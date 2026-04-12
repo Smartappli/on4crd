@@ -303,20 +303,90 @@ function validate_public_profile_url(string $url): ?string
 function validate_remote_feed_url(string $url): ?string
 {
     $normalized = normalize_http_url($url);
- [... ELLIPSIZATION ...]       if ($product['stock_qty'] !== null) {
-                $updateStock->execute([$qty, (int) $product['id'], $qty]);
+    if ($normalized === null) {
+        return null;
+    }
+
+    $host = (string) parse_url($normalized, PHP_URL_HOST);
+    if ($host === '' || host_resolves_to_private_network($host)) {
+        throw new RuntimeException("L'URL distante pointe vers un réseau privé ou réservé.");
+    }
+
+    return $normalized;
+}
+
+function place_shop_order(int $memberId, string $paymentMethod, string $notes = ''): string
+{
+    if (!table_exists('shop_orders') || !table_exists('shop_order_items')) {
+        throw new RuntimeException("Le module boutique n'est pas initialisé.");
+    }
+
+    $cart = shop_cart_state();
+    if (($cart['items'] ?? []) === []) {
+        throw new RuntimeException('Le panier est vide.');
+    }
+
+    $allowedPayments = ['on_site', 'bank_transfer'];
+    $payment = in_array($paymentMethod, $allowedPayments, true) ? $paymentMethod : 'on_site';
+    $cleanNotes = trim($notes);
+    if (function_exists('mb_substr')) {
+        $cleanNotes = mb_substr($cleanNotes, 0, 1000);
+    } else {
+        $cleanNotes = substr($cleanNotes, 0, 1000);
+    }
+
+    $orderReference = 'CMD-' . date('Ymd') . '-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+    $pdo = db();
+
+    $insertOrder = $pdo->prepare(
+        'INSERT INTO shop_orders (reference_code, member_id, status, total_cents, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?)'
+    );
+    $insertItem = $pdo->prepare(
+        'INSERT INTO shop_order_items (order_id, product_id, title_snapshot, qty, unit_price_cents, line_total_cents) VALUES (?, ?, ?, ?, ?, ?)'
+    );
+    $fetchProduct = $pdo->prepare('SELECT id, title, price_cents, stock_qty, status FROM shop_products WHERE id = ? LIMIT 1');
+    $updateStock = $pdo->prepare('UPDATE shop_products SET stock_qty = stock_qty - ? WHERE id = ? AND stock_qty >= ?');
+
+    $pdo->beginTransaction();
+    try {
+        $insertOrder->execute([
+            $orderReference,
+            $memberId,
+            'pending',
+            (int) ($cart['total_cents'] ?? 0),
+            $payment,
+            $cleanNotes,
+        ]);
+        $orderId = (int) $pdo->lastInsertId();
+
+        foreach ((array) ($cart['items'] ?? []) as $item) {
+            $product = $item['product'] ?? null;
+            $qty = max(1, (int) ($item['quantity'] ?? 0));
+            $productId = (int) ($product['id'] ?? 0);
+            if ($productId <= 0) {
+                throw new RuntimeException('Produit invalide dans le panier.');
+            }
+
+            $fetchProduct->execute([$productId]);
+            $dbProduct = $fetchProduct->fetch();
+            if (!$dbProduct || (string) $dbProduct['status'] !== 'published') {
+                throw new RuntimeException('Produit indisponible.');
+            }
+
+            if ($dbProduct['stock_qty'] !== null) {
+                $updateStock->execute([$qty, (int) $dbProduct['id'], $qty]);
                 if ($updateStock->rowCount() === 0) {
-                    throw new RuntimeException('Stock insuffisant pour ' . (string) $product['title'] . '.');
+                    throw new RuntimeException('Stock insuffisant pour ' . (string) $dbProduct['title'] . '.');
                 }
             }
 
             $insertItem->execute([
                 $orderId,
-                (int) $product['id'],
-                (string) $product['title'],
+                (int) $dbProduct['id'],
+                (string) $dbProduct['title'],
                 $qty,
-                (int) $product['price_cents'],
-                (int) $item['line_total_cents'],
+                (int) $dbProduct['price_cents'],
+                $qty * (int) $dbProduct['price_cents'],
             ]);
         }
 
