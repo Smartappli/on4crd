@@ -84,6 +84,181 @@ function mb_safe_strimwidth(string $value, int $start, int $width, string $trimM
     return $slice;
 }
 
+function e(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function slugify(string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return 'n-a';
+    }
+
+    if (function_exists('iconv')) {
+        $transliterated = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+        if ($transliterated !== false) {
+            $value = $transliterated;
+        }
+    }
+
+    $value = strtolower($value);
+    $value = preg_replace('/[^a-z0-9]+/i', '-', $value) ?? '';
+    $value = trim($value, '-');
+
+    return $value !== '' ? $value : 'n-a';
+}
+
+function sanitize_href_attribute(string $url): ?string
+{
+    $trimmed = trim($url);
+    if ($trimmed === '') {
+        return null;
+    }
+
+    if (preg_match('/^(?:javascript|data|vbscript):/i', $trimmed) === 1) {
+        return null;
+    }
+
+    try {
+        return normalize_http_url($trimmed, true);
+    } catch (Throwable) {
+        return null;
+    }
+}
+
+function sanitize_image_src_attribute(string $url): ?string
+{
+    $trimmed = trim($url);
+    if ($trimmed === '') {
+        return null;
+    }
+    if (preg_match('/^data:image\\/(?:png|jpe?g|gif|webp);base64,[a-z0-9+\\/=]+$/i', $trimmed) === 1) {
+        return $trimmed;
+    }
+
+    return sanitize_href_attribute($trimmed);
+}
+
+function sanitize_rich_html(string $html): string
+{
+    if ($html === '') {
+        return '';
+    }
+
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $wrapped = '<!doctype html><html><body>' . $html . '</body></html>';
+    $dom->loadHTML($wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    libxml_clear_errors();
+
+    $removeTags = ['script', 'style', 'iframe', 'object', 'embed', 'link', 'meta', 'base'];
+    foreach ($removeTags as $tag) {
+        while (($nodes = $dom->getElementsByTagName($tag))->length > 0) {
+            $node = $nodes->item(0);
+            if ($node !== null && $node->parentNode !== null) {
+                $node->parentNode->removeChild($node);
+            } else {
+                break;
+            }
+        }
+    }
+
+    $allNodes = $dom->getElementsByTagName('*');
+    for ($i = $allNodes->length - 1; $i >= 0; $i--) {
+        $node = $allNodes->item($i);
+        if (!$node instanceof DOMElement || !$node->hasAttributes()) {
+            continue;
+        }
+        $toRemove = [];
+        foreach ($node->attributes as $attribute) {
+            $name = strtolower($attribute->name);
+            if (str_starts_with($name, 'on')) {
+                $toRemove[] = $attribute->name;
+                continue;
+            }
+            if ($name === 'href') {
+                $safe = sanitize_href_attribute($attribute->value);
+                if ($safe === null) {
+                    $toRemove[] = $attribute->name;
+                } else {
+                    $node->setAttribute('href', $safe);
+                }
+            }
+            if ($name === 'src') {
+                $safe = sanitize_image_src_attribute($attribute->value);
+                if ($safe === null) {
+                    $toRemove[] = $attribute->name;
+                } else {
+                    $node->setAttribute('src', $safe);
+                }
+            }
+        }
+        foreach ($toRemove as $attrName) {
+            $node->removeAttribute($attrName);
+        }
+        if (strtolower($node->tagName) === 'img' && !$node->hasAttribute('loading')) {
+            $node->setAttribute('loading', 'lazy');
+        }
+    }
+
+    $body = $dom->getElementsByTagName('body')->item(0);
+    if (!$body) {
+        return '';
+    }
+
+    $result = '';
+    foreach ($body->childNodes as $child) {
+        $result .= $dom->saveHTML($child);
+    }
+
+    return $result;
+}
+
+function safe_storage_public_path(string $path, array $allowedPrefixes = ['storage/press/', 'storage/uploads/']): string
+{
+    $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
+    if ($normalized === '' || str_contains($normalized, '..')) {
+        throw new RuntimeException('Chemin de stockage invalide.');
+    }
+
+    foreach ($allowedPrefixes as $prefix) {
+        $prefix = ltrim(str_replace('\\', '/', trim($prefix)), '/');
+        if ($prefix !== '' && str_starts_with($normalized, $prefix)) {
+            return $normalized;
+        }
+    }
+
+    throw new RuntimeException('Chemin de stockage non autorisé.');
+}
+
+function safe_storage_public_path_or_null(string $path, array $allowedPrefixes = ['storage/press/', 'storage/uploads/']): ?string
+{
+    try {
+        return safe_storage_public_path($path, $allowedPrefixes);
+    } catch (Throwable) {
+        return null;
+    }
+}
+
+function csrf_token(): string
+{
+    if (!isset($_SESSION['_csrf']) || !is_string($_SESSION['_csrf']) || strlen($_SESSION['_csrf']) !== 64) {
+        $_SESSION['_csrf'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['_csrf'];
+}
+
+function verify_csrf(): void
+{
+    $sessionToken = (string) ($_SESSION['_csrf'] ?? '');
+    $submittedToken = (string) ($_POST['_csrf'] ?? '');
+    if ($sessionToken === '' || $submittedToken === '' || !hash_equals($sessionToken, $submittedToken)) {
+        throw new RuntimeException('Jeton CSRF invalide.');
+    }
+}
+
 function matomo_origin(): ?string
 {
     $matomoUrl = trim((string) config('tracking.matomo_url', ''));
@@ -164,6 +339,184 @@ function ensure_storage_htaccess(string $directory, string $rules): void
     if (!is_file($file)) {
         file_put_contents($file, $rules);
     }
+}
+
+function detect_uploaded_mime_type(string $tmpPath): string
+{
+    if (!is_file($tmpPath)) {
+        return '';
+    }
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    if ($finfo === false) {
+        return '';
+    }
+    $mime = (string) finfo_file($finfo, $tmpPath);
+    finfo_close($finfo);
+
+    return strtolower(trim($mime));
+}
+
+function assert_upload_file_is_valid_signature(string $tmpPath, array $allowedExtensions): void
+{
+    $signature = @file_get_contents($tmpPath, false, null, 0, 16);
+    if ($signature === false) {
+        throw new RuntimeException('Fichier téléversé illisible.');
+    }
+
+    $known = [
+        'pdf' => '%PDF-',
+        'jpg' => "\xFF\xD8\xFF",
+        'jpeg' => "\xFF\xD8\xFF",
+        'png' => "\x89PNG\r\n\x1A\n",
+        'webp' => 'RIFF',
+    ];
+
+    foreach ($allowedExtensions as $extension) {
+        $extension = strtolower((string) $extension);
+        if (!isset($known[$extension])) {
+            continue;
+        }
+        if (str_starts_with($signature, $known[$extension])) {
+            if ($extension !== 'webp' || str_contains(substr($signature, 8), 'WEBP')) {
+                return;
+            }
+        }
+    }
+
+    throw new RuntimeException('Signature de fichier invalide pour le type attendu.');
+}
+
+function secure_move_uploaded_file(
+    array $upload,
+    string $destinationDirectory,
+    string $prefix,
+    array $allowedExtensions,
+    array $allowedMimes,
+    int $maxBytes
+): string {
+    $errorCode = (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE);
+    if ($errorCode !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Échec du téléversement.');
+    }
+
+    $tmpPath = (string) ($upload['tmp_name'] ?? '');
+    if ($tmpPath === '' || !is_uploaded_file($tmpPath)) {
+        throw new RuntimeException('Fichier téléversé invalide.');
+    }
+
+    $size = (int) ($upload['size'] ?? 0);
+    if ($size <= 0 || $size > $maxBytes) {
+        throw new RuntimeException('Fichier trop volumineux ou vide.');
+    }
+
+    $originalName = (string) ($upload['name'] ?? '');
+    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    if (!in_array($extension, $allowedExtensions, true)) {
+        throw new RuntimeException('Extension de fichier non autorisée.');
+    }
+
+    $mime = detect_uploaded_mime_type($tmpPath);
+    if (!in_array($mime, $allowedMimes, true)) {
+        throw new RuntimeException('Type MIME de fichier non autorisé.');
+    }
+    assert_upload_file_is_valid_signature($tmpPath, $allowedExtensions);
+
+    $sanitizedTmpPath = $tmpPath;
+    if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+        $sanitizedTmpPath = sanitize_uploaded_image_file($tmpPath, $extension);
+    }
+
+    if (!is_dir($destinationDirectory) && !mkdir($destinationDirectory, 0755, true) && !is_dir($destinationDirectory)) {
+        throw new RuntimeException('Impossible de créer le dossier de destination.');
+    }
+
+    $filename = $prefix . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
+    $destinationPath = rtrim($destinationDirectory, '/') . '/' . $filename;
+    $moved = $sanitizedTmpPath === $tmpPath
+        ? move_uploaded_file($tmpPath, $destinationPath)
+        : rename($sanitizedTmpPath, $destinationPath);
+    if (!$moved) {
+        throw new RuntimeException('Impossible de déplacer le fichier téléversé.');
+    }
+
+    @chmod($destinationPath, 0644);
+    return $filename;
+}
+
+function sanitize_uploaded_image_file(string $tmpPath, string $extension): string
+{
+    $raw = @file_get_contents($tmpPath);
+    if ($raw === false) {
+        throw new RuntimeException('Image téléversée illisible.');
+    }
+
+    if (!function_exists('imagecreatefromstring')) {
+        return $tmpPath;
+    }
+
+    $image = @imagecreatefromstring($raw);
+    if ($image === false) {
+        throw new RuntimeException('Image téléversée invalide.');
+    }
+
+    $outputPath = tempnam(sys_get_temp_dir(), 'on4crd-img-');
+    if ($outputPath === false) {
+        imagedestroy($image);
+        throw new RuntimeException('Impossible de créer un fichier temporaire.');
+    }
+
+    $writeOk = match ($extension) {
+        'jpg', 'jpeg' => imagejpeg($image, $outputPath, 90),
+        'png' => imagepng($image, $outputPath, 6),
+        'webp' => function_exists('imagewebp') ? imagewebp($image, $outputPath, 85) : false,
+        default => false,
+    };
+    imagedestroy($image);
+
+    if (!$writeOk) {
+        @unlink($outputPath);
+        throw new RuntimeException('Échec du nettoyage des métadonnées image.');
+    }
+
+    return $outputPath;
+}
+
+function handle_album_upload(?array $upload, string $callsign): string
+{
+    if (!is_array($upload)) {
+        throw new RuntimeException('Image manquante.');
+    }
+    $baseDir = dirname(__DIR__) . '/storage/uploads/albums';
+    $saved = secure_move_uploaded_file(
+        $upload,
+        $baseDir,
+        slugify($callsign !== '' ? $callsign : 'member'),
+        ['jpg', 'jpeg', 'png', 'webp'],
+        ['image/jpeg', 'image/png', 'image/webp'],
+        8 * 1024 * 1024
+    );
+
+    return 'storage/uploads/albums/' . $saved;
+}
+
+function handle_ad_image_upload(?array $upload, string $callsign, string $existingPath = ''): ?string
+{
+    if (!is_array($upload) || (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        return $existingPath !== '' ? $existingPath : null;
+    }
+
+    $baseDir = dirname(__DIR__) . '/storage/uploads/ads';
+    $saved = secure_move_uploaded_file(
+        $upload,
+        $baseDir,
+        slugify($callsign !== '' ? $callsign : 'ad'),
+        ['jpg', 'jpeg', 'png', 'webp'],
+        ['image/jpeg', 'image/png', 'image/webp'],
+        6 * 1024 * 1024
+    );
+
+    return 'storage/uploads/ads/' . $saved;
 }
 
 function client_ip_address(): string
@@ -303,20 +656,102 @@ function validate_public_profile_url(string $url): ?string
 function validate_remote_feed_url(string $url): ?string
 {
     $normalized = normalize_http_url($url);
- [... ELLIPSIZATION ...]       if ($product['stock_qty'] !== null) {
-                $updateStock->execute([$qty, (int) $product['id'], $qty]);
+    if ($normalized === null) {
+        return null;
+    }
+
+    $host = strtolower((string) parse_url($normalized, PHP_URL_HOST));
+    if ($host === '' || host_resolves_to_private_network($host)) {
+        throw new RuntimeException("L'URL distante pointe vers un réseau privé ou réservé.");
+    }
+
+    $dnsRecords = @dns_get_record($host, DNS_A + DNS_AAAA);
+    if (is_array($dnsRecords)) {
+        foreach ($dnsRecords as $record) {
+            $ip = (string) ($record['ip'] ?? $record['ipv6'] ?? '');
+            if ($ip !== '' && is_private_or_reserved_ip($ip)) {
+                throw new RuntimeException("L'URL distante résout vers une IP privée/réservée.");
+            }
+        }
+    }
+
+    return $normalized;
+}
+
+function place_shop_order(int $memberId, string $paymentMethod, string $notes = ''): string
+{
+    if (!table_exists('shop_orders') || !table_exists('shop_order_items')) {
+        throw new RuntimeException("Le module boutique n'est pas initialisé.");
+    }
+
+    $cart = shop_cart_state();
+    if (($cart['items'] ?? []) === []) {
+        throw new RuntimeException('Le panier est vide.');
+    }
+
+    $allowedPayments = ['on_site', 'bank_transfer'];
+    $payment = in_array($paymentMethod, $allowedPayments, true) ? $paymentMethod : 'on_site';
+    $cleanNotes = trim($notes);
+    if (function_exists('mb_substr')) {
+        $cleanNotes = mb_substr($cleanNotes, 0, 1000);
+    } else {
+        $cleanNotes = substr($cleanNotes, 0, 1000);
+    }
+
+    $orderReference = 'CMD-' . date('Ymd') . '-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+    $pdo = db();
+
+    $insertOrder = $pdo->prepare(
+        'INSERT INTO shop_orders (reference_code, member_id, status, total_cents, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?)'
+    );
+    $insertItem = $pdo->prepare(
+        'INSERT INTO shop_order_items (order_id, product_id, product_title, quantity, unit_price_cents, line_total_cents) VALUES (?, ?, ?, ?, ?, ?)'
+    );
+    $fetchProduct = $pdo->prepare(
+        'SELECT id, title, price_cents, stock_qty, status FROM shop_products WHERE id = ? AND status = "published" LIMIT 1 FOR UPDATE'
+    );
+    $updateStock = $pdo->prepare('UPDATE shop_products SET stock_qty = stock_qty - ? WHERE id = ? AND stock_qty >= ?');
+
+    $pdo->beginTransaction();
+    try {
+        $insertOrder->execute([
+            $orderReference,
+            $memberId,
+            'pending',
+            (int) ($cart['total_cents'] ?? 0),
+            $payment,
+            $cleanNotes,
+        ]);
+        $orderId = (int) $pdo->lastInsertId();
+
+        foreach ((array) ($cart['items'] ?? []) as $item) {
+            $product = $item['product'] ?? null;
+            $qty = max(1, (int) ($item['quantity'] ?? 0));
+            $productId = (int) ($product['id'] ?? 0);
+            if ($productId <= 0) {
+                throw new RuntimeException('Produit invalide dans le panier.');
+            }
+
+            $fetchProduct->execute([$productId]);
+            $dbProduct = $fetchProduct->fetch();
+            if (!$dbProduct) {
+                throw new RuntimeException('Produit indisponible.');
+            }
+
+            if ($dbProduct['stock_qty'] !== null) {
+                $updateStock->execute([$qty, (int) $dbProduct['id'], $qty]);
                 if ($updateStock->rowCount() === 0) {
-                    throw new RuntimeException('Stock insuffisant pour ' . (string) $product['title'] . '.');
+                    throw new RuntimeException('Stock insuffisant pour ' . (string) $dbProduct['title'] . '.');
                 }
             }
 
             $insertItem->execute([
                 $orderId,
-                (int) $product['id'],
-                (string) $product['title'],
+                (int) $dbProduct['id'],
+                (string) $dbProduct['title'],
                 $qty,
-                (int) $product['price_cents'],
-                (int) $item['line_total_cents'],
+                (int) $dbProduct['price_cents'],
+                $qty * (int) $dbProduct['price_cents'],
             ]);
         }
 
@@ -497,37 +932,44 @@ function auction_sync_expired_lots(): void
 
 function place_auction_bid(int $lotId, int $memberId, int $amountCents): void
 {
-    $lot = auction_lot_by_id($lotId);
-    if ($lot === null) {
-        throw new RuntimeException('Lot introuvable.');
-    }
-
-    $status = auction_runtime_status($lot);
-    if ($status !== 'active') {
-        throw new RuntimeException('Cette enchère n’est pas active.');
-    }
-
-    $minimum = auction_minimum_bid_cents($lot);
-    if ($amountCents < $minimum) {
-        throw new RuntimeException('Le montant minimum pour enchérir est ' . format_price_eur($minimum) . '.');
-    }
-
     $pdo = db();
     $insertBid = $pdo->prepare('INSERT INTO auction_bids (lot_id, member_id, amount_cents) VALUES (?, ?, ?)');
-    $updateLot = $pdo->prepare('UPDATE auction_lots SET current_price_cents = ?, status = "active", winner_member_id = NULL, extended_until = ?, ends_at = ? WHERE id = ?');
-
-    $now = new DateTimeImmutable('now');
-    $endsAt = new DateTimeImmutable((string) $lot['ends_at']);
-    $extension = null;
-    if ($endsAt->getTimestamp() - $now->getTimestamp() <= 300) {
-        $extension = $endsAt->modify('+5 minutes')->format('Y-m-d H:i:s');
-    }
+    $lockLot = $pdo->prepare('SELECT * FROM auction_lots WHERE id = ? LIMIT 1 FOR UPDATE');
+    $updateLot = $pdo->prepare(
+        'UPDATE auction_lots SET current_price_cents = ?, status = "active", winner_member_id = NULL, extended_until = ?, ends_at = ? WHERE id = ? AND current_price_cents <= ?'
+    );
 
     $pdo->beginTransaction();
     try {
+        $lockLot->execute([$lotId]);
+        $lot = $lockLot->fetch();
+        if (!$lot) {
+            throw new RuntimeException('Lot introuvable.');
+        }
+
+        $status = auction_runtime_status($lot);
+        if ($status !== 'active') {
+            throw new RuntimeException('Cette enchère n’est pas active.');
+        }
+
+        $minimum = auction_minimum_bid_cents($lot);
+        if ($amountCents < $minimum) {
+            throw new RuntimeException('Le montant minimum pour enchérir est ' . format_price_eur($minimum) . '.');
+        }
+
+        $now = new DateTimeImmutable('now');
+        $endsAt = new DateTimeImmutable((string) $lot['ends_at']);
+        $extension = null;
+        if ($endsAt->getTimestamp() - $now->getTimestamp() <= 300) {
+            $extension = $endsAt->modify('+5 minutes')->format('Y-m-d H:i:s');
+        }
+
         $insertBid->execute([$lotId, $memberId, $amountCents]);
         $newEnd = $extension ?? (string) $lot['ends_at'];
-        $updateLot->execute([$amountCents, $extension, $newEnd, $lotId]);
+        $updateLot->execute([$amountCents, $extension, $newEnd, $lotId, (int) $lot['current_price_cents']]);
+        if ($updateLot->rowCount() === 0) {
+            throw new RuntimeException('Conflit de concurrence sur l’enchère. Veuillez réessayer.');
+        }
 
         if (!empty($lot['buy_now_price_cents']) && $amountCents >= (int) $lot['buy_now_price_cents']) {
             $pdo->prepare('UPDATE auction_lots SET status = "closed", winner_member_id = ?, current_price_cents = ? WHERE id = ?')

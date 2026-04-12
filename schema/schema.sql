@@ -366,6 +366,8 @@ CREATE TABLE IF NOT EXISTS shop_products (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE INDEX idx_shop_products_status ON shop_products (status);
+
 CREATE TABLE IF NOT EXISTS shop_orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT NOT NULL,
@@ -389,6 +391,9 @@ CREATE TABLE IF NOT EXISTS shop_order_items (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX idx_shop_order_items_order_id ON shop_order_items (order_id);
+CREATE INDEX idx_shop_order_items_product_id ON shop_order_items (product_id);
+
 CREATE TABLE IF NOT EXISTS auction_lots (
     id INT AUTO_INCREMENT PRIMARY KEY,
     slug VARCHAR(190) NOT NULL UNIQUE,
@@ -410,6 +415,8 @@ CREATE TABLE IF NOT EXISTS auction_lots (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE INDEX idx_auction_lots_status_ends_at ON auction_lots (status, ends_at);
+
 CREATE TABLE IF NOT EXISTS auction_bids (
     id INT AUTO_INCREMENT PRIMARY KEY,
     lot_id INT NOT NULL,
@@ -417,3 +424,5 @@ CREATE TABLE IF NOT EXISTS auction_bids (
     amount_cents INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_auction_bids_lot_amount ON auction_bids (lot_id, amount_cents, created_at);
