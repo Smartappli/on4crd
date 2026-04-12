@@ -73,9 +73,6 @@ function mb_safe_strimwidth(string $value, int $start, int $width, string $trimM
     }
 
     $slice = substr($value, $start, $width);
-    if ($slice === false) {
-        return '';
-    }
 
     if (strlen($value) > ($start + $width) && $trimMarker !== '') {
         return rtrim($slice) . $trimMarker;
