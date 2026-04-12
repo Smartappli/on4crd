@@ -1,0 +1,14 @@
+/vendor/
+/.phpunit.cache/
+/config/config.php
+/storage/cache/*
+!/storage/cache/.gitkeep
+/storage/uploads/*
+!/storage/uploads/.htaccess
+!/storage/uploads/.gitkeep
+/storage/press/*
+!/storage/press/.htaccess
+!/storage/press/.gitkeep
+!.gitkeep
+.DS_Store
+Thumbs.db

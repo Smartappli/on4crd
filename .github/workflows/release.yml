@@ -1,0 +1,44 @@
+name: Build release archive
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, gd, mbstring, pdo, pdo_mysql, zip
+          tools: composer:v2
+
+      - name: Prepare config
+        run: cp config/config.sample.php config/config.php
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run validation suite
+        run: |
+          composer lint
+          composer test
+
+      - name: Create release archive
+        run: |
+          mkdir -p dist
+          zip -r dist/on4crd-${GITHUB_REF_NAME:-snapshot}.zip . \
+            -x 'vendor/*' '.git/*' '.github/*' 'dist/*' 'config/config.php' '.phpunit.cache/*'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: on4crd-release-archive
+          path: dist/*.zip

@@ -1,0 +1,25 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+change-template: '- $TITLE (#$NUMBER)'
+version-template: '$MAJOR.$MINOR.$PATCH'
+categories:
+  - title: '🚀 Fonctionnalités'
+    labels:
+      - feature
+      - enhancement
+  - title: '🛡️ Sécurité'
+    labels:
+      - security
+  - title: '🧪 Qualité'
+    labels:
+      - tests
+      - ci
+  - title: '🛠️ Maintenance'
+    labels:
+      - chore
+      - dependencies
+change-title-escapes: '\\<*_&'
+template: |
+  ## Changements
+
+  $CHANGES

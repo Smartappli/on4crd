@@ -1,0 +1,154 @@
+<?php
+declare(strict_types=1);
+
+require_permission('ads.moderate');
+$user = require_login();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+        if ($action === 'moderate_ad') {
+            $adId = (int) ($_POST['ad_id'] ?? 0);
+            $status = (string) ($_POST['status'] ?? 'pending');
+            $note = trim((string) ($_POST['moderation_note'] ?? ''));
+            if (!in_array($status, ['pending', 'active', 'paused', 'expired', 'rejected'], true)) {
+                throw new RuntimeException('Statut invalide.');
+            }
+            db()->prepare('UPDATE ads SET status = ?, moderation_note = ? WHERE id = ?')->execute([$status, $note, $adId]);
+            set_flash('success', 'Publicité mise à jour.');
+            redirect('admin_ads');
+        }
+        if ($action === 'add_placement') {
+            $code = slugify((string) ($_POST['code'] ?? ''));
+            $name = trim((string) ($_POST['name'] ?? ''));
+            $description = trim((string) ($_POST['description'] ?? ''));
+            $sortOrder = (int) ($_POST['sort_order'] ?? 100);
+            if ($code === '' || $name === '') {
+                throw new RuntimeException('Code et nom obligatoires.');
+            }
+            db()->prepare('INSERT INTO ad_placements (code, name, description, sort_order, is_active) VALUES (?, ?, ?, ?, 1)')->execute([$code, $name, $description, $sortOrder]);
+            set_flash('success', 'Placement ajouté.');
+            redirect('admin_ads');
+        }
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect('admin_ads');
+    }
+}
+
+$pendingAds = db()->query('SELECT a.*, ap.name AS placement_name, ap.code AS placement_code, m.callsign AS owner_callsign
+    FROM ads a
+    INNER JOIN ad_placements ap ON ap.id = a.placement_id
+    LEFT JOIN members m ON m.id = a.owner_member_id
+    WHERE a.status IN ("pending", "rejected", "paused")
+    ORDER BY a.updated_at DESC, a.id DESC')->fetchAll();
+$activeAds = db()->query('SELECT a.*, ap.name AS placement_name, ap.code AS placement_code, m.callsign AS owner_callsign
+    FROM ads a
+    INNER JOIN ad_placements ap ON ap.id = a.placement_id
+    LEFT JOIN members m ON m.id = a.owner_member_id
+    ORDER BY a.updated_at DESC, a.id DESC LIMIT 20')->fetchAll();
+$placements = available_ad_placements();
+$totals = db()->query('SELECT COUNT(*) AS ads_count FROM ads')->fetch() ?: ['ads_count' => 0];
+$totalImpressions = (int) db()->query('SELECT COUNT(*) FROM ad_events WHERE event_type = "impression"')->fetchColumn();
+$totalClicks = (int) db()->query('SELECT COUNT(*) FROM ad_events WHERE event_type = "click"')->fetchColumn();
+$ctr = $totalImpressions > 0 ? round(($totalClicks / $totalImpressions) * 100, 2) : 0.0;
+
+ob_start();
+?>
+<div class="grid-3 stats-grid">
+  <div class="stat-card"><strong><?= (int) $totals['ads_count'] ?></strong><span>Campagnes</span></div>
+  <div class="stat-card"><strong><?= $totalImpressions ?></strong><span>Affichages cumulés</span></div>
+  <div class="stat-card"><strong><?= e((string) $ctr) ?>%</strong><span>CTR global</span></div>
+</div>
+
+<div class="grid-2">
+<section class="card">
+  <h1>File de modération publicitaire</h1>
+  <?php foreach ($pendingAds as $ad): ?>
+    <article class="card inner-card">
+      <div class="row-between">
+        <div>
+          <h3><?= e((string) $ad['title']) ?></h3>
+          <p class="help"><?= e((string) $ad['owner_callsign']) ?> — <?= e((string) $ad['placement_name']) ?> — <?= e(ad_format_label((string) $ad['format_code'])) ?></p>
+        </div>
+        <span class="badge muted"><?= e(ad_status_label((string) ad_runtime_status($ad))) ?></span>
+      </div>
+      <p><?= e((string) $ad['description']) ?></p>
+      <form method="post" class="stack">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <input type="hidden" name="action" value="moderate_ad">
+        <input type="hidden" name="ad_id" value="<?= (int) $ad['id'] ?>">
+        <label>Décision
+          <select name="status">
+            <option value="active">Activer</option>
+            <option value="pending">Laisser en attente</option>
+            <option value="paused">Mettre en pause</option>
+            <option value="expired">Expirer</option>
+            <option value="rejected">Refuser</option>
+          </select>
+        </label>
+        <label>Note de modération
+          <textarea name="moderation_note" rows="3"><?= e((string) ($ad['moderation_note'] ?? '')) ?></textarea>
+        </label>
+        <p><button class="button">Enregistrer la décision</button></p>
+      </form>
+    </article>
+  <?php endforeach; ?>
+  <?php if ($pendingAds === []): ?><p>Aucune publicité à modérer.</p><?php endif; ?>
+</section>
+
+<section class="card">
+  <h2>Placements publicitaires</h2>
+  <form method="post" class="stack">
+    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+    <input type="hidden" name="action" value="add_placement">
+    <label>Code
+      <input type="text" name="code" placeholder="club_sidebar">
+    </label>
+    <label>Nom
+      <input type="text" name="name" placeholder="Colonne latérale club">
+    </label>
+    <label>Description
+      <textarea name="description" rows="3"></textarea>
+    </label>
+    <label>Ordre
+      <input type="text" name="sort_order" value="100">
+    </label>
+    <p><button class="button">Ajouter un placement</button></p>
+  </form>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Nom</th><th>Description</th></tr></thead>
+      <tbody>
+      <?php foreach ($placements as $placement): ?>
+        <tr><td><code><?= e((string) $placement['code']) ?></code></td><td><?= e((string) $placement['name']) ?></td><td><?= e((string) $placement['description']) ?></td></tr>
+      <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</section>
+</div>
+
+<section class="card">
+  <h2>Dernières campagnes</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Titre</th><th>Dépositaire</th><th>Placement</th><th>Statut</th><th>URL</th></tr></thead>
+      <tbody>
+      <?php foreach ($activeAds as $ad): ?>
+        <tr>
+          <td><?= e((string) $ad['title']) ?></td>
+          <td><?= e((string) ($ad['owner_callsign'] ?: '—')) ?></td>
+          <td><?= e((string) $ad['placement_name']) ?></td>
+          <td><?= e(ad_status_label((string) ad_runtime_status($ad))) ?></td>
+          <td><a href="<?= e(base_url('index.php?route=ad_click&id=' . (int) $ad['id'])) ?>" target="_blank" rel="noopener">Voir le clic tracké</a></td>
+        </tr>
+      <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</section>
+<?php
+
+echo render_layout((string) ob_get_clean(), 'Administration publicités');

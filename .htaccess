@@ -1,0 +1,19 @@
+Options -Indexes
+RewriteEngine On
+
+RewriteRule ^(?:config|schema|storage/cache)(?:/|$) - [F,L,NC]
+RewriteRule (^|/)\.(?!well-known/) - [F,L]
+<FilesMatch "^(?:README\.txt|ANALYSE_CRITIQUE_.*\.md|RAPPORT_SECURITE_.*\.md)$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "\.(?:sql|log|bak|dist)$">
+    Require all denied
+</FilesMatch>
+
+RewriteRule ^sitemap\.xml$ index.php?route=sitemap.xml [L,QSA]
+RewriteRule ^robots\.txt$ index.php?route=robots.txt [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^$ index.php [L,QSA]
+RewriteRule ^(.+)$ index.php?route=$1 [L,QSA]
