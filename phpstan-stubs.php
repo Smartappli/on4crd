@@ -46,10 +46,10 @@ if (!function_exists('ad_runtime_status')) { function ad_runtime_status(array $a
 if (!function_exists('ad_format_catalog')) { function ad_format_catalog(): array { return []; } }
 if (!function_exists('available_ad_placements')) { function available_ad_placements(): array { return []; } }
 if (!function_exists('ad_placements_for_member')) { function ad_placements_for_member(int $memberId): array { return []; } }
-if (!function_exists('member_ads')) { function member_ads(int $memberId, string $status = 'all'): array { return []; } }
+if (!function_exists('member_ads')) { function member_ads(int $memberId, bool|string $status = 'all'): array { return []; } }
 if (!function_exists('ad_fetch_by_id')) { function ad_fetch_by_id(int $adId): ?array { return null; } }
 if (!function_exists('ad_daily_stats')) { function ad_daily_stats(int $adId, int $days = 30): array { return []; } }
-if (!function_exists('log_ad_event')) { function log_ad_event(int $adId, string $eventType): void {} }
+if (!function_exists('log_ad_event')) { function log_ad_event(int $adId, string $eventType, ?string $placementCode = null): void {} }
 
 if (!function_exists('shop_public_products')) { function shop_public_products(?string $category = null): array { return []; } }
 if (!function_exists('shop_categories')) { function shop_categories(): array { return []; } }
@@ -70,11 +70,11 @@ if (!function_exists('qsl_format_display_date')) { function qsl_format_display_d
 if (!function_exists('qsl_format_display_time')) { function qsl_format_display_time(string $value): string { return $value; } }
 
 if (!function_exists('notify_album_webhooks')) { function notify_album_webhooks(array $album): void {} }
-if (!function_exists('article_translation_upsert')) { function article_translation_upsert(int $articleId, string $locale, string $title, string $summary, string $content): void {} }
-if (!function_exists('save_editorial_content')) { function save_editorial_content(string $slot, string $value): void {} }
+if (!function_exists('article_translation_upsert')) { function article_translation_upsert(int $articleId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void {} }
+if (!function_exists('save_editorial_content')) { function save_editorial_content(string $slot, string $fr = '', string $en = '', string $de = '', string $nl = ''): void {} }
 if (!function_exists('editorial_content_row')) { function editorial_content_row(string $slot): ?array { return null; } }
-if (!function_exists('can_submit_news_in_section')) { function can_submit_news_in_section(array $user, int $sectionId): bool { return false; } }
-if (!function_exists('news_translation_upsert')) { function news_translation_upsert(int $newsId, string $locale, string $title, string $summary, string $content): void {} }
+if (!function_exists('can_submit_news_in_section')) { function can_submit_news_in_section(int|array $user, int $sectionId): bool { return false; } }
+if (!function_exists('news_translation_upsert')) { function news_translation_upsert(int $newsId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void {} }
 if (!function_exists('managed_section_ids_for_member')) { function managed_section_ids_for_member(int $memberId): array { return []; } }
 if (!function_exists('news_status_label')) { function news_status_label(string $status): string { return $status; } }
 if (!function_exists('press_contacts')) { function press_contacts(): array { return []; } }
