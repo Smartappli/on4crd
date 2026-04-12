@@ -84,6 +84,181 @@ function mb_safe_strimwidth(string $value, int $start, int $width, string $trimM
     return $slice;
 }
 
+function e(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function slugify(string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return 'n-a';
+    }
+
+    if (function_exists('iconv')) {
+        $transliterated = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+        if ($transliterated !== false) {
+            $value = $transliterated;
+        }
+    }
+
+    $value = strtolower($value);
+    $value = preg_replace('/[^a-z0-9]+/i', '-', $value) ?? '';
+    $value = trim($value, '-');
+
+    return $value !== '' ? $value : 'n-a';
+}
+
+function sanitize_href_attribute(string $url): ?string
+{
+    $trimmed = trim($url);
+    if ($trimmed === '') {
+        return null;
+    }
+
+    if (preg_match('/^(?:javascript|data|vbscript):/i', $trimmed) === 1) {
+        return null;
+    }
+
+    try {
+        return normalize_http_url($trimmed, true);
+    } catch (Throwable) {
+        return null;
+    }
+}
+
+function sanitize_image_src_attribute(string $url): ?string
+{
+    $trimmed = trim($url);
+    if ($trimmed === '') {
+        return null;
+    }
+    if (preg_match('/^data:image\\/(?:png|jpe?g|gif|webp);base64,[a-z0-9+\\/=]+$/i', $trimmed) === 1) {
+        return $trimmed;
+    }
+
+    return sanitize_href_attribute($trimmed);
+}
+
+function sanitize_rich_html(string $html): string
+{
+    if ($html === '') {
+        return '';
+    }
+
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true);
+    $wrapped = '<!doctype html><html><body>' . $html . '</body></html>';
+    $dom->loadHTML($wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    libxml_clear_errors();
+
+    $removeTags = ['script', 'style', 'iframe', 'object', 'embed', 'link', 'meta', 'base'];
+    foreach ($removeTags as $tag) {
+        while (($nodes = $dom->getElementsByTagName($tag))->length > 0) {
+            $node = $nodes->item(0);
+            if ($node !== null && $node->parentNode !== null) {
+                $node->parentNode->removeChild($node);
+            } else {
+                break;
+            }
+        }
+    }
+
+    $allNodes = $dom->getElementsByTagName('*');
+    for ($i = $allNodes->length - 1; $i >= 0; $i--) {
+        $node = $allNodes->item($i);
+        if (!$node instanceof DOMElement || !$node->hasAttributes()) {
+            continue;
+        }
+        $toRemove = [];
+        foreach ($node->attributes as $attribute) {
+            $name = strtolower($attribute->name);
+            if (str_starts_with($name, 'on')) {
+                $toRemove[] = $attribute->name;
+                continue;
+            }
+            if ($name === 'href') {
+                $safe = sanitize_href_attribute($attribute->value);
+                if ($safe === null) {
+                    $toRemove[] = $attribute->name;
+                } else {
+                    $node->setAttribute('href', $safe);
+                }
+            }
+            if ($name === 'src') {
+                $safe = sanitize_image_src_attribute($attribute->value);
+                if ($safe === null) {
+                    $toRemove[] = $attribute->name;
+                } else {
+                    $node->setAttribute('src', $safe);
+                }
+            }
+        }
+        foreach ($toRemove as $attrName) {
+            $node->removeAttribute($attrName);
+        }
+        if (strtolower($node->tagName) === 'img' && !$node->hasAttribute('loading')) {
+            $node->setAttribute('loading', 'lazy');
+        }
+    }
+
+    $body = $dom->getElementsByTagName('body')->item(0);
+    if (!$body) {
+        return '';
+    }
+
+    $result = '';
+    foreach ($body->childNodes as $child) {
+        $result .= $dom->saveHTML($child);
+    }
+
+    return $result;
+}
+
+function safe_storage_public_path(string $path, array $allowedPrefixes = ['storage/press/', 'storage/uploads/']): string
+{
+    $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
+    if ($normalized === '' || str_contains($normalized, '..')) {
+        throw new RuntimeException('Chemin de stockage invalide.');
+    }
+
+    foreach ($allowedPrefixes as $prefix) {
+        $prefix = ltrim(str_replace('\\', '/', trim($prefix)), '/');
+        if ($prefix !== '' && str_starts_with($normalized, $prefix)) {
+            return $normalized;
+        }
+    }
+
+    throw new RuntimeException('Chemin de stockage non autorisé.');
+}
+
+function safe_storage_public_path_or_null(string $path, array $allowedPrefixes = ['storage/press/', 'storage/uploads/']): ?string
+{
+    try {
+        return safe_storage_public_path($path, $allowedPrefixes);
+    } catch (Throwable) {
+        return null;
+    }
+}
+
+function csrf_token(): string
+{
+    if (!isset($_SESSION['_csrf']) || !is_string($_SESSION['_csrf']) || strlen($_SESSION['_csrf']) !== 64) {
+        $_SESSION['_csrf'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['_csrf'];
+}
+
+function verify_csrf(): void
+{
+    $sessionToken = (string) ($_SESSION['_csrf'] ?? '');
+    $submittedToken = (string) ($_POST['_csrf'] ?? '');
+    if ($sessionToken === '' || $submittedToken === '' || !hash_equals($sessionToken, $submittedToken)) {
+        throw new RuntimeException('Jeton CSRF invalide.');
+    }
+}
+
 function matomo_origin(): ?string
 {
     $matomoUrl = trim((string) config('tracking.matomo_url', ''));

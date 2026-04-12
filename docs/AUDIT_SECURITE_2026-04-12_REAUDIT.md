@@ -8,7 +8,7 @@
 
 ## Résumé exécutif
 - ✅ **Améliorations de sécurité présentes** sur uploads, validation d'URL distante, transactions concurrentes, et CI sécurité.
-- ⚠️ **Risque applicatif majeur restant**: de nombreuses fonctions appelées par l'application ne sont pas définies dans les fichiers du dépôt audité (90 identifiants remontés), ce qui peut provoquer des erreurs fatales à l'exécution sur des routes centrales.
+- ⚠️ **Risque applicatif majeur restant**: de nombreuses fonctions appelées par l'application ne sont pas définies dans les fichiers du dépôt audité (82 identifiants remontés), ce qui peut provoquer des erreurs fatales à l'exécution sur des routes centrales.
 - ✅ La syntaxe PHP est valide après corrections.
 
 ## Points vérifiés et résultats
@@ -47,7 +47,7 @@
 - Le pipeline répond à l'objectif de contrôle continu de sécurité.
 
 ## Risque critique restant: fonctions manquantes
-- Le script d'inventaire a remonté **90 fonctions appelées mais non définies** dans le dépôt (exemples: `db`, `e`, `render_layout`, `require_login`, `verify_csrf`, etc.).
+- Le script d'inventaire a remonté **82 fonctions appelées mais non définies** dans le dépôt (exemples: `db`, `render_layout`, `require_login`, `table_exists`, etc.).
 - Impact: risque élevé d'erreurs fatales runtime sur des routes principales.
 - Recommandation prioritaire:
   1. Restaurer le bloc fonctionnel manquant (ou les fichiers omis) depuis la source canonique.
