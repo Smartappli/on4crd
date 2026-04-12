@@ -216,7 +216,7 @@ function sanitize_rich_html(string $html): string
     return $result;
 }
 
-function safe_storage_public_path(string $path, array $allowedPrefixes = ['storage/press/', 'storage/uploads/']): string
+function safe_storage_public_path(string $path, array $allowedPrefixes = ['storage/press/']): string
 {
     $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
     if ($normalized === '' || str_contains($normalized, '..')) {
@@ -233,13 +233,148 @@ function safe_storage_public_path(string $path, array $allowedPrefixes = ['stora
     throw new RuntimeException('Chemin de stockage non autorisé.');
 }
 
-function safe_storage_public_path_or_null(string $path, array $allowedPrefixes = ['storage/press/', 'storage/uploads/']): ?string
+function safe_storage_public_path_or_null(string $path, array $allowedPrefixes = ['storage/press/']): ?string
 {
     try {
         return safe_storage_public_path($path, $allowedPrefixes);
     } catch (Throwable) {
         return null;
     }
+}
+
+function qsl_normalize_callsign(string $value): string
+{
+    $upper = mb_safe_strtoupper(trim($value));
+    $upper = preg_replace('/\s*\/\s*/', '/', $upper) ?? '';
+    $upper = preg_replace('/[^A-Z0-9\/]/', '', $upper) ?? '';
+
+    return trim($upper, '/');
+}
+
+function qsl_normalize_date(string $value): string
+{
+    $digits = preg_replace('/[^0-9]/', '', trim($value)) ?? '';
+    if (strlen($digits) >= 8) {
+        return substr($digits, 0, 8);
+    }
+
+    return '';
+}
+
+function qsl_normalize_time(string $value): string
+{
+    $digits = preg_replace('/[^0-9]/', '', trim($value)) ?? '';
+    if ($digits === '') {
+        return '';
+    }
+    if (strlen($digits) <= 2) {
+        return str_pad($digits, 2, '0', STR_PAD_LEFT) . '00';
+    }
+
+    return str_pad(substr($digits, 0, 4), 4, '0', STR_PAD_LEFT);
+}
+
+function qsl_normalize_comment(string $value): string
+{
+    $clean = trim(preg_replace('/\s+/', ' ', $value) ?? '');
+
+    return mb_safe_substr($clean, 0, 180);
+}
+
+function parse_adif(string $content): array
+{
+    $rows = [];
+    if (trim($content) === '') {
+        return $rows;
+    }
+
+    preg_match_all('/<([A-Z0-9_]+):(\d+)[^>]*>(.*?)((?=<[A-Z0-9_]+:\d+)|<EOR>|$)/is', $content, $matches, PREG_SET_ORDER);
+
+    $record = [];
+    foreach ($matches as $match) {
+        $field = strtolower((string) $match[1]);
+        $length = (int) $match[2];
+        $raw = (string) $match[3];
+        $value = substr($raw, 0, $length);
+        $value = trim($value);
+
+        if ($field === 'call') {
+            $record['call'] = qsl_normalize_callsign($value);
+        } elseif ($field === 'qso_date') {
+            $record['qso_date'] = qsl_normalize_date($value);
+        } elseif ($field === 'time_on') {
+            $record['time_on'] = qsl_normalize_time($value);
+        } elseif ($field === 'band') {
+            $record['band'] = mb_safe_strtoupper($value);
+        } elseif ($field === 'mode') {
+            $record['mode'] = mb_safe_strtoupper($value);
+        } elseif ($field === 'rst_sent') {
+            $record['rst_sent'] = mb_safe_substr(trim($value), 0, 16);
+        } elseif ($field === 'rst_rcvd') {
+            $record['rst_recv'] = mb_safe_substr(trim($value), 0, 16);
+        } elseif ($field === 'comment') {
+            $record['comment'] = qsl_normalize_comment($value);
+        }
+
+        if (stripos((string) $match[4], '<EOR>') !== false) {
+            if (($record['call'] ?? '') !== '') {
+                $rows[] = $record;
+            }
+            $record = [];
+        }
+    }
+
+    if ($record !== [] && ($record['call'] ?? '') !== '') {
+        $rows[] = $record;
+    }
+
+    return $rows;
+}
+
+function sanitize_svg_document(string $svg): string
+{
+    $normalized = strtolower($svg);
+    if (
+        str_contains($normalized, '<script')
+        || str_contains($normalized, 'javascript:')
+        || str_contains($normalized, 'onload=')
+        || str_contains($normalized, 'onerror=')
+        || str_contains($normalized, '<iframe')
+        || str_contains($normalized, '<object')
+    ) {
+        return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+    }
+
+    return $svg;
+}
+
+function generate_qsl_svg(array $payload): string
+{
+    $ownCall = e(qsl_normalize_callsign((string) ($payload['own_call'] ?? '')));
+    $qsoCall = e(qsl_normalize_callsign((string) ($payload['qso_call'] ?? '')));
+    $ownName = e(trim((string) ($payload['own_name'] ?? '')));
+    $ownQth = e(trim((string) ($payload['own_qth'] ?? '')));
+    $date = e(qsl_normalize_date((string) ($payload['qso_date'] ?? '')));
+    $time = e(qsl_normalize_time((string) ($payload['time_on'] ?? '')));
+    $band = e(mb_safe_strtoupper(trim((string) ($payload['band'] ?? ''))));
+    $mode = e(mb_safe_strtoupper(trim((string) ($payload['mode'] ?? ''))));
+    $rstSent = e(trim((string) ($payload['rst_sent'] ?? '')));
+    $rstRecv = e(trim((string) ($payload['rst_recv'] ?? '')));
+    $comment = e(qsl_normalize_comment((string) ($payload['comment'] ?? 'TNX QSO 73')));
+    $title = e(trim((string) ($payload['title'] ?? 'QSL Card')));
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">'
+        . '<rect width="900" height="500" fill="#0b1f3a"/>'
+        . '<text x="40" y="70" fill="#e2e8f0" font-size="42" font-family="Arial, sans-serif" font-weight="700">' . $title . '</text>'
+        . '<text x="40" y="130" fill="#f8fafc" font-size="30" font-family="Arial, sans-serif">DE: ' . $ownCall . '</text>'
+        . '<text x="40" y="170" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">' . $ownName . ' • ' . $ownQth . '</text>'
+        . '<text x="40" y="250" fill="#f8fafc" font-size="34" font-family="Arial, sans-serif">TO: ' . $qsoCall . '</text>'
+        . '<text x="40" y="305" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">DATE ' . $date . '  UTC ' . $time . '  BAND ' . $band . '  MODE ' . $mode . '</text>'
+        . '<text x="40" y="345" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
+        . '<text x="40" y="395" fill="#f8fafc" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>'
+        . '</svg>';
+
+    return sanitize_svg_document($svg);
 }
 
 function csrf_token(): string
