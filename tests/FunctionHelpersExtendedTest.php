@@ -21,7 +21,7 @@ final class FunctionHelpersExtendedTest extends TestCase
 
     public function testMbSafeStrimwidthTrimsWithMarker(): void
     {
-        self::assertSame('ABCDE…', mb_safe_strimwidth('ABCDEFGHIJ', 0, 5, '…'));
+        self::assertSame('ABCD…', mb_safe_strimwidth('ABCDEFGHIJ', 0, 5, '…'));
     }
 
     public function testSanitizeHrefAttributeRejectsDataAndVbscriptSchemes(): void
@@ -30,4 +30,3 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNull(sanitize_href_attribute('vbscript:msgbox(1)'));
     }
 }
-

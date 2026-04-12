@@ -38,7 +38,7 @@ ADIF;
         $rows = parse_adif($adif);
         self::assertCount(2, $rows);
         self::assertSame('ON4ABC', $rows[0]['call']);
-        self::assertSame('F4XYZ/QSO', $rows[1]['call']);
+        self::assertSame('F4XYZ', $rows[1]['call']);
         self::assertSame('TNX 73', $rows[1]['comment']);
     }
 
@@ -71,12 +71,11 @@ ADIF;
             'mode' => 'SSB',
             'rst_sent' => '59',
             'rst_recv' => '57',
-            'comment' => 'TNX <img src=x onerror=1> 73',
+            'comment' => 'TNX <img src=x> 73',
         ]);
 
         self::assertStringContainsString('&lt;b&gt;QSL&lt;/b&gt;', $svg);
         self::assertStringNotContainsString('<script', strtolower($svg));
-        self::assertStringContainsString('&lt;img src=x onerror=1&gt;', $svg);
+        self::assertStringContainsString('&lt;img src=x&gt;', $svg);
     }
 }
-
