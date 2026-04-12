@@ -73,7 +73,6 @@ jobs:
 
       - name: SAST (PHPStan)
         run: phpstan analyse app pages --no-progress --level=5
-        continue-on-error: true
 
       - name: Dependency audit
         run: composer audit --no-interaction

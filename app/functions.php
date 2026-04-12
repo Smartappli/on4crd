@@ -247,18 +247,64 @@ function secure_move_uploaded_file(
     }
     assert_upload_file_is_valid_signature($tmpPath, $allowedExtensions);
 
+    $sanitizedTmpPath = $tmpPath;
+    if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+        $sanitizedTmpPath = sanitize_uploaded_image_file($tmpPath, $extension);
+    }
+
     if (!is_dir($destinationDirectory) && !mkdir($destinationDirectory, 0755, true) && !is_dir($destinationDirectory)) {
         throw new RuntimeException('Impossible de créer le dossier de destination.');
     }
 
     $filename = $prefix . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
     $destinationPath = rtrim($destinationDirectory, '/') . '/' . $filename;
-    if (!move_uploaded_file($tmpPath, $destinationPath)) {
+    $moved = $sanitizedTmpPath === $tmpPath
+        ? move_uploaded_file($tmpPath, $destinationPath)
+        : rename($sanitizedTmpPath, $destinationPath);
+    if (!$moved) {
         throw new RuntimeException('Impossible de déplacer le fichier téléversé.');
     }
 
     @chmod($destinationPath, 0644);
     return $filename;
+}
+
+function sanitize_uploaded_image_file(string $tmpPath, string $extension): string
+{
+    $raw = @file_get_contents($tmpPath);
+    if ($raw === false) {
+        throw new RuntimeException('Image téléversée illisible.');
+    }
+
+    if (!function_exists('imagecreatefromstring')) {
+        return $tmpPath;
+    }
+
+    $image = @imagecreatefromstring($raw);
+    if ($image === false) {
+        throw new RuntimeException('Image téléversée invalide.');
+    }
+
+    $outputPath = tempnam(sys_get_temp_dir(), 'on4crd-img-');
+    if ($outputPath === false) {
+        imagedestroy($image);
+        throw new RuntimeException('Impossible de créer un fichier temporaire.');
+    }
+
+    $writeOk = match ($extension) {
+        'jpg', 'jpeg' => imagejpeg($image, $outputPath, 90),
+        'png' => imagepng($image, $outputPath, 6),
+        'webp' => function_exists('imagewebp') ? imagewebp($image, $outputPath, 85) : false,
+        default => false,
+    };
+    imagedestroy($image);
+
+    if (!$writeOk) {
+        @unlink($outputPath);
+        throw new RuntimeException('Échec du nettoyage des métadonnées image.');
+    }
+
+    return $outputPath;
 }
 
 function handle_album_upload(?array $upload, string $callsign): string
