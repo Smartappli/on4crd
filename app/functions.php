@@ -166,6 +166,138 @@ function ensure_storage_htaccess(string $directory, string $rules): void
     }
 }
 
+function detect_uploaded_mime_type(string $tmpPath): string
+{
+    if (!is_file($tmpPath)) {
+        return '';
+    }
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    if ($finfo === false) {
+        return '';
+    }
+    $mime = (string) finfo_file($finfo, $tmpPath);
+    finfo_close($finfo);
+
+    return strtolower(trim($mime));
+}
+
+function assert_upload_file_is_valid_signature(string $tmpPath, array $allowedExtensions): void
+{
+    $signature = @file_get_contents($tmpPath, false, null, 0, 16);
+    if ($signature === false) {
+        throw new RuntimeException('Fichier téléversé illisible.');
+    }
+
+    $known = [
+        'pdf' => '%PDF-',
+        'jpg' => "\xFF\xD8\xFF",
+        'jpeg' => "\xFF\xD8\xFF",
+        'png' => "\x89PNG\r\n\x1A\n",
+        'webp' => 'RIFF',
+    ];
+
+    foreach ($allowedExtensions as $extension) {
+        $extension = strtolower((string) $extension);
+        if (!isset($known[$extension])) {
+            continue;
+        }
+        if (str_starts_with($signature, $known[$extension])) {
+            if ($extension !== 'webp' || str_contains(substr($signature, 8), 'WEBP')) {
+                return;
+            }
+        }
+    }
+
+    throw new RuntimeException('Signature de fichier invalide pour le type attendu.');
+}
+
+function secure_move_uploaded_file(
+    array $upload,
+    string $destinationDirectory,
+    string $prefix,
+    array $allowedExtensions,
+    array $allowedMimes,
+    int $maxBytes
+): string {
+    $errorCode = (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE);
+    if ($errorCode !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Échec du téléversement.');
+    }
+
+    $tmpPath = (string) ($upload['tmp_name'] ?? '');
+    if ($tmpPath === '' || !is_uploaded_file($tmpPath)) {
+        throw new RuntimeException('Fichier téléversé invalide.');
+    }
+
+    $size = (int) ($upload['size'] ?? 0);
+    if ($size <= 0 || $size > $maxBytes) {
+        throw new RuntimeException('Fichier trop volumineux ou vide.');
+    }
+
+    $originalName = (string) ($upload['name'] ?? '');
+    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    if (!in_array($extension, $allowedExtensions, true)) {
+        throw new RuntimeException('Extension de fichier non autorisée.');
+    }
+
+    $mime = detect_uploaded_mime_type($tmpPath);
+    if (!in_array($mime, $allowedMimes, true)) {
+        throw new RuntimeException('Type MIME de fichier non autorisé.');
+    }
+    assert_upload_file_is_valid_signature($tmpPath, $allowedExtensions);
+
+    if (!is_dir($destinationDirectory) && !mkdir($destinationDirectory, 0755, true) && !is_dir($destinationDirectory)) {
+        throw new RuntimeException('Impossible de créer le dossier de destination.');
+    }
+
+    $filename = $prefix . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
+    $destinationPath = rtrim($destinationDirectory, '/') . '/' . $filename;
+    if (!move_uploaded_file($tmpPath, $destinationPath)) {
+        throw new RuntimeException('Impossible de déplacer le fichier téléversé.');
+    }
+
+    @chmod($destinationPath, 0644);
+    return $filename;
+}
+
+function handle_album_upload(?array $upload, string $callsign): string
+{
+    if (!is_array($upload)) {
+        throw new RuntimeException('Image manquante.');
+    }
+    $baseDir = dirname(__DIR__) . '/storage/uploads/albums';
+    $saved = secure_move_uploaded_file(
+        $upload,
+        $baseDir,
+        slugify($callsign !== '' ? $callsign : 'member'),
+        ['jpg', 'jpeg', 'png', 'webp'],
+        ['image/jpeg', 'image/png', 'image/webp'],
+        8 * 1024 * 1024
+    );
+
+    return 'storage/uploads/albums/' . $saved;
+}
+
+function handle_ad_image_upload(?array $upload, string $callsign, string $existingPath = ''): ?string
+{
+    if (!is_array($upload) || (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        return $existingPath !== '' ? $existingPath : null;
+    }
+
+    $baseDir = dirname(__DIR__) . '/storage/uploads/ads';
+    $saved = secure_move_uploaded_file(
+        $upload,
+        $baseDir,
+        slugify($callsign !== '' ? $callsign : 'ad'),
+        ['jpg', 'jpeg', 'png', 'webp'],
+        ['image/jpeg', 'image/png', 'image/webp'],
+        6 * 1024 * 1024
+    );
+
+    return 'storage/uploads/ads/' . $saved;
+}
+
 function client_ip_address(): string
 {
     return trim((string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0')) ?: '0.0.0.0';
@@ -307,9 +439,19 @@ function validate_remote_feed_url(string $url): ?string
         return null;
     }
 
-    $host = (string) parse_url($normalized, PHP_URL_HOST);
+    $host = strtolower((string) parse_url($normalized, PHP_URL_HOST));
     if ($host === '' || host_resolves_to_private_network($host)) {
         throw new RuntimeException("L'URL distante pointe vers un réseau privé ou réservé.");
+    }
+
+    $dnsRecords = @dns_get_record($host, DNS_A + DNS_AAAA);
+    if (is_array($dnsRecords)) {
+        foreach ($dnsRecords as $record) {
+            $ip = (string) ($record['ip'] ?? $record['ipv6'] ?? '');
+            if ($ip !== '' && is_private_or_reserved_ip($ip)) {
+                throw new RuntimeException("L'URL distante résout vers une IP privée/réservée.");
+            }
+        }
     }
 
     return $normalized;
@@ -342,9 +484,11 @@ function place_shop_order(int $memberId, string $paymentMethod, string $notes = 
         'INSERT INTO shop_orders (reference_code, member_id, status, total_cents, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?)'
     );
     $insertItem = $pdo->prepare(
-        'INSERT INTO shop_order_items (order_id, product_id, title_snapshot, qty, unit_price_cents, line_total_cents) VALUES (?, ?, ?, ?, ?, ?)'
+        'INSERT INTO shop_order_items (order_id, product_id, product_title, quantity, unit_price_cents, line_total_cents) VALUES (?, ?, ?, ?, ?, ?)'
     );
-    $fetchProduct = $pdo->prepare('SELECT id, title, price_cents, stock_qty, status FROM shop_products WHERE id = ? LIMIT 1');
+    $fetchProduct = $pdo->prepare(
+        'SELECT id, title, price_cents, stock_qty, status FROM shop_products WHERE id = ? AND status = "published" LIMIT 1 FOR UPDATE'
+    );
     $updateStock = $pdo->prepare('UPDATE shop_products SET stock_qty = stock_qty - ? WHERE id = ? AND stock_qty >= ?');
 
     $pdo->beginTransaction();
@@ -369,7 +513,7 @@ function place_shop_order(int $memberId, string $paymentMethod, string $notes = 
 
             $fetchProduct->execute([$productId]);
             $dbProduct = $fetchProduct->fetch();
-            if (!$dbProduct || (string) $dbProduct['status'] !== 'published') {
+            if (!$dbProduct) {
                 throw new RuntimeException('Produit indisponible.');
             }
 
@@ -567,37 +711,44 @@ function auction_sync_expired_lots(): void
 
 function place_auction_bid(int $lotId, int $memberId, int $amountCents): void
 {
-    $lot = auction_lot_by_id($lotId);
-    if ($lot === null) {
-        throw new RuntimeException('Lot introuvable.');
-    }
-
-    $status = auction_runtime_status($lot);
-    if ($status !== 'active') {
-        throw new RuntimeException('Cette enchère n’est pas active.');
-    }
-
-    $minimum = auction_minimum_bid_cents($lot);
-    if ($amountCents < $minimum) {
-        throw new RuntimeException('Le montant minimum pour enchérir est ' . format_price_eur($minimum) . '.');
-    }
-
     $pdo = db();
     $insertBid = $pdo->prepare('INSERT INTO auction_bids (lot_id, member_id, amount_cents) VALUES (?, ?, ?)');
-    $updateLot = $pdo->prepare('UPDATE auction_lots SET current_price_cents = ?, status = "active", winner_member_id = NULL, extended_until = ?, ends_at = ? WHERE id = ?');
-
-    $now = new DateTimeImmutable('now');
-    $endsAt = new DateTimeImmutable((string) $lot['ends_at']);
-    $extension = null;
-    if ($endsAt->getTimestamp() - $now->getTimestamp() <= 300) {
-        $extension = $endsAt->modify('+5 minutes')->format('Y-m-d H:i:s');
-    }
+    $lockLot = $pdo->prepare('SELECT * FROM auction_lots WHERE id = ? LIMIT 1 FOR UPDATE');
+    $updateLot = $pdo->prepare(
+        'UPDATE auction_lots SET current_price_cents = ?, status = "active", winner_member_id = NULL, extended_until = ?, ends_at = ? WHERE id = ? AND current_price_cents <= ?'
+    );
 
     $pdo->beginTransaction();
     try {
+        $lockLot->execute([$lotId]);
+        $lot = $lockLot->fetch();
+        if (!$lot) {
+            throw new RuntimeException('Lot introuvable.');
+        }
+
+        $status = auction_runtime_status($lot);
+        if ($status !== 'active') {
+            throw new RuntimeException('Cette enchère n’est pas active.');
+        }
+
+        $minimum = auction_minimum_bid_cents($lot);
+        if ($amountCents < $minimum) {
+            throw new RuntimeException('Le montant minimum pour enchérir est ' . format_price_eur($minimum) . '.');
+        }
+
+        $now = new DateTimeImmutable('now');
+        $endsAt = new DateTimeImmutable((string) $lot['ends_at']);
+        $extension = null;
+        if ($endsAt->getTimestamp() - $now->getTimestamp() <= 300) {
+            $extension = $endsAt->modify('+5 minutes')->format('Y-m-d H:i:s');
+        }
+
         $insertBid->execute([$lotId, $memberId, $amountCents]);
         $newEnd = $extension ?? (string) $lot['ends_at'];
-        $updateLot->execute([$amountCents, $extension, $newEnd, $lotId]);
+        $updateLot->execute([$amountCents, $extension, $newEnd, $lotId, (int) $lot['current_price_cents']]);
+        if ($updateLot->rowCount() === 0) {
+            throw new RuntimeException('Conflit de concurrence sur l’enchère. Veuillez réessayer.');
+        }
 
         if (!empty($lot['buy_now_price_cents']) && $amountCents >= (int) $lot['buy_now_price_cents']) {
             $pdo->prepare('UPDATE auction_lots SET status = "closed", winner_member_id = ?, current_price_cents = ? WHERE id = ?')

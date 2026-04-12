@@ -43,3 +43,37 @@ jobs:
 
       - name: Run unit tests
         run: composer test
+
+  security:
+    name: Security checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          extensions: dom, gd, mbstring, pdo, pdo_mysql, zip
+          tools: composer:v2, phpstan
+
+      - name: Prepare config
+        run: cp config/config.sample.php config/config.php
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Lint PHP
+        run: composer lint
+
+      - name: Run unit tests
+        run: composer test
+
+      - name: SAST (PHPStan)
+        run: phpstan analyse app pages --no-progress --level=5
+        continue-on-error: true
+
+      - name: Dependency audit
+        run: composer audit --no-interaction

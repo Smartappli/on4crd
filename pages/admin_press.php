@@ -22,17 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'release') {
             $filePath = null;
             if (isset($_FILES['pdf']) && ($_FILES['pdf']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
-                $ext = strtolower(pathinfo((string) $_FILES['pdf']['name'], PATHINFO_EXTENSION));
-                $mime = mime_content_type((string) $_FILES['pdf']['tmp_name']) ?: '';
-                if ($ext !== 'pdf' || !in_array($mime, ['application/pdf', 'application/x-pdf'], true)) {
-                    throw new RuntimeException('Seuls les fichiers PDF valides sont autorisés.');
-                }
-                $name = 'storage/press/' . slugify((string) ($_POST['title'] ?? 'communique')) . '-' . date('YmdHis') . '.pdf';
-                $target = dirname(__DIR__) . '/' . $name;
-                if (!move_uploaded_file((string) $_FILES['pdf']['tmp_name'], $target)) {
-                    throw new RuntimeException('Impossible de déplacer le fichier téléversé.');
-                }
-                $filePath = $name;
+                $prefix = slugify((string) ($_POST['title'] ?? 'communique'));
+                $savedFile = secure_move_uploaded_file(
+                    $_FILES['pdf'],
+                    dirname(__DIR__) . '/storage/press',
+                    $prefix !== '' ? $prefix : 'communique',
+                    ['pdf'],
+                    ['application/pdf'],
+                    10 * 1024 * 1024
+                );
+                $filePath = 'storage/press/' . $savedFile;
             }
             $stmt = db()->prepare('INSERT INTO press_releases (title, summary, published_on, file_path, is_published) VALUES (?, ?, ?, ?, ?)');
             $stmt->execute([
