@@ -1,0 +1,14 @@
+{
+  "name": "smartappli/on4crd",
+  "description": "Site club ON4CRD en PHP avec modules contenus, QSL, boutique et encheres.",
+  "type": "project",
+  "license": "proprietary",
+  "require": {},
+  "require-dev": {
+    "phpunit/phpunit": "^10.5"
+  },
+  "scripts": {
+    "lint": "php tools/lint.php",
+    "test": "phpunit --configuration phpunit.xml.dist --testdox"
+  }
+}

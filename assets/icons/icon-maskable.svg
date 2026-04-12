@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">ON4CRD</title>
+  <desc id="desc">Icône maskable ON4CRD</desc>
+  <rect width="512" height="512" rx="112" fill="#2f6fed"></rect>
+  <circle cx="256" cy="176" r="74" fill="#ffffff" opacity="0.14"></circle>
+  <path d="M138 318c0-65 53-118 118-118s118 53 118 118" fill="none" stroke="#ffffff" stroke-width="24" stroke-linecap="round"></path>
+  <circle cx="256" cy="318" r="18" fill="#ffffff"></circle>
+  <path d="M192 318h128" stroke="#ffffff" stroke-width="18" stroke-linecap="round"></path>
+  <text x="256" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="68" font-weight="700" fill="#ffffff">ON4CRD</text>
+</svg>

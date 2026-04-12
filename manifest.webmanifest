@@ -1,0 +1,13 @@
+{
+  "id": "./index.php?route=home",
+  "name": "ON4CRD Club Radio Durnal",
+  "short_name": "ON4CRD",
+  "description": "Plateforme club radioamateur ON4CRD : actualités, agenda, contenus techniques, dossier presse, ressources pédagogiques et espace membres.",
+  "start_url": "./index.php?route=home",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f7fb",
+  "theme_color": "#2f6fed",
+  "lang": "fr"
+}
