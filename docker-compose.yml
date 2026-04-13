@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: on4crd-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-on4crd}
+      MYSQL_USER: ${DB_USER:-on4crd}
+      MYSQL_PASSWORD: ${DB_PASS:-on4crd}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS:-root}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASS:-root}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: on4crd-web
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-on4crd}
+      DB_USER: ${DB_USER:-on4crd}
+      DB_PASS: ${DB_PASS:-on4crd}
+      APP_URL: ${APP_URL:-http://localhost:8080}
+      ADMIN_CALLSIGN: ${ADMIN_CALLSIGN:-ON4CRD}
+      ADMIN_NAME: ${ADMIN_NAME:-Administrateur local}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@on4crd.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin!23456}
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+
+volumes:
+  db_data:
