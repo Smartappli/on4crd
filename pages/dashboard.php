@@ -29,6 +29,7 @@ ob_start();
         <p class="help">Les widgets live sont réservés à ce module séparé. Vous pouvez réorganiser les blocs, en ajouter ou en retirer selon vos besoins.</p>
       </div>
       <div class="actions">
+        <a class="button secondary" href="<?= e(route_url('newsletter')) ?>">Newsletter</a>
         <button class="button secondary" id="save-dashboard" type="button">Enregistrer la disposition</button>
       </div>
     </div>

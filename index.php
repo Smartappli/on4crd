@@ -4,6 +4,24 @@ declare(strict_types=1);
 require __DIR__ . '/app/bootstrap.php';
 
 $route = (string) ($_GET['route'] ?? 'home');
+$requestStart = microtime(true);
+
+register_shutdown_function(static function () use ($requestStart, $route): void {
+    $status = http_response_code();
+    $durationMs = (int) round((microtime(true) - $requestStart) * 1000);
+    log_structured_event('http_request', [
+        'status_code' => $status,
+        'duration_ms' => $durationMs,
+        'route_name' => $route,
+        'method' => (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'),
+    ]);
+});
+
+if (maintenance_should_block_route($route)) {
+    maintenance_render_and_exit();
+}
+
+seo_apply_defaults($route);
 
 if ($route === 'toggle_theme') {
     require_login();
@@ -38,6 +56,7 @@ $routeModules = [
     'qsl_preview' => 'qsl',
     'qsl_export' => 'qsl',
     'chatbot' => 'chatbot',
+    'newsletter' => 'members',
     'news' => 'news',
     'news_view' => 'news',
     'articles' => 'articles',
@@ -52,6 +71,7 @@ $routeModules = [
     'ad_click' => 'advertising',
     'admin' => 'admin',
     'admin_permissions' => 'admin',
+    'admin_newsletters' => 'admin',
     'admin_modules' => 'admin',
     'admin_articles' => 'admin',
     'admin_committee' => 'admin',
@@ -71,7 +91,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt'];
+$publicRoutes = ['home', 'login', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -109,6 +129,7 @@ switch ($route) {
     case 'qsl_preview': require __DIR__ . '/pages/qsl_preview.php'; break;
     case 'qsl_export': require __DIR__ . '/pages/qsl_export.php'; break;
     case 'chatbot': require __DIR__ . '/pages/chatbot.php'; break;
+    case 'newsletter': require __DIR__ . '/pages/newsletter.php'; break;
     case 'news': require __DIR__ . '/pages/news.php'; break;
     case 'news_view': require __DIR__ . '/pages/news_view.php'; break;
     case 'articles': require __DIR__ . '/pages/articles.php'; break;
@@ -120,6 +141,7 @@ switch ($route) {
     case 'album': require __DIR__ . '/pages/album.php'; break;
     case 'admin': require __DIR__ . '/pages/admin.php'; break;
     case 'admin_permissions': require __DIR__ . '/pages/admin_permissions.php'; break;
+    case 'admin_newsletters': require __DIR__ . '/pages/admin_newsletters.php'; break;
     case 'admin_modules': require __DIR__ . '/pages/admin_modules.php'; break;
     case 'admin_articles': require __DIR__ . '/pages/admin_articles.php'; break;
     case 'admin_committee': require __DIR__ . '/pages/admin_committee.php'; break;
@@ -138,6 +160,7 @@ switch ($route) {
     case 'ad_click': require __DIR__ . '/pages/ad_click.php'; break;
     case 'sitemap.xml': require __DIR__ . '/pages/sitemap.php'; break;
     case 'robots.txt': require __DIR__ . '/pages/robots.php'; break;
+    case 'newsletter_unsubscribe': require __DIR__ . '/pages/newsletter_unsubscribe.php'; break;
     default:
         http_response_code(404);
         echo render_layout('<div class="card"><h1>404</h1><p>Page introuvable.</p></div>', '404');

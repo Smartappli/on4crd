@@ -14,9 +14,19 @@ return [
         'supported_locales' => ['fr', 'en', 'de', 'nl'],
         'session_name' => 'on4crd_session',
         'allow_install' => false,
+        'maintenance' => [
+            'enabled' => false,
+            'secret' => '',
+            'allowed_routes' => ['login', 'robots.txt', 'sitemap.xml'],
+        ],
     ],
     'security' => [
         'csrf_key' => 'change-me-please',
+    ],
+    'cache' => [
+        'enabled' => true,
+        'default_ttl' => 300,
+        'directory' => __DIR__ . '/../storage/cache/data',
     ],
     'tracking' => [
         'matomo_url' => '',
@@ -47,5 +57,8 @@ return [
         'provider' => 'local', // local|external
         'external_api_url' => '',
         'external_api_key' => '',
+    ],
+    'observability' => [
+        'enabled' => true,
     ],
 ];

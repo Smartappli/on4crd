@@ -29,7 +29,13 @@ session_set_cookie_params([
 session_start();
 
 require __DIR__ . '/functions.php';
+require __DIR__ . '/cache.php';
+require __DIR__ . '/observability.php';
+require __DIR__ . '/maintenance.php';
+require __DIR__ . '/newsletter.php';
+require __DIR__ . '/seo.php';
 
+setup_observability((array) ($bootstrapConfig['observability'] ?? []));
 apply_security_headers();
 ensure_directories();
 apply_runtime_schema_updates();

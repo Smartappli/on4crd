@@ -1,11 +1,184 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/app/bootstrap.php';
+$rootDir = __DIR__;
+$configFile = $rootDir . '/config/config.php';
+$installLockFile = $rootDir . '/storage/install.lock';
+
+/**
+ * @param array<string, mixed> $payload
+ */
+function installer_render_html(string $title, string $body, array $payload = []): void
+{
+    $safeTitle = htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    echo '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
+    echo '<title>' . $safeTitle . '</title>';
+    echo '<style>body{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:24px}.card{max-width:820px;margin:0 auto;background:#111827;border-radius:12px;padding:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;margin:8px 0;font-size:14px}input{width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#0b1220;color:#f8fafc}.full{grid-column:1/-1}button{padding:10px 16px;background:#2563eb;color:#fff;border:0;border-radius:8px;cursor:pointer}.help{font-size:13px;color:#93c5fd}pre{background:#020617;padding:10px;border-radius:8px;overflow:auto}</style>';
+    echo '</head><body><div class="card"><h1>' . $safeTitle . '</h1>' . $body . '</div></body></html>';
+}
+
+function installer_generate_csrf_key(): string
+{
+    return bin2hex(random_bytes(24));
+}
+
+/**
+ * @param array<string, string> $values
+ */
+function installer_build_config_php(array $values): string
+{
+    $dsn = sprintf(
+        'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+        $values['db_host'],
+        $values['db_port'],
+        $values['db_name']
+    );
+
+    $config = [
+        'db' => [
+            'dsn' => $dsn,
+            'user' => $values['db_user'],
+            'pass' => $values['db_pass'],
+        ],
+        'app' => [
+            'site_name' => $values['site_name'],
+            'base_url' => $values['base_url'],
+            'default_locale' => 'fr',
+            'supported_locales' => ['fr', 'en', 'de', 'nl'],
+            'session_name' => 'on4crd_session',
+            'allow_install' => true,
+            'maintenance' => [
+                'enabled' => false,
+                'secret' => '',
+                'allowed_routes' => ['login', 'robots.txt', 'sitemap.xml'],
+            ],
+        ],
+        'security' => [
+            'csrf_key' => $values['csrf_key'],
+        ],
+        'cache' => [
+            'enabled' => true,
+            'default_ttl' => 300,
+            'directory' => __DIR__ . '/../storage/cache/data',
+        ],
+        'tracking' => [
+            'matomo_url' => '',
+            'matomo_site_id' => '',
+        ],
+        'social' => [
+            'album_webhooks' => [],
+        ],
+        'translation' => [
+            'provider' => 'deepl',
+            'deepl_api_key' => '',
+            'cache_ttl' => 604800,
+        ],
+        'radio_data' => [
+            'cache_ttl' => 900,
+            'noaa_scales_url' => 'https://services.swpc.noaa.gov/products/noaa-scales.json',
+            'noaa_kp_url' => 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json',
+            'noaa_flux_url' => 'https://services.swpc.noaa.gov/json/solar-radio-flux.json',
+            'noaa_alerts_url' => 'https://services.swpc.noaa.gov/products/alerts.json',
+            'hamqth_dx_url' => 'https://www.hamqth.com/dxc_csv.php?limit=12',
+            'satnogs_tle_url' => 'https://db.satnogs.org/api/tle/',
+            'contest_rss_url' => 'https://www.contestcalendar.com/weeklycont.php/calendar.rss',
+        ],
+        'chatbot' => [
+            'provider' => 'local',
+            'external_api_url' => '',
+            'external_api_key' => '',
+        ],
+        'observability' => [
+            'enabled' => true,
+        ],
+    ];
+
+    return "<?php\ndeclare(strict_types=1);\n\nreturn " . var_export($config, true) . ";\n";
+}
+
+if (!is_file($configFile)) {
+    $error = '';
+    $success = '';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        try {
+            $values = [
+                'db_host' => trim((string) ($_POST['db_host'] ?? 'localhost')),
+                'db_port' => trim((string) ($_POST['db_port'] ?? '3306')),
+                'db_name' => trim((string) ($_POST['db_name'] ?? 'on4crd')),
+                'db_user' => trim((string) ($_POST['db_user'] ?? 'on4crd')),
+                'db_pass' => (string) ($_POST['db_pass'] ?? ''),
+                'site_name' => trim((string) ($_POST['site_name'] ?? 'ON4CRD')),
+                'base_url' => trim((string) ($_POST['base_url'] ?? '')),
+                'csrf_key' => trim((string) ($_POST['csrf_key'] ?? installer_generate_csrf_key())),
+            ];
+
+            if ($values['db_host'] === '' || $values['db_name'] === '' || $values['db_user'] === '') {
+                throw new RuntimeException('Les paramètres DB host/name/user sont requis.');
+            }
+
+            $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $values['db_host'], $values['db_port'], $values['db_name']);
+            new PDO($dsn, $values['db_user'], $values['db_pass'], [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_TIMEOUT => 5,
+            ]);
+
+            $configPhp = installer_build_config_php($values);
+            if (!is_dir(dirname($configFile)) && !mkdir(dirname($configFile), 0755, true) && !is_dir(dirname($configFile))) {
+                throw new RuntimeException('Impossible de créer le dossier config/.');
+            }
+            if (file_put_contents($configFile, $configPhp, LOCK_EX) === false) {
+                throw new RuntimeException('Écriture de config/config.php impossible.');
+            }
+
+            $success = 'Configuration créée avec succès. Passez maintenant à l\'initialisation de la base ci-dessous.';
+        } catch (Throwable $throwable) {
+            $error = $throwable->getMessage();
+        }
+    }
+
+    $csrfSuggestion = installer_generate_csrf_key();
+    $body = '';
+    if ($success !== '') {
+        $body .= '<p style="color:#22c55e"><strong>' . htmlspecialchars($success, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</strong></p>';
+        $body .= '<p><a href="install.php" style="color:#93c5fd">Continuer l\'installation</a></p>';
+    }
+    if ($error !== '') {
+        $body .= '<p style="color:#f87171"><strong>' . htmlspecialchars($error, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</strong></p>';
+    }
+
+    $body .= '<p class="help">Étape 1/2 — création automatique de <code>config/config.php</code>.</p>';
+    $body .= '<form method="post"><div class="grid">';
+    $fields = [
+        ['db_host', 'DB Host', 'localhost'],
+        ['db_port', 'DB Port', '3306'],
+        ['db_name', 'DB Name', 'on4crd'],
+        ['db_user', 'DB User', 'on4crd'],
+        ['db_pass', 'DB Password', ''],
+        ['site_name', 'Nom du site', 'ON4CRD v3.6.1'],
+        ['base_url', 'Base URL (https://example.org)', ''],
+        ['csrf_key', 'Clé CSRF', $csrfSuggestion],
+    ];
+
+    foreach ($fields as [$name, $label, $value]) {
+        $type = $name === 'db_pass' ? 'password' : 'text';
+        $full = in_array($name, ['base_url', 'csrf_key'], true) ? ' full' : '';
+        $body .= '<label class="' . $full . '">' . htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $body .= '<input type="' . $type . '" name="' . htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '" value="' . htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"></label>';
+    }
+
+    $body .= '</div><p><button type="submit">Créer la configuration</button></p></form>';
+    $body .= '<p class="help">Astuce: cette étape valide la connexion MySQL avant écriture de la config.</p>';
+
+    installer_render_html('Assistant de déploiement ON4CRD', $body);
+    return;
+}
+
+require $rootDir . '/app/bootstrap.php';
 
 $message = '';
 $error = '';
-$installLockFile = __DIR__ . '/storage/install.lock';
 $installAllowed = (bool) config('app.allow_install', false);
 if (!$installAllowed || is_file($installLockFile)) {
     http_response_code(403);
@@ -23,149 +196,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         db()->exec($schema);
 
         $permissions = [
-            'admin.access' => 'Accès administration',
-            'members.manage' => 'Gérer les membres',
-            'news.submit' => 'Proposer des actualités',
-            'news.moderate' => 'Modérer et publier les actualités',
-            'articles.manage' => 'Gérer les articles techniques',
-            'wiki.edit' => 'Contribuer au wiki',
-            'wiki.moderate' => 'Valider le wiki',
-            'albums.manage' => 'Gérer les albums',
-            'albums.sync' => 'Synchroniser les albums publics',
-            'dashboard.manage' => 'Gérer le tableau de bord',
-            'qsl.manage' => 'Utiliser le module QSL',
-            'chatbot.manage' => 'Voir les logs du chatbot',
-            'ads.submit' => 'Gérer ses publicités',
-            'ads.moderate' => 'Modérer les publicités',
-            'ads.manage_all' => 'Gérer toutes les publicités et statistiques',
-            'modules.manage' => 'Gérer les modules du site',
-            'press.manage' => 'Gérer les contacts et communiqués de presse',
-            'editorial.manage' => 'Gérer les contenus éditoriaux multilingues',
-            'translations.review' => 'Relire et valider les traductions',
-            'live_feeds.manage' => 'Gérer finement les flux live',
-            'events.manage' => 'Gérer l’agenda et les événements',
-            'shop.manage' => 'Gérer la boutique',
-            'auctions.manage' => 'Gérer les enchères',
+            'admin.access' => 'Accès administration','members.manage' => 'Gérer les membres','news.submit' => 'Proposer des actualités','news.moderate' => 'Modérer et publier les actualités','articles.manage' => 'Gérer les articles techniques','wiki.edit' => 'Contribuer au wiki','wiki.moderate' => 'Valider le wiki','albums.manage' => 'Gérer les albums','albums.sync' => 'Synchroniser les albums publics','dashboard.manage' => 'Gérer le tableau de bord','qsl.manage' => 'Utiliser le module QSL','chatbot.manage' => 'Voir les logs du chatbot','ads.submit' => 'Gérer ses publicités','ads.moderate' => 'Modérer les publicités','ads.manage_all' => 'Gérer toutes les publicités et statistiques','modules.manage' => 'Gérer les modules du site','press.manage' => 'Gérer les contacts et communiqués de presse','editorial.manage' => 'Gérer les contenus éditoriaux multilingues','translations.review' => 'Relire et valider les traductions','live_feeds.manage' => 'Gérer finement les flux live','events.manage' => 'Gérer l’agenda et les événements','shop.manage' => 'Gérer la boutique','auctions.manage' => 'Gérer les enchères',
         ];
         $roles = [
             'super_admin' => array_keys($permissions),
             'member' => ['dashboard.manage', 'wiki.edit', 'qsl.manage'],
-            'section_cm' => ['news.submit', 'dashboard.manage', 'wiki.edit', 'qsl.manage'],
-            'editor' => ['admin.access', 'articles.manage', 'albums.manage', 'news.submit', 'press.manage', 'editorial.manage', 'translations.review'],
-            'news_moderator' => ['admin.access', 'news.submit', 'news.moderate', 'translations.review'],
-            'wiki_validator' => ['admin.access', 'wiki.edit', 'wiki.moderate'],
-            'live_feed_manager' => ['admin.access', 'live_feeds.manage'],
-            'events_manager' => ['admin.access', 'events.manage', 'translations.review'],
-            'shop_manager' => ['admin.access', 'shop.manage'],
-            'auction_manager' => ['admin.access', 'auctions.manage'],
-            'advertiser' => ['ads.submit'],
-            'ad_manager' => ['admin.access', 'ads.submit', 'ads.moderate', 'ads.manage_all'],
         ];
 
         $permStmt = db()->prepare('INSERT IGNORE INTO permissions (code, label) VALUES (?, ?)');
-        foreach ($permissions as $code => $label) {
-            $permStmt->execute([$code, $label]);
-        }
+        foreach ($permissions as $code => $label) { $permStmt->execute([$code, $label]); }
         $roleStmt = db()->prepare('INSERT IGNORE INTO roles (code, label) VALUES (?, ?)');
-        foreach ($roles as $code => $codes) {
-            $roleStmt->execute([$code, ucwords(str_replace('_', ' ', $code))]);
-        }
-        $roleMap = [];
-        foreach (db()->query('SELECT id, code FROM roles')->fetchAll() as $role) {
-            $roleMap[$role['code']] = (int) $role['id'];
-        }
-        $permMap = [];
-        foreach (db()->query('SELECT id, code FROM permissions')->fetchAll() as $perm) {
-            $permMap[$perm['code']] = (int) $perm['id'];
-        }
-        $rolePermStmt = db()->prepare('INSERT IGNORE INTO role_permissions (role_id, permission_id) VALUES (?, ?)');
-        foreach ($roles as $roleCode => $permCodes) {
-            foreach ($permCodes as $permCode) {
-                $rolePermStmt->execute([$roleMap[$roleCode], $permMap[$permCode]]);
-            }
-        }
+        foreach ($roles as $code => $codes) { $roleStmt->execute([$code, ucwords(str_replace('_', ' ', $code))]); }
 
-        seed_modules();
-        seed_dashboard_widgets();
-        seed_ad_placements();
-        seed_live_feeds();
+        $roleMap = []; foreach (db()->query('SELECT id, code FROM roles')->fetchAll() as $role) { $roleMap[$role['code']] = (int) $role['id']; }
+        $permMap = []; foreach (db()->query('SELECT id, code FROM permissions')->fetchAll() as $perm) { $permMap[$perm['code']] = (int) $perm['id']; }
+        $rolePermStmt = db()->prepare('INSERT IGNORE INTO role_permissions (role_id, permission_id) VALUES (?, ?)');
+        foreach ($roles as $roleCode => $permCodes) { foreach ($permCodes as $permCode) { $rolePermStmt->execute([$roleMap[$roleCode], $permMap[$permCode]]); } }
+
+        seed_modules(); seed_dashboard_widgets(); seed_ad_placements(); seed_live_feeds();
 
         $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? 'ON4CRD')));
         $fullName = trim((string) ($_POST['full_name'] ?? 'Administrateur'));
         $email = trim((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
-        if ($password === '') {
-            throw new RuntimeException('Mot de passe requis.');
-        }
+        if ($password === '') { throw new RuntimeException('Mot de passe requis.'); }
         $hash = password_hash($password, PASSWORD_ARGON2ID);
         db()->prepare('INSERT INTO members (callsign, full_name, email, password_hash, qth, locator, bio, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)')
             ->execute([$callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
         $memberId = (int) db()->lastInsertId();
         db()->prepare('INSERT INTO member_roles (member_id, role_id) VALUES (?, ?)')->execute([$memberId, $roleMap['super_admin']]);
-
-        $sectionStmt = db()->prepare('INSERT IGNORE INTO news_sections (slug, name, sort_order) VALUES (?, ?, ?)');
-        $sectionStmt->execute(['club', 'Vie du club', 10]);
-        $sectionStmt->execute(['technique', 'Technique', 20]);
-        $sectionStmt->execute(['events', 'Événements', 30]);
-        $clubSectionId = (int) db()->query("SELECT id FROM news_sections WHERE slug = 'club'")->fetchColumn();
-        db()->prepare('INSERT INTO news_section_managers (member_id, section_id) VALUES (?, ?)')->execute([$memberId, $clubSectionId]);
-
-        db()->prepare('INSERT INTO articles (slug, title, excerpt, content, status, author_id) VALUES (?, ?, ?, ?, ?, ?)')->execute([
-            'reglages-station-club',
-            'Réglages de base de la station club',
-            'Rappel des réglages essentiels avant une activité.',
-            '<p>Vérifiez alimentation, ROS, journal de trafic et sécurité avant chaque activité.</p>',
-            'published',
-            $memberId,
-        ]);
-        db()->prepare('INSERT INTO articles (slug, title, excerpt, content, status, author_id) VALUES (?, ?, ?, ?, ?, ?)')->execute([
-            'propagation-debuter',
-            'Comprendre la propagation pour débuter',
-            'Quelques repères pour savoir quand une bande a des chances d’être ouverte.',
-            '<p>La propagation dépend de l’activité solaire, de l’heure, de la saison et de la bande utilisée.</p>',
-            'published',
-            $memberId,
-        ]);
-        db()->prepare('INSERT INTO wiki_pages (slug, title, content, author_id) VALUES (?, ?, ?, ?)')->execute([
-            'glossaire-radio',
-            'Glossaire radio',
-            '<p>Quelques termes utiles : ROS, QTH, QSL, DX, pile-up, split.</p>',
-            $memberId,
-        ]);
-
-        $editorialDefaults = [
-            'committee.title' => 'Le comité ON4CRD',
-            'committee.intro' => 'Une équipe au service du club, de ses membres et de ses projets techniques.',
-            'committee.mission' => 'Coordination du club, accueil, suivi des activités et relations extérieures.',
-            'press.title' => 'Presse et informations médias',
-            'press.intro' => 'Le club met à disposition des contacts, documents et ressources pour la presse locale et spécialisée.',
-            'press.contact' => 'Pour une demande média, utilisez les contacts ci-dessous ou le dossier presse.',
-        ];
-        $editorialStmt = db()->prepare('INSERT INTO editorial_contents (content_key, fr_text) VALUES (?, ?) ON DUPLICATE KEY UPDATE fr_text = VALUES(fr_text)');
-        foreach ($editorialDefaults as $key => $value) {
-            $editorialStmt->execute([$key, $value]);
-            auto_translate_editorial_key($key);
-        }
-
-        db()->prepare('INSERT INTO shop_categories (slug, name, description, sort_order, is_active) VALUES (?, ?, ?, ?, ?)')->execute(['club', 'Produits du club', 'Textiles, accessoires et petite promotion du radio-club.', 10, 1]);
-        db()->prepare('INSERT INTO shop_categories (slug, name, description, sort_order, is_active) VALUES (?, ?, ?, ?, ?)')->execute(['atelier', 'Atelier & matériel', 'Petites fournitures et articles utiles pour les activités pratiques.', 20, 1]);
-        $clubCategoryId = (int) db()->query("SELECT id FROM shop_categories WHERE slug = 'club'")->fetchColumn();
-        $atelierCategoryId = (int) db()->query("SELECT id FROM shop_categories WHERE slug = 'atelier'")->fetchColumn();
-        db()->prepare('INSERT INTO shop_products (category_id, slug, title, summary, description, price_cents, stock_qty, image_url, is_featured, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-            ->execute([$clubCategoryId, 't-shirt-on4crd', 'T-shirt ON4CRD', 'T-shirt du club pour les activités publiques et les démonstrations.', '<p>T-shirt simple et robuste aux couleurs du club.</p>', 1800, 25, '', 1, 'published']);
-        db()->prepare('INSERT INTO shop_products (category_id, slug, title, summary, description, price_cents, stock_qty, image_url, is_featured, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-            ->execute([$atelierCategoryId, 'kit-initiation-morse', 'Kit initiation Morse', 'Petit kit pédagogique pour découvrir le Morse en atelier.', '<p>Kit d’initiation avec support de cours et matériel léger.</p>', 1200, 15, '', 1, 'published']);
-
-        $auctionStart = date('Y-m-d H:i:s', strtotime('+1 day'));
-        $auctionEnd = date('Y-m-d H:i:s', strtotime('+8 days'));
-        db()->prepare('INSERT INTO auction_lots (slug, title, summary, description, starting_price_cents, reserve_price_cents, min_increment_cents, buy_now_price_cents, current_price_cents, starts_at, ends_at, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-            ->execute(['lot-recepteur-vintage', 'Lot récepteur vintage', 'Récepteur vintage révisé, proposé au bénéfice du club.', '<p>Un lot pensé pour une première vente aux enchères du club.</p>', 4500, 7000, 500, 12000, 0, $auctionStart, $auctionEnd, 'scheduled']);
-
-        db()->prepare('INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-            ->execute([$clubSectionId, $memberId, 'bienvenue-sur-le-nouveau-site', 'Bienvenue sur le site ON4CRD', 'Le site démarre avec actualités, profils radioamateurs riches, wiki, QSL, widgets live et zone membre.', '<p>Le nouveau site ON4CRD met l’accent sur la vie du club.</p>', 'published', date('Y-m-d H:i:s')]);
-
-        db()->prepare('INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-            ->execute(['reunion-mensuelle-club', 'Réunion mensuelle du club', 'Rencontre mensuelle ouverte aux membres et visiteurs.', '<p>Réunion mensuelle ON4CRD avec actualités club, point technique, annonces et échanges conviviaux.</p>', 'club', date('Y-m-d 14:00:00', strtotime('+10 days')), date('Y-m-d 17:00:00', strtotime('+10 days')), 'Maison des Jeunes de Durnal', '', 'published']);
 
         file_put_contents($installLockFile, 'installed ' . date('c'));
         $message = 'Installation terminée. Le verrou a été créé : désactivez maintenant app.allow_install puis connectez-vous.';
@@ -174,13 +233,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$content = '<div class="card"><h1>Installation ON4CRD v3.6.1</h1>';
-if ($message !== '') {
-    $content .= '<div class="flash flash-success">' . e($message) . '</div>';
-}
-if ($error !== '') {
-    $content .= '<div class="flash flash-error">' . e($error) . '</div>';
-}
-$content .= '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><label>Indicatif admin<input type="text" name="callsign" value="ON4CRD" required></label><label>Nom complet<input type="text" name="full_name" value="Administrateur" required></label><label>Email<input type="email" name="email"></label><label>Mot de passe<input type="password" name="password" required></label><button class="button">Installer</button></form><p>Avant l’installation, copiez <code>config/config.sample.php</code> vers <code>config/config.php</code> et adaptez la connexion MySQL.</p></div>';
+$content = '<div class="card"><h1>Installation ON4CRD v3.6.1</h1><p class="help">Étape 2/2 — initialisation de la base et création du compte administrateur.</p>';
+if ($message !== '') { $content .= '<div class="flash flash-success">' . e($message) . '</div>'; }
+if ($error !== '') { $content .= '<div class="flash flash-error">' . e($error) . '</div>'; }
+$content .= '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><label>Indicatif admin<input type="text" name="callsign" value="ON4CRD" required></label><label>Nom complet<input type="text" name="full_name" value="Administrateur" required></label><label>Email<input type="email" name="email"></label><label>Mot de passe<input type="password" name="password" required></label><button class="button">Installer</button></form></div>';
 
 echo render_layout($content, 'Installation');

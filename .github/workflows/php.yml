@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Composer metadata
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  composer-validate:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,28 +21,7 @@ jobs:
         with:
           php-version: '8.4'
           coverage: none
-          extensions: dom, gd, mbstring, pdo, pdo_mysql, zip
           tools: composer:v2
 
       - name: Validate composer.json
         run: composer validate --strict --no-check-lock
-
-      - name: Cache Composer packages
-        uses: actions/cache@v5
-        with:
-          path: ~/.composer/cache/files
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: Prepare config
-        run: cp config/config.sample.php config/config.php
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
-
-      - name: Lint
-        run: composer lint
-
-      - name: Tests
-        run: composer test

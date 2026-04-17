@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-$lots = auction_public_lots(60);
+$lots = cache_remember('auction_public_lots_60_v1', 60, static fn(): array => auction_public_lots(60));
 set_page_meta([
     'title' => 'Enchères',
     'description' => 'Lots proposés à l’enchère par le club.',
