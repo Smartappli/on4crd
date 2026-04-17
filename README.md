@@ -5,12 +5,14 @@ Site PHP moderne pour le radio-club ON4CRD avec contenus éditoriaux, espace mem
 ## Fonctionnalités principales
 
 - actualités, articles, comité, écoles, wiki et presse
-- authentification membre et tableau de bord séparé
+- authentification membre, tableau de bord séparé et préférences newsletter
 - module QSL avec import ADIF, génération SVG et export
 - boutique club et module d'enchères
 - workflow éditorial multilingue FR/EN/NL/DE
-- PWA hors ligne et SEO de base
+- gestion newsletter (abonnés, import CSV, campagnes et désabonnement)
+- PWA hors ligne et SEO avancé (canonical, robots, sitemap dynamique)
 - sécurité renforcée sur uploads, headers, CSRF, CSP et flux distants
+- cache applicatif fichier (TTL) pour accélérer pages publiques et sitemap
 
 ## Démarrage local avec Docker Compose
 
@@ -26,6 +28,40 @@ docker compose up --build
 ```
 
 Le site est accessible sur `http://localhost:8080`.
+
+
+### Mode maintenance
+
+Vous pouvez activer un mode maintenance dans `config/config.php`:
+
+```php
+'app' => [
+    // ...
+    'maintenance' => [
+        'enabled' => true,
+        'secret' => 'votre-cle-bypass',
+        'allowed_routes' => ['login', 'robots.txt', 'sitemap.xml'],
+    ],
+],
+```
+
+- Quand activé, toutes les routes non autorisées renvoient `503` avec `offline.html`.
+- Un bypass session est possible avec `?maintenance_bypass=<secret>`.
+
+
+### Assistant d’installation (déploiement initial)
+
+Pour un déploiement initial simplifié, ouvrez :
+
+```
+http://<votre-domaine>/install.php
+```
+
+L’assistant fonctionne en 2 étapes :
+1. création automatique de `config/config.php` avec test de connexion MySQL ;
+2. initialisation de la base + création du compte administrateur.
+
+Ensuite, vérifiez que `app.allow_install` reste à `false` et conservez `storage/install.lock`.
 
 ### Variables utiles
 
@@ -51,3 +87,8 @@ Puis relancer:
 ```bash
 docker compose up --build
 ```
+
+## Exploitation
+
+- Observabilité minimale: `docs/OBSERVABILITE_PROD.md`
+- Plan de reprise (PRA): `docs/PLAN_REPRISE_CLUB.md`

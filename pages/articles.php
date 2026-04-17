@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-$rows = db()->query('SELECT id, slug, title, excerpt, content, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC')->fetchAll();
+$rows = cache_remember('articles_published_v1', 180, static fn(): array => db()->query('SELECT id, slug, title, excerpt, content, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC')->fetchAll());
 
 set_page_meta([
     'title' => 'Articles techniques',

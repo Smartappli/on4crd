@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-$products = shop_public_products();
-$categories = shop_categories();
+$products = cache_remember('shop_public_products_v1', 120, static fn(): array => shop_public_products());
+$categories = cache_remember('shop_categories_v1', 600, static fn(): array => shop_categories());
 $cart = shop_cart_state();
 set_page_meta([
     'title' => 'Boutique club',

@@ -426,3 +426,42 @@ CREATE TABLE IF NOT EXISTS auction_bids (
 );
 
 CREATE INDEX idx_auction_bids_lot_amount ON auction_bids (lot_id, amount_cents, created_at);
+
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(190) NOT NULL UNIQUE,
+    member_id INT DEFAULT NULL,
+    status ENUM('active','unsubscribed') NOT NULL DEFAULT 'active',
+    source VARCHAR(32) NOT NULL DEFAULT 'admin',
+    subscribe_token CHAR(48) NOT NULL,
+    unsubscribe_token CHAR(48) NOT NULL,
+    unsubscribed_at DATETIME DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_newsletter_member (member_id),
+    INDEX idx_newsletter_status (status)
+);
+
+CREATE TABLE IF NOT EXISTS newsletter_campaigns (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(190) NOT NULL,
+    subject VARCHAR(190) NOT NULL,
+    content LONGTEXT NOT NULL,
+    status ENUM('draft','sent') NOT NULL DEFAULT 'draft',
+    created_by INT DEFAULT NULL,
+    sent_at DATETIME DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS newsletter_deliveries (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    campaign_id INT NOT NULL,
+    subscriber_id INT NOT NULL,
+    status ENUM('queued','sent','failed') NOT NULL DEFAULT 'queued',
+    error_message VARCHAR(255) DEFAULT NULL,
+    sent_at DATETIME DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_newsletter_delivery (campaign_id, subscriber_id),
+    INDEX idx_newsletter_delivery_status (status)
+);

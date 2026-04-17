@@ -32,6 +32,7 @@ if (module_enabled('auctions') && has_permission('auctions.manage')) {
 $cards[] = ['route' => 'admin_editorial', 'title' => 'Éditorial multilingue', 'desc' => 'Français source, traduction auto EN/DE/NL et relecture manuelle.'];
 $cards[] = ['route' => 'admin_translation_reviews', 'title' => 'Relecture linguistique', 'desc' => 'Workflow de validation des traductions des actualités et articles.'];
 $cards[] = ['route' => 'admin_live_feeds', 'title' => 'Flux live', 'desc' => 'Pilotage fin des flux radioamateur, TTL, URLs et activation.'];
+$cards[] = ['route' => 'admin_newsletters', 'title' => 'Newsletter', 'desc' => 'Abonnés, import CSV et campagnes email.'];
 if (module_enabled('wiki')) {
     $cards[] = ['route' => 'admin_wiki', 'title' => 'Wiki', 'desc' => 'Pages collaboratives et révisions.'];
 }
