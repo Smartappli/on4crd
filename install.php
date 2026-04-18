@@ -175,14 +175,17 @@ if (!is_file($configFile)) {
     return;
 }
 
-require $rootDir . '/app/bootstrap.php';
+require_once $rootDir . '/app/bootstrap.php';
 
 $message = '';
 $error = '';
 $installAllowed = (bool) config('app.allow_install', false);
 if (!$installAllowed || is_file($installLockFile)) {
     http_response_code(403);
-    echo render_layout('<div class="card"><h1>Installation verrouillée</h1><p>Activez temporairement <code>app.allow_install</code> puis supprimez le verrou uniquement pour l\'installation initiale.</p></div>', 'Installation verrouillée');
+    installer_render_html(
+        'Installation verrouillée',
+        '<p>Activez temporairement <code>app.allow_install</code> puis supprimez le verrou uniquement pour l\'installation initiale.</p>'
+    );
     return;
 }
 
