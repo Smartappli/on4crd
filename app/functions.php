@@ -178,6 +178,7 @@ function apply_runtime_schema_updates(): void
     // do not fail when no runtime migration is required.
 }
 
+if (!function_exists('base_url')) {
 function base_url(string $path = ''): string
 {
     $configured = rtrim((string) config('app.base_url', ''), '/');
@@ -195,12 +196,16 @@ function base_url(string $path = ''): string
 
     return $base . '/' . ltrim($path, '/');
 }
+}
 
+if (!function_exists('asset_url')) {
 function asset_url(string $path): string
 {
     return base_url($path);
 }
+}
 
+if (!function_exists('route_url')) {
 function route_url(string $route, array $query = []): string
 {
     $route = trim($route);
@@ -226,23 +231,31 @@ function route_url(string $route, array $query = []): string
     $params = array_merge(['route' => $route], $extra, $query);
     return base_url('/index.php?' . http_build_query($params));
 }
+}
 
+if (!function_exists('redirect_url')) {
 function redirect_url(string $url): void
 {
     header('Location: ' . $url, true, 302);
     exit;
 }
+}
 
+if (!function_exists('redirect')) {
 function redirect(string $route): void
 {
     redirect_url(route_url($route));
 }
+}
 
+if (!function_exists('set_flash')) {
 function set_flash(string $type, string $message): void
 {
     $_SESSION['_flash'][] = ['type' => $type, 'message' => $message];
 }
+}
 
+if (!function_exists('consume_flashes')) {
 function consume_flashes(): array
 {
     $flashes = $_SESSION['_flash'] ?? [];
@@ -253,7 +266,9 @@ function consume_flashes(): array
 
     return array_values(array_filter($flashes, static fn ($item): bool => is_array($item)));
 }
+}
 
+if (!function_exists('current_user')) {
 function current_user(): ?array
 {
     static $cache = null;
@@ -282,7 +297,9 @@ function current_user(): ?array
     $cache = $row;
     return $cache;
 }
+}
 
+if (!function_exists('require_login')) {
 function require_login(): array
 {
     $user = current_user();
@@ -293,12 +310,16 @@ function require_login(): array
 
     return $user;
 }
+}
 
+if (!function_exists('logout_member')) {
 function logout_member(): void
 {
     unset($_SESSION['member_id']);
 }
+}
 
+if (!function_exists('module_enabled')) {
 function module_enabled(string $module): bool
 {
     if ($module === '' || !table_exists('modules')) {
@@ -314,7 +335,9 @@ function module_enabled(string $module): bool
 
     return (int) $value === 1;
 }
+}
 
+if (!function_exists('require_module_enabled')) {
 function require_module_enabled(string $module): void
 {
     if (module_enabled($module)) {
@@ -325,7 +348,9 @@ function require_module_enabled(string $module): void
     echo render_layout('<div class="card"><h1>404</h1><p>Module indisponible.</p></div>', '404');
     exit;
 }
+}
 
+if (!function_exists('has_permission')) {
 function has_permission(string $permission): bool
 {
     $user = current_user();
@@ -350,7 +375,9 @@ function has_permission(string $permission): bool
 
     return (bool) $stmt->fetchColumn();
 }
+}
 
+if (!function_exists('require_permission')) {
 function require_permission(string $permission): void
 {
     require_login();
@@ -362,7 +389,9 @@ function require_permission(string $permission): void
     echo render_layout('<div class="card"><h1>403</h1><p>Accès refusé.</p></div>', 'Accès refusé');
     exit;
 }
+}
 
+if (!function_exists('set_page_meta')) {
 function set_page_meta(string|array $title = '', string $description = ''): void
 {
     if (is_array($title)) {
@@ -371,7 +400,9 @@ function set_page_meta(string|array $title = '', string $description = ''): void
     }
     $_SESSION['_page_meta'] = ['title' => $title, 'description' => $description];
 }
+}
 
+if (!function_exists('render_layout')) {
 function render_layout(string $content, string $title = ''): string
 {
     $pageTitle = $title !== '' ? $title : (string) config('app.site_name', 'ON4CRD');
@@ -389,6 +420,7 @@ function render_layout(string $content, string $title = ''): string
         . $flashHtml
         . $content
         . '</main></body></html>';
+}
 }
 
 function is_https_request(): bool
