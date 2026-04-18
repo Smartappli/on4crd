@@ -9,6 +9,8 @@ DB_PORT="${DB_PORT:-3306}"
 DB_NAME="${DB_NAME:-on4crd}"
 DB_USER="${DB_USER:-on4crd}"
 DB_PASS="${DB_PASS:-on4crd}"
+DB_ROOT_PASS="${DB_ROOT_PASS:-root}"
+MYSQL_WAIT_TIMEOUT="${MYSQL_WAIT_TIMEOUT:-120}"
 APP_URL="${APP_URL:-http://localhost:8080}"
 ADMIN_CALLSIGN="${ADMIN_CALLSIGN:-ON4CRD}"
 ADMIN_NAME="${ADMIN_NAME:-Administrateur}"
@@ -68,9 +70,21 @@ return [
 ];
 PHP
 
-until mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --silent; do
-  echo "Waiting for MySQL at ${DB_HOST}:${DB_PORT}..."
+mysql_ping() {
+  mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --silent >/dev/null 2>&1 \
+    || mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" -uroot -p"$DB_ROOT_PASS" --silent >/dev/null 2>&1
+}
+
+elapsed=0
+until mysql_ping; do
+  if [ "$elapsed" -ge "$MYSQL_WAIT_TIMEOUT" ]; then
+    echo "ERROR: Timed out after ${MYSQL_WAIT_TIMEOUT}s waiting for MySQL at ${DB_HOST}:${DB_PORT}."
+    echo "Hint: if you changed DB_* variables, remove the existing db volume (docker compose down -v) or align credentials."
+    exit 1
+  fi
+  echo "Waiting for MySQL at ${DB_HOST}:${DB_PORT}... (${elapsed}s/${MYSQL_WAIT_TIMEOUT}s)"
   sleep 2
+  elapsed=$((elapsed + 2))
 done
 
 php "$APP_DIR/docker/auto_install.php" \

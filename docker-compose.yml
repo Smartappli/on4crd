@@ -31,6 +31,7 @@ services:
       DB_NAME: ${DB_NAME:-on4crd}
       DB_USER: ${DB_USER:-on4crd}
       DB_PASS: ${DB_PASS:-on4crd}
+      DB_ROOT_PASS: ${DB_ROOT_PASS:-root}
       APP_URL: ${APP_URL:-http://localhost:8080}
       ADMIN_CALLSIGN: ${ADMIN_CALLSIGN:-ON4CRD}
       ADMIN_NAME: ${ADMIN_NAME:-Administrateur local}
