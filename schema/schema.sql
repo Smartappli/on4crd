@@ -363,10 +363,9 @@ CREATE TABLE IF NOT EXISTS shop_products (
     is_featured TINYINT(1) NOT NULL DEFAULT 0,
     status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_shop_products_status (status)
 );
-
-CREATE INDEX idx_shop_products_status ON shop_products (status);
 
 CREATE TABLE IF NOT EXISTS shop_orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
