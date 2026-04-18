@@ -387,11 +387,10 @@ CREATE TABLE IF NOT EXISTS shop_order_items (
     quantity INT NOT NULL DEFAULT 1,
     unit_price_cents INT NOT NULL DEFAULT 0,
     line_total_cents INT NOT NULL DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_shop_order_items_order_id (order_id),
+    INDEX idx_shop_order_items_product_id (product_id)
 );
-
-CREATE INDEX idx_shop_order_items_order_id ON shop_order_items (order_id);
-CREATE INDEX idx_shop_order_items_product_id ON shop_order_items (product_id);
 
 CREATE TABLE IF NOT EXISTS auction_lots (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -411,20 +410,18 @@ CREATE TABLE IF NOT EXISTS auction_lots (
     status ENUM('draft','scheduled','active','closed','cancelled') NOT NULL DEFAULT 'draft',
     winner_member_id INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_auction_lots_status_ends_at (status, ends_at)
 );
-
-CREATE INDEX idx_auction_lots_status_ends_at ON auction_lots (status, ends_at);
 
 CREATE TABLE IF NOT EXISTS auction_bids (
     id INT AUTO_INCREMENT PRIMARY KEY,
     lot_id INT NOT NULL,
     member_id INT NOT NULL,
     amount_cents INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_auction_bids_lot_amount (lot_id, amount_cents, created_at)
 );
-
-CREATE INDEX idx_auction_bids_lot_amount ON auction_bids (lot_id, amount_cents, created_at);
 
 CREATE TABLE IF NOT EXISTS newsletter_subscribers (
     id INT AUTO_INCREMENT PRIMARY KEY,
