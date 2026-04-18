@@ -13,27 +13,29 @@ $isHttps = (
     || (strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https')
 );
 
-ini_set('session.use_strict_mode', '1');
-ini_set('session.cookie_httponly', '1');
-ini_set('session.cookie_samesite', 'Lax');
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_samesite', 'Lax');
 
-session_name((string) ($bootstrapConfig['app']['session_name'] ?? 'on4crd_session'));
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => '',
-    'secure' => $isHttps,
-    'httponly' => true,
-    'samesite' => 'Lax',
-]);
-session_start();
+    session_name((string) ($bootstrapConfig['app']['session_name'] ?? 'on4crd_session'));
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'domain' => '',
+        'secure' => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+    session_start();
+}
 
-require __DIR__ . '/functions.php';
-require __DIR__ . '/cache.php';
-require __DIR__ . '/observability.php';
-require __DIR__ . '/maintenance.php';
-require __DIR__ . '/newsletter.php';
-require __DIR__ . '/seo.php';
+require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/cache.php';
+require_once __DIR__ . '/observability.php';
+require_once __DIR__ . '/maintenance.php';
+require_once __DIR__ . '/newsletter.php';
+require_once __DIR__ . '/seo.php';
 
 setup_observability((array) ($bootstrapConfig['observability'] ?? []));
 apply_security_headers();
