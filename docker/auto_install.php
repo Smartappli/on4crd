@@ -41,7 +41,23 @@ $schema = file_get_contents(__DIR__ . '/../schema/schema.sql');
 if ($schema === false) {
     throw new RuntimeException('Unable to read schema/schema.sql');
 }
-$pdo->exec($schema);
+$statements = preg_split('/;\s*(?:\r\n|\r|\n|$)/', $schema) ?: [];
+foreach ($statements as $statement) {
+    $statement = trim($statement);
+    if ($statement === '') {
+        continue;
+    }
+
+    try {
+        $pdo->exec($statement);
+    } catch (PDOException $exception) {
+        $isDuplicateIndex = str_contains($exception->getMessage(), 'Duplicate key name');
+        if ($isDuplicateIndex) {
+            continue;
+        }
+        throw $exception;
+    }
+}
 
 $permissions = [
     'admin.access' => 'Accès administration',
