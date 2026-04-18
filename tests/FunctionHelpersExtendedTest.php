@@ -29,4 +29,14 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNull(sanitize_href_attribute('data:text/html;base64,PHNjcmlwdD4='));
         self::assertNull(sanitize_href_attribute('vbscript:msgbox(1)'));
     }
+
+    public function testSanitizeHrefAttributeRejectsProtocolRelativeUrls(): void
+    {
+        self::assertNull(sanitize_href_attribute('//evil.example/path'));
+    }
+
+    public function testSanitizeHrefAttributeRejectsUrlsWithLineBreaks(): void
+    {
+        self::assertNull(sanitize_href_attribute("/ok\r\njavascript:alert(1)"));
+    }
 }

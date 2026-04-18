@@ -124,8 +124,9 @@ function cache_forget(string $key, ?array $settings = null): void
  */
 function cache_remember(string $key, int $ttlSeconds, callable $resolver, ?array $settings = null): mixed
 {
-    $cached = cache_get($key, null, $settings);
-    if ($cached !== null) {
+    $cacheMiss = new stdClass();
+    $cached = cache_get($key, $cacheMiss, $settings);
+    if ($cached !== $cacheMiss) {
         return $cached;
     }
 

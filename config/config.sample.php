@@ -60,5 +60,6 @@ return [
     ],
     'observability' => [
         'enabled' => true,
+        'display_error_details' => false,
     ],
 ];
