@@ -22,6 +22,27 @@ function installer_generate_csrf_key(): string
     return bin2hex(random_bytes(24));
 }
 
+function installer_apply_schema(PDO $pdo, string $schema): void
+{
+    $statements = preg_split('/;\s*(?:\r\n|\r|\n|$)/', $schema) ?: [];
+    foreach ($statements as $statement) {
+        $statement = trim($statement);
+        if ($statement === '') {
+            continue;
+        }
+
+        try {
+            $pdo->exec($statement);
+        } catch (PDOException $exception) {
+            if (str_contains($exception->getMessage(), 'Duplicate key name')) {
+                continue;
+            }
+
+            throw $exception;
+        }
+    }
+}
+
 /**
  * @param array<string, string> $values
  */
@@ -196,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($schema === false) {
             throw new RuntimeException('Impossible de lire le schéma SQL.');
         }
-        db()->exec($schema);
+        installer_apply_schema(db(), $schema);
 
         $permissions = [
             'admin.access' => 'Accès administration','members.manage' => 'Gérer les membres','news.submit' => 'Proposer des actualités','news.moderate' => 'Modérer et publier les actualités','articles.manage' => 'Gérer les articles techniques','wiki.edit' => 'Contribuer au wiki','wiki.moderate' => 'Valider le wiki','albums.manage' => 'Gérer les albums','albums.sync' => 'Synchroniser les albums publics','dashboard.manage' => 'Gérer le tableau de bord','qsl.manage' => 'Utiliser le module QSL','chatbot.manage' => 'Voir les logs du chatbot','ads.submit' => 'Gérer ses publicités','ads.moderate' => 'Modérer les publicités','ads.manage_all' => 'Gérer toutes les publicités et statistiques','modules.manage' => 'Gérer les modules du site','press.manage' => 'Gérer les contacts et communiqués de presse','editorial.manage' => 'Gérer les contenus éditoriaux multilingues','translations.review' => 'Relire et valider les traductions','live_feeds.manage' => 'Gérer finement les flux live','events.manage' => 'Gérer l’agenda et les événements','shop.manage' => 'Gérer la boutique','auctions.manage' => 'Gérer les enchères',
