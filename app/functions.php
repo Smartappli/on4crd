@@ -27,6 +27,29 @@ function config(?string $key = null, mixed $default = null): mixed
     return $value;
 }
 
+function ensure_directories(): void
+{
+    $directories = [
+        dirname(__DIR__) . '/storage/cache/data',
+        dirname(__DIR__) . '/storage/uploads/albums',
+        dirname(__DIR__) . '/storage/uploads/ads',
+        dirname(__DIR__) . '/storage/press',
+    ];
+
+    foreach ($directories as $directory) {
+        if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+            throw new RuntimeException('Impossible de créer un dossier requis: ' . $directory);
+        }
+    }
+}
+
+function apply_runtime_schema_updates(): void
+{
+    // Intentionally kept as a no-op fallback.
+    // The bootstrap always invokes this hook so deployments with mixed versions
+    // do not fail when no runtime migration is required.
+}
+
 function is_https_request(): bool
 {
     return (
