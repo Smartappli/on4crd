@@ -241,4 +241,4 @@ if ($message !== '') { $content .= '<div class="flash flash-success">' . e($mess
 if ($error !== '') { $content .= '<div class="flash flash-error">' . e($error) . '</div>'; }
 $content .= '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><label>Indicatif admin<input type="text" name="callsign" value="ON4CRD" required></label><label>Nom complet<input type="text" name="full_name" value="Administrateur" required></label><label>Email<input type="email" name="email"></label><label>Mot de passe<input type="password" name="password" required></label><button class="button">Installer</button></form></div>';
 
-echo render_layout($content, 'Installation');
+installer_render_html('Installation', $content);
