@@ -180,10 +180,14 @@ function apply_runtime_schema_updates(): void
 
 function is_https_request(): bool
 {
+    $forwardedProtoHeader = strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
+    $forwardedProto = $forwardedProtoHeader !== '' ? trim(explode(',', $forwardedProtoHeader)[0]) : '';
+    $serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');
+
     return (
-        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (($_SERVER['SERVER_PORT'] ?? null) === '443')
-        || (strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https')
+        (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+        || ($serverPort === '443')
+        || ($forwardedProto === 'https')
     );
 }
 

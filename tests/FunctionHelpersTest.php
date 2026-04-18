@@ -73,4 +73,18 @@ final class FunctionHelpersTest extends TestCase
         $this->expectException(RuntimeException::class);
         validate_remote_feed_url('http://127.0.0.1/feed.xml');
     }
+
+    public function testIsHttpsRequestReturnsTrueWhenServerPortIsInteger443(): void
+    {
+        $_SERVER['SERVER_PORT'] = 443;
+
+        self::assertTrue(is_https_request());
+    }
+
+    public function testIsHttpsRequestUsesFirstForwardedProtoValue(): void
+    {
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https, http';
+
+        self::assertTrue(is_https_request());
+    }
 }
