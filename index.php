@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/app/bootstrap.php';
+require_once __DIR__ . '/app/bootstrap.php';
 
 $route = (string) ($_GET['route'] ?? 'home');
 $requestStart = microtime(true);
@@ -22,6 +22,11 @@ if (maintenance_should_block_route($route)) {
 }
 
 seo_apply_defaults($route);
+
+if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'install.php'], true)) {
+    http_response_code(404);
+    exit('Not found');
+}
 
 if ($route === 'toggle_theme') {
     require_login();
@@ -91,7 +96,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe'];
+$publicRoutes = ['home', 'login', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -161,8 +166,9 @@ switch ($route) {
     case 'sitemap.xml': require __DIR__ . '/pages/sitemap.php'; break;
     case 'robots.txt': require __DIR__ . '/pages/robots.php'; break;
     case 'newsletter_unsubscribe': require __DIR__ . '/pages/newsletter_unsubscribe.php'; break;
+    case 'install.php': require __DIR__ . '/install.php'; break;
     default:
         http_response_code(404);
-        echo render_layout('<div class="card"><h1>404</h1><p>Page introuvable.</p></div>', '404');
+        echo '<!doctype html><html lang="fr"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>Page introuvable.</p></body></html>';
         break;
 }

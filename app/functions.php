@@ -27,6 +27,52 @@ function config(?string $key = null, mixed $default = null): mixed
     return $value;
 }
 
+function db(): PDO
+{
+    static $pdo = null;
+    if ($pdo instanceof PDO) {
+        return $pdo;
+    }
+
+    $dsn = (string) config('db.dsn', '');
+    $user = (string) config('db.user', '');
+    $pass = (string) config('db.pass', '');
+    if ($dsn === '') {
+        throw new RuntimeException('Configuration DB manquante (db.dsn).');
+    }
+
+    $pdo = new PDO($dsn, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
+
+    return $pdo;
+}
+
+function ensure_directories(): void
+{
+    $directories = [
+        dirname(__DIR__) . '/storage/cache/data',
+        dirname(__DIR__) . '/storage/uploads/albums',
+        dirname(__DIR__) . '/storage/uploads/ads',
+        dirname(__DIR__) . '/storage/press',
+    ];
+
+    foreach ($directories as $directory) {
+        if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+            throw new RuntimeException('Impossible de créer un dossier requis: ' . $directory);
+        }
+    }
+}
+
+function apply_runtime_schema_updates(): void
+{
+    // Intentionally kept as a no-op fallback.
+    // The bootstrap always invokes this hook so deployments with mixed versions
+    // do not fail when no runtime migration is required.
+}
+
 function is_https_request(): bool
 {
     return (
