@@ -41,7 +41,23 @@ $schema = file_get_contents(__DIR__ . '/../schema/schema.sql');
 if ($schema === false) {
     throw new RuntimeException('Unable to read schema/schema.sql');
 }
-$pdo->exec($schema);
+$statements = preg_split('/;\s*(?:\r\n|\r|\n|$)/', $schema) ?: [];
+foreach ($statements as $statement) {
+    $statement = trim($statement);
+    if ($statement === '') {
+        continue;
+    }
+
+    try {
+        $pdo->exec($statement);
+    } catch (PDOException $exception) {
+        $isDuplicateIndex = str_contains($exception->getMessage(), 'Duplicate key name');
+        if ($isDuplicateIndex) {
+            continue;
+        }
+        throw $exception;
+    }
+}
 
 $permissions = [
     'admin.access' => 'Accès administration',
@@ -95,15 +111,22 @@ $name = trim((string) $options['admin-name']);
 $email = trim((string) $options['admin-email']);
 $passwordHash = password_hash((string) $options['admin-password'], PASSWORD_ARGON2ID);
 
-$upsertMember = $pdo->prepare(
-    'INSERT INTO members (callsign, full_name, email, password_hash, is_active) VALUES (?, ?, ?, ?, 1)
-     ON DUPLICATE KEY UPDATE full_name = VALUES(full_name), email = VALUES(email), password_hash = VALUES(password_hash), is_active = 1'
-);
-$upsertMember->execute([$callsign, $name, $email !== '' ? $email : null, $passwordHash]);
+$pdo->prepare(
+    'INSERT INTO members (callsign, full_name, email, password_hash, is_active)
+     VALUES (?, ?, ?, ?, 1)
+     ON DUPLICATE KEY UPDATE
+         full_name = VALUES(full_name),
+         email = VALUES(email),
+         password_hash = VALUES(password_hash),
+         is_active = 1'
+)->execute([$callsign, $name, $email !== '' ? $email : null, $passwordHash]);
 
 $memberIdStmt = $pdo->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
 $memberIdStmt->execute([$callsign]);
 $memberId = (int) $memberIdStmt->fetchColumn();
+if ($memberId <= 0) {
+    throw new RuntimeException('Unable to fetch admin member after upsert');
+}
 
 $pdo->prepare('INSERT IGNORE INTO member_roles (member_id, role_id) VALUES (?, ?)')->execute([$memberId, $roleId]);
 
