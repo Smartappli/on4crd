@@ -22,6 +22,27 @@ function installer_generate_csrf_key(): string
     return bin2hex(random_bytes(24));
 }
 
+function installer_apply_schema(PDO $pdo, string $schema): void
+{
+    $statements = preg_split('/;\s*(?:\r\n|\r|\n|$)/', $schema) ?: [];
+    foreach ($statements as $statement) {
+        $statement = trim($statement);
+        if ($statement === '') {
+            continue;
+        }
+
+        try {
+            $pdo->exec($statement);
+        } catch (PDOException $exception) {
+            if (str_contains($exception->getMessage(), 'Duplicate key name')) {
+                continue;
+            }
+
+            throw $exception;
+        }
+    }
+}
+
 /**
  * @param array<string, string> $values
  */
@@ -175,14 +196,17 @@ if (!is_file($configFile)) {
     return;
 }
 
-require $rootDir . '/app/bootstrap.php';
+require_once $rootDir . '/app/bootstrap.php';
 
 $message = '';
 $error = '';
 $installAllowed = (bool) config('app.allow_install', false);
 if (!$installAllowed || is_file($installLockFile)) {
     http_response_code(403);
-    echo render_layout('<div class="card"><h1>Installation verrouillée</h1><p>Activez temporairement <code>app.allow_install</code> puis supprimez le verrou uniquement pour l\'installation initiale.</p></div>', 'Installation verrouillée');
+    installer_render_html(
+        'Installation verrouillée',
+        '<p>Activez temporairement <code>app.allow_install</code> puis supprimez le verrou uniquement pour l\'installation initiale.</p>'
+    );
     return;
 }
 
@@ -193,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($schema === false) {
             throw new RuntimeException('Impossible de lire le schéma SQL.');
         }
-        db()->exec($schema);
+        installer_apply_schema(db(), $schema);
 
         $permissions = [
             'admin.access' => 'Accès administration','members.manage' => 'Gérer les membres','news.submit' => 'Proposer des actualités','news.moderate' => 'Modérer et publier les actualités','articles.manage' => 'Gérer les articles techniques','wiki.edit' => 'Contribuer au wiki','wiki.moderate' => 'Valider le wiki','albums.manage' => 'Gérer les albums','albums.sync' => 'Synchroniser les albums publics','dashboard.manage' => 'Gérer le tableau de bord','qsl.manage' => 'Utiliser le module QSL','chatbot.manage' => 'Voir les logs du chatbot','ads.submit' => 'Gérer ses publicités','ads.moderate' => 'Modérer les publicités','ads.manage_all' => 'Gérer toutes les publicités et statistiques','modules.manage' => 'Gérer les modules du site','press.manage' => 'Gérer les contacts et communiqués de presse','editorial.manage' => 'Gérer les contenus éditoriaux multilingues','translations.review' => 'Relire et valider les traductions','live_feeds.manage' => 'Gérer finement les flux live','events.manage' => 'Gérer l’agenda et les événements','shop.manage' => 'Gérer la boutique','auctions.manage' => 'Gérer les enchères',
@@ -221,10 +245,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = (string) ($_POST['password'] ?? '');
         if ($password === '') { throw new RuntimeException('Mot de passe requis.'); }
         $hash = password_hash($password, PASSWORD_ARGON2ID);
-        db()->prepare('INSERT INTO members (callsign, full_name, email, password_hash, qth, locator, bio, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)')
-            ->execute([$callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
-        $memberId = (int) db()->lastInsertId();
-        db()->prepare('INSERT INTO member_roles (member_id, role_id) VALUES (?, ?)')->execute([$memberId, $roleMap['super_admin']]);
+        db()->prepare(
+            'INSERT INTO members (callsign, full_name, email, password_hash, qth, locator, bio, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+             ON DUPLICATE KEY UPDATE
+                full_name = VALUES(full_name),
+                email = VALUES(email),
+                password_hash = VALUES(password_hash),
+                qth = VALUES(qth),
+                locator = VALUES(locator),
+                bio = VALUES(bio),
+                is_active = 1'
+        )->execute([$callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
+
+        $memberIdStmt = db()->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
+        $memberIdStmt->execute([$callsign]);
+        $memberId = (int) $memberIdStmt->fetchColumn();
+        db()->prepare('INSERT IGNORE INTO member_roles (member_id, role_id) VALUES (?, ?)')->execute([$memberId, $roleMap['super_admin']]);
 
         file_put_contents($installLockFile, 'installed ' . date('c'));
         $message = 'Installation terminée. Le verrou a été créé : désactivez maintenant app.allow_install puis connectez-vous.';
@@ -238,4 +275,4 @@ if ($message !== '') { $content .= '<div class="flash flash-success">' . e($mess
 if ($error !== '') { $content .= '<div class="flash flash-error">' . e($error) . '</div>'; }
 $content .= '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><label>Indicatif admin<input type="text" name="callsign" value="ON4CRD" required></label><label>Nom complet<input type="text" name="full_name" value="Administrateur" required></label><label>Email<input type="email" name="email"></label><label>Mot de passe<input type="password" name="password" required></label><button class="button">Installer</button></form></div>';
 
-echo render_layout($content, 'Installation');
+installer_render_html('Installation', $content);
