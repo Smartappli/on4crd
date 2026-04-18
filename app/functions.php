@@ -43,6 +43,13 @@ function ensure_directories(): void
     }
 }
 
+function apply_runtime_schema_updates(): void
+{
+    // Intentionally kept as a no-op fallback.
+    // The bootstrap always invokes this hook so deployments with mixed versions
+    // do not fail when no runtime migration is required.
+}
+
 function is_https_request(): bool
 {
     return (
