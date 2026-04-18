@@ -50,6 +50,111 @@ function db(): PDO
     return $pdo;
 }
 
+function table_exists(string $table): bool
+{
+    static $cache = [];
+    $normalized = strtolower(trim($table));
+    if ($normalized === '') {
+        return false;
+    }
+    if (array_key_exists($normalized, $cache)) {
+        return $cache[$normalized];
+    }
+
+    $stmt = db()->prepare(
+        'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?'
+    );
+    $stmt->execute([$normalized]);
+    $cache[$normalized] = (int) $stmt->fetchColumn() > 0;
+
+    return $cache[$normalized];
+}
+
+function seed_modules(): void
+{
+    if (!table_exists('modules')) {
+        return;
+    }
+
+    $modules = [
+        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 1, 1, 10],
+        ['members', 'Membres', 'Espace membres et profil', 1, 1, 20],
+        ['news', 'Actualités', 'Section des actualités du club', 1, 1, 30],
+        ['articles', 'Articles', 'Articles techniques', 1, 1, 40],
+        ['wiki', 'Wiki', 'Base de connaissances collaborative', 1, 1, 50],
+        ['albums', 'Albums', 'Galerie photos', 1, 1, 60],
+        ['events', 'Événements', 'Agenda du club', 1, 1, 70],
+        ['shop', 'Boutique', 'Produits et commandes', 1, 1, 80],
+        ['auctions', 'Enchères', 'Ventes aux enchères', 1, 1, 90],
+        ['qsl', 'QSL', 'Gestion des cartes QSL', 1, 1, 100],
+        ['chatbot', 'Assistant', 'Assistant conversationnel', 1, 1, 110],
+        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 1, 1, 120],
+        ['press', 'Presse', 'Communiqués et contacts presse', 1, 1, 130],
+        ['education', 'Éducation', 'Activités écoles/formation', 1, 1, 140],
+        ['committee', 'Comité', 'Informations du comité', 1, 1, 150],
+        ['directory', 'Annuaire', 'Annuaire public du club', 1, 1, 160],
+        ['admin', 'Administration', 'Administration générale', 1, 1, 1000],
+    ];
+
+    $stmt = db()->prepare(
+        'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
+         VALUES (?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), sort_order = VALUES(sort_order)'
+    );
+
+    foreach ($modules as $module) {
+        $stmt->execute($module);
+    }
+}
+
+function seed_dashboard_widgets(): void
+{
+    // Hook conservé pour compatibilité installateur.
+}
+
+function seed_ad_placements(): void
+{
+    if (!table_exists('ad_placements')) {
+        return;
+    }
+
+    $placements = [
+        ['homepage_top', 'Accueil (haut)', 'Bannière en haut de la page d’accueil', 10],
+        ['sidebar', 'Barre latérale', 'Emplacement encart latéral', 20],
+        ['article_inline', 'Article (inline)', 'Annonce dans le contenu des articles', 30],
+    ];
+
+    $stmt = db()->prepare(
+        'INSERT INTO ad_placements (code, name, description, sort_order, is_active)
+         VALUES (?, ?, ?, ?, 1)
+         ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description), sort_order = VALUES(sort_order)'
+    );
+    foreach ($placements as $placement) {
+        $stmt->execute($placement);
+    }
+}
+
+function seed_live_feeds(): void
+{
+    if (!table_exists('live_feeds')) {
+        return;
+    }
+
+    $feeds = [
+        ['noaa-alerts', 'NOAA Alerts', 'https://services.swpc.noaa.gov/products/alerts.json', 'json', 120, 180, 1, 'Alertes météo spatiale NOAA'],
+        ['hamqth-dx', 'HamQTH DX', 'https://www.hamqth.com/dxc_csv.php?limit=12', 'csv', 300, 300, 1, 'Derniers spots DX'],
+    ];
+
+    $stmt = db()->prepare(
+        'INSERT INTO live_feeds (code, label, url, parser, cache_ttl, refresh_seconds, is_enabled, notes)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE label = VALUES(label), url = VALUES(url), parser = VALUES(parser), cache_ttl = VALUES(cache_ttl), refresh_seconds = VALUES(refresh_seconds), is_enabled = VALUES(is_enabled), notes = VALUES(notes)'
+    );
+    foreach ($feeds as $feed) {
+        $stmt->execute($feed);
+    }
+}
+
 function ensure_directories(): void
 {
     $directories = [
