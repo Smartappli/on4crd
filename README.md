@@ -92,3 +92,17 @@ docker compose up --build
 
 - Observabilité minimale: `docs/OBSERVABILITE_PROD.md`
 - Plan de reprise (PRA): `docs/PLAN_REPRISE_CLUB.md`
+
+### Gestion des erreurs en production
+
+La section `observability` de `config/config.php` accepte:
+
+```php
+'observability' => [
+    'enabled' => true,
+    'display_error_details' => false, // laisser false en production
+],
+```
+
+- En production (`false`), les erreurs fatales non capturées renvoient un message générique avec une référence de requête.
+- En développement (`true`), le message d’exception est ajouté à la réponse pour faciliter le débogage.

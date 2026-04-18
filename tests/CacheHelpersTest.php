@@ -60,4 +60,26 @@ final class CacheHelpersTest extends TestCase
     {
         self::assertSame('my_key_with_spaces', cache_key_normalize('my key with spaces'));
     }
+
+    public function testCacheRememberSupportsCachingNullValues(): void
+    {
+        $settings = ['enabled' => true, 'directory' => $this->tmpDir];
+        $counter = 0;
+
+        $first = cache_remember('nullable_key', 60, static function () use (&$counter): ?string {
+            $counter++;
+
+            return null;
+        }, $settings);
+
+        $second = cache_remember('nullable_key', 60, static function () use (&$counter): ?string {
+            $counter++;
+
+            return 'unexpected';
+        }, $settings);
+
+        self::assertNull($first);
+        self::assertNull($second);
+        self::assertSame(1, $counter);
+    }
 }
