@@ -34,14 +34,30 @@ if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt',
 }
 
 if ($route === 'toggle_theme') {
-    require_login();
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         exit('Method not allowed');
     }
     verify_csrf();
     $_SESSION['theme'] = ($_SESSION['theme'] ?? 'light') === 'light' ? 'dark' : 'light';
-    redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
+    $returnRoute = (string) ($_POST['return_route'] ?? 'home');
+    redirect($returnRoute !== '' ? $returnRoute : 'home');
+}
+
+if ($route === 'set_language') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        exit('Method not allowed');
+    }
+    verify_csrf();
+    $locale = strtolower((string) ($_POST['locale'] ?? 'fr'));
+    $supportedLocales = ['fr', 'en', 'de', 'nl'];
+    if (!in_array($locale, $supportedLocales, true)) {
+        $locale = 'fr';
+    }
+    $_SESSION['locale'] = $locale;
+    $returnRoute = (string) ($_POST['return_route'] ?? 'home');
+    redirect($returnRoute !== '' ? $returnRoute : 'home');
 }
 
 $routeModules = [
