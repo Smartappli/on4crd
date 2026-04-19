@@ -3,18 +3,20 @@ declare(strict_types=1);
 
 $user = current_user();
 $isAuthenticated = $user !== null;
+
 $primaryCta = $isAuthenticated
-    ? '<a class="button" href="' . e(route_url('dashboard')) . '">Accéder au tableau de bord</a>'
-    : '<a class="button" href="' . e(route_url('login')) . '">Connexion membre</a>';
-$secondaryCta = '<a class="button secondary" href="' . e(route_url('events')) . '">Voir les événements</a>';
+    ? '<a class="button" href="' . e(route_url('dashboard')) . '">Accéder à mon espace membre</a>'
+    : '<a class="button" href="' . e(route_url('login')) . '">Rejoindre le club</a>';
+
+$secondaryCta = '<a class="button secondary" href="' . e(route_url('events')) . '">Voir l’agenda des activités</a>';
 
 $modules = [
-    ['code' => 'news', 'route' => 'news', 'title' => 'News', 'desc' => 'Fil d’actualités et publications du club.'],
-    ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Wiki', 'desc' => 'Base de connaissances collaborative.'],
-    ['code' => 'events', 'route' => 'events', 'title' => 'Événements', 'desc' => 'Calendrier et détails des activités.'],
-    ['code' => 'directory', 'route' => 'directory', 'title' => 'Annuaire', 'desc' => 'Coordonnées et profils des membres.'],
-    ['code' => 'shop', 'route' => 'shop', 'title' => 'Boutique', 'desc' => 'Catalogue et commandes du club.'],
-    ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Annonces et suivi des offres.'],
+    ['code' => 'news', 'route' => 'news', 'title' => 'Actualités du club', 'desc' => 'Annonces, comptes rendus et informations essentielles.'],
+    ['code' => 'events', 'route' => 'events', 'title' => 'Activités & événements', 'desc' => 'Rencontres, ateliers techniques et activations terrain.'],
+    ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Base technique', 'desc' => 'Documentation radioamateur, procédures et astuces.'],
+    ['code' => 'directory', 'route' => 'directory', 'title' => 'Communauté', 'desc' => 'Annuaire des membres et spécialités disponibles.'],
+    ['code' => 'albums', 'route' => 'albums', 'title' => 'Galerie photo', 'desc' => 'Moments marquants et vie associative du RC Durnal.'],
+    ['code' => 'shop', 'route' => 'shop', 'title' => 'Ressources club', 'desc' => 'Boutique et supports pour la vie du club.'],
 ];
 
 $activeModules = [];
@@ -25,72 +27,59 @@ foreach ($modules as $module) {
     }
 
     $activeModules[] = $module;
-    $moduleCards .= '<a class="audience-card" href="' . e(route_url((string) $module['route'])) . '"><strong>'
-        . e((string) $module['title']) . '</strong><span>' . e((string) $module['desc']) . '</span></a>';
+    $moduleCards .= '<a class="landing-module-card" href="' . e(route_url((string) $module['route'])) . '">'
+        . '<h3>' . e((string) $module['title']) . '</h3>'
+        . '<p>' . e((string) $module['desc']) . '</p>'
+        . '<span>Explorer →</span>'
+        . '</a>';
 }
 
 if ($moduleCards === '') {
-    $moduleCards = '<div class="empty-state">Aucun module public actif pour le moment.</div>';
+    $moduleCards = '<div class="empty-state">Les espaces publics sont en cours de mise à jour.</div>';
 }
 
-$featureCards = [
-    ['title' => 'Communication du club', 'desc' => 'Actualités, articles et contenus éditoriaux dans une expérience cohérente.'],
-    ['title' => 'Collaboration interne', 'desc' => 'Wiki, annuaire membres et rôles pour fluidifier le travail quotidien.'],
-    ['title' => 'Engagement communautaire', 'desc' => 'Événements, albums, boutique et enchères pour dynamiser la vie du club.'],
-];
-$featureMarkup = '';
-foreach ($featureCards as $feature) {
-    $featureMarkup .= '<article class="card feature-card"><h3>' . e($feature['title']) . '</h3><p class="help">'
-        . e($feature['desc']) . '</p></article>';
-}
+$heroTitle = $isAuthenticated
+    ? 'Heureux de vous revoir sur le portail ON4CRD'
+    : 'Le portail officiel du Radio Club de Durnal';
 
-$quickLinks = [
-    ['label' => 'Lire les actualités', 'route' => 'news'],
-    ['label' => 'Explorer le wiki', 'route' => 'wiki'],
-    ['label' => 'Consulter l’agenda', 'route' => 'events'],
-];
-$quickLinkMarkup = '';
-foreach ($quickLinks as $link) {
-    $quickLinkMarkup .= '<li><a href="' . e(route_url((string) $link['route'])) . '">' . e((string) $link['label']) . '</a></li>';
-}
+$heroSubtitle = $isAuthenticated
+    ? 'Retrouvez en un clic vos outils, vos contenus et les prochaines activités du club.'
+    : 'Une landing page professionnelle avec une navigation claire pour les visiteurs et les membres.';
 
-$kpiAuthLabel = $isAuthenticated ? 'Membre connecté' : 'Visiteur public';
-$kpiAuthValue = $isAuthenticated ? e((string) ($user['callsign'] ?? 'Compte actif')) : 'Accès libre';
-
-$content = '<section class="hero hero-home landing-hero">'
-    . '<article class="card hero-copy">'
-    . '<span class="badge">Plateforme ON4CRD</span>'
-    . '<h1>Une landing page professionnelle pour votre club radioamateur</h1>'
-    . '<p class="hero-lead">Pilotez les activités, valorisez les contenus techniques et offrez une expérience claire aux membres comme aux visiteurs.</p>'
+$content = '<section class="landing-v2-hero">'
+    . '<div class="landing-v2-copy">'
+    . '<span class="badge">ON4CRD · Radio Club de Durnal</span>'
+    . '<h1>' . e($heroTitle) . '</h1>'
+    . '<p>' . e($heroSubtitle) . '</p>'
     . '<div class="actions">' . $primaryCta . $secondaryCta . '</div>'
-    . '</article>'
-    . '<aside class="hero-panel landing-kpi-panel">'
-    . '<h2>Vue d’ensemble</h2>'
-    . '<div class="landing-kpi-grid">'
-    . '<div class="stat-card"><span class="help">Modules publics actifs</span><strong>' . e((string) count($activeModules)) . '</strong></div>'
-    . '<div class="stat-card"><span class="help">' . e($kpiAuthLabel) . '</span><strong>' . $kpiAuthValue . '</strong></div>'
-    . '<div class="stat-card"><span class="help">Parcours rapide</span><strong>3 étapes</strong></div>'
+    . '<div class="landing-v2-tags"><span>📡 Radioamateurisme</span><span>🤝 Vie associative</span><span>🎓 Transmission technique</span></div>'
     . '</div>'
+    . '<aside class="landing-v2-panel">'
+    . '<h2>Vue d’ensemble</h2>'
+    . '<div class="landing-v2-stats">'
+    . '<article><strong>' . e((string) count($activeModules)) . '</strong><span>espaces actifs</span></article>'
+    . '<article><strong>100%</strong><span>navigation unifiée</span></article>'
+    . '<article><strong>24/7</strong><span>accès aux ressources</span></article>'
+    . '</div>'
+    . '<ul class="landing-v2-checks"><li>Présentation claire pour les visiteurs</li><li>Expérience cohérente pour les membres</li><li>Accès rapide aux modules du site</li></ul>'
     . '</aside>'
     . '</section>'
-    . '<section class="grid-3 inner-card">' . $featureMarkup . '</section>'
-    . '<section class="card stack inner-card">'
-    . '<div class="section-header"><h2>Accès rapide aux modules</h2><span class="help">Navigation orientée productivité</span></div>'
-    . '<div class="audience-grid">' . $moduleCards . '</div>'
+    . '<section class="landing-v2-values">'
+    . '<article class="landing-value-card"><span class="landing-icon">📶</span><h3>Initiation & accompagnement</h3><p>Des membres expérimentés accompagnent les nouveaux opérateurs.</p></article>'
+    . '<article class="landing-value-card"><span class="landing-icon">🛠️</span><h3>Pratique concrète</h3><p>Ateliers, essais matériels, activations et exercices radio.</p></article>'
+    . '<article class="landing-value-card"><span class="landing-icon">🌍</span><h3>Impact local</h3><p>Un club ancré à Durnal, ouvert aux projets et partenariats.</p></article>'
     . '</section>'
-    . '<section class="card split inner-card">'
-    . '<article>'
-    . '<h2>Démarrage en moins de 2 minutes</h2>'
-    . '<ol class="list-spaced">'
-    . '<li><strong>1. Explorer</strong><span class="help">Parcourez les pages publiques pour découvrir les activités du club.</span></li>'
-    . '<li><strong>2. Se connecter</strong><span class="help">Accédez à vos fonctionnalités membres selon vos rôles.</span></li>'
-    . '<li><strong>3. Contribuer</strong><span class="help">Publiez, collaborez et participez aux modules actifs.</span></li>'
-    . '</ol>'
-    . '</article>'
-    . '<aside>'
-    . '<h3>Raccourcis utiles</h3>'
-    . '<ul class="list-clean list-spaced">' . $quickLinkMarkup . '</ul>'
-    . '</aside>'
+    . '<section class="landing-v2-modules">'
+    . '<header><h2>Explorer les rubriques du club</h2><p>Un design homogène pour naviguer facilement entre les modules.</p></header>'
+    . '<div class="landing-v2-module-grid">' . $moduleCards . '</div>'
+    . '</section>'
+    . '<section class="landing-v2-journeys">'
+    . '<article class="landing-journey-card"><h3>Parcours visiteur</h3><ol><li>Découvrir le club via les actualités et la galerie.</li><li>Identifier les prochaines activités ouvertes.</li><li>Prendre contact puis participer à une rencontre.</li></ol></article>'
+    . '<article class="landing-journey-card"><h3>Parcours membre</h3><ol><li>Se connecter à son espace personnel.</li><li>Contribuer aux contenus techniques et à la vie du club.</li><li>S’engager dans les projets, événements et actions locales.</li></ol></article>'
+    . '</section>'
+    . '<section class="landing-v2-bottom-cta">'
+    . '<div><h2>Envie de découvrir la radioamateur à Durnal ?</h2><p>Le club accueille débutants et opérateurs confirmés pour apprendre, expérimenter et partager la passion des ondes.</p></div>'
+    . '<div class="landing-v2-bottom-actions">' . $primaryCta . '<a class="button secondary" href="' . e(route_url('news')) . '">Lire les actualités</a></div>'
     . '</section>';
 
 echo render_layout($content, 'Accueil');

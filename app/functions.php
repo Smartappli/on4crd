@@ -455,7 +455,7 @@ function render_layout(string $content, string $title = ''): string
 
         $route = (string) $item['route'];
         $isCurrent = $currentRoute === $route || ($currentRoute === '' && $route === 'home');
-        $navHtml .= '<a href="' . e(route_url($route)) . '"' . ($isCurrent ? ' aria-current="page"' : '') . '>'
+        $navHtml .= '<a class="transition-colors duration-200" href="' . e(route_url($route)) . '"' . ($isCurrent ? ' aria-current="page"' : '') . '>'
             . e((string) $item['label']) . '</a>';
     }
 
@@ -473,15 +473,21 @@ function render_layout(string $content, string $title = ''): string
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $year = gmdate('Y');
 
+    $nonce = csp_nonce();
+
     return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
-        . '</title><link rel="stylesheet" href="' . e(asset_url('public/assets/style.css')) . '"></head><body>'
+        . '</title><link rel="stylesheet" href="' . e(asset_url('public/assets/style.css')) . '">'
+        . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
+        . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
+        . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
+        . '</head><body class="bg-slate-50 text-slate-900">'
         . '<a class="skip-link" href="#main-content">Aller au contenu</a>'
-        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
+        . '<header class="topbar border-b border-slate-200"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">' . e($siteName) . '</span><span class="brand-subtitle">Plateforme club radioamateur</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $authHtml . '</div></header>'
-        . '<main id="main-content" class="layout container">' . $flashHtml . $content . '</main>'
+        . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
         . '<section><h3 class="footer-title">' . e($siteName) . '</h3><p class="footer-copy">Portail professionnel pour la communication, la collaboration et les activités du club.</p></section>'
         . '<section><h3 class="footer-title">Navigation</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
@@ -887,7 +893,7 @@ function apply_security_headers(): void
     }
 
     $nonce = csp_nonce();
-    $scriptSrc = ["'self'", "'nonce-" . $nonce . "'"];
+    $scriptSrc = ["'self'", "'nonce-" . $nonce . "'", 'https://cdn.tailwindcss.com'];
     $imgSrc = ["'self'", 'data:', 'https:'];
     $styleSrc = ["'self'", "'unsafe-inline'"];
     $connectSrc = ["'self'"];
