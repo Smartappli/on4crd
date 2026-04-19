@@ -507,10 +507,9 @@ function render_layout(string $content, string $title = ''): string
 
     $nonce = csp_nonce();
 
-    return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
+    return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
-        . '</title><link rel="stylesheet" href="' . e(asset_url('public/assets/style.css')) . '">'
-        . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
+        . '</title><link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body class="bg-slate-50 text-slate-900">'
@@ -518,7 +517,7 @@ function render_layout(string $content, string $title = ''): string
         . '<header class="topbar border-b border-slate-200"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">' . e($siteName) . '</span><span class="brand-subtitle">Plateforme club radioamateur</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
-        . '<div class="toolbar">' . $menuToolsHtml . $authHtml . '</div></header>'
+        . '<div class="toolbar">' . $authHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
         . '<section><h3 class="footer-title">' . e($siteName) . '</h3><p class="footer-copy">Portail professionnel pour la communication, la collaboration et les activités du club.</p></section>'
