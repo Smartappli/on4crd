@@ -493,42 +493,49 @@ function render_layout(string $content, string $title = ''): string
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $year = gmdate('Y');
-    $toggleThemeLabel = $currentTheme === 'dark' ? 'Passer en clair' : 'Passer en sombre';
-    $toggleThemeIcon = $currentTheme === 'dark' ? '☀️' : '🌙';
+    $themeOptions = [
+        'light' => 'Clair',
+        'dark' => 'Sombre',
+    ];
     $languageOptions = [
-        'fr' => ['label' => 'Français', 'flag' => '🇫🇷'],
-        'en' => ['label' => 'English', 'flag' => '🇬🇧'],
-        'de' => ['label' => 'Deutsch', 'flag' => '🇩🇪'],
-        'nl' => ['label' => 'Nederlands', 'flag' => '🇳🇱'],
+        'fr' => ['label' => 'Français'],
+        'en' => ['label' => 'English'],
+        'de' => ['label' => 'Deutsch'],
+        'nl' => ['label' => 'Nederlands'],
     ];
     $languageOptionHtml = '';
     foreach ($languageOptions as $localeCode => $localeConfig) {
         $isActive = $localeCode === $currentLocale;
-        $languageOptionHtml .= '<button type="submit" class="flag-option' . ($isActive ? ' is-active' : '') . '" name="locale" value="' . e($localeCode) . '" aria-label="' . e((string) ($localeConfig['label'] ?? strtoupper($localeCode))) . '"' . ($isActive ? ' aria-current="true"' : '') . '>'
-            . '<span aria-hidden="true">' . e((string) ($localeConfig['flag'] ?? '🏳️')) . '</span></button>';
+        $languageOptionHtml .= '<option value="' . e($localeCode) . '"' . ($isActive ? ' selected' : '') . '>' . e((string) ($localeConfig['label'] ?? strtoupper($localeCode))) . '</option>';
+    }
+    $themeOptionHtml = '';
+    foreach ($themeOptions as $themeCode => $themeLabel) {
+        $isActive = $themeCode === $currentTheme;
+        $themeOptionHtml .= '<option value="' . e($themeCode) . '"' . ($isActive ? ' selected' : '') . '>' . e($themeLabel) . '</option>';
     }
     $accentOptionHtml = '';
     foreach ($accentPalette as $accentCode => $accentConfig) {
         $isActive = $accentCode === $currentAccent;
-        $accentOptionHtml .= '<button type="submit" class="color-swatch' . ($isActive ? ' is-active' : '') . '" name="accent" value="' . e($accentCode) . '" aria-label="' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '" style="--swatch-color:' . e((string) ($accentConfig['color'] ?? '#2f6fed')) . ';"' . ($isActive ? ' aria-current="true"' : '') . '></button>';
+        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '</option>';
     }
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<span class="sr-only">Changer de langue</span>'
-        . '<div class="flag-list" role="group" aria-label="Choix de la langue">' . $languageOptionHtml . '</div>'
+        . '<label class="sr-only" for="language-selector">Choix de la langue</label>'
+        . '<select id="language-selector" class="preference-select" name="locale" aria-label="Choix de la langue" onchange="this.form.submit()">' . $languageOptionHtml . '</select>'
         . '</form>'
-        . '<form class="toolbar-form" method="post" action="' . e(route_url('toggle_theme')) . '">'
+        . '<form class="toolbar-form" method="post" action="' . e(route_url('set_theme')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<button type="submit" class="flag-option theme-toggle" aria-label="' . e($toggleThemeLabel) . '" title="' . e($toggleThemeLabel) . '"><span aria-hidden="true">' . e($toggleThemeIcon) . '</span></button>'
+        . '<label class="sr-only" for="theme-selector">Choix du mode</label>'
+        . '<select id="theme-selector" class="preference-select" name="theme" aria-label="Choix du mode clair ou sombre" onchange="this.form.submit()">' . $themeOptionHtml . '</select>'
         . '</form>'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<span class="sr-only">Changer la couleur</span>'
-        . '<div class="color-palette" role="group" aria-label="Choix de la couleur">' . $accentOptionHtml . '</div>'
+        . '<label class="sr-only" for="accent-selector">Choix de la couleur</label>'
+        . '<select id="accent-selector" class="preference-select" name="accent" aria-label="Choix de la couleur" onchange="this.form.submit()">' . $accentOptionHtml . '</select>'
         . '</form>'
         . '</div>';
 
