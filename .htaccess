@@ -12,8 +12,11 @@ RewriteRule (^|/)\.(?!well-known/) - [F,L]
 
 RewriteRule ^sitemap\.xml$ index.php?route=sitemap.xml [L,QSA]
 RewriteRule ^robots\.txt$ index.php?route=robots.txt [L,QSA]
+RewriteRule ^index\.php$ - [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^$ index.php [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ index.php?route=$1 [L,QSA]
