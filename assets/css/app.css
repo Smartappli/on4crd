@@ -130,6 +130,7 @@ textarea:focus-visible {
 .narrow { max-width: 520px; margin: 2rem auto; }
 .hero { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(320px, .95fr); gap: 1rem; align-items: stretch; }
 .hero-home { margin-top: .25rem; }
+.landing-hero { align-items: stretch; }
 .hero-copy {
   padding: 1.65rem;
   background:
@@ -144,6 +145,8 @@ textarea:focus-visible {
   padding: 1.15rem;
   border-radius: 24px;
 }
+.landing-kpi-panel { display:grid; gap:.9rem; align-content:start; }
+.landing-kpi-grid { display:grid; gap:.7rem; }
 .grid-2 { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:1rem; }
 .grid-3 { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:1rem; }
 .grid-4 { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap:1rem; }
@@ -235,7 +238,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   font-size:.92rem;
   font-weight:600;
 }
-.audience-grid { display:grid; gap:.8rem; }
+.audience-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:.8rem; }
 .compact-grid { grid-template-columns: 1fr; }
 .audience-card {
   display:flex;
@@ -264,6 +267,8 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .compact-feature-list li { padding:.7rem 0; }
 .list-spaced { display:grid; gap:.8rem; }
 .list-spaced li { display:grid; gap:.15rem; }
+.list-spaced a { color: var(--text); font-weight: 600; }
+.list-spaced a:hover { color: var(--accent); text-decoration: none; }
 .empty-state {
   display:grid;
   place-items:center;

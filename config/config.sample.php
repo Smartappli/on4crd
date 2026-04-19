@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return [
     'db' => [
-        'dsn' => 'mysql:host=localhost;dbname=on4crd;charset=utf8mb4',
+        'dsn' => 'mysql:host=localhost;port=3306;dbname=on4crd;charset=utf8mb4',
         'user' => 'db_user',
         'pass' => 'db_password',
     ],
