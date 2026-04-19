@@ -429,6 +429,14 @@ function render_layout(string $content, string $title = ''): string
     $pageTitle = $title !== '' ? $title : (string) config('app.site_name', 'ON4CRD');
     $flashes = consume_flashes();
     $currentRoute = (string) ($_GET['route'] ?? 'home');
+    $currentTheme = (string) ($_SESSION['theme'] ?? 'light');
+    if ($currentTheme !== 'dark') {
+        $currentTheme = 'light';
+    }
+    $currentLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl'], true)) {
+        $currentLocale = 'fr';
+    }
     $user = current_user();
     $flashHtml = '';
     foreach ($flashes as $flash) {
@@ -472,6 +480,30 @@ function render_layout(string $content, string $title = ''): string
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $year = gmdate('Y');
+    $toggleThemeLabel = $currentTheme === 'dark' ? 'Passer en clair' : 'Passer en sombre';
+    $languageOptions = [
+        'fr' => 'FR',
+        'en' => 'EN',
+        'de' => 'DE',
+        'nl' => 'NL',
+    ];
+    $languageOptionHtml = '';
+    foreach ($languageOptions as $localeCode => $localeLabel) {
+        $selected = $localeCode === $currentLocale ? ' selected' : '';
+        $languageOptionHtml .= '<option value="' . e($localeCode) . '"' . $selected . '>' . e($localeLabel) . '</option>';
+    }
+    $menuToolsHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
+        . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+        . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
+        . '<label class="sr-only" for="locale-switcher">Changer de langue</label>'
+        . '<select id="locale-switcher" name="locale">' . $languageOptionHtml . '</select>'
+        . '<button type="submit" class="button secondary small">Langue</button>'
+        . '</form>'
+        . '<form class="toolbar-form" method="post" action="' . e(route_url('toggle_theme')) . '">'
+        . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+        . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
+        . '<button type="submit" class="button secondary small">' . e($toggleThemeLabel) . '</button>'
+        . '</form>';
 
     $nonce = csp_nonce();
 
