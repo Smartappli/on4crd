@@ -249,18 +249,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'INSERT INTO members (callsign, full_name, email, password_hash, qth, locator, bio, is_active)
              VALUES (?, ?, ?, ?, ?, ?, ?, 1)
              ON DUPLICATE KEY UPDATE
-                full_name = VALUES(full_name),
-                email = VALUES(email),
-                password_hash = VALUES(password_hash),
-                qth = VALUES(qth),
-                locator = VALUES(locator),
-                bio = VALUES(bio),
-                is_active = 1'
+                 full_name = VALUES(full_name),
+                 email = VALUES(email),
+                 password_hash = VALUES(password_hash),
+                 qth = VALUES(qth),
+                 locator = VALUES(locator),
+                 bio = VALUES(bio),
+                 is_active = 1'
         )->execute([$callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
 
         $memberIdStmt = db()->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
         $memberIdStmt->execute([$callsign]);
         $memberId = (int) $memberIdStmt->fetchColumn();
+        if ($memberId <= 0) {
+            throw new RuntimeException('Impossible de retrouver le compte administrateur après création.');
+        }
+
         db()->prepare('INSERT IGNORE INTO member_roles (member_id, role_id) VALUES (?, ?)')->execute([$memberId, $roleMap['super_admin']]);
 
         file_put_contents($installLockFile, 'installed ' . date('c'));

@@ -178,6 +178,251 @@ function apply_runtime_schema_updates(): void
     // do not fail when no runtime migration is required.
 }
 
+if (!function_exists('base_url')) {
+function base_url(string $path = ''): string
+{
+    $configured = rtrim((string) config('app.base_url', ''), '/');
+    if ($configured !== '') {
+        $base = $configured;
+    } else {
+        $scheme = is_https_request() ? 'https' : 'http';
+        $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $base = $scheme . '://' . $host;
+    }
+
+    if ($path === '') {
+        return $base;
+    }
+
+    return $base . '/' . ltrim($path, '/');
+}
+}
+
+if (!function_exists('asset_url')) {
+function asset_url(string $path): string
+{
+    return base_url($path);
+}
+}
+
+if (!function_exists('route_url')) {
+function route_url(string $route, array $query = []): string
+{
+    $route = trim($route);
+    if ($route === '' || $route === 'home') {
+        if ($query === []) {
+            return base_url('/');
+        }
+
+        return base_url('/?' . http_build_query($query));
+    }
+
+    if (str_ends_with($route, '.php')) {
+        $suffix = $query === [] ? '' : ('?' . http_build_query($query));
+        return base_url('/' . ltrim($route, '/') . $suffix);
+    }
+
+    $extra = [];
+    if (str_contains($route, '&')) {
+        [$route, $tail] = explode('&', $route, 2);
+        parse_str($tail, $extra);
+    }
+
+    $params = array_merge(['route' => $route], $extra, $query);
+    return base_url('/index.php?' . http_build_query($params));
+}
+}
+
+if (!function_exists('redirect_url')) {
+function redirect_url(string $url): void
+{
+    header('Location: ' . $url, true, 302);
+    exit;
+}
+}
+
+if (!function_exists('redirect')) {
+function redirect(string $route): void
+{
+    redirect_url(route_url($route));
+}
+}
+
+if (!function_exists('set_flash')) {
+function set_flash(string $type, string $message): void
+{
+    $_SESSION['_flash'][] = ['type' => $type, 'message' => $message];
+}
+}
+
+if (!function_exists('consume_flashes')) {
+function consume_flashes(): array
+{
+    $flashes = $_SESSION['_flash'] ?? [];
+    if (!is_array($flashes)) {
+        $flashes = [];
+    }
+    unset($_SESSION['_flash']);
+
+    return array_values(array_filter($flashes, static fn ($item): bool => is_array($item)));
+}
+}
+
+if (!function_exists('current_user')) {
+function current_user(): ?array
+{
+    static $cache = null;
+    static $loaded = false;
+
+    if ($loaded) {
+        return $cache;
+    }
+    $loaded = true;
+
+    $memberId = (int) ($_SESSION['member_id'] ?? 0);
+    if ($memberId <= 0 || !table_exists('members')) {
+        $cache = null;
+        return null;
+    }
+
+    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active FROM members WHERE id = ? LIMIT 1');
+    $stmt->execute([$memberId]);
+    $row = $stmt->fetch();
+    if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
+        unset($_SESSION['member_id']);
+        $cache = null;
+        return null;
+    }
+
+    $cache = $row;
+    return $cache;
+}
+}
+
+if (!function_exists('require_login')) {
+function require_login(): array
+{
+    $user = current_user();
+    if ($user === null) {
+        set_flash('error', 'Veuillez vous connecter pour continuer.');
+        redirect('login');
+    }
+
+    return $user;
+}
+}
+
+if (!function_exists('logout_member')) {
+function logout_member(): void
+{
+    unset($_SESSION['member_id']);
+}
+}
+
+if (!function_exists('module_enabled')) {
+function module_enabled(string $module): bool
+{
+    if ($module === '' || !table_exists('modules')) {
+        return true;
+    }
+
+    $stmt = db()->prepare('SELECT is_enabled FROM modules WHERE code = ? LIMIT 1');
+    $stmt->execute([$module]);
+    $value = $stmt->fetchColumn();
+    if ($value === false) {
+        return true;
+    }
+
+    return (int) $value === 1;
+}
+}
+
+if (!function_exists('require_module_enabled')) {
+function require_module_enabled(string $module): void
+{
+    if (module_enabled($module)) {
+        return;
+    }
+
+    http_response_code(404);
+    echo render_layout('<div class="card"><h1>404</h1><p>Module indisponible.</p></div>', '404');
+    exit;
+}
+}
+
+if (!function_exists('has_permission')) {
+function has_permission(string $permission): bool
+{
+    $user = current_user();
+    if ($user === null || $permission === '') {
+        return false;
+    }
+    if (!table_exists('permissions') || !table_exists('roles') || !table_exists('member_roles') || !table_exists('role_permissions')) {
+        return false;
+    }
+
+    $stmt = db()->prepare(
+        'SELECT 1
+         FROM permissions p
+         LEFT JOIN member_permissions mp ON mp.permission_id = p.id AND mp.member_id = ?
+         LEFT JOIN role_permissions rp ON rp.permission_id = p.id
+         LEFT JOIN member_roles mr ON mr.role_id = rp.role_id AND mr.member_id = ?
+         WHERE p.code = ?
+           AND (mp.member_id IS NOT NULL OR mr.member_id IS NOT NULL)
+         LIMIT 1'
+    );
+    $stmt->execute([(int) $user['id'], (int) $user['id'], $permission]);
+
+    return (bool) $stmt->fetchColumn();
+}
+}
+
+if (!function_exists('require_permission')) {
+function require_permission(string $permission): void
+{
+    require_login();
+    if (has_permission($permission)) {
+        return;
+    }
+
+    http_response_code(403);
+    echo render_layout('<div class="card"><h1>403</h1><p>Accès refusé.</p></div>', 'Accès refusé');
+    exit;
+}
+}
+
+if (!function_exists('set_page_meta')) {
+function set_page_meta(string|array $title = '', string $description = ''): void
+{
+    if (is_array($title)) {
+        $_SESSION['_page_meta'] = $title;
+        return;
+    }
+    $_SESSION['_page_meta'] = ['title' => $title, 'description' => $description];
+}
+}
+
+if (!function_exists('render_layout')) {
+function render_layout(string $content, string $title = ''): string
+{
+    $pageTitle = $title !== '' ? $title : (string) config('app.site_name', 'ON4CRD');
+    $flashes = consume_flashes();
+    $flashHtml = '';
+    foreach ($flashes as $flash) {
+        $type = (string) ($flash['type'] ?? 'info');
+        $message = e((string) ($flash['message'] ?? ''));
+        $flashHtml .= '<div class="flash flash-' . e($type) . '">' . $message . '</div>';
+    }
+
+    return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
+        . e($pageTitle)
+        . '</title><link rel="stylesheet" href="' . e(asset_url('public/assets/style.css')) . '"></head><body><main class="layout">'
+        . $flashHtml
+        . $content
+        . '</main></body></html>';
+}
+}
+
 function is_https_request(): bool
 {
     $forwardedProtoHeader = strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
