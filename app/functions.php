@@ -437,6 +437,19 @@ function render_layout(string $content, string $title = ''): string
     if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl'], true)) {
         $currentLocale = 'fr';
     }
+    $currentAccent = strtolower((string) ($_SESSION['accent'] ?? 'blue'));
+    $accentPalette = [
+        'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf', 'label' => 'Bleu'],
+        'emerald' => ['color' => '#059669', 'strong' => '#047857', 'label' => 'Émeraude'],
+        'violet' => ['color' => '#7c3aed', 'strong' => '#6d28d9', 'label' => 'Violet'],
+        'rose' => ['color' => '#e11d48', 'strong' => '#be123c', 'label' => 'Rose'],
+        'amber' => ['color' => '#d97706', 'strong' => '#b45309', 'label' => 'Ambre'],
+    ];
+    if (!array_key_exists($currentAccent, $accentPalette)) {
+        $currentAccent = 'blue';
+    }
+    $accentColor = (string) $accentPalette[$currentAccent]['color'];
+    $accentStrongColor = (string) $accentPalette[$currentAccent]['strong'];
     $user = current_user();
     $flashHtml = '';
     foreach ($flashes as $flash) {
@@ -492,6 +505,11 @@ function render_layout(string $content, string $title = ''): string
         $selected = $localeCode === $currentLocale ? ' selected' : '';
         $languageOptionHtml .= '<option value="' . e($localeCode) . '"' . $selected . '>' . e($localeLabel) . '</option>';
     }
+    $accentOptionHtml = '';
+    foreach ($accentPalette as $accentCode => $accentConfig) {
+        $selected = $accentCode === $currentAccent ? ' selected' : '';
+        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . $selected . '>' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '</option>';
+    }
     $menuToolsHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
@@ -503,11 +521,18 @@ function render_layout(string $content, string $title = ''): string
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<button type="submit" class="button secondary small">' . e($toggleThemeLabel) . '</button>'
+        . '</form>'
+        . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
+        . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+        . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
+        . '<label class="sr-only" for="accent-switcher">Changer la couleur</label>'
+        . '<select id="accent-switcher" name="accent">' . $accentOptionHtml . '</select>'
+        . '<button type="submit" class="button secondary small">Couleur</button>'
         . '</form>';
 
     $nonce = csp_nonce();
 
-    return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
+    return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title><link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
@@ -517,7 +542,7 @@ function render_layout(string $content, string $title = ''): string
         . '<header class="topbar border-b border-slate-200"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">' . e($siteName) . '</span><span class="brand-subtitle">Plateforme club radioamateur</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
-        . '<div class="toolbar">' . $authHtml . '</div></header>'
+        . '<div class="toolbar">' . $menuToolsHtml . $authHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
         . '<section><h3 class="footer-title">' . e($siteName) . '</h3><p class="footer-copy">Portail professionnel pour la communication, la collaboration et les activités du club.</p></section>'
