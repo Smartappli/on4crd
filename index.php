@@ -2,12 +2,6 @@
 declare(strict_types=1);
 
 if (!is_file(__DIR__ . '/config/config.php')) {
-    $requestedRoute = (string) ($_GET['route'] ?? 'home');
-    if ($requestedRoute !== 'install.php') {
-        header('Location: ?route=install.php', true, 302);
-        exit;
-    }
-
     require __DIR__ . '/install.php';
     exit;
 }
