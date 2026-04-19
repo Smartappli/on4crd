@@ -235,7 +235,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   font-size:.92rem;
   font-weight:600;
 }
-.audience-grid { display:grid; gap:.8rem; }
+.audience-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:.8rem; }
 .compact-grid { grid-template-columns: 1fr; }
 .audience-card {
   display:flex;
