@@ -120,10 +120,17 @@ textarea:focus-visible {
 .nav-link-button[aria-current="page"] {
   background: var(--panel-2);
 }
-.toolbar-form .theme-toggle { display: inline-flex; align-items: center; justify-content: center; }
-.theme-toggle span { font-size: 1rem; line-height: 1; }
 .toolbar { display:flex; align-items:center; gap:.8rem; }
-.flag-list, .color-palette { display: inline-flex; gap: .35rem; align-items: center; }
+.toolbar-preferences { display: inline-flex; flex-direction: row; gap: .45rem; align-items: center; }
+.preference-select {
+  width: 3.2rem;
+  margin-top: 0;
+  padding: .45rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  text-align: center;
+}
+.flag-list, .color-palette { display: inline-flex; flex-direction: column; gap: .35rem; align-items: center; }
 .flag-option, .color-swatch {
   width: 2rem;
   height: 2rem;

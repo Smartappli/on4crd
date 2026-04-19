@@ -67,11 +67,30 @@ if ($route === 'set_accent') {
     }
     verify_csrf();
     $accent = strtolower((string) ($_POST['accent'] ?? 'blue'));
-    $supportedAccents = ['blue', 'emerald', 'violet', 'rose', 'amber'];
+    if ($accent === 'rose') {
+        $accent = 'red';
+    }
+    $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber'];
     if (!in_array($accent, $supportedAccents, true)) {
         $accent = 'blue';
     }
     $_SESSION['accent'] = $accent;
+    $returnRoute = (string) ($_POST['return_route'] ?? 'home');
+    redirect($returnRoute !== '' ? $returnRoute : 'home');
+}
+
+if ($route === 'set_theme') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        exit('Method not allowed');
+    }
+    verify_csrf();
+    $theme = strtolower((string) ($_POST['theme'] ?? 'light'));
+    $supportedThemes = ['light', 'dark'];
+    if (!in_array($theme, $supportedThemes, true)) {
+        $theme = 'light';
+    }
+    $_SESSION['theme'] = $theme;
     $returnRoute = (string) ($_POST['return_route'] ?? 'home');
     redirect($returnRoute !== '' ? $returnRoute : 'home');
 }
