@@ -495,15 +495,21 @@ function render_layout(string $content, string $title = ''): string
     $year = gmdate('Y');
     $toggleThemeLabel = $currentTheme === 'dark' ? 'Passer en clair' : 'Passer en sombre';
     $languageOptions = [
-        'fr' => 'FR',
-        'en' => 'EN',
-        'de' => 'DE',
-        'nl' => 'NL',
+        'fr' => ['label' => 'Français', 'flag' => '🇫🇷'],
+        'en' => ['label' => 'English', 'flag' => '🇬🇧'],
+        'de' => ['label' => 'Deutsch', 'flag' => '🇩🇪'],
+        'nl' => ['label' => 'Nederlands', 'flag' => '🇳🇱'],
     ];
     $languageOptionHtml = '';
-    foreach ($languageOptions as $localeCode => $localeLabel) {
-        $selected = $localeCode === $currentLocale ? ' selected' : '';
-        $languageOptionHtml .= '<option value="' . e($localeCode) . '"' . $selected . '>' . e($localeLabel) . '</option>';
+    foreach ($languageOptions as $localeCode => $localeConfig) {
+        $isActive = $localeCode === $currentLocale;
+        $languageOptionHtml .= '<button type="submit" class="flag-option' . ($isActive ? ' is-active' : '') . '" name="locale" value="' . e($localeCode) . '" aria-label="' . e((string) ($localeConfig['label'] ?? strtoupper($localeCode))) . '"' . ($isActive ? ' aria-current="true"' : '') . '>'
+            . '<span aria-hidden="true">' . e((string) ($localeConfig['flag'] ?? '🏳️')) . '</span></button>';
+    }
+    $accentOptionHtml = '';
+    foreach ($accentPalette as $accentCode => $accentConfig) {
+        $isActive = $accentCode === $currentAccent;
+        $accentOptionHtml .= '<button type="submit" class="color-swatch' . ($isActive ? ' is-active' : '') . '" name="accent" value="' . e($accentCode) . '" aria-label="' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '" style="--swatch-color:' . e((string) ($accentConfig['color'] ?? '#2f6fed')) . ';"' . ($isActive ? ' aria-current="true"' : '') . '></button>';
     }
     $accentOptionHtml = '';
     foreach ($accentPalette as $accentCode => $accentConfig) {
@@ -513,9 +519,8 @@ function render_layout(string $content, string $title = ''): string
     $menuToolsHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<label class="sr-only" for="locale-switcher">Changer de langue</label>'
-        . '<select id="locale-switcher" name="locale">' . $languageOptionHtml . '</select>'
-        . '<button type="submit" class="button secondary small">Langue</button>'
+        . '<span class="sr-only">Changer de langue</span>'
+        . '<div class="flag-list" role="group" aria-label="Choix de la langue">' . $languageOptionHtml . '</div>'
         . '</form>'
         . '<form class="toolbar-form" method="post" action="' . e(route_url('toggle_theme')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
