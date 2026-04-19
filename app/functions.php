@@ -512,7 +512,8 @@ function render_layout(string $content, string $title = ''): string
         $isActive = $accentCode === $currentAccent;
         $accentOptionHtml .= '<button type="submit" class="color-swatch' . ($isActive ? ' is-active' : '') . '" name="accent" value="' . e($accentCode) . '" aria-label="' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '" style="--swatch-color:' . e((string) ($accentConfig['color'] ?? '#2f6fed')) . ';"' . ($isActive ? ' aria-current="true"' : '') . '></button>';
     }
-    $menuToolsHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
+    $menuToolsHtml = '<div class="toolbar-preferences">'
+        . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<span class="sr-only">Changer de langue</span>'
@@ -528,7 +529,8 @@ function render_layout(string $content, string $title = ''): string
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<span class="sr-only">Changer la couleur</span>'
         . '<div class="color-palette" role="group" aria-label="Choix de la couleur">' . $accentOptionHtml . '</div>'
-        . '</form>';
+        . '</form>'
+        . '</div>';
 
     $nonce = csp_nonce();
 
