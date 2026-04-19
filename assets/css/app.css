@@ -135,16 +135,16 @@ textarea:focus-visible {
 .toolbar-preferences .toolbar-form,
 .toolbar-preferences .inline-form { margin: 0; }
 .preference-select {
-  width: 3.4rem;
-  min-width: 3.4rem;
+  width: 4.1rem;
+  min-width: 4.1rem;
   margin-top: 0;
-  padding: .42rem .4rem;
+  padding: .52rem .45rem;
   border-radius: 12px;
   border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, white), color-mix(in srgb, var(--panel-2) 82%, var(--panel)));
   color: var(--text);
-  font-size: 1.02rem;
+  font-size: 1.08rem;
   font-weight: 600;
   text-align: center;
   line-height: 1;

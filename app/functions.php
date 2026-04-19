@@ -534,19 +534,19 @@ function render_layout(string $content, string $title = ''): string
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="language-selector">Choix de la langue</label>'
-        . '<select id="language-selector" class="preference-select" name="locale" aria-label="Choix de la langue" onchange="this.form.submit()">' . $languageOptionHtml . '</select>'
+        . '<select id="language-selector" class="preference-select js-auto-submit" name="locale" aria-label="Choix de la langue">' . $languageOptionHtml . '</select>'
         . '</form>'
         . '<form class="toolbar-form" method="post" action="' . e(route_url('set_theme')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="theme-selector">Choix du mode</label>'
-        . '<select id="theme-selector" class="preference-select" name="theme" aria-label="Choix du mode clair ou sombre" onchange="this.form.submit()">' . $themeOptionHtml . '</select>'
+        . '<select id="theme-selector" class="preference-select js-auto-submit" name="theme" aria-label="Choix du mode clair ou sombre">' . $themeOptionHtml . '</select>'
         . '</form>'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="accent-selector">Choix de la couleur</label>'
-        . '<select id="accent-selector" class="preference-select" name="accent" aria-label="Choix de la couleur" onchange="this.form.submit()">' . $accentOptionHtml . '</select>'
+        . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="Choix de la couleur">' . $accentOptionHtml . '</select>'
         . '</form>'
         . '</div>';
 
@@ -568,7 +568,7 @@ function render_layout(string $content, string $title = ''): string
         . '<section><h3 class="footer-title">Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
         . '<section><h3 class="footer-title">CGU</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
         . '<section><h3 class="footer-title">ROI</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
-        . '</div><div class="footer-meta"><span>© Radio Club de Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli</a></span></div></div></footer>'
+        . '</div><div class="footer-meta"><span>© Radio Club de Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli (r)</a></span></div></div></footer>'
         . '</body></html>';
 }
 }
