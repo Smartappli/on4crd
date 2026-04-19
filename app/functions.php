@@ -442,9 +442,12 @@ function render_layout(string $content, string $title = ''): string
         'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf', 'label' => 'Bleu'],
         'emerald' => ['color' => '#059669', 'strong' => '#047857', 'label' => 'Émeraude'],
         'violet' => ['color' => '#7c3aed', 'strong' => '#6d28d9', 'label' => 'Violet'],
-        'rose' => ['color' => '#e11d48', 'strong' => '#be123c', 'label' => 'Rose'],
+        'red' => ['color' => '#dc2626', 'strong' => '#b91c1c', 'label' => 'Rouge'],
         'amber' => ['color' => '#d97706', 'strong' => '#b45309', 'label' => 'Ambre'],
     ];
+    if ($currentAccent === 'rose') {
+        $currentAccent = 'red';
+    }
     if (!array_key_exists($currentAccent, $accentPalette)) {
         $currentAccent = 'blue';
     }
@@ -494,20 +497,20 @@ function render_layout(string $content, string $title = ''): string
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $year = gmdate('Y');
     $themeOptions = [
-        'light' => '☀️ Clair',
-        'dark' => '🌙 Sombre',
+        'light' => '☀️',
+        'dark' => '🌙',
     ];
     $languageOptions = [
-        'fr' => ['label' => '🇫🇷 Français'],
-        'en' => ['label' => '🇬🇧 English'],
-        'de' => ['label' => '🇩🇪 Deutsch'],
-        'nl' => ['label' => '🇳🇱 Nederlands'],
+        'fr' => ['label' => '🇫🇷'],
+        'en' => ['label' => '🇬🇧'],
+        'de' => ['label' => '🇩🇪'],
+        'nl' => ['label' => '🇳🇱'],
     ];
     $accentIcons = [
         'blue' => '🔵',
         'emerald' => '🟢',
         'violet' => '🟣',
-        'rose' => '🌹',
+        'red' => '🔴',
         'amber' => '🟡',
     ];
     $languageOptionHtml = '';
@@ -523,9 +526,8 @@ function render_layout(string $content, string $title = ''): string
     $accentOptionHtml = '';
     foreach ($accentPalette as $accentCode => $accentConfig) {
         $isActive = $accentCode === $currentAccent;
-        $accentLabel = (string) ($accentConfig['label'] ?? strtoupper($accentCode));
         $accentIcon = (string) ($accentIcons[$accentCode] ?? '🎨');
-        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>' . e($accentIcon . ' ' . $accentLabel) . '</option>';
+        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>' . e($accentIcon) . '</option>';
     }
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'

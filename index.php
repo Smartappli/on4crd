@@ -67,7 +67,10 @@ if ($route === 'set_accent') {
     }
     verify_csrf();
     $accent = strtolower((string) ($_POST['accent'] ?? 'blue'));
-    $supportedAccents = ['blue', 'emerald', 'violet', 'rose', 'amber'];
+    if ($accent === 'rose') {
+        $accent = 'red';
+    }
+    $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber'];
     if (!in_array($accent, $supportedAccents, true)) {
         $accent = 'blue';
     }
