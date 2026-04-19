@@ -1,25 +1,30 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 APP_DIR="/var/www/html"
-CONFIG_FILE="$APP_DIR/config/config.php"
+CONFIG_DIR="${APP_DIR}/config"
+CONFIG_FILE="${CONFIG_DIR}/config.php"
 
 DB_HOST="${DB_HOST:-db}"
 DB_PORT="${DB_PORT:-3306}"
 DB_NAME="${DB_NAME:-on4crd}"
 DB_USER="${DB_USER:-on4crd}"
 DB_PASS="${DB_PASS:-on4crd}"
-DB_ROOT_PASS="${DB_ROOT_PASS:-root}"
 MYSQL_WAIT_TIMEOUT="${MYSQL_WAIT_TIMEOUT:-120}"
+
 APP_URL="${APP_URL:-http://localhost:8080}"
 ADMIN_CALLSIGN="${ADMIN_CALLSIGN:-ON4CRD}"
-ADMIN_NAME="${ADMIN_NAME:-Administrateur}"
-ADMIN_EMAIL="${ADMIN_EMAIL:-admin@example.test}"
-ADMIN_PASSWORD="${ADMIN_PASSWORD:-ChangeMeNow!123}"
+ADMIN_NAME="${ADMIN_NAME:-Administrateur local}"
+ADMIN_EMAIL="${ADMIN_EMAIL:-admin@on4crd.local}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-Admin!23456}"
 
-mkdir -p "$APP_DIR/config" "$APP_DIR/storage/cache" "$APP_DIR/storage/uploads"
+mkdir -p \
+    "${CONFIG_DIR}" \
+    "${APP_DIR}/storage" \
+    "${APP_DIR}/storage/cache" \
+    "${APP_DIR}/storage/uploads"
 
-cat > "$CONFIG_FILE" <<PHP
+cat > "${CONFIG_FILE}" <<EOF
 <?php
 declare(strict_types=1);
 
@@ -68,34 +73,59 @@ return [
         'external_api_key' => '',
     ],
 ];
-PHP
+EOF
 
-mysql_ping() {
-  mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" --silent >/dev/null 2>&1 \
-    || mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" -uroot -p"$DB_ROOT_PASS" --silent >/dev/null 2>&1
-}
+echo "Waiting for MySQL at ${DB_HOST}:${DB_PORT}..."
 
 elapsed=0
-until mysql_ping; do
-  if [ "$elapsed" -ge "$MYSQL_WAIT_TIMEOUT" ]; then
-    echo "ERROR: Timed out after ${MYSQL_WAIT_TIMEOUT}s waiting for MySQL at ${DB_HOST}:${DB_PORT}."
-    echo "Hint: if you changed DB_* variables, remove the existing db volume (docker compose down -v) or align credentials."
-    exit 1
-  fi
-  echo "Waiting for MySQL at ${DB_HOST}:${DB_PORT}... (${elapsed}s/${MYSQL_WAIT_TIMEOUT}s)"
-  sleep 2
-  elapsed=$((elapsed + 2))
+until php -r "
+\$host = getenv('DB_HOST') ?: 'db';
+\$port = (int) (getenv('DB_PORT') ?: 3306);
+\$db   = getenv('DB_NAME') ?: 'on4crd';
+\$user = getenv('DB_USER') ?: 'on4crd';
+\$pass = getenv('DB_PASS') ?: 'on4crd';
+
+try {
+    new PDO(
+        \"mysql:host=\$host;port=\$port;dbname=\$db;charset=utf8mb4\",
+        \$user,
+        \$pass,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_TIMEOUT => 2,
+        ]
+    );
+    exit(0);
+} catch (Throwable \$e) {
+    fwrite(STDERR, \$e->getMessage() . PHP_EOL);
+    exit(1);
+}
+"; do
+    if [ "${elapsed}" -ge "${MYSQL_WAIT_TIMEOUT}" ]; then
+        echo "ERROR: Timed out after ${MYSQL_WAIT_TIMEOUT}s waiting for MySQL at ${DB_HOST}:${DB_PORT}."
+        exit 1
+    fi
+
+    echo "Waiting for MySQL at ${DB_HOST}:${DB_PORT}... (${elapsed}s/${MYSQL_WAIT_TIMEOUT}s)"
+    sleep 2
+    elapsed=$((elapsed + 2))
 done
 
-php "$APP_DIR/docker/auto_install.php" \
-    --db-host="$DB_HOST" \
-    --db-port="$DB_PORT" \
-    --db-name="$DB_NAME" \
-    --db-user="$DB_USER" \
-    --db-pass="$DB_PASS" \
-    --admin-callsign="$ADMIN_CALLSIGN" \
-    --admin-name="$ADMIN_NAME" \
-    --admin-email="$ADMIN_EMAIL" \
-    --admin-password="$ADMIN_PASSWORD"
+echo "MySQL is up."
+
+if [ -f "${APP_DIR}/docker/auto_install.php" ]; then
+    php "${APP_DIR}/docker/auto_install.php" \
+        --db-host="${DB_HOST}" \
+        --db-port="${DB_PORT}" \
+        --db-name="${DB_NAME}" \
+        --db-user="${DB_USER}" \
+        --db-pass="${DB_PASS}" \
+        --admin-callsign="${ADMIN_CALLSIGN}" \
+        --admin-name="${ADMIN_NAME}" \
+        --admin-email="${ADMIN_EMAIL}" \
+        --admin-password="${ADMIN_PASSWORD}"
+else
+    echo "INFO: ${APP_DIR}/docker/auto_install.php not found, skipping auto installation."
+fi
 
 exec "$@"
