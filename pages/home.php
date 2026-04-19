@@ -43,6 +43,7 @@ $heroTitle = $isAuthenticated
     : 'Le portail officiel du Radio Club de Durnal';
 
 $heroSubtitle = $isAuthenticated
+  
     ? 'Retrouvez en un clic vos outils, vos contenus et les prochaines activités du club.'
     : 'Un design moderne et une navigation homogène pour découvrir, suivre et rejoindre la communauté radioamateur de Durnal.';
 
