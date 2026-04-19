@@ -21,6 +21,14 @@
     });
   }
 
+  document.querySelectorAll('select.js-auto-submit').forEach((select) => {
+    select.addEventListener('change', () => {
+      if (select.form) {
+        select.form.submit();
+      }
+    });
+  });
+
   let deferredInstallPrompt = null;
   const installButtons = document.querySelectorAll('[data-pwa-install]');
   installButtons.forEach((button) => {
