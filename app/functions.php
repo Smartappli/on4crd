@@ -186,7 +186,28 @@ function base_url(string $path = ''): string
         $base = $configured;
     } else {
         $scheme = is_https_request() ? 'https' : 'http';
-        $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $forwardedHostHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ''));
+        $hostHeader = $forwardedHostHeader !== ''
+            ? trim(explode(',', $forwardedHostHeader)[0])
+            : (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+
+        $host = strtolower(trim($hostHeader));
+        if ($host === '' || preg_match('/[^a-z0-9\\-\\.:\\[\\]]/i', $host) !== 0) {
+            $host = 'localhost';
+        }
+
+        $forwardedPortHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_PORT'] ?? ''));
+        $forwardedPort = $forwardedPortHeader !== ''
+            ? trim(explode(',', $forwardedPortHeader)[0])
+            : '';
+        if ($forwardedPort !== '' && ctype_digit($forwardedPort)) {
+            $port = (int) $forwardedPort;
+            if (($scheme === 'https' && $port !== 443) || ($scheme === 'http' && $port !== 80)) {
+                $hostWithoutPort = preg_replace('/:\\d+$/', '', $host);
+                $host = ($hostWithoutPort ?: $host) . ':' . $port;
+            }
+        }
+
         $base = $scheme . '://' . $host;
     }
 
