@@ -76,6 +76,22 @@ if ($route === 'set_accent') {
     redirect($returnRoute !== '' ? $returnRoute : 'home');
 }
 
+if ($route === 'set_theme') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        exit('Method not allowed');
+    }
+    verify_csrf();
+    $theme = strtolower((string) ($_POST['theme'] ?? 'light'));
+    $supportedThemes = ['light', 'dark'];
+    if (!in_array($theme, $supportedThemes, true)) {
+        $theme = 'light';
+    }
+    $_SESSION['theme'] = $theme;
+    $returnRoute = (string) ($_POST['return_route'] ?? 'home');
+    redirect($returnRoute !== '' ? $returnRoute : 'home');
+}
+
 $routeModules = [
     'dashboard' => 'dashboard',
     'save_dashboard' => 'dashboard',
