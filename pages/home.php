@@ -2,19 +2,11 @@
 declare(strict_types=1);
 
 $user = current_user();
-$primaryCta = $user === null
-    ? '<a class="button" href="' . e(route_url('login')) . '">Se connecter</a>'
-    : '<a class="button" href="' . e(route_url('dashboard')) . '">Ouvrir le tableau de bord</a>';
-
-$secondaryCta = '<a class="button secondary" href="' . e(route_url('articles')) . '">Découvrir les contenus</a>';
-$headline = 'La plateforme radioamateur moderne pour votre club';
-$lead = 'ON4CRD centralise actualités, wiki, événements, annuaire membres, boutique, enchères et outils QSL dans une expérience claire et fiable.';
-
-$highlights = [
-    ['title' => 'Actualités éditoriales', 'desc' => 'Publiez des nouvelles multilingues et des articles techniques validés.'],
-    ['title' => 'Vie du club', 'desc' => 'Agenda, comité, presse et albums pour garder toute la communauté alignée.'],
-    ['title' => 'Opérations numériques', 'desc' => 'Permissions fines, observabilité et modules activables selon vos besoins.'],
-];
+$isAuthenticated = $user !== null;
+$primaryCta = $isAuthenticated
+    ? '<a class="button" href="' . e(route_url('dashboard')) . '">Accéder au tableau de bord</a>'
+    : '<a class="button" href="' . e(route_url('login')) . '">Connexion membre</a>';
+$secondaryCta = '<a class="button secondary" href="' . e(route_url('events')) . '">Voir les événements</a>';
 
 $modules = [
     ['code' => 'news', 'route' => 'news', 'title' => 'News', 'desc' => 'Fil d’actualités et publications du club.'],
@@ -25,12 +17,14 @@ $modules = [
     ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Annonces et suivi des offres.'],
 ];
 
+$activeModules = [];
 $moduleCards = '';
 foreach ($modules as $module) {
     if (!module_enabled((string) $module['code'])) {
         continue;
     }
 
+    $activeModules[] = $module;
     $moduleCards .= '<a class="audience-card" href="' . e(route_url((string) $module['route'])) . '"><strong>'
         . e((string) $module['title']) . '</strong><span>' . e((string) $module['desc']) . '</span></a>';
 }
