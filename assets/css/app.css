@@ -30,6 +30,9 @@ html[data-theme="dark"] {
 html, body { min-height: 100%; }
 html { scroll-behavior: smooth; }
 body { margin: 0; font-family: Inter, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.layout { min-height: calc(100vh - 160px); }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -.015em; }
+p { margin: .5rem 0 1rem; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 a:focus-visible,
@@ -311,10 +314,9 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 }
 @media (max-width: 900px) {
   .topbar { flex-wrap: wrap; }
-  .menu-toggle { display:inline-flex; }
+  .menu-toggle { display:none; }
   .toolbar { margin-left: auto; }
-  .nav { display:none; width:100%; flex-direction:column; background: var(--panel); padding-top:.5rem; }
-  .nav.nav-open { display:flex; }
+  .nav { display:flex; width:100%; flex-direction:column; background: var(--panel); padding-top:.5rem; }
   .nav a, .nav-link-button { padding:.55rem .7rem; border-bottom:1px solid var(--border); border-radius: 0; width: 100%; text-align: left; }
   .hero, .grid-2, .grid-3, .grid-4, .profile-grid, .form-grid, .widget-grid, .home-grid, .split { grid-template-columns: 1fr; }
   .hero-copy h1 { max-width: none; }

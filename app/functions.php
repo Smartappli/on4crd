@@ -428,6 +428,8 @@ function render_layout(string $content, string $title = ''): string
 {
     $pageTitle = $title !== '' ? $title : (string) config('app.site_name', 'ON4CRD');
     $flashes = consume_flashes();
+    $currentRoute = (string) ($_GET['route'] ?? 'home');
+    $user = current_user();
     $flashHtml = '';
     foreach ($flashes as $flash) {
         $type = (string) ($flash['type'] ?? 'info');
@@ -435,12 +437,57 @@ function render_layout(string $content, string $title = ''): string
         $flashHtml .= '<div class="flash flash-' . e($type) . '">' . $message . '</div>';
     }
 
+    $navItems = [
+        ['label' => 'Accueil', 'route' => 'home', 'module' => ''],
+        ['label' => 'Actualités', 'route' => 'news', 'module' => 'news'],
+        ['label' => 'Articles', 'route' => 'articles', 'module' => 'articles'],
+        ['label' => 'Wiki', 'route' => 'wiki', 'module' => 'wiki'],
+        ['label' => 'Événements', 'route' => 'events', 'module' => 'events'],
+        ['label' => 'Annuaire', 'route' => 'directory', 'module' => 'directory'],
+    ];
+
+    $navHtml = '';
+    foreach ($navItems as $item) {
+        $module = (string) ($item['module'] ?? '');
+        if ($module !== '' && !module_enabled($module)) {
+            continue;
+        }
+
+        $route = (string) $item['route'];
+        $isCurrent = $currentRoute === $route || ($currentRoute === '' && $route === 'home');
+        $navHtml .= '<a href="' . e(route_url($route)) . '"' . ($isCurrent ? ' aria-current="page"' : '') . '>'
+            . e((string) $item['label']) . '</a>';
+    }
+
+    $authHtml = '';
+    if ($user !== null) {
+        $authHtml = '<a class="button secondary small" href="' . e(route_url('profile')) . '">' . e((string) ($user['callsign'] ?? 'Mon profil')) . '</a>'
+            . '<form class="nav-form" method="post" action="' . e(route_url('logout')) . '">'
+            . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+            . '<button type="submit" class="button secondary small">Déconnexion</button>'
+            . '</form>';
+    } else {
+        $authHtml = '<a class="button small" href="' . e(route_url('login')) . '">Connexion</a>';
+    }
+
+    $siteName = (string) config('app.site_name', 'ON4CRD');
+    $year = gmdate('Y');
+
     return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
-        . '</title><link rel="stylesheet" href="' . e(asset_url('public/assets/style.css')) . '"></head><body><main class="layout">'
-        . $flashHtml
-        . $content
-        . '</main></body></html>';
+        . '</title><link rel="stylesheet" href="' . e(asset_url('public/assets/style.css')) . '"></head><body>'
+        . '<a class="skip-link" href="#main-content">Aller au contenu</a>'
+        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
+        . '<span class="brand-title">' . e($siteName) . '</span><span class="brand-subtitle">Plateforme club radioamateur</span></a></div>'
+        . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
+        . '<div class="toolbar">' . $authHtml . '</div></header>'
+        . '<main id="main-content" class="layout container">' . $flashHtml . $content . '</main>'
+        . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
+        . '<section><h3 class="footer-title">' . e($siteName) . '</h3><p class="footer-copy">Portail professionnel pour la communication, la collaboration et les activités du club.</p></section>'
+        . '<section><h3 class="footer-title">Navigation</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
+        . '<section><h3 class="footer-title">Espace membre</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
+        . '</div><div class="footer-meta"><span>© ' . e($year) . ' ' . e($siteName) . '</span><span>Design professionnel et accessible</span></div></div></footer>'
+        . '</body></html>';
 }
 }
 
