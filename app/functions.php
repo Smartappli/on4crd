@@ -560,15 +560,16 @@ function render_layout(string $content, string $title = ''): string
         . '</head><body class="bg-slate-50 text-slate-900">'
         . '<a class="skip-link" href="#main-content">Aller au contenu</a>'
         . '<header class="topbar border-b border-slate-200"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
-        . '<span class="brand-title">' . e($siteName) . '</span><span class="brand-subtitle">Plateforme club radioamateur</span></a></div>'
+        . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . $authHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
-        . '<section><h3 class="footer-title">Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
+        . '<section><h3 class="footer-title">Adresse : Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
         . '<section><h3 class="footer-title">CGU</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
         . '<section><h3 class="footer-title">ROI</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
-        . '</div><div class="footer-meta"><span>© Radio Club de Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli (r)</a></span></div></div></footer>'
+        . '</div><div class="footer-meta"><span>© Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
+        . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
         . '</body></html>';
 }
 }
