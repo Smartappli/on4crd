@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+if (!is_file(__DIR__ . '/config/config.php')) {
+    require __DIR__ . '/install.php';
+    exit;
+}
+
 require_once __DIR__ . '/app/bootstrap.php';
 
 $route = (string) ($_GET['route'] ?? 'home');
