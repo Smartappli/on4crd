@@ -565,10 +565,10 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar">' . $menuToolsHtml . $authHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
-        . '<section><h3 class="footer-title">' . e($siteName) . '</h3><p class="footer-copy">Portail professionnel pour la communication, la collaboration et les activités du club.</p></section>'
-        . '<section><h3 class="footer-title">Navigation</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
-        . '<section><h3 class="footer-title">Espace membre</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
-        . '</div><div class="footer-meta"><span>© ' . e($year) . ' ' . e($siteName) . '</span><span>Design professionnel et accessible</span></div></div></footer>'
+        . '<section><h3 class="footer-title">Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
+        . '<section><h3 class="footer-title">CGU</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
+        . '<section><h3 class="footer-title">ROI</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
+        . '</div><div class="footer-meta"><span>© Radio Club de Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli</a></span></div></div></footer>'
         . '</body></html>';
 }
 }

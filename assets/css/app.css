@@ -121,14 +121,45 @@ textarea:focus-visible {
   background: var(--panel-2);
 }
 .toolbar { display:flex; align-items:center; gap:.8rem; }
-.toolbar-preferences { display: inline-flex; flex-direction: row; gap: .45rem; align-items: center; }
+.toolbar-preferences {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: nowrap;
+  padding: .2rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel-2) 72%, var(--panel));
+  border: 1px solid var(--border);
+}
+.toolbar-preferences .toolbar-form,
+.toolbar-preferences .inline-form { margin: 0; }
 .preference-select {
-  width: 3.2rem;
+  width: 3.4rem;
+  min-width: 3.4rem;
   margin-top: 0;
-  padding: .45rem;
-  border-radius: 10px;
-  font-size: 1rem;
+  padding: .42rem .4rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, white), color-mix(in srgb, var(--panel-2) 82%, var(--panel)));
+  color: var(--text);
+  font-size: 1.02rem;
+  font-weight: 600;
   text-align: center;
+  line-height: 1;
+  cursor: pointer;
+  appearance: none;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
+}
+.preference-select:hover {
+  border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.preference-select:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 24%, transparent), 0 8px 16px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 .flag-list, .color-palette { display: inline-flex; flex-direction: column; gap: .35rem; align-items: center; }
 .flag-option, .color-swatch {
