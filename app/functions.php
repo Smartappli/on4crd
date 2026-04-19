@@ -494,6 +494,7 @@ function render_layout(string $content, string $title = ''): string
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $year = gmdate('Y');
     $toggleThemeLabel = $currentTheme === 'dark' ? 'Passer en clair' : 'Passer en sombre';
+    $toggleThemeIcon = $currentTheme === 'dark' ? '☀️' : '🌙';
     $languageOptions = [
         'fr' => ['label' => 'Français', 'flag' => '🇫🇷'],
         'en' => ['label' => 'English', 'flag' => '🇬🇧'],
@@ -511,11 +512,6 @@ function render_layout(string $content, string $title = ''): string
         $isActive = $accentCode === $currentAccent;
         $accentOptionHtml .= '<button type="submit" class="color-swatch' . ($isActive ? ' is-active' : '') . '" name="accent" value="' . e($accentCode) . '" aria-label="' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '" style="--swatch-color:' . e((string) ($accentConfig['color'] ?? '#2f6fed')) . ';"' . ($isActive ? ' aria-current="true"' : '') . '></button>';
     }
-    $accentOptionHtml = '';
-    foreach ($accentPalette as $accentCode => $accentConfig) {
-        $selected = $accentCode === $currentAccent ? ' selected' : '';
-        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . $selected . '>' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '</option>';
-    }
     $menuToolsHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
@@ -525,14 +521,13 @@ function render_layout(string $content, string $title = ''): string
         . '<form class="toolbar-form" method="post" action="' . e(route_url('toggle_theme')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<button type="submit" class="button secondary small">' . e($toggleThemeLabel) . '</button>'
+        . '<button type="submit" class="flag-option theme-toggle" aria-label="' . e($toggleThemeLabel) . '" title="' . e($toggleThemeLabel) . '"><span aria-hidden="true">' . e($toggleThemeIcon) . '</span></button>'
         . '</form>'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<label class="sr-only" for="accent-switcher">Changer la couleur</label>'
-        . '<select id="accent-switcher" name="accent">' . $accentOptionHtml . '</select>'
-        . '<button type="submit" class="button secondary small">Couleur</button>'
+        . '<span class="sr-only">Changer la couleur</span>'
+        . '<div class="color-palette" role="group" aria-label="Choix de la couleur">' . $accentOptionHtml . '</div>'
         . '</form>';
 
     $nonce = csp_nonce();
