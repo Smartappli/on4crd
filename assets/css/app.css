@@ -26,6 +26,32 @@ html[data-theme="dark"] {
   --success: #6ee7b7;
   --shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
 }
+
+/* Tailwind utility compatibility layer (home/legacy templates) */
+.bg-white { background-color: var(--panel) !important; }
+.bg-slate-50 { background-color: var(--panel-3) !important; }
+.text-slate-900 { color: var(--text) !important; }
+.text-slate-800 { color: color-mix(in srgb, var(--text) 90%, var(--muted)) !important; }
+.text-slate-700 { color: color-mix(in srgb, var(--text) 82%, var(--muted)) !important; }
+.text-slate-600,
+.text-slate-500 { color: var(--muted) !important; }
+.border-slate-300,
+.border-slate-200 { border-color: var(--border) !important; }
+.border-blue-200,
+.border-blue-100 { border-color: color-mix(in srgb, var(--accent) 24%, var(--border)) !important; }
+.text-blue-600,
+.text-blue-700 { color: var(--accent) !important; }
+.bg-blue-600,
+.bg-blue-700 { background-color: var(--accent) !important; }
+.hover\:bg-blue-700:hover,
+.hover\:bg-blue-600:hover { background-color: var(--accent-strong) !important; }
+.hover\:bg-slate-50:hover { background-color: var(--panel-3) !important; }
+.hover\:border-blue-200:hover { border-color: color-mix(in srgb, var(--accent) 34%, var(--border)) !important; }
+.from-white,
+.via-white { --tw-gradient-from: var(--panel) var(--tw-gradient-from-position) !important; }
+.to-white { --tw-gradient-to: var(--panel) var(--tw-gradient-to-position) !important; }
+.to-blue-50 { --tw-gradient-to: color-mix(in srgb, var(--accent) 14%, var(--panel)) var(--tw-gradient-to-position) !important; }
+.from-blue-50 { --tw-gradient-from: color-mix(in srgb, var(--accent) 12%, var(--panel)) var(--tw-gradient-from-position) !important; }
 * { box-sizing: border-box; }
 html, body { min-height: 100%; }
 html { scroll-behavior: smooth; }
