@@ -425,10 +425,14 @@ function render_layout(string $content, string $title = ''): string
 
 function is_https_request(): bool
 {
+    $forwardedProtoHeader = strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
+    $forwardedProto = $forwardedProtoHeader !== '' ? trim(explode(',', $forwardedProtoHeader)[0]) : '';
+    $serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');
+
     return (
-        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (($_SERVER['SERVER_PORT'] ?? null) === '443')
-        || (strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https')
+        (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+        || ($serverPort === '443')
+        || ($forwardedProto === 'https')
     );
 }
 
@@ -541,10 +545,11 @@ function sanitize_rich_html(string $html): string
     }
 
     $dom = new DOMDocument();
-    libxml_use_internal_errors(true);
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
     $wrapped = '<!doctype html><html><body>' . $html . '</body></html>';
     $dom->loadHTML($wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
 
     $removeTags = ['script', 'style', 'iframe', 'object', 'embed', 'link', 'meta', 'base'];
     foreach ($removeTags as $tag) {
@@ -1115,6 +1120,14 @@ function normalize_http_url(string $url, bool $allowRelative = false): ?string
     $trimmed = trim($url);
     if ($trimmed === '') {
         return null;
+    }
+
+    if (preg_match('/[\r\n]/', $trimmed) === 1) {
+        throw new RuntimeException('URL invalide.');
+    }
+
+    if ($allowRelative && str_starts_with($trimmed, '//')) {
+        throw new RuntimeException('URL relative invalide.');
     }
 
     if ($allowRelative && preg_match('~^(?:/|\./|\../|\?|#)~', $trimmed) === 1) {

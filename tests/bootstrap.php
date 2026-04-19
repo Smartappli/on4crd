@@ -11,4 +11,5 @@ require_once __DIR__ . '/../app/cache.php';
 
 require_once __DIR__ . '/../app/maintenance.php';
 require_once __DIR__ . '/../app/newsletter.php';
+require_once __DIR__ . '/../app/observability.php';
 require_once __DIR__ . '/../app/seo.php';

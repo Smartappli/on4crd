@@ -7,10 +7,13 @@ if (!is_file($bootstrapConfigFile)) {
 }
 
 $bootstrapConfig = require $bootstrapConfigFile;
+$forwardedProtoHeader = strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
+$forwardedProto = $forwardedProtoHeader !== '' ? trim(explode(',', $forwardedProtoHeader)[0]) : '';
+$serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');
 $isHttps = (
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-    || (($_SERVER['SERVER_PORT'] ?? null) === '443')
-    || (strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https')
+    (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+    || ($serverPort === '443')
+    || ($forwardedProto === 'https')
 );
 
 if (session_status() === PHP_SESSION_NONE && session_id() === '') {

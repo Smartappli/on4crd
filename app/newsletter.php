@@ -97,6 +97,7 @@ function newsletter_upsert_subscriber(string $email, ?int $memberId = null, stri
     if ($normalized === '') {
         return false;
     }
+    $normalizedSource = mb_safe_substr(trim($source), 0, 32);
 
     $existing = db()->prepare('SELECT id FROM newsletter_subscribers WHERE email = ? LIMIT 1');
     $existing->execute([$normalized]);
@@ -104,7 +105,7 @@ function newsletter_upsert_subscriber(string $email, ?int $memberId = null, stri
 
     if ($row) {
         $stmt = db()->prepare('UPDATE newsletter_subscribers SET status = "active", unsubscribed_at = NULL, member_id = COALESCE(?, member_id), source = ?, updated_at = NOW() WHERE id = ?');
-        $stmt->execute([$memberId, $source, (int) $row['id']]);
+        $stmt->execute([$memberId, $normalizedSource, (int) $row['id']]);
 
         return true;
     }
@@ -114,7 +115,7 @@ function newsletter_upsert_subscriber(string $email, ?int $memberId = null, stri
     return $stmt->execute([
         $normalized,
         $memberId,
-        mb_safe_substr(trim($source), 0, 32),
+        $normalizedSource,
         newsletter_generate_token(),
         newsletter_generate_token(),
     ]);
