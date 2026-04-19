@@ -494,14 +494,21 @@ function render_layout(string $content, string $title = ''): string
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $year = gmdate('Y');
     $themeOptions = [
-        'light' => 'Clair',
-        'dark' => 'Sombre',
+        'light' => '☀️ Clair',
+        'dark' => '🌙 Sombre',
     ];
     $languageOptions = [
-        'fr' => ['label' => 'Français'],
-        'en' => ['label' => 'English'],
-        'de' => ['label' => 'Deutsch'],
-        'nl' => ['label' => 'Nederlands'],
+        'fr' => ['label' => '🇫🇷 Français'],
+        'en' => ['label' => '🇬🇧 English'],
+        'de' => ['label' => '🇩🇪 Deutsch'],
+        'nl' => ['label' => '🇳🇱 Nederlands'],
+    ];
+    $accentIcons = [
+        'blue' => '🔵',
+        'emerald' => '🟢',
+        'violet' => '🟣',
+        'rose' => '🌹',
+        'amber' => '🟡',
     ];
     $languageOptionHtml = '';
     foreach ($languageOptions as $localeCode => $localeConfig) {
@@ -516,7 +523,9 @@ function render_layout(string $content, string $title = ''): string
     $accentOptionHtml = '';
     foreach ($accentPalette as $accentCode => $accentConfig) {
         $isActive = $accentCode === $currentAccent;
-        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>' . e((string) ($accentConfig['label'] ?? strtoupper($accentCode))) . '</option>';
+        $accentLabel = (string) ($accentConfig['label'] ?? strtoupper($accentCode));
+        $accentIcon = (string) ($accentIcons[$accentCode] ?? '🎨');
+        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>' . e($accentIcon . ' ' . $accentLabel) . '</option>';
     }
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
