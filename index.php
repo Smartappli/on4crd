@@ -60,6 +60,22 @@ if ($route === 'set_language') {
     redirect($returnRoute !== '' ? $returnRoute : 'home');
 }
 
+if ($route === 'set_accent') {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        exit('Method not allowed');
+    }
+    verify_csrf();
+    $accent = strtolower((string) ($_POST['accent'] ?? 'blue'));
+    $supportedAccents = ['blue', 'emerald', 'violet', 'rose', 'amber'];
+    if (!in_array($accent, $supportedAccents, true)) {
+        $accent = 'blue';
+    }
+    $_SESSION['accent'] = $accent;
+    $returnRoute = (string) ($_POST['return_route'] ?? 'home');
+    redirect($returnRoute !== '' ? $returnRoute : 'home');
+}
+
 $routeModules = [
     'dashboard' => 'dashboard',
     'save_dashboard' => 'dashboard',

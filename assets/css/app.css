@@ -122,6 +122,26 @@ textarea:focus-visible {
 }
 .toolbar-form .theme-toggle { display: inline-flex; align-items: center; justify-content: center; }
 .toolbar { display:flex; align-items:center; gap:.8rem; }
+.flag-list, .color-palette { display: inline-flex; gap: .35rem; align-items: center; }
+.flag-option, .color-swatch {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.flag-option:hover, .color-swatch:hover { transform: translateY(-1px); border-color: var(--accent); }
+.flag-option.is-active, .color-swatch.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.flag-option span { font-size: 1rem; line-height: 1; }
+.color-swatch { background: var(--swatch-color); }
 .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
 .card {
   background: var(--panel);
