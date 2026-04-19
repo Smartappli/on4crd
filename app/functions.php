@@ -477,8 +477,7 @@ function render_layout(string $content, string $title = ''): string
 
     return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
-        . '</title><link rel="stylesheet" href="' . e(asset_url('public/assets/style.css')) . '">'
-        . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
+        . '</title><link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body class="bg-slate-50 text-slate-900">'
