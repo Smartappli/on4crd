@@ -256,6 +256,40 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .audience-card:hover { background: var(--panel-3); text-decoration: none; }
 .audience-card span { color: var(--muted); }
 .feature-card { height: 100%; }
+
+.landing-durnal .landing-hero-copy {
+  background:
+    radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 38%),
+    linear-gradient(180deg, var(--panel), var(--panel-3));
+}
+.landing-journeys .card { height: 100%; }
+.landing-steps { counter-reset: step; }
+.landing-steps li {
+  position: relative;
+  padding-left: 2.1rem;
+  min-height: 1.7rem;
+}
+.landing-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: .05rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: .8rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+}
+.landing-final-cta {
+  align-items: center;
+  background:
+    linear-gradient(180deg, var(--panel), color-mix(in srgb, var(--panel-2) 75%, var(--panel)));
+}
 .feature-list,
 .list-clean { list-style:none; padding:0; margin:0; }
 .feature-list li {
