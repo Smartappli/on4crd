@@ -3,18 +3,20 @@ declare(strict_types=1);
 
 $user = current_user();
 $isAuthenticated = $user !== null;
+
 $primaryCta = $isAuthenticated
-    ? '<a class="button" href="' . e(route_url('dashboard')) . '">Accéder au tableau de bord</a>'
-    : '<a class="button" href="' . e(route_url('login')) . '">Connexion membre</a>';
-$secondaryCta = '<a class="button secondary" href="' . e(route_url('events')) . '">Voir les événements</a>';
+    ? '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('dashboard')) . '">Accéder à mon espace membre</a>'
+    : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('login')) . '">Rejoindre le club</a>';
+
+$secondaryCta = '<a class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('events')) . '">Voir l’agenda des activités</a>';
 
 $modules = [
-    ['code' => 'news', 'route' => 'news', 'title' => 'News', 'desc' => 'Fil d’actualités et publications du club.'],
-    ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Wiki', 'desc' => 'Base de connaissances collaborative.'],
-    ['code' => 'events', 'route' => 'events', 'title' => 'Événements', 'desc' => 'Calendrier et détails des activités.'],
-    ['code' => 'directory', 'route' => 'directory', 'title' => 'Annuaire', 'desc' => 'Coordonnées et profils des membres.'],
-    ['code' => 'shop', 'route' => 'shop', 'title' => 'Boutique', 'desc' => 'Catalogue et commandes du club.'],
-    ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Annonces et suivi des offres.'],
+    ['code' => 'news', 'route' => 'news', 'title' => 'Actualités du club', 'desc' => 'Annonces, comptes rendus et informations essentielles.'],
+    ['code' => 'events', 'route' => 'events', 'title' => 'Activités & événements', 'desc' => 'Rencontres, ateliers techniques et activations terrain.'],
+    ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Base technique', 'desc' => 'Documentation radioamateur, procédures et astuces.'],
+    ['code' => 'directory', 'route' => 'directory', 'title' => 'Communauté', 'desc' => 'Annuaire des membres et spécialités disponibles.'],
+    ['code' => 'albums', 'route' => 'albums', 'title' => 'Galerie photo', 'desc' => 'Moments marquants et vie associative du RC Durnal.'],
+    ['code' => 'shop', 'route' => 'shop', 'title' => 'Ressources club', 'desc' => 'Boutique et supports pour la vie du club.'],
 ];
 
 $activeModules = [];
@@ -25,72 +27,67 @@ foreach ($modules as $module) {
     }
 
     $activeModules[] = $module;
-    $moduleCards .= '<a class="audience-card" href="' . e(route_url((string) $module['route'])) . '"><strong>'
-        . e((string) $module['title']) . '</strong><span>' . e((string) $module['desc']) . '</span></a>';
+    $moduleCards .= '<a class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" href="' . e(route_url((string) $module['route'])) . '">'
+        . '<h3 class="text-lg font-semibold text-slate-900">' . e((string) $module['title']) . '</h3>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e((string) $module['desc']) . '</p>'
+        . '<span class="mt-4 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">Explorer →</span>'
+        . '</a>';
 }
 
 if ($moduleCards === '') {
-    $moduleCards = '<div class="empty-state">Aucun module public actif pour le moment.</div>';
+    $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Les espaces publics sont en cours de mise à jour.</div>';
 }
 
-$featureCards = [
-    ['title' => 'Communication du club', 'desc' => 'Actualités, articles et contenus éditoriaux dans une expérience cohérente.'],
-    ['title' => 'Collaboration interne', 'desc' => 'Wiki, annuaire membres et rôles pour fluidifier le travail quotidien.'],
-    ['title' => 'Engagement communautaire', 'desc' => 'Événements, albums, boutique et enchères pour dynamiser la vie du club.'],
-];
-$featureMarkup = '';
-foreach ($featureCards as $feature) {
-    $featureMarkup .= '<article class="card feature-card"><h3>' . e($feature['title']) . '</h3><p class="help">'
-        . e($feature['desc']) . '</p></article>';
-}
+$heroTitle = $isAuthenticated
+    ? 'Heureux de vous revoir sur le portail ON4CRD'
+    : 'Le portail officiel du Radio Club de Durnal';
 
-$quickLinks = [
-    ['label' => 'Lire les actualités', 'route' => 'news'],
-    ['label' => 'Explorer le wiki', 'route' => 'wiki'],
-    ['label' => 'Consulter l’agenda', 'route' => 'events'],
-];
-$quickLinkMarkup = '';
-foreach ($quickLinks as $link) {
-    $quickLinkMarkup .= '<li><a href="' . e(route_url((string) $link['route'])) . '">' . e((string) $link['label']) . '</a></li>';
-}
+$heroSubtitle = $isAuthenticated
+    ? 'Retrouvez en un clic vos outils, vos contenus et les prochaines activités du club.'
+    : 'Un design moderne et une navigation homogène pour découvrir, suivre et rejoindre la communauté radioamateur de Durnal.';
 
-$kpiAuthLabel = $isAuthenticated ? 'Membre connecté' : 'Visiteur public';
-$kpiAuthValue = $isAuthenticated ? e((string) ($user['callsign'] ?? 'Compte actif')) : 'Accès libre';
-
-$content = '<section class="hero hero-home landing-hero">'
-    . '<article class="card hero-copy">'
-    . '<span class="badge">Plateforme ON4CRD</span>'
-    . '<h1>Une landing page professionnelle pour votre club radioamateur</h1>'
-    . '<p class="hero-lead">Pilotez les activités, valorisez les contenus techniques et offrez une expérience claire aux membres comme aux visiteurs.</p>'
-    . '<div class="actions">' . $primaryCta . $secondaryCta . '</div>'
-    . '</article>'
-    . '<aside class="hero-panel landing-kpi-panel">'
-    . '<h2>Vue d’ensemble</h2>'
-    . '<div class="landing-kpi-grid">'
-    . '<div class="stat-card"><span class="help">Modules publics actifs</span><strong>' . e((string) count($activeModules)) . '</strong></div>'
-    . '<div class="stat-card"><span class="help">' . e($kpiAuthLabel) . '</span><strong>' . $kpiAuthValue . '</strong></div>'
-    . '<div class="stat-card"><span class="help">Parcours rapide</span><strong>3 étapes</strong></div>'
+$content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
+    . '<article class="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-blue-50 p-8 shadow-sm">'
+    . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">ON4CRD · Radio Club de Durnal</span>'
+    . '<h1 class="mt-4 max-w-xl text-4xl font-extrabold leading-tight text-slate-900 lg:text-5xl">' . e($heroTitle) . '</h1>'
+    . '<p class="mt-4 max-w-2xl text-base text-slate-600">' . e($heroSubtitle) . '</p>'
+    . '<div class="mt-6 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . '</div>'
+    . '<div class="mt-6 flex flex-wrap gap-2 text-sm font-medium text-slate-700">'
+    . '<span class="rounded-full border border-blue-100 bg-white px-3 py-1">📡 Radioamateurisme</span>'
+    . '<span class="rounded-full border border-blue-100 bg-white px-3 py-1">🤝 Vie associative</span>'
+    . '<span class="rounded-full border border-blue-100 bg-white px-3 py-1">🎓 Transmission technique</span>'
     . '</div>'
-    . '</aside>'
-    . '</section>'
-    . '<section class="grid-3 inner-card">' . $featureMarkup . '</section>'
-    . '<section class="card stack inner-card">'
-    . '<div class="section-header"><h2>Accès rapide aux modules</h2><span class="help">Navigation orientée productivité</span></div>'
-    . '<div class="audience-grid">' . $moduleCards . '</div>'
-    . '</section>'
-    . '<section class="card split inner-card">'
-    . '<article>'
-    . '<h2>Démarrage en moins de 2 minutes</h2>'
-    . '<ol class="list-spaced">'
-    . '<li><strong>1. Explorer</strong><span class="help">Parcourez les pages publiques pour découvrir les activités du club.</span></li>'
-    . '<li><strong>2. Se connecter</strong><span class="help">Accédez à vos fonctionnalités membres selon vos rôles.</span></li>'
-    . '<li><strong>3. Contribuer</strong><span class="help">Publiez, collaborez et participez aux modules actifs.</span></li>'
-    . '</ol>'
     . '</article>'
-    . '<aside>'
-    . '<h3>Raccourcis utiles</h3>'
-    . '<ul class="list-clean list-spaced">' . $quickLinkMarkup . '</ul>'
+    . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<h2 class="text-xl font-bold text-slate-900">Vue d’ensemble</h2>'
+    . '<div class="mt-4 grid gap-3">'
+    . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4"><strong class="block text-2xl font-extrabold text-slate-900">' . e((string) count($activeModules)) . '</strong><span class="text-sm text-slate-600">espaces actifs</span></article>'
+    . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4"><strong class="block text-2xl font-extrabold text-slate-900">100%</strong><span class="text-sm text-slate-600">navigation unifiée</span></article>'
+    . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4"><strong class="block text-2xl font-extrabold text-slate-900">24/7</strong><span class="text-sm text-slate-600">accès aux ressources</span></article>'
+    . '</div>'
+    . '<ul class="mt-4 space-y-2 text-sm text-slate-600">'
+    . '<li>• Présentation claire pour les visiteurs.</li>'
+    . '<li>• Expérience cohérente pour les membres.</li>'
+    . '<li>• Accès rapide aux modules du site.</li>'
+    . '</ul>'
     . '</aside>'
+    . '</section>'
+    . '<section class="mt-4 grid gap-4 md:grid-cols-3">'
+    . '<article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><p class="text-2xl">📶</p><h3 class="mt-2 text-lg font-semibold">Initiation & accompagnement</h3><p class="mt-2 text-sm text-slate-600">Des membres expérimentés accompagnent les nouveaux opérateurs.</p></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><p class="text-2xl">🛠️</p><h3 class="mt-2 text-lg font-semibold">Pratique concrète</h3><p class="mt-2 text-sm text-slate-600">Ateliers, essais matériels, activations et exercices radio.</p></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><p class="text-2xl">🌍</p><h3 class="mt-2 text-lg font-semibold">Impact local</h3><p class="mt-2 text-sm text-slate-600">Un club ancré à Durnal, ouvert aux projets et partenariats.</p></article>'
+    . '</section>'
+    . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<header class="mb-4"><h2 class="text-2xl font-bold text-slate-900">Explorer les rubriques du club</h2><p class="mt-1 text-slate-600">Un design homogène pour naviguer facilement entre les modules.</p></header>'
+    . '<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">' . $moduleCards . '</div>'
+    . '</section>'
+    . '<section class="mt-4 grid gap-4 md:grid-cols-2">'
+    . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><h3 class="text-xl font-bold">Parcours visiteur</h3><ol class="mt-3 list-decimal space-y-2 pl-5 text-sm text-slate-600"><li>Découvrir le club via les actualités et la galerie.</li><li>Identifier les prochaines activités ouvertes.</li><li>Prendre contact puis participer à une rencontre.</li></ol></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><h3 class="text-xl font-bold">Parcours membre</h3><ol class="mt-3 list-decimal space-y-2 pl-5 text-sm text-slate-600"><li>Se connecter à son espace personnel.</li><li>Contribuer aux contenus techniques et à la vie du club.</li><li>S’engager dans les projets, événements et actions locales.</li></ol></article>'
+    . '</section>'
+    . '<section class="mt-4 grid gap-4 rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-50 to-white p-6 shadow-sm lg:grid-cols-[1.8fr_1fr] lg:items-center">'
+    . '<div><h2 class="text-2xl font-extrabold text-slate-900">Envie de découvrir la radioamateur à Durnal ?</h2><p class="mt-2 text-slate-600">Le club accueille débutants et opérateurs confirmés pour apprendre, expérimenter et partager la passion des ondes.</p></div>'
+    . '<div class="grid gap-2">' . $primaryCta . '<a class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('news')) . '">Lire les actualités</a></div>'
     . '</section>';
 
 echo render_layout($content, 'Accueil');
