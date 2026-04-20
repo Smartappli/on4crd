@@ -70,7 +70,8 @@ $moduleCount = count($activeModules);
 $heroBackgroundUrl = asset_url('assets/img/on4crd_hero.png');
 
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
-    . '<article class="flex h-full flex-col rounded-3xl border border-slate-200 p-8 shadow-sm" style="background-image: linear-gradient(135deg, rgba(255,255,255,.92), rgba(239,246,255,.86)), url(\"' . e($heroBackgroundUrl) . '\"); background-size: cover; background-position: center; background-repeat: no-repeat;">'
+    . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
+    . '<img class="absolute inset-0 -z-20 h-full w-full object-cover" src="' . e($heroBackgroundUrl) . '" alt="Illustration ON4CRD" loading="eager" decoding="async">'
     . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">ON4CRD · Connecter, expérimenter, partager</span>'
     . $heroIntro
     . '<div class="mt-auto pt-8 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . $tertiaryCta . '</div>'
