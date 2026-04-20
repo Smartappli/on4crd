@@ -17,6 +17,7 @@ $xml = cache_remember('seo_sitemap_xml_v2', 300, static function (): string {
 
     $staticRoutes = [
         ['route' => 'news', 'priority' => '0.9', 'changefreq' => 'daily'],
+        ['route' => 'membership', 'priority' => '0.8', 'changefreq' => 'monthly'],
         ['route' => 'articles', 'priority' => '0.8', 'changefreq' => 'weekly'],
         ['route' => 'wiki', 'priority' => '0.8', 'changefreq' => 'weekly'],
         ['route' => 'albums', 'priority' => '0.7', 'changefreq' => 'weekly'],
