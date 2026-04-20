@@ -127,7 +127,7 @@ if (is_array($nextEvent) && !empty($nextEvent['slug'])) {
         . '</a>';
 }
 
-$adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="font-semibold text-slate-700">Emplacement publicitaire</p><p class="mt-2">Cet espace est réservé aux annonces partenaires du club.</p></div>';
+$adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">Cet espace est réservé aux annonces partenaires du club.</p></div>';
 if (is_array($featuredAd) && !empty($featuredAd['title'])) {
     $adTarget = trim((string) ($featuredAd['target_url'] ?? ''));
     $adDescription = trim((string) ($featuredAd['description'] ?? ''));
