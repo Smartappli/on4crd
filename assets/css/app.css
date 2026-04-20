@@ -150,14 +150,24 @@ textarea:focus-visible {
 .toolbar { display:flex; align-items:center; gap:.8rem; }
 .toolbar-preferences {
   display: inline-flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: .5rem;
   flex-wrap: nowrap;
   padding: .2rem;
   border-radius: 14px;
   background: color-mix(in srgb, var(--panel-2) 72%, var(--panel));
   border: 1px solid var(--border);
+}
+.toolbar-preferences-row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.toolbar-auth {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
 }
 .toolbar-preferences .toolbar-form,
 .toolbar-preferences .inline-form { margin: 0; }
@@ -466,8 +476,30 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 @media (max-width: 640px) {
   .container, .footer-inner { padding: 1rem; }
   .topbar { padding: .85rem 1rem; }
+  .toolbar { width: 100%; }
+  .toolbar-preferences {
+    width: 100%;
+  }
+  .toolbar-preferences-row {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .toolbar-preferences-row .toolbar-form {
+    flex: 1 1 0;
+  }
+  .toolbar-auth {
+    flex: 1 1 0;
+    justify-content: flex-end;
+  }
+  .preference-select {
+    width: 100%;
+    min-width: 0;
+  }
   .card, .hero-panel { padding: 1rem; border-radius: 20px; }
   .button, button { width: 100%; justify-content: center; }
+  .toolbar-auth .button,
+  .toolbar-auth button { width: auto; }
   .actions { flex-direction: column; }
 }
 

@@ -540,28 +540,30 @@ function render_layout(string $content, string $title = ''): string
             . e(trim($accentIcon . ' ' . $accentLabel))
             . '</option>';
     }
-    $menuToolsHtml = '<div class="toolbar-preferences">'
-        . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
+    $languageFormHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="language-selector">Choix de la langue</label>'
         . '<select id="language-selector" class="preference-select js-auto-submit" name="locale" aria-label="Choix de la langue" aria-describedby="language-help">' . $languageOptionHtml . '</select>'
         . '<span class="sr-only" id="language-help">Sélecteur de langue du site. Le changement est appliqué automatiquement.</span>'
-        . '</form>'
-        . '<form class="toolbar-form" method="post" action="' . e(route_url('set_theme')) . '">'
+        . '</form>';
+    $themeFormHtml = '<form class="toolbar-form" method="post" action="' . e(route_url('set_theme')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="theme-selector">Choix du mode</label>'
         . '<select id="theme-selector" class="preference-select js-auto-submit" name="theme" aria-label="Choix du mode clair ou sombre" aria-describedby="theme-help">' . $themeOptionHtml . '</select>'
         . '<span class="sr-only" id="theme-help">Sélecteur de thème. Le changement est appliqué automatiquement.</span>'
-        . '</form>'
-        . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
+        . '</form>';
+    $accentFormHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="accent-selector">Choix de la couleur</label>'
         . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="Choix de la couleur" aria-describedby="accent-help">' . $accentOptionHtml . '</select>'
         . '<span class="sr-only" id="accent-help">Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.</span>'
-        . '</form>'
+        . '</form>';
+    $menuToolsHtml = '<div class="toolbar-preferences">'
+        . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
+        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $authHtml . '</div></div>'
         . '</div>';
 
     $nonce = csp_nonce();
@@ -576,7 +578,7 @@ function render_layout(string $content, string $title = ''): string
         . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
-        . '<div class="toolbar">' . $menuToolsHtml . $authHtml . '</div></header>'
+        . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
         . '<section><h3 class="footer-title">Adresse : Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
