@@ -9,6 +9,7 @@ $primaryCta = $isAuthenticated
     : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('login')) . '">Rejoindre le club</a>';
 
 $secondaryCta = '<a class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('events')) . '">Consulter l’agenda</a>';
+$tertiaryCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100" href="' . e(route_url('events')) . '">Prochains événements</a>';
 
 $moduleCatalog = [
     ['code' => 'news', 'route' => 'news', 'title' => 'Actualités', 'desc' => 'Suivez les annonces officielles, les comptes rendus et les temps forts du club.', 'icon' => '📰', 'audience' => 'Visiteurs & membres'],
@@ -60,16 +61,11 @@ $heroSubtitle = $isAuthenticated
 $moduleCount = count($activeModules);
 
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
-    . '<article class="rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-blue-50 p-8 shadow-sm">'
+    . '<article class="flex h-full flex-col rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-blue-50 p-8 shadow-sm">'
     . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">ON4CRD · Radio Club de Durnal</span>'
     . '<h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-tight text-slate-900 lg:text-5xl">' . e($heroTitle) . '</h1>'
     . '<p class="mt-4 max-w-2xl text-base text-slate-600">' . e($heroSubtitle) . '</p>'
-    . '<div class="mt-6 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . '</div>'
-    . '<div class="mt-6 grid gap-3 text-sm text-slate-700 sm:grid-cols-3">'
-    . '<div class="rounded-xl border border-blue-100 bg-white p-3"><p class="font-semibold">Structure claire</p><p class="mt-1 text-slate-600">Un accès direct aux fonctions utiles.</p></div>'
-    . '<div class="rounded-xl border border-blue-100 bg-white p-3"><p class="font-semibold">Contenus vivants</p><p class="mt-1 text-slate-600">Actualisé par la communauté du club.</p></div>'
-    . '<div class="rounded-xl border border-blue-100 bg-white p-3"><p class="font-semibold">Orientation terrain</p><p class="mt-1 text-slate-600">Pensé pour les activités radio réelles.</p></div>'
-    . '</div>'
+    . '<div class="mt-auto pt-8 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . $tertiaryCta . '</div>'
     . '</article>'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-xl font-bold text-slate-900">Informations utiles</h2>'
@@ -94,20 +90,14 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '</section>'
     . '<section class="mt-4 grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<h3 class="text-xl font-bold text-slate-900">Parcours visiteur</h3>'
-    . '<ol class="mt-3 list-decimal space-y-2 pl-5 text-sm text-slate-600">'
-    . '<li>Découvrir la mission du club via les modules Actualités, Événements et Presse.</li>'
-    . '<li>Visualiser la dynamique associative grâce à la Galerie photo et aux actions Éducation.</li>'
-    . '<li>Passer à l’action : participer à une activité puis rejoindre la communauté.</li>'
-    . '</ol>'
+    . '<h3 class="text-xl font-bold text-slate-900">Vous êtes journaliste</h3>'
+    . '<p class="mt-3 text-sm text-slate-600">Accédez directement à notre dossier de presse pour préparer vos publications et reportages.</p>'
+    . '<a class="mt-4 inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('press')) . '">Consulter le dossier presse</a>'
     . '</article>'
     . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<h3 class="text-xl font-bold text-slate-900">Parcours membre</h3>'
-    . '<ol class="mt-3 list-decimal space-y-2 pl-5 text-sm text-slate-600">'
-    . '<li>Accéder au tableau de bord et aux modules opérationnels (QSL, annuaire, enchères).</li>'
-    . '<li>Contribuer aux savoirs partagés avec les Articles techniques et le Wiki.</li>'
-    . '<li>Coordonner les actions du club depuis un environnement centralisé et cohérent.</li>'
-    . '</ol>'
+    . '<h3 class="text-xl font-bold text-slate-900">Vous êtes enseignant</h3>'
+    . '<p class="mt-3 text-sm text-slate-600">Retrouvez nos dossiers pédagogiques pour vos activités scolaires et vos projets éducatifs.</p>'
+    . '<a class="mt-4 inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('schools')) . '">Voir les dossiers pédagogiques</a>'
     . '</article>'
     . '</section>'
     . '<section class="mt-4 grid gap-4 rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-50 to-white p-6 shadow-sm lg:grid-cols-[1.8fr_1fr] lg:items-center">'
