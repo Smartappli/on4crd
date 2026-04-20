@@ -6,7 +6,7 @@ $isAuthenticated = $user !== null;
 
 $primaryCta = $isAuthenticated
     ? '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('dashboard')) . '">Accéder à mon espace membre</a>'
-    : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('login')) . '">Rejoindre le club</a>';
+    : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('membership')) . '">Rejoindre le club</a>';
 
 
 $moduleCatalog = [
@@ -67,6 +67,91 @@ if ($heroSubtitle !== '') {
 $moduleCount = count($activeModules);
 $heroBackgroundUrl = asset_url('assets/img/on4crd_hero.png');
 
+$latestNews = null;
+$nextEvent = null;
+$featuredAd = null;
+
+try {
+    if (table_exists('news_posts')) {
+        $latestNews = db()->query('SELECT slug, title, excerpt, published_at, updated_at FROM news_posts WHERE status = "published" ORDER BY COALESCE(published_at, updated_at) DESC LIMIT 1')->fetch();
+    }
+
+    if (table_exists('events')) {
+        $stmt = db()->prepare('SELECT slug, title, summary, start_at, location FROM events WHERE status = "published" AND end_at >= NOW() ORDER BY start_at ASC LIMIT 1');
+        $stmt->execute();
+        $nextEvent = $stmt->fetch();
+    }
+
+    if (module_enabled('advertising') && table_exists('ads')) {
+        $featuredAd = db()->query('SELECT title, description, image_path, target_url FROM ads WHERE status = "active" ORDER BY updated_at DESC LIMIT 1')->fetch();
+    }
+} catch (Throwable) {
+    // Les blocs "À la une" restent en mode fallback si la base n'est pas disponible.
+}
+
+$latestNewsHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">Aucune actualité publiée pour le moment.</div>';
+if (is_array($latestNews) && !empty($latestNews['slug'])) {
+    $newsDate = !empty($latestNews['published_at']) ? date('d/m/Y', strtotime((string) $latestNews['published_at'])) : date('d/m/Y', strtotime((string) ($latestNews['updated_at'] ?? 'now')));
+    $newsExcerpt = trim((string) ($latestNews['excerpt'] ?? ''));
+    if ($newsExcerpt === '') {
+        $newsExcerpt = 'Consultez la dernière publication du club.';
+    }
+
+    $latestNewsHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('news_view', ['slug' => (string) $latestNews['slug']])) . '">'
+        . '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">Publié le ' . e($newsDate) . '</p>'
+        . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestNews['title']) . '</h3>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e($newsExcerpt) . '</p>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">Lire l’actualité →</span>'
+        . '</a>';
+}
+
+$nextEventHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">Aucun évènement planifié actuellement.</div>';
+if (is_array($nextEvent) && !empty($nextEvent['slug'])) {
+    $eventDate = !empty($nextEvent['start_at']) ? date('d/m/Y H:i', strtotime((string) $nextEvent['start_at'])) : 'Date à confirmer';
+    $eventSummary = trim((string) ($nextEvent['summary'] ?? ''));
+    if ($eventSummary === '') {
+        $eventSummary = 'Découvrez les détails du prochain rendez-vous du club.';
+    }
+    $eventLocation = trim((string) ($nextEvent['location'] ?? ''));
+
+    $nextEventHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('event_view', ['slug' => (string) $nextEvent['slug']])) . '">'
+        . '<p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Prochaine date · ' . e($eventDate) . '</p>'
+        . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $nextEvent['title']) . '</h3>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e($eventSummary) . '</p>';
+
+    if ($eventLocation !== '') {
+        $nextEventHtml .= '<p class="mt-2 text-xs font-medium text-slate-500">Lieu : ' . e($eventLocation) . '</p>';
+    }
+
+    $nextEventHtml .= '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">Voir l’évènement →</span>'
+        . '</a>';
+}
+
+$adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="font-semibold text-slate-700">Emplacement publicitaire</p><p class="mt-2">Cet espace est réservé aux annonces partenaires du club.</p></div>';
+if (is_array($featuredAd) && !empty($featuredAd['title'])) {
+    $adTarget = trim((string) ($featuredAd['target_url'] ?? ''));
+    $adDescription = trim((string) ($featuredAd['description'] ?? ''));
+    $adImage = trim((string) ($featuredAd['image_path'] ?? ''));
+
+    $adInner = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
+        . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Annonce partenaire</p>'
+        . '<h3 class="mt-2 text-lg font-bold text-slate-900">' . e((string) $featuredAd['title']) . '</h3>';
+
+    if ($adDescription !== '') {
+        $adInner .= '<p class="mt-2 text-sm text-slate-600">' . e($adDescription) . '</p>';
+    }
+
+    if ($adImage !== '') {
+        $adInner .= '<img class="mt-3 h-36 w-full rounded-lg object-cover" src="' . e(asset_url($adImage)) . '" alt="' . e((string) $featuredAd['title']) . '" loading="lazy" decoding="async">';
+    }
+
+    $adInner .= '</div>';
+
+    $adSlotHtml = $adTarget !== ''
+        ? '<a class="block transition hover:-translate-y-0.5" href="' . e($adTarget) . '" target="_blank" rel="noopener noreferrer">' . $adInner . '</a>'
+        : $adInner;
+}
+
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
     . '<img class="absolute inset-0 -z-20 h-full w-full object-cover" src="' . e($heroBackgroundUrl) . '" alt="Illustration ON4CRD" loading="eager" decoding="async">'
@@ -100,6 +185,17 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '</article>'
     . '</div>'
     . '</aside>'
+    . '</div>'
+    . '</section>'
+    . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<header class="mb-4">'
+    . '<h2 class="text-2xl font-bold text-slate-900">À la une du club</h2>'
+    . '<p class="mt-1 text-slate-600">Retrouvez en un coup d’œil la dernière actualité, le prochain évènement et un emplacement pub.</p>'
+    . '</header>'
+    . '<div class="grid gap-4 lg:grid-cols-3">'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">Dernière actualité</h3>' . $latestNewsHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">Prochain évènement</h3>' . $nextEventHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">Publicité</h3>' . $adSlotHtml . '</article>'
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
