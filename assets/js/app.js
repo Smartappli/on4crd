@@ -29,6 +29,39 @@
     });
   });
 
+  const liveClocks = document.querySelectorAll('[data-live-clock]');
+  if (liveClocks.length > 0) {
+    const formatterCache = new Map();
+    const defaultLocale = document.documentElement.lang || 'fr-FR';
+    const getFormatter = (timeZone, locale) => {
+      const cacheKey = `${timeZone}|${locale}`;
+      if (!formatterCache.has(cacheKey)) {
+        formatterCache.set(cacheKey, new Intl.DateTimeFormat(locale, {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          timeZone,
+          timeZoneName: 'short',
+        }));
+      }
+      return formatterCache.get(cacheKey);
+    };
+    const updateClocks = () => {
+      const now = new Date();
+      liveClocks.forEach((clockNode) => {
+        const zoneValue = clockNode.getAttribute('data-timezone') || 'UTC';
+        const localeValue = clockNode.getAttribute('data-locale') || defaultLocale;
+        const timeZone = zoneValue === 'local'
+          ? Intl.DateTimeFormat().resolvedOptions().timeZone
+          : zoneValue;
+        clockNode.textContent = getFormatter(timeZone, localeValue).format(now);
+        clockNode.setAttribute('datetime', now.toISOString());
+      });
+    };
+    updateClocks();
+    window.setInterval(updateClocks, 1000);
+  }
+
   let deferredInstallPrompt = null;
   const installButtons = document.querySelectorAll('[data-pwa-install]');
   installButtons.forEach((button) => {
