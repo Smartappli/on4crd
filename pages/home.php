@@ -66,6 +66,10 @@ if ($heroSubtitle !== '') {
 
 $moduleCount = count($activeModules);
 $heroBackgroundUrl = asset_url('assets/img/on4crd_hero.png');
+$heroImageCandidates = glob(__DIR__ . '/../assets/img/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
+if ($heroImageCandidates !== []) {
+    $heroBackgroundUrl = asset_url('assets/img/' . basename((string) $heroImageCandidates[array_rand($heroImageCandidates)]));
+}
 
 $latestNews = null;
 $nextEvent = null;
