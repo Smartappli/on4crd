@@ -988,6 +988,7 @@ function apply_security_headers(): void
     $imgSrc = ["'self'", 'data:', 'https:'];
     $styleSrc = ["'self'", "'unsafe-inline'"];
     $connectSrc = ["'self'"];
+    $frameSrc = ["'self'", 'https://www.google.com', 'https://maps.google.com'];
 
     $matomoOrigin = matomo_origin();
     if ($matomoOrigin !== null) {
@@ -1004,7 +1005,7 @@ function apply_security_headers(): void
         "object-src 'none'",
         "manifest-src 'self'",
         "worker-src 'self'",
-        "frame-src 'none'",
+        'frame-src ' . implode(' ', array_unique($frameSrc)),
         "font-src 'self' data:",
         'script-src ' . implode(' ', array_unique($scriptSrc)),
         'style-src ' . implode(' ', array_unique($styleSrc)),
