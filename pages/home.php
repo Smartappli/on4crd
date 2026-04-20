@@ -9,6 +9,7 @@ $primaryCta = $isAuthenticated
     : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('login')) . '">Rejoindre le club</a>';
 
 $secondaryCta = '<a class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('events')) . '">Consulter l’agenda</a>';
+$tertiaryCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100" href="' . e(route_url('events')) . '">Prochains événements</a>';
 
 $moduleCatalog = [
     ['code' => 'news', 'route' => 'news', 'title' => 'Actualités', 'desc' => 'Suivez les annonces officielles, les comptes rendus et les temps forts du club.', 'icon' => '📰', 'audience' => 'Visiteurs & membres'],
@@ -64,12 +65,7 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">ON4CRD · Radio Club de Durnal</span>'
     . '<h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-tight text-slate-900 lg:text-5xl">' . e($heroTitle) . '</h1>'
     . '<p class="mt-4 max-w-2xl text-base text-slate-600">' . e($heroSubtitle) . '</p>'
-    . '<div class="mt-6 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . '</div>'
-    . '<div class="mt-6 grid gap-3 text-sm text-slate-700 sm:grid-cols-3">'
-    . '<div class="rounded-xl border border-blue-100 bg-white p-3"><p class="font-semibold">Structure claire</p><p class="mt-1 text-slate-600">Un accès direct aux fonctions utiles.</p></div>'
-    . '<div class="rounded-xl border border-blue-100 bg-white p-3"><p class="font-semibold">Contenus vivants</p><p class="mt-1 text-slate-600">Actualisé par la communauté du club.</p></div>'
-    . '<div class="rounded-xl border border-blue-100 bg-white p-3"><p class="font-semibold">Orientation terrain</p><p class="mt-1 text-slate-600">Pensé pour les activités radio réelles.</p></div>'
-    . '</div>'
+    . '<div class="mt-6 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . $tertiaryCta . '</div>'
     . '</article>'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-xl font-bold text-slate-900">Informations utiles</h2>'
