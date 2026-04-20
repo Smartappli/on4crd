@@ -497,14 +497,14 @@ function render_layout(string $content, string $title = ''): string
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $year = gmdate('Y');
     $themeOptions = [
-        'light' => '☀️',
-        'dark' => '🌙',
+        'light' => ['icon' => '☀️', 'label' => 'Clair'],
+        'dark' => ['icon' => '🌙', 'label' => 'Sombre'],
     ];
     $languageOptions = [
-        'fr' => ['label' => '🇫🇷'],
-        'en' => ['label' => '🇬🇧'],
-        'de' => ['label' => '🇩🇪'],
-        'nl' => ['label' => '🇳🇱'],
+        'fr' => ['icon' => '🇫🇷', 'label' => 'Français'],
+        'en' => ['icon' => '🇬🇧', 'label' => 'English'],
+        'de' => ['icon' => '🇩🇪', 'label' => 'Deutsch'],
+        'nl' => ['icon' => '🇳🇱', 'label' => 'Nederlands'],
     ];
     $accentIcons = [
         'blue' => '🔵',
@@ -516,37 +516,54 @@ function render_layout(string $content, string $title = ''): string
     $languageOptionHtml = '';
     foreach ($languageOptions as $localeCode => $localeConfig) {
         $isActive = $localeCode === $currentLocale;
-        $languageOptionHtml .= '<option value="' . e($localeCode) . '"' . ($isActive ? ' selected' : '') . '>' . e((string) ($localeConfig['label'] ?? strtoupper($localeCode))) . '</option>';
+        $localeLabel = (string) ($localeConfig['label'] ?? strtoupper($localeCode));
+        $localeIcon = (string) ($localeConfig['icon'] ?? '');
+        $languageOptionHtml .= '<option value="' . e($localeCode) . '"' . ($isActive ? ' selected' : '') . '>'
+            . e(trim($localeIcon . ' ' . $localeLabel))
+            . '</option>';
     }
     $themeOptionHtml = '';
-    foreach ($themeOptions as $themeCode => $themeLabel) {
+    foreach ($themeOptions as $themeCode => $themeConfig) {
         $isActive = $themeCode === $currentTheme;
-        $themeOptionHtml .= '<option value="' . e($themeCode) . '"' . ($isActive ? ' selected' : '') . '>' . e($themeLabel) . '</option>';
+        $themeIcon = (string) ($themeConfig['icon'] ?? '');
+        $themeLabel = (string) ($themeConfig['label'] ?? $themeCode);
+        $themeOptionHtml .= '<option value="' . e($themeCode) . '"' . ($isActive ? ' selected' : '') . '>'
+            . e(trim($themeIcon . ' ' . $themeLabel))
+            . '</option>';
     }
     $accentOptionHtml = '';
     foreach ($accentPalette as $accentCode => $accentConfig) {
         $isActive = $accentCode === $currentAccent;
         $accentIcon = (string) ($accentIcons[$accentCode] ?? '🎨');
-        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>' . e($accentIcon) . '</option>';
+        $accentLabel = (string) ($accentConfig['label'] ?? ucfirst($accentCode));
+        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>'
+            . e(trim($accentIcon . ' ' . $accentLabel))
+            . '</option>';
     }
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="language-selector">Choix de la langue</label>'
-        . '<select id="language-selector" class="preference-select js-auto-submit" name="locale" aria-label="Choix de la langue">' . $languageOptionHtml . '</select>'
+        . '<select id="language-selector" class="preference-select js-auto-submit has-tooltip" name="locale" title="Langue du site" aria-label="Choix de la langue" aria-describedby="language-help">' . $languageOptionHtml . '</select>'
+        . '<span class="selector-tooltip" aria-hidden="true">Langue du site</span>'
+        . '<span class="sr-only" id="language-help">Sélecteur de langue du site. Le changement est appliqué automatiquement.</span>'
         . '</form>'
         . '<form class="toolbar-form" method="post" action="' . e(route_url('set_theme')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="theme-selector">Choix du mode</label>'
-        . '<select id="theme-selector" class="preference-select js-auto-submit" name="theme" aria-label="Choix du mode clair ou sombre">' . $themeOptionHtml . '</select>'
+        . '<select id="theme-selector" class="preference-select js-auto-submit has-tooltip" name="theme" title="Mode clair ou sombre" aria-label="Choix du mode clair ou sombre" aria-describedby="theme-help">' . $themeOptionHtml . '</select>'
+        . '<span class="selector-tooltip" aria-hidden="true">Mode clair ou sombre</span>'
+        . '<span class="sr-only" id="theme-help">Sélecteur de thème. Le changement est appliqué automatiquement.</span>'
         . '</form>'
         . '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
         . '<label class="sr-only" for="accent-selector">Choix de la couleur</label>'
-        . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="Choix de la couleur">' . $accentOptionHtml . '</select>'
+        . '<select id="accent-selector" class="preference-select js-auto-submit has-tooltip" name="accent" title="Couleur d’accent du site" aria-label="Choix de la couleur" aria-describedby="accent-help">' . $accentOptionHtml . '</select>'
+        . '<span class="selector-tooltip" aria-hidden="true">Couleur d’accent du site</span>'
+        . '<span class="sr-only" id="accent-help">Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.</span>'
         . '</form>'
         . '</div>';
 
