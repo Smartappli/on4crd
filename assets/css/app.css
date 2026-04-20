@@ -133,6 +133,7 @@ textarea:focus-visible {
   text-decoration: none;
 }
 .nav-form, .toolbar-form { margin: 0; }
+.toolbar-form { position: relative; }
 .nav-link-button {
   border: 0;
   background: transparent;
@@ -161,8 +162,8 @@ textarea:focus-visible {
 .toolbar-preferences .toolbar-form,
 .toolbar-preferences .inline-form { margin: 0; }
 .preference-select {
-  width: 4.1rem;
-  min-width: 4.1rem;
+  width: 8.6rem;
+  min-width: 8.6rem;
   margin-top: 0;
   padding: .52rem .45rem;
   border-radius: 12px;
@@ -178,6 +179,28 @@ textarea:focus-visible {
   appearance: none;
   box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 10%, transparent);
   transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
+}
+.selector-tooltip {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + .35rem);
+  transform: translate(-50%, -.2rem);
+  background: color-mix(in srgb, var(--text) 92%, black);
+  color: #fff;
+  border-radius: 10px;
+  padding: .32rem .58rem;
+  font-size: .78rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .16s ease, transform .16s ease;
+  z-index: 30;
+}
+.preference-select:hover + .selector-tooltip,
+.preference-select:focus-visible + .selector-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 .preference-select:hover {
   border-color: color-mix(in srgb, var(--accent) 52%, var(--border));
