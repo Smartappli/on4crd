@@ -70,7 +70,7 @@ $moduleCount = count($activeModules);
 
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="flex h-full flex-col rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-blue-50 p-8 shadow-sm">'
-    . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">ON4CRD · Radio Club de Durnal</span>'
+    . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">ON4CRD · Connecter, expérimenter, partager</span>'
     . $heroIntro
     . '<div class="mt-auto pt-8 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . $tertiaryCta . '</div>'
     . '</article>'
