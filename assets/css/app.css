@@ -133,6 +133,7 @@ textarea:focus-visible {
   text-decoration: none;
 }
 .nav-form, .toolbar-form { margin: 0; }
+.toolbar-form { position: relative; }
 .nav-link-button {
   border: 0;
   background: transparent;
@@ -161,8 +162,8 @@ textarea:focus-visible {
 .toolbar-preferences .toolbar-form,
 .toolbar-preferences .inline-form { margin: 0; }
 .preference-select {
-  width: 4.1rem;
-  min-width: 4.1rem;
+  width: 8.6rem;
+  min-width: 8.6rem;
   margin-top: 0;
   padding: .52rem .45rem;
   border-radius: 12px;
