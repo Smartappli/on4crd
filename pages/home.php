@@ -52,19 +52,26 @@ if ($moduleCards === '') {
 
 $heroTitle = $isAuthenticated
     ? 'Pilotez vos activités radio depuis un portail unique'
-    : 'ON4CRD : un portail clair, moderne et orienté action';
+    : '';
 
 $heroSubtitle = $isAuthenticated
     ? 'Retrouvez vos modules, vos contenus et vos prochaines actions en quelques clics.'
-    : 'Découvrez le Radio Club de Durnal à travers des modules concrets : actualités, événements, ressources techniques et vie communautaire.';
+    : '';
+
+$heroIntro = '';
+if ($heroTitle !== '') {
+    $heroIntro .= '<h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-tight text-slate-900 lg:text-5xl">' . e($heroTitle) . '</h1>';
+}
+if ($heroSubtitle !== '') {
+    $heroIntro .= '<p class="mt-4 max-w-2xl text-base text-slate-600">' . e($heroSubtitle) . '</p>';
+}
 
 $moduleCount = count($activeModules);
 
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="flex h-full flex-col rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-blue-50 p-8 shadow-sm">'
     . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">ON4CRD · Radio Club de Durnal</span>'
-    . '<h1 class="mt-4 max-w-2xl text-4xl font-extrabold leading-tight text-slate-900 lg:text-5xl">' . e($heroTitle) . '</h1>'
-    . '<p class="mt-4 max-w-2xl text-base text-slate-600">' . e($heroSubtitle) . '</p>'
+    . $heroIntro
     . '<div class="mt-auto pt-8 flex flex-wrap gap-3">' . $primaryCta . $secondaryCta . $tertiaryCta . '</div>'
     . '</article>'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
