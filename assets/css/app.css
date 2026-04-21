@@ -272,20 +272,6 @@ textarea:focus-visible {
 }
 .hero-copy h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; margin: .3rem 0 .8rem; max-width: 13ch; }
 .hero-lead { font-size: 1.05rem; color: var(--muted); max-width: 65ch; }
-
-.home-hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  pointer-events: none;
-  border-radius: inherit;
-}
-
 .hero-panel {
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
   border: 1px solid var(--border);
@@ -502,7 +488,6 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 }
 @media (max-width: 1024px) {
   .hero, .split, .grid-3, .home-grid, .footer-grid { grid-template-columns: 1fr; }
-  .home-hero-card { min-height: clamp(18rem, 70vw, 28rem); }
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
