@@ -51,30 +51,8 @@ if (table_exists('members')) {
     $licenceRows = [];
 }
 
-$committeeCount = 0;
-foreach ($members as $member) {
-    if ((int) ($member['is_committee'] ?? 0) === 1) {
-        $committeeCount++;
-    }
-}
-
 ob_start();
 ?>
-<section class="card directory-header">
-    <h1>Annuaire</h1>
-    <p class="help">Retrouvez les opérateurs actifs du radio-club et leurs informations publiques.</p>
-    <div class="stats-grid">
-        <article class="stat-card">
-            <span class="help">Membres affichés</span>
-            <strong><?= (int) count($members) ?></strong>
-        </article>
-        <article class="stat-card">
-            <span class="help">Comité</span>
-            <strong><?= (int) $committeeCount ?></strong>
-        </article>
-    </div>
-</section>
-
 <section class="card directory-filters">
     <h2>Recherche et filtres</h2>
     <form method="get" class="inline-form">

@@ -10,6 +10,11 @@ $posts = [];
 $search = trim((string) ($_GET['q'] ?? ''));
 $monthFilter = trim((string) ($_GET['ym'] ?? ''));
 $categoryFilter = trim((string) ($_GET['category'] ?? ''));
+$sort = (string) ($_GET['sort'] ?? 'recent');
+$page = max(1, (int) ($_GET['p'] ?? 1));
+if (!in_array($sort, ['recent', 'oldest', 'title'], true)) {
+    $sort = 'recent';
+}
 if (!preg_match('/^\d{4}-\d{2}$/', $monthFilter)) {
     $monthFilter = '';
 }
@@ -34,6 +39,26 @@ if ($categoryFilter !== '') {
     $where[] = 's.slug = ?';
     $params[] = $categoryFilter;
 }
+$orderBy = match ($sort) {
+    'oldest' => 'COALESCE(p.published_at, p.updated_at) ASC',
+    'title' => 'p.title ASC',
+    default => 'COALESCE(p.published_at, p.updated_at) DESC',
+};
+$perPage = 18;
+$totalPosts = 0;
+try {
+    $countSql = 'SELECT COUNT(*) FROM news_posts p LEFT JOIN news_sections s ON s.id = p.section_id WHERE ' . implode(' AND ', $where);
+    $countStmt = db()->prepare($countSql);
+    $countStmt->execute($params);
+    $totalPosts = (int) $countStmt->fetchColumn();
+} catch (Throwable) {
+    $totalPosts = 0;
+}
+$totalPages = max(1, (int) ceil($totalPosts / $perPage));
+if ($page > $totalPages) {
+    $page = $totalPages;
+}
+$offset = ($page - 1) * $perPage;
 
 try {
     $sql = 'SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.slug AS section_slug, s.name AS section_name, m.callsign AS author_callsign
@@ -41,8 +66,8 @@ try {
         LEFT JOIN news_sections s ON s.id = p.section_id
         LEFT JOIN members m ON m.id = p.author_id
         WHERE ' . implode(' AND ', $where) . '
-        ORDER BY COALESCE(p.published_at, p.updated_at) DESC
-        LIMIT 48';
+        ORDER BY ' . $orderBy . '
+        LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset;
     $stmt = db()->prepare($sql);
     $stmt->execute($params);
     $posts = $stmt->fetchAll() ?: [];
@@ -123,6 +148,11 @@ ob_start();
                 <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e((string) ($category['name'] ?? 'Catégorie')) ?></option>
             <?php endforeach; ?>
         </select>
+        <select name="sort">
+            <option value="recent" <?= $sort === 'recent' ? 'selected' : '' ?>>Plus récentes</option>
+            <option value="oldest" <?= $sort === 'oldest' ? 'selected' : '' ?>>Plus anciennes</option>
+            <option value="title" <?= $sort === 'title' ? 'selected' : '' ?>>Titre (A→Z)</option>
+        </select>
         <button class="button" type="submit">Filtrer</button>
         <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
             <a class="button secondary" href="<?= e(route_url('news')) ?>">Réinitialiser</a>
@@ -188,6 +218,22 @@ ob_start();
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
+</section>
+
+<?php if ($totalPosts > $perPage): ?>
+    <section class="card">
+        <div class="row-between">
+            <p class="help">Page <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= (int) $totalPosts ?> actualité<?= $totalPosts > 1 ? 's' : '' ?></p>
+            <p class="actions">
+                <?php if ($page > 1): ?>
+                    <a class="button secondary" href="<?= e(route_url('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page - 1])) ?>">← Précédent</a>
+                <?php endif; ?>
+                <?php if ($page < $totalPages): ?>
+                    <a class="button secondary" href="<?= e(route_url('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page + 1])) ?>">Suivant →</a>
+                <?php endif; ?>
+            </p>
+        </div>
+    </section>
 <?php endif; ?>
 <?php
 echo render_layout((string) ob_get_clean(), 'Actualités');
