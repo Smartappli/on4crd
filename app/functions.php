@@ -518,7 +518,6 @@ function render_layout(string $content, string $title = ''): string
         'violet' => '🟣',
         'red' => '🔴',
         'amber' => '🟡',
-        'pink' => '🩷',
         'orange' => '🟠',
     ];
     $languageOptionHtml = '';
