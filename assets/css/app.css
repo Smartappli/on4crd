@@ -675,68 +675,28 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   flex-wrap: wrap;
   justify-content: flex-end;
 }
-.events-toolbar-actions .button.is-active {
+#events-calendar {
+  margin-top: .75rem;
+}
+#events-calendar .fc {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: var(--panel);
+  --fc-neutral-bg-color: var(--panel-2);
+  --fc-list-event-hover-bg-color: color-mix(in srgb, var(--accent) 8%, var(--panel));
+  --fc-today-bg-color: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--text);
+}
+#events-calendar .fc .fc-button-primary {
   background: var(--accent);
-  color: #fff;
   border-color: var(--accent);
 }
-.events-current-month {
-  margin: .5rem 0 1rem;
-  text-transform: capitalize;
+#events-calendar .fc .fc-button-primary:not(:disabled).fc-button-active,
+#events-calendar .fc .fc-button-primary:not(:disabled):active {
+  background: color-mix(in srgb, var(--accent-strong) 88%, black 12%);
+  border-color: color-mix(in srgb, var(--accent-strong) 88%, black 12%);
 }
-.events-calendar-head,
-.events-calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: .5rem;
-}
-.events-calendar-head {
-  margin-bottom: .5rem;
-  color: var(--muted);
-  font-size: .82rem;
-  font-weight: 700;
-}
-.events-day {
-  border: 1px solid var(--border);
-  background: var(--panel-3);
-  border-radius: 14px;
-  padding: .5rem;
-  min-height: 125px;
-}
-.events-day.is-outside {
+#events-calendar .fc .fc-button-primary:disabled {
   opacity: .6;
-}
-.events-day header {
-  font-weight: 700;
-  margin-bottom: .35rem;
-}
-.events-day-list {
-  display: grid;
-  gap: .35rem;
-}
-.event-chip {
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
-  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
-  color: var(--text);
-  border-radius: 10px;
-  font-size: .78rem;
-  line-height: 1.25;
-  text-align: left;
-  padding: .35rem .45rem;
-  cursor: pointer;
-}
-.event-chip-list {
-  display: grid;
-  gap: .2rem;
-  padding: .65rem .75rem;
-}
-.event-chip-list span {
-  color: var(--muted);
-  font-size: .85rem;
-}
-.events-list-view {
-  display: grid;
-  gap: .6rem;
 }
 .events-detail-card h3 {
   margin: .25rem 0;
@@ -784,23 +744,5 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   .events-toolbar-actions .button {
     width: 100%;
     text-align: center;
-  }
-  .events-calendar-head,
-  .events-calendar-grid {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-  .events-calendar-head {
-    display: none;
-  }
-  .events-day {
-    min-height: 0;
-    padding: .7rem;
-  }
-  .events-day.is-outside {
-    display: none;
-  }
-  .event-chip {
-    font-size: .9rem;
-    padding: .5rem .6rem;
   }
 }
