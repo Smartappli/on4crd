@@ -79,22 +79,30 @@ $monthRaw = (string) ($_GET['ym'] ?? date('Y-m'));
 if (!preg_match('/^\d{4}-\d{2}$/', $monthRaw)) {
     $monthRaw = date('Y-m');
 }
+/** @var 'month'|'week'|'list' $view */
+$view = in_array((string) ($_GET['view'] ?? 'month'), ['month', 'week', 'list'], true)
+    ? (string) $_GET['view']
+    : 'month';
 
 $monthDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $monthRaw . '-01 00:00:00');
 if (!$monthDate instanceof DateTimeImmutable) {
     $monthDate = new DateTimeImmutable('first day of this month midnight');
 }
 
-$calendarStart = $monthDate->modify('monday this week');
-$calendarEnd = $monthDate->modify('last day of this month')->modify('sunday this week');
-$period = new DatePeriod($calendarStart, new DateInterval('P1D'), $calendarEnd->modify('+1 day'));
+$weekRaw = (string) ($_GET['week'] ?? date('Y-m-d'));
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $weekRaw)) {
+    $weekRaw = date('Y-m-d');
+}
+$weekDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $weekRaw . ' 00:00:00');
+if (!$weekDate instanceof DateTimeImmutable) {
+    $weekDate = new DateTimeImmutable('today');
+}
 
-$eventsByDay = [];
 $eventCards = [];
+$calendarEvents = [];
 foreach ($rows as $event) {
     $startAt = new DateTimeImmutable((string) $event['start_at']);
-    $dayKey = $startAt->format('Y-m-d');
-    $eventsByDay[$dayKey][] = $event;
+    $endAt = new DateTimeImmutable((string) $event['end_at']);
 
     $summary = trim((string) ($event['summary'] ?? ''));
     if ($summary === '') {
@@ -106,19 +114,35 @@ foreach ($rows as $event) {
         'title' => (string) $event['title'],
         'summary' => $summary,
         'startLabel' => $startAt->format('d/m/Y H:i'),
-        'endLabel' => (new DateTimeImmutable((string) $event['end_at']))->format('d/m/Y H:i'),
+        'endLabel' => $endAt->format('d/m/Y H:i'),
         'location' => trim((string) ($event['location'] ?? '')),
         'detailUrl' => route_url('event_view', ['slug' => (string) $event['slug']]),
         'externalUrl' => trim((string) ($event['external_url'] ?? '')),
     ];
+
+    $calendarEvents[] = [
+        'id' => (string) ((int) $event['id']),
+        'title' => (string) $event['title'],
+        'start' => $startAt->format(DateTimeInterface::ATOM),
+        'end' => $endAt->format(DateTimeInterface::ATOM),
+        'url' => route_url('event_view', ['slug' => (string) $event['slug']]),
+        'extendedProps' => [
+            'summary' => $summary,
+            'location' => trim((string) ($event['location'] ?? '')),
+            'externalUrl' => trim((string) ($event['external_url'] ?? '')),
+            'startLabel' => $startAt->format('d/m/Y H:i'),
+            'endLabel' => $endAt->format('d/m/Y H:i'),
+        ],
+    ];
 }
 
 $defaultEvent = $eventCards !== [] ? reset($eventCards) : null;
-
-$prevMonth = $monthDate->modify('-1 month')->format('Y-m');
-$nextMonth = $monthDate->modify('+1 month')->format('Y-m');
-$monthNames = [1 => 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-$monthLabel = ($monthNames[(int) $monthDate->format('n')] ?? $monthDate->format('F')) . ' ' . $monthDate->format('Y');
+$calendarView = match ($view) {
+    'week' => 'timeGridWeek',
+    'list' => 'listMonth',
+    default => 'dayGridMonth',
+};
+$initialDate = $view === 'week' ? $weekDate->format('Y-m-d') : $monthDate->format('Y-m-d');
 
 ob_start();
 ?>
@@ -127,57 +151,102 @@ ob_start();
         <header class="events-toolbar">
             <div>
                 <h1>Événements</h1>
-                <p class="help">Calendrier du club avec export iCalendar (.ics).</p>
+                <p class="help">Calendrier interactif (mois, semaine, liste) avec export iCalendar (.ics).</p>
             </div>
             <div class="events-toolbar-actions">
-                <a class="button secondary" href="<?= e(route_url('events', ['ym' => $prevMonth])) ?>">← Mois précédent</a>
-                <a class="button secondary" href="<?= e(route_url('events', ['ym' => $nextMonth])) ?>">Mois suivant →</a>
                 <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter ICS</a>
             </div>
         </header>
 
-        <h2 class="events-current-month"><?= e($monthLabel) ?></h2>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
+        <div id="events-calendar"></div>
+        <script type="application/json" id="events-calendar-data"><?= e(json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]') ?></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/fr.global.min.js"></script>
+        <script>
+            (() => {
+                const calendarEl = document.getElementById('events-calendar');
+                const dataEl = document.getElementById('events-calendar-data');
+                if (!calendarEl || !dataEl || !window.FullCalendar) {
+                    calendarEl?.insertAdjacentHTML('beforeend', '<p class="help">Impossible de charger le calendrier interactif.</p>');
+                    return;
+                }
 
-        <div class="events-calendar-head" aria-hidden="true">
-            <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
-        </div>
-        <div class="events-calendar-grid">
-            <?php foreach ($period as $day):
-                $dayKey = $day->format('Y-m-d');
-                $inMonth = $day->format('m') === $monthDate->format('m');
-                $dayEvents = $eventsByDay[$dayKey] ?? [];
-                ?>
-                <section class="events-day <?= $inMonth ? '' : 'is-outside' ?>">
-                    <header>
-                        <time datetime="<?= e($dayKey) ?>"><?= e($day->format('d')) ?></time>
-                    </header>
-                    <div class="events-day-list">
-                        <?php foreach ($dayEvents as $event):
-                            $eventId = (int) $event['id'];
-                            $eventData = $eventCards[$eventId] ?? null;
-                            if (!is_array($eventData)) {
-                                continue;
-                            }
-                            ?>
-                            <button
-                                type="button"
-                                class="event-chip"
-                                data-event-id="<?= $eventId ?>"
-                                data-title="<?= e($eventData['title']) ?>"
-                                data-summary="<?= e($eventData['summary']) ?>"
-                                data-start="<?= e($eventData['startLabel']) ?>"
-                                data-end="<?= e($eventData['endLabel']) ?>"
-                                data-location="<?= e($eventData['location']) ?>"
-                                data-detail-url="<?= e($eventData['detailUrl']) ?>"
-                                data-external-url="<?= e($eventData['externalUrl']) ?>"
-                            >
-                                <?= e($eventData['startLabel']) ?> · <?= e($eventData['title']) ?>
-                            </button>
-                        <?php endforeach; ?>
-                    </div>
-                </section>
-            <?php endforeach; ?>
-        </div>
+                const events = JSON.parse(dataEl.textContent || '[]');
+                const detail = {
+                    title: document.getElementById('event-detail-title'),
+                    summary: document.getElementById('event-detail-summary'),
+                    start: document.getElementById('event-detail-start'),
+                    end: document.getElementById('event-detail-end'),
+                    location: document.getElementById('event-detail-location'),
+                    link: document.getElementById('event-detail-link'),
+                    external: document.getElementById('event-detail-external')
+                };
+
+                const updateDetails = (event) => {
+                    const props = event.extendedProps || {};
+                    if (detail.title) detail.title.textContent = event.title || 'Événement';
+                    if (detail.summary) detail.summary.textContent = props.summary || 'Aucun résumé disponible.';
+                    if (detail.start) detail.start.textContent = props.startLabel || '';
+                    if (detail.end) detail.end.textContent = props.endLabel || '';
+                    if (detail.location) detail.location.textContent = props.location || 'À confirmer';
+                    if (detail.link) detail.link.setAttribute('href', event.url || '#');
+                    if (detail.external) {
+                        const externalUrl = props.externalUrl || '';
+                        detail.external.setAttribute('href', externalUrl || '#');
+                        detail.external.classList.toggle('is-hidden', !externalUrl);
+                    }
+                };
+                const formatDate = (date) => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                };
+
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    locale: 'fr',
+                    firstDay: 1,
+                    height: 'auto',
+                    initialView: <?= json_encode($calendarView) ?>,
+                    initialDate: <?= json_encode($initialDate) ?>,
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,listMonth'
+                    },
+                    buttonText: {
+                        today: 'Aujourd’hui',
+                        month: 'Mois',
+                        week: 'Semaine',
+                        list: 'Liste'
+                    },
+                    events,
+                    eventClick(info) {
+                        info.jsEvent.preventDefault();
+                        updateDetails(info.event);
+                    },
+                    datesSet(info) {
+                        const params = new URLSearchParams(window.location.search);
+                        const viewMap = {
+                            dayGridMonth: 'month',
+                            timeGridWeek: 'week',
+                            listMonth: 'list'
+                        };
+                        const route = params.get('route') || 'events';
+                        const currentView = viewMap[info.view.type] || 'month';
+                        const monthAnchor = info.view.currentStart instanceof Date ? info.view.currentStart : info.start;
+                        const weekAnchor = info.start instanceof Date ? info.start : monthAnchor;
+                        params.set('route', route);
+                        params.set('view', currentView);
+                        params.set('ym', formatDate(monthAnchor).slice(0, 7));
+                        params.set('week', formatDate(weekAnchor));
+                        history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+                    }
+                });
+                calendar.render();
+            })();
+        </script>
     </article>
 
     <aside class="card events-detail-card" id="event-detail">
