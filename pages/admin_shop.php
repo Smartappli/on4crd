@@ -31,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 db()->prepare('INSERT INTO shop_categories (slug, name, description, sort_order, is_active) VALUES (?, ?, ?, ?, ?)')->execute($params);
             }
+            cache_forget('shop_categories_v1');
+            cache_forget('shop_public_products_v1');
             set_flash('success', 'Catégorie enregistrée.');
         } elseif ($action === 'save_product') {
             $id = (int) ($_POST['id'] ?? 0);
@@ -62,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 db()->prepare('INSERT INTO shop_products (category_id, slug, title, summary, description, price_cents, stock_qty, image_url, is_featured, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->execute($params);
             }
+            cache_forget('shop_public_products_v1');
             set_flash('success', 'Produit enregistré.');
         } elseif ($action === 'save_order_status') {
             db()->prepare('UPDATE shop_orders SET status = ? WHERE id = ?')->execute([
