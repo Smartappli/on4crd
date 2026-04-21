@@ -7,22 +7,73 @@ if (!table_exists('news_posts')) {
 }
 
 $posts = [];
+$search = trim((string) ($_GET['q'] ?? ''));
+$monthFilter = trim((string) ($_GET['ym'] ?? ''));
+$categoryFilter = trim((string) ($_GET['category'] ?? ''));
+if (!preg_match('/^\d{4}-\d{2}$/', $monthFilter)) {
+    $monthFilter = '';
+}
+if (!preg_match('/^[a-z0-9-]{1,100}$/', $categoryFilter)) {
+    $categoryFilter = '';
+}
+
+$where = ['p.status = "published"'];
+$params = [];
+if ($search !== '') {
+    $where[] = '(p.title LIKE ? OR p.excerpt LIKE ? OR p.content LIKE ?)';
+    $searchLike = '%' . $search . '%';
+    $params[] = $searchLike;
+    $params[] = $searchLike;
+    $params[] = $searchLike;
+}
+if ($monthFilter !== '') {
+    $where[] = 'DATE_FORMAT(COALESCE(p.published_at, p.updated_at), "%Y-%m") = ?';
+    $params[] = $monthFilter;
+}
+if ($categoryFilter !== '') {
+    $where[] = 's.slug = ?';
+    $params[] = $categoryFilter;
+}
+
 try {
-    $stmt = db()->query('SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.name AS section_name, m.callsign AS author_callsign
+    $sql = 'SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.slug AS section_slug, s.name AS section_name, m.callsign AS author_callsign
         FROM news_posts p
         LEFT JOIN news_sections s ON s.id = p.section_id
         LEFT JOIN members m ON m.id = p.author_id
-        WHERE p.status = "published"
+        WHERE ' . implode(' AND ', $where) . '
         ORDER BY COALESCE(p.published_at, p.updated_at) DESC
-        LIMIT 24');
-    $posts = $stmt->fetchAll();
+        LIMIT 48';
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+    $posts = $stmt->fetchAll() ?: [];
 } catch (Throwable) {
     $posts = [];
 }
 
-$featuredPost = $posts !== [] ? $posts[0] : null;
-$remainingPosts = $posts !== [] ? array_slice($posts, 1) : [];
-$latestRaw = (string) (($featuredPost['published_at'] ?? $featuredPost['updated_at'] ?? ''));
+$categories = [];
+try {
+    $categories = db()->query('SELECT s.slug, s.name, COUNT(p.id) AS total
+        FROM news_sections s
+        INNER JOIN news_posts p ON p.section_id = s.id AND p.status = "published"
+        GROUP BY s.id, s.slug, s.name
+        ORDER BY s.sort_order ASC, s.name ASC')->fetchAll() ?: [];
+} catch (Throwable) {
+    $categories = [];
+}
+
+$archives = [];
+try {
+    $archives = db()->query('SELECT DATE_FORMAT(COALESCE(published_at, updated_at), "%Y-%m") AS ym, COUNT(*) AS total
+        FROM news_posts
+        WHERE status = "published"
+        GROUP BY ym
+        ORDER BY ym DESC
+        LIMIT 18')->fetchAll() ?: [];
+} catch (Throwable) {
+    $archives = [];
+}
+
+$latestRaw = (string) (($posts[0]['published_at'] ?? $posts[0]['updated_at'] ?? ''));
 $latestDate = $latestRaw !== '' ? date('d/m/Y', strtotime($latestRaw)) : '—';
 $sections = [];
 foreach ($posts as $post) {
@@ -30,6 +81,12 @@ foreach ($posts as $post) {
     if ($section !== '') {
         $sections[$section] = true;
     }
+}
+$postsByCategory = [];
+foreach ($posts as $post) {
+    $sectionName = trim((string) ($post['section_name'] ?? ''));
+    $key = $sectionName !== '' ? $sectionName : 'Sans catégorie';
+    $postsByCategory[$key][] = $post;
 }
 
 ob_start();
@@ -53,42 +110,61 @@ ob_start();
     </div>
 </section>
 
-<?php if ($posts === []): ?>
-    <section class="card">
-        <p>Aucune actualité publiée pour le moment.</p>
-    </section>
-<?php else: ?>
-    <?php if (is_array($featuredPost)): ?>
-        <?php
-        $featuredDateRaw = (string) ($featuredPost['published_at'] ?? $featuredPost['updated_at'] ?? '');
-        $featuredDate = $featuredDateRaw !== '' ? date('d/m/Y', strtotime($featuredDateRaw)) : 'Date non définie';
-        $featuredExcerpt = trim((string) ($featuredPost['excerpt'] ?? ''));
-        if ($featuredExcerpt === '') {
-            $featuredExcerpt = 'Découvrez les informations complètes dans l’article.';
-        }
-        ?>
-        <section class="card news-featured">
-            <span class="badge">À la une</span>
-            <h2><?= e((string) $featuredPost['title']) ?></h2>
-            <p class="help">
-                <?= e($featuredDate) ?>
-                <?php if (trim((string) ($featuredPost['section_name'] ?? '')) !== ''): ?>
-                    · <?= e((string) $featuredPost['section_name']) ?>
-                <?php endif; ?>
-                <?php if (trim((string) ($featuredPost['author_callsign'] ?? '')) !== ''): ?>
-                    · <?= e((string) $featuredPost['author_callsign']) ?>
-                <?php endif; ?>
-            </p>
-            <p><?= e($featuredExcerpt) ?></p>
-            <p><a class="button" href="<?= e(route_url('news_view', ['slug' => (string) $featuredPost['slug']])) ?>">Lire l’actualité principale</a></p>
-        </section>
+<section class="card news-filters">
+    <h2>Rechercher et filtrer</h2>
+    <form method="get" class="inline-form">
+        <input type="hidden" name="route" value="news">
+        <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une actualité (titre, extrait, contenu)">
+        <input type="month" name="ym" value="<?= e($monthFilter) ?>">
+        <select name="category">
+            <option value="">Toutes les catégories</option>
+            <?php foreach ($categories as $category): ?>
+                <?php $slug = (string) ($category['slug'] ?? ''); ?>
+                <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e((string) ($category['name'] ?? 'Catégorie')) ?></option>
+            <?php endforeach; ?>
+        </select>
+        <button class="button" type="submit">Filtrer</button>
+        <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
+            <a class="button secondary" href="<?= e(route_url('news')) ?>">Réinitialiser</a>
+        <?php endif; ?>
+    </form>
+    <?php if ($categories !== []): ?>
+        <div class="news-archives">
+            <?php foreach ($categories as $category): ?>
+                <?php $slug = (string) ($category['slug'] ?? ''); ?>
+                <a class="pill" href="<?= e(route_url('news', ['category' => $slug])) ?>"<?= $categoryFilter === $slug ? ' aria-current="page"' : '' ?>>
+                    <?= e((string) ($category['name'] ?? 'Catégorie')) ?> · <?= (int) ($category['total'] ?? 0) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
+    <?php if ($archives !== []): ?>
+        <div class="news-archives">
+            <?php foreach ($archives as $archive):
+                $ym = (string) ($archive['ym'] ?? '');
+                if (!preg_match('/^\d{4}-\d{2}$/', $ym)) {
+                    continue;
+                }
+                [$year, $month] = explode('-', $ym);
+                $label = $month . '/' . $year;
+                ?>
+                <a class="pill" href="<?= e(route_url('news', ['ym' => $ym])) ?>"<?= $monthFilter === $ym ? ' aria-current="page"' : '' ?>>
+                    <?= e($label) ?> · <?= (int) ($archive['total'] ?? 0) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
 
-    <?php if ($remainingPosts !== []): ?>
-        <section class="card">
-            <h2>Dernières publications</h2>
+<section class="card">
+    <h2>Publications par catégorie</h2>
+    <?php if ($posts === []): ?>
+        <p>Aucune actualité publiée pour le moment.</p>
+    <?php else: ?>
+        <?php foreach ($postsByCategory as $categoryName => $items): ?>
+            <h3><?= e((string) $categoryName) ?></h3>
             <div class="news-grid">
-                <?php foreach ($remainingPosts as $post):
+                <?php foreach ($items as $post):
                 $publishedAtRaw = (string) ($post['published_at'] ?? $post['updated_at'] ?? '');
                 $publishedAt = $publishedAtRaw !== '' ? date('d/m/Y', strtotime($publishedAtRaw)) : 'Date non définie';
                 $excerpt = trim((string) ($post['excerpt'] ?? ''));
@@ -98,7 +174,7 @@ ob_start();
                 ?>
                 <article class="news-card feature-card">
                     <span class="badge muted"><?= e((string) ($post['section_name'] ?? 'Actualité')) ?></span>
-                    <h2><?= e((string) $post['title']) ?></h2>
+                    <h4><?= e((string) $post['title']) ?></h4>
                     <p class="help">
                         Publié le <?= e($publishedAt) ?>
                         <?php if (trim((string) ($post['author_callsign'] ?? '')) !== ''): ?>
@@ -110,7 +186,7 @@ ob_start();
                 </article>
                 <?php endforeach; ?>
             </div>
-        </section>
+        <?php endforeach; ?>
     <?php endif; ?>
 <?php endif; ?>
 <?php
