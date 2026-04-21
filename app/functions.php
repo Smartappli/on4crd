@@ -543,7 +543,8 @@ function render_layout(string $content, string $title = ''): string
         $isActive = $accentCode === $currentAccent;
         $accentIcon = (string) ($accentIcons[$accentCode] ?? '🎨');
         $accentLabel = (string) ($accentConfig['label'] ?? ucfirst($accentCode));
-        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . '>'
+        $accentDotColor = (string) ($accentConfig['color'] ?? '#2f6fed');
+        $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . ' style="color:' . e($accentDotColor) . ';">'
             . e(trim($accentIcon . ' ' . $accentLabel))
             . '</option>';
     }
