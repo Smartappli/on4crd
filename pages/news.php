@@ -7,24 +7,194 @@ if (!table_exists('news_posts')) {
 }
 
 $posts = [];
+$search = trim((string) ($_GET['q'] ?? ''));
+$monthFilter = trim((string) ($_GET['ym'] ?? ''));
+$categoryFilter = trim((string) ($_GET['category'] ?? ''));
+$sort = (string) ($_GET['sort'] ?? 'recent');
+$page = max(1, (int) ($_GET['p'] ?? 1));
+if (!in_array($sort, ['recent', 'oldest', 'title'], true)) {
+    $sort = 'recent';
+}
+if (!preg_match('/^\d{4}-\d{2}$/', $monthFilter)) {
+    $monthFilter = '';
+}
+if (!preg_match('/^[a-z0-9-]{1,100}$/', $categoryFilter)) {
+    $categoryFilter = '';
+}
+
+$where = ['p.status = "published"'];
+$params = [];
+if ($search !== '') {
+    $where[] = '(p.title LIKE ? OR p.excerpt LIKE ? OR p.content LIKE ?)';
+    $searchLike = '%' . $search . '%';
+    $params[] = $searchLike;
+    $params[] = $searchLike;
+    $params[] = $searchLike;
+}
+if ($monthFilter !== '') {
+    $where[] = 'DATE_FORMAT(COALESCE(p.published_at, p.updated_at), "%Y-%m") = ?';
+    $params[] = $monthFilter;
+}
+if ($categoryFilter !== '') {
+    $where[] = 's.slug = ?';
+    $params[] = $categoryFilter;
+}
+$orderBy = match ($sort) {
+    'oldest' => 'COALESCE(p.published_at, p.updated_at) ASC',
+    'title' => 'p.title ASC',
+    default => 'COALESCE(p.published_at, p.updated_at) DESC',
+};
+$perPage = 18;
+$totalPosts = 0;
 try {
-    $stmt = db()->query('SELECT slug, title, excerpt, published_at, updated_at FROM news_posts WHERE status = "published" ORDER BY COALESCE(published_at, updated_at) DESC LIMIT 24');
-    $posts = $stmt->fetchAll();
+    $countSql = 'SELECT COUNT(*) FROM news_posts p LEFT JOIN news_sections s ON s.id = p.section_id WHERE ' . implode(' AND ', $where);
+    $countStmt = db()->prepare($countSql);
+    $countStmt->execute($params);
+    $totalPosts = (int) $countStmt->fetchColumn();
+} catch (Throwable) {
+    $totalPosts = 0;
+}
+$totalPages = max(1, (int) ceil($totalPosts / $perPage));
+if ($page > $totalPages) {
+    $page = $totalPages;
+}
+$offset = ($page - 1) * $perPage;
+
+try {
+    $sql = 'SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.slug AS section_slug, s.name AS section_name, m.callsign AS author_callsign
+        FROM news_posts p
+        LEFT JOIN news_sections s ON s.id = p.section_id
+        LEFT JOIN members m ON m.id = p.author_id
+        WHERE ' . implode(' AND ', $where) . '
+        ORDER BY ' . $orderBy . '
+        LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset;
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+    $posts = $stmt->fetchAll() ?: [];
 } catch (Throwable) {
     $posts = [];
 }
 
+$categories = [];
+try {
+    $categories = db()->query('SELECT s.slug, s.name, COUNT(p.id) AS total
+        FROM news_sections s
+        INNER JOIN news_posts p ON p.section_id = s.id AND p.status = "published"
+        GROUP BY s.id, s.slug, s.name
+        ORDER BY s.sort_order ASC, s.name ASC')->fetchAll() ?: [];
+} catch (Throwable) {
+    $categories = [];
+}
+
+$archives = [];
+try {
+    $archives = db()->query('SELECT DATE_FORMAT(COALESCE(published_at, updated_at), "%Y-%m") AS ym, COUNT(*) AS total
+        FROM news_posts
+        WHERE status = "published"
+        GROUP BY ym
+        ORDER BY ym DESC
+        LIMIT 18')->fetchAll() ?: [];
+} catch (Throwable) {
+    $archives = [];
+}
+
+$latestRaw = (string) (($posts[0]['published_at'] ?? $posts[0]['updated_at'] ?? ''));
+$latestDate = $latestRaw !== '' ? date('d/m/Y', strtotime($latestRaw)) : '—';
+$sections = [];
+foreach ($posts as $post) {
+    $section = trim((string) ($post['section_name'] ?? ''));
+    if ($section !== '') {
+        $sections[$section] = true;
+    }
+}
+$postsByCategory = [];
+foreach ($posts as $post) {
+    $sectionName = trim((string) ($post['section_name'] ?? ''));
+    $key = $sectionName !== '' ? $sectionName : 'Sans catégorie';
+    $postsByCategory[$key][] = $post;
+}
+
 ob_start();
 ?>
-<section class="card">
+<section class="card news-page-header">
     <h1>Actualités</h1>
-    <p class="help">Retrouvez les dernières informations du radio-club sous forme de cards.</p>
+    <p class="help">Suivez la vie du radio-club : annonces, compte-rendus, résultats et nouvelles techniques.</p>
+    <div class="stats-grid">
+        <article class="stat-card">
+            <span class="help">Articles publiés</span>
+            <strong><?= (int) count($posts) ?></strong>
+        </article>
+        <article class="stat-card">
+            <span class="help">Dernière publication</span>
+            <strong><?= e($latestDate) ?></strong>
+        </article>
+        <article class="stat-card">
+            <span class="help">Sections actives</span>
+            <strong><?= (int) count($sections) ?></strong>
+        </article>
+    </div>
+</section>
 
+<section class="card news-filters">
+    <h2>Rechercher et filtrer</h2>
+    <form method="get" class="inline-form">
+        <input type="hidden" name="route" value="news">
+        <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une actualité (titre, extrait, contenu)">
+        <input type="month" name="ym" value="<?= e($monthFilter) ?>">
+        <select name="category">
+            <option value="">Toutes les catégories</option>
+            <?php foreach ($categories as $category): ?>
+                <?php $slug = (string) ($category['slug'] ?? ''); ?>
+                <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e((string) ($category['name'] ?? 'Catégorie')) ?></option>
+            <?php endforeach; ?>
+        </select>
+        <select name="sort">
+            <option value="recent" <?= $sort === 'recent' ? 'selected' : '' ?>>Plus récentes</option>
+            <option value="oldest" <?= $sort === 'oldest' ? 'selected' : '' ?>>Plus anciennes</option>
+            <option value="title" <?= $sort === 'title' ? 'selected' : '' ?>>Titre (A→Z)</option>
+        </select>
+        <button class="button" type="submit">Filtrer</button>
+        <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
+            <a class="button secondary" href="<?= e(route_url('news')) ?>">Réinitialiser</a>
+        <?php endif; ?>
+    </form>
+    <?php if ($categories !== []): ?>
+        <div class="news-archives">
+            <?php foreach ($categories as $category): ?>
+                <?php $slug = (string) ($category['slug'] ?? ''); ?>
+                <a class="pill" href="<?= e(route_url('news', ['category' => $slug])) ?>"<?= $categoryFilter === $slug ? ' aria-current="page"' : '' ?>>
+                    <?= e((string) ($category['name'] ?? 'Catégorie')) ?> · <?= (int) ($category['total'] ?? 0) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($archives !== []): ?>
+        <div class="news-archives">
+            <?php foreach ($archives as $archive):
+                $ym = (string) ($archive['ym'] ?? '');
+                if (!preg_match('/^\d{4}-\d{2}$/', $ym)) {
+                    continue;
+                }
+                [$year, $month] = explode('-', $ym);
+                $label = $month . '/' . $year;
+                ?>
+                <a class="pill" href="<?= e(route_url('news', ['ym' => $ym])) ?>"<?= $monthFilter === $ym ? ' aria-current="page"' : '' ?>>
+                    <?= e($label) ?> · <?= (int) ($archive['total'] ?? 0) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
+
+<section class="card">
+    <h2>Publications par catégorie</h2>
     <?php if ($posts === []): ?>
         <p>Aucune actualité publiée pour le moment.</p>
     <?php else: ?>
-        <div class="news-grid">
-            <?php foreach ($posts as $post):
+        <?php foreach ($postsByCategory as $categoryName => $items): ?>
+            <h3><?= e((string) $categoryName) ?></h3>
+            <div class="news-grid">
+                <?php foreach ($items as $post):
                 $publishedAtRaw = (string) ($post['published_at'] ?? $post['updated_at'] ?? '');
                 $publishedAt = $publishedAtRaw !== '' ? date('d/m/Y', strtotime($publishedAtRaw)) : 'Date non définie';
                 $excerpt = trim((string) ($post['excerpt'] ?? ''));
@@ -33,15 +203,37 @@ ob_start();
                 }
                 ?>
                 <article class="news-card feature-card">
-                    <span class="badge">Actualité</span>
-                    <h2><?= e((string) $post['title']) ?></h2>
-                    <p class="help">Publié le <?= e($publishedAt) ?></p>
+                    <span class="badge muted"><?= e((string) ($post['section_name'] ?? 'Actualité')) ?></span>
+                    <h4><?= e((string) $post['title']) ?></h4>
+                    <p class="help">
+                        Publié le <?= e($publishedAt) ?>
+                        <?php if (trim((string) ($post['author_callsign'] ?? '')) !== ''): ?>
+                            · <?= e((string) $post['author_callsign']) ?>
+                        <?php endif; ?>
+                    </p>
                     <p><?= e($excerpt) ?></p>
                     <p><a class="button secondary" href="<?= e(route_url('news_view', ['slug' => (string) $post['slug']])) ?>">Lire l’actualité</a></p>
                 </article>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endforeach; ?>
     <?php endif; ?>
 </section>
+
+<?php if ($totalPosts > $perPage): ?>
+    <section class="card">
+        <div class="row-between">
+            <p class="help">Page <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= (int) $totalPosts ?> actualité<?= $totalPosts > 1 ? 's' : '' ?></p>
+            <p class="actions">
+                <?php if ($page > 1): ?>
+                    <a class="button secondary" href="<?= e(route_url('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page - 1])) ?>">← Précédent</a>
+                <?php endif; ?>
+                <?php if ($page < $totalPages): ?>
+                    <a class="button secondary" href="<?= e(route_url('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page + 1])) ?>">Suivant →</a>
+                <?php endif; ?>
+            </p>
+        </div>
+    </section>
+<?php endif; ?>
 <?php
 echo render_layout((string) ob_get_clean(), 'Actualités');

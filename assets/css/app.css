@@ -318,6 +318,39 @@ textarea { resize: vertical; }
 .avatar.member { width:108px; height:108px; }
 .directory-grid, .gallery-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
 .member-card, .gallery-item { background: var(--panel-2); border:1px solid var(--border); padding:1rem; border-radius:18px; }
+.directory-header,
+.directory-filters {
+  display: grid;
+  gap: .9rem;
+}
+.gallery-header {
+  display: grid;
+  gap: .9rem;
+}
+.gallery-header .inline-form {
+  flex-wrap: wrap;
+}
+.gallery-header .inline-form input[type="text"] {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+.directory-filters .inline-form {
+  flex-wrap: wrap;
+}
+.directory-filters .inline-form input[type="text"] {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+.directory-filters .inline-form select {
+  width: auto;
+  min-width: 220px;
+}
+.directory-card {
+  background: var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:1rem;
+}
 .gallery-item img { width:100%; height:180px; object-fit:cover; border-radius:14px; }
 .album-card { padding: 0; overflow: hidden; }
 .album-card-link { display: block; padding: 1rem; color: var(--text); height: 100%; }
@@ -346,6 +379,49 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .widget-profile { display:flex; align-items:center; gap:.9rem; }
 .news-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:1rem; }
 .news-card, .news-list-item { background: var(--panel-2); border:1px solid var(--border); border-radius:18px; padding:1rem; }
+.news-page-header {
+  display: grid;
+  gap: 1rem;
+}
+.news-filters {
+  display: grid;
+  gap: .8rem;
+}
+.news-filters .inline-form {
+  flex-wrap: wrap;
+}
+.news-filters .inline-form input[type="text"] {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+.news-filters .inline-form input[type="month"] {
+  width: auto;
+  min-width: 165px;
+}
+.news-filters .inline-form select {
+  width: auto;
+  min-width: 220px;
+}
+.news-archives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.wiki-header {
+  display: grid;
+  gap: .9rem;
+}
+.wiki-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.wiki-card {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1rem;
+}
 .badge { display:inline-block; padding:.28rem .7rem; border-radius:999px; background: var(--accent); color:#fff; font-size:.8rem; font-weight:700; margin-bottom:.6rem; }
 .badge.muted { background: var(--panel-2); color: var(--text); border:1px solid var(--border); }
 .inner-card { margin-top: 1rem; }
@@ -675,6 +751,17 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   flex-wrap: wrap;
   justify-content: flex-end;
 }
+.events-toolbar-actions .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8.6rem;
+  min-width: 8.6rem;
+  padding: .52rem .45rem;
+  font-size: 1.08rem;
+  line-height: 1;
+  text-align: center;
+}
 .fullcalendar-theme {
   margin-top: .75rem;
 }
@@ -702,17 +789,18 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   font-size: 1.1rem;
 }
 .fullcalendar-theme .fc .fc-button-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  color: #fff !important;
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
 }
 .fullcalendar-theme .fc .fc-button-primary:not(:disabled):hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
+  background: var(--accent-strong) !important;
+  border-color: var(--accent-strong) !important;
 }
 .fullcalendar-theme .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fullcalendar-theme .fc .fc-button-primary:not(:disabled):active {
-  background: color-mix(in srgb, var(--accent-strong) 88%, black 12%);
-  border-color: color-mix(in srgb, var(--accent-strong) 88%, black 12%);
+  background: color-mix(in srgb, var(--accent-strong) 88%, black 12%) !important;
+  border-color: color-mix(in srgb, var(--accent-strong) 88%, black 12%) !important;
 }
 .fullcalendar-theme .fc .fc-button-primary:disabled {
   opacity: .6;
