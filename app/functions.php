@@ -491,7 +491,7 @@ function render_layout(string $content, string $title = ''): string
             . '<button type="submit" class="button secondary small">Déconnexion</button>'
             . '</form>';
     } else {
-        $authHtml = '<a class="button small" href="' . e(route_url('login')) . '">Connexion</a>';
+        $authHtml = '<a class="button small toolbar-login-button" href="' . e(route_url('login')) . '">Connexion</a>';
     }
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
