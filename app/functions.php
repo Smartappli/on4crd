@@ -462,26 +462,43 @@ function render_layout(string $content, string $title = ''): string
         $flashHtml .= '<div class="flash flash-' . e($type) . '">' . $message . '</div>';
     }
 
-    $navItems = [
+    $navPrimaryItems = [
         ['label' => 'Accueil', 'route' => 'home', 'module' => ''],
         ['label' => 'Actualités', 'route' => 'news', 'module' => 'news'],
-        ['label' => 'Articles', 'route' => 'articles', 'module' => 'articles'],
-        ['label' => 'Wiki', 'route' => 'wiki', 'module' => 'wiki'],
+        ['label' => 'Boutique', 'route' => 'shop', 'module' => 'shop'],
         ['label' => 'Événements', 'route' => 'events', 'module' => 'events'],
         ['label' => 'Annuaire', 'route' => 'directory', 'module' => 'directory'],
     ];
+    $navMemberItems = [
+        ['label' => 'Wiki', 'route' => 'wiki', 'module' => 'wiki'],
+        ['label' => 'Galerie', 'route' => 'albums', 'module' => 'albums'],
+        ['label' => 'Articles', 'route' => 'articles', 'module' => 'articles'],
+        ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
+        ['label' => 'Enchères', 'route' => 'auctions', 'module' => 'auctions'],
+    ];
 
-    $navHtml = '';
-    foreach ($navItems as $item) {
-        $module = (string) ($item['module'] ?? '');
-        if ($module !== '' && !module_enabled($module)) {
-            continue;
+    $buildNavLinks = static function (array $items, string $currentRoute): string {
+        $links = '';
+        foreach ($items as $item) {
+            $module = (string) ($item['module'] ?? '');
+            if ($module !== '' && !module_enabled($module)) {
+                continue;
+            }
+
+            $route = (string) $item['route'];
+            $isCurrent = $currentRoute === $route || ($currentRoute === '' && $route === 'home');
+            $links .= '<a class="transition-colors duration-200" href="' . e(route_url($route)) . '"' . ($isCurrent ? ' aria-current="page"' : '') . '>'
+                . e((string) $item['label']) . '</a>';
         }
 
-        $route = (string) $item['route'];
-        $isCurrent = $currentRoute === $route || ($currentRoute === '' && $route === 'home');
-        $navHtml .= '<a class="transition-colors duration-200" href="' . e(route_url($route)) . '"' . ($isCurrent ? ' aria-current="page"' : '') . '>'
-            . e((string) $item['label']) . '</a>';
+        return $links;
+    };
+    $navHtml = '<div class="nav-row nav-row-primary">' . $buildNavLinks($navPrimaryItems, $currentRoute) . '</div>';
+    if ($user !== null) {
+        $memberLinks = $buildNavLinks($navMemberItems, $currentRoute);
+        if ($memberLinks !== '') {
+            $navHtml .= '<div class="nav-row nav-row-member">' . $memberLinks . '</div>';
+        }
     }
 
     $authHtml = '';

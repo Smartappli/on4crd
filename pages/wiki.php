@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 if (!table_exists('wiki_pages')) {
-    echo render_layout('<div class="card"><h1>Wiki technique</h1><p>Le wiki sera disponible après initialisation des pages.</p></div>', 'Wiki');
+    echo render_layout('<div class="card"><h1>Wiki</h1><p>Le wiki sera disponible après initialisation des pages.</p></div>', 'Wiki');
     return;
 }
 
@@ -26,29 +26,20 @@ try {
     $rows = [];
 }
 
-$latestUpdate = $rows !== [] ? (string) ($rows[0]['updated_at'] ?? '') : '';
-$latestUpdateLabel = $latestUpdate !== '' ? date('d/m/Y H:i', strtotime($latestUpdate)) : '—';
-
 ob_start();
 ?>
 <section class="card wiki-header">
-    <div class="row-between">
-        <h1>Wiki technique</h1>
-        <?php if (has_permission('wiki.edit')): ?>
-            <a class="button small" href="<?= e(base_url('index.php?route=wiki_edit')) ?>">Nouvelle page</a>
-        <?php endif; ?>
-    </div>
-    <p class="help">Base de connaissances du radio-club : procédures, fiches techniques, guides terrain et documentation opérationnelle.</p>
     <div class="stats-grid">
         <article class="stat-card">
-            <span class="help">Pages indexées</span>
-            <strong><?= (int) count($rows) ?></strong>
+            <strong>Nouvelles pages</strong>
         </article>
         <article class="stat-card">
-            <span class="help">Dernière mise à jour</span>
-            <strong><?= e($latestUpdateLabel) ?></strong>
+            <strong>Pages modifiées</strong>
         </article>
     </div>
+    <?php if (has_permission('wiki.edit')): ?>
+        <p><a class="button small" href="<?= e(base_url('index.php?route=wiki_edit')) ?>">Nouvelle page</a></p>
+    <?php endif; ?>
     <form method="get" class="inline-form">
         <input type="hidden" name="route" value="wiki">
         <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une page (titre ou contenu)">
