@@ -155,7 +155,7 @@ if (is_array($featuredAd) && !empty($featuredAd['title'])) {
 }
 
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
-    . '<article class="home-hero-card relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
+    . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
     . '<img class="absolute inset-0 -z-20 h-full w-full object-cover" src="' . e($heroBackgroundUrl) . '" alt="Illustration ON4CRD" loading="eager" decoding="async">'
     . '<span class="hidden rounded-full bg-blue-600 px-3 py-1 text-[1.1rem] font-semibold uppercase tracking-wide text-white sm:inline-flex">ON4CRD · Connecter, expérimenter, partager</span>'
     . $heroIntro
