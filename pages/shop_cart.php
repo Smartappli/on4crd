@@ -59,7 +59,7 @@ ob_start();
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="update">
                                     <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
-                                    <input type="number" name="quantity" value="<?= (int) $item['quantity'] ?>" min="1" max="<?= e((string) max(1, (int) ($product['stock_qty'] ?? 99))) ?>">
+                                    <input type="number" name="quantity" value="<?= (int) $item['quantity'] ?>" min="1" <?= $product['stock_qty'] !== null ? "max=\"" . e((string) max(0, (int) $product['stock_qty'])) . "\"" : "" ?>>
                                     <button class="ghost">Mettre à jour</button>
                                 </form>
                             </td>

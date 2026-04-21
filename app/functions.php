@@ -1407,6 +1407,219 @@ function validate_remote_feed_url(string $url): ?string
     return $normalized;
 }
 
+function shop_status_label(string $status): string
+{
+    return match (trim($status)) {
+        'draft' => 'Brouillon',
+        'published' => 'Publié',
+        'archived' => 'Archivé',
+        default => 'Inconnu',
+    };
+}
+
+function shop_order_status_label(string $status): string
+{
+    return match (trim($status)) {
+        'pending' => 'En attente',
+        'confirmed' => 'Confirmée',
+        'ready' => 'Prête',
+        'completed' => 'Terminée',
+        'cancelled' => 'Annulée',
+        default => 'Inconnu',
+    };
+}
+
+function shop_categories(): array
+{
+    if (!table_exists('shop_categories')) {
+        return [];
+    }
+
+    $stmt = db()->query('SELECT id, slug, name, description, sort_order, is_active FROM shop_categories WHERE is_active = 1 ORDER BY sort_order ASC, name ASC, id ASC');
+    return $stmt->fetchAll();
+}
+
+function shop_public_products(?string $category = null): array
+{
+    if (!table_exists('shop_products')) {
+        return [];
+    }
+
+    $sql = 'SELECT p.*, c.name AS category_name, c.slug AS category_slug
+            FROM shop_products p
+            LEFT JOIN shop_categories c ON c.id = p.category_id
+            WHERE p.status = "published"';
+    $params = [];
+
+    $normalizedCategory = trim((string) $category);
+    if ($normalizedCategory !== '') {
+        $sql .= ' AND c.slug = ? AND c.is_active = 1';
+        $params[] = $normalizedCategory;
+    }
+
+    $sql .= ' ORDER BY p.is_featured DESC, p.updated_at DESC, p.id DESC';
+
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+
+    return $stmt->fetchAll();
+}
+
+function shop_product_by_slug(string $slug): ?array
+{
+    if (!table_exists('shop_products')) {
+        return null;
+    }
+
+    $stmt = db()->prepare(
+        'SELECT p.*, c.name AS category_name, c.slug AS category_slug
+         FROM shop_products p
+         LEFT JOIN shop_categories c ON c.id = p.category_id
+         WHERE p.slug = ?
+         LIMIT 1'
+    );
+    $stmt->execute([trim($slug)]);
+    $row = $stmt->fetch();
+
+    return $row ?: null;
+}
+
+function shop_cart_raw(): array
+{
+    $cart = $_SESSION['shop_cart'] ?? [];
+    if (!is_array($cart)) {
+        return [];
+    }
+
+    $normalized = [];
+    foreach ($cart as $productId => $quantity) {
+        $id = (int) $productId;
+        $qty = (int) $quantity;
+        if ($id > 0 && $qty > 0) {
+            $normalized[$id] = $qty;
+        }
+    }
+
+    return $normalized;
+}
+
+function shop_cart_save(array $cart): void
+{
+    if ($cart === []) {
+        unset($_SESSION['shop_cart']);
+        return;
+    }
+
+    $_SESSION['shop_cart'] = $cart;
+}
+
+function shop_cart_state(): array
+{
+    $raw = shop_cart_raw();
+    if ($raw === [] || !table_exists('shop_products')) {
+        if ($raw === []) {
+            return ['items' => [], 'total_cents' => 0];
+        }
+        shop_cart_clear();
+
+        return ['items' => [], 'total_cents' => 0];
+    }
+
+    $ids = array_keys($raw);
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    $stmt = db()->prepare(
+        'SELECT id, slug, title, summary, price_cents, stock_qty, status
+         FROM shop_products
+         WHERE id IN (' . $placeholders . ')'
+    );
+    $stmt->execute($ids);
+
+    $productsById = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $productsById[(int) $row['id']] = $row;
+    }
+
+    $items = [];
+    $total = 0;
+    $updatedCart = [];
+
+    foreach ($raw as $productId => $quantity) {
+        $product = $productsById[$productId] ?? null;
+        if (!is_array($product) || (string) ($product['status'] ?? '') !== 'published') {
+            continue;
+        }
+
+        $maxQty = $product['stock_qty'] !== null ? (int) $product['stock_qty'] : null;
+        $finalQty = $maxQty !== null ? min($quantity, max(0, $maxQty)) : $quantity;
+        if ($finalQty <= 0) {
+            continue;
+        }
+
+        $lineTotal = $finalQty * (int) $product['price_cents'];
+        $items[] = [
+            'product' => $product,
+            'quantity' => $finalQty,
+            'line_total_cents' => $lineTotal,
+        ];
+        $total += $lineTotal;
+        $updatedCart[$productId] = $finalQty;
+    }
+
+    if ($updatedCart !== $raw) {
+        shop_cart_save($updatedCart);
+    }
+
+    return [
+        'items' => $items,
+        'total_cents' => $total,
+    ];
+}
+
+function shop_cart_add(int $productId, int $quantity = 1): void
+{
+    if ($productId <= 0) {
+        throw new RuntimeException('Produit invalide.');
+    }
+
+    $cart = shop_cart_raw();
+    $cart[$productId] = max(1, (int) ($cart[$productId] ?? 0) + max(1, $quantity));
+    shop_cart_save($cart);
+    shop_cart_state();
+}
+
+function shop_cart_update(int $productId, int $quantity): void
+{
+    if ($productId <= 0) {
+        throw new RuntimeException('Produit invalide.');
+    }
+
+    $cart = shop_cart_raw();
+    if ($quantity <= 0) {
+        unset($cart[$productId]);
+    } else {
+        $cart[$productId] = $quantity;
+    }
+
+    shop_cart_save($cart);
+    shop_cart_state();
+}
+
+function shop_cart_remove(int $productId): void
+{
+    if ($productId <= 0) {
+        return;
+    }
+
+    $cart = shop_cart_raw();
+    unset($cart[$productId]);
+    shop_cart_save($cart);
+}
+
+function shop_cart_clear(): void
+{
+    unset($_SESSION['shop_cart']);
+}
+
 function place_shop_order(int $memberId, string $paymentMethod, string $notes = ''): string
 {
     if (!table_exists('shop_orders') || !table_exists('shop_order_items')) {
