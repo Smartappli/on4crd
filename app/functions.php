@@ -515,9 +515,9 @@ function render_layout(string $content, string $title = ''): string
         'violet' => '🟣',
         'red' => '🔴',
         'amber' => '🟡',
-        'teal' => '🟤',
-        'indigo' => '⚫',
-        'pink' => '⚪',
+        'teal' => '🟢',
+        'indigo' => '🟣',
+        'pink' => '🔴',
     ];
     $languageOptionHtml = '';
     foreach ($languageOptions as $localeCode => $localeConfig) {
