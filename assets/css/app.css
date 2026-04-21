@@ -169,6 +169,15 @@ textarea:focus-visible {
   align-items: center;
   gap: .45rem;
 }
+.toolbar-login-button {
+  width: 8.6rem;
+  min-width: 8.6rem;
+  padding: .52rem .45rem;
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+}
 .toolbar-preferences .toolbar-form,
 .toolbar-preferences .inline-form { margin: 0; }
 .preference-select {
