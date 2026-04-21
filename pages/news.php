@@ -188,6 +188,6 @@ ob_start();
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
-</section>
+<?php endif; ?>
 <?php
 echo render_layout((string) ob_get_clean(), 'Actualités');
