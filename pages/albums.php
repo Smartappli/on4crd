@@ -1,27 +1,76 @@
 <?php
 declare(strict_types=1);
 
-$rows = db()->query(
+if (!table_exists('albums') || !table_exists('album_photos')) {
+    echo render_layout('<div class="card"><h1>Albums publics</h1><p>La galerie sera disponible après initialisation.</p></div>', 'Albums');
+    return;
+}
+
+$search = trim((string) ($_GET['q'] ?? ''));
+if (mb_strlen($search) > 100) {
+    $search = mb_substr($search, 0, 100);
+}
+
+$params = [];
+$where = 'a.is_public = 1';
+if ($search !== '') {
+    $where .= ' AND (a.title LIKE ? OR a.description LIKE ?)';
+    $like = '%' . $search . '%';
+    $params[] = $like;
+    $params[] = $like;
+}
+
+$stmt = db()->prepare(
     'SELECT a.*, 
         (SELECT COUNT(*) FROM album_photos p WHERE p.album_id = a.id) AS photo_count,
         (SELECT p.file_path FROM album_photos p WHERE p.album_id = a.id ORDER BY p.id DESC LIMIT 1) AS cover_path
      FROM albums a
-     WHERE a.is_public = 1
-     ORDER BY a.id DESC'
-)->fetchAll();
+     WHERE ' . $where . '
+     ORDER BY a.id DESC
+     LIMIT 120'
+);
+$stmt->execute($params);
+$rows = $stmt->fetchAll() ?: [];
+
+$photoTotal = 0;
+foreach ($rows as $row) {
+    $photoTotal += (int) ($row['photo_count'] ?? 0);
+}
 
 ob_start();
 ?>
-<div class="card">
+<section class="card gallery-header">
     <div class="row-between">
         <h1>Albums publics</h1>
         <?php if (has_permission('albums.manage')): ?>
             <a class="button small" href="<?= e(base_url('index.php?route=admin_albums')) ?>">Gérer</a>
         <?php endif; ?>
     </div>
+    <p class="help">Explorez les activités du club en images : ateliers, sorties, contests et moments de vie associative.</p>
+    <div class="stats-grid">
+        <article class="stat-card">
+            <span class="help">Albums</span>
+            <strong><?= (int) count($rows) ?></strong>
+        </article>
+        <article class="stat-card">
+            <span class="help">Photos indexées</span>
+            <strong><?= (int) $photoTotal ?></strong>
+        </article>
+    </div>
+    <form method="get" class="inline-form">
+        <input type="hidden" name="route" value="albums">
+        <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher un album (titre, description)">
+        <button class="button" type="submit">Rechercher</button>
+        <?php if ($search !== ''): ?>
+            <a class="button secondary" href="<?= e(route_url('albums')) ?>">Réinitialiser</a>
+        <?php endif; ?>
+    </form>
+</section>
 
+<section class="card">
+    <h2>Galerie</h2>
     <?php if ($rows === []): ?>
-        <p class="help">Aucun album public disponible pour le moment.</p>
+        <p class="help">Aucun album public disponible<?= $search !== '' ? ' pour cette recherche' : '' ?>.</p>
     <?php else: ?>
         <div class="gallery-grid">
             <?php foreach ($rows as $row):
@@ -43,6 +92,6 @@ ob_start();
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
-</div>
+</section>
 <?php
 echo render_layout((string) ob_get_clean(), 'Albums');
