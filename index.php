@@ -70,7 +70,7 @@ if ($route === 'set_accent') {
     if ($accent === 'rose') {
         $accent = 'red';
     }
-    $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber'];
+    $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber', 'orange'];
     if (!in_array($accent, $supportedAccents, true)) {
         $accent = 'blue';
     }
