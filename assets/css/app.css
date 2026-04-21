@@ -629,3 +629,113 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
     grid-template-columns: 1fr;
   }
 }
+
+.events-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(280px, .95fr);
+  gap: 1rem;
+  align-items: start;
+}
+.events-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.events-toolbar-actions {
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.events-current-month {
+  margin: .5rem 0 1rem;
+  text-transform: capitalize;
+}
+.events-calendar-head,
+.events-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: .5rem;
+}
+.events-calendar-head {
+  margin-bottom: .5rem;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 700;
+}
+.events-day {
+  border: 1px solid var(--border);
+  background: var(--panel-3);
+  border-radius: 14px;
+  padding: .5rem;
+  min-height: 125px;
+}
+.events-day.is-outside {
+  opacity: .6;
+}
+.events-day header {
+  font-weight: 700;
+  margin-bottom: .35rem;
+}
+.events-day-list {
+  display: grid;
+  gap: .35rem;
+}
+.event-chip {
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+  color: var(--text);
+  border-radius: 10px;
+  font-size: .78rem;
+  line-height: 1.25;
+  text-align: left;
+  padding: .35rem .45rem;
+  cursor: pointer;
+}
+.events-detail-card h3 {
+  margin: .25rem 0;
+}
+.events-detail-card dl,
+.events-single-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .25rem .7rem;
+}
+.events-detail-card dt,
+.events-single-meta dt {
+  color: var(--muted);
+  font-weight: 600;
+}
+.events-detail-actions {
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+.is-hidden {
+  display: none !important;
+}
+.events-single-card {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.events-single-description {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 960px) {
+  .events-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .events-calendar-head,
+  .events-calendar-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .events-day {
+    min-height: 0;
+  }
+}
