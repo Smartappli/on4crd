@@ -277,6 +277,17 @@ textarea:focus-visible {
   aspect-ratio: 16 / 9;
   min-height: clamp(20rem, 48vw, 34rem);
 }
+.home-hero-media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -20;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  border-radius: inherit;
+}
 
 .hero-panel {
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
