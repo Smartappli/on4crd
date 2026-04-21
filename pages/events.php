@@ -149,21 +149,17 @@ ob_start();
 <section class="events-layout">
     <article class="card events-calendar-card">
         <header class="events-toolbar">
-            <div>
-                <h1>Événements</h1>
-                <p class="help">Calendrier interactif (mois, semaine, liste) avec export iCalendar (.ics).</p>
-            </div>
             <div class="events-toolbar-actions">
                 <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter ICS</a>
             </div>
         </header>
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
-        <div id="events-calendar"></div>
+        <div id="events-calendar" class="fullcalendar-theme"></div>
         <script type="application/json" id="events-calendar-data"><?= e(json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]') ?></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/fr.global.min.js"></script>
-        <script>
+        <script nonce="<?= e(csp_nonce()) ?>">
             (() => {
                 const calendarEl = document.getElementById('events-calendar');
                 const dataEl = document.getElementById('events-calendar-data');
