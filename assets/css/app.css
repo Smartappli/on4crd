@@ -520,6 +520,11 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 @media (max-width: 640px) {
   .container, .footer-inner { padding: 1rem; }
   .topbar { padding: .85rem 1rem; }
+  .home-hero-card {
+    aspect-ratio: 4 / 3;
+    min-height: clamp(14rem, 85vw, 20rem);
+    padding: 1.1rem;
+  }
   .toolbar { width: 100%; }
   .toolbar-preferences {
     width: 100%;
