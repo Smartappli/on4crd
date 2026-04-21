@@ -346,6 +346,19 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .widget-profile { display:flex; align-items:center; gap:.9rem; }
 .news-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:1rem; }
 .news-card, .news-list-item { background: var(--panel-2); border:1px solid var(--border); border-radius:18px; padding:1rem; }
+.news-page-header {
+  display: grid;
+  gap: 1rem;
+}
+.news-featured {
+  background: linear-gradient(130deg, color-mix(in srgb, var(--accent) 12%, var(--panel)) 0%, var(--panel) 65%);
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
+}
+.news-featured h2 {
+  margin-top: .3rem;
+  margin-bottom: .35rem;
+  font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+}
 .badge { display:inline-block; padding:.28rem .7rem; border-radius:999px; background: var(--accent); color:#fff; font-size:.8rem; font-weight:700; margin-bottom:.6rem; }
 .badge.muted { background: var(--panel-2); color: var(--text); border:1px solid var(--border); }
 .inner-card { margin-top: 1rem; }
