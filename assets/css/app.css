@@ -274,18 +274,22 @@ textarea:focus-visible {
 .hero-lead { font-size: 1.05rem; color: var(--muted); max-width: 65ch; }
 
 .home-hero-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   aspect-ratio: 16 / 9;
   min-height: clamp(20rem, 48vw, 34rem);
 }
 .home-hero-media {
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -20;
+  inset: 0;
+  z-index: -1;
   display: block;
   width: 100%;
-  height: auto;
-  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
   border-radius: inherit;
 }
 
