@@ -120,7 +120,7 @@ ob_start();
             <h3>Vue calendrier (FullCalendar)</h3>
             <p class="help">Cliquez sur un événement pour ouvrir son édition.</p>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
-            <div id="admin-events-calendar"></div>
+            <div id="admin-events-calendar" class="fullcalendar-theme"></div>
             <script type="application/json" id="admin-events-calendar-data"><?= e(json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]') ?></script>
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/fr.global.min.js"></script>
