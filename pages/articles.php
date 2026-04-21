@@ -63,7 +63,6 @@ ob_start();
             <a class="button small" href="<?= e(base_url('index.php?route=admin_articles')) ?>">Gérer</a>
         <?php endif; ?>
     </div>
-    <p class="help">Les articles sont écrits en français. Les autres langues sont générées automatiquement à partir de cette version source.</p>
     <div class="pill-row">
         <?php foreach ($themeLabels as $themeCode => $themeLabel): ?>
             <a class="pill" href="<?= e(route_url('articles', ['theme' => $themeCode])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
