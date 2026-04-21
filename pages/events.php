@@ -79,6 +79,10 @@ $monthRaw = (string) ($_GET['ym'] ?? date('Y-m'));
 if (!preg_match('/^\d{4}-\d{2}$/', $monthRaw)) {
     $monthRaw = date('Y-m');
 }
+/** @var 'month'|'week'|'list' $view */
+$view = in_array((string) ($_GET['view'] ?? 'month'), ['month', 'week', 'list'], true)
+    ? (string) $_GET['view']
+    : 'month';
 
 $monthDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $monthRaw . '-01 00:00:00');
 if (!$monthDate instanceof DateTimeImmutable) {
@@ -87,7 +91,19 @@ if (!$monthDate instanceof DateTimeImmutable) {
 
 $calendarStart = $monthDate->modify('monday this week');
 $calendarEnd = $monthDate->modify('last day of this month')->modify('sunday this week');
-$period = new DatePeriod($calendarStart, new DateInterval('P1D'), $calendarEnd->modify('+1 day'));
+$monthPeriod = new DatePeriod($calendarStart, new DateInterval('P1D'), $calendarEnd->modify('+1 day'));
+
+$weekRaw = (string) ($_GET['week'] ?? date('Y-m-d'));
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $weekRaw)) {
+    $weekRaw = date('Y-m-d');
+}
+$weekDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $weekRaw . ' 00:00:00');
+if (!$weekDate instanceof DateTimeImmutable) {
+    $weekDate = new DateTimeImmutable('today');
+}
+$weekStart = $weekDate->modify('monday this week');
+$weekEnd = $weekStart->modify('+6 days');
+$weekPeriod = new DatePeriod($weekStart, new DateInterval('P1D'), $weekEnd->modify('+1 day'));
 
 $eventsByDay = [];
 $eventCards = [];
@@ -117,8 +133,18 @@ $defaultEvent = $eventCards !== [] ? reset($eventCards) : null;
 
 $prevMonth = $monthDate->modify('-1 month')->format('Y-m');
 $nextMonth = $monthDate->modify('+1 month')->format('Y-m');
+$prevWeek = $weekStart->modify('-7 days')->format('Y-m-d');
+$nextWeek = $weekStart->modify('+7 days')->format('Y-m-d');
 $monthNames = [1 => 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 $monthLabel = ($monthNames[(int) $monthDate->format('n')] ?? $monthDate->format('F')) . ' ' . $monthDate->format('Y');
+$weekStartMonthLabel = $monthNames[(int) $weekStart->format('n')] ?? $weekStart->format('F');
+$weekEndMonthLabel = $monthNames[(int) $weekEnd->format('n')] ?? $weekEnd->format('F');
+$weekLabel = sprintf(
+    'Semaine du %s au %s %s',
+    $weekStart->format('d') . ' ' . $weekStartMonthLabel,
+    $weekEnd->format('d') . ' ' . $weekEndMonthLabel,
+    $weekEnd->format('Y')
+);
 
 ob_start();
 ?>
@@ -130,54 +156,131 @@ ob_start();
                 <p class="help">Calendrier du club avec export iCalendar (.ics).</p>
             </div>
             <div class="events-toolbar-actions">
-                <a class="button secondary" href="<?= e(route_url('events', ['ym' => $prevMonth])) ?>">← Mois précédent</a>
-                <a class="button secondary" href="<?= e(route_url('events', ['ym' => $nextMonth])) ?>">Mois suivant →</a>
+                <a class="button secondary <?= $view === 'month' ? 'is-active' : '' ?>" href="<?= e(route_url('events', ['view' => 'month', 'ym' => $monthDate->format('Y-m')])) ?>">Mois</a>
+                <a class="button secondary <?= $view === 'week' ? 'is-active' : '' ?>" href="<?= e(route_url('events', ['view' => 'week', 'week' => $weekStart->format('Y-m-d')])) ?>">Semaine</a>
+                <a class="button secondary <?= $view === 'list' ? 'is-active' : '' ?>" href="<?= e(route_url('events', ['view' => 'list'])) ?>">Liste</a>
+                <?php if ($view === 'month'): ?>
+                    <a class="button secondary" href="<?= e(route_url('events', ['view' => 'month', 'ym' => $prevMonth])) ?>">← Mois précédent</a>
+                    <a class="button secondary" href="<?= e(route_url('events', ['view' => 'month', 'ym' => $nextMonth])) ?>">Mois suivant →</a>
+                <?php elseif ($view === 'week'): ?>
+                    <a class="button secondary" href="<?= e(route_url('events', ['view' => 'week', 'week' => $prevWeek])) ?>">← Semaine précédente</a>
+                    <a class="button secondary" href="<?= e(route_url('events', ['view' => 'week', 'week' => $nextWeek])) ?>">Semaine suivante →</a>
+                <?php endif; ?>
                 <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter ICS</a>
             </div>
         </header>
 
-        <h2 class="events-current-month"><?= e($monthLabel) ?></h2>
+        <?php if ($view === 'month'): ?>
+            <h2 class="events-current-month"><?= e($monthLabel) ?></h2>
 
-        <div class="events-calendar-head" aria-hidden="true">
-            <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
-        </div>
-        <div class="events-calendar-grid">
-            <?php foreach ($period as $day):
-                $dayKey = $day->format('Y-m-d');
-                $inMonth = $day->format('m') === $monthDate->format('m');
-                $dayEvents = $eventsByDay[$dayKey] ?? [];
-                ?>
-                <section class="events-day <?= $inMonth ? '' : 'is-outside' ?>">
-                    <header>
-                        <time datetime="<?= e($dayKey) ?>"><?= e($day->format('d')) ?></time>
-                    </header>
-                    <div class="events-day-list">
-                        <?php foreach ($dayEvents as $event):
-                            $eventId = (int) $event['id'];
-                            $eventData = $eventCards[$eventId] ?? null;
-                            if (!is_array($eventData)) {
-                                continue;
-                            }
-                            ?>
-                            <button
-                                type="button"
-                                class="event-chip"
-                                data-event-id="<?= $eventId ?>"
-                                data-title="<?= e($eventData['title']) ?>"
-                                data-summary="<?= e($eventData['summary']) ?>"
-                                data-start="<?= e($eventData['startLabel']) ?>"
-                                data-end="<?= e($eventData['endLabel']) ?>"
-                                data-location="<?= e($eventData['location']) ?>"
-                                data-detail-url="<?= e($eventData['detailUrl']) ?>"
-                                data-external-url="<?= e($eventData['externalUrl']) ?>"
-                            >
-                                <?= e($eventData['startLabel']) ?> · <?= e($eventData['title']) ?>
-                            </button>
-                        <?php endforeach; ?>
-                    </div>
-                </section>
-            <?php endforeach; ?>
-        </div>
+            <div class="events-calendar-head" aria-hidden="true">
+                <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+            </div>
+            <div class="events-calendar-grid">
+                <?php foreach ($monthPeriod as $day):
+                    $dayKey = $day->format('Y-m-d');
+                    $inMonth = $day->format('m') === $monthDate->format('m');
+                    $dayEvents = $eventsByDay[$dayKey] ?? [];
+                    ?>
+                    <section class="events-day <?= $inMonth ? '' : 'is-outside' ?>">
+                        <header>
+                            <time datetime="<?= e($dayKey) ?>"><?= e($day->format('d')) ?></time>
+                        </header>
+                        <div class="events-day-list">
+                            <?php foreach ($dayEvents as $event):
+                                $eventId = (int) $event['id'];
+                                $eventData = $eventCards[$eventId] ?? null;
+                                if (!is_array($eventData)) {
+                                    continue;
+                                }
+                                ?>
+                                <button
+                                    type="button"
+                                    class="event-chip"
+                                    data-event-id="<?= $eventId ?>"
+                                    data-title="<?= e($eventData['title']) ?>"
+                                    data-summary="<?= e($eventData['summary']) ?>"
+                                    data-start="<?= e($eventData['startLabel']) ?>"
+                                    data-end="<?= e($eventData['endLabel']) ?>"
+                                    data-location="<?= e($eventData['location']) ?>"
+                                    data-detail-url="<?= e($eventData['detailUrl']) ?>"
+                                    data-external-url="<?= e($eventData['externalUrl']) ?>"
+                                >
+                                    <?= e($eventData['startLabel']) ?> · <?= e($eventData['title']) ?>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+                <?php endforeach; ?>
+            </div>
+        <?php elseif ($view === 'week'): ?>
+            <h2 class="events-current-month"><?= e($weekLabel) ?></h2>
+            <div class="events-calendar-head" aria-hidden="true">
+                <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+            </div>
+            <div class="events-calendar-grid events-calendar-grid-week">
+                <?php foreach ($weekPeriod as $day):
+                    $dayKey = $day->format('Y-m-d');
+                    $dayEvents = $eventsByDay[$dayKey] ?? [];
+                    ?>
+                    <section class="events-day">
+                        <header>
+                            <time datetime="<?= e($dayKey) ?>"><?= e($day->format('d/m')) ?></time>
+                        </header>
+                        <div class="events-day-list">
+                            <?php foreach ($dayEvents as $event):
+                                $eventId = (int) $event['id'];
+                                $eventData = $eventCards[$eventId] ?? null;
+                                if (!is_array($eventData)) {
+                                    continue;
+                                }
+                                ?>
+                                <button
+                                    type="button"
+                                    class="event-chip"
+                                    data-event-id="<?= $eventId ?>"
+                                    data-title="<?= e($eventData['title']) ?>"
+                                    data-summary="<?= e($eventData['summary']) ?>"
+                                    data-start="<?= e($eventData['startLabel']) ?>"
+                                    data-end="<?= e($eventData['endLabel']) ?>"
+                                    data-location="<?= e($eventData['location']) ?>"
+                                    data-detail-url="<?= e($eventData['detailUrl']) ?>"
+                                    data-external-url="<?= e($eventData['externalUrl']) ?>"
+                                >
+                                    <?= e($eventData['startLabel']) ?> · <?= e($eventData['title']) ?>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <h2 class="events-current-month">Liste des événements</h2>
+            <div class="events-list-view">
+                <?php if ($eventCards === []): ?>
+                    <p>Aucun événement publié pour le moment.</p>
+                <?php else: ?>
+                    <?php foreach ($eventCards as $eventData): ?>
+                        <button
+                            type="button"
+                            class="event-chip event-chip-list"
+                            data-event-id="<?= (int) $eventData['id'] ?>"
+                            data-title="<?= e($eventData['title']) ?>"
+                            data-summary="<?= e($eventData['summary']) ?>"
+                            data-start="<?= e($eventData['startLabel']) ?>"
+                            data-end="<?= e($eventData['endLabel']) ?>"
+                            data-location="<?= e($eventData['location']) ?>"
+                            data-detail-url="<?= e($eventData['detailUrl']) ?>"
+                            data-external-url="<?= e($eventData['externalUrl']) ?>"
+                        >
+                            <strong><?= e($eventData['title']) ?></strong>
+                            <span><?= e($eventData['startLabel']) ?> → <?= e($eventData['endLabel']) ?></span>
+                            <?php if ($eventData['location'] !== ''): ?><span><?= e($eventData['location']) ?></span><?php endif; ?>
+                        </button>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     </article>
 
     <aside class="card events-detail-card" id="event-detail">

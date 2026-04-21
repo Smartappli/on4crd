@@ -675,6 +675,11 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   flex-wrap: wrap;
   justify-content: flex-end;
 }
+.events-toolbar-actions .button.is-active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
 .events-current-month {
   margin: .5rem 0 1rem;
   text-transform: capitalize;
@@ -719,6 +724,19 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   text-align: left;
   padding: .35rem .45rem;
   cursor: pointer;
+}
+.event-chip-list {
+  display: grid;
+  gap: .2rem;
+  padding: .65rem .75rem;
+}
+.event-chip-list span {
+  color: var(--muted);
+  font-size: .85rem;
+}
+.events-list-view {
+  display: grid;
+  gap: .6rem;
 }
 .events-detail-card h3 {
   margin: .25rem 0;
