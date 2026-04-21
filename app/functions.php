@@ -444,6 +444,12 @@ function render_layout(string $content, string $title = ''): string
         'violet' => ['color' => '#7c3aed', 'strong' => '#6d28d9', 'label' => 'Violet'],
         'red' => ['color' => '#dc2626', 'strong' => '#b91c1c', 'label' => 'Rouge'],
         'amber' => ['color' => '#d97706', 'strong' => '#b45309', 'label' => 'Ambre'],
+        'teal' => ['color' => '#0f766e', 'strong' => '#115e59', 'label' => 'Turquoise'],
+        'indigo' => ['color' => '#4f46e5', 'strong' => '#4338ca', 'label' => 'Indigo'],
+        'pink' => ['color' => '#db2777', 'strong' => '#be185d', 'label' => 'Rose'],
+        'orange' => ['color' => '#ea580c', 'strong' => '#c2410c', 'label' => 'Orange'],
+        'brown' => ['color' => '#92400e', 'strong' => '#78350f', 'label' => 'Marron'],
+        'graphite' => ['color' => '#334155', 'strong' => '#1e293b', 'label' => 'Graphite'],
     ];
     if ($currentAccent === 'rose') {
         $currentAccent = 'red';
@@ -491,7 +497,7 @@ function render_layout(string $content, string $title = ''): string
             . '<button type="submit" class="button secondary small">Déconnexion</button>'
             . '</form>';
     } else {
-        $authHtml = '<a class="button small" href="' . e(route_url('login')) . '">Connexion</a>';
+        $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">Connexion</a>';
     }
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
@@ -512,6 +518,8 @@ function render_layout(string $content, string $title = ''): string
         'violet' => '🟣',
         'red' => '🔴',
         'amber' => '🟡',
+        'pink' => '🔴',
+        'orange' => '🟠',
     ];
     $languageOptionHtml = '';
     foreach ($languageOptions as $localeCode => $localeConfig) {
@@ -584,7 +592,7 @@ function render_layout(string $content, string $title = ''): string
         . '<section><h3 class="footer-title">Adresse : Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
         . '<section><h3 class="footer-title">CGU</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
         . '<section><h3 class="footer-title">ROI</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
-        . '</div><div class="footer-meta"><span>© Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
+        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
         . '</body></html>';
 }
