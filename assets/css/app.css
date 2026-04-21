@@ -675,6 +675,17 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   flex-wrap: wrap;
   justify-content: flex-end;
 }
+.events-toolbar-actions .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8.6rem;
+  min-width: 8.6rem;
+  padding: .52rem .45rem;
+  font-size: 1.08rem;
+  line-height: 1;
+  text-align: center;
+}
 .fullcalendar-theme {
   margin-top: .75rem;
 }
