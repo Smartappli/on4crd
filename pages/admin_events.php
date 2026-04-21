@@ -124,7 +124,7 @@ ob_start();
             <script type="application/json" id="admin-events-calendar-data"><?= e(json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]') ?></script>
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/fr.global.min.js"></script>
-            <script>
+            <script nonce="<?= e(csp_nonce()) ?>">
                 (() => {
                     const calendarEl = document.getElementById('admin-events-calendar');
                     const dataEl = document.getElementById('admin-events-calendar-data');
