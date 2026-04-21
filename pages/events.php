@@ -168,6 +168,7 @@ ob_start();
                 const calendarEl = document.getElementById('events-calendar');
                 const dataEl = document.getElementById('events-calendar-data');
                 if (!calendarEl || !dataEl || !window.FullCalendar) {
+                    calendarEl?.insertAdjacentHTML('beforeend', '<p class="help">Impossible de charger le calendrier interactif.</p>');
                     return;
                 }
 
@@ -195,6 +196,12 @@ ob_start();
                         detail.external.setAttribute('href', externalUrl || '#');
                         detail.external.classList.toggle('is-hidden', !externalUrl);
                     }
+                };
+                const formatDate = (date) => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
                 };
 
                 const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -228,10 +235,12 @@ ob_start();
                         };
                         const route = params.get('route') || 'events';
                         const currentView = viewMap[info.view.type] || 'month';
+                        const monthAnchor = info.view.currentStart instanceof Date ? info.view.currentStart : info.start;
+                        const weekAnchor = info.start instanceof Date ? info.start : monthAnchor;
                         params.set('route', route);
                         params.set('view', currentView);
-                        params.set('ym', info.startStr.slice(0, 7));
-                        params.set('week', info.startStr.slice(0, 10));
+                        params.set('ym', formatDate(monthAnchor).slice(0, 7));
+                        params.set('week', formatDate(weekAnchor));
                         history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
                     }
                 });
