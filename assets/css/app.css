@@ -169,7 +169,10 @@ textarea:focus-visible {
   align-items: center;
   gap: .45rem;
 }
-.toolbar-login-button {
+.toolbar-auth .button.toolbar-login-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 8.6rem;
   min-width: 8.6rem;
   padding: .52rem .45rem;
@@ -754,11 +757,32 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   }
 }
 @media (max-width: 760px) {
+  .events-toolbar-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .45rem;
+  }
+  .events-toolbar-actions .button {
+    width: 100%;
+    text-align: center;
+  }
   .events-calendar-head,
   .events-calendar-grid {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
+  .events-calendar-head {
+    display: none;
+  }
   .events-day {
     min-height: 0;
+    padding: .7rem;
+  }
+  .events-day.is-outside {
+    display: none;
+  }
+  .event-chip {
+    font-size: .9rem;
+    padding: .5rem .6rem;
   }
 }
