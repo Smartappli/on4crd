@@ -702,17 +702,18 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   font-size: 1.1rem;
 }
 .fullcalendar-theme .fc .fc-button-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  color: #fff !important;
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
 }
 .fullcalendar-theme .fc .fc-button-primary:not(:disabled):hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
+  background: var(--accent-strong) !important;
+  border-color: var(--accent-strong) !important;
 }
 .fullcalendar-theme .fc .fc-button-primary:not(:disabled).fc-button-active,
 .fullcalendar-theme .fc .fc-button-primary:not(:disabled):active {
-  background: color-mix(in srgb, var(--accent-strong) 88%, black 12%);
-  border-color: color-mix(in srgb, var(--accent-strong) 88%, black 12%);
+  background: color-mix(in srgb, var(--accent-strong) 88%, black 12%) !important;
+  border-color: color-mix(in srgb, var(--accent-strong) 88%, black 12%) !important;
 }
 .fullcalendar-theme .fc .fc-button-primary:disabled {
   opacity: .6;
