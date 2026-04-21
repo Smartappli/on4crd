@@ -447,6 +447,9 @@ function render_layout(string $content, string $title = ''): string
         'teal' => ['color' => '#0f766e', 'strong' => '#115e59', 'label' => 'Turquoise'],
         'indigo' => ['color' => '#4f46e5', 'strong' => '#4338ca', 'label' => 'Indigo'],
         'pink' => ['color' => '#db2777', 'strong' => '#be185d', 'label' => 'Rose'],
+        'orange' => ['color' => '#ea580c', 'strong' => '#c2410c', 'label' => 'Orange'],
+        'brown' => ['color' => '#92400e', 'strong' => '#78350f', 'label' => 'Marron'],
+        'graphite' => ['color' => '#334155', 'strong' => '#1e293b', 'label' => 'Graphite'],
     ];
     if ($currentAccent === 'rose') {
         $currentAccent = 'red';
@@ -510,14 +513,12 @@ function render_layout(string $content, string $title = ''): string
         'nl' => ['icon' => '🇳🇱', 'label' => 'Nederlands'],
     ];
     $accentIcons = [
-        'blue' => '●',
-        'emerald' => '●',
-        'violet' => '●',
-        'red' => '●',
-        'amber' => '●',
-        'teal' => '●',
-        'indigo' => '●',
-        'pink' => '●',
+        'blue' => '🔵',
+        'emerald' => '🟢',
+        'violet' => '🟣',
+        'red' => '🔴',
+        'amber' => '🟡',
+        'orange' => '🟠',
     ];
     $languageOptionHtml = '';
     foreach ($languageOptions as $localeCode => $localeConfig) {

@@ -19,8 +19,6 @@ $moduleCatalog = [
     ['code' => 'shop', 'route' => 'shop', 'title' => 'Boutique', 'desc' => 'Accédez aux ressources et supports utiles à la vie du club.', 'icon' => '🛍️', 'audience' => 'Membres'],
     ['code' => 'qsl', 'route' => 'qsl', 'title' => 'Espace QSL', 'desc' => 'Préparez, prévisualisez et exportez vos cartes QSL depuis un espace dédié.', 'icon' => '📨', 'audience' => 'Opérateurs actifs'],
     ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Donnez une seconde vie au matériel radio via les ventes entre membres.', 'icon' => '🔧', 'audience' => 'Membres'],
-    ['code' => 'press', 'route' => 'press', 'title' => 'Presse', 'desc' => 'Retrouvez les communiqués et les informations institutionnelles du club.', 'icon' => '🎙️', 'audience' => 'Partenaires & médias'],
-    ['code' => 'education', 'route' => 'schools', 'title' => 'Éducation', 'desc' => 'Découvrez les actions de sensibilisation et les initiatives pédagogiques locales.', 'icon' => '🎓', 'audience' => 'Écoles & grand public'],
 ];
 
 $activeModules = [];
