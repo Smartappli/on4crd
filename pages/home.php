@@ -21,10 +21,15 @@ $moduleCatalog = [
     ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Donnez une seconde vie au matériel radio via les ventes entre membres.', 'icon' => '🔧', 'audience' => 'Membres'],
 ];
 
+$membersOnlyRoutes = ['qsl'];
 $activeModules = [];
 $moduleCards = '';
 foreach ($moduleCatalog as $module) {
     if (!module_enabled((string) $module['code'])) {
+        continue;
+    }
+
+    if (!in_array((string) $module['route'], $membersOnlyRoutes, true)) {
         continue;
     }
 
@@ -43,7 +48,7 @@ foreach ($moduleCatalog as $module) {
 }
 
 if ($moduleCards === '') {
-    $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Les espaces publics sont en cours de mise à jour.</div>';
+    $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Les espaces membres sont en cours de mise à jour.</div>';
 }
 
 $heroTitle = $isAuthenticated
