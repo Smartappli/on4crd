@@ -98,38 +98,13 @@ try {
     $archives = [];
 }
 
-$latestRaw = (string) (($posts[0]['published_at'] ?? $posts[0]['updated_at'] ?? ''));
-$latestDate = $latestRaw !== '' ? date('d/m/Y', strtotime($latestRaw)) : '—';
-$sections = [];
-foreach ($posts as $post) {
-    $section = trim((string) ($post['section_name'] ?? ''));
-    if ($section !== '') {
-        $sections[$section] = true;
-    }
-}
-
 ob_start();
 ?>
-<section class="card news-page-header">
-    <h1>Actualités</h1>
-    <p class="help">Suivez la vie du radio-club : annonces, compte-rendus, résultats et nouvelles techniques.</p>
-    <div class="stats-grid">
-        <article class="stat-card">
-            <span class="help">Articles publiés</span>
-            <strong><?= (int) count($posts) ?></strong>
-        </article>
-        <article class="stat-card">
-            <span class="help">Dernière publication</span>
-            <strong><?= e($latestDate) ?></strong>
-        </article>
-        <article class="stat-card">
-            <span class="help">Sections actives</span>
-            <strong><?= (int) count($sections) ?></strong>
-        </article>
-    </div>
-</section>
-
 <section class="card news-filters">
+    <div class="news-intro">
+        <h1>Fil d’actualités du radio-club</h1>
+        <p class="help">Parcourez rapidement les publications, filtrez par thème et ouvrez chaque article en un clic.</p>
+    </div>
     <h2>Rechercher et filtrer</h2>
     <form method="get" class="inline-form">
         <input type="hidden" name="route" value="news">
