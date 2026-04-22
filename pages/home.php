@@ -21,7 +21,8 @@ $moduleCatalog = [
     ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Donnez une seconde vie au matériel radio via les ventes entre membres.', 'icon' => '🔧', 'audience' => 'Membres'],
 ];
 
-$membersOnlyRoutes = ['qsl'];
+$publicRoutes = ['home', 'login', 'membership', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'install.php'];
+$navigationRoutes = ['home', 'news', 'shop', 'events', 'directory', 'wiki', 'albums', 'articles', 'qsl', 'auctions'];
 $activeModules = [];
 $moduleCards = '';
 foreach ($moduleCatalog as $module) {
@@ -29,7 +30,10 @@ foreach ($moduleCatalog as $module) {
         continue;
     }
 
-    if (!in_array((string) $module['route'], $membersOnlyRoutes, true)) {
+    $moduleRoute = (string) $module['route'];
+    $isMembersOnlyRoute = !in_array($moduleRoute, $publicRoutes, true);
+    $isAlreadyInNavigation = in_array($moduleRoute, $navigationRoutes, true);
+    if (!$isMembersOnlyRoute || $isAlreadyInNavigation) {
         continue;
     }
 
@@ -48,7 +52,7 @@ foreach ($moduleCatalog as $module) {
 }
 
 if ($moduleCards === '') {
-    $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Les espaces membres sont en cours de mise à jour.</div>';
+    $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Aucun module membre hors navigation n’est disponible pour le moment.</div>';
 }
 
 $heroTitle = $isAuthenticated
