@@ -59,6 +59,18 @@ if ($page > $totalPages) {
     $page = $totalPages;
 }
 $offset = ($page - 1) * $perPage;
+$activeFiltersCount = 0;
+if ($search !== '') {
+    $activeFiltersCount++;
+}
+if ($monthFilter !== '') {
+    $activeFiltersCount++;
+}
+if ($categoryFilter !== '') {
+    $activeFiltersCount++;
+}
+$resultStart = $totalPosts > 0 ? ($offset + 1) : 0;
+$resultEnd = min($offset + $perPage, $totalPosts);
 
 try {
     $sql = 'SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.slug AS section_slug, s.name AS section_name, m.callsign AS author_callsign
@@ -104,6 +116,13 @@ ob_start();
     <div class="news-intro">
         <h1>Fil d’actualités du radio-club</h1>
         <p class="help">Parcourez rapidement les publications, filtrez par thème et ouvrez chaque article en un clic.</p>
+        <div class="news-meta-row">
+            <span class="badge muted"><?= (int) $totalPosts ?> résultat<?= $totalPosts > 1 ? 's' : '' ?></span>
+            <?php if ($activeFiltersCount > 0): ?>
+                <span class="badge muted"><?= $activeFiltersCount ?> filtre<?= $activeFiltersCount > 1 ? 's actifs' : ' actif' ?></span>
+            <?php endif; ?>
+            <span class="help">Affichage <?= (int) $resultStart ?>–<?= (int) $resultEnd ?></span>
+        </div>
     </div>
     <h2>Rechercher et filtrer</h2>
     <form method="get" class="inline-form">
@@ -127,8 +146,28 @@ ob_start();
             <a class="button secondary" href="<?= e(route_url('news')) ?>">Réinitialiser</a>
         <?php endif; ?>
     </form>
+    <div class="news-quick-links">
+        <span class="help">Accès rapide :</span>
+        <a class="pill" href="#news-list">Liste des actualités</a>
+        <a class="pill" href="#news-categories">Catégories</a>
+        <a class="pill" href="#news-archives">Archives</a>
+    </div>
+    <?php if ($activeFiltersCount > 0): ?>
+        <div class="news-active-filters">
+            <strong>Filtres appliqués :</strong>
+            <?php if ($search !== ''): ?>
+                <span class="pill">Recherche : “<?= e($search) ?>”</span>
+            <?php endif; ?>
+            <?php if ($monthFilter !== ''): ?>
+                <span class="pill">Mois : <?= e($monthFilter) ?></span>
+            <?php endif; ?>
+            <?php if ($categoryFilter !== ''): ?>
+                <span class="pill">Catégorie : <?= e($categoryFilter) ?></span>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
     <?php if ($categories !== []): ?>
-        <div class="news-archives">
+        <div class="news-archives" id="news-categories">
             <?php foreach ($categories as $category): ?>
                 <?php $slug = (string) ($category['slug'] ?? ''); ?>
                 <a class="pill" href="<?= e(route_url('news', ['category' => $slug])) ?>"<?= $categoryFilter === $slug ? ' aria-current="page"' : '' ?>>
@@ -138,7 +177,7 @@ ob_start();
         </div>
     <?php endif; ?>
     <?php if ($archives !== []): ?>
-        <div class="news-archives">
+        <div class="news-archives" id="news-archives">
             <?php foreach ($archives as $archive):
                 $ym = (string) ($archive['ym'] ?? '');
                 if (!preg_match('/^\d{4}-\d{2}$/', $ym)) {
@@ -179,12 +218,32 @@ ob_start();
                 <?php endforeach; ?>
             </nav>
         <?php endif; ?>
+        <?php if ($archives !== []): ?>
+            <h3>Archives</h3>
+            <div class="news-category-list">
+                <?php foreach ($archives as $archive):
+                    $ym = (string) ($archive['ym'] ?? '');
+                    if (!preg_match('/^\d{4}-\d{2}$/', $ym)) {
+                        continue;
+                    }
+                    ?>
+                    <a class="news-category-item" href="<?= e(route_url('news', ['ym' => $ym])) ?>"<?= $monthFilter === $ym ? ' aria-current="page"' : '' ?>>
+                        <span><?= e($ym) ?></span>
+                        <span class="badge muted"><?= (int) ($archive['total'] ?? 0) ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </aside>
 
-    <div class="card">
+    <div class="card" id="news-list">
         <h2>Aperçu des actualités</h2>
         <?php if ($posts === []): ?>
-            <p>Aucune actualité publiée pour le moment.</p>
+            <div class="news-empty-state">
+                <p>Aucune actualité ne correspond à vos filtres.</p>
+                <p class="help">Essayez de supprimer un filtre ou de lancer une recherche plus large.</p>
+                <a class="button secondary" href="<?= e(route_url('news')) ?>">Voir toutes les actualités</a>
+            </div>
         <?php else: ?>
             <div class="news-grid">
                 <?php foreach ($posts as $post):
