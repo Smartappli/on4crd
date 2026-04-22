@@ -194,7 +194,7 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="news-layout">
+<section class="news-layout mt-4">
     <aside class="card news-categories">
         <h2>Catégories</h2>
         <?php if ($categories === []): ?>
@@ -275,7 +275,7 @@ ob_start();
 </section>
 
 <?php if ($totalPosts > $perPage): ?>
-    <section class="card">
+    <section class="card mt-4">
         <div class="row-between">
             <p class="help">Page <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= (int) $totalPosts ?> actualité<?= $totalPosts > 1 ? 's' : '' ?></p>
             <p class="actions">
