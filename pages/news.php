@@ -128,7 +128,7 @@ ob_start();
 <section class="card">
     <h2>Dernières actualités</h2>
     <?php if ($latestNews !== []): ?>
-        <div class="news-grid">
+        <div class="news-grid latest-news-grid">
             <?php foreach ($latestNews as $latestPost): ?>
                 <?php
                 $latestDateRaw = (string) ($latestPost['published_at'] ?? $latestPost['updated_at'] ?? '');
@@ -157,39 +157,50 @@ ob_start();
 </section>
 
 <section class="card news-filters mt-4">
-    <h1>Recherche d’actualités</h1>
+    <div class="news-search-header">
+        <h1>Recherche d’actualités</h1>
+        <p class="help">Trouvez rapidement une publication par mot-clé, période ou catégorie.</p>
+    </div>
     <?php if ($activeFiltersCount > 0): ?>
         <div class="news-meta-row">
             <span class="badge muted"><?= $activeFiltersCount ?> filtre<?= $activeFiltersCount > 1 ? 's actifs' : ' actif' ?></span>
         </div>
     <?php endif; ?>
-    <form method="get" class="inline-form">
+    <form method="get" class="inline-form news-search-form">
         <input type="hidden" name="route" value="news">
-        <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une actualité (titre, extrait, contenu)">
-        <input type="month" name="ym" value="<?= e($monthFilter) ?>">
-        <select name="category">
-            <option value="">Toutes les catégories</option>
-            <?php foreach ($categories as $category): ?>
-                <?php $slug = (string) ($category['slug'] ?? ''); ?>
-                <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e((string) ($category['name'] ?? 'Catégorie')) ?></option>
-            <?php endforeach; ?>
-        </select>
-        <select name="sort">
-            <option value="recent" <?= $sort === 'recent' ? 'selected' : '' ?>>Plus récentes</option>
-            <option value="oldest" <?= $sort === 'oldest' ? 'selected' : '' ?>>Plus anciennes</option>
-            <option value="title" <?= $sort === 'title' ? 'selected' : '' ?>>Titre (A→Z)</option>
-        </select>
-        <button class="button" type="submit">Filtrer</button>
-        <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
-            <a class="button secondary" href="<?= e(route_url('news')) ?>">Réinitialiser</a>
-        <?php endif; ?>
+        <label class="news-search-field news-search-field--query">
+            <span>Mots-clés</span>
+            <input type="text" name="q" value="<?= e($search) ?>" placeholder="Ex. : contest, réunion, atelier...">
+        </label>
+        <label class="news-search-field">
+            <span>Période</span>
+            <input type="month" name="ym" value="<?= e($monthFilter) ?>">
+        </label>
+        <label class="news-search-field">
+            <span>Catégorie</span>
+            <select name="category">
+                <option value="">Toutes les catégories</option>
+                <?php foreach ($categories as $category): ?>
+                    <?php $slug = (string) ($category['slug'] ?? ''); ?>
+                    <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e((string) ($category['name'] ?? 'Catégorie')) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label class="news-search-field">
+            <span>Trier par</span>
+            <select name="sort">
+                <option value="recent" <?= $sort === 'recent' ? 'selected' : '' ?>>Plus récentes</option>
+                <option value="oldest" <?= $sort === 'oldest' ? 'selected' : '' ?>>Plus anciennes</option>
+                <option value="title" <?= $sort === 'title' ? 'selected' : '' ?>>Titre (A→Z)</option>
+            </select>
+        </label>
+        <div class="news-search-actions">
+            <button class="button" type="submit">Appliquer les filtres</button>
+            <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url('news')) ?>">Réinitialiser</a>
+            <?php endif; ?>
+        </div>
     </form>
-    <div class="news-quick-links">
-        <span class="help">Accès rapide :</span>
-        <a class="pill" href="#news-list">Liste des actualités</a>
-        <a class="pill" href="#news-categories">Catégories</a>
-        <a class="pill" href="#news-archives">Archives</a>
-    </div>
     <?php if ($activeFiltersCount > 0): ?>
         <div class="news-active-filters">
             <strong>Filtres appliqués :</strong>
