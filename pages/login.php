@@ -10,10 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
         $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
         $password = (string) ($_POST['password'] ?? '');
+        $captcha = trim((string) ($_POST['captcha'] ?? ''));
+        $captchaExpected = (string) ($_SESSION['login_captcha'] ?? '');
 
-        if ($callsign === '' || $password === '') {
+        if ($callsign === '' || $password === '' || $captcha === '') {
             throw new RuntimeException('Identifiants requis.');
         }
+        if (!hash_equals($captchaExpected, $captcha)) {
+            throw new RuntimeException('Captcha invalide.');
+        }
+        unset($_SESSION['login_captcha']);
         if (!table_exists('members')) {
             throw new RuntimeException('La base membres n\'est pas initialisée.');
         }
@@ -35,10 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$content = '<div class="card"><h1>Connexion</h1>'
+$captchaA = random_int(1, 9);
+$captchaB = random_int(1, 9);
+$captchaExpected = $captchaA + $captchaB;
+$_SESSION['login_captcha'] = (string) $captchaExpected;
+
+$content = '<div class="card narrow login-card"><h1>Connexion</h1>'
     . '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . '<label>Indicatif<input type="text" name="callsign" required></label>'
     . '<label>Mot de passe<input type="password" name="password" required></label>'
+    . '<label>Captcha : combien font ' . $captchaA . ' + ' . $captchaB . ' ?'
+    . '<input type="text" name="captcha" inputmode="numeric" autocomplete="off" required></label>'
     . '<button class="button">Se connecter</button></form></div>';
 
 echo render_layout($content, 'Connexion');
