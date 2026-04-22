@@ -154,14 +154,11 @@ ob_start();
 
 <section class="card news-filters mt-4">
     <h1>Recherche d’actualités</h1>
-    <p class="help">Parcourez rapidement les publications, filtrez par thème et ouvrez chaque article en un clic.</p>
-    <div class="news-meta-row">
-        <span class="badge muted"><?= (int) $totalPosts ?> résultat<?= $totalPosts > 1 ? 's' : '' ?></span>
-        <?php if ($activeFiltersCount > 0): ?>
+    <?php if ($activeFiltersCount > 0): ?>
+        <div class="news-meta-row">
             <span class="badge muted"><?= $activeFiltersCount ?> filtre<?= $activeFiltersCount > 1 ? 's actifs' : ' actif' ?></span>
-        <?php endif; ?>
-        <span class="help">Affichage <?= (int) $resultStart ?>–<?= (int) $resultEnd ?></span>
-    </div>
+        </div>
+    <?php endif; ?>
     <form method="get" class="inline-form">
         <input type="hidden" name="route" value="news">
         <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une actualité (titre, extrait, contenu)">
@@ -279,7 +276,6 @@ ob_start();
             <div class="news-empty-state">
                 <p>Aucune actualité ne correspond à vos filtres.</p>
                 <p class="help">Essayez de supprimer un filtre ou de lancer une recherche plus large.</p>
-                <a class="button secondary" href="<?= e(route_url('news')) ?>">Voir toutes les actualités</a>
             </div>
         <?php else: ?>
             <div class="news-grid">
