@@ -106,8 +106,106 @@ $qslCards = db()->prepare('SELECT * FROM qsl_cards WHERE member_id = ? ORDER BY 
 $qslCards->execute([(int) $user['id']]);
 $qslRows = $qslCards->fetchAll();
 
+$qsoSearch = trim((string) ($_GET['qso_search'] ?? ''));
+$qsoBandFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_band'] ?? '')));
+$qsoModeFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_mode'] ?? '')));
+$qslSearch = trim((string) ($_GET['qsl_search'] ?? ''));
+
+$qsoBandOptions = [];
+$qsoModeOptions = [];
+foreach ($qsoRows as $row) {
+    $band = mb_safe_strtoupper(trim((string) ($row['band'] ?? '')));
+    $mode = mb_safe_strtoupper(trim((string) ($row['mode'] ?? '')));
+    if ($band !== '') {
+        $qsoBandOptions[$band] = true;
+    }
+    if ($mode !== '') {
+        $qsoModeOptions[$mode] = true;
+    }
+}
+
+$matchesTextFilter = static function (string $needle, array $fields): bool {
+    if ($needle === '') {
+        return true;
+    }
+    foreach ($fields as $field) {
+        if (stripos($field, $needle) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
+$filteredQsoRows = array_values(array_filter($qsoRows, static function (array $row) use ($matchesTextFilter, $qsoSearch, $qsoBandFilter, $qsoModeFilter): bool {
+    $band = mb_safe_strtoupper(trim((string) ($row['band'] ?? '')));
+    $mode = mb_safe_strtoupper(trim((string) ($row['mode'] ?? '')));
+    if ($qsoBandFilter !== '' && $band !== $qsoBandFilter) {
+        return false;
+    }
+    if ($qsoModeFilter !== '' && $mode !== $qsoModeFilter) {
+        return false;
+    }
+
+    return $matchesTextFilter($qsoSearch, [
+        (string) ($row['qso_call'] ?? ''),
+        (string) ($row['qso_date'] ?? ''),
+        (string) ($row['band'] ?? ''),
+        (string) ($row['mode'] ?? ''),
+        (string) ($row['comment'] ?? ''),
+    ]);
+}));
+
+$filteredQslRows = array_values(array_filter($qslRows, static function (array $row) use ($matchesTextFilter, $qslSearch): bool {
+    return $matchesTextFilter($qslSearch, [
+        (string) ($row['title'] ?? ''),
+        (string) ($row['qso_call'] ?? ''),
+        (string) ($row['qso_date'] ?? ''),
+        (string) ($row['band'] ?? ''),
+        (string) ($row['mode'] ?? ''),
+    ]);
+}));
+
+$generatedByQsoId = [];
+foreach ($qslRows as $card) {
+    $key = qsl_normalize_callsign((string) ($card['qso_call'] ?? '')) . '|'
+        . qsl_normalize_date((string) ($card['qso_date'] ?? '')) . '|'
+        . qsl_normalize_time((string) ($card['time_on'] ?? ''));
+    if ($key !== '||') {
+        $generatedByQsoId[$key] = true;
+    }
+}
+
+$pendingCount = 0;
+foreach ($qsoRows as $row) {
+    $key = qsl_normalize_callsign((string) ($row['qso_call'] ?? '')) . '|'
+        . qsl_normalize_date((string) ($row['qso_date'] ?? '')) . '|'
+        . qsl_normalize_time((string) ($row['time_on'] ?? ''));
+    if (!isset($generatedByQsoId[$key])) {
+        $pendingCount++;
+    }
+}
+
+ksort($qsoBandOptions);
+ksort($qsoModeOptions);
+
 ob_start();
 ?>
+<section class="card qsl-kpis">
+    <div class="qsl-kpi">
+        <p class="help">QSO enregistrés</p>
+        <strong><?= count($qsoRows) ?></strong>
+    </div>
+    <div class="qsl-kpi">
+        <p class="help">QSL créées</p>
+        <strong><?= count($qslRows) ?></strong>
+    </div>
+    <div class="qsl-kpi">
+        <p class="help">QSO sans QSL</p>
+        <strong><?= $pendingCount ?></strong>
+    </div>
+</section>
+
 <div class="grid-2">
     <section class="card">
         <h1>QSL Designer</h1>
@@ -151,16 +249,38 @@ ob_start();
     <?php if ($qsoRows === []): ?>
         <p>Aucun QSO importé pour le moment.</p>
     <?php else: ?>
+        <form method="get" class="inline-form qsl-filters">
+            <input type="hidden" name="route" value="qsl">
+            <input type="text" name="qso_search" value="<?= e($qsoSearch) ?>" placeholder="Filtrer par call, date, mode...">
+            <select name="qso_band">
+                <option value="">Toutes bandes</option>
+                <?php foreach (array_keys($qsoBandOptions) as $option): ?>
+                    <option value="<?= e($option) ?>" <?= $qsoBandFilter === $option ? 'selected' : '' ?>><?= e($option) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select name="qso_mode">
+                <option value="">Tous modes</option>
+                <?php foreach (array_keys($qsoModeOptions) as $option): ?>
+                    <option value="<?= e($option) ?>" <?= $qsoModeFilter === $option ? 'selected' : '' ?>><?= e($option) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="button secondary small">Filtrer</button>
+            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost">Réinitialiser</a>
+        </form>
         <form method="post">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="generate_batch">
+            <div class="actions">
+                <button type="button" class="button secondary small" data-qso-toggle="all">Tout sélectionner</button>
+                <button type="button" class="button secondary small" data-qso-toggle="none">Tout désélectionner</button>
+            </div>
             <div class="table-wrap">
                 <table>
                     <thead>
                     <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Bande</th><th>Mode</th><th>RST</th><th>Action</th></tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($qsoRows as $row): ?>
+                    <?php foreach ($filteredQsoRows as $row): ?>
                         <tr>
                             <td><input type="checkbox" name="qso_ids[]" value="<?= (int) $row['id'] ?>"></td>
                             <td><?= e((string) $row['qso_call']) ?></td>
@@ -175,6 +295,9 @@ ob_start();
                     </tbody>
                 </table>
             </div>
+            <?php if ($filteredQsoRows === []): ?>
+                <p class="help">Aucun QSO ne correspond aux filtres actifs.</p>
+            <?php endif; ?>
             <p><button class="button">Générer les QSL sélectionnées</button></p>
         </form>
     <?php endif; ?>
@@ -188,13 +311,19 @@ ob_start();
     <?php if ($qslRows === []): ?>
         <p>Aucune QSL générée pour le moment.</p>
     <?php else: ?>
+        <form method="get" class="inline-form qsl-filters">
+            <input type="hidden" name="route" value="qsl">
+            <input type="text" name="qsl_search" value="<?= e($qslSearch) ?>" placeholder="Rechercher une QSL (titre, call, bande...)">
+            <button type="submit" class="button secondary small">Filtrer</button>
+            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost">Réinitialiser</a>
+        </form>
         <div class="table-wrap">
             <table>
                 <thead>
                 <tr><th>Titre</th><th>QSO</th><th>Date</th><th>Bande</th><th>Mode</th><th>Aperçu</th><th>Export</th><th>Action</th></tr>
                 </thead>
                 <tbody>
-                <?php foreach ($qslRows as $row): ?>
+                <?php foreach ($filteredQslRows as $row): ?>
                     <tr>
                         <td><?= e((string) $row['title']) ?></td>
                         <td><?= e((string) $row['qso_call']) ?></td>
@@ -216,7 +345,24 @@ ob_start();
                 </tbody>
             </table>
         </div>
+        <?php if ($filteredQslRows === []): ?>
+            <p class="help">Aucune QSL ne correspond à la recherche.</p>
+        <?php endif; ?>
     <?php endif; ?>
 </section>
+<script nonce="<?= e(csp_nonce()) ?>">
+document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const table = button.closest('form');
+        if (!table) {
+            return;
+        }
+        const checked = button.dataset.qsoToggle === 'all';
+        table.querySelectorAll('input[name="qso_ids[]"]').forEach((checkbox) => {
+            checkbox.checked = checked;
+        });
+    });
+});
+</script>
 <?php
 echo render_layout((string) ob_get_clean(), 'QSL');
