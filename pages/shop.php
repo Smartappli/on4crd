@@ -55,7 +55,7 @@ ob_start();
     </aside>
 </section>
 
-<section class="card stack">
+<section class="card stack mt-4">
     <h2>Filtrer le catalogue</h2>
     <form method="get" action="<?= e(route_url('shop')) ?>" class="grid-3">
         <label>Catégorie
@@ -76,7 +76,7 @@ ob_start();
     </form>
 </section>
 
-<section class="inner-card">
+<section class="inner-card mt-4">
     <?php if ($products === []): ?>
         <div class="card empty-state"><p>Aucun produit ne correspond à votre filtre.</p></div>
     <?php else: ?>

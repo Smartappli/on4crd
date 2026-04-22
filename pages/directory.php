@@ -53,28 +53,6 @@ if (table_exists('members')) {
 
 ob_start();
 ?>
-<section class="card directory-filters">
-    <h2>Recherche et filtres</h2>
-    <form method="get" class="inline-form">
-        <input type="hidden" name="route" value="directory">
-        <input type="text" name="q" value="<?= e($search) ?>" placeholder="Recherche par indicatif ou nom">
-        <select name="licence">
-            <option value="">Toutes les classes de licence</option>
-            <?php foreach ($licenceRows as $row): ?>
-                <?php $licence = trim((string) ($row['licence_class'] ?? '')); ?>
-                <?php if ($licence === '') continue; ?>
-                <option value="<?= e($licence) ?>" <?= $licenceFilter === $licence ? 'selected' : '' ?>>
-                    <?= e($licence) ?> · <?= (int) ($row['total'] ?? 0) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-        <button class="button" type="submit">Filtrer</button>
-        <?php if ($search !== '' || $licenceFilter !== ''): ?>
-            <a class="button secondary" href="<?= e(route_url('directory')) ?>">Réinitialiser</a>
-        <?php endif; ?>
-    </form>
-</section>
-
 <section class="card">
     <h2>Membres actifs</h2>
     <?php if ($members === []): ?>
