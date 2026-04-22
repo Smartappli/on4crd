@@ -395,6 +395,36 @@ textarea { resize: vertical; }
 table { width:100%; border-collapse: collapse; }
 th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; }
 .help { color: var(--muted); font-size:.93rem; }
+.qsl-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .8rem;
+}
+.qsl-kpi {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: .8rem .95rem;
+}
+.qsl-kpi p {
+  margin: 0;
+}
+.qsl-kpi strong {
+  font-size: clamp(1.3rem, 2vw, 2rem);
+  line-height: 1.1;
+}
+.qsl-filters {
+  flex-wrap: wrap;
+  margin-bottom: .9rem;
+}
+.qsl-filters input[type="text"] {
+  flex: 1 1 280px;
+  min-width: 220px;
+}
+.qsl-filters select {
+  width: auto;
+  min-width: 150px;
+}
 .qsl-preview svg, .qsl-preview img { width:100%; height:auto; display:block; border-radius:18px; background:#fff; }
 .admin-link { display:block; color: var(--text); }
 .actions { display:flex; gap: .7rem; flex-wrap:wrap; margin-top: 1rem; }
@@ -725,7 +755,14 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   .card, .hero-panel { padding: 1rem; border-radius: 20px; }
   .button, button { width: 100%; justify-content: center; }
   .toolbar-auth .button,
-  .toolbar-auth button { width: auto; }
+  .toolbar-auth button {
+    width: 100%;
+    min-width: 0;
+  }
+  .toolbar-auth .button.toolbar-login-button {
+    min-height: 2.5rem;
+    padding: .52rem .45rem;
+  }
   .actions { flex-direction: column; }
 }
 
