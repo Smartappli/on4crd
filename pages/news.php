@@ -98,44 +98,13 @@ try {
     $archives = [];
 }
 
-$latestRaw = (string) (($posts[0]['published_at'] ?? $posts[0]['updated_at'] ?? ''));
-$latestDate = $latestRaw !== '' ? date('d/m/Y', strtotime($latestRaw)) : '—';
-$sections = [];
-foreach ($posts as $post) {
-    $section = trim((string) ($post['section_name'] ?? ''));
-    if ($section !== '') {
-        $sections[$section] = true;
-    }
-}
-$postsByCategory = [];
-foreach ($posts as $post) {
-    $sectionName = trim((string) ($post['section_name'] ?? ''));
-    $key = $sectionName !== '' ? $sectionName : 'Sans catégorie';
-    $postsByCategory[$key][] = $post;
-}
-
 ob_start();
 ?>
-<section class="card news-page-header">
-    <h1>Actualités</h1>
-    <p class="help">Suivez la vie du radio-club : annonces, compte-rendus, résultats et nouvelles techniques.</p>
-    <div class="stats-grid">
-        <article class="stat-card">
-            <span class="help">Articles publiés</span>
-            <strong><?= (int) count($posts) ?></strong>
-        </article>
-        <article class="stat-card">
-            <span class="help">Dernière publication</span>
-            <strong><?= e($latestDate) ?></strong>
-        </article>
-        <article class="stat-card">
-            <span class="help">Sections actives</span>
-            <strong><?= (int) count($sections) ?></strong>
-        </article>
-    </div>
-</section>
-
 <section class="card news-filters">
+    <div class="news-intro">
+        <h1>Fil d’actualités du radio-club</h1>
+        <p class="help">Parcourez rapidement les publications, filtrez par thème et ouvrez chaque article en un clic.</p>
+    </div>
     <h2>Rechercher et filtrer</h2>
     <form method="get" class="inline-form">
         <input type="hidden" name="route" value="news">
@@ -186,15 +155,39 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="card">
-    <h2>Publications par catégorie</h2>
-    <?php if ($posts === []): ?>
-        <p>Aucune actualité publiée pour le moment.</p>
-    <?php else: ?>
-        <?php foreach ($postsByCategory as $categoryName => $items): ?>
-            <h3><?= e((string) $categoryName) ?></h3>
+<section class="news-layout">
+    <aside class="card news-categories">
+        <h2>Catégories</h2>
+        <?php if ($categories === []): ?>
+            <p class="help">Aucune catégorie publiée pour le moment.</p>
+        <?php else: ?>
+            <nav class="news-category-list" aria-label="Filtrer par catégorie">
+                <a class="news-category-item" href="<?= e(route_url('news')) ?>"<?= $categoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                    <span>Toutes les catégories</span>
+                    <span class="badge muted"><?= (int) $totalPosts ?></span>
+                </a>
+                <?php foreach ($categories as $category): ?>
+                    <?php
+                    $slug = (string) ($category['slug'] ?? '');
+                    $name = (string) ($category['name'] ?? 'Catégorie');
+                    $total = (int) ($category['total'] ?? 0);
+                    ?>
+                    <a class="news-category-item" href="<?= e(route_url('news', ['category' => $slug])) ?>"<?= $categoryFilter === $slug ? ' aria-current="page"' : '' ?>>
+                        <span><?= e($name) ?></span>
+                        <span class="badge muted"><?= $total ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </nav>
+        <?php endif; ?>
+    </aside>
+
+    <div class="card">
+        <h2>Aperçu des actualités</h2>
+        <?php if ($posts === []): ?>
+            <p>Aucune actualité publiée pour le moment.</p>
+        <?php else: ?>
             <div class="news-grid">
-                <?php foreach ($items as $post):
+                <?php foreach ($posts as $post):
                 $publishedAtRaw = (string) ($post['published_at'] ?? $post['updated_at'] ?? '');
                 $publishedAt = $publishedAtRaw !== '' ? date('d/m/Y', strtotime($publishedAtRaw)) : 'Date non définie';
                 $excerpt = trim((string) ($post['excerpt'] ?? ''));
@@ -203,21 +196,23 @@ ob_start();
                 }
                 ?>
                 <article class="news-card feature-card">
-                    <span class="badge muted"><?= e((string) ($post['section_name'] ?? 'Actualité')) ?></span>
-                    <h4><?= e((string) $post['title']) ?></h4>
-                    <p class="help">
-                        Publié le <?= e($publishedAt) ?>
-                        <?php if (trim((string) ($post['author_callsign'] ?? '')) !== ''): ?>
-                            · <?= e((string) $post['author_callsign']) ?>
-                        <?php endif; ?>
-                    </p>
-                    <p><?= e($excerpt) ?></p>
-                    <p><a class="button secondary" href="<?= e(route_url('news_view', ['slug' => (string) $post['slug']])) ?>">Lire l’actualité</a></p>
+                    <a class="news-card-link" href="<?= e(route_url('news_view', ['slug' => (string) $post['slug']])) ?>">
+                        <span class="badge muted"><?= e((string) ($post['section_name'] ?? 'Actualité')) ?></span>
+                        <h3><?= e((string) $post['title']) ?></h3>
+                        <p class="help">
+                            Publié le <?= e($publishedAt) ?>
+                            <?php if (trim((string) ($post['author_callsign'] ?? '')) !== ''): ?>
+                                · <?= e((string) $post['author_callsign']) ?>
+                            <?php endif; ?>
+                        </p>
+                        <p><?= e($excerpt) ?></p>
+                        <span class="news-card-cta">Voir l’article →</span>
+                    </a>
                 </article>
                 <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
+        <?php endif; ?>
+    </div>
 </section>
 
 <?php if ($totalPosts > $perPage): ?>
