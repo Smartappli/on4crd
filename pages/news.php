@@ -110,21 +110,59 @@ try {
     $archives = [];
 }
 
+$latestNews = [];
+try {
+    $latestNewsStmt = db()->query('SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.name AS section_name
+        FROM news_posts p
+        LEFT JOIN news_sections s ON s.id = p.section_id
+        WHERE p.status = "published"
+        ORDER BY COALESCE(p.published_at, p.updated_at) DESC
+        LIMIT 2');
+    $latestNews = $latestNewsStmt ? ($latestNewsStmt->fetchAll() ?: []) : [];
+} catch (Throwable) {
+    $latestNews = [];
+}
+
 ob_start();
 ?>
-<section class="card news-filters">
-    <div class="news-intro">
-        <h1>Fil d’actualités du radio-club</h1>
-        <p class="help">Parcourez rapidement les publications, filtrez par thème et ouvrez chaque article en un clic.</p>
-        <div class="news-meta-row">
-            <span class="badge muted"><?= (int) $totalPosts ?> résultat<?= $totalPosts > 1 ? 's' : '' ?></span>
-            <?php if ($activeFiltersCount > 0): ?>
-                <span class="badge muted"><?= $activeFiltersCount ?> filtre<?= $activeFiltersCount > 1 ? 's actifs' : ' actif' ?></span>
-            <?php endif; ?>
-            <span class="help">Affichage <?= (int) $resultStart ?>–<?= (int) $resultEnd ?></span>
+<section class="card">
+    <h2>Dernières actualités</h2>
+    <?php if ($latestNews !== []): ?>
+        <div class="news-grid">
+            <?php foreach ($latestNews as $latestPost): ?>
+                <?php
+                $latestDateRaw = (string) ($latestPost['published_at'] ?? $latestPost['updated_at'] ?? '');
+                $latestDate = $latestDateRaw !== '' ? date('d/m/Y', strtotime($latestDateRaw)) : 'Date non définie';
+                $latestExcerpt = trim((string) ($latestPost['excerpt'] ?? ''));
+                if ($latestExcerpt === '') {
+                    $latestExcerpt = 'Consultez la dernière publication du club.';
+                }
+                ?>
+                <article class="news-card feature-card">
+                    <a class="news-card-link" href="<?= e(route_url('news_view', ['slug' => (string) ($latestPost['slug'] ?? '')])) ?>">
+                        <span class="badge muted"><?= e((string) ($latestPost['section_name'] ?? 'Actualité')) ?></span>
+                        <h3><?= e((string) ($latestPost['title'] ?? 'Actualité')) ?></h3>
+                        <p class="help">Publié le <?= e($latestDate) ?></p>
+                        <p><?= e($latestExcerpt) ?></p>
+                        <span class="news-card-cta">Lire l’actualité →</span>
+                    </a>
+                </article>
+            <?php endforeach; ?>
         </div>
-    </div>
-    <h2>Rechercher et filtrer</h2>
+    <?php else: ?>
+        <div class="news-empty-state">
+            <p>Aucune actualité publiée pour le moment.</p>
+        </div>
+    <?php endif; ?>
+</section>
+
+<section class="card news-filters mt-4">
+    <h1>Recherche d’actualités</h1>
+    <?php if ($activeFiltersCount > 0): ?>
+        <div class="news-meta-row">
+            <span class="badge muted"><?= $activeFiltersCount ?> filtre<?= $activeFiltersCount > 1 ? 's actifs' : ' actif' ?></span>
+        </div>
+    <?php endif; ?>
     <form method="get" class="inline-form">
         <input type="hidden" name="route" value="news">
         <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une actualité (titre, extrait, contenu)">
@@ -194,7 +232,7 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="news-layout">
+<section class="news-layout mt-4">
     <aside class="card news-categories">
         <h2>Catégories</h2>
         <?php if ($categories === []): ?>
@@ -242,7 +280,6 @@ ob_start();
             <div class="news-empty-state">
                 <p>Aucune actualité ne correspond à vos filtres.</p>
                 <p class="help">Essayez de supprimer un filtre ou de lancer une recherche plus large.</p>
-                <a class="button secondary" href="<?= e(route_url('news')) ?>">Voir toutes les actualités</a>
             </div>
         <?php else: ?>
             <div class="news-grid">
@@ -275,7 +312,7 @@ ob_start();
 </section>
 
 <?php if ($totalPosts > $perPage): ?>
-    <section class="card">
+    <section class="card mt-4">
         <div class="row-between">
             <p class="help">Page <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= (int) $totalPosts ?> actualité<?= $totalPosts > 1 ? 's' : '' ?></p>
             <p class="actions">
