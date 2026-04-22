@@ -10,13 +10,9 @@ $primaryCta = $isAuthenticated
 
 
 $moduleCatalog = [
-    ['code' => 'news', 'route' => 'news', 'title' => 'Actualités', 'desc' => 'Suivez les annonces officielles, les comptes rendus et les temps forts du club.', 'icon' => '📰', 'audience' => 'Visiteurs & membres'],
-    ['code' => 'events', 'route' => 'events', 'title' => 'Événements', 'desc' => 'Repérez les ateliers, sorties terrain, activations et réunions à venir.', 'icon' => '📅', 'audience' => 'Ouvert à tous'],
     ['code' => 'articles', 'route' => 'articles', 'title' => 'Articles techniques', 'desc' => 'Approfondissez vos connaissances avec des contenus pratiques et pédagogiques.', 'icon' => '🧠', 'audience' => 'Membres passionnés'],
     ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Wiki du club', 'desc' => 'Consultez les procédures, fiches matériel et bonnes pratiques radioamateur.', 'icon' => '📚', 'audience' => 'Contributeurs & opérateurs'],
     ['code' => 'albums', 'route' => 'albums', 'title' => 'Galerie photo', 'desc' => 'Revivez les activités du club avec des albums thématiques régulièrement enrichis.', 'icon' => '📸', 'audience' => 'Visiteurs & membres'],
-    ['code' => 'directory', 'route' => 'directory', 'title' => 'Annuaire', 'desc' => 'Identifiez rapidement les compétences, spécialités et profils de la communauté.', 'icon' => '👥', 'audience' => 'Membres'],
-    ['code' => 'shop', 'route' => 'shop', 'title' => 'Boutique', 'desc' => 'Accédez aux ressources et supports utiles à la vie du club.', 'icon' => '🛍️', 'audience' => 'Membres'],
     ['code' => 'qsl', 'route' => 'qsl', 'title' => 'Espace QSL', 'desc' => 'Préparez, prévisualisez et exportez vos cartes QSL depuis un espace dédié.', 'icon' => '📨', 'audience' => 'Opérateurs actifs'],
     ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Donnez une seconde vie au matériel radio via les ventes entre membres.', 'icon' => '🔧', 'audience' => 'Membres'],
 ];
