@@ -262,6 +262,28 @@ textarea:focus-visible {
   box-shadow: var(--shadow);
 }
 .narrow { max-width: 520px; margin: 2rem auto; }
+.login-card {
+  max-width: 420px;
+  margin-inline: auto;
+  padding: 1rem;
+}
+.login-card h1 {
+  margin-top: .2rem;
+  margin-bottom: .8rem;
+  font-size: 1.35rem;
+}
+.login-card label {
+  margin: .55rem 0;
+}
+.login-card input[type="text"],
+.login-card input[type="password"] {
+  padding: .62rem .75rem;
+  border-radius: 12px;
+}
+.login-card .button {
+  width: 100%;
+  margin-top: .6rem;
+}
 .hero { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(320px, .95fr); gap: 1rem; align-items: stretch; }
 .hero-home { margin-top: .25rem; }
 .landing-hero { align-items: stretch; }
