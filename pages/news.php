@@ -110,21 +110,58 @@ try {
     $archives = [];
 }
 
+$latestNews = null;
+try {
+    $latestNewsStmt = db()->query('SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.name AS section_name
+        FROM news_posts p
+        LEFT JOIN news_sections s ON s.id = p.section_id
+        WHERE p.status = "published"
+        ORDER BY COALESCE(p.published_at, p.updated_at) DESC
+        LIMIT 1');
+    $latestNews = $latestNewsStmt ? $latestNewsStmt->fetch() : null;
+} catch (Throwable) {
+    $latestNews = null;
+}
+
 ob_start();
 ?>
-<section class="card news-filters">
-    <div class="news-intro">
-        <h1>Fil d’actualités du radio-club</h1>
-        <p class="help">Parcourez rapidement les publications, filtrez par thème et ouvrez chaque article en un clic.</p>
-        <div class="news-meta-row">
-            <span class="badge muted"><?= (int) $totalPosts ?> résultat<?= $totalPosts > 1 ? 's' : '' ?></span>
-            <?php if ($activeFiltersCount > 0): ?>
-                <span class="badge muted"><?= $activeFiltersCount ?> filtre<?= $activeFiltersCount > 1 ? 's actifs' : ' actif' ?></span>
-            <?php endif; ?>
-            <span class="help">Affichage <?= (int) $resultStart ?>–<?= (int) $resultEnd ?></span>
+<section class="card">
+    <h2>Dernière actualité</h2>
+    <?php if (is_array($latestNews)): ?>
+        <?php
+        $latestDateRaw = (string) ($latestNews['published_at'] ?? $latestNews['updated_at'] ?? '');
+        $latestDate = $latestDateRaw !== '' ? date('d/m/Y', strtotime($latestDateRaw)) : 'Date non définie';
+        $latestExcerpt = trim((string) ($latestNews['excerpt'] ?? ''));
+        if ($latestExcerpt === '') {
+            $latestExcerpt = 'Consultez la dernière publication du club.';
+        }
+        ?>
+        <article class="news-card feature-card">
+            <a class="news-card-link" href="<?= e(route_url('news_view', ['slug' => (string) ($latestNews['slug'] ?? '')])) ?>">
+                <span class="badge muted"><?= e((string) ($latestNews['section_name'] ?? 'Actualité')) ?></span>
+                <h3><?= e((string) ($latestNews['title'] ?? 'Actualité')) ?></h3>
+                <p class="help">Publié le <?= e($latestDate) ?></p>
+                <p><?= e($latestExcerpt) ?></p>
+                <span class="news-card-cta">Lire l’actualité →</span>
+            </a>
+        </article>
+    <?php else: ?>
+        <div class="news-empty-state">
+            <p>Aucune actualité publiée pour le moment.</p>
         </div>
+    <?php endif; ?>
+</section>
+
+<section class="card news-filters mt-4">
+    <h1>Recherche d’actualités</h1>
+    <p class="help">Parcourez rapidement les publications, filtrez par thème et ouvrez chaque article en un clic.</p>
+    <div class="news-meta-row">
+        <span class="badge muted"><?= (int) $totalPosts ?> résultat<?= $totalPosts > 1 ? 's' : '' ?></span>
+        <?php if ($activeFiltersCount > 0): ?>
+            <span class="badge muted"><?= $activeFiltersCount ?> filtre<?= $activeFiltersCount > 1 ? 's actifs' : ' actif' ?></span>
+        <?php endif; ?>
+        <span class="help">Affichage <?= (int) $resultStart ?>–<?= (int) $resultEnd ?></span>
     </div>
-    <h2>Rechercher et filtrer</h2>
     <form method="get" class="inline-form">
         <input type="hidden" name="route" value="news">
         <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une actualité (titre, extrait, contenu)">
