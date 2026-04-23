@@ -426,7 +426,6 @@ function set_page_meta(string|array $title = '', string $description = ''): void
 if (!function_exists('render_layout')) {
 function render_layout(string $content, string $title = ''): string
 {
-    $pageTitle = $title !== '' ? $title : (string) config('app.site_name', 'ON4CRD');
     $flashes = consume_flashes();
     $currentRoute = (string) ($_GET['route'] ?? 'home');
     $currentTheme = (string) ($_SESSION['theme'] ?? 'light');
@@ -513,6 +512,34 @@ function render_layout(string $content, string $title = ''): string
     }
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
+    $pageMeta = (array) ($_SESSION['_page_meta'] ?? []);
+    unset($_SESSION['_page_meta']);
+    $metaTitle = trim((string) ($pageMeta['title'] ?? ''));
+    $pageTitle = $title !== '' ? $title : ($metaTitle !== '' ? $metaTitle : $siteName);
+    $metaDescription = trim((string) ($pageMeta['description'] ?? ''));
+    if ($metaDescription === '') {
+        $metaDescription = 'Radio Club Durnal ON4CRD : actualités, événements, formation, ressources et vie du club radioamateur.';
+    }
+    $metaCanonical = trim((string) ($pageMeta['canonical'] ?? ''));
+    $metaRobots = trim((string) ($pageMeta['robots'] ?? 'index,follow'));
+    $metaOgType = trim((string) ($pageMeta['og_type'] ?? 'website'));
+    $metaTwitterCard = trim((string) ($pageMeta['twitter_card'] ?? 'summary_large_image'));
+    $metaLocale = trim((string) ($pageMeta['locale'] ?? 'fr_BE'));
+    $metaSiteName = trim((string) ($pageMeta['site_name'] ?? $siteName));
+    $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
+        . '<meta name="robots" content="' . e($metaRobots) . '">'
+        . '<meta property="og:title" content="' . e($pageTitle) . '">'
+        . '<meta property="og:description" content="' . e($metaDescription) . '">'
+        . '<meta property="og:type" content="' . e($metaOgType) . '">'
+        . '<meta property="og:locale" content="' . e($metaLocale) . '">'
+        . '<meta property="og:site_name" content="' . e($metaSiteName) . '">'
+        . '<meta name="twitter:card" content="' . e($metaTwitterCard) . '">'
+        . '<meta name="twitter:title" content="' . e($pageTitle) . '">'
+        . '<meta name="twitter:description" content="' . e($metaDescription) . '">';
+    if ($metaCanonical !== '') {
+        $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
+            . '<meta property="og:url" content="' . e($metaCanonical) . '">';
+    }
     $year = gmdate('Y');
     $themeOptions = [
         'light' => ['icon' => '☀️', 'label' => 'Clair'],
@@ -589,7 +616,8 @@ function render_layout(string $content, string $title = ''): string
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
-        . '</title><link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
+        . '</title>' . $metaHead
+        . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body>'
