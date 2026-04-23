@@ -737,6 +737,8 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .footer-grid { display:grid; grid-template-columns: minmax(0, 1.4fr) minmax(220px, .9fr); gap:1rem; }
 .footer-title { margin:0 0 .45rem; font-size:1rem; }
 .footer-nav { list-style:none; padding:0; margin:0; display:grid; gap:.45rem; }
+.footer-newsletter-form { display:grid; gap:.55rem; max-width: 360px; }
+.footer-newsletter-form input { width:100%; }
 .footer-copy,
 .footer-meta { color: var(--muted); }
 .footer-meta {
