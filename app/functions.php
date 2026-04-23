@@ -87,7 +87,7 @@ function seed_modules(): void
         ['shop', 'Boutique', 'Produits et commandes', 1, 1, 80],
         ['auctions', 'Enchères', 'Ventes aux enchères', 1, 1, 90],
         ['qsl', 'QSL', 'Gestion des cartes QSL', 1, 1, 100],
-        ['chatbot', 'Assistant', 'Assistant conversationnel', 1, 1, 110],
+        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 1, 1, 110],
         ['advertising', 'Publicités', 'Gestion des annonces/publicités', 1, 1, 120],
         ['press', 'Presse', 'Communiqués et contacts presse', 1, 1, 130],
         ['education', 'Éducation', 'Activités écoles/formation', 1, 1, 140],
@@ -423,10 +423,75 @@ function set_page_meta(string|array $title = '', string $description = ''): void
 }
 }
 
+if (!function_exists('render_footer_social_links')) {
+function render_footer_social_links(): string
+{
+    $socialLinks = [
+        [
+            'name' => 'Facebook',
+            'href' => 'https://www.facebook.com/groups/clubradiodurnal/',
+            'path' => 'M22 12a10 10 0 1 0-11.56 9.87v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.19 2.23.19v2.45h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.88h-2.34v6.99A10 10 0 0 0 22 12z',
+        ],
+        [
+            'name' => 'LinkedIn',
+            'href' => 'https://www.linkedin.com/',
+            'path' => 'M4.98 3.5a2.49 2.49 0 1 0 0 4.98 2.49 2.49 0 0 0 0-4.98zM3 8.98h3.96V21H3zM9.34 8.98h3.8v1.64h.05c.53-1 1.82-2.05 3.75-2.05C20.95 8.57 22 11.2 22 14.62V21h-3.96v-5.66c0-1.35-.02-3.09-1.88-3.09-1.88 0-2.17 1.47-2.17 2.99V21H10.03z',
+        ],
+        [
+            'name' => 'X',
+            'href' => 'https://x.com/',
+            'path' => 'M18.9 2H22l-6.77 7.74L23 22h-6.2l-4.85-6.33L6.41 22H3.3l7.24-8.28L1 2h6.36l4.38 5.78zM17.82 20h1.72L6.45 3.9H4.6z',
+        ],
+        [
+            'name' => 'Instagram',
+            'href' => 'https://www.instagram.com/',
+            'path' => 'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm11.25 1.5a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25zM12 7a5 5 0 1 1-5 5 5 5 0 0 1 5-5zm0 2a3 3 0 1 0 3 3 3 3 0 0 0-3-3z',
+        ],
+    ];
+
+    $html = '<span style="display:inline-flex;align-items:center;gap:.6rem;">';
+    foreach ($socialLinks as $social) {
+        $name = (string) ($social['name'] ?? '');
+        $href = (string) ($social['href'] ?? '#');
+        $path = (string) ($social['path'] ?? '');
+        $html .= '<a href="' . e($href) . '" target="_blank" rel="noopener noreferrer" aria-label="' . e($name . ' - Club Radio Durnal') . '" title="' . e($name . ' - Club Radio Durnal') . '">'
+            . '<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="' . e($path) . '"></path></svg>'
+            . '<span class="sr-only">' . e($name) . '</span>'
+            . '</a>';
+    }
+    $html .= '</span>';
+
+    return $html;
+}
+}
+
+if (!function_exists('render_site_footer')) {
+function render_site_footer(string $currentRoute): string
+{
+    $infoLinks = [
+        ['label' => 'Conditions générales d\'utilisation', 'route' => 'conditions_utilisation'],
+        ['label' => 'Mentions légales', 'route' => 'mentions_legales'],
+        ['label' => 'Règlement d\'ordre intérieur', 'route' => 'reglement_interieur'],
+        ['label' => 'Faire un don', 'route' => 'membership'],
+        ['label' => 'Sponsoring', 'route' => 'sponsoring'],
+    ];
+
+    $infoLinksHtml = '';
+    foreach ($infoLinks as $link) {
+        $infoLinksHtml .= '<li><a href="' . e(route_url((string) $link['route'])) . '">' . e((string) $link['label']) . '</a></li>';
+    }
+
+    return '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
+        . '<section><h3 class="footer-title">Radio Club Durnal</h3><p class="footer-copy">Bocq Arena, Rue des Écoles, 5530 Purnode</p><p class="footer-spacer" aria-hidden="true">&nbsp;</p><p class="footer-copy">Éditeurs responsables: ON4BEN : +32 496 260 865 &amp; ON4DG : +32 478 789 193.</p><p class="footer-spacer" aria-hidden="true">&nbsp;</p><form class="footer-newsletter-form" method="get" action="' . e(route_url('newsletter')) . '"><label for="footer-newsletter-email" class="sr-only">Email newsletter</label><input id="footer-newsletter-email" type="email" name="email" placeholder="Votre email" required><button type="submit" class="button">S\'inscrire à la newsletter</button></form></section>'
+        . '<section><h3 class="footer-title">Contact</h3><form class="footer-contact-form" method="post" action="' . e(route_url('footer_contact')) . '"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><input type="hidden" name="return_route" value="' . e($currentRoute) . '"><label for="footer-contact-name" class="sr-only">Nom</label><input id="footer-contact-name" type="text" name="name" placeholder="Votre nom" required><label for="footer-contact-email" class="sr-only">Email</label><input id="footer-contact-email" type="email" name="email" placeholder="Votre email" required><label for="footer-contact-message" class="sr-only">Message</label><textarea id="footer-contact-message" name="message" placeholder=" Votre message" rows="3" required></textarea><button type="submit" class="button">Envoyer</button></form></section>'
+        . '<section><h3 class="footer-title">Informations importantes</h3><ul class="footer-nav">' . $infoLinksHtml . '</ul></section>'
+        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
+}
+}
+
 if (!function_exists('render_layout')) {
 function render_layout(string $content, string $title = ''): string
 {
-    $pageTitle = $title !== '' ? $title : (string) config('app.site_name', 'ON4CRD');
     $flashes = consume_flashes();
     $currentRoute = (string) ($_GET['route'] ?? 'home');
     $currentTheme = (string) ($_SESSION['theme'] ?? 'light');
@@ -513,6 +578,34 @@ function render_layout(string $content, string $title = ''): string
     }
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
+    $pageMeta = (array) ($_SESSION['_page_meta'] ?? []);
+    unset($_SESSION['_page_meta']);
+    $metaTitle = trim((string) ($pageMeta['title'] ?? ''));
+    $pageTitle = $title !== '' ? $title : ($metaTitle !== '' ? $metaTitle : $siteName);
+    $metaDescription = trim((string) ($pageMeta['description'] ?? ''));
+    if ($metaDescription === '') {
+        $metaDescription = 'Radio Club Durnal ON4CRD : actualités, événements, formation, ressources et vie du club radioamateur.';
+    }
+    $metaCanonical = trim((string) ($pageMeta['canonical'] ?? ''));
+    $metaRobots = trim((string) ($pageMeta['robots'] ?? 'index,follow'));
+    $metaOgType = trim((string) ($pageMeta['og_type'] ?? 'website'));
+    $metaTwitterCard = trim((string) ($pageMeta['twitter_card'] ?? 'summary_large_image'));
+    $metaLocale = trim((string) ($pageMeta['locale'] ?? 'fr_BE'));
+    $metaSiteName = trim((string) ($pageMeta['site_name'] ?? $siteName));
+    $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
+        . '<meta name="robots" content="' . e($metaRobots) . '">'
+        . '<meta property="og:title" content="' . e($pageTitle) . '">'
+        . '<meta property="og:description" content="' . e($metaDescription) . '">'
+        . '<meta property="og:type" content="' . e($metaOgType) . '">'
+        . '<meta property="og:locale" content="' . e($metaLocale) . '">'
+        . '<meta property="og:site_name" content="' . e($metaSiteName) . '">'
+        . '<meta name="twitter:card" content="' . e($metaTwitterCard) . '">'
+        . '<meta name="twitter:title" content="' . e($pageTitle) . '">'
+        . '<meta name="twitter:description" content="' . e($metaDescription) . '">';
+    if ($metaCanonical !== '') {
+        $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
+            . '<meta property="og:url" content="' . e($metaCanonical) . '">';
+    }
     $year = gmdate('Y');
     $themeOptions = [
         'light' => ['icon' => '☀️', 'label' => 'Clair'],
@@ -589,7 +682,8 @@ function render_layout(string $content, string $title = ''): string
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
-        . '</title><link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
+        . '</title>' . $metaHead
+        . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body>'
@@ -599,11 +693,7 @@ function render_layout(string $content, string $title = ''): string
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
-        . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
-        . '<section><h3 class="footer-title">Radio Club Durnal</h3><p class="footer-copy">Bocq Arena, Rue des Écoles, 5530 Purnode</p><p class="footer-spacer" aria-hidden="true">&nbsp;</p><p class="footer-copy">Éditeurs responsables: ON4BEN - +32 496 260 865 &amp; ON4DG - +32 478 789 193.</p><p class="footer-spacer" aria-hidden="true">&nbsp;</p><form class="footer-newsletter-form" method="get" action="' . e(route_url('newsletter')) . '"><label for="footer-newsletter-email" class="sr-only">Email newsletter</label><input id="footer-newsletter-email" type="email" name="email" placeholder="Votre email" required><button type="submit" class="button">S\'inscrire à la newsletter</button></form></section>'
-        . '<section><h3 class="footer-title">Contact</h3><form class="footer-contact-form" method="post" action="' . e(route_url('footer_contact')) . '"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><input type="hidden" name="return_route" value="' . e($currentRoute) . '"><label for="footer-contact-name" class="sr-only">Nom</label><input id="footer-contact-name" type="text" name="name" placeholder="Votre nom" required><label for="footer-contact-email" class="sr-only">Email</label><input id="footer-contact-email" type="email" name="email" placeholder="Votre email" required><label for="footer-contact-message" class="sr-only">Message</label><textarea id="footer-contact-message" name="message" placeholder=" Votre message" rows="3" required></textarea><button type="submit" class="button">Envoyer</button></form></section>'
-        . '<section><h3 class="footer-title">Informations importantes</h3><ul class="footer-nav"><li><a href="' . e(route_url('conditions_utilisation')) . '">Conditions générales d\'utilisation</a></li><li><a href="' . e(route_url('mentions_legales')) . '">Mentions légales</a></li><li><a href="' . e(route_url('reglement_interieur')) . '">Règlement d\'ordre intérieur</a></li><li><a href="' . e(route_url('membership')) . '">Faire un don</a></li><li><a href="' . e(route_url('sponsoring')) . '">Sponsoring</a></li></ul></section>'
-        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
+        . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
         . '</body></html>';
 }
