@@ -131,7 +131,9 @@ $localAdCandidates = glob(__DIR__ . '/../assets/pub/*.{png,jpg,jpeg,webp,gif,avi
 if ($localAdCandidates !== []) {
     $localAdPath = 'assets/pub/' . basename((string) $localAdCandidates[array_rand($localAdCandidates)]);
     $adSlotHtml = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
-        . '<img class="h-36 w-full rounded-lg object-cover" src="' . e(asset_url($localAdPath)) . '" alt="Publicité partenaire" loading="lazy" decoding="async">'
+        . '<div class="overflow-hidden rounded-lg aspect-square w-full">'
+        . '<img class="h-full w-full object-cover" src="' . e(asset_url($localAdPath)) . '" alt="Publicité partenaire" loading="lazy" decoding="async">'
+        . '</div>'
         . '</div>';
 }
 if (is_array($featuredAd) && !empty($featuredAd['title'])) {
@@ -148,7 +150,7 @@ if (is_array($featuredAd) && !empty($featuredAd['title'])) {
     }
 
     if ($adImage !== '') {
-        $adInner .= '<img class="mt-3 h-36 w-full rounded-lg object-cover" src="' . e(asset_url($adImage)) . '" alt="' . e((string) $featuredAd['title']) . '" loading="lazy" decoding="async">';
+        $adInner .= '<div class="mt-3 overflow-hidden rounded-lg aspect-square w-full"><img class="h-full w-full object-cover" src="' . e(asset_url($adImage)) . '" alt="' . e((string) $featuredAd['title']) . '" loading="lazy" decoding="async"></div>';
     }
 
     $adInner .= '</div>';
