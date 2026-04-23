@@ -234,7 +234,7 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '</section>'
     . '<section class="mt-4 grid gap-4 rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-50 to-white p-6 shadow-sm lg:grid-cols-[1.8fr_1fr] lg:items-center">'
     . '<div><h2 class="text-2xl font-extrabold text-slate-900">Prêt à rejoindre une communauté radio active et structurée ?</h2><p class="mt-2 text-slate-600">La nouvelle page d’accueil met en évidence les modules clés pour trouver rapidement l’information utile et participer aux projets ON4CRD.</p></div>'
-    . '<div class="grid gap-2">' . $primaryCta . '<a class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('news')) . '">Lire les actualités</a></div>'
+    . '<div class="grid gap-2">' . $primaryCta . '</div>'
     . '</section>';
 
 echo render_layout($content, 'Accueil');
