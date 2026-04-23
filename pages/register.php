@@ -32,8 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Trop de tentatives. Merci de réessayer plus tard.');
         }
 
-        db()->prepare('INSERT INTO members (id, auth_user_id, callsign, full_name, email, password_hash, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)')
-            ->execute([(int) $userId, (int) $userId, $callsign, $fullName, $email, password_hash($password, PASSWORD_DEFAULT)]);
+        db()->prepare(
+            'INSERT INTO members (auth_user_id, callsign, full_name, email, password_hash, is_active)
+             VALUES (?, ?, ?, ?, ?, 1)
+             ON DUPLICATE KEY UPDATE
+                 callsign = VALUES(callsign),
+                 full_name = VALUES(full_name),
+                 email = VALUES(email),
+                 password_hash = VALUES(password_hash),
+                 is_active = 1'
+        )->execute([(int) $userId, $callsign, $fullName, $email, password_hash($password, PASSWORD_DEFAULT)]);
 
         $authClient->loginWithUsername($callsign, $password);
         $_SESSION['member_id'] = (int) $authClient->getUserId();

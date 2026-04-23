@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $authClient->resetPassword($selector, $token, $newPassword);
-        unset($_SESSION['password_reset_link']);
+        unset($_SESSION['password_reset_pending']);
         set_flash('success', 'Mot de passe mis à jour. Vous pouvez vous connecter.');
         redirect('login');
     } catch (\Delight\Auth\InvalidSelectorTokenPairException|\Delight\Auth\TokenExpiredException $exception) {

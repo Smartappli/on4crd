@@ -15,10 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $authClient->forgotPassword($email, static function (string $selector, string $token): void {
-            $_SESSION['password_reset_link'] = route_url('reset_password', [
-                'selector' => $selector,
-                'token' => $token,
-            ]);
+            // Intégration e-mail à brancher ici (SMTP/API) pour transmettre le lien de reset.
+            // Le callback est obligatoire pour récupérer selector/token.
+            $_SESSION['password_reset_pending'] = hash('sha256', $selector . ':' . $token);
         });
 
         set_flash('success', 'Si un compte existe pour cet email, un lien de réinitialisation a été généré.');
@@ -38,17 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$debugReset = (string) ($_SESSION['password_reset_link'] ?? '');
-
 $content = '<div class="card narrow login-card"><h1>Mot de passe oublié</h1>'
     . '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . '<label>Email<input type="email" name="email" required></label>'
     . '<button class="button">Envoyer le lien</button></form>'
     . '<p><a href="' . e(route_url('login')) . '">Retour à la connexion</a></p>';
-
-if ($debugReset !== '') {
-    $content .= '<p><strong>Lien de réinitialisation (mode développement):</strong><br><a href="' . e($debugReset) . '">' . e($debugReset) . '</a></p>';
-}
 
 $content .= '</div>';
 

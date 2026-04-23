@@ -260,10 +260,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         db()->prepare(
-            'INSERT INTO members (id, auth_user_id, callsign, full_name, email, password_hash, qth, locator, bio, is_active)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+            'INSERT INTO members (auth_user_id, callsign, full_name, email, password_hash, qth, locator, bio, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
              ON DUPLICATE KEY UPDATE
-                 id = VALUES(id),
                  auth_user_id = VALUES(auth_user_id),
                  full_name = VALUES(full_name),
                  email = VALUES(email),
@@ -272,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  locator = VALUES(locator),
                  bio = VALUES(bio),
                  is_active = 1'
-        )->execute([$authUserId, $authUserId, $callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
+        )->execute([$authUserId, $callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
 
         $memberIdStmt = db()->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
         $memberIdStmt->execute([$callsign]);

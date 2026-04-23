@@ -126,16 +126,15 @@ if ($authUserId <= 0) {
 }
 
 $pdo->prepare(
-    'INSERT INTO members (id, auth_user_id, callsign, full_name, email, password_hash, is_active)
-     VALUES (?, ?, ?, ?, ?, ?, 1)
+    'INSERT INTO members (auth_user_id, callsign, full_name, email, password_hash, is_active)
+     VALUES (?, ?, ?, ?, ?, 1)
      ON DUPLICATE KEY UPDATE
-         id = VALUES(id),
          auth_user_id = VALUES(auth_user_id),
          full_name = VALUES(full_name),
          email = VALUES(email),
          password_hash = VALUES(password_hash),
          is_active = 1'
-)->execute([$authUserId, $authUserId, $callsign, $name, $email !== '' ? $email : null, $passwordHash]);
+)->execute([$authUserId, $callsign, $name, $email !== '' ? $email : null, $passwordHash]);
 
 $memberIdStmt = $pdo->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
 $memberIdStmt->execute([$callsign]);

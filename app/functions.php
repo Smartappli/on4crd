@@ -61,12 +61,23 @@ function auth(): ?\Delight\Auth\Auth
         return null;
     }
 
-    if (!class_exists(\Delight\Auth\Auth::class) || !class_exists(\Delight\Db\PdoDatabase::class)) {
+    if (!class_exists(\Delight\Auth\Auth::class)) {
         $auth = null;
         return null;
     }
 
-    $auth = new \Delight\Auth\Auth(new \Delight\Db\PdoDatabase(db()));
+    $pdo = db();
+    try {
+        if (class_exists(\Delight\Db\PdoDatabase::class)) {
+            $auth = new \Delight\Auth\Auth(new \Delight\Db\PdoDatabase($pdo));
+        } else {
+            $auth = new \Delight\Auth\Auth($pdo);
+        }
+    } catch (Throwable $throwable) {
+        $auth = null;
+        return null;
+    }
+
     return $auth;
 }
 
@@ -261,7 +272,15 @@ function apply_runtime_schema_updates(): void
     );
 
     if (table_exists('members')) {
-        db()->exec('ALTER TABLE members ADD COLUMN IF NOT EXISTS auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE');
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $columnStmt->execute(['members', 'auth_user_id']);
+        $hasAuthUserId = (int) $columnStmt->fetchColumn() > 0;
+        if (!$hasAuthUserId) {
+            db()->exec('ALTER TABLE members ADD COLUMN auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE');
+        }
     }
 }
 
