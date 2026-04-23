@@ -755,6 +755,8 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .footer-contact-form textarea { resize: vertical; min-height: 88px; }
 .footer-newsletter-form .button,
 .footer-contact-form .button {
+  width: 100%;
+  justify-content: center;
   font-size: .88rem;
   padding: .45rem .65rem;
 }
