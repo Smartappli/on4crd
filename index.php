@@ -153,7 +153,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'install.php'];
+$publicRoutes = ['home', 'login', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'footer_contact', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -240,6 +240,7 @@ switch ($route) {
     case 'sitemap.xml': $dispatchPage('pages/sitemap.php'); break;
     case 'robots.txt': $dispatchPage('pages/robots.php'); break;
     case 'newsletter_unsubscribe': $dispatchPage('pages/newsletter_unsubscribe.php'); break;
+    case 'footer_contact': $dispatchPage('pages/footer_contact.php'); break;
     case 'install.php': $dispatchPage('install.php'); break;
     default:
         http_response_code(404);
