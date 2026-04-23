@@ -1,6 +1,6 @@
 services:
   db:
-    image: mysql:9.6
+    image: mysql:9.7
     container_name: on4crd-db
     restart: unless-stopped
     environment:
