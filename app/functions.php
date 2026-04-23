@@ -601,10 +601,9 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
-        . '<section><h3 class="footer-title">Adresse : Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
-        . '<section><h3 class="footer-title">CGU</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
-        . '<section><h3 class="footer-title">ROI</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
-        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
+        . '<section><h3 class="footer-title">Radio Club Durnal</h3><p class="footer-copy">Adresse : Bocq Arena, Rue des Écoles, 5530 Purnode</p><form class="footer-newsletter-form" method="get" action="' . e(route_url('newsletter')) . '"><label for="footer-newsletter-email" class="sr-only">Email newsletter</label><input id="footer-newsletter-email" type="email" name="email" placeholder="Votre email" required><button type="submit" class="button">S\'inscrire à la newsletter</button></form></section>'
+        . '<section><ul class="footer-nav"><li><a href="' . e(route_url('conditions_utilisation')) . '">Conditions générales d\'utilisation</a></li><li><a href="' . e(route_url('mentions_legales')) . '">Mentions légales</a></li><li><a href="' . e(route_url('reglement_interieur')) . '">Règlement d\'ordre intérieur</a></li><li><a href="' . e(route_url('sponsoring')) . '">sponsoring</a></li></ul></section>'
+        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span><span>Éditeur responsable : Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
         . '</body></html>';
 }

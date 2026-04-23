@@ -10,6 +10,7 @@ $primaryCta = $isAuthenticated
 
 
 $moduleCatalog = [
+    ['code' => 'dashboard', 'route' => 'dashboard', 'title' => 'Tableau de bord personnalisable', 'desc' => 'Configurez votre espace membre avec des widgets à afficher, organiser et adapter selon vos besoins.', 'icon' => '🧩', 'audience' => 'Membres connectés'],
     ['code' => 'articles', 'route' => 'articles', 'title' => 'Articles techniques', 'desc' => 'Approfondissez vos connaissances avec des contenus pratiques et pédagogiques.', 'icon' => '🧠', 'audience' => 'Membres passionnés'],
     ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Wiki du club', 'desc' => 'Consultez les procédures, fiches matériel et bonnes pratiques radioamateur.', 'icon' => '📚', 'audience' => 'Contributeurs & opérateurs'],
     ['code' => 'albums', 'route' => 'albums', 'title' => 'Galerie photo', 'desc' => 'Revivez les activités du club avec des albums thématiques régulièrement enrichis.', 'icon' => '📸', 'audience' => 'Visiteurs & membres'],
@@ -183,6 +184,12 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '</article>'
     . '</div>'
     . '</aside>'
+    . '</div>'
+    . '</section>'
+    . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<div class="grid gap-4 md:grid-cols-2">'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">Nous sommes affilié à l\'UBA</h3><p class="mt-2 text-sm text-slate-600">Le Radio Club Durnal est affilié à l\'Union Belge des Amateurs-Émetteurs.</p></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">Notre relai</h3><p class="mt-2 text-sm text-slate-600">Retrouvez les informations essentielles concernant notre relai et ses usages.</p></article>'
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
