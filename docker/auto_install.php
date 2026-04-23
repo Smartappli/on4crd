@@ -110,16 +110,31 @@ $callsign = strtoupper(trim((string) $options['admin-callsign']));
 $name = trim((string) $options['admin-name']);
 $email = trim((string) $options['admin-email']);
 $passwordHash = password_hash((string) $options['admin-password'], PASSWORD_ARGON2ID);
+$registeredAt = time();
 
 $pdo->prepare(
-    'INSERT INTO members (callsign, full_name, email, password_hash, is_active)
-     VALUES (?, ?, ?, ?, 1)
+    'INSERT INTO users (email, password, username, status, verified, resettable, roles_mask, registered)
+     VALUES (?, ?, ?, 0, 1, 1, 0, ?)
+     ON DUPLICATE KEY UPDATE password = VALUES(password), username = VALUES(username), verified = VALUES(verified), resettable = VALUES(resettable)'
+)->execute([$email !== '' ? $email : ($callsign . '@local.invalid'), $passwordHash, $callsign, $registeredAt]);
+
+$authUserStmt = $pdo->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
+$authUserStmt->execute([$callsign]);
+$authUserId = (int) $authUserStmt->fetchColumn();
+if ($authUserId <= 0) {
+    throw new RuntimeException('Unable to create auth user');
+}
+
+$pdo->prepare(
+    'INSERT INTO members (auth_user_id, callsign, full_name, email, password_hash, is_active)
+     VALUES (?, ?, ?, ?, ?, 1)
      ON DUPLICATE KEY UPDATE
+         auth_user_id = VALUES(auth_user_id),
          full_name = VALUES(full_name),
          email = VALUES(email),
          password_hash = VALUES(password_hash),
          is_active = 1'
-)->execute([$callsign, $name, $email !== '' ? $email : null, $passwordHash]);
+)->execute([$authUserId, $callsign, $name, $email !== '' ? $email : null, $passwordHash]);
 
 $memberIdStmt = $pdo->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
 $memberIdStmt->execute([$callsign]);

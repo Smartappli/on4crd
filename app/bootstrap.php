@@ -7,6 +7,10 @@ if (!is_file($bootstrapConfigFile)) {
 }
 
 $bootstrapConfig = require $bootstrapConfigFile;
+$vendorAutoload = __DIR__ . '/../vendor/autoload.php';
+if (is_file($vendorAutoload)) {
+    require_once $vendorAutoload;
+}
 $forwardedProtoHeader = strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
 $forwardedProto = $forwardedProtoHeader !== '' ? trim(explode(',', $forwardedProtoHeader)[0]) : '';
 $serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');

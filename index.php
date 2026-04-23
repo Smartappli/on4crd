@@ -153,7 +153,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'footer_contact', 'install.php'];
+$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'footer_contact', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -173,6 +173,9 @@ $dispatchPage = static function (string $relativePath): void {
 switch ($route) {
     case 'home': $dispatchPage('pages/home.php'); break;
     case 'login': $dispatchPage('pages/login.php'); break;
+    case 'register': $dispatchPage('pages/register.php'); break;
+    case 'forgot_password': $dispatchPage('pages/forgot_password.php'); break;
+    case 'reset_password': $dispatchPage('pages/reset_password.php'); break;
     case 'membership': $dispatchPage('pages/membership.php'); break;
     case 'conditions_utilisation': $dispatchPage('pages/conditions_utilisation.php'); break;
     case 'mentions_legales': $dispatchPage('pages/mentions_legales.php'); break;

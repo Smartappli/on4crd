@@ -3,7 +3,9 @@
   "description": "Site club ON4CRD en PHP avec modules contenus, QSL, boutique et encheres.",
   "type": "project",
   "license": "proprietary",
-  "require": {},
+  "require": {
+    "delight-im/auth": "^9.0"
+  },
   "require-dev": {
     "phpunit/phpunit": "^13.1"
   },
