@@ -50,6 +50,26 @@ function db(): PDO
     return $pdo;
 }
 
+function auth(): ?\Delight\Auth\Auth
+{
+    static $auth = false;
+
+    if ($auth instanceof \Delight\Auth\Auth) {
+        return $auth;
+    }
+    if ($auth === null) {
+        return null;
+    }
+
+    if (!class_exists(\Delight\Auth\Auth::class) || !class_exists(\Delight\Db\PdoDatabase::class)) {
+        $auth = null;
+        return null;
+    }
+
+    $auth = new \Delight\Auth\Auth(new \Delight\Db\PdoDatabase(db()));
+    return $auth;
+}
+
 function table_exists(string $table): bool
 {
     static $cache = [];
@@ -173,9 +193,76 @@ function ensure_directories(): void
 
 function apply_runtime_schema_updates(): void
 {
-    // Intentionally kept as a no-op fallback.
-    // The bootstrap always invokes this hook so deployments with mixed versions
-    // do not fail when no runtime migration is required.
+    if (!table_exists('users')) {
+        db()->exec(
+            'CREATE TABLE users (
+                id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                email VARCHAR(249) NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                username VARCHAR(100) DEFAULT NULL,
+                status TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                verified TINYINT UNSIGNED NOT NULL DEFAULT 0,
+                resettable TINYINT UNSIGNED NOT NULL DEFAULT 1,
+                roles_mask INT UNSIGNED NOT NULL DEFAULT 0,
+                registered INT UNSIGNED NOT NULL,
+                last_login INT UNSIGNED DEFAULT NULL,
+                force_logout MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+                UNIQUE KEY users_email_unique (email),
+                UNIQUE KEY users_username_unique (username)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+    }
+
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_confirmations (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED NOT NULL,
+            email VARCHAR(249) NOT NULL,
+            selector VARCHAR(16) NOT NULL,
+            token VARCHAR(255) NOT NULL,
+            expires INT UNSIGNED NOT NULL,
+            UNIQUE KEY users_confirmations_selector_unique (selector),
+            KEY users_confirmations_user_id_index (user_id),
+            CONSTRAINT users_confirmations_user_id_foreign FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_remembered (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user INT UNSIGNED NOT NULL,
+            selector VARCHAR(24) NOT NULL,
+            token VARCHAR(255) NOT NULL,
+            expires INT UNSIGNED NOT NULL,
+            UNIQUE KEY users_remembered_selector_unique (selector),
+            KEY users_remembered_user_index (user),
+            CONSTRAINT users_remembered_user_foreign FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_resets (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user INT UNSIGNED NOT NULL,
+            selector VARCHAR(20) NOT NULL,
+            token VARCHAR(255) NOT NULL,
+            expires INT UNSIGNED NOT NULL,
+            UNIQUE KEY users_resets_selector_unique (selector),
+            KEY users_resets_user_index (user),
+            CONSTRAINT users_resets_user_foreign FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_throttling (
+            bucket VARCHAR(44) NOT NULL,
+            tokens FLOAT UNSIGNED NOT NULL,
+            replenished_at INT UNSIGNED NOT NULL,
+            expires_at INT UNSIGNED NOT NULL,
+            PRIMARY KEY (bucket)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
+    if (table_exists('members')) {
+        db()->exec('ALTER TABLE members ADD COLUMN IF NOT EXISTS auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE');
+    }
 }
 
 if (!function_exists('base_url')) {
@@ -301,13 +388,17 @@ function current_user(): ?array
     $loaded = true;
 
     $memberId = (int) ($_SESSION['member_id'] ?? 0);
+    $authClient = auth();
+    if ($authClient !== null && $authClient->isLoggedIn()) {
+        $memberId = (int) $authClient->getUserId();
+    }
     if ($memberId <= 0 || !table_exists('members')) {
         $cache = null;
         return null;
     }
 
-    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active FROM members WHERE id = ? LIMIT 1');
-    $stmt->execute([$memberId]);
+    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active FROM members WHERE id = ? OR auth_user_id = ? LIMIT 1');
+    $stmt->execute([$memberId, $memberId]);
     $row = $stmt->fetch();
     if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
         unset($_SESSION['member_id']);
@@ -336,6 +427,10 @@ function require_login(): array
 if (!function_exists('logout_member')) {
 function logout_member(): void
 {
+    $authClient = auth();
+    if ($authClient !== null && $authClient->isLoggedIn()) {
+        $authClient->logOut();
+    }
     unset($_SESSION['member_id']);
 }
 }
