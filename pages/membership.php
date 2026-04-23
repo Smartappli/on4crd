@@ -32,7 +32,7 @@ $content = '<section class="rounded-3xl border border-slate-200 bg-gradient-to-r
     . '<h1 class="mt-4 text-3xl font-extrabold text-slate-900 lg:text-4xl">Rejoindre le club</h1>'
     . '<p class="mt-3 max-w-3xl text-slate-700">Devenez membre pour participer activement aux projets radio, profiter de l\'entraide technique et intégrer une communauté locale dynamique.</p>'
     . '<div class="mt-6 flex flex-wrap gap-3">'
-    . '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('login')) . '">Demander l\'adhésion</a>'
+    . '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('register')) . '">Demander l\'adhésion</a>'
     . '<a class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('events')) . '">Voir les prochaines activités</a>'
     . '</div>'
     . '</section>'

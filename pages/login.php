@@ -20,19 +20,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Captcha invalide.');
         }
         unset($_SESSION['login_captcha']);
-        if (!table_exists('members')) {
-            throw new RuntimeException('La base membres n\'est pas initialisée.');
+        $authClient = auth();
+        if ($authClient === null) {
+            throw new RuntimeException('Module d’authentification indisponible. Lancez composer install.');
         }
 
-        $stmt = db()->prepare('SELECT id, password_hash, is_active FROM members WHERE callsign = ? LIMIT 1');
-        $stmt->execute([$callsign]);
-        $member = $stmt->fetch();
-
-        if (!is_array($member) || (int) ($member['is_active'] ?? 0) !== 1 || !password_verify($password, (string) ($member['password_hash'] ?? ''))) {
+        try {
+            $authClient->loginWithUsername($callsign, $password);
+        } catch (\Delight\Auth\UnknownUsernameException|\Delight\Auth\InvalidPasswordException $exception) {
             throw new RuntimeException('Indicatif ou mot de passe invalide.');
+        } catch (\Delight\Auth\TooManyRequestsException $exception) {
+            throw new RuntimeException('Trop de tentatives de connexion. Réessayez dans quelques minutes.');
+        } catch (\Delight\Auth\EmailNotVerifiedException $exception) {
+            throw new RuntimeException('Votre compte n’est pas encore vérifié.');
         }
 
-        $_SESSION['member_id'] = (int) $member['id'];
+        $_SESSION['member_id'] = (int) $authClient->getUserId();
         set_flash('success', 'Connexion réussie.');
         redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
     } catch (Throwable $throwable) {
@@ -52,6 +55,9 @@ $content = '<div class="card narrow login-card"><h1>Connexion</h1>'
     . '<label>Mot de passe<input type="password" name="password" required></label>'
     . '<label>Captcha : combien font ' . $captchaA . ' + ' . $captchaB . ' ?'
     . '<input type="text" name="captcha" inputmode="numeric" autocomplete="off" required></label>'
-    . '<button class="button">Se connecter</button></form></div>';
+    . '<button class="button">Se connecter</button></form>'
+    . '<p><a href="' . e(route_url('forgot_password')) . '">Mot de passe oublié ?</a></p>'
+    . '<p>Pas encore membre ? <a href="' . e(route_url('register')) . '">Créer un compte</a></p>'
+    . '</div>';
 
 echo render_layout($content, 'Connexion');

@@ -245,10 +245,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = (string) ($_POST['password'] ?? '');
         if ($password === '') { throw new RuntimeException('Mot de passe requis.'); }
         $hash = password_hash($password, PASSWORD_ARGON2ID);
+        $nowTs = time();
         db()->prepare(
-            'INSERT INTO members (callsign, full_name, email, password_hash, qth, locator, bio, is_active)
-             VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+            'INSERT INTO users (email, password, username, status, verified, resettable, roles_mask, registered)
+             VALUES (?, ?, ?, 0, 1, 1, 0, ?)
+             ON DUPLICATE KEY UPDATE password = VALUES(password), username = VALUES(username), verified = VALUES(verified), resettable = VALUES(resettable)'
+        )->execute([$email !== '' ? $email : ($callsign . '@local.invalid'), $hash, $callsign, $nowTs]);
+
+        $authUserStmt = db()->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
+        $authUserStmt->execute([$callsign]);
+        $authUserId = (int) $authUserStmt->fetchColumn();
+        if ($authUserId <= 0) {
+            throw new RuntimeException('Impossible de créer le compte d’authentification.');
+        }
+
+        db()->prepare(
+            'INSERT INTO members (id, auth_user_id, callsign, full_name, email, password_hash, qth, locator, bio, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
              ON DUPLICATE KEY UPDATE
+                 id = VALUES(id),
+                 auth_user_id = VALUES(auth_user_id),
                  full_name = VALUES(full_name),
                  email = VALUES(email),
                  password_hash = VALUES(password_hash),
@@ -256,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  locator = VALUES(locator),
                  bio = VALUES(bio),
                  is_active = 1'
-        )->execute([$callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
+        )->execute([$authUserId, $authUserId, $callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
 
         $memberIdStmt = db()->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
         $memberIdStmt->execute([$callsign]);
