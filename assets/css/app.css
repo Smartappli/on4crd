@@ -734,7 +734,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   margin: 0 auto;
   padding: 1.5rem;
 }
-.footer-grid { display:grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(180px, .8fr)); gap:1rem; }
+.footer-grid { display:grid; grid-template-columns: minmax(0, 1.4fr) minmax(220px, .9fr); gap:1rem; }
 .footer-title { margin:0 0 .45rem; font-size:1rem; }
 .footer-nav { list-style:none; padding:0; margin:0; display:grid; gap:.45rem; }
 .footer-copy,

@@ -602,9 +602,8 @@ function render_layout(string $content, string $title = ''): string
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
         . '<section><h3 class="footer-title">Adresse : Bocq Arena, Rue des Écoles, 5530 Purnode</h3></section>'
-        . '<section><h3 class="footer-title">CGU</h3><ul class="footer-nav"><li><a href="' . e(route_url('home')) . '">Accueil</a></li><li><a href="' . e(route_url('news')) . '">Actualités</a></li><li><a href="' . e(route_url('events')) . '">Événements</a></li></ul></section>'
-        . '<section><h3 class="footer-title">ROI</h3><ul class="footer-nav"><li><a href="' . e(route_url('login')) . '">Connexion</a></li><li><a href="' . e(route_url('profile')) . '">Profil</a></li><li><a href="' . e(route_url('dashboard')) . '">Tableau de bord</a></li></ul></section>'
-        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
+        . '<section><h3 class="footer-title">Informations</h3><ul class="footer-nav"><li>Conditions générales d\'utilisation</li><li>Mentions légales</li><li>Règlement d\'ordre intérieur</li><li>Sponsoring</li></ul></section>'
+        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span><span>Éditeur responsable : Radio Club Durnal (ON4CRD)</span><span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>'
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
         . '</body></html>';
 }
