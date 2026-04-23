@@ -740,6 +740,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .footer-newsletter-form,
 .footer-contact-form { display:grid; gap:.55rem; max-width: 360px; }
 .footer-newsletter-form { margin-bottom: .9rem; }
+.footer-spacer { margin: .6rem 0 1rem; line-height: 1; }
 .footer-newsletter-form input,
 .footer-contact-form input,
 .footer-contact-form textarea { width:100%; }
