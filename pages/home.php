@@ -126,7 +126,14 @@ if (is_array($nextEvent) && !empty($nextEvent['slug'])) {
         . '</a>';
 }
 
-$adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">Cet espace est réservé aux annonces partenaires du club.</p></div>';
+$adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">Aucune publicité partenaire disponible pour le moment.</p></div>';
+$localAdCandidates = glob(__DIR__ . '/../assets/pub/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
+if ($localAdCandidates !== []) {
+    $localAdPath = 'assets/pub/' . basename((string) $localAdCandidates[array_rand($localAdCandidates)]);
+    $adSlotHtml = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
+        . '<img class="h-36 w-full rounded-lg object-cover" src="' . e(asset_url($localAdPath)) . '" alt="Publicité partenaire" loading="lazy" decoding="async">'
+        . '</div>';
+}
 if (is_array($featuredAd) && !empty($featuredAd['title'])) {
     $adTarget = trim((string) ($featuredAd['target_url'] ?? ''));
     $adDescription = trim((string) ($featuredAd['description'] ?? ''));
@@ -192,7 +199,7 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Union royale belge des amateurs-émetteurs a.s.b.l.</h3><p class="mt-2 text-sm text-slate-600">Le Radio Club Durnal est affilié à l\'Union Belge des Amateurs-Émetteurs.</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.uba.be" target="_blank" rel="noopener noreferrer">Visiter le site de l\'UBA</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($ubaLogoPath)) . '" alt="Logo UBA" loading="lazy" decoding="async"></div></article>'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Notre relais</h3><p class="mt-2 text-sm text-slate-600">Retrouvez les informations essentielles concernant notre relai et ses usages.</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('relais')) . '">Voir la page relais</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($relaisLogoPath)) . '" alt="Logo du relais" loading="lazy" decoding="async"></div></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Notre relais</h3><p class="mt-2 text-sm text-slate-600">Retrouvez les informations essentielles concernant notre relai et ses paramètres.</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('relais')) . '">Voir la page relais</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($relaisLogoPath)) . '" alt="Logo du relais" loading="lazy" decoding="async"></div></article>'
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
