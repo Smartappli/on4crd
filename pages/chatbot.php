@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ob_start();
 ?>
 <div class="card narrow">
-    <h1>Assistant club</h1>
+    <h1>Raymond vous répond</h1>
     <form method="post">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <label>Question
@@ -45,4 +45,4 @@ ob_start();
     <?php endif; ?>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Assistant');
+echo render_layout((string) ob_get_clean(), 'Raymond vous répond');

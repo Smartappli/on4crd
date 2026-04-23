@@ -8,8 +8,12 @@ $userWidgets->execute([(int) $user['id']]);
 $selected = $userWidgets->fetchAll();
 $selectedKeys = array_map(static fn(array $row): string => (string) $row['widget_key'], $selected);
 if ($selectedKeys === []) {
-    $selectedKeys = ['welcome', 'propagation', 'club_status'];
+    $selectedKeys = ['welcome', 'propagation', 'club_status', 'chatbot'];
 }
+$selectedKeys = array_values(array_filter(
+    $selectedKeys,
+    static fn(string $widgetKey): bool => array_key_exists($widgetKey, $availableWidgets)
+));
 $availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);
 
 $dashboardConfig = [
@@ -26,10 +30,11 @@ ob_start();
     <div class="row-between">
       <div>
         <h1>Tableau de bord membre</h1>
-        <p class="help">Les widgets live sont réservés à ce module séparé. Vous pouvez réorganiser les blocs, en ajouter ou en retirer selon vos besoins.</p>
+        <p class="help">Les widgets live sont réservés à ce module séparé. Raymond vous répond est intégré au tableau de bord personnalisable des membres : vous pouvez réorganiser les blocs, en ajouter ou en retirer selon vos besoins.</p>
       </div>
       <div class="actions">
         <a class="button secondary" href="<?= e(route_url('newsletter')) ?>">Newsletter</a>
+        <a class="button secondary" href="<?= e(route_url('chatbot')) ?>">Raymond vous répond</a>
         <button class="button secondary" id="save-dashboard" type="button">Enregistrer la disposition</button>
       </div>
     </div>
