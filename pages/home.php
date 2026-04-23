@@ -10,6 +10,7 @@ $primaryCta = $isAuthenticated
 
 
 $moduleCatalog = [
+    ['code' => 'dashboard', 'route' => 'dashboard', 'title' => 'Tableau de bord personnalisable', 'desc' => 'Configurez votre espace membre avec des widgets à afficher, organiser et adapter selon vos besoins.', 'icon' => '🧩', 'audience' => 'Membres connectés'],
     ['code' => 'articles', 'route' => 'articles', 'title' => 'Articles techniques', 'desc' => 'Approfondissez vos connaissances avec des contenus pratiques et pédagogiques.', 'icon' => '🧠', 'audience' => 'Membres passionnés'],
     ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Wiki du club', 'desc' => 'Consultez les procédures, fiches matériel et bonnes pratiques radioamateur.', 'icon' => '📚', 'audience' => 'Contributeurs & opérateurs'],
     ['code' => 'albums', 'route' => 'albums', 'title' => 'Galerie photo', 'desc' => 'Revivez les activités du club avec des albums thématiques régulièrement enrichis.', 'icon' => '📸', 'audience' => 'Visiteurs & membres'],
