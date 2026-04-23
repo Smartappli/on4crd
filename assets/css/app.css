@@ -169,24 +169,28 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: .45rem;
+  flex: 1 1 auto;
 }
 .toolbar-auth .button.toolbar-login-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 8.6rem;
-  min-width: 8.6rem;
+  width: 100%;
+  min-width: 0;
+  height: 2.35rem;
   padding: .52rem .45rem;
   font-size: 1.08rem;
   font-weight: 600;
   line-height: 1;
   text-align: center;
+  box-sizing: border-box;
 }
 .toolbar-preferences .toolbar-form,
 .toolbar-preferences .inline-form { margin: 0; }
 .preference-select {
   width: 8.6rem;
   min-width: 8.6rem;
+  height: 2.35rem;
   margin-top: 0;
   padding: .52rem .45rem;
   border-radius: 12px;
@@ -200,6 +204,7 @@ textarea:focus-visible {
   line-height: 1;
   cursor: pointer;
   appearance: none;
+  box-sizing: border-box;
   box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 10%, transparent);
   transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
 }
