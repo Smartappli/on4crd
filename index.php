@@ -153,7 +153,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'footer_contact', 'install.php'];
+$publicRoutes = ['home', 'login', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'footer_contact', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -195,6 +195,7 @@ switch ($route) {
     case 'committee': $dispatchPage('pages/committee.php'); break;
     case 'press': $dispatchPage('pages/press.php'); break;
     case 'schools': $dispatchPage('pages/schools.php'); break;
+    case 'relais': $dispatchPage('pages/relais.php'); break;
     case 'events': $dispatchPage('pages/events.php'); break;
     case 'event_view': $dispatchPage('pages/event_view.php'); break;
     case 'shop': $dispatchPage('pages/shop.php'); break;
