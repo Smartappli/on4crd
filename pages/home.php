@@ -151,6 +151,25 @@ if (is_array($featuredAd) && !empty($featuredAd['title'])) {
         : $adInner;
 }
 
+$logoFiles = glob(__DIR__ . '/../assets/logo/*.{svg,png,jpg,jpeg,webp,avif}', GLOB_BRACE) ?: [];
+sort($logoFiles);
+$ubaLogoPath = '';
+$relaisLogoPath = '';
+foreach ($logoFiles as $logoFile) {
+    $basename = strtolower(basename((string) $logoFile));
+    $relativePath = 'assets/logo/' . basename((string) $logoFile);
+    if ($ubaLogoPath === '' && str_contains($basename, 'uba')) {
+        $ubaLogoPath = $relativePath;
+        continue;
+    }
+    if ($relaisLogoPath === '') {
+        $relaisLogoPath = $relativePath;
+    }
+}
+if ($relaisLogoPath === '' && $ubaLogoPath !== '') {
+    $relaisLogoPath = $ubaLogoPath;
+}
+
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
     . '<img class="absolute inset-0 -z-20 h-full w-full object-cover" src="' . e($heroBackgroundUrl) . '" alt="Illustration ON4CRD" loading="eager" decoding="async">'
@@ -188,8 +207,8 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="grid gap-4 md:grid-cols-2">'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">Nous sommes affilié à l\'UBA</h3><p class="mt-2 text-sm text-slate-600">Le Radio Club Durnal est affilié à l\'Union Belge des Amateurs-Émetteurs.</p></article>'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">Notre relai</h3><p class="mt-2 text-sm text-slate-600">Retrouvez les informations essentielles concernant notre relai et ses usages.</p></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Nous sommes affilié à l\'UBA</h3><p class="mt-2 text-sm text-slate-600">Le Radio Club Durnal est affilié à l\'Union Belge des Amateurs-Émetteurs.</p></div>' . ($ubaLogoPath !== '' ? '<img class="h-14 w-auto object-contain" src="' . e(asset_url($ubaLogoPath)) . '" alt="Logo UBA" loading="lazy" decoding="async">' : '') . '</div></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Notre relais</h3><p class="mt-2 text-sm text-slate-600">Retrouvez les informations essentielles concernant notre relai et ses usages.</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('relais')) . '">Voir la page relais</a></div>' . ($relaisLogoPath !== '' ? '<img class="h-14 w-auto object-contain" src="' . e(asset_url($relaisLogoPath)) . '" alt="Logo du relais" loading="lazy" decoding="async">' : '') . '</div></article>'
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
