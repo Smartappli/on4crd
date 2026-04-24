@@ -145,6 +145,7 @@ $routeModules = [
     'admin_translation_reviews' => 'admin',
     'admin_live_feeds' => 'admin',
     'admin_events' => 'admin',
+    'admin_events_feed' => 'admin',
     'admin_shop' => 'admin',
     'admin_auctions' => 'admin',
 ];
@@ -153,7 +154,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'install.php'];
+$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -200,6 +201,7 @@ switch ($route) {
     case 'schools': $dispatchPage('pages/schools.php'); break;
     case 'relais': $dispatchPage('pages/relais.php'); break;
     case 'events': $dispatchPage('pages/events.php'); break;
+    case 'events_feed': $dispatchPage('pages/events_feed.php'); break;
     case 'event_view': $dispatchPage('pages/event_view.php'); break;
     case 'shop': $dispatchPage('pages/shop.php'); break;
     case 'shop_product': $dispatchPage('pages/shop_product.php'); break;
@@ -237,6 +239,7 @@ switch ($route) {
     case 'admin_translation_reviews': $dispatchPage('pages/admin_translation_reviews.php'); break;
     case 'admin_live_feeds': $dispatchPage('pages/admin_live_feeds.php'); break;
     case 'admin_events': $dispatchPage('pages/admin_events.php'); break;
+    case 'admin_events_feed': $dispatchPage('pages/admin_events_feed.php'); break;
     case 'admin_shop': $dispatchPage('pages/admin_shop.php'); break;
     case 'admin_auctions': $dispatchPage('pages/admin_auctions.php'); break;
     case 'ads': $dispatchPage('pages/ads.php'); break;
