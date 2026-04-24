@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 $members = [];
+$activeMembersCount = 0;
+$ubaMembersCount = 0;
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 100) {
     $search = mb_substr($search, 0, 100);
@@ -14,22 +16,35 @@ if (mb_strlen($licenceFilter) > 64) {
 
 if (table_exists('members')) {
     $viewer = current_user();
-    $qthVisibility = $viewer !== null ? ['public', 'members'] : ['public'];
+    $allowedVisibilityLevels = ['public'];
+    if ($viewer !== null) {
+        $allowedVisibilityLevels[] = 'members';
+        if ((int) ($viewer['is_committee'] ?? 0) === 1) {
+            $allowedVisibilityLevels[] = 'private';
+        }
+    }
+    $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
-    $sql = 'SELECT callsign, full_name, qth, licence_class, favourite_bands, is_committee, committee_role, visibility_qth
+    $sql = 'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, is_committee, committee_role, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
         FROM members
         WHERE is_active = 1';
     $params = [];
 
     if ($search !== '') {
-        $sql .= ' AND (callsign LIKE ? OR full_name LIKE ?)';
+        $sql .= ' AND (callsign LIKE ? OR (full_name LIKE ? AND visibility_full_name IN (' . $visibilityPlaceholders . ')))';
         $like = '%' . $search . '%';
         $params[] = $like;
         $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
     }
     if ($licenceFilter !== '') {
-        $sql .= ' AND licence_class = ?';
+        $sql .= ' AND licence_class = ? AND visibility_licence_class IN (' . $visibilityPlaceholders . ')';
         $params[] = $licenceFilter;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
     }
 
     $sql .= ' ORDER BY callsign ASC LIMIT 300';
@@ -38,13 +53,66 @@ if (table_exists('members')) {
     $stmt->execute($params);
     $members = $stmt->fetchAll() ?: [];
 
-    foreach ($members as &$member) {
-        $visibility = (string) ($member['visibility_qth'] ?? 'private');
-        if (!in_array($visibility, $qthVisibility, true)) {
-            $member['qth'] = '';
+    $countsStmt = db()->prepare(
+        'SELECT COUNT(*) AS active_total,
+                SUM(CASE WHEN UPPER(COALESCE(licence_class, "")) LIKE "%UBA%" AND visibility_licence_class IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
+         FROM members
+         WHERE is_active = 1
+           AND (
+               visibility_full_name IN (' . $visibilityPlaceholders . ')
+               OR visibility_email IN (' . $visibilityPlaceholders . ')
+               OR visibility_phone IN (' . $visibilityPlaceholders . ')
+               OR visibility_qth IN (' . $visibilityPlaceholders . ')
+               OR visibility_licence_class IN (' . $visibilityPlaceholders . ')
+               OR visibility_favourite_bands IN (' . $visibilityPlaceholders . ')
+               OR visibility_station IN (' . $visibilityPlaceholders . ')
+           )'
+    );
+    $countParams = [];
+    foreach ($allowedVisibilityLevels as $visibilityLevel) {
+        $countParams[] = $visibilityLevel;
+    }
+    for ($i = 0; $i < 7; $i++) {
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $countParams[] = $visibilityLevel;
+        }
+    }
+    $countsStmt->execute($countParams);
+    $countsRow = $countsStmt->fetch() ?: [];
+    $activeMembersCount = (int) ($countsRow['active_total'] ?? 0);
+    $ubaMembersCount = (int) ($countsRow['uba_total'] ?? 0);
+
+    $fieldVisibilityMap = [
+        'full_name' => 'visibility_full_name',
+        'email' => 'visibility_email',
+        'phone' => 'visibility_phone',
+        'qth' => 'visibility_qth',
+        'licence_class' => 'visibility_licence_class',
+        'favourite_bands' => 'visibility_favourite_bands',
+        'station_equipment' => 'visibility_station',
+    ];
+
+    foreach ($members as $index => &$member) {
+        foreach ($fieldVisibilityMap as $field => $visibilityField) {
+            $visibility = (string) ($member[$visibilityField] ?? 'private');
+            if (!in_array($visibility, $allowedVisibilityLevels, true)) {
+                $member[$field] = '';
+            }
+        }
+
+        $hasVisibleData = false;
+        foreach (array_keys($fieldVisibilityMap) as $field) {
+            if (trim((string) ($member[$field] ?? '')) !== '') {
+                $hasVisibleData = true;
+                break;
+            }
+        }
+        if (!$hasVisibleData) {
+            unset($members[$index]);
         }
     }
     unset($member);
+    $members = array_values($members);
 
     $licenceRows = db()->query('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND licence_class IS NOT NULL AND licence_class <> "" GROUP BY licence_class ORDER BY licence_class ASC')->fetchAll() ?: [];
 } else {
@@ -54,23 +122,48 @@ if (table_exists('members')) {
 ob_start();
 ?>
 <section class="card">
-    <h2>Membres actifs</h2>
+    <h2 class="text-xl font-bold text-slate-900">Le club en chiffres</h2>
+    <div class="directory-grid">
+        <article class="directory-card">
+            <h3><?= e((string) $activeMembersCount) ?></h3>
+            <p>Liste des membres</p>
+        </article>
+        <article class="directory-card">
+            <h3><?= e((string) $ubaMembersCount) ?></h3>
+            <p>Membres UBA</p>
+        </article>
+    </div>
+</section>
+
+<section class="card mt-4">
+    <h2>Liste des membres</h2>
     <?php if ($members === []): ?>
-        <p>Aucun membre actif trouvé.</p>
+        <p>Aucun membre trouvé.</p>
     <?php else: ?>
         <div class="directory-grid">
             <?php foreach ($members as $member): ?>
                 <article class="directory-card">
                     <h3><?= e((string) $member['callsign']) ?></h3>
-                    <p><?= e((string) $member['full_name']) ?></p>
+                    <?php if (trim((string) ($member['full_name'] ?? '')) !== ''): ?>
+                        <p><?= e((string) $member['full_name']) ?></p>
+                    <?php endif; ?>
                     <?php if (trim((string) ($member['licence_class'] ?? '')) !== ''): ?>
                         <p class="help">Licence : <?= e((string) $member['licence_class']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($member['email'] ?? '')) !== ''): ?>
+                        <p class="help">Email : <?= e((string) $member['email']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($member['phone'] ?? '')) !== ''): ?>
+                        <p class="help">Téléphone : <?= e((string) $member['phone']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['qth'] ?? '')) !== ''): ?>
                         <p class="help">QTH : <?= e((string) $member['qth']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['favourite_bands'] ?? '')) !== ''): ?>
                         <p class="help">Bandes : <?= e((string) $member['favourite_bands']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($member['station_equipment'] ?? '')) !== ''): ?>
+                        <p class="help">Station : <?= e((string) $member['station_equipment']) ?></p>
                     <?php endif; ?>
                     <?php if ((int) ($member['is_committee'] ?? 0) === 1): ?>
                         <span class="badge muted"><?= e((string) ($member['committee_role'] ?: 'Comité')) ?></span>
