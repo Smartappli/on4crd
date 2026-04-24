@@ -194,10 +194,82 @@ if ($reservations !== []) {
     }
 }
 
+if ((string) ($_GET['export'] ?? '') === '1') {
+    $rows = db()->query(
+        'SELECT r.id AS reservation_id,
+                r.reserved_by,
+                r.created_at,
+                r.total_cents AS reservation_total_cents,
+                l.starter_enabled,
+                l.starter_label,
+                l.starter_price_cents,
+                l.meal_enabled,
+                l.meal_label,
+                l.meal_price_cents,
+                l.dessert_enabled,
+                l.dessert_label,
+                l.dessert_price_cents,
+                l.quantity,
+                l.line_total_cents
+         FROM dinner_reservations r
+         INNER JOIN dinner_reservation_lines l ON l.reservation_id = r.id
+         ORDER BY r.id DESC, l.id ASC'
+    )->fetchAll() ?: [];
+
+    $filename = 'reservations_diner_annuel_' . gmdate('Ymd_His') . '.csv';
+    header('Content-Type: text/csv; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+    $output = fopen('php://output', 'wb');
+    if ($output !== false) {
+        fwrite($output, "\xEF\xBB\xBF");
+        fputcsv($output, [
+            'Reservation ID',
+            'Nom reservation',
+            'Date',
+            'Entree active',
+            'Entree',
+            'Prix entree',
+            'Plat actif',
+            'Plat',
+            'Prix plat',
+            'Dessert actif',
+            'Dessert',
+            'Prix dessert',
+            'Quantite',
+            'Total ligne',
+            'Total reservation',
+        ], ';');
+
+        foreach ($rows as $row) {
+            fputcsv($output, [
+                (int) ($row['reservation_id'] ?? 0),
+                (string) ($row['reserved_by'] ?? ''),
+                (string) ($row['created_at'] ?? ''),
+                (int) ($row['starter_enabled'] ?? 0) === 1 ? 'Oui' : 'Non',
+                (string) ($row['starter_label'] ?? ''),
+                number_format(((int) ($row['starter_price_cents'] ?? 0)) / 100, 2, ',', ''),
+                (int) ($row['meal_enabled'] ?? 0) === 1 ? 'Oui' : 'Non',
+                (string) ($row['meal_label'] ?? ''),
+                number_format(((int) ($row['meal_price_cents'] ?? 0)) / 100, 2, ',', ''),
+                (int) ($row['dessert_enabled'] ?? 0) === 1 ? 'Oui' : 'Non',
+                (string) ($row['dessert_label'] ?? ''),
+                number_format(((int) ($row['dessert_price_cents'] ?? 0)) / 100, 2, ',', ''),
+                (int) ($row['quantity'] ?? 0),
+                number_format(((int) ($row['line_total_cents'] ?? 0)) / 100, 2, ',', ''),
+                number_format(((int) ($row['reservation_total_cents'] ?? 0)) / 100, 2, ',', ''),
+            ], ';');
+        }
+        fclose($output);
+    }
+    exit;
+}
+
 ob_start();
 ?>
 <section class="card">
     <h1>Réservations dîner annuel</h1>
+    <p><a class="button secondary" href="<?= e(route_url('admin_dinner_reservations', ['export' => 1])) ?>">Exporter Excel (CSV)</a></p>
     <form method="post" class="stack" id="dinner-reservation-form">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
