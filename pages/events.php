@@ -148,17 +148,20 @@ ob_start();
 ?>
 <section class="events-layout">
     <article class="card events-calendar-card">
-        <header class="events-toolbar">
+        <header class="events-toolbar events-toolbar-right">
             <div class="events-toolbar-actions">
-                <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter</a>
+                <a class="button events-export-button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter</a>
             </div>
         </header>
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">
         <div id="events-calendar" class="fullcalendar-theme"></div>
         <script type="application/json" id="events-calendar-data"><?= e(json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]') ?></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/fr.global.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/fr.global.js"></script>
         <script nonce="<?= e(csp_nonce()) ?>">
             (() => {
                 const calendarEl = document.getElementById('events-calendar');
