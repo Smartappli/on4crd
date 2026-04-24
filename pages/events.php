@@ -99,7 +99,6 @@ if (!$weekDate instanceof DateTimeImmutable) {
 }
 
 $eventCards = [];
-$calendarEvents = [];
 foreach ($rows as $event) {
     $startAt = new DateTimeImmutable((string) $event['start_at']);
     $endAt = new DateTimeImmutable((string) $event['end_at']);
@@ -120,20 +119,6 @@ foreach ($rows as $event) {
         'externalUrl' => trim((string) ($event['external_url'] ?? '')),
     ];
 
-    $calendarEvents[] = [
-        'id' => (string) ((int) $event['id']),
-        'title' => (string) $event['title'],
-        'start' => $startAt->format(DateTimeInterface::ATOM),
-        'end' => $endAt->format(DateTimeInterface::ATOM),
-        'url' => route_url('event_view', ['slug' => (string) $event['slug']]),
-        'extendedProps' => [
-            'summary' => $summary,
-            'location' => trim((string) ($event['location'] ?? '')),
-            'externalUrl' => trim((string) ($event['external_url'] ?? '')),
-            'startLabel' => $startAt->format('d/m/Y H:i'),
-            'endLabel' => $endAt->format('d/m/Y H:i'),
-        ],
-    ];
 }
 
 $defaultEvent = $eventCards !== [] ? reset($eventCards) : null;
@@ -158,20 +143,16 @@ ob_start();
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">
         <div id="events-calendar" class="fullcalendar-theme"></div>
-        <script type="application/json" id="events-calendar-data"><?= e(json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]') ?></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/fr.global.js"></script>
         <script nonce="<?= e(csp_nonce()) ?>">
             (() => {
                 const calendarEl = document.getElementById('events-calendar');
-                const dataEl = document.getElementById('events-calendar-data');
-                if (!calendarEl || !dataEl || !window.FullCalendar) {
+                if (!calendarEl || !window.FullCalendar) {
                     calendarEl?.insertAdjacentHTML('beforeend', '<p class="help">Impossible de charger le calendrier interactif.</p>');
                     return;
                 }
-
-                const events = JSON.parse(dataEl.textContent || '[]');
                 const detail = {
                     title: document.getElementById('event-detail-title'),
                     summary: document.getElementById('event-detail-summary'),
@@ -220,7 +201,7 @@ ob_start();
                         week: 'Semaine',
                         list: 'Liste'
                     },
-                    events,
+                    events: <?= json_encode(route_url('events_feed')) ?>,
                     eventClick(info) {
                         info.jsEvent.preventDefault();
                         updateDetails(info.event);
