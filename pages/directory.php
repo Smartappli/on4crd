@@ -96,7 +96,7 @@ ob_start();
     </div>
 </section>
 
-<section class="card">
+<section class="card mt-4">
     <h2>Membres actifs</h2>
     <?php if ($members === []): ?>
         <p>Aucun membre actif trouvé.</p>
