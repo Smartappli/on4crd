@@ -17,12 +17,18 @@ db()->exec(
     'CREATE TABLE IF NOT EXISTS dinner_reservation_lines (
         id INT AUTO_INCREMENT PRIMARY KEY,
         reservation_id INT NOT NULL,
+        starter_code VARCHAR(64) DEFAULT NULL,
+        starter_label VARCHAR(190) DEFAULT NULL,
+        starter_price_cents INT NOT NULL DEFAULT 0,
         meal_code VARCHAR(64) NOT NULL,
         meal_label VARCHAR(190) NOT NULL,
         meal_price_cents INT NOT NULL,
         dessert_code VARCHAR(64) NOT NULL,
         dessert_label VARCHAR(190) NOT NULL,
         dessert_price_cents INT NOT NULL,
+        starter_enabled TINYINT(1) NOT NULL DEFAULT 0,
+        meal_enabled TINYINT(1) NOT NULL DEFAULT 1,
+        dessert_enabled TINYINT(1) NOT NULL DEFAULT 1,
         quantity INT NOT NULL DEFAULT 1,
         line_total_cents INT NOT NULL DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -31,7 +37,31 @@ db()->exec(
     )'
 );
 
-$mealOptions = [
+$columnStmt = db()->prepare(
+    'SELECT COUNT(*) FROM information_schema.columns
+     WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+);
+$lineColumnUpdates = [
+    'starter_code' => 'ALTER TABLE dinner_reservation_lines ADD COLUMN starter_code VARCHAR(64) DEFAULT NULL AFTER reservation_id',
+    'starter_label' => 'ALTER TABLE dinner_reservation_lines ADD COLUMN starter_label VARCHAR(190) DEFAULT NULL AFTER starter_code',
+    'starter_price_cents' => 'ALTER TABLE dinner_reservation_lines ADD COLUMN starter_price_cents INT NOT NULL DEFAULT 0 AFTER starter_label',
+    'starter_enabled' => 'ALTER TABLE dinner_reservation_lines ADD COLUMN starter_enabled TINYINT(1) NOT NULL DEFAULT 0 AFTER dessert_price_cents',
+    'meal_enabled' => 'ALTER TABLE dinner_reservation_lines ADD COLUMN meal_enabled TINYINT(1) NOT NULL DEFAULT 1 AFTER starter_enabled',
+    'dessert_enabled' => 'ALTER TABLE dinner_reservation_lines ADD COLUMN dessert_enabled TINYINT(1) NOT NULL DEFAULT 1 AFTER meal_enabled',
+];
+foreach ($lineColumnUpdates as $columnName => $statement) {
+    $columnStmt->execute(['dinner_reservation_lines', $columnName]);
+    if ((int) $columnStmt->fetchColumn() <= 0) {
+        db()->exec($statement);
+    }
+}
+
+$starterOptions = [
+    'potage' => ['label' => 'Potage maison', 'price_cents' => 650],
+    'croquettes' => ['label' => 'Croquettes de fromage', 'price_cents' => 750],
+    'salade' => ['label' => 'Petite salade', 'price_cents' => 600],
+];
+$mainOptions = [
     'vol_au_vent' => ['label' => 'Vol-au-vent', 'price_cents' => 1800],
     'boulettes' => ['label' => 'Boulettes sauce tomate', 'price_cents' => 1700],
     'vegetarien' => ['label' => 'Assiette végétarienne', 'price_cents' => 1650],
@@ -56,6 +86,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             continue;
         }
 
+        $starterEnabled = isset($line['starter_enabled']) && (string) $line['starter_enabled'] === '1';
+        $mealEnabled = isset($line['meal_enabled']) && (string) $line['meal_enabled'] === '1';
+        $dessertEnabled = isset($line['dessert_enabled']) && (string) $line['dessert_enabled'] === '1';
+        if (!$starterEnabled && !$mealEnabled && !$dessertEnabled) {
+            continue;
+        }
+
+        $starterCode = (string) ($line['starter'] ?? '');
         $mealCode = (string) ($line['meal'] ?? '');
         $dessertCode = (string) ($line['dessert'] ?? '');
         $quantity = (int) ($line['quantity'] ?? 0);
@@ -63,22 +101,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($quantity <= 0) {
             continue;
         }
-        if (!isset($mealOptions[$mealCode]) || !isset($dessertOptions[$dessertCode])) {
+        if (($starterEnabled && !isset($starterOptions[$starterCode]))
+            || ($mealEnabled && !isset($mainOptions[$mealCode]))
+            || ($dessertEnabled && !isset($dessertOptions[$dessertCode]))
+        ) {
             continue;
         }
 
-        $meal = $mealOptions[$mealCode];
-        $dessert = $dessertOptions[$dessertCode];
-        $lineTotal = ($meal['price_cents'] + $dessert['price_cents']) * $quantity;
+        $starter = $starterEnabled ? $starterOptions[$starterCode] : ['label' => '', 'price_cents' => 0];
+        $meal = $mealEnabled ? $mainOptions[$mealCode] : ['label' => '', 'price_cents' => 0];
+        $dessert = $dessertEnabled ? $dessertOptions[$dessertCode] : ['label' => '', 'price_cents' => 0];
+        $lineTotal = ((int) $starter['price_cents'] + (int) $meal['price_cents'] + (int) $dessert['price_cents']) * $quantity;
         $totalCents += $lineTotal;
 
         $lines[] = [
-            'meal_code' => $mealCode,
+            'starter_code' => $starterEnabled ? $starterCode : '',
+            'starter_label' => $starter['label'],
+            'starter_price_cents' => (int) $starter['price_cents'],
+            'meal_code' => $mealEnabled ? $mealCode : '',
             'meal_label' => $meal['label'],
             'meal_price_cents' => (int) $meal['price_cents'],
-            'dessert_code' => $dessertCode,
+            'dessert_code' => $dessertEnabled ? $dessertCode : '',
             'dessert_label' => $dessert['label'],
             'dessert_price_cents' => (int) $dessert['price_cents'],
+            'starter_enabled' => $starterEnabled ? 1 : 0,
+            'meal_enabled' => $mealEnabled ? 1 : 0,
+            'dessert_enabled' => $dessertEnabled ? 1 : 0,
             'quantity' => $quantity,
             'line_total_cents' => $lineTotal,
         ];
@@ -97,19 +145,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $lineStmt = db()->prepare(
             'INSERT INTO dinner_reservation_lines
-             (reservation_id, meal_code, meal_label, meal_price_cents, dessert_code, dessert_label, dessert_price_cents, quantity, line_total_cents)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+             (reservation_id, starter_code, starter_label, starter_price_cents, meal_code, meal_label, meal_price_cents, dessert_code, dessert_label, dessert_price_cents, starter_enabled, meal_enabled, dessert_enabled, quantity, line_total_cents)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
 
         foreach ($lines as $line) {
             $lineStmt->execute([
                 $reservationId,
+                $line['starter_code'] !== '' ? $line['starter_code'] : null,
+                $line['starter_label'] !== '' ? $line['starter_label'] : null,
+                $line['starter_price_cents'],
                 $line['meal_code'],
                 $line['meal_label'],
                 $line['meal_price_cents'],
                 $line['dessert_code'],
                 $line['dessert_label'],
                 $line['dessert_price_cents'],
+                $line['starter_enabled'],
+                $line['meal_enabled'],
+                $line['dessert_enabled'],
                 $line['quantity'],
                 $line['line_total_cents'],
             ]);
@@ -184,6 +238,7 @@ ob_start();
                 <table>
                     <thead>
                         <tr>
+                            <th>Entrée</th>
                             <th>Repas</th>
                             <th>Dessert</th>
                             <th>Quantité</th>
@@ -193,8 +248,9 @@ ob_start();
                     <tbody>
                     <?php foreach (($linesByReservation[$reservationId] ?? []) as $line): ?>
                         <tr>
-                            <td><?= e((string) $line['meal_label']) ?> (<?= e(format_price_eur((int) $line['meal_price_cents'])) ?>)</td>
-                            <td><?= e((string) $line['dessert_label']) ?> (<?= e(format_price_eur((int) $line['dessert_price_cents'])) ?>)</td>
+                            <td><?= (int) ($line['starter_enabled'] ?? 0) === 1 ? e((string) $line['starter_label']) . ' (' . e(format_price_eur((int) $line['starter_price_cents'])) . ')' : '—' ?></td>
+                            <td><?= (int) ($line['meal_enabled'] ?? 0) === 1 ? e((string) $line['meal_label']) . ' (' . e(format_price_eur((int) $line['meal_price_cents'])) . ')' : '—' ?></td>
+                            <td><?= (int) ($line['dessert_enabled'] ?? 0) === 1 ? e((string) $line['dessert_label']) . ' (' . e(format_price_eur((int) $line['dessert_price_cents'])) . ')' : '—' ?></td>
                             <td><?= (int) $line['quantity'] ?></td>
                             <td><?= e(format_price_eur((int) $line['line_total_cents'])) ?></td>
                         </tr>
@@ -208,7 +264,8 @@ ob_start();
 
 <script nonce="<?= e(csp_nonce()) ?>">
 (() => {
-    const mealOptions = <?= json_encode($mealOptions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+    const starterOptions = <?= json_encode($starterOptions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+    const mainOptions = <?= json_encode($mainOptions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
     const dessertOptions = <?= json_encode($dessertOptions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
     const linesContainer = document.getElementById('dinner-lines');
     const addButton = document.getElementById('add-dinner-line');
@@ -224,31 +281,60 @@ ob_start();
     const updateTotals = () => {
         let total = 0;
         linesContainer.querySelectorAll('.dinner-line').forEach((line) => {
-            const mealPrice = Number(line.querySelector('.meal-select option:checked')?.dataset.price || 0);
-            const dessertPrice = Number(line.querySelector('.dessert-select option:checked')?.dataset.price || 0);
+            const starterEnabled = line.querySelector('.starter-enabled')?.checked;
+            const mealEnabled = line.querySelector('.meal-enabled')?.checked;
+            const dessertEnabled = line.querySelector('.dessert-enabled')?.checked;
+            const starterPrice = starterEnabled ? Number(line.querySelector('.starter-select option:checked')?.dataset.price || 0) : 0;
+            const mealPrice = mealEnabled ? Number(line.querySelector('.meal-select option:checked')?.dataset.price || 0) : 0;
+            const dessertPrice = dessertEnabled ? Number(line.querySelector('.dessert-select option:checked')?.dataset.price || 0) : 0;
             const quantity = Number(line.querySelector('.quantity-input').value || 0);
-            const lineTotal = (mealPrice + dessertPrice) * quantity;
+            const lineTotal = (starterPrice + mealPrice + dessertPrice) * quantity;
             line.querySelector('.line-total').textContent = formatEur(lineTotal);
             total += lineTotal;
+
+            const starterSelect = line.querySelector('.starter-select');
+            const mealSelect = line.querySelector('.meal-select');
+            const dessertSelect = line.querySelector('.dessert-select');
+            if (starterSelect) {
+                starterSelect.disabled = !starterEnabled;
+            }
+            if (mealSelect) {
+                mealSelect.disabled = !mealEnabled;
+            }
+            if (dessertSelect) {
+                dessertSelect.disabled = !dessertEnabled;
+            }
         });
         totalEl.textContent = formatEur(total);
     };
 
     const addLine = () => {
         const wrapper = document.createElement('div');
-        wrapper.className = 'grid-3 dinner-line';
+        wrapper.className = 'stack inner-card dinner-line';
         wrapper.innerHTML = `
-            <label>Repas
-                <select class="meal-select" name="lines[${lineIndex}][meal]">${renderSelectOptions(mealOptions)}</select>
-            </label>
-            <label>Dessert
-                <select class="dessert-select" name="lines[${lineIndex}][dessert]">${renderSelectOptions(dessertOptions)}</select>
-            </label>
-            <label>Nombre
-                <input class="quantity-input" type="number" name="lines[${lineIndex}][quantity]" min="0" step="1" value="1">
-            </label>
-            <p class="help">Total ligne : <strong class="line-total">${formatEur(0)}</strong></p>
-            <p><button type="button" class="button secondary remove-line">Supprimer</button></p>
+            <div class="grid-3">
+                <label><input class="starter-enabled" type="checkbox" name="lines[${lineIndex}][starter_enabled]" value="1"> Activer entrée</label>
+                <label><input class="meal-enabled" type="checkbox" name="lines[${lineIndex}][meal_enabled]" value="1" checked> Activer plat</label>
+                <label><input class="dessert-enabled" type="checkbox" name="lines[${lineIndex}][dessert_enabled]" value="1" checked> Activer dessert</label>
+            </div>
+            <div class="grid-3">
+                <label>Entrée
+                    <select class="starter-select" name="lines[${lineIndex}][starter]">${renderSelectOptions(starterOptions)}</select>
+                </label>
+                <label>Plat
+                    <select class="meal-select" name="lines[${lineIndex}][meal]">${renderSelectOptions(mainOptions)}</select>
+                </label>
+                <label>Dessert
+                    <select class="dessert-select" name="lines[${lineIndex}][dessert]">${renderSelectOptions(dessertOptions)}</select>
+                </label>
+            </div>
+            <div class="grid-3">
+                <label>Nombre
+                    <input class="quantity-input" type="number" name="lines[${lineIndex}][quantity]" min="0" step="1" value="1">
+                </label>
+                <p class="help">Total ligne : <strong class="line-total">${formatEur(0)}</strong></p>
+                <p><button type="button" class="button secondary remove-line">Supprimer</button></p>
+            </div>
         `;
         lineIndex += 1;
         linesContainer.appendChild(wrapper);
