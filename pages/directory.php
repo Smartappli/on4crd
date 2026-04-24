@@ -16,9 +16,15 @@ if (mb_strlen($licenceFilter) > 64) {
 
 if (table_exists('members')) {
     $viewer = current_user();
-    $qthVisibility = $viewer !== null ? ['public', 'members'] : ['public'];
+    $allowedVisibilityLevels = ['public'];
+    if ($viewer !== null) {
+        $allowedVisibilityLevels[] = 'members';
+        if ((int) ($viewer['is_committee'] ?? 0) === 1) {
+            $allowedVisibilityLevels[] = 'private';
+        }
+    }
 
-    $sql = 'SELECT callsign, full_name, qth, licence_class, favourite_bands, is_committee, committee_role, visibility_qth
+    $sql = 'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, is_committee, committee_role, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
         FROM members
         WHERE is_active = 1';
     $params = [];
@@ -49,10 +55,22 @@ if (table_exists('members')) {
     $activeMembersCount = (int) ($countsRow['active_total'] ?? 0);
     $ubaMembersCount = (int) ($countsRow['uba_total'] ?? 0);
 
+    $fieldVisibilityMap = [
+        'full_name' => 'visibility_full_name',
+        'email' => 'visibility_email',
+        'phone' => 'visibility_phone',
+        'qth' => 'visibility_qth',
+        'licence_class' => 'visibility_licence_class',
+        'favourite_bands' => 'visibility_favourite_bands',
+        'station_equipment' => 'visibility_station',
+    ];
+
     foreach ($members as &$member) {
-        $visibility = (string) ($member['visibility_qth'] ?? 'private');
-        if (!in_array($visibility, $qthVisibility, true)) {
-            $member['qth'] = '';
+        foreach ($fieldVisibilityMap as $field => $visibilityField) {
+            $visibility = (string) ($member[$visibilityField] ?? 'private');
+            if (!in_array($visibility, $allowedVisibilityLevels, true)) {
+                $member[$field] = '';
+            }
         }
     }
     unset($member);
@@ -87,15 +105,26 @@ ob_start();
             <?php foreach ($members as $member): ?>
                 <article class="directory-card">
                     <h3><?= e((string) $member['callsign']) ?></h3>
-                    <p><?= e((string) $member['full_name']) ?></p>
+                    <?php if (trim((string) ($member['full_name'] ?? '')) !== ''): ?>
+                        <p><?= e((string) $member['full_name']) ?></p>
+                    <?php endif; ?>
                     <?php if (trim((string) ($member['licence_class'] ?? '')) !== ''): ?>
                         <p class="help">Licence : <?= e((string) $member['licence_class']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($member['email'] ?? '')) !== ''): ?>
+                        <p class="help">Email : <?= e((string) $member['email']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($member['phone'] ?? '')) !== ''): ?>
+                        <p class="help">Téléphone : <?= e((string) $member['phone']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['qth'] ?? '')) !== ''): ?>
                         <p class="help">QTH : <?= e((string) $member['qth']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['favourite_bands'] ?? '')) !== ''): ?>
                         <p class="help">Bandes : <?= e((string) $member['favourite_bands']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($member['station_equipment'] ?? '')) !== ''): ?>
+                        <p class="help">Station : <?= e((string) $member['station_equipment']) ?></p>
                     <?php endif; ?>
                     <?php if ((int) ($member['is_committee'] ?? 0) === 1): ?>
                         <span class="badge muted"><?= e((string) ($member['committee_role'] ?: 'Comité')) ?></span>
