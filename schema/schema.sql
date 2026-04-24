@@ -520,3 +520,27 @@ CREATE TABLE IF NOT EXISTS newsletter_deliveries (
     UNIQUE KEY uniq_newsletter_delivery (campaign_id, subscriber_id),
     INDEX idx_newsletter_delivery_status (status)
 );
+
+CREATE TABLE IF NOT EXISTS dinner_reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reserved_by VARCHAR(190) NOT NULL,
+    total_cents INT NOT NULL DEFAULT 0,
+    notes TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS dinner_reservation_lines (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reservation_id INT NOT NULL,
+    meal_code VARCHAR(64) NOT NULL,
+    meal_label VARCHAR(190) NOT NULL,
+    meal_price_cents INT NOT NULL,
+    dessert_code VARCHAR(64) NOT NULL,
+    dessert_label VARCHAR(190) NOT NULL,
+    dessert_price_cents INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    line_total_cents INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_dinner_reservation_id (reservation_id),
+    FOREIGN KEY (reservation_id) REFERENCES dinner_reservations(id) ON DELETE CASCADE
+);
