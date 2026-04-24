@@ -276,10 +276,19 @@ function apply_runtime_schema_updates(): void
             'SELECT COUNT(*) FROM information_schema.columns
              WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
         );
-        $columnStmt->execute(['members', 'auth_user_id']);
-        $hasAuthUserId = (int) $columnStmt->fetchColumn() > 0;
-        if (!$hasAuthUserId) {
-            db()->exec('ALTER TABLE members ADD COLUMN auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE');
+        $requiredColumns = [
+            'auth_user_id' => 'ALTER TABLE members ADD COLUMN auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE',
+            'visibility_full_name' => 'ALTER TABLE members ADD COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_licence_class' => 'ALTER TABLE members ADD COLUMN visibility_licence_class ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_favourite_bands' => 'ALTER TABLE members ADD COLUMN visibility_favourite_bands ENUM("public","members","private") NOT NULL DEFAULT "members"',
+        ];
+
+        foreach ($requiredColumns as $columnName => $statement) {
+            $columnStmt->execute(['members', $columnName]);
+            $hasColumn = (int) $columnStmt->fetchColumn() > 0;
+            if (!$hasColumn) {
+                db()->exec($statement);
+            }
         }
     }
 }
@@ -416,7 +425,7 @@ function current_user(): ?array
         return null;
     }
 
-    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active FROM members WHERE id = ? OR auth_user_id = ? LIMIT 1');
+    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active, is_committee FROM members WHERE id = ? OR auth_user_id = ? LIMIT 1');
     $stmt->execute([$memberId, $memberId]);
     $row = $stmt->fetch();
     if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
