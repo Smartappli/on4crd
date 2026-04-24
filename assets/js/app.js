@@ -235,3 +235,137 @@
     });
   }, refreshMs);
 })();
+
+(function () {
+  const textareas = document.querySelectorAll('textarea:not([data-wysiwyg="off"])');
+  if (!textareas.length) return;
+  const currentRoute = new URLSearchParams(window.location.search).get('route') || 'home';
+
+  const syncHandlers = [];
+  const toolbarButtons = [
+    { label: 'B', command: 'bold', title: 'Gras' },
+    { label: 'I', command: 'italic', title: 'Italique' },
+    { label: 'U', command: 'underline', title: 'Souligné' },
+    { label: '• Liste', command: 'insertUnorderedList', title: 'Liste à puces' },
+    { label: '1. Liste', command: 'insertOrderedList', title: 'Liste numérotée' },
+    { label: 'Lien', command: 'createLink', title: 'Insérer un lien' },
+  ];
+
+  const applyCommand = (editor, command) => {
+    editor.focus();
+    if (command === 'createLink') {
+      const url = window.prompt('URL du lien (https://...)', 'https://');
+      if (!url) return;
+      document.execCommand('createLink', false, url);
+      return;
+    }
+    document.execCommand(command, false, null);
+  };
+
+  let mammothLoader = null;
+  const loadMammoth = async () => {
+    if (window.mammoth) return window.mammoth;
+    if (!mammothLoader) {
+      mammothLoader = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+        script.async = true;
+        script.onload = () => resolve(window.mammoth);
+        script.onerror = () => reject(new Error('Impossible de charger le convertisseur Word.'));
+        document.head.appendChild(script);
+      });
+    }
+    return mammothLoader;
+  };
+
+  textareas.forEach((textarea, index) => {
+    if (textarea.dataset.wysiwygApplied === '1') return;
+    textarea.dataset.wysiwygApplied = '1';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'wysiwyg';
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'wysiwyg-toolbar';
+
+    toolbarButtons.forEach((buttonConfig) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ghost small';
+      button.textContent = buttonConfig.label;
+      button.title = buttonConfig.title;
+      button.addEventListener('click', () => applyCommand(editor, buttonConfig.command));
+      toolbar.appendChild(button);
+    });
+
+    const editor = document.createElement('div');
+    editor.className = 'wysiwyg-editor';
+    editor.contentEditable = 'true';
+    editor.setAttribute('role', 'textbox');
+    editor.setAttribute('aria-multiline', 'true');
+    editor.setAttribute('data-wysiwyg-editor-index', String(index));
+    editor.innerHTML = textarea.value && textarea.value.trim() !== '' ? textarea.value : '<p><br></p>';
+
+    const sync = () => {
+      textarea.value = editor.innerHTML;
+    };
+
+    if (currentRoute === 'admin_news' && textarea.name === 'content') {
+      const importButton = document.createElement('button');
+      importButton.type = 'button';
+      importButton.className = 'ghost small';
+      importButton.textContent = 'Importer Word';
+      importButton.title = 'Importer un document Word (.docx)';
+
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      fileInput.hidden = true;
+
+      importButton.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', async () => {
+        const file = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+        if (!file) return;
+
+        const extension = file.name.toLowerCase();
+        if (extension.endsWith('.doc')) {
+          window.alert('Le format .doc n’est pas supporté directement. Merci d’enregistrer en .docx puis de réimporter.');
+          return;
+        }
+
+        try {
+          const mammoth = await loadMammoth();
+          if (!mammoth) {
+            throw new Error('Convertisseur indisponible.');
+          }
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.convertToHtml({ arrayBuffer });
+          editor.innerHTML = result.value || '<p><br></p>';
+          sync();
+        } catch (error) {
+          window.alert('Import Word impossible pour le moment.');
+        } finally {
+          fileInput.value = '';
+        }
+      });
+
+      toolbar.appendChild(importButton);
+      toolbar.appendChild(fileInput);
+    }
+
+    editor.addEventListener('input', sync);
+    editor.addEventListener('blur', sync);
+    syncHandlers.push(sync);
+
+    textarea.classList.add('wysiwyg-source');
+    textarea.insertAdjacentElement('beforebegin', wrapper);
+    wrapper.appendChild(toolbar);
+    wrapper.appendChild(editor);
+  });
+
+  document.querySelectorAll('form').forEach((form) => {
+    form.addEventListener('submit', () => {
+      syncHandlers.forEach((sync) => sync());
+    });
+  });
+})();

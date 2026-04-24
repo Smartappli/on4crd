@@ -130,6 +130,7 @@ ob_start();
             <label>Contenu HTML simple
                 <textarea name="content" rows="12"><?= e((string) ($editing['content'] ?? '<p></p>')) ?></textarea>
             </label>
+            <p class="help">Astuce: utilisez le bouton <strong>Importer Word</strong> (format .docx) dans la barre de l’éditeur.</p>
             <?php if (has_permission('news.moderate')): ?>
                 <label>Statut
                     <select name="status">
