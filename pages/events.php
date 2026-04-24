@@ -148,9 +148,9 @@ ob_start();
 ?>
 <section class="events-layout">
     <article class="card events-calendar-card">
-        <header class="events-toolbar">
+        <header class="events-toolbar events-toolbar-right">
             <div class="events-toolbar-actions">
-                <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter</a>
+                <a class="button events-export-button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter</a>
             </div>
         </header>
 

@@ -7,6 +7,7 @@ $isAuthenticated = $user !== null;
 $primaryCta = $isAuthenticated
     ? '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('dashboard')) . '">Accéder à mon espace membre</a>'
     : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('membership')) . '">Rejoindre le club</a>';
+$newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-50" href="' . e(route_url('newsletter_public')) . '">S\'inscrire à la newsletter</a>';
 
 
 $moduleCatalog = [
@@ -168,7 +169,7 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<img class="absolute inset-0 -z-20 h-full w-full object-cover" src="' . e($heroBackgroundUrl) . '" alt="Illustration ON4CRD" loading="eager" decoding="async">'
     . '<span class="hidden rounded-full bg-blue-600 px-3 py-1 text-[1.1rem] font-semibold uppercase tracking-wide text-white sm:inline-flex">ON4CRD · Connecter, expérimenter, partager</span>'
     . $heroIntro
-    . '<div class="mt-auto pt-8 flex flex-wrap gap-3">' . $primaryCta . '</div>'
+    . '<div class="mt-auto pt-8 grid max-w-sm gap-2">' . $primaryCta . $newsletterCta . '</div>'
     . '</article>'
     . '<div class="grid gap-4">'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
@@ -201,7 +202,7 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Union royale belge des amateurs-émetteurs a.s.b.l.</h3><p class="mt-2 text-sm text-slate-600">Le Radio Club Durnal est affilié à l\'Union Belge des Amateurs-Émetteurs.</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.uba.be" target="_blank" rel="noopener noreferrer">Visiter le site de l\'UBA</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($ubaLogoPath)) . '" alt="Logo UBA" loading="lazy" decoding="async"></div></article>'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Notre relais</h3><p class="mt-2 text-sm text-slate-600">Retrouvez les informations essentielles concernant notre relai et ses paramètres.</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('relais')) . '">Voir la page relais</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($relaisLogoPath)) . '" alt="Logo du relais" loading="lazy" decoding="async"></div></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">Notre relais</h3><p class="mt-2 text-sm text-slate-600">Retrouvez les informations essentielles concernant notre relai et ses paramètres.</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('relais')) . '">Consulter les informations du relais</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($relaisLogoPath)) . '" alt="Logo du relais" loading="lazy" decoding="async"></div></article>'
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
@@ -234,7 +235,14 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '</section>'
     . '<section class="mt-4 grid gap-4 rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-50 to-white p-6 shadow-sm lg:grid-cols-[1.8fr_1fr] lg:items-center">'
     . '<div><h2 class="text-2xl font-extrabold text-slate-900">Prêt à rejoindre une communauté radio active et structurée ?</h2><p class="mt-2 text-slate-600">La nouvelle page d’accueil met en évidence les modules clés pour trouver rapidement l’information utile et participer aux projets ON4CRD.</p></div>'
-    . '<div class="grid gap-2">' . $primaryCta . '</div>'
+    . '<div class="grid gap-2">' . $primaryCta . $newsletterCta . '</div>'
+    . '</section>'
+    . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<div class="grid gap-6 lg:grid-cols-3">'
+    . '<article><h3 class="text-lg font-bold text-slate-900">Adresse</h3><p class="mt-3 text-sm text-slate-700">Radio Club Durnal</p><p class="text-sm text-slate-700">Bocq Arena</p><p class="text-sm text-slate-700">Rue des Écoles</p><p class="text-sm text-slate-700">5530 Purnode</p><p class="mt-4 text-lg font-bold text-slate-900">Personnes de contact</p><p class="text-sm text-slate-700">ON4BEN : +32 496 260 865</p><p class="text-sm text-slate-700">ON4DG : +32 478 789 193</p></article>'
+    . '<article><h3 class="text-lg font-bold text-slate-900">Nous contacter</h3><form class="mt-3 grid gap-2" method="post" action="' . e(route_url('footer_contact')) . '"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><input type="hidden" name="return_route" value="home"><label for="home-contact-name" class="sr-only">Nom</label><input id="home-contact-name" type="text" name="name" placeholder="Nom" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"><label for="home-contact-email" class="sr-only">Email</label><input id="home-contact-email" type="email" name="email" placeholder="Email" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"><label for="home-contact-message" class="sr-only">Message</label><textarea id="home-contact-message" name="message" placeholder="Message" rows="3" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea><button type="submit" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">Envoyer</button></form></article>'
+    . '<article><h3 class="text-lg font-bold text-slate-900">Informations importantes</h3><ul class="mt-3 list-inside list-disc space-y-1 text-sm text-slate-700"><li><a class="hover:underline" href="' . e(route_url('conditions_utilisation')) . '">Conditions générales d\'utilisation</a></li><li><a class="hover:underline" href="' . e(route_url('mentions_legales')) . '">Mentions légales</a></li><li><a class="hover:underline" href="' . e(route_url('reglement_interieur')) . '">Règlement d\'ordre intérieur</a></li><li><a class="hover:underline" href="' . e(route_url('membership')) . '">Faire un don</a></li><li><a class="hover:underline" href="' . e(route_url('sponsoring')) . '">Sponsoring</a></li></ul></article>'
+    . '</div>'
     . '</section>';
 
 echo render_layout($content, 'Accueil');
