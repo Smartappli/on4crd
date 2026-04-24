@@ -22,6 +22,9 @@ if (module_enabled('press')) {
 }
 if (module_enabled('events')) {
     $cards[] = ['route' => 'admin_events', 'title' => 'Agenda', 'desc' => 'Événements du club et contests locaux affichés dans les widgets live.'];
+    if (has_permission('events.manage')) {
+        $cards[] = ['route' => 'admin_dinner_reservations', 'title' => 'Dîner annuel', 'desc' => 'Réservations, lignes repas/dessert, quantités et total automatique.'];
+    }
 }
 if (module_enabled('shop') && has_permission('shop.manage')) {
     $cards[] = ['route' => 'admin_shop', 'title' => 'Boutique', 'desc' => 'Catalogue produits, catégories et commandes club.'];
