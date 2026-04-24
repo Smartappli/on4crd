@@ -10,7 +10,8 @@ verify_csrf();
 
 $name = trim((string) ($_POST['name'] ?? ''));
 $email = trim((string) ($_POST['email'] ?? ''));
-$message = trim((string) ($_POST['message'] ?? ''));
+$rawMessage = trim((string) ($_POST['message'] ?? ''));
+$message = trim(strip_tags($rawMessage));
 $returnRoute = trim((string) ($_POST['return_route'] ?? 'home'));
 
 if ($name === '' || $message === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
