@@ -582,24 +582,7 @@ function render_footer_social_links(): string
 if (!function_exists('render_site_footer')) {
 function render_site_footer(string $currentRoute): string
 {
-    $infoLinks = [
-        ['label' => 'Conditions générales d\'utilisation', 'route' => 'conditions_utilisation'],
-        ['label' => 'Mentions légales', 'route' => 'mentions_legales'],
-        ['label' => 'Règlement d\'ordre intérieur', 'route' => 'reglement_interieur'],
-        ['label' => 'Faire un don', 'route' => 'membership'],
-        ['label' => 'Sponsoring', 'route' => 'sponsoring'],
-    ];
-
-    $infoLinksHtml = '';
-    foreach ($infoLinks as $link) {
-        $infoLinksHtml .= '<li><a href="' . e(route_url((string) $link['route'])) . '">' . e((string) $link['label']) . '</a></li>';
-    }
-
-    return '<footer class="site-footer"><div class="footer-inner"><div class="footer-grid">'
-        . '<section><h3 class="footer-title">Adresse</h3><p class="footer-copy">Radio Club Durnal</p><p class="footer-copy">Bocq Arena</p><p class="footer-copy">Rue des Écoles</p><p class="footer-copy">5530 Purnode</p><p class="footer-spacer" aria-hidden="true">&nbsp;</p><p class="footer-copy">Éditeurs responsables: ON4BEN : +32 496 260 865 &amp; ON4DG : +32 478 789 193.</p></section>'
-        . '<section><h3 class="footer-title">Contact</h3><form class="footer-contact-form" method="post" action="' . e(route_url('footer_contact')) . '"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><input type="hidden" name="return_route" value="' . e($currentRoute) . '"><label for="footer-contact-name" class="sr-only">Nom</label><input id="footer-contact-name" type="text" name="name" placeholder="Votre nom" required><label for="footer-contact-email" class="sr-only">Email</label><input id="footer-contact-email" type="email" name="email" placeholder="Votre email" required><label for="footer-contact-message" class="sr-only">Message</label><textarea id="footer-contact-message" name="message" placeholder=" Votre message" rows="3" required></textarea><button type="submit" class="button">Envoyer</button></form></section>'
-        . '<section><h3 class="footer-title">Informations importantes</h3><ul class="footer-nav">' . $infoLinksHtml . '</ul><p class="footer-spacer" aria-hidden="true">&nbsp;</p><form class="footer-newsletter-form" method="get" action="' . e(route_url('newsletter')) . '"><label for="footer-newsletter-email" class="sr-only">Email newsletter</label><input id="footer-newsletter-email" type="email" name="email" placeholder="Votre email" required><button type="submit" class="button">S\'inscrire à la newsletter</button></form></section>'
-        . '</div><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
+    return '<footer class="site-footer"><div class="footer-inner"><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
 }
 }
 
