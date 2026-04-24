@@ -23,6 +23,7 @@ if (table_exists('members')) {
             $allowedVisibilityLevels[] = 'private';
         }
     }
+    $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
     $sql = 'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, is_committee, committee_role, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
         FROM members
@@ -30,14 +31,20 @@ if (table_exists('members')) {
     $params = [];
 
     if ($search !== '') {
-        $sql .= ' AND (callsign LIKE ? OR full_name LIKE ?)';
+        $sql .= ' AND (callsign LIKE ? OR (full_name LIKE ? AND visibility_full_name IN (' . $visibilityPlaceholders . ')))';
         $like = '%' . $search . '%';
         $params[] = $like;
         $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
     }
     if ($licenceFilter !== '') {
-        $sql .= ' AND licence_class = ?';
+        $sql .= ' AND licence_class = ? AND visibility_licence_class IN (' . $visibilityPlaceholders . ')';
         $params[] = $licenceFilter;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
     }
 
     $sql .= ' ORDER BY callsign ASC LIMIT 300';
@@ -46,12 +53,32 @@ if (table_exists('members')) {
     $stmt->execute($params);
     $members = $stmt->fetchAll() ?: [];
 
-    $countsStmt = db()->query(
-        'SELECT COUNT(*) AS active_total, SUM(CASE WHEN UPPER(COALESCE(licence_class, "")) LIKE "%UBA%" THEN 1 ELSE 0 END) AS uba_total
-        FROM members
-        WHERE is_active = 1'
+    $countsStmt = db()->prepare(
+        'SELECT COUNT(*) AS active_total,
+                SUM(CASE WHEN UPPER(COALESCE(licence_class, "")) LIKE "%UBA%" AND visibility_licence_class IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
+         FROM members
+         WHERE is_active = 1
+           AND (
+               visibility_full_name IN (' . $visibilityPlaceholders . ')
+               OR visibility_email IN (' . $visibilityPlaceholders . ')
+               OR visibility_phone IN (' . $visibilityPlaceholders . ')
+               OR visibility_qth IN (' . $visibilityPlaceholders . ')
+               OR visibility_licence_class IN (' . $visibilityPlaceholders . ')
+               OR visibility_favourite_bands IN (' . $visibilityPlaceholders . ')
+               OR visibility_station IN (' . $visibilityPlaceholders . ')
+           )'
     );
-    $countsRow = $countsStmt ? ($countsStmt->fetch() ?: []) : [];
+    $countParams = [];
+    foreach ($allowedVisibilityLevels as $visibilityLevel) {
+        $countParams[] = $visibilityLevel;
+    }
+    for ($i = 0; $i < 7; $i++) {
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $countParams[] = $visibilityLevel;
+        }
+    }
+    $countsStmt->execute($countParams);
+    $countsRow = $countsStmt->fetch() ?: [];
     $activeMembersCount = (int) ($countsRow['active_total'] ?? 0);
     $ubaMembersCount = (int) ($countsRow['uba_total'] ?? 0);
 
@@ -65,15 +92,27 @@ if (table_exists('members')) {
         'station_equipment' => 'visibility_station',
     ];
 
-    foreach ($members as &$member) {
+    foreach ($members as $index => &$member) {
         foreach ($fieldVisibilityMap as $field => $visibilityField) {
             $visibility = (string) ($member[$visibilityField] ?? 'private');
             if (!in_array($visibility, $allowedVisibilityLevels, true)) {
                 $member[$field] = '';
             }
         }
+
+        $hasVisibleData = false;
+        foreach (array_keys($fieldVisibilityMap) as $field) {
+            if (trim((string) ($member[$field] ?? '')) !== '') {
+                $hasVisibleData = true;
+                break;
+            }
+        }
+        if (!$hasVisibleData) {
+            unset($members[$index]);
+        }
     }
     unset($member);
+    $members = array_values($members);
 
     $licenceRows = db()->query('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND licence_class IS NOT NULL AND licence_class <> "" GROUP BY licence_class ORDER BY licence_class ASC')->fetchAll() ?: [];
 } else {
@@ -83,11 +122,11 @@ if (table_exists('members')) {
 ob_start();
 ?>
 <section class="card">
-    <h2>Statistiques membres</h2>
+    <h2 class="text-xl font-bold text-slate-900">Le club en chiffres</h2>
     <div class="directory-grid">
         <article class="directory-card">
             <h3><?= e((string) $activeMembersCount) ?></h3>
-            <p>Membres actifs</p>
+            <p>Liste des membres</p>
         </article>
         <article class="directory-card">
             <h3><?= e((string) $ubaMembersCount) ?></h3>
@@ -97,9 +136,9 @@ ob_start();
 </section>
 
 <section class="card mt-4">
-    <h2>Membres actifs</h2>
+    <h2>Liste des membres</h2>
     <?php if ($members === []): ?>
-        <p>Aucun membre actif trouvé.</p>
+        <p>Aucun membre trouvé.</p>
     <?php else: ?>
         <div class="directory-grid">
             <?php foreach ($members as $member): ?>
