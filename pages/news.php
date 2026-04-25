@@ -243,49 +243,7 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="news-layout mt-4">
-    <aside class="card news-categories">
-        <h2>Catégories</h2>
-        <?php if ($categories === []): ?>
-            <p class="help">Aucune catégorie publiée pour le moment.</p>
-        <?php else: ?>
-            <nav class="news-category-list" aria-label="Filtrer par catégorie">
-                <a class="news-category-item" href="<?= e(route_url('news')) ?>"<?= $categoryFilter === '' ? ' aria-current="page"' : '' ?>>
-                    <span>Toutes les catégories</span>
-                    <span class="badge muted"><?= (int) $totalPosts ?></span>
-                </a>
-                <?php foreach ($categories as $category): ?>
-                    <?php
-                    $slug = (string) ($category['slug'] ?? '');
-                    $name = (string) ($category['name'] ?? 'Catégorie');
-                    $total = (int) ($category['total'] ?? 0);
-                    ?>
-                    <a class="news-category-item" href="<?= e(route_url('news', ['category' => $slug])) ?>"<?= $categoryFilter === $slug ? ' aria-current="page"' : '' ?>>
-                        <span><?= e($name) ?></span>
-                        <span class="badge muted"><?= $total ?></span>
-                    </a>
-                <?php endforeach; ?>
-            </nav>
-        <?php endif; ?>
-        <?php if ($archives !== []): ?>
-            <h3>Archives</h3>
-            <div class="news-category-list">
-                <?php foreach ($archives as $archive):
-                    $ym = (string) ($archive['ym'] ?? '');
-                    if (!preg_match('/^\d{4}-\d{2}$/', $ym)) {
-                        continue;
-                    }
-                    ?>
-                    <a class="news-category-item" href="<?= e(route_url('news', ['ym' => $ym])) ?>"<?= $monthFilter === $ym ? ' aria-current="page"' : '' ?>>
-                        <span><?= e($ym) ?></span>
-                        <span class="badge muted"><?= (int) ($archive['total'] ?? 0) ?></span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </aside>
-
-    <div class="card" id="news-list">
+<section class="card mt-4" id="news-list">
         <h2>Aperçu des actualités</h2>
         <?php if ($posts === []): ?>
             <div class="news-empty-state">
@@ -319,7 +277,6 @@ ob_start();
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-    </div>
 </section>
 
 <?php if ($totalPosts > $perPage): ?>

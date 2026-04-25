@@ -28,52 +28,57 @@ try {
 
 ob_start();
 ?>
-<section class="card wiki-header">
-    <div class="stats-grid">
-        <article class="stat-card">
-            <strong>Nouvelles pages</strong>
-        </article>
-        <article class="stat-card">
-            <strong>Pages modifiées</strong>
-        </article>
-    </div>
-    <?php if (has_permission('wiki.edit')): ?>
-        <p><a class="button small" href="<?= e(base_url('index.php?route=wiki_edit')) ?>">Nouvelle page</a></p>
-    <?php endif; ?>
-    <form method="get" class="inline-form">
-        <input type="hidden" name="route" value="wiki">
-        <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une page (titre ou contenu)">
-        <button class="button" type="submit">Rechercher</button>
-        <?php if ($search !== ''): ?>
-            <a class="button secondary" href="<?= e(route_url('wiki')) ?>">Réinitialiser</a>
-        <?php endif; ?>
-    </form>
-</section>
-
-<section class="card">
-    <h2>Pages du wiki</h2>
-    <?php if ($rows === []): ?>
-        <p>Aucune page trouvée<?= $search !== '' ? ' pour cette recherche' : '' ?>.</p>
-    <?php else: ?>
-        <div class="wiki-grid">
-            <?php foreach ($rows as $row):
-                $summary = trim(strip_tags((string) ($row['content'] ?? '')));
-                if ($summary === '') {
-                    $summary = 'Consulter cette page pour accéder au contenu complet.';
-                }
-                if (mb_strlen($summary) > 190) {
-                    $summary = mb_substr($summary, 0, 187) . '…';
-                }
-                ?>
-                <article class="wiki-card">
-                    <h3><a href="<?= e(base_url('index.php?route=wiki_view&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $row['title']) ?></a></h3>
-                    <p class="help">Mise à jour : <?= e(date('d/m/Y H:i', strtotime((string) $row['updated_at']))) ?></p>
-                    <p><?= e($summary) ?></p>
-                    <p><a class="button secondary" href="<?= e(base_url('index.php?route=wiki_view&slug=' . urlencode((string) $row['slug']))) ?>">Ouvrir la page</a></p>
-                </article>
-            <?php endforeach; ?>
+<div class="stack">
+    <section class="card wiki-header">
+        <div class="stats-grid">
+            <article class="stat-card">
+                <strong>Nouvelles pages</strong>
+            </article>
+            <article class="stat-card">
+                <strong>Pages modifiées</strong>
+            </article>
+            <article class="stat-card">
+                <strong>Les plus lues</strong>
+            </article>
         </div>
-    <?php endif; ?>
-</section>
+        <?php if (has_permission('wiki.edit')): ?>
+            <p><a class="button small" href="<?= e(base_url('index.php?route=wiki_edit')) ?>">Nouvelle page</a></p>
+        <?php endif; ?>
+        <form method="get" class="inline-form">
+            <input type="hidden" name="route" value="wiki">
+            <input type="text" name="q" value="<?= e($search) ?>" placeholder="Rechercher une page (titre ou contenu)">
+            <button class="button" type="submit">Rechercher</button>
+            <?php if ($search !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url('wiki')) ?>">Réinitialiser</a>
+            <?php endif; ?>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Pages du wiki</h2>
+        <?php if ($rows === []): ?>
+            <p>Aucune page trouvée<?= $search !== '' ? ' pour cette recherche' : '' ?>.</p>
+        <?php else: ?>
+            <div class="wiki-grid">
+                <?php foreach ($rows as $row):
+                    $summary = trim(strip_tags((string) ($row['content'] ?? '')));
+                    if ($summary === '') {
+                        $summary = 'Consulter cette page pour accéder au contenu complet.';
+                    }
+                    if (mb_strlen($summary) > 190) {
+                        $summary = mb_substr($summary, 0, 187) . '…';
+                    }
+                    ?>
+                    <article class="wiki-card">
+                        <h3><a href="<?= e(base_url('index.php?route=wiki_view&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $row['title']) ?></a></h3>
+                        <p class="help">Mise à jour : <?= e(date('d/m/Y H:i', strtotime((string) $row['updated_at']))) ?></p>
+                        <p><?= e($summary) ?></p>
+                        <p><a class="button secondary" href="<?= e(base_url('index.php?route=wiki_view&slug=' . urlencode((string) $row['slug']))) ?>">Ouvrir la page</a></p>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </section>
+</div>
 <?php
 echo render_layout((string) ob_get_clean(), 'Wiki');
