@@ -83,8 +83,8 @@ function installer_build_config_php(array $values): string
             'directory' => __DIR__ . '/../storage/cache/data',
         ],
         'tracking' => [
-            'matomo_url' => '',
-            'matomo_site_id' => '',
+            'matomo_url' => 'https://stats.smartappli.eu/',
+            'matomo_site_id' => '4',
         ],
         'social' => [
             'album_webhooks' => [],
