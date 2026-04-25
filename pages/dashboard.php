@@ -36,6 +36,7 @@ ob_start();
         <a class="button secondary" href="<?= e(route_url('newsletter')) ?>">Newsletter</a>
         <a class="button secondary" href="<?= e(route_url('chatbot')) ?>">Raymond vous répond</a>
         <button class="button secondary" id="save-dashboard" type="button">Enregistrer la disposition</button>
+        <span class="help" id="dashboard-save-status" role="status" aria-live="polite"></span>
       </div>
     </div>
     <div id="dashboard-grid" class="widget-grid" data-config='<?= e(json_encode($dashboardConfig, JSON_UNESCAPED_SLASHES)) ?>'>
