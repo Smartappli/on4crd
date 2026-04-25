@@ -135,6 +135,7 @@
 
   const renderBase = window.dashboardConfig.renderBase;
   const csrf = window.dashboardConfig.csrf;
+  const saveEnabled = Boolean(window.dashboardConfig.saveEnabled);
   const saveButton = document.getElementById('save-dashboard');
   const saveStatus = document.getElementById('dashboard-save-status');
   let dragged = null;
@@ -147,6 +148,10 @@
   }
 
   async function saveDashboardLayout() {
+    if (!saveEnabled) {
+      setSaveStatus('Sauvegarde indisponible (table dashboard_widgets absente).', true);
+      return;
+    }
     if (isSaving) {
       return;
     }
