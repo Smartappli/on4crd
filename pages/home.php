@@ -44,13 +44,9 @@ if ($moduleCards === '') {
     $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Les espaces publics sont en cours de mise à jour.</div>';
 }
 
-$heroTitle = $isAuthenticated
-    ? 'Pilotez vos activités radio depuis un portail unique'
-    : '';
+$heroTitle = '';
 
-$heroSubtitle = $isAuthenticated
-    ? 'Retrouvez vos modules, vos contenus et vos prochaines actions en quelques clics.'
-    : '';
+$heroSubtitle = '';
 
 $heroIntro = '';
 if ($heroTitle !== '') {

@@ -318,6 +318,7 @@ textarea:focus-visible {
 .widget-card.dragging { opacity: .55; }
 .widget-card header, .row-between, .section-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
 .widget-body { margin-top: .8rem; }
+#dashboard-save-status.error { color: var(--danger); }
 .button, button {
   border: 0;
   background: var(--accent);
