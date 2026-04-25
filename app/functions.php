@@ -143,6 +143,101 @@ function seed_dashboard_widgets(): void
     // Hook conservé pour compatibilité installateur.
 }
 
+if (!function_exists('widget_catalog')) {
+function widget_catalog(): array
+{
+    return [
+        'welcome' => [
+            'title' => 'Bienvenue',
+            'description' => 'Résumé rapide de votre espace membre.',
+        ],
+        'club_status' => [
+            'title' => 'État du club',
+            'description' => 'Statut des modules actifs du site.',
+        ],
+        'events' => [
+            'title' => 'Prochains événements',
+            'description' => 'Les prochains rendez-vous du club.',
+        ],
+        'chatbot' => [
+            'title' => 'Raymond vous répond',
+            'description' => 'Accès rapide à l’assistant du club.',
+        ],
+        'quick_links' => [
+            'title' => 'Liens rapides',
+            'description' => 'Raccourcis vers les modules membres.',
+        ],
+        'propagation' => [
+            'title' => 'Propagation',
+            'description' => 'Repères rapides radio du moment.',
+        ],
+    ];
+}
+}
+
+if (!function_exists('render_widget')) {
+function render_widget(string $slug, array $user = []): string
+{
+    $safeSlug = strtolower(trim($slug));
+    $callsign = trim((string) ($user['callsign'] ?? 'OM'));
+
+    switch ($safeSlug) {
+        case 'welcome':
+            return '<p>Bonjour <strong>' . e($callsign) . '</strong>, bienvenue dans votre espace membre.</p>'
+                . '<p class="help">Personnalisez ce tableau de bord en ajoutant, supprimant et déplaçant vos widgets.</p>';
+
+        case 'club_status':
+            $moduleCount = 0;
+            if (table_exists('modules')) {
+                $stmt = db()->query('SELECT COUNT(*) FROM modules WHERE is_enabled = 1');
+                $moduleCount = $stmt !== false ? (int) $stmt->fetchColumn() : 0;
+            }
+
+            return '<p><strong>' . $moduleCount . '</strong> modules actifs.</p>'
+                . '<p class="help">Configuration dynamique via l’administration.</p>';
+
+        case 'events':
+            if (!table_exists('events')) {
+                return '<p class="help">Module événements indisponible.</p>';
+            }
+
+            $rows = db()->query('SELECT title, starts_at FROM events WHERE starts_at IS NOT NULL ORDER BY starts_at ASC LIMIT 3');
+            $events = $rows !== false ? ($rows->fetchAll() ?: []) : [];
+            if ($events === []) {
+                return '<p class="help">Aucun événement à venir.</p>';
+            }
+
+            $html = '<ul class="list-clean">';
+            foreach ($events as $event) {
+                $title = e((string) ($event['title'] ?? 'Événement'));
+                $startsAt = e((string) ($event['starts_at'] ?? ''));
+                $html .= '<li><strong>' . $title . '</strong><br><span class="help">' . $startsAt . '</span></li>';
+            }
+            $html .= '</ul>';
+
+            return $html;
+
+        case 'chatbot':
+            return '<p class="help">Posez vos questions à Raymond sur la radio, le club et les procédures.</p>'
+                . '<p><a class="button small" href="' . e(route_url('chatbot')) . '">Ouvrir Raymond</a></p>';
+
+        case 'quick_links':
+            return '<ul class="list-clean">'
+                . '<li><a href="' . e(route_url('profile')) . '">Mon profil</a></li>'
+                . '<li><a href="' . e(route_url('qsl')) . '">QSL</a></li>'
+                . '<li><a href="' . e(route_url('newsletter')) . '">Newsletter</a></li>'
+                . '</ul>';
+
+        case 'propagation':
+            return '<p class="help">Consultez les bandes actives et adaptez vos sessions selon les conditions du moment.</p>'
+                . '<p><a href="https://www.solarham.com/" target="_blank" rel="noopener">Voir les indicateurs</a></p>';
+
+        default:
+            return '<p class="help">Widget indisponible.</p>';
+    }
+}
+}
+
 function seed_ad_placements(): void
 {
     if (!table_exists('ad_placements')) {
