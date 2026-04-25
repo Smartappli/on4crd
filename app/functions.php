@@ -405,6 +405,27 @@ function consume_flashes(): array
 }
 
 if (!function_exists('current_user')) {
+function auth_bypass_member_id(): int
+{
+    return max(0, (int) config('app.auth_bypass_member_id', 0));
+}
+
+function bypass_member_user(int $memberId): ?array
+{
+    if ($memberId <= 0 || !table_exists('members')) {
+        return null;
+    }
+
+    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active, is_committee FROM members WHERE id = ? LIMIT 1');
+    $stmt->execute([$memberId]);
+    $row = $stmt->fetch();
+    if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
+        return null;
+    }
+
+    return $row;
+}
+
 function current_user(): ?array
 {
     static $cache = null;
@@ -420,7 +441,23 @@ function current_user(): ?array
     if ($authClient !== null && $authClient->isLoggedIn()) {
         $memberId = (int) $authClient->getUserId();
     }
-    if ($memberId <= 0 || !table_exists('members')) {
+
+    if ($memberId <= 0) {
+        $bypassMemberId = auth_bypass_member_id();
+        if ($bypassMemberId > 0) {
+            $bypassUser = bypass_member_user($bypassMemberId);
+            if (is_array($bypassUser)) {
+                $_SESSION['member_id'] = (int) $bypassUser['id'];
+                $cache = $bypassUser;
+                return $cache;
+            }
+        }
+
+        $cache = null;
+        return null;
+    }
+
+    if (!table_exists('members')) {
         $cache = null;
         return null;
     }
