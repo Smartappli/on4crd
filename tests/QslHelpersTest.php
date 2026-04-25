@@ -57,6 +57,49 @@ ADIF;
         self::assertStringNotContainsString('<script', $svg);
     }
 
+    public function testBuildQslSvgPayloadBuildsNormalizedPayloadFromUserAndData(): void
+    {
+        $payload = build_qsl_svg_payload(
+            [
+                'callsign' => 'ON4CRD',
+                'full_name' => 'Radio Club',
+                'qth' => 'Charleroi',
+            ],
+            [
+                'qso_call' => ' f4xyz/p ',
+                'qso_date' => '2026-04-25',
+                'time_on' => '9:5',
+                'band' => '20m',
+                'mode' => 'ssb',
+                'rst_sent' => '59',
+                'rst_recv' => '57',
+            ],
+            '  TNX   73  '
+        );
+
+        self::assertSame('ON4CRD', $payload['own_call']);
+        self::assertSame('F4XYZ/P', $payload['qso_call']);
+        self::assertSame('20260425', $payload['qso_date']);
+        self::assertSame('0905', $payload['time_on']);
+        self::assertSame('20M', $payload['band']);
+        self::assertSame('SSB', $payload['mode']);
+        self::assertSame('TNX 73', $payload['comment']);
+    }
+
+    public function testQslCardTitleAndDisplayFormattingHelpers(): void
+    {
+        $payload = [
+            'qso_call' => 'F4XYZ',
+            'qso_date' => '20260425',
+            'band' => '20m',
+            'mode' => 'ssb',
+        ];
+
+        self::assertSame('QSL • F4XYZ • 25/04/2026 • 20M • SSB', qsl_card_title($payload));
+        self::assertSame('25/04/2026', qsl_format_display_date('2026-04-25'));
+        self::assertSame('09:05', qsl_format_display_time('9:5'));
+    }
+
     public function testSanitizeSvgDocumentFallsBackForDangerousSvg(): void
     {
         $svg = sanitize_svg_document('<svg><script>alert(1)</script></svg>');

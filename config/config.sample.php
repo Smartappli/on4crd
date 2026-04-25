@@ -14,6 +14,9 @@ return [
         'supported_locales' => ['fr', 'en', 'de', 'nl'],
         'session_name' => 'on4crd_session',
         'allow_install' => false,
+        // Définir un ID membre actif pour contourner temporairement l'authentification.
+        // Exemple: 1. Laisser à 0 pour désactiver le bypass.
+        'auth_bypass_member_id' => 0,
         'maintenance' => [
             'enabled' => false,
             'secret' => '',
