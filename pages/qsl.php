@@ -191,6 +191,7 @@ ksort($qsoModeOptions);
 
 ob_start();
 ?>
+<div class="qsl-page">
 <section class="card qsl-kpis">
     <div class="qsl-kpi">
         <p class="help">QSO enregistrés</p>
@@ -350,6 +351,7 @@ ob_start();
         <?php endif; ?>
     <?php endif; ?>
 </section>
+</div>
 <script nonce="<?= e(csp_nonce()) ?>">
 document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
     button.addEventListener('click', () => {
