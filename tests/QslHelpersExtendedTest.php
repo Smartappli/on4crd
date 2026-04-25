@@ -51,6 +51,22 @@ ADIF;
         self::assertStringNotContainsString('onload=', strtolower($sanitized));
     }
 
+    public function testSanitizeSvgDocumentBlocksEventHandlerWithWhitespaceBypassAttempt(): void
+    {
+        $dangerous = '<svg><image oNLoAd = "evil()"></image></svg>';
+        $sanitized = sanitize_svg_document($dangerous);
+
+        self::assertStringContainsString('QSL sécurisée indisponible', $sanitized);
+    }
+
+    public function testSanitizeSvgDocumentBlocksXlinkJavascriptHref(): void
+    {
+        $dangerous = '<svg><a xlink:href=" javascript:alert(1) "><text>click</text></a></svg>';
+        $sanitized = sanitize_svg_document($dangerous);
+
+        self::assertStringContainsString('QSL sécurisée indisponible', $sanitized);
+    }
+
     public function testSanitizeSvgDocumentLeavesSafeSvgUntouched(): void
     {
         $safe = '<svg xmlns="http://www.w3.org/2000/svg"><text>ON4CRD</text></svg>';

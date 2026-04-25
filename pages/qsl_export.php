@@ -11,6 +11,7 @@ if (!$row) {
     exit('QSL introuvable');
 }
 $filename = slugify((string) ($row['title'] ?? 'qsl-card')) ?: 'qsl-card';
+$isDownload = ((string) ($_GET['download'] ?? '') === '1');
 header('Content-Type: image/svg+xml; charset=utf-8');
-header('Content-Disposition: attachment; filename="' . $filename . '.svg"');
+header('Content-Disposition: ' . ($isDownload ? 'attachment' : 'inline') . '; filename="' . $filename . '.svg"');
 echo sanitize_svg_document((string) $row['svg_content']);
