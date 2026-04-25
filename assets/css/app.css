@@ -401,6 +401,10 @@ textarea { resize: vertical; }
 table { width:100%; border-collapse: collapse; }
 th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; }
 .help { color: var(--muted); font-size:.93rem; }
+.qsl-page {
+  display: grid;
+  gap: 1rem;
+}
 .qsl-kpis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
