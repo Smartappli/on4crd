@@ -59,7 +59,7 @@ ob_start();
     </div>
   </section>
   <aside class="card">
-    <h2>Ajouter un widget</h2>
+    <h2>Widgets disponibles</h2>
     <div class="stack">
       <?php foreach ($availableToAdd as $widgetKey => $widget): ?>
         <article class="widget-card">
