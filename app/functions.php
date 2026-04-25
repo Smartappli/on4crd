@@ -407,7 +407,21 @@ function consume_flashes(): array
 if (!function_exists('current_user')) {
 function auth_bypass_member_id(): int
 {
-    return max(0, (int) config('app.auth_bypass_member_id', 0));
+    $configuredBypassId = max(0, (int) config('app.auth_bypass_member_id', 0));
+    if ($configuredBypassId > 0) {
+        return $configuredBypassId;
+    }
+
+    $environment = strtolower(trim((string) config('app.env', 'production')));
+    $allowDevelopmentBypass = (bool) config('app.disable_login_in_development', false);
+    if (!$allowDevelopmentBypass || $environment !== 'development' || !table_exists('members')) {
+        return 0;
+    }
+
+    $stmt = db()->query('SELECT id FROM members WHERE is_active = 1 ORDER BY id ASC LIMIT 1');
+    $firstActiveMemberId = $stmt !== false ? (int) $stmt->fetchColumn() : 0;
+
+    return max(0, $firstActiveMemberId);
 }
 
 function bypass_member_user(int $memberId): ?array

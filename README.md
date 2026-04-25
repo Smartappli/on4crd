@@ -88,6 +88,22 @@ Puis relancer:
 docker compose up --build
 ```
 
+### Désactiver la connexion en développement
+
+Si vous souhaitez travailler localement sans passer par l'écran de connexion, activez ces options dans `config/config.php`:
+
+```php
+'app' => [
+    // ...
+    'env' => 'development',
+    'disable_login_in_development' => true,
+],
+```
+
+Comportement:
+- en `development`, si aucun `auth_bypass_member_id` n'est défini, l'application connecte automatiquement le premier membre actif;
+- en `production`, ce mode reste inactif.
+
 ## Exploitation
 
 - Observabilité minimale: `docs/OBSERVABILITE_PROD.md`
