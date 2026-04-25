@@ -412,6 +412,27 @@ function auth_bypass_member_id(): int
         return $configuredBypassId;
     }
 
+    $route = (string) ($_GET['route'] ?? 'home');
+    $temporaryBypassForMembers = (bool) config('app.bypass_member_modules_auth', false);
+    $memberBypassRoutes = [
+        'dashboard',
+        'save_dashboard',
+        'widget_render',
+        'profile',
+        'qsl',
+        'qsl_preview',
+        'qsl_export',
+        'shop_checkout',
+        'auction_bid',
+        'newsletter',
+    ];
+    if ($temporaryBypassForMembers && in_array($route, $memberBypassRoutes, true) && table_exists('members')) {
+        $stmt = db()->query('SELECT id FROM members WHERE is_active = 1 ORDER BY id ASC LIMIT 1');
+        $firstActiveMemberId = $stmt !== false ? (int) $stmt->fetchColumn() : 0;
+
+        return max(0, $firstActiveMemberId);
+    }
+
     $environment = strtolower(trim((string) config('app.env', 'production')));
     $allowDevelopmentBypass = (bool) config('app.disable_login_in_development', false);
     if (!$allowDevelopmentBypass || $environment !== 'development' || !table_exists('members')) {

@@ -20,6 +20,9 @@ return [
         // Définir un ID membre actif pour contourner temporairement l'authentification.
         // Exemple: 1. Laisser à 0 pour désactiver le bypass.
         'auth_bypass_member_id' => 0,
+        // Bypass temporaire de connexion pour les modules membres (dashboard, profil, QSL, checkout, etc.).
+        // Utilise le premier membre actif trouvé si aucun utilisateur n'est connecté.
+        'bypass_member_modules_auth' => false,
         'maintenance' => [
             'enabled' => false,
             'secret' => '',
