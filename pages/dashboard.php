@@ -35,7 +35,6 @@ ob_start();
     <div class="row-between">
       <div>
         <h1>Tableau de bord membre</h1>
-        <p class="help">Les widgets live sont réservés à ce module séparé. Raymond vous répond est intégré au tableau de bord personnalisable des membres : vous pouvez réorganiser les blocs, en ajouter ou en retirer selon vos besoins.</p>
       </div>
       <div class="actions">
         <a class="button secondary" href="<?= e(route_url('newsletter')) ?>">Newsletter</a>

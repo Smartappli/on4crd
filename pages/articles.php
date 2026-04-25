@@ -56,46 +56,48 @@ set_page_meta([
 
 ob_start();
 ?>
-<div class="card">
-    <div class="row-between">
-        <h1>Articles techniques</h1>
-        <?php if (has_permission('articles.manage')): ?>
-            <a class="button small" href="<?= e(base_url('index.php?route=admin_articles')) ?>">Gérer</a>
-        <?php endif; ?>
-    </div>
-    <div class="pill-row">
-        <?php foreach ($themeLabels as $themeCode => $themeLabel): ?>
-            <a class="pill" href="<?= e(route_url('articles', ['theme' => $themeCode])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
-                <?= e($themeLabel) ?> · <?= (int) ($themeCounts[$themeCode] ?? 0) ?>
-            </a>
-        <?php endforeach; ?>
-        <?php if ($themeFilter !== ''): ?>
-            <a class="pill" href="<?= e(route_url('articles')) ?>">Réinitialiser</a>
-        <?php endif; ?>
-    </div>
-</div>
-
-<?php if ($groupedArticles === []): ?>
+<div class="stack">
     <div class="card">
-        <p>Aucun article disponible pour cette thématique.</p>
+        <div class="row-between">
+            <h1>Articles techniques</h1>
+            <?php if (has_permission('articles.manage')): ?>
+                <a class="button small" href="<?= e(base_url('index.php?route=admin_articles')) ?>">Gérer</a>
+            <?php endif; ?>
+        </div>
+        <div class="pill-row">
+            <?php foreach ($themeLabels as $themeCode => $themeLabel): ?>
+                <a class="pill" href="<?= e(route_url('articles', ['theme' => $themeCode])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
+                    <?= e($themeLabel) ?> · <?= (int) ($themeCounts[$themeCode] ?? 0) ?>
+                </a>
+            <?php endforeach; ?>
+            <?php if ($themeFilter !== ''): ?>
+                <a class="pill" href="<?= e(route_url('articles')) ?>">Réinitialiser</a>
+            <?php endif; ?>
+        </div>
     </div>
-<?php else: ?>
-    <?php foreach ($groupedArticles as $themeCode => $themeRows): ?>
-        <section class="card">
-            <h2><?= e((string) ($themeLabels[$themeCode] ?? 'Thématique')) ?></h2>
-            <div class="news-grid">
-                <?php foreach ($themeRows as $row): ?>
-                    <?php $row = localized_article_row($row); ?>
-                    <article class="news-card feature-card">
-                        <span class="badge muted"><?= e((string) ($themeLabels[$themeCode] ?? 'Thématique')) ?></span>
-                        <h3><a href="<?= e(base_url('index.php?route=article&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
-                        <p><?= e((string) $row['excerpt_localized']) ?></p>
-                        <p><a class="button secondary" href="<?= e(base_url('index.php?route=article&slug=' . urlencode((string) $row['slug']))) ?>">Lire l’article</a></p>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-        </section>
-    <?php endforeach; ?>
-<?php endif; ?>
+
+    <?php if ($groupedArticles === []): ?>
+        <div class="card">
+            <p>Aucun article disponible pour cette thématique.</p>
+        </div>
+    <?php else: ?>
+        <?php foreach ($groupedArticles as $themeCode => $themeRows): ?>
+            <section class="card">
+                <h2><?= e((string) ($themeLabels[$themeCode] ?? 'Thématique')) ?></h2>
+                <div class="news-grid">
+                    <?php foreach ($themeRows as $row): ?>
+                        <?php $row = localized_article_row($row); ?>
+                        <article class="news-card feature-card">
+                            <span class="badge muted"><?= e((string) ($themeLabels[$themeCode] ?? 'Thématique')) ?></span>
+                            <h3><a href="<?= e(base_url('index.php?route=article&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
+                            <p><?= e((string) $row['excerpt_localized']) ?></p>
+                            <p><a class="button secondary" href="<?= e(base_url('index.php?route=article&slug=' . urlencode((string) $row['slug']))) ?>">Lire l’article</a></p>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 <?php
 echo render_layout((string) ob_get_clean(), 'Articles');
