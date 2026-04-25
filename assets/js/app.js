@@ -135,7 +135,54 @@
 
   const renderBase = window.dashboardConfig.renderBase;
   const csrf = window.dashboardConfig.csrf;
+  const saveEnabled = Boolean(window.dashboardConfig.saveEnabled);
+  const saveButton = document.getElementById('save-dashboard');
+  const saveStatus = document.getElementById('dashboard-save-status');
   let dragged = null;
+  let isSaving = false;
+
+  function setSaveStatus(message, isError) {
+    if (!saveStatus) return;
+    saveStatus.textContent = message;
+    saveStatus.classList.toggle('error', Boolean(isError));
+  }
+
+  async function saveDashboardLayout() {
+    if (!saveEnabled) {
+      setSaveStatus('Sauvegarde indisponible (table dashboard_widgets absente).', true);
+      return;
+    }
+    if (isSaving) {
+      return;
+    }
+    isSaving = true;
+    if (saveButton) saveButton.disabled = true;
+    setSaveStatus('Enregistrement…', false);
+
+    try {
+      const widgets = [...grid.querySelectorAll('.widget-card')].map((card) => card.dataset.widget).filter(Boolean);
+      const response = await fetch(window.dashboardConfig.saveUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-Token': csrf,
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ _csrf: csrf, widgets })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || 'Erreur de sauvegarde');
+      }
+      setSaveStatus('Disposition enregistrée.', false);
+    } catch (error) {
+      setSaveStatus(error instanceof Error ? error.message : 'Erreur de sauvegarde.', true);
+    } finally {
+      if (saveButton) saveButton.disabled = false;
+      isSaving = false;
+    }
+  }
 
   function bindCard(card) {
     card.addEventListener('dragstart', () => {
@@ -145,9 +192,11 @@
     card.addEventListener('dragend', () => {
       card.classList.remove('dragging');
       dragged = null;
+      saveDashboardLayout();
     });
     card.querySelector('.remove-widget')?.addEventListener('click', () => {
       card.remove();
+      saveDashboardLayout();
     });
   }
 
@@ -196,24 +245,11 @@
       }
       const card = createCard(key, button.dataset.title || key);
       grid.appendChild(card);
+      saveDashboardLayout();
     });
   });
 
-  document.getElementById('save-dashboard')?.addEventListener('click', async () => {
-    const widgets = [...grid.querySelectorAll('.widget-card')].map((card) => card.dataset.widget);
-    const response = await fetch(window.dashboardConfig.saveUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-Token': csrf,
-      },
-      credentials: 'same-origin',
-      body: JSON.stringify({ _csrf: csrf, widgets })
-    });
-    const data = await response.json();
-    alert(data.ok ? 'Disposition enregistrée' : (data.error || 'Erreur'));
-  });
+  saveButton?.addEventListener('click', saveDashboardLayout);
 })();
 
 (function () {
