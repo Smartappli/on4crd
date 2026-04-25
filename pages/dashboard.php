@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 $user = require_login();
 $availableWidgets = widget_catalog();
-$userWidgets = db()->prepare('SELECT widget_key, position FROM dashboard_widgets WHERE member_id = ? ORDER BY position ASC');
-$userWidgets->execute([(int) $user['id']]);
-$selected = $userWidgets->fetchAll();
+$dashboardPersistenceEnabled = table_exists('dashboard_widgets');
+$selected = [];
+if ($dashboardPersistenceEnabled) {
+    $userWidgets = db()->prepare('SELECT widget_key, position FROM dashboard_widgets WHERE member_id = ? ORDER BY position ASC');
+    $userWidgets->execute([(int) $user['id']]);
+    $selected = $userWidgets->fetchAll();
+}
 $selectedKeys = array_map(static fn(array $row): string => (string) $row['widget_key'], $selected);
 if ($selectedKeys === []) {
     $selectedKeys = ['welcome', 'propagation', 'club_status', 'chatbot'];
@@ -19,6 +23,7 @@ $availableToAdd = array_filter($availableWidgets, static fn(string $key): bool =
 $dashboardConfig = [
     'renderBase' => base_url('index.php?route=widget_render&widget='),
     'saveUrl' => base_url('index.php?route=save_dashboard'),
+    'saveEnabled' => $dashboardPersistenceEnabled,
     'refreshMs' => 90000,
     'csrf' => csrf_token(),
 ];
@@ -35,9 +40,13 @@ ob_start();
       <div class="actions">
         <a class="button secondary" href="<?= e(route_url('newsletter')) ?>">Newsletter</a>
         <a class="button secondary" href="<?= e(route_url('chatbot')) ?>">Raymond vous répond</a>
-        <button class="button secondary" id="save-dashboard" type="button">Enregistrer la disposition</button>
+        <button class="button secondary" id="save-dashboard" type="button" <?= $dashboardPersistenceEnabled ? '' : 'disabled' ?>>Enregistrer la disposition</button>
+        <span class="help" id="dashboard-save-status" role="status" aria-live="polite"></span>
       </div>
     </div>
+    <?php if (!$dashboardPersistenceEnabled): ?>
+      <p class="flash flash-error">La table <code>dashboard_widgets</code> est absente : la disposition des widgets ne peut pas être enregistrée.</p>
+    <?php endif; ?>
     <div id="dashboard-grid" class="widget-grid" data-config='<?= e(json_encode($dashboardConfig, JSON_UNESCAPED_SLASHES)) ?>'>
       <?php foreach ($selectedKeys as $widgetKey): ?>
         <article class="widget-card" draggable="true" data-widget="<?= e($widgetKey) ?>">

@@ -6,6 +6,9 @@ $user = require_login();
 
 try {
     verify_csrf();
+    if (!table_exists('dashboard_widgets')) {
+        throw new RuntimeException('La table dashboard_widgets est absente.');
+    }
     $payload = json_decode((string) file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
     $widgets = is_array($payload['widgets'] ?? null) ? $payload['widgets'] : [];
     $catalog = widget_catalog();
