@@ -435,7 +435,20 @@ function auth_bypass_member_id(): int
 
     $environment = strtolower(trim((string) config('app.env', 'production')));
     $allowDevelopmentBypass = (bool) config('app.disable_login_in_development', false);
-    if (!$allowDevelopmentBypass || $environment !== 'development' || !table_exists('members')) {
+    $route = (string) ($_GET['route'] ?? 'home');
+    $memberBypassRoutes = [
+        'dashboard',
+        'save_dashboard',
+        'widget_render',
+        'profile',
+        'qsl',
+        'qsl_preview',
+        'qsl_export',
+        'shop_checkout',
+        'auction_bid',
+        'newsletter',
+    ];
+    if (!$allowDevelopmentBypass || $environment !== 'development' || !table_exists('members') || !in_array($route, $memberBypassRoutes, true)) {
         return 0;
     }
 
