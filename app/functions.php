@@ -1577,7 +1577,9 @@ function csrf_token(): string
 function verify_csrf(): void
 {
     $sessionToken = (string) ($_SESSION['_csrf'] ?? '');
-    $submittedToken = (string) ($_POST['_csrf'] ?? '');
+    $postToken = (string) ($_POST['_csrf'] ?? '');
+    $headerToken = (string) ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+    $submittedToken = $postToken !== '' ? $postToken : $headerToken;
     if ($sessionToken === '' || $submittedToken === '' || !hash_equals($sessionToken, $submittedToken)) {
         throw new RuntimeException('Jeton CSRF invalide.');
     }

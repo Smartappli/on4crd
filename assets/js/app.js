@@ -138,6 +138,8 @@
   const saveEnabled = Boolean(window.dashboardConfig.saveEnabled);
   const saveButton = document.getElementById('save-dashboard');
   const saveStatus = document.getElementById('dashboard-save-status');
+  const addWidgetContainer = document.querySelector('.split-home aside .stack');
+  const addWidgetTemplates = new Map();
   let dragged = null;
   let isSaving = false;
 
@@ -184,6 +186,60 @@
     }
   }
 
+  function bindAddWidgetButton(button) {
+    button.addEventListener('click', () => {
+      const key = button.dataset.widget;
+      if (!key) {
+        return;
+      }
+      if ([...grid.querySelectorAll('.widget-card')].some((card) => card.dataset.widget === key)) {
+        return;
+      }
+      const card = createCard(key, button.dataset.title || key);
+      grid.appendChild(card);
+      button.closest('.widget-card')?.remove();
+      saveDashboardLayout();
+    });
+  }
+
+  function addWidgetOption(widgetKey, title) {
+    if (!addWidgetContainer || !widgetKey) {
+      return;
+    }
+    const existing = [...addWidgetContainer.querySelectorAll('.add-widget')]
+      .some((button) => button.dataset.widget === widgetKey);
+    if (existing) {
+      return;
+    }
+
+    const template = addWidgetTemplates.get(widgetKey) || {};
+    const widgetTitle = title || template.title || widgetKey;
+    const article = document.createElement('article');
+    article.className = 'widget-card';
+    article.innerHTML = `<header><strong></strong></header><p class="help"></p><button class="button small add-widget" type="button">Ajouter</button>`;
+    const titleNode = article.querySelector('header strong');
+    if (titleNode) {
+      titleNode.textContent = widgetTitle;
+    }
+    const helpNode = article.querySelector('.help');
+    const description = template.description || '';
+    if (helpNode) {
+      if (description !== '') {
+        helpNode.textContent = description;
+      } else {
+        helpNode.remove();
+      }
+    }
+    const button = article.querySelector('.add-widget');
+    if (!button) {
+      return;
+    }
+    button.dataset.widget = widgetKey;
+    button.dataset.title = widgetTitle;
+    bindAddWidgetButton(button);
+    addWidgetContainer.appendChild(article);
+  }
+
   function bindCard(card) {
     card.addEventListener('dragstart', () => {
       dragged = card;
@@ -195,7 +251,10 @@
       saveDashboardLayout();
     });
     card.querySelector('.remove-widget')?.addEventListener('click', () => {
+      const widgetKey = card.dataset.widget || '';
+      const widgetTitle = card.querySelector('header strong')?.textContent?.trim() || widgetKey;
       card.remove();
+      addWidgetOption(widgetKey, widgetTitle);
       saveDashboardLayout();
     });
   }
@@ -222,6 +281,16 @@
   }
 
   grid.querySelectorAll('.widget-card').forEach(bindCard);
+  document.querySelectorAll('.add-widget').forEach((button) => {
+    const key = button.dataset.widget || '';
+    if (key !== '' && !addWidgetTemplates.has(key)) {
+      addWidgetTemplates.set(key, {
+        title: button.dataset.title || key,
+        description: button.closest('.widget-card')?.querySelector('.help')?.textContent?.trim() || ''
+      });
+    }
+    bindAddWidgetButton(button);
+  });
 
   grid.addEventListener('dragover', (event) => {
     event.preventDefault();
@@ -235,18 +304,6 @@
     } else if (after !== dragged) {
       grid.insertBefore(dragged, after);
     }
-  });
-
-  document.querySelectorAll('.add-widget').forEach((button) => {
-    button.addEventListener('click', () => {
-      const key = button.dataset.widget;
-      if ([...grid.querySelectorAll('.widget-card')].some((card) => card.dataset.widget === key)) {
-        return;
-      }
-      const card = createCard(key, button.dataset.title || key);
-      grid.appendChild(card);
-      saveDashboardLayout();
-    });
   });
 
   saveButton?.addEventListener('click', saveDashboardLayout);
