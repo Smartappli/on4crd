@@ -726,6 +726,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => 'Annuaire', 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
+        ['label' => 'Tableau de bord', 'route' => 'dashboard', 'module' => 'dashboard'],
         ['label' => 'Wiki', 'route' => 'wiki', 'module' => 'wiki'],
         ['label' => 'Galerie', 'route' => 'albums', 'module' => 'albums'],
         ['label' => 'Articles', 'route' => 'articles', 'module' => 'articles'],
