@@ -37,6 +37,9 @@ ob_start();
             <article class="stat-card">
                 <strong>Pages modifiées</strong>
             </article>
+            <article class="stat-card">
+                <strong>Les plus lues</strong>
+            </article>
         </div>
         <?php if (has_permission('wiki.edit')): ?>
             <p><a class="button small" href="<?= e(base_url('index.php?route=wiki_edit')) ?>">Nouvelle page</a></p>

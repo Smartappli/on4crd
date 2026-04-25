@@ -79,9 +79,10 @@ $monthRaw = (string) ($_GET['ym'] ?? date('Y-m'));
 if (!preg_match('/^\d{4}-\d{2}$/', $monthRaw)) {
     $monthRaw = date('Y-m');
 }
+$requestedView = (string) ($_GET['view'] ?? 'month');
 /** @var 'month'|'week'|'list' $view */
-$view = in_array((string) ($_GET['view'] ?? 'month'), ['month', 'week', 'list'], true)
-    ? (string) $_GET['view']
+$view = in_array($requestedView, ['month', 'week', 'list'], true)
+    ? $requestedView
     : 'month';
 
 $monthDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $monthRaw . '-01 00:00:00');
