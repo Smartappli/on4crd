@@ -299,6 +299,32 @@ textarea:focus-visible {
   margin: 0;
   font-size: .95rem;
 }
+.qsl-studio-overview {
+  background:
+    radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 34%),
+    var(--panel);
+}
+.qsl-studio-overview .grid-3 {
+  margin-top: .7rem;
+}
+.qsl-studio-overview .inner-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--panel-2) 72%, var(--panel));
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.qsl-studio-overview .inner-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
+  box-shadow: var(--shadow);
+}
+.qsl-studio-overview .inner-card h3 {
+  margin: .15rem 0 .35rem;
+}
+.qsl-studio-overview .inner-card .button {
+  margin-top: .2rem;
+}
 .toolbar-auth .button.toolbar-login-button {
   display: inline-flex;
   align-items: center;
