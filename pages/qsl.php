@@ -186,6 +186,7 @@ $qslCards->execute([$memberId]);
 $backgroundPresetsStmt = db()->prepare('SELECT id, label, type, color_primary, color_secondary, is_default FROM qsl_background_presets WHERE member_id = ? ORDER BY is_default DESC, id DESC');
 $backgroundPresetsStmt->execute([$memberId]);
 $backgroundPresets = $backgroundPresetsStmt->fetchAll();
+$qslRows = $qslCards->fetchAll();
 $defaultBackgroundPresetId = 0;
 foreach ($backgroundPresets as $presetRow) {
     if ((int) ($presetRow['is_default'] ?? 0) === 1) {
@@ -194,7 +195,6 @@ foreach ($backgroundPresets as $presetRow) {
     }
 }
 $hasCreatedQsl = count($qslRows) > 0;
-$qslRows = $qslCards->fetchAll();
 
 $qsoSearch = trim((string) ($_GET['qso_search'] ?? ''));
 $qsoBandFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_band'] ?? '')));
