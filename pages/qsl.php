@@ -2,13 +2,80 @@
 declare(strict_types=1);
 
 $user = require_login();
+$memberId = (int) ($user['id'] ?? 0);
+
+db()->exec(
+    'CREATE TABLE IF NOT EXISTS qsl_background_presets (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        member_id INT NOT NULL,
+        label VARCHAR(120) NOT NULL,
+        type VARCHAR(16) NOT NULL,
+        image_data_uri LONGTEXT DEFAULT NULL,
+        color_primary VARCHAR(7) DEFAULT NULL,
+        color_secondary VARCHAR(7) DEFAULT NULL,
+        is_default TINYINT(1) NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )'
+);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
 
-        if ($action === 'import_adif') {
+        if ($action === 'save_background_image') {
+            $label = trim((string) ($_POST['background_label'] ?? 'Fond image'));
+            $label = mb_safe_substr($label !== '' ? $label : 'Fond image', 0, 120);
+            $dataUri = qsl_background_upload_to_data_uri($_FILES['background_image'] ?? null);
+            if ($dataUri === '') {
+                throw new RuntimeException('Veuillez sélectionner une image de fond.');
+            }
+            $setDefault = ((string) ($_POST['set_default'] ?? '') === '1');
+            if ($setDefault) {
+                db()->prepare('UPDATE qsl_background_presets SET is_default = 0 WHERE member_id = ?')->execute([$memberId]);
+            }
+            db()->prepare(
+                'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
+                 VALUES (?, ?, ?, ?, NULL, NULL, ?)'
+            )->execute([$memberId, $label, 'image', $dataUri, $setDefault ? 1 : 0]);
+            set_flash('success', 'Fond image enregistré.');
+        } elseif ($action === 'save_background_gradient') {
+            $label = trim((string) ($_POST['gradient_label'] ?? 'Fond dégradé'));
+            $label = mb_safe_substr($label !== '' ? $label : 'Fond dégradé', 0, 120);
+            $primary = trim((string) ($_POST['background_primary'] ?? '#0B1F3A'));
+            $secondary = trim((string) ($_POST['background_secondary'] ?? '#1D4ED8'));
+            if (preg_match('/^#[A-Fa-f0-9]{6}$/', $primary) !== 1 || preg_match('/^#[A-Fa-f0-9]{6}$/', $secondary) !== 1) {
+                throw new RuntimeException('Couleurs de dégradé invalides.');
+            }
+            $setDefault = ((string) ($_POST['set_default'] ?? '') === '1');
+            if ($setDefault) {
+                db()->prepare('UPDATE qsl_background_presets SET is_default = 0 WHERE member_id = ?')->execute([$memberId]);
+            }
+            db()->prepare(
+                'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
+                 VALUES (?, ?, ?, NULL, ?, ?, ?)'
+            )->execute([$memberId, $label, 'gradient', strtoupper($primary), strtoupper($secondary), $setDefault ? 1 : 0]);
+            set_flash('success', 'Fond dégradé enregistré.');
+        } elseif ($action === 'set_default_background') {
+            $presetId = (int) ($_POST['preset_id'] ?? 0);
+            db()->prepare('UPDATE qsl_background_presets SET is_default = 0 WHERE member_id = ?')->execute([$memberId]);
+            db()->prepare('UPDATE qsl_background_presets SET is_default = 1 WHERE id = ? AND member_id = ?')->execute([$presetId, $memberId]);
+            set_flash('success', 'Fond par défaut mis à jour.');
+        } elseif ($action === 'delete_background') {
+            $presetId = (int) ($_POST['preset_id'] ?? 0);
+            db()->prepare('DELETE FROM qsl_background_presets WHERE id = ? AND member_id = ? LIMIT 1')->execute([$presetId, $memberId]);
+            $hasDefault = db()->prepare('SELECT id FROM qsl_background_presets WHERE member_id = ? AND is_default = 1 LIMIT 1');
+            $hasDefault->execute([$memberId]);
+            if (!$hasDefault->fetch()) {
+                $fallback = db()->prepare('SELECT id FROM qsl_background_presets WHERE member_id = ? ORDER BY id ASC LIMIT 1');
+                $fallback->execute([$memberId]);
+                $first = $fallback->fetch();
+                if ($first) {
+                    db()->prepare('UPDATE qsl_background_presets SET is_default = 1 WHERE id = ? AND member_id = ?')->execute([(int) $first['id'], $memberId]);
+                }
+            }
+            set_flash('success', 'Fond supprimé.');
+        } elseif ($action === 'import_adif') {
             if (!isset($_FILES['adif_file']) || !is_array($_FILES['adif_file'])) {
                 throw new RuntimeException('Aucun fichier ADIF reçu.');
             }
@@ -44,6 +111,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 set_flash('error', 'Aucune QSL générée. Sélection vide ou QSL déjà existantes.');
             }
         } elseif ($action === 'create_manual') {
+            $presetId = (int) ($_POST['background_preset_id'] ?? 0);
+            $presetStmt = db()->prepare('SELECT id, type, image_data_uri, color_primary, color_secondary FROM qsl_background_presets WHERE id = ? AND member_id = ? LIMIT 1');
+            $presetStmt->execute([$presetId, $memberId]);
+            $selectedPreset = $presetStmt->fetch();
+            if (!$selectedPreset) {
+                $defaultStmt = db()->prepare('SELECT id, type, image_data_uri, color_primary, color_secondary FROM qsl_background_presets WHERE member_id = ? AND is_default = 1 LIMIT 1');
+                $defaultStmt->execute([$memberId]);
+                $selectedPreset = $defaultStmt->fetch();
+            }
             $data = [
                 'own_call' => (string) ($user['callsign'] ?? ''),
                 'own_name' => (string) ($user['full_name'] ?? ''),
@@ -56,6 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'rst_sent' => trim((string) ($_POST['rst_sent'] ?? '')),
                 'rst_recv' => trim((string) ($_POST['rst_recv'] ?? '')),
                 'comment' => trim((string) ($_POST['comment'] ?? 'TNX QSO 73')),
+                'background_primary' => (string) ($selectedPreset['color_primary'] ?? '#0B1F3A'),
+                'background_secondary' => (string) ($selectedPreset['color_secondary'] ?? '#1D4ED8'),
+                'background_image_data_uri' => (string) ($selectedPreset['image_data_uri'] ?? ''),
             ];
 
             $svg = generate_qsl_svg($data);
@@ -65,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
             );
             $stmt->execute([
-                (int) $user['id'],
+                $memberId,
                 qsl_card_title($payload),
                 $payload['qso_call'],
                 $payload['qso_date'] !== '' ? $payload['qso_date'] : null,
@@ -81,11 +160,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($action === 'delete_qso' || isset($_POST['delete_qso_id'])) {
             $qsoId = (int) ($_POST['delete_qso_id'] ?? ($_POST['qso_id'] ?? 0));
             $stmt = db()->prepare('DELETE FROM qso_logs WHERE id = ? AND member_id = ? LIMIT 1');
-            $stmt->execute([$qsoId, (int) $user['id']]);
+            $stmt->execute([$qsoId, $memberId]);
             set_flash('success', 'QSO supprimé.');
         } elseif ($action === 'delete_qsl') {
             $stmt = db()->prepare('DELETE FROM qsl_cards WHERE id = ? AND member_id = ? LIMIT 1');
-            $stmt->execute([(int) ($_POST['qsl_id'] ?? 0), (int) $user['id']]);
+            $stmt->execute([(int) ($_POST['qsl_id'] ?? 0), $memberId]);
             set_flash('success', 'QSL supprimée.');
         } else {
             throw new RuntimeException('Action QSL inconnue.');
@@ -99,12 +178,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $qsoLogs = db()->prepare('SELECT * FROM qso_logs WHERE member_id = ? ORDER BY id DESC LIMIT 100');
-$qsoLogs->execute([(int) $user['id']]);
+$qsoLogs->execute([$memberId]);
 $qsoRows = $qsoLogs->fetchAll();
 
 $qslCards = db()->prepare('SELECT * FROM qsl_cards WHERE member_id = ? ORDER BY id DESC LIMIT 50');
-$qslCards->execute([(int) $user['id']]);
+$qslCards->execute([$memberId]);
+$backgroundPresetsStmt = db()->prepare('SELECT id, label, type, color_primary, color_secondary, is_default FROM qsl_background_presets WHERE member_id = ? ORDER BY is_default DESC, id DESC');
+$backgroundPresetsStmt->execute([$memberId]);
+$backgroundPresets = $backgroundPresetsStmt->fetchAll();
 $qslRows = $qslCards->fetchAll();
+$defaultBackgroundPresetId = 0;
+foreach ($backgroundPresets as $presetRow) {
+    if ((int) ($presetRow['is_default'] ?? 0) === 1) {
+        $defaultBackgroundPresetId = (int) ($presetRow['id'] ?? 0);
+        break;
+    }
+}
+$hasCreatedQsl = count($qslRows) > 0;
 
 $qsoSearch = trim((string) ($_GET['qso_search'] ?? ''));
 $qsoBandFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_band'] ?? '')));
@@ -135,6 +225,26 @@ $matchesTextFilter = static function (string $needle, array $fields): bool {
     }
 
     return false;
+};
+
+$qsoEqslStatus = static function (array $row): string {
+    $raw = (string) ($row['raw_payload'] ?? '');
+    if ($raw === '') {
+        return '—';
+    }
+
+    $payload = json_decode($raw, true);
+    if (!is_array($payload)) {
+        return '—';
+    }
+
+    $sent = qsl_normalize_qsl_status((string) ($payload['eqsl_qsl_sent'] ?? ''));
+    $received = qsl_normalize_qsl_status((string) ($payload['eqsl_qsl_rcvd'] ?? ''));
+    if ($sent === '' && $received === '') {
+        return '—';
+    }
+
+    return 'S:' . ($sent !== '' ? $sent : '—') . ' / R:' . ($received !== '' ? $received : '—');
 };
 
 $filteredQsoRows = array_values(array_filter($qsoRows, static function (array $row) use ($matchesTextFilter, $qsoSearch, $qsoBandFilter, $qsoModeFilter): bool {
@@ -176,42 +286,120 @@ foreach ($qslRows as $card) {
     }
 }
 
-$pendingCount = 0;
-foreach ($qsoRows as $row) {
-    $key = qsl_normalize_callsign((string) ($row['qso_call'] ?? '')) . '|'
-        . qsl_normalize_date((string) ($row['qso_date'] ?? '')) . '|'
-        . qsl_normalize_time((string) ($row['time_on'] ?? ''));
-    if (!isset($generatedByQsoId[$key])) {
-        $pendingCount++;
-    }
-}
-
 ksort($qsoBandOptions);
 ksort($qsoModeOptions);
 
 ob_start();
 ?>
 <div class="qsl-page">
-<section class="card qsl-kpis">
-    <div class="qsl-kpi">
-        <p class="help">QSO enregistrés</p>
-        <strong><?= count($qsoRows) ?></strong>
+<section class="card qsl-studio-overview">
+    <h2>QSL Studio</h2>
+    <p class="help">Choisissez une étape pour concevoir votre carte, la générer et suivre vos résultats.</p>
+    <div class="grid-3">
+        <a class="inner-card qsl-studio-link-card" href="#qsl-draw">
+            <span class="badge muted">Étape 1</span>
+            <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
+        </a>
+        <?php if ($hasCreatedQsl): ?>
+            <a class="inner-card qsl-studio-link-card" href="#qsl-create">
+                <span class="badge muted">Étape 2</span>
+                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
+            </a>
+        <?php else: ?>
+            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
+                <span class="badge muted">Étape 2</span>
+                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
+            </div>
+        <?php endif; ?>
+        <?php if ($hasCreatedQsl): ?>
+            <a class="inner-card qsl-studio-link-card" href="#qsl-view">
+                <span class="badge muted">Étape 3</span>
+                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
+            </a>
+        <?php else: ?>
+            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
+                <span class="badge muted">Étape 3</span>
+                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
+            </div>
+        <?php endif; ?>
     </div>
-    <div class="qsl-kpi">
-        <p class="help">QSL créées</p>
-        <strong><?= count($qslRows) ?></strong>
+    <?php if (!$hasCreatedQsl): ?>
+        <p class="help">Les accès « Créer » et « Consulter » seront activés après la création de votre première QSL.</p>
+    <?php endif; ?>
+</section>
+
+<section class="card" id="qsl-draw">
+    <h2>Dessiner sa QSL</h2>
+    <p>Section de préparation des fonds, sur toute la largeur, avec création à gauche et prévisualisation à droite.</p>
+    <div class="split qsl-background-workbench">
+        <div>
+            <div class="stack">
+                <form method="post" enctype="multipart/form-data" class="stack" data-preview-form="image">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="save_background_image">
+                    <label>Nom du fond image<input type="text" name="background_label" maxlength="120" placeholder="Ex: Shack ON4CRD"></label>
+                    <label>Image
+                        <input type="file" name="background_image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required data-preview-image-input>
+                    </label>
+                    <label><input type="checkbox" name="set_default" value="1"> Définir comme fond par défaut</label>
+                    <button type="submit" class="button secondary">Ajouter le fond image</button>
+                </form>
+                <hr>
+                <form method="post" class="stack" data-preview-form="gradient">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="save_background_gradient">
+                    <label>Nom du fond dégradé<input type="text" name="gradient_label" maxlength="120" placeholder="Ex: Bleu club"></label>
+                    <label>Couleur de fond 1<input type="color" name="background_primary" value="#0B1F3A" data-preview-color-primary></label>
+                    <label>Couleur de fond 2<input type="color" name="background_secondary" value="#1D4ED8" data-preview-color-secondary></label>
+                    <label><input type="checkbox" name="set_default" value="1"> Définir comme fond par défaut</label>
+                    <button type="submit" class="button secondary">Ajouter le fond dégradé</button>
+                </form>
+            </div>
+        </div>
+        <div class="qsl-live-preview-wrap">
+            <h3>Prévisualisation de la QSL</h3>
+            <div class="qsl-live-preview" data-qsl-preview>
+                <div class="qsl-live-preview-card" data-qsl-preview-card>
+                    <p class="qsl-live-preview-title">QSL Preview</p>
+                    <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: F4XYZ</p>
+                </div>
+            </div>
+            <p class="help">Aperçu du fond en cours de création (image ou dégradé).</p>
+        </div>
     </div>
-    <div class="qsl-kpi">
-        <p class="help">QSO sans QSL</p>
-        <strong><?= $pendingCount ?></strong>
-    </div>
+    <?php if ($backgroundPresets !== []): ?>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr><th>Fond</th><th>Type</th><th>Défaut</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                <?php foreach ($backgroundPresets as $preset): ?>
+                    <tr>
+                        <td><?= e((string) ($preset['label'] ?? 'Fond')) ?></td>
+                        <td><?= e(((string) ($preset['type'] ?? 'gradient')) === 'image' ? 'Image' : 'Dégradé') ?></td>
+                        <td><?= ((int) ($preset['is_default'] ?? 0) === 1) ? '✅' : '—' ?></td>
+                        <td>
+                            <form method="post" class="inline-form">
+                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                <input type="hidden" name="preset_id" value="<?= (int) ($preset['id'] ?? 0) ?>">
+                                <button type="submit" name="action" value="set_default_background" class="button secondary small">Par défaut</button>
+                                <button type="submit" name="action" value="delete_background" class="button secondary small">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 </section>
 
 <div class="grid-2">
-    <section class="card">
-        <h1>QSL Designer</h1>
+    <section class="card" id="qsl-create">
+        <h1>QSL Creator</h1>
         <p>Crée une carte QSL manuelle ou génère un lot à partir d’un fichier ADIF importé.</p>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="create_manual">
             <div class="form-grid">
@@ -222,8 +410,35 @@ ob_start();
                 <label>Mode<input type="text" name="mode" maxlength="32" placeholder="SSB"></label>
                 <label>RST envoyé<input type="text" name="rst_sent" maxlength="16" placeholder="59"></label>
                 <label>RST reçu<input type="text" name="rst_recv" maxlength="16" placeholder="59"></label>
-                <label>Commentaire<textarea name="comment" rows="3" maxlength="180">TNX QSO 73</textarea></label>
+                <label>Commentaire</label>
+                <div class="wysiwyg" data-wysiwyg data-max-length="180">
+                    <div class="wysiwyg-toolbar" role="toolbar" aria-label="Outils de mise en forme du commentaire QSL">
+                        <button type="button" class="button secondary small" data-wysiwyg-command="bold" aria-label="Gras"><strong>B</strong></button>
+                        <button type="button" class="button secondary small" data-wysiwyg-command="italic" aria-label="Italique"><em>I</em></button>
+                        <button type="button" class="button secondary small" data-wysiwyg-command="underline" aria-label="Souligné"><span style="text-decoration:underline;">U</span></button>
+                    </div>
+                    <div class="wysiwyg-editor" contenteditable="true" data-wysiwyg-editor aria-label="Éditeur WYSIWYG du commentaire QSL">TNX QSO 73</div>
+                    <input type="hidden" name="comment" value="TNX QSO 73" data-wysiwyg-input>
+                    <p class="help" data-wysiwyg-counter>180 caractères restants.</p>
+                </div>
+                <label>Fond QSL
+                    <select name="background_preset_id">
+                        <option value="0" <?= $defaultBackgroundPresetId === 0 ? 'selected' : '' ?>>Fond par défaut système</option>
+                        <?php foreach ($backgroundPresets as $preset): ?>
+                            <?php
+                            $presetId = (int) ($preset['id'] ?? 0);
+                            $isDefaultPreset = (int) ($preset['is_default'] ?? 0) === 1;
+                            $presetLabel = (string) ($preset['label'] ?? 'Fond');
+                            $presetType = (string) ($preset['type'] ?? 'gradient');
+                            ?>
+                            <option value="<?= $presetId ?>" <?= ($presetId === $defaultBackgroundPresetId) ? 'selected' : '' ?>>
+                                <?= e($presetLabel) ?><?= $isDefaultPreset ? ' (défaut)' : '' ?> — <?= e($presetType === 'image' ? 'Image' : 'Dégradé') ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
             </div>
+            <p class="help">Choisissez un seul fond enregistré pour cette QSL. Les préférences de fond se gèrent dans la section dédiée ci-dessous.</p>
             <p><button class="button">Créer une QSL</button></p>
         </form>
     </section>
@@ -242,7 +457,7 @@ ob_start();
     </section>
 </div>
 
-<section class="card">
+<section class="card" id="qsl-view">
     <div class="row-between">
         <h2>QSO importés</h2>
         <span><?= count($qsoRows) ?> enregistrement(s)</span>
@@ -278,7 +493,7 @@ ob_start();
             <div class="table-wrap">
                 <table>
                     <thead>
-                    <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Bande</th><th>Mode</th><th>RST</th><th>Action</th></tr>
+                    <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Bande</th><th>Mode</th><th>RST</th><th>eQSL</th><th>Action</th></tr>
                     </thead>
                     <tbody>
                     <?php foreach ($filteredQsoRows as $row): ?>
@@ -290,6 +505,7 @@ ob_start();
                             <td><?= e((string) $row['band']) ?></td>
                             <td><?= e((string) $row['mode']) ?></td>
                             <td><?= e((string) $row['rst_sent']) ?>/<?= e((string) $row['rst_recv']) ?></td>
+                            <td><?= e($qsoEqslStatus($row)) ?></td>
                             <td><button class="button secondary small" type="submit" name="delete_qso_id" value="<?= (int) $row['id'] ?>">Supprimer</button></td>
                         </tr>
                     <?php endforeach; ?>
@@ -365,6 +581,87 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
         });
     });
 });
+
+document.querySelectorAll('[data-wysiwyg]').forEach((wrapper) => {
+    const editor = wrapper.querySelector('[data-wysiwyg-editor]');
+    const hiddenInput = wrapper.querySelector('[data-wysiwyg-input]');
+    const counter = wrapper.querySelector('[data-wysiwyg-counter]');
+    if (!editor || !hiddenInput || !counter) {
+        return;
+    }
+
+    const maxLength = Number(wrapper.getAttribute('data-max-length') || '180');
+    const sync = () => {
+        const plainText = (editor.textContent || '').replace(/\s+/g, ' ').trim();
+        const normalized = plainText.slice(0, maxLength);
+        hiddenInput.value = normalized;
+        if (plainText !== normalized) {
+            editor.textContent = normalized;
+            const range = document.createRange();
+            range.selectNodeContents(editor);
+            range.collapse(false);
+            const selection = window.getSelection();
+            selection?.removeAllRanges();
+            selection?.addRange(range);
+        }
+        const remaining = Math.max(0, maxLength - normalized.length);
+        counter.textContent = `${remaining} caractères restants.`;
+    };
+
+    wrapper.querySelectorAll('[data-wysiwyg-command]').forEach((control) => {
+        control.addEventListener('click', () => {
+            const command = control.getAttribute('data-wysiwyg-command');
+            if (!command) {
+                return;
+            }
+            editor.focus();
+            document.execCommand(command, false);
+            sync();
+        });
+    });
+
+    editor.addEventListener('input', sync);
+    const form = wrapper.closest('form');
+    form?.addEventListener('submit', sync);
+    sync();
+});
+
+(() => {
+    const previewCard = document.querySelector('[data-qsl-preview-card]');
+    if (!previewCard) {
+        return;
+    }
+
+    const primaryInput = document.querySelector('[data-preview-color-primary]');
+    const secondaryInput = document.querySelector('[data-preview-color-secondary]');
+    const imageInput = document.querySelector('[data-preview-image-input]');
+    const applyGradient = () => {
+        const primary = primaryInput?.value || '#0B1F3A';
+        const secondary = secondaryInput?.value || '#1D4ED8';
+        previewCard.style.backgroundImage = `linear-gradient(135deg, ${primary}, ${secondary})`;
+    };
+
+    primaryInput?.addEventListener('input', applyGradient);
+    secondaryInput?.addEventListener('input', applyGradient);
+    applyGradient();
+
+    imageInput?.addEventListener('change', () => {
+        const file = imageInput.files?.[0];
+        if (!file) {
+            applyGradient();
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (typeof reader.result === 'string') {
+                previewCard.style.backgroundImage = `linear-gradient(rgba(5, 10, 25, .35), rgba(5, 10, 25, .35)), url('${reader.result}')`;
+                previewCard.style.backgroundSize = 'cover';
+                previewCard.style.backgroundPosition = 'center';
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+})();
 </script>
 <?php
 echo render_layout((string) ob_get_clean(), 'QSL');
