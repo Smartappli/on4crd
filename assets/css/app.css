@@ -317,6 +317,16 @@ textarea:focus-visible {
   color: var(--muted);
   font-weight: 500;
 }
+[data-theme="dark"] .qsl-adif-dropzone {
+  background: color-mix(in srgb, #0b1220 82%, var(--panel));
+  border-color: color-mix(in srgb, var(--accent) 75%, #93c5fd);
+}
+[data-theme="dark"] .qsl-adif-dropzone .dz-message {
+  color: #f8fafc;
+}
+[data-theme="dark"] .qsl-adif-dropzone .dz-message small {
+  color: #cbd5e1;
+}
 .qsl-studio-overview {
   background:
     radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 34%),
