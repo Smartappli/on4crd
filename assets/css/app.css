@@ -314,6 +314,24 @@ textarea:focus-visible {
   background: color-mix(in srgb, var(--panel-2) 72%, var(--panel));
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
+.qsl-studio-link-card {
+  display: grid;
+  gap: .45rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.qsl-studio-link-card:hover {
+  text-decoration: none;
+}
+.qsl-studio-link-card.disabled {
+  opacity: .58;
+  cursor: not-allowed;
+}
+.qsl-studio-overview .inner-card.disabled:hover {
+  transform: none;
+  border-color: var(--border);
+  box-shadow: none;
+}
 .qsl-studio-overview .inner-card:hover {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--accent) 36%, var(--border));

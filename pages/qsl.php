@@ -296,36 +296,32 @@ ob_start();
     <h2>QSL Studio</h2>
     <p class="help">Choisissez une étape pour concevoir votre carte, la générer et suivre vos résultats.</p>
     <div class="grid-3">
-        <article class="inner-card">
-            <span class="badge muted">Étape 1 - Dessiner</span>
-            <h3>Dessiner</h3>
+        <a class="inner-card qsl-studio-link-card" href="#qsl-draw">
+            <span class="badge muted">Étape 1</span>
             <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
-            <p><a class="button secondary small" href="#qsl-draw">Accéder</a></p>
-        </article>
-        <article class="inner-card">
-            <span class="badge muted">Étape 2 - Créer</span>
-            <h3>Créer</h3>
-            <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
-            <p>
-                <?php if ($hasCreatedQsl): ?>
-                    <a class="button secondary small" href="#qsl-create">Accéder</a>
-                <?php else: ?>
-                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
-                <?php endif; ?>
-            </p>
-        </article>
-        <article class="inner-card">
-            <span class="badge muted">Étape 3 - Consulter</span>
-            <h3>Consulter</h3>
-            <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
-            <p>
-                <?php if ($hasCreatedQsl): ?>
-                    <a class="button secondary small" href="#qsl-view">Accéder</a>
-                <?php else: ?>
-                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
-                <?php endif; ?>
-            </p>
-        </article>
+        </a>
+        <?php if ($hasCreatedQsl): ?>
+            <a class="inner-card qsl-studio-link-card" href="#qsl-create">
+                <span class="badge muted">Étape 2</span>
+                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
+            </a>
+        <?php else: ?>
+            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
+                <span class="badge muted">Étape 2</span>
+                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
+            </div>
+        <?php endif; ?>
+        <?php if ($hasCreatedQsl): ?>
+            <a class="inner-card qsl-studio-link-card" href="#qsl-view">
+                <span class="badge muted">Étape 3</span>
+                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
+            </a>
+        <?php else: ?>
+            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
+                <span class="badge muted">Étape 3</span>
+                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
+            </div>
+        <?php endif; ?>
     </div>
     <?php if (!$hasCreatedQsl): ?>
         <p class="help">Les accès « Créer » et « Consulter » seront activés après la création de votre première QSL.</p>
