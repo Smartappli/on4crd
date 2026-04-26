@@ -1,7 +1,12 @@
-const VERSION = 'v354-secure';
+const VERSION = 'v356-offline-mode';
 const STATIC_CACHE = `on4crd-static-${VERSION}`;
 const PAGE_CACHE = `on4crd-pages-${VERSION}`;
 const DATA_CACHE = `on4crd-data-${VERSION}`;
+const CACHE_LIMITS = {
+  [STATIC_CACHE]: 120,
+  [PAGE_CACHE]: 50,
+  [DATA_CACHE]: 80
+};
 
 const APP_SHELL = [
   './',
@@ -48,7 +53,7 @@ const PUBLIC_ROUTES = new Set([
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then((cache) => cache.addAll(APP_SHELL))
+      .then((cache) => cache.addAll(APP_SHELL.map((url) => new Request(url, { cache: 'reload' }))))
       .then(() => self.skipWaiting())
   );
 });
@@ -57,21 +62,56 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
       .then((keys) => Promise.all(keys.filter((key) => ![STATIC_CACHE, PAGE_CACHE, DATA_CACHE].includes(key)).map((key) => caches.delete(key))))
+      .then(() => Promise.all([trimCache(STATIC_CACHE), trimCache(PAGE_CACHE), trimCache(DATA_CACHE)]))
       .then(() => self.clients.claim())
   );
 });
+
+async function trimCache(cacheName) {
+  const limit = CACHE_LIMITS[cacheName] || 80;
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  if (keys.length <= limit) {
+    return;
+  }
+  const stale = keys.slice(0, keys.length - limit);
+  await Promise.all(stale.map((request) => cache.delete(request)));
+}
+
+function isCacheableResponse(response) {
+  return response && (response.status === 200 || response.type === 'opaque');
+}
+
+async function putInCache(cache, request, response, cacheName) {
+  if (!isCacheableResponse(response)) {
+    return;
+  }
+  await cache.put(request, response.clone());
+  await trimCache(cacheName);
+}
 
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
   const networkPromise = fetch(request, { credentials: 'same-origin' })
     .then((response) => {
-      if (response && response.status === 200) {
-        cache.put(request, response.clone());
-      }
-      return response;
+      return putInCache(cache, request, response, cacheName).then(() => response);
     })
-    .catch(() => cached);
+    .catch(async () => {
+      if (cached) {
+        return cached;
+      }
+      if (request.destination === 'image') {
+        return (await caches.match('./assets/icons/icon-192.png')) || Response.error();
+      }
+      if (request.destination === 'style') {
+        return new Response('', { headers: { 'Content-Type': 'text/css; charset=utf-8' } });
+      }
+      if (request.destination === 'script') {
+        return new Response('// offline fallback', { headers: { 'Content-Type': 'application/javascript; charset=utf-8' } });
+      }
+      return Response.error();
+    });
   return cached || networkPromise;
 }
 
@@ -79,12 +119,17 @@ async function networkFirst(request, cacheName, fallbackUrl = './offline.html') 
   const cache = await caches.open(cacheName);
   try {
     const response = await fetch(request, { credentials: 'same-origin' });
-    if (response && response.status === 200) {
-      cache.put(request, response.clone());
-    }
+    await putInCache(cache, request, response, cacheName);
     return response;
   } catch (error) {
-    return (await cache.match(request)) || (await caches.match(fallbackUrl));
+    const cached = await cache.match(request);
+    if (cached) {
+      return cached;
+    }
+    if (request.destination === 'document' || request.mode === 'navigate') {
+      return (await caches.match(fallbackUrl)) || Response.error();
+    }
+    return Response.error();
   }
 }
 
@@ -123,7 +168,10 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (route === 'widget_render' || route === 'dashboard' || route === 'save_dashboard' || route === 'profile' || route.startsWith('admin')) {
-    event.respondWith(fetch(request, { credentials: 'same-origin' }));
+    event.respondWith(
+      fetch(request, { credentials: 'same-origin' })
+        .catch(async () => (await caches.match('./offline.html')) || Response.error())
+    );
     return;
   }
 

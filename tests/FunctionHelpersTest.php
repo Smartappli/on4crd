@@ -87,4 +87,27 @@ final class FunctionHelpersTest extends TestCase
 
         self::assertTrue(is_https_request());
     }
+
+    public function testMaidenheadToCoordinatesConvertsFourCharactersLocator(): void
+    {
+        $coordinates = maidenhead_to_coordinates('JO20');
+
+        self::assertIsArray($coordinates);
+        self::assertSame(50.5, round((float) $coordinates['latitude'], 1));
+        self::assertSame(5.0, round((float) $coordinates['longitude'], 1));
+    }
+
+    public function testMaidenheadToCoordinatesReturnsNullForInvalidLocator(): void
+    {
+        self::assertNull(maidenhead_to_coordinates('INVALID'));
+    }
+
+    public function testMaidenheadToCoordinatesConvertsSixCharactersLocator(): void
+    {
+        $coordinates = maidenhead_to_coordinates('JO20LI');
+
+        self::assertIsArray($coordinates);
+        self::assertSame(50.4, round((float) $coordinates['latitude'], 1));
+        self::assertSame(4.9, round((float) $coordinates['longitude'], 1));
+    }
 }
