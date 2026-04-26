@@ -171,6 +171,79 @@ textarea:focus-visible {
   gap: .45rem;
   flex: 1 1 auto;
 }
+.account-menu {
+  position: relative;
+}
+.account-menu-trigger {
+  list-style: none;
+  width: 8.6rem;
+  min-width: 8.6rem;
+  height: 2.35rem;
+  margin: 0;
+  padding: .52rem .45rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, white), color-mix(in srgb, var(--panel-2) 82%, var(--panel)));
+  color: var(--text);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
+}
+.account-menu-trigger:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+.account-menu-trigger:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 65%, white);
+  outline-offset: 2px;
+}
+.account-menu-trigger::-webkit-details-marker {
+  display: none;
+}
+.account-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + .35rem);
+  min-width: 11rem;
+  display: none;
+  z-index: 40;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: .45rem;
+}
+.account-menu[open] .account-menu-panel {
+  display: grid;
+  gap: .2rem;
+}
+.account-menu-link {
+  display: block;
+  padding: .45rem .55rem;
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+.account-menu-link:hover {
+  background: var(--panel-2);
+  text-decoration: none;
+}
+.account-menu-separator {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: .35rem 0;
+}
+.account-menu-form {
+  margin: 0;
+}
+.account-menu-logout {
+  width: 100%;
+}
 .toolbar-auth .button.toolbar-login-button {
   display: inline-flex;
   align-items: center;
@@ -823,6 +896,14 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   .toolbar-auth .button,
   .toolbar-auth button {
     width: 100%;
+    min-width: 0;
+  }
+  .account-menu {
+    width: 100%;
+  }
+  .account-menu-panel {
+    left: 0;
+    right: 0;
     min-width: 0;
   }
   .toolbar-auth .button.toolbar-login-button {
