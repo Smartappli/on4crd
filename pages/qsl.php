@@ -372,13 +372,17 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="card" id="qsl-draw">
+<section class="card" id="qsl-draw" data-qsl-draw-assistant>
     <h2>Dessiner sa QSL</h2>
-    <p>Section de préparation des fonds, sur toute la largeur, avec création à gauche et prévisualisation à droite.</p>
+    <p class="help">Assistant de dessin : choisissez le type de fond, puis ne remplissez que les champs nécessaires.</p>
+    <div class="actions">
+        <label><input type="radio" name="qsl_draw_flow" value="image" data-qsl-draw-choice> Fond image</label>
+        <label><input type="radio" name="qsl_draw_flow" value="gradient" data-qsl-draw-choice checked> Fond dégradé</label>
+    </div>
     <div class="split qsl-background-workbench">
         <div>
             <div class="stack">
-                <form method="post" enctype="multipart/form-data" class="stack" data-preview-form="image">
+                <form method="post" enctype="multipart/form-data" class="stack" data-preview-form="image" data-qsl-draw-panel="image">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="save_background_image">
                     <label>Nom du fond image<input type="text" name="background_label" maxlength="120" placeholder="Ex: Shack ON4CRD"></label>
@@ -388,8 +392,7 @@ ob_start();
                     <label><input type="checkbox" name="set_default" value="1"> Définir comme fond par défaut</label>
                     <button type="submit" class="button secondary">Ajouter le fond image</button>
                 </form>
-                <hr>
-                <form method="post" class="stack" data-preview-form="gradient">
+                <form method="post" class="stack" data-preview-form="gradient" data-qsl-draw-panel="gradient">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="save_background_gradient">
                     <label>Nom du fond dégradé<input type="text" name="gradient_label" maxlength="120" placeholder="Ex: Bleu club"></label>
@@ -655,6 +658,30 @@ ob_start();
         const activeFlow = selected ? selected.value : 'manual';
         panels.forEach((panel) => {
             panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-assistant-panel') !== activeFlow);
+        });
+    };
+
+    choices.forEach((input) => input.addEventListener('change', syncPanels));
+    syncPanels();
+})();
+
+(() => {
+    const drawAssistant = document.querySelector('[data-qsl-draw-assistant]');
+    if (!drawAssistant) {
+        return;
+    }
+
+    const choices = drawAssistant.querySelectorAll('[data-qsl-draw-choice]');
+    const panels = drawAssistant.querySelectorAll('[data-qsl-draw-panel]');
+    if (!choices.length || !panels.length) {
+        return;
+    }
+
+    const syncPanels = () => {
+        const selected = drawAssistant.querySelector('[data-qsl-draw-choice]:checked');
+        const activeFlow = selected ? selected.value : 'gradient';
+        panels.forEach((panel) => {
+            panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-draw-panel') !== activeFlow);
         });
     };
 
