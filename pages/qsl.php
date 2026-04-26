@@ -193,6 +193,7 @@ foreach ($backgroundPresets as $presetRow) {
         break;
     }
 }
+$hasCreatedQsl = count($qslRows) > 0;
 $qslRows = $qslCards->fetchAll();
 
 $qsoSearch = trim((string) ($_GET['qso_search'] ?? ''));
@@ -327,14 +328,29 @@ ob_start();
         <article class="inner-card">
             <h3>Créer ses QSL</h3>
             <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
-            <p><a class="button secondary small" href="#qsl-create">Accéder</a></p>
+            <p>
+                <?php if ($hasCreatedQsl): ?>
+                    <a class="button secondary small" href="#qsl-create">Accéder</a>
+                <?php else: ?>
+                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
+                <?php endif; ?>
+            </p>
         </article>
         <article class="inner-card">
             <h3>Consulter ses QSL</h3>
             <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
-            <p><a class="button secondary small" href="#qsl-view">Accéder</a></p>
+            <p>
+                <?php if ($hasCreatedQsl): ?>
+                    <a class="button secondary small" href="#qsl-view">Accéder</a>
+                <?php else: ?>
+                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
+                <?php endif; ?>
+            </p>
         </article>
     </div>
+    <?php if (!$hasCreatedQsl): ?>
+        <p class="help">Les accès « Créer ses QSL » et « Consulter ses QSL » seront activés après la création de votre première QSL.</p>
+    <?php endif; ?>
 </section>
 
 <section class="card" id="qsl-draw">
