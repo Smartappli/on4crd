@@ -264,8 +264,54 @@ function render_widget(string $slug, array $user = []): string
                 . '</ul>';
 
         case 'propagation':
-            return '<p class="help">Consultez les bandes actives et adaptez vos sessions selon les conditions du moment.</p>'
-                . '<p><a href="https://www.solarham.com/" target="_blank" rel="noopener">Voir les indicateurs</a></p>';
+            $kpFeedUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
+            $cacheKey = 'widget:propagation:kp-index';
+            $payload = cache_remember($cacheKey, 300, static function () use ($kpFeedUrl): ?array {
+                $context = stream_context_create([
+                    'http' => [
+                        'method' => 'GET',
+                        'timeout' => 6,
+                        'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Widget/1.0\r\n",
+                    ],
+                ]);
+                $raw = @file_get_contents($kpFeedUrl, false, $context);
+                if (!is_string($raw) || trim($raw) === '') {
+                    return null;
+                }
+                $decoded = json_decode($raw, true);
+                return is_array($decoded) ? $decoded : null;
+            });
+
+            $latestKp = null;
+            $kpTimestamp = '';
+            if (is_array($payload) && count($payload) > 1) {
+                $lastRow = $payload[array_key_last($payload)] ?? null;
+                if (is_array($lastRow)) {
+                    $kpTimestamp = trim((string) ($lastRow[0] ?? ''));
+                    $latestKp = is_numeric($lastRow[1] ?? null) ? (float) $lastRow[1] : null;
+                }
+            }
+
+            if ($latestKp === null) {
+                return '<p class="help">Indicateurs de propagation indisponibles pour le moment.</p>';
+            }
+
+            $geomagnetic = match (true) {
+                $latestKp < 2.0 => 'Très calme',
+                $latestKp < 4.0 => 'Calme',
+                $latestKp < 5.0 => 'Actif',
+                $latestKp < 7.0 => 'Perturbé',
+                default => 'Orage géomagnétique',
+            };
+            $hfOutlook = $latestKp <= 3.0 ? 'HF favorable' : ($latestKp <= 5.0 ? 'HF variable' : 'HF difficile');
+            $vhfOutlook = $latestKp >= 4.0 ? 'Aurores possibles sur VHF' : 'Aurores peu probables';
+
+            return '<ul class="list-clean">'
+                . '<li><strong>Kp : ' . e(number_format($latestKp, 1, ',', '')) . '</strong> — ' . e($geomagnetic) . '</li>'
+                . '<li>Prévision HF : ' . e($hfOutlook) . '</li>'
+                . '<li>Tendance VHF : ' . e($vhfOutlook) . '</li>'
+                . '<li class="help">Mesure NOAA : ' . e($kpTimestamp !== '' ? $kpTimestamp : 'inconnue') . '</li>'
+                . '</ul>';
 
         case 'open_meteo':
             $defaultUrl = 'https://api.open-meteo.com/v1/forecast?latitude=50.3150&longitude=4.9452&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FBrussels';

@@ -161,8 +161,12 @@ $ubaLogoPath = 'assets/logo/UBA-Logo-Couleur-MID2.png';
 $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = render_widget('open_meteo');
 $homePropagationHtml = render_widget('propagation');
-$homeUnassignedHtml = '<p class="text-sm text-slate-600">Section en préparation.</p>'
-    . '<p class="mt-2 text-xs text-slate-500">Cet emplacement sera affecté prochainement.</p>';
+$homeRadioInfoHtml = '<ul class="list-clean">'
+    . '<li><strong>Phonie VHF :</strong> 145.500 MHz (appel simplex régional)</li>'
+    . '<li><strong>QRG CW QRP :</strong> 7.030 MHz • 14.060 MHz</li>'
+    . '<li><strong>Bon réflexe :</strong> annoncer indicatif + QTH + trafic recherché</li>'
+    . '<li class="help">Astuce : adapter puissance et antenne selon Kp/HF affichés ci‑contre.</li>'
+    . '</ul>';
 
 $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
@@ -217,7 +221,7 @@ $content = '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<div class="mt-4 grid gap-4 lg:grid-cols-3">'
     . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">Météo</h3>' . $homeWeatherHtml . '</article>'
     . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">Propagation</h3>' . $homePropagationHtml . '</article>'
-    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">À définir</h3>' . $homeUnassignedHtml . '</article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">Repères radioamateur</h3>' . $homeRadioInfoHtml . '</article>'
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
