@@ -297,13 +297,13 @@ ob_start();
     <p class="help">Choisissez une étape pour concevoir votre carte, la générer et suivre vos résultats.</p>
     <div class="grid-3">
         <article class="inner-card">
-            <span class="badge muted">Étape 1</span>
+            <span class="badge muted">Étape 1 - Dessiner</span>
             <h3>Dessiner</h3>
             <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
             <p><a class="button secondary small" href="#qsl-draw">Accéder</a></p>
         </article>
         <article class="inner-card">
-            <span class="badge muted">Étape 2</span>
+            <span class="badge muted">Étape 2 - Créer</span>
             <h3>Créer</h3>
             <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
             <p>
@@ -315,7 +315,7 @@ ob_start();
             </p>
         </article>
         <article class="inner-card">
-            <span class="badge muted">Étape 3</span>
+            <span class="badge muted">Étape 3 - Consulter</span>
             <h3>Consulter</h3>
             <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
             <p>
@@ -329,109 +329,6 @@ ob_start();
     </div>
     <?php if (!$hasCreatedQsl): ?>
         <p class="help">Les accès « Créer » et « Consulter » seront activés après la création de votre première QSL.</p>
-    <?php endif; ?>
-</section>
-
-<section class="card" id="qsl-draw">
-    <h2>Dessiner sa QSL</h2>
-    <p>Section de préparation des fonds, sur toute la largeur, avec création à gauche et prévisualisation à droite.</p>
-    <div class="split qsl-background-workbench">
-        <div>
-            <div class="stack">
-                <form method="post" enctype="multipart/form-data" class="stack" data-preview-form="image">
-                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="save_background_image">
-                    <label>Nom du fond image<input type="text" name="background_label" maxlength="120" placeholder="Ex: Shack ON4CRD"></label>
-                    <label>Image
-                        <input type="file" name="background_image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required data-preview-image-input>
-                    </label>
-                    <label><input type="checkbox" name="set_default" value="1"> Définir comme fond par défaut</label>
-                    <button type="submit" class="button secondary">Ajouter le fond image</button>
-                </form>
-                <hr>
-                <form method="post" class="stack" data-preview-form="gradient">
-                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="save_background_gradient">
-                    <label>Nom du fond dégradé<input type="text" name="gradient_label" maxlength="120" placeholder="Ex: Bleu club"></label>
-                    <label>Couleur de fond 1<input type="color" name="background_primary" value="#0B1F3A" data-preview-color-primary></label>
-                    <label>Couleur de fond 2<input type="color" name="background_secondary" value="#1D4ED8" data-preview-color-secondary></label>
-                    <label><input type="checkbox" name="set_default" value="1"> Définir comme fond par défaut</label>
-                    <button type="submit" class="button secondary">Ajouter le fond dégradé</button>
-                </form>
-            </div>
-        </div>
-        <div class="qsl-live-preview-wrap">
-            <h3>Prévisualisation de la QSL</h3>
-            <div class="qsl-live-preview" data-qsl-preview>
-                <div class="qsl-live-preview-card" data-qsl-preview-card>
-                    <p class="qsl-live-preview-title">QSL Preview</p>
-                    <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: F4XYZ</p>
-                </div>
-            </div>
-            <p class="help">Aperçu du fond en cours de création (image ou dégradé).</p>
-        </div>
-    </div>
-    <?php if ($backgroundPresets !== []): ?>
-        <div class="table-wrap">
-            <table>
-                <thead>
-                <tr><th>Fond</th><th>Type</th><th>Défaut</th><th>Actions</th></tr>
-                </thead>
-                <tbody>
-                <?php foreach ($backgroundPresets as $preset): ?>
-                    <tr>
-                        <td><?= e((string) ($preset['label'] ?? 'Fond')) ?></td>
-                        <td><?= e(((string) ($preset['type'] ?? 'gradient')) === 'image' ? 'Image' : 'Dégradé') ?></td>
-                        <td><?= ((int) ($preset['is_default'] ?? 0) === 1) ? '✅' : '—' ?></td>
-                        <td>
-                            <form method="post" class="inline-form">
-                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                                <input type="hidden" name="preset_id" value="<?= (int) ($preset['id'] ?? 0) ?>">
-                                <button type="submit" name="action" value="set_default_background" class="button secondary small">Par défaut</button>
-                                <button type="submit" name="action" value="delete_background" class="button secondary small">Supprimer</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php endif; ?>
-</section>
-
-<section class="card">
-    <h2>QSL Studio</h2>
-    <div class="grid-3">
-        <article class="inner-card">
-            <h3>Dessiner sa QSL</h3>
-            <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
-            <p><a class="button secondary small" href="#qsl-draw">Accéder</a></p>
-        </article>
-        <article class="inner-card">
-            <h3>Créer ses QSL</h3>
-            <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
-            <p>
-                <?php if ($hasCreatedQsl): ?>
-                    <a class="button secondary small" href="#qsl-create">Accéder</a>
-                <?php else: ?>
-                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
-                <?php endif; ?>
-            </p>
-        </article>
-        <article class="inner-card">
-            <h3>Consulter ses QSL</h3>
-            <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
-            <p>
-                <?php if ($hasCreatedQsl): ?>
-                    <a class="button secondary small" href="#qsl-view">Accéder</a>
-                <?php else: ?>
-                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
-                <?php endif; ?>
-            </p>
-        </article>
-    </div>
-    <?php if (!$hasCreatedQsl): ?>
-        <p class="help">Les accès « Créer ses QSL » et « Consulter ses QSL » seront activés après la création de votre première QSL.</p>
     <?php endif; ?>
 </section>
 
