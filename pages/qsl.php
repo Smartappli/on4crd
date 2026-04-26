@@ -141,6 +141,26 @@ $matchesTextFilter = static function (string $needle, array $fields): bool {
     return false;
 };
 
+$qsoEqslStatus = static function (array $row): string {
+    $raw = (string) ($row['raw_payload'] ?? '');
+    if ($raw === '') {
+        return '—';
+    }
+
+    $payload = json_decode($raw, true);
+    if (!is_array($payload)) {
+        return '—';
+    }
+
+    $sent = qsl_normalize_qsl_status((string) ($payload['eqsl_qsl_sent'] ?? ''));
+    $received = qsl_normalize_qsl_status((string) ($payload['eqsl_qsl_rcvd'] ?? ''));
+    if ($sent === '' && $received === '') {
+        return '—';
+    }
+
+    return 'S:' . ($sent !== '' ? $sent : '—') . ' / R:' . ($received !== '' ? $received : '—');
+};
+
 $filteredQsoRows = array_values(array_filter($qsoRows, static function (array $row) use ($matchesTextFilter, $qsoSearch, $qsoBandFilter, $qsoModeFilter): bool {
     $band = mb_safe_strtoupper(trim((string) ($row['band'] ?? '')));
     $mode = mb_safe_strtoupper(trim((string) ($row['mode'] ?? '')));
@@ -288,7 +308,7 @@ ob_start();
             <div class="table-wrap">
                 <table>
                     <thead>
-                    <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Bande</th><th>Mode</th><th>RST</th><th>Action</th></tr>
+                    <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Bande</th><th>Mode</th><th>RST</th><th>eQSL</th><th>Action</th></tr>
                     </thead>
                     <tbody>
                     <?php foreach ($filteredQsoRows as $row): ?>
@@ -300,6 +320,7 @@ ob_start();
                             <td><?= e((string) $row['band']) ?></td>
                             <td><?= e((string) $row['mode']) ?></td>
                             <td><?= e((string) $row['rst_sent']) ?>/<?= e((string) $row['rst_recv']) ?></td>
+                            <td><?= e($qsoEqslStatus($row)) ?></td>
                             <td><button class="button secondary small" type="submit" name="delete_qso_id" value="<?= (int) $row['id'] ?>">Supprimer</button></td>
                         </tr>
                     <?php endforeach; ?>

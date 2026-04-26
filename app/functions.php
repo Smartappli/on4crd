@@ -1250,6 +1250,18 @@ function qsl_normalize_comment(string $value): string
     return mb_safe_substr($clean, 0, 180);
 }
 
+function qsl_normalize_qsl_status(string $value): string
+{
+    $normalized = mb_safe_strtoupper(trim($value));
+    if ($normalized === '') {
+        return '';
+    }
+
+    $allowed = ['Y', 'N', 'R', 'Q', 'I', 'V'];
+    $status = mb_safe_substr($normalized, 0, 1);
+    return in_array($status, $allowed, true) ? $status : '';
+}
+
 function parse_adif(string $content): array
 {
     $rows = [];
@@ -1283,6 +1295,18 @@ function parse_adif(string $content): array
             $record['rst_recv'] = mb_safe_substr(trim($value), 0, 16);
         } elseif ($field === 'comment') {
             $record['comment'] = qsl_normalize_comment($value);
+        } elseif ($field === 'eqsl_qsl_sent') {
+            $record['eqsl_qsl_sent'] = qsl_normalize_qsl_status($value);
+        } elseif ($field === 'eqsl_qsl_rcvd') {
+            $record['eqsl_qsl_rcvd'] = qsl_normalize_qsl_status($value);
+        } elseif ($field === 'qsl_sent') {
+            $record['qsl_sent'] = qsl_normalize_qsl_status($value);
+        } elseif ($field === 'qsl_rcvd') {
+            $record['qsl_rcvd'] = qsl_normalize_qsl_status($value);
+        } elseif ($field === 'lotw_qsl_sent') {
+            $record['lotw_qsl_sent'] = qsl_normalize_qsl_status($value);
+        } elseif ($field === 'lotw_qsl_rcvd') {
+            $record['lotw_qsl_rcvd'] = qsl_normalize_qsl_status($value);
         }
 
         if (stripos((string) $match[4], '<EOR>') !== false) {
