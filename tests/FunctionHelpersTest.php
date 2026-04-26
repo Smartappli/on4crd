@@ -110,4 +110,35 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(50.4, round((float) $coordinates['latitude'], 1));
         self::assertSame(4.9, round((float) $coordinates['longitude'], 1));
     }
+
+    public function testExtractLatestKpMeasurementReturnsLatestNumericRow(): void
+    {
+        $payload = [
+            ['time_tag', 'kp_index'],
+            ['2026-04-26 00:00:00.000', '2.00'],
+            ['2026-04-26 03:00:00.000', '3.33'],
+        ];
+
+        $result = extract_latest_kp_measurement($payload);
+
+        self::assertIsArray($result);
+        self::assertSame('2026-04-26 03:00:00.000', $result['timestamp']);
+        self::assertSame(3.33, round((float) $result['kp'], 2));
+    }
+
+    public function testExtractLatestKpMeasurementSkipsInvalidTrailingRows(): void
+    {
+        $payload = [
+            ['time_tag', 'kp_index'],
+            ['2026-04-26 00:00:00.000', '1.67'],
+            ['2026-04-26 03:00:00.000', ''],
+            ['bad-row'],
+        ];
+
+        $result = extract_latest_kp_measurement($payload);
+
+        self::assertIsArray($result);
+        self::assertSame('2026-04-26 00:00:00.000', $result['timestamp']);
+        self::assertSame(1.67, round((float) $result['kp'], 2));
+    }
 }

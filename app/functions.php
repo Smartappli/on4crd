@@ -211,6 +211,33 @@ function maidenhead_to_coordinates(string $locator): ?array
     ];
 }
 
+function extract_latest_kp_measurement(array $payload): ?array
+{
+    if (count($payload) <= 1) {
+        return null;
+    }
+
+    for ($index = count($payload) - 1; $index >= 1; $index--) {
+        $row = $payload[$index] ?? null;
+        if (!is_array($row)) {
+            continue;
+        }
+
+        $timestamp = trim((string) ($row[0] ?? ''));
+        $kpValue = $row[1] ?? null;
+        if ($timestamp === '' || !is_numeric($kpValue)) {
+            continue;
+        }
+
+        return [
+            'timestamp' => $timestamp,
+            'kp' => (float) $kpValue,
+        ];
+    }
+
+    return null;
+}
+
 function render_widget(string $slug, array $user = []): string
 {
     $safeSlug = strtolower(trim($slug));
@@ -282,19 +309,12 @@ function render_widget(string $slug, array $user = []): string
                 return is_array($decoded) ? $decoded : null;
             });
 
-            $latestKp = null;
-            $kpTimestamp = '';
-            if (is_array($payload) && count($payload) > 1) {
-                $lastRow = $payload[array_key_last($payload)] ?? null;
-                if (is_array($lastRow)) {
-                    $kpTimestamp = trim((string) ($lastRow[0] ?? ''));
-                    $latestKp = is_numeric($lastRow[1] ?? null) ? (float) $lastRow[1] : null;
-                }
-            }
-
-            if ($latestKp === null) {
+            $measurement = is_array($payload) ? extract_latest_kp_measurement($payload) : null;
+            if (!is_array($measurement)) {
                 return '<p class="help">Indicateurs de propagation indisponibles pour le moment.</p>';
             }
+            $latestKp = (float) ($measurement['kp'] ?? 0.0);
+            $kpTimestamp = (string) ($measurement['timestamp'] ?? '');
 
             $geomagnetic = match (true) {
                 $latestKp < 2.0 => 'Très calme',
