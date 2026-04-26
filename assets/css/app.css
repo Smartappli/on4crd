@@ -185,8 +185,8 @@ textarea:focus-visible {
   border: 1px solid color-mix(in srgb, var(--accent) 65%, var(--accent-strong));
   background: var(--accent);
   color: #fff;
-  font-family: inherit;
-  font-size: 1.08rem;
+  font-family: inherit !important;
+  font-size: 1.08rem !important;
   font-weight: 600;
   line-height: 1;
   text-align: center;
