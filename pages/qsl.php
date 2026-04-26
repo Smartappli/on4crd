@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
+        $isAjaxRequest = strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest';
 
         if ($action === 'save_background_image') {
             $label = trim((string) ($_POST['background_label'] ?? 'Fond image'));
@@ -76,31 +77,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             set_flash('success', 'Fond supprimé.');
         } elseif ($action === 'import_adif') {
-            if (!isset($_FILES['adif_file']) || !is_array($_FILES['adif_file'])) {
+            $uploads = [];
+            if (isset($_FILES['adif_files']) && is_array($_FILES['adif_files'])) {
+                $batch = $_FILES['adif_files'];
+                $names = (array) ($batch['name'] ?? []);
+                foreach (array_keys($names) as $index) {
+                    $uploads[] = [
+                        'name' => (string) ($batch['name'][$index] ?? ''),
+                        'type' => (string) ($batch['type'][$index] ?? ''),
+                        'tmp_name' => (string) ($batch['tmp_name'][$index] ?? ''),
+                        'error' => (int) ($batch['error'][$index] ?? UPLOAD_ERR_NO_FILE),
+                        'size' => (int) ($batch['size'][$index] ?? 0),
+                    ];
+                }
+            } elseif (isset($_FILES['adif_file']) && is_array($_FILES['adif_file'])) {
+                $uploads[] = $_FILES['adif_file'];
+            }
+
+            if ($uploads === []) {
                 throw new RuntimeException('Aucun fichier ADIF reçu.');
             }
-
-            $file = $_FILES['adif_file'];
-            if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-                throw new RuntimeException('Le téléversement du fichier ADIF a échoué.');
+            $totalImported = 0;
+            $processedFiles = 0;
+            foreach ($uploads as $file) {
+                if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+                    continue;
+                }
+                $tmpName = (string) ($file['tmp_name'] ?? '');
+                if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+                    continue;
+                }
+                $content = file_get_contents($tmpName);
+                if ($content === false) {
+                    continue;
+                }
+                $records = parse_adif($content);
+                $totalImported += import_adif_records((int) $user['id'], $records);
+                $processedFiles++;
             }
 
-            $tmpName = (string) ($file['tmp_name'] ?? '');
-            if ($tmpName === '' || !is_uploaded_file($tmpName)) {
-                throw new RuntimeException('Fichier ADIF temporaire invalide.');
+            if ($processedFiles === 0) {
+                throw new RuntimeException('Aucun fichier ADIF valide n’a pu être traité.');
             }
 
-            $content = file_get_contents($tmpName);
-            if ($content === false) {
-                throw new RuntimeException('Fichier ADIF illisible.');
+            if ($isAjaxRequest) {
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode([
+                    'ok' => true,
+                    'files' => $processedFiles,
+                    'imported' => $totalImported,
+                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                exit;
             }
 
-            $records = parse_adif($content);
-            $count = import_adif_records((int) $user['id'], $records);
-            if ($count > 0) {
-                set_flash('success', $count . ' QSO(s) importé(s).');
+            if ($totalImported > 0) {
+                set_flash('success', $totalImported . ' QSO(s) importé(s) depuis ' . $processedFiles . ' fichier(s).');
             } else {
-                set_flash('error', 'Aucun nouveau QSO importé. Les enregistrements sont peut-être déjà présents.');
+                set_flash('error', 'Aucun nouveau QSO importé dans ' . $processedFiles . ' fichier(s).');
             }
         } elseif ($action === 'generate_batch') {
             $ids = array_map('intval', $_POST['qso_ids'] ?? []);
@@ -170,8 +203,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Action QSL inconnue.');
         }
 
+        if ($isAjaxRequest) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['ok' => true], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            exit;
+        }
         redirect('qsl');
     } catch (Throwable $throwable) {
+        $isAjaxRequest = strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest';
+        if ($isAjaxRequest) {
+            header('Content-Type: application/json; charset=utf-8');
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => $throwable->getMessage()], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            exit;
+        }
         set_flash('error', $throwable->getMessage());
         redirect('qsl');
     }
@@ -297,28 +342,28 @@ ob_start();
     <p class="help">Choisissez une étape pour concevoir votre carte, la générer et suivre vos résultats.</p>
     <div class="grid-3">
         <a class="inner-card qsl-studio-link-card" href="#qsl-draw">
-            <span class="badge muted">Étape 1</span>
+            <span class="badge muted">Étape 1 - Dessiner</span>
             <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
         </a>
         <?php if ($hasCreatedQsl): ?>
             <a class="inner-card qsl-studio-link-card" href="#qsl-create">
-                <span class="badge muted">Étape 2</span>
+                <span class="badge muted">Étape 2 - Créer</span>
                 <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
             </a>
         <?php else: ?>
             <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
-                <span class="badge muted">Étape 2</span>
+                <span class="badge muted">Étape 2 - Créer</span>
                 <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
             </div>
         <?php endif; ?>
         <?php if ($hasCreatedQsl): ?>
             <a class="inner-card qsl-studio-link-card" href="#qsl-view">
-                <span class="badge muted">Étape 3</span>
+                <span class="badge muted">Étape 3 - Consulter</span>
                 <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
             </a>
         <?php else: ?>
             <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
-                <span class="badge muted">Étape 3</span>
+                <span class="badge muted">Étape 3 - Consulter</span>
                 <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
             </div>
         <?php endif; ?>
@@ -445,17 +490,23 @@ ob_start();
 
     <section class="card">
         <h2>Import ADIF</h2>
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="import_adif">
-            <label>Fichier ADIF
-                <input type="file" name="adif_file" accept=".adi,.adif,text/plain" required>
-            </label>
-            <p><button class="button secondary">Importer les QSO</button></p>
+            <div id="adif-dropzone" class="dropzone qsl-adif-dropzone">
+                <div class="dz-message">
+                    Glissez-déposez vos fichiers ADIF ici
+                    <small>ou cliquez pour sélectionner plusieurs fichiers (.adi, .adif)</small>
+                </div>
+            </div>
+            <input type="file" name="adif_files[]" id="adif-fallback-input" accept=".adi,.adif,text/plain" multiple hidden>
+            <p class="help" id="adif-dropzone-status">Les fichiers seront traités automatiquement à l’ajout.</p>
         </form>
         <p class="help">Les doublons exacts sont ignorés automatiquement lors de l’import.</p>
     </section>
 </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
+<script nonce="<?= e(csp_nonce()) ?>" src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
 
 <section class="card" id="qsl-view">
     <div class="row-between">
@@ -660,6 +711,57 @@ document.querySelectorAll('[data-wysiwyg]').forEach((wrapper) => {
             }
         };
         reader.readAsDataURL(file);
+    });
+})();
+
+(() => {
+    const form = document.getElementById('adif-dropzone-form');
+    const status = document.getElementById('adif-dropzone-status');
+    if (!form || typeof Dropzone === 'undefined') {
+        return;
+    }
+
+    Dropzone.autoDiscover = false;
+    const csrf = form.querySelector('input[name="_csrf"]')?.value || '';
+    const action = form.querySelector('input[name="action"]')?.value || 'import_adif';
+    const dropzone = new Dropzone('#adif-dropzone', {
+        url: window.location.href,
+        method: 'post',
+        paramName: 'adif_files[]',
+        acceptedFiles: '.adi,.adif,text/plain',
+        uploadMultiple: false,
+        parallelUploads: 6,
+        maxFilesize: 8,
+        addRemoveLinks: true,
+        autoProcessQueue: true,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        params: {
+            _csrf: csrf,
+            action: action,
+        },
+        dictDefaultMessage: '',
+    });
+
+    dropzone.on('sending', () => {
+        if (status) {
+            status.textContent = 'Traitement des fichiers ADIF en cours...';
+        }
+    });
+    dropzone.on('success', (file, response) => {
+        const imported = Number(response?.imported || 0);
+        const files = Number(response?.files || 1);
+        if (status) {
+            status.textContent = `${imported} QSO importé(s) depuis ${files} fichier(s).`;
+        }
+    });
+    dropzone.on('error', (file, message) => {
+        const text = typeof message === 'string' ? message : (message?.error || 'Échec de l’import ADIF.');
+        if (status) {
+            status.textContent = text;
+        }
+    });
+    dropzone.on('queuecomplete', () => {
+        window.setTimeout(() => window.location.reload(), 500);
     });
 })();
 </script>
