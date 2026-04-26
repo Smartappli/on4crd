@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 set_flash('error', 'Aucune QSL générée. Sélection vide ou QSL déjà existantes.');
             }
         } elseif ($action === 'create_manual') {
+            $backgroundImageDataUri = qsl_background_upload_to_data_uri($_FILES['background_image'] ?? null);
             $data = [
                 'own_call' => (string) ($user['callsign'] ?? ''),
                 'own_name' => (string) ($user['full_name'] ?? ''),
@@ -56,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'rst_sent' => trim((string) ($_POST['rst_sent'] ?? '')),
                 'rst_recv' => trim((string) ($_POST['rst_recv'] ?? '')),
                 'comment' => trim((string) ($_POST['comment'] ?? 'TNX QSO 73')),
+                'background_primary' => trim((string) ($_POST['background_primary'] ?? '#0B1F3A')),
+                'background_secondary' => trim((string) ($_POST['background_secondary'] ?? '#1D4ED8')),
+                'background_image_data_uri' => $backgroundImageDataUri,
             ];
 
             $svg = generate_qsl_svg($data);
@@ -211,7 +215,7 @@ ob_start();
     <section class="card">
         <h1>QSL Designer</h1>
         <p>Crée une carte QSL manuelle ou génère un lot à partir d’un fichier ADIF importé.</p>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="create_manual">
             <div class="form-grid">
@@ -223,7 +227,13 @@ ob_start();
                 <label>RST envoyé<input type="text" name="rst_sent" maxlength="16" placeholder="59"></label>
                 <label>RST reçu<input type="text" name="rst_recv" maxlength="16" placeholder="59"></label>
                 <label>Commentaire<textarea name="comment" rows="3" maxlength="180">TNX QSO 73</textarea></label>
+                <label>Couleur de fond 1<input type="color" name="background_primary" value="#0B1F3A"></label>
+                <label>Couleur de fond 2<input type="color" name="background_secondary" value="#1D4ED8"></label>
+                <label>Image de fond (optionnel)
+                    <input type="file" name="background_image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                </label>
             </div>
+            <p class="help">Sans image, un dégradé est généré automatiquement. Avec image, la photo est utilisée comme arrière-plan de la QSL.</p>
             <p><button class="button">Créer une QSL</button></p>
         </form>
     </section>

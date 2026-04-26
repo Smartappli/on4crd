@@ -855,11 +855,19 @@ function render_layout(string $content, string $title = ''): string
 
     $authHtml = '';
     if ($user !== null) {
-        $authHtml = '<a class="button secondary small" href="' . e(route_url('profile')) . '">' . e((string) ($user['callsign'] ?? 'Mon profil')) . '</a>'
-            . '<form class="nav-form" method="post" action="' . e(route_url('logout')) . '">'
+        $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : 'Mon espace';
+        $authHtml = '<details class="account-menu">'
+            . '<summary class="button small account-menu-trigger">' . e($accountLabel) . '</summary>'
+            . '<div class="account-menu-panel">'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Profile</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Paramètre</a>'
+            . '<hr class="account-menu-separator">'
+            . '<form class="nav-form account-menu-form" method="post" action="' . e(route_url('logout')) . '">'
             . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
-            . '<button type="submit" class="button secondary small">Déconnexion</button>'
-            . '</form>';
+            . '<button type="submit" class="button secondary small account-menu-logout">Déconnexion</button>'
+            . '</form>'
+            . '</div>'
+            . '</details>';
     } else {
         $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">Connexion</a>';
     }
@@ -1329,6 +1337,9 @@ function build_qsl_svg_payload(array $user, array $data, string $comment = ''): 
     if ($templateName === '') {
         $templateName = 'classic';
     }
+    $backgroundImage = trim((string) ($data['background_image_data_uri'] ?? ''));
+    $backgroundPrimary = trim((string) ($data['background_primary'] ?? '#0b1f3a'));
+    $backgroundSecondary = trim((string) ($data['background_secondary'] ?? '#1d4ed8'));
 
     return [
         'title' => (string) ($data['title'] ?? ''),
@@ -1344,6 +1355,9 @@ function build_qsl_svg_payload(array $user, array $data, string $comment = ''): 
         'rst_recv' => $rstRecv,
         'comment' => $payloadComment,
         'template_name' => $templateName,
+        'background_image_data_uri' => $backgroundImage,
+        'background_primary' => preg_match('/^#[a-f0-9]{6}$/i', $backgroundPrimary) === 1 ? strtoupper($backgroundPrimary) : '#0B1F3A',
+        'background_secondary' => preg_match('/^#[a-f0-9]{6}$/i', $backgroundSecondary) === 1 ? strtoupper($backgroundSecondary) : '#1D4ED8',
     ];
 }
 
@@ -1520,7 +1534,7 @@ function sanitize_svg_document(string $svg): string
         '/<\s*script\b/i',
         '/<\s*(iframe|object|embed|foreignobject)\b/i',
         '/\s+on[a-z0-9:_-]+\s*=/i',
-        '/(?:href|xlink:href)\s*=\s*["\']?\s*(?:javascript:|data:)/i',
+        '/(?:href|xlink:href)\s*=\s*["\']?\s*javascript:/i',
         '/style\s*=\s*["\'][^"\']*url\s*\(/i',
     ];
 
@@ -1532,6 +1546,19 @@ function sanitize_svg_document(string $svg): string
 
     if (str_contains($normalized, 'javascript:')) {
         return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+    }
+
+    if (preg_match_all('/(?:href|xlink:href)\s*=\s*["\']([^"\']+)["\']/i', $svg, $matches) > 0 && isset($matches[1])) {
+        foreach ($matches[1] as $href) {
+            $candidate = strtolower(trim((string) $href));
+            if (str_starts_with($candidate, 'data:image/')) {
+                if (preg_match('/^data:image\/(?:png|jpe?g|webp);base64,[a-z0-9+\/=]+$/i', $candidate) !== 1) {
+                    return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+                }
+            } elseif (str_starts_with($candidate, 'data:')) {
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+            }
+        }
     }
 
     return $svg;
@@ -1551,9 +1578,22 @@ function generate_qsl_svg(array $payload): string
     $rstRecv = e(trim((string) ($payload['rst_recv'] ?? '')));
     $comment = e(qsl_normalize_comment((string) ($payload['comment'] ?? 'TNX QSO 73')));
     $title = e(trim((string) ($payload['title'] ?? 'QSL Card')));
+    $backgroundPrimary = e(trim((string) ($payload['background_primary'] ?? '#0B1F3A')));
+    $backgroundSecondary = e(trim((string) ($payload['background_secondary'] ?? '#1D4ED8')));
+    $backgroundImage = trim((string) ($payload['background_image_data_uri'] ?? ''));
+    $backgroundLayer = '<rect width="900" height="500" fill="url(#qsl-bg-gradient)"/>';
+    if ($backgroundImage !== '') {
+        $safeBackground = e($backgroundImage);
+        $backgroundLayer = '<image href="' . $safeBackground . '" x="0" y="0" width="900" height="500" preserveAspectRatio="xMidYMid slice"/>'
+            . '<rect width="900" height="500" fill="rgba(8, 15, 32, .38)"/>';
+    }
 
     $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">'
-        . '<rect width="900" height="500" fill="#0b1f3a"/>'
+        . '<defs><linearGradient id="qsl-bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">'
+        . '<stop offset="0%" stop-color="' . $backgroundPrimary . '"/>'
+        . '<stop offset="100%" stop-color="' . $backgroundSecondary . '"/>'
+        . '</linearGradient></defs>'
+        . $backgroundLayer
         . '<text x="40" y="70" fill="#e2e8f0" font-size="42" font-family="Arial, sans-serif" font-weight="700">' . $title . '</text>'
         . '<text x="40" y="130" fill="#f8fafc" font-size="30" font-family="Arial, sans-serif">DE: ' . $ownCall . '</text>'
         . '<text x="40" y="170" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">' . $ownName . ' • ' . $ownQth . '</text>'
@@ -1564,6 +1604,53 @@ function generate_qsl_svg(array $payload): string
         . '</svg>';
 
     return sanitize_svg_document($svg);
+}
+
+function qsl_background_upload_to_data_uri(?array $upload): string
+{
+    if (!is_array($upload)) {
+        return '';
+    }
+    $errorCode = (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE);
+    if ($errorCode === UPLOAD_ERR_NO_FILE) {
+        return '';
+    }
+    if ($errorCode !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Le téléversement de l’image de fond QSL a échoué.');
+    }
+
+    $tmpPath = (string) ($upload['tmp_name'] ?? '');
+    if ($tmpPath === '' || !is_uploaded_file($tmpPath)) {
+        throw new RuntimeException('Image de fond QSL invalide.');
+    }
+
+    $mime = detect_uploaded_mime_type($tmpPath);
+    $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!in_array($mime, $allowedMimes, true)) {
+        throw new RuntimeException('Image de fond non supportée (JPG, PNG ou WEBP).');
+    }
+    $size = (int) ($upload['size'] ?? 0);
+    if ($size <= 0 || $size > 6 * 1024 * 1024) {
+        throw new RuntimeException('Image de fond trop volumineuse (max 6 Mo).');
+    }
+
+    $extension = match ($mime) {
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+        default => '',
+    };
+    assert_upload_file_is_valid_signature($tmpPath, [$extension]);
+    $sanitizedTmpPath = sanitize_uploaded_image_file($tmpPath, $extension);
+    $raw = @file_get_contents($sanitizedTmpPath);
+    if ($sanitizedTmpPath !== $tmpPath) {
+        @unlink($sanitizedTmpPath);
+    }
+    if ($raw === false) {
+        throw new RuntimeException('Image de fond QSL illisible.');
+    }
+
+    return 'data:' . $mime . ';base64,' . base64_encode($raw);
 }
 
 function csrf_token(): string
