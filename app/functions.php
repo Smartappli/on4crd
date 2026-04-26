@@ -180,6 +180,64 @@ function widget_catalog(): array
 }
 
 if (!function_exists('render_widget')) {
+function maidenhead_to_coordinates(string $locator): ?array
+{
+    $normalized = strtoupper(trim($locator));
+    if (preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $normalized) !== 1) {
+        return null;
+    }
+
+    $lon = -180.0;
+    $lat = -90.0;
+
+    $lon += (ord($normalized[0]) - ord('A')) * 20.0;
+    $lat += (ord($normalized[1]) - ord('A')) * 10.0;
+    $lon += ((int) $normalized[2]) * 2.0;
+    $lat += (int) $normalized[3];
+
+    $lonStep = 2.0;
+    $latStep = 1.0;
+
+    if (strlen($normalized) >= 6) {
+        $lon += (ord($normalized[4]) - ord('A')) * (5.0 / 60.0);
+        $lat += (ord($normalized[5]) - ord('A')) * (2.5 / 60.0);
+        $lonStep = 5.0 / 60.0;
+        $latStep = 2.5 / 60.0;
+    }
+
+    return [
+        'latitude' => $lat + ($latStep / 2.0),
+        'longitude' => $lon + ($lonStep / 2.0),
+    ];
+}
+
+function extract_latest_kp_measurement(array $payload): ?array
+{
+    if (count($payload) <= 1) {
+        return null;
+    }
+
+    for ($index = count($payload) - 1; $index >= 1; $index--) {
+        $row = $payload[$index] ?? null;
+        if (!is_array($row)) {
+            continue;
+        }
+
+        $timestamp = trim((string) ($row[0] ?? ''));
+        $kpValue = $row[1] ?? null;
+        if ($timestamp === '' || !is_numeric($kpValue)) {
+            continue;
+        }
+
+        return [
+            'timestamp' => $timestamp,
+            'kp' => (float) $kpValue,
+        ];
+    }
+
+    return null;
+}
+
 function render_widget(string $slug, array $user = []): string
 {
     $safeSlug = strtolower(trim($slug));
@@ -233,13 +291,62 @@ function render_widget(string $slug, array $user = []): string
                 . '</ul>';
 
         case 'propagation':
-            return '<p class="help">Consultez les bandes actives et adaptez vos sessions selon les conditions du moment.</p>'
-                . '<p><a href="https://www.solarham.com/" target="_blank" rel="noopener">Voir les indicateurs</a></p>';
+            $kpFeedUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
+            $cacheKey = 'widget:propagation:kp-index';
+            $payload = cache_remember($cacheKey, 300, static function () use ($kpFeedUrl): ?array {
+                $context = stream_context_create([
+                    'http' => [
+                        'method' => 'GET',
+                        'timeout' => 6,
+                        'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Widget/1.0\r\n",
+                    ],
+                ]);
+                $raw = @file_get_contents($kpFeedUrl, false, $context);
+                if (!is_string($raw) || trim($raw) === '') {
+                    return null;
+                }
+                $decoded = json_decode($raw, true);
+                return is_array($decoded) ? $decoded : null;
+            });
+
+            $measurement = is_array($payload) ? extract_latest_kp_measurement($payload) : null;
+            if (!is_array($measurement)) {
+                return '<ul class="list-clean">'
+                    . '<li><strong>Kp : n/d</strong> — Données live indisponibles</li>'
+                    . '<li>Prévision HF : variable (estimation locale)</li>'
+                    . '<li>Tendance VHF : normale hors évènement géomagnétique</li>'
+                    . '<li class="help">Le flux NOAA n’est pas accessible actuellement. Réessayez dans quelques minutes.</li>'
+                    . '</ul>';
+            }
+            $latestKp = (float) ($measurement['kp'] ?? 0.0);
+            $kpTimestamp = (string) ($measurement['timestamp'] ?? '');
+
+            $geomagnetic = match (true) {
+                $latestKp < 2.0 => 'Très calme',
+                $latestKp < 4.0 => 'Calme',
+                $latestKp < 5.0 => 'Actif',
+                $latestKp < 7.0 => 'Perturbé',
+                default => 'Orage géomagnétique',
+            };
+            $hfOutlook = $latestKp <= 3.0 ? 'HF favorable' : ($latestKp <= 5.0 ? 'HF variable' : 'HF difficile');
+            $vhfOutlook = $latestKp >= 4.0 ? 'Aurores possibles sur VHF' : 'Aurores peu probables';
+
+            return '<ul class="list-clean">'
+                . '<li><strong>Kp : ' . e(number_format($latestKp, 1, ',', '')) . '</strong> — ' . e($geomagnetic) . '</li>'
+                . '<li>Prévision HF : ' . e($hfOutlook) . '</li>'
+                . '<li>Tendance VHF : ' . e($vhfOutlook) . '</li>'
+                . '<li class="help">Mesure NOAA : ' . e($kpTimestamp !== '' ? $kpTimestamp : 'inconnue') . '</li>'
+                . '</ul>';
 
         case 'open_meteo':
-            $defaultUrl = 'https://api.open-meteo.com/v1/forecast?latitude=48.86&longitude=2.35&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FParis';
+            $defaultUrl = 'https://api.open-meteo.com/v1/forecast?latitude=50.3150&longitude=4.9452&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FBrussels';
             $feedUrl = $defaultUrl;
             $cacheTtl = 300;
+            $defaultLocator = 'JO20LI';
+            $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
+            $locator = $memberLocator !== '' ? $memberLocator : $defaultLocator;
+            $usingClubDefaultLocator = $memberLocator === '';
+            $weatherCoordinates = maidenhead_to_coordinates($locator);
 
             if (table_exists('live_feeds')) {
                 $feedStmt = db()->prepare('SELECT url, cache_ttl, is_enabled FROM live_feeds WHERE code = ? LIMIT 1');
@@ -257,7 +364,16 @@ function render_widget(string $slug, array $user = []): string
                 }
             }
 
-            $cacheKey = 'widget:open-meteo:' . sha1($feedUrl);
+            if ($weatherCoordinates !== null) {
+                $feedUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
+                    'latitude' => number_format($weatherCoordinates['latitude'], 4, '.', ''),
+                    'longitude' => number_format($weatherCoordinates['longitude'], 4, '.', ''),
+                    'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code',
+                    'timezone' => 'auto',
+                ]);
+            }
+
+            $cacheKey = 'widget:open-meteo:' . sha1($feedUrl . '|' . $locator);
             $payload = cache_remember($cacheKey, $cacheTtl, static function () use ($feedUrl): ?array {
                 $context = stream_context_create([
                     'http' => [
@@ -300,6 +416,7 @@ function render_widget(string $slug, array $user = []): string
                 . '<li>Température : ' . ($temperature !== null ? e(number_format($temperature, 1, ',', '')) . ' °C' : 'n/d') . '</li>'
                 . '<li>Humidité : ' . ($humidity !== null ? e((string) $humidity) . ' %' : 'n/d') . '</li>'
                 . '<li>Vent : ' . ($wind !== null ? e(number_format($wind, 1, ',', '')) . ' km/h' : 'n/d') . '</li>'
+                . ($weatherCoordinates !== null ? '<li class="help">Locator : ' . e($locator) . ($usingClubDefaultLocator ? ' (radio-club)' : '') . '</li>' : '')
                 . '<li class="help">Mesure : ' . e($timeLabel !== '' ? $timeLabel : 'inconnue') . '</li>'
                 . '</ul>';
 
@@ -339,7 +456,7 @@ function seed_live_feeds(): void
 
     $feeds = [
         ['noaa-alerts', 'NOAA Alerts', 'https://services.swpc.noaa.gov/products/alerts.json', 'json', 120, 180, 1, 'Alertes météo spatiale NOAA'],
-        ['open-meteo', 'Open-Meteo', 'https://api.open-meteo.com/v1/forecast?latitude=48.86&longitude=2.35&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FParis', 'json', 300, 300, 1, 'Météo locale via Open-Meteo (Paris par défaut)'],
+        ['open-meteo', 'Open-Meteo', 'https://api.open-meteo.com/v1/forecast?latitude=50.3150&longitude=4.9452&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FBrussels', 'json', 300, 300, 1, 'Météo locale via Open-Meteo (locator membre, fallback radio-club JO20LI)'],
         ['hamqth-dx', 'HamQTH DX', 'https://www.hamqth.com/dxc_csv.php?limit=12', 'csv', 300, 300, 1, 'Derniers spots DX'],
     ];
 
@@ -631,7 +748,7 @@ function bypass_member_user(int $memberId): ?array
         return null;
     }
 
-    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active, is_committee FROM members WHERE id = ? LIMIT 1');
+    $stmt = db()->prepare('SELECT id, callsign, full_name, email, locator, is_active, is_committee FROM members WHERE id = ? LIMIT 1');
     $stmt->execute([$memberId]);
     $row = $stmt->fetch();
     if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
@@ -677,7 +794,7 @@ function current_user(): ?array
         return null;
     }
 
-    $stmt = db()->prepare('SELECT id, callsign, full_name, email, is_active, is_committee FROM members WHERE id = ? OR auth_user_id = ? LIMIT 1');
+    $stmt = db()->prepare('SELECT id, callsign, full_name, email, locator, is_active, is_committee FROM members WHERE id = ? OR auth_user_id = ? LIMIT 1');
     $stmt->execute([$memberId, $memberId]);
     $row = $stmt->fetch();
     if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
@@ -1041,19 +1158,24 @@ function render_layout(string $content, string $title = ''): string
         . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="Choix de la couleur" aria-describedby="accent-help">' . $accentOptionHtml . '</select>'
         . '<span class="sr-only" id="accent-help">Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.</span>'
         . '</form>';
+    $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="Installer l’application">Installer l’app</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $authHtml . '</div></div>'
+        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title>' . $metaHead
+        . '<meta name="theme-color" content="#2f6fed">'
+        . '<link rel="manifest" href="' . e(asset_url('manifest.webmanifest')) . '">'
+        . '<link rel="icon" href="' . e(asset_url('assets/icons/icon.svg')) . '" type="image/svg+xml">'
+        . '<link rel="apple-touch-icon" href="' . e(asset_url('assets/icons/apple-touch-icon.png')) . '">'
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
-        . '</head><body>'
+        . '</head><body data-sw-url="' . e(base_url('sw.js')) . '">'
         . '<a class="skip-link" href="#main-content">Aller au contenu</a>'
         . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
