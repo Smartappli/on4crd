@@ -1055,7 +1055,7 @@ function render_layout(string $content, string $title = ''): string
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body>'
         . '<a class="skip-link" href="#main-content">Aller au contenu</a>'
-        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
+        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
