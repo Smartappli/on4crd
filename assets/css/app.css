@@ -245,6 +245,60 @@ textarea:focus-visible {
 .account-menu-logout {
   width: 100%;
 }
+.wysiwyg {
+  display: grid;
+  gap: .45rem;
+}
+.wysiwyg-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+.wysiwyg-toolbar .button {
+  width: auto;
+}
+.wysiwyg-editor {
+  min-height: 7rem;
+  padding: .75rem .9rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  color: var(--text);
+  line-height: 1.45;
+}
+.wysiwyg-editor:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 50%, white);
+  outline-offset: 1px;
+}
+.qsl-background-workbench {
+  margin-top: .8rem;
+  align-items: start;
+}
+.qsl-live-preview-wrap {
+  display: grid;
+  gap: .6rem;
+}
+.qsl-live-preview-card {
+  min-height: 220px;
+  border-radius: 18px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #0B1F3A, #1D4ED8);
+  color: #fff;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.qsl-live-preview-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+.qsl-live-preview-meta {
+  margin: 0;
+  font-size: .95rem;
+}
 .toolbar-auth .button.toolbar-login-button {
   display: inline-flex;
   align-items: center;

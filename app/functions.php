@@ -864,7 +864,7 @@ function render_layout(string $content, string $title = ''): string
             . '<hr class="account-menu-separator">'
             . '<form class="nav-form account-menu-form" method="post" action="' . e(route_url('logout')) . '">'
             . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
-            . '<button type="submit" class="button secondary small account-menu-logout">Déconnexion</button>'
+            . '<button type="submit" class="button small account-menu-logout">Déconnexion</button>'
             . '</form>'
             . '</div>'
             . '</details>';
