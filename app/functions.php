@@ -171,6 +171,10 @@ function widget_catalog(): array
             'title' => 'Propagation',
             'description' => 'Repères rapides radio du moment.',
         ],
+        'open_meteo' => [
+            'title' => 'Météo locale',
+            'description' => 'Conditions météo en direct via Open‑Meteo.',
+        ],
     ];
 }
 }
@@ -232,6 +236,73 @@ function render_widget(string $slug, array $user = []): string
             return '<p class="help">Consultez les bandes actives et adaptez vos sessions selon les conditions du moment.</p>'
                 . '<p><a href="https://www.solarham.com/" target="_blank" rel="noopener">Voir les indicateurs</a></p>';
 
+        case 'open_meteo':
+            $defaultUrl = 'https://api.open-meteo.com/v1/forecast?latitude=48.86&longitude=2.35&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FParis';
+            $feedUrl = $defaultUrl;
+            $cacheTtl = 300;
+
+            if (table_exists('live_feeds')) {
+                $feedStmt = db()->prepare('SELECT url, cache_ttl, is_enabled FROM live_feeds WHERE code = ? LIMIT 1');
+                $feedStmt->execute(['open-meteo']);
+                $feedRow = $feedStmt->fetch();
+                if (is_array($feedRow)) {
+                    if ((int) ($feedRow['is_enabled'] ?? 1) !== 1) {
+                        return '<p class="help">Flux Open‑Meteo désactivé dans l’administration.</p>';
+                    }
+                    $configuredUrl = trim((string) ($feedRow['url'] ?? ''));
+                    if ($configuredUrl !== '') {
+                        $feedUrl = $configuredUrl;
+                    }
+                    $cacheTtl = max(60, (int) ($feedRow['cache_ttl'] ?? 300));
+                }
+            }
+
+            $cacheKey = 'widget:open-meteo:' . sha1($feedUrl);
+            $payload = cache_remember($cacheKey, $cacheTtl, static function () use ($feedUrl): ?array {
+                $context = stream_context_create([
+                    'http' => [
+                        'method' => 'GET',
+                        'timeout' => 6,
+                        'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Widget/1.0\r\n",
+                    ],
+                ]);
+                $raw = @file_get_contents($feedUrl, false, $context);
+                if (!is_string($raw) || trim($raw) === '') {
+                    return null;
+                }
+                $decoded = json_decode($raw, true);
+                return is_array($decoded) ? $decoded : null;
+            });
+
+            if (!is_array($payload)) {
+                return '<p class="help">Données météo indisponibles pour le moment.</p>';
+            }
+
+            $current = is_array($payload['current'] ?? null) ? $payload['current'] : [];
+            $temperature = is_numeric($current['temperature_2m'] ?? null) ? (float) $current['temperature_2m'] : null;
+            $humidity = is_numeric($current['relative_humidity_2m'] ?? null) ? (int) $current['relative_humidity_2m'] : null;
+            $wind = is_numeric($current['wind_speed_10m'] ?? null) ? (float) $current['wind_speed_10m'] : null;
+            $weatherCode = (int) ($current['weather_code'] ?? -1);
+            $weatherText = match ($weatherCode) {
+                0 => 'Ciel dégagé',
+                1, 2, 3 => 'Partiellement nuageux',
+                45, 48 => 'Brouillard',
+                51, 53, 55, 61, 63, 65, 80, 81, 82 => 'Pluie',
+                56, 57, 66, 67 => 'Pluie verglaçante',
+                71, 73, 75, 77, 85, 86 => 'Neige',
+                95, 96, 99 => 'Orage',
+                default => 'Conditions variables',
+            };
+            $timeLabel = trim((string) ($current['time'] ?? ''));
+
+            return '<ul class="list-clean">'
+                . '<li><strong>' . e($weatherText) . '</strong></li>'
+                . '<li>Température : ' . ($temperature !== null ? e(number_format($temperature, 1, ',', '')) . ' °C' : 'n/d') . '</li>'
+                . '<li>Humidité : ' . ($humidity !== null ? e((string) $humidity) . ' %' : 'n/d') . '</li>'
+                . '<li>Vent : ' . ($wind !== null ? e(number_format($wind, 1, ',', '')) . ' km/h' : 'n/d') . '</li>'
+                . '<li class="help">Mesure : ' . e($timeLabel !== '' ? $timeLabel : 'inconnue') . '</li>'
+                . '</ul>';
+
         default:
             return '<p class="help">Widget indisponible.</p>';
     }
@@ -268,6 +339,7 @@ function seed_live_feeds(): void
 
     $feeds = [
         ['noaa-alerts', 'NOAA Alerts', 'https://services.swpc.noaa.gov/products/alerts.json', 'json', 120, 180, 1, 'Alertes météo spatiale NOAA'],
+        ['open-meteo', 'Open-Meteo', 'https://api.open-meteo.com/v1/forecast?latitude=48.86&longitude=2.35&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FParis', 'json', 300, 300, 1, 'Météo locale via Open-Meteo (Paris par défaut)'],
         ['hamqth-dx', 'HamQTH DX', 'https://www.hamqth.com/dxc_csv.php?limit=12', 'csv', 300, 300, 1, 'Derniers spots DX'],
     ];
 
@@ -983,7 +1055,7 @@ function render_layout(string $content, string $title = ''): string
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body>'
         . '<a class="skip-link" href="#main-content">Aller au contenu</a>'
-        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark">ON</div><a class="brand" href="' . e(route_url('home')) . '">'
+        . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
