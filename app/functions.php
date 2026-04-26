@@ -855,11 +855,18 @@ function render_layout(string $content, string $title = ''): string
 
     $authHtml = '';
     if ($user !== null) {
-        $authHtml = '<a class="button secondary small" href="' . e(route_url('profile')) . '">' . e((string) ($user['callsign'] ?? 'Mon profil')) . '</a>'
-            . '<form class="nav-form" method="post" action="' . e(route_url('logout')) . '">'
+        $authHtml = '<details class="account-menu">'
+            . '<summary class="button secondary small account-menu-trigger">ON4CRD</summary>'
+            . '<div class="account-menu-panel">'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Profile</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Paramètre</a>'
+            . '<hr class="account-menu-separator">'
+            . '<form class="nav-form account-menu-form" method="post" action="' . e(route_url('logout')) . '">'
             . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
-            . '<button type="submit" class="button secondary small">Déconnexion</button>'
-            . '</form>';
+            . '<button type="submit" class="button secondary small account-menu-logout">Déconnexion</button>'
+            . '</form>'
+            . '</div>'
+            . '</details>';
     } else {
         $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">Connexion</a>';
     }
