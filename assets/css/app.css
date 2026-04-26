@@ -121,6 +121,12 @@ textarea:focus-visible {
   object-fit: cover;
   display: block;
 }
+.brand-mark-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .brand { display: inline-flex; flex-direction: column; gap: .05rem; color: var(--text); }
 .brand-title { font-size: 1.1rem; font-weight: 800; }
 .brand-subtitle { color: var(--muted); font-size: .82rem; }
