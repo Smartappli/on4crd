@@ -268,6 +268,7 @@ function seed_live_feeds(): void
 
     $feeds = [
         ['noaa-alerts', 'NOAA Alerts', 'https://services.swpc.noaa.gov/products/alerts.json', 'json', 120, 180, 1, 'Alertes météo spatiale NOAA'],
+        ['open-meteo', 'Open-Meteo', 'https://api.open-meteo.com/v1/forecast?latitude=48.86&longitude=2.35&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FParis', 'json', 300, 300, 1, 'Météo locale via Open-Meteo (Paris par défaut)'],
         ['hamqth-dx', 'HamQTH DX', 'https://www.hamqth.com/dxc_csv.php?limit=12', 'csv', 300, 300, 1, 'Derniers spots DX'],
     ];
 
