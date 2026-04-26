@@ -193,6 +193,7 @@ foreach ($backgroundPresets as $presetRow) {
         break;
     }
 }
+$hasCreatedQsl = count($qslRows) > 0;
 $qslRows = $qslCards->fetchAll();
 
 $qsoSearch = trim((string) ($_GET['qso_search'] ?? ''));
@@ -317,7 +318,43 @@ ob_start();
 </section>
 
 <section class="card">
-    <h2>Fonds QSL (préférences)</h2>
+    <h2>QSL Studio</h2>
+    <div class="grid-3">
+        <article class="inner-card">
+            <h3>Dessiner sa QSL</h3>
+            <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
+            <p><a class="button secondary small" href="#qsl-draw">Accéder</a></p>
+        </article>
+        <article class="inner-card">
+            <h3>Créer ses QSL</h3>
+            <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
+            <p>
+                <?php if ($hasCreatedQsl): ?>
+                    <a class="button secondary small" href="#qsl-create">Accéder</a>
+                <?php else: ?>
+                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
+                <?php endif; ?>
+            </p>
+        </article>
+        <article class="inner-card">
+            <h3>Consulter ses QSL</h3>
+            <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
+            <p>
+                <?php if ($hasCreatedQsl): ?>
+                    <a class="button secondary small" href="#qsl-view">Accéder</a>
+                <?php else: ?>
+                    <span class="button secondary small disabled" aria-disabled="true">Accéder</span>
+                <?php endif; ?>
+            </p>
+        </article>
+    </div>
+    <?php if (!$hasCreatedQsl): ?>
+        <p class="help">Les accès « Créer ses QSL » et « Consulter ses QSL » seront activés après la création de votre première QSL.</p>
+    <?php endif; ?>
+</section>
+
+<section class="card" id="qsl-draw">
+    <h2>Dessiner sa QSL</h2>
     <p>Section de préparation des fonds, sur toute la largeur, avec création à gauche et prévisualisation à droite.</p>
     <div class="split qsl-background-workbench">
         <div>
@@ -384,7 +421,7 @@ ob_start();
 </section>
 
 <div class="grid-2">
-    <section class="card">
+    <section class="card" id="qsl-create">
         <h1>QSL Creator</h1>
         <p>Crée une carte QSL manuelle ou génère un lot à partir d’un fichier ADIF importé.</p>
         <form method="post" enctype="multipart/form-data">
@@ -445,7 +482,7 @@ ob_start();
     </section>
 </div>
 
-<section class="card">
+<section class="card" id="qsl-view">
     <div class="row-between">
         <h2>QSO importés</h2>
         <span><?= count($qsoRows) ?> enregistrement(s)</span>

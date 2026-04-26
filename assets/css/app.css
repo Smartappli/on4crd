@@ -459,6 +459,11 @@ textarea:focus-visible {
 }
 .button:hover, button:hover { transform: translateY(-1px); background: var(--accent-strong); text-decoration: none; }
 .button[disabled], button[disabled] { opacity: .55; cursor: not-allowed; transform: none; }
+.button.disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 .button.secondary, .ghost { background: var(--panel-2); color: var(--text); border:1px solid var(--border); }
 .button.secondary:hover, .ghost:hover { background: var(--panel-3); }
 .button.small, .ghost { padding: .5rem .8rem; border-radius: 12px; font-size: .92rem; }
