@@ -176,6 +176,31 @@ textarea:focus-visible {
 }
 .account-menu-trigger {
   list-style: none;
+  width: 8.6rem;
+  min-width: 8.6rem;
+  height: 2.35rem;
+  margin: 0;
+  padding: .52rem .45rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, white), color-mix(in srgb, var(--panel-2) 82%, var(--panel)));
+  color: var(--text);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .15s ease;
+}
+.account-menu-trigger:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+.account-menu-trigger:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 65%, white);
+  outline-offset: 2px;
 }
 .account-menu-trigger::-webkit-details-marker {
   display: none;
