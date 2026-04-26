@@ -339,7 +339,6 @@ ob_start();
 <div class="qsl-page">
 <section class="card qsl-studio-overview">
     <h2>QSL Studio</h2>
-    <p class="help">Choisissez une étape pour concevoir votre carte, la générer et suivre vos résultats.</p>
     <div class="grid-3">
         <a class="inner-card qsl-studio-link-card" href="#qsl-draw">
             <span class="badge muted">Étape 1 - Dessiner</span>
@@ -440,71 +439,90 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<div class="grid-2">
-    <section class="card" id="qsl-create">
-        <h1>QSL Creator</h1>
-        <p>Crée une carte QSL manuelle ou génère un lot à partir d’un fichier ADIF importé.</p>
-        <form method="post" enctype="multipart/form-data">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <input type="hidden" name="action" value="create_manual">
-            <div class="form-grid">
-                <label>Indicatif correspondant<input type="text" name="qso_call" maxlength="64" required></label>
-                <label>Date QSO<input type="text" name="qso_date" placeholder="YYYYMMDD ou YYYY-MM-DD"></label>
-                <label>UTC<input type="text" name="time_on" placeholder="HHMM ou HH:MM"></label>
-                <label>Bande<input type="text" name="band" maxlength="32" placeholder="20M"></label>
-                <label>Mode<input type="text" name="mode" maxlength="32" placeholder="SSB"></label>
-                <label>RST envoyé<input type="text" name="rst_sent" maxlength="16" placeholder="59"></label>
-                <label>RST reçu<input type="text" name="rst_recv" maxlength="16" placeholder="59"></label>
-                <label>Commentaire</label>
-                <div class="wysiwyg" data-wysiwyg data-max-length="180">
-                    <div class="wysiwyg-toolbar" role="toolbar" aria-label="Outils de mise en forme du commentaire QSL">
-                        <button type="button" class="button secondary small" data-wysiwyg-command="bold" aria-label="Gras"><strong>B</strong></button>
-                        <button type="button" class="button secondary small" data-wysiwyg-command="italic" aria-label="Italique"><em>I</em></button>
-                        <button type="button" class="button secondary small" data-wysiwyg-command="underline" aria-label="Souligné"><span style="text-decoration:underline;">U</span></button>
-                    </div>
-                    <div class="wysiwyg-editor" contenteditable="true" data-wysiwyg-editor aria-label="Éditeur WYSIWYG du commentaire QSL">TNX QSO 73</div>
-                    <input type="hidden" name="comment" value="TNX QSO 73" data-wysiwyg-input>
-                    <p class="help" data-wysiwyg-counter>180 caractères restants.</p>
-                </div>
-                <label>Fond QSL
-                    <select name="background_preset_id">
-                        <option value="0" <?= $defaultBackgroundPresetId === 0 ? 'selected' : '' ?>>Fond par défaut système</option>
-                        <?php foreach ($backgroundPresets as $preset): ?>
-                            <?php
-                            $presetId = (int) ($preset['id'] ?? 0);
-                            $isDefaultPreset = (int) ($preset['is_default'] ?? 0) === 1;
-                            $presetLabel = (string) ($preset['label'] ?? 'Fond');
-                            $presetType = (string) ($preset['type'] ?? 'gradient');
-                            ?>
-                            <option value="<?= $presetId ?>" <?= ($presetId === $defaultBackgroundPresetId) ? 'selected' : '' ?>>
-                                <?= e($presetLabel) ?><?= $isDefaultPreset ? ' (défaut)' : '' ?> — <?= e($presetType === 'image' ? 'Image' : 'Dégradé') ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-            </div>
-            <p class="help">Choisissez un seul fond enregistré pour cette QSL. Les préférences de fond se gèrent dans la section dédiée ci-dessous.</p>
-            <p><button class="button">Créer une QSL</button></p>
-        </form>
-    </section>
+<section class="card" id="qsl-create" data-qsl-assistant>
+    <h1>Assistant QSL Creator</h1>
+    <p class="help">Suivez les étapes : choisissez votre objectif, puis l’assistant affiche uniquement les actions nécessaires.</p>
 
-    <section class="card">
-        <h2>Import ADIF</h2>
-        <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <input type="hidden" name="action" value="import_adif">
-            <div id="adif-dropzone" class="dropzone qsl-adif-dropzone">
-                <div class="dz-message">
-                    Glissez-déposez vos fichiers ADIF ici
-                    <small>ou cliquez pour sélectionner plusieurs fichiers (.adi, .adif)</small>
-                </div>
+    <div class="stack">
+        <div>
+            <span class="badge muted">Étape 1</span>
+            <h2>Que souhaitez-vous faire ?</h2>
+            <div class="actions">
+                <label><input type="radio" name="qsl_assistant_flow" value="manual" data-qsl-assistant-choice <?= $hasCreatedQsl ? 'checked' : '' ?>> Créer une QSL manuelle</label>
+                <label><input type="radio" name="qsl_assistant_flow" value="adif" data-qsl-assistant-choice <?= !$hasCreatedQsl ? 'checked' : '' ?>> Importer des QSO ADIF</label>
             </div>
-            <input type="file" name="adif_files[]" id="adif-fallback-input" accept=".adi,.adif,text/plain" multiple hidden>
-            <p class="help" id="adif-dropzone-status">Les fichiers seront traités automatiquement à l’ajout.</p>
-        </form>
-        <p class="help">Les doublons exacts sont ignorés automatiquement lors de l’import.</p>
-    </section>
-</div>
+        </div>
+
+        <section class="stack" data-qsl-assistant-panel="manual">
+            <div>
+                <span class="badge muted">Étape 2</span>
+                <h2>Créer une QSL manuelle</h2>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="create_manual">
+                <div class="form-grid">
+                    <label>Indicatif correspondant<input type="text" name="qso_call" maxlength="64" required></label>
+                    <label>Date QSO<input type="text" name="qso_date" placeholder="YYYYMMDD ou YYYY-MM-DD"></label>
+                    <label>UTC<input type="text" name="time_on" placeholder="HHMM ou HH:MM"></label>
+                    <label>Bande<input type="text" name="band" maxlength="32" placeholder="20M"></label>
+                    <label>Mode<input type="text" name="mode" maxlength="32" placeholder="SSB"></label>
+                    <label>RST envoyé<input type="text" name="rst_sent" maxlength="16" placeholder="59"></label>
+                    <label>RST reçu<input type="text" name="rst_recv" maxlength="16" placeholder="59"></label>
+                    <label>Commentaire</label>
+                    <div class="wysiwyg" data-wysiwyg data-max-length="180">
+                        <div class="wysiwyg-toolbar" role="toolbar" aria-label="Outils de mise en forme du commentaire QSL">
+                            <button type="button" class="button secondary small" data-wysiwyg-command="bold" aria-label="Gras"><strong>B</strong></button>
+                            <button type="button" class="button secondary small" data-wysiwyg-command="italic" aria-label="Italique"><em>I</em></button>
+                            <button type="button" class="button secondary small" data-wysiwyg-command="underline" aria-label="Souligné"><span style="text-decoration:underline;">U</span></button>
+                        </div>
+                        <div class="wysiwyg-editor" contenteditable="true" data-wysiwyg-editor aria-label="Éditeur WYSIWYG du commentaire QSL">TNX QSO 73</div>
+                        <input type="hidden" name="comment" value="TNX QSO 73" data-wysiwyg-input>
+                        <p class="help" data-wysiwyg-counter>180 caractères restants.</p>
+                    </div>
+                    <label>Fond QSL
+                        <select name="background_preset_id">
+                            <option value="0" <?= $defaultBackgroundPresetId === 0 ? 'selected' : '' ?>>Fond par défaut système</option>
+                            <?php foreach ($backgroundPresets as $preset): ?>
+                                <?php
+                                $presetId = (int) ($preset['id'] ?? 0);
+                                $isDefaultPreset = (int) ($preset['is_default'] ?? 0) === 1;
+                                $presetLabel = (string) ($preset['label'] ?? 'Fond');
+                                $presetType = (string) ($preset['type'] ?? 'gradient');
+                                ?>
+                                <option value="<?= $presetId ?>" <?= ($presetId === $defaultBackgroundPresetId) ? 'selected' : '' ?>>
+                                    <?= e($presetLabel) ?><?= $isDefaultPreset ? ' (défaut)' : '' ?> — <?= e($presetType === 'image' ? 'Image' : 'Dégradé') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+                <p class="help">Choisissez un seul fond enregistré pour cette QSL.</p>
+                <p><button class="button">Créer une QSL</button></p>
+            </form>
+        </section>
+
+        <section class="stack" data-qsl-assistant-panel="adif">
+            <div>
+                <span class="badge muted">Étape 2</span>
+                <h2>Importer des QSO ADIF</h2>
+            </div>
+            <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="import_adif">
+                <div id="adif-dropzone" class="dropzone qsl-adif-dropzone">
+                    <div class="dz-message">
+                        Glissez-déposez vos fichiers ADIF ici
+                        <small>ou cliquez pour sélectionner plusieurs fichiers (.adi, .adif)</small>
+                    </div>
+                </div>
+                <input type="file" name="adif_files[]" id="adif-fallback-input" accept=".adi,.adif,text/plain" multiple hidden>
+                <p class="help" id="adif-dropzone-status">Les fichiers seront traités automatiquement à l’ajout.</p>
+            </form>
+            <p class="help">Les doublons exacts sont ignorés automatiquement lors de l’import.</p>
+        </section>
+    </div>
+</section>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
 <script nonce="<?= e(csp_nonce()) ?>" src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
 
@@ -620,6 +638,30 @@ ob_start();
 </section>
 </div>
 <script nonce="<?= e(csp_nonce()) ?>">
+(() => {
+    const assistant = document.querySelector('[data-qsl-assistant]');
+    if (!assistant) {
+        return;
+    }
+
+    const choices = assistant.querySelectorAll('[data-qsl-assistant-choice]');
+    const panels = assistant.querySelectorAll('[data-qsl-assistant-panel]');
+    if (!choices.length || !panels.length) {
+        return;
+    }
+
+    const syncPanels = () => {
+        const selected = assistant.querySelector('[data-qsl-assistant-choice]:checked');
+        const activeFlow = selected ? selected.value : 'manual';
+        panels.forEach((panel) => {
+            panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-assistant-panel') !== activeFlow);
+        });
+    };
+
+    choices.forEach((input) => input.addEventListener('change', syncPanels));
+    syncPanels();
+})();
+
 document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
     button.addEventListener('click', () => {
         const table = button.closest('form');
