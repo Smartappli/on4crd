@@ -185,7 +185,8 @@ textarea:focus-visible {
   border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, white), color-mix(in srgb, var(--panel-2) 82%, var(--panel)));
-  color: var(--text);
+  color: var(--accent);
+  font-family: inherit;
   font-size: 1.08rem;
   font-weight: 600;
   line-height: 1;
