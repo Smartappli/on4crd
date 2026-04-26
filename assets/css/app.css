@@ -107,8 +107,8 @@ textarea:focus-visible {
 }
 .brand-wrap { display: flex; align-items: center; gap: .9rem; }
 .brand-mark {
-  width: 6.75rem;
-  height: 6.75rem;
+  width: 6.5rem;
+  height: 6.5rem;
   border-radius: 16px;
   background: transparent;
   display: grid;
