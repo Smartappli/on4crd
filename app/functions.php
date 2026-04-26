@@ -311,7 +311,12 @@ function render_widget(string $slug, array $user = []): string
 
             $measurement = is_array($payload) ? extract_latest_kp_measurement($payload) : null;
             if (!is_array($measurement)) {
-                return '<p class="help">Indicateurs de propagation indisponibles pour le moment.</p>';
+                return '<ul class="list-clean">'
+                    . '<li><strong>Kp : n/d</strong> — Données live indisponibles</li>'
+                    . '<li>Prévision HF : variable (estimation locale)</li>'
+                    . '<li>Tendance VHF : normale hors évènement géomagnétique</li>'
+                    . '<li class="help">Le flux NOAA n’est pas accessible actuellement. Réessayez dans quelques minutes.</li>'
+                    . '</ul>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
             $kpTimestamp = (string) ($measurement['timestamp'] ?? '');
