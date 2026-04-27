@@ -125,4 +125,21 @@ ADIF;
         self::assertStringNotContainsString('<script', strtolower($svg));
         self::assertStringContainsString('&lt;img src=x&gt;', $svg);
     }
+
+    public function testGenerateQslBackSvgReturnsSanitizedBackCard(): void
+    {
+        $svg = generate_qsl_back_svg([
+            'own_call' => 'ON4CRD',
+            'qso_call' => 'F4XYZ',
+            'qso_date' => '20260412',
+            'time_on' => '0915',
+            'band' => '20m',
+            'mode' => 'ssb',
+            'comment' => '<script>alert(1)</script>',
+        ]);
+
+        self::assertStringContainsString('Verso', $svg);
+        self::assertStringContainsString('ON4CRD', $svg);
+        self::assertStringNotContainsString('<script>', strtolower($svg));
+    }
 }

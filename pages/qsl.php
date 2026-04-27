@@ -137,7 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($action === 'generate_batch') {
             $ids = array_map('intval', $_POST['qso_ids'] ?? []);
-            $count = create_qsl_cards_from_qsos((int) $user['id'], $ids);
+            $templateName = ((string) ($_POST['qsl_template_name'] ?? 'classic')) === 'classic_duplex' ? 'classic_duplex' : 'classic';
+            $count = create_qsl_cards_from_qsos((int) $user['id'], $ids, $templateName);
             if ($count > 0) {
                 set_flash('success', $count . ' QSL générée(s).');
             } else {
@@ -145,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($action === 'create_manual') {
             $presetId = (int) ($_POST['background_preset_id'] ?? 0);
+            $templateName = ((string) ($_POST['template_name'] ?? 'classic')) === 'classic_duplex' ? 'classic_duplex' : 'classic';
             $presetStmt = db()->prepare('SELECT id, type, image_data_uri, color_primary, color_secondary FROM qsl_background_presets WHERE id = ? AND member_id = ? LIMIT 1');
             $presetStmt->execute([$presetId, $memberId]);
             $selectedPreset = $presetStmt->fetch();
@@ -186,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $payload['mode'] !== '' ? $payload['mode'] : null,
                 $payload['rst_sent'] !== '' ? $payload['rst_sent'] : null,
                 $payload['rst_recv'] !== '' ? $payload['rst_recv'] : null,
-                'classic',
+                $templateName,
                 $svg,
             ]);
             set_flash('success', 'QSL créée.');
@@ -499,6 +501,12 @@ ob_start();
                             <?php endforeach; ?>
                         </select>
                     </label>
+                    <label>Format d’impression
+                        <select name="template_name">
+                            <option value="classic">Recto uniquement</option>
+                            <option value="classic_duplex">Recto-verso</option>
+                        </select>
+                    </label>
                 </div>
                 <p class="help">Choisissez un seul fond enregistré pour cette QSL.</p>
                 <p><button class="button">Créer une QSL</button></p>
@@ -561,6 +569,12 @@ ob_start();
             <div class="actions">
                 <button type="button" class="button secondary small" data-qso-toggle="all">Tout sélectionner</button>
                 <button type="button" class="button secondary small" data-qso-toggle="none">Tout désélectionner</button>
+                <label>Format
+                    <select name="qsl_template_name">
+                        <option value="classic">Recto</option>
+                        <option value="classic_duplex">Recto-verso</option>
+                    </select>
+                </label>
             </div>
             <div class="table-wrap">
                 <table>
@@ -609,7 +623,7 @@ ob_start();
         <div class="table-wrap">
             <table>
                 <thead>
-                <tr><th>Titre</th><th>QSO</th><th>Date</th><th>Bande</th><th>Mode</th><th>Aperçu</th><th>Export</th><th>Action</th></tr>
+                <tr><th>Titre</th><th>QSO</th><th>Date</th><th>Bande</th><th>Mode</th><th>Format</th><th>Aperçu</th><th>Export</th><th>Action</th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($filteredQslRows as $row): ?>
@@ -619,8 +633,14 @@ ob_start();
                         <td><?= e(qsl_format_display_date((string) ($row['qso_date'] ?? ''))) ?></td>
                         <td><?= e((string) $row['band']) ?></td>
                         <td><?= e((string) $row['mode']) ?></td>
+                        <td><?= qsl_template_supports_back((string) ($row['template_name'] ?? 'classic')) ? 'Recto-verso' : 'Recto' ?></td>
                         <td><a href="<?= e(base_url('index.php?route=qsl_preview&id=' . (int) $row['id'])) ?>">Voir</a></td>
-                        <td><a href="<?= e(base_url('index.php?route=qsl_export&id=' . (int) $row['id'])) ?>">Télécharger SVG</a></td>
+                        <td>
+                            <a href="<?= e(base_url('index.php?route=qsl_export&id=' . (int) $row['id'])) ?>">Recto SVG</a>
+                            <?php if (qsl_template_supports_back((string) ($row['template_name'] ?? 'classic'))): ?>
+                                · <a href="<?= e(base_url('index.php?route=qsl_export&id=' . (int) $row['id'] . '&side=back')) ?>">Verso SVG</a>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <form method="post" class="inline-form">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
