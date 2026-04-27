@@ -1243,12 +1243,23 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
-    $randomQuote = $currentRoute === 'home' ? random_quote_for_layout() : null;
     $quoteHtml = '';
-    if (is_array($randomQuote)) {
-        $quoteAuthor = trim((string) ($randomQuote['author'] ?? ''));
+    if ($currentRoute === 'home') {
+        $randomQuote = random_quote_for_layout();
+        $quoteText = 'Chaque contact radio est une nouvelle aventure.';
+        $quoteAuthor = 'ON4CRD';
+        if (is_array($randomQuote)) {
+            $candidateQuote = trim((string) ($randomQuote['quote'] ?? ''));
+            $candidateAuthor = trim((string) ($randomQuote['author'] ?? ''));
+            if ($candidateQuote !== '') {
+                $quoteText = $candidateQuote;
+            }
+            if ($candidateAuthor !== '') {
+                $quoteAuthor = $candidateAuthor;
+            }
+        }
         $quoteHtml = '<section class="quote-strip" aria-label="Citation du jour"><div class="container quote-strip-inner"><p class="quote-strip-text">“'
-            . e((string) ($randomQuote['quote'] ?? '')) . '”'
+            . e($quoteText) . '”'
             . ($quoteAuthor !== '' ? ' <span class="quote-strip-author">— ' . e($quoteAuthor) . '</span>' : '')
             . '</p></div></section>';
     }
