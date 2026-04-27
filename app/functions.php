@@ -1243,27 +1243,6 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
-    $quoteHtml = '';
-    if ($currentRoute === 'home') {
-        $randomQuote = random_quote_for_layout();
-        $quoteText = 'Chaque contact radio est une nouvelle aventure.';
-        $quoteAuthor = 'ON4CRD';
-        if (is_array($randomQuote)) {
-            $candidateQuote = trim((string) ($randomQuote['quote'] ?? ''));
-            $candidateAuthor = trim((string) ($randomQuote['author'] ?? ''));
-            if ($candidateQuote !== '') {
-                $quoteText = $candidateQuote;
-            }
-            if ($candidateAuthor !== '') {
-                $quoteAuthor = $candidateAuthor;
-            }
-        }
-        $quoteHtml = '<section class="quote-strip" aria-label="Citation du jour"><div class="container quote-strip-inner"><p class="quote-strip-text">“'
-            . e($quoteText) . '”'
-            . ($quoteAuthor !== '' ? ' <span class="quote-strip-author">— ' . e($quoteAuthor) . '</span>' : '')
-            . '</p></div></section>';
-    }
-
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title>' . $metaHead
@@ -1280,7 +1259,6 @@ function render_layout(string $content, string $title = ''): string
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
-        . $quoteHtml
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
