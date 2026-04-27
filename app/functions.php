@@ -591,7 +591,14 @@ function apply_runtime_schema_updates(): void
     if (!$hasQuotes) {
         $seedFile = __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532.sql';
         if (is_file($seedFile)) {
-            seed_quotes_from_sql_file($seedFile);
+            try {
+                seed_quotes_from_sql_file($seedFile);
+            } catch (Throwable $throwable) {
+                log_structured_event('quotes_seed_failed', [
+                    'message' => $throwable->getMessage(),
+                    'file' => $seedFile,
+                ]);
+            }
         }
     }
 }
@@ -610,10 +617,16 @@ function seed_quotes_from_sql_file(string $filePath): void
     $statements = preg_split('/;\s*(?:\R|$)/', $sql) ?: [];
     foreach ($statements as $statement) {
         $trimmed = trim($statement);
-        if ($trimmed === '' || str_starts_with($trimmed, '--')) {
+        if ($trimmed === '' || str_starts_with($trimmed, '--') || str_starts_with($trimmed, '#') || str_starts_with($trimmed, '/*')) {
             continue;
         }
-        db()->exec($trimmed);
+        try {
+            db()->exec($trimmed);
+        } catch (Throwable $throwable) {
+            log_structured_event('quotes_seed_statement_skipped', [
+                'message' => $throwable->getMessage(),
+            ]);
+        }
     }
 }
 
@@ -1230,7 +1243,7 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
-    $randomQuote = random_quote_for_layout();
+    $randomQuote = $currentRoute === 'home' ? random_quote_for_layout() : null;
     $quoteHtml = '';
     if (is_array($randomQuote)) {
         $quoteAuthor = trim((string) ($randomQuote['author'] ?? ''));
