@@ -575,6 +575,72 @@ function apply_runtime_schema_updates(): void
             }
         }
     }
+
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS quotes (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            quote_text TEXT NOT NULL,
+            author VARCHAR(190) DEFAULT NULL,
+            is_active TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
+    $quoteCount = db()->query('SELECT COUNT(*) FROM quotes');
+    $hasQuotes = $quoteCount !== false ? (int) $quoteCount->fetchColumn() > 0 : false;
+    if (!$hasQuotes) {
+        $seedFile = __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532.sql';
+        if (is_file($seedFile)) {
+            seed_quotes_from_sql_file($seedFile);
+        }
+    }
+}
+
+function seed_quotes_from_sql_file(string $filePath): void
+{
+    if (!is_file($filePath)) {
+        return;
+    }
+
+    $sql = (string) file_get_contents($filePath);
+    if (trim($sql) === '') {
+        return;
+    }
+
+    $statements = preg_split('/;\s*(?:\R|$)/', $sql) ?: [];
+    foreach ($statements as $statement) {
+        $trimmed = trim($statement);
+        if ($trimmed === '' || str_starts_with($trimmed, '--')) {
+            continue;
+        }
+        db()->exec($trimmed);
+    }
+}
+
+function random_quote_for_layout(): ?array
+{
+    if (!table_exists('quotes')) {
+        return null;
+    }
+    $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 ORDER BY RAND() LIMIT 1');
+    if ($stmt === false) {
+        return null;
+    }
+    $row = $stmt->fetch();
+    if (!is_array($row)) {
+        return null;
+    }
+
+    $quote = trim((string) ($row['quote_text'] ?? ''));
+    $author = trim((string) ($row['author'] ?? ''));
+    if ($quote === '') {
+        return null;
+    }
+
+    return [
+        'quote' => $quote,
+        'author' => $author,
+    ];
 }
 
 if (!function_exists('base_url')) {
@@ -1164,6 +1230,15 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
+    $randomQuote = random_quote_for_layout();
+    $quoteHtml = '';
+    if (is_array($randomQuote)) {
+        $quoteAuthor = trim((string) ($randomQuote['author'] ?? ''));
+        $quoteHtml = '<section class="quote-strip" aria-label="Citation du jour"><div class="container quote-strip-inner"><p class="quote-strip-text">“'
+            . e((string) ($randomQuote['quote'] ?? '')) . '”'
+            . ($quoteAuthor !== '' ? ' <span class="quote-strip-author">— ' . e($quoteAuthor) . '</span>' : '')
+            . '</p></div></section>';
+    }
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
@@ -1181,6 +1256,7 @@ function render_layout(string $content, string $title = ''): string
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
+        . $quoteHtml
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
