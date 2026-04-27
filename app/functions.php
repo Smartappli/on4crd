@@ -1662,10 +1662,14 @@ function import_adif_records(int $memberId, array $records): int
     return $created;
 }
 
-function create_qsl_cards_from_qsos(int $memberId, array $qsoIds): int
+function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templateName = 'classic'): int
 {
     if ($memberId <= 0 || $qsoIds === [] || !table_exists('qso_logs') || !table_exists('qsl_cards')) {
         return 0;
+    }
+    $normalizedTemplate = strtolower(trim($templateName));
+    if (!in_array($normalizedTemplate, ['classic', 'classic_duplex'], true)) {
+        $normalizedTemplate = 'classic';
     }
 
     $ids = array_values(array_unique(array_filter(array_map('intval', $qsoIds), static fn (int $id): bool => $id > 0)));
@@ -1736,13 +1740,18 @@ function create_qsl_cards_from_qsos(int $memberId, array $qsoIds): int
             $payload['mode'] !== '' ? $payload['mode'] : null,
             $payload['rst_sent'] !== '' ? $payload['rst_sent'] : null,
             $payload['rst_recv'] !== '' ? $payload['rst_recv'] : null,
-            $payload['template_name'],
+            $normalizedTemplate,
             $svg,
         ]);
         $created++;
     }
 
     return $created;
+}
+
+function qsl_template_supports_back(string $templateName): bool
+{
+    return strtolower(trim($templateName)) === 'classic_duplex';
 }
 
 function sanitize_svg_document(string $svg): string
@@ -1819,6 +1828,37 @@ function generate_qsl_svg(array $payload): string
         . '<text x="40" y="305" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">DATE ' . $date . '  UTC ' . $time . '  BAND ' . $band . '  MODE ' . $mode . '</text>'
         . '<text x="40" y="345" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
         . '<text x="40" y="395" fill="#f8fafc" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>'
+        . '</svg>';
+
+    return sanitize_svg_document($svg);
+}
+
+function generate_qsl_back_svg(array $payload): string
+{
+    $ownCall = e(qsl_normalize_callsign((string) ($payload['own_call'] ?? '')));
+    $qsoCall = e(qsl_normalize_callsign((string) ($payload['qso_call'] ?? '')));
+    $ownName = e(trim((string) ($payload['own_name'] ?? '')));
+    $ownQth = e(trim((string) ($payload['own_qth'] ?? '')));
+    $date = e(qsl_normalize_date((string) ($payload['qso_date'] ?? '')));
+    $time = e(qsl_normalize_time((string) ($payload['time_on'] ?? '')));
+    $band = e(mb_safe_strtoupper(trim((string) ($payload['band'] ?? ''))));
+    $mode = e(mb_safe_strtoupper(trim((string) ($payload['mode'] ?? ''))));
+    $rstSent = e(trim((string) ($payload['rst_sent'] ?? '')));
+    $rstRecv = e(trim((string) ($payload['rst_recv'] ?? '')));
+    $comment = e(qsl_normalize_comment((string) ($payload['comment'] ?? 'TNX QSO 73')));
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">'
+        . '<rect width="900" height="500" fill="#f8fafc"/>'
+        . '<rect x="18" y="18" width="864" height="464" fill="none" stroke="#1f2937" stroke-width="3"/>'
+        . '<text x="40" y="70" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">QSL Confirmation (Verso)</text>'
+        . '<text x="40" y="115" fill="#334155" font-size="20" font-family="Arial, sans-serif">DE: ' . $ownCall . ' • TO: ' . $qsoCall . '</text>'
+        . '<text x="40" y="165" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Operator: ' . $ownName . '</text>'
+        . '<text x="40" y="200" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">QTH: ' . $ownQth . '</text>'
+        . '<text x="40" y="250" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Date: ' . $date . '    UTC: ' . $time . '</text>'
+        . '<text x="40" y="285" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Band: ' . $band . '    Mode: ' . $mode . '</text>'
+        . '<text x="40" y="320" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
+        . '<text x="40" y="370" fill="#334155" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>'
+        . '<text x="40" y="440" fill="#475569" font-size="18" font-family="Arial, sans-serif">Merci pour le contact — 73 !</text>'
         . '</svg>';
 
     return sanitize_svg_document($svg);
