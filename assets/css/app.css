@@ -105,6 +105,22 @@ textarea:focus-visible {
   z-index: 20;
   backdrop-filter: blur(14px);
 }
+.quote-strip {
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel-2) 78%, var(--panel));
+}
+.quote-strip-inner {
+  padding: .6rem 1.2rem;
+}
+.quote-strip-text {
+  margin: 0;
+  color: var(--text);
+  font-size: .98rem;
+}
+.quote-strip-author {
+  color: var(--muted);
+  font-weight: 600;
+}
 .brand-wrap { display: flex; align-items: center; gap: .9rem; }
 .brand-mark {
   width: 6.0rem;

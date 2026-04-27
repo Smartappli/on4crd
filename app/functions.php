@@ -575,6 +575,72 @@ function apply_runtime_schema_updates(): void
             }
         }
     }
+
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS quotes (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            quote_text TEXT NOT NULL,
+            author VARCHAR(190) DEFAULT NULL,
+            is_active TINYINT(1) NOT NULL DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
+    $quoteCount = db()->query('SELECT COUNT(*) FROM quotes');
+    $hasQuotes = $quoteCount !== false ? (int) $quoteCount->fetchColumn() > 0 : false;
+    if (!$hasQuotes) {
+        $seedFile = __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532.sql';
+        if (is_file($seedFile)) {
+            seed_quotes_from_sql_file($seedFile);
+        }
+    }
+}
+
+function seed_quotes_from_sql_file(string $filePath): void
+{
+    if (!is_file($filePath)) {
+        return;
+    }
+
+    $sql = (string) file_get_contents($filePath);
+    if (trim($sql) === '') {
+        return;
+    }
+
+    $statements = preg_split('/;\s*(?:\R|$)/', $sql) ?: [];
+    foreach ($statements as $statement) {
+        $trimmed = trim($statement);
+        if ($trimmed === '' || str_starts_with($trimmed, '--')) {
+            continue;
+        }
+        db()->exec($trimmed);
+    }
+}
+
+function random_quote_for_layout(): ?array
+{
+    if (!table_exists('quotes')) {
+        return null;
+    }
+    $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 ORDER BY RAND() LIMIT 1');
+    if ($stmt === false) {
+        return null;
+    }
+    $row = $stmt->fetch();
+    if (!is_array($row)) {
+        return null;
+    }
+
+    $quote = trim((string) ($row['quote_text'] ?? ''));
+    $author = trim((string) ($row['author'] ?? ''));
+    if ($quote === '') {
+        return null;
+    }
+
+    return [
+        'quote' => $quote,
+        'author' => $author,
+    ];
 }
 
 if (!function_exists('base_url')) {
@@ -1164,6 +1230,15 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
+    $randomQuote = random_quote_for_layout();
+    $quoteHtml = '';
+    if (is_array($randomQuote)) {
+        $quoteAuthor = trim((string) ($randomQuote['author'] ?? ''));
+        $quoteHtml = '<section class="quote-strip" aria-label="Citation du jour"><div class="container quote-strip-inner"><p class="quote-strip-text">“'
+            . e((string) ($randomQuote['quote'] ?? '')) . '”'
+            . ($quoteAuthor !== '' ? ' <span class="quote-strip-author">— ' . e($quoteAuthor) . '</span>' : '')
+            . '</p></div></section>';
+    }
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
@@ -1181,6 +1256,7 @@ function render_layout(string $content, string $title = ''): string
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<nav class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
+        . $quoteHtml
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
@@ -1662,10 +1738,14 @@ function import_adif_records(int $memberId, array $records): int
     return $created;
 }
 
-function create_qsl_cards_from_qsos(int $memberId, array $qsoIds): int
+function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templateName = 'classic'): int
 {
     if ($memberId <= 0 || $qsoIds === [] || !table_exists('qso_logs') || !table_exists('qsl_cards')) {
         return 0;
+    }
+    $normalizedTemplate = strtolower(trim($templateName));
+    if (!in_array($normalizedTemplate, ['classic', 'classic_duplex'], true)) {
+        $normalizedTemplate = 'classic';
     }
 
     $ids = array_values(array_unique(array_filter(array_map('intval', $qsoIds), static fn (int $id): bool => $id > 0)));
@@ -1736,13 +1816,18 @@ function create_qsl_cards_from_qsos(int $memberId, array $qsoIds): int
             $payload['mode'] !== '' ? $payload['mode'] : null,
             $payload['rst_sent'] !== '' ? $payload['rst_sent'] : null,
             $payload['rst_recv'] !== '' ? $payload['rst_recv'] : null,
-            $payload['template_name'],
+            $normalizedTemplate,
             $svg,
         ]);
         $created++;
     }
 
     return $created;
+}
+
+function qsl_template_supports_back(string $templateName): bool
+{
+    return strtolower(trim($templateName)) === 'classic_duplex';
 }
 
 function sanitize_svg_document(string $svg): string
@@ -1819,6 +1904,37 @@ function generate_qsl_svg(array $payload): string
         . '<text x="40" y="305" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">DATE ' . $date . '  UTC ' . $time . '  BAND ' . $band . '  MODE ' . $mode . '</text>'
         . '<text x="40" y="345" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
         . '<text x="40" y="395" fill="#f8fafc" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>'
+        . '</svg>';
+
+    return sanitize_svg_document($svg);
+}
+
+function generate_qsl_back_svg(array $payload): string
+{
+    $ownCall = e(qsl_normalize_callsign((string) ($payload['own_call'] ?? '')));
+    $qsoCall = e(qsl_normalize_callsign((string) ($payload['qso_call'] ?? '')));
+    $ownName = e(trim((string) ($payload['own_name'] ?? '')));
+    $ownQth = e(trim((string) ($payload['own_qth'] ?? '')));
+    $date = e(qsl_normalize_date((string) ($payload['qso_date'] ?? '')));
+    $time = e(qsl_normalize_time((string) ($payload['time_on'] ?? '')));
+    $band = e(mb_safe_strtoupper(trim((string) ($payload['band'] ?? ''))));
+    $mode = e(mb_safe_strtoupper(trim((string) ($payload['mode'] ?? ''))));
+    $rstSent = e(trim((string) ($payload['rst_sent'] ?? '')));
+    $rstRecv = e(trim((string) ($payload['rst_recv'] ?? '')));
+    $comment = e(qsl_normalize_comment((string) ($payload['comment'] ?? 'TNX QSO 73')));
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">'
+        . '<rect width="900" height="500" fill="#f8fafc"/>'
+        . '<rect x="18" y="18" width="864" height="464" fill="none" stroke="#1f2937" stroke-width="3"/>'
+        . '<text x="40" y="70" fill="#0f172a" font-size="40" font-family="Arial, sans-serif" font-weight="700">QSL Confirmation (Verso)</text>'
+        . '<text x="40" y="115" fill="#334155" font-size="20" font-family="Arial, sans-serif">DE: ' . $ownCall . ' • TO: ' . $qsoCall . '</text>'
+        . '<text x="40" y="165" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Operator: ' . $ownName . '</text>'
+        . '<text x="40" y="200" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">QTH: ' . $ownQth . '</text>'
+        . '<text x="40" y="250" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Date: ' . $date . '    UTC: ' . $time . '</text>'
+        . '<text x="40" y="285" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">Band: ' . $band . '    Mode: ' . $mode . '</text>'
+        . '<text x="40" y="320" fill="#0f172a" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
+        . '<text x="40" y="370" fill="#334155" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>'
+        . '<text x="40" y="440" fill="#475569" font-size="18" font-family="Arial, sans-serif">Merci pour le contact — 73 !</text>'
         . '</svg>';
 
     return sanitize_svg_document($svg);

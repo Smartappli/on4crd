@@ -107,4 +107,10 @@ ADIF;
         self::assertStringContainsString('QSL sécurisée indisponible', $svg);
         self::assertStringNotContainsString('<script', $svg);
     }
+
+    public function testQslTemplateSupportsBackOnlyForDuplexTemplate(): void
+    {
+        self::assertFalse(qsl_template_supports_back('classic'));
+        self::assertTrue(qsl_template_supports_back('classic_duplex'));
+    }
 }
