@@ -170,7 +170,7 @@ $homeRadioInfoHtml = '<ul class="list-clean">'
 
 $homeQuote = random_quote_for_layout();
 $homeQuoteText = 'Chaque contact radio est une nouvelle aventure.';
-$homeQuoteAuthor = 'ON4CRD';
+$homeQuoteAuthor = '';
 if (is_array($homeQuote)) {
     $candidateHomeQuoteText = trim((string) ($homeQuote['quote'] ?? ''));
     $candidateHomeQuoteAuthor = trim((string) ($homeQuote['author'] ?? ''));
@@ -185,7 +185,7 @@ if (is_array($homeQuote)) {
 $content = '<section class="mb-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Citation mise à l\'honneur">'
     . '<h2 class="text-xl font-bold text-slate-900">Citation du jour</h2>'
     . '<blockquote class="mt-3 border-l-4 border-blue-200 pl-4 text-base italic text-slate-700">“' . e($homeQuoteText) . '”</blockquote>'
-    . '<p class="mt-3 text-sm font-semibold text-slate-500">' . ($homeQuoteAuthor !== '' ? '— ' . e($homeQuoteAuthor) : '— ON4CRD') . '</p>'
+    . ($homeQuoteAuthor !== '' ? '<p class="mt-3 text-sm font-semibold text-slate-500">— ' . e($homeQuoteAuthor) . '</p>' : '')
     . '</section>'
     . '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
