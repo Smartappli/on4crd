@@ -213,10 +213,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'background_primary' => (string) ($selectedPreset['color_primary'] ?? '#0B1F3A'),
                 'background_secondary' => (string) ($selectedPreset['color_secondary'] ?? '#1D4ED8'),
                 'background_image_data_uri' => (string) ($selectedPreset['image_data_uri'] ?? ''),
+                'template_name' => $templateName,
             ];
 
-            $svg = generate_qsl_svg($data);
             $payload = build_qsl_svg_payload($user, $data, (string) $data['comment']);
+            $svg = generate_qsl_svg($payload);
             $stmt = db()->prepare(
                 'INSERT INTO qsl_cards (member_id, title, qso_call, qso_date, time_on, band, mode, rst_sent, rst_recv, template_name, svg_content)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
@@ -525,23 +526,15 @@ ob_start();
                 <input type="hidden" name="action" value="create_manual">
                 <div class="form-grid">
                     <label>Indicatif correspondant<input type="text" name="qso_call" maxlength="64" required data-manual-preview-source="qso_call"></label>
-                    <label>Date QSO<input type="text" name="qso_date" placeholder="YYYYMMDD ou YYYY-MM-DD" data-manual-preview-source="qso_date"></label>
-                    <label>UTC<input type="text" name="time_on" placeholder="HHMM ou HH:MM" data-manual-preview-source="time_on"></label>
+                    <label>Date QSO<input type="date" name="qso_date" data-manual-preview-source="qso_date"></label>
+                    <label>UTC<input type="time" name="time_on" step="60" data-manual-preview-source="time_on"></label>
                     <label>Bande<input type="text" name="band" maxlength="32" placeholder="20M" data-manual-preview-source="band"></label>
                     <label>Mode<input type="text" name="mode" maxlength="32" placeholder="SSB" data-manual-preview-source="mode"></label>
                     <label>RST envoyé<input type="text" name="rst_sent" maxlength="16" placeholder="59" data-manual-preview-source="rst_sent"></label>
                     <label>RST reçu<input type="text" name="rst_recv" maxlength="16" placeholder="59" data-manual-preview-source="rst_recv"></label>
-                    <label>Commentaire</label>
-                    <div class="wysiwyg" data-wysiwyg data-max-length="180">
-                        <div class="wysiwyg-toolbar" role="toolbar" aria-label="Outils de mise en forme du commentaire QSL">
-                            <button type="button" class="button secondary small" data-wysiwyg-command="bold" aria-label="Gras"><strong>B</strong></button>
-                            <button type="button" class="button secondary small" data-wysiwyg-command="italic" aria-label="Italique"><em>I</em></button>
-                            <button type="button" class="button secondary small" data-wysiwyg-command="underline" aria-label="Souligné"><span style="text-decoration:underline;">U</span></button>
-                        </div>
-                        <div class="wysiwyg-editor" contenteditable="true" data-wysiwyg-editor aria-label="Éditeur WYSIWYG du commentaire QSL">TNX QSO 73</div>
-                        <input type="hidden" name="comment" value="TNX QSO 73" data-wysiwyg-input data-manual-preview-source="comment">
-                        <p class="help" data-wysiwyg-counter>180 caractères restants.</p>
-                    </div>
+                    <label>Commentaire
+                        <textarea name="comment" rows="3" maxlength="180" data-manual-preview-source="comment">TNX QSO 73</textarea>
+                    </label>
                     <label>Fond QSL
                         <select name="background_preset_id" data-manual-preview-source="background_preset_id">
                             <option value="0" data-bg-type="gradient" data-bg-primary="#0B1F3A" data-bg-secondary="#1D4ED8" <?= $defaultBackgroundPresetId === 0 ? 'selected' : '' ?>>Fond par défaut système</option>
@@ -830,50 +823,6 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
             checkbox.checked = checked;
         });
     });
-});
-
-document.querySelectorAll('[data-wysiwyg]').forEach((wrapper) => {
-    const editor = wrapper.querySelector('[data-wysiwyg-editor]');
-    const hiddenInput = wrapper.querySelector('[data-wysiwyg-input]');
-    const counter = wrapper.querySelector('[data-wysiwyg-counter]');
-    if (!editor || !hiddenInput || !counter) {
-        return;
-    }
-
-    const maxLength = Number(wrapper.getAttribute('data-max-length') || '180');
-    const sync = () => {
-        const plainText = (editor.textContent || '').replace(/\s+/g, ' ').trim();
-        const normalized = plainText.slice(0, maxLength);
-        hiddenInput.value = normalized;
-        if (plainText !== normalized) {
-            editor.textContent = normalized;
-            const range = document.createRange();
-            range.selectNodeContents(editor);
-            range.collapse(false);
-            const selection = window.getSelection();
-            selection?.removeAllRanges();
-            selection?.addRange(range);
-        }
-        const remaining = Math.max(0, maxLength - normalized.length);
-        counter.textContent = `${remaining} caractères restants.`;
-    };
-
-    wrapper.querySelectorAll('[data-wysiwyg-command]').forEach((control) => {
-        control.addEventListener('click', () => {
-            const command = control.getAttribute('data-wysiwyg-command');
-            if (!command) {
-                return;
-            }
-            editor.focus();
-            document.execCommand(command, false);
-            sync();
-        });
-    });
-
-    editor.addEventListener('input', sync);
-    const form = wrapper.closest('form');
-    form?.addEventListener('submit', sync);
-    sync();
 });
 
 (() => {

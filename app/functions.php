@@ -1886,6 +1886,8 @@ function generate_qsl_svg(array $payload): string
     $backgroundPrimary = e(trim((string) ($payload['background_primary'] ?? '#0B1F3A')));
     $backgroundSecondary = e(trim((string) ($payload['background_secondary'] ?? '#1D4ED8')));
     $backgroundImage = trim((string) ($payload['background_image_data_uri'] ?? ''));
+    $templateName = trim((string) ($payload['template_name'] ?? 'classic'));
+    $isDuplex = qsl_template_supports_back($templateName);
     $backgroundLayer = '<rect width="900" height="500" fill="url(#qsl-bg-gradient)"/>';
     if ($backgroundImage !== '') {
         $safeBackground = e($backgroundImage);
@@ -1902,11 +1904,17 @@ function generate_qsl_svg(array $payload): string
         . '<text x="40" y="70" fill="#e2e8f0" font-size="42" font-family="Arial, sans-serif" font-weight="700">' . $title . '</text>'
         . '<text x="40" y="130" fill="#f8fafc" font-size="30" font-family="Arial, sans-serif">DE: ' . $ownCall . '</text>'
         . '<text x="40" y="170" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">' . $ownName . ' • ' . $ownQth . '</text>'
-        . '<text x="40" y="250" fill="#f8fafc" font-size="34" font-family="Arial, sans-serif">TO: ' . $qsoCall . '</text>'
-        . '<text x="40" y="305" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">DATE ' . $date . '  UTC ' . $time . '  BAND ' . $band . '  MODE ' . $mode . '</text>'
-        . '<text x="40" y="345" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
-        . '<text x="40" y="395" fill="#f8fafc" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>'
-        . '</svg>';
+        . '<text x="40" y="250" fill="#f8fafc" font-size="34" font-family="Arial, sans-serif">TO: ' . $qsoCall . '</text>';
+
+    if ($isDuplex) {
+        $svg .= '<text x="40" y="395" fill="#e2e8f0" font-size="20" font-family="Arial, sans-serif">QSL recto — détails au verso</text>';
+    } else {
+        $svg .= '<text x="40" y="305" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">DATE ' . $date . '  UTC ' . $time . '  BAND ' . $band . '  MODE ' . $mode . '</text>'
+            . '<text x="40" y="345" fill="#cbd5e1" font-size="22" font-family="Arial, sans-serif">RST S/R: ' . $rstSent . ' / ' . $rstRecv . '</text>'
+            . '<text x="40" y="395" fill="#f8fafc" font-size="20" font-family="Arial, sans-serif">' . $comment . '</text>';
+    }
+
+    $svg .= '</svg>';
 
     return sanitize_svg_document($svg);
 }

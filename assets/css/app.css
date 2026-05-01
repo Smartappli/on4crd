@@ -374,6 +374,18 @@ textarea:focus-visible {
 .qsl-studio-link-card:hover {
   text-decoration: none;
 }
+.qsl-studio-link-card.active,
+.qsl-studio-link-card[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--accent) 62%, var(--border));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, var(--panel)), color-mix(in srgb, var(--accent-strong) 14%, var(--panel)));
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.qsl-studio-link-card.active .badge,
+.qsl-studio-link-card[aria-current="page"] .badge {
+  background: color-mix(in srgb, var(--accent-strong) 88%, black 12%);
+  border-color: color-mix(in srgb, var(--accent-strong) 55%, var(--border));
+  color: #fff;
+}
 .qsl-studio-link-card.disabled {
   opacity: .58;
   cursor: not-allowed;
@@ -660,8 +672,8 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   min-width: 220px;
 }
 .qsl-filters select {
-  width: auto;
-  min-width: 150px;
+  flex: 1 1 220px;
+  min-width: 220px;
 }
 .qsl-preview svg, .qsl-preview img { width:100%; height:auto; display:block; border-radius:18px; background:#fff; }
 .admin-link { display:block; color: var(--text); }
