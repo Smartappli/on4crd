@@ -932,6 +932,9 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
         source.addEventListener('input', sync);
         source.addEventListener('change', sync);
     });
+    if (templateSource instanceof HTMLSelectElement) {
+        templateSource.addEventListener('change', sync);
+    }
 
     sync();
 })();
