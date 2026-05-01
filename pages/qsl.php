@@ -213,10 +213,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'background_primary' => (string) ($selectedPreset['color_primary'] ?? '#0B1F3A'),
                 'background_secondary' => (string) ($selectedPreset['color_secondary'] ?? '#1D4ED8'),
                 'background_image_data_uri' => (string) ($selectedPreset['image_data_uri'] ?? ''),
+                'template_name' => $templateName,
             ];
 
-            $svg = generate_qsl_svg($data);
             $payload = build_qsl_svg_payload($user, $data, (string) $data['comment']);
+            $svg = generate_qsl_svg($payload);
             $stmt = db()->prepare(
                 'INSERT INTO qsl_cards (member_id, title, qso_call, qso_date, time_on, band, mode, rst_sent, rst_recv, template_name, svg_content)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
@@ -383,43 +384,27 @@ ob_start();
 ?>
 <div class="qsl-page">
 <section class="card qsl-studio-overview">
-    <h2>QSL Studio</h2>
+    <h2>QSL Studio · simple, guidé, efficace</h2>
+    <p class="help">Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.</p>
     <div class="grid-3">
-        <a class="inner-card qsl-studio-link-card" href="#qsl-draw">
-            <span class="badge muted">Étape 1 - Dessiner</span>
-            <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
+        <a class="inner-card qsl-studio-link-card" href="#qsl-draw" data-qsl-nav-target="design">
+            <span class="badge muted">1 · Personnaliser le design</span>
+            <p class="help">Ajoutez un fond image, une couleur unie, un dégradé ou une palette prête à l’emploi.</p>
         </a>
-        <?php if ($hasCreatedQsl): ?>
-            <a class="inner-card qsl-studio-link-card" href="#qsl-create">
-                <span class="badge muted">Étape 2 - Créer</span>
-                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
-            </a>
-        <?php else: ?>
-            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
-                <span class="badge muted">Étape 2 - Créer</span>
-                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
-            </div>
-        <?php endif; ?>
-        <?php if ($hasCreatedQsl): ?>
-            <a class="inner-card qsl-studio-link-card" href="#qsl-view">
-                <span class="badge muted">Étape 3 - Consulter</span>
-                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
-            </a>
-        <?php else: ?>
-            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
-                <span class="badge muted">Étape 3 - Consulter</span>
-                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
-            </div>
-        <?php endif; ?>
+        <a class="inner-card qsl-studio-link-card" href="#qsl-create" data-qsl-nav-target="create">
+            <span class="badge muted">2 · Créer / importer</span>
+            <p class="help">Créez une QSL manuelle ou importez vos ADIF en glisser‑déposer.</p>
+        </a>
+        <a class="inner-card qsl-studio-link-card" href="#qsl-view" data-qsl-nav-target="manage">
+            <span class="badge muted">3 · Gérer et exporter</span>
+            <p class="help">Filtrez vos QSO, générez en lot et exportez vos cartes recto/verso.</p>
+        </a>
     </div>
-    <?php if (!$hasCreatedQsl): ?>
-        <p class="help">Les accès « Créer » et « Consulter » seront activés après la création de votre première QSL.</p>
-    <?php endif; ?>
 </section>
 
-<section class="card" id="qsl-draw" data-qsl-draw-assistant>
-    <h2>Dessiner sa QSL</h2>
-    <p class="help">Assistant de dessin : choisissez le type de fond, puis ne remplissez que les champs nécessaires.</p>
+<section class="card" id="qsl-draw" data-qsl-draw-assistant data-qsl-panel="design">
+    <h2>1) Designer vos fonds QSL</h2>
+    <p class="help">Choisissez un type de fond. Le formulaire s’adapte automatiquement et l’aperçu se met à jour en direct.</p>
     <div class="actions">
         <label><input type="radio" name="qsl_draw_flow" value="image" data-qsl-draw-choice> Fond image</label>
         <label><input type="radio" name="qsl_draw_flow" value="solid" data-qsl-draw-choice> Couleur unique</label>
@@ -479,7 +464,7 @@ ob_start();
             </div>
         </div>
         <div class="qsl-live-preview-wrap">
-            <h3>Prévisualisation de la QSL</h3>
+            <h3>Aperçu en direct</h3>
             <div class="qsl-live-preview" data-qsl-preview>
                 <div class="qsl-live-preview-card" data-qsl-preview-card>
                     <p class="qsl-live-preview-title">QSL Preview</p>
@@ -517,47 +502,39 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="card" id="qsl-create" data-qsl-assistant>
-    <h1>Assistant QSL Creator</h1>
-    <p class="help">Suivez les étapes : choisissez votre objectif, puis l’assistant affiche uniquement les actions nécessaires.</p>
+<section class="card" id="qsl-create" data-qsl-assistant data-qsl-panel="create">
+    <h1>2) Créer des QSL facilement</h1>
+    <p class="help">Choisissez votre objectif : création manuelle détaillée ou import ADIF instantané.</p>
 
     <div class="stack">
         <div>
-            <span class="badge muted">Étape 1</span>
-            <h2>Que souhaitez-vous faire ?</h2>
+            <span class="badge muted">Étape A</span>
+            <h2>Quel est votre besoin maintenant ?</h2>
             <div class="actions">
-                <label><input type="radio" name="qsl_assistant_flow" value="manual" data-qsl-assistant-choice <?= $hasCreatedQsl ? 'checked' : '' ?>> Créer une QSL manuelle</label>
-                <label><input type="radio" name="qsl_assistant_flow" value="adif" data-qsl-assistant-choice <?= !$hasCreatedQsl ? 'checked' : '' ?>> Importer des QSO ADIF</label>
+                <label><input type="radio" name="qsl_assistant_flow" value="manual" data-qsl-assistant-choice checked> Créer une QSL manuelle</label>
+                <label><input type="radio" name="qsl_assistant_flow" value="adif" data-qsl-assistant-choice> Importer des QSO ADIF</label>
             </div>
         </div>
 
         <section class="stack" data-qsl-assistant-panel="manual">
             <div>
-                <span class="badge muted">Étape 2</span>
-                <h2>Créer une QSL manuelle</h2>
+                <span class="badge muted">Étape B</span>
+                <h2>Formulaire manuel assisté</h2>
             </div>
             <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="create_manual">
                 <div class="form-grid">
                     <label>Indicatif correspondant<input type="text" name="qso_call" maxlength="64" required data-manual-preview-source="qso_call"></label>
-                    <label>Date QSO<input type="text" name="qso_date" placeholder="YYYYMMDD ou YYYY-MM-DD" data-manual-preview-source="qso_date"></label>
-                    <label>UTC<input type="text" name="time_on" placeholder="HHMM ou HH:MM" data-manual-preview-source="time_on"></label>
+                    <label>Date QSO<input type="date" name="qso_date" data-manual-preview-source="qso_date"></label>
+                    <label>UTC<input type="time" name="time_on" step="60" data-manual-preview-source="time_on"></label>
                     <label>Bande<input type="text" name="band" maxlength="32" placeholder="20M" data-manual-preview-source="band"></label>
                     <label>Mode<input type="text" name="mode" maxlength="32" placeholder="SSB" data-manual-preview-source="mode"></label>
                     <label>RST envoyé<input type="text" name="rst_sent" maxlength="16" placeholder="59" data-manual-preview-source="rst_sent"></label>
                     <label>RST reçu<input type="text" name="rst_recv" maxlength="16" placeholder="59" data-manual-preview-source="rst_recv"></label>
-                    <label>Commentaire</label>
-                    <div class="wysiwyg" data-wysiwyg data-max-length="180">
-                        <div class="wysiwyg-toolbar" role="toolbar" aria-label="Outils de mise en forme du commentaire QSL">
-                            <button type="button" class="button secondary small" data-wysiwyg-command="bold" aria-label="Gras"><strong>B</strong></button>
-                            <button type="button" class="button secondary small" data-wysiwyg-command="italic" aria-label="Italique"><em>I</em></button>
-                            <button type="button" class="button secondary small" data-wysiwyg-command="underline" aria-label="Souligné"><span style="text-decoration:underline;">U</span></button>
-                        </div>
-                        <div class="wysiwyg-editor" contenteditable="true" data-wysiwyg-editor aria-label="Éditeur WYSIWYG du commentaire QSL">TNX QSO 73</div>
-                        <input type="hidden" name="comment" value="TNX QSO 73" data-wysiwyg-input data-manual-preview-source="comment">
-                        <p class="help" data-wysiwyg-counter>180 caractères restants.</p>
-                    </div>
+                    <label>Commentaire
+                        <textarea name="comment" rows="3" maxlength="180" data-manual-preview-source="comment">TNX QSO 73</textarea>
+                    </label>
                     <label>Fond QSL
                         <select name="background_preset_id" data-manual-preview-source="background_preset_id">
                             <option value="0" data-bg-type="gradient" data-bg-primary="#0B1F3A" data-bg-secondary="#1D4ED8" <?= $defaultBackgroundPresetId === 0 ? 'selected' : '' ?>>Fond par défaut système</option>
@@ -592,26 +569,38 @@ ob_start();
                 <p class="help">Choisissez un seul fond enregistré pour cette QSL.</p>
                 <div class="qsl-live-preview-wrap" data-qsl-manual-preview>
                     <h3>Prévisualisation de la QSL</h3>
-                    <div class="qsl-live-preview">
-                        <div class="qsl-live-preview-card" data-manual-preview-card>
-                            <p class="qsl-live-preview-title">QSL Preview</p>
-                            <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
-                            <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">0915</span></p>
-                            <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
-                            <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
-                            <p class="qsl-live-preview-meta"><span data-manual-preview-field="comment">TNX QSO 73</span></p>
+                    <div class="grid-2" data-manual-preview-layout>
+                        <div class="qsl-live-preview">
+                            <div class="qsl-live-preview-card" data-manual-preview-card>
+                                <p class="qsl-live-preview-title">Aperçu recto</p>
+                                <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
+                                <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">09:15</span></p>
+                                <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
+                                <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
+                                <p class="qsl-live-preview-meta"><span data-manual-preview-field="comment">TNX QSO 73</span></p>
+                            </div>
+                        </div>
+                        <div class="qsl-live-preview is-hidden" data-manual-preview-back-wrap>
+                            <div class="qsl-live-preview-card" data-manual-preview-back-card>
+                                <p class="qsl-live-preview-title">Aperçu verso</p>
+                                <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: <span data-manual-preview-back-field="qso_call">F4XYZ</span></p>
+                                <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-back-field="qso_date">20260412</span> UTC: <span data-manual-preview-back-field="time_on">09:15</span></p>
+                                <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-back-field="band">20M</span> MODE: <span data-manual-preview-back-field="mode">SSB</span></p>
+                                <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-back-field="rst_sent">59</span>/<span data-manual-preview-back-field="rst_recv">59</span></p>
+                                <p class="qsl-live-preview-meta"><span data-manual-preview-back-field="comment">TNX QSO 73</span></p>
+                            </div>
                         </div>
                     </div>
                     <p class="help" data-manual-preview-note>Aperçu dynamique selon les champs du formulaire.</p>
                 </div>
-                <p><button class="button">Créer une QSL</button></p>
+                <p><button class="button">Créer ma QSL</button></p>
             </form>
         </section>
 
         <section class="stack" data-qsl-assistant-panel="adif">
             <div>
-                <span class="badge muted">Étape 2</span>
-                <h2>Importer des QSO ADIF</h2>
+                <span class="badge muted">Étape B</span>
+                <h2>Import ADIF rapide</h2>
             </div>
             <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -632,9 +621,9 @@ ob_start();
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
 <script nonce="<?= e(csp_nonce()) ?>" src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
 
-<section class="card" id="qsl-view">
+<section class="card" id="qsl-view" data-qsl-panel="manage">
     <div class="row-between">
-        <h2>QSO importés</h2>
+        <h2>3) QSO importés</h2>
         <span><?= count($qsoRows) ?> enregistrement(s)</span>
     </div>
     <?php if ($qsoRows === []): ?>
@@ -701,7 +690,7 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="card">
+<section class="card" data-qsl-panel="manage">
     <div class="row-between">
         <h2>QSL générées</h2>
         <span><?= count($qslRows) ?> carte(s)</span>
@@ -756,6 +745,37 @@ ob_start();
 </section>
 </div>
 <script nonce="<?= e(csp_nonce()) ?>">
+(() => {
+    const navLinks = document.querySelectorAll('[data-qsl-nav-target]');
+    const panels = document.querySelectorAll('[data-qsl-panel]');
+    if (!navLinks.length || !panels.length) {
+        return;
+    }
+
+    const activate = (target) => {
+        const allowed = ['design', 'create', 'manage'];
+        const current = allowed.includes(target) ? target : 'design';
+        panels.forEach((panel) => {
+            panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-panel') !== current);
+        });
+        navLinks.forEach((link) => {
+            const isActive = link.getAttribute('data-qsl-nav-target') === current;
+            link.classList.toggle('active', isActive);
+            link.setAttribute('aria-current', isActive ? 'page' : 'false');
+        });
+    };
+
+    navLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const target = link.getAttribute('data-qsl-nav-target') || 'design';
+            activate(target);
+        });
+    });
+
+    activate('design');
+})();
+
 (() => {
     const assistant = document.querySelector('[data-qsl-assistant]');
     if (!assistant) {
@@ -817,50 +837,6 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
     });
 });
 
-document.querySelectorAll('[data-wysiwyg]').forEach((wrapper) => {
-    const editor = wrapper.querySelector('[data-wysiwyg-editor]');
-    const hiddenInput = wrapper.querySelector('[data-wysiwyg-input]');
-    const counter = wrapper.querySelector('[data-wysiwyg-counter]');
-    if (!editor || !hiddenInput || !counter) {
-        return;
-    }
-
-    const maxLength = Number(wrapper.getAttribute('data-max-length') || '180');
-    const sync = () => {
-        const plainText = (editor.textContent || '').replace(/\s+/g, ' ').trim();
-        const normalized = plainText.slice(0, maxLength);
-        hiddenInput.value = normalized;
-        if (plainText !== normalized) {
-            editor.textContent = normalized;
-            const range = document.createRange();
-            range.selectNodeContents(editor);
-            range.collapse(false);
-            const selection = window.getSelection();
-            selection?.removeAllRanges();
-            selection?.addRange(range);
-        }
-        const remaining = Math.max(0, maxLength - normalized.length);
-        counter.textContent = `${remaining} caractères restants.`;
-    };
-
-    wrapper.querySelectorAll('[data-wysiwyg-command]').forEach((control) => {
-        control.addEventListener('click', () => {
-            const command = control.getAttribute('data-wysiwyg-command');
-            if (!command) {
-                return;
-            }
-            editor.focus();
-            document.execCommand(command, false);
-            sync();
-        });
-    });
-
-    editor.addEventListener('input', sync);
-    const form = wrapper.closest('form');
-    form?.addEventListener('submit', sync);
-    sync();
-});
-
 (() => {
     const previewRoot = document.querySelector('[data-qsl-manual-preview]');
     if (!previewRoot) {
@@ -871,16 +847,31 @@ document.querySelectorAll('[data-wysiwyg]').forEach((wrapper) => {
     if (!card) {
         return;
     }
+    const backWrap = previewRoot.querySelector('[data-manual-preview-back-wrap]');
+    const templateSource = document.querySelector('select[name="template_name"]');
 
     const fieldDefaults = {
         qso_call: 'F4XYZ',
-        qso_date: '20260412',
-        time_on: '0915',
+        qso_date: '2026-04-12',
+        time_on: '09:15',
         band: '20M',
         mode: 'SSB',
         rst_sent: '59',
         rst_recv: '59',
         comment: 'TNX QSO 73',
+    };
+    const formatPreviewDate = (value) => {
+        if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+            const [year, month, day] = value.split('-');
+            return `${day}/${month}/${year}`;
+        }
+        return value;
+    };
+    const formatPreviewTime = (value) => {
+        if (/^\d{2}:\d{2}(:\d{2})?$/.test(value)) {
+            return value.slice(0, 5);
+        }
+        return value;
     };
 
     const sync = () => {
@@ -894,7 +885,19 @@ document.querySelectorAll('[data-wysiwyg]').forEach((wrapper) => {
                 ? source.value
                 : '';
             const value = (rawValue || '').trim();
-            target.textContent = value !== '' ? value.toUpperCase() : fieldDefaults[field];
+            let displayValue = value !== '' ? value : fieldDefaults[field];
+            if (field === 'qso_date') {
+                displayValue = formatPreviewDate(displayValue);
+            } else if (field === 'time_on') {
+                displayValue = formatPreviewTime(displayValue);
+            } else if (field !== 'comment') {
+                displayValue = displayValue.toUpperCase();
+            }
+            target.textContent = displayValue;
+            const backTarget = previewRoot.querySelector(`[data-manual-preview-back-field="${field}"]`);
+            if (backTarget) {
+                backTarget.textContent = displayValue;
+            }
         });
 
         const presetSelect = document.querySelector('[data-manual-preview-source="background_preset_id"]');
@@ -918,12 +921,20 @@ document.querySelectorAll('[data-wysiwyg]').forEach((wrapper) => {
                 note.textContent = 'Fond image sélectionné (aperçu simplifié).';
             }
         }
+
+        const isDuplex = templateSource instanceof HTMLSelectElement && templateSource.value === 'classic_duplex';
+        if (backWrap) {
+            backWrap.classList.toggle('is-hidden', !isDuplex);
+        }
     };
 
     document.querySelectorAll('[data-manual-preview-source]').forEach((source) => {
         source.addEventListener('input', sync);
         source.addEventListener('change', sync);
     });
+    if (templateSource instanceof HTMLSelectElement) {
+        templateSource.addEventListener('change', sync);
+    }
 
     sync();
 })();
