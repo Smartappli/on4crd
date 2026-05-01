@@ -383,43 +383,27 @@ ob_start();
 ?>
 <div class="qsl-page">
 <section class="card qsl-studio-overview">
-    <h2>QSL Studio</h2>
+    <h2>QSL Studio · simple, guidé, efficace</h2>
+    <p class="help">Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.</p>
     <div class="grid-3">
-        <a class="inner-card qsl-studio-link-card" href="#qsl-draw">
-            <span class="badge muted">Étape 1 - Dessiner</span>
-            <p class="help">Préparez vos fonds (image ou dégradé), puis choisissez votre fond par défaut.</p>
+        <a class="inner-card qsl-studio-link-card" href="#qsl-draw" data-qsl-nav-target="design">
+            <span class="badge muted">1 · Personnaliser le design</span>
+            <p class="help">Ajoutez un fond image, une couleur unie, un dégradé ou une palette prête à l’emploi.</p>
         </a>
-        <?php if ($hasCreatedQsl): ?>
-            <a class="inner-card qsl-studio-link-card" href="#qsl-create">
-                <span class="badge muted">Étape 2 - Créer</span>
-                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
-            </a>
-        <?php else: ?>
-            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
-                <span class="badge muted">Étape 2 - Créer</span>
-                <p class="help">Créez une QSL manuelle en sélectionnant un fond et en remplissant les informations QSO.</p>
-            </div>
-        <?php endif; ?>
-        <?php if ($hasCreatedQsl): ?>
-            <a class="inner-card qsl-studio-link-card" href="#qsl-view">
-                <span class="badge muted">Étape 3 - Consulter</span>
-                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
-            </a>
-        <?php else: ?>
-            <div class="inner-card qsl-studio-link-card disabled" aria-disabled="true">
-                <span class="badge muted">Étape 3 - Consulter</span>
-                <p class="help">Consultez vos QSO importés, vos eQSL et les QSL déjà générées.</p>
-            </div>
-        <?php endif; ?>
+        <a class="inner-card qsl-studio-link-card" href="#qsl-create" data-qsl-nav-target="create">
+            <span class="badge muted">2 · Créer / importer</span>
+            <p class="help">Créez une QSL manuelle ou importez vos ADIF en glisser‑déposer.</p>
+        </a>
+        <a class="inner-card qsl-studio-link-card" href="#qsl-view" data-qsl-nav-target="manage">
+            <span class="badge muted">3 · Gérer et exporter</span>
+            <p class="help">Filtrez vos QSO, générez en lot et exportez vos cartes recto/verso.</p>
+        </a>
     </div>
-    <?php if (!$hasCreatedQsl): ?>
-        <p class="help">Les accès « Créer » et « Consulter » seront activés après la création de votre première QSL.</p>
-    <?php endif; ?>
 </section>
 
-<section class="card" id="qsl-draw" data-qsl-draw-assistant>
-    <h2>Dessiner sa QSL</h2>
-    <p class="help">Assistant de dessin : choisissez le type de fond, puis ne remplissez que les champs nécessaires.</p>
+<section class="card" id="qsl-draw" data-qsl-draw-assistant data-qsl-panel="design">
+    <h2>1) Designer vos fonds QSL</h2>
+    <p class="help">Choisissez un type de fond. Le formulaire s’adapte automatiquement et l’aperçu se met à jour en direct.</p>
     <div class="actions">
         <label><input type="radio" name="qsl_draw_flow" value="image" data-qsl-draw-choice> Fond image</label>
         <label><input type="radio" name="qsl_draw_flow" value="solid" data-qsl-draw-choice> Couleur unique</label>
@@ -479,7 +463,7 @@ ob_start();
             </div>
         </div>
         <div class="qsl-live-preview-wrap">
-            <h3>Prévisualisation de la QSL</h3>
+            <h3>Aperçu en direct</h3>
             <div class="qsl-live-preview" data-qsl-preview>
                 <div class="qsl-live-preview-card" data-qsl-preview-card>
                     <p class="qsl-live-preview-title">QSL Preview</p>
@@ -517,24 +501,24 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="card" id="qsl-create" data-qsl-assistant>
-    <h1>Assistant QSL Creator</h1>
-    <p class="help">Suivez les étapes : choisissez votre objectif, puis l’assistant affiche uniquement les actions nécessaires.</p>
+<section class="card" id="qsl-create" data-qsl-assistant data-qsl-panel="create">
+    <h1>2) Créer des QSL facilement</h1>
+    <p class="help">Choisissez votre objectif : création manuelle détaillée ou import ADIF instantané.</p>
 
     <div class="stack">
         <div>
-            <span class="badge muted">Étape 1</span>
-            <h2>Que souhaitez-vous faire ?</h2>
+            <span class="badge muted">Étape A</span>
+            <h2>Quel est votre besoin maintenant ?</h2>
             <div class="actions">
-                <label><input type="radio" name="qsl_assistant_flow" value="manual" data-qsl-assistant-choice <?= $hasCreatedQsl ? 'checked' : '' ?>> Créer une QSL manuelle</label>
-                <label><input type="radio" name="qsl_assistant_flow" value="adif" data-qsl-assistant-choice <?= !$hasCreatedQsl ? 'checked' : '' ?>> Importer des QSO ADIF</label>
+                <label><input type="radio" name="qsl_assistant_flow" value="manual" data-qsl-assistant-choice checked> Créer une QSL manuelle</label>
+                <label><input type="radio" name="qsl_assistant_flow" value="adif" data-qsl-assistant-choice> Importer des QSO ADIF</label>
             </div>
         </div>
 
         <section class="stack" data-qsl-assistant-panel="manual">
             <div>
-                <span class="badge muted">Étape 2</span>
-                <h2>Créer une QSL manuelle</h2>
+                <span class="badge muted">Étape B</span>
+                <h2>Formulaire manuel assisté</h2>
             </div>
             <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -604,14 +588,14 @@ ob_start();
                     </div>
                     <p class="help" data-manual-preview-note>Aperçu dynamique selon les champs du formulaire.</p>
                 </div>
-                <p><button class="button">Créer une QSL</button></p>
+                <p><button class="button">Créer ma QSL</button></p>
             </form>
         </section>
 
         <section class="stack" data-qsl-assistant-panel="adif">
             <div>
-                <span class="badge muted">Étape 2</span>
-                <h2>Importer des QSO ADIF</h2>
+                <span class="badge muted">Étape B</span>
+                <h2>Import ADIF rapide</h2>
             </div>
             <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -632,9 +616,9 @@ ob_start();
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
 <script nonce="<?= e(csp_nonce()) ?>" src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
 
-<section class="card" id="qsl-view">
+<section class="card" id="qsl-view" data-qsl-panel="manage">
     <div class="row-between">
-        <h2>QSO importés</h2>
+        <h2>3) QSO importés</h2>
         <span><?= count($qsoRows) ?> enregistrement(s)</span>
     </div>
     <?php if ($qsoRows === []): ?>
@@ -701,7 +685,7 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="card">
+<section class="card" data-qsl-panel="manage">
     <div class="row-between">
         <h2>QSL générées</h2>
         <span><?= count($qslRows) ?> carte(s)</span>
@@ -756,6 +740,37 @@ ob_start();
 </section>
 </div>
 <script nonce="<?= e(csp_nonce()) ?>">
+(() => {
+    const navLinks = document.querySelectorAll('[data-qsl-nav-target]');
+    const panels = document.querySelectorAll('[data-qsl-panel]');
+    if (!navLinks.length || !panels.length) {
+        return;
+    }
+
+    const activate = (target) => {
+        const allowed = ['design', 'create', 'manage'];
+        const current = allowed.includes(target) ? target : 'design';
+        panels.forEach((panel) => {
+            panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-panel') !== current);
+        });
+        navLinks.forEach((link) => {
+            const isActive = link.getAttribute('data-qsl-nav-target') === current;
+            link.classList.toggle('active', isActive);
+            link.setAttribute('aria-current', isActive ? 'page' : 'false');
+        });
+    };
+
+    navLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const target = link.getAttribute('data-qsl-nav-target') || 'design';
+            activate(target);
+        });
+    });
+
+    activate('design');
+})();
+
 (() => {
     const assistant = document.querySelector('[data-qsl-assistant]');
     if (!assistant) {
