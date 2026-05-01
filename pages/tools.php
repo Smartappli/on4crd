@@ -43,6 +43,16 @@ ob_start();
                     </label>
                     <p class="help">Watts: <strong id="power-watts-out">—</strong></p>
                 </section>
+                <section class="card">
+                    <h3>Distance entre 2 locators</h3>
+                    <label>Locator A
+                        <input type="text" id="locator-a" maxlength="6" placeholder="Ex: JO20LI">
+                    </label>
+                    <label>Locator B
+                        <input type="text" id="locator-b" maxlength="6" placeholder="Ex: JN18EU">
+                    </label>
+                    <p class="help">Distance estimée: <strong id="locator-distance">—</strong></p>
+                </section>
             </div>
         </article>
     </div>
@@ -64,6 +74,9 @@ ob_start();
     const dbmInput = document.getElementById('power-dbm-input');
     const dbmOut = document.getElementById('power-dbm');
     const wattsOut = document.getElementById('power-watts-out');
+    const locatorA = document.getElementById('locator-a');
+    const locatorB = document.getElementById('locator-b');
+    const locatorDistance = document.getElementById('locator-distance');
     if (!(form instanceof HTMLFormElement) || !(addressInput instanceof HTMLInputElement)) {
         return;
     }
@@ -106,23 +119,22 @@ ob_start();
             return;
         }
         try {
-            const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=${encodeURIComponent(query)}`;
-            const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            const url = `index.php?route=tools_geocode&q=${encodeURIComponent(query)}`;
+            const response = await fetch(url, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' });
             if (!response.ok) {
                 throw new Error('Service de géocodage indisponible.');
             }
-            const rows = await response.json();
-            if (!Array.isArray(rows) || rows.length === 0) {
-                throw new Error('Adresse introuvable. Essayez avec ville et code postal.');
+            const payload = await response.json();
+            if (!payload?.ok) {
+                throw new Error(payload?.error || 'Adresse introuvable. Essayez avec ville et code postal.');
             }
-            const row = rows[0] || {};
-            const lat = Number(row.lat);
-            const lon = Number(row.lon);
+            const lat = Number(payload.lat);
+            const lon = Number(payload.lon);
             if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
                 throw new Error('Coordonnées invalides reçues.');
             }
             const locator = toMaidenhead(lat, lon, 6);
-            if (foundAddress) foundAddress.textContent = row.display_name || query;
+            if (foundAddress) foundAddress.textContent = payload.display_name || query;
             if (foundCoords) foundCoords.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
             if (foundLocator) foundLocator.textContent = locator;
             result?.classList.remove('is-hidden');
@@ -163,6 +175,40 @@ ob_start();
         const watts = Math.pow(10, dbm / 10) / 1000;
         wattsOut.textContent = `${watts.toFixed(4)} W`;
     });
+
+    const locatorToLatLon = (locator) => {
+        const normalized = locator.toUpperCase().trim();
+        if (!/^[A-R]{2}[0-9]{2}([A-X]{2})?$/.test(normalized)) {
+            return null;
+        }
+        let lon = -180 + (normalized.charCodeAt(0) - 65) * 20 + Number(normalized[2]) * 2 + 1;
+        let lat = -90 + (normalized.charCodeAt(1) - 65) * 10 + Number(normalized[3]) + 0.5;
+        if (normalized.length === 6) {
+            lon += (normalized.charCodeAt(4) - 65) * (5 / 60) + (2.5 / 60);
+            lat += (normalized.charCodeAt(5) - 65) * (2.5 / 60) + (1.25 / 60);
+        }
+        return { lat, lon };
+    };
+    const haversineKm = (a, b) => {
+        const r = 6371;
+        const toRad = (v) => v * Math.PI / 180;
+        const dLat = toRad(b.lat - a.lat);
+        const dLon = toRad(b.lon - a.lon);
+        const x = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
+        return 2 * r * Math.asin(Math.sqrt(x));
+    };
+    const syncDistance = () => {
+        if (!(locatorA instanceof HTMLInputElement) || !(locatorB instanceof HTMLInputElement) || !locatorDistance) return;
+        const p1 = locatorToLatLon(locatorA.value);
+        const p2 = locatorToLatLon(locatorB.value);
+        if (!p1 || !p2) {
+            locatorDistance.textContent = '—';
+            return;
+        }
+        locatorDistance.textContent = `${haversineKm(p1, p2).toFixed(1)} km`;
+    };
+    locatorA?.addEventListener('input', syncDistance);
+    locatorB?.addEventListener('input', syncDistance);
 })();
 </script>
 <?php
