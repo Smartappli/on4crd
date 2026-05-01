@@ -67,6 +67,7 @@ ob_start();
             <strong><?= e((string) $widget['title']) ?></strong>
           </header>
           <p class="help"><?= e((string) ($widget['description'] ?? '')) ?></p>
+          <div class="widget-body widget-preview"><?= render_widget((string) $widgetKey, $user) ?></div>
           <button class="button small add-widget" type="button" data-widget="<?= e($widgetKey) ?>" data-title="<?= e((string) $widget['title']) ?>">Ajouter</button>
         </article>
       <?php endforeach; ?>
