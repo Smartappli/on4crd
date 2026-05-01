@@ -1033,9 +1033,16 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 }
 @media (max-width: 900px) {
   .topbar { flex-wrap: wrap; }
-  .menu-toggle { display:none; }
+  .menu-toggle { display:inline-flex; }
   .toolbar { margin-left: auto; }
-  .nav { display:flex; width:100%; flex-direction:column; background: var(--panel); padding-top:.5rem; }
+  .nav {
+    display:none;
+    width:100%;
+    flex-direction:column;
+    background: var(--panel);
+    padding-top:.5rem;
+  }
+  .nav.nav-open { display:flex; }
   .nav-row { width: 100%; flex-direction: column; gap: 0; }
   .nav a, .nav-link-button { padding:.55rem .7rem; border-bottom:1px solid var(--border); border-radius: 0; width: 100%; text-align: left; }
   .hero, .grid-2, .grid-3, .grid-4, .profile-grid, .form-grid, .widget-grid, .home-grid, .split, .latest-news-grid { grid-template-columns: 1fr; }
