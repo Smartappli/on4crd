@@ -216,7 +216,7 @@
     const widgetTitle = title || template.title || widgetKey;
     const article = document.createElement('article');
     article.className = 'widget-card';
-    article.innerHTML = `<header><strong></strong></header><p class="help"></p><button class="button small add-widget" type="button">Ajouter</button>`;
+    article.innerHTML = `<header><strong></strong></header><p class="help"></p><div class="widget-body widget-preview"></div><button class="button small add-widget" type="button">Ajouter</button>`;
     const titleNode = article.querySelector('header strong');
     if (titleNode) {
       titleNode.textContent = widgetTitle;
@@ -224,11 +224,15 @@
     const helpNode = article.querySelector('.help');
     const description = template.description || '';
     if (helpNode) {
-      if (description !== '') {
+        if (description !== '') {
         helpNode.textContent = description;
       } else {
         helpNode.remove();
       }
+    }
+    const previewNode = article.querySelector('.widget-preview');
+    if (previewNode) {
+      previewNode.innerHTML = template.previewHtml || '<p class="help">Prévisualisation indisponible.</p>';
     }
     const button = article.querySelector('.add-widget');
     if (!button) {
@@ -286,7 +290,8 @@
     if (key !== '' && !addWidgetTemplates.has(key)) {
       addWidgetTemplates.set(key, {
         title: button.dataset.title || key,
-        description: button.closest('.widget-card')?.querySelector('.help')?.textContent?.trim() || ''
+        description: button.closest('.widget-card')?.querySelector('.help')?.textContent?.trim() || '',
+        previewHtml: button.closest('.widget-card')?.querySelector('.widget-preview')?.innerHTML || ''
       });
     }
     bindAddWidgetButton(button);

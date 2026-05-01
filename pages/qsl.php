@@ -274,7 +274,7 @@ $qsoRows = $qsoLogs->fetchAll();
 
 $qslCards = db()->prepare('SELECT * FROM qsl_cards WHERE member_id = ? ORDER BY id DESC LIMIT 50');
 $qslCards->execute([$memberId]);
-$backgroundPresetsStmt = db()->prepare('SELECT id, label, type, color_primary, color_secondary, is_default FROM qsl_background_presets WHERE member_id = ? ORDER BY is_default DESC, id DESC');
+$backgroundPresetsStmt = db()->prepare('SELECT id, label, type, image_data_uri, color_primary, color_secondary, is_default FROM qsl_background_presets WHERE member_id = ? ORDER BY is_default DESC, id DESC');
 $backgroundPresetsStmt->execute([$memberId]);
 $backgroundPresets = $backgroundPresetsStmt->fetchAll();
 $qslRows = $qslCards->fetchAll();
@@ -428,8 +428,8 @@ ob_start();
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="save_background_gradient">
                     <label>Nom du fond dégradé<input type="text" name="gradient_label" maxlength="120" placeholder="Ex: Bleu club"></label>
-                    <label>Couleur de fond 1<input type="color" name="background_primary" value="#0B1F3A" data-preview-color-primary></label>
-                    <label>Couleur de fond 2<input type="color" name="background_secondary" value="#1D4ED8" data-preview-color-secondary></label>
+                    <label><span>Couleur de fond 1</span><input class="qsl-color-input" type="color" name="background_primary" value="#0B1F3A" data-preview-color-primary></label>
+                    <label><span>Couleur de fond 2</span><input class="qsl-color-input" type="color" name="background_secondary" value="#1D4ED8" data-preview-color-secondary></label>
                     <label><input type="checkbox" name="set_default" value="1"> Définir comme fond par défaut</label>
                     <button type="submit" class="button secondary">Ajouter le fond dégradé</button>
                 </form>
@@ -550,6 +550,7 @@ ob_start();
                                 <option
                                     value="<?= $presetId ?>"
                                     data-bg-type="<?= e($presetType) ?>"
+                                    data-bg-image="<?= e((string) ($preset['image_data_uri'] ?? '')) ?>"
                                     data-bg-primary="<?= e($presetPrimary) ?>"
                                     data-bg-secondary="<?= e($presetSecondary) ?>"
                                     <?= ($presetId === $defaultBackgroundPresetId) ? 'selected' : '' ?>
@@ -574,10 +575,11 @@ ob_start();
                             <div class="qsl-live-preview-card" data-manual-preview-card>
                                 <p class="qsl-live-preview-title">Aperçu recto</p>
                                 <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
-                                <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">09:15</span></p>
-                                <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
-                                <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
-                                <p class="qsl-live-preview-meta"><span data-manual-preview-field="comment">TNX QSO 73</span></p>
+                                <p class="qsl-live-preview-meta" data-manual-preview-front-detail>DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">09:15</span></p>
+                                <p class="qsl-live-preview-meta" data-manual-preview-front-detail>BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
+                                <p class="qsl-live-preview-meta" data-manual-preview-front-detail>RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
+                                <p class="qsl-live-preview-meta" data-manual-preview-front-detail><span data-manual-preview-field="comment">TNX QSO 73</span></p>
+                                <p class="qsl-live-preview-meta is-hidden" data-manual-preview-front-message>QSL recto — détails au verso</p>
                             </div>
                         </div>
                         <div class="qsl-live-preview is-hidden" data-manual-preview-back-wrap>
@@ -848,6 +850,8 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
         return;
     }
     const backWrap = previewRoot.querySelector('[data-manual-preview-back-wrap]');
+    const frontDetails = previewRoot.querySelectorAll('[data-manual-preview-front-detail]');
+    const frontMessage = previewRoot.querySelector('[data-manual-preview-front-message]');
     const templateSource = document.querySelector('select[name="template_name"]');
 
     const fieldDefaults = {
@@ -908,15 +912,27 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
 
         const selectedOption = presetSelect.selectedOptions[0];
         const type = selectedOption?.getAttribute('data-bg-type') || 'gradient';
+        const imageData = selectedOption?.getAttribute('data-bg-image') || '';
         const primary = selectedOption?.getAttribute('data-bg-primary') || '#0B1F3A';
         const secondary = selectedOption?.getAttribute('data-bg-secondary') || '#1D4ED8';
-        if (type === 'gradient') {
+        if (type === 'image' && imageData !== '') {
+            card.style.backgroundImage = `linear-gradient(rgba(5, 10, 25, .35), rgba(5, 10, 25, .35)), url('${imageData}')`;
+            card.style.backgroundSize = 'cover';
+            card.style.backgroundPosition = 'center';
+            if (note) {
+                note.textContent = 'Fond image sélectionné.';
+            }
+        } else if (type === 'gradient') {
             card.style.background = `linear-gradient(135deg, ${primary}, ${secondary})`;
+            card.style.backgroundSize = '';
+            card.style.backgroundPosition = '';
             if (note) {
                 note.textContent = 'Aperçu dynamique selon les champs du formulaire.';
             }
         } else {
             card.style.background = 'linear-gradient(135deg, #0f172a, #1e293b)';
+            card.style.backgroundSize = '';
+            card.style.backgroundPosition = '';
             if (note) {
                 note.textContent = 'Fond image sélectionné (aperçu simplifié).';
             }
@@ -925,6 +941,10 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
         const isDuplex = templateSource instanceof HTMLSelectElement && templateSource.value === 'classic_duplex';
         if (backWrap) {
             backWrap.classList.toggle('is-hidden', !isDuplex);
+        }
+        frontDetails.forEach((node) => node.classList.toggle('is-hidden', isDuplex));
+        if (frontMessage) {
+            frontMessage.classList.toggle('is-hidden', !isDuplex);
         }
     };
 

@@ -1086,6 +1086,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => 'Actualités', 'route' => 'news', 'module' => 'news'],
         ['label' => 'Boutique', 'route' => 'shop', 'module' => 'shop'],
         ['label' => 'Événements', 'route' => 'events', 'module' => 'events'],
+        ['label' => 'Outils', 'route' => 'tools', 'module' => ''],
         ['label' => 'Annuaire', 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
