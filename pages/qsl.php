@@ -569,14 +569,26 @@ ob_start();
                 <p class="help">Choisissez un seul fond enregistré pour cette QSL.</p>
                 <div class="qsl-live-preview-wrap" data-qsl-manual-preview>
                     <h3>Prévisualisation de la QSL</h3>
-                    <div class="qsl-live-preview">
-                        <div class="qsl-live-preview-card" data-manual-preview-card>
-                            <p class="qsl-live-preview-title">QSL Preview</p>
-                            <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
-                            <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">0915</span></p>
-                            <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
-                            <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
-                            <p class="qsl-live-preview-meta"><span data-manual-preview-field="comment">TNX QSO 73</span></p>
+                    <div class="grid-2" data-manual-preview-layout>
+                        <div class="qsl-live-preview">
+                            <div class="qsl-live-preview-card" data-manual-preview-card>
+                                <p class="qsl-live-preview-title">Aperçu recto</p>
+                                <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
+                                <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">09:15</span></p>
+                                <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
+                                <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
+                                <p class="qsl-live-preview-meta"><span data-manual-preview-field="comment">TNX QSO 73</span></p>
+                            </div>
+                        </div>
+                        <div class="qsl-live-preview is-hidden" data-manual-preview-back-wrap>
+                            <div class="qsl-live-preview-card" data-manual-preview-back-card>
+                                <p class="qsl-live-preview-title">Aperçu verso</p>
+                                <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> → TO: <span data-manual-preview-back-field="qso_call">F4XYZ</span></p>
+                                <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-back-field="qso_date">20260412</span> UTC: <span data-manual-preview-back-field="time_on">09:15</span></p>
+                                <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-back-field="band">20M</span> MODE: <span data-manual-preview-back-field="mode">SSB</span></p>
+                                <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-back-field="rst_sent">59</span>/<span data-manual-preview-back-field="rst_recv">59</span></p>
+                                <p class="qsl-live-preview-meta"><span data-manual-preview-back-field="comment">TNX QSO 73</span></p>
+                            </div>
                         </div>
                     </div>
                     <p class="help" data-manual-preview-note>Aperçu dynamique selon les champs du formulaire.</p>
@@ -835,16 +847,31 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
     if (!card) {
         return;
     }
+    const backWrap = previewRoot.querySelector('[data-manual-preview-back-wrap]');
+    const templateSource = document.querySelector('select[name="template_name"]');
 
     const fieldDefaults = {
         qso_call: 'F4XYZ',
-        qso_date: '20260412',
-        time_on: '0915',
+        qso_date: '2026-04-12',
+        time_on: '09:15',
         band: '20M',
         mode: 'SSB',
         rst_sent: '59',
         rst_recv: '59',
         comment: 'TNX QSO 73',
+    };
+    const formatPreviewDate = (value) => {
+        if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+            const [year, month, day] = value.split('-');
+            return `${day}/${month}/${year}`;
+        }
+        return value;
+    };
+    const formatPreviewTime = (value) => {
+        if (/^\d{2}:\d{2}(:\d{2})?$/.test(value)) {
+            return value.slice(0, 5);
+        }
+        return value;
     };
 
     const sync = () => {
@@ -858,7 +885,19 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
                 ? source.value
                 : '';
             const value = (rawValue || '').trim();
-            target.textContent = value !== '' ? value.toUpperCase() : fieldDefaults[field];
+            let displayValue = value !== '' ? value : fieldDefaults[field];
+            if (field === 'qso_date') {
+                displayValue = formatPreviewDate(displayValue);
+            } else if (field === 'time_on') {
+                displayValue = formatPreviewTime(displayValue);
+            } else if (field !== 'comment') {
+                displayValue = displayValue.toUpperCase();
+            }
+            target.textContent = displayValue;
+            const backTarget = previewRoot.querySelector(`[data-manual-preview-back-field="${field}"]`);
+            if (backTarget) {
+                backTarget.textContent = displayValue;
+            }
         });
 
         const presetSelect = document.querySelector('[data-manual-preview-source="background_preset_id"]');
@@ -881,6 +920,11 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
             if (note) {
                 note.textContent = 'Fond image sélectionné (aperçu simplifié).';
             }
+        }
+
+        const isDuplex = templateSource instanceof HTMLSelectElement && templateSource.value === 'classic_duplex';
+        if (backWrap) {
+            backWrap.classList.toggle('is-hidden', !isDuplex);
         }
     };
 
