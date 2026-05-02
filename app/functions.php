@@ -1275,21 +1275,45 @@ function render_layout(string $content, string $title = ''): string
             'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Boutique', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
             'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_auctions' => 'Enchères',
             'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'logout' => 'Déconnexion', 'login' => 'Connexion',
+            'theme_light' => 'Clair', 'theme_dark' => 'Sombre',
+            'accent_blue' => 'Bleu', 'accent_emerald' => 'Émeraude', 'accent_violet' => 'Violet', 'accent_red' => 'Rouge', 'accent_amber' => 'Ambre', 'accent_orange' => 'Orange',
+            'language_choice' => 'Choix de la langue', 'language_help' => 'Sélecteur de langue du site. Le changement est appliqué automatiquement.',
+            'theme_choice' => 'Choix du mode clair ou sombre', 'theme_help' => 'Sélecteur de thème. Le changement est appliqué automatiquement.',
+            'accent_choice' => 'Choix de la couleur', 'accent_help' => 'Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.',
+            'install_app' => 'Installer l’app',
         ],
         'en' => [
             'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_auctions' => 'Auctions',
             'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'logout' => 'Log out', 'login' => 'Log in',
+            'theme_light' => 'Light', 'theme_dark' => 'Dark',
+            'accent_blue' => 'Blue', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Red', 'accent_amber' => 'Amber', 'accent_orange' => 'Orange',
+            'language_choice' => 'Language selection', 'language_help' => 'Site language selector. Changes are applied automatically.',
+            'theme_choice' => 'Light or dark mode selection', 'theme_help' => 'Theme selector. Changes are applied automatically.',
+            'accent_choice' => 'Accent color selection', 'accent_help' => 'Accent color selector. Changes are applied automatically.',
+            'install_app' => 'Install app',
         ],
         'de' => [
             'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_auctions' => 'Auktionen',
             'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'logout' => 'Abmelden', 'login' => 'Anmelden',
+            'theme_light' => 'Hell', 'theme_dark' => 'Dunkel',
+            'accent_blue' => 'Blau', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violett', 'accent_red' => 'Rot', 'accent_amber' => 'Bernstein', 'accent_orange' => 'Orange',
+            'language_choice' => 'Sprachauswahl', 'language_help' => 'Sprachauswahl der Website. Änderungen werden automatisch angewendet.',
+            'theme_choice' => 'Hell- oder Dunkelmodus auswählen', 'theme_help' => 'Designauswahl. Änderungen werden automatisch angewendet.',
+            'accent_choice' => 'Akzentfarbe auswählen', 'accent_help' => 'Akzentfarbauswahl. Änderungen werden automatisch angewendet.',
+            'install_app' => 'App installieren',
         ],
         'nl' => [
             'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_auctions' => 'Veilingen',
             'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'logout' => 'Afmelden', 'login' => 'Inloggen',
+            'theme_light' => 'Licht', 'theme_dark' => 'Donker',
+            'accent_blue' => 'Blauw', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violet', 'accent_red' => 'Rood', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranje',
+            'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
+            'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
+            'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
+            'install_app' => 'App installeren',
         ],
     ];
     $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
@@ -1409,8 +1433,8 @@ function render_layout(string $content, string $title = ''): string
     }
     $year = gmdate('Y');
     $themeOptions = [
-        'light' => ['icon' => '☀️', 'label' => 'Clair'],
-        'dark' => ['icon' => '🌙', 'label' => 'Sombre'],
+        'light' => ['icon' => '☀️', 'label' => (string) $layoutI18n['theme_light']],
+        'dark' => ['icon' => '🌙', 'label' => (string) $layoutI18n['theme_dark']],
     ];
     $languageOptions = [
         'fr' => ['icon' => '🇫🇷', 'label' => 'Français'],
@@ -1448,7 +1472,7 @@ function render_layout(string $content, string $title = ''): string
     foreach ($accentPalette as $accentCode => $accentConfig) {
         $isActive = $accentCode === $currentAccent;
         $accentIcon = (string) ($accentIcons[$accentCode] ?? '🎨');
-        $accentLabel = (string) ($accentConfig['label'] ?? ucfirst($accentCode));
+        $accentLabel = (string) ($layoutI18n['accent_' . $accentCode] ?? ($accentConfig['label'] ?? ucfirst($accentCode)));
         $accentDotColor = (string) ($accentConfig['color'] ?? '#2f6fed');
         $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . ' style="color:' . e($accentDotColor) . ';">'
             . e(trim($accentIcon . ' ' . $accentLabel))
@@ -1457,25 +1481,25 @@ function render_layout(string $content, string $title = ''): string
     $languageFormHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_language')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<label class="sr-only" for="language-selector">Choix de la langue</label>'
-        . '<select id="language-selector" class="preference-select js-auto-submit" name="locale" aria-label="Choix de la langue" aria-describedby="language-help">' . $languageOptionHtml . '</select>'
-        . '<span class="sr-only" id="language-help">Sélecteur de langue du site. Le changement est appliqué automatiquement.</span>'
+        . '<label class="sr-only" for="language-selector">' . e((string) $layoutI18n['language_choice']) . '</label>'
+        . '<select id="language-selector" class="preference-select js-auto-submit" name="locale" aria-label="' . e((string) $layoutI18n['language_choice']) . '" aria-describedby="language-help">' . $languageOptionHtml . '</select>'
+        . '<span class="sr-only" id="language-help">' . e((string) $layoutI18n['language_help']) . '</span>'
         . '</form>';
     $themeFormHtml = '<form class="toolbar-form" method="post" action="' . e(route_url('set_theme')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<label class="sr-only" for="theme-selector">Choix du mode</label>'
-        . '<select id="theme-selector" class="preference-select js-auto-submit" name="theme" aria-label="Choix du mode clair ou sombre" aria-describedby="theme-help">' . $themeOptionHtml . '</select>'
-        . '<span class="sr-only" id="theme-help">Sélecteur de thème. Le changement est appliqué automatiquement.</span>'
+        . '<label class="sr-only" for="theme-selector">' . e((string) $layoutI18n['theme_choice']) . '</label>'
+        . '<select id="theme-selector" class="preference-select js-auto-submit" name="theme" aria-label="' . e((string) $layoutI18n['theme_choice']) . '" aria-describedby="theme-help">' . $themeOptionHtml . '</select>'
+        . '<span class="sr-only" id="theme-help">' . e((string) $layoutI18n['theme_help']) . '</span>'
         . '</form>';
     $accentFormHtml = '<form class="toolbar-form inline-form" method="post" action="' . e(route_url('set_accent')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_route" value="' . e($currentRoute) . '">'
-        . '<label class="sr-only" for="accent-selector">Choix de la couleur</label>'
-        . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="Choix de la couleur" aria-describedby="accent-help">' . $accentOptionHtml . '</select>'
-        . '<span class="sr-only" id="accent-help">Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.</span>'
+        . '<label class="sr-only" for="accent-selector">' . e((string) $layoutI18n['accent_choice']) . '</label>'
+        . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="' . e((string) $layoutI18n['accent_choice']) . '" aria-describedby="accent-help">' . $accentOptionHtml . '</select>'
+        . '<span class="sr-only" id="accent-help">' . e((string) $layoutI18n['accent_help']) . '</span>'
         . '</form>';
-    $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="Installer l’application">Installer l’app</button>';
+    $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
