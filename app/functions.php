@@ -405,6 +405,86 @@ function render_widget(string $slug, array $user = []): string
 
 function render_ham_weather_advice(array $user = []): string
 {
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    $messages = [
+        'fr' => [
+            'score_excellent' => 'Excellentes conditions',
+            'score_good' => 'Bonnes conditions',
+            'score_variable' => 'Conditions variables',
+            'score_difficult' => 'Conditions difficiles',
+            'window_day' => '08h–15h',
+            'window_evening' => '16h–21h',
+            'window_night' => 'soirée / nuit',
+            'radio_info' => 'Informations radioamateur',
+            'for_qso' => 'pour les QSO',
+            'bands' => 'Bandes conseillées :',
+            'modes' => 'Modes conseillés :',
+            'window' => 'Créneau recommandé :',
+            'input_info' => 'Informations utilisées pour le calcul',
+            'location' => 'Localisation :',
+            'local_hour' => 'Heure locale :',
+            'local_weather' => 'Météo locale :',
+            'geomagnetic' => 'Indice géomagnétique :',
+        ],
+        'en' => [
+            'score_excellent' => 'Excellent conditions',
+            'score_good' => 'Good conditions',
+            'score_variable' => 'Variable conditions',
+            'score_difficult' => 'Difficult conditions',
+            'window_day' => '08:00–15:00',
+            'window_evening' => '16:00–21:00',
+            'window_night' => 'evening / night',
+            'radio_info' => 'Ham radio information',
+            'for_qso' => 'for QSOs',
+            'bands' => 'Recommended bands:',
+            'modes' => 'Recommended modes:',
+            'window' => 'Recommended time window:',
+            'input_info' => 'Data used for calculation',
+            'location' => 'Location:',
+            'local_hour' => 'Local time:',
+            'local_weather' => 'Local weather:',
+            'geomagnetic' => 'Geomagnetic index:',
+        ],
+        'de' => [
+            'score_excellent' => 'Ausgezeichnete Bedingungen',
+            'score_good' => 'Gute Bedingungen',
+            'score_variable' => 'Wechselhafte Bedingungen',
+            'score_difficult' => 'Schwierige Bedingungen',
+            'window_day' => '08:00–15:00',
+            'window_evening' => '16:00–21:00',
+            'window_night' => 'Abend / Nacht',
+            'radio_info' => 'Funkinformationen',
+            'for_qso' => 'für QSOs',
+            'bands' => 'Empfohlene Bänder:',
+            'modes' => 'Empfohlene Betriebsarten:',
+            'window' => 'Empfohlenes Zeitfenster:',
+            'input_info' => 'Für die Berechnung verwendete Daten',
+            'location' => 'Standort:',
+            'local_hour' => 'Ortszeit:',
+            'local_weather' => 'Lokales Wetter:',
+            'geomagnetic' => 'Geomagnetischer Index:',
+        ],
+        'nl' => [
+            'score_excellent' => 'Uitstekende condities',
+            'score_good' => 'Goede condities',
+            'score_variable' => 'Wisselende condities',
+            'score_difficult' => 'Moeilijke condities',
+            'window_day' => '08:00–15:00',
+            'window_evening' => '16:00–21:00',
+            'window_night' => 'avond / nacht',
+            'radio_info' => 'Radioamateurinformatie',
+            'for_qso' => 'voor QSO’s',
+            'bands' => 'Aanbevolen banden:',
+            'modes' => 'Aanbevolen modes:',
+            'window' => 'Aanbevolen tijdsvenster:',
+            'input_info' => 'Gegevens gebruikt voor de berekening',
+            'location' => 'Locatie:',
+            'local_hour' => 'Lokale tijd:',
+            'local_weather' => 'Lokaal weer:',
+            'geomagnetic' => 'Geomagnetische index:',
+        ],
+    ];
+    $i18n = $messages[$locale] ?? $messages['fr'];
     $defaultLocator = 'JO20LI';
     $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
     $locator = $memberLocator !== '' ? $memberLocator : $defaultLocator;
@@ -490,26 +570,26 @@ function render_ham_weather_advice(array $user = []): string
         $modes = ['FT8', 'SSB', 'CW'];
     }
 
-    $scoreLabel = $hfScore >= 80 ? 'Excellentes conditions' : ($hfScore >= 60 ? 'Bonnes conditions' : ($hfScore >= 45 ? 'Conditions variables' : 'Conditions difficiles'));
-    $timeWindow = $hour >= 8 && $hour <= 15 ? '08h–15h' : ($hour >= 16 && $hour <= 21 ? '16h–21h' : 'soirée / nuit');
+    $scoreLabel = $hfScore >= 80 ? (string) $i18n['score_excellent'] : ($hfScore >= 60 ? (string) $i18n['score_good'] : ($hfScore >= 45 ? (string) $i18n['score_variable'] : (string) $i18n['score_difficult']));
+    $timeWindow = $hour >= 8 && $hour <= 15 ? (string) $i18n['window_day'] : ($hour >= 16 && $hour <= 21 ? (string) $i18n['window_evening'] : (string) $i18n['window_night']);
 
     return '<div class="grid gap-4">'
         . '<section>'
-        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Informations radioamateur</h3>'
+        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $i18n['radio_info']) . '</h3>'
         . '<ul class="mt-2 list-clean">'
-        . '<li><strong>' . e($scoreLabel) . '</strong> pour les QSO (score ' . e((string) max(0, min(100, (int) round($hfScore)))) . '/100)</li>'
-        . '<li><strong>Bandes conseillées :</strong> ' . e(implode(' • ', $bands)) . '</li>'
-        . '<li><strong>Modes conseillés :</strong> ' . e(implode(' • ', $modes)) . '</li>'
-        . '<li><strong>Créneau recommandé :</strong> ' . e($timeWindow) . '</li>'
+        . '<li><strong>' . e($scoreLabel) . '</strong> ' . e((string) $i18n['for_qso']) . ' (score ' . e((string) max(0, min(100, (int) round($hfScore)))) . '/100)</li>'
+        . '<li><strong>' . e((string) $i18n['bands']) . '</strong> ' . e(implode(' • ', $bands)) . '</li>'
+        . '<li><strong>' . e((string) $i18n['modes']) . '</strong> ' . e(implode(' • ', $modes)) . '</li>'
+        . '<li><strong>' . e((string) $i18n['window']) . '</strong> ' . e($timeWindow) . '</li>'
         . '</ul>'
         . '</section>'
         . '<section>'
-        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Informations utilisées pour le calcul</h3>'
+        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $i18n['input_info']) . '</h3>'
         . '<ul class="mt-2 list-clean">'
-        . '<li><strong>Localisation :</strong> ' . e($locator) . '</li>'
-        . '<li><strong>Heure locale :</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
-        . '<li><strong>Météo locale :</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h</li>'
-        . '<li><strong>Indice géomagnétique :</strong> Kp=' . e(number_format($kp, 1, ',', '')) . '</li>'
+        . '<li><strong>' . e((string) $i18n['location']) . '</strong> ' . e($locator) . '</li>'
+        . '<li><strong>' . e((string) $i18n['local_hour']) . '</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
+        . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h</li>'
+        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> Kp=' . e(number_format($kp, 1, ',', '')) . '</li>'
         . '</ul>'
         . '</section>'
         . '</div>';
