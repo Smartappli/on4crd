@@ -309,4 +309,53 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '</div>'
     . '</section>';
 
-echo render_layout($content, 'Accueil');
+
+if ($homeLocale !== 'fr') {
+    $homeReplace = [
+        'en' => [
+            'Accueil' => 'Home','Citation du jour' => 'Quote of the day','Heure UTC' => 'UTC time','Heure locale' => 'Local time',
+            "S'inscrire à la newsletter" => 'Subscribe to the newsletter','Accéder à mon espace membre' => 'Go to my member area','Rejoindre le club' => 'Join the club',
+            'Informations utiles' => 'Useful information','À la une du club' => 'Club highlights','Dernière actualité' => 'Latest news','Prochain évènement' => 'Next event',
+            'Publicité' => 'Advertising','Modules réservés aux membres' => 'Member-only modules','Vous êtes journaliste' => 'Are you a journalist','Vous êtes enseignant' => 'Are you a teacher',
+            'Adresse' => 'Address','Nous contacter' => 'Contact us','Informations importantes' => 'Important information','Envoyer' => 'Send',
+            "Conditions générales d'utilisation" => 'Terms of use','Mentions légales' => 'Legal notice',"Règlement d'ordre intérieur" => 'Internal regulations',
+            'Faire un don' => 'Make a donation','Aucune actualité publiée pour le moment.' => 'No news published yet.','Aucun évènement planifié actuellement.' => 'No upcoming event scheduled at the moment.',
+            'Aucune publicité partenaire disponible pour le moment.' => 'No partner advertisement available at the moment.', 'Publié le' => 'Published on','Voir l’évènement →' => 'View event →','Ouvrir →' => 'Open →',
+            'Météo radioamateur' => 'Ham radio weather','Nos réunions se déroulent le 3ième samedi du mois à partir de 14h.' => 'Our meetings are held on the 3rd Saturday of each month from 2:00 PM.',
+            'Bocq Arena, rue des Écoles, 5530 Purnode' => 'Bocq Arena, Rue des Écoles, 5530 Purnode','Itinéraire Google Maps' => 'Google Maps directions',
+            'Union royale belge des amateurs-émetteurs a.s.b.l.' => 'Royal Belgian Amateur Radio Union',"Le Radio Club Durnal est affilié à l'Union Belge des Amateurs-Émetteurs." => 'Radio Club Durnal is affiliated with the Belgian Amateur Radio Union.',
+            "Visiter le site de l'UBA" => 'Visit UBA website','Notre relais' => 'Our repeater','Retrouvez les informations essentielles concernant notre relai et ses paramètres.' => 'Find key information about our repeater and settings.',
+            'Consulter les informations du relais' => 'View repeater information','Accédez directement à notre dossier de presse pour préparer vos publications et reportages.' => 'Access our press kit directly for your articles and reports.',
+            'Consulter le dossier presse' => 'Open press kit','Retrouvez nos dossiers pédagogiques pour vos activités scolaires et vos projets éducatifs.' => 'Find our educational resources for school activities and projects.',
+            'Voir les dossiers pédagogiques' => 'View educational resources','Prêt à rejoindre une communauté radio active et structurée ?' => 'Ready to join an active and structured radio community?',
+            'La nouvelle page d’accueil met en évidence les modules clés pour trouver rapidement l’information utile et participer aux projets ON4CRD.' => 'The new homepage highlights key modules to quickly find useful info and join ON4CRD projects.',
+            'Adresse' => 'Address','Personnes de contact' => 'Contact persons','Nom' => 'Name','Email' => 'Email','Message' => 'Message','Sponsoring' => 'Sponsoring','Enchères' => 'Auctions','Articles techniques' => 'Technical articles','Wiki du club' => 'Club wiki','Galerie photo' => 'Photo gallery','Espace QSL' => 'QSL area','Tableau de bord personnalisable' => 'Custom dashboard'
+        ],
+        'de' => [
+            'Accueil' => 'Startseite','Citation du jour' => 'Zitat des Tages','Heure UTC' => 'UTC-Zeit','Heure locale' => 'Ortszeit','Informations utiles' => 'Nützliche Informationen',
+            'À la une du club' => 'Highlights des Clubs','Dernière actualité' => 'Neueste Nachricht','Prochain évènement' => 'Nächstes Ereignis','Publicité' => 'Werbung',
+            'Modules réservés aux membres' => 'Module für Mitglieder','Vous êtes journaliste' => 'Sie sind Journalist','Vous êtes enseignant' => 'Sie sind Lehrkraft',
+            'Adresse' => 'Adresse','Nous contacter' => 'Kontakt','Informations importantes' => 'Wichtige Informationen','Envoyer' => 'Senden',
+            "Conditions générales d'utilisation" => 'Nutzungsbedingungen','Mentions légales' => 'Impressum',"Règlement d'ordre intérieur" => 'Interne Ordnung','Faire un don' => 'Spenden',
+            'Aucune actualité publiée pour le moment.' => 'Derzeit keine veröffentlichte Nachricht.','Aucun évènement planifié actuellement.' => 'Derzeit kein geplantes Ereignis.','Publié le' => 'Veröffentlicht am',
+            'Météo radioamateur' => 'Funkwetter','Itinéraire Google Maps' => 'Google-Maps-Route','Notre relais' => 'Unser Relais','Consulter les informations du relais' => 'Relaisinformationen ansehen',
+            'Vous êtes journaliste' => 'Sind Sie Journalist?','Vous êtes enseignant' => 'Sind Sie Lehrkraft?','Nom' => 'Name','Email' => 'E-Mail','Message' => 'Nachricht','Sponsoring' => 'Sponsoring','Enchères' => 'Auktionen'
+        ],
+        'nl' => [
+            'Accueil' => 'Startpagina','Citation du jour' => 'Quote van de dag','Heure UTC' => 'UTC-tijd','Heure locale' => 'Lokale tijd','Informations utiles' => 'Nuttige informatie',
+            'À la une du club' => 'Club in de kijker','Dernière actualité' => 'Laatste nieuws','Prochain évènement' => 'Volgend evenement','Publicité' => 'Advertentie',
+            'Modules réservés aux membres' => 'Modules voor leden','Vous êtes journaliste' => 'Bent u journalist','Vous êtes enseignant' => 'Bent u leerkracht',
+            'Adresse' => 'Adres','Nous contacter' => 'Contacteer ons','Informations importantes' => 'Belangrijke informatie','Envoyer' => 'Verzenden',
+            "Conditions générales d'utilisation" => 'Algemene gebruiksvoorwaarden','Mentions légales' => 'Juridische vermeldingen',"Règlement d'ordre intérieur" => 'Huishoudelijk reglement','Faire un don' => 'Doneer',
+            'Aucune actualité publiée pour le moment.' => 'Nog geen nieuws gepubliceerd.','Aucun évènement planifié actuellement.' => 'Momenteel geen gepland evenement.','Publié le' => 'Gepubliceerd op',
+            'Météo radioamateur' => 'Zendweer voor radioamateurs','Itinéraire Google Maps' => 'Google Maps route','Notre relais' => 'Onze relais','Consulter les informations du relais' => 'Bekijk relaisinformatie',
+            'Vous êtes journaliste' => 'Bent u journalist?','Vous êtes enseignant' => 'Bent u leerkracht?','Nom' => 'Naam','Email' => 'E-mail','Message' => 'Bericht','Sponsoring' => 'Sponsoring','Enchères' => 'Veilingen'
+        ],
+    ];
+    if (isset($homeReplace[$homeLocale])) {
+        $content = strtr($content, $homeReplace[$homeLocale]);
+    }
+}
+
+echo render_layout($content, $homeLocale === 'fr' ? 'Accueil' : ($homeReplace[$homeLocale]['Accueil'] ?? 'Accueil'));
+
