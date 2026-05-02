@@ -192,12 +192,16 @@ $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = render_widget('open_meteo');
 $homePropagationHtml = render_widget('propagation');
 $homeHamAdviceHtml = render_ham_weather_advice(current_user() ?? []);
-$homeRadioInfoHtml = '<ul class="list-clean">'
+$homeRadioInfoHtml = '<div class="grid gap-4">'
+    . '<section>'
+    . '<h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500">Informations radioamateur</h4>'
+    . '<ul class="mt-2 list-clean">'
     . '<li><strong>Phonie VHF :</strong> 145.500 MHz (appel simplex régional)</li>'
     . '<li><strong>QRG CW QRP :</strong> 7.030 MHz • 14.060 MHz</li>'
     . '<li><strong>Bon réflexe :</strong> annoncer indicatif + QTH + trafic recherché</li>'
-    . '<li class="help">Astuce : adapter puissance et antenne selon Kp/HF affichés ci‑contre.</li>'
-    . '</ul>';
+    . '</ul>'
+    . '</section>'
+    . '</div>';
 
 $homeQuote = random_quote_for_layout();
 $homeQuoteText = (string) $homeI18n['quote_fallback'];
@@ -219,10 +223,6 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<blockquote class="mt-3 border-l-4 border-blue-200 pl-4 text-base italic text-slate-700">“' . e($homeQuoteText) . '”</blockquote>'
     . ($homeQuoteAuthor !== '' ? '<p class="mt-3 text-sm font-semibold text-slate-500">— ' . e($homeQuoteAuthor) . '</p>' : '')
     . '</article>'
-    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Météo radioamateur">'
-    . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['ham_weather']) . '</h2>'
-    . '<div class="rounded-xl border border-slate-200 bg-slate-50 p-4">' . $homeHamAdviceHtml . '</div>'
-    . '</article>'
     . '</section>'
     . '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
@@ -232,17 +232,9 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="mt-auto pt-8 grid max-w-sm gap-2">' . $primaryCta . $newsletterCta . '</div>'
     . '</article>'
     . '<div class="grid gap-4">'
-    . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<div class="mt-4 grid gap-3 sm:grid-cols-2">'
-    . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">'
-    . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Heure UTC</p>'
-    . '<time class="mt-2 block text-2xl font-extrabold text-slate-900" data-live-clock data-timezone="UTC" aria-live="polite">--:--:--</time>'
-    . '</article>'
-    . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">'
-    . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Heure locale</p>'
-    . '<time class="mt-2 block text-2xl font-extrabold text-slate-900" data-live-clock data-timezone="local" aria-live="polite">--:--:--</time>'
-    . '</article>'
-    . '</div>'
+    . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Météo radioamateur">'
+    . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['ham_weather']) . '</h2>'
+    . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">' . $homeHamAdviceHtml . '</div>'
     . '</aside>'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-xl font-bold text-slate-900">Informations utiles</h2>'
