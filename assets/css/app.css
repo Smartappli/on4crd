@@ -1052,8 +1052,8 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 @media (max-width: 900px) {
    .topbar { flex-wrap: nowrap; }
   .brand-wrap { min-width: 0; flex: 1; }
-  .menu-toggle { margin-left: auto; flex-shrink: 0; }
-  .menu-toggle { display:inline-flex; }
+  .menu-toggle { margin-left: auto; flex-shrink: 0; width: auto; min-width: 0; padding: .42rem .62rem; }
+  .menu-toggle { display:inline-flex; justify-content: flex-start; }
   .toolbar { display: none; }
   body.menu-open { overflow: hidden; }
   .nav-backdrop {
@@ -1122,6 +1122,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   }
   .card, .hero-panel { padding: 1rem; border-radius: 20px; }
   .button, button { width: 100%; justify-content: center; }
+  .menu-toggle { width: auto; }
   .toolbar-auth .button,
   .toolbar-auth button {
     width: 100%;
