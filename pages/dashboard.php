@@ -30,6 +30,15 @@ if ($selectedWidgets === []) {
 $selectedKeys = array_map(static fn(array $widget): string => (string) $widget['key'], $selectedWidgets);
 $availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);
 
+
+$safeRenderWidget = static function (string $widgetKey, array $currentUser): string {
+    try {
+        return render_widget($widgetKey, $currentUser);
+    } catch (Throwable $throwable) {
+        return '<p class="help">Widget temporairement indisponible.</p>';
+    }
+};
+
 $dashboardConfig = [
     'renderBase' => base_url('index.php?route=widget_render&widget='),
     'saveUrl' => base_url('index.php?route=save_dashboard'),
@@ -64,7 +73,7 @@ ob_start();
             <strong><?= e($availableWidgets[$widgetKey]['title'] ?? $widgetKey) ?></strong>
             <button class="ghost remove-widget" type="button">✕</button>
           </header>
-          <div class="widget-body"><?= render_widget($widgetKey, $user) ?></div>
+          <div class="widget-body"><?= $safeRenderWidget($widgetKey, $user) ?></div>
         </article>
       <?php endforeach; ?>
     </div>
@@ -79,7 +88,7 @@ ob_start();
             <strong><?= e((string) $widget['title']) ?></strong>
           </header>
           <p class="help"><?= e((string) ($widget['description'] ?? '')) ?></p>
-          <div class="widget-body widget-preview"><?= render_widget((string) $widgetKey, $user) ?></div>
+          <div class="widget-body widget-preview"><?= $safeRenderWidget((string) $widgetKey, $user) ?></div>
           <button class="button small add-widget" type="button" data-widget="<?= e($widgetKey) ?>" data-title="<?= e((string) $widget['title']) ?>">Ajouter</button>
         </article>
       <?php endforeach; ?>

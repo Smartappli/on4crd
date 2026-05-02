@@ -9,7 +9,11 @@ try {
     if (!table_exists('dashboard_widgets')) {
         throw new RuntimeException('La table dashboard_widgets est absente.');
     }
-    $payload = json_decode((string) file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
+    $rawPayload = (string) file_get_contents('php://input');
+    $payload = $rawPayload !== '' ? json_decode($rawPayload, true) : [];
+    if (!is_array($payload)) {
+        $payload = [];
+    }
     $widgetsInput = is_array($payload['widgets'] ?? null) ? $payload['widgets'] : [];
     $catalog = widget_catalog();
     $widgets = [];
