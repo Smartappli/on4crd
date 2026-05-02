@@ -146,6 +146,28 @@
     });
   }
 
+  const chatbotForm = document.getElementById('chatbot-form');
+  const chatbotInput = document.getElementById('chatbot-question');
+  const chatbotThread = document.getElementById('chatbot-thread');
+  if (chatbotThread) {
+    chatbotThread.scrollTop = chatbotThread.scrollHeight;
+  }
+  if (chatbotForm && chatbotInput) {
+    chatbotInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        chatbotForm.submit();
+      }
+    });
+    document.querySelectorAll('[data-suggestion]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const value = button.getAttribute('data-suggestion') || '';
+        chatbotInput.value = value;
+        chatbotInput.focus();
+      });
+    });
+  }
+
   const grid = document.getElementById('dashboard-grid');
   if (!grid || !window.dashboardConfig) {
     return;
