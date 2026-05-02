@@ -1,8 +1,17 @@
 <?php
 declare(strict_types=1);
 
+$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$i18n = [
+    'fr' => ['title' => 'Événements', 'agenda_unavailable' => "L'agenda n'est pas encore disponible.", 'export' => 'Exporter', 'calendar_load_error' => 'Impossible de charger le calendrier interactif.', 'event' => 'Événement', 'no_summary' => 'Aucun résumé disponible.', 'location_tbd' => 'À confirmer', 'today' => 'Aujourd’hui', 'month' => 'Mois', 'week' => 'Semaine', 'list' => 'Liste', 'detail' => 'Détail', 'start' => 'Début', 'end' => 'Fin', 'location' => 'Lieu', 'view_sheet' => 'Voir la fiche', 'external_link' => 'Lien externe', 'no_event' => 'Aucun événement publié pour le moment.'],
+    'en' => ['title' => 'Events', 'agenda_unavailable' => 'The calendar is not available yet.', 'export' => 'Export', 'calendar_load_error' => 'Unable to load the interactive calendar.', 'event' => 'Event', 'no_summary' => 'No summary available.', 'location_tbd' => 'To be confirmed', 'today' => 'Today', 'month' => 'Month', 'week' => 'Week', 'list' => 'List', 'detail' => 'Details', 'start' => 'Start', 'end' => 'End', 'location' => 'Location', 'view_sheet' => 'View details', 'external_link' => 'External link', 'no_event' => 'No published event at the moment.'],
+    'de' => ['title' => 'Veranstaltungen', 'agenda_unavailable' => 'Der Kalender ist noch nicht verfügbar.', 'export' => 'Exportieren', 'calendar_load_error' => 'Interaktiver Kalender konnte nicht geladen werden.', 'event' => 'Veranstaltung', 'no_summary' => 'Keine Zusammenfassung verfügbar.', 'location_tbd' => 'Noch offen', 'today' => 'Heute', 'month' => 'Monat', 'week' => 'Woche', 'list' => 'Liste', 'detail' => 'Details', 'start' => 'Beginn', 'end' => 'Ende', 'location' => 'Ort', 'view_sheet' => 'Details ansehen', 'external_link' => 'Externer Link', 'no_event' => 'Derzeit keine veröffentlichten Veranstaltungen.'],
+    'nl' => ['title' => 'Evenementen', 'agenda_unavailable' => 'De agenda is nog niet beschikbaar.', 'export' => 'Exporteren', 'calendar_load_error' => 'Interactieve kalender kon niet geladen worden.', 'event' => 'Evenement', 'no_summary' => 'Geen samenvatting beschikbaar.', 'location_tbd' => 'Nog te bevestigen', 'today' => 'Vandaag', 'month' => 'Maand', 'week' => 'Week', 'list' => 'Lijst', 'detail' => 'Details', 'start' => 'Start', 'end' => 'Einde', 'location' => 'Locatie', 'view_sheet' => 'Bekijk detail', 'external_link' => 'Externe link', 'no_event' => 'Momenteel geen gepubliceerde evenementen.'],
+];
+$t = $i18n[$locale] ?? $i18n['fr'];
+
 if (!table_exists('events')) {
-    echo render_layout('<div class="card"><h1>Événements</h1><p>L\'agenda n\'est pas encore disponible.</p></div>', 'Événements');
+    echo render_layout('<div class="card"><h1>' . e($t['title']) . '</h1><p>' . e($t['agenda_unavailable']) . '</p></div>', $t['title']);
     return;
 }
 
@@ -136,7 +145,7 @@ ob_start();
     <article class="card events-calendar-card">
         <header class="events-toolbar events-toolbar-right">
             <div class="events-toolbar-actions">
-                <a class="button events-export-button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>">Exporter</a>
+                <a class="button events-export-button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
             </div>
         </header>
 
@@ -151,7 +160,7 @@ ob_start();
             (() => {
                 const calendarEl = document.getElementById('events-calendar');
                 if (!calendarEl || !window.FullCalendar) {
-                    calendarEl?.insertAdjacentHTML('beforeend', '<p class="help">Impossible de charger le calendrier interactif.</p>');
+                    calendarEl?.insertAdjacentHTML('beforeend', '<p class="help"><?= e($t['calendar_load_error']) ?></p>');
                     return;
                 }
                 const detail = {
@@ -166,11 +175,11 @@ ob_start();
 
                 const updateDetails = (event) => {
                     const props = event.extendedProps || {};
-                    if (detail.title) detail.title.textContent = event.title || 'Événement';
-                    if (detail.summary) detail.summary.textContent = props.summary || 'Aucun résumé disponible.';
+                    if (detail.title) detail.title.textContent = event.title || <?= json_encode($t['event']) ?>;
+                    if (detail.summary) detail.summary.textContent = props.summary || <?= json_encode($t['no_summary']) ?>;
                     if (detail.start) detail.start.textContent = props.startLabel || '';
                     if (detail.end) detail.end.textContent = props.endLabel || '';
-                    if (detail.location) detail.location.textContent = props.location || 'À confirmer';
+                    if (detail.location) detail.location.textContent = props.location || <?= json_encode($t['location_tbd']) ?>;
                     if (detail.link) detail.link.setAttribute('href', event.url || '#');
                     if (detail.external) {
                         const externalUrl = props.externalUrl || '';
@@ -186,7 +195,7 @@ ob_start();
                 };
 
                 const calendar = new FullCalendar.Calendar(calendarEl, {
-                    locale: 'fr',
+                    locale: <?= json_encode($locale) ?>,
                     firstDay: 1,
                     height: 'auto',
                     initialView: <?= json_encode($calendarView) ?>,
@@ -197,10 +206,10 @@ ob_start();
                         right: 'dayGridMonth,timeGridWeek,listMonth'
                     },
                     buttonText: {
-                        today: 'Aujourd’hui',
-                        month: 'Mois',
-                        week: 'Semaine',
-                        list: 'Liste'
+                        today: <?= json_encode($t['today']) ?>,
+                        month: <?= json_encode($t['month']) ?>,
+                        week: <?= json_encode($t['week']) ?>,
+                        list: <?= json_encode($t['list']) ?>
                     },
                     events: <?= json_encode(route_url('events_feed')) ?>,
                     eventClick(info) {
@@ -231,23 +240,23 @@ ob_start();
     </article>
 
     <aside class="card events-detail-card" id="event-detail">
-        <h2>Détail</h2>
+        <h2><?= e($t['detail']) ?></h2>
         <?php if (is_array($defaultEvent)): ?>
             <h3 id="event-detail-title"><?= e($defaultEvent['title']) ?></h3>
-            <p id="event-detail-summary"><?= e($defaultEvent['summary'] !== '' ? $defaultEvent['summary'] : 'Aucun résumé disponible.') ?></p>
+            <p id="event-detail-summary"><?= e($defaultEvent['summary'] !== '' ? $defaultEvent['summary'] : $t['no_summary']) ?></p>
             <dl>
-                <dt>Début</dt><dd id="event-detail-start"><?= e($defaultEvent['startLabel']) ?></dd>
-                <dt>Fin</dt><dd id="event-detail-end"><?= e($defaultEvent['endLabel']) ?></dd>
-                <dt>Lieu</dt><dd id="event-detail-location"><?= e($defaultEvent['location'] !== '' ? $defaultEvent['location'] : 'À confirmer') ?></dd>
+                <dt><?= e($t['start']) ?></dt><dd id="event-detail-start"><?= e($defaultEvent['startLabel']) ?></dd>
+                <dt><?= e($t['end']) ?></dt><dd id="event-detail-end"><?= e($defaultEvent['endLabel']) ?></dd>
+                <dt><?= e($t['location']) ?></dt><dd id="event-detail-location"><?= e($defaultEvent['location'] !== '' ? $defaultEvent['location'] : $t['location_tbd']) ?></dd>
             </dl>
             <p class="events-detail-actions">
-                <a id="event-detail-link" class="button" href="<?= e($defaultEvent['detailUrl']) ?>">Voir la fiche</a>
-                <a id="event-detail-external" class="button secondary <?= $defaultEvent['externalUrl'] === '' ? 'is-hidden' : '' ?>" href="<?= e($defaultEvent['externalUrl']) ?>" target="_blank" rel="noopener noreferrer">Lien externe</a>
+                <a id="event-detail-link" class="button" href="<?= e($defaultEvent['detailUrl']) ?>"><?= e($t['view_sheet']) ?></a>
+                <a id="event-detail-external" class="button secondary <?= $defaultEvent['externalUrl'] === '' ? 'is-hidden' : '' ?>" href="<?= e($defaultEvent['externalUrl']) ?>" target="_blank" rel="noopener noreferrer"><?= e($t['external_link']) ?></a>
             </p>
         <?php else: ?>
-            <p>Aucun événement publié pour le moment.</p>
+            <p><?= e($t['no_event']) ?></p>
         <?php endif; ?>
     </aside>
 </section>
 <?php
-echo render_layout((string) ob_get_clean(), 'Événements');
+echo render_layout((string) ob_get_clean(), $t['title']);
