@@ -59,7 +59,7 @@ ob_start();
             <li><button type="button" class="chatbot-chip" data-suggestion="Comment rejoindre le club ?">Adhésion</button></li>
             <li><button type="button" class="chatbot-chip" data-suggestion="Comment publier un article sur le site ?">Publier un article</button></li>
         </ul>
-        <a class="button ghost" href="<?= e(url('chatbot', ['clear' => '1'])) ?>">Effacer la conversation</a>
+        <a class="button ghost" href="<?= e('index.php?route=chatbot&clear=1') ?>">Effacer la conversation</a>
     </aside>
 
     <section class="chatbot-main card" aria-label="Conversation avec Raymond">
