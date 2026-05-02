@@ -39,7 +39,7 @@ if ($route === 'toggle_theme') {
         exit('Method not allowed');
     }
     verify_csrf();
-    $_SESSION['theme'] = ($_SESSION['theme'] ?? 'light') === 'light' ? 'dark' : 'light';
+    $_SESSION['theme'] = ($_SESSION['theme'] ?? 'dark') === 'dark' ? 'light' : 'dark';
     $returnRoute = (string) ($_POST['return_route'] ?? 'home');
     redirect($returnRoute !== '' ? $returnRoute : 'home');
 }
@@ -85,10 +85,10 @@ if ($route === 'set_theme') {
         exit('Method not allowed');
     }
     verify_csrf();
-    $theme = strtolower((string) ($_POST['theme'] ?? 'light'));
+    $theme = strtolower((string) ($_POST['theme'] ?? 'dark'));
     $supportedThemes = ['light', 'dark'];
     if (!in_array($theme, $supportedThemes, true)) {
-        $theme = 'light';
+        $theme = 'dark';
     }
     $_SESSION['theme'] = $theme;
     $returnRoute = (string) ($_POST['return_route'] ?? 'home');
