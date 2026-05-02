@@ -28,18 +28,19 @@ $sections = [
 
 ob_start();
 ?>
-<section class="stack">
+<section class="stack auctions-page">
     <?php foreach ($sections as $status => $meta): ?>
-        <section class="inner-card">
+        <section class="inner-card auctions-section auctions-section-<?= e($status) ?>">
             <div class="section-header">
                 <h1><?= e($meta['title']) ?></h1>
+                <span class="badge"><?= count($groupedLots[$status]) ?> lot<?= count($groupedLots[$status]) > 1 ? 's' : '' ?></span>
             </div>
             <?php if ($groupedLots[$status] === []): ?>
                 <div class="card empty-state"><p><?= e($meta['empty']) ?></p></div>
             <?php else: ?>
                 <div class="grid-3">
                     <?php foreach ($groupedLots[$status] as $lot): ?>
-                        <article class="card feature-card">
+                        <article class="card feature-card auction-lot-card">
                             <div class="section-header">
                                 <h2><?= e((string) $lot['title']) ?></h2>
                                 <strong class="price-tag"><?= e(format_price_eur(max((int) $lot['current_price_cents'], (int) $lot['starting_price_cents']))) ?></strong>
