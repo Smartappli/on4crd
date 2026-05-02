@@ -8,7 +8,27 @@ if (!is_file(__DIR__ . '/config/config.php')) {
 
 require_once __DIR__ . '/app/bootstrap.php';
 
-$route = (string) ($_GET['route'] ?? 'home');
+$route = strtolower(trim((string) ($_GET['route'] ?? '')));
+if ($route === '') {
+    $requestUriPath = parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
+    $path = is_string($requestUriPath) ? trim($requestUriPath, '/') : '';
+    if ($path !== '' && $path !== 'index.php') {
+        $route = strtolower(trim(pathinfo($path, PATHINFO_FILENAME)));
+    }
+}
+
+$normalizedRoute = ltrim($route, '/');
+if (str_ends_with($normalizedRoute, '.php')) {
+    if (in_array($normalizedRoute, ['install.php'], true)) {
+        $route = 'install.php';
+    } else {
+        $route = strtolower(pathinfo($normalizedRoute, PATHINFO_FILENAME));
+    }
+}
+
+if ($route === '') {
+    $route = 'home';
+}
 $requestStart = microtime(true);
 
 register_shutdown_function(static function () use ($requestStart, $route): void {
