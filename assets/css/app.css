@@ -1593,3 +1593,53 @@ textarea.wysiwyg-source {
   .chatbot-shell { grid-template-columns: 1fr; }
   .chatbot-thread { max-height: 52vh; }
 }
+
+/* Auctions */
+.auctions-page {
+  gap: 1.15rem;
+}
+.auctions-section {
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 95% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 34%),
+    linear-gradient(180deg, var(--panel), var(--panel-2));
+}
+.auctions-section h1 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+}
+.auction-lot-card {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border-color: color-mix(in srgb, var(--border) 70%, var(--accent));
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.auction-lot-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 46%, var(--border));
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .14);
+}
+.auction-lot-card h2 {
+  margin: 0;
+  font-size: 1.12rem;
+}
+.auction-detail-layout {
+  align-items: start;
+}
+.auction-detail-main {
+  background:
+    radial-gradient(circle at 90% 2%, color-mix(in srgb, var(--accent) 11%, transparent), transparent 30%),
+    linear-gradient(180deg, var(--panel), var(--panel-2));
+}
+.auction-detail-side {
+  position: sticky;
+  top: 1rem;
+}
+.auction-meta-list .pill {
+  background: color-mix(in srgb, var(--panel-3) 72%, var(--accent));
+  border-color: color-mix(in srgb, var(--border) 65%, var(--accent));
+}
+@media (max-width: 920px) {
+  .auction-detail-side {
+    position: static;
+  }
+}
