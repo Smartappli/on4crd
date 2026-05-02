@@ -493,13 +493,26 @@ function render_ham_weather_advice(array $user = []): string
     $scoreLabel = $hfScore >= 80 ? 'Excellentes conditions' : ($hfScore >= 60 ? 'Bonnes conditions' : ($hfScore >= 45 ? 'Conditions variables' : 'Conditions difficiles'));
     $timeWindow = $hour >= 8 && $hour <= 15 ? '08h–15h' : ($hour >= 16 && $hour <= 21 ? '16h–21h' : 'soirée / nuit');
 
-    return '<ul class="list-clean">'
+    return '<div class="grid gap-4">'
+        . '<section>'
+        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Informations radioamateur</h3>'
+        . '<ul class="mt-2 list-clean">'
         . '<li><strong>' . e($scoreLabel) . '</strong> pour les QSO (score ' . e((string) max(0, min(100, (int) round($hfScore)))) . '/100)</li>'
         . '<li><strong>Bandes conseillées :</strong> ' . e(implode(' • ', $bands)) . '</li>'
         . '<li><strong>Modes conseillés :</strong> ' . e(implode(' • ', $modes)) . '</li>'
         . '<li><strong>Créneau recommandé :</strong> ' . e($timeWindow) . '</li>'
-        . '<li class="help">Algorithme basé sur localisation (' . e($locator) . '), heure locale (' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h), météo locale (T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h) et indice Kp=' . e(number_format($kp, 1, ',', '')) . '.</li>'
-        . '</ul>';
+        . '</ul>'
+        . '</section>'
+        . '<section>'
+        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Informations utilisées pour le calcul</h3>'
+        . '<ul class="mt-2 list-clean">'
+        . '<li><strong>Localisation :</strong> ' . e($locator) . '</li>'
+        . '<li><strong>Heure locale :</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
+        . '<li><strong>Météo locale :</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h</li>'
+        . '<li><strong>Indice géomagnétique :</strong> Kp=' . e(number_format($kp, 1, ',', '')) . '</li>'
+        . '</ul>'
+        . '</section>'
+        . '</div>';
 }
 }
 
@@ -1366,7 +1379,7 @@ function render_layout(string $content, string $title = ''): string
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<button class="menu-toggle button small secondary" type="button" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="menu-label">Menu</span></button>'
         . '<button class="nav-backdrop" type="button" aria-label="Fermer le menu" hidden></button>'
-        . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
+        . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
