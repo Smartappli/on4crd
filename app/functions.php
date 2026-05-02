@@ -1379,7 +1379,7 @@ function render_layout(string $content, string $title = ''): string
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<button class="menu-toggle button small secondary" type="button" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="menu-label">Menu</span></button>'
         . '<button class="nav-backdrop" type="button" aria-label="Fermer le menu" hidden></button>'
-        . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
+        . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
