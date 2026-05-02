@@ -51,6 +51,7 @@ ob_start();
 ?>
 <div class="chatbot-shell">
     <aside class="chatbot-sidebar card">
+        <img class="chatbot-illustration" src="<?= e(asset_url('assets/chartbot/chatbot.png')) ?>" alt="Illustration du chatbot Raymond">
         <h1>Raymond vous répond</h1>
         <p class="help">Posez une question technique, réglementaire ou club. Les réponses sont basées sur la base de connaissances interne.</p>
         <ul class="chatbot-suggestions" id="chatbot-suggestions">
