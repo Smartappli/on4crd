@@ -190,7 +190,9 @@
             if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
               config = parsed;
             }
-          } catch (error) {}
+          } catch (error) {
+            config = {};
+          }
         }
         return { key, config };
       }).filter(Boolean);
@@ -204,7 +206,7 @@
         credentials: 'same-origin',
         body: JSON.stringify({ _csrf: csrf, widgets })
       });
-      const data = await response.json();
+      const data = await response.json().catch(() => ({ ok: false, error: 'Réponse serveur invalide.' }));
       if (!response.ok || !data.ok) {
         throw new Error(data.error || 'Erreur de sauvegarde');
       }
@@ -302,7 +304,11 @@
     card.dataset.widget = widgetKey;
     card.dataset.widgetConfig = '{}';
     card.classList.add('is-loading');
-    card.innerHTML = `<header><strong>${title}</strong><button class="ghost remove-widget" type="button" aria-label="Retirer le widget">✕</button></header><div class="widget-body">Chargement…</div>`;
+    card.innerHTML = '<header><strong></strong><button class="ghost remove-widget" type="button" aria-label="Retirer le widget">✕</button></header><div class="widget-body">Chargement…</div>';
+    const titleNode = card.querySelector('header strong');
+    if (titleNode) {
+      titleNode.textContent = title;
+    }
     bindCard(card);
     fetch(renderBase + encodeURIComponent(widgetKey), {
       headers: { 'X-Requested-With': 'XMLHttpRequest' },
