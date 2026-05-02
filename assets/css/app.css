@@ -1607,6 +1607,8 @@ textarea.wysiwyg-source {
 .auctions-section h1 {
   margin: 0;
   font-size: clamp(1.25rem, 2vw, 1.65rem);
+  font-family: Inter, Arial, sans-serif;
+  font-weight: 600;
 }
 .auction-lot-card {
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
