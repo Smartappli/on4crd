@@ -908,7 +908,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .menu-toggle { display:none; align-items:center; gap:.35rem; }
 .menu-label { font-size:.95rem; }
 .nav-backdrop { display: none; }
-.nav-mobile-tools { display: none; width: 100%; padding: .55rem .7rem .8rem; }
+.nav-mobile-tools { display: none !important; width: 100%; padding: .55rem .7rem .8rem; }
 .stat-grid { display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:.75rem; }
 .stat-grid > div { background: var(--panel); border:1px solid var(--border); border-radius:14px; padding:.8rem; }
 .live-radio-grid { margin: 1rem 0; }
@@ -1047,6 +1047,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 @media (max-width: 1024px) {
   .hero, .split, .grid-3, .home-grid, .footer-grid { grid-template-columns: 1fr; }
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .toolbar { display: none; }
 }
 @media (max-width: 900px) {
   .topbar { flex-wrap: wrap; }
@@ -1078,7 +1079,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
     z-index: 22;
   }
   .nav.nav-open { display:flex; }
-  .nav-mobile-tools { display: block; }
+  .nav.nav-open .nav-mobile-tools { display: block !important; }
   .nav-mobile-tools .toolbar-preferences { width: 100%; }
   .nav-mobile-tools .toolbar-preferences-row { width: 100%; justify-content: space-between; flex-wrap: wrap; }
   .nav-mobile-tools .toolbar-preferences-row .toolbar-form,
