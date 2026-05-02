@@ -224,7 +224,6 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . ($homeQuoteAuthor !== '' ? '<p class="mt-3 text-sm font-semibold text-slate-500">— ' . e($homeQuoteAuthor) . '</p>' : '')
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Heures de référence">'
-    . '<h2 class="text-xl font-bold text-slate-900">Heures de référence</h2>'
     . '<div class="mt-4 grid gap-3 sm:grid-cols-2">'
     . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">'
     . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Heure UTC</p>'
