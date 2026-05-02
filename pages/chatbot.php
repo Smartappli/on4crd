@@ -51,7 +51,7 @@ ob_start();
 ?>
 <div class="chatbot-shell">
     <aside class="chatbot-sidebar card">
-        <h1>Raymond Assistant</h1>
+        <h1>Raymond vous répond</h1>
         <p class="help">Posez une question technique, réglementaire ou club. Les réponses sont basées sur la base de connaissances interne.</p>
         <ul class="chatbot-suggestions" id="chatbot-suggestions">
             <li><button type="button" class="chatbot-chip" data-suggestion="Comment exporter une QSL ?">Exporter une QSL</button></li>
