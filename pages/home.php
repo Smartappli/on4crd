@@ -1,6 +1,36 @@
 <?php
 declare(strict_types=1);
 
+/** @var string $homeLocale */
+$homeLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$homeMessages = [
+    'fr' => [
+        'quote_day' => 'Citation du jour',
+        'ham_weather' => 'Météo radioamateur',
+        'ham_weather_desc' => 'Recommandations calculées automatiquement selon votre localisation, l\'heure, la météo et la propagation pour identifier les bandes et modes les plus propices aux QSO.',
+        'quote_fallback' => 'Chaque contact radio est une nouvelle aventure.',
+    ],
+    'en' => [
+        'quote_day' => 'Quote of the day',
+        'ham_weather' => 'Ham radio weather',
+        'ham_weather_desc' => 'Recommendations are computed automatically from your location, time of day, weather and propagation to identify the most favorable bands and modes for QSO.',
+        'quote_fallback' => 'Every radio contact is a new adventure.',
+    ],
+    'de' => [
+        'quote_day' => 'Zitat des Tages',
+        'ham_weather' => 'Funkwetter',
+        'ham_weather_desc' => 'Die Empfehlungen werden automatisch aus Standort, Tageszeit, Wetter und Ausbreitung berechnet, um die besten Bänder und Betriebsarten für QSOs zu ermitteln.',
+        'quote_fallback' => 'Jeder Funkkontakt ist ein neues Abenteuer.',
+    ],
+    'nl' => [
+        'quote_day' => 'Quote van de dag',
+        'ham_weather' => 'Zendweer voor radioamateurs',
+        'ham_weather_desc' => 'Aanbevelingen worden automatisch berekend op basis van uw locatie, tijdstip, weer en propagatie om de beste banden en modes voor QSO te bepalen.',
+        'quote_fallback' => 'Elk radiocontact is een nieuw avontuur.',
+    ],
+];
+$homeI18n = $homeMessages[$homeLocale] ?? $homeMessages['fr'];
+
 $user = current_user();
 $isAuthenticated = $user !== null;
 
@@ -161,6 +191,7 @@ $ubaLogoPath = 'assets/logo/UBA-Logo-Couleur-MID2.png';
 $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = render_widget('open_meteo');
 $homePropagationHtml = render_widget('propagation');
+$homeHamAdviceHtml = render_ham_weather_advice(current_user() ?? []);
 $homeRadioInfoHtml = '<ul class="list-clean">'
     . '<li><strong>Phonie VHF :</strong> 145.500 MHz (appel simplex régional)</li>'
     . '<li><strong>QRG CW QRP :</strong> 7.030 MHz • 14.060 MHz</li>'
@@ -169,7 +200,7 @@ $homeRadioInfoHtml = '<ul class="list-clean">'
     . '</ul>';
 
 $homeQuote = random_quote_for_layout();
-$homeQuoteText = 'Chaque contact radio est une nouvelle aventure.';
+$homeQuoteText = (string) $homeI18n['quote_fallback'];
 $homeQuoteAuthor = '';
 if (is_array($homeQuote)) {
     $candidateHomeQuoteText = trim((string) ($homeQuote['quote'] ?? ''));
@@ -182,10 +213,21 @@ if (is_array($homeQuote)) {
     }
 }
 
-$content = '<section class="mb-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Citation mise à l\'honneur">'
-    . '<h2 class="text-xl font-bold text-slate-900">Citation du jour</h2>'
+$content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
+    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Citation mise à l\'honneur">'
+    . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['quote_day']) . '</h2>'
     . '<blockquote class="mt-3 border-l-4 border-blue-200 pl-4 text-base italic text-slate-700">“' . e($homeQuoteText) . '”</blockquote>'
     . ($homeQuoteAuthor !== '' ? '<p class="mt-3 text-sm font-semibold text-slate-500">— ' . e($homeQuoteAuthor) . '</p>' : '')
+    . '</article>'
+    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Météo radioamateur">'
+    . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['ham_weather']) . '</h2>'
+    . '<p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['ham_weather_desc']) . '</p>'
+    . '<div class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4">' . $homeHamAdviceHtml . '</div>'
+    . '<div class="mt-4 grid gap-3 md:grid-cols-2">'
+    . '<div class="rounded-xl border border-slate-200 bg-slate-50 p-4">' . $homePropagationHtml . '</div>'
+    . '<div class="rounded-xl border border-slate-200 bg-slate-50 p-4">' . $homeWeatherHtml . '</div>'
+    . '</div>'
+    . '</article>'
     . '</section>'
     . '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
     . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'

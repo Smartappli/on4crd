@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS members (
     phone VARCHAR(64) DEFAULT NULL,
     bio TEXT DEFAULT NULL,
     photo_path VARCHAR(255) DEFAULT NULL,
+    avatar_path VARCHAR(255) DEFAULT NULL,
     licence_class VARCHAR(64) DEFAULT NULL,
     operator_since VARCHAR(32) DEFAULT NULL,
     cq_zone VARCHAR(16) DEFAULT NULL,
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS members (
     visibility_licence_class ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_favourite_bands ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_station ENUM('public','members','private') NOT NULL DEFAULT 'members',
+    visibility_photo ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_online ENUM('public','members','private') NOT NULL DEFAULT 'members',
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -169,6 +171,7 @@ CREATE TABLE IF NOT EXISTS dashboard_widgets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT NOT NULL,
     widget_key VARCHAR(80) NOT NULL,
+    config_json LONGTEXT DEFAULT NULL,
     position INT NOT NULL DEFAULT 0
 );
 
@@ -209,6 +212,7 @@ CREATE TABLE IF NOT EXISTS articles (
     excerpt TEXT DEFAULT NULL,
     content LONGTEXT NOT NULL,
     status ENUM('draft','published') NOT NULL DEFAULT 'draft',
+    category VARCHAR(120) NOT NULL DEFAULT 'autres',
     author_id INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

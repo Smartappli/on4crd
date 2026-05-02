@@ -6,18 +6,26 @@ $availableWidgets = widget_catalog();
 $dashboardPersistenceEnabled = table_exists('dashboard_widgets');
 $selected = [];
 if ($dashboardPersistenceEnabled) {
-    $userWidgets = db()->prepare('SELECT widget_key, position FROM dashboard_widgets WHERE member_id = ? ORDER BY position ASC');
+    $userWidgets = db()->prepare('SELECT widget_key, config_json, position FROM dashboard_widgets WHERE member_id = ? ORDER BY position ASC');
     $userWidgets->execute([(int) $user['id']]);
     $selected = $userWidgets->fetchAll();
 }
-$selectedKeys = array_map(static fn(array $row): string => (string) $row['widget_key'], $selected);
-if ($selectedKeys === []) {
-    $selectedKeys = ['welcome', 'propagation', 'club_status', 'chatbot'];
+$selectedWidgets = [];
+foreach ($selected as $row) {
+    $widgetKey = (string) ($row['widget_key'] ?? '');
+    if ($widgetKey === '' || !array_key_exists($widgetKey, $availableWidgets)) {
+        continue;
+    }
+    $decodedConfig = json_decode((string) ($row['config_json'] ?? ''), true);
+    $selectedWidgets[] = [
+        'key' => $widgetKey,
+        'config' => is_array($decodedConfig) ? $decodedConfig : [],
+    ];
 }
-$selectedKeys = array_values(array_filter(
-    $selectedKeys,
-    static fn(string $widgetKey): bool => array_key_exists($widgetKey, $availableWidgets)
-));
+if ($selectedWidgets === []) {
+    $selectedWidgets = array_map(static fn(string $key): array => ['key' => $key, 'config' => []], ['welcome', 'propagation', 'club_status', 'chatbot']);
+}
+$selectedKeys = array_map(static fn(array $widget): string => (string) $widget['key'], $selectedWidgets);
 $availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);
 
 $dashboardConfig = [
@@ -47,8 +55,9 @@ ob_start();
       <p class="flash flash-error">La table <code>dashboard_widgets</code> est absente : la disposition des widgets ne peut pas être enregistrée.</p>
     <?php endif; ?>
     <div id="dashboard-grid" class="widget-grid" data-config='<?= e(json_encode($dashboardConfig, JSON_UNESCAPED_SLASHES)) ?>'>
-      <?php foreach ($selectedKeys as $widgetKey): ?>
-        <article class="widget-card" draggable="true" data-widget="<?= e($widgetKey) ?>">
+      <?php foreach ($selectedWidgets as $selectedWidget): ?>
+        <?php $widgetKey = (string) $selectedWidget['key']; ?>
+        <article class="widget-card" draggable="true" aria-grabbed="false" data-widget="<?= e($widgetKey) ?>" data-widget-config='<?= e(json_encode($selectedWidget['config'], JSON_UNESCAPED_SLASHES)) ?>'>
           <header>
             <strong><?= e($availableWidgets[$widgetKey]['title'] ?? $widgetKey) ?></strong>
             <button class="ghost remove-widget" type="button">✕</button>
@@ -60,6 +69,7 @@ ob_start();
   </section>
   <aside class="card">
     <h2>Widgets disponibles</h2>
+    <p class="help">Installez vos widgets, puis glissez-déposez pour réordonner la grille.</p>
     <div class="stack">
       <?php foreach ($availableToAdd as $widgetKey => $widget): ?>
         <article class="widget-card">

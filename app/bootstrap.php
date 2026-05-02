@@ -44,6 +44,8 @@ require_once __DIR__ . '/maintenance.php';
 require_once __DIR__ . '/newsletter.php';
 require_once __DIR__ . '/seo.php';
 
+initialize_user_preferences();
+
 setup_observability((array) ($bootstrapConfig['observability'] ?? []));
 apply_security_headers();
 ensure_directories();

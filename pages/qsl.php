@@ -3,6 +3,16 @@ declare(strict_types=1);
 
 $user = require_login();
 $memberId = (int) ($user['id'] ?? 0);
+$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$qslI18n = [
+    'fr' => ['studio' => 'QSL Studio · simple, guidé, efficace', 'studio_help' => 'Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.', 'design' => '1) Designer vos fonds QSL', 'create' => '2) Créer des QSL facilement', 'manage' => '3) QSO importés', 'generated' => 'QSL générées', 'filter' => 'Filtrer', 'reset' => 'Réinitialiser'],
+    'en' => ['studio' => 'QSL Studio · simple, guided, efficient', 'studio_help' => 'Everything is designed for speed: import your QSOs, create cards and export them seamlessly.', 'design' => '1) Design your QSL backgrounds', 'create' => '2) Create QSL cards easily', 'manage' => '3) Imported QSOs', 'generated' => 'Generated QSL cards', 'filter' => 'Filter', 'reset' => 'Reset'],
+    'de' => ['studio' => 'QSL Studio · einfach, geführt, effizient', 'studio_help' => 'Alles ist auf Tempo ausgelegt: QSOs importieren, Karten erstellen und ohne Reibung exportieren.', 'design' => '1) QSL-Hintergründe gestalten', 'create' => '2) QSL-Karten einfach erstellen', 'manage' => '3) Importierte QSOs', 'generated' => 'Erstellte QSL-Karten', 'filter' => 'Filtern', 'reset' => 'Zurücksetzen'],
+    'nl' => ['studio' => 'QSL Studio · eenvoudig, begeleid, efficiënt', 'studio_help' => 'Alles is gericht op snelheid: importeer je QSO’s, maak kaarten en exporteer zonder frictie.', 'design' => '1) Ontwerp je QSL-achtergronden', 'create' => '2) Maak eenvoudig QSL-kaarten', 'manage' => '3) Geïmporteerde QSO’s', 'generated' => 'Gegenereerde QSL-kaarten', 'filter' => 'Filteren', 'reset' => 'Reset'],
+];
+$qt = static function (string $key) use ($locale, $qslI18n): string {
+    return (string) (($qslI18n[$locale] ?? $qslI18n['fr'])[$key] ?? $key);
+};
 $drawPresetPalettes = [
     'club_blue' => ['label' => 'Bleu club (dégradé)', 'primary' => '#0B1F3A', 'secondary' => '#1D4ED8'],
     'sunset' => ['label' => 'Sunset (dégradé)', 'primary' => '#7C2D12', 'secondary' => '#F97316'],
@@ -384,8 +394,8 @@ ob_start();
 ?>
 <div class="qsl-page">
 <section class="card qsl-studio-overview">
-    <h2>QSL Studio · simple, guidé, efficace</h2>
-    <p class="help">Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.</p>
+    <h2><?= e($qt('studio')) ?></h2>
+    <p class="help"><?= e($qt('studio_help')) ?></p>
     <div class="grid-3">
         <a class="inner-card qsl-studio-link-card" href="#qsl-draw" data-qsl-nav-target="design">
             <span class="badge muted">1 · Personnaliser le design</span>
@@ -403,7 +413,7 @@ ob_start();
 </section>
 
 <section class="card" id="qsl-draw" data-qsl-draw-assistant data-qsl-panel="design">
-    <h2>1) Designer vos fonds QSL</h2>
+    <h2><?= e($qt('design')) ?></h2>
     <p class="help">Choisissez un type de fond. Le formulaire s’adapte automatiquement et l’aperçu se met à jour en direct.</p>
     <div class="actions">
         <label><input type="radio" name="qsl_draw_flow" value="image" data-qsl-draw-choice> Fond image</label>
@@ -503,7 +513,7 @@ ob_start();
 </section>
 
 <section class="card" id="qsl-create" data-qsl-assistant data-qsl-panel="create">
-    <h1>2) Créer des QSL facilement</h1>
+    <h1><?= e($qt('create')) ?></h1>
     <p class="help">Choisissez votre objectif : création manuelle détaillée ou import ADIF instantané.</p>
 
     <div class="stack">
@@ -625,7 +635,7 @@ ob_start();
 
 <section class="card" id="qsl-view" data-qsl-panel="manage">
     <div class="row-between">
-        <h2>3) QSO importés</h2>
+        <h2><?= e($qt('manage')) ?></h2>
         <span><?= count($qsoRows) ?> enregistrement(s)</span>
     </div>
     <?php if ($qsoRows === []): ?>
@@ -646,8 +656,8 @@ ob_start();
                     <option value="<?= e($option) ?>" <?= $qsoModeFilter === $option ? 'selected' : '' ?>><?= e($option) ?></option>
                 <?php endforeach; ?>
             </select>
-            <button type="submit" class="button secondary small">Filtrer</button>
-            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost">Réinitialiser</a>
+            <button type="submit" class="button secondary small"><?= e($qt('filter')) ?></button>
+            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost"><?= e($qt('reset')) ?></a>
         </form>
         <form method="post">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -694,7 +704,7 @@ ob_start();
 
 <section class="card" data-qsl-panel="manage">
     <div class="row-between">
-        <h2>QSL générées</h2>
+        <h2><?= e($qt('generated')) ?></h2>
         <span><?= count($qslRows) ?> carte(s)</span>
     </div>
     <?php if ($qslRows === []): ?>
@@ -703,8 +713,8 @@ ob_start();
         <form method="get" class="inline-form qsl-filters">
             <input type="hidden" name="route" value="qsl">
             <input type="text" name="qsl_search" value="<?= e($qslSearch) ?>" placeholder="Rechercher une QSL (titre, call, bande...)">
-            <button type="submit" class="button secondary small">Filtrer</button>
-            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost">Réinitialiser</a>
+            <button type="submit" class="button secondary small"><?= e($qt('filter')) ?></button>
+            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost"><?= e($qt('reset')) ?></a>
         </form>
         <div class="table-wrap">
             <table>

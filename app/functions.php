@@ -424,6 +424,105 @@ function render_widget(string $slug, array $user = []): string
             return '<p class="help">Widget indisponible.</p>';
     }
 }
+
+function render_ham_weather_advice(array $user = []): string
+{
+    $defaultLocator = 'JO20LI';
+    $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
+    $locator = $memberLocator !== '' ? $memberLocator : $defaultLocator;
+    $coordinates = maidenhead_to_coordinates($locator) ?? ['latitude' => 50.3150, 'longitude' => 4.9452];
+
+    $weatherUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
+        'latitude' => number_format((float) $coordinates['latitude'], 4, '.', ''),
+        'longitude' => number_format((float) $coordinates['longitude'], 4, '.', ''),
+        'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code',
+        'timezone' => 'auto',
+    ]);
+    $weatherPayload = cache_remember('ham:advice:weather:' . sha1($weatherUrl), 300, static function () use ($weatherUrl): ?array {
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 6,
+                'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Propagation/1.0\r\n",
+            ],
+        ]);
+        $raw = @file_get_contents($weatherUrl, false, $context);
+        if (!is_string($raw) || trim($raw) === '') {
+            return null;
+        }
+        $decoded = json_decode($raw, true);
+        return is_array($decoded) ? $decoded : null;
+    });
+
+    $kpPayload = cache_remember('ham:advice:kp', 300, static function (): ?array {
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 6,
+                'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Propagation/1.0\r\n",
+            ],
+        ]);
+        $raw = @file_get_contents('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json', false, $context);
+        if (!is_string($raw) || trim($raw) === '') {
+            return null;
+        }
+        $decoded = json_decode($raw, true);
+        return is_array($decoded) ? $decoded : null;
+    });
+
+    $currentWeather = is_array($weatherPayload) && is_array($weatherPayload['current'] ?? null) ? $weatherPayload['current'] : [];
+    $temperature = is_numeric($currentWeather['temperature_2m'] ?? null) ? (float) $currentWeather['temperature_2m'] : 15.0;
+    $wind = is_numeric($currentWeather['wind_speed_10m'] ?? null) ? (float) $currentWeather['wind_speed_10m'] : 10.0;
+    $weatherCode = (int) ($currentWeather['weather_code'] ?? -1);
+    $localTime = trim((string) ($currentWeather['time'] ?? ''));
+    $hour = (int) gmdate('G');
+    if ($localTime !== '') {
+        try {
+            $hour = (int) (new DateTimeImmutable($localTime))->format('G');
+        } catch (Throwable $throwable) {
+            $hour = (int) gmdate('G');
+        }
+    }
+    $humidity = is_numeric($currentWeather['relative_humidity_2m'] ?? null) ? (int) $currentWeather['relative_humidity_2m'] : 60;
+    $measurement = is_array($kpPayload) ? extract_latest_kp_measurement($kpPayload) : null;
+    $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : 3.0;
+
+    $hfScore = 70.0;
+    $hfScore += $kp <= 2.0 ? 15.0 : ($kp <= 4.0 ? 5.0 : -20.0);
+    $hfScore += ($hour >= 7 && $hour <= 16) ? 10.0 : -5.0;
+    $hfScore += ($wind <= 25.0 ? 5.0 : -8.0);
+    $hfScore += ($humidity >= 35 && $humidity <= 85) ? 3.0 : -4.0;
+    $hfScore += in_array($weatherCode, [95, 96, 99], true) ? -15.0 : 0.0;
+
+    $bands = ['40m', '20m', '15m'];
+    if ($hour >= 8 && $hour <= 15 && $kp <= 3.5) {
+        $bands = ['20m', '17m', '15m'];
+    } elseif ($hour >= 10 && $hour <= 17 && $kp <= 2.5) {
+        $bands = ['15m', '12m', '10m'];
+    } elseif ($hour >= 18 || $hour <= 6) {
+        $bands = ['40m', '80m', '30m'];
+    } elseif ($kp >= 5.0) {
+        $bands = ['40m', '30m', '20m'];
+    }
+
+    $modes = ['SSB', 'CW'];
+    if ($kp >= 4.5 || $wind >= 35.0 || in_array($weatherCode, [95, 96, 99], true)) {
+        $modes = ['FT8', 'CW', 'RTTY'];
+    } elseif ($temperature < 5.0 || $humidity > 90) {
+        $modes = ['FT8', 'SSB', 'CW'];
+    }
+
+    $scoreLabel = $hfScore >= 80 ? 'Excellentes conditions' : ($hfScore >= 60 ? 'Bonnes conditions' : ($hfScore >= 45 ? 'Conditions variables' : 'Conditions difficiles'));
+    $timeWindow = $hour >= 8 && $hour <= 15 ? '08h–15h' : ($hour >= 16 && $hour <= 21 ? '16h–21h' : 'soirée / nuit');
+
+    return '<ul class="list-clean">'
+        . '<li><strong>' . e($scoreLabel) . '</strong> pour les QSO (score ' . e((string) max(0, min(100, (int) round($hfScore)))) . '/100)</li>'
+        . '<li><strong>Bandes conseillées :</strong> ' . e(implode(' • ', $bands)) . '</li>'
+        . '<li><strong>Modes conseillés :</strong> ' . e(implode(' • ', $modes)) . '</li>'
+        . '<li><strong>Créneau recommandé :</strong> ' . e($timeWindow) . '</li>'
+        . '<li class="help">Algorithme basé sur localisation (' . e($locator) . '), heure locale (' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h), météo locale (T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h) et indice Kp=' . e(number_format($kp, 1, ',', '')) . '.</li>'
+        . '</ul>';
+}
 }
 
 function seed_ad_placements(): void
@@ -476,6 +575,8 @@ function ensure_directories(): void
         dirname(__DIR__) . '/storage/cache/data',
         dirname(__DIR__) . '/storage/uploads/albums',
         dirname(__DIR__) . '/storage/uploads/ads',
+        dirname(__DIR__) . '/storage/uploads/members',
+        dirname(__DIR__) . '/storage/uploads/members/avatars',
         dirname(__DIR__) . '/storage/press',
     ];
 
@@ -555,6 +656,31 @@ function apply_runtime_schema_updates(): void
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
 
+    if (table_exists('articles')) {
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $columnStmt->execute(['articles', 'category']);
+        $hasCategory = (int) $columnStmt->fetchColumn() > 0;
+        if (!$hasCategory) {
+            db()->exec('ALTER TABLE articles ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "autres" AFTER status');
+        }
+    }
+
+
+    if (table_exists('dashboard_widgets')) {
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $columnStmt->execute(['dashboard_widgets', 'config_json']);
+        $hasConfigJson = (int) $columnStmt->fetchColumn() > 0;
+        if (!$hasConfigJson) {
+            db()->exec('ALTER TABLE dashboard_widgets ADD COLUMN config_json LONGTEXT DEFAULT NULL AFTER widget_key');
+        }
+    }
+
     if (table_exists('members')) {
         $columnStmt = db()->prepare(
             'SELECT COUNT(*) FROM information_schema.columns
@@ -565,6 +691,8 @@ function apply_runtime_schema_updates(): void
             'visibility_full_name' => 'ALTER TABLE members ADD COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_licence_class' => 'ALTER TABLE members ADD COLUMN visibility_licence_class ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_favourite_bands' => 'ALTER TABLE members ADD COLUMN visibility_favourite_bands ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_photo' => 'ALTER TABLE members ADD COLUMN visibility_photo ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'avatar_path' => 'ALTER TABLE members ADD COLUMN avatar_path VARCHAR(255) DEFAULT NULL',
         ];
 
         foreach ($requiredColumns as $columnName => $statement) {
@@ -1259,6 +1387,7 @@ function render_layout(string $content, string $title = ''): string
         . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<button class="menu-toggle button small secondary" type="button" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="menu-label">Menu</span></button>'
+        . '<button class="nav-backdrop" type="button" aria-label="Fermer le menu" hidden></button>'
         . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '</nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
@@ -2007,6 +2136,56 @@ function csrf_token(): string
     return $_SESSION['_csrf'];
 }
 
+function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl']): string
+{
+    $normalized = strtolower(trim($header));
+    if ($normalized === '') {
+        return 'en';
+    }
+    $chunks = preg_split('/\s*,\s*/', $normalized) ?: [];
+    foreach ($chunks as $chunk) {
+        if ($chunk === '') {
+            continue;
+        }
+        $localePart = explode(';', $chunk)[0] ?? '';
+        $localePart = trim($localePart);
+        if ($localePart === '') {
+            continue;
+        }
+        $base = explode('-', $localePart)[0] ?? $localePart;
+        if (in_array($base, $supportedLocales, true)) {
+            return $base;
+        }
+    }
+
+    return 'en';
+}
+
+function initialize_user_preferences(): void
+{
+    $supportedLocales = ['fr', 'en', 'de', 'nl'];
+    $supportedThemes = ['light', 'dark'];
+    $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber', 'orange'];
+
+    $cookieLocale = strtolower((string) ($_COOKIE['on4crd_locale'] ?? ''));
+    $cookieTheme = strtolower((string) ($_COOKIE['on4crd_theme'] ?? ''));
+    $cookieAccent = strtolower((string) ($_COOKIE['on4crd_accent'] ?? ''));
+
+    if (!isset($_SESSION['locale'])) {
+        if (in_array($cookieLocale, $supportedLocales, true)) {
+            $_SESSION['locale'] = $cookieLocale;
+        } else {
+            $_SESSION['locale'] = preferred_locale_from_accept_language((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''), $supportedLocales);
+        }
+    }
+    if (!isset($_SESSION['theme'])) {
+        $_SESSION['theme'] = in_array($cookieTheme, $supportedThemes, true) ? $cookieTheme : 'dark';
+    }
+    if (!isset($_SESSION['accent'])) {
+        $_SESSION['accent'] = in_array($cookieAccent, $supportedAccents, true) ? $cookieAccent : 'blue';
+    }
+}
+
 function verify_csrf(): void
 {
     $sessionToken = (string) ($_SESSION['_csrf'] ?? '');
@@ -2279,6 +2458,90 @@ function handle_ad_image_upload(?array $upload, string $callsign, string $existi
     return 'storage/uploads/ads/' . $saved;
 }
 
+function generate_member_avatar_from_photo(string $photoPublicPath, int $memberId): ?string
+{
+    $sourcePath = dirname(__DIR__) . '/' . ltrim($photoPublicPath, '/');
+    if (!is_file($sourcePath) || !extension_loaded('gd')) {
+        return null;
+    }
+
+    $info = @getimagesize($sourcePath);
+    $mime = (string) ($info['mime'] ?? '');
+    $sourceImage = match ($mime) {
+        'image/jpeg' => @imagecreatefromjpeg($sourcePath),
+        'image/png' => @imagecreatefrompng($sourcePath),
+        'image/webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($sourcePath) : false,
+        default => false,
+    };
+    if (!$sourceImage) {
+        return null;
+    }
+
+    $sourceWidth = imagesx($sourceImage);
+    $sourceHeight = imagesy($sourceImage);
+    $side = min($sourceWidth, $sourceHeight);
+    $srcX = (int) floor(($sourceWidth - $side) / 2);
+    $srcY = (int) floor(($sourceHeight - $side) / 2);
+
+    $avatar = imagecreatetruecolor(256, 256);
+    imagealphablending($avatar, false);
+    imagesavealpha($avatar, true);
+    $transparent = imagecolorallocatealpha($avatar, 0, 0, 0, 127);
+    imagefill($avatar, 0, 0, $transparent);
+    imagecopyresampled($avatar, $sourceImage, 0, 0, $srcX, $srcY, 256, 256, $side, $side);
+    imagedestroy($sourceImage);
+
+    $targetDir = dirname(__DIR__) . '/storage/uploads/members/avatars';
+    if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
+        imagedestroy($avatar);
+        return null;
+    }
+    $fileName = 'avatar_' . $memberId . '_' . date('YmdHis') . '.png';
+    $targetPath = $targetDir . '/' . $fileName;
+    $saved = imagepng($avatar, $targetPath, 8);
+    imagedestroy($avatar);
+    if (!$saved) {
+        return null;
+    }
+
+    return 'storage/uploads/members/avatars/' . $fileName;
+}
+
+
+function member_default_avatar_data_uri(string $label = ''): string
+{
+    $trimmed = trim($label);
+    $initial = strtoupper(function_exists('mb_substr') ? (string) mb_substr($trimmed, 0, 1, 'UTF-8') : substr($trimmed, 0, 1));
+    if ($initial === '' || !preg_match('/[A-Z0-9]/', $initial)) {
+        $initial = 'R';
+    }
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Avatar">'
+        . '<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1d4ed8"/><stop offset="100%" stop-color="#0f172a"/></linearGradient></defs>'
+        . '<rect width="256" height="256" rx="128" fill="url(#bg)"/>'
+        . '<text x="50%" y="56%" text-anchor="middle" dominant-baseline="middle" font-family="Arial, Helvetica, sans-serif" font-size="112" font-weight="700" fill="#f8fafc">'
+        . htmlspecialchars($initial, ENT_QUOTES, 'UTF-8')
+        . '</text></svg>';
+
+    return 'data:image/svg+xml;utf8,' . rawurlencode($svg);
+}
+
+function member_avatar_src(array $member): string
+{
+    $avatarPath = trim((string) ($member['avatar_path'] ?? ''));
+    if ($avatarPath !== '') {
+        return asset_url($avatarPath);
+    }
+
+    $photoPath = trim((string) ($member['photo_path'] ?? ''));
+    if ($photoPath !== '') {
+        return asset_url($photoPath);
+    }
+
+    $label = (string) ($member['callsign'] ?? ($member['full_name'] ?? ''));
+
+    return member_default_avatar_data_uri($label);
+}
 function client_ip_address(): string
 {
     return trim((string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0')) ?: '0.0.0.0';

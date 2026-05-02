@@ -1,19 +1,37 @@
 (function () {
   const menuToggle = document.querySelector('.menu-toggle');
   const nav = document.getElementById('main-nav');
+  const navBackdrop = document.querySelector('.nav-backdrop');
   if (menuToggle && nav) {
     const closeMenu = () => {
       menuToggle.setAttribute('aria-expanded', 'false');
       nav.classList.remove('nav-open');
+      document.body.classList.remove('menu-open');
+      if (navBackdrop instanceof HTMLElement) {
+        navBackdrop.hidden = true;
+      }
     };
 
     menuToggle.addEventListener('click', () => {
       const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
       menuToggle.setAttribute('aria-expanded', expanded ? 'false' : 'true');
       nav.classList.toggle('nav-open');
+      const nowOpen = !expanded;
+      document.body.classList.toggle('menu-open', nowOpen);
+      if (navBackdrop instanceof HTMLElement) {
+        navBackdrop.hidden = !nowOpen;
+      }
     });
 
     nav.querySelectorAll('a, button').forEach((node) => node.addEventListener('click', closeMenu));
+    if (navBackdrop instanceof HTMLElement) {
+      navBackdrop.addEventListener('click', closeMenu);
+    }
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 900) {
+        closeMenu();
+      }
+    });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         closeMenu();
@@ -162,7 +180,20 @@
     setSaveStatus('Enregistrement…', false);
 
     try {
-      const widgets = [...grid.querySelectorAll('.widget-card')].map((card) => card.dataset.widget).filter(Boolean);
+      const widgets = [...grid.querySelectorAll('.widget-card')].map((card) => {
+        const key = card.dataset.widget || '';
+        if (!key) return null;
+        let config = {};
+        if (card.dataset.widgetConfig) {
+          try {
+            const parsed = JSON.parse(card.dataset.widgetConfig);
+            if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+              config = parsed;
+            }
+          } catch (error) {}
+        }
+        return { key, config };
+      }).filter(Boolean);
       const response = await fetch(window.dashboardConfig.saveUrl, {
         method: 'POST',
         headers: {
@@ -177,7 +208,7 @@
       if (!response.ok || !data.ok) {
         throw new Error(data.error || 'Erreur de sauvegarde');
       }
-      setSaveStatus('Disposition enregistrée.', false);
+      setSaveStatus(`Disposition enregistrée à ${new Date().toLocaleTimeString()}.`, false);
     } catch (error) {
       setSaveStatus(error instanceof Error ? error.message : 'Erreur de sauvegarde.', true);
     } finally {
@@ -254,6 +285,7 @@
       dragged = null;
       saveDashboardLayout();
     });
+    card.querySelector('.remove-widget')?.setAttribute('aria-label', 'Retirer le widget');
     card.querySelector('.remove-widget')?.addEventListener('click', () => {
       const widgetKey = card.dataset.widget || '';
       const widgetTitle = card.querySelector('header strong')?.textContent?.trim() || widgetKey;
@@ -268,7 +300,9 @@
     card.className = 'widget-card';
     card.draggable = true;
     card.dataset.widget = widgetKey;
-    card.innerHTML = `<header><strong>${title}</strong><button class="ghost remove-widget" type="button">✕</button></header><div class="widget-body">Chargement…</div>`;
+    card.dataset.widgetConfig = '{}';
+    card.classList.add('is-loading');
+    card.innerHTML = `<header><strong>${title}</strong><button class="ghost remove-widget" type="button" aria-label="Retirer le widget">✕</button></header><div class="widget-body">Chargement…</div>`;
     bindCard(card);
     fetch(renderBase + encodeURIComponent(widgetKey), {
       headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -277,9 +311,12 @@
       .then((response) => response.text())
       .then((html) => {
         card.querySelector('.widget-body').innerHTML = html;
+        card.classList.remove('is-loading');
       })
       .catch(() => {
         card.querySelector('.widget-body').innerHTML = '<p>Impossible de charger le widget.</p>';
+        card.classList.add('is-error');
+        card.classList.remove('is-loading');
       });
     return card;
   }
@@ -360,6 +397,11 @@
     document.execCommand(command, false, null);
   };
 
+  const applyCommandWithValue = (editor, command, value) => {
+    editor.focus();
+    document.execCommand(command, false, value);
+  };
+
   let mammothLoader = null;
   const loadMammoth = async () => {
     if (window.mammoth) return window.mammoth;
@@ -385,6 +427,37 @@
 
     const toolbar = document.createElement('div');
     toolbar.className = 'wysiwyg-toolbar';
+
+    const fontSizeSelect = document.createElement('select');
+    fontSizeSelect.className = 'wysiwyg-control';
+    fontSizeSelect.title = 'Taille de police';
+    [
+      { value: '3', label: 'Texte normal' },
+      { value: '2', label: 'Petit' },
+      { value: '4', label: 'Grand' },
+      { value: '5', label: 'Très grand' },
+    ].forEach((optionConfig) => {
+      const option = document.createElement('option');
+      option.value = optionConfig.value;
+      option.textContent = optionConfig.label;
+      fontSizeSelect.appendChild(option);
+    });
+    fontSizeSelect.addEventListener('change', () => {
+      applyCommandWithValue(editor, 'fontSize', fontSizeSelect.value || '3');
+      editor.dispatchEvent(new Event('input'));
+    });
+    toolbar.appendChild(fontSizeSelect);
+
+    const fontColorInput = document.createElement('input');
+    fontColorInput.type = 'color';
+    fontColorInput.className = 'wysiwyg-control wysiwyg-color';
+    fontColorInput.title = 'Couleur du texte';
+    fontColorInput.value = '#111111';
+    fontColorInput.addEventListener('input', () => {
+      applyCommandWithValue(editor, 'foreColor', fontColorInput.value);
+      editor.dispatchEvent(new Event('input'));
+    });
+    toolbar.appendChild(fontColorInput);
 
     toolbarButtons.forEach((buttonConfig) => {
       const button = document.createElement('button');

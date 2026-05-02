@@ -10,14 +10,31 @@ try {
         throw new RuntimeException('La table dashboard_widgets est absente.');
     }
     $payload = json_decode((string) file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
-    $widgets = is_array($payload['widgets'] ?? null) ? $payload['widgets'] : [];
+    $widgetsInput = is_array($payload['widgets'] ?? null) ? $payload['widgets'] : [];
     $catalog = widget_catalog();
-    $widgets = array_values(array_filter(array_map('strval', $widgets), static fn(string $key): bool => isset($catalog[$key])));
+    $widgets = [];
+    foreach ($widgetsInput as $item) {
+        if (is_string($item)) {
+            $widgetKey = $item;
+            $config = [];
+        } elseif (is_array($item)) {
+            $widgetKey = (string) ($item['key'] ?? '');
+            $config = is_array($item['config'] ?? null) ? $item['config'] : [];
+        } else {
+            continue;
+        }
+
+        if ($widgetKey === '' || !isset($catalog[$widgetKey])) {
+            continue;
+        }
+
+        $widgets[] = ['key' => $widgetKey, 'config' => $config];
+    }
 
     db()->prepare('DELETE FROM dashboard_widgets WHERE member_id = ?')->execute([(int) $user['id']]);
-    $insert = db()->prepare('INSERT INTO dashboard_widgets (member_id, widget_key, position) VALUES (?, ?, ?)');
-    foreach ($widgets as $position => $widgetKey) {
-        $insert->execute([(int) $user['id'], $widgetKey, $position]);
+    $insert = db()->prepare('INSERT INTO dashboard_widgets (member_id, widget_key, config_json, position) VALUES (?, ?, ?, ?)');
+    foreach ($widgets as $position => $widget) {
+        $insert->execute([(int) $user['id'], $widget['key'], json_encode($widget['config'], JSON_UNESCAPED_SLASHES), $position]);
     }
 
     echo json_encode(['ok' => true, 'widgets' => $widgets], JSON_THROW_ON_ERROR);
