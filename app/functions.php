@@ -836,8 +836,14 @@ function route_url(string $route, array $query = []): string
     }
 
     if (str_ends_with($route, '.php')) {
-        $suffix = $query === [] ? '' : ('?' . http_build_query($query));
-        return base_url('/' . ltrim($route, '/') . $suffix);
+        $directPhpRoutes = ['install.php', 'sitemap.xml', 'robots.txt'];
+        $normalizedRoute = ltrim($route, '/');
+        if (in_array($normalizedRoute, $directPhpRoutes, true)) {
+            $suffix = $query === [] ? '' : ('?' . http_build_query($query));
+            return base_url('/' . $normalizedRoute . $suffix);
+        }
+
+        $route = pathinfo($normalizedRoute, PATHINFO_FILENAME);
     }
 
     $extra = [];
