@@ -9,24 +9,48 @@ $homeMessages = [
         'ham_weather' => 'Météo radioamateur',
         'ham_weather_desc' => 'Recommandations calculées automatiquement selon votre localisation, l\'heure, la météo et la propagation pour identifier les bandes et modes les plus propices aux QSO.',
         'quote_fallback' => 'Chaque contact radio est une nouvelle aventure.',
+        'cta_member_area' => 'Accéder à mon espace membre',
+        'cta_join_club' => 'Rejoindre le club',
+        'cta_newsletter' => 'S\'inscrire à la newsletter',
+        'useful_info' => 'Informations utiles',
+        'meetings_info' => 'Nos réunions se déroulent le 3ième samedi du mois à partir de 14h.',
+        'maps_route' => 'Itinéraire Google Maps',
     ],
     'en' => [
         'quote_day' => 'Quote of the day',
         'ham_weather' => 'Ham radio weather',
         'ham_weather_desc' => 'Recommendations are computed automatically from your location, time of day, weather and propagation to identify the most favorable bands and modes for QSO.',
         'quote_fallback' => 'Every radio contact is a new adventure.',
+        'cta_member_area' => 'Access my member area',
+        'cta_join_club' => 'Join the club',
+        'cta_newsletter' => 'Subscribe to the newsletter',
+        'useful_info' => 'Useful information',
+        'meetings_info' => 'Our meetings take place on the 3rd Saturday of each month from 2:00 PM.',
+        'maps_route' => 'Google Maps directions',
     ],
     'de' => [
         'quote_day' => 'Zitat des Tages',
         'ham_weather' => 'Funkwetter',
         'ham_weather_desc' => 'Die Empfehlungen werden automatisch aus Standort, Tageszeit, Wetter und Ausbreitung berechnet, um die besten Bänder und Betriebsarten für QSOs zu ermitteln.',
         'quote_fallback' => 'Jeder Funkkontakt ist ein neues Abenteuer.',
+        'cta_member_area' => 'Meinen Mitgliederbereich öffnen',
+        'cta_join_club' => 'Dem Club beitreten',
+        'cta_newsletter' => 'Newsletter abonnieren',
+        'useful_info' => 'Nützliche Informationen',
+        'meetings_info' => 'Unsere Treffen finden am 3. Samstag jedes Monats ab 14:00 Uhr statt.',
+        'maps_route' => 'Google-Maps-Route',
     ],
     'nl' => [
         'quote_day' => 'Quote van de dag',
         'ham_weather' => 'Zendweer voor radioamateurs',
         'ham_weather_desc' => 'Aanbevelingen worden automatisch berekend op basis van uw locatie, tijdstip, weer en propagatie om de beste banden en modes voor QSO te bepalen.',
         'quote_fallback' => 'Elk radiocontact is een nieuw avontuur.',
+        'cta_member_area' => 'Mijn ledengedeelte openen',
+        'cta_join_club' => 'Word lid van de club',
+        'cta_newsletter' => 'Inschrijven op de nieuwsbrief',
+        'useful_info' => 'Nuttige informatie',
+        'meetings_info' => 'Onze bijeenkomsten vinden plaats op de 3e zaterdag van elke maand vanaf 14:00 uur.',
+        'maps_route' => 'Route via Google Maps',
     ],
 ];
 $homeI18n = $homeMessages[$homeLocale] ?? $homeMessages['fr'];
@@ -35,9 +59,9 @@ $user = current_user();
 $isAuthenticated = $user !== null;
 
 $primaryCta = $isAuthenticated
-    ? '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('dashboard')) . '">Accéder à mon espace membre</a>'
-    : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('membership')) . '">Rejoindre le club</a>';
-$newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-50" href="' . e(route_url('newsletter_public')) . '">S\'inscrire à la newsletter</a>';
+    ? '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('dashboard')) . '">' . e((string) $homeI18n['cta_member_area']) . '</a>'
+    : '<a class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700" href="' . e(route_url('membership')) . '">' . e((string) $homeI18n['cta_join_club']) . '</a>';
+$newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-50" href="' . e(route_url('newsletter_public')) . '">' . e((string) $homeI18n['cta_newsletter']) . '</a>';
 
 
 $moduleCatalog = [
@@ -249,15 +273,15 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">' . $homeHamAdviceHtml . '</div>'
     . '</aside>'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<h2 class="text-xl font-bold text-slate-900">Informations utiles</h2>'
+    . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['useful_info']) . '</h2>'
     . '<div class="mt-4 grid gap-3">'
-    . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4"><span class="text-sm text-slate-600">Nos réunions se déroulent le 3ième samedi du mois à partir de 14h.</span></article>'
+    . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4"><span class="text-sm text-slate-600">' . e((string) $homeI18n['meetings_info']) . '</span></article>'
     . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">'
     . '<p class="mt-2 text-sm text-slate-600">Bocq Arena, rue des Écoles, 5530 Purnode</p>'
     . '<div class="mt-3 overflow-hidden rounded-lg border border-slate-200">'
     . '<iframe class="h-56 w-full" title="Carte Google Map - Radio Club Durnal" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E&output=embed"></iframe>'
     . '</div>'
-    . '<a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E" target="_blank" rel="noopener noreferrer">Itinéraire Google Maps</a>'
+    . '<a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E" target="_blank" rel="noopener noreferrer">' . e((string) $homeI18n['maps_route']) . '</a>'
     . '</article>'
     . '</div>'
     . '</aside>'
@@ -358,4 +382,3 @@ if ($homeLocale !== 'fr') {
 }
 
 echo render_layout($content, $homeLocale === 'fr' ? 'Accueil' : ($homeReplace[$homeLocale]['Accueil'] ?? 'Accueil'));
-
