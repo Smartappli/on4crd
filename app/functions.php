@@ -1358,9 +1358,8 @@ function render_layout(string $content, string $title = ''): string
         . '<span class="sr-only" id="accent-help">Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.</span>'
         . '</form>';
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="Installer l’application">Installer l’app</button>';
-    $menuToolsHtml = '<div class="toolbar-preferences">'
-        . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
+    $authToolsHtml = '<div class="toolbar-preferences">'
+        . '<div class="toolbar-preferences-row"><div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
@@ -1379,8 +1378,8 @@ function render_layout(string $content, string $title = ''): string
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<button class="menu-toggle button small secondary" type="button" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="menu-label">Menu</span></button>'
         . '<button class="nav-backdrop" type="button" aria-label="Fermer le menu" hidden></button>'
-        . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
-        . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
+        . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '<div class="nav-mobile-tools">' . $authToolsHtml . '</div></nav>'
+        . '<div class="toolbar">' . $authToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
