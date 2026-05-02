@@ -25,7 +25,7 @@ if (table_exists('members')) {
     }
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
-    $sql = 'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, is_committee, committee_role, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
+    $sql = 'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, photo_path, avatar_path, is_committee, committee_role, visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
         FROM members
         WHERE is_active = 1';
     $params = [];
@@ -59,7 +59,8 @@ if (table_exists('members')) {
          FROM members
          WHERE is_active = 1
            AND (
-               visibility_full_name IN (' . $visibilityPlaceholders . ')
+               visibility_photo IN (' . $visibilityPlaceholders . ')
+               OR visibility_full_name IN (' . $visibilityPlaceholders . ')
                OR visibility_email IN (' . $visibilityPlaceholders . ')
                OR visibility_phone IN (' . $visibilityPlaceholders . ')
                OR visibility_qth IN (' . $visibilityPlaceholders . ')
@@ -72,7 +73,7 @@ if (table_exists('members')) {
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
     }
-    for ($i = 0; $i < 7; $i++) {
+    for ($i = 0; $i < 8; $i++) {
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $countParams[] = $visibilityLevel;
         }
@@ -83,6 +84,7 @@ if (table_exists('members')) {
     $ubaMembersCount = (int) ($countsRow['uba_total'] ?? 0);
 
     $fieldVisibilityMap = [
+        'photo_path' => 'visibility_photo',
         'full_name' => 'visibility_full_name',
         'email' => 'visibility_email',
         'phone' => 'visibility_phone',
@@ -144,6 +146,8 @@ ob_start();
             <?php foreach ($members as $member): ?>
                 <article class="directory-card">
                     <h3><?= e((string) $member['callsign']) ?></h3>
+                    <?php $memberAvatarSrc = member_avatar_src($member); ?>
+                    <p><img src="<?= e($memberAvatarSrc) ?>" alt="Avatar de <?= e((string) $member['callsign']) ?>" style="width:96px;height:96px;object-fit:cover;border-radius:999px;"></p>
                     <?php if (trim((string) ($member['full_name'] ?? '')) !== ''): ?>
                         <p><?= e((string) $member['full_name']) ?></p>
                     <?php endif; ?>

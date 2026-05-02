@@ -56,6 +56,13 @@ if ($route === 'set_language') {
         $locale = 'fr';
     }
     $_SESSION['locale'] = $locale;
+    setcookie('on4crd_locale', $locale, [
+        'expires' => time() + (86400 * 365),
+        'path' => '/',
+        'secure' => (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off'),
+        'httponly' => false,
+        'samesite' => 'Lax',
+    ]);
     $returnRoute = (string) ($_POST['return_route'] ?? 'home');
     redirect($returnRoute !== '' ? $returnRoute : 'home');
 }
@@ -75,6 +82,13 @@ if ($route === 'set_accent') {
         $accent = 'blue';
     }
     $_SESSION['accent'] = $accent;
+    setcookie('on4crd_accent', $accent, [
+        'expires' => time() + (86400 * 365),
+        'path' => '/',
+        'secure' => (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off'),
+        'httponly' => false,
+        'samesite' => 'Lax',
+    ]);
     $returnRoute = (string) ($_POST['return_route'] ?? 'home');
     redirect($returnRoute !== '' ? $returnRoute : 'home');
 }
@@ -91,6 +105,13 @@ if ($route === 'set_theme') {
         $theme = 'dark';
     }
     $_SESSION['theme'] = $theme;
+    setcookie('on4crd_theme', $theme, [
+        'expires' => time() + (86400 * 365),
+        'path' => '/',
+        'secure' => (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off'),
+        'httponly' => false,
+        'samesite' => 'Lax',
+    ]);
     $returnRoute = (string) ($_POST['return_route'] ?? 'home');
     redirect($returnRoute !== '' ? $returnRoute : 'home');
 }

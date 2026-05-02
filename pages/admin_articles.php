@@ -55,6 +55,24 @@ function import_article_document(array $file): array
     ];
 }
 
+$defaultCategories = [
+    'antennes' => 'Antennes',
+    'trafic' => 'Trafic & DX',
+    'numerique' => 'Modes numériques',
+    'materiel' => 'Matériel & station',
+    'formation' => 'Formation',
+    'autres' => 'Autres',
+];
+
+$existingCategoryRows = db()->query('SELECT DISTINCT category FROM articles WHERE category IS NOT NULL AND category <> "" ORDER BY category ASC')->fetchAll();
+$knownCategories = $defaultCategories;
+foreach ($existingCategoryRows as $existingCategoryRow) {
+    $code = trim((string) ($existingCategoryRow['category'] ?? ''));
+    if ($code !== '' && !isset($knownCategories[$code])) {
+        $knownCategories[$code] = ucwords(str_replace('-', ' ', $code));
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -67,17 +85,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
             $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
             $status = (string) ($_POST['status'] ?? 'draft');
+            $categoryChoice = trim((string) ($_POST['category'] ?? 'autres'));
+            $customCategory = slugify(trim((string) ($_POST['category_custom'] ?? '')));
+            $category = $categoryChoice === '__custom__' ? $customCategory : slugify($categoryChoice);
+            if ($category === '') {
+                $category = 'autres';
+            }
             $imported = import_article_document($_FILES['article_document'] ?? []);
             if ($imported['content'] !== '') {
-                $content = sanitize_rich_html($imported['content']);
+                $content = $imported['content'];
                 if ($excerpt === '') {
                     $excerpt = $imported['excerpt'];
                 }
             }
             if ($id > 0) {
-                db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ? WHERE id = ?')->execute([$title, $slug, $excerpt, $content, $status, $id]);
+                db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ? WHERE id = ?')->execute([$title, $slug, $excerpt, $content, $status, $category, $id]);
             } else {
-                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, author_id) VALUES (?, ?, ?, ?, ?, ?)')->execute([$title, $slug, $excerpt, $content, $status, (int) current_user()['id']]);
+                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, ?, ?, ?)')->execute([$title, $slug, $excerpt, $content, $status, $category, (int) current_user()['id']]);
                 $id = (int) db()->lastInsertId();
             }
             article_translation_upsert($id, 'en');
@@ -94,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $articles = db()->query('SELECT * FROM articles ORDER BY updated_at DESC')->fetchAll();
 $editingId = (int) ($_GET['id'] ?? 0);
-$editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft'];
+$editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres'];
 if ($editingId > 0) {
     $stmt = db()->prepare('SELECT * FROM articles WHERE id = ?');
     $stmt->execute([$editingId]);
@@ -112,6 +136,18 @@ ob_start();
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
             <label>Titre<input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
             <label>Slug<input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
+            <label>Catégorie
+                <select name="category" id="article-category">
+                    <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
+                    <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
+                        <option value="<?= e($categoryCode) ?>" <?= $editingCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
+                    <?php endforeach; ?>
+                    <option value="__custom__">Nouvelle catégorie…</option>
+                </select>
+            </label>
+            <label id="article-category-custom" hidden>Nouvelle catégorie (identifiant)
+                <input type="text" name="category_custom" value="" placeholder="ex: propagation-vhf">
+            </label>
             <label>Importer un document (PDF ou DOCX)<input type="file" name="article_document" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"></label>
             <label>Résumé<textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
             <label>Contenu (HTML simple)<textarea name="content" rows="16"><?= e((string) $editing['content']) ?></textarea></label>
@@ -130,6 +166,7 @@ ob_start();
             <?php foreach ($articles as $article): ?>
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(base_url('index.php?route=admin_articles&id=' . (int) $article['id'])) ?>">Modifier</a></div>
+                    <p><strong>Catégorie :</strong> <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>
@@ -140,24 +177,33 @@ ob_start();
 (() => {
     const titleInput = document.querySelector('input[name="title"]');
     const slugInput = document.querySelector('input[name="slug"]');
-    if (!(titleInput instanceof HTMLInputElement) || !(slugInput instanceof HTMLInputElement)) {
-        return;
+    const categorySelect = document.querySelector('#article-category');
+    const customCategoryWrapper = document.querySelector('#article-category-custom');
+
+    if (titleInput instanceof HTMLInputElement && slugInput instanceof HTMLInputElement) {
+        const slugify = (value) => value
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .replace(/-{2,}/g, '-');
+
+        const syncSlug = () => {
+            slugInput.value = slugify(titleInput.value);
+        };
+
+        titleInput.addEventListener('input', syncSlug);
+        syncSlug();
     }
 
-    const slugify = (value) => value
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-        .replace(/-{2,}/g, '-');
-
-    const syncSlug = () => {
-        slugInput.value = slugify(titleInput.value);
-    };
-
-    titleInput.addEventListener('input', syncSlug);
-    syncSlug();
+    if (categorySelect instanceof HTMLSelectElement && customCategoryWrapper instanceof HTMLElement) {
+        const syncCategoryCustom = () => {
+            customCategoryWrapper.hidden = categorySelect.value !== '__custom__';
+        };
+        categorySelect.addEventListener('change', syncCategoryCustom);
+        syncCategoryCustom();
+    }
 })();
 </script>
 <?php

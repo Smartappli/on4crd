@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $allowedVisibilities = array_keys($visibilityOptions);
     $visibilityFields = [
+        'visibility_photo',
         'visibility_full_name',
         'visibility_email',
         'visibility_phone',
@@ -29,9 +30,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $visibilityPayload[$field] = in_array($value, $allowedVisibilities, true) ? $value : 'members';
     }
 
+    $photoPathStmt = db()->prepare('SELECT photo_path FROM members WHERE id = ? LIMIT 1');
+    $photoPathStmt->execute([$memberId]);
+    $existingPhotoPath = trim((string) ($photoPathStmt->fetchColumn() ?: ''));
+    $newPhotoPath = $existingPhotoPath;
+    $avatarStmt = db()->prepare('SELECT avatar_path FROM members WHERE id = ? LIMIT 1');
+    $avatarStmt->execute([$memberId]);
+    $newAvatarPath = trim((string) ($avatarStmt->fetchColumn() ?: ''));
+    if (isset($_FILES['photo']) && is_array($_FILES['photo']) && (int) ($_FILES['photo']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+        $savedFilename = secure_move_uploaded_file(
+            $_FILES['photo'],
+            dirname(__DIR__) . '/storage/uploads/members',
+            'member_' . $memberId,
+            ['jpg', 'jpeg', 'png', 'webp'],
+            6 * 1024 * 1024
+        );
+        $newPhotoPath = 'storage/uploads/members/' . $savedFilename;
+        $generatedAvatarPath = generate_member_avatar_from_photo($newPhotoPath, $memberId);
+        if ($generatedAvatarPath !== null && $generatedAvatarPath !== '') {
+            $newAvatarPath = $generatedAvatarPath;
+        }
+    }
+
     $stmt = db()->prepare(
         'UPDATE members
-         SET visibility_full_name = ?,
+         SET photo_path = ?,
+             avatar_path = ?,
+             visibility_photo = ?,
+             visibility_full_name = ?,
              visibility_email = ?,
              visibility_phone = ?,
              visibility_qth = ?,
@@ -41,6 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          WHERE id = ?'
     );
     $stmt->execute([
+        $newPhotoPath,
+        $newAvatarPath,
+        $visibilityPayload['visibility_photo'],
         $visibilityPayload['visibility_full_name'],
         $visibilityPayload['visibility_email'],
         $visibilityPayload['visibility_phone'],
@@ -56,8 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $stmt = db()->prepare(
-    'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment,
-            visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
+    'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, photo_path, avatar_path,
+            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
      FROM members
      WHERE id = ? LIMIT 1'
 );
@@ -68,6 +97,8 @@ ob_start();
 ?>
 <div class="card">
     <h1>Profil</h1>
+    <?php $avatarSrc = member_avatar_src($member); ?>
+    <p><img src="<?= e($avatarSrc) ?>" alt="Avatar du membre" style="max-width:180px;border-radius:12px;"></p>
     <p><strong>Indicatif :</strong> <?= e((string) ($member['callsign'] ?? '')) ?></p>
     <p><strong>Nom :</strong> <?= e((string) ($member['full_name'] ?? '')) ?></p>
     <p><strong>Email :</strong> <?= e((string) ($member['email'] ?? '')) ?></p>
@@ -76,8 +107,23 @@ ob_start();
 <section class="card">
     <h2>Visibilité dans l'annuaire</h2>
     <p class="help">Choisissez qui peut voir chaque information : public, membres connectés ou comité.</p>
-    <form method="post" class="stack">
+    <form method="post" class="stack" enctype="multipart/form-data">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+
+        <label>
+            Photo de profil
+            <select name="visibility_photo">
+                <?php foreach ($visibilityOptions as $value => $label): ?>
+                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_photo'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+
+        <label>
+            Modifier la photo de profil
+            <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+            <small class="help">Optionnel — formats JPG, PNG ou WEBP, max 6&nbsp;Mo.</small>
+        </label>
 
         <label>
             Nom complet
