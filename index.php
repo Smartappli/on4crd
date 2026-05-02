@@ -16,6 +16,16 @@ if ($route === '') {
         $route = strtolower(pathinfo($path, PATHINFO_FILENAME));
     }
 }
+
+$normalizedRoute = ltrim($route, '/');
+if (str_ends_with($normalizedRoute, '.php')) {
+    if (in_array($normalizedRoute, ['install.php'], true)) {
+        $route = 'install.php';
+    } else {
+        $route = strtolower(pathinfo($normalizedRoute, PATHINFO_FILENAME));
+    }
+}
+
 if ($route === '') {
     $route = 'home';
 }
