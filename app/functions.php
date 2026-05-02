@@ -311,15 +311,9 @@ function render_widget(string $slug, array $user = []): string
 
             $measurement = is_array($payload) ? extract_latest_kp_measurement($payload) : null;
             if (!is_array($measurement)) {
-                return '<ul class="list-clean">'
-                    . '<li><strong>Kp : n/d</strong> — Données live indisponibles</li>'
-                    . '<li>Prévision HF : variable (estimation locale)</li>'
-                    . '<li>Tendance VHF : normale hors évènement géomagnétique</li>'
-                    . '<li class="help">Le flux NOAA n’est pas accessible actuellement. Réessayez dans quelques minutes.</li>'
-                    . '</ul>';
+                return '<p class="help">Données de propagation indisponibles actuellement.</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
-            $kpTimestamp = (string) ($measurement['timestamp'] ?? '');
 
             $geomagnetic = match (true) {
                 $latestKp < 2.0 => 'Très calme',
@@ -328,14 +322,8 @@ function render_widget(string $slug, array $user = []): string
                 $latestKp < 7.0 => 'Perturbé',
                 default => 'Orage géomagnétique',
             };
-            $hfOutlook = $latestKp <= 3.0 ? 'HF favorable' : ($latestKp <= 5.0 ? 'HF variable' : 'HF difficile');
-            $vhfOutlook = $latestKp >= 4.0 ? 'Aurores possibles sur VHF' : 'Aurores peu probables';
-
             return '<ul class="list-clean">'
                 . '<li><strong>Kp : ' . e(number_format($latestKp, 1, ',', '')) . '</strong> — ' . e($geomagnetic) . '</li>'
-                . '<li>Prévision HF : ' . e($hfOutlook) . '</li>'
-                . '<li>Tendance VHF : ' . e($vhfOutlook) . '</li>'
-                . '<li class="help">Mesure NOAA : ' . e($kpTimestamp !== '' ? $kpTimestamp : 'inconnue') . '</li>'
                 . '</ul>';
 
         case 'open_meteo':
@@ -395,9 +383,6 @@ function render_widget(string $slug, array $user = []): string
             }
 
             $current = is_array($payload['current'] ?? null) ? $payload['current'] : [];
-            $temperature = is_numeric($current['temperature_2m'] ?? null) ? (float) $current['temperature_2m'] : null;
-            $humidity = is_numeric($current['relative_humidity_2m'] ?? null) ? (int) $current['relative_humidity_2m'] : null;
-            $wind = is_numeric($current['wind_speed_10m'] ?? null) ? (float) $current['wind_speed_10m'] : null;
             $weatherCode = (int) ($current['weather_code'] ?? -1);
             $weatherText = match ($weatherCode) {
                 0 => 'Ciel dégagé',
@@ -409,15 +394,8 @@ function render_widget(string $slug, array $user = []): string
                 95, 96, 99 => 'Orage',
                 default => 'Conditions variables',
             };
-            $timeLabel = trim((string) ($current['time'] ?? ''));
-
             return '<ul class="list-clean">'
                 . '<li><strong>' . e($weatherText) . '</strong></li>'
-                . '<li>Température : ' . ($temperature !== null ? e(number_format($temperature, 1, ',', '')) . ' °C' : 'n/d') . '</li>'
-                . '<li>Humidité : ' . ($humidity !== null ? e((string) $humidity) . ' %' : 'n/d') . '</li>'
-                . '<li>Vent : ' . ($wind !== null ? e(number_format($wind, 1, ',', '')) . ' km/h' : 'n/d') . '</li>'
-                . ($weatherCoordinates !== null ? '<li class="help">Locator : ' . e($locator) . ($usingClubDefaultLocator ? ' (radio-club)' : '') . '</li>' : '')
-                . '<li class="help">Mesure : ' . e($timeLabel !== '' ? $timeLabel : 'inconnue') . '</li>'
                 . '</ul>';
 
         default:
