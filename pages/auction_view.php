@@ -25,12 +25,12 @@ set_page_meta([
 
 ob_start();
 ?>
-<div class="split">
-    <article class="card">
+<div class="split auction-detail-layout">
+    <article class="card auction-detail-main">
         <div class="badge <?= $runtime === 'closed' ? 'muted' : '' ?>"><?= e(auction_status_label($runtime)) ?></div>
         <h1><?= e((string) $lot['title']) ?></h1>
         <p class="hero-lead"><?= e((string) ($lot['summary'] ?: 'Lot aux enchères du club.')) ?></p>
-        <div class="catalog">
+        <div class="catalog auction-meta-list">
             <span class="pill">Prix actuel : <?= e(format_price_eur(max((int) $lot['current_price_cents'], (int) $lot['starting_price_cents']))) ?></span>
             <span class="pill">Pas minimal : <?= e(format_price_eur((int) $lot['min_increment_cents'])) ?></span>
             <span class="pill">Fin : <?= e(date('d/m/Y H:i', strtotime((string) $lot['ends_at']))) ?></span>
@@ -40,7 +40,7 @@ ob_start();
             <p><strong>Gagnant provisoire :</strong> <?= e((string) $lot['winner_callsign']) ?></p>
         <?php endif; ?>
     </article>
-    <aside class="card">
+    <aside class="card auction-detail-side">
         <h2>Enchérir</h2>
         <?php if ($runtime !== 'active'): ?>
             <p class="help">Le lot n’est pas actuellement en phase d’enchère active.</p>
