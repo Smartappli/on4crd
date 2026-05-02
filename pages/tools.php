@@ -56,21 +56,6 @@ ob_start();
             </div>
         </article>
     </div>
-    <article class="card" style="margin-top:1rem;">
-        <h2>Écoute en ligne des bandes radioamateur</h2>
-        <p class="help">Choisissez un récepteur SDR public pour écouter directement dans le navigateur (HF, VHF selon la station).</p>
-        <label for="sdr-receiver">Récepteur en ligne</label>
-        <select id="sdr-receiver">
-            <option value="http://websdr.ewi.utwente.nl:8901/">WebSDR UTwente (Pays-Bas)</option>
-            <option value="http://na5b.com:8901/">WebSDR NA5B (États-Unis)</option>
-            <option value="https://rx.linkfanel.net/">KiwiSDR Linkfanel (Europe)</option>
-            <option value="https://sdr.hu/">Annuaire SDR.hu (liste complète)</option>
-        </select>
-        <div class="actions" style="margin-top:.75rem;">
-            <button type="button" class="button" id="sdr-open-btn">Écouter maintenant</button>
-        </div>
-        <p class="help" style="margin-top:.75rem;">Conseil: commencez sur 7.074 MHz (FT8), 14.074 MHz (FT8) ou 145.500 MHz (appel VHF FM) selon la station choisie.</p>
-    </article>
     <p id="grid-tool-error" class="flash flash-error is-hidden" style="margin-top:1rem;"></p>
 </section>
 
