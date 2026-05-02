@@ -1164,7 +1164,16 @@ function render_footer_social_links(): string
 if (!function_exists('render_site_footer')) {
 function render_site_footer(string $currentRoute): string
 {
-    return '<footer class="site-footer"><div class="footer-inner"><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    $footerMessages = [
+        'fr' => ['built_by' => 'Site réalisé par'],
+        'en' => ['built_by' => 'Website built by'],
+        'de' => ['built_by' => 'Website erstellt von'],
+        'nl' => ['built_by' => 'Website gemaakt door'],
+    ];
+    $i18n = $footerMessages[$locale] ?? $footerMessages['fr'];
+
+    return '<footer class="site-footer"><div class="footer-inner"><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>' . e((string) $i18n['built_by']) . ' <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
 }
 }
 
@@ -1181,6 +1190,29 @@ function render_layout(string $content, string $title = ''): string
     if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl'], true)) {
         $currentLocale = 'fr';
     }
+    $layoutMessages = [
+        'fr' => [
+            'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Boutique', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
+            'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_auctions' => 'Enchères',
+            'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'logout' => 'Déconnexion', 'login' => 'Connexion',
+        ],
+        'en' => [
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_auctions' => 'Auctions',
+            'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'logout' => 'Log out', 'login' => 'Log in',
+        ],
+        'de' => [
+            'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_auctions' => 'Auktionen',
+            'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'logout' => 'Abmelden', 'login' => 'Anmelden',
+        ],
+        'nl' => [
+            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_auctions' => 'Veilingen',
+            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'logout' => 'Afmelden', 'login' => 'Inloggen',
+        ],
+    ];
+    $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
     $currentAccent = strtolower((string) ($_SESSION['accent'] ?? 'blue'));
     $accentPalette = [
         'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf', 'label' => 'Bleu'],
@@ -1207,20 +1239,20 @@ function render_layout(string $content, string $title = ''): string
     }
 
     $navPrimaryItems = [
-        ['label' => 'Accueil', 'route' => 'home', 'module' => ''],
-        ['label' => 'Actualités', 'route' => 'news', 'module' => 'news'],
-        ['label' => 'Boutique', 'route' => 'shop', 'module' => 'shop'],
-        ['label' => 'Événements', 'route' => 'events', 'module' => 'events'],
-        ['label' => 'Outils', 'route' => 'tools', 'module' => ''],
-        ['label' => 'Annuaire', 'route' => 'directory', 'module' => 'directory'],
+        ['label' => (string) $layoutI18n['nav_home'], 'route' => 'home', 'module' => ''],
+        ['label' => (string) $layoutI18n['nav_news'], 'route' => 'news', 'module' => 'news'],
+        ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
+        ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
+        ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
+        ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
-        ['label' => 'Tableau de bord', 'route' => 'dashboard', 'module' => 'dashboard'],
-        ['label' => 'Wiki', 'route' => 'wiki', 'module' => 'wiki'],
-        ['label' => 'Galerie', 'route' => 'albums', 'module' => 'albums'],
-        ['label' => 'Articles', 'route' => 'articles', 'module' => 'articles'],
+        ['label' => (string) $layoutI18n['nav_dashboard'], 'route' => 'dashboard', 'module' => 'dashboard'],
+        ['label' => (string) $layoutI18n['nav_wiki'], 'route' => 'wiki', 'module' => 'wiki'],
+        ['label' => (string) $layoutI18n['nav_gallery'], 'route' => 'albums', 'module' => 'albums'],
+        ['label' => (string) $layoutI18n['nav_articles'], 'route' => 'articles', 'module' => 'articles'],
         ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
-        ['label' => 'Enchères', 'route' => 'auctions', 'module' => 'auctions'],
+        ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
     ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {
@@ -1249,21 +1281,21 @@ function render_layout(string $content, string $title = ''): string
 
     $authHtml = '';
     if ($user !== null) {
-        $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : 'Mon espace';
+        $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
         $authHtml = '<details class="account-menu">'
             . '<summary class="button small account-menu-trigger">' . e($accountLabel) . '</summary>'
             . '<div class="account-menu-panel">'
-            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Profile</a>'
-            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Paramètre</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
             . '<hr class="account-menu-separator">'
             . '<form class="nav-form account-menu-form" method="post" action="' . e(route_url('logout')) . '">'
             . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
-            . '<button type="submit" class="button small account-menu-logout">Déconnexion</button>'
+            . '<button type="submit" class="button small account-menu-logout">' . e((string) $layoutI18n['logout']) . '</button>'
             . '</form>'
             . '</div>'
             . '</details>';
     } else {
-        $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">Connexion</a>';
+        $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">' . e((string) $layoutI18n['login']) . '</a>';
     }
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
