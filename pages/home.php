@@ -192,12 +192,25 @@ $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = render_widget('open_meteo');
 $homePropagationHtml = render_widget('propagation');
 $homeHamAdviceHtml = render_ham_weather_advice(current_user() ?? []);
-$homeRadioInfoHtml = '<ul class="list-clean">'
+$homeRadioInfoHtml = '<div class="grid gap-4">'
+    . '<section>'
+    . '<h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500">Informations radioamateur</h4>'
+    . '<ul class="mt-2 list-clean">'
     . '<li><strong>Phonie VHF :</strong> 145.500 MHz (appel simplex régional)</li>'
     . '<li><strong>QRG CW QRP :</strong> 7.030 MHz • 14.060 MHz</li>'
     . '<li><strong>Bon réflexe :</strong> annoncer indicatif + QTH + trafic recherché</li>'
+    . '</ul>'
+    . '</section>'
+    . '<section>'
+    . '<h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500">Informations utilisées pour le calcul</h4>'
+    . '<ul class="mt-2 list-clean">'
+    . '<li>Météo locale (température, vent, pluie)</li>'
+    . '<li>Propagation HF et indice Kp</li>'
+    . '<li>Heure locale et plage jour/nuit</li>'
     . '<li class="help">Astuce : adapter puissance et antenne selon Kp/HF affichés ci‑contre.</li>'
-    . '</ul>';
+    . '</ul>'
+    . '</section>'
+    . '</div>';
 
 $homeQuote = random_quote_for_layout();
 $homeQuoteText = (string) $homeI18n['quote_fallback'];
