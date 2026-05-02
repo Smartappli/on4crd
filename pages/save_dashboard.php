@@ -13,7 +13,13 @@ try {
     $widgetsInput = is_array($payload['widgets'] ?? null) ? $payload['widgets'] : [];
     $catalog = widget_catalog();
     $widgets = [];
+    $seen = [];
+    $maxWidgets = 24;
     foreach ($widgetsInput as $item) {
+        if (count($widgets) >= $maxWidgets) {
+            break;
+        }
+
         if (is_string($item)) {
             $widgetKey = $item;
             $config = [];
@@ -24,10 +30,11 @@ try {
             continue;
         }
 
-        if ($widgetKey === '' || !isset($catalog[$widgetKey])) {
+        if ($widgetKey === '' || !isset($catalog[$widgetKey]) || isset($seen[$widgetKey])) {
             continue;
         }
 
+        $seen[$widgetKey] = true;
         $widgets[] = ['key' => $widgetKey, 'config' => $config];
     }
 

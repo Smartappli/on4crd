@@ -11,12 +11,14 @@ if ($dashboardPersistenceEnabled) {
     $selected = $userWidgets->fetchAll();
 }
 $selectedWidgets = [];
+$seenSelected = [];
 foreach ($selected as $row) {
     $widgetKey = (string) ($row['widget_key'] ?? '');
-    if ($widgetKey === '' || !array_key_exists($widgetKey, $availableWidgets)) {
+    if ($widgetKey === '' || !array_key_exists($widgetKey, $availableWidgets) || isset($seenSelected[$widgetKey])) {
         continue;
     }
     $decodedConfig = json_decode((string) ($row['config_json'] ?? ''), true);
+    $seenSelected[$widgetKey] = true;
     $selectedWidgets[] = [
         'key' => $widgetKey,
         'config' => is_array($decodedConfig) ? $decodedConfig : [],
