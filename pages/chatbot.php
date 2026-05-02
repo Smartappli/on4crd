@@ -51,7 +51,8 @@ ob_start();
 ?>
 <div class="chatbot-shell">
     <aside class="chatbot-sidebar card">
-        <h1>Raymond vous répond</h1>
+        <img class="chatbot-illustration" src="<?= e(asset_url('assets/chartbot/chatbot.png')) ?>" alt="Illustration du chatbot Raymond">
+        <h1>&nbsp;</h1>
         <p class="help">Posez une question technique, réglementaire ou club. Les réponses sont basées sur la base de connaissances interne.</p>
         <ul class="chatbot-suggestions" id="chatbot-suggestions">
             <li><button type="button" class="chatbot-chip" data-suggestion="Comment exporter une QSL ?">Exporter une QSL</button></li>
@@ -93,4 +94,4 @@ ob_start();
     </section>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Raymond vous répond');
+echo render_layout((string) ob_get_clean(), ' ');

@@ -1523,6 +1523,13 @@ textarea.wysiwyg-source {
 .chatbot-main {
   padding: 1rem;
 }
+.chatbot-illustration {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  margin: 0 0 1rem;
+  border-radius: 14px;
+}
 .chatbot-suggestions {
   list-style: none;
   margin: 1rem 0;
