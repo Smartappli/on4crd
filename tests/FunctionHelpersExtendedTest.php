@@ -39,4 +39,25 @@ final class FunctionHelpersExtendedTest extends TestCase
     {
         self::assertNull(sanitize_href_attribute("/ok\r\njavascript:alert(1)"));
     }
+
+    public function testExtractLatestKpMeasurementReturnsNullWhenPayloadHasOnlyHeader(): void
+    {
+        $payload = [
+            ['time_tag', 'kp_index'],
+        ];
+
+        self::assertNull(extract_latest_kp_measurement($payload));
+    }
+
+    public function testExtractLatestKpMeasurementReturnsNullWhenNoRowContainsNumericKp(): void
+    {
+        $payload = [
+            ['time_tag', 'kp_index'],
+            ['2026-04-26 00:00:00.000', ''],
+            ['2026-04-26 03:00:00.000', 'n/a'],
+        ];
+
+        self::assertNull(extract_latest_kp_measurement($payload));
+    }
+
 }
