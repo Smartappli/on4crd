@@ -405,6 +405,86 @@ function render_widget(string $slug, array $user = []): string
 
 function render_ham_weather_advice(array $user = []): string
 {
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    $messages = [
+        'fr' => [
+            'score_excellent' => 'Excellentes conditions',
+            'score_good' => 'Bonnes conditions',
+            'score_variable' => 'Conditions variables',
+            'score_difficult' => 'Conditions difficiles',
+            'window_day' => '08h–15h',
+            'window_evening' => '16h–21h',
+            'window_night' => 'soirée / nuit',
+            'radio_info' => 'Informations radioamateur',
+            'for_qso' => 'pour les QSO',
+            'bands' => 'Bandes conseillées :',
+            'modes' => 'Modes conseillés :',
+            'window' => 'Créneau recommandé :',
+            'input_info' => 'Informations utilisées pour le calcul',
+            'location' => 'Localisation :',
+            'local_hour' => 'Heure locale :',
+            'local_weather' => 'Météo locale :',
+            'geomagnetic' => 'Indice géomagnétique :',
+        ],
+        'en' => [
+            'score_excellent' => 'Excellent conditions',
+            'score_good' => 'Good conditions',
+            'score_variable' => 'Variable conditions',
+            'score_difficult' => 'Difficult conditions',
+            'window_day' => '08:00–15:00',
+            'window_evening' => '16:00–21:00',
+            'window_night' => 'evening / night',
+            'radio_info' => 'Ham radio information',
+            'for_qso' => 'for QSOs',
+            'bands' => 'Recommended bands:',
+            'modes' => 'Recommended modes:',
+            'window' => 'Recommended time window:',
+            'input_info' => 'Data used for calculation',
+            'location' => 'Location:',
+            'local_hour' => 'Local time:',
+            'local_weather' => 'Local weather:',
+            'geomagnetic' => 'Geomagnetic index:',
+        ],
+        'de' => [
+            'score_excellent' => 'Ausgezeichnete Bedingungen',
+            'score_good' => 'Gute Bedingungen',
+            'score_variable' => 'Wechselhafte Bedingungen',
+            'score_difficult' => 'Schwierige Bedingungen',
+            'window_day' => '08:00–15:00',
+            'window_evening' => '16:00–21:00',
+            'window_night' => 'Abend / Nacht',
+            'radio_info' => 'Funkinformationen',
+            'for_qso' => 'für QSOs',
+            'bands' => 'Empfohlene Bänder:',
+            'modes' => 'Empfohlene Betriebsarten:',
+            'window' => 'Empfohlenes Zeitfenster:',
+            'input_info' => 'Für die Berechnung verwendete Daten',
+            'location' => 'Standort:',
+            'local_hour' => 'Ortszeit:',
+            'local_weather' => 'Lokales Wetter:',
+            'geomagnetic' => 'Geomagnetischer Index:',
+        ],
+        'nl' => [
+            'score_excellent' => 'Uitstekende condities',
+            'score_good' => 'Goede condities',
+            'score_variable' => 'Wisselende condities',
+            'score_difficult' => 'Moeilijke condities',
+            'window_day' => '08:00–15:00',
+            'window_evening' => '16:00–21:00',
+            'window_night' => 'avond / nacht',
+            'radio_info' => 'Radioamateurinformatie',
+            'for_qso' => 'voor QSO’s',
+            'bands' => 'Aanbevolen banden:',
+            'modes' => 'Aanbevolen modes:',
+            'window' => 'Aanbevolen tijdsvenster:',
+            'input_info' => 'Gegevens gebruikt voor de berekening',
+            'location' => 'Locatie:',
+            'local_hour' => 'Lokale tijd:',
+            'local_weather' => 'Lokaal weer:',
+            'geomagnetic' => 'Geomagnetische index:',
+        ],
+    ];
+    $i18n = $messages[$locale] ?? $messages['fr'];
     $defaultLocator = 'JO20LI';
     $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
     $locator = $memberLocator !== '' ? $memberLocator : $defaultLocator;
@@ -490,26 +570,26 @@ function render_ham_weather_advice(array $user = []): string
         $modes = ['FT8', 'SSB', 'CW'];
     }
 
-    $scoreLabel = $hfScore >= 80 ? 'Excellentes conditions' : ($hfScore >= 60 ? 'Bonnes conditions' : ($hfScore >= 45 ? 'Conditions variables' : 'Conditions difficiles'));
-    $timeWindow = $hour >= 8 && $hour <= 15 ? '08h–15h' : ($hour >= 16 && $hour <= 21 ? '16h–21h' : 'soirée / nuit');
+    $scoreLabel = $hfScore >= 80 ? (string) $i18n['score_excellent'] : ($hfScore >= 60 ? (string) $i18n['score_good'] : ($hfScore >= 45 ? (string) $i18n['score_variable'] : (string) $i18n['score_difficult']));
+    $timeWindow = $hour >= 8 && $hour <= 15 ? (string) $i18n['window_day'] : ($hour >= 16 && $hour <= 21 ? (string) $i18n['window_evening'] : (string) $i18n['window_night']);
 
     return '<div class="grid gap-4">'
         . '<section>'
-        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Informations radioamateur</h3>'
+        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $i18n['radio_info']) . '</h3>'
         . '<ul class="mt-2 list-clean">'
-        . '<li><strong>' . e($scoreLabel) . '</strong> pour les QSO (score ' . e((string) max(0, min(100, (int) round($hfScore)))) . '/100)</li>'
-        . '<li><strong>Bandes conseillées :</strong> ' . e(implode(' • ', $bands)) . '</li>'
-        . '<li><strong>Modes conseillés :</strong> ' . e(implode(' • ', $modes)) . '</li>'
-        . '<li><strong>Créneau recommandé :</strong> ' . e($timeWindow) . '</li>'
+        . '<li><strong>' . e($scoreLabel) . '</strong> ' . e((string) $i18n['for_qso']) . ' (score ' . e((string) max(0, min(100, (int) round($hfScore)))) . '/100)</li>'
+        . '<li><strong>' . e((string) $i18n['bands']) . '</strong> ' . e(implode(' • ', $bands)) . '</li>'
+        . '<li><strong>' . e((string) $i18n['modes']) . '</strong> ' . e(implode(' • ', $modes)) . '</li>'
+        . '<li><strong>' . e((string) $i18n['window']) . '</strong> ' . e($timeWindow) . '</li>'
         . '</ul>'
         . '</section>'
         . '<section>'
-        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Informations utilisées pour le calcul</h3>'
+        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $i18n['input_info']) . '</h3>'
         . '<ul class="mt-2 list-clean">'
-        . '<li><strong>Localisation :</strong> ' . e($locator) . '</li>'
-        . '<li><strong>Heure locale :</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
-        . '<li><strong>Météo locale :</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h</li>'
-        . '<li><strong>Indice géomagnétique :</strong> Kp=' . e(number_format($kp, 1, ',', '')) . '</li>'
+        . '<li><strong>' . e((string) $i18n['location']) . '</strong> ' . e($locator) . '</li>'
+        . '<li><strong>' . e((string) $i18n['local_hour']) . '</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
+        . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h</li>'
+        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> Kp=' . e(number_format($kp, 1, ',', '')) . '</li>'
         . '</ul>'
         . '</section>'
         . '</div>';
@@ -1164,7 +1244,16 @@ function render_footer_social_links(): string
 if (!function_exists('render_site_footer')) {
 function render_site_footer(string $currentRoute): string
 {
-    return '<footer class="site-footer"><div class="footer-inner"><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>Site réalisé par <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    $footerMessages = [
+        'fr' => ['built_by' => 'Site réalisé par'],
+        'en' => ['built_by' => 'Website built by'],
+        'de' => ['built_by' => 'Website erstellt von'],
+        'nl' => ['built_by' => 'Website gemaakt door'],
+    ];
+    $i18n = $footerMessages[$locale] ?? $footerMessages['fr'];
+
+    return '<footer class="site-footer"><div class="footer-inner"><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>' . e((string) $i18n['built_by']) . ' <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
 }
 }
 
@@ -1181,6 +1270,29 @@ function render_layout(string $content, string $title = ''): string
     if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl'], true)) {
         $currentLocale = 'fr';
     }
+    $layoutMessages = [
+        'fr' => [
+            'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Boutique', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
+            'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_auctions' => 'Enchères',
+            'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'logout' => 'Déconnexion', 'login' => 'Connexion',
+        ],
+        'en' => [
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_auctions' => 'Auctions',
+            'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'logout' => 'Log out', 'login' => 'Log in',
+        ],
+        'de' => [
+            'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_auctions' => 'Auktionen',
+            'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'logout' => 'Abmelden', 'login' => 'Anmelden',
+        ],
+        'nl' => [
+            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_auctions' => 'Veilingen',
+            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'logout' => 'Afmelden', 'login' => 'Inloggen',
+        ],
+    ];
+    $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
     $currentAccent = strtolower((string) ($_SESSION['accent'] ?? 'blue'));
     $accentPalette = [
         'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf', 'label' => 'Bleu'],
@@ -1207,20 +1319,20 @@ function render_layout(string $content, string $title = ''): string
     }
 
     $navPrimaryItems = [
-        ['label' => 'Accueil', 'route' => 'home', 'module' => ''],
-        ['label' => 'Actualités', 'route' => 'news', 'module' => 'news'],
-        ['label' => 'Boutique', 'route' => 'shop', 'module' => 'shop'],
-        ['label' => 'Événements', 'route' => 'events', 'module' => 'events'],
-        ['label' => 'Outils', 'route' => 'tools', 'module' => ''],
-        ['label' => 'Annuaire', 'route' => 'directory', 'module' => 'directory'],
+        ['label' => (string) $layoutI18n['nav_home'], 'route' => 'home', 'module' => ''],
+        ['label' => (string) $layoutI18n['nav_news'], 'route' => 'news', 'module' => 'news'],
+        ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
+        ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
+        ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
+        ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
-        ['label' => 'Tableau de bord', 'route' => 'dashboard', 'module' => 'dashboard'],
-        ['label' => 'Wiki', 'route' => 'wiki', 'module' => 'wiki'],
-        ['label' => 'Galerie', 'route' => 'albums', 'module' => 'albums'],
-        ['label' => 'Articles', 'route' => 'articles', 'module' => 'articles'],
+        ['label' => (string) $layoutI18n['nav_dashboard'], 'route' => 'dashboard', 'module' => 'dashboard'],
+        ['label' => (string) $layoutI18n['nav_wiki'], 'route' => 'wiki', 'module' => 'wiki'],
+        ['label' => (string) $layoutI18n['nav_gallery'], 'route' => 'albums', 'module' => 'albums'],
+        ['label' => (string) $layoutI18n['nav_articles'], 'route' => 'articles', 'module' => 'articles'],
         ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
-        ['label' => 'Enchères', 'route' => 'auctions', 'module' => 'auctions'],
+        ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
     ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {
@@ -1249,21 +1361,21 @@ function render_layout(string $content, string $title = ''): string
 
     $authHtml = '';
     if ($user !== null) {
-        $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : 'Mon espace';
+        $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
         $authHtml = '<details class="account-menu">'
             . '<summary class="button small account-menu-trigger">' . e($accountLabel) . '</summary>'
             . '<div class="account-menu-panel">'
-            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Profile</a>'
-            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">Paramètre</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
             . '<hr class="account-menu-separator">'
             . '<form class="nav-form account-menu-form" method="post" action="' . e(route_url('logout')) . '">'
             . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
-            . '<button type="submit" class="button small account-menu-logout">Déconnexion</button>'
+            . '<button type="submit" class="button small account-menu-logout">' . e((string) $layoutI18n['logout']) . '</button>'
             . '</form>'
             . '</div>'
             . '</details>';
     } else {
-        $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">Connexion</a>';
+        $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">' . e((string) $layoutI18n['login']) . '</a>';
     }
 
     $siteName = (string) config('app.site_name', 'ON4CRD');
