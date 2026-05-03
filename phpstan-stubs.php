@@ -83,3 +83,5 @@ if (!function_exists('managed_section_ids_for_member')) { function managed_secti
 if (!function_exists('news_status_label')) { function news_status_label(string $status): string { return $status; } }
 if (!function_exists('press_contacts')) { function press_contacts(): array { return []; } }
 if (!function_exists('latest_press_releases')) { function latest_press_releases(int $limit = 20): array { return []; } }
+
+function admin_dashboard_translations(string $locale): array { return []; }
