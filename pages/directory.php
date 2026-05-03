@@ -2,6 +2,17 @@
 declare(strict_types=1);
 
 $members = [];
+$locale = current_locale();
+$i18n = [
+    'fr' => ['club_numbers' => 'Le club en chiffres', 'member_list' => 'Liste des membres', 'uba_members' => 'Membres UBA', 'members_title' => 'Liste des membres', 'none' => 'Aucun membre trouvé.', 'avatar_of' => 'Avatar de', 'licence' => 'Licence', 'email' => 'Email', 'phone' => 'Téléphone', 'bands' => 'Bandes', 'station' => 'Station', 'committee' => 'Comité', 'layout_title' => 'Annuaire'],
+    'en' => ['club_numbers' => 'Club in numbers', 'member_list' => 'Member directory', 'uba_members' => 'UBA members', 'members_title' => 'Member directory', 'none' => 'No member found.', 'avatar_of' => 'Avatar of', 'licence' => 'Licence', 'email' => 'Email', 'phone' => 'Phone', 'bands' => 'Bands', 'station' => 'Station', 'committee' => 'Committee', 'layout_title' => 'Directory'],
+    'de' => ['club_numbers' => 'Der Club in Zahlen', 'member_list' => 'Mitgliederliste', 'uba_members' => 'UBA-Mitglieder', 'members_title' => 'Mitgliederliste', 'none' => 'Keine Mitglieder gefunden.', 'avatar_of' => 'Avatar von', 'licence' => 'Lizenz', 'email' => 'E-Mail', 'phone' => 'Telefon', 'bands' => 'Bänder', 'station' => 'Station', 'committee' => 'Komitee', 'layout_title' => 'Verzeichnis'],
+    'nl' => ['club_numbers' => 'De club in cijfers', 'member_list' => 'Ledenlijst', 'uba_members' => 'UBA-leden', 'members_title' => 'Ledenlijst', 'none' => 'Geen leden gevonden.', 'avatar_of' => 'Avatar van', 'licence' => 'Licentie', 'email' => 'E-mail', 'phone' => 'Telefoon', 'bands' => 'Banden', 'station' => 'Station', 'committee' => 'Comité', 'layout_title' => 'Ledenlijst'],
+];
+$t = static function (string $key) use ($locale, $i18n): string {
+    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+};
+
 $activeMembersCount = 0;
 $ubaMembersCount = 0;
 $search = trim((string) ($_GET['q'] ?? ''));
@@ -124,53 +135,53 @@ if (table_exists('members')) {
 ob_start();
 ?>
 <section class="card">
-    <h2 class="text-xl font-bold text-slate-900">Le club en chiffres</h2>
+    <h2 class="text-xl font-bold text-slate-900"><?= e($t('club_numbers')) ?></h2>
     <div class="directory-grid">
         <article class="directory-card">
             <h3><?= e((string) $activeMembersCount) ?></h3>
-            <p>Liste des membres</p>
+            <p><?= e($t('member_list')) ?></p>
         </article>
         <article class="directory-card">
             <h3><?= e((string) $ubaMembersCount) ?></h3>
-            <p>Membres UBA</p>
+            <p><?= e($t('uba_members')) ?></p>
         </article>
     </div>
 </section>
 
 <section class="card mt-4">
-    <h2>Liste des membres</h2>
+    <h2><?= e($t('members_title')) ?></h2>
     <?php if ($members === []): ?>
-        <p>Aucun membre trouvé.</p>
+        <p><?= e($t('none')) ?></p>
     <?php else: ?>
         <div class="directory-grid">
             <?php foreach ($members as $member): ?>
                 <article class="directory-card">
                     <h3><?= e((string) $member['callsign']) ?></h3>
                     <?php $memberAvatarSrc = member_avatar_src($member); ?>
-                    <p><img src="<?= e($memberAvatarSrc) ?>" alt="Avatar de <?= e((string) $member['callsign']) ?>" style="width:96px;height:96px;object-fit:cover;border-radius:999px;"></p>
+                    <p><img src="<?= e($memberAvatarSrc) ?>" alt="<?= e($t('avatar_of')) ?> <?= e((string) $member['callsign']) ?>" style="width:96px;height:96px;object-fit:cover;border-radius:999px;"></p>
                     <?php if (trim((string) ($member['full_name'] ?? '')) !== ''): ?>
                         <p><?= e((string) $member['full_name']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['licence_class'] ?? '')) !== ''): ?>
-                        <p class="help">Licence : <?= e((string) $member['licence_class']) ?></p>
+                        <p class="help"><?= e($t('licence')) ?> : <?= e((string) $member['licence_class']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['email'] ?? '')) !== ''): ?>
-                        <p class="help">Email : <?= e((string) $member['email']) ?></p>
+                        <p class="help"><?= e($t('email')) ?> : <?= e((string) $member['email']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['phone'] ?? '')) !== ''): ?>
-                        <p class="help">Téléphone : <?= e((string) $member['phone']) ?></p>
+                        <p class="help"><?= e($t('phone')) ?> : <?= e((string) $member['phone']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['qth'] ?? '')) !== ''): ?>
                         <p class="help">QTH : <?= e((string) $member['qth']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['favourite_bands'] ?? '')) !== ''): ?>
-                        <p class="help">Bandes : <?= e((string) $member['favourite_bands']) ?></p>
+                        <p class="help"><?= e($t('bands')) ?> : <?= e((string) $member['favourite_bands']) ?></p>
                     <?php endif; ?>
                     <?php if (trim((string) ($member['station_equipment'] ?? '')) !== ''): ?>
-                        <p class="help">Station : <?= e((string) $member['station_equipment']) ?></p>
+                        <p class="help"><?= e($t('station')) ?> : <?= e((string) $member['station_equipment']) ?></p>
                     <?php endif; ?>
                     <?php if ((int) ($member['is_committee'] ?? 0) === 1): ?>
-                        <span class="badge muted"><?= e((string) ($member['committee_role'] ?: 'Comité')) ?></span>
+                        <span class="badge muted"><?= e((string) ($member['committee_role'] ?: $t('committee'))) ?></span>
                     <?php endif; ?>
                 </article>
             <?php endforeach; ?>
@@ -179,4 +190,4 @@ ob_start();
 </section>
 <?php
 
-echo render_layout((string) ob_get_clean(), 'Annuaire');
+echo render_layout((string) ob_get_clean(), $t('layout_title'));
