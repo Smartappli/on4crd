@@ -3,14 +3,21 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $i18n = [
-    'fr' => ['not_found' => 'Page wiki introuvable.', 'edit' => 'Modifier', 'layout' => 'Wiki'],
-    'en' => ['not_found' => 'Wiki page not found.', 'edit' => 'Edit', 'layout' => 'Wiki'],
-    'de' => ['not_found' => 'Wiki-Seite nicht gefunden.', 'edit' => 'Bearbeiten', 'layout' => 'Wiki'],
-    'nl' => ['not_found' => 'Wiki-pagina niet gevonden.', 'edit' => 'Bewerken', 'layout' => 'Wiki'],
+    'fr' => ['not_found' => 'Page wiki introuvable.', 'edit' => 'Modifier', 'layout' => 'Wiki', 'meta_desc' => 'Consultation d\'une page wiki.'],
+    'en' => ['not_found' => 'Wiki page not found.', 'edit' => 'Edit', 'layout' => 'Wiki', 'meta_desc' => 'View a wiki page.'],
+    'de' => ['not_found' => 'Wiki-Seite nicht gefunden.', 'edit' => 'Bearbeiten', 'layout' => 'Wiki', 'meta_desc' => 'Wiki-Seite anzeigen.'],
+    'nl' => ['not_found' => 'Wiki-pagina niet gevonden.', 'edit' => 'Bewerken', 'layout' => 'Wiki', 'meta_desc' => 'Een wiki-pagina bekijken.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };
+
+
+set_page_meta([
+    'title' => $t('layout'),
+    'description' => $t('meta_desc'),
+    'robots' => 'index,follow',
+]);
 
 $slug = (string) ($_GET['slug'] ?? '');
 $stmt = db()->prepare('SELECT * FROM wiki_pages WHERE slug = ?');
