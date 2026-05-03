@@ -271,6 +271,8 @@ $homeRadioInfoHtml = '<div class="grid gap-4">'
 if (isset($_GET['ajax']) && (string) $_GET['ajax'] === 'ham_weather') {
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode([
+        'weather' => render_widget('open_meteo'),
+        'propagation' => render_widget('propagation'),
         'advice' => render_ham_weather_advice(current_user() ?? []),
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     return;
@@ -319,7 +321,13 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="grid gap-4">'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Météo radioamateur">'
     . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['ham_weather']) . '</h2>'
-    . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4" data-ham-weather-root data-refresh-ms="900000" data-refresh-url="' . e(route_url('home', ['ajax' => 'ham_weather'])) . '"><div data-ham-weather-advice>' . $homeHamAdviceHtml . '</div></div>'
+    . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4" data-ham-weather-root data-refresh-ms="900000" data-refresh-url="' . e(route_url('home', ['ajax' => 'ham_weather'])) . '">'
+    . '<div class="grid gap-3">'
+    . '<section data-ham-weather-weather>' . $homeWeatherHtml . '</section>'
+    . '<section data-ham-weather-propagation>' . $homePropagationHtml . '</section>'
+    . '<section data-ham-weather-advice>' . $homeHamAdviceHtml . '</section>'
+    . '</div>'
+    . '</div>'
     . '</aside>'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['useful_info']) . '</h2>'
@@ -430,6 +438,6 @@ if ($homeLocale !== 'fr') {
     }
 }
 
-$content .= '<script>(function(){const root=document.querySelector("[data-ham-weather-root]");if(!root){return;}const target=root.querySelector("[data-ham-weather-advice]");const url=root.getAttribute("data-refresh-url");const refreshMs=Number(root.getAttribute("data-refresh-ms")||"900000");if(!target||!url||refreshMs<60000){return;}const tick=async()=>{try{const res=await fetch(url,{headers:{"X-Requested-With":"XMLHttpRequest"}});if(!res.ok){return;}const payload=await res.json();if(payload&&typeof payload.advice==="string"){target.innerHTML=payload.advice;}}catch(_e){}};setInterval(tick,refreshMs);})();</script>';
+$content .= '<script>(function(){const root=document.querySelector("[data-ham-weather-root]");if(!root){return;}const weather=root.querySelector("[data-ham-weather-weather]");const propagation=root.querySelector("[data-ham-weather-propagation]");const advice=root.querySelector("[data-ham-weather-advice]");const url=root.getAttribute("data-refresh-url");const refreshMs=Number(root.getAttribute("data-refresh-ms")||"900000");if(!advice||!url||refreshMs<60000){return;}const tick=async()=>{try{const res=await fetch(url,{headers:{"X-Requested-With":"XMLHttpRequest"}});if(!res.ok){return;}const payload=await res.json();if(payload&&typeof payload.weather==="string"&&weather){weather.innerHTML=payload.weather;}if(payload&&typeof payload.propagation==="string"&&propagation){propagation.innerHTML=payload.propagation;}if(payload&&typeof payload.advice==="string"){advice.innerHTML=payload.advice;}}catch(_e){}};setInterval(tick,refreshMs);})();</script>';
 
 echo render_layout($content, $homeLocale === 'fr' ? 'Accueil' : ($homeReplace[$homeLocale]['Accueil'] ?? 'Accueil'));
