@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 $user = require_login();
 $memberId = (int) ($user['id'] ?? 0);
-$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$locale = current_locale();
 $qslI18n = [
-    'fr' => ['studio' => 'QSL Studio · simple, guidé, efficace', 'studio_help' => 'Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.', 'design' => '1) Designer vos fonds QSL', 'create' => '2) Créer des QSL facilement', 'manage' => '3) QSO importés', 'generated' => 'QSL générées', 'filter' => 'Filtrer', 'reset' => 'Réinitialiser'],
-    'en' => ['studio' => 'QSL Studio · simple, guided, efficient', 'studio_help' => 'Everything is designed for speed: import your QSOs, create cards and export them seamlessly.', 'design' => '1) Design your QSL backgrounds', 'create' => '2) Create QSL cards easily', 'manage' => '3) Imported QSOs', 'generated' => 'Generated QSL cards', 'filter' => 'Filter', 'reset' => 'Reset'],
-    'de' => ['studio' => 'QSL Studio · einfach, geführt, effizient', 'studio_help' => 'Alles ist auf Tempo ausgelegt: QSOs importieren, Karten erstellen und ohne Reibung exportieren.', 'design' => '1) QSL-Hintergründe gestalten', 'create' => '2) QSL-Karten einfach erstellen', 'manage' => '3) Importierte QSOs', 'generated' => 'Erstellte QSL-Karten', 'filter' => 'Filtern', 'reset' => 'Zurücksetzen'],
-    'nl' => ['studio' => 'QSL Studio · eenvoudig, begeleid, efficiënt', 'studio_help' => 'Alles is gericht op snelheid: importeer je QSO’s, maak kaarten en exporteer zonder frictie.', 'design' => '1) Ontwerp je QSL-achtergronden', 'create' => '2) Maak eenvoudig QSL-kaarten', 'manage' => '3) Geïmporteerde QSO’s', 'generated' => 'Gegenereerde QSL-kaarten', 'filter' => 'Filteren', 'reset' => 'Reset'],
+    'fr' => ['studio' => 'QSL Studio · simple, guidé, efficace', 'studio_help' => 'Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.', 'design' => '1) Designer vos fonds QSL', 'create' => '2) Créer des QSL facilement', 'manage' => '3) QSO importés', 'generated' => 'QSL générées', 'filter' => 'Filtrer', 'reset' => 'Réinitialiser', 'page' => 'Page', 'previous' => 'Précédent', 'next' => 'Suivant', 'nav_design' => '1 · Personnaliser le design', 'nav_design_help' => 'Ajoutez un fond image, une couleur unie, un dégradé ou une palette prête à l’emploi.', 'nav_create' => '2 · Créer / importer', 'nav_create_help' => 'Créez une QSL manuelle ou importez vos ADIF en glisser‑déposer.', 'err_select_bg' => 'Veuillez sélectionner une image de fond.', 'ok_bg_image' => 'Fond image enregistré.', 'err_gradient_invalid' => 'Couleurs de dégradé invalides.', 'ok_bg_gradient' => 'Fond dégradé enregistré.', 'err_solid_invalid' => 'Couleur unie invalide.', 'ok_bg_solid' => 'Fond couleur unie enregistré.', 'err_palette_invalid' => 'Palette prédéfinie invalide.', 'ok_bg_palette' => 'Palette prédéfinie enregistrée.', 'ok_bg_default' => 'Fond par défaut mis à jour.', 'ok_bg_deleted' => 'Fond supprimé.', 'err_no_adif' => 'Aucun fichier ADIF reçu.', 'err_no_valid_adif' => 'Aucun fichier ADIF valide n’a pu être traité.', 'ok_qso_imported' => 'QSO importés depuis les fichiers ADIF.', 'err_qso_none' => 'Aucun nouveau QSO importé.', 'ok_qsl_generated' => 'QSL générées.', 'err_qsl_none' => 'Aucune QSL générée. Sélection vide ou QSL déjà existantes.', 'ok_qsl_created' => 'QSL créée.', 'ok_qso_deleted' => 'QSO supprimé.', 'ok_qsl_deleted' => 'QSL supprimée.', 'err_unknown_action' => 'Action QSL inconnue.', 'label_bg_image' => 'Fond image', 'label_gradient' => 'Dégradé 2 couleurs', 'label_delete' => 'Supprimer', 'empty_qso' => 'Aucun QSO importé pour le moment.', 'empty_qso_filtered' => 'Aucun QSO ne correspond aux filtres actifs.', 'empty_qsl' => 'Aucune QSL générée pour le moment.', 'empty_qsl_filtered' => 'Aucune QSL ne correspond à la recherche.', 'nav_manage' => '3 · Gérer et exporter', 'nav_manage_help' => 'Filtrez vos QSO, générez en lot et exportez vos cartes recto/verso.', 'bulk_generate' => 'Générer les QSL sélectionnées', 'select_all' => 'Tout sélectionner', 'select_none' => 'Tout désélectionner', 'qso_search_ph' => 'Filtrer par call, date, mode...', 'qsl_search_ph' => 'Rechercher une QSL (titre, call, bande...)', 'all_bands' => 'Toutes bandes', 'all_modes' => 'Tous modes'],
+    'en' => ['studio' => 'QSL Studio · simple, guided, efficient', 'studio_help' => 'Everything is designed for speed: import your QSOs, create cards and export them seamlessly.', 'design' => '1) Design your QSL backgrounds', 'create' => '2) Create QSL cards easily', 'manage' => '3) Imported QSOs', 'generated' => 'Generated QSL cards', 'filter' => 'Filter', 'reset' => 'Reset', 'page' => 'Page', 'previous' => 'Previous', 'next' => 'Next', 'nav_design' => '1 · Customize design', 'nav_design_help' => 'Add an image background, a solid color, a gradient or a ready-to-use palette.', 'nav_create' => '2 · Create / import', 'nav_create_help' => 'Create a manual QSL or import your ADIF files via drag and drop.', 'err_select_bg' => 'Please select a background image.', 'ok_bg_image' => 'Image background saved.', 'err_gradient_invalid' => 'Invalid gradient colors.', 'ok_bg_gradient' => 'Gradient background saved.', 'err_solid_invalid' => 'Invalid solid color.', 'ok_bg_solid' => 'Solid color background saved.', 'err_palette_invalid' => 'Invalid preset palette.', 'ok_bg_palette' => 'Preset palette saved.', 'ok_bg_default' => 'Default background updated.', 'ok_bg_deleted' => 'Background deleted.', 'err_no_adif' => 'No ADIF file received.', 'err_no_valid_adif' => 'No valid ADIF file could be processed.', 'ok_qso_imported' => 'QSOs imported from ADIF files.', 'err_qso_none' => 'No new QSO imported.', 'ok_qsl_generated' => 'QSL cards generated.', 'err_qsl_none' => 'No QSL generated. Empty selection or cards already exist.', 'ok_qsl_created' => 'QSL created.', 'ok_qso_deleted' => 'QSO deleted.', 'ok_qsl_deleted' => 'QSL deleted.', 'err_unknown_action' => 'Unknown QSL action.', 'label_bg_image' => 'Image background', 'label_gradient' => '2-color gradient', 'label_delete' => 'Delete', 'empty_qso' => 'No imported QSO yet.', 'empty_qso_filtered' => 'No QSO matches active filters.', 'empty_qsl' => 'No generated QSL yet.', 'empty_qsl_filtered' => 'No QSL matches your search.', 'nav_manage' => '3 · Manage and export', 'nav_manage_help' => 'Filter your QSOs, generate in batch and export front/back cards.', 'bulk_generate' => 'Generate selected QSL cards', 'select_all' => 'Select all', 'select_none' => 'Select none', 'qso_search_ph' => 'Filter by callsign, date, mode...', 'qsl_search_ph' => 'Search a QSL (title, call, band...)', 'all_bands' => 'All bands', 'all_modes' => 'All modes'],
+    'de' => ['studio' => 'QSL Studio · einfach, geführt, effizient', 'studio_help' => 'Alles ist auf Tempo ausgelegt: QSOs importieren, Karten erstellen und ohne Reibung exportieren.', 'design' => '1) QSL-Hintergründe gestalten', 'create' => '2) QSL-Karten einfach erstellen', 'manage' => '3) Importierte QSOs', 'generated' => 'Erstellte QSL-Karten', 'filter' => 'Filtern', 'reset' => 'Zurücksetzen', 'page' => 'Seite', 'previous' => 'Zurück', 'next' => 'Weiter', 'nav_design' => '1 · Design anpassen', 'nav_design_help' => 'Fügen Sie ein Bild, eine Volltonfarbe, einen Verlauf oder eine fertige Palette hinzu.', 'nav_create' => '2 · Erstellen / importieren', 'nav_create_help' => 'Erstellen Sie eine manuelle QSL oder importieren Sie ADIF per Drag & Drop.', 'err_select_bg' => 'Bitte wählen Sie ein Hintergrundbild aus.', 'ok_bg_image' => 'Bildhintergrund gespeichert.', 'err_gradient_invalid' => 'Ungültige Verlauf-Farben.', 'ok_bg_gradient' => 'Verlaufshintergrund gespeichert.', 'err_solid_invalid' => 'Ungültige Volltonfarbe.', 'ok_bg_solid' => 'Einfarbiger Hintergrund gespeichert.', 'err_palette_invalid' => 'Ungültige vordefinierte Palette.', 'ok_bg_palette' => 'Vordefinierte Palette gespeichert.', 'ok_bg_default' => 'Standardhintergrund aktualisiert.', 'ok_bg_deleted' => 'Hintergrund gelöscht.', 'err_no_adif' => 'Keine ADIF-Datei empfangen.', 'err_no_valid_adif' => 'Keine gültige ADIF-Datei konnte verarbeitet werden.', 'ok_qso_imported' => 'QSOs aus ADIF-Dateien importiert.', 'err_qso_none' => 'Kein neuer QSO importiert.', 'ok_qsl_generated' => 'QSL-Karten erstellt.', 'err_qsl_none' => 'Keine QSL erstellt. Leere Auswahl oder bereits vorhandene Karten.', 'ok_qsl_created' => 'QSL erstellt.', 'ok_qso_deleted' => 'QSO gelöscht.', 'ok_qsl_deleted' => 'QSL gelöscht.', 'err_unknown_action' => 'Unbekannte QSL-Aktion.', 'label_bg_image' => 'Bildhintergrund', 'label_gradient' => '2-Farben-Verlauf', 'label_delete' => 'Löschen', 'empty_qso' => 'Noch kein QSO importiert.', 'empty_qso_filtered' => 'Kein QSO entspricht den aktiven Filtern.', 'empty_qsl' => 'Noch keine QSL erstellt.', 'empty_qsl_filtered' => 'Keine QSL entspricht der Suche.', 'nav_manage' => '3 · Verwalten und exportieren', 'nav_manage_help' => 'Filtern Sie Ihre QSOs, erzeugen Sie Stapel und exportieren Sie Vorder-/Rückseiten.', 'bulk_generate' => 'Ausgewählte QSL-Karten erzeugen', 'select_all' => 'Alle auswählen', 'select_none' => 'Auswahl aufheben', 'qso_search_ph' => 'Nach Rufzeichen, Datum, Modus filtern...', 'qsl_search_ph' => 'QSL suchen (Titel, Rufzeichen, Band...)', 'all_bands' => 'Alle Bänder', 'all_modes' => 'Alle Modi'],
+    'nl' => ['studio' => 'QSL Studio · eenvoudig, begeleid, efficiënt', 'studio_help' => 'Alles is gericht op snelheid: importeer je QSO’s, maak kaarten en exporteer zonder frictie.', 'design' => '1) Ontwerp je QSL-achtergronden', 'create' => '2) Maak eenvoudig QSL-kaarten', 'manage' => '3) Geïmporteerde QSO’s', 'generated' => 'Gegenereerde QSL-kaarten', 'filter' => 'Filteren', 'reset' => 'Reset', 'page' => 'Pagina', 'previous' => 'Vorige', 'next' => 'Volgende', 'nav_design' => '1 · Ontwerp aanpassen', 'nav_design_help' => 'Voeg een afbeeldingsachtergrond, effen kleur, verloop of kant-en-klaar palet toe.', 'nav_create' => '2 · Maken / importeren', 'nav_create_help' => 'Maak een manuele QSL of importeer ADIF via drag-and-drop.', 'err_select_bg' => 'Selecteer een achtergrondafbeelding.', 'ok_bg_image' => 'Afbeeldingsachtergrond opgeslagen.', 'err_gradient_invalid' => 'Ongeldige verloopkleuren.', 'ok_bg_gradient' => 'Verloopachtergrond opgeslagen.', 'err_solid_invalid' => 'Ongeldige effen kleur.', 'ok_bg_solid' => 'Effen achtergrond opgeslagen.', 'err_palette_invalid' => 'Ongeldig vooraf ingesteld palet.', 'ok_bg_palette' => 'Vooraf ingesteld palet opgeslagen.', 'ok_bg_default' => 'Standaardachtergrond bijgewerkt.', 'ok_bg_deleted' => 'Achtergrond verwijderd.', 'err_no_adif' => 'Geen ADIF-bestand ontvangen.', 'err_no_valid_adif' => 'Geen geldig ADIF-bestand kon worden verwerkt.', 'ok_qso_imported' => 'QSO’s geïmporteerd uit ADIF-bestanden.', 'err_qso_none' => 'Geen nieuwe QSO geïmporteerd.', 'ok_qsl_generated' => 'QSL-kaarten gegenereerd.', 'err_qsl_none' => 'Geen QSL gegenereerd. Lege selectie of kaarten bestaan al.', 'ok_qsl_created' => 'QSL aangemaakt.', 'ok_qso_deleted' => 'QSO verwijderd.', 'ok_qsl_deleted' => 'QSL verwijderd.', 'err_unknown_action' => 'Onbekende QSL-actie.', 'label_bg_image' => 'Afbeeldingsachtergrond', 'label_gradient' => 'Verloop met 2 kleuren', 'label_delete' => 'Verwijderen', 'empty_qso' => 'Nog geen QSO geïmporteerd.', 'empty_qso_filtered' => 'Geen QSO komt overeen met de actieve filters.', 'empty_qsl' => 'Nog geen QSL gegenereerd.', 'empty_qsl_filtered' => 'Geen QSL komt overeen met de zoekopdracht.', 'nav_manage' => '3 · Beheren en exporteren', 'nav_manage_help' => 'Filter je QSO’s, genereer in bulk en exporteer voor-/achterkant kaarten.', 'bulk_generate' => 'Geselecteerde QSL-kaarten genereren', 'select_all' => 'Alles selecteren', 'select_none' => 'Selectie wissen', 'qso_search_ph' => 'Filter op roepnaam, datum, mode...', 'qsl_search_ph' => 'Zoek een QSL (titel, roepnaam, band...)', 'all_bands' => 'Alle banden', 'all_modes' => 'Alle modi'],
 ];
 $qt = static function (string $key) use ($locale, $qslI18n): string {
     return (string) (($qslI18n[$locale] ?? $qslI18n['fr'])[$key] ?? $key);
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $label = mb_safe_substr($label !== '' ? $label : 'Fond image', 0, 120);
             $dataUri = qsl_background_upload_to_data_uri($_FILES['background_image'] ?? null);
             if ($dataUri === '') {
-                throw new RuntimeException('Veuillez sélectionner une image de fond.');
+                throw new RuntimeException($qt('err_select_bg'));
             }
             $setDefault = ((string) ($_POST['set_default'] ?? '') === '1');
             if ($setDefault) {
@@ -56,14 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
                  VALUES (?, ?, ?, ?, NULL, NULL, ?)'
             )->execute([$memberId, $label, 'image', $dataUri, $setDefault ? 1 : 0]);
-            set_flash('success', 'Fond image enregistré.');
+            set_flash('success', $qt('ok_bg_image'));
         } elseif ($action === 'save_background_gradient') {
             $label = trim((string) ($_POST['gradient_label'] ?? 'Fond dégradé'));
             $label = mb_safe_substr($label !== '' ? $label : 'Fond dégradé', 0, 120);
             $primary = trim((string) ($_POST['background_primary'] ?? '#0B1F3A'));
             $secondary = trim((string) ($_POST['background_secondary'] ?? '#1D4ED8'));
             if (preg_match('/^#[A-Fa-f0-9]{6}$/', $primary) !== 1 || preg_match('/^#[A-Fa-f0-9]{6}$/', $secondary) !== 1) {
-                throw new RuntimeException('Couleurs de dégradé invalides.');
+                throw new RuntimeException($qt('err_gradient_invalid'));
             }
             $setDefault = ((string) ($_POST['set_default'] ?? '') === '1');
             if ($setDefault) {
@@ -73,13 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
                  VALUES (?, ?, ?, NULL, ?, ?, ?)'
             )->execute([$memberId, $label, 'gradient', strtoupper($primary), strtoupper($secondary), $setDefault ? 1 : 0]);
-            set_flash('success', 'Fond dégradé enregistré.');
+            set_flash('success', $qt('ok_bg_gradient'));
         } elseif ($action === 'save_background_solid') {
             $label = trim((string) ($_POST['solid_label'] ?? 'Fond couleur unie'));
             $label = mb_safe_substr($label !== '' ? $label : 'Fond couleur unie', 0, 120);
             $solidColor = trim((string) ($_POST['background_solid'] ?? '#1E293B'));
             if (preg_match('/^#[A-Fa-f0-9]{6}$/', $solidColor) !== 1) {
-                throw new RuntimeException('Couleur unie invalide.');
+                throw new RuntimeException($qt('err_solid_invalid'));
             }
             $setDefault = ((string) ($_POST['set_default'] ?? '') === '1');
             if ($setDefault) {
@@ -90,12 +90,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
                  VALUES (?, ?, ?, NULL, ?, ?, ?)'
             )->execute([$memberId, $label, 'gradient', $normalizedColor, $normalizedColor, $setDefault ? 1 : 0]);
-            set_flash('success', 'Fond couleur unie enregistré.');
+            set_flash('success', $qt('ok_bg_solid'));
         } elseif ($action === 'save_background_palette') {
             $paletteKey = trim((string) ($_POST['preset_palette'] ?? ''));
             $palette = $drawPresetPalettes[$paletteKey] ?? null;
             if (!is_array($palette)) {
-                throw new RuntimeException('Palette prédéfinie invalide.');
+                throw new RuntimeException($qt('err_palette_invalid'));
             }
             $label = trim((string) ($_POST['palette_label'] ?? (string) ($palette['label'] ?? 'Palette prédéfinie')));
             $label = mb_safe_substr($label !== '' ? $label : (string) ($palette['label'] ?? 'Palette prédéfinie'), 0, 120);
@@ -109,12 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
                  VALUES (?, ?, ?, NULL, ?, ?, ?)'
             )->execute([$memberId, $label, 'gradient', strtoupper($primary), strtoupper($secondary), $setDefault ? 1 : 0]);
-            set_flash('success', 'Palette prédéfinie enregistrée.');
+            set_flash('success', $qt('ok_bg_palette'));
         } elseif ($action === 'set_default_background') {
             $presetId = (int) ($_POST['preset_id'] ?? 0);
             db()->prepare('UPDATE qsl_background_presets SET is_default = 0 WHERE member_id = ?')->execute([$memberId]);
             db()->prepare('UPDATE qsl_background_presets SET is_default = 1 WHERE id = ? AND member_id = ?')->execute([$presetId, $memberId]);
-            set_flash('success', 'Fond par défaut mis à jour.');
+            set_flash('success', $qt('ok_bg_default'));
         } elseif ($action === 'delete_background') {
             $presetId = (int) ($_POST['preset_id'] ?? 0);
             db()->prepare('DELETE FROM qsl_background_presets WHERE id = ? AND member_id = ? LIMIT 1')->execute([$presetId, $memberId]);
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     db()->prepare('UPDATE qsl_background_presets SET is_default = 1 WHERE id = ? AND member_id = ?')->execute([(int) $first['id'], $memberId]);
                 }
             }
-            set_flash('success', 'Fond supprimé.');
+            set_flash('success', $qt('ok_bg_deleted'));
         } elseif ($action === 'import_adif') {
             $uploads = [];
             if (isset($_FILES['adif_files']) && is_array($_FILES['adif_files'])) {
@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($uploads === []) {
-                throw new RuntimeException('Aucun fichier ADIF reçu.');
+                throw new RuntimeException($qt('err_no_adif'));
             }
             $totalImported = 0;
             $processedFiles = 0;
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($processedFiles === 0) {
-                throw new RuntimeException('Aucun fichier ADIF valide n’a pu être traité.');
+                throw new RuntimeException($qt('err_no_valid_adif'));
             }
 
             if ($isAjaxRequest) {
@@ -184,18 +184,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($totalImported > 0) {
-                set_flash('success', $totalImported . ' QSO(s) importé(s) depuis ' . $processedFiles . ' fichier(s).');
+                set_flash('success', $totalImported . ' ' . $qt('ok_qso_imported'));
             } else {
-                set_flash('error', 'Aucun nouveau QSO importé dans ' . $processedFiles . ' fichier(s).');
+                set_flash('error', $qt('err_qso_none'));
             }
         } elseif ($action === 'generate_batch') {
             $ids = array_map('intval', $_POST['qso_ids'] ?? []);
             $templateName = ((string) ($_POST['qsl_template_name'] ?? 'classic')) === 'classic_duplex' ? 'classic_duplex' : 'classic';
             $count = create_qsl_cards_from_qsos((int) $user['id'], $ids, $templateName);
             if ($count > 0) {
-                set_flash('success', $count . ' QSL générée(s).');
+                set_flash('success', $count . ' ' . $qt('ok_qsl_generated'));
             } else {
-                set_flash('error', 'Aucune QSL générée. Sélection vide ou QSL déjà existantes.');
+                set_flash('error', $qt('err_qsl_none'));
             }
         } elseif ($action === 'create_manual') {
             $presetId = (int) ($_POST['background_preset_id'] ?? 0);
@@ -245,18 +245,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $templateName,
                 $svg,
             ]);
-            set_flash('success', 'QSL créée.');
+            set_flash('success', $qt('ok_qsl_created'));
         } elseif ($action === 'delete_qso' || isset($_POST['delete_qso_id'])) {
             $qsoId = (int) ($_POST['delete_qso_id'] ?? ($_POST['qso_id'] ?? 0));
             $stmt = db()->prepare('DELETE FROM qso_logs WHERE id = ? AND member_id = ? LIMIT 1');
             $stmt->execute([$qsoId, $memberId]);
-            set_flash('success', 'QSO supprimé.');
+            set_flash('success', $qt('ok_qso_deleted'));
         } elseif ($action === 'delete_qsl') {
             $stmt = db()->prepare('DELETE FROM qsl_cards WHERE id = ? AND member_id = ? LIMIT 1');
             $stmt->execute([(int) ($_POST['qsl_id'] ?? 0), $memberId]);
-            set_flash('success', 'QSL supprimée.');
+            set_flash('success', $qt('ok_qsl_deleted'));
         } else {
-            throw new RuntimeException('Action QSL inconnue.');
+            throw new RuntimeException($qt('err_unknown_action'));
         }
 
         if ($isAjaxRequest) {
@@ -301,6 +301,10 @@ $qsoSearch = trim((string) ($_GET['qso_search'] ?? ''));
 $qsoBandFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_band'] ?? '')));
 $qsoModeFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_mode'] ?? '')));
 $qslSearch = trim((string) ($_GET['qsl_search'] ?? ''));
+$qsoPage = max(1, (int) ($_GET['qso_page'] ?? 1));
+$qslPage = max(1, (int) ($_GET['qsl_page'] ?? 1));
+$qsoPerPage = 25;
+$qslPerPage = 25;
 
 $qsoBandOptions = [];
 $qsoModeOptions = [];
@@ -377,6 +381,29 @@ $filteredQslRows = array_values(array_filter($qslRows, static function (array $r
     ]);
 }));
 
+$qsoTotal = count($filteredQsoRows);
+$qslTotal = count($filteredQslRows);
+$qsoTotalPages = max(1, (int) ceil($qsoTotal / $qsoPerPage));
+$qslTotalPages = max(1, (int) ceil($qslTotal / $qslPerPage));
+$qsoPage = min($qsoPage, $qsoTotalPages);
+$qslPage = min($qslPage, $qslTotalPages);
+$qsoOffset = ($qsoPage - 1) * $qsoPerPage;
+$qslOffset = ($qslPage - 1) * $qslPerPage;
+$pagedQsoRows = array_slice($filteredQsoRows, $qsoOffset, $qsoPerPage);
+$pagedQslRows = array_slice($filteredQslRows, $qslOffset, $qslPerPage);
+
+$buildQslPageUrl = static function (int $targetQsoPage, int $targetQslPage) use ($qsoSearch, $qsoBandFilter, $qsoModeFilter, $qslSearch): string {
+    $params = ['route' => 'qsl'];
+    if ($qsoSearch !== '') { $params['qso_search'] = $qsoSearch; }
+    if ($qsoBandFilter !== '') { $params['qso_band'] = $qsoBandFilter; }
+    if ($qsoModeFilter !== '') { $params['qso_mode'] = $qsoModeFilter; }
+    if ($qslSearch !== '') { $params['qsl_search'] = $qslSearch; }
+    if ($targetQsoPage > 1) { $params['qso_page'] = (string) $targetQsoPage; }
+    if ($targetQslPage > 1) { $params['qsl_page'] = (string) $targetQslPage; }
+
+    return base_url('index.php?' . http_build_query($params));
+};
+
 $generatedByQsoId = [];
 foreach ($qslRows as $card) {
     $key = qsl_normalize_callsign((string) ($card['qso_call'] ?? '')) . '|'
@@ -398,16 +425,16 @@ ob_start();
     <p class="help"><?= e($qt('studio_help')) ?></p>
     <div class="grid-3">
         <a class="inner-card qsl-studio-link-card" href="#qsl-draw" data-qsl-nav-target="design">
-            <span class="badge muted">1 · Personnaliser le design</span>
-            <p class="help">Ajoutez un fond image, une couleur unie, un dégradé ou une palette prête à l’emploi.</p>
+            <span class="badge muted"><?= e($qt('nav_design')) ?></span>
+            <p class="help"><?= e($qt('nav_design_help')) ?></p>
         </a>
         <a class="inner-card qsl-studio-link-card" href="#qsl-create" data-qsl-nav-target="create">
-            <span class="badge muted">2 · Créer / importer</span>
-            <p class="help">Créez une QSL manuelle ou importez vos ADIF en glisser‑déposer.</p>
+            <span class="badge muted"><?= e($qt('nav_create')) ?></span>
+            <p class="help"><?= e($qt('nav_create_help')) ?></p>
         </a>
         <a class="inner-card qsl-studio-link-card" href="#qsl-view" data-qsl-nav-target="manage">
-            <span class="badge muted">3 · Gérer et exporter</span>
-            <p class="help">Filtrez vos QSO, générez en lot et exportez vos cartes recto/verso.</p>
+            <span class="badge muted"><?= e($qt('nav_manage')) ?></span>
+            <p class="help"><?= e($qt('nav_manage_help')) ?></p>
         </a>
     </div>
 </section>
@@ -416,9 +443,9 @@ ob_start();
     <h2><?= e($qt('design')) ?></h2>
     <p class="help">Choisissez un type de fond. Le formulaire s’adapte automatiquement et l’aperçu se met à jour en direct.</p>
     <div class="actions">
-        <label><input type="radio" name="qsl_draw_flow" value="image" data-qsl-draw-choice> Fond image</label>
+        <label><input type="radio" name="qsl_draw_flow" value="image" data-qsl-draw-choice> <?= e($qt('label_bg_image')) ?></label>
         <label><input type="radio" name="qsl_draw_flow" value="solid" data-qsl-draw-choice> Couleur unique</label>
-        <label><input type="radio" name="qsl_draw_flow" value="gradient" data-qsl-draw-choice checked> Dégradé 2 couleurs</label>
+        <label><input type="radio" name="qsl_draw_flow" value="gradient" data-qsl-draw-choice checked> <?= e($qt('label_gradient')) ?></label>
         <label><input type="radio" name="qsl_draw_flow" value="palette" data-qsl-draw-choice> Couleurs prédéfinies</label>
     </div>
     <div class="split qsl-background-workbench">
@@ -501,7 +528,7 @@ ob_start();
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="preset_id" value="<?= (int) ($preset['id'] ?? 0) ?>">
                                 <button type="submit" name="action" value="set_default_background" class="button secondary small">Par défaut</button>
-                                <button type="submit" name="action" value="delete_background" class="button secondary small">Supprimer</button>
+                                <button type="submit" name="action" value="delete_background" class="button secondary small"><?= e($qt('label_delete')) ?></button>
                             </form>
                         </td>
                     </tr>
@@ -639,19 +666,19 @@ ob_start();
         <span><?= count($qsoRows) ?> enregistrement(s)</span>
     </div>
     <?php if ($qsoRows === []): ?>
-        <p>Aucun QSO importé pour le moment.</p>
+        <p><?= e($qt('empty_qso')) ?></p>
     <?php else: ?>
         <form method="get" class="inline-form qsl-filters">
             <input type="hidden" name="route" value="qsl">
-            <input type="text" name="qso_search" value="<?= e($qsoSearch) ?>" placeholder="Filtrer par call, date, mode...">
+            <input type="text" name="qso_search" value="<?= e($qsoSearch) ?>" placeholder="<?= e($qt('qso_search_ph')) ?>">
             <select name="qso_band">
-                <option value="">Toutes bandes</option>
+                <option value=""><?= e($qt('all_bands')) ?></option>
                 <?php foreach (array_keys($qsoBandOptions) as $option): ?>
                     <option value="<?= e($option) ?>" <?= $qsoBandFilter === $option ? 'selected' : '' ?>><?= e($option) ?></option>
                 <?php endforeach; ?>
             </select>
             <select name="qso_mode">
-                <option value="">Tous modes</option>
+                <option value=""><?= e($qt('all_modes')) ?></option>
                 <?php foreach (array_keys($qsoModeOptions) as $option): ?>
                     <option value="<?= e($option) ?>" <?= $qsoModeFilter === $option ? 'selected' : '' ?>><?= e($option) ?></option>
                 <?php endforeach; ?>
@@ -663,8 +690,8 @@ ob_start();
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="generate_batch">
             <div class="actions">
-                <button type="button" class="button secondary small" data-qso-toggle="all">Tout sélectionner</button>
-                <button type="button" class="button secondary small" data-qso-toggle="none">Tout désélectionner</button>
+                <button type="button" class="button secondary small" data-qso-toggle="all"><?= e($qt('select_all')) ?></button>
+                <button type="button" class="button secondary small" data-qso-toggle="none"><?= e($qt('select_none')) ?></button>
                 <label>Format
                     <select name="qsl_template_name">
                         <option value="classic">Recto</option>
@@ -678,7 +705,7 @@ ob_start();
                     <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Bande</th><th>Mode</th><th>RST</th><th>eQSL</th><th>Action</th></tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($filteredQsoRows as $row): ?>
+                    <?php foreach ($pagedQsoRows as $row): ?>
                         <tr>
                             <td><input type="checkbox" name="qso_ids[]" value="<?= (int) $row['id'] ?>"></td>
                             <td><?= e((string) $row['qso_call']) ?></td>
@@ -688,16 +715,23 @@ ob_start();
                             <td><?= e((string) $row['mode']) ?></td>
                             <td><?= e((string) $row['rst_sent']) ?>/<?= e((string) $row['rst_recv']) ?></td>
                             <td><?= e($qsoEqslStatus($row)) ?></td>
-                            <td><button class="button secondary small" type="submit" name="delete_qso_id" value="<?= (int) $row['id'] ?>">Supprimer</button></td>
+                            <td><button class="button secondary small" type="submit" name="delete_qso_id" value="<?= (int) $row['id'] ?>"><?= e($qt('label_delete')) ?></button></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
             <?php if ($filteredQsoRows === []): ?>
-                <p class="help">Aucun QSO ne correspond aux filtres actifs.</p>
+                <p class="help"><?= e($qt('empty_qso_filtered')) ?></p>
             <?php endif; ?>
-            <p><button class="button">Générer les QSL sélectionnées</button></p>
+            <?php if ($qsoTotalPages > 1): ?>
+                <div class="actions">
+                    <span class="help"><?= e($qt('page')) ?> <?= $qsoPage ?> / <?= $qsoTotalPages ?></span>
+                    <?php if ($qsoPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage - 1, $qslPage)) ?>">← <?= e($qt('previous')) ?></a><?php endif; ?>
+                    <?php if ($qsoPage < $qsoTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage + 1, $qslPage)) ?>"><?= e($qt('next')) ?> →</a><?php endif; ?>
+                </div>
+            <?php endif; ?>
+            <p><button class="button"><?= e($qt('bulk_generate')) ?></button></p>
         </form>
     <?php endif; ?>
 </section>
@@ -708,11 +742,11 @@ ob_start();
         <span><?= count($qslRows) ?> carte(s)</span>
     </div>
     <?php if ($qslRows === []): ?>
-        <p>Aucune QSL générée pour le moment.</p>
+        <p><?= e($qt('empty_qsl')) ?></p>
     <?php else: ?>
         <form method="get" class="inline-form qsl-filters">
             <input type="hidden" name="route" value="qsl">
-            <input type="text" name="qsl_search" value="<?= e($qslSearch) ?>" placeholder="Rechercher une QSL (titre, call, bande...)">
+            <input type="text" name="qsl_search" value="<?= e($qslSearch) ?>" placeholder="<?= e($qt('qsl_search_ph')) ?>">
             <button type="submit" class="button secondary small"><?= e($qt('filter')) ?></button>
             <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost"><?= e($qt('reset')) ?></a>
         </form>
@@ -722,7 +756,7 @@ ob_start();
                 <tr><th>Titre</th><th>QSO</th><th>Date</th><th>Bande</th><th>Mode</th><th>Format</th><th>Aperçu</th><th>Export</th><th>Action</th></tr>
                 </thead>
                 <tbody>
-                <?php foreach ($filteredQslRows as $row): ?>
+                <?php foreach ($pagedQslRows as $row): ?>
                     <tr>
                         <td><?= e((string) $row['title']) ?></td>
                         <td><?= e((string) $row['qso_call']) ?></td>
@@ -742,7 +776,7 @@ ob_start();
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="action" value="delete_qsl">
                                 <input type="hidden" name="qsl_id" value="<?= (int) $row['id'] ?>">
-                                <button class="button secondary small" type="submit">Supprimer</button>
+                                <button class="button secondary small" type="submit"><?= e($qt('label_delete')) ?></button>
                             </form>
                         </td>
                     </tr>
@@ -751,7 +785,14 @@ ob_start();
             </table>
         </div>
         <?php if ($filteredQslRows === []): ?>
-            <p class="help">Aucune QSL ne correspond à la recherche.</p>
+            <p class="help"><?= e($qt('empty_qsl_filtered')) ?></p>
+        <?php endif; ?>
+        <?php if ($qslTotalPages > 1): ?>
+            <div class="actions">
+                <span class="help"><?= e($qt('page')) ?> <?= $qslPage ?> / <?= $qslTotalPages ?></span>
+                <?php if ($qslPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage - 1)) ?>">← <?= e($qt('previous')) ?></a><?php endif; ?>
+                <?php if ($qslPage < $qslTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage + 1)) ?>"><?= e($qt('next')) ?> →</a><?php endif; ?>
+            </div>
         <?php endif; ?>
     <?php endif; ?>
 </section>
@@ -930,7 +971,7 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
             card.style.backgroundSize = 'cover';
             card.style.backgroundPosition = 'center';
             if (note) {
-                note.textContent = 'Fond image sélectionné.';
+                note.textContent = "<?= addslashes($qt('label_bg_image')) ?>";
             }
         } else if (type === 'gradient') {
             card.style.background = `linear-gradient(135deg, ${primary}, ${secondary})`;
@@ -944,7 +985,7 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
             card.style.backgroundSize = '';
             card.style.backgroundPosition = '';
             if (note) {
-                note.textContent = 'Fond image sélectionné (aperçu simplifié).';
+                note.textContent = "<?= addslashes($qt('label_bg_image')) ?>";
             }
         }
 

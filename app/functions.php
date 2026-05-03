@@ -101,6 +101,69 @@ function table_exists(string $table): bool
     return $cache[$normalized];
 }
 
+if (!function_exists('current_locale')) {
+function current_locale(): string
+{
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    if (!in_array($locale, ['fr', 'en', 'de', 'nl'], true)) {
+        return 'fr';
+    }
+
+    return $locale;
+}
+}
+
+if (!function_exists('t_page')) {
+function t_page(string $domain, string $key, ?string $locale = null): string
+{
+    $lang = $locale !== null ? strtolower(trim($locale)) : current_locale();
+    if (!in_array($lang, ['fr', 'en', 'de', 'nl'], true)) {
+        $lang = 'fr';
+    }
+
+    $messages = [
+        'press' => [
+            'fr' => ['title' => 'Presse', 'body' => "La section presse sera alimentée via le module d'administration."],
+            'en' => ['title' => 'Press', 'body' => 'The press section will be managed from the administration module.'],
+            'de' => ['title' => 'Presse', 'body' => 'Der Pressebereich wird über das Administrationsmodul gepflegt.'],
+            'nl' => ['title' => 'Pers', 'body' => 'De perssectie wordt beheerd via de beheermodule.'],
+        ],
+        'sponsoring' => [
+            'fr' => ['title' => 'Sponsoring', 'body' => 'Retrouvez sur cette page les informations relatives aux partenaires et opportunités de sponsoring du club.'],
+            'en' => ['title' => 'Sponsoring', 'body' => 'Find information here about partners and club sponsorship opportunities.'],
+            'de' => ['title' => 'Sponsoring', 'body' => 'Hier finden Sie Informationen zu Partnern und Sponsoring-Möglichkeiten des Clubs.'],
+            'nl' => ['title' => 'Sponsoring', 'body' => 'Hier vindt u informatie over partners en sponsoringsmogelijkheden van de club.'],
+        ],
+        'mentions_legales' => [
+            'fr' => ['title' => 'Mentions légales', 'body' => 'Les mentions légales du site ON4CRD sont accessibles ici et seront complétées selon les obligations en vigueur.'],
+            'en' => ['title' => 'Legal notice', 'body' => 'The ON4CRD legal notices are available here and will be completed according to applicable obligations.'],
+            'de' => ['title' => 'Impressum', 'body' => 'Die rechtlichen Hinweise von ON4CRD sind hier verfügbar und werden gemäß geltenden Verpflichtungen ergänzt.'],
+            'nl' => ['title' => 'Juridische vermeldingen', 'body' => 'De juridische vermeldingen van ON4CRD staan hier en worden aangevuld volgens de geldende verplichtingen.'],
+        ],
+        'conditions_utilisation' => [
+            'fr' => ['title' => "Conditions générales d'utilisation", 'body' => "Les conditions générales d'utilisation du site ON4CRD seront publiées et mises à jour sur cette page."],
+            'en' => ['title' => 'Terms of use', 'body' => 'The ON4CRD website terms of use will be published and updated on this page.'],
+            'de' => ['title' => 'Nutzungsbedingungen', 'body' => 'Die Nutzungsbedingungen der ON4CRD-Website werden auf dieser Seite veröffentlicht und aktualisiert.'],
+            'nl' => ['title' => 'Gebruiksvoorwaarden', 'body' => 'De gebruiksvoorwaarden van de ON4CRD-website worden op deze pagina gepubliceerd en bijgewerkt.'],
+        ],
+        'reglement_interieur' => [
+            'fr' => ['title' => "Règlement d'ordre intérieur", 'body' => "Le règlement d'ordre intérieur du club sera présenté sur cette page."],
+            'en' => ['title' => 'Internal regulations', 'body' => 'The club internal regulations will be published on this page.'],
+            'de' => ['title' => 'Interne Ordnung', 'body' => 'Die interne Ordnung des Clubs wird auf dieser Seite veröffentlicht.'],
+            'nl' => ['title' => 'Intern reglement', 'body' => 'Het intern reglement van de club wordt op deze pagina gepubliceerd.'],
+        ],
+    ];
+
+    if (!isset($messages[$domain])) {
+        return $key;
+    }
+
+    $catalog = $messages[$domain][$lang] ?? $messages[$domain]['fr'];
+
+    return (string) ($catalog[$key] ?? ($messages[$domain]['fr'][$key] ?? $key));
+}
+}
+
 function seed_modules(): void
 {
     if (!table_exists('modules')) {
@@ -2004,6 +2067,527 @@ function import_adif_records(int $memberId, array $records): int
     return $created;
 }
 
+if (!function_exists('answer_question_from_knowledge')) {
+    /**
+     * @return array{answer:string,source:string}
+     */
+function answer_question_from_knowledge(string $question): array
+{
+        $normalized = mb_safe_strtolower(trim($question));
+        if ($normalized === '') {
+            return ['answer' => 'Je n’ai pas reçu de question exploitable.', 'source' => 'Assistant Raymond'];
+        }
+
+        $knowledgePath = __DIR__ . '/knowledge.php';
+        $knowledgeBase = [];
+        if (is_file($knowledgePath)) {
+            $loaded = require $knowledgePath;
+            if (is_array($loaded)) {
+                $knowledgeBase = $loaded;
+            }
+        }
+
+        $bestScore = -1;
+        $bestItem = null;
+        foreach ($knowledgeBase as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $score = 0;
+            $keywords = isset($item['keywords']) && is_array($item['keywords']) ? $item['keywords'] : [];
+            foreach ($keywords as $keyword) {
+                $needle = mb_safe_strtolower(trim((string) $keyword));
+                if ($needle !== '' && str_contains($normalized, $needle)) {
+                    $score += 3;
+                }
+            }
+            $title = mb_safe_strtolower((string) ($item['title'] ?? ''));
+            if ($title !== '' && str_contains($normalized, $title)) {
+                $score += 2;
+            }
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $bestItem = $item;
+            }
+        }
+
+        if ($bestItem !== null && $bestScore > 0) {
+            return [
+                'answer' => trim((string) ($bestItem['body'] ?? 'Je n’ai pas de réponse précise pour le moment.')),
+                'source' => trim((string) ($bestItem['source'] ?? 'Base de connaissances ON4CRD')),
+            ];
+        }
+
+        if (table_exists('articles')) {
+            try {
+                $like = '%' . $question . '%';
+                $stmt = db()->prepare('SELECT title, excerpt, slug FROM articles WHERE status = "published" AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?) ORDER BY updated_at DESC LIMIT 1');
+                $stmt->execute([$like, $like, $like]);
+                $article = $stmt->fetch();
+                if (is_array($article)) {
+                    $title = trim((string) ($article['title'] ?? 'Article'));
+                    $excerpt = trim((string) ($article['excerpt'] ?? ''));
+                    $slug = trim((string) ($article['slug'] ?? ''));
+                    $url = $slug !== '' ? base_url('index.php?route=article&slug=' . urlencode($slug)) : '';
+                    $answer = 'J’ai trouvé un article pertinent : ' . $title . '.';
+                    if ($excerpt !== '') {
+                        $answer .= "\n\nRésumé : " . $excerpt;
+                    }
+                    if ($url !== '') {
+                        $answer .= "\n\nLien : " . $url;
+                    }
+                    return ['answer' => $answer, 'source' => 'Articles ON4CRD'];
+                }
+            } catch (Throwable) {
+                // fallback below
+            }
+        }
+
+        return [
+            'answer' => 'Je n’ai pas de réponse précise pour cette question. Essayez de mentionner un mot-clé (QSL, antenne, propagation, licence) ou consultez le module Articles.',
+            'source' => 'Assistant Raymond',
+        ];
+    }
+}
+
+/**
+ * @param array<string,mixed> $row
+ * @return array<string,mixed>
+ */
+function localized_article_row(array $row): array
+{
+    $locale = current_locale();
+    if ($locale === 'fr') {
+        return $row;
+    }
+
+    $articleId = (int) ($row['id'] ?? 0);
+    if ($articleId <= 0 || !table_exists('article_translations')) {
+        return $row;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? ORDER BY CASE status WHEN "reviewed" THEN 0 WHEN "auto" THEN 1 ELSE 2 END, updated_at DESC LIMIT 1');
+        $stmt->execute([$articleId, $locale]);
+        $translation = $stmt->fetch();
+        if (!is_array($translation)) {
+            return $row;
+        }
+
+        foreach (['title', 'excerpt', 'content'] as $field) {
+            $value = trim((string) ($translation[$field] ?? ''));
+            if ($value !== '') {
+                $row[$field] = $value;
+            }
+        }
+    } catch (Throwable) {
+        return $row;
+    }
+
+    return $row;
+}
+
+function article_translation_upsert(int $articleId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void
+{
+    if ($articleId <= 0 || $locale === 'fr' || !table_exists('article_translations')) {
+        return;
+    }
+
+    $sourceStmt = db()->prepare('SELECT title, excerpt, content FROM articles WHERE id = ? LIMIT 1');
+    $sourceStmt->execute([$articleId]);
+    $source = $sourceStmt->fetch();
+    if (!is_array($source)) {
+        return;
+    }
+
+    $finalTitle = trim((string) ($title ?? ''));
+    $finalExcerpt = trim((string) ($summary ?? ''));
+    $finalContent = trim((string) ($content ?? ''));
+    if ($finalTitle === '') {
+        $finalTitle = (string) ($source['title'] ?? '');
+    }
+    if ($finalExcerpt === '') {
+        $finalExcerpt = (string) ($source['excerpt'] ?? '');
+    }
+    if ($finalContent === '') {
+        $finalContent = (string) ($source['content'] ?? '');
+    }
+
+    $status = ($title === null && $summary === null && $content === null) ? 'auto' : 'needs_review';
+
+    $update = db()->prepare('UPDATE article_translations SET title = ?, excerpt = ?, content = ?, status = ?, updated_at = NOW() WHERE article_id = ? AND locale = ?');
+    $update->execute([$finalTitle, $finalExcerpt, $finalContent, $status, $articleId, $locale]);
+    if ($update->rowCount() > 0) {
+        return;
+    }
+
+    db()->prepare('INSERT INTO article_translations (article_id, locale, title, excerpt, content, status) VALUES (?, ?, ?, ?, ?, ?)')
+        ->execute([$articleId, $locale, $finalTitle, $finalExcerpt, $finalContent, $status]);
+}
+
+function parse_price_to_cents(string $price): int
+{
+    $normalized = str_replace([' ', "\xc2\xa0"], '', trim($price));
+    $normalized = str_replace(',', '.', $normalized);
+    $normalized = preg_replace('/[^0-9.\-]/', '', $normalized) ?? '0';
+    if ($normalized === '' || $normalized === '-' || $normalized === '.') {
+        return 0;
+    }
+
+    return (int) max(0, round(((float) $normalized) * 100));
+}
+
+function format_price_eur(int $cents): string
+{
+    $amount = max(0, $cents) / 100;
+    return number_format($amount, 2, ',', ' ') . ' €';
+}
+
+function format_integer_or_unlimited(?int $value): string
+{
+    return $value === null ? '∞' : (string) max(0, $value);
+}
+
+/**
+ * @return array<string, array{label:string,width:int,height:int}>
+ */
+function ad_format_catalog(): array
+{
+    return [
+        'square' => ['label' => 'Carré (1080×1080)', 'width' => 1080, 'height' => 1080],
+        'landscape' => ['label' => 'Paysage (1200×628)', 'width' => 1200, 'height' => 628],
+        'portrait' => ['label' => 'Portrait (1080×1350)', 'width' => 1080, 'height' => 1350],
+    ];
+}
+
+function ad_format_label(string $formatCode): string
+{
+    $catalog = ad_format_catalog();
+    return (string) ($catalog[$formatCode]['label'] ?? $formatCode);
+}
+
+function ad_status_label(string $status): string
+{
+    return match ($status) {
+        'pending' => 'En attente',
+        'active' => 'Active',
+        'paused' => 'En pause',
+        'expired' => 'Expirée',
+        'rejected' => 'Refusée',
+        default => ucfirst($status),
+    };
+}
+
+/**
+ * @param array<string,mixed> $ad
+ */
+function ad_runtime_status(array $ad): string
+{
+    $status = (string) ($ad['status'] ?? 'pending');
+    if ($status !== 'active') {
+        return $status;
+    }
+    $endsAt = (string) ($ad['ends_at'] ?? '');
+    if ($endsAt !== '' && strtotime($endsAt) !== false && strtotime($endsAt) < time()) {
+        return 'expired';
+    }
+    return 'active';
+}
+
+/**
+ * @return array<int, array{code:string,label:string}>
+ */
+function available_ad_placements(): array
+{
+    return [
+        ['code' => 'home_hero', 'label' => 'Accueil (hero)'],
+        ['code' => 'home_sidebar', 'label' => 'Accueil (latéral)'],
+        ['code' => 'news_inline', 'label' => 'Actualités (inline)'],
+    ];
+}
+
+/**
+ * @return array<int, array{code:string,label:string}>
+ */
+function ad_placements_for_member(int $memberId): array
+{
+    return available_ad_placements();
+}
+
+/**
+ * @return array<int, array<string,mixed>>
+ */
+function member_ads(int $memberId, bool $ownerOnly = true): array
+{
+    if (!table_exists('ads')) {
+        return [];
+    }
+
+    $placementMap = [];
+    foreach (available_ad_placements() as $placement) {
+        $placementMap[(string) ($placement['code'] ?? '')] = (string) ($placement['label'] ?? '');
+    }
+
+    if ($ownerOnly) {
+        $stmt = db()->prepare('SELECT a.* FROM ads a WHERE a.owner_member_id = ? ORDER BY a.updated_at DESC, a.id DESC');
+        $stmt->execute([$memberId]);
+        $rows = $stmt->fetchAll() ?: [];
+    } else {
+        $rows = db()->query('SELECT a.* FROM ads a ORDER BY a.updated_at DESC, a.id DESC')->fetchAll() ?: [];
+    }
+
+    foreach ($rows as &$row) {
+        $row['runtime_status'] = ad_runtime_status($row);
+        $code = (string) ($row['placement_code'] ?? '');
+        $row['placement_name'] = $placementMap[$code] ?? $code;
+        $row['owner_callsign'] = (string) ($row['owner_callsign'] ?? '');
+    }
+    unset($row);
+
+    return $rows;
+}
+
+/**
+ * @return array<int, array<string,mixed>>
+ */
+function committee_members(): array
+{
+    if (!table_exists('committee_members')) {
+        return [];
+    }
+    return db()->query('SELECT * FROM committee_members WHERE is_active = 1 ORDER BY sort_order ASC, id ASC')->fetchAll() ?: [];
+}
+
+function placeholder_avatar(string $seed = '', int $size = 256): string
+{
+    return 'assets/icons/icon-192.png';
+}
+
+function editorial_text(string $slot, string $fallback = ''): string
+{
+    if (table_exists('editorial_contents')) {
+        $locale = current_locale();
+        $stmt = db()->prepare('SELECT fr, en, de, nl FROM editorial_contents WHERE slot = ? LIMIT 1');
+        $stmt->execute([$slot]);
+        $row = $stmt->fetch();
+        if (is_array($row)) {
+            $candidate = trim((string) ($row[$locale] ?? ''));
+            if ($candidate === '') {
+                $candidate = trim((string) ($row['fr'] ?? ''));
+            }
+            if ($candidate !== '') {
+                return $candidate;
+            }
+        }
+    }
+
+    $defaults = [
+        'committee.title' => 'Comité',
+        'committee.intro' => 'Présentation du comité du radio club.',
+        'committee.mission' => 'Transparence',
+        'committee.onboarding' => 'Accueil des membres',
+        'committee.contact_title' => 'Contact',
+        'committee.contact_text' => 'Le comité est disponible pour vos questions.',
+    ];
+
+    return (string) ($defaults[$slot] ?? $fallback);
+}
+
+/**
+ * @return array<string,mixed>|null
+ */
+function editorial_content_row(string $slot): ?array
+{
+    if ($slot === '' || !table_exists('editorial_contents')) {
+        return null;
+    }
+    $stmt = db()->prepare('SELECT * FROM editorial_contents WHERE slot = ? LIMIT 1');
+    $stmt->execute([$slot]);
+    $row = $stmt->fetch();
+    return is_array($row) ? $row : null;
+}
+
+function save_editorial_content(string $slot, string $fr = '', string $en = '', string $de = '', string $nl = ''): void
+{
+    if ($slot === '' || !table_exists('editorial_contents')) {
+        return;
+    }
+    $update = db()->prepare('UPDATE editorial_contents SET fr = ?, en = ?, de = ?, nl = ?, updated_at = NOW() WHERE slot = ?');
+    $update->execute([$fr, $en, $de, $nl, $slot]);
+    if ($update->rowCount() > 0) {
+        return;
+    }
+    db()->prepare('INSERT INTO editorial_contents (slot, fr, en, de, nl) VALUES (?, ?, ?, ?, ?)')
+        ->execute([$slot, $fr, $en, $de, $nl]);
+}
+
+function news_status_label(string $status): string
+{
+    return match ($status) {
+        'draft' => 'Brouillon',
+        'pending' => 'En attente',
+        'published' => 'Publié',
+        'archived' => 'Archivé',
+        default => ucfirst($status),
+    };
+}
+
+/**
+ * @return int[]
+ */
+function managed_section_ids_for_member(int $memberId): array
+{
+    if ($memberId <= 0 || !table_exists('news_section_managers')) {
+        return [];
+    }
+    $stmt = db()->prepare('SELECT section_id FROM news_section_managers WHERE member_id = ?');
+    $stmt->execute([$memberId]);
+    return array_values(array_unique(array_map('intval', array_column($stmt->fetchAll() ?: [], 'section_id'))));
+}
+
+function can_submit_news_in_section(int|array $user, int $sectionId): bool
+{
+    if ($sectionId <= 0) {
+        return false;
+    }
+    if (is_array($user) && ((int) ($user['is_admin'] ?? 0) === 1)) {
+        return true;
+    }
+    $memberId = is_array($user) ? (int) ($user['id'] ?? 0) : (int) $user;
+    if ($memberId <= 0) {
+        return false;
+    }
+    return in_array($sectionId, managed_section_ids_for_member($memberId), true);
+}
+
+function news_translation_upsert(int $newsId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void
+{
+    if ($newsId <= 0 || $locale === 'fr' || !table_exists('news_translations')) {
+        return;
+    }
+    $src = db()->prepare('SELECT title, excerpt AS summary, content FROM news_posts WHERE id = ? LIMIT 1');
+    $src->execute([$newsId]);
+    $row = $src->fetch();
+    if (!is_array($row)) {
+        return;
+    }
+    $finalTitle = trim((string) ($title ?? '')) ?: (string) ($row['title'] ?? '');
+    $finalSummary = trim((string) ($summary ?? '')) ?: (string) ($row['summary'] ?? '');
+    $finalContent = trim((string) ($content ?? '')) ?: (string) ($row['content'] ?? '');
+    $status = ($title === null && $summary === null && $content === null) ? 'auto' : 'needs_review';
+
+    $update = db()->prepare('UPDATE news_translations SET title = ?, summary = ?, content = ?, status = ?, updated_at = NOW() WHERE news_id = ? AND locale = ?');
+    $update->execute([$finalTitle, $finalSummary, $finalContent, $status, $newsId, $locale]);
+    if ($update->rowCount() > 0) {
+        return;
+    }
+    db()->prepare('INSERT INTO news_translations (news_id, locale, title, summary, content, status) VALUES (?, ?, ?, ?, ?, ?)')
+        ->execute([$newsId, $locale, $finalTitle, $finalSummary, $finalContent, $status]);
+}
+
+/**
+ * @return array<int,array<string,mixed>>
+ */
+function press_contacts(): array
+{
+    if (!table_exists('press_contacts')) {
+        return [];
+    }
+    return db()->query('SELECT * FROM press_contacts ORDER BY sort_order ASC, id ASC')->fetchAll() ?: [];
+}
+
+/**
+ * @return array<int,array<string,mixed>>
+ */
+function latest_press_releases(int $limit = 20): array
+{
+    if (!table_exists('press_releases')) {
+        return [];
+    }
+    $limit = max(1, min(100, $limit));
+    return db()->query('SELECT * FROM press_releases ORDER BY release_date DESC, id DESC LIMIT ' . (int) $limit)->fetchAll() ?: [];
+}
+
+function notify_album_webhooks(array $album): void
+{
+    if (!table_exists('webhooks')) {
+        return;
+    }
+    $targets = db()->query('SELECT url FROM webhooks WHERE is_active = 1 AND event IN ("album.updated","album.created","*")')->fetchAll() ?: [];
+    if ($targets === []) {
+        return;
+    }
+    $payload = json_encode([
+        'event' => 'album.updated',
+        'album' => [
+            'id' => (int) ($album['id'] ?? 0),
+            'title' => (string) ($album['title'] ?? ''),
+            'slug' => (string) ($album['slug'] ?? ''),
+        ],
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (!is_string($payload)) {
+        return;
+    }
+    foreach ($targets as $target) {
+        $url = trim((string) ($target['url'] ?? ''));
+        if ($url === '') {
+            continue;
+        }
+        $ctx = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'header' => "Content-Type: application/json\r\n",
+                'content' => $payload,
+                'timeout' => 3,
+                'ignore_errors' => true,
+            ],
+        ]);
+        @file_get_contents($url, false, $ctx);
+    }
+}
+
+/**
+ * @return array<string,mixed>|null
+ */
+function ad_fetch_by_id(int $adId): ?array
+{
+    if ($adId <= 0 || !table_exists('ads')) {
+        return null;
+    }
+    $stmt = db()->prepare('SELECT * FROM ads WHERE id = ? LIMIT 1');
+    $stmt->execute([$adId]);
+    $row = $stmt->fetch();
+    return is_array($row) ? $row : null;
+}
+
+/**
+ * @return array<int, array{day:string,impressions:int,clicks:int}>
+ */
+function ad_daily_stats(int $adId): array
+{
+    if ($adId <= 0 || !table_exists('ad_events')) {
+        return [];
+    }
+    $stmt = db()->prepare('SELECT DATE(created_at) AS day, SUM(event_type = "view") AS impressions, SUM(event_type = "click") AS clicks FROM ad_events WHERE ad_id = ? GROUP BY DATE(created_at) ORDER BY day DESC LIMIT 30');
+    $stmt->execute([$adId]);
+    return $stmt->fetchAll() ?: [];
+}
+
+function log_ad_event(int $adId, string $eventType, string $placementCode = ''): void
+{
+    if ($adId <= 0 || !table_exists('ad_events')) {
+        return;
+    }
+    db()->prepare('INSERT INTO ad_events (ad_id, event_type, placement_code, ip_address, user_agent) VALUES (?, ?, ?, ?, ?)')
+        ->execute([
+            $adId,
+            $eventType,
+            $placementCode,
+            (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+            substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
+        ]);
+}
+
 function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templateName = 'classic'): int
 {
     if ($memberId <= 0 || $qsoIds === [] || !table_exists('qso_logs') || !table_exists('qsl_cards')) {
@@ -2569,7 +3153,68 @@ function handle_album_upload(?array $upload, string $callsign): string
         8 * 1024 * 1024
     );
 
-    return 'storage/uploads/albums/' . $saved;
+    $publicPath = 'storage/uploads/albums/' . $saved;
+    create_album_thumbnail($publicPath, 640, 640);
+
+    return $publicPath;
+}
+
+function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string
+{
+    if (!extension_loaded('gd')) {
+        return null;
+    }
+    $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
+    if (!is_file($sourcePath)) {
+        return null;
+    }
+    $info = @getimagesize($sourcePath);
+    if (!is_array($info)) {
+        return null;
+    }
+    [$width, $height] = $info;
+    if ($width <= 0 || $height <= 0) {
+        return null;
+    }
+    $mime = (string) ($info['mime'] ?? '');
+    $src = match ($mime) {
+        'image/jpeg' => @imagecreatefromjpeg($sourcePath),
+        'image/png' => @imagecreatefrompng($sourcePath),
+        'image/webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($sourcePath) : false,
+        default => false,
+    };
+    if (!$src) {
+        return null;
+    }
+    $ratio = min($maxWidth / $width, $maxHeight / $height, 1);
+    $newW = max(1, (int) floor($width * $ratio));
+    $newH = max(1, (int) floor($height * $ratio));
+    $dst = imagecreatetruecolor($newW, $newH);
+    imagealphablending($dst, false);
+    imagesavealpha($dst, true);
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $width, $height);
+
+    $dir = dirname($sourcePath) . '/thumbs';
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        imagedestroy($src);
+        imagedestroy($dst);
+        return null;
+    }
+    $name = pathinfo($sourcePath, PATHINFO_FILENAME) . '.jpg';
+    $thumbAbs = $dir . '/' . $name;
+    $ok = imagejpeg($dst, $thumbAbs, 84);
+    imagedestroy($src);
+    imagedestroy($dst);
+    if (!$ok) {
+        return null;
+    }
+    return 'storage/uploads/albums/thumbs/' . $name;
+}
+
+function album_thumbnail_public_path(string $photoPath): string
+{
+    $base = pathinfo($photoPath, PATHINFO_FILENAME);
+    return 'storage/uploads/albums/thumbs/' . $base . '.jpg';
 }
 
 function handle_ad_image_upload(?array $upload, string $callsign, string $existingPath = ''): ?string
@@ -2678,6 +3323,16 @@ function member_avatar_src(array $member): string
 function client_ip_address(): string
 {
     return trim((string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0')) ?: '0.0.0.0';
+}
+
+function cache_dir_path(): string
+{
+    $dir = __DIR__ . '/../storage/cache';
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0775, true);
+    }
+
+    return $dir;
 }
 
 function login_throttle_file(): string
@@ -3275,6 +3930,18 @@ function auction_runtime_status(array $lot): string
     return $status === 'closed' ? 'closed' : 'active';
 }
 
+function auction_status_label(string $status): string
+{
+    return match ($status) {
+        'draft' => 'Brouillon',
+        'scheduled' => 'Planifiée',
+        'active' => 'En cours',
+        'closed' => 'Terminée',
+        'cancelled' => 'Annulée',
+        default => ucfirst($status),
+    };
+}
+
 function auction_minimum_bid_cents(array $lot): int
 {
     $current = max((int) ($lot['current_price_cents'] ?? 0), (int) ($lot['starting_price_cents'] ?? 0));
@@ -3286,13 +3953,24 @@ function auction_minimum_bid_cents(array $lot): int
     return $current + max(1, (int) ($lot['min_increment_cents'] ?? 100));
 }
 
+
+function auction_reserve_met(array $lot, int $highestBidCents): bool
+{
+    $reserve = (int) ($lot['reserve_price_cents'] ?? 0);
+    if ($reserve <= 0) {
+        return true;
+    }
+
+    return $highestBidCents >= $reserve;
+}
+
 function auction_sync_expired_lots(): void
 {
     if (!table_exists('auction_lots')) {
         return;
     }
 
-    $rows = db()->query('SELECT id FROM auction_lots WHERE status IN ("scheduled","active") AND ends_at <= NOW()')->fetchAll();
+    $rows = db()->query('SELECT id, reserve_price_cents FROM auction_lots WHERE status IN ("scheduled","active") AND ends_at <= NOW()')->fetchAll();
     if ($rows === []) {
         return;
     }
@@ -3301,8 +3979,9 @@ function auction_sync_expired_lots(): void
     foreach ($rows as $row) {
         $lotId = (int) $row['id'];
         $highestBid = auction_highest_bid($lotId);
-        $winnerId = $highestBid ? (int) $highestBid['member_id'] : null;
         $currentPrice = $highestBid ? (int) $highestBid['amount_cents'] : 0;
+        $reserveMet = auction_reserve_met($row, $currentPrice);
+        $winnerId = ($highestBid && $reserveMet) ? (int) $highestBid['member_id'] : null;
         $update->execute([$winnerId, $currentPrice, $lotId]);
     }
 }
@@ -3360,4 +4039,88 @@ function place_auction_bid(int $lotId, int $memberId, int $amountCents): void
         }
         throw $throwable;
     }
+}
+
+
+/**
+ * @return array{layout:string,title:string,lead:string,search_label:string,search_placeholder:string,search_cta:string,search_reset:string,empty:string}
+ */
+function admin_dashboard_translations(string $locale): array
+{
+    $i18n = [
+        'fr' => ['layout' => 'Administration', 'title' => 'Administration centralisée', 'lead' => 'Tous les modules et outils d’administration sont regroupés dans ce tableau de bord unique.', 'search_label' => 'Recherche rapide', 'search_placeholder' => 'Module, outil, description…', 'search_cta' => 'Filtrer', 'search_reset' => 'Réinitialiser', 'empty' => 'Aucun module ne correspond à la recherche.'],
+        'en' => ['layout' => 'Administration', 'title' => 'Centralized administration', 'lead' => 'All admin modules and tools are grouped in this single dashboard.', 'search_label' => 'Quick search', 'search_placeholder' => 'Module, tool, description…', 'search_cta' => 'Filter', 'search_reset' => 'Reset', 'empty' => 'No module matches your search.'],
+        'de' => ['layout' => 'Verwaltung', 'title' => 'Zentralisierte Verwaltung', 'lead' => 'Alle Verwaltungs-Module und Werkzeuge sind in diesem einzigen Dashboard gebündelt.', 'search_label' => 'Schnellsuche', 'search_placeholder' => 'Modul, Werkzeug, Beschreibung…', 'search_cta' => 'Filtern', 'search_reset' => 'Zurücksetzen', 'empty' => 'Kein Modul entspricht Ihrer Suche.'],
+        'nl' => ['layout' => 'Beheer', 'title' => 'Gecentraliseerd beheer', 'lead' => 'Alle beheermodules en tools zijn gegroepeerd in dit ene dashboard.', 'search_label' => 'Snel zoeken', 'search_placeholder' => 'Module, tool, beschrijving…', 'search_cta' => 'Filteren', 'search_reset' => 'Reset', 'empty' => 'Geen module komt overeen met je zoekopdracht.'],
+    ];
+
+    return $i18n[$locale] ?? $i18n['fr'];
+}
+
+/**
+ * @return array<int, array{route:string,title:array{fr:string,en:string,de:string,nl:string},desc:array{fr:string,en:string,de:string,nl:string},module?:string,permission?:string}>
+ */
+function admin_module_cards_catalog(): array
+{
+    return [
+        ['route' => 'admin_modules', 'title' => ['fr' => 'Modules', 'en' => 'Modules', 'de' => 'Module', 'nl' => 'Modules'], 'desc' => ['fr' => 'Activation, désactivation et pilotage global des modules.', 'en' => 'Enable, disable and globally manage modules.', 'de' => 'Module aktivieren, deaktivieren und zentral steuern.', 'nl' => 'Modules activeren, deactiveren en centraal beheren.'], 'permission' => 'modules.manage'],
+        ['route' => 'admin_permissions', 'title' => ['fr' => 'Permissions', 'en' => 'Permissions', 'de' => 'Berechtigungen', 'nl' => 'Rechten'], 'desc' => ['fr' => 'Rôles, droits et affectations.', 'en' => 'Roles, rights and assignments.', 'de' => 'Rollen, Rechte und Zuweisungen.', 'nl' => 'Rollen, rechten en toewijzingen.']],
+        ['route' => 'admin_news', 'title' => ['fr' => 'Actualités', 'en' => 'News', 'de' => 'Neuigkeiten', 'nl' => 'Nieuws'], 'desc' => ['fr' => 'Sections, rédaction et modération.', 'en' => 'Sections, writing and moderation.', 'de' => 'Bereiche, Redaktion und Moderation.', 'nl' => 'Secties, redactie en moderatie.'], 'module' => 'news'],
+        ['route' => 'admin_articles', 'title' => ['fr' => 'Articles', 'en' => 'Articles', 'de' => 'Artikel', 'nl' => 'Artikels'], 'desc' => ['fr' => 'Articles techniques publics.', 'en' => 'Public technical articles.', 'de' => 'Öffentliche technische Artikel.', 'nl' => 'Publieke technische artikels.'], 'module' => 'articles'],
+        ['route' => 'admin_committee', 'title' => ['fr' => 'Comité', 'en' => 'Committee', 'de' => 'Komitee', 'nl' => 'Comité'], 'desc' => ['fr' => 'Membres du comité, rôle, ordre et biographie.', 'en' => 'Committee members, role, order and biography.', 'de' => 'Komiteemitglieder, Rolle, Reihenfolge und Biografie.', 'nl' => 'Comitéleden, rol, volgorde en biografie.'], 'module' => 'committee'],
+        ['route' => 'admin_press', 'title' => ['fr' => 'Presse', 'en' => 'Press', 'de' => 'Presse', 'nl' => 'Pers'], 'desc' => ['fr' => 'Contacts presse, communiqués datés et documents téléchargeables.', 'en' => 'Press contacts, dated releases and downloadable documents.', 'de' => 'Pressekontakte, datierte Mitteilungen und Downloads.', 'nl' => 'Perscontacten, gedateerde berichten en downloads.'], 'module' => 'press'],
+        ['route' => 'admin_events', 'title' => ['fr' => 'Agenda', 'en' => 'Agenda', 'de' => 'Agenda', 'nl' => 'Agenda'], 'desc' => ['fr' => 'Événements du club et contests locaux affichés dans les widgets live.', 'en' => 'Club events and local contests shown in live widgets.', 'de' => 'Clubveranstaltungen und lokale Contests in Live-Widgets.', 'nl' => 'Clubevenementen en lokale contests in live widgets.'], 'module' => 'events'],
+        ['route' => 'admin_dinner_reservations', 'title' => ['fr' => 'Dîner annuel', 'en' => 'Annual dinner', 'de' => 'Jahresessen', 'nl' => 'Jaarlijks diner'], 'desc' => ['fr' => 'Réservations, lignes repas/dessert, quantités et total automatique.', 'en' => 'Reservations, meal/dessert lines, quantities and auto total.', 'de' => 'Reservierungen, Menüzeilen, Mengen und automatische Summe.', 'nl' => 'Reservaties, maaltijdregels, aantallen en automatisch totaal.'], 'module' => 'events', 'permission' => 'events.manage'],
+        ['route' => 'admin_shop', 'title' => ['fr' => 'Boutique', 'en' => 'Shop', 'de' => 'Shop', 'nl' => 'Winkel'], 'desc' => ['fr' => 'Catalogue produits, catégories et commandes club.', 'en' => 'Product catalog, categories and club orders.', 'de' => 'Produktkatalog, Kategorien und Clubbestellungen.', 'nl' => 'Productcatalogus, categorieën en clubbestellingen.'], 'module' => 'shop', 'permission' => 'shop.manage'],
+        ['route' => 'admin_auctions', 'title' => ['fr' => 'Enchères', 'en' => 'Auctions', 'de' => 'Auktionen', 'nl' => 'Veilingen'], 'desc' => ['fr' => 'Lots, planification, offres et clôture.', 'en' => 'Lots, scheduling, bids and closing.', 'de' => 'Lose, Planung, Gebote und Abschluss.', 'nl' => 'Kavels, planning, biedingen en afsluiting.'], 'module' => 'auctions', 'permission' => 'auctions.manage'],
+        ['route' => 'admin_editorial', 'title' => ['fr' => 'Éditorial multilingue', 'en' => 'Multilingual editorial', 'de' => 'Mehrsprachige Redaktion', 'nl' => 'Meertalige redactie'], 'desc' => ['fr' => 'Français source, traduction auto EN/DE/NL et relecture manuelle.', 'en' => 'French source, EN/DE/NL auto translation and manual review.', 'de' => 'Französische Quelle, automatische Übersetzung und Review.', 'nl' => 'Franse bron, automatische vertaling en manuele review.']],
+        ['route' => 'admin_translation_reviews', 'title' => ['fr' => 'Relecture linguistique', 'en' => 'Translation reviews', 'de' => 'Sprachliche Prüfung', 'nl' => 'Taalreview'], 'desc' => ['fr' => 'Workflow de validation des traductions des actualités et articles.', 'en' => 'Validation workflow for news/article translations.', 'de' => 'Freigabe-Workflow für News-/Artikelübersetzungen.', 'nl' => 'Validatieworkflow voor vertalingen van nieuws/artikels.']],
+        ['route' => 'admin_live_feeds', 'title' => ['fr' => 'Flux live', 'en' => 'Live feeds', 'de' => 'Live-Feeds', 'nl' => 'Live feeds'], 'desc' => ['fr' => 'Pilotage fin des flux radioamateur, TTL, URLs et activation.', 'en' => 'Fine control of radio feeds, TTL, URLs and activation.', 'de' => 'Feinsteuerung von Funk-Feeds, TTL, URLs und Aktivierung.', 'nl' => 'Fijn beheer van radiofeeds, TTL, URL’s en activatie.']],
+        ['route' => 'admin_newsletters', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter', 'de' => 'Newsletter', 'nl' => 'Nieuwsbrief'], 'desc' => ['fr' => 'Abonnés, import CSV et campagnes email.', 'en' => 'Subscribers, CSV import and email campaigns.', 'de' => 'Abonnenten, CSV-Import und E-Mail-Kampagnen.', 'nl' => 'Abonnees, CSV-import en e-mailcampagnes.']],
+        ['route' => 'admin_wiki', 'title' => ['fr' => 'Wiki', 'en' => 'Wiki', 'de' => 'Wiki', 'nl' => 'Wiki'], 'desc' => ['fr' => 'Pages collaboratives et révisions.', 'en' => 'Collaborative pages and revisions.', 'de' => 'Kollaborative Seiten und Revisionen.', 'nl' => 'Samenwerkingspagina’s en revisies.'], 'module' => 'wiki'],
+        ['route' => 'admin_albums', 'title' => ['fr' => 'Albums', 'en' => 'Albums', 'de' => 'Alben', 'nl' => 'Albums'], 'desc' => ['fr' => 'Galerie publique et synchro sociale.', 'en' => 'Public gallery and social sync.', 'de' => 'Öffentliche Galerie und Social-Sync.', 'nl' => 'Publieke galerij en sociale sync.'], 'module' => 'albums'],
+        ['route' => 'admin_ads', 'title' => ['fr' => 'Publicités', 'en' => 'Ads', 'de' => 'Werbung', 'nl' => 'Advertenties'], 'desc' => ['fr' => 'Régie publicitaire, placements et statistiques.', 'en' => 'Ad inventory, placements and statistics.', 'de' => 'Werbeverwaltung, Platzierungen und Statistiken.', 'nl' => 'Advertentiebeheer, plaatsingen en statistieken.'], 'module' => 'advertising'],
+    ];
+}
+
+
+/**
+ * @return array<int, array{route:string,title:string,desc:string}>
+ */
+function admin_dashboard_cards(string $locale, int $userId, string $search = ''): array
+{
+    $needle = trim($search);
+    $needle = $needle !== '' ? mb_safe_strtolower($needle) : '';
+
+    return admin_cards_for_dashboard($locale, $userId, $needle);
+}
+
+/**
+ * @return array<int, array{route:string,title:string,desc:string}>
+ */
+function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
+{
+    return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . md5($searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
+        $cards = [];
+        foreach (admin_module_cards_catalog() as $card) {
+            $module = (string) ($card['module'] ?? '');
+            $permission = (string) ($card['permission'] ?? '');
+            if ($module !== '' && !module_enabled($module)) {
+                continue;
+            }
+            if ($permission !== '' && !has_permission($permission)) {
+                continue;
+            }
+            $title = (string) ($card['title'][$locale] ?? $card['title']['fr']);
+            $desc = (string) ($card['desc'][$locale] ?? $card['desc']['fr']);
+            if ($searchNeedle !== '') {
+                $haystack = mb_safe_strtolower($title . ' ' . $desc);
+                if (!str_contains($haystack, $searchNeedle)) {
+                    continue;
+                }
+            }
+            $cards[] = ['route' => (string) $card['route'], 'title' => $title, 'desc' => $desc];
+        }
+        return $cards;
+    });
 }
