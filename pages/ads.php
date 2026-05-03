@@ -2,8 +2,18 @@
 declare(strict_types=1);
 
 $user = require_login();
+$locale = current_locale();
+$i18n = [
+    'fr' => ['module_off' => 'Module publicitaire désactivé.', 'title' => 'Publicités', 'save_ok' => 'Publicité mise à jour.', 'create_ok' => 'Publicité créée.', 'status_ok' => 'Statut publicitaire mis à jour.'],
+    'en' => ['module_off' => 'Advertising module disabled.', 'title' => 'Advertisements', 'save_ok' => 'Advertisement updated.', 'create_ok' => 'Advertisement created.', 'status_ok' => 'Advertisement status updated.'],
+    'de' => ['module_off' => 'Werbemodul deaktiviert.', 'title' => 'Werbung', 'save_ok' => 'Anzeige aktualisiert.', 'create_ok' => 'Anzeige erstellt.', 'status_ok' => 'Anzeigenstatus aktualisiert.'],
+    'nl' => ['module_off' => 'Advertentiemodule uitgeschakeld.', 'title' => 'Advertenties', 'save_ok' => 'Advertentie bijgewerkt.', 'create_ok' => 'Advertentie aangemaakt.', 'status_ok' => 'Advertentiestatus bijgewerkt.'],
+];
+$t = static function (string $key) use ($locale, $i18n): string {
+    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+};
 if (!module_enabled('advertising')) {
-    echo render_layout('<div class="card"><p>Module publicitaire désactivé.</p></div>', 'Publicités');
+    echo render_layout('<div class="card"><p>' . e($t('module_off')) . '</p></div>', $t('title'));
     return;
 }
 
@@ -100,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $payload['status'],
                     $adId,
                 ]);
-                set_flash('success', 'Publicité mise à jour.');
+                set_flash('success', $t('save_ok'));
             } else {
                 $stmt = db()->prepare('INSERT INTO ads (owner_member_id, placement_id, format_code, title, description, image_path, target_url, start_at, duration_days, end_at, max_impressions, weight, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->execute([
@@ -118,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $payload['weight'],
                     $payload['status'],
                 ]);
-                set_flash('success', 'Publicité créée.');
+                set_flash('success', $t('create_ok'));
             }
         }
 
@@ -133,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Statut invalide.');
             }
             db()->prepare('UPDATE ads SET status = ?, updated_at = NOW() WHERE id = ?')->execute([$newStatus, $adId]);
-            set_flash('success', 'Statut publicitaire mis à jour.');
+            set_flash('success', $t('status_ok'));
         }
 
         redirect('ads');
