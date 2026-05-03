@@ -3581,6 +3581,22 @@ function place_auction_bid(int $lotId, int $memberId, int $amountCents): void
     }
 }
 
+
+/**
+ * @return array{layout:string,title:string,lead:string,search_label:string,search_placeholder:string,search_cta:string,search_reset:string,empty:string}
+ */
+function admin_dashboard_translations(string $locale): array
+{
+    $i18n = [
+        'fr' => ['layout' => 'Administration', 'title' => 'Administration centralisée', 'lead' => 'Tous les modules et outils d’administration sont regroupés dans ce tableau de bord unique.', 'search_label' => 'Recherche rapide', 'search_placeholder' => 'Module, outil, description…', 'search_cta' => 'Filtrer', 'search_reset' => 'Réinitialiser', 'empty' => 'Aucun module ne correspond à la recherche.'],
+        'en' => ['layout' => 'Administration', 'title' => 'Centralized administration', 'lead' => 'All admin modules and tools are grouped in this single dashboard.', 'search_label' => 'Quick search', 'search_placeholder' => 'Module, tool, description…', 'search_cta' => 'Filter', 'search_reset' => 'Reset', 'empty' => 'No module matches your search.'],
+        'de' => ['layout' => 'Verwaltung', 'title' => 'Zentralisierte Verwaltung', 'lead' => 'Alle Verwaltungs-Module und Werkzeuge sind in diesem einzigen Dashboard gebündelt.', 'search_label' => 'Schnellsuche', 'search_placeholder' => 'Modul, Werkzeug, Beschreibung…', 'search_cta' => 'Filtern', 'search_reset' => 'Zurücksetzen', 'empty' => 'Kein Modul entspricht Ihrer Suche.'],
+        'nl' => ['layout' => 'Beheer', 'title' => 'Gecentraliseerd beheer', 'lead' => 'Alle beheermodules en tools zijn gegroepeerd in dit ene dashboard.', 'search_label' => 'Snel zoeken', 'search_placeholder' => 'Module, tool, beschrijving…', 'search_cta' => 'Filteren', 'search_reset' => 'Reset', 'empty' => 'Geen module komt overeen met je zoekopdracht.'],
+    ];
+
+    return $i18n[$locale] ?? $i18n['fr'];
+}
+
 /**
  * @return array<int, array{route:string,title:array{fr:string,en:string,de:string,nl:string},desc:array{fr:string,en:string,de:string,nl:string},module?:string,permission?:string}>
  */
