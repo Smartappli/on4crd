@@ -18,11 +18,15 @@ if (!function_exists('set_flash')) { function set_flash(string $type, string $me
 if (!function_exists('redirect')) { function redirect(string $route): void {} }
 if (!function_exists('redirect_url')) { function redirect_url(string $url): void {} }
 if (!function_exists('table_exists')) { function table_exists(string $table): bool { return false; } }
+if (!function_exists('current_locale')) { function current_locale(): string { return 'fr'; } }
+if (!function_exists('t_page')) { function t_page(string $domain, string $key, ?string $locale = null): string { return $key; } }
 if (!function_exists('render_layout')) { function render_layout(string $content, string $title = ''): string { return $content; } }
 if (!function_exists('base_url')) { function base_url(string $path = ''): string { return $path; } }
 if (!function_exists('route_url')) { function route_url(string $route, array $query = []): string { return $route; } }
 if (!function_exists('module_enabled')) { function module_enabled(string $module): bool { return false; } }
 if (!function_exists('set_page_meta')) { function set_page_meta(string|array $title = '', string $description = ''): void {} }
+if (!function_exists('admin_module_cards_catalog')) { function admin_module_cards_catalog(): array { return []; } }
+if (!function_exists('admin_cards_for_dashboard')) { function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array { return []; } }
 
 if (!function_exists('localized_article_row')) { function localized_article_row(array $row): array { return $row; } }
 if (!function_exists('answer_question_from_knowledge')) { function answer_question_from_knowledge(string $question): array { return ['answer' => '', 'source' => '']; } }
@@ -79,3 +83,7 @@ if (!function_exists('managed_section_ids_for_member')) { function managed_secti
 if (!function_exists('news_status_label')) { function news_status_label(string $status): string { return $status; } }
 if (!function_exists('press_contacts')) { function press_contacts(): array { return []; } }
 if (!function_exists('latest_press_releases')) { function latest_press_releases(int $limit = 20): array { return []; } }
+
+function admin_dashboard_translations(string $locale): array { return []; }
+
+function admin_dashboard_cards(string $locale, int $userId, string $search = ''): array { return []; }
