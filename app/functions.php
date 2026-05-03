@@ -101,6 +101,69 @@ function table_exists(string $table): bool
     return $cache[$normalized];
 }
 
+if (!function_exists('current_locale')) {
+function current_locale(): string
+{
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    if (!in_array($locale, ['fr', 'en', 'de', 'nl'], true)) {
+        return 'fr';
+    }
+
+    return $locale;
+}
+}
+
+if (!function_exists('t_page')) {
+function t_page(string $domain, string $key, ?string $locale = null): string
+{
+    $lang = $locale !== null ? strtolower(trim($locale)) : current_locale();
+    if (!in_array($lang, ['fr', 'en', 'de', 'nl'], true)) {
+        $lang = 'fr';
+    }
+
+    $messages = [
+        'press' => [
+            'fr' => ['title' => 'Presse', 'body' => "La section presse sera alimentée via le module d'administration."],
+            'en' => ['title' => 'Press', 'body' => 'The press section will be managed from the administration module.'],
+            'de' => ['title' => 'Presse', 'body' => 'Der Pressebereich wird über das Administrationsmodul gepflegt.'],
+            'nl' => ['title' => 'Pers', 'body' => 'De perssectie wordt beheerd via de beheermodule.'],
+        ],
+        'sponsoring' => [
+            'fr' => ['title' => 'Sponsoring', 'body' => 'Retrouvez sur cette page les informations relatives aux partenaires et opportunités de sponsoring du club.'],
+            'en' => ['title' => 'Sponsoring', 'body' => 'Find information here about partners and club sponsorship opportunities.'],
+            'de' => ['title' => 'Sponsoring', 'body' => 'Hier finden Sie Informationen zu Partnern und Sponsoring-Möglichkeiten des Clubs.'],
+            'nl' => ['title' => 'Sponsoring', 'body' => 'Hier vindt u informatie over partners en sponsoringsmogelijkheden van de club.'],
+        ],
+        'mentions_legales' => [
+            'fr' => ['title' => 'Mentions légales', 'body' => 'Les mentions légales du site ON4CRD sont accessibles ici et seront complétées selon les obligations en vigueur.'],
+            'en' => ['title' => 'Legal notice', 'body' => 'The ON4CRD legal notices are available here and will be completed according to applicable obligations.'],
+            'de' => ['title' => 'Impressum', 'body' => 'Die rechtlichen Hinweise von ON4CRD sind hier verfügbar und werden gemäß geltenden Verpflichtungen ergänzt.'],
+            'nl' => ['title' => 'Juridische vermeldingen', 'body' => 'De juridische vermeldingen van ON4CRD staan hier en worden aangevuld volgens de geldende verplichtingen.'],
+        ],
+        'conditions_utilisation' => [
+            'fr' => ['title' => "Conditions générales d'utilisation", 'body' => "Les conditions générales d'utilisation du site ON4CRD seront publiées et mises à jour sur cette page."],
+            'en' => ['title' => 'Terms of use', 'body' => 'The ON4CRD website terms of use will be published and updated on this page.'],
+            'de' => ['title' => 'Nutzungsbedingungen', 'body' => 'Die Nutzungsbedingungen der ON4CRD-Website werden auf dieser Seite veröffentlicht und aktualisiert.'],
+            'nl' => ['title' => 'Gebruiksvoorwaarden', 'body' => 'De gebruiksvoorwaarden van de ON4CRD-website worden op deze pagina gepubliceerd en bijgewerkt.'],
+        ],
+        'reglement_interieur' => [
+            'fr' => ['title' => "Règlement d'ordre intérieur", 'body' => "Le règlement d'ordre intérieur du club sera présenté sur cette page."],
+            'en' => ['title' => 'Internal regulations', 'body' => 'The club internal regulations will be published on this page.'],
+            'de' => ['title' => 'Interne Ordnung', 'body' => 'Die interne Ordnung des Clubs wird auf dieser Seite veröffentlicht.'],
+            'nl' => ['title' => 'Intern reglement', 'body' => 'Het intern reglement van de club wordt op deze pagina gepubliceerd.'],
+        ],
+    ];
+
+    if (!isset($messages[$domain])) {
+        return $key;
+    }
+
+    $catalog = $messages[$domain][$lang] ?? $messages[$domain]['fr'];
+
+    return (string) ($catalog[$key] ?? ($messages[$domain]['fr'][$key] ?? $key));
+}
+}
+
 function seed_modules(): void
 {
     if (!table_exists('modules')) {
@@ -2004,6 +2067,89 @@ function import_adif_records(int $memberId, array $records): int
     return $created;
 }
 
+if (!function_exists('answer_question_from_knowledge')) {
+    /**
+     * @return array{answer:string,source:string}
+     */
+    function answer_question_from_knowledge(string $question): array
+    {
+        $normalized = mb_safe_strtolower(trim($question));
+        if ($normalized === '') {
+            return ['answer' => 'Je n’ai pas reçu de question exploitable.', 'source' => 'Assistant Raymond'];
+        }
+
+        $knowledgePath = __DIR__ . '/knowledge.php';
+        $knowledgeBase = [];
+        if (is_file($knowledgePath)) {
+            $loaded = require $knowledgePath;
+            if (is_array($loaded)) {
+                $knowledgeBase = $loaded;
+            }
+        }
+
+        $bestScore = -1;
+        $bestItem = null;
+        foreach ($knowledgeBase as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $score = 0;
+            $keywords = isset($item['keywords']) && is_array($item['keywords']) ? $item['keywords'] : [];
+            foreach ($keywords as $keyword) {
+                $needle = mb_safe_strtolower(trim((string) $keyword));
+                if ($needle !== '' && str_contains($normalized, $needle)) {
+                    $score += 3;
+                }
+            }
+            $title = mb_safe_strtolower((string) ($item['title'] ?? ''));
+            if ($title !== '' && str_contains($normalized, $title)) {
+                $score += 2;
+            }
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $bestItem = $item;
+            }
+        }
+
+        if ($bestItem !== null && $bestScore > 0) {
+            return [
+                'answer' => trim((string) ($bestItem['body'] ?? 'Je n’ai pas de réponse précise pour le moment.')),
+                'source' => trim((string) ($bestItem['source'] ?? 'Base de connaissances ON4CRD')),
+            ];
+        }
+
+        if (table_exists('articles')) {
+            try {
+                $like = '%' . $question . '%';
+                $stmt = db()->prepare('SELECT title, excerpt, slug FROM articles WHERE status = "published" AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?) ORDER BY updated_at DESC LIMIT 1');
+                $stmt->execute([$like, $like, $like]);
+                $article = $stmt->fetch();
+                if (is_array($article)) {
+                    $title = trim((string) ($article['title'] ?? 'Article'));
+                    $excerpt = trim((string) ($article['excerpt'] ?? ''));
+                    $slug = trim((string) ($article['slug'] ?? ''));
+                    $url = $slug !== '' ? base_url('index.php?route=article&slug=' . urlencode($slug)) : '';
+                    $answer = 'J’ai trouvé un article pertinent : ' . $title . '.';
+                    if ($excerpt !== '') {
+                        $answer .= "\n\nRésumé : " . $excerpt;
+                    }
+                    if ($url !== '') {
+                        $answer .= "\n\nLien : " . $url;
+                    }
+                    return ['answer' => $answer, 'source' => 'Articles ON4CRD'];
+                }
+            } catch (Throwable) {
+                // fallback below
+            }
+        }
+
+        return [
+            'answer' => 'Je n’ai pas de réponse précise pour cette question. Essayez de mentionner un mot-clé (QSL, antenne, propagation, licence) ou consultez le module Articles.',
+            'source' => 'Assistant Raymond',
+        ];
+    }
+}
+
 function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templateName = 'classic'): int
 {
     if ($memberId <= 0 || $qsoIds === [] || !table_exists('qso_logs') || !table_exists('qsl_cards')) {
@@ -2569,7 +2715,68 @@ function handle_album_upload(?array $upload, string $callsign): string
         8 * 1024 * 1024
     );
 
-    return 'storage/uploads/albums/' . $saved;
+    $publicPath = 'storage/uploads/albums/' . $saved;
+    create_album_thumbnail($publicPath, 640, 640);
+
+    return $publicPath;
+}
+
+function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string
+{
+    if (!extension_loaded('gd')) {
+        return null;
+    }
+    $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
+    if (!is_file($sourcePath)) {
+        return null;
+    }
+    $info = @getimagesize($sourcePath);
+    if (!is_array($info)) {
+        return null;
+    }
+    [$width, $height] = $info;
+    if ($width <= 0 || $height <= 0) {
+        return null;
+    }
+    $mime = (string) ($info['mime'] ?? '');
+    $src = match ($mime) {
+        'image/jpeg' => @imagecreatefromjpeg($sourcePath),
+        'image/png' => @imagecreatefrompng($sourcePath),
+        'image/webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($sourcePath) : false,
+        default => false,
+    };
+    if (!$src) {
+        return null;
+    }
+    $ratio = min($maxWidth / $width, $maxHeight / $height, 1);
+    $newW = max(1, (int) floor($width * $ratio));
+    $newH = max(1, (int) floor($height * $ratio));
+    $dst = imagecreatetruecolor($newW, $newH);
+    imagealphablending($dst, false);
+    imagesavealpha($dst, true);
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $width, $height);
+
+    $dir = dirname($sourcePath) . '/thumbs';
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        imagedestroy($src);
+        imagedestroy($dst);
+        return null;
+    }
+    $name = pathinfo($sourcePath, PATHINFO_FILENAME) . '.jpg';
+    $thumbAbs = $dir . '/' . $name;
+    $ok = imagejpeg($dst, $thumbAbs, 84);
+    imagedestroy($src);
+    imagedestroy($dst);
+    if (!$ok) {
+        return null;
+    }
+    return 'storage/uploads/albums/thumbs/' . $name;
+}
+
+function album_thumbnail_public_path(string $photoPath): string
+{
+    $base = pathinfo($photoPath, PATHINFO_FILENAME);
+    return 'storage/uploads/albums/thumbs/' . $base . '.jpg';
 }
 
 function handle_ad_image_upload(?array $upload, string $callsign, string $existingPath = ''): ?string

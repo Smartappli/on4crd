@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 $user = require_login();
 $memberId = (int) ($user['id'] ?? 0);
-$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$locale = current_locale();
 $qslI18n = [
-    'fr' => ['studio' => 'QSL Studio · simple, guidé, efficace', 'studio_help' => 'Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.', 'design' => '1) Designer vos fonds QSL', 'create' => '2) Créer des QSL facilement', 'manage' => '3) QSO importés', 'generated' => 'QSL générées', 'filter' => 'Filtrer', 'reset' => 'Réinitialiser'],
-    'en' => ['studio' => 'QSL Studio · simple, guided, efficient', 'studio_help' => 'Everything is designed for speed: import your QSOs, create cards and export them seamlessly.', 'design' => '1) Design your QSL backgrounds', 'create' => '2) Create QSL cards easily', 'manage' => '3) Imported QSOs', 'generated' => 'Generated QSL cards', 'filter' => 'Filter', 'reset' => 'Reset'],
-    'de' => ['studio' => 'QSL Studio · einfach, geführt, effizient', 'studio_help' => 'Alles ist auf Tempo ausgelegt: QSOs importieren, Karten erstellen und ohne Reibung exportieren.', 'design' => '1) QSL-Hintergründe gestalten', 'create' => '2) QSL-Karten einfach erstellen', 'manage' => '3) Importierte QSOs', 'generated' => 'Erstellte QSL-Karten', 'filter' => 'Filtern', 'reset' => 'Zurücksetzen'],
-    'nl' => ['studio' => 'QSL Studio · eenvoudig, begeleid, efficiënt', 'studio_help' => 'Alles is gericht op snelheid: importeer je QSO’s, maak kaarten en exporteer zonder frictie.', 'design' => '1) Ontwerp je QSL-achtergronden', 'create' => '2) Maak eenvoudig QSL-kaarten', 'manage' => '3) Geïmporteerde QSO’s', 'generated' => 'Gegenereerde QSL-kaarten', 'filter' => 'Filteren', 'reset' => 'Reset'],
+    'fr' => ['studio' => 'QSL Studio · simple, guidé, efficace', 'studio_help' => 'Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.', 'design' => '1) Designer vos fonds QSL', 'create' => '2) Créer des QSL facilement', 'manage' => '3) QSO importés', 'generated' => 'QSL générées', 'filter' => 'Filtrer', 'reset' => 'Réinitialiser', 'page' => 'Page', 'previous' => 'Précédent', 'next' => 'Suivant'],
+    'en' => ['studio' => 'QSL Studio · simple, guided, efficient', 'studio_help' => 'Everything is designed for speed: import your QSOs, create cards and export them seamlessly.', 'design' => '1) Design your QSL backgrounds', 'create' => '2) Create QSL cards easily', 'manage' => '3) Imported QSOs', 'generated' => 'Generated QSL cards', 'filter' => 'Filter', 'reset' => 'Reset', 'page' => 'Page', 'previous' => 'Previous', 'next' => 'Next'],
+    'de' => ['studio' => 'QSL Studio · einfach, geführt, effizient', 'studio_help' => 'Alles ist auf Tempo ausgelegt: QSOs importieren, Karten erstellen und ohne Reibung exportieren.', 'design' => '1) QSL-Hintergründe gestalten', 'create' => '2) QSL-Karten einfach erstellen', 'manage' => '3) Importierte QSOs', 'generated' => 'Erstellte QSL-Karten', 'filter' => 'Filtern', 'reset' => 'Zurücksetzen', 'page' => 'Seite', 'previous' => 'Zurück', 'next' => 'Weiter'],
+    'nl' => ['studio' => 'QSL Studio · eenvoudig, begeleid, efficiënt', 'studio_help' => 'Alles is gericht op snelheid: importeer je QSO’s, maak kaarten en exporteer zonder frictie.', 'design' => '1) Ontwerp je QSL-achtergronden', 'create' => '2) Maak eenvoudig QSL-kaarten', 'manage' => '3) Geïmporteerde QSO’s', 'generated' => 'Gegenereerde QSL-kaarten', 'filter' => 'Filteren', 'reset' => 'Reset', 'page' => 'Pagina', 'previous' => 'Vorige', 'next' => 'Volgende'],
 ];
 $qt = static function (string $key) use ($locale, $qslI18n): string {
     return (string) (($qslI18n[$locale] ?? $qslI18n['fr'])[$key] ?? $key);
@@ -301,6 +301,10 @@ $qsoSearch = trim((string) ($_GET['qso_search'] ?? ''));
 $qsoBandFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_band'] ?? '')));
 $qsoModeFilter = mb_safe_strtoupper(trim((string) ($_GET['qso_mode'] ?? '')));
 $qslSearch = trim((string) ($_GET['qsl_search'] ?? ''));
+$qsoPage = max(1, (int) ($_GET['qso_page'] ?? 1));
+$qslPage = max(1, (int) ($_GET['qsl_page'] ?? 1));
+$qsoPerPage = 25;
+$qslPerPage = 25;
 
 $qsoBandOptions = [];
 $qsoModeOptions = [];
@@ -376,6 +380,29 @@ $filteredQslRows = array_values(array_filter($qslRows, static function (array $r
         (string) ($row['mode'] ?? ''),
     ]);
 }));
+
+$qsoTotal = count($filteredQsoRows);
+$qslTotal = count($filteredQslRows);
+$qsoTotalPages = max(1, (int) ceil($qsoTotal / $qsoPerPage));
+$qslTotalPages = max(1, (int) ceil($qslTotal / $qslPerPage));
+$qsoPage = min($qsoPage, $qsoTotalPages);
+$qslPage = min($qslPage, $qslTotalPages);
+$qsoOffset = ($qsoPage - 1) * $qsoPerPage;
+$qslOffset = ($qslPage - 1) * $qslPerPage;
+$pagedQsoRows = array_slice($filteredQsoRows, $qsoOffset, $qsoPerPage);
+$pagedQslRows = array_slice($filteredQslRows, $qslOffset, $qslPerPage);
+
+$buildQslPageUrl = static function (int $targetQsoPage, int $targetQslPage) use ($qsoSearch, $qsoBandFilter, $qsoModeFilter, $qslSearch): string {
+    $params = ['route' => 'qsl'];
+    if ($qsoSearch !== '') { $params['qso_search'] = $qsoSearch; }
+    if ($qsoBandFilter !== '') { $params['qso_band'] = $qsoBandFilter; }
+    if ($qsoModeFilter !== '') { $params['qso_mode'] = $qsoModeFilter; }
+    if ($qslSearch !== '') { $params['qsl_search'] = $qslSearch; }
+    if ($targetQsoPage > 1) { $params['qso_page'] = (string) $targetQsoPage; }
+    if ($targetQslPage > 1) { $params['qsl_page'] = (string) $targetQslPage; }
+
+    return base_url('index.php?' . http_build_query($params));
+};
 
 $generatedByQsoId = [];
 foreach ($qslRows as $card) {
@@ -678,7 +705,7 @@ ob_start();
                     <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Bande</th><th>Mode</th><th>RST</th><th>eQSL</th><th>Action</th></tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($filteredQsoRows as $row): ?>
+                    <?php foreach ($pagedQsoRows as $row): ?>
                         <tr>
                             <td><input type="checkbox" name="qso_ids[]" value="<?= (int) $row['id'] ?>"></td>
                             <td><?= e((string) $row['qso_call']) ?></td>
@@ -696,6 +723,13 @@ ob_start();
             </div>
             <?php if ($filteredQsoRows === []): ?>
                 <p class="help">Aucun QSO ne correspond aux filtres actifs.</p>
+            <?php endif; ?>
+            <?php if ($qsoTotalPages > 1): ?>
+                <div class="actions">
+                    <span class="help"><?= e($qt('page')) ?> <?= $qsoPage ?> / <?= $qsoTotalPages ?></span>
+                    <?php if ($qsoPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage - 1, $qslPage)) ?>">← <?= e($qt('previous')) ?></a><?php endif; ?>
+                    <?php if ($qsoPage < $qsoTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage + 1, $qslPage)) ?>"><?= e($qt('next')) ?> →</a><?php endif; ?>
+                </div>
             <?php endif; ?>
             <p><button class="button">Générer les QSL sélectionnées</button></p>
         </form>
@@ -722,7 +756,7 @@ ob_start();
                 <tr><th>Titre</th><th>QSO</th><th>Date</th><th>Bande</th><th>Mode</th><th>Format</th><th>Aperçu</th><th>Export</th><th>Action</th></tr>
                 </thead>
                 <tbody>
-                <?php foreach ($filteredQslRows as $row): ?>
+                <?php foreach ($pagedQslRows as $row): ?>
                     <tr>
                         <td><?= e((string) $row['title']) ?></td>
                         <td><?= e((string) $row['qso_call']) ?></td>
@@ -752,6 +786,13 @@ ob_start();
         </div>
         <?php if ($filteredQslRows === []): ?>
             <p class="help">Aucune QSL ne correspond à la recherche.</p>
+        <?php endif; ?>
+        <?php if ($qslTotalPages > 1): ?>
+            <div class="actions">
+                <span class="help"><?= e($qt('page')) ?> <?= $qslPage ?> / <?= $qslTotalPages ?></span>
+                <?php if ($qslPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage - 1)) ?>">← <?= e($qt('previous')) ?></a><?php endif; ?>
+                <?php if ($qslPage < $qslTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage + 1)) ?>"><?= e($qt('next')) ?> →</a><?php endif; ?>
+            </div>
         <?php endif; ?>
     <?php endif; ?>
 </section>

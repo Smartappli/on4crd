@@ -18,6 +18,8 @@ if (!function_exists('set_flash')) { function set_flash(string $type, string $me
 if (!function_exists('redirect')) { function redirect(string $route): void {} }
 if (!function_exists('redirect_url')) { function redirect_url(string $url): void {} }
 if (!function_exists('table_exists')) { function table_exists(string $table): bool { return false; } }
+if (!function_exists('current_locale')) { function current_locale(): string { return 'fr'; } }
+if (!function_exists('t_page')) { function t_page(string $domain, string $key, ?string $locale = null): string { return $key; } }
 if (!function_exists('render_layout')) { function render_layout(string $content, string $title = ''): string { return $content; } }
 if (!function_exists('base_url')) { function base_url(string $path = ''): string { return $path; } }
 if (!function_exists('route_url')) { function route_url(string $route, array $query = []): string { return $route; } }
