@@ -18,8 +18,8 @@ function import_article_document(array $file): array
 
     $originalName = trim((string) ($file['name'] ?? 'document'));
     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-    if (!in_array($extension, ['pdf', 'docx'], true)) {
-        throw new RuntimeException('Formats autorisés : PDF ou DOCX.');
+    if (!in_array($extension, ['pdf', 'docx', 'txt', 'md', 'html', 'htm'], true)) {
+        throw new RuntimeException('Formats autorisés : PDF, DOCX, TXT, MD ou HTML.');
     }
 
     $tmpPath = (string) ($file['tmp_name'] ?? '');
@@ -45,9 +45,30 @@ function import_article_document(array $file): array
     $publicPath = 'storage/uploads/articles/' . $filename;
     $publicUrl = base_url($publicPath);
     $safeTitle = e(pathinfo($originalName, PATHINFO_FILENAME));
-    $content = $extension === 'pdf'
-        ? '<div class="article-document"><p><strong>Document importé :</strong> ' . $safeTitle . '</p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
-        : '<div class="article-document"><p><strong>Document DOCX importé :</strong> ' . $safeTitle . '</p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
+    if (in_array($extension, ['txt', 'md'], true)) {
+        $rawText = (string) file_get_contents($absolutePath);
+        $paragraphs = preg_split('/\R{2,}/u', trim($rawText)) ?: [];
+        $htmlParts = [];
+        foreach ($paragraphs as $paragraph) {
+            $line = trim($paragraph);
+            if ($line === '') {
+                continue;
+            }
+            if ($extension === 'md' && preg_match('/^#{1,6}\s+(.+)$/u', $line, $matches)) {
+                $htmlParts[] = '<h3>' . e($matches[1]) . '</h3>';
+            } else {
+                $htmlParts[] = '<p>' . nl2br(e($line)) . '</p>';
+            }
+        }
+        $content = implode("\n", $htmlParts);
+    } elseif (in_array($extension, ['html', 'htm'], true)) {
+        $rawHtml = (string) file_get_contents($absolutePath);
+        $content = sanitize_rich_html($rawHtml);
+    } else {
+        $content = $extension === 'pdf'
+            ? '<div class="article-document"><p><strong>Document importé :</strong> ' . $safeTitle . '</p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
+            : '<div class="article-document"><p><strong>Document DOCX importé :</strong> ' . $safeTitle . '</p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
+    }
 
     return [
         'excerpt' => 'Document importé : ' . pathinfo($originalName, PATHINFO_FILENAME),
@@ -109,6 +130,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             article_translation_upsert($id, 'nl');
             set_flash('success', 'Article enregistré.');
             redirect('admin_articles');
+        } elseif ($action === 'save_category') {
+            $oldCode = slugify(trim((string) ($_POST['old_code'] ?? '')));
+            $newCode = slugify(trim((string) ($_POST['new_code'] ?? '')));
+            if ($oldCode === '' || $newCode === '') {
+                throw new RuntimeException('Catégorie invalide.');
+            }
+            db()->prepare('UPDATE articles SET category = ? WHERE category = ?')->execute([$newCode, $oldCode]);
+            set_flash('success', 'Catégorie mise à jour.');
+            redirect('admin_articles');
+        } elseif ($action === 'delete_category') {
+            $code = slugify(trim((string) ($_POST['code'] ?? '')));
+            if ($code === '' || $code === 'autres') {
+                throw new RuntimeException('Suppression impossible pour cette catégorie.');
+            }
+            db()->prepare('UPDATE articles SET category = "autres" WHERE category = ?')->execute([$code]);
+            set_flash('success', 'Catégorie supprimée (articles déplacés vers "autres").');
+            redirect('admin_articles');
         }
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -148,7 +186,7 @@ ob_start();
             <label id="article-category-custom" hidden>Nouvelle catégorie (identifiant)
                 <input type="text" name="category_custom" value="" placeholder="ex: propagation-vhf">
             </label>
-            <label>Importer un document (PDF ou DOCX)<input type="file" name="article_document" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"></label>
+            <label>Importer un document (PDF, DOCX, TXT, MD, HTML)<input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
             <label>Résumé<textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
             <label>Contenu (HTML simple)<textarea name="content" rows="16"><?= e((string) $editing['content']) ?></textarea></label>
             <label>Statut
@@ -168,6 +206,35 @@ ob_start();
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(base_url('index.php?route=admin_articles&id=' . (int) $article['id'])) ?>">Modifier</a></div>
                     <p><strong>Catégorie :</strong> <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <section class="card">
+        <h2>Édition des catégories</h2>
+        <div class="stack">
+            <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
+                <article class="article-item">
+                    <form method="post" class="row-between" style="gap:8px;align-items:end;">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="save_category">
+                        <input type="hidden" name="old_code" value="<?= e($categoryCode) ?>">
+                        <label style="flex:1;">Code
+                            <input type="text" name="new_code" value="<?= e($categoryCode) ?>" required>
+                        </label>
+                        <label style="flex:2;">Libellé
+                            <input type="text" value="<?= e($categoryLabel) ?>" disabled>
+                        </label>
+                        <button class="button small" type="submit">Renommer code</button>
+                    </form>
+                    <?php if ($categoryCode !== 'autres'): ?>
+                        <form method="post" style="margin-top:8px;">
+                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="action" value="delete_category">
+                            <input type="hidden" name="code" value="<?= e($categoryCode) ?>">
+                            <button class="button small secondary" type="submit">Supprimer (vers autres)</button>
+                        </form>
+                    <?php endif; ?>
                 </article>
             <?php endforeach; ?>
         </div>
