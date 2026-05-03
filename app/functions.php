@@ -101,6 +101,69 @@ function table_exists(string $table): bool
     return $cache[$normalized];
 }
 
+if (!function_exists('current_locale')) {
+function current_locale(): string
+{
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    if (!in_array($locale, ['fr', 'en', 'de', 'nl'], true)) {
+        return 'fr';
+    }
+
+    return $locale;
+}
+}
+
+if (!function_exists('t_page')) {
+function t_page(string $domain, string $key, ?string $locale = null): string
+{
+    $lang = $locale !== null ? strtolower(trim($locale)) : current_locale();
+    if (!in_array($lang, ['fr', 'en', 'de', 'nl'], true)) {
+        $lang = 'fr';
+    }
+
+    $messages = [
+        'press' => [
+            'fr' => ['title' => 'Presse', 'body' => "La section presse sera alimentée via le module d'administration."],
+            'en' => ['title' => 'Press', 'body' => 'The press section will be managed from the administration module.'],
+            'de' => ['title' => 'Presse', 'body' => 'Der Pressebereich wird über das Administrationsmodul gepflegt.'],
+            'nl' => ['title' => 'Pers', 'body' => 'De perssectie wordt beheerd via de beheermodule.'],
+        ],
+        'sponsoring' => [
+            'fr' => ['title' => 'Sponsoring', 'body' => 'Retrouvez sur cette page les informations relatives aux partenaires et opportunités de sponsoring du club.'],
+            'en' => ['title' => 'Sponsoring', 'body' => 'Find information here about partners and club sponsorship opportunities.'],
+            'de' => ['title' => 'Sponsoring', 'body' => 'Hier finden Sie Informationen zu Partnern und Sponsoring-Möglichkeiten des Clubs.'],
+            'nl' => ['title' => 'Sponsoring', 'body' => 'Hier vindt u informatie over partners en sponsoringsmogelijkheden van de club.'],
+        ],
+        'mentions_legales' => [
+            'fr' => ['title' => 'Mentions légales', 'body' => 'Les mentions légales du site ON4CRD sont accessibles ici et seront complétées selon les obligations en vigueur.'],
+            'en' => ['title' => 'Legal notice', 'body' => 'The ON4CRD legal notices are available here and will be completed according to applicable obligations.'],
+            'de' => ['title' => 'Impressum', 'body' => 'Die rechtlichen Hinweise von ON4CRD sind hier verfügbar und werden gemäß geltenden Verpflichtungen ergänzt.'],
+            'nl' => ['title' => 'Juridische vermeldingen', 'body' => 'De juridische vermeldingen van ON4CRD staan hier en worden aangevuld volgens de geldende verplichtingen.'],
+        ],
+        'conditions_utilisation' => [
+            'fr' => ['title' => "Conditions générales d'utilisation", 'body' => "Les conditions générales d'utilisation du site ON4CRD seront publiées et mises à jour sur cette page."],
+            'en' => ['title' => 'Terms of use', 'body' => 'The ON4CRD website terms of use will be published and updated on this page.'],
+            'de' => ['title' => 'Nutzungsbedingungen', 'body' => 'Die Nutzungsbedingungen der ON4CRD-Website werden auf dieser Seite veröffentlicht und aktualisiert.'],
+            'nl' => ['title' => 'Gebruiksvoorwaarden', 'body' => 'De gebruiksvoorwaarden van de ON4CRD-website worden op deze pagina gepubliceerd en bijgewerkt.'],
+        ],
+        'reglement_interieur' => [
+            'fr' => ['title' => "Règlement d'ordre intérieur", 'body' => "Le règlement d'ordre intérieur du club sera présenté sur cette page."],
+            'en' => ['title' => 'Internal regulations', 'body' => 'The club internal regulations will be published on this page.'],
+            'de' => ['title' => 'Interne Ordnung', 'body' => 'Die interne Ordnung des Clubs wird auf dieser Seite veröffentlicht.'],
+            'nl' => ['title' => 'Intern reglement', 'body' => 'Het intern reglement van de club wordt op deze pagina gepubliceerd.'],
+        ],
+    ];
+
+    if (!isset($messages[$domain])) {
+        return $key;
+    }
+
+    $catalog = $messages[$domain][$lang] ?? $messages[$domain]['fr'];
+
+    return (string) ($catalog[$key] ?? ($messages[$domain]['fr'][$key] ?? $key));
+}
+}
+
 function seed_modules(): void
 {
     if (!table_exists('modules')) {
@@ -2004,6 +2067,89 @@ function import_adif_records(int $memberId, array $records): int
     return $created;
 }
 
+if (!function_exists('answer_question_from_knowledge')) {
+    /**
+     * @return array{answer:string,source:string}
+     */
+    function answer_question_from_knowledge(string $question): array
+    {
+        $normalized = mb_safe_strtolower(trim($question));
+        if ($normalized === '') {
+            return ['answer' => 'Je n’ai pas reçu de question exploitable.', 'source' => 'Assistant Raymond'];
+        }
+
+        $knowledgePath = __DIR__ . '/knowledge.php';
+        $knowledgeBase = [];
+        if (is_file($knowledgePath)) {
+            $loaded = require $knowledgePath;
+            if (is_array($loaded)) {
+                $knowledgeBase = $loaded;
+            }
+        }
+
+        $bestScore = -1;
+        $bestItem = null;
+        foreach ($knowledgeBase as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $score = 0;
+            $keywords = isset($item['keywords']) && is_array($item['keywords']) ? $item['keywords'] : [];
+            foreach ($keywords as $keyword) {
+                $needle = mb_safe_strtolower(trim((string) $keyword));
+                if ($needle !== '' && str_contains($normalized, $needle)) {
+                    $score += 3;
+                }
+            }
+            $title = mb_safe_strtolower((string) ($item['title'] ?? ''));
+            if ($title !== '' && str_contains($normalized, $title)) {
+                $score += 2;
+            }
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $bestItem = $item;
+            }
+        }
+
+        if ($bestItem !== null && $bestScore > 0) {
+            return [
+                'answer' => trim((string) ($bestItem['body'] ?? 'Je n’ai pas de réponse précise pour le moment.')),
+                'source' => trim((string) ($bestItem['source'] ?? 'Base de connaissances ON4CRD')),
+            ];
+        }
+
+        if (table_exists('articles')) {
+            try {
+                $like = '%' . $question . '%';
+                $stmt = db()->prepare('SELECT title, excerpt, slug FROM articles WHERE status = "published" AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?) ORDER BY updated_at DESC LIMIT 1');
+                $stmt->execute([$like, $like, $like]);
+                $article = $stmt->fetch();
+                if (is_array($article)) {
+                    $title = trim((string) ($article['title'] ?? 'Article'));
+                    $excerpt = trim((string) ($article['excerpt'] ?? ''));
+                    $slug = trim((string) ($article['slug'] ?? ''));
+                    $url = $slug !== '' ? base_url('index.php?route=article&slug=' . urlencode($slug)) : '';
+                    $answer = 'J’ai trouvé un article pertinent : ' . $title . '.';
+                    if ($excerpt !== '') {
+                        $answer .= "\n\nRésumé : " . $excerpt;
+                    }
+                    if ($url !== '') {
+                        $answer .= "\n\nLien : " . $url;
+                    }
+                    return ['answer' => $answer, 'source' => 'Articles ON4CRD'];
+                }
+            } catch (Throwable) {
+                // fallback below
+            }
+        }
+
+        return [
+            'answer' => 'Je n’ai pas de réponse précise pour cette question. Essayez de mentionner un mot-clé (QSL, antenne, propagation, licence) ou consultez le module Articles.',
+            'source' => 'Assistant Raymond',
+        ];
+    }
+}
+
 function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templateName = 'classic'): int
 {
     if ($memberId <= 0 || $qsoIds === [] || !table_exists('qso_logs') || !table_exists('qsl_cards')) {
@@ -2569,7 +2715,68 @@ function handle_album_upload(?array $upload, string $callsign): string
         8 * 1024 * 1024
     );
 
-    return 'storage/uploads/albums/' . $saved;
+    $publicPath = 'storage/uploads/albums/' . $saved;
+    create_album_thumbnail($publicPath, 640, 640);
+
+    return $publicPath;
+}
+
+function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string
+{
+    if (!extension_loaded('gd')) {
+        return null;
+    }
+    $sourcePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
+    if (!is_file($sourcePath)) {
+        return null;
+    }
+    $info = @getimagesize($sourcePath);
+    if (!is_array($info)) {
+        return null;
+    }
+    [$width, $height] = $info;
+    if ($width <= 0 || $height <= 0) {
+        return null;
+    }
+    $mime = (string) ($info['mime'] ?? '');
+    $src = match ($mime) {
+        'image/jpeg' => @imagecreatefromjpeg($sourcePath),
+        'image/png' => @imagecreatefrompng($sourcePath),
+        'image/webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($sourcePath) : false,
+        default => false,
+    };
+    if (!$src) {
+        return null;
+    }
+    $ratio = min($maxWidth / $width, $maxHeight / $height, 1);
+    $newW = max(1, (int) floor($width * $ratio));
+    $newH = max(1, (int) floor($height * $ratio));
+    $dst = imagecreatetruecolor($newW, $newH);
+    imagealphablending($dst, false);
+    imagesavealpha($dst, true);
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $width, $height);
+
+    $dir = dirname($sourcePath) . '/thumbs';
+    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
+        imagedestroy($src);
+        imagedestroy($dst);
+        return null;
+    }
+    $name = pathinfo($sourcePath, PATHINFO_FILENAME) . '.jpg';
+    $thumbAbs = $dir . '/' . $name;
+    $ok = imagejpeg($dst, $thumbAbs, 84);
+    imagedestroy($src);
+    imagedestroy($dst);
+    if (!$ok) {
+        return null;
+    }
+    return 'storage/uploads/albums/thumbs/' . $name;
+}
+
+function album_thumbnail_public_path(string $photoPath): string
+{
+    $base = pathinfo($photoPath, PATHINFO_FILENAME);
+    return 'storage/uploads/albums/thumbs/' . $base . '.jpg';
 }
 
 function handle_ad_image_upload(?array $upload, string $callsign, string $existingPath = ''): ?string
@@ -3286,13 +3493,24 @@ function auction_minimum_bid_cents(array $lot): int
     return $current + max(1, (int) ($lot['min_increment_cents'] ?? 100));
 }
 
+
+function auction_reserve_met(array $lot, int $highestBidCents): bool
+{
+    $reserve = (int) ($lot['reserve_price_cents'] ?? 0);
+    if ($reserve <= 0) {
+        return true;
+    }
+
+    return $highestBidCents >= $reserve;
+}
+
 function auction_sync_expired_lots(): void
 {
     if (!table_exists('auction_lots')) {
         return;
     }
 
-    $rows = db()->query('SELECT id FROM auction_lots WHERE status IN ("scheduled","active") AND ends_at <= NOW()')->fetchAll();
+    $rows = db()->query('SELECT id, reserve_price_cents FROM auction_lots WHERE status IN ("scheduled","active") AND ends_at <= NOW()')->fetchAll();
     if ($rows === []) {
         return;
     }
@@ -3301,8 +3519,9 @@ function auction_sync_expired_lots(): void
     foreach ($rows as $row) {
         $lotId = (int) $row['id'];
         $highestBid = auction_highest_bid($lotId);
-        $winnerId = $highestBid ? (int) $highestBid['member_id'] : null;
         $currentPrice = $highestBid ? (int) $highestBid['amount_cents'] : 0;
+        $reserveMet = auction_reserve_met($row, $currentPrice);
+        $winnerId = ($highestBid && $reserveMet) ? (int) $highestBid['member_id'] : null;
         $update->execute([$winnerId, $currentPrice, $lotId]);
     }
 }
@@ -3361,3 +3580,61 @@ function place_auction_bid(int $lotId, int $memberId, int $amountCents): void
         throw $throwable;
     }
 }
+
+/**
+ * @return array<int, array{route:string,title:array{fr:string,en:string,de:string,nl:string},desc:array{fr:string,en:string,de:string,nl:string},module?:string,permission?:string}>
+ */
+function admin_module_cards_catalog(): array
+{
+    return [
+        ['route' => 'admin_modules', 'title' => ['fr' => 'Modules', 'en' => 'Modules', 'de' => 'Module', 'nl' => 'Modules'], 'desc' => ['fr' => 'Activation, désactivation et pilotage global des modules.', 'en' => 'Enable, disable and globally manage modules.', 'de' => 'Module aktivieren, deaktivieren und zentral steuern.', 'nl' => 'Modules activeren, deactiveren en centraal beheren.'], 'permission' => 'modules.manage'],
+        ['route' => 'admin_permissions', 'title' => ['fr' => 'Permissions', 'en' => 'Permissions', 'de' => 'Berechtigungen', 'nl' => 'Rechten'], 'desc' => ['fr' => 'Rôles, droits et affectations.', 'en' => 'Roles, rights and assignments.', 'de' => 'Rollen, Rechte und Zuweisungen.', 'nl' => 'Rollen, rechten en toewijzingen.']],
+        ['route' => 'admin_news', 'title' => ['fr' => 'Actualités', 'en' => 'News', 'de' => 'Neuigkeiten', 'nl' => 'Nieuws'], 'desc' => ['fr' => 'Sections, rédaction et modération.', 'en' => 'Sections, writing and moderation.', 'de' => 'Bereiche, Redaktion und Moderation.', 'nl' => 'Secties, redactie en moderatie.'], 'module' => 'news'],
+        ['route' => 'admin_articles', 'title' => ['fr' => 'Articles', 'en' => 'Articles', 'de' => 'Artikel', 'nl' => 'Artikels'], 'desc' => ['fr' => 'Articles techniques publics.', 'en' => 'Public technical articles.', 'de' => 'Öffentliche technische Artikel.', 'nl' => 'Publieke technische artikels.'], 'module' => 'articles'],
+        ['route' => 'admin_committee', 'title' => ['fr' => 'Comité', 'en' => 'Committee', 'de' => 'Komitee', 'nl' => 'Comité'], 'desc' => ['fr' => 'Membres du comité, rôle, ordre et biographie.', 'en' => 'Committee members, role, order and biography.', 'de' => 'Komiteemitglieder, Rolle, Reihenfolge und Biografie.', 'nl' => 'Comitéleden, rol, volgorde en biografie.'], 'module' => 'committee'],
+        ['route' => 'admin_press', 'title' => ['fr' => 'Presse', 'en' => 'Press', 'de' => 'Presse', 'nl' => 'Pers'], 'desc' => ['fr' => 'Contacts presse, communiqués datés et documents téléchargeables.', 'en' => 'Press contacts, dated releases and downloadable documents.', 'de' => 'Pressekontakte, datierte Mitteilungen und Downloads.', 'nl' => 'Perscontacten, gedateerde berichten en downloads.'], 'module' => 'press'],
+        ['route' => 'admin_events', 'title' => ['fr' => 'Agenda', 'en' => 'Agenda', 'de' => 'Agenda', 'nl' => 'Agenda'], 'desc' => ['fr' => 'Événements du club et contests locaux affichés dans les widgets live.', 'en' => 'Club events and local contests shown in live widgets.', 'de' => 'Clubveranstaltungen und lokale Contests in Live-Widgets.', 'nl' => 'Clubevenementen en lokale contests in live widgets.'], 'module' => 'events'],
+        ['route' => 'admin_dinner_reservations', 'title' => ['fr' => 'Dîner annuel', 'en' => 'Annual dinner', 'de' => 'Jahresessen', 'nl' => 'Jaarlijks diner'], 'desc' => ['fr' => 'Réservations, lignes repas/dessert, quantités et total automatique.', 'en' => 'Reservations, meal/dessert lines, quantities and auto total.', 'de' => 'Reservierungen, Menüzeilen, Mengen und automatische Summe.', 'nl' => 'Reservaties, maaltijdregels, aantallen en automatisch totaal.'], 'module' => 'events', 'permission' => 'events.manage'],
+        ['route' => 'admin_shop', 'title' => ['fr' => 'Boutique', 'en' => 'Shop', 'de' => 'Shop', 'nl' => 'Winkel'], 'desc' => ['fr' => 'Catalogue produits, catégories et commandes club.', 'en' => 'Product catalog, categories and club orders.', 'de' => 'Produktkatalog, Kategorien und Clubbestellungen.', 'nl' => 'Productcatalogus, categorieën en clubbestellingen.'], 'module' => 'shop', 'permission' => 'shop.manage'],
+        ['route' => 'admin_auctions', 'title' => ['fr' => 'Enchères', 'en' => 'Auctions', 'de' => 'Auktionen', 'nl' => 'Veilingen'], 'desc' => ['fr' => 'Lots, planification, offres et clôture.', 'en' => 'Lots, scheduling, bids and closing.', 'de' => 'Lose, Planung, Gebote und Abschluss.', 'nl' => 'Kavels, planning, biedingen en afsluiting.'], 'module' => 'auctions', 'permission' => 'auctions.manage'],
+        ['route' => 'admin_editorial', 'title' => ['fr' => 'Éditorial multilingue', 'en' => 'Multilingual editorial', 'de' => 'Mehrsprachige Redaktion', 'nl' => 'Meertalige redactie'], 'desc' => ['fr' => 'Français source, traduction auto EN/DE/NL et relecture manuelle.', 'en' => 'French source, EN/DE/NL auto translation and manual review.', 'de' => 'Französische Quelle, automatische Übersetzung und Review.', 'nl' => 'Franse bron, automatische vertaling en manuele review.']],
+        ['route' => 'admin_translation_reviews', 'title' => ['fr' => 'Relecture linguistique', 'en' => 'Translation reviews', 'de' => 'Sprachliche Prüfung', 'nl' => 'Taalreview'], 'desc' => ['fr' => 'Workflow de validation des traductions des actualités et articles.', 'en' => 'Validation workflow for news/article translations.', 'de' => 'Freigabe-Workflow für News-/Artikelübersetzungen.', 'nl' => 'Validatieworkflow voor vertalingen van nieuws/artikels.']],
+        ['route' => 'admin_live_feeds', 'title' => ['fr' => 'Flux live', 'en' => 'Live feeds', 'de' => 'Live-Feeds', 'nl' => 'Live feeds'], 'desc' => ['fr' => 'Pilotage fin des flux radioamateur, TTL, URLs et activation.', 'en' => 'Fine control of radio feeds, TTL, URLs and activation.', 'de' => 'Feinsteuerung von Funk-Feeds, TTL, URLs und Aktivierung.', 'nl' => 'Fijn beheer van radiofeeds, TTL, URL’s en activatie.']],
+        ['route' => 'admin_newsletters', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter', 'de' => 'Newsletter', 'nl' => 'Nieuwsbrief'], 'desc' => ['fr' => 'Abonnés, import CSV et campagnes email.', 'en' => 'Subscribers, CSV import and email campaigns.', 'de' => 'Abonnenten, CSV-Import und E-Mail-Kampagnen.', 'nl' => 'Abonnees, CSV-import en e-mailcampagnes.']],
+        ['route' => 'admin_wiki', 'title' => ['fr' => 'Wiki', 'en' => 'Wiki', 'de' => 'Wiki', 'nl' => 'Wiki'], 'desc' => ['fr' => 'Pages collaboratives et révisions.', 'en' => 'Collaborative pages and revisions.', 'de' => 'Kollaborative Seiten und Revisionen.', 'nl' => 'Samenwerkingspagina’s en revisies.'], 'module' => 'wiki'],
+        ['route' => 'admin_albums', 'title' => ['fr' => 'Albums', 'en' => 'Albums', 'de' => 'Alben', 'nl' => 'Albums'], 'desc' => ['fr' => 'Galerie publique et synchro sociale.', 'en' => 'Public gallery and social sync.', 'de' => 'Öffentliche Galerie und Social-Sync.', 'nl' => 'Publieke galerij en sociale sync.'], 'module' => 'albums'],
+        ['route' => 'admin_ads', 'title' => ['fr' => 'Publicités', 'en' => 'Ads', 'de' => 'Werbung', 'nl' => 'Advertenties'], 'desc' => ['fr' => 'Régie publicitaire, placements et statistiques.', 'en' => 'Ad inventory, placements and statistics.', 'de' => 'Werbeverwaltung, Platzierungen und Statistiken.', 'nl' => 'Advertentiebeheer, plaatsingen en statistieken.'], 'module' => 'advertising'],
+    ];
+}
+
+/**
+ * @return array<int, array{route:string,title:string,desc:string}>
+ */
+function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
+{
+    return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . md5($searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
+        $cards = [];
+        foreach (admin_module_cards_catalog() as $card) {
+            $module = (string) ($card['module'] ?? '');
+            $permission = (string) ($card['permission'] ?? '');
+            if ($module !== '' && !module_enabled($module)) {
+                continue;
+            }
+            if ($permission !== '' && !has_permission($permission)) {
+                continue;
+            }
+            $title = (string) ($card['title'][$locale] ?? $card['title']['fr']);
+            $desc = (string) ($card['desc'][$locale] ?? $card['desc']['fr']);
+            if ($searchNeedle !== '') {
+                $haystack = mb_safe_strtolower($title . ' ' . $desc);
+                if (!str_contains($haystack, $searchNeedle)) {
+                    continue;
+                }
+            }
+            $cards[] = ['route' => (string) $card['route'], 'title' => $title, 'desc' => $desc];
+        }
+        return $cards;
+    });
+}
+
+

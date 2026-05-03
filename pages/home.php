@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /** @var string $homeLocale */
-$homeLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$homeLocale = current_locale();
 $homeMessages = [
     'fr' => [
         'quote_day' => 'Citation du jour',
@@ -15,6 +15,18 @@ $homeMessages = [
         'useful_info' => 'Informations utiles',
         'meetings_info' => 'Nos réunions se déroulent le 3ième samedi du mois à partir de 14h.',
         'maps_route' => 'Itinéraire Google Maps',
+        'open' => 'Ouvrir',
+        'public_updating' => 'Les espaces publics sont en cours de mise à jour.',
+        'no_news' => 'Aucune actualité publiée pour le moment.',
+        'published_on' => 'Publié le',
+        'read_news' => 'Lire l’actualité',
+        'news_fallback' => 'Consultez la dernière publication du club.',
+        'no_event' => 'Aucun évènement planifié actuellement.',
+        'event_date_tbd' => 'Date à confirmer',
+        'event_fallback' => 'Découvrez les détails du prochain rendez-vous du club.',
+        'next_date' => 'Prochaine date',
+        'event_location' => 'Lieu',
+        'view_event' => 'Voir l’évènement',
     ],
     'en' => [
         'quote_day' => 'Quote of the day',
@@ -27,6 +39,18 @@ $homeMessages = [
         'useful_info' => 'Useful information',
         'meetings_info' => 'Our meetings take place on the 3rd Saturday of each month from 2:00 PM.',
         'maps_route' => 'Google Maps directions',
+        'open' => 'Open',
+        'public_updating' => 'Public areas are currently being updated.',
+        'no_news' => 'No published news at the moment.',
+        'published_on' => 'Published on',
+        'read_news' => 'Read news',
+        'news_fallback' => 'Check out the club’s latest publication.',
+        'no_event' => 'No event is currently scheduled.',
+        'event_date_tbd' => 'Date to be confirmed',
+        'event_fallback' => 'Discover details about the club’s next meetup.',
+        'next_date' => 'Next date',
+        'event_location' => 'Location',
+        'view_event' => 'View event',
     ],
     'de' => [
         'quote_day' => 'Zitat des Tages',
@@ -39,6 +63,18 @@ $homeMessages = [
         'useful_info' => 'Nützliche Informationen',
         'meetings_info' => 'Unsere Treffen finden am 3. Samstag jedes Monats ab 14:00 Uhr statt.',
         'maps_route' => 'Google-Maps-Route',
+        'open' => 'Öffnen',
+        'public_updating' => 'Die öffentlichen Bereiche werden aktuell aktualisiert.',
+        'no_news' => 'Derzeit sind keine Nachrichten veröffentlicht.',
+        'published_on' => 'Veröffentlicht am',
+        'read_news' => 'Nachricht lesen',
+        'news_fallback' => 'Lesen Sie die neueste Veröffentlichung des Clubs.',
+        'no_event' => 'Derzeit ist keine Veranstaltung geplant.',
+        'event_date_tbd' => 'Datum wird bestätigt',
+        'event_fallback' => 'Entdecken Sie die Details zum nächsten Clubtreffen.',
+        'next_date' => 'Nächster Termin',
+        'event_location' => 'Ort',
+        'view_event' => 'Veranstaltung ansehen',
     ],
     'nl' => [
         'quote_day' => 'Quote van de dag',
@@ -51,6 +87,18 @@ $homeMessages = [
         'useful_info' => 'Nuttige informatie',
         'meetings_info' => 'Onze bijeenkomsten vinden plaats op de 3e zaterdag van elke maand vanaf 14:00 uur.',
         'maps_route' => 'Route via Google Maps',
+        'open' => 'Openen',
+        'public_updating' => 'Openbare ruimtes worden momenteel bijgewerkt.',
+        'no_news' => 'Momenteel is er geen gepubliceerd nieuws.',
+        'published_on' => 'Gepubliceerd op',
+        'read_news' => 'Nieuws lezen',
+        'news_fallback' => 'Bekijk de nieuwste publicatie van de club.',
+        'no_event' => 'Er staat momenteel geen evenement gepland.',
+        'event_date_tbd' => 'Datum te bevestigen',
+        'event_fallback' => 'Ontdek de details van de volgende clubbijeenkomst.',
+        'next_date' => 'Volgende datum',
+        'event_location' => 'Locatie',
+        'view_event' => 'Evenement bekijken',
     ],
 ];
 $homeI18n = $homeMessages[$homeLocale] ?? $homeMessages['fr'];
@@ -64,14 +112,7 @@ $primaryCta = $isAuthenticated
 $newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-50" href="' . e(route_url('newsletter_public')) . '">' . e((string) $homeI18n['cta_newsletter']) . '</a>';
 
 
-$moduleCatalog = [
-    ['code' => 'dashboard', 'route' => 'dashboard', 'title' => 'Tableau de bord personnalisable', 'desc' => 'Configurez votre espace membre avec des widgets à afficher, organiser et adapter selon vos besoins.', 'icon' => '🧩', 'audience' => 'Membres connectés'],
-    ['code' => 'articles', 'route' => 'articles', 'title' => 'Articles techniques', 'desc' => 'Approfondissez vos connaissances avec des contenus pratiques et pédagogiques.', 'icon' => '🧠', 'audience' => 'Membres passionnés'],
-    ['code' => 'wiki', 'route' => 'wiki', 'title' => 'Wiki du club', 'desc' => 'Consultez les procédures, fiches matériel et bonnes pratiques radioamateur.', 'icon' => '📚', 'audience' => 'Contributeurs & opérateurs'],
-    ['code' => 'albums', 'route' => 'albums', 'title' => 'Galerie photo', 'desc' => 'Revivez les activités du club avec des albums thématiques régulièrement enrichis.', 'icon' => '📸', 'audience' => 'Visiteurs & membres'],
-    ['code' => 'qsl', 'route' => 'qsl', 'title' => 'Espace QSL', 'desc' => 'Préparez, prévisualisez et exportez vos cartes QSL depuis un espace dédié.', 'icon' => '📨', 'audience' => 'Opérateurs actifs'],
-    ['code' => 'auctions', 'route' => 'auctions', 'title' => 'Enchères', 'desc' => 'Donnez une seconde vie au matériel radio via les ventes entre membres.', 'icon' => '🔧', 'audience' => 'Membres'],
-];
+$moduleCatalog = admin_module_cards_catalog($homeLocale);
 
 $activeModules = [];
 $moduleCards = '';
@@ -89,13 +130,13 @@ foreach ($moduleCatalog as $module) {
         . '<p class="mt-2 text-sm text-slate-600">' . e((string) $module['desc']) . '</p>'
         . '<div class="mt-4 flex items-center justify-between">'
         . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $module['audience']) . '</span>'
-        . '<span class="text-sm font-semibold text-blue-600 group-hover:text-blue-700">Ouvrir →</span>'
+        . '<span class="text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) $homeI18n['open']) . ' →</span>'
         . '</div>'
         . '</a>';
 }
 
 if ($moduleCards === '') {
-    $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Les espaces publics sont en cours de mise à jour.</div>';
+    $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">' . e((string) $homeI18n['public_updating']) . '</div>';
 }
 
 $heroTitle = '';
@@ -139,41 +180,41 @@ try {
     // Les blocs "À la une" restent en mode fallback si la base n'est pas disponible.
 }
 
-$latestNewsHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">Aucune actualité publiée pour le moment.</div>';
+$latestNewsHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['no_news']) . '</div>';
 if (is_array($latestNews) && !empty($latestNews['slug'])) {
     $newsDate = !empty($latestNews['published_at']) ? date('d/m/Y', strtotime((string) $latestNews['published_at'])) : date('d/m/Y', strtotime((string) ($latestNews['updated_at'] ?? 'now')));
     $newsExcerpt = trim((string) ($latestNews['excerpt'] ?? ''));
     if ($newsExcerpt === '') {
-        $newsExcerpt = 'Consultez la dernière publication du club.';
+        $newsExcerpt = (string) $homeI18n['news_fallback'];
     }
 
     $latestNewsHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('news_view', ['slug' => (string) $latestNews['slug']])) . '">'
-        . '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">Publié le ' . e($newsDate) . '</p>'
+        . '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e((string) $homeI18n['published_on']) . ' ' . e($newsDate) . '</p>'
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestNews['title']) . '</h3>'
         . '<p class="mt-2 text-sm text-slate-600">' . e($newsExcerpt) . '</p>'
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">Lire l’actualité →</span>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) $homeI18n['read_news']) . ' →</span>'
         . '</a>';
 }
 
-$nextEventHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">Aucun évènement planifié actuellement.</div>';
+$nextEventHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['no_event']) . '</div>';
 if (is_array($nextEvent) && !empty($nextEvent['slug'])) {
-    $eventDate = !empty($nextEvent['start_at']) ? date('d/m/Y H:i', strtotime((string) $nextEvent['start_at'])) : 'Date à confirmer';
+    $eventDate = !empty($nextEvent['start_at']) ? date('d/m/Y H:i', strtotime((string) $nextEvent['start_at'])) : (string) $homeI18n['event_date_tbd'];
     $eventSummary = trim((string) ($nextEvent['summary'] ?? ''));
     if ($eventSummary === '') {
-        $eventSummary = 'Découvrez les détails du prochain rendez-vous du club.';
+        $eventSummary = (string) $homeI18n['event_fallback'];
     }
     $eventLocation = trim((string) ($nextEvent['location'] ?? ''));
 
     $nextEventHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('event_view', ['slug' => (string) $nextEvent['slug']])) . '">'
-        . '<p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Prochaine date · ' . e($eventDate) . '</p>'
+        . '<p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">' . e((string) $homeI18n['next_date']) . ' · ' . e($eventDate) . '</p>'
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $nextEvent['title']) . '</h3>'
         . '<p class="mt-2 text-sm text-slate-600">' . e($eventSummary) . '</p>';
 
     if ($eventLocation !== '') {
-        $nextEventHtml .= '<p class="mt-2 text-xs font-medium text-slate-500">Lieu : ' . e($eventLocation) . '</p>';
+        $nextEventHtml .= '<p class="mt-2 text-xs font-medium text-slate-500">' . e((string) $homeI18n['event_location']) . ' : ' . e($eventLocation) . '</p>';
     }
 
-    $nextEventHtml .= '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">Voir l’évènement →</span>'
+    $nextEventHtml .= '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) $homeI18n['view_event']) . ' →</span>'
         . '</a>';
 }
 
@@ -227,6 +268,14 @@ $homeRadioInfoHtml = '<div class="grid gap-4">'
     . '</section>'
     . '</div>';
 
+if (isset($_GET['ajax']) && (string) $_GET['ajax'] === 'ham_weather') {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        'advice' => render_ham_weather_advice(current_user() ?? []),
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    return;
+}
+
 $homeQuote = random_quote_for_layout();
 $homeQuoteText = (string) $homeI18n['quote_fallback'];
 $homeQuoteAuthor = '';
@@ -270,7 +319,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="grid gap-4">'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Météo radioamateur">'
     . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['ham_weather']) . '</h2>'
-    . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">' . $homeHamAdviceHtml . '</div>'
+    . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4" data-ham-weather-root data-refresh-ms="900000" data-refresh-url="' . e(route_url('home', ['ajax' => 'ham_weather'])) . '"><div data-ham-weather-advice>' . $homeHamAdviceHtml . '</div></div>'
     . '</aside>'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['useful_info']) . '</h2>'
@@ -380,5 +429,7 @@ if ($homeLocale !== 'fr') {
         $content = strtr($content, $homeReplace[$homeLocale]);
     }
 }
+
+$content .= '<script>(function(){const root=document.querySelector("[data-ham-weather-root]");if(!root){return;}const target=root.querySelector("[data-ham-weather-advice]");const url=root.getAttribute("data-refresh-url");const refreshMs=Number(root.getAttribute("data-refresh-ms")||"900000");if(!target||!url||refreshMs<60000){return;}const tick=async()=>{try{const res=await fetch(url,{headers:{"X-Requested-With":"XMLHttpRequest"}});if(!res.ok){return;}const payload=await res.json();if(payload&&typeof payload.advice==="string"){target.innerHTML=payload.advice;}}catch(_e){}};setInterval(tick,refreshMs);})();</script>';
 
 echo render_layout($content, $homeLocale === 'fr' ? 'Accueil' : ($homeReplace[$homeLocale]['Accueil'] ?? 'Accueil'));
