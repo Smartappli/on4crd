@@ -1,6 +1,13 @@
 name: Compress Images
 
 on:
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: "Dossier à compresser"
+        required: true
+        default: "assets/img"
+
   pull_request:
     paths:
       - "assets/img/**/*.jpg"
