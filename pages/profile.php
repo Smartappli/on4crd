@@ -111,6 +111,7 @@ $member = $stmt->fetch() ?: [];
 
 ob_start();
 ?>
+<div class="stack">
 <div class="card">
     <h1><?= e($t('title')) ?></h1>
     <?php $avatarSrc = member_avatar_src($member); ?>
@@ -207,6 +208,7 @@ ob_start();
         <button type="submit" class="button"><?= e($t('save')) ?></button>
     </form>
 </section>
+</div>
 <?php
 
 echo render_layout((string) ob_get_clean(), $t('title'));

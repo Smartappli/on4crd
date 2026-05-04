@@ -269,7 +269,7 @@ ob_start();
 ?>
 <section class="card">
     <h1>Réservations dîner annuel</h1>
-    <p><a class="button secondary" href="<?= e(route_url('admin_dinner_reservations', ['export' => 1])) ?>">Exporter Excel (CSV)</a></p>
+    <div class="row-between"><span></span><a class="button secondary" href="<?= e(route_url('admin_dinner_reservations', ['export' => 1])) ?>">Exporter Excel (CSV)</a></div>
     <form method="post" class="stack" id="dinner-reservation-form">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
