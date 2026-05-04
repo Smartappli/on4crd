@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+require_module_enabled('shop');
 require_permission('admin.access');
 require_permission('shop.manage');
 $locale = current_locale();
