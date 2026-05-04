@@ -296,6 +296,17 @@ if ($memberModuleCards === '') {
     $memberModuleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Aucun module membre disponible actuellement.</div>';
 }
 
+
+$memberModulesSectionHtml = '';
+if (!$isAuthenticated) {
+    $memberModulesSectionHtml = '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+        . '<header class="mb-4">'
+        . '<h2 class="text-2xl font-bold text-slate-900">Modules accessibles aux membres</h2>'
+        . '</header>'
+        . '<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">' . $memberModuleCards . '</div>'
+        . '</section>';
+}
+
 $heroTitle = '';
 
 $heroSubtitle = '';
@@ -532,12 +543,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ad_title']) . '</h3>' . $adSlotHtml . '</article>'
     . '</div>'
     . '</section>'
-    . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<header class="mb-4">'
-    . '<h2 class="text-2xl font-bold text-slate-900">Modules accessibles aux membres</h2>'
-    . '</header>'
-    . '<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">' . $memberModuleCards . '</div>'
-    . '</section>'
+    . $memberModulesSectionHtml
     . '<section class="mt-4 grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h3 class="text-xl font-bold text-slate-900">Vous êtes journaliste</h3>'
