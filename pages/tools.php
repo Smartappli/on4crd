@@ -9,6 +9,11 @@ $i18n = [
     'nl' => ['title'=>'Tools','grid_title'=>'Grid berekenen vanaf een postadres','address'=>'Postadres','calc_grid'=>'Grid berekenen','found_address'=>'Gevonden adres','coords'=>'Coördinaten','locator'=>'Maidenhead-locator','conv'=>'Nuttige conversies','freq_wave'=>'Frequentie → golflengte','freq_mhz'=>'Frequentie (MHz)','wavelength'=>'Golflengte','power'=>'Vermogen (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Afstand tussen 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschatte afstand','err_enter_address'=>'Voer een postadres in.','err_geocode_unavailable'=>'Geocodingservice niet beschikbaar.','err_address_not_found'=>'Adres niet gevonden. Probeer met stad en postcode.','err_invalid_coords'=>'Ongeldige coördinaten ontvangen.','err_grid_calc'=>'Fout bij het berekenen van het grid.','addr_ph'=>'Voorbeeld: Kerkstraat 1, 1000 Brussel, België','freq_ph'=>'Bijv.: 145.500','watts_ph'=>'Bijv.: 10','dbm_ph'=>'Bijv.: 40','locator_a_ph'=>'Bijv.: JO20LI','locator_b_ph'=>'Bijv.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
+set_page_meta([
+    'title' => (string) ($t['title'] ?? $i18n['fr']['title']),
+    'description' => (string) ($t['grid_title'] ?? $i18n['fr']['grid_title']),
+    'schema_type' => 'WebPage',
+]);
 $jsI18n = [
     'err_enter_address' => (string) ($t['err_enter_address'] ?? $i18n['fr']['err_enter_address']),
     'err_geocode_unavailable' => (string) ($t['err_geocode_unavailable'] ?? $i18n['fr']['err_geocode_unavailable']),
@@ -57,7 +62,7 @@ ob_start();
                         <input type="number" id="power-watts" min="0" step="0.001" placeholder="<?= e((string) $t['watts_ph']) ?>">
                     </label>
                     <p class="help"><?= e((string) $t['dbm_label']) ?>: <strong id="power-dbm">—</strong></p>
-                    <label>dBm
+                    <label><?= e((string) $t['dbm_label']) ?>
                         <input type="number" id="power-dbm-input" step="0.1" placeholder="<?= e((string) $t['dbm_ph']) ?>">
                     </label>
                     <p class="help"><?= e((string) $t['watts_out_label']) ?>: <strong id="power-watts-out">—</strong></p>

@@ -3,11 +3,21 @@ declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
 $user = require_login();
+$locale = current_locale();
+$i18n = [
+    'fr' => ['missing_table' => 'La table dashboard_widgets est absente.'],
+    'en' => ['missing_table' => 'The dashboard_widgets table is missing.'],
+    'de' => ['missing_table' => 'Die Tabelle dashboard_widgets fehlt.'],
+    'nl' => ['missing_table' => 'De tabel dashboard_widgets ontbreekt.'],
+];
+$t = static function (string $key) use ($locale, $i18n): string {
+    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+};
 
 try {
     verify_csrf();
     if (!table_exists('dashboard_widgets')) {
-        throw new RuntimeException('La table dashboard_widgets est absente.');
+        throw new RuntimeException($t('missing_table'));
     }
     $rawPayload = (string) file_get_contents('php://input');
     $payload = $rawPayload !== '' ? json_decode($rawPayload, true) : [];
