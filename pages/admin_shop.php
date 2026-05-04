@@ -5,10 +5,10 @@ require_permission('admin.access');
 require_permission('shop.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['layout' => 'Administration boutique', 'meta_desc' => 'Gestion des produits, catégories et commandes de la boutique.', 'no_orders' => 'Aucune commande.', 'err_category_required' => 'Nom de catégorie obligatoire.', 'ok_category_saved' => 'Catégorie enregistrée.', 'err_product_title_required' => 'Titre produit obligatoire.', 'ok_product_saved' => 'Produit enregistré.', 'ok_order_updated' => 'Commande mise à jour.'],
-    'en' => ['layout' => 'Shop administration', 'meta_desc' => 'Manage shop products, categories, and orders.', 'no_orders' => 'No orders.', 'err_category_required' => 'Category name is required.', 'ok_category_saved' => 'Category saved.', 'err_product_title_required' => 'Product title is required.', 'ok_product_saved' => 'Product saved.', 'ok_order_updated' => 'Order updated.'],
-    'de' => ['layout' => 'Shop-Verwaltung', 'meta_desc' => 'Produkte, Kategorien und Bestellungen des Shops verwalten.', 'no_orders' => 'Keine Bestellungen.', 'err_category_required' => 'Kategoriename ist erforderlich.', 'ok_category_saved' => 'Kategorie gespeichert.', 'err_product_title_required' => 'Produkttitel ist erforderlich.', 'ok_product_saved' => 'Produkt gespeichert.', 'ok_order_updated' => 'Bestellung aktualisiert.'],
-    'nl' => ['layout' => 'Winkelbeheer', 'meta_desc' => 'Beheer producten, categorieën en bestellingen van de winkel.', 'no_orders' => 'Geen bestellingen.', 'err_category_required' => 'Categorienaam is verplicht.', 'ok_category_saved' => 'Categorie opgeslagen.', 'err_product_title_required' => 'Producttitel is verplicht.', 'ok_product_saved' => 'Product opgeslagen.', 'ok_order_updated' => 'Bestelling bijgewerkt.'],
+    'fr' => ['layout' => 'Administration boutique', 'meta_desc' => 'Gestion des produits, catégories et commandes de la boutique.', 'no_orders' => 'Aucune commande.', 'edit' => 'Modifier', 'create' => 'Créer', 'a_category' => 'une catégorie', 'a_product' => 'un produit', 'err_category_required' => 'Nom de catégorie obligatoire.', 'ok_category_saved' => 'Catégorie enregistrée.', 'err_product_title_required' => 'Titre produit obligatoire.', 'ok_product_saved' => 'Produit enregistré.', 'ok_order_updated' => 'Commande mise à jour.'],
+    'en' => ['layout' => 'Shop administration', 'meta_desc' => 'Manage shop products, categories, and orders.', 'no_orders' => 'No orders.', 'edit' => 'Edit', 'create' => 'Create', 'a_category' => 'a category', 'a_product' => 'a product', 'err_category_required' => 'Category name is required.', 'ok_category_saved' => 'Category saved.', 'err_product_title_required' => 'Product title is required.', 'ok_product_saved' => 'Product saved.', 'ok_order_updated' => 'Order updated.'],
+    'de' => ['layout' => 'Shop-Verwaltung', 'meta_desc' => 'Produkte, Kategorien und Bestellungen des Shops verwalten.', 'no_orders' => 'Keine Bestellungen.', 'edit' => 'Bearbeiten', 'create' => 'Erstellen', 'a_category' => 'eine Kategorie', 'a_product' => 'ein Produkt', 'err_category_required' => 'Kategoriename ist erforderlich.', 'ok_category_saved' => 'Kategorie gespeichert.', 'err_product_title_required' => 'Produkttitel ist erforderlich.', 'ok_product_saved' => 'Produkt gespeichert.', 'ok_order_updated' => 'Bestellung aktualisiert.'],
+    'nl' => ['layout' => 'Winkelbeheer', 'meta_desc' => 'Beheer producten, categorieën en bestellingen van de winkel.', 'no_orders' => 'Geen bestellingen.', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'a_category' => 'een categorie', 'a_product' => 'een product', 'err_category_required' => 'Categorienaam is verplicht.', 'ok_category_saved' => 'Categorie opgeslagen.', 'err_product_title_required' => 'Producttitel is verplicht.', 'ok_product_saved' => 'Product opgeslagen.', 'ok_order_updated' => 'Bestelling bijgewerkt.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
@@ -115,7 +115,7 @@ ob_start();
 ?>
 <div class="grid-2">
     <section class="card">
-        <h1><?= $editCategory ? 'Modifier' : 'Créer' ?> une catégorie</h1>
+        <h1><?= e($editCategory ? $t('edit') : $t('create')) ?> <?= e($t('a_category')) ?></h1>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_category">
@@ -132,7 +132,7 @@ ob_start();
     </section>
 
     <section class="card">
-        <h1><?= $editProduct ? 'Modifier' : 'Créer' ?> un produit</h1>
+        <h1><?= e($editProduct ? $t('edit') : $t('create')) ?> <?= e($t('a_product')) ?></h1>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_product">
