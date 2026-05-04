@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS modules (
     description TEXT DEFAULT NULL,
     is_core TINYINT(1) NOT NULL DEFAULT 0,
     is_enabled TINYINT(1) NOT NULL DEFAULT 1,
+    visibility ENUM('public','members','admin') NOT NULL DEFAULT 'members',
     sort_order INT NOT NULL DEFAULT 0
 );
 
