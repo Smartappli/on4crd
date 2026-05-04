@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('UPDATE ads SET status = ?, moderation_note = ? WHERE id = ?')->execute([$status, $note, $adId]);
             set_flash('success', (string) $t['ad_updated']);
-            redirect('admin_ads', ['refresh' => (string) time()]);
+            redirect('admin_ads', ['refresh' => '1']);
         }
         if ($action === 'add_placement') {
             $code = slugify((string) ($_POST['code'] ?? ''));
@@ -37,15 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO ad_placements (code, name, description, sort_order, is_active) VALUES (?, ?, ?, ?, 1)')->execute([$code, $name, $description, $sortOrder]);
             set_flash('success', (string) $t['placement_added']);
-            redirect('admin_ads', ['refresh' => (string) time()]);
+            redirect('admin_ads', ['refresh' => '1']);
         }
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
-        redirect('admin_ads', ['refresh' => (string) time()]);
+        redirect('admin_ads', ['refresh' => '1']);
     }
 }
 
-$refreshToken = preg_replace('/[^0-9]/', '', (string) ($_GET['refresh'] ?? '')) ?: '0';
+$refreshToken = ((string) ($_GET['refresh'] ?? '') === '1') ? '1' : '0';
 
 $pendingAds = cache_remember('admin_ads_pending_v1_' . $refreshToken, 30, static function (): array {
     return db()->query('SELECT a.*, ap.name AS placement_name, ap.code AS placement_code, m.callsign AS owner_callsign
