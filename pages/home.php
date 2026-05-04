@@ -202,6 +202,25 @@ $newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl b
 
 $moduleCatalog = admin_module_cards_catalog();
 
+
+$visibilityLabels = [
+    'fr' => ['public' => 'Public', 'members' => 'Membres', 'admin' => 'Administrateurs'],
+    'en' => ['public' => 'Public', 'members' => 'Members', 'admin' => 'Administrators'],
+    'de' => ['public' => 'Öffentlich', 'members' => 'Mitglieder', 'admin' => 'Administratoren'],
+    'nl' => ['public' => 'Openbaar', 'members' => 'Leden', 'admin' => 'Beheerders'],
+];
+$moduleVisibilityLabels = $visibilityLabels[$homeLocale] ?? $visibilityLabels['fr'];
+$moduleVisibilityByCode = [];
+if (table_exists('modules')) {
+    foreach (db()->query('SELECT code, visibility FROM modules')->fetchAll() as $moduleRow) {
+        $code = (string) ($moduleRow['code'] ?? '');
+        if ($code === '') {
+            continue;
+        }
+        $moduleVisibilityByCode[$code] = (string) ($moduleRow['visibility'] ?? 'members');
+    }
+}
+
 $activeModules = [];
 $moduleCards = '';
 foreach ($moduleCatalog as $module) {
@@ -213,7 +232,14 @@ foreach ($moduleCatalog as $module) {
     $activeModules[] = $module;
     $moduleTitle = is_array($module['title'] ?? null) ? (string) (($module['title'][$homeLocale] ?? $module['title']['fr'] ?? '')) : (string) ($module['title'] ?? '');
     $moduleDesc = is_array($module['desc'] ?? null) ? (string) (($module['desc'][$homeLocale] ?? $module['desc']['fr'] ?? '')) : (string) ($module['desc'] ?? '');
-    $moduleAudience = is_array($module['audience'] ?? null) ? (string) (($module['audience'][$homeLocale] ?? $module['audience']['fr'] ?? 'Membres')) : (string) ($module['audience'] ?? 'Membres');
+    $moduleAudience = is_array($module['audience'] ?? null) ? (string) (($module['audience'][$homeLocale] ?? $module['audience']['fr'] ?? '')) : (string) ($module['audience'] ?? '');
+    $moduleAudienceCode = (string) ($module['code'] ?? $module['module'] ?? '');
+    $configuredVisibility = (string) ($moduleVisibilityByCode[$moduleAudienceCode] ?? '');
+    if ($configuredVisibility !== '') {
+        $moduleAudience = (string) ($moduleVisibilityLabels[$configuredVisibility] ?? ucfirst($configuredVisibility));
+    } elseif ($moduleAudience === '') {
+        $moduleAudience = (string) ($moduleVisibilityLabels['members'] ?? 'Membres');
+    }
     $moduleIcon = is_array($module['icon'] ?? null) ? (string) (($module['icon'][$homeLocale] ?? $module['icon']['fr'] ?? '📦')) : (string) ($module['icon'] ?? '📦');
 
     $moduleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $module['route'])) . '">'
