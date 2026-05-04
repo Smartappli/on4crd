@@ -2,8 +2,18 @@
 declare(strict_types=1);
 
 $user = require_login();
+$locale = current_locale();
+$i18n = [
+    'fr' => ['module_off' => 'Module publicitaire désactivé.', 'title' => 'Publicités', 'save_ok' => 'Publicité mise à jour.', 'create_ok' => 'Publicité créée.', 'status_ok' => 'Statut publicitaire mis à jour.', 'ad_missing' => 'Publicité introuvable ou inaccessible.', 'placement_required' => 'Placement obligatoire.', 'title_required' => 'Titre obligatoire.', 'invalid_format' => 'Format publicitaire invalide.', 'ad_not_found' => 'Publicité introuvable.', 'invalid_status' => 'Statut invalide.', 'edit_ad' => 'Modifier une publicité', 'new_ad' => 'Déposer une publicité', 'module_help' => 'Le module sert à gérer les encarts sponsorisés du club. Les campagnes sont visibles seulement sur les emplacements dédiés et peuvent être modérées par l’administration.'],
+    'en' => ['module_off' => 'Advertising module disabled.', 'title' => 'Advertisements', 'save_ok' => 'Advertisement updated.', 'create_ok' => 'Advertisement created.', 'status_ok' => 'Advertisement status updated.', 'ad_missing' => 'Advertisement not found or inaccessible.', 'placement_required' => 'Placement is required.', 'title_required' => 'Title is required.', 'invalid_format' => 'Invalid ad format.', 'ad_not_found' => 'Advertisement not found.', 'invalid_status' => 'Invalid status.', 'edit_ad' => 'Edit an advertisement', 'new_ad' => 'Submit an advertisement', 'module_help' => 'Use this module to manage the club’s sponsored slots. Campaigns are visible only on dedicated placements and can be moderated by administrators.'],
+    'de' => ['module_off' => 'Werbemodul deaktiviert.', 'title' => 'Werbung', 'save_ok' => 'Anzeige aktualisiert.', 'create_ok' => 'Anzeige erstellt.', 'status_ok' => 'Anzeigenstatus aktualisiert.', 'ad_missing' => 'Anzeige nicht gefunden oder nicht zugänglich.', 'placement_required' => 'Platzierung ist erforderlich.', 'title_required' => 'Titel ist erforderlich.', 'invalid_format' => 'Ungültiges Anzeigenformat.', 'ad_not_found' => 'Anzeige nicht gefunden.', 'invalid_status' => 'Ungültiger Status.', 'edit_ad' => 'Anzeige bearbeiten', 'new_ad' => 'Anzeige einreichen', 'module_help' => 'Mit diesem Modul verwalten Sie gesponserte Flächen des Clubs. Kampagnen erscheinen nur auf vorgesehenen Plätzen und können von der Verwaltung moderiert werden.'],
+    'nl' => ['module_off' => 'Advertentiemodule uitgeschakeld.', 'title' => 'Advertenties', 'save_ok' => 'Advertentie bijgewerkt.', 'create_ok' => 'Advertentie aangemaakt.', 'status_ok' => 'Advertentiestatus bijgewerkt.', 'ad_missing' => 'Advertentie niet gevonden of niet toegankelijk.', 'placement_required' => 'Plaatsing is verplicht.', 'title_required' => 'Titel is verplicht.', 'invalid_format' => 'Ongeldig advertentieformaat.', 'ad_not_found' => 'Advertentie niet gevonden.', 'invalid_status' => 'Ongeldige status.', 'edit_ad' => 'Advertentie bewerken', 'new_ad' => 'Advertentie indienen', 'module_help' => 'Met deze module beheer je gesponsorde clubblokken. Campagnes zijn alleen zichtbaar op toegewezen plaatsingen en kunnen door beheerders worden gemodereerd.'],
+];
+$t = static function (string $key) use ($locale, $i18n): string {
+    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+};
 if (!module_enabled('advertising')) {
-    echo render_layout('<div class="card"><p>Module publicitaire désactivé.</p></div>', 'Publicités');
+    echo render_layout('<div class="card"><p>' . e($t('module_off')) . '</p></div>', $t('title'));
     return;
 }
 
@@ -39,12 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $adId = (int) ($_POST['ad_id'] ?? 0);
             $existing = $adId > 0 ? ad_fetch_by_id($adId) : null;
             if ($adId > 0 && ($existing === null || (!$canModerate && (int) $existing['owner_member_id'] !== (int) $user['id']))) {
-                throw new RuntimeException('Publicité introuvable ou inaccessible.');
+                throw new RuntimeException($t('ad_missing'));
             }
 
             $placementId = (int) ($_POST['placement_id'] ?? 0);
             if ($placementId <= 0) {
-                throw new RuntimeException('Placement obligatoire.');
+                throw new RuntimeException($t('placement_required'));
             }
 
             $targetUrl = normalize_http_url((string) ($_POST['target_url'] ?? ''));
@@ -77,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
 
             if ($payload['title'] === '') {
-                throw new RuntimeException('Titre obligatoire.');
+                throw new RuntimeException($t('title_required'));
             }
             if (!isset(ad_format_catalog()[$payload['format_code']])) {
-                throw new RuntimeException('Format publicitaire invalide.');
+                throw new RuntimeException($t('invalid_format'));
             }
 
             if ($adId > 0) {
@@ -100,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $payload['status'],
                     $adId,
                 ]);
-                set_flash('success', 'Publicité mise à jour.');
+                set_flash('success', $t('save_ok'));
             } else {
                 $stmt = db()->prepare('INSERT INTO ads (owner_member_id, placement_id, format_code, title, description, image_path, target_url, start_at, duration_days, end_at, max_impressions, weight, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->execute([
@@ -118,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $payload['weight'],
                     $payload['status'],
                 ]);
-                set_flash('success', 'Publicité créée.');
+                set_flash('success', $t('create_ok'));
             }
         }
 
@@ -127,13 +137,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newStatus = (string) ($_POST['status'] ?? 'paused');
             $existing = ad_fetch_by_id($adId);
             if ($existing === null || (!$canModerate && (int) $existing['owner_member_id'] !== (int) $user['id'])) {
-                throw new RuntimeException('Publicité introuvable.');
+                throw new RuntimeException($t('ad_not_found'));
             }
             if (!in_array($newStatus, ['draft', 'pending', 'active', 'paused', 'expired'], true)) {
-                throw new RuntimeException('Statut invalide.');
+                throw new RuntimeException($t('invalid_status'));
             }
             db()->prepare('UPDATE ads SET status = ?, updated_at = NOW() WHERE id = ?')->execute([$newStatus, $adId]);
-            set_flash('success', 'Statut publicitaire mis à jour.');
+            set_flash('success', $t('status_ok'));
         }
 
         redirect('ads');
@@ -147,8 +157,8 @@ ob_start();
 ?>
 <div class="grid-2">
   <section class="card">
-    <h1><?= $editing ? 'Modifier une publicité' : 'Déposer une publicité' ?></h1>
-    <p class="help">Le module sert à gérer les encarts sponsorisés du club. Les campagnes sont visibles seulement sur les emplacements dédiés et peuvent être modérées par l’administration.</p>
+    <h1><?= e($editing ? $t('edit_ad') : $t('new_ad')) ?></h1>
+    <p class="help"><?= e($t('module_help')) ?></p>
     <form method="post" enctype="multipart/form-data" class="stack">
       <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
       <input type="hidden" name="action" value="save_ad">
