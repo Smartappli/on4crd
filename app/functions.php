@@ -181,29 +181,29 @@ function seed_modules(): void
     }
 
     $modules = [
-        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 1, 1, 10],
-        ['members', 'Membres', 'Espace membres et profil', 1, 1, 20],
-        ['news', 'Actualités', 'Section des actualités du club', 1, 1, 30],
-        ['articles', 'Articles', 'Articles techniques', 1, 1, 40],
-        ['wiki', 'Wiki', 'Base de connaissances collaborative', 1, 1, 50],
-        ['albums', 'Albums', 'Galerie photos', 1, 1, 60],
-        ['events', 'Événements', 'Agenda du club', 1, 1, 70],
-        ['shop', 'Boutique', 'Produits et commandes', 1, 1, 80],
-        ['auctions', 'Enchères', 'Ventes aux enchères', 1, 1, 90],
-        ['qsl', 'QSL', 'Gestion des cartes QSL', 1, 1, 100],
-        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 1, 1, 110],
-        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 1, 1, 120],
-        ['press', 'Presse', 'Communiqués et contacts presse', 1, 1, 130],
-        ['education', 'Éducation', 'Activités écoles/formation', 1, 1, 140],
-        ['committee', 'Comité', 'Informations du comité', 1, 1, 150],
-        ['directory', 'Annuaire', 'Annuaire public du club', 1, 1, 160],
+        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 10],
+        ['members', 'Membres', 'Espace membres et profil', 0, 1, 20],
+        ['news', 'Actualités', 'Section des actualités du club', 0, 1, 30],
+        ['articles', 'Articles', 'Articles techniques', 0, 1, 40],
+        ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 50],
+        ['albums', 'Albums', 'Galerie photos', 0, 1, 60],
+        ['events', 'Événements', 'Agenda du club', 0, 1, 70],
+        ['shop', 'Boutique', 'Produits et commandes', 0, 1, 80],
+        ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 90],
+        ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 100],
+        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 110],
+        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 120],
+        ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 130],
+        ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 140],
+        ['committee', 'Comité', 'Informations du comité', 0, 1, 150],
+        ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 160],
         ['admin', 'Administration', 'Administration générale', 1, 1, 1000],
     ];
 
     $stmt = db()->prepare(
         'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
          VALUES (?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), sort_order = VALUES(sort_order)'
+         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
     );
 
     foreach ($modules as $module) {
@@ -249,6 +249,37 @@ function widget_catalog(): array
             'description' => 'Conditions météo en direct via Open‑Meteo.',
         ],
     ];
+}
+}
+
+
+if (!function_exists('enabled_widget_catalog')) {
+function enabled_widget_catalog(): array
+{
+    $catalog = widget_catalog();
+    if (!table_exists('dashboard_widget_settings')) {
+        return $catalog;
+    }
+
+    $rows = db()->query('SELECT widget_key, is_enabled FROM dashboard_widget_settings');
+    $settings = $rows !== false ? ($rows->fetchAll() ?: []) : [];
+    $enabledMap = [];
+    foreach ($settings as $row) {
+        $key = (string) ($row['widget_key'] ?? '');
+        if ($key === '') {
+            continue;
+        }
+        $enabledMap[$key] = (int) ($row['is_enabled'] ?? 0) === 1;
+    }
+
+    $filtered = [];
+    foreach ($catalog as $key => $meta) {
+        if (($enabledMap[$key] ?? true) === true) {
+            $filtered[$key] = $meta;
+        }
+    }
+
+    return $filtered;
 }
 }
 
@@ -820,6 +851,15 @@ function apply_runtime_schema_updates(): void
     }
 
 
+
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS dashboard_widget_settings (
+            widget_key VARCHAR(120) PRIMARY KEY,
+            is_enabled TINYINT(1) NOT NULL DEFAULT 1,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
     if (table_exists('dashboard_widgets')) {
         $columnStmt = db()->prepare(
             'SELECT COUNT(*) FROM information_schema.columns
@@ -852,6 +892,19 @@ function apply_runtime_schema_updates(): void
             if (!$hasColumn) {
                 db()->exec($statement);
             }
+        }
+    }
+
+
+    if (table_exists('modules')) {
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $columnStmt->execute(['modules', 'visibility']);
+        $hasVisibility = (int) $columnStmt->fetchColumn() > 0;
+        if (!$hasVisibility) {
+            db()->exec('ALTER TABLE modules ADD COLUMN visibility ENUM("public","members","admin") NOT NULL DEFAULT "members" AFTER is_enabled');
         }
     }
 
@@ -1234,10 +1287,43 @@ function module_enabled(string $module): bool
 }
 }
 
+
+if (!function_exists('module_visible_for_current_user')) {
+function module_visible_for_current_user(string $module): bool
+{
+    if ($module === '' || !table_exists('modules')) {
+        return true;
+    }
+
+    $stmt = db()->prepare('SELECT visibility FROM modules WHERE code = ? LIMIT 1');
+    $stmt->execute([$module]);
+    $visibility = (string) ($stmt->fetchColumn() ?: 'public');
+
+    if ($visibility === 'public') {
+        return true;
+    }
+
+    $user = current_user();
+    if ($user === null) {
+        return false;
+    }
+
+    if ($visibility === 'members') {
+        return true;
+    }
+
+    if ($visibility === 'admin') {
+        return has_permission('admin.access') || has_permission('modules.manage');
+    }
+
+    return false;
+}
+}
+
 if (!function_exists('require_module_enabled')) {
 function require_module_enabled(string $module): void
 {
-    if (module_enabled($module)) {
+    if (module_enabled($module) && module_visible_for_current_user($module)) {
         return;
     }
 
