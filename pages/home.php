@@ -200,24 +200,30 @@ $primaryCta = $isAuthenticated
 $newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-50" href="' . e(route_url('newsletter_public')) . '">' . e((string) $homeI18n['cta_newsletter']) . '</a>';
 
 
-$moduleCatalog = admin_module_cards_catalog($homeLocale);
+$moduleCatalog = admin_module_cards_catalog();
 
 $activeModules = [];
 $moduleCards = '';
 foreach ($moduleCatalog as $module) {
-    if (!module_enabled((string) $module['code'])) {
+    $moduleCode = (string) ($module['code'] ?? $module['module'] ?? '');
+    if ($moduleCode !== '' && !module_enabled($moduleCode)) {
         continue;
     }
 
     $activeModules[] = $module;
+    $moduleTitle = is_array($module['title'] ?? null) ? (string) (($module['title'][$homeLocale] ?? $module['title']['fr'] ?? '')) : (string) ($module['title'] ?? '');
+    $moduleDesc = is_array($module['desc'] ?? null) ? (string) (($module['desc'][$homeLocale] ?? $module['desc']['fr'] ?? '')) : (string) ($module['desc'] ?? '');
+    $moduleAudience = is_array($module['audience'] ?? null) ? (string) (($module['audience'][$homeLocale] ?? $module['audience']['fr'] ?? 'Membres')) : (string) ($module['audience'] ?? 'Membres');
+    $moduleIcon = is_array($module['icon'] ?? null) ? (string) (($module['icon'][$homeLocale] ?? $module['icon']['fr'] ?? '📦')) : (string) ($module['icon'] ?? '📦');
+
     $moduleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $module['route'])) . '">'
         . '<div class="flex items-center justify-between gap-3">'
-        . '<h3 class="text-lg font-semibold text-slate-900">' . e((string) $module['title']) . '</h3>'
-        . '<span class="text-xl" aria-hidden="true">' . e((string) $module['icon']) . '</span>'
+        . '<h3 class="text-lg font-semibold text-slate-900">' . e($moduleTitle) . '</h3>'
+        . '<span class="text-xl" aria-hidden="true">' . e($moduleIcon) . '</span>'
         . '</div>'
-        . '<p class="mt-2 text-sm text-slate-600">' . e((string) $module['desc']) . '</p>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e($moduleDesc) . '</p>'
         . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
-        . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $module['audience']) . '</span>'
+        . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e($moduleAudience) . '</span>'
         . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
         . '</div>'
         . '</a>';
