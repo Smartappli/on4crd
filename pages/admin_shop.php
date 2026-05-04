@@ -5,14 +5,19 @@ require_permission('admin.access');
 require_permission('shop.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['layout' => 'Administration boutique', 'no_orders' => 'Aucune commande.'],
-    'en' => ['layout' => 'Shop administration', 'no_orders' => 'No orders.'],
-    'de' => ['layout' => 'Shop-Verwaltung', 'no_orders' => 'Keine Bestellungen.'],
-    'nl' => ['layout' => 'Winkelbeheer', 'no_orders' => 'Geen bestellingen.'],
+    'fr' => ['layout' => 'Administration boutique', 'meta_desc' => 'Gestion des produits, catégories et commandes de la boutique.', 'no_orders' => 'Aucune commande.'],
+    'en' => ['layout' => 'Shop administration', 'meta_desc' => 'Manage shop products, categories, and orders.', 'no_orders' => 'No orders.'],
+    'de' => ['layout' => 'Shop-Verwaltung', 'meta_desc' => 'Produkte, Kategorien und Bestellungen des Shops verwalten.', 'no_orders' => 'Keine Bestellungen.'],
+    'nl' => ['layout' => 'Winkelbeheer', 'meta_desc' => 'Beheer producten, categorieën en bestellingen van de winkel.', 'no_orders' => 'Geen bestellingen.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };
+set_page_meta([
+    'title' => $t('layout'),
+    'description' => $t('meta_desc'),
+    'schema_type' => 'WebPage',
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
