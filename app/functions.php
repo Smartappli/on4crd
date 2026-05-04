@@ -1247,10 +1247,43 @@ function module_enabled(string $module): bool
 }
 }
 
+
+if (!function_exists('module_visible_for_current_user')) {
+function module_visible_for_current_user(string $module): bool
+{
+    if ($module === '' || !table_exists('modules')) {
+        return true;
+    }
+
+    $stmt = db()->prepare('SELECT visibility FROM modules WHERE code = ? LIMIT 1');
+    $stmt->execute([$module]);
+    $visibility = (string) ($stmt->fetchColumn() ?: 'public');
+
+    if ($visibility === 'public') {
+        return true;
+    }
+
+    $user = current_user();
+    if ($user === null) {
+        return false;
+    }
+
+    if ($visibility === 'members') {
+        return true;
+    }
+
+    if ($visibility === 'admin') {
+        return has_permission('admin.access') || has_permission('modules.manage');
+    }
+
+    return false;
+}
+}
+
 if (!function_exists('require_module_enabled')) {
 function require_module_enabled(string $module): void
 {
-    if (module_enabled($module)) {
+    if (module_enabled($module) && module_visible_for_current_user($module)) {
         return;
     }
 

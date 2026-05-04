@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+require_module_enabled('dashboard');
 $user = require_login();
 $locale = current_locale();
 $i18n = [
