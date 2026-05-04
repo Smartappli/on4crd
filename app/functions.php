@@ -104,12 +104,19 @@ function table_exists(string $table): bool
 if (!function_exists('current_locale')) {
 function current_locale(): string
 {
-    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($locale, ['fr', 'en', 'de', 'nl'], true)) {
-        return 'fr';
+    static $resolvedLocale = null;
+    if (is_string($resolvedLocale)) {
+        return $resolvedLocale;
     }
 
-    return $locale;
+    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    if (!in_array($locale, ['fr', 'en', 'de', 'nl'], true)) {
+        $resolvedLocale = 'fr';
+        return $resolvedLocale;
+    }
+
+    $resolvedLocale = $locale;
+    return $resolvedLocale;
 }
 }
 
@@ -121,7 +128,9 @@ function t_page(string $domain, string $key, ?string $locale = null): string
         $lang = 'fr';
     }
 
-    $messages = [
+    static $messages = null;
+    if (!is_array($messages)) {
+        $messages = [
         'press' => [
             'fr' => ['title' => 'Presse', 'body' => "La section presse sera alimentée via le module d'administration."],
             'en' => ['title' => 'Press', 'body' => 'The press section will be managed from the administration module.'],
@@ -153,6 +162,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'nl' => ['title' => 'Intern reglement', 'body' => 'Het intern reglement van de club wordt op deze pagina gepubliceerd.'],
         ],
     ];
+    }
 
     if (!isset($messages[$domain])) {
         return $key;
@@ -897,7 +907,25 @@ function random_quote_for_layout(): ?array
     if (!table_exists('quotes')) {
         return null;
     }
-    $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 ORDER BY RAND() LIMIT 1');
+
+    static $cachedQuote = null;
+    if (is_array($cachedQuote)) {
+        return $cachedQuote;
+    }
+
+    $countStmt = db()->query('SELECT COUNT(*) FROM quotes WHERE is_active = 1');
+    $activeCount = $countStmt !== false ? (int) $countStmt->fetchColumn() : 0;
+    if ($activeCount <= 0) {
+        return null;
+    }
+
+    try {
+        $offset = random_int(0, max(0, $activeCount - 1));
+    } catch (Throwable $throwable) {
+        $offset = 0;
+    }
+
+    $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
     if ($stmt === false) {
         return null;
     }
@@ -912,10 +940,12 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
-    return [
+    $cachedQuote = [
         'quote' => $quote,
         'author' => $author,
     ];
+
+    return $cachedQuote;
 }
 
 if (!function_exists('base_url')) {
@@ -2071,8 +2101,8 @@ if (!function_exists('answer_question_from_knowledge')) {
     /**
      * @return array{answer:string,source:string}
      */
-    function answer_question_from_knowledge(string $question): array
-    {
+function answer_question_from_knowledge(string $question): array
+{
         $normalized = mb_safe_strtolower(trim($question));
         if ($normalized === '') {
             return ['answer' => 'Je n’ai pas reçu de question exploitable.', 'source' => 'Assistant Raymond'];
@@ -2148,6 +2178,444 @@ if (!function_exists('answer_question_from_knowledge')) {
             'source' => 'Assistant Raymond',
         ];
     }
+}
+
+/**
+ * @param array<string,mixed> $row
+ * @return array<string,mixed>
+ */
+function localized_article_row(array $row): array
+{
+    $locale = current_locale();
+    if ($locale === 'fr') {
+        return $row;
+    }
+
+    $articleId = (int) ($row['id'] ?? 0);
+    if ($articleId <= 0 || !table_exists('article_translations')) {
+        return $row;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? ORDER BY CASE status WHEN "reviewed" THEN 0 WHEN "auto" THEN 1 ELSE 2 END, updated_at DESC LIMIT 1');
+        $stmt->execute([$articleId, $locale]);
+        $translation = $stmt->fetch();
+        if (!is_array($translation)) {
+            return $row;
+        }
+
+        foreach (['title', 'excerpt', 'content'] as $field) {
+            $value = trim((string) ($translation[$field] ?? ''));
+            if ($value !== '') {
+                $row[$field] = $value;
+            }
+        }
+    } catch (Throwable) {
+        return $row;
+    }
+
+    return $row;
+}
+
+function article_translation_upsert(int $articleId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void
+{
+    if ($articleId <= 0 || $locale === 'fr' || !table_exists('article_translations')) {
+        return;
+    }
+
+    $sourceStmt = db()->prepare('SELECT title, excerpt, content FROM articles WHERE id = ? LIMIT 1');
+    $sourceStmt->execute([$articleId]);
+    $source = $sourceStmt->fetch();
+    if (!is_array($source)) {
+        return;
+    }
+
+    $finalTitle = trim((string) ($title ?? ''));
+    $finalExcerpt = trim((string) ($summary ?? ''));
+    $finalContent = trim((string) ($content ?? ''));
+    if ($finalTitle === '') {
+        $finalTitle = (string) ($source['title'] ?? '');
+    }
+    if ($finalExcerpt === '') {
+        $finalExcerpt = (string) ($source['excerpt'] ?? '');
+    }
+    if ($finalContent === '') {
+        $finalContent = (string) ($source['content'] ?? '');
+    }
+
+    $status = ($title === null && $summary === null && $content === null) ? 'auto' : 'needs_review';
+
+    $update = db()->prepare('UPDATE article_translations SET title = ?, excerpt = ?, content = ?, status = ?, updated_at = NOW() WHERE article_id = ? AND locale = ?');
+    $update->execute([$finalTitle, $finalExcerpt, $finalContent, $status, $articleId, $locale]);
+    if ($update->rowCount() > 0) {
+        return;
+    }
+
+    db()->prepare('INSERT INTO article_translations (article_id, locale, title, excerpt, content, status) VALUES (?, ?, ?, ?, ?, ?)')
+        ->execute([$articleId, $locale, $finalTitle, $finalExcerpt, $finalContent, $status]);
+}
+
+function parse_price_to_cents(string $price): int
+{
+    $normalized = str_replace([' ', "\xc2\xa0"], '', trim($price));
+    $normalized = str_replace(',', '.', $normalized);
+    $normalized = preg_replace('/[^0-9.\-]/', '', $normalized) ?? '0';
+    if ($normalized === '' || $normalized === '-' || $normalized === '.') {
+        return 0;
+    }
+
+    return (int) max(0, round(((float) $normalized) * 100));
+}
+
+function format_price_eur(int $cents): string
+{
+    $amount = max(0, $cents) / 100;
+    return number_format($amount, 2, ',', ' ') . ' €';
+}
+
+function format_integer_or_unlimited(?int $value): string
+{
+    return $value === null ? '∞' : (string) max(0, $value);
+}
+
+/**
+ * @return array<string, array{label:string,width:int,height:int}>
+ */
+function ad_format_catalog(): array
+{
+    return [
+        'square' => ['label' => 'Carré (1080×1080)', 'width' => 1080, 'height' => 1080],
+        'landscape' => ['label' => 'Paysage (1200×628)', 'width' => 1200, 'height' => 628],
+        'portrait' => ['label' => 'Portrait (1080×1350)', 'width' => 1080, 'height' => 1350],
+    ];
+}
+
+function ad_format_label(string $formatCode): string
+{
+    $catalog = ad_format_catalog();
+    return (string) ($catalog[$formatCode]['label'] ?? $formatCode);
+}
+
+function ad_status_label(string $status): string
+{
+    return match ($status) {
+        'pending' => 'En attente',
+        'active' => 'Active',
+        'paused' => 'En pause',
+        'expired' => 'Expirée',
+        'rejected' => 'Refusée',
+        default => ucfirst($status),
+    };
+}
+
+/**
+ * @param array<string,mixed> $ad
+ */
+function ad_runtime_status(array $ad): string
+{
+    $status = (string) ($ad['status'] ?? 'pending');
+    if ($status !== 'active') {
+        return $status;
+    }
+    $endsAt = (string) ($ad['ends_at'] ?? '');
+    if ($endsAt !== '' && strtotime($endsAt) !== false && strtotime($endsAt) < time()) {
+        return 'expired';
+    }
+    return 'active';
+}
+
+/**
+ * @return array<int, array{code:string,label:string}>
+ */
+function available_ad_placements(): array
+{
+    return [
+        ['code' => 'home_hero', 'label' => 'Accueil (hero)'],
+        ['code' => 'home_sidebar', 'label' => 'Accueil (latéral)'],
+        ['code' => 'news_inline', 'label' => 'Actualités (inline)'],
+    ];
+}
+
+/**
+ * @return array<int, array{code:string,label:string}>
+ */
+function ad_placements_for_member(int $memberId): array
+{
+    return available_ad_placements();
+}
+
+/**
+ * @return array<int, array<string,mixed>>
+ */
+function member_ads(int $memberId, bool $ownerOnly = true): array
+{
+    if (!table_exists('ads')) {
+        return [];
+    }
+
+    $placementMap = [];
+    foreach (available_ad_placements() as $placement) {
+        $placementMap[(string) ($placement['code'] ?? '')] = (string) ($placement['label'] ?? '');
+    }
+
+    if ($ownerOnly) {
+        $stmt = db()->prepare('SELECT a.* FROM ads a WHERE a.owner_member_id = ? ORDER BY a.updated_at DESC, a.id DESC');
+        $stmt->execute([$memberId]);
+        $rows = $stmt->fetchAll() ?: [];
+    } else {
+        $rows = db()->query('SELECT a.* FROM ads a ORDER BY a.updated_at DESC, a.id DESC')->fetchAll() ?: [];
+    }
+
+    foreach ($rows as &$row) {
+        $row['runtime_status'] = ad_runtime_status($row);
+        $code = (string) ($row['placement_code'] ?? '');
+        $row['placement_name'] = $placementMap[$code] ?? $code;
+        $row['owner_callsign'] = (string) ($row['owner_callsign'] ?? '');
+    }
+    unset($row);
+
+    return $rows;
+}
+
+/**
+ * @return array<int, array<string,mixed>>
+ */
+function committee_members(): array
+{
+    if (!table_exists('committee_members')) {
+        return [];
+    }
+    return db()->query('SELECT * FROM committee_members WHERE is_active = 1 ORDER BY sort_order ASC, id ASC')->fetchAll() ?: [];
+}
+
+function placeholder_avatar(string $seed = '', int $size = 256): string
+{
+    return 'assets/icons/icon-192.png';
+}
+
+function editorial_text(string $slot, string $fallback = ''): string
+{
+    if (table_exists('editorial_contents')) {
+        $locale = current_locale();
+        $stmt = db()->prepare('SELECT fr, en, de, nl FROM editorial_contents WHERE slot = ? LIMIT 1');
+        $stmt->execute([$slot]);
+        $row = $stmt->fetch();
+        if (is_array($row)) {
+            $candidate = trim((string) ($row[$locale] ?? ''));
+            if ($candidate === '') {
+                $candidate = trim((string) ($row['fr'] ?? ''));
+            }
+            if ($candidate !== '') {
+                return $candidate;
+            }
+        }
+    }
+
+    $defaults = [
+        'committee.title' => 'Comité',
+        'committee.intro' => 'Présentation du comité du radio club.',
+        'committee.mission' => 'Transparence',
+        'committee.onboarding' => 'Accueil des membres',
+        'committee.contact_title' => 'Contact',
+        'committee.contact_text' => 'Le comité est disponible pour vos questions.',
+    ];
+
+    return (string) ($defaults[$slot] ?? $fallback);
+}
+
+/**
+ * @return array<string,mixed>|null
+ */
+function editorial_content_row(string $slot): ?array
+{
+    if ($slot === '' || !table_exists('editorial_contents')) {
+        return null;
+    }
+    $stmt = db()->prepare('SELECT * FROM editorial_contents WHERE slot = ? LIMIT 1');
+    $stmt->execute([$slot]);
+    $row = $stmt->fetch();
+    return is_array($row) ? $row : null;
+}
+
+function save_editorial_content(string $slot, string $fr = '', string $en = '', string $de = '', string $nl = ''): void
+{
+    if ($slot === '' || !table_exists('editorial_contents')) {
+        return;
+    }
+    $update = db()->prepare('UPDATE editorial_contents SET fr = ?, en = ?, de = ?, nl = ?, updated_at = NOW() WHERE slot = ?');
+    $update->execute([$fr, $en, $de, $nl, $slot]);
+    if ($update->rowCount() > 0) {
+        return;
+    }
+    db()->prepare('INSERT INTO editorial_contents (slot, fr, en, de, nl) VALUES (?, ?, ?, ?, ?)')
+        ->execute([$slot, $fr, $en, $de, $nl]);
+}
+
+function news_status_label(string $status): string
+{
+    return match ($status) {
+        'draft' => 'Brouillon',
+        'pending' => 'En attente',
+        'published' => 'Publié',
+        'archived' => 'Archivé',
+        default => ucfirst($status),
+    };
+}
+
+/**
+ * @return int[]
+ */
+function managed_section_ids_for_member(int $memberId): array
+{
+    if ($memberId <= 0 || !table_exists('news_section_managers')) {
+        return [];
+    }
+    $stmt = db()->prepare('SELECT section_id FROM news_section_managers WHERE member_id = ?');
+    $stmt->execute([$memberId]);
+    return array_values(array_unique(array_map('intval', array_column($stmt->fetchAll() ?: [], 'section_id'))));
+}
+
+function can_submit_news_in_section(int|array $user, int $sectionId): bool
+{
+    if ($sectionId <= 0) {
+        return false;
+    }
+    if (is_array($user) && ((int) ($user['is_admin'] ?? 0) === 1)) {
+        return true;
+    }
+    $memberId = is_array($user) ? (int) ($user['id'] ?? 0) : (int) $user;
+    if ($memberId <= 0) {
+        return false;
+    }
+    return in_array($sectionId, managed_section_ids_for_member($memberId), true);
+}
+
+function news_translation_upsert(int $newsId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void
+{
+    if ($newsId <= 0 || $locale === 'fr' || !table_exists('news_translations')) {
+        return;
+    }
+    $src = db()->prepare('SELECT title, excerpt AS summary, content FROM news_posts WHERE id = ? LIMIT 1');
+    $src->execute([$newsId]);
+    $row = $src->fetch();
+    if (!is_array($row)) {
+        return;
+    }
+    $finalTitle = trim((string) ($title ?? '')) ?: (string) ($row['title'] ?? '');
+    $finalSummary = trim((string) ($summary ?? '')) ?: (string) ($row['summary'] ?? '');
+    $finalContent = trim((string) ($content ?? '')) ?: (string) ($row['content'] ?? '');
+    $status = ($title === null && $summary === null && $content === null) ? 'auto' : 'needs_review';
+
+    $update = db()->prepare('UPDATE news_translations SET title = ?, summary = ?, content = ?, status = ?, updated_at = NOW() WHERE news_id = ? AND locale = ?');
+    $update->execute([$finalTitle, $finalSummary, $finalContent, $status, $newsId, $locale]);
+    if ($update->rowCount() > 0) {
+        return;
+    }
+    db()->prepare('INSERT INTO news_translations (news_id, locale, title, summary, content, status) VALUES (?, ?, ?, ?, ?, ?)')
+        ->execute([$newsId, $locale, $finalTitle, $finalSummary, $finalContent, $status]);
+}
+
+/**
+ * @return array<int,array<string,mixed>>
+ */
+function press_contacts(): array
+{
+    if (!table_exists('press_contacts')) {
+        return [];
+    }
+    return db()->query('SELECT * FROM press_contacts ORDER BY sort_order ASC, id ASC')->fetchAll() ?: [];
+}
+
+/**
+ * @return array<int,array<string,mixed>>
+ */
+function latest_press_releases(int $limit = 20): array
+{
+    if (!table_exists('press_releases')) {
+        return [];
+    }
+    $limit = max(1, min(100, $limit));
+    return db()->query('SELECT * FROM press_releases ORDER BY release_date DESC, id DESC LIMIT ' . (int) $limit)->fetchAll() ?: [];
+}
+
+function notify_album_webhooks(array $album): void
+{
+    if (!table_exists('webhooks')) {
+        return;
+    }
+    $targets = db()->query('SELECT url FROM webhooks WHERE is_active = 1 AND event IN ("album.updated","album.created","*")')->fetchAll() ?: [];
+    if ($targets === []) {
+        return;
+    }
+    $payload = json_encode([
+        'event' => 'album.updated',
+        'album' => [
+            'id' => (int) ($album['id'] ?? 0),
+            'title' => (string) ($album['title'] ?? ''),
+            'slug' => (string) ($album['slug'] ?? ''),
+        ],
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (!is_string($payload)) {
+        return;
+    }
+    foreach ($targets as $target) {
+        $url = trim((string) ($target['url'] ?? ''));
+        if ($url === '') {
+            continue;
+        }
+        $ctx = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'header' => "Content-Type: application/json\r\n",
+                'content' => $payload,
+                'timeout' => 3,
+                'ignore_errors' => true,
+            ],
+        ]);
+        @file_get_contents($url, false, $ctx);
+    }
+}
+
+/**
+ * @return array<string,mixed>|null
+ */
+function ad_fetch_by_id(int $adId): ?array
+{
+    if ($adId <= 0 || !table_exists('ads')) {
+        return null;
+    }
+    $stmt = db()->prepare('SELECT * FROM ads WHERE id = ? LIMIT 1');
+    $stmt->execute([$adId]);
+    $row = $stmt->fetch();
+    return is_array($row) ? $row : null;
+}
+
+/**
+ * @return array<int, array{day:string,impressions:int,clicks:int}>
+ */
+function ad_daily_stats(int $adId): array
+{
+    if ($adId <= 0 || !table_exists('ad_events')) {
+        return [];
+    }
+    $stmt = db()->prepare('SELECT DATE(created_at) AS day, SUM(event_type = "view") AS impressions, SUM(event_type = "click") AS clicks FROM ad_events WHERE ad_id = ? GROUP BY DATE(created_at) ORDER BY day DESC LIMIT 30');
+    $stmt->execute([$adId]);
+    return $stmt->fetchAll() ?: [];
+}
+
+function log_ad_event(int $adId, string $eventType, string $placementCode = ''): void
+{
+    if ($adId <= 0 || !table_exists('ad_events')) {
+        return;
+    }
+    db()->prepare('INSERT INTO ad_events (ad_id, event_type, placement_code, ip_address, user_agent) VALUES (?, ?, ?, ?, ?)')
+        ->execute([
+            $adId,
+            $eventType,
+            $placementCode,
+            (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+            substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
+        ]);
 }
 
 function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templateName = 'classic'): int
@@ -2887,6 +3355,16 @@ function client_ip_address(): string
     return trim((string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0')) ?: '0.0.0.0';
 }
 
+function cache_dir_path(): string
+{
+    $dir = __DIR__ . '/../storage/cache';
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0775, true);
+    }
+
+    return $dir;
+}
+
 function login_throttle_file(): string
 {
     return cache_dir_path() . '/login-' . hash('sha256', client_ip_address()) . '.json';
@@ -3482,6 +3960,18 @@ function auction_runtime_status(array $lot): string
     return $status === 'closed' ? 'closed' : 'active';
 }
 
+function auction_status_label(string $status): string
+{
+    return match ($status) {
+        'draft' => 'Brouillon',
+        'scheduled' => 'Planifiée',
+        'active' => 'En cours',
+        'closed' => 'Terminée',
+        'cancelled' => 'Annulée',
+        default => ucfirst($status),
+    };
+}
+
 function auction_minimum_bid_cents(array $lot): int
 {
     $current = max((int) ($lot['current_price_cents'] ?? 0), (int) ($lot['starting_price_cents'] ?? 0));
@@ -3623,6 +4113,18 @@ function admin_module_cards_catalog(): array
     ];
 }
 
+
+/**
+ * @return array<int, array{route:string,title:string,desc:string}>
+ */
+function admin_dashboard_cards(string $locale, int $userId, string $search = ''): array
+{
+    $needle = trim($search);
+    $needle = $needle !== '' ? mb_safe_strtolower($needle) : '';
+
+    return admin_cards_for_dashboard($locale, $userId, $needle);
+}
+
 /**
  * @return array<int, array{route:string,title:string,desc:string}>
  */
@@ -3652,5 +4154,3 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
         return $cards;
     });
 }
-
-

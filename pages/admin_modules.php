@@ -3,6 +3,14 @@ declare(strict_types=1);
 
 require_permission('admin.access');
 require_permission('modules.manage');
+$locale = current_locale();
+$i18n = [
+    'fr' => ['updated' => 'Modules mis à jour.', 'title' => 'Modules', 'core' => 'Cœur', 'enabled' => 'Activé', 'save' => 'Enregistrer', 'layout' => 'Modules'],
+    'en' => ['updated' => 'Modules updated.', 'title' => 'Modules', 'core' => 'Core', 'enabled' => 'Enabled', 'save' => 'Save', 'layout' => 'Modules'],
+    'de' => ['updated' => 'Module aktualisiert.', 'title' => 'Module', 'core' => 'Kern', 'enabled' => 'Aktiviert', 'save' => 'Speichern', 'layout' => 'Module'],
+    'nl' => ['updated' => 'Modules bijgewerkt.', 'title' => 'Modules', 'core' => 'Kern', 'enabled' => 'Ingeschakeld', 'save' => 'Opslaan', 'layout' => 'Modules'],
+];
+$t = $i18n[$locale] ?? $i18n['fr'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -15,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $stmt->execute([$enabled, (int) $module['id']]);
         }
-        set_flash('success', 'Modules mis à jour.');
+        set_flash('success', (string) $t['updated']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
     }
@@ -27,7 +35,7 @@ $modules = db()->query('SELECT * FROM modules ORDER BY sort_order, label')->fetc
 ob_start();
 ?>
 <div class="card">
-    <h1>Modules</h1>
+    <h1><?= e((string) $t['title']) ?></h1>
     <form method="post">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <div class="stack">
@@ -39,7 +47,7 @@ ob_start();
                     </div>
                     <div class="module-actions">
                         <?php if ((int) $module['is_core'] === 1): ?>
-                            <span class="badge muted">Cœur</span>
+                            <span class="badge muted"><?= e((string) $t['core']) ?></span>
                         <?php endif; ?>
                         <label>
                             <input type="checkbox"
@@ -47,14 +55,14 @@ ob_start();
                                    value="1"
                                    <?= (int) $module['is_enabled'] === 1 ? 'checked' : '' ?>
                                    <?= (int) $module['is_core'] === 1 ? 'disabled' : '' ?>>
-                            Activé
+                            <?= e((string) $t['enabled']) ?>
                         </label>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
-        <p><button class="button">Enregistrer</button></p>
+        <p><button class="button"><?= e((string) $t['save']) ?></button></p>
     </form>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Modules');
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);

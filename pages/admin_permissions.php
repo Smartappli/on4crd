@@ -3,6 +3,14 @@ declare(strict_types=1);
 
 require_permission('admin.access');
 $user = require_login();
+$locale = current_locale();
+$i18n = [
+    'fr' => ['role_assigned' => 'Rôle attribué.', 'title' => 'Rôles et permissions', 'th_permission' => 'Permission', 'th_label' => 'Libellé', 'assign_role' => 'Attribuer un rôle', 'member' => 'Membre', 'role' => 'Rôle', 'assign' => 'Attribuer', 'layout' => 'Permissions'],
+    'en' => ['role_assigned' => 'Role assigned.', 'title' => 'Roles and permissions', 'th_permission' => 'Permission', 'th_label' => 'Label', 'assign_role' => 'Assign a role', 'member' => 'Member', 'role' => 'Role', 'assign' => 'Assign', 'layout' => 'Permissions'],
+    'de' => ['role_assigned' => 'Rolle zugewiesen.', 'title' => 'Rollen und Berechtigungen', 'th_permission' => 'Berechtigung', 'th_label' => 'Bezeichnung', 'assign_role' => 'Rolle zuweisen', 'member' => 'Mitglied', 'role' => 'Rolle', 'assign' => 'Zuweisen', 'layout' => 'Berechtigungen'],
+    'nl' => ['role_assigned' => 'Rol toegewezen.', 'title' => 'Rollen en rechten', 'th_permission' => 'Recht', 'th_label' => 'Label', 'assign_role' => 'Rol toewijzen', 'member' => 'Lid', 'role' => 'Rol', 'assign' => 'Toewijzen', 'layout' => 'Rechten'],
+];
+$t = $i18n[$locale] ?? $i18n['fr'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -12,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (int) ($_POST['member_id'] ?? 0),
                 (int) ($_POST['role_id'] ?? 0),
             ]);
-            set_flash('success', 'Rôle attribué.');
+            set_flash('success', (string) $t['role_assigned']);
         }
         redirect('admin_permissions');
     } catch (Throwable $throwable) {
@@ -29,10 +37,10 @@ ob_start();
 ?>
 <div class="grid-2">
     <section class="card">
-        <h1>Rôles et permissions</h1>
+        <h1><?= e((string) $t['title']) ?></h1>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Permission</th><th>Libellé</th></tr></thead>
+                <thead><tr><th><?= e((string) $t['th_permission']) ?></th><th><?= e((string) $t['th_label']) ?></th></tr></thead>
                 <tbody>
                 <?php foreach ($permissions as $permission): ?>
                     <tr><td><code><?= e((string) $permission['code']) ?></code></td><td><?= e((string) $permission['label']) ?></td></tr>
@@ -43,27 +51,27 @@ ob_start();
     </section>
 
     <section class="card">
-        <h2>Attribuer un rôle</h2>
+        <h2><?= e((string) $t['assign_role']) ?></h2>
         <form method="post">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="assign_role">
-            <label>Membre
+            <label><?= e((string) $t['member']) ?>
                 <select name="member_id">
                     <?php foreach ($members as $member): ?>
                         <option value="<?= (int) $member['id'] ?>"><?= e((string) $member['callsign']) ?> — <?= e((string) $member['full_name']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label>Rôle
+            <label><?= e((string) $t['role']) ?>
                 <select name="role_id">
                     <?php foreach ($roles as $role): ?>
                         <option value="<?= (int) $role['id'] ?>"><?= e((string) $role['label']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
-            <p><button class="button">Attribuer</button></p>
+            <p><button class="button"><?= e((string) $t['assign']) ?></button></p>
         </form>
     </section>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Permissions');
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);

@@ -4,10 +4,18 @@ declare(strict_types=1);
 require_permission('admin.access');
 $user = require_login();
 newsletter_ensure_tables();
+$locale = current_locale();
+$i18n = [
+    'fr' => ['meta_title' => 'Administration newsletter', 'meta_desc' => 'Gestion des abonnés et campagnes newsletter.', 'layout' => 'Administration newsletter'],
+    'en' => ['meta_title' => 'Newsletter administration', 'meta_desc' => 'Manage subscribers and newsletter campaigns.', 'layout' => 'Newsletter administration'],
+    'de' => ['meta_title' => 'Newsletter-Verwaltung', 'meta_desc' => 'Verwalten Sie Abonnenten und Newsletter-Kampagnen.', 'layout' => 'Newsletter-Verwaltung'],
+    'nl' => ['meta_title' => 'Nieuwsbriefbeheer', 'meta_desc' => 'Beheer abonnees en nieuwsbriefcampagnes.', 'layout' => 'Nieuwsbriefbeheer'],
+];
+$t = $i18n[$locale] ?? $i18n['fr'];
 
 set_page_meta([
-    'title' => 'Administration newsletter',
-    'description' => 'Gestion des abonnés et campagnes newsletter.',
+    'title' => (string) $t['meta_title'],
+    'description' => (string) $t['meta_desc'],
     'robots' => 'noindex,nofollow',
 ]);
 
@@ -168,4 +176,4 @@ ob_start();
 </div>
 <?php
 
-echo render_layout((string) ob_get_clean(), 'Administration newsletter');
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);

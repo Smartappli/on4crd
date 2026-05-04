@@ -85,3 +85,5 @@ if (!function_exists('press_contacts')) { function press_contacts(): array { ret
 if (!function_exists('latest_press_releases')) { function latest_press_releases(int $limit = 20): array { return []; } }
 
 function admin_dashboard_translations(string $locale): array { return []; }
+
+function admin_dashboard_cards(string $locale, int $userId, string $search = ''): array { return []; }

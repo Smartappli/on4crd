@@ -6,10 +6,8 @@ $locale = current_locale();
 $t = admin_dashboard_translations($locale);
 
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
-$adminSearchNeedle = $adminSearch !== '' ? mb_safe_strtolower($adminSearch) : '';
-
 $userId = (int) (current_user()['id'] ?? 0);
-$cards = admin_cards_for_dashboard($locale, $userId, $adminSearchNeedle);
+$cards = admin_dashboard_cards($locale, $userId, $adminSearch);
 
 ob_start();
 ?>

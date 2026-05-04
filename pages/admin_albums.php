@@ -4,10 +4,10 @@ declare(strict_types=1);
 require_permission('albums.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['invalid_album' => 'Album invalide.', 'uploaded_count' => 'photo(s) ajoutée(s).', 'no_photo_imported' => 'Aucune photo importée.', 'created_thumbs' => 'thumbnail(s) généré(s).', 'manage_title' => 'Gestion des albums', 'photos_editor' => 'Éditer les photos', 'page' => 'Page', 'previous' => 'Précédent', 'next' => 'Suivant', 'create_album' => 'Créer un album', 'add_photo' => 'Ajouter une photo', 'upload' => 'Téléverser', 'rebuild_thumbs' => 'Régénérer les thumbnails', 'title' => 'Titre', 'description' => 'Description', 'public_album' => 'Album public', 'photo_title' => 'Titre photo', 'caption' => 'Légende', 'files_dropzone' => 'Fichiers image (dropzone)', 'albums' => 'Albums', 'created_at' => 'Créé'],
-    'en' => ['invalid_album' => 'Invalid album.', 'uploaded_count' => 'photo(s) added.', 'no_photo_imported' => 'No photo imported.', 'created_thumbs' => 'thumbnail(s) generated.', 'manage_title' => 'Album management', 'photos_editor' => 'Edit photos', 'page' => 'Page', 'previous' => 'Previous', 'next' => 'Next', 'create_album' => 'Create album', 'add_photo' => 'Add photo', 'upload' => 'Upload', 'rebuild_thumbs' => 'Rebuild thumbnails', 'title' => 'Title', 'description' => 'Description', 'public_album' => 'Public album', 'photo_title' => 'Photo title', 'caption' => 'Caption', 'files_dropzone' => 'Image files (dropzone)', 'albums' => 'Albums', 'created_at' => 'Created'],
-    'de' => ['invalid_album' => 'Ungültiges Album.', 'uploaded_count' => 'Foto(s) hinzugefügt.', 'no_photo_imported' => 'Kein Foto importiert.', 'created_thumbs' => 'Thumbnail(s) erzeugt.', 'manage_title' => 'Albumverwaltung', 'photos_editor' => 'Fotos bearbeiten', 'page' => 'Seite', 'previous' => 'Zurück', 'next' => 'Weiter', 'create_album' => 'Album erstellen', 'add_photo' => 'Foto hinzufügen', 'upload' => 'Hochladen', 'rebuild_thumbs' => 'Thumbnails neu erzeugen', 'title' => 'Titel', 'description' => 'Beschreibung', 'public_album' => 'Öffentliches Album', 'photo_title' => 'Fototitel', 'caption' => 'Bildunterschrift', 'files_dropzone' => 'Bilddateien (Dropzone)', 'albums' => 'Alben', 'created_at' => 'Erstellt'],
-    'nl' => ['invalid_album' => 'Ongeldig album.', 'uploaded_count' => 'foto(\'s) toegevoegd.', 'no_photo_imported' => 'Geen foto geïmporteerd.', 'created_thumbs' => 'thumbnail(s) gegenereerd.', 'manage_title' => 'Albumbeheer', 'photos_editor' => 'Foto\'s bewerken', 'page' => 'Pagina', 'previous' => 'Vorige', 'next' => 'Volgende', 'create_album' => 'Album maken', 'add_photo' => 'Foto toevoegen', 'upload' => 'Uploaden', 'rebuild_thumbs' => 'Thumbnails opnieuw opbouwen', 'title' => 'Titel', 'description' => 'Beschrijving', 'public_album' => 'Openbaar album', 'photo_title' => 'Fototitel', 'caption' => 'Bijschrift', 'files_dropzone' => 'Afbeeldingsbestanden (dropzone)', 'albums' => 'Albums', 'created_at' => 'Aangemaakt'],
+    'fr' => ['invalid_album' => 'Album invalide.', 'uploaded_count' => 'photo(s) ajoutée(s).', 'no_photo_imported' => 'Aucune photo importée.', 'created_thumbs' => 'thumbnail(s) généré(s).', 'manage_title' => 'Gestion des albums', 'photos_editor' => 'Éditer les photos', 'page' => 'Page', 'previous' => 'Précédent', 'next' => 'Suivant', 'create_album' => 'Créer un album', 'add_photo' => 'Ajouter une photo', 'upload' => 'Téléverser', 'rebuild_thumbs' => 'Régénérer les thumbnails', 'title' => 'Titre', 'description' => 'Description', 'public_album' => 'Album public', 'photo_title' => 'Titre photo', 'caption' => 'Légende', 'files_dropzone' => 'Fichiers image (dropzone)', 'albums' => 'Albums', 'created_at' => 'Créé', 'created_ok' => 'Album créé.', 'updated_ok' => 'Album mis à jour.', 'photo_updated_ok' => 'Photo mise à jour.', 'photo_deleted_ok' => 'Photo supprimée.', 'album_label' => 'Album', 'dropzone_hint' => 'Glissez-déposez vos photos ici ou cliquez pour sélectionner.', 'yes' => 'Oui', 'no' => 'Non', 'edit_albums' => 'Éditer les albums', 'save' => 'Enregistrer', 'album_word' => 'Album', 'update' => 'Mettre à jour', 'delete' => 'Supprimer', 'ready_files' => 'fichier(s) prêt(s) à être importé(s).'],
+    'en' => ['invalid_album' => 'Invalid album.', 'uploaded_count' => 'photo(s) added.', 'no_photo_imported' => 'No photo imported.', 'created_thumbs' => 'thumbnail(s) generated.', 'manage_title' => 'Album management', 'photos_editor' => 'Edit photos', 'page' => 'Page', 'previous' => 'Previous', 'next' => 'Next', 'create_album' => 'Create album', 'add_photo' => 'Add photo', 'upload' => 'Upload', 'rebuild_thumbs' => 'Rebuild thumbnails', 'title' => 'Title', 'description' => 'Description', 'public_album' => 'Public album', 'photo_title' => 'Photo title', 'caption' => 'Caption', 'files_dropzone' => 'Image files (dropzone)', 'albums' => 'Albums', 'created_at' => 'Created', 'created_ok' => 'Album created.', 'updated_ok' => 'Album updated.', 'photo_updated_ok' => 'Photo updated.', 'photo_deleted_ok' => 'Photo deleted.', 'album_label' => 'Album', 'dropzone_hint' => 'Drag and drop your photos here or click to select.', 'yes' => 'Yes', 'no' => 'No', 'edit_albums' => 'Edit albums', 'save' => 'Save', 'album_word' => 'Album', 'update' => 'Update', 'delete' => 'Delete', 'ready_files' => 'file(s) ready to import.'],
+    'de' => ['invalid_album' => 'Ungültiges Album.', 'uploaded_count' => 'Foto(s) hinzugefügt.', 'no_photo_imported' => 'Kein Foto importiert.', 'created_thumbs' => 'Thumbnail(s) erzeugt.', 'manage_title' => 'Albumverwaltung', 'photos_editor' => 'Fotos bearbeiten', 'page' => 'Seite', 'previous' => 'Zurück', 'next' => 'Weiter', 'create_album' => 'Album erstellen', 'add_photo' => 'Foto hinzufügen', 'upload' => 'Hochladen', 'rebuild_thumbs' => 'Thumbnails neu erzeugen', 'title' => 'Titel', 'description' => 'Beschreibung', 'public_album' => 'Öffentliches Album', 'photo_title' => 'Fototitel', 'caption' => 'Bildunterschrift', 'files_dropzone' => 'Bilddateien (Dropzone)', 'albums' => 'Alben', 'created_at' => 'Erstellt', 'created_ok' => 'Album erstellt.', 'updated_ok' => 'Album aktualisiert.', 'photo_updated_ok' => 'Foto aktualisiert.', 'photo_deleted_ok' => 'Foto gelöscht.', 'album_label' => 'Album', 'dropzone_hint' => 'Fotos hierher ziehen oder klicken, um auszuwählen.', 'yes' => 'Ja', 'no' => 'Nein', 'edit_albums' => 'Alben bearbeiten', 'save' => 'Speichern', 'album_word' => 'Album', 'update' => 'Aktualisieren', 'delete' => 'Löschen', 'ready_files' => 'Datei(en) bereit zum Import.'],
+    'nl' => ['invalid_album' => 'Ongeldig album.', 'uploaded_count' => 'foto(\'s) toegevoegd.', 'no_photo_imported' => 'Geen foto geïmporteerd.', 'created_thumbs' => 'thumbnail(s) gegenereerd.', 'manage_title' => 'Albumbeheer', 'photos_editor' => 'Foto\'s bewerken', 'page' => 'Pagina', 'previous' => 'Vorige', 'next' => 'Volgende', 'create_album' => 'Album maken', 'add_photo' => 'Foto toevoegen', 'upload' => 'Uploaden', 'rebuild_thumbs' => 'Thumbnails opnieuw opbouwen', 'title' => 'Titel', 'description' => 'Beschrijving', 'public_album' => 'Openbaar album', 'photo_title' => 'Fototitel', 'caption' => 'Bijschrift', 'files_dropzone' => 'Afbeeldingsbestanden (dropzone)', 'albums' => 'Albums', 'created_at' => 'Aangemaakt', 'created_ok' => 'Album aangemaakt.', 'updated_ok' => 'Album bijgewerkt.', 'photo_updated_ok' => 'Foto bijgewerkt.', 'photo_deleted_ok' => 'Foto verwijderd.', 'album_label' => 'Album', 'dropzone_hint' => 'Sleep je foto\'s hierheen of klik om te selecteren.', 'yes' => 'Ja', 'no' => 'Nee', 'edit_albums' => 'Albums bewerken', 'save' => 'Opslaan', 'album_word' => 'Album', 'update' => 'Bijwerken', 'delete' => 'Verwijderen', 'ready_files' => 'bestand(en) klaar om te importeren.'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $description = trim((string) ($_POST['description'] ?? ''));
             $isPublic = isset($_POST['is_public']) ? 1 : 0;
             db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, ?)')->execute([$title, $description, $isPublic]);
-            set_flash('success', 'Album créé.');
+            set_flash('success', (string) $t['created_ok']);
             redirect('admin_albums');
         }
 
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
             db()->prepare('UPDATE albums SET title = ?, description = ?, is_public = ? WHERE id = ?')->execute([$title, $description, $isPublic, $albumId]);
-            set_flash('success', 'Album mis à jour.');
+            set_flash('success', (string) $t['updated_ok']);
             redirect('admin_albums');
         }
         if ($action === 'update_photo') {
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
             db()->prepare('UPDATE album_photos SET title = ?, caption = ? WHERE id = ?')->execute([$title, $caption, $photoId]);
-            set_flash('success', 'Photo mise à jour.');
+            set_flash('success', (string) $t['photo_updated_ok']);
             redirect('admin_albums');
         }
         if ($action === 'delete_photo') {
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (is_array($photoRow)) {
                 delete_album_photo_files((string) ($photoRow['file_path'] ?? ''));
             }
-            set_flash('success', 'Photo supprimée.');
+            set_flash('success', (string) $t['photo_deleted_ok']);
             redirect('admin_albums');
         }
         if ($action === 'rebuild_thumbnails') {
@@ -166,7 +166,7 @@ ob_start();
                 <textarea name="description" rows="4"></textarea>
             </label>
             <label><input type="checkbox" name="is_public" checked> <?= e((string) $t['public_album']) ?></label>
-            <button class="button">Créer l’album</button>
+            <button class="button"><?= e((string) $t['create_album']) ?></button>
         </form>
 </section>
 <section class="card">
@@ -174,7 +174,7 @@ ob_start();
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="upload_photo">
-            <label>Album
+            <label><?= e((string) $t['album_label']) ?>
                 <select name="album_id" required>
                     <?php foreach ($albums as $album): ?>
                         <option value="<?= (int) $album['id'] ?>"><?= e((string) $album['title']) ?></option>
@@ -189,7 +189,7 @@ ob_start();
             </label>
             <label><?= e((string) $t['files_dropzone']) ?>
                 <div id="album-dropzone" class="card" style="border:2px dashed #93c5fd;padding:14px;text-align:center;cursor:pointer;">
-                    Glissez-déposez vos photos ici ou cliquez pour sélectionner.
+                    <?= e((string) $t['dropzone_hint']) ?>
                 </div>
                 <input id="album-photos-input" type="file" name="photos[]" accept="image/*" multiple required style="display:none;">
             </label>
@@ -209,14 +209,14 @@ ob_start();
             <thead><tr><th><?= e((string) $t['title']) ?></th><th><?= e((string) $t['public_album']) ?></th><th><?= e((string) $t['photos_editor']) ?></th><th><?= e((string) $t['created_at']) ?></th></tr></thead>
             <tbody>
             <?php foreach ($albums as $album): ?>
-                <tr><td><?= e((string) $album['title']) ?></td><td><?= (int) $album['is_public'] === 1 ? 'Oui' : 'Non' ?></td><td><?= (int) $album['photo_count'] ?></td><td><?= e((string) $album['created_at']) ?></td></tr>
+                <tr><td><?= e((string) $album['title']) ?></td><td><?= (int) $album['is_public'] === 1 ? (string) $t['yes'] : (string) $t['no'] ?></td><td><?= (int) $album['photo_count'] ?></td><td><?= e((string) $album['created_at']) ?></td></tr>
             <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </section>
 <section class="card">
-    <h2>Éditer les albums</h2>
+    <h2><?= e((string) $t['edit_albums']) ?></h2>
     <div class="stack">
         <?php foreach ($albums as $album): ?>
             <article class="article-item">
@@ -224,14 +224,14 @@ ob_start();
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_album">
                     <input type="hidden" name="album_id" value="<?= (int) $album['id'] ?>">
-                    <label>Titre
+                    <label><?= e((string) $t['title']) ?>
                         <input type="text" name="title" value="<?= e((string) $album['title']) ?>" required>
                     </label>
-                    <label><input type="checkbox" name="is_public" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> Album public</label>
-                    <label style="grid-column:1 / -1;">Description
+                    <label><input type="checkbox" name="is_public" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['public_album']) ?></label>
+                    <label style="grid-column:1 / -1;"><?= e((string) $t['description']) ?>
                         <textarea name="description" rows="3"><?= e((string) ($album['description'] ?? '')) ?></textarea>
                     </label>
-                    <div><button class="button small" type="submit">Enregistrer</button></div>
+                    <div><button class="button small" type="submit"><?= e((string) $t['save']) ?></button></div>
                 </form>
             </article>
         <?php endforeach; ?>
@@ -242,26 +242,26 @@ ob_start();
     <div class="stack">
         <?php foreach ($photos as $photo): ?>
             <article class="article-item">
-                <p class="help">Album : <?= e((string) $photo['album_title']) ?></p>
+                <p class="help"><?= e((string) $t['album_word']) ?> : <?= e((string) $photo['album_title']) ?></p>
                 <form method="post" class="grid-2">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="update_photo">
                     <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
-                    <label>Titre
+                    <label><?= e((string) $t['title']) ?>
                         <input type="text" name="title" value="<?= e((string) $photo['title']) ?>" required>
                     </label>
-                    <label style="grid-column:1 / -1;">Légende
+                    <label style="grid-column:1 / -1;"><?= e((string) $t['caption']) ?>
                         <textarea name="caption" rows="2"><?= e((string) ($photo['caption'] ?? '')) ?></textarea>
                     </label>
                     <div class="actions">
-                        <button class="button small" type="submit">Mettre à jour</button>
+                        <button class="button small" type="submit"><?= e((string) $t['update']) ?></button>
                     </div>
                 </form>
                 <form method="post" style="margin-top:8px;">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_photo">
                     <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
-                    <button class="button small secondary" type="submit">Supprimer</button>
+                    <button class="button small secondary" type="submit"><?= e((string) $t['delete']) ?></button>
                 </form>
             </article>
         <?php endforeach; ?>
@@ -303,12 +303,12 @@ echo render_layout((string) ob_get_clean(), (string) $t['manage_title']);
         const files = event.dataTransfer?.files;
         if (!files || files.length === 0) return;
         input.files = files;
-        dropzone.textContent = files.length + ' fichier(s) prêt(s) à être importé(s).';
+        dropzone.textContent = files.length + ' ' + <?= json_encode((string) $t['ready_files']) ?>;
     });
     input.addEventListener('change', () => {
         const count = input.files?.length || 0;
         if (count > 0) {
-            dropzone.textContent = count + ' fichier(s) prêt(s) à être importé(s).';
+            dropzone.textContent = count + ' ' + <?= json_encode((string) $t['ready_files']) ?>;
         }
     });
 })();

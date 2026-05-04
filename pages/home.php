@@ -355,6 +355,7 @@ $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = render_widget('open_meteo');
 $homePropagationHtml = render_widget('propagation');
 $homeHamAdviceHtml = render_ham_weather_advice(current_user() ?? []);
+$hamWeatherRefreshUrl = base_url('index.php?' . http_build_query(['route' => 'home', 'ajax' => 'ham_weather']));
 $homeRadioInfoHtml = '<div class="grid gap-4">'
     . '<section>'
     . '<h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ham_info_title']) . '</h4>'
@@ -419,7 +420,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="grid gap-4">'
     . '<aside class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Météo radioamateur">'
     . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['ham_weather']) . '</h2>'
-    . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4" data-ham-weather-root data-refresh-ms="900000" data-refresh-url="' . e(route_url('home', ['ajax' => 'ham_weather'])) . '" data-updated-label="' . e((string) $homeI18n['weather_updated']) . '">'
+    . '<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4" data-ham-weather-root data-refresh-ms="900000" data-refresh-url="' . e($hamWeatherRefreshUrl) . '" data-updated-label="' . e((string) $homeI18n['weather_updated']) . '">'
     . '<div class="grid gap-3">'
     . '<section data-ham-weather-weather>' . $homeWeatherHtml . '</section>'
     . '<section data-ham-weather-propagation>' . $homePropagationHtml . '</section>'
