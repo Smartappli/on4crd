@@ -210,15 +210,15 @@ foreach ($moduleCatalog as $module) {
     }
 
     $activeModules[] = $module;
-    $moduleCards .= '<a class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url((string) $module['route'])) . '">'
+    $moduleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $module['route'])) . '">'
         . '<div class="flex items-center justify-between gap-3">'
         . '<h3 class="text-lg font-semibold text-slate-900">' . e((string) $module['title']) . '</h3>'
         . '<span class="text-xl" aria-hidden="true">' . e((string) $module['icon']) . '</span>'
         . '</div>'
         . '<p class="mt-2 text-sm text-slate-600">' . e((string) $module['desc']) . '</p>'
-        . '<div class="mt-4 flex items-center justify-between">'
+        . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
         . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $module['audience']) . '</span>'
-        . '<span class="text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) $homeI18n['open']) . ' →</span>'
+        . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
         . '</div>'
         . '</a>';
 }
