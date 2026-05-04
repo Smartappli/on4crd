@@ -5,10 +5,10 @@ require_permission('admin.access');
 require_permission('shop.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['layout' => 'Administration boutique', 'meta_desc' => 'Gestion des produits, catégories et commandes de la boutique.', 'no_orders' => 'Aucune commande.'],
-    'en' => ['layout' => 'Shop administration', 'meta_desc' => 'Manage shop products, categories, and orders.', 'no_orders' => 'No orders.'],
-    'de' => ['layout' => 'Shop-Verwaltung', 'meta_desc' => 'Produkte, Kategorien und Bestellungen des Shops verwalten.', 'no_orders' => 'Keine Bestellungen.'],
-    'nl' => ['layout' => 'Winkelbeheer', 'meta_desc' => 'Beheer producten, categorieën en bestellingen van de winkel.', 'no_orders' => 'Geen bestellingen.'],
+    'fr' => ['layout' => 'Administration boutique', 'meta_desc' => 'Gestion des produits, catégories et commandes de la boutique.', 'no_orders' => 'Aucune commande.', 'err_category_required' => 'Nom de catégorie obligatoire.', 'ok_category_saved' => 'Catégorie enregistrée.', 'err_product_title_required' => 'Titre produit obligatoire.', 'ok_product_saved' => 'Produit enregistré.', 'ok_order_updated' => 'Commande mise à jour.'],
+    'en' => ['layout' => 'Shop administration', 'meta_desc' => 'Manage shop products, categories, and orders.', 'no_orders' => 'No orders.', 'err_category_required' => 'Category name is required.', 'ok_category_saved' => 'Category saved.', 'err_product_title_required' => 'Product title is required.', 'ok_product_saved' => 'Product saved.', 'ok_order_updated' => 'Order updated.'],
+    'de' => ['layout' => 'Shop-Verwaltung', 'meta_desc' => 'Produkte, Kategorien und Bestellungen des Shops verwalten.', 'no_orders' => 'Keine Bestellungen.', 'err_category_required' => 'Kategoriename ist erforderlich.', 'ok_category_saved' => 'Kategorie gespeichert.', 'err_product_title_required' => 'Produkttitel ist erforderlich.', 'ok_product_saved' => 'Produkt gespeichert.', 'ok_order_updated' => 'Bestellung aktualisiert.'],
+    'nl' => ['layout' => 'Winkelbeheer', 'meta_desc' => 'Beheer producten, categorieën en bestellingen van de winkel.', 'no_orders' => 'Geen bestellingen.', 'err_category_required' => 'Categorienaam is verplicht.', 'ok_category_saved' => 'Categorie opgeslagen.', 'err_product_title_required' => 'Producttitel is verplicht.', 'ok_product_saved' => 'Product opgeslagen.', 'ok_order_updated' => 'Bestelling bijgewerkt.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int) ($_POST['id'] ?? 0);
             $name = trim((string) ($_POST['name'] ?? ''));
             if ($name === '') {
-                throw new RuntimeException('Nom de catégorie obligatoire.');
+                throw new RuntimeException($t('err_category_required'));
             }
             $slug = trim((string) ($_POST['slug'] ?? ''));
             if ($slug === '') {
@@ -48,12 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             cache_forget('shop_categories_v1');
             cache_forget('shop_public_products_v1');
-            set_flash('success', 'Catégorie enregistrée.');
+            set_flash('success', $t('ok_category_saved'));
         } elseif ($action === 'save_product') {
             $id = (int) ($_POST['id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
             if ($title === '') {
-                throw new RuntimeException('Titre produit obligatoire.');
+                throw new RuntimeException($t('err_product_title_required'));
             }
             $slug = trim((string) ($_POST['slug'] ?? ''));
             if ($slug === '') {
@@ -80,13 +80,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('INSERT INTO shop_products (category_id, slug, title, summary, description, price_cents, stock_qty, image_url, is_featured, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')->execute($params);
             }
             cache_forget('shop_public_products_v1');
-            set_flash('success', 'Produit enregistré.');
+            set_flash('success', $t('ok_product_saved'));
         } elseif ($action === 'save_order_status') {
             db()->prepare('UPDATE shop_orders SET status = ? WHERE id = ?')->execute([
                 (string) ($_POST['status'] ?? 'pending'),
                 (int) ($_POST['order_id'] ?? 0),
             ]);
-            set_flash('success', 'Commande mise à jour.');
+            set_flash('success', $t('ok_order_updated'));
         }
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
