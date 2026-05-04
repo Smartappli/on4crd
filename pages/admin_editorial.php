@@ -13,16 +13,27 @@ $keys = [
     'press.contact' => 'Presse — contact',
 ];
 
+$fieldMap = [
+    'committee_title' => 'committee.title',
+    'committee_intro' => 'committee.intro',
+    'committee_mission' => 'committee.mission',
+    'press_title' => 'press.title',
+    'press_intro' => 'press.intro',
+    'press_contact' => 'press.contact',
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
-        foreach ($keys as $contentKey => $_label) {
+        $payload = is_array($_POST['content'] ?? null) ? $_POST['content'] : [];
+        foreach ($fieldMap as $fieldKey => $contentKey) {
+            $row = is_array($payload[$fieldKey] ?? null) ? $payload[$fieldKey] : [];
             save_editorial_content(
                 $contentKey,
-                (string) ($_POST[$contentKey]['fr'] ?? ''),
-                (string) ($_POST[$contentKey]['en'] ?? ''),
-                (string) ($_POST[$contentKey]['de'] ?? ''),
-                (string) ($_POST[$contentKey]['nl'] ?? '')
+                (string) ($row['fr'] ?? ''),
+                (string) ($row['en'] ?? ''),
+                (string) ($row['de'] ?? ''),
+                (string) ($row['nl'] ?? '')
             );
         }
         set_flash('success', 'Contenus éditoriaux mis à jour.');
@@ -41,21 +52,28 @@ ob_start();
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <div class="stack">
             <?php foreach ($keys as $contentKey => $label): ?>
-                <?php $entry = editorial_content_row($contentKey); ?>
+                <?php
+                    $entry = editorial_content_row($contentKey) ?? [];
+                    $fieldKey = array_search($contentKey, $fieldMap, true);
+                    $frValue = (string) ($entry['fr'] ?? $entry['fr_text'] ?? '');
+                    $enValue = (string) ($entry['en'] ?? $entry['en_text'] ?? '');
+                    $deValue = (string) ($entry['de'] ?? $entry['de_text'] ?? '');
+                    $nlValue = (string) ($entry['nl'] ?? $entry['nl_text'] ?? '');
+                ?>
                 <section class="card muted-card">
                     <h2><?= e($label) ?></h2>
                     <div class="grid-2">
                         <label>Français (source)
-                            <textarea name="<?= e($contentKey) ?>[fr]" rows="4"><?= e((string) ($entry['fr_text'] ?? '')) ?></textarea>
+                            <textarea name="content[<?= e((string) $fieldKey) ?>][fr]" rows="4"><?= e($frValue) ?></textarea>
                         </label>
                         <label>English
-                            <textarea name="<?= e($contentKey) ?>[en]" rows="4"><?= e((string) ($entry['en_text'] ?? '')) ?></textarea>
+                            <textarea name="content[<?= e((string) $fieldKey) ?>][en]" rows="4"><?= e($enValue) ?></textarea>
                         </label>
                         <label>Deutsch
-                            <textarea name="<?= e($contentKey) ?>[de]" rows="4"><?= e((string) ($entry['de_text'] ?? '')) ?></textarea>
+                            <textarea name="content[<?= e((string) $fieldKey) ?>][de]" rows="4"><?= e($deValue) ?></textarea>
                         </label>
                         <label>Nederlands
-                            <textarea name="<?= e($contentKey) ?>[nl]" rows="4"><?= e((string) ($entry['nl_text'] ?? '')) ?></textarea>
+                            <textarea name="content[<?= e((string) $fieldKey) ?>][nl]" rows="4"><?= e($nlValue) ?></textarea>
                         </label>
                     </div>
                 </section>

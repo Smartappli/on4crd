@@ -152,7 +152,7 @@ ob_start();
             <label>Description<textarea name="description" rows="5"><?= e((string) ($editProduct['description'] ?? '')) ?></textarea></label>
             <div class="grid-2">
                 <label>Prix (€)<input type="text" name="price" value="<?= e(number_format(((int) ($editProduct['price_cents'] ?? 0)) / 100, 2, ',', '')) ?>"></label>
-                <label>Stock (laisser vide pour illimité)<input type="text" name="stock_qty" value="<?= e(array_key_exists('stock_qty', $editProduct) ? (string) ($editProduct['stock_qty'] ?? '') : '') ?>"></label>
+                <label>Stock (laisser vide pour illimité)<input type="text" name="stock_qty" value="<?= e(is_array($editProduct) && array_key_exists('stock_qty', $editProduct) ? (string) ($editProduct['stock_qty'] ?? '') : '') ?>"></label>
             </div>
             <label>Image URL<input type="text" name="image_url" value="<?= e((string) ($editProduct['image_url'] ?? '')) ?>"></label>
             <div class="grid-2">
