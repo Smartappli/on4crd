@@ -2,6 +2,16 @@
 declare(strict_types=1);
 
 require_permission('articles.manage');
+$locale = current_locale();
+$i18n = [
+    'fr' => ['layout' => 'Articles'],
+    'en' => ['layout' => 'Articles'],
+    'de' => ['layout' => 'Artikel'],
+    'nl' => ['layout' => 'Artikelen'],
+];
+$t = static function (string $key) use ($locale, $i18n): string {
+    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+};
 
 /**
  * @return array{excerpt:string,content:string}
@@ -274,4 +284,4 @@ ob_start();
 })();
 </script>
 <?php
-echo render_layout((string) ob_get_clean(), 'Articles');
+echo render_layout((string) ob_get_clean(), $t('layout'));

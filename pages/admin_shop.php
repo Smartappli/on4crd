@@ -3,6 +3,16 @@ declare(strict_types=1);
 
 require_permission('admin.access');
 require_permission('shop.manage');
+$locale = current_locale();
+$i18n = [
+    'fr' => ['layout' => 'Administration boutique', 'no_orders' => 'Aucune commande.'],
+    'en' => ['layout' => 'Shop administration', 'no_orders' => 'No orders.'],
+    'de' => ['layout' => 'Shop-Verwaltung', 'no_orders' => 'Keine Bestellungen.'],
+    'nl' => ['layout' => 'Winkelbeheer', 'no_orders' => 'Geen bestellingen.'],
+];
+$t = static function (string $key) use ($locale, $i18n): string {
+    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+};
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -204,11 +214,11 @@ ob_start();
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                <?php if ($orders === []): ?><tr><td colspan="5">Aucune commande.</td></tr><?php endif; ?>
+                <?php if ($orders === []): ?><tr><td colspan="5"><?= e($t('no_orders')) ?></td></tr><?php endif; ?>
                 </tbody>
             </table>
         </div>
     </section>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Administration boutique');
+echo render_layout((string) ob_get_clean(), $t('layout'));
