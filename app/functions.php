@@ -855,6 +855,19 @@ function apply_runtime_schema_updates(): void
         }
     }
 
+
+    if (table_exists('modules')) {
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $columnStmt->execute(['modules', 'visibility']);
+        $hasVisibility = (int) $columnStmt->fetchColumn() > 0;
+        if (!$hasVisibility) {
+            db()->exec('ALTER TABLE modules ADD COLUMN visibility ENUM("public","members","admin") NOT NULL DEFAULT "members" AFTER is_enabled');
+        }
+    }
+
     db()->exec(
         'CREATE TABLE IF NOT EXISTS quotes (
             id INT AUTO_INCREMENT PRIMARY KEY,
