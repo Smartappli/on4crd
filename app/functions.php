@@ -1460,7 +1460,7 @@ function render_layout(string $content, string $title = ''): string
         'fr' => [
             'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Boutique', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
             'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_auctions' => 'Enchères',
-            'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'logout' => 'Déconnexion', 'login' => 'Connexion',
+            'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'account_admin' => 'Administration', 'logout' => 'Déconnexion', 'login' => 'Connexion',
             'theme_light' => 'Clair', 'theme_dark' => 'Sombre',
             'accent_blue' => 'Bleu', 'accent_emerald' => 'Émeraude', 'accent_violet' => 'Violet', 'accent_red' => 'Rouge', 'accent_amber' => 'Ambre', 'accent_orange' => 'Orange',
             'language_choice' => 'Choix de la langue', 'language_help' => 'Sélecteur de langue du site. Le changement est appliqué automatiquement.',
@@ -1471,7 +1471,7 @@ function render_layout(string $content, string $title = ''): string
         'en' => [
             'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_auctions' => 'Auctions',
-            'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'logout' => 'Log out', 'login' => 'Log in',
+            'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
             'theme_light' => 'Light', 'theme_dark' => 'Dark',
             'accent_blue' => 'Blue', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Red', 'accent_amber' => 'Amber', 'accent_orange' => 'Orange',
             'language_choice' => 'Language selection', 'language_help' => 'Site language selector. Changes are applied automatically.',
@@ -1482,7 +1482,7 @@ function render_layout(string $content, string $title = ''): string
         'de' => [
             'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_auctions' => 'Auktionen',
-            'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'logout' => 'Abmelden', 'login' => 'Anmelden',
+            'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'account_admin' => 'Verwaltung', 'logout' => 'Abmelden', 'login' => 'Anmelden',
             'theme_light' => 'Hell', 'theme_dark' => 'Dunkel',
             'accent_blue' => 'Blau', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violett', 'accent_red' => 'Rot', 'accent_amber' => 'Bernstein', 'accent_orange' => 'Orange',
             'language_choice' => 'Sprachauswahl', 'language_help' => 'Sprachauswahl der Website. Änderungen werden automatisch angewendet.',
@@ -1493,7 +1493,7 @@ function render_layout(string $content, string $title = ''): string
         'nl' => [
             'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_auctions' => 'Veilingen',
-            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'logout' => 'Afmelden', 'login' => 'Inloggen',
+            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
             'theme_light' => 'Licht', 'theme_dark' => 'Donker',
             'accent_blue' => 'Blauw', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violet', 'accent_red' => 'Rood', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranje',
             'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
@@ -1572,11 +1572,18 @@ function render_layout(string $content, string $title = ''): string
     $authHtml = '';
     if ($user !== null) {
         $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
+        $adminMenuLink = '';
+        if (has_permission('admin.access')) {
+            $adminMenuLink = '<hr class="account-menu-separator">'
+                . '<a class="account-menu-link" href="' . e(route_url('admin')) . '">' . e((string) $layoutI18n['account_admin']) . '</a>';
+        }
+
         $authHtml = '<details class="account-menu">'
             . '<summary class="button small account-menu-trigger">' . e($accountLabel) . '</summary>'
             . '<div class="account-menu-panel">'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
+            . $adminMenuLink
             . '<hr class="account-menu-separator">'
             . '<form class="nav-form account-menu-form" method="post" action="' . e(route_url('logout')) . '">'
             . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
