@@ -364,6 +364,7 @@ function render_widget(string $slug, array $user = []): string
                 . '</ul>';
 
         case 'propagation':
+            $locale = current_locale();
             $kpFeedUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
             $cacheKey = 'widget:propagation:kp-index';
             $payload = cache_remember($cacheKey, 300, static function () use ($kpFeedUrl): ?array {
@@ -384,7 +385,13 @@ function render_widget(string $slug, array $user = []): string
 
             $measurement = is_array($payload) ? extract_latest_kp_measurement($payload) : null;
             if (!is_array($measurement)) {
-                return '<p class="help">Données de propagation indisponibles actuellement.</p>';
+                $unavailableMessage = match ($locale) {
+                    'en' => 'Propagation data is currently unavailable.',
+                    'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
+                    'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
+                    default => 'Données de propagation indisponibles actuellement.',
+                };
+                return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
