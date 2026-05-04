@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+require_module_enabled('press');
 require_permission('admin.access');
 $locale = current_locale();
 $i18n = [
