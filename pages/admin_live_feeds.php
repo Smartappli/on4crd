@@ -2,6 +2,14 @@
 declare(strict_types=1);
 
 require_permission('admin.access');
+$locale = current_locale();
+$i18n = [
+    'fr' => ['updated' => 'Flux live mis à jour.', 'title' => 'Administration des flux live', 'intro' => 'Les widgets temps réel sont confinés au tableau de bord membre. Ici vous gérez l’activation, l’URL, le parseur et les TTL sans exposer ces widgets sur les pages publiques.', 'active' => 'Actif', 'label' => 'Libellé', 'url' => 'URL', 'parser' => 'Parseur', 'cache_ttl' => 'Cache TTL', 'refresh' => 'Refresh navigateur', 'notes' => 'Notes', 'save' => 'Enregistrer', 'layout' => 'Flux live'],
+    'en' => ['updated' => 'Live feeds updated.', 'title' => 'Live feeds administration', 'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.', 'active' => 'Active', 'label' => 'Label', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache TTL', 'refresh' => 'Browser refresh', 'notes' => 'Notes', 'save' => 'Save', 'layout' => 'Live feeds'],
+    'de' => ['updated' => 'Live-Feeds aktualisiert.', 'title' => 'Verwaltung der Live-Feeds', 'intro' => 'Echtzeit-Widgets sind auf das Mitglieder-Dashboard beschränkt. Verwalten Sie Aktivierung, URL, Parser und TTL ohne öffentliche Anzeige.', 'active' => 'Aktiv', 'label' => 'Bezeichnung', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache-TTL', 'refresh' => 'Browser-Refresh', 'notes' => 'Notizen', 'save' => 'Speichern', 'layout' => 'Live-Feeds'],
+    'nl' => ['updated' => 'Livefeeds bijgewerkt.', 'title' => 'Beheer van livefeeds', 'intro' => 'Realtime widgets zijn beperkt tot het ledendashboard. Beheer hier activatie, URL, parser en TTL zonder ze publiek te tonen.', 'active' => 'Actief', 'label' => 'Label', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache-TTL', 'refresh' => 'Browser-refresh', 'notes' => 'Notities', 'save' => 'Opslaan', 'layout' => 'Livefeeds'],
+];
+$t = $i18n[$locale] ?? $i18n['fr'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -20,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (int) $id,
             ]);
         }
-        set_flash('success', 'Flux live mis à jour.');
+        set_flash('success', (string) $t['updated']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
     }
@@ -32,8 +40,8 @@ $rows = table_exists('live_feeds') ? db()->query('SELECT * FROM live_feeds ORDER
 ob_start();
 ?>
 <div class="card">
-    <h1>Administration des flux live</h1>
-    <p>Les widgets temps réel sont confinés au tableau de bord membre. Ici vous gérez l’activation, l’URL, le parseur et les TTL sans exposer ces widgets sur les pages publiques.</p>
+    <h1><?= e((string) $t['title']) ?></h1>
+    <p><?= e((string) $t['intro']) ?></p>
     <form method="post">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <div class="stack">
@@ -41,21 +49,21 @@ ob_start();
                 <section class="card muted-card">
                     <div class="row-between">
                         <strong><?= e((string) $row['code']) ?></strong>
-                        <label><input type="checkbox" name="feeds[<?= (int) $row['id'] ?>][is_enabled]" value="1" <?= (int) $row['is_enabled'] === 1 ? 'checked' : '' ?>> Actif</label>
+                        <label><input type="checkbox" name="feeds[<?= (int) $row['id'] ?>][is_enabled]" value="1" <?= (int) $row['is_enabled'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['active']) ?></label>
                     </div>
                     <div class="form-grid">
-                        <label>Libellé<input type="text" name="feeds[<?= (int) $row['id'] ?>][label]" value="<?= e((string) $row['label']) ?>"></label>
-                        <label>URL<input type="text" name="feeds[<?= (int) $row['id'] ?>][url]" value="<?= e((string) $row['url']) ?>"></label>
-                        <label>Parseur<input type="text" name="feeds[<?= (int) $row['id'] ?>][parser]" value="<?= e((string) $row['parser']) ?>"></label>
-                        <label>Cache TTL<input type="number" name="feeds[<?= (int) $row['id'] ?>][cache_ttl]" value="<?= (int) $row['cache_ttl'] ?>"></label>
-                        <label>Refresh navigateur<input type="number" name="feeds[<?= (int) $row['id'] ?>][refresh_seconds]" value="<?= (int) $row['refresh_seconds'] ?>"></label>
-                        <label>Notes<textarea name="feeds[<?= (int) $row['id'] ?>][notes]" rows="3"><?= e((string) $row['notes']) ?></textarea></label>
+                        <label><?= e((string) $t['label']) ?><input type="text" name="feeds[<?= (int) $row['id'] ?>][label]" value="<?= e((string) $row['label']) ?>"></label>
+                        <label><?= e((string) $t['url']) ?><input type="text" name="feeds[<?= (int) $row['id'] ?>][url]" value="<?= e((string) $row['url']) ?>"></label>
+                        <label><?= e((string) $t['parser']) ?><input type="text" name="feeds[<?= (int) $row['id'] ?>][parser]" value="<?= e((string) $row['parser']) ?>"></label>
+                        <label><?= e((string) $t['cache_ttl']) ?><input type="number" name="feeds[<?= (int) $row['id'] ?>][cache_ttl]" value="<?= (int) $row['cache_ttl'] ?>"></label>
+                        <label><?= e((string) $t['refresh']) ?><input type="number" name="feeds[<?= (int) $row['id'] ?>][refresh_seconds]" value="<?= (int) $row['refresh_seconds'] ?>"></label>
+                        <label><?= e((string) $t['notes']) ?><textarea name="feeds[<?= (int) $row['id'] ?>][notes]" rows="3"><?= e((string) $row['notes']) ?></textarea></label>
                     </div>
                 </section>
             <?php endforeach; ?>
         </div>
-        <p><button class="button">Enregistrer</button></p>
+        <p><button class="button"><?= e((string) $t['save']) ?></button></p>
     </form>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Flux live');
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);

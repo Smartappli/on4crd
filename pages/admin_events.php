@@ -3,6 +3,14 @@ declare(strict_types=1);
 
 require_permission('admin.access');
 require_permission('events.manage');
+$locale = current_locale();
+$i18n = [
+    'fr' => ['event_saved' => 'Événement enregistré.', 'layout' => 'Administration agenda'],
+    'en' => ['event_saved' => 'Event saved.', 'layout' => 'Agenda administration'],
+    'de' => ['event_saved' => 'Ereignis gespeichert.', 'layout' => 'Agenda-Verwaltung'],
+    'nl' => ['event_saved' => 'Evenement opgeslagen.', 'layout' => 'Agenda-beheer'],
+];
+$t = $i18n[$locale] ?? $i18n['fr'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -34,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
                 ->execute($params);
         }
-        set_flash('success', 'Événement enregistré.');
+        set_flash('success', (string) $t['event_saved']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
     }
@@ -134,4 +142,4 @@ ob_start();
     </section>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Administration agenda');
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);
