@@ -5,22 +5,21 @@ $locale = current_locale();
 $titles = ['fr'=>'Code Q radioamateur','en'=>'Amateur radio Q-code','de'=>'Q-Code Funkamateur','nl'=>'Q-code radioamateur'];
 $labels = ['fr'=>'Signification','en'=>'Meaning','de'=>'Bedeutung','nl'=>'Betekenis'];
 $title = $titles[$locale] ?? $titles['fr'];
+$qRows = [
+['QRA','Nom de la station'],['QRB','Distance entre stations'],['QRG','Fréquence exacte'],['QRH','Variation de fréquence'],['QRI','Tonalité de l’émission'],['QRK','Lisibilité du signal'],['QRL','Fréquence occupée'],['QRM','Interférences humaines'],['QRN','Parasites atmosphériques'],['QRO','Augmenter la puissance'],['QRP','Réduire la puissance'],['QRQ','Émettre plus vite'],['QRS','Émettre plus lentement'],['QRT','Cesser l’émission'],['QRU','Avez-vous quelque chose pour moi ?'],['QRV','Êtes-vous prêt ?'],['QRW','Prévenez ... de m’appeler'],['QRX','Rappeler à ...'],['QRY','Quel est mon tour ?'],['QRZ','Qui m’appelle ?'],['QSA','Force des signaux'],['QSB','Variation de force du signal'],['QSD','Manipulation défectueuse'],['QSG','Émettre ... télégrammes à la fois'],['QSK','Puis-je vous entendre entre mes signaux ?'],['QSL','Confirmez réception'],['QSM','Répéter le dernier message'],['QSN','M’avez-vous entendu ?'],['QSO','Communication directe'],['QSP','Relayer un message'],['QSR','Répéter sur fréquence indiquée'],['QST','Message général à toutes stations'],['QSU','Émettre sur fréquence actuelle'],['QSV','Émettre une série de V'],['QSW','Émettre sur cette fréquence'],['QSX','Écouter sur autre fréquence'],['QSY','Changer de fréquence'],['QSZ','Émettre chaque mot/groupe deux fois'],['QTA','Annuler le message'],['QTB','Êtes-vous d’accord avec comptage de mots ?'],['QTC','Message(s) à transmettre'],['QTH','Position géographique'],['QTR','Heure exacte']
+];
 ob_start();
 ?>
 <section class="card">
   <h1><?= e($title) ?></h1>
+  <p class="help">Liste étendue des Q-codes usuels en trafic radioamateur.</p>
   <div class="table-wrap mt-3">
     <table>
       <thead><tr><th>Code Q</th><th><?= e($labels[$locale] ?? $labels['fr']) ?></th></tr></thead>
       <tbody>
-        <tr><td>QRA</td><td><?= e(['fr'=>'Nom de la station','en'=>'Station name','de'=>'Name der Station','nl'=>'Naam van station'][$locale] ?? 'Nom de la station') ?></td></tr>
-        <tr><td>QRG</td><td><?= e(['fr'=>'Fréquence exacte','en'=>'Exact frequency','de'=>'Genaue Frequenz','nl'=>'Exacte frequentie'][$locale] ?? 'Fréquence exacte') ?></td></tr>
-        <tr><td>QRM</td><td><?= e(['fr'=>'Interférences','en'=>'Interference','de'=>'Störungen','nl'=>'Interferentie'][$locale] ?? 'Interférences') ?></td></tr>
-        <tr><td>QRZ</td><td><?= e(['fr'=>'Qui m’appelle ?','en'=>'Who is calling me?','de'=>'Wer ruft mich?','nl'=>'Wie roept mij?'][$locale] ?? 'Qui m’appelle ?') ?></td></tr>
-        <tr><td>QSL</td><td><?= e(['fr'=>'Confirmez réception','en'=>'Confirm reception','de'=>'Empfang bestätigen','nl'=>'Ontvangst bevestigen'][$locale] ?? 'Confirmez réception') ?></td></tr>
-        <tr><td>QSO</td><td><?= e(['fr'=>'Communication entre stations','en'=>'Communication between stations','de'=>'Verbindung zwischen Stationen','nl'=>'Verbinding tussen stations'][$locale] ?? 'Communication entre stations') ?></td></tr>
-        <tr><td>QSY</td><td><?= e(['fr'=>'Changer de fréquence','en'=>'Change frequency','de'=>'Frequenz wechseln','nl'=>'Verander frequentie'][$locale] ?? 'Changer de fréquence') ?></td></tr>
-        <tr><td>QTH</td><td><?= e(['fr'=>'Position géographique','en'=>'Location','de'=>'Standort','nl'=>'Locatie'][$locale] ?? 'Position géographique') ?></td></tr>
+      <?php foreach ($qRows as $row): ?>
+        <tr><td><?= e($row[0]) ?></td><td><?= e($row[1]) ?></td></tr>
+      <?php endforeach; ?>
       </tbody>
     </table>
   </div>
