@@ -32,6 +32,10 @@ $cards = admin_dashboard_cards($locale, $userId, $adminSearch);
 ob_start();
 ?>
 <div class="stack">
+    <style>
+        .admin-open-cta{display:inline-flex;align-items:center;justify-content:center;padding:.35rem .7rem;border-radius:999px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;font-size:.8rem;font-weight:600;transition:all .15s ease}
+        .admin-link:hover .admin-open-cta{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
+    </style>
     <?php if ($cards === []): ?>
         <section class="card empty-state"><p><?= e((string) $t['empty']) ?></p></section>
     <?php else: ?>
@@ -44,7 +48,10 @@ ob_start();
                     <span aria-hidden="true"><?= e($cardIcon) ?></span>
                 </div>
                 <p><?= e((string) $card['desc']) ?></p>
-                <span class="button secondary" style="margin-top:.5rem;display:inline-flex;"><?= e($openLabel) ?> →</span>
+                <div class="row-between" style="margin-top:.75rem;">
+                    <span></span>
+                    <span class="admin-open-cta"><?= e($openLabel) ?> →</span>
+                </div>
             </a>
         <?php endforeach; ?>
     </div>
