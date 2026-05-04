@@ -3,18 +3,23 @@ declare(strict_types=1);
 require_login();
 $locale = current_locale();
 $titles = ['fr'=>'Code CW (Morse)','en'=>'CW code (Morse)','de'=>'CW-Code (Morse)','nl'=>'CW-code (Morse)'];
+$intro = ['fr'=>'Tableau complet alphabet + chiffres + ponctuation utile.','en'=>'Complete table with alphabet, digits and useful punctuation.','de'=>'Vollständige Tabelle mit Alphabet, Zahlen und nützlichen Satzzeichen.','nl'=>'Volledige tabel met alfabet, cijfers en nuttige leestekens.'];
 $charLabel = ['fr'=>'Caractère','en'=>'Character','de'=>'Zeichen','nl'=>'Teken'];
 $title = $titles[$locale] ?? $titles['fr'];
+$rows = [
+['A','.-','N','-.'],['B','-...','O','---'],['C','-.-.','P','.--.'],['D','-..','Q','--.-'],['E','.','R','.-.'],['F','..-.','S','...'],['G','--.','T','-'],['H','....','U','..-'],['I','..','V','...-'],['J','.---','W','.--'],['K','-.-','X','-..-'],['L','.-..','Y','-.--'],['M','--','Z','--..'],
+['1','.----','6','-....'],['2','..---','7','--...'],['3','...--','8','---..'],['4','....-','9','----.'],['5','.....','0','-----'],
+['.','.-.-.-',',','--..--'],['?','..--..','/','-..-.'],['=','-...-','+','.-.-.']
+];
 ob_start();
 ?>
 <section class="card">
   <h1><?= e($title) ?></h1>
+  <p class="help"><?= e($intro[$locale] ?? $intro['fr']) ?></p>
   <div class="table-wrap mt-3">
     <table>
       <thead><tr><th><?= e($charLabel[$locale] ?? $charLabel['fr']) ?></th><th>Code</th><th><?= e($charLabel[$locale] ?? $charLabel['fr']) ?></th><th>Code</th></tr></thead>
-      <tbody>
-        <tr><td>A</td><td>.-</td><td>N</td><td>-.</td></tr><tr><td>B</td><td>-...</td><td>O</td><td>---</td></tr><tr><td>C</td><td>-.-.</td><td>P</td><td>.--.</td></tr><tr><td>D</td><td>-..</td><td>Q</td><td>--.-</td></tr><tr><td>E</td><td>.</td><td>R</td><td>.-.</td></tr><tr><td>F</td><td>..-.</td><td>S</td><td>...</td></tr><tr><td>G</td><td>--.</td><td>T</td><td>-</td></tr><tr><td>H</td><td>....</td><td>U</td><td>..-</td></tr><tr><td>I</td><td>..</td><td>V</td><td>...-</td></tr><tr><td>J</td><td>.---</td><td>W</td><td>.--</td></tr><tr><td>K</td><td>-.-</td><td>X</td><td>-..-</td></tr><tr><td>L</td><td>.-..</td><td>Y</td><td>-.--</td></tr><tr><td>M</td><td>--</td><td>Z</td><td>--..</td></tr>
-      </tbody>
+      <tbody><?php foreach ($rows as $r): ?><tr><td><?= e($r[0]) ?></td><td><?= e($r[1]) ?></td><td><?= e($r[2]) ?></td><td><?= e($r[3]) ?></td></tr><?php endforeach; ?></tbody>
     </table>
   </div>
 </section>

@@ -2,16 +2,14 @@
 declare(strict_types=1);
 require_login();
 $locale=current_locale();
-$title=['fr'=>'Band planning ON3','en'=>'ON3 band plan','de'=>'ON3-Bandplan','nl'=>'ON3-bandplan'][$locale] ?? 'Band planning ON3';
+$titleMap=['fr'=>'Band planning ON3','en'=>'ON3 band plan','de'=>'ON3-Bandplan','nl'=>'ON3-bandplan'];
+$title=$titleMap[$locale] ?? $titleMap['fr'];
+$h=['fr'=>['band'=>'Bande','freq'=>'Fréquences (MHz)','modes'=>'Modes','pwr'=>'Puissance max*','notes'=>'Notes'],'en'=>['band'=>'Band','freq'=>'Frequencies (MHz)','modes'=>'Modes','pwr'=>'Max power*','notes'=>'Notes'],'de'=>['band'=>'Band','freq'=>'Frequenzen (MHz)','modes'=>'Betriebsarten','pwr'=>'Max. Leistung*','notes'=>'Hinweise'],'nl'=>['band'=>'Band','freq'=>'Frequenties (MHz)','modes'=>'Modes','pwr'=>'Max vermogen*','notes'=>'Notities']][$locale] ?? ['band'=>'Bande','freq'=>'Fréquences (MHz)','modes'=>'Modes','pwr'=>'Puissance max*','notes'=>'Notes'];
+$rows=[
+['2 m','144.000–146.000','FM/SSB/CW',['fr'=>'145.500 MHz appel simplex.','en'=>'145.500 MHz simplex calling.','de'=>'145,500 MHz Simplex-Anruf.','nl'=>'145.500 MHz simplex-oproep.'],'10 W'],
+['70 cm','430.000–440.000','FM/Relais/numérique',['fr'=>'Respecter le plan relais local.','en'=>'Follow local repeater plan.','de'=>'Lokalen Relaisplan beachten.','nl'=>'Volg het lokale relaisplan.'],'10 W'],
+['23 cm','1240–1300','FM/SSB/Data',['fr'=>'Portions partagées, filtrage conseillé.','en'=>'Shared segments, filtering recommended.','de'=>'Geteilte Segmente, Filter empfohlen.','nl'=>'Gedeelde segmenten, filtering aanbevolen.'],'10 W'],
+];
 ob_start(); ?>
-<section class="card">
-  <h1><?= e($title) ?></h1>
-  <p class="help">Source IBPT/BIPT: <a href="https://www.ibpt.be/file/cc73d96153bbd5448a56f19d925d05b1379c7f21/1891ad4029fa18396c037433ed4c2a063854f1b0/freq-fr.pdf?name=Freq-FR.pdf&type=application%2Fpdf" target="_blank" rel="noopener noreferrer">Freq‑FR.pdf</a>.</p>
-  <div class="table-wrap mt-3"><table><thead><tr><th><?= e(['fr'=>'Bande','en'=>'Band','de'=>'Band','nl'=>'Band'][$locale] ?? "Bande") ?></th><th><?= e(['fr'=>'Fréquences (MHz)','en'=>'Frequencies (MHz)','de'=>'Frequenzen (MHz)','nl'=>'Frequenties (MHz)'][$locale] ?? "Fréquences (MHz)") ?></th><th><?= e(['fr'=>'Modes','en'=>'Modes','de'=>'Betriebsarten','nl'=>'Modes'][$locale] ?? "Modes") ?></th><th><?= e(['fr'=>'Puissance max*','en'=>'Max power*','de'=>'Max. Leistung*','nl'=>'Max vermogen*'][$locale] ?? "Puissance max*") ?></th><th><?= e(['fr'=>'Notes','en'=>'Notes','de'=>'Hinweise','nl'=>'Notities'][$locale] ?? "Notes") ?></th></tr></thead><tbody>
-    <tr><td>2 m</td><td>144.000–146.000</td><td>FM/SSB/CW</td><td>10 W</td><td>145.500 MHz appel simplex.</td></tr>
-    <tr><td>70 cm</td><td>430.000–440.000</td><td>FM/Relais/numérique</td><td>10 W</td><td>Respecter le plan relais local.</td></tr>
-    <tr><td>23 cm</td><td>1240–1300</td><td>FM/SSB/Data</td><td>10 W</td><td>Portions partagées, filtrage conseillé.</td></tr>
-  </tbody></table></div>
-  <p class="help mt-3">* Vérifier les limites légales exactes ON3 publiées par l’IBPT/BIPT (mise à jour réglementaire prioritaire).</p>
-</section>
+<section class="card"><h1><?= e($title) ?></h1><p class="help">IBPT/BIPT: <a href="https://www.ibpt.be/file/cc73d96153bbd5448a56f19d925d05b1379c7f21/1891ad4029fa18396c037433ed4c2a063854f1b0/freq-fr.pdf?name=Freq-FR.pdf&type=application%2Fpdf" target="_blank" rel="noopener noreferrer">Freq‑FR.pdf</a></p><div class="table-wrap mt-3"><table><thead><tr><th><?=e($h['band'])?></th><th><?=e($h['freq'])?></th><th><?=e($h['modes'])?></th><th><?=e($h['pwr'])?></th><th><?=e($h['notes'])?></th></tr></thead><tbody><?php foreach($rows as $r): ?><tr><td><?=e($r[0])?></td><td><?=e($r[1])?></td><td><?=e($r[2])?></td><td><?=e($r[4])?></td><td><?=e($r[3][$locale] ?? $r[3]['fr'])?></td></tr><?php endforeach; ?></tbody></table></div></section>
 <?php echo render_layout((string)ob_get_clean(),$title); ?>

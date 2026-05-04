@@ -3,22 +3,43 @@ declare(strict_types=1);
 require_login();
 $locale = current_locale();
 $titles = ['fr'=>'Code Q radioamateur','en'=>'Amateur radio Q-code','de'=>'Q-Code Funkamateur','nl'=>'Q-code radioamateur'];
-$labels = ['fr'=>'Signification','en'=>'Meaning','de'=>'Bedeutung','nl'=>'Betekenis'];
 $title = $titles[$locale] ?? $titles['fr'];
 $qRows = [
-['QRA',['fr'=>'Nom de la station','en'=>'Station name']],['QRB',['fr'=>'Distance entre stations','en'=>'Distance between stations']],['QRG',['fr'=>'Fréquence exacte','en'=>'Exact frequency']],['QRH',['fr'=>'Variation de fréquence','en'=>'Frequency drift']],['QRI',['fr'=>'Tonalité de l’émission','en'=>'Tone of transmission']],['QRK',['fr'=>'Lisibilité du signal','en'=>'Signal readability']],['QRL',['fr'=>'Fréquence occupée','en'=>'Frequency in use']],['QRM',['fr'=>'Interférences humaines','en'=>'Man-made interference']],['QRN',['fr'=>'Parasites atmosphériques','en'=>'Atmospheric noise']],['QRO',['fr'=>'Augmenter la puissance','en'=>'Increase power']],['QRP',['fr'=>'Réduire la puissance','en'=>'Reduce power']],['QRQ','Émettre plus vite'],['QRS','Émettre plus lentement'],['QRT','Cesser l’émission'],['QRU','Avez-vous quelque chose pour moi ?'],['QRV','Êtes-vous prêt ?'],['QRW','Prévenez ... de m’appeler'],['QRX','Rappeler à ...'],['QRY','Quel est mon tour ?'],['QRZ','Qui m’appelle ?'],['QSA','Force des signaux'],['QSB','Variation de force du signal'],['QSD','Manipulation défectueuse'],['QSG','Émettre ... télégrammes à la fois'],['QSK','Puis-je vous entendre entre mes signaux ?'],['QSL','Confirmez réception'],['QSM','Répéter le dernier message'],['QSN','M’avez-vous entendu ?'],['QSO','Communication directe'],['QSP','Relayer un message'],['QSR','Répéter sur fréquence indiquée'],['QST','Message général à toutes stations'],['QSU','Émettre sur fréquence actuelle'],['QSV','Émettre une série de V'],['QSW','Émettre sur cette fréquence'],['QSX','Écouter sur autre fréquence'],['QSY','Changer de fréquence'],['QSZ','Émettre chaque mot/groupe deux fois'],['QTA','Annuler le message'],['QTB','Êtes-vous d’accord avec comptage de mots ?'],['QTC','Message(s) à transmettre'],['QTH','Position géographique'],['QTR','Heure exacte']
+['QRA','Nom de la station','Station name','Name der Station','Naam van station'],
+['QRB','Distance entre stations','Distance between stations','Entfernung zwischen Stationen','Afstand tussen stations'],
+['QRG','Fréquence exacte','Exact frequency','Genaue Frequenz','Exacte frequentie'],
+['QRH','Variation de fréquence','Frequency drift','Frequenzdrift','Frequentiedrift'],
+['QRI','Tonalité de l’émission','Tone of transmission','Tonqualität der Aussendung','Toon van de uitzending'],
+['QRK','Lisibilité du signal','Signal readability','Lesbarkeit des Signals','Leesbaarheid van het signaal'],
+['QRL','Fréquence occupée','Frequency in use','Frequenz belegt','Frequentie bezet'],
+['QRM','Interférences humaines','Man-made interference','Menschengemachte Störungen','Door mensen veroorzaakte storing'],
+['QRN','Parasites atmosphériques','Atmospheric noise','Atmosphärische Störungen','Atmosferische ruis'],
+['QRO','Augmenter la puissance','Increase power','Leistung erhöhen','Vermogen verhogen'],
+['QRP','Réduire la puissance','Reduce power','Leistung reduzieren','Vermogen verlagen'],
+['QRQ','Émettre plus vite','Send faster','Schneller senden','Sneller seinen'],
+['QRS','Émettre plus lentement','Send slower','Langsamer senden','Trager seinen'],
+['QRT','Cesser l’émission','Stop transmitting','Aussendung beenden','Stoppen met uitzenden'],
+['QRU','Avez-vous quelque chose pour moi ?','Anything for me?','Haben Sie etwas für mich?','Heeft u iets voor mij?'],
+['QRV','Êtes-vous prêt ?','Are you ready?','Sind Sie bereit?','Bent u gereed?'],
+['QRZ','Qui m’appelle ?','Who is calling me?','Wer ruft mich?','Wie roept mij?'],
+['QSB','Variation du signal','Signal fading','Signalschwankung','Signaalvervaging'],
+['QSL','Confirmez réception','Confirm reception','Empfang bestätigen','Ontvangst bevestigen'],
+['QSO','Communication entre stations','Communication between stations','Verbindung zwischen Stationen','Verbinding tussen stations'],
+['QSY','Changer de fréquence','Change frequency','Frequenz wechseln','Verander frequentie'],
+['QTH','Position géographique','Location','Standort','Locatie'],
+['QTR','Heure exacte','Exact time','Genaue Uhrzeit','Exacte tijd'],
 ];
 ob_start();
 ?>
 <section class="card">
   <h1><?= e($title) ?></h1>
-  <p class="help"><?= e(['fr'=>'Liste étendue des Q-codes usuels en trafic radioamateur.','en'=>'Extended list of common Q-codes for amateur radio operation.','de'=>'Erweiterte Liste gängiger Q-Codes für den Amateurfunkbetrieb.','nl'=>'Uitgebreide lijst van veelgebruikte Q-codes voor radioamateurverkeer.'][$locale] ?? 'Liste étendue des Q-codes usuels en trafic radioamateur.') ?></p>
+  <p class="help">Tableau multilingue FR/EN/DE/NL des principaux Q-codes.</p>
   <div class="table-wrap mt-3">
     <table>
-      <thead><tr><th>Code Q</th><th><?= e($labels[$locale] ?? $labels['fr']) ?></th></tr></thead>
+      <thead><tr><th>Q</th><th>FR</th><th>EN</th><th>DE</th><th>NL</th></tr></thead>
       <tbody>
-      <?php foreach ($qRows as $row): ?>
-        <tr><td><?= e($row[0]) ?></td><td><?php $meaning=$row[1]; if(is_array($meaning)){ $meaningText=(string) ($meaning[$locale] ?? $meaning['en'] ?? $meaning['fr'] ?? ''); } else { $meaningText=(string) $meaning; } ?><?= e($meaningText) ?></td></tr>
+      <?php foreach ($qRows as $r): ?>
+        <tr><td><?= e($r[0]) ?></td><td><?= e($r[1]) ?></td><td><?= e($r[2]) ?></td><td><?= e($r[3]) ?></td><td><?= e($r[4]) ?></td></tr>
       <?php endforeach; ?>
       </tbody>
     </table>
