@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$locale = current_locale();
 $i18n = [
-    'fr' => ['title' => 'Événements', 'agenda_unavailable' => "L'agenda n'est pas encore disponible.", 'export' => 'Exporter', 'calendar_load_error' => 'Impossible de charger le calendrier interactif.', 'event' => 'Événement', 'no_summary' => 'Aucun résumé disponible.', 'location_tbd' => 'À confirmer', 'today' => 'Aujourd’hui', 'month' => 'Mois', 'week' => 'Semaine', 'list' => 'Liste', 'detail' => 'Détail', 'start' => 'Début', 'end' => 'Fin', 'location' => 'Lieu', 'view_sheet' => 'Voir la fiche', 'external_link' => 'Lien externe', 'no_event' => 'Aucun événement publié pour le moment.'],
-    'en' => ['title' => 'Events', 'agenda_unavailable' => 'The calendar is not available yet.', 'export' => 'Export', 'calendar_load_error' => 'Unable to load the interactive calendar.', 'event' => 'Event', 'no_summary' => 'No summary available.', 'location_tbd' => 'To be confirmed', 'today' => 'Today', 'month' => 'Month', 'week' => 'Week', 'list' => 'List', 'detail' => 'Details', 'start' => 'Start', 'end' => 'End', 'location' => 'Location', 'view_sheet' => 'View details', 'external_link' => 'External link', 'no_event' => 'No published event at the moment.'],
-    'de' => ['title' => 'Veranstaltungen', 'agenda_unavailable' => 'Der Kalender ist noch nicht verfügbar.', 'export' => 'Exportieren', 'calendar_load_error' => 'Interaktiver Kalender konnte nicht geladen werden.', 'event' => 'Veranstaltung', 'no_summary' => 'Keine Zusammenfassung verfügbar.', 'location_tbd' => 'Noch offen', 'today' => 'Heute', 'month' => 'Monat', 'week' => 'Woche', 'list' => 'Liste', 'detail' => 'Details', 'start' => 'Beginn', 'end' => 'Ende', 'location' => 'Ort', 'view_sheet' => 'Details ansehen', 'external_link' => 'Externer Link', 'no_event' => 'Derzeit keine veröffentlichten Veranstaltungen.'],
-    'nl' => ['title' => 'Evenementen', 'agenda_unavailable' => 'De agenda is nog niet beschikbaar.', 'export' => 'Exporteren', 'calendar_load_error' => 'Interactieve kalender kon niet geladen worden.', 'event' => 'Evenement', 'no_summary' => 'Geen samenvatting beschikbaar.', 'location_tbd' => 'Nog te bevestigen', 'today' => 'Vandaag', 'month' => 'Maand', 'week' => 'Week', 'list' => 'Lijst', 'detail' => 'Details', 'start' => 'Start', 'end' => 'Einde', 'location' => 'Locatie', 'view_sheet' => 'Bekijk detail', 'external_link' => 'Externe link', 'no_event' => 'Momenteel geen gepubliceerde evenementen.'],
+    'fr' => ['title' => 'Événements', 'agenda_unavailable' => "L'agenda n'est pas encore disponible.", 'export' => 'Exporter', 'calendar_load_error' => 'Impossible de charger le calendrier interactif.', 'event' => 'Événement', 'no_summary' => 'Aucun résumé disponible.', 'location_tbd' => 'À confirmer', 'today' => 'Aujourd’hui', 'month' => 'Mois', 'week' => 'Semaine', 'list' => 'Liste', 'detail' => 'Détail', 'start' => 'Début', 'end' => 'Fin', 'location' => 'Lieu', 'view_sheet' => 'Voir la fiche', 'external_link' => 'Lien externe', 'no_event' => 'Aucun événement publié pour le moment.', 'calendar_name' => 'Agenda ON4CRD', 'ics_filename' => 'on4crd-evenements.ics'],
+    'en' => ['title' => 'Events', 'agenda_unavailable' => 'The calendar is not available yet.', 'export' => 'Export', 'calendar_load_error' => 'Unable to load the interactive calendar.', 'event' => 'Event', 'no_summary' => 'No summary available.', 'location_tbd' => 'To be confirmed', 'today' => 'Today', 'month' => 'Month', 'week' => 'Week', 'list' => 'List', 'detail' => 'Details', 'start' => 'Start', 'end' => 'End', 'location' => 'Location', 'view_sheet' => 'View details', 'external_link' => 'External link', 'no_event' => 'No published event at the moment.', 'calendar_name' => 'ON4CRD Calendar', 'ics_filename' => 'on4crd-events.ics'],
+    'de' => ['title' => 'Veranstaltungen', 'agenda_unavailable' => 'Der Kalender ist noch nicht verfügbar.', 'export' => 'Exportieren', 'calendar_load_error' => 'Interaktiver Kalender konnte nicht geladen werden.', 'event' => 'Veranstaltung', 'no_summary' => 'Keine Zusammenfassung verfügbar.', 'location_tbd' => 'Noch offen', 'today' => 'Heute', 'month' => 'Monat', 'week' => 'Woche', 'list' => 'Liste', 'detail' => 'Details', 'start' => 'Beginn', 'end' => 'Ende', 'location' => 'Ort', 'view_sheet' => 'Details ansehen', 'external_link' => 'Externer Link', 'no_event' => 'Derzeit keine veröffentlichten Veranstaltungen.', 'calendar_name' => 'ON4CRD Kalender', 'ics_filename' => 'on4crd-veranstaltungen.ics'],
+    'nl' => ['title' => 'Evenementen', 'agenda_unavailable' => 'De agenda is nog niet beschikbaar.', 'export' => 'Exporteren', 'calendar_load_error' => 'Interactieve kalender kon niet geladen worden.', 'event' => 'Evenement', 'no_summary' => 'Geen samenvatting beschikbaar.', 'location_tbd' => 'Nog te bevestigen', 'today' => 'Vandaag', 'month' => 'Maand', 'week' => 'Week', 'list' => 'Lijst', 'detail' => 'Details', 'start' => 'Start', 'end' => 'Einde', 'location' => 'Locatie', 'view_sheet' => 'Bekijk detail', 'external_link' => 'Externe link', 'no_event' => 'Momenteel geen gepubliceerde evenementen.', 'calendar_name' => 'ON4CRD Agenda', 'ics_filename' => 'on4crd-evenementen.ics'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
 
@@ -38,7 +38,7 @@ if (strtolower((string) ($_GET['format'] ?? '')) === 'ics') {
         'PRODID:-//ON4CRD//Agenda//FR',
         'CALSCALE:GREGORIAN',
         'METHOD:PUBLISH',
-        'X-WR-CALNAME:Agenda ON4CRD',
+        'X-WR-CALNAME:' . $icalEscape((string) $t['calendar_name']),
     ];
 
     foreach ($rows as $event) {
@@ -79,7 +79,7 @@ if (strtolower((string) ($_GET['format'] ?? '')) === 'ics') {
     $lines[] = 'END:VCALENDAR';
 
     header('Content-Type: text/calendar; charset=utf-8');
-    header('Content-Disposition: attachment; filename="on4crd-evenements.ics"');
+    header('Content-Disposition: attachment; filename="' . str_replace('"', '', (string) $t['ics_filename']) . '"');
     echo implode("\r\n", $lines) . "\r\n";
     exit;
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$locale = current_locale();
 $i18n = [
     'fr' => ['not_found' => 'Événement introuvable', 'not_found_msg' => "L'événement demandé est indisponible.", 'back' => '← Retour au calendrier', 'summary_fallback' => 'Retrouvez toutes les informations utiles sur cet événement.', 'start' => 'Début', 'end' => 'Fin', 'location' => 'Lieu', 'tbd' => 'À confirmer', 'site' => "Site de l'événement", 'title' => 'Événement'],
     'en' => ['not_found' => 'Event not found', 'not_found_msg' => 'The requested event is unavailable.', 'back' => '← Back to calendar', 'summary_fallback' => 'Find all useful information about this event.', 'start' => 'Start', 'end' => 'End', 'location' => 'Location', 'tbd' => 'To be confirmed', 'site' => 'Event website', 'title' => 'Event'],
