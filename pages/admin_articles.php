@@ -4,14 +4,19 @@ declare(strict_types=1);
 require_permission('articles.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['layout' => 'Articles'],
-    'en' => ['layout' => 'Articles'],
-    'de' => ['layout' => 'Artikel'],
-    'nl' => ['layout' => 'Artikelen'],
+    'fr' => ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.'],
+    'en' => ['layout' => 'Articles', 'meta_desc' => 'Administration and publishing of site articles.'],
+    'de' => ['layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'],
+    'nl' => ['layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };
+set_page_meta([
+    'title' => $t('layout'),
+    'description' => $t('meta_desc'),
+    'schema_type' => 'WebPage',
+]);
 
 /**
  * @return array{excerpt:string,content:string}
