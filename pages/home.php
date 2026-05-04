@@ -495,12 +495,6 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ad_title']) . '</h3>' . $adSlotHtml . '</article>'
     . '</div>'
     . '</section>'
-    . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<header class="mb-4">'
-    . '<h2 class="text-2xl font-bold text-slate-900">Modules réservés aux administrateurs</h2>'
-    . '</header>'
-    . '<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">' . $moduleCards . '</div>'
-    . '</section>'
     . '<section class="mt-4 grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h3 class="text-xl font-bold text-slate-900">Vous êtes journaliste</h3>'
@@ -532,7 +526,7 @@ if ($homeLocale !== 'fr') {
             'Accueil' => 'Home','Citation du jour' => 'Quote of the day','Heure UTC' => 'UTC time','Heure locale' => 'Local time',
             "S'inscrire à la newsletter" => 'Subscribe to the newsletter','Accéder à mon espace membre' => 'Go to my member area','Rejoindre le club' => 'Join the club',
             'Informations utiles' => 'Useful information','À la une du club' => 'Club highlights','Dernière actualité' => 'Latest news','Prochain évènement' => 'Next event',
-            'Publicité' => 'Advertising','Modules réservés aux administrateurs' => 'Administrator-only modules','Vous êtes journaliste' => 'Are you a journalist','Vous êtes enseignant' => 'Are you a teacher',
+            'Publicité' => 'Advertising','Vous êtes journaliste' => 'Are you a journalist','Vous êtes enseignant' => 'Are you a teacher',
             'Adresse' => 'Address','Nous contacter' => 'Contact us','Informations importantes' => 'Important information','Envoyer' => 'Send',
             "Conditions générales d'utilisation" => 'Terms of use','Mentions légales' => 'Legal notice',"Règlement d'ordre intérieur" => 'Internal regulations',
             'Faire un don' => 'Make a donation','Aucune actualité publiée pour le moment.' => 'No news published yet.','Aucun évènement planifié actuellement.' => 'No upcoming event scheduled at the moment.',
@@ -550,7 +544,7 @@ if ($homeLocale !== 'fr') {
         'de' => [
             'Accueil' => 'Startseite','Citation du jour' => 'Zitat des Tages','Heure UTC' => 'UTC-Zeit','Heure locale' => 'Ortszeit','Informations utiles' => 'Nützliche Informationen',
             'À la une du club' => 'Highlights des Clubs','Dernière actualité' => 'Neueste Nachricht','Prochain évènement' => 'Nächstes Ereignis','Publicité' => 'Werbung',
-            'Modules réservés aux administrateurs' => 'Module nur für Administratoren','Vous êtes journaliste' => 'Sie sind Journalist','Vous êtes enseignant' => 'Sie sind Lehrkraft',
+            'Vous êtes journaliste' => 'Sie sind Journalist','Vous êtes enseignant' => 'Sie sind Lehrkraft',
             'Adresse' => 'Adresse','Nous contacter' => 'Kontakt','Informations importantes' => 'Wichtige Informationen','Envoyer' => 'Senden',
             "Conditions générales d'utilisation" => 'Nutzungsbedingungen','Mentions légales' => 'Impressum',"Règlement d'ordre intérieur" => 'Interne Ordnung','Faire un don' => 'Spenden',
             'Aucune actualité publiée pour le moment.' => 'Derzeit keine veröffentlichte Nachricht.','Aucun évènement planifié actuellement.' => 'Derzeit kein geplantes Ereignis.','Publié le' => 'Veröffentlicht am',
@@ -560,7 +554,7 @@ if ($homeLocale !== 'fr') {
         'nl' => [
             'Accueil' => 'Startpagina','Citation du jour' => 'Quote van de dag','Heure UTC' => 'UTC-tijd','Heure locale' => 'Lokale tijd','Informations utiles' => 'Nuttige informatie',
             'À la une du club' => 'Club in de kijker','Dernière actualité' => 'Laatste nieuws','Prochain évènement' => 'Volgend evenement','Publicité' => 'Advertentie',
-            'Modules réservés aux administrateurs' => 'Modules alleen voor beheerders','Vous êtes journaliste' => 'Bent u journalist','Vous êtes enseignant' => 'Bent u leerkracht',
+            'Vous êtes journaliste' => 'Bent u journalist','Vous êtes enseignant' => 'Bent u leerkracht',
             'Adresse' => 'Adres','Nous contacter' => 'Contacteer ons','Informations importantes' => 'Belangrijke informatie','Envoyer' => 'Verzenden',
             "Conditions générales d'utilisation" => 'Algemene gebruiksvoorwaarden','Mentions légales' => 'Juridische vermeldingen',"Règlement d'ordre intérieur" => 'Huishoudelijk reglement','Faire un don' => 'Doneer',
             'Aucune actualité publiée pour le moment.' => 'Nog geen nieuws gepubliceerd.','Aucun évènement planifié actuellement.' => 'Momenteel geen gepland evenement.','Publié le' => 'Gepubliceerd op',

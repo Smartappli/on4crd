@@ -181,29 +181,29 @@ function seed_modules(): void
     }
 
     $modules = [
-        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 1, 1, 10],
-        ['members', 'Membres', 'Espace membres et profil', 1, 1, 20],
-        ['news', 'Actualités', 'Section des actualités du club', 1, 1, 30],
-        ['articles', 'Articles', 'Articles techniques', 1, 1, 40],
-        ['wiki', 'Wiki', 'Base de connaissances collaborative', 1, 1, 50],
-        ['albums', 'Albums', 'Galerie photos', 1, 1, 60],
-        ['events', 'Événements', 'Agenda du club', 1, 1, 70],
-        ['shop', 'Boutique', 'Produits et commandes', 1, 1, 80],
-        ['auctions', 'Enchères', 'Ventes aux enchères', 1, 1, 90],
-        ['qsl', 'QSL', 'Gestion des cartes QSL', 1, 1, 100],
-        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 1, 1, 110],
-        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 1, 1, 120],
-        ['press', 'Presse', 'Communiqués et contacts presse', 1, 1, 130],
-        ['education', 'Éducation', 'Activités écoles/formation', 1, 1, 140],
-        ['committee', 'Comité', 'Informations du comité', 1, 1, 150],
-        ['directory', 'Annuaire', 'Annuaire public du club', 1, 1, 160],
+        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 10],
+        ['members', 'Membres', 'Espace membres et profil', 0, 1, 20],
+        ['news', 'Actualités', 'Section des actualités du club', 0, 1, 30],
+        ['articles', 'Articles', 'Articles techniques', 0, 1, 40],
+        ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 50],
+        ['albums', 'Albums', 'Galerie photos', 0, 1, 60],
+        ['events', 'Événements', 'Agenda du club', 0, 1, 70],
+        ['shop', 'Boutique', 'Produits et commandes', 0, 1, 80],
+        ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 90],
+        ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 100],
+        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 110],
+        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 120],
+        ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 130],
+        ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 140],
+        ['committee', 'Comité', 'Informations du comité', 0, 1, 150],
+        ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 160],
         ['admin', 'Administration', 'Administration générale', 1, 1, 1000],
     ];
 
     $stmt = db()->prepare(
         'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
          VALUES (?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), sort_order = VALUES(sort_order)'
+         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
     );
 
     foreach ($modules as $module) {

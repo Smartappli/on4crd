@@ -53,8 +53,12 @@ ob_start();
         <div class="stack">
             <?php foreach ($keys as $contentKey => $label): ?>
                 <?php
-                    $entry = editorial_content_row($contentKey) ?? [];
-                    $fieldKey = array_search($contentKey, $fieldMap, true);
+                    try {
+                        $entry = editorial_content_row($contentKey) ?? [];
+                    } catch (Throwable $_editorialReadError) {
+                        $entry = [];
+                    }
+                    $fieldKey = (string) (array_search($contentKey, $fieldMap, true) ?: $contentKey);
                     $frValue = (string) ($entry['fr'] ?? $entry['fr_text'] ?? '');
                     $enValue = (string) ($entry['en'] ?? $entry['en_text'] ?? '');
                     $deValue = (string) ($entry['de'] ?? $entry['de_text'] ?? '');

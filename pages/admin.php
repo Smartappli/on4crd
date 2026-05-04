@@ -12,19 +12,6 @@ $cards = admin_dashboard_cards($locale, $userId, $adminSearch);
 ob_start();
 ?>
 <div class="stack">
-    <section class="card">
-        <h1><?= e((string) $t['title']) ?></h1>
-        <p class="help"><?= e((string) $t['lead']) ?></p>
-        <form method="get" action="<?= e(route_url('admin')) ?>" class="mt-2">
-            <label><?= e((string) $t['search_label']) ?>
-                <input type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
-            </label>
-            <div class="actions mt-2">
-                <button type="submit" class="button"><?= e((string) $t['search_cta']) ?></button>
-                <a class="button secondary" href="<?= e(route_url('admin')) ?>"><?= e((string) $t['search_reset']) ?></a>
-            </div>
-        </form>
-    </section>
     <?php if ($cards === []): ?>
         <section class="card empty-state"><p><?= e((string) $t['empty']) ?></p></section>
     <?php else: ?>

@@ -12,6 +12,8 @@ $i18n = [
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
 
+seed_modules();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
