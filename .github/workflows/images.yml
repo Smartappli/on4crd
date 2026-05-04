@@ -1,0 +1,22 @@
+name: Compress Images
+
+on:
+  pull_request:
+    paths:
+      - "assets/img/**/*.jpg"
+      - "assets/img/**/*.jpeg"
+      - "assets/img/**/*.png"
+      - "assets/img/**/*.webp"
+
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Compress Images
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
