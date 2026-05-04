@@ -7,7 +7,7 @@ ob_start(); ?>
 <section class="card">
   <h1><?= e($title) ?></h1>
   <p class="help">Source IBPT/BIPT: <a href="https://www.ibpt.be/file/cc73d96153bbd5448a56f19d925d05b1379c7f21/1891ad4029fa18396c037433ed4c2a063854f1b0/freq-fr.pdf?name=Freq-FR.pdf&type=application%2Fpdf" target="_blank" rel="noopener noreferrer">Freq‑FR.pdf</a>.</p>
-  <div class="table-wrap mt-3"><table><thead><tr><th>Bande</th><th>Fréquences (MHz)</th><th>Modes</th><th>Puissance max*</th><th>Notes</th></tr></thead><tbody>
+  <div class="table-wrap mt-3"><table><thead><tr><th><?= e(['fr'=>'Bande','en'=>'Band','de'=>'Band','nl'=>'Band'][$locale] ?? "Bande") ?></th><th><?= e(['fr'=>'Fréquences (MHz)','en'=>'Frequencies (MHz)','de'=>'Frequenzen (MHz)','nl'=>'Frequenties (MHz)'][$locale] ?? "Fréquences (MHz)") ?></th><th><?= e(['fr'=>'Modes','en'=>'Modes','de'=>'Betriebsarten','nl'=>'Modes'][$locale] ?? "Modes") ?></th><th><?= e(['fr'=>'Puissance max*','en'=>'Max power*','de'=>'Max. Leistung*','nl'=>'Max vermogen*'][$locale] ?? "Puissance max*") ?></th><th><?= e(['fr'=>'Notes','en'=>'Notes','de'=>'Hinweise','nl'=>'Notities'][$locale] ?? "Notes") ?></th></tr></thead><tbody>
     <tr><td>2 m</td><td>144.000–146.000</td><td>FM/SSB/CW</td><td>10 W</td><td>145.500 MHz appel simplex.</td></tr>
     <tr><td>70 cm</td><td>430.000–440.000</td><td>FM/Relais/numérique</td><td>10 W</td><td>Respecter le plan relais local.</td></tr>
     <tr><td>23 cm</td><td>1240–1300</td><td>FM/SSB/Data</td><td>10 W</td><td>Portions partagées, filtrage conseillé.</td></tr>
