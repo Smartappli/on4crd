@@ -47,7 +47,7 @@ $selectedKeys = array_map(static fn(array $widget): string => (string) $widget['
 $availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);
 
 
-$safeRenderWidget = static function (string $widgetKey, array $currentUser): string {
+$safeRenderWidget = static function (string $widgetKey, array $currentUser) use ($t): string {
     try {
         return render_widget($widgetKey, $currentUser);
     } catch (Throwable $throwable) {
