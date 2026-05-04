@@ -200,31 +200,100 @@ $primaryCta = $isAuthenticated
 $newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl border border-blue-200 bg-white px-5 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-50" href="' . e(route_url('newsletter_public')) . '">' . e((string) $homeI18n['cta_newsletter']) . '</a>';
 
 
-$moduleCatalog = admin_module_cards_catalog($homeLocale);
+$moduleCatalog = admin_module_cards_catalog();
+
+
+$visibilityLabels = [
+    'fr' => ['public' => 'Public', 'members' => 'Membres', 'admin' => 'Administrateurs'],
+    'en' => ['public' => 'Public', 'members' => 'Members', 'admin' => 'Administrators'],
+    'de' => ['public' => 'Öffentlich', 'members' => 'Mitglieder', 'admin' => 'Administratoren'],
+    'nl' => ['public' => 'Openbaar', 'members' => 'Leden', 'admin' => 'Beheerders'],
+];
+$moduleVisibilityLabels = $visibilityLabels[$homeLocale] ?? $visibilityLabels['fr'];
+$moduleVisibilityByCode = [];
+if (table_exists('modules')) {
+    foreach (db()->query('SELECT code, visibility FROM modules')->fetchAll() as $moduleRow) {
+        $code = (string) ($moduleRow['code'] ?? '');
+        if ($code === '') {
+            continue;
+        }
+        $moduleVisibilityByCode[$code] = (string) ($moduleRow['visibility'] ?? 'members');
+    }
+}
 
 $activeModules = [];
 $moduleCards = '';
 foreach ($moduleCatalog as $module) {
-    if (!module_enabled((string) $module['code'])) {
+    $moduleCode = (string) ($module['code'] ?? $module['module'] ?? '');
+    if ($moduleCode !== '' && !module_enabled($moduleCode)) {
         continue;
     }
 
     $activeModules[] = $module;
-    $moduleCards .= '<a class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url((string) $module['route'])) . '">'
+    $moduleTitle = is_array($module['title'] ?? null) ? (string) (($module['title'][$homeLocale] ?? $module['title']['fr'] ?? '')) : (string) ($module['title'] ?? '');
+    $moduleDesc = is_array($module['desc'] ?? null) ? (string) (($module['desc'][$homeLocale] ?? $module['desc']['fr'] ?? '')) : (string) ($module['desc'] ?? '');
+    $moduleAudience = is_array($module['audience'] ?? null) ? (string) (($module['audience'][$homeLocale] ?? $module['audience']['fr'] ?? '')) : (string) ($module['audience'] ?? '');
+    $moduleAudienceCode = (string) ($module['code'] ?? $module['module'] ?? '');
+    $configuredVisibility = (string) ($moduleVisibilityByCode[$moduleAudienceCode] ?? '');
+    if ($configuredVisibility !== '') {
+        $moduleAudience = (string) ($moduleVisibilityLabels[$configuredVisibility] ?? ucfirst($configuredVisibility));
+    } elseif ($moduleAudience === '') {
+        $moduleAudience = (string) ($moduleVisibilityLabels['members'] ?? 'Membres');
+    }
+    $moduleIcon = is_array($module['icon'] ?? null) ? (string) (($module['icon'][$homeLocale] ?? $module['icon']['fr'] ?? '📦')) : (string) ($module['icon'] ?? '📦');
+
+    $moduleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $module['route'])) . '">'
         . '<div class="flex items-center justify-between gap-3">'
-        . '<h3 class="text-lg font-semibold text-slate-900">' . e((string) $module['title']) . '</h3>'
-        . '<span class="text-xl" aria-hidden="true">' . e((string) $module['icon']) . '</span>'
+        . '<h3 class="text-lg font-semibold text-slate-900">' . e($moduleTitle) . '</h3>'
+        . '<span class="text-xl" aria-hidden="true">' . e($moduleIcon) . '</span>'
         . '</div>'
-        . '<p class="mt-2 text-sm text-slate-600">' . e((string) $module['desc']) . '</p>'
-        . '<div class="mt-4 flex items-center justify-between">'
-        . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $module['audience']) . '</span>'
-        . '<span class="text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) $homeI18n['open']) . ' →</span>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e($moduleDesc) . '</p>'
+        . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
+        . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e($moduleAudience) . '</span>'
+        . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
         . '</div>'
         . '</a>';
 }
 
 if ($moduleCards === '') {
     $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">' . e((string) $homeI18n['public_updating']) . '</div>';
+}
+
+
+$memberModuleDefinitions = [
+    'dashboard' => ['route' => 'dashboard', 'icon' => '🧭', 'title' => ['fr' => 'Tableau de bord'], 'desc' => ['fr' => 'Configurez votre espace membre avec des widgets personnalisables.']],
+    'articles' => ['route' => 'articles', 'icon' => '🛠️', 'title' => ['fr' => 'Articles techniques'], 'desc' => ['fr' => 'Approfondissez vos connaissances avec des contenus pédagogiques.']],
+    'wiki' => ['route' => 'wiki', 'icon' => '📚', 'title' => ['fr' => 'Wiki du club'], 'desc' => ['fr' => 'Consultez les procédures et bonnes pratiques radioamateur.']],
+    'albums' => ['route' => 'albums', 'icon' => '🖼️', 'title' => ['fr' => 'Galerie photo'], 'desc' => ['fr' => 'Revivez les activités du club à travers les albums.']],
+    'qsl' => ['route' => 'qsl', 'icon' => '📮', 'title' => ['fr' => 'Espace QSL'], 'desc' => ['fr' => 'Préparez et exportez vos cartes QSL depuis un espace dédié.']],
+    'auctions' => ['route' => 'auctions', 'icon' => '🏷️', 'title' => ['fr' => 'Enchères'], 'desc' => ['fr' => 'Donnez une seconde vie au matériel radio entre membres.']],
+    'news' => ['route' => 'news', 'icon' => '📰', 'title' => ['fr' => 'Actualités'], 'desc' => ['fr' => 'Suivez les annonces et informations du club.']],
+    'events' => ['route' => 'events', 'icon' => '📅', 'title' => ['fr' => 'Événements'], 'desc' => ['fr' => 'Consultez le calendrier des activités et rendez-vous.']],
+];
+$memberModuleCards = '';
+if (table_exists('modules')) {
+    $memberModules = db()->query("SELECT code FROM modules WHERE is_enabled = 1 AND visibility = 'members' ORDER BY sort_order ASC")->fetchAll() ?: [];
+    foreach ($memberModules as $memberModuleRow) {
+        $moduleCode = (string) ($memberModuleRow['code'] ?? '');
+        if ($moduleCode === '' || !isset($memberModuleDefinitions[$moduleCode])) {
+            continue;
+        }
+        $moduleMeta = $memberModuleDefinitions[$moduleCode];
+        $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $moduleMeta['route'])) . '">' 
+            . '<div class="flex items-center justify-between gap-3">'
+            . '<h3 class="text-lg font-semibold text-slate-900">' . e((string) ($moduleMeta['title']['fr'] ?? $moduleCode)) . '</h3>'
+            . '<span class="text-xl" aria-hidden="true">' . e((string) ($moduleMeta['icon'] ?? '📦')) . '</span>'
+            . '</div>'
+            . '<p class="mt-2 text-sm text-slate-600">' . e((string) ($moduleMeta['desc']['fr'] ?? '')) . '</p>'
+            . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
+            . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">Membres</span>'
+            . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
+            . '</div>'
+            . '</a>';
+    }
+}
+if ($memberModuleCards === '') {
+    $memberModuleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Aucun module membre disponible actuellement.</div>';
 }
 
 $heroTitle = '';
@@ -465,9 +534,9 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<header class="mb-4">'
-    . '<h2 class="text-2xl font-bold text-slate-900">Modules réservés aux membres</h2>'
+    . '<h2 class="text-2xl font-bold text-slate-900">Modules accessibles aux membres</h2>'
     . '</header>'
-    . '<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">' . $moduleCards . '</div>'
+    . '<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">' . $memberModuleCards . '</div>'
     . '</section>'
     . '<section class="mt-4 grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">'
@@ -500,7 +569,7 @@ if ($homeLocale !== 'fr') {
             'Accueil' => 'Home','Citation du jour' => 'Quote of the day','Heure UTC' => 'UTC time','Heure locale' => 'Local time',
             "S'inscrire à la newsletter" => 'Subscribe to the newsletter','Accéder à mon espace membre' => 'Go to my member area','Rejoindre le club' => 'Join the club',
             'Informations utiles' => 'Useful information','À la une du club' => 'Club highlights','Dernière actualité' => 'Latest news','Prochain évènement' => 'Next event',
-            'Publicité' => 'Advertising','Modules réservés aux membres' => 'Member-only modules','Vous êtes journaliste' => 'Are you a journalist','Vous êtes enseignant' => 'Are you a teacher',
+            'Publicité' => 'Advertising','Vous êtes journaliste' => 'Are you a journalist','Vous êtes enseignant' => 'Are you a teacher',
             'Adresse' => 'Address','Nous contacter' => 'Contact us','Informations importantes' => 'Important information','Envoyer' => 'Send',
             "Conditions générales d'utilisation" => 'Terms of use','Mentions légales' => 'Legal notice',"Règlement d'ordre intérieur" => 'Internal regulations',
             'Faire un don' => 'Make a donation','Aucune actualité publiée pour le moment.' => 'No news published yet.','Aucun évènement planifié actuellement.' => 'No upcoming event scheduled at the moment.',
@@ -518,7 +587,7 @@ if ($homeLocale !== 'fr') {
         'de' => [
             'Accueil' => 'Startseite','Citation du jour' => 'Zitat des Tages','Heure UTC' => 'UTC-Zeit','Heure locale' => 'Ortszeit','Informations utiles' => 'Nützliche Informationen',
             'À la une du club' => 'Highlights des Clubs','Dernière actualité' => 'Neueste Nachricht','Prochain évènement' => 'Nächstes Ereignis','Publicité' => 'Werbung',
-            'Modules réservés aux membres' => 'Module für Mitglieder','Vous êtes journaliste' => 'Sie sind Journalist','Vous êtes enseignant' => 'Sie sind Lehrkraft',
+            'Vous êtes journaliste' => 'Sie sind Journalist','Vous êtes enseignant' => 'Sie sind Lehrkraft',
             'Adresse' => 'Adresse','Nous contacter' => 'Kontakt','Informations importantes' => 'Wichtige Informationen','Envoyer' => 'Senden',
             "Conditions générales d'utilisation" => 'Nutzungsbedingungen','Mentions légales' => 'Impressum',"Règlement d'ordre intérieur" => 'Interne Ordnung','Faire un don' => 'Spenden',
             'Aucune actualité publiée pour le moment.' => 'Derzeit keine veröffentlichte Nachricht.','Aucun évènement planifié actuellement.' => 'Derzeit kein geplantes Ereignis.','Publié le' => 'Veröffentlicht am',
@@ -528,7 +597,7 @@ if ($homeLocale !== 'fr') {
         'nl' => [
             'Accueil' => 'Startpagina','Citation du jour' => 'Quote van de dag','Heure UTC' => 'UTC-tijd','Heure locale' => 'Lokale tijd','Informations utiles' => 'Nuttige informatie',
             'À la une du club' => 'Club in de kijker','Dernière actualité' => 'Laatste nieuws','Prochain évènement' => 'Volgend evenement','Publicité' => 'Advertentie',
-            'Modules réservés aux membres' => 'Modules voor leden','Vous êtes journaliste' => 'Bent u journalist','Vous êtes enseignant' => 'Bent u leerkracht',
+            'Vous êtes journaliste' => 'Bent u journalist','Vous êtes enseignant' => 'Bent u leerkracht',
             'Adresse' => 'Adres','Nous contacter' => 'Contacteer ons','Informations importantes' => 'Belangrijke informatie','Envoyer' => 'Verzenden',
             "Conditions générales d'utilisation" => 'Algemene gebruiksvoorwaarden','Mentions légales' => 'Juridische vermeldingen',"Règlement d'ordre intérieur" => 'Huishoudelijk reglement','Faire un don' => 'Doneer',
             'Aucune actualité publiée pour le moment.' => 'Nog geen nieuws gepubliceerd.','Aucun évènement planifié actuellement.' => 'Momenteel geen gepland evenement.','Publié le' => 'Gepubliceerd op',
