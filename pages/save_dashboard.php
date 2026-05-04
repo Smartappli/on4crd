@@ -25,7 +25,7 @@ try {
         $payload = [];
     }
     $widgetsInput = is_array($payload['widgets'] ?? null) ? $payload['widgets'] : [];
-    $catalog = widget_catalog();
+    $catalog = enabled_widget_catalog();
     $widgets = [];
     $seen = [];
     $maxWidgets = 24;

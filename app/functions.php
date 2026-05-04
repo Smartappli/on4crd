@@ -252,6 +252,37 @@ function widget_catalog(): array
 }
 }
 
+
+if (!function_exists('enabled_widget_catalog')) {
+function enabled_widget_catalog(): array
+{
+    $catalog = widget_catalog();
+    if (!table_exists('dashboard_widget_settings')) {
+        return $catalog;
+    }
+
+    $rows = db()->query('SELECT widget_key, is_enabled FROM dashboard_widget_settings');
+    $settings = $rows !== false ? ($rows->fetchAll() ?: []) : [];
+    $enabledMap = [];
+    foreach ($settings as $row) {
+        $key = (string) ($row['widget_key'] ?? '');
+        if ($key === '') {
+            continue;
+        }
+        $enabledMap[$key] = (int) ($row['is_enabled'] ?? 0) === 1;
+    }
+
+    $filtered = [];
+    foreach ($catalog as $key => $meta) {
+        if (($enabledMap[$key] ?? true) === true) {
+            $filtered[$key] = $meta;
+        }
+    }
+
+    return $filtered;
+}
+}
+
 if (!function_exists('render_widget')) {
 function maidenhead_to_coordinates(string $locator): ?array
 {
@@ -819,6 +850,15 @@ function apply_runtime_schema_updates(): void
         }
     }
 
+
+
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS dashboard_widget_settings (
+            widget_key VARCHAR(120) PRIMARY KEY,
+            is_enabled TINYINT(1) NOT NULL DEFAULT 1,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
 
     if (table_exists('dashboard_widgets')) {
         $columnStmt = db()->prepare(
