@@ -192,6 +192,12 @@ $routeModules = [
     'admin_dashboard' => 'admin',
     'admin_shop' => 'admin',
     'admin_auctions' => 'admin',
+    'settings' => 'members',
+    'code_q' => 'members',
+    'code_cw' => 'members',
+    'bandplan_on3' => 'members',
+    'bandplan_on2' => 'members',
+    'bandplan_harec' => 'members',
 ];
 
 if (isset($routeModules[$route])) {
@@ -289,6 +295,12 @@ switch ($route) {
     case 'admin_dashboard': $dispatchPage('pages/admin_dashboard.php'); break;
     case 'admin_shop': $dispatchPage('pages/admin_shop.php'); break;
     case 'admin_auctions': $dispatchPage('pages/admin_auctions.php'); break;
+    case 'settings': $dispatchPage('pages/settings.php'); break;
+    case 'code_q': $dispatchPage('pages/code_q.php'); break;
+    case 'code_cw': $dispatchPage('pages/code_cw.php'); break;
+    case 'bandplan_on3': $dispatchPage('pages/bandplan_on3.php'); break;
+    case 'bandplan_on2': $dispatchPage('pages/bandplan_on2.php'); break;
+    case 'bandplan_harec': $dispatchPage('pages/bandplan_harec.php'); break;
     case 'ads': $dispatchPage('pages/ads.php'); break;
     case 'admin_ads': $dispatchPage('pages/admin_ads.php'); break;
     case 'ad_click': $dispatchPage('pages/ad_click.php'); break;
