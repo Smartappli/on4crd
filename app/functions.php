@@ -181,29 +181,29 @@ function seed_modules(): void
     }
 
     $modules = [
-        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 1, 1, 10],
-        ['members', 'Membres', 'Espace membres et profil', 1, 1, 20],
-        ['news', 'Actualités', 'Section des actualités du club', 1, 1, 30],
-        ['articles', 'Articles', 'Articles techniques', 1, 1, 40],
-        ['wiki', 'Wiki', 'Base de connaissances collaborative', 1, 1, 50],
-        ['albums', 'Albums', 'Galerie photos', 1, 1, 60],
-        ['events', 'Événements', 'Agenda du club', 1, 1, 70],
-        ['shop', 'Boutique', 'Produits et commandes', 1, 1, 80],
-        ['auctions', 'Enchères', 'Ventes aux enchères', 1, 1, 90],
-        ['qsl', 'QSL', 'Gestion des cartes QSL', 1, 1, 100],
-        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 1, 1, 110],
-        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 1, 1, 120],
-        ['press', 'Presse', 'Communiqués et contacts presse', 1, 1, 130],
-        ['education', 'Éducation', 'Activités écoles/formation', 1, 1, 140],
-        ['committee', 'Comité', 'Informations du comité', 1, 1, 150],
-        ['directory', 'Annuaire', 'Annuaire public du club', 1, 1, 160],
+        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 10],
+        ['members', 'Membres', 'Espace membres et profil', 0, 1, 20],
+        ['news', 'Actualités', 'Section des actualités du club', 0, 1, 30],
+        ['articles', 'Articles', 'Articles techniques', 0, 1, 40],
+        ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 50],
+        ['albums', 'Albums', 'Galerie photos', 0, 1, 60],
+        ['events', 'Événements', 'Agenda du club', 0, 1, 70],
+        ['shop', 'Boutique', 'Produits et commandes', 0, 1, 80],
+        ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 90],
+        ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 100],
+        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 110],
+        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 120],
+        ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 130],
+        ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 140],
+        ['committee', 'Comité', 'Informations du comité', 0, 1, 150],
+        ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 160],
         ['admin', 'Administration', 'Administration générale', 1, 1, 1000],
     ];
 
     $stmt = db()->prepare(
         'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
          VALUES (?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), sort_order = VALUES(sort_order)'
+         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
     );
 
     foreach ($modules as $module) {
@@ -249,6 +249,37 @@ function widget_catalog(): array
             'description' => 'Conditions météo en direct via Open‑Meteo.',
         ],
     ];
+}
+}
+
+
+if (!function_exists('enabled_widget_catalog')) {
+function enabled_widget_catalog(): array
+{
+    $catalog = widget_catalog();
+    if (!table_exists('dashboard_widget_settings')) {
+        return $catalog;
+    }
+
+    $rows = db()->query('SELECT widget_key, is_enabled FROM dashboard_widget_settings');
+    $settings = $rows !== false ? ($rows->fetchAll() ?: []) : [];
+    $enabledMap = [];
+    foreach ($settings as $row) {
+        $key = (string) ($row['widget_key'] ?? '');
+        if ($key === '') {
+            continue;
+        }
+        $enabledMap[$key] = (int) ($row['is_enabled'] ?? 0) === 1;
+    }
+
+    $filtered = [];
+    foreach ($catalog as $key => $meta) {
+        if (($enabledMap[$key] ?? true) === true) {
+            $filtered[$key] = $meta;
+        }
+    }
+
+    return $filtered;
 }
 }
 
@@ -820,6 +851,15 @@ function apply_runtime_schema_updates(): void
     }
 
 
+
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS dashboard_widget_settings (
+            widget_key VARCHAR(120) PRIMARY KEY,
+            is_enabled TINYINT(1) NOT NULL DEFAULT 1,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
     if (table_exists('dashboard_widgets')) {
         $columnStmt = db()->prepare(
             'SELECT COUNT(*) FROM information_schema.columns
@@ -852,6 +892,19 @@ function apply_runtime_schema_updates(): void
             if (!$hasColumn) {
                 db()->exec($statement);
             }
+        }
+    }
+
+
+    if (table_exists('modules')) {
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $columnStmt->execute(['modules', 'visibility']);
+        $hasVisibility = (int) $columnStmt->fetchColumn() > 0;
+        if (!$hasVisibility) {
+            db()->exec('ALTER TABLE modules ADD COLUMN visibility ENUM("public","members","admin") NOT NULL DEFAULT "members" AFTER is_enabled');
         }
     }
 
@@ -1234,10 +1287,43 @@ function module_enabled(string $module): bool
 }
 }
 
+
+if (!function_exists('module_visible_for_current_user')) {
+function module_visible_for_current_user(string $module): bool
+{
+    if ($module === '' || !table_exists('modules')) {
+        return true;
+    }
+
+    $stmt = db()->prepare('SELECT visibility FROM modules WHERE code = ? LIMIT 1');
+    $stmt->execute([$module]);
+    $visibility = (string) ($stmt->fetchColumn() ?: 'public');
+
+    if ($visibility === 'public') {
+        return true;
+    }
+
+    $user = current_user();
+    if ($user === null) {
+        return false;
+    }
+
+    if ($visibility === 'members') {
+        return true;
+    }
+
+    if ($visibility === 'admin') {
+        return has_permission('admin.access') || has_permission('modules.manage');
+    }
+
+    return false;
+}
+}
+
 if (!function_exists('require_module_enabled')) {
 function require_module_enabled(string $module): void
 {
-    if (module_enabled($module)) {
+    if (module_enabled($module) && module_visible_for_current_user($module)) {
         return;
     }
 
@@ -1374,7 +1460,7 @@ function render_layout(string $content, string $title = ''): string
         'fr' => [
             'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Boutique', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
             'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_auctions' => 'Enchères',
-            'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'logout' => 'Déconnexion', 'login' => 'Connexion',
+            'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'account_admin' => 'Administration', 'logout' => 'Déconnexion', 'login' => 'Connexion',
             'theme_light' => 'Clair', 'theme_dark' => 'Sombre',
             'accent_blue' => 'Bleu', 'accent_emerald' => 'Émeraude', 'accent_violet' => 'Violet', 'accent_red' => 'Rouge', 'accent_amber' => 'Ambre', 'accent_orange' => 'Orange',
             'language_choice' => 'Choix de la langue', 'language_help' => 'Sélecteur de langue du site. Le changement est appliqué automatiquement.',
@@ -1385,7 +1471,7 @@ function render_layout(string $content, string $title = ''): string
         'en' => [
             'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_auctions' => 'Auctions',
-            'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'logout' => 'Log out', 'login' => 'Log in',
+            'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
             'theme_light' => 'Light', 'theme_dark' => 'Dark',
             'accent_blue' => 'Blue', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Red', 'accent_amber' => 'Amber', 'accent_orange' => 'Orange',
             'language_choice' => 'Language selection', 'language_help' => 'Site language selector. Changes are applied automatically.',
@@ -1396,7 +1482,7 @@ function render_layout(string $content, string $title = ''): string
         'de' => [
             'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_auctions' => 'Auktionen',
-            'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'logout' => 'Abmelden', 'login' => 'Anmelden',
+            'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'account_admin' => 'Verwaltung', 'logout' => 'Abmelden', 'login' => 'Anmelden',
             'theme_light' => 'Hell', 'theme_dark' => 'Dunkel',
             'accent_blue' => 'Blau', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violett', 'accent_red' => 'Rot', 'accent_amber' => 'Bernstein', 'accent_orange' => 'Orange',
             'language_choice' => 'Sprachauswahl', 'language_help' => 'Sprachauswahl der Website. Änderungen werden automatisch angewendet.',
@@ -1407,7 +1493,7 @@ function render_layout(string $content, string $title = ''): string
         'nl' => [
             'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_auctions' => 'Veilingen',
-            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'logout' => 'Afmelden', 'login' => 'Inloggen',
+            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
             'theme_light' => 'Licht', 'theme_dark' => 'Donker',
             'accent_blue' => 'Blauw', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violet', 'accent_red' => 'Rood', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranje',
             'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
@@ -1486,11 +1572,18 @@ function render_layout(string $content, string $title = ''): string
     $authHtml = '';
     if ($user !== null) {
         $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
+        $adminMenuLink = '';
+        if (has_permission('admin.access')) {
+            $adminMenuLink = '<hr class="account-menu-separator">'
+                . '<a class="account-menu-link" href="' . e(route_url('admin')) . '">' . e((string) $layoutI18n['account_admin']) . '</a>';
+        }
+
         $authHtml = '<details class="account-menu">'
             . '<summary class="button small account-menu-trigger">' . e($accountLabel) . '</summary>'
             . '<div class="account-menu-panel">'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
+            . $adminMenuLink
             . '<hr class="account-menu-separator">'
             . '<form class="nav-form account-menu-form" method="post" action="' . e(route_url('logout')) . '">'
             . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
@@ -4112,6 +4205,7 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_auctions', 'title' => ['fr' => 'Enchères', 'en' => 'Auctions', 'de' => 'Auktionen', 'nl' => 'Veilingen'], 'desc' => ['fr' => 'Lots, planification, offres et clôture.', 'en' => 'Lots, scheduling, bids and closing.', 'de' => 'Lose, Planung, Gebote und Abschluss.', 'nl' => 'Kavels, planning, biedingen en afsluiting.'], 'module' => 'auctions', 'permission' => 'auctions.manage'],
         ['route' => 'admin_editorial', 'title' => ['fr' => 'Éditorial multilingue', 'en' => 'Multilingual editorial', 'de' => 'Mehrsprachige Redaktion', 'nl' => 'Meertalige redactie'], 'desc' => ['fr' => 'Français source, traduction auto EN/DE/NL et relecture manuelle.', 'en' => 'French source, EN/DE/NL auto translation and manual review.', 'de' => 'Französische Quelle, automatische Übersetzung und Review.', 'nl' => 'Franse bron, automatische vertaling en manuele review.']],
         ['route' => 'admin_translation_reviews', 'title' => ['fr' => 'Relecture linguistique', 'en' => 'Translation reviews', 'de' => 'Sprachliche Prüfung', 'nl' => 'Taalreview'], 'desc' => ['fr' => 'Workflow de validation des traductions des actualités et articles.', 'en' => 'Validation workflow for news/article translations.', 'de' => 'Freigabe-Workflow für News-/Artikelübersetzungen.', 'nl' => 'Validatieworkflow voor vertalingen van nieuws/artikels.']],
+        ['route' => 'admin_dashboard', 'title' => ['fr' => 'Widgets dashboard', 'en' => 'Dashboard widgets', 'de' => 'Dashboard-Widgets', 'nl' => 'Dashboard-widgets'], 'desc' => ['fr' => 'Activation des widgets disponibles pour les membres.', 'en' => 'Enable widgets available to members.', 'de' => 'Aktivierung verfügbarer Widgets für Mitglieder.', 'nl' => 'Activeer widgets beschikbaar voor leden.'], 'module' => 'dashboard', 'permission' => 'admin.access'],
         ['route' => 'admin_live_feeds', 'title' => ['fr' => 'Flux live', 'en' => 'Live feeds', 'de' => 'Live-Feeds', 'nl' => 'Live feeds'], 'desc' => ['fr' => 'Pilotage fin des flux radioamateur, TTL, URLs et activation.', 'en' => 'Fine control of radio feeds, TTL, URLs and activation.', 'de' => 'Feinsteuerung von Funk-Feeds, TTL, URLs und Aktivierung.', 'nl' => 'Fijn beheer van radiofeeds, TTL, URL’s en activatie.']],
         ['route' => 'admin_newsletters', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter', 'de' => 'Newsletter', 'nl' => 'Nieuwsbrief'], 'desc' => ['fr' => 'Abonnés, import CSV et campagnes email.', 'en' => 'Subscribers, CSV import and email campaigns.', 'de' => 'Abonnenten, CSV-Import und E-Mail-Kampagnen.', 'nl' => 'Abonnees, CSV-import en e-mailcampagnes.']],
         ['route' => 'admin_wiki', 'title' => ['fr' => 'Wiki', 'en' => 'Wiki', 'de' => 'Wiki', 'nl' => 'Wiki'], 'desc' => ['fr' => 'Pages collaboratives et révisions.', 'en' => 'Collaborative pages and revisions.', 'de' => 'Kollaborative Seiten und Revisionen.', 'nl' => 'Samenwerkingspagina’s en revisies.'], 'module' => 'wiki'],
