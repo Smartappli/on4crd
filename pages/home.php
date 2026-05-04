@@ -259,6 +259,54 @@ if ($moduleCards === '') {
     $moduleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">' . e((string) $homeI18n['public_updating']) . '</div>';
 }
 
+
+$memberModuleDefinitions = [
+    'dashboard' => ['route' => 'dashboard', 'icon' => '🧭', 'title' => ['fr' => 'Tableau de bord'], 'desc' => ['fr' => 'Configurez votre espace membre avec des widgets personnalisables.']],
+    'articles' => ['route' => 'articles', 'icon' => '🛠️', 'title' => ['fr' => 'Articles techniques'], 'desc' => ['fr' => 'Approfondissez vos connaissances avec des contenus pédagogiques.']],
+    'wiki' => ['route' => 'wiki', 'icon' => '📚', 'title' => ['fr' => 'Wiki du club'], 'desc' => ['fr' => 'Consultez les procédures et bonnes pratiques radioamateur.']],
+    'albums' => ['route' => 'albums', 'icon' => '🖼️', 'title' => ['fr' => 'Galerie photo'], 'desc' => ['fr' => 'Revivez les activités du club à travers les albums.']],
+    'qsl' => ['route' => 'qsl', 'icon' => '📮', 'title' => ['fr' => 'Espace QSL'], 'desc' => ['fr' => 'Préparez et exportez vos cartes QSL depuis un espace dédié.']],
+    'auctions' => ['route' => 'auctions', 'icon' => '🏷️', 'title' => ['fr' => 'Enchères'], 'desc' => ['fr' => 'Donnez une seconde vie au matériel radio entre membres.']],
+    'news' => ['route' => 'news', 'icon' => '📰', 'title' => ['fr' => 'Actualités'], 'desc' => ['fr' => 'Suivez les annonces et informations du club.']],
+    'events' => ['route' => 'events', 'icon' => '📅', 'title' => ['fr' => 'Événements'], 'desc' => ['fr' => 'Consultez le calendrier des activités et rendez-vous.']],
+];
+$memberModuleCards = '';
+if (table_exists('modules')) {
+    $memberModules = db()->query("SELECT code FROM modules WHERE is_enabled = 1 AND visibility = 'members' ORDER BY sort_order ASC")->fetchAll() ?: [];
+    foreach ($memberModules as $memberModuleRow) {
+        $moduleCode = (string) ($memberModuleRow['code'] ?? '');
+        if ($moduleCode === '' || !isset($memberModuleDefinitions[$moduleCode])) {
+            continue;
+        }
+        $moduleMeta = $memberModuleDefinitions[$moduleCode];
+        $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $moduleMeta['route'])) . '">' 
+            . '<div class="flex items-center justify-between gap-3">'
+            . '<h3 class="text-lg font-semibold text-slate-900">' . e((string) ($moduleMeta['title']['fr'] ?? $moduleCode)) . '</h3>'
+            . '<span class="text-xl" aria-hidden="true">' . e((string) ($moduleMeta['icon'] ?? '📦')) . '</span>'
+            . '</div>'
+            . '<p class="mt-2 text-sm text-slate-600">' . e((string) ($moduleMeta['desc']['fr'] ?? '')) . '</p>'
+            . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
+            . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">Membres</span>'
+            . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
+            . '</div>'
+            . '</a>';
+    }
+}
+if ($memberModuleCards === '') {
+    $memberModuleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Aucun module membre disponible actuellement.</div>';
+}
+
+
+$memberModulesSectionHtml = '';
+if (!$isAuthenticated) {
+    $memberModulesSectionHtml = '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+        . '<header class="mb-4">'
+        . '<h2 class="text-2xl font-bold text-slate-900">Modules accessibles aux membres</h2>'
+        . '</header>'
+        . '<div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">' . $memberModuleCards . '</div>'
+        . '</section>';
+}
+
 $heroTitle = '';
 
 $heroSubtitle = '';
@@ -495,6 +543,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ad_title']) . '</h3>' . $adSlotHtml . '</article>'
     . '</div>'
     . '</section>'
+    . $memberModulesSectionHtml
     . '<section class="mt-4 grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h3 class="text-xl font-bold text-slate-900">Vous êtes journaliste</h3>'

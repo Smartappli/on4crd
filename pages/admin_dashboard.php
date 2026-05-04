@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
+require_module_enabled('dashboard');
 require_permission('admin.access');
+require_permission('modules.manage');
 
 db()->exec(
     "CREATE TABLE IF NOT EXISTS dashboard_widget_settings (
