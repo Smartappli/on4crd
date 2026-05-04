@@ -7,7 +7,12 @@ on:
         description: "Dossier à compresser"
         required: true
         default: "assets/img"
-
+  push:
+    paths:
+      - "assets/img/**/*.jpg"
+      - "assets/img/**/*.jpeg"
+      - "assets/img/**/*.png"
+      - "assets/img/**/*.webp"
   pull_request:
     paths:
       - "assets/img/**/*.jpg"
