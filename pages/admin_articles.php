@@ -6,8 +6,8 @@ $locale = current_locale();
 $i18n = [
     'fr' => ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.', 'ok_saved' => 'Article enregistré.', 'err_invalid_category' => 'Catégorie invalide.', 'ok_category_updated' => 'Catégorie mise à jour.', 'err_delete_category' => 'Suppression impossible pour cette catégorie.', 'ok_category_deleted' => 'Catégorie supprimée (articles déplacés vers "autres").', 'edit' => 'Modifier', 'create' => 'Créer', 'an_article' => 'un article', 'title' => 'Titre', 'slug' => 'Slug', 'category' => 'Catégorie', 'new_category' => 'Nouvelle catégorie…', 'new_category_id' => 'Nouvelle catégorie (identifiant)', 'import_document' => 'Importer un document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Résumé', 'content_simple_html' => 'Contenu (HTML simple)', 'status' => 'Statut', 'draft' => 'Brouillon', 'published' => 'Publié', 'save' => 'Enregistrer', 'existing_articles' => 'Articles existants', 'category_label' => 'Catégorie :', 'category_edit' => 'Édition des catégories', 'code' => 'Code', 'label' => 'Libellé', 'rename_code' => 'Renommer code', 'delete_to_other' => 'Supprimer (vers autres)'],
     'en' => ['ok_saved' => 'Article saved.', 'err_invalid_category' => 'Invalid category.', 'ok_category_updated' => 'Category updated.', 'err_delete_category' => 'Cannot delete this category.', 'ok_category_deleted' => 'Category deleted (articles moved to "other").', 'edit' => 'Edit', 'create' => 'Create', 'an_article' => 'an article', 'title' => 'Title', 'slug' => 'Slug', 'category' => 'Category', 'new_category' => 'New category…', 'new_category_id' => 'New category (identifier)', 'import_document' => 'Import a document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Summary', 'content_simple_html' => 'Content (simple HTML)', 'status' => 'Status', 'draft' => 'Draft', 'published' => 'Published', 'save' => 'Save', 'existing_articles' => 'Existing articles', 'category_label' => 'Category:', 'category_edit' => 'Category editing', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Rename code', 'delete_to_other' => 'Delete (to other)', 'layout' => 'Articles', 'meta_desc' => 'Administration and publishing of site articles.'],
-    'de' => ['ok_saved' => 'Article saved.', 'err_invalid_category' => 'Invalid category.', 'ok_category_updated' => 'Category updated.', 'err_delete_category' => 'Cannot delete this category.', 'ok_category_deleted' => 'Category deleted (articles moved to "other").', 'edit' => 'Edit', 'create' => 'Create', 'an_article' => 'an article', 'title' => 'Title', 'slug' => 'Slug', 'category' => 'Category', 'new_category' => 'New category…', 'new_category_id' => 'New category (identifier)', 'import_document' => 'Import a document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Summary', 'content_simple_html' => 'Content (simple HTML)', 'status' => 'Status', 'draft' => 'Draft', 'published' => 'Published', 'save' => 'Save', 'existing_articles' => 'Existing articles', 'category_label' => 'Category:', 'category_edit' => 'Category editing', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Rename code', 'delete_to_other' => 'Delete (to other)', 'layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'],
-    'nl' => ['ok_saved' => 'Article saved.', 'err_invalid_category' => 'Invalid category.', 'ok_category_updated' => 'Category updated.', 'err_delete_category' => 'Cannot delete this category.', 'ok_category_deleted' => 'Category deleted (articles moved to "other").', 'edit' => 'Edit', 'create' => 'Create', 'an_article' => 'an article', 'title' => 'Title', 'slug' => 'Slug', 'category' => 'Category', 'new_category' => 'New category…', 'new_category_id' => 'New category (identifier)', 'import_document' => 'Import a document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Summary', 'content_simple_html' => 'Content (simple HTML)', 'status' => 'Status', 'draft' => 'Draft', 'published' => 'Published', 'save' => 'Save', 'existing_articles' => 'Existing articles', 'category_label' => 'Category:', 'category_edit' => 'Category editing', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Rename code', 'delete_to_other' => 'Delete (to other)', 'layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'],
+    'de' => ['ok_saved' => 'Artikel gespeichert.', 'err_invalid_category' => 'Ungültige Kategorie.', 'ok_category_updated' => 'Kategorie aktualisiert.', 'err_delete_category' => 'Diese Kategorie kann nicht gelöscht werden.', 'ok_category_deleted' => 'Kategorie gelöscht (Artikel nach "autres" verschoben).', 'edit' => 'Bearbeiten', 'create' => 'Erstellen', 'an_article' => 'einen Artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Kategorie', 'new_category' => 'Neue Kategorie…', 'new_category_id' => 'Neue Kategorie (Kennung)', 'import_document' => 'Dokument importieren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Zusammenfassung', 'content_simple_html' => 'Inhalt (einfaches HTML)', 'status' => 'Status', 'draft' => 'Entwurf', 'published' => 'Veröffentlicht', 'save' => 'Speichern', 'existing_articles' => 'Vorhandene Artikel', 'category_label' => 'Kategorie:', 'category_edit' => 'Kategorien bearbeiten', 'code' => 'Code', 'label' => 'Bezeichnung', 'rename_code' => 'Code umbenennen', 'delete_to_other' => 'Löschen (nach autres)', 'layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'],
+    'nl' => ['ok_saved' => 'Artikel opgeslagen.', 'err_invalid_category' => 'Ongeldige categorie.', 'ok_category_updated' => 'Categorie bijgewerkt.', 'err_delete_category' => 'Deze categorie kan niet worden verwijderd.', 'ok_category_deleted' => 'Categorie verwijderd (artikelen verplaatst naar "autres").', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'an_article' => 'een artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Categorie', 'new_category' => 'Nieuwe categorie…', 'new_category_id' => 'Nieuwe categorie (identifier)', 'import_document' => 'Document importeren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Samenvatting', 'content_simple_html' => 'Inhoud (eenvoudige HTML)', 'status' => 'Status', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'existing_articles' => 'Bestaande artikelen', 'category_label' => 'Categorie:', 'category_edit' => 'Categorieën bewerken', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Code hernoemen', 'delete_to_other' => 'Verwijderen (naar autres)', 'layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
@@ -23,28 +23,36 @@ set_page_meta([
  */
 function import_article_document(array $file): array
 {
+    $locale = current_locale();
+    $msg = [
+        'fr' => ['upload_failed' => 'Le téléversement du document a échoué.', 'allowed_formats' => 'Formats autorisés : PDF, DOCX, TXT, MD ou HTML.', 'invalid_doc' => 'Document importé invalide.', 'create_dir' => 'Impossible de créer le répertoire de stockage des articles.', 'save_doc' => 'Impossible d’enregistrer le document importé.', 'imported_doc' => 'Document importé :', 'imported_docx' => 'Document DOCX importé :'],
+        'en' => ['upload_failed' => 'Document upload failed.', 'allowed_formats' => 'Allowed formats: PDF, DOCX, TXT, MD or HTML.', 'invalid_doc' => 'Invalid imported document.', 'create_dir' => 'Unable to create article storage directory.', 'save_doc' => 'Unable to save imported document.', 'imported_doc' => 'Imported document:', 'imported_docx' => 'Imported DOCX document:'],
+        'de' => ['upload_failed' => 'Dokument-Upload fehlgeschlagen.', 'allowed_formats' => 'Erlaubte Formate: PDF, DOCX, TXT, MD oder HTML.', 'invalid_doc' => 'Ungültiges importiertes Dokument.', 'create_dir' => 'Speicherverzeichnis für Artikel kann nicht erstellt werden.', 'save_doc' => 'Importiertes Dokument konnte nicht gespeichert werden.', 'imported_doc' => 'Importiertes Dokument:', 'imported_docx' => 'Importiertes DOCX-Dokument:'],
+        'nl' => ['upload_failed' => 'Upload van document mislukt.', 'allowed_formats' => 'Toegestane formaten: PDF, DOCX, TXT, MD of HTML.', 'invalid_doc' => 'Ongeldig geïmporteerd document.', 'create_dir' => 'Kan opslagmap voor artikelen niet maken.', 'save_doc' => 'Kan geïmporteerd document niet opslaan.', 'imported_doc' => 'Geïmporteerd document:', 'imported_docx' => 'Geïmporteerd DOCX-document:'],
+    ];
+    $tm = $msg[$locale] ?? $msg['fr'];
     $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
     if ($error === UPLOAD_ERR_NO_FILE) {
         return ['excerpt' => '', 'content' => ''];
     }
     if ($error !== UPLOAD_ERR_OK) {
-        throw new RuntimeException('Le téléversement du document a échoué.');
+        throw new RuntimeException((string) $tm['upload_failed']);
     }
 
     $originalName = trim((string) ($file['name'] ?? 'document'));
     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
     if (!in_array($extension, ['pdf', 'docx', 'txt', 'md', 'html', 'htm'], true)) {
-        throw new RuntimeException('Formats autorisés : PDF, DOCX, TXT, MD ou HTML.');
+        throw new RuntimeException((string) $tm['allowed_formats']);
     }
 
     $tmpPath = (string) ($file['tmp_name'] ?? '');
     if ($tmpPath === '' || !is_uploaded_file($tmpPath)) {
-        throw new RuntimeException('Document importé invalide.');
+        throw new RuntimeException((string) $tm['invalid_doc']);
     }
 
     $targetDir = __DIR__ . '/../storage/uploads/articles';
     if (!is_dir($targetDir) && !mkdir($targetDir, 0775, true) && !is_dir($targetDir)) {
-        throw new RuntimeException('Impossible de créer le répertoire de stockage des articles.');
+        throw new RuntimeException((string) $tm['create_dir']);
     }
 
     $basename = slugify(pathinfo($originalName, PATHINFO_FILENAME));
@@ -54,7 +62,7 @@ function import_article_document(array $file): array
     $filename = $basename . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
     $absolutePath = $targetDir . '/' . $filename;
     if (!move_uploaded_file($tmpPath, $absolutePath)) {
-        throw new RuntimeException('Impossible d’enregistrer le document importé.');
+        throw new RuntimeException((string) $tm['save_doc']);
     }
 
     $publicPath = 'storage/uploads/articles/' . $filename;
@@ -81,12 +89,12 @@ function import_article_document(array $file): array
         $content = sanitize_rich_html($rawHtml);
     } else {
         $content = $extension === 'pdf'
-            ? '<div class="article-document"><p><strong>Document importé :</strong> ' . $safeTitle . '</p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
-            : '<div class="article-document"><p><strong>Document DOCX importé :</strong> ' . $safeTitle . '</p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
+            ? '<div class="article-document"><p><strong>' . e((string) $tm['imported_doc']) . ' ' . $safeTitle . '</p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
+            : '<div class="article-document"><p><strong>' . e((string) $tm['imported_docx']) . ' ' . $safeTitle . '</p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
     }
 
     return [
-        'excerpt' => 'Document importé : ' . pathinfo($originalName, PATHINFO_FILENAME),
+        'excerpt' => ((string) $tm['imported_doc']) . ' ' . pathinfo($originalName, PATHINFO_FILENAME),
         'content' => $content,
     ];
 }
