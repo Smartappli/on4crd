@@ -1459,47 +1459,47 @@ function render_layout(string $content, string $title = ''): string
     $layoutMessages = [
         'fr' => [
             'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Boutique', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
-            'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_auctions' => 'Enchères',
+            'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_library' => 'Bibliothèque', 'nav_auctions' => 'Enchères',
             'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'account_admin' => 'Administration', 'logout' => 'Déconnexion', 'login' => 'Connexion',
             'theme_light' => 'Clair', 'theme_dark' => 'Sombre',
             'accent_blue' => 'Bleu', 'accent_emerald' => 'Émeraude', 'accent_violet' => 'Violet', 'accent_red' => 'Rouge', 'accent_amber' => 'Ambre', 'accent_orange' => 'Orange',
             'language_choice' => 'Choix de la langue', 'language_help' => 'Sélecteur de langue du site. Le changement est appliqué automatiquement.',
             'theme_choice' => 'Choix du mode clair ou sombre', 'theme_help' => 'Sélecteur de thème. Le changement est appliqué automatiquement.',
             'accent_choice' => 'Choix de la couleur', 'accent_help' => 'Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.',
-            'install_app' => 'Installer l’app',
+            'install_app' => 'Installer l’app', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
         ],
         'en' => [
             'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_auctions' => 'Auctions',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
             'theme_light' => 'Light', 'theme_dark' => 'Dark',
             'accent_blue' => 'Blue', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Red', 'accent_amber' => 'Amber', 'accent_orange' => 'Orange',
             'language_choice' => 'Language selection', 'language_help' => 'Site language selector. Changes are applied automatically.',
             'theme_choice' => 'Light or dark mode selection', 'theme_help' => 'Theme selector. Changes are applied automatically.',
             'accent_choice' => 'Accent color selection', 'accent_help' => 'Accent color selector. Changes are applied automatically.',
-            'install_app' => 'Install app',
+            'install_app' => 'Install app', 'search_label' => 'Global search', 'search_placeholder' => 'Search…', 'search_submit' => 'Search',
         ],
         'de' => [
             'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_auctions' => 'Auktionen',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_library' => 'Bibliothek', 'nav_auctions' => 'Auktionen',
             'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'account_admin' => 'Verwaltung', 'logout' => 'Abmelden', 'login' => 'Anmelden',
             'theme_light' => 'Hell', 'theme_dark' => 'Dunkel',
             'accent_blue' => 'Blau', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violett', 'accent_red' => 'Rot', 'accent_amber' => 'Bernstein', 'accent_orange' => 'Orange',
             'language_choice' => 'Sprachauswahl', 'language_help' => 'Sprachauswahl der Website. Änderungen werden automatisch angewendet.',
             'theme_choice' => 'Hell- oder Dunkelmodus auswählen', 'theme_help' => 'Designauswahl. Änderungen werden automatisch angewendet.',
             'accent_choice' => 'Akzentfarbe auswählen', 'accent_help' => 'Akzentfarbauswahl. Änderungen werden automatisch angewendet.',
-            'install_app' => 'App installieren',
+            'install_app' => 'App installieren', 'search_label' => 'Globale Suche', 'search_placeholder' => 'Suchen…', 'search_submit' => 'Suchen',
         ],
         'nl' => [
             'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_auctions' => 'Veilingen',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_library' => 'Bibliotheek', 'nav_auctions' => 'Veilingen',
             'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
             'theme_light' => 'Licht', 'theme_dark' => 'Donker',
             'accent_blue' => 'Blauw', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violet', 'accent_red' => 'Rood', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranje',
             'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
             'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
             'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
-            'install_app' => 'App installeren',
+            'install_app' => 'App installeren', 'search_label' => 'Globale zoekopdracht', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
     ];
     $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
@@ -1541,6 +1541,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_wiki'], 'route' => 'wiki', 'module' => 'wiki'],
         ['label' => (string) $layoutI18n['nav_gallery'], 'route' => 'albums', 'module' => 'albums'],
         ['label' => (string) $layoutI18n['nav_articles'], 'route' => 'articles', 'module' => 'articles'],
+        ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
         ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
         ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
     ];
@@ -1568,6 +1569,14 @@ function render_layout(string $content, string $title = ''): string
             $navHtml .= '<div class="nav-row nav-row-member">' . $memberLinks . '</div>';
         }
     }
+
+    $searchQuery = trim((string) ($_GET['q'] ?? ''));
+    $searchForm = '<form class="nav-search" method="get" action="' . e(route_url('search')) . '">'
+        . '<label class="sr-only" for="nav-search-input">' . e((string) $layoutI18n['search_label']) . '</label>'
+        . '<input type="hidden" name="route" value="search">'
+        . '<input id="nav-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" required>'
+        . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
+        . '</form>';
 
     $authHtml = '';
     if ($user !== null) {
@@ -1695,7 +1704,7 @@ function render_layout(string $content, string $title = ''): string
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
+        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $searchForm . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
@@ -2203,9 +2212,61 @@ if (!function_exists('answer_question_from_knowledge')) {
      */
 function answer_question_from_knowledge(string $question): array
 {
+        $locale = current_locale();
+        $chatbotI18n = [
+            'fr' => [
+                'empty_question' => 'Je n’ai pas reçu de question exploitable.',
+                'no_precise_yet' => 'Je n’ai pas de réponse précise pour le moment.',
+                'article_found' => 'J’ai trouvé un article pertinent : ',
+                'summary' => 'Résumé : ',
+                'link' => 'Lien : ',
+                'articles_source' => 'Articles ON4CRD',
+                'knowledge_source' => 'Base de connaissances ON4CRD',
+                'article_label' => 'Article',
+                'no_answer' => 'Je n’ai pas de réponse précise pour cette question. Essayez de mentionner un mot-clé (QSL, antenne, propagation, licence) ou consultez le module Articles.',
+                'assistant_source' => 'Assistant Raymond',
+            ],
+            'en' => [
+                'empty_question' => 'I did not receive a usable question.',
+                'no_precise_yet' => 'I do not have a precise answer right now.',
+                'article_found' => 'I found a relevant article: ',
+                'summary' => 'Summary: ',
+                'link' => 'Link: ',
+                'articles_source' => 'ON4CRD articles',
+                'knowledge_source' => 'ON4CRD knowledge base',
+                'article_label' => 'Article',
+                'no_answer' => 'I do not have a precise answer for this question. Try adding a keyword (QSL, antenna, propagation, license) or browse the Articles module.',
+                'assistant_source' => 'Raymond assistant',
+            ],
+            'de' => [
+                'empty_question' => 'Ich habe keine verwertbare Frage erhalten.',
+                'no_precise_yet' => 'Ich habe im Moment keine genaue Antwort.',
+                'article_found' => 'Ich habe einen relevanten Artikel gefunden: ',
+                'summary' => 'Zusammenfassung: ',
+                'link' => 'Link: ',
+                'articles_source' => 'ON4CRD-Artikel',
+                'knowledge_source' => 'ON4CRD-Wissensdatenbank',
+                'article_label' => 'Artikel',
+                'no_answer' => 'Ich habe keine genaue Antwort auf diese Frage. Versuchen Sie ein Schlüsselwort (QSL, Antenne, Ausbreitung, Lizenz) oder nutzen Sie das Artikel-Modul.',
+                'assistant_source' => 'Assistent Raymond',
+            ],
+            'nl' => [
+                'empty_question' => 'Ik heb geen bruikbare vraag ontvangen.',
+                'no_precise_yet' => 'Ik heb momenteel geen exact antwoord.',
+                'article_found' => 'Ik heb een relevant artikel gevonden: ',
+                'summary' => 'Samenvatting: ',
+                'link' => 'Link: ',
+                'articles_source' => 'ON4CRD-artikels',
+                'knowledge_source' => 'ON4CRD-kennisbank',
+                'article_label' => 'Artikel',
+                'no_answer' => 'Ik heb geen exact antwoord op deze vraag. Probeer een trefwoord (QSL, antenne, propagatie, licentie) of bekijk de Artikels-module.',
+                'assistant_source' => 'Raymond-assistent',
+            ],
+        ];
+        $chatbotT = $chatbotI18n[$locale] ?? $chatbotI18n['fr'];
         $normalized = mb_safe_strtolower(trim($question));
         if ($normalized === '') {
-            return ['answer' => 'Je n’ai pas reçu de question exploitable.', 'source' => 'Assistant Raymond'];
+            return ['answer' => (string) $chatbotT['empty_question'], 'source' => (string) $chatbotT['assistant_source']];
         }
 
         $knowledgePath = __DIR__ . '/knowledge.php';
@@ -2243,8 +2304,8 @@ function answer_question_from_knowledge(string $question): array
 
         if ($bestItem !== null && $bestScore > 0) {
             return [
-                'answer' => trim((string) ($bestItem['body'] ?? 'Je n’ai pas de réponse précise pour le moment.')),
-                'source' => trim((string) ($bestItem['source'] ?? 'Base de connaissances ON4CRD')),
+                'answer' => trim((string) ($bestItem['body'] ?? (string) $chatbotT['no_precise_yet'])),
+                'source' => trim((string) ($bestItem['source'] ?? (string) $chatbotT['knowledge_source'])),
             ];
         }
 
@@ -2255,18 +2316,50 @@ function answer_question_from_knowledge(string $question): array
                 $stmt->execute([$like, $like, $like]);
                 $article = $stmt->fetch();
                 if (is_array($article)) {
-                    $title = trim((string) ($article['title'] ?? 'Article'));
+                    $title = trim((string) ($article['title'] ?? (string) $chatbotT['article_label']));
                     $excerpt = trim((string) ($article['excerpt'] ?? ''));
                     $slug = trim((string) ($article['slug'] ?? ''));
                     $url = $slug !== '' ? base_url('index.php?route=article&slug=' . urlencode($slug)) : '';
-                    $answer = 'J’ai trouvé un article pertinent : ' . $title . '.';
+                    $answer = (string) $chatbotT['article_found'] . $title . '.';
                     if ($excerpt !== '') {
-                        $answer .= "\n\nRésumé : " . $excerpt;
+                        $answer .= "\n\n" . (string) $chatbotT['summary'] . $excerpt;
                     }
                     if ($url !== '') {
-                        $answer .= "\n\nLien : " . $url;
+                        $answer .= "\n\n" . (string) $chatbotT['link'] . $url;
                     }
-                    return ['answer' => $answer, 'source' => 'Articles ON4CRD'];
+                    return ['answer' => $answer, 'source' => (string) $chatbotT['articles_source']];
+                }
+            } catch (Throwable) {
+                // fallback below
+            }
+        }
+
+        if (ensure_member_library_table()) {
+            try {
+                $like = '%' . $question . '%';
+                $stmt = db()->prepare('SELECT title, description, file_path FROM member_library_documents WHERE (title LIKE ? OR description LIKE ? OR extracted_text LIKE ?) ORDER BY uploaded_at DESC LIMIT 1');
+                $stmt->execute([$like, $like, $like]);
+                $doc = $stmt->fetch();
+                if (is_array($doc)) {
+                    $locale = current_locale();
+                    $chatbotDocI18n = [
+                        'fr' => ['doc_fallback' => 'Document PDF', 'prefix' => 'J’ai trouvé un document dans la bibliothèque membres : ', 'summary' => 'Résumé : ', 'open' => 'Consulter : ', 'source' => 'Bibliothèque membres'],
+                        'en' => ['doc_fallback' => 'PDF document', 'prefix' => 'I found a document in the members library: ', 'summary' => 'Summary: ', 'open' => 'Open: ', 'source' => 'Members library'],
+                        'de' => ['doc_fallback' => 'PDF-Dokument', 'prefix' => 'Ich habe ein Dokument in der Mitgliederbibliothek gefunden: ', 'summary' => 'Zusammenfassung: ', 'open' => 'Öffnen: ', 'source' => 'Mitgliederbibliothek'],
+                        'nl' => ['doc_fallback' => 'PDF-document', 'prefix' => 'Ik heb een document gevonden in de ledenbibliotheek: ', 'summary' => 'Samenvatting: ', 'open' => 'Openen: ', 'source' => 'Ledenbibliotheek'],
+                    ];
+                    $chatbotDocT = $chatbotDocI18n[$locale] ?? $chatbotDocI18n['fr'];
+                    $docTitle = trim((string) ($doc['title'] ?? (string) $chatbotDocT['doc_fallback']));
+                    $docDescription = trim((string) ($doc['description'] ?? ''));
+                    $docUrl = trim((string) ($doc['file_path'] ?? ''));
+                    $answer = (string) $chatbotDocT['prefix'] . $docTitle . '.';
+                    if ($docDescription !== '') {
+                        $answer .= "\n\n" . (string) $chatbotDocT['summary'] . $docDescription;
+                    }
+                    if ($docUrl !== '') {
+                        $answer .= "\n\n" . (string) $chatbotDocT['open'] . base_url($docUrl);
+                    }
+                    return ['answer' => $answer, 'source' => (string) $chatbotDocT['source']];
                 }
             } catch (Throwable) {
                 // fallback below
@@ -2274,10 +2367,32 @@ function answer_question_from_knowledge(string $question): array
         }
 
         return [
-            'answer' => 'Je n’ai pas de réponse précise pour cette question. Essayez de mentionner un mot-clé (QSL, antenne, propagation, licence) ou consultez le module Articles.',
-            'source' => 'Assistant Raymond',
+            'answer' => (string) $chatbotT['no_answer'],
+            'source' => (string) $chatbotT['assistant_source'],
         ];
     }
+}
+
+if (!function_exists('ensure_member_library_table')) {
+function ensure_member_library_table(): bool
+{
+    static $ready = null;
+    if (is_bool($ready)) {
+        return $ready;
+    }
+    if (table_exists('member_library_documents')) {
+        $ready = true;
+        return true;
+    }
+    try {
+        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at))');
+        $ready = table_exists('member_library_documents');
+    } catch (Throwable) {
+        $ready = false;
+    }
+
+    return $ready;
+}
 }
 
 /**
