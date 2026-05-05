@@ -228,6 +228,18 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS member_library_documents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    extracted_text LONGTEXT NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_uploaded (uploaded_at),
+    INDEX idx_member_uploaded (member_id, uploaded_at)
+);
+
 CREATE TABLE IF NOT EXISTS wiki_revisions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     wiki_page_id INT NOT NULL,
