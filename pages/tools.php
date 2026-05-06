@@ -65,38 +65,33 @@ ob_start();
                 <p><strong><?= e((string) $t['locator']) ?> :</strong> <span id="grid-found-locator">—</span></p>
             </div>
         </article>
-        <article class="card">
-            <h2><?= e((string) $t['conv']) ?></h2>
-            <div class="stack">
-                <section class="card tool-panel" id="tool-freq-wave" data-tool-panel>
-                    <h3><?= e((string) $t['freq_wave']) ?></h3>
-                    <label><?= e((string) $t['freq_mhz']) ?>
-                        <input type="number" id="freq-mhz" min="0" step="0.001" placeholder="<?= e((string) $t['freq_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['wavelength']) ?>: <strong id="freq-wavelength">—</strong></p>
-                </section>
-                <section class="card tool-panel" id="tool-power" data-tool-panel>
-                    <h3><?= e((string) $t['power']) ?></h3>
-                    <label><?= e((string) $t['watts']) ?>
-                        <input type="number" id="power-watts" min="0" step="0.001" placeholder="<?= e((string) $t['watts_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['dbm_label']) ?>: <strong id="power-dbm">—</strong></p>
-                    <label><?= e((string) $t['dbm_label']) ?>
-                        <input type="number" id="power-dbm-input" step="0.1" placeholder="<?= e((string) $t['dbm_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['watts_out_label']) ?>: <strong id="power-watts-out">—</strong></p>
-                </section>
-                <section class="card tool-panel" id="tool-distance" data-tool-panel>
-                    <h3><?= e((string) $t['distance']) ?></h3>
-                    <label><?= e((string) $t['locator_a']) ?>
-                        <input type="text" id="locator-a" maxlength="6" placeholder="<?= e((string) $t['locator_a_ph']) ?>">
-                    </label>
-                    <label><?= e((string) $t['locator_b']) ?>
-                        <input type="text" id="locator-b" maxlength="6" placeholder="<?= e((string) $t['locator_b_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">—</strong></p>
-                </section>
-            </div>
+        <article class="card tool-panel" id="tool-freq-wave" data-tool-panel>
+            <h2><?= e((string) $t['conv']) ?> · <?= e((string) $t['freq_wave']) ?></h2>
+            <label><?= e((string) $t['freq_mhz']) ?>
+                <input type="number" id="freq-mhz" min="0" step="0.001" placeholder="<?= e((string) $t['freq_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['wavelength']) ?>: <strong id="freq-wavelength">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-power" data-tool-panel>
+            <h2><?= e((string) $t['conv']) ?> · <?= e((string) $t['power']) ?></h2>
+            <label><?= e((string) $t['watts']) ?>
+                <input type="number" id="power-watts" min="0" step="0.001" placeholder="<?= e((string) $t['watts_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['dbm_label']) ?>: <strong id="power-dbm">—</strong></p>
+            <label><?= e((string) $t['dbm_label']) ?>
+                <input type="number" id="power-dbm-input" step="0.1" placeholder="<?= e((string) $t['dbm_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['watts_out_label']) ?>: <strong id="power-watts-out">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-distance" data-tool-panel>
+            <h2><?= e((string) $t['distance']) ?></h2>
+            <label><?= e((string) $t['locator_a']) ?>
+                <input type="text" id="locator-a" maxlength="6" placeholder="<?= e((string) $t['locator_a_ph']) ?>">
+            </label>
+            <label><?= e((string) $t['locator_b']) ?>
+                <input type="text" id="locator-b" maxlength="6" placeholder="<?= e((string) $t['locator_b_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">—</strong></p>
         </article>
     </div>
     </div>
