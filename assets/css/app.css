@@ -185,6 +185,31 @@ textarea:focus-visible {
   align-items: center;
   gap: .5rem;
 }
+
+.toolbar-search-row {
+  width: 100%;
+}
+.nav-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .5rem;
+  width: 100%;
+  padding: .35rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 90%, var(--panel-2));
+}
+.nav-search input[type="search"] {
+  margin: 0;
+  border-radius: 10px;
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
+  background: var(--panel);
+  min-width: 14rem;
+}
+.nav-search .button.small {
+  margin: 0;
+  white-space: nowrap;
+}
 .toolbar-auth {
   display: inline-flex;
   align-items: center;
@@ -1084,6 +1109,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   .nav.nav-open .nav-mobile-tools { display: block !important; }
   .nav-mobile-tools .toolbar-preferences { width: 100%; }
   .nav-mobile-tools .toolbar-preferences-row { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+  .nav-mobile-tools .nav-search { grid-template-columns: 1fr; }
   .nav-mobile-tools .toolbar-preferences-row .toolbar-form,
   .nav-mobile-tools .toolbar-auth,
   .nav-mobile-tools .account-menu { width: 100%; }
@@ -1115,6 +1141,12 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   .toolbar-auth {
     flex: 1 1 0;
     justify-content: flex-end;
+  }
+  .nav-search {
+    grid-template-columns: 1fr;
+  }
+  .nav-search input[type="search"] {
+    min-width: 0;
   }
   .preference-select {
     width: 100%;
@@ -1643,5 +1675,49 @@ textarea.wysiwyg-source {
 @media (max-width: 920px) {
   .auction-detail-side {
     position: static;
+  }
+}
+
+.tools-index {
+  margin-bottom: 1rem;
+}
+.tools-index h2 {
+  margin-top: 0;
+}
+.tools-index-group {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel-2) 70%, var(--panel));
+  padding: .4rem .75rem;
+  margin-bottom: .6rem;
+}
+.tools-index-group summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.tools-index-group ul {
+  margin: .55rem 0 .25rem 1rem;
+  padding: 0;
+}
+.tools-index-group li {
+  margin: .35rem 0;
+}
+
+.search-page {
+  display: grid;
+  place-items: center;
+}
+.search-page-card {
+  width: min(760px, 100%);
+}
+.search-page-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .65rem;
+  align-items: end;
+}
+@media (max-width: 640px) {
+  .search-page-form {
+    grid-template-columns: 1fr;
   }
 }
