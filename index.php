@@ -266,6 +266,8 @@ switch ($route) {
     case 'qsl_preview': $dispatchPage('pages/qsl_preview.php'); break;
     case 'qsl_export': $dispatchPage('pages/qsl_export.php'); break;
     case 'chatbot': $dispatchPage('pages/chatbot.php'); break;
+    case 'members_library': $dispatchPage('pages/members_library.php'); break;
+    case 'search': $dispatchPage('pages/search.php'); break;
     case 'newsletter': $dispatchPage('pages/newsletter.php'); break;
     case 'newsletter_public': $dispatchPage('pages/newsletter_public.php'); break;
     case 'news': $dispatchPage('pages/news.php'); break;
