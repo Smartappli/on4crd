@@ -1588,6 +1588,14 @@ function render_layout(string $content, string $title = ''): string
         }
     }
 
+    $searchQuery = trim((string) ($_GET['q'] ?? ''));
+    $searchForm = '<form class="nav-search" method="get" action="' . e(route_url('search')) . '">'
+        . '<label class="sr-only" for="nav-search-input">' . e((string) $layoutI18n['search_label']) . '</label>'
+        . '<input type="hidden" name="route" value="search">'
+        . '<input id="nav-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" required>'
+        . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
+        . '</form>';
+
     $authHtml = '';
     if ($user !== null) {
         $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
@@ -1715,7 +1723,7 @@ function render_layout(string $content, string $title = ''): string
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row toolbar-search-row">' . $searchForm . '</div>'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
+        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $searchForm . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'

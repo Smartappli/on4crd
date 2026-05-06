@@ -30,6 +30,9 @@ $homeMessages = [
         'weather_updated' => 'Mise à jour météo :',
         'weather_refresh' => 'Rafraîchir maintenant',
         'today_date' => 'Date :',
+        'clocks_aria' => 'Horloges UTC et locale',
+        'utc_time' => 'Heure UTC',
+        'local_time' => 'Heure locale',
         'partner_ad_empty' => 'Aucune publicité partenaire disponible pour le moment.',
         'partner_ad_title' => 'Annonce partenaire',
         'ham_info_title' => 'Informations radioamateur',
@@ -77,6 +80,9 @@ $homeMessages = [
         'weather_updated' => 'Weather update:',
         'weather_refresh' => 'Refresh now',
         'today_date' => 'Date:',
+        'clocks_aria' => 'UTC and local clocks',
+        'utc_time' => 'UTC time',
+        'local_time' => 'Local time',
         'partner_ad_empty' => 'No partner advertisement available at the moment.',
         'partner_ad_title' => 'Partner advertisement',
         'ham_info_title' => 'Ham radio information',
@@ -124,6 +130,9 @@ $homeMessages = [
         'weather_updated' => 'Wetter aktualisiert:',
         'weather_refresh' => 'Jetzt aktualisieren',
         'today_date' => 'Datum:',
+        'clocks_aria' => 'UTC- und Ortszeituhren',
+        'utc_time' => 'UTC-Zeit',
+        'local_time' => 'Ortszeit',
         'partner_ad_empty' => 'Derzeit ist keine Partnerwerbung verfügbar.',
         'partner_ad_title' => 'Partnerwerbung',
         'ham_info_title' => 'Funkamateur-Informationen',
@@ -171,6 +180,9 @@ $homeMessages = [
         'weather_updated' => 'Weer bijgewerkt:',
         'weather_refresh' => 'Nu verversen',
         'today_date' => 'Datum:',
+        'clocks_aria' => 'UTC- en lokale klokken',
+        'utc_time' => 'UTC-tijd',
+        'local_time' => 'Lokale tijd',
         'partner_ad_empty' => 'Er is momenteel geen partneradvertentie beschikbaar.',
         'partner_ad_title' => 'Partneradvertentie',
         'ham_info_title' => 'Radioamateurinformatie',
@@ -194,7 +206,13 @@ $homeMessages = [
     ],
 ];
 $homeI18n = $homeMessages[$homeLocale] ?? $homeMessages['fr'];
-$homeTodayDate = date('d/m/Y');
+$homeDateFormats = [
+    'fr' => 'd/m/Y',
+    'en' => 'Y-m-d',
+    'de' => 'd.m.Y',
+    'nl' => 'd-m-Y',
+];
+$homeTodayDate = date((string) ($homeDateFormats[$homeLocale] ?? 'd/m/Y'));
 
 $user = current_user();
 $isAuthenticated = $user !== null;
@@ -491,15 +509,15 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<blockquote class="mt-3 border-l-4 border-blue-200 pl-4 text-base italic text-slate-700">“' . e($homeQuoteText) . '”</blockquote>'
     . ($homeQuoteAuthor !== '' ? '<p class="mt-3 text-sm font-semibold text-slate-500">— ' . e($homeQuoteAuthor) . '</p>' : '')
     . '</article>'
-    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Horloges UTC et locale">'
+    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="' . e((string) $homeI18n['clocks_aria']) . '">'
     . '<p class="mb-3 text-sm font-semibold text-slate-700">' . e((string) $homeI18n['today_date']) . ' ' . e($homeTodayDate) . '</p>'
     . '<div class="grid gap-3 sm:grid-cols-2">'
     . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">'
-    . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Heure UTC</p>'
+    . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['utc_time']) . '</p>'
     . '<time class="mt-2 block text-2xl font-extrabold text-slate-900" data-live-clock data-timezone="UTC" aria-live="polite">--:--:--</time>'
     . '</article>'
     . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">'
-    . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Heure locale</p>'
+    . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['local_time']) . '</p>'
     . '<time class="mt-2 block text-2xl font-extrabold text-slate-900" data-live-clock data-timezone="local" aria-live="polite">--:--:--</time>'
     . '</article>'
     . '</div>'
