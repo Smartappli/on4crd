@@ -1723,7 +1723,8 @@ function render_layout(string $content, string $title = ''): string
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row toolbar-search-row">' . $searchForm . '</div>'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $searchForm . $authHtml . '</div></div>'
+        . '<div class="toolbar-preferences-row">' . $searchForm . $accentFormHtml . '</div>'
+        . '<div class="toolbar-preferences-row"><div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
