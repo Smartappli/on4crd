@@ -1551,6 +1551,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
+        ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
@@ -1586,14 +1587,6 @@ function render_layout(string $content, string $title = ''): string
             $navHtml .= '<div class="nav-row nav-row-member">' . $memberLinks . '</div>';
         }
     }
-
-    $searchQuery = trim((string) ($_GET['q'] ?? ''));
-    $searchForm = '<form class="nav-search" method="get" action="' . e(route_url('search')) . '">'
-        . '<label class="sr-only" for="nav-search-input">' . e((string) $layoutI18n['search_label']) . '</label>'
-        . '<input type="hidden" name="route" value="search">'
-        . '<input id="nav-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" required>'
-        . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
-        . '</form>';
 
     $authHtml = '';
     if ($user !== null) {
@@ -1721,7 +1714,8 @@ function render_layout(string $content, string $title = ''): string
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $searchForm . $authHtml . '</div></div>'
+        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '</div>'
+        . '<div class="toolbar-preferences-row"><div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
@@ -2268,6 +2262,26 @@ if (!function_exists('answer_question_from_knowledge')) {
     /**
      * @param list<string> $queryTokens
      */
+
+
+    /**
+     * @param list<string> $queryTokens
+     */
+    function rag_query_coverage(array $queryTokens, string $text): float
+    {
+        if ($queryTokens === []) {
+            return 0.0;
+        }
+        $normalizedText = ' ' . mb_safe_strtolower($text) . ' ';
+        $matched = 0;
+        foreach ($queryTokens as $token) {
+            if (str_contains($normalizedText, ' ' . $token . ' ') || str_contains($normalizedText, $token)) {
+                $matched++;
+            }
+        }
+        return $matched / max(1, count($queryTokens));
+    }
+
     function rag_weighted_score(array $queryTokens, string $text): float
     {
         if ($queryTokens === []) {
@@ -2301,6 +2315,75 @@ if (!function_exists('answer_question_from_knowledge')) {
         }
 
         return $score;
+    }
+
+
+
+    function ensure_rag_chunks_table(): bool
+    {
+        try {
+            db()->exec('CREATE TABLE IF NOT EXISTS rag_chunks (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                source_type VARCHAR(32) NOT NULL,
+                source_key VARCHAR(191) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                body MEDIUMTEXT NOT NULL,
+                url VARCHAR(255) DEFAULT NULL,
+                embedding_json MEDIUMTEXT NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY uniq_source (source_type, source_key)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+            return true;
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    /** @return list<string> */
+    function rag_chunks_from_text(string $text, int $maxChars = 600, int $overlap = 120): array
+    {
+        $plain = trim(preg_replace('/\s+/u', ' ', strip_tags($text)) ?? '');
+        if ($plain === '') { return []; }
+        $chunks = [];
+        $length = mb_strlen($plain);
+        $step = max(80, $maxChars - $overlap);
+        for ($offset = 0; $offset < $length; $offset += $step) {
+            $chunk = trim(mb_substr($plain, $offset, $maxChars));
+            if ($chunk !== '') { $chunks[] = $chunk; }
+            if (count($chunks) >= 12) { break; }
+        }
+        return $chunks;
+    }
+
+    /** @return list<float> */
+    function rag_embedding_vector(string $text, int $dim = 96): array
+    {
+        $vector = array_fill(0, $dim, 0.0);
+        $tokens = rag_tokens($text);
+        if ($tokens === []) { return $vector; }
+        foreach ($tokens as $token) {
+            $hash = abs(crc32($token));
+            $index = $hash % $dim;
+            $sign = (($hash >> 1) & 1) === 0 ? 1.0 : -1.0;
+            $vector[$index] += $sign;
+        }
+        $norm = 0.0;
+        foreach ($vector as $v) { $norm += $v * $v; }
+        $norm = sqrt($norm);
+        if ($norm > 0) {
+            foreach ($vector as $i => $v) { $vector[$i] = $v / $norm; }
+        }
+        return $vector;
+    }
+
+    /** @param list<float> $a @param list<float> $b */
+    function rag_cosine_similarity(array $a, array $b): float
+    {
+        $size = min(count($a), count($b));
+        if ($size === 0) { return 0.0; }
+        $dot = 0.0;
+        for ($i = 0; $i < $size; $i++) { $dot += ((float) $a[$i]) * ((float) $b[$i]); }
+        return $dot;
     }
 
     /**
@@ -2366,6 +2449,92 @@ function answer_question_from_knowledge(string $question): array
         }
 
         $queryTokens = rag_tokens($normalized);
+
+        if (ensure_rag_chunks_table()) {
+            try {
+                $countStmt = db()->query('SELECT COUNT(*) FROM rag_chunks');
+                $chunkCount = (int) ($countStmt ? $countStmt->fetchColumn() : 0);
+                if ($chunkCount === 0) {
+                    $insert = db()->prepare('INSERT INTO rag_chunks (source_type, source_key, title, body, url, embedding_json) VALUES (?,?,?,?,?,?)');
+                    $knowledgePath = __DIR__ . '/knowledge.php';
+                    $knowledgeBase = is_file($knowledgePath) ? (require $knowledgePath) : [];
+                    if (is_array($knowledgeBase)) {
+                        foreach ($knowledgeBase as $idx => $item) {
+                            if (!is_array($item)) { continue; }
+                            $title = trim((string) ($item['title'] ?? 'Knowledge'));
+                            $body = trim((string) ($item['body'] ?? ''));
+                            foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
+                                $key = 'kb_' . (string) $idx . '_' . (string) $chunkIndex;
+                                $vec = rag_embedding_vector($title . ' ' . $chunk);
+                                $insert->execute(['knowledge', $key, $title, $chunk, (string) ($item['url'] ?? ''), json_encode($vec)]);
+                            }
+                        }
+                    }
+                    if (table_exists('articles')) {
+                        $rows = db()->query('SELECT slug,title,excerpt,content FROM articles WHERE status = "published" ORDER BY updated_at DESC LIMIT 120')->fetchAll() ?: [];
+                        foreach ($rows as $row) {
+                            if (!is_array($row)) { continue; }
+                            $slug = trim((string) ($row['slug'] ?? ''));
+                            if ($slug === '') { continue; }
+                            $title = trim((string) ($row['title'] ?? 'Article'));
+                            $body = trim((string) (($row['excerpt'] ?? '') . "
+" . ($row['content'] ?? '')));
+                            foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
+                                $key = 'article_' . $slug . '_' . (string) $chunkIndex;
+                                $vec = rag_embedding_vector($title . ' ' . $chunk);
+                                $insert->execute(['article', $key, $title, $chunk, route_url('article', ['slug' => $slug]), json_encode($vec)]);
+                            }
+                        }
+                    }
+
+                    if (ensure_member_library_table()) {
+                        $docs = db()->query('SELECT id,title,description,extracted_text,file_path FROM member_library_documents ORDER BY uploaded_at DESC LIMIT 120')->fetchAll() ?: [];
+                        foreach ($docs as $doc) {
+                            if (!is_array($doc)) { continue; }
+                            $docId = (int) ($doc['id'] ?? 0);
+                            if ($docId <= 0) { continue; }
+                            $title = trim((string) ($doc['title'] ?? 'Document'));
+                            $body = trim((string) (($doc['description'] ?? '') . "
+" . ($doc['extracted_text'] ?? '')));
+                            $safePath = safe_storage_public_path_or_null((string) ($doc['file_path'] ?? ''), ['storage/uploads/library/']) ?? '';
+                            $url = $safePath !== '' ? base_url($safePath) : '';
+                            foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
+                                $key = 'doc_' . (string) $docId . '_' . (string) $chunkIndex;
+                                $vec = rag_embedding_vector($title . ' ' . $chunk);
+                                $insert->execute(['library', $key, $title, $chunk, $url, json_encode($vec)]);
+                            }
+                        }
+                    }
+                }
+
+                $qVec = rag_embedding_vector($normalized);
+                $stmt = db()->query('SELECT source_type, title, body, url, embedding_json FROM rag_chunks ORDER BY updated_at DESC LIMIT 350');
+                $rows = $stmt ? ($stmt->fetchAll() ?: []) : [];
+                $best = null;
+                $bestScore = -1.0;
+                foreach ($rows as $row) {
+                    if (!is_array($row)) { continue; }
+                    $vec = json_decode((string) ($row['embedding_json'] ?? '[]'), true);
+                    if (!is_array($vec)) { continue; }
+                    $sim = rag_cosine_similarity($qVec, array_map('floatval', $vec));
+                    $coverage = rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['body'] ?? '')));
+                    $score = $sim * 6.0 + $coverage * 2.5;
+                    if ($score > $bestScore) { $bestScore = $score; $best = $row; }
+                }
+                if (is_array($best) && $bestScore >= 1.8) {
+                    $summary = trim(mb_substr((string) ($best['body'] ?? ''), 0, 480));
+                    $link = trim((string) ($best['url'] ?? ''));
+                    $answer = $summary;
+                    if ($link !== '') { $answer .= "
+
+" . (string) $chatbotT['link'] . $link; }
+                    return ['answer' => $answer, 'source' => 'RAG v2 · ' . (string) ($best['source_type'] ?? 'source')];
+                }
+            } catch (Throwable) {
+                // fallback below
+            }
+        }
+
         $knowledgePath = __DIR__ . '/knowledge.php';
         $knowledgeBase = [];
         if (is_file($knowledgePath)) {
@@ -2393,6 +2562,7 @@ function answer_question_from_knowledge(string $question): array
             $body = (string) ($item['body'] ?? '');
             $score += rag_weighted_score($queryTokens, $title) * 2.0;
             $score += rag_weighted_score($queryTokens, $body);
+            $score += rag_query_coverage($queryTokens, $title . ' ' . $body) * 3.5;
             if ($score > $bestScore) {
                 $bestScore = $score;
                 $bestItem = $item;
@@ -2441,12 +2611,13 @@ function answer_question_from_knowledge(string $question): array
                     $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
                         + rag_weighted_score($queryTokens, (string) ($row['excerpt'] ?? ''))
                         + rag_weighted_score($queryTokens, (string) ($row['content'] ?? ''));
+                    $score += rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['excerpt'] ?? '') . ' ' . ($row['content'] ?? ''))) * 3.0;
                     if ($score > $articleScore) {
                         $articleScore = $score;
                         $article = $row;
                     }
                 }
-                if (is_array($article) && $articleScore > 0.0) {
+                if (is_array($article) && $articleScore >= 2.0) {
                     $title = trim((string) ($article['title'] ?? (string) $chatbotT['article_label']));
                     $excerpt = trim((string) ($article['excerpt'] ?? ''));
                     $slug = trim((string) ($article['slug'] ?? ''));
@@ -2491,12 +2662,13 @@ function answer_question_from_knowledge(string $question): array
                     $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
                         + rag_weighted_score($queryTokens, (string) ($row['description'] ?? ''))
                         + rag_weighted_score($queryTokens, (string) ($row['extracted_text'] ?? ''));
+                    $score += rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['description'] ?? '') . ' ' . ($row['extracted_text'] ?? ''))) * 3.0;
                     if ($score > $docScore) {
                         $docScore = $score;
                         $doc = $row;
                     }
                 }
-                if (is_array($doc) && $docScore > 0.0) {
+                if (is_array($doc) && $docScore >= 2.0) {
                     $locale = current_locale();
                     $chatbotDocI18n = [
                         'fr' => ['doc_fallback' => 'Document PDF', 'prefix' => 'J’ai trouvé un document dans la bibliothèque membres : ', 'summary' => 'Résumé : ', 'open' => 'Consulter : ', 'source' => 'Bibliothèque membres'],

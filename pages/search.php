@@ -79,12 +79,13 @@ set_page_meta([
 ]);
 ob_start();
 ?>
-<div class="card">
+<section class="search-page">
+    <div class="card search-page-card narrow">
     <h1><?= e((string) $t['title']) ?></h1>
-    <form method="get">
+    <form method="get" class="search-page-form">
         <input type="hidden" name="route" value="search">
         <input type="search" name="q" value="<?= e($q) ?>" placeholder="<?= e((string) $t['placeholder']) ?>" required>
-        <button class="button"><?= e((string) $t['submit']) ?></button>
+        <button class="button" type="submit"><?= e((string) $t['submit']) ?></button>
     </form>
     <p><?= $totalResults ?> <?= e((string) $t['count']) ?></p>
     <?php if ($hasQuery && !$isQueryLongEnough): ?>
@@ -104,5 +105,6 @@ ob_start();
             <?php if ($hasNext): ?><a class="button secondary" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
         </div>
     <?php endif; ?>
-</div>
+    </div>
+</section>
 <?php echo render_layout((string) ob_get_clean(), (string) $t['title']);
