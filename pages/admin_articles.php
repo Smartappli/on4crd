@@ -4,10 +4,10 @@ declare(strict_types=1);
 require_permission('articles.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.'],
-    'en' => ['layout' => 'Articles', 'meta_desc' => 'Administration and publishing of site articles.'],
-    'de' => ['layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'],
-    'nl' => ['layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'],
+    'fr' => ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.', 'ok_saved' => 'Article enregistré.', 'err_invalid_category' => 'Catégorie invalide.', 'ok_category_updated' => 'Catégorie mise à jour.', 'err_delete_category' => 'Suppression impossible pour cette catégorie.', 'ok_category_deleted' => 'Catégorie supprimée (articles déplacés vers "autres").', 'edit' => 'Modifier', 'create' => 'Créer', 'an_article' => 'un article', 'title' => 'Titre', 'slug' => 'Slug', 'category' => 'Catégorie', 'new_category' => 'Nouvelle catégorie…', 'new_category_id' => 'Nouvelle catégorie (identifiant)', 'import_document' => 'Importer un document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Résumé', 'content_simple_html' => 'Contenu (HTML simple)', 'status' => 'Statut', 'draft' => 'Brouillon', 'published' => 'Publié', 'save' => 'Enregistrer', 'existing_articles' => 'Articles existants', 'category_label' => 'Catégorie :', 'category_edit' => 'Édition des catégories', 'code' => 'Code', 'label' => 'Libellé', 'rename_code' => 'Renommer code', 'delete_to_other' => 'Supprimer (vers autres)', 'no_articles' => 'Aucun article.', 'custom_category_ph' => 'ex: propagation-vhf', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Trafic & DX', 'cat_numerique' => 'Modes numériques', 'cat_materiel' => 'Matériel & station', 'cat_formation' => 'Formation', 'cat_autres' => 'Autres'],
+    'en' => ['ok_saved' => 'Article saved.', 'err_invalid_category' => 'Invalid category.', 'ok_category_updated' => 'Category updated.', 'err_delete_category' => 'Cannot delete this category.', 'ok_category_deleted' => 'Category deleted (articles moved to "other").', 'edit' => 'Edit', 'create' => 'Create', 'an_article' => 'an article', 'title' => 'Title', 'slug' => 'Slug', 'category' => 'Category', 'new_category' => 'New category…', 'new_category_id' => 'New category (identifier)', 'import_document' => 'Import a document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Summary', 'content_simple_html' => 'Content (simple HTML)', 'status' => 'Status', 'draft' => 'Draft', 'published' => 'Published', 'save' => 'Save', 'existing_articles' => 'Existing articles', 'category_label' => 'Category:', 'category_edit' => 'Category editing', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Rename code', 'delete_to_other' => 'Delete (to other)', 'no_articles' => 'No articles.', 'custom_category_ph' => 'e.g. vhf-propagation', 'cat_antennes' => 'Antennas', 'cat_trafic' => 'Traffic & DX', 'cat_numerique' => 'Digital modes', 'cat_materiel' => 'Equipment & station', 'cat_formation' => 'Training', 'cat_autres' => 'Other', 'layout' => 'Articles', 'meta_desc' => 'Administration and publishing of site articles.'],
+    'de' => ['ok_saved' => 'Artikel gespeichert.', 'err_invalid_category' => 'Ungültige Kategorie.', 'ok_category_updated' => 'Kategorie aktualisiert.', 'err_delete_category' => 'Diese Kategorie kann nicht gelöscht werden.', 'ok_category_deleted' => 'Kategorie gelöscht (Artikel in die Standardkategorie verschoben).', 'edit' => 'Bearbeiten', 'create' => 'Erstellen', 'an_article' => 'einen Artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Kategorie', 'new_category' => 'Neue Kategorie…', 'new_category_id' => 'Neue Kategorie (Kennung)', 'import_document' => 'Dokument importieren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Zusammenfassung', 'content_simple_html' => 'Inhalt (einfaches HTML)', 'status' => 'Status', 'draft' => 'Entwurf', 'published' => 'Veröffentlicht', 'save' => 'Speichern', 'existing_articles' => 'Vorhandene Artikel', 'category_label' => 'Kategorie:', 'category_edit' => 'Kategorien bearbeiten', 'code' => 'Code', 'label' => 'Bezeichnung', 'rename_code' => 'Code umbenennen', 'delete_to_other' => 'Löschen (zur Standardkategorie)', 'no_articles' => 'Keine Artikel.', 'custom_category_ph' => 'z. B. vhf-ausbreitung', 'cat_antennes' => 'Antennen', 'cat_trafic' => 'Verkehr & DX', 'cat_numerique' => 'Digitale Modi', 'cat_materiel' => 'Ausrüstung & Station', 'cat_formation' => 'Schulung', 'cat_autres' => 'Sonstiges', 'layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'],
+    'nl' => ['ok_saved' => 'Artikel opgeslagen.', 'err_invalid_category' => 'Ongeldige categorie.', 'ok_category_updated' => 'Categorie bijgewerkt.', 'err_delete_category' => 'Deze categorie kan niet worden verwijderd.', 'ok_category_deleted' => 'Categorie verwijderd (artikelen verplaatst naar de standaardcategorie).', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'an_article' => 'een artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Categorie', 'new_category' => 'Nieuwe categorie…', 'new_category_id' => 'Nieuwe categorie (identifier)', 'import_document' => 'Document importeren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Samenvatting', 'content_simple_html' => 'Inhoud (eenvoudige HTML)', 'status' => 'Status', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'existing_articles' => 'Bestaande artikelen', 'category_label' => 'Categorie:', 'category_edit' => 'Categorieën bewerken', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Code hernoemen', 'delete_to_other' => 'Verwijderen (naar standaardcategorie)', 'no_articles' => 'Geen artikelen.', 'custom_category_ph' => 'bv. vhf-propagatie', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Verkeer & DX', 'cat_numerique' => 'Digitale modi', 'cat_materiel' => 'Materiaal & station', 'cat_formation' => 'Opleiding', 'cat_autres' => 'Overige', 'layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
@@ -23,28 +23,36 @@ set_page_meta([
  */
 function import_article_document(array $file): array
 {
+    $locale = current_locale();
+    $msg = [
+        'fr' => ['upload_failed' => 'Le téléversement du document a échoué.', 'allowed_formats' => 'Formats autorisés : PDF, DOCX, TXT, MD ou HTML.', 'invalid_doc' => 'Document importé invalide.', 'create_dir' => 'Impossible de créer le répertoire de stockage des articles.', 'save_doc' => 'Impossible d’enregistrer le document importé.', 'imported_doc' => 'Document importé :', 'imported_docx' => 'Document DOCX importé :'],
+        'en' => ['upload_failed' => 'Document upload failed.', 'allowed_formats' => 'Allowed formats: PDF, DOCX, TXT, MD or HTML.', 'invalid_doc' => 'Invalid imported document.', 'create_dir' => 'Unable to create article storage directory.', 'save_doc' => 'Unable to save imported document.', 'imported_doc' => 'Imported document:', 'imported_docx' => 'Imported DOCX document:'],
+        'de' => ['upload_failed' => 'Dokument-Upload fehlgeschlagen.', 'allowed_formats' => 'Erlaubte Formate: PDF, DOCX, TXT, MD oder HTML.', 'invalid_doc' => 'Ungültiges importiertes Dokument.', 'create_dir' => 'Speicherverzeichnis für Artikel kann nicht erstellt werden.', 'save_doc' => 'Importiertes Dokument konnte nicht gespeichert werden.', 'imported_doc' => 'Importiertes Dokument:', 'imported_docx' => 'Importiertes DOCX-Dokument:'],
+        'nl' => ['upload_failed' => 'Upload van document mislukt.', 'allowed_formats' => 'Toegestane formaten: PDF, DOCX, TXT, MD of HTML.', 'invalid_doc' => 'Ongeldig geïmporteerd document.', 'create_dir' => 'Kan opslagmap voor artikelen niet maken.', 'save_doc' => 'Kan geïmporteerd document niet opslaan.', 'imported_doc' => 'Geïmporteerd document:', 'imported_docx' => 'Geïmporteerd DOCX-document:'],
+    ];
+    $tm = $msg[$locale] ?? $msg['fr'];
     $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
     if ($error === UPLOAD_ERR_NO_FILE) {
         return ['excerpt' => '', 'content' => ''];
     }
     if ($error !== UPLOAD_ERR_OK) {
-        throw new RuntimeException('Le téléversement du document a échoué.');
+        throw new RuntimeException((string) $tm['upload_failed']);
     }
 
     $originalName = trim((string) ($file['name'] ?? 'document'));
     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
     if (!in_array($extension, ['pdf', 'docx', 'txt', 'md', 'html', 'htm'], true)) {
-        throw new RuntimeException('Formats autorisés : PDF, DOCX, TXT, MD ou HTML.');
+        throw new RuntimeException((string) $tm['allowed_formats']);
     }
 
     $tmpPath = (string) ($file['tmp_name'] ?? '');
     if ($tmpPath === '' || !is_uploaded_file($tmpPath)) {
-        throw new RuntimeException('Document importé invalide.');
+        throw new RuntimeException((string) $tm['invalid_doc']);
     }
 
     $targetDir = __DIR__ . '/../storage/uploads/articles';
     if (!is_dir($targetDir) && !mkdir($targetDir, 0775, true) && !is_dir($targetDir)) {
-        throw new RuntimeException('Impossible de créer le répertoire de stockage des articles.');
+        throw new RuntimeException((string) $tm['create_dir']);
     }
 
     $basename = slugify(pathinfo($originalName, PATHINFO_FILENAME));
@@ -54,7 +62,7 @@ function import_article_document(array $file): array
     $filename = $basename . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
     $absolutePath = $targetDir . '/' . $filename;
     if (!move_uploaded_file($tmpPath, $absolutePath)) {
-        throw new RuntimeException('Impossible d’enregistrer le document importé.');
+        throw new RuntimeException((string) $tm['save_doc']);
     }
 
     $publicPath = 'storage/uploads/articles/' . $filename;
@@ -81,23 +89,23 @@ function import_article_document(array $file): array
         $content = sanitize_rich_html($rawHtml);
     } else {
         $content = $extension === 'pdf'
-            ? '<div class="article-document"><p><strong>Document importé :</strong> ' . $safeTitle . '</p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
-            : '<div class="article-document"><p><strong>Document DOCX importé :</strong> ' . $safeTitle . '</p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
+            ? '<div class="article-document"><p><strong>' . e((string) $tm['imported_doc']) . ' ' . $safeTitle . '</p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
+            : '<div class="article-document"><p><strong>' . e((string) $tm['imported_docx']) . ' ' . $safeTitle . '</p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
     }
 
     return [
-        'excerpt' => 'Document importé : ' . pathinfo($originalName, PATHINFO_FILENAME),
+        'excerpt' => ((string) $tm['imported_doc']) . ' ' . pathinfo($originalName, PATHINFO_FILENAME),
         'content' => $content,
     ];
 }
 
 $defaultCategories = [
-    'antennes' => 'Antennes',
-    'trafic' => 'Trafic & DX',
-    'numerique' => 'Modes numériques',
-    'materiel' => 'Matériel & station',
-    'formation' => 'Formation',
-    'autres' => 'Autres',
+    'antennes' => $t('cat_antennes'),
+    'trafic' => $t('cat_trafic'),
+    'numerique' => $t('cat_numerique'),
+    'materiel' => $t('cat_materiel'),
+    'formation' => $t('cat_formation'),
+    'autres' => $t('cat_autres'),
 ];
 
 $existingCategoryRows = db()->query('SELECT DISTINCT category FROM articles WHERE category IS NOT NULL AND category <> "" ORDER BY category ASC')->fetchAll();
@@ -143,24 +151,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             article_translation_upsert($id, 'en');
             article_translation_upsert($id, 'de');
             article_translation_upsert($id, 'nl');
-            set_flash('success', 'Article enregistré.');
+            set_flash('success', $t('ok_saved'));
             redirect('admin_articles');
         } elseif ($action === 'save_category') {
             $oldCode = slugify(trim((string) ($_POST['old_code'] ?? '')));
             $newCode = slugify(trim((string) ($_POST['new_code'] ?? '')));
             if ($oldCode === '' || $newCode === '') {
-                throw new RuntimeException('Catégorie invalide.');
+                throw new RuntimeException($t('err_invalid_category'));
             }
             db()->prepare('UPDATE articles SET category = ? WHERE category = ?')->execute([$newCode, $oldCode]);
-            set_flash('success', 'Catégorie mise à jour.');
+            set_flash('success', $t('ok_category_updated'));
             redirect('admin_articles');
         } elseif ($action === 'delete_category') {
             $code = slugify(trim((string) ($_POST['code'] ?? '')));
             if ($code === '' || $code === 'autres') {
-                throw new RuntimeException('Suppression impossible pour cette catégorie.');
+                throw new RuntimeException($t('err_delete_category'));
             }
             db()->prepare('UPDATE articles SET category = "autres" WHERE category = ?')->execute([$code]);
-            set_flash('success', 'Catégorie supprimée (articles déplacés vers "autres").');
+            set_flash('success', $t('ok_category_deleted'));
             redirect('admin_articles');
         }
     } catch (Throwable $throwable) {
@@ -182,51 +190,52 @@ ob_start();
 ?>
 <div class="grid-2">
     <section class="card">
-        <h1><?= $editingId > 0 ? 'Modifier' : 'Créer' ?> un article</h1>
+        <h1><?= $editingId > 0 ? e($t('edit')) : e($t('create')) ?> <?= e($t('an_article')) ?></h1>
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
-            <label>Titre<input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
-            <label>Slug<input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
-            <label>Catégorie
+            <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
+            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
+            <label><?= e($t('category')) ?>
                 <select name="category" id="article-category">
                     <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
                     <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
                         <option value="<?= e($categoryCode) ?>" <?= $editingCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
                     <?php endforeach; ?>
-                    <option value="__custom__">Nouvelle catégorie…</option>
+                    <option value="__custom__"><?= e($t('new_category')) ?></option>
                 </select>
             </label>
-            <label id="article-category-custom" hidden>Nouvelle catégorie (identifiant)
-                <input type="text" name="category_custom" value="" placeholder="ex: propagation-vhf">
+            <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
+                <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
             </label>
-            <label>Importer un document (PDF, DOCX, TXT, MD, HTML)<input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
-            <label>Résumé<textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
-            <label>Contenu (HTML simple)<textarea name="content" rows="16"><?= e((string) $editing['content']) ?></textarea></label>
-            <label>Statut
+            <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
+            <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
+            <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16"><?= e((string) $editing['content']) ?></textarea></label>
+            <label><?= e($t('status')) ?>
                 <select name="status">
-                    <option value="draft" <?= (string) $editing['status'] === 'draft' ? 'selected' : '' ?>>Brouillon</option>
-                    <option value="published" <?= (string) $editing['status'] === 'published' ? 'selected' : '' ?>>Publié</option>
+                    <option value="draft" <?= (string) $editing['status'] === 'draft' ? 'selected' : '' ?>><?= e($t('draft')) ?></option>
+                    <option value="published" <?= (string) $editing['status'] === 'published' ? 'selected' : '' ?>><?= e($t('published')) ?></option>
                 </select>
             </label>
-            <button class="button">Enregistrer</button>
+            <button class="button"><?= e($t('save')) ?></button>
         </form>
     </section>
     <section class="card">
-        <h2>Articles existants</h2>
+        <h2><?= e($t('existing_articles')) ?></h2>
         <div class="stack">
             <?php foreach ($articles as $article): ?>
                 <article class="article-item">
-                    <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(base_url('index.php?route=admin_articles&id=' . (int) $article['id'])) ?>">Modifier</a></div>
-                    <p><strong>Catégorie :</strong> <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?></p>
+                    <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
+                    <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>
+            <?php if ($articles === []): ?><p><?= e($t('no_articles')) ?></p><?php endif; ?>
         </div>
     </section>
     <section class="card">
-        <h2>Édition des catégories</h2>
+        <h2><?= e($t('category_edit')) ?></h2>
         <div class="stack">
             <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
                 <article class="article-item">
@@ -234,24 +243,25 @@ ob_start();
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="save_category">
                         <input type="hidden" name="old_code" value="<?= e($categoryCode) ?>">
-                        <label style="flex:1;">Code
+                        <label style="flex:1;"><?= e($t('code')) ?>
                             <input type="text" name="new_code" value="<?= e($categoryCode) ?>" required>
                         </label>
-                        <label style="flex:2;">Libellé
+                        <label style="flex:2;"><?= e($t('label')) ?>
                             <input type="text" value="<?= e($categoryLabel) ?>" disabled>
                         </label>
-                        <button class="button small" type="submit">Renommer code</button>
+                        <button class="button small" type="submit"><?= e($t('rename_code')) ?></button>
                     </form>
                     <?php if ($categoryCode !== 'autres'): ?>
                         <form method="post" style="margin-top:8px;">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_category">
                             <input type="hidden" name="code" value="<?= e($categoryCode) ?>">
-                            <button class="button small secondary" type="submit">Supprimer (vers autres)</button>
+                            <button class="button small secondary" type="submit"><?= e($t('delete_to_other')) ?></button>
                         </form>
                     <?php endif; ?>
                 </article>
             <?php endforeach; ?>
+            <?php if ($articles === []): ?><p><?= e($t('no_articles')) ?></p><?php endif; ?>
         </div>
     </section>
 </div>

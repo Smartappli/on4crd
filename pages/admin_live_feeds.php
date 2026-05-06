@@ -4,12 +4,18 @@ declare(strict_types=1);
 require_permission('admin.access');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['updated' => 'Flux live mis à jour.', 'title' => 'Administration des flux live', 'intro' => 'Les widgets temps réel sont confinés au tableau de bord membre. Ici vous gérez l’activation, l’URL, le parseur et les TTL sans exposer ces widgets sur les pages publiques.', 'active' => 'Actif', 'label' => 'Libellé', 'url' => 'URL', 'parser' => 'Parseur', 'cache_ttl' => 'Cache TTL', 'refresh' => 'Refresh navigateur', 'notes' => 'Notes', 'save' => 'Enregistrer', 'layout' => 'Flux live'],
-    'en' => ['updated' => 'Live feeds updated.', 'title' => 'Live feeds administration', 'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.', 'active' => 'Active', 'label' => 'Label', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache TTL', 'refresh' => 'Browser refresh', 'notes' => 'Notes', 'save' => 'Save', 'layout' => 'Live feeds'],
-    'de' => ['updated' => 'Live-Feeds aktualisiert.', 'title' => 'Verwaltung der Live-Feeds', 'intro' => 'Echtzeit-Widgets sind auf das Mitglieder-Dashboard beschränkt. Verwalten Sie Aktivierung, URL, Parser und TTL ohne öffentliche Anzeige.', 'active' => 'Aktiv', 'label' => 'Bezeichnung', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache-TTL', 'refresh' => 'Browser-Refresh', 'notes' => 'Notizen', 'save' => 'Speichern', 'layout' => 'Live-Feeds'],
-    'nl' => ['updated' => 'Livefeeds bijgewerkt.', 'title' => 'Beheer van livefeeds', 'intro' => 'Realtime widgets zijn beperkt tot het ledendashboard. Beheer hier activatie, URL, parser en TTL zonder ze publiek te tonen.', 'active' => 'Actief', 'label' => 'Label', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache-TTL', 'refresh' => 'Browser-refresh', 'notes' => 'Notities', 'save' => 'Opslaan', 'layout' => 'Livefeeds'],
+    'fr' => ['updated' => 'Flux live mis à jour.', 'title' => 'Administration des flux live', 'intro' => 'Les widgets temps réel sont confinés au tableau de bord membre. Ici vous gérez l’activation, l’URL, le parseur et les TTL sans exposer ces widgets sur les pages publiques.', 'active' => 'Actif', 'label' => 'Libellé', 'url' => 'URL', 'parser' => 'Parseur', 'cache_ttl' => 'Cache TTL', 'refresh' => 'Rafraîchissement navigateur', 'notes' => 'Notes', 'save' => 'Enregistrer', 'layout' => 'Flux live', 'meta_desc' => 'Configuration des flux live affichés dans l’espace membre.'],
+    'en' => ['updated' => 'Live feeds updated.', 'title' => 'Live feeds administration', 'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.', 'active' => 'Active', 'label' => 'Label', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache TTL', 'refresh' => 'Browser refresh', 'notes' => 'Notes', 'save' => 'Save', 'layout' => 'Live feeds', 'meta_desc' => 'Configure live feeds shown in the members area.'],
+    'de' => ['updated' => 'Live-Feeds aktualisiert.', 'title' => 'Verwaltung der Live-Feeds', 'intro' => 'Echtzeit-Widgets sind auf das Mitglieder-Dashboard beschränkt. Verwalten Sie Aktivierung, URL, Parser und TTL ohne öffentliche Anzeige.', 'active' => 'Aktiv', 'label' => 'Bezeichnung', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache-TTL', 'refresh' => 'Browser-Aktualisierung', 'notes' => 'Notizen', 'save' => 'Speichern', 'layout' => 'Live-Feeds', 'meta_desc' => 'Konfiguration der Live-Feeds im Mitgliederbereich.'],
+    'nl' => ['updated' => 'Livefeeds bijgewerkt.', 'title' => 'Beheer van livefeeds', 'intro' => 'Realtime widgets zijn beperkt tot het ledendashboard. Beheer hier activatie, URL, parser en TTL zonder ze publiek te tonen.', 'active' => 'Actief', 'label' => 'Label', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache-TTL', 'refresh' => 'Browserverversing', 'notes' => 'Notities', 'save' => 'Opslaan', 'layout' => 'Livefeeds', 'meta_desc' => 'Configuratie van livefeeds die in de ledenruimte worden getoond.'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {

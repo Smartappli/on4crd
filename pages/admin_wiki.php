@@ -29,7 +29,7 @@ ob_start();
     <div class="row-between">
         <h1><?= e($t('title')) ?></h1>
         <?php if (has_permission('wiki.edit')): ?>
-            <a class="button small" href="<?= e(base_url('index.php?route=wiki_edit')) ?>"><?= e($t('new_page')) ?></a>
+            <a class="button small" href="<?= e(route_url('wiki_edit')) ?>"><?= e($t('new_page')) ?></a>
         <?php endif; ?>
     </div>
     <div class="table-wrap">
@@ -41,7 +41,7 @@ ob_start();
                     <td><?= e((string) $page['title']) ?></td>
                     <td><code><?= e((string) $page['slug']) ?></code></td>
                     <td><?= e((string) $page['updated_at']) ?></td>
-                    <td><a href="<?= e(base_url('index.php?route=wiki_edit&id=' . (int) $page['id'])) ?>"><?= e($t('edit')) ?></a></td>
+                    <td><a href="<?= e(route_url('wiki_edit', ['id' => (int) $page['id']])) ?>"><?= e($t('edit')) ?></a></td>
                 </tr>
             <?php endforeach; ?>
             <?php if ($pages === []): ?><tr><td colspan="4"><?= e($t('empty')) ?></td></tr><?php endif; ?>
