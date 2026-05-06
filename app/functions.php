@@ -1551,6 +1551,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
+        ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
@@ -1586,14 +1587,6 @@ function render_layout(string $content, string $title = ''): string
             $navHtml .= '<div class="nav-row nav-row-member">' . $memberLinks . '</div>';
         }
     }
-
-    $searchQuery = trim((string) ($_GET['q'] ?? ''));
-    $searchForm = '<form class="nav-search" method="get" action="' . e(route_url('search')) . '">'
-        . '<label class="sr-only" for="nav-search-input">' . e((string) $layoutI18n['search_label']) . '</label>'
-        . '<input type="hidden" name="route" value="search">'
-        . '<input id="nav-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" required>'
-        . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
-        . '</form>';
 
     $authHtml = '';
     if ($user !== null) {
@@ -1721,7 +1714,7 @@ function render_layout(string $content, string $title = ''): string
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $searchForm . $authHtml . '</div></div>'
+        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
