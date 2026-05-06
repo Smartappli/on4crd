@@ -112,40 +112,32 @@ set_page_meta([
 ]);
 ob_start();
 ?>
-<section class="mx-auto max-w-4xl space-y-4">
-    <header class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h1 class="text-2xl font-bold text-slate-900"><?= e((string) $t['title']) ?></h1>
-        <p class="mt-1 text-sm text-slate-600"><?= e((string) $t['meta_desc']) ?></p>
-    </header>
-
-    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <form method="get" class="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <input type="hidden" name="route" value="search">
-            <input class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200" type="search" name="q" value="<?= e($q) ?>" placeholder="<?= e((string) $t['placeholder']) ?>" required>
-            <button class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"><?= e((string) $t['submit']) ?></button>
-        </form>
-        <p class="mt-3 text-sm text-slate-600"><?= $totalResults ?> <?= e((string) $t['count']) ?></p>
-        <?php if ($hasQuery && !$isQueryLongEnough): ?>
-            <p class="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800"><?= e((string) $t['query_too_short']) ?></p>
-        <?php elseif ($hasQuery && $totalResults === 0): ?>
-            <p class="mt-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700"><?= e((string) $t['empty']) ?></p>
-        <?php endif; ?>
-    </div>
-
-    <div class="space-y-3">
-        <?php foreach ($pagedResults as $item): ?>
-            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow">
-                <h3 class="text-lg font-semibold text-slate-900"><a class="hover:text-blue-700 hover:underline" href="<?= e($item['url']) ?>"><?= e($item['title']) ?></a></h3>
-                <p class="mt-2 text-sm text-slate-600"><?= e($item['summary']) ?></p>
-            </article>
-        <?php endforeach; ?>
-    </div>
-
+<section class="search-page">
+    <div class="card search-page-card narrow">
+    <h1><?= e((string) $t['title']) ?></h1>
+    <form method="get" class="search-page-form">
+        <input type="hidden" name="route" value="search">
+        <input type="search" name="q" value="<?= e($q) ?>" placeholder="<?= e((string) $t['placeholder']) ?>" required>
+        <button class="button" type="submit"><?= e((string) $t['submit']) ?></button>
+    </form>
+    <p><?= $totalResults ?> <?= e((string) $t['count']) ?></p>
+    <?php if ($hasQuery && !$isQueryLongEnough): ?>
+        <p><?= e((string) $t['query_too_short']) ?></p>
+    <?php elseif ($hasQuery && $totalResults === 0): ?>
+        <p><?= e((string) $t['empty']) ?></p>
+    <?php endif; ?>
+    <?php foreach ($pagedResults as $item): ?>
+        <article class="card" style="margin-top:12px;">
+            <h3><a href="<?= e($item['url']) ?>"><?= e($item['title']) ?></a></h3>
+            <p><?= e($item['summary']) ?></p>
+        </article>
+    <?php endforeach; ?>
     <?php if ($totalResults > $perPage): ?>
         <nav class="flex items-center gap-2" aria-label="Pagination">
             <?php if ($hasPrev): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page - 1)])) ?>"><?= e((string) $t['previous']) ?></a><?php endif; ?>
             <?php if ($hasNext): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
         </nav>
     <?php endif; ?>
+    </div>
 </section>
 <?php echo render_layout((string) ob_get_clean(), (string) $t['title']);
