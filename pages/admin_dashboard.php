@@ -4,6 +4,20 @@ declare(strict_types=1);
 require_module_enabled('dashboard');
 require_permission('admin.access');
 require_permission('modules.manage');
+$i18n = [
+    'fr' => ['ok_updated' => 'Widgets du dashboard mis à jour.', 'title' => 'Administration dashboard', 'help' => 'Activez/désactivez les widgets disponibles sur le dashboard membre.', 'save' => 'Enregistrer', 'layout' => 'Dashboard', 'meta_desc' => 'Configuration des widgets du dashboard membre.'],
+    'en' => ['ok_updated' => 'Dashboard widgets updated.', 'title' => 'Dashboard administration', 'help' => 'Enable/disable widgets available on the member dashboard.', 'save' => 'Save', 'layout' => 'Dashboard', 'meta_desc' => 'Configuration of member dashboard widgets.'],
+    'de' => ['ok_updated' => 'Dashboard-Widgets aktualisiert.', 'title' => 'Dashboard-Verwaltung', 'help' => 'Aktivieren/deaktivieren Sie verfügbare Widgets im Mitglieder-Dashboard.', 'save' => 'Speichern', 'layout' => 'Dashboard', 'meta_desc' => 'Konfiguration der Widgets im Mitglieder-Dashboard.'],
+    'nl' => ['ok_updated' => 'Dashboardwidgets bijgewerkt.', 'title' => 'Dashboardbeheer', 'help' => 'Activeer/deactiveer widgets die beschikbaar zijn op het ledendashboard.', 'save' => 'Opslaan', 'layout' => 'Dashboard', 'meta_desc' => 'Configuratie van widgets op het ledendashboard.'],
+];
+$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+$t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 db()->exec(
     "CREATE TABLE IF NOT EXISTS dashboard_widget_settings (
@@ -22,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $enabled = isset($_POST['widget_' . $widgetKey]) ? 1 : 0;
         $stmt->execute([(string) $widgetKey, $enabled]);
     }
-    set_flash('success', 'Widgets du dashboard mis à jour.');
+    set_flash('success', (string) $t['ok_updated']);
     redirect('admin_dashboard');
 }
 
@@ -35,8 +49,8 @@ foreach ($rows as $row) {
 ob_start();
 ?>
 <div class="card">
-    <h1>Admin dashboard</h1>
-    <p class="help">Activez/désactivez les widgets disponibles sur le dashboard membre.</p>
+    <h1><?= e((string) $t['title']) ?></h1>
+    <p class="help"><?= e((string) $t['help']) ?></p>
     <form method="post" class="stack">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <?php foreach ($catalog as $widgetKey => $widget): ?>
@@ -46,8 +60,8 @@ ob_start();
                 <span class="help"><?= e((string) ($widget['description'] ?? '')) ?></span>
             </label>
         <?php endforeach; ?>
-        <button class="button" type="submit">Enregistrer</button>
+        <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
     </form>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), 'Admin dashboard');
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);

@@ -29,6 +29,7 @@ $homeMessages = [
         'view_event' => 'Voir l’évènement',
         'weather_updated' => 'Mise à jour météo :',
         'weather_refresh' => 'Rafraîchir maintenant',
+        'today_date' => 'Date :',
         'partner_ad_empty' => 'Aucune publicité partenaire disponible pour le moment.',
         'partner_ad_title' => 'Annonce partenaire',
         'ham_info_title' => 'Informations radioamateur',
@@ -75,6 +76,7 @@ $homeMessages = [
         'view_event' => 'View event',
         'weather_updated' => 'Weather update:',
         'weather_refresh' => 'Refresh now',
+        'today_date' => 'Date:',
         'partner_ad_empty' => 'No partner advertisement available at the moment.',
         'partner_ad_title' => 'Partner advertisement',
         'ham_info_title' => 'Ham radio information',
@@ -121,6 +123,7 @@ $homeMessages = [
         'view_event' => 'Veranstaltung ansehen',
         'weather_updated' => 'Wetter aktualisiert:',
         'weather_refresh' => 'Jetzt aktualisieren',
+        'today_date' => 'Datum:',
         'partner_ad_empty' => 'Derzeit ist keine Partnerwerbung verfügbar.',
         'partner_ad_title' => 'Partnerwerbung',
         'ham_info_title' => 'Funkamateur-Informationen',
@@ -167,6 +170,7 @@ $homeMessages = [
         'view_event' => 'Evenement bekijken',
         'weather_updated' => 'Weer bijgewerkt:',
         'weather_refresh' => 'Nu verversen',
+        'today_date' => 'Datum:',
         'partner_ad_empty' => 'Er is momenteel geen partneradvertentie beschikbaar.',
         'partner_ad_title' => 'Partneradvertentie',
         'ham_info_title' => 'Radioamateurinformatie',
@@ -190,6 +194,7 @@ $homeMessages = [
     ],
 ];
 $homeI18n = $homeMessages[$homeLocale] ?? $homeMessages['fr'];
+$homeTodayDate = date('d/m/Y');
 
 $user = current_user();
 $isAuthenticated = $user !== null;
@@ -449,11 +454,20 @@ $homeRadioInfoHtml = '<div class="grid gap-4">'
 
 if (isset($_GET['ajax']) && (string) $_GET['ajax'] === 'ham_weather') {
     header('Content-Type: application/json; charset=utf-8');
-    echo json_encode([
-        'weather' => render_widget('open_meteo'),
-        'propagation' => render_widget('propagation'),
-        'advice' => render_ham_weather_advice(current_user() ?? []),
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+
+    try {
+        echo json_encode([
+            'weather' => render_widget('open_meteo'),
+            'propagation' => render_widget('propagation'),
+            'advice' => render_ham_weather_advice(current_user() ?? []),
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        echo '{"weather":"","propagation":"","advice":""}';
+    }
+
     return;
 }
 
@@ -478,6 +492,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . ($homeQuoteAuthor !== '' ? '<p class="mt-3 text-sm font-semibold text-slate-500">— ' . e($homeQuoteAuthor) . '</p>' : '')
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="Horloges UTC et locale">'
+    . '<p class="mb-3 text-sm font-semibold text-slate-700">' . e((string) $homeI18n['today_date']) . ' ' . e($homeTodayDate) . '</p>'
     . '<div class="grid gap-3 sm:grid-cols-2">'
     . '<article class="rounded-xl border border-slate-200 bg-slate-50 p-4">'
     . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Heure UTC</p>'
@@ -616,6 +631,6 @@ if ($homeLocale !== 'fr') {
     }
 }
 
-$content .= '<script>(function(){const root=document.querySelector("[data-ham-weather-root]");if(!root){return;}const weather=root.querySelector("[data-ham-weather-weather]");const propagation=root.querySelector("[data-ham-weather-propagation]");const advice=root.querySelector("[data-ham-weather-advice]");const updated=root.querySelector("[data-ham-weather-updated]");const refreshBtn=root.querySelector("[data-ham-weather-refresh]");const label=root.getAttribute("data-updated-label")||"";const url=root.getAttribute("data-refresh-url");const refreshMs=Number(root.getAttribute("data-refresh-ms")||"900000");if(!advice||!url||refreshMs<60000){return;}let lastUpdateAt=Date.now();let isRefreshing=false;const renderUpdated=()=>{if(!updated){return;}updated.textContent=label+" "+new Date().toLocaleString();};const setRefreshing=(state)=>{isRefreshing=state;if(refreshBtn){refreshBtn.disabled=state;}};const tick=async()=>{if(isRefreshing){return;}setRefreshing(true);try{const sep=url.includes("?")?"&":"?";const endpoint=url+sep+"_ts="+Date.now();const res=await fetch(endpoint,{cache:"no-store",headers:{"X-Requested-With":"XMLHttpRequest"}});if(!res.ok){return;}const payload=await res.json();if(payload&&typeof payload.weather==="string"&&weather){weather.innerHTML=payload.weather;}if(payload&&typeof payload.propagation==="string"&&propagation){propagation.innerHTML=payload.propagation;}if(payload&&typeof payload.advice==="string"){advice.innerHTML=payload.advice;}lastUpdateAt=Date.now();renderUpdated();}catch(_e){}finally{setRefreshing(false);}};if(refreshBtn){refreshBtn.addEventListener("click",()=>{tick();});}renderUpdated();setInterval(tick,refreshMs);setTimeout(tick,1000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-lastUpdateAt>=refreshMs){tick();}});})();</script>';
+$content .= '<script>(function(){const root=document.querySelector("[data-ham-weather-root]");if(!root){return;}const weather=root.querySelector("[data-ham-weather-weather]");const propagation=root.querySelector("[data-ham-weather-propagation]");const advice=root.querySelector("[data-ham-weather-advice]");const updated=root.querySelector("[data-ham-weather-updated]");const refreshBtn=root.querySelector("[data-ham-weather-refresh]");const label=root.getAttribute("data-updated-label")||"";const url=root.getAttribute("data-refresh-url");const refreshMs=Number(root.getAttribute("data-refresh-ms")||"900000");if(!advice||!url||refreshMs<60000){return;}let lastUpdateAt=Date.now();let isRefreshing=false;const renderUpdated=()=>{if(!updated){return;}updated.textContent=label+" "+new Date().toLocaleString();};const setRefreshing=(state)=>{isRefreshing=state;if(refreshBtn){refreshBtn.disabled=state;}};const tick=async()=>{if(isRefreshing){return;}setRefreshing(true);try{const sep=url.includes("?")?"&":"?";const endpoint=url+sep+"_ts="+Date.now();const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),10000);const res=await fetch(endpoint,{cache:"no-store",headers:{"X-Requested-With":"XMLHttpRequest","Accept":"application/json"},signal:controller.signal});clearTimeout(timeout);if(!res.ok){return;}const payload=await res.json();if(payload&&typeof payload.weather==="string"&&weather){weather.innerHTML=payload.weather;}if(payload&&typeof payload.propagation==="string"&&propagation){propagation.innerHTML=payload.propagation;}if(payload&&typeof payload.advice==="string"){advice.innerHTML=payload.advice;}lastUpdateAt=Date.now();renderUpdated();}catch(_e){}finally{setRefreshing(false);}};if(refreshBtn){refreshBtn.addEventListener("click",()=>{tick();});}renderUpdated();setInterval(tick,refreshMs);setTimeout(tick,1000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-lastUpdateAt>=refreshMs){tick();}});})();</script>';
 
 echo render_layout($content, $homeLocale === 'fr' ? 'Accueil' : ($homeReplace[$homeLocale]['Accueil'] ?? 'Accueil'));

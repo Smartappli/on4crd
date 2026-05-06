@@ -4,6 +4,22 @@ declare(strict_types=1);
 require_permission('admin.access');
 require_permission('events.manage');
 
+
+$locale = current_locale();
+$i18n = [
+    'fr' => ['err_invalid_reservation' => 'Veuillez indiquer un nom et au moins une ligne de réservation valide.', 'ok_saved' => 'Réservation enregistrée.', 'notes_placeholder' => 'Remarques allergènes, options, etc.', 'layout' => 'Administration dîner annuel', 'title' => 'Réservations dîner annuel', 'export_csv' => 'Exporter Excel (CSV)', 'reservation_name' => 'Nom de la réservation', 'reservation_name_ph' => 'Ex: Famille Dupont', 'add_line' => 'Ajouter une ligne', 'total_to_pay' => 'Total à payer :', 'notes' => 'Notes', 'save_reservation' => 'Enregistrer la réservation', 'history' => 'Historique', 'no_history' => 'Aucune réservation enregistrée.', 'total' => 'Total :', 'col_starter' => 'Entrée', 'col_meal' => 'Repas', 'col_dessert' => 'Dessert', 'col_qty' => 'Quantité', 'col_line_total' => 'Total ligne', 'line_active' => 'Actif', 'line_remove' => 'Supprimer', 'yes' => 'Oui', 'no' => 'Non', 'csv_reservation_id' => 'Reservation ID', 'csv_reserved_by' => 'Nom', 'csv_created_at' => 'Date', 'csv_starter_enabled' => 'Entree active', 'csv_starter' => 'Entree', 'csv_starter_price' => 'Prix entree', 'csv_meal_enabled' => 'Plat actif', 'csv_meal' => 'Plat', 'csv_meal_price' => 'Prix plat', 'csv_dessert_enabled' => 'Dessert actif', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Prix dessert', 'csv_quantity' => 'Quantite', 'csv_line_total' => 'Total ligne', 'csv_res_total' => 'Total reservation', 'meta_desc' => 'Gestion des réservations et export du dîner annuel.'],
+    'en' => ['err_invalid_reservation' => 'Please provide a name and at least one valid reservation line.', 'ok_saved' => 'Reservation saved.', 'notes_placeholder' => 'Allergen notes, options, etc.', 'layout' => 'Annual dinner administration', 'title' => 'Annual dinner reservations', 'export_csv' => 'Export Excel (CSV)', 'reservation_name' => 'Reservation name', 'reservation_name_ph' => 'Ex: Dupont Family', 'add_line' => 'Add a line', 'total_to_pay' => 'Total to pay:', 'notes' => 'Notes', 'save_reservation' => 'Save reservation', 'history' => 'History', 'no_history' => 'No reservations recorded.', 'total' => 'Total:', 'col_starter' => 'Starter', 'col_meal' => 'Meal', 'col_dessert' => 'Dessert', 'col_qty' => 'Quantity', 'col_line_total' => 'Line total', 'line_active' => 'Enabled', 'line_remove' => 'Remove', 'yes' => 'Yes', 'no' => 'No', 'csv_reservation_id' => 'Reservation ID', 'csv_reserved_by' => 'Name', 'csv_created_at' => 'Date', 'csv_starter_enabled' => 'Starter enabled', 'csv_starter' => 'Starter', 'csv_starter_price' => 'Starter price', 'csv_meal_enabled' => 'Meal enabled', 'csv_meal' => 'Meal', 'csv_meal_price' => 'Meal price', 'csv_dessert_enabled' => 'Dessert enabled', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Dessert price', 'csv_quantity' => 'Quantity', 'csv_line_total' => 'Line total', 'csv_res_total' => 'Reservation total', 'meta_desc' => 'Manage annual dinner reservations and exports.'],
+    'de' => ['err_invalid_reservation' => 'Bitte geben Sie einen Namen und mindestens eine gültige Reservierungszeile an.', 'ok_saved' => 'Reservierung gespeichert.', 'notes_placeholder' => 'Allergiehinweise, Optionen usw.', 'layout' => 'Verwaltung Jahresessen', 'title' => 'Reservierungen Jahresessen', 'export_csv' => 'Excel exportieren (CSV)', 'reservation_name' => 'Reservierungsname', 'reservation_name_ph' => 'Bsp.: Familie Dupont', 'add_line' => 'Zeile hinzufügen', 'total_to_pay' => 'Zu zahlender Betrag:', 'notes' => 'Notizen', 'save_reservation' => 'Reservierung speichern', 'history' => 'Verlauf', 'no_history' => 'Keine Reservierungen gespeichert.', 'total' => 'Gesamt:', 'col_starter' => 'Vorspeise', 'col_meal' => 'Hauptgericht', 'col_dessert' => 'Dessert', 'col_qty' => 'Menge', 'col_line_total' => 'Zeilensumme', 'line_active' => 'Aktiv', 'line_remove' => 'Entfernen', 'yes' => 'Ja', 'no' => 'Nein', 'csv_reservation_id' => 'Reservierungs-ID', 'csv_reserved_by' => 'Name', 'csv_created_at' => 'Datum', 'csv_starter_enabled' => 'Vorspeise aktiv', 'csv_starter' => 'Vorspeise', 'csv_starter_price' => 'Preis Vorspeise', 'csv_meal_enabled' => 'Hauptgericht aktiv', 'csv_meal' => 'Hauptgericht', 'csv_meal_price' => 'Preis Hauptgericht', 'csv_dessert_enabled' => 'Dessert aktiv', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Preis Dessert', 'csv_quantity' => 'Menge', 'csv_line_total' => 'Zeilensumme', 'csv_res_total' => 'Reservierung gesamt', 'meta_desc' => 'Reservierungen und Exporte für das Jahresessen verwalten.'],
+    'nl' => ['err_invalid_reservation' => 'Geef een naam en minstens één geldige reserveringsregel op.', 'ok_saved' => 'Reservering opgeslagen.', 'notes_placeholder' => 'Allergenenopmerkingen, opties, enz.', 'layout' => 'Beheer jaarlijks diner', 'title' => 'Reserveringen jaarlijks diner', 'export_csv' => 'Excel exporteren (CSV)', 'reservation_name' => 'Naam van de reservering', 'reservation_name_ph' => 'Bijv.: Familie Dupont', 'add_line' => 'Lijn toevoegen', 'total_to_pay' => 'Totaal te betalen:', 'notes' => 'Notities', 'save_reservation' => 'Reservering opslaan', 'history' => 'Historiek', 'no_history' => 'Geen reserveringen opgeslagen.', 'total' => 'Totaal:', 'col_starter' => 'Voorgerecht', 'col_meal' => 'Hoofdgerecht', 'col_dessert' => 'Dessert', 'col_qty' => 'Aantal', 'col_line_total' => 'Lijntotaal', 'line_active' => 'Actief', 'line_remove' => 'Verwijderen', 'yes' => 'Ja', 'no' => 'Nee', 'csv_reservation_id' => 'Reserverings-ID', 'csv_reserved_by' => 'Naam', 'csv_created_at' => 'Datum', 'csv_starter_enabled' => 'Voorgerecht actief', 'csv_starter' => 'Voorgerecht', 'csv_starter_price' => 'Prijs voorgerecht', 'csv_meal_enabled' => 'Hoofdgerecht actief', 'csv_meal' => 'Hoofdgerecht', 'csv_meal_price' => 'Prijs hoofdgerecht', 'csv_dessert_enabled' => 'Dessert actief', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Prijs dessert', 'csv_quantity' => 'Aantal', 'csv_line_total' => 'Lijntotaal', 'csv_res_total' => 'Reservering totaal', 'meta_desc' => 'Beheer van reserveringen en export voor het jaarlijkse diner.'],
+];
+$t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
+
 db()->exec(
     'CREATE TABLE IF NOT EXISTS dinner_reservations (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -133,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($reservedBy === '' || $lines === []) {
-        set_flash('error', 'Veuillez indiquer un nom et au moins une ligne de réservation valide.');
+        set_flash('error', (string) $t['err_invalid_reservation']);
         redirect('admin_dinner_reservations');
     }
 
@@ -170,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         db()->commit();
-        set_flash('success', 'Réservation enregistrée.');
+        set_flash('success', (string) $t['ok_saved']);
     } catch (Throwable $e) {
         if (db()->inTransaction()) {
             db()->rollBack();
@@ -230,12 +246,12 @@ if ((string) ($_GET['export'] ?? '') === '1') {
             'Entree active',
             'Entree',
             'Prix entree',
-            'Plat actif',
-            'Plat',
-            'Prix plat',
-            'Dessert actif',
-            'Dessert',
-            'Prix dessert',
+            (string) $t['csv_meal_enabled'],
+            (string) $t['csv_meal'],
+            (string) $t['csv_meal_price'],
+            (string) $t['csv_dessert_enabled'],
+            (string) $t['csv_dessert'],
+            (string) $t['csv_dessert_price'],
             'Quantite',
             'Total ligne',
             'Total reservation',
@@ -246,13 +262,13 @@ if ((string) ($_GET['export'] ?? '') === '1') {
                 (int) ($row['reservation_id'] ?? 0),
                 (string) ($row['reserved_by'] ?? ''),
                 (string) ($row['created_at'] ?? ''),
-                (int) ($row['starter_enabled'] ?? 0) === 1 ? 'Oui' : 'Non',
+                (int) ($row['starter_enabled'] ?? 0) === 1 ? (string) $t['yes'] : (string) $t['no'],
                 (string) ($row['starter_label'] ?? ''),
                 number_format(((int) ($row['starter_price_cents'] ?? 0)) / 100, 2, ',', ''),
-                (int) ($row['meal_enabled'] ?? 0) === 1 ? 'Oui' : 'Non',
+                (int) ($row['meal_enabled'] ?? 0) === 1 ? (string) $t['yes'] : (string) $t['no'],
                 (string) ($row['meal_label'] ?? ''),
                 number_format(((int) ($row['meal_price_cents'] ?? 0)) / 100, 2, ',', ''),
-                (int) ($row['dessert_enabled'] ?? 0) === 1 ? 'Oui' : 'Non',
+                (int) ($row['dessert_enabled'] ?? 0) === 1 ? (string) $t['yes'] : (string) $t['no'],
                 (string) ($row['dessert_label'] ?? ''),
                 number_format(((int) ($row['dessert_price_cents'] ?? 0)) / 100, 2, ',', ''),
                 (int) ($row['quantity'] ?? 0),
@@ -268,53 +284,53 @@ if ((string) ($_GET['export'] ?? '') === '1') {
 ob_start();
 ?>
 <section class="card">
-    <h1>Réservations dîner annuel</h1>
-    <div class="row-between"><span></span><a class="button secondary" href="<?= e(route_url('admin_dinner_reservations', ['export' => 1])) ?>">Exporter Excel (CSV)</a></div>
+    <h1><?= e((string) $t['title']) ?></h1>
+    <div class="row-between"><span></span><a class="button secondary" href="<?= e(route_url('admin_dinner_reservations', ['export' => 1])) ?>"><?= e((string) $t['export_csv']) ?></a></div>
     <form method="post" class="stack" id="dinner-reservation-form">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
         <label>
-            Nom de la réservation
-            <input type="text" name="reserved_by" required maxlength="190" placeholder="Ex: Famille Dupont">
+            <?= e((string) $t['reservation_name']) ?>
+            <input type="text" name="reserved_by" required maxlength="190" placeholder="<?= e((string) $t['reservation_name_ph']) ?>">
         </label>
 
         <div class="stack" id="dinner-lines"></div>
 
         <div class="row-between">
-            <button type="button" class="button secondary" id="add-dinner-line">Ajouter une ligne</button>
-            <strong>Total à payer : <span id="dinner-total">0,00 €</span></strong>
+            <button type="button" class="button secondary" id="add-dinner-line"><?= e((string) $t['add_line']) ?></button>
+            <strong><?= e((string) $t['total_to_pay']) ?> <span id="dinner-total">0,00 €</span></strong>
         </div>
 
         <label>
-            Notes
-            <textarea name="notes" rows="3" placeholder="Remarques allergènes, options, etc."></textarea>
+            <?= e((string) $t['notes']) ?>
+            <textarea name="notes" rows="3" placeholder="<?= e((string) $t['notes_placeholder']) ?>"></textarea>
         </label>
 
-        <button type="submit" class="button">Enregistrer la réservation</button>
+        <button type="submit" class="button"><?= e((string) $t['save_reservation']) ?></button>
     </form>
 </section>
 
 <section class="card mt-4">
-    <h2>Historique</h2>
+    <h2><?= e((string) $t['history']) ?></h2>
     <?php if ($reservations === []): ?>
-        <p>Aucune réservation enregistrée.</p>
+        <p><?= e((string) $t['no_history']) ?></p>
     <?php else: ?>
         <?php foreach ($reservations as $reservation): ?>
             <?php $reservationId = (int) $reservation['id']; ?>
             <article class="inner-card mt-4">
                 <h3><?= e((string) $reservation['reserved_by']) ?> — <?= e((string) $reservation['created_at']) ?></h3>
-                <p><strong>Total :</strong> <?= e(format_price_eur((int) $reservation['total_cents'])) ?></p>
+                <p><strong><?= e((string) $t['total']) ?></strong>  <?= e(format_price_eur((int) $reservation['total_cents'])) ?></p>
                 <?php if (trim((string) ($reservation['notes'] ?? '')) !== ''): ?>
                     <p class="help"><?= nl2br(e((string) $reservation['notes'])) ?></p>
                 <?php endif; ?>
                 <table>
                     <thead>
                         <tr>
-                            <th>Entrée</th>
-                            <th>Repas</th>
-                            <th>Dessert</th>
-                            <th>Quantité</th>
-                            <th>Total ligne</th>
+                            <th><?= e((string) $t['col_starter']) ?></th>
+                            <th><?= e((string) $t['col_meal']) ?></th>
+                            <th><?= e((string) $t['col_dessert']) ?></th>
+                            <th><?= e((string) $t['col_qty']) ?></th>
+                            <th><?= e((string) $t['col_line_total']) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -344,7 +360,10 @@ ob_start();
     const totalEl = document.getElementById('dinner-total');
     let lineIndex = 0;
 
-    const formatEur = (cents) => new Intl.NumberFormat('fr-BE', { style: 'currency', currency: 'EUR' }).format((Number(cents) || 0) / 100);
+    const ui = <?= json_encode(['starter' => $t['col_starter'], 'meal' => $t['col_meal'], 'dessert' => $t['col_dessert'], 'qty' => $t['col_qty'], 'remove' => ($locale === 'fr' ? '${ui.remove}' : ($locale === 'en' ? 'Remove' : ($locale === 'de' ? 'Entfernen' : 'Verwijderen'))), 'active' => ($locale === 'fr' ? '${ui.active}' : ($locale === 'en' ? 'Enabled' : ($locale === 'de' ? 'Aktiv' : 'Actief')))], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+    const localeMap = { fr: 'fr-BE', en: 'en-GB', de: 'de-DE', nl: 'nl-BE' };
+    const numberLocale = localeMap[<?= json_encode($locale) ?>] || 'fr-BE';
+    const formatEur = (cents) => new Intl.NumberFormat(numberLocale, { style: 'currency', currency: 'EUR' }).format((Number(cents) || 0) / 100);
 
     const renderSelectOptions = (options) => Object.entries(options)
         .map(([key, value]) => `<option value="${key}" data-price="${value.price_cents}">${value.label} (${formatEur(value.price_cents)})</option>`)
@@ -390,13 +409,13 @@ ob_start();
                 <label><input class="dessert-enabled" type="checkbox" name="lines[${lineIndex}][dessert_enabled]" value="1" checked> Activer dessert</label>
             </div>
             <div class="grid-3">
-                <label>Entrée
+                <label>${ui.starter}
                     <select class="starter-select" name="lines[${lineIndex}][starter]">${renderSelectOptions(starterOptions)}</select>
                 </label>
-                <label>Plat
+                <label>${ui.meal}
                     <select class="meal-select" name="lines[${lineIndex}][meal]">${renderSelectOptions(mainOptions)}</select>
                 </label>
-                <label>Dessert
+                <label>${ui.dessert}
                     <select class="dessert-select" name="lines[${lineIndex}][dessert]">${renderSelectOptions(dessertOptions)}</select>
                 </label>
             </div>
@@ -405,7 +424,7 @@ ob_start();
                     <input class="quantity-input" type="number" name="lines[${lineIndex}][quantity]" min="0" step="1" value="1">
                 </label>
                 <p class="help">Total ligne : <strong class="line-total">${formatEur(0)}</strong></p>
-                <p><button type="button" class="button secondary remove-line">Supprimer</button></p>
+                <p><button type="button" class="button secondary remove-line">${ui.remove}</button></p>
             </div>
         `;
         lineIndex += 1;
@@ -424,4 +443,4 @@ ob_start();
 </script>
 <?php
 
-echo render_layout((string) ob_get_clean(), 'Administration dîner annuel');
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);
