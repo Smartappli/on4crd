@@ -5,12 +5,18 @@ require_permission('admin.access');
 $user = require_login();
 $locale = current_locale();
 $i18n = [
-    'fr' => ['role_assigned' => 'Rôle attribué.', 'title' => 'Rôles et permissions', 'th_permission' => 'Permission', 'th_label' => 'Libellé', 'assign_role' => 'Attribuer un rôle', 'member' => 'Membre', 'role' => 'Rôle', 'assign' => 'Attribuer', 'layout' => 'Permissions'],
-    'en' => ['role_assigned' => 'Role assigned.', 'title' => 'Roles and permissions', 'th_permission' => 'Permission', 'th_label' => 'Label', 'assign_role' => 'Assign a role', 'member' => 'Member', 'role' => 'Role', 'assign' => 'Assign', 'layout' => 'Permissions'],
-    'de' => ['role_assigned' => 'Rolle zugewiesen.', 'title' => 'Rollen und Berechtigungen', 'th_permission' => 'Berechtigung', 'th_label' => 'Bezeichnung', 'assign_role' => 'Rolle zuweisen', 'member' => 'Mitglied', 'role' => 'Rolle', 'assign' => 'Zuweisen', 'layout' => 'Berechtigungen'],
-    'nl' => ['role_assigned' => 'Rol toegewezen.', 'title' => 'Rollen en rechten', 'th_permission' => 'Recht', 'th_label' => 'Label', 'assign_role' => 'Rol toewijzen', 'member' => 'Lid', 'role' => 'Rol', 'assign' => 'Toewijzen', 'layout' => 'Rechten'],
+    'fr' => ['role_assigned' => 'Rôle attribué.', 'title' => 'Rôles et permissions', 'th_permission' => 'Permission', 'th_label' => 'Libellé', 'assign_role' => 'Attribuer un rôle', 'member' => 'Membre', 'role' => 'Rôle', 'assign' => 'Attribuer', 'layout' => 'Permissions', 'meta_desc' => 'Gestion des rôles et permissions des membres.'],
+    'en' => ['role_assigned' => 'Role assigned.', 'title' => 'Roles and permissions', 'th_permission' => 'Permission', 'th_label' => 'Label', 'assign_role' => 'Assign a role', 'member' => 'Member', 'role' => 'Role', 'assign' => 'Assign', 'layout' => 'Permissions', 'meta_desc' => 'Manage member roles and permissions.'],
+    'de' => ['role_assigned' => 'Rolle zugewiesen.', 'title' => 'Rollen und Berechtigungen', 'th_permission' => 'Berechtigung', 'th_label' => 'Bezeichnung', 'assign_role' => 'Rolle zuweisen', 'member' => 'Mitglied', 'role' => 'Rolle', 'assign' => 'Zuweisen', 'layout' => 'Berechtigungen', 'meta_desc' => 'Rollen und Berechtigungen der Mitglieder verwalten.'],
+    'nl' => ['role_assigned' => 'Rol toegewezen.', 'title' => 'Rollen en rechten', 'th_permission' => 'Recht', 'th_label' => 'Label', 'assign_role' => 'Rol toewijzen', 'member' => 'Lid', 'role' => 'Rol', 'assign' => 'Toewijzen', 'layout' => 'Rechten', 'meta_desc' => 'Beheer van rollen en rechten van leden.'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
