@@ -5,13 +5,19 @@ require_module_enabled('dashboard');
 require_permission('admin.access');
 require_permission('modules.manage');
 $i18n = [
-    'fr' => ['ok_updated' => 'Widgets du dashboard mis à jour.', 'title' => 'Administration dashboard', 'help' => 'Activez/désactivez les widgets disponibles sur le dashboard membre.', 'save' => 'Enregistrer'],
-    'en' => ['ok_updated' => 'Dashboard widgets updated.', 'title' => 'Dashboard administration', 'help' => 'Enable/disable widgets available on the member dashboard.', 'save' => 'Save'],
-    'de' => ['ok_updated' => 'Dashboard-Widgets aktualisiert.', 'title' => 'Dashboard-Verwaltung', 'help' => 'Aktivieren/deaktivieren Sie verfügbare Widgets im Mitglieder-Dashboard.', 'save' => 'Speichern'],
-    'nl' => ['ok_updated' => 'Dashboardwidgets bijgewerkt.', 'title' => 'Dashboardbeheer', 'help' => 'Activeer/deactiveer widgets die beschikbaar zijn op het ledendashboard.', 'save' => 'Opslaan'],
+    'fr' => ['ok_updated' => 'Widgets du dashboard mis à jour.', 'title' => 'Administration dashboard', 'help' => 'Activez/désactivez les widgets disponibles sur le dashboard membre.', 'save' => 'Enregistrer', 'layout' => 'Dashboard', 'meta_desc' => 'Configuration des widgets du dashboard membre.'],
+    'en' => ['ok_updated' => 'Dashboard widgets updated.', 'title' => 'Dashboard administration', 'help' => 'Enable/disable widgets available on the member dashboard.', 'save' => 'Save', 'layout' => 'Dashboard', 'meta_desc' => 'Configuration of member dashboard widgets.'],
+    'de' => ['ok_updated' => 'Dashboard-Widgets aktualisiert.', 'title' => 'Dashboard-Verwaltung', 'help' => 'Aktivieren/deaktivieren Sie verfügbare Widgets im Mitglieder-Dashboard.', 'save' => 'Speichern', 'layout' => 'Dashboard', 'meta_desc' => 'Konfiguration der Widgets im Mitglieder-Dashboard.'],
+    'nl' => ['ok_updated' => 'Dashboardwidgets bijgewerkt.', 'title' => 'Dashboardbeheer', 'help' => 'Activeer/deactiveer widgets die beschikbaar zijn op het ledendashboard.', 'save' => 'Opslaan', 'layout' => 'Dashboard', 'meta_desc' => 'Configuratie van widgets op het ledendashboard.'],
 ];
 $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
 $t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 db()->exec(
     "CREATE TABLE IF NOT EXISTS dashboard_widget_settings (
@@ -58,4 +64,4 @@ ob_start();
     </form>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), (string) $t['title']);
+echo render_layout((string) ob_get_clean(), (string) $t['layout']);

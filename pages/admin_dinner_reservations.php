@@ -7,12 +7,18 @@ require_permission('events.manage');
 
 $locale = current_locale();
 $i18n = [
-    'fr' => ['err_invalid_reservation' => 'Veuillez indiquer un nom et au moins une ligne de réservation valide.', 'ok_saved' => 'Réservation enregistrée.', 'notes_placeholder' => 'Remarques allergènes, options, etc.', 'layout' => 'Administration dîner annuel', 'title' => 'Réservations dîner annuel', 'export_csv' => 'Exporter Excel (CSV)', 'reservation_name' => 'Nom de la réservation', 'reservation_name_ph' => 'Ex: Famille Dupont', 'add_line' => 'Ajouter une ligne', 'total_to_pay' => 'Total à payer :', 'notes' => 'Notes', 'save_reservation' => 'Enregistrer la réservation', 'history' => 'Historique', 'no_history' => 'Aucune réservation enregistrée.', 'total' => 'Total :', 'col_starter' => 'Entrée', 'col_meal' => 'Repas', 'col_dessert' => 'Dessert', 'col_qty' => 'Quantité', 'col_line_total' => 'Total ligne', 'yes' => 'Oui', 'no' => 'Non', 'csv_reservation_id' => 'Reservation ID', 'csv_reserved_by' => 'Nom', 'csv_created_at' => 'Date', 'csv_starter_enabled' => 'Entree active', 'csv_starter' => 'Entree', 'csv_starter_price' => 'Prix entree', 'csv_meal_enabled' => 'Plat actif', 'csv_meal' => 'Plat', 'csv_meal_price' => 'Prix plat', 'csv_dessert_enabled' => 'Dessert actif', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Prix dessert', 'csv_quantity' => 'Quantite', 'csv_line_total' => 'Total ligne', 'csv_res_total' => 'Total reservation'],
-    'en' => ['err_invalid_reservation' => 'Please provide a name and at least one valid reservation line.', 'ok_saved' => 'Reservation saved.', 'notes_placeholder' => 'Allergen notes, options, etc.', 'layout' => 'Annual dinner administration', 'title' => 'Annual dinner reservations', 'export_csv' => 'Export Excel (CSV)', 'reservation_name' => 'Reservation name', 'reservation_name_ph' => 'Ex: Dupont Family', 'add_line' => 'Add a line', 'total_to_pay' => 'Total to pay:', 'notes' => 'Notes', 'save_reservation' => 'Save reservation', 'history' => 'History', 'no_history' => 'No reservations recorded.', 'total' => 'Total:', 'col_starter' => 'Starter', 'col_meal' => 'Meal', 'col_dessert' => 'Dessert', 'col_qty' => 'Quantity', 'col_line_total' => 'Line total', 'yes' => 'Yes', 'no' => 'No', 'csv_reservation_id' => 'Reservation ID', 'csv_reserved_by' => 'Name', 'csv_created_at' => 'Date', 'csv_starter_enabled' => 'Starter enabled', 'csv_starter' => 'Starter', 'csv_starter_price' => 'Starter price', 'csv_meal_enabled' => 'Meal enabled', 'csv_meal' => 'Meal', 'csv_meal_price' => 'Meal price', 'csv_dessert_enabled' => 'Dessert enabled', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Dessert price', 'csv_quantity' => 'Quantity', 'csv_line_total' => 'Line total', 'csv_res_total' => 'Reservation total'],
-    'de' => ['err_invalid_reservation' => 'Bitte geben Sie einen Namen und mindestens eine gültige Reservierungszeile an.', 'ok_saved' => 'Reservierung gespeichert.', 'notes_placeholder' => 'Allergiehinweise, Optionen usw.', 'layout' => 'Verwaltung Jahresessen', 'title' => 'Reservierungen Jahresessen', 'export_csv' => 'Excel exportieren (CSV)', 'reservation_name' => 'Reservierungsname', 'reservation_name_ph' => 'Bsp.: Familie Dupont', 'add_line' => 'Zeile hinzufügen', 'total_to_pay' => 'Zu zahlender Betrag:', 'notes' => 'Notizen', 'save_reservation' => 'Reservierung speichern', 'history' => 'Verlauf', 'no_history' => 'Keine Reservierungen gespeichert.', 'total' => 'Gesamt:', 'col_starter' => 'Vorspeise', 'col_meal' => 'Hauptgericht', 'col_dessert' => 'Dessert', 'col_qty' => 'Menge', 'col_line_total' => 'Zeilensumme', 'yes' => 'Ja', 'no' => 'Nein', 'csv_reservation_id' => 'Reservierungs-ID', 'csv_reserved_by' => 'Name', 'csv_created_at' => 'Datum', 'csv_starter_enabled' => 'Vorspeise aktiv', 'csv_starter' => 'Vorspeise', 'csv_starter_price' => 'Preis Vorspeise', 'csv_meal_enabled' => 'Hauptgericht aktiv', 'csv_meal' => 'Hauptgericht', 'csv_meal_price' => 'Preis Hauptgericht', 'csv_dessert_enabled' => 'Dessert aktiv', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Preis Dessert', 'csv_quantity' => 'Menge', 'csv_line_total' => 'Zeilensumme', 'csv_res_total' => 'Reservierung gesamt'],
-    'nl' => ['err_invalid_reservation' => 'Geef een naam en minstens één geldige reserveringsregel op.', 'ok_saved' => 'Reservering opgeslagen.', 'notes_placeholder' => 'Allergenenopmerkingen, opties, enz.', 'layout' => 'Beheer jaarlijks diner', 'title' => 'Reserveringen jaarlijks diner', 'export_csv' => 'Excel exporteren (CSV)', 'reservation_name' => 'Naam van de reservering', 'reservation_name_ph' => 'Bijv.: Familie Dupont', 'add_line' => 'Lijn toevoegen', 'total_to_pay' => 'Totaal te betalen:', 'notes' => 'Notities', 'save_reservation' => 'Reservering opslaan', 'history' => 'Historiek', 'no_history' => 'Geen reserveringen opgeslagen.', 'total' => 'Totaal:', 'col_starter' => 'Voorgerecht', 'col_meal' => 'Hoofdgerecht', 'col_dessert' => 'Dessert', 'col_qty' => 'Aantal', 'col_line_total' => 'Lijntotaal', 'yes' => 'Ja', 'no' => 'Nee', 'csv_reservation_id' => 'Reserverings-ID', 'csv_reserved_by' => 'Naam', 'csv_created_at' => 'Datum', 'csv_starter_enabled' => 'Voorgerecht actief', 'csv_starter' => 'Voorgerecht', 'csv_starter_price' => 'Prijs voorgerecht', 'csv_meal_enabled' => 'Hoofdgerecht actief', 'csv_meal' => 'Hoofdgerecht', 'csv_meal_price' => 'Prijs hoofdgerecht', 'csv_dessert_enabled' => 'Dessert actief', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Prijs dessert', 'csv_quantity' => 'Aantal', 'csv_line_total' => 'Lijntotaal', 'csv_res_total' => 'Reservering totaal'],
+    'fr' => ['err_invalid_reservation' => 'Veuillez indiquer un nom et au moins une ligne de réservation valide.', 'ok_saved' => 'Réservation enregistrée.', 'notes_placeholder' => 'Remarques allergènes, options, etc.', 'layout' => 'Administration dîner annuel', 'title' => 'Réservations dîner annuel', 'export_csv' => 'Exporter Excel (CSV)', 'reservation_name' => 'Nom de la réservation', 'reservation_name_ph' => 'Ex: Famille Dupont', 'add_line' => 'Ajouter une ligne', 'total_to_pay' => 'Total à payer :', 'notes' => 'Notes', 'save_reservation' => 'Enregistrer la réservation', 'history' => 'Historique', 'no_history' => 'Aucune réservation enregistrée.', 'total' => 'Total :', 'col_starter' => 'Entrée', 'col_meal' => 'Repas', 'col_dessert' => 'Dessert', 'col_qty' => 'Quantité', 'col_line_total' => 'Total ligne', 'line_active' => 'Actif', 'line_remove' => 'Supprimer', 'yes' => 'Oui', 'no' => 'Non', 'csv_reservation_id' => 'Reservation ID', 'csv_reserved_by' => 'Nom', 'csv_created_at' => 'Date', 'csv_starter_enabled' => 'Entree active', 'csv_starter' => 'Entree', 'csv_starter_price' => 'Prix entree', 'csv_meal_enabled' => 'Plat actif', 'csv_meal' => 'Plat', 'csv_meal_price' => 'Prix plat', 'csv_dessert_enabled' => 'Dessert actif', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Prix dessert', 'csv_quantity' => 'Quantite', 'csv_line_total' => 'Total ligne', 'csv_res_total' => 'Total reservation', 'meta_desc' => 'Gestion des réservations et export du dîner annuel.'],
+    'en' => ['err_invalid_reservation' => 'Please provide a name and at least one valid reservation line.', 'ok_saved' => 'Reservation saved.', 'notes_placeholder' => 'Allergen notes, options, etc.', 'layout' => 'Annual dinner administration', 'title' => 'Annual dinner reservations', 'export_csv' => 'Export Excel (CSV)', 'reservation_name' => 'Reservation name', 'reservation_name_ph' => 'Ex: Dupont Family', 'add_line' => 'Add a line', 'total_to_pay' => 'Total to pay:', 'notes' => 'Notes', 'save_reservation' => 'Save reservation', 'history' => 'History', 'no_history' => 'No reservations recorded.', 'total' => 'Total:', 'col_starter' => 'Starter', 'col_meal' => 'Meal', 'col_dessert' => 'Dessert', 'col_qty' => 'Quantity', 'col_line_total' => 'Line total', 'line_active' => 'Enabled', 'line_remove' => 'Remove', 'yes' => 'Yes', 'no' => 'No', 'csv_reservation_id' => 'Reservation ID', 'csv_reserved_by' => 'Name', 'csv_created_at' => 'Date', 'csv_starter_enabled' => 'Starter enabled', 'csv_starter' => 'Starter', 'csv_starter_price' => 'Starter price', 'csv_meal_enabled' => 'Meal enabled', 'csv_meal' => 'Meal', 'csv_meal_price' => 'Meal price', 'csv_dessert_enabled' => 'Dessert enabled', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Dessert price', 'csv_quantity' => 'Quantity', 'csv_line_total' => 'Line total', 'csv_res_total' => 'Reservation total', 'meta_desc' => 'Manage annual dinner reservations and exports.'],
+    'de' => ['err_invalid_reservation' => 'Bitte geben Sie einen Namen und mindestens eine gültige Reservierungszeile an.', 'ok_saved' => 'Reservierung gespeichert.', 'notes_placeholder' => 'Allergiehinweise, Optionen usw.', 'layout' => 'Verwaltung Jahresessen', 'title' => 'Reservierungen Jahresessen', 'export_csv' => 'Excel exportieren (CSV)', 'reservation_name' => 'Reservierungsname', 'reservation_name_ph' => 'Bsp.: Familie Dupont', 'add_line' => 'Zeile hinzufügen', 'total_to_pay' => 'Zu zahlender Betrag:', 'notes' => 'Notizen', 'save_reservation' => 'Reservierung speichern', 'history' => 'Verlauf', 'no_history' => 'Keine Reservierungen gespeichert.', 'total' => 'Gesamt:', 'col_starter' => 'Vorspeise', 'col_meal' => 'Hauptgericht', 'col_dessert' => 'Dessert', 'col_qty' => 'Menge', 'col_line_total' => 'Zeilensumme', 'line_active' => 'Aktiv', 'line_remove' => 'Entfernen', 'yes' => 'Ja', 'no' => 'Nein', 'csv_reservation_id' => 'Reservierungs-ID', 'csv_reserved_by' => 'Name', 'csv_created_at' => 'Datum', 'csv_starter_enabled' => 'Vorspeise aktiv', 'csv_starter' => 'Vorspeise', 'csv_starter_price' => 'Preis Vorspeise', 'csv_meal_enabled' => 'Hauptgericht aktiv', 'csv_meal' => 'Hauptgericht', 'csv_meal_price' => 'Preis Hauptgericht', 'csv_dessert_enabled' => 'Dessert aktiv', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Preis Dessert', 'csv_quantity' => 'Menge', 'csv_line_total' => 'Zeilensumme', 'csv_res_total' => 'Reservierung gesamt', 'meta_desc' => 'Reservierungen und Exporte für das Jahresessen verwalten.'],
+    'nl' => ['err_invalid_reservation' => 'Geef een naam en minstens één geldige reserveringsregel op.', 'ok_saved' => 'Reservering opgeslagen.', 'notes_placeholder' => 'Allergenenopmerkingen, opties, enz.', 'layout' => 'Beheer jaarlijks diner', 'title' => 'Reserveringen jaarlijks diner', 'export_csv' => 'Excel exporteren (CSV)', 'reservation_name' => 'Naam van de reservering', 'reservation_name_ph' => 'Bijv.: Familie Dupont', 'add_line' => 'Lijn toevoegen', 'total_to_pay' => 'Totaal te betalen:', 'notes' => 'Notities', 'save_reservation' => 'Reservering opslaan', 'history' => 'Historiek', 'no_history' => 'Geen reserveringen opgeslagen.', 'total' => 'Totaal:', 'col_starter' => 'Voorgerecht', 'col_meal' => 'Hoofdgerecht', 'col_dessert' => 'Dessert', 'col_qty' => 'Aantal', 'col_line_total' => 'Lijntotaal', 'line_active' => 'Actief', 'line_remove' => 'Verwijderen', 'yes' => 'Ja', 'no' => 'Nee', 'csv_reservation_id' => 'Reserverings-ID', 'csv_reserved_by' => 'Naam', 'csv_created_at' => 'Datum', 'csv_starter_enabled' => 'Voorgerecht actief', 'csv_starter' => 'Voorgerecht', 'csv_starter_price' => 'Prijs voorgerecht', 'csv_meal_enabled' => 'Hoofdgerecht actief', 'csv_meal' => 'Hoofdgerecht', 'csv_meal_price' => 'Prijs hoofdgerecht', 'csv_dessert_enabled' => 'Dessert actief', 'csv_dessert' => 'Dessert', 'csv_dessert_price' => 'Prijs dessert', 'csv_quantity' => 'Aantal', 'csv_line_total' => 'Lijntotaal', 'csv_res_total' => 'Reservering totaal', 'meta_desc' => 'Beheer van reserveringen en export voor het jaarlijkse diner.'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 db()->exec(
     'CREATE TABLE IF NOT EXISTS dinner_reservations (
@@ -240,12 +246,12 @@ if ((string) ($_GET['export'] ?? '') === '1') {
             'Entree active',
             'Entree',
             'Prix entree',
-            'Plat actif',
-            'Plat',
-            'Prix plat',
-            'Dessert actif',
-            'Dessert',
-            'Prix dessert',
+            (string) $t['csv_meal_enabled'],
+            (string) $t['csv_meal'],
+            (string) $t['csv_meal_price'],
+            (string) $t['csv_dessert_enabled'],
+            (string) $t['csv_dessert'],
+            (string) $t['csv_dessert_price'],
             'Quantite',
             'Total ligne',
             'Total reservation',
@@ -354,6 +360,7 @@ ob_start();
     const totalEl = document.getElementById('dinner-total');
     let lineIndex = 0;
 
+    const ui = <?= json_encode(['starter' => $t['col_starter'], 'meal' => $t['col_meal'], 'dessert' => $t['col_dessert'], 'qty' => $t['col_qty'], 'remove' => ($locale === 'fr' ? '${ui.remove}' : ($locale === 'en' ? 'Remove' : ($locale === 'de' ? 'Entfernen' : 'Verwijderen'))), 'active' => ($locale === 'fr' ? '${ui.active}' : ($locale === 'en' ? 'Enabled' : ($locale === 'de' ? 'Aktiv' : 'Actief')))], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
     const localeMap = { fr: 'fr-BE', en: 'en-GB', de: 'de-DE', nl: 'nl-BE' };
     const numberLocale = localeMap[<?= json_encode($locale) ?>] || 'fr-BE';
     const formatEur = (cents) => new Intl.NumberFormat(numberLocale, { style: 'currency', currency: 'EUR' }).format((Number(cents) || 0) / 100);
@@ -402,13 +409,13 @@ ob_start();
                 <label><input class="dessert-enabled" type="checkbox" name="lines[${lineIndex}][dessert_enabled]" value="1" checked> Activer dessert</label>
             </div>
             <div class="grid-3">
-                <label>Entrée
+                <label>${ui.starter}
                     <select class="starter-select" name="lines[${lineIndex}][starter]">${renderSelectOptions(starterOptions)}</select>
                 </label>
-                <label>Plat
+                <label>${ui.meal}
                     <select class="meal-select" name="lines[${lineIndex}][meal]">${renderSelectOptions(mainOptions)}</select>
                 </label>
-                <label>Dessert
+                <label>${ui.dessert}
                     <select class="dessert-select" name="lines[${lineIndex}][dessert]">${renderSelectOptions(dessertOptions)}</select>
                 </label>
             </div>
@@ -417,7 +424,7 @@ ob_start();
                     <input class="quantity-input" type="number" name="lines[${lineIndex}][quantity]" min="0" step="1" value="1">
                 </label>
                 <p class="help">Total ligne : <strong class="line-total">${formatEur(0)}</strong></p>
-                <p><button type="button" class="button secondary remove-line">Supprimer</button></p>
+                <p><button type="button" class="button secondary remove-line">${ui.remove}</button></p>
             </div>
         `;
         lineIndex += 1;

@@ -144,10 +144,10 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'nl' => ['title' => 'Sponsoring', 'body' => 'Hier vindt u informatie over partners en sponsoringsmogelijkheden van de club.'],
         ],
         'mentions_legales' => [
-            'fr' => ['title' => 'Mentions légales', 'body' => 'Les mentions légales du site ON4CRD sont accessibles ici et seront complétées selon les obligations en vigueur.'],
-            'en' => ['title' => 'Legal notice', 'body' => 'The ON4CRD legal notices are available here and will be completed according to applicable obligations.'],
-            'de' => ['title' => 'Impressum', 'body' => 'Die rechtlichen Hinweise von ON4CRD sind hier verfügbar und werden gemäß geltenden Verpflichtungen ergänzt.'],
-            'nl' => ['title' => 'Juridische vermeldingen', 'body' => 'De juridische vermeldingen van ON4CRD staan hier en worden aangevuld volgens de geldende verplichtingen.'],
+            'fr' => ['title' => 'Mentions légales', 'body' => "Éditeur du site : Radio Club ON4CRD.\n\nResponsable de publication : le comité du Radio Club ON4CRD.\n\nContact : utilisez le formulaire de contact du site ou les coordonnées publiées dans l’espace membre.\n\nHébergement : infrastructure technique opérée pour le compte du club.\n\nPropriété intellectuelle : les contenus (textes, images, documents, logos) publiés sur ce site restent la propriété de leurs auteurs respectifs ou du Radio Club ON4CRD. Toute reproduction totale ou partielle sans autorisation préalable est interdite, sauf exceptions légales.\n\nDonnées personnelles : les données traitées via les formulaires et espaces membres sont utilisées pour la gestion des activités du club et l’administration du site. Vous pouvez demander l’accès, la rectification ou la suppression de vos données conformément à la réglementation applicable.\n\nLimitation de responsabilité : malgré le soin apporté à la publication, ON4CRD ne garantit pas l’absence d’erreurs ou d’interruptions et ne peut être tenu responsable d’un usage inadapté des informations publiées."],
+            'en' => ['title' => 'Legal notice', 'body' => "Website publisher: Radio Club ON4CRD.\n\nPublishing manager: the Radio Club ON4CRD committee.\n\nContact: please use the website contact form or the details available in the members area.\n\nHosting: technical infrastructure operated on behalf of the club.\n\nIntellectual property: content (texts, images, documents, logos) published on this website remains the property of its respective authors or of Radio Club ON4CRD. Full or partial reproduction without prior authorization is prohibited, except where legally permitted.\n\nPersonal data: data processed through forms and member areas is used for club activity management and site administration. You may request access, correction, or deletion of your data in accordance with applicable regulations.\n\nLimitation of liability: despite the care taken in publication, ON4CRD does not guarantee the absence of errors or service interruptions and cannot be held liable for inappropriate use of published information."],
+            'de' => ['title' => 'Impressum', 'body' => "Herausgeber der Website: Radio Club ON4CRD.\n\nVerantwortlich für die Veröffentlichung: das Komitee des Radio Club ON4CRD.\n\nKontakt: bitte verwenden Sie das Kontaktformular der Website oder die im Mitgliederbereich veröffentlichten Kontaktdaten.\n\nHosting: technische Infrastruktur, die im Auftrag des Clubs betrieben wird.\n\nUrheberrecht: Inhalte (Texte, Bilder, Dokumente, Logos) auf dieser Website bleiben Eigentum der jeweiligen Urheber oder des Radio Club ON4CRD. Jede vollständige oder teilweise Vervielfältigung ohne vorherige Genehmigung ist unzulässig, außer in gesetzlich erlaubten Fällen.\n\nPersonenbezogene Daten: über Formulare und Mitgliederbereiche verarbeitete Daten werden zur Verwaltung der Clubaktivitäten und der Website genutzt. Sie können gemäß den geltenden Vorschriften Auskunft, Berichtigung oder Löschung Ihrer Daten verlangen.\n\nHaftungsbeschränkung: trotz sorgfältiger Pflege der Inhalte übernimmt ON4CRD keine Gewähr für Fehlerfreiheit oder unterbrechungsfreien Betrieb und haftet nicht für eine unsachgemäße Nutzung der veröffentlichten Informationen."],
+            'nl' => ['title' => 'Juridische vermeldingen', 'body' => "Uitgever van de website: Radio Club ON4CRD.\n\nVerantwoordelijke voor publicatie: het comité van Radio Club ON4CRD.\n\nContact: gebruik het contactformulier van de website of de gegevens die in de ledenruimte zijn gepubliceerd.\n\nHosting: technische infrastructuur beheerd in opdracht van de club.\n\nIntellectuele eigendom: inhoud (teksten, afbeeldingen, documenten, logo’s) op deze website blijft eigendom van de respectieve auteurs of van Radio Club ON4CRD. Gehele of gedeeltelijke reproductie zonder voorafgaande toestemming is verboden, behalve waar wettelijk toegestaan.\n\nPersoonsgegevens: gegevens die via formulieren en ledenruimtes worden verwerkt, worden gebruikt voor het beheer van clubactiviteiten en sitebeheer. U kunt inzage, correctie of verwijdering van uw gegevens vragen volgens de toepasselijke regelgeving.\n\nAansprakelijkheidsbeperking: ondanks de zorg bij publicatie garandeert ON4CRD niet dat de informatie foutloos is of dat de dienst ononderbroken beschikbaar is, en kan ON4CRD niet aansprakelijk worden gesteld voor oneigenlijk gebruik van gepubliceerde informatie."],
         ],
         'conditions_utilisation' => [
             'fr' => ['title' => "Conditions générales d'utilisation", 'body' => "Les conditions générales d'utilisation du site ON4CRD seront publiées et mises à jour sur cette page."],
@@ -656,20 +656,37 @@ function render_ham_weather_advice(array $user = []): string
     $measurement = is_array($kpPayload) ? extract_latest_kp_measurement($kpPayload) : null;
     $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : 3.0;
 
-    $hfScore = 70.0;
-    $hfScore += $kp <= 2.0 ? 15.0 : ($kp <= 4.0 ? 5.0 : -20.0);
-    $hfScore += ($hour >= 7 && $hour <= 16) ? 10.0 : -5.0;
-    $hfScore += ($wind <= 25.0 ? 5.0 : -8.0);
-    $hfScore += ($humidity >= 35 && $humidity <= 85) ? 3.0 : -4.0;
-    $hfScore += in_array($weatherCode, [95, 96, 99], true) ? -15.0 : 0.0;
+    $month = (int) gmdate('n');
+    if ($localTime !== '') {
+        try {
+            $month = (int) (new DateTimeImmutable($localTime))->format('n');
+        } catch (Throwable $throwable) {
+            $month = (int) gmdate('n');
+        }
+    }
+    $isSummer = $month >= 4 && $month <= 9;
+    $isDaytime = $hour >= 7 && $hour <= 16;
+    $isLateEvening = $hour >= 20 || $hour <= 5;
+
+    $hfScore = 68.0;
+    $hfScore += $kp <= 2.0 ? 18.0 : ($kp <= 4.0 ? 7.0 : -22.0);
+    $hfScore += $isDaytime ? 12.0 : -5.0;
+    $hfScore += ($wind <= 22.0 ? 6.0 : ($wind <= 35.0 ? 0.0 : -10.0));
+    $hfScore += ($humidity >= 35 && $humidity <= 85) ? 3.0 : -5.0;
+    $hfScore += in_array($weatherCode, [95, 96, 99], true) ? -16.0 : 0.0;
+    $hfScore += $isSummer && $isDaytime ? 4.0 : 0.0;
+    $hfScore += !$isSummer && $isLateEvening ? 4.0 : 0.0;
 
     $bands = ['40m', '20m', '15m'];
-    if ($hour >= 8 && $hour <= 15 && $kp <= 3.5) {
+    if ($hour >= 8 && $hour <= 15 && $kp <= 3.5 && $isSummer) {
         $bands = ['20m', '17m', '15m'];
-    } elseif ($hour >= 10 && $hour <= 17 && $kp <= 2.5) {
+    } elseif ($hour >= 10 && $hour <= 17 && $kp <= 2.5 && $isSummer) {
         $bands = ['15m', '12m', '10m'];
     } elseif ($hour >= 18 || $hour <= 6) {
         $bands = ['40m', '80m', '30m'];
+        if (!$isSummer && $kp <= 4.0) {
+            $bands = ['80m', '40m', '30m'];
+        }
     } elseif ($kp >= 5.0) {
         $bands = ['40m', '30m', '20m'];
     }
@@ -2208,6 +2225,85 @@ function import_adif_records(int $memberId, array $records): int
 
 if (!function_exists('answer_question_from_knowledge')) {
     /**
+     * @return list<string>
+     */
+    function rag_tokens(string $text): array
+    {
+        $normalized = mb_safe_strtolower(trim($text));
+        if ($normalized === '') {
+            return [];
+        }
+        $parts = preg_split('/[^\p{L}\p{N}]+/u', $normalized) ?: [];
+        $tokens = [];
+        foreach ($parts as $part) {
+            $token = trim((string) $part);
+            if ($token === '' || mb_strlen($token) < 2) {
+                continue;
+            }
+            $tokens[$token] = true;
+        }
+        return array_keys($tokens);
+    }
+
+    /**
+     * @param list<string> $queryTokens
+     */
+    function rag_overlap_score(array $queryTokens, string $text): float
+    {
+        if ($queryTokens === []) {
+            return 0.0;
+        }
+        $haystack = ' ' . mb_safe_strtolower($text) . ' ';
+        $score = 0.0;
+        foreach ($queryTokens as $token) {
+            if (str_contains($haystack, ' ' . $token . ' ')) {
+                $score += 1.0;
+            } elseif (str_contains($haystack, $token)) {
+                $score += 0.5;
+            }
+        }
+        return $score;
+    }
+
+    /**
+     * @param list<string> $queryTokens
+     */
+    function rag_weighted_score(array $queryTokens, string $text): float
+    {
+        if ($queryTokens === []) {
+            return 0.0;
+        }
+
+        $normalizedText = mb_safe_strtolower($text);
+        if (trim($normalizedText) === '') {
+            return 0.0;
+        }
+
+        $score = 0.0;
+        foreach ($queryTokens as $token) {
+            $quoted = preg_quote($token, '/');
+            $wholeWordMatches = preg_match_all('/(?<![\p{L}\p{N}])' . $quoted . '(?![\p{L}\p{N}])/u', $normalizedText);
+            if (is_int($wholeWordMatches) && $wholeWordMatches > 0) {
+                $score += 1.5 + min(1.5, ($wholeWordMatches - 1) * 0.3);
+                continue;
+            }
+
+            if (str_contains($normalizedText, $token)) {
+                $score += 0.4;
+            }
+        }
+
+        if (count($queryTokens) >= 2) {
+            $phrase = implode(' ', $queryTokens);
+            if ($phrase !== '' && str_contains($normalizedText, $phrase)) {
+                $score += 2.0;
+            }
+        }
+
+        return $score;
+    }
+
+    /**
      * @return array{answer:string,source:string}
      */
 function answer_question_from_knowledge(string $question): array
@@ -2269,6 +2365,7 @@ function answer_question_from_knowledge(string $question): array
             return ['answer' => (string) $chatbotT['empty_question'], 'source' => (string) $chatbotT['assistant_source']];
         }
 
+        $queryTokens = rag_tokens($normalized);
         $knowledgePath = __DIR__ . '/knowledge.php';
         $knowledgeBase = [];
         if (is_file($knowledgePath)) {
@@ -2278,24 +2375,24 @@ function answer_question_from_knowledge(string $question): array
             }
         }
 
-        $bestScore = -1;
+        $bestScore = -1.0;
         $bestItem = null;
         foreach ($knowledgeBase as $item) {
             if (!is_array($item)) {
                 continue;
             }
-            $score = 0;
+            $score = 0.0;
             $keywords = isset($item['keywords']) && is_array($item['keywords']) ? $item['keywords'] : [];
             foreach ($keywords as $keyword) {
                 $needle = mb_safe_strtolower(trim((string) $keyword));
                 if ($needle !== '' && str_contains($normalized, $needle)) {
-                    $score += 3;
+                    $score += 3.0;
                 }
             }
-            $title = mb_safe_strtolower((string) ($item['title'] ?? ''));
-            if ($title !== '' && str_contains($normalized, $title)) {
-                $score += 2;
-            }
+            $title = (string) ($item['title'] ?? '');
+            $body = (string) ($item['body'] ?? '');
+            $score += rag_weighted_score($queryTokens, $title) * 2.0;
+            $score += rag_weighted_score($queryTokens, $body);
             if ($score > $bestScore) {
                 $bestScore = $score;
                 $bestItem = $item;
@@ -2309,17 +2406,51 @@ function answer_question_from_knowledge(string $question): array
             ];
         }
 
+        $ragLikeTerms = array_slice($queryTokens, 0, 5);
+        if ($normalized !== '') {
+            array_unshift($ragLikeTerms, $normalized);
+        }
+        $ragLikeTerms = array_values(array_unique(array_filter(array_map(
+            static fn(string $term): string => trim($term),
+            $ragLikeTerms
+        ), static fn(string $term): bool => $term !== '')));
+
         if (table_exists('articles')) {
             try {
-                $like = '%' . $question . '%';
-                $stmt = db()->prepare('SELECT title, excerpt, slug FROM articles WHERE status = "published" AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?) ORDER BY updated_at DESC LIMIT 1');
-                $stmt->execute([$like, $like, $like]);
-                $article = $stmt->fetch();
-                if (is_array($article)) {
+                $whereParts = [];
+                $params = [];
+                foreach ($ragLikeTerms as $term) {
+                    $like = '%' . $term . '%';
+                    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+                    array_push($params, $like, $like, $like);
+                }
+                if ($whereParts === []) {
+                    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+                    array_push($params, '%'.$question.'%', '%'.$question.'%', '%'.$question.'%');
+                }
+                $sql = 'SELECT title, excerpt, content, slug FROM articles WHERE status = "published" AND (' . implode(' OR ', $whereParts) . ') ORDER BY updated_at DESC LIMIT 25';
+                $stmt = db()->prepare($sql);
+                $stmt->execute($params);
+                $articles = $stmt->fetchAll();
+                $article = null;
+                $articleScore = -1.0;
+                foreach ($articles as $row) {
+                    if (!is_array($row)) {
+                        continue;
+                    }
+                    $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
+                        + rag_weighted_score($queryTokens, (string) ($row['excerpt'] ?? ''))
+                        + rag_weighted_score($queryTokens, (string) ($row['content'] ?? ''));
+                    if ($score > $articleScore) {
+                        $articleScore = $score;
+                        $article = $row;
+                    }
+                }
+                if (is_array($article) && $articleScore > 0.0) {
                     $title = trim((string) ($article['title'] ?? (string) $chatbotT['article_label']));
                     $excerpt = trim((string) ($article['excerpt'] ?? ''));
                     $slug = trim((string) ($article['slug'] ?? ''));
-                    $url = $slug !== '' ? base_url('index.php?route=article&slug=' . urlencode($slug)) : '';
+                    $url = $slug !== '' ? route_url('article', ['slug' => $slug]) : '';
                     $answer = (string) $chatbotT['article_found'] . $title . '.';
                     if ($excerpt !== '') {
                         $answer .= "\n\n" . (string) $chatbotT['summary'] . $excerpt;
@@ -2336,11 +2467,36 @@ function answer_question_from_knowledge(string $question): array
 
         if (ensure_member_library_table()) {
             try {
-                $like = '%' . $question . '%';
-                $stmt = db()->prepare('SELECT title, description, file_path FROM member_library_documents WHERE (title LIKE ? OR description LIKE ? OR extracted_text LIKE ?) ORDER BY uploaded_at DESC LIMIT 1');
-                $stmt->execute([$like, $like, $like]);
-                $doc = $stmt->fetch();
-                if (is_array($doc)) {
+                $whereParts = [];
+                $params = [];
+                foreach ($ragLikeTerms as $term) {
+                    $like = '%' . $term . '%';
+                    $whereParts[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
+                    array_push($params, $like, $like, $like);
+                }
+                if ($whereParts === []) {
+                    $whereParts[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
+                    array_push($params, '%'.$question.'%', '%'.$question.'%', '%'.$question.'%');
+                }
+                $sql = 'SELECT title, description, extracted_text, file_path FROM member_library_documents WHERE (' . implode(' OR ', $whereParts) . ') ORDER BY uploaded_at DESC LIMIT 25';
+                $stmt = db()->prepare($sql);
+                $stmt->execute($params);
+                $docs = $stmt->fetchAll();
+                $doc = null;
+                $docScore = -1.0;
+                foreach ($docs as $row) {
+                    if (!is_array($row)) {
+                        continue;
+                    }
+                    $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
+                        + rag_weighted_score($queryTokens, (string) ($row['description'] ?? ''))
+                        + rag_weighted_score($queryTokens, (string) ($row['extracted_text'] ?? ''));
+                    if ($score > $docScore) {
+                        $docScore = $score;
+                        $doc = $row;
+                    }
+                }
+                if (is_array($doc) && $docScore > 0.0) {
                     $locale = current_locale();
                     $chatbotDocI18n = [
                         'fr' => ['doc_fallback' => 'Document PDF', 'prefix' => 'J’ai trouvé un document dans la bibliothèque membres : ', 'summary' => 'Résumé : ', 'open' => 'Consulter : ', 'source' => 'Bibliothèque membres'],
@@ -2352,12 +2508,13 @@ function answer_question_from_knowledge(string $question): array
                     $docTitle = trim((string) ($doc['title'] ?? (string) $chatbotDocT['doc_fallback']));
                     $docDescription = trim((string) ($doc['description'] ?? ''));
                     $docUrl = trim((string) ($doc['file_path'] ?? ''));
+                    $safeDocUrl = safe_storage_public_path_or_null($docUrl, ['storage/uploads/library/']);
                     $answer = (string) $chatbotDocT['prefix'] . $docTitle . '.';
                     if ($docDescription !== '') {
                         $answer .= "\n\n" . (string) $chatbotDocT['summary'] . $docDescription;
                     }
-                    if ($docUrl !== '') {
-                        $answer .= "\n\n" . (string) $chatbotDocT['open'] . base_url($docUrl);
+                    if (is_string($safeDocUrl) && $safeDocUrl !== '') {
+                        $answer .= "\n\n" . (string) $chatbotDocT['open'] . base_url($safeDocUrl);
                     }
                     return ['answer' => $answer, 'source' => (string) $chatbotDocT['source']];
                 }

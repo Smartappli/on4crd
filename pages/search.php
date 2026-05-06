@@ -34,7 +34,7 @@ if ($hasQuery && $isQueryLongEnough) {
                 if (stripos($summary, $q) !== false) {
                     $score += 2;
                 }
-                $collected[] = ['title' => $title, 'summary' => $summary, 'url' => base_url('index.php?route=article&slug=' . urlencode((string) $row['slug'])), 'score' => $score];
+                $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('article', ['slug' => (string) $row['slug']]), 'score' => $score];
             }
         }
         if (table_exists('wiki_pages')) {
@@ -50,7 +50,7 @@ if ($hasQuery && $isQueryLongEnough) {
                 if (stripos($summary, $q) !== false) {
                     $score += 1;
                 }
-                $collected[] = ['title' => $title, 'summary' => $summary, 'url' => base_url('index.php?route=wiki_view&slug=' . urlencode((string) $row['slug'])), 'score' => $score];
+                $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('wiki_view', ['slug' => (string) $row['slug']]), 'score' => $score];
             }
         }
         return $collected;
@@ -100,8 +100,8 @@ ob_start();
     <?php endforeach; ?>
     <?php if ($totalResults > $perPage): ?>
         <div style="display:flex;gap:10px;margin-top:12px;">
-            <?php if ($hasPrev): ?><a class="button secondary" href="<?= e(base_url('index.php?route=search&q=' . urlencode($q) . '&page=' . ($page - 1))) ?>"><?= e((string) $t['previous']) ?></a><?php endif; ?>
-            <?php if ($hasNext): ?><a class="button secondary" href="<?= e(base_url('index.php?route=search&q=' . urlencode($q) . '&page=' . ($page + 1))) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
+            <?php if ($hasPrev): ?><a class="button secondary" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page - 1)])) ?>"><?= e((string) $t['previous']) ?></a><?php endif; ?>
+            <?php if ($hasNext): ?><a class="button secondary" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
         </div>
     <?php endif; ?>
 </div>

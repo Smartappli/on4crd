@@ -43,8 +43,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $tmpName = (string) ($file['tmp_name'] ?? '');
-    $mime = $tmpName !== '' ? (string) mime_content_type($tmpName) : '';
-    if ($mime !== 'application/pdf' && $mime !== 'application/x-pdf') {
+    $originalName = (string) ($file['name'] ?? '');
+    $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
+    $mime = '';
+    if ($tmpName !== '') {
+        if (class_exists('finfo')) {
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = (string) ($finfo->file($tmpName) ?: '');
+        }
+        if ($mime === '') {
+            $mime = (string) @mime_content_type($tmpName);
+        }
+    }
+    if ($extension !== 'pdf' || ($mime !== 'application/pdf' && $mime !== 'application/x-pdf')) {
         set_flash('error', (string) $t['err_invalid']);
         redirect('members_library');
     }
@@ -72,6 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             shell_exec('pdftotext ' . escapeshellarg($absolutePath) . ' ' . escapeshellarg($tmpPath));
             if (is_file($tmpPath)) {
                 $extractedText = trim((string) file_get_contents($tmpPath));
+                if (strlen($extractedText) > 200000) {
+                    $extractedText = substr($extractedText, 0, 200000);
+                }
                 @unlink($tmpPath);
             }
         }
@@ -99,11 +113,13 @@ ob_start();
     </form>
 
     <?php foreach ($documents as $document): ?>
+        <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); ?>
+        <?php if ($safePath === null) { continue; } ?>
         <article class="card" style="margin-top:12px;">
             <h3><?= e((string) $document['title']) ?></h3>
             <p><?= e((string) ($document['description'] ?? '')) ?></p>
-            <iframe src="<?= e(base_url((string) $document['file_path'])) ?>" style="width:100%;height:480px;border:1px solid #ccc;" loading="lazy"></iframe>
-            <p><a class="button secondary" href="<?= e(base_url((string) $document['file_path'])) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a></p>
+            <iframe src="<?= e(base_url($safePath)) ?>" style="width:100%;height:480px;border:1px solid #ccc;" loading="lazy"></iframe>
+            <p><a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a></p>
         </article>
     <?php endforeach; ?>
 </div>

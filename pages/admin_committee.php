@@ -4,12 +4,18 @@ declare(strict_types=1);
 require_permission('admin.access');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['updated' => 'Comité mis à jour.', 'title' => 'Gestion du comité', 'intro' => 'Sélectionnez les membres qui doivent apparaître sur la page comité, définissez leur rôle, leur ordre et une courte biographie.', 'show_on_page' => 'Afficher sur la page comité', 'role' => 'Rôle au comité', 'sort_order' => "Ordre d'affichage", 'bio' => 'Biographie courte', 'save' => 'Enregistrer', 'layout' => 'Gestion du comité'],
-    'en' => ['updated' => 'Committee updated.', 'title' => 'Committee management', 'intro' => 'Select members to display on the committee page and define role, order, and short biography.', 'show_on_page' => 'Display on committee page', 'role' => 'Committee role', 'sort_order' => 'Display order', 'bio' => 'Short biography', 'save' => 'Save', 'layout' => 'Committee management'],
-    'de' => ['updated' => 'Komitee aktualisiert.', 'title' => 'Komitee-Verwaltung', 'intro' => 'Wählen Sie Mitglieder aus, die auf der Komiteeseite erscheinen sollen, und definieren Sie Rolle, Reihenfolge und Kurzbiografie.', 'show_on_page' => 'Auf Komiteeseite anzeigen', 'role' => 'Rolle im Komitee', 'sort_order' => 'Anzeigereihenfolge', 'bio' => 'Kurze Biografie', 'save' => 'Speichern', 'layout' => 'Komitee-Verwaltung'],
-    'nl' => ['updated' => 'Comité bijgewerkt.', 'title' => 'Comitébeheer', 'intro' => 'Selecteer leden die op de comitépagina moeten verschijnen en stel rol, volgorde en korte biografie in.', 'show_on_page' => 'Op comitépagina tonen', 'role' => 'Rol in het comité', 'sort_order' => 'Weergavevolgorde', 'bio' => 'Korte biografie', 'save' => 'Opslaan', 'layout' => 'Comitébeheer'],
+    'fr' => ['updated' => 'Comité mis à jour.', 'title' => 'Gestion du comité', 'intro' => 'Sélectionnez les membres qui doivent apparaître sur la page comité, définissez leur rôle, leur ordre et une courte biographie.', 'show_on_page' => 'Afficher sur la page comité', 'role' => 'Rôle au comité', 'sort_order' => "Ordre d'affichage", 'bio' => 'Biographie courte', 'save' => 'Enregistrer', 'layout' => 'Gestion du comité', 'meta_desc' => 'Gestion des membres affichés sur la page comité.'],
+    'en' => ['updated' => 'Committee updated.', 'title' => 'Committee management', 'intro' => 'Select members to display on the committee page and define role, order, and short biography.', 'show_on_page' => 'Display on committee page', 'role' => 'Committee role', 'sort_order' => 'Display order', 'bio' => 'Short biography', 'save' => 'Save', 'layout' => 'Committee management', 'meta_desc' => 'Manage members displayed on the committee page.'],
+    'de' => ['updated' => 'Komitee aktualisiert.', 'title' => 'Komitee-Verwaltung', 'intro' => 'Wählen Sie Mitglieder aus, die auf der Komiteeseite erscheinen sollen, und definieren Sie Rolle, Reihenfolge und Kurzbiografie.', 'show_on_page' => 'Auf Komiteeseite anzeigen', 'role' => 'Rolle im Komitee', 'sort_order' => 'Anzeigereihenfolge', 'bio' => 'Kurze Biografie', 'save' => 'Speichern', 'layout' => 'Komitee-Verwaltung', 'meta_desc' => 'Mitglieder verwalten, die auf der Komiteeseite angezeigt werden.'],
+    'nl' => ['updated' => 'Comité bijgewerkt.', 'title' => 'Comitébeheer', 'intro' => 'Selecteer leden die op de comitépagina moeten verschijnen en stel rol, volgorde en korte biografie in.', 'show_on_page' => 'Op comitépagina tonen', 'role' => 'Rol in het comité', 'sort_order' => 'Weergavevolgorde', 'bio' => 'Korte biografie', 'save' => 'Opslaan', 'layout' => 'Comitébeheer', 'meta_desc' => 'Beheer van leden die op de comitépagina worden weergegeven.'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {

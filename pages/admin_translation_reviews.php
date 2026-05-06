@@ -3,13 +3,19 @@ declare(strict_types=1);
 
 require_permission('admin.access');
 $i18n = [
-    'fr' => ['invalid_lang' => 'Langue invalide.', 'ok_news' => 'Traduction d’actualité relue.', 'ok_article' => 'Traduction d’article relue.', 'news_title' => 'Relecture des actualités', 'article_title' => 'Relecture des articles', 'label_title' => 'Titre', 'label_excerpt' => 'Extrait', 'label_content' => 'Contenu', 'submit' => 'Valider la traduction', 'no_news' => 'Aucune traduction d’actualité en attente.', 'no_article' => 'Aucune traduction d’article en attente.', 'layout' => 'Relecture linguistique'],
-    'en' => ['invalid_lang' => 'Invalid language.', 'ok_news' => 'News translation reviewed.', 'ok_article' => 'Article translation reviewed.', 'news_title' => 'News review', 'article_title' => 'Article review', 'label_title' => 'Title', 'label_excerpt' => 'Excerpt', 'label_content' => 'Content', 'submit' => 'Approve translation', 'no_news' => 'No pending news translation.', 'no_article' => 'No pending article translation.', 'layout' => 'Translation review'],
-    'de' => ['invalid_lang' => 'Ungültige Sprache.', 'ok_news' => 'Nachrichtenübersetzung geprüft.', 'ok_article' => 'Artikelübersetzung geprüft.', 'news_title' => 'Nachrichtenprüfung', 'article_title' => 'Artikelprüfung', 'label_title' => 'Titel', 'label_excerpt' => 'Auszug', 'label_content' => 'Inhalt', 'submit' => 'Übersetzung bestätigen', 'no_news' => 'Keine ausstehende Nachrichtenübersetzung.', 'no_article' => 'Keine ausstehende Artikelübersetzung.', 'layout' => 'Sprachprüfung'],
-    'nl' => ['invalid_lang' => 'Ongeldige taal.', 'ok_news' => 'Nieuwsvertaling nagekeken.', 'ok_article' => 'Artikelvertaling nagekeken.', 'news_title' => 'Nieuwscontrole', 'article_title' => 'Artikelcontrole', 'label_title' => 'Titel', 'label_excerpt' => 'Uittreksel', 'label_content' => 'Inhoud', 'submit' => 'Vertaling goedkeuren', 'no_news' => 'Geen wachtende nieuwsvertaling.', 'no_article' => 'Geen wachtende artikelvertaling.', 'layout' => 'Taalcontrole'],
+    'fr' => ['invalid_lang' => 'Langue invalide.', 'ok_news' => 'Traduction d’actualité relue.', 'ok_article' => 'Traduction d’article relue.', 'news_title' => 'Relecture des actualités', 'article_title' => 'Relecture des articles', 'label_title' => 'Titre', 'label_excerpt' => 'Extrait', 'label_content' => 'Contenu', 'submit' => 'Valider la traduction', 'no_news' => 'Aucune traduction d’actualité en attente.', 'no_article' => 'Aucune traduction d’article en attente.', 'layout' => 'Relecture linguistique', 'meta_desc' => 'Validation des traductions automatiques des contenus.'],
+    'en' => ['invalid_lang' => 'Invalid language.', 'ok_news' => 'News translation reviewed.', 'ok_article' => 'Article translation reviewed.', 'news_title' => 'News review', 'article_title' => 'Article review', 'label_title' => 'Title', 'label_excerpt' => 'Excerpt', 'label_content' => 'Content', 'submit' => 'Approve translation', 'no_news' => 'No pending news translation.', 'no_article' => 'No pending article translation.', 'layout' => 'Translation review', 'meta_desc' => 'Review and validate automated content translations.'],
+    'de' => ['invalid_lang' => 'Ungültige Sprache.', 'ok_news' => 'Nachrichtenübersetzung geprüft.', 'ok_article' => 'Artikelübersetzung geprüft.', 'news_title' => 'Nachrichtenprüfung', 'article_title' => 'Artikelprüfung', 'label_title' => 'Titel', 'label_excerpt' => 'Auszug', 'label_content' => 'Inhalt', 'submit' => 'Übersetzung bestätigen', 'no_news' => 'Keine ausstehende Nachrichtenübersetzung.', 'no_article' => 'Keine ausstehende Artikelübersetzung.', 'layout' => 'Sprachprüfung', 'meta_desc' => 'Automatische Inhaltsübersetzungen prüfen und validieren.'],
+    'nl' => ['invalid_lang' => 'Ongeldige taal.', 'ok_news' => 'Nieuwsvertaling nagekeken.', 'ok_article' => 'Artikelvertaling nagekeken.', 'news_title' => 'Nieuwscontrole', 'article_title' => 'Artikelcontrole', 'label_title' => 'Titel', 'label_excerpt' => 'Uittreksel', 'label_content' => 'Inhoud', 'submit' => 'Vertaling goedkeuren', 'no_news' => 'Geen wachtende nieuwsvertaling.', 'no_article' => 'Geen wachtende artikelvertaling.', 'layout' => 'Taalcontrole', 'meta_desc' => 'Automatische inhoudsvertalingen nakijken en valideren.'],
 ];
 $localeUi = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
 $t = $i18n[$localeUi] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {

@@ -5,6 +5,8 @@ require_permission('admin.access');
 require_permission('events.manage');
 
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: private, max-age=60');
+header('X-Content-Type-Options: nosniff');
 
 if (!table_exists('events')) {
     echo '[]';
@@ -12,7 +14,7 @@ if (!table_exists('events')) {
 }
 
 try {
-    $rows = db()->query('SELECT id, title, start_at, end_at FROM events ORDER BY start_at DESC, id DESC')->fetchAll();
+    $rows = db()->query('SELECT id, title, start_at, end_at FROM events ORDER BY start_at ASC, id ASC')->fetchAll();
 } catch (Throwable) {
     echo '[]';
     exit;
@@ -44,4 +46,8 @@ foreach ($rows as $row) {
     ];
 }
 
-echo json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]';
+try {
+    echo json_encode($calendarEvents, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+} catch (JsonException) {
+    echo '[]';
+}

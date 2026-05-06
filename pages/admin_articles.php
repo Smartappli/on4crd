@@ -4,10 +4,10 @@ declare(strict_types=1);
 require_permission('articles.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.', 'ok_saved' => 'Article enregistré.', 'err_invalid_category' => 'Catégorie invalide.', 'ok_category_updated' => 'Catégorie mise à jour.', 'err_delete_category' => 'Suppression impossible pour cette catégorie.', 'ok_category_deleted' => 'Catégorie supprimée (articles déplacés vers "autres").', 'edit' => 'Modifier', 'create' => 'Créer', 'an_article' => 'un article', 'title' => 'Titre', 'slug' => 'Slug', 'category' => 'Catégorie', 'new_category' => 'Nouvelle catégorie…', 'new_category_id' => 'Nouvelle catégorie (identifiant)', 'import_document' => 'Importer un document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Résumé', 'content_simple_html' => 'Contenu (HTML simple)', 'status' => 'Statut', 'draft' => 'Brouillon', 'published' => 'Publié', 'save' => 'Enregistrer', 'existing_articles' => 'Articles existants', 'category_label' => 'Catégorie :', 'category_edit' => 'Édition des catégories', 'code' => 'Code', 'label' => 'Libellé', 'rename_code' => 'Renommer code', 'delete_to_other' => 'Supprimer (vers autres)'],
-    'en' => ['ok_saved' => 'Article saved.', 'err_invalid_category' => 'Invalid category.', 'ok_category_updated' => 'Category updated.', 'err_delete_category' => 'Cannot delete this category.', 'ok_category_deleted' => 'Category deleted (articles moved to "other").', 'edit' => 'Edit', 'create' => 'Create', 'an_article' => 'an article', 'title' => 'Title', 'slug' => 'Slug', 'category' => 'Category', 'new_category' => 'New category…', 'new_category_id' => 'New category (identifier)', 'import_document' => 'Import a document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Summary', 'content_simple_html' => 'Content (simple HTML)', 'status' => 'Status', 'draft' => 'Draft', 'published' => 'Published', 'save' => 'Save', 'existing_articles' => 'Existing articles', 'category_label' => 'Category:', 'category_edit' => 'Category editing', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Rename code', 'delete_to_other' => 'Delete (to other)', 'layout' => 'Articles', 'meta_desc' => 'Administration and publishing of site articles.'],
-    'de' => ['ok_saved' => 'Artikel gespeichert.', 'err_invalid_category' => 'Ungültige Kategorie.', 'ok_category_updated' => 'Kategorie aktualisiert.', 'err_delete_category' => 'Diese Kategorie kann nicht gelöscht werden.', 'ok_category_deleted' => 'Kategorie gelöscht (Artikel nach "autres" verschoben).', 'edit' => 'Bearbeiten', 'create' => 'Erstellen', 'an_article' => 'einen Artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Kategorie', 'new_category' => 'Neue Kategorie…', 'new_category_id' => 'Neue Kategorie (Kennung)', 'import_document' => 'Dokument importieren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Zusammenfassung', 'content_simple_html' => 'Inhalt (einfaches HTML)', 'status' => 'Status', 'draft' => 'Entwurf', 'published' => 'Veröffentlicht', 'save' => 'Speichern', 'existing_articles' => 'Vorhandene Artikel', 'category_label' => 'Kategorie:', 'category_edit' => 'Kategorien bearbeiten', 'code' => 'Code', 'label' => 'Bezeichnung', 'rename_code' => 'Code umbenennen', 'delete_to_other' => 'Löschen (nach autres)', 'layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'],
-    'nl' => ['ok_saved' => 'Artikel opgeslagen.', 'err_invalid_category' => 'Ongeldige categorie.', 'ok_category_updated' => 'Categorie bijgewerkt.', 'err_delete_category' => 'Deze categorie kan niet worden verwijderd.', 'ok_category_deleted' => 'Categorie verwijderd (artikelen verplaatst naar "autres").', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'an_article' => 'een artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Categorie', 'new_category' => 'Nieuwe categorie…', 'new_category_id' => 'Nieuwe categorie (identifier)', 'import_document' => 'Document importeren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Samenvatting', 'content_simple_html' => 'Inhoud (eenvoudige HTML)', 'status' => 'Status', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'existing_articles' => 'Bestaande artikelen', 'category_label' => 'Categorie:', 'category_edit' => 'Categorieën bewerken', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Code hernoemen', 'delete_to_other' => 'Verwijderen (naar autres)', 'layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'],
+    'fr' => ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.', 'ok_saved' => 'Article enregistré.', 'err_invalid_category' => 'Catégorie invalide.', 'ok_category_updated' => 'Catégorie mise à jour.', 'err_delete_category' => 'Suppression impossible pour cette catégorie.', 'ok_category_deleted' => 'Catégorie supprimée (articles déplacés vers "autres").', 'edit' => 'Modifier', 'create' => 'Créer', 'an_article' => 'un article', 'title' => 'Titre', 'slug' => 'Slug', 'category' => 'Catégorie', 'new_category' => 'Nouvelle catégorie…', 'new_category_id' => 'Nouvelle catégorie (identifiant)', 'import_document' => 'Importer un document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Résumé', 'content_simple_html' => 'Contenu (HTML simple)', 'status' => 'Statut', 'draft' => 'Brouillon', 'published' => 'Publié', 'save' => 'Enregistrer', 'existing_articles' => 'Articles existants', 'category_label' => 'Catégorie :', 'category_edit' => 'Édition des catégories', 'code' => 'Code', 'label' => 'Libellé', 'rename_code' => 'Renommer code', 'delete_to_other' => 'Supprimer (vers autres)', 'no_articles' => 'Aucun article.', 'custom_category_ph' => 'ex: propagation-vhf', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Trafic & DX', 'cat_numerique' => 'Modes numériques', 'cat_materiel' => 'Matériel & station', 'cat_formation' => 'Formation', 'cat_autres' => 'Autres'],
+    'en' => ['ok_saved' => 'Article saved.', 'err_invalid_category' => 'Invalid category.', 'ok_category_updated' => 'Category updated.', 'err_delete_category' => 'Cannot delete this category.', 'ok_category_deleted' => 'Category deleted (articles moved to "other").', 'edit' => 'Edit', 'create' => 'Create', 'an_article' => 'an article', 'title' => 'Title', 'slug' => 'Slug', 'category' => 'Category', 'new_category' => 'New category…', 'new_category_id' => 'New category (identifier)', 'import_document' => 'Import a document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Summary', 'content_simple_html' => 'Content (simple HTML)', 'status' => 'Status', 'draft' => 'Draft', 'published' => 'Published', 'save' => 'Save', 'existing_articles' => 'Existing articles', 'category_label' => 'Category:', 'category_edit' => 'Category editing', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Rename code', 'delete_to_other' => 'Delete (to other)', 'no_articles' => 'No articles.', 'custom_category_ph' => 'e.g. vhf-propagation', 'cat_antennes' => 'Antennas', 'cat_trafic' => 'Traffic & DX', 'cat_numerique' => 'Digital modes', 'cat_materiel' => 'Equipment & station', 'cat_formation' => 'Training', 'cat_autres' => 'Other', 'layout' => 'Articles', 'meta_desc' => 'Administration and publishing of site articles.'],
+    'de' => ['ok_saved' => 'Artikel gespeichert.', 'err_invalid_category' => 'Ungültige Kategorie.', 'ok_category_updated' => 'Kategorie aktualisiert.', 'err_delete_category' => 'Diese Kategorie kann nicht gelöscht werden.', 'ok_category_deleted' => 'Kategorie gelöscht (Artikel in die Standardkategorie verschoben).', 'edit' => 'Bearbeiten', 'create' => 'Erstellen', 'an_article' => 'einen Artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Kategorie', 'new_category' => 'Neue Kategorie…', 'new_category_id' => 'Neue Kategorie (Kennung)', 'import_document' => 'Dokument importieren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Zusammenfassung', 'content_simple_html' => 'Inhalt (einfaches HTML)', 'status' => 'Status', 'draft' => 'Entwurf', 'published' => 'Veröffentlicht', 'save' => 'Speichern', 'existing_articles' => 'Vorhandene Artikel', 'category_label' => 'Kategorie:', 'category_edit' => 'Kategorien bearbeiten', 'code' => 'Code', 'label' => 'Bezeichnung', 'rename_code' => 'Code umbenennen', 'delete_to_other' => 'Löschen (zur Standardkategorie)', 'no_articles' => 'Keine Artikel.', 'custom_category_ph' => 'z. B. vhf-ausbreitung', 'cat_antennes' => 'Antennen', 'cat_trafic' => 'Verkehr & DX', 'cat_numerique' => 'Digitale Modi', 'cat_materiel' => 'Ausrüstung & Station', 'cat_formation' => 'Schulung', 'cat_autres' => 'Sonstiges', 'layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'],
+    'nl' => ['ok_saved' => 'Artikel opgeslagen.', 'err_invalid_category' => 'Ongeldige categorie.', 'ok_category_updated' => 'Categorie bijgewerkt.', 'err_delete_category' => 'Deze categorie kan niet worden verwijderd.', 'ok_category_deleted' => 'Categorie verwijderd (artikelen verplaatst naar de standaardcategorie).', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'an_article' => 'een artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Categorie', 'new_category' => 'Nieuwe categorie…', 'new_category_id' => 'Nieuwe categorie (identifier)', 'import_document' => 'Document importeren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Samenvatting', 'content_simple_html' => 'Inhoud (eenvoudige HTML)', 'status' => 'Status', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'existing_articles' => 'Bestaande artikelen', 'category_label' => 'Categorie:', 'category_edit' => 'Categorieën bewerken', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Code hernoemen', 'delete_to_other' => 'Verwijderen (naar standaardcategorie)', 'no_articles' => 'Geen artikelen.', 'custom_category_ph' => 'bv. vhf-propagatie', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Verkeer & DX', 'cat_numerique' => 'Digitale modi', 'cat_materiel' => 'Materiaal & station', 'cat_formation' => 'Opleiding', 'cat_autres' => 'Overige', 'layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
@@ -100,12 +100,12 @@ function import_article_document(array $file): array
 }
 
 $defaultCategories = [
-    'antennes' => 'Antennes',
-    'trafic' => 'Trafic & DX',
-    'numerique' => 'Modes numériques',
-    'materiel' => 'Matériel & station',
-    'formation' => 'Formation',
-    'autres' => 'Autres',
+    'antennes' => $t('cat_antennes'),
+    'trafic' => $t('cat_trafic'),
+    'numerique' => $t('cat_numerique'),
+    'materiel' => $t('cat_materiel'),
+    'formation' => $t('cat_formation'),
+    'autres' => $t('cat_autres'),
 ];
 
 $existingCategoryRows = db()->query('SELECT DISTINCT category FROM articles WHERE category IS NOT NULL AND category <> "" ORDER BY category ASC')->fetchAll();
@@ -196,7 +196,7 @@ ob_start();
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
             <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
-            <label>Slug<input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
+            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
             <label><?= e($t('category')) ?>
                 <select name="category" id="article-category">
                     <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
@@ -207,7 +207,7 @@ ob_start();
                 </select>
             </label>
             <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
-                <input type="text" name="category_custom" value="" placeholder="ex: propagation-vhf">
+                <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
             </label>
             <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
             <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
@@ -226,11 +226,12 @@ ob_start();
         <div class="stack">
             <?php foreach ($articles as $article): ?>
                 <article class="article-item">
-                    <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(base_url('index.php?route=admin_articles&id=' . (int) $article['id'])) ?>"><?= e(('edit')) ?></a></div>
+                    <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
                     <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>
+            <?php if ($articles === []): ?><p><?= e($t('no_articles')) ?></p><?php endif; ?>
         </div>
     </section>
     <section class="card">
@@ -260,6 +261,7 @@ ob_start();
                     <?php endif; ?>
                 </article>
             <?php endforeach; ?>
+            <?php if ($articles === []): ?><p><?= e($t('no_articles')) ?></p><?php endif; ?>
         </div>
     </section>
 </div>

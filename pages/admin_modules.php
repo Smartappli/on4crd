@@ -5,12 +5,19 @@ require_permission('admin.access');
 require_permission('modules.manage');
 $locale = current_locale();
 $i18n = [
-    'fr' => ['updated' => 'Modules mis à jour.', 'title' => 'Modules', 'core' => 'Cœur', 'enabled' => 'Activé', 'visibility' => 'Visibilité', 'public' => 'Public', 'members' => 'Membres', 'admin' => 'Administrateurs', 'save' => 'Enregistrer', 'layout' => 'Modules'],
-    'en' => ['updated' => 'Modules updated.', 'title' => 'Modules', 'core' => 'Core', 'enabled' => 'Enabled', 'visibility' => 'Visibility', 'public' => 'Public', 'members' => 'Members', 'admin' => 'Administrators', 'save' => 'Save', 'layout' => 'Modules'],
-    'de' => ['updated' => 'Module aktualisiert.', 'title' => 'Module', 'core' => 'Kern', 'enabled' => 'Aktiviert', 'visibility' => 'Sichtbarkeit', 'public' => 'Öffentlich', 'members' => 'Mitglieder', 'admin' => 'Administratoren', 'save' => 'Speichern', 'layout' => 'Module'],
-    'nl' => ['updated' => 'Modules bijgewerkt.', 'title' => 'Modules', 'core' => 'Kern', 'enabled' => 'Ingeschakeld', 'visibility' => 'Zichtbaarheid', 'public' => 'Openbaar', 'members' => 'Leden', 'admin' => 'Beheerders', 'save' => 'Opslaan', 'layout' => 'Modules'],
+    'fr' => ['updated' => 'Modules mis à jour.', 'title' => 'Modules', 'core' => 'Cœur', 'enabled' => 'Activé', 'visibility' => 'Visibilité', 'public' => 'Public', 'members' => 'Membres', 'admin' => 'Administrateurs', 'save' => 'Enregistrer', 'layout' => 'Modules', 'meta_desc' => 'Gestion de l\'activation et de la visibilité des modules du site.'],
+    'en' => ['updated' => 'Modules updated.', 'title' => 'Modules', 'core' => 'Core', 'enabled' => 'Enabled', 'visibility' => 'Visibility', 'public' => 'Public', 'members' => 'Members', 'admin' => 'Administrators', 'save' => 'Save', 'layout' => 'Modules', 'meta_desc' => 'Manage module activation and visibility across the site.'],
+    'de' => ['updated' => 'Module aktualisiert.', 'title' => 'Module', 'core' => 'Kern', 'enabled' => 'Aktiviert', 'visibility' => 'Sichtbarkeit', 'public' => 'Öffentlich', 'members' => 'Mitglieder', 'admin' => 'Administratoren', 'save' => 'Speichern', 'layout' => 'Module', 'meta_desc' => 'Aktivierung und Sichtbarkeit der Website-Module verwalten.'],
+    'nl' => ['updated' => 'Modules bijgewerkt.', 'title' => 'Modules', 'core' => 'Kern', 'enabled' => 'Ingeschakeld', 'visibility' => 'Zichtbaarheid', 'public' => 'Openbaar', 'members' => 'Leden', 'admin' => 'Beheerders', 'save' => 'Opslaan', 'layout' => 'Modules', 'meta_desc' => 'Beheer van activatie en zichtbaarheid van sitemodules.'],
 ];
+
 $t = $i18n[$locale] ?? $i18n['fr'];
+
+set_page_meta([
+    'title' => (string) $t['layout'],
+    'description' => (string) $t['meta_desc'],
+    'robots' => 'noindex,nofollow',
+]);
 
 seed_modules();
 

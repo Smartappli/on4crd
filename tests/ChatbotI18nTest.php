@@ -53,4 +53,24 @@ final class ChatbotI18nTest extends TestCase
         self::assertSame('Ik heb geen bruikbare vraag ontvangen.', $result['answer']);
         self::assertSame('Raymond-assistent', $result['source']);
     }
+
+    public function testEmptyQuestionFallbackDefaultsToFrenchForUnknownLocale(): void
+    {
+        $_SESSION['locale'] = 'it';
+
+        $result = answer_question_from_knowledge('');
+
+        self::assertSame('Je n’ai pas reçu de question exploitable.', $result['answer']);
+        self::assertSame('Assistant Raymond', $result['source']);
+    }
+
+    public function testEmptyQuestionFallbackDefaultsToFrenchWithoutLocale(): void
+    {
+        unset($_SESSION['locale']);
+
+        $result = answer_question_from_knowledge('');
+
+        self::assertSame('Je n’ai pas reçu de question exploitable.', $result['answer']);
+        self::assertSame('Assistant Raymond', $result['source']);
+    }
 }
