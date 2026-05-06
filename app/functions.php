@@ -420,9 +420,9 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
-                    default => 'Données de propagation indisponibles actuellement.',
+                    default => '',
                 };
-                return '<p class="help">' . e($unavailableMessage) . '</p>';
+                return '';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
@@ -497,7 +497,7 @@ function render_widget(string $slug, array $user = []): string
             $weatherCode = (int) ($current['weather_code'] ?? -1);
             $weatherText = match ($weatherCode) {
                 0 => 'Ciel dégagé',
-                1, 2, 3 => 'Partiellement nuageux',
+                1, 2, 3 => 'Nuageux',
                 45, 48 => 'Brouillard',
                 51, 53, 55, 61, 63, 65, 80, 81, 82 => 'Pluie',
                 56, 57, 66, 67 => 'Pluie verglaçante',
