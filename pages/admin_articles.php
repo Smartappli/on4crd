@@ -196,7 +196,7 @@ ob_start();
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
             <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
-            <label>Slug<input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
+            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
             <label><?= e($t('category')) ?>
                 <select name="category" id="article-category">
                     <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
@@ -226,7 +226,7 @@ ob_start();
         <div class="stack">
             <?php foreach ($articles as $article): ?>
                 <article class="article-item">
-                    <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(base_url('index.php?route=admin_articles&id=' . (int) $article['id'])) ?>"><?= e(('edit')) ?></a></div>
+                    <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(base_url('index.php?route=admin_articles&id=' . (int) $article['id'])) ?>"><?= e($t('edit')) ?></a></div>
                     <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
