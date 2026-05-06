@@ -467,7 +467,7 @@ function render_widget(string $slug, array $user = []): string
                 $feedUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
                     'latitude' => number_format($weatherCoordinates['latitude'], 4, '.', ''),
                     'longitude' => number_format($weatherCoordinates['longitude'], 4, '.', ''),
-                    'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code',
+                    'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
                     'timezone' => 'auto',
                 ]);
             }
@@ -604,7 +604,7 @@ function render_ham_weather_advice(array $user = []): string
     $weatherUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
         'latitude' => number_format((float) $coordinates['latitude'], 4, '.', ''),
         'longitude' => number_format((float) $coordinates['longitude'], 4, '.', ''),
-        'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code',
+        'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
         'timezone' => 'auto',
     ]);
     $weatherPayload = cache_remember('ham:advice:weather:' . sha1($weatherUrl), 300, static function () use ($weatherUrl): ?array {
@@ -653,8 +653,18 @@ function render_ham_weather_advice(array $user = []): string
         }
     }
     $humidity = is_numeric($currentWeather['relative_humidity_2m'] ?? null) ? (int) $currentWeather['relative_humidity_2m'] : 60;
+    $cloudCover = is_numeric($currentWeather['cloud_cover'] ?? null) ? (int) $currentWeather['cloud_cover'] : 45;
+    $precipitation = is_numeric($currentWeather['precipitation'] ?? null) ? (float) $currentWeather['precipitation'] : 0.0;
     $measurement = is_array($kpPayload) ? extract_latest_kp_measurement($kpPayload) : null;
     $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : 3.0;
+    $kpTrend = 0.0;
+    if (is_array($kpPayload) && count($kpPayload) >= 4) {
+        $latest = extract_latest_kp_measurement($kpPayload);
+        $older = extract_latest_kp_measurement(array_slice($kpPayload, 0, max(0, count($kpPayload) - 3)));
+        if (is_array($latest) && is_array($older)) {
+            $kpTrend = ((float) ($latest['kp'] ?? $kp)) - ((float) ($older['kp'] ?? $kp));
+        }
+    }
 
     $month = (int) gmdate('n');
     if ($localTime !== '') {
@@ -668,11 +678,14 @@ function render_ham_weather_advice(array $user = []): string
     $isDaytime = $hour >= 7 && $hour <= 16;
     $isLateEvening = $hour >= 20 || $hour <= 5;
 
-    $hfScore = 68.0;
-    $hfScore += $kp <= 2.0 ? 18.0 : ($kp <= 4.0 ? 7.0 : -22.0);
-    $hfScore += $isDaytime ? 12.0 : -5.0;
-    $hfScore += ($wind <= 22.0 ? 6.0 : ($wind <= 35.0 ? 0.0 : -10.0));
+    $hfScore = 65.0;
+    $hfScore += $kp <= 1.5 ? 20.0 : ($kp <= 3.0 ? 10.0 : ($kp <= 4.5 ? 1.0 : -20.0));
+    $hfScore += $kpTrend <= -0.8 ? 6.0 : ($kpTrend >= 0.8 ? -8.0 : 0.0);
+    $hfScore += $isDaytime ? 10.0 : -4.0;
+    $hfScore += ($wind <= 18.0 ? 8.0 : ($wind <= 30.0 ? 2.0 : -10.0));
     $hfScore += ($humidity >= 35 && $humidity <= 85) ? 3.0 : -5.0;
+    $hfScore += ($cloudCover <= 45 ? 2.0 : ($cloudCover >= 90 ? -4.0 : 0.0));
+    $hfScore += ($precipitation <= 0.1 ? 2.0 : ($precipitation >= 2.5 ? -8.0 : -3.0));
     $hfScore += in_array($weatherCode, [95, 96, 99], true) ? -16.0 : 0.0;
     $hfScore += $isSummer && $isDaytime ? 4.0 : 0.0;
     $hfScore += !$isSummer && $isLateEvening ? 4.0 : 0.0;
@@ -692,7 +705,7 @@ function render_ham_weather_advice(array $user = []): string
     }
 
     $modes = ['SSB', 'CW'];
-    if ($kp >= 4.5 || $wind >= 35.0 || in_array($weatherCode, [95, 96, 99], true)) {
+    if ($kp >= 4.5 || $wind >= 35.0 || $precipitation >= 2.0 || in_array($weatherCode, [95, 96, 99], true)) {
         $modes = ['FT8', 'CW', 'RTTY'];
     } elseif ($temperature < 5.0 || $humidity > 90) {
         $modes = ['FT8', 'SSB', 'CW'];
@@ -716,8 +729,8 @@ function render_ham_weather_advice(array $user = []): string
         . '<ul class="mt-2 list-clean">'
         . '<li><strong>' . e((string) $i18n['location']) . '</strong> ' . e($locator) . '</li>'
         . '<li><strong>' . e((string) $i18n['local_hour']) . '</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
-        . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h</li>'
-        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> Kp=' . e(number_format($kp, 1, ',', '')) . '</li>'
+        . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h, nuages ' . e((string) $cloudCover) . '%, pluie ' . e(number_format($precipitation, 1, ',', '')) . ' mm/h</li>'
+        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> Kp=' . e(number_format($kp, 1, ',', '')) . ' (Δ ' . e(number_format($kpTrend, 1, ',', '')) . ')</li>'
         . '</ul>'
         . '</section>'
         . '</div>';
