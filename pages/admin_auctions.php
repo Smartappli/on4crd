@@ -74,7 +74,7 @@ ob_start();
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="id" value="<?= (int) ($edit['id'] ?? 0) ?>">
             <label><?= e((string) $t['title']) ?><input type="text" name="title" value="<?= e((string) ($edit['title'] ?? '')) ?>" required></label>
-            <label>Slug<input type="text" name="slug" value="<?= e((string) ($edit['slug'] ?? '')) ?>"></label>
+            <label><?= e((string) $t['slug']) ?><input type="text" name="slug" value="<?= e((string) ($edit['slug'] ?? '')) ?>"></label>
             <label><?= e((string) $t['summary']) ?><textarea name="summary" rows="3"><?= e((string) ($edit['summary'] ?? '')) ?></textarea></label>
             <label><?= e((string) $t['description']) ?><textarea name="description" rows="6"><?= e((string) ($edit['description'] ?? '')) ?></textarea></label>
             <label><?= e((string) $t['image_url']) ?><input type="text" name="image_url" value="<?= e((string) ($edit['image_url'] ?? '')) ?>"></label>
