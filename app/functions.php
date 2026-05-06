@@ -2262,6 +2262,26 @@ if (!function_exists('answer_question_from_knowledge')) {
     /**
      * @param list<string> $queryTokens
      */
+
+
+    /**
+     * @param list<string> $queryTokens
+     */
+    function rag_query_coverage(array $queryTokens, string $text): float
+    {
+        if ($queryTokens === []) {
+            return 0.0;
+        }
+        $normalizedText = ' ' . mb_safe_strtolower($text) . ' ';
+        $matched = 0;
+        foreach ($queryTokens as $token) {
+            if (str_contains($normalizedText, ' ' . $token . ' ') || str_contains($normalizedText, $token)) {
+                $matched++;
+            }
+        }
+        return $matched / max(1, count($queryTokens));
+    }
+
     function rag_weighted_score(array $queryTokens, string $text): float
     {
         if ($queryTokens === []) {
@@ -2387,6 +2407,7 @@ function answer_question_from_knowledge(string $question): array
             $body = (string) ($item['body'] ?? '');
             $score += rag_weighted_score($queryTokens, $title) * 2.0;
             $score += rag_weighted_score($queryTokens, $body);
+            $score += rag_query_coverage($queryTokens, $title . ' ' . $body) * 3.5;
             if ($score > $bestScore) {
                 $bestScore = $score;
                 $bestItem = $item;
@@ -2435,12 +2456,13 @@ function answer_question_from_knowledge(string $question): array
                     $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
                         + rag_weighted_score($queryTokens, (string) ($row['excerpt'] ?? ''))
                         + rag_weighted_score($queryTokens, (string) ($row['content'] ?? ''));
+                    $score += rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['excerpt'] ?? '') . ' ' . ($row['content'] ?? ''))) * 3.0;
                     if ($score > $articleScore) {
                         $articleScore = $score;
                         $article = $row;
                     }
                 }
-                if (is_array($article) && $articleScore > 0.0) {
+                if (is_array($article) && $articleScore >= 2.0) {
                     $title = trim((string) ($article['title'] ?? (string) $chatbotT['article_label']));
                     $excerpt = trim((string) ($article['excerpt'] ?? ''));
                     $slug = trim((string) ($article['slug'] ?? ''));
@@ -2485,12 +2507,13 @@ function answer_question_from_knowledge(string $question): array
                     $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
                         + rag_weighted_score($queryTokens, (string) ($row['description'] ?? ''))
                         + rag_weighted_score($queryTokens, (string) ($row['extracted_text'] ?? ''));
+                    $score += rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['description'] ?? '') . ' ' . ($row['extracted_text'] ?? ''))) * 3.0;
                     if ($score > $docScore) {
                         $docScore = $score;
                         $doc = $row;
                     }
                 }
-                if (is_array($doc) && $docScore > 0.0) {
+                if (is_array($doc) && $docScore >= 2.0) {
                     $locale = current_locale();
                     $chatbotDocI18n = [
                         'fr' => ['doc_fallback' => 'Document PDF', 'prefix' => 'J’ai trouvé un document dans la bibliothèque membres : ', 'summary' => 'Résumé : ', 'open' => 'Consulter : ', 'source' => 'Bibliothèque membres'],
