@@ -1551,6 +1551,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
+        ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
@@ -1720,6 +1721,7 @@ function render_layout(string $content, string $title = ''): string
         . '</form>';
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
+        . '<div class="toolbar-preferences-row toolbar-search-row">' . $searchForm . '</div>'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
         . '<div class="toolbar-preferences-row">' . $searchForm . $accentFormHtml . '</div>'
         . '<div class="toolbar-preferences-row"><div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
