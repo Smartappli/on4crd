@@ -1677,3 +1677,47 @@ textarea.wysiwyg-source {
     position: static;
   }
 }
+
+.tools-index {
+  margin-bottom: 1rem;
+}
+.tools-index h2 {
+  margin-top: 0;
+}
+.tools-index-group {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel-2) 70%, var(--panel));
+  padding: .4rem .75rem;
+  margin-bottom: .6rem;
+}
+.tools-index-group summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.tools-index-group ul {
+  margin: .55rem 0 .25rem 1rem;
+  padding: 0;
+}
+.tools-index-group li {
+  margin: .35rem 0;
+}
+
+.search-page {
+  display: grid;
+  place-items: center;
+}
+.search-page-card {
+  width: min(760px, 100%);
+}
+.search-page-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .65rem;
+  align-items: end;
+}
+@media (max-width: 640px) {
+  .search-page-form {
+    grid-template-columns: 1fr;
+  }
+}

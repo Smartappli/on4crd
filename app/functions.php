@@ -1551,6 +1551,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
+        ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
@@ -1586,14 +1587,6 @@ function render_layout(string $content, string $title = ''): string
             $navHtml .= '<div class="nav-row nav-row-member">' . $memberLinks . '</div>';
         }
     }
-
-    $searchQuery = trim((string) ($_GET['q'] ?? ''));
-    $searchForm = '<form class="nav-search" method="get" action="' . e(route_url('search')) . '">'
-        . '<label class="sr-only" for="nav-search-input">' . e((string) $layoutI18n['search_label']) . '</label>'
-        . '<input type="hidden" name="route" value="search">'
-        . '<input id="nav-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" required>'
-        . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
-        . '</form>';
 
     $authHtml = '';
     if ($user !== null) {
