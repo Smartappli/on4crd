@@ -1689,3 +1689,33 @@ textarea.wysiwyg-source {
     grid-template-columns: 1fr;
   }
 }
+
+.tools-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+.tools-content {
+  display: grid;
+  gap: 1rem;
+}
+.tools-index {
+  position: sticky;
+  top: 1rem;
+}
+.tools-index-group a.is-active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+.tool-panel.is-hidden {
+  display: none;
+}
+@media (max-width: 920px) {
+  .tools-layout {
+    grid-template-columns: 1fr;
+  }
+  .tools-index {
+    position: static;
+  }
+}
