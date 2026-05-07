@@ -420,9 +420,9 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
-                    default => 'Données de propagation indisponibles actuellement.',
+                    default => '',
                 };
-                return '<p class="help">' . e($unavailableMessage) . '</p>';
+                return '';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
@@ -467,7 +467,7 @@ function render_widget(string $slug, array $user = []): string
                 $feedUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
                     'latitude' => number_format($weatherCoordinates['latitude'], 4, '.', ''),
                     'longitude' => number_format($weatherCoordinates['longitude'], 4, '.', ''),
-                    'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code',
+                    'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
                     'timezone' => 'auto',
                 ]);
             }
@@ -497,7 +497,7 @@ function render_widget(string $slug, array $user = []): string
             $weatherCode = (int) ($current['weather_code'] ?? -1);
             $weatherText = match ($weatherCode) {
                 0 => 'Ciel dégagé',
-                1, 2, 3 => 'Partiellement nuageux',
+                1, 2, 3 => 'Nuageux',
                 45, 48 => 'Brouillard',
                 51, 53, 55, 61, 63, 65, 80, 81, 82 => 'Pluie',
                 56, 57, 66, 67 => 'Pluie verglaçante',
@@ -534,6 +534,7 @@ function render_ham_weather_advice(array $user = []): string
             'input_info' => 'Informations utilisées pour le calcul',
             'location' => 'Localisation :',
             'local_hour' => 'Heure locale :',
+            'updated_at' => 'Dernière mise à jour :',
             'local_weather' => 'Météo locale :',
             'geomagnetic' => 'Indice géomagnétique :',
         ],
@@ -553,6 +554,7 @@ function render_ham_weather_advice(array $user = []): string
             'input_info' => 'Data used for calculation',
             'location' => 'Location:',
             'local_hour' => 'Local time:',
+            'updated_at' => 'Last update:',
             'local_weather' => 'Local weather:',
             'geomagnetic' => 'Geomagnetic index:',
         ],
@@ -572,6 +574,7 @@ function render_ham_weather_advice(array $user = []): string
             'input_info' => 'Für die Berechnung verwendete Daten',
             'location' => 'Standort:',
             'local_hour' => 'Ortszeit:',
+            'updated_at' => 'Letzte Aktualisierung:',
             'local_weather' => 'Lokales Wetter:',
             'geomagnetic' => 'Geomagnetischer Index:',
         ],
@@ -591,6 +594,7 @@ function render_ham_weather_advice(array $user = []): string
             'input_info' => 'Gegevens gebruikt voor de berekening',
             'location' => 'Locatie:',
             'local_hour' => 'Lokale tijd:',
+            'updated_at' => 'Laatste update:',
             'local_weather' => 'Lokaal weer:',
             'geomagnetic' => 'Geomagnetische index:',
         ],
@@ -604,7 +608,7 @@ function render_ham_weather_advice(array $user = []): string
     $weatherUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
         'latitude' => number_format((float) $coordinates['latitude'], 4, '.', ''),
         'longitude' => number_format((float) $coordinates['longitude'], 4, '.', ''),
-        'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code',
+        'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
         'timezone' => 'auto',
     ]);
     $weatherPayload = cache_remember('ham:advice:weather:' . sha1($weatherUrl), 300, static function () use ($weatherUrl): ?array {
@@ -645,16 +649,33 @@ function render_ham_weather_advice(array $user = []): string
     $weatherCode = (int) ($currentWeather['weather_code'] ?? -1);
     $localTime = trim((string) ($currentWeather['time'] ?? ''));
     $hour = (int) gmdate('G');
+    $updatedLabel = '';
     if ($localTime !== '') {
         try {
-            $hour = (int) (new DateTimeImmutable($localTime))->format('G');
+            $dtLocal = new DateTimeImmutable($localTime);
+            $hour = (int) $dtLocal->format('G');
+            $updatedLabel = $dtLocal->format('Y-m-d H:i');
         } catch (Throwable $throwable) {
             $hour = (int) gmdate('G');
+            $updatedLabel = gmdate('Y-m-d H:i');
         }
+    } else {
+        $updatedLabel = gmdate('Y-m-d H:i');
     }
+
     $humidity = is_numeric($currentWeather['relative_humidity_2m'] ?? null) ? (int) $currentWeather['relative_humidity_2m'] : 60;
+    $cloudCover = is_numeric($currentWeather['cloud_cover'] ?? null) ? (int) $currentWeather['cloud_cover'] : 45;
+    $precipitation = is_numeric($currentWeather['precipitation'] ?? null) ? (float) $currentWeather['precipitation'] : 0.0;
     $measurement = is_array($kpPayload) ? extract_latest_kp_measurement($kpPayload) : null;
     $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : 3.0;
+    $kpTrend = 0.0;
+    if (is_array($kpPayload) && count($kpPayload) >= 4) {
+        $latest = extract_latest_kp_measurement($kpPayload);
+        $older = extract_latest_kp_measurement(array_slice($kpPayload, 0, max(0, count($kpPayload) - 3)));
+        if (is_array($latest) && is_array($older)) {
+            $kpTrend = ((float) ($latest['kp'] ?? $kp)) - ((float) ($older['kp'] ?? $kp));
+        }
+    }
 
     $month = (int) gmdate('n');
     if ($localTime !== '') {
@@ -668,11 +689,14 @@ function render_ham_weather_advice(array $user = []): string
     $isDaytime = $hour >= 7 && $hour <= 16;
     $isLateEvening = $hour >= 20 || $hour <= 5;
 
-    $hfScore = 68.0;
-    $hfScore += $kp <= 2.0 ? 18.0 : ($kp <= 4.0 ? 7.0 : -22.0);
-    $hfScore += $isDaytime ? 12.0 : -5.0;
-    $hfScore += ($wind <= 22.0 ? 6.0 : ($wind <= 35.0 ? 0.0 : -10.0));
+    $hfScore = 65.0;
+    $hfScore += $kp <= 1.5 ? 20.0 : ($kp <= 3.0 ? 10.0 : ($kp <= 4.5 ? 1.0 : -20.0));
+    $hfScore += $kpTrend <= -0.8 ? 6.0 : ($kpTrend >= 0.8 ? -8.0 : 0.0);
+    $hfScore += $isDaytime ? 10.0 : -4.0;
+    $hfScore += ($wind <= 18.0 ? 8.0 : ($wind <= 30.0 ? 2.0 : -10.0));
     $hfScore += ($humidity >= 35 && $humidity <= 85) ? 3.0 : -5.0;
+    $hfScore += ($cloudCover <= 45 ? 2.0 : ($cloudCover >= 90 ? -4.0 : 0.0));
+    $hfScore += ($precipitation <= 0.1 ? 2.0 : ($precipitation >= 2.5 ? -8.0 : -3.0));
     $hfScore += in_array($weatherCode, [95, 96, 99], true) ? -16.0 : 0.0;
     $hfScore += $isSummer && $isDaytime ? 4.0 : 0.0;
     $hfScore += !$isSummer && $isLateEvening ? 4.0 : 0.0;
@@ -692,7 +716,7 @@ function render_ham_weather_advice(array $user = []): string
     }
 
     $modes = ['SSB', 'CW'];
-    if ($kp >= 4.5 || $wind >= 35.0 || in_array($weatherCode, [95, 96, 99], true)) {
+    if ($kp >= 4.5 || $wind >= 35.0 || $precipitation >= 2.0 || in_array($weatherCode, [95, 96, 99], true)) {
         $modes = ['FT8', 'CW', 'RTTY'];
     } elseif ($temperature < 5.0 || $humidity > 90) {
         $modes = ['FT8', 'SSB', 'CW'];
@@ -716,8 +740,9 @@ function render_ham_weather_advice(array $user = []): string
         . '<ul class="mt-2 list-clean">'
         . '<li><strong>' . e((string) $i18n['location']) . '</strong> ' . e($locator) . '</li>'
         . '<li><strong>' . e((string) $i18n['local_hour']) . '</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
-        . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h</li>'
-        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> Kp=' . e(number_format($kp, 1, ',', '')) . '</li>'
+        . '<li><strong>' . e((string) $i18n['updated_at']) . '</strong> ' . e($updatedLabel) . '</li>'
+        . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h, nuages ' . e((string) $cloudCover) . '%, pluie ' . e(number_format($precipitation, 1, ',', '')) . ' mm/h</li>'
+        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> Kp=' . e(number_format($kp, 1, ',', '')) . ' (Δ ' . e(number_format($kpTrend, 1, ',', '')) . ')</li>'
         . '</ul>'
         . '</section>'
         . '</div>';
@@ -1551,6 +1576,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
+        ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
@@ -1586,14 +1612,6 @@ function render_layout(string $content, string $title = ''): string
             $navHtml .= '<div class="nav-row nav-row-member">' . $memberLinks . '</div>';
         }
     }
-
-    $searchQuery = trim((string) ($_GET['q'] ?? ''));
-    $searchForm = '<form class="nav-search" method="get" action="' . e(route_url('search')) . '">'
-        . '<label class="sr-only" for="nav-search-input">' . e((string) $layoutI18n['search_label']) . '</label>'
-        . '<input type="hidden" name="route" value="search">'
-        . '<input id="nav-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" required>'
-        . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
-        . '</form>';
 
     $authHtml = '';
     if ($user !== null) {
@@ -1721,7 +1739,7 @@ function render_layout(string $content, string $title = ''): string
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
-        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $searchForm . $authHtml . '</div></div>'
+        . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
     return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
@@ -2234,10 +2252,20 @@ if (!function_exists('answer_question_from_knowledge')) {
             return [];
         }
         $parts = preg_split('/[^\p{L}\p{N}]+/u', $normalized) ?: [];
+        $stopwords = [
+            'fr' => ['le','la','les','de','des','du','un','une','et','ou','pour','avec','dans','sur','est','sont','au','aux','ce','cette','ces'],
+            'en' => ['the','a','an','and','or','for','with','in','on','is','are','to','of','from','that','this','these'],
+            'de' => ['der','die','das','ein','eine','und','oder','mit','im','in','auf','ist','sind','zu','von','für','den','dem'],
+            'nl' => ['de','het','een','en','of','met','in','op','is','zijn','voor','van','naar','dat','dit','deze'],
+        ];
+        $localeStops = $stopwords[current_locale()] ?? $stopwords['fr'];
         $tokens = [];
         foreach ($parts as $part) {
             $token = trim((string) $part);
             if ($token === '' || mb_strlen($token) < 2) {
+                continue;
+            }
+            if (in_array($token, $localeStops, true)) {
                 continue;
             }
             $tokens[$token] = true;
@@ -2268,6 +2296,26 @@ if (!function_exists('answer_question_from_knowledge')) {
     /**
      * @param list<string> $queryTokens
      */
+
+
+    /**
+     * @param list<string> $queryTokens
+     */
+    function rag_query_coverage(array $queryTokens, string $text): float
+    {
+        if ($queryTokens === []) {
+            return 0.0;
+        }
+        $normalizedText = ' ' . mb_safe_strtolower($text) . ' ';
+        $matched = 0;
+        foreach ($queryTokens as $token) {
+            if (str_contains($normalizedText, ' ' . $token . ' ') || str_contains($normalizedText, $token)) {
+                $matched++;
+            }
+        }
+        return $matched / max(1, count($queryTokens));
+    }
+
     function rag_weighted_score(array $queryTokens, string $text): float
     {
         if ($queryTokens === []) {
@@ -2301,6 +2349,138 @@ if (!function_exists('answer_question_from_knowledge')) {
         }
 
         return $score;
+    }
+
+
+
+    function ensure_rag_chunks_table(): bool
+    {
+        try {
+            db()->exec('CREATE TABLE IF NOT EXISTS rag_chunks (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                source_type VARCHAR(32) NOT NULL,
+                source_key VARCHAR(191) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                body MEDIUMTEXT NOT NULL,
+                url VARCHAR(255) DEFAULT NULL,
+                embedding_json MEDIUMTEXT NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY uniq_source (source_type, source_key)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+            return true;
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    /** @return list<string> */
+    function rag_chunks_from_text(string $text, int $maxChars = 600, int $overlap = 120): array
+    {
+        $plain = trim(preg_replace('/\s+/u', ' ', strip_tags($text)) ?? '');
+        if ($plain === '') { return []; }
+        $sentences = preg_split('/(?<=[\.\!\?])\s+/u', $plain) ?: [];
+        if ($sentences === []) {
+            $sentences = [$plain];
+        }
+        $chunks = [];
+        $seen = [];
+        $buffer = '';
+        foreach ($sentences as $sentence) {
+            $sentence = trim((string) $sentence);
+            if ($sentence === '') {
+                continue;
+            }
+            $candidate = trim($buffer . ' ' . $sentence);
+            if (mb_strlen($candidate) <= $maxChars) {
+                $buffer = $candidate;
+                continue;
+            }
+            if ($buffer !== '') {
+                $normalized = mb_safe_strtolower($buffer);
+                if (!isset($seen[$normalized])) {
+                    $seen[$normalized] = true;
+                    $chunks[] = $buffer;
+                }
+                $tail = mb_substr($buffer, max(0, mb_strlen($buffer) - $overlap));
+                $buffer = trim($tail . ' ' . $sentence);
+            } else {
+                $buffer = mb_substr($sentence, 0, $maxChars);
+            }
+            if (count($chunks) >= 12) { break; }
+        }
+        if ($buffer !== '' && count($chunks) < 12) {
+            $normalized = mb_safe_strtolower($buffer);
+            if (!isset($seen[$normalized])) {
+                $chunks[] = $buffer;
+            }
+        }
+        return $chunks;
+    }
+
+    /** @return list<float> */
+    function rag_embedding_vector(string $text, int $dim = 96): array
+    {
+        $vector = array_fill(0, $dim, 0.0);
+        $tokens = rag_tokens($text);
+        if ($tokens === []) { return $vector; }
+        foreach ($tokens as $token) {
+            $hash = abs(crc32($token));
+            $index = $hash % $dim;
+            $sign = (($hash >> 1) & 1) === 0 ? 1.0 : -1.0;
+            $vector[$index] += $sign;
+        }
+        $norm = 0.0;
+        foreach ($vector as $v) { $norm += $v * $v; }
+        $norm = sqrt($norm);
+        if ($norm > 0) {
+            foreach ($vector as $i => $v) { $vector[$i] = $v / $norm; }
+        }
+        return $vector;
+    }
+
+    /** @param list<float> $a @param list<float> $b */
+    function rag_cosine_similarity(array $a, array $b): float
+    {
+        $size = min(count($a), count($b));
+        if ($size === 0) { return 0.0; }
+        $dot = 0.0;
+        for ($i = 0; $i < $size; $i++) { $dot += ((float) $a[$i]) * ((float) $b[$i]); }
+        return $dot;
+    }
+
+    function rag_chunks_are_stale(int $maxAgeSeconds = 86400): bool
+    {
+        try {
+            $stmt = db()->query('SELECT UNIX_TIMESTAMP(MAX(updated_at)) FROM rag_chunks');
+            $ts = (int) ($stmt ? $stmt->fetchColumn() : 0);
+            if ($ts <= 0) {
+                return true;
+            }
+            return (time() - $ts) > $maxAgeSeconds;
+        } catch (Throwable) {
+            return true;
+        }
+    }
+
+    function rag_reindex_lock_file(): string
+    {
+        return cache_dir_path() . '/rag-reindex.lock';
+    }
+
+    function rag_can_reindex_now(int $cooldownSeconds = 900): bool
+    {
+        $file = rag_reindex_lock_file();
+        $now = time();
+        if (!is_file($file)) {
+            @file_put_contents($file, (string) $now);
+            return true;
+        }
+        $last = (int) @file_get_contents($file);
+        if (($now - $last) < $cooldownSeconds) {
+            return false;
+        }
+        @file_put_contents($file, (string) $now);
+        return true;
     }
 
     /**
@@ -2366,6 +2546,144 @@ function answer_question_from_knowledge(string $question): array
         }
 
         $queryTokens = rag_tokens($normalized);
+        if ($queryTokens === [] && mb_strlen($normalized) < 3) {
+            return [
+                'answer' => (string) $chatbotT['no_answer'],
+                'source' => (string) $chatbotT['assistant_source'],
+            ];
+        }
+
+        if (ensure_rag_chunks_table()) {
+            try {
+                $countStmt = db()->query('SELECT COUNT(*) FROM rag_chunks');
+                $chunkCount = (int) ($countStmt ? $countStmt->fetchColumn() : 0);
+                $mustReindex = $chunkCount === 0 || rag_chunks_are_stale(43200);
+                if ($mustReindex && rag_can_reindex_now(900)) {
+                    db()->exec('DELETE FROM rag_chunks');
+                    $insert = db()->prepare('INSERT INTO rag_chunks (source_type, source_key, title, body, url, embedding_json) VALUES (?,?,?,?,?,?)');
+                    $knowledgePath = __DIR__ . '/knowledge.php';
+                    $knowledgeBase = is_file($knowledgePath) ? (require $knowledgePath) : [];
+                    if (is_array($knowledgeBase)) {
+                        foreach ($knowledgeBase as $idx => $item) {
+                            if (!is_array($item)) { continue; }
+                            $title = trim((string) ($item['title'] ?? 'Knowledge'));
+                            $body = trim((string) ($item['body'] ?? ''));
+                            foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
+                                $key = 'kb_' . (string) $idx . '_' . (string) $chunkIndex;
+                                $vec = rag_embedding_vector($title . ' ' . $chunk);
+                                $insert->execute(['knowledge', $key, $title, $chunk, (string) ($item['url'] ?? ''), json_encode($vec)]);
+                            }
+                        }
+                    }
+                    if (table_exists('articles')) {
+                        $rows = db()->query('SELECT slug,title,excerpt,content FROM articles WHERE status = "published" ORDER BY updated_at DESC LIMIT 120')->fetchAll() ?: [];
+                        foreach ($rows as $row) {
+                            if (!is_array($row)) { continue; }
+                            $slug = trim((string) ($row['slug'] ?? ''));
+                            if ($slug === '') { continue; }
+                            $title = trim((string) ($row['title'] ?? 'Article'));
+                            $body = trim((string) (($row['excerpt'] ?? '') . "\n" . ($row['content'] ?? '')));
+                            foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
+                                $key = 'article_' . $slug . '_' . (string) $chunkIndex;
+                                $vec = rag_embedding_vector($title . ' ' . $chunk);
+                                $insert->execute(['article', $key, $title, $chunk, route_url('article', ['slug' => $slug]), json_encode($vec)]);
+                            }
+                        }
+                    }
+
+                    if (ensure_member_library_table()) {
+                        $docs = db()->query('SELECT id,title,description,extracted_text,file_path FROM member_library_documents ORDER BY uploaded_at DESC LIMIT 120')->fetchAll() ?: [];
+                        foreach ($docs as $doc) {
+                            if (!is_array($doc)) { continue; }
+                            $docId = (int) ($doc['id'] ?? 0);
+                            if ($docId <= 0) { continue; }
+                            $title = trim((string) ($doc['title'] ?? 'Document'));
+                            $body = trim((string) (($doc['description'] ?? '') . "\n" . ($doc['extracted_text'] ?? '')));
+                            $safePath = safe_storage_public_path_or_null((string) ($doc['file_path'] ?? ''), ['storage/uploads/library/']) ?? '';
+                            $url = $safePath !== '' ? base_url($safePath) : '';
+                            foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
+                                $key = 'doc_' . (string) $docId . '_' . (string) $chunkIndex;
+                                $vec = rag_embedding_vector($title . ' ' . $chunk);
+                                $insert->execute(['library', $key, $title, $chunk, $url, json_encode($vec)]);
+                            }
+                        }
+                    }
+                }
+
+                $qVec = rag_embedding_vector($normalized);
+                $rows = [];
+                $tokenHints = array_slice($queryTokens, 0, 3);
+                if ($tokenHints !== []) {
+                    $whereParts = [];
+                    $params = [];
+                    foreach ($tokenHints as $hint) {
+                        $whereParts[] = '(title LIKE ? OR body LIKE ?)';
+                        $like = '%' . $hint . '%';
+                        $params[] = $like;
+                        $params[] = $like;
+                    }
+                    $sql = 'SELECT source_type, title, body, url, embedding_json, updated_at FROM rag_chunks WHERE ' . implode(' OR ', $whereParts) . ' ORDER BY updated_at DESC LIMIT 120';
+                    $stmt = db()->prepare($sql);
+                    $stmt->execute($params);
+                    $rows = $stmt->fetchAll() ?: [];
+                }
+                if ($rows === []) {
+                    $stmt = db()->query('SELECT source_type, title, body, url, embedding_json, updated_at FROM rag_chunks ORDER BY updated_at DESC LIMIT 220');
+                    $rows = $stmt ? ($stmt->fetchAll() ?: []) : [];
+                }
+                $best = null;
+                $bestScore = -1.0;
+                $bestCoverage = 0.0;
+                $secondBestScore = -1.0;
+                foreach ($rows as $row) {
+                    if (!is_array($row)) { continue; }
+                    $vec = json_decode((string) ($row['embedding_json'] ?? '[]'), true);
+                    if (!is_array($vec)) { continue; }
+                    $sim = rag_cosine_similarity($qVec, array_map('floatval', $vec));
+                    $coverage = rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['body'] ?? '')));
+                    $sourceType = (string) ($row['source_type'] ?? '');
+                    $sourceBoost = match ($sourceType) {
+                        'knowledge' => 0.45,
+                        'article' => 0.28,
+                        'library' => 0.18,
+                        default => 0.0,
+                    };
+                    $recencyBoost = 0.0;
+                    $updatedAt = trim((string) ($row['updated_at'] ?? ''));
+                    if ($updatedAt !== '') {
+                        try {
+                            $ageHours = max(0.0, (time() - (new DateTimeImmutable($updatedAt))->getTimestamp()) / 3600.0);
+                            $recencyBoost = max(0.0, 0.2 - min(0.2, $ageHours / 1200.0));
+                        } catch (Throwable) {
+                            $recencyBoost = 0.0;
+                        }
+                    }
+                    $score = $sim * 6.0 + $coverage * 2.5 + $sourceBoost + $recencyBoost;
+                    if ($score > $bestScore) {
+                        $secondBestScore = $bestScore;
+                        $bestScore = $score;
+                        $best = $row;
+                        $bestCoverage = $coverage;
+                    } elseif ($score > $secondBestScore) {
+                        $secondBestScore = $score;
+                    }
+                }
+                $isAmbiguous = ($bestScore - $secondBestScore) < 0.08 && $bestCoverage < 0.35;
+                if (is_array($best) && !$isAmbiguous && $bestScore >= 1.8 && $bestCoverage >= 0.2) {
+                    $summary = trim(mb_substr((string) ($best['body'] ?? ''), 0, 480));
+                    $link = trim((string) ($best['url'] ?? ''));
+                    $answer = $summary;
+                    if ($link !== '') { $answer .= "\n\n" . (string) $chatbotT['link'] . $link; }
+                    $sourceType = trim((string) ($best['source_type'] ?? 'source'));
+                    $sourceTitle = trim((string) ($best['title'] ?? ''));
+                    $source = 'RAG v2 · ' . $sourceType . ($sourceTitle !== '' ? (' · ' . $sourceTitle) : '');
+                    return ['answer' => $answer, 'source' => $source];
+                }
+            } catch (Throwable) {
+                // fallback below
+            }
+        }
+
         $knowledgePath = __DIR__ . '/knowledge.php';
         $knowledgeBase = [];
         if (is_file($knowledgePath)) {
@@ -2393,6 +2711,7 @@ function answer_question_from_knowledge(string $question): array
             $body = (string) ($item['body'] ?? '');
             $score += rag_weighted_score($queryTokens, $title) * 2.0;
             $score += rag_weighted_score($queryTokens, $body);
+            $score += rag_query_coverage($queryTokens, $title . ' ' . $body) * 3.5;
             if ($score > $bestScore) {
                 $bestScore = $score;
                 $bestItem = $item;
@@ -2441,12 +2760,13 @@ function answer_question_from_knowledge(string $question): array
                     $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
                         + rag_weighted_score($queryTokens, (string) ($row['excerpt'] ?? ''))
                         + rag_weighted_score($queryTokens, (string) ($row['content'] ?? ''));
+                    $score += rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['excerpt'] ?? '') . ' ' . ($row['content'] ?? ''))) * 3.0;
                     if ($score > $articleScore) {
                         $articleScore = $score;
                         $article = $row;
                     }
                 }
-                if (is_array($article) && $articleScore > 0.0) {
+                if (is_array($article) && $articleScore >= 2.0) {
                     $title = trim((string) ($article['title'] ?? (string) $chatbotT['article_label']));
                     $excerpt = trim((string) ($article['excerpt'] ?? ''));
                     $slug = trim((string) ($article['slug'] ?? ''));
@@ -2491,12 +2811,13 @@ function answer_question_from_knowledge(string $question): array
                     $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
                         + rag_weighted_score($queryTokens, (string) ($row['description'] ?? ''))
                         + rag_weighted_score($queryTokens, (string) ($row['extracted_text'] ?? ''));
+                    $score += rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['description'] ?? '') . ' ' . ($row['extracted_text'] ?? ''))) * 3.0;
                     if ($score > $docScore) {
                         $docScore = $score;
                         $doc = $row;
                     }
                 }
-                if (is_array($doc) && $docScore > 0.0) {
+                if (is_array($doc) && $docScore >= 2.0) {
                     $locale = current_locale();
                     $chatbotDocI18n = [
                         'fr' => ['doc_fallback' => 'Document PDF', 'prefix' => 'J’ai trouvé un document dans la bibliothèque membres : ', 'summary' => 'Résumé : ', 'open' => 'Consulter : ', 'source' => 'Bibliothèque membres'],
