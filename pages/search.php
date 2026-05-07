@@ -11,6 +11,9 @@ $t = $i18n[$locale] ?? $i18n['fr'];
 $q = trim((string) ($_GET['q'] ?? ''));
 $q = preg_replace('/\s+/u', ' ', $q) ?? '';
 $q = mb_substr($q, 0, 120);
+$tokens = preg_split('/[\s\p{P}]+/u', mb_strtolower($q), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+$tokens = array_values(array_unique(array_filter($tokens, static fn(string $token): bool => mb_strlen($token) >= 2)));
+$tokens = array_slice($tokens, 0, 5);
 $hasQuery = $q !== '';
 $isQueryLongEnough = mb_strlen($q) >= 2;
 $page = max(1, (int) ($_GET['page'] ?? 1));
@@ -18,15 +21,23 @@ $perPage = 12;
 $offset = ($page - 1) * $perPage;
 $results = [];
 if ($hasQuery && $isQueryLongEnough) {
-    $results = cache_remember('site_search_' . current_locale() . '_' . md5(mb_strtolower($q)), 120, static function () use ($q): array {
+    $results = cache_remember('site_search_' . current_locale() . '_' . md5(mb_strtolower($q)), 120, static function () use ($q, $tokens): array {
         $like = '%' . $q . '%';
+        $queryLikes = array_map(static fn(string $term): string => '%' . $term . '%', $tokens);
         $collected = [];
         if (table_exists('articles')) {
-            $stmt = db()->prepare('SELECT title, excerpt, slug FROM articles WHERE status = "published" AND (title LIKE ? OR excerpt LIKE ? OR content LIKE ?) ORDER BY updated_at DESC LIMIT 24');
-            $stmt->execute([$like, $like, $like]);
+            $where = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+            $params = [$like, $like, $like];
+            foreach ($queryLikes as $termLike) {
+                $where .= ' OR (title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+                array_push($params, $termLike, $termLike, $termLike);
+            }
+            $stmt = db()->prepare('SELECT title, excerpt, slug, content FROM articles WHERE status = "published" AND (' . $where . ') ORDER BY updated_at DESC LIMIT 30');
+            $stmt->execute($params);
             foreach ($stmt->fetchAll() as $row) {
                 $title = (string) $row['title'];
                 $summary = (string) ($row['excerpt'] ?? '');
+                $contentSnippet = mb_substr(strip_tags((string) ($row['content'] ?? '')), 0, 240);
                 $score = 0;
                 if (stripos($title, $q) !== false) {
                     $score += 4;
@@ -34,12 +45,26 @@ if ($hasQuery && $isQueryLongEnough) {
                 if (stripos($summary, $q) !== false) {
                     $score += 2;
                 }
+                foreach ($tokens as $term) {
+                    if (stripos($title, $term) !== false) {
+                        $score += 2;
+                    }
+                    if (stripos($summary, $term) !== false || stripos($contentSnippet, $term) !== false) {
+                        $score += 1;
+                    }
+                }
                 $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('article', ['slug' => (string) $row['slug']]), 'score' => $score];
             }
         }
         if (table_exists('wiki_pages')) {
-            $stmt = db()->prepare('SELECT title, content, slug FROM wiki_pages WHERE status = "published" AND (title LIKE ? OR content LIKE ?) ORDER BY updated_at DESC LIMIT 24');
-            $stmt->execute([$like, $like]);
+            $where = '(title LIKE ? OR content LIKE ?)';
+            $params = [$like, $like];
+            foreach ($queryLikes as $termLike) {
+                $where .= ' OR (title LIKE ? OR content LIKE ?)';
+                array_push($params, $termLike, $termLike);
+            }
+            $stmt = db()->prepare('SELECT title, content, slug FROM wiki_pages WHERE status = "published" AND (' . $where . ') ORDER BY updated_at DESC LIMIT 30');
+            $stmt->execute($params);
             foreach ($stmt->fetchAll() as $row) {
                 $title = (string) $row['title'];
                 $summary = mb_substr(strip_tags((string) ($row['content'] ?? '')), 0, 180);
@@ -49,6 +74,14 @@ if ($hasQuery && $isQueryLongEnough) {
                 }
                 if (stripos($summary, $q) !== false) {
                     $score += 1;
+                }
+                foreach ($tokens as $term) {
+                    if (stripos($title, $term) !== false) {
+                        $score += 2;
+                    }
+                    if (stripos($summary, $term) !== false) {
+                        $score += 1;
+                    }
                 }
                 $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('wiki_view', ['slug' => (string) $row['slug']]), 'score' => $score];
             }
@@ -100,10 +133,10 @@ ob_start();
         </article>
     <?php endforeach; ?>
     <?php if ($totalResults > $perPage): ?>
-        <div style="display:flex;gap:10px;margin-top:12px;">
-            <?php if ($hasPrev): ?><a class="button secondary" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page - 1)])) ?>"><?= e((string) $t['previous']) ?></a><?php endif; ?>
-            <?php if ($hasNext): ?><a class="button secondary" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
-        </div>
+        <nav class="flex items-center gap-2" aria-label="Pagination">
+            <?php if ($hasPrev): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page - 1)])) ?>"><?= e((string) $t['previous']) ?></a><?php endif; ?>
+            <?php if ($hasNext): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
+        </nav>
     <?php endif; ?>
     </div>
 </section>
