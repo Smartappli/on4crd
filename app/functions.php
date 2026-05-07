@@ -2253,10 +2253,20 @@ if (!function_exists('answer_question_from_knowledge')) {
             return [];
         }
         $parts = preg_split('/[^\p{L}\p{N}]+/u', $normalized) ?: [];
+        $stopwords = [
+            'fr' => ['le','la','les','de','des','du','un','une','et','ou','pour','avec','dans','sur','est','sont','au','aux','ce','cette','ces'],
+            'en' => ['the','a','an','and','or','for','with','in','on','is','are','to','of','from','that','this','these'],
+            'de' => ['der','die','das','ein','eine','und','oder','mit','im','in','auf','ist','sind','zu','von','für','den','dem'],
+            'nl' => ['de','het','een','en','of','met','in','op','is','zijn','voor','van','naar','dat','dit','deze'],
+        ];
+        $localeStops = $stopwords[current_locale()] ?? $stopwords['fr'];
         $tokens = [];
         foreach ($parts as $part) {
             $token = trim((string) $part);
             if ($token === '' || mb_strlen($token) < 2) {
+                continue;
+            }
+            if (in_array($token, $localeStops, true)) {
                 continue;
             }
             $tokens[$token] = true;
@@ -2369,13 +2379,41 @@ if (!function_exists('answer_question_from_knowledge')) {
     {
         $plain = trim(preg_replace('/\s+/u', ' ', strip_tags($text)) ?? '');
         if ($plain === '') { return []; }
+        $sentences = preg_split('/(?<=[\.\!\?])\s+/u', $plain) ?: [];
+        if ($sentences === []) {
+            $sentences = [$plain];
+        }
         $chunks = [];
-        $length = mb_strlen($plain);
-        $step = max(80, $maxChars - $overlap);
-        for ($offset = 0; $offset < $length; $offset += $step) {
-            $chunk = trim(mb_substr($plain, $offset, $maxChars));
-            if ($chunk !== '') { $chunks[] = $chunk; }
+        $seen = [];
+        $buffer = '';
+        foreach ($sentences as $sentence) {
+            $sentence = trim((string) $sentence);
+            if ($sentence === '') {
+                continue;
+            }
+            $candidate = trim($buffer . ' ' . $sentence);
+            if (mb_strlen($candidate) <= $maxChars) {
+                $buffer = $candidate;
+                continue;
+            }
+            if ($buffer !== '') {
+                $normalized = mb_safe_strtolower($buffer);
+                if (!isset($seen[$normalized])) {
+                    $seen[$normalized] = true;
+                    $chunks[] = $buffer;
+                }
+                $tail = mb_substr($buffer, max(0, mb_strlen($buffer) - $overlap));
+                $buffer = trim($tail . ' ' . $sentence);
+            } else {
+                $buffer = mb_substr($sentence, 0, $maxChars);
+            }
             if (count($chunks) >= 12) { break; }
+        }
+        if ($buffer !== '' && count($chunks) < 12) {
+            $normalized = mb_safe_strtolower($buffer);
+            if (!isset($seen[$normalized])) {
+                $chunks[] = $buffer;
+            }
         }
         return $chunks;
     }
@@ -2423,6 +2461,27 @@ if (!function_exists('answer_question_from_knowledge')) {
         } catch (Throwable) {
             return true;
         }
+    }
+
+    function rag_reindex_lock_file(): string
+    {
+        return cache_dir_path() . '/rag-reindex.lock';
+    }
+
+    function rag_can_reindex_now(int $cooldownSeconds = 900): bool
+    {
+        $file = rag_reindex_lock_file();
+        $now = time();
+        if (!is_file($file)) {
+            @file_put_contents($file, (string) $now);
+            return true;
+        }
+        $last = (int) @file_get_contents($file);
+        if (($now - $last) < $cooldownSeconds) {
+            return false;
+        }
+        @file_put_contents($file, (string) $now);
+        return true;
     }
 
     /**
@@ -2488,13 +2547,19 @@ function answer_question_from_knowledge(string $question): array
         }
 
         $queryTokens = rag_tokens($normalized);
+        if ($queryTokens === [] && mb_strlen($normalized) < 3) {
+            return [
+                'answer' => (string) $chatbotT['no_answer'],
+                'source' => (string) $chatbotT['assistant_source'],
+            ];
+        }
 
         if (ensure_rag_chunks_table()) {
             try {
                 $countStmt = db()->query('SELECT COUNT(*) FROM rag_chunks');
                 $chunkCount = (int) ($countStmt ? $countStmt->fetchColumn() : 0);
                 $mustReindex = $chunkCount === 0 || rag_chunks_are_stale(43200);
-                if ($mustReindex) {
+                if ($mustReindex && rag_can_reindex_now(900)) {
                     db()->exec('DELETE FROM rag_chunks');
                     $insert = db()->prepare('INSERT INTO rag_chunks (source_type, source_key, title, body, url, embedding_json) VALUES (?,?,?,?,?,?)');
                     $knowledgePath = __DIR__ . '/knowledge.php';
@@ -2558,27 +2623,54 @@ function answer_question_from_knowledge(string $question): array
                         $params[] = $like;
                         $params[] = $like;
                     }
-                    $sql = 'SELECT source_type, title, body, url, embedding_json FROM rag_chunks WHERE ' . implode(' OR ', $whereParts) . ' ORDER BY updated_at DESC LIMIT 180';
+                    $sql = 'SELECT source_type, title, body, url, embedding_json, updated_at FROM rag_chunks WHERE ' . implode(' OR ', $whereParts) . ' ORDER BY updated_at DESC LIMIT 120';
                     $stmt = db()->prepare($sql);
                     $stmt->execute($params);
                     $rows = $stmt->fetchAll() ?: [];
                 }
                 if ($rows === []) {
-                    $stmt = db()->query('SELECT source_type, title, body, url, embedding_json FROM rag_chunks ORDER BY updated_at DESC LIMIT 350');
+                    $stmt = db()->query('SELECT source_type, title, body, url, embedding_json, updated_at FROM rag_chunks ORDER BY updated_at DESC LIMIT 220');
                     $rows = $stmt ? ($stmt->fetchAll() ?: []) : [];
                 }
                 $best = null;
                 $bestScore = -1.0;
+                $bestCoverage = 0.0;
+                $secondBestScore = -1.0;
                 foreach ($rows as $row) {
                     if (!is_array($row)) { continue; }
                     $vec = json_decode((string) ($row['embedding_json'] ?? '[]'), true);
                     if (!is_array($vec)) { continue; }
                     $sim = rag_cosine_similarity($qVec, array_map('floatval', $vec));
                     $coverage = rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['body'] ?? '')));
-                    $score = $sim * 6.0 + $coverage * 2.5;
-                    if ($score > $bestScore) { $bestScore = $score; $best = $row; }
+                    $sourceType = (string) ($row['source_type'] ?? '');
+                    $sourceBoost = match ($sourceType) {
+                        'knowledge' => 0.45,
+                        'article' => 0.28,
+                        'library' => 0.18,
+                        default => 0.0,
+                    };
+                    $recencyBoost = 0.0;
+                    $updatedAt = trim((string) ($row['updated_at'] ?? ''));
+                    if ($updatedAt !== '') {
+                        try {
+                            $ageHours = max(0.0, (time() - (new DateTimeImmutable($updatedAt))->getTimestamp()) / 3600.0);
+                            $recencyBoost = max(0.0, 0.2 - min(0.2, $ageHours / 1200.0));
+                        } catch (Throwable) {
+                            $recencyBoost = 0.0;
+                        }
+                    }
+                    $score = $sim * 6.0 + $coverage * 2.5 + $sourceBoost + $recencyBoost;
+                    if ($score > $bestScore) {
+                        $secondBestScore = $bestScore;
+                        $bestScore = $score;
+                        $best = $row;
+                        $bestCoverage = $coverage;
+                    } elseif ($score > $secondBestScore) {
+                        $secondBestScore = $score;
+                    }
                 }
-                if (is_array($best) && $bestScore >= 1.8) {
+                $isAmbiguous = ($bestScore - $secondBestScore) < 0.08 && $bestCoverage < 0.35;
+                if (is_array($best) && !$isAmbiguous && $bestScore >= 1.8 && $bestCoverage >= 0.2) {
                     $summary = trim(mb_substr((string) ($best['body'] ?? ''), 0, 480));
                     $link = trim((string) ($best['url'] ?? ''));
                     $answer = $summary;
