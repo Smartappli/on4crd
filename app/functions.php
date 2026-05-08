@@ -606,6 +606,24 @@ function render_ham_weather_advice(array $user = []): string
     $i18n = $messages[$locale] ?? $messages['fr'];
     $defaultLocator = 'JO20LI';
     $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
+    if ($memberLocator === '' && isset($user['id']) && is_numeric($user['id']) && table_exists('members')) {
+        try {
+            $stmt = db()->prepare('SELECT locator, qth FROM members WHERE id = ? LIMIT 1');
+            $stmt->execute([(int) $user['id']]);
+            $row = $stmt->fetch();
+            if (is_array($row)) {
+                $candidateLocator = strtoupper(trim((string) ($row['locator'] ?? '')));
+                if ($candidateLocator === '') {
+                    $candidateLocator = strtoupper(trim((string) ($row['qth'] ?? '')));
+                }
+                if ($candidateLocator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $candidateLocator) === 1) {
+                    $memberLocator = $candidateLocator;
+                }
+            }
+        } catch (Throwable) {
+            // Keep fallback behavior when member profile location cannot be read.
+        }
+    }
     $locator = $memberLocator !== '' ? $memberLocator : $defaultLocator;
     $coordinates = maidenhead_to_coordinates($locator) ?? ['latitude' => 50.3150, 'longitude' => 4.9452];
 
