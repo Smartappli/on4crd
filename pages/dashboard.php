@@ -65,7 +65,7 @@ $dashboardConfig = [
 
 ob_start();
 ?>
-<div class="split-home split">
+<div class="dashboard-fullwidth">
   <section class="card">
     <div class="row-between">
       <div>

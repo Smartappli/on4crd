@@ -1780,3 +1780,11 @@ textarea.wysiwyg-source {
   gap: .75rem;
   margin-bottom: .75rem;
 }
+
+.dashboard-fullwidth {
+  display: block;
+}
+.dashboard-fullwidth > .card {
+  width: 100%;
+  max-width: 100%;
+}
