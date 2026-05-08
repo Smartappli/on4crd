@@ -30,6 +30,9 @@ $homeMessages = [
         'weather_updated' => 'Mise à jour météo :',
         'weather_refresh' => 'Rafraîchir maintenant',
         'today_date' => 'Date :',
+        'clocks_aria' => 'Horloges UTC et locale',
+        'utc_time' => 'Heure UTC',
+        'local_time' => 'Heure locale',
         'partner_ad_empty' => 'Aucune publicité partenaire disponible pour le moment.',
         'partner_ad_title' => 'Annonce partenaire',
         'ham_info_title' => 'Informations radioamateur',
@@ -92,6 +95,9 @@ $homeMessages = [
         'weather_updated' => 'Weather update:',
         'weather_refresh' => 'Refresh now',
         'today_date' => 'Date:',
+        'clocks_aria' => 'UTC and local clocks',
+        'utc_time' => 'UTC time',
+        'local_time' => 'Local time',
         'partner_ad_empty' => 'No partner advertisement available at the moment.',
         'partner_ad_title' => 'Partner advertisement',
         'ham_info_title' => 'Ham radio information',
@@ -154,6 +160,9 @@ $homeMessages = [
         'weather_updated' => 'Wetter aktualisiert:',
         'weather_refresh' => 'Jetzt aktualisieren',
         'today_date' => 'Datum:',
+        'clocks_aria' => 'UTC- und Ortszeituhren',
+        'utc_time' => 'UTC-Zeit',
+        'local_time' => 'Ortszeit',
         'partner_ad_empty' => 'Derzeit ist keine Partnerwerbung verfügbar.',
         'partner_ad_title' => 'Partnerwerbung',
         'ham_info_title' => 'Funkamateur-Informationen',
@@ -216,6 +225,9 @@ $homeMessages = [
         'weather_updated' => 'Weer bijgewerkt:',
         'weather_refresh' => 'Nu verversen',
         'today_date' => 'Datum:',
+        'clocks_aria' => 'UTC- en lokale klokken',
+        'utc_time' => 'UTC-tijd',
+        'local_time' => 'Lokale tijd',
         'partner_ad_empty' => 'Er is momenteel geen partneradvertentie beschikbaar.',
         'partner_ad_title' => 'Partneradvertentie',
         'ham_info_title' => 'Radioamateurinformatie',
@@ -746,6 +758,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '</div>'
     . '<article class="h-full rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) $homeI18n['useful_info']) . '</h3><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['meetings_info']) . '</p><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['venue_address']) . '</p><div class="mt-3 overflow-hidden rounded-lg border border-slate-200"><iframe class="h-64 w-full" title="' . e((string) $homeI18n['map_title']) . '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E&output=embed"></iframe></div><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E" target="_blank" rel="noopener noreferrer">' . e((string) $homeI18n['maps_route']) . '</a></article>'
     . '</div>'
+    . '<article class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">' . e((string) $homeI18n['repeater_title']) . '</h3><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['repeater_desc']) . '</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('relais')) . '">' . e((string) $homeI18n['repeater_cta']) . '</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($relaisLogoPath)) . '" alt="' . e((string) $homeI18n['alt_repeater_logo']) . '" loading="lazy" decoding="async"></div></article>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<header class="mb-4">'
