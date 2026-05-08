@@ -50,6 +50,9 @@ $homeMessages = [
         'uba_title' => 'Union royale belge des amateurs-émetteurs a.s.b.l.',
         'uba_desc' => 'Le Radio Club Durnal est affilié à l\'Union Belge des Amateurs-Émetteurs.',
         'uba_cta' => 'Visiter le site de l\'UBA',
+        'ibpt_title' => 'IBPT',
+        'ibpt_desc' => 'Informations officielles pour l\'utilisation privée de loisir des radioamateurs.',
+        'ibpt_cta' => 'Consulter la page IBPT',
         'member_modules_title' => 'Modules accessibles aux membres',
         'member_modules_empty' => 'Aucun module membre disponible actuellement.',
         'member_audience' => 'Membres',
@@ -109,6 +112,9 @@ $homeMessages = [
         'uba_title' => 'Royal Belgian Amateur Radio Union',
         'uba_desc' => 'Radio Club Durnal is affiliated with the Belgian Amateur Radio Union.',
         'uba_cta' => 'Visit UBA website',
+        'ibpt_title' => 'BIPT',
+        'ibpt_desc' => 'Official information about private recreational use for amateur radio operators.',
+        'ibpt_cta' => 'Open BIPT page',
         'member_modules_title' => 'Modules available to members',
         'member_modules_empty' => 'No member modules are currently available.',
         'member_audience' => 'Members',
@@ -168,6 +174,9 @@ $homeMessages = [
         'uba_title' => 'Königliche Belgische Union der Funkamateure (UBA)',
         'uba_desc' => 'Der Radio Club Durnal ist der belgischen Funkamateure-Union angeschlossen.',
         'uba_cta' => 'UBA-Website besuchen',
+        'ibpt_title' => 'BIPT',
+        'ibpt_desc' => 'Offizielle Informationen zur privaten Freizeitnutzung für Funkamateure.',
+        'ibpt_cta' => 'BIPT-Seite öffnen',
         'member_modules_title' => 'Module für Mitglieder',
         'member_modules_empty' => 'Derzeit sind keine Mitgliedermodule verfügbar.',
         'member_audience' => 'Mitglieder',
@@ -227,6 +236,9 @@ $homeMessages = [
         'uba_title' => 'Koninklijke Unie van Belgische Zendamateurs (UBA)',
         'uba_desc' => 'Radio Club Durnal is aangesloten bij de Belgische Zendamateurunie.',
         'uba_cta' => 'Bezoek de UBA-website',
+        'ibpt_title' => 'BIPT',
+        'ibpt_desc' => 'Officiële informatie over privé vrijetijdsgebruik voor radioamateurs.',
+        'ibpt_cta' => 'BIPT-pagina openen',
         'member_modules_title' => 'Modules voor leden',
         'member_modules_empty' => 'Er zijn momenteel geen ledenmodules beschikbaar.',
         'member_audience' => 'Leden',
@@ -728,6 +740,8 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="grid gap-4 lg:grid-cols-[1.15fr_.85fr]">'
     . '<div class="grid gap-4">'
     . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">' . e((string) $homeI18n['uba_title']) . '</h3><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['uba_desc']) . '</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.uba.be" target="_blank" rel="noopener noreferrer">' . e((string) $homeI18n['uba_cta']) . '</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($ubaLogoPath)) . '" alt="' . e((string) $homeI18n['alt_uba_logo']) . '" loading="lazy" decoding="async"></div></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) $homeI18n['ibpt_title']) . '</h3><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['ibpt_desc']) . '</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.ibpt.be/consommateurs/frequences-radio/utilisation-privee-de-loisir/radioamateurs" target="_blank" rel="noopener noreferrer">' . e((string) $homeI18n['ibpt_cta']) . '</a></article>'
+    . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="flex items-start justify-between gap-3"><div><h3 class="text-lg font-semibold text-slate-900">' . e((string) $homeI18n['repeater_title']) . '</h3><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['repeater_desc']) . '</p><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('relais')) . '">' . e((string) $homeI18n['repeater_cta']) . '</a></div><img class="h-20 w-auto object-contain" src="' . e(asset_url($relaisLogoPath)) . '" alt="' . e((string) $homeI18n['alt_repeater_logo']) . '" loading="lazy" decoding="async"></div></article>'
     . '</div>'
     . '<article class="h-full rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) $homeI18n['useful_info']) . '</h3><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['meetings_info']) . '</p><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['venue_address']) . '</p><div class="mt-3 overflow-hidden rounded-lg border border-slate-200"><iframe class="h-64 w-full" title="' . e((string) $homeI18n['map_title']) . '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E&output=embed"></iframe></div><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E" target="_blank" rel="noopener noreferrer">' . e((string) $homeI18n['maps_route']) . '</a></article>'
     . '</div>'
