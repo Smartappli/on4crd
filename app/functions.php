@@ -537,6 +537,7 @@ function render_ham_weather_advice(array $user = []): string
             'updated_at' => 'Dernière mise à jour :',
             'local_weather' => 'Météo locale :',
             'geomagnetic' => 'Indice géomagnétique :',
+            'kp_unavailable' => 'indisponible',
         ],
         'en' => [
             'score_excellent' => 'Excellent conditions',
@@ -557,6 +558,7 @@ function render_ham_weather_advice(array $user = []): string
             'updated_at' => 'Last update:',
             'local_weather' => 'Local weather:',
             'geomagnetic' => 'Geomagnetic index:',
+            'kp_unavailable' => 'unavailable',
         ],
         'de' => [
             'score_excellent' => 'Ausgezeichnete Bedingungen',
@@ -577,6 +579,7 @@ function render_ham_weather_advice(array $user = []): string
             'updated_at' => 'Letzte Aktualisierung:',
             'local_weather' => 'Lokales Wetter:',
             'geomagnetic' => 'Geomagnetischer Index:',
+            'kp_unavailable' => 'nicht verfügbar',
         ],
         'nl' => [
             'score_excellent' => 'Uitstekende condities',
@@ -597,6 +600,7 @@ function render_ham_weather_advice(array $user = []): string
             'updated_at' => 'Laatste update:',
             'local_weather' => 'Lokaal weer:',
             'geomagnetic' => 'Geomagnetische index:',
+            'kp_unavailable' => 'niet beschikbaar',
         ],
     ];
     $i18n = $messages[$locale] ?? $messages['fr'];
@@ -667,15 +671,16 @@ function render_ham_weather_advice(array $user = []): string
     $cloudCover = is_numeric($currentWeather['cloud_cover'] ?? null) ? (int) $currentWeather['cloud_cover'] : 45;
     $precipitation = is_numeric($currentWeather['precipitation'] ?? null) ? (float) $currentWeather['precipitation'] : 0.0;
     $measurement = is_array($kpPayload) ? extract_latest_kp_measurement($kpPayload) : null;
-    $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : 3.0;
+    $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : null;
     $kpTrend = 0.0;
     if (is_array($kpPayload) && count($kpPayload) >= 4) {
         $latest = extract_latest_kp_measurement($kpPayload);
         $older = extract_latest_kp_measurement(array_slice($kpPayload, 0, max(0, count($kpPayload) - 3)));
         if (is_array($latest) && is_array($older)) {
-            $kpTrend = ((float) ($latest['kp'] ?? $kp)) - ((float) ($older['kp'] ?? $kp));
+            $kpTrend = ((float) ($latest['kp'] ?? ($kp ?? 3.0))) - ((float) ($older['kp'] ?? ($kp ?? 3.0)));
         }
     }
+    $kpForScoring = is_numeric($kp) ? (float) $kp : 3.0;
 
     $month = (int) gmdate('n');
     if ($localTime !== '') {
@@ -690,7 +695,7 @@ function render_ham_weather_advice(array $user = []): string
     $isLateEvening = $hour >= 20 || $hour <= 5;
 
     $hfScore = 65.0;
-    $hfScore += $kp <= 1.5 ? 20.0 : ($kp <= 3.0 ? 10.0 : ($kp <= 4.5 ? 1.0 : -20.0));
+    $hfScore += $kpForScoring <= 1.5 ? 20.0 : ($kpForScoring <= 3.0 ? 10.0 : ($kpForScoring <= 4.5 ? 1.0 : -20.0));
     $hfScore += $kpTrend <= -0.8 ? 6.0 : ($kpTrend >= 0.8 ? -8.0 : 0.0);
     $hfScore += $isDaytime ? 10.0 : -4.0;
     $hfScore += ($wind <= 18.0 ? 8.0 : ($wind <= 30.0 ? 2.0 : -10.0));
@@ -702,21 +707,21 @@ function render_ham_weather_advice(array $user = []): string
     $hfScore += !$isSummer && $isLateEvening ? 4.0 : 0.0;
 
     $bands = ['40m', '20m', '15m'];
-    if ($hour >= 8 && $hour <= 15 && $kp <= 3.5 && $isSummer) {
+    if ($hour >= 8 && $hour <= 15 && $kpForScoring <= 3.5 && $isSummer) {
         $bands = ['20m', '17m', '15m'];
-    } elseif ($hour >= 10 && $hour <= 17 && $kp <= 2.5 && $isSummer) {
+    } elseif ($hour >= 10 && $hour <= 17 && $kpForScoring <= 2.5 && $isSummer) {
         $bands = ['15m', '12m', '10m'];
     } elseif ($hour >= 18 || $hour <= 6) {
         $bands = ['40m', '80m', '30m'];
-        if (!$isSummer && $kp <= 4.0) {
+        if (!$isSummer && $kpForScoring <= 4.0) {
             $bands = ['80m', '40m', '30m'];
         }
-    } elseif ($kp >= 5.0) {
+    } elseif ($kpForScoring >= 5.0) {
         $bands = ['40m', '30m', '20m'];
     }
 
     $modes = ['SSB', 'CW'];
-    if ($kp >= 4.5 || $wind >= 35.0 || $precipitation >= 2.0 || in_array($weatherCode, [95, 96, 99], true)) {
+    if ($kpForScoring >= 4.5 || $wind >= 35.0 || $precipitation >= 2.0 || in_array($weatherCode, [95, 96, 99], true)) {
         $modes = ['FT8', 'CW', 'RTTY'];
     } elseif ($temperature < 5.0 || $humidity > 90) {
         $modes = ['FT8', 'SSB', 'CW'];
@@ -740,9 +745,13 @@ function render_ham_weather_advice(array $user = []): string
         . '<ul class="mt-2 list-clean">'
         . '<li><strong>' . e((string) $i18n['location']) . '</strong> ' . e($locator) . '</li>'
         . '<li><strong>' . e((string) $i18n['local_hour']) . '</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
-        . '<li><strong>' . e((string) $i18n['updated_at']) . '</strong> ' . e($updatedLabel) . '</li>'
         . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h, nuages ' . e((string) $cloudCover) . '%, pluie ' . e(number_format($precipitation, 1, ',', '')) . ' mm/h</li>'
-        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> Kp=' . e(number_format($kp, 1, ',', '')) . ' (Δ ' . e(number_format($kpTrend, 1, ',', '')) . ')</li>'
+        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> '
+        . (is_numeric($kp)
+            ? 'Kp=' . e(number_format((float) $kp, 1, ',', '')) . ' (Δ ' . e(number_format($kpTrend, 1, ',', '')) . ')'
+            : e((string) $i18n['kp_unavailable']))
+        . '</li>'
+        . '<li><strong>' . e((string) $i18n['updated_at']) . '</strong> ' . e($updatedLabel) . '</li>'
         . '</ul>'
         . '</section>'
         . '</div>';
@@ -1021,11 +1030,8 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
-    try {
-        $offset = random_int(0, max(0, $activeCount - 1));
-    } catch (Throwable $throwable) {
-        $offset = 0;
-    }
+    $daySeed = (string) gmdate('Y-m-d');
+    $offset = (int) (hexdec(substr(sha1($daySeed), 0, 8)) % max(1, $activeCount));
 
     $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
     if ($stmt === false) {
