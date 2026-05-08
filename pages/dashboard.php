@@ -72,6 +72,7 @@ ob_start();
         <h1><?= e($t('title')) ?></h1>
       </div>
       <div class="actions">
+        <button class="button secondary" id="open-widgets-panel" type="button" aria-controls="dashboard-widgets-panel" aria-expanded="false"><?= e($t('available_widgets')) ?></button>
         <a class="button secondary" href="<?= e(route_url('newsletter')) ?>"><?= e($t('newsletter')) ?></a>
         <a class="button secondary" href="<?= e(route_url('chatbot')) ?>"><?= e($t('chatbot')) ?></a>
         <button class="button secondary" id="save-dashboard" type="button" <?= $dashboardPersistenceEnabled ? '' : 'disabled' ?>><?= e($t('save_layout')) ?></button>
@@ -97,23 +98,51 @@ ob_start();
       <?php endforeach; ?>
     </div>
   </section>
-  <aside class="card">
-    <h2><?= e($t('available_widgets')) ?></h2>
-    <p class="help"><?= e($t('widgets_help')) ?></p>
-    <div class="stack">
-      <?php foreach ($availableToAdd as $widgetKey => $widget): ?>
-        <article class="widget-card">
-          <header>
-            <strong><?= e((string) $widget['title']) ?></strong>
-          </header>
-          <p class="help"><?= e((string) ($widget['description'] ?? '')) ?></p>
-          <div class="widget-body widget-preview"><?= $safeRenderWidget((string) $widgetKey, $user) ?></div>
-          <button class="button small add-widget" type="button" data-widget="<?= e($widgetKey) ?>" data-title="<?= e((string) $widget['title']) ?>"><?= e($t('add')) ?></button>
-        </article>
-      <?php endforeach; ?>
-    </div>
-  </aside>
 </div>
+<div class="dashboard-offcanvas-backdrop" id="dashboard-widgets-backdrop" hidden></div>
+<aside class="dashboard-offcanvas" id="dashboard-widgets-panel" aria-hidden="true">
+  <header class="dashboard-offcanvas-header">
+    <h2><?= e($t('available_widgets')) ?></h2>
+    <button class="ghost" type="button" id="close-widgets-panel" aria-label="Fermer">✕</button>
+  </header>
+  <p class="help"><?= e($t('widgets_help')) ?></p>
+  <div class="stack">
+    <?php foreach ($availableToAdd as $widgetKey => $widget): ?>
+      <article class="widget-card">
+        <header>
+          <strong><?= e((string) $widget['title']) ?></strong>
+        </header>
+        <p class="help"><?= e((string) ($widget['description'] ?? '')) ?></p>
+        <div class="widget-body widget-preview"><?= $safeRenderWidget((string) $widgetKey, $user) ?></div>
+        <button class="button small add-widget" type="button" data-widget="<?= e($widgetKey) ?>" data-title="<?= e((string) $widget['title']) ?>"><?= e($t('add')) ?></button>
+      </article>
+    <?php endforeach; ?>
+  </div>
+</aside>
+<script nonce="<?= e(csp_nonce()) ?>">
+(() => {
+  const panel = document.getElementById('dashboard-widgets-panel');
+  const backdrop = document.getElementById('dashboard-widgets-backdrop');
+  const openBtn = document.getElementById('open-widgets-panel');
+  const closeBtn = document.getElementById('close-widgets-panel');
+  if (!panel || !backdrop || !openBtn || !closeBtn) return;
+  const open = () => {
+    panel.classList.add('is-open');
+    panel.setAttribute('aria-hidden', 'false');
+    backdrop.hidden = false;
+    openBtn.setAttribute('aria-expanded', 'true');
+  };
+  const close = () => {
+    panel.classList.remove('is-open');
+    panel.setAttribute('aria-hidden', 'true');
+    backdrop.hidden = true;
+    openBtn.setAttribute('aria-expanded', 'false');
+  };
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+})();
+</script>
 <script nonce="<?= e(csp_nonce()) ?>">window.dashboardConfig = <?= json_encode($dashboardConfig, JSON_UNESCAPED_SLASHES) ?>;</script>
 <?php
 echo render_layout((string) ob_get_clean(), $t('title'));
