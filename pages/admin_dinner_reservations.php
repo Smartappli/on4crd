@@ -72,20 +72,43 @@ foreach ($lineColumnUpdates as $columnName => $statement) {
     }
 }
 
+$starterOptionsByLocale = [
+    'fr' => ['potage' => 'Potage maison', 'croquettes' => 'Croquettes de fromage', 'salade' => 'Petite salade'],
+    'en' => ['potage' => 'Homemade soup', 'croquettes' => 'Cheese croquettes', 'salade' => 'Small salad'],
+    'de' => ['potage' => 'Hausgemachte Suppe', 'croquettes' => 'Käsekroketten', 'salade' => 'Kleiner Salat'],
+    'nl' => ['potage' => 'Huisgemaakte soep', 'croquettes' => 'Kaaskroketten', 'salade' => 'Kleine salade'],
+];
+$mainOptionsByLocale = [
+    'fr' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Boulettes sauce tomate', 'vegetarien' => 'Assiette végétarienne'],
+    'en' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Meatballs in tomato sauce', 'vegetarien' => 'Vegetarian plate'],
+    'de' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Fleischbällchen in Tomatensauce', 'vegetarien' => 'Vegetarischer Teller'],
+    'nl' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Gehaktballetjes in tomatensaus', 'vegetarien' => 'Vegetarisch bord'],
+];
+$dessertOptionsByLocale = [
+    'fr' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Mousse au chocolat', 'salade_fruits' => 'Salade de fruits'],
+    'en' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Chocolate mousse', 'salade_fruits' => 'Fruit salad'],
+    'de' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Schokoladenmousse', 'salade_fruits' => 'Obstsalat'],
+    'nl' => ['tiramisu' => 'Tiramisu', 'mousse_choco' => 'Chocolademousse', 'salade_fruits' => 'Fruitsalade'],
+];
+
+$starterOptionLabels = $starterOptionsByLocale[$locale] ?? $starterOptionsByLocale['fr'];
+$mainOptionLabels = $mainOptionsByLocale[$locale] ?? $mainOptionsByLocale['fr'];
+$dessertOptionLabels = $dessertOptionsByLocale[$locale] ?? $dessertOptionsByLocale['fr'];
+
 $starterOptions = [
-    'potage' => ['label' => 'Potage maison', 'price_cents' => 650],
-    'croquettes' => ['label' => 'Croquettes de fromage', 'price_cents' => 750],
-    'salade' => ['label' => 'Petite salade', 'price_cents' => 600],
+    'potage' => ['label' => (string) ($starterOptionLabels['potage'] ?? $starterOptionsByLocale['fr']['potage']), 'price_cents' => 650],
+    'croquettes' => ['label' => (string) ($starterOptionLabels['croquettes'] ?? $starterOptionsByLocale['fr']['croquettes']), 'price_cents' => 750],
+    'salade' => ['label' => (string) ($starterOptionLabels['salade'] ?? $starterOptionsByLocale['fr']['salade']), 'price_cents' => 600],
 ];
 $mainOptions = [
-    'vol_au_vent' => ['label' => 'Vol-au-vent', 'price_cents' => 1800],
-    'boulettes' => ['label' => 'Boulettes sauce tomate', 'price_cents' => 1700],
-    'vegetarien' => ['label' => 'Assiette végétarienne', 'price_cents' => 1650],
+    'vol_au_vent' => ['label' => (string) ($mainOptionLabels['vol_au_vent'] ?? $mainOptionsByLocale['fr']['vol_au_vent']), 'price_cents' => 1800],
+    'boulettes' => ['label' => (string) ($mainOptionLabels['boulettes'] ?? $mainOptionsByLocale['fr']['boulettes']), 'price_cents' => 1700],
+    'vegetarien' => ['label' => (string) ($mainOptionLabels['vegetarien'] ?? $mainOptionsByLocale['fr']['vegetarien']), 'price_cents' => 1650],
 ];
 $dessertOptions = [
-    'tiramisu' => ['label' => 'Tiramisu', 'price_cents' => 600],
-    'mousse_choco' => ['label' => 'Mousse au chocolat', 'price_cents' => 550],
-    'salade_fruits' => ['label' => 'Salade de fruits', 'price_cents' => 500],
+    'tiramisu' => ['label' => (string) ($dessertOptionLabels['tiramisu'] ?? $dessertOptionsByLocale['fr']['tiramisu']), 'price_cents' => 600],
+    'mousse_choco' => ['label' => (string) ($dessertOptionLabels['mousse_choco'] ?? $dessertOptionsByLocale['fr']['mousse_choco']), 'price_cents' => 550],
+    'salade_fruits' => ['label' => (string) ($dessertOptionLabels['salade_fruits'] ?? $dessertOptionsByLocale['fr']['salade_fruits']), 'price_cents' => 500],
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -240,21 +263,21 @@ if ((string) ($_GET['export'] ?? '') === '1') {
     if ($output !== false) {
         fwrite($output, "\xEF\xBB\xBF");
         fputcsv($output, [
-            'Reservation ID',
-            'Nom reservation',
-            'Date',
-            'Entree active',
-            'Entree',
-            'Prix entree',
+            (string) $t['csv_reservation_id'],
+            (string) $t['csv_reserved_by'],
+            (string) $t['csv_created_at'],
+            (string) $t['csv_starter_enabled'],
+            (string) $t['csv_starter'],
+            (string) $t['csv_starter_price'],
             (string) $t['csv_meal_enabled'],
             (string) $t['csv_meal'],
             (string) $t['csv_meal_price'],
             (string) $t['csv_dessert_enabled'],
             (string) $t['csv_dessert'],
             (string) $t['csv_dessert_price'],
-            'Quantite',
-            'Total ligne',
-            'Total reservation',
+            (string) $t['csv_quantity'],
+            (string) $t['csv_line_total'],
+            (string) $t['csv_res_total'],
         ], ';');
 
         foreach ($rows as $row) {
