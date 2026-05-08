@@ -1048,8 +1048,11 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
-    $daySeed = (string) gmdate('Y-m-d');
-    $offset = (int) (hexdec(substr(sha1($daySeed), 0, 8)) % max(1, $activeCount));
+    try {
+        $offset = random_int(0, max(0, $activeCount - 1));
+    } catch (Throwable) {
+        $offset = 0;
+    }
 
     $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
     if ($stmt === false) {
