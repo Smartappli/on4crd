@@ -220,33 +220,13 @@ if (!function_exists('widget_catalog')) {
 function widget_catalog(): array
 {
     return [
-        'welcome' => [
-            'title' => 'Bienvenue',
-            'description' => 'Résumé rapide de votre espace membre.',
-        ],
-        'club_status' => [
-            'title' => 'État du club',
-            'description' => 'Statut des modules actifs du site.',
-        ],
-        'events' => [
-            'title' => 'Prochains événements',
-            'description' => 'Les prochains rendez-vous du club.',
-        ],
-        'chatbot' => [
-            'title' => 'Raymond vous répond',
-            'description' => 'Accès rapide à l’assistant du club.',
-        ],
-        'quick_links' => [
-            'title' => 'Liens rapides',
-            'description' => 'Raccourcis vers les modules membres.',
-        ],
         'propagation' => [
             'title' => 'Propagation',
-            'description' => 'Repères rapides radio du moment.',
+            'description' => 'Indicateurs géomagnétiques en temps réel pour vos QSO.',
         ],
         'open_meteo' => [
             'title' => 'Météo locale',
-            'description' => 'Conditions météo en direct via Open‑Meteo.',
+            'description' => 'Conditions météo locales en temps réel pour l’activité radio.',
         ],
     ];
 }
