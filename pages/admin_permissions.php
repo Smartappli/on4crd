@@ -73,6 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $memberSearch = trim((string) ($_GET['member_q'] ?? ''));
 
 $memberSort = (string) ($_GET['sort'] ?? 'callsign');
+
+$memberPage = max(1, (int) ($_GET['page'] ?? 1));
+$memberPerPage = 25;
 $memberDir = strtolower((string) ($_GET['dir'] ?? 'asc')) === 'desc' ? 'desc' : 'asc';
 $allowedSort = ['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'];
 if (!in_array($memberSort, $allowedSort, true)) {
@@ -92,6 +95,11 @@ if ($memberSearch !== '') {
         return str_contains($hay, $needle);
     }));
 }
+$memberTotal = count($members);
+$memberPages = max(1, (int) ceil($memberTotal / $memberPerPage));
+if ($memberPage > $memberPages) { $memberPage = $memberPages; }
+$members = array_slice($members, ($memberPage - 1) * $memberPerPage, $memberPerPage);
+
 $roles = db()->query('SELECT id, code, label FROM roles ORDER BY label')->fetchAll();
 $permissions = db()->query('SELECT code, label FROM permissions ORDER BY code')->fetchAll();
 $memberRoles = db()->query('SELECT mr.member_id, mr.role_id, r.label FROM member_roles mr INNER JOIN roles r ON r.id = mr.role_id ORDER BY r.label')->fetchAll() ?: [];
@@ -152,7 +160,7 @@ ob_start();
         <label><?= e((string) $t['search']) ?>
             <input type="text" name="member_q" value="<?= e($memberSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         </label>
-        <button class="button secondary" type="submit">OK</button>
+        <input type="hidden" name="sort" value="<?= e($memberSort) ?>"><input type="hidden" name="dir" value="<?= e($memberDir) ?>"><button class="button secondary" type="submit">OK</button>
     </form>
     <div class="table-wrap">
         <table>
@@ -212,6 +220,16 @@ ob_start();
             </tbody>
         </table>
     </div>
+    <?php if ($memberPages > 1): ?>
+        <p class="help" style="margin-top:.75rem;">Page <?= (int) $memberPage ?> / <?= (int) $memberPages ?>
+            <?php if ($memberPage > 1): ?>
+                <a href="?member_q=<?= urlencode($memberSearch) ?>&sort=<?= urlencode($memberSort) ?>&dir=<?= urlencode($memberDir) ?>&page=<?= $memberPage - 1 ?>">←</a>
+            <?php endif; ?>
+            <?php if ($memberPage < $memberPages): ?>
+                <a href="?member_q=<?= urlencode($memberSearch) ?>&sort=<?= urlencode($memberSort) ?>&dir=<?= urlencode($memberDir) ?>&page=<?= $memberPage + 1 ?>">→</a>
+            <?php endif; ?>
+        </p>
+    <?php endif; ?>
 </section>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);
