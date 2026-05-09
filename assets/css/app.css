@@ -607,6 +607,9 @@ textarea:focus-visible {
 @media (max-width: 1280px) {
   .widget-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
+@media (min-width: 1600px) {
+  .widget-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+}
 .button, button {
   border: 0;
   background: var(--accent);
@@ -1790,4 +1793,11 @@ textarea.wysiwyg-source {
 .dashboard-fullwidth > .card {
   width: 100%;
   max-width: 100%;
+}
+.dashboard-fullwidth .row-between {
+  align-items: center;
+}
+.dashboard-fullwidth .actions {
+  margin-top: .25rem;
+  margin-bottom: .9rem;
 }
