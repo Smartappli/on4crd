@@ -400,9 +400,9 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
-                    default => '',
+                    default => 'Les données de propagation sont actuellement indisponibles.',
                 };
-                return '';
+                return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
@@ -656,13 +656,13 @@ function render_ham_weather_advice(array $user = []): string
         try {
             $dtLocal = new DateTimeImmutable($localTime);
             $hour = (int) $dtLocal->format('G');
-            $updatedLabel = $dtLocal->format('Y-m-d H:i');
+            $updatedLabel = $dtLocal->format('d-m-Y H:i');
         } catch (Throwable $throwable) {
             $hour = (int) gmdate('G');
-            $updatedLabel = gmdate('Y-m-d H:i');
+            $updatedLabel = gmdate('d-m-Y H:i');
         }
     } else {
-        $updatedLabel = gmdate('Y-m-d H:i');
+        $updatedLabel = gmdate('d-m-Y H:i');
     }
 
     $humidity = is_numeric($currentWeather['relative_humidity_2m'] ?? null) ? (int) $currentWeather['relative_humidity_2m'] : 60;
@@ -3970,7 +3970,7 @@ function qsl_background_upload_to_data_uri(?array $upload): string
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
         'image/webp' => 'webp',
-        default => '',
+        default => 'Les données de propagation sont actuellement indisponibles.',
     };
     assert_upload_file_is_valid_signature($tmpPath, [$extension]);
     $sanitizedTmpPath = sanitize_uploaded_image_file($tmpPath, $extension);
@@ -5204,7 +5204,7 @@ function admin_module_cards_catalog(): array
 {
     return [
         ['route' => 'admin_modules', 'title' => ['fr' => 'Modules', 'en' => 'Modules', 'de' => 'Module', 'nl' => 'Modules'], 'desc' => ['fr' => 'Activation, désactivation et pilotage global des modules.', 'en' => 'Enable, disable and globally manage modules.', 'de' => 'Module aktivieren, deaktivieren und zentral steuern.', 'nl' => 'Modules activeren, deactiveren en centraal beheren.'], 'permission' => 'modules.manage'],
-        ['route' => 'admin_permissions', 'title' => ['fr' => 'Permissions', 'en' => 'Permissions', 'de' => 'Berechtigungen', 'nl' => 'Rechten'], 'desc' => ['fr' => 'Rôles, droits et affectations.', 'en' => 'Roles, rights and assignments.', 'de' => 'Rollen, Rechte und Zuweisungen.', 'nl' => 'Rollen, rechten en toewijzingen.']],
+        ['route' => 'admin_permissions', 'title' => ['fr' => 'Gestion des membres', 'en' => 'Member management', 'de' => 'Mitgliederverwaltung', 'nl' => 'Ledenbeheer'], 'desc' => ['fr' => 'Membres, rôles, droits et affectations.', 'en' => 'Members, roles, rights and assignments.', 'de' => 'Mitglieder, Rollen, Rechte und Zuweisungen.', 'nl' => 'Leden, rollen, rechten en toewijzingen.']],
         ['route' => 'admin_news', 'title' => ['fr' => 'Actualités', 'en' => 'News', 'de' => 'Neuigkeiten', 'nl' => 'Nieuws'], 'desc' => ['fr' => 'Sections, rédaction et modération.', 'en' => 'Sections, writing and moderation.', 'de' => 'Bereiche, Redaktion und Moderation.', 'nl' => 'Secties, redactie en moderatie.'], 'module' => 'news'],
         ['route' => 'admin_articles', 'title' => ['fr' => 'Articles', 'en' => 'Articles', 'de' => 'Artikel', 'nl' => 'Artikels'], 'desc' => ['fr' => 'Articles techniques publics.', 'en' => 'Public technical articles.', 'de' => 'Öffentliche technische Artikel.', 'nl' => 'Publieke technische artikels.'], 'module' => 'articles'],
         ['route' => 'admin_committee', 'title' => ['fr' => 'Comité', 'en' => 'Committee', 'de' => 'Komitee', 'nl' => 'Comité'], 'desc' => ['fr' => 'Membres du comité, rôle, ordre et biographie.', 'en' => 'Committee members, role, order and biography.', 'de' => 'Komiteemitglieder, Rolle, Reihenfolge und Biografie.', 'nl' => 'Comitéleden, rol, volgorde en biografie.'], 'module' => 'committee'],
