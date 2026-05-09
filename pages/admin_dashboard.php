@@ -71,27 +71,5 @@ ob_start();
     </form>
 </div>
 
-<div class="card">
-    <h2><?= e((string) $t['members_title']) ?></h2>
-    <p class="help"><?= e((string) $t['members_help']) ?></p>
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin: 0.75rem 0 1rem;">
-        <article class="card" style="margin: 0; padding: 0.75rem;">
-            <p class="help" style="margin:0;"><?= e((string) $t['members_total']) ?></p>
-            <p style="margin:0.25rem 0 0; font-size:1.5rem; font-weight:700;"><?= (int) $memberStats['total'] ?></p>
-        </article>
-        <article class="card" style="margin: 0; padding: 0.75rem;">
-            <p class="help" style="margin:0;"><?= e((string) $t['members_active']) ?></p>
-            <p style="margin:0.25rem 0 0; font-size:1.5rem; font-weight:700;"><?= (int) $memberStats['active'] ?></p>
-        </article>
-        <article class="card" style="margin: 0; padding: 0.75rem;">
-            <p class="help" style="margin:0;"><?= e((string) $t['members_committee']) ?></p>
-            <p style="margin:0.25rem 0 0; font-size:1.5rem; font-weight:700;"><?= (int) $memberStats['committee'] ?></p>
-        </article>
-    </div>
-    <p>
-        <a class="button" href="<?= e(route_url('admin_permissions')) ?>"><?= e((string) $t['members_roles']) ?></a>
-        <a class="button secondary" href="<?= e(route_url('admin_committee')) ?>"><?= e((string) $t['members_committee_cta']) ?></a>
-    </p>
-</div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);
