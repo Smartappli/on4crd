@@ -5,10 +5,10 @@ require_module_enabled('dashboard');
 $user = require_login();
 $locale = current_locale();
 $i18n = [
-    'fr' => ['meta_title' => 'Tableau de bord membre', 'meta_desc' => 'Personnalisez votre tableau de bord ON4CRD avec vos widgets favoris.', 'title' => 'Tableau de bord membre', 'newsletter' => 'Newsletter', 'chatbot' => 'Raymond vous répond', 'save_layout' => 'Enregistrer la disposition', 'widget_unavailable' => 'Widget temporairement indisponible.', 'table_missing' => 'La table dashboard_widgets est absente : la disposition des widgets ne peut pas être enregistrée.', 'available_widgets' => 'Widgets disponibles', 'widgets_help' => 'Installez vos widgets, puis glissez-déposez pour réordonner la grille.', 'no_widgets' => 'Aucun widget activé pour le moment.', 'add' => 'Ajouter'],
-    'en' => ['meta_title' => 'Member dashboard', 'meta_desc' => 'Customize your ON4CRD dashboard with your favorite widgets.', 'title' => 'Member dashboard', 'newsletter' => 'Newsletter', 'chatbot' => 'Raymond answers you', 'save_layout' => 'Save layout', 'widget_unavailable' => 'Widget temporarily unavailable.', 'table_missing' => 'The dashboard_widgets table is missing: widget layout cannot be saved.', 'available_widgets' => 'Available widgets', 'widgets_help' => 'Install your widgets, then drag and drop to reorder the grid.', 'no_widgets' => 'No widgets are currently enabled.', 'add' => 'Add'],
-    'de' => ['meta_title' => 'Mitglieder-Dashboard', 'meta_desc' => 'Passen Sie Ihr ON4CRD-Dashboard mit Ihren bevorzugten Widgets an.', 'title' => 'Mitglieder-Dashboard', 'newsletter' => 'Newsletter', 'chatbot' => 'Raymond antwortet', 'save_layout' => 'Layout speichern', 'widget_unavailable' => 'Widget vorübergehend nicht verfügbar.', 'table_missing' => 'Die Tabelle dashboard_widgets fehlt: Das Widget-Layout kann nicht gespeichert werden.', 'available_widgets' => 'Verfügbare Widgets', 'widgets_help' => 'Installieren Sie Ihre Widgets und ordnen Sie das Raster per Drag-and-drop neu.', 'no_widgets' => 'Derzeit sind keine Widgets aktiviert.', 'add' => 'Hinzufügen'],
-    'nl' => ['meta_title' => 'Leden-dashboard', 'meta_desc' => 'Pas je ON4CRD-dashboard aan met je favoriete widgets.', 'title' => 'Leden-dashboard', 'newsletter' => 'Nieuwsbrief', 'chatbot' => 'Raymond antwoordt', 'save_layout' => 'Indeling opslaan', 'widget_unavailable' => 'Widget tijdelijk niet beschikbaar.', 'table_missing' => 'De tabel dashboard_widgets ontbreekt: de widgetindeling kan niet worden opgeslagen.', 'available_widgets' => 'Beschikbare widgets', 'widgets_help' => 'Installeer je widgets en herschik het raster met slepen en neerzetten.', 'no_widgets' => 'Aucun widget activé pour le moment.', 'add' => 'Toevoegen'],
+    'fr' => ['meta_title' => 'Tableau de bord membre', 'meta_desc' => 'Personnalisez votre tableau de bord ON4CRD avec vos widgets favoris.', 'title' => 'Tableau de bord membre', 'notifications' => 'Notifications', 'chatbot' => 'Assistant', 'fullscreen' => 'Plein écran', 'save_layout' => 'Enregistrer', 'widget_unavailable' => 'Widget temporairement indisponible.', 'table_missing' => 'La table dashboard_widgets est absente : la disposition des widgets ne peut pas être enregistrée.', 'available_widgets' => 'Widgets', 'widgets_help' => 'Installez vos widgets, puis glissez-déposez pour réordonner la grille.', 'no_widgets' => 'Aucun widget activé pour le moment.', 'add' => 'Ajouter'],
+    'en' => ['meta_title' => 'Member dashboard', 'meta_desc' => 'Customize your ON4CRD dashboard with your favorite widgets.', 'title' => 'Member dashboard', 'notifications' => 'Notifications', 'chatbot' => 'Assistant', 'fullscreen' => 'Fullscreen', 'save_layout' => 'Save', 'widget_unavailable' => 'Widget temporarily unavailable.', 'table_missing' => 'The dashboard_widgets table is missing: widget layout cannot be saved.', 'available_widgets' => 'Widgets', 'widgets_help' => 'Install your widgets, then drag and drop to reorder the grid.', 'no_widgets' => 'No widgets are currently enabled.', 'add' => 'Add'],
+    'de' => ['meta_title' => 'Mitglieder-Dashboard', 'meta_desc' => 'Passen Sie Ihr ON4CRD-Dashboard mit Ihren bevorzugten Widgets an.', 'title' => 'Mitglieder-Dashboard', 'notifications' => 'Benachrichtigungen', 'chatbot' => 'Assistent', 'fullscreen' => 'Vollbild', 'save_layout' => 'Speichern', 'widget_unavailable' => 'Widget vorübergehend nicht verfügbar.', 'table_missing' => 'Die Tabelle dashboard_widgets fehlt: Das Widget-Layout kann nicht gespeichert werden.', 'available_widgets' => 'Widgets', 'widgets_help' => 'Installieren Sie Ihre Widgets und ordnen Sie das Raster per Drag-and-drop neu.', 'no_widgets' => 'Derzeit sind keine Widgets aktiviert.', 'add' => 'Hinzufügen'],
+    'nl' => ['meta_title' => 'Leden-dashboard', 'meta_desc' => 'Pas je ON4CRD-dashboard aan met je favoriete widgets.', 'title' => 'Leden-dashboard', 'notifications' => 'Meldingen', 'chatbot' => 'Assistent', 'fullscreen' => 'Volledig scherm', 'save_layout' => 'Opslaan', 'widget_unavailable' => 'Widget tijdelijk niet beschikbaar.', 'table_missing' => 'De tabel dashboard_widgets ontbreekt: de widgetindeling kan niet worden opgeslagen.', 'available_widgets' => 'Widgets', 'widgets_help' => 'Installeer je widgets en herschik het raster met slepen en neerzetten.', 'no_widgets' => 'Er zijn momenteel geen widgets geactiveerd.', 'add' => 'Toevoegen'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
@@ -65,16 +65,18 @@ $dashboardConfig = [
 
 ob_start();
 ?>
-<div class="split-home split">
+<div class="dashboard-fullwidth" id="dashboard-shell">
   <section class="card">
     <div class="row-between">
       <div>
         <h1><?= e($t('title')) ?></h1>
       </div>
       <div class="actions">
-        <a class="button secondary" href="<?= e(route_url('newsletter')) ?>"><?= e($t('newsletter')) ?></a>
-        <a class="button secondary" href="<?= e(route_url('chatbot')) ?>"><?= e($t('chatbot')) ?></a>
-        <button class="button secondary" id="save-dashboard" type="button" <?= $dashboardPersistenceEnabled ? '' : 'disabled' ?>><?= e($t('save_layout')) ?></button>
+        <button class="button secondary small" id="open-widgets-panel" type="button" aria-controls="dashboard-widgets-panel" aria-expanded="false">🧩 <?= e($t('available_widgets')) ?></button>
+        <button class="button secondary small" id="dashboard-fullscreen-toggle" type="button">⛶ <?= e($t('fullscreen')) ?></button>
+        <a class="button secondary small" href="<?= e(route_url('news')) ?>">🔔 <?= e($t('notifications')) ?></a>
+        <a class="button secondary small" href="<?= e(route_url('chatbot')) ?>">🤖 <?= e($t('chatbot')) ?></a>
+        <button class="button secondary small" id="save-dashboard" type="button" <?= $dashboardPersistenceEnabled ? '' : 'disabled' ?>>💾 <?= e($t('save_layout')) ?></button>
         <span class="help" id="dashboard-save-status" role="status" aria-live="polite"></span>
       </div>
     </div>
@@ -97,23 +99,64 @@ ob_start();
       <?php endforeach; ?>
     </div>
   </section>
-  <aside class="card">
-    <h2><?= e($t('available_widgets')) ?></h2>
-    <p class="help"><?= e($t('widgets_help')) ?></p>
-    <div class="stack">
-      <?php foreach ($availableToAdd as $widgetKey => $widget): ?>
-        <article class="widget-card">
-          <header>
-            <strong><?= e((string) $widget['title']) ?></strong>
-          </header>
-          <p class="help"><?= e((string) ($widget['description'] ?? '')) ?></p>
-          <div class="widget-body widget-preview"><?= $safeRenderWidget((string) $widgetKey, $user) ?></div>
-          <button class="button small add-widget" type="button" data-widget="<?= e($widgetKey) ?>" data-title="<?= e((string) $widget['title']) ?>"><?= e($t('add')) ?></button>
-        </article>
-      <?php endforeach; ?>
-    </div>
-  </aside>
 </div>
+<div class="dashboard-offcanvas-backdrop" id="dashboard-widgets-backdrop" hidden></div>
+<aside class="dashboard-offcanvas" id="dashboard-widgets-panel" aria-hidden="true">
+  <header class="dashboard-offcanvas-header">
+    <h2><?= e($t('available_widgets')) ?></h2>
+    <button class="ghost" type="button" id="close-widgets-panel" aria-label="Fermer">✕</button>
+  </header>
+  <p class="help"><?= e($t('widgets_help')) ?></p>
+  <div class="stack">
+    <?php foreach ($availableToAdd as $widgetKey => $widget): ?>
+      <article class="widget-card">
+        <header>
+          <strong><?= e((string) $widget['title']) ?></strong>
+        </header>
+        <p class="help"><?= e((string) ($widget['description'] ?? '')) ?></p>
+        <div class="widget-body widget-preview"><?= $safeRenderWidget((string) $widgetKey, $user) ?></div>
+        <button class="button small add-widget" type="button" data-widget="<?= e($widgetKey) ?>" data-title="<?= e((string) $widget['title']) ?>"><?= e($t('add')) ?></button>
+      </article>
+    <?php endforeach; ?>
+  </div>
+</aside>
+<script nonce="<?= e(csp_nonce()) ?>">
+(() => {
+  const panel = document.getElementById('dashboard-widgets-panel');
+  const backdrop = document.getElementById('dashboard-widgets-backdrop');
+  const openBtn = document.getElementById('open-widgets-panel');
+  const closeBtn = document.getElementById('close-widgets-panel');
+  if (!panel || !backdrop || !openBtn || !closeBtn) return;
+  const open = () => {
+    panel.classList.add('is-open');
+    panel.setAttribute('aria-hidden', 'false');
+    backdrop.hidden = false;
+    openBtn.setAttribute('aria-expanded', 'true');
+  };
+  const close = () => {
+    panel.classList.remove('is-open');
+    panel.setAttribute('aria-hidden', 'true');
+    backdrop.hidden = true;
+    openBtn.setAttribute('aria-expanded', 'false');
+  };
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  const fsBtn = document.getElementById('dashboard-fullscreen-toggle');
+  const shell = document.getElementById('dashboard-shell');
+  if (fsBtn && shell && document.fullscreenEnabled) {
+    fsBtn.addEventListener('click', async () => {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else {
+          await shell.requestFullscreen();
+        }
+      } catch (_e) {}
+    });
+  }
+})();
+</script>
 <script nonce="<?= e(csp_nonce()) ?>">window.dashboardConfig = <?= json_encode($dashboardConfig, JSON_UNESCAPED_SLASHES) ?>;</script>
 <?php
 echo render_layout((string) ob_get_clean(), $t('title'));
