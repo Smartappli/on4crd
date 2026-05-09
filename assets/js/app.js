@@ -48,8 +48,10 @@
   });
 
   const liveClocks = document.querySelectorAll('[data-live-clock]');
+  const liveDates = document.querySelectorAll('[data-live-date]');
   if (liveClocks.length > 0) {
     const formatterCache = new Map();
+    const dateFormatterCache = new Map();
     const defaultLocale = document.documentElement.lang || 'fr-FR';
     const getFormatter = (timeZone, locale) => {
       const cacheKey = `${timeZone}|${locale}`;
@@ -74,6 +76,23 @@
           : zoneValue;
         clockNode.textContent = getFormatter(timeZone, localeValue).format(now);
         clockNode.setAttribute('datetime', now.toISOString());
+      });
+      liveDates.forEach((dateNode) => {
+        const zoneValue = dateNode.getAttribute('data-timezone') || 'UTC';
+        const localeValue = dateNode.getAttribute('data-locale') || defaultLocale;
+        const timeZone = zoneValue === 'local'
+          ? Intl.DateTimeFormat().resolvedOptions().timeZone
+          : zoneValue;
+        const cacheKey = `${timeZone}|${localeValue}`;
+        if (!dateFormatterCache.has(cacheKey)) {
+          dateFormatterCache.set(cacheKey, new Intl.DateTimeFormat(localeValue, {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            timeZone,
+          }));
+        }
+        dateNode.textContent = dateFormatterCache.get(cacheKey).format(now);
       });
     };
     updateClocks();
