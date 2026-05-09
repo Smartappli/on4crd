@@ -5,10 +5,10 @@ require_permission('admin.access');
 $user = require_login();
 $locale = current_locale();
 $i18n = [
-    'fr' => ['role_assigned' => 'Rôle attribué.', 'role_removed' => 'Rôle retiré.', 'member_updated' => 'Membre mis à jour.', 'title' => 'Gestion complète des membres', 'th_permission' => 'Permission', 'th_label' => 'Libellé', 'assign_role' => 'Attribuer un rôle', 'member' => 'Membre', 'role' => 'Rôle', 'assign' => 'Attribuer', 'layout' => 'Permissions', 'meta_desc' => 'Gestion des rôles, permissions et profils des membres.', 'members' => 'Membres', 'th_callsign' => 'Indicatif', 'th_name' => 'Nom', 'th_email' => 'Email', 'th_locator' => 'Locator', 'th_active' => 'Actif', 'th_committee' => 'Comité', 'th_roles' => 'Rôles', 'th_actions' => 'Actions', 'save' => 'Enregistrer', 'remove_role' => 'Retirer', 'none' => 'Aucun rôle'],
-    'en' => ['role_assigned' => 'Role assigned.', 'role_removed' => 'Role removed.', 'member_updated' => 'Member updated.', 'title' => 'Complete member management', 'th_permission' => 'Permission', 'th_label' => 'Label', 'assign_role' => 'Assign a role', 'member' => 'Member', 'role' => 'Role', 'assign' => 'Assign', 'layout' => 'Permissions', 'meta_desc' => 'Manage roles, permissions and member profiles.', 'members' => 'Members', 'th_callsign' => 'Callsign', 'th_name' => 'Name', 'th_email' => 'Email', 'th_locator' => 'Locator', 'th_active' => 'Active', 'th_committee' => 'Committee', 'th_roles' => 'Roles', 'th_actions' => 'Actions', 'save' => 'Save', 'remove_role' => 'Remove', 'none' => 'No role'],
-    'de' => ['role_assigned' => 'Rolle zugewiesen.', 'role_removed' => 'Rolle entfernt.', 'member_updated' => 'Mitglied aktualisiert.', 'title' => 'Vollständige Mitgliederverwaltung', 'th_permission' => 'Berechtigung', 'th_label' => 'Bezeichnung', 'assign_role' => 'Rolle zuweisen', 'member' => 'Mitglied', 'role' => 'Rolle', 'assign' => 'Zuweisen', 'layout' => 'Berechtigungen', 'meta_desc' => 'Rollen, Berechtigungen und Mitgliedsprofile verwalten.', 'members' => 'Mitglieder', 'th_callsign' => 'Rufzeichen', 'th_name' => 'Name', 'th_email' => 'E-Mail', 'th_locator' => 'Locator', 'th_active' => 'Aktiv', 'th_committee' => 'Komitee', 'th_roles' => 'Rollen', 'th_actions' => 'Aktionen', 'save' => 'Speichern', 'remove_role' => 'Entfernen', 'none' => 'Keine Rolle'],
-    'nl' => ['role_assigned' => 'Rol toegewezen.', 'role_removed' => 'Rol verwijderd.', 'member_updated' => 'Lid bijgewerkt.', 'title' => 'Volledig ledenbeheer', 'th_permission' => 'Recht', 'th_label' => 'Label', 'assign_role' => 'Rol toewijzen', 'member' => 'Lid', 'role' => 'Rol', 'assign' => 'Toewijzen', 'layout' => 'Rechten', 'meta_desc' => 'Beheer van rollen, rechten en ledenprofielen.', 'members' => 'Leden', 'th_callsign' => 'Callsign', 'th_name' => 'Naam', 'th_email' => 'E-mail', 'th_locator' => 'Locator', 'th_active' => 'Actief', 'th_committee' => 'Comité', 'th_roles' => 'Rollen', 'th_actions' => 'Acties', 'save' => 'Opslaan', 'remove_role' => 'Verwijderen', 'none' => 'Geen rol'],
+    'fr' => ['role_assigned' => 'Rôle attribué.', 'role_removed' => 'Rôle retiré.', 'member_updated' => 'Membre mis à jour.', 'title' => 'Gestion complète des membres', 'th_permission' => 'Permission', 'th_label' => 'Libellé', 'assign_role' => 'Attribuer un rôle', 'member' => 'Membre', 'role' => 'Rôle', 'assign' => 'Attribuer', 'layout' => 'Permissions', 'meta_desc' => 'Gestion des rôles, permissions et profils des membres.', 'members' => 'Membres', 'th_callsign' => 'Indicatif', 'th_name' => 'Nom', 'th_email' => 'Email', 'th_locator' => 'Locator', 'th_active' => 'Actif', 'th_committee' => 'Comité', 'th_roles' => 'Rôles', 'th_actions' => 'Actions', 'save' => 'Enregistrer', 'remove_role' => 'Retirer', 'none' => 'Aucun rôle', 'err_callsign' => 'Indicatif requis.', 'err_email' => 'Email invalide.', 'err_locator' => 'Locator invalide.', 'search' => 'Rechercher un membre', 'search_ph' => 'Indicatif, nom, email…'],
+    'en' => ['role_assigned' => 'Role assigned.', 'role_removed' => 'Role removed.', 'member_updated' => 'Member updated.', 'title' => 'Complete member management', 'th_permission' => 'Permission', 'th_label' => 'Label', 'assign_role' => 'Assign a role', 'member' => 'Member', 'role' => 'Role', 'assign' => 'Assign', 'layout' => 'Permissions', 'meta_desc' => 'Manage roles, permissions and member profiles.', 'members' => 'Members', 'th_callsign' => 'Callsign', 'th_name' => 'Name', 'th_email' => 'Email', 'th_locator' => 'Locator', 'th_active' => 'Active', 'th_committee' => 'Committee', 'th_roles' => 'Roles', 'th_actions' => 'Actions', 'save' => 'Save', 'remove_role' => 'Remove', 'none' => 'No role', 'err_callsign' => 'Callsign required.', 'err_email' => 'Invalid email.', 'err_locator' => 'Invalid locator.', 'search' => 'Search member', 'search_ph' => 'Callsign, name, email…'],
+    'de' => ['role_assigned' => 'Rolle zugewiesen.', 'role_removed' => 'Rolle entfernt.', 'member_updated' => 'Mitglied aktualisiert.', 'title' => 'Vollständige Mitgliederverwaltung', 'th_permission' => 'Berechtigung', 'th_label' => 'Bezeichnung', 'assign_role' => 'Rolle zuweisen', 'member' => 'Mitglied', 'role' => 'Rolle', 'assign' => 'Zuweisen', 'layout' => 'Berechtigungen', 'meta_desc' => 'Rollen, Berechtigungen und Mitgliedsprofile verwalten.', 'members' => 'Mitglieder', 'th_callsign' => 'Rufzeichen', 'th_name' => 'Name', 'th_email' => 'E-Mail', 'th_locator' => 'Locator', 'th_active' => 'Aktiv', 'th_committee' => 'Komitee', 'th_roles' => 'Rollen', 'th_actions' => 'Aktionen', 'save' => 'Speichern', 'remove_role' => 'Entfernen', 'none' => 'Keine Rolle', 'err_callsign' => 'Rufzeichen erforderlich.', 'err_email' => 'Ungültige E-Mail.', 'err_locator' => 'Ungültiger Locator.', 'search' => 'Mitglied suchen', 'search_ph' => 'Rufzeichen, Name, E-Mail…'],
+    'nl' => ['role_assigned' => 'Rol toegewezen.', 'role_removed' => 'Rol verwijderd.', 'member_updated' => 'Lid bijgewerkt.', 'title' => 'Volledig ledenbeheer', 'th_permission' => 'Recht', 'th_label' => 'Label', 'assign_role' => 'Rol toewijzen', 'member' => 'Lid', 'role' => 'Rol', 'assign' => 'Toewijzen', 'layout' => 'Rechten', 'meta_desc' => 'Beheer van rollen, rechten en ledenprofielen.', 'members' => 'Leden', 'th_callsign' => 'Callsign', 'th_name' => 'Naam', 'th_email' => 'E-mail', 'th_locator' => 'Locator', 'th_active' => 'Actief', 'th_committee' => 'Comité', 'th_roles' => 'Rollen', 'th_actions' => 'Acties', 'save' => 'Opslaan', 'remove_role' => 'Verwijderen', 'none' => 'Geen rol', 'err_callsign' => 'Callsign verplicht.', 'err_email' => 'Ongeldig e-mailadres.', 'err_locator' => 'Ongeldige locator.', 'search' => 'Lid zoeken', 'search_ph' => 'Callsign, naam, e-mail…'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
 
@@ -37,11 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_flash('success', (string) $t['role_removed']);
         }
         if ($action === 'update_member') {
+            $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
+            $fullName = trim((string) ($_POST['full_name'] ?? ''));
+            $email = trim((string) ($_POST['email'] ?? ''));
+            $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
+            if ($callsign === '') { throw new RuntimeException((string) $t['err_callsign']); }
+            if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) { throw new RuntimeException((string) $t['err_email']); }
+            if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) { throw new RuntimeException((string) $t['err_locator']); }
             db()->prepare('UPDATE members SET callsign = ?, full_name = ?, email = ?, locator = ?, is_active = ?, is_committee = ? WHERE id = ? LIMIT 1')->execute([
-                trim((string) ($_POST['callsign'] ?? '')),
-                trim((string) ($_POST['full_name'] ?? '')),
-                trim((string) ($_POST['email'] ?? '')),
-                strtoupper(trim((string) ($_POST['locator'] ?? ''))),
+                $callsign,
+                $fullName,
+                $email,
+                $locator,
                 isset($_POST['is_active']) ? 1 : 0,
                 isset($_POST['is_committee']) ? 1 : 0,
                 (int) ($_POST['member_id'] ?? 0),
@@ -55,7 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$memberSearch = trim((string) ($_GET['member_q'] ?? ''));
 $members = db()->query('SELECT id, callsign, full_name, email, locator, is_active, is_committee FROM members ORDER BY callsign')->fetchAll();
+if ($memberSearch !== '') {
+    $needle = mb_safe_strtolower($memberSearch);
+    $members = array_values(array_filter($members, static function (array $m) use ($needle): bool {
+        $hay = mb_safe_strtolower((string) ($m['callsign'] ?? '') . ' ' . (string) ($m['full_name'] ?? '') . ' ' . (string) ($m['email'] ?? ''));
+        return str_contains($hay, $needle);
+    }));
+}
 $roles = db()->query('SELECT id, code, label FROM roles ORDER BY label')->fetchAll();
 $permissions = db()->query('SELECT code, label FROM permissions ORDER BY code')->fetchAll();
 $memberRoles = db()->query('SELECT mr.member_id, mr.role_id, r.label FROM member_roles mr INNER JOIN roles r ON r.id = mr.role_id ORDER BY r.label')->fetchAll() ?: [];
@@ -111,6 +126,12 @@ ob_start();
 
 <section class="card" style="margin-top:1rem;">
     <h2><?= e((string) $t['members']) ?></h2>
+    <form method="get" style="margin:.5rem 0 1rem;">
+        <label><?= e((string) $t['search']) ?>
+            <input type="text" name="member_q" value="<?= e($memberSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
+        </label>
+        <button class="button secondary" type="submit">OK</button>
+    </form>
     <div class="table-wrap">
         <table>
             <thead>
