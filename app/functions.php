@@ -2392,9 +2392,13 @@ if (!function_exists('answer_question_from_knowledge')) {
                 body MEDIUMTEXT NOT NULL,
                 url VARCHAR(255) DEFAULT NULL,
                 embedding_json MEDIUMTEXT NOT NULL,
+                embedding_provider VARCHAR(48) NOT NULL DEFAULT "llphant",
+                embedding_model VARCHAR(128) NOT NULL DEFAULT "",
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 UNIQUE KEY uniq_source (source_type, source_key)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+            try { db()->exec('ALTER TABLE rag_chunks ADD COLUMN embedding_provider VARCHAR(48) NOT NULL DEFAULT "llphant"'); } catch (Throwable) { /* column may already exist */ }
+            try { db()->exec('ALTER TABLE rag_chunks ADD COLUMN embedding_model VARCHAR(128) NOT NULL DEFAULT ""'); } catch (Throwable) { /* column may already exist */ }
             try { db()->exec('CREATE INDEX idx_rag_chunks_updated_at ON rag_chunks (updated_at)'); } catch (Throwable) { /* index may already exist */ }
             try { db()->exec('CREATE INDEX idx_rag_chunks_source_type_updated_at ON rag_chunks (source_type, updated_at)'); } catch (Throwable) { /* index may already exist */ }
             return true;
@@ -2450,25 +2454,141 @@ if (!function_exists('answer_question_from_knowledge')) {
         return $chunks;
     }
 
+    function rag_library_document_body(array $doc): string
+    {
+        $description = trim((string) ($doc['description'] ?? ''));
+        $extracted = trim((string) ($doc['extracted_text'] ?? ''));
+        $parts = [];
+        if ($description !== '') {
+            $parts[] = $description;
+        }
+        if ($extracted !== '') {
+            $parts[] = $extracted;
+        }
+
+        $filePath = trim((string) ($doc['file_path'] ?? ''));
+        if ($extracted === '' && $filePath !== '') {
+            $absPath = storage_path($filePath);
+            $ext = mb_safe_strtolower((string) pathinfo($absPath, PATHINFO_EXTENSION));
+            $allowed = ['txt', 'md', 'csv', 'json', 'log', 'xml', 'html', 'htm', 'docx', 'pdf'];
+            if (is_file($absPath) && in_array($ext, $allowed, true)) {
+                $raw = '';
+                if ($ext === 'docx') {
+                    $raw = rag_extract_docx_text($absPath);
+                } elseif ($ext === 'pdf') {
+                    $raw = rag_extract_pdf_text($absPath);
+                } else {
+                    $fileRaw = @file_get_contents($absPath);
+                    if (is_string($fileRaw)) {
+                        $raw = $fileRaw;
+                    }
+                }
+                if ($raw !== '') {
+                    if ($ext === 'html' || $ext === 'htm') {
+                        $raw = strip_tags($raw);
+                    }
+                    $parts[] = trim((string) preg_replace('/\s+/u', ' ', $raw));
+                }
+            }
+        }
+
+        return trim(implode("\n", array_filter($parts, static fn ($v): bool => is_string($v) && $v !== '')));
+    }
+
+    function rag_extract_docx_text(string $path): string
+    {
+        if (!class_exists('ZipArchive')) {
+            return '';
+        }
+        $zip = new ZipArchive();
+        if ($zip->open($path) !== true) {
+            return '';
+        }
+        $xml = $zip->getFromName('word/document.xml');
+        $zip->close();
+        if (!is_string($xml) || $xml === '') {
+            return '';
+        }
+        return trim((string) preg_replace('/\s+/u', ' ', strip_tags($xml)));
+    }
+
+    function rag_extract_pdf_text(string $path): string
+    {
+        $binary = trim((string) @shell_exec('command -v pdftotext 2>/dev/null'));
+        if ($binary === '') {
+            return '';
+        }
+        $cmd = $binary . ' -layout ' . escapeshellarg($path) . ' - 2>/dev/null';
+        $output = @shell_exec($cmd);
+        if (!is_string($output) || trim($output) === '') {
+            return '';
+        }
+        return trim((string) preg_replace('/\s+/u', ' ', $output));
+    }
+
+    /** @return list<float> */
+    function rag_embedding_with_llphant(string $text): array
+    {
+        if (!class_exists('\\LLPhant\\Embeddings\\EmbeddingGenerator\\EmbeddingGeneratorInterface')) {
+            return [];
+        }
+
+        try {
+            // Preferred integration: app-level LLPhant adapter returning an embedding generator instance.
+            if (function_exists('llphant_embedding_generator')) {
+                $generator = llphant_embedding_generator();
+                if (is_object($generator) && method_exists($generator, 'embedQuery')) {
+                    $embedding = $generator->embedQuery($text);
+                    if (is_array($embedding)) {
+                        return array_values(array_map('floatval', array_filter($embedding, 'is_numeric')));
+                    }
+                }
+            }
+
+            // Backward-compatible integration hook kept for legacy projects.
+            if (function_exists('llphant_embedding_vector')) {
+                $vector = llphant_embedding_vector($text);
+                if (is_array($vector)) {
+                    return array_values(array_map('floatval', array_filter($vector, 'is_numeric')));
+                }
+            }
+        } catch (Throwable) {
+            return [];
+        }
+
+        return [];
+    }
+
+    function rag_llphant_is_ready(): bool
+    {
+        if (!class_exists('\\LLPhant\\Embeddings\\EmbeddingGenerator\\EmbeddingGeneratorInterface')) {
+            return false;
+        }
+
+        return function_exists('llphant_embedding_generator') || function_exists('llphant_embedding_vector');
+    }
+
+    function rag_llphant_model_name(): string
+    {
+        $model = trim((string) env('RAG_LLPHANT_EMBEDDING_MODEL', ''));
+        return $model;
+    }
+
     /** @return list<float> */
     function rag_embedding_vector(string $text, int $dim = 96): array
     {
-        $vector = array_fill(0, $dim, 0.0);
-        $tokens = rag_tokens($text);
-        if ($tokens === []) { return $vector; }
-        foreach ($tokens as $token) {
-            $hash = abs(crc32($token));
-            $index = $hash % $dim;
-            $sign = (($hash >> 1) & 1) === 0 ? 1.0 : -1.0;
-            $vector[$index] += $sign;
+        $trimmed = trim($text);
+        if ($trimmed === '') {
+            return array_fill(0, $dim, 0.0);
         }
-        $norm = 0.0;
-        foreach ($vector as $v) { $norm += $v * $v; }
-        $norm = sqrt($norm);
-        if ($norm > 0) {
-            foreach ($vector as $i => $v) { $vector[$i] = $v / $norm; }
+
+        // RAG embeddings are now fully LLPhant-based.
+        $providerVector = rag_embedding_with_llphant($trimmed);
+        if ($providerVector !== []) {
+            return $providerVector;
         }
-        return $vector;
+
+        return [];
     }
 
     /** @param list<float> $a @param list<float> $b */
@@ -2642,6 +2762,23 @@ if (!function_exists('answer_question_from_knowledge')) {
         }
     }
 
+    function rag_chunks_need_embedding_refresh(string $provider, string $model): bool
+    {
+        try {
+            $stmt = db()->prepare('SELECT COUNT(*) FROM rag_chunks WHERE embedding_provider = ? AND embedding_model = ?');
+            $stmt->execute([$provider, $model]);
+            $matching = (int) ($stmt->fetchColumn() ?: 0);
+            $totalStmt = db()->query('SELECT COUNT(*) FROM rag_chunks');
+            $total = (int) ($totalStmt ? $totalStmt->fetchColumn() : 0);
+            if ($total <= 0) {
+                return true;
+            }
+            return $matching !== $total;
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
     function rag_reindex_lock_file(): string
     {
         return cache_dir_path() . '/rag-reindex.lock';
@@ -2737,12 +2874,17 @@ function answer_question_from_knowledge(string $question): array
             try {
                 $countStmt = db()->query('SELECT COUNT(*) FROM rag_chunks');
                 $chunkCount = (int) ($countStmt ? $countStmt->fetchColumn() : 0);
-                $mustReindex = $chunkCount === 0 || rag_chunks_are_stale(43200);
-                if ($mustReindex && rag_can_reindex_now(900)) {
+                $embeddingProvider = 'llphant';
+                $embeddingModel = rag_llphant_model_name();
+                $mustReindex = $chunkCount === 0
+                    || rag_chunks_are_stale(43200)
+                    || rag_chunks_need_embedding_refresh($embeddingProvider, $embeddingModel);
+                $llphantReady = rag_llphant_is_ready();
+                if ($llphantReady && $mustReindex && rag_can_reindex_now(900)) {
                     db()->beginTransaction();
                     try {
                         db()->exec('DELETE FROM rag_chunks');
-                        $insert = db()->prepare('INSERT INTO rag_chunks (source_type, source_key, title, body, url, embedding_json) VALUES (?,?,?,?,?,?)');
+                        $insert = db()->prepare('INSERT INTO rag_chunks (source_type, source_key, title, body, url, embedding_json, embedding_provider, embedding_model) VALUES (?,?,?,?,?,?,?,?)');
                         $knowledgePath = __DIR__ . '/knowledge.php';
                         $knowledgeBase = is_file($knowledgePath) ? (require $knowledgePath) : [];
                         if (is_array($knowledgeBase)) {
@@ -2753,7 +2895,7 @@ function answer_question_from_knowledge(string $question): array
                                 foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
                                     $key = 'kb_' . (string) $idx . '_' . (string) $chunkIndex;
                                     $vec = rag_embedding_vector($title . ' ' . $chunk);
-                                    $insert->execute(['knowledge', $key, $title, $chunk, (string) ($item['url'] ?? ''), json_encode($vec)]);
+                                    $insert->execute(['knowledge', $key, $title, $chunk, (string) ($item['url'] ?? ''), json_encode($vec), $embeddingProvider, $embeddingModel]);
                                 }
                             }
                         }
@@ -2768,7 +2910,7 @@ function answer_question_from_knowledge(string $question): array
                                 foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
                                     $key = 'article_' . $slug . '_' . (string) $chunkIndex;
                                     $vec = rag_embedding_vector($title . ' ' . $chunk);
-                                    $insert->execute(['article', $key, $title, $chunk, route_url('article', ['slug' => $slug]), json_encode($vec)]);
+                                    $insert->execute(['article', $key, $title, $chunk, route_url('article', ['slug' => $slug]), json_encode($vec), $embeddingProvider, $embeddingModel]);
                                 }
                             }
                         }
@@ -2780,13 +2922,14 @@ function answer_question_from_knowledge(string $question): array
                                 $docId = (int) ($doc['id'] ?? 0);
                                 if ($docId <= 0) { continue; }
                                 $title = trim((string) ($doc['title'] ?? 'Document'));
-                                $body = trim((string) (($doc['description'] ?? '') . "\n" . ($doc['extracted_text'] ?? '')));
+                                $body = rag_library_document_body($doc);
+                                if ($body === '') { continue; }
                                 $safePath = safe_storage_public_path_or_null((string) ($doc['file_path'] ?? ''), ['storage/uploads/library/']) ?? '';
                                 $url = $safePath !== '' ? base_url($safePath) : '';
                                 foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
                                     $key = 'doc_' . (string) $docId . '_' . (string) $chunkIndex;
                                     $vec = rag_embedding_vector($title . ' ' . $chunk);
-                                    $insert->execute(['library', $key, $title, $chunk, $url, json_encode($vec)]);
+                                    $insert->execute(['library', $key, $title, $chunk, $url, json_encode($vec), $embeddingProvider, $embeddingModel]);
                                 }
                             }
                         }
@@ -2857,6 +3000,10 @@ function answer_question_from_knowledge(string $question): array
                 $queryComplexity = max(1, count($queryTokens));
                 $sourceSeen = [];
                 $qVecMap = [];
+                $llphantReady = rag_llphant_is_ready();
+                if (!$llphantReady) {
+                    throw new RuntimeException('llphant_unavailable');
+                }
                 foreach ($rows as $row) {
                     if (!is_array($row)) { continue; }
                     $vec = rag_decode_embedding((string) ($row['embedding_json'] ?? '[]'));
@@ -2948,7 +3095,7 @@ function answer_question_from_knowledge(string $question): array
                         if ($link !== '') { $answer .= "\n\n" . (string) $chatbotT['link'] . $link; }
                         $sourceType = trim((string) ($best['source_type'] ?? 'source'));
                         $sourceTitle = trim((string) ($best['title'] ?? ''));
-                        $source = 'RAG v2 agentic · ' . $sourceType . ($sourceTitle !== '' ? (' · ' . $sourceTitle) : '');
+                        $source = 'RAG v2 agentic (LLPhant) · ' . $sourceType . ($sourceTitle !== '' ? (' · ' . $sourceTitle) : '');
                         if ($bestVariantUsed !== '') {
                             $source .= ' · variant:' . mb_substr($bestVariantUsed, 0, 48);
                         }

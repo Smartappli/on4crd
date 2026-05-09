@@ -4,7 +4,8 @@
   "type": "project",
   "license": "proprietary",
   "require": {
-    "delight-im/auth": "^9.0"
+    "delight-im/auth": "^9.0",
+    "llphant/llphant": "^0.12"
   },
   "require-dev": {
     "phpunit/phpunit": "^13.1"
