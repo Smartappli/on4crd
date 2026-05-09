@@ -1798,6 +1798,7 @@ textarea.wysiwyg-source {
   align-items: center;
 }
 .dashboard-fullwidth .actions {
-  margin-top: .25rem;
+  margin-top: 0;
   margin-bottom: .9rem;
+  align-items: center;
 }
