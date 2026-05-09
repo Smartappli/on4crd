@@ -63,5 +63,6 @@ ob_start();
         <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
     </form>
 </div>
+
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);
