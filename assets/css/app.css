@@ -598,12 +598,15 @@ textarea:focus-visible {
 .grid-4 { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap:1rem; }
 .split { display:grid; grid-template-columns: minmax(0, 2.25fr) minmax(280px, 1fr); gap:1rem; }
 .home-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:1rem; }
-.widget-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:1rem; }
+.widget-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:1rem; }
 .widget-card { border: 1px dashed var(--border); border-radius: 18px; padding: 1rem; background: var(--panel-2); }
 .widget-card.dragging { opacity: .55; }
 .widget-card header, .row-between, .section-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
 .widget-body { margin-top: .8rem; }
 #dashboard-save-status.error { color: var(--danger); }
+@media (max-width: 1280px) {
+  .widget-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
 .button, button {
   border: 0;
   background: var(--accent);
