@@ -206,8 +206,6 @@ ob_start();
     const coaxLength = document.getElementById('coax-length');
     const coaxAtten = document.getElementById('coax-atten');
     const coaxLoss = document.getElementById('coax-loss');
-    const receiverSelect = document.getElementById('sdr-receiver');
-    const receiverOpenBtn = document.getElementById('sdr-open-btn');
     if (!(form instanceof HTMLFormElement) || !(addressInput instanceof HTMLInputElement)) {
         return;
     }
@@ -435,14 +433,6 @@ ob_start();
     };
     locatorA?.addEventListener('input', syncDistance);
     locatorB?.addEventListener('input', syncDistance);
-
-    receiverOpenBtn?.addEventListener('click', () => {
-        if (!(receiverSelect instanceof HTMLSelectElement)) return;
-        const url = receiverSelect.value.trim();
-        if (url === '') return;
-        window.open(url, '_blank', 'noopener,noreferrer');
-    });
-
     const toolLinks = document.querySelectorAll('[data-tool-target]');
     const toolPanels = document.querySelectorAll('[data-tool-panel]');
     const setActiveTool = (id) => {
