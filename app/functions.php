@@ -656,13 +656,13 @@ function render_ham_weather_advice(array $user = []): string
         try {
             $dtLocal = new DateTimeImmutable($localTime);
             $hour = (int) $dtLocal->format('G');
-            $updatedLabel = $dtLocal->format('Y-m-d H:i');
+            $updatedLabel = $dtLocal->format('d-m-Y H:i');
         } catch (Throwable $throwable) {
             $hour = (int) gmdate('G');
-            $updatedLabel = gmdate('Y-m-d H:i');
+            $updatedLabel = gmdate('d-m-Y H:i');
         }
     } else {
-        $updatedLabel = gmdate('Y-m-d H:i');
+        $updatedLabel = gmdate('d-m-Y H:i');
     }
 
     $humidity = is_numeric($currentWeather['relative_humidity_2m'] ?? null) ? (int) $currentWeather['relative_humidity_2m'] : 60;
