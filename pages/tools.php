@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $i18n = [
-    'fr' => ['title'=>'Outils','grid_title'=>'Calcul du grid depuis une adresse postale','address'=>'Adresse postale','calc_grid'=>'Calculer le grid','found_address'=>'Adresse trouvée','coords'=>'Coordonnées','locator'=>'Locator Maidenhead','conv'=>'Conversions utiles','freq_wave'=>'Fréquence → longueur d’onde','freq_mhz'=>'Fréquence (MHz)','wavelength'=>'Longueur d’onde','power'=>'Puissance (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance entre 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Distance estimée','err_enter_address'=>'Veuillez saisir une adresse postale.','err_geocode_unavailable'=>'Service de géocodage indisponible.','err_address_not_found'=>'Adresse introuvable. Essayez avec ville et code postal.','err_invalid_coords'=>'Coordonnées invalides reçues.','err_grid_calc'=>'Erreur lors du calcul du grid.','addr_ph'=>'Ex: Rue des Écoles 1, 5530 Purnode, Belgique','freq_ph'=>'Ex: 145.500','watts_ph'=>'Ex: 10','dbm_ph'=>'Ex: 40','locator_a_ph'=>'Ex: JO20LI','locator_b_ph'=>'Ex: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km'],
-    'en' => ['title'=>'Tools','grid_title'=>'Grid calculation from a postal address','address'=>'Postal address','calc_grid'=>'Calculate grid','found_address'=>'Found address','coords'=>'Coordinates','locator'=>'Maidenhead locator','conv'=>'Useful conversions','freq_wave'=>'Frequency → wavelength','freq_mhz'=>'Frequency (MHz)','wavelength'=>'Wavelength','power'=>'Power (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance between 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Estimated distance','err_enter_address'=>'Please enter a postal address.','err_geocode_unavailable'=>'Geocoding service unavailable.','err_address_not_found'=>'Address not found. Try with city and postal code.','err_invalid_coords'=>'Received invalid coordinates.','err_grid_calc'=>'Error while calculating grid.','addr_ph'=>'Example: Baker Street 221B, London, UK','freq_ph'=>'E.g.: 145.500','watts_ph'=>'E.g.: 10','dbm_ph'=>'E.g.: 40','locator_a_ph'=>'E.g.: JO20LI','locator_b_ph'=>'E.g.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km'],
-    'de' => ['title'=>'Werkzeuge','grid_title'=>'Grid-Berechnung aus einer Postadresse','address'=>'Postadresse','calc_grid'=>'Grid berechnen','found_address'=>'Gefundene Adresse','coords'=>'Koordinaten','locator'=>'Maidenhead-Locator','conv'=>'Nützliche Umrechnungen','freq_wave'=>'Frequenz → Wellenlänge','freq_mhz'=>'Frequenz (MHz)','wavelength'=>'Wellenlänge','power'=>'Leistung (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Entfernung zwischen 2 Locatoren','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschätzte Entfernung','err_enter_address'=>'Bitte geben Sie eine Postadresse ein.','err_geocode_unavailable'=>'Geokodierungsdienst nicht verfügbar.','err_address_not_found'=>'Adresse nicht gefunden. Versuchen Sie es mit Stadt und Postleitzahl.','err_invalid_coords'=>'Ungültige Koordinaten empfangen.','err_grid_calc'=>'Fehler bei der Grid-Berechnung.','addr_ph'=>'Beispiel: Hauptstraße 1, 10115 Berlin, Deutschland','freq_ph'=>'Bsp.: 145.500','watts_ph'=>'Bsp.: 10','dbm_ph'=>'Bsp.: 40','locator_a_ph'=>'Bsp.: JO20LI','locator_b_ph'=>'Bsp.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km'],
-    'nl' => ['title'=>'Tools','grid_title'=>'Grid berekenen vanaf een postadres','address'=>'Postadres','calc_grid'=>'Grid berekenen','found_address'=>'Gevonden adres','coords'=>'Coördinaten','locator'=>'Maidenhead-locator','conv'=>'Nuttige conversies','freq_wave'=>'Frequentie → golflengte','freq_mhz'=>'Frequentie (MHz)','wavelength'=>'Golflengte','power'=>'Vermogen (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Afstand tussen 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschatte afstand','err_enter_address'=>'Voer een postadres in.','err_geocode_unavailable'=>'Geocodingservice niet beschikbaar.','err_address_not_found'=>'Adres niet gevonden. Probeer met stad en postcode.','err_invalid_coords'=>'Ongeldige coördinaten ontvangen.','err_grid_calc'=>'Fout bij het berekenen van het grid.','addr_ph'=>'Voorbeeld: Kerkstraat 1, 1000 Brussel, België','freq_ph'=>'Bijv.: 145.500','watts_ph'=>'Bijv.: 10','dbm_ph'=>'Bijv.: 40','locator_a_ph'=>'Bijv.: JO20LI','locator_b_ph'=>'Bijv.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km'],
+    'fr' => ['title'=>'Boite à outils','tool_index'=>'Classement des outils','category_locators'=>'Locators & géolocalisation','category_conversions'=>'Conversions radio','open_category'=>'Voir les outils','choose_tool'=>'Choisir un outil','grid_title'=>'Calcul du grid depuis une adresse postale','address'=>'Adresse postale','calc_grid'=>'Calculer le grid','found_address'=>'Adresse trouvée','coords'=>'Coordonnées','locator'=>'Locator Maidenhead','conv'=>'Conversions utiles','freq_wave'=>'Fréquence → longueur d’onde','freq_mhz'=>'Fréquence (MHz)','wavelength'=>'Longueur d’onde','power'=>'Puissance (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance entre 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Distance estimée','filter_calc'=>'Calcul filtre LC','cutoff_freq'=>'Fréquence de coupure (MHz)','impedance'=>'Impédance (Ω)','inductance'=>'Inductance (µH)','capacitance'=>'Capacité (pF)','balun_calc'=>'Calcul balun','source_imp'=>'Impédance source (Ω)','load_imp'=>'Impédance charge (Ω)','turns_ratio'=>'Rapport de spires','swr_calc'=>'Calcul ROS / Return Loss','swr'=>'ROS','return_loss'=>'Return loss (dB)','coax_calc'=>'Perte coaxiale','length_m'=>'Longueur (m)','atten_100m'=>'Atténuation câble (dB/100m)','coax_loss'=>'Perte estimée (dB)','err_enter_address'=>'Veuillez saisir une adresse postale.','err_geocode_unavailable'=>'Service de géocodage indisponible.','err_address_not_found'=>'Adresse introuvable. Essayez avec ville et code postal.','err_invalid_coords'=>'Coordonnées invalides reçues.','err_grid_calc'=>'Erreur lors du calcul du grid.','addr_ph'=>'Ex: Rue des Écoles 1, 5530 Purnode, Belgique','freq_ph'=>'Ex: 145.500','watts_ph'=>'Ex: 10','dbm_ph'=>'Ex: 40','locator_a_ph'=>'Ex: JO20LI','locator_b_ph'=>'Ex: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km'],
+    'en' => ['title'=>'Toolbox','tool_index'=>'Tool index','category_locators'=>'Locators & geolocation','category_conversions'=>'Radio conversions','open_category'=>'View tools','choose_tool'=>'Choose a tool','grid_title'=>'Grid calculation from a postal address','address'=>'Postal address','calc_grid'=>'Calculate grid','found_address'=>'Found address','coords'=>'Coordinates','locator'=>'Maidenhead locator','conv'=>'Useful conversions','freq_wave'=>'Frequency → wavelength','freq_mhz'=>'Frequency (MHz)','wavelength'=>'Wavelength','power'=>'Power (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance between 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Estimated distance','filter_calc'=>'LC filter calculator','cutoff_freq'=>'Cutoff frequency (MHz)','impedance'=>'Impedance (Ω)','inductance'=>'Inductance (µH)','capacitance'=>'Capacitance (pF)','balun_calc'=>'Balun calculator','source_imp'=>'Source impedance (Ω)','load_imp'=>'Load impedance (Ω)','turns_ratio'=>'Turns ratio','swr_calc'=>'SWR / Return loss calculator','swr'=>'SWR','return_loss'=>'Return loss (dB)','coax_calc'=>'Coax loss','length_m'=>'Length (m)','atten_100m'=>'Cable attenuation (dB/100m)','coax_loss'=>'Estimated loss (dB)','err_enter_address'=>'Please enter a postal address.','err_geocode_unavailable'=>'Geocoding service unavailable.','err_address_not_found'=>'Address not found. Try with city and postal code.','err_invalid_coords'=>'Received invalid coordinates.','err_grid_calc'=>'Error while calculating grid.','addr_ph'=>'Example: Baker Street 221B, London, UK','freq_ph'=>'E.g.: 145.500','watts_ph'=>'E.g.: 10','dbm_ph'=>'E.g.: 40','locator_a_ph'=>'E.g.: JO20LI','locator_b_ph'=>'E.g.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km'],
+    'de' => ['title'=>'Werkzeuge','tool_index'=>'Werkzeugübersicht','category_locators'=>'Locatoren & Geolokalisierung','category_conversions'=>'Funk-Umrechnungen','open_category'=>'Werkzeuge anzeigen','choose_tool'=>'Werkzeug wählen','grid_title'=>'Grid-Berechnung aus einer Postadresse','address'=>'Postadresse','calc_grid'=>'Grid berechnen','found_address'=>'Gefundene Adresse','coords'=>'Koordinaten','locator'=>'Maidenhead-Locator','conv'=>'Nützliche Umrechnungen','freq_wave'=>'Frequenz → Wellenlänge','freq_mhz'=>'Frequenz (MHz)','wavelength'=>'Wellenlänge','power'=>'Leistung (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Entfernung zwischen 2 Locatoren','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschätzte Entfernung','filter_calc'=>'LC-Filterrechner','cutoff_freq'=>'Grenzfrequenz (MHz)','impedance'=>'Impedanz (Ω)','inductance'=>'Induktivität (µH)','capacitance'=>'Kapazität (pF)','balun_calc'=>'Balun-Rechner','source_imp'=>'Quellimpedanz (Ω)','load_imp'=>'Lastimpedanz (Ω)','turns_ratio'=>'Windungsverhältnis','swr_calc'=>'SWR-/Return-Loss-Rechner','swr'=>'SWR','return_loss'=>'Return Loss (dB)','coax_calc'=>'Koax-Dämpfung','length_m'=>'Länge (m)','atten_100m'=>'Kabeldämpfung (dB/100m)','coax_loss'=>'Geschätzte Dämpfung (dB)','err_enter_address'=>'Bitte geben Sie eine Postadresse ein.','err_geocode_unavailable'=>'Geokodierungsdienst nicht verfügbar.','err_address_not_found'=>'Adresse nicht gefunden. Versuchen Sie es mit Stadt und Postleitzahl.','err_invalid_coords'=>'Ungültige Koordinaten empfangen.','err_grid_calc'=>'Fehler bei der Grid-Berechnung.','addr_ph'=>'Beispiel: Hauptstraße 1, 10115 Berlin, Deutschland','freq_ph'=>'Bsp.: 145.500','watts_ph'=>'Bsp.: 10','dbm_ph'=>'Bsp.: 40','locator_a_ph'=>'Bsp.: JO20LI','locator_b_ph'=>'Bsp.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km'],
+    'nl' => ['title'=>'Tools','tool_index'=>'Tools overzicht','category_locators'=>'Locators & geolocatie','category_conversions'=>'Radio conversies','open_category'=>'Bekijk tools','choose_tool'=>'Kies een tool','grid_title'=>'Grid berekenen vanaf een postadres','address'=>'Postadres','calc_grid'=>'Grid berekenen','found_address'=>'Gevonden adres','coords'=>'Coördinaten','locator'=>'Maidenhead-locator','conv'=>'Nuttige conversies','freq_wave'=>'Frequentie → golflengte','freq_mhz'=>'Frequentie (MHz)','wavelength'=>'Golflengte','power'=>'Vermogen (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Afstand tussen 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschatte afstand','filter_calc'=>'LC-filtercalculator','cutoff_freq'=>'Afsnijfrequentie (MHz)','impedance'=>'Impedantie (Ω)','inductance'=>'Inductantie (µH)','capacitance'=>'Capaciteit (pF)','balun_calc'=>'Baluncalculator','source_imp'=>'Bronimpedantie (Ω)','load_imp'=>'Belastingsimpedantie (Ω)','turns_ratio'=>'Wikkelverhouding','swr_calc'=>'SWR/return-loss-calculator','swr'=>'SWR','return_loss'=>'Return loss (dB)','coax_calc'=>'Coaxverlies','length_m'=>'Lengte (m)','atten_100m'=>'Kabeldemping (dB/100m)','coax_loss'=>'Geschat verlies (dB)','err_enter_address'=>'Voer een postadres in.','err_geocode_unavailable'=>'Geocodingservice niet beschikbaar.','err_address_not_found'=>'Adres niet gevonden. Probeer met stad en postcode.','err_invalid_coords'=>'Ongeldige coördinaten ontvangen.','err_grid_calc'=>'Fout bij het berekenen van het grid.','addr_ph'=>'Voorbeeld: Kerkstraat 1, 1000 Brussel, België','freq_ph'=>'Bijv.: 145.500','watts_ph'=>'Bijv.: 10','dbm_ph'=>'Bijv.: 40','locator_a_ph'=>'Bijv.: JO20LI','locator_b_ph'=>'Bijv.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
 set_page_meta([
@@ -28,9 +28,32 @@ $jsI18n = [
 ob_start();
 ?>
 <section class="card">
-    <h1><?= e((string) $t['title']) ?></h1>
-    <div class="grid-2">
-        <article class="card">
+    <h1 style="font-size:1rem;font-weight:400;line-height:1.4;"><?= e((string) $t['title']) ?></h1>
+    <div class="tools-layout">
+    <aside class="tools-index card">
+        <h2><?= e((string) $t['tool_index']) ?></h2>
+        <p class="help"><?= e((string) $t['choose_tool']) ?></p>
+        <details class="tools-index-group">
+            <summary><?= e((string) $t['category_locators']) ?></summary>
+            <ul>
+                <li><a href="#tool-grid" data-tool-target="tool-grid"><?= e((string) $t['grid_title']) ?></a></li>
+                <li><a href="#tool-distance" data-tool-target="tool-distance"><?= e((string) $t['distance']) ?></a></li>
+            </ul>
+        </details>
+        <details class="tools-index-group">
+            <summary><?= e((string) $t['category_conversions']) ?></summary>
+            <ul>
+                <li><a href="#tool-freq-wave" data-tool-target="tool-freq-wave"><?= e((string) $t['freq_wave']) ?></a></li>
+                <li><a href="#tool-power" data-tool-target="tool-power"><?= e((string) $t['power']) ?></a></li>
+                <li><a href="#tool-filter" data-tool-target="tool-filter"><?= e((string) $t['filter_calc']) ?></a></li>
+                <li><a href="#tool-balun" data-tool-target="tool-balun"><?= e((string) $t['balun_calc']) ?></a></li>
+                <li><a href="#tool-swr" data-tool-target="tool-swr"><?= e((string) $t['swr_calc']) ?></a></li>
+                <li><a href="#tool-coax" data-tool-target="tool-coax"><?= e((string) $t['coax_calc']) ?></a></li>
+            </ul>
+        </details>
+    </aside>
+    <div class="tools-content">
+        <article class="card tool-panel" id="tool-grid" data-tool-panel>
             <h2><?= e((string) $t['grid_title']) ?></h2>
             <form id="grid-tool-form" class="stack">
                 <label><?= e((string) $t['address']) ?>
@@ -46,39 +69,73 @@ ob_start();
                 <p><strong><?= e((string) $t['locator']) ?> :</strong> <span id="grid-found-locator">—</span></p>
             </div>
         </article>
-        <article class="card">
-            <h2><?= e((string) $t['conv']) ?></h2>
-            <div class="stack">
-                <section class="card">
-                    <h3><?= e((string) $t['freq_wave']) ?></h3>
-                    <label><?= e((string) $t['freq_mhz']) ?>
-                        <input type="number" id="freq-mhz" min="0" step="0.001" placeholder="<?= e((string) $t['freq_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['wavelength']) ?>: <strong id="freq-wavelength">—</strong></p>
-                </section>
-                <section class="card">
-                    <h3><?= e((string) $t['power']) ?></h3>
-                    <label><?= e((string) $t['watts']) ?>
-                        <input type="number" id="power-watts" min="0" step="0.001" placeholder="<?= e((string) $t['watts_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['dbm_label']) ?>: <strong id="power-dbm">—</strong></p>
-                    <label><?= e((string) $t['dbm_label']) ?>
-                        <input type="number" id="power-dbm-input" step="0.1" placeholder="<?= e((string) $t['dbm_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['watts_out_label']) ?>: <strong id="power-watts-out">—</strong></p>
-                </section>
-                <section class="card">
-                    <h3><?= e((string) $t['distance']) ?></h3>
-                    <label><?= e((string) $t['locator_a']) ?>
-                        <input type="text" id="locator-a" maxlength="6" placeholder="<?= e((string) $t['locator_a_ph']) ?>">
-                    </label>
-                    <label><?= e((string) $t['locator_b']) ?>
-                        <input type="text" id="locator-b" maxlength="6" placeholder="<?= e((string) $t['locator_b_ph']) ?>">
-                    </label>
-                    <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">—</strong></p>
-                </section>
-            </div>
+        <article class="card tool-panel" id="tool-freq-wave" data-tool-panel>
+            <h2><?= e((string) $t['conv']) ?> · <?= e((string) $t['freq_wave']) ?></h2>
+            <label><?= e((string) $t['freq_mhz']) ?>
+                <input type="number" id="freq-mhz" min="0" step="0.001" placeholder="<?= e((string) $t['freq_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['wavelength']) ?>: <strong id="freq-wavelength">—</strong></p>
         </article>
+        <article class="card tool-panel" id="tool-power" data-tool-panel>
+            <h2><?= e((string) $t['conv']) ?> · <?= e((string) $t['power']) ?></h2>
+            <label><?= e((string) $t['watts']) ?>
+                <input type="number" id="power-watts" min="0" step="0.001" placeholder="<?= e((string) $t['watts_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['dbm_label']) ?>: <strong id="power-dbm">—</strong></p>
+            <label><?= e((string) $t['dbm_label']) ?>
+                <input type="number" id="power-dbm-input" step="0.1" placeholder="<?= e((string) $t['dbm_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['watts_out_label']) ?>: <strong id="power-watts-out">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-distance" data-tool-panel>
+            <h2><?= e((string) $t['distance']) ?></h2>
+            <label><?= e((string) $t['locator_a']) ?>
+                <input type="text" id="locator-a" maxlength="6" placeholder="<?= e((string) $t['locator_a_ph']) ?>">
+            </label>
+            <label><?= e((string) $t['locator_b']) ?>
+                <input type="text" id="locator-b" maxlength="6" placeholder="<?= e((string) $t['locator_b_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-filter" data-tool-panel>
+            <h2><?= e((string) $t['filter_calc']) ?></h2>
+            <label><?= e((string) $t['cutoff_freq']) ?>
+                <input type="number" id="filter-freq" min="0" step="0.001" placeholder="<?= e((string) $t['freq_ph']) ?>">
+            </label>
+            <label><?= e((string) $t['impedance']) ?>
+                <input type="number" id="filter-impedance" min="1" step="0.1" value="50">
+            </label>
+            <p class="help"><?= e((string) $t['inductance']) ?>: <strong id="filter-l">—</strong></p>
+            <p class="help"><?= e((string) $t['capacitance']) ?>: <strong id="filter-c">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-balun" data-tool-panel>
+            <h2><?= e((string) $t['balun_calc']) ?></h2>
+            <label><?= e((string) $t['source_imp']) ?>
+                <input type="number" id="balun-source" min="1" step="0.1" value="50">
+            </label>
+            <label><?= e((string) $t['load_imp']) ?>
+                <input type="number" id="balun-load" min="1" step="0.1" value="200">
+            </label>
+            <p class="help"><?= e((string) $t['turns_ratio']) ?>: <strong id="balun-ratio">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-swr" data-tool-panel>
+            <h2><?= e((string) $t['swr_calc']) ?></h2>
+            <label><?= e((string) $t['swr']) ?>
+                <input type="number" id="swr-input" min="1" step="0.01" value="1.50">
+            </label>
+            <p class="help"><?= e((string) $t['return_loss']) ?>: <strong id="swr-rl">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-coax" data-tool-panel>
+            <h2><?= e((string) $t['coax_calc']) ?></h2>
+            <label><?= e((string) $t['length_m']) ?>
+                <input type="number" id="coax-length" min="0" step="0.1" value="20">
+            </label>
+            <label><?= e((string) $t['atten_100m']) ?>
+                <input type="number" id="coax-atten" min="0" step="0.01" value="6.7">
+            </label>
+            <p class="help"><?= e((string) $t['coax_loss']) ?>: <strong id="coax-loss">—</strong></p>
+        </article>
+    </div>
     </div>
     <p id="grid-tool-error" class="flash flash-error is-hidden" style="margin-top:1rem;"></p>
 </section>
@@ -102,6 +159,18 @@ ob_start();
     const locatorA = document.getElementById('locator-a');
     const locatorB = document.getElementById('locator-b');
     const locatorDistance = document.getElementById('locator-distance');
+    const filterFreq = document.getElementById('filter-freq');
+    const filterImpedance = document.getElementById('filter-impedance');
+    const filterL = document.getElementById('filter-l');
+    const filterC = document.getElementById('filter-c');
+    const balunSource = document.getElementById('balun-source');
+    const balunLoad = document.getElementById('balun-load');
+    const balunRatio = document.getElementById('balun-ratio');
+    const swrInput = document.getElementById('swr-input');
+    const swrRl = document.getElementById('swr-rl');
+    const coaxLength = document.getElementById('coax-length');
+    const coaxAtten = document.getElementById('coax-atten');
+    const coaxLoss = document.getElementById('coax-loss');
     const receiverSelect = document.getElementById('sdr-receiver');
     const receiverOpenBtn = document.getElementById('sdr-open-btn');
     if (!(form instanceof HTMLFormElement) || !(addressInput instanceof HTMLInputElement)) {
@@ -203,6 +272,70 @@ ob_start();
         wattsOut.textContent = `${watts.toFixed(4)} ${i18n.watts_out_label || 'W'}`;
     });
 
+    const computeFilter = () => {
+        if (!(filterFreq instanceof HTMLInputElement) || !(filterImpedance instanceof HTMLInputElement) || !filterL || !filterC) return;
+        const fMHz = Number(filterFreq.value);
+        const z = Number(filterImpedance.value);
+        if (!Number.isFinite(fMHz) || fMHz <= 0 || !Number.isFinite(z) || z <= 0) {
+            filterL.textContent = '—';
+            filterC.textContent = '—';
+            return;
+        }
+        const f = fMHz * 1e6;
+        const lHenrys = z / (2 * Math.PI * f);
+        const cFarads = 1 / (2 * Math.PI * f * z);
+        filterL.textContent = `${(lHenrys * 1e6).toFixed(3)} µH`;
+        filterC.textContent = `${(cFarads * 1e12).toFixed(2)} pF`;
+    };
+    filterFreq?.addEventListener('input', computeFilter);
+    filterImpedance?.addEventListener('input', computeFilter);
+    computeFilter();
+
+    const computeBalun = () => {
+        if (!(balunSource instanceof HTMLInputElement) || !(balunLoad instanceof HTMLInputElement) || !balunRatio) return;
+        const zin = Number(balunSource.value);
+        const zout = Number(balunLoad.value);
+        if (!Number.isFinite(zin) || zin <= 0 || !Number.isFinite(zout) || zout <= 0) {
+            balunRatio.textContent = '—';
+            return;
+        }
+        const ratio = Math.sqrt(zout / zin);
+        const powerRatio = zout / zin;
+        balunRatio.textContent = `1:${ratio.toFixed(2)} (Z ${zin}:${zout} ≈ ${powerRatio.toFixed(2)}:1)`;
+    };
+    balunSource?.addEventListener('input', computeBalun);
+    balunLoad?.addEventListener('input', computeBalun);
+    computeBalun();
+
+    const computeSWR = () => {
+        if (!(swrInput instanceof HTMLInputElement) || !swrRl) return;
+        const swr = Number(swrInput.value);
+        if (!Number.isFinite(swr) || swr < 1) {
+            swrRl.textContent = '—';
+            return;
+        }
+        const gamma = (swr - 1) / (swr + 1);
+        const rl = -20 * Math.log10(Math.max(gamma, 1e-12));
+        swrRl.textContent = `${rl.toFixed(2)} dB`;
+    };
+    swrInput?.addEventListener('input', computeSWR);
+    computeSWR();
+
+    const computeCoaxLoss = () => {
+        if (!(coaxLength instanceof HTMLInputElement) || !(coaxAtten instanceof HTMLInputElement) || !coaxLoss) return;
+        const len = Number(coaxLength.value);
+        const att = Number(coaxAtten.value);
+        if (!Number.isFinite(len) || len < 0 || !Number.isFinite(att) || att < 0) {
+            coaxLoss.textContent = '—';
+            return;
+        }
+        const loss = (len / 100) * att;
+        coaxLoss.textContent = `${loss.toFixed(2)} dB`;
+    };
+    coaxLength?.addEventListener('input', computeCoaxLoss);
+    coaxAtten?.addEventListener('input', computeCoaxLoss);
+    computeCoaxLoss();
+
     const locatorToLatLon = (locator) => {
         const normalized = locator.toUpperCase().trim();
         if (!/^[A-R]{2}[0-9]{2}([A-X]{2})?$/.test(normalized)) {
@@ -243,6 +376,31 @@ ob_start();
         if (url === '') return;
         window.open(url, '_blank', 'noopener,noreferrer');
     });
+
+    const toolLinks = document.querySelectorAll('[data-tool-target]');
+    const toolPanels = document.querySelectorAll('[data-tool-panel]');
+    const setActiveTool = (id) => {
+        if (!id) return;
+        toolPanels.forEach((panel) => {
+            panel.classList.toggle('is-hidden', panel.id !== id);
+        });
+        toolLinks.forEach((link) => {
+            const isActive = link.getAttribute('data-tool-target') === id;
+            link.classList.toggle('is-active', isActive);
+        });
+    };
+    const initialTool = window.location.hash ? window.location.hash.slice(1) : 'tool-grid';
+    setActiveTool(initialTool);
+    toolLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+            const targetId = link.getAttribute('data-tool-target') || '';
+            if (targetId === '') return;
+            event.preventDefault();
+            window.history.replaceState(null, '', `#${targetId}`);
+            setActiveTool(targetId);
+        });
+    });
+
 })();
 </script>
 <?php

@@ -172,9 +172,6 @@ ob_start();
     <div class="card">
         <div class="row-between">
             <h1><?= e((string) $t['page_title']) ?></h1>
-            <?php if (has_permission('articles.manage')): ?>
-                <a class="button small" href="<?= e(base_url('index.php?route=admin_articles')) ?>"><?= e((string) $t['manage']) ?></a>
-            <?php endif; ?>
         </div>
         <div class="news-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
