@@ -400,9 +400,9 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
-                    default => '',
+                    default => 'Les données de propagation sont actuellement indisponibles.',
                 };
-                return '';
+                return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
@@ -656,13 +656,13 @@ function render_ham_weather_advice(array $user = []): string
         try {
             $dtLocal = new DateTimeImmutable($localTime);
             $hour = (int) $dtLocal->format('G');
-            $updatedLabel = $dtLocal->format('Y-m-d H:i');
+            $updatedLabel = $dtLocal->format('d-m-Y H:i');
         } catch (Throwable $throwable) {
             $hour = (int) gmdate('G');
-            $updatedLabel = gmdate('Y-m-d H:i');
+            $updatedLabel = gmdate('d-m-Y H:i');
         }
     } else {
-        $updatedLabel = gmdate('Y-m-d H:i');
+        $updatedLabel = gmdate('d-m-Y H:i');
     }
 
     $humidity = is_numeric($currentWeather['relative_humidity_2m'] ?? null) ? (int) $currentWeather['relative_humidity_2m'] : 60;
@@ -3970,7 +3970,7 @@ function qsl_background_upload_to_data_uri(?array $upload): string
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
         'image/webp' => 'webp',
-        default => '',
+        default => 'Les données de propagation sont actuellement indisponibles.',
     };
     assert_upload_file_is_valid_signature($tmpPath, [$extension]);
     $sanitizedTmpPath = sanitize_uploaded_image_file($tmpPath, $extension);
