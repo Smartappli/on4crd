@@ -1802,3 +1802,9 @@ textarea.wysiwyg-source {
   margin-bottom: .9rem;
   align-items: center;
 }
+.dashboard-heading {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
