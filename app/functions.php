@@ -400,9 +400,9 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
-                    default => '',
+                    default => 'Les données de propagation sont actuellement indisponibles.',
                 };
-                return '';
+                return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
@@ -3970,7 +3970,7 @@ function qsl_background_upload_to_data_uri(?array $upload): string
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
         'image/webp' => 'webp',
-        default => '',
+        default => 'Les données de propagation sont actuellement indisponibles.',
     };
     assert_upload_file_is_valid_signature($tmpPath, [$extension]);
     $sanitizedTmpPath = sanitize_uploaded_image_file($tmpPath, $extension);
