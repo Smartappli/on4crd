@@ -39,7 +39,7 @@ $jsI18n = [
 ob_start();
 ?>
 <section class="card">
-    <h1 style="font-size:1rem;font-weight:400;line-height:1.4;"><?= e((string) $t['title']) ?></h1>
+    <h1 class="tools-page-title"><?= e((string) $t['title']) ?></h1>
     <div class="tools-layout">
     <aside class="tools-index card">
         <h2><?= e((string) $t['tool_index']) ?></h2>
