@@ -1017,22 +1017,14 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
-    static $cachedQuote = null;
-    if (is_array($cachedQuote)) {
-        return $cachedQuote;
-    }
-
     $countStmt = db()->query('SELECT COUNT(*) FROM quotes WHERE is_active = 1');
     $activeCount = $countStmt !== false ? (int) $countStmt->fetchColumn() : 0;
     if ($activeCount <= 0) {
         return null;
     }
 
-    try {
-        $offset = random_int(0, max(0, $activeCount - 1));
-    } catch (Throwable) {
-        $offset = 0;
-    }
+    $daySeed = date('Y-m-d');
+    $offset = (int) (sprintf('%u', crc32($daySeed)) % $activeCount);
 
     $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
     if ($stmt === false) {
@@ -1049,12 +1041,10 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
-    $cachedQuote = [
+    return [
         'quote' => $quote,
         'author' => $author,
     ];
-
-    return $cachedQuote;
 }
 
 if (!function_exists('base_url')) {
