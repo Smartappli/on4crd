@@ -3280,8 +3280,21 @@ function ensure_member_library_table(): bool
         return true;
     }
     try {
-        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at))');
+        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, category VARCHAR(120) NOT NULL DEFAULT "general", title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at), INDEX idx_category (category))');
         $ready = table_exists('member_library_documents');
+        if ($ready) {
+            $hasCategory = false;
+            try {
+                $col = db()->query("SHOW COLUMNS FROM member_library_documents LIKE 'category'");
+                $hasCategory = (bool) ($col && $col->fetch());
+            } catch (Throwable) {
+                $hasCategory = false;
+            }
+            if (!$hasCategory) {
+                db()->exec('ALTER TABLE member_library_documents ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
+                db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category (category)');
+            }
+        }
     } catch (Throwable) {
         $ready = false;
     }
