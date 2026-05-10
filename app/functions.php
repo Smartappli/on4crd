@@ -3275,13 +3275,26 @@ function ensure_member_library_table(): bool
     if (is_bool($ready)) {
         return $ready;
     }
-    if (table_exists('member_library_documents')) {
-        $ready = true;
-        return true;
-    }
     try {
-        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at))');
+        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, category VARCHAR(120) NOT NULL DEFAULT "general", title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at), INDEX idx_category (category))');
         $ready = table_exists('member_library_documents');
+        if ($ready) {
+            $hasCategory = false;
+            try {
+                $col = db()->query("SHOW COLUMNS FROM member_library_documents LIKE 'category'");
+                $hasCategory = (bool) ($col && $col->fetch());
+            } catch (Throwable) {
+                $hasCategory = false;
+            }
+            if (!$hasCategory) {
+                db()->exec('ALTER TABLE member_library_documents ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
+            }
+            try {
+                db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category (category)');
+            } catch (Throwable) {
+                // Index may already exist.
+            }
+        }
     } catch (Throwable) {
         $ready = false;
     }
@@ -5204,7 +5217,8 @@ function admin_module_cards_catalog(): array
 {
     return [
         ['route' => 'admin_modules', 'title' => ['fr' => 'Modules', 'en' => 'Modules', 'de' => 'Module', 'nl' => 'Modules'], 'desc' => ['fr' => 'Activation, désactivation et pilotage global des modules.', 'en' => 'Enable, disable and globally manage modules.', 'de' => 'Module aktivieren, deaktivieren und zentral steuern.', 'nl' => 'Modules activeren, deactiveren en centraal beheren.'], 'permission' => 'modules.manage'],
-        ['route' => 'admin_permissions', 'title' => ['fr' => 'Gestion des membres', 'en' => 'Member management', 'de' => 'Mitgliederverwaltung', 'nl' => 'Ledenbeheer'], 'desc' => ['fr' => 'Membres, rôles, droits et affectations.', 'en' => 'Members, roles, rights and assignments.', 'de' => 'Mitglieder, Rollen, Rechte und Zuweisungen.', 'nl' => 'Leden, rollen, rechten en toewijzingen.']],
+        ['route' => 'admin_members', 'title' => ['fr' => 'Gestion des membres', 'en' => 'Member management', 'de' => 'Mitgliederverwaltung', 'nl' => 'Ledenbeheer'], 'desc' => ['fr' => 'Profils membres, statut actif et comité.', 'en' => 'Member profiles, active status and committee.', 'de' => 'Mitgliederprofile, Aktivstatus und Komitee.', 'nl' => 'Ledenprofielen, actieve status en comité.']],
+        ['route' => 'admin_permissions', 'title' => ['fr' => 'Rôles & permissions', 'en' => 'Roles & permissions', 'de' => 'Rollen & Berechtigungen', 'nl' => 'Rollen & rechten'], 'desc' => ['fr' => 'Attribution des rôles et matrice des permissions.', 'en' => 'Role assignment and permissions matrix.', 'de' => 'Rollenzuweisung und Berechtigungsmatrix.', 'nl' => 'Roltoewijzing en rechtenmatrix.']],
         ['route' => 'admin_news', 'title' => ['fr' => 'Actualités', 'en' => 'News', 'de' => 'Neuigkeiten', 'nl' => 'Nieuws'], 'desc' => ['fr' => 'Sections, rédaction et modération.', 'en' => 'Sections, writing and moderation.', 'de' => 'Bereiche, Redaktion und Moderation.', 'nl' => 'Secties, redactie en moderatie.'], 'module' => 'news'],
         ['route' => 'admin_articles', 'title' => ['fr' => 'Articles', 'en' => 'Articles', 'de' => 'Artikel', 'nl' => 'Artikels'], 'desc' => ['fr' => 'Articles techniques publics.', 'en' => 'Public technical articles.', 'de' => 'Öffentliche technische Artikel.', 'nl' => 'Publieke technische artikels.'], 'module' => 'articles'],
         ['route' => 'admin_committee', 'title' => ['fr' => 'Comité', 'en' => 'Committee', 'de' => 'Komitee', 'nl' => 'Comité'], 'desc' => ['fr' => 'Membres du comité, rôle, ordre et biographie.', 'en' => 'Committee members, role, order and biography.', 'de' => 'Komiteemitglieder, Rolle, Reihenfolge und Biografie.', 'nl' => 'Comitéleden, rol, volgorde en biografie.'], 'module' => 'committee'],
@@ -5220,6 +5234,7 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_newsletters', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter', 'de' => 'Newsletter', 'nl' => 'Nieuwsbrief'], 'desc' => ['fr' => 'Abonnés, import CSV et campagnes email.', 'en' => 'Subscribers, CSV import and email campaigns.', 'de' => 'Abonnenten, CSV-Import und E-Mail-Kampagnen.', 'nl' => 'Abonnees, CSV-import en e-mailcampagnes.']],
         ['route' => 'admin_wiki', 'title' => ['fr' => 'Wiki', 'en' => 'Wiki', 'de' => 'Wiki', 'nl' => 'Wiki'], 'desc' => ['fr' => 'Pages collaboratives et révisions.', 'en' => 'Collaborative pages and revisions.', 'de' => 'Kollaborative Seiten und Revisionen.', 'nl' => 'Samenwerkingspagina’s en revisies.'], 'module' => 'wiki'],
         ['route' => 'admin_albums', 'title' => ['fr' => 'Albums', 'en' => 'Albums', 'de' => 'Alben', 'nl' => 'Albums'], 'desc' => ['fr' => 'Galerie publique et synchro sociale.', 'en' => 'Public gallery and social sync.', 'de' => 'Öffentliche Galerie und Social-Sync.', 'nl' => 'Publieke galerij en sociale sync.'], 'module' => 'albums'],
+        ['route' => 'admin_library', 'title' => ['fr' => 'Bibliothèque', 'en' => 'Library', 'de' => 'Bibliothek', 'nl' => 'Bibliotheek'], 'desc' => ['fr' => 'Gestion des documents PDF de la bibliothèque membres.', 'en' => 'Manage PDF documents from the members library.', 'de' => 'Verwaltung der PDF-Dokumente der Mitgliederbibliothek.', 'nl' => 'Beheer van PDF-documenten uit de ledenbibliotheek.'], 'permission' => 'admin.access'],
         ['route' => 'admin_ads', 'title' => ['fr' => 'Publicités', 'en' => 'Ads', 'de' => 'Werbung', 'nl' => 'Advertenties'], 'desc' => ['fr' => 'Régie publicitaire, placements et statistiques.', 'en' => 'Ad inventory, placements and statistics.', 'de' => 'Werbeverwaltung, Platzierungen und Statistiken.', 'nl' => 'Advertentiebeheer, plaatsingen en statistieken.'], 'module' => 'advertising'],
     ];
 }

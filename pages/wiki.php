@@ -50,9 +50,6 @@ ob_start();
                 <strong><?= e((string) $t['most_read']) ?></strong>
             </article>
         </div>
-        <?php if (has_permission('wiki.edit')): ?>
-            <p><a class="button small" href="<?= e(base_url('index.php?route=wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a></p>
-        <?php endif; ?>
         <form method="get" class="inline-form">
             <input type="hidden" name="route" value="wiki">
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
@@ -64,7 +61,7 @@ ob_start();
     </section>
 
     <section class="card">
-        <h2><?= e((string) $t['wiki_pages']) ?></h2>
+        <h2 class="wiki-section-title"><?= e((string) $t['wiki_pages']) ?></h2>
         <?php if ($rows === []): ?>
             <p><?= e((string) $t['no_page']) ?><?= $search !== '' ? e((string) $t['for_search']) : '' ?>.</p>
         <?php else: ?>

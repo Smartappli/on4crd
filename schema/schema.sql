@@ -231,6 +231,7 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
 CREATE TABLE IF NOT EXISTS member_library_documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT NOT NULL,
+    category VARCHAR(120) NOT NULL DEFAULT 'general',
     title VARCHAR(255) NOT NULL,
     description TEXT NULL,
     file_path VARCHAR(255) NOT NULL,
