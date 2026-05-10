@@ -72,35 +72,43 @@ if ($categoryOptions === []) {
 $documents = db()->query('SELECT * FROM member_library_documents ORDER BY uploaded_at DESC LIMIT 120')->fetchAll();
 ob_start();
 ?>
-<div class="card">
-    <h1><?= e((string) $t['title']) ?></h1>
-    <p><?= e((string) $t['intro']) ?></p>
-    <form method="post" enctype="multipart/form-data">
+<div class="card admin-library-shell">
+    <header class="admin-library-header">
+        <h1><?= e((string) $t['title']) ?></h1>
+        <p><?= e((string) $t['intro']) ?></p>
+    </header>
+    <form method="post" enctype="multipart/form-data" class="admin-library-upload-form">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="upload">
-        <select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>"><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select>
-        <input type="text" name="title" placeholder="<?= e((string) $t['title_ph']) ?>" required>
-        <textarea name="description" placeholder="<?= e((string) $t['desc_ph']) ?>"></textarea>
-        <input type="file" name="pdf" accept="application/pdf" required>
+        <div class="admin-library-upload-grid">
+            <select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>"><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select>
+            <input type="text" name="title" placeholder="<?= e((string) $t['title_ph']) ?>" required>
+            <textarea name="description" placeholder="<?= e((string) $t['desc_ph']) ?>"></textarea>
+            <input type="file" name="pdf" accept="application/pdf" required>
+        </div>
         <button class="button"><?= e((string) $t['upload']) ?></button>
     </form>
 
-    <section class="card" style="margin-top:12px;">
+    <section class="card admin-library-categories">
         <h2><?= e((string) $t['categories']) ?></h2>
         <form method="post" class="inline-form"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="add_category"><input type="text" name="category_code" placeholder="<?= e((string) $t['category_ph']) ?>"><button class="button" type="submit"><?= e((string) $t['add_category']) ?></button></form>
         <p class="help"><?= e((string) $t['existing_categories']) ?></p>
-        <?php foreach ($categoryOptions as $catOpt): ?>
-            <form method="post" class="inline-form" style="margin:.35rem 0;"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete_category"><input type="hidden" name="category_code" value="<?= e((string) $catOpt['code']) ?>"><span class="badge muted"><?= e((string) $catOpt['label']) ?></span><?php if ((string) $catOpt['code'] !== 'general'): ?><button class="button secondary" type="submit"><?= e((string) $t['delete']) ?></button><?php endif; ?></form>
-        <?php endforeach; ?>
+        <div class="admin-library-category-list">
+            <?php foreach ($categoryOptions as $catOpt): ?>
+                <form method="post" class="inline-form admin-library-category-item"><input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete_category"><input type="hidden" name="category_code" value="<?= e((string) $catOpt['code']) ?>"><span class="badge muted"><?= e((string) $catOpt['label']) ?></span><?php if ((string) $catOpt['code'] !== 'general'): ?><button class="button secondary" type="submit"><?= e((string) $t['delete']) ?></button><?php endif; ?></form>
+            <?php endforeach; ?>
+        </div>
     </section>
 
+    <section class="admin-library-documents">
     <?php foreach ($documents as $document): $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); if ($safePath === null) { continue; } ?>
-        <article class="card" style="margin-top:12px;">
+        <article class="card admin-library-document">
             <p><span class="badge muted"><?= e((string) ($document['category'] ?? 'general')) ?></span></p>
             <h3><?= e((string) $document['title']) ?></h3>
             <p><?= e((string) ($document['description'] ?? '')) ?></p>
-            <iframe src="<?= e(base_url($safePath)) ?>" style="width:100%;height:480px;border:1px solid #ccc;" loading="lazy"></iframe>
+            <iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview" loading="lazy"></iframe>
             <p><a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a></p>
         </article>
     <?php endforeach; ?>
+    </section>
 </div>
 <?php echo render_layout((string) ob_get_clean(), (string) $t['title']);
