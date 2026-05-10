@@ -1101,7 +1101,26 @@ function base_url(string $path = ''): string
 if (!function_exists('asset_url')) {
 function asset_url(string $path): string
 {
-    return base_url($path);
+    static $versionCache = [];
+
+    $normalizedPath = ltrim($path, '/');
+    if ($normalizedPath === '') {
+        return base_url($path);
+    }
+
+    if (!array_key_exists($normalizedPath, $versionCache)) {
+        $absolutePath = dirname(__DIR__) . '/' . $normalizedPath;
+        $versionCache[$normalizedPath] = is_file($absolutePath) ? (string) filemtime($absolutePath) : '';
+    }
+
+    $assetUrl = base_url($normalizedPath);
+    $version = $versionCache[$normalizedPath];
+    if ($version === '') {
+        return $assetUrl;
+    }
+
+    $separator = str_contains($assetUrl, '?') ? '&' : '?';
+    return $assetUrl . $separator . 'v=' . rawurlencode($version);
 }
 }
 
