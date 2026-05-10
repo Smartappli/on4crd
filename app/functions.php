@@ -960,7 +960,6 @@ function apply_runtime_schema_updates(): void
     db()->exec(
         'CREATE TABLE IF NOT EXISTS quotes (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            quote_text TEXT NOT NULL,
             quote_fr TEXT DEFAULT NULL,
             quote_en TEXT DEFAULT NULL,
             quote_de TEXT DEFAULT NULL,
@@ -971,6 +970,15 @@ function apply_runtime_schema_updates(): void
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
     if (table_exists('quotes')) {
+        $legacyColumnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $legacyColumnStmt->execute(['quotes', 'quote_text']);
+        if ((int) $legacyColumnStmt->fetchColumn() > 0) {
+            db()->exec('ALTER TABLE quotes DROP COLUMN quote_text');
+        }
+
         foreach (['quote_fr', 'quote_en', 'quote_de', 'quote_nl'] as $quoteColumn) {
             $columnStmt = db()->prepare(
                 'SELECT COUNT(*) FROM information_schema.columns
@@ -1049,7 +1057,7 @@ function seed_quotes_from_radioamateur_dump(string $sql): void
         return;
     }
 
-    $insertStmt = db()->prepare('INSERT INTO quotes (quote_text, quote_fr, quote_en, quote_de, quote_nl, author, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)');
+    $insertStmt = db()->prepare('INSERT INTO quotes (quote_fr, quote_en, quote_de, quote_nl, author, is_active) VALUES (?, ?, ?, ?, ?, 1)');
     if ($insertStmt === false) {
         return;
     }
@@ -1069,7 +1077,7 @@ function seed_quotes_from_radioamateur_dump(string $sql): void
             }
 
             try {
-                $insertStmt->execute([$quoteFr, $quoteFr, $quoteEn, $quoteDe, $quoteNl, null]);
+                $insertStmt->execute([$quoteFr, $quoteEn, $quoteDe, $quoteNl, null]);
             } catch (Throwable) {
                 continue;
             }
@@ -1092,7 +1100,7 @@ function random_quote_for_layout(): ?array
     $daySeed = date('Y-m-d');
     $offset = (int) (sprintf('%u', crc32($daySeed)) % $activeCount);
 
-    $stmt = db()->query('SELECT quote_text, quote_fr, quote_en, quote_de, quote_nl, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
+    $stmt = db()->query('SELECT quote_fr, quote_en, quote_de, quote_nl, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
     if ($stmt === false) {
         return null;
     }
@@ -1110,7 +1118,7 @@ function random_quote_for_layout(): ?array
     ];
     $quote = $localizedQuotes[$locale] ?? '';
     if ($quote === '') {
-        $quote = $localizedQuotes['fr'] !== '' ? $localizedQuotes['fr'] : trim((string) ($row['quote_text'] ?? ''));
+        $quote = $localizedQuotes['fr'];
     }
     $author = trim((string) ($row['author'] ?? ''));
     if ($quote === '') {
