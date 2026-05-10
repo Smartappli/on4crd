@@ -400,7 +400,7 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
-                    default => '',
+                    default => 'Les données de propagation sont actuellement indisponibles.',
                 };
                 return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
