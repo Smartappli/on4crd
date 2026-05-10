@@ -52,7 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
     $mime = '';
     if ($tmpName !== '') { if (class_exists('finfo')) { $finfo = new finfo(FILEINFO_MIME_TYPE); $mime = (string) ($finfo->file($tmpName) ?: ''); } if ($mime === '') { $mime = (string) @mime_content_type($tmpName); } }
-    if ($extension !== 'pdf' || ($mime !== 'application/pdf' && $mime !== 'application/x-pdf')) { set_flash('error', (string) $t['err_invalid']); redirect('admin_library'); }
+    $pdfSignature = '';
+    if ($tmpName !== '' && is_readable($tmpName)) {
+        $handle = fopen($tmpName, 'rb');
+        if (is_resource($handle)) {
+            $pdfSignature = (string) fread($handle, 5);
+            fclose($handle);
+        }
+    }
+    if ($extension !== 'pdf' || ($mime !== 'application/pdf' && $mime !== 'application/x-pdf') || $pdfSignature !== '%PDF-') { set_flash('error', (string) $t['err_invalid']); redirect('admin_library'); }
 
     try { $saved = secure_move_uploaded_file($file, dirname(__DIR__) . '/storage/uploads/library', 'doc_' . (int) ($user['id'] ?? 0), ['pdf'], ['application/pdf', 'application/x-pdf'], 15 * 1024 * 1024); }
     catch (Throwable) { set_flash('error', (string) $t['err_upload']); redirect('admin_library'); }
