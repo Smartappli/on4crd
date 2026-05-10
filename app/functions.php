@@ -1101,7 +1101,26 @@ function base_url(string $path = ''): string
 if (!function_exists('asset_url')) {
 function asset_url(string $path): string
 {
-    return base_url($path);
+    static $versionCache = [];
+
+    $normalizedPath = ltrim($path, '/');
+    if ($normalizedPath === '') {
+        return base_url($path);
+    }
+
+    if (!array_key_exists($normalizedPath, $versionCache)) {
+        $absolutePath = dirname(__DIR__) . '/' . $normalizedPath;
+        $versionCache[$normalizedPath] = is_file($absolutePath) ? (string) filemtime($absolutePath) : '';
+    }
+
+    $assetUrl = base_url($normalizedPath);
+    $version = $versionCache[$normalizedPath];
+    if ($version === '') {
+        return $assetUrl;
+    }
+
+    $separator = str_contains($assetUrl, '?') ? '&' : '?';
+    return $assetUrl . $separator . 'v=' . rawurlencode($version);
 }
 }
 
@@ -1136,6 +1155,43 @@ function route_url(string $route, array $query = []): string
 
     $params = array_merge(['route' => $route], $extra, $query);
     return base_url('/index.php?' . http_build_query($params));
+}
+}
+
+if (!function_exists('env')) {
+function env(string $key, mixed $default = null): mixed
+{
+    $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+    if ($value === false || $value === null) {
+        return $default;
+    }
+    return $value;
+}
+}
+
+if (!function_exists('storage_path')) {
+function storage_path(string $path = ''): string
+{
+    $base = dirname(__DIR__) . '/storage';
+    if ($path === '') {
+        return $base;
+    }
+    return $base . '/' . ltrim($path, '/');
+}
+}
+
+if (!function_exists('llphant_embedding_generator')) {
+function llphant_embedding_generator(): ?object
+{
+    return null;
+}
+}
+
+if (!function_exists('llphant_embedding_vector')) {
+/** @return list<float> */
+function llphant_embedding_vector(string $text): array
+{
+    return [];
 }
 }
 
@@ -2544,8 +2600,23 @@ if (!function_exists('answer_question_from_knowledge')) {
         if (!class_exists('\\LLPhant\\Embeddings\\EmbeddingGenerator\\EmbeddingGeneratorInterface')) {
             return false;
         }
-
-        return function_exists('llphant_embedding_generator') || function_exists('llphant_embedding_vector');
+        try {
+            if (function_exists('llphant_embedding_generator')) {
+                $generator = llphant_embedding_generator();
+                if (is_object($generator) && method_exists($generator, 'embedQuery')) {
+                    return true;
+                }
+            }
+            if (function_exists('llphant_embedding_vector')) {
+                $probe = llphant_embedding_vector('ping');
+                if (is_array($probe) && $probe !== []) {
+                    return true;
+                }
+            }
+        } catch (Throwable) {
+            return false;
+        }
+        return false;
     }
 
     function rag_llphant_model_name(): string

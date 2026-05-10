@@ -940,6 +940,11 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
     var(--panel);
 }
 .admin-library-header p { max-width: 72ch; color: var(--muted); }
+.admin-library-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
 .admin-library-upload-form,
 .admin-library-document {
   border: 1px solid var(--border);
@@ -953,6 +958,20 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   gap: .8rem;
 }
 .admin-library-upload-grid textarea { min-height: 7.5rem; }
+.admin-library-field {
+  display: grid;
+  gap: .3rem;
+  font-size: .92rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.admin-library-field span {
+  color: var(--muted);
+  font-weight: 600;
+}
+.admin-library-field-wide {
+  grid-column: 1 / -1;
+}
 .admin-library-categories { margin-top: 0; }
 .admin-library-category-list { display: flex; flex-wrap: wrap; gap: .55rem; }
 .admin-library-category-item {
@@ -964,6 +983,11 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 }
 .admin-library-documents { display: grid; gap: .8rem; }
 .admin-library-document { margin-top: 0; }
+.admin-library-empty {
+  text-align: center;
+  border: 1px dashed var(--border);
+  background: color-mix(in srgb, var(--panel-2) 64%, var(--panel));
+}
 .admin-library-pdf-preview {
   width: 100%;
   min-height: 460px;
@@ -972,6 +996,25 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   background: #fff;
 }
 [data-theme="dark"] .admin-library-pdf-preview { background: #0b1220; }
+.admin-library-preview-toggle {
+  margin-top: .7rem;
+}
+.admin-library-preview-toggle summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: .5rem;
+}
+.admin-library-preview-toggle[open] summary {
+  color: var(--accent-strong);
+}
+.admin-library-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .65rem;
+  margin-top: .9rem;
+}
 .stats-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:1rem; }
 .stat-card { background: var(--panel); border:1px solid var(--border); border-radius: 18px; padding: 1rem; display:flex; flex-direction:column; gap:.35rem; }
 .stat-card strong { font-size: 1.5rem; }
