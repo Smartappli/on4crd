@@ -1736,7 +1736,8 @@ textarea.wysiwyg-source {
 }
 .auctions-section h1 {
   margin: 0;
-  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  font-size: 1rem;
+  line-height: 1.4;
   font-family: inherit;
   font-weight: 600;
 }
