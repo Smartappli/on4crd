@@ -659,6 +659,10 @@ textarea { resize: vertical; }
   flex: 1 1 260px;
   min-width: 220px;
 }
+.album-heading-font {
+  font-family: inherit;
+  font-weight: 700;
+}
 .directory-filters .inline-form {
   flex-wrap: wrap;
 }
@@ -931,6 +935,11 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .stats-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:1rem; }
 .stat-card { background: var(--panel); border:1px solid var(--border); border-radius: 18px; padding: 1rem; display:flex; flex-direction:column; gap:.35rem; }
 .stat-card strong { font-size: 1.5rem; }
+.stat-card strong,
+.wiki-section-title {
+  font-family: inherit;
+  font-weight: 700;
+}
 .top-zone .ad-slot { padding: .6rem; }
 .split-home { align-items:start; }
 .module-row { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:.8rem 0; border-bottom:1px solid var(--border); }
