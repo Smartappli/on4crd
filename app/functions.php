@@ -961,17 +961,43 @@ function apply_runtime_schema_updates(): void
         'CREATE TABLE IF NOT EXISTS quotes (
             id INT AUTO_INCREMENT PRIMARY KEY,
             quote_text TEXT NOT NULL,
+            quote_fr TEXT DEFAULT NULL,
+            quote_en TEXT DEFAULT NULL,
+            quote_de TEXT DEFAULT NULL,
+            quote_nl TEXT DEFAULT NULL,
             author VARCHAR(190) DEFAULT NULL,
             is_active TINYINT(1) NOT NULL DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
+    if (table_exists('quotes')) {
+        foreach (['quote_fr', 'quote_en', 'quote_de', 'quote_nl'] as $quoteColumn) {
+            $columnStmt = db()->prepare(
+                'SELECT COUNT(*) FROM information_schema.columns
+                 WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+            );
+            $columnStmt->execute(['quotes', $quoteColumn]);
+            if ((int) $columnStmt->fetchColumn() === 0) {
+                db()->exec('ALTER TABLE quotes ADD COLUMN ' . $quoteColumn . ' TEXT DEFAULT NULL');
+            }
+        }
+    }
 
     $quoteCount = db()->query('SELECT COUNT(*) FROM quotes');
     $hasQuotes = $quoteCount !== false ? (int) $quoteCount->fetchColumn() > 0 : false;
     if (!$hasQuotes) {
-        $seedFile = __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532.sql';
-        if (is_file($seedFile)) {
+        $seedCandidates = [
+            __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532_mysql.sql',
+            __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532.sql',
+        ];
+        $seedFile = '';
+        foreach ($seedCandidates as $candidatePath) {
+            if (is_file($candidatePath)) {
+                $seedFile = $candidatePath;
+                break;
+            }
+        }
+        if ($seedFile !== '') {
             try {
                 seed_quotes_from_sql_file($seedFile);
             } catch (Throwable $throwable) {
@@ -995,6 +1021,13 @@ function seed_quotes_from_sql_file(string $filePath): void
         return;
     }
 
+    if (
+        preg_match('/INSERT INTO\s+(?:public\.)?(?:`?radioamateur_citations`?)/i', $sql) === 1
+    ) {
+        seed_quotes_from_postgresql_dump($sql);
+        return;
+    }
+
     $statements = preg_split('/;\s*(?:\R|$)/', $sql) ?: [];
     foreach ($statements as $statement) {
         $trimmed = trim($statement);
@@ -1011,15 +1044,44 @@ function seed_quotes_from_sql_file(string $filePath): void
     }
 }
 
+function seed_quotes_from_postgresql_dump(string $sql): void
+{
+    if (!preg_match_all('/INSERT INTO\s+(?:public\.)?(?:`?radioamateur_citations`?)\s*\([^)]*\)\s*VALUES\s*(.+?);/is', $sql, $matches)) {
+        return;
+    }
+
+    $insertStmt = db()->prepare('INSERT INTO quotes (quote_text, quote_fr, quote_en, quote_de, quote_nl, author, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)');
+    if ($insertStmt === false) {
+        return;
+    }
+
+    foreach (($matches[1] ?? []) as $valuesBlock) {
+        if (!preg_match_all("/\\(\\s*'((?:''|\\\\'|[^'])*)'\\s*,\\s*'((?:''|\\\\'|[^'])*)'\\s*,\\s*'((?:''|\\\\'|[^'])*)'\\s*,\\s*'((?:''|\\\\'|[^'])*)'\\s*,/u", (string) $valuesBlock, $rows, PREG_SET_ORDER)) {
+            continue;
+        }
+
+        foreach ($rows as $rowMatch) {
+            $quoteFr = trim(str_replace(["''", "\\'"], ["'", "'"], (string) ($rowMatch[1] ?? '')));
+            $quoteEn = trim(str_replace(["''", "\\'"], ["'", "'"], (string) ($rowMatch[2] ?? '')));
+            $quoteDe = trim(str_replace(["''", "\\'"], ["'", "'"], (string) ($rowMatch[3] ?? '')));
+            $quoteNl = trim(str_replace(["''", "\\'"], ["'", "'"], (string) ($rowMatch[4] ?? '')));
+            if ($quoteFr === '') {
+                continue;
+            }
+
+            try {
+                $insertStmt->execute([$quoteFr, $quoteFr, $quoteEn, $quoteDe, $quoteNl, null]);
+            } catch (Throwable) {
+                continue;
+            }
+        }
+    }
+}
+
 function random_quote_for_layout(): ?array
 {
     if (!table_exists('quotes')) {
         return null;
-    }
-
-    static $cachedQuote = null;
-    if (is_array($cachedQuote)) {
-        return $cachedQuote;
     }
 
     $countStmt = db()->query('SELECT COUNT(*) FROM quotes WHERE is_active = 1');
@@ -1028,13 +1090,10 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
-    try {
-        $offset = random_int(0, max(0, $activeCount - 1));
-    } catch (Throwable) {
-        $offset = 0;
-    }
+    $daySeed = date('Y-m-d');
+    $offset = (int) (sprintf('%u', crc32($daySeed)) % $activeCount);
 
-    $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
+    $stmt = db()->query('SELECT quote_text, quote_fr, quote_en, quote_de, quote_nl, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
     if ($stmt === false) {
         return null;
     }
@@ -1043,18 +1102,26 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
-    $quote = trim((string) ($row['quote_text'] ?? ''));
+    $locale = current_locale();
+    $localizedQuotes = [
+        'fr' => trim((string) ($row['quote_fr'] ?? '')),
+        'en' => trim((string) ($row['quote_en'] ?? '')),
+        'de' => trim((string) ($row['quote_de'] ?? '')),
+        'nl' => trim((string) ($row['quote_nl'] ?? '')),
+    ];
+    $quote = $localizedQuotes[$locale] ?? '';
+    if ($quote === '') {
+        $quote = $localizedQuotes['fr'] !== '' ? $localizedQuotes['fr'] : trim((string) ($row['quote_text'] ?? ''));
+    }
     $author = trim((string) ($row['author'] ?? ''));
     if ($quote === '') {
         return null;
     }
 
-    $cachedQuote = [
+    return [
         'quote' => $quote,
         'author' => $author,
     ];
-
-    return $cachedQuote;
 }
 
 if (!function_exists('base_url')) {
