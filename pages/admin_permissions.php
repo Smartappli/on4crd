@@ -18,6 +18,12 @@ set_page_meta([
     'robots' => 'noindex,nofollow',
 ]);
 
+$returnQuery = http_build_query([
+    'member_q' => (string) ($_GET['member_q'] ?? ''),
+    'sort' => (string) ($_GET['sort'] ?? 'callsign'),
+    'dir' => (string) ($_GET['dir'] ?? 'asc'),
+]);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -55,15 +61,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             set_flash('success', (string) $t['member_updated']);
         }
-        redirect('admin_permissions');
+        $postReturnQuery = trim((string) ($_POST['return_query'] ?? ''));
+        redirect('admin_permissions' . ($postReturnQuery !== '' ? '&' . $postReturnQuery : ''));
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
-        redirect('admin_permissions');
+        $postReturnQuery = trim((string) ($_POST['return_query'] ?? ''));
+        redirect('admin_permissions' . ($postReturnQuery !== '' ? '&' . $postReturnQuery : ''));
     }
 }
 
 $memberSearch = trim((string) ($_GET['member_q'] ?? ''));
+
+$memberSort = (string) ($_GET['sort'] ?? 'callsign');
+
+$memberPage = max(1, (int) ($_GET['page'] ?? 1));
+$memberPerPage = 25;
+$memberDir = strtolower((string) ($_GET['dir'] ?? 'asc')) === 'desc' ? 'desc' : 'asc';
+$allowedSort = ['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'];
+if (!in_array($memberSort, $allowedSort, true)) {
+    $memberSort = 'callsign';
+}
 $members = db()->query('SELECT id, callsign, full_name, email, locator, is_active, is_committee FROM members ORDER BY callsign')->fetchAll();
+usort($members, static function (array $a, array $b) use ($memberSort, $memberDir): int {
+    $va = (string) ($a[$memberSort] ?? '');
+    $vb = (string) ($b[$memberSort] ?? '');
+    $cmp = strnatcasecmp($va, $vb);
+    return $memberDir === 'desc' ? -$cmp : $cmp;
+});
 if ($memberSearch !== '') {
     $needle = mb_safe_strtolower($memberSearch);
     $members = array_values(array_filter($members, static function (array $m) use ($needle): bool {
@@ -71,6 +95,11 @@ if ($memberSearch !== '') {
         return str_contains($hay, $needle);
     }));
 }
+$memberTotal = count($members);
+$memberPages = max(1, (int) ceil($memberTotal / $memberPerPage));
+if ($memberPage > $memberPages) { $memberPage = $memberPages; }
+$members = array_slice($members, ($memberPage - 1) * $memberPerPage, $memberPerPage);
+
 $roles = db()->query('SELECT id, code, label FROM roles ORDER BY label')->fetchAll();
 $permissions = db()->query('SELECT code, label FROM permissions ORDER BY code')->fetchAll();
 $memberRoles = db()->query('SELECT mr.member_id, mr.role_id, r.label FROM member_roles mr INNER JOIN roles r ON r.id = mr.role_id ORDER BY r.label')->fetchAll() ?: [];
@@ -105,6 +134,7 @@ ob_start();
         <form method="post">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="assign_role">
+            <input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
             <label><?= e((string) $t['member']) ?>
                 <select name="member_id">
                     <?php foreach ($members as $member): ?>
@@ -130,18 +160,18 @@ ob_start();
         <label><?= e((string) $t['search']) ?>
             <input type="text" name="member_q" value="<?= e($memberSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         </label>
-        <button class="button secondary" type="submit">OK</button>
+        <input type="hidden" name="sort" value="<?= e($memberSort) ?>"><input type="hidden" name="dir" value="<?= e($memberDir) ?>"><button class="button secondary" type="submit">OK</button>
     </form>
     <div class="table-wrap">
         <table>
             <thead>
                 <tr>
-                    <th><?= e((string) $t['th_callsign']) ?></th>
-                    <th><?= e((string) $t['th_name']) ?></th>
-                    <th><?= e((string) $t['th_email']) ?></th>
-                    <th><?= e((string) $t['th_locator']) ?></th>
-                    <th><?= e((string) $t['th_active']) ?></th>
-                    <th><?= e((string) $t['th_committee']) ?></th>
+                    <th><a href="?member_q=<?= urlencode($memberSearch) ?>&sort=callsign&dir=<?= $memberSort==='callsign'&&$memberDir==='asc'?'desc':'asc' ?>"><?= e((string) $t['th_callsign']) ?></a></th>
+                    <th><a href="?member_q=<?= urlencode($memberSearch) ?>&sort=full_name&dir=<?= $memberSort==='full_name'&&$memberDir==='asc'?'desc':'asc' ?>"><?= e((string) $t['th_name']) ?></a></th>
+                    <th><a href="?member_q=<?= urlencode($memberSearch) ?>&sort=email&dir=<?= $memberSort==='email'&&$memberDir==='asc'?'desc':'asc' ?>"><?= e((string) $t['th_email']) ?></a></th>
+                    <th><a href="?member_q=<?= urlencode($memberSearch) ?>&sort=locator&dir=<?= $memberSort==='locator'&&$memberDir==='asc'?'desc':'asc' ?>"><?= e((string) $t['th_locator']) ?></a></th>
+                    <th><a href="?member_q=<?= urlencode($memberSearch) ?>&sort=is_active&dir=<?= $memberSort==='is_active'&&$memberDir==='asc'?'desc':'asc' ?>"><?= e((string) $t['th_active']) ?></a></th>
+                    <th><a href="?member_q=<?= urlencode($memberSearch) ?>&sort=is_committee&dir=<?= $memberSort==='is_committee'&&$memberDir==='asc'?'desc':'asc' ?>"><?= e((string) $t['th_committee']) ?></a></th>
                     <th><?= e((string) $t['th_roles']) ?></th>
                     <th><?= e((string) $t['th_actions']) ?></th>
                 </tr>
@@ -154,6 +184,7 @@ ob_start();
                             <form method="post" class="grid" style="grid-template-columns: 1fr 1fr 1fr 1fr auto auto 2fr auto; gap:.5rem; align-items:center;">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                                                 <input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>">
+                                    <input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
                                 <input type="text" name="callsign" value="<?= e((string) $member['callsign']) ?>">
                                 <input type="text" name="full_name" value="<?= e((string) $member['full_name']) ?>">
                                 <input type="email" name="email" value="<?= e((string) $member['email']) ?>">
@@ -189,6 +220,16 @@ ob_start();
             </tbody>
         </table>
     </div>
+    <?php if ($memberPages > 1): ?>
+        <p class="help" style="margin-top:.75rem;">Page <?= (int) $memberPage ?> / <?= (int) $memberPages ?>
+            <?php if ($memberPage > 1): ?>
+                <a href="?member_q=<?= urlencode($memberSearch) ?>&sort=<?= urlencode($memberSort) ?>&dir=<?= urlencode($memberDir) ?>&page=<?= $memberPage - 1 ?>">←</a>
+            <?php endif; ?>
+            <?php if ($memberPage < $memberPages): ?>
+                <a href="?member_q=<?= urlencode($memberSearch) ?>&sort=<?= urlencode($memberSort) ?>&dir=<?= urlencode($memberDir) ?>&page=<?= $memberPage + 1 ?>">→</a>
+            <?php endif; ?>
+        </p>
+    <?php endif; ?>
 </section>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);
