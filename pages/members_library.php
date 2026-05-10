@@ -49,7 +49,7 @@ ob_start();
                 <option value="<?= e($catName) ?>" <?= $catName === $category ? 'selected' : '' ?>><?= e($catName) ?> (<?= (int) ($cat['total'] ?? 0) ?>)</option>
             <?php endforeach; ?>
         </select>
-        <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
+        <input type="search" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
     </form>
 
