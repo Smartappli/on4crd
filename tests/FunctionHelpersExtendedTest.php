@@ -60,4 +60,28 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNull(extract_latest_kp_measurement($payload));
     }
 
+    public function testEnvReturnsDefaultWhenMissingAndServerValueWhenPresent(): void
+    {
+        self::assertSame('fallback', env('ON4CRD_TEST_ENV', 'fallback'));
+        $_SERVER['ON4CRD_TEST_ENV'] = 'server-value';
+        self::assertSame('server-value', env('ON4CRD_TEST_ENV', 'fallback'));
+    }
+
+    public function testStoragePathBuildsAbsolutePath(): void
+    {
+        $base = storage_path();
+        self::assertStringEndsWith('/storage', $base);
+        self::assertSame($base . '/uploads/library', storage_path('uploads/library'));
+    }
+
+    public function testAssetUrlAddsVersionParameterForExistingFile(): void
+    {
+        $_SERVER['HTTP_HOST'] = 'example.test';
+        $_SERVER['HTTPS'] = 'on';
+
+        $url = asset_url('assets/css/app.css');
+        self::assertStringContainsString('/assets/css/app.css', $url);
+        self::assertMatchesRegularExpression('/[?&]v=\\d+$/', $url);
+    }
+
 }
