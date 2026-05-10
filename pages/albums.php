@@ -53,19 +53,16 @@ ob_start();
 <div class="stack">
     <section class="card gallery-header">
         <div class="row-between">
-            <h1><?= e((string) $t['public_albums']) ?></h1>
-            <?php if (has_permission('albums.manage')): ?>
-                <a class="button small" href="<?= e(base_url('index.php?route=admin_albums')) ?>"><?= e((string) $t['manage']) ?></a>
-            <?php endif; ?>
+            <h1 class="album-heading-font"><?= e((string) $t['public_albums']) ?></h1>
         </div>
         <p class="help"><?= e((string) $t['intro']) ?></p>
         <div class="stats-grid">
             <article class="stat-card">
-                <span class="help"><?= e((string) $t['albums']) ?></span>
+                <span class="help album-heading-font"><?= e((string) $t['albums']) ?></span>
                 <strong><?= (int) count($rows) ?></strong>
             </article>
             <article class="stat-card">
-                <span class="help"><?= e((string) $t['indexed_photos']) ?></span>
+                <span class="help album-heading-font"><?= e((string) $t['indexed_photos']) ?></span>
                 <strong><?= (int) $photoTotal ?></strong>
             </article>
         </div>
@@ -80,7 +77,7 @@ ob_start();
     </section>
 
     <section class="card">
-        <h2><?= e((string) $t['gallery']) ?></h2>
+        <h2 class="album-heading-font"><?= e((string) $t['gallery']) ?></h2>
         <?php if ($rows === []): ?>
             <p class="help"><?= e((string) $t['none']) ?><?= $search !== '' ? e((string) $t['for_search']) : '' ?>.</p>
         <?php else: ?>

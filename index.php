@@ -281,12 +281,14 @@ switch ($route) {
     case 'album': $dispatchPage('pages/album.php'); break;
     case 'admin': $dispatchPage('pages/admin.php'); break;
     case 'admin_permissions': $dispatchPage('pages/admin_permissions.php'); break;
+    case 'admin_members': $dispatchPage('pages/admin_members.php'); break;
     case 'admin_newsletters': $dispatchPage('pages/admin_newsletters.php'); break;
     case 'admin_modules': $dispatchPage('pages/admin_modules.php'); break;
     case 'admin_articles': $dispatchPage('pages/admin_articles.php'); break;
     case 'admin_committee': $dispatchPage('pages/admin_committee.php'); break;
     case 'admin_wiki': $dispatchPage('pages/admin_wiki.php'); break;
     case 'admin_albums': $dispatchPage('pages/admin_albums.php'); break;
+    case 'admin_library': $dispatchPage('pages/admin_library.php'); break;
     case 'admin_news': $dispatchPage('pages/admin_news.php'); break;
     case 'admin_press': $dispatchPage('pages/admin_press.php'); break;
     case 'admin_editorial': $dispatchPage('pages/admin_editorial.php'); break;
