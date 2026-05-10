@@ -1028,10 +1028,11 @@ function random_quote_for_layout(): ?array
         return null;
     }
 
+    $maxOffset = max(0, $activeCount - 1);
     try {
-        $offset = random_int(0, max(0, $activeCount - 1));
+        $offset = random_int(0, $maxOffset);
     } catch (Throwable) {
-        $offset = 0;
+        $offset = mt_rand(0, $maxOffset);
     }
 
     $stmt = db()->query('SELECT quote_text, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
