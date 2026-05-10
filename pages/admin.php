@@ -8,6 +8,7 @@ $openLabel = ['fr' => 'Ouvrir', 'en' => 'Open', 'de' => 'Öffnen', 'nl' => 'Open
 $adminCardIcons = [
     'admin_modules' => '🧩',
     'admin_permissions' => '🔐',
+    'admin_members' => '👤',
     'admin_news' => '📰',
     'admin_articles' => '🛠️',
     'admin_committee' => '👥',
@@ -22,6 +23,7 @@ $adminCardIcons = [
     'admin_newsletters' => '✉️',
     'admin_wiki' => '📚',
     'admin_albums' => '🖼️',
+    'admin_library' => '📖',
     'admin_ads' => '📢',
 ];
 

@@ -97,7 +97,7 @@ ob_start();
         <form method="post" class="chatbot-form" id="chatbot-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <label for="chatbot-question" class="sr-only"><?= e($t('question_label')) ?></label>
-            <textarea id="chatbot-question" name="question" rows="3" placeholder="<?= e($t('placeholder')) ?>" required><?= e($question) ?></textarea>
+            <textarea id="chatbot-question" name="question" rows="3" placeholder="<?= e($t('placeholder')) ?>" data-wysiwyg="off" required><?= e($question) ?></textarea>
             <div class="chatbot-form-actions">
                 <span class="help"><?= e($t('kbd_help')) ?></span>
                 <button class="button" type="submit"><?= e($t('send')) ?></button>
