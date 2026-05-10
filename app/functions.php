@@ -988,7 +988,6 @@ function apply_runtime_schema_updates(): void
     if (!$hasQuotes) {
         $seedCandidates = [
             __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532_mysql.sql',
-            __DIR__ . '/../assets/sql/radioamateur_citations_multilingue_3532.sql',
         ];
         $seedFile = '';
         foreach ($seedCandidates as $candidatePath) {
@@ -1024,7 +1023,7 @@ function seed_quotes_from_sql_file(string $filePath): void
     if (
         preg_match('/INSERT INTO\s+(?:public\.)?(?:`?radioamateur_citations`?)/i', $sql) === 1
     ) {
-        seed_quotes_from_postgresql_dump($sql);
+        seed_quotes_from_radioamateur_dump($sql);
         return;
     }
 
@@ -1044,7 +1043,7 @@ function seed_quotes_from_sql_file(string $filePath): void
     }
 }
 
-function seed_quotes_from_postgresql_dump(string $sql): void
+function seed_quotes_from_radioamateur_dump(string $sql): void
 {
     if (!preg_match_all('/INSERT INTO\s+(?:public\.)?(?:`?radioamateur_citations`?)\s*\([^)]*\)\s*VALUES\s*(.+?);/is', $sql, $matches)) {
         return;
