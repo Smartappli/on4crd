@@ -47,6 +47,13 @@ $homeMessages = [
         'latest_news_title' => 'Dernière actualité',
         'next_event_title' => 'Prochain évènement',
         'ad_title' => 'Publicité',
+        'spotlight_tool_day' => 'Dernière actualité',
+        'spotlight_for_sale' => 'Prochain événement',
+        'spotlight_auction_live' => 'Publicité',
+        'spotlight_sub_1' => 'Actuellement en vente',
+        'spotlight_sub_2' => "L'outil du jour",
+        'spotlight_sub_3' => 'Enchère en cours',
+        'spotlight_sub_placeholder' => 'Contenu bientôt disponible.',
         'repeater_title' => 'Notre relais',
         'repeater_desc' => 'Retrouvez les informations essentielles concernant notre relai et ses paramètres.',
         'repeater_cta' => 'Consulter les informations du relais',
@@ -112,6 +119,13 @@ $homeMessages = [
         'latest_news_title' => 'Latest news',
         'next_event_title' => 'Next event',
         'ad_title' => 'Advertisement',
+        'spotlight_tool_day' => 'Tool of the day',
+        'spotlight_for_sale' => 'Currently for sale',
+        'spotlight_auction_live' => 'Auction in progress',
+        'spotlight_sub_1' => 'Equipment focus',
+        'spotlight_sub_2' => 'Classifieds',
+        'spotlight_sub_3' => 'Upcoming opportunities',
+        'spotlight_sub_placeholder' => 'Content coming soon.',
         'repeater_title' => 'Our repeater',
         'repeater_desc' => 'Find key information about our repeater and settings.',
         'repeater_cta' => 'View repeater information',
@@ -177,6 +191,13 @@ $homeMessages = [
         'latest_news_title' => 'Neueste Nachricht',
         'next_event_title' => 'Nächstes Ereignis',
         'ad_title' => 'Werbung',
+        'spotlight_tool_day' => 'Werkzeug des Tages',
+        'spotlight_for_sale' => 'Aktuell im Verkauf',
+        'spotlight_auction_live' => 'Laufende Auktion',
+        'spotlight_sub_1' => 'Geräte im Fokus',
+        'spotlight_sub_2' => 'Kleinanzeigen',
+        'spotlight_sub_3' => 'Kommende Chancen',
+        'spotlight_sub_placeholder' => 'Inhalte folgen in Kürze.',
         'repeater_title' => 'Unser Relais',
         'repeater_desc' => 'Finden Sie die wichtigsten Informationen über unser Relais und seine Parameter.',
         'repeater_cta' => 'Relaisinformationen ansehen',
@@ -242,6 +263,13 @@ $homeMessages = [
         'latest_news_title' => 'Laatste nieuws',
         'next_event_title' => 'Volgend evenement',
         'ad_title' => 'Advertentie',
+        'spotlight_tool_day' => 'Tool van de dag',
+        'spotlight_for_sale' => 'Momenteel te koop',
+        'spotlight_auction_live' => 'Veiling bezig',
+        'spotlight_sub_1' => 'Materieel in de kijker',
+        'spotlight_sub_2' => 'Kleine annonces',
+        'spotlight_sub_3' => 'Komende kansen',
+        'spotlight_sub_placeholder' => 'Inhoud binnenkort beschikbaar.',
         'repeater_title' => 'Ons relais',
         'repeater_desc' => 'Vind de belangrijkste informatie over ons relais en zijn parameters.',
         'repeater_cta' => 'Bekijk relaisinformatie',
@@ -768,9 +796,12 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<h2 class="text-2xl font-bold text-slate-900">' . e((string) $homeI18n['club_spotlight_title']) . '</h2>'
     . '</header>'
     . '<div class="grid gap-4 lg:grid-cols-3">'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['latest_news_title']) . '</h3>' . $latestNewsHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['next_event_title']) . '</h3>' . $nextEventHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ad_title']) . '</h3>' . $adSlotHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_tool_day']) . '</h3>' . $latestNewsHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_for_sale']) . '</h3>' . $nextEventHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $adSlotHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_1']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_2']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_3']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
     . '</div>'
     . '</section>'
     . $memberModulesSectionHtml

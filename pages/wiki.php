@@ -41,13 +41,13 @@ ob_start();
     <section class="card wiki-header">
         <div class="stats-grid">
             <article class="stat-card">
-                <strong><?= e((string) $t['new_pages']) ?></strong>
+                <span class="stat-card-label"><?= e((string) $t['new_pages']) ?></span>
             </article>
             <article class="stat-card">
-                <strong><?= e((string) $t['updated_pages']) ?></strong>
+                <span class="stat-card-label"><?= e((string) $t['updated_pages']) ?></span>
             </article>
             <article class="stat-card">
-                <strong><?= e((string) $t['most_read']) ?></strong>
+                <span class="stat-card-label"><?= e((string) $t['most_read']) ?></span>
             </article>
         </div>
         <form method="get" class="inline-form">

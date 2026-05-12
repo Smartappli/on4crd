@@ -486,7 +486,7 @@ function render_widget(string $slug, array $user = []): string
                 default => 'Conditions variables',
             };
             return '<ul class="list-clean">'
-                . '<li><strong>' . e($weatherText) . '</strong></li>'
+                . '<li><strong>Météo: ' . e($weatherText) . '</strong></li>'
                 . '</ul>';
 
         default:
