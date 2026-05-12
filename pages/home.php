@@ -54,6 +54,8 @@ $homeMessages = [
         'spotlight_sub_2' => "L'outil du jour",
         'spotlight_sub_3' => 'Enchère en cours',
         'spotlight_sub_placeholder' => 'Contenu bientôt disponible.',
+        'spotlight_tool_day_item' => 'Calcul du grid depuis une adresse postale',
+        'spotlight_tool_day_cta' => 'Ouvrir cet outil',
         'repeater_title' => 'Notre relais',
         'repeater_desc' => 'Retrouvez les informations essentielles concernant notre relai et ses paramètres.',
         'repeater_cta' => 'Consulter les informations du relais',
@@ -126,6 +128,8 @@ $homeMessages = [
         'spotlight_sub_2' => 'Classifieds',
         'spotlight_sub_3' => 'Upcoming opportunities',
         'spotlight_sub_placeholder' => 'Content coming soon.',
+        'spotlight_tool_day_item' => 'Grid calculation from a postal address',
+        'spotlight_tool_day_cta' => 'Open this tool',
         'repeater_title' => 'Our repeater',
         'repeater_desc' => 'Find key information about our repeater and settings.',
         'repeater_cta' => 'View repeater information',
@@ -198,6 +202,8 @@ $homeMessages = [
         'spotlight_sub_2' => 'Kleinanzeigen',
         'spotlight_sub_3' => 'Kommende Chancen',
         'spotlight_sub_placeholder' => 'Inhalte folgen in Kürze.',
+        'spotlight_tool_day_item' => 'Grid-Berechnung aus einer Postadresse',
+        'spotlight_tool_day_cta' => 'Werkzeug öffnen',
         'repeater_title' => 'Unser Relais',
         'repeater_desc' => 'Finden Sie die wichtigsten Informationen über unser Relais und seine Parameter.',
         'repeater_cta' => 'Relaisinformationen ansehen',
@@ -270,6 +276,8 @@ $homeMessages = [
         'spotlight_sub_2' => 'Kleine annonces',
         'spotlight_sub_3' => 'Komende kansen',
         'spotlight_sub_placeholder' => 'Inhoud binnenkort beschikbaar.',
+        'spotlight_tool_day_item' => 'Grid berekenen vanaf een postadres',
+        'spotlight_tool_day_cta' => 'Tool openen',
         'repeater_title' => 'Ons relais',
         'repeater_desc' => 'Vind de belangrijkste informatie over ons relais en zijn parameters.',
         'repeater_cta' => 'Bekijk relaisinformatie',
@@ -722,19 +730,25 @@ if (is_array($homeQuote)) {
     }
 }
 
-$spotlightCards = [
-    ['title' => (string) $homeI18n['spotlight_tool_day'], 'body' => $latestNewsHtml],
-    ['title' => (string) $homeI18n['spotlight_for_sale'], 'body' => $nextEventHtml],
-    ['title' => (string) $homeI18n['spotlight_auction_live'], 'body' => $adSlotHtml],
-];
-$spotlightCardsHtml = '';
-foreach ($spotlightCards as $spotlightCard) {
-    $spotlightCardsHtml .= '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">'
-        . e((string) $spotlightCard['title'])
-        . '</h3>'
-        . (string) $spotlightCard['body']
-        . '</article>';
-}
+
+$spotlightPlaceholderCard = static function (string $title, string $placeholder): string {
+    return '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">'
+        . e($title)
+        . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">'
+        . e($placeholder)
+        . '</div></article>';
+};
+$spotlightToolCard = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">'
+    . e((string) $homeI18n['spotlight_sub_2'])
+    . '</h3><a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="'
+    . e(route_url('tools'))
+    . '#tool-grid"><p class="text-sm font-semibold text-slate-900">'
+    . e((string) $homeI18n['spotlight_tool_day_item'])
+    . '</p><span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">'
+    . e((string) $homeI18n['spotlight_tool_day_cta'])
+    . ' →</span></a></article>';
+$spotlightPlaceholderOneCard = $spotlightPlaceholderCard((string) $homeI18n['spotlight_sub_1'], (string) $homeI18n['spotlight_sub_placeholder']);
+$spotlightPlaceholderThreeCard = $spotlightPlaceholderCard((string) $homeI18n['spotlight_sub_3'], (string) $homeI18n['spotlight_sub_placeholder']);
 
 $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="' . e((string) $homeI18n['quote_aria']) . '">'
@@ -813,9 +827,9 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_tool_day']) . '</h3>' . $latestNewsHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_for_sale']) . '</h3>' . $nextEventHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $adSlotHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_1']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_2']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_3']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
+    . $spotlightPlaceholderOneCard
+    . $spotlightToolCard
+    . $spotlightPlaceholderThreeCard
     . '</div>'
     . '</section>'
     . $memberModulesSectionHtml
