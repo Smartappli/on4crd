@@ -706,6 +706,20 @@ if (is_array($homeQuote)) {
     }
 }
 
+$spotlightCards = [
+    ['title' => (string) $homeI18n['spotlight_tool_day'], 'body' => $latestNewsHtml],
+    ['title' => (string) $homeI18n['spotlight_for_sale'], 'body' => $nextEventHtml],
+    ['title' => (string) $homeI18n['spotlight_auction_live'], 'body' => $adSlotHtml],
+];
+$spotlightCardsHtml = '';
+foreach ($spotlightCards as $spotlightCard) {
+    $spotlightCardsHtml .= '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">'
+        . e((string) $spotlightCard['title'])
+        . '</h3>'
+        . (string) $spotlightCard['body']
+        . '</article>';
+}
+
 $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="' . e((string) $homeI18n['quote_aria']) . '">'
     . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['quote_day']) . '</h2>'
@@ -780,9 +794,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<h2 class="text-2xl font-bold text-slate-900">' . e((string) $homeI18n['club_spotlight_title']) . '</h2>'
     . '</header>'
     . '<div class="grid gap-4 lg:grid-cols-3">'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_tool_day']) . '</h3>' . $latestNewsHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_for_sale']) . '</h3>' . $nextEventHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $adSlotHtml . '</article>'
+    . $spotlightCardsHtml
     . '</div>'
     . '</section>'
     . $memberModulesSectionHtml
