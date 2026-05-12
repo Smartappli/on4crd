@@ -50,6 +50,10 @@ $homeMessages = [
         'spotlight_tool_day' => 'L’outil du jour',
         'spotlight_for_sale' => 'Actuellement en vente',
         'spotlight_auction_live' => 'Enchère en cours',
+        'spotlight_sub_1' => 'Focus matériel',
+        'spotlight_sub_2' => 'Petites annonces',
+        'spotlight_sub_3' => 'Opportunités à venir',
+        'spotlight_sub_placeholder' => 'Contenu bientôt disponible.',
         'repeater_title' => 'Notre relais',
         'repeater_desc' => 'Retrouvez les informations essentielles concernant notre relai et ses paramètres.',
         'repeater_cta' => 'Consulter les informations du relais',
@@ -118,6 +122,10 @@ $homeMessages = [
         'spotlight_tool_day' => 'Tool of the day',
         'spotlight_for_sale' => 'Currently for sale',
         'spotlight_auction_live' => 'Auction in progress',
+        'spotlight_sub_1' => 'Equipment focus',
+        'spotlight_sub_2' => 'Classifieds',
+        'spotlight_sub_3' => 'Upcoming opportunities',
+        'spotlight_sub_placeholder' => 'Content coming soon.',
         'repeater_title' => 'Our repeater',
         'repeater_desc' => 'Find key information about our repeater and settings.',
         'repeater_cta' => 'View repeater information',
@@ -186,6 +194,10 @@ $homeMessages = [
         'spotlight_tool_day' => 'Werkzeug des Tages',
         'spotlight_for_sale' => 'Aktuell im Verkauf',
         'spotlight_auction_live' => 'Laufende Auktion',
+        'spotlight_sub_1' => 'Geräte im Fokus',
+        'spotlight_sub_2' => 'Kleinanzeigen',
+        'spotlight_sub_3' => 'Kommende Chancen',
+        'spotlight_sub_placeholder' => 'Inhalte folgen in Kürze.',
         'repeater_title' => 'Unser Relais',
         'repeater_desc' => 'Finden Sie die wichtigsten Informationen über unser Relais und seine Parameter.',
         'repeater_cta' => 'Relaisinformationen ansehen',
@@ -254,6 +266,10 @@ $homeMessages = [
         'spotlight_tool_day' => 'Tool van de dag',
         'spotlight_for_sale' => 'Momenteel te koop',
         'spotlight_auction_live' => 'Veiling bezig',
+        'spotlight_sub_1' => 'Materieel in de kijker',
+        'spotlight_sub_2' => 'Kleine annonces',
+        'spotlight_sub_3' => 'Komende kansen',
+        'spotlight_sub_placeholder' => 'Inhoud binnenkort beschikbaar.',
         'repeater_title' => 'Ons relais',
         'repeater_desc' => 'Vind de belangrijkste informatie over ons relais en zijn parameters.',
         'repeater_cta' => 'Bekijk relaisinformatie',
@@ -797,6 +813,9 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_tool_day']) . '</h3>' . $latestNewsHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_for_sale']) . '</h3>' . $nextEventHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $adSlotHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_1']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_2']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_sub_3']) . '</h3><div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['spotlight_sub_placeholder']) . '</div></article>'
     . '</div>'
     . '</section>'
     . $memberModulesSectionHtml
