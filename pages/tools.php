@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $i18n = [
-    'fr' => ['title'=>'Boite à outils','tool_index'=>'Classement des outils','category_locators'=>'Locators & géolocalisation','category_conversions'=>'Conversions radio','category_antenna'=>'Antennes & propagation','open_category'=>'Voir les outils','choose_tool'=>'Choisir un outil','grid_title'=>'Calcul du grid depuis une adresse postale','address'=>'Adresse postale','calc_grid'=>'Calculer le grid','found_address'=>'Adresse trouvée','coords'=>'Coordonnées','locator'=>'Locator Maidenhead','conv'=>'Conversions utiles','freq_wave'=>'Fréquence → longueur d’onde','freq_mhz'=>'Fréquence (MHz)','wavelength'=>'Longueur d’onde','power'=>'Puissance (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance entre 2 locators','distance_calc'=>'Calcul de distance entre 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Distance estimée','filter_calc'=>'Calcul filtre LC','cutoff_freq'=>'Fréquence de coupure (MHz)','impedance'=>'Impédance (Ω)','inductance'=>'Inductance (µH)','capacitance'=>'Capacité (pF)','balun_calc'=>'Calcul balun','source_imp'=>'Impédance source (Ω)','load_imp'=>'Impédance charge (Ω)','turns_ratio'=>'Rapport de spires','swr_calc'=>'Calcul ROS / Return Loss','swr'=>'ROS','return_loss'=>'Return loss (dB)','coax_calc'=>'Perte coaxiale','length_m'=>'Longueur (m)','atten_100m'=>'Atténuation câble (dB/100m)','coax_loss'=>'Perte estimée (dB)','erp_calc'=>'Puissance ERP approximative','tx_power_w'=>'Puissance TX (W)','feedline_loss_db'=>'Perte ligne (dB)','antenna_gain_dbd'=>'Gain antenne (dBd)','erp_result'=>'ERP estimée (W)','quarter_wave_calc'=>'Longueur quart d’onde','velocity_factor'=>'Facteur de vélocité (0-1)','quarter_wave_result'=>'Longueur estimée','err_enter_address'=>'Veuillez saisir une adresse postale.','err_geocode_unavailable'=>'Service de géocodage indisponible.','err_address_not_found'=>'Adresse introuvable. Essayez avec ville et code postal.','err_invalid_coords'=>'Coordonnées invalides reçues.','err_grid_calc'=>'Erreur lors du calcul du grid.','addr_ph'=>'Ex: Rue des Écoles 1, 5530 Purnode, Belgique','freq_ph'=>'Ex: 145.500','watts_ph'=>'Ex: 10','dbm_ph'=>'Ex: 40','locator_a_ph'=>'Ex: JO20LI','locator_b_ph'=>'Ex: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Calcul perte en espace libre (FSPL)','distance_km'=>'Distance (km)','frequency_mhz'=>'Fréquence (MHz)','fspl_result'=>'Perte estimée','runtime_calc'=>'Autonomie batterie','capacity_mah'=>'Capacité batterie (mAh)','current_ma'=>'Courant (mA)','runtime_result'=>'Autonomie estimée'],
-    'en' => ['title'=>'Toolbox','tool_index'=>'Tool index','category_locators'=>'Locators & geolocation','category_conversions'=>'Radio conversions','category_antenna'=>'Antenna & propagation','open_category'=>'View tools','choose_tool'=>'Choose a tool','grid_title'=>'Grid calculation from a postal address','address'=>'Postal address','calc_grid'=>'Calculate grid','found_address'=>'Found address','coords'=>'Coordinates','locator'=>'Maidenhead locator','conv'=>'Useful conversions','freq_wave'=>'Frequency → wavelength','freq_mhz'=>'Frequency (MHz)','wavelength'=>'Wavelength','power'=>'Power (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance between 2 locators','distance_calc'=>'Distance calculator between 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Estimated distance','filter_calc'=>'LC filter calculator','cutoff_freq'=>'Cutoff frequency (MHz)','impedance'=>'Impedance (Ω)','inductance'=>'Inductance (µH)','capacitance'=>'Capacitance (pF)','balun_calc'=>'Balun calculator','source_imp'=>'Source impedance (Ω)','load_imp'=>'Load impedance (Ω)','turns_ratio'=>'Turns ratio','swr_calc'=>'SWR / Return loss calculator','swr'=>'SWR','return_loss'=>'Return loss (dB)','coax_calc'=>'Coax loss','length_m'=>'Length (m)','atten_100m'=>'Cable attenuation (dB/100m)','coax_loss'=>'Estimated loss (dB)','erp_calc'=>'Estimated ERP','tx_power_w'=>'TX power (W)','feedline_loss_db'=>'Feedline loss (dB)','antenna_gain_dbd'=>'Antenna gain (dBd)','erp_result'=>'Estimated ERP (W)','quarter_wave_calc'=>'Quarter-wave length','velocity_factor'=>'Velocity factor (0-1)','quarter_wave_result'=>'Estimated length','err_enter_address'=>'Please enter a postal address.','err_geocode_unavailable'=>'Geocoding service unavailable.','err_address_not_found'=>'Address not found. Try with city and postal code.','err_invalid_coords'=>'Received invalid coordinates.','err_grid_calc'=>'Error while calculating grid.','addr_ph'=>'Example: Baker Street 221B, London, UK','freq_ph'=>'E.g.: 145.500','watts_ph'=>'E.g.: 10','dbm_ph'=>'E.g.: 40','locator_a_ph'=>'E.g.: JO20LI','locator_b_ph'=>'E.g.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Free-space path loss (FSPL)','distance_km'=>'Distance (km)','frequency_mhz'=>'Frequency (MHz)','fspl_result'=>'Estimated loss','runtime_calc'=>'Battery runtime','capacity_mah'=>'Battery capacity (mAh)','current_ma'=>'Current draw (mA)','runtime_result'=>'Estimated runtime'],
-    'de' => ['title'=>'Werkzeuge','tool_index'=>'Werkzeugübersicht','category_locators'=>'Locatoren & Geolokalisierung','category_conversions'=>'Funk-Umrechnungen','category_antenna'=>'Antennen & Ausbreitung','open_category'=>'Werkzeuge anzeigen','choose_tool'=>'Werkzeug wählen','grid_title'=>'Grid-Berechnung aus einer Postadresse','address'=>'Postadresse','calc_grid'=>'Grid berechnen','found_address'=>'Gefundene Adresse','coords'=>'Koordinaten','locator'=>'Maidenhead-Locator','conv'=>'Nützliche Umrechnungen','freq_wave'=>'Frequenz → Wellenlänge','freq_mhz'=>'Frequenz (MHz)','wavelength'=>'Wellenlänge','power'=>'Leistung (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Entfernung zwischen 2 Locatoren','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschätzte Entfernung','filter_calc'=>'LC-Filterrechner','cutoff_freq'=>'Grenzfrequenz (MHz)','impedance'=>'Impedanz (Ω)','inductance'=>'Induktivität (µH)','capacitance'=>'Kapazität (pF)','balun_calc'=>'Balun-Rechner','source_imp'=>'Quellimpedanz (Ω)','load_imp'=>'Lastimpedanz (Ω)','turns_ratio'=>'Windungsverhältnis','swr_calc'=>'SWR-/Return-Loss-Rechner','swr'=>'SWR','return_loss'=>'Return Loss (dB)','coax_calc'=>'Koax-Dämpfung','length_m'=>'Länge (m)','atten_100m'=>'Kabeldämpfung (dB/100m)','coax_loss'=>'Geschätzte Dämpfung (dB)','erp_calc'=>'Geschätzte ERP','tx_power_w'=>'Sendeleistung (W)','feedline_loss_db'=>'Leitungsverlust (dB)','antenna_gain_dbd'=>'Antennengewinn (dBd)','erp_result'=>'Geschätzte ERP (W)','quarter_wave_calc'=>'Viertelwellenlänge','velocity_factor'=>'Verkürzungsfaktor (0-1)','quarter_wave_result'=>'Geschätzte Länge','err_enter_address'=>'Bitte geben Sie eine Postadresse ein.','err_geocode_unavailable'=>'Geokodierungsdienst nicht verfügbar.','err_address_not_found'=>'Adresse nicht gefunden. Versuchen Sie es mit Stadt und Postleitzahl.','err_invalid_coords'=>'Ungültige Koordinaten empfangen.','err_grid_calc'=>'Fehler bei der Grid-Berechnung.','addr_ph'=>'Beispiel: Hauptstraße 1, 10115 Berlin, Deutschland','freq_ph'=>'Bsp.: 145.500','watts_ph'=>'Bsp.: 10','dbm_ph'=>'Bsp.: 40','locator_a_ph'=>'Bsp.: JO20LI','locator_b_ph'=>'Bsp.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Freiraumdämpfung (FSPL)','distance_km'=>'Entfernung (km)','frequency_mhz'=>'Frequenz (MHz)','fspl_result'=>'Geschätzte Dämpfung','runtime_calc'=>'Batterielaufzeit','capacity_mah'=>'Batteriekapazität (mAh)','current_ma'=>'Stromaufnahme (mA)','runtime_result'=>'Geschätzte Laufzeit'],
-    'nl' => ['title'=>'Tools','tool_index'=>'Tools overzicht','category_locators'=>'Locators & geolocatie','category_conversions'=>'Radio conversies','category_antenna'=>'Antennes & propagatie','open_category'=>'Bekijk tools','choose_tool'=>'Kies een tool','grid_title'=>'Grid berekenen vanaf een postadres','address'=>'Postadres','calc_grid'=>'Grid berekenen','found_address'=>'Gevonden adres','coords'=>'Coördinaten','locator'=>'Maidenhead-locator','conv'=>'Nuttige conversies','freq_wave'=>'Frequentie → golflengte','freq_mhz'=>'Frequentie (MHz)','wavelength'=>'Golflengte','power'=>'Vermogen (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Afstand tussen 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschatte afstand','filter_calc'=>'LC-filtercalculator','cutoff_freq'=>'Afsnijfrequentie (MHz)','impedance'=>'Impedantie (Ω)','inductance'=>'Inductantie (µH)','capacitance'=>'Capaciteit (pF)','balun_calc'=>'Baluncalculator','source_imp'=>'Bronimpedantie (Ω)','load_imp'=>'Belastingsimpedantie (Ω)','turns_ratio'=>'Wikkelverhouding','swr_calc'=>'SWR/return-loss-calculator','swr'=>'SWR','return_loss'=>'Return loss (dB)','coax_calc'=>'Coaxverlies','length_m'=>'Lengte (m)','atten_100m'=>'Kabeldemping (dB/100m)','coax_loss'=>'Geschat verlies (dB)','erp_calc'=>'Geschatte ERP','tx_power_w'=>'Zendvermogen (W)','feedline_loss_db'=>'Lijnverlies (dB)','antenna_gain_dbd'=>'Antenneversterking (dBd)','erp_result'=>'Geschatte ERP (W)','quarter_wave_calc'=>'Kwartgolflengte','velocity_factor'=>'Snelheidsfactor (0-1)','quarter_wave_result'=>'Geschatte lengte','err_enter_address'=>'Voer een postadres in.','err_geocode_unavailable'=>'Geocodingservice niet beschikbaar.','err_address_not_found'=>'Adres niet gevonden. Probeer met stad en postcode.','err_invalid_coords'=>'Ongeldige coördinaten ontvangen.','err_grid_calc'=>'Fout bij het berekenen van het grid.','addr_ph'=>'Voorbeeld: Kerkstraat 1, 1000 Brussel, België','freq_ph'=>'Bijv.: 145.500','watts_ph'=>'Bijv.: 10','dbm_ph'=>'Bijv.: 40','locator_a_ph'=>'Bijv.: JO20LI','locator_b_ph'=>'Bijv.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Vrije-ruimte verzwakking (FSPL)','distance_km'=>'Afstand (km)','frequency_mhz'=>'Frequentie (MHz)','fspl_result'=>'Geschat verlies','runtime_calc'=>'Batterijduur','capacity_mah'=>'Batterijcapaciteit (mAh)','current_ma'=>'Stroomverbruik (mA)','runtime_result'=>'Geschatte duur'],
+    'fr' => ['title'=>'Boite à outils','tool_index'=>'Classement des outils','category_locators'=>'Locators & géolocalisation','category_conversions'=>'Conversions radio','category_antenna'=>'Antennes & propagation','open_category'=>'Voir les outils','choose_tool'=>'Choisir un outil','grid_title'=>'Calcul du grid depuis une adresse postale','address'=>'Adresse postale','calc_grid'=>'Calculer le grid','found_address'=>'Adresse trouvée','coords'=>'Coordonnées','locator'=>'Locator Maidenhead','conv'=>'Conversions utiles','freq_wave'=>'Fréquence → longueur d’onde','freq_mhz'=>'Fréquence (MHz)','wavelength'=>'Longueur d’onde','power'=>'Puissance (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance entre 2 locators','distance_calc'=>'Calcul de distance entre 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Distance estimée','filter_calc'=>'Calcul filtre LC','cutoff_freq'=>'Fréquence de coupure (MHz)','impedance'=>'Impédance (Ω)','inductance'=>'Inductance (µH)','capacitance'=>'Capacité (pF)','balun_calc'=>'Calcul balun','source_imp'=>'Impédance source (Ω)','load_imp'=>'Impédance charge (Ω)','turns_ratio'=>'Rapport de spires','swr_calc'=>'Calcul ROS / Return Loss','swr'=>'ROS','return_loss'=>'Return loss (dB)','coax_calc'=>'Perte coaxiale','length_m'=>'Longueur (m)','atten_100m'=>'Atténuation câble (dB/100m)','coax_loss'=>'Perte estimée (dB)','erp_calc'=>'Puissance ERP approximative','tx_power_w'=>'Puissance TX (W)','feedline_loss_db'=>'Perte ligne (dB)','antenna_gain_dbd'=>'Gain antenne (dBd)','erp_result'=>'ERP estimée (W)','quarter_wave_calc'=>'Longueur quart d’onde','velocity_factor'=>'Facteur de vélocité (0-1)','quarter_wave_result'=>'Longueur estimée','err_enter_address'=>'Veuillez saisir une adresse postale.','err_geocode_unavailable'=>'Service de géocodage indisponible.','err_address_not_found'=>'Adresse introuvable. Essayez avec ville et code postal.','err_invalid_coords'=>'Coordonnées invalides reçues.','err_grid_calc'=>'Erreur lors du calcul du grid.','addr_ph'=>'Ex: Rue des Écoles 1, 5530 Purnode, Belgique','freq_ph'=>'Ex: 145.500','watts_ph'=>'Ex: 10','dbm_ph'=>'Ex: 40','locator_a_ph'=>'Ex: JO20LI','locator_b_ph'=>'Ex: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Calcul perte en espace libre (FSPL)','distance_km'=>'Distance (km)','frequency_mhz'=>'Fréquence (MHz)','fspl_result'=>'Perte estimée','runtime_calc'=>'Autonomie batterie','capacity_mah'=>'Capacité batterie (mAh)','current_ma'=>'Courant (mA)','runtime_result'=>'Autonomie estimée','bandwidth_calc'=>'Calcul largeur de bande','mode_rate'=>'Débit mode (bauds)','rolloff_factor'=>'Facteur roll-off','bandwidth_result'=>'Largeur de bande estimée','dipole_calc'=>'Longueur dipôle demi-onde','dipole_total_length'=>'Longueur totale estimée','duty_cycle_calc'=>'Cycle de service','tx_time_sec'=>'Temps émission (s)','period_sec'=>'Période totale (s)','duty_cycle_result'=>'Cycle de service','divider_calc'=>'Diviseur de tension','vin_volts'=>'Tension entrée (V)','r1_ohm'=>'R1 (Ω)','r2_ohm'=>'R2 (Ω)','vout_volts'=>'Tension sortie estimée (V)'],
+    'en' => ['title'=>'Toolbox','tool_index'=>'Tool index','category_locators'=>'Locators & geolocation','category_conversions'=>'Radio conversions','category_antenna'=>'Antenna & propagation','open_category'=>'View tools','choose_tool'=>'Choose a tool','grid_title'=>'Grid calculation from a postal address','address'=>'Postal address','calc_grid'=>'Calculate grid','found_address'=>'Found address','coords'=>'Coordinates','locator'=>'Maidenhead locator','conv'=>'Useful conversions','freq_wave'=>'Frequency → wavelength','freq_mhz'=>'Frequency (MHz)','wavelength'=>'Wavelength','power'=>'Power (W ↔ dBm)','watts'=>'Watts (W)','distance'=>'Distance between 2 locators','distance_calc'=>'Distance calculator between 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Estimated distance','filter_calc'=>'LC filter calculator','cutoff_freq'=>'Cutoff frequency (MHz)','impedance'=>'Impedance (Ω)','inductance'=>'Inductance (µH)','capacitance'=>'Capacitance (pF)','balun_calc'=>'Balun calculator','source_imp'=>'Source impedance (Ω)','load_imp'=>'Load impedance (Ω)','turns_ratio'=>'Turns ratio','swr_calc'=>'SWR / Return loss calculator','swr'=>'SWR','return_loss'=>'Return loss (dB)','coax_calc'=>'Coax loss','length_m'=>'Length (m)','atten_100m'=>'Cable attenuation (dB/100m)','coax_loss'=>'Estimated loss (dB)','erp_calc'=>'Estimated ERP','tx_power_w'=>'TX power (W)','feedline_loss_db'=>'Feedline loss (dB)','antenna_gain_dbd'=>'Antenna gain (dBd)','erp_result'=>'Estimated ERP (W)','quarter_wave_calc'=>'Quarter-wave length','velocity_factor'=>'Velocity factor (0-1)','quarter_wave_result'=>'Estimated length','err_enter_address'=>'Please enter a postal address.','err_geocode_unavailable'=>'Geocoding service unavailable.','err_address_not_found'=>'Address not found. Try with city and postal code.','err_invalid_coords'=>'Received invalid coordinates.','err_grid_calc'=>'Error while calculating grid.','addr_ph'=>'Example: Baker Street 221B, London, UK','freq_ph'=>'E.g.: 145.500','watts_ph'=>'E.g.: 10','dbm_ph'=>'E.g.: 40','locator_a_ph'=>'E.g.: JO20LI','locator_b_ph'=>'E.g.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watts','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Free-space path loss (FSPL)','distance_km'=>'Distance (km)','frequency_mhz'=>'Frequency (MHz)','fspl_result'=>'Estimated loss','runtime_calc'=>'Battery runtime','capacity_mah'=>'Battery capacity (mAh)','current_ma'=>'Current draw (mA)','runtime_result'=>'Estimated runtime','bandwidth_calc'=>'Bandwidth calculator','mode_rate'=>'Mode rate (baud)','rolloff_factor'=>'Roll-off factor','bandwidth_result'=>'Estimated bandwidth','dipole_calc'=>'Half-wave dipole length','dipole_total_length'=>'Estimated total length','duty_cycle_calc'=>'Duty cycle','tx_time_sec'=>'TX time (s)','period_sec'=>'Total period (s)','duty_cycle_result'=>'Duty cycle','divider_calc'=>'Voltage divider','vin_volts'=>'Input voltage (V)','r1_ohm'=>'R1 (Ω)','r2_ohm'=>'R2 (Ω)','vout_volts'=>'Estimated output voltage (V)'],
+    'de' => ['title'=>'Werkzeuge','tool_index'=>'Werkzeugübersicht','category_locators'=>'Locatoren & Geolokalisierung','category_conversions'=>'Funk-Umrechnungen','category_antenna'=>'Antennen & Ausbreitung','open_category'=>'Werkzeuge anzeigen','choose_tool'=>'Werkzeug wählen','grid_title'=>'Grid-Berechnung aus einer Postadresse','address'=>'Postadresse','calc_grid'=>'Grid berechnen','found_address'=>'Gefundene Adresse','coords'=>'Koordinaten','locator'=>'Maidenhead-Locator','conv'=>'Nützliche Umrechnungen','freq_wave'=>'Frequenz → Wellenlänge','freq_mhz'=>'Frequenz (MHz)','wavelength'=>'Wellenlänge','power'=>'Leistung (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Entfernung zwischen 2 Locatoren','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschätzte Entfernung','filter_calc'=>'LC-Filterrechner','cutoff_freq'=>'Grenzfrequenz (MHz)','impedance'=>'Impedanz (Ω)','inductance'=>'Induktivität (µH)','capacitance'=>'Kapazität (pF)','balun_calc'=>'Balun-Rechner','source_imp'=>'Quellimpedanz (Ω)','load_imp'=>'Lastimpedanz (Ω)','turns_ratio'=>'Windungsverhältnis','swr_calc'=>'SWR-/Return-Loss-Rechner','swr'=>'SWR','return_loss'=>'Return Loss (dB)','coax_calc'=>'Koax-Dämpfung','length_m'=>'Länge (m)','atten_100m'=>'Kabeldämpfung (dB/100m)','coax_loss'=>'Geschätzte Dämpfung (dB)','erp_calc'=>'Geschätzte ERP','tx_power_w'=>'Sendeleistung (W)','feedline_loss_db'=>'Leitungsverlust (dB)','antenna_gain_dbd'=>'Antennengewinn (dBd)','erp_result'=>'Geschätzte ERP (W)','quarter_wave_calc'=>'Viertelwellenlänge','velocity_factor'=>'Verkürzungsfaktor (0-1)','quarter_wave_result'=>'Geschätzte Länge','err_enter_address'=>'Bitte geben Sie eine Postadresse ein.','err_geocode_unavailable'=>'Geokodierungsdienst nicht verfügbar.','err_address_not_found'=>'Adresse nicht gefunden. Versuchen Sie es mit Stadt und Postleitzahl.','err_invalid_coords'=>'Ungültige Koordinaten empfangen.','err_grid_calc'=>'Fehler bei der Grid-Berechnung.','addr_ph'=>'Beispiel: Hauptstraße 1, 10115 Berlin, Deutschland','freq_ph'=>'Bsp.: 145.500','watts_ph'=>'Bsp.: 10','dbm_ph'=>'Bsp.: 40','locator_a_ph'=>'Bsp.: JO20LI','locator_b_ph'=>'Bsp.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Freiraumdämpfung (FSPL)','distance_km'=>'Entfernung (km)','frequency_mhz'=>'Frequenz (MHz)','fspl_result'=>'Geschätzte Dämpfung','runtime_calc'=>'Batterielaufzeit','capacity_mah'=>'Batteriekapazität (mAh)','current_ma'=>'Stromaufnahme (mA)','runtime_result'=>'Geschätzte Laufzeit','bandwidth_calc'=>'Bandbreitenrechner','mode_rate'=>'Modulationsrate (Baud)','rolloff_factor'=>'Roll-off-Faktor','bandwidth_result'=>'Geschätzte Bandbreite','dipole_calc'=>'Halbwellen-Dipollänge','dipole_total_length'=>'Geschätzte Gesamtlänge','duty_cycle_calc'=>'Tastverhältnis','tx_time_sec'=>'Sendezeit (s)','period_sec'=>'Gesamtperiode (s)','duty_cycle_result'=>'Tastverhältnis','divider_calc'=>'Spannungsteiler','vin_volts'=>'Eingangsspannung (V)','r1_ohm'=>'R1 (Ω)','r2_ohm'=>'R2 (Ω)','vout_volts'=>'Geschätzte Ausgangsspannung (V)'],
+    'nl' => ['title'=>'Tools','tool_index'=>'Tools overzicht','category_locators'=>'Locators & geolocatie','category_conversions'=>'Radio conversies','category_antenna'=>'Antennes & propagatie','open_category'=>'Bekijk tools','choose_tool'=>'Kies een tool','grid_title'=>'Grid berekenen vanaf een postadres','address'=>'Postadres','calc_grid'=>'Grid berekenen','found_address'=>'Gevonden adres','coords'=>'Coördinaten','locator'=>'Maidenhead-locator','conv'=>'Nuttige conversies','freq_wave'=>'Frequentie → golflengte','freq_mhz'=>'Frequentie (MHz)','wavelength'=>'Golflengte','power'=>'Vermogen (W ↔ dBm)','watts'=>'Watt (W)','distance'=>'Afstand tussen 2 locators','locator_a'=>'Locator A','locator_b'=>'Locator B','estimated_distance'=>'Geschatte afstand','filter_calc'=>'LC-filtercalculator','cutoff_freq'=>'Afsnijfrequentie (MHz)','impedance'=>'Impedantie (Ω)','inductance'=>'Inductantie (µH)','capacitance'=>'Capaciteit (pF)','balun_calc'=>'Baluncalculator','source_imp'=>'Bronimpedantie (Ω)','load_imp'=>'Belastingsimpedantie (Ω)','turns_ratio'=>'Wikkelverhouding','swr_calc'=>'SWR/return-loss-calculator','swr'=>'SWR','return_loss'=>'Return loss (dB)','coax_calc'=>'Coaxverlies','length_m'=>'Lengte (m)','atten_100m'=>'Kabeldemping (dB/100m)','coax_loss'=>'Geschat verlies (dB)','erp_calc'=>'Geschatte ERP','tx_power_w'=>'Zendvermogen (W)','feedline_loss_db'=>'Lijnverlies (dB)','antenna_gain_dbd'=>'Antenneversterking (dBd)','erp_result'=>'Geschatte ERP (W)','quarter_wave_calc'=>'Kwartgolflengte','velocity_factor'=>'Snelheidsfactor (0-1)','quarter_wave_result'=>'Geschatte lengte','err_enter_address'=>'Voer een postadres in.','err_geocode_unavailable'=>'Geocodingservice niet beschikbaar.','err_address_not_found'=>'Adres niet gevonden. Probeer met stad en postcode.','err_invalid_coords'=>'Ongeldige coördinaten ontvangen.','err_grid_calc'=>'Fout bij het berekenen van het grid.','addr_ph'=>'Voorbeeld: Kerkstraat 1, 1000 Brussel, België','freq_ph'=>'Bijv.: 145.500','watts_ph'=>'Bijv.: 10','dbm_ph'=>'Bijv.: 40','locator_a_ph'=>'Bijv.: JO20LI','locator_b_ph'=>'Bijv.: JN18EU','dbm_label'=>'dBm','watts_out_label'=>'Watt','meters_unit'=>'m','km_unit'=>'km','fspl_calc'=>'Vrije-ruimte verzwakking (FSPL)','distance_km'=>'Afstand (km)','frequency_mhz'=>'Frequentie (MHz)','fspl_result'=>'Geschat verlies','runtime_calc'=>'Batterijduur','capacity_mah'=>'Batterijcapaciteit (mAh)','current_ma'=>'Stroomverbruik (mA)','runtime_result'=>'Geschatte duur','bandwidth_calc'=>'Bandbreedtecalculator','mode_rate'=>'Modus-snelheid (baud)','rolloff_factor'=>'Roll-off-factor','bandwidth_result'=>'Geschatte bandbreedte','dipole_calc'=>'Halvegolf dipoollengte','dipole_total_length'=>'Geschatte totale lengte','duty_cycle_calc'=>'Dutycycle','tx_time_sec'=>'Zendtijd (s)','period_sec'=>'Totale periode (s)','duty_cycle_result'=>'Dutycycle','divider_calc'=>'Spanningsdeler','vin_volts'=>'Ingangsspanning (V)','r1_ohm'=>'R1 (Ω)','r2_ohm'=>'R2 (Ω)','vout_volts'=>'Geschatte uitgangsspanning (V)'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
 $labelCategoryAntenna = (string) ($t['category_antenna'] ?? 'Antenna & propagation');
@@ -28,10 +28,14 @@ $conversionTools = [
     ['id' => 'tool-fspl', 'title' => (string) $t['fspl_calc']],
     ['id' => 'tool-runtime', 'title' => (string) $t['runtime_calc']],
     ['id' => 'tool-coax', 'title' => (string) $t['coax_calc']],
+    ['id' => 'tool-bandwidth', 'title' => (string) $t['bandwidth_calc']],
+    ['id' => 'tool-duty', 'title' => (string) $t['duty_cycle_calc']],
+    ['id' => 'tool-divider', 'title' => (string) $t['divider_calc']],
 ];
 $antennaTools = [
     ['id' => 'tool-quarter-wave', 'title' => $labelQuarterWaveCalc],
     ['id' => 'tool-erp', 'title' => $labelErpCalc],
+    ['id' => 'tool-dipole', 'title' => (string) $t['dipole_calc']],
 ];
 set_page_meta([
     'title' => (string) ($t['title'] ?? $i18n['fr']['title']),
@@ -185,6 +189,43 @@ ob_start();
             </label>
             <p class="help"><?= e((string) $t['coax_loss']) ?>: <strong id="coax-loss">—</strong></p>
         </article>
+
+        <article class="card tool-panel" id="tool-bandwidth" data-tool-panel>
+            <h2><?= e((string) $t['bandwidth_calc']) ?></h2>
+            <label><?= e((string) $t['mode_rate']) ?>
+                <input type="number" id="bandwidth-rate" min="0" step="1" value="1200">
+            </label>
+            <label><?= e((string) $t['rolloff_factor']) ?>
+                <input type="number" id="bandwidth-rolloff" min="0" step="0.01" value="0.35">
+            </label>
+            <p class="help"><?= e((string) $t['bandwidth_result']) ?>: <strong id="bandwidth-result">—</strong></p>
+        </article>
+
+
+        <article class="card tool-panel" id="tool-duty" data-tool-panel>
+            <h2><?= e((string) $t['duty_cycle_calc']) ?></h2>
+            <label><?= e((string) $t['tx_time_sec']) ?>
+                <input type="number" id="duty-tx" min="0" step="0.1" value="30">
+            </label>
+            <label><?= e((string) $t['period_sec']) ?>
+                <input type="number" id="duty-period" min="0" step="0.1" value="120">
+            </label>
+            <p class="help"><?= e((string) $t['duty_cycle_result']) ?>: <strong id="duty-result">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-divider" data-tool-panel>
+            <h2><?= e((string) $t['divider_calc']) ?></h2>
+            <label><?= e((string) $t['vin_volts']) ?>
+                <input type="number" id="divider-vin" min="0" step="0.01" value="13.8">
+            </label>
+            <label><?= e((string) $t['r1_ohm']) ?>
+                <input type="number" id="divider-r1" min="0" step="1" value="10000">
+            </label>
+            <label><?= e((string) $t['r2_ohm']) ?>
+                <input type="number" id="divider-r2" min="0" step="1" value="2200">
+            </label>
+            <p class="help"><?= e((string) $t['vout_volts']) ?>: <strong id="divider-vout">—</strong></p>
+        </article>
+
         <article class="card tool-panel" id="tool-quarter-wave" data-tool-panel>
             <h2><?= e($labelQuarterWaveCalc) ?></h2>
             <label><?= e((string) $t['frequency_mhz']) ?>
@@ -207,6 +248,13 @@ ob_start();
                 <input type="number" id="erp-gain" step="0.1" value="3">
             </label>
             <p class="help"><?= e($labelErpResult) ?>: <strong id="erp-result">—</strong></p>
+        </article>
+        <article class="card tool-panel" id="tool-dipole" data-tool-panel>
+            <h2><?= e((string) $t['dipole_calc']) ?></h2>
+            <label><?= e((string) $t['frequency_mhz']) ?>
+                <input type="number" id="dipole-frequency" min="0" step="0.001" value="145.5">
+            </label>
+            <p class="help"><?= e((string) $t['dipole_total_length']) ?>: <strong id="dipole-length">—</strong></p>
         </article>
     </div>
     </div>
@@ -257,6 +305,18 @@ ob_start();
     const erpLoss = document.getElementById('erp-loss');
     const erpGain = document.getElementById('erp-gain');
     const erpResult = document.getElementById('erp-result');
+    const bandwidthRate = document.getElementById('bandwidth-rate');
+    const bandwidthRolloff = document.getElementById('bandwidth-rolloff');
+    const bandwidthResult = document.getElementById('bandwidth-result');
+    const dipoleFrequency = document.getElementById('dipole-frequency');
+    const dipoleLength = document.getElementById('dipole-length');
+    const dutyTx = document.getElementById('duty-tx');
+    const dutyPeriod = document.getElementById('duty-period');
+    const dutyResult = document.getElementById('duty-result');
+    const dividerVin = document.getElementById('divider-vin');
+    const dividerR1 = document.getElementById('divider-r1');
+    const dividerR2 = document.getElementById('divider-r2');
+    const dividerVout = document.getElementById('divider-vout');
     if (!(form instanceof HTMLFormElement) || !(addressInput instanceof HTMLInputElement)) {
         return;
     }
@@ -450,7 +510,23 @@ ob_start();
     runtimeCapacity?.addEventListener('input', computeRuntime);
     runtimeCurrent?.addEventListener('input', computeRuntime);
     computeRuntime();
-    
+
+
+    const computeBandwidth = () => {
+        if (!(bandwidthRate instanceof HTMLInputElement) || !(bandwidthRolloff instanceof HTMLInputElement) || !bandwidthResult) return;
+        const rate = Number(bandwidthRate.value);
+        const rolloff = Number(bandwidthRolloff.value);
+        if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(rolloff) || rolloff < 0) {
+            bandwidthResult.textContent = '—';
+            return;
+        }
+        const bw = rate * (1 + rolloff);
+        bandwidthResult.textContent = `${bw.toFixed(1)} Hz`;
+    };
+    bandwidthRate?.addEventListener('input', computeBandwidth);
+    bandwidthRolloff?.addEventListener('input', computeBandwidth);
+    computeBandwidth();
+
     const computeQuarterWave = () => {
         if (!(quarterWaveFrequency instanceof HTMLInputElement) || !(quarterWaveVf instanceof HTMLInputElement) || !quarterWaveLength) return;
         const f = Number(quarterWaveFrequency.value);
@@ -483,6 +559,52 @@ ob_start();
     erpLoss?.addEventListener('input', computeErp);
     erpGain?.addEventListener('input', computeErp);
     computeErp();
+
+
+    const computeDipole = () => {
+        if (!(dipoleFrequency instanceof HTMLInputElement) || !dipoleLength) return;
+        const f = Number(dipoleFrequency.value);
+        if (!Number.isFinite(f) || f <= 0) {
+            dipoleLength.textContent = '—';
+            return;
+        }
+        const lengthMeters = 143 / f;
+        dipoleLength.textContent = `${lengthMeters.toFixed(2)} ${i18n.meters_unit}`;
+    };
+    dipoleFrequency?.addEventListener('input', computeDipole);
+    computeDipole();
+
+
+    const computeDutyCycle = () => {
+        if (!(dutyTx instanceof HTMLInputElement) || !(dutyPeriod instanceof HTMLInputElement) || !dutyResult) return;
+        const tx = Number(dutyTx.value);
+        const period = Number(dutyPeriod.value);
+        if (!Number.isFinite(tx) || tx < 0 || !Number.isFinite(period) || period <= 0 || tx > period) {
+            dutyResult.textContent = '—';
+            return;
+        }
+        dutyResult.textContent = `${((tx / period) * 100).toFixed(1)} %`;
+    };
+    dutyTx?.addEventListener('input', computeDutyCycle);
+    dutyPeriod?.addEventListener('input', computeDutyCycle);
+    computeDutyCycle();
+
+    const computeDivider = () => {
+        if (!(dividerVin instanceof HTMLInputElement) || !(dividerR1 instanceof HTMLInputElement) || !(dividerR2 instanceof HTMLInputElement) || !dividerVout) return;
+        const vin = Number(dividerVin.value);
+        const r1 = Number(dividerR1.value);
+        const r2 = Number(dividerR2.value);
+        if (!Number.isFinite(vin) || vin < 0 || !Number.isFinite(r1) || r1 <= 0 || !Number.isFinite(r2) || r2 <= 0) {
+            dividerVout.textContent = '—';
+            return;
+        }
+        const vout = vin * (r2 / (r1 + r2));
+        dividerVout.textContent = `${vout.toFixed(3)} V`;
+    };
+    dividerVin?.addEventListener('input', computeDivider);
+    dividerR1?.addEventListener('input', computeDivider);
+    dividerR2?.addEventListener('input', computeDivider);
+    computeDivider();
 
     const locatorToLatLon = (locator) => {
         const normalized = locator.toUpperCase().trim();
