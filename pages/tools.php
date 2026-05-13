@@ -184,16 +184,7 @@ ob_start();
             <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">—</strong></p>
         </article>
         <?php require __DIR__ . '/tools_panels/tool_filter.php'; ?>
-        <article class="card tool-panel" id="tool-balun" data-tool-panel>
-            <h2><?= e((string) $t['balun_calc']) ?></h2>
-            <label><?= e((string) $t['source_imp']) ?>
-                <input type="number" id="balun-source" min="1" step="0.1" value="50">
-            </label>
-            <label><?= e((string) $t['load_imp']) ?>
-                <input type="number" id="balun-load" min="1" step="0.1" value="200">
-            </label>
-            <p class="help"><?= e((string) $t['turns_ratio']) ?>: <strong id="balun-ratio">—</strong></p>
-        </article>
+        <?php require __DIR__ . '/tools_panels/tool_balun.php'; ?>
         <?php require __DIR__ . '/tools_panels/tool_swr.php'; ?>
         <?php require __DIR__ . '/tools_panels/tool_fspl.php'; ?>
         <?php require __DIR__ . '/tools_panels/tool_runtime.php'; ?>
