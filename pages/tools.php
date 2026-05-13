@@ -173,16 +173,7 @@ ob_start();
             </label>
             <p class="help"><?= e((string) $t['watts_out_label']) ?>: <strong id="power-watts-out">—</strong></p>
         </article>
-        <article class="card tool-panel" id="tool-distance" data-tool-panel>
-            <h2><?= e((string) ($t['distance_calc'] ?? $t['distance'])) ?></h2>
-            <label><?= e((string) $t['locator_a']) ?>
-                <input type="text" id="locator-a" maxlength="6" placeholder="<?= e((string) $t['locator_a_ph']) ?>">
-            </label>
-            <label><?= e((string) $t['locator_b']) ?>
-                <input type="text" id="locator-b" maxlength="6" placeholder="<?= e((string) $t['locator_b_ph']) ?>">
-            </label>
-            <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">—</strong></p>
-        </article>
+        <?php require __DIR__ . '/tools_panels/tool_distance.php'; ?>
         <?php require __DIR__ . '/tools_panels/tool_filter.php'; ?>
         <?php require __DIR__ . '/tools_panels/tool_balun.php'; ?>
         <?php require __DIR__ . '/tools_panels/tool_swr.php'; ?>
