@@ -620,7 +620,6 @@ ob_start();
     dividerR2?.addEventListener('input', computeDivider);
     computeDivider();
 
-
     const computeMismatchLoss = () => {
         if (!(mismatchSwr instanceof HTMLInputElement) || !mismatchGamma || !mismatchLoss) return;
         const swr = Number(mismatchSwr.value);
