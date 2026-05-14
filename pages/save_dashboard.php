@@ -8,6 +8,9 @@ $i18n = [
     'fr' => ['missing_table' => 'La table dashboard_widgets est absente.'],
     'en' => ['missing_table' => 'The dashboard_widgets table is missing.'],
     'de' => ['missing_table' => 'Die Tabelle dashboard_widgets fehlt.'],
+    'es' => ['missing_table' => 'Falta la tabla dashboard_widgets.'],
+    'it' => ['missing_table' => 'La tabella dashboard_widgets è assente.'],
+    'pt' => ['missing_table' => 'A tabela dashboard_widgets está em falta.'],
     'nl' => ['missing_table' => 'De tabel dashboard_widgets ontbreekt.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {

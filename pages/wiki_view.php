@@ -6,6 +6,9 @@ $i18n = [
     'fr' => ['not_found' => 'Page wiki introuvable.', 'edit' => 'Modifier', 'layout' => 'Wiki', 'meta_desc' => 'Consultation d\'une page wiki.'],
     'en' => ['not_found' => 'Wiki page not found.', 'edit' => 'Edit', 'layout' => 'Wiki', 'meta_desc' => 'View a wiki page.'],
     'de' => ['not_found' => 'Wiki-Seite nicht gefunden.', 'edit' => 'Bearbeiten', 'layout' => 'Wiki', 'meta_desc' => 'Wiki-Seite anzeigen.'],
+    'es' => ['not_found' => 'Página wiki no encontrada.', 'edit' => 'Editar', 'layout' => 'Wiki', 'meta_desc' => 'Ver una página wiki.'],
+    'it' => ['not_found' => 'Pagina wiki non trovata.', 'edit' => 'Modifica', 'layout' => 'Wiki', 'meta_desc' => 'Visualizza una pagina wiki.'],
+    'pt' => ['not_found' => 'Página wiki não encontrada.', 'edit' => 'Editar', 'layout' => 'Wiki', 'meta_desc' => 'Visualizar uma página wiki.'],
     'nl' => ['not_found' => 'Wiki-pagina niet gevonden.', 'edit' => 'Bewerken', 'layout' => 'Wiki', 'meta_desc' => 'Een wiki-pagina bekijken.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {

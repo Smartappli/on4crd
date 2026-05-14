@@ -58,6 +58,7 @@ $jsI18n = [
     'err_address_not_found' => (string) ($t['err_address_not_found'] ?? $i18n['fr']['err_address_not_found']),
     'err_invalid_coords' => (string) ($t['err_invalid_coords'] ?? $i18n['fr']['err_invalid_coords']),
     'err_grid_calc' => (string) ($t['err_grid_calc'] ?? $i18n['fr']['err_grid_calc']),
+    'err_tool_load' => (string) ($t['err_tool_load'] ?? $i18n['fr']['err_tool_load']),
     'meters_unit' => (string) ($t['meters_unit'] ?? $i18n['fr']['meters_unit']),
     'km_unit' => (string) ($t['km_unit'] ?? $i18n['fr']['km_unit']),
     'watts_out_label' => (string) ($t['watts_out_label'] ?? $i18n['fr']['watts_out_label']),

@@ -7,6 +7,9 @@ $i18n = [
     'fr' => ['not_found' => 'Article introuvable.', 'layout_article' => 'Article', 'meta_fallback' => 'Article technique ON4CRD'],
     'en' => ['not_found' => 'Article not found.', 'layout_article' => 'Article', 'meta_fallback' => 'ON4CRD technical article'],
     'de' => ['not_found' => 'Artikel nicht gefunden.', 'layout_article' => 'Artikel', 'meta_fallback' => 'Technischer ON4CRD-Artikel'],
+    'es' => ['not_found' => 'Artículo no encontrado.', 'layout_article' => 'Artículo', 'meta_fallback' => 'Artículo técnico ON4CRD'],
+    'it' => ['not_found' => 'Articolo non trovato.', 'layout_article' => 'Articolo', 'meta_fallback' => 'Articolo tecnico ON4CRD'],
+    'pt' => ['not_found' => 'Artigo não encontrado.', 'layout_article' => 'Artigo', 'meta_fallback' => 'Artigo técnico ON4CRD'],
     'nl' => ['not_found' => 'Artikel niet gevonden.', 'layout_article' => 'Artikel', 'meta_fallback' => 'Technisch ON4CRD-artikel'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
