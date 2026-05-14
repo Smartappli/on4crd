@@ -76,3 +76,40 @@ jobs:
 
       - name: Dependency audit
         run: composer audit --no-interaction
+
+  toolbox-smoke:
+    name: Toolbox smoke checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Prepare config
+        run: cp config/config.sample.php config/config.php
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Start local PHP server
+        run: |
+          php -S 127.0.0.1:8080 -t . >/tmp/php-server.log 2>&1 &
+          echo $! > /tmp/php-server.pid
+
+      - name: Run toolbox checks with smoke
+        env:
+          TOOLS_SMOKE_BASE_URL: http://127.0.0.1:8080/index.php
+        run: ./scripts/check-tools.sh --with-smoke
+
+      - name: Stop local PHP server
+        if: always()
+        run: |
+          if [[ -f /tmp/php-server.pid ]]; then
+            kill "$(cat /tmp/php-server.pid)" || true
+          fi

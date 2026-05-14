@@ -1,0 +1,31 @@
+<?php
+declare(strict_types=1);
+
+return [
+    'tool-grid' => 'tool_grid.php',
+    'tool-freq-wave' => 'tool_freq_wave.php',
+    'tool-power' => 'tool_power.php',
+    'tool-distance' => 'tool_distance.php',
+    'tool-filter' => 'tool_filter.php',
+    'tool-balun' => 'tool_balun.php',
+    'tool-swr' => 'tool_swr.php',
+    'tool-fspl' => 'tool_fspl.php',
+    'tool-runtime' => 'tool_runtime.php',
+    'tool-coax' => 'tool_coax.php',
+    'tool-bandwidth' => 'tool_bandwidth.php',
+    'tool-duty' => 'tool_duty.php',
+    'tool-divider' => 'tool_divider.php',
+    'tool-mismatch' => 'tool_mismatch.php',
+    'tool-solar' => 'tool_solar.php',
+    'tool-battery-current' => 'tool_battery_current.php',
+    'tool-muf' => 'tool_muf.php',
+    'tool-eirp' => 'tool_eirp.php',
+    'tool-skip' => 'tool_skip.php',
+    'tool-db-sum' => 'tool_db_sum.php',
+    'tool-dbuv' => 'tool_dbuv.php',
+    'tool-gain-conv' => 'tool_gain_conv.php',
+    'tool-dbw' => 'tool_dbw.php',
+    'tool-quarter-wave' => 'tool_quarter_wave.php',
+    'tool-erp' => 'tool_erp.php',
+    'tool-dipole' => 'tool_dipole.php',
+];;

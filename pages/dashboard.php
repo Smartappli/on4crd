@@ -88,14 +88,13 @@ ob_start();
         <p class="help"><?= e($t('no_widgets')) ?></p>
       <?php endif; ?>
       <?php foreach ($selectedWidgets as $selectedWidget): ?>
-        <?php $widgetKey = (string) $selectedWidget['key']; ?>
-        <article class="widget-card" draggable="true" aria-grabbed="false" data-widget="<?= e($widgetKey) ?>" data-widget-config='<?= e(json_encode($selectedWidget['config'], JSON_UNESCAPED_SLASHES)) ?>'>
-          <header>
-            <strong><?= e($availableWidgets[$widgetKey]['title'] ?? $widgetKey) ?></strong>
-            <button class="ghost remove-widget" type="button">✕</button>
-          </header>
-          <div class="widget-body"><?= $safeRenderWidget($widgetKey, $user) ?></div>
-        </article>
+        <?php
+          $widgetKey = (string) $selectedWidget['key'];
+          $widgetTitle = (string) ($availableWidgets[$widgetKey]['title'] ?? $widgetKey);
+          $widgetConfig = (array) ($selectedWidget['config'] ?? []);
+          $widgetBodyHtml = $safeRenderWidget($widgetKey, $user);
+          include __DIR__ . '/dashboard_widget_card.php';
+        ?>
       <?php endforeach; ?>
     </div>
   </section>
@@ -120,43 +119,6 @@ ob_start();
     <?php endforeach; ?>
   </div>
 </aside>
-<script nonce="<?= e(csp_nonce()) ?>">
-(() => {
-  const panel = document.getElementById('dashboard-widgets-panel');
-  const backdrop = document.getElementById('dashboard-widgets-backdrop');
-  const openBtn = document.getElementById('open-widgets-panel');
-  const closeBtn = document.getElementById('close-widgets-panel');
-  if (!panel || !backdrop || !openBtn || !closeBtn) return;
-  const open = () => {
-    panel.classList.add('is-open');
-    panel.setAttribute('aria-hidden', 'false');
-    backdrop.hidden = false;
-    openBtn.setAttribute('aria-expanded', 'true');
-  };
-  const close = () => {
-    panel.classList.remove('is-open');
-    panel.setAttribute('aria-hidden', 'true');
-    backdrop.hidden = true;
-    openBtn.setAttribute('aria-expanded', 'false');
-  };
-  openBtn.addEventListener('click', open);
-  closeBtn.addEventListener('click', close);
-  backdrop.addEventListener('click', close);
-  const fsBtn = document.getElementById('dashboard-fullscreen-toggle');
-  const shell = document.getElementById('dashboard-shell');
-  if (fsBtn && shell && document.fullscreenEnabled) {
-    fsBtn.addEventListener('click', async () => {
-      try {
-        if (document.fullscreenElement) {
-          await document.exitFullscreen();
-        } else {
-          await shell.requestFullscreen();
-        }
-      } catch (_e) {}
-    });
-  }
-})();
-</script>
-<script nonce="<?= e(csp_nonce()) ?>">window.dashboardConfig = <?= json_encode($dashboardConfig, JSON_UNESCAPED_SLASHES) ?>;</script>
+<?php include __DIR__ . '/dashboard_script.js.php'; ?>
 <?php
 echo render_layout((string) ob_get_clean(), $t('title'));
