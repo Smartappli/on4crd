@@ -71,6 +71,55 @@ $jsI18n = [
     'dbuv_label' => (string) ($t['dbuv_label'] ?? ($i18n['fr']['dbuv_label'] ?? 'dBµV')),
 ];
 
+$toolPanelMap = [
+    'tool-grid' => 'tool_grid.php',
+    'tool-freq-wave' => 'tool_freq_wave.php',
+    'tool-power' => 'tool_power.php',
+    'tool-distance' => 'tool_distance.php',
+    'tool-filter' => 'tool_filter.php',
+    'tool-balun' => 'tool_balun.php',
+    'tool-swr' => 'tool_swr.php',
+    'tool-fspl' => 'tool_fspl.php',
+    'tool-runtime' => 'tool_runtime.php',
+    'tool-coax' => 'tool_coax.php',
+    'tool-bandwidth' => 'tool_bandwidth.php',
+    'tool-duty' => 'tool_duty.php',
+    'tool-divider' => 'tool_divider.php',
+    'tool-mismatch' => 'tool_mismatch.php',
+    'tool-solar' => 'tool_solar.php',
+    'tool-battery-current' => 'tool_battery_current.php',
+    'tool-muf' => 'tool_muf.php',
+    'tool-eirp' => 'tool_eirp.php',
+    'tool-skip' => 'tool_skip.php',
+    'tool-db-sum' => 'tool_db_sum.php',
+    'tool-dbuv' => 'tool_dbuv.php',
+    'tool-gain-conv' => 'tool_gain_conv.php',
+    'tool-quarter-wave' => 'tool_quarter_wave.php',
+    'tool-erp' => 'tool_erp.php',
+    'tool-dipole' => 'tool_dipole.php',
+];
+
+if (($_GET['ajax'] ?? '') === 'tool_panel') {
+    $toolId = (string) ($_GET['id'] ?? '');
+    $partialFile = $toolPanelMap[$toolId] ?? null;
+    if ($partialFile === null) {
+        http_response_code(404);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo 'Unknown tool panel';
+        return;
+    }
+    $partialPath = __DIR__ . '/tools_panels/' . $partialFile;
+    if (!is_file($partialPath)) {
+        http_response_code(500);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo 'Missing tool panel';
+        return;
+    }
+    header('Content-Type: text/html; charset=UTF-8');
+    require $partialPath;
+    return;
+}
+
 ob_start();
 ?>
 <section class="card">
@@ -138,37 +187,9 @@ ob_start();
             </ul>
         </details>
     </aside>
-    <div class="tools-content">
+    <div id="tools-content" class="tools-content">
         <?php
-        $toolPanelPartials = [
-            'tool_grid.php',
-            'tool_freq_wave.php',
-            'tool_power.php',
-            'tool_distance.php',
-            'tool_filter.php',
-            'tool_balun.php',
-            'tool_swr.php',
-            'tool_fspl.php',
-            'tool_runtime.php',
-            'tool_coax.php',
-            'tool_bandwidth.php',
-            'tool_duty.php',
-            'tool_divider.php',
-            'tool_mismatch.php',
-            'tool_solar.php',
-            'tool_battery_current.php',
-            'tool_muf.php',
-            'tool_eirp.php',
-            'tool_skip.php',
-            'tool_db_sum.php',
-            'tool_dbuv.php',
-            'tool_gain_conv.php',
-            'tool_quarter_wave.php',
-            'tool_erp.php',
-            'tool_dipole.php',
-        ];
-
-        foreach ($toolPanelPartials as $partialFile) {
+        foreach ($toolPanelMap as $partialFile) {
             $partialPath = __DIR__ . '/tools_panels/' . $partialFile;
             if (!is_file($partialPath)) {
                 trigger_error('Missing tools panel partial: ' . $partialFile, E_USER_WARNING);
@@ -432,6 +453,7 @@ ob_start();
             };
             locatorA?.addEventListener('input', syncDistance);
             locatorB?.addEventListener('input', syncDistance);
+            syncDistance();
         },
         'tool-quarter-wave': () => {
             quarterWaveFrequency?.addEventListener('input', computeQuarterWave);
@@ -772,8 +794,12 @@ ob_start();
     };
     const toolLinks = document.querySelectorAll('[data-tool-target]');
     const toolPanels = document.querySelectorAll('[data-tool-panel]');
+    const toolPanelsCache = new Map();
+    toolPanels.forEach((panel) => toolPanelsCache.set(panel.id, panel));
     const setActiveTool = (id) => {
-        if (!id) return;
+        if (!id || !toolPanelsCache.has(id)) {
+            id = 'tool-grid';
+        }
         initToolIfNeeded(id);
         toolPanels.forEach((panel) => {
             panel.classList.toggle('is-hidden', panel.id !== id);
@@ -793,6 +819,10 @@ ob_start();
             window.history.replaceState(null, '', `#${targetId}`);
             setActiveTool(targetId);
         });
+    });
+    window.addEventListener('hashchange', () => {
+        const hashTool = window.location.hash ? window.location.hash.slice(1) : 'tool-grid';
+        setActiveTool(hashTool);
     });
 
 })();
