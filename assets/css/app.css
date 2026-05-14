@@ -783,6 +783,9 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .news-search-header p {
   margin: 0;
 }
+.news-ui-heading {
+  font-family: inherit;
+}
 .news-search-form {
   display: grid;
   grid-template-columns: minmax(240px, 2fr) repeat(3, minmax(170px, 1fr));
@@ -1017,8 +1020,11 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 }
 .stats-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:1rem; }
 .stat-card { background: var(--panel); border:1px solid var(--border); border-radius: 18px; padding: 1rem; display:flex; flex-direction:column; gap:.35rem; }
-.stat-card strong { font-size: 1.5rem; }
-.stat-card strong,
+.stat-card-label {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+}
 .wiki-section-title {
   font-family: inherit;
   font-weight: 700;
