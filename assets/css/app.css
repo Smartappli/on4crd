@@ -1963,4 +1963,5 @@ textarea.wysiwyg-source {
 
 .tools-page-title {
   margin-top: 0;
+  font-family: inherit;
 }
