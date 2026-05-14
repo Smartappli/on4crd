@@ -1,39 +1,68 @@
     const toolLinks = document.querySelectorAll('[data-tool-target]');
     const toolsContent = document.getElementById('tools-content');
     const toolPanelsCache = new Map();
+    const toolPanelRequests = new Map();
+    const knownToolIds = new Set(['tool-grid']);
+    toolLinks.forEach((link) => {
+        const targetId = link.getAttribute('data-tool-target') || '';
+        if (/^tool-[a-z0-9-]+$/.test(targetId)) {
+            knownToolIds.add(targetId);
+        }
+    });
     document.querySelectorAll('[data-tool-panel]').forEach((panel) => toolPanelsCache.set(panel.id, panel));
 
     const getToolPanels = () => Array.from(document.querySelectorAll('[data-tool-panel]'));
 
     const loadToolPanel = async (id) => {
+        if (!/^tool-[a-z0-9-]+$/.test(id)) {
+            return null;
+        }
+        if (!knownToolIds.has(id)) {
+            return null;
+        }
         if (toolPanelsCache.has(id)) {
             return toolPanelsCache.get(id) ?? null;
+        }
+        if (toolPanelRequests.has(id)) {
+            return toolPanelRequests.get(id) ?? null;
         }
         if (!(toolsContent instanceof HTMLElement)) {
             return null;
         }
 
-        const response = await fetch(`index.php?route=tools&ajax=tool_panel&id=${encodeURIComponent(id)}`, {
+        const endpoint = new URL(window.location.href);
+        endpoint.hash = '';
+        endpoint.searchParams.set('route', 'tools');
+        endpoint.searchParams.set('ajax', 'tool_panel');
+        endpoint.searchParams.set('id', id);
+
+        const request = fetch(endpoint.toString(), {
             headers: { 'Accept': 'text/html' },
             credentials: 'same-origin',
+        }).then(async (response) => {
+            if (!response.ok) {
+                return null;
+            }
+
+            const html = await response.text();
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html.trim();
+            const panel = wrapper.firstElementChild;
+            if (!(panel instanceof HTMLElement) || panel.id !== id) {
+                return null;
+            }
+
+            panel.classList.add('is-hidden');
+            toolsContent.appendChild(panel);
+            refreshDomRefs();
+            toolPanelsCache.set(id, panel);
+            return panel;
+        }).finally(() => {
+            toolPanelRequests.delete(id);
         });
-        if (!response.ok) {
-            return null;
-        }
 
-        const html = await response.text();
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = html.trim();
-        const panel = wrapper.firstElementChild;
-        if (!(panel instanceof HTMLElement) || panel.id !== id) {
-            return null;
-        }
-
-        panel.classList.add('is-hidden');
-        toolsContent.appendChild(panel);
-        refreshDomRefs();
-        toolPanelsCache.set(id, panel);
-        return panel;
+        toolPanelRequests.set(id, request);
+        return request;
     };
 
     let activeToolRequestToken = 0;
@@ -42,6 +71,9 @@
         const requestToken = ++activeToolRequestToken;
         let id = requestedId;
         if (!id) {
+            id = 'tool-grid';
+        }
+        if (!knownToolIds.has(id)) {
             id = 'tool-grid';
         }
 
@@ -60,9 +92,11 @@
             }
         }
         if (activePanel === null || requestToken !== activeToolRequestToken) {
+            setError(i18n.err_tool_load);
             return;
         }
 
+        clearError();
         initToolIfNeeded(id);
         getToolPanels().forEach((panel) => {
             panel.classList.toggle('is-hidden', panel.id !== id);

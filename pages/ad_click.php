@@ -6,6 +6,9 @@ $i18n = [
     'fr' => ['not_found' => 'Publicité introuvable', 'title' => 'Publicité'],
     'en' => ['not_found' => 'Ad not found', 'title' => 'Advertisement'],
     'de' => ['not_found' => 'Anzeige nicht gefunden', 'title' => 'Anzeige'],
+    'es' => ['not_found' => 'Publicidad no encontrada', 'title' => 'Publicidad'],
+    'it' => ['not_found' => 'Pubblicità non trovata', 'title' => 'Pubblicità'],
+    'pt' => ['not_found' => 'Publicidade não encontrada', 'title' => 'Publicidade'],
     'nl' => ['not_found' => 'Advertentie niet gevonden', 'title' => 'Advertentie'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];

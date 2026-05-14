@@ -7,6 +7,9 @@ $i18n = [
     'fr' => ['title' => 'Désabonnement newsletter', 'desc' => 'Confirmation de désabonnement à la newsletter ON4CRD.', 'heading' => 'Newsletter', 'ok' => 'Votre désabonnement a été pris en compte.', 'invalid' => 'Lien invalide ou déjà traité.'],
     'en' => ['title' => 'Newsletter unsubscribe', 'desc' => 'Unsubscribe confirmation for the ON4CRD newsletter.', 'heading' => 'Newsletter', 'ok' => 'Your unsubscribe request has been processed.', 'invalid' => 'Invalid or already used link.'],
     'de' => ['title' => 'Newsletter-Abmeldung', 'desc' => 'Bestätigung der Abmeldung vom ON4CRD-Newsletter.', 'heading' => 'Newsletter', 'ok' => 'Ihre Abmeldung wurde berücksichtigt.', 'invalid' => 'Ungültiger oder bereits verwendeter Link.'],
+    'es' => ['title' => 'Baja del boletín', 'desc' => 'Confirmación de baja del boletín ON4CRD.', 'heading' => 'Boletín', 'ok' => 'Su baja ha sido procesada.', 'invalid' => 'Enlace no válido o ya usado.'],
+    'it' => ['title' => 'Disiscrizione newsletter', 'desc' => 'Conferma di disiscrizione alla newsletter ON4CRD.', 'heading' => 'Newsletter', 'ok' => 'La disiscrizione è stata registrata.', 'invalid' => 'Link non valido o già utilizzato.'],
+    'pt' => ['title' => 'Cancelar subscrição newsletter', 'desc' => 'Confirmação de cancelamento da newsletter ON4CRD.', 'heading' => 'Newsletter', 'ok' => 'O seu cancelamento foi processado.', 'invalid' => 'Ligação inválida ou já utilizada.'],
     'nl' => ['title' => 'Nieuwsbrief uitschrijven', 'desc' => 'Bevestiging van uitschrijving voor de ON4CRD-nieuwsbrief.', 'heading' => 'Nieuwsbrief', 'ok' => 'Je uitschrijving is verwerkt.', 'invalid' => 'Ongeldige of al gebruikte link.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {

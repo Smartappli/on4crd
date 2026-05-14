@@ -5350,6 +5350,9 @@ function admin_dashboard_translations(string $locale): array
         'en' => ['layout' => 'Administration', 'title' => 'Centralized administration', 'lead' => 'All admin modules and tools are grouped in this single dashboard.', 'search_label' => 'Quick search', 'search_placeholder' => 'Module, tool, description…', 'search_cta' => 'Filter', 'search_reset' => 'Reset', 'empty' => 'No module matches your search.'],
         'de' => ['layout' => 'Verwaltung', 'title' => 'Zentralisierte Verwaltung', 'lead' => 'Alle Verwaltungs-Module und Werkzeuge sind in diesem einzigen Dashboard gebündelt.', 'search_label' => 'Schnellsuche', 'search_placeholder' => 'Modul, Werkzeug, Beschreibung…', 'search_cta' => 'Filtern', 'search_reset' => 'Zurücksetzen', 'empty' => 'Kein Modul entspricht Ihrer Suche.'],
         'nl' => ['layout' => 'Beheer', 'title' => 'Gecentraliseerd beheer', 'lead' => 'Alle beheermodules en tools zijn gegroepeerd in dit ene dashboard.', 'search_label' => 'Snel zoeken', 'search_placeholder' => 'Module, tool, beschrijving…', 'search_cta' => 'Filteren', 'search_reset' => 'Reset', 'empty' => 'Geen module komt overeen met je zoekopdracht.'],
+        'es' => ['layout' => 'Administración', 'title' => 'Administración centralizada', 'lead' => 'Todos los módulos y herramientas de administración se agrupan en este panel único.', 'search_label' => 'Búsqueda rápida', 'search_placeholder' => 'Módulo, herramienta, descripción…', 'search_cta' => 'Filtrar', 'search_reset' => 'Restablecer', 'empty' => 'Ningún módulo coincide con su búsqueda.'],
+        'it' => ['layout' => 'Amministrazione', 'title' => 'Amministrazione centralizzata', 'lead' => 'Tutti i moduli e gli strumenti di amministrazione sono raccolti in questa dashboard unica.', 'search_label' => 'Ricerca rapida', 'search_placeholder' => 'Modulo, strumento, descrizione…', 'search_cta' => 'Filtra', 'search_reset' => 'Reimposta', 'empty' => 'Nessun modulo corrisponde alla ricerca.'],
+        'pt' => ['layout' => 'Administração', 'title' => 'Administração centralizada', 'lead' => 'Todos os módulos e ferramentas de administração estão agrupados neste painel único.', 'search_label' => 'Pesquisa rápida', 'search_placeholder' => 'Módulo, ferramenta, descrição…', 'search_cta' => 'Filtrar', 'search_reset' => 'Repor', 'empty' => 'Nenhum módulo corresponde à sua pesquisa.'],
     ];
 
     return $i18n[$locale] ?? $i18n['fr'];
@@ -5402,6 +5405,7 @@ function admin_dashboard_cards(string $locale, int $userId, string $search = '')
 function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
 {
     return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . md5($searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
+        $catalogLocale = in_array($locale, ['es', 'it', 'pt'], true) ? 'en' : $locale;
         $cards = [];
         foreach (admin_module_cards_catalog() as $card) {
             $module = (string) ($card['module'] ?? '');
@@ -5412,8 +5416,8 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
             if ($permission !== '' && !has_permission($permission)) {
                 continue;
             }
-            $title = (string) ($card['title'][$locale] ?? $card['title']['fr']);
-            $desc = (string) ($card['desc'][$locale] ?? $card['desc']['fr']);
+            $title = (string) ($card['title'][$catalogLocale] ?? $card['title']['fr']);
+            $desc = (string) ($card['desc'][$catalogLocale] ?? $card['desc']['fr']);
             if ($searchNeedle !== '') {
                 $haystack = mb_safe_strtolower($title . ' ' . $desc);
                 if (!str_contains($haystack, $searchNeedle)) {
