@@ -110,7 +110,7 @@ function current_locale(): string
     }
 
     $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($locale, ['fr', 'en', 'de', 'nl'], true)) {
+    if (!in_array($locale, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt'], true)) {
         $resolvedLocale = 'fr';
         return $resolvedLocale;
     }
@@ -124,7 +124,7 @@ if (!function_exists('t_page')) {
 function t_page(string $domain, string $key, ?string $locale = null): string
 {
     $lang = $locale !== null ? strtolower(trim($locale)) : current_locale();
-    if (!in_array($lang, ['fr', 'en', 'de', 'nl'], true)) {
+    if (!in_array($lang, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt'], true)) {
         $lang = 'fr';
     }
 
@@ -486,7 +486,7 @@ function render_widget(string $slug, array $user = []): string
                 default => 'Conditions variables',
             };
             return '<ul class="list-clean">'
-                . '<li><strong>' . e($weatherText) . '</strong></li>'
+                . '<li><strong>Météo: ' . e($weatherText) . '</strong></li>'
                 . '</ul>';
 
         default:

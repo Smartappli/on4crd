@@ -5,10 +5,10 @@ $user = require_login();
 $memberId = (int) ($user['id'] ?? 0);
 $locale = current_locale();
 $qslI18n = [
-    'fr' => ['studio' => 'QSL Studio · simple, guidé, efficace', 'studio_help' => 'Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.', 'design' => '1) Designer vos fonds QSL', 'create' => '2) Créer des QSL facilement', 'manage' => '3) QSO importés', 'generated' => 'QSL générées', 'filter' => 'Filtrer', 'reset' => 'Réinitialiser', 'page' => 'Page', 'previous' => 'Précédent', 'next' => 'Suivant', 'nav_design' => '1 · Personnaliser le design', 'nav_design_help' => 'Ajoutez un fond image, une couleur unie, un dégradé ou une palette prête à l’emploi.', 'nav_create' => '2 · Créer / importer', 'nav_create_help' => 'Créez une QSL manuelle ou importez vos ADIF en glisser‑déposer.', 'err_select_bg' => 'Veuillez sélectionner une image de fond.', 'ok_bg_image' => 'Fond image enregistré.', 'err_gradient_invalid' => 'Couleurs de dégradé invalides.', 'ok_bg_gradient' => 'Fond dégradé enregistré.', 'err_solid_invalid' => 'Couleur unie invalide.', 'ok_bg_solid' => 'Fond couleur unie enregistré.', 'err_palette_invalid' => 'Palette prédéfinie invalide.', 'ok_bg_palette' => 'Palette prédéfinie enregistrée.', 'ok_bg_default' => 'Fond par défaut mis à jour.', 'ok_bg_deleted' => 'Fond supprimé.', 'err_no_adif' => 'Aucun fichier ADIF reçu.', 'err_no_valid_adif' => 'Aucun fichier ADIF valide n’a pu être traité.', 'ok_qso_imported' => 'QSO importés depuis les fichiers ADIF.', 'err_qso_none' => 'Aucun nouveau QSO importé.', 'ok_qsl_generated' => 'QSL générées.', 'err_qsl_none' => 'Aucune QSL générée. Sélection vide ou QSL déjà existantes.', 'ok_qsl_created' => 'QSL créée.', 'ok_qso_deleted' => 'QSO supprimé.', 'ok_qsl_deleted' => 'QSL supprimée.', 'err_unknown_action' => 'Action QSL inconnue.', 'label_bg_image' => 'Fond image', 'label_gradient' => 'Dégradé 2 couleurs', 'label_delete' => 'Supprimer', 'empty_qso' => 'Aucun QSO importé pour le moment.', 'empty_qso_filtered' => 'Aucun QSO ne correspond aux filtres actifs.', 'empty_qsl' => 'Aucune QSL générée pour le moment.', 'empty_qsl_filtered' => 'Aucune QSL ne correspond à la recherche.', 'nav_manage' => '3 · Gérer et exporter', 'nav_manage_help' => 'Filtrez vos QSO, générez en lot et exportez vos cartes recto/verso.', 'bulk_generate' => 'Générer les QSL sélectionnées', 'select_all' => 'Tout sélectionner', 'select_none' => 'Tout désélectionner', 'qso_search_ph' => 'Filtrer par call, date, mode...', 'qsl_search_ph' => 'Rechercher une QSL (titre, call, bande...)', 'all_bands' => 'Toutes bandes', 'all_modes' => 'Tous modes'],
-    'en' => ['studio' => 'QSL Studio · simple, guided, efficient', 'studio_help' => 'Everything is designed for speed: import your QSOs, create cards and export them seamlessly.', 'design' => '1) Design your QSL backgrounds', 'create' => '2) Create QSL cards easily', 'manage' => '3) Imported QSOs', 'generated' => 'Generated QSL cards', 'filter' => 'Filter', 'reset' => 'Reset', 'page' => 'Page', 'previous' => 'Previous', 'next' => 'Next', 'nav_design' => '1 · Customize design', 'nav_design_help' => 'Add an image background, a solid color, a gradient or a ready-to-use palette.', 'nav_create' => '2 · Create / import', 'nav_create_help' => 'Create a manual QSL or import your ADIF files via drag and drop.', 'err_select_bg' => 'Please select a background image.', 'ok_bg_image' => 'Image background saved.', 'err_gradient_invalid' => 'Invalid gradient colors.', 'ok_bg_gradient' => 'Gradient background saved.', 'err_solid_invalid' => 'Invalid solid color.', 'ok_bg_solid' => 'Solid color background saved.', 'err_palette_invalid' => 'Invalid preset palette.', 'ok_bg_palette' => 'Preset palette saved.', 'ok_bg_default' => 'Default background updated.', 'ok_bg_deleted' => 'Background deleted.', 'err_no_adif' => 'No ADIF file received.', 'err_no_valid_adif' => 'No valid ADIF file could be processed.', 'ok_qso_imported' => 'QSOs imported from ADIF files.', 'err_qso_none' => 'No new QSO imported.', 'ok_qsl_generated' => 'QSL cards generated.', 'err_qsl_none' => 'No QSL generated. Empty selection or cards already exist.', 'ok_qsl_created' => 'QSL created.', 'ok_qso_deleted' => 'QSO deleted.', 'ok_qsl_deleted' => 'QSL deleted.', 'err_unknown_action' => 'Unknown QSL action.', 'label_bg_image' => 'Image background', 'label_gradient' => '2-color gradient', 'label_delete' => 'Delete', 'empty_qso' => 'No imported QSO yet.', 'empty_qso_filtered' => 'No QSO matches active filters.', 'empty_qsl' => 'No generated QSL yet.', 'empty_qsl_filtered' => 'No QSL matches your search.', 'nav_manage' => '3 · Manage and export', 'nav_manage_help' => 'Filter your QSOs, generate in batch and export front/back cards.', 'bulk_generate' => 'Generate selected QSL cards', 'select_all' => 'Select all', 'select_none' => 'Select none', 'qso_search_ph' => 'Filter by callsign, date, mode...', 'qsl_search_ph' => 'Search a QSL (title, call, band...)', 'all_bands' => 'All bands', 'all_modes' => 'All modes'],
-    'de' => ['studio' => 'QSL Studio · einfach, geführt, effizient', 'studio_help' => 'Alles ist auf Tempo ausgelegt: QSOs importieren, Karten erstellen und ohne Reibung exportieren.', 'design' => '1) QSL-Hintergründe gestalten', 'create' => '2) QSL-Karten einfach erstellen', 'manage' => '3) Importierte QSOs', 'generated' => 'Erstellte QSL-Karten', 'filter' => 'Filtern', 'reset' => 'Zurücksetzen', 'page' => 'Seite', 'previous' => 'Zurück', 'next' => 'Weiter', 'nav_design' => '1 · Design anpassen', 'nav_design_help' => 'Fügen Sie ein Bild, eine Volltonfarbe, einen Verlauf oder eine fertige Palette hinzu.', 'nav_create' => '2 · Erstellen / importieren', 'nav_create_help' => 'Erstellen Sie eine manuelle QSL oder importieren Sie ADIF per Drag & Drop.', 'err_select_bg' => 'Bitte wählen Sie ein Hintergrundbild aus.', 'ok_bg_image' => 'Bildhintergrund gespeichert.', 'err_gradient_invalid' => 'Ungültige Verlauf-Farben.', 'ok_bg_gradient' => 'Verlaufshintergrund gespeichert.', 'err_solid_invalid' => 'Ungültige Volltonfarbe.', 'ok_bg_solid' => 'Einfarbiger Hintergrund gespeichert.', 'err_palette_invalid' => 'Ungültige vordefinierte Palette.', 'ok_bg_palette' => 'Vordefinierte Palette gespeichert.', 'ok_bg_default' => 'Standardhintergrund aktualisiert.', 'ok_bg_deleted' => 'Hintergrund gelöscht.', 'err_no_adif' => 'Keine ADIF-Datei empfangen.', 'err_no_valid_adif' => 'Keine gültige ADIF-Datei konnte verarbeitet werden.', 'ok_qso_imported' => 'QSOs aus ADIF-Dateien importiert.', 'err_qso_none' => 'Kein neuer QSO importiert.', 'ok_qsl_generated' => 'QSL-Karten erstellt.', 'err_qsl_none' => 'Keine QSL erstellt. Leere Auswahl oder bereits vorhandene Karten.', 'ok_qsl_created' => 'QSL erstellt.', 'ok_qso_deleted' => 'QSO gelöscht.', 'ok_qsl_deleted' => 'QSL gelöscht.', 'err_unknown_action' => 'Unbekannte QSL-Aktion.', 'label_bg_image' => 'Bildhintergrund', 'label_gradient' => '2-Farben-Verlauf', 'label_delete' => 'Löschen', 'empty_qso' => 'Noch kein QSO importiert.', 'empty_qso_filtered' => 'Kein QSO entspricht den aktiven Filtern.', 'empty_qsl' => 'Noch keine QSL erstellt.', 'empty_qsl_filtered' => 'Keine QSL entspricht der Suche.', 'nav_manage' => '3 · Verwalten und exportieren', 'nav_manage_help' => 'Filtern Sie Ihre QSOs, erzeugen Sie Stapel und exportieren Sie Vorder-/Rückseiten.', 'bulk_generate' => 'Ausgewählte QSL-Karten erzeugen', 'select_all' => 'Alle auswählen', 'select_none' => 'Auswahl aufheben', 'qso_search_ph' => 'Nach Rufzeichen, Datum, Modus filtern...', 'qsl_search_ph' => 'QSL suchen (Titel, Rufzeichen, Band...)', 'all_bands' => 'Alle Bänder', 'all_modes' => 'Alle Modi'],
-    'nl' => ['studio' => 'QSL Studio · eenvoudig, begeleid, efficiënt', 'studio_help' => 'Alles is gericht op snelheid: importeer je QSO’s, maak kaarten en exporteer zonder frictie.', 'design' => '1) Ontwerp je QSL-achtergronden', 'create' => '2) Maak eenvoudig QSL-kaarten', 'manage' => '3) Geïmporteerde QSO’s', 'generated' => 'Gegenereerde QSL-kaarten', 'filter' => 'Filteren', 'reset' => 'Reset', 'page' => 'Pagina', 'previous' => 'Vorige', 'next' => 'Volgende', 'nav_design' => '1 · Ontwerp aanpassen', 'nav_design_help' => 'Voeg een afbeeldingsachtergrond, effen kleur, verloop of kant-en-klaar palet toe.', 'nav_create' => '2 · Maken / importeren', 'nav_create_help' => 'Maak een manuele QSL of importeer ADIF via drag-and-drop.', 'err_select_bg' => 'Selecteer een achtergrondafbeelding.', 'ok_bg_image' => 'Afbeeldingsachtergrond opgeslagen.', 'err_gradient_invalid' => 'Ongeldige verloopkleuren.', 'ok_bg_gradient' => 'Verloopachtergrond opgeslagen.', 'err_solid_invalid' => 'Ongeldige effen kleur.', 'ok_bg_solid' => 'Effen achtergrond opgeslagen.', 'err_palette_invalid' => 'Ongeldig vooraf ingesteld palet.', 'ok_bg_palette' => 'Vooraf ingesteld palet opgeslagen.', 'ok_bg_default' => 'Standaardachtergrond bijgewerkt.', 'ok_bg_deleted' => 'Achtergrond verwijderd.', 'err_no_adif' => 'Geen ADIF-bestand ontvangen.', 'err_no_valid_adif' => 'Geen geldig ADIF-bestand kon worden verwerkt.', 'ok_qso_imported' => 'QSO’s geïmporteerd uit ADIF-bestanden.', 'err_qso_none' => 'Geen nieuwe QSO geïmporteerd.', 'ok_qsl_generated' => 'QSL-kaarten gegenereerd.', 'err_qsl_none' => 'Geen QSL gegenereerd. Lege selectie of kaarten bestaan al.', 'ok_qsl_created' => 'QSL aangemaakt.', 'ok_qso_deleted' => 'QSO verwijderd.', 'ok_qsl_deleted' => 'QSL verwijderd.', 'err_unknown_action' => 'Onbekende QSL-actie.', 'label_bg_image' => 'Afbeeldingsachtergrond', 'label_gradient' => 'Verloop met 2 kleuren', 'label_delete' => 'Verwijderen', 'empty_qso' => 'Nog geen QSO geïmporteerd.', 'empty_qso_filtered' => 'Geen QSO komt overeen met de actieve filters.', 'empty_qsl' => 'Nog geen QSL gegenereerd.', 'empty_qsl_filtered' => 'Geen QSL komt overeen met de zoekopdracht.', 'nav_manage' => '3 · Beheren en exporteren', 'nav_manage_help' => 'Filter je QSO’s, genereer in bulk en exporteer voor-/achterkant kaarten.', 'bulk_generate' => 'Geselecteerde QSL-kaarten genereren', 'select_all' => 'Alles selecteren', 'select_none' => 'Selectie wissen', 'qso_search_ph' => 'Filter op roepnaam, datum, mode...', 'qsl_search_ph' => 'Zoek een QSL (titel, roepnaam, band...)', 'all_bands' => 'Alle banden', 'all_modes' => 'Alle modi'],
+    'fr' => ['studio' => 'QSL Studio · simple, guidé, efficace', 'studio_help' => 'Tout est pensé pour aller vite : importez vos QSO, créez vos cartes et exportez-les sans friction.', 'design' => '1) Designer vos fonds QSL', 'create' => '2) Créer des QSL facilement', 'manage' => '3) QSO importés', 'generated' => 'QSL générées', 'filter' => 'Filtrer', 'reset' => 'Réinitialiser', 'page' => 'Page', 'previous' => 'Précédent', 'next' => 'Suivant', 'nav_design' => '1 · Personnaliser le design', 'nav_design_help' => 'Ajoutez un fond image, une couleur unie, un dégradé ou une palette prête à l’emploi.', 'nav_create' => '2 · Créer / importer', 'nav_create_help' => 'Créez une QSL manuelle ou importez vos ADIF en glisser‑déposer.', 'err_select_bg' => 'Veuillez sélectionner une image de fond.', 'ok_bg_image' => 'Fond image enregistré.', 'err_gradient_invalid' => 'Couleurs de dégradé invalides.', 'ok_bg_gradient' => 'Fond dégradé enregistré.', 'err_solid_invalid' => 'Couleur unie invalide.', 'ok_bg_solid' => 'Fond couleur unie enregistré.', 'err_palette_invalid' => 'Palette prédéfinie invalide.', 'ok_bg_palette' => 'Palette prédéfinie enregistrée.', 'ok_bg_default' => 'Fond par défaut mis à jour.', 'ok_bg_deleted' => 'Fond supprimé.', 'err_no_adif' => 'Aucun fichier ADIF reçu.', 'err_no_valid_adif' => 'Aucun fichier ADIF valide n’a pu être traité.', 'ok_qso_imported' => 'QSO importés depuis les fichiers ADIF.', 'err_qso_none' => 'Aucun nouveau QSO importé.', 'ok_qsl_generated' => 'QSL générées.', 'err_qsl_none' => 'Aucune QSL générée. Sélection vide ou QSL déjà existantes.', 'ok_qsl_created' => 'QSL créée.', 'ok_qso_deleted' => 'QSO supprimé.', 'ok_qsl_deleted' => 'QSL supprimée.', 'err_unknown_action' => 'Action QSL inconnue.', 'label_bg_image' => 'Fond image', 'label_gradient' => 'Dégradé 2 couleurs', 'label_delete' => 'Supprimer', 'empty_qso' => 'Aucun QSO importé pour le moment.', 'empty_qso_filtered' => 'Aucun QSO ne correspond aux filtres actifs.', 'empty_qsl' => 'Aucune QSL générée pour le moment.', 'empty_qsl_filtered' => 'Aucune QSL ne correspond à la recherche.', 'nav_manage' => '3 · Gérer et exporter', 'nav_manage_help' => 'Filtrez vos QSO, générez en lot et exportez vos cartes recto/verso.', 'bulk_generate' => 'Générer les QSL sélectionnées', 'select_all' => 'Tout sélectionner', 'select_none' => 'Tout désélectionner', 'qso_search_ph' => 'Filtrer par call, date, mode...', 'qsl_search_ph' => 'Rechercher une QSL (titre, call, bande...)', 'all_bands' => 'Toutes bandes', 'all_modes' => 'Tous modes', 'preview_dynamic' => 'Aperçu dynamique selon les champs du formulaire.', 'adif_processing' => 'Traitement des fichiers ADIF en cours...', 'adif_import_error' => 'Échec de l’import ADIF.', 'adif_imported_status' => '{imported} QSO importé(s) depuis {files} fichier(s).'],
+    'en' => ['studio' => 'QSL Studio · simple, guided, efficient', 'studio_help' => 'Everything is designed for speed: import your QSOs, create cards and export them seamlessly.', 'design' => '1) Design your QSL backgrounds', 'create' => '2) Create QSL cards easily', 'manage' => '3) Imported QSOs', 'generated' => 'Generated QSL cards', 'filter' => 'Filter', 'reset' => 'Reset', 'page' => 'Page', 'previous' => 'Previous', 'next' => 'Next', 'nav_design' => '1 · Customize design', 'nav_design_help' => 'Add an image background, a solid color, a gradient or a ready-to-use palette.', 'nav_create' => '2 · Create / import', 'nav_create_help' => 'Create a manual QSL or import your ADIF files via drag and drop.', 'err_select_bg' => 'Please select a background image.', 'ok_bg_image' => 'Image background saved.', 'err_gradient_invalid' => 'Invalid gradient colors.', 'ok_bg_gradient' => 'Gradient background saved.', 'err_solid_invalid' => 'Invalid solid color.', 'ok_bg_solid' => 'Solid color background saved.', 'err_palette_invalid' => 'Invalid preset palette.', 'ok_bg_palette' => 'Preset palette saved.', 'ok_bg_default' => 'Default background updated.', 'ok_bg_deleted' => 'Background deleted.', 'err_no_adif' => 'No ADIF file received.', 'err_no_valid_adif' => 'No valid ADIF file could be processed.', 'ok_qso_imported' => 'QSOs imported from ADIF files.', 'err_qso_none' => 'No new QSO imported.', 'ok_qsl_generated' => 'QSL cards generated.', 'err_qsl_none' => 'No QSL generated. Empty selection or cards already exist.', 'ok_qsl_created' => 'QSL created.', 'ok_qso_deleted' => 'QSO deleted.', 'ok_qsl_deleted' => 'QSL deleted.', 'err_unknown_action' => 'Unknown QSL action.', 'label_bg_image' => 'Image background', 'label_gradient' => '2-color gradient', 'label_delete' => 'Delete', 'empty_qso' => 'No imported QSO yet.', 'empty_qso_filtered' => 'No QSO matches active filters.', 'empty_qsl' => 'No generated QSL yet.', 'empty_qsl_filtered' => 'No QSL matches your search.', 'nav_manage' => '3 · Manage and export', 'nav_manage_help' => 'Filter your QSOs, generate in batch and export front/back cards.', 'bulk_generate' => 'Generate selected QSL cards', 'select_all' => 'Select all', 'select_none' => 'Select none', 'qso_search_ph' => 'Filter by callsign, date, mode...', 'qsl_search_ph' => 'Search a QSL (title, call, band...)', 'all_bands' => 'All bands', 'all_modes' => 'All modes', 'preview_dynamic' => 'Dynamic preview based on form fields.', 'adif_processing' => 'Processing ADIF files...', 'adif_import_error' => 'ADIF import failed.', 'adif_imported_status' => '{imported} QSO imported from {files} file(s).'],
+    'de' => ['studio' => 'QSL Studio · einfach, geführt, effizient', 'studio_help' => 'Alles ist auf Tempo ausgelegt: QSOs importieren, Karten erstellen und ohne Reibung exportieren.', 'design' => '1) QSL-Hintergründe gestalten', 'create' => '2) QSL-Karten einfach erstellen', 'manage' => '3) Importierte QSOs', 'generated' => 'Erstellte QSL-Karten', 'filter' => 'Filtern', 'reset' => 'Zurücksetzen', 'page' => 'Seite', 'previous' => 'Zurück', 'next' => 'Weiter', 'nav_design' => '1 · Design anpassen', 'nav_design_help' => 'Fügen Sie ein Bild, eine Volltonfarbe, einen Verlauf oder eine fertige Palette hinzu.', 'nav_create' => '2 · Erstellen / importieren', 'nav_create_help' => 'Erstellen Sie eine manuelle QSL oder importieren Sie ADIF per Drag & Drop.', 'err_select_bg' => 'Bitte wählen Sie ein Hintergrundbild aus.', 'ok_bg_image' => 'Bildhintergrund gespeichert.', 'err_gradient_invalid' => 'Ungültige Verlauf-Farben.', 'ok_bg_gradient' => 'Verlaufshintergrund gespeichert.', 'err_solid_invalid' => 'Ungültige Volltonfarbe.', 'ok_bg_solid' => 'Einfarbiger Hintergrund gespeichert.', 'err_palette_invalid' => 'Ungültige vordefinierte Palette.', 'ok_bg_palette' => 'Vordefinierte Palette gespeichert.', 'ok_bg_default' => 'Standardhintergrund aktualisiert.', 'ok_bg_deleted' => 'Hintergrund gelöscht.', 'err_no_adif' => 'Keine ADIF-Datei empfangen.', 'err_no_valid_adif' => 'Keine gültige ADIF-Datei konnte verarbeitet werden.', 'ok_qso_imported' => 'QSOs aus ADIF-Dateien importiert.', 'err_qso_none' => 'Kein neuer QSO importiert.', 'ok_qsl_generated' => 'QSL-Karten erstellt.', 'err_qsl_none' => 'Keine QSL erstellt. Leere Auswahl oder bereits vorhandene Karten.', 'ok_qsl_created' => 'QSL erstellt.', 'ok_qso_deleted' => 'QSO gelöscht.', 'ok_qsl_deleted' => 'QSL gelöscht.', 'err_unknown_action' => 'Unbekannte QSL-Aktion.', 'label_bg_image' => 'Bildhintergrund', 'label_gradient' => '2-Farben-Verlauf', 'label_delete' => 'Löschen', 'empty_qso' => 'Noch kein QSO importiert.', 'empty_qso_filtered' => 'Kein QSO entspricht den aktiven Filtern.', 'empty_qsl' => 'Noch keine QSL erstellt.', 'empty_qsl_filtered' => 'Keine QSL entspricht der Suche.', 'nav_manage' => '3 · Verwalten und exportieren', 'nav_manage_help' => 'Filtern Sie Ihre QSOs, erzeugen Sie Stapel und exportieren Sie Vorder-/Rückseiten.', 'bulk_generate' => 'Ausgewählte QSL-Karten erzeugen', 'select_all' => 'Alle auswählen', 'select_none' => 'Auswahl aufheben', 'qso_search_ph' => 'Nach Rufzeichen, Datum, Modus filtern...', 'qsl_search_ph' => 'QSL suchen (Titel, Rufzeichen, Band...)', 'all_bands' => 'Alle Bänder', 'all_modes' => 'Alle Modi', 'preview_dynamic' => 'Dynamische Vorschau basierend auf den Formularfeldern.', 'adif_processing' => 'ADIF-Dateien werden verarbeitet...', 'adif_import_error' => 'ADIF-Import fehlgeschlagen.', 'adif_imported_status' => '{imported} QSO aus {files} Datei(en) importiert.'],
+    'nl' => ['studio' => 'QSL Studio · eenvoudig, begeleid, efficiënt', 'studio_help' => 'Alles is gericht op snelheid: importeer je QSO’s, maak kaarten en exporteer zonder frictie.', 'design' => '1) Ontwerp je QSL-achtergronden', 'create' => '2) Maak eenvoudig QSL-kaarten', 'manage' => '3) Geïmporteerde QSO’s', 'generated' => 'Gegenereerde QSL-kaarten', 'filter' => 'Filteren', 'reset' => 'Reset', 'page' => 'Pagina', 'previous' => 'Vorige', 'next' => 'Volgende', 'nav_design' => '1 · Ontwerp aanpassen', 'nav_design_help' => 'Voeg een afbeeldingsachtergrond, effen kleur, verloop of kant-en-klaar palet toe.', 'nav_create' => '2 · Maken / importeren', 'nav_create_help' => 'Maak een manuele QSL of importeer ADIF via drag-and-drop.', 'err_select_bg' => 'Selecteer een achtergrondafbeelding.', 'ok_bg_image' => 'Afbeeldingsachtergrond opgeslagen.', 'err_gradient_invalid' => 'Ongeldige verloopkleuren.', 'ok_bg_gradient' => 'Verloopachtergrond opgeslagen.', 'err_solid_invalid' => 'Ongeldige effen kleur.', 'ok_bg_solid' => 'Effen achtergrond opgeslagen.', 'err_palette_invalid' => 'Ongeldig vooraf ingesteld palet.', 'ok_bg_palette' => 'Vooraf ingesteld palet opgeslagen.', 'ok_bg_default' => 'Standaardachtergrond bijgewerkt.', 'ok_bg_deleted' => 'Achtergrond verwijderd.', 'err_no_adif' => 'Geen ADIF-bestand ontvangen.', 'err_no_valid_adif' => 'Geen geldig ADIF-bestand kon worden verwerkt.', 'ok_qso_imported' => 'QSO’s geïmporteerd uit ADIF-bestanden.', 'err_qso_none' => 'Geen nieuwe QSO geïmporteerd.', 'ok_qsl_generated' => 'QSL-kaarten gegenereerd.', 'err_qsl_none' => 'Geen QSL gegenereerd. Lege selectie of kaarten bestaan al.', 'ok_qsl_created' => 'QSL aangemaakt.', 'ok_qso_deleted' => 'QSO verwijderd.', 'ok_qsl_deleted' => 'QSL verwijderd.', 'err_unknown_action' => 'Onbekende QSL-actie.', 'label_bg_image' => 'Afbeeldingsachtergrond', 'label_gradient' => 'Verloop met 2 kleuren', 'label_delete' => 'Verwijderen', 'empty_qso' => 'Nog geen QSO geïmporteerd.', 'empty_qso_filtered' => 'Geen QSO komt overeen met de actieve filters.', 'empty_qsl' => 'Nog geen QSL gegenereerd.', 'empty_qsl_filtered' => 'Geen QSL komt overeen met de zoekopdracht.', 'nav_manage' => '3 · Beheren en exporteren', 'nav_manage_help' => 'Filter je QSO’s, genereer in bulk en exporteer voor-/achterkant kaarten.', 'bulk_generate' => 'Geselecteerde QSL-kaarten genereren', 'select_all' => 'Alles selecteren', 'select_none' => 'Selectie wissen', 'qso_search_ph' => 'Filter op roepnaam, datum, mode...', 'qsl_search_ph' => 'Zoek een QSL (titel, roepnaam, band...)', 'all_bands' => 'Alle banden', 'all_modes' => 'Alle modi', 'preview_dynamic' => 'Dynamische preview op basis van formuliervelden.', 'adif_processing' => 'ADIF-bestanden worden verwerkt...', 'adif_import_error' => 'ADIF-import mislukt.', 'adif_imported_status' => '{imported} QSO geïmporteerd uit {files} bestand(en).'],
 ];
 $qt = static function (string $key) use ($locale, $qslI18n): string {
     return (string) (($qslI18n[$locale] ?? $qslI18n['fr'])[$key] ?? $key);
@@ -605,7 +605,7 @@ ob_start();
                     </label>
                 </div>
                 <p class="help">Choisissez un seul fond enregistré pour cette QSL.</p>
-                <div class="qsl-live-preview-wrap" data-qsl-manual-preview>
+                <div class="qsl-live-preview-wrap" data-qsl-manual-preview data-preview-note="<?= e($qt('preview_dynamic')) ?>">
                     <h3>Prévisualisation de la QSL</h3>
                     <div class="grid-2" data-manual-preview-layout>
                         <div class="qsl-live-preview">
@@ -630,7 +630,7 @@ ob_start();
                             </div>
                         </div>
                     </div>
-                    <p class="help" data-manual-preview-note>Aperçu dynamique selon les champs du formulaire.</p>
+                    <p class="help" data-manual-preview-note><?= e($qt('preview_dynamic')) ?></p>
                 </div>
                 <p><button class="button">Créer ma QSL</button></p>
             </form>
@@ -641,7 +641,7 @@ ob_start();
                 <span class="badge muted">Étape B</span>
                 <h2>Import ADIF rapide</h2>
             </div>
-            <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack">
+            <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack" data-adif-processing="<?= e($qt('adif_processing')) ?>" data-adif-import-error="<?= e($qt('adif_import_error')) ?>" data-adif-imported-status="<?= e($qt('adif_imported_status')) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="import_adif">
                 <div id="adif-dropzone" class="dropzone qsl-adif-dropzone">
@@ -797,342 +797,7 @@ ob_start();
     <?php endif; ?>
 </section>
 </div>
-<script nonce="<?= e(csp_nonce()) ?>">
-(() => {
-    const navLinks = document.querySelectorAll('[data-qsl-nav-target]');
-    const panels = document.querySelectorAll('[data-qsl-panel]');
-    if (!navLinks.length || !panels.length) {
-        return;
-    }
+<?php include __DIR__ . '/qsl_script.js.php'; ?>
 
-    const activate = (target) => {
-        const allowed = ['design', 'create', 'manage'];
-        const current = allowed.includes(target) ? target : 'design';
-        panels.forEach((panel) => {
-            panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-panel') !== current);
-        });
-        navLinks.forEach((link) => {
-            const isActive = link.getAttribute('data-qsl-nav-target') === current;
-            link.classList.toggle('active', isActive);
-            link.setAttribute('aria-current', isActive ? 'page' : 'false');
-        });
-    };
-
-    navLinks.forEach((link) => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const target = link.getAttribute('data-qsl-nav-target') || 'design';
-            activate(target);
-        });
-    });
-
-    activate('design');
-})();
-
-(() => {
-    const assistant = document.querySelector('[data-qsl-assistant]');
-    if (!assistant) {
-        return;
-    }
-
-    const choices = assistant.querySelectorAll('[data-qsl-assistant-choice]');
-    const panels = assistant.querySelectorAll('[data-qsl-assistant-panel]');
-    if (!choices.length || !panels.length) {
-        return;
-    }
-
-    const syncPanels = () => {
-        const selected = assistant.querySelector('[data-qsl-assistant-choice]:checked');
-        const activeFlow = selected ? selected.value : 'manual';
-        panels.forEach((panel) => {
-            panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-assistant-panel') !== activeFlow);
-        });
-    };
-
-    choices.forEach((input) => input.addEventListener('change', syncPanels));
-    syncPanels();
-})();
-
-(() => {
-    const drawAssistant = document.querySelector('[data-qsl-draw-assistant]');
-    if (!drawAssistant) {
-        return;
-    }
-
-    const choices = drawAssistant.querySelectorAll('[data-qsl-draw-choice]');
-    const panels = drawAssistant.querySelectorAll('[data-qsl-draw-panel]');
-    if (!choices.length || !panels.length) {
-        return;
-    }
-
-    const syncPanels = () => {
-        const selected = drawAssistant.querySelector('[data-qsl-draw-choice]:checked');
-        const activeFlow = selected ? selected.value : 'gradient';
-        panels.forEach((panel) => {
-            panel.classList.toggle('is-hidden', panel.getAttribute('data-qsl-draw-panel') !== activeFlow);
-        });
-    };
-
-    choices.forEach((input) => input.addEventListener('change', syncPanels));
-    syncPanels();
-})();
-
-document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
-    button.addEventListener('click', () => {
-        const table = button.closest('form');
-        if (!table) {
-            return;
-        }
-        const checked = button.dataset.qsoToggle === 'all';
-        table.querySelectorAll('input[name="qso_ids[]"]').forEach((checkbox) => {
-            checkbox.checked = checked;
-        });
-    });
-});
-
-(() => {
-    const previewRoot = document.querySelector('[data-qsl-manual-preview]');
-    if (!previewRoot) {
-        return;
-    }
-
-    const card = previewRoot.querySelector('[data-manual-preview-card]');
-    if (!card) {
-        return;
-    }
-    const backWrap = previewRoot.querySelector('[data-manual-preview-back-wrap]');
-    const frontDetails = previewRoot.querySelectorAll('[data-manual-preview-front-detail]');
-    const frontMessage = previewRoot.querySelector('[data-manual-preview-front-message]');
-    const templateSource = document.querySelector('select[name="template_name"]');
-
-    const fieldDefaults = {
-        qso_call: 'F4XYZ',
-        qso_date: '2026-04-12',
-        time_on: '09:15',
-        band: '20M',
-        mode: 'SSB',
-        rst_sent: '59',
-        rst_recv: '59',
-        comment: 'TNX QSO 73',
-    };
-    const formatPreviewDate = (value) => {
-        if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-            const [year, month, day] = value.split('-');
-            return `${day}/${month}/${year}`;
-        }
-        return value;
-    };
-    const formatPreviewTime = (value) => {
-        if (/^\d{2}:\d{2}(:\d{2})?$/.test(value)) {
-            return value.slice(0, 5);
-        }
-        return value;
-    };
-
-    const sync = () => {
-        Object.keys(fieldDefaults).forEach((field) => {
-            const source = document.querySelector(`[data-manual-preview-source="${field}"]`);
-            const target = previewRoot.querySelector(`[data-manual-preview-field="${field}"]`);
-            if (!target) {
-                return;
-            }
-            const rawValue = source instanceof HTMLInputElement || source instanceof HTMLSelectElement || source instanceof HTMLTextAreaElement
-                ? source.value
-                : '';
-            const value = (rawValue || '').trim();
-            let displayValue = value !== '' ? value : fieldDefaults[field];
-            if (field === 'qso_date') {
-                displayValue = formatPreviewDate(displayValue);
-            } else if (field === 'time_on') {
-                displayValue = formatPreviewTime(displayValue);
-            } else if (field !== 'comment') {
-                displayValue = displayValue.toUpperCase();
-            }
-            target.textContent = displayValue;
-            const backTarget = previewRoot.querySelector(`[data-manual-preview-back-field="${field}"]`);
-            if (backTarget) {
-                backTarget.textContent = displayValue;
-            }
-        });
-
-        const presetSelect = document.querySelector('[data-manual-preview-source="background_preset_id"]');
-        const note = previewRoot.querySelector('[data-manual-preview-note]');
-        if (!(presetSelect instanceof HTMLSelectElement)) {
-            return;
-        }
-
-        const selectedOption = presetSelect.selectedOptions[0];
-        const type = selectedOption?.getAttribute('data-bg-type') || 'gradient';
-        const imageData = selectedOption?.getAttribute('data-bg-image') || '';
-        const primary = selectedOption?.getAttribute('data-bg-primary') || '#0B1F3A';
-        const secondary = selectedOption?.getAttribute('data-bg-secondary') || '#1D4ED8';
-        if (type === 'image' && imageData !== '') {
-            card.style.backgroundImage = `linear-gradient(rgba(5, 10, 25, .35), rgba(5, 10, 25, .35)), url('${imageData}')`;
-            card.style.backgroundSize = 'cover';
-            card.style.backgroundPosition = 'center';
-            if (note) {
-                note.textContent = "<?= addslashes($qt('label_bg_image')) ?>";
-            }
-        } else if (type === 'gradient') {
-            card.style.background = `linear-gradient(135deg, ${primary}, ${secondary})`;
-            card.style.backgroundSize = '';
-            card.style.backgroundPosition = '';
-            if (note) {
-                note.textContent = 'Aperçu dynamique selon les champs du formulaire.';
-            }
-        } else {
-            card.style.background = 'linear-gradient(135deg, #0f172a, #1e293b)';
-            card.style.backgroundSize = '';
-            card.style.backgroundPosition = '';
-            if (note) {
-                note.textContent = "<?= addslashes($qt('label_bg_image')) ?>";
-            }
-        }
-
-        const isDuplex = templateSource instanceof HTMLSelectElement && templateSource.value === 'classic_duplex';
-        if (backWrap) {
-            backWrap.classList.toggle('is-hidden', !isDuplex);
-        }
-        frontDetails.forEach((node) => node.classList.toggle('is-hidden', isDuplex));
-        if (frontMessage) {
-            frontMessage.classList.toggle('is-hidden', !isDuplex);
-        }
-    };
-
-    document.querySelectorAll('[data-manual-preview-source]').forEach((source) => {
-        source.addEventListener('input', sync);
-        source.addEventListener('change', sync);
-    });
-    if (templateSource instanceof HTMLSelectElement) {
-        templateSource.addEventListener('change', sync);
-    }
-
-    sync();
-})();
-
-(() => {
-    const previewCard = document.querySelector('[data-qsl-preview-card]');
-    if (!previewCard) {
-        return;
-    }
-
-    const primaryInput = document.querySelector('[data-preview-color-primary]');
-    const secondaryInput = document.querySelector('[data-preview-color-secondary]');
-    const solidInput = document.querySelector('[data-preview-solid-color]');
-    const paletteSelect = document.querySelector('[data-preview-palette-select]');
-    const imageInput = document.querySelector('[data-preview-image-input]');
-    const drawFlowChoices = document.querySelectorAll('[data-qsl-draw-choice]');
-    const applyGradient = (primary = '#0B1F3A', secondary = '#1D4ED8') => {
-        previewCard.style.backgroundImage = `linear-gradient(135deg, ${primary}, ${secondary})`;
-    };
-    const applyCurrentGradientInputs = () => {
-        const primary = primaryInput?.value || '#0B1F3A';
-        const secondary = secondaryInput?.value || '#1D4ED8';
-        applyGradient(primary, secondary);
-    };
-    const applySolid = () => {
-        const solid = solidInput?.value || '#1E293B';
-        applyGradient(solid, solid);
-    };
-    const applyPalette = () => {
-        if (!(paletteSelect instanceof HTMLSelectElement)) {
-            return;
-        }
-        const option = paletteSelect.selectedOptions[0];
-        const primary = option?.getAttribute('data-primary') || '#0B1F3A';
-        const secondary = option?.getAttribute('data-secondary') || '#1D4ED8';
-        applyGradient(primary, secondary);
-    };
-    const applyFromActiveFlow = () => {
-        const activeFlow = document.querySelector('[data-qsl-draw-choice]:checked')?.getAttribute('value') || 'gradient';
-        if (activeFlow === 'solid') {
-            applySolid();
-            return;
-        }
-        if (activeFlow === 'palette') {
-            applyPalette();
-            return;
-        }
-        applyCurrentGradientInputs();
-    };
-
-    primaryInput?.addEventListener('input', applyFromActiveFlow);
-    secondaryInput?.addEventListener('input', applyFromActiveFlow);
-    solidInput?.addEventListener('input', applyFromActiveFlow);
-    paletteSelect?.addEventListener('change', applyFromActiveFlow);
-    drawFlowChoices.forEach((choice) => {
-        choice.addEventListener('change', applyFromActiveFlow);
-    });
-    applyFromActiveFlow();
-
-    imageInput?.addEventListener('change', () => {
-        const file = imageInput.files?.[0];
-        if (!file) {
-            applyFromActiveFlow();
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-            if (typeof reader.result === 'string') {
-                previewCard.style.backgroundImage = `linear-gradient(rgba(5, 10, 25, .35), rgba(5, 10, 25, .35)), url('${reader.result}')`;
-                previewCard.style.backgroundSize = 'cover';
-                previewCard.style.backgroundPosition = 'center';
-            }
-        };
-        reader.readAsDataURL(file);
-    });
-})();
-
-(() => {
-    const form = document.getElementById('adif-dropzone-form');
-    const status = document.getElementById('adif-dropzone-status');
-    if (!form || typeof Dropzone === 'undefined') {
-        return;
-    }
-
-    Dropzone.autoDiscover = false;
-    const csrf = form.querySelector('input[name="_csrf"]')?.value || '';
-    const action = form.querySelector('input[name="action"]')?.value || 'import_adif';
-    const dropzone = new Dropzone('#adif-dropzone', {
-        url: window.location.href,
-        method: 'post',
-        paramName: 'adif_files[]',
-        acceptedFiles: '.adi,.adif,text/plain',
-        uploadMultiple: false,
-        parallelUploads: 6,
-        maxFilesize: 8,
-        addRemoveLinks: true,
-        autoProcessQueue: true,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        params: {
-            _csrf: csrf,
-            action: action,
-        },
-        dictDefaultMessage: '',
-    });
-
-    dropzone.on('sending', () => {
-        if (status) {
-            status.textContent = 'Traitement des fichiers ADIF en cours...';
-        }
-    });
-    dropzone.on('success', (file, response) => {
-        const imported = Number(response?.imported || 0);
-        const files = Number(response?.files || 1);
-        if (status) {
-            status.textContent = `${imported} QSO importé(s) depuis ${files} fichier(s).`;
-        }
-    });
-    dropzone.on('error', (file, message) => {
-        const text = typeof message === 'string' ? message : (message?.error || 'Échec de l’import ADIF.');
-        if (status) {
-            status.textContent = text;
-        }
-    });
-    dropzone.on('queuecomplete', () => {
-        window.setTimeout(() => window.location.reload(), 500);
-    });
-})();
-</script>
 <?php
 echo render_layout((string) ob_get_clean(), 'QSL');
