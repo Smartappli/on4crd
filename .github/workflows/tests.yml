@@ -42,3 +42,66 @@ jobs:
 
       - name: Run unit tests
         run: composer test
+
+  toolbox-smoke-and-e2e:
+    name: Toolbox smoke + Playwright E2E
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Prepare config
+        run: cp config/config.sample.php config/config.php
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Install Playwright dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Start local PHP server
+        run: |
+          php -S 127.0.0.1:8080 -t . >/tmp/php-server.log 2>&1 &
+          echo $! > /tmp/php-server.pid
+
+      - name: Run toolbox checks with smoke
+        env:
+          TOOLS_SMOKE_BASE_URL: http://127.0.0.1:8080/index.php
+        run: ./scripts/check-tools.sh --with-smoke
+
+      - name: Run Playwright E2E
+        env:
+          E2E_BASE_URL: http://127.0.0.1:8080/index.php
+        run: npm run test:e2e
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+
+      - name: Stop local PHP server
+        if: always()
+        run: |
+          if [[ -f /tmp/php-server.pid ]]; then
+            kill "$(cat /tmp/php-server.pid)" || true
+          fi

@@ -23,6 +23,9 @@ $i18n = [
         'manage' => 'Gérer',
         'article_count' => 'article(s)',
         'reset_filter' => 'Réinitialiser le filtre',
+        'search_placeholder' => 'Rechercher un article',
+        'search' => 'Rechercher',
+        'reset_search' => 'Réinitialiser la recherche',
         'no_article_for_theme' => 'Aucun article disponible pour cette thématique.',
         'read_article' => 'Lire l’article',
         'layout_title' => 'Articles',
@@ -44,6 +47,9 @@ $i18n = [
         'manage' => 'Manage',
         'article_count' => 'article(s)',
         'reset_filter' => 'Reset filter',
+        'search_placeholder' => 'Search for an article',
+        'search' => 'Search',
+        'reset_search' => 'Reset search',
         'no_article_for_theme' => 'No articles available for this theme.',
         'read_article' => 'Read article',
         'layout_title' => 'Articles',
@@ -65,6 +71,9 @@ $i18n = [
         'manage' => 'Verwalten',
         'article_count' => 'Artikel',
         'reset_filter' => 'Filter zurücksetzen',
+        'search_placeholder' => 'Artikel suchen',
+        'search' => 'Suchen',
+        'reset_search' => 'Suche zurücksetzen',
         'no_article_for_theme' => 'Keine Artikel für dieses Thema verfügbar.',
         'read_article' => 'Artikel lesen',
         'layout_title' => 'Artikel',
@@ -86,6 +95,9 @@ $i18n = [
         'manage' => 'Beheren',
         'article_count' => 'artikel(en)',
         'reset_filter' => 'Filter resetten',
+        'search_placeholder' => 'Zoek een artikel',
+        'search' => 'Zoeken',
+        'reset_search' => 'Zoekopdracht resetten',
         'no_article_for_theme' => 'Geen artikelen beschikbaar voor dit thema.',
         'read_article' => 'Artikel lezen',
         'layout_title' => 'Artikels',
@@ -113,6 +125,10 @@ $themeMeta = [
 ];
 
 $themeFilter = slugify(trim((string) ($_GET['theme'] ?? '')));
+$search = trim((string) ($_GET['q'] ?? ''));
+if (mb_strlen($search) > 120) {
+    $search = mb_substr($search, 0, 120);
+}
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
 $themeCounts = cache_remember('articles_theme_counts_v1', 180, static function (): array {
@@ -133,9 +149,20 @@ foreach (array_keys($themeCounts) as $themeCode) {
     }
 }
 
-[$whereSql, $whereParams] = $themeFilter !== ''
-    ? ['WHERE status = "published" AND category = ?', [$themeFilter]]
-    : ['WHERE status = "published"', []];
+$whereParts = ['status = "published"'];
+$whereParams = [];
+if ($themeFilter !== '') {
+    $whereParts[] = 'category = ?';
+    $whereParams[] = $themeFilter;
+}
+if ($search !== '') {
+    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+    $like = '%' . $search . '%';
+    $whereParams[] = $like;
+    $whereParams[] = $like;
+    $whereParams[] = $like;
+}
+$whereSql = 'WHERE ' . implode(' AND ', $whereParts);
 $countStmt = db()->prepare('SELECT COUNT(*) FROM articles ' . $whereSql);
 $countStmt->execute($whereParams);
 $totalArticles = (int) $countStmt->fetchColumn();
@@ -187,8 +214,19 @@ ob_start();
                 </a>
             <?php endforeach; ?>
         </div>
+        <form method="get" class="inline-form" style="margin: 1rem 0 0;">
+            <input type="hidden" name="route" value="articles">
+            <?php if ($themeFilter !== ''): ?>
+                <input type="hidden" name="theme" value="<?= e($themeFilter) ?>">
+            <?php endif; ?>
+            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+            <?php if ($search !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['reset_search']) ?></a>
+            <?php endif; ?>
+        </form>
         <?php if ($themeFilter !== ''): ?>
-            <p><a class="pill" href="<?= e(route_url('articles')) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
+            <p><a class="pill" href="<?= e(route_url('articles', array_filter(['q' => $search], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
         <?php endif; ?>
     </div>
 
@@ -217,11 +255,11 @@ ob_start();
     <?php if ($maxPage > 1): ?>
         <div class="card actions">
             <?php if ($page > 1): ?>
-                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter, 'page' => $page - 1], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['previous']) ?></a>
+                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter, 'q' => $search, 'page' => $page - 1], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['previous']) ?></a>
             <?php endif; ?>
             <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $maxPage ?></span>
             <?php if ($page < $maxPage): ?>
-                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter, 'page' => $page + 1], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['next']) ?></a>
+                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter, 'q' => $search, 'page' => $page + 1], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['next']) ?></a>
             <?php endif; ?>
         </div>
     <?php endif; ?>

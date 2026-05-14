@@ -142,7 +142,7 @@ $latestNews = cache_remember('news_latest_v1', 60, static function (): array {
 ob_start();
 ?>
 <section class="card">
-    <h2><?= e((string) $newsT['latest_news']) ?></h2>
+    <h2 class="news-ui-heading"><?= e((string) $newsT['latest_news']) ?></h2>
     <?php if ($latestNews !== []): ?>
         <div class="news-grid latest-news-grid">
             <?php foreach ($latestNews as $latestPost): ?>
@@ -174,7 +174,7 @@ ob_start();
 
 <section class="card news-filters mt-4">
     <div class="news-search-header">
-        <h1><?= e((string) $newsT['search_title']) ?></h1>
+        <h1 class="news-ui-heading"><?= e((string) $newsT['search_title']) ?></h1>
         <p class="help"><?= e((string) $newsT['search_lead']) ?></p>
     </div>
     <?php if ($activeFiltersCount > 0): ?>
@@ -260,7 +260,7 @@ ob_start();
 </section>
 
 <section class="card mt-4" id="news-list">
-        <h2><?= e((string) $newsT['news_overview']) ?></h2>
+        <h2 class="news-ui-heading"><?= e((string) $newsT['news_overview']) ?></h2>
         <?php if ($posts === []): ?>
             <div class="news-empty-state">
                 <p><?= e((string) $newsT['no_match']) ?></p>
