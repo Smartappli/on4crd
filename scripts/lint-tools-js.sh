@@ -25,4 +25,18 @@ print(js)
 PY
 
 node --check "$TMP_JS"
+
+python - <<'PY' "$TMP_JS"
+from pathlib import Path
+import re
+import sys
+
+js = Path(sys.argv[1]).read_text()
+pattern = re.compile(r"\bconst\s+([A-Za-z_$][\w$]*)\s*=\s*document\.getElementById\(")
+names = pattern.findall(js)
+dups = sorted({name for name in names if names.count(name) > 1})
+if dups:
+    raise SystemExit(f"Duplicate DOM const declarations found: {', '.join(dups)}")
+PY
+
 echo "tools JS syntax OK"
