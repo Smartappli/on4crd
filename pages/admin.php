@@ -4,7 +4,7 @@ declare(strict_types=1);
 require_permission('admin.access');
 $locale = current_locale();
 $t = admin_dashboard_translations($locale);
-$openLabel = ['fr' => 'Ouvrir', 'en' => 'Open', 'de' => 'Öffnen', 'nl' => 'Openen'][$locale] ?? 'Ouvrir';
+$openLabel = ['fr' => 'Ouvrir', 'en' => 'Open', 'de' => 'Öffnen', 'es' => 'Abrir', 'it' => 'Apri', 'pt' => 'Abrir', 'nl' => 'Openen'][$locale] ?? 'Ouvrir';
 $adminCardIcons = [
     'admin_modules' => '🧩',
     'admin_permissions' => '🔐',

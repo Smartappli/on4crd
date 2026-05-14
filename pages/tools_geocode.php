@@ -8,6 +8,9 @@ $i18n = [
     'fr' => ['missing_q' => $t('missing_q'), 'service_down' => $t('service_down'), 'address_not_found' => $t('address_not_found'), 'invalid_coords' => $t('invalid_coords')],
     'en' => ['missing_q' => 'Missing q parameter.', 'service_down' => 'Geocoding service unavailable.', 'address_not_found' => 'Address not found.', 'invalid_coords' => 'Invalid coordinates received.'],
     'de' => ['missing_q' => 'Fehlender q-Parameter.', 'service_down' => 'Geokodierungsdienst nicht verfügbar.', 'address_not_found' => 'Adresse nicht gefunden.', 'invalid_coords' => 'Ungültige Koordinaten empfangen.'],
+    'es' => ['missing_q' => 'Falta el parámetro q.', 'service_down' => 'Servicio de geocodificación no disponible.', 'address_not_found' => 'Dirección no encontrada.', 'invalid_coords' => 'Coordenadas no válidas recibidas.'],
+    'it' => ['missing_q' => 'Parametro q mancante.', 'service_down' => 'Servizio di geocodifica non disponibile.', 'address_not_found' => 'Indirizzo non trovato.', 'invalid_coords' => 'Coordinate non valide ricevute.'],
+    'pt' => ['missing_q' => 'Parâmetro q em falta.', 'service_down' => 'Serviço de geocodificação indisponível.', 'address_not_found' => 'Endereço não encontrado.', 'invalid_coords' => 'Coordenadas inválidas recebidas.'],
     'nl' => ['missing_q' => 'Ontbrekende q-parameter.', 'service_down' => 'Geocoderingsservice niet beschikbaar.', 'address_not_found' => 'Adres niet gevonden.', 'invalid_coords' => 'Ongeldige coördinaten ontvangen.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {

@@ -87,6 +87,15 @@ $i18n = [
         'theme_formation' => 'Ausbildung',
         'theme_autres' => 'Weitere Themen',
     ],
+    'es' => [
+        'default_category' => 'Categoría', 'theme_default' => 'Temática', 'page_title' => 'Artículos técnicos', 'page_description' => 'Artículos técnicos de ON4CRD sobre radioafición, equipos y práctica.', 'manage' => 'Gestionar', 'article_count' => 'artículo(s)', 'reset_filter' => 'Restablecer filtro', 'search_placeholder' => 'Buscar un artículo', 'search' => 'Buscar', 'reset_search' => 'Restablecer búsqueda', 'no_article_for_theme' => 'No hay artículos disponibles para esta temática.', 'read_article' => 'Leer artículo', 'layout_title' => 'Artículos', 'page' => 'Página', 'previous' => 'Anterior', 'next' => 'Siguiente', 'theme_antennes' => 'Antenas', 'theme_trafic' => 'Tráfico y DX', 'theme_numerique' => 'Modos digitales', 'theme_materiel' => 'Equipos y estación', 'theme_formation' => 'Formación', 'theme_autres' => 'Otros temas',
+    ],
+    'it' => [
+        'default_category' => 'Categoria', 'theme_default' => 'Tema', 'page_title' => 'Articoli tecnici', 'page_description' => 'Articoli tecnici ON4CRD su radioamatori, attrezzature e pratica.', 'manage' => 'Gestisci', 'article_count' => 'articolo/i', 'reset_filter' => 'Reimposta filtro', 'search_placeholder' => 'Cerca un articolo', 'search' => 'Cerca', 'reset_search' => 'Reimposta ricerca', 'no_article_for_theme' => 'Nessun articolo disponibile per questo tema.', 'read_article' => 'Leggi articolo', 'layout_title' => 'Articoli', 'page' => 'Pagina', 'previous' => 'Precedente', 'next' => 'Successiva', 'theme_antennes' => 'Antenne', 'theme_trafic' => 'Traffico e DX', 'theme_numerique' => 'Modi digitali', 'theme_materiel' => 'Attrezzature e stazione', 'theme_formation' => 'Formazione', 'theme_autres' => 'Altri temi',
+    ],
+    'pt' => [
+        'default_category' => 'Categoria', 'theme_default' => 'Tema', 'page_title' => 'Artigos técnicos', 'page_description' => 'Artigos técnicos ON4CRD sobre radioamadorismo, equipamento e prática.', 'manage' => 'Gerir', 'article_count' => 'artigo(s)', 'reset_filter' => 'Repor filtro', 'search_placeholder' => 'Pesquisar um artigo', 'search' => 'Pesquisar', 'reset_search' => 'Repor pesquisa', 'no_article_for_theme' => 'Não há artigos disponíveis para este tema.', 'read_article' => 'Ler artigo', 'layout_title' => 'Artigos', 'page' => 'Página', 'previous' => 'Anterior', 'next' => 'Seguinte', 'theme_antennes' => 'Antenas', 'theme_trafic' => 'Tráfego e DX', 'theme_numerique' => 'Modos digitais', 'theme_materiel' => 'Equipamento e estação', 'theme_formation' => 'Formação', 'theme_autres' => 'Outros temas',
+    ],
     'nl' => [
         'default_category' => 'Categorie',
         'theme_default' => 'Thema',

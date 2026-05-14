@@ -161,6 +161,40 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'de' => ['title' => 'Interne Ordnung', 'body' => 'Die interne Ordnung des Clubs wird auf dieser Seite veröffentlicht.'],
             'nl' => ['title' => 'Intern reglement', 'body' => 'Het intern reglement van de club wordt op deze pagina gepubliceerd.'],
         ],
+
+        'es' => [
+            'nav_home' => 'Inicio', 'nav_news' => 'Noticias', 'nav_shop' => 'Tienda', 'nav_events' => 'Eventos', 'nav_tools' => 'Herramientas', 'nav_directory' => 'Directorio',
+            'nav_dashboard' => 'Panel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galería', 'nav_articles' => 'Artículos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Subastas',
+            'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
+            'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
+            'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Rojo', 'accent_amber' => 'Ámbar', 'accent_orange' => 'Naranja',
+            'language_choice' => 'Selección de idioma', 'language_help' => 'Selector de idioma del sitio. Los cambios se aplican automáticamente.',
+            'theme_choice' => 'Selección de modo claro u oscuro', 'theme_help' => 'Selector de tema. Los cambios se aplican automáticamente.',
+            'accent_choice' => 'Selección de color', 'accent_help' => 'Selector de color de acento. Los cambios se aplican automáticamente.',
+            'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
+        ],
+        'it' => [
+            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
+            'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
+            'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
+            'accent_blue' => 'Blu', 'accent_emerald' => 'Smeraldo', 'accent_violet' => 'Viola', 'accent_red' => 'Rosso', 'accent_amber' => 'Ambra', 'accent_orange' => 'Arancione',
+            'language_choice' => 'Selezione lingua', 'language_help' => 'Selettore della lingua del sito. Le modifiche sono applicate automaticamente.',
+            'theme_choice' => 'Selezione modalità chiara o scura', 'theme_help' => 'Selettore tema. Le modifiche sono applicate automaticamente.',
+            'accent_choice' => 'Selezione colore', 'accent_help' => 'Selettore colore di accento. Le modifiche sono applicate automaticamente.',
+            'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
+        ],
+        'pt' => [
+            'nav_home' => 'Início', 'nav_news' => 'Notícias', 'nav_shop' => 'Loja', 'nav_events' => 'Eventos', 'nav_tools' => 'Ferramentas', 'nav_directory' => 'Diretório',
+            'nav_dashboard' => 'Painel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeria', 'nav_articles' => 'Artigos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Leilões',
+            'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
+            'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
+            'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Vermelho', 'accent_amber' => 'Âmbar', 'accent_orange' => 'Laranja',
+            'language_choice' => 'Seleção de idioma', 'language_help' => 'Seletor de idioma do site. As alterações são aplicadas automaticamente.',
+            'theme_choice' => 'Seleção de modo claro ou escuro', 'theme_help' => 'Seletor de tema. As alterações são aplicadas automaticamente.',
+            'accent_choice' => 'Seleção de cor', 'accent_help' => 'Seletor de cor de destaque. As alterações são aplicadas automaticamente.',
+            'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Pesquisa global', 'search_placeholder' => 'Pesquisar…', 'search_submit' => 'Pesquisar',
+        ],
     ];
     }
 
@@ -1615,6 +1649,9 @@ function render_site_footer(string $currentRoute): string
         'en' => ['built_by' => 'Website built by'],
         'de' => ['built_by' => 'Website erstellt von'],
         'nl' => ['built_by' => 'Website gemaakt door'],
+        'es' => ['built_by' => 'Sitio realizado por'],
+        'it' => ['built_by' => 'Sito realizzato da'],
+        'pt' => ['built_by' => 'Site desenvolvido por'],
     ];
     $i18n = $footerMessages[$locale] ?? $footerMessages['fr'];
 
@@ -1632,7 +1669,7 @@ function render_layout(string $content, string $title = ''): string
         $currentTheme = 'light';
     }
     $currentLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl'], true)) {
+    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt'], true)) {
         $currentLocale = 'fr';
     }
     $layoutMessages = [
@@ -1645,7 +1682,7 @@ function render_layout(string $content, string $title = ''): string
             'language_choice' => 'Choix de la langue', 'language_help' => 'Sélecteur de langue du site. Le changement est appliqué automatiquement.',
             'theme_choice' => 'Choix du mode clair ou sombre', 'theme_help' => 'Sélecteur de thème. Le changement est appliqué automatiquement.',
             'accent_choice' => 'Choix de la couleur', 'accent_help' => 'Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.',
-            'install_app' => 'Installer l’app', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
+            'install_app' => 'Installer l’app', 'skip_to_content' => 'Aller au contenu', 'close_menu' => 'Fermer le menu', 'main_navigation' => 'Navigation principale', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
         ],
         'en' => [
             'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
@@ -1656,7 +1693,7 @@ function render_layout(string $content, string $title = ''): string
             'language_choice' => 'Language selection', 'language_help' => 'Site language selector. Changes are applied automatically.',
             'theme_choice' => 'Light or dark mode selection', 'theme_help' => 'Theme selector. Changes are applied automatically.',
             'accent_choice' => 'Accent color selection', 'accent_help' => 'Accent color selector. Changes are applied automatically.',
-            'install_app' => 'Install app', 'search_label' => 'Global search', 'search_placeholder' => 'Search…', 'search_submit' => 'Search',
+            'install_app' => 'Install app', 'skip_to_content' => 'Skip to content', 'close_menu' => 'Close menu', 'main_navigation' => 'Main navigation', 'search_label' => 'Global search', 'search_placeholder' => 'Search…', 'search_submit' => 'Search',
         ],
         'de' => [
             'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
@@ -1667,7 +1704,7 @@ function render_layout(string $content, string $title = ''): string
             'language_choice' => 'Sprachauswahl', 'language_help' => 'Sprachauswahl der Website. Änderungen werden automatisch angewendet.',
             'theme_choice' => 'Hell- oder Dunkelmodus auswählen', 'theme_help' => 'Designauswahl. Änderungen werden automatisch angewendet.',
             'accent_choice' => 'Akzentfarbe auswählen', 'accent_help' => 'Akzentfarbauswahl. Änderungen werden automatisch angewendet.',
-            'install_app' => 'App installieren', 'search_label' => 'Globale Suche', 'search_placeholder' => 'Suchen…', 'search_submit' => 'Suchen',
+            'install_app' => 'App installieren', 'skip_to_content' => 'Zum Inhalt springen', 'close_menu' => 'Menü schließen', 'main_navigation' => 'Hauptnavigation', 'search_label' => 'Globale Suche', 'search_placeholder' => 'Suchen…', 'search_submit' => 'Suchen',
         ],
         'nl' => [
             'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
@@ -1678,7 +1715,7 @@ function render_layout(string $content, string $title = ''): string
             'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
             'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
             'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
-            'install_app' => 'App installeren', 'search_label' => 'Globale zoekopdracht', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
+            'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Globale zoekopdracht', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
     ];
     $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
@@ -1815,6 +1852,9 @@ function render_layout(string $content, string $title = ''): string
         'en' => ['icon' => '🇬🇧', 'label' => 'English'],
         'de' => ['icon' => '🇩🇪', 'label' => 'Deutsch'],
         'nl' => ['icon' => '🇳🇱', 'label' => 'Nederlands'],
+        'es' => ['icon' => '🇪🇸', 'label' => 'Español'],
+        'it' => ['icon' => '🇮🇹', 'label' => 'Italiano'],
+        'pt' => ['icon' => '🇵🇹', 'label' => 'Português'],
     ];
     $accentIcons = [
         'blue' => '🔵',
@@ -1891,12 +1931,12 @@ function render_layout(string $content, string $title = ''): string
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body data-sw-url="' . e(base_url('sw.js')) . '">'
-        . '<a class="skip-link" href="#main-content">Aller au contenu</a>'
+        . '<a class="skip-link" href="#main-content">' . e((string) ($layoutI18n['skip_to_content'] ?? 'Skip to content')) . '</a>'
         . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
         . '<span class="brand-title">ON4CRD.be</span><span class="brand-subtitle">Club Radio Durnal</span></a></div>'
         . '<button class="menu-toggle button secondary" type="button" aria-controls="main-nav" aria-expanded="false"><span aria-hidden="true">☰</span><span class="menu-label">Menu</span></button>'
-        . '<button class="nav-backdrop" type="button" aria-label="Fermer le menu" hidden></button>'
-        . '<nav id="main-nav" class="nav" aria-label="Navigation principale">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
+        . '<button class="nav-backdrop" type="button" aria-label="' . e((string) ($layoutI18n['close_menu'] ?? 'Close menu')) . '" hidden></button>'
+        . '<nav id="main-nav" class="nav" aria-label="' . e((string) ($layoutI18n['main_navigation'] ?? 'Main navigation')) . '">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
@@ -4151,7 +4191,7 @@ function csrf_token(): string
     return $_SESSION['_csrf'];
 }
 
-function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl']): string
+function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt']): string
 {
     $normalized = strtolower(trim($header));
     if ($normalized === '') {
@@ -4178,7 +4218,7 @@ function preferred_locale_from_accept_language(string $header, array $supportedL
 
 function initialize_user_preferences(): void
 {
-    $supportedLocales = ['fr', 'en', 'de', 'nl'];
+    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt'];
     $supportedThemes = ['light', 'dark'];
     $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber', 'orange'];
 
@@ -5350,6 +5390,9 @@ function admin_dashboard_translations(string $locale): array
         'en' => ['layout' => 'Administration', 'title' => 'Centralized administration', 'lead' => 'All admin modules and tools are grouped in this single dashboard.', 'search_label' => 'Quick search', 'search_placeholder' => 'Module, tool, description…', 'search_cta' => 'Filter', 'search_reset' => 'Reset', 'empty' => 'No module matches your search.'],
         'de' => ['layout' => 'Verwaltung', 'title' => 'Zentralisierte Verwaltung', 'lead' => 'Alle Verwaltungs-Module und Werkzeuge sind in diesem einzigen Dashboard gebündelt.', 'search_label' => 'Schnellsuche', 'search_placeholder' => 'Modul, Werkzeug, Beschreibung…', 'search_cta' => 'Filtern', 'search_reset' => 'Zurücksetzen', 'empty' => 'Kein Modul entspricht Ihrer Suche.'],
         'nl' => ['layout' => 'Beheer', 'title' => 'Gecentraliseerd beheer', 'lead' => 'Alle beheermodules en tools zijn gegroepeerd in dit ene dashboard.', 'search_label' => 'Snel zoeken', 'search_placeholder' => 'Module, tool, beschrijving…', 'search_cta' => 'Filteren', 'search_reset' => 'Reset', 'empty' => 'Geen module komt overeen met je zoekopdracht.'],
+        'es' => ['layout' => 'Administración', 'title' => 'Administración centralizada', 'lead' => 'Todos los módulos y herramientas de administración se agrupan en este panel único.', 'search_label' => 'Búsqueda rápida', 'search_placeholder' => 'Módulo, herramienta, descripción…', 'search_cta' => 'Filtrar', 'search_reset' => 'Restablecer', 'empty' => 'Ningún módulo coincide con su búsqueda.'],
+        'it' => ['layout' => 'Amministrazione', 'title' => 'Amministrazione centralizzata', 'lead' => 'Tutti i moduli e gli strumenti di amministrazione sono raccolti in questa dashboard unica.', 'search_label' => 'Ricerca rapida', 'search_placeholder' => 'Modulo, strumento, descrizione…', 'search_cta' => 'Filtra', 'search_reset' => 'Reimposta', 'empty' => 'Nessun modulo corrisponde alla ricerca.'],
+        'pt' => ['layout' => 'Administração', 'title' => 'Administração centralizada', 'lead' => 'Todos os módulos e ferramentas de administração estão agrupados neste painel único.', 'search_label' => 'Pesquisa rápida', 'search_placeholder' => 'Módulo, ferramenta, descrição…', 'search_cta' => 'Filtrar', 'search_reset' => 'Repor', 'empty' => 'Nenhum módulo corresponde à sua pesquisa.'],
     ];
 
     return $i18n[$locale] ?? $i18n['fr'];
@@ -5402,6 +5445,7 @@ function admin_dashboard_cards(string $locale, int $userId, string $search = '')
 function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
 {
     return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . md5($searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
+        $catalogLocale = in_array($locale, ['es', 'it', 'pt'], true) ? 'en' : $locale;
         $cards = [];
         foreach (admin_module_cards_catalog() as $card) {
             $module = (string) ($card['module'] ?? '');
@@ -5412,8 +5456,8 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
             if ($permission !== '' && !has_permission($permission)) {
                 continue;
             }
-            $title = (string) ($card['title'][$locale] ?? $card['title']['fr']);
-            $desc = (string) ($card['desc'][$locale] ?? $card['desc']['fr']);
+            $title = (string) ($card['title'][$catalogLocale] ?? $card['title']['fr']);
+            $desc = (string) ($card['desc'][$catalogLocale] ?? $card['desc']['fr']);
             if ($searchNeedle !== '') {
                 $haystack = mb_safe_strtolower($title . ' ' . $desc);
                 if (!str_contains($haystack, $searchNeedle)) {
