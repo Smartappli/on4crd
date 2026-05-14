@@ -35,7 +35,8 @@
         const imported = Number(response?.imported || 0);
         const files = Number(response?.files || 1);
         if (status) {
-            status.textContent = `${imported} QSO importé(s) depuis ${files} fichier(s).`;
+            const template = form.getAttribute('data-adif-imported-status') || '';
+            status.textContent = template.replace('{imported}', String(imported)).replace('{files}', String(files));
         }
     });
     dropzone.on('error', (file, message) => {

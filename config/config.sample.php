@@ -12,7 +12,7 @@ return [
         'env' => 'production', // production|development
         'base_url' => '',
         'default_locale' => 'fr',
-        'supported_locales' => ['fr', 'en', 'de', 'nl'],
+        'supported_locales' => ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt'],
         'session_name' => 'on4crd_session',
         'allow_install' => false,
         // En développement uniquement: bypass l'identification pour les routes membres si un membre actif existe.
