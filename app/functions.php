@@ -4903,6 +4903,9 @@ function upload_i18n_message(string $key): string
         'upload_invalid' => ['fr' => 'Fichier téléversé invalide.', 'en' => 'Invalid uploaded file.', 'de' => 'Ungültig hochgeladene Datei.', 'nl' => 'Ongeldig geüpload bestand.', 'es' => 'Archivo subido no válido.', 'it' => 'File caricato non valido.', 'pt' => 'Ficheiro carregado inválido.', 'ar' => 'الملف المرفوع غير صالح.', 'hi' => 'अपलोड की गई फ़ाइल अमान्य है।', 'ja' => '無効なアップロードファイルです。', 'zh' => '上传的文件无效。', 'bn' => 'আপলোড করা ফাইলটি অবৈধ।', 'ru' => 'Недопустимый загруженный файл.', 'id' => 'File yang diunggah tidak valid.'],
         'file_too_large_or_empty' => ['fr' => 'Fichier trop volumineux ou vide.', 'en' => 'File is too large or empty.', 'de' => 'Datei ist zu groß oder leer.', 'nl' => 'Bestand is te groot of leeg.', 'es' => 'El archivo es demasiado grande o está vacío.', 'it' => 'Il file è troppo grande o vuoto.', 'pt' => 'O ficheiro é demasiado grande ou está vazio.', 'ar' => 'الملف كبير جدًا أو فارغ.', 'hi' => 'फ़ाइल बहुत बड़ी है या खाली है।', 'ja' => 'ファイルが大きすぎるか空です。', 'zh' => '文件过大或为空。', 'bn' => 'ফাইলটি খুব বড় বা খালি।', 'ru' => 'Файл слишком большой или пустой.', 'id' => 'File terlalu besar atau kosong.'],
         'extension_not_allowed' => ['fr' => 'Extension de fichier non autorisée.', 'en' => 'File extension is not allowed.', 'de' => 'Dateierweiterung ist nicht erlaubt.', 'nl' => 'Bestandsextensie is niet toegestaan.', 'es' => 'La extensión de archivo no está permitida.', 'it' => 'Estensione file non consentita.', 'pt' => 'Extensão de ficheiro não permitida.', 'ar' => 'امتداد الملف غير مسموح به.', 'hi' => 'फ़ाइल एक्सटेंशन की अनुमति नहीं है।', 'ja' => '許可されていないファイル拡張子です。', 'zh' => '文件扩展名不被允许。', 'bn' => 'ফাইল এক্সটেনশন অনুমোদিত নয়।', 'ru' => 'Расширение файла не разрешено.', 'id' => 'Ekstensi file tidak diizinkan.'],
+        'mime_not_allowed' => ['fr' => 'Type MIME de fichier non autorisé.', 'en' => 'File MIME type is not allowed.', 'de' => 'MIME-Typ der Datei ist nicht erlaubt.', 'nl' => 'MIME-type van bestand is niet toegestaan.', 'es' => 'El tipo MIME del archivo no está permitido.', 'it' => 'Il tipo MIME del file non è consentito.', 'pt' => 'O tipo MIME do ficheiro não é permitido.', 'ar' => 'نوع MIME للملف غير مسموح به.', 'hi' => 'फ़ाइल का MIME प्रकार अनुमत नहीं है।', 'ja' => '許可されていない MIME タイプです。', 'zh' => '文件 MIME 类型不被允许。', 'bn' => 'ফাইলের MIME ধরন অনুমোদিত নয়।', 'ru' => 'MIME-тип файла не разрешён.', 'id' => 'Tipe MIME file tidak diizinkan.'],
+        'cannot_create_destination_dir' => ['fr' => 'Impossible de créer le dossier de destination.', 'en' => 'Unable to create destination folder.', 'de' => 'Zielordner konnte nicht erstellt werden.', 'nl' => 'Kan doelmap niet maken.', 'es' => 'No se puede crear la carpeta de destino.', 'it' => 'Impossibile creare la cartella di destinazione.', 'pt' => 'Não foi possível criar a pasta de destino.', 'ar' => 'تعذر إنشاء مجلد الوجهة.', 'hi' => 'गंतव्य फ़ोल्डर बनाया नहीं जा सका।', 'ja' => '保存先フォルダーを作成できません。', 'zh' => '无法创建目标文件夹。', 'bn' => 'গন্তব্য ফোল্ডার তৈরি করা যায়নি।', 'ru' => 'Не удалось создать целевую папку.', 'id' => 'Tidak dapat membuat folder tujuan.'],
+        'cannot_move_uploaded_file' => ['fr' => 'Impossible de déplacer le fichier téléversé.', 'en' => 'Unable to move uploaded file.', 'de' => 'Hochgeladene Datei konnte nicht verschoben werden.', 'nl' => 'Kan geüpload bestand niet verplaatsen.', 'es' => 'No se puede mover el archivo subido.', 'it' => 'Impossibile spostare il file caricato.', 'pt' => 'Não foi possível mover o ficheiro carregado.', 'ar' => 'تعذر نقل الملف المرفوع.', 'hi' => 'अपलोड की गई फ़ाइल को स्थानांतरित नहीं किया जा सका।', 'ja' => 'アップロードファイルを移動できません。', 'zh' => '无法移动上传的文件。', 'bn' => 'আপলোড করা ফাইল সরানো যায়নি।', 'ru' => 'Не удалось переместить загруженный файл.', 'id' => 'Tidak dapat memindahkan file yang diunggah.'],
     ];
     return $messages[$key][$locale] ?? $messages[$key]['fr'] ?? '';
 }
@@ -4968,7 +4971,7 @@ function secure_move_uploaded_file(
 
     $mime = detect_uploaded_mime_type($tmpPath);
     if (!in_array($mime, $allowedMimes, true)) {
-        throw new RuntimeException('Type MIME de fichier non autorisé.');
+        throw new RuntimeException(upload_i18n_message('mime_not_allowed'));
     }
     assert_upload_file_is_valid_signature($tmpPath, $allowedExtensions);
 
@@ -4978,7 +4981,7 @@ function secure_move_uploaded_file(
     }
 
     if (!is_dir($destinationDirectory) && !mkdir($destinationDirectory, 0755, true) && !is_dir($destinationDirectory)) {
-        throw new RuntimeException('Impossible de créer le dossier de destination.');
+        throw new RuntimeException(upload_i18n_message('cannot_create_destination_dir'));
     }
 
     $filename = $prefix . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
@@ -4987,7 +4990,7 @@ function secure_move_uploaded_file(
         ? move_uploaded_file($tmpPath, $destinationPath)
         : rename($sanitizedTmpPath, $destinationPath);
     if (!$moved) {
-        throw new RuntimeException('Impossible de déplacer le fichier téléversé.');
+        throw new RuntimeException(upload_i18n_message('cannot_move_uploaded_file'));
     }
 
     @chmod($destinationPath, 0644);
