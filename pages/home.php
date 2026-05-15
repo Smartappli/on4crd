@@ -39,6 +39,8 @@ $homeMessages = [
         'vhf_voice_label' => 'Phonie VHF :',
         'good_practice_label' => 'Bon réflexe :',
         'vhf_voice_value' => '145.500 MHz (appel simplex régional)',
+        'cw_qrp_label' => 'QRG CW QRP :',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'annoncer indicatif + QTH + trafic recherché',
         'map_title' => 'Carte Google Map - Radio Club Durnal',
         'address_title' => 'Adresse',
@@ -113,6 +115,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF voice:',
         'good_practice_label' => 'Good practice:',
         'vhf_voice_value' => '145.500 MHz (regional simplex calling)',
+        'cw_qrp_label' => 'CW QRP frequencies:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'announce callsign + QTH + requested traffic',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Address',
@@ -187,6 +191,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF-Sprechfunk:',
         'good_practice_label' => 'Gute Praxis:',
         'vhf_voice_value' => '145.500 MHz (regionaler Simplex-Anruf)',
+        'cw_qrp_label' => 'CW-QRP-Frequenzen:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'Rufzeichen + QTH + gewünschter Verkehr ansagen',
         'map_title' => 'Google-Karte - Radio Club Durnal',
         'address_title' => 'Adresse',
@@ -261,6 +267,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF-spraak:',
         'good_practice_label' => 'Goede reflex:',
         'vhf_voice_value' => '145.500 MHz (regionale simplex-oproep)',
+        'cw_qrp_label' => 'CW QRP-frequenties:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'roepnaam + QTH + gewenst verkeer aankondigen',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Adres',
@@ -335,6 +343,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF fonía:',
         'good_practice_label' => 'Buena práctica:',
         'vhf_voice_value' => '145.500 MHz (llamada simplex regional)',
+        'cw_qrp_label' => 'Frecuencias CW QRP:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'anunciar indicativo + QTH + tráfico solicitado',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Dirección',
@@ -409,6 +419,8 @@ $homeMessages = [
         'vhf_voice_label' => 'Fonìa VHF:',
         'good_practice_label' => 'Buona pratica:',
         'vhf_voice_value' => '145.500 MHz (chiamata simplex regionale)',
+        'cw_qrp_label' => 'Frequenze CW QRP:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'annunciare nominativo + QTH + traffico richiesto',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Indirizzo',
@@ -483,6 +495,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF fonia:',
         'good_practice_label' => 'Boa prática:',
         'vhf_voice_value' => '145.500 MHz (chamada simplex regional)',
+        'cw_qrp_label' => 'Frequências CW QRP:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'anunciar indicativo + QTH + tráfego pretendido',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Endereço',
@@ -926,7 +940,7 @@ $homeRadioInfoHtml = '<div class="grid gap-4">'
     . '<h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ham_info_title']) . '</h4>'
     . '<ul class="mt-2 list-clean">'
     . '<li><strong>' . e((string) $homeI18n['vhf_voice_label']) . '</strong> ' . e((string) $homeI18n['vhf_voice_value']) . '</li>'
-    . '<li><strong>QRG CW QRP :</strong> 7.030 MHz • 14.060 MHz</li>'
+    . '<li><strong>' . e((string) ($homeI18n['cw_qrp_label'] ?? 'QRG CW QRP :')) . '</strong> ' . e((string) ($homeI18n['cw_qrp_value'] ?? '7.030 MHz • 14.060 MHz')) . '</li>'
     . '<li><strong>' . e((string) $homeI18n['good_practice_label']) . '</strong> ' . e((string) $homeI18n['good_practice_value']) . '</li>'
     . '</ul>'
     . '</section>'

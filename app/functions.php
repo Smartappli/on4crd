@@ -110,7 +110,7 @@ function current_locale(): string
     }
 
     $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($locale, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt'], true)) {
+    if (!in_array($locale, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
         $resolvedLocale = 'fr';
         return $resolvedLocale;
     }
@@ -124,7 +124,7 @@ if (!function_exists('t_page')) {
 function t_page(string $domain, string $key, ?string $locale = null): string
 {
     $lang = $locale !== null ? strtolower(trim($locale)) : current_locale();
-    if (!in_array($lang, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt'], true)) {
+    if (!in_array($lang, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
         $lang = 'fr';
     }
 
@@ -136,30 +136,80 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'en' => ['title' => 'Press', 'body' => 'The press section will be managed from the administration module.'],
             'de' => ['title' => 'Presse', 'body' => 'Der Pressebereich wird über das Administrationsmodul gepflegt.'],
             'nl' => ['title' => 'Pers', 'body' => 'De perssectie wordt beheerd via de beheermodule.'],
+            'es' => ['title' => 'Prensa', 'body' => 'La sección de prensa se gestionará desde el módulo de administración.'],
+            'it' => ['title' => 'Stampa', 'body' => 'La sezione stampa sarà gestita dal modulo di amministrazione.'],
+            'pt' => ['title' => 'Imprensa', 'body' => 'A secção de imprensa será gerida a partir do módulo de administração.'],
+            'ar' => ['title' => 'الصحافة', 'body' => 'سيتم إدارة قسم الصحافة من وحدة الإدارة.'],
+            'hi' => ['title' => 'प्रेस', 'body' => 'प्रेस अनुभाग का प्रबंधन प्रशासन मॉड्यूल से किया जाएगा।'],
+            'ja' => ['title' => 'プレス', 'body' => 'プレスセクションは管理モジュールから管理されます。'],
+            'zh' => ['title' => '新闻', 'body' => '新闻版块将通过管理模块进行维护。'],
+            'bn' => ['title' => 'প্রেস', 'body' => 'প্রেস বিভাগটি প্রশাসনিক মডিউল থেকে পরিচালিত হবে।'],
+            'ru' => ['title' => 'Пресса', 'body' => 'Раздел прессы будет управляться через административный модуль.'],
+            'id' => ['title' => 'Pers', 'body' => 'Bagian pers akan dikelola dari modul administrasi.'],
         ],
         'sponsoring' => [
             'fr' => ['title' => 'Sponsoring', 'body' => 'Retrouvez sur cette page les informations relatives aux partenaires et opportunités de sponsoring du club.'],
             'en' => ['title' => 'Sponsoring', 'body' => 'Find information here about partners and club sponsorship opportunities.'],
             'de' => ['title' => 'Sponsoring', 'body' => 'Hier finden Sie Informationen zu Partnern und Sponsoring-Möglichkeiten des Clubs.'],
             'nl' => ['title' => 'Sponsoring', 'body' => 'Hier vindt u informatie over partners en sponsoringsmogelijkheden van de club.'],
+            'es' => ['title' => 'Patrocinio', 'body' => 'En esta página encontrará información sobre socios y oportunidades de patrocinio del club.'],
+            'it' => ['title' => 'Sponsorizzazione', 'body' => 'In questa pagina trovi informazioni su partner e opportunità di sponsorizzazione del club.'],
+            'pt' => ['title' => 'Patrocínio', 'body' => 'Nesta página encontra informações sobre parceiros e oportunidades de patrocínio do clube.'],
+            'ar' => ['title' => 'الرعاية', 'body' => 'ستجد في هذه الصفحة معلومات حول الشركاء وفرص رعاية النادي.'],
+            'hi' => ['title' => 'प्रायोजन', 'body' => 'इस पृष्ठ पर आपको क्लब के साझेदारों और प्रायोजन अवसरों की जानकारी मिलेगी।'],
+            'ja' => ['title' => 'スポンサーシップ', 'body' => 'このページでは、クラブのパートナーやスポンサー機会に関する情報を確認できます。'],
+            'zh' => ['title' => '赞助', 'body' => '本页面提供俱乐部合作伙伴和赞助机会的相关信息。'],
+            'bn' => ['title' => 'স্পনসরশিপ', 'body' => 'এই পাতায় ক্লাবের অংশীদার ও স্পনসরশিপ সুযোগ সম্পর্কে তথ্য পাওয়া যাবে।'],
+            'ru' => ['title' => 'Спонсорство', 'body' => 'На этой странице размещена информация о партнёрах и возможностях спонсорства клуба.'],
+            'id' => ['title' => 'Sponsorship', 'body' => 'Di halaman ini tersedia informasi tentang mitra dan peluang sponsorship klub.'],
         ],
         'mentions_legales' => [
             'fr' => ['title' => 'Mentions légales', 'body' => "Éditeur du site : Radio Club ON4CRD.\n\nResponsable de publication : le comité du Radio Club ON4CRD.\n\nContact : utilisez le formulaire de contact du site ou les coordonnées publiées dans l’espace membre.\n\nHébergement : infrastructure technique opérée pour le compte du club.\n\nPropriété intellectuelle : les contenus (textes, images, documents, logos) publiés sur ce site restent la propriété de leurs auteurs respectifs ou du Radio Club ON4CRD. Toute reproduction totale ou partielle sans autorisation préalable est interdite, sauf exceptions légales.\n\nDonnées personnelles : les données traitées via les formulaires et espaces membres sont utilisées pour la gestion des activités du club et l’administration du site. Vous pouvez demander l’accès, la rectification ou la suppression de vos données conformément à la réglementation applicable.\n\nLimitation de responsabilité : malgré le soin apporté à la publication, ON4CRD ne garantit pas l’absence d’erreurs ou d’interruptions et ne peut être tenu responsable d’un usage inadapté des informations publiées."],
             'en' => ['title' => 'Legal notice', 'body' => "Website publisher: Radio Club ON4CRD.\n\nPublishing manager: the Radio Club ON4CRD committee.\n\nContact: please use the website contact form or the details available in the members area.\n\nHosting: technical infrastructure operated on behalf of the club.\n\nIntellectual property: content (texts, images, documents, logos) published on this website remains the property of its respective authors or of Radio Club ON4CRD. Full or partial reproduction without prior authorization is prohibited, except where legally permitted.\n\nPersonal data: data processed through forms and member areas is used for club activity management and site administration. You may request access, correction, or deletion of your data in accordance with applicable regulations.\n\nLimitation of liability: despite the care taken in publication, ON4CRD does not guarantee the absence of errors or service interruptions and cannot be held liable for inappropriate use of published information."],
             'de' => ['title' => 'Impressum', 'body' => "Herausgeber der Website: Radio Club ON4CRD.\n\nVerantwortlich für die Veröffentlichung: das Komitee des Radio Club ON4CRD.\n\nKontakt: bitte verwenden Sie das Kontaktformular der Website oder die im Mitgliederbereich veröffentlichten Kontaktdaten.\n\nHosting: technische Infrastruktur, die im Auftrag des Clubs betrieben wird.\n\nUrheberrecht: Inhalte (Texte, Bilder, Dokumente, Logos) auf dieser Website bleiben Eigentum der jeweiligen Urheber oder des Radio Club ON4CRD. Jede vollständige oder teilweise Vervielfältigung ohne vorherige Genehmigung ist unzulässig, außer in gesetzlich erlaubten Fällen.\n\nPersonenbezogene Daten: über Formulare und Mitgliederbereiche verarbeitete Daten werden zur Verwaltung der Clubaktivitäten und der Website genutzt. Sie können gemäß den geltenden Vorschriften Auskunft, Berichtigung oder Löschung Ihrer Daten verlangen.\n\nHaftungsbeschränkung: trotz sorgfältiger Pflege der Inhalte übernimmt ON4CRD keine Gewähr für Fehlerfreiheit oder unterbrechungsfreien Betrieb und haftet nicht für eine unsachgemäße Nutzung der veröffentlichten Informationen."],
             'nl' => ['title' => 'Juridische vermeldingen', 'body' => "Uitgever van de website: Radio Club ON4CRD.\n\nVerantwoordelijke voor publicatie: het comité van Radio Club ON4CRD.\n\nContact: gebruik het contactformulier van de website of de gegevens die in de ledenruimte zijn gepubliceerd.\n\nHosting: technische infrastructuur beheerd in opdracht van de club.\n\nIntellectuele eigendom: inhoud (teksten, afbeeldingen, documenten, logo’s) op deze website blijft eigendom van de respectieve auteurs of van Radio Club ON4CRD. Gehele of gedeeltelijke reproductie zonder voorafgaande toestemming is verboden, behalve waar wettelijk toegestaan.\n\nPersoonsgegevens: gegevens die via formulieren en ledenruimtes worden verwerkt, worden gebruikt voor het beheer van clubactiviteiten en sitebeheer. U kunt inzage, correctie of verwijdering van uw gegevens vragen volgens de toepasselijke regelgeving.\n\nAansprakelijkheidsbeperking: ondanks de zorg bij publicatie garandeert ON4CRD niet dat de informatie foutloos is of dat de dienst ononderbroken beschikbaar is, en kan ON4CRD niet aansprakelijk worden gesteld voor oneigenlijk gebruik van gepubliceerde informatie."],
+            'es' => ['title' => 'Aviso legal', 'body' => "Editor del sitio web: Radio Club ON4CRD.\n\nResponsable de publicación: el comité de Radio Club ON4CRD.\n\nContacto: utilice el formulario de contacto del sitio web o los datos disponibles en el área de miembros.\n\nAlojamiento: infraestructura técnica operada en nombre del club.\n\nPropiedad intelectual: los contenidos (textos, imágenes, documentos, logotipos) publicados en este sitio siguen siendo propiedad de sus autores respectivos o de Radio Club ON4CRD. Queda prohibida la reproducción total o parcial sin autorización previa, salvo excepciones legales.\n\nDatos personales: los datos tratados mediante formularios y áreas de miembros se utilizan para la gestión de las actividades del club y la administración del sitio. Puede solicitar acceso, rectificación o eliminación de sus datos conforme a la normativa aplicable.\n\nLimitación de responsabilidad: pese al cuidado en la publicación, ON4CRD no garantiza la ausencia de errores o interrupciones del servicio y no puede ser responsable del uso inadecuado de la información publicada."],
+            'it' => ['title' => 'Note legali', 'body' => "Editore del sito: Radio Club ON4CRD.\n\nResponsabile della pubblicazione: il comitato del Radio Club ON4CRD.\n\nContatto: utilizzare il modulo di contatto del sito o i recapiti disponibili nell’area membri.\n\nHosting: infrastruttura tecnica gestita per conto del club.\n\nProprietà intellettuale: i contenuti (testi, immagini, documenti, loghi) pubblicati su questo sito restano di proprietà dei rispettivi autori o del Radio Club ON4CRD. La riproduzione totale o parziale senza autorizzazione preventiva è vietata, salvo i casi previsti dalla legge.\n\nDati personali: i dati trattati tramite moduli e aree membri sono utilizzati per la gestione delle attività del club e l’amministrazione del sito. È possibile richiedere accesso, rettifica o cancellazione dei dati in conformità alla normativa applicabile.\n\nLimitazione di responsabilità: nonostante la cura nella pubblicazione, ON4CRD non garantisce l’assenza di errori o interruzioni del servizio e non può essere ritenuto responsabile per l’uso improprio delle informazioni pubblicate."],
+            'pt' => ['title' => 'Informações legais', 'body' => "Editor do website: Radio Club ON4CRD.\n\nResponsável pela publicação: o comité do Radio Club ON4CRD.\n\nContacto: utilize o formulário de contacto do website ou os dados disponíveis na área de membros.\n\nAlojamento: infraestrutura técnica operada em nome do clube.\n\nPropriedade intelectual: os conteúdos (textos, imagens, documentos, logótipos) publicados neste website permanecem propriedade dos respetivos autores ou do Radio Club ON4CRD. A reprodução total ou parcial sem autorização prévia é proibida, salvo exceções legais.\n\nDados pessoais: os dados tratados através de formulários e áreas de membros são usados para a gestão das atividades do clube e administração do site. Pode solicitar acesso, retificação ou eliminação dos seus dados de acordo com a legislação aplicável.\n\nLimitação de responsabilidade: apesar do cuidado na publicação, o ON4CRD não garante ausência de erros ou interrupções de serviço e não pode ser responsabilizado por uso inadequado das informações publicadas."],
+            'ar' => ['title' => 'الإشعارات القانونية', 'body' => 'سيتم نشر الإشعارات القانونية لموقع ON4CRD وتحديثها في هذه الصفحة.'],
+            'hi' => ['title' => 'कानूनी सूचना', 'body' => 'ON4CRD वेबसाइट की कानूनी सूचनाएँ इस पृष्ठ पर प्रकाशित और अद्यतन की जाएँगी।'],
+            'ja' => ['title' => '法的表示', 'body' => 'ON4CRD サイトの法的表示はこのページで公開・更新されます。'],
+            'zh' => ['title' => '法律声明', 'body' => 'ON4CRD 网站的法律声明将在此页面发布并更新。'],
+            'bn' => ['title' => 'আইনি নোটিশ', 'body' => 'ON4CRD ওয়েবসাইটের আইনি নোটিশ এই পাতায় প্রকাশ ও হালনাগাদ করা হবে।'],
+            'ru' => ['title' => 'Юридическая информация', 'body' => 'Юридическая информация сайта ON4CRD будет опубликована и обновляться на этой странице.'],
+            'id' => ['title' => 'Pemberitahuan hukum', 'body' => 'Pemberitahuan hukum situs ON4CRD akan dipublikasikan dan diperbarui di halaman ini.'],
         ],
         'conditions_utilisation' => [
             'fr' => ['title' => "Conditions générales d'utilisation", 'body' => "Les conditions générales d'utilisation du site ON4CRD seront publiées et mises à jour sur cette page."],
             'en' => ['title' => 'Terms of use', 'body' => 'The ON4CRD website terms of use will be published and updated on this page.'],
             'de' => ['title' => 'Nutzungsbedingungen', 'body' => 'Die Nutzungsbedingungen der ON4CRD-Website werden auf dieser Seite veröffentlicht und aktualisiert.'],
             'nl' => ['title' => 'Gebruiksvoorwaarden', 'body' => 'De gebruiksvoorwaarden van de ON4CRD-website worden op deze pagina gepubliceerd en bijgewerkt.'],
+            'es' => ['title' => 'Condiciones de uso', 'body' => 'Las condiciones de uso del sitio web ON4CRD se publicarán y actualizarán en esta página.'],
+            'it' => ['title' => 'Condizioni d’uso', 'body' => 'Le condizioni d’uso del sito ON4CRD saranno pubblicate e aggiornate in questa pagina.'],
+            'pt' => ['title' => 'Termos de utilização', 'body' => 'Os termos de utilização do site ON4CRD serão publicados e atualizados nesta página.'],
+            'ar' => ['title' => 'شروط الاستخدام', 'body' => 'سيتم نشر شروط استخدام موقع ON4CRD وتحديثها في هذه الصفحة.'],
+            'hi' => ['title' => 'उपयोग की शर्तें', 'body' => 'ON4CRD वेबसाइट की उपयोग शर्तें इस पृष्ठ पर प्रकाशित और अपडेट की जाएँगी।'],
+            'ja' => ['title' => '利用規約', 'body' => 'ON4CRD ウェブサイトの利用規約はこのページで公開・更新されます。'],
+            'zh' => ['title' => '使用条款', 'body' => 'ON4CRD 网站的使用条款将在此页面发布并更新。'],
+            'bn' => ['title' => 'ব্যবহারের শর্তাবলি', 'body' => 'ON4CRD ওয়েবসাইটের ব্যবহারের শর্তাবলি এই পাতায় প্রকাশ ও হালনাগাদ করা হবে।'],
+            'ru' => ['title' => 'Условия использования', 'body' => 'Условия использования сайта ON4CRD будут опубликованы и обновляться на этой странице.'],
+            'id' => ['title' => 'Ketentuan penggunaan', 'body' => 'Ketentuan penggunaan situs ON4CRD akan dipublikasikan dan diperbarui di halaman ini.'],
         ],
         'reglement_interieur' => [
             'fr' => ['title' => "Règlement d'ordre intérieur", 'body' => "Le règlement d'ordre intérieur du club sera présenté sur cette page."],
             'en' => ['title' => 'Internal regulations', 'body' => 'The club internal regulations will be published on this page.'],
             'de' => ['title' => 'Interne Ordnung', 'body' => 'Die interne Ordnung des Clubs wird auf dieser Seite veröffentlicht.'],
             'nl' => ['title' => 'Intern reglement', 'body' => 'Het intern reglement van de club wordt op deze pagina gepubliceerd.'],
+            'es' => ['title' => 'Reglamento interno', 'body' => 'El reglamento interno del club se publicará en esta página.'],
+            'it' => ['title' => 'Regolamento interno', 'body' => 'Il regolamento interno del club sarà pubblicato in questa pagina.'],
+            'pt' => ['title' => 'Regulamento interno', 'body' => 'O regulamento interno do clube será publicado nesta página.'],
+            'ar' => ['title' => 'النظام الداخلي', 'body' => 'سيتم نشر النظام الداخلي للنادي في هذه الصفحة.'],
+            'hi' => ['title' => 'आंतरिक नियमावली', 'body' => 'क्लब की आंतरिक नियमावली इस पृष्ठ पर प्रकाशित की जाएगी।'],
+            'ja' => ['title' => '内部規則', 'body' => 'クラブの内部規則はこのページに掲載されます。'],
+            'zh' => ['title' => '内部规章', 'body' => '俱乐部内部规章将发布在此页面。'],
+            'bn' => ['title' => 'অভ্যন্তরীণ বিধিমালা', 'body' => 'ক্লাবের অভ্যন্তরীণ বিধিমালা এই পাতায় প্রকাশ করা হবে।'],
+            'ru' => ['title' => 'Внутренний регламент', 'body' => 'Внутренний регламент клуба будет опубликован на этой странице.'],
+            'id' => ['title' => 'Peraturan internal', 'body' => 'Peraturan internal klub akan dipublikasikan di halaman ini.'],
         ],
 
         'es' => [
@@ -193,8 +243,54 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'language_choice' => 'Seleção de idioma', 'language_help' => 'Seletor de idioma do site. As alterações são aplicadas automaticamente.',
             'theme_choice' => 'Seleção de modo claro ou escuro', 'theme_help' => 'Seletor de tema. As alterações são aplicadas automaticamente.',
             'accent_choice' => 'Seleção de cor', 'accent_help' => 'Seletor de cor de destaque. As alterações são aplicadas automaticamente.',
-            'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Pesquisa global', 'search_placeholder' => 'Pesquisar…', 'search_submit' => 'Pesquisar',
+            'install_app' => 'Instalar app', 'skip_to_content' => 'Ir para o conteúdo', 'close_menu' => 'Fechar menu', 'main_navigation' => 'Navegação principal', 'search_label' => 'Pesquisa global', 'search_placeholder' => 'Pesquisar…', 'search_submit' => 'Pesquisar',
         ],
+
+        'ar' => [
+            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'المتجر', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
+            'nav_dashboard' => 'لوحة التحكم', 'nav_wiki' => 'ويكي', 'nav_gallery' => 'المعرض', 'nav_articles' => 'مقالات', 'nav_library' => 'المكتبة', 'nav_auctions' => 'المزادات',
+            'account_space' => 'حسابي', 'account_profile' => 'الملف الشخصي', 'account_settings' => 'الإعدادات', 'account_admin' => 'الإدارة', 'logout' => 'تسجيل الخروج', 'login' => 'تسجيل الدخول',
+            'theme_light' => 'فاتح', 'theme_dark' => 'داكن',
+            'accent_blue' => 'أزرق', 'accent_emerald' => 'زمردي', 'accent_violet' => 'بنفسجي', 'accent_red' => 'أحمر', 'accent_amber' => 'كهرماني', 'accent_orange' => 'برتقالي',
+            'language_choice' => 'اختيار اللغة', 'language_help' => 'محدد لغة الموقع. يتم تطبيق التغييرات تلقائيًا.',
+            'theme_choice' => 'اختيار الوضع الفاتح أو الداكن', 'theme_help' => 'محدد النمط. يتم تطبيق التغييرات تلقائيًا.',
+            'accent_choice' => 'اختيار لون التمييز', 'accent_help' => 'محدد لون التمييز. يتم تطبيق التغييرات تلقائيًا.',
+            'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
+        ],
+        'hi' => [
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'टूल्स', 'nav_directory' => 'निर्देशिका',
+            'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
+            'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
+            'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
+            'accent_blue' => 'नीला', 'accent_emerald' => 'एमराल्ड', 'accent_violet' => 'बैंगनी', 'accent_red' => 'लाल', 'accent_amber' => 'ऐंबर', 'accent_orange' => 'नारंगी',
+            'language_choice' => 'भाषा चयन', 'language_help' => 'साइट भाषा चयनक। बदलाव स्वतः लागू होते हैं।',
+            'theme_choice' => 'लाइट या डार्क मोड चयन', 'theme_help' => 'थीम चयनक। बदलाव स्वतः लागू होते हैं।',
+            'accent_choice' => 'एक्सेंट रंग चयन', 'accent_help' => 'एक्सेंट रंग चयनक। बदलाव स्वतः लागू होते हैं।',
+            'install_app' => 'ऐप इंस्टॉल करें', 'skip_to_content' => 'सामग्री पर जाएँ', 'close_menu' => 'मेनू बंद करें', 'main_navigation' => 'मुख्य नेविगेशन', 'search_label' => 'वैश्विक खोज', 'search_placeholder' => 'खोजें…', 'search_submit' => 'खोजें',
+        ],
+        'ja' => [
+            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
+            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
+            'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
+            'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
+            'accent_blue' => 'ブルー', 'accent_emerald' => 'エメラルド', 'accent_violet' => 'バイオレット', 'accent_red' => 'レッド', 'accent_amber' => 'アンバー', 'accent_orange' => 'オレンジ',
+            'language_choice' => '言語選択', 'language_help' => 'サイト言語セレクター。変更は自動適用されます。',
+            'theme_choice' => 'ライト/ダークモード選択', 'theme_help' => 'テーマセレクター。変更は自動適用されます。',
+            'accent_choice' => 'アクセントカラー選択', 'accent_help' => 'アクセントカラーセレクター。変更は自動適用されます。',
+            'install_app' => 'アプリをインストール', 'skip_to_content' => 'コンテンツへスキップ', 'close_menu' => 'メニューを閉じる', 'main_navigation' => 'メインナビゲーション', 'search_label' => 'サイト内検索', 'search_placeholder' => '検索…', 'search_submit' => '検索',
+        ],
+        'zh' => [
+            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '商店', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
+            'nav_dashboard' => '仪表盘', 'nav_wiki' => '维基', 'nav_gallery' => '画廊', 'nav_articles' => '文章', 'nav_library' => '资料库', 'nav_auctions' => '拍卖',
+            'account_space' => '我的账户', 'account_profile' => '个人资料', 'account_settings' => '设置', 'account_admin' => '管理', 'logout' => '退出登录', 'login' => '登录',
+            'theme_light' => '浅色', 'theme_dark' => '深色',
+            'accent_blue' => '蓝色', 'accent_emerald' => '祖母绿', 'accent_violet' => '紫色', 'accent_red' => '红色', 'accent_amber' => '琥珀色', 'accent_orange' => '橙色',
+            'language_choice' => '语言选择', 'language_help' => '站点语言选择器。更改将自动应用。',
+            'theme_choice' => '浅色/深色模式选择', 'theme_help' => '主题选择器。更改将自动应用。',
+            'accent_choice' => '强调色选择', 'accent_help' => '强调色选择器。更改将自动应用。',
+            'install_app' => '安装应用', 'skip_to_content' => '跳到内容', 'close_menu' => '关闭菜单', 'main_navigation' => '主导航', 'search_label' => '全站搜索', 'search_placeholder' => '搜索…', 'search_submit' => '搜索',
+        ],
+
     ];
     }
 
@@ -434,18 +530,35 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
+                    'es' => 'Los datos de propagación no están disponibles actualmente.',
+                    'it' => 'I dati di propagazione non sono attualmente disponibili.',
+                    'pt' => 'Os dados de propagação estão indisponíveis no momento.',
+                    'ar' => 'بيانات الانتشار غير متاحة حالياً.',
+                    'hi' => 'प्रसार डेटा इस समय उपलब्ध नहीं है।',
+                    'ja' => '現在、伝搬データを利用できません。',
+                    'zh' => '当前无法获取传播数据。',
                     default => 'Les données de propagation sont actuellement indisponibles.',
                 };
                 return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
-            $geomagnetic = match (true) {
+            $geomagneticFr = match (true) {
                 $latestKp < 2.0 => 'Très calme',
                 $latestKp < 4.0 => 'Calme',
                 $latestKp < 5.0 => 'Actif',
                 $latestKp < 7.0 => 'Perturbé',
                 default => 'Orage géomagnétique',
+            };
+            $geomagnetic = match ($locale) {
+                'en' => match (true) {
+                    $latestKp < 2.0 => 'Very quiet',
+                    $latestKp < 4.0 => 'Quiet',
+                    $latestKp < 5.0 => 'Active',
+                    $latestKp < 7.0 => 'Disturbed',
+                    default => 'Geomagnetic storm',
+                },
+                default => $geomagneticFr,
             };
             return '<ul class="list-clean">'
                 . '<li><strong>Kp : ' . e(number_format($latestKp, 1, ',', '')) . '</strong> — ' . e($geomagnetic) . '</li>'
@@ -1652,6 +1765,13 @@ function render_site_footer(string $currentRoute): string
         'es' => ['built_by' => 'Sitio realizado por'],
         'it' => ['built_by' => 'Sito realizzato da'],
         'pt' => ['built_by' => 'Site desenvolvido por'],
+        'ar' => ['built_by' => 'تم تطوير الموقع بواسطة'],
+        'hi' => ['built_by' => 'वेबसाइट विकसित की गई द्वारा'],
+        'ja' => ['built_by' => 'サイト制作'],
+        'zh' => ['built_by' => '网站由以下团队开发：'],
+        'bn' => ['built_by' => 'ওয়েবসাইটটি তৈরি করেছে'],
+        'ru' => ['built_by' => 'Сайт разработан'],
+        'id' => ['built_by' => 'Situs dikembangkan oleh'],
     ];
     $i18n = $footerMessages[$locale] ?? $footerMessages['fr'];
 
@@ -1669,7 +1789,7 @@ function render_layout(string $content, string $title = ''): string
         $currentTheme = 'light';
     }
     $currentLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt'], true)) {
+    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
         $currentLocale = 'fr';
     }
     $layoutMessages = [
@@ -1716,6 +1836,85 @@ function render_layout(string $content, string $title = ''): string
             'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
             'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
             'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Globale zoekopdracht', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
+        ],
+
+        'ar' => [
+            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'المتجر', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
+            'nav_dashboard' => 'لوحة التحكم', 'nav_wiki' => 'ويكي', 'nav_gallery' => 'المعرض', 'nav_articles' => 'مقالات', 'nav_library' => 'المكتبة', 'nav_auctions' => 'المزادات',
+            'account_space' => 'حسابي', 'account_profile' => 'الملف الشخصي', 'account_settings' => 'الإعدادات', 'account_admin' => 'الإدارة', 'logout' => 'تسجيل الخروج', 'login' => 'تسجيل الدخول',
+            'theme_light' => 'فاتح', 'theme_dark' => 'داكن',
+            'accent_blue' => 'أزرق', 'accent_emerald' => 'زمردي', 'accent_violet' => 'بنفسجي', 'accent_red' => 'أحمر', 'accent_amber' => 'كهرماني', 'accent_orange' => 'برتقالي',
+            'language_choice' => 'اختيار اللغة', 'language_help' => 'محدد لغة الموقع. يتم تطبيق التغييرات تلقائيًا.',
+            'theme_choice' => 'اختيار الوضع الفاتح أو الداكن', 'theme_help' => 'محدد النمط. يتم تطبيق التغييرات تلقائيًا.',
+            'accent_choice' => 'اختيار لون التمييز', 'accent_help' => 'محدد لون التمييز. يتم تطبيق التغييرات تلقائيًا.',
+            'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
+        ],
+        'hi' => [
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'टूल्स', 'nav_directory' => 'निर्देशिका',
+            'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
+            'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
+            'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
+            'accent_blue' => 'नीला', 'accent_emerald' => 'एमराल्ड', 'accent_violet' => 'बैंगनी', 'accent_red' => 'लाल', 'accent_amber' => 'ऐंबर', 'accent_orange' => 'नारंगी',
+            'language_choice' => 'भाषा चयन', 'language_help' => 'साइट भाषा चयनक। बदलाव स्वतः लागू होते हैं।',
+            'theme_choice' => 'लाइट या डार्क मोड चयन', 'theme_help' => 'थीम चयनक। बदलाव स्वतः लागू होते हैं।',
+            'accent_choice' => 'एक्सेंट रंग चयन', 'accent_help' => 'एक्सेंट रंग चयनक। बदलाव स्वतः लागू होते हैं।',
+            'install_app' => 'ऐप इंस्टॉल करें', 'skip_to_content' => 'सामग्री पर जाएँ', 'close_menu' => 'मेनू बंद करें', 'main_navigation' => 'मुख्य नेविगेशन', 'search_label' => 'वैश्विक खोज', 'search_placeholder' => 'खोजें…', 'search_submit' => 'खोजें',
+        ],
+        'ja' => [
+            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
+            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
+            'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
+            'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
+            'accent_blue' => 'ブルー', 'accent_emerald' => 'エメラルド', 'accent_violet' => 'バイオレット', 'accent_red' => 'レッド', 'accent_amber' => 'アンバー', 'accent_orange' => 'オレンジ',
+            'language_choice' => '言語選択', 'language_help' => 'サイト言語セレクター。変更は自動適用されます。',
+            'theme_choice' => 'ライト/ダークモード選択', 'theme_help' => 'テーマセレクター。変更は自動適用されます。',
+            'accent_choice' => 'アクセントカラー選択', 'accent_help' => 'アクセントカラーセレクター。変更は自動適用されます。',
+            'install_app' => 'アプリをインストール', 'skip_to_content' => 'コンテンツへスキップ', 'close_menu' => 'メニューを閉じる', 'main_navigation' => 'メインナビゲーション', 'search_label' => 'サイト内検索', 'search_placeholder' => '検索…', 'search_submit' => '検索',
+        ],
+        'zh' => [
+            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '商店', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
+            'nav_dashboard' => '仪表盘', 'nav_wiki' => '维基', 'nav_gallery' => '画廊', 'nav_articles' => '文章', 'nav_library' => '资料库', 'nav_auctions' => '拍卖',
+            'account_space' => '我的账户', 'account_profile' => '个人资料', 'account_settings' => '设置', 'account_admin' => '管理', 'logout' => '退出登录', 'login' => '登录',
+            'theme_light' => '浅色', 'theme_dark' => '深色',
+            'accent_blue' => '蓝色', 'accent_emerald' => '祖母绿', 'accent_violet' => '紫色', 'accent_red' => '红色', 'accent_amber' => '琥珀色', 'accent_orange' => '橙色',
+            'language_choice' => '语言选择', 'language_help' => '站点语言选择器。更改将自动应用。',
+            'theme_choice' => '浅色/深色模式选择', 'theme_help' => '主题选择器。更改将自动应用。',
+            'accent_choice' => '强调色选择', 'accent_help' => '强调色选择器。更改将自动应用。',
+            'install_app' => '安装应用', 'skip_to_content' => '跳到内容', 'close_menu' => '关闭菜单', 'main_navigation' => '主导航', 'search_label' => '全站搜索', 'search_placeholder' => '搜索…', 'search_submit' => '搜索',
+        ],
+
+        'bn' => [
+            'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'দোকান', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'টুলস', 'nav_directory' => 'ডিরেক্টরি',
+            'nav_dashboard' => 'ড্যাশবোর্ড', 'nav_wiki' => 'উইকি', 'nav_gallery' => 'গ্যালারি', 'nav_articles' => 'প্রবন্ধ', 'nav_library' => 'লাইব্রেরি', 'nav_auctions' => 'নিলাম',
+            'account_space' => 'আমার অ্যাকাউন্ট', 'account_profile' => 'প্রোফাইল', 'account_settings' => 'সেটিংস', 'account_admin' => 'অ্যাডমিন', 'logout' => 'লগআউট', 'login' => 'লগইন',
+            'theme_light' => 'লাইট', 'theme_dark' => 'ডার্ক',
+            'accent_blue' => 'নীল', 'accent_emerald' => 'এমেরাল্ড', 'accent_violet' => 'বেগুনি', 'accent_red' => 'লাল', 'accent_amber' => 'অ্যাম্বার', 'accent_orange' => 'কমলা',
+            'language_choice' => 'ভাষা নির্বাচন', 'language_help' => 'সাইটের ভাষা নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
+            'theme_choice' => 'লাইট বা ডার্ক মোড নির্বাচন', 'theme_help' => 'থিম নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
+            'accent_choice' => 'অ্যাকসেন্ট রঙ নির্বাচন', 'accent_help' => 'অ্যাকসেন্ট রঙ নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
+            'install_app' => 'অ্যাপ ইনস্টল করুন', 'skip_to_content' => 'কনটেন্টে যান', 'close_menu' => 'মেনু বন্ধ করুন', 'main_navigation' => 'মূল নেভিগেশন', 'search_label' => 'সাইট অনুসন্ধান', 'search_placeholder' => 'অনুসন্ধান…', 'search_submit' => 'অনুসন্ধান',
+        ],
+        'ru' => [
+            'nav_home' => 'Главная', 'nav_news' => 'Новости', 'nav_shop' => 'Магазин', 'nav_events' => 'События', 'nav_tools' => 'Инструменты', 'nav_directory' => 'Каталог',
+            'nav_dashboard' => 'Панель', 'nav_wiki' => 'Вики', 'nav_gallery' => 'Галерея', 'nav_articles' => 'Статьи', 'nav_library' => 'Библиотека', 'nav_auctions' => 'Аукционы',
+            'account_space' => 'Мой аккаунт', 'account_profile' => 'Профиль', 'account_settings' => 'Настройки', 'account_admin' => 'Администрирование', 'logout' => 'Выйти', 'login' => 'Войти',
+            'theme_light' => 'Светлая', 'theme_dark' => 'Тёмная',
+            'accent_blue' => 'Синий', 'accent_emerald' => 'Изумрудный', 'accent_violet' => 'Фиолетовый', 'accent_red' => 'Красный', 'accent_amber' => 'Янтарный', 'accent_orange' => 'Оранжевый',
+            'language_choice' => 'Выбор языка', 'language_help' => 'Переключатель языка сайта. Изменения применяются автоматически.',
+            'theme_choice' => 'Выбор светлой или тёмной темы', 'theme_help' => 'Переключатель темы. Изменения применяются автоматически.',
+            'accent_choice' => 'Выбор акцентного цвета', 'accent_help' => 'Переключатель акцентного цвета. Изменения применяются автоматически.',
+            'install_app' => 'Установить приложение', 'skip_to_content' => 'Перейти к содержимому', 'close_menu' => 'Закрыть меню', 'main_navigation' => 'Основная навигация', 'search_label' => 'Поиск по сайту', 'search_placeholder' => 'Поиск…', 'search_submit' => 'Поиск',
+        ],
+        'id' => [
+            'nav_home' => 'Beranda', 'nav_news' => 'Berita', 'nav_shop' => 'Toko', 'nav_events' => 'Acara', 'nav_tools' => 'Alat', 'nav_directory' => 'Direktori',
+            'nav_dashboard' => 'Dasbor', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeri', 'nav_articles' => 'Artikel', 'nav_library' => 'Perpustakaan', 'nav_auctions' => 'Lelang',
+            'account_space' => 'Akun saya', 'account_profile' => 'Profil', 'account_settings' => 'Pengaturan', 'account_admin' => 'Administrasi', 'logout' => 'Keluar', 'login' => 'Masuk',
+            'theme_light' => 'Terang', 'theme_dark' => 'Gelap',
+            'accent_blue' => 'Biru', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Merah', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranye',
+            'language_choice' => 'Pilihan bahasa', 'language_help' => 'Pemilih bahasa situs. Perubahan diterapkan otomatis.',
+            'theme_choice' => 'Pilihan mode terang/gelap', 'theme_help' => 'Pemilih tema. Perubahan diterapkan otomatis.',
+            'accent_choice' => 'Pilihan warna aksen', 'accent_help' => 'Pemilih warna aksen. Perubahan diterapkan otomatis.',
+            'install_app' => 'Instal aplikasi', 'skip_to_content' => 'Lewati ke konten', 'close_menu' => 'Tutup menu', 'main_navigation' => 'Navigasi utama', 'search_label' => 'Pencarian situs', 'search_placeholder' => 'Cari…', 'search_submit' => 'Cari',
         ],
     ];
     $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
@@ -1828,6 +2027,11 @@ function render_layout(string $content, string $title = ''): string
     $metaTwitterCard = trim((string) ($pageMeta['twitter_card'] ?? 'summary_large_image'));
     $metaLocale = trim((string) ($pageMeta['locale'] ?? 'fr_BE'));
     $metaSiteName = trim((string) ($pageMeta['site_name'] ?? $siteName));
+    $metaGeoRegion = trim((string) ($pageMeta['geo_region'] ?? ''));
+    $metaGeoPlacename = trim((string) ($pageMeta['geo_placename'] ?? ''));
+    $metaGeoPosition = trim((string) ($pageMeta['geo_position'] ?? ''));
+    $metaIcbm = trim((string) ($pageMeta['icbm'] ?? ''));
+    $metaAlternates = (array) ($pageMeta['alternates'] ?? []);
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
         . '<meta property="og:title" content="' . e($pageTitle) . '">'
@@ -1842,6 +2046,26 @@ function render_layout(string $content, string $title = ''): string
         $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
             . '<meta property="og:url" content="' . e($metaCanonical) . '">';
     }
+    foreach ($metaAlternates as $hreflang => $href) {
+        $lang = trim((string) $hreflang);
+        $url = trim((string) $href);
+        if ($lang === '' || $url === '') {
+            continue;
+        }
+        $metaHead .= '<link rel="alternate" hreflang="' . e($lang) . '" href="' . e($url) . '">';
+    }
+    if ($metaGeoRegion !== '') {
+        $metaHead .= '<meta name="geo.region" content="' . e($metaGeoRegion) . '">';
+    }
+    if ($metaGeoPlacename !== '') {
+        $metaHead .= '<meta name="geo.placename" content="' . e($metaGeoPlacename) . '">';
+    }
+    if ($metaGeoPosition !== '') {
+        $metaHead .= '<meta name="geo.position" content="' . e($metaGeoPosition) . '">';
+    }
+    if ($metaIcbm !== '') {
+        $metaHead .= '<meta name="ICBM" content="' . e($metaIcbm) . '">';
+    }
     $year = gmdate('Y');
     $themeOptions = [
         'light' => ['icon' => '☀️', 'label' => (string) $layoutI18n['theme_light']],
@@ -1855,6 +2079,13 @@ function render_layout(string $content, string $title = ''): string
         'es' => ['icon' => '🇪🇸', 'label' => 'Español'],
         'it' => ['icon' => '🇮🇹', 'label' => 'Italiano'],
         'pt' => ['icon' => '🇵🇹', 'label' => 'Português'],
+        'ar' => ['icon' => '🇸🇦', 'label' => 'العربية'],
+        'hi' => ['icon' => '🇮🇳', 'label' => 'हिन्दी'],
+        'ja' => ['icon' => '🇯🇵', 'label' => '日本語'],
+        'zh' => ['icon' => '🇨🇳', 'label' => '中文'],
+        'bn' => ['icon' => '🇧🇩', 'label' => 'বাংলা'],
+        'ru' => ['icon' => '🇷🇺', 'label' => 'Русский'],
+        'id' => ['icon' => '🇮🇩', 'label' => 'Bahasa Indonesia'],
     ];
     $accentIcons = [
         'blue' => '🔵',
@@ -1920,7 +2151,8 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
-    return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
+    $htmlDir = $currentLocale === 'ar' ? 'rtl' : 'ltr';
+    return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title>' . $metaHead
         . '<meta name="theme-color" content="#2f6fed">'
@@ -4191,7 +4423,7 @@ function csrf_token(): string
     return $_SESSION['_csrf'];
 }
 
-function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt']): string
+function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id']): string
 {
     $normalized = strtolower(trim($header));
     if ($normalized === '') {
@@ -4216,9 +4448,25 @@ function preferred_locale_from_accept_language(string $header, array $supportedL
     return 'en';
 }
 
+function preferred_locale_from_host(string $host, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id']): string
+{
+    $normalizedHost = strtolower(trim($host));
+    if ($normalizedHost === '') {
+        return '';
+    }
+
+    $hostname = explode(':', $normalizedHost)[0] ?? $normalizedHost;
+    $firstLabel = explode('.', $hostname)[0] ?? '';
+    if ($firstLabel !== '' && in_array($firstLabel, $supportedLocales, true)) {
+        return $firstLabel;
+    }
+
+    return '';
+}
+
 function initialize_user_preferences(): void
 {
-    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt'];
+    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
     $supportedThemes = ['light', 'dark'];
     $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber', 'orange'];
 
@@ -4227,7 +4475,10 @@ function initialize_user_preferences(): void
     $cookieAccent = strtolower((string) ($_COOKIE['on4crd_accent'] ?? ''));
 
     if (!isset($_SESSION['locale'])) {
-        if (in_array($cookieLocale, $supportedLocales, true)) {
+        $hostLocale = preferred_locale_from_host((string) ($_SERVER['HTTP_HOST'] ?? ''), $supportedLocales);
+        if ($hostLocale !== '') {
+            $_SESSION['locale'] = $hostLocale;
+        } elseif (in_array($cookieLocale, $supportedLocales, true)) {
             $_SESSION['locale'] = $cookieLocale;
         } else {
             $_SESSION['locale'] = preferred_locale_from_accept_language((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''), $supportedLocales);
