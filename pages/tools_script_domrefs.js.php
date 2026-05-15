@@ -51,6 +51,9 @@
     let dividerR1 = null;
     let dividerR2 = null;
     let dividerVout = null;
+    let resistorTarget = null;
+    let resistorMaxCount = null;
+    let resistorBest = null;
     let mismatchSwr = null;
     let mismatchGamma = null;
     let mismatchLoss = null;
@@ -133,6 +136,9 @@
         dividerR1 = document.getElementById('divider-r1');
         dividerR2 = document.getElementById('divider-r2');
         dividerVout = document.getElementById('divider-vout');
+        resistorTarget = document.getElementById('resistor-target');
+        resistorMaxCount = document.getElementById('resistor-max-count');
+        resistorBest = document.getElementById('resistor-best');
         mismatchSwr = document.getElementById('mismatch-swr');
         mismatchGamma = document.getElementById('mismatch-gamma');
         mismatchLoss = document.getElementById('mismatch-loss');
