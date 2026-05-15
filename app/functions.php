@@ -617,20 +617,52 @@ function render_widget(string $slug, array $user = []): string
             });
 
             if (!is_array($payload)) {
-                return '<p class="help">Données météo indisponibles pour le moment.</p>';
+                $weatherUnavailable = match ($locale) {
+                    'en' => 'Weather data is currently unavailable.',
+                    'de' => 'Wetterdaten sind derzeit nicht verfügbar.',
+                    'nl' => 'Weergegevens zijn momenteel niet beschikbaar.',
+                    'es' => 'Los datos meteorológicos no están disponibles por el momento.',
+                    'it' => 'I dati meteo non sono disponibili al momento.',
+                    'pt' => 'Os dados meteorológicos não estão disponíveis no momento.',
+                    'ar' => 'بيانات الطقس غير متاحة حالياً.',
+                    'hi' => 'मौसम डेटा फिलहाल उपलब्ध नहीं है।',
+                    'ja' => '現在、天気データは利用できません。',
+                    'zh' => '当前天气数据不可用。',
+                    'bn' => 'এই মুহূর্তে আবহাওয়ার তথ্য পাওয়া যাচ্ছে না।',
+                    'ru' => 'Метеоданные сейчас недоступны.',
+                    'id' => 'Data cuaca saat ini tidak tersedia.',
+                    default => 'Données météo indisponibles pour le moment.',
+                };
+                return '<p class="help">' . e($weatherUnavailable) . '</p>';
             }
 
             $current = is_array($payload['current'] ?? null) ? $payload['current'] : [];
             $weatherCode = (int) ($current['weather_code'] ?? -1);
+            $weatherLabels = match ($locale) {
+                'en' => ['clear', 'cloudy', 'fog', 'rain', 'freezing_rain', 'snow', 'storm', 'variable'],
+                'de' => ['Klarer Himmel', 'Bewölkt', 'Nebel', 'Regen', 'Gefrierender Regen', 'Schnee', 'Gewitter', 'Wechselhafte Bedingungen'],
+                'nl' => ['Heldere hemel', 'Bewolkt', 'Mist', 'Regen', 'IJzel', 'Sneeuw', 'Onweer', 'Wisselende omstandigheden'],
+                'es' => ['Cielo despejado', 'Nublado', 'Niebla', 'Lluvia', 'Lluvia helada', 'Nieve', 'Tormenta', 'Condiciones variables'],
+                'it' => ['Cielo sereno', 'Nuvoloso', 'Nebbia', 'Pioggia', 'Pioggia gelata', 'Neve', 'Temporale', 'Condizioni variabili'],
+                'pt' => ['Céu limpo', 'Nublado', 'Nevoeiro', 'Chuva', 'Chuva gelada', 'Neve', 'Trovoada', 'Condições variáveis'],
+                'ar' => ['سماء صافية', 'غائم', 'ضباب', 'مطر', 'مطر متجمد', 'ثلج', 'عاصفة رعدية', 'ظروف متغيرة'],
+                'hi' => ['आसमान साफ़', 'बादल', 'कोहरा', 'बारिश', 'जमी हुई बारिश', 'बर्फ़', 'आंधी-तूफ़ान', 'परिवर्ती परिस्थितियाँ'],
+                'ja' => ['快晴', '曇り', '霧', '雨', '凍雨', '雪', '雷雨', '変わりやすい状況'],
+                'zh' => ['晴朗', '多云', '有雾', '降雨', '冻雨', '降雪', '雷暴', '天气多变'],
+                'bn' => ['আকাশ পরিষ্কার', 'মেঘলা', 'কুয়াশা', 'বৃষ্টি', 'বরফমিশ্রিত বৃষ্টি', 'তুষার', 'বজ্রঝড়', 'পরিবর্তনশীল অবস্থা'],
+                'ru' => ['Ясно', 'Облачно', 'Туман', 'Дождь', 'Ледяной дождь', 'Снег', 'Гроза', 'Переменные условия'],
+                'id' => ['Langit cerah', 'Berawan', 'Berkabut', 'Hujan', 'Hujan beku', 'Salju', 'Badai petir', 'Kondisi berubah-ubah'],
+                default => ['Ciel dégagé', 'Nuageux', 'Brouillard', 'Pluie', 'Pluie verglaçante', 'Neige', 'Orage', 'Conditions variables'],
+            };
             $weatherText = match ($weatherCode) {
-                0 => 'Ciel dégagé',
-                1, 2, 3 => 'Nuageux',
-                45, 48 => 'Brouillard',
-                51, 53, 55, 61, 63, 65, 80, 81, 82 => 'Pluie',
-                56, 57, 66, 67 => 'Pluie verglaçante',
-                71, 73, 75, 77, 85, 86 => 'Neige',
-                95, 96, 99 => 'Orage',
-                default => 'Conditions variables',
+                0 => $weatherLabels[0],
+                1, 2, 3 => $weatherLabels[1],
+                45, 48 => $weatherLabels[2],
+                51, 53, 55, 61, 63, 65, 80, 81, 82 => $weatherLabels[3],
+                56, 57, 66, 67 => $weatherLabels[4],
+                71, 73, 75, 77, 85, 86 => $weatherLabels[5],
+                95, 96, 99 => $weatherLabels[6],
+                default => $weatherLabels[7],
             };
             return '<ul class="list-clean">'
                 . '<li><strong>Météo: ' . e($weatherText) . '</strong></li>'
