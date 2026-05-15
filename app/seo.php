@@ -113,6 +113,12 @@ function seo_apply_defaults(string $route): void
 
     $routeSpecificMeta = $routeMetaDefaults[$route] ?? [];
 
+    $locale = current_locale();
+    $localeMap = [
+        'fr' => 'fr_BE', 'en' => 'en_GB', 'de' => 'de_DE', 'nl' => 'nl_BE', 'es' => 'es_ES', 'it' => 'it_IT', 'pt' => 'pt_PT',
+        'ar' => 'ar_SA', 'hi' => 'hi_IN', 'ja' => 'ja_JP', 'zh' => 'zh_CN', 'bn' => 'bn_BD', 'ru' => 'ru_RU', 'id' => 'id_ID',
+    ];
+
     $meta = [
         'canonical' => seo_build_canonical_url($route),
         'robots' => seo_route_should_noindex($route) ? 'noindex,nofollow' : 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
@@ -120,7 +126,11 @@ function seo_apply_defaults(string $route): void
         'twitter_card' => 'summary_large_image',
         'schema_type' => 'WebPage',
         'site_name' => (string) config('app.site_name', 'ON4CRD'),
-        'locale' => 'fr_BE',
+        'locale' => (string) ($localeMap[$locale] ?? 'fr_BE'),
+        'geo_region' => 'BE-WNA',
+        'geo_placename' => 'Durnal, Belgium',
+        'geo_position' => '50.3150;4.9452',
+        'icbm' => '50.3150, 4.9452',
     ];
 
     if (in_array($route, ['article', 'news_view'], true)) {

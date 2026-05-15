@@ -4,7 +4,7 @@ declare(strict_types=1);
 $user = require_login();
 $locale = current_locale();
 $i18n = [
-    'fr' => ['module_off' => 'Module publicitaire désactivé.', 'title' => 'Publicités', 'save_ok' => 'Publicité mise à jour.', 'create_ok' => 'Publicité créée.', 'status_ok' => 'Statut publicitaire mis à jour.', 'ad_missing' => 'Publicité introuvable ou inaccessible.', 'placement_required' => 'Placement obligatoire.', 'title_required' => 'Titre obligatoire.', 'invalid_format' => 'Format publicitaire invalide.', 'ad_not_found' => 'Publicité introuvable.', 'invalid_status' => 'Statut invalide.', 'edit_ad' => 'Modifier une publicité', 'new_ad' => 'Déposer une publicité', 'module_help' => 'Le module sert à gérer les encarts sponsorisés du club. Les campagnes sont visibles seulement sur les emplacements dédiés et peuvent être modérées par l’administration.'],
+    'fr' => ['module_off' => 'Module publicitaire désactivé.', 'title' => 'Publicités', 'save_ok' => 'Publicité mise à jour.', 'create_ok' => 'Publicité créée.', 'status_ok' => 'Statut publicitaire mis à jour.', 'ad_missing' => 'Publicité introuvable ou inaccessible.', 'placement_required' => 'Placement obligatoire.', 'title_required' => 'Titre obligatoire.', 'invalid_format' => 'Format publicitaire invalide.', 'ad_not_found' => 'Publicité introuvable.', 'invalid_status' => 'Statut invalide.', 'edit_ad' => 'Modifier une publicité', 'new_ad' => 'Déposer une publicité', 'label_title'=>'Title', 'label_title'=>'Titel', 'label_title'=>'Título', 'label_title'=>'Titolo', 'label_title'=>'Título', 'label_title'=>'Titel', 'module_help' => 'Le module sert à gérer les encarts sponsorisés du club. Les campagnes sont visibles seulement sur les emplacements dédiés et peuvent être modérées par l’administration.', 'label_title'=>'Titre','label_description'=>'Description','label_placement'=>'Placement','label_format'=>'Format','label_target_url'=>'URL cible','label_start'=>'Début','label_duration_days'=>'Durée (jours)','label_max_impressions'=>'Nombre maximal d’affichages','label_weight'=>'Poids / priorité','label_status'=>'Statut','label_visual'=>'Visuel','end_date_help'=>'La date de fin sera calculée automatiquement à l’enregistrement. Si le nombre maximal d’affichages est atteint avant la fin, la campagne expirera automatiquement.','save'=>'Enregistrer','my_ads'=>'Mes publicités','col_title'=>'Titre','col_placement'=>'Placement','col_status'=>'Statut','col_impr'=>'Impr.','col_clicks'=>'Clics','col_ctr'=>'CTR','col_actions'=>'Actions','computed_end'=>'Fin calculée :','no_end_date'=>'sans limite de date','edit'=>'Éditer','stats'=>'Stats','pause'=>'Pause','back_to_pending'=>'Repasse en attente','draft'=>'Brouillon','none_ads'=>'Aucune publicité enregistrée.','detailed_stats'=>'Statistiques détaillées','impressions'=>'Affichages','clicks'=>'Clics','unique_visitors'=>'Visiteurs uniques approx.','date'=>'Date','none_stats'=>'Aucune statistique enregistrée pour le moment.'],
     'en' => ['module_off' => 'Advertising module disabled.', 'title' => 'Advertisements', 'save_ok' => 'Advertisement updated.', 'create_ok' => 'Advertisement created.', 'status_ok' => 'Advertisement status updated.', 'ad_missing' => 'Advertisement not found or inaccessible.', 'placement_required' => 'Placement is required.', 'title_required' => 'Title is required.', 'invalid_format' => 'Invalid ad format.', 'ad_not_found' => 'Advertisement not found.', 'invalid_status' => 'Invalid status.', 'edit_ad' => 'Edit an advertisement', 'new_ad' => 'Submit an advertisement', 'module_help' => 'Use this module to manage the club’s sponsored slots. Campaigns are visible only on dedicated placements and can be moderated by administrators.'],
     'de' => ['module_off' => 'Werbemodul deaktiviert.', 'title' => 'Werbung', 'save_ok' => 'Anzeige aktualisiert.', 'create_ok' => 'Anzeige erstellt.', 'status_ok' => 'Anzeigenstatus aktualisiert.', 'ad_missing' => 'Anzeige nicht gefunden oder nicht zugänglich.', 'placement_required' => 'Platzierung ist erforderlich.', 'title_required' => 'Titel ist erforderlich.', 'invalid_format' => 'Ungültiges Anzeigenformat.', 'ad_not_found' => 'Anzeige nicht gefunden.', 'invalid_status' => 'Ungültiger Status.', 'edit_ad' => 'Anzeige bearbeiten', 'new_ad' => 'Anzeige einreichen', 'module_help' => 'Mit diesem Modul verwalten Sie gesponserte Flächen des Clubs. Kampagnen erscheinen nur auf vorgesehenen Plätzen und können von der Verwaltung moderiert werden.'],
     'es' => ['module_off' => 'Módulo publicitario desactivado.', 'title' => 'Publicidad', 'save_ok' => 'Publicidad actualizada.', 'create_ok' => 'Publicidad creada.', 'status_ok' => 'Estado publicitario actualizado.', 'ad_missing' => 'Publicidad no encontrada o inaccesible.', 'placement_required' => 'La ubicación es obligatoria.', 'title_required' => 'El título es obligatorio.', 'invalid_format' => 'Formato publicitario no válido.', 'ad_not_found' => 'Publicidad no encontrada.', 'invalid_status' => 'Estado no válido.', 'edit_ad' => 'Editar publicidad', 'new_ad' => 'Publicar publicidad', 'module_help' => 'Este módulo permite gestionar espacios patrocinados del club.'],
@@ -166,21 +166,21 @@ ob_start();
       <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
       <input type="hidden" name="action" value="save_ad">
       <input type="hidden" name="ad_id" value="<?= (int) ($editing['id'] ?? 0) ?>">
-      <label>Titre
+      <label><?= e($t('label_title')) ?>
         <input type="text" name="title" value="<?= e((string) ($editing['title'] ?? '')) ?>" required>
       </label>
-      <label>Description
+      <label><?= e($t('label_description')) ?>
         <textarea name="description" rows="4"><?= e((string) ($editing['description'] ?? '')) ?></textarea>
       </label>
       <div class="form-grid">
-        <label>Placement
+        <label><?= e($t('label_placement')) ?>
           <select name="placement_id">
             <?php foreach ($placementOptions as $placement): ?>
               <option value="<?= (int) $placement['id'] ?>" <?= ((int) ($editing['placement_id'] ?? 0) === (int) $placement['id']) ? 'selected' : '' ?>><?= e((string) $placement['name']) ?></option>
             <?php endforeach; ?>
           </select>
         </label>
-        <label>Format
+        <label><?= e($t('label_format')) ?>
           <select name="format_code">
             <?php foreach (ad_format_catalog() as $formatCode => $format): ?>
               <option value="<?= e($formatCode) ?>" <?= (($editing['format_code'] ?? 'leaderboard') === $formatCode) ? 'selected' : '' ?>><?= e((string) $format['label']) ?></option>
@@ -188,27 +188,27 @@ ob_start();
           </select>
         </label>
       </div>
-      <label>URL cible
+      <label><?= e($t('label_target_url')) ?>
         <input type="url" name="target_url" value="<?= e((string) ($editing['target_url'] ?? 'https://')) ?>" inputmode="url" placeholder="https://exemple.tld">
       </label>
       <div class="form-grid">
-        <label>Début
+        <label><?= e($t('label_start')) ?>
           <input type="datetime-local" name="start_at" value="<?= e(isset($editing['start_at']) && $editing['start_at'] ? date('Y-m-d\TH:i', strtotime((string) $editing['start_at'])) : date('Y-m-d\TH:i')) ?>">
         </label>
-        <label>Durée (jours)
+        <label><?= e($t('label_duration_days')) ?>
           <input type="text" name="duration_days" value="<?= e((string) ($editing['duration_days'] ?? '30')) ?>">
         </label>
       </div>
       <div class="form-grid">
-        <label>Nombre maximal d’affichages
+        <label><?= e($t('label_max_impressions')) ?>
           <input type="text" name="max_impressions" value="<?= e((string) ($editing['max_impressions'] ?? '10000')) ?>">
         </label>
-        <label>Poids / priorité
+        <label><?= e($t('label_weight')) ?>
           <input type="text" name="weight" value="<?= e((string) ($editing['weight'] ?? '100')) ?>">
         </label>
       </div>
       <?php if (has_permission('ads.moderate') || has_permission('ads.manage_all')): ?>
-      <label>Statut
+      <label><?= e($t('label_status')) ?>
         <select name="status">
           <?php foreach (['draft','pending','active','paused','expired','rejected'] as $status): ?>
             <option value="<?= e($status) ?>" <?= (($editing['status'] ?? 'active') === $status) ? 'selected' : '' ?>><?= e(ad_status_label($status)) ?></option>
@@ -216,29 +216,29 @@ ob_start();
         </select>
       </label>
       <?php endif; ?>
-      <label>Visuel
+      <label><?= e($t('label_visual')) ?>
         <input type="file" name="image" accept="image/jpeg,image/png,image/webp">
       </label>
       <?php if (!empty($editing['image_path'])): ?>
         <p><img class="ad-preview-image" src="<?= e(base_url((string) $editing['image_path'])) ?>" alt=""></p>
       <?php endif; ?>
-      <p class="help">La date de fin sera calculée automatiquement à l’enregistrement. Si le nombre maximal d’affichages est atteint avant la fin, la campagne expirera automatiquement.</p>
-      <p><button class="button">Enregistrer</button></p>
+      <p class="help"><?= e($t('end_date_help')) ?></p>
+      <p><button class="button"><?= e($t('save')) ?></button></p>
     </form>
   </section>
 
   <section class="card">
-    <h2>Mes publicités</h2>
+    <h2><?= e($t('my_ads')) ?></h2>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Titre</th><th>Placement</th><th>Statut</th><th>Impr.</th><th>Clics</th><th>CTR</th><th>Actions</th></tr></thead>
+        <thead><tr><th><?= e($t('col_title')) ?></th><th><?= e($t('col_placement')) ?></th><th><?= e($t('col_status')) ?></th><th><?= e($t('col_impr')) ?></th><th><?= e($t('col_clicks')) ?></th><th><?= e($t('col_ctr')) ?></th><th><?= e($t('col_actions')) ?></th></tr></thead>
         <tbody>
           <?php foreach ($ads as $ad): ?>
             <tr>
               <td>
                 <strong><?= e((string) $ad['title']) ?></strong>
                 <div class="help"><?= e((string) $ad['owner_callsign']) ?> — <?= e(ad_format_label((string) $ad['format_code'])) ?></div>
-                <div class="help">Fin calculée : <?= e((string) ($ad['end_at'] ?: 'sans limite de date')) ?></div>
+                <div class="help"><?= e($t('computed_end')) ?> <?= e((string) ($ad['end_at'] ?: $t('no_end_date'))) ?></div>
               </td>
               <td><?= e((string) $ad['placement_name']) ?></td>
               <td><span class="badge muted"><?= e(ad_status_label((string) $ad['runtime_status'])) ?></span></td>
@@ -247,17 +247,17 @@ ob_start();
               <td><?= e((string) $ad['stats']['ctr']) ?>%</td>
               <td>
                 <div class="member-links">
-                  <a href="<?= e(route_url('ads', ['edit' => (int) $ad['id']])) ?>">Éditer</a>
-                  <a href="<?= e(route_url('ads', ['stats' => (int) $ad['id']])) ?>">Stats</a>
+                  <a href="<?= e(route_url('ads', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
+                  <a href="<?= e(route_url('ads', ['stats' => (int) $ad['id']])) ?>"><?= e($t('stats')) ?></a>
                 </div>
                 <form method="post" class="inline-form">
                   <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                   <input type="hidden" name="action" value="change_status">
                   <input type="hidden" name="ad_id" value="<?= (int) $ad['id'] ?>">
                   <select name="status">
-                    <option value="paused">Pause</option>
-                    <option value="pending">Repasse en attente</option>
-                    <option value="draft">Brouillon</option>
+                    <option value="paused"><?= e($t('pause')) ?></option>
+                    <option value="pending"><?= e($t('back_to_pending')) ?></option>
+                    <option value="draft"><?= e($t('draft')) ?></option>
                   </select>
                   <button class="ghost">OK</button>
                 </form>
@@ -276,7 +276,7 @@ ob_start();
 <?php if ($statsAd): ?>
 <section class="card">
   <div class="row-between">
-    <h2>Statistiques détaillées — <?= e((string) $statsAd['title']) ?></h2>
+    <h2><?= e($t('detailed_stats')) ?> — <?= e((string) $statsAd['title']) ?></h2>
     <span class="badge muted"><?= e(ad_status_label((string) ad_runtime_status($statsAd))) ?></span>
   </div>
   <div class="stats-grid">
@@ -287,7 +287,7 @@ ob_start();
   </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Date</th><th>Placement</th><th>Affichages</th><th>Clics</th><th>CTR</th></tr></thead>
+      <thead><tr><th><?= e($t('date')) ?></th><th><?= e($t('col_placement')) ?></th><th><?= e($t('impressions')) ?></th><th><?= e($t('clicks')) ?></th><th><?= e($t('col_ctr')) ?></th></tr></thead>
       <tbody>
       <?php foreach ($statsDaily as $row): ?>
         <tr>
@@ -298,11 +298,11 @@ ob_start();
           <td><?= e((string) $row['ctr']) ?>%</td>
         </tr>
       <?php endforeach; ?>
-      <?php if ($statsDaily === []): ?><tr><td colspan="5">Aucune statistique enregistrée pour le moment.</td></tr><?php endif; ?>
+      <?php if ($statsDaily === []): ?><tr><td colspan="5"><?= e($t('none_stats')) ?></td></tr><?php endif; ?>
       </tbody>
     </table>
   </div>
 </section>
 <?php endif; ?>
 <?php
-echo render_layout((string) ob_get_clean(), 'Publicités');
+echo render_layout((string) ob_get_clean(), $t('title'));
