@@ -110,7 +110,7 @@ function current_locale(): string
     }
 
     $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($locale, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt'], true)) {
+    if (!in_array($locale, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
         $resolvedLocale = 'fr';
         return $resolvedLocale;
     }
@@ -124,7 +124,7 @@ if (!function_exists('t_page')) {
 function t_page(string $domain, string $key, ?string $locale = null): string
 {
     $lang = $locale !== null ? strtolower(trim($locale)) : current_locale();
-    if (!in_array($lang, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt'], true)) {
+    if (!in_array($lang, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
         $lang = 'fr';
     }
 
@@ -193,8 +193,54 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'language_choice' => 'Seleção de idioma', 'language_help' => 'Seletor de idioma do site. As alterações são aplicadas automaticamente.',
             'theme_choice' => 'Seleção de modo claro ou escuro', 'theme_help' => 'Seletor de tema. As alterações são aplicadas automaticamente.',
             'accent_choice' => 'Seleção de cor', 'accent_help' => 'Seletor de cor de destaque. As alterações são aplicadas automaticamente.',
-            'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Pesquisa global', 'search_placeholder' => 'Pesquisar…', 'search_submit' => 'Pesquisar',
+            'install_app' => 'Instalar app', 'skip_to_content' => 'Ir para o conteúdo', 'close_menu' => 'Fechar menu', 'main_navigation' => 'Navegação principal', 'search_label' => 'Pesquisa global', 'search_placeholder' => 'Pesquisar…', 'search_submit' => 'Pesquisar',
         ],
+
+        'ar' => [
+            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'المتجر', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
+            'nav_dashboard' => 'لوحة التحكم', 'nav_wiki' => 'ويكي', 'nav_gallery' => 'المعرض', 'nav_articles' => 'مقالات', 'nav_library' => 'المكتبة', 'nav_auctions' => 'المزادات',
+            'account_space' => 'حسابي', 'account_profile' => 'الملف الشخصي', 'account_settings' => 'الإعدادات', 'account_admin' => 'الإدارة', 'logout' => 'تسجيل الخروج', 'login' => 'تسجيل الدخول',
+            'theme_light' => 'فاتح', 'theme_dark' => 'داكن',
+            'accent_blue' => 'أزرق', 'accent_emerald' => 'زمردي', 'accent_violet' => 'بنفسجي', 'accent_red' => 'أحمر', 'accent_amber' => 'كهرماني', 'accent_orange' => 'برتقالي',
+            'language_choice' => 'اختيار اللغة', 'language_help' => 'محدد لغة الموقع. يتم تطبيق التغييرات تلقائيًا.',
+            'theme_choice' => 'اختيار الوضع الفاتح أو الداكن', 'theme_help' => 'محدد النمط. يتم تطبيق التغييرات تلقائيًا.',
+            'accent_choice' => 'اختيار لون التمييز', 'accent_help' => 'محدد لون التمييز. يتم تطبيق التغييرات تلقائيًا.',
+            'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
+        ],
+        'hi' => [
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'टूल्स', 'nav_directory' => 'निर्देशिका',
+            'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
+            'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
+            'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
+            'accent_blue' => 'नीला', 'accent_emerald' => 'एमराल्ड', 'accent_violet' => 'बैंगनी', 'accent_red' => 'लाल', 'accent_amber' => 'ऐंबर', 'accent_orange' => 'नारंगी',
+            'language_choice' => 'भाषा चयन', 'language_help' => 'साइट भाषा चयनक। बदलाव स्वतः लागू होते हैं।',
+            'theme_choice' => 'लाइट या डार्क मोड चयन', 'theme_help' => 'थीम चयनक। बदलाव स्वतः लागू होते हैं।',
+            'accent_choice' => 'एक्सेंट रंग चयन', 'accent_help' => 'एक्सेंट रंग चयनक। बदलाव स्वतः लागू होते हैं।',
+            'install_app' => 'ऐप इंस्टॉल करें', 'skip_to_content' => 'सामग्री पर जाएँ', 'close_menu' => 'मेनू बंद करें', 'main_navigation' => 'मुख्य नेविगेशन', 'search_label' => 'वैश्विक खोज', 'search_placeholder' => 'खोजें…', 'search_submit' => 'खोजें',
+        ],
+        'ja' => [
+            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
+            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
+            'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
+            'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
+            'accent_blue' => 'ブルー', 'accent_emerald' => 'エメラルド', 'accent_violet' => 'バイオレット', 'accent_red' => 'レッド', 'accent_amber' => 'アンバー', 'accent_orange' => 'オレンジ',
+            'language_choice' => '言語選択', 'language_help' => 'サイト言語セレクター。変更は自動適用されます。',
+            'theme_choice' => 'ライト/ダークモード選択', 'theme_help' => 'テーマセレクター。変更は自動適用されます。',
+            'accent_choice' => 'アクセントカラー選択', 'accent_help' => 'アクセントカラーセレクター。変更は自動適用されます。',
+            'install_app' => 'アプリをインストール', 'skip_to_content' => 'コンテンツへスキップ', 'close_menu' => 'メニューを閉じる', 'main_navigation' => 'メインナビゲーション', 'search_label' => 'サイト内検索', 'search_placeholder' => '検索…', 'search_submit' => '検索',
+        ],
+        'zh' => [
+            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '商店', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
+            'nav_dashboard' => '仪表盘', 'nav_wiki' => '维基', 'nav_gallery' => '画廊', 'nav_articles' => '文章', 'nav_library' => '资料库', 'nav_auctions' => '拍卖',
+            'account_space' => '我的账户', 'account_profile' => '个人资料', 'account_settings' => '设置', 'account_admin' => '管理', 'logout' => '退出登录', 'login' => '登录',
+            'theme_light' => '浅色', 'theme_dark' => '深色',
+            'accent_blue' => '蓝色', 'accent_emerald' => '祖母绿', 'accent_violet' => '紫色', 'accent_red' => '红色', 'accent_amber' => '琥珀色', 'accent_orange' => '橙色',
+            'language_choice' => '语言选择', 'language_help' => '站点语言选择器。更改将自动应用。',
+            'theme_choice' => '浅色/深色模式选择', 'theme_help' => '主题选择器。更改将自动应用。',
+            'accent_choice' => '强调色选择', 'accent_help' => '强调色选择器。更改将自动应用。',
+            'install_app' => '安装应用', 'skip_to_content' => '跳到内容', 'close_menu' => '关闭菜单', 'main_navigation' => '主导航', 'search_label' => '全站搜索', 'search_placeholder' => '搜索…', 'search_submit' => '搜索',
+        ],
+
     ];
     }
 
@@ -434,18 +480,35 @@ function render_widget(string $slug, array $user = []): string
                     'en' => 'Propagation data is currently unavailable.',
                     'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
                     'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
+                    'es' => 'Los datos de propagación no están disponibles actualmente.',
+                    'it' => 'I dati di propagazione non sono attualmente disponibili.',
+                    'pt' => 'Os dados de propagação estão indisponíveis no momento.',
+                    'ar' => 'بيانات الانتشار غير متاحة حالياً.',
+                    'hi' => 'प्रसार डेटा इस समय उपलब्ध नहीं है।',
+                    'ja' => '現在、伝搬データを利用できません。',
+                    'zh' => '当前无法获取传播数据。',
                     default => 'Les données de propagation sont actuellement indisponibles.',
                 };
                 return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
 
-            $geomagnetic = match (true) {
+            $geomagneticFr = match (true) {
                 $latestKp < 2.0 => 'Très calme',
                 $latestKp < 4.0 => 'Calme',
                 $latestKp < 5.0 => 'Actif',
                 $latestKp < 7.0 => 'Perturbé',
                 default => 'Orage géomagnétique',
+            };
+            $geomagnetic = match ($locale) {
+                'en' => match (true) {
+                    $latestKp < 2.0 => 'Very quiet',
+                    $latestKp < 4.0 => 'Quiet',
+                    $latestKp < 5.0 => 'Active',
+                    $latestKp < 7.0 => 'Disturbed',
+                    default => 'Geomagnetic storm',
+                },
+                default => $geomagneticFr,
             };
             return '<ul class="list-clean">'
                 . '<li><strong>Kp : ' . e(number_format($latestKp, 1, ',', '')) . '</strong> — ' . e($geomagnetic) . '</li>'
@@ -1652,6 +1715,13 @@ function render_site_footer(string $currentRoute): string
         'es' => ['built_by' => 'Sitio realizado por'],
         'it' => ['built_by' => 'Sito realizzato da'],
         'pt' => ['built_by' => 'Site desenvolvido por'],
+        'ar' => ['built_by' => 'تم تطوير الموقع بواسطة'],
+        'hi' => ['built_by' => 'वेबसाइट विकसित की गई द्वारा'],
+        'ja' => ['built_by' => 'サイト制作'],
+        'zh' => ['built_by' => '网站由以下团队开发：'],
+        'bn' => ['built_by' => 'ওয়েবসাইটটি তৈরি করেছে'],
+        'ru' => ['built_by' => 'Сайт разработан'],
+        'id' => ['built_by' => 'Situs dikembangkan oleh'],
     ];
     $i18n = $footerMessages[$locale] ?? $footerMessages['fr'];
 
@@ -1669,7 +1739,7 @@ function render_layout(string $content, string $title = ''): string
         $currentTheme = 'light';
     }
     $currentLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt'], true)) {
+    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
         $currentLocale = 'fr';
     }
     $layoutMessages = [
@@ -1716,6 +1786,85 @@ function render_layout(string $content, string $title = ''): string
             'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
             'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
             'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Globale zoekopdracht', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
+        ],
+
+        'ar' => [
+            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'المتجر', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
+            'nav_dashboard' => 'لوحة التحكم', 'nav_wiki' => 'ويكي', 'nav_gallery' => 'المعرض', 'nav_articles' => 'مقالات', 'nav_library' => 'المكتبة', 'nav_auctions' => 'المزادات',
+            'account_space' => 'حسابي', 'account_profile' => 'الملف الشخصي', 'account_settings' => 'الإعدادات', 'account_admin' => 'الإدارة', 'logout' => 'تسجيل الخروج', 'login' => 'تسجيل الدخول',
+            'theme_light' => 'فاتح', 'theme_dark' => 'داكن',
+            'accent_blue' => 'أزرق', 'accent_emerald' => 'زمردي', 'accent_violet' => 'بنفسجي', 'accent_red' => 'أحمر', 'accent_amber' => 'كهرماني', 'accent_orange' => 'برتقالي',
+            'language_choice' => 'اختيار اللغة', 'language_help' => 'محدد لغة الموقع. يتم تطبيق التغييرات تلقائيًا.',
+            'theme_choice' => 'اختيار الوضع الفاتح أو الداكن', 'theme_help' => 'محدد النمط. يتم تطبيق التغييرات تلقائيًا.',
+            'accent_choice' => 'اختيار لون التمييز', 'accent_help' => 'محدد لون التمييز. يتم تطبيق التغييرات تلقائيًا.',
+            'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
+        ],
+        'hi' => [
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'टूल्स', 'nav_directory' => 'निर्देशिका',
+            'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
+            'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
+            'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
+            'accent_blue' => 'नीला', 'accent_emerald' => 'एमराल्ड', 'accent_violet' => 'बैंगनी', 'accent_red' => 'लाल', 'accent_amber' => 'ऐंबर', 'accent_orange' => 'नारंगी',
+            'language_choice' => 'भाषा चयन', 'language_help' => 'साइट भाषा चयनक। बदलाव स्वतः लागू होते हैं।',
+            'theme_choice' => 'लाइट या डार्क मोड चयन', 'theme_help' => 'थीम चयनक। बदलाव स्वतः लागू होते हैं।',
+            'accent_choice' => 'एक्सेंट रंग चयन', 'accent_help' => 'एक्सेंट रंग चयनक। बदलाव स्वतः लागू होते हैं।',
+            'install_app' => 'ऐप इंस्टॉल करें', 'skip_to_content' => 'सामग्री पर जाएँ', 'close_menu' => 'मेनू बंद करें', 'main_navigation' => 'मुख्य नेविगेशन', 'search_label' => 'वैश्विक खोज', 'search_placeholder' => 'खोजें…', 'search_submit' => 'खोजें',
+        ],
+        'ja' => [
+            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
+            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
+            'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
+            'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
+            'accent_blue' => 'ブルー', 'accent_emerald' => 'エメラルド', 'accent_violet' => 'バイオレット', 'accent_red' => 'レッド', 'accent_amber' => 'アンバー', 'accent_orange' => 'オレンジ',
+            'language_choice' => '言語選択', 'language_help' => 'サイト言語セレクター。変更は自動適用されます。',
+            'theme_choice' => 'ライト/ダークモード選択', 'theme_help' => 'テーマセレクター。変更は自動適用されます。',
+            'accent_choice' => 'アクセントカラー選択', 'accent_help' => 'アクセントカラーセレクター。変更は自動適用されます。',
+            'install_app' => 'アプリをインストール', 'skip_to_content' => 'コンテンツへスキップ', 'close_menu' => 'メニューを閉じる', 'main_navigation' => 'メインナビゲーション', 'search_label' => 'サイト内検索', 'search_placeholder' => '検索…', 'search_submit' => '検索',
+        ],
+        'zh' => [
+            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '商店', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
+            'nav_dashboard' => '仪表盘', 'nav_wiki' => '维基', 'nav_gallery' => '画廊', 'nav_articles' => '文章', 'nav_library' => '资料库', 'nav_auctions' => '拍卖',
+            'account_space' => '我的账户', 'account_profile' => '个人资料', 'account_settings' => '设置', 'account_admin' => '管理', 'logout' => '退出登录', 'login' => '登录',
+            'theme_light' => '浅色', 'theme_dark' => '深色',
+            'accent_blue' => '蓝色', 'accent_emerald' => '祖母绿', 'accent_violet' => '紫色', 'accent_red' => '红色', 'accent_amber' => '琥珀色', 'accent_orange' => '橙色',
+            'language_choice' => '语言选择', 'language_help' => '站点语言选择器。更改将自动应用。',
+            'theme_choice' => '浅色/深色模式选择', 'theme_help' => '主题选择器。更改将自动应用。',
+            'accent_choice' => '强调色选择', 'accent_help' => '强调色选择器。更改将自动应用。',
+            'install_app' => '安装应用', 'skip_to_content' => '跳到内容', 'close_menu' => '关闭菜单', 'main_navigation' => '主导航', 'search_label' => '全站搜索', 'search_placeholder' => '搜索…', 'search_submit' => '搜索',
+        ],
+
+        'bn' => [
+            'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'দোকান', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'টুলস', 'nav_directory' => 'ডিরেক্টরি',
+            'nav_dashboard' => 'ড্যাশবোর্ড', 'nav_wiki' => 'উইকি', 'nav_gallery' => 'গ্যালারি', 'nav_articles' => 'প্রবন্ধ', 'nav_library' => 'লাইব্রেরি', 'nav_auctions' => 'নিলাম',
+            'account_space' => 'আমার অ্যাকাউন্ট', 'account_profile' => 'প্রোফাইল', 'account_settings' => 'সেটিংস', 'account_admin' => 'অ্যাডমিন', 'logout' => 'লগআউট', 'login' => 'লগইন',
+            'theme_light' => 'লাইট', 'theme_dark' => 'ডার্ক',
+            'accent_blue' => 'নীল', 'accent_emerald' => 'এমেরাল্ড', 'accent_violet' => 'বেগুনি', 'accent_red' => 'লাল', 'accent_amber' => 'অ্যাম্বার', 'accent_orange' => 'কমলা',
+            'language_choice' => 'ভাষা নির্বাচন', 'language_help' => 'সাইটের ভাষা নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
+            'theme_choice' => 'লাইট বা ডার্ক মোড নির্বাচন', 'theme_help' => 'থিম নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
+            'accent_choice' => 'অ্যাকসেন্ট রঙ নির্বাচন', 'accent_help' => 'অ্যাকসেন্ট রঙ নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
+            'install_app' => 'অ্যাপ ইনস্টল করুন', 'skip_to_content' => 'কনটেন্টে যান', 'close_menu' => 'মেনু বন্ধ করুন', 'main_navigation' => 'মূল নেভিগেশন', 'search_label' => 'সাইট অনুসন্ধান', 'search_placeholder' => 'অনুসন্ধান…', 'search_submit' => 'অনুসন্ধান',
+        ],
+        'ru' => [
+            'nav_home' => 'Главная', 'nav_news' => 'Новости', 'nav_shop' => 'Магазин', 'nav_events' => 'События', 'nav_tools' => 'Инструменты', 'nav_directory' => 'Каталог',
+            'nav_dashboard' => 'Панель', 'nav_wiki' => 'Вики', 'nav_gallery' => 'Галерея', 'nav_articles' => 'Статьи', 'nav_library' => 'Библиотека', 'nav_auctions' => 'Аукционы',
+            'account_space' => 'Мой аккаунт', 'account_profile' => 'Профиль', 'account_settings' => 'Настройки', 'account_admin' => 'Администрирование', 'logout' => 'Выйти', 'login' => 'Войти',
+            'theme_light' => 'Светлая', 'theme_dark' => 'Тёмная',
+            'accent_blue' => 'Синий', 'accent_emerald' => 'Изумрудный', 'accent_violet' => 'Фиолетовый', 'accent_red' => 'Красный', 'accent_amber' => 'Янтарный', 'accent_orange' => 'Оранжевый',
+            'language_choice' => 'Выбор языка', 'language_help' => 'Переключатель языка сайта. Изменения применяются автоматически.',
+            'theme_choice' => 'Выбор светлой или тёмной темы', 'theme_help' => 'Переключатель темы. Изменения применяются автоматически.',
+            'accent_choice' => 'Выбор акцентного цвета', 'accent_help' => 'Переключатель акцентного цвета. Изменения применяются автоматически.',
+            'install_app' => 'Установить приложение', 'skip_to_content' => 'Перейти к содержимому', 'close_menu' => 'Закрыть меню', 'main_navigation' => 'Основная навигация', 'search_label' => 'Поиск по сайту', 'search_placeholder' => 'Поиск…', 'search_submit' => 'Поиск',
+        ],
+        'id' => [
+            'nav_home' => 'Beranda', 'nav_news' => 'Berita', 'nav_shop' => 'Toko', 'nav_events' => 'Acara', 'nav_tools' => 'Alat', 'nav_directory' => 'Direktori',
+            'nav_dashboard' => 'Dasbor', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeri', 'nav_articles' => 'Artikel', 'nav_library' => 'Perpustakaan', 'nav_auctions' => 'Lelang',
+            'account_space' => 'Akun saya', 'account_profile' => 'Profil', 'account_settings' => 'Pengaturan', 'account_admin' => 'Administrasi', 'logout' => 'Keluar', 'login' => 'Masuk',
+            'theme_light' => 'Terang', 'theme_dark' => 'Gelap',
+            'accent_blue' => 'Biru', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Merah', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranye',
+            'language_choice' => 'Pilihan bahasa', 'language_help' => 'Pemilih bahasa situs. Perubahan diterapkan otomatis.',
+            'theme_choice' => 'Pilihan mode terang/gelap', 'theme_help' => 'Pemilih tema. Perubahan diterapkan otomatis.',
+            'accent_choice' => 'Pilihan warna aksen', 'accent_help' => 'Pemilih warna aksen. Perubahan diterapkan otomatis.',
+            'install_app' => 'Instal aplikasi', 'skip_to_content' => 'Lewati ke konten', 'close_menu' => 'Tutup menu', 'main_navigation' => 'Navigasi utama', 'search_label' => 'Pencarian situs', 'search_placeholder' => 'Cari…', 'search_submit' => 'Cari',
         ],
     ];
     $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
@@ -1828,6 +1977,11 @@ function render_layout(string $content, string $title = ''): string
     $metaTwitterCard = trim((string) ($pageMeta['twitter_card'] ?? 'summary_large_image'));
     $metaLocale = trim((string) ($pageMeta['locale'] ?? 'fr_BE'));
     $metaSiteName = trim((string) ($pageMeta['site_name'] ?? $siteName));
+    $metaGeoRegion = trim((string) ($pageMeta['geo_region'] ?? ''));
+    $metaGeoPlacename = trim((string) ($pageMeta['geo_placename'] ?? ''));
+    $metaGeoPosition = trim((string) ($pageMeta['geo_position'] ?? ''));
+    $metaIcbm = trim((string) ($pageMeta['icbm'] ?? ''));
+    $metaAlternates = (array) ($pageMeta['alternates'] ?? []);
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
         . '<meta property="og:title" content="' . e($pageTitle) . '">'
@@ -1842,6 +1996,26 @@ function render_layout(string $content, string $title = ''): string
         $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
             . '<meta property="og:url" content="' . e($metaCanonical) . '">';
     }
+    foreach ($metaAlternates as $hreflang => $href) {
+        $lang = trim((string) $hreflang);
+        $url = trim((string) $href);
+        if ($lang === '' || $url === '') {
+            continue;
+        }
+        $metaHead .= '<link rel="alternate" hreflang="' . e($lang) . '" href="' . e($url) . '">';
+    }
+    if ($metaGeoRegion !== '') {
+        $metaHead .= '<meta name="geo.region" content="' . e($metaGeoRegion) . '">';
+    }
+    if ($metaGeoPlacename !== '') {
+        $metaHead .= '<meta name="geo.placename" content="' . e($metaGeoPlacename) . '">';
+    }
+    if ($metaGeoPosition !== '') {
+        $metaHead .= '<meta name="geo.position" content="' . e($metaGeoPosition) . '">';
+    }
+    if ($metaIcbm !== '') {
+        $metaHead .= '<meta name="ICBM" content="' . e($metaIcbm) . '">';
+    }
     $year = gmdate('Y');
     $themeOptions = [
         'light' => ['icon' => '☀️', 'label' => (string) $layoutI18n['theme_light']],
@@ -1855,6 +2029,13 @@ function render_layout(string $content, string $title = ''): string
         'es' => ['icon' => '🇪🇸', 'label' => 'Español'],
         'it' => ['icon' => '🇮🇹', 'label' => 'Italiano'],
         'pt' => ['icon' => '🇵🇹', 'label' => 'Português'],
+        'ar' => ['icon' => '🇸🇦', 'label' => 'العربية'],
+        'hi' => ['icon' => '🇮🇳', 'label' => 'हिन्दी'],
+        'ja' => ['icon' => '🇯🇵', 'label' => '日本語'],
+        'zh' => ['icon' => '🇨🇳', 'label' => '中文'],
+        'bn' => ['icon' => '🇧🇩', 'label' => 'বাংলা'],
+        'ru' => ['icon' => '🇷🇺', 'label' => 'Русский'],
+        'id' => ['icon' => '🇮🇩', 'label' => 'Bahasa Indonesia'],
     ];
     $accentIcons = [
         'blue' => '🔵',
@@ -1920,7 +2101,8 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
-    return '<!doctype html><html lang="' . e($currentLocale) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
+    $htmlDir = $currentLocale === 'ar' ? 'rtl' : 'ltr';
+    return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title>' . $metaHead
         . '<meta name="theme-color" content="#2f6fed">'
@@ -4191,7 +4373,7 @@ function csrf_token(): string
     return $_SESSION['_csrf'];
 }
 
-function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt']): string
+function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id']): string
 {
     $normalized = strtolower(trim($header));
     if ($normalized === '') {
@@ -4216,9 +4398,25 @@ function preferred_locale_from_accept_language(string $header, array $supportedL
     return 'en';
 }
 
+function preferred_locale_from_host(string $host, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id']): string
+{
+    $normalizedHost = strtolower(trim($host));
+    if ($normalizedHost === '') {
+        return '';
+    }
+
+    $hostname = explode(':', $normalizedHost)[0] ?? $normalizedHost;
+    $firstLabel = explode('.', $hostname)[0] ?? '';
+    if ($firstLabel !== '' && in_array($firstLabel, $supportedLocales, true)) {
+        return $firstLabel;
+    }
+
+    return '';
+}
+
 function initialize_user_preferences(): void
 {
-    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt'];
+    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
     $supportedThemes = ['light', 'dark'];
     $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber', 'orange'];
 
@@ -4227,7 +4425,10 @@ function initialize_user_preferences(): void
     $cookieAccent = strtolower((string) ($_COOKIE['on4crd_accent'] ?? ''));
 
     if (!isset($_SESSION['locale'])) {
-        if (in_array($cookieLocale, $supportedLocales, true)) {
+        $hostLocale = preferred_locale_from_host((string) ($_SERVER['HTTP_HOST'] ?? ''), $supportedLocales);
+        if ($hostLocale !== '') {
+            $_SESSION['locale'] = $hostLocale;
+        } elseif (in_array($cookieLocale, $supportedLocales, true)) {
             $_SESSION['locale'] = $cookieLocale;
         } else {
             $_SESSION['locale'] = preferred_locale_from_accept_language((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''), $supportedLocales);

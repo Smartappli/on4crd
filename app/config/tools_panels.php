@@ -29,4 +29,7 @@ return [
     'tool-quarter-wave' => 'tool_quarter_wave.php',
     'tool-erp' => 'tool_erp.php',
     'tool-dipole' => 'tool_dipole.php',
-];;
+    'tool-ohm-law' => 'tool_ohm_law.php',
+    'tool-link-budget' => 'tool_link_budget.php',
+ ];
+
