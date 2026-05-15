@@ -14,6 +14,7 @@ return [
         ['id' => 'tool-bandwidth', 'title_key' => 'bandwidth_calc'],
         ['id' => 'tool-duty', 'title_key' => 'duty_cycle_calc'],
         ['id' => 'tool-divider', 'title_key' => 'divider_calc'],
+        ['id' => 'tool-resistor-combo', 'title_key' => 'resistor_combo_calc'],
         ['id' => 'tool-mismatch', 'title_key' => 'mismatch_loss_calc'],
     ],
     'antenna' => [

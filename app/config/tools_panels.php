@@ -15,6 +15,7 @@ return [
     'tool-bandwidth' => 'tool_bandwidth.php',
     'tool-duty' => 'tool_duty.php',
     'tool-divider' => 'tool_divider.php',
+    'tool-resistor-combo' => 'tool_resistor_combo.php',
     'tool-mismatch' => 'tool_mismatch.php',
     'tool-solar' => 'tool_solar.php',
     'tool-battery-current' => 'tool_battery_current.php',
