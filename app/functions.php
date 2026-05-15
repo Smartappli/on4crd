@@ -1981,6 +1981,7 @@ function render_layout(string $content, string $title = ''): string
     $metaGeoPlacename = trim((string) ($pageMeta['geo_placename'] ?? ''));
     $metaGeoPosition = trim((string) ($pageMeta['geo_position'] ?? ''));
     $metaIcbm = trim((string) ($pageMeta['icbm'] ?? ''));
+    $metaAlternates = (array) ($pageMeta['alternates'] ?? []);
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
         . '<meta property="og:title" content="' . e($pageTitle) . '">'
@@ -1994,6 +1995,14 @@ function render_layout(string $content, string $title = ''): string
     if ($metaCanonical !== '') {
         $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
             . '<meta property="og:url" content="' . e($metaCanonical) . '">';
+    }
+    foreach ($metaAlternates as $hreflang => $href) {
+        $lang = trim((string) $hreflang);
+        $url = trim((string) $href);
+        if ($lang === '' || $url === '') {
+            continue;
+        }
+        $metaHead .= '<link rel="alternate" hreflang="' . e($lang) . '" href="' . e($url) . '">';
     }
     if ($metaGeoRegion !== '') {
         $metaHead .= '<meta name="geo.region" content="' . e($metaGeoRegion) . '">';
@@ -4389,6 +4398,22 @@ function preferred_locale_from_accept_language(string $header, array $supportedL
     return 'en';
 }
 
+function preferred_locale_from_host(string $host, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id']): string
+{
+    $normalizedHost = strtolower(trim($host));
+    if ($normalizedHost === '') {
+        return '';
+    }
+
+    $hostname = explode(':', $normalizedHost)[0] ?? $normalizedHost;
+    $firstLabel = explode('.', $hostname)[0] ?? '';
+    if ($firstLabel !== '' && in_array($firstLabel, $supportedLocales, true)) {
+        return $firstLabel;
+    }
+
+    return '';
+}
+
 function initialize_user_preferences(): void
 {
     $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
@@ -4400,7 +4425,10 @@ function initialize_user_preferences(): void
     $cookieAccent = strtolower((string) ($_COOKIE['on4crd_accent'] ?? ''));
 
     if (!isset($_SESSION['locale'])) {
-        if (in_array($cookieLocale, $supportedLocales, true)) {
+        $hostLocale = preferred_locale_from_host((string) ($_SERVER['HTTP_HOST'] ?? ''), $supportedLocales);
+        if ($hostLocale !== '') {
+            $_SESSION['locale'] = $hostLocale;
+        } elseif (in_array($cookieLocale, $supportedLocales, true)) {
             $_SESSION['locale'] = $cookieLocale;
         } else {
             $_SESSION['locale'] = preferred_locale_from_accept_language((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''), $supportedLocales);

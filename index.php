@@ -46,6 +46,21 @@ if (maintenance_should_block_route($route)) {
     maintenance_render_and_exit();
 }
 
+$localeFromQuery = strtolower(trim((string) ($_GET['locale'] ?? '')));
+if ($localeFromQuery !== '') {
+    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+    if (in_array($localeFromQuery, $supportedLocales, true)) {
+        $_SESSION['locale'] = $localeFromQuery;
+        setcookie('on4crd_locale', $localeFromQuery, [
+            'expires' => time() + (86400 * 365),
+            'path' => '/',
+            'secure' => (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off'),
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+    }
+}
+
 seo_apply_defaults($route);
 
 if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'install.php'], true)) {

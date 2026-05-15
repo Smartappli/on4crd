@@ -18,7 +18,16 @@ function seo_build_canonical_query(array $query): string
 
 function seo_build_canonical_url(string $route): string
 {
-    $base = rtrim((string) config('app.base_url', ''), '/');
+    $requestHost = trim((string) ($_SERVER['HTTP_HOST'] ?? ''));
+    $requestScheme = (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') ? 'https' : 'http';
+    $configuredBase = rtrim((string) config('app.base_url', ''), '/');
+    $normalizedHost = strtolower(explode(':', $requestHost)[0] ?? $requestHost);
+    $configuredCdnHost = strtolower(trim((string) config('app.cdn_host', '')));
+    $isCdnHost = $normalizedHost !== '' && (
+        str_starts_with($normalizedHost, 'cdn.')
+        || ($configuredCdnHost !== '' && $normalizedHost === $configuredCdnHost)
+    );
+    $base = (!$isCdnHost && $requestHost !== '') ? ($requestScheme . '://' . $requestHost) : $configuredBase;
     if ($base === '') {
         return '';
     }
@@ -38,6 +47,76 @@ function seo_build_canonical_url(string $route): string
     }
 
     return $url;
+}
+
+
+function seo_supported_locales(): array
+{
+    return ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+}
+
+/**
+ * @return array<string,string>
+ */
+function seo_build_hreflang_alternates(string $route): array
+{
+    $canonical = seo_build_canonical_url($route);
+    if ($canonical === '') {
+        return [];
+    }
+
+    $canonicalParts = parse_url($canonical);
+    if (!is_array($canonicalParts)) {
+        return [];
+    }
+
+    parse_str((string) ($canonicalParts['query'] ?? ''), $canonicalQuery);
+    unset($canonicalQuery['locale']);
+    $canonicalQueryString = seo_build_canonical_query($canonicalQuery);
+
+    $basePath = (string) ($canonicalParts['path'] ?? '/index.php');
+    $baseScheme = (string) ($canonicalParts['scheme'] ?? 'https');
+    $baseHost = (string) ($canonicalParts['host'] ?? '');
+    $basePort = isset($canonicalParts['port']) ? ':' . (string) $canonicalParts['port'] : '';
+    if ($baseHost === '') {
+        return [];
+    }
+
+    $requestHost = strtolower(trim((string) ($_SERVER['HTTP_HOST'] ?? '')));
+    $requestHostWithoutPort = explode(':', $requestHost)[0] ?? $requestHost;
+    $hostForLocalePattern = strtolower($baseHost) !== '' ? strtolower($baseHost) : $requestHostWithoutPort;
+    $parts = explode('.', $hostForLocalePattern);
+    $first = $parts[0] ?? '';
+    $suffix = count($parts) > 1 ? implode('.', array_slice($parts, 1)) : '';
+
+    $alternates = [];
+    foreach (seo_supported_locales() as $locale) {
+        $alternateQuery = $canonicalQuery;
+        $alternateQuery['locale'] = $locale;
+        $alternateQueryString = seo_build_canonical_query($alternateQuery);
+
+        if ($suffix !== '' && in_array($first, seo_supported_locales(), true)) {
+            $alternateHost = preg_replace('/^' . preg_quote($first, '/') . '\./', $locale . '.', $hostForLocalePattern, 1);
+            if ($alternateHost === null || $alternateHost === '') {
+                continue;
+            }
+            $alternates[$locale] = $baseScheme . '://' . $alternateHost . $basePort . $basePath . '?' . $alternateQueryString;
+            continue;
+        }
+        $alternates[$locale] = $baseScheme . '://' . $baseHost . $basePort . $basePath . '?' . $alternateQueryString;
+    }
+
+    $xDefault = $canonical;
+    $configuredBase = rtrim((string) config('app.base_url', ''), '/');
+    if ($configuredBase !== '') {
+        $xDefault = $configuredBase . '/index.php?route=' . rawurlencode($route);
+        if ($canonicalQueryString !== '') {
+            $xDefault .= '&' . $canonicalQueryString;
+        }
+    }
+    $alternates['x-default'] = $xDefault;
+
+    return $alternates;
 }
 
 function seo_route_should_noindex(string $route): bool
@@ -120,6 +199,7 @@ function seo_apply_defaults(string $route): void
     ];
 
     $meta = [
+        'alternates' => seo_build_hreflang_alternates($route),
         'canonical' => seo_build_canonical_url($route),
         'robots' => seo_route_should_noindex($route) ? 'noindex,nofollow' : 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
         'og_type' => 'website',
