@@ -159,6 +159,54 @@
         mismatchLoss.textContent = `${loss.toFixed(3)} dB`;
     };
 
+    const computeResistorCombo = () => {
+        if (!(resistorTarget instanceof HTMLInputElement) || !(resistorMaxCount instanceof HTMLInputElement) || !resistorBest) return;
+        const target = Number(resistorTarget.value);
+        const maxCount = Math.max(1, Math.min(3, Math.round(Number(resistorMaxCount.value))));
+        if (!Number.isFinite(target) || target <= 0) {
+            resistorBest.textContent = '—';
+            return;
+        }
+
+        const series = [10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82];
+        const standardValues = [];
+        for (let decade = 0; decade <= 6; decade++) {
+            const factor = 10 ** decade;
+            for (const base of series) {
+                standardValues.push(base * factor);
+            }
+        }
+
+        const candidates = [];
+        for (const r of standardValues) {
+            candidates.push({ eq: r, text: `${r.toLocaleString('fr-BE')} Ω` });
+        }
+        if (maxCount >= 2) {
+            for (const r1 of standardValues) {
+                for (const r2 of standardValues) {
+                    const s = r1 + r2;
+                    const p = 1 / ((1 / r1) + (1 / r2));
+                    candidates.push({ eq: s, text: `${r1.toLocaleString('fr-BE')}Ω + ${r2.toLocaleString('fr-BE')}Ω` });
+                    candidates.push({ eq: p, text: `${r1.toLocaleString('fr-BE')}Ω // ${r2.toLocaleString('fr-BE')}Ω` });
+                }
+            }
+        }
+
+        let best = null;
+        for (const candidate of candidates) {
+            const error = Math.abs(candidate.eq - target);
+            if (best === null || error < best.error) {
+                best = { ...candidate, error };
+            }
+        }
+        if (!best) {
+            resistorBest.textContent = '—';
+            return;
+        }
+        const pctError = (best.error / target) * 100;
+        resistorBest.textContent = `${best.text} ≈ ${best.eq.toFixed(2)} Ω (Δ ${pctError.toFixed(2)}%)`;
+    };
+
     const computeSolarEnergy = () => {
         if (!(solarWatts instanceof HTMLInputElement) || !(solarHours instanceof HTMLInputElement) || !solarEnergy) return;
         const watts = Number(solarWatts.value);

@@ -112,6 +112,11 @@
             dividerR2?.addEventListener('input', computeDivider);
             computeDivider();
         },
+        'tool-resistor-combo': () => {
+            resistorTarget?.addEventListener('input', computeResistorCombo);
+            resistorMaxCount?.addEventListener('input', computeResistorCombo);
+            computeResistorCombo();
+        },
         'tool-mismatch': () => {
             mismatchSwr?.addEventListener('input', computeMismatchLoss);
             computeMismatchLoss();
