@@ -81,6 +81,14 @@
     let dbwDbm = null;
     let dbwDbwInput = null;
     let dbwResult = null;
+    let ohmVoltage = null;
+    let ohmCurrent = null;
+    let ohmResistance = null;
+    let lbPtx = null;
+    let lbGtx = null;
+    let lbGrx = null;
+    let lbLoss = null;
+    let lbPrx = null;
 
     const refreshDomRefs = () => {
         form = document.getElementById('grid-tool-form');
@@ -166,6 +174,14 @@
         dbwDbm = document.getElementById('dbw-dbm');
         dbwDbwInput = document.getElementById('dbw-dbw-input');
         dbwResult = document.getElementById('dbw-result');
+        ohmVoltage = document.getElementById('ohm-voltage');
+        ohmCurrent = document.getElementById('ohm-current');
+        ohmResistance = document.getElementById('ohm-resistance');
+        lbPtx = document.getElementById('lb-ptx');
+        lbGtx = document.getElementById('lb-gtx');
+        lbGrx = document.getElementById('lb-grx');
+        lbLoss = document.getElementById('lb-loss');
+        lbPrx = document.getElementById('lb-prx');
     };
 
     refreshDomRefs();

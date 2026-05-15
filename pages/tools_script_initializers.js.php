@@ -199,4 +199,16 @@
             computeDbwFromDbm();
             computeDbmFromDbw();
         },
+        'tool-ohm-law': () => {
+            ohmVoltage?.addEventListener('input', computeOhmLaw);
+            ohmCurrent?.addEventListener('input', computeOhmLaw);
+            ohmResistance?.addEventListener('input', computeOhmLaw);
+        },
+        'tool-link-budget': () => {
+            lbPtx?.addEventListener('input', computeLinkBudget);
+            lbGtx?.addEventListener('input', computeLinkBudget);
+            lbGrx?.addEventListener('input', computeLinkBudget);
+            lbLoss?.addEventListener('input', computeLinkBudget);
+            computeLinkBudget();
+        },
     };
