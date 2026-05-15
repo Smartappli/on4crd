@@ -664,12 +664,44 @@ function render_widget(string $slug, array $user = []): string
                 95, 96, 99 => $weatherLabels[6],
                 default => $weatherLabels[7],
             };
+            $weatherPrefix = match ($locale) {
+                'en' => 'Weather:',
+                'de' => 'Wetter:',
+                'nl' => 'Weer:',
+                'es' => 'Tiempo:',
+                'it' => 'Meteo:',
+                'pt' => 'Tempo:',
+                'ar' => 'الطقس:',
+                'hi' => 'मौसम:',
+                'ja' => '天気:',
+                'zh' => '天气：',
+                'bn' => 'আবহাওয়া:',
+                'ru' => 'Погода:',
+                'id' => 'Cuaca:',
+                default => 'Météo:',
+            };
             return '<ul class="list-clean">'
-                . '<li><strong>Météo: ' . e($weatherText) . '</strong></li>'
+                . '<li><strong>' . e($weatherPrefix) . ' ' . e($weatherText) . '</strong></li>'
                 . '</ul>';
 
         default:
-            return '<p class="help">Widget indisponible.</p>';
+            $widgetUnavailable = match ($locale) {
+                'en' => 'Widget unavailable.',
+                'de' => 'Widget nicht verfügbar.',
+                'nl' => 'Widget niet beschikbaar.',
+                'es' => 'Widget no disponible.',
+                'it' => 'Widget non disponibile.',
+                'pt' => 'Widget indisponível.',
+                'ar' => 'الأداة غير متاحة.',
+                'hi' => 'विजेट उपलब्ध नहीं है।',
+                'ja' => 'ウィジェットは利用できません。',
+                'zh' => '小组件不可用。',
+                'bn' => 'উইজেটটি উপলভ্য নয়।',
+                'ru' => 'Виджет недоступен.',
+                'id' => 'Widget tidak tersedia.',
+                default => 'Widget indisponible.',
+            };
+            return '<p class="help">' . e($widgetUnavailable) . '</p>';
     }
 }
 
