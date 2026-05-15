@@ -46,6 +46,21 @@ if (maintenance_should_block_route($route)) {
     maintenance_render_and_exit();
 }
 
+$localeFromQuery = strtolower(trim((string) ($_GET['locale'] ?? '')));
+if ($localeFromQuery !== '') {
+    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+    if (in_array($localeFromQuery, $supportedLocales, true)) {
+        $_SESSION['locale'] = $localeFromQuery;
+        setcookie('on4crd_locale', $localeFromQuery, [
+            'expires' => time() + (86400 * 365),
+            'path' => '/',
+            'secure' => (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off'),
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+    }
+}
+
 seo_apply_defaults($route);
 
 if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'install.php'], true)) {
@@ -71,7 +86,7 @@ if ($route === 'set_language') {
     }
     verify_csrf();
     $locale = strtolower((string) ($_POST['locale'] ?? 'fr'));
-    $supportedLocales = ['fr', 'en', 'de', 'nl'];
+    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
     if (!in_array($locale, $supportedLocales, true)) {
         $locale = 'fr';
     }
@@ -204,7 +219,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'install.php'];
+$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -310,6 +325,7 @@ switch ($route) {
     case 'ad_click': $dispatchPage('pages/ad_click.php'); break;
     case 'sitemap.xml': $dispatchPage('pages/sitemap.php'); break;
     case 'robots.txt': $dispatchPage('pages/robots.php'); break;
+    case 'llms.txt': $dispatchPage('pages/llms.php'); break;
     case 'newsletter_unsubscribe': $dispatchPage('pages/newsletter_unsubscribe.php'); break;
     case 'footer_contact': $dispatchPage('pages/footer_contact.php'); break;
     case 'install.php': $dispatchPage('install.php'); break;
