@@ -224,7 +224,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_home' => 'Inizio', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Elenco',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
@@ -2113,7 +2113,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Installer l’app', 'skip_to_content' => 'Aller au contenu', 'close_menu' => 'Fermer le menu', 'main_navigation' => 'Navigation principale', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
         ],
         'en' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Hulpmiddelen', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
             'theme_light' => 'Light', 'theme_dark' => 'Dark',
@@ -2157,7 +2157,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Saltar al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_home' => 'Inizio', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Elenco',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
@@ -2227,7 +2227,7 @@ function render_layout(string $content, string $title = ''): string
         'bn' => [
             'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'দোকান', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'সরঞ্জাম', 'nav_directory' => 'ডিরেক্টরি',
             'nav_dashboard' => 'ড্যাশবোর্ড', 'nav_wiki' => 'উইকি', 'nav_gallery' => 'গ্যালারি', 'nav_articles' => 'প্রবন্ধ', 'nav_library' => 'লাইব্রেরি', 'nav_auctions' => 'নিলাম',
-            'account_space' => 'আমার অ্যাকাউন্ট', 'account_profile' => 'প্রোফাইল', 'account_settings' => 'সেটিংস', 'account_admin' => 'অ্যাডমিন', 'logout' => 'লগআউট', 'login' => 'লগইন',
+            'account_space' => 'আমার অ্যাকাউন্ট', 'account_profile' => 'প্রোফাইল', 'account_settings' => 'সেটিংস', 'account_admin' => 'প্রশাসন', 'logout' => 'লগআউট', 'login' => 'লগইন',
             'theme_light' => 'লাইট', 'theme_dark' => 'ডার্ক',
             'accent_blue' => 'নীল', 'accent_emerald' => 'এমেরাল্ড', 'accent_violet' => 'বেগুনি', 'accent_red' => 'লাল', 'accent_amber' => 'অ্যাম্বার', 'accent_orange' => 'কমলা',
             'language_choice' => 'ভাষা নির্বাচন', 'language_help' => 'সাইটের ভাষা নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
@@ -2251,7 +2251,7 @@ function render_layout(string $content, string $title = ''): string
             'nav_dashboard' => 'Dasbor', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeri', 'nav_articles' => 'Artikel', 'nav_library' => 'Perpustakaan', 'nav_auctions' => 'Lelang',
             'account_space' => 'Akun saya', 'account_profile' => 'Profil', 'account_settings' => 'Pengaturan', 'account_admin' => 'Administrasi', 'logout' => 'Keluar', 'login' => 'Masuk',
             'theme_light' => 'Terang', 'theme_dark' => 'Gelap',
-            'accent_blue' => 'Biru', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Merah', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranye',
+            'accent_blue' => 'Biru', 'accent_emerald' => 'Zamrud', 'accent_violet' => 'Ungu', 'accent_red' => 'Merah', 'accent_amber' => 'Ambar', 'accent_orange' => 'Oranye',
             'language_choice' => 'Pilihan bahasa', 'language_help' => 'Pemilih bahasa situs. Perubahan diterapkan otomatis.',
             'theme_choice' => 'Pilihan mode terang/gelap', 'theme_help' => 'Pemilih tema. Perubahan diterapkan otomatis.',
             'accent_choice' => 'Pilihan warna aksen', 'accent_help' => 'Pemilih warna aksen. Perubahan diterapkan otomatis.',
