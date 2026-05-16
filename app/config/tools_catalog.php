@@ -2,6 +2,10 @@
 declare(strict_types=1);
 
 return [
+    'locators' => [
+        ['id' => 'tool-grid', 'title_key' => 'grid_title'],
+        ['id' => 'tool-distance', 'title_key' => 'distance'],
+    ],
     'conversion' => [
         ['id' => 'tool-freq-wave', 'title_pattern' => 'conv_dot', 'left_key' => 'conv', 'right_key' => 'freq_wave'],
         ['id' => 'tool-power', 'title_pattern' => 'conv_dot', 'left_key' => 'conv', 'right_key' => 'power'],
