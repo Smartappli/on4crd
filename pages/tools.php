@@ -15,6 +15,7 @@ $labelQuarterWaveResult = (string) ($t['quarter_wave_result'] ?? 'Estimated leng
 $labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)');
 
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
+$toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 $resolveToolTitle = static function (array $entry) use ($t): string {
     if (isset($entry['title'])) {
         return (string) $entry['title'];
@@ -32,13 +33,27 @@ $resolveToolTitle = static function (array $entry) use ($t): string {
     return (string) $entry['id'];
 };
 
-$buildTools = static function (array $entries) use ($resolveToolTitle): array {
-    return array_map(static function (array $entry) use ($resolveToolTitle): array {
-        return [
-            'id' => (string) $entry['id'],
+$buildTools = static function (array $entries) use ($resolveToolTitle, $toolPanelMap): array {
+    $tools = [];
+    foreach ($entries as $entry) {
+        $id = (string) ($entry['id'] ?? '');
+        $partialFile = $toolPanelMap[$id] ?? null;
+        if ($id === '' || $partialFile === null) {
+            continue;
+        }
+
+        $partialPath = __DIR__ . '/tools_panels/' . $partialFile;
+        if (!is_file($partialPath)) {
+            continue;
+        }
+
+        $tools[] = [
+            'id' => $id,
             'title' => $resolveToolTitle($entry),
         ];
-    }, $entries);
+    }
+
+    return $tools;
 };
 
 $conversionTools = $buildTools($toolCatalog['conversion'] ?? []);
@@ -64,8 +79,6 @@ $jsI18n = [
     'watts_out_label' => (string) ($t['watts_out_label'] ?? $i18n['fr']['watts_out_label']),
     'dbuv_label' => (string) ($t['dbuv_label'] ?? ($i18n['fr']['dbuv_label'] ?? 'dBµV')),
 ];
-
-$toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 
 $renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
