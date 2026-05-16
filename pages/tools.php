@@ -36,7 +36,6 @@ $resolveToolTitle = static function (array $entry) use ($t): string {
 };
 
 
-
 $canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGridFallbackPath, $hasToolGridFallback): bool {
     if (isset($toolPanelMap[$toolId])) {
         $partialPath = __DIR__ . '/tools_panels/' . $toolPanelMap[$toolId];
@@ -45,7 +44,6 @@ $canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGri
 
     return $toolId === 'tool-grid' && $hasToolGridFallback;
 };
-
 
 
 $buildTools = static function (array $entries) use ($resolveToolTitle, $canRenderToolId): array {
@@ -146,6 +144,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         return;
     }
 
+    header('Content-Type: text/html; charset=UTF-8');
     return;
 }
 
