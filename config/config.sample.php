@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 return [
     'db' => [
-        'dsn' => 'mysql:host=localhost;port=3306;dbname=on4crd;charset=utf8mb4',
-        'user' => 'db_user',
-        'pass' => 'db_password',
+        'dsn' => 'mysql:host=smartappwyon4crd.mysql.db;port=3306;dbname=smartappwyon4crd;charset=utf8mb4',
+        'user' => 'smartappwyon4crd',
+        'pass' => 'Rei3Le5eon4crd',
     ],
     'app' => [
         'site_name' => 'ON4CRD v3.6.1',

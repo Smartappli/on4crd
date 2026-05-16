@@ -2,6 +2,10 @@
 declare(strict_types=1);
 
 return [
+    'locators' => [
+        ['id' => 'tool-grid', 'title_key' => 'grid_title'],
+        ['id' => 'tool-distance', 'title_key' => 'distance'],
+    ],
     'conversion' => [
         ['id' => 'tool-freq-wave', 'title_pattern' => 'conv_dot', 'left_key' => 'conv', 'right_key' => 'freq_wave'],
         ['id' => 'tool-power', 'title_pattern' => 'conv_dot', 'left_key' => 'conv', 'right_key' => 'power'],
@@ -38,7 +42,7 @@ return [
         ['id' => 'tool-dbuv', 'title_key' => 'dbuv_calc'],
         ['id' => 'tool-gain-conv', 'title_key' => 'gain_conv_calc'],
         ['id' => 'tool-dbw', 'title' => 'dBm ↔ dBW'],
-        ['id' => 'tool-ohm-law', 'title' => "Loi d'Ohm"],
-        ['id' => 'tool-link-budget', 'title' => 'Link budget'],
+        ['id' => 'tool-ohm-law', 'title_key' => 'ohm_law_calc'],
+        ['id' => 'tool-link-budget', 'title_key' => 'link_budget_calc'],
     ],
 ];
