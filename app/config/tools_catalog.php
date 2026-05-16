@@ -38,7 +38,7 @@ return [
         ['id' => 'tool-dbuv', 'title_key' => 'dbuv_calc'],
         ['id' => 'tool-gain-conv', 'title_key' => 'gain_conv_calc'],
         ['id' => 'tool-dbw', 'title' => 'dBm ↔ dBW'],
-        ['id' => 'tool-ohm-law', 'title' => "Loi d'Ohm"],
-        ['id' => 'tool-link-budget', 'title' => 'Link budget'],
+        ['id' => 'tool-ohm-law', 'title_key' => 'ohm_law_calc'],
+        ['id' => 'tool-link-budget', 'title_key' => 'link_budget_calc'],
     ],
 ];
