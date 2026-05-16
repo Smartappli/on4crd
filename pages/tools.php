@@ -135,6 +135,11 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     }
 
     header('Cache-Control: public, max-age=600');
+    header('Content-Type: text/html; charset=UTF-8');
+
+    if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
+        return;
+    }
 
     if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
         header('Content-Type: text/html; charset=UTF-8');
@@ -143,7 +148,6 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
 
     if (!$renderToolPanel($toolId)) {
         if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
-            header('Content-Type: text/html; charset=UTF-8');
             return;
         }
 
