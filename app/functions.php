@@ -258,7 +258,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
         ],
         'hi' => [
-            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'टूल्स', 'nav_directory' => 'निर्देशिका',
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'उपकरण', 'nav_directory' => 'निर्देशिका',
             'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
             'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
             'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
@@ -270,7 +270,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
         ],
         'ja' => [
             'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
-            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
+            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'ウィキ', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
             'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
             'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
             'accent_blue' => 'ブルー', 'accent_emerald' => 'エメラルド', 'accent_violet' => 'バイオレット', 'accent_red' => 'レッド', 'accent_amber' => 'アンバー', 'accent_orange' => 'オレンジ',
@@ -2113,7 +2113,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Installer l’app', 'skip_to_content' => 'Aller au contenu', 'close_menu' => 'Fermer le menu', 'main_navigation' => 'Navigation principale', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
         ],
         'en' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Hulpmiddelen', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
             'theme_light' => 'Light', 'theme_dark' => 'Dark',
@@ -2135,15 +2135,15 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'App installieren', 'skip_to_content' => 'Zum Inhalt springen', 'close_menu' => 'Menü schließen', 'main_navigation' => 'Hauptnavigation', 'search_label' => 'Globale Suche', 'search_placeholder' => 'Suchen…', 'search_submit' => 'Suchen',
         ],
         'nl' => [
-            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Tools', 'nav_directory' => 'Gids',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikels', 'nav_library' => 'Bibliotheek', 'nav_auctions' => 'Veilingen',
-            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
+            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Gereedschap', 'nav_directory' => 'Gids',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikelen', 'nav_library' => 'Bibliotheek', 'nav_auctions' => 'Veilingen',
+            'account_space' => 'Mijn account', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
             'theme_light' => 'Licht', 'theme_dark' => 'Donker',
             'accent_blue' => 'Blauw', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violet', 'accent_red' => 'Rood', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranje',
             'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
             'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
             'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
-            'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Globale zoekopdracht', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
+            'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Zoeken op de site', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
 
         'ar' => [
@@ -2158,7 +2158,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
         ],
         'hi' => [
-            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'टूल्स', 'nav_directory' => 'निर्देशिका',
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'उपकरण', 'nav_directory' => 'निर्देशिका',
             'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
             'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
             'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
@@ -2170,7 +2170,7 @@ function render_layout(string $content, string $title = ''): string
         ],
         'ja' => [
             'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
-            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
+            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'ウィキ', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
             'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
             'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
             'accent_blue' => 'ブルー', 'accent_emerald' => 'エメラルド', 'accent_violet' => 'バイオレット', 'accent_red' => 'レッド', 'accent_amber' => 'アンバー', 'accent_orange' => 'オレンジ',
@@ -2192,7 +2192,7 @@ function render_layout(string $content, string $title = ''): string
         ],
 
         'bn' => [
-            'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'দোকান', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'টুলস', 'nav_directory' => 'ডিরেক্টরি',
+            'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'দোকান', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'সরঞ্জাম', 'nav_directory' => 'ডিরেক্টরি',
             'nav_dashboard' => 'ড্যাশবোর্ড', 'nav_wiki' => 'উইকি', 'nav_gallery' => 'গ্যালারি', 'nav_articles' => 'প্রবন্ধ', 'nav_library' => 'লাইব্রেরি', 'nav_auctions' => 'নিলাম',
             'account_space' => 'আমার অ্যাকাউন্ট', 'account_profile' => 'প্রোফাইল', 'account_settings' => 'সেটিংস', 'account_admin' => 'অ্যাডমিন', 'logout' => 'লগআউট', 'login' => 'লগইন',
             'theme_light' => 'লাইট', 'theme_dark' => 'ডার্ক',
