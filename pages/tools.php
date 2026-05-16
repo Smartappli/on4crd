@@ -80,6 +80,17 @@ $jsI18n = [
     'dbuv_label' => (string) ($t['dbuv_label'] ?? ($i18n['fr']['dbuv_label'] ?? 'dBµV')),
 ];
 
+
+$renderFallbackToolGridPanel = static function (): bool {
+    $fallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
+    if (!is_file($fallbackPath)) {
+        return false;
+    }
+
+    require $fallbackPath;
+    return true;
+};
+
 $renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
     if ($partialFile === null) {
@@ -115,6 +126,10 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     header('Cache-Control: public, max-age=600');
 
     if (!$renderToolPanel($toolId)) {
+        if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
+            return;
+        }
+
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Missing tool panel';
@@ -193,7 +208,7 @@ ob_start();
     </aside>
     <div id="tools-content" class="tools-content">
         <?php
-        if (!$renderToolPanel('tool-grid')) {
+        if (!$renderToolPanel('tool-grid') && !$renderFallbackToolGridPanel()) {
             trigger_error('Missing tools panel partial for id: tool-grid', E_USER_WARNING);
         }
         ?>
