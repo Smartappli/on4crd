@@ -17,6 +17,7 @@ $labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
 $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 $toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
+$hasToolGridFallback = is_file($toolGridFallbackPath);
 $resolveToolTitle = static function (array $entry) use ($t): string {
     if (isset($entry['title'])) {
         return (string) $entry['title'];
@@ -35,13 +36,13 @@ $resolveToolTitle = static function (array $entry) use ($t): string {
 };
 
 
-$canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGridFallbackPath): bool {
+$canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGridFallbackPath, $hasToolGridFallback): bool {
     if (isset($toolPanelMap[$toolId])) {
         $partialPath = __DIR__ . '/tools_panels/' . $toolPanelMap[$toolId];
         return is_file($partialPath);
     }
 
-    return $toolId === 'tool-grid' && is_file($toolGridFallbackPath);
+    return $toolId === 'tool-grid' && $hasToolGridFallback;
 };
 
 
@@ -92,9 +93,9 @@ $jsI18n = [
 ];
 
 
-$renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath): bool {
+$renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $hasToolGridFallback): bool {
     $fallbackPath = $toolGridFallbackPath;
-    if (!is_file($fallbackPath)) {
+    if (!$hasToolGridFallback) {
         return false;
     }
 
