@@ -11,6 +11,13 @@ $i18n = [
     'it' => ['not_found' => 'Articolo non trovato.', 'layout_article' => 'Articolo', 'meta_fallback' => 'Articolo tecnico ON4CRD'],
     'pt' => ['not_found' => 'Artigo não encontrado.', 'layout_article' => 'Artigo', 'meta_fallback' => 'Artigo técnico ON4CRD'],
     'nl' => ['not_found' => 'Artikel niet gevonden.', 'layout_article' => 'Artikel', 'meta_fallback' => 'Technisch ON4CRD-artikel'],
+    'ar' => ['not_found' => 'المقال غير موجود.', 'layout_article' => 'مقال', 'meta_fallback' => 'مقال تقني ON4CRD'],
+    'hi' => ['not_found' => 'लेख नहीं मिला।', 'layout_article' => 'लेख', 'meta_fallback' => 'ON4CRD तकनीकी लेख'],
+    'ja' => ['not_found' => '記事が見つかりません。', 'layout_article' => '記事', 'meta_fallback' => 'ON4CRD 技術記事'],
+    'zh' => ['not_found' => '未找到文章。', 'layout_article' => '文章', 'meta_fallback' => 'ON4CRD 技术文章'],
+    'bn' => ['not_found' => 'প্রবন্ধ পাওয়া যায়নি।', 'layout_article' => 'প্রবন্ধ', 'meta_fallback' => 'ON4CRD প্রযুক্তিগত প্রবন্ধ'],
+    'ru' => ['not_found' => 'Статья не найдена.', 'layout_article' => 'Статья', 'meta_fallback' => 'Техническая статья ON4CRD'],
+    'id' => ['not_found' => 'Artikel tidak ditemukan.', 'layout_article' => 'Artikel', 'meta_fallback' => 'Artikel teknis ON4CRD'],
 ];
 $t = $i18n[$locale] ?? $i18n['fr'];
 

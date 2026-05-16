@@ -47,8 +47,8 @@
             const html = await response.text();
             const wrapper = document.createElement('div');
             wrapper.innerHTML = html.trim();
-            const panel = wrapper.firstElementChild;
-            if (!(panel instanceof HTMLElement) || panel.id !== id) {
+            const panel = wrapper.querySelector(`#${id}[data-tool-panel]`) || wrapper.querySelector(`[data-tool-panel]#${id}`) || wrapper.firstElementChild;
+            if (!(panel instanceof HTMLElement) || panel.id !== id || panel.getAttribute('data-tool-panel') === null) {
                 return null;
             }
 
@@ -91,7 +91,10 @@
                 activePanel = null;
             }
         }
-        if (activePanel === null || requestToken !== activeToolRequestToken) {
+        if (requestToken !== activeToolRequestToken) {
+            return;
+        }
+        if (activePanel === null) {
             setError(i18n.err_tool_load);
             return;
         }
