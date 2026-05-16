@@ -46,8 +46,7 @@ $canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGri
 };
 
 
-
-$buildTools = static function (array $entries) use ($resolveToolTitle, $toolPanelMap, $canRenderToolId): array {
+$buildTools = static function (array $entries) use ($resolveToolTitle, $canRenderToolId): array {
     $tools = [];
     foreach ($entries as $entry) {
         $id = (string) ($entry['id'] ?? '');
@@ -68,6 +67,7 @@ $buildTools = static function (array $entries) use ($resolveToolTitle, $toolPane
     return $tools;
 };
 
+$locatorTools = $buildTools($toolCatalog['locators'] ?? []);
 $conversionTools = $buildTools($toolCatalog['conversion'] ?? []);
 $antennaTools = $buildTools($toolCatalog['antenna'] ?? []);
 $powerTools = $buildTools($toolCatalog['power'] ?? []);
@@ -130,27 +130,14 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     if (!$canRenderToolId($toolId)) {
         http_response_code(404);
         header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Unknown tool panel';
+        echo 'Tool panel unavailable';
         return;
     }
 
     header('Cache-Control: public, max-age=600');
     header('Content-Type: text/html; charset=UTF-8');
 
-    if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
-        return;
-    }
-
-    if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
-        header('Content-Type: text/html; charset=UTF-8');
-        return;
-    }
-
-    if (!$renderToolPanel($toolId)) {
-        if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
-            return;
-        }
-
+    if (!$renderToolPanel($toolId) && !($toolId === 'tool-grid' && $renderFallbackToolGridPanel())) {
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Missing tool panel';
@@ -173,8 +160,9 @@ ob_start();
         <details class="tools-index-group">
             <summary><?= e((string) $t['category_locators']) ?></summary>
             <ul>
-                <li><a href="#tool-grid" data-tool-target="tool-grid"><?= e((string) $t['grid_title']) ?></a></li>
-                <li><a href="#tool-distance" data-tool-target="tool-distance"><?= e((string) $t['distance']) ?></a></li>
+                <?php foreach ($locatorTools as $tool): ?>
+                    <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
+                <?php endforeach; ?>
             </ul>
         </details>
         <details class="tools-index-group">
