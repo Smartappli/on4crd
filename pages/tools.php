@@ -37,10 +37,6 @@ $resolveToolTitle = static function (array $entry) use ($t): string {
 
 
 
-$hasKnownToolId = static function (string $toolId) use ($toolPanelMap, $hasToolGridFallback): bool {
-    return isset($toolPanelMap[$toolId]) || ($toolId === 'tool-grid' && $hasToolGridFallback);
-};
-
 $canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGridFallbackPath, $hasToolGridFallback): bool {
     if (isset($toolPanelMap[$toolId])) {
         $partialPath = __DIR__ . '/tools_panels/' . $toolPanelMap[$toolId];
@@ -52,7 +48,7 @@ $canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGri
 
 
 
-$buildTools = static function (array $entries) use ($resolveToolTitle, $toolPanelMap, $canRenderToolId): array {
+$buildTools = static function (array $entries) use ($resolveToolTitle, $canRenderToolId): array {
     $tools = [];
     foreach ($entries as $entry) {
         $id = (string) ($entry['id'] ?? '');
@@ -133,32 +129,27 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         return;
     }
 
-    if (!$hasKnownToolId($toolId)) {
+    if (!$canRenderToolId($toolId)) {
         http_response_code(404);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Tool panel unavailable';
         return;
     }
 
-    header('Cache-Control: public, max-age=600');
-    header('Content-Type: text/html; charset=UTF-8');
+    ob_start();
+    $rendered = $renderToolPanel($toolId) || ($toolId === 'tool-grid' && $renderFallbackToolGridPanel());
+    $panelHtml = (string) ob_get_clean();
 
-    if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
-        return;
-    }
-
-    if (!$renderToolPanel($toolId)) {
-        if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
-            return;
-        }
-
+    if (!$rendered) {
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Missing tool panel';
         return;
     }
 
+    header('Cache-Control: public, max-age=600');
     header('Content-Type: text/html; charset=UTF-8');
+    echo $panelHtml;
     return;
 }
 
