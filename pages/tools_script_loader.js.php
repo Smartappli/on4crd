@@ -108,12 +108,15 @@
     };
     const initialTool = window.location.hash ? window.location.hash.slice(1) : 'tool-grid';
     setActiveTool(initialTool);
-    const resolveToolTarget = (element) => {
-        if (!(element instanceof Element)) {
+    const resolveToolTarget = (eventTarget) => {
+        const baseElement = eventTarget instanceof Element
+            ? eventTarget
+            : (eventTarget instanceof Node ? eventTarget.parentElement : null);
+        if (!(baseElement instanceof Element)) {
             return '';
         }
 
-        const trigger = element.closest('[data-tool-target], a[href^="#tool-"]');
+        const trigger = baseElement.closest('[data-tool-target], a[href^="#tool-"]');
         if (!(trigger instanceof Element)) {
             return '';
         }
