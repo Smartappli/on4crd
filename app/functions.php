@@ -2135,15 +2135,15 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'App installieren', 'skip_to_content' => 'Zum Inhalt springen', 'close_menu' => 'Menü schließen', 'main_navigation' => 'Hauptnavigation', 'search_label' => 'Globale Suche', 'search_placeholder' => 'Suchen…', 'search_submit' => 'Suchen',
         ],
         'nl' => [
-            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Hulpmiddelen', 'nav_directory' => 'Gids',
+            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Gereedschap', 'nav_directory' => 'Gids',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikelen', 'nav_library' => 'Bibliotheek', 'nav_auctions' => 'Veilingen',
-            'account_space' => 'Mijn ruimte', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
+            'account_space' => 'Mijn account', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
             'theme_light' => 'Licht', 'theme_dark' => 'Donker',
             'accent_blue' => 'Blauw', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violet', 'accent_red' => 'Rood', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranje',
             'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
             'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
             'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
-            'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Globale zoekopdracht', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
+            'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Zoeken op de site', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
 
         'ar' => [
