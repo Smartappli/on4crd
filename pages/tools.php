@@ -141,6 +141,11 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         return;
     }
 
+    if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
+        header('Content-Type: text/html; charset=UTF-8');
+        return;
+    }
+
     if (!$renderToolPanel($toolId)) {
         if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
             return;
@@ -152,6 +157,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         return;
     }
 
+    header('Content-Type: text/html; charset=UTF-8');
     return;
 }
 
