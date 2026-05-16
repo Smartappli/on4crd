@@ -15,6 +15,9 @@ $labelQuarterWaveResult = (string) ($t['quarter_wave_result'] ?? 'Estimated leng
 $labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)');
 
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
+$toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
+$toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
+$hasToolGridFallback = is_file($toolGridFallbackPath);
 $resolveToolTitle = static function (array $entry) use ($t): string {
     if (isset($entry['title'])) {
         return (string) $entry['title'];
@@ -32,13 +35,42 @@ $resolveToolTitle = static function (array $entry) use ($t): string {
     return (string) $entry['id'];
 };
 
-$buildTools = static function (array $entries) use ($resolveToolTitle): array {
-    return array_map(static function (array $entry) use ($resolveToolTitle): array {
-        return [
-            'id' => (string) $entry['id'],
+
+
+$hasKnownToolId = static function (string $toolId) use ($toolPanelMap, $hasToolGridFallback): bool {
+    return isset($toolPanelMap[$toolId]) || ($toolId === 'tool-grid' && $hasToolGridFallback);
+};
+
+$canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGridFallbackPath, $hasToolGridFallback): bool {
+    if (isset($toolPanelMap[$toolId])) {
+        $partialPath = __DIR__ . '/tools_panels/' . $toolPanelMap[$toolId];
+        return is_file($partialPath);
+    }
+
+    return $toolId === 'tool-grid' && $hasToolGridFallback;
+};
+
+
+
+$buildTools = static function (array $entries) use ($resolveToolTitle, $toolPanelMap, $canRenderToolId): array {
+    $tools = [];
+    foreach ($entries as $entry) {
+        $id = (string) ($entry['id'] ?? '');
+        if ($id === '') {
+            continue;
+        }
+
+        if (!$canRenderToolId($id)) {
+            continue;
+        }
+
+        $tools[] = [
+            'id' => $id,
             'title' => $resolveToolTitle($entry),
         ];
-    }, $entries);
+    }
+
+    return $tools;
 };
 
 $conversionTools = $buildTools($toolCatalog['conversion'] ?? []);
@@ -65,7 +97,16 @@ $jsI18n = [
     'dbuv_label' => (string) ($t['dbuv_label'] ?? ($i18n['fr']['dbuv_label'] ?? 'dBµV')),
 ];
 
-$toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
+
+$renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $hasToolGridFallback): bool {
+    $fallbackPath = $toolGridFallbackPath;
+    if (!$hasToolGridFallback) {
+        return false;
+    }
+
+    require $fallbackPath;
+    return true;
+};
 
 $renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
@@ -91,20 +132,29 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         return;
     }
 
-    if (!isset($toolPanelMap[$toolId])) {
+    if (!$hasKnownToolId($toolId)) {
         http_response_code(404);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Unknown tool panel';
         return;
     }
 
-    header('Content-Type: text/html; charset=UTF-8');
     header('Cache-Control: public, max-age=600');
+    header('Content-Type: text/html; charset=UTF-8');
+
+    if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
+        return;
+    }
 
     if (!$renderToolPanel($toolId)) {
+        if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
+            return;
+        }
+
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Missing tool panel';
+        return;
     }
 
     return;
@@ -180,7 +230,7 @@ ob_start();
     </aside>
     <div id="tools-content" class="tools-content">
         <?php
-        if (!$renderToolPanel('tool-grid')) {
+        if (!$renderToolPanel('tool-grid') && !$renderFallbackToolGridPanel()) {
             trigger_error('Missing tools panel partial for id: tool-grid', E_USER_WARNING);
         }
         ?>
