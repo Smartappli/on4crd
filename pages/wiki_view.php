@@ -10,6 +10,13 @@ $i18n = [
     'it' => ['not_found' => 'Pagina wiki non trovata.', 'edit' => 'Modifica', 'layout' => 'Wiki', 'meta_desc' => 'Visualizza una pagina wiki.'],
     'pt' => ['not_found' => 'Página wiki não encontrada.', 'edit' => 'Editar', 'layout' => 'Wiki', 'meta_desc' => 'Visualizar uma página wiki.'],
     'nl' => ['not_found' => 'Wiki-pagina niet gevonden.', 'edit' => 'Bewerken', 'layout' => 'Wiki', 'meta_desc' => 'Een wiki-pagina bekijken.'],
+    'ar' => ['not_found' => 'صفحة الويكي غير موجودة.', 'edit' => 'تعديل', 'layout' => 'ويكي', 'meta_desc' => 'عرض صفحة ويكي.'],
+    'hi' => ['not_found' => 'विकी पृष्ठ नहीं मिला।', 'edit' => 'संपादित करें', 'layout' => 'विकी', 'meta_desc' => 'एक विकी पृष्ठ देखें।'],
+    'ja' => ['not_found' => 'Wikiページが見つかりません。', 'edit' => '編集', 'layout' => 'Wiki', 'meta_desc' => 'Wikiページを表示します。'],
+    'zh' => ['not_found' => '未找到 Wiki 页面。', 'edit' => '编辑', 'layout' => 'Wiki', 'meta_desc' => '查看 Wiki 页面。'],
+    'bn' => ['not_found' => 'উইকি পৃষ্ঠা পাওয়া যায়নি।', 'edit' => 'সম্পাদনা', 'layout' => 'উইকি', 'meta_desc' => 'একটি উইকি পৃষ্ঠা দেখুন।'],
+    'ru' => ['not_found' => 'Страница wiki не найдена.', 'edit' => 'Редактировать', 'layout' => 'Wiki', 'meta_desc' => 'Просмотр страницы wiki.'],
+    'id' => ['not_found' => 'Halaman wiki tidak ditemukan.', 'edit' => 'Ubah', 'layout' => 'Wiki', 'meta_desc' => 'Lihat halaman wiki.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
