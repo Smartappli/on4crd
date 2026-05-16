@@ -346,3 +346,28 @@
         const x = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
         return 2 * r * Math.asin(Math.sqrt(x));
     };
+
+
+    const computeOhmLaw = () => {
+        if (!(ohmVoltage instanceof HTMLInputElement) || !(ohmCurrent instanceof HTMLInputElement) || !(ohmResistance instanceof HTMLInputElement)) return;
+        const values = [Number(ohmVoltage.value), Number(ohmCurrent.value), Number(ohmResistance.value)];
+        const valid = values.map((v) => Number.isFinite(v) && v > 0);
+        const count = valid.filter(Boolean).length;
+        if (count !== 2) return;
+        if (!valid[0] && valid[1] && valid[2]) ohmVoltage.value = (values[1] * values[2]).toFixed(2);
+        if (!valid[1] && valid[0] && valid[2]) ohmCurrent.value = (values[0] / values[2]).toFixed(3);
+        if (!valid[2] && valid[0] && valid[1]) ohmResistance.value = (values[0] / values[1]).toFixed(2);
+    };
+
+    const computeLinkBudget = () => {
+        if (!(lbPtx instanceof HTMLInputElement) || !(lbGtx instanceof HTMLInputElement) || !(lbGrx instanceof HTMLInputElement) || !(lbLoss instanceof HTMLInputElement) || !lbPrx) return;
+        const ptx = Number(lbPtx.value);
+        const gtx = Number(lbGtx.value);
+        const grx = Number(lbGrx.value);
+        const loss = Number(lbLoss.value);
+        if (![ptx, gtx, grx, loss].every((v) => Number.isFinite(v))) {
+            lbPrx.textContent = '—';
+            return;
+        }
+        lbPrx.textContent = `${(ptx + gtx + grx - loss).toFixed(2)} dBm`;
+    };

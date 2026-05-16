@@ -39,6 +39,8 @@ $homeMessages = [
         'vhf_voice_label' => 'Phonie VHF :',
         'good_practice_label' => 'Bon réflexe :',
         'vhf_voice_value' => '145.500 MHz (appel simplex régional)',
+        'cw_qrp_label' => 'QRG CW QRP :',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'annoncer indicatif + QTH + trafic recherché',
         'map_title' => 'Carte Google Map - Radio Club Durnal',
         'address_title' => 'Adresse',
@@ -113,6 +115,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF voice:',
         'good_practice_label' => 'Good practice:',
         'vhf_voice_value' => '145.500 MHz (regional simplex calling)',
+        'cw_qrp_label' => 'CW QRP frequencies:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'announce callsign + QTH + requested traffic',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Address',
@@ -187,6 +191,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF-Sprechfunk:',
         'good_practice_label' => 'Gute Praxis:',
         'vhf_voice_value' => '145.500 MHz (regionaler Simplex-Anruf)',
+        'cw_qrp_label' => 'CW-QRP-Frequenzen:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'Rufzeichen + QTH + gewünschter Verkehr ansagen',
         'map_title' => 'Google-Karte - Radio Club Durnal',
         'address_title' => 'Adresse',
@@ -261,6 +267,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF-spraak:',
         'good_practice_label' => 'Goede reflex:',
         'vhf_voice_value' => '145.500 MHz (regionale simplex-oproep)',
+        'cw_qrp_label' => 'CW QRP-frequenties:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'roepnaam + QTH + gewenst verkeer aankondigen',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Adres',
@@ -335,6 +343,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF fonía:',
         'good_practice_label' => 'Buena práctica:',
         'vhf_voice_value' => '145.500 MHz (llamada simplex regional)',
+        'cw_qrp_label' => 'Frecuencias CW QRP:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'anunciar indicativo + QTH + tráfico solicitado',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Dirección',
@@ -409,6 +419,8 @@ $homeMessages = [
         'vhf_voice_label' => 'Fonìa VHF:',
         'good_practice_label' => 'Buona pratica:',
         'vhf_voice_value' => '145.500 MHz (chiamata simplex regionale)',
+        'cw_qrp_label' => 'Frequenze CW QRP:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'annunciare nominativo + QTH + traffico richiesto',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Indirizzo',
@@ -483,6 +495,8 @@ $homeMessages = [
         'vhf_voice_label' => 'VHF fonia:',
         'good_practice_label' => 'Boa prática:',
         'vhf_voice_value' => '145.500 MHz (chamada simplex regional)',
+        'cw_qrp_label' => 'Frequências CW QRP:',
+        'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
         'good_practice_value' => 'anunciar indicativo + QTH + tráfego pretendido',
         'map_title' => 'Google Map - Radio Club Durnal',
         'address_title' => 'Endereço',
@@ -745,14 +759,14 @@ if ($moduleCards === '') {
 
 
 $memberModuleDefinitions = [
-    'dashboard' => ['route' => 'dashboard', 'icon' => '🧭', 'title' => ['fr' => 'Tableau de bord', 'en' => 'Dashboard', 'de' => 'Dashboard', 'nl' => 'Dashboard'], 'desc' => ['fr' => 'Configurez votre espace membre avec des widgets personnalisables.', 'en' => 'Configure your member area with customizable widgets.', 'de' => 'Passen Sie Ihren Mitgliederbereich mit anpassbaren Widgets an.', 'nl' => 'Configureer je ledenruimte met aanpasbare widgets.']],
-    'articles' => ['route' => 'articles', 'icon' => '🛠️', 'title' => ['fr' => 'Articles techniques', 'en' => 'Technical articles', 'de' => 'Technische Artikel', 'nl' => 'Technische artikels'], 'desc' => ['fr' => 'Approfondissez vos connaissances avec des contenus pédagogiques.', 'en' => 'Deepen your knowledge with educational content.', 'de' => 'Vertiefen Sie Ihr Wissen mit didaktischen Inhalten.', 'nl' => 'Verdiep je kennis met educatieve inhoud.']],
-    'wiki' => ['route' => 'wiki', 'icon' => '📚', 'title' => ['fr' => 'Wiki du club', 'en' => 'Club wiki', 'de' => 'Club-Wiki', 'nl' => 'Clubwiki'], 'desc' => ['fr' => 'Consultez les procédures et bonnes pratiques radioamateur.', 'en' => 'Browse procedures and amateur radio best practices.', 'de' => 'Lesen Sie Verfahren und bewährte Funkpraktiken.', 'nl' => 'Bekijk procedures en goede radioamateurpraktijken.']],
-    'albums' => ['route' => 'albums', 'icon' => '🖼️', 'title' => ['fr' => 'Galerie photo', 'en' => 'Photo gallery', 'de' => 'Fotogalerie', 'nl' => 'Fotogalerij'], 'desc' => ['fr' => 'Revivez les activités du club à travers les albums.', 'en' => 'Relive club activities through photo albums.', 'de' => 'Erleben Sie Clubaktivitäten in Fotoalben erneut.', 'nl' => 'Herbeleef clubactiviteiten via fotoalbums.']],
-    'qsl' => ['route' => 'qsl', 'icon' => '📮', 'title' => ['fr' => 'Espace QSL', 'en' => 'QSL area', 'de' => 'QSL-Bereich', 'nl' => 'QSL-ruimte'], 'desc' => ['fr' => 'Préparez et exportez vos cartes QSL depuis un espace dédié.', 'en' => 'Prepare and export your QSL cards from a dedicated area.', 'de' => 'Bereiten Sie Ihre QSL-Karten in einem eigenen Bereich vor und exportieren Sie sie.', 'nl' => 'Bereid en exporteer je QSL-kaarten vanuit een aparte ruimte.']],
-    'auctions' => ['route' => 'auctions', 'icon' => '🏷️', 'title' => ['fr' => 'Enchères', 'en' => 'Auctions', 'de' => 'Auktionen', 'nl' => 'Veilingen'], 'desc' => ['fr' => 'Donnez une seconde vie au matériel radio entre membres.', 'en' => 'Give radio gear a second life between members.', 'de' => 'Geben Sie Funkgeräten unter Mitgliedern ein zweites Leben.', 'nl' => 'Geef radioapparatuur een tweede leven tussen leden.']],
-    'news' => ['route' => 'news', 'icon' => '📰', 'title' => ['fr' => 'Actualités', 'en' => 'News', 'de' => 'Nachrichten', 'nl' => 'Nieuws'], 'desc' => ['fr' => 'Suivez les annonces et informations du club.', 'en' => 'Follow club announcements and updates.', 'de' => 'Verfolgen Sie Ankündigungen und Informationen des Clubs.', 'nl' => 'Volg clubaankondigingen en updates.']],
-    'events' => ['route' => 'events', 'icon' => '📅', 'title' => ['fr' => 'Événements', 'en' => 'Events', 'de' => 'Veranstaltungen', 'nl' => 'Evenementen'], 'desc' => ['fr' => 'Consultez le calendrier des activités et rendez-vous.', 'en' => 'Check the calendar of activities and meetups.', 'de' => 'Sehen Sie den Kalender der Aktivitäten und Treffen ein.', 'nl' => 'Bekijk de kalender met activiteiten en bijeenkomsten.']],
+    'dashboard' => ['route' => 'dashboard', 'icon' => '🧭', 'title' => ['fr' => 'Tableau de bord', 'en' => 'Dashboard', 'de' => 'Dashboard', 'nl' => 'Dashboard', 'es' => 'Panel', 'it' => 'Dashboard', 'pt' => 'Painel', 'ar' => 'لوحة التحكم', 'hi' => 'डैशबोर्ड', 'ja' => 'ダッシュボード', 'zh' => '仪表板', 'bn' => 'ড্যাশবোর্ড', 'ru' => 'Панель', 'id' => 'Dasbor'], 'desc' => ['fr' => 'Configurez votre espace membre avec des widgets personnalisables.', 'en' => 'Configure your member area with customizable widgets.', 'de' => 'Passen Sie Ihren Mitgliederbereich mit anpassbaren Widgets an.', 'nl' => 'Configureer je ledenruimte met aanpasbare widgets.', 'es' => 'Configura tu espacio de miembro con widgets personalizables.', 'it' => 'Configura la tua area membri con widget personalizzabili.', 'pt' => 'Configure a sua área de membro com widgets personalizáveis.', 'ar' => 'قم بتخصيص مساحة الأعضاء باستخدام عناصر واجهة قابلة للتخصيص.', 'hi' => 'अनुकूलन योग्य विजेट्स के साथ अपना सदस्य क्षेत्र कॉन्फ़िगर करें।', 'ja' => 'カスタマイズ可能なウィジェットで会員エリアを設定します。', 'zh' => '使用可自定义小组件配置您的会员空间。', 'bn' => 'কাস্টমাইজযোগ্য উইজেট দিয়ে আপনার সদস্য এলাকা কনফিগার করুন।', 'ru' => 'Настройте пространство участника с помощью настраиваемых виджетов.', 'id' => 'Konfigurasikan area anggota Anda dengan widget yang dapat disesuaikan.']],
+    'articles' => ['route' => 'articles', 'icon' => '🛠️', 'title' => ['fr' => 'Articles techniques', 'en' => 'Technical articles', 'de' => 'Technische Artikel', 'nl' => 'Technische artikels', 'es' => 'Artículos técnicos', 'it' => 'Articoli tecnici', 'pt' => 'Artigos técnicos', 'ar' => 'مقالات تقنية', 'hi' => 'तकनीकी लेख', 'ja' => '技術記事', 'zh' => '技术文章', 'bn' => 'প্রযুক্তিগত নিবন্ধ', 'ru' => 'Технические статьи', 'id' => 'Artikel teknis'], 'desc' => ['fr' => 'Approfondissez vos connaissances avec des contenus pédagogiques.', 'en' => 'Deepen your knowledge with educational content.', 'de' => 'Vertiefen Sie Ihr Wissen mit didaktischen Inhalten.', 'nl' => 'Verdiep je kennis met educatieve inhoud.', 'es' => 'Profundiza tus conocimientos con contenidos educativos.', 'it' => 'Approfondisci le tue conoscenze con contenuti formativi.', 'pt' => 'Aprofunde os seus conhecimentos com conteúdos educativos.', 'ar' => 'عمّق معرفتك من خلال محتوى تعليمي.', 'hi' => 'शैक्षिक सामग्री के साथ अपना ज्ञान बढ़ाएँ।', 'ja' => '教育コンテンツで知識を深めましょう。', 'zh' => '通过教育内容深化您的知识。', 'bn' => 'শিক্ষামূলক কনটেন্ট দিয়ে আপনার জ্ঞান বাড়ান।', 'ru' => 'Углубляйте знания с помощью обучающего контента.', 'id' => 'Perdalam pengetahuan Anda dengan konten edukatif.']],
+    'wiki' => ['route' => 'wiki', 'icon' => '📚', 'title' => ['fr' => 'Wiki du club', 'en' => 'Club wiki', 'de' => 'Club-Wiki', 'nl' => 'Clubwiki', 'es' => 'Wiki del club', 'it' => 'Wiki del club', 'pt' => 'Wiki do clube', 'ar' => 'ويكي النادي', 'hi' => 'क्लब विकि', 'ja' => 'クラブWiki', 'zh' => '俱乐部维基', 'bn' => 'ক্লাব উইকি', 'ru' => 'Вики клуба', 'id' => 'Wiki klub'], 'desc' => ['fr' => 'Consultez les procédures et bonnes pratiques radioamateur.', 'en' => 'Browse procedures and amateur radio best practices.', 'de' => 'Lesen Sie Verfahren und bewährte Funkpraktiken.', 'nl' => 'Bekijk procedures en goede radioamateurpraktijken.', 'es' => 'Consulta procedimientos y buenas prácticas de radioafición.', 'it' => 'Consulta procedure e buone pratiche radioamatoriali.', 'pt' => 'Consulte procedimentos e boas práticas de radioamador.', 'ar' => 'تصفح الإجراءات وأفضل ممارسات هواة الراديو.', 'hi' => 'प्रक्रियाएँ और शौकिया रेडियो की श्रेष्ठ प्रथाएँ देखें।', 'ja' => '手順とアマチュア無線のベストプラクティスを確認できます。', 'zh' => '浏览流程与业余无线电最佳实践。', 'bn' => 'পদ্ধতি ও রেডিও অপেশাদারদের সেরা চর্চা দেখুন।', 'ru' => 'Изучайте процедуры и лучшие практики радиолюбителей.', 'id' => 'Jelajahi prosedur dan praktik terbaik radio amatir.']],
+    'albums' => ['route' => 'albums', 'icon' => '🖼️', 'title' => ['fr' => 'Galerie photo', 'en' => 'Photo gallery', 'de' => 'Fotogalerie', 'nl' => 'Fotogalerij', 'es' => 'Galería de fotos', 'it' => 'Galleria fotografica', 'pt' => 'Galeria de fotos', 'ar' => 'معرض الصور', 'hi' => 'फ़ोटो गैलरी', 'ja' => 'フォトギャラリー', 'zh' => '照片库', 'bn' => 'ফটো গ্যালারি', 'ru' => 'Фотогалерея', 'id' => 'Galeri foto'], 'desc' => ['fr' => 'Revivez les activités du club à travers les albums.', 'en' => 'Relive club activities through photo albums.', 'de' => 'Erleben Sie Clubaktivitäten in Fotoalben erneut.', 'nl' => 'Herbeleef clubactiviteiten via fotoalbums.', 'es' => 'Revive las actividades del club a través de álbumes de fotos.', 'it' => 'Rivivi le attività del club attraverso gli album fotografici.', 'pt' => 'Reviva as atividades do clube através dos álbuns de fotos.', 'ar' => 'استعد أنشطة النادي من خلال ألبومات الصور.', 'hi' => 'फोटो एलबम के माध्यम से क्लब की गतिविधियों को फिर से देखें।', 'ja' => 'フォトアルバムでクラブ活動を振り返りましょう。', 'zh' => '通过相册重温俱乐部活动。', 'bn' => 'ফটো অ্যালবামের মাধ্যমে ক্লাবের কার্যক্রম আবার দেখুন।', 'ru' => 'Вспоминайте клубные мероприятия через фотоальбомы.', 'id' => 'Hidupkan kembali aktivitas klub melalui album foto.']],
+    'qsl' => ['route' => 'qsl', 'icon' => '📮', 'title' => ['fr' => 'Espace QSL', 'en' => 'QSL area', 'de' => 'QSL-Bereich', 'nl' => 'QSL-ruimte', 'es' => 'Espacio QSL', 'it' => 'Area QSL', 'pt' => 'Área QSL', 'ar' => 'مساحة QSL', 'hi' => 'QSL क्षेत्र', 'ja' => 'QSLエリア', 'zh' => 'QSL专区', 'bn' => 'QSL এলাকা', 'ru' => 'Зона QSL', 'id' => 'Area QSL'], 'desc' => ['fr' => 'Préparez et exportez vos cartes QSL depuis un espace dédié.', 'en' => 'Prepare and export your QSL cards from a dedicated area.', 'de' => 'Bereiten Sie Ihre QSL-Karten in einem eigenen Bereich vor und exportieren Sie sie.', 'nl' => 'Bereid en exporteer je QSL-kaarten vanuit een aparte ruimte.', 'es' => 'Prepara y exporta tus tarjetas QSL desde un espacio dedicado.', 'it' => 'Prepara ed esporta le tue cartoline QSL da un’area dedicata.', 'pt' => 'Prepare e exporte os seus cartões QSL a partir de uma área dedicada.', 'ar' => 'حضّر بطاقات QSL وصدّرها من مساحة مخصصة.', 'hi' => 'एक समर्पित क्षेत्र से अपनी QSL कार्ड तैयार और निर्यात करें।', 'ja' => '専用エリアでQSLカードを作成・エクスポートできます。', 'zh' => '在专属区域准备并导出您的QSL卡片。', 'bn' => 'নির্দিষ্ট একটি এলাকা থেকে আপনার QSL কার্ড প্রস্তুত ও এক্সপোর্ট করুন।', 'ru' => 'Готовьте и экспортируйте QSL-карточки в отдельном разделе.', 'id' => 'Siapkan dan ekspor kartu QSL Anda dari area khusus.']],
+    'auctions' => ['route' => 'auctions', 'icon' => '🏷️', 'title' => ['fr' => 'Enchères', 'en' => 'Auctions', 'de' => 'Auktionen', 'nl' => 'Veilingen', 'es' => 'Subastas', 'it' => 'Aste', 'pt' => 'Leilões', 'ar' => 'المزادات', 'hi' => 'नीलामी', 'ja' => 'オークション', 'zh' => '拍卖', 'bn' => 'নিলাম', 'ru' => 'Аукционы', 'id' => 'Lelang'], 'desc' => ['fr' => 'Donnez une seconde vie au matériel radio entre membres.', 'en' => 'Give radio gear a second life between members.', 'de' => 'Geben Sie Funkgeräten unter Mitgliedern ein zweites Leben.', 'nl' => 'Geef radioapparatuur een tweede leven tussen leden.', 'es' => 'Da una segunda vida al equipo de radio entre miembros.', 'it' => 'Dai una seconda vita all’attrezzatura radio tra membri.', 'pt' => 'Dê uma segunda vida ao equipamento de rádio entre membros.', 'ar' => 'امنح معدات الراديو حياة ثانية بين الأعضاء.', 'hi' => 'सदस्यों के बीच रेडियो उपकरण को दूसरी ज़िंदगी दें।', 'ja' => '会員間で無線機材に第二の命を与えましょう。', 'zh' => '让无线电设备在会员间焕发新生。', 'bn' => 'সদস্যদের মধ্যে রেডিও সরঞ্জামকে নতুন জীবন দিন।', 'ru' => 'Дайте радиооборудованию вторую жизнь среди участников.', 'id' => 'Beri perlengkapan radio kehidupan kedua antaranggota.']],
+    'news' => ['route' => 'news', 'icon' => '📰', 'title' => ['fr' => 'Actualités', 'en' => 'News', 'de' => 'Nachrichten', 'nl' => 'Nieuws', 'es' => 'Noticias', 'it' => 'Notizie', 'pt' => 'Notícias', 'ar' => 'الأخبار', 'hi' => 'समाचार', 'ja' => 'ニュース', 'zh' => '新闻', 'bn' => 'সংবাদ', 'ru' => 'Новости', 'id' => 'Berita'], 'desc' => ['fr' => 'Suivez les annonces et informations du club.', 'en' => 'Follow club announcements and updates.', 'de' => 'Verfolgen Sie Ankündigungen und Informationen des Clubs.', 'nl' => 'Volg clubaankondigingen en updates.', 'es' => 'Sigue los anuncios y novedades del club.', 'it' => 'Segui annunci e aggiornamenti del club.', 'pt' => 'Acompanhe os anúncios e novidades do clube.', 'ar' => 'تابع إعلانات النادي وتحديثاته.', 'hi' => 'क्लब की घोषणाओं और अपडेट्स का अनुसरण करें।', 'ja' => 'クラブのお知らせと最新情報を確認しましょう。', 'zh' => '关注俱乐部公告和更新。', 'bn' => 'ক্লাবের ঘোষণা ও আপডেট অনুসরণ করুন।', 'ru' => 'Следите за объявлениями и обновлениями клуба.', 'id' => 'Ikuti pengumuman dan pembaruan klub.']],
+    'events' => ['route' => 'events', 'icon' => '📅', 'title' => ['fr' => 'Événements', 'en' => 'Events', 'de' => 'Veranstaltungen', 'nl' => 'Evenementen', 'es' => 'Eventos', 'it' => 'Eventi', 'pt' => 'Eventos', 'ar' => 'الفعاليات', 'hi' => 'इवेंट्स', 'ja' => 'イベント', 'zh' => '活动', 'bn' => 'ইভেন্ট', 'ru' => 'События', 'id' => 'Acara'], 'desc' => ['fr' => 'Consultez le calendrier des activités et rendez-vous.', 'en' => 'Check the calendar of activities and meetups.', 'de' => 'Sehen Sie den Kalender der Aktivitäten und Treffen ein.', 'nl' => 'Bekijk de kalender met activiteiten en bijeenkomsten.', 'es' => 'Consulta el calendario de actividades y encuentros.', 'it' => 'Consulta il calendario di attività e incontri.', 'pt' => 'Consulte o calendário de atividades e encontros.', 'ar' => 'اطلع على تقويم الأنشطة واللقاءات.', 'hi' => 'गतिविधियों और मुलाक़ातों का कैलेंडर देखें।', 'ja' => '活動やミートアップのカレンダーを確認してください。', 'zh' => '查看活动与聚会日历。', 'bn' => 'কার্যক্রম ও মিটআপের ক্যালেন্ডার দেখুন।', 'ru' => 'Проверьте календарь мероприятий и встреч.', 'id' => 'Lihat kalender aktivitas dan pertemuan.']],
 ];
 $memberModuleCards = '';
 if (table_exists('modules')) {
@@ -926,7 +940,7 @@ $homeRadioInfoHtml = '<div class="grid gap-4">'
     . '<h4 class="text-xs font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['ham_info_title']) . '</h4>'
     . '<ul class="mt-2 list-clean">'
     . '<li><strong>' . e((string) $homeI18n['vhf_voice_label']) . '</strong> ' . e((string) $homeI18n['vhf_voice_value']) . '</li>'
-    . '<li><strong>QRG CW QRP :</strong> 7.030 MHz • 14.060 MHz</li>'
+    . '<li><strong>' . e((string) ($homeI18n['cw_qrp_label'] ?? 'QRG CW QRP :')) . '</strong> ' . e((string) ($homeI18n['cw_qrp_value'] ?? '7.030 MHz • 14.060 MHz')) . '</li>'
     . '<li><strong>' . e((string) $homeI18n['good_practice_label']) . '</strong> ' . e((string) $homeI18n['good_practice_value']) . '</li>'
     . '</ul>'
     . '</section>'

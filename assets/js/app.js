@@ -402,20 +402,86 @@
   if (!window.dashboardConfig) return;
   const refreshMs = Number(window.dashboardConfig.refreshMs || 0);
   if (!refreshMs) return;
-  setInterval(() => {
-    document.querySelectorAll('#dashboard-grid .widget-card[data-widget]').forEach((card) => {
-      const widgetKey = card.dataset.widget;
-      const body = card.querySelector('.widget-body');
-      if (!widgetKey || !body) return;
-      fetch(window.dashboardConfig.renderBase + encodeURIComponent(widgetKey), {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        credentials: 'same-origin'
-      })
-        .then((response) => response.text())
-        .then((html) => { body.innerHTML = html; })
-        .catch(() => {});
+
+  const inFlightWidgets = new Set();
+  const visibleCards = new Set();
+
+  const refreshCard = (card) => {
+    const widgetKey = card.dataset.widget;
+    const body = card.querySelector('.widget-body');
+    if (!widgetKey || !body || inFlightWidgets.has(widgetKey)) return;
+
+    inFlightWidgets.add(widgetKey);
+    fetch(window.dashboardConfig.renderBase + encodeURIComponent(widgetKey), {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      credentials: 'same-origin'
+    })
+      .then((response) => response.text())
+      .then((html) => { body.innerHTML = html; })
+      .catch(() => {})
+      .finally(() => {
+        inFlightWidgets.delete(widgetKey);
+      });
+  };
+
+  const refreshVisibleWidgets = () => {
+    if (document.visibilityState === 'hidden') {
+      return;
+    }
+
+    visibleCards.forEach((card) => {
+      if (!(card instanceof HTMLElement) || !card.isConnected) return;
+      refreshCard(card);
     });
-  }, refreshMs);
+  };
+
+  const cards = Array.from(document.querySelectorAll('#dashboard-grid .widget-card[data-widget]'));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const widgetKey = entry.target instanceof HTMLElement ? (entry.target.dataset.widget || '') : '';
+        if (!widgetKey) return;
+        if (entry.isIntersecting) {
+          visibleCards.add(entry.target);
+          if (document.visibilityState === 'visible') {
+            refreshCard(entry.target);
+          }
+        } else {
+          visibleCards.delete(entry.target);
+        }
+      });
+    }, { root: null, threshold: 0.05 });
+
+    cards.forEach((card) => observer.observe(card));
+  } else {
+    const isCardVisible = (card) => {
+      const rect = card.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+      return rect.bottom >= 0 && rect.right >= 0 && rect.top <= viewportHeight && rect.left <= viewportWidth;
+    };
+
+    const updateVisibleWidgets = () => {
+      visibleCards.clear();
+      cards.forEach((card) => {
+        const widgetKey = card.dataset.widget || '';
+        if (widgetKey && isCardVisible(card)) {
+          visibleCards.add(card);
+        }
+      });
+    };
+
+    updateVisibleWidgets();
+    window.addEventListener('scroll', updateVisibleWidgets, { passive: true });
+    window.addEventListener('resize', updateVisibleWidgets);
+  }
+
+  setInterval(refreshVisibleWidgets, refreshMs);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      refreshVisibleWidgets();
+    }
+  });
 })();
 
 (function () {
