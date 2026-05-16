@@ -16,6 +16,7 @@ $labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)
 
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
 $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
+$toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
 $resolveToolTitle = static function (array $entry) use ($t): string {
     if (isset($entry['title'])) {
         return (string) $entry['title'];
@@ -33,17 +34,27 @@ $resolveToolTitle = static function (array $entry) use ($t): string {
     return (string) $entry['id'];
 };
 
-$buildTools = static function (array $entries) use ($resolveToolTitle, $toolPanelMap): array {
+
+$canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGridFallbackPath): bool {
+    if (isset($toolPanelMap[$toolId])) {
+        $partialPath = __DIR__ . '/tools_panels/' . $toolPanelMap[$toolId];
+        return is_file($partialPath);
+    }
+
+    return $toolId === 'tool-grid' && is_file($toolGridFallbackPath);
+};
+
+
+
+$buildTools = static function (array $entries) use ($resolveToolTitle, $toolPanelMap, $canRenderToolId): array {
     $tools = [];
     foreach ($entries as $entry) {
         $id = (string) ($entry['id'] ?? '');
-        $partialFile = $toolPanelMap[$id] ?? null;
-        if ($id === '' || $partialFile === null) {
+        if ($id === '') {
             continue;
         }
 
-        $partialPath = __DIR__ . '/tools_panels/' . $partialFile;
-        if (!is_file($partialPath)) {
+        if (!$canRenderToolId($id)) {
             continue;
         }
 
@@ -81,8 +92,8 @@ $jsI18n = [
 ];
 
 
-$renderFallbackToolGridPanel = static function (): bool {
-    $fallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
+$renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath): bool {
+    $fallbackPath = $toolGridFallbackPath;
     if (!is_file($fallbackPath)) {
         return false;
     }
@@ -115,26 +126,33 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         return;
     }
 
-    if (!isset($toolPanelMap[$toolId])) {
+    if (!$canRenderToolId($toolId)) {
         http_response_code(404);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Unknown tool panel';
         return;
     }
 
-    header('Content-Type: text/html; charset=UTF-8');
     header('Cache-Control: public, max-age=600');
+
+    if ($toolId === 'tool-grid' && !isset($toolPanelMap[$toolId]) && $renderFallbackToolGridPanel()) {
+        header('Content-Type: text/html; charset=UTF-8');
+        return;
+    }
 
     if (!$renderToolPanel($toolId)) {
         if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
+            header('Content-Type: text/html; charset=UTF-8');
             return;
         }
 
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Missing tool panel';
+        return;
     }
 
+    header('Content-Type: text/html; charset=UTF-8');
     return;
 }
 
