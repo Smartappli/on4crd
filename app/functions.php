@@ -2113,7 +2113,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Installer l’app', 'skip_to_content' => 'Aller au contenu', 'close_menu' => 'Fermer le menu', 'main_navigation' => 'Navigation principale', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
         ],
         'en' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Hulpmiddelen', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
             'theme_light' => 'Light', 'theme_dark' => 'Dark',
@@ -2145,7 +2145,6 @@ function render_layout(string $content, string $title = ''): string
             'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
             'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Zoeken op de site', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
-
         'es' => [
             'nav_home' => 'Inicio', 'nav_news' => 'Noticias', 'nav_shop' => 'Tienda', 'nav_events' => 'Eventos', 'nav_tools' => 'Herramientas', 'nav_directory' => 'Directorio',
             'nav_dashboard' => 'Panel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galería', 'nav_articles' => 'Artículos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Subastas',
