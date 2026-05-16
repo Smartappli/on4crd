@@ -108,22 +108,29 @@
     };
     const initialTool = window.location.hash ? window.location.hash.slice(1) : 'tool-grid';
     setActiveTool(initialTool);
-    const resolveToolTarget = (element) => {
-        if (!(element instanceof Element)) {
+    const resolveToolTarget = (eventTarget) => {
+        const baseElement = eventTarget instanceof Element
+            ? eventTarget
+            : (eventTarget instanceof Node ? eventTarget.parentElement : null);
+        if (!(baseElement instanceof Element)) {
             return '';
         }
 
-        const link = element.closest('a[href^="#tool-"], [data-tool-target]');
-        if (!(link instanceof HTMLAnchorElement)) {
+        const trigger = baseElement.closest('[data-tool-target], a[href^="#tool-"]');
+        if (!(trigger instanceof Element)) {
             return '';
         }
 
-        const datasetTarget = (link.getAttribute('data-tool-target') || '').trim();
+        const datasetTarget = (trigger.getAttribute('data-tool-target') || '').trim();
         if (/^tool-[a-z0-9-]+$/.test(datasetTarget)) {
             return datasetTarget;
         }
 
-        const href = (link.getAttribute('href') || '').trim();
+        if (!(trigger instanceof HTMLAnchorElement)) {
+            return '';
+        }
+
+        const href = (trigger.getAttribute('href') || '').trim();
         const hrefTarget = href.startsWith('#') ? href.slice(1) : '';
         if (/^tool-[a-z0-9-]+$/.test(hrefTarget)) {
             return hrefTarget;
