@@ -213,8 +213,8 @@ function t_page(string $domain, string $key, ?string $locale = null): string
         ],
 
         'es' => [
-            'nav_home' => 'Inicio', 'nav_news' => 'Noticias', 'nav_shop' => 'Tienda', 'nav_events' => 'Eventos', 'nav_tools' => 'Herramientas', 'nav_directory' => 'Directorio',
-            'nav_dashboard' => 'Panel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galería', 'nav_articles' => 'Artículos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Subastas',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
             'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Rojo', 'accent_amber' => 'Ámbar', 'accent_orange' => 'Naranja',
@@ -224,8 +224,8 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Inizio', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Elenco',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
+            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
             'accent_blue' => 'Blu', 'accent_emerald' => 'Smeraldo', 'accent_violet' => 'Viola', 'accent_red' => 'Rosso', 'accent_amber' => 'Ambra', 'accent_orange' => 'Arancione',
@@ -235,8 +235,8 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
         ],
         'pt' => [
-            'nav_home' => 'Início', 'nav_news' => 'Notícias', 'nav_shop' => 'Loja', 'nav_events' => 'Eventos', 'nav_tools' => 'Ferramentas', 'nav_directory' => 'Diretório',
-            'nav_dashboard' => 'Painel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeria', 'nav_articles' => 'Artigos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Leilões',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
             'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Vermelho', 'accent_amber' => 'Âmbar', 'accent_orange' => 'Laranja',
@@ -2146,8 +2146,8 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Zoeken op de site', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
         'es' => [
-            'nav_home' => 'Inicio', 'nav_news' => 'Noticias', 'nav_shop' => 'Tienda', 'nav_events' => 'Eventos', 'nav_tools' => 'Herramientas', 'nav_directory' => 'Directorio',
-            'nav_dashboard' => 'Panel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galería', 'nav_articles' => 'Artículos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Subastas',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
             'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Rojo', 'accent_amber' => 'Ámbar', 'accent_orange' => 'Naranja',
@@ -2157,8 +2157,8 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Saltar al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Inizio', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Elenco',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
+            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
             'accent_blue' => 'Blu', 'accent_emerald' => 'Smeraldo', 'accent_violet' => 'Viola', 'accent_red' => 'Rosso', 'accent_amber' => 'Ambra', 'accent_orange' => 'Arancione',
@@ -2168,8 +2168,8 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
         ],
         'pt' => [
-            'nav_home' => 'Início', 'nav_news' => 'Notícias', 'nav_shop' => 'Loja', 'nav_events' => 'Eventos', 'nav_tools' => 'Ferramentas', 'nav_directory' => 'Diretório',
-            'nav_dashboard' => 'Painel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeria', 'nav_articles' => 'Artigos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Leilões',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
             'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Vermelho', 'accent_amber' => 'Âmbar', 'accent_orange' => 'Laranja',
