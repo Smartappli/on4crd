@@ -15,6 +15,7 @@ $labelQuarterWaveResult = (string) ($t['quarter_wave_result'] ?? 'Estimated leng
 $labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)');
 
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
+$toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 $resolveToolTitle = static function (array $entry) use ($t): string {
     if (isset($entry['title'])) {
         return (string) $entry['title'];
@@ -32,13 +33,27 @@ $resolveToolTitle = static function (array $entry) use ($t): string {
     return (string) $entry['id'];
 };
 
-$buildTools = static function (array $entries) use ($resolveToolTitle): array {
-    return array_map(static function (array $entry) use ($resolveToolTitle): array {
-        return [
-            'id' => (string) $entry['id'],
+$buildTools = static function (array $entries) use ($resolveToolTitle, $toolPanelMap): array {
+    $tools = [];
+    foreach ($entries as $entry) {
+        $id = (string) ($entry['id'] ?? '');
+        $partialFile = $toolPanelMap[$id] ?? null;
+        if ($id === '' || $partialFile === null) {
+            continue;
+        }
+
+        $partialPath = __DIR__ . '/tools_panels/' . $partialFile;
+        if (!is_file($partialPath)) {
+            continue;
+        }
+
+        $tools[] = [
+            'id' => $id,
             'title' => $resolveToolTitle($entry),
         ];
-    }, $entries);
+    }
+
+    return $tools;
 };
 
 $conversionTools = $buildTools($toolCatalog['conversion'] ?? []);
@@ -65,7 +80,16 @@ $jsI18n = [
     'dbuv_label' => (string) ($t['dbuv_label'] ?? ($i18n['fr']['dbuv_label'] ?? 'dBµV')),
 ];
 
-$toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
+
+$renderFallbackToolGridPanel = static function (): bool {
+    $fallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
+    if (!is_file($fallbackPath)) {
+        return false;
+    }
+
+    require $fallbackPath;
+    return true;
+};
 
 $renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
@@ -102,6 +126,10 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     header('Cache-Control: public, max-age=600');
 
     if (!$renderToolPanel($toolId)) {
+        if ($toolId === 'tool-grid' && $renderFallbackToolGridPanel()) {
+            return;
+        }
+
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
         echo 'Missing tool panel';
@@ -180,7 +208,7 @@ ob_start();
     </aside>
     <div id="tools-content" class="tools-content">
         <?php
-        if (!$renderToolPanel('tool-grid')) {
+        if (!$renderToolPanel('tool-grid') && !$renderFallbackToolGridPanel()) {
             trigger_error('Missing tools panel partial for id: tool-grid', E_USER_WARNING);
         }
         ?>
