@@ -1945,7 +1945,24 @@ function require_module_enabled(string $module): void
     }
 
     http_response_code(404);
-    echo render_layout('<div class="card"><h1>404</h1><p>Module indisponible.</p></div>', '404');
+    $locale = current_locale();
+    $moduleUnavailable = match ($locale) {
+        'en' => 'Module unavailable.',
+        'de' => 'Modul nicht verfügbar.',
+        'nl' => 'Module niet beschikbaar.',
+        'es' => 'Módulo no disponible.',
+        'it' => 'Modulo non disponibile.',
+        'pt' => 'Módulo indisponível.',
+        'ar' => 'الوحدة غير متاحة.',
+        'hi' => 'मॉड्यूल उपलब्ध नहीं है।',
+        'ja' => 'モジュールは利用できません。',
+        'zh' => '模块不可用。',
+        'bn' => 'মডিউলটি উপলভ্য নয়।',
+        'ru' => 'Модуль недоступен.',
+        'id' => 'Modul tidak tersedia.',
+        default => 'Module indisponible.',
+    };
+    echo render_layout('<div class="card"><h1>404</h1><p>' . e($moduleUnavailable) . '</p></div>', '404');
     exit;
 }
 }
@@ -4543,6 +4560,25 @@ function qsl_template_supports_back(string $templateName): bool
 
 function sanitize_svg_document(string $svg): string
 {
+    $locale = current_locale();
+    $qslUnavailableLabel = match ($locale) {
+        'en' => 'Secure QSL unavailable',
+        'de' => 'Sichere QSL nicht verfügbar',
+        'nl' => 'Beveiligde QSL niet beschikbaar',
+        'es' => 'QSL segura no disponible',
+        'it' => 'QSL sicura non disponibile',
+        'pt' => 'QSL segura indisponível',
+        'ar' => 'QSL الآمنة غير متاحة',
+        'hi' => 'सुरक्षित QSL उपलब्ध नहीं है',
+        'ja' => '安全なQSLは利用できません',
+        'zh' => '安全QSL不可用',
+        'bn' => 'নিরাপদ QSL উপলভ্য নয়',
+        'ru' => 'Безопасная QSL недоступна',
+        'id' => 'QSL aman tidak tersedia',
+        default => 'QSL sécurisée indisponible',
+    };
+    $safeFallbackSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">' . e($qslUnavailableLabel) . '</text></svg>';
+
     $normalized = strtolower($svg);
     $dangerousPatterns = [
         '/<\s*script\b/i',
@@ -4554,12 +4590,12 @@ function sanitize_svg_document(string $svg): string
 
     foreach ($dangerousPatterns as $pattern) {
         if (preg_match($pattern, $svg) === 1) {
-            return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+            return $safeFallbackSvg;
         }
     }
 
     if (str_contains($normalized, 'javascript:')) {
-        return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+        return $safeFallbackSvg;
     }
 
     if (preg_match_all('/(?:href|xlink:href)\s*=\s*["\']([^"\']+)["\']/i', $svg, $matches) > 0 && isset($matches[1])) {
@@ -4567,10 +4603,10 @@ function sanitize_svg_document(string $svg): string
             $candidate = strtolower(trim((string) $href));
             if (str_starts_with($candidate, 'data:image/')) {
                 if (preg_match('/^data:image\/(?:png|jpe?g|webp);base64,[a-z0-9+\/=]+$/i', $candidate) !== 1) {
-                    return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+                    return $safeFallbackSvg;
                 }
             } elseif (str_starts_with($candidate, 'data:')) {
-                return '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500"><rect width="900" height="500" fill="#0f172a"/><text x="450" y="250" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28">QSL sécurisée indisponible</text></svg>';
+                return $safeFallbackSvg;
             }
         }
     }
