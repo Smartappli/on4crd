@@ -192,7 +192,7 @@ $extractPanelTranslationKeys = static function (string $toolId) use ($toolPanelM
         return $panelKeyCache[$toolId];
     }
 
-    preg_match_all('/\$t\[\'([a-z0-9_]+)\'\]/i', $content, $matches);
+    preg_match_all('/\$t\[(?:\'|")([a-z0-9_]+)(?:\'|")\]/i', $content, $matches);
     $panelKeyCache[$toolId] = isset($matches[1]) ? array_values(array_unique(array_map('strval', $matches[1]))) : [];
 
     return $panelKeyCache[$toolId];
