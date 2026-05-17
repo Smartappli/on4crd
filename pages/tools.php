@@ -168,6 +168,36 @@ $toolPanelTranslationKeys['tool-erp'] = array_values(array_unique(array_merge(
     ['erp_calc', 'tx_power_w', 'feedline_loss_db', 'antenna_gain_dbd', 'calc', 'erp_result']
 )));
 
+$extractPanelTranslationKeys = static function (string $toolId) use ($toolPanelMap): array {
+    static $panelKeyCache = [];
+    if (array_key_exists($toolId, $panelKeyCache)) {
+        return $panelKeyCache[$toolId];
+    }
+
+    $partialFile = $toolPanelMap[$toolId] ?? null;
+    if ($partialFile === null) {
+        $panelKeyCache[$toolId] = [];
+        return $panelKeyCache[$toolId];
+    }
+
+    $partialPath = __DIR__ . '/tools_panels/' . $partialFile;
+    if (!is_file($partialPath)) {
+        $panelKeyCache[$toolId] = [];
+        return $panelKeyCache[$toolId];
+    }
+
+    $content = (string) @file_get_contents($partialPath);
+    if ($content === '') {
+        $panelKeyCache[$toolId] = [];
+        return $panelKeyCache[$toolId];
+    }
+
+    preg_match_all('/\$t\[\'([a-z0-9_]+)\'\]/i', $content, $matches);
+    $panelKeyCache[$toolId] = isset($matches[1]) ? array_values(array_unique(array_map('strval', $matches[1]))) : [];
+
+    return $panelKeyCache[$toolId];
+};
+
 $renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
     if ($partialFile === null) {
@@ -192,9 +222,11 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         return;
     }
 
-    if (isset($toolPanelTranslationKeys[$toolId])) {
+    $panelKeys = $toolPanelTranslationKeys[$toolId] ?? [];
+    $panelKeys = array_values(array_unique(array_merge($panelKeys, $extractPanelTranslationKeys($toolId))));
+    if ($panelKeys !== []) {
         $panelTranslations = [];
-        foreach ($toolPanelTranslationKeys[$toolId] as $k) {
+        foreach ($panelKeys as $k) {
             $panelTranslations[$k] = $tr($k, (string) ($i18n['fr'][$k] ?? ''));
         }
         $t = $panelTranslations + $t;
