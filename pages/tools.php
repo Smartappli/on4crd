@@ -5,20 +5,29 @@ $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/tools.php';
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
-    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+    $value = trim(i18n_localized_value($i18n, $locale, $key));
+    if ($value === '') {
+        $value = trim((string) ($i18n['fr'][$key] ?? ''));
+    }
+    $t[$key] = $value;
 }
-$labelCategoryAntenna = (string) ($t['category_antenna'] ?? 'Antenna & propagation');
-$labelQuarterWaveCalc = (string) ($t['quarter_wave_calc'] ?? 'Quarter-wave length');
-$labelErpCalc = (string) ($t['erp_calc'] ?? 'Estimated ERP');
-$labelTxPowerW = (string) ($t['tx_power_w'] ?? 'TX power (W)');
-$labelFeedlineLossDb = (string) ($t['feedline_loss_db'] ?? 'Feedline loss (dB)');
-$labelAntennaGainDbd = (string) ($t['antenna_gain_dbd'] ?? 'Antenna gain (dBd)');
-$labelErpResult = (string) ($t['erp_result'] ?? 'Estimated ERP');
-$labelQuarterWaveResult = (string) ($t['quarter_wave_result'] ?? 'Estimated length');
-$labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)');
+$tr = static function (string $key, string $fallback = '') use ($t): string {
+    if (array_key_exists($key, $t)) {
+        return trim((string) $t[$key]);
+    }
 
     return trim($fallback);
 };
+
+$labelCategoryAntenna = $tr('category_antenna', 'Antenna & propagation');
+$labelQuarterWaveCalc = $tr('quarter_wave_calc', 'Quarter-wave length');
+$labelErpCalc = $tr('erp_calc', 'Estimated ERP');
+$labelTxPowerW = $tr('tx_power_w', 'TX power (W)');
+$labelFeedlineLossDb = $tr('feedline_loss_db', 'Feedline loss (dB)');
+$labelAntennaGainDbd = $tr('antenna_gain_dbd', 'Antenna gain (dBd)');
+$labelErpResult = $tr('erp_result', 'Estimated ERP');
+$labelQuarterWaveResult = $tr('quarter_wave_result', 'Estimated length');
+$labelVelocityFactor = $tr('velocity_factor', 'Velocity factor (0-1)');
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
 $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 $toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
@@ -129,14 +138,14 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     if ($toolId === '' || preg_match('/^tool-[a-z0-9-]+$/', $toolId) !== 1) {
         http_response_code(400);
         header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Invalid tool panel id';
+        echo $tr('err_tool_load', 'Tool loading error');
         return;
     }
 
     if (!$canRenderToolId($toolId)) {
         http_response_code(404);
         header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Tool panel unavailable';
+        echo $tr('err_tool_load', 'Tool loading error');
         return;
     }
 
@@ -147,7 +156,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     if (!$rendered) {
         http_response_code(500);
         header('Content-Type: text/plain; charset=UTF-8');
-        echo 'Missing tool panel';
+        echo $tr('err_tool_load', 'Tool loading error');
         return;
     }
 

@@ -14,7 +14,11 @@ $i18n = [
 ];
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
-    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+    $value = trim(i18n_localized_value($i18n, $locale, 'fr'));
+    if ($value === '') {
+        $value = trim((string) ($i18n['fr'][$key] ?? ''));
+    }
+    $t[$key] = $value;
 }
 set_page_meta(['title' => (string) $t['title'], 'description' => (string) $t['meta_desc'], 'robots' => 'noindex,follow']);
 
@@ -51,7 +55,7 @@ ob_start();
         <input type="hidden" name="route" value="members_library">
         <select name="category">
             <option value=""><?= e((string) $t['all_categories']) ?></option>
-            <?php foreach ($categories as $cat): $catName = trim((string) ($cat['category'] ?? 'general')); ?>
+            <?php foreach ($categories as $cat): $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
                 <option value="<?= e($catName) ?>" <?= $catName === $category ? 'selected' : '' ?>><?= e($catName) ?> (<?= (int) ($cat['total'] ?? 0) ?>)</option>
             <?php endforeach; ?>
         </select>
@@ -67,9 +71,12 @@ ob_start();
         <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); ?>
         <?php if ($safePath === null) { continue; } ?>
         <article class="card" style="margin-top:12px;">
-            <p><span class="badge muted"><?= e((string) ($document['category'] ?? 'general')) ?></span></p>
-            <h3><?= e((string) $document['title']) ?></h3>
-            <p><?= e((string) ($document['description'] ?? '')) ?></p>
+            <?php $docCategory = trim((string) ($document['category'] ?? 'general')); if ($docCategory === '') { $docCategory = 'general'; } ?>
+            <?php $docTitle = trim((string) ($document['title'] ?? '')); if ($docTitle === '') { $docTitle = 'Document'; } ?>
+            <?php $docDescription = trim((string) ($document['description'] ?? '')); if ($docDescription === '') { $docDescription = (string) $t['intro']; } ?>
+            <p><span class="badge muted"><?= e($docCategory) ?></span></p>
+            <h3><?= e($docTitle) ?></h3>
+            <p><?= e($docDescription) ?></p>
             <iframe src="<?= e(base_url($safePath)) ?>" style="width:100%;height:480px;border:1px solid #ccc;" loading="lazy"></iframe>
             <p><a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a></p>
         </article>
