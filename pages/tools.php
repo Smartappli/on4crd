@@ -5,7 +5,14 @@ $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/tools.php';
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
-    $value = trim(i18n_localized_value($i18n, $locale, $key));
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+
+    $value = trim(i18n_localized_value($pool, $locale, 'fr'));
     if ($value === '') {
         $value = trim((string) ($i18n['fr'][$key] ?? ''));
     }
