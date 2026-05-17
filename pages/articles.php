@@ -123,7 +123,18 @@ $i18n = [
 ];
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
-    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+
+    $value = trim(i18n_localized_value($pool, $locale, 'fr'));
+    if ($value === '') {
+        $value = trim((string) ($i18n['fr'][$key] ?? ''));
+    }
+    $t[$key] = $value;
 }
 $GLOBALS['articles_i18n'] = $t;
 
