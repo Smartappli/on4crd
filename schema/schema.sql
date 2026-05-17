@@ -568,3 +568,19 @@ CREATE TABLE IF NOT EXISTS dinner_reservation_lines (
     INDEX idx_dinner_reservation_id (reservation_id),
     FOREIGN KEY (reservation_id) REFERENCES dinner_reservations(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS classified_ads (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    owner_member_id INT NOT NULL,
+    category_code VARCHAR(32) NOT NULL DEFAULT 'gear',
+    title VARCHAR(190) NOT NULL,
+    description TEXT DEFAULT NULL,
+    location VARCHAR(120) DEFAULT NULL,
+    contact VARCHAR(190) DEFAULT NULL,
+    price_cents INT NOT NULL DEFAULT 0,
+    status ENUM('active','sold','archived') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_classified_owner_status (owner_member_id, status),
+    INDEX idx_classified_status_created (status, created_at)
+);
