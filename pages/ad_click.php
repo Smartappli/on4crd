@@ -11,7 +11,16 @@ $i18n = [
     'pt' => ['not_found' => 'Publicidade não encontrada', 'title' => 'Publicidade'],
     'nl' => ['not_found' => 'Advertentie niet gevonden', 'title' => 'Advertentie'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 $adId = (int) ($_GET['id'] ?? 0);
 $ad = ad_fetch_by_id($adId);

@@ -11,7 +11,16 @@ $i18n = [
     'pt' => ['public_albums' => 'Álbuns públicos', 'gallery_unavailable' => 'A galeria estará disponível após a inicialização.', 'manage' => 'Gerir', 'intro' => 'Explore as atividades do clube em imagens: workshops, saídas, concursos e momentos associativos.', 'albums' => 'Álbuns', 'indexed_photos' => 'Fotos indexadas', 'search_placeholder' => 'Pesquisar um álbum (título, descrição)', 'search' => 'Pesquisar', 'reset' => 'Repor', 'gallery' => 'Galeria', 'none' => 'Nenhum álbum público disponível', 'for_search' => ' para esta pesquisa', 'cover_alt' => 'Capa do álbum', 'photo' => 'foto'],
     'nl' => ['public_albums' => 'Openbare albums', 'gallery_unavailable' => 'De galerij is beschikbaar na initialisatie.', 'manage' => 'Beheren', 'intro' => 'Ontdek clubactiviteiten in beeld: workshops, uitstappen, contests en verenigingsmomenten.', 'albums' => 'Albums', 'indexed_photos' => "Geïndexeerde foto's", 'search_placeholder' => 'Zoek een album (titel, beschrijving)', 'search' => 'Zoeken', 'reset' => 'Reset', 'gallery' => 'Galerij', 'none' => 'Geen openbaar album beschikbaar', 'for_search' => ' voor deze zoekopdracht', 'cover_alt' => 'Albumcover', 'photo' => 'foto'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);

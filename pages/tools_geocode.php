@@ -13,8 +13,18 @@ $i18n = [
     'pt' => ['missing_q' => 'Parâmetro q em falta.', 'service_down' => 'Serviço de geocodificação indisponível.', 'address_not_found' => 'Endereço não encontrado.', 'invalid_coords' => 'Coordenadas inválidas recebidas.'],
     'nl' => ['missing_q' => 'Ontbrekende q-parameter.', 'service_down' => 'Geocoderingsservice niet beschikbaar.', 'address_not_found' => 'Adres niet gevonden.', 'invalid_coords' => 'Ongeldige coördinaten ontvangen.'],
 ];
-$t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+$resolved = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $resolved[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
+$t = static function (string $key) use ($resolved): string {
+    return (string) ($resolved[$key] ?? $key);
 };
 
 $query = trim((string) ($_GET['q'] ?? ''));
@@ -60,4 +70,3 @@ echo json_encode([
     'lat' => $lat,
     'lon' => $lon,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-

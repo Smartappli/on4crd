@@ -11,7 +11,16 @@ $newsI18n = [
     'pt' => ['title' => 'Notícias', 'unavailable' => 'O feed de notícias estará disponível após as primeiras publicações.', 'latest_news' => 'Últimas notícias', 'unknown_date' => 'Data não definida', 'latest_fallback_excerpt' => 'Consulte a publicação mais recente do clube.', 'default_section' => 'Notícia', 'published_on' => 'Publicado em', 'read_news' => 'Ler notícia →', 'no_news_yet' => 'Ainda não há notícias publicadas.', 'search_title' => 'Pesquisa de notícias', 'search_lead' => 'Encontre rapidamente uma publicação por palavra-chave, período ou categoria.', 'active_filters' => 'filtro(s) ativo(s)', 'keywords' => 'Palavras-chave', 'keywords_placeholder' => 'Ex.: concurso, reunião, workshop...', 'period' => 'Período', 'category' => 'Categoria', 'all_categories' => 'Todas as categorias', 'sort_by' => 'Ordenar por', 'sort_recent' => 'Mais recentes', 'sort_oldest' => 'Mais antigas', 'sort_title' => 'Título (A→Z)', 'apply_filters' => 'Aplicar filtros', 'reset' => 'Repor', 'applied_filters' => 'Filtros aplicados:', 'search_filter' => 'Pesquisa', 'month_filter' => 'Mês', 'category_filter' => 'Categoria', 'news_overview' => 'Visão geral das notícias', 'no_match' => 'Nenhuma notícia corresponde aos seus filtros.', 'no_match_help' => 'Tente remover um filtro ou alargar a pesquisa.', 'card_fallback_excerpt' => 'Abra esta notícia para ver os detalhes completos.', 'view_article' => 'Ver artigo →', 'page' => 'Página', 'previous' => 'Anterior', 'next' => 'Seguinte', 'news_count' => 'notícia(s)'],
     'nl' => ['title' => 'Nieuws', 'unavailable' => 'De nieuwsfeed is beschikbaar na de eerste publicaties.', 'latest_news' => 'Laatste nieuws', 'unknown_date' => 'Onbekende datum', 'latest_fallback_excerpt' => 'Bekijk de nieuwste clubpublicatie.', 'default_section' => 'Nieuws', 'published_on' => 'Gepubliceerd op', 'read_news' => 'Nieuws lezen →', 'no_news_yet' => 'Nog geen gepubliceerd nieuws.', 'search_title' => 'Nieuws zoeken', 'search_lead' => 'Vind snel een publicatie op trefwoord, periode of categorie.', 'active_filters' => 'actieve filter(s)', 'keywords' => 'Trefwoorden', 'keywords_placeholder' => 'Bv.: contest, vergadering, workshop...', 'period' => 'Periode', 'category' => 'Categorie', 'all_categories' => 'Alle categorieën', 'sort_by' => 'Sorteren op', 'sort_recent' => 'Meest recent', 'sort_oldest' => 'Oudste', 'sort_title' => 'Titel (A→Z)', 'apply_filters' => 'Filters toepassen', 'reset' => 'Reset', 'applied_filters' => 'Actieve filters:', 'search_filter' => 'Zoeken', 'month_filter' => 'Maand', 'category_filter' => 'Categorie', 'news_overview' => 'Nieuwsoverzicht', 'no_match' => 'Geen nieuws komt overeen met je filters.', 'no_match_help' => 'Probeer een filter te verwijderen of breder te zoeken.', 'card_fallback_excerpt' => 'Open dit nieuwsitem voor alle details.', 'view_article' => 'Artikel bekijken →', 'page' => 'Pagina', 'previous' => 'Vorige', 'next' => 'Volgende', 'news_count' => 'nieuwsbericht(en)'],
 ];
-$newsT = $newsI18n[$locale] ?? $newsI18n['fr'];
+$newsT = [];
+foreach (array_keys($newsI18n['fr']) as $key) {
+    $pool = [];
+    foreach ($newsI18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $newsT[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 if (!table_exists('news_posts')) {
     echo render_layout('<div class="card"><h1>' . e((string) $newsT['title']) . '</h1><p>' . e((string) $newsT['unavailable']) . '</p></div>', (string) $newsT['title']);

@@ -286,7 +286,16 @@ $i18n = [
         'next' => 'Berikutnya',
     ],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 set_page_meta([
     'title' => (string) $t['meta_title'],
     'description' => (string) $t['meta_desc'],

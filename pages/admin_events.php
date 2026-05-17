@@ -13,7 +13,10 @@ $i18n = [
     'pt' => ['event_saved' => 'Evento guardado.', 'layout' => 'Administração agenda', 'title_required' => 'Título obrigatório.', 'form_title' => 'um evento', 'edit' => 'Editar', 'create' => 'Criar', 'title' => 'Título', 'slug' => 'Slug', 'summary' => 'Resumo', 'description' => 'Descrição', 'start' => 'Início', 'end' => 'Fim', 'location' => 'Local', 'external_url' => 'URL externa', 'type' => 'Tipo', 'status' => 'Estado', 'type_club' => 'Clube', 'type_contest' => 'Concurso', 'draft' => 'Rascunho', 'published' => 'Publicado', 'save' => 'Guardar', 'saved_events' => 'Eventos guardados', 'no_event' => 'Sem evento.', 'calendar_view' => 'Vista calendário', 'calendar_help' => 'Clique num evento para editar.', 'today' => 'Hoje', 'month' => 'Mês', 'week' => 'Semana', 'list' => 'Lista', 'meta_desc' => 'Gestão de eventos e calendário do site.'],
     'nl' => ['event_saved' => 'Evenement opgeslagen.', 'layout' => 'Agenda-beheer', 'title_required' => 'Titel is verplicht.', 'form_title' => 'een evenement', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'title' => 'Titel', 'slug' => 'Slug', 'summary' => 'Samenvatting', 'description' => 'Beschrijving', 'start' => 'Start', 'end' => 'Einde', 'location' => 'Locatie', 'external_url' => 'Externe URL', 'type' => 'Type', 'status' => 'Status', 'type_club' => 'Club', 'type_contest' => 'Wedstrijd', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'saved_events' => 'Opgeslagen evenementen', 'no_event' => 'Geen evenement.', 'calendar_view' => 'Kalenderweergave (FullCalendar)', 'calendar_help' => 'Klik op een evenement om de bewerking te openen.', 'today' => 'Vandaag', 'month' => 'Maand', 'week' => 'Week', 'list' => 'Lijst', 'meta_desc' => 'Beheer van evenementen en kalenderitems van de site.'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
+}
 
 set_page_meta([
     'title' => (string) $t['layout'],

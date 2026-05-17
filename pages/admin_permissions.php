@@ -19,7 +19,10 @@ $i18n = [
     'ru' => ['role_assigned' => 'Роль назначена.', 'role_removed' => 'Роль удалена.', 'title' => 'Роли и права', 'th_permission' => 'Право', 'th_label' => 'Метка', 'assign_role' => 'Назначить роль', 'member' => 'Участник', 'role' => 'Роль', 'assign' => 'Назначить', 'layout' => 'Роли и права', 'meta_desc' => 'Управление ролями и правами.', 'remove_role' => 'Удалить', 'assignments' => 'Назначения'],
     'id' => ['role_assigned' => 'Peran ditetapkan.', 'role_removed' => 'Peran dihapus.', 'title' => 'Peran dan izin', 'th_permission' => 'Izin', 'th_label' => 'Label', 'assign_role' => 'Tetapkan peran', 'member' => 'Anggota', 'role' => 'Peran', 'assign' => 'Tetapkan', 'layout' => 'Peran & izin', 'meta_desc' => 'Kelola peran dan izin.', 'remove_role' => 'Hapus', 'assignments' => 'Penetapan'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
+}
 set_page_meta(['title' => (string) $t['layout'], 'description' => (string) $t['meta_desc'], 'robots' => 'noindex,nofollow']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -538,7 +538,10 @@ $homeMessages = [
     ],
 
 ];
-$homeI18n = $homeMessages[$homeLocale] ?? $homeMessages['fr'];
+$homeI18n = [];
+foreach (array_keys($homeMessages['fr']) as $key) {
+    $homeI18n[$key] = i18n_localized_value($homeMessages, $homeLocale, $key);
+}
 $homeExtraMessages = [
     'fr' => [
         'journalist_title' => 'Vous êtes journaliste',
@@ -683,7 +686,9 @@ $homeExtraMessages = [
         'journalist_title' => 'É jornalista?', 'journalist_desc' => 'Aceda diretamente ao nosso dossier de imprensa para preparar publicações e reportagens.', 'journalist_cta' => 'Ver dossier de imprensa', 'teacher_title' => 'É professor?', 'teacher_desc' => 'Encontre os nossos recursos pedagógicos para atividades escolares e projetos educativos.', 'teacher_cta' => 'Ver recursos pedagógicos', 'join_title' => 'Pronto para se juntar a uma comunidade de rádio ativa e estruturada?', 'join_desc' => 'A nova página inicial destaca os módulos principais para encontrar rapidamente informação útil e participar nos projetos ON4CRD.', 'contact_title' => 'Contacte-nos', 'contact_name' => 'Nome', 'contact_email' => 'Email', 'contact_message' => 'Mensagem', 'contact_send' => 'Enviar', 'important_info_title' => 'Informações importantes', 'link_terms' => 'Condições gerais de utilização', 'link_legal' => 'Aviso legal', 'link_internal_rules' => 'Regulamento interno', 'link_donate' => 'Fazer um donativo', 'link_sponsoring' => 'Patrocínio', 'link_code_q' => 'Código Q', 'link_code_cw' => 'Código CW', 'link_bandplan_on3' => 'Plano de bandas ON3', 'link_bandplan_on2' => 'Plano de bandas ON2', 'link_bandplan_harec' => 'Plano de bandas HAREC', 'utc_datetime' => 'Data/hora UTC', 'local_datetime' => 'Data/hora local', 'hero_tagline' => 'ON4CRD · Ligar, experimentar, partilhar', 'ham_weather_aria' => 'Meteo radioamador', 'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode', 'quote_aria' => 'Citação em destaque', 'clock_aria' => 'Relógios UTC e local',
     ],
 ];
-$homeI18n = array_merge($homeI18n, $homeExtraMessages[$homeLocale] ?? $homeExtraMessages['fr']);
+foreach (array_keys($homeExtraMessages['fr']) as $key) {
+    $homeI18n[$key] = i18n_localized_value($homeExtraMessages, $homeLocale, $key);
+}
 $homeTodayDate = date('d/m/Y');
 
 $user = current_user();
@@ -707,7 +712,10 @@ $visibilityLabels = [
     'it' => ['public' => 'Pubblico', 'members' => 'Soci', 'admin' => 'Amministratori'],
     'pt' => ['public' => 'Público', 'members' => 'Membros', 'admin' => 'Administradores'],
 ];
-$moduleVisibilityLabels = $visibilityLabels[$homeLocale] ?? $visibilityLabels['fr'];
+$moduleVisibilityLabels = [];
+foreach (array_keys($visibilityLabels['fr']) as $key) {
+    $moduleVisibilityLabels[$key] = i18n_localized_value($visibilityLabels, $homeLocale, $key);
+}
 $moduleVisibilityByCode = [];
 if (table_exists('modules')) {
     foreach (db()->query('SELECT code, visibility FROM modules')->fetchAll() as $moduleRow) {
@@ -728,9 +736,9 @@ foreach ($moduleCatalog as $module) {
     }
 
     $activeModules[] = $module;
-    $moduleTitle = is_array($module['title'] ?? null) ? (string) (($module['title'][$homeLocale] ?? $module['title']['fr'] ?? '')) : (string) ($module['title'] ?? '');
-    $moduleDesc = is_array($module['desc'] ?? null) ? (string) (($module['desc'][$homeLocale] ?? $module['desc']['fr'] ?? '')) : (string) ($module['desc'] ?? '');
-    $moduleAudience = is_array($module['audience'] ?? null) ? (string) (($module['audience'][$homeLocale] ?? $module['audience']['fr'] ?? '')) : (string) ($module['audience'] ?? '');
+    $moduleTitle = is_array($module['title'] ?? null) ? i18n_localized_value((array) $module['title'], $homeLocale, 'fr') : (string) ($module['title'] ?? '');
+    $moduleDesc = is_array($module['desc'] ?? null) ? i18n_localized_value((array) $module['desc'], $homeLocale, 'fr') : (string) ($module['desc'] ?? '');
+    $moduleAudience = is_array($module['audience'] ?? null) ? i18n_localized_value((array) $module['audience'], $homeLocale, 'fr') : (string) ($module['audience'] ?? '');
     $moduleAudienceCode = (string) ($module['code'] ?? $module['module'] ?? '');
     $configuredVisibility = (string) ($moduleVisibilityByCode[$moduleAudienceCode] ?? '');
     if ($configuredVisibility !== '') {
@@ -738,7 +746,7 @@ foreach ($moduleCatalog as $module) {
     } elseif ($moduleAudience === '') {
         $moduleAudience = (string) ($moduleVisibilityLabels['members'] ?? 'Membres');
     }
-    $moduleIcon = is_array($module['icon'] ?? null) ? (string) (($module['icon'][$homeLocale] ?? $module['icon']['fr'] ?? '📦')) : (string) ($module['icon'] ?? '📦');
+    $moduleIcon = is_array($module['icon'] ?? null) ? i18n_localized_value((array) $module['icon'], $homeLocale, '📦') : (string) ($module['icon'] ?? '📦');
 
     $moduleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $module['route'])) . '">'
         . '<div class="flex items-center justify-between gap-3">'
@@ -779,10 +787,10 @@ if (table_exists('modules')) {
         $moduleMeta = $memberModuleDefinitions[$moduleCode];
         $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url((string) $moduleMeta['route'])) . '">' 
             . '<div class="flex items-center justify-between gap-3">'
-            . '<h3 class="text-lg font-semibold text-slate-900">' . e((string) (($moduleMeta['title'][$homeLocale] ?? $moduleMeta['title']['fr'] ?? $moduleCode))) . '</h3>'
+            . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
             . '<span class="text-xl" aria-hidden="true">' . e((string) ($moduleMeta['icon'] ?? '📦')) . '</span>'
             . '</div>'
-            . '<p class="mt-2 text-sm text-slate-600">' . e((string) (($moduleMeta['desc'][$homeLocale] ?? $moduleMeta['desc']['fr'] ?? ''))) . '</p>'
+            . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
             . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
             . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
             . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'

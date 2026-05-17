@@ -11,7 +11,10 @@ $i18n = [
     'pt' => ['not_found' => 'Evento não encontrado', 'not_found_msg' => 'O evento solicitado não está disponível.', 'back' => '← Voltar ao calendário', 'summary_fallback' => 'Encontre todas as informações úteis sobre este evento.', 'start' => 'Início', 'end' => 'Fim', 'location' => 'Local', 'tbd' => 'A confirmar', 'site' => 'Site do evento', 'title' => 'Evento'],
     'nl' => ['not_found' => 'Evenement niet gevonden', 'not_found_msg' => 'Het gevraagde evenement is niet beschikbaar.', 'back' => '← Terug naar kalender', 'summary_fallback' => 'Vind alle nuttige informatie over dit evenement.', 'start' => 'Start', 'end' => 'Einde', 'location' => 'Locatie', 'tbd' => 'Nog te bevestigen', 'site' => 'Evenementwebsite', 'title' => 'Evenement'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+}
 
 $slug = trim((string) ($_GET['slug'] ?? ''));
 if ($slug === '' || !table_exists('events')) {

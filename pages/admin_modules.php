@@ -14,7 +14,10 @@ $i18n = [
     'nl' => ['updated' => 'Modules bijgewerkt.', 'title' => 'Modules', 'core' => 'Kern', 'enabled' => 'Ingeschakeld', 'visibility' => 'Zichtbaarheid', 'public' => 'Openbaar', 'members' => 'Leden', 'admin' => 'Beheerders', 'save' => 'Opslaan', 'layout' => 'Modules', 'meta_desc' => 'Beheer van activatie en zichtbaarheid van sitemodules.'],
 ];
 
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
+}
 
 set_page_meta([
     'title' => (string) $t['layout'],

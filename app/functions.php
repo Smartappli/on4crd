@@ -101,6 +101,58 @@ function table_exists(string $table): bool
     return $cache[$normalized];
 }
 
+if (!function_exists('supported_locales')) {
+function supported_locales(): array
+{
+    return ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+}
+}
+
+if (!function_exists('locale_fallback_chain')) {
+function locale_fallback_chain(?string $locale = null): array
+{
+    $requested = strtolower(trim((string) ($locale ?? current_locale())));
+    $requested = str_replace('_', '-', $requested);
+    $normalized = $requested;
+    if (str_contains($requested, '-')) {
+        $normalized = (string) explode('-', $requested, 2)[0];
+    }
+
+    $chain = [];
+    foreach ([$requested, $normalized, 'en', 'fr'] as $candidate) {
+        if ($candidate === '' || in_array($candidate, $chain, true) || !in_array($candidate, supported_locales(), true)) {
+            continue;
+        }
+        $chain[] = $candidate;
+    }
+
+    return $chain === [] ? ['fr'] : $chain;
+}
+}
+
+if (!function_exists('i18n_localized_value')) {
+function i18n_localized_value(array $localized, ?string $locale = null, string $default = 'fr'): string
+{
+    foreach (locale_fallback_chain($locale) as $candidateLocale) {
+        if (isset($localized[$candidateLocale]) && is_string($localized[$candidateLocale]) && $localized[$candidateLocale] !== '') {
+            return $localized[$candidateLocale];
+        }
+    }
+
+    if (isset($localized[$default]) && is_string($localized[$default])) {
+        return $localized[$default];
+    }
+
+    foreach ($localized as $value) {
+        if (is_string($value) && $value !== '') {
+            return $value;
+        }
+    }
+
+    return '';
+}
+}
+
 if (!function_exists('current_locale')) {
 function current_locale(): string
 {
@@ -109,8 +161,18 @@ function current_locale(): string
         return $resolvedLocale;
     }
 
-    $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($locale, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
+    $locale = strtolower((string) ($_SESSION['locale'] ?? ''));
+    if ($locale === '') {
+        $acceptLanguage = strtolower((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''));
+        if ($acceptLanguage !== '') {
+            $raw = trim((string) explode(',', $acceptLanguage, 2)[0]);
+            $locale = str_replace('_', '-', $raw);
+        }
+    }
+    if (!in_array($locale, supported_locales(), true) && str_contains($locale, '-')) {
+        $locale = (string) explode('-', $locale, 2)[0];
+    }
+    if (!in_array($locale, supported_locales(), true)) {
         $resolvedLocale = 'fr';
         return $resolvedLocale;
     }
@@ -123,10 +185,7 @@ function current_locale(): string
 if (!function_exists('t_page')) {
 function t_page(string $domain, string $key, ?string $locale = null): string
 {
-    $lang = $locale !== null ? strtolower(trim($locale)) : current_locale();
-    if (!in_array($lang, ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
-        $lang = 'fr';
-    }
+    $fallbackChain = locale_fallback_chain($locale);
 
     static $messages = null;
     if (!is_array($messages)) {
@@ -213,8 +272,8 @@ function t_page(string $domain, string $key, ?string $locale = null): string
         ],
 
         'es' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
+            'nav_home' => 'Inicio', 'nav_news' => 'Noticias', 'nav_shop' => 'Tienda', 'nav_events' => 'Eventos', 'nav_tools' => 'Herramientas', 'nav_directory' => 'Directorio',
+            'nav_dashboard' => 'Panel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galería', 'nav_articles' => 'Artículos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Subastas',
             'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
             'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Rojo', 'accent_amber' => 'Ámbar', 'accent_orange' => 'Naranja',
@@ -224,8 +283,8 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Annunci', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
+            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
             'accent_blue' => 'Blu', 'accent_emerald' => 'Smeraldo', 'accent_violet' => 'Viola', 'accent_red' => 'Rosso', 'accent_amber' => 'Ambra', 'accent_orange' => 'Arancione',
@@ -235,8 +294,8 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
         ],
         'pt' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
+            'nav_home' => 'Início', 'nav_news' => 'Notícias', 'nav_shop' => 'Loja', 'nav_events' => 'Eventos', 'nav_tools' => 'Ferramentas', 'nav_directory' => 'Diretório',
+            'nav_dashboard' => 'Painel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeria', 'nav_articles' => 'Artigos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Leilões',
             'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
             'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Vermelho', 'accent_amber' => 'Âmbar', 'accent_orange' => 'Laranja',
@@ -2146,8 +2205,8 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Zoeken op de site', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
         'es' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
+            'nav_home' => 'Inicio', 'nav_news' => 'Noticias', 'nav_shop' => 'Tienda', 'nav_events' => 'Eventos', 'nav_tools' => 'Herramientas', 'nav_directory' => 'Directorio',
+            'nav_dashboard' => 'Panel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galería', 'nav_articles' => 'Artículos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Subastas',
             'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
             'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Rojo', 'accent_amber' => 'Ámbar', 'accent_orange' => 'Naranja',
@@ -2157,8 +2216,8 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Saltar al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Annunci', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
+            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
             'accent_blue' => 'Blu', 'accent_emerald' => 'Smeraldo', 'accent_violet' => 'Viola', 'accent_red' => 'Rosso', 'accent_amber' => 'Ambra', 'accent_orange' => 'Arancione',
@@ -2168,8 +2227,8 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
         ],
         'pt' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
+            'nav_home' => 'Início', 'nav_news' => 'Notícias', 'nav_shop' => 'Loja', 'nav_events' => 'Eventos', 'nav_tools' => 'Ferramentas', 'nav_directory' => 'Diretório',
+            'nav_dashboard' => 'Painel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeria', 'nav_articles' => 'Artigos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Leilões',
             'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
             'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
             'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Vermelho', 'accent_amber' => 'Âmbar', 'accent_orange' => 'Laranja',
@@ -5782,7 +5841,18 @@ function admin_dashboard_translations(string $locale): array
         'pt' => ['layout' => 'Administração', 'title' => 'Administração centralizada', 'lead' => 'Todos os módulos e ferramentas de administração estão agrupados neste painel único.', 'search_label' => 'Pesquisa rápida', 'search_placeholder' => 'Módulo, ferramenta, descrição…', 'search_cta' => 'Filtrar', 'search_reset' => 'Repor', 'empty' => 'Nenhum módulo corresponde à sua pesquisa.'],
     ];
 
-    return $i18n[$locale] ?? $i18n['fr'];
+    $resolved = [];
+    foreach (array_keys($i18n['fr']) as $key) {
+        $pool = [];
+        foreach ($i18n as $lang => $translations) {
+            if (isset($translations[$key]) && is_string($translations[$key])) {
+                $pool[$lang] = $translations[$key];
+            }
+        }
+        $resolved[$key] = i18n_localized_value($pool, $locale, 'fr');
+    }
+
+    return $resolved;
 }
 
 /**
@@ -5800,7 +5870,6 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_press', 'title' => ['fr' => 'Presse', 'en' => 'Press', 'de' => 'Presse', 'nl' => 'Pers'], 'desc' => ['fr' => 'Contacts presse, communiqués datés et documents téléchargeables.', 'en' => 'Press contacts, dated releases and downloadable documents.', 'de' => 'Pressekontakte, datierte Mitteilungen und Downloads.', 'nl' => 'Perscontacten, gedateerde berichten en downloads.'], 'module' => 'press'],
         ['route' => 'admin_events', 'title' => ['fr' => 'Agenda', 'en' => 'Agenda', 'de' => 'Agenda', 'nl' => 'Agenda'], 'desc' => ['fr' => 'Événements du club et contests locaux affichés dans les widgets live.', 'en' => 'Club events and local contests shown in live widgets.', 'de' => 'Clubveranstaltungen und lokale Contests in Live-Widgets.', 'nl' => 'Clubevenementen en lokale contests in live widgets.'], 'module' => 'events'],
         ['route' => 'admin_dinner_reservations', 'title' => ['fr' => 'Dîner annuel', 'en' => 'Annual dinner', 'de' => 'Jahresessen', 'nl' => 'Jaarlijks diner'], 'desc' => ['fr' => 'Réservations, lignes repas/dessert, quantités et total automatique.', 'en' => 'Reservations, meal/dessert lines, quantities and auto total.', 'de' => 'Reservierungen, Menüzeilen, Mengen und automatische Summe.', 'nl' => 'Reservaties, maaltijdregels, aantallen en automatisch totaal.'], 'module' => 'events', 'permission' => 'events.manage'],
-        ['route' => 'admin_classifieds', 'title' => ['fr' => 'Petites annonces', 'en' => 'Classifieds', 'de' => 'Kleinanzeigen', 'nl' => 'Kleine advertenties'], 'desc' => ['fr' => 'Gestion et modération des annonces.', 'en' => 'Manage and moderate classifieds.', 'de' => 'Kleinanzeigen verwalten und moderieren.', 'nl' => 'Kleine advertenties beheren en modereren.'], 'module' => 'classifieds', 'permission' => 'ads.moderate'],
         ['route' => 'admin_auctions', 'title' => ['fr' => 'Enchères', 'en' => 'Auctions', 'de' => 'Auktionen', 'nl' => 'Veilingen'], 'desc' => ['fr' => 'Lots, planification, offres et clôture.', 'en' => 'Lots, scheduling, bids and closing.', 'de' => 'Lose, Planung, Gebote und Abschluss.', 'nl' => 'Kavels, planning, biedingen en afsluiting.'], 'module' => 'auctions', 'permission' => 'auctions.manage'],
         ['route' => 'admin_editorial', 'title' => ['fr' => 'Éditorial multilingue', 'en' => 'Multilingual editorial', 'de' => 'Mehrsprachige Redaktion', 'nl' => 'Meertalige redactie'], 'desc' => ['fr' => 'Français source, traduction auto EN/DE/NL et relecture manuelle.', 'en' => 'French source, EN/DE/NL auto translation and manual review.', 'de' => 'Französische Quelle, automatische Übersetzung und Review.', 'nl' => 'Franse bron, automatische vertaling en manuele review.']],
         ['route' => 'admin_translation_reviews', 'title' => ['fr' => 'Relecture linguistique', 'en' => 'Translation reviews', 'de' => 'Sprachliche Prüfung', 'nl' => 'Taalreview'], 'desc' => ['fr' => 'Workflow de validation des traductions des actualités et articles.', 'en' => 'Validation workflow for news/article translations.', 'de' => 'Freigabe-Workflow für News-/Artikelübersetzungen.', 'nl' => 'Validatieworkflow voor vertalingen van nieuws/artikels.']],
@@ -5832,7 +5901,6 @@ function admin_dashboard_cards(string $locale, int $userId, string $search = '')
 function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
 {
     return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . md5($searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
-        $catalogLocale = in_array($locale, ['es', 'it', 'pt'], true) ? 'en' : $locale;
         $cards = [];
         foreach (admin_module_cards_catalog() as $card) {
             $module = (string) ($card['module'] ?? '');
@@ -5843,8 +5911,8 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
             if ($permission !== '' && !has_permission($permission)) {
                 continue;
             }
-            $title = (string) ($card['title'][$catalogLocale] ?? $card['title']['fr']);
-            $desc = (string) ($card['desc'][$catalogLocale] ?? $card['desc']['fr']);
+            $title = i18n_localized_value($card['title'], $locale, 'fr');
+            $desc = i18n_localized_value($card['desc'], $locale, 'fr');
             if ($searchNeedle !== '') {
                 $haystack = mb_safe_strtolower($title . ' ' . $desc);
                 if (!str_contains($haystack, $searchNeedle)) {

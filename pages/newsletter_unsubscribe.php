@@ -20,7 +20,7 @@ $i18n = [
     'id' => ['title' => 'Berhenti berlangganan newsletter', 'desc' => 'Konfirmasi berhenti berlangganan newsletter ON4CRD.', 'heading' => 'Newsletter', 'ok' => 'Permintaan berhenti berlangganan Anda telah diproses.', 'invalid' => 'Tautan tidak valid atau sudah digunakan.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+    return i18n_localized_value($i18n, $locale, $key);
 };
 
 set_page_meta([

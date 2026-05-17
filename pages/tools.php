@@ -3,17 +3,19 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/tools.php';
-$t = $i18n[$locale] ?? $i18n['fr'];
-$tr = static function (string $key, string $fallback = '') use ($t, $i18n): string {
-    $local = isset($t[$key]) ? trim((string) $t[$key]) : '';
-    if ($local !== '') {
-        return $local;
-    }
-
-    $french = isset($i18n['fr'][$key]) ? trim((string) $i18n['fr'][$key]) : '';
-    if ($french !== '') {
-        return $french;
-    }
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+}
+$labelCategoryAntenna = (string) ($t['category_antenna'] ?? 'Antenna & propagation');
+$labelQuarterWaveCalc = (string) ($t['quarter_wave_calc'] ?? 'Quarter-wave length');
+$labelErpCalc = (string) ($t['erp_calc'] ?? 'Estimated ERP');
+$labelTxPowerW = (string) ($t['tx_power_w'] ?? 'TX power (W)');
+$labelFeedlineLossDb = (string) ($t['feedline_loss_db'] ?? 'Feedline loss (dB)');
+$labelAntennaGainDbd = (string) ($t['antenna_gain_dbd'] ?? 'Antenna gain (dBd)');
+$labelErpResult = (string) ($t['erp_result'] ?? 'Estimated ERP');
+$labelQuarterWaveResult = (string) ($t['quarter_wave_result'] ?? 'Estimated length');
+$labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)');
 
     return trim($fallback);
 };

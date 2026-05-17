@@ -13,7 +13,7 @@ $i18n = [
     'pt' => ['ok_saved' => 'Artigo guardado.', 'err_invalid_category' => 'Categoria inválida.', 'ok_category_updated' => 'Categoria atualizada.', 'err_delete_category' => 'Não é possível eliminar esta categoria.', 'ok_category_deleted' => 'Categoria eliminada (artigos movidos para a categoria padrão).', 'edit' => 'Editar', 'create' => 'Criar', 'an_article' => 'um artigo', 'title' => 'Título', 'slug' => 'Slug', 'category' => 'Categoria', 'new_category' => 'Nova categoria…', 'new_category_id' => 'Nova categoria (identificador)', 'import_document' => 'Importar um documento (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Resumo', 'content_simple_html' => 'Conteúdo (HTML simples)', 'status' => 'Estado', 'draft' => 'Rascunho', 'published' => 'Publicado', 'save' => 'Guardar', 'existing_articles' => 'Artigos existentes', 'category_label' => 'Categoria:', 'category_edit' => 'Editar categorias', 'code' => 'Código', 'label' => 'Etiqueta', 'rename_code' => 'Renomear código', 'delete_to_other' => 'Eliminar (para categoria padrão)', 'no_articles' => 'Sem artigos.', 'custom_category_ph' => 'ex.: propagacao-vhf', 'cat_antennes' => 'Antenas', 'cat_trafic' => 'Tráfego e DX', 'cat_numerique' => 'Modos digitais', 'cat_materiel' => 'Equipamento e estação', 'cat_formation' => 'Formação', 'cat_autres' => 'Outros', 'layout' => 'Artigos', 'meta_desc' => 'Administração e publicação de artigos do site.'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+    return i18n_localized_value($i18n, $locale, $key);
 };
 set_page_meta([
     'title' => $t('layout'),
@@ -33,7 +33,10 @@ function import_article_document(array $file): array
         'de' => ['upload_failed' => 'Dokument-Upload fehlgeschlagen.', 'allowed_formats' => 'Erlaubte Formate: PDF, DOCX, TXT, MD oder HTML.', 'invalid_doc' => 'Ungültiges importiertes Dokument.', 'create_dir' => 'Speicherverzeichnis für Artikel kann nicht erstellt werden.', 'save_doc' => 'Importiertes Dokument konnte nicht gespeichert werden.', 'imported_doc' => 'Importiertes Dokument:', 'imported_docx' => 'Importiertes DOCX-Dokument:'],
         'nl' => ['upload_failed' => 'Upload van document mislukt.', 'allowed_formats' => 'Toegestane formaten: PDF, DOCX, TXT, MD of HTML.', 'invalid_doc' => 'Ongeldig geïmporteerd document.', 'create_dir' => 'Kan opslagmap voor artikelen niet maken.', 'save_doc' => 'Kan geïmporteerd document niet opslaan.', 'imported_doc' => 'Geïmporteerd document:', 'imported_docx' => 'Geïmporteerd DOCX-document:'],
     ];
-    $tm = $msg[$locale] ?? $msg['fr'];
+    $tm = [];
+    foreach (array_keys($msg['fr']) as $key) {
+        $tm[$key] = i18n_localized_value($msg, $locale, $key);
+    }
     $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
     if ($error === UPLOAD_ERR_NO_FILE) {
         return ['excerpt' => '', 'content' => ''];
