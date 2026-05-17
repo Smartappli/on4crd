@@ -5,7 +5,11 @@ $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/tools.php';
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
-    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+    $value = trim(i18n_localized_value($i18n, $locale, $key));
+    if ($value === '') {
+        $value = trim((string) ($i18n['fr'][$key] ?? ''));
+    }
+    $t[$key] = $value;
 }
 $tr = static function (string $key, string $fallback = '') use ($t): string {
     if (array_key_exists($key, $t)) {

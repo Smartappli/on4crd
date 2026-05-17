@@ -540,7 +540,11 @@ $homeMessages = [
 ];
 $homeI18n = [];
 foreach (array_keys($homeMessages['fr']) as $key) {
-    $homeI18n[$key] = i18n_localized_value($homeMessages, $homeLocale, $key);
+    $value = trim(i18n_localized_value($homeMessages, $homeLocale, $key));
+    if ($value === '') {
+        $value = trim((string) ($homeMessages['fr'][$key] ?? ''));
+    }
+    $homeI18n[$key] = $value;
 }
 $homeExtraMessages = [
     'fr' => [
@@ -687,7 +691,11 @@ $homeExtraMessages = [
     ],
 ];
 foreach (array_keys($homeExtraMessages['fr']) as $key) {
-    $homeI18n[$key] = i18n_localized_value($homeExtraMessages, $homeLocale, $key);
+    $value = trim(i18n_localized_value($homeExtraMessages, $homeLocale, $key));
+    if ($value === '') {
+        $value = trim((string) ($homeExtraMessages['fr'][$key] ?? ''));
+    }
+    $homeI18n[$key] = $value;
 }
 $homeTodayDate = date('d/m/Y');
 
