@@ -210,7 +210,8 @@ ob_start();
                 <option value=""><?= e((string) $newsT['all_categories']) ?></option>
                 <?php foreach ($categories as $category): ?>
                     <?php $slug = (string) ($category['slug'] ?? ''); ?>
-                    <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e((string) ($category['name'] ?? (string) $newsT['category'])) ?></option>
+                    <?php $categoryName = trim((string) ($category['name'] ?? '')); if ($categoryName === '') { $categoryName = (string) $newsT['category']; } ?>
+                    <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e($categoryName) ?></option>
                 <?php endforeach; ?>
             </select>
         </label>
