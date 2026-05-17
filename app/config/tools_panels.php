@@ -33,6 +33,8 @@ return [
     'tool-dipole' => 'tool_dipole.php',
     'tool-ohm-law' => 'tool_ohm_law.php',
     'tool-link-budget' => 'tool_link_budget.php',
+    'tool-dbuv-sunit' => 'tool_dbuv_sunit.php',
+    'tool-sunit-dbuv' => 'tool_sunit_dbuv.php',
     'tool-rps-rpm' => 'tool_rps_rpm.php',
     'tool-rpm-rps' => 'tool_rpm_rps.php',
     'tool-s-ms' => 'tool_s_ms.php',

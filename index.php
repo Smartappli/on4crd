@@ -165,10 +165,6 @@ $routeModules = [
     'schools' => 'education',
     'events' => 'events',
     'event_view' => 'events',
-    'shop' => 'shop',
-    'shop_product' => 'shop',
-    'shop_cart' => 'shop',
-    'shop_checkout' => 'shop',
     'auctions' => 'auctions',
     'auction_view' => 'auctions',
     'auction_bid' => 'auctions',
@@ -186,7 +182,9 @@ $routeModules = [
     'wiki_view' => 'wiki',
     'albums' => 'albums',
     'album' => 'albums',
+    'classifieds' => 'classifieds',
     'ads' => 'advertising',
+    'admin_classifieds' => 'classifieds',
     'admin_ads' => 'advertising',
     'ad_click' => 'advertising',
     'admin' => 'admin',
@@ -205,7 +203,6 @@ $routeModules = [
     'admin_events' => 'admin',
     'admin_dinner_reservations' => 'admin',
     'admin_dashboard' => 'admin',
-    'admin_shop' => 'admin',
     'admin_auctions' => 'admin',
     'settings' => 'members',
     'code_q' => 'members',
@@ -219,7 +216,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'shop', 'shop_product', 'shop_cart', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'install.php'];
+$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'classifieds', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -270,11 +267,8 @@ switch ($route) {
     case 'events': $dispatchPage('pages/events.php'); break;
     case 'events_feed': $dispatchPage('pages/events_feed.php'); break;
     case 'event_view': $dispatchPage('pages/event_view.php'); break;
-    case 'shop': $dispatchPage('pages/shop.php'); break;
-    case 'shop_product': $dispatchPage('pages/shop_product.php'); break;
-    case 'shop_cart': $dispatchPage('pages/shop_cart.php'); break;
-    case 'shop_checkout': $dispatchPage('pages/shop_checkout.php'); break;
     case 'auctions': $dispatchPage('pages/auctions.php'); break;
+    case 'classifieds': $dispatchPage('pages/classifieds.php'); break;
     case 'auction_view': $dispatchPage('pages/auction_view.php'); break;
     case 'auction_bid': $dispatchPage('pages/auction_bid.php'); break;
     case 'qsl': $dispatchPage('pages/qsl.php'); break;
@@ -312,8 +306,8 @@ switch ($route) {
     case 'admin_events': $dispatchPage('pages/admin_events.php'); break;
     case 'admin_dinner_reservations': $dispatchPage('pages/admin_dinner_reservations.php'); break;
     case 'admin_dashboard': $dispatchPage('pages/admin_dashboard.php'); break;
-    case 'admin_shop': $dispatchPage('pages/admin_shop.php'); break;
     case 'admin_auctions': $dispatchPage('pages/admin_auctions.php'); break;
+    case 'admin_classifieds': $dispatchPage('pages/admin_classifieds.php'); break;
     case 'settings': $dispatchPage('pages/settings.php'); break;
     case 'code_q': $dispatchPage('pages/code_q.php'); break;
     case 'code_cw': $dispatchPage('pages/code_cw.php'); break;

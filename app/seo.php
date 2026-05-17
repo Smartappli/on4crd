@@ -129,8 +129,6 @@ function seo_route_should_noindex(string $route): bool
         'profile',
         'newsletter',
         'newsletter_unsubscribe',
-        'shop_cart',
-        'shop_checkout',
         'auction_bid',
         'qsl',
         'qsl_preview',
@@ -150,7 +148,6 @@ function seo_route_should_noindex(string $route): bool
         'admin_translation_reviews',
         'admin_live_feeds',
         'admin_events',
-        'admin_shop',
         'admin_auctions',
         'admin_ads',
     ];
@@ -176,8 +173,6 @@ function seo_apply_defaults(string $route): void
         'wiki_view' => ['title' => 'Page wiki', 'description' => 'Consultez une page de la base de connaissances ON4CRD.'],
         'albums' => ['title' => 'Galerie photo', 'description' => 'Albums photo des activités et événements du Radio Club Durnal.'],
         'album' => ['title' => 'Album photo', 'description' => 'Parcourez un album photo publié par le club ON4CRD.'],
-        'shop' => ['title' => 'Boutique du club', 'description' => 'Catalogue des produits du club ON4CRD : textile, accessoires et documentation.'],
-        'shop_product' => ['title' => 'Produit boutique', 'description' => 'Fiche produit de la boutique ON4CRD avec disponibilité et informations utiles.'],
         'auctions' => ['title' => 'Enchères radioamateur', 'description' => 'Découvrez les enchères de matériel radio proposées sur l’espace membres ON4CRD.'],
         'auction_view' => ['title' => 'Détail enchère', 'description' => 'Consultez les détails d’une enchère et les informations du lot proposé.'],
         'directory' => ['title' => 'Annuaire', 'description' => 'Annuaire des membres et contacts utiles du Radio Club Durnal ON4CRD.'],
@@ -216,10 +211,6 @@ function seo_apply_defaults(string $route): void
     if (in_array($route, ['article', 'news_view'], true)) {
         $meta['og_type'] = 'article';
         $meta['schema_type'] = 'Article';
-    }
-
-    if ($route === 'shop_product') {
-        $meta['schema_type'] = 'Product';
     }
 
     set_page_meta(array_merge($meta, $routeSpecificMeta));

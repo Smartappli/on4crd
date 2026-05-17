@@ -42,6 +42,8 @@ return [
         ['id' => 'tool-s-ms', 'title_key' => 's_ms_calc'],
         ['id' => 'tool-rpm-rps', 'title_key' => 'rpm_rps_calc'],
         ['id' => 'tool-rps-rpm', 'title_key' => 'rps_rpm_calc'],
+        ['id' => 'tool-sunit-dbuv', 'title_key' => 'sunit_dbuv_calc'],
+        ['id' => 'tool-dbuv-sunit', 'title_key' => 'dbuv_sunit_calc'],
     ],
     'antenna' => [
         ['id' => 'tool-quarter-wave', 'title_key' => 'quarter_wave_calc'],
