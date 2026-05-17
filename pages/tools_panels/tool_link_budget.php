@@ -1,5 +1,5 @@
-<article id="tool-link-budget" data-tool-panel class="card is-hidden">
-    <h3><?= e((string) ($t['link_budget_calc'] ?? 'Link budget')) ?></h3>
+<article id="tool-link-budget" data-tool-panel class="card tool-panel is-hidden">
+    <h2><?= e((string) ($t['link_budget_calc'] ?? 'Link budget')) ?></h2>
     <p class="help"><?= e((string) ($t['link_budget_help'] ?? 'Received power: Prx = Ptx + Gtx + Grx - losses.')) ?></p>
     <div class="grid-auto">
         <label><?= e((string) ($t['tx_power_dbm'] ?? 'Ptx (dBm)')) ?>

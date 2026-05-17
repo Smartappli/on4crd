@@ -9,7 +9,7 @@ return [
     'conversion' => [
         ['id' => 'tool-freq-wave', 'title_pattern' => 'conv_dot', 'left_key' => 'conv', 'right_key' => 'freq_wave'],
         ['id' => 'tool-power', 'title_pattern' => 'conv_dot', 'left_key' => 'conv', 'right_key' => 'power'],
-        ['id' => 'tool-unit-conversions', 'title' => 'Conversion d’unités'],
+        ['id' => 'tool-unit-conversions', 'title_key' => 'unit_conv_title'],
         ['id' => 'tool-filter', 'title_key' => 'filter_calc'],
         ['id' => 'tool-balun', 'title_key' => 'balun_calc'],
         ['id' => 'tool-swr', 'title_key' => 'swr_calc'],

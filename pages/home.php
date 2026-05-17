@@ -538,9 +538,29 @@ $homeMessages = [
     ],
 
 ];
+
+$requiredHomeLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+foreach ($requiredHomeLocales as $requiredLocale) {
+    if (!isset($homeMessages[$requiredLocale]) || !is_array($homeMessages[$requiredLocale])) {
+        $homeMessages[$requiredLocale] = $homeMessages['fr'];
+        continue;
+    }
+    foreach ($homeMessages['fr'] as $msgKey => $msgValue) {
+        if (!isset($homeMessages[$requiredLocale][$msgKey]) || !is_string($homeMessages[$requiredLocale][$msgKey]) || trim((string) $homeMessages[$requiredLocale][$msgKey]) === '') {
+            $homeMessages[$requiredLocale][$msgKey] = (string) $msgValue;
+        }
+    }
+}
+
 $homeI18n = [];
 foreach (array_keys($homeMessages['fr']) as $key) {
-    $value = trim(i18n_localized_value($homeMessages, $homeLocale, $key));
+    $pool = [];
+    foreach ($homeMessages as $lang => $messages) {
+        if (isset($messages[$key]) && is_string($messages[$key])) {
+            $pool[$lang] = $messages[$key];
+        }
+    }
+    $value = trim(i18n_localized_value($pool, $homeLocale, 'fr'));
     if ($value === '') {
         $value = trim((string) ($homeMessages['fr'][$key] ?? ''));
     }
@@ -690,8 +710,27 @@ $homeExtraMessages = [
         'journalist_title' => 'É jornalista?', 'journalist_desc' => 'Aceda diretamente ao nosso dossier de imprensa para preparar publicações e reportagens.', 'journalist_cta' => 'Ver dossier de imprensa', 'teacher_title' => 'É professor?', 'teacher_desc' => 'Encontre os nossos recursos pedagógicos para atividades escolares e projetos educativos.', 'teacher_cta' => 'Ver recursos pedagógicos', 'join_title' => 'Pronto para se juntar a uma comunidade de rádio ativa e estruturada?', 'join_desc' => 'A nova página inicial destaca os módulos principais para encontrar rapidamente informação útil e participar nos projetos ON4CRD.', 'contact_title' => 'Contacte-nos', 'contact_name' => 'Nome', 'contact_email' => 'Email', 'contact_message' => 'Mensagem', 'contact_send' => 'Enviar', 'important_info_title' => 'Informações importantes', 'link_terms' => 'Condições gerais de utilização', 'link_legal' => 'Aviso legal', 'link_internal_rules' => 'Regulamento interno', 'link_donate' => 'Fazer um donativo', 'link_sponsoring' => 'Patrocínio', 'link_code_q' => 'Código Q', 'link_code_cw' => 'Código CW', 'link_bandplan_on3' => 'Plano de bandas ON3', 'link_bandplan_on2' => 'Plano de bandas ON2', 'link_bandplan_harec' => 'Plano de bandas HAREC', 'utc_datetime' => 'Data/hora UTC', 'local_datetime' => 'Data/hora local', 'hero_tagline' => 'ON4CRD · Ligar, experimentar, partilhar', 'ham_weather_aria' => 'Meteo radioamador', 'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode', 'quote_aria' => 'Citação em destaque', 'clock_aria' => 'Relógios UTC e local',
     ],
 ];
+
+foreach ($requiredHomeLocales as $requiredLocale) {
+    if (!isset($homeExtraMessages[$requiredLocale]) || !is_array($homeExtraMessages[$requiredLocale])) {
+        $homeExtraMessages[$requiredLocale] = $homeExtraMessages['fr'];
+        continue;
+    }
+    foreach ($homeExtraMessages['fr'] as $msgKey => $msgValue) {
+        if (!isset($homeExtraMessages[$requiredLocale][$msgKey]) || !is_string($homeExtraMessages[$requiredLocale][$msgKey]) || trim((string) $homeExtraMessages[$requiredLocale][$msgKey]) === '') {
+            $homeExtraMessages[$requiredLocale][$msgKey] = (string) $msgValue;
+        }
+    }
+}
+
 foreach (array_keys($homeExtraMessages['fr']) as $key) {
-    $value = trim(i18n_localized_value($homeExtraMessages, $homeLocale, $key));
+    $pool = [];
+    foreach ($homeExtraMessages as $lang => $messages) {
+        if (isset($messages[$key]) && is_string($messages[$key])) {
+            $pool[$lang] = $messages[$key];
+        }
+    }
+    $value = trim(i18n_localized_value($pool, $homeLocale, 'fr'));
     if ($value === '') {
         $value = trim((string) ($homeExtraMessages['fr'][$key] ?? ''));
     }
