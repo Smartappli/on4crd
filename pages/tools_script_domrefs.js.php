@@ -89,6 +89,12 @@
     let lbGrx = null;
     let lbLoss = null;
     let lbPrx = null;
+    let xlFreq = null;
+    let xlInductance = null;
+    let xlResult = null;
+    let xcFreq = null;
+    let xcCapacitance = null;
+    let xcResult = null;
 
     const refreshDomRefs = () => {
         form = document.getElementById('grid-tool-form');
@@ -182,6 +188,12 @@
         lbGrx = document.getElementById('lb-grx');
         lbLoss = document.getElementById('lb-loss');
         lbPrx = document.getElementById('lb-prx');
+        xlFreq = document.getElementById('xl-freq');
+        xlInductance = document.getElementById('xl-inductance');
+        xlResult = document.getElementById('xl-result');
+        xcFreq = document.getElementById('xc-freq');
+        xcCapacitance = document.getElementById('xc-capacitance');
+        xcResult = document.getElementById('xc-result');
     };
 
     refreshDomRefs();

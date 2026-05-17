@@ -1,3 +1,67 @@
+
+    const simpleToolConverters = {
+        'tool-vpp-vrms': (x) => x / (2 * Math.sqrt(2)),
+        'tool-vrms-vpp': (x) => x * (2 * Math.sqrt(2)),
+        'tool-vpk-vrms': (x) => x / Math.sqrt(2),
+        'tool-kw-w': (x) => x * 1000,
+        'tool-w-kw': (x) => x / 1000,
+        'tool-hz-khz': (x) => x / 1000,
+        'tool-khz-mhz': (x) => x / 1000,
+        'tool-mhz-ghz': (x) => x / 1000,
+        'tool-in-mm': (x) => x * 25.4,
+        'tool-ft-m': (x) => x * 0.3048,
+        'tool-c-f': (x) => (x * 9 / 5) + 32,
+        'tool-f-c': (x) => (x - 32) * 5 / 9,
+        'tool-pa-db': (x) => 20 * Math.log10(Math.max(x, 1e-12) / 2e-5),
+        'tool-db-pa': (x) => 2e-5 * (10 ** (x / 20)),
+        'tool-j-wh': (x) => x / 3600,
+        'tool-wh-j': (x) => x * 3600,
+        'tool-ms-s': (x) => x / 1000,
+        'tool-s-ms': (x) => x * 1000,
+        'tool-rpm-rps': (x) => x / 60,
+        'tool-rps-rpm': (x) => x * 60,
+        'tool-vpp-vrms': () => initSimpleConverter('tool-vpp-vrms'),
+        'tool-vrms-vpp': () => initSimpleConverter('tool-vrms-vpp'),
+        'tool-vpk-vrms': () => initSimpleConverter('tool-vpk-vrms'),
+        'tool-kw-w': () => initSimpleConverter('tool-kw-w'),
+        'tool-w-kw': () => initSimpleConverter('tool-w-kw'),
+        'tool-hz-khz': () => initSimpleConverter('tool-hz-khz'),
+        'tool-khz-mhz': () => initSimpleConverter('tool-khz-mhz'),
+        'tool-mhz-ghz': () => initSimpleConverter('tool-mhz-ghz'),
+        'tool-in-mm': () => initSimpleConverter('tool-in-mm'),
+        'tool-ft-m': () => initSimpleConverter('tool-ft-m'),
+        'tool-c-f': () => initSimpleConverter('tool-c-f'),
+        'tool-f-c': () => initSimpleConverter('tool-f-c'),
+        'tool-pa-db': () => initSimpleConverter('tool-pa-db'),
+        'tool-db-pa': () => initSimpleConverter('tool-db-pa'),
+        'tool-j-wh': () => initSimpleConverter('tool-j-wh'),
+        'tool-wh-j': () => initSimpleConverter('tool-wh-j'),
+        'tool-ms-s': () => initSimpleConverter('tool-ms-s'),
+        'tool-s-ms': () => initSimpleConverter('tool-s-ms'),
+        'tool-rpm-rps': () => initSimpleConverter('tool-rpm-rps'),
+        'tool-rps-rpm': () => initSimpleConverter('tool-rps-rpm'),
+    };
+
+    const initSimpleConverter = (toolId) => {
+        const panel = document.getElementById(toolId);
+        if (!panel) return;
+        const input = panel.querySelector('input[id$="-in"]');
+        const output = panel.querySelector('output[id$="-out"]');
+        const convert = simpleToolConverters[toolId];
+        if (!(input instanceof HTMLInputElement) || !output || typeof convert !== 'function') return;
+        const sync = () => {
+            const x = Number(input.value);
+            if (!Number.isFinite(x)) {
+                output.textContent = '—';
+                return;
+            }
+            const y = convert(x);
+            output.textContent = Number.isFinite(y) ? y.toFixed(6).replace(/\.?(0+)$/, '') : '—';
+        };
+        input.addEventListener('input', sync);
+        sync();
+    };
+
     const toolInitializers = {
         'tool-grid': () => {
             if (!(form instanceof HTMLFormElement) || !(addressInput instanceof HTMLInputElement)) {
@@ -121,6 +185,16 @@
             mismatchSwr?.addEventListener('input', computeMismatchLoss);
             computeMismatchLoss();
         },
+        'tool-xl': () => {
+            xlFreq?.addEventListener('input', computeXl);
+            xlInductance?.addEventListener('input', computeXl);
+            computeXl();
+        },
+        'tool-xc': () => {
+            xcFreq?.addEventListener('input', computeXc);
+            xcCapacitance?.addEventListener('input', computeXc);
+            computeXc();
+        },
         'tool-solar': () => {
             solarWatts?.addEventListener('input', computeSolarEnergy);
             solarHours?.addEventListener('input', computeSolarEnergy);
@@ -203,6 +277,7 @@
             ohmVoltage?.addEventListener('input', computeOhmLaw);
             ohmCurrent?.addEventListener('input', computeOhmLaw);
             ohmResistance?.addEventListener('input', computeOhmLaw);
+            computeOhmLaw();
         },
         'tool-link-budget': () => {
             lbPtx?.addEventListener('input', computeLinkBudget);
