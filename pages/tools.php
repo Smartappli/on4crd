@@ -136,7 +136,7 @@ $jsI18n = [
     'dbuv_label' => $tr('dbuv_label', 'dBµV'),
 ];
 
-$renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $hasToolGridFallback): bool {
+$renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $hasToolGridFallback, &$t): bool {
     $fallbackPath = $toolGridFallbackPath;
     if (!$hasToolGridFallback) {
         return false;
@@ -214,7 +214,7 @@ $extractPanelTranslationKeys = static function (string $toolId) use ($toolPanelM
     return $panelKeyCache[$toolId];
 };
 
-$renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
+$renderToolPanel = static function (string $toolId) use ($toolPanelMap, &$t): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
     if ($partialFile === null) {
         return false;
