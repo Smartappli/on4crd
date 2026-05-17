@@ -121,7 +121,10 @@ $i18n = [
         'theme_autres' => 'Andere thema’s',
     ],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+}
 $GLOBALS['articles_i18n'] = $t;
 
 $themeMeta = [

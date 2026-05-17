@@ -11,7 +11,16 @@ $i18n = [
     'pt' => ['not_found' => 'Notícia não encontrada', 'not_found_msg' => 'Esta notícia não existe ou não está publicada.', 'back' => '← Voltar às notícias', 'published_on' => 'Publicado em', 'date_unknown' => 'Data não definida', 'content_soon' => 'O conteúdo detalhado será adicionado em breve.'],
     'nl' => ['not_found' => 'Nieuws niet gevonden', 'not_found_msg' => 'Dit nieuwsbericht bestaat niet of is niet gepubliceerd.', 'back' => '← Terug naar nieuws', 'published_on' => 'Gepubliceerd op', 'date_unknown' => 'Datum niet ingesteld', 'content_soon' => 'Gedetailleerde inhoud wordt binnenkort toegevoegd.'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 $slug = trim((string) ($_GET['slug'] ?? ''));
 if ($slug === '' || !table_exists('news_posts')) {

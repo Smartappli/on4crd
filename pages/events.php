@@ -11,7 +11,16 @@ $i18n = [
     'pt' => ['title' => 'Eventos', 'agenda_unavailable' => 'A agenda ainda não está disponível.', 'export' => 'Exportar', 'calendar_load_error' => 'Não foi possível carregar o calendário interativo.', 'event' => 'Evento', 'no_summary' => 'Sem resumo disponível.', 'location_tbd' => 'A confirmar', 'today' => 'Hoje', 'month' => 'Mês', 'week' => 'Semana', 'list' => 'Lista', 'detail' => 'Detalhe', 'start' => 'Início', 'end' => 'Fim', 'location' => 'Local', 'view_sheet' => 'Ver ficha', 'external_link' => 'Ligação externa', 'no_event' => 'Sem eventos publicados neste momento.', 'calendar_name' => 'Agenda ON4CRD', 'ics_filename' => 'on4crd-eventos.ics'],
     'nl' => ['title' => 'Evenementen', 'agenda_unavailable' => 'De agenda is nog niet beschikbaar.', 'export' => 'Exporteren', 'calendar_load_error' => 'Interactieve kalender kon niet geladen worden.', 'event' => 'Evenement', 'no_summary' => 'Geen samenvatting beschikbaar.', 'location_tbd' => 'Nog te bevestigen', 'today' => 'Vandaag', 'month' => 'Maand', 'week' => 'Week', 'list' => 'Lijst', 'detail' => 'Details', 'start' => 'Start', 'end' => 'Einde', 'location' => 'Locatie', 'view_sheet' => 'Bekijk detail', 'external_link' => 'Externe link', 'no_event' => 'Momenteel geen gepubliceerde evenementen.', 'calendar_name' => 'ON4CRD Agenda', 'ics_filename' => 'on4crd-evenementen.ics'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 if (!table_exists('events')) {
     echo render_layout('<div class="card"><h1>' . e($t['title']) . '</h1><p>' . e($t['agenda_unavailable']) . '</p></div>', $t['title']);

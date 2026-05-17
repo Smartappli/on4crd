@@ -13,7 +13,10 @@ $i18n = [
     'pt' => ['contact_added' => 'Contacto de imprensa adicionado.', 'release_added' => 'Comunicado adicionado.', 'contacts_title' => 'Contactos de imprensa', 'releases_title' => 'Comunicados', 'full_name' => 'Nome completo', 'role' => 'Função', 'email' => 'Email', 'phone' => 'Telefone', 'notes' => 'Notas', 'order' => 'Ordem', 'add' => 'Adicionar', 'th_name' => 'Nome', 'th_role' => 'Função', 'th_contact' => 'Contacto', 'title' => 'Título', 'summary' => 'Resumo', 'publish_date' => 'Data de publicação', 'pdf_doc' => 'Documento PDF', 'th_date' => 'Data', 'th_file' => 'Ficheiro', 'open' => 'abrir', 'layout' => 'Imprensa', 'meta_desc' => 'Gestão de contactos e comunicados de imprensa.'],
     'nl' => ['contact_added' => 'Perscontact toegevoegd.', 'release_added' => 'Persbericht toegevoegd.', 'contacts_title' => 'Perscontacten', 'releases_title' => 'Persberichten', 'full_name' => 'Volledige naam', 'role' => 'Rol', 'email' => 'E-mail', 'phone' => 'Telefoon', 'notes' => 'Notities', 'order' => 'Volgorde', 'add' => 'Toevoegen', 'th_name' => 'Naam', 'th_role' => 'Rol', 'th_contact' => 'Contact', 'title' => 'Titel', 'summary' => 'Samenvatting', 'publish_date' => 'Publicatiedatum', 'pdf_doc' => 'PDF-document', 'th_date' => 'Datum', 'th_file' => 'Bestand', 'open' => 'openen', 'layout' => 'Pers', 'meta_desc' => 'Beheer van perscontacten en persberichten.'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
+}
 
 set_page_meta([
     'title' => (string) $t['layout'],

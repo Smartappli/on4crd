@@ -11,7 +11,16 @@ $i18n = [
     'pt' => ['title' => 'Álbum', 'gallery_unavailable' => 'A galeria está indisponível de momento.', 'not_found' => 'Álbum não encontrado.', 'back' => '← Voltar à galeria', 'photos' => 'Fotos', 'album_photos' => 'Fotos do álbum', 'none' => 'Não há fotos disponíveis neste álbum.', 'photo_alt' => 'Foto do álbum'],
     'nl' => ['title' => 'Album', 'gallery_unavailable' => 'De galerij is momenteel niet beschikbaar.', 'not_found' => 'Album niet gevonden.', 'back' => '← Terug naar galerij', 'photos' => "Foto's", 'album_photos' => "Foto's van het album", 'none' => "Geen foto's beschikbaar in dit album.", 'photo_alt' => 'Albumfoto'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['title']);

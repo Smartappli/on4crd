@@ -8,8 +8,17 @@ $i18n = [
     'pt' => ['title' => 'Pesquisa', 'placeholder' => 'Pesquisa global', 'submit' => 'Pesquisar', 'count' => 'resultado(s)', 'empty' => 'Nenhum resultado encontrado para esta pesquisa.', 'query_too_short' => 'Introduza pelo menos 2 caracteres.', 'previous' => 'Anterior', 'next' => 'Seguinte', 'meta_desc' => 'Pesquisa global ON4CRD nos conteúdos de Artigos e Wiki.'],
     'nl' => ['title' => 'Zoeken', 'placeholder' => 'Globale zoekopdracht', 'submit' => 'Zoeken', 'count' => 'resulta(a)t(en)', 'empty' => 'Geen resultaten gevonden voor deze zoekopdracht.', 'query_too_short' => 'Voer minstens 2 tekens in.', 'previous' => 'Vorige', 'next' => 'Volgende', 'meta_desc' => 'ON4CRD globale zoekfunctie over Artikels- en Wiki-inhoud.'],
 ];
-$locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-$t = $i18n[$locale] ?? $i18n['fr'];
+$locale = current_locale();
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 $q = trim((string) ($_GET['q'] ?? ''));
 $q = preg_replace('/\s+/u', ' ', $q) ?? '';

@@ -19,7 +19,16 @@ $i18n = [
     'ru' => ['not_found' => 'Статья не найдена.', 'layout_article' => 'Статья', 'meta_fallback' => 'Техническая статья ON4CRD'],
     'id' => ['not_found' => 'Artikel tidak ditemukan.', 'layout_article' => 'Artikel', 'meta_fallback' => 'Artikel teknis ON4CRD'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $pool = [];
+    foreach ($i18n as $lang => $translations) {
+        if (isset($translations[$key]) && is_string($translations[$key])) {
+            $pool[$lang] = $translations[$key];
+        }
+    }
+    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
+}
 
 $slug = (string) ($_GET['slug'] ?? '');
 $stmt = db()->prepare('SELECT * FROM articles WHERE slug = ? AND status = "published"');

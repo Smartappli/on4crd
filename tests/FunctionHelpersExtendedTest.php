@@ -84,4 +84,29 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertMatchesRegularExpression('/[?&]v=\\d+$/', $url);
     }
 
+    public function testLocaleFallbackChainHandlesRegionalTags(): void
+    {
+        self::assertSame(['pt', 'en', 'fr'], locale_fallback_chain('pt-BR'));
+        self::assertSame(['en', 'fr'], locale_fallback_chain('en-US'));
+    }
+
+    public function testI18nLocalizedValueUsesFallbackChain(): void
+    {
+        $localized = [
+            'fr' => 'Bonjour',
+            'en' => 'Hello',
+        ];
+
+        self::assertSame('Hello', i18n_localized_value($localized, 'pt-BR'));
+        self::assertSame('Bonjour', i18n_localized_value(['fr' => 'Bonjour'], 'ja-JP'));
+    }
+
+    public function testCurrentLocaleUsesAcceptLanguageWhenSessionEmpty(): void
+    {
+        unset($_SESSION['locale']);
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE,de;q=0.9,en;q=0.8';
+
+        self::assertSame('de', current_locale());
+    }
+
 }

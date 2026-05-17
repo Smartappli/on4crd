@@ -15,7 +15,6 @@ $adminCardIcons = [
     'admin_press' => '🗞️',
     'admin_events' => '📅',
     'admin_dinner_reservations' => '🍽️',
-    'admin_shop' => '🛒',
     'admin_auctions' => '🏷️',
     'admin_editorial' => '🌐',
     'admin_translation_reviews' => '✅',

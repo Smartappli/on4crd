@@ -13,7 +13,7 @@ $i18n = [
     'nl' => ['transparency' => 'Transparantie', 'member_welcome' => 'Ontvangst van leden', 'contact' => 'Contact', 'committee_desc' => 'Het comité coördineert het clubleven, de organisatie van activiteiten, de ontvangst van nieuwkomers en de relaties met partners.', 'manage_label' => 'Comité beheren', 'none' => 'Er is momenteel geen commissielid gepubliceerd.', 'portrait_of' => 'Portret van'],
 ];
 $t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
+    return i18n_localized_value($i18n, $locale, $key);
 };
 
 set_page_meta([

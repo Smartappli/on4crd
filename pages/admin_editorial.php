@@ -14,7 +14,10 @@ $i18n = [
     'it' => ['ok_saved' => 'Contenuti editoriali aggiornati.', 'layout' => 'Editoriale multilingue', 'title' => 'Editoriale multilingue', 'intro' => 'Il francese resta la lingua sorgente. Le altre lingue possono essere generate automaticamente e poi revisionate.', 'fr_source' => 'Francese (sorgente)', 'english' => 'Inglese', 'deutsch' => 'Tedesco', 'dutch' => 'Olandese', 'save' => 'Salva', 'committee_title' => 'Comitato — titolo', 'committee_intro' => 'Comitato — introduzione', 'committee_mission' => 'Comitato — missione', 'press_title' => 'Stampa — titolo', 'press_intro' => 'Stampa — introduzione', 'press_contact' => 'Stampa — contatto', 'meta_desc' => 'Gestione dei contenuti editoriali multilingue.'],
     'pt' => ['ok_saved' => 'Conteúdos editoriais atualizados.', 'layout' => 'Editorial multilingue', 'title' => 'Editorial multilingue', 'intro' => 'O francês continua a ser a língua de origem. Os outros idiomas podem ser gerados automaticamente e revistos depois.', 'fr_source' => 'Francês (origem)', 'english' => 'Inglês', 'deutsch' => 'Alemão', 'dutch' => 'Neerlandês', 'save' => 'Guardar', 'committee_title' => 'Comissão — título', 'committee_intro' => 'Comissão — introdução', 'committee_mission' => 'Comissão — missão', 'press_title' => 'Imprensa — título', 'press_intro' => 'Imprensa — introdução', 'press_contact' => 'Imprensa — contacto', 'meta_desc' => 'Gestão de conteúdos editoriais multilingues.'],
 ];
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+}
 
 set_page_meta([
     'title' => (string) $t['layout'],

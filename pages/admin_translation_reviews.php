@@ -18,8 +18,11 @@ $i18n = [
     'ru' => ['invalid_lang' => 'Недопустимый язык.', 'ok_news' => 'Перевод новости проверен.', 'ok_article' => 'Перевод статьи проверен.', 'news_title' => 'Проверка новостей', 'article_title' => 'Проверка статей', 'label_title' => 'Заголовок', 'label_excerpt' => 'Краткое описание', 'label_content' => 'Содержание', 'submit' => 'Подтвердить перевод', 'no_news' => 'Нет ожидающих переводов новостей.', 'no_article' => 'Нет ожидающих переводов статей.', 'layout' => 'Проверка переводов', 'meta_desc' => 'Проверка и подтверждение автоматических переводов контента.'],
     'id' => ['invalid_lang' => 'Bahasa tidak valid.', 'ok_news' => 'Terjemahan berita ditinjau.', 'ok_article' => 'Terjemahan artikel ditinjau.', 'news_title' => 'Tinjauan berita', 'article_title' => 'Tinjauan artikel', 'label_title' => 'Judul', 'label_excerpt' => 'Ringkasan', 'label_content' => 'Konten', 'submit' => 'Setujui terjemahan', 'no_news' => 'Tidak ada terjemahan berita yang menunggu.', 'no_article' => 'Tidak ada terjemahan artikel yang menunggu.', 'layout' => 'Tinjauan terjemahan', 'meta_desc' => 'Tinjau dan validasi terjemahan konten otomatis.'],
 ];
-$localeUi = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-$t = $i18n[$localeUi] ?? $i18n['fr'];
+$localeUi = current_locale();
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $localeUi, (string) $key);
+}
 
 set_page_meta([
     'title' => (string) $t['layout'],

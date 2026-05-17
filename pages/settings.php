@@ -11,15 +11,15 @@ $links = [
     ['route' => 'bandplan_on2', 'label' => ['fr' => 'Band plan ON2', 'en' => 'ON2 band plan', 'de' => 'ON2-Bandplan', 'es' => 'Plan de bandas ON2', 'it' => 'Band plan ON2', 'pt' => 'Plano de bandas ON2', 'nl' => 'ON2-bandplan', 'ar' => 'خطة نطاق ON2', 'hi' => 'ON2 बैंड प्लान', 'ja' => 'ON2 バンドプラン', 'zh' => 'ON2 频段规划', 'bn' => 'ON2 ব্যান্ড প্ল্যান', 'ru' => 'План диапазонов ON2', 'id' => 'Rencana band ON2']],
     ['route' => 'bandplan_harec', 'label' => ['fr' => 'Band plan HAREC', 'en' => 'HAREC band plan', 'de' => 'HAREC-Bandplan', 'es' => 'Plan de bandas HAREC', 'it' => 'Band plan HAREC', 'pt' => 'Plano de bandas HAREC', 'nl' => 'HAREC-bandplan', 'ar' => 'خطة نطاق HAREC', 'hi' => 'HAREC बैंड प्लान', 'ja' => 'HAREC バンドプラン', 'zh' => 'HAREC 频段规划', 'bn' => 'HAREC ব্যান্ড প্ল্যান', 'ru' => 'План диапазонов HAREC', 'id' => 'Rencana band HAREC']],
 ];
-$pageTitle = $titleMap[$locale] ?? $titleMap['fr'];
+$pageTitle = i18n_localized_value($titleMap, $locale, 'fr');
 ob_start();
 ?>
 <section class="card">
   <h1><?= e($pageTitle) ?></h1>
-  <p><?= e($introMap[$locale] ?? $introMap['fr']) ?></p>
+  <p><?= e(i18n_localized_value($introMap, $locale, 'fr')) ?></p>
   <ul>
     <?php foreach ($links as $link): ?>
-      <li><a href="<?= e(route_url((string) $link['route'])) ?>"><?= e((string) ($link['label'][$locale] ?? $link['label']['fr'])) ?></a></li>
+      <li><a href="<?= e(route_url((string) $link['route'])) ?>"><?= e(i18n_localized_value((array) $link['label'], $locale, 'fr')) ?></a></li>
     <?php endforeach; ?>
   </ul>
 </section>

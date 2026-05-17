@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/tools.php';
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = i18n_localized_value($i18n, $locale, $key);
+}
 $labelCategoryAntenna = (string) ($t['category_antenna'] ?? 'Antenna & propagation');
 $labelQuarterWaveCalc = (string) ($t['quarter_wave_calc'] ?? 'Quarter-wave length');
 $labelErpCalc = (string) ($t['erp_calc'] ?? 'Estimated ERP');
