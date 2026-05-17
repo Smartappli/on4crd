@@ -33,7 +33,9 @@ if (!module_enabled('classifieds')) {
 }
 
 if (!table_exists('classified_ads')) {
-    throw new RuntimeException('Missing table classified_ads. Run schema migrations.');
+    $message = '<section class="card"><h1>' . e($t('title')) . '</h1><p class="help">Module temporairement indisponible : table <code>classified_ads</code> manquante.</p></section>';
+    echo render_layout($message, $t('title'));
+    return;
 }
 
 $categories = ['gear' => 'Matériel', 'wanted' => 'Recherche', 'service' => 'Service'];
