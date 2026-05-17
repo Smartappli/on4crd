@@ -31,15 +31,6 @@ foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = $tr($key, (string) ($i18n['fr'][$key] ?? ''));
 }
 
-$labelCategoryAntenna = $tr('category_antenna', 'Antenna & propagation');
-$labelQuarterWaveCalc = $tr('quarter_wave_calc', 'Quarter-wave length');
-$labelErpCalc = $tr('erp_calc', 'Estimated ERP');
-$labelTxPowerW = $tr('tx_power_w', 'TX power (W)');
-$labelFeedlineLossDb = $tr('feedline_loss_db', 'Feedline loss (dB)');
-$labelAntennaGainDbd = $tr('antenna_gain_dbd', 'Antenna gain (dBd)');
-$labelErpResult = $tr('erp_result', 'Estimated ERP');
-$labelQuarterWaveResult = $tr('quarter_wave_result', 'Estimated length');
-$labelVelocityFactor = $tr('velocity_factor', 'Velocity factor (0-1)');
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
 $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 $toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
