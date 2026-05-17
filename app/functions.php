@@ -134,17 +134,30 @@ if (!function_exists('i18n_localized_value')) {
 function i18n_localized_value(array $localized, ?string $locale = null, string $default = 'fr'): string
 {
     foreach (locale_fallback_chain($locale) as $candidateLocale) {
-        if (isset($localized[$candidateLocale]) && is_string($localized[$candidateLocale]) && $localized[$candidateLocale] !== '') {
-            return $localized[$candidateLocale];
+        if (!isset($localized[$candidateLocale]) || !is_string($localized[$candidateLocale])) {
+            continue;
+        }
+
+        $value = trim($localized[$candidateLocale]);
+        if ($value !== '') {
+            return $value;
         }
     }
 
     if (isset($localized[$default]) && is_string($localized[$default])) {
-        return $localized[$default];
+        $value = trim($localized[$default]);
+        if ($value !== '') {
+            return $value;
+        }
     }
 
     foreach ($localized as $value) {
-        if (is_string($value) && $value !== '') {
+        if (!is_string($value)) {
+            continue;
+        }
+
+        $value = trim($value);
+        if ($value !== '') {
             return $value;
         }
     }
