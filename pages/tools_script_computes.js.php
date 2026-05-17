@@ -1,3 +1,14 @@
+
+    const formatOhms = (value) => {
+        if (!Number.isFinite(value)) {
+            return '—';
+        }
+        if (value >= 1000) {
+            return `${(value / 1000).toFixed(3)} kΩ`;
+        }
+        return `${value.toFixed(2)} Ω`;
+    };
+
     const computeFilter = () => {
         if (!(filterFreq instanceof HTMLInputElement) || !(filterImpedance instanceof HTMLInputElement) || !filterL || !filterC) return;
         const fMHz = Number(filterFreq.value);
@@ -227,6 +238,33 @@
             return;
         }
         batteryCurrent.textContent = `${(load / voltage).toFixed(2)} A`;
+    };
+
+
+    const computeXl = () => {
+        if (!(xlFreq instanceof HTMLInputElement) || !(xlInductance instanceof HTMLInputElement) || !xlResult) return;
+        const f = Number(xlFreq.value);
+        const lMicro = Number(xlInductance.value);
+        if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(lMicro) || lMicro <= 0 || lMicro > 1e6) {
+            xlResult.textContent = '—';
+            return;
+        }
+        const l = lMicro * 1e-6;
+        const x = 2 * Math.PI * (f * 1e6) * l;
+        xlResult.textContent = formatOhms(x);
+    };
+
+    const computeXc = () => {
+        if (!(xcFreq instanceof HTMLInputElement) || !(xcCapacitance instanceof HTMLInputElement) || !xcResult) return;
+        const f = Number(xcFreq.value);
+        const cPico = Number(xcCapacitance.value);
+        if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(cPico) || cPico <= 0 || cPico > 1e9) {
+            xcResult.textContent = '—';
+            return;
+        }
+        const c = cPico * 1e-12;
+        const x = 1 / (2 * Math.PI * (f * 1e6) * c);
+        xcResult.textContent = formatOhms(x);
     };
 
     const computeMuf = () => {

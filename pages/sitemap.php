@@ -25,7 +25,6 @@ $xml = cache_remember('seo_sitemap_xml_v2', 300, static function (): string {
         ['route' => 'press', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'schools', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'events', 'priority' => '0.8', 'changefreq' => 'weekly'],
-        ['route' => 'shop', 'priority' => '0.8', 'changefreq' => 'daily'],
         ['route' => 'auctions', 'priority' => '0.8', 'changefreq' => 'daily'],
     ];
 
@@ -75,19 +74,6 @@ $xml = cache_remember('seo_sitemap_xml_v2', 300, static function (): string {
                 'lastmod' => !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : gmdate('c'),
                 'priority' => '0.6',
                 'changefreq' => 'monthly',
-            ];
-        }
-
-        $products = db()->query('SELECT slug, updated_at FROM shop_products WHERE status = "published" ORDER BY updated_at DESC LIMIT 500')->fetchAll();
-        foreach ($products as $row) {
-            if (empty($row['slug'])) {
-                continue;
-            }
-            $entries[] = [
-                'loc' => $base . '/index.php?route=shop_product&slug=' . rawurlencode((string) $row['slug']),
-                'lastmod' => !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : gmdate('c'),
-                'priority' => '0.7',
-                'changefreq' => 'weekly',
             ];
         }
 

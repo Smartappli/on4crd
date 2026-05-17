@@ -213,7 +213,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
         ],
 
         'es' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
             'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
@@ -224,7 +224,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Ir al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Annunci', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
@@ -235,7 +235,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
         ],
         'pt' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
             'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
@@ -247,7 +247,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
         ],
 
         'ar' => [
-            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'المتجر', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
+            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'إعلانات مبوبة', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
             'nav_dashboard' => 'لوحة التحكم', 'nav_wiki' => 'ويكي', 'nav_gallery' => 'المعرض', 'nav_articles' => 'مقالات', 'nav_library' => 'المكتبة', 'nav_auctions' => 'المزادات',
             'account_space' => 'حسابي', 'account_profile' => 'الملف الشخصي', 'account_settings' => 'الإعدادات', 'account_admin' => 'الإدارة', 'logout' => 'تسجيل الخروج', 'login' => 'تسجيل الدخول',
             'theme_light' => 'فاتح', 'theme_dark' => 'داكن',
@@ -258,7 +258,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
         ],
         'hi' => [
-            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'उपकरण', 'nav_directory' => 'निर्देशिका',
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'वर्गीकृत', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'उपकरण', 'nav_directory' => 'निर्देशिका',
             'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
             'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
             'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
@@ -269,7 +269,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'ऐप इंस्टॉल करें', 'skip_to_content' => 'सामग्री पर जाएँ', 'close_menu' => 'मेनू बंद करें', 'main_navigation' => 'मुख्य नेविगेशन', 'search_label' => 'वैश्विक खोज', 'search_placeholder' => 'खोजें…', 'search_submit' => 'खोजें',
         ],
         'ja' => [
-            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
+            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'クラシファイド', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
             'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'ウィキ', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
             'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
             'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
@@ -280,7 +280,7 @@ function t_page(string $domain, string $key, ?string $locale = null): string
             'install_app' => 'アプリをインストール', 'skip_to_content' => 'コンテンツへスキップ', 'close_menu' => 'メニューを閉じる', 'main_navigation' => 'メインナビゲーション', 'search_label' => 'サイト内検索', 'search_placeholder' => '検索…', 'search_submit' => '検索',
         ],
         'zh' => [
-            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '商店', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
+            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '分类信息', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
             'nav_dashboard' => '仪表盘', 'nav_wiki' => '维基', 'nav_gallery' => '画廊', 'nav_articles' => '文章', 'nav_library' => '资料库', 'nav_auctions' => '拍卖',
             'account_space' => '我的账户', 'account_profile' => '个人资料', 'account_settings' => '设置', 'account_admin' => '管理', 'logout' => '退出登录', 'login' => '登录',
             'theme_light' => '浅色', 'theme_dark' => '深色',
@@ -318,11 +318,11 @@ function seed_modules(): void
         ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 50],
         ['albums', 'Albums', 'Galerie photos', 0, 1, 60],
         ['events', 'Événements', 'Agenda du club', 0, 1, 70],
-        ['shop', 'Boutique', 'Produits et commandes', 0, 1, 80],
         ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 90],
         ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 100],
         ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 110],
         ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 120],
+        ['classifieds', 'Petites annonces', 'Module petites annonces', 0, 1, 121],
         ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 130],
         ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 140],
         ['committee', 'Comité', 'Informations du comité', 0, 1, 150],
@@ -1743,7 +1743,7 @@ function auth_bypass_member_id(): int
         'qsl',
         'qsl_preview',
         'qsl_export',
-        'shop_checkout',
+        'classifieds',
         'auction_bid',
         'newsletter',
     ];
@@ -1765,7 +1765,7 @@ function auth_bypass_member_id(): int
         'qsl',
         'qsl_preview',
         'qsl_export',
-        'shop_checkout',
+        'classifieds',
         'auction_bid',
         'newsletter',
     ];
@@ -2102,7 +2102,7 @@ function render_layout(string $content, string $title = ''): string
     }
     $layoutMessages = [
         'fr' => [
-            'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Boutique', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
+            'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Petites annonces', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
             'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_library' => 'Bibliothèque', 'nav_auctions' => 'Enchères',
             'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'account_admin' => 'Administration', 'logout' => 'Déconnexion', 'login' => 'Connexion',
             'theme_light' => 'Clair', 'theme_dark' => 'Sombre',
@@ -2113,7 +2113,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Installer l’app', 'skip_to_content' => 'Aller au contenu', 'close_menu' => 'Fermer le menu', 'main_navigation' => 'Navigation principale', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
         ],
         'en' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
             'theme_light' => 'Light', 'theme_dark' => 'Dark',
@@ -2124,7 +2124,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Install app', 'skip_to_content' => 'Skip to content', 'close_menu' => 'Close menu', 'main_navigation' => 'Main navigation', 'search_label' => 'Global search', 'search_placeholder' => 'Search…', 'search_submit' => 'Search',
         ],
         'de' => [
-            'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Shop', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
+            'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Classifieds', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_library' => 'Bibliothek', 'nav_auctions' => 'Auktionen',
             'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'account_admin' => 'Verwaltung', 'logout' => 'Abmelden', 'login' => 'Anmelden',
             'theme_light' => 'Hell', 'theme_dark' => 'Dunkel',
@@ -2135,7 +2135,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'App installieren', 'skip_to_content' => 'Zum Inhalt springen', 'close_menu' => 'Menü schließen', 'main_navigation' => 'Hauptnavigation', 'search_label' => 'Globale Suche', 'search_placeholder' => 'Suchen…', 'search_submit' => 'Suchen',
         ],
         'nl' => [
-            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Winkel', 'nav_events' => 'Evenementen', 'nav_tools' => 'Gereedschap', 'nav_directory' => 'Gids',
+            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Kleine advertenties', 'nav_events' => 'Evenementen', 'nav_tools' => 'Gereedschap', 'nav_directory' => 'Gids',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikelen', 'nav_library' => 'Bibliotheek', 'nav_auctions' => 'Veilingen',
             'account_space' => 'Mijn account', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
             'theme_light' => 'Licht', 'theme_dark' => 'Donker',
@@ -2146,7 +2146,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Zoeken op de site', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
         ],
         'es' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
             'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
@@ -2157,7 +2157,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Instalar app', 'skip_to_content' => 'Saltar al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
         ],
         'it' => [
-            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Annunci', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
             'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
@@ -2168,7 +2168,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
         ],
         'pt' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Shop', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
+            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
             'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
             'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
             'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
@@ -2180,7 +2180,7 @@ function render_layout(string $content, string $title = ''): string
         ],
 
         'ar' => [
-            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'المتجر', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
+            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'إعلانات مبوبة', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
             'nav_dashboard' => 'لوحة التحكم', 'nav_wiki' => 'ويكي', 'nav_gallery' => 'المعرض', 'nav_articles' => 'مقالات', 'nav_library' => 'المكتبة', 'nav_auctions' => 'المزادات',
             'account_space' => 'حسابي', 'account_profile' => 'الملف الشخصي', 'account_settings' => 'الإعدادات', 'account_admin' => 'الإدارة', 'logout' => 'تسجيل الخروج', 'login' => 'تسجيل الدخول',
             'theme_light' => 'فاتح', 'theme_dark' => 'داكن',
@@ -2191,7 +2191,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
         ],
         'hi' => [
-            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'दुकान', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'उपकरण', 'nav_directory' => 'निर्देशिका',
+            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'वर्गीकृत', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'उपकरण', 'nav_directory' => 'निर्देशिका',
             'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
             'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
             'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
@@ -2202,7 +2202,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'ऐप इंस्टॉल करें', 'skip_to_content' => 'सामग्री पर जाएँ', 'close_menu' => 'मेनू बंद करें', 'main_navigation' => 'मुख्य नेविगेशन', 'search_label' => 'वैश्विक खोज', 'search_placeholder' => 'खोजें…', 'search_submit' => 'खोजें',
         ],
         'ja' => [
-            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'ショップ', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
+            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'クラシファイド', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
             'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'ウィキ', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
             'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
             'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
@@ -2213,7 +2213,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'アプリをインストール', 'skip_to_content' => 'コンテンツへスキップ', 'close_menu' => 'メニューを閉じる', 'main_navigation' => 'メインナビゲーション', 'search_label' => 'サイト内検索', 'search_placeholder' => '検索…', 'search_submit' => '検索',
         ],
         'zh' => [
-            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '商店', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
+            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '分类信息', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
             'nav_dashboard' => '仪表盘', 'nav_wiki' => '维基', 'nav_gallery' => '画廊', 'nav_articles' => '文章', 'nav_library' => '资料库', 'nav_auctions' => '拍卖',
             'account_space' => '我的账户', 'account_profile' => '个人资料', 'account_settings' => '设置', 'account_admin' => '管理', 'logout' => '退出登录', 'login' => '登录',
             'theme_light' => '浅色', 'theme_dark' => '深色',
@@ -2225,7 +2225,7 @@ function render_layout(string $content, string $title = ''): string
         ],
 
         'bn' => [
-            'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'দোকান', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'সরঞ্জাম', 'nav_directory' => 'ডিরেক্টরি',
+            'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'শ্রেণিবদ্ধ', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'সরঞ্জাম', 'nav_directory' => 'ডিরেক্টরি',
             'nav_dashboard' => 'ড্যাশবোর্ড', 'nav_wiki' => 'উইকি', 'nav_gallery' => 'গ্যালারি', 'nav_articles' => 'প্রবন্ধ', 'nav_library' => 'লাইব্রেরি', 'nav_auctions' => 'নিলাম',
             'account_space' => 'আমার অ্যাকাউন্ট', 'account_profile' => 'প্রোফাইল', 'account_settings' => 'সেটিংস', 'account_admin' => 'প্রশাসন', 'logout' => 'লগআউট', 'login' => 'লগইন',
             'theme_light' => 'লাইট', 'theme_dark' => 'ডার্ক',
@@ -2236,7 +2236,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'অ্যাপ ইনস্টল করুন', 'skip_to_content' => 'কনটেন্টে যান', 'close_menu' => 'মেনু বন্ধ করুন', 'main_navigation' => 'মূল নেভিগেশন', 'search_label' => 'সাইট অনুসন্ধান', 'search_placeholder' => 'অনুসন্ধান…', 'search_submit' => 'অনুসন্ধান',
         ],
         'ru' => [
-            'nav_home' => 'Главная', 'nav_news' => 'Новости', 'nav_shop' => 'Магазин', 'nav_events' => 'События', 'nav_tools' => 'Инструменты', 'nav_directory' => 'Каталог',
+            'nav_home' => 'Главная', 'nav_news' => 'Новости', 'nav_shop' => 'Объявления', 'nav_events' => 'События', 'nav_tools' => 'Инструменты', 'nav_directory' => 'Каталог',
             'nav_dashboard' => 'Панель', 'nav_wiki' => 'Вики', 'nav_gallery' => 'Галерея', 'nav_articles' => 'Статьи', 'nav_library' => 'Библиотека', 'nav_auctions' => 'Аукционы',
             'account_space' => 'Мой аккаунт', 'account_profile' => 'Профиль', 'account_settings' => 'Настройки', 'account_admin' => 'Администрирование', 'logout' => 'Выйти', 'login' => 'Войти',
             'theme_light' => 'Светлая', 'theme_dark' => 'Тёмная',
@@ -2247,7 +2247,7 @@ function render_layout(string $content, string $title = ''): string
             'install_app' => 'Установить приложение', 'skip_to_content' => 'Перейти к содержимому', 'close_menu' => 'Закрыть меню', 'main_navigation' => 'Основная навигация', 'search_label' => 'Поиск по сайту', 'search_placeholder' => 'Поиск…', 'search_submit' => 'Поиск',
         ],
         'id' => [
-            'nav_home' => 'Beranda', 'nav_news' => 'Berita', 'nav_shop' => 'Toko', 'nav_events' => 'Acara', 'nav_tools' => 'Alat', 'nav_directory' => 'Direktori',
+            'nav_home' => 'Beranda', 'nav_news' => 'Berita', 'nav_shop' => 'Iklan baris', 'nav_events' => 'Acara', 'nav_tools' => 'Alat', 'nav_directory' => 'Direktori',
             'nav_dashboard' => 'Dasbor', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeri', 'nav_articles' => 'Artikel', 'nav_library' => 'Perpustakaan', 'nav_auctions' => 'Lelang',
             'account_space' => 'Akun saya', 'account_profile' => 'Profil', 'account_settings' => 'Pengaturan', 'account_admin' => 'Administrasi', 'logout' => 'Keluar', 'login' => 'Masuk',
             'theme_light' => 'Terang', 'theme_dark' => 'Gelap',
@@ -2287,7 +2287,7 @@ function render_layout(string $content, string $title = ''): string
     $navPrimaryItems = [
         ['label' => (string) $layoutI18n['nav_home'], 'route' => 'home', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_news'], 'route' => 'news', 'module' => 'news'],
-        ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'shop', 'module' => 'shop'],
+        ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'classifieds', 'module' => 'classifieds'],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
         ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
@@ -4993,7 +4993,6 @@ function upload_i18n_message(string $key): string
         'invalid_product' => ['fr' => 'Produit invalide.', 'en' => 'Invalid product.', 'de' => 'Ungültiges Produkt.', 'nl' => 'Ongeldig product.', 'es' => 'Producto no válido.', 'it' => 'Prodotto non valido.', 'pt' => 'Produto inválido.', 'ar' => 'منتج غير صالح.', 'hi' => 'अमान्य उत्पाद।', 'ja' => '無効な商品です。', 'zh' => '无效商品。', 'bn' => 'অবৈধ পণ্য।', 'ru' => 'Недопустимый товар.', 'id' => 'Produk tidak valid.'],
         'product_unavailable' => ['fr' => 'Produit indisponible.', 'en' => 'Product unavailable.', 'de' => 'Produkt nicht verfügbar.', 'nl' => 'Product niet beschikbaar.', 'es' => 'Producto no disponible.', 'it' => 'Prodotto non disponibile.', 'pt' => 'Produto indisponível.', 'ar' => 'المنتج غير متاح.', 'hi' => 'उत्पाद उपलब्ध नहीं है।', 'ja' => '商品は利用できません。', 'zh' => '商品不可用。', 'bn' => 'পণ্য উপলভ্য নয়।', 'ru' => 'Товар недоступен.', 'id' => 'Produk tidak tersedia.'],
         'invalid_product_in_cart' => ['fr' => 'Produit invalide dans le panier.', 'en' => 'Invalid product in cart.', 'de' => 'Ungültiges Produkt im Warenkorb.', 'nl' => 'Ongeldig product in de winkelwagen.', 'es' => 'Producto no válido en el carrito.', 'it' => 'Prodotto non valido nel carrello.', 'pt' => 'Produto inválido no carrinho.', 'ar' => 'منتج غير صالح في السلة.', 'hi' => 'कार्ट में अमान्य उत्पाद।', 'ja' => 'カート内に無効な商品があります。', 'zh' => '购物车中有无效商品。', 'bn' => 'কার্টে অবৈধ পণ্য।', 'ru' => 'Недопустимый товар в корзине.', 'id' => 'Produk tidak valid di keranjang.'],
-        'shop_module_not_initialized' => ['fr' => "Le module boutique n'est pas initialisé.", 'en' => 'Shop module is not initialized.', 'de' => 'Shop-Modul ist nicht initialisiert.', 'nl' => 'Winkelmodule is niet geïnitialiseerd.', 'es' => 'El módulo de tienda no está inicializado.', 'it' => 'Il modulo shop non è inizializzato.', 'pt' => 'O módulo da loja não está inicializado.', 'ar' => 'وحدة المتجر غير مهيأة.', 'hi' => 'शॉप मॉड्यूल प्रारंभित नहीं है।', 'ja' => 'ショップモジュールが初期化されていません。', 'zh' => '商店模块未初始化。', 'bn' => 'শপ মডিউলটি ইনিশিয়ালাইজ করা হয়নি।', 'ru' => 'Модуль магазина не инициализирован.', 'id' => 'Modul toko belum diinisialisasi.'],
         'cart_empty' => ['fr' => 'Le panier est vide.', 'en' => 'Cart is empty.', 'de' => 'Der Warenkorb ist leer.', 'nl' => 'Winkelwagen is leeg.', 'es' => 'El carrito está vacío.', 'it' => 'Il carrello è vuoto.', 'pt' => 'O carrinho está vazio.', 'ar' => 'سلة التسوق فارغة.', 'hi' => 'कार्ट खाली है।', 'ja' => 'カートは空です。', 'zh' => '购物车为空。', 'bn' => 'কার্ট খালি।', 'ru' => 'Корзина пуста.', 'id' => 'Keranjang kosong.'],
         'insufficient_stock_for' => ['fr' => 'Stock insuffisant pour ', 'en' => 'Insufficient stock for ', 'de' => 'Unzureichender Lagerbestand für ', 'nl' => 'Onvoldoende voorraad voor ', 'es' => 'Stock insuficiente para ', 'it' => 'Scorte insufficienti per ', 'pt' => 'Stock insuficiente para ', 'ar' => 'المخزون غير كافٍ لـ ', 'hi' => 'के लिए स्टॉक अपर्याप्त है: ', 'ja' => '在庫不足: ', 'zh' => '库存不足：', 'bn' => 'এর জন্য পর্যাপ্ত স্টক নেই: ', 'ru' => 'Недостаточно товара для ', 'id' => 'Stok tidak mencukupi untuk '],
     ];
@@ -5484,338 +5483,6 @@ function validate_remote_feed_url(string $url): ?string
     return $normalized;
 }
 
-function shop_status_label(string $status): string
-{
-    return match (trim($status)) {
-        'draft' => 'Brouillon',
-        'published' => 'Publié',
-        'archived' => 'Archivé',
-        default => 'Inconnu',
-    };
-}
-
-function shop_order_status_label(string $status): string
-{
-    return match (trim($status)) {
-        'pending' => 'En attente',
-        'confirmed' => 'Confirmée',
-        'ready' => 'Prête',
-        'completed' => 'Terminée',
-        'cancelled' => 'Annulée',
-        default => 'Inconnu',
-    };
-}
-
-function shop_categories(): array
-{
-    if (!table_exists('shop_categories')) {
-        return [];
-    }
-
-    $stmt = db()->query('SELECT id, slug, name, description, sort_order, is_active FROM shop_categories WHERE is_active = 1 ORDER BY sort_order ASC, name ASC, id ASC');
-    return $stmt->fetchAll();
-}
-
-function shop_public_products(?string $category = null): array
-{
-    if (!table_exists('shop_products')) {
-        return [];
-    }
-
-    $sql = 'SELECT p.*, c.name AS category_name, c.slug AS category_slug
-            FROM shop_products p
-            LEFT JOIN shop_categories c ON c.id = p.category_id
-            WHERE p.status = "published"';
-    $params = [];
-
-    $normalizedCategory = trim((string) $category);
-    if ($normalizedCategory !== '') {
-        $sql .= ' AND c.slug = ? AND c.is_active = 1';
-        $params[] = $normalizedCategory;
-    }
-
-    $sql .= ' ORDER BY p.is_featured DESC, p.updated_at DESC, p.id DESC';
-
-    $stmt = db()->prepare($sql);
-    $stmt->execute($params);
-
-    return $stmt->fetchAll();
-}
-
-function shop_product_by_slug(string $slug): ?array
-{
-    if (!table_exists('shop_products')) {
-        return null;
-    }
-
-    $stmt = db()->prepare(
-        'SELECT p.*, c.name AS category_name, c.slug AS category_slug
-         FROM shop_products p
-         LEFT JOIN shop_categories c ON c.id = p.category_id
-         WHERE p.slug = ?
-         LIMIT 1'
-    );
-    $stmt->execute([trim($slug)]);
-    $row = $stmt->fetch();
-
-    return $row ?: null;
-}
-
-function shop_cart_raw(): array
-{
-    $cart = $_SESSION['shop_cart'] ?? [];
-    if (!is_array($cart)) {
-        return [];
-    }
-
-    $normalized = [];
-    foreach ($cart as $productId => $quantity) {
-        $id = (int) $productId;
-        $qty = (int) $quantity;
-        if ($id > 0 && $qty > 0) {
-            $normalized[$id] = $qty;
-        }
-    }
-
-    return $normalized;
-}
-
-function shop_cart_save(array $cart): void
-{
-    if ($cart === []) {
-        unset($_SESSION['shop_cart']);
-        return;
-    }
-
-    $_SESSION['shop_cart'] = $cart;
-}
-
-function shop_cart_state(): array
-{
-    $raw = shop_cart_raw();
-    if ($raw === [] || !table_exists('shop_products')) {
-        if ($raw === []) {
-            return ['items' => [], 'total_cents' => 0];
-        }
-        shop_cart_clear();
-
-        return ['items' => [], 'total_cents' => 0];
-    }
-
-    $ids = array_keys($raw);
-    $placeholders = implode(',', array_fill(0, count($ids), '?'));
-    $stmt = db()->prepare(
-        'SELECT id, slug, title, summary, price_cents, stock_qty, status
-         FROM shop_products
-         WHERE id IN (' . $placeholders . ')'
-    );
-    $stmt->execute($ids);
-
-    $productsById = [];
-    foreach ($stmt->fetchAll() as $row) {
-        $productsById[(int) $row['id']] = $row;
-    }
-
-    $items = [];
-    $total = 0;
-    $updatedCart = [];
-
-    foreach ($raw as $productId => $quantity) {
-        $product = $productsById[$productId] ?? null;
-        if (!is_array($product) || (string) ($product['status'] ?? '') !== 'published') {
-            continue;
-        }
-
-        $maxQty = $product['stock_qty'] !== null ? (int) $product['stock_qty'] : null;
-        $finalQty = $maxQty !== null ? min($quantity, max(0, $maxQty)) : $quantity;
-        if ($finalQty <= 0) {
-            continue;
-        }
-
-        $lineTotal = $finalQty * (int) $product['price_cents'];
-        $items[] = [
-            'product' => $product,
-            'quantity' => $finalQty,
-            'line_total_cents' => $lineTotal,
-        ];
-        $total += $lineTotal;
-        $updatedCart[$productId] = $finalQty;
-    }
-
-    if ($updatedCart !== $raw) {
-        shop_cart_save($updatedCart);
-    }
-
-    return [
-        'items' => $items,
-        'total_cents' => $total,
-    ];
-}
-
-function shop_cart_add(int $productId, int $quantity = 1): void
-{
-    if ($productId <= 0) {
-        throw new RuntimeException(upload_i18n_message('invalid_product'));
-    }
-
-    $cart = shop_cart_raw();
-    $cart[$productId] = max(1, (int) ($cart[$productId] ?? 0) + max(1, $quantity));
-    shop_cart_save($cart);
-    shop_cart_state();
-}
-
-function shop_cart_update(int $productId, int $quantity): void
-{
-    if ($productId <= 0) {
-        throw new RuntimeException(upload_i18n_message('invalid_product'));
-    }
-
-    $cart = shop_cart_raw();
-    if ($quantity <= 0) {
-        unset($cart[$productId]);
-    } else {
-        $cart[$productId] = $quantity;
-    }
-
-    shop_cart_save($cart);
-    shop_cart_state();
-}
-
-function shop_cart_remove(int $productId): void
-{
-    if ($productId <= 0) {
-        return;
-    }
-
-    $cart = shop_cart_raw();
-    unset($cart[$productId]);
-    shop_cart_save($cart);
-}
-
-function shop_cart_clear(): void
-{
-    unset($_SESSION['shop_cart']);
-}
-
-function place_shop_order(int $memberId, string $paymentMethod, string $notes = ''): string
-{
-    if (!table_exists('shop_orders') || !table_exists('shop_order_items')) {
-        throw new RuntimeException(upload_i18n_message('shop_module_not_initialized'));
-    }
-
-    $cart = shop_cart_state();
-    if (($cart['items'] ?? []) === []) {
-        throw new RuntimeException(upload_i18n_message('cart_empty'));
-    }
-
-    $allowedPayments = ['on_site', 'bank_transfer'];
-    $payment = in_array($paymentMethod, $allowedPayments, true) ? $paymentMethod : 'on_site';
-    $cleanNotes = trim($notes);
-    if (function_exists('mb_substr')) {
-        $cleanNotes = mb_substr($cleanNotes, 0, 1000);
-    } else {
-        $cleanNotes = substr($cleanNotes, 0, 1000);
-    }
-
-    $orderReference = 'CMD-' . date('Ymd') . '-' . strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
-    $pdo = db();
-
-    $insertOrder = $pdo->prepare(
-        'INSERT INTO shop_orders (reference_code, member_id, status, total_cents, payment_method, notes) VALUES (?, ?, ?, ?, ?, ?)'
-    );
-    $insertItem = $pdo->prepare(
-        'INSERT INTO shop_order_items (order_id, product_id, product_title, quantity, unit_price_cents, line_total_cents) VALUES (?, ?, ?, ?, ?, ?)'
-    );
-    $fetchProduct = $pdo->prepare(
-        'SELECT id, title, price_cents, stock_qty, status FROM shop_products WHERE id = ? AND status = "published" LIMIT 1 FOR UPDATE'
-    );
-    $updateStock = $pdo->prepare('UPDATE shop_products SET stock_qty = stock_qty - ? WHERE id = ? AND stock_qty >= ?');
-
-    $pdo->beginTransaction();
-    try {
-        $insertOrder->execute([
-            $orderReference,
-            $memberId,
-            'pending',
-            (int) ($cart['total_cents'] ?? 0),
-            $payment,
-            $cleanNotes,
-        ]);
-        $orderId = (int) $pdo->lastInsertId();
-
-        foreach ((array) ($cart['items'] ?? []) as $item) {
-            $product = $item['product'] ?? null;
-            $qty = max(1, (int) ($item['quantity'] ?? 0));
-            $productId = (int) ($product['id'] ?? 0);
-            if ($productId <= 0) {
-                throw new RuntimeException(upload_i18n_message('invalid_product_in_cart'));
-            }
-
-            $fetchProduct->execute([$productId]);
-            $dbProduct = $fetchProduct->fetch();
-            if (!$dbProduct) {
-                throw new RuntimeException(upload_i18n_message('product_unavailable'));
-            }
-
-            if ($dbProduct['stock_qty'] !== null) {
-                $updateStock->execute([$qty, (int) $dbProduct['id'], $qty]);
-                if ($updateStock->rowCount() === 0) {
-                    throw new RuntimeException(upload_i18n_message('insufficient_stock_for') . (string) $dbProduct['title'] . '.');
-                }
-            }
-
-            $insertItem->execute([
-                $orderId,
-                (int) $dbProduct['id'],
-                (string) $dbProduct['title'],
-                $qty,
-                (int) $dbProduct['price_cents'],
-                $qty * (int) $dbProduct['price_cents'],
-            ]);
-        }
-
-        $pdo->commit();
-    } catch (Throwable $throwable) {
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
-        }
-        throw $throwable;
-    }
-
-    shop_cart_clear();
-    return $orderReference;
-}
-
-function shop_recent_orders(?int $memberId = null, int $limit = 50): array
-{
-    if (!table_exists('shop_orders')) {
-        return [];
-    }
-
-    $sql = 'SELECT o.*, m.callsign
-            FROM shop_orders o
-            LEFT JOIN members m ON m.id = o.member_id';
-    $params = [];
-    if ($memberId !== null && $memberId > 0) {
-        $sql .= ' WHERE o.member_id = ?';
-        $params[] = $memberId;
-    }
-    $sql .= ' ORDER BY o.created_at DESC, o.id DESC LIMIT ' . max(1, $limit);
-    $stmt = db()->prepare($sql);
-    $stmt->execute($params);
-    return $stmt->fetchAll();
-}
-
-function shop_order_items(int $orderId): array
-{
-    if (!table_exists('shop_order_items')) {
-        return [];
-    }
-    $stmt = db()->prepare('SELECT * FROM shop_order_items WHERE order_id = ? ORDER BY id ASC');
-    $stmt->execute([$orderId]);
-    return $stmt->fetchAll();
-}
-
 function auction_public_lots(int $limit = 24): array
 {
     if (!table_exists('auction_lots')) {
@@ -6133,7 +5800,7 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_press', 'title' => ['fr' => 'Presse', 'en' => 'Press', 'de' => 'Presse', 'nl' => 'Pers'], 'desc' => ['fr' => 'Contacts presse, communiqués datés et documents téléchargeables.', 'en' => 'Press contacts, dated releases and downloadable documents.', 'de' => 'Pressekontakte, datierte Mitteilungen und Downloads.', 'nl' => 'Perscontacten, gedateerde berichten en downloads.'], 'module' => 'press'],
         ['route' => 'admin_events', 'title' => ['fr' => 'Agenda', 'en' => 'Agenda', 'de' => 'Agenda', 'nl' => 'Agenda'], 'desc' => ['fr' => 'Événements du club et contests locaux affichés dans les widgets live.', 'en' => 'Club events and local contests shown in live widgets.', 'de' => 'Clubveranstaltungen und lokale Contests in Live-Widgets.', 'nl' => 'Clubevenementen en lokale contests in live widgets.'], 'module' => 'events'],
         ['route' => 'admin_dinner_reservations', 'title' => ['fr' => 'Dîner annuel', 'en' => 'Annual dinner', 'de' => 'Jahresessen', 'nl' => 'Jaarlijks diner'], 'desc' => ['fr' => 'Réservations, lignes repas/dessert, quantités et total automatique.', 'en' => 'Reservations, meal/dessert lines, quantities and auto total.', 'de' => 'Reservierungen, Menüzeilen, Mengen und automatische Summe.', 'nl' => 'Reservaties, maaltijdregels, aantallen en automatisch totaal.'], 'module' => 'events', 'permission' => 'events.manage'],
-        ['route' => 'admin_shop', 'title' => ['fr' => 'Boutique', 'en' => 'Shop', 'de' => 'Shop', 'nl' => 'Winkel'], 'desc' => ['fr' => 'Catalogue produits, catégories et commandes club.', 'en' => 'Product catalog, categories and club orders.', 'de' => 'Produktkatalog, Kategorien und Clubbestellungen.', 'nl' => 'Productcatalogus, categorieën en clubbestellingen.'], 'module' => 'shop', 'permission' => 'shop.manage'],
+        ['route' => 'admin_classifieds', 'title' => ['fr' => 'Petites annonces', 'en' => 'Classifieds', 'de' => 'Kleinanzeigen', 'nl' => 'Kleine advertenties'], 'desc' => ['fr' => 'Gestion et modération des annonces.', 'en' => 'Manage and moderate classifieds.', 'de' => 'Kleinanzeigen verwalten und moderieren.', 'nl' => 'Kleine advertenties beheren en modereren.'], 'module' => 'classifieds', 'permission' => 'ads.moderate'],
         ['route' => 'admin_auctions', 'title' => ['fr' => 'Enchères', 'en' => 'Auctions', 'de' => 'Auktionen', 'nl' => 'Veilingen'], 'desc' => ['fr' => 'Lots, planification, offres et clôture.', 'en' => 'Lots, scheduling, bids and closing.', 'de' => 'Lose, Planung, Gebote und Abschluss.', 'nl' => 'Kavels, planning, biedingen en afsluiting.'], 'module' => 'auctions', 'permission' => 'auctions.manage'],
         ['route' => 'admin_editorial', 'title' => ['fr' => 'Éditorial multilingue', 'en' => 'Multilingual editorial', 'de' => 'Mehrsprachige Redaktion', 'nl' => 'Meertalige redactie'], 'desc' => ['fr' => 'Français source, traduction auto EN/DE/NL et relecture manuelle.', 'en' => 'French source, EN/DE/NL auto translation and manual review.', 'de' => 'Französische Quelle, automatische Übersetzung und Review.', 'nl' => 'Franse bron, automatische vertaling en manuele review.']],
         ['route' => 'admin_translation_reviews', 'title' => ['fr' => 'Relecture linguistique', 'en' => 'Translation reviews', 'de' => 'Sprachliche Prüfung', 'nl' => 'Taalreview'], 'desc' => ['fr' => 'Workflow de validation des traductions des actualités et articles.', 'en' => 'Validation workflow for news/article translations.', 'de' => 'Freigabe-Workflow für News-/Artikelübersetzungen.', 'nl' => 'Validatieworkflow voor vertalingen van nieuws/artikels.']],
