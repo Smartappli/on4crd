@@ -131,11 +131,42 @@ $renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $h
 };
 
 
-$toolPanelTranslationKeys = [
-    'tool-grid' => ['grid_title', 'address', 'addr_ph', 'calc_grid', 'found_address', 'coords', 'locator'],
-    'tool-quarter-wave' => ['quarter_wave_calc', 'freq_mhz', 'velocity_factor', 'calc', 'quarter_wave_result'],
-    'tool-erp' => ['erp_calc', 'tx_power_w', 'feedline_loss_db', 'antenna_gain_dbd', 'calc', 'erp_result'],
-];
+$toolPanelTranslationKeys = [];
+$catalogGroups = ['locators', 'conversion', 'antenna', 'power', 'advanced_propagation', 'rf_measures', 'radio_math'];
+foreach ($catalogGroups as $group) {
+    foreach (($toolCatalog[$group] ?? []) as $entry) {
+        $id = (string) ($entry['id'] ?? '');
+        if ($id === '') {
+            continue;
+        }
+
+        $keys = [];
+        if (isset($entry['title_key']) && is_string($entry['title_key']) && $entry['title_key'] !== '') {
+            $keys[] = $entry['title_key'];
+        }
+        if (isset($entry['left_key']) && is_string($entry['left_key']) && $entry['left_key'] !== '') {
+            $keys[] = $entry['left_key'];
+        }
+        if (isset($entry['right_key']) && is_string($entry['right_key']) && $entry['right_key'] !== '') {
+            $keys[] = $entry['right_key'];
+        }
+        if ($keys !== []) {
+            $toolPanelTranslationKeys[$id] = array_values(array_unique($keys));
+        }
+    }
+}
+$toolPanelTranslationKeys['tool-grid'] = array_values(array_unique(array_merge(
+    $toolPanelTranslationKeys['tool-grid'] ?? [],
+    ['grid_title', 'address', 'addr_ph', 'calc_grid', 'found_address', 'coords', 'locator']
+)));
+$toolPanelTranslationKeys['tool-quarter-wave'] = array_values(array_unique(array_merge(
+    $toolPanelTranslationKeys['tool-quarter-wave'] ?? [],
+    ['quarter_wave_calc', 'freq_mhz', 'velocity_factor', 'calc', 'quarter_wave_result']
+)));
+$toolPanelTranslationKeys['tool-erp'] = array_values(array_unique(array_merge(
+    $toolPanelTranslationKeys['tool-erp'] ?? [],
+    ['erp_calc', 'tx_power_w', 'feedline_loss_db', 'antenna_gain_dbd', 'calc', 'erp_result']
+)));
 
 $renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
