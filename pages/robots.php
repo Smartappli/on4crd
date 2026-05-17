@@ -15,8 +15,6 @@ $lines = [
     'Allow: /',
     'Disallow: /index.php?route=admin',
     'Disallow: /index.php?route=dashboard',
-    'Disallow: /index.php?route=shop_cart',
-    'Disallow: /index.php?route=shop_checkout',
     'Disallow: /index.php?route=qsl',
     'Disallow: /storage/cache/',
     'Disallow: /storage/uploads/',

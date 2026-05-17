@@ -182,7 +182,9 @@ $routeModules = [
     'wiki_view' => 'wiki',
     'albums' => 'albums',
     'album' => 'albums',
+    'classifieds' => 'classifieds',
     'ads' => 'advertising',
+    'admin_classifieds' => 'classifieds',
     'admin_ads' => 'advertising',
     'ad_click' => 'advertising',
     'admin' => 'admin',
@@ -266,6 +268,7 @@ switch ($route) {
     case 'events_feed': $dispatchPage('pages/events_feed.php'); break;
     case 'event_view': $dispatchPage('pages/event_view.php'); break;
     case 'auctions': $dispatchPage('pages/auctions.php'); break;
+    case 'classifieds': $dispatchPage('pages/classifieds.php'); break;
     case 'auction_view': $dispatchPage('pages/auction_view.php'); break;
     case 'auction_bid': $dispatchPage('pages/auction_bid.php'); break;
     case 'qsl': $dispatchPage('pages/qsl.php'); break;
@@ -304,6 +307,7 @@ switch ($route) {
     case 'admin_dinner_reservations': $dispatchPage('pages/admin_dinner_reservations.php'); break;
     case 'admin_dashboard': $dispatchPage('pages/admin_dashboard.php'); break;
     case 'admin_auctions': $dispatchPage('pages/admin_auctions.php'); break;
+    case 'admin_classifieds': $dispatchPage('pages/admin_classifieds.php'); break;
     case 'settings': $dispatchPage('pages/settings.php'); break;
     case 'code_q': $dispatchPage('pages/code_q.php'); break;
     case 'code_cw': $dispatchPage('pages/code_cw.php'); break;

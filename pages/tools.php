@@ -17,30 +17,34 @@ $labelErpResult = (string) ($t['erp_result'] ?? 'Estimated ERP');
 $labelQuarterWaveResult = (string) ($t['quarter_wave_result'] ?? 'Estimated length');
 $labelVelocityFactor = (string) ($t['velocity_factor'] ?? 'Velocity factor (0-1)');
 
+    return trim($fallback);
+};
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
 $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 $toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
 $hasToolGridFallback = is_file($toolGridFallbackPath);
-$resolveToolTitle = static function (array $entry) use ($t): string {
+$resolveToolTitle = static function (array $entry) use ($tr): string {
     if (isset($entry['title'])) {
         return (string) $entry['title'];
     }
 
     $key = (string) ($entry['title_key'] ?? '');
-    if ($key !== '' && isset($t[$key])) {
-        return (string) $t[$key];
+    if ($key !== '') {
+        return $tr($key, (string) ($entry['id'] ?? $key));
     }
 
     if (($entry['title_pattern'] ?? '') === 'conv_dot' && isset($entry['left_key'], $entry['right_key'])) {
-        return ((string) ($t[(string) $entry['left_key']] ?? $entry['left_key'])) . ' · ' . ((string) ($t[(string) $entry['right_key']] ?? $entry['right_key']));
+        $left = $tr((string) $entry['left_key']);
+        $right = $tr((string) $entry['right_key']);
+        if ($left !== '' && $right !== '') {
+            return $left . ' · ' . $right;
+        }
     }
 
     return (string) $entry['id'];
 };
 
-
-
-$canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGridFallbackPath, $hasToolGridFallback): bool {
+$canRenderToolId = static function (string $toolId) use ($toolPanelMap, $hasToolGridFallback): bool {
     if (isset($toolPanelMap[$toolId])) {
         $partialPath = __DIR__ . '/tools_panels/' . $toolPanelMap[$toolId];
         return is_file($partialPath);
@@ -48,8 +52,6 @@ $canRenderToolId = static function (string $toolId) use ($toolPanelMap, $toolGri
 
     return $toolId === 'tool-grid' && $hasToolGridFallback;
 };
-
-
 
 $buildTools = static function (array $entries) use ($resolveToolTitle, $canRenderToolId): array {
     $tools = [];
@@ -80,23 +82,22 @@ $advancedPropagationTools = $buildTools($toolCatalog['advanced_propagation'] ?? 
 $rfMeasureTools = $buildTools($toolCatalog['rf_measures'] ?? []);
 $radioMathTools = $buildTools($toolCatalog['radio_math'] ?? []);
 set_page_meta([
-    'title' => (string) ($t['title'] ?? $i18n['fr']['title']),
-    'description' => (string) ($t['grid_title'] ?? $i18n['fr']['grid_title']),
+    'title' => $tr('title', 'Outils radioamateur'),
+    'description' => $tr('grid_title', 'Maidenhead locator map and converter'),
     'schema_type' => 'WebPage',
 ]);
 $jsI18n = [
-    'err_enter_address' => (string) ($t['err_enter_address'] ?? $i18n['fr']['err_enter_address']),
-    'err_geocode_unavailable' => (string) ($t['err_geocode_unavailable'] ?? $i18n['fr']['err_geocode_unavailable']),
-    'err_address_not_found' => (string) ($t['err_address_not_found'] ?? $i18n['fr']['err_address_not_found']),
-    'err_invalid_coords' => (string) ($t['err_invalid_coords'] ?? $i18n['fr']['err_invalid_coords']),
-    'err_grid_calc' => (string) ($t['err_grid_calc'] ?? $i18n['fr']['err_grid_calc']),
-    'err_tool_load' => (string) ($t['err_tool_load'] ?? $i18n['fr']['err_tool_load']),
-    'meters_unit' => (string) ($t['meters_unit'] ?? $i18n['fr']['meters_unit']),
-    'km_unit' => (string) ($t['km_unit'] ?? $i18n['fr']['km_unit']),
-    'watts_out_label' => (string) ($t['watts_out_label'] ?? $i18n['fr']['watts_out_label']),
-    'dbuv_label' => (string) ($t['dbuv_label'] ?? ($i18n['fr']['dbuv_label'] ?? 'dBµV')),
+    'err_enter_address' => $tr('err_enter_address'),
+    'err_geocode_unavailable' => $tr('err_geocode_unavailable'),
+    'err_address_not_found' => $tr('err_address_not_found'),
+    'err_invalid_coords' => $tr('err_invalid_coords'),
+    'err_grid_calc' => $tr('err_grid_calc'),
+    'err_tool_load' => $tr('err_tool_load'),
+    'meters_unit' => $tr('meters_unit'),
+    'km_unit' => $tr('km_unit'),
+    'watts_out_label' => $tr('watts_out_label'),
+    'dbuv_label' => $tr('dbuv_label', 'dBµV'),
 ];
-
 
 $renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $hasToolGridFallback): bool {
     $fallbackPath = $toolGridFallbackPath;
@@ -156,17 +157,16 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     return;
 }
 
-
 ob_start();
 ?>
 <section class="card">
-    <h1 class="tools-page-title"><?= e((string) $t['title']) ?></h1>
+    <h1 class="tools-page-title"><?= e($tr('title', 'Outils radioamateur')) ?></h1>
     <div class="tools-layout">
     <aside class="tools-index card">
-        <h2><?= e((string) $t['tool_index']) ?></h2>
-        <p class="help"><?= e((string) $t['choose_tool']) ?></p>
+        <h2><?= e($tr('tool_index')) ?></h2>
+        <p class="help"><?= e($tr('choose_tool')) ?></p>
         <details class="tools-index-group">
-            <summary><?= e((string) $t['category_locators']) ?></summary>
+            <summary><?= e($tr('category_locators')) ?></summary>
             <ul>
                 <?php foreach ($locatorTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -174,7 +174,7 @@ ob_start();
             </ul>
         </details>
         <details class="tools-index-group">
-            <summary><?= e((string) $t['category_conversions']) ?></summary>
+            <summary><?= e($tr('category_conversions')) ?></summary>
             <ul>
                 <?php foreach ($conversionTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -182,7 +182,7 @@ ob_start();
             </ul>
         </details>
         <details class="tools-index-group">
-            <summary><?= e($labelCategoryAntenna) ?></summary>
+            <summary><?= e($tr('category_antenna', 'Antenna & propagation')) ?></summary>
             <ul>
                 <?php foreach ($antennaTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -191,7 +191,7 @@ ob_start();
         </details>
 
         <details class="tools-index-group">
-            <summary><?= e((string) $t['category_power']) ?></summary>
+            <summary><?= e($tr('category_power')) ?></summary>
             <ul>
                 <?php foreach ($powerTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -199,7 +199,7 @@ ob_start();
             </ul>
         </details>
         <details class="tools-index-group">
-            <summary><?= e((string) $t['category_propagation_adv']) ?></summary>
+            <summary><?= e($tr('category_propagation_adv')) ?></summary>
             <ul>
                 <?php foreach ($advancedPropagationTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -208,7 +208,7 @@ ob_start();
         </details>
 
         <details class="tools-index-group">
-            <summary><?= e((string) $t['category_rf_measures']) ?></summary>
+            <summary><?= e($tr('category_rf_measures')) ?></summary>
             <ul>
                 <?php foreach ($rfMeasureTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -217,7 +217,7 @@ ob_start();
         </details>
 
         <details class="tools-index-group">
-            <summary><?= e((string) $t['category_radio_math']) ?></summary>
+            <summary><?= e($tr('category_radio_math')) ?></summary>
             <ul>
                 <?php foreach ($radioMathTools as $tool): ?>
                     <li><a href="#<?= e((string) $tool['id']) ?>" data-tool-target="<?= e((string) $tool['id']) ?>"><?= e((string) $tool['title']) ?></a></li>
@@ -240,4 +240,4 @@ ob_start();
 <?php require __DIR__ . '/tools_script.js.php'; ?>
 </script>
 <?php
-echo render_layout((string) ob_get_clean(), (string) ($t['title'] ?? 'Outils'));
+echo render_layout((string) ob_get_clean(), $tr('title', 'Outils radioamateur'));
