@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/tools.php';
-$t = [];
-foreach (array_keys($i18n['fr']) as $key) {
+$trCache = [];
+$tr = static function (string $key, string $fallback = '') use ($i18n, $locale, &$trCache): string {
+    if (array_key_exists($key, $trCache)) {
+        return $trCache[$key];
+    }
+
     $pool = [];
     foreach ($i18n as $lang => $translations) {
         if (isset($translations[$key]) && is_string($translations[$key])) {
@@ -14,17 +18,18 @@ foreach (array_keys($i18n['fr']) as $key) {
 
     $value = trim(i18n_localized_value($pool, $locale, 'fr'));
     if ($value === '') {
-        $value = trim((string) ($i18n['fr'][$key] ?? ''));
-    }
-    $t[$key] = $value;
-}
-$tr = static function (string $key, string $fallback = '') use ($t): string {
-    if (array_key_exists($key, $t)) {
-        return trim((string) $t[$key]);
+        $value = trim((string) ($i18n['fr'][$key] ?? $fallback));
     }
 
-    return trim($fallback);
+    $trCache[$key] = $value;
+    return $value;
 };
+
+
+$t = [];
+foreach (array_keys($i18n['fr']) as $key) {
+    $t[$key] = $tr($key, (string) ($i18n['fr'][$key] ?? ''));
+}
 
 $labelCategoryAntenna = $tr('category_antenna', 'Antenna & propagation');
 $labelQuarterWaveCalc = $tr('quarter_wave_calc', 'Quarter-wave length');
@@ -125,6 +130,13 @@ $renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $h
     return true;
 };
 
+
+$toolPanelTranslationKeys = [
+    'tool-grid' => ['grid_title', 'address', 'addr_ph', 'calc_grid', 'found_address', 'coords', 'locator'],
+    'tool-quarter-wave' => ['quarter_wave_calc', 'freq_mhz', 'velocity_factor', 'calc', 'quarter_wave_result'],
+    'tool-erp' => ['erp_calc', 'tx_power_w', 'feedline_loss_db', 'antenna_gain_dbd', 'calc', 'erp_result'],
+];
+
 $renderToolPanel = static function (string $toolId) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
     if ($partialFile === null) {
@@ -147,6 +159,14 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
         header('Content-Type: text/plain; charset=UTF-8');
         echo $tr('err_tool_load', 'Tool loading error');
         return;
+    }
+
+    if (isset($toolPanelTranslationKeys[$toolId])) {
+        $panelTranslations = [];
+        foreach ($toolPanelTranslationKeys[$toolId] as $k) {
+            $panelTranslations[$k] = $tr($k, (string) ($i18n['fr'][$k] ?? ''));
+        }
+        $t = $panelTranslations + $t;
     }
 
     if (!$canRenderToolId($toolId)) {
