@@ -26,11 +26,36 @@ $tr = static function (string $key, string $fallback = '') use ($i18n, $locale, 
 };
 
 
+$initialToolKeys = [
+    'grid_title', 'address', 'addr_ph', 'calc_grid', 'found_address', 'coords', 'locator',
+    'quarter_wave_calc', 'frequency_mhz', 'velocity_factor', 'quarter_wave_result',
+    'erp_calc', 'tx_power_w', 'feedline_loss_db', 'antenna_gain_dbd', 'erp_result',
+];
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
-    $t[$key] = $tr($key, (string) ($i18n['fr'][$key] ?? ''));
+    $value = trim(i18n_localized_value($i18n, $locale, $key));
+    if ($value === '') {
+        $value = trim((string) ($i18n['fr'][$key] ?? ''));
+    }
+    $t[$key] = $value;
 }
+$tr = static function (string $key, string $fallback = '') use ($t): string {
+    if (array_key_exists($key, $t)) {
+        return trim((string) $t[$key]);
+    }
 
+    return trim($fallback);
+};
+
+$labelCategoryAntenna = $tr('category_antenna', 'Antenna & propagation');
+$labelQuarterWaveCalc = $tr('quarter_wave_calc', 'Quarter-wave length');
+$labelErpCalc = $tr('erp_calc', 'Estimated ERP');
+$labelTxPowerW = $tr('tx_power_w', 'TX power (W)');
+$labelFeedlineLossDb = $tr('feedline_loss_db', 'Feedline loss (dB)');
+$labelAntennaGainDbd = $tr('antenna_gain_dbd', 'Antenna gain (dBd)');
+$labelErpResult = $tr('erp_result', 'Estimated ERP');
+$labelQuarterWaveResult = $tr('quarter_wave_result', 'Estimated length');
+$labelVelocityFactor = $tr('velocity_factor', 'Velocity factor (0-1)');
 $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
 $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
 $toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
