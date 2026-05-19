@@ -10,7 +10,16 @@ $i18n = [
     'it' => ['not_found' => 'Notizia non trovata', 'not_found_msg' => 'Questa notizia non esiste o non è pubblicata.', 'back' => '← Torna alle notizie', 'published_on' => 'Pubblicato il', 'date_unknown' => 'Data non definita', 'content_soon' => 'Il contenuto dettagliato sarà aggiunto presto.'],
     'pt' => ['not_found' => 'Notícia não encontrada', 'not_found_msg' => 'Esta notícia não existe ou não está publicada.', 'back' => '← Voltar às notícias', 'published_on' => 'Publicado em', 'date_unknown' => 'Data não definida', 'content_soon' => 'O conteúdo detalhado será adicionado em breve.'],
     'nl' => ['not_found' => 'Nieuws niet gevonden', 'not_found_msg' => 'Dit nieuwsbericht bestaat niet of is niet gepubliceerd.', 'back' => '← Terug naar nieuws', 'published_on' => 'Gepubliceerd op', 'date_unknown' => 'Datum niet ingesteld', 'content_soon' => 'Gedetailleerde inhoud wordt binnenkort toegevoegd.'],
+
+    'ar' => ['not_found' => 'الخبر غير موجود', 'not_found_msg' => 'هذا الخبر غير موجود أو غير منشور.', 'back' => '← العودة إلى الأخبار', 'published_on' => 'نُشر في', 'date_unknown' => 'تاريخ غير محدد', 'content_soon' => 'سيتم إضافة المحتوى التفصيلي قريبًا.'],
+    'bn' => ['not_found' => 'সংবাদ পাওয়া যায়নি', 'not_found_msg' => 'এই সংবাদটি নেই বা প্রকাশিত নয়।', 'back' => '← সংবাদে ফিরে যান', 'published_on' => 'প্রকাশিত', 'date_unknown' => 'তারিখ নির্ধারিত নয়', 'content_soon' => 'বিস্তারিত বিষয়বস্তু শিগগিরই যোগ করা হবে।'],
+    'hi' => ['not_found' => 'समाचार नहीं मिला', 'not_found_msg' => 'यह समाचार मौजूद नहीं है या प्रकाशित नहीं है।', 'back' => '← समाचार पर वापस जाएँ', 'published_on' => 'प्रकाशित', 'date_unknown' => 'तारीख निर्धारित नहीं', 'content_soon' => 'विस्तृत सामग्री जल्द जोड़ी जाएगी।'],
+    'id' => ['not_found' => 'Berita tidak ditemukan', 'not_found_msg' => 'Berita ini tidak ada atau belum dipublikasikan.', 'back' => '← Kembali ke berita', 'published_on' => 'Dipublikasikan pada', 'date_unknown' => 'Tanggal belum ditetapkan', 'content_soon' => 'Konten rinci akan segera ditambahkan.'],
+    'ja' => ['not_found' => 'ニュースが見つかりません', 'not_found_msg' => 'このニュースは存在しないか、公開されていません。', 'back' => '← ニュース一覧へ戻る', 'published_on' => '公開日', 'date_unknown' => '日付未設定', 'content_soon' => '詳細な内容は近日中に追加されます。'],
+    'ru' => ['not_found' => 'Новость не найдена', 'not_found_msg' => 'Эта новость не существует или не опубликована.', 'back' => '← Назад к новостям', 'published_on' => 'Опубликовано', 'date_unknown' => 'Дата не указана', 'content_soon' => 'Подробное содержание будет добавлено в ближайшее время.'],
+    'zh' => ['not_found' => '未找到新闻', 'not_found_msg' => '该新闻不存在或未发布。', 'back' => '← 返回新闻', 'published_on' => '发布于', 'date_unknown' => '日期未设置', 'content_soon' => '详细内容将很快添加。'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $pool = [];

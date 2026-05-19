@@ -121,6 +121,7 @@ $i18n = [
         'theme_autres' => 'Andere thema’s',
     ],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $pool = [];

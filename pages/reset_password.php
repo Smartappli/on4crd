@@ -21,6 +21,7 @@ $i18n = [
     'ru' => ['err_incomplete' => 'Недостаточно данных для сброса.', 'err_auth_unavailable' => 'Модуль аутентификации недоступен. Выполните composer install.', 'ok_updated' => 'Пароль обновлён. Теперь вы можете войти.', 'err_invalid_link' => 'Ссылка недействительна или истекла.', 'err_reset_disabled' => 'Сброс пароля для этого аккаунта отключён.', 'err_invalid_password' => 'Недопустимый пароль (рекомендуется минимум 8 символов).', 'err_too_many' => 'Слишком много попыток. Попробуйте позже.', 'title' => 'Сброс пароля', 'new_password' => 'Новый пароль', 'submit' => 'Обновить', 'back_login' => 'Вернуться ко входу', 'layout_title' => 'Сброс пароля'],
     'id' => ['err_incomplete' => 'Informasi reset tidak lengkap.', 'err_auth_unavailable' => 'Modul autentikasi tidak tersedia. Jalankan composer install.', 'ok_updated' => 'Kata sandi diperbarui. Anda sekarang dapat masuk.', 'err_invalid_link' => 'Tautan tidak valid atau kedaluwarsa.', 'err_reset_disabled' => 'Reset dinonaktifkan untuk akun ini.', 'err_invalid_password' => 'Kata sandi tidak valid (disarankan minimal 8 karakter).', 'err_too_many' => 'Terlalu banyak percobaan. Coba lagi nanti.', 'title' => 'Reset kata sandi', 'new_password' => 'Kata sandi baru', 'submit' => 'Perbarui', 'back_login' => 'Kembali ke login', 'layout_title' => 'Reset kata sandi'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };

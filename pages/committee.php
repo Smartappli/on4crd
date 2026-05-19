@@ -12,6 +12,7 @@ $i18n = [
     'pt' => ['transparency' => 'Transparência', 'member_welcome' => 'Acolhimento de membros', 'contact' => 'Contacto', 'committee_desc' => 'A comissão coordena a vida do clube, a organização das atividades, o acolhimento de novos membros e as relações com parceiros.', 'manage_label' => 'Gerir comissão', 'none' => 'Nenhum membro da comissão publicado de momento.', 'portrait_of' => 'Retrato de'],
     'nl' => ['transparency' => 'Transparantie', 'member_welcome' => 'Ontvangst van leden', 'contact' => 'Contact', 'committee_desc' => 'Het comité coördineert het clubleven, de organisatie van activiteiten, de ontvangst van nieuwkomers en de relaties met partners.', 'manage_label' => 'Comité beheren', 'none' => 'Er is momenteel geen commissielid gepubliceerd.', 'portrait_of' => 'Portret van'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return i18n_localized_value($i18n, $locale, $key);
 };

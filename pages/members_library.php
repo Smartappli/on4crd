@@ -12,6 +12,7 @@ $i18n = [
     'pt' => ['title' => 'Biblioteca de membros', 'intro' => 'Consulte PDFs por categoria ou pesquisa.', 'open' => 'Abrir PDF', 'empty' => 'Nenhum documento encontrado.', 'storage_unavailable' => 'A biblioteca está temporariamente indisponível.', 'meta_desc' => 'Interface de consulta da biblioteca privada de membros ON4CRD.', 'search_ph' => 'Pesquisar (título, resumo, conteúdo indexado)', 'search' => 'Pesquisar', 'all_categories' => 'Todas as categorias', 'for_filters' => ' para estes filtros'],
     'nl' => ['title' => 'Ledenbibliotheek', 'intro' => 'Bekijk PDF\'s per categorie of via zoeken.', 'open' => 'PDF openen', 'empty' => 'Geen document gevonden.', 'storage_unavailable' => 'De bibliotheek is tijdelijk niet beschikbaar.', 'meta_desc' => 'Raadpleeginterface voor de private ON4CRD-ledenbibliotheek.', 'search_ph' => 'Zoeken (titel, samenvatting, geïndexeerde inhoud)', 'search' => 'Zoeken', 'all_categories' => 'Alle categorieën', 'for_filters' => ' voor deze filters'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $value = trim(i18n_localized_value($i18n, $locale, 'fr'));

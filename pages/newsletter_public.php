@@ -12,6 +12,7 @@ $i18n = [
     'pt' => ['title' => 'Inscrição newsletter', 'desc' => 'Subscreva a newsletter ON4CRD.', 'invalid_email' => 'Endereço de email inválido.', 'ok' => 'A sua subscrição da newsletter está confirmada.', 'intro' => 'Receba as notícias do Radio Club Durnal diretamente por email.', 'email_label' => 'Email da newsletter', 'submit' => 'Subscrever newsletter'],
     'nl' => ['title' => 'Nieuwsbriefinschrijving', 'desc' => 'Schrijf je in voor de ON4CRD-nieuwsbrief.', 'invalid_email' => 'Ongeldig e-mailadres.', 'ok' => 'Je nieuwsbriefinschrijving is bevestigd.', 'intro' => 'Ontvang nieuws van Radio Club Durnal rechtstreeks per e-mail.', 'email_label' => 'Nieuwsbrief e-mail', 'submit' => 'Inschrijven op nieuwsbrief'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };

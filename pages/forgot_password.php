@@ -18,6 +18,7 @@ $i18n = [
     'ru' => ['err_email_required' => 'Пожалуйста, укажите ваш email.', 'err_auth_unavailable' => 'Модуль аутентификации недоступен. Выполните composer install.', 'ok_sent' => 'Если для этого email существует аккаунт, ссылка для сброса создана.', 'err_invalid_email' => 'Неверный email.', 'err_not_verified' => 'Аккаунт не подтверждён.', 'err_reset_disabled' => 'Сброс пароля для этого аккаунта отключён.', 'err_too_many' => 'Слишком много запросов. Попробуйте позже.', 'title' => 'Забыли пароль', 'submit' => 'Отправить ссылку', 'back_login' => 'Вернуться ко входу', 'email_label' => 'Email'],
     'id' => ['err_email_required' => 'Silakan masukkan email Anda.', 'err_auth_unavailable' => 'Modul autentikasi tidak tersedia. Jalankan composer install.', 'ok_sent' => 'Jika akun untuk email ini ada, tautan reset telah dibuat.', 'err_invalid_email' => 'Alamat email tidak valid.', 'err_not_verified' => 'Akun belum diverifikasi.', 'err_reset_disabled' => 'Reset dinonaktifkan untuk akun ini.', 'err_too_many' => 'Terlalu banyak permintaan. Coba lagi nanti.', 'title' => 'Lupa kata sandi', 'submit' => 'Kirim tautan', 'back_login' => 'Kembali ke login', 'email_label' => 'Email'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };

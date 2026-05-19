@@ -13,6 +13,7 @@ $i18n = [
     'pt' => ['missing_q' => 'Parâmetro q em falta.', 'service_down' => 'Serviço de geocodificação indisponível.', 'address_not_found' => 'Endereço não encontrado.', 'invalid_coords' => 'Coordenadas inválidas recebidas.'],
     'nl' => ['missing_q' => 'Ontbrekende q-parameter.', 'service_down' => 'Geocoderingsservice niet beschikbaar.', 'address_not_found' => 'Adres niet gevonden.', 'invalid_coords' => 'Ongeldige coördinaten ontvangen.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $resolved = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $pool = [];
