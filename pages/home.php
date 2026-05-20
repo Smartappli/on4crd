@@ -1079,7 +1079,13 @@ foreach ($homeEnglishFallbackLocales as $localeCode) {
 }
 $homeI18n = [];
 foreach (array_keys($homeMessages['fr']) as $key) {
-    $value = trim(i18n_localized_value($homeMessages, $homeLocale, $key));
+    $pool = [];
+    foreach ($homeMessages as $lang => $messages) {
+        if (isset($messages[$key]) && is_string($messages[$key])) {
+            $pool[$lang] = $messages[$key];
+        }
+    }
+    $value = trim(i18n_localized_value($pool, $homeLocale, 'fr'));
     if ($value === '') {
         $value = trim((string) ($homeMessages['fr'][$key] ?? ''));
     }
@@ -1467,7 +1473,13 @@ foreach ($homeEnglishFallbackLocales as $localeCode) {
     $homeExtraMessages[$localeCode] = array_replace($homeExtraMessages['en'], $homeExtraMessages[$localeCode]);
 }
 foreach (array_keys($homeExtraMessages['fr']) as $key) {
-    $value = trim(i18n_localized_value($homeExtraMessages, $homeLocale, $key));
+    $pool = [];
+    foreach ($homeExtraMessages as $lang => $messages) {
+        if (isset($messages[$key]) && is_string($messages[$key])) {
+            $pool[$lang] = $messages[$key];
+        }
+    }
+    $value = trim(i18n_localized_value($pool, $homeLocale, 'fr'));
     if ($value === '') {
         $value = trim((string) ($homeExtraMessages['fr'][$key] ?? ''));
     }

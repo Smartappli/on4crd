@@ -1,4 +1,4 @@
-<article class="card tool-panel" id="tool-unit-conversions" data-tool-panel>
+<article class="card tool-panel is-hidden" id="tool-unit-conversions" data-tool-panel>
     <h2><?= e((string) ($t['unit_conv_title'] ?? 'Conversion d’unités')) ?></h2>
     <p class="help"><?= e((string) ($t['unit_conv_help'] ?? 'Sélectionnez une conversion :')) ?></p>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem;">

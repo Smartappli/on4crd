@@ -12,6 +12,6 @@
   },
   "scripts": {
     "lint": "php tools/lint.php",
-    "test": "phpunit --configuration phpunit.xml.dist --testdox"
+    "test": "vendor/bin/phpunit --configuration phpunit.xml.dist --testdox"
   }
 }

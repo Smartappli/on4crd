@@ -73,6 +73,9 @@
         if (!id) {
             id = 'tool-grid';
         }
+        if (!knownToolIds.has(id) && /^tool-[a-z0-9-]+$/.test(id)) {
+            knownToolIds.add(id);
+        }
         if (!knownToolIds.has(id)) {
             id = 'tool-grid';
         }

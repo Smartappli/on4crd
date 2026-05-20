@@ -1,5 +1,5 @@
-<article id="tool-ohm-law" data-tool-panel class="card is-hidden">
-    <h3><?= e((string) ($t['ohm_law_calc'] ?? "Loi d'Ohm")) ?></h3>
+<article id="tool-ohm-law" data-tool-panel class="card tool-panel is-hidden">
+    <h2><?= e((string) ($t['ohm_law_calc'] ?? "Loi d'Ohm")) ?></h2>
     <p class="help"><?= e((string) ($t['ohm_law_help'] ?? 'Enter two values to compute the third.')) ?></p>
     <div class="grid-auto">
         <label><?= e((string) ($t['voltage_v'] ?? 'Tension (V)')) ?>
