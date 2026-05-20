@@ -11,6 +11,7 @@ $i18n = [
     'pt' => ['title' => 'Álbum', 'gallery_unavailable' => 'A galeria está indisponível de momento.', 'not_found' => 'Álbum não encontrado.', 'back' => '← Voltar à galeria', 'photos' => 'Fotos', 'album_photos' => 'Fotos do álbum', 'none' => 'Não há fotos disponíveis neste álbum.', 'photo_alt' => 'Foto do álbum'],
     'nl' => ['title' => 'Album', 'gallery_unavailable' => 'De galerij is momenteel niet beschikbaar.', 'not_found' => 'Album niet gevonden.', 'back' => '← Terug naar galerij', 'photos' => "Foto's", 'album_photos' => "Foto's van het album", 'none' => "Geen foto's beschikbaar in dit album.", 'photo_alt' => 'Albumfoto'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $pool = [];

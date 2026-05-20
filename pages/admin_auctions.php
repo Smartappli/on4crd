@@ -14,6 +14,7 @@ $i18n = [
     'it' => ['err_title_required' => 'Il titolo del lotto è obbligatorio.', 'ok_saved' => 'Lotto salvato.', 'edit' => 'Modifica', 'create' => 'Crea', 'a_lot' => 'un lotto', 'title' => 'Titolo', 'slug' => 'Slug', 'summary' => 'Riepilogo', 'description' => 'Descrizione', 'image_url' => 'URL immagine', 'starting_price' => 'Prezzo iniziale', 'reserve_price' => 'Prezzo di riserva', 'min_increment' => 'Rialzo minimo', 'buy_now' => 'Acquisto immediato', 'start' => 'Inizio', 'end' => 'Fine', 'status' => 'Stato', 'save_lot' => 'Salva lotto', 'saved_lots' => 'Lotti salvati', 'no_lot' => 'Nessun lotto.', 'layout' => 'Amministrazione aste', 'meta_desc' => 'Gestione dei lotti e delle impostazioni d’asta.'],
     'pt' => ['err_title_required' => 'O título do lote é obrigatório.', 'ok_saved' => 'Lote guardado.', 'edit' => 'Editar', 'create' => 'Criar', 'a_lot' => 'um lote', 'title' => 'Título', 'slug' => 'Slug', 'summary' => 'Resumo', 'description' => 'Descrição', 'image_url' => 'URL da imagem', 'starting_price' => 'Preço inicial', 'reserve_price' => 'Preço de reserva', 'min_increment' => 'Incremento mínimo', 'buy_now' => 'Compra imediata', 'start' => 'Início', 'end' => 'Fim', 'status' => 'Estado', 'save_lot' => 'Guardar lote', 'saved_lots' => 'Lotes guardados', 'no_lot' => 'Sem lote.', 'layout' => 'Administração de leilões', 'meta_desc' => 'Gestão de lotes e configurações de leilão.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);

@@ -18,6 +18,7 @@ $i18n = [
     'ru' => ['required' => 'Требуются учетные данные.', 'captcha_invalid' => 'Неверная captcha.', 'auth_unavailable' => 'Модуль аутентификации недоступен. Выполните composer install.', 'invalid_credentials' => 'Неверный позывной или пароль.', 'too_many' => 'Слишком много попыток входа. Повторите через несколько минут.', 'not_verified' => 'Ваш аккаунт ещё не подтверждён.', 'login_success' => 'Вход выполнен успешно.', 'title' => 'Вход', 'callsign' => 'Позывной', 'password' => 'Пароль', 'captcha_question' => 'Captcha: сколько будет', 'login' => 'Войти', 'forgot_password' => 'Забыли пароль?', 'no_member' => 'Ещё не участник?', 'create_account' => 'Создать аккаунт'],
     'id' => ['required' => 'Kredensial wajib diisi.', 'captcha_invalid' => 'Captcha tidak valid.', 'auth_unavailable' => 'Modul autentikasi tidak tersedia. Jalankan composer install.', 'invalid_credentials' => 'Callsign atau kata sandi tidak valid.', 'too_many' => 'Terlalu banyak percobaan login. Coba lagi dalam beberapa menit.', 'not_verified' => 'Akun Anda belum diverifikasi.', 'login_success' => 'Login berhasil.', 'title' => 'Masuk', 'callsign' => 'Callsign', 'password' => 'Kata sandi', 'captcha_question' => 'Captcha: berapa hasil', 'login' => 'Masuk', 'forgot_password' => 'Lupa kata sandi?', 'no_member' => 'Belum menjadi anggota?', 'create_account' => 'Buat akun'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 
 if (current_user() !== null) {

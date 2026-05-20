@@ -13,6 +13,7 @@ $i18n = [
     'pt' => ['updated' => 'Módulos atualizados.', 'title' => 'Módulos', 'core' => 'Núcleo', 'enabled' => 'Ativado', 'visibility' => 'Visibilidade', 'public' => 'Público', 'members' => 'Membros', 'admin' => 'Administradores', 'save' => 'Guardar', 'layout' => 'Módulos', 'meta_desc' => 'Gestão da ativação e visibilidade dos módulos.'],
     'nl' => ['updated' => 'Modules bijgewerkt.', 'title' => 'Modules', 'core' => 'Kern', 'enabled' => 'Ingeschakeld', 'visibility' => 'Zichtbaarheid', 'public' => 'Openbaar', 'members' => 'Leden', 'admin' => 'Beheerders', 'save' => 'Opslaan', 'layout' => 'Modules', 'meta_desc' => 'Beheer van activatie en zichtbaarheid van sitemodules.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {

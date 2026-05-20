@@ -13,6 +13,7 @@ $i18n = [
     'pt' => ['ok_updated' => 'Widgets do painel atualizados.', 'title' => 'Administração do painel', 'help' => 'Ative/desative widgets disponíveis no painel de membros.', 'save' => 'Guardar', 'layout' => 'Painel', 'meta_desc' => 'Configuração dos widgets do painel de membros.', 'members_title' => 'Gestão de membros', 'members_help' => 'Acesso rápido às ferramentas de gestão de membros.', 'members_total' => 'Membros totais', 'members_active' => 'Membros ativos', 'members_committee' => 'Membros da comissão', 'members_roles' => 'Funções e permissões', 'members_committee_cta' => 'Gerir comissão'],
     'nl' => ['ok_updated' => 'Dashboardwidgets bijgewerkt.', 'title' => 'Dashboardbeheer', 'help' => 'Activeer/deactiveer widgets die beschikbaar zijn op het ledendashboard.', 'save' => 'Opslaan', 'layout' => 'Dashboard', 'meta_desc' => 'Configuratie van widgets op het ledendashboard.', 'members_title' => 'Ledenbeheer', 'members_help' => 'Snelle toegang tot tools voor ledenbeheer.', 'members_total' => 'Totaal leden', 'members_active' => 'Actieve leden', 'members_committee' => 'Comitéleden', 'members_roles' => 'Rollen & rechten', 'members_committee_cta' => 'Comité beheren'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $locale = current_locale();
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {

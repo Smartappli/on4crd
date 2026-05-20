@@ -13,6 +13,7 @@ $i18n = [
     'pt' => ['title' => 'Administração wiki', 'new_page' => 'Nova página', 'th_title' => 'Título', 'th_slug' => 'Slug', 'th_updated' => 'Atualizado', 'th_action' => 'Ação', 'edit' => 'Editar', 'empty' => 'Sem páginas.', 'layout' => 'Administração wiki', 'meta_desc' => 'Gestão de páginas wiki.'],
     'nl' => ['title' => 'Wiki-beheer', 'new_page' => 'Nieuwe pagina', 'th_title' => 'Titel', 'th_slug' => 'Slug', 'th_updated' => 'Bijgewerkt', 'th_action' => 'Actie', 'edit' => 'Bewerken', 'empty' => 'Geen pagina\'s.', 'layout' => 'Wiki-beheer', 'meta_desc' => 'Wiki-pagina\'s beheren.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };

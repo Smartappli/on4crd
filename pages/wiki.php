@@ -11,6 +11,7 @@ $i18n = [
     'pt' => ['title' => 'Wiki', 'unavailable' => 'A wiki estará disponível após a inicialização das páginas.', 'new_pages' => 'Novas páginas', 'updated_pages' => 'Páginas atualizadas', 'most_read' => 'Mais lidas', 'new_page' => 'Nova página', 'search_placeholder' => 'Pesquisar uma página (título ou conteúdo)', 'search' => 'Pesquisar', 'reset' => 'Repor', 'wiki_pages' => 'Páginas wiki', 'no_page' => 'Nenhuma página encontrada', 'for_search' => ' para esta pesquisa', 'summary_fallback' => 'Abra esta página para aceder ao conteúdo completo.', 'updated_at' => 'Atualizado:', 'open_page' => 'Abrir página'],
     'nl' => ['title' => 'Wiki', 'unavailable' => "De wiki is beschikbaar na initialisatie van de pagina's.", 'new_pages' => "Nieuwe pagina's", 'updated_pages' => "Bijgewerkte pagina's", 'most_read' => 'Meest gelezen', 'new_page' => 'Nieuwe pagina', 'search_placeholder' => 'Zoek een pagina (titel of inhoud)', 'search' => 'Zoeken', 'reset' => 'Reset', 'wiki_pages' => "Wiki-pagina's", 'no_page' => 'Geen pagina gevonden', 'for_search' => ' voor deze zoekopdracht', 'summary_fallback' => 'Open deze pagina om de volledige inhoud te bekijken.', 'updated_at' => 'Bijgewerkt:', 'open_page' => 'Pagina openen'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 
 if (!table_exists('wiki_pages')) {

@@ -12,6 +12,7 @@ $i18n = [
     'pt' => ['updated' => 'Comissão atualizada.', 'title' => 'Gestão da comissão', 'intro' => 'Selecione os membros a mostrar na página da comissão.', 'show_on_page' => 'Mostrar na página comissão', 'role' => 'Função na comissão', 'sort_order' => 'Ordem de visualização', 'bio' => 'Biografia curta', 'save' => 'Guardar', 'layout' => 'Gestão da comissão', 'meta_desc' => 'Gestão dos membros mostrados na página da comissão.'],
     'nl' => ['updated' => 'Comité bijgewerkt.', 'title' => 'Comitébeheer', 'intro' => 'Selecteer leden die op de comitépagina moeten verschijnen en stel rol, volgorde en korte biografie in.', 'show_on_page' => 'Op comitépagina tonen', 'role' => 'Rol in het comité', 'sort_order' => 'Weergavevolgorde', 'bio' => 'Korte biografie', 'save' => 'Opslaan', 'layout' => 'Comitébeheer', 'meta_desc' => 'Beheer van leden die op de comitépagina worden weergegeven.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, $key);

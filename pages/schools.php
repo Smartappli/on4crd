@@ -63,6 +63,7 @@ $i18n = [
         'layout' => 'Scholen',
     ],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 
 set_page_meta([

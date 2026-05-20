@@ -20,6 +20,7 @@ $i18n = [
     'ru' => ['meta_title' => 'Настройки рассылки', 'meta_desc' => 'Управляйте подпиской на рассылку ON4CRD.', 'err_invalid_email' => 'Неверный email.', 'ok_subscribed' => 'Вы подписаны на рассылку.', 'err_no_sub' => 'Подписка не найдена.', 'ok_unsubscribed' => 'Вы отписались от рассылки.', 'title' => 'Настройки рассылки', 'intro' => 'Подпишитесь, чтобы получать новости радиоклуба по email. Вы можете отписаться в любое время.', 'status' => 'Текущий статус:', 'subscribed' => 'подписан', 'not_subscribed' => 'не подписан', 'unsubscribe' => 'Отписаться', 'email_label' => 'Контактный email', 'subscribe' => 'Подписаться', 'layout_title' => 'Рассылка'],
     'id' => ['meta_title' => 'Preferensi newsletter', 'meta_desc' => 'Kelola langganan newsletter ON4CRD Anda.', 'err_invalid_email' => 'Email tidak valid.', 'ok_subscribed' => 'Anda berlangganan newsletter.', 'err_no_sub' => 'Langganan tidak ditemukan.', 'ok_unsubscribed' => 'Anda berhenti berlangganan newsletter.', 'title' => 'Preferensi newsletter', 'intro' => 'Berlangganan untuk menerima berita klub radio melalui email. Anda dapat berhenti berlangganan kapan saja.', 'status' => 'Status saat ini:', 'subscribed' => 'berlangganan', 'not_subscribed' => 'tidak berlangganan', 'unsubscribe' => 'Berhenti berlangganan', 'email_label' => 'Email kontak', 'subscribe' => 'Berlangganan', 'layout_title' => 'Newsletter'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };
