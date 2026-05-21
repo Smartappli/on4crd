@@ -4,15 +4,7 @@ declare(strict_types=1);
 require_permission('admin.access');
 
 $locale = current_locale();
-$i18n = [
-    'fr' => ['title' => 'Administration du wiki', 'new_page' => 'Nouvelle page', 'th_title' => 'Titre', 'th_slug' => 'Slug', 'th_updated' => 'Mise à jour', 'th_action' => 'Action', 'edit' => 'Modifier', 'empty' => 'Aucune page.', 'layout' => 'Administration wiki', 'meta_desc' => 'Gestion des pages wiki.'],
-    'en' => ['title' => 'Wiki administration', 'new_page' => 'New page', 'th_title' => 'Title', 'th_slug' => 'Slug', 'th_updated' => 'Updated', 'th_action' => 'Action', 'edit' => 'Edit', 'empty' => 'No pages.', 'layout' => 'Wiki administration', 'meta_desc' => 'Manage wiki pages.'],
-    'de' => ['title' => 'Wiki-Verwaltung', 'new_page' => 'Neue Seite', 'th_title' => 'Titel', 'th_slug' => 'Slug', 'th_updated' => 'Aktualisiert', 'th_action' => 'Aktion', 'edit' => 'Bearbeiten', 'empty' => 'Keine Seiten.', 'layout' => 'Wiki-Verwaltung', 'meta_desc' => 'Wiki-Seiten verwalten.'],
-    'es' => ['title' => 'Administración wiki', 'new_page' => 'Nueva página', 'th_title' => 'Título', 'th_slug' => 'Slug', 'th_updated' => 'Actualizado', 'th_action' => 'Acción', 'edit' => 'Editar', 'empty' => 'Sin páginas.', 'layout' => 'Administración wiki', 'meta_desc' => 'Gestión de páginas wiki.'],
-    'it' => ['title' => 'Amministrazione wiki', 'new_page' => 'Nuova pagina', 'th_title' => 'Titolo', 'th_slug' => 'Slug', 'th_updated' => 'Aggiornato', 'th_action' => 'Azione', 'edit' => 'Modifica', 'empty' => 'Nessuna pagina.', 'layout' => 'Amministrazione wiki', 'meta_desc' => 'Gestione pagine wiki.'],
-    'pt' => ['title' => 'Administração wiki', 'new_page' => 'Nova página', 'th_title' => 'Título', 'th_slug' => 'Slug', 'th_updated' => 'Atualizado', 'th_action' => 'Ação', 'edit' => 'Editar', 'empty' => 'Sem páginas.', 'layout' => 'Administração wiki', 'meta_desc' => 'Gestão de páginas wiki.'],
-    'nl' => ['title' => 'Wiki-beheer', 'new_page' => 'Nieuwe pagina', 'th_title' => 'Titel', 'th_slug' => 'Slug', 'th_updated' => 'Bijgewerkt', 'th_action' => 'Actie', 'edit' => 'Bewerken', 'empty' => 'Geen pagina\'s.', 'layout' => 'Wiki-beheer', 'meta_desc' => 'Wiki-pagina\'s beheren.'],
-];
+$i18n = require __DIR__ . '/../app/i18n/admin_wiki.php';
 $i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);

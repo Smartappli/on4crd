@@ -122,3 +122,5 @@ La section `observability` de `config/config.php` accepte:
 
 - En production (`false`), les erreurs fatales non capturées renvoient un message générique avec une référence de requête.
 - En développement (`true`), le message d’exception est ajouté à la réponse pour faciliter le débogage.
+
+<!-- chore: touch commit marker -->
