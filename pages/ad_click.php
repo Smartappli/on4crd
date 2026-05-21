@@ -2,22 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = [
-    'fr' => ['not_found' => 'Publicité introuvable', 'title' => 'Publicité'],
-    'en' => ['not_found' => 'Ad not found', 'title' => 'Advertisement'],
-    'de' => ['not_found' => 'Anzeige nicht gefunden', 'title' => 'Anzeige'],
-    'es' => ['not_found' => 'Publicidad no encontrada', 'title' => 'Publicidad'],
-    'it' => ['not_found' => 'Pubblicità non trovata', 'title' => 'Pubblicità'],
-    'pt' => ['not_found' => 'Publicidade não encontrada', 'title' => 'Publicidade'],
-    'nl' => ['not_found' => 'Advertentie niet gevonden', 'title' => 'Advertentie'],
-    'ar' => ['not_found' => 'الإعلان غير موجود', 'title' => 'إعلان'],
-    'bn' => ['not_found' => 'বিজ্ঞাপন পাওয়া যায়নি', 'title' => 'বিজ্ঞাপন'],
-    'hi' => ['not_found' => 'विज्ञापन नहीं मिला', 'title' => 'विज्ञापन'],
-    'id' => ['not_found' => 'Iklan tidak ditemukan', 'title' => 'Iklan'],
-    'ja' => ['not_found' => '広告が見つかりません', 'title' => '広告'],
-    'ru' => ['not_found' => 'Объявление не найдено', 'title' => 'Реклама'],
-    'zh' => ['not_found' => '未找到广告', 'title' => '广告'],
-];
+$i18n = require __DIR__ . '/../app/i18n/ad_click.php';
 $i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {

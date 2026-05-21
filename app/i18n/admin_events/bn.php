@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['event_saved' => 'ইভেন্ট সংরক্ষণ করা হয়েছে।', 'layout' => 'এজেন্ডা প্রশাসন', 'title_required' => 'শিরোনাম আবশ্যক।', 'form_title' => 'একটি ইভেন্ট', 'edit' => 'সম্পাদনা', 'create' => 'তৈরি করুন', 'title' => 'শিরোনাম', 'slug' => 'Slug', 'summary' => 'সারাংশ', 'description' => 'বিবরণ', 'start' => 'শুরু', 'end' => 'শেষ', 'location' => 'স্থান', 'external_url' => 'বাহ্যিক URL', 'type' => 'ধরন', 'status' => 'স্থিতি', 'type_club' => 'ক্লাব', 'type_contest' => 'প্রতিযোগিতা', 'draft' => 'খসড়া', 'published' => 'প্রকাশিত', 'save' => 'সংরক্ষণ করুন', 'saved_events' => 'সংরক্ষিত ইভেন্ট', 'no_event' => 'কোনো ইভেন্ট নেই।', 'calendar_view' => 'ক্যালেন্ডার ভিউ', 'calendar_help' => 'সম্পাদনা খুলতে ইভেন্টে ক্লিক করুন।', 'today' => 'আজ', 'month' => 'মাস', 'week' => 'সপ্তাহ', 'list' => 'তালিকা', 'meta_desc' => 'সাইটের ইভেন্ট ও ক্যালেন্ডার পরিচালনা।'];

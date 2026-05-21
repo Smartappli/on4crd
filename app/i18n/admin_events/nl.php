@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['event_saved' => 'Evenement opgeslagen.', 'layout' => 'Agenda-beheer', 'title_required' => 'Titel is verplicht.', 'form_title' => 'een evenement', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'title' => 'Titel', 'slug' => 'Slug', 'summary' => 'Samenvatting', 'description' => 'Beschrijving', 'start' => 'Start', 'end' => 'Einde', 'location' => 'Locatie', 'external_url' => 'Externe URL', 'type' => 'Type', 'status' => 'Status', 'type_club' => 'Club', 'type_contest' => 'Wedstrijd', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'saved_events' => 'Opgeslagen evenementen', 'no_event' => 'Geen evenement.', 'calendar_view' => 'Kalenderweergave (FullCalendar)', 'calendar_help' => 'Klik op een evenement om de bewerking te openen.', 'today' => 'Vandaag', 'month' => 'Maand', 'week' => 'Week', 'list' => 'Lijst', 'meta_desc' => 'Beheer van evenementen en kalenderitems van de site.'];

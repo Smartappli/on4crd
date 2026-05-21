@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['title' => 'Amministrazione biblioteca', 'intro' => 'Aggiungi e consulta documenti PDF della biblioteca membri.', 'category_ph' => 'Categoria', 'categories' => 'Gestione categorie', 'existing_categories' => 'Categorie esistenti', 'add_category' => 'Aggiungi categoria', 'delete' => 'Elimina', 'title_ph' => 'Titolo', 'desc_ph' => 'Riepilogo / parole chiave', 'upload' => 'Carica', 'open' => 'Apri PDF', 'preview' => 'Anteprima integrata', 'prev' => 'Precedente', 'next' => 'Successivo', 'page' => 'Pagina', 'err_required' => 'Titolo e PDF sono obbligatori.', 'err_invalid' => 'Il file deve essere un PDF valido.', 'err_size' => 'Il file PDF supera il limite consentito (15 MB).', 'err_upload' => 'Caricamento PDF non riuscito.', 'ok_added' => 'Documento aggiunto alla biblioteca membri.', 'storage_unavailable' => 'La biblioteca è temporaneamente non disponibile.', 'meta_desc' => 'Amministrazione della biblioteca membri ON4CRD.'];

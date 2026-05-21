@@ -1,0 +1,20 @@
+<?php
+return [
+    'badge' => 'ON4CRD Lidmaatschap',
+    'title' => 'Word lid van de club',
+    'intro' => 'Word lid om actief deel te nemen aan radioprojecten, technische ondersteuning te krijgen en deel uit te maken van een dynamische lokale gemeenschap.',
+    'cta_join' => 'Lidmaatschap aanvragen',
+    'cta_events' => 'Komende activiteiten bekijken',
+    'benefits_title' => 'Ledenvoordelen',
+    'dues_title' => 'Lidgeldinformatie',
+    'dues_help' => 'Bedragen zijn indicatief en worden bevestigd op de jaarlijkse vergadering. Betaling kan via overschrijving of contant in het lokaal.',
+    'help_committee' => 'Hulp nodig? Contacteer de commissie via de pagina',
+    'committee' => 'Commissie',
+    'due_adult' => 'Jaarlijks lidgeld volwassene',
+    'due_student' => 'Jaarlijks lidgeld student (-25)',
+    'due_family' => 'Gezinslidgeld (zelfde adres)',
+    'benefit_1' => 'Toegang tot praktische workshops, technische demonstraties en terreinactiviteiten.',
+    'benefit_2' => 'Persoonlijke begeleiding voor nieuwe radioamateurs (examens, eerste QSO\'s, installatie).',
+    'benefit_3' => 'Gebruik van clubinfrastructuur volgens planning: station, antennes en gedeeld materiaal.',
+    'benefit_4' => 'Ledentarieven op bepaalde activiteiten, groepsbestellingen en shopacties.',
+];
