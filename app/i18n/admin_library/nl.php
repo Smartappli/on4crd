@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['title' => 'Bibliotheekbeheer', 'intro' => 'Voeg PDF-documenten toe aan de ledenbibliotheek en bekijk ze.', 'category_ph' => 'Categorie', 'categories' => 'Categoriebeheer', 'existing_categories' => 'Bestaande categorieën', 'add_category' => 'Categorie toevoegen', 'delete' => 'Verwijderen', 'title_ph' => 'Titel', 'desc_ph' => 'Samenvatting / sleutelwoorden', 'upload' => 'Uploaden', 'open' => 'PDF openen', 'preview' => 'Ingesloten voorbeeld', 'prev' => 'Vorige', 'next' => 'Volgende', 'page' => 'Pagina', 'err_required' => 'Titel en PDF zijn verplicht.', 'err_invalid' => 'Het bestand moet een geldige PDF zijn.', 'err_size' => 'PDF-bestand is te groot (max. 15 MB).', 'err_upload' => 'PDF-upload mislukt.', 'ok_added' => 'Document toegevoegd aan de ledenbibliotheek.', 'storage_unavailable' => 'De bibliotheek is tijdelijk niet beschikbaar.', 'meta_desc' => 'Beheer van de ON4CRD-ledenbibliotheek.'];
