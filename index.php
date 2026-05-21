@@ -63,9 +63,39 @@ if ($localeFromQuery !== '') {
 
 seo_apply_defaults($route);
 
+
+function render_localized_not_found(): void
+{
+    $locale = function_exists('current_locale') ? current_locale() : 'fr';
+    $messages = [
+        'fr' => 'Page introuvable.',
+        'en' => 'Page not found.',
+        'de' => 'Seite nicht gefunden.',
+        'nl' => 'Pagina niet gevonden.',
+        'es' => 'Página no encontrada.',
+        'it' => 'Pagina non trovata.',
+        'pt' => 'Página não encontrada.',
+        'ar' => 'الصفحة غير موجودة.',
+        'hi' => 'पृष्ठ नहीं मिला।',
+        'ja' => 'ページが見つかりません。',
+        'zh' => '未找到页面。',
+        'bn' => 'পৃষ্ঠা পাওয়া যায়নি।',
+        'ru' => 'Страница не найдена.',
+        'id' => 'Halaman tidak ditemukan.',
+    ];
+
+    $message = $messages[$locale] ?? $messages['fr'];
+    $htmlLang = in_array($locale, ['ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true) ? $locale : substr($locale, 0, 2);
+    echo '<!doctype html><html lang="' . htmlspecialchars($htmlLang, ENT_QUOTES, 'UTF-8') . '"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>'
+        . htmlspecialchars($message, ENT_QUOTES, 'UTF-8')
+        . '</p></body></html>';
+}
+
+
 if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'install.php'], true)) {
     http_response_code(404);
-    exit('Not found');
+    render_localized_not_found();
+    exit;
 }
 
 if ($route === 'toggle_theme') {
@@ -226,7 +256,7 @@ $dispatchPage = static function (string $relativePath): void {
     $path = __DIR__ . '/' . ltrim($relativePath, '/');
     if (!is_file($path)) {
         http_response_code(404);
-        echo '<!doctype html><html lang="fr"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>Page introuvable.</p></body></html>';
+        render_localized_not_found();
         return;
     }
 
@@ -325,6 +355,6 @@ switch ($route) {
     case 'install.php': $dispatchPage('install.php'); break;
     default:
         http_response_code(404);
-        echo '<!doctype html><html lang="fr"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>Page introuvable.</p></body></html>';
+        render_localized_not_found();
         break;
 }
