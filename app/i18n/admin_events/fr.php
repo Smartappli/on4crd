@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['event_saved' => 'Événement enregistré.', 'layout' => 'Administration agenda', 'title_required' => 'Titre obligatoire.', 'form_title' => 'un événement', 'edit' => 'Modifier', 'create' => 'Créer', 'title' => 'Titre', 'slug' => 'Slug', 'summary' => 'Résumé', 'description' => 'Description', 'start' => 'Début', 'end' => 'Fin', 'location' => 'Lieu', 'external_url' => 'URL externe', 'type' => 'Type', 'status' => 'Statut', 'type_club' => 'Club', 'type_contest' => 'Concours', 'draft' => 'Brouillon', 'published' => 'Publié', 'save' => 'Enregistrer', 'saved_events' => 'Événements enregistrés', 'no_event' => 'Aucun événement.', 'calendar_view' => 'Vue calendrier (FullCalendar)', 'calendar_help' => 'Cliquez sur un événement pour ouvrir son édition.', 'today' => 'Aujourd’hui', 'month' => 'Mois', 'week' => 'Semaine', 'list' => 'Liste', 'meta_desc' => 'Gestion des événements et du calendrier du site.'];

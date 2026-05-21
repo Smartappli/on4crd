@@ -4,15 +4,7 @@ declare(strict_types=1);
 require_permission('admin.access');
 require_permission('modules.manage');
 $locale = current_locale();
-$i18n = [
-    'fr' => ['updated' => 'Modules mis à jour.', 'title' => 'Modules', 'core' => 'Cœur', 'enabled' => 'Activé', 'visibility' => 'Visibilité', 'public' => 'Public', 'members' => 'Membres', 'admin' => 'Administrateurs', 'save' => 'Enregistrer', 'layout' => 'Modules', 'meta_desc' => 'Gestion de l\'activation et de la visibilité des modules du site.'],
-    'en' => ['updated' => 'Modules updated.', 'title' => 'Modules', 'core' => 'Core', 'enabled' => 'Enabled', 'visibility' => 'Visibility', 'public' => 'Public', 'members' => 'Members', 'admin' => 'Administrators', 'save' => 'Save', 'layout' => 'Modules', 'meta_desc' => 'Manage module activation and visibility across the site.'],
-    'de' => ['updated' => 'Module aktualisiert.', 'title' => 'Module', 'core' => 'Kern', 'enabled' => 'Aktiviert', 'visibility' => 'Sichtbarkeit', 'public' => 'Öffentlich', 'members' => 'Mitglieder', 'admin' => 'Administratoren', 'save' => 'Speichern', 'layout' => 'Module', 'meta_desc' => 'Aktivierung und Sichtbarkeit der Website-Module verwalten.'],
-    'es' => ['updated' => 'Módulos actualizados.', 'title' => 'Módulos', 'core' => 'Núcleo', 'enabled' => 'Activado', 'visibility' => 'Visibilidad', 'public' => 'Público', 'members' => 'Miembros', 'admin' => 'Administradores', 'save' => 'Guardar', 'layout' => 'Módulos', 'meta_desc' => 'Gestión de activación y visibilidad de módulos.'],
-    'it' => ['updated' => 'Moduli aggiornati.', 'title' => 'Moduli', 'core' => 'Core', 'enabled' => 'Attivato', 'visibility' => 'Visibilità', 'public' => 'Pubblico', 'members' => 'Membri', 'admin' => 'Amministratori', 'save' => 'Salva', 'layout' => 'Moduli', 'meta_desc' => 'Gestione attivazione e visibilità dei moduli.'],
-    'pt' => ['updated' => 'Módulos atualizados.', 'title' => 'Módulos', 'core' => 'Núcleo', 'enabled' => 'Ativado', 'visibility' => 'Visibilidade', 'public' => 'Público', 'members' => 'Membros', 'admin' => 'Administradores', 'save' => 'Guardar', 'layout' => 'Módulos', 'meta_desc' => 'Gestão da ativação e visibilidade dos módulos.'],
-    'nl' => ['updated' => 'Modules bijgewerkt.', 'title' => 'Modules', 'core' => 'Kern', 'enabled' => 'Ingeschakeld', 'visibility' => 'Zichtbaarheid', 'public' => 'Openbaar', 'members' => 'Leden', 'admin' => 'Beheerders', 'save' => 'Opslaan', 'layout' => 'Modules', 'meta_desc' => 'Beheer van activatie en zichtbaarheid van sitemodules.'],
-];
+$i18n = require __DIR__ . '/../app/i18n/admin_modules.php';
 $i18n = i18n_expand_supported_locales($i18n);
 
 $t = [];
