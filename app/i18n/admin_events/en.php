@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['event_saved' => 'Event saved.', 'layout' => 'Agenda administration', 'title_required' => 'Title is required.', 'form_title' => 'an event', 'edit' => 'Edit', 'create' => 'Create', 'title' => 'Title', 'slug' => 'Slug', 'summary' => 'Summary', 'description' => 'Description', 'start' => 'Start', 'end' => 'End', 'location' => 'Location', 'external_url' => 'External URL', 'type' => 'Type', 'status' => 'Status', 'type_club' => 'Club', 'type_contest' => 'Contest', 'draft' => 'Draft', 'published' => 'Published', 'save' => 'Save', 'saved_events' => 'Saved events', 'no_event' => 'No event.', 'calendar_view' => 'Calendar view (FullCalendar)', 'calendar_help' => 'Click an event to open its edition.', 'today' => 'Today', 'month' => 'Month', 'week' => 'Week', 'list' => 'List', 'meta_desc' => 'Manage site events and calendar entries.'];
