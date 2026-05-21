@@ -1,4 +1,4 @@
 <?php
 declare(strict_types=1);
 
-return ['upload_failed' => 'Document upload failed.', 'allowed_formats' => 'Allowed formats: PDF, DOCX, TXT, MD or HTML.', 'invalid_doc' => 'Invalid imported document.', 'create_dir' => 'Unable to create article storage directory.', 'save_doc' => 'Unable to save imported document.', 'imported_doc' => 'Imported document:', 'imported_docx' => 'Imported DOCX document:'];
+return ['upload_failed' => 'दस्तावेज़ अपलोड विफल हुआ।', 'allowed_formats' => 'स्वीकृत फ़ॉर्मैट: PDF, DOCX, TXT, MD या HTML।', 'invalid_doc' => 'आयात किया गया दस्तावेज़ अमान्य है।', 'create_dir' => 'लेख भंडारण निर्देशिका बनाई नहीं जा सकी।', 'save_doc' => 'आयातित दस्तावेज़ सहेजा नहीं जा सका।', 'imported_doc' => 'आयातित दस्तावेज़:', 'imported_docx' => 'आयातित DOCX दस्तावेज़:'];

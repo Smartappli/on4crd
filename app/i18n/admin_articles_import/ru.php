@@ -1,4 +1,4 @@
 <?php
 declare(strict_types=1);
 
-return ['upload_failed' => 'Document upload failed.', 'allowed_formats' => 'Allowed formats: PDF, DOCX, TXT, MD or HTML.', 'invalid_doc' => 'Invalid imported document.', 'create_dir' => 'Unable to create article storage directory.', 'save_doc' => 'Unable to save imported document.', 'imported_doc' => 'Imported document:', 'imported_docx' => 'Imported DOCX document:'];
+return ['upload_failed' => 'Не удалось загрузить документ.', 'allowed_formats' => 'Допустимые форматы: PDF, DOCX, TXT, MD или HTML.', 'invalid_doc' => 'Импортированный документ недействителен.', 'create_dir' => 'Не удалось создать каталог хранения статей.', 'save_doc' => 'Не удалось сохранить импортированный документ.', 'imported_doc' => 'Импортированный документ:', 'imported_docx' => 'Импортированный документ DOCX:'];
