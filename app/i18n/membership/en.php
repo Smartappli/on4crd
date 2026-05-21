@@ -1,0 +1,20 @@
+<?php
+return [
+    'badge' => 'ON4CRD Membership',
+    'title' => 'Join the club',
+    'intro' => 'Become a member to actively take part in radio projects, benefit from technical support, and join a dynamic local community.',
+    'cta_join' => 'Apply for membership',
+    'cta_events' => 'See upcoming activities',
+    'benefits_title' => 'Member benefits',
+    'dues_title' => 'Membership fees',
+    'dues_help' => 'Amounts are indicative and validated at the annual meeting. Payment can be made by bank transfer or cash at the club.',
+    'help_committee' => 'Need help? Contact the committee via the',
+    'committee' => 'Committee',
+    'due_adult' => 'Annual adult membership',
+    'due_student' => 'Annual student membership (-25)',
+    'due_family' => 'Family membership (same household)',
+    'benefit_1' => 'Access to practical workshops, technical demonstrations, and field outings.',
+    'benefit_2' => 'Personalized support for new radio amateurs (exams, first QSOs, setup).',
+    'benefit_3' => 'Use of club infrastructure according to schedule: station, antennas, and shared equipment.',
+    'benefit_4' => 'Member pricing on selected activities, group orders, and shop operations.',
+];

@@ -1,0 +1,16 @@
+<?php
+return [
+    'invalid_lang' => 'Bahasa tidak valid.',
+    'ok_news' => 'Terjemahan berita ditinjau.',
+    'ok_article' => 'Terjemahan artikel ditinjau.',
+    'news_title' => 'Tinjauan berita',
+    'article_title' => 'Tinjauan artikel',
+    'label_title' => 'Judul',
+    'label_excerpt' => 'Ringkasan',
+    'label_content' => 'Konten',
+    'submit' => 'Setujui terjemahan',
+    'no_news' => 'Tidak ada terjemahan berita yang menunggu.',
+    'no_article' => 'Tidak ada terjemahan artikel yang menunggu.',
+    'layout' => 'Tinjauan terjemahan',
+    'meta_desc' => 'Tinjau dan validasi terjemahan konten otomatis.',
+];

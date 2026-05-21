@@ -1,0 +1,20 @@
+<?php
+return [
+    'badge' => 'ON4CRD Mitgliedschaft',
+    'title' => 'Dem Club beitreten',
+    'intro' => 'Werden Sie Mitglied, um aktiv an Funkprojekten teilzunehmen, technische Unterstützung zu erhalten und Teil einer dynamischen lokalen Gemeinschaft zu werden.',
+    'cta_join' => 'Mitgliedschaft beantragen',
+    'cta_events' => 'Nächste Aktivitäten ansehen',
+    'benefits_title' => 'Mitgliedervorteile',
+    'dues_title' => 'Mitgliedsbeiträge',
+    'dues_help' => 'Die Beträge sind Richtwerte und werden in der Jahresversammlung bestätigt. Zahlung per Überweisung oder bar im Clubheim möglich.',
+    'help_committee' => 'Brauchen Sie Hilfe? Kontaktieren Sie das Komitee über die Seite',
+    'committee' => 'Komitee',
+    'due_adult' => 'Jährlicher Erwachsenenbeitrag',
+    'due_student' => 'Jährlicher Studentenbeitrag (-25)',
+    'due_family' => 'Familienbeitrag (gleicher Haushalt)',
+    'benefit_1' => 'Zugang zu Praxis-Workshops, technischen Vorführungen und Außeneinsätzen.',
+    'benefit_2' => 'Individuelle Begleitung für neue Funkamateure (Prüfungen, erste QSOs, Einrichtung).',
+    'benefit_3' => 'Nutzung der Clubinfrastruktur nach Plan: Station, Antennen und gemeinsam genutztes Material.',
+    'benefit_4' => 'Mitgliedspreise für bestimmte Aktivitäten, Sammelbestellungen und Shop-Aktionen.',
+];

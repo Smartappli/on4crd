@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['title' => 'Administrasi perpustakaan', 'intro' => 'Tambahkan dan telusuri dokumen PDF perpustakaan anggota.', 'category_ph' => 'Kategori', 'categories' => 'Manajemen kategori', 'existing_categories' => 'Kategori yang ada', 'add_category' => 'Tambah kategori', 'delete' => 'Hapus', 'title_ph' => 'Judul', 'desc_ph' => 'Ringkasan / kata kunci', 'upload' => 'Unggah', 'open' => 'Buka PDF', 'preview' => 'Pratinjau tertanam', 'prev' => 'Sebelumnya', 'next' => 'Berikutnya', 'page' => 'Halaman', 'err_required' => 'Judul dan PDF wajib diisi.', 'err_invalid' => 'File yang diunggah harus PDF yang valid.', 'err_size' => 'File PDF terlalu besar (maks 15 MB).', 'err_upload' => 'Unggah PDF gagal.', 'ok_added' => 'Dokumen ditambahkan ke perpustakaan anggota.', 'storage_unavailable' => 'Perpustakaan sementara tidak tersedia.', 'meta_desc' => 'Administrasi perpustakaan anggota ON4CRD.'];

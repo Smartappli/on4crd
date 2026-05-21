@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['title' => 'Administration bibliothèque', 'intro' => 'Ajoutez et consultez les documents PDF de la bibliothèque membres.', 'category_ph' => 'Catégorie', 'categories' => 'Gestion des catégories', 'existing_categories' => 'Catégories existantes', 'add_category' => 'Ajouter la catégorie', 'delete' => 'Supprimer', 'title_ph' => 'Titre', 'desc_ph' => 'Résumé / mots-clés', 'upload' => 'Uploader', 'open' => 'Ouvrir le PDF', 'preview' => 'Aperçu intégré', 'prev' => 'Précédent', 'next' => 'Suivant', 'page' => 'Page', 'err_required' => 'Titre et PDF requis.', 'err_invalid' => 'Le fichier doit être un PDF valide.', 'err_size' => 'Le fichier PDF dépasse la limite autorisée (15 Mo).', 'err_upload' => 'Le téléversement du PDF a échoué.', 'ok_added' => 'Document ajouté à la bibliothèque membres.', 'storage_unavailable' => 'La bibliothèque est temporairement indisponible.', 'meta_desc' => 'Administration de la bibliothèque membres ON4CRD.'];

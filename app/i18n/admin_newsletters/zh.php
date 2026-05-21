@@ -1,0 +1,6 @@
+<?php
+declare(strict_types=1);
+
+return ['meta_title' => '通讯管理', 'meta_desc' => '管理订阅者和通讯活动。', 'layout' => '通讯管理', 'err_invalid_email' => '无效邮箱地址。', 'ok_subscriber_saved' => '订阅者已添加或重新激活。', 'err_csv_required' => '导入前请粘贴 CSV 内容。', 'ok_csv_import' => '地址已处理。', 'err_status_update' => '无法更新状态。', 'ok_status_updated' => '状态已更新。', 'err_delete_subscriber' => '无法删除订阅者。', 'ok_subscriber_deleted' => '订阅者已删除。', 'err_campaign_required' => '标题、主题和内容为必填项。', 'ok_campaign_created' => '活动已创建。', 'ok_campaign_sent' => '活动已发送：%d 成功 / %d 失败（共 %d）。', 'title_subscribers' => '通讯 — 订阅者', 'email_to_add' => '要添加的邮箱', 'add_or_reactivate' => '添加 / 重新激活', 'csv_import' => 'CSV 导入', 'csv_content' => 'CSV/Excel 内容（复制粘贴）', 'import' => '导入', 'member' => '成员', 'status' => '状态', 'actions' => '操作', 'unsubscribe' => '取消订阅', 'reactivate' => '重新激活', 'confirm_delete_subscriber' => '删除此订阅者？', 'delete' => '删除', 'campaigns' => '活动', 'title' => '标题', 'email_subject' => '邮件主题', 'content' => '内容', 'create_campaign' => '创建活动', 'results' => '结果', 'action' => '操作', 'sent_results' => '%d 已发送 / %d 失败', 'send' => '发送', 'already_sent' => '已发送', 'email' => '邮箱', 'csv_ph' => 'email
+foo@example.org
+bar@example.org', 'no_subscribers' => '暂无订阅者。', 'no_campaigns' => '暂无活动。'];

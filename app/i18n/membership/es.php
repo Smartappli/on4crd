@@ -1,0 +1,20 @@
+<?php
+return [
+    'badge' => 'Membresía ON4CRD',
+    'title' => 'Unirse al club',
+    'intro' => 'Hágase miembro para participar activamente en proyectos de radio y beneficiarse del apoyo técnico.',
+    'cta_join' => 'Solicitar membresía',
+    'cta_events' => 'Ver próximas actividades',
+    'benefits_title' => 'Ventajas para miembros',
+    'dues_title' => 'Información de cuotas',
+    'dues_help' => 'Los importes son orientativos y se validan anualmente.',
+    'help_committee' => '¿Necesita ayuda? Contacte al comité mediante la página',
+    'committee' => 'Comité',
+    'due_adult' => 'Cuota anual adulto',
+    'due_student' => 'Cuota anual estudiante (-25)',
+    'due_family' => 'Cuota familiar',
+    'benefit_1' => 'Acceso a talleres prácticos y demostraciones.',
+    'benefit_2' => 'Acompañamiento para nuevos radioaficionados.',
+    'benefit_3' => 'Uso de infraestructuras del club según planificación.',
+    'benefit_4' => 'Tarifas miembro en actividades seleccionadas.',
+];
