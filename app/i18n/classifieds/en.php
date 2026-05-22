@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return [
     'title' => 'Classifieds',
-    'lead' => 'Post and browse club ham radio classifieds.',
+    'lead' => 'Post and browse the club ham radio classifieds.',
     'new_ad' => 'Post an ad',
     'my_ads' => 'My ads',
     'all_ads' => 'Recent ads',
@@ -15,7 +15,7 @@ return [
     'missing' => 'Ad not found.',
     'title_label' => 'Title',
     'description_label' => 'Description',
-    'price_label' => 'Price (EUR)',
+    'price_label' => 'Price (€)',
     'location_label' => 'Location',
     'contact_label' => 'Contact',
     'category_label' => 'Category',
@@ -25,7 +25,7 @@ return [
     'mark_sold' => 'Mark sold',
     'reactivate' => 'Reactivate',
     'none' => 'No classifieds yet.',
-    'category_gear' => 'Gear',
+    'category_gear' => 'Equipment',
     'category_wanted' => 'Wanted',
     'category_service' => 'Service',
     'status_active' => 'Active',
