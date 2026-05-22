@@ -136,4 +136,15 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('unknown_key', $translator('unknown_key'));
     }
 
+    public function testArticleImportTextToHtmlBuildsStructuredSafeHtml(): void
+    {
+        $html = article_import_text_to_html("# Title\n\nFirst line\ncontinues here\n\n- one\n- two\n\n<script>alert(1)</script>");
+
+        self::assertStringContainsString('<h2>Title</h2>', $html);
+        self::assertStringContainsString('<p>First line continues here</p>', $html);
+        self::assertStringContainsString('<ul>', $html);
+        self::assertStringContainsString('<li>one</li>', $html);
+        self::assertStringNotContainsString('<script', $html);
+    }
+
 }

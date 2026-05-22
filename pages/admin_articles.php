@@ -21,34 +21,29 @@ set_page_meta([
 function import_article_document(array $file): array
 {
     $locale = current_locale();
-    $msg = require __DIR__ . '/../app/i18n/admin_articles_import.php';
-    $msg = i18n_expand_supported_locales($msg);
-    $tm = [];
-    foreach (array_keys($msg['fr']) as $key) {
-        $tm[$key] = i18n_localized_value($msg, $locale, $key);
-    }
+    $tm = i18n_domain_translator('admin_articles_import', $locale);
     $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
     if ($error === UPLOAD_ERR_NO_FILE) {
         return ['excerpt' => '', 'content' => ''];
     }
     if ($error !== UPLOAD_ERR_OK) {
-        throw new RuntimeException((string) $tm['upload_failed']);
+        throw new RuntimeException($tm('upload_failed'));
     }
 
     $originalName = trim((string) ($file['name'] ?? 'document'));
     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
     if (!in_array($extension, ['pdf', 'docx', 'txt', 'md', 'html', 'htm'], true)) {
-        throw new RuntimeException((string) $tm['allowed_formats']);
+        throw new RuntimeException($tm('allowed_formats'));
     }
 
     $tmpPath = (string) ($file['tmp_name'] ?? '');
     if ($tmpPath === '' || !is_uploaded_file($tmpPath)) {
-        throw new RuntimeException((string) $tm['invalid_doc']);
+        throw new RuntimeException($tm('invalid_doc'));
     }
 
     $targetDir = __DIR__ . '/../storage/uploads/articles';
     if (!is_dir($targetDir) && !mkdir($targetDir, 0775, true) && !is_dir($targetDir)) {
-        throw new RuntimeException((string) $tm['create_dir']);
+        throw new RuntimeException($tm('create_dir'));
     }
 
     $basename = slugify(pathinfo($originalName, PATHINFO_FILENAME));
@@ -58,39 +53,40 @@ function import_article_document(array $file): array
     $filename = $basename . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
     $absolutePath = $targetDir . '/' . $filename;
     if (!move_uploaded_file($tmpPath, $absolutePath)) {
-        throw new RuntimeException((string) $tm['save_doc']);
+        throw new RuntimeException($tm('save_doc'));
     }
 
     $publicPath = 'storage/uploads/articles/' . $filename;
     $publicUrl = base_url($publicPath);
-    $safeTitle = e(pathinfo($originalName, PATHINFO_FILENAME));
+    $documentTitle = trim((string) pathinfo($originalName, PATHINFO_FILENAME));
+    $sourceLink = '<p class="help article-source-document"><a href="' . e($publicUrl) . '">' . e($tm('source_file')) . '</a></p>';
     if (in_array($extension, ['txt', 'md'], true)) {
         $rawText = (string) file_get_contents($absolutePath);
-        $paragraphs = preg_split('/\R{2,}/u', trim($rawText)) ?: [];
-        $htmlParts = [];
-        foreach ($paragraphs as $paragraph) {
-            $line = trim($paragraph);
-            if ($line === '') {
-                continue;
-            }
-            if ($extension === 'md' && preg_match('/^#{1,6}\s+(.+)$/u', $line, $matches)) {
-                $htmlParts[] = '<h3>' . e($matches[1]) . '</h3>';
-            } else {
-                $htmlParts[] = '<p>' . nl2br(e($line)) . '</p>';
-            }
-        }
-        $content = implode("\n", $htmlParts);
+        $content = article_import_text_to_html($rawText);
     } elseif (in_array($extension, ['html', 'htm'], true)) {
         $rawHtml = (string) file_get_contents($absolutePath);
         $content = sanitize_rich_html($rawHtml);
+    } elseif ($extension === 'docx') {
+        $content = article_extract_docx_html($absolutePath);
+        if ($content === '') {
+            $content = '<div class="article-document"><p>' . e($tm('docx_extraction_unavailable')) . '</p></div>';
+        }
+    } elseif ($extension === 'pdf') {
+        $rawText = article_extract_pdf_text($absolutePath);
+        $content = article_import_text_to_html($rawText);
+        if ($content === '') {
+            $content = '<div class="article-document"><p>' . e($tm('pdf_extraction_unavailable')) . '</p></div>';
+        }
     } else {
-        $content = $extension === 'pdf'
-            ? '<div class="article-document"><p><strong>' . e((string) $tm['imported_doc']) . ' ' . $safeTitle . '</strong></p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
-            : '<div class="article-document"><p><strong>' . e((string) $tm['imported_docx']) . ' ' . $safeTitle . '</strong></p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
+        $content = '';
+    }
+    $content = trim($content);
+    if ($content !== '') {
+        $content .= "\n" . $sourceLink;
     }
 
     return [
-        'excerpt' => ((string) $tm['imported_doc']) . ' ' . pathinfo($originalName, PATHINFO_FILENAME),
+        'excerpt' => $tm('imported_doc') . ' ' . $documentTitle,
         'content' => $content,
     ];
 }
