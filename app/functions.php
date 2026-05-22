@@ -3102,17 +3102,31 @@ function article_import_text_to_html(string $text): string
 if (!function_exists('article_extract_docx_html')) {
 function article_extract_docx_html(string $path): string
 {
-    if (!class_exists('ZipArchive') || !is_file($path)) {
+    if (!is_file($path)) {
         return '';
     }
 
-    $zip = new ZipArchive();
-    if ($zip->open($path) !== true) {
-        return '';
+    $xml = '';
+    if (class_exists('ZipArchive')) {
+        $zip = new ZipArchive();
+        if ($zip->open($path) === true) {
+            $documentXml = $zip->getFromName('word/document.xml');
+            $zip->close();
+            if (is_string($documentXml)) {
+                $xml = $documentXml;
+            }
+        }
+    } else {
+        $unzip = article_find_binary('unzip');
+        if ($unzip !== '') {
+            $output = @shell_exec(escapeshellarg($unzip) . ' -p ' . escapeshellarg($path) . ' word/document.xml');
+            if (is_string($output)) {
+                $xml = $output;
+            }
+        }
     }
-    $xml = $zip->getFromName('word/document.xml');
-    $zip->close();
-    if (!is_string($xml) || $xml === '') {
+
+    if ($xml === '') {
         return '';
     }
 
