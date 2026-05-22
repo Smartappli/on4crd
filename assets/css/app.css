@@ -1673,6 +1673,12 @@ textarea.wysiwyg-source {
   display: grid;
   gap: .45rem;
 }
+.chatbot-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: .75rem;
+}
 .chatbot-chip {
   width: 100%;
   border: 1px solid var(--border);
@@ -1700,6 +1706,10 @@ textarea.wysiwyg-source {
   border-radius: 12px;
 }
 .chatbot-message p { margin: 0; }
+.chatbot-message strong {
+  display: block;
+  margin-bottom: .25rem;
+}
 .chatbot-message.user {
   margin-left: auto;
   background: var(--accent);
@@ -1711,6 +1721,22 @@ textarea.wysiwyg-source {
   background: var(--panel);
   border: 1px solid var(--border);
   border-bottom-left-radius: 4px;
+}
+.chatbot-message-action {
+  margin-top: .45rem;
+  border: 0;
+  background: transparent;
+  color: currentColor;
+  opacity: .72;
+  padding: 0;
+  font: inherit;
+  font-size: .85rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.chatbot-message-action:hover,
+.chatbot-message-action.is-copied {
+  opacity: 1;
 }
 .chatbot-form { margin-top: .85rem; }
 .chatbot-form textarea {

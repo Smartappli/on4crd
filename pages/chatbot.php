@@ -102,6 +102,8 @@ ob_start();
                     </article>
                     <article class="chatbot-message bot">
                         <p><?= nl2br(e((string) $item['answer'])) ?></p>
+                        <button type="button" class="chatbot-message-action" data-copy-target="chatbot-answer-<?= (int) $index ?>"><?= e($t('copy')) ?></button>
+                        <span id="chatbot-answer-<?= (int) $index ?>" hidden><?= e((string) $item['answer']) ?></span>
                         <p class="help"><?= e($t('source')) ?> <?= e((string) $item['source']) ?> · <?= e((string) $item['at']) ?></p>
                     </article>
                 <?php endforeach; ?>
@@ -110,10 +112,11 @@ ob_start();
 
         <form method="post" class="chatbot-form" id="chatbot-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="ask">
             <label for="chatbot-question" class="sr-only"><?= e($t('question_label')) ?></label>
-            <textarea id="chatbot-question" name="question" rows="3" placeholder="<?= e($t('placeholder')) ?>" data-wysiwyg="off" required><?= e($question) ?></textarea>
+            <textarea id="chatbot-question" name="question" rows="3" maxlength="<?= $maxQuestionLength ?>" placeholder="<?= e($t('placeholder')) ?>" data-wysiwyg="off" required><?= e($question) ?></textarea>
             <div class="chatbot-form-actions">
-                <span class="help"><?= e($t('kbd_help')) ?></span>
+                <span class="help"><?= e($t('kbd_help')) ?> · <span id="chatbot-counter">0</span>/<?= $maxQuestionLength ?></span>
                 <button class="button" type="submit"><?= e($t('send')) ?></button>
             </div>
         </form>
