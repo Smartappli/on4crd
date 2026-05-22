@@ -29,6 +29,15 @@ docker compose up --build
 
 Le site est accessible sur `http://localhost:8080`.
 
+### Vérifications rapides
+
+Avant de pousser une modification, vous pouvez lancer les contrôles principaux:
+
+```bash
+composer test
+./scripts/check-tools.sh
+```
+
 
 ### Mode maintenance
 
