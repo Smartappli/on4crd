@@ -4257,32 +4257,30 @@ function ensure_member_library_table(): bool
 function localized_article_row(array $row): array
 {
     $locale = current_locale();
-    if ($locale === 'fr') {
-        return $row;
-    }
-
-    $articleId = (int) ($row['id'] ?? 0);
-    if ($articleId <= 0 || !table_exists('article_translations')) {
-        return $row;
-    }
-
-    try {
-        $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? ORDER BY CASE status WHEN "reviewed" THEN 0 WHEN "auto" THEN 1 ELSE 2 END, updated_at DESC LIMIT 1');
-        $stmt->execute([$articleId, $locale]);
-        $translation = $stmt->fetch();
-        if (!is_array($translation)) {
-            return $row;
-        }
-
-        foreach (['title', 'excerpt', 'content'] as $field) {
-            $value = trim((string) ($translation[$field] ?? ''));
-            if ($value !== '') {
-                $row[$field] = $value;
+    if ($locale !== 'fr') {
+        $articleId = (int) ($row['id'] ?? 0);
+        if ($articleId > 0 && table_exists('article_translations')) {
+            try {
+                $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? ORDER BY CASE status WHEN "reviewed" THEN 0 WHEN "auto" THEN 1 ELSE 2 END, updated_at DESC LIMIT 1');
+                $stmt->execute([$articleId, $locale]);
+                $translation = $stmt->fetch();
+                if (is_array($translation)) {
+                    foreach (['title', 'excerpt', 'content'] as $field) {
+                        $value = trim((string) ($translation[$field] ?? ''));
+                        if ($value !== '') {
+                            $row[$field] = $value;
+                        }
+                    }
+                }
+            } catch (Throwable) {
+                // Keep the source article when translations are unavailable.
             }
         }
-    } catch (Throwable) {
-        return $row;
     }
+
+    $row['title_localized'] = (string) ($row['title'] ?? '');
+    $row['excerpt_localized'] = (string) ($row['excerpt'] ?? '');
+    $row['content_localized'] = (string) ($row['content'] ?? '');
 
     return $row;
 }
