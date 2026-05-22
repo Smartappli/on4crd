@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
+
 return [
-    'updated' => 'Live feeds updated.',
-    'title' => 'Live feeds administration',
-    'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.',
-    'active' => 'Active',
-    'label' => 'Label',
+    'updated' => 'Обновлены прямые трансляции.',
+    'title' => 'Администрирование прямых трансляций',
+    'intro' => 'Виджеты реального времени ограничены панелью участников. Управляйте активацией, URL-адресом, парсером и TTL, не размещая виджеты на общедоступных страницах.',
+    'active' => 'Активный',
+    'label' => 'Этикетка',
     'url' => 'URL',
-    'parser' => 'Parser',
-    'cache_ttl' => 'Cache TTL',
-    'refresh' => 'Browser refresh',
-    'notes' => 'Notes',
-    'save' => 'Save',
-    'layout' => 'Live feeds',
-    'meta_desc' => 'Configure live feeds shown in the members area.',
+    'parser' => 'Парсер',
+    'cache_ttl' => 'TTL-кэш',
+    'refresh' => 'Обновление браузера',
+    'notes' => 'Примечания',
+    'save' => 'Сохранять',
+    'layout' => 'Прямые трансляции',
+    'meta_desc' => 'Настройте прямые трансляции, отображаемые в личном кабинете.',
 ];

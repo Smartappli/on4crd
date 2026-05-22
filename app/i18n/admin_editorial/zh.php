@@ -1,4 +1,21 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_saved' => 'Editorial content updated.', 'layout' => 'Multilingual editorial', 'title' => 'Multilingual editorial', 'intro' => 'French remains the source language. Other languages can be generated automatically and then reviewed.', 'fr_source' => 'French (source)', 'english' => 'English', 'deutsch' => 'German', 'dutch' => 'Dutch', 'save' => 'Save', 'committee_title' => 'Committee — title', 'committee_intro' => 'Committee — introduction', 'committee_mission' => 'Committee — mission', 'press_title' => 'Press — title', 'press_intro' => 'Press — introduction', 'press_contact' => 'Press — contact', 'meta_desc' => 'Manage multilingual editorial content.'];
+return [
+    'ok_saved' => '编辑内容已更新。',
+    'layout' => '多语言社论',
+    'title' => '多语言社论',
+    'intro' => '法语仍然是源语言。其他语言可以自动生成然后审阅。',
+    'fr_source' => '法语（来源）',
+    'english' => '英语',
+    'deutsch' => '德语',
+    'dutch' => '荷兰语',
+    'save' => '节省',
+    'committee_title' => '委员会 — 名称',
+    'committee_intro' => '委员会——简介',
+    'committee_mission' => '委员会——使命',
+    'press_title' => '新闻 — 标题',
+    'press_intro' => '新闻 — 简介',
+    'press_contact' => '新闻 — 联系方式',
+    'meta_desc' => '管理多语言编辑内容。',
+];

@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
+
 return [
-    'updated' => 'Live feeds updated.',
-    'title' => 'Live feeds administration',
-    'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.',
-    'active' => 'Active',
-    'label' => 'Label',
+    'updated' => '实时动态已更新。',
+    'title' => '实时供稿管理',
+    'intro' => '实时小部件仅限于会员仪表板。管理激活、URL、解析器和 TTL，而无需在公共页面上公开小部件。',
+    'active' => '积极的',
+    'label' => '标签',
     'url' => 'URL',
-    'parser' => 'Parser',
-    'cache_ttl' => 'Cache TTL',
-    'refresh' => 'Browser refresh',
-    'notes' => 'Notes',
-    'save' => 'Save',
-    'layout' => 'Live feeds',
-    'meta_desc' => 'Configure live feeds shown in the members area.',
+    'parser' => '解析器',
+    'cache_ttl' => 'TTL缓存',
+    'refresh' => '浏览器刷新',
+    'notes' => '笔记',
+    'save' => '节省',
+    'layout' => '直播',
+    'meta_desc' => '配置会员区域中显示的实时提要。',
 ];

@@ -1,4 +1,21 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_saved' => 'Editorial content updated.', 'layout' => 'Multilingual editorial', 'title' => 'Multilingual editorial', 'intro' => 'French remains the source language. Other languages can be generated automatically and then reviewed.', 'fr_source' => 'French (source)', 'english' => 'English', 'deutsch' => 'German', 'dutch' => 'Dutch', 'save' => 'Save', 'committee_title' => 'Committee — title', 'committee_intro' => 'Committee — introduction', 'committee_mission' => 'Committee — mission', 'press_title' => 'Press — title', 'press_intro' => 'Press — introduction', 'press_contact' => 'Press — contact', 'meta_desc' => 'Manage multilingual editorial content.'];
+return [
+    'ok_saved' => 'সম্পাদকীয় বিষয়বস্তু আপডেট করা হয়েছে।',
+    'layout' => 'বহুভাষিক সম্পাদকীয়',
+    'title' => 'বহুভাষিক সম্পাদকীয়',
+    'intro' => 'ফরাসি উৎস ভাষা অবশেষ. অন্যান্য ভাষা স্বয়ংক্রিয়ভাবে তৈরি এবং তারপর পর্যালোচনা করা যেতে পারে।',
+    'fr_source' => 'ফরাসি (উৎস)',
+    'english' => 'ইংরেজি',
+    'deutsch' => 'জার্মান',
+    'dutch' => 'ডাচ',
+    'save' => 'সংরক্ষণ করুন',
+    'committee_title' => 'কমিটি - শিরোনাম',
+    'committee_intro' => 'কমিটি - ভূমিকা',
+    'committee_mission' => 'কমিটি - মিশন',
+    'press_title' => 'প্রেস — শিরোনাম',
+    'press_intro' => 'প্রেস — ভূমিকা',
+    'press_contact' => 'টিপুন - যোগাযোগ করুন',
+    'meta_desc' => 'বহুভাষিক সম্পাদকীয় বিষয়বস্তু পরিচালনা করুন।',
+];

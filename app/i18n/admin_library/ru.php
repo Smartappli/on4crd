@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Library administration', 'intro' => 'Add and browse member library PDF documents.', 'category_ph' => 'Category', 'categories' => 'Category management', 'existing_categories' => 'Existing categories', 'add_category' => 'Add category', 'delete' => 'Delete', 'title_ph' => 'Title', 'desc_ph' => 'Summary / keywords', 'upload' => 'Upload', 'open' => 'Open PDF', 'preview' => 'Embedded preview', 'prev' => 'Previous', 'next' => 'Next', 'page' => 'Page', 'err_required' => 'Title and PDF are required.', 'err_invalid' => 'The uploaded file must be a valid PDF.', 'err_size' => 'PDF file is too large (15 MB max).', 'err_upload' => 'PDF upload failed.', 'ok_added' => 'Document added to the members library.', 'storage_unavailable' => 'The library is temporarily unavailable.', 'meta_desc' => 'Administration for ON4CRD members library.'];
+return [
+    'title' => 'Администрация библиотеки',
+    'intro' => 'Добавляйте и просматривайте PDF-документы участников библиотеки.',
+    'category_ph' => 'Категория',
+    'categories' => 'Категорийный менеджмент',
+    'existing_categories' => 'Существующие категории',
+    'add_category' => 'Добавить категорию',
+    'delete' => 'Удалить',
+    'title_ph' => 'Заголовок',
+    'desc_ph' => 'Резюме / ключевые слова',
+    'upload' => 'Загрузить',
+    'open' => 'Открыть PDF',
+    'preview' => 'Встроенный предварительный просмотр',
+    'prev' => 'Предыдущий',
+    'next' => 'Следующий',
+    'page' => 'Страница',
+    'err_required' => 'Необходимо указать название и PDF.',
+    'err_invalid' => 'Загруженный файл должен быть действительным PDF-файлом.',
+    'err_size' => 'PDF-файл слишком велик (максимум 15 МБ).',
+    'err_upload' => 'Загрузка PDF не удалась.',
+    'ok_added' => 'Документ добавлен в библиотеку участников.',
+    'storage_unavailable' => 'Библиотека временно недоступна.',
+    'meta_desc' => 'Администрирование библиотеки участников ON4CRD.',
+];

@@ -1,4 +1,21 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_saved' => 'Editorial content updated.', 'layout' => 'Multilingual editorial', 'title' => 'Multilingual editorial', 'intro' => 'French remains the source language. Other languages can be generated automatically and then reviewed.', 'fr_source' => 'French (source)', 'english' => 'English', 'deutsch' => 'German', 'dutch' => 'Dutch', 'save' => 'Save', 'committee_title' => 'Committee — title', 'committee_intro' => 'Committee — introduction', 'committee_mission' => 'Committee — mission', 'press_title' => 'Press — title', 'press_intro' => 'Press — introduction', 'press_contact' => 'Press — contact', 'meta_desc' => 'Manage multilingual editorial content.'];
+return [
+    'ok_saved' => 'संपादकीय सामग्री अद्यतन की गई.',
+    'layout' => 'बहुभाषी संपादकीय',
+    'title' => 'बहुभाषी संपादकीय',
+    'intro' => 'फ्रेंच स्रोत भाषा बनी हुई है। अन्य भाषाएँ स्वचालित रूप से उत्पन्न की जा सकती हैं और फिर उनकी समीक्षा की जा सकती है।',
+    'fr_source' => 'फ़्रेंच (स्रोत)',
+    'english' => 'अंग्रेज़ी',
+    'deutsch' => 'जर्मन',
+    'dutch' => 'डच',
+    'save' => 'बचाना',
+    'committee_title' => 'समिति - शीर्षक',
+    'committee_intro' => 'समिति-परिचय',
+    'committee_mission' => 'समिति - मिशन',
+    'press_title' => 'दबाएँ - शीर्षक',
+    'press_intro' => 'प्रेस-परिचय',
+    'press_contact' => 'दबाएँ - संपर्क करें',
+    'meta_desc' => 'बहुभाषी संपादकीय सामग्री प्रबंधित करें।',
+];

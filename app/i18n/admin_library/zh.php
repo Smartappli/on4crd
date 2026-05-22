@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Library administration', 'intro' => 'Add and browse member library PDF documents.', 'category_ph' => 'Category', 'categories' => 'Category management', 'existing_categories' => 'Existing categories', 'add_category' => 'Add category', 'delete' => 'Delete', 'title_ph' => 'Title', 'desc_ph' => 'Summary / keywords', 'upload' => 'Upload', 'open' => 'Open PDF', 'preview' => 'Embedded preview', 'prev' => 'Previous', 'next' => 'Next', 'page' => 'Page', 'err_required' => 'Title and PDF are required.', 'err_invalid' => 'The uploaded file must be a valid PDF.', 'err_size' => 'PDF file is too large (15 MB max).', 'err_upload' => 'PDF upload failed.', 'ok_added' => 'Document added to the members library.', 'storage_unavailable' => 'The library is temporarily unavailable.', 'meta_desc' => 'Administration for ON4CRD members library.'];
+return [
+    'title' => '图书馆管理',
+    'intro' => '添加和浏览会员库PDF文档。',
+    'category_ph' => '类别',
+    'categories' => '品类管理',
+    'existing_categories' => '现有类别',
+    'add_category' => '添加类别',
+    'delete' => '删除',
+    'title_ph' => '标题',
+    'desc_ph' => '摘要/关键词',
+    'upload' => '上传',
+    'open' => '打开 PDF',
+    'preview' => '嵌入预览',
+    'prev' => '以前的',
+    'next' => '下一个',
+    'page' => '页',
+    'err_required' => '需要标题和 PDF。',
+    'err_invalid' => '上传的文件必须是有效的 PDF。',
+    'err_size' => 'PDF 文件太大（最大 15 MB）。',
+    'err_upload' => 'PDF 上传失败。',
+    'ok_added' => '文档已添加到成员库。',
+    'storage_unavailable' => '图书馆暂时无法使用。',
+    'meta_desc' => 'ON4CRD 成员库的管理。',
+];

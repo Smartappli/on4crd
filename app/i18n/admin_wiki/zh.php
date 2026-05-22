@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki administration', 'new_page' => 'New page', 'th_title' => 'Title', 'th_slug' => 'Slug', 'th_updated' => 'Updated', 'th_action' => 'Action', 'edit' => 'Edit', 'empty' => 'No pages.', 'layout' => 'Wiki administration', 'meta_desc' => 'Manage wiki pages.'];
+return [
+    'title' => '维基管理',
+    'new_page' => '新页面',
+    'th_title' => '标题',
+    'th_slug' => '蛞蝓',
+    'th_updated' => '已更新',
+    'th_action' => '行动',
+    'edit' => '编辑',
+    'empty' => '没有页面。',
+    'layout' => '维基管理',
+    'meta_desc' => '管理维基页面。',
+];

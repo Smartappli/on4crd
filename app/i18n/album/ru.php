@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'title' => 'Album',
-  'gallery_unavailable' => 'The gallery is currently unavailable.',
-  'not_found' => 'Album not found.',
-  'back' => '← Back to gallery',
-  'photos' => 'Photos',
-  'album_photos' => 'Album photos',
-  'none' => 'No photos available in this album.',
-  'photo_alt' => 'Album photo',
-);
+return [
+    'title' => 'Альбом',
+    'gallery_unavailable' => 'Галерея в настоящее время недоступна.',
+    'not_found' => 'Альбом не найден.',
+    'back' => '← Вернуться в галерею',
+    'photos' => 'Фотографии',
+    'album_photos' => 'Фотографии из альбома',
+    'none' => 'В этом альбоме нет фотографий.',
+    'photo_alt' => 'Фото из альбома',
+];

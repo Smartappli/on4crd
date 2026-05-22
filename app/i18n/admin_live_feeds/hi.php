@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
+
 return [
-    'updated' => 'Live feeds updated.',
-    'title' => 'Live feeds administration',
-    'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.',
-    'active' => 'Active',
-    'label' => 'Label',
+    'updated' => 'लाइव फ़ीड अपडेट किया गया.',
+    'title' => 'लाइव फ़ीड प्रशासन',
+    'intro' => 'रीयल-टाइम विजेट सदस्य डैशबोर्ड तक सीमित हैं। सार्वजनिक पृष्ठों पर विजेट उजागर किए बिना सक्रियण, यूआरएल, पार्सर और टीटीएल प्रबंधित करें।',
+    'active' => 'सक्रिय',
+    'label' => 'लेबल',
     'url' => 'URL',
-    'parser' => 'Parser',
-    'cache_ttl' => 'Cache TTL',
-    'refresh' => 'Browser refresh',
-    'notes' => 'Notes',
-    'save' => 'Save',
-    'layout' => 'Live feeds',
-    'meta_desc' => 'Configure live feeds shown in the members area.',
+    'parser' => 'पार्सर',
+    'cache_ttl' => 'टीटीएल कैश',
+    'refresh' => 'ब्राउज़र ताज़ा करें',
+    'notes' => 'टिप्पणियाँ',
+    'save' => 'बचाना',
+    'layout' => 'लाइव फ़ीड',
+    'meta_desc' => 'सदस्य क्षेत्र में दिखाए गए लाइव फ़ीड कॉन्फ़िगर करें।',
 ];

@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
+
 return [
-    'updated' => 'Live feeds updated.',
-    'title' => 'Live feeds administration',
-    'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.',
-    'active' => 'Active',
+    'updated' => 'Umpan langsung diperbarui.',
+    'title' => 'Administrasi feed langsung',
+    'intro' => 'Widget real-time terbatas pada dashboard anggota. Kelola aktivasi, URL, parser, dan TTL tanpa menampilkan widget di halaman publik.',
+    'active' => 'Aktif',
     'label' => 'Label',
     'url' => 'URL',
-    'parser' => 'Parser',
-    'cache_ttl' => 'Cache TTL',
-    'refresh' => 'Browser refresh',
-    'notes' => 'Notes',
-    'save' => 'Save',
-    'layout' => 'Live feeds',
-    'meta_desc' => 'Configure live feeds shown in the members area.',
+    'parser' => 'pengurai',
+    'cache_ttl' => 'tembolok TTL',
+    'refresh' => 'Penyegaran peramban',
+    'notes' => 'Catatan',
+    'save' => 'Menyimpan',
+    'layout' => 'Umpan langsung',
+    'meta_desc' => 'Konfigurasikan umpan langsung yang ditampilkan di area anggota.',
 ];

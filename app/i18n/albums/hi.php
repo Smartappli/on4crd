@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'public_albums' => 'Public albums',
-  'gallery_unavailable' => 'The gallery will be available after initialization.',
-  'manage' => 'Manage',
-  'intro' => 'Explore club activities in pictures: workshops, outings, contests and community moments.',
-  'albums' => 'Albums',
-  'indexed_photos' => 'Indexed photos',
-  'search_placeholder' => 'Search an album (title, description)',
-  'search' => 'Search',
-  'reset' => 'Reset',
-  'gallery' => 'Gallery',
-  'none' => 'No public album available',
-  'for_search' => ' for this search',
-  'cover_alt' => 'Album cover',
-  'photo' => 'photo',
-);
+return [
+    'public_albums' => 'सार्वजनिक एलबम',
+    'gallery_unavailable' => 'आरंभीकरण के बाद गैलरी उपलब्ध होगी.',
+    'manage' => 'प्रबंधित करना',
+    'intro' => 'तस्वीरों में क्लब की गतिविधियाँ देखें: कार्यशालाएँ, सैर-सपाटे, प्रतियोगिताएँ और सामुदायिक क्षण।',
+    'albums' => 'एल्बम',
+    'indexed_photos' => 'अनुक्रमित तस्वीरें',
+    'search_placeholder' => 'एक एल्बम खोजें (शीर्षक, विवरण)',
+    'search' => 'खोज',
+    'reset' => 'रीसेट करें',
+    'gallery' => 'गैलरी',
+    'none' => 'कोई सार्वजनिक एल्बम उपलब्ध नहीं है',
+    'for_search' => 'इस खोज के लिए',
+    'cover_alt' => 'एल्बम कवर',
+    'photo' => 'तस्वीर',
+];

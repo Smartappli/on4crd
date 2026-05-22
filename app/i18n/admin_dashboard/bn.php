@@ -1,4 +1,18 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_updated' => 'Dashboard widgets updated.', 'title' => 'Dashboard administration', 'help' => 'Enable/disable widgets available on the member dashboard.', 'save' => 'Save', 'layout' => 'Dashboard', 'meta_desc' => 'Configuration of member dashboard widgets.', 'members_title' => 'Member management', 'members_help' => 'Quick access to member administration tools.', 'members_total' => 'Total members', 'members_active' => 'Active members', 'members_committee' => 'Committee members', 'members_roles' => 'Roles & permissions', 'members_committee_cta' => 'Manage committee'];
+return [
+    'ok_updated' => 'ড্যাশবোর্ড উইজেট আপডেট করা হয়েছে।',
+    'title' => 'ড্যাশবোর্ড প্রশাসন',
+    'help' => 'সদস্য ড্যাশবোর্ডে উপলব্ধ উইজেটগুলি সক্ষম/অক্ষম করুন৷',
+    'save' => 'সংরক্ষণ করুন',
+    'layout' => 'ড্যাশবোর্ড',
+    'meta_desc' => 'সদস্য ড্যাশবোর্ড উইজেট কনফিগারেশন.',
+    'members_title' => 'সদস্য ব্যবস্থাপনা',
+    'members_help' => 'সদস্য প্রশাসনের সরঞ্জামগুলিতে দ্রুত অ্যাক্সেস।',
+    'members_total' => 'মোট সদস্য',
+    'members_active' => 'সক্রিয় সদস্য',
+    'members_committee' => 'কমিটির সদস্যরা',
+    'members_roles' => 'ভূমিকা এবং অনুমতি',
+    'members_committee_cta' => 'পরিচালনা কমিটি',
+];

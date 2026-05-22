@@ -1,4 +1,18 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_updated' => 'Dashboard widgets updated.', 'title' => 'Dashboard administration', 'help' => 'Enable/disable widgets available on the member dashboard.', 'save' => 'Save', 'layout' => 'Dashboard', 'meta_desc' => 'Configuration of member dashboard widgets.', 'members_title' => 'Member management', 'members_help' => 'Quick access to member administration tools.', 'members_total' => 'Total members', 'members_active' => 'Active members', 'members_committee' => 'Committee members', 'members_roles' => 'Roles & permissions', 'members_committee_cta' => 'Manage committee'];
+return [
+    'ok_updated' => 'Обновлены виджеты панели управления.',
+    'title' => 'Администрирование панели управления',
+    'help' => 'Включите/отключите виджеты, доступные на панели управления участника.',
+    'save' => 'Сохранять',
+    'layout' => 'Панель управления',
+    'meta_desc' => 'Настройка виджетов панели мониторинга участников.',
+    'members_title' => 'Управление участниками',
+    'members_help' => 'Быстрый доступ к инструментам администрирования участников.',
+    'members_total' => 'Всего участников',
+    'members_active' => 'Активные участники',
+    'members_committee' => 'Члены комитета',
+    'members_roles' => 'Роли и разрешения',
+    'members_committee_cta' => 'Управляющий комитет',
+];

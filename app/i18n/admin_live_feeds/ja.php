@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
+
 return [
-    'updated' => 'Live feeds updated.',
-    'title' => 'Live feeds administration',
-    'intro' => 'Real-time widgets are limited to the member dashboard. Manage activation, URL, parser and TTL without exposing widgets on public pages.',
-    'active' => 'Active',
-    'label' => 'Label',
+    'updated' => 'ライブフィードが更新されました。',
+    'title' => 'ライブフィードの管理',
+    'intro' => 'リアルタイム ウィジェットはメンバー ダッシュボードに限定されます。公開ページにウィジェットを公開せずに、アクティベーション、URL、パーサー、TTL を管理します。',
+    'active' => 'アクティブ',
+    'label' => 'ラベル',
     'url' => 'URL',
-    'parser' => 'Parser',
-    'cache_ttl' => 'Cache TTL',
-    'refresh' => 'Browser refresh',
-    'notes' => 'Notes',
-    'save' => 'Save',
-    'layout' => 'Live feeds',
-    'meta_desc' => 'Configure live feeds shown in the members area.',
+    'parser' => 'パーサー',
+    'cache_ttl' => 'TTLキャッシュ',
+    'refresh' => 'ブラウザの更新',
+    'notes' => '注意事項',
+    'save' => '保存',
+    'layout' => 'ライブフィード',
+    'meta_desc' => 'メンバーエリアに表示されるライブフィードを設定します。',
 ];

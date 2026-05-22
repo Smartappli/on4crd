@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['updated' => 'Committee updated.', 'title' => 'Committee management', 'intro' => 'Select members to display on the committee page and define role, order, and short biography.', 'show_on_page' => 'Display on committee page', 'role' => 'Committee role', 'sort_order' => 'Display order', 'bio' => 'Short biography', 'save' => 'Save', 'layout' => 'Committee management', 'meta_desc' => 'Manage members displayed on the committee page.'];
+return [
+    'updated' => 'Комитет обновлен.',
+    'title' => 'Управление комитетом',
+    'intro' => 'Выберите членов для отображения на странице комитета и определите роль, порядок и краткую биографию.',
+    'show_on_page' => 'Отображать на странице комитета',
+    'role' => 'Роль комитета',
+    'sort_order' => 'Порядок отображения',
+    'bio' => 'Краткая биография',
+    'save' => 'Сохранять',
+    'layout' => 'Управление комитетом',
+    'meta_desc' => 'Управляйте членами, отображаемыми на странице комитета.',
+];

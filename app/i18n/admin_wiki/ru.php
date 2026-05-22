@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki administration', 'new_page' => 'New page', 'th_title' => 'Title', 'th_slug' => 'Slug', 'th_updated' => 'Updated', 'th_action' => 'Action', 'edit' => 'Edit', 'empty' => 'No pages.', 'layout' => 'Wiki administration', 'meta_desc' => 'Manage wiki pages.'];
+return [
+    'title' => 'Администрация вики',
+    'new_page' => 'Новая страница',
+    'th_title' => 'Заголовок',
+    'th_slug' => 'Слизень',
+    'th_updated' => 'Обновлено',
+    'th_action' => 'Действие',
+    'edit' => 'Редактировать',
+    'empty' => 'Никаких страниц.',
+    'layout' => 'Администрация вики',
+    'meta_desc' => 'Управление вики-страницами.',
+];

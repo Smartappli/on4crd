@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'title' => 'Members library',
-  'intro' => 'Browse PDFs by category or search.',
-  'open' => 'Open PDF',
-  'empty' => 'No document found.',
-  'storage_unavailable' => 'The library is temporarily unavailable.',
-  'meta_desc' => 'Browsing interface for ON4CRD private members library.',
-  'search_ph' => 'Search (title, summary, indexed content)',
-  'search' => 'Search',
-  'all_categories' => 'All categories',
-  'for_filters' => ' for these filters',
-);
+return [
+    'title' => '会員ライブラリー',
+    'intro' => 'カテゴリまたは検索別に PDF を参照します。',
+    'open' => 'PDFを開く',
+    'empty' => '文書が見つかりませんでした。',
+    'storage_unavailable' => '図書館は一時的に利用できません。',
+    'meta_desc' => 'ON4CRD プライベート メンバー ライブラリの閲覧インターフェイス。',
+    'search_ph' => '検索 (タイトル、概要、インデックス付きコンテンツ)',
+    'search' => '検索',
+    'all_categories' => 'すべてのカテゴリー',
+    'for_filters' => 'これらのフィルターの場合',
+];

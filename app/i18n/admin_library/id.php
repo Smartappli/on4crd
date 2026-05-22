@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Library administration', 'intro' => 'Add and browse member library PDF documents.', 'category_ph' => 'Category', 'categories' => 'Category management', 'existing_categories' => 'Existing categories', 'add_category' => 'Add category', 'delete' => 'Delete', 'title_ph' => 'Title', 'desc_ph' => 'Summary / keywords', 'upload' => 'Upload', 'open' => 'Open PDF', 'preview' => 'Embedded preview', 'prev' => 'Previous', 'next' => 'Next', 'page' => 'Page', 'err_required' => 'Title and PDF are required.', 'err_invalid' => 'The uploaded file must be a valid PDF.', 'err_size' => 'PDF file is too large (15 MB max).', 'err_upload' => 'PDF upload failed.', 'ok_added' => 'Document added to the members library.', 'storage_unavailable' => 'The library is temporarily unavailable.', 'meta_desc' => 'Administration for ON4CRD members library.'];
+return [
+    'title' => 'Administrasi perpustakaan',
+    'intro' => 'Tambahkan dan telusuri dokumen PDF perpustakaan anggota.',
+    'category_ph' => 'Kategori',
+    'categories' => 'Manajemen kategori',
+    'existing_categories' => 'Kategori yang ada',
+    'add_category' => 'Tambahkan kategori',
+    'delete' => 'Menghapus',
+    'title_ph' => 'Judul',
+    'desc_ph' => 'Ringkasan / kata kunci',
+    'upload' => 'Mengunggah',
+    'open' => 'Buka PDF',
+    'preview' => 'Pratinjau tertanam',
+    'prev' => 'Sebelumnya',
+    'next' => 'Berikutnya',
+    'page' => 'Halaman',
+    'err_required' => 'Judul dan PDF diperlukan.',
+    'err_invalid' => 'File yang diunggah harus berupa PDF yang valid.',
+    'err_size' => 'File PDF terlalu besar (maks 15 MB).',
+    'err_upload' => 'Pengunggahan PDF gagal.',
+    'ok_added' => 'Dokumen ditambahkan ke perpustakaan anggota.',
+    'storage_unavailable' => 'Perpustakaan untuk sementara tidak tersedia.',
+    'meta_desc' => 'Administrasi untuk perpustakaan anggota ON4CRD.',
+];

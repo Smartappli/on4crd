@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
+
 return [
-    'missing_q' => 'Missing q parameter.',
-    'service_down' => 'Geocoding service unavailable.',
-    'address_not_found' => 'Address not found.',
-    'invalid_coords' => 'Invalid coordinates received.',
+    'missing_q' => 'Отсутствует параметр q.',
+    'service_down' => 'Служба геокодирования недоступна.',
+    'address_not_found' => 'Адрес не найден.',
+    'invalid_coords' => 'Получены неверные координаты.',
 ];

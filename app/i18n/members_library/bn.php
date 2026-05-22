@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'title' => 'Members library',
-  'intro' => 'Browse PDFs by category or search.',
-  'open' => 'Open PDF',
-  'empty' => 'No document found.',
-  'storage_unavailable' => 'The library is temporarily unavailable.',
-  'meta_desc' => 'Browsing interface for ON4CRD private members library.',
-  'search_ph' => 'Search (title, summary, indexed content)',
-  'search' => 'Search',
-  'all_categories' => 'All categories',
-  'for_filters' => ' for these filters',
-);
+return [
+    'title' => 'সদস্যদের গ্রন্থাগার',
+    'intro' => 'বিভাগ বা অনুসন্ধান দ্বারা PDF ব্রাউজ করুন.',
+    'open' => 'PDF খুলুন',
+    'empty' => 'কোনো নথি পাওয়া যায়নি।',
+    'storage_unavailable' => 'গ্রন্থাগারটি সাময়িকভাবে অনুপলব্ধ৷',
+    'meta_desc' => 'ON4CRD প্রাইভেট মেম্বার লাইব্রেরির জন্য ব্রাউজিং ইন্টারফেস।',
+    'search_ph' => 'অনুসন্ধান (শিরোনাম, সারাংশ, সূচীকৃত বিষয়বস্তু)',
+    'search' => 'অনুসন্ধান করুন',
+    'all_categories' => 'সমস্ত বিভাগ',
+    'for_filters' => 'এই ফিল্টার জন্য',
+];

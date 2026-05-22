@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'title' => 'Album',
-  'gallery_unavailable' => 'The gallery is currently unavailable.',
-  'not_found' => 'Album not found.',
-  'back' => '← Back to gallery',
-  'photos' => 'Photos',
-  'album_photos' => 'Album photos',
-  'none' => 'No photos available in this album.',
-  'photo_alt' => 'Album photo',
-);
+return [
+    'title' => '专辑',
+    'gallery_unavailable' => '该画廊目前无法使用。',
+    'not_found' => '找不到相册。',
+    'back' => '← 返回画廊',
+    'photos' => '照片',
+    'album_photos' => '相册照片',
+    'none' => '该相册中没有可用的照片。',
+    'photo_alt' => '相册照片',
+];

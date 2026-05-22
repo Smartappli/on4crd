@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Library administration', 'intro' => 'Add and browse member library PDF documents.', 'category_ph' => 'Category', 'categories' => 'Category management', 'existing_categories' => 'Existing categories', 'add_category' => 'Add category', 'delete' => 'Delete', 'title_ph' => 'Title', 'desc_ph' => 'Summary / keywords', 'upload' => 'Upload', 'open' => 'Open PDF', 'preview' => 'Embedded preview', 'prev' => 'Previous', 'next' => 'Next', 'page' => 'Page', 'err_required' => 'Title and PDF are required.', 'err_invalid' => 'The uploaded file must be a valid PDF.', 'err_size' => 'PDF file is too large (15 MB max).', 'err_upload' => 'PDF upload failed.', 'ok_added' => 'Document added to the members library.', 'storage_unavailable' => 'The library is temporarily unavailable.', 'meta_desc' => 'Administration for ON4CRD members library.'];
+return [
+    'title' => 'গ্রন্থাগার প্রশাসন',
+    'intro' => 'সদস্য লাইব্রেরি পিডিএফ ডকুমেন্ট যোগ করুন এবং ব্রাউজ করুন।',
+    'category_ph' => 'শ্রেণী',
+    'categories' => 'বিভাগ ব্যবস্থাপনা',
+    'existing_categories' => 'বিদ্যমান বিভাগ',
+    'add_category' => 'বিভাগ যোগ করুন',
+    'delete' => 'মুছে দিন',
+    'title_ph' => 'শিরোনাম',
+    'desc_ph' => 'সারাংশ/কীওয়ার্ড',
+    'upload' => 'আপলোড করুন',
+    'open' => 'PDF খুলুন',
+    'preview' => 'এমবেডেড প্রিভিউ',
+    'prev' => 'আগের',
+    'next' => 'পরবর্তী',
+    'page' => 'পাতা',
+    'err_required' => 'শিরোনাম এবং PDF প্রয়োজন.',
+    'err_invalid' => 'আপলোড করা ফাইলটি অবশ্যই একটি বৈধ PDF হতে হবে।',
+    'err_size' => 'PDF ফাইলটি খুব বড় (15 MB সর্বোচ্চ)।',
+    'err_upload' => 'PDF আপলোড ব্যর্থ হয়েছে৷',
+    'ok_added' => 'সদস্যদের লাইব্রেরিতে নথি যোগ করা হয়েছে।',
+    'storage_unavailable' => 'গ্রন্থাগারটি সাময়িকভাবে অনুপলব্ধ৷',
+    'meta_desc' => 'ON4CRD সদস্যদের লাইব্রেরির জন্য প্রশাসন।',
+];

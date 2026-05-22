@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Library administration', 'intro' => 'Add and browse member library PDF documents.', 'category_ph' => 'Category', 'categories' => 'Category management', 'existing_categories' => 'Existing categories', 'add_category' => 'Add category', 'delete' => 'Delete', 'title_ph' => 'Title', 'desc_ph' => 'Summary / keywords', 'upload' => 'Upload', 'open' => 'Open PDF', 'preview' => 'Embedded preview', 'prev' => 'Previous', 'next' => 'Next', 'page' => 'Page', 'err_required' => 'Title and PDF are required.', 'err_invalid' => 'The uploaded file must be a valid PDF.', 'err_size' => 'PDF file is too large (15 MB max).', 'err_upload' => 'PDF upload failed.', 'ok_added' => 'Document added to the members library.', 'storage_unavailable' => 'The library is temporarily unavailable.', 'meta_desc' => 'Administration for ON4CRD members library.'];
+return [
+    'title' => 'पुस्तकालय प्रशासन',
+    'intro' => 'सदस्य लाइब्रेरी पीडीएफ दस्तावेज़ जोड़ें और ब्राउज़ करें।',
+    'category_ph' => 'वर्ग',
+    'categories' => 'श्रेणी प्रबंधन',
+    'existing_categories' => 'मौजूदा श्रेणियां',
+    'add_category' => 'श्रेणी जोड़ना',
+    'delete' => 'मिटाना',
+    'title_ph' => 'शीर्षक',
+    'desc_ph' => 'सारांश/कीवर्ड',
+    'upload' => 'अपलोड करें',
+    'open' => 'पीडीएफ खोलें',
+    'preview' => 'एंबेडेड पूर्वावलोकन',
+    'prev' => 'पहले का',
+    'next' => 'अगला',
+    'page' => 'पेज',
+    'err_required' => 'शीर्षक और पीडीएफ आवश्यक है.',
+    'err_invalid' => 'अपलोड की गई फ़ाइल एक वैध पीडीएफ होनी चाहिए।',
+    'err_size' => 'पीडीएफ फाइल बहुत बड़ी है (अधिकतम 15 एमबी)।',
+    'err_upload' => 'पीडीएफ अपलोड विफल रहा.',
+    'ok_added' => 'दस्तावेज़ को सदस्यों की लाइब्रेरी में जोड़ा गया.',
+    'storage_unavailable' => 'लाइब्रेरी अस्थायी रूप से अनुपलब्ध है.',
+    'meta_desc' => 'ON4CRD सदस्यों की लाइब्रेरी के लिए प्रशासन।',
+];

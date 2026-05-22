@@ -1,4 +1,28 @@
 <?php
 declare(strict_types=1);
 
-return ['contact_added' => 'Press contact added.', 'release_added' => 'Press release added.', 'contacts_title' => 'Press contacts', 'releases_title' => 'Press releases', 'full_name' => 'Full name', 'role' => 'Role', 'email' => 'Email', 'phone' => 'Phone', 'notes' => 'Notes', 'order' => 'Order', 'add' => 'Add', 'th_name' => 'Name', 'th_role' => 'Role', 'th_contact' => 'Contact', 'title' => 'Title', 'summary' => 'Summary', 'publish_date' => 'Publication date', 'pdf_doc' => 'PDF document', 'th_date' => 'Date', 'th_file' => 'File', 'open' => 'open', 'layout' => 'Press', 'meta_desc' => 'Manage press contacts and press releases.'];
+return [
+    'contact_added' => 'Tekan kontak ditambahkan.',
+    'release_added' => 'Siaran pers ditambahkan.',
+    'contacts_title' => 'Tekan kontak',
+    'releases_title' => 'Siaran pers',
+    'full_name' => 'Nama lengkap',
+    'role' => 'Peran',
+    'email' => 'E-mail',
+    'phone' => 'Telepon',
+    'notes' => 'Catatan',
+    'order' => 'Memesan',
+    'add' => 'Menambahkan',
+    'th_name' => 'Nama',
+    'th_role' => 'Peran',
+    'th_contact' => 'Kontak',
+    'title' => 'Judul',
+    'summary' => 'Ringkasan',
+    'publish_date' => 'Tanggal penerbitan',
+    'pdf_doc' => 'dokumen PDF',
+    'th_date' => 'Tanggal',
+    'th_file' => 'Mengajukan',
+    'open' => 'membuka',
+    'layout' => 'Tekan',
+    'meta_desc' => 'Kelola kontak pers dan siaran pers.',
+];

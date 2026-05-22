@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki administration', 'new_page' => 'New page', 'th_title' => 'Title', 'th_slug' => 'Slug', 'th_updated' => 'Updated', 'th_action' => 'Action', 'edit' => 'Edit', 'empty' => 'No pages.', 'layout' => 'Wiki administration', 'meta_desc' => 'Manage wiki pages.'];
+return [
+    'title' => 'विकी प्रशासन',
+    'new_page' => 'नया पेज',
+    'th_title' => 'शीर्षक',
+    'th_slug' => 'काउंटर',
+    'th_updated' => 'अद्यतन',
+    'th_action' => 'कार्रवाई',
+    'edit' => 'संपादन करना',
+    'empty' => 'कोई पेज नहीं.',
+    'layout' => 'विकी प्रशासन',
+    'meta_desc' => 'विकि पृष्ठ प्रबंधित करें.',
+];
