@@ -11,22 +11,38 @@ if (!isset($_SESSION['chatbot_history']) || !is_array($_SESSION['chatbot_history
 
 $question = '';
 $response = null;
+$maxQuestionLength = 800;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
+        $action = (string) ($_POST['action'] ?? 'ask');
+        if ($action === 'clear') {
+            $_SESSION['chatbot_history'] = [];
+            redirect('chatbot');
+        }
+
         $question = trim((string) ($_POST['question'] ?? ''));
+        $question = preg_replace('/\s+/u', ' ', $question) ?? $question;
         if ($question === '') {
             throw new RuntimeException($t('err_question'));
         }
+        if (mb_strlen($question) > $maxQuestionLength) {
+            $question = mb_substr($question, 0, $maxQuestionLength);
+        }
 
         $response = answer_question_from_knowledge($question);
-        db()->prepare('INSERT INTO chatbot_logs (member_id, question, answer, source_name) VALUES (?, ?, ?, ?)')->execute([
-            current_user()['id'] ?? null,
-            $question,
-            $response['answer'],
-            $response['source'],
-        ]);
+        try {
+            if (table_exists('chatbot_logs')) {
+                db()->prepare('INSERT INTO chatbot_logs (member_id, question, answer, source_name) VALUES (?, ?, ?, ?)')->execute([
+                    current_user()['id'] ?? null,
+                    $question,
+                    $response['answer'],
+                    $response['source'],
+                ]);
+            }
+        } catch (Throwable) {
+        }
 
         $_SESSION['chatbot_history'][] = [
             'question' => $question,
@@ -44,39 +60,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-if (isset($_GET['clear']) && $_GET['clear'] === '1') {
-    $_SESSION['chatbot_history'] = [];
-    redirect('chatbot');
-}
-
 $history = $_SESSION['chatbot_history'];
+$historyCount = count($history);
 
 ob_start();
 ?>
 <div class="chatbot-shell">
     <aside class="chatbot-sidebar card">
         <img class="chatbot-illustration" src="<?= e(asset_url('assets/chartbot/chatbot.png')) ?>" alt="<?= e($t('chatbot_alt')) ?>">
-        <h1>&nbsp;</h1>
+        <h1><?= e($t('meta_title')) ?></h1>
         <p class="help"><?= e($t('sidebar_help')) ?></p>
+        <div class="chatbot-status">
+            <span class="badge muted"><?= $historyCount ?> <?= e($t('history_count')) ?></span>
+            <span class="badge muted"><?= e($t('rag_ready')) ?></span>
+        </div>
         <ul class="chatbot-suggestions" id="chatbot-suggestions">
             <li><button type="button" class="chatbot-chip" data-suggestion="<?= e($t('s1_q')) ?>"><?= e($t('s1_l')) ?></button></li>
             <li><button type="button" class="chatbot-chip" data-suggestion="<?= e($t('s2_q')) ?>"><?= e($t('s2_l')) ?></button></li>
             <li><button type="button" class="chatbot-chip" data-suggestion="<?= e($t('s3_q')) ?>"><?= e($t('s3_l')) ?></button></li>
             <li><button type="button" class="chatbot-chip" data-suggestion="<?= e($t('s4_q')) ?>"><?= e($t('s4_l')) ?></button></li>
         </ul>
-        <a class="button ghost" href="<?= e('index.php?route=chatbot&clear=1') ?>"><?= e($t('clear')) ?></a>
+        <form method="post" onsubmit="return confirm('<?= e($t('clear_confirm')) ?>');">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="clear">
+            <button class="button ghost" type="submit"><?= e($t('clear')) ?></button>
+        </form>
     </aside>
 
     <section class="chatbot-main card" aria-label="<?= e($t('conversation_label')) ?>">
         <div class="chatbot-thread" id="chatbot-thread">
             <?php if ($history === []): ?>
                 <article class="chatbot-message bot">
+                    <strong><?= e($t('welcome_title')) ?></strong>
                     <p><?= e($t('welcome')) ?></p>
                 </article>
             <?php else: ?>
-                <?php foreach ($history as $item): ?>
+                <?php foreach ($history as $index => $item): ?>
                     <article class="chatbot-message user">
                         <p><?= e((string) $item['question']) ?></p>
+                        <button type="button" class="chatbot-message-action" data-suggestion="<?= e((string) $item['question']) ?>"><?= e($t('reuse')) ?></button>
                     </article>
                     <article class="chatbot-message bot">
                         <p><?= nl2br(e((string) $item['answer'])) ?></p>
