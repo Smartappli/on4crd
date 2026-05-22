@@ -3,11 +3,7 @@ declare(strict_types=1);
 
 $user = require_login();
 $locale = current_locale();
-$i18n = i18n_domain_messages('ads');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
-};
+$t = i18n_domain_translator('ads', $locale);
 if (!module_enabled('advertising')) {
     echo render_layout('<div class="card"><p>' . e($t('module_off')) . '</p></div>', $t('title'));
     return;

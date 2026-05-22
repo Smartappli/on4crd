@@ -1,17 +1,8 @@
 <?php
-$i18n = require __DIR__ . '/../app/i18n/search.php';
-$i18n = i18n_expand_supported_locales($i18n);
+declare(strict_types=1);
+
 $locale = current_locale();
-$t = [];
-foreach (array_keys($i18n['fr']) as $key) {
-    $pool = [];
-    foreach ($i18n as $lang => $translations) {
-        if (isset($translations[$key]) && is_string($translations[$key])) {
-            $pool[$lang] = $translations[$key];
-        }
-    }
-    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
-}
+$t = i18n_domain_locale('search', $locale);
 
 $q = trim((string) ($_GET['q'] ?? ''));
 $q = preg_replace('/\s+/u', ' ', $q) ?? '';
@@ -23,7 +14,6 @@ $hasQuery = $q !== '';
 $isQueryLongEnough = mb_strlen($q) >= 2;
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
-$offset = ($page - 1) * $perPage;
 $results = [];
 if ($hasQuery && $isQueryLongEnough) {
     $results = cache_remember('site_search_' . current_locale() . '_' . md5(mb_strtolower($q)), 120, static function () use ($q, $tokens): array {
@@ -107,6 +97,9 @@ foreach ($results as $result) {
 $results = array_values($uniqueResults);
 usort($results, static fn(array $a, array $b): int => ((int) ($b['score'] ?? 0)) <=> ((int) ($a['score'] ?? 0)));
 $totalResults = count($results);
+$pagination = pagination_state($totalResults, $page, $perPage);
+$page = $pagination['page'];
+$offset = $pagination['offset'];
 $pagedResults = array_slice($results, $offset, $perPage);
 $hasPrev = $page > 1;
 $hasNext = ($offset + $perPage) < $totalResults;
@@ -139,8 +132,8 @@ ob_start();
     <?php endforeach; ?>
     <?php if ($totalResults > $perPage): ?>
         <nav class="flex items-center gap-2" aria-label="Pagination">
-            <?php if ($hasPrev): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page - 1)])) ?>"><?= e((string) $t['previous']) ?></a><?php endif; ?>
-            <?php if ($hasNext): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url('search', ['q' => $q, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
+            <?php if ($hasPrev): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url_clean('search', ['q' => $q, 'page' => ($page - 1)])) ?>"><?= e((string) $t['previous']) ?></a><?php endif; ?>
+            <?php if ($hasNext): ?><a class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" href="<?= e(route_url_clean('search', ['q' => $q, 'page' => ($page + 1)])) ?>"><?= e((string) $t['next']) ?></a><?php endif; ?>
         </nav>
     <?php endif; ?>
     </div>

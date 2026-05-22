@@ -3,18 +3,7 @@ declare(strict_types=1);
 
 $lots = cache_remember('auction_public_lots_60_v1', 60, static fn(): array => auction_public_lots(60));
 $locale = current_locale();
-$i18n = i18n_domain_messages('auctions');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = [];
-foreach (array_keys($i18n['fr']) as $key) {
-    $pool = [];
-    foreach ($i18n as $lang => $translations) {
-        if (isset($translations[$key]) && is_string($translations[$key])) {
-            $pool[$lang] = $translations[$key];
-        }
-    }
-    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
-}
+$t = i18n_domain_locale('auctions', $locale);
 set_page_meta([
     'title' => (string) $t['meta_title'],
     'description' => (string) $t['meta_desc'],
@@ -42,12 +31,10 @@ $sectionPages = [
 $sectionMaxPages = [];
 $pagedGroupedLots = [];
 foreach ($groupedLots as $status => $items) {
-    $max = max(1, (int) ceil(count($items) / $perPage));
-    if ($sectionPages[$status] > $max) {
-        $sectionPages[$status] = $max;
-    }
-    $sectionMaxPages[$status] = $max;
-    $pagedGroupedLots[$status] = array_slice($items, ($sectionPages[$status] - 1) * $perPage, $perPage);
+    $pagination = pagination_state(count($items), $sectionPages[$status], $perPage);
+    $sectionPages[$status] = $pagination['page'];
+    $sectionMaxPages[$status] = $pagination['total_pages'];
+    $pagedGroupedLots[$status] = array_slice($items, $pagination['offset'], $perPage);
 }
 
 $sections = [
@@ -90,11 +77,11 @@ ob_start();
                 <?php if ($sectionMaxPages[$status] > 1): ?>
                     <div class="actions mt-3">
                         <?php if ($sectionPages[$status] > 1): ?>
-                            <a class="button secondary" href="<?= e(route_url('auctions', $sectionPages + [$status . '_page' => $sectionPages[$status] - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                            <a class="button secondary" href="<?= e(route_url_clean('auctions', $sectionPages + [$status . '_page' => $sectionPages[$status] - 1])) ?>"><?= e((string) $t['previous']) ?></a>
                         <?php endif; ?>
                         <span class="pill"><?= e((string) $t['page']) ?> <?= $sectionPages[$status] ?> / <?= $sectionMaxPages[$status] ?></span>
                         <?php if ($sectionPages[$status] < $sectionMaxPages[$status]): ?>
-                            <a class="button secondary" href="<?= e(route_url('auctions', $sectionPages + [$status . '_page' => $sectionPages[$status] + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                            <a class="button secondary" href="<?= e(route_url_clean('auctions', $sectionPages + [$status . '_page' => $sectionPages[$status] + 1])) ?>"><?= e((string) $t['next']) ?></a>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>

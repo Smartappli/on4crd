@@ -3,11 +3,7 @@ declare(strict_types=1);
 
 newsletter_ensure_tables();
 $locale = current_locale();
-$i18n = i18n_domain_messages('newsletter_unsubscribe');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = static function (string $key) use ($locale, $i18n): string {
-    return i18n_localized_value($i18n, $locale, $key);
-};
+$t = i18n_domain_translator('newsletter_unsubscribe', $locale);
 
 set_page_meta([
     'title' => $t('title'),
