@@ -4,6 +4,7 @@ declare(strict_types=1);
 function config(?string $key = null, mixed $default = null): mixed
 {
     static $config = null;
+    static $pathCache = [];
     if ($config === null) {
         $configFile = __DIR__ . '/../config/config.php';
         if (!is_file($configFile)) {
@@ -16,6 +17,10 @@ function config(?string $key = null, mixed $default = null): mixed
         return $config;
     }
 
+    if (array_key_exists($key, $pathCache)) {
+        return $pathCache[$key];
+    }
+
     $value = $config;
     foreach (explode('.', $key) as $segment) {
         if (!is_array($value) || !array_key_exists($segment, $value)) {
@@ -24,7 +29,8 @@ function config(?string $key = null, mixed $default = null): mixed
         $value = $value[$segment];
     }
 
-    return $value;
+    $pathCache[$key] = $value;
+    return $pathCache[$key];
 }
 
 function db(): PDO
@@ -83,28 +89,45 @@ function auth(): ?\Delight\Auth\Auth
 
 function table_exists(string $table): bool
 {
-    static $cache = [];
+    static $cache = null;
+    static $fallbackCache = [];
     $normalized = strtolower(trim($table));
     if ($normalized === '') {
         return false;
     }
-    if (array_key_exists($normalized, $cache)) {
-        return $cache[$normalized];
+    if (is_array($cache)) {
+        return isset($cache[$normalized]);
     }
 
-    $stmt = db()->prepare(
-        'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?'
-    );
-    $stmt->execute([$normalized]);
-    $cache[$normalized] = (int) $stmt->fetchColumn() > 0;
+    try {
+        $stmt = db()->query('SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()');
+        $loadedTables = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $tableName) {
+            $loadedTables[strtolower((string) $tableName)] = true;
+        }
+        $cache = $loadedTables;
 
-    return $cache[$normalized];
+        return isset($cache[$normalized]);
+    } catch (Throwable) {
+        if (array_key_exists($normalized, $fallbackCache)) {
+            return $fallbackCache[$normalized];
+        }
+
+        $stmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?'
+        );
+        $stmt->execute([$normalized]);
+        $fallbackCache[$normalized] = (int) $stmt->fetchColumn() > 0;
+
+        return $fallbackCache[$normalized];
+    }
 }
 
 if (!function_exists('supported_locales')) {
 function supported_locales(): array
 {
-    return ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+    static $locales = ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+    return $locales;
 }
 }
 
@@ -1744,34 +1767,38 @@ function random_quote_for_layout(): ?array
 if (!function_exists('base_url')) {
 function base_url(string $path = ''): string
 {
-    $configured = rtrim((string) config('app.base_url', ''), '/');
-    if ($configured !== '') {
-        $base = $configured;
-    } else {
-        $scheme = is_https_request() ? 'https' : 'http';
-        $forwardedHostHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ''));
-        $hostHeader = $forwardedHostHeader !== ''
-            ? trim(explode(',', $forwardedHostHeader)[0])
-            : (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+    static $base = null;
 
-        $host = strtolower(trim($hostHeader));
-        if ($host === '' || preg_match('/[^a-z0-9\\-\\.:\\[\\]]/i', $host) !== 0) {
-            $host = 'localhost';
-        }
+    if ($base === null) {
+        $configured = rtrim((string) config('app.base_url', ''), '/');
+        if ($configured !== '') {
+            $base = $configured;
+        } else {
+            $scheme = is_https_request() ? 'https' : 'http';
+            $forwardedHostHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ''));
+            $hostHeader = $forwardedHostHeader !== ''
+                ? trim(explode(',', $forwardedHostHeader)[0])
+                : (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
-        $forwardedPortHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_PORT'] ?? ''));
-        $forwardedPort = $forwardedPortHeader !== ''
-            ? trim(explode(',', $forwardedPortHeader)[0])
-            : '';
-        if ($forwardedPort !== '' && ctype_digit($forwardedPort)) {
-            $port = (int) $forwardedPort;
-            if (($scheme === 'https' && $port !== 443) || ($scheme === 'http' && $port !== 80)) {
-                $hostWithoutPort = preg_replace('/:\\d+$/', '', $host);
-                $host = ($hostWithoutPort ?: $host) . ':' . $port;
+            $host = strtolower(trim($hostHeader));
+            if ($host === '' || preg_match('/[^a-z0-9\\-\\.:\\[\\]]/i', $host) !== 0) {
+                $host = 'localhost';
             }
-        }
 
-        $base = $scheme . '://' . $host;
+            $forwardedPortHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_PORT'] ?? ''));
+            $forwardedPort = $forwardedPortHeader !== ''
+                ? trim(explode(',', $forwardedPortHeader)[0])
+                : '';
+            if ($forwardedPort !== '' && ctype_digit($forwardedPort)) {
+                $port = (int) $forwardedPort;
+                if (($scheme === 'https' && $port !== 443) || ($scheme === 'http' && $port !== 80)) {
+                    $hostWithoutPort = preg_replace('/:\\d+$/', '', $host);
+                    $host = ($hostWithoutPort ?: $host) . ':' . $port;
+                }
+            }
+
+            $base = $scheme . '://' . $host;
+        }
     }
 
     if ($path === '') {
@@ -2075,21 +2102,42 @@ function logout_member(): void
 }
 }
 
+if (!function_exists('module_row')) {
+function module_row(string $module): ?array
+{
+    static $cache = [];
+
+    $module = trim($module);
+    if ($module === '' || !table_exists('modules')) {
+        return null;
+    }
+
+    if (array_key_exists($module, $cache)) {
+        return $cache[$module];
+    }
+
+    $stmt = db()->prepare('SELECT is_enabled, visibility FROM modules WHERE code = ? LIMIT 1');
+    $stmt->execute([$module]);
+    $row = $stmt->fetch();
+    $cache[$module] = is_array($row) ? $row : null;
+
+    return $cache[$module];
+}
+}
+
 if (!function_exists('module_enabled')) {
 function module_enabled(string $module): bool
 {
-    if ($module === '' || !table_exists('modules')) {
+    if ($module === '') {
         return true;
     }
 
-    $stmt = db()->prepare('SELECT is_enabled FROM modules WHERE code = ? LIMIT 1');
-    $stmt->execute([$module]);
-    $value = $stmt->fetchColumn();
-    if ($value === false) {
+    $row = module_row($module);
+    if ($row === null) {
         return true;
     }
 
-    return (int) $value === 1;
+    return (int) $row['is_enabled'] === 1;
 }
 }
 
@@ -2097,13 +2145,12 @@ function module_enabled(string $module): bool
 if (!function_exists('module_visible_for_current_user')) {
 function module_visible_for_current_user(string $module): bool
 {
-    if ($module === '' || !table_exists('modules')) {
+    if ($module === '') {
         return true;
     }
 
-    $stmt = db()->prepare('SELECT visibility FROM modules WHERE code = ? LIMIT 1');
-    $stmt->execute([$module]);
-    $visibility = (string) ($stmt->fetchColumn() ?: 'public');
+    $row = module_row($module);
+    $visibility = (string) ($row['visibility'] ?? 'public');
 
     if ($visibility === 'public') {
         return true;
@@ -2159,12 +2206,30 @@ function require_module_enabled(string $module): void
 if (!function_exists('has_permission')) {
 function has_permission(string $permission): bool
 {
+    static $permissionCache = [];
+    static $schemaReady = null;
+
     $user = current_user();
     if ($user === null || $permission === '') {
         return false;
     }
-    if (!table_exists('permissions') || !table_exists('roles') || !table_exists('member_roles') || !table_exists('role_permissions')) {
-        return false;
+
+    $userId = (int) $user['id'];
+    $cacheKey = $userId . '|' . $permission;
+    if (array_key_exists($cacheKey, $permissionCache)) {
+        return $permissionCache[$cacheKey];
+    }
+
+    if ($schemaReady === null) {
+        $schemaReady = table_exists('permissions')
+            && table_exists('roles')
+            && table_exists('member_roles')
+            && table_exists('member_permissions')
+            && table_exists('role_permissions');
+    }
+    if (!$schemaReady) {
+        $permissionCache[$cacheKey] = false;
+        return $permissionCache[$cacheKey];
     }
 
     $stmt = db()->prepare(
@@ -2177,9 +2242,10 @@ function has_permission(string $permission): bool
            AND (mp.member_id IS NOT NULL OR mr.member_id IS NOT NULL)
          LIMIT 1'
     );
-    $stmt->execute([(int) $user['id'], (int) $user['id'], $permission]);
+    $stmt->execute([$userId, $userId, $permission]);
 
-    return (bool) $stmt->fetchColumn();
+    $permissionCache[$cacheKey] = (bool) $stmt->fetchColumn();
+    return $permissionCache[$cacheKey];
 }
 }
 
