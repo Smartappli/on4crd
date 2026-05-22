@@ -24,4 +24,6 @@ return [
     'theme_materiel' => 'उपकरण एवं स्टेशन',
     'theme_formation' => 'प्रशिक्षण',
     'theme_autres' => 'अन्य विषय',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 ];

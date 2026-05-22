@@ -5,8 +5,9 @@ require_permission('articles.manage');
 $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/admin_articles.php';
 $i18n = i18n_expand_supported_locales($i18n);
-$t = static function (string $key) use ($locale, $i18n): string {
-    return i18n_localized_value($i18n, $locale, $key);
+$t = static function (string $key, string $fallback = '') use ($locale, $i18n): string {
+    $value = i18n_localized_value($i18n, $locale, $key);
+    return trim($value) !== '' && $value !== $key ? $value : $fallback;
 };
 set_page_meta([
     'title' => $t('layout'),
@@ -84,14 +85,34 @@ function import_article_document(array $file): array
         $content = sanitize_rich_html($rawHtml);
     } else {
         $content = $extension === 'pdf'
-            ? '<div class="article-document"><p><strong>' . e((string) $tm['imported_doc']) . ' ' . $safeTitle . '</p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
-            : '<div class="article-document"><p><strong>' . e((string) $tm['imported_docx']) . ' ' . $safeTitle . '</p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
+            ? '<div class="article-document"><p><strong>' . e((string) $tm['imported_doc']) . ' ' . $safeTitle . '</strong></p><iframe src="' . e($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>'
+            : '<div class="article-document"><p><strong>' . e((string) $tm['imported_docx']) . ' ' . $safeTitle . '</strong></p><iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . rawurlencode($publicUrl) . '" title="' . $safeTitle . '" style="width:100%;min-height:70vh;border:1px solid #cbd5e1;border-radius:12px;" loading="lazy"></iframe></div>';
     }
 
     return [
         'excerpt' => ((string) $tm['imported_doc']) . ' ' . pathinfo($originalName, PATHINFO_FILENAME),
         'content' => $content,
     ];
+}
+
+function article_unique_slug(string $slug, int $ignoreId = 0): string
+{
+    $base = slugify($slug);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'article';
+    }
+
+    $candidate = $base;
+    $suffix = 2;
+    while (true) {
+        $stmt = db()->prepare('SELECT id FROM articles WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, $ignoreId]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $candidate = $base . '-' . $suffix;
+        $suffix++;
+    }
 }
 
 $defaultCategories = [
@@ -120,7 +141,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'save_article') {
             $id = (int) ($_POST['id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
-            $slug = slugify($title);
+            $slugInput = trim((string) ($_POST['slug'] ?? ''));
+            $slug = article_unique_slug($slugInput !== '' ? $slugInput : $title, $id);
             $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
             $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
             $status = (string) ($_POST['status'] ?? 'draft');
@@ -129,6 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $category = $categoryChoice === '__custom__' ? $customCategory : slugify($categoryChoice);
             if ($category === '') {
                 $category = 'autres';
+            }
+            if ($title === '' || !in_array($status, ['draft', 'published'], true)) {
+                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }
             $imported = import_article_document($_FILES['article_document'] ?? []);
             if ($imported['content'] !== '') {
@@ -147,6 +172,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             article_translation_upsert($id, 'de');
             article_translation_upsert($id, 'nl');
             set_flash('success', $t('ok_saved'));
+            redirect('admin_articles');
+        } elseif ($action === 'delete_article') {
+            $id = (int) ($_POST['id'] ?? 0);
+            if ($id <= 0) {
+                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+            }
+            if (table_exists('article_translations')) {
+                db()->prepare('DELETE FROM article_translations WHERE article_id = ?')->execute([$id]);
+            }
+            db()->prepare('DELETE FROM articles WHERE id = ?')->execute([$id]);
+            set_flash('success', $t('ok_deleted', 'Article supprimé.'));
             redirect('admin_articles');
         } elseif ($action === 'save_category') {
             $oldCode = slugify(trim((string) ($_POST['old_code'] ?? '')));
@@ -172,7 +208,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$articles = db()->query('SELECT * FROM articles ORDER BY updated_at DESC')->fetchAll();
+$adminStatus = (string) ($_GET['status'] ?? '');
+$adminCategory = slugify(trim((string) ($_GET['category'] ?? '')));
+$adminSearch = trim((string) ($_GET['q'] ?? ''));
+$adminWhere = [];
+$adminParams = [];
+if (in_array($adminStatus, ['draft', 'published'], true)) {
+    $adminWhere[] = 'status = ?';
+    $adminParams[] = $adminStatus;
+}
+if ($adminCategory !== '') {
+    $adminWhere[] = 'category = ?';
+    $adminParams[] = $adminCategory;
+}
+if ($adminSearch !== '') {
+    $adminWhere[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+    $needle = '%' . $adminSearch . '%';
+    $adminParams[] = $needle;
+    $adminParams[] = $needle;
+    $adminParams[] = $needle;
+}
+$adminWhereSql = $adminWhere === [] ? '' : ('WHERE ' . implode(' AND ', $adminWhere));
+$articleStmt = db()->prepare('SELECT * FROM articles ' . $adminWhereSql . ' ORDER BY updated_at DESC, id DESC LIMIT 100');
+$articleStmt->execute($adminParams);
+$articles = $articleStmt->fetchAll() ?: [];
+$articleStats = db()->query('SELECT status, COUNT(*) AS total FROM articles GROUP BY status')->fetchAll() ?: [];
+$articleStatMap = ['draft' => 0, 'published' => 0];
+foreach ($articleStats as $statRow) {
+    $articleStatMap[(string) $statRow['status']] = (int) $statRow['total'];
+}
 $editingId = (int) ($_GET['id'] ?? 0);
 $editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres'];
 if ($editingId > 0) {
@@ -191,7 +255,7 @@ ob_start();
             <input type="hidden" name="action" value="save_article">
             <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
             <label><?= e($t('title')) ?><input type="text" name="title" value="<?= e((string) $editing['title']) ?>" required></label>
-            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" readonly aria-readonly="true" tabindex="-1"></label>
+            <label><?= e($t('slug')) ?><input type="text" name="slug" value="<?= e((string) $editing['slug']) ?>" placeholder="<?= e($t('slug_placeholder', 'genere-depuis-le-titre')) ?>"></label>
             <label><?= e($t('category')) ?>
                 <select name="category" id="article-category">
                     <?php $editingCategory = (string) ($editing['category'] ?? 'autres'); ?>
@@ -215,14 +279,47 @@ ob_start();
             </label>
             <button class="button"><?= e($t('save')) ?></button>
         </form>
+        <?php if ((int) $editing['id'] > 0): ?>
+            <form method="post" style="margin-top:1rem;" onsubmit="return confirm('<?= e($t('confirm_delete', 'Supprimer cet article ?')) ?>');">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="delete_article">
+                <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
+                <button class="button secondary" type="submit"><?= e($t('delete_article', 'Supprimer l’article')) ?></button>
+            </form>
+        <?php endif; ?>
     </section>
     <section class="card">
-        <h2><?= e($t('existing_articles')) ?></h2>
+        <div class="row-between">
+            <h2><?= e($t('existing_articles')) ?></h2>
+            <span class="badge"><?= e($t('published')) ?>: <?= (int) $articleStatMap['published'] ?> · <?= e($t('draft')) ?>: <?= (int) $articleStatMap['draft'] ?></span>
+        </div>
+        <form method="get" class="stack">
+            <input type="hidden" name="route" value="admin_articles">
+            <div class="grid-3">
+                <label><?= e($t('search', 'Recherche')) ?><input type="search" name="q" value="<?= e($adminSearch) ?>"></label>
+                <label><?= e($t('status')) ?>
+                    <select name="status">
+                        <option value=""><?= e($t('all_statuses', 'Tous les statuts')) ?></option>
+                        <option value="published" <?= $adminStatus === 'published' ? 'selected' : '' ?>><?= e($t('published')) ?></option>
+                        <option value="draft" <?= $adminStatus === 'draft' ? 'selected' : '' ?>><?= e($t('draft')) ?></option>
+                    </select>
+                </label>
+                <label><?= e($t('category')) ?>
+                    <select name="category">
+                        <option value=""><?= e($t('all_categories', 'Toutes les catégories')) ?></option>
+                        <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
+                            <option value="<?= e($categoryCode) ?>" <?= $adminCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+            <p><button class="button" type="submit"><?= e($t('filter', 'Filtrer')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter', 'Réinitialiser')) ?></a></p>
+        </form>
         <div class="stack">
             <?php foreach ($articles as $article): ?>
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
-                    <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?></p>
+                    <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?> · <span class="badge muted"><?= e($t((string) $article['status'], (string) $article['status'])) ?></span></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>
@@ -268,6 +365,7 @@ ob_start();
     const customCategoryWrapper = document.querySelector('#article-category-custom');
 
     if (titleInput instanceof HTMLInputElement && slugInput instanceof HTMLInputElement) {
+        let slugWasAuto = slugInput.value.trim() === '';
         const slugify = (value) => value
             .toLowerCase()
             .normalize('NFD')
@@ -277,9 +375,13 @@ ob_start();
             .replace(/-{2,}/g, '-');
 
         const syncSlug = () => {
+            if (!slugWasAuto) return;
             slugInput.value = slugify(titleInput.value);
         };
 
+        slugInput.addEventListener('input', () => {
+            slugWasAuto = slugInput.value.trim() === '';
+        });
         titleInput.addEventListener('input', syncSlug);
         syncSlug();
     }

@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_saved' => 'Artikel opgeslagen.', 'err_invalid_category' => 'Ongeldige categorie.', 'ok_category_updated' => 'Categorie bijgewerkt.', 'err_delete_category' => 'Deze categorie kan niet worden verwijderd.', 'ok_category_deleted' => 'Categorie verwijderd (artikelen verplaatst naar de standaardcategorie).', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'an_article' => 'een artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Categorie', 'new_category' => 'Nieuwe categorie…', 'new_category_id' => 'Nieuwe categorie (identifier)', 'import_document' => 'Document importeren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Samenvatting', 'content_simple_html' => 'Inhoud (eenvoudige HTML)', 'status' => 'Status', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'existing_articles' => 'Bestaande artikelen', 'category_label' => 'Categorie:', 'category_edit' => 'Categorieën bewerken', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Code hernoemen', 'delete_to_other' => 'Verwijderen (naar standaardcategorie)', 'no_articles' => 'Geen artikelen.', 'custom_category_ph' => 'bv. vhf-propagatie', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Verkeer & DX', 'cat_numerique' => 'Digitale modi', 'cat_materiel' => 'Materiaal & station', 'cat_formation' => 'Opleiding', 'cat_autres' => 'Overige', 'layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.'];
+return ['ok_saved' => 'Artikel opgeslagen.', 'err_invalid_category' => 'Ongeldige categorie.', 'ok_category_updated' => 'Categorie bijgewerkt.', 'err_delete_category' => 'Deze categorie kan niet worden verwijderd.', 'ok_category_deleted' => 'Categorie verwijderd (artikelen verplaatst naar de standaardcategorie).', 'edit' => 'Bewerken', 'create' => 'Aanmaken', 'an_article' => 'een artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Categorie', 'new_category' => 'Nieuwe categorie…', 'new_category_id' => 'Nieuwe categorie (identifier)', 'import_document' => 'Document importeren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Samenvatting', 'content_simple_html' => 'Inhoud (eenvoudige HTML)', 'status' => 'Status', 'draft' => 'Concept', 'published' => 'Gepubliceerd', 'save' => 'Opslaan', 'existing_articles' => 'Bestaande artikelen', 'category_label' => 'Categorie:', 'category_edit' => 'Categorieën bewerken', 'code' => 'Code', 'label' => 'Label', 'rename_code' => 'Code hernoemen', 'delete_to_other' => 'Verwijderen (naar standaardcategorie)', 'no_articles' => 'Geen artikelen.', 'custom_category_ph' => 'bv. vhf-propagatie', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Verkeer & DX', 'cat_numerique' => 'Digitale modi', 'cat_materiel' => 'Materiaal & station', 'cat_formation' => 'Opleiding', 'cat_autres' => 'Overige', 'layout' => 'Artikelen', 'meta_desc' => 'Beheer en publicatie van siteartikelen.',
+    'err_invalid_article' => 'Invalid article.',
+    'ok_deleted' => 'Article deleted.',
+    'slug_placeholder' => 'generated-from-title',
+    'confirm_delete' => 'Delete this article?',
+    'delete_article' => 'Delete article',
+    'search' => 'Search',
+    'all_statuses' => 'All statuses',
+    'all_categories' => 'All categories',
+    'filter' => 'Filter',
+    'reset_filter' => 'Reset',
+];

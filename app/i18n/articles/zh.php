@@ -24,4 +24,6 @@ return [
     'theme_materiel' => '设备及工位',
     'theme_formation' => '训练',
     'theme_autres' => '其他主题',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 ];

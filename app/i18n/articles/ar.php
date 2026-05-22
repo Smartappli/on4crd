@@ -24,4 +24,6 @@ return [
     'theme_materiel' => 'المعدات والمحطة',
     'theme_formation' => 'تمرين',
     'theme_autres' => 'مواضيع أخرى',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 ];

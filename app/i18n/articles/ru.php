@@ -24,4 +24,6 @@ return [
     'theme_materiel' => 'Оборудование и станция',
     'theme_formation' => 'Обучение',
     'theme_autres' => 'Другие темы',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 ];

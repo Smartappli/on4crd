@@ -24,4 +24,6 @@ return [
     'theme_materiel' => 'Peralatan & stasiun',
     'theme_formation' => 'Pelatihan',
     'theme_autres' => 'Topik lainnya',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 ];

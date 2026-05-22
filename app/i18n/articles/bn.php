@@ -24,4 +24,6 @@ return [
     'theme_materiel' => 'সরঞ্জাম এবং স্টেশন',
     'theme_formation' => 'প্রশিক্ষণ',
     'theme_autres' => 'অন্যান্য বিষয়',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 ];

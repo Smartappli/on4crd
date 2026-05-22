@@ -24,4 +24,6 @@ return [
     'theme_materiel' => '設備とステーション',
     'theme_formation' => 'トレーニング',
     'theme_autres' => 'その他の話題',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 ];

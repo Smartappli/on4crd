@@ -3,6 +3,28 @@ declare(strict_types=1);
 
 $GLOBALS['articles_i18n'] = [];
 
+function article_plain_text(string $html): string
+{
+    return trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+}
+
+function article_reading_minutes(string $html): int
+{
+    $wordCount = str_word_count(article_plain_text($html));
+    return max(1, (int) ceil($wordCount / 220));
+}
+
+function article_card_excerpt(array $row): string
+{
+    $excerpt = trim((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? ''));
+    if ($excerpt !== '') {
+        return $excerpt;
+    }
+
+    $plain = article_plain_text((string) ($row['content_localized'] ?? $row['content'] ?? ''));
+    return mb_strlen($plain) > 180 ? mb_substr($plain, 0, 177) . '...' : $plain;
+}
+
 function article_category_logo(string $label): string
 {
     $safeLabel = trim($label) !== '' ? $label : ((string) ($GLOBALS['articles_i18n']['default_category'] ?? 'Catégorie'));
@@ -89,7 +111,7 @@ if ($page > $maxPage) {
     $page = $maxPage;
 }
 $offset = ($page - 1) * $perPage;
-$dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, updated_at FROM articles ' . $whereSql . ' ORDER BY updated_at DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY updated_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $dataStmt->execute($whereParams);
 $pagedRows = $dataStmt->fetchAll() ?: [];
 $groupedArticles = [];
@@ -116,7 +138,11 @@ ob_start();
 <div class="stack">
     <div class="card">
         <div class="row-between">
-            <h1><?= e((string) $t['page_title']) ?></h1>
+            <div>
+                <h1><?= e((string) $t['page_title']) ?></h1>
+                <p class="help"><?= e((string) $t['page_description']) ?></p>
+            </div>
+            <span class="badge"><?= $totalArticles ?> <?= e((string) $t['article_count']) ?></span>
         </div>
         <div class="news-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
@@ -146,6 +172,9 @@ ob_start();
         <?php if ($themeFilter !== ''): ?>
             <p><a class="pill" href="<?= e(route_url('articles', array_filter(['q' => $search], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
         <?php endif; ?>
+        <?php if ($search !== '' || $themeFilter !== ''): ?>
+            <p class="help"><?= e((string) $t['results']) ?> : <?= $totalArticles ?></p>
+        <?php endif; ?>
     </div>
 
     <?php if ($groupedArticles === []): ?>
@@ -161,9 +190,10 @@ ob_start();
                         <?php $row = localized_article_row($row); ?>
                         <article class="news-card feature-card">
                             <span class="badge muted"><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></span>
-                            <h3><a href="<?= e(base_url('index.php?route=article&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
-                            <p><?= e((string) $row['excerpt_localized']) ?></p>
-                            <p><a class="button secondary" href="<?= e(base_url('index.php?route=article&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $t['read_article']) ?></a></p>
+                            <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
+                            <p class="help"><?= e(date('d/m/Y', strtotime((string) $row['updated_at']))) ?> · <?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
+                            <p><?= e(article_card_excerpt($row)) ?></p>
+                            <p><a class="button secondary" href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['read_article']) ?></a></p>
                         </article>
                     <?php endforeach; ?>
                 </div>

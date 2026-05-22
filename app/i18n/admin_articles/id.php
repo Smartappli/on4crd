@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_saved' => 'Artikel disimpan.', 'err_invalid_category' => 'Kategori tidak valid.', 'ok_category_updated' => 'Kategori diperbarui.', 'err_delete_category' => 'Kategori ini tidak dapat dihapus.', 'ok_category_deleted' => 'Kategori dihapus (artikel dipindahkan ke "other").', 'edit' => 'Edit', 'create' => 'Buat', 'an_article' => 'sebuah artikel', 'title' => 'Judul', 'slug' => 'Slug', 'category' => 'Kategori', 'new_category' => 'Kategori baru…', 'new_category_id' => 'Kategori baru (identifier)', 'import_document' => 'Impor dokumen (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Ringkasan', 'content_simple_html' => 'Konten (HTML sederhana)', 'status' => 'Status', 'draft' => 'Draf', 'published' => 'Dipublikasikan', 'save' => 'Simpan', 'existing_articles' => 'Artikel yang ada', 'category_label' => 'Kategori:', 'category_edit' => 'Pengeditan kategori', 'code' => 'Kode', 'label' => 'Label', 'rename_code' => 'Ubah nama kode', 'delete_to_other' => 'Hapus (ke other)', 'no_articles' => 'Tidak ada artikel.', 'custom_category_ph' => 'mis. vhf-propagation', 'cat_antennes' => 'Antena', 'cat_trafic' => 'Lalu lintas & DX', 'cat_numerique' => 'Mode digital', 'cat_materiel' => 'Peralatan & stasiun', 'cat_formation' => 'Pelatihan', 'cat_autres' => 'Lainnya', 'layout' => 'Artikel', 'meta_desc' => 'Administrasi dan publikasi artikel situs.'];
+return ['ok_saved' => 'Artikel disimpan.', 'err_invalid_category' => 'Kategori tidak valid.', 'ok_category_updated' => 'Kategori diperbarui.', 'err_delete_category' => 'Kategori ini tidak dapat dihapus.', 'ok_category_deleted' => 'Kategori dihapus (artikel dipindahkan ke "other").', 'edit' => 'Edit', 'create' => 'Buat', 'an_article' => 'sebuah artikel', 'title' => 'Judul', 'slug' => 'Slug', 'category' => 'Kategori', 'new_category' => 'Kategori baru…', 'new_category_id' => 'Kategori baru (identifier)', 'import_document' => 'Impor dokumen (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Ringkasan', 'content_simple_html' => 'Konten (HTML sederhana)', 'status' => 'Status', 'draft' => 'Draf', 'published' => 'Dipublikasikan', 'save' => 'Simpan', 'existing_articles' => 'Artikel yang ada', 'category_label' => 'Kategori:', 'category_edit' => 'Pengeditan kategori', 'code' => 'Kode', 'label' => 'Label', 'rename_code' => 'Ubah nama kode', 'delete_to_other' => 'Hapus (ke other)', 'no_articles' => 'Tidak ada artikel.', 'custom_category_ph' => 'mis. vhf-propagation', 'cat_antennes' => 'Antena', 'cat_trafic' => 'Lalu lintas & DX', 'cat_numerique' => 'Mode digital', 'cat_materiel' => 'Peralatan & stasiun', 'cat_formation' => 'Pelatihan', 'cat_autres' => 'Lainnya', 'layout' => 'Artikel', 'meta_desc' => 'Administrasi dan publikasi artikel situs.',
+    'err_invalid_article' => 'Invalid article.',
+    'ok_deleted' => 'Article deleted.',
+    'slug_placeholder' => 'generated-from-title',
+    'confirm_delete' => 'Delete this article?',
+    'delete_article' => 'Delete article',
+    'search' => 'Search',
+    'all_statuses' => 'All statuses',
+    'all_categories' => 'All categories',
+    'filter' => 'Filter',
+    'reset_filter' => 'Reset',
+];

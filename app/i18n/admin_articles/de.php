@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['ok_saved' => 'Artikel gespeichert.', 'err_invalid_category' => 'Ungültige Kategorie.', 'ok_category_updated' => 'Kategorie aktualisiert.', 'err_delete_category' => 'Diese Kategorie kann nicht gelöscht werden.', 'ok_category_deleted' => 'Kategorie gelöscht (Artikel in die Standardkategorie verschoben).', 'edit' => 'Bearbeiten', 'create' => 'Erstellen', 'an_article' => 'einen Artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Kategorie', 'new_category' => 'Neue Kategorie…', 'new_category_id' => 'Neue Kategorie (Kennung)', 'import_document' => 'Dokument importieren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Zusammenfassung', 'content_simple_html' => 'Inhalt (einfaches HTML)', 'status' => 'Status', 'draft' => 'Entwurf', 'published' => 'Veröffentlicht', 'save' => 'Speichern', 'existing_articles' => 'Vorhandene Artikel', 'category_label' => 'Kategorie:', 'category_edit' => 'Kategorien bearbeiten', 'code' => 'Code', 'label' => 'Bezeichnung', 'rename_code' => 'Code umbenennen', 'delete_to_other' => 'Löschen (zur Standardkategorie)', 'no_articles' => 'Keine Artikel.', 'custom_category_ph' => 'z. B. vhf-ausbreitung', 'cat_antennes' => 'Antennen', 'cat_trafic' => 'Verkehr & DX', 'cat_numerique' => 'Digitale Modi', 'cat_materiel' => 'Ausrüstung & Station', 'cat_formation' => 'Schulung', 'cat_autres' => 'Sonstiges', 'layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.'];
+return ['ok_saved' => 'Artikel gespeichert.', 'err_invalid_category' => 'Ungültige Kategorie.', 'ok_category_updated' => 'Kategorie aktualisiert.', 'err_delete_category' => 'Diese Kategorie kann nicht gelöscht werden.', 'ok_category_deleted' => 'Kategorie gelöscht (Artikel in die Standardkategorie verschoben).', 'edit' => 'Bearbeiten', 'create' => 'Erstellen', 'an_article' => 'einen Artikel', 'title' => 'Titel', 'slug' => 'Slug', 'category' => 'Kategorie', 'new_category' => 'Neue Kategorie…', 'new_category_id' => 'Neue Kategorie (Kennung)', 'import_document' => 'Dokument importieren (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Zusammenfassung', 'content_simple_html' => 'Inhalt (einfaches HTML)', 'status' => 'Status', 'draft' => 'Entwurf', 'published' => 'Veröffentlicht', 'save' => 'Speichern', 'existing_articles' => 'Vorhandene Artikel', 'category_label' => 'Kategorie:', 'category_edit' => 'Kategorien bearbeiten', 'code' => 'Code', 'label' => 'Bezeichnung', 'rename_code' => 'Code umbenennen', 'delete_to_other' => 'Löschen (zur Standardkategorie)', 'no_articles' => 'Keine Artikel.', 'custom_category_ph' => 'z. B. vhf-ausbreitung', 'cat_antennes' => 'Antennen', 'cat_trafic' => 'Verkehr & DX', 'cat_numerique' => 'Digitale Modi', 'cat_materiel' => 'Ausrüstung & Station', 'cat_formation' => 'Schulung', 'cat_autres' => 'Sonstiges', 'layout' => 'Artikel', 'meta_desc' => 'Verwaltung und Veröffentlichung von Website-Artikeln.',
+    'err_invalid_article' => 'Invalid article.',
+    'ok_deleted' => 'Article deleted.',
+    'slug_placeholder' => 'generated-from-title',
+    'confirm_delete' => 'Delete this article?',
+    'delete_article' => 'Delete article',
+    'search' => 'Search',
+    'all_statuses' => 'All statuses',
+    'all_categories' => 'All categories',
+    'filter' => 'Filter',
+    'reset_filter' => 'Reset',
+];

@@ -24,4 +24,6 @@ return array (
   'theme_materiel' => 'Ausrüstung & Station',
   'theme_formation' => 'Ausbildung',
   'theme_autres' => 'Weitere Themen',
+    'results' => 'Results',
+    'reading_minutes' => 'min read',
 );

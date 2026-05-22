@@ -1,4 +1,15 @@
 <?php
 declare(strict_types=1);
 
-return ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.', 'ok_saved' => 'Article enregistré.', 'err_invalid_category' => 'Catégorie invalide.', 'ok_category_updated' => 'Catégorie mise à jour.', 'err_delete_category' => 'Suppression impossible pour cette catégorie.', 'ok_category_deleted' => 'Catégorie supprimée (articles déplacés vers "autres").', 'edit' => 'Modifier', 'create' => 'Créer', 'an_article' => 'un article', 'title' => 'Titre', 'slug' => 'Slug', 'category' => 'Catégorie', 'new_category' => 'Nouvelle catégorie…', 'new_category_id' => 'Nouvelle catégorie (identifiant)', 'import_document' => 'Importer un document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Résumé', 'content_simple_html' => 'Contenu (HTML simple)', 'status' => 'Statut', 'draft' => 'Brouillon', 'published' => 'Publié', 'save' => 'Enregistrer', 'existing_articles' => 'Articles existants', 'category_label' => 'Catégorie :', 'category_edit' => 'Édition des catégories', 'code' => 'Code', 'label' => 'Libellé', 'rename_code' => 'Renommer code', 'delete_to_other' => 'Supprimer (vers autres)', 'no_articles' => 'Aucun article.', 'custom_category_ph' => 'ex: propagation-vhf', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Trafic & DX', 'cat_numerique' => 'Modes numériques', 'cat_materiel' => 'Matériel & station', 'cat_formation' => 'Formation', 'cat_autres' => 'Autres'];
+return ['layout' => 'Articles', 'meta_desc' => 'Administration et publication des articles du site.', 'ok_saved' => 'Article enregistré.', 'err_invalid_category' => 'Catégorie invalide.', 'ok_category_updated' => 'Catégorie mise à jour.', 'err_delete_category' => 'Suppression impossible pour cette catégorie.', 'ok_category_deleted' => 'Catégorie supprimée (articles déplacés vers "autres").', 'edit' => 'Modifier', 'create' => 'Créer', 'an_article' => 'un article', 'title' => 'Titre', 'slug' => 'Slug', 'category' => 'Catégorie', 'new_category' => 'Nouvelle catégorie…', 'new_category_id' => 'Nouvelle catégorie (identifiant)', 'import_document' => 'Importer un document (PDF, DOCX, TXT, MD, HTML)', 'excerpt' => 'Résumé', 'content_simple_html' => 'Contenu (HTML simple)', 'status' => 'Statut', 'draft' => 'Brouillon', 'published' => 'Publié', 'save' => 'Enregistrer', 'existing_articles' => 'Articles existants', 'category_label' => 'Catégorie :', 'category_edit' => 'Édition des catégories', 'code' => 'Code', 'label' => 'Libellé', 'rename_code' => 'Renommer code', 'delete_to_other' => 'Supprimer (vers autres)', 'no_articles' => 'Aucun article.', 'custom_category_ph' => 'ex: propagation-vhf', 'cat_antennes' => 'Antennes', 'cat_trafic' => 'Trafic & DX', 'cat_numerique' => 'Modes numériques', 'cat_materiel' => 'Matériel & station', 'cat_formation' => 'Formation', 'cat_autres' => 'Autres',
+    'err_invalid_article' => 'Article invalide.',
+    'ok_deleted' => 'Article supprim�.',
+    'slug_placeholder' => 'genere-depuis-le-titre',
+    'confirm_delete' => 'Supprimer cet article ?',
+    'delete_article' => 'Supprimer l�article',
+    'search' => 'Recherche',
+    'all_statuses' => 'Tous les statuts',
+    'all_categories' => 'Toutes les cat�gories',
+    'filter' => 'Filtrer',
+    'reset_filter' => 'R�initialiser',
+];
