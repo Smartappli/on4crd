@@ -23,4 +23,10 @@ return array (
   's3_l' => 'Adesão',
   's4_q' => 'Como publicar um artigo no site?',
   's4_l' => 'Publicar artigo',
+  'history_count' => 'mensagens',
+  'rag_ready' => 'Base interna',
+  'clear_confirm' => 'Limpar toda a conversa?',
+  'welcome_title' => 'Assistente ON4CRD',
+  'reuse' => 'Perguntar de novo',
+  'copy' => 'Copiar',
 );

@@ -23,4 +23,10 @@ return array (
   's3_l' => 'Membership',
   's4_q' => 'How can I publish an article on the site?',
   's4_l' => 'Publish an article',
+  'history_count' => 'messages',
+  'rag_ready' => 'Internal base',
+  'clear_confirm' => 'Clear the full conversation?',
+  'welcome_title' => 'ON4CRD assistant',
+  'reuse' => 'Ask again',
+  'copy' => 'Copy',
 );

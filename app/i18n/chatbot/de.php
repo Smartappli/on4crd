@@ -23,4 +23,10 @@ return array (
   's3_l' => 'Mitgliedschaft',
   's4_q' => 'Wie veröffentliche ich einen Artikel auf der Website?',
   's4_l' => 'Artikel veröffentlichen',
+  'history_count' => 'Nachrichten',
+  'rag_ready' => 'Interne Basis',
+  'clear_confirm' => 'Ganze Unterhaltung loeschen?',
+  'welcome_title' => 'ON4CRD-Assistent',
+  'reuse' => 'Erneut fragen',
+  'copy' => 'Kopieren',
 );

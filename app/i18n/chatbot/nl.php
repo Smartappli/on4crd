@@ -23,4 +23,10 @@ return array (
   's3_l' => 'Lidmaatschap',
   's4_q' => 'Hoe publiceer ik een artikel op de site?',
   's4_l' => 'Artikel publiceren',
+  'history_count' => 'berichten',
+  'rag_ready' => 'Interne basis',
+  'clear_confirm' => 'Hele conversatie wissen?',
+  'welcome_title' => 'ON4CRD-assistent',
+  'reuse' => 'Opnieuw vragen',
+  'copy' => 'Kopieren',
 );
