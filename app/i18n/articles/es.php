@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'default_category' => 'Categoría',
+  'theme_default' => 'Temática',
+  'page_title' => 'Artículos técnicos',
+  'page_description' => 'Artículos técnicos de ON4CRD sobre radioafición, equipos y práctica.',
+  'manage' => 'Gestionar',
+  'article_count' => 'artículo(s)',
+  'reset_filter' => 'Restablecer filtro',
+  'search_placeholder' => 'Buscar un artículo',
+  'search' => 'Buscar',
+  'reset_search' => 'Restablecer búsqueda',
+  'no_article_for_theme' => 'No hay artículos disponibles para esta temática.',
+  'read_article' => 'Leer artículo',
+  'layout_title' => 'Artículos',
+  'page' => 'Página',
+  'previous' => 'Anterior',
+  'next' => 'Siguiente',
+  'theme_antennes' => 'Antenas',
+  'theme_trafic' => 'Tráfico y DX',
+  'theme_numerique' => 'Modos digitales',
+  'theme_materiel' => 'Equipos y estación',
+  'theme_formation' => 'Formación',
+  'theme_autres' => 'Otros temas',
+);

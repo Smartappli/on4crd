@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Petites annonces',
+  'lead' => 'Déposez et consultez les annonces radioamateur du club.',
+  'new_ad' => 'Déposer une annonce',
+  'my_ads' => 'Mes annonces',
+  'all_ads' => 'Annonces récentes',
+  'save' => 'Enregistrer',
+  'created_ok' => 'Annonce créée.',
+  'updated_ok' => 'Annonce mise à jour.',
+  'status_ok' => 'Statut mis à jour.',
+  'invalid' => 'Données invalides.',
+  'missing' => 'Annonce introuvable.',
+  'title_label' => 'Titre',
+  'description_label' => 'Description',
+  'price_label' => 'Prix (€)',
+  'location_label' => 'Localisation',
+  'contact_label' => 'Contact',
+  'category_label' => 'Catégorie',
+  'status_label' => 'Statut',
+  'actions' => 'Actions',
+  'edit' => 'Éditer',
+  'mark_sold' => 'Marquer vendue',
+  'reactivate' => 'Réactiver',
+  'none' => 'Aucune annonce pour le moment.',
+);

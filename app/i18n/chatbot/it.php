@@ -1,0 +1,26 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'meta_title' => 'Assistente Raymond',
+  'meta_desc' => 'Fai domande tecniche, normative o sul club all\'assistente ON4CRD.',
+  'err_question' => 'Inserisci una domanda.',
+  'sidebar_help' => 'Fai una domanda tecnica, normativa o sul club.',
+  'chatbot_alt' => 'Illustrazione chatbot Raymond',
+  'clear' => 'Cancella conversazione',
+  'conversation_label' => 'Conversazione con Raymond',
+  'welcome' => 'Ciao 👋 Sono Raymond. Fai la tua domanda e risponderò subito.',
+  'source' => 'Fonte:',
+  'question_label' => 'Domanda',
+  'placeholder' => 'Es.: Dove trovo le procedure QSL?',
+  'kbd_help' => 'Invio per inviare · Shift+Invio per nuova riga',
+  'send' => 'Invia',
+  's1_q' => 'Come esportare una QSL?',
+  's1_l' => 'Esporta una QSL',
+  's2_q' => 'Quali sono i band plan HF?',
+  's2_l' => 'Band plan HF',
+  's3_q' => 'Come entrare nel club?',
+  's3_l' => 'Iscrizione',
+  's4_q' => 'Come pubblicare un articolo sul sito?',
+  's4_l' => 'Pubblicare articolo',
+);

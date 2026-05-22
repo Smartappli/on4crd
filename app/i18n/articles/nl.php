@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'default_category' => 'Categorie',
+  'theme_default' => 'Thema',
+  'page_title' => 'Technische artikels',
+  'page_description' => 'ON4CRD technische artikels over radioamateurisme, materiaal en praktijk.',
+  'manage' => 'Beheren',
+  'article_count' => 'artikel(en)',
+  'reset_filter' => 'Filter resetten',
+  'search_placeholder' => 'Zoek een artikel',
+  'search' => 'Zoeken',
+  'reset_search' => 'Zoekopdracht resetten',
+  'no_article_for_theme' => 'Geen artikelen beschikbaar voor dit thema.',
+  'read_article' => 'Artikel lezen',
+  'layout_title' => 'Artikels',
+  'page' => 'Pagina',
+  'previous' => 'Vorige',
+  'next' => 'Volgende',
+  'theme_antennes' => 'Antennes',
+  'theme_trafic' => 'Verkeer & DX',
+  'theme_numerique' => 'Digitale modi',
+  'theme_materiel' => 'Materiaal & station',
+  'theme_formation' => 'Opleiding',
+  'theme_autres' => 'Andere thema’s',
+);
