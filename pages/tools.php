@@ -214,7 +214,7 @@ $extractPanelTranslationKeys = static function (string $toolId) use ($toolPanelM
     return $panelKeyCache[$toolId];
 };
 
-$renderToolPanel = static function (string $toolId) use ($toolPanelMap, &$t): bool {
+$renderToolPanel = static function (string $toolId) use ($toolPanelMap, &$t, $conversionTools, $radioMathTools): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
     if ($partialFile === null) {
         return false;

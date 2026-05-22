@@ -44,6 +44,155 @@
         sync();
     };
 
+    const initUnitConversions = () => {
+        const panel = document.getElementById('tool-unit-conversions');
+        if (!(panel instanceof HTMLElement)) return;
+
+        const dataNode = panel.querySelector('#unit-conv-data');
+        const groupSelect = panel.querySelector('#unit-conv-group');
+        const fromSelect = panel.querySelector('#unit-conv-from');
+        const toSelect = panel.querySelector('#unit-conv-to');
+        const input = panel.querySelector('#unit-conv-input');
+        const output = panel.querySelector('#unit-conv-output');
+        const swap = panel.querySelector('#unit-conv-swap');
+        const presets = panel.querySelector('#unit-conv-presets');
+        const reference = panel.querySelector('#unit-conv-reference');
+
+        if (
+            !(dataNode instanceof HTMLScriptElement)
+            || !(groupSelect instanceof HTMLSelectElement)
+            || !(fromSelect instanceof HTMLSelectElement)
+            || !(toSelect instanceof HTMLSelectElement)
+            || !(input instanceof HTMLInputElement)
+            || !(output instanceof HTMLElement)
+            || !(presets instanceof HTMLElement)
+        ) {
+            return;
+        }
+
+        let groups = {};
+        try {
+            groups = JSON.parse(dataNode.textContent || '{}');
+        } catch (_) {
+            groups = {};
+        }
+
+        const formatNumber = (value) => {
+            if (!Number.isFinite(value)) return '—';
+            const abs = Math.abs(value);
+            if (abs !== 0 && (abs >= 1e7 || abs < 1e-4)) {
+                return value.toExponential(6).replace(/\.?0+e/, 'e');
+            }
+            return value.toLocaleString(undefined, {
+                maximumFractionDigits: 8,
+                minimumFractionDigits: 0,
+            });
+        };
+
+        const toBase = (value, unit) => {
+            const kind = unit?.kind || '';
+            if (kind === 'dbm') return 10 ** (value / 10) / 1000;
+            if (kind === 'dbw') return 10 ** (value / 10);
+            if (kind === 'c') return value + 273.15;
+            if (kind === 'f') return ((value - 32) * 5 / 9) + 273.15;
+            if (kind === 'k') return value;
+            if (kind === 'dbuv') return (value - 6) / 6;
+            if (kind === 'sunit') return value;
+            return value * Number(unit?.factor ?? 1);
+        };
+
+        const fromBase = (base, unit) => {
+            const kind = unit?.kind || '';
+            if (kind === 'dbm') return 10 * Math.log10(Math.max(base, 1e-30) * 1000);
+            if (kind === 'dbw') return 10 * Math.log10(Math.max(base, 1e-30));
+            if (kind === 'c') return base - 273.15;
+            if (kind === 'f') return ((base - 273.15) * 9 / 5) + 32;
+            if (kind === 'k') return base;
+            if (kind === 'dbuv') return 6 + (base * 6);
+            if (kind === 'sunit') return base;
+            return base / Number(unit?.factor ?? 1);
+        };
+
+        const activeGroup = () => groups[groupSelect.value] || {};
+        const activeUnits = () => activeGroup().units || {};
+
+        const fillUnitSelects = () => {
+            const units = activeUnits();
+            const previousFrom = fromSelect.value;
+            const previousTo = toSelect.value;
+            const keys = Object.keys(units);
+
+            fromSelect.innerHTML = '';
+            toSelect.innerHTML = '';
+            keys.forEach((key) => {
+                const label = String(units[key]?.label || key);
+                fromSelect.add(new Option(label, key));
+                toSelect.add(new Option(label, key));
+            });
+
+            const defaultFrom = String(activeGroup().default_from || '');
+            const defaultTo = String(activeGroup().default_to || '');
+            fromSelect.value = keys.includes(previousFrom) ? previousFrom : (keys.includes(defaultFrom) ? defaultFrom : (keys[0] || ''));
+            toSelect.value = keys.includes(previousTo) ? previousTo : (keys.includes(defaultTo) ? defaultTo : (keys[1] || keys[0] || ''));
+        };
+
+        const fillPresets = () => {
+            const values = Array.isArray(activeGroup().presets) ? activeGroup().presets : [];
+            presets.innerHTML = '';
+            values.forEach((value) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'button ghost';
+                button.textContent = value;
+                button.addEventListener('click', () => {
+                    input.value = value;
+                    compute();
+                });
+                presets.appendChild(button);
+            });
+        };
+
+        const compute = () => {
+            const units = activeUnits();
+            const from = units[fromSelect.value];
+            const to = units[toSelect.value];
+            const value = Number(input.value);
+            if (!from || !to || !Number.isFinite(value)) {
+                output.textContent = '—';
+                if (reference instanceof HTMLElement) reference.textContent = '—';
+                return;
+            }
+
+            const base = toBase(value, from);
+            const converted = fromBase(base, to);
+            output.textContent = `${formatNumber(converted)} ${to.label || ''}`.trim();
+            if (reference instanceof HTMLElement) {
+                reference.textContent = `${formatNumber(value)} ${from.label || fromSelect.value} = ${formatNumber(base)} base = ${formatNumber(converted)} ${to.label || toSelect.value}`;
+            }
+        };
+
+        const onGroupChange = () => {
+            fillUnitSelects();
+            fillPresets();
+            compute();
+        };
+
+        groupSelect.addEventListener('change', onGroupChange);
+        fromSelect.addEventListener('change', compute);
+        toSelect.addEventListener('change', compute);
+        input.addEventListener('input', compute);
+        swap?.addEventListener('click', () => {
+            const previous = fromSelect.value;
+            fromSelect.value = toSelect.value;
+            toSelect.value = previous;
+            compute();
+        });
+
+        fillUnitSelects();
+        fillPresets();
+        compute();
+    };
+
     const toolInitializers = {
         'tool-grid': () => {
             if (!(form instanceof HTMLFormElement) || !(addressInput instanceof HTMLInputElement)) {
@@ -118,6 +267,7 @@
                 wattsOut.textContent = `${watts.toFixed(4)} ${i18n.watts_out_label || 'W'}`;
             });
         },
+        'tool-unit-conversions': initUnitConversions,
         'tool-balun': () => {
             balunSource?.addEventListener('input', computeBalun);
             balunLoad?.addEventListener('input', computeBalun);

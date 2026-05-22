@@ -11,6 +11,8 @@ $unitConversionGroups = [
             'ghz' => ['label' => 'GHz', 'factor' => 1_000_000_000.0],
         ],
         'presets' => ['145.5', '433.5', '7100'],
+        'default_from' => 'mhz',
+        'default_to' => 'khz',
     ],
     'power' => [
         'label' => (string) ($t['unit_conv_group_power'] ?? 'Puissance'),
@@ -22,6 +24,8 @@ $unitConversionGroups = [
             'dbw' => ['label' => 'dBW', 'kind' => 'dbw'],
         ],
         'presets' => ['0.005', '5', '100'],
+        'default_from' => 'w',
+        'default_to' => 'dbm',
     ],
     'voltage' => [
         'label' => (string) ($t['unit_conv_group_voltage'] ?? 'Tension sinusoidale'),
@@ -31,6 +35,8 @@ $unitConversionGroups = [
             'vpk' => ['label' => 'Vpk', 'factor' => 1 / sqrt(2)],
         ],
         'presets' => ['1', '5', '13.8'],
+        'default_from' => 'vrms',
+        'default_to' => 'vpp',
     ],
     'length' => [
         'label' => (string) ($t['unit_conv_group_length'] ?? 'Longueur'),
@@ -43,6 +49,8 @@ $unitConversionGroups = [
             'ft' => ['label' => 'ft', 'factor' => 0.3048],
         ],
         'presets' => ['0.25', '10', '100'],
+        'default_from' => 'm',
+        'default_to' => 'ft',
     ],
     'energy' => [
         'label' => (string) ($t['unit_conv_group_energy'] ?? 'Energie'),
@@ -52,6 +60,8 @@ $unitConversionGroups = [
             'kwh' => ['label' => 'kWh', 'factor' => 3_600_000.0],
         ],
         'presets' => ['3600', '12', '1000'],
+        'default_from' => 'wh',
+        'default_to' => 'j',
     ],
     'time' => [
         'label' => (string) ($t['unit_conv_group_time'] ?? 'Temps'),
@@ -62,6 +72,8 @@ $unitConversionGroups = [
             'h' => ['label' => 'h', 'factor' => 3_600.0],
         ],
         'presets' => ['1000', '60', '3600'],
+        'default_from' => 'ms',
+        'default_to' => 's',
     ],
     'temperature' => [
         'label' => (string) ($t['unit_conv_group_temperature'] ?? 'Temperature'),
@@ -71,6 +83,8 @@ $unitConversionGroups = [
             'k' => ['label' => 'K', 'kind' => 'k'],
         ],
         'presets' => ['0', '20', '100'],
+        'default_from' => 'c',
+        'default_to' => 'f',
     ],
     'rotation' => [
         'label' => (string) ($t['unit_conv_group_rotation'] ?? 'Rotation'),
@@ -80,6 +94,8 @@ $unitConversionGroups = [
             'hz' => ['label' => 'Hz', 'factor' => 1.0],
         ],
         'presets' => ['60', '1200', '3000'],
+        'default_from' => 'rpm',
+        'default_to' => 'rps',
     ],
     'field' => [
         'label' => (string) ($t['unit_conv_group_field'] ?? 'Niveau de signal'),
@@ -88,6 +104,8 @@ $unitConversionGroups = [
             'sunit' => ['label' => 'S-unit', 'kind' => 'sunit'],
         ],
         'presets' => ['9', '59', '73'],
+        'default_from' => 'sunit',
+        'default_to' => 'dbuv',
     ],
 ];
 ?>
