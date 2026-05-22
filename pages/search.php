@@ -1,13 +1,5 @@
 <?php
-$i18n = [
-    'fr' => ['title' => 'Recherche', 'placeholder' => 'Recherche globale', 'submit' => 'Rechercher', 'count' => 'résultat(s)', 'empty' => 'Aucun résultat pour cette recherche.', 'query_too_short' => 'Veuillez saisir au moins 2 caractères.', 'previous' => 'Précédent', 'next' => 'Suivant', 'meta_desc' => 'Recherche globale ON4CRD sur les contenus Articles et Wiki.'],
-    'en' => ['title' => 'Search', 'placeholder' => 'Global search', 'submit' => 'Search', 'count' => 'result(s)', 'empty' => 'No results found for this query.', 'query_too_short' => 'Please enter at least 2 characters.', 'previous' => 'Previous', 'next' => 'Next', 'meta_desc' => 'ON4CRD global search across Articles and Wiki content.'],
-    'de' => ['title' => 'Suche', 'placeholder' => 'Globale Suche', 'submit' => 'Suchen', 'count' => 'Ergebnis(se)', 'empty' => 'Keine Ergebnisse für diese Suche gefunden.', 'query_too_short' => 'Bitte mindestens 2 Zeichen eingeben.', 'previous' => 'Zurück', 'next' => 'Weiter', 'meta_desc' => 'Globale ON4CRD-Suche über Artikel- und Wiki-Inhalte.'],
-    'es' => ['title' => 'Búsqueda', 'placeholder' => 'Búsqueda global', 'submit' => 'Buscar', 'count' => 'resultado(s)', 'empty' => 'No se encontraron resultados para esta búsqueda.', 'query_too_short' => 'Introduzca al menos 2 caracteres.', 'previous' => 'Anterior', 'next' => 'Siguiente', 'meta_desc' => 'Búsqueda global ON4CRD en contenidos de Artículos y Wiki.'],
-    'it' => ['title' => 'Ricerca', 'placeholder' => 'Ricerca globale', 'submit' => 'Cerca', 'count' => 'risultato/i', 'empty' => 'Nessun risultato trovato per questa ricerca.', 'query_too_short' => 'Inserisci almeno 2 caratteri.', 'previous' => 'Precedente', 'next' => 'Successiva', 'meta_desc' => 'Ricerca globale ON4CRD nei contenuti Articoli e Wiki.'],
-    'pt' => ['title' => 'Pesquisa', 'placeholder' => 'Pesquisa global', 'submit' => 'Pesquisar', 'count' => 'resultado(s)', 'empty' => 'Nenhum resultado encontrado para esta pesquisa.', 'query_too_short' => 'Introduza pelo menos 2 caracteres.', 'previous' => 'Anterior', 'next' => 'Seguinte', 'meta_desc' => 'Pesquisa global ON4CRD nos conteúdos de Artigos e Wiki.'],
-    'nl' => ['title' => 'Zoeken', 'placeholder' => 'Globale zoekopdracht', 'submit' => 'Zoeken', 'count' => 'resulta(a)t(en)', 'empty' => 'Geen resultaten gevonden voor deze zoekopdracht.', 'query_too_short' => 'Voer minstens 2 tekens in.', 'previous' => 'Vorige', 'next' => 'Volgende', 'meta_desc' => 'ON4CRD globale zoekfunctie over Artikels- en Wiki-inhoud.'],
-];
+$i18n = require __DIR__ . '/../app/i18n/search.php';
 $i18n = i18n_expand_supported_locales($i18n);
 $locale = current_locale();
 $t = [];

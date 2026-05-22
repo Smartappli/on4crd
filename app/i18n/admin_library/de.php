@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['title' => 'Bibliotheksverwaltung', 'intro' => 'PDF-Dokumente der Mitgliederbibliothek hinzufügen und einsehen.', 'category_ph' => 'Kategorie', 'categories' => 'Kategorienverwaltung', 'existing_categories' => 'Vorhandene Kategorien', 'add_category' => 'Kategorie hinzufügen', 'delete' => 'Löschen', 'title_ph' => 'Titel', 'desc_ph' => 'Zusammenfassung / Schlüsselwörter', 'upload' => 'Hochladen', 'open' => 'PDF öffnen', 'preview' => 'Eingebettete Vorschau', 'prev' => 'Zurück', 'next' => 'Weiter', 'page' => 'Seite', 'err_required' => 'Titel und PDF sind erforderlich.', 'err_invalid' => 'Die Datei muss ein gültiges PDF sein.', 'err_size' => 'PDF-Datei ist zu groß (max. 15 MB).', 'err_upload' => 'PDF-Upload fehlgeschlagen.', 'ok_added' => 'Dokument zur Mitgliederbibliothek hinzugefügt.', 'storage_unavailable' => 'Die Bibliothek ist vorübergehend nicht verfügbar.', 'meta_desc' => 'Verwaltung der ON4CRD-Mitgliederbibliothek.'];
