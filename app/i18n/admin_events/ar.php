@@ -1,4 +1,35 @@
 <?php
 declare(strict_types=1);
 
-return ['event_saved' => 'تم حفظ الحدث.', 'layout' => 'إدارة الأجندة', 'title_required' => 'العنوان مطلوب.', 'form_title' => 'حدث', 'edit' => 'تعديل', 'create' => 'إنشاء', 'title' => 'العنوان', 'slug' => 'Slug', 'summary' => 'ملخص', 'description' => 'الوصف', 'start' => 'البداية', 'end' => 'النهاية', 'location' => 'المكان', 'external_url' => 'رابط خارجي', 'type' => 'النوع', 'status' => 'الحالة', 'type_club' => 'النادي', 'type_contest' => 'مسابقة', 'draft' => 'مسودة', 'published' => 'منشور', 'save' => 'حفظ', 'saved_events' => 'الأحداث المحفوظة', 'no_event' => 'لا يوجد حدث.', 'calendar_view' => 'عرض التقويم', 'calendar_help' => 'انقر على حدث لفتحه للتعديل.', 'today' => 'اليوم', 'month' => 'شهر', 'week' => 'أسبوع', 'list' => 'قائمة', 'meta_desc' => 'إدارة أحداث الموقع والتقويم.'];
+return [
+    'event_saved' => 'تم حفظ الحدث.',
+    'layout' => 'إدارة الأجندة',
+    'title_required' => 'العنوان مطلوب.',
+    'form_title' => 'حدث',
+    'edit' => 'تعديل',
+    'create' => 'إنشاء',
+    'title' => 'العنوان',
+    'slug' => 'سبيكة',
+    'summary' => 'ملخص',
+    'description' => 'الوصف',
+    'start' => 'البداية',
+    'end' => 'النهاية',
+    'location' => 'المكان',
+    'external_url' => 'رابط خارجي',
+    'type' => 'النوع',
+    'status' => 'الحالة',
+    'type_club' => 'النادي',
+    'type_contest' => 'مسابقة',
+    'draft' => 'مسودة',
+    'published' => 'منشور',
+    'save' => 'حفظ',
+    'saved_events' => 'الأحداث المحفوظة',
+    'no_event' => 'لا يوجد حدث.',
+    'calendar_view' => 'عرض التقويم',
+    'calendar_help' => 'انقر على حدث لفتحه للتعديل.',
+    'today' => 'اليوم',
+    'month' => 'شهر',
+    'week' => 'أسبوع',
+    'list' => 'قائمة',
+    'meta_desc' => 'إدارة أحداث الموقع والتقويم.',
+];
