@@ -2,15 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = [
-    'fr' => ['title' => 'Album', 'gallery_unavailable' => 'La galerie est indisponible pour le moment.', 'not_found' => 'Album introuvable.', 'back' => '← Retour à la galerie', 'photos' => 'Photos', 'album_photos' => 'Photos de l’album', 'none' => 'Aucune photo disponible dans cet album.', 'photo_alt' => 'Photo de l’album'],
-    'en' => ['title' => 'Album', 'gallery_unavailable' => 'The gallery is currently unavailable.', 'not_found' => 'Album not found.', 'back' => '← Back to gallery', 'photos' => 'Photos', 'album_photos' => 'Album photos', 'none' => 'No photos available in this album.', 'photo_alt' => 'Album photo'],
-    'de' => ['title' => 'Album', 'gallery_unavailable' => 'Die Galerie ist derzeit nicht verfügbar.', 'not_found' => 'Album nicht gefunden.', 'back' => '← Zurück zur Galerie', 'photos' => 'Fotos', 'album_photos' => 'Albumfotos', 'none' => 'Keine Fotos in diesem Album verfügbar.', 'photo_alt' => 'Albumfoto'],
-    'es' => ['title' => 'Álbum', 'gallery_unavailable' => 'La galería no está disponible en este momento.', 'not_found' => 'Álbum no encontrado.', 'back' => '← Volver a la galería', 'photos' => 'Fotos', 'album_photos' => 'Fotos del álbum', 'none' => 'No hay fotos disponibles en este álbum.', 'photo_alt' => 'Foto del álbum'],
-    'it' => ['title' => 'Album', 'gallery_unavailable' => 'La galleria non è disponibile al momento.', 'not_found' => 'Album non trovato.', 'back' => '← Torna alla galleria', 'photos' => 'Foto', 'album_photos' => 'Foto dell\'album', 'none' => 'Nessuna foto disponibile in questo album.', 'photo_alt' => 'Foto album'],
-    'pt' => ['title' => 'Álbum', 'gallery_unavailable' => 'A galeria está indisponível de momento.', 'not_found' => 'Álbum não encontrado.', 'back' => '← Voltar à galeria', 'photos' => 'Fotos', 'album_photos' => 'Fotos do álbum', 'none' => 'Não há fotos disponíveis neste álbum.', 'photo_alt' => 'Foto do álbum'],
-    'nl' => ['title' => 'Album', 'gallery_unavailable' => 'De galerij is momenteel niet beschikbaar.', 'not_found' => 'Album niet gevonden.', 'back' => '← Terug naar galerij', 'photos' => "Foto's", 'album_photos' => "Foto's van het album", 'none' => "Geen foto's beschikbaar in dit album.", 'photo_alt' => 'Albumfoto'],
-];
+$i18n = i18n_domain_messages('album');
 $i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {

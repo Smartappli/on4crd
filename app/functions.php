@@ -134,10 +134,24 @@ if (!function_exists('i18n_localized_value')) {
 function i18n_localized_value(array $localized, ?string $locale = null, string $default = 'fr'): string
 {
     foreach (locale_fallback_chain($locale) as $candidateLocale) {
-        if (!isset($localized[$candidateLocale]) || !is_string($localized[$candidateLocale])) {
+        if (!isset($localized[$candidateLocale])) {
             continue;
         }
 
+        if (is_array($localized[$candidateLocale])) {
+            $nestedValue = $localized[$candidateLocale][$default] ?? null;
+            if (is_string($nestedValue)) {
+                $nestedValue = trim($nestedValue);
+                if ($nestedValue !== '') {
+                    return $nestedValue;
+                }
+            }
+            continue;
+        }
+
+        if (!is_string($localized[$candidateLocale])) {
+            continue;
+        }
         $value = trim($localized[$candidateLocale]);
         if ($value !== '') {
             return $value;
@@ -191,6 +205,65 @@ function i18n_expand_supported_locales(array $messages, ?array $locales = null, 
     }
 
     return $messages;
+}
+}
+
+if (!function_exists('i18n_domain_messages')) {
+/**
+ * Load a module i18n catalog from app/i18n/<domain>.php.
+ *
+ * @return array<string, array<string, string>>
+ */
+function i18n_domain_messages(string $domain): array
+{
+    static $catalogs = [];
+
+    $domain = preg_replace('/[^a-z0-9_]/', '', strtolower($domain)) ?: '';
+    if ($domain === '') {
+        return [];
+    }
+
+    if (array_key_exists($domain, $catalogs)) {
+        return $catalogs[$domain];
+    }
+
+    $path = __DIR__ . '/i18n/' . $domain . '.php';
+    if (!is_file($path)) {
+        $catalogs[$domain] = [];
+        return [];
+    }
+
+    $messages = require $path;
+    if (!is_array($messages)) {
+        $catalogs[$domain] = [];
+        return [];
+    }
+
+    $catalogs[$domain] = i18n_expand_supported_locales($messages);
+    return $catalogs[$domain];
+}
+}
+
+if (!function_exists('i18n_domain_locale')) {
+/**
+ * Return the best localized key/value map for a module catalog.
+ *
+ * @return array<string, string>
+ */
+function i18n_domain_locale(string $domain, ?string $locale = null, string $default = 'fr'): array
+{
+    $messages = i18n_domain_messages($domain);
+    if ($messages === []) {
+        return [];
+    }
+
+    foreach (locale_fallback_chain($locale) as $candidateLocale) {
+        if (isset($messages[$candidateLocale]) && is_array($messages[$candidateLocale])) {
+            return $messages[$candidateLocale];
+        }
+    }
+
+    return isset($messages[$default]) && is_array($messages[$default]) ? $messages[$default] : [];
 }
 }
 
@@ -394,13 +467,29 @@ function t_page(string $domain, string $key, ?string $locale = null): string
     ];
     }
 
+    $diskMessages = i18n_domain_messages($domain);
+    if ($diskMessages !== []) {
+        foreach ($fallbackChain as $candidateLocale) {
+            if (isset($diskMessages[$candidateLocale][$key])) {
+                return (string) $diskMessages[$candidateLocale][$key];
+            }
+        }
+        if (isset($diskMessages['fr'][$key])) {
+            return (string) $diskMessages['fr'][$key];
+        }
+    }
+
     if (!isset($messages[$domain])) {
         return $key;
     }
 
-    $catalog = $messages[$domain][$lang] ?? $messages[$domain]['fr'];
+    foreach ($fallbackChain as $candidateLocale) {
+        if (isset($messages[$domain][$candidateLocale][$key])) {
+            return (string) $messages[$domain][$candidateLocale][$key];
+        }
+    }
 
-    return (string) ($catalog[$key] ?? ($messages[$domain]['fr'][$key] ?? $key));
+    return (string) ($messages[$domain]['fr'][$key] ?? $key);
 }
 }
 
