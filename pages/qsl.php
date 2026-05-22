@@ -396,25 +396,24 @@ $filteredQslRows = array_values(array_filter($qslRows, static function (array $r
 
 $qsoTotal = count($filteredQsoRows);
 $qslTotal = count($filteredQslRows);
-$qsoTotalPages = max(1, (int) ceil($qsoTotal / $qsoPerPage));
-$qslTotalPages = max(1, (int) ceil($qslTotal / $qslPerPage));
-$qsoPage = min($qsoPage, $qsoTotalPages);
-$qslPage = min($qslPage, $qslTotalPages);
-$qsoOffset = ($qsoPage - 1) * $qsoPerPage;
-$qslOffset = ($qslPage - 1) * $qslPerPage;
-$pagedQsoRows = array_slice($filteredQsoRows, $qsoOffset, $qsoPerPage);
-$pagedQslRows = array_slice($filteredQslRows, $qslOffset, $qslPerPage);
+$qsoPagination = pagination_state($qsoTotal, $qsoPage, $qsoPerPage);
+$qslPagination = pagination_state($qslTotal, $qslPage, $qslPerPage);
+$qsoPage = $qsoPagination['page'];
+$qslPage = $qslPagination['page'];
+$qsoTotalPages = $qsoPagination['total_pages'];
+$qslTotalPages = $qslPagination['total_pages'];
+$pagedQsoRows = array_slice($filteredQsoRows, $qsoPagination['offset'], $qsoPerPage);
+$pagedQslRows = array_slice($filteredQslRows, $qslPagination['offset'], $qslPerPage);
 
 $buildQslPageUrl = static function (int $targetQsoPage, int $targetQslPage) use ($qsoSearch, $qsoBandFilter, $qsoModeFilter, $qslSearch): string {
-    $params = ['route' => 'qsl'];
-    if ($qsoSearch !== '') { $params['qso_search'] = $qsoSearch; }
-    if ($qsoBandFilter !== '') { $params['qso_band'] = $qsoBandFilter; }
-    if ($qsoModeFilter !== '') { $params['qso_mode'] = $qsoModeFilter; }
-    if ($qslSearch !== '') { $params['qsl_search'] = $qslSearch; }
-    if ($targetQsoPage > 1) { $params['qso_page'] = (string) $targetQsoPage; }
-    if ($targetQslPage > 1) { $params['qsl_page'] = (string) $targetQslPage; }
-
-    return base_url('index.php?' . http_build_query($params));
+    return route_url_clean('qsl', [
+        'qso_search' => $qsoSearch,
+        'qso_band' => $qsoBandFilter,
+        'qso_mode' => $qsoModeFilter,
+        'qsl_search' => $qslSearch,
+        'qso_page' => $targetQsoPage > 1 ? $targetQsoPage : null,
+        'qsl_page' => $targetQslPage > 1 ? $targetQslPage : null,
+    ]);
 };
 
 $generatedByQsoId = [];
@@ -697,7 +696,7 @@ ob_start();
                 <?php endforeach; ?>
             </select>
             <button type="submit" class="button secondary small"><?= e($qt('filter')) ?></button>
-            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost"><?= e($qt('reset')) ?></a>
+            <a href="<?= e(route_url('qsl')) ?>" class="ghost"><?= e($qt('reset')) ?></a>
         </form>
         <form method="post">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -761,7 +760,7 @@ ob_start();
             <input type="hidden" name="route" value="qsl">
             <input type="text" name="qsl_search" value="<?= e($qslSearch) ?>" placeholder="<?= e($qt('qsl_search_ph')) ?>">
             <button type="submit" class="button secondary small"><?= e($qt('filter')) ?></button>
-            <a href="<?= e(base_url('index.php?route=qsl')) ?>" class="ghost"><?= e($qt('reset')) ?></a>
+            <a href="<?= e(route_url('qsl')) ?>" class="ghost"><?= e($qt('reset')) ?></a>
         </form>
         <div class="table-wrap">
             <table>
@@ -777,11 +776,11 @@ ob_start();
                         <td><?= e((string) $row['band']) ?></td>
                         <td><?= e((string) $row['mode']) ?></td>
                         <td><?= qsl_template_supports_back((string) ($row['template_name'] ?? 'classic')) ? 'Recto-verso' : 'Recto' ?></td>
-                        <td><a href="<?= e(base_url('index.php?route=qsl_preview&id=' . (int) $row['id'])) ?>">Voir</a></td>
+                        <td><a href="<?= e(route_url('qsl_preview', ['id' => (int) $row['id']])) ?>">Voir</a></td>
                         <td>
-                            <a href="<?= e(base_url('index.php?route=qsl_export&id=' . (int) $row['id'])) ?>">Recto SVG</a>
+                            <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id']])) ?>">Recto SVG</a>
                             <?php if (qsl_template_supports_back((string) ($row['template_name'] ?? 'classic'))): ?>
-                                · <a href="<?= e(base_url('index.php?route=qsl_export&id=' . (int) $row['id'] . '&side=back')) ?>">Verso SVG</a>
+                                · <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id'], 'side' => 'back'])) ?>">Verso SVG</a>
                             <?php endif; ?>
                         </td>
                         <td>

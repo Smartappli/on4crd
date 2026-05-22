@@ -2,9 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = i18n_domain_messages('auction_view');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = $i18n[$locale] ?? $i18n['fr'];
+$t = i18n_domain_locale('auction_view', $locale);
 
 $slug = trim((string) ($_GET['slug'] ?? ''));
 $lot = $slug !== '' ? auction_lot_by_slug($slug) : null;

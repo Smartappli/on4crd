@@ -4,11 +4,7 @@ declare(strict_types=1);
 require_module_enabled('dashboard');
 $user = require_login();
 $locale = current_locale();
-$i18n = i18n_domain_messages('dashboard');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
-};
+$t = i18n_domain_translator('dashboard', $locale);
 set_page_meta(['title' => $t('meta_title'), 'description' => $t('meta_desc'), 'schema_type' => 'WebPage']);
 $availableWidgets = enabled_widget_catalog();
 $dashboardPersistenceEnabled = table_exists('dashboard_widgets');

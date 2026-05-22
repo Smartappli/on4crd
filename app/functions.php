@@ -290,6 +290,18 @@ function i18n_domain_locale(string $domain, ?string $locale = null, string $defa
 }
 }
 
+if (!function_exists('i18n_domain_translator')) {
+/**
+ * Return a compact translation callback for a module catalog.
+ */
+function i18n_domain_translator(string $domain, ?string $locale = null, string $default = 'fr'): Closure
+{
+    $messages = i18n_domain_locale($domain, $locale, $default);
+
+    return static fn(string $key): string => (string) ($messages[$key] ?? $key);
+}
+}
+
 if (!function_exists('current_locale')) {
 function current_locale(): string
 {

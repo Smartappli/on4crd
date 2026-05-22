@@ -2,11 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = i18n_domain_messages('relais');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
-};
+$t = i18n_domain_translator('relais', $locale);
 
 set_page_meta([
     'title' => $t('meta_title'),

@@ -129,4 +129,11 @@ final class FunctionHelpersExtendedTest extends TestCase
         );
     }
 
+    public function testI18nDomainTranslatorReturnsKeyWhenMissing(): void
+    {
+        $translator = i18n_domain_translator('missing_test_domain', 'fr');
+
+        self::assertSame('unknown_key', $translator('unknown_key'));
+    }
+
 }

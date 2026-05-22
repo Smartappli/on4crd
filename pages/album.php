@@ -2,18 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = i18n_domain_messages('album');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = [];
-foreach (array_keys($i18n['fr']) as $key) {
-    $pool = [];
-    foreach ($i18n as $lang => $translations) {
-        if (isset($translations[$key]) && is_string($translations[$key])) {
-            $pool[$lang] = $translations[$key];
-        }
-    }
-    $t[$key] = i18n_localized_value($pool, $locale, 'fr');
-}
+$t = i18n_domain_locale('album', $locale);
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['title']);
