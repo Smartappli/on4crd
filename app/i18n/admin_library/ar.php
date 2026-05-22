@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['title' => 'إدارة المكتبة', 'intro' => 'إضافة وتصفح مستندات PDF الخاصة بمكتبة الأعضاء.', 'category_ph' => 'الفئة', 'categories' => 'إدارة الفئات', 'existing_categories' => 'الفئات الحالية', 'add_category' => 'إضافة فئة', 'delete' => 'حذف', 'title_ph' => 'العنوان', 'desc_ph' => 'ملخص / كلمات مفتاحية', 'upload' => 'رفع', 'open' => 'فتح PDF', 'preview' => 'معاينة مدمجة', 'prev' => 'السابق', 'next' => 'التالي', 'page' => 'الصفحة', 'err_required' => 'العنوان وملف PDF مطلوبان.', 'err_invalid' => 'يجب أن يكون الملف المرفوع PDF صالحاً.', 'err_size' => 'حجم ملف PDF كبير جداً (الحد الأقصى 15 ميجابايت).', 'err_upload' => 'فشل رفع PDF.', 'ok_added' => 'تمت إضافة المستند إلى مكتبة الأعضاء.', 'storage_unavailable' => 'المكتبة غير متاحة مؤقتاً.', 'meta_desc' => 'إدارة مكتبة أعضاء ON4CRD.'];

@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['invalid_album' => '无效相册。', 'uploaded_count' => '已添加照片。', 'no_photo_imported' => '未导入任何照片。', 'created_thumbs' => '已生成缩略图。', 'manage_title' => '相册管理', 'photos_editor' => '编辑照片', 'page' => '页', 'previous' => '上一页', 'next' => '下一页', 'create_album' => '创建相册', 'add_photo' => '添加照片', 'upload' => '上传', 'rebuild_thumbs' => '重建缩略图', 'title' => '标题', 'description' => '描述', 'public_album' => '公开相册', 'photo_title' => '照片标题', 'caption' => '说明', 'files_dropzone' => '图片文件（拖放区）', 'albums' => '相册', 'created_at' => '创建时间', 'created_ok' => '相册已创建。', 'updated_ok' => '相册已更新。', 'photo_updated_ok' => '照片已更新。', 'photo_deleted_ok' => '照片已删除。', 'album_label' => '相册', 'dropzone_hint' => '将照片拖放到此处或点击选择。', 'yes' => '是', 'no' => '否', 'edit_albums' => '编辑相册', 'save' => '保存', 'album_word' => '相册', 'update' => '更新', 'delete' => '删除', 'ready_files' => '文件已准备好导入。', 'meta_desc' => '管理相册及其内容。'];

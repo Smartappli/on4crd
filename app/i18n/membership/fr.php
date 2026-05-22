@@ -1,0 +1,20 @@
+<?php
+return [
+    'badge' => 'Adhésion ON4CRD',
+    'title' => 'Rejoindre le club',
+    'intro' => 'Devenez membre pour participer activement aux projets radio, profiter de l\'entraide technique et intégrer une communauté locale dynamique.',
+    'cta_join' => 'Demander l\'adhésion',
+    'cta_events' => 'Voir les prochaines activités',
+    'benefits_title' => 'Avantages membres',
+    'dues_title' => 'Informations de cotisation',
+    'dues_help' => 'Les montants sont indicatifs et validés en assemblée annuelle. Le règlement peut se faire par virement ou en espèces au local.',
+    'help_committee' => 'Besoin d\'aide ? Contactez le comité via la page',
+    'committee' => 'Commissie',
+    'due_adult' => 'Cotisation annuelle adulte',
+    'due_student' => 'Cotisation annuelle étudiant (-25 ans)',
+    'due_family' => 'Cotisation familiale (même domicile)',
+    'benefit_1' => 'Accès aux ateliers pratiques, démonstrations techniques et sorties terrain.',
+    'benefit_2' => 'Accompagnement personnalisé pour les nouveaux radioamateurs (examens, premiers QSO, installation).',
+    'benefit_3' => 'Utilisation des infrastructures du club selon le planning : station, antennes et matériel mutualisé.',
+    'benefit_4' => 'Tarifs membres sur certaines activités, commandes groupées et opérations boutique.',
+];
