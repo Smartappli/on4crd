@@ -1,15 +1,22 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'title' => 'Библиотека участников',
-    'intro' => 'Просмотр PDF-файлов по категориям или поиск.',
-    'open' => 'Открыть PDF',
-    'empty' => 'Документ не найден.',
-    'storage_unavailable' => 'Библиотека временно недоступна.',
-    'meta_desc' => 'Интерфейс просмотра библиотеки частных участников ON4CRD.',
-    'search_ph' => 'Поиск (заголовок, краткое содержание, индексированный контент)',
-    'search' => 'Поиск',
-    'all_categories' => 'Все категории',
-    'for_filters' => 'для этих фильтров',
-];
+return array (
+  'title' => 'Библиотека участников',
+  'intro' => 'Browse shared documents by category, search their extracted content, and open the original files.',
+  'open' => 'Открыть документ',
+  'empty' => 'Документы не найдены.',
+  'storage_unavailable' => 'The library is temporarily unavailable.',
+  'meta_desc' => 'Private ON4CRD member library.',
+  'search_ph' => 'Search title, summary or indexed content',
+  'search' => 'Поиск',
+  'all_categories' => 'Все категории',
+  'for_filters' => ' for these filters',
+  'documents' => 'Документы',
+  'reset' => 'Сбросить',
+  'document' => 'Документ',
+  'preview' => 'Просмотр',
+  'prev' => 'Назад',
+  'next' => 'Вперед',
+  'page' => 'Page',
+);

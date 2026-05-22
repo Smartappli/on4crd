@@ -1,15 +1,22 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'title' => 'सदस्य पुस्तकालय',
-    'intro' => 'श्रेणी के अनुसार पीडीएफ़ ब्राउज़ करें या खोजें।',
-    'open' => 'पीडीएफ खोलें',
-    'empty' => 'कोई दस्तावेज़ नहीं मिला.',
-    'storage_unavailable' => 'लाइब्रेरी अस्थायी रूप से अनुपलब्ध है.',
-    'meta_desc' => 'ON4CRD निजी सदस्यों की लाइब्रेरी के लिए ब्राउज़िंग इंटरफ़ेस।',
-    'search_ph' => 'खोजें (शीर्षक, सारांश, अनुक्रमित सामग्री)',
-    'search' => 'खोज',
-    'all_categories' => 'सभी श्रेणियां',
-    'for_filters' => 'इन फ़िल्टर के लिए',
-];
+return array (
+  'title' => 'सदस्य लाइब्रेरी',
+  'intro' => 'Browse shared documents by category, search their extracted content, and open the original files.',
+  'open' => 'दस्तावेज खोलें',
+  'empty' => 'कोई दस्तावेज नहीं मिला।',
+  'storage_unavailable' => 'The library is temporarily unavailable.',
+  'meta_desc' => 'Private ON4CRD member library.',
+  'search_ph' => 'Search title, summary or indexed content',
+  'search' => 'खोजें',
+  'all_categories' => 'सभी श्रेणियां',
+  'for_filters' => ' for these filters',
+  'documents' => 'दस्तावेज',
+  'reset' => 'रीसेट',
+  'document' => 'दस्तावेज',
+  'preview' => 'पूर्वावलोकन',
+  'prev' => 'पिछला',
+  'next' => 'अगला',
+  'page' => 'Page',
+);

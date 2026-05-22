@@ -1,15 +1,22 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'title' => 'Perpustakaan anggota',
-    'intro' => 'Jelajahi PDF berdasarkan kategori atau cari.',
-    'open' => 'Buka PDF',
-    'empty' => 'Tidak ada dokumen yang ditemukan.',
-    'storage_unavailable' => 'Perpustakaan untuk sementara tidak tersedia.',
-    'meta_desc' => 'Antarmuka penjelajahan untuk perpustakaan anggota pribadi ON4CRD.',
-    'search_ph' => 'Pencarian (judul, ringkasan, konten yang diindeks)',
-    'search' => 'Mencari',
-    'all_categories' => 'Semua kategori',
-    'for_filters' => 'untuk filter ini',
-];
+return array (
+  'title' => 'Perpustakaan anggota',
+  'intro' => 'Browse shared documents by category, search their extracted content, and open the original files.',
+  'open' => 'Buka dokumen',
+  'empty' => 'Tidak ada dokumen ditemukan.',
+  'storage_unavailable' => 'The library is temporarily unavailable.',
+  'meta_desc' => 'Private ON4CRD member library.',
+  'search_ph' => 'Search title, summary or indexed content',
+  'search' => 'Cari',
+  'all_categories' => 'Semua kategori',
+  'for_filters' => ' for these filters',
+  'documents' => 'Dokumen',
+  'reset' => 'Reset',
+  'document' => 'Document',
+  'preview' => 'Pratinjau',
+  'prev' => 'Sebelumnya',
+  'next' => 'Berikutnya',
+  'page' => 'Page',
+);

@@ -1,15 +1,22 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'title' => 'সদস্যদের গ্রন্থাগার',
-    'intro' => 'বিভাগ বা অনুসন্ধান দ্বারা PDF ব্রাউজ করুন.',
-    'open' => 'PDF খুলুন',
-    'empty' => 'কোনো নথি পাওয়া যায়নি।',
-    'storage_unavailable' => 'গ্রন্থাগারটি সাময়িকভাবে অনুপলব্ধ৷',
-    'meta_desc' => 'ON4CRD প্রাইভেট মেম্বার লাইব্রেরির জন্য ব্রাউজিং ইন্টারফেস।',
-    'search_ph' => 'অনুসন্ধান (শিরোনাম, সারাংশ, সূচীকৃত বিষয়বস্তু)',
-    'search' => 'অনুসন্ধান করুন',
-    'all_categories' => 'সমস্ত বিভাগ',
-    'for_filters' => 'এই ফিল্টার জন্য',
-];
+return array (
+  'title' => 'সদস্য লাইব্রেরি',
+  'intro' => 'Browse shared documents by category, search their extracted content, and open the original files.',
+  'open' => 'নথি খুলুন',
+  'empty' => 'কোনো নথি পাওয়া যায়নি।',
+  'storage_unavailable' => 'The library is temporarily unavailable.',
+  'meta_desc' => 'Private ON4CRD member library.',
+  'search_ph' => 'Search title, summary or indexed content',
+  'search' => 'খুঁজুন',
+  'all_categories' => 'সব বিভাগ',
+  'for_filters' => ' for these filters',
+  'documents' => 'নথি',
+  'reset' => 'রিসেট',
+  'document' => 'নথি',
+  'preview' => 'প্রিভিউ',
+  'prev' => 'আগের',
+  'next' => 'পরের',
+  'page' => 'Page',
+);

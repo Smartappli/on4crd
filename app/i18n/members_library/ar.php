@@ -1,15 +1,22 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'title' => 'مكتبة الأعضاء',
-    'intro' => 'تصفح ملفات PDF حسب الفئة أو البحث.',
-    'open' => 'افتح ملف PDF',
-    'empty' => 'لم يتم العثور على وثيقة.',
-    'storage_unavailable' => 'المكتبة غير متاحة مؤقتا.',
-    'meta_desc' => 'واجهة التصفح لمكتبة الأعضاء الخاصة ON4CRD.',
-    'search_ph' => 'البحث (العنوان، الملخص، المحتوى المفهرس)',
-    'search' => 'يبحث',
-    'all_categories' => 'جميع الفئات',
-    'for_filters' => 'لهذه المرشحات',
-];
+return array (
+  'title' => 'مكتبة الأعضاء',
+  'intro' => 'Browse shared documents by category, search their extracted content, and open the original files.',
+  'open' => 'فتح المستند',
+  'empty' => 'لم يتم العثور على مستند.',
+  'storage_unavailable' => 'The library is temporarily unavailable.',
+  'meta_desc' => 'Private ON4CRD member library.',
+  'search_ph' => 'Search title, summary or indexed content',
+  'search' => 'بحث',
+  'all_categories' => 'كل الفئات',
+  'for_filters' => ' for these filters',
+  'documents' => 'المستندات',
+  'reset' => 'إعادة تعيين',
+  'document' => 'مستند',
+  'preview' => 'معاينة',
+  'prev' => 'السابق',
+  'next' => 'التالي',
+  'page' => 'Page',
+);
