@@ -109,4 +109,24 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('de', current_locale());
     }
 
+    public function testCleanQueryParamsDropsOnlyEmptyValues(): void
+    {
+        self::assertSame(
+            ['zero' => 0, 'string_zero' => '0', 'valid' => 'abc'],
+            clean_query_params(['empty' => '', 'null' => null, 'false' => false, 'zero' => 0, 'string_zero' => '0', 'valid' => 'abc'])
+        );
+    }
+
+    public function testPaginationStateClampsPageAndComputesOffset(): void
+    {
+        self::assertSame(
+            ['page' => 3, 'per_page' => 10, 'total_pages' => 3, 'offset' => 20],
+            pagination_state(25, 9, 10)
+        );
+        self::assertSame(
+            ['page' => 1, 'per_page' => 1, 'total_pages' => 1, 'offset' => 0],
+            pagination_state(0, -2, 0)
+        );
+    }
+
 }

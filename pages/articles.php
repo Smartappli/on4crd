@@ -36,23 +36,7 @@ function article_category_logo(string $label): string
 
 
 $locale = current_locale();
-$i18n = i18n_domain_messages('articles');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = [];
-foreach (array_keys($i18n['fr']) as $key) {
-    $pool = [];
-    foreach ($i18n as $lang => $translations) {
-        if (isset($translations[$key]) && is_string($translations[$key])) {
-            $pool[$lang] = $translations[$key];
-        }
-    }
-
-    $value = trim(i18n_localized_value($pool, $locale, 'fr'));
-    if ($value === '') {
-        $value = trim((string) ($i18n['fr'][$key] ?? ''));
-    }
-    $t[$key] = $value;
-}
+$t = i18n_domain_locale('articles', $locale);
 $GLOBALS['articles_i18n'] = $t;
 
 $themeMeta = [
@@ -106,11 +90,10 @@ $whereSql = 'WHERE ' . implode(' AND ', $whereParts);
 $countStmt = db()->prepare('SELECT COUNT(*) FROM articles ' . $whereSql);
 $countStmt->execute($whereParams);
 $totalArticles = (int) $countStmt->fetchColumn();
-$maxPage = max(1, (int) ceil($totalArticles / $perPage));
-if ($page > $maxPage) {
-    $page = $maxPage;
-}
-$offset = ($page - 1) * $perPage;
+$pagination = pagination_state($totalArticles, $page, $perPage);
+$page = $pagination['page'];
+$maxPage = $pagination['total_pages'];
+$offset = $pagination['offset'];
 $dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY updated_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $dataStmt->execute($whereParams);
 $pagedRows = $dataStmt->fetchAll() ?: [];
@@ -166,11 +149,11 @@ ob_start();
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
             <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['reset_search']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter])) ?>"><?= e((string) $t['reset_search']) ?></a>
             <?php endif; ?>
         </form>
         <?php if ($themeFilter !== ''): ?>
-            <p><a class="pill" href="<?= e(route_url('articles', array_filter(['q' => $search], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
+            <p><a class="pill" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
         <?php endif; ?>
         <?php if ($search !== '' || $themeFilter !== ''): ?>
             <p class="help"><?= e((string) $t['results']) ?> : <?= $totalArticles ?></p>
@@ -203,11 +186,11 @@ ob_start();
     <?php if ($maxPage > 1): ?>
         <div class="card actions">
             <?php if ($page > 1): ?>
-                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter, 'q' => $search, 'page' => $page - 1], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['previous']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'q' => $search, 'page' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
             <?php endif; ?>
             <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $maxPage ?></span>
             <?php if ($page < $maxPage): ?>
-                <a class="button secondary" href="<?= e(route_url('articles', array_filter(['theme' => $themeFilter, 'q' => $search, 'page' => $page + 1], static fn($v): bool => $v !== ''))) ?>"><?= e((string) $t['next']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'q' => $search, 'page' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
             <?php endif; ?>
         </div>
     <?php endif; ?>
