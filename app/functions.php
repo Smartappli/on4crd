@@ -1869,6 +1869,52 @@ function route_url(string $route, array $query = []): string
 }
 }
 
+if (!function_exists('clean_query_params')) {
+/**
+ * Drop empty query values while preserving meaningful numeric and boolean values.
+ *
+ * @param array<string, mixed> $query
+ * @return array<string, mixed>
+ */
+function clean_query_params(array $query): array
+{
+    return array_filter($query, static fn(mixed $value): bool => $value !== '' && $value !== null && $value !== false);
+}
+}
+
+if (!function_exists('route_url_clean')) {
+/**
+ * Build a route URL without leaking empty filter values into the query string.
+ *
+ * @param array<string, mixed> $query
+ */
+function route_url_clean(string $route, array $query = []): string
+{
+    return route_url($route, clean_query_params($query));
+}
+}
+
+if (!function_exists('pagination_state')) {
+/**
+ * Normalize common pagination values for list pages.
+ *
+ * @return array{page:int, per_page:int, total_pages:int, offset:int}
+ */
+function pagination_state(int $totalItems, int $requestedPage, int $perPage): array
+{
+    $perPage = max(1, $perPage);
+    $totalPages = max(1, (int) ceil(max(0, $totalItems) / $perPage));
+    $page = min(max(1, $requestedPage), $totalPages);
+
+    return [
+        'page' => $page,
+        'per_page' => $perPage,
+        'total_pages' => $totalPages,
+        'offset' => ($page - 1) * $perPage,
+    ];
+}
+}
+
 if (!function_exists('env')) {
 function env(string $key, mixed $default = null): mixed
 {

@@ -2,10 +2,9 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = i18n_domain_messages('classifieds');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'] ?? [])[$key] ?? ($i18n['fr'][$key] ?? $key));
+$messages = i18n_domain_locale('classifieds', $locale);
+$t = static function (string $key) use ($messages): string {
+    return (string) ($messages[$key] ?? $key);
 };
 
 if (!module_enabled('classifieds')) {
@@ -92,6 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $categoryFilter = (string) ($_GET['category'] ?? '');
 $query = trim((string) ($_GET['q'] ?? ''));
+if (mb_strlen($query) > 120) {
+    $query = mb_substr($query, 0, 120);
+}
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
 $where = ["ca.status = 'active'"];
@@ -113,9 +115,10 @@ $whereSql = implode(' AND ', $where);
 $countStmt = db()->prepare("SELECT COUNT(*) FROM classified_ads ca WHERE $whereSql");
 $countStmt->execute($params);
 $totalAds = (int) $countStmt->fetchColumn();
-$maxPage = max(1, (int) ceil($totalAds / $perPage));
-$page = min($page, $maxPage);
-$offset = ($page - 1) * $perPage;
+$pagination = pagination_state($totalAds, $page, $perPage);
+$page = $pagination['page'];
+$maxPage = $pagination['total_pages'];
+$offset = $pagination['offset'];
 
 $adsStmt = db()->prepare("SELECT ca.*, m.callsign FROM classified_ads ca LEFT JOIN members m ON m.id = ca.owner_member_id WHERE $whereSql ORDER BY ca.created_at DESC, ca.id DESC LIMIT $perPage OFFSET $offset");
 $adsStmt->execute($params);
@@ -226,9 +229,9 @@ ob_start();
             </div>
             <?php if ($maxPage > 1): ?>
                 <div class="actions mt-3">
-                    <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page - 1])) ?>"><?= e($t('previous')) ?></a><?php endif; ?>
+                    <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page - 1])) ?>"><?= e($t('previous')) ?></a><?php endif; ?>
                     <span class="pill"><?= e($t('page')) ?> <?= $page ?> / <?= $maxPage ?></span>
-                    <?php if ($page < $maxPage): ?><a class="button secondary" href="<?= e(route_url('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page + 1])) ?>"><?= e($t('next')) ?></a><?php endif; ?>
+                    <?php if ($page < $maxPage): ?><a class="button secondary" href="<?= e(route_url_clean('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page + 1])) ?>"><?= e($t('next')) ?></a><?php endif; ?>
                 </div>
             <?php endif; ?>
         <?php endif; ?>

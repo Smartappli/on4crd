@@ -85,11 +85,10 @@ $totalPosts = cache_remember($cacheBase . '_count', 45, static function () use (
         return 0;
     }
 });
-$totalPages = max(1, (int) ceil($totalPosts / $perPage));
-if ($page > $totalPages) {
-    $page = $totalPages;
-}
-$offset = ($page - 1) * $perPage;
+$pagination = pagination_state($totalPosts, $page, $perPage);
+$page = $pagination['page'];
+$totalPages = $pagination['total_pages'];
+$offset = $pagination['offset'];
 $activeFiltersCount = 0;
 if ($search !== '') {
     $activeFiltersCount++;
@@ -322,10 +321,10 @@ ob_start();
             <p class="help"><?= e((string) $newsT['page']) ?> <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= (int) $totalPosts ?> <?= e((string) $newsT['news_count']) ?></p>
             <p class="actions">
                 <?php if ($page > 1): ?>
-                    <a class="button secondary" href="<?= e(route_url('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page - 1])) ?>">← <?= e((string) $newsT['previous']) ?></a>
+                    <a class="button secondary" href="<?= e(route_url_clean('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page - 1])) ?>">← <?= e((string) $newsT['previous']) ?></a>
                 <?php endif; ?>
                 <?php if ($page < $totalPages): ?>
-                    <a class="button secondary" href="<?= e(route_url('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page + 1])) ?>"><?= e((string) $newsT['next']) ?> →</a>
+                    <a class="button secondary" href="<?= e(route_url_clean('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page + 1])) ?>"><?= e((string) $newsT['next']) ?> →</a>
                 <?php endif; ?>
             </p>
         </div>
