@@ -16,7 +16,7 @@ Site PHP moderne pour le radio-club ON4CRD avec contenus éditoriaux, espace mem
 
 ## Démarrage local avec Docker Compose
 
-Le projet inclut une stack Docker Compose qui:
+Le projet inclut une stack Docker Compose qui :
 - installe automatiquement les dépendances PHP nécessaires;
 - initialise la base MySQL avec `schema/schema.sql`;
 - crée (ou met à jour) automatiquement un compte administrateur.
@@ -28,6 +28,16 @@ docker compose up --build
 ```
 
 Le site est accessible sur `http://localhost:8080`.
+
+### Vérifications rapides
+
+Avant de pousser une modification, vous pouvez lancer les contrôles principaux:
+
+```bash
+composer test
+./scripts/check-tools.sh
+php ./scripts/check_i18n_module_locales.php
+```
 
 
 ### Mode maintenance
@@ -122,3 +132,5 @@ La section `observability` de `config/config.php` accepte:
 
 - En production (`false`), les erreurs fatales non capturées renvoient un message générique avec une référence de requête.
 - En développement (`true`), le message d’exception est ajouté à la réponse pour faciliter le débogage.
+
+<!-- chore: touch commit marker -->

@@ -1,0 +1,20 @@
+<?php
+return [
+    'badge' => 'Keanggotaan ON4CRD',
+    'title' => 'Bergabung dengan klub',
+    'intro' => 'Jadilah anggota untuk berpartisipasi aktif dalam proyek radio, mendapatkan dukungan teknis, dan bergabung dengan komunitas lokal yang dinamis.',
+    'cta_join' => 'Ajukan keanggotaan',
+    'cta_events' => 'Lihat kegiatan mendatang',
+    'benefits_title' => 'Manfaat anggota',
+    'dues_title' => 'Informasi iuran',
+    'dues_help' => 'Besaran iuran bersifat indikatif dan disahkan pada rapat tahunan. Pembayaran dapat dilakukan melalui transfer bank atau tunai di klub.',
+    'help_committee' => 'Butuh bantuan? Hubungi komite melalui halaman',
+    'committee' => 'Komite',
+    'due_adult' => 'Iuran tahunan dewasa',
+    'due_student' => 'Iuran tahunan pelajar/mahasiswa (-25)',
+    'due_family' => 'Iuran keluarga (alamat yang sama)',
+    'benefit_1' => 'Akses ke lokakarya praktik, demonstrasi teknis, dan kegiatan lapangan.',
+    'benefit_2' => 'Pendampingan personal untuk radio amatir baru (ujian, QSO pertama, pemasangan).',
+    'benefit_3' => 'Penggunaan infrastruktur klub sesuai jadwal: stasiun, antena, dan peralatan bersama.',
+    'benefit_4' => 'Harga anggota untuk kegiatan tertentu, pesanan bersama, dan toko.',
+];

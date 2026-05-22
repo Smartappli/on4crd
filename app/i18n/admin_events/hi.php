@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+
+return ['event_saved' => 'इवेंट सहेजा गया।', 'layout' => 'एजेंडा प्रशासन', 'title_required' => 'शीर्षक आवश्यक है।', 'form_title' => 'एक इवेंट', 'edit' => 'संपादित करें', 'create' => 'बनाएँ', 'title' => 'शीर्षक', 'slug' => 'स्लग', 'summary' => 'सारांश', 'description' => 'विवरण', 'start' => 'प्रारंभ', 'end' => 'समाप्ति', 'location' => 'स्थान', 'external_url' => 'बाहरी URL', 'type' => 'प्रकार', 'status' => 'स्थिति', 'type_club' => 'क्लब', 'type_contest' => 'प्रतियोगिता', 'draft' => 'मसौदा', 'published' => 'प्रकाशित', 'save' => 'सहेजें', 'saved_events' => 'सहेजे गए इवेंट', 'no_event' => 'कोई इवेंट नहीं।', 'calendar_view' => 'कैलेंडर दृश्य', 'calendar_help' => 'संपादन खोलने के लिए इवेंट पर क्लिक करें।', 'today' => 'आज', 'month' => 'माह', 'week' => 'सप्ताह', 'list' => 'सूची', 'meta_desc' => 'साइट इवेंट और कैलेंडर का प्रबंधन।'];

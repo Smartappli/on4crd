@@ -1,0 +1,6 @@
+<?php
+declare(strict_types=1);
+
+return ['meta_title' => 'ニュースレター管理', 'meta_desc' => '購読者とニュースレター配信を管理します。', 'layout' => 'ニュースレター管理', 'err_invalid_email' => '無効なメールアドレスです。', 'ok_subscriber_saved' => '購読者を追加または再有効化しました。', 'err_csv_required' => 'インポート前にCSV内容を貼り付けてください。', 'ok_csv_import' => '件のアドレスを処理しました。', 'err_status_update' => 'ステータスを更新できません。', 'ok_status_updated' => 'ステータスを更新しました。', 'err_delete_subscriber' => '購読者を削除できません。', 'ok_subscriber_deleted' => '購読者を削除しました。', 'err_campaign_required' => 'タイトル、件名、内容は必須です。', 'ok_campaign_created' => '配信を作成しました。', 'ok_campaign_sent' => '配信結果: 成功 %d / 失敗 %d（合計 %d）。', 'title_subscribers' => 'ニュースレター — 購読者', 'email_to_add' => '追加するメール', 'add_or_reactivate' => '追加 / 再有効化', 'csv_import' => 'CSVインポート', 'csv_content' => 'CSV/Excel内容（コピー&ペースト）', 'import' => 'インポート', 'member' => 'メンバー', 'status' => 'ステータス', 'actions' => '操作', 'unsubscribe' => '購読解除', 'reactivate' => '再有効化', 'confirm_delete_subscriber' => 'この購読者を削除しますか？', 'delete' => '削除', 'campaigns' => '配信', 'title' => 'タイトル', 'email_subject' => 'メール件名', 'content' => '内容', 'create_campaign' => '配信を作成', 'results' => '結果', 'action' => '操作', 'sent_results' => '送信 %d / 失敗 %d', 'send' => '送信', 'already_sent' => '送信済み', 'email' => 'メール', 'csv_ph' => 'email
+foo@example.org
+bar@example.org', 'no_subscribers' => '購読者はいません。', 'no_campaigns' => '配信はありません。'];
