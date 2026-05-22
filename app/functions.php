@@ -6020,6 +6020,14 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_ads', 'title' => ['fr' => 'Publicités', 'en' => 'Ads', 'de' => 'Werbung', 'nl' => 'Advertenties', 'es' => 'Publicidad', 'it' => 'Pubblicità', 'pt' => 'Publicidade', 'ar' => 'الإعلانات', 'bn' => 'বিজ্ঞাপন', 'hi' => 'विज्ञापन', 'id' => 'Iklan', 'ja' => '広告', 'ru' => 'Реклама', 'zh' => '广告'], 'desc' => ['fr' => 'Régie publicitaire, placements et statistiques.', 'en' => 'Ad inventory, placements and statistics.', 'de' => 'Werbeverwaltung, Platzierungen und Statistiken.', 'nl' => 'Advertentiebeheer, plaatsingen en statistieken.', 'es' => 'Inventario publicitario, ubicaciones y estadísticas.', 'it' => 'Inventario pubblicitario, posizionamenti e statistiche.', 'pt' => 'Inventário publicitário, posicionamentos e estatísticas.', 'ar' => 'إدارة المخزون الإعلاني والمواضع والإحصاءات.', 'bn' => 'বিজ্ঞাপন ইনভেন্টরি, প্লেসমেন্ট ও পরিসংখ্যান।', 'hi' => 'विज्ञापन इन्वेंटरी, प्लेसमेंट और आँकड़े।', 'id' => 'Inventaris iklan, penempatan, dan statistik.', 'ja' => '広告在庫、配置、統計。', 'ru' => 'Рекламный инвентарь, размещения и статистика.', 'zh' => '广告库存、投放位与统计。'], 'module' => 'advertising'],
     ];
 
+    $catalog[] = [
+        'route' => 'admin_classifieds',
+        'title' => ['fr' => 'Petites annonces', 'en' => 'Classifieds'],
+        'desc' => ['fr' => 'Modération des annonces membres.', 'en' => 'Moderate member classifieds.'],
+        'module' => 'classifieds',
+        'permission' => 'ads.moderate',
+    ];
+
     $allSupportedLocales = supported_locales();
     foreach ($catalog as &$card) {
         foreach (['title', 'desc', 'audience', 'icon'] as $field) {

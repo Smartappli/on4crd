@@ -1,21 +1,170 @@
+<?php
+declare(strict_types=1);
+
+$unitConversionGroups = [
+    'rf' => [
+        'label' => (string) ($t['unit_conv_group_rf'] ?? 'Radio / RF'),
+        'units' => [
+            'hz' => ['label' => 'Hz', 'factor' => 1.0],
+            'khz' => ['label' => 'kHz', 'factor' => 1_000.0],
+            'mhz' => ['label' => 'MHz', 'factor' => 1_000_000.0],
+            'ghz' => ['label' => 'GHz', 'factor' => 1_000_000_000.0],
+        ],
+        'presets' => ['145.5', '433.5', '7100'],
+    ],
+    'power' => [
+        'label' => (string) ($t['unit_conv_group_power'] ?? 'Puissance'),
+        'units' => [
+            'w' => ['label' => 'W', 'factor' => 1.0],
+            'kw' => ['label' => 'kW', 'factor' => 1_000.0],
+            'mw' => ['label' => 'mW', 'factor' => 0.001],
+            'dbm' => ['label' => 'dBm', 'kind' => 'dbm'],
+            'dbw' => ['label' => 'dBW', 'kind' => 'dbw'],
+        ],
+        'presets' => ['0.005', '5', '100'],
+    ],
+    'voltage' => [
+        'label' => (string) ($t['unit_conv_group_voltage'] ?? 'Tension sinusoidale'),
+        'units' => [
+            'vrms' => ['label' => 'Vrms', 'factor' => 1.0],
+            'vpp' => ['label' => 'Vpp', 'factor' => 1 / (2 * sqrt(2))],
+            'vpk' => ['label' => 'Vpk', 'factor' => 1 / sqrt(2)],
+        ],
+        'presets' => ['1', '5', '13.8'],
+    ],
+    'length' => [
+        'label' => (string) ($t['unit_conv_group_length'] ?? 'Longueur'),
+        'units' => [
+            'mm' => ['label' => 'mm', 'factor' => 0.001],
+            'cm' => ['label' => 'cm', 'factor' => 0.01],
+            'm' => ['label' => 'm', 'factor' => 1.0],
+            'km' => ['label' => 'km', 'factor' => 1_000.0],
+            'in' => ['label' => 'in', 'factor' => 0.0254],
+            'ft' => ['label' => 'ft', 'factor' => 0.3048],
+        ],
+        'presets' => ['0.25', '10', '100'],
+    ],
+    'energy' => [
+        'label' => (string) ($t['unit_conv_group_energy'] ?? 'Energie'),
+        'units' => [
+            'j' => ['label' => 'J', 'factor' => 1.0],
+            'wh' => ['label' => 'Wh', 'factor' => 3_600.0],
+            'kwh' => ['label' => 'kWh', 'factor' => 3_600_000.0],
+        ],
+        'presets' => ['3600', '12', '1000'],
+    ],
+    'time' => [
+        'label' => (string) ($t['unit_conv_group_time'] ?? 'Temps'),
+        'units' => [
+            'ms' => ['label' => 'ms', 'factor' => 0.001],
+            's' => ['label' => 's', 'factor' => 1.0],
+            'min' => ['label' => 'min', 'factor' => 60.0],
+            'h' => ['label' => 'h', 'factor' => 3_600.0],
+        ],
+        'presets' => ['1000', '60', '3600'],
+    ],
+    'temperature' => [
+        'label' => (string) ($t['unit_conv_group_temperature'] ?? 'Temperature'),
+        'units' => [
+            'c' => ['label' => '°C', 'kind' => 'c'],
+            'f' => ['label' => '°F', 'kind' => 'f'],
+            'k' => ['label' => 'K', 'kind' => 'k'],
+        ],
+        'presets' => ['0', '20', '100'],
+    ],
+    'rotation' => [
+        'label' => (string) ($t['unit_conv_group_rotation'] ?? 'Rotation'),
+        'units' => [
+            'rpm' => ['label' => 'RPM', 'factor' => 1 / 60],
+            'rps' => ['label' => 'RPS', 'factor' => 1.0],
+            'hz' => ['label' => 'Hz', 'factor' => 1.0],
+        ],
+        'presets' => ['60', '1200', '3000'],
+    ],
+    'field' => [
+        'label' => (string) ($t['unit_conv_group_field'] ?? 'Niveau de signal'),
+        'units' => [
+            'dbuv' => ['label' => 'dBµV', 'kind' => 'dbuv'],
+            'sunit' => ['label' => 'S-unit', 'kind' => 'sunit'],
+        ],
+        'presets' => ['9', '59', '73'],
+    ],
+];
+?>
 <article class="card tool-panel is-hidden" id="tool-unit-conversions" data-tool-panel>
-    <h2><?= e((string) ($t['unit_conv_title'] ?? 'Conversion d’unités')) ?></h2>
-    <p class="help"><?= e((string) ($t['unit_conv_help'] ?? 'Sélectionnez une conversion :')) ?></p>
-    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem;">
-        <?php
-        $unitTools = [
-            'tool-kw-w','tool-w-kw','tool-hz-khz','tool-khz-mhz','tool-mhz-ghz','tool-in-mm','tool-ft-m',
-            'tool-c-f','tool-f-c','tool-pa-db','tool-db-pa','tool-j-wh','tool-wh-j','tool-ms-s','tool-s-ms',
-            'tool-rpm-rps','tool-rps-rpm','tool-sunit-dbuv','tool-dbuv-sunit','tool-vpp-vrms','tool-vrms-vpp','tool-vpk-vrms'
-        ];
-        foreach ($unitTools as $unitToolId):
-            $unitLabel = '';
-            foreach ($conversionTools as $tool) {
-                if ((string) ($tool['id'] ?? '') === $unitToolId) { $unitLabel = (string) ($tool['title'] ?? ''); break; }
-            }
-            if ($unitLabel === '') { $unitLabel = $unitToolId; }
-        ?>
-            <a class="button secondary" href="#<?= e($unitToolId) ?>" data-tool-target="<?= e($unitToolId) ?>"><?= e($unitLabel) ?></a>
-        <?php endforeach; ?>
+    <div class="section-header">
+        <div>
+            <h2><?= e((string) ($t['unit_conv_title'] ?? 'Conversion d’unités')) ?></h2>
+            <p class="help"><?= e((string) ($t['unit_conv_help'] ?? 'Convertisseur multi-unités orienté radioamateur.')) ?></p>
+        </div>
+        <button type="button" class="button ghost" id="unit-conv-swap"><?= e((string) ($t['unit_conv_swap'] ?? 'Inverser')) ?></button>
     </div>
+
+    <div class="grid-3">
+        <label><?= e((string) ($t['unit_conv_family'] ?? 'Famille')) ?>
+            <select id="unit-conv-group">
+                <?php foreach ($unitConversionGroups as $groupCode => $group): ?>
+                    <option value="<?= e($groupCode) ?>"><?= e((string) $group['label']) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label><?= e((string) ($t['value_in'] ?? 'Valeur entrée')) ?>
+            <input id="unit-conv-input" type="number" step="any" value="145.5" inputmode="decimal">
+        </label>
+        <label><?= e((string) ($t['value_out'] ?? 'Valeur sortie')) ?>
+            <output id="unit-conv-output" class="result-box">—</output>
+        </label>
+    </div>
+
+    <div class="grid-2">
+        <label><?= e((string) ($t['unit_conv_from'] ?? 'Depuis')) ?>
+            <select id="unit-conv-from"></select>
+        </label>
+        <label><?= e((string) ($t['unit_conv_to'] ?? 'Vers')) ?>
+            <select id="unit-conv-to"></select>
+        </label>
+    </div>
+
+    <div class="actions" id="unit-conv-presets" aria-label="<?= e((string) ($t['unit_conv_presets'] ?? 'Valeurs rapides')) ?>"></div>
+
+    <div class="grid-2">
+        <section class="inner-card">
+            <h3><?= e((string) ($t['unit_conv_reference'] ?? 'Référence')) ?></h3>
+            <p id="unit-conv-reference" class="help">—</p>
+        </section>
+        <section class="inner-card">
+            <h3><?= e((string) ($t['unit_conv_quick_links'] ?? 'Convertisseurs détaillés')) ?></h3>
+            <div class="actions">
+                <?php
+                $unitTools = [
+                    'tool-power', 'tool-freq-wave', 'tool-dbuv', 'tool-gain-conv',
+                    'tool-kw-w', 'tool-hz-khz', 'tool-in-mm', 'tool-c-f', 'tool-vpp-vrms', 'tool-sunit-dbuv',
+                ];
+                foreach ($unitTools as $unitToolId):
+                    $unitLabel = '';
+                    foreach ($conversionTools as $tool) {
+                        if ((string) ($tool['id'] ?? '') === $unitToolId) {
+                            $unitLabel = (string) ($tool['title'] ?? '');
+                            break;
+                        }
+                    }
+                    foreach ($radioMathTools ?? [] as $tool) {
+                        if ($unitLabel === '' && (string) ($tool['id'] ?? '') === $unitToolId) {
+                            $unitLabel = (string) ($tool['title'] ?? '');
+                            break;
+                        }
+                    }
+                    if ($unitLabel === '') {
+                        $unitLabel = $unitToolId;
+                    }
+                ?>
+                    <a class="button secondary" href="#<?= e($unitToolId) ?>" data-tool-target="<?= e($unitToolId) ?>"><?= e($unitLabel) ?></a>
+                <?php endforeach; ?>
+            </div>
+        </section>
+    </div>
+
+    <script type="application/json" id="unit-conv-data">
+        <?= json_encode($unitConversionGroups, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+    </script>
 </article>

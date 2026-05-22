@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-$user = require_login();
 $locale = current_locale();
 $i18n = i18n_domain_messages('classifieds');
 $i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
-    return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $i18n['fr'][$key] ?? $key);
+    return (string) (($i18n[$locale] ?? $i18n['fr'] ?? [])[$key] ?? ($i18n['fr'][$key] ?? $key));
 };
 
 if (!module_enabled('classifieds')) {
@@ -20,40 +19,55 @@ if (!table_exists('classified_ads')) {
     return;
 }
 
-$categories = ['gear' => 'Matériel', 'wanted' => 'Recherche', 'service' => 'Service'];
+$categories = [
+    'gear' => $t('category_gear'),
+    'wanted' => $t('category_wanted'),
+    'service' => $t('category_service'),
+];
+$statuses = [
+    'active' => $t('status_active'),
+    'sold' => $t('status_sold'),
+    'archived' => $t('status_archived'),
+];
+
+$user = current_user();
 $editing = null;
-if (!empty($_GET['edit'])) {
+if ($user !== null && !empty($_GET['edit'])) {
     $stmt = db()->prepare('SELECT * FROM classified_ads WHERE id = ? AND owner_member_id = ? LIMIT 1');
     $stmt->execute([(int) $_GET['edit'], (int) $user['id']]);
-    $editing = $stmt->fetch();
+    $editing = $stmt->fetch() ?: null;
+    if ($editing === null) {
+        set_flash('error', $t('missing'));
+        redirect_url(route_url('classifieds'));
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user = require_login();
     try {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? 'save');
 
         if ($action === 'save') {
             $id = (int) ($_POST['id'] ?? 0);
-            $payload = [
-                'category_code' => (string) ($_POST['category_code'] ?? 'gear'),
-                'title' => trim((string) ($_POST['title'] ?? '')),
-                'description' => trim((string) ($_POST['description'] ?? '')),
-                'location' => trim((string) ($_POST['location'] ?? '')),
-                'contact' => trim((string) ($_POST['contact'] ?? '')),
-                'price_cents' => (int) round(((float) str_replace(',', '.', (string) ($_POST['price'] ?? '0'))) * 100),
-            ];
-            if ($payload['title'] === '' || !isset($categories[$payload['category_code']])) {
+            $category = (string) ($_POST['category_code'] ?? 'gear');
+            $title = trim((string) ($_POST['title'] ?? ''));
+            $description = trim((string) ($_POST['description'] ?? ''));
+            $location = trim((string) ($_POST['location'] ?? ''));
+            $contact = trim((string) ($_POST['contact'] ?? ''));
+            $priceCents = max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0')));
+
+            if ($title === '' || $description === '' || $contact === '' || !isset($categories[$category])) {
                 throw new RuntimeException($t('invalid'));
             }
 
             if ($id > 0) {
                 $stmt = db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-                $stmt->execute([$payload['category_code'], $payload['title'], $payload['description'], $payload['location'], $payload['contact'], max(0, $payload['price_cents']), $id, (int) $user['id']]);
+                $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $id, (int) $user['id']]);
                 set_flash('success', $t('updated_ok'));
             } else {
-                $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents) VALUES (?, ?, ?, ?, ?, ?, ?)');
-                $stmt->execute([(int) $user['id'], $payload['category_code'], $payload['title'], $payload['description'], $payload['location'], $payload['contact'], max(0, $payload['price_cents'])]);
+                $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status) VALUES (?, ?, ?, ?, ?, ?, ?, "active")');
+                $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents]);
                 set_flash('success', $t('created_ok'));
             }
         }
@@ -61,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'set_status') {
             $id = (int) ($_POST['id'] ?? 0);
             $status = (string) ($_POST['status'] ?? 'active');
-            if (!in_array($status, ['active', 'sold'], true)) {
+            if (!in_array($status, ['active', 'sold', 'archived'], true)) {
                 throw new RuntimeException($t('invalid'));
             }
             $stmt = db()->prepare('UPDATE classified_ads SET status = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
@@ -69,83 +83,156 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_flash('success', $t('status_ok'));
         }
 
-        redirect('classifieds');
+        redirect_url(route_url('classifieds'));
     } catch (Throwable $exception) {
         set_flash('error', $exception->getMessage());
-        redirect('classifieds');
+        redirect_url(route_url('classifieds'));
     }
 }
 
-$myStmt = db()->prepare('SELECT * FROM classified_ads WHERE owner_member_id = ? ORDER BY created_at DESC');
-$myStmt->execute([(int) $user['id']]);
-$myAds = $myStmt->fetchAll();
+$categoryFilter = (string) ($_GET['category'] ?? '');
+$query = trim((string) ($_GET['q'] ?? ''));
+$page = max(1, (int) ($_GET['page'] ?? 1));
+$perPage = 12;
+$where = ["ca.status = 'active'"];
+$params = [];
 
-$allAds = db()->query("SELECT ca.*, m.callsign FROM classified_ads ca LEFT JOIN members m ON m.id = ca.owner_member_id WHERE ca.status = 'active' ORDER BY ca.created_at DESC LIMIT 60")->fetchAll();
+if (isset($categories[$categoryFilter])) {
+    $where[] = 'ca.category_code = ?';
+    $params[] = $categoryFilter;
+}
+if ($query !== '') {
+    $where[] = '(ca.title LIKE ? OR ca.description LIKE ? OR ca.location LIKE ?)';
+    $needle = '%' . $query . '%';
+    $params[] = $needle;
+    $params[] = $needle;
+    $params[] = $needle;
+}
+
+$whereSql = implode(' AND ', $where);
+$countStmt = db()->prepare("SELECT COUNT(*) FROM classified_ads ca WHERE $whereSql");
+$countStmt->execute($params);
+$totalAds = (int) $countStmt->fetchColumn();
+$maxPage = max(1, (int) ceil($totalAds / $perPage));
+$page = min($page, $maxPage);
+$offset = ($page - 1) * $perPage;
+
+$adsStmt = db()->prepare("SELECT ca.*, m.callsign FROM classified_ads ca LEFT JOIN members m ON m.id = ca.owner_member_id WHERE $whereSql ORDER BY ca.created_at DESC, ca.id DESC LIMIT $perPage OFFSET $offset");
+$adsStmt->execute($params);
+$allAds = $adsStmt->fetchAll() ?: [];
+
+$myAds = [];
+if ($user !== null) {
+    $myStmt = db()->prepare('SELECT * FROM classified_ads WHERE owner_member_id = ? ORDER BY created_at DESC, id DESC');
+    $myStmt->execute([(int) $user['id']]);
+    $myAds = $myStmt->fetchAll() ?: [];
+}
 
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
 ?>
-<div class="grid-2">
+<section class="stack classifieds-page">
     <section class="card">
-        <h1><?= e($editing ? $t('edit') : $t('new_ad')) ?></h1>
-        <p class="help"><?= e($t('lead')) ?></p>
-        <form method="post" class="stack">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <input type="hidden" name="action" value="save">
-            <input type="hidden" name="id" value="<?= (int) ($editing['id'] ?? 0) ?>">
+        <div class="section-header">
+            <div>
+                <h1><?= e($t('title')) ?></h1>
+                <p class="help"><?= e($t('lead')) ?></p>
+            </div>
+            <?php if ($user === null): ?>
+                <a class="button" href="<?= e(route_url('login')) ?>"><?= e($t('login_to_post')) ?></a>
+            <?php endif; ?>
+        </div>
+        <form method="get" class="grid-3">
+            <input type="hidden" name="route" value="classifieds">
+            <label><?= e($t('search_label')) ?><input type="search" name="q" value="<?= e($query) ?>" placeholder="<?= e($t('search_placeholder')) ?>"></label>
             <label><?= e($t('category_label')) ?>
-                <select name="category_code">
+                <select name="category">
+                    <option value=""><?= e($t('all_categories')) ?></option>
                     <?php foreach ($categories as $code => $label): ?>
-                    <option value="<?= e($code) ?>" <?= (($editing['category_code'] ?? 'gear') === $code) ? 'selected' : '' ?>><?= e($label) ?></option>
+                        <option value="<?= e($code) ?>" <?= $categoryFilter === $code ? 'selected' : '' ?>><?= e($label) ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label><?= e($t('title_label')) ?><input type="text" name="title" required value="<?= e((string) ($editing['title'] ?? '')) ?>"></label>
-            <label><?= e($t('description_label')) ?><textarea name="description" rows="5"><?= e((string) ($editing['description'] ?? '')) ?></textarea></label>
-            <label><?= e($t('price_label')) ?><input type="text" name="price" value="<?= e(number_format(((int) ($editing['price_cents'] ?? 0)) / 100, 2, '.', '')) ?>"></label>
-            <label><?= e($t('location_label')) ?><input type="text" name="location" value="<?= e((string) ($editing['location'] ?? '')) ?>"></label>
-            <label><?= e($t('contact_label')) ?><input type="text" name="contact" value="<?= e((string) ($editing['contact'] ?? ((string) ($user['callsign'] ?? '')))) ?>"></label>
-            <p><button class="button"><?= e($t('save')) ?></button></p>
+            <div class="actions" style="align-self:end;"><button class="button"><?= e($t('filter')) ?></button><a class="button ghost" href="<?= e(route_url('classifieds')) ?>"><?= e($t('reset')) ?></a></div>
         </form>
     </section>
 
+    <?php if ($user !== null): ?>
+    <div class="grid-2">
+        <section class="card">
+            <h2><?= e($editing ? $t('edit') : $t('new_ad')) ?></h2>
+            <form method="post" class="stack">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="save">
+                <input type="hidden" name="id" value="<?= (int) ($editing['id'] ?? 0) ?>">
+                <label><?= e($t('category_label')) ?>
+                    <select name="category_code">
+                        <?php foreach ($categories as $code => $label): ?>
+                        <option value="<?= e($code) ?>" <?= (($editing['category_code'] ?? 'gear') === $code) ? 'selected' : '' ?>><?= e($label) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><?= e($t('title_label')) ?><input type="text" name="title" maxlength="190" required value="<?= e((string) ($editing['title'] ?? '')) ?>"></label>
+                <label><?= e($t('description_label')) ?><textarea name="description" rows="5" required><?= e((string) ($editing['description'] ?? '')) ?></textarea></label>
+                <div class="grid-2">
+                    <label><?= e($t('price_label')) ?><input type="text" name="price" value="<?= e(number_format(((int) ($editing['price_cents'] ?? 0)) / 100, 2, ',', '')) ?>"></label>
+                    <label><?= e($t('location_label')) ?><input type="text" name="location" maxlength="120" value="<?= e((string) ($editing['location'] ?? '')) ?>"></label>
+                </div>
+                <label><?= e($t('contact_label')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($editing['contact'] ?? ((string) ($user['email'] ?? $user['callsign'] ?? '')))) ?>"></label>
+                <p><button class="button"><?= e($t('save')) ?></button><?php if ($editing): ?> <a class="button ghost" href="<?= e(route_url('classifieds')) ?>"><?= e($t('cancel')) ?></a><?php endif; ?></p>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2><?= e($t('my_ads')) ?></h2>
+            <?php if ($myAds === []): ?><p class="help"><?= e($t('none')) ?></p><?php else: ?>
+                <div class="table-wrap"><table><thead><tr><th><?= e($t('title_label')) ?></th><th><?= e($t('status_label')) ?></th><th><?= e($t('actions')) ?></th></tr></thead><tbody>
+                <?php foreach ($myAds as $ad): ?>
+                    <tr>
+                        <td><strong><?= e((string) $ad['title']) ?></strong><div class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> - <?= e(format_price_eur((int) $ad['price_cents'])) ?></div></td>
+                        <td><span class="badge muted"><?= e((string) ($statuses[$ad['status']] ?? $ad['status'])) ?></span></td>
+                        <td>
+                            <a href="<?= e(route_url('classifieds', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
+                            <form method="post" class="inline-form" style="display:inline-flex;gap:.4rem;margin-left:.5rem;">
+                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="set_status"><input type="hidden" name="id" value="<?= (int) $ad['id'] ?>">
+                                <?php if ((string) $ad['status'] !== 'sold'): ?><button class="button ghost" name="status" value="sold"><?= e($t('mark_sold')) ?></button><?php endif; ?>
+                                <?php if ((string) $ad['status'] !== 'active'): ?><button class="button ghost" name="status" value="active"><?= e($t('reactivate')) ?></button><?php endif; ?>
+                                <?php if ((string) $ad['status'] !== 'archived'): ?><button class="button ghost" name="status" value="archived"><?= e($t('archive')) ?></button><?php endif; ?>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody></table></div>
+            <?php endif; ?>
+        </section>
+    </div>
+    <?php endif; ?>
+
     <section class="card">
-        <h2><?= e($t('my_ads')) ?></h2>
-        <?php if ($myAds === []): ?><p class="help"><?= e($t('none')) ?></p><?php else: ?>
-            <div class="table-wrap"><table><thead><tr><th><?= e($t('title_label')) ?></th><th><?= e($t('status_label')) ?></th><th><?= e($t('actions')) ?></th></tr></thead><tbody>
-            <?php foreach ($myAds as $ad): ?>
-                <tr>
-                    <td><strong><?= e((string) $ad['title']) ?></strong><div class="help"><?= e((string) $ad['location']) ?> · <?= e(number_format(((int) $ad['price_cents']) / 100, 2, ',', ' ')) ?> €</div></td>
-                    <td><span class="badge muted"><?= e((string) $ad['status']) ?></span></td>
-                    <td>
-                        <a href="<?= e(route_url('classifieds', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
-                        <form method="post" class="inline-form" style="display:inline-flex;gap:.4rem;margin-left:.5rem;">
-                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="set_status"><input type="hidden" name="id" value="<?= (int) $ad['id'] ?>">
-                            <button class="button ghost" name="status" value="sold"><?= e($t('mark_sold')) ?></button>
-                            <button class="button ghost" name="status" value="active"><?= e($t('reactivate')) ?></button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody></table></div>
+        <div class="section-header"><h2><?= e($t('all_ads')) ?></h2><span class="badge"><?= $totalAds ?></span></div>
+        <?php if ($allAds === []): ?><p class="help"><?= e($t('none')) ?></p><?php else: ?>
+            <div class="grid-3">
+                <?php foreach ($allAds as $ad): ?>
+                <article class="card feature-card" style="margin:0;">
+                    <div class="section-header">
+                        <h3 style="margin:0;"><?= e((string) $ad['title']) ?></h3>
+                        <strong class="price-tag"><?= e(format_price_eur((int) $ad['price_cents'])) ?></strong>
+                    </div>
+                    <p class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> - <?= e((string) ($ad['callsign'] ?? 'N/A')) ?><?php if ((string) ($ad['location'] ?? '') !== ''): ?> - <?= e((string) $ad['location']) ?><?php endif; ?></p>
+                    <p><?= nl2br(e((string) $ad['description'])) ?></p>
+                    <p><strong><?= e($t('contact_label')) ?>:</strong> <?= e((string) $ad['contact']) ?></p>
+                </article>
+                <?php endforeach; ?>
+            </div>
+            <?php if ($maxPage > 1): ?>
+                <div class="actions mt-3">
+                    <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page - 1])) ?>"><?= e($t('previous')) ?></a><?php endif; ?>
+                    <span class="pill"><?= e($t('page')) ?> <?= $page ?> / <?= $maxPage ?></span>
+                    <?php if ($page < $maxPage): ?><a class="button secondary" href="<?= e(route_url('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page + 1])) ?>"><?= e($t('next')) ?></a><?php endif; ?>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
     </section>
-</div>
-
-<section class="card" style="margin-top:1rem;">
-    <h2><?= e($t('all_ads')) ?></h2>
-    <?php if ($allAds === []): ?><p class="help"><?= e($t('none')) ?></p><?php else: ?>
-        <div class="stack">
-            <?php foreach ($allAds as $ad): ?>
-            <article class="card" style="margin:0;">
-                <h3 style="margin:0;"><?= e((string) $ad['title']) ?></h3>
-                <p class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> · <?= e((string) ($ad['callsign'] ?? 'N/A')) ?> · <?= e((string) $ad['location']) ?></p>
-                <p><?= nl2br(e((string) $ad['description'])) ?></p>
-                <p><strong><?= e(number_format(((int) $ad['price_cents']) / 100, 2, ',', ' ')) ?> €</strong> — <?= e((string) $ad['contact']) ?></p>
-            </article>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
 </section>
 <?php
 
