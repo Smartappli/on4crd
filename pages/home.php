@@ -2,49 +2,7 @@
 
 /** @var string $homeLocale */
 $homeLocale = current_locale();
-$legacyStaticMessages = require __DIR__ . '/../app/i18n/static_pages_legacy.php';
-$homeMessages = (array) ($legacyStaticMessages['home'] ?? []);
-$homeEnglishFallbackLocales = ['ar', 'bn', 'hi', 'id', 'ja', 'ru', 'zh'];
-foreach ($homeEnglishFallbackLocales as $localeCode) {
-    if (!isset($homeMessages[$localeCode])) {
-        $homeMessages[$localeCode] = [];
-    }
-    $homeMessages[$localeCode] = array_replace($homeMessages['en'], $homeMessages[$localeCode]);
-}
-$homeI18n = [];
-foreach (array_keys($homeMessages['fr']) as $key) {
-    $pool = [];
-    foreach ($homeMessages as $lang => $messages) {
-        if (isset($messages[$key]) && is_string($messages[$key])) {
-            $pool[$lang] = $messages[$key];
-        }
-    }
-    $value = trim(i18n_localized_value($pool, $homeLocale, 'fr'));
-    if ($value === '') {
-        $value = trim((string) ($homeMessages['fr'][$key] ?? ''));
-    }
-    $homeI18n[$key] = $value;
-}
-$homeExtraMessages = (array) ($legacyStaticMessages['home_extra'] ?? []);
-foreach ($homeEnglishFallbackLocales as $localeCode) {
-    if (!isset($homeExtraMessages[$localeCode])) {
-        $homeExtraMessages[$localeCode] = [];
-    }
-    $homeExtraMessages[$localeCode] = array_replace($homeExtraMessages['en'], $homeExtraMessages[$localeCode]);
-}
-foreach (array_keys($homeExtraMessages['fr']) as $key) {
-    $pool = [];
-    foreach ($homeExtraMessages as $lang => $messages) {
-        if (isset($messages[$key]) && is_string($messages[$key])) {
-            $pool[$lang] = $messages[$key];
-        }
-    }
-    $value = trim(i18n_localized_value($pool, $homeLocale, 'fr'));
-    if ($value === '') {
-        $value = trim((string) ($homeExtraMessages['fr'][$key] ?? ''));
-    }
-    $homeI18n[$key] = $value;
-}
+$homeI18n = i18n_domain_locale('home', $homeLocale);
 $homeTodayDate = date('d/m/Y');
 $homeFallbackBox = static function (string $message): string {
     return '<p class="help">' . e($message) . '</p>';
@@ -79,18 +37,12 @@ if (!is_array($moduleCatalog)) {
 }
 
 
-$visibilityLabels = (array) ($legacyStaticMessages['home_visibility'] ?? []);
 $defaultVisibilityLabels = [
     'public' => 'Public',
     'members' => 'Membres',
     'private' => 'Privé',
 ];
-$moduleVisibilityLabels = [];
-if (isset($visibilityLabels['fr']) && is_array($visibilityLabels['fr'])) {
-    foreach (array_keys($visibilityLabels['fr']) as $key) {
-        $moduleVisibilityLabels[$key] = i18n_localized_value($visibilityLabels, $homeLocale, $key);
-    }
-}
+$moduleVisibilityLabels = $defaultVisibilityLabels;
 foreach ($defaultVisibilityLabels as $key => $label) {
     if (!isset($moduleVisibilityLabels[$key]) || $moduleVisibilityLabels[$key] === '') {
         $moduleVisibilityLabels[$key] = $label;
@@ -154,7 +106,7 @@ if ($moduleCards === '') {
 }
 
 
-$memberModuleDefinitions = (array) ($legacyStaticMessages['home_member_modules'] ?? []);
+$memberModuleDefinitions = [];
 $memberModuleCards = '';
 
 if (table_exists('modules')) {

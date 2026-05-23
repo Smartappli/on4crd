@@ -2482,6 +2482,31 @@ function render_site_footer(string $currentRoute): string
 }
 
 if (!function_exists('render_layout')) {
+function module_css_assets_for_route(string $route): array
+{
+    $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+    $moduleByRoute = [
+        'album' => 'albums',
+        'auction_bid' => 'auctions',
+        'auction_view' => 'auctions',
+        'event_view' => 'events',
+        'news_view' => 'news',
+        'wiki_edit' => 'wiki',
+        'wiki_view' => 'wiki',
+    ];
+    $module = $moduleByRoute[$route] ?? $route;
+    $assets = [];
+
+    foreach (array_unique(['home' === $module ? 'home' : $module]) as $candidate) {
+        $path = 'assets/css/modules/' . $candidate . '.css';
+        if (is_file(dirname(__DIR__) . '/' . $path)) {
+            $assets[] = $path;
+        }
+    }
+
+    return $assets;
+}
+
 function render_layout(string $content, string $title = ''): string
 {
     $flashes = consume_flashes();
@@ -2736,6 +2761,11 @@ function render_layout(string $content, string $title = ''): string
         . '</div>';
     $nonce = csp_nonce();
     $htmlDir = is_rtl_locale($currentLocale) ? 'rtl' : 'ltr';
+    $moduleCssHtml = '';
+    foreach (module_css_assets_for_route($currentRoute) as $moduleCssPath) {
+        $moduleCssHtml .= '<link rel="stylesheet" href="' . e(asset_url($moduleCssPath)) . '">';
+    }
+
     return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title>' . $metaHead
@@ -2744,6 +2774,7 @@ function render_layout(string $content, string $title = ''): string
         . '<link rel="icon" href="' . e(asset_url('assets/icons/icon.svg')) . '" type="image/svg+xml">'
         . '<link rel="apple-touch-icon" href="' . e(asset_url('assets/icons/apple-touch-icon.png')) . '">'
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
+        . $moduleCssHtml
         . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
         . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
         . '</head><body data-sw-url="' . e(base_url('sw.js')) . '">'
