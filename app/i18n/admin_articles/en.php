@@ -57,4 +57,7 @@ return array (
   'restore_revision' => 'Restore',
   'no_revisions' => 'No saved revisions.',
   'confirm_restore_revision' => 'Restore this version?',
+  'preview' => 'Preview',
+  'preview_help' => 'Check rendering before publishing.',
+  'preview_empty' => 'Preview appears after clicking "Preview".',
 );

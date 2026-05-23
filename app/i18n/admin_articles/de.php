@@ -57,4 +57,7 @@ return array (
   'restore_revision' => 'Wiederherstellen',
   'no_revisions' => 'Keine gespeicherten Versionen.',
   'confirm_restore_revision' => 'Diese Version wiederherstellen?',
+  'preview' => 'Vorschau',
+  'preview_help' => 'Darstellung vor der Veroeffentlichung pruefen.',
+  'preview_empty' => 'Die Vorschau erscheint nach Klick auf "Vorschau".',
 );

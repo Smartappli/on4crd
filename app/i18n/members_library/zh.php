@@ -19,4 +19,6 @@ return array (
   'prev' => '上一页',
   'next' => '下一页',
   'page' => 'Page',
+  'related_docs' => '????',
+  'no_related_docs' => '???????',
 );

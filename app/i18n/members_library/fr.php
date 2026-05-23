@@ -19,4 +19,6 @@ return array (
   'prev' => 'Précédent',
   'next' => 'Suivant',
   'page' => 'Page',
+  'related_docs' => 'Documents lies',
+  'no_related_docs' => 'Aucun document lie.',
 );

@@ -57,4 +57,7 @@ return array (
   'restore_revision' => 'Restaurar',
   'no_revisions' => 'No hay versiones guardadas.',
   'confirm_restore_revision' => 'Restaurar esta version?',
+  'preview' => 'Vista previa',
+  'preview_help' => 'Revise el renderizado antes de publicar.',
+  'preview_empty' => 'La vista previa aparece tras pulsar "Vista previa".',
 );

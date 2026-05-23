@@ -19,4 +19,6 @@ return array (
   'prev' => 'Sebelumnya',
   'next' => 'Berikutnya',
   'page' => 'Page',
+  'related_docs' => 'Dokumen terkait',
+  'no_related_docs' => 'Tidak ada dokumen terkait.',
 );

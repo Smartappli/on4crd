@@ -19,4 +19,6 @@ return array (
   'prev' => 'Anterior',
   'next' => 'Siguiente',
   'page' => 'Page',
+  'related_docs' => 'Documentos relacionados',
+  'no_related_docs' => 'No hay documentos relacionados.',
 );

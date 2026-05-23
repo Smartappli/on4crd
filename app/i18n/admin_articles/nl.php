@@ -57,4 +57,7 @@ return array (
   'restore_revision' => 'Herstellen',
   'no_revisions' => 'Geen opgeslagen versies.',
   'confirm_restore_revision' => 'Deze versie herstellen?',
+  'preview' => 'Voorbeeld',
+  'preview_help' => 'Controleer de weergave voor publicatie.',
+  'preview_empty' => 'De preview verschijnt na klikken op "Voorbeeld".',
 );

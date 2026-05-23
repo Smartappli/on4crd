@@ -15,6 +15,7 @@ set_page_meta([
     'schema_type' => 'WebPage',
 ]);
 articles_sync_scheduled_publications();
+$previewPayload = null;
 
 /**
  * @return array{excerpt:string,content:string}
@@ -154,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
 
-        if ($action === 'save_article') {
+        if ($action === 'save_article' || $action === 'preview_article') {
             $id = (int) ($_POST['id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
             $slugInput = trim((string) ($_POST['slug'] ?? ''));
@@ -198,6 +199,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $excerpt = $imported['excerpt'];
                 }
             }
+            if ($action === 'preview_article') {
+                $previewPayload = [
+                    'title' => $title,
+                    'excerpt' => $excerpt,
+                    'content' => $content,
+                    'status' => $status,
+                    'category' => $category,
+                    'scheduled_at' => $scheduledAtValue,
+                ];
+                $editing = array_merge((array) $editing, [
+                    'id' => $id,
+                    'title' => $title,
+                    'slug' => $slug,
+                    'excerpt' => $excerpt,
+                    'content' => $content,
+                    'status' => $status,
+                    'category' => $category,
+                    'scheduled_at' => $scheduledAtValue,
+                ]);
+            } else {
             if ($id > 0) {
                 if (table_exists('article_revisions')) {
                     $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
@@ -233,6 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             article_translation_upsert($id, 'nl');
             set_flash('success', $t('ok_saved'));
             redirect('admin_articles');
+            }
         } elseif ($action === 'delete_article') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id <= 0) {
@@ -381,6 +403,7 @@ ob_start();
             </label>
             <label><?= e($t('scheduled_at', 'Date de publication')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
             <button class="button"><?= e($t('save')) ?></button>
+            <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview', 'Prévisualiser')) ?></button>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
             <form method="post" style="margin-top:1rem;" onsubmit="return confirm('<?= e($t('confirm_delete', 'Supprimer cet article ?')) ?>');">
@@ -408,6 +431,22 @@ ob_start();
                     </div>
                 <?php endif; ?>
             </section>
+        <?php endif; ?>
+    </section>
+    <section class="card">
+        <h2><?= e($t('preview', 'Prévisualiser')) ?></h2>
+        <p class="help"><?= e($t('preview_help', 'Vérifiez le rendu avant publication.')) ?></p>
+        <?php if ($previewPayload === null): ?>
+            <p class="help"><?= e($t('preview_empty', 'La prévisualisation apparaît après avoir cliqué sur “Prévisualiser”.')) ?></p>
+        <?php else: ?>
+            <article class="feature-card" style="margin:0;">
+                <h3><?= e((string) ($previewPayload['title'] ?? '')) ?></h3>
+                <?php if (trim((string) ($previewPayload['excerpt'] ?? '')) !== ''): ?>
+                    <p><?= e((string) $previewPayload['excerpt']) ?></p>
+                <?php endif; ?>
+                <p class="help"><?= e($t((string) ($previewPayload['status'] ?? 'draft'), (string) ($previewPayload['status'] ?? 'draft'))) ?><?php if (!empty($previewPayload['scheduled_at'])): ?> · <?= e(date('d/m/Y H:i', strtotime((string) $previewPayload['scheduled_at']))) ?><?php endif; ?></p>
+                <div><?= sanitize_rich_html((string) ($previewPayload['content'] ?? '')) ?></div>
+            </article>
         <?php endif; ?>
     </section>
     <section class="card">

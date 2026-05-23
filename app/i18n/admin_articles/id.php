@@ -57,4 +57,7 @@ return array (
   'restore_revision' => 'Pulihkan',
   'no_revisions' => 'Tidak ada versi tersimpan.',
   'confirm_restore_revision' => 'Pulihkan versi ini?',
+  'preview' => 'Pratinjau',
+  'preview_help' => 'Periksa tampilan sebelum publikasi.',
+  'preview_empty' => 'Pratinjau muncul setelah klik "Pratinjau".',
 );

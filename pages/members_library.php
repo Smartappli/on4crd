@@ -65,6 +65,58 @@ $stmt = db()->prepare('SELECT * FROM member_library_documents' . $whereSql . ' O
 $stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
 
+$relatedByDocumentId = [];
+if ($documents !== []) {
+    $docIds = [];
+    $categoriesInPage = [];
+    foreach ($documents as $documentRow) {
+        $docId = (int) ($documentRow['id'] ?? 0);
+        if ($docId > 0) {
+            $docIds[] = $docId;
+        }
+        $cat = trim((string) ($documentRow['category'] ?? 'general'));
+        if ($cat === '') {
+            $cat = 'general';
+        }
+        $categoriesInPage[$cat] = true;
+    }
+
+    if ($docIds !== [] && $categoriesInPage !== []) {
+        $categoryKeys = array_keys($categoriesInPage);
+        $catPlaceholders = implode(',', array_fill(0, count($categoryKeys), '?'));
+        $relatedStmt = db()->prepare('SELECT id, category, title FROM member_library_documents WHERE category IN (' . $catPlaceholders . ') ORDER BY uploaded_at DESC, id DESC LIMIT 300');
+        $relatedStmt->execute($categoryKeys);
+        $relatedPool = $relatedStmt->fetchAll() ?: [];
+
+        $poolByCategory = [];
+        foreach ($relatedPool as $candidate) {
+            $candidateCategory = trim((string) ($candidate['category'] ?? 'general'));
+            if ($candidateCategory === '') {
+                $candidateCategory = 'general';
+            }
+            $poolByCategory[$candidateCategory][] = $candidate;
+        }
+
+        foreach ($documents as $documentRow) {
+            $docId = (int) ($documentRow['id'] ?? 0);
+            $docCategory = trim((string) ($documentRow['category'] ?? 'general'));
+            if ($docCategory === '') {
+                $docCategory = 'general';
+            }
+            $relatedByDocumentId[$docId] = [];
+            foreach (($poolByCategory[$docCategory] ?? []) as $candidate) {
+                if ((int) ($candidate['id'] ?? 0) === $docId) {
+                    continue;
+                }
+                $relatedByDocumentId[$docId][] = $candidate;
+                if (count($relatedByDocumentId[$docId]) >= 3) {
+                    break;
+                }
+            }
+        }
+    }
+}
+
 ob_start();
 ?>
 <div class="card members-library-page">
@@ -102,6 +154,8 @@ ob_start();
         <?php $docTitle = trim((string) ($document['title'] ?? '')); if ($docTitle === '') { $docTitle = (string) $t['document']; } ?>
         <?php $docDescription = trim((string) ($document['description'] ?? '')); ?>
         <?php $docExtract = trim((string) ($document['extracted_text'] ?? '')); ?>
+        <?php $docId = (int) ($document['id'] ?? 0); ?>
+        <?php $relatedDocs = $relatedByDocumentId[$docId] ?? []; ?>
         <?php $isFavorite = favorite_is_saved((int) $user['id'], 'library_document', (int) ($document['id'] ?? 0)); ?>
         <article class="card feature-card" style="margin-top:12px;">
             <p><span class="badge muted"><?= e($docCategory) ?></span> <span class="badge muted"><?= e(strtoupper($extension)) ?></span></p>
@@ -114,6 +168,19 @@ ob_start();
                     <iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview" loading="lazy"></iframe>
                 </details>
             <?php endif; ?>
+            <details class="admin-library-related-toggle">
+                <summary><?= e((string) ($t['related_docs'] ?? 'Documents lies')) ?></summary>
+                <?php if ($relatedDocs === []): ?>
+                    <p class="help"><?= e((string) ($t['no_related_docs'] ?? 'Aucun document lie.')) ?></p>
+                <?php else: ?>
+                    <ul class="help" style="padding-left:1rem;margin:.4rem 0;">
+                        <?php foreach ($relatedDocs as $related): ?>
+                            <?php $relatedTitle = trim((string) ($related['title'] ?? '')); if ($relatedTitle === '') { $relatedTitle = (string) ($t['document'] ?? 'Document'); } ?>
+                            <li><a href="<?= e(route_url_clean('members_library', ['q' => $relatedTitle, 'category' => (string) ($related['category'] ?? '')])) ?>"><?= e($relatedTitle) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </details>
             <p class="actions">
                 <a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
                 <form method="post" class="inline-form">

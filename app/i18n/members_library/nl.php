@@ -19,4 +19,6 @@ return array (
   'prev' => 'Vorige',
   'next' => 'Volgende',
   'page' => 'Page',
+  'related_docs' => 'Gerelateerde documenten',
+  'no_related_docs' => 'Geen gerelateerde documenten.',
 );
