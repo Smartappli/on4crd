@@ -456,6 +456,9 @@ textarea:focus-visible {
   border-radius: 12px;
   background: var(--panel);
 }
+.qsl-uppercase-input {
+  text-transform: uppercase;
+}
 .toolbar-auth .button.toolbar-login-button {
   display: inline-flex;
   align-items: center;

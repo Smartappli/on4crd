@@ -179,21 +179,21 @@
         },
         {
             "name": "delight-im/otp",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/delight-im/PHP-OTP.git",
-                "reference": "d012342f5ee3430394b568b46a00c412c24f4f4a"
+                "reference": "eb6a5520e13f793dd12f4530ca69549570c99232"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/delight-im/PHP-OTP/zipball/d012342f5ee3430394b568b46a00c412c24f4f4a",
-                "reference": "d012342f5ee3430394b568b46a00c412c24f4f4a",
+                "url": "https://api.github.com/repos/delight-im/PHP-OTP/zipball/eb6a5520e13f793dd12f4530ca69549570c99232",
+                "reference": "eb6a5520e13f793dd12f4530ca69549570c99232",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
-                "paragonie/constant_time_encoding": "~1.1.0",
+                "paragonie/constant_time_encoding": "~1.1.0 || ~2.7.0",
                 "php": ">=5.6.0"
             },
             "type": "library",
@@ -224,9 +224,9 @@
             ],
             "support": {
                 "issues": "https://github.com/delight-im/PHP-OTP/issues",
-                "source": "https://github.com/delight-im/PHP-OTP/tree/v1.0.1"
+                "source": "https://github.com/delight-im/PHP-OTP/tree/v1.0.2"
             },
-            "time": "2023-07-03T08:13:03+00:00"
+            "time": "2025-08-04T10:06:20+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -299,13 +299,13 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6.0",
         "ext-openssl": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }

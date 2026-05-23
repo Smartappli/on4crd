@@ -48,8 +48,7 @@ if (maintenance_should_block_route($route)) {
 
 $localeFromQuery = strtolower(trim((string) ($_GET['locale'] ?? '')));
 if ($localeFromQuery !== '') {
-    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
-    if (in_array($localeFromQuery, $supportedLocales, true)) {
+    if (in_array($localeFromQuery, supported_locales(), true)) {
         $_SESSION['locale'] = $localeFromQuery;
         setcookie('on4crd_locale', $localeFromQuery, [
             'expires' => time() + (86400 * 365),
@@ -67,26 +66,11 @@ seo_apply_defaults($route);
 function render_localized_not_found(): void
 {
     $locale = function_exists('current_locale') ? current_locale() : 'fr';
-    $messages = [
-        'fr' => 'Page introuvable.',
-        'en' => 'Page not found.',
-        'de' => 'Seite nicht gefunden.',
-        'nl' => 'Pagina niet gevonden.',
-        'es' => 'Página no encontrada.',
-        'it' => 'Pagina non trovata.',
-        'pt' => 'Página não encontrada.',
-        'ar' => 'الصفحة غير موجودة.',
-        'hi' => 'पृष्ठ नहीं मिला।',
-        'ja' => 'ページが見つかりません。',
-        'zh' => '未找到页面。',
-        'bn' => 'পৃষ্ঠা পাওয়া যায়নি।',
-        'ru' => 'Страница не найдена.',
-        'id' => 'Halaman tidak ditemukan.',
-    ];
-
-    $message = $messages[$locale] ?? $messages['fr'];
-    $htmlLang = in_array($locale, ['ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true) ? $locale : substr($locale, 0, 2);
-    echo '<!doctype html><html lang="' . htmlspecialchars($htmlLang, ENT_QUOTES, 'UTF-8') . '"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>'
+    $messages = i18n_domain_locale('errors', $locale);
+    $message = (string) ($messages['page_not_found'] ?? 'Page introuvable.');
+    $htmlLang = in_array($locale, supported_locales(), true) ? $locale : substr($locale, 0, 2);
+    $htmlDir = is_rtl_locale($htmlLang) ? 'rtl' : 'ltr';
+    echo '<!doctype html><html lang="' . htmlspecialchars($htmlLang, ENT_QUOTES, 'UTF-8') . '" dir="' . htmlspecialchars($htmlDir, ENT_QUOTES, 'UTF-8') . '"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>'
         . htmlspecialchars($message, ENT_QUOTES, 'UTF-8')
         . '</p></body></html>';
 }
@@ -116,8 +100,7 @@ if ($route === 'set_language') {
     }
     verify_csrf();
     $locale = strtolower((string) ($_POST['locale'] ?? 'fr'));
-    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
-    if (!in_array($locale, $supportedLocales, true)) {
+    if (!in_array($locale, supported_locales(), true)) {
         $locale = 'fr';
     }
     $_SESSION['locale'] = $locale;

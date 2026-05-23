@@ -66,12 +66,17 @@ foreach (array_keys($visibilityLabels['fr']) as $key) {
 }
 $moduleVisibilityByCode = [];
 if (table_exists('modules')) {
-    foreach (db()->query('SELECT code, visibility FROM modules')->fetchAll() as $moduleRow) {
-        $code = (string) ($moduleRow['code'] ?? '');
-        if ($code === '') {
-            continue;
+    try {
+        $visibilitySelect = table_has_column('modules', 'visibility') ? 'visibility' : "'members' AS visibility";
+        foreach (db()->query('SELECT code, ' . $visibilitySelect . ' FROM modules')->fetchAll() as $moduleRow) {
+            $code = (string) ($moduleRow['code'] ?? '');
+            if ($code === '') {
+                continue;
+            }
+            $moduleVisibilityByCode[$code] = (string) ($moduleRow['visibility'] ?? 'members');
         }
-        $moduleVisibilityByCode[$code] = (string) ($moduleRow['visibility'] ?? 'members');
+    } catch (Throwable) {
+        $moduleVisibilityByCode = [];
     }
 }
 
@@ -118,7 +123,13 @@ $memberModuleDefinitions = (array) ($legacyStaticMessages['home_member_modules']
 $memberModuleCards = '';
 
 if (table_exists('modules')) {
-    $memberModules = db()->query("SELECT code FROM modules WHERE is_enabled = 1 AND visibility = 'members' ORDER BY sort_order ASC")->fetchAll() ?: [];
+    $whereVisibility = table_has_column('modules', 'visibility') ? " AND visibility = 'members'" : '';
+    $orderBy = table_has_column('modules', 'sort_order') ? 'sort_order ASC' : 'code ASC';
+    try {
+        $memberModules = db()->query('SELECT code FROM modules WHERE is_enabled = 1' . $whereVisibility . ' ORDER BY ' . $orderBy)->fetchAll() ?: [];
+    } catch (Throwable) {
+        $memberModules = [];
+    }
     foreach ($memberModules as $memberModuleRow) {
         $moduleCode = (string) ($memberModuleRow['code'] ?? '');
         if ($moduleCode === '' || !isset($memberModuleDefinitions[$moduleCode])) {
