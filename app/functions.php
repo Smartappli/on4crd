@@ -2498,23 +2498,7 @@ if (!function_exists('render_site_footer')) {
 function render_site_footer(string $currentRoute): string
 {
     $locale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    $footerMessages = [
-        'fr' => ['built_by' => 'Site réalisé par'],
-        'en' => ['built_by' => 'Website built by'],
-        'de' => ['built_by' => 'Website erstellt von'],
-        'nl' => ['built_by' => 'Website gemaakt door'],
-        'es' => ['built_by' => 'Sitio realizado por'],
-        'it' => ['built_by' => 'Sito realizzato da'],
-        'pt' => ['built_by' => 'Site desenvolvido por'],
-        'ar' => ['built_by' => 'تم تطوير الموقع بواسطة'],
-        'hi' => ['built_by' => 'वेबसाइट विकसित की गई द्वारा'],
-        'ja' => ['built_by' => 'サイト制作'],
-        'zh' => ['built_by' => '网站由以下团队开发：'],
-        'bn' => ['built_by' => 'ওয়েবসাইটটি তৈরি করেছে'],
-        'ru' => ['built_by' => 'Сайт разработан'],
-        'id' => ['built_by' => 'Situs dikembangkan oleh'],
-    ];
-    $i18n = $footerMessages[$locale] ?? $footerMessages['fr'];
+    $i18n = i18n_domain_locale('footer', $locale);
 
     return '<footer class="site-footer"><div class="footer-inner"><div class="footer-meta"><span>© 2026 Radio Club Durnal (ON4CRD)</span>' . render_footer_social_links() . '<span>' . e((string) $i18n['built_by']) . ' <a href="https://smartappli.eu">Smartappli ®</a></span></div></div></footer>';
 }
