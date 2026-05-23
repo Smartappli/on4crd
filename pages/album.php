@@ -50,8 +50,9 @@ $photosStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER
 $photosStmt->execute([(int) $album['id']]);
 $photos = $photosStmt->fetchAll() ?: [];
 
-$cover = $photos[0] ?? null;
-$coverPath = is_array($cover) ? safe_storage_public_path_or_null((string) ($cover['file_path'] ?? ''), ['storage/uploads/albums/']) : null;
+$coverStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1');
+$coverStmt->execute([(int) $album['id']]);
+$coverPath = safe_storage_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''), ['storage/uploads/albums/']);
 $pageMeta = [
     'title' => (string) $album['title'],
     'description' => trim((string) ($album['description'] ?? '')) !== '' ? (string) $album['description'] : (string) $t['meta_desc'],
@@ -63,72 +64,87 @@ set_page_meta($pageMeta);
 
 ob_start();
 ?>
-<section class="card gallery-header">
-    <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
-    <?php if ($user !== null): ?>
-        <form method="post" class="inline-form" style="margin-bottom:.7rem;">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <input type="hidden" name="action" value="toggle_favorite">
-            <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; Favorite' : '&#9734; Favorite' ?></button>
-        </form>
-    <?php endif; ?>
-    <h1><?= e((string) $album['title']) ?></h1>
-    <?php if (trim((string) ($album['description'] ?? '')) !== ''): ?>
-        <p><?= e((string) $album['description']) ?></p>
-    <?php endif; ?>
-    <div class="stats-grid">
-        <article class="stat-card">
-            <span class="help"><?= e((string) $t['photos']) ?></span>
-            <strong><?= (int) $photoTotal ?></strong>
-        </article>
-        <article class="stat-card">
-            <span class="help"><?= e((string) $t['page']) ?></span>
-            <strong><?= $page ?> / <?= $totalPages ?></strong>
-        </article>
-    </div>
-</section>
-
-<section class="card">
-    <h2><?= e((string) $t['album_photos']) ?></h2>
-    <?php if ($photos === []): ?>
-        <p><?= e((string) $t['none']) ?></p>
-    <?php else: ?>
-        <div class="gallery-grid">
-            <?php foreach ($photos as $photo): ?>
-                <?php
-                $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
-                if ($filePath === null) {
-                    continue;
-                }
-                $thumbPath = album_thumbnail_public_path($filePath);
-                $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
-                $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
-                $title = trim((string) ($photo['title'] ?? ''));
-                $caption = trim((string) ($photo['caption'] ?? ''));
-                ?>
-                <figure class="gallery-item">
-                    <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener">
-                        <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>">
-                    </a>
-                    <figcaption>
-                        <?php if ($title !== ''): ?><strong><?= e($title) ?></strong><?php endif; ?>
-                        <?php if ($caption !== ''): ?><br><?= e($caption) ?><?php endif; ?>
-                    </figcaption>
-                </figure>
-            <?php endforeach; ?>
+<div class="album-detail-page">
+    <section class="album-detail-hero">
+        <div class="album-detail-cover">
+            <?php if ($coverPath !== null): ?>
+                <img src="<?= e(base_url($coverPath)) ?>" alt="<?= e((string) $album['title']) ?>">
+            <?php else: ?>
+                <span class="album-placeholder-mark" aria-hidden="true"></span>
+            <?php endif; ?>
         </div>
-        <?php if ($totalPages > 1): ?>
-            <nav class="actions mt-3" aria-label="<?= e((string) $t['pagination']) ?>">
-                <?php if ($page > 1): ?>
-                    <a class="button secondary" href="<?= e(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
-                <?php endif; ?>
-                <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-                <?php if ($page < $totalPages): ?>
-                    <a class="button secondary" href="<?= e(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
-                <?php endif; ?>
-            </nav>
+        <div class="album-detail-copy">
+            <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
+            <h1><?= e((string) $album['title']) ?></h1>
+            <?php if (trim((string) ($album['description'] ?? '')) !== ''): ?>
+                <p><?= e((string) $album['description']) ?></p>
+            <?php endif; ?>
+            <div class="album-detail-stats">
+                <article>
+                    <span><?= e((string) $t['photos']) ?></span>
+                    <strong><?= (int) $photoTotal ?></strong>
+                </article>
+                <article>
+                    <span><?= e((string) $t['page']) ?></span>
+                    <strong><?= $page ?> / <?= $totalPages ?></strong>
+                </article>
+            </div>
+            <?php if ($user !== null): ?>
+                <form method="post" class="album-favorite-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="toggle_favorite">
+                    <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
+                </form>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <section class="album-photo-section">
+        <div class="row-between">
+            <h2><?= e((string) $t['album_photos']) ?></h2>
+        </div>
+        <?php if ($photos === []): ?>
+            <p class="help"><?= e((string) $t['none']) ?></p>
+        <?php else: ?>
+            <div class="album-photo-grid">
+                <?php foreach ($photos as $photo): ?>
+                    <?php
+                    $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+                    if ($filePath === null) {
+                        continue;
+                    }
+                    $thumbPath = album_thumbnail_public_path($filePath);
+                    $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
+                    $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
+                    $title = trim((string) ($photo['title'] ?? ''));
+                    $caption = trim((string) ($photo['caption'] ?? ''));
+                    ?>
+                    <figure class="album-photo-card">
+                        <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener">
+                            <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>">
+                        </a>
+                        <?php if ($title !== '' || $caption !== ''): ?>
+                            <figcaption>
+                                <?php if ($title !== ''): ?><strong><?= e($title) ?></strong><?php endif; ?>
+                                <?php if ($caption !== ''): ?><span><?= e($caption) ?></span><?php endif; ?>
+                            </figcaption>
+                        <?php endif; ?>
+                    </figure>
+                <?php endforeach; ?>
+            </div>
+            <?php if ($totalPages > 1): ?>
+                <nav class="actions mt-3" aria-label="<?= e((string) $t['pagination']) ?>">
+                    <?php if ($page > 1): ?>
+                        <a class="button secondary" href="<?= e(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                    <?php endif; ?>
+                    <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
+                    <?php if ($page < $totalPages): ?>
+                        <a class="button secondary" href="<?= e(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                    <?php endif; ?>
+                </nav>
+            <?php endif; ?>
         <?php endif; ?>
-    <?php endif; ?>
-</section>
+    </section>
+</div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $album['title']);

@@ -6,7 +6,7 @@ $i18n = require __DIR__ . '/../app/i18n/wiki.php';
 $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 
-if (!table_exists('wiki_pages')) {
+if (!ensure_wiki_tables()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['unavailable']) . '</p></div>', (string) $t['title']);
     return;
 }
@@ -17,14 +17,37 @@ if (mb_strlen($search) > 120) {
 }
 
 $rows = [];
+$totalPagesCount = 0;
+$updatedPagesCount = 0;
+$revisionCount = 0;
+
 try {
+    $totalPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages')->fetchColumn();
+    $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
+    $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
+
     if ($search === '') {
-        $stmt = db()->query('SELECT slug, title, content, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 120');
+        $stmt = db()->query(
+            'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
+                (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
+             FROM wiki_pages p
+             LEFT JOIN members m ON m.id = p.author_id
+             ORDER BY p.updated_at DESC
+             LIMIT 120'
+        );
         $rows = $stmt->fetchAll() ?: [];
     } else {
-        $stmt = db()->prepare('SELECT slug, title, content, updated_at FROM wiki_pages WHERE title LIKE ? OR content LIKE ? ORDER BY updated_at DESC LIMIT 120');
+        $stmt = db()->prepare(
+            'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
+                (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
+             FROM wiki_pages p
+             LEFT JOIN members m ON m.id = p.author_id
+             WHERE p.title LIKE ? OR p.content LIKE ? OR p.slug LIKE ?
+             ORDER BY p.updated_at DESC
+             LIMIT 120'
+        );
         $like = '%' . $search . '%';
-        $stmt->execute([$like, $like]);
+        $stmt->execute([$like, $like, $like]);
         $rows = $stmt->fetchAll() ?: [];
     }
 } catch (Throwable) {
@@ -33,20 +56,35 @@ try {
 
 ob_start();
 ?>
-<div class="stack">
-    <section class="card wiki-header">
-        <div class="stats-grid">
-            <article class="stat-card">
-                <span class="stat-card-label"><?= e((string) $t['new_pages']) ?></span>
-            </article>
-            <article class="stat-card">
-                <span class="stat-card-label"><?= e((string) $t['updated_pages']) ?></span>
-            </article>
-            <article class="stat-card">
-                <span class="stat-card-label"><?= e((string) $t['most_read']) ?></span>
-            </article>
+<div class="wiki-page">
+    <section class="wiki-hero">
+        <div>
+            <p class="eyebrow"><?= e((string) $t['title']) ?></p>
+            <h1><?= e((string) $t['wiki_pages']) ?></h1>
+            <p class="help"><?= e((string) $t['summary_fallback']) ?></p>
         </div>
-        <form method="get" class="inline-form">
+        <?php if (has_permission('wiki.edit')): ?>
+            <a class="button" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
+        <?php endif; ?>
+    </section>
+
+    <section class="wiki-dashboard">
+        <article class="wiki-stat">
+            <span><?= e((string) $t['wiki_pages']) ?></span>
+            <strong><?= $totalPagesCount ?></strong>
+        </article>
+        <article class="wiki-stat">
+            <span><?= e((string) $t['updated_pages']) ?></span>
+            <strong><?= $updatedPagesCount ?></strong>
+        </article>
+        <article class="wiki-stat">
+            <span><?= e((string) $t['revisions']) ?></span>
+            <strong><?= $revisionCount ?></strong>
+        </article>
+    </section>
+
+    <section class="wiki-search-panel">
+        <form method="get" class="wiki-search-form">
             <input type="hidden" name="route" value="wiki">
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
@@ -56,10 +94,12 @@ ob_start();
         </form>
     </section>
 
-    <section class="card">
-        <h2 class="wiki-section-title"><?= e((string) $t['wiki_pages']) ?></h2>
+    <section class="wiki-directory">
         <?php if ($rows === []): ?>
-            <p><?= e((string) $t['no_page']) ?><?= $search !== '' ? e((string) $t['for_search']) : '' ?>.</p>
+            <article class="wiki-empty">
+                <h2><?= e((string) $t['no_page']) ?></h2>
+                <p class="help"><?= $search !== '' ? e((string) $t['for_search']) : e((string) $t['summary_fallback']) ?></p>
+            </article>
         <?php else: ?>
             <div class="wiki-grid">
                 <?php foreach ($rows as $row):
@@ -67,15 +107,24 @@ ob_start();
                     if ($summary === '') {
                         $summary = (string) $t['summary_fallback'];
                     }
-                    if (mb_strlen($summary) > 190) {
-                        $summary = mb_substr($summary, 0, 187) . '…';
-                    }
+                    $summary = mb_safe_strimwidth($summary, 0, 220, '...');
+                    $author = trim((string) ($row['callsign'] ?? ''));
+                    $revisionTotal = (int) ($row['revision_count'] ?? 0);
                     ?>
                     <article class="wiki-card">
-                        <h3><a href="<?= e(base_url('index.php?route=wiki_view&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $row['title']) ?></a></h3>
-                        <p class="help"><?= e((string) $t['updated_at']) ?> <?= e(date('d/m/Y H:i', strtotime((string) $row['updated_at']))) ?></p>
-                        <p><?= e($summary) ?></p>
-                        <p><a class="button secondary" href="<?= e(base_url('index.php?route=wiki_view&slug=' . urlencode((string) $row['slug']))) ?>"><?= e((string) $t['open_page']) ?></a></p>
+                        <div class="wiki-card-main">
+                            <span class="wiki-slug">/<?= e((string) $row['slug']) ?></span>
+                            <h2><a href="<?= e(route_url('wiki_view', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title']) ?></a></h2>
+                            <p><?= e($summary) ?></p>
+                        </div>
+                        <div class="wiki-card-meta">
+                            <span><?= e((string) $t['updated_at']) ?> <?= e(date('d/m/Y H:i', strtotime((string) $row['updated_at']))) ?></span>
+                            <?php if ($author !== ''): ?><span><?= e($author) ?></span><?php endif; ?>
+                            <span><?= $revisionTotal ?> <?= e((string) $t['revisions']) ?></span>
+                        </div>
+                        <div class="wiki-card-actions">
+                            <a class="button secondary" href="<?= e(route_url('wiki_view', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['open_page']) ?></a>
+                        </div>
                     </article>
                 <?php endforeach; ?>
             </div>

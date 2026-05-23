@@ -1607,6 +1607,7 @@ function apply_runtime_schema_updates(): void
     }
 
     ensure_classified_ads_table();
+    ensure_wiki_tables();
 
     ensure_member_favorites_table();
     ensure_member_notifications_table();
@@ -1651,6 +1652,44 @@ function ensure_classified_ads_table(): bool
         return true;
     } catch (Throwable $throwable) {
         log_structured_event('classified_ads_table_ensure_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+
+        return false;
+    }
+}
+}
+
+if (!function_exists('ensure_wiki_tables')) {
+function ensure_wiki_tables(): bool
+{
+    try {
+        db()->exec(
+            'CREATE TABLE IF NOT EXISTS wiki_pages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                slug VARCHAR(190) NOT NULL UNIQUE,
+                title VARCHAR(190) NOT NULL,
+                content LONGTEXT NOT NULL,
+                author_id INT DEFAULT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_wiki_updated (updated_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+
+        db()->exec(
+            'CREATE TABLE IF NOT EXISTS wiki_revisions (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                wiki_page_id INT NOT NULL,
+                member_id INT DEFAULT NULL,
+                content LONGTEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_wiki_revision_page (wiki_page_id, created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+
+        return true;
+    } catch (Throwable $throwable) {
+        log_structured_event('wiki_tables_ensure_failed', [
             'message' => $throwable->getMessage(),
         ]);
 
