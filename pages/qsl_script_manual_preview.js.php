@@ -111,6 +111,19 @@
         source.addEventListener('input', sync);
         source.addEventListener('change', sync);
     });
+    document.querySelectorAll('[data-qsl-uppercase]').forEach((source) => {
+        source.addEventListener('input', () => {
+            if (!(source instanceof HTMLInputElement)) {
+                return;
+            }
+            const start = source.selectionStart;
+            const end = source.selectionEnd;
+            source.value = source.value.toUpperCase();
+            if (start !== null && end !== null) {
+                source.setSelectionRange(start, end);
+            }
+        });
+    });
     if (templateSource instanceof HTMLSelectElement) {
         templateSource.addEventListener('change', sync);
     }

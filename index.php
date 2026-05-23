@@ -48,8 +48,7 @@ if (maintenance_should_block_route($route)) {
 
 $localeFromQuery = strtolower(trim((string) ($_GET['locale'] ?? '')));
 if ($localeFromQuery !== '') {
-    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
-    if (in_array($localeFromQuery, $supportedLocales, true)) {
+    if (in_array($localeFromQuery, supported_locales(), true)) {
         $_SESSION['locale'] = $localeFromQuery;
         setcookie('on4crd_locale', $localeFromQuery, [
             'expires' => time() + (86400 * 365),
@@ -67,26 +66,11 @@ seo_apply_defaults($route);
 function render_localized_not_found(): void
 {
     $locale = function_exists('current_locale') ? current_locale() : 'fr';
-    $messages = [
-        'fr' => 'Page introuvable.',
-        'en' => 'Page not found.',
-        'de' => 'Seite nicht gefunden.',
-        'nl' => 'Pagina niet gevonden.',
-        'es' => 'Página no encontrada.',
-        'it' => 'Pagina non trovata.',
-        'pt' => 'Página não encontrada.',
-        'ar' => 'الصفحة غير موجودة.',
-        'hi' => 'पृष्ठ नहीं मिला।',
-        'ja' => 'ページが見つかりません。',
-        'zh' => '未找到页面。',
-        'bn' => 'পৃষ্ঠা পাওয়া যায়নি।',
-        'ru' => 'Страница не найдена.',
-        'id' => 'Halaman tidak ditemukan.',
-    ];
-
-    $message = $messages[$locale] ?? $messages['fr'];
-    $htmlLang = in_array($locale, ['ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true) ? $locale : substr($locale, 0, 2);
-    echo '<!doctype html><html lang="' . htmlspecialchars($htmlLang, ENT_QUOTES, 'UTF-8') . '"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>'
+    $messages = i18n_domain_locale('errors', $locale);
+    $message = (string) ($messages['page_not_found'] ?? 'Page introuvable.');
+    $htmlLang = in_array($locale, supported_locales(), true) ? $locale : substr($locale, 0, 2);
+    $htmlDir = is_rtl_locale($htmlLang) ? 'rtl' : 'ltr';
+    echo '<!doctype html><html lang="' . htmlspecialchars($htmlLang, ENT_QUOTES, 'UTF-8') . '" dir="' . htmlspecialchars($htmlDir, ENT_QUOTES, 'UTF-8') . '"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>'
         . htmlspecialchars($message, ENT_QUOTES, 'UTF-8')
         . '</p></body></html>';
 }
@@ -116,8 +100,7 @@ if ($route === 'set_language') {
     }
     verify_csrf();
     $locale = strtolower((string) ($_POST['locale'] ?? 'fr'));
-    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
-    if (!in_array($locale, $supportedLocales, true)) {
+    if (!in_array($locale, supported_locales(), true)) {
         $locale = 'fr';
     }
     $_SESSION['locale'] = $locale;
@@ -288,10 +271,21 @@ switch ($route) {
     case 'notifications': $dispatchPage('pages/notifications.php'); break;
     case 'save_dashboard': $dispatchPage('pages/save_dashboard.php'); break;
     case 'widget_render': $dispatchPage('pages/widget_render.php'); break;
+    case 'dashboard_script': $dispatchPage('pages/dashboard_script.js.php'); break;
+    case 'dashboard_script_fullscreen': $dispatchPage('pages/dashboard_script_fullscreen.js.php'); break;
+    case 'dashboard_script_loader': $dispatchPage('pages/dashboard_script_loader.js.php'); break;
+    case 'dashboard_script_offcanvas': $dispatchPage('pages/dashboard_script_offcanvas.js.php'); break;
+    case 'dashboard_widget_card': $dispatchPage('pages/dashboard_widget_card.php'); break;
     case 'profile': $dispatchPage('pages/profile.php'); break;
     case 'directory': $dispatchPage('pages/directory.php'); break;
     case 'tools': $dispatchPage('pages/tools.php'); break;
     case 'tools_geocode': $dispatchPage('pages/tools_geocode.php'); break;
+    case 'tools_script': $dispatchPage('pages/tools_script.js.php'); break;
+    case 'tools_script_computes': $dispatchPage('pages/tools_script_computes.js.php'); break;
+    case 'tools_script_domrefs': $dispatchPage('pages/tools_script_domrefs.js.php'); break;
+    case 'tools_script_helpers': $dispatchPage('pages/tools_script_helpers.js.php'); break;
+    case 'tools_script_initializers': $dispatchPage('pages/tools_script_initializers.js.php'); break;
+    case 'tools_script_loader': $dispatchPage('pages/tools_script_loader.js.php'); break;
     case 'committee': $dispatchPage('pages/committee.php'); break;
     case 'press': $dispatchPage('pages/press.php'); break;
     case 'schools': $dispatchPage('pages/schools.php'); break;
@@ -306,6 +300,14 @@ switch ($route) {
     case 'qsl': $dispatchPage('pages/qsl.php'); break;
     case 'qsl_preview': $dispatchPage('pages/qsl_preview.php'); break;
     case 'qsl_export': $dispatchPage('pages/qsl_export.php'); break;
+    case 'qsl_script': $dispatchPage('pages/qsl_script.js.php'); break;
+    case 'qsl_script_assistant': $dispatchPage('pages/qsl_script_assistant.js.php'); break;
+    case 'qsl_script_card_preview': $dispatchPage('pages/qsl_script_card_preview.js.php'); break;
+    case 'qsl_script_draw_assistant': $dispatchPage('pages/qsl_script_draw_assistant.js.php'); break;
+    case 'qsl_script_dropzone': $dispatchPage('pages/qsl_script_dropzone.js.php'); break;
+    case 'qsl_script_manual_preview': $dispatchPage('pages/qsl_script_manual_preview.js.php'); break;
+    case 'qsl_script_nav': $dispatchPage('pages/qsl_script_nav.js.php'); break;
+    case 'qsl_script_qso_toggle': $dispatchPage('pages/qsl_script_qso_toggle.js.php'); break;
     case 'chatbot': $dispatchPage('pages/chatbot.php'); break;
     case 'members_library': $dispatchPage('pages/members_library.php'); break;
     case 'search': $dispatchPage('pages/search.php'); break;
@@ -336,6 +338,7 @@ switch ($route) {
     case 'admin_translation_reviews': $dispatchPage('pages/admin_translation_reviews.php'); break;
     case 'admin_live_feeds': $dispatchPage('pages/admin_live_feeds.php'); break;
     case 'admin_events': $dispatchPage('pages/admin_events.php'); break;
+    case 'admin_events_feed': $dispatchPage('pages/admin_events_feed.php'); break;
     case 'admin_dinner_reservations': $dispatchPage('pages/admin_dinner_reservations.php'); break;
     case 'admin_dashboard': $dispatchPage('pages/admin_dashboard.php'); break;
     case 'admin_auctions': $dispatchPage('pages/admin_auctions.php'); break;
@@ -352,6 +355,7 @@ switch ($route) {
     case 'sitemap.xml': $dispatchPage('pages/sitemap.php'); break;
     case 'robots.txt': $dispatchPage('pages/robots.php'); break;
     case 'llms.txt': $dispatchPage('pages/llms.php'); break;
+    case 'home_script_ham_weather': $dispatchPage('pages/home_script_ham_weather.js.php'); break;
     case 'newsletter_unsubscribe': $dispatchPage('pages/newsletter_unsubscribe.php'); break;
     case 'footer_contact': $dispatchPage('pages/footer_contact.php'); break;
     case 'install.php': $dispatchPage('install.php'); break;
