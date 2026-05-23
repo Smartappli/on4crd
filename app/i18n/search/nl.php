@@ -1,4 +1,33 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Zoeken', 'placeholder' => 'Globale zoekopdracht', 'submit' => 'Zoeken', 'count' => 'resulta(a)t(en)', 'empty' => 'Geen resultaten gevonden voor deze zoekopdracht.', 'query_too_short' => 'Voer minstens 2 tekens in.', 'previous' => 'Vorige', 'next' => 'Volgende', 'meta_desc' => 'ON4CRD globale zoekfunctie over Artikels- en Wiki-inhoud.'];
+return [
+    'title' => 'Zoeken',
+    'eyebrow' => 'Globaal zoeken',
+    'lead' => 'Vind snel nieuws, artikels, wikipagina’s, documenten, advertenties en albums.',
+    'placeholder' => 'Roepnaam, trefwoord, thema, document...',
+    'query_label' => 'Uw zoekopdracht',
+    'source_label' => 'Bron',
+    'submit' => 'Zoeken',
+    'count' => 'resulta(a)t(en)',
+    'empty' => 'Geen resultaten gevonden voor deze zoekopdracht.',
+    'empty_help' => 'Probeer een korter trefwoord, een andere bron of een andere spelling.',
+    'query_too_short' => 'Voer minstens 2 tekens in.',
+    'previous' => 'Vorige',
+    'next' => 'Volgende',
+    'page' => 'Pagina',
+    'pagination' => 'Paginering',
+    'meta_desc' => 'Globale ON4CRD-zoekfunctie in de site-inhoud.',
+    'source_all' => 'Alles',
+    'source_news' => 'Nieuws',
+    'source_articles' => 'Artikels',
+    'source_wiki' => 'Wiki',
+    'source_library' => 'Bibliotheek',
+    'source_classifieds' => 'Advertenties',
+    'source_albums' => 'Albums',
+    'results_title' => 'Resultaten',
+    'results_for' => '%d resulta(a)t(en) voor "%s"',
+    'start_title' => 'Start een zoekopdracht',
+    'start_hint' => 'Voer minstens twee tekens in om de site-inhoud te doorzoeken.',
+    'open_result' => 'Openen',
+];

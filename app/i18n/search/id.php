@@ -1,4 +1,33 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Pencarian', 'placeholder' => 'Pencarian global', 'submit' => 'Cari', 'count' => 'hasil', 'empty' => 'Tidak ada hasil untuk kueri ini.', 'query_too_short' => 'Masukkan setidaknya 2 karakter.', 'previous' => 'Sebelumnya', 'next' => 'Berikutnya', 'meta_desc' => 'Pencarian global ON4CRD pada Artikel dan konten Wiki.'];
+return [
+    'title' => 'Pencarian',
+    'eyebrow' => 'Pencarian global',
+    'lead' => 'Temukan berita, artikel, halaman wiki, dokumen, iklan, dan album dengan cepat.',
+    'placeholder' => 'Callsign, kata kunci, topik, dokumen...',
+    'query_label' => 'Pencarian Anda',
+    'source_label' => 'Sumber',
+    'submit' => 'Cari',
+    'count' => 'hasil',
+    'empty' => 'Tidak ada hasil untuk pencarian ini.',
+    'empty_help' => 'Coba kata kunci yang lebih pendek, sumber lain, atau ejaan berbeda.',
+    'query_too_short' => 'Masukkan setidaknya 2 karakter.',
+    'previous' => 'Sebelumnya',
+    'next' => 'Berikutnya',
+    'page' => 'Halaman',
+    'pagination' => 'Paginasi',
+    'meta_desc' => 'Pencarian global ON4CRD pada konten situs.',
+    'source_all' => 'Semua',
+    'source_news' => 'Berita',
+    'source_articles' => 'Artikel',
+    'source_wiki' => 'Wiki',
+    'source_library' => 'Perpustakaan',
+    'source_classifieds' => 'Iklan',
+    'source_albums' => 'Album',
+    'results_title' => 'Hasil',
+    'results_for' => '%d hasil untuk "%s"',
+    'start_title' => 'Mulai pencarian',
+    'start_hint' => 'Masukkan setidaknya dua karakter untuk menjelajahi konten situs.',
+    'open_result' => 'Buka',
+];

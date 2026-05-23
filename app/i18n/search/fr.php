@@ -1,4 +1,33 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Recherche', 'placeholder' => 'Recherche globale', 'submit' => 'Rechercher', 'count' => 'résultat(s)', 'empty' => 'Aucun résultat pour cette recherche.', 'query_too_short' => 'Veuillez saisir au moins 2 caractères.', 'previous' => 'Précédent', 'next' => 'Suivant', 'meta_desc' => 'Recherche globale ON4CRD sur les contenus Articles et Wiki.'];
+return [
+    'title' => 'Recherche',
+    'eyebrow' => 'Recherche globale',
+    'lead' => 'Trouvez rapidement des actualités, articles, pages wiki, documents, annonces et albums.',
+    'placeholder' => 'Indicatif, mot-clé, thème, document...',
+    'query_label' => 'Votre recherche',
+    'source_label' => 'Source',
+    'submit' => 'Rechercher',
+    'count' => 'résultat(s)',
+    'empty' => 'Aucun résultat pour cette recherche.',
+    'empty_help' => 'Essayez un mot-clé plus court, une autre source ou une orthographe différente.',
+    'query_too_short' => 'Veuillez saisir au moins 2 caractères.',
+    'previous' => 'Précédent',
+    'next' => 'Suivant',
+    'page' => 'Page',
+    'pagination' => 'Pagination',
+    'meta_desc' => 'Recherche globale ON4CRD dans les contenus du site.',
+    'source_all' => 'Tout',
+    'source_news' => 'Actualités',
+    'source_articles' => 'Articles',
+    'source_wiki' => 'Wiki',
+    'source_library' => 'Bibliothèque',
+    'source_classifieds' => 'Annonces',
+    'source_albums' => 'Albums',
+    'results_title' => 'Résultats',
+    'results_for' => '%d résultat(s) pour "%s"',
+    'start_title' => 'Lancez une recherche',
+    'start_hint' => 'Saisissez au moins deux caractères pour explorer les contenus du site.',
+    'open_result' => 'Ouvrir',
+];

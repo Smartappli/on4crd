@@ -1,4 +1,33 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Search', 'placeholder' => 'Global search', 'submit' => 'Search', 'count' => 'result(s)', 'empty' => 'No results found for this query.', 'query_too_short' => 'Please enter at least 2 characters.', 'previous' => 'Previous', 'next' => 'Next', 'meta_desc' => 'ON4CRD global search across Articles and Wiki content.'];
+return [
+    'title' => 'Search',
+    'eyebrow' => 'Global search',
+    'lead' => 'Quickly find news, articles, wiki pages, documents, classifieds and albums.',
+    'placeholder' => 'Callsign, keyword, topic, document...',
+    'query_label' => 'Your search',
+    'source_label' => 'Source',
+    'submit' => 'Search',
+    'count' => 'result(s)',
+    'empty' => 'No results found for this query.',
+    'empty_help' => 'Try a shorter keyword, another source or a different spelling.',
+    'query_too_short' => 'Please enter at least 2 characters.',
+    'previous' => 'Previous',
+    'next' => 'Next',
+    'page' => 'Page',
+    'pagination' => 'Pagination',
+    'meta_desc' => 'ON4CRD global search across site content.',
+    'source_all' => 'All',
+    'source_news' => 'News',
+    'source_articles' => 'Articles',
+    'source_wiki' => 'Wiki',
+    'source_library' => 'Library',
+    'source_classifieds' => 'Classifieds',
+    'source_albums' => 'Albums',
+    'results_title' => 'Results',
+    'results_for' => '%d result(s) for "%s"',
+    'start_title' => 'Start a search',
+    'start_hint' => 'Enter at least two characters to explore site content.',
+    'open_result' => 'Open',
+];

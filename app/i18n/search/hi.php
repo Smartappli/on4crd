@@ -1,4 +1,33 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'खोज', 'placeholder' => 'वैश्विक खोज', 'submit' => 'खोजें', 'count' => 'परिणाम', 'empty' => 'इस खोज के लिए कोई परिणाम नहीं मिला।', 'query_too_short' => 'कृपया कम से कम 2 अक्षर दर्ज करें।', 'previous' => 'पिछला', 'next' => 'अगला', 'meta_desc' => 'लेखों और विकि सामग्री में ON4CRD की वैश्विक खोज।'];
+return [
+    'title' => 'खोज',
+    'eyebrow' => 'वैश्विक खोज',
+    'lead' => 'समाचार, लेख, विकि पृष्ठ, दस्तावेज़, विज्ञापन और एल्बम जल्दी खोजें।',
+    'placeholder' => 'कॉलसाइन, कीवर्ड, विषय, दस्तावेज़...',
+    'query_label' => 'आपकी खोज',
+    'source_label' => 'स्रोत',
+    'submit' => 'खोजें',
+    'count' => 'परिणाम',
+    'empty' => 'इस खोज के लिए कोई परिणाम नहीं मिला।',
+    'empty_help' => 'छोटा कीवर्ड, दूसरा स्रोत या अलग वर्तनी आज़माएँ।',
+    'query_too_short' => 'कृपया कम से कम 2 अक्षर दर्ज करें।',
+    'previous' => 'पिछला',
+    'next' => 'अगला',
+    'page' => 'पृष्ठ',
+    'pagination' => 'पृष्ठांकन',
+    'meta_desc' => 'साइट सामग्री में ON4CRD की वैश्विक खोज।',
+    'source_all' => 'सब',
+    'source_news' => 'समाचार',
+    'source_articles' => 'लेख',
+    'source_wiki' => 'विकि',
+    'source_library' => 'लाइब्रेरी',
+    'source_classifieds' => 'विज्ञापन',
+    'source_albums' => 'एल्बम',
+    'results_title' => 'परिणाम',
+    'results_for' => '"%2$s" के लिए %1$d परिणाम',
+    'start_title' => 'खोज शुरू करें',
+    'start_hint' => 'साइट सामग्री देखने के लिए कम से कम दो अक्षर लिखें।',
+    'open_result' => 'खोलें',
+];
