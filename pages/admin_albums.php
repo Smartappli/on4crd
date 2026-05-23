@@ -16,6 +16,22 @@ function albums_admin_tables_ready(): bool
     return table_exists('albums') && table_exists('album_photos');
 }
 
+function albums_admin_ensure_photo_order_column(): void
+{
+    if (!table_exists('album_photos')) {
+        return;
+    }
+    $stmt = db()->prepare(
+        'SELECT COUNT(*) FROM information_schema.columns
+         WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+    );
+    $stmt->execute(['album_photos', 'sort_order']);
+    if ((int) $stmt->fetchColumn() === 0) {
+        db()->exec('ALTER TABLE album_photos ADD COLUMN sort_order INT NOT NULL DEFAULT 0 AFTER album_id');
+        db()->exec('UPDATE album_photos SET sort_order = id WHERE sort_order = 0');
+    }
+}
+
 function albums_admin_safe_photo_path(string $publicPath): ?string
 {
     return safe_storage_public_path_or_null($publicPath, ['storage/uploads/albums/']);
@@ -50,6 +66,7 @@ if (!albums_admin_tables_ready()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
     return;
 }
+albums_admin_ensure_photo_order_column();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -117,9 +134,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = trim((string) ($_POST['title'] ?? ''));
             $caption = trim((string) ($_POST['caption'] ?? ''));
             $files = $_FILES['photos'] ?? $_FILES['photo'] ?? null;
-            $insertPhotoStmt = db()->prepare('INSERT INTO album_photos (album_id, title, caption, file_path) VALUES (?, ?, ?, ?)');
+            $insertPhotoStmt = db()->prepare('INSERT INTO album_photos (album_id, sort_order, title, caption, file_path) VALUES (?, ?, ?, ?, ?)');
             $importedCount = 0;
             $lastTitle = $title !== '' ? $title : (string) $t['photo'];
+            $orderStmt = db()->prepare('SELECT COALESCE(MAX(sort_order), 0) FROM album_photos WHERE album_id = ?');
 
             if (is_array($files) && is_array($files['name'] ?? null)) {
                 $total = count($files['name']);
@@ -137,14 +155,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $path = handle_album_upload($single, (string) (current_user()['callsign'] ?? 'album'));
                     $photoTitle = $title !== '' && $total === 1 ? $title : pathinfo((string) $single['name'], PATHINFO_FILENAME);
                     $photoTitle = trim($photoTitle) !== '' ? trim($photoTitle) : (string) $t['photo'];
-                    $insertPhotoStmt->execute([$albumId, $photoTitle, $caption, $path]);
+                    $orderStmt->execute([$albumId]);
+                    $nextOrder = (int) ($orderStmt->fetchColumn() ?: 0) + 1;
+                    $insertPhotoStmt->execute([$albumId, $nextOrder, $photoTitle, $caption, $path]);
                     $lastTitle = $photoTitle;
                     $importedCount++;
                 }
             } else {
                 $path = handle_album_upload(is_array($files) ? $files : null, (string) (current_user()['callsign'] ?? 'album'));
                 $photoTitle = $title !== '' ? $title : (string) $t['photo'];
-                $insertPhotoStmt->execute([$albumId, $photoTitle, $caption, $path]);
+                $orderStmt->execute([$albumId]);
+                $nextOrder = (int) ($orderStmt->fetchColumn() ?: 0) + 1;
+                $insertPhotoStmt->execute([$albumId, $nextOrder, $photoTitle, $caption, $path]);
                 $lastTitle = $photoTitle;
                 $importedCount = 1;
             }
@@ -198,6 +220,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('admin_albums');
         }
 
+        if ($action === 'reorder_photo') {
+            $photoId = (int) ($_POST['photo_id'] ?? 0);
+            $direction = (string) ($_POST['direction'] ?? '');
+            if ($photoId <= 0 || !in_array($direction, ['up', 'down'], true)) {
+                throw new RuntimeException((string) $t['invalid_photo']);
+            }
+            $photoStmt = db()->prepare('SELECT id, album_id, sort_order FROM album_photos WHERE id = ? LIMIT 1');
+            $photoStmt->execute([$photoId]);
+            $photo = $photoStmt->fetch() ?: null;
+            if (!is_array($photo)) {
+                throw new RuntimeException((string) $t['invalid_photo']);
+            }
+            $albumId = (int) ($photo['album_id'] ?? 0);
+            $sortOrder = (int) ($photo['sort_order'] ?? 0);
+            if ($direction === 'up') {
+                $swapStmt = db()->prepare('SELECT id, sort_order FROM album_photos WHERE album_id = ? AND sort_order < ? ORDER BY sort_order DESC, id DESC LIMIT 1');
+            } else {
+                $swapStmt = db()->prepare('SELECT id, sort_order FROM album_photos WHERE album_id = ? AND sort_order > ? ORDER BY sort_order ASC, id ASC LIMIT 1');
+            }
+            $swapStmt->execute([$albumId, $sortOrder]);
+            $swap = $swapStmt->fetch() ?: null;
+            if (is_array($swap)) {
+                db()->beginTransaction();
+                db()->prepare('UPDATE album_photos SET sort_order = ? WHERE id = ?')->execute([(int) $swap['sort_order'], $photoId]);
+                db()->prepare('UPDATE album_photos SET sort_order = ? WHERE id = ?')->execute([$sortOrder, (int) $swap['id']]);
+                db()->commit();
+            }
+            albums_admin_clear_cache();
+            redirect('admin_albums');
+        }
+
         if ($action === 'rebuild_thumbnails') {
             $photoRows = db()->query('SELECT file_path FROM album_photos ORDER BY id DESC')->fetchAll() ?: [];
             $created = 0;
@@ -246,7 +299,7 @@ $photos = db()->query(
     'SELECT p.*, a.title AS album_title
      FROM album_photos p
      INNER JOIN albums a ON a.id = p.album_id
-     ORDER BY p.id DESC
+     ORDER BY p.album_id ASC, p.sort_order ASC, p.id ASC
      LIMIT ' . (int) $photosPerPage . ' OFFSET ' . (int) $photosOffset
 )->fetchAll() ?: [];
 
@@ -387,6 +440,13 @@ ob_start();
                                 <button class="button small" type="submit"><?= e((string) $t['update']) ?></button>
                                 <?php if ($safePath !== null): ?><a class="button secondary small" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a><?php endif; ?>
                             </div>
+                        </form>
+                        <form method="post" class="inline-form" style="margin-top:8px;">
+                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="action" value="reorder_photo">
+                            <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
+                            <button class="button small secondary" type="submit" name="direction" value="up">&uarr;</button>
+                            <button class="button small secondary" type="submit" name="direction" value="down">&darr;</button>
                         </form>
                         <form method="post" style="margin-top:8px;" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_photo'], JSON_UNESCAPED_UNICODE)) ?>)">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">

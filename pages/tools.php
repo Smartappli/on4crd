@@ -47,6 +47,87 @@ $tr = static function (string $key, string $fallback = '') use ($t): string {
     return trim($fallback);
 };
 
+function ensure_member_tools_tables(): bool
+{
+    if (!table_exists('members')) {
+        return false;
+    }
+    db()->exec('CREATE TABLE IF NOT EXISTS member_tool_presets (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        member_id INT NOT NULL,
+        tool_id VARCHAR(120) NOT NULL,
+        label VARCHAR(190) NOT NULL,
+        payload_json LONGTEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        KEY idx_member_tool (member_id, tool_id, created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+    db()->exec('CREATE TABLE IF NOT EXISTS member_tool_history (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        member_id INT NOT NULL,
+        tool_id VARCHAR(120) NOT NULL,
+        input_value VARCHAR(190) NOT NULL,
+        output_value VARCHAR(190) NOT NULL,
+        notes VARCHAR(255) DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        KEY idx_member_created (member_id, created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+    return true;
+}
+
+$user = current_user();
+$memberId = (int) ($user['id'] ?? 0);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') !== '') {
+    $user = require_login();
+    $memberId = (int) ($user['id'] ?? 0);
+    verify_csrf();
+    if (ensure_member_tools_tables()) {
+        $action = (string) ($_POST['action'] ?? '');
+        if ($action === 'save_tool_preset') {
+            $toolId = mb_safe_substr(trim((string) ($_POST['tool_id'] ?? 'unit-conversion')), 0, 120);
+            $label = mb_safe_substr(trim((string) ($_POST['label'] ?? 'Preset')), 0, 190);
+            $inputValue = mb_safe_substr(trim((string) ($_POST['input_value'] ?? '')), 0, 190);
+            $outputValue = mb_safe_substr(trim((string) ($_POST['output_value'] ?? '')), 0, 190);
+            if ($label !== '' && $inputValue !== '' && $outputValue !== '') {
+                $payload = json_encode(['input' => $inputValue, 'output' => $outputValue], JSON_UNESCAPED_UNICODE);
+                db()->prepare('INSERT INTO member_tool_presets (member_id, tool_id, label, payload_json) VALUES (?, ?, ?, ?)')
+                    ->execute([$memberId, $toolId, $label, (string) $payload]);
+                set_flash('success', $tr('preset_saved', 'Preset saved.'));
+            }
+        } elseif ($action === 'log_tool_conversion') {
+            $toolId = mb_safe_substr(trim((string) ($_POST['tool_id'] ?? 'unit-conversion')), 0, 120);
+            $inputValue = mb_safe_substr(trim((string) ($_POST['input_value'] ?? '')), 0, 190);
+            $outputValue = mb_safe_substr(trim((string) ($_POST['output_value'] ?? '')), 0, 190);
+            $notes = mb_safe_substr(trim((string) ($_POST['notes'] ?? '')), 0, 255);
+            if ($inputValue !== '' && $outputValue !== '') {
+                db()->prepare('INSERT INTO member_tool_history (member_id, tool_id, input_value, output_value, notes) VALUES (?, ?, ?, ?, ?)')
+                    ->execute([$memberId, $toolId, $inputValue, $outputValue, $notes !== '' ? $notes : null]);
+                set_flash('success', $tr('history_saved', 'Conversion logged.'));
+            }
+        } elseif ($action === 'delete_tool_preset') {
+            $presetId = (int) ($_POST['preset_id'] ?? 0);
+            if ($presetId > 0) {
+                db()->prepare('DELETE FROM member_tool_presets WHERE id = ? AND member_id = ?')->execute([$presetId, $memberId]);
+                set_flash('success', $tr('preset_deleted', 'Preset deleted.'));
+            }
+        } elseif ($action === 'clear_tool_history') {
+            db()->prepare('DELETE FROM member_tool_history WHERE member_id = ?')->execute([$memberId]);
+            set_flash('success', $tr('history_cleared', 'History cleared.'));
+        }
+    }
+    redirect_url(route_url('tools'));
+}
+
+$toolPresets = [];
+$toolHistory = [];
+if ($memberId > 0 && ensure_member_tools_tables()) {
+    $presetStmt = db()->prepare('SELECT id, tool_id, label, payload_json, created_at FROM member_tool_presets WHERE member_id = ? ORDER BY created_at DESC, id DESC LIMIT 20');
+    $presetStmt->execute([$memberId]);
+    $toolPresets = $presetStmt->fetchAll() ?: [];
+    $historyStmt = db()->prepare('SELECT id, tool_id, input_value, output_value, notes, created_at FROM member_tool_history WHERE member_id = ? ORDER BY created_at DESC, id DESC LIMIT 30');
+    $historyStmt->execute([$memberId]);
+    $toolHistory = $historyStmt->fetchAll() ?: [];
+}
+
 $labelCategoryAntenna = $tr('category_antenna', 'Antenna & propagation');
 $labelQuarterWaveCalc = $tr('quarter_wave_calc', 'Quarter-wave length');
 $labelErpCalc = $tr('erp_calc', 'Estimated ERP');
@@ -276,6 +357,63 @@ ob_start();
 ?>
 <section class="card">
     <h1 class="tools-page-title"><?= e($tr('title', 'Outils radioamateur')) ?></h1>
+    <?php if ($memberId > 0): ?>
+    <section class="card" style="margin-bottom:1rem;">
+        <h2><?= e($tr('saved_presets', 'Saved presets')) ?></h2>
+        <form method="post" class="inline-form" style="flex-wrap:wrap;margin-bottom:.7rem;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="save_tool_preset">
+            <input type="text" name="tool_id" value="unit-conversion" placeholder="tool_id">
+            <input type="text" name="label" placeholder="<?= e($tr('preset_label', 'Preset label')) ?>">
+            <input type="text" name="input_value" placeholder="<?= e($tr('input_value', 'Input')) ?>">
+            <input type="text" name="output_value" placeholder="<?= e($tr('output_value', 'Output')) ?>">
+            <button class="button" type="submit"><?= e($tr('save_preset', 'Save preset')) ?></button>
+        </form>
+        <?php if ($toolPresets === []): ?>
+            <p class="help"><?= e($tr('no_presets', 'No presets saved.')) ?></p>
+        <?php else: ?>
+            <ul class="stack" style="list-style:none;padding:0;margin:0;">
+                <?php foreach ($toolPresets as $preset): ?>
+                    <?php $payload = json_decode((string) ($preset['payload_json'] ?? ''), true); ?>
+                    <li class="row-between" style="gap:.6rem;">
+                        <span><strong><?= e((string) ($preset['label'] ?? 'Preset')) ?></strong> (<?= e((string) ($preset['tool_id'] ?? '')) ?>) — <?= e((string) ($payload['input'] ?? '')) ?> → <?= e((string) ($payload['output'] ?? '')) ?></span>
+                        <form method="post" class="inline-form">
+                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="action" value="delete_tool_preset">
+                            <input type="hidden" name="preset_id" value="<?= (int) ($preset['id'] ?? 0) ?>">
+                            <button class="button secondary small" type="submit"><?= e($tr('delete', 'Delete')) ?></button>
+                        </form>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
+        <h2 style="margin-top:1rem;"><?= e($tr('conversion_history', 'Conversion history')) ?></h2>
+        <form method="post" class="inline-form" style="flex-wrap:wrap;margin-bottom:.7rem;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="log_tool_conversion">
+            <input type="text" name="tool_id" value="unit-conversion" placeholder="tool_id">
+            <input type="text" name="input_value" placeholder="<?= e($tr('input_value', 'Input')) ?>">
+            <input type="text" name="output_value" placeholder="<?= e($tr('output_value', 'Output')) ?>">
+            <input type="text" name="notes" placeholder="<?= e($tr('notes', 'Notes')) ?>">
+            <button class="button" type="submit"><?= e($tr('log_conversion', 'Log conversion')) ?></button>
+        </form>
+        <form method="post" class="inline-form" style="margin-bottom:.7rem;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="clear_tool_history">
+            <button class="button secondary small" type="submit"><?= e($tr('clear_history', 'Clear history')) ?></button>
+        </form>
+        <?php if ($toolHistory === []): ?>
+            <p class="help"><?= e($tr('no_history', 'No conversion history.')) ?></p>
+        <?php else: ?>
+            <ul class="stack" style="list-style:none;padding:0;margin:0;">
+                <?php foreach ($toolHistory as $history): ?>
+                    <li><span class="help"><?= e((string) ($history['created_at'] ?? '')) ?></span> — <strong><?= e((string) ($history['tool_id'] ?? '')) ?></strong>: <?= e((string) ($history['input_value'] ?? '')) ?> → <?= e((string) ($history['output_value'] ?? '')) ?><?php if (trim((string) ($history['notes'] ?? '')) !== ''): ?> (<?= e((string) $history['notes']) ?>)<?php endif; ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </section>
+    <?php endif; ?>
     <div class="tools-layout">
     <aside class="tools-index card">
         <h2><?= e($tr('tool_index')) ?></h2>

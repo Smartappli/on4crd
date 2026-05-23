@@ -1611,6 +1611,18 @@ function apply_runtime_schema_updates(): void
         }
     }
 
+    if (table_exists('album_photos')) {
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $columnStmt->execute(['album_photos', 'sort_order']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE album_photos ADD COLUMN sort_order INT NOT NULL DEFAULT 0 AFTER album_id');
+            db()->exec('UPDATE album_photos SET sort_order = id WHERE sort_order = 0');
+        }
+    }
+
     if (table_exists('members')) {
         $columnStmt = db()->prepare(
             'SELECT COUNT(*) FROM information_schema.columns

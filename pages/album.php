@@ -46,7 +46,7 @@ $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
 $offset = $pagination['offset'];
 
-$photosStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER BY id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$photosStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $photosStmt->execute([(int) $album['id']]);
 $photos = $photosStmt->fetchAll() ?: [];
 
