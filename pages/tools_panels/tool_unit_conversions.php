@@ -108,8 +108,9 @@ $unitConversionGroups = [
         'default_to' => 'dbuv',
     ],
 ];
+$unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversions');
 ?>
-<article class="card tool-panel is-hidden" id="tool-unit-conversions" data-tool-panel>
+<article class="card tool-panel is-hidden" id="<?= e($unitConversionPanelId) ?>" data-tool-panel>
     <div class="section-header">
         <div>
             <h2><?= e((string) ($t['unit_conv_title'] ?? 'Unit conversion')) ?></h2>

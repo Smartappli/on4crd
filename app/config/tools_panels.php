@@ -31,6 +31,7 @@ return [
     'tool-quarter-wave' => 'tool_quarter_wave.php',
     'tool-erp' => 'tool_erp.php',
     'tool-dipole' => 'tool_dipole.php',
+    'tool-unit-converter' => 'tool_unit_converter.php',
     'tool-ohm-law' => 'tool_ohm_law.php',
     'tool-link-budget' => 'tool_link_budget.php',
     'tool-unit-conversions' => 'tool_unit_conversions.php',

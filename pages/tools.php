@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') !
     if (ensure_member_tools_tables()) {
         $action = (string) ($_POST['action'] ?? '');
         if ($action === 'save_tool_preset') {
-            $toolId = mb_safe_substr(trim((string) ($_POST['tool_id'] ?? 'unit-conversion')), 0, 120);
+            $toolId = mb_safe_substr(trim((string) ($_POST['tool_id'] ?? 'tool-unit-converter')), 0, 120);
             $label = mb_safe_substr(trim((string) ($_POST['label'] ?? 'Preset')), 0, 190);
             $inputValue = mb_safe_substr(trim((string) ($_POST['input_value'] ?? '')), 0, 190);
             $outputValue = mb_safe_substr(trim((string) ($_POST['output_value'] ?? '')), 0, 190);
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') !
                 set_flash('success', $tr('preset_saved', 'Preset saved.'));
             }
         } elseif ($action === 'log_tool_conversion') {
-            $toolId = mb_safe_substr(trim((string) ($_POST['tool_id'] ?? 'unit-conversion')), 0, 120);
+            $toolId = mb_safe_substr(trim((string) ($_POST['tool_id'] ?? 'tool-unit-converter')), 0, 120);
             $inputValue = mb_safe_substr(trim((string) ($_POST['input_value'] ?? '')), 0, 190);
             $outputValue = mb_safe_substr(trim((string) ($_POST['output_value'] ?? '')), 0, 190);
             $notes = mb_safe_substr(trim((string) ($_POST['notes'] ?? '')), 0, 255);
@@ -356,14 +356,13 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
 ob_start();
 ?>
 <section class="card">
-    <h1 class="tools-page-title"><?= e($tr('title', 'Outils radioamateur')) ?></h1>
     <?php if ($memberId > 0): ?>
     <section class="card" style="margin-bottom:1rem;">
         <h2><?= e($tr('saved_presets', 'Saved presets')) ?></h2>
         <form method="post" class="inline-form" style="flex-wrap:wrap;margin-bottom:.7rem;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save_tool_preset">
-            <input type="text" name="tool_id" value="unit-conversion" placeholder="tool_id">
+            <input type="text" name="tool_id" value="tool-unit-converter" placeholder="tool_id">
             <input type="text" name="label" placeholder="<?= e($tr('preset_label', 'Preset label')) ?>">
             <input type="text" name="input_value" placeholder="<?= e($tr('input_value', 'Input')) ?>">
             <input type="text" name="output_value" placeholder="<?= e($tr('output_value', 'Output')) ?>">
@@ -392,7 +391,7 @@ ob_start();
         <form method="post" class="inline-form" style="flex-wrap:wrap;margin-bottom:.7rem;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="log_tool_conversion">
-            <input type="text" name="tool_id" value="unit-conversion" placeholder="tool_id">
+            <input type="text" name="tool_id" value="tool-unit-converter" placeholder="tool_id">
             <input type="text" name="input_value" placeholder="<?= e($tr('input_value', 'Input')) ?>">
             <input type="text" name="output_value" placeholder="<?= e($tr('output_value', 'Output')) ?>">
             <input type="text" name="notes" placeholder="<?= e($tr('notes', 'Notes')) ?>">

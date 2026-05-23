@@ -44,8 +44,8 @@
         sync();
     };
 
-    const initUnitConversions = () => {
-        const panel = document.getElementById('tool-unit-conversions');
+    const initUnitConversions = (panelId = 'tool-unit-conversions') => {
+        const panel = document.getElementById(panelId);
         if (!(panel instanceof HTMLElement)) return;
 
         const dataNode = panel.querySelector('#unit-conv-data');
@@ -267,7 +267,8 @@
                 wattsOut.textContent = `${watts.toFixed(4)} ${i18n.watts_out_label || 'W'}`;
             });
         },
-        'tool-unit-conversions': initUnitConversions,
+        'tool-unit-converter': () => initUnitConversions('tool-unit-converter'),
+        'tool-unit-conversions': () => initUnitConversions('tool-unit-conversions'),
         'tool-balun': () => {
             balunSource?.addEventListener('input', computeBalun);
             balunLoad?.addEventListener('input', computeBalun);
