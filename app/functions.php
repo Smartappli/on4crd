@@ -131,9 +131,23 @@ function supported_locales(): array
 }
 }
 
+if (!function_exists('supported_locales_map')) {
+function supported_locales_map(): array
+{
+    static $map = null;
+    if (is_array($map)) {
+        return $map;
+    }
+
+    $map = array_fill_keys(supported_locales(), true);
+    return $map;
+}
+}
+
 if (!function_exists('locale_fallback_chain')) {
 function locale_fallback_chain(?string $locale = null): array
 {
+    $supported = supported_locales_map();
     $requested = strtolower(trim((string) ($locale ?? current_locale())));
     $requested = str_replace('_', '-', $requested);
     $normalized = $requested;
@@ -143,7 +157,7 @@ function locale_fallback_chain(?string $locale = null): array
 
     $chain = [];
     foreach ([$requested, $normalized, 'en', 'fr'] as $candidate) {
-        if ($candidate === '' || in_array($candidate, $chain, true) || !in_array($candidate, supported_locales(), true)) {
+        if ($candidate === '' || in_array($candidate, $chain, true) || !isset($supported[$candidate])) {
             continue;
         }
         $chain[] = $candidate;
@@ -310,6 +324,7 @@ function current_locale(): string
         return $resolvedLocale;
     }
 
+    $supported = supported_locales_map();
     $locale = strtolower((string) ($_SESSION['locale'] ?? ''));
     if ($locale === '') {
         $acceptLanguage = strtolower((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''));
@@ -318,10 +333,10 @@ function current_locale(): string
             $locale = str_replace('_', '-', $raw);
         }
     }
-    if (!in_array($locale, supported_locales(), true) && str_contains($locale, '-')) {
+    if (!isset($supported[$locale]) && str_contains($locale, '-')) {
         $locale = (string) explode('-', $locale, 2)[0];
     }
-    if (!in_array($locale, supported_locales(), true)) {
+    if (!isset($supported[$locale])) {
         $resolvedLocale = 'fr';
         return $resolvedLocale;
     }
@@ -1850,6 +1865,8 @@ function asset_url(string $path): string
 if (!function_exists('route_url')) {
 function route_url(string $route, array $query = []): string
 {
+    static $directPhpRoutes = ['install.php' => true, 'sitemap.xml' => true, 'robots.txt' => true];
+
     $route = trim($route);
     if ($route === '' || $route === 'home') {
         if ($query === []) {
@@ -1860,9 +1877,8 @@ function route_url(string $route, array $query = []): string
     }
 
     if (str_ends_with($route, '.php')) {
-        $directPhpRoutes = ['install.php', 'sitemap.xml', 'robots.txt'];
         $normalizedRoute = ltrim($route, '/');
-        if (in_array($normalizedRoute, $directPhpRoutes, true)) {
+        if (isset($directPhpRoutes[$normalizedRoute])) {
             $suffix = $query === [] ? '' : ('?' . http_build_query($query));
             return base_url('/' . $normalizedRoute . $suffix);
         }
