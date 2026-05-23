@@ -11,7 +11,16 @@ $i18n = [
     'it' => ['method_not_allowed' => 'Metodo non consentito.', 'bid_saved' => 'Offerta registrata.'],
     'pt' => ['method_not_allowed' => 'Método não permitido.', 'bid_saved' => 'Lance registado.'],
     'nl' => ['method_not_allowed' => 'Methode niet toegestaan.', 'bid_saved' => 'Bod opgeslagen.'],
+
+    'ar' => ['method_not_allowed' => 'الطريقة غير مسموح بها.', 'bid_saved' => 'تم تسجيل العرض.'],
+    'bn' => ['method_not_allowed' => 'এই পদ্ধতি অনুমোদিত নয়।', 'bid_saved' => 'বিড সংরক্ষণ করা হয়েছে।'],
+    'hi' => ['method_not_allowed' => 'यह विधि अनुमत नहीं है।', 'bid_saved' => 'बोली सहेज दी गई है।'],
+    'id' => ['method_not_allowed' => 'Metode tidak diizinkan.', 'bid_saved' => 'Tawaran disimpan.'],
+    'ja' => ['method_not_allowed' => '許可されていないメソッドです。', 'bid_saved' => '入札を保存しました。'],
+    'ru' => ['method_not_allowed' => 'Метод не разрешён.', 'bid_saved' => 'Ставка сохранена.'],
+    'zh' => ['method_not_allowed' => '不允许此请求方法。', 'bid_saved' => '出价已保存。'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };

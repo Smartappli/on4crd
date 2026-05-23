@@ -11,7 +11,15 @@ $i18n = [
     'it' => ['not_found' => 'QSL non trovata.', 'layout_title' => 'QSL', 'front' => 'Fronte', 'front_alt' => 'Anteprima fronte QSL', 'front_download' => 'Scarica fronte (SVG)', 'back' => 'Retro', 'back_alt' => 'Anteprima retro QSL', 'back_download' => 'Scarica retro (SVG)'],
     'pt' => ['not_found' => 'QSL não encontrada.', 'layout_title' => 'QSL', 'front' => 'Frente', 'front_alt' => 'Pré-visualização frente QSL', 'front_download' => 'Descarregar frente (SVG)', 'back' => 'Verso', 'back_alt' => 'Pré-visualização verso QSL', 'back_download' => 'Descarregar verso (SVG)'],
     'nl' => ['not_found' => 'QSL niet gevonden.', 'layout_title' => 'QSL', 'front' => 'Voorzijde', 'front_alt' => 'QSL-voorvertoning voorkant', 'front_download' => 'Voorzijde downloaden (SVG)', 'back' => 'Achterzijde', 'back_alt' => 'QSL-voorvertoning achterkant', 'back_download' => 'Achterzijde downloaden (SVG)'],
+    'ar' => ['not_found' => 'لم يتم العثور على QSL.', 'layout_title' => 'QSL', 'front' => 'الوجه الأمامي', 'front_alt' => 'معاينة الوجه الأمامي لـ QSL', 'front_download' => 'تنزيل الوجه الأمامي (SVG)', 'back' => 'الوجه الخلفي', 'back_alt' => 'معاينة الوجه الخلفي لـ QSL', 'back_download' => 'تنزيل الوجه الخلفي (SVG)'],
+    'bn' => ['not_found' => 'QSL পাওয়া যায়নি।', 'layout_title' => 'QSL', 'front' => 'সামনের দিক', 'front_alt' => 'QSL সামনের প্রিভিউ', 'front_download' => 'সামনের দিক ডাউনলোড করুন (SVG)', 'back' => 'পেছনের দিক', 'back_alt' => 'QSL পেছনের প্রিভিউ', 'back_download' => 'পেছনের দিক ডাউনলোড করুন (SVG)'],
+    'hi' => ['not_found' => 'QSL नहीं मिला।', 'layout_title' => 'QSL', 'front' => 'सामने', 'front_alt' => 'QSL सामने का पूर्वावलोकन', 'front_download' => 'सामने डाउनलोड करें (SVG)', 'back' => 'पीछे', 'back_alt' => 'QSL पीछे का पूर्वावलोकन', 'back_download' => 'पीछे डाउनलोड करें (SVG)'],
+    'id' => ['not_found' => 'QSL tidak ditemukan.', 'layout_title' => 'QSL', 'front' => 'Depan', 'front_alt' => 'Pratinjau depan QSL', 'front_download' => 'Unduh depan (SVG)', 'back' => 'Belakang', 'back_alt' => 'Pratinjau belakang QSL', 'back_download' => 'Unduh belakang (SVG)'],
+    'ja' => ['not_found' => 'QSLが見つかりません。', 'layout_title' => 'QSL', 'front' => '表面', 'front_alt' => 'QSL表面プレビュー', 'front_download' => '表面をダウンロード (SVG)', 'back' => '裏面', 'back_alt' => 'QSL裏面プレビュー', 'back_download' => '裏面をダウンロード (SVG)'],
+    'ru' => ['not_found' => 'QSL не найдена.', 'layout_title' => 'QSL', 'front' => 'Лицевая сторона', 'front_alt' => 'Предпросмотр лицевой стороны QSL', 'front_download' => 'Скачать лицевую сторону (SVG)', 'back' => 'Оборотная сторона', 'back_alt' => 'Предпросмотр оборотной стороны QSL', 'back_download' => 'Скачать оборотную сторону (SVG)'],
+    'zh' => ['not_found' => '未找到 QSL。', 'layout_title' => 'QSL', 'front' => '正面', 'front_alt' => 'QSL 正面预览', 'front_download' => '下载正面 (SVG)', 'back' => '背面', 'back_alt' => 'QSL 背面预览', 'back_download' => '下载背面 (SVG)'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };

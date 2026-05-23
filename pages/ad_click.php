@@ -10,7 +10,15 @@ $i18n = [
     'it' => ['not_found' => 'Pubblicità non trovata', 'title' => 'Pubblicità'],
     'pt' => ['not_found' => 'Publicidade não encontrada', 'title' => 'Publicidade'],
     'nl' => ['not_found' => 'Advertentie niet gevonden', 'title' => 'Advertentie'],
+    'ar' => ['not_found' => 'الإعلان غير موجود', 'title' => 'إعلان'],
+    'bn' => ['not_found' => 'বিজ্ঞাপন পাওয়া যায়নি', 'title' => 'বিজ্ঞাপন'],
+    'hi' => ['not_found' => 'विज्ञापन नहीं मिला', 'title' => 'विज्ञापन'],
+    'id' => ['not_found' => 'Iklan tidak ditemukan', 'title' => 'Iklan'],
+    'ja' => ['not_found' => '広告が見つかりません', 'title' => '広告'],
+    'ru' => ['not_found' => 'Объявление не найдено', 'title' => 'Реклама'],
+    'zh' => ['not_found' => '未找到广告', 'title' => '广告'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $pool = [];

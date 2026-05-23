@@ -19,6 +19,7 @@ $i18n = [
     'ru' => ['title' => 'Отписка от рассылки', 'desc' => 'Подтверждение отписки от рассылки ON4CRD.', 'heading' => 'Рассылка', 'ok' => 'Ваш запрос на отписку обработан.', 'invalid' => 'Недействительная или уже использованная ссылка.'],
     'id' => ['title' => 'Berhenti berlangganan newsletter', 'desc' => 'Konfirmasi berhenti berlangganan newsletter ON4CRD.', 'heading' => 'Newsletter', 'ok' => 'Permintaan berhenti berlangganan Anda telah diproses.', 'invalid' => 'Tautan tidak valid atau sudah digunakan.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return i18n_localized_value($i18n, $locale, $key);
 };

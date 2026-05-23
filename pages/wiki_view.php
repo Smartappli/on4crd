@@ -18,6 +18,7 @@ $i18n = [
     'ru' => ['not_found' => 'Страница wiki не найдена.', 'edit' => 'Редактировать', 'layout' => 'Wiki', 'meta_desc' => 'Просмотр страницы wiki.'],
     'id' => ['not_found' => 'Halaman wiki tidak ditemukan.', 'edit' => 'Ubah', 'layout' => 'Wiki', 'meta_desc' => 'Lihat halaman wiki.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };

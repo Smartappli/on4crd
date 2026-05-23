@@ -12,6 +12,7 @@ $i18n = [
     'pt' => ['updated' => 'Feeds live atualizados.', 'title' => 'Administração de feeds live', 'intro' => 'Os widgets em tempo real estão limitados ao painel de membros.', 'active' => 'Ativo', 'label' => 'Rótulo', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'TTL cache', 'refresh' => 'Atualização navegador', 'notes' => 'Notas', 'save' => 'Guardar', 'layout' => 'Feeds live', 'meta_desc' => 'Configuração de feeds live na área de membros.'],
     'nl' => ['updated' => 'Livefeeds bijgewerkt.', 'title' => 'Beheer van livefeeds', 'intro' => 'Realtime widgets zijn beperkt tot het ledendashboard. Beheer hier activatie, URL, parser en TTL zonder ze publiek te tonen.', 'active' => 'Actief', 'label' => 'Label', 'url' => 'URL', 'parser' => 'Parser', 'cache_ttl' => 'Cache-TTL', 'refresh' => 'Browserverversing', 'notes' => 'Notities', 'save' => 'Opslaan', 'layout' => 'Livefeeds', 'meta_desc' => 'Configuratie van livefeeds die in de ledenruimte worden getoond.'],
 ];
+$i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, $key);

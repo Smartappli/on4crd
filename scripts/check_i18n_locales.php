@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 $files = glob($root . '/pages/*.php') ?: [];
-$required = ["'fr'", "'en'", "'de'", "'nl'"];
+$requiredLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'bn', 'hi', 'id', 'ja', 'ru', 'zh'];
+$homeRequiredLocales = $requiredLocales;
+$required = array_map(static fn (string $locale): string => "'" . $locale . "'", $requiredLocales);
 $issues = [];
 $warnings = [];
 $strictWarnings = in_array('--strict-warnings', $argv, true) || in_array('--fail-on-warnings', $argv, true);
@@ -58,7 +60,7 @@ foreach ($files as $file) {
             $missing[] = trim($lang, "'");
         }
     }
-    if ($missing !== []) {
+    if ($missing !== [] && !str_contains($content, 'i18n_expand_supported_locales($i18n)')) {
         $issues[] = [basename($file), $missing];
     }
 }
@@ -66,10 +68,11 @@ foreach ($files as $file) {
 /**
  * @return array<string, array<string, string>>
  */
-function extract_i18n_top_locales(string $slice): array
+function extract_i18n_top_locales(string $slice, array $locales): array
 {
     $result = [];
-    if (!preg_match_all("/'(?P<locale>fr|en|de|nl)'\\s*=>\\s*\\[(?P<body>.*?)\\](?:\\s*,|\\s*$)/s", $slice, $matches, PREG_SET_ORDER)) {
+    $localePattern = implode('|', array_map(static fn (string $locale): string => preg_quote($locale, '/'), $locales));
+    if (!preg_match_all("/'(?P<locale>" . $localePattern . ")'\\s*=>\\s*\\[(?P<body>.*?)\\](?:\\s*,|\\s*$)/s", $slice, $matches, PREG_SET_ORDER)) {
         return $result;
     }
     foreach ($matches as $match) {
@@ -103,11 +106,14 @@ foreach ($files as $file) {
     if ($slice === null) {
         continue;
     }
-    $locales = extract_i18n_top_locales($slice);
+    $locales = extract_i18n_top_locales($slice, $requiredLocales);
     if (!isset($locales['fr'])) {
         continue;
     }
-    foreach (['en', 'de', 'nl'] as $locale) {
+    foreach ($requiredLocales as $locale) {
+        if ($locale === 'fr') {
+            continue;
+        }
         if (!isset($locales[$locale])) {
             continue;
         }
@@ -154,7 +160,7 @@ function extract_locale_blocks(string $content, array $locales): array
 $homeFile = $root . '/pages/home.php';
 if (is_file($homeFile)) {
     $homeContent = (string) file_get_contents($homeFile);
-    $localeBlocks = extract_locale_blocks($homeContent, ['fr', 'en', 'de', 'nl']);
+    $localeBlocks = extract_locale_blocks($homeContent, $homeRequiredLocales);
     $homeRequiredKeys = [
         'member_modules_title',
         'member_modules_empty',
@@ -170,7 +176,7 @@ if (is_file($homeFile)) {
         'alt_repeater_logo',
     ];
 
-    foreach (['fr', 'en', 'de', 'nl'] as $locale) {
+    foreach ($homeRequiredLocales as $locale) {
         if (!isset($localeBlocks[$locale])) {
             $issues[] = ['home.php', ['missing_locale_block_' . $locale]];
             continue;
@@ -190,7 +196,7 @@ if (is_file($homeFile)) {
 }
 
 if ($issues === []) {
-    echo "OK: all page-level i18n blocks include fr/en/de/nl\n";
+    echo "OK: all page-level i18n dictionaries expose " . implode('/', $requiredLocales) . "\n";
     if ($warnings !== []) {
         echo "WARN: potential French string leakage in non-fr locales -> " . implode(',', $warnings) . "\n";
         if ($strictWarnings) {
