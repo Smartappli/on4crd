@@ -1557,6 +1557,18 @@ function apply_runtime_schema_updates(): void
         if (!$hasCategory) {
             db()->exec('ALTER TABLE articles ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "autres" AFTER status');
         }
+
+        $columnStmt->execute(['articles', 'scheduled_at']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE articles ADD COLUMN scheduled_at DATETIME NULL DEFAULT NULL AFTER status');
+        }
+
+        $columnStmt->execute(['articles', 'published_at']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE articles ADD COLUMN published_at DATETIME NULL DEFAULT NULL AFTER scheduled_at');
+        }
+
+        db()->exec('ALTER TABLE articles MODIFY COLUMN status ENUM("draft","scheduled","published") NOT NULL DEFAULT "draft"');
     }
 
 
@@ -1675,6 +1687,45 @@ function apply_runtime_schema_updates(): void
             }
         }
     }
+
+    if (table_exists('classified_ads')) {
+        $columnStmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+
+        $columnStmt->execute(['classified_ads', 'expires_at']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN expires_at DATETIME NULL DEFAULT NULL AFTER status');
+        }
+
+        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
+    }
+
+    ensure_member_favorites_table();
+    ensure_member_notifications_table();
+}
+
+if (!function_exists('classifieds_sync_expired')) {
+function classifieds_sync_expired(): void
+{
+    if (!table_exists('classified_ads')) {
+        return;
+    }
+
+    db()->exec('UPDATE classified_ads SET status = "expired", updated_at = NOW() WHERE status = "active" AND expires_at IS NOT NULL AND expires_at < NOW()');
+}
+}
+
+if (!function_exists('articles_sync_scheduled_publications')) {
+function articles_sync_scheduled_publications(): void
+{
+    if (!table_exists('articles')) {
+        return;
+    }
+
+    db()->exec('UPDATE articles SET status = "published", published_at = COALESCE(published_at, NOW()), updated_at = NOW() WHERE status = "scheduled" AND scheduled_at IS NOT NULL AND scheduled_at <= NOW()');
+}
 }
 
 function seed_quotes_from_sql_file(string $filePath): void
@@ -4634,6 +4685,159 @@ function ensure_member_library_table(): bool
     }
 
     return $ready;
+}
+}
+
+if (!function_exists('ensure_member_favorites_table')) {
+function ensure_member_favorites_table(): bool
+{
+    if (!table_exists('members')) {
+        return false;
+    }
+
+    db()->exec('CREATE TABLE IF NOT EXISTS member_favorites (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        member_id INT NOT NULL,
+        target_type VARCHAR(48) NOT NULL,
+        target_id INT NOT NULL,
+        target_key VARCHAR(190) DEFAULT NULL,
+        title VARCHAR(255) NOT NULL DEFAULT "",
+        url VARCHAR(255) NOT NULL DEFAULT "",
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY uniq_member_target (member_id, target_type, target_id),
+        KEY idx_member_created (member_id, created_at),
+        KEY idx_target (target_type, target_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+
+    return true;
+}
+}
+
+if (!function_exists('favorite_is_saved')) {
+function favorite_is_saved(int $memberId, string $targetType, int $targetId): bool
+{
+    if ($memberId <= 0 || $targetId <= 0 || !ensure_member_favorites_table()) {
+        return false;
+    }
+
+    $stmt = db()->prepare('SELECT id FROM member_favorites WHERE member_id = ? AND target_type = ? AND target_id = ? LIMIT 1');
+    $stmt->execute([$memberId, $targetType, $targetId]);
+    return $stmt->fetchColumn() !== false;
+}
+}
+
+if (!function_exists('favorite_toggle')) {
+function favorite_toggle(int $memberId, string $targetType, int $targetId, string $title = '', string $url = '', ?string $targetKey = null): bool
+{
+    if ($memberId <= 0 || $targetId <= 0 || !ensure_member_favorites_table()) {
+        return false;
+    }
+
+    if (favorite_is_saved($memberId, $targetType, $targetId)) {
+        $stmt = db()->prepare('DELETE FROM member_favorites WHERE member_id = ? AND target_type = ? AND target_id = ?');
+        $stmt->execute([$memberId, $targetType, $targetId]);
+        return false;
+    }
+
+    $stmt = db()->prepare('INSERT INTO member_favorites (member_id, target_type, target_id, target_key, title, url) VALUES (?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$memberId, $targetType, $targetId, $targetKey, mb_safe_substr(trim($title), 0, 255), mb_safe_substr(trim($url), 0, 255)]);
+    return true;
+}
+}
+
+if (!function_exists('member_favorites_recent')) {
+function member_favorites_recent(int $memberId, int $limit = 12): array
+{
+    if ($memberId <= 0 || !ensure_member_favorites_table()) {
+        return [];
+    }
+
+    $limit = max(1, min(100, $limit));
+    $stmt = db()->prepare('SELECT target_type, target_id, target_key, title, url, created_at FROM member_favorites WHERE member_id = ? ORDER BY created_at DESC, id DESC LIMIT ' . $limit);
+    $stmt->execute([$memberId]);
+    return $stmt->fetchAll() ?: [];
+}
+}
+
+if (!function_exists('ensure_member_notifications_table')) {
+function ensure_member_notifications_table(): bool
+{
+    if (!table_exists('members')) {
+        return false;
+    }
+
+    db()->exec('CREATE TABLE IF NOT EXISTS member_notifications (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        member_id INT NOT NULL,
+        type VARCHAR(64) NOT NULL DEFAULT "info",
+        title VARCHAR(255) NOT NULL,
+        body TEXT DEFAULT NULL,
+        url VARCHAR(255) DEFAULT NULL,
+        is_read TINYINT(1) NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        read_at TIMESTAMP NULL DEFAULT NULL,
+        KEY idx_member_unread (member_id, is_read, created_at),
+        KEY idx_member_created (member_id, created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+
+    return true;
+}
+}
+
+if (!function_exists('notify_member')) {
+function notify_member(int $memberId, string $type, string $title, ?string $body = null, ?string $url = null): void
+{
+    if ($memberId <= 0 || !ensure_member_notifications_table()) {
+        return;
+    }
+
+    $stmt = db()->prepare('INSERT INTO member_notifications (member_id, type, title, body, url) VALUES (?, ?, ?, ?, ?)');
+    $stmt->execute([
+        $memberId,
+        mb_safe_substr(trim($type), 0, 64) ?: 'info',
+        mb_safe_substr(trim($title), 0, 255),
+        $body !== null ? trim($body) : null,
+        $url !== null ? mb_safe_substr(trim($url), 0, 255) : null,
+    ]);
+}
+}
+
+if (!function_exists('member_notifications_recent')) {
+function member_notifications_recent(int $memberId, int $limit = 10): array
+{
+    if ($memberId <= 0 || !ensure_member_notifications_table()) {
+        return [];
+    }
+
+    $limit = max(1, min(100, $limit));
+    $stmt = db()->prepare('SELECT id, type, title, body, url, is_read, created_at FROM member_notifications WHERE member_id = ? ORDER BY created_at DESC, id DESC LIMIT ' . $limit);
+    $stmt->execute([$memberId]);
+    return $stmt->fetchAll() ?: [];
+}
+}
+
+if (!function_exists('member_notifications_unread_count')) {
+function member_notifications_unread_count(int $memberId): int
+{
+    if ($memberId <= 0 || !ensure_member_notifications_table()) {
+        return 0;
+    }
+
+    $stmt = db()->prepare('SELECT COUNT(*) FROM member_notifications WHERE member_id = ? AND is_read = 0');
+    $stmt->execute([$memberId]);
+    return (int) ($stmt->fetchColumn() ?: 0);
+}
+}
+
+if (!function_exists('member_notifications_mark_all_read')) {
+function member_notifications_mark_all_read(int $memberId): void
+{
+    if ($memberId <= 0 || !ensure_member_notifications_table()) {
+        return;
+    }
+
+    $stmt = db()->prepare('UPDATE member_notifications SET is_read = 1, read_at = NOW() WHERE member_id = ? AND is_read = 0');
+    $stmt->execute([$memberId]);
 }
 }
 

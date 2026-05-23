@@ -17,6 +17,7 @@ if (!table_exists('classified_ads')) {
     echo render_layout($message, $t('title'));
     return;
 }
+classifieds_sync_expired();
 
 $categories = [
     'gear' => $t('category_gear'),
@@ -24,9 +25,11 @@ $categories = [
     'service' => $t('category_service'),
 ];
 $statuses = [
+    'draft' => 'Brouillon',
     'active' => $t('status_active'),
     'sold' => $t('status_sold'),
     'archived' => $t('status_archived'),
+    'expired' => 'Expirée',
 ];
 
 $user = current_user();
@@ -55,18 +58,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $location = trim((string) ($_POST['location'] ?? ''));
             $contact = trim((string) ($_POST['contact'] ?? ''));
             $priceCents = max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0')));
+            $requestedStatus = (string) ($_POST['status'] ?? 'draft');
+            if (!in_array($requestedStatus, ['draft', 'active', 'sold', 'archived'], true)) {
+                $requestedStatus = 'draft';
+            }
 
             if ($title === '' || $description === '' || $contact === '' || !isset($categories[$category])) {
                 throw new RuntimeException($t('invalid'));
             }
 
             if ($id > 0) {
-                $stmt = db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-                $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $id, (int) $user['id']]);
+                $expiresAt = null;
+                if ($requestedStatus === 'active') {
+                    $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
+                }
+                $stmt = db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
+                $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt, $id, (int) $user['id']]);
                 set_flash('success', $t('updated_ok'));
             } else {
-                $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status) VALUES (?, ?, ?, ?, ?, ?, ?, "active")');
-                $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents]);
+                $expiresAt = null;
+                if ($requestedStatus === 'active') {
+                    $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
+                }
+                $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt]);
                 set_flash('success', $t('created_ok'));
             }
         }
@@ -74,12 +89,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'set_status') {
             $id = (int) ($_POST['id'] ?? 0);
             $status = (string) ($_POST['status'] ?? 'active');
-            if (!in_array($status, ['active', 'sold', 'archived'], true)) {
+            if (!in_array($status, ['draft', 'active', 'sold', 'archived'], true)) {
                 throw new RuntimeException($t('invalid'));
             }
-            $stmt = db()->prepare('UPDATE classified_ads SET status = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-            $stmt->execute([$status, $id, (int) $user['id']]);
+            $expiresAt = null;
+            if ($status === 'active') {
+                $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
+            }
+            $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
+            $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
             set_flash('success', $t('status_ok'));
+        }
+
+        if ($action === 'renew') {
+            $id = (int) ($_POST['id'] ?? 0);
+            $stmt = db()->prepare('UPDATE classified_ads SET status = "active", expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
+            $stmt->execute([date('Y-m-d H:i:s', time() + (30 * 86400)), $id, (int) $user['id']]);
+            set_flash('success', 'Annonce renouvelée pour 30 jours.');
+        }
+
+        if ($action === 'toggle_favorite') {
+            $id = (int) ($_POST['id'] ?? 0);
+            if ($id > 0) {
+                $adStmt = db()->prepare('SELECT id, title FROM classified_ads WHERE id = ? LIMIT 1');
+                $adStmt->execute([$id]);
+                $adRow = $adStmt->fetch() ?: null;
+                if ($adRow !== null) {
+                    $title = (string) ($adRow['title'] ?? 'Annonce');
+                    $url = route_url('classifieds', ['q' => $title]);
+                    $saved = favorite_toggle((int) $user['id'], 'classified_ad', (int) $adRow['id'], $title, $url);
+                    notify_member((int) $user['id'], 'favorite', $saved ? 'Favori ajouté' : 'Favori retiré', $title, $url);
+                    set_flash('success', $saved ? 'Annonce ajoutée aux favoris.' : 'Annonce retirée des favoris.');
+                }
+            }
         }
 
         redirect_url(route_url('classifieds'));
@@ -96,7 +138,7 @@ if (mb_strlen($query) > 120) {
 }
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
-$where = ["ca.status = 'active'"];
+$where = ["ca.status = 'active'", '(ca.expires_at IS NULL OR ca.expires_at >= NOW())'];
 $params = [];
 
 if (isset($categories[$categoryFilter])) {
@@ -182,6 +224,12 @@ ob_start();
                     <label><?= e($t('location_label')) ?><input type="text" name="location" maxlength="120" value="<?= e((string) ($editing['location'] ?? '')) ?>"></label>
                 </div>
                 <label><?= e($t('contact_label')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($editing['contact'] ?? ((string) ($user['email'] ?? $user['callsign'] ?? '')))) ?>"></label>
+                <label>Publication
+                    <select name="status">
+                        <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>>Brouillon</option>
+                        <option value="active" <?= (($editing['status'] ?? '') === 'active') ? 'selected' : '' ?>>Publiée (30 jours)</option>
+                    </select>
+                </label>
                 <p><button class="button"><?= e($t('save')) ?></button><?php if ($editing): ?> <a class="button ghost" href="<?= e(route_url('classifieds')) ?>"><?= e($t('cancel')) ?></a><?php endif; ?></p>
             </form>
         </section>
@@ -193,7 +241,10 @@ ob_start();
                 <?php foreach ($myAds as $ad): ?>
                     <tr>
                         <td><strong><?= e((string) $ad['title']) ?></strong><div class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> - <?= e(format_price_eur((int) $ad['price_cents'])) ?></div></td>
-                        <td><span class="badge muted"><?= e((string) ($statuses[$ad['status']] ?? $ad['status'])) ?></span></td>
+                        <td>
+                            <span class="badge muted"><?= e((string) ($statuses[$ad['status']] ?? $ad['status'])) ?></span>
+                            <?php if (!empty($ad['expires_at'])): ?><div class="help">Expire: <?= e(date('d/m/Y', strtotime((string) $ad['expires_at']))) ?></div><?php endif; ?>
+                        </td>
                         <td>
                             <a href="<?= e(route_url('classifieds', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
                             <form method="post" class="inline-form" style="display:inline-flex;gap:.4rem;margin-left:.5rem;">
@@ -201,6 +252,9 @@ ob_start();
                                 <?php if ((string) $ad['status'] !== 'sold'): ?><button class="button ghost" name="status" value="sold"><?= e($t('mark_sold')) ?></button><?php endif; ?>
                                 <?php if ((string) $ad['status'] !== 'active'): ?><button class="button ghost" name="status" value="active"><?= e($t('reactivate')) ?></button><?php endif; ?>
                                 <?php if ((string) $ad['status'] !== 'archived'): ?><button class="button ghost" name="status" value="archived"><?= e($t('archive')) ?></button><?php endif; ?>
+                                <?php if (in_array((string) $ad['status'], ['active', 'expired'], true)): ?>
+                                    <button class="button ghost" formaction="<?= e(route_url('classifieds')) ?>" name="action" value="renew">Renouveler 30j</button>
+                                <?php endif; ?>
                             </form>
                         </td>
                     </tr>
@@ -216,6 +270,7 @@ ob_start();
         <?php if ($allAds === []): ?><p class="help"><?= e($t('none')) ?></p><?php else: ?>
             <div class="grid-3">
                 <?php foreach ($allAds as $ad): ?>
+                <?php $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'classified_ad', (int) $ad['id']) : false; ?>
                 <article class="card feature-card" style="margin:0;">
                     <div class="section-header">
                         <h3 style="margin:0;"><?= e((string) $ad['title']) ?></h3>
@@ -224,6 +279,14 @@ ob_start();
                     <p class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> - <?= e((string) ($ad['callsign'] ?? 'N/A')) ?><?php if ((string) ($ad['location'] ?? '') !== ''): ?> - <?= e((string) $ad['location']) ?><?php endif; ?></p>
                     <p><?= nl2br(e((string) $ad['description'])) ?></p>
                     <p><strong><?= e($t('contact_label')) ?>:</strong> <?= e((string) $ad['contact']) ?></p>
+                    <?php if ($user !== null): ?>
+                        <form method="post" class="inline-form">
+                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="action" value="toggle_favorite">
+                            <input type="hidden" name="id" value="<?= (int) $ad['id'] ?>">
+                            <button class="button secondary" type="submit"><?= $isFavorite ? '★ Favori' : '☆ Favori' ?></button>
+                        </form>
+                    <?php endif; ?>
                 </article>
                 <?php endforeach; ?>
             </div>

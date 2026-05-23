@@ -4,11 +4,32 @@ declare(strict_types=1);
 require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('members_library', $locale);
+/** @var array{id:int} $user */
+$user = current_user() ?? ['id' => 0];
 set_page_meta(['title' => (string) $t['title'], 'description' => (string) $t['meta_desc'], 'robots' => 'noindex,follow']);
 
 if (!ensure_member_library_table()) {
     echo render_layout('<div class="card"><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['title']);
     return;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite_document') {
+    verify_csrf();
+    $documentId = (int) ($_POST['document_id'] ?? 0);
+    if ($documentId > 0) {
+        $docStmt = db()->prepare('SELECT id, title, category FROM member_library_documents WHERE id = ? LIMIT 1');
+        $docStmt->execute([$documentId]);
+        $docRow = $docStmt->fetch() ?: null;
+        if ($docRow !== null) {
+            $docTitle = trim((string) ($docRow['title'] ?? 'Document'));
+            $docCategory = trim((string) ($docRow['category'] ?? ''));
+            $favoriteUrl = route_url_clean('members_library', ['q' => $docTitle, 'category' => $docCategory]);
+            $saved = favorite_toggle((int) $user['id'], 'library_document', (int) $docRow['id'], $docTitle, $favoriteUrl);
+            notify_member((int) $user['id'], 'favorite', $saved ? 'Favori ajouté' : 'Favori retiré', $docTitle, $favoriteUrl);
+            set_flash('success', $saved ? 'Document ajouté aux favoris.' : 'Document retiré des favoris.');
+        }
+    }
+    redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
 }
 
 $search = trim((string) ($_GET['q'] ?? ''));
@@ -81,6 +102,7 @@ ob_start();
         <?php $docTitle = trim((string) ($document['title'] ?? '')); if ($docTitle === '') { $docTitle = (string) $t['document']; } ?>
         <?php $docDescription = trim((string) ($document['description'] ?? '')); ?>
         <?php $docExtract = trim((string) ($document['extracted_text'] ?? '')); ?>
+        <?php $isFavorite = favorite_is_saved((int) $user['id'], 'library_document', (int) ($document['id'] ?? 0)); ?>
         <article class="card feature-card" style="margin-top:12px;">
             <p><span class="badge muted"><?= e($docCategory) ?></span> <span class="badge muted"><?= e(strtoupper($extension)) ?></span></p>
             <h3><?= e($docTitle) ?></h3>
@@ -92,7 +114,15 @@ ob_start();
                     <iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview" loading="lazy"></iframe>
                 </details>
             <?php endif; ?>
-            <p><a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a></p>
+            <p class="actions">
+                <a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
+                <form method="post" class="inline-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="toggle_favorite_document">
+                    <input type="hidden" name="document_id" value="<?= (int) ($document['id'] ?? 0) ?>">
+                    <button class="button secondary" type="submit"><?= $isFavorite ? '★ Favori' : '☆ Favori' ?></button>
+                </form>
+            </p>
         </article>
     <?php endforeach; ?>
     </div>

@@ -7,6 +7,15 @@ $locale = current_locale();
 $t = i18n_domain_translator('dashboard', $locale);
 set_page_meta(['title' => $t('meta_title'), 'description' => $t('meta_desc'), 'schema_type' => 'WebPage']);
 $availableWidgets = enabled_widget_catalog();
+$userId = (int) ($user['id'] ?? 0);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'mark_notifications_read') {
+    verify_csrf();
+    member_notifications_mark_all_read($userId);
+    redirect_url(route_url('dashboard'));
+}
+$unreadNotifications = member_notifications_unread_count($userId);
+$recentNotifications = member_notifications_recent($userId, 6);
+$recentFavorites = member_favorites_recent($userId, 6);
 $dashboardPersistenceEnabled = table_exists('dashboard_widgets');
 $selected = [];
 if ($dashboardPersistenceEnabled) {
@@ -89,6 +98,47 @@ ob_start();
         ?>
       <?php endforeach; ?>
     </div>
+  </section>
+  <section class="card">
+    <div class="row-between">
+      <h2 style="margin:0;">Notifications</h2>
+      <div class="actions">
+        <span class="badge muted"><?= $unreadNotifications ?> non lues</span>
+        <form method="post" class="inline-form">
+          <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+          <input type="hidden" name="action" value="mark_notifications_read">
+          <button class="button secondary small" type="submit">Tout marquer lu</button>
+        </form>
+      </div>
+    </div>
+    <?php if ($recentNotifications === []): ?>
+      <p class="help">Aucune notification.</p>
+    <?php else: ?>
+      <ul class="stack" style="list-style:none;padding:0;margin:.8rem 0 0 0;">
+        <?php foreach ($recentNotifications as $item): ?>
+          <li class="card" style="margin:0;">
+            <strong><?= e((string) ($item['title'] ?? '')) ?></strong>
+            <?php if (trim((string) ($item['body'] ?? '')) !== ''): ?><p class="help" style="margin:.35rem 0;"><?= e((string) $item['body']) ?></p><?php endif; ?>
+            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a href="<?= e((string) $item['url']) ?>">Ouvrir</a><?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endif; ?>
+  </section>
+  <section class="card">
+    <h2 style="margin-top:0;">Favoris récents</h2>
+    <?php if ($recentFavorites === []): ?>
+      <p class="help">Aucun favori enregistré.</p>
+    <?php else: ?>
+      <ul class="stack" style="list-style:none;padding:0;margin:0;">
+        <?php foreach ($recentFavorites as $favorite): ?>
+          <li class="row-between" style="gap:.8rem;">
+            <span><?= e((string) ($favorite['title'] !== '' ? $favorite['title'] : $favorite['target_type'])) ?></span>
+            <?php if (trim((string) ($favorite['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $favorite['url']) ?>">Ouvrir</a><?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endif; ?>
   </section>
 </div>
 <div class="dashboard-offcanvas-backdrop" id="dashboard-widgets-backdrop" hidden></div>

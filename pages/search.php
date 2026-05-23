@@ -81,6 +81,115 @@ if ($hasQuery && $isQueryLongEnough) {
                 $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('wiki_view', ['slug' => (string) $row['slug']]), 'score' => $score];
             }
         }
+        if (table_exists('classified_ads')) {
+            $where = '(title LIKE ? OR description LIKE ? OR location LIKE ?)';
+            $params = [$like, $like, $like];
+            foreach ($queryLikes as $termLike) {
+                $where .= ' OR (title LIKE ? OR description LIKE ? OR location LIKE ?)';
+                array_push($params, $termLike, $termLike, $termLike);
+            }
+            $stmt = db()->prepare('SELECT id, category_code, title, description, location, price_cents FROM classified_ads WHERE status = "active" AND (' . $where . ') ORDER BY updated_at DESC LIMIT 30');
+            $stmt->execute($params);
+            foreach ($stmt->fetchAll() as $row) {
+                $title = (string) $row['title'];
+                $summaryParts = [];
+                $description = trim((string) ($row['description'] ?? ''));
+                if ($description !== '') {
+                    $summaryParts[] = mb_substr(strip_tags($description), 0, 180);
+                }
+                $location = trim((string) ($row['location'] ?? ''));
+                if ($location !== '') {
+                    $summaryParts[] = $location;
+                }
+                $priceCents = (int) ($row['price_cents'] ?? 0);
+                if ($priceCents > 0) {
+                    $summaryParts[] = format_price_eur($priceCents);
+                }
+                $summary = implode(' · ', $summaryParts);
+                $score = 0;
+                if (stripos($title, $q) !== false) {
+                    $score += 4;
+                }
+                if (stripos($summary, $q) !== false) {
+                    $score += 2;
+                }
+                foreach ($tokens as $term) {
+                    if (stripos($title, $term) !== false) {
+                        $score += 2;
+                    }
+                    if (stripos($summary, $term) !== false) {
+                        $score += 1;
+                    }
+                }
+                $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('classifieds', ['q' => $title]), 'score' => $score];
+            }
+        }
+        if (table_exists('member_library_documents')) {
+            $where = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
+            $params = [$like, $like, $like];
+            foreach ($queryLikes as $termLike) {
+                $where .= ' OR (title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
+                array_push($params, $termLike, $termLike, $termLike);
+            }
+            $stmt = db()->prepare('SELECT title, description, category FROM member_library_documents WHERE ' . $where . ' ORDER BY uploaded_at DESC LIMIT 30');
+            $stmt->execute($params);
+            foreach ($stmt->fetchAll() as $row) {
+                $title = (string) $row['title'];
+                $description = trim((string) ($row['description'] ?? ''));
+                $summary = $description !== '' ? mb_substr(strip_tags($description), 0, 180) : '';
+                $score = 0;
+                if (stripos($title, $q) !== false) {
+                    $score += 4;
+                }
+                if (stripos($summary, $q) !== false) {
+                    $score += 2;
+                }
+                foreach ($tokens as $term) {
+                    if (stripos($title, $term) !== false) {
+                        $score += 2;
+                    }
+                    if (stripos($summary, $term) !== false) {
+                        $score += 1;
+                    }
+                }
+                $category = trim((string) ($row['category'] ?? ''));
+                $urlQuery = ['q' => $title];
+                if ($category !== '') {
+                    $urlQuery['category'] = $category;
+                }
+                $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('members_library', $urlQuery), 'score' => $score];
+            }
+        }
+        if (table_exists('albums')) {
+            $where = '(title LIKE ? OR description LIKE ?)';
+            $params = [$like, $like];
+            foreach ($queryLikes as $termLike) {
+                $where .= ' OR (title LIKE ? OR description LIKE ?)';
+                array_push($params, $termLike, $termLike);
+            }
+            $stmt = db()->prepare('SELECT id, title, description FROM albums WHERE is_public = 1 AND (' . $where . ') ORDER BY id DESC LIMIT 30');
+            $stmt->execute($params);
+            foreach ($stmt->fetchAll() as $row) {
+                $title = (string) $row['title'];
+                $summary = mb_substr(strip_tags((string) ($row['description'] ?? '')), 0, 180);
+                $score = 0;
+                if (stripos($title, $q) !== false) {
+                    $score += 4;
+                }
+                if (stripos($summary, $q) !== false) {
+                    $score += 2;
+                }
+                foreach ($tokens as $term) {
+                    if (stripos($title, $term) !== false) {
+                        $score += 2;
+                    }
+                    if (stripos($summary, $term) !== false) {
+                        $score += 1;
+                    }
+                }
+                $collected[] = ['title' => $title, 'summary' => $summary, 'url' => route_url('album', ['id' => (int) $row['id']]), 'score' => $score];
+            }
+        }
         return $collected;
     });
 }

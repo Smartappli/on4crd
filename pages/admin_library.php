@@ -154,6 +154,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_flash('success', (string) $t['ok_deleted']);
             redirect('admin_library');
         }
+        if ($action === 'bulk_delete_documents') {
+            $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
+            if ($ids === []) {
+                throw new RuntimeException('err_required');
+            }
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $sel = db()->prepare('SELECT file_path FROM member_library_documents WHERE id IN (' . $placeholders . ')');
+            $sel->execute($ids);
+            foreach ($sel->fetchAll() ?: [] as $row) {
+                $safePath = safe_storage_public_path_or_null((string) ($row['file_path'] ?? ''), ['storage/uploads/library/']);
+                if ($safePath !== null) {
+                    $absolute = dirname(__DIR__) . '/' . $safePath;
+                    if (is_file($absolute)) {
+                        @unlink($absolute);
+                    }
+                }
+            }
+            db()->prepare('DELETE FROM member_library_documents WHERE id IN (' . $placeholders . ')')->execute($ids);
+            set_flash('success', (string) $t['ok_deleted']);
+            redirect('admin_library');
+        }
 
         $category = library_category_slug((string) ($_POST['category'] ?? 'general'));
         $title = trim((string) ($_POST['title'] ?? ''));
@@ -179,15 +200,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $categoryOptions = db()->query('SELECT code, label FROM member_library_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [];
 $perPage = 20;
 $page = max(1, (int) ($_GET['p'] ?? 1));
-$totalDocuments = (int) (db()->query('SELECT COUNT(*) FROM member_library_documents')->fetchColumn() ?: 0);
+$adminCategory = library_category_slug((string) ($_GET['category'] ?? ''));
+if ($adminCategory === 'general' && !isset($_GET['category'])) {
+    $adminCategory = '';
+}
+$adminSearch = trim((string) ($_GET['q'] ?? ''));
+$where = [];
+$params = [];
+if ($adminCategory !== '') {
+    $where[] = 'category = ?';
+    $params[] = $adminCategory;
+}
+if ($adminSearch !== '') {
+    $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
+    $needle = '%' . $adminSearch . '%';
+    array_push($params, $needle, $needle, $needle);
+}
+$whereSql = $where === [] ? '' : (' WHERE ' . implode(' AND ', $where));
+$countStmt = db()->prepare('SELECT COUNT(*) FROM member_library_documents' . $whereSql);
+$countStmt->execute($params);
+$totalDocuments = (int) ($countStmt->fetchColumn() ?: 0);
 $pagination = pagination_state($totalDocuments, $page, $perPage);
 $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
 $offset = $pagination['offset'];
-$stmt = db()->prepare('SELECT id, category, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents ORDER BY uploaded_at DESC LIMIT :limit OFFSET :offset');
-$stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
+$stmt = db()->prepare('SELECT id, category, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
 
 ob_start();
@@ -238,13 +276,32 @@ ob_start();
     </section>
 
     <section class="admin-library-documents">
+    <form method="get" class="inline-form" style="margin-bottom:.8rem;flex-wrap:wrap;">
+        <input type="hidden" name="route" value="admin_library">
+        <select name="category">
+            <option value="">Toutes catégories</option>
+            <?php foreach ($categoryOptions as $catOpt): ?>
+                <option value="<?= e((string) $catOpt['code']) ?>" <?= $adminCategory === (string) $catOpt['code'] ? 'selected' : '' ?>><?= e((string) $catOpt['label']) ?></option>
+            <?php endforeach; ?>
+        </select>
+        <input type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="Recherche">
+        <button class="button" type="submit">Filtrer</button>
+        <a class="button secondary" href="<?= e(route_url('admin_library')) ?>">Reset</a>
+    </form>
     <?php if ($documents === []): ?>
         <article class="card admin-library-empty"><p><?= e((string) $t['empty']) ?></p></article>
+    <?php endif; ?>
+    <?php if ($documents !== []): ?>
+    <form method="post" onsubmit="return confirm('<?= e((string) $t['confirm_delete']) ?>');">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <input type="hidden" name="action" value="bulk_delete_documents">
+        <p><button class="button secondary" type="submit">Supprimer la sélection</button></p>
     <?php endif; ?>
     <?php foreach ($documents as $document): ?>
         <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); if ($safePath === null) { continue; } ?>
         <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
         <article class="card admin-library-document">
+            <p><input type="checkbox" name="ids[]" value="<?= (int) $document['id'] ?>"> <span class="help">Sélectionner</span></p>
             <p><span class="badge muted"><?= e((string) ($document['category'] ?? 'general')) ?></span> <span class="badge muted"><?= e(strtoupper($extension)) ?></span></p>
             <h3><?= e((string) $document['title']) ?></h3>
             <p><?= e((string) ($document['description'] ?? '')) ?></p>
@@ -263,12 +320,15 @@ ob_start();
             </div>
         </article>
     <?php endforeach; ?>
+    <?php if ($documents !== []): ?>
+    </form>
+    <?php endif; ?>
     </section>
     <?php if ($totalPages > 1): ?>
         <nav class="admin-library-pagination" aria-label="Pagination documents">
-            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url('admin_library', ['p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
+            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_library', ['category' => $adminCategory, 'q' => $adminSearch, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
             <span class="badge muted"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url('admin_library', ['p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
+            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_library', ['category' => $adminCategory, 'q' => $adminSearch, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
 </div>

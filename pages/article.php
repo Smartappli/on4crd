@@ -37,6 +37,23 @@ if (!$row) {
 }
 
 $row = localized_article_row($row);
+$user = current_user();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
+    $user = require_login();
+    verify_csrf();
+    $saved = favorite_toggle(
+        (int) $user['id'],
+        'article',
+        (int) $row['id'],
+        (string) ($row['title_localized'] ?? $row['title'] ?? ''),
+        route_url('article', ['slug' => (string) $row['slug']])
+    );
+    notify_member((int) $user['id'], 'favorite', $saved ? 'Favori ajouté' : 'Favori retiré', (string) ($row['title_localized'] ?? $row['title'] ?? ''), route_url('article', ['slug' => (string) $row['slug']]));
+    set_flash('success', $saved ? 'Article ajouté aux favoris.' : 'Article retiré des favoris.');
+    redirect_url(route_url('article', ['slug' => (string) $row['slug']]));
+}
+$isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) $row['id']) : false;
+
 $category = slugify((string) ($row['category'] ?? 'autres'));
 $categoryLabel = ucwords(str_replace('-', ' ', $category));
 $readingMinutes = article_view_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? ''));
@@ -63,6 +80,13 @@ ob_start();
 ?>
 <article class="card article-view">
     <p><a class="pill" href="<?= e(route_url('articles', ['theme' => $category])) ?>"><?= e((string) $t['back_to_articles']) ?></a></p>
+    <?php if ($user !== null): ?>
+        <form method="post" class="inline-form" style="margin-bottom:.7rem;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="toggle_favorite">
+            <button class="button secondary" type="submit"><?= $isFavorite ? '★ Retirer des favoris' : '☆ Ajouter aux favoris' ?></button>
+        </form>
+    <?php endif; ?>
     <h1><?= e((string) $row['title_localized']) ?></h1>
     <p class="help">
         <?= e($categoryLabel) ?> ·

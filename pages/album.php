@@ -19,6 +19,23 @@ if (!$album) {
     return;
 }
 
+$user = current_user();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
+    $user = require_login();
+    verify_csrf();
+    $saved = favorite_toggle(
+        (int) $user['id'],
+        'album',
+        (int) $album['id'],
+        (string) ($album['title'] ?? ''),
+        route_url('album', ['id' => (int) $album['id']])
+    );
+    notify_member((int) $user['id'], 'favorite', $saved ? 'Favori ajouté' : 'Favori retiré', (string) ($album['title'] ?? ''), route_url('album', ['id' => (int) $album['id']]));
+    set_flash('success', $saved ? 'Album ajouté aux favoris.' : 'Album retiré des favoris.');
+    redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+}
+$isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'album', (int) $album['id']) : false;
+
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 24;
 $countStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
@@ -48,6 +65,13 @@ ob_start();
 ?>
 <section class="card gallery-header">
     <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
+    <?php if ($user !== null): ?>
+        <form method="post" class="inline-form" style="margin-bottom:.7rem;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="toggle_favorite">
+            <button class="button secondary" type="submit"><?= $isFavorite ? '★ Retirer des favoris' : '☆ Ajouter aux favoris' ?></button>
+        </form>
+    <?php endif; ?>
     <h1><?= e((string) $album['title']) ?></h1>
     <?php if (trim((string) ($album['description'] ?? '')) !== ''): ?>
         <p><?= e((string) $album['description']) ?></p>
