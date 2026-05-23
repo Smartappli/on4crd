@@ -127,6 +127,35 @@ function table_exists(string $table): bool
     }
 }
 
+function table_has_column(string $table, string $column): bool
+{
+    static $cache = [];
+
+    $table = strtolower(trim($table));
+    $column = strtolower(trim($column));
+    if ($table === '' || $column === '') {
+        return false;
+    }
+
+    $cacheKey = $table . '.' . $column;
+    if (array_key_exists($cacheKey, $cache)) {
+        return $cache[$cacheKey];
+    }
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
+        );
+        $stmt->execute([$table, $column]);
+        $cache[$cacheKey] = (int) $stmt->fetchColumn() > 0;
+    } catch (Throwable) {
+        $cache[$cacheKey] = false;
+    }
+
+    return $cache[$cacheKey];
+}
+
 if (!function_exists('supported_locales')) {
 function supported_locales(): array
 {
@@ -2118,9 +2147,18 @@ function module_row(string $module): ?array
         return $cache[$module];
     }
 
-    $stmt = db()->prepare('SELECT is_enabled, visibility FROM modules WHERE code = ? LIMIT 1');
-    $stmt->execute([$module]);
-    $row = $stmt->fetch();
+    $columns = ['is_enabled'];
+    if (table_has_column('modules', 'visibility')) {
+        $columns[] = 'visibility';
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT ' . implode(', ', $columns) . ' FROM modules WHERE code = ? LIMIT 1');
+        $stmt->execute([$module]);
+        $row = $stmt->fetch();
+    } catch (Throwable) {
+        $row = false;
+    }
     $cache[$module] = is_array($row) ? $row : null;
 
     return $cache[$module];

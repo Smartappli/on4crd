@@ -5,12 +5,19 @@ $user = require_login();
 $memberId = (int) ($user['id'] ?? 0);
 $locale = current_locale();
 $qt = i18n_domain_translator('qsl', $locale);
+$qslBackgroundTypeLabel = static function (string $type) use ($qt): string {
+    return match ($type) {
+        'image' => $qt('type_image'),
+        'solid' => $qt('type_solid'),
+        default => $qt('type_gradient'),
+    };
+};
 $drawPresetPalettes = [
-    'club_blue' => ['label' => 'Club blue (gradient)', 'primary' => '#0B1F3A', 'secondary' => '#1D4ED8'],
-    'sunset' => ['label' => 'Sunset (gradient)', 'primary' => '#7C2D12', 'secondary' => '#F97316'],
-    'northern' => ['label' => 'Aurora (gradient)', 'primary' => '#0F766E', 'secondary' => '#22D3EE'],
-    'forest' => ['label' => 'Forest (solid color)', 'primary' => '#166534', 'secondary' => '#166534'],
-    'slate' => ['label' => 'Slate (solid color)', 'primary' => '#334155', 'secondary' => '#334155'],
+    'club_blue' => ['label_key' => 'preset_club_blue', 'type' => 'gradient', 'primary' => '#0B1F3A', 'secondary' => '#1D4ED8'],
+    'sunset' => ['label_key' => 'preset_sunset', 'type' => 'gradient', 'primary' => '#7C2D12', 'secondary' => '#F97316'],
+    'northern' => ['label_key' => 'preset_aurora', 'type' => 'gradient', 'primary' => '#0F766E', 'secondary' => '#22D3EE'],
+    'forest' => ['label_key' => 'preset_forest', 'type' => 'solid', 'primary' => '#166534', 'secondary' => '#166534'],
+    'slate' => ['label_key' => 'preset_slate', 'type' => 'solid', 'primary' => '#334155', 'secondary' => '#334155'],
 ];
 
 db()->exec(
@@ -34,8 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $isAjaxRequest = strtolower((string) ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest';
 
         if ($action === 'save_background_image') {
-            $label = trim((string) ($_POST['background_label'] ?? 'Image background'));
-            $label = mb_safe_substr($label !== '' ? $label : 'Image background', 0, 120);
+            $defaultLabel = $qt('default_image_background');
+            $label = trim((string) ($_POST['background_label'] ?? $defaultLabel));
+            $label = mb_safe_substr($label !== '' ? $label : $defaultLabel, 0, 120);
             $dataUri = qsl_background_upload_to_data_uri($_FILES['background_image'] ?? null);
             if ($dataUri === '') {
                 throw new RuntimeException($qt('err_select_bg'));
@@ -50,8 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             )->execute([$memberId, $label, 'image', $dataUri, $setDefault ? 1 : 0]);
             set_flash('success', $qt('ok_bg_image'));
         } elseif ($action === 'save_background_gradient') {
-            $label = trim((string) ($_POST['gradient_label'] ?? 'Gradient background'));
-            $label = mb_safe_substr($label !== '' ? $label : 'Gradient background', 0, 120);
+            $defaultLabel = $qt('default_gradient_background');
+            $label = trim((string) ($_POST['gradient_label'] ?? $defaultLabel));
+            $label = mb_safe_substr($label !== '' ? $label : $defaultLabel, 0, 120);
             $primary = trim((string) ($_POST['background_primary'] ?? '#0B1F3A'));
             $secondary = trim((string) ($_POST['background_secondary'] ?? '#1D4ED8'));
             if (preg_match('/^#[A-Fa-f0-9]{6}$/', $primary) !== 1 || preg_match('/^#[A-Fa-f0-9]{6}$/', $secondary) !== 1) {
@@ -67,8 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             )->execute([$memberId, $label, 'gradient', strtoupper($primary), strtoupper($secondary), $setDefault ? 1 : 0]);
             set_flash('success', $qt('ok_bg_gradient'));
         } elseif ($action === 'save_background_solid') {
-            $label = trim((string) ($_POST['solid_label'] ?? 'Solid color background'));
-            $label = mb_safe_substr($label !== '' ? $label : 'Solid color background', 0, 120);
+            $defaultLabel = $qt('default_solid_background');
+            $label = trim((string) ($_POST['solid_label'] ?? $defaultLabel));
+            $label = mb_safe_substr($label !== '' ? $label : $defaultLabel, 0, 120);
             $solidColor = trim((string) ($_POST['background_solid'] ?? '#1E293B'));
             if (preg_match('/^#[A-Fa-f0-9]{6}$/', $solidColor) !== 1) {
                 throw new RuntimeException($qt('err_solid_invalid'));
@@ -81,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare(
                 'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
                  VALUES (?, ?, ?, NULL, ?, ?, ?)'
-            )->execute([$memberId, $label, 'gradient', $normalizedColor, $normalizedColor, $setDefault ? 1 : 0]);
+            )->execute([$memberId, $label, 'solid', $normalizedColor, $normalizedColor, $setDefault ? 1 : 0]);
             set_flash('success', $qt('ok_bg_solid'));
         } elseif ($action === 'save_background_palette') {
             $paletteKey = trim((string) ($_POST['preset_palette'] ?? ''));
@@ -89,10 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_array($palette)) {
                 throw new RuntimeException($qt('err_palette_invalid'));
             }
-            $label = trim((string) ($_POST['palette_label'] ?? (string) ($palette['label'] ?? 'Preset palette')));
-            $label = mb_safe_substr($label !== '' ? $label : (string) ($palette['label'] ?? 'Preset palette'), 0, 120);
+            $defaultLabel = $qt((string) ($palette['label_key'] ?? 'default_preset_palette'));
+            $label = trim((string) ($_POST['palette_label'] ?? $defaultLabel));
+            $label = mb_safe_substr($label !== '' ? $label : $defaultLabel, 0, 120);
             $primary = (string) ($palette['primary'] ?? '#0B1F3A');
             $secondary = (string) ($palette['secondary'] ?? '#1D4ED8');
+            $type = (string) ($palette['type'] ?? 'gradient');
             $setDefault = ((string) ($_POST['set_default'] ?? '') === '1');
             if ($setDefault) {
                 db()->prepare('UPDATE qsl_background_presets SET is_default = 0 WHERE member_id = ?')->execute([$memberId]);
@@ -100,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare(
                 'INSERT INTO qsl_background_presets (member_id, label, type, image_data_uri, color_primary, color_secondary, is_default)
                  VALUES (?, ?, ?, NULL, ?, ?, ?)'
-            )->execute([$memberId, $label, 'gradient', strtoupper($primary), strtoupper($secondary), $setDefault ? 1 : 0]);
+            )->execute([$memberId, $label, $type === 'solid' ? 'solid' : 'gradient', strtoupper($primary), strtoupper($secondary), $setDefault ? 1 : 0]);
             set_flash('success', $qt('ok_bg_palette'));
         } elseif ($action === 'set_default_background') {
             $presetId = (int) ($_POST['preset_id'] ?? 0);
@@ -432,12 +444,12 @@ ob_start();
 
 <section class="card" id="qsl-draw" data-qsl-draw-assistant data-qsl-panel="design">
     <h2><?= e($qt('design')) ?></h2>
-    <p class="help">Choose a background type. The form updates automatically and the preview refreshes live.</p>
+    <p class="help"><?= e($qt('design_help')) ?></p>
     <div class="actions">
         <label><input type="radio" name="qsl_draw_flow" value="image" data-qsl-draw-choice> <?= e($qt('label_bg_image')) ?></label>
-        <label><input type="radio" name="qsl_draw_flow" value="solid" data-qsl-draw-choice> Solid color</label>
+        <label><input type="radio" name="qsl_draw_flow" value="solid" data-qsl-draw-choice> <?= e($qt('label_solid')) ?></label>
         <label><input type="radio" name="qsl_draw_flow" value="gradient" data-qsl-draw-choice checked> <?= e($qt('label_gradient')) ?></label>
-        <label><input type="radio" name="qsl_draw_flow" value="palette" data-qsl-draw-choice> Preset colors</label>
+        <label><input type="radio" name="qsl_draw_flow" value="palette" data-qsl-draw-choice> <?= e($qt('label_palette')) ?></label>
     </div>
     <div class="split qsl-background-workbench">
         <div>
@@ -445,80 +457,85 @@ ob_start();
                 <form method="post" enctype="multipart/form-data" class="stack" data-preview-form="image" data-qsl-draw-panel="image">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="save_background_image">
-                    <label>Image background name<input type="text" name="background_label" maxlength="120" placeholder="Ex: Shack ON4CRD"></label>
-                    <label>Image
+                    <label><?= e($qt('bg_image_name')) ?><input type="text" name="background_label" maxlength="120" placeholder="Ex: Shack ON4CRD"></label>
+                    <label><?= e($qt('image_label')) ?>
                         <input type="file" name="background_image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required data-preview-image-input>
                     </label>
-                    <label><input type="checkbox" name="set_default" value="1"> Set as default background</label>
-                    <button type="submit" class="button secondary">Add image background</button>
+                    <label><input type="checkbox" name="set_default" value="1"> <?= e($qt('set_default_bg')) ?></label>
+                    <button type="submit" class="button secondary"><?= e($qt('add_image_bg')) ?></button>
                 </form>
                 <form method="post" class="stack" data-preview-form="gradient" data-qsl-draw-panel="gradient">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="save_background_gradient">
-                    <label>Gradient background name<input type="text" name="gradient_label" maxlength="120" placeholder="Ex: Club blue"></label>
-                    <label><span>Background color 1</span><input class="qsl-color-input" type="color" name="background_primary" value="#0B1F3A" data-preview-color-primary></label>
-                    <label><span>Background color 2</span><input class="qsl-color-input" type="color" name="background_secondary" value="#1D4ED8" data-preview-color-secondary></label>
-                    <label><input type="checkbox" name="set_default" value="1"> Set as default background</label>
-                    <button type="submit" class="button secondary">Add gradient background</button>
+                    <label><?= e($qt('gradient_name')) ?><input type="text" name="gradient_label" maxlength="120" placeholder="Ex: Club blue"></label>
+                    <label><span><?= e($qt('bg_color_1')) ?></span><input class="qsl-color-input" type="color" name="background_primary" value="#0B1F3A" data-preview-color-primary></label>
+                    <label><span><?= e($qt('bg_color_2')) ?></span><input class="qsl-color-input" type="color" name="background_secondary" value="#1D4ED8" data-preview-color-secondary></label>
+                    <label><input type="checkbox" name="set_default" value="1"> <?= e($qt('set_default_bg')) ?></label>
+                    <button type="submit" class="button secondary"><?= e($qt('add_gradient_bg')) ?></button>
                 </form>
                 <form method="post" class="stack is-hidden" data-preview-form="solid" data-qsl-draw-panel="solid">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="save_background_solid">
-                    <label>Color name<input type="text" name="solid_label" maxlength="120" placeholder="Ex: Night blue"></label>
-                    <label>Solid color<input type="color" name="background_solid" value="#1E293B" data-preview-solid-color></label>
-                    <label><input type="checkbox" name="set_default" value="1"> Set as default background</label>
-                    <button type="submit" class="button secondary">Add solid color</button>
+                    <label><?= e($qt('solid_name')) ?><input type="text" name="solid_label" maxlength="120" placeholder="Ex: Night blue"></label>
+                    <label><?= e($qt('solid_color')) ?><input type="color" name="background_solid" value="#1E293B" data-preview-solid-color></label>
+                    <label><input type="checkbox" name="set_default" value="1"> <?= e($qt('set_default_bg')) ?></label>
+                    <button type="submit" class="button secondary"><?= e($qt('add_solid_color')) ?></button>
                 </form>
                 <form method="post" class="stack is-hidden" data-preview-form="palette" data-qsl-draw-panel="palette">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="save_background_palette">
-                    <label>Preset palette
+                    <label><?= e($qt('preset_palette')) ?>
                         <select name="preset_palette" data-preview-palette-select>
                             <?php foreach ($drawPresetPalettes as $paletteKey => $palette): ?>
+                                <?php
+                                $paletteType = (string) ($palette['type'] ?? 'gradient');
+                                $paletteLabelKey = (string) ($palette['label_key'] ?? 'default_preset_palette');
+                                ?>
                                 <option
                                     value="<?= e($paletteKey) ?>"
+                                    data-type="<?= e($paletteType === 'solid' ? 'solid' : 'gradient') ?>"
                                     data-primary="<?= e((string) ($palette['primary'] ?? '#0B1F3A')) ?>"
                                     data-secondary="<?= e((string) ($palette['secondary'] ?? '#1D4ED8')) ?>"
                                 >
-                                    <?= e((string) ($palette['label'] ?? 'Palette')) ?>
+                                    <?= e($qt($paletteLabelKey)) ?> - <?= e($qslBackgroundTypeLabel($paletteType)) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </label>
-                    <label>Custom name (optional)<input type="text" name="palette_label" maxlength="120" placeholder="Ex: Aurora palette"></label>
-                    <label><input type="checkbox" name="set_default" value="1"> Set as default background</label>
-                    <button type="submit" class="button secondary">Add palette</button>
+                    <label><?= e($qt('custom_name_optional')) ?><input type="text" name="palette_label" maxlength="120" placeholder="Ex: Aurora palette"></label>
+                    <label><input type="checkbox" name="set_default" value="1"> <?= e($qt('set_default_bg')) ?></label>
+                    <button type="submit" class="button secondary"><?= e($qt('add_palette')) ?></button>
                 </form>
             </div>
         </div>
         <div class="qsl-live-preview-wrap">
-            <h3>Live preview</h3>
+            <h3><?= e($qt('live_preview')) ?></h3>
             <div class="qsl-live-preview" data-qsl-preview>
                 <div class="qsl-live-preview-card" data-qsl-preview-card>
-                    <p class="qsl-live-preview-title">QSL Preview</p>
+                    <p class="qsl-live-preview-title"><?= e($qt('qsl_preview_label')) ?></p>
                     <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> -> TO: F4XYZ</p>
                 </div>
             </div>
-            <p class="help">Preview of the background being created (image, solid color, gradient or preset palette).</p>
+            <p class="help"><?= e($qt('preview_bg_help')) ?></p>
         </div>
     </div>
     <?php if ($backgroundPresets !== []): ?>
         <div class="table-wrap">
             <table>
                 <thead>
-                <tr><th>Background</th><th>Type</th><th>Default</th><th>Actions</th></tr>
+                <tr><th><?= e($qt('table_background')) ?></th><th><?= e($qt('table_type')) ?></th><th><?= e($qt('table_default')) ?></th><th><?= e($qt('table_actions')) ?></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($backgroundPresets as $preset): ?>
                     <tr>
-                        <td><?= e((string) ($preset['label'] ?? 'Background')) ?></td>
-                        <td><?= e(((string) ($preset['type'] ?? 'gradient')) === 'image' ? 'Image' : 'Gradient') ?></td>
-                        <td><?= ((int) ($preset['is_default'] ?? 0) === 1) ? 'Yes' : '-' ?></td>
+                        <td><?= e((string) ($preset['label'] ?? $qt('fallback_background'))) ?></td>
+                        <td><?= e($qslBackgroundTypeLabel((string) ($preset['type'] ?? 'gradient'))) ?></td>
+                        <td><?= ((int) ($preset['is_default'] ?? 0) === 1) ? e($qt('yes')) : '-' ?></td>
                         <td>
                             <form method="post" class="inline-form">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="preset_id" value="<?= (int) ($preset['id'] ?? 0) ?>">
-                                <button type="submit" name="action" value="set_default_background" class="button secondary small">Set default</button>
+                                <button type="submit" name="action" value="set_default_background" class="button secondary small"><?= e($qt('set_default')) ?></button>
                                 <button type="submit" name="action" value="delete_background" class="button secondary small"><?= e($qt('label_delete')) ?></button>
                             </form>
                         </td>
@@ -532,45 +549,45 @@ ob_start();
 
 <section class="card" id="qsl-create" data-qsl-assistant data-qsl-panel="create">
     <h1><?= e($qt('create')) ?></h1>
-    <p class="help">Choose your goal: detailed manual creation or instant ADIF import.</p>
+    <p class="help"><?= e($qt('create_help')) ?></p>
 
     <div class="stack">
         <div>
-            <span class="badge muted">Step A</span>
-            <h2>What do you need now?</h2>
+            <span class="badge muted"><?= e($qt('step_a')) ?></span>
+            <h2><?= e($qt('need_now')) ?></h2>
             <div class="actions">
-                <label><input type="radio" name="qsl_assistant_flow" value="manual" data-qsl-assistant-choice checked> Create a manual QSL</label>
-                <label><input type="radio" name="qsl_assistant_flow" value="adif" data-qsl-assistant-choice> Import ADIF QSOs</label>
+                <label><input type="radio" name="qsl_assistant_flow" value="manual" data-qsl-assistant-choice checked> <?= e($qt('manual_flow')) ?></label>
+                <label><input type="radio" name="qsl_assistant_flow" value="adif" data-qsl-assistant-choice> <?= e($qt('adif_flow')) ?></label>
             </div>
         </div>
 
         <section class="stack" data-qsl-assistant-panel="manual">
             <div>
-                <span class="badge muted">Step B</span>
-                <h2>Guided manual form</h2>
+                <span class="badge muted"><?= e($qt('step_b')) ?></span>
+                <h2><?= e($qt('guided_manual_form')) ?></h2>
             </div>
             <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="create_manual">
                 <div class="form-grid">
-                    <label>Contact callsign<input type="text" name="qso_call" maxlength="64" required data-manual-preview-source="qso_call"></label>
-                    <label>QSO date<input type="date" name="qso_date" data-manual-preview-source="qso_date"></label>
-                    <label>UTC<input type="time" name="time_on" step="60" data-manual-preview-source="time_on"></label>
-                    <label>Band<input type="text" name="band" maxlength="32" placeholder="20M" data-manual-preview-source="band"></label>
-                    <label>Mode<input type="text" name="mode" maxlength="32" placeholder="SSB" data-manual-preview-source="mode"></label>
-                    <label>RST sent<input type="text" name="rst_sent" maxlength="16" placeholder="59" data-manual-preview-source="rst_sent"></label>
-                    <label>RST received<input type="text" name="rst_recv" maxlength="16" placeholder="59" data-manual-preview-source="rst_recv"></label>
-                    <label>Comment
+                    <label><?= e($qt('contact_callsign')) ?><input class="qsl-uppercase-input" type="text" name="qso_call" maxlength="64" required autocapitalize="characters" autocomplete="off" data-qsl-uppercase data-manual-preview-source="qso_call"></label>
+                    <label><?= e($qt('qso_date')) ?><input type="date" name="qso_date" data-manual-preview-source="qso_date"></label>
+                    <label><?= e($qt('utc')) ?><input type="time" name="time_on" step="60" data-manual-preview-source="time_on"></label>
+                    <label><?= e($qt('band')) ?><input class="qsl-uppercase-input" type="text" name="band" maxlength="32" placeholder="<?= e($qt('band_placeholder')) ?>" list="qsl-band-list" autocomplete="off" data-qsl-uppercase data-manual-preview-source="band"></label>
+                    <label><?= e($qt('mode')) ?><input class="qsl-uppercase-input" type="text" name="mode" maxlength="32" placeholder="<?= e($qt('mode_placeholder')) ?>" list="qsl-mode-list" autocomplete="off" data-qsl-uppercase data-manual-preview-source="mode"></label>
+                    <label><?= e($qt('rst_sent')) ?><input class="qsl-uppercase-input" type="text" name="rst_sent" maxlength="16" placeholder="59" data-qsl-uppercase data-manual-preview-source="rst_sent"></label>
+                    <label><?= e($qt('rst_received')) ?><input class="qsl-uppercase-input" type="text" name="rst_recv" maxlength="16" placeholder="59" data-qsl-uppercase data-manual-preview-source="rst_recv"></label>
+                    <label><?= e($qt('comment')) ?>
                         <textarea name="comment" rows="3" maxlength="180" data-manual-preview-source="comment">TNX QSO 73</textarea>
                     </label>
-                    <label>QSL background
+                    <label><?= e($qt('qsl_background')) ?>
                         <select name="background_preset_id" data-manual-preview-source="background_preset_id">
-                            <option value="0" data-bg-type="gradient" data-bg-primary="#0B1F3A" data-bg-secondary="#1D4ED8" <?= $defaultBackgroundPresetId === 0 ? 'selected' : '' ?>>System default background</option>
+                            <option value="0" data-bg-type="gradient" data-bg-primary="#0B1F3A" data-bg-secondary="#1D4ED8" <?= $defaultBackgroundPresetId === 0 ? 'selected' : '' ?>><?= e($qt('system_default_background')) ?></option>
                             <?php foreach ($backgroundPresets as $preset): ?>
                                 <?php
                                 $presetId = (int) ($preset['id'] ?? 0);
                                 $isDefaultPreset = (int) ($preset['is_default'] ?? 0) === 1;
-                                $presetLabel = (string) ($preset['label'] ?? 'Background');
+                                $presetLabel = (string) ($preset['label'] ?? $qt('fallback_background'));
                                 $presetType = (string) ($preset['type'] ?? 'gradient');
                                 $presetPrimary = (string) ($preset['color_primary'] ?? '#0B1F3A');
                                 $presetSecondary = (string) ($preset['color_secondary'] ?? '#1D4ED8');
@@ -583,36 +600,42 @@ ob_start();
                                     data-bg-secondary="<?= e($presetSecondary) ?>"
                                     <?= ($presetId === $defaultBackgroundPresetId) ? 'selected' : '' ?>
                                 >
-                            <?= e($presetLabel) ?><?= $isDefaultPreset ? ' (default)' : '' ?> - <?= e($presetType === 'image' ? 'Image' : 'Gradient') ?>
+                            <?= e($presetLabel) ?><?= $isDefaultPreset ? ' (' . e($qt('default_suffix')) . ')' : '' ?> - <?= e($qslBackgroundTypeLabel($presetType)) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </label>
-                    <label>Print format
+                    <label><?= e($qt('print_format')) ?>
                         <select name="template_name">
-                            <option value="classic">Front only</option>
-                            <option value="classic_duplex">Front and back</option>
+                            <option value="classic"><?= e($qt('front_only')) ?></option>
+                            <option value="classic_duplex"><?= e($qt('front_back')) ?></option>
                         </select>
                     </label>
                 </div>
-                <p class="help">Choose one saved background for this QSL.</p>
+                <datalist id="qsl-band-list">
+                    <option value="160M"><option value="80M"><option value="60M"><option value="40M"><option value="30M"><option value="20M"><option value="17M"><option value="15M"><option value="12M"><option value="10M"><option value="6M"><option value="2M"><option value="70CM">
+                </datalist>
+                <datalist id="qsl-mode-list">
+                    <option value="SSB"><option value="CW"><option value="FM"><option value="AM"><option value="FT8"><option value="RTTY"><option value="PSK31"><option value="DSTAR"><option value="C4FM">
+                </datalist>
+                <p class="help"><?= e($qt('choose_saved_bg')) ?> <?= e($qt('manual_hint')) ?></p>
                 <div class="qsl-live-preview-wrap" data-qsl-manual-preview data-preview-note="<?= e($qt('preview_dynamic')) ?>">
-                    <h3>QSL preview</h3>
+                    <h3><?= e($qt('qsl_preview_label')) ?></h3>
                     <div class="grid-2" data-manual-preview-layout>
                         <div class="qsl-live-preview">
                             <div class="qsl-live-preview-card" data-manual-preview-card>
-                                <p class="qsl-live-preview-title">Front preview</p>
+                                <p class="qsl-live-preview-title"><?= e($qt('front_preview')) ?></p>
                     <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> -> TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
                                 <p class="qsl-live-preview-meta" data-manual-preview-front-detail>DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">09:15</span></p>
                                 <p class="qsl-live-preview-meta" data-manual-preview-front-detail>BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
                                 <p class="qsl-live-preview-meta" data-manual-preview-front-detail>RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
                                 <p class="qsl-live-preview-meta" data-manual-preview-front-detail><span data-manual-preview-field="comment">TNX QSO 73</span></p>
-                                <p class="qsl-live-preview-meta is-hidden" data-manual-preview-front-message>Front side - details on back side</p>
+                                <p class="qsl-live-preview-meta is-hidden" data-manual-preview-front-message><?= e($qt('front_details_on_back')) ?></p>
                             </div>
                         </div>
                         <div class="qsl-live-preview is-hidden" data-manual-preview-back-wrap>
                             <div class="qsl-live-preview-card" data-manual-preview-back-card>
-                                <p class="qsl-live-preview-title">Back preview</p>
+                                <p class="qsl-live-preview-title"><?= e($qt('back_preview')) ?></p>
                     <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> -> TO: <span data-manual-preview-back-field="qso_call">F4XYZ</span></p>
                                 <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-back-field="qso_date">20260412</span> UTC: <span data-manual-preview-back-field="time_on">09:15</span></p>
                                 <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-back-field="band">20M</span> MODE: <span data-manual-preview-back-field="mode">SSB</span></p>
@@ -623,28 +646,28 @@ ob_start();
                     </div>
                     <p class="help" data-manual-preview-note><?= e($qt('preview_dynamic')) ?></p>
                 </div>
-                <p><button class="button">Create my QSL</button></p>
+                <p><button class="button"><?= e($qt('create_my_qsl')) ?></button></p>
             </form>
         </section>
 
         <section class="stack" data-qsl-assistant-panel="adif">
             <div>
-                <span class="badge muted">Step B</span>
-                <h2>Fast ADIF import</h2>
+                <span class="badge muted"><?= e($qt('step_b')) ?></span>
+                <h2><?= e($qt('fast_adif_import')) ?></h2>
             </div>
             <form method="post" enctype="multipart/form-data" id="adif-dropzone-form" class="stack" data-adif-processing="<?= e($qt('adif_processing')) ?>" data-adif-import-error="<?= e($qt('adif_import_error')) ?>" data-adif-imported-status="<?= e($qt('adif_imported_status')) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="import_adif">
                 <div id="adif-dropzone" class="dropzone qsl-adif-dropzone">
                     <div class="dz-message">
-                        Drag and drop your ADIF files here
-                        <small>or click to select multiple files (.adi, .adif)</small>
+                        <?= e($qt('adif_drop_here')) ?>
+                        <small><?= e($qt('adif_drop_click')) ?></small>
                     </div>
                 </div>
                 <input type="file" name="adif_files[]" id="adif-fallback-input" accept=".adi,.adif,text/plain" multiple hidden>
-                <p class="help" id="adif-dropzone-status">Files are processed automatically when added.</p>
+                <p class="help" id="adif-dropzone-status"><?= e($qt('adif_auto_status')) ?></p>
             </form>
-            <p class="help">Exact duplicates are ignored automatically during import.</p>
+            <p class="help"><?= e($qt('adif_duplicates_help')) ?></p>
         </section>
     </div>
 </section>
@@ -654,7 +677,7 @@ ob_start();
 <section class="card" id="qsl-view" data-qsl-panel="manage">
     <div class="row-between">
         <h2><?= e($qt('manage')) ?></h2>
-        <span><?= count($qsoRows) ?> enregistrement(s)</span>
+        <span><?= count($qsoRows) ?> <?= e($qt('records_count')) ?></span>
     </div>
     <?php if ($qsoRows === []): ?>
         <p><?= e($qt('empty_qso')) ?></p>
@@ -683,17 +706,17 @@ ob_start();
             <div class="actions">
                 <button type="button" class="button secondary small" data-qso-toggle="all"><?= e($qt('select_all')) ?></button>
                 <button type="button" class="button secondary small" data-qso-toggle="none"><?= e($qt('select_none')) ?></button>
-                <label>Format
+                <label><?= e($qt('format')) ?>
                     <select name="qsl_template_name">
-                        <option value="classic">Recto</option>
-                        <option value="classic_duplex">Recto-verso</option>
+                        <option value="classic"><?= e($qt('front_only')) ?></option>
+                        <option value="classic_duplex"><?= e($qt('front_back')) ?></option>
                     </select>
                 </label>
             </div>
             <div class="table-wrap">
                 <table>
                     <thead>
-                    <tr><th></th><th>Call</th><th>Date</th><th>UTC</th><th>Band</th><th>Mode</th><th>RST</th><th>eQSL</th><th>Action</th></tr>
+                    <tr><th></th><th><?= e($qt('table_call')) ?></th><th><?= e($qt('table_date')) ?></th><th><?= e($qt('table_utc')) ?></th><th><?= e($qt('table_band')) ?></th><th><?= e($qt('table_mode')) ?></th><th><?= e($qt('table_rst')) ?></th><th>eQSL</th><th><?= e($qt('table_action')) ?></th></tr>
                     </thead>
                     <tbody>
                     <?php foreach ($pagedQsoRows as $row): ?>
@@ -730,7 +753,7 @@ ob_start();
 <section class="card" data-qsl-panel="manage">
     <div class="row-between">
         <h2><?= e($qt('generated')) ?></h2>
-        <span><?= count($qslRows) ?> carte(s)</span>
+        <span><?= count($qslRows) ?> <?= e($qt('cards_count')) ?></span>
     </div>
     <?php if ($qslRows === []): ?>
         <p><?= e($qt('empty_qsl')) ?></p>
@@ -744,7 +767,7 @@ ob_start();
         <div class="table-wrap">
             <table>
                 <thead>
-                <tr><th>Title</th><th>QSO</th><th>Date</th><th>Band</th><th>Mode</th><th>Format</th><th>Preview</th><th>Export</th><th>Action</th></tr>
+                <tr><th><?= e($qt('table_title')) ?></th><th><?= e($qt('table_qso')) ?></th><th><?= e($qt('table_date')) ?></th><th><?= e($qt('table_band')) ?></th><th><?= e($qt('table_mode')) ?></th><th><?= e($qt('format')) ?></th><th><?= e($qt('table_preview')) ?></th><th><?= e($qt('table_export')) ?></th><th><?= e($qt('table_action')) ?></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($pagedQslRows as $row): ?>
@@ -754,12 +777,12 @@ ob_start();
                         <td><?= e(qsl_format_display_date((string) ($row['qso_date'] ?? ''))) ?></td>
                         <td><?= e((string) $row['band']) ?></td>
                         <td><?= e((string) $row['mode']) ?></td>
-                        <td><?= qsl_template_supports_back((string) ($row['template_name'] ?? 'classic')) ? 'Recto-verso' : 'Recto' ?></td>
-                        <td><a href="<?= e(route_url('qsl_preview', ['id' => (int) $row['id']])) ?>">Voir</a></td>
+                        <td><?= qsl_template_supports_back((string) ($row['template_name'] ?? 'classic')) ? e($qt('front_back')) : e($qt('front_only')) ?></td>
+                        <td><a href="<?= e(route_url('qsl_preview', ['id' => (int) $row['id']])) ?>"><?= e($qt('view')) ?></a></td>
                         <td>
-                            <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id']])) ?>">Recto SVG</a>
+                            <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id']])) ?>"><?= e($qt('front_svg')) ?></a>
                             <?php if (qsl_template_supports_back((string) ($row['template_name'] ?? 'classic'))): ?>
-                                - <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id'], 'side' => 'back'])) ?>">Verso SVG</a>
+                                - <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id'], 'side' => 'back'])) ?>"><?= e($qt('back_svg')) ?></a>
                             <?php endif; ?>
                         </td>
                         <td>
