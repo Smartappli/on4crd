@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+$_base = [
     'fr' => require __DIR__ . '/admin_articles/fr.php',
     'en' => require __DIR__ . '/admin_articles/en.php',
     'de' => require __DIR__ . '/admin_articles/de.php',
@@ -17,3 +17,13 @@ return [
     'ru' => require __DIR__ . '/admin_articles/ru.php',
     'id' => require __DIR__ . '/admin_articles/id.php',
 ];
+
+$extra = require __DIR__ . '/admin_articles_extra.php';
+foreach ($extra as $locale => $entries) {
+    if (!isset($_base[$locale]) || !is_array($_base[$locale])) {
+        $_base[$locale] = [];
+    }
+    $_base[$locale] = array_replace($_base[$locale], $entries);
+}
+
+return $_base;

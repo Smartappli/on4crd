@@ -25,11 +25,11 @@ $categories = [
     'service' => $t('category_service'),
 ];
 $statuses = [
-    'draft' => 'Brouillon',
+    'draft' => $t('status_draft'),
     'active' => $t('status_active'),
     'sold' => $t('status_sold'),
     'archived' => $t('status_archived'),
-    'expired' => 'Expirée',
+    'expired' => $t('status_expired'),
 ];
 
 $user = current_user();
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int) ($_POST['id'] ?? 0);
             $stmt = db()->prepare('UPDATE classified_ads SET status = "active", expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
             $stmt->execute([date('Y-m-d H:i:s', time() + (30 * 86400)), $id, (int) $user['id']]);
-            set_flash('success', 'Annonce renouvelée pour 30 jours.');
+            set_flash('success', $t('renewed_ok'));
         }
 
         if ($action === 'toggle_favorite') {
@@ -224,10 +224,10 @@ ob_start();
                     <label><?= e($t('location_label')) ?><input type="text" name="location" maxlength="120" value="<?= e((string) ($editing['location'] ?? '')) ?>"></label>
                 </div>
                 <label><?= e($t('contact_label')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($editing['contact'] ?? ((string) ($user['email'] ?? $user['callsign'] ?? '')))) ?>"></label>
-                <label>Publication
+                <label><?= e($t('publication_label')) ?>
                     <select name="status">
-                        <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>>Brouillon</option>
-                        <option value="active" <?= (($editing['status'] ?? '') === 'active') ? 'selected' : '' ?>>Publiée (30 jours)</option>
+                        <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>><?= e($t('status_draft')) ?></option>
+                        <option value="active" <?= (($editing['status'] ?? '') === 'active') ? 'selected' : '' ?>><?= e($t('published_30d')) ?></option>
                     </select>
                 </label>
                 <p><button class="button"><?= e($t('save')) ?></button><?php if ($editing): ?> <a class="button ghost" href="<?= e(route_url('classifieds')) ?>"><?= e($t('cancel')) ?></a><?php endif; ?></p>
@@ -243,7 +243,7 @@ ob_start();
                         <td><strong><?= e((string) $ad['title']) ?></strong><div class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> - <?= e(format_price_eur((int) $ad['price_cents'])) ?></div></td>
                         <td>
                             <span class="badge muted"><?= e((string) ($statuses[$ad['status']] ?? $ad['status'])) ?></span>
-                            <?php if (!empty($ad['expires_at'])): ?><div class="help">Expire: <?= e(date('d/m/Y', strtotime((string) $ad['expires_at']))) ?></div><?php endif; ?>
+                            <?php if (!empty($ad['expires_at'])): ?><div class="help"><?= e($t('expires_on')) ?>: <?= e(date('d/m/Y', strtotime((string) $ad['expires_at']))) ?></div><?php endif; ?>
                         </td>
                         <td>
                             <a href="<?= e(route_url('classifieds', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
@@ -253,7 +253,7 @@ ob_start();
                                 <?php if ((string) $ad['status'] !== 'active'): ?><button class="button ghost" name="status" value="active"><?= e($t('reactivate')) ?></button><?php endif; ?>
                                 <?php if ((string) $ad['status'] !== 'archived'): ?><button class="button ghost" name="status" value="archived"><?= e($t('archive')) ?></button><?php endif; ?>
                                 <?php if (in_array((string) $ad['status'], ['active', 'expired'], true)): ?>
-                                    <button class="button ghost" formaction="<?= e(route_url('classifieds')) ?>" name="action" value="renew">Renouveler 30j</button>
+                                    <button class="button ghost" formaction="<?= e(route_url('classifieds')) ?>" name="action" value="renew"><?= e($t('renew_30d')) ?></button>
                                 <?php endif; ?>
                             </form>
                         </td>

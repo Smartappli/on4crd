@@ -4,28 +4,6 @@ declare(strict_types=1);
 require_permission('articles.manage');
 $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/admin_articles.php';
-$i18nExtra = [
-    'fr' => ['scheduled' => 'Programmée', 'scheduled_at' => 'Date de publication', 'revisions' => 'Historique des versions', 'no_revisions' => 'Aucune révision enregistrée.', 'revision_saved_at' => 'Version du', 'restore_revision' => 'Restaurer', 'confirm_restore_revision' => 'Restaurer cette version ?', 'ok_revision_restored' => 'Version restaurée.'],
-    'en' => ['scheduled' => 'Scheduled', 'scheduled_at' => 'Publication date', 'revisions' => 'Revision history', 'no_revisions' => 'No saved revisions.', 'revision_saved_at' => 'Version saved on', 'restore_revision' => 'Restore', 'confirm_restore_revision' => 'Restore this version?', 'ok_revision_restored' => 'Version restored.'],
-    'de' => ['scheduled' => 'Geplant', 'scheduled_at' => 'Veröffentlichungsdatum', 'revisions' => 'Versionsverlauf', 'no_revisions' => 'Keine gespeicherten Versionen.', 'revision_saved_at' => 'Version vom', 'restore_revision' => 'Wiederherstellen', 'confirm_restore_revision' => 'Diese Version wiederherstellen?', 'ok_revision_restored' => 'Version wiederhergestellt.'],
-    'nl' => ['scheduled' => 'Gepland', 'scheduled_at' => 'Publicatiedatum', 'revisions' => 'Versiegeschiedenis', 'no_revisions' => 'Geen opgeslagen versies.', 'revision_saved_at' => 'Versie van', 'restore_revision' => 'Herstellen', 'confirm_restore_revision' => 'Deze versie herstellen?', 'ok_revision_restored' => 'Versie hersteld.'],
-    'es' => ['scheduled' => 'Programado', 'scheduled_at' => 'Fecha de publicación', 'revisions' => 'Historial de versiones', 'no_revisions' => 'No hay versiones guardadas.', 'revision_saved_at' => 'Versión del', 'restore_revision' => 'Restaurar', 'confirm_restore_revision' => '¿Restaurar esta versión?', 'ok_revision_restored' => 'Versión restaurada.'],
-    'it' => ['scheduled' => 'Programmato', 'scheduled_at' => 'Data di pubblicazione', 'revisions' => 'Storico versioni', 'no_revisions' => 'Nessuna versione salvata.', 'revision_saved_at' => 'Versione del', 'restore_revision' => 'Ripristina', 'confirm_restore_revision' => 'Ripristinare questa versione?', 'ok_revision_restored' => 'Versione ripristinata.'],
-    'pt' => ['scheduled' => 'Agendado', 'scheduled_at' => 'Data de publicação', 'revisions' => 'Histórico de versões', 'no_revisions' => 'Sem versões guardadas.', 'revision_saved_at' => 'Versão de', 'restore_revision' => 'Restaurar', 'confirm_restore_revision' => 'Restaurar esta versão?', 'ok_revision_restored' => 'Versão restaurada.'],
-    'ar' => ['scheduled' => 'مجدول', 'scheduled_at' => 'تاريخ النشر', 'revisions' => 'سجل الإصدارات', 'no_revisions' => 'لا توجد إصدارات محفوظة.', 'revision_saved_at' => 'إصدار بتاريخ', 'restore_revision' => 'استعادة', 'confirm_restore_revision' => 'استعادة هذا الإصدار؟', 'ok_revision_restored' => 'تمت استعادة الإصدار.'],
-    'hi' => ['scheduled' => 'अनुसूचित', 'scheduled_at' => 'प्रकाशन तिथि', 'revisions' => 'संस्करण इतिहास', 'no_revisions' => 'कोई सहेजे गए संस्करण नहीं।', 'revision_saved_at' => 'संस्करण दिनांक', 'restore_revision' => 'पुनर्स्थापित करें', 'confirm_restore_revision' => 'क्या यह संस्करण पुनर्स्थापित करें?', 'ok_revision_restored' => 'संस्करण पुनर्स्थापित हुआ।'],
-    'ja' => ['scheduled' => '公開予約', 'scheduled_at' => '公開日時', 'revisions' => '版履歴', 'no_revisions' => '保存された版はありません。', 'revision_saved_at' => '保存日時', 'restore_revision' => '復元', 'confirm_restore_revision' => 'この版を復元しますか？', 'ok_revision_restored' => '版を復元しました。'],
-    'zh' => ['scheduled' => '已计划', 'scheduled_at' => '发布时间', 'revisions' => '版本历史', 'no_revisions' => '没有已保存版本。', 'revision_saved_at' => '版本时间', 'restore_revision' => '恢复', 'confirm_restore_revision' => '恢复这个版本？', 'ok_revision_restored' => '版本已恢复。'],
-    'bn' => ['scheduled' => 'নির্ধারিত', 'scheduled_at' => 'প্রকাশের তারিখ', 'revisions' => 'সংস্করণ ইতিহাস', 'no_revisions' => 'কোনো সংরক্ষিত সংস্করণ নেই।', 'revision_saved_at' => 'সংস্করণ তারিখ', 'restore_revision' => 'পুনরুদ্ধার', 'confirm_restore_revision' => 'এই সংস্করণ পুনরুদ্ধার করবেন?', 'ok_revision_restored' => 'সংস্করণ পুনরুদ্ধার করা হয়েছে।'],
-    'ru' => ['scheduled' => 'Запланировано', 'scheduled_at' => 'Дата публикации', 'revisions' => 'История версий', 'no_revisions' => 'Сохранённых версий нет.', 'revision_saved_at' => 'Версия от', 'restore_revision' => 'Восстановить', 'confirm_restore_revision' => 'Восстановить эту версию?', 'ok_revision_restored' => 'Версия восстановлена.'],
-    'id' => ['scheduled' => 'Terjadwal', 'scheduled_at' => 'Tanggal publikasi', 'revisions' => 'Riwayat versi', 'no_revisions' => 'Tidak ada versi tersimpan.', 'revision_saved_at' => 'Versi pada', 'restore_revision' => 'Pulihkan', 'confirm_restore_revision' => 'Pulihkan versi ini?', 'ok_revision_restored' => 'Versi dipulihkan.'],
-];
-foreach ($i18nExtra as $lang => $extraEntries) {
-    if (!isset($i18n[$lang]) || !is_array($i18n[$lang])) {
-        $i18n[$lang] = [];
-    }
-    $i18n[$lang] = array_replace($i18n[$lang], $extraEntries);
-}
 $i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key, string $fallback = '') use ($locale, $i18n): string {
     $value = i18n_localized_value($i18n, $locale, $key);
