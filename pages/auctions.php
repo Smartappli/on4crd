@@ -42,40 +42,85 @@ $sections = [
     'scheduled' => ['title' => (string) $t['scheduled_title'], 'empty' => (string) $t['scheduled_empty']],
     'closed' => ['title' => (string) $t['closed_title'], 'empty' => (string) $t['closed_empty']],
 ];
+$totalLots = count($lots);
+$formatAuctionDate = static function (mixed $value): string {
+    $timestamp = strtotime((string) $value);
+    return $timestamp !== false ? date('d/m/Y H:i', $timestamp) : '';
+};
 
 ob_start();
 ?>
-<section class="stack auctions-page">
+<section class="auctions-page">
+    <header class="auctions-hero">
+        <div class="auctions-hero-copy">
+            <p class="directory-eyebrow"><?= e((string) $t['meta_title']) ?></p>
+            <h1><?= e((string) $t['meta_title']) ?></h1>
+            <p class="directory-lead"><?= e((string) $t['meta_desc']) ?></p>
+        </div>
+        <div class="auctions-stats">
+            <div class="auctions-stat">
+                <span><?= (int) count($groupedLots['active']) ?></span>
+                <p><?= e((string) $t['active_title']) ?></p>
+            </div>
+            <div class="auctions-stat">
+                <span><?= (int) count($groupedLots['scheduled']) ?></span>
+                <p><?= e((string) $t['scheduled_title']) ?></p>
+            </div>
+            <div class="auctions-stat">
+                <span><?= (int) $totalLots ?></span>
+                <p><?= e((string) $t['lots']) ?></p>
+            </div>
+        </div>
+    </header>
+
     <?php foreach ($sections as $status => $meta): ?>
-        <section class="inner-card auctions-section auctions-section-<?= e($status) ?>">
-            <div class="section-header">
-                <h1><?= e($meta['title']) ?></h1>
+        <section class="auctions-section auctions-section-<?= e($status) ?>">
+            <div class="auctions-section-header">
+                <div>
+                    <h2><?= e($meta['title']) ?></h2>
+                    <p class="help"><?= count($groupedLots[$status]) ?> <?= count($groupedLots[$status]) > 1 ? e((string) $t['lots']) : e((string) $t['lot']) ?></p>
+                </div>
                 <span class="badge"><?= count($groupedLots[$status]) ?> <?= count($groupedLots[$status]) > 1 ? e((string) $t['lots']) : e((string) $t['lot']) ?></span>
             </div>
             <?php if ($groupedLots[$status] === []): ?>
-                <div class="card empty-state"><p><?= e($meta['empty']) ?></p></div>
+                <div class="auctions-empty"><h3><?= e($meta['empty']) ?></h3></div>
             <?php else: ?>
-                <div class="grid-3">
+                <div class="auctions-grid">
                     <?php foreach ($pagedGroupedLots[$status] as $lot): ?>
-                        <article class="card feature-card auction-lot-card">
-                            <div class="section-header">
-                                <h2><?= e((string) $lot['title']) ?></h2>
-                                <strong class="price-tag"><?= e(format_price_eur(max((int) $lot['current_price_cents'], (int) $lot['starting_price_cents']))) ?></strong>
+                        <?php
+                        $lotTitle = trim((string) ($lot['title'] ?? ''));
+                        $lotSummary = trim((string) ($lot['summary'] ?? ''));
+                        $lotPrice = max((int) ($lot['current_price_cents'] ?? 0), (int) ($lot['starting_price_cents'] ?? 0));
+                        ?>
+                        <article class="auction-lot-card">
+                            <div class="auction-lot-top">
+                                <span class="badge muted"><?= e($meta['title']) ?></span>
+                                <strong class="price-tag"><?= e(format_price_eur($lotPrice)) ?></strong>
                             </div>
-                            <p><?= e((string) ($lot['summary'] ?: (string) $t['default_summary'])) ?></p>
-                            <ul class="list-clean list-spaced">
-                                <li><span class="help"><?= e((string) $t['start']) ?> : <?= e(date('d/m/Y H:i', strtotime((string) $lot['starts_at']))) ?></span></li>
-                                <li><span class="help"><?= e((string) $t['end']) ?> : <?= e(date('d/m/Y H:i', strtotime((string) $lot['ends_at']))) ?></span></li>
-                                <li><span class="help"><?= e((string) $t['step']) ?> : <?= e(format_price_eur((int) $lot['min_increment_cents'])) ?></span></li>
-                            </ul>
-                            <div class="actions">
+                            <h3><?= e($lotTitle !== '' ? $lotTitle : (string) $t['lot']) ?></h3>
+                            <p><?= e($lotSummary !== '' ? $lotSummary : (string) $t['default_summary']) ?></p>
+                            <dl class="auction-lot-meta">
+                                <div>
+                                    <dt><?= e((string) $t['start']) ?></dt>
+                                    <dd><?= e($formatAuctionDate($lot['starts_at'] ?? '')) ?></dd>
+                                </div>
+                                <div>
+                                    <dt><?= e((string) $t['end']) ?></dt>
+                                    <dd><?= e($formatAuctionDate($lot['ends_at'] ?? '')) ?></dd>
+                                </div>
+                                <div>
+                                    <dt><?= e((string) $t['step']) ?></dt>
+                                    <dd><?= e(format_price_eur((int) ($lot['min_increment_cents'] ?? 0))) ?></dd>
+                                </div>
+                            </dl>
+                            <div class="auction-lot-actions">
                                 <a class="button" href="<?= e(route_url('auction_view', ['slug' => (string) $lot['slug']])) ?>"><?= e((string) $t['view_lot']) ?></a>
                             </div>
                         </article>
                     <?php endforeach; ?>
                 </div>
                 <?php if ($sectionMaxPages[$status] > 1): ?>
-                    <div class="actions mt-3">
+                    <div class="auctions-pagination">
                         <?php if ($sectionPages[$status] > 1): ?>
                             <a class="button secondary" href="<?= e(route_url_clean('auctions', $sectionPages + [$status . '_page' => $sectionPages[$status] - 1])) ?>"><?= e((string) $t['previous']) ?></a>
                         <?php endif; ?>

@@ -2,16 +2,15 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$newsI18n = i18n_expand_supported_locales(require __DIR__ . '/../app/i18n/news.php');
-$newsT = [];
-foreach (array_keys($newsI18n['fr']) as $key) {
-    $pool = [];
-    foreach ($newsI18n as $lang => $translations) {
-        if (isset($translations[$key]) && is_string($translations[$key])) {
-            $pool[$lang] = $translations[$key];
-        }
+$newsFallback = require __DIR__ . '/../app/i18n/news/fr.php';
+$newsT = array_replace(
+    is_array($newsFallback) ? $newsFallback : [],
+    i18n_domain_locale('news', $locale)
+);
+foreach ($newsFallback as $key => $value) {
+    if (!isset($newsT[$key]) || !is_string($newsT[$key]) || $newsT[$key] === '') {
+        $newsT[$key] = (string) $value;
     }
-    $newsT[$key] = i18n_localized_value($pool, $locale, 'fr');
 }
 
 if (!table_exists('news_posts')) {
@@ -225,13 +224,13 @@ ob_start();
         <div class="news-active-filters">
             <strong><?= e((string) $newsT['applied_filters']) ?></strong>
             <?php if ($search !== ''): ?>
-                <span class="pill"><?= e((string) $newsT['search_filter']) ?> : “<?= e($search) ?>”</span>
+                <span class="pill"><?= e(sprintf((string) $newsT['search_filter'], $search)) ?></span>
             <?php endif; ?>
             <?php if ($monthFilter !== ''): ?>
-                <span class="pill"><?= e((string) $newsT['month_filter']) ?> : <?= e($monthFilter) ?></span>
+                <span class="pill"><?= e(sprintf((string) $newsT['month_filter'], $monthFilter)) ?></span>
             <?php endif; ?>
             <?php if ($categoryFilter !== ''): ?>
-                <span class="pill"><?= e((string) $newsT['category_filter']) ?> : <?= e($categoryFilter) ?></span>
+                <span class="pill"><?= e(sprintf((string) $newsT['category_filter'], $categoryFilter)) ?></span>
             <?php endif; ?>
         </div>
     <?php endif; ?>
@@ -302,7 +301,7 @@ ob_start();
 <?php if ($totalPosts > $perPage): ?>
     <section class="card mt-4">
         <div class="row-between">
-            <p class="help"><?= e((string) $newsT['page']) ?> <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= (int) $totalPosts ?> <?= e((string) $newsT['news_count']) ?></p>
+            <p class="help"><?= e((string) $newsT['page']) ?> <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= e(sprintf((string) $newsT['news_count'], (int) $totalPosts)) ?></p>
             <p class="actions">
                 <?php if ($page > 1): ?>
                     <a class="button secondary" href="<?= e(route_url_clean('news', ['q' => $search, 'ym' => $monthFilter, 'category' => $categoryFilter, 'sort' => $sort, 'p' => $page - 1])) ?>">← <?= e((string) $newsT['previous']) ?></a>

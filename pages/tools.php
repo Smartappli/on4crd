@@ -358,36 +358,7 @@ ob_start();
 <section class="card">
     <?php if ($memberId > 0): ?>
     <section class="card" style="margin-bottom:1rem;">
-        <h2><?= e($tr('saved_presets', 'Saved presets')) ?></h2>
-        <form method="post" class="inline-form" style="flex-wrap:wrap;margin-bottom:.7rem;">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <input type="hidden" name="action" value="save_tool_preset">
-            <input type="text" name="tool_id" value="tool-unit-converter" placeholder="tool_id">
-            <input type="text" name="label" placeholder="<?= e($tr('preset_label', 'Preset label')) ?>">
-            <input type="text" name="input_value" placeholder="<?= e($tr('input_value', 'Input')) ?>">
-            <input type="text" name="output_value" placeholder="<?= e($tr('output_value', 'Output')) ?>">
-            <button class="button" type="submit"><?= e($tr('save_preset', 'Save preset')) ?></button>
-        </form>
-        <?php if ($toolPresets === []): ?>
-            <p class="help"><?= e($tr('no_presets', 'No presets saved.')) ?></p>
-        <?php else: ?>
-            <ul class="stack" style="list-style:none;padding:0;margin:0;">
-                <?php foreach ($toolPresets as $preset): ?>
-                    <?php $payload = json_decode((string) ($preset['payload_json'] ?? ''), true); ?>
-                    <li class="row-between" style="gap:.6rem;">
-                        <span><strong><?= e((string) ($preset['label'] ?? 'Preset')) ?></strong> (<?= e((string) ($preset['tool_id'] ?? '')) ?>) — <?= e((string) ($payload['input'] ?? '')) ?> → <?= e((string) ($payload['output'] ?? '')) ?></span>
-                        <form method="post" class="inline-form">
-                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                            <input type="hidden" name="action" value="delete_tool_preset">
-                            <input type="hidden" name="preset_id" value="<?= (int) ($preset['id'] ?? 0) ?>">
-                            <button class="button secondary small" type="submit"><?= e($tr('delete', 'Delete')) ?></button>
-                        </form>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-
-        <h2 style="margin-top:1rem;"><?= e($tr('conversion_history', 'Conversion history')) ?></h2>
+        <h2><?= e($tr('conversion_history', 'Conversion history')) ?></h2>
         <form method="post" class="inline-form" style="flex-wrap:wrap;margin-bottom:.7rem;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="log_tool_conversion">

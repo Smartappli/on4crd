@@ -70,6 +70,16 @@ $offset = $pagination['offset'];
 $stmt = db()->prepare('SELECT * FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
+$activeFiltersCount = 0;
+if ($search !== '') {
+    $activeFiltersCount++;
+}
+if ($category !== '') {
+    $activeFiltersCount++;
+}
+if ($tag !== '') {
+    $activeFiltersCount++;
+}
 
 $relatedByDocumentId = [];
 if ($documents !== []) {
@@ -125,34 +135,62 @@ if ($documents !== []) {
 
 ob_start();
 ?>
-<div class="card members-library-page">
-    <div class="row-between">
-        <div>
+<section class="members-library-page">
+    <header class="library-hero">
+        <div class="library-hero-copy">
+            <p class="directory-eyebrow"><?= e((string) $t['title']) ?></p>
             <h1><?= e((string) $t['title']) ?></h1>
-            <p><?= e((string) $t['intro']) ?></p>
+            <p class="directory-lead"><?= e((string) $t['intro']) ?></p>
         </div>
-        <span class="badge muted"><?= $totalDocuments ?> <?= e((string) $t['documents']) ?></span>
-    </div>
+        <div class="library-stats">
+            <div class="library-stat">
+                <span><?= (int) $totalDocuments ?></span>
+                <p><?= e((string) $t['documents']) ?></p>
+            </div>
+            <div class="library-stat">
+                <span><?= (int) count($categories) ?></span>
+                <p><?= e((string) $t['all_categories']) ?></p>
+            </div>
+            <div class="library-stat">
+                <span><?= (int) $activeFiltersCount ?></span>
+                <p><?= e((string) $t['search']) ?></p>
+            </div>
+        </div>
+    </header>
 
-    <form method="get" class="inline-form" style="flex-wrap:wrap; margin-bottom:.8rem;">
+    <form method="get" class="library-search-panel">
         <input type="hidden" name="route" value="members_library">
-        <select name="category">
-            <option value=""><?= e((string) $t['all_categories']) ?></option>
-            <?php foreach ($categories as $cat): $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
-                <option value="<?= e($catName) ?>" <?= $catName === $category ? 'selected' : '' ?>><?= e($catName) ?> (<?= (int) ($cat['total'] ?? 0) ?>)</option>
-            <?php endforeach; ?>
-        </select>
-        <input type="search" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
-        <input type="search" name="tag" value="<?= e($tag) ?>" placeholder="<?= e((string) $t['tag_search_ph']) ?>">
-        <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-        <?php if ($search !== '' || $category !== '' || $tag !== ''): ?><a class="button secondary" href="<?= e(route_url('members_library')) ?>"><?= e((string) $t['reset']) ?></a><?php endif; ?>
+        <label>
+            <span><?= e((string) $t['all_categories']) ?></span>
+            <select name="category">
+                <option value=""><?= e((string) $t['all_categories']) ?></option>
+                <?php foreach ($categories as $cat): $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
+                    <option value="<?= e($catName) ?>" <?= $catName === $category ? 'selected' : '' ?>><?= e($catName) ?> (<?= (int) ($cat['total'] ?? 0) ?>)</option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+        <label class="library-search-query">
+            <span><?= e((string) $t['search']) ?></span>
+            <input type="search" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
+        </label>
+        <label>
+            <span><?= e((string) $t['tags']) ?></span>
+            <input type="search" name="tag" value="<?= e($tag) ?>" placeholder="<?= e((string) $t['tag_search_ph']) ?>">
+        </label>
+        <div class="library-search-actions">
+            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+            <?php if ($search !== '' || $category !== '' || $tag !== ''): ?><a class="button secondary" href="<?= e(route_url('members_library')) ?>"><?= e((string) $t['reset']) ?></a><?php endif; ?>
+        </div>
     </form>
 
     <?php if ($documents === []): ?>
-        <p class="help"><?= e((string) $t['empty']) ?><?= ($search !== '' || $category !== '' || $tag !== '') ? e((string) $t['for_filters']) : '' ?>.</p>
+        <div class="library-empty">
+            <h3><?= e((string) $t['empty']) ?></h3>
+            <?php if ($search !== '' || $category !== '' || $tag !== ''): ?><p><?= e((string) $t['for_filters']) ?>.</p><?php endif; ?>
+        </div>
     <?php endif; ?>
 
-    <div class="news-grid">
+    <div class="library-document-grid">
     <?php foreach ($documents as $document): ?>
         <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); ?>
         <?php if ($safePath === null) { continue; } ?>
@@ -165,8 +203,11 @@ ob_start();
         <?php $docId = (int) ($document['id'] ?? 0); ?>
         <?php $relatedDocs = $relatedByDocumentId[$docId] ?? []; ?>
         <?php $isFavorite = favorite_is_saved((int) $user['id'], 'library_document', (int) ($document['id'] ?? 0)); ?>
-        <article class="card feature-card" style="margin-top:12px;">
-            <p><span class="badge muted"><?= e($docCategory) ?></span> <span class="badge muted"><?= e(strtoupper($extension)) ?></span></p>
+        <article class="library-document-card">
+            <div class="library-card-top">
+                <span class="badge muted"><?= e($docCategory) ?></span>
+                <span class="badge muted"><?= e(strtoupper($extension)) ?></span>
+            </div>
             <h3><?= e($docTitle) ?></h3>
             <?php if ($docDescription !== ''): ?><p><?= e($docDescription) ?></p><?php endif; ?>
             <?php if ($docTags !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e($docTags) ?></p><?php endif; ?>
@@ -190,7 +231,7 @@ ob_start();
                     </ul>
                 <?php endif; ?>
             </details>
-            <p class="actions">
+            <div class="library-card-actions">
                 <a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
                 <form method="post" class="inline-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -198,7 +239,7 @@ ob_start();
                     <input type="hidden" name="document_id" value="<?= (int) ($document['id'] ?? 0) ?>">
                     <button class="button secondary" type="submit"><?= $isFavorite ? ('★ ' . e((string) $t['favorite'])) : ('☆ ' . e((string) $t['favorite'])) ?></button>
                 </form>
-            </p>
+            </div>
         </article>
     <?php endforeach; ?>
     </div>
@@ -209,5 +250,5 @@ ob_start();
             <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'tag' => $tag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
-</div>
+</section>
 <?php echo render_layout((string) ob_get_clean(), (string) $t['title']);
