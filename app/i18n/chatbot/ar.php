@@ -28,5 +28,11 @@ return array (
   'clear_confirm' => '?? ???? ??? ?? ?????????',
   'welcome_title' => '????? ON4CRD',
   'reuse' => '???? ?????',
-  'copy' => '???',
+  'copy' => 'نسخ',
+  'sources_used' => 'المصادر المستخدمة',
+  'scope' => 'نطاق المعرفة',
+  'scope_all' => 'كل المصادر',
+  'scope_knowledge' => 'قاعدة المعرفة',
+  'scope_articles' => 'المقالات',
+  'scope_library' => 'وثائق المكتبة',
 );
