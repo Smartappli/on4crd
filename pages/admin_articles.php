@@ -408,12 +408,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int) ($_POST['id'] ?? 0);
             $result = editorial_retry_scheduled_article($id);
             if ($result === 'blocked_missing_fields') {
-                throw new RuntimeException('Retry blocked: complete title/content first.');
+                throw new RuntimeException($t('retry_blocked_missing_fields'));
             }
             if ($result === 'invalid' || $result === 'missing') {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }
-            set_flash('success', 'Retry applied.');
+            if ($result === 'published') {
+                set_flash('success', $t('retry_applied_published'));
+            } elseif ($result === 'rescheduled') {
+                set_flash('success', $t('retry_applied_rescheduled'));
+            } else {
+                set_flash('success', $t('retry_applied'));
+            }
             redirect('admin_articles');
         } elseif ($action === 'retry_scheduled_bulk') {
             $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
@@ -425,11 +431,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $result = editorial_retry_scheduled_article($id);
                 $counts[$result] = ($counts[$result] ?? 0) + 1;
             }
-            $message = 'Bulk retry: '
-                . $counts['published'] . ' published, '
-                . $counts['rescheduled'] . ' rescheduled, '
-                . $counts['retried'] . ' retried, '
-                . $counts['blocked_missing_fields'] . ' blocked.';
+            $message = sprintf(
+                $t('retry_bulk_summary'),
+                (int) $counts['published'],
+                (int) $counts['rescheduled'],
+                (int) $counts['retried'],
+                (int) $counts['blocked_missing_fields']
+            );
             set_flash('success', $message);
             redirect('admin_articles');
         }
@@ -602,7 +610,7 @@ ob_start();
                                 </p>
                                 <?php if ($blockedReasons !== []): ?>
                                     <p class="help" style="margin:.3rem 0 0 0;color:#b54708;">
-                                        Blocked: <?= e(implode(', ', $blockedReasons)) ?>
+                                        <?= e($t('blocked_reasons')) ?>: <?= e(implode(', ', $blockedReasons)) ?>
                                     </p>
                                 <?php endif; ?>
                             </div>

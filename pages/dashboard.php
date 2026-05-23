@@ -180,11 +180,11 @@ ob_start();
     <form method="post" class="inline-form" style="margin:.25rem 0 1rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;">
       <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
       <input type="hidden" name="action" value="toggle_recommendation_signals">
-      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[article]" value="1" <?= $recommendationSignals['article'] ? 'checked' : '' ?>> <span>Articles</span></label>
-      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[wiki]" value="1" <?= $recommendationSignals['wiki'] ? 'checked' : '' ?>> <span>Wiki</span></label>
-      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[classified]" value="1" <?= $recommendationSignals['classified'] ? 'checked' : '' ?>> <span>Classifieds</span></label>
-      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[album]" value="1" <?= $recommendationSignals['album'] ? 'checked' : '' ?>> <span>Albums</span></label>
-      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[library]" value="1" <?= $recommendationSignals['library'] ? 'checked' : '' ?>> <span>Library</span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[article]" value="1" <?= $recommendationSignals['article'] ? 'checked' : '' ?>> <span><?= e($t('signal_article')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[wiki]" value="1" <?= $recommendationSignals['wiki'] ? 'checked' : '' ?>> <span><?= e($t('signal_wiki')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[classified]" value="1" <?= $recommendationSignals['classified'] ? 'checked' : '' ?>> <span><?= e($t('signal_classified')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[album]" value="1" <?= $recommendationSignals['album'] ? 'checked' : '' ?>> <span><?= e($t('signal_album')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[library]" value="1" <?= $recommendationSignals['library'] ? 'checked' : '' ?>> <span><?= e($t('signal_library')) ?></span></label>
       <button class="button secondary small" type="submit"><?= e($t('save_layout')) ?></button>
     </form>
     <?php if ($recommendations === []): ?>

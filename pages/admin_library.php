@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $updated++;
             }
 
-            set_flash('success', 'Tags merged on ' . $updated . ' document(s).');
+            set_flash('success', sprintf((string) $t['ok_tags_merged'], $updated));
             redirect('admin_library');
         }
 
@@ -396,17 +396,17 @@ ob_start();
     </section>
 
     <section class="card admin-library-categories">
-        <h2>Tag cleanup</h2>
-        <p class="help">Normalize duplicated tag variants before moderation/export workflows.</p>
+        <h2><?= e((string) $t['tag_cleanup_title']) ?></h2>
+        <p class="help"><?= e((string) $t['tag_cleanup_help']) ?></p>
         <form method="post" class="inline-form" style="flex-wrap:wrap;gap:.6rem;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="merge_tags">
-            <input type="text" name="from_tag" placeholder="From tag variant" required>
-            <input type="text" name="to_tag" placeholder="To canonical tag" required>
+            <input type="text" name="from_tag" placeholder="<?= e((string) $t['tag_from_ph']) ?>" required>
+            <input type="text" name="to_tag" placeholder="<?= e((string) $t['tag_to_ph']) ?>" required>
             <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
         </form>
         <?php if ($tagDuplicates === []): ?>
-            <p class="help" style="margin-top:.75rem;">No duplicate tag variants detected.</p>
+            <p class="help" style="margin-top:.75rem;"><?= e((string) $t['tag_duplicates_empty']) ?></p>
         <?php else: ?>
             <div class="admin-library-category-list" style="margin-top:.75rem;">
                 <?php foreach ($tagDuplicates as $normalized => $variants): ?>
