@@ -18,7 +18,7 @@ Deliver functional upgrades by waves without changing existing business rules.
 
 ## Wave 3 (Differentiators)
 - [~] Chatbot connected to site knowledge sources (RAG).
-- [ ] Admin assistant for taxonomy/tagging/i18n QA.
+- [~] Admin assistant for taxonomy/tagging/i18n QA.
 - [ ] Personalized recommendations by user activity.
 
 ## Critical Audit (May 23, 2026)
