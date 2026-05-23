@@ -379,6 +379,18 @@ if (!function_exists('current_locale')) {
 function current_locale(): string
 {
     $supported = supported_locales_map();
+    $queryLocale = strtolower(trim((string) ($_GET['lang'] ?? '')));
+    $queryLocale = str_replace('_', '-', $queryLocale);
+    if (isset($supported[$queryLocale])) {
+        return $queryLocale;
+    }
+    if (str_contains($queryLocale, '-')) {
+        $queryLocaleBase = (string) explode('-', $queryLocale, 2)[0];
+        if (isset($supported[$queryLocaleBase])) {
+            return $queryLocaleBase;
+        }
+    }
+
     $locale = strtolower((string) ($_SESSION['locale'] ?? ''));
     if ($locale === '') {
         $acceptLanguage = strtolower((string) ($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? ''));
@@ -2482,6 +2494,71 @@ function render_site_footer(string $currentRoute): string
 }
 
 if (!function_exists('render_layout')) {
+function route_url_with_locale(string $route, string $locale, array $query = []): string
+{
+    $query['lang'] = $locale;
+    return route_url_clean($route, $query);
+}
+
+function localized_seo_defaults(string $route, string $locale, array $pageMeta, string $siteName): array
+{
+    $seo = i18n_domain_locale('seo', $locale);
+    $routeKey = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+    $titleKey = $routeKey . '_title';
+    $descriptionKey = $routeKey . '_description';
+    $title = trim((string) ($pageMeta['title'] ?? ''));
+    $description = trim((string) ($pageMeta['description'] ?? ''));
+
+    if ($title === '') {
+        $title = trim((string) ($seo[$titleKey] ?? $seo['default_title'] ?? $siteName));
+    }
+    if ($description === '') {
+        $description = trim((string) ($seo[$descriptionKey] ?? $seo['default_description'] ?? ''));
+    }
+
+    $alternates = isset($pageMeta['alternates']) && is_array($pageMeta['alternates']) ? $pageMeta['alternates'] : [];
+    foreach (supported_locales() as $supportedLocale) {
+        $alternates[$supportedLocale] = route_url_with_locale($routeKey, $supportedLocale);
+    }
+    $alternates['x-default'] = route_url_with_locale($routeKey, 'fr');
+
+    $defaults = array_replace([
+        'title' => $title,
+        'description' => $description,
+        'canonical' => route_url_with_locale($routeKey, $locale),
+        'locale' => str_replace('-', '_', locale_open_graph_code($locale)),
+        'geo_region' => 'BE-WNA',
+        'geo_placename' => (string) ($seo['geo_placename'] ?? 'Durnal, Yvoir, Namur, Belgium'),
+        'geo_position' => '50.3150;4.9452',
+        'icbm' => '50.3150, 4.9452',
+        'alternates' => $alternates,
+    ], array_filter($pageMeta, static fn($value): bool => $value !== null && $value !== ''));
+    $defaults['alternates'] = $alternates;
+
+    return $defaults;
+}
+
+function locale_open_graph_code(string $locale): string
+{
+    return match ($locale) {
+        'fr' => 'fr_BE',
+        'en' => 'en_US',
+        'de' => 'de_DE',
+        'nl' => 'nl_BE',
+        'it' => 'it_IT',
+        'es' => 'es_ES',
+        'pt' => 'pt_PT',
+        'ar' => 'ar_AR',
+        'hi' => 'hi_IN',
+        'ja' => 'ja_JP',
+        'zh' => 'zh_CN',
+        'bn' => 'bn_BD',
+        'ru' => 'ru_RU',
+        'id' => 'id_ID',
+        default => 'fr_BE',
+    };
+}
+
 function module_css_assets_for_route(string $route): array
 {
     $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
@@ -2515,7 +2592,7 @@ function render_layout(string $content, string $title = ''): string
     if ($currentTheme !== 'dark') {
         $currentTheme = 'light';
     }
-    $currentLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
+    $currentLocale = current_locale();
     if (!in_array($currentLocale, supported_locales(), true)) {
         $currentLocale = 'fr';
     }
@@ -2617,6 +2694,7 @@ function render_layout(string $content, string $title = ''): string
     $siteName = (string) config('app.site_name', 'ON4CRD');
     $pageMeta = (array) ($_SESSION['_page_meta'] ?? []);
     unset($_SESSION['_page_meta']);
+    $pageMeta = localized_seo_defaults($currentRoute, $currentLocale, $pageMeta, $siteName);
     $metaTitle = trim((string) ($pageMeta['title'] ?? ''));
     $pageTitle = $title !== '' ? $title : ($metaTitle !== '' ? $metaTitle : $siteName);
     $metaDescription = trim((string) ($pageMeta['description'] ?? ''));
@@ -2746,16 +2824,19 @@ function render_layout(string $content, string $title = ''): string
         . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="' . e((string) $layoutI18n['accent_choice']) . '" aria-describedby="accent-help">' . $accentOptionHtml . '</select>'
         . '<span class="sr-only" id="accent-help">' . e((string) $layoutI18n['accent_help']) . '</span>'
         . '</form>';
-    $searchQuery = trim((string) ($_GET['q'] ?? ''));
-    $searchForm = '<form class="toolbar-form toolbar-search-form" method="get" action="' . e(route_url('search')) . '">'
-        . '<input type="hidden" name="route" value="search">'
-        . '<label class="sr-only" for="toolbar-search">' . e((string) $layoutI18n['search_label']) . '</label>'
-        . '<input id="toolbar-search" class="toolbar-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" aria-label="' . e((string) $layoutI18n['search_label']) . '">'
-        . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
-        . '</form>';
+    $searchForm = '';
+    if ($currentRoute !== 'home') {
+        $searchQuery = trim((string) ($_GET['q'] ?? ''));
+        $searchForm = '<form class="toolbar-form toolbar-search-form" method="get" action="' . e(route_url('search')) . '">'
+            . '<input type="hidden" name="route" value="search">'
+            . '<label class="sr-only" for="toolbar-search">' . e((string) $layoutI18n['search_label']) . '</label>'
+            . '<input id="toolbar-search" class="toolbar-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" aria-label="' . e((string) $layoutI18n['search_label']) . '">'
+            . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
+            . '</form>';
+    }
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
-        . '<div class="toolbar-preferences-row toolbar-search-row">' . $searchForm . '</div>'
+        . ($searchForm !== '' ? '<div class="toolbar-preferences-row toolbar-search-row">' . $searchForm . '</div>' : '')
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
