@@ -1,0 +1,61 @@
+.albums-page,
+.album-detail-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.albums-hero,
+.album-detail-hero {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 44%),
+    var(--panel);
+}
+
+.albums-hero {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.album-detail-hero {
+  grid-template-columns: minmax(260px, 38%) minmax(0, 1fr);
+}
+
+.albums-grid,
+.album-photo-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.albums-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.album-photo-grid {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+.album-tile,
+.album-photo-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+}
+
+@media (max-width: 900px) {
+  .albums-hero,
+  .album-detail-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .albums-grid,
+  .album-photo-grid {
+    grid-template-columns: 1fr;
+  }
+}

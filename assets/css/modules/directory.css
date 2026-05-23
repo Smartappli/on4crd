@@ -1,0 +1,22 @@
+.directory-page,
+.directory-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.directory-grid {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.directory-card,
+.member-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel-2);
+}
+
+@media (max-width: 640px) {
+  .directory-grid {
+    grid-template-columns: 1fr;
+  }
+}

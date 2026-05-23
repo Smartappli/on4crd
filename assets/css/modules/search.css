@@ -1,0 +1,25 @@
+.site-search-page,
+.site-search-results {
+  display: grid;
+  gap: 1rem;
+}
+
+.site-search-hero,
+.site-search-result-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.site-search-source-tabs,
+.site-search-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+}
+
+@media (max-width: 640px) {
+  .site-search-source-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+}

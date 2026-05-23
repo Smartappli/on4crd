@@ -1,0 +1,15 @@
+.classifieds-page,
+.classifieds-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.classifieds-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .classifieds-grid {
+    grid-template-columns: 1fr;
+  }
+}

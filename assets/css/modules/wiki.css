@@ -1,0 +1,70 @@
+.wiki-page,
+.wiki-view-page,
+.wiki-edit-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.wiki-hero,
+.wiki-view-hero,
+.wiki-edit-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.15rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 42%),
+    var(--panel);
+}
+
+.wiki-dashboard,
+.wiki-grid,
+.wiki-view-layout,
+.wiki-edit-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.wiki-dashboard {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wiki-grid {
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+.wiki-view-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  align-items: start;
+}
+
+.wiki-card,
+.wiki-stat,
+.wiki-search-panel,
+.wiki-edit-form,
+.wiki-article,
+.wiki-history-panel {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+}
+
+@media (max-width: 900px) {
+  .wiki-view-layout,
+  .wiki-dashboard,
+  .wiki-edit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .wiki-hero,
+  .wiki-view-hero,
+  .wiki-edit-hero {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

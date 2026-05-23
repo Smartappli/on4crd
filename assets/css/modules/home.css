@@ -1,0 +1,22 @@
+.home-module .rounded-3xl,
+[data-route="home"] .rounded-3xl {
+  border-radius: 20px;
+}
+
+.home-module img,
+[data-route="home"] img {
+  max-width: 100%;
+}
+
+.home-module iframe,
+[data-route="home"] iframe {
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .home-module .text-4xl,
+  [data-route="home"] .text-4xl {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+}

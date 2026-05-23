@@ -1,0 +1,26 @@
+.tools-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.tools-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.tools-index {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 920px) {
+  .tools-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tools-index {
+    position: static;
+  }
+}

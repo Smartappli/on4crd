@@ -1,0 +1,18 @@
+.member-library-page,
+.library-grid,
+.library-category-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.library-grid,
+.library-category-grid {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .library-grid,
+  .library-category-grid {
+    grid-template-columns: 1fr;
+  }
+}
