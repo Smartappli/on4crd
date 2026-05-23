@@ -1,5 +1,5 @@
 <article class="card tool-panel" id="tool-power" data-tool-panel>
-    <h2><?= e((string) $t['conv']) ?> Â· <?= e((string) $t['power']) ?></h2>
+    <h2><?= e((string) $t['conv']) ?> - <?= e((string) $t['power']) ?></h2>
     <label><?= e((string) $t['watts']) ?>
         <input type="number" id="power-watts" min="0" step="0.001" placeholder="<?= e((string) $t['watts_ph']) ?>">
     </label>

@@ -4,7 +4,7 @@
         <label for="tool-sunit-dbuv-in"><?= e((string) ($t['sunit_label'] ?? 'S-unit')) ?></label>
         <input id="tool-sunit-dbuv-in" type="number" step="0.1" inputmode="decimal" placeholder="1">
 
-        <label for="tool-sunit-dbuv-out"><?= e((string) ($t['dbuv_label'] ?? 'dBÂµV')) ?></label>
+        <label for="tool-sunit-dbuv-out"><?= e((string) ($t['dbuv_label'] ?? 'dBuV')) ?></label>
         <output id="tool-sunit-dbuv-out">-</output>
     </div>
 </article>

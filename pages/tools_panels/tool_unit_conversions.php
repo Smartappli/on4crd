@@ -98,7 +98,7 @@ $unitConversionGroups = [
         'default_to' => 'rps',
     ],
     'field' => [
-        'label' => (string) ($t['unit_conv_group_field'] ?? 'Niveau de signal'),
+        'label' => (string) ($t['unit_conv_group_field'] ?? 'Signal level'),
         'units' => [
             'dbuv' => ['label' => 'dBÂµV', 'kind' => 'dbuv'],
             'sunit' => ['label' => 'S-unit', 'kind' => 'sunit'],
