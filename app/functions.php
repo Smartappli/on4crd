@@ -4874,6 +4874,18 @@ function member_notifications_mark_all_read(int $memberId): void
 }
 }
 
+if (!function_exists('member_notification_mark_read')) {
+function member_notification_mark_read(int $memberId, int $notificationId): void
+{
+    if ($memberId <= 0 || $notificationId <= 0 || !ensure_member_notifications_table()) {
+        return;
+    }
+
+    $stmt = db()->prepare('UPDATE member_notifications SET is_read = 1, read_at = NOW() WHERE id = ? AND member_id = ? AND is_read = 0');
+    $stmt->execute([$notificationId, $memberId]);
+}
+}
+
 /**
  * @param array<string,mixed> $row
  * @return array<string,mixed>

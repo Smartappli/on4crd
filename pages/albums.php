@@ -4,6 +4,26 @@ declare(strict_types=1);
 $locale = current_locale();
 $t = i18n_domain_locale('albums', $locale);
 set_page_meta(['title' => (string) $t['public_albums'], 'description' => (string) $t['meta_desc']]);
+$user = current_user();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite_album') {
+    $user = require_login();
+    verify_csrf();
+    $albumId = (int) ($_POST['album_id'] ?? 0);
+    if ($albumId > 0) {
+        $favStmt = db()->prepare('SELECT id, title FROM albums WHERE id = ? AND is_public = 1 LIMIT 1');
+        $favStmt->execute([$albumId]);
+        $favRow = $favStmt->fetch() ?: null;
+        if ($favRow !== null) {
+            $favTitle = trim((string) ($favRow['title'] ?? 'Album'));
+            $favUrl = route_url('album', ['id' => (int) $favRow['id']]);
+            $saved = favorite_toggle((int) $user['id'], 'album', (int) $favRow['id'], $favTitle, $favUrl);
+            notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $favTitle, $favUrl);
+            set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
+        }
+    }
+    redirect_url(route_url_clean('albums', ['q' => (string) ($_GET['q'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+}
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
@@ -111,6 +131,15 @@ ob_start();
                             <?php endif; ?>
                             <p><span class="badge muted"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span></p>
                         </a>
+                        <?php if ($user !== null): ?>
+                            <?php $isFavorite = favorite_is_saved((int) $user['id'], 'album', (int) ($row['id'] ?? 0)); ?>
+                            <form method="post" class="inline-form" style="margin-top:.5rem;">
+                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                <input type="hidden" name="action" value="toggle_favorite_album">
+                                <input type="hidden" name="album_id" value="<?= (int) ($row['id'] ?? 0) ?>">
+                                <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; Favorite' : '&#9734; Favorite' ?></button>
+                            </form>
+                        <?php endif; ?>
                     </article>
                 <?php endforeach; ?>
             </div>

@@ -39,6 +39,26 @@ $locale = current_locale();
 $t = i18n_domain_locale('articles', $locale);
 articles_sync_scheduled_publications();
 $GLOBALS['articles_i18n'] = $t;
+$user = current_user();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite_article') {
+    $user = require_login();
+    verify_csrf();
+    $articleId = (int) ($_POST['article_id'] ?? 0);
+    if ($articleId > 0) {
+        $favStmt = db()->prepare('SELECT id, slug, title FROM articles WHERE id = ? AND status = "published" LIMIT 1');
+        $favStmt->execute([$articleId]);
+        $favRow = $favStmt->fetch() ?: null;
+        if ($favRow !== null) {
+            $favTitle = trim((string) ($favRow['title'] ?? 'Article'));
+            $favUrl = route_url('article', ['slug' => (string) ($favRow['slug'] ?? '')]);
+            $saved = favorite_toggle((int) $user['id'], 'article', (int) $favRow['id'], $favTitle, $favUrl);
+            notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $favTitle, $favUrl);
+            set_flash('success', $saved ? 'Article added to favorites.' : 'Article removed from favorites.');
+        }
+    }
+    redirect_url(route_url_clean('articles', ['theme' => (string) ($_GET['theme'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'page' => max(1, (int) ($_GET['page'] ?? 1))]));
+}
 
 $themeMeta = [
     'antennes' => ['label' => (string) $t['theme_antennes'], 'image' => null],
@@ -172,12 +192,23 @@ ob_start();
                 <div class="news-grid">
                     <?php foreach ($themeRows as $row): ?>
                         <?php $row = localized_article_row($row); ?>
+                        <?php $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) ($row['id'] ?? 0)) : false; ?>
                         <article class="news-card feature-card">
                             <span class="badge muted"><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></span>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
                             <p class="help"><?= e(date('d/m/Y', strtotime((string) $row['updated_at']))) ?> · <?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
                             <p><?= e(article_card_excerpt($row)) ?></p>
-                            <p><a class="button secondary" href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['read_article']) ?></a></p>
+                            <p class="actions">
+                                <a class="button secondary" href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['read_article']) ?></a>
+                                <?php if ($user !== null): ?>
+                                    <form method="post" class="inline-form">
+                                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                        <input type="hidden" name="action" value="toggle_favorite_article">
+                                        <input type="hidden" name="article_id" value="<?= (int) ($row['id'] ?? 0) ?>">
+                                        <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; Favorite' : '&#9734; Favorite' ?></button>
+                                    </form>
+                                <?php endif; ?>
+                            </p>
                         </article>
                     <?php endforeach; ?>
                 </div>

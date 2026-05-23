@@ -5,8 +5,8 @@ Deliver functional upgrades by waves without changing existing business rules.
 
 ## Wave 1 (Quick Wins)
 - [x] Unified global search across `articles`, `wiki`, `classified_ads`, `member_library_documents`, `albums`.
-- [ ] Cross-module favorites/bookmarks (articles, albums, classifieds, library docs).
-- [ ] In-app notification center (publication, moderation, import completion).
+- [x] Cross-module favorites/bookmarks (articles, albums, classifieds, library docs).
+- [~] In-app notification center (publication, moderation, import completion).
 - [ ] Unified admin list UX (filters, pagination, bulk actions patterns).
 
 ## Wave 2 (Core Modules)

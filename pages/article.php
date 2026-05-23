@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
         (string) ($row['title_localized'] ?? $row['title'] ?? ''),
         route_url('article', ['slug' => (string) $row['slug']])
     );
-    notify_member((int) $user['id'], 'favorite', $saved ? 'Favori ajouté' : 'Favori retiré', (string) ($row['title_localized'] ?? $row['title'] ?? ''), route_url('article', ['slug' => (string) $row['slug']]));
-    set_flash('success', $saved ? 'Article ajouté aux favoris.' : 'Article retiré des favoris.');
+    notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', (string) ($row['title_localized'] ?? $row['title'] ?? ''), route_url('article', ['slug' => (string) $row['slug']]));
+    set_flash('success', $saved ? 'Article added to favorites.' : 'Article removed from favorites.');
     redirect_url(route_url('article', ['slug' => (string) $row['slug']]));
 }
 $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) $row['id']) : false;
@@ -85,7 +85,7 @@ ob_start();
         <form method="post" class="inline-form" style="margin-bottom:.7rem;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="toggle_favorite">
-            <button class="button secondary" type="submit"><?= $isFavorite ? '★ Retirer des favoris' : '☆ Ajouter aux favoris' ?></button>
+            <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; Favorite' : '&#9734; Favorite' ?></button>
         </form>
     <?php endif; ?>
     <h1><?= e((string) $row['title_localized']) ?></h1>

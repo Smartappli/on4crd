@@ -183,6 +183,7 @@ if ($route === 'set_theme') {
 
 $routeModules = [
     'dashboard' => 'dashboard',
+    'notifications' => 'dashboard',
     'save_dashboard' => 'dashboard',
     'widget_render' => 'dashboard',
     'profile' => 'members',
@@ -284,6 +285,7 @@ switch ($route) {
         redirect('home');
         break;
     case 'dashboard': $dispatchPage('pages/dashboard.php'); break;
+    case 'notifications': $dispatchPage('pages/notifications.php'); break;
     case 'save_dashboard': $dispatchPage('pages/save_dashboard.php'); break;
     case 'widget_render': $dispatchPage('pages/widget_render.php'); break;
     case 'profile': $dispatchPage('pages/profile.php'); break;

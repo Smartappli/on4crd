@@ -75,7 +75,7 @@ ob_start();
       <div class="actions">
         <button class="button secondary small" id="open-widgets-panel" type="button" aria-controls="dashboard-widgets-panel" aria-expanded="false">🧩 <?= e($t('available_widgets')) ?></button>
         <button class="button secondary small" id="dashboard-fullscreen-toggle" type="button">⛶ <?= e($t('fullscreen')) ?></button>
-        <a class="button secondary small" href="<?= e(route_url('news')) ?>">🔔 <?= e($t('notifications')) ?></a>
+        <a class="button secondary small" href="<?= e(route_url('notifications')) ?>">🔔 <?= e($t('notifications')) ?></a>
         <a class="button secondary small" href="<?= e(route_url('chatbot')) ?>">🤖 <?= e($t('chatbot')) ?></a>
         <button class="button secondary small" id="save-dashboard" type="button" <?= $dashboardPersistenceEnabled ? '' : 'disabled' ?>>💾 <?= e($t('save_layout')) ?></button>
         <span class="help" id="dashboard-save-status" role="status" aria-live="polite"></span>
