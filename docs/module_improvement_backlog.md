@@ -30,9 +30,17 @@ Deliver functional upgrades by waves without changing existing business rules.
 - Audit snapshot and action report: `docs/critical_audit_2026-05-23.md`.
 
 ## Wave 4 (Reliability & Quality)
-- [ ] i18n hardening: UTF-8 normalization, key completeness gates, screenshot QA per locale.
-- [ ] RAG quality pipeline: source freshness scoring, answer confidence thresholds, fallback responses.
-- [ ] Observability baseline: module health dashboard, query latency/error SLOs, alert rules.
+- [x] i18n hardening: UTF-8 normalization, key completeness gates, screenshot QA per locale.
+- [x] RAG quality pipeline: source freshness scoring, answer confidence thresholds, fallback responses.
+- [x] Observability baseline: module health dashboard, query latency/error SLOs, alert rules.
+
+### Wave 4 Verification (May 23, 2026)
+- `php scripts/check_i18n_encoding.php`: OK.
+- `php scripts/check_i18n_native.php --strict`: OK.
+- `php scripts/check_i18n_coverage.php`: OK (14 locales).
+- `php scripts/check_chatbot_i18n_quality.php`: OK.
+- `php vendor/bin/phpunit ...`: blocked in current workspace (`vendor/` missing).
+- `php tools/observability_snapshot.php`: blocked (`config/config.php` missing).
 
 ## Wave 5 (Operator Productivity)
 - [ ] Admin co-pilot for tagging: suggest/merge tags, duplicate detection, bulk approve flows.
