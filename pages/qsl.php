@@ -327,21 +327,21 @@ $matchesTextFilter = static function (string $needle, array $fields): bool {
 $qsoEqslStatus = static function (array $row): string {
     $raw = (string) ($row['raw_payload'] ?? '');
     if ($raw === '') {
-        return 'Ã¢â‚¬â€';
+        return '-';
     }
 
     $payload = json_decode($raw, true);
     if (!is_array($payload)) {
-        return 'Ã¢â‚¬â€';
+        return '-';
     }
 
     $sent = qsl_normalize_qsl_status((string) ($payload['eqsl_qsl_sent'] ?? ''));
     $received = qsl_normalize_qsl_status((string) ($payload['eqsl_qsl_rcvd'] ?? ''));
     if ($sent === '' && $received === '') {
-        return 'Ã¢â‚¬â€';
+        return '-';
     }
 
-    return 'S:' . ($sent !== '' ? $sent : 'Ã¢â‚¬â€') . ' / R:' . ($received !== '' ? $received : 'Ã¢â‚¬â€');
+    return 'S:' . ($sent !== '' ? $sent : '-') . ' / R:' . ($received !== '' ? $received : '-');
 };
 
 $filteredQsoRows = array_values(array_filter($qsoRows, static function (array $row) use ($matchesTextFilter, $qsoSearch, $qsoBandFilter, $qsoModeFilter): bool {
@@ -496,7 +496,7 @@ ob_start();
             <div class="qsl-live-preview" data-qsl-preview>
                 <div class="qsl-live-preview-card" data-qsl-preview-card>
                     <p class="qsl-live-preview-title">QSL Preview</p>
-                    <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> Ã¢â€ â€™ TO: F4XYZ</p>
+                    <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> -> TO: F4XYZ</p>
                 </div>
             </div>
             <p class="help">Preview of the background being created (image, solid color, gradient or preset palette).</p>
@@ -513,7 +513,7 @@ ob_start();
                     <tr>
                         <td><?= e((string) ($preset['label'] ?? 'Background')) ?></td>
                         <td><?= e(((string) ($preset['type'] ?? 'gradient')) === 'image' ? 'Image' : 'Gradient') ?></td>
-                        <td><?= ((int) ($preset['is_default'] ?? 0) === 1) ? 'Ã¢Å“â€¦' : 'Ã¢â‚¬â€' ?></td>
+                        <td><?= ((int) ($preset['is_default'] ?? 0) === 1) ? 'Yes' : '-' ?></td>
                         <td>
                             <form method="post" class="inline-form">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -583,7 +583,7 @@ ob_start();
                                     data-bg-secondary="<?= e($presetSecondary) ?>"
                                     <?= ($presetId === $defaultBackgroundPresetId) ? 'selected' : '' ?>
                                 >
-                                    <?= e($presetLabel) ?><?= $isDefaultPreset ? ' (default)' : '' ?> Ã¢â‚¬â€ <?= e($presetType === 'image' ? 'Image' : 'Gradient') ?>
+                            <?= e($presetLabel) ?><?= $isDefaultPreset ? ' (default)' : '' ?> - <?= e($presetType === 'image' ? 'Image' : 'Gradient') ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -602,7 +602,7 @@ ob_start();
                         <div class="qsl-live-preview">
                             <div class="qsl-live-preview-card" data-manual-preview-card>
                                 <p class="qsl-live-preview-title">Front preview</p>
-                                <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> Ã¢â€ â€™ TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
+                    <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> -> TO: <span data-manual-preview-field="qso_call">F4XYZ</span></p>
                                 <p class="qsl-live-preview-meta" data-manual-preview-front-detail>DATE: <span data-manual-preview-field="qso_date">20260412</span> UTC: <span data-manual-preview-field="time_on">09:15</span></p>
                                 <p class="qsl-live-preview-meta" data-manual-preview-front-detail>BAND: <span data-manual-preview-field="band">20M</span> MODE: <span data-manual-preview-field="mode">SSB</span></p>
                                 <p class="qsl-live-preview-meta" data-manual-preview-front-detail>RST S/R: <span data-manual-preview-field="rst_sent">59</span>/<span data-manual-preview-field="rst_recv">59</span></p>
@@ -613,7 +613,7 @@ ob_start();
                         <div class="qsl-live-preview is-hidden" data-manual-preview-back-wrap>
                             <div class="qsl-live-preview-card" data-manual-preview-back-card>
                                 <p class="qsl-live-preview-title">Back preview</p>
-                                <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> Ã¢â€ â€™ TO: <span data-manual-preview-back-field="qso_call">F4XYZ</span></p>
+                    <p class="qsl-live-preview-meta">DE: <?= e((string) ($user['callsign'] ?? 'ON4CRD')) ?> -> TO: <span data-manual-preview-back-field="qso_call">F4XYZ</span></p>
                                 <p class="qsl-live-preview-meta">DATE: <span data-manual-preview-back-field="qso_date">20260412</span> UTC: <span data-manual-preview-back-field="time_on">09:15</span></p>
                                 <p class="qsl-live-preview-meta">BAND: <span data-manual-preview-back-field="band">20M</span> MODE: <span data-manual-preview-back-field="mode">SSB</span></p>
                                 <p class="qsl-live-preview-meta">RST S/R: <span data-manual-preview-back-field="rst_sent">59</span>/<span data-manual-preview-back-field="rst_recv">59</span></p>
@@ -718,8 +718,8 @@ ob_start();
             <?php if ($qsoTotalPages > 1): ?>
                 <div class="actions">
                     <span class="help"><?= e($qt('page')) ?> <?= $qsoPage ?> / <?= $qsoTotalPages ?></span>
-                    <?php if ($qsoPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage - 1, $qslPage)) ?>">Ã¢â€ Â <?= e($qt('previous')) ?></a><?php endif; ?>
-                    <?php if ($qsoPage < $qsoTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage + 1, $qslPage)) ?>"><?= e($qt('next')) ?> Ã¢â€ â€™</a><?php endif; ?>
+                    <?php if ($qsoPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage - 1, $qslPage)) ?>">&lt;- <?= e($qt('previous')) ?></a><?php endif; ?>
+                    <?php if ($qsoPage < $qsoTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage + 1, $qslPage)) ?>"><?= e($qt('next')) ?> -&gt;</a><?php endif; ?>
                 </div>
             <?php endif; ?>
             <p><button class="button"><?= e($qt('bulk_generate')) ?></button></p>
@@ -759,7 +759,7 @@ ob_start();
                         <td>
                             <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id']])) ?>">Recto SVG</a>
                             <?php if (qsl_template_supports_back((string) ($row['template_name'] ?? 'classic'))): ?>
-                                Ã‚Â· <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id'], 'side' => 'back'])) ?>">Verso SVG</a>
+                                - <a href="<?= e(route_url('qsl_export', ['id' => (int) $row['id'], 'side' => 'back'])) ?>">Verso SVG</a>
                             <?php endif; ?>
                         </td>
                         <td>
@@ -781,8 +781,8 @@ ob_start();
         <?php if ($qslTotalPages > 1): ?>
             <div class="actions">
                 <span class="help"><?= e($qt('page')) ?> <?= $qslPage ?> / <?= $qslTotalPages ?></span>
-                <?php if ($qslPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage - 1)) ?>">Ã¢â€ Â <?= e($qt('previous')) ?></a><?php endif; ?>
-                <?php if ($qslPage < $qslTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage + 1)) ?>"><?= e($qt('next')) ?> Ã¢â€ â€™</a><?php endif; ?>
+                <?php if ($qslPage > 1): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage - 1)) ?>">&lt;- <?= e($qt('previous')) ?></a><?php endif; ?>
+                <?php if ($qslPage < $qslTotalPages): ?><a class="button secondary small" href="<?= e($buildQslPageUrl($qsoPage, $qslPage + 1)) ?>"><?= e($qt('next')) ?> -&gt;</a><?php endif; ?>
             </div>
         <?php endif; ?>
     <?php endif; ?>
