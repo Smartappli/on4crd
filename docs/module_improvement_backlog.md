@@ -12,7 +12,7 @@ Deliver functional upgrades by waves without changing existing business rules.
 ## Wave 2 (Core Modules)
 - [~] Classifieds workflow: draft/publish/expire/renew + moderation/reporting.
 - [~] Articles workflow: revisions, scheduling, editorial preview.
-- [ ] Library: collections/tags, better discovery, related documents.
+- [~] Library: collections/tags, better discovery, related documents.
 - [ ] Albums: bulk upload UX, ordering, metadata enrichment.
 - [ ] Tools: saved conversion presets + conversion history.
 

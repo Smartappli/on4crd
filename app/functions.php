@@ -4679,7 +4679,7 @@ function ensure_member_library_table(): bool
         return $ready;
     }
     try {
-        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, category VARCHAR(120) NOT NULL DEFAULT "general", title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at), INDEX idx_category (category))');
+        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, category VARCHAR(120) NOT NULL DEFAULT "general", tags VARCHAR(255) NOT NULL DEFAULT "", title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at), INDEX idx_category (category), INDEX idx_tags (tags))');
         $ready = table_exists('member_library_documents');
         if ($ready) {
             $hasCategory = false;
@@ -4692,8 +4692,23 @@ function ensure_member_library_table(): bool
             if (!$hasCategory) {
                 db()->exec('ALTER TABLE member_library_documents ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
             }
+            $hasTags = false;
+            try {
+                $tagsCol = db()->query("SHOW COLUMNS FROM member_library_documents LIKE 'tags'");
+                $hasTags = (bool) ($tagsCol && $tagsCol->fetch());
+            } catch (Throwable) {
+                $hasTags = false;
+            }
+            if (!$hasTags) {
+                db()->exec('ALTER TABLE member_library_documents ADD COLUMN tags VARCHAR(255) NOT NULL DEFAULT "" AFTER category');
+            }
             try {
                 db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category (category)');
+            } catch (Throwable) {
+                // Index may already exist.
+            }
+            try {
+                db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_tags (tags)');
             } catch (Throwable) {
                 // Index may already exist.
             }

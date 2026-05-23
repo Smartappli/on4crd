@@ -21,4 +21,11 @@ return array (
   'page' => 'Page',
   'related_docs' => 'Documentos relacionados',
   'no_related_docs' => 'No hay documentos relacionados.',
+  'tag_search_ph' => 'Search tags',
+  'tags' => 'Tags',
+  'favorite' => 'Favorite',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Document added to favorites.',
+  'favorite_removed_msg' => 'Document removed from favorites.',
 );

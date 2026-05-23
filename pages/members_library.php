@@ -17,19 +17,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
     verify_csrf();
     $documentId = (int) ($_POST['document_id'] ?? 0);
     if ($documentId > 0) {
-        $docStmt = db()->prepare('SELECT id, title, category FROM member_library_documents WHERE id = ? LIMIT 1');
+        $docStmt = db()->prepare('SELECT id, title, category, tags FROM member_library_documents WHERE id = ? LIMIT 1');
         $docStmt->execute([$documentId]);
         $docRow = $docStmt->fetch() ?: null;
         if ($docRow !== null) {
             $docTitle = trim((string) ($docRow['title'] ?? 'Document'));
             $docCategory = trim((string) ($docRow['category'] ?? ''));
-            $favoriteUrl = route_url_clean('members_library', ['q' => $docTitle, 'category' => $docCategory]);
+            $docTags = trim((string) ($docRow['tags'] ?? ''));
+            $favoriteUrl = route_url_clean('members_library', ['q' => $docTitle, 'category' => $docCategory, 'tag' => $docTags]);
             $saved = favorite_toggle((int) $user['id'], 'library_document', (int) $docRow['id'], $docTitle, $favoriteUrl);
-            notify_member((int) $user['id'], 'favorite', $saved ? 'Favori ajouté' : 'Favori retiré', $docTitle, $favoriteUrl);
-            set_flash('success', $saved ? 'Document ajouté aux favoris.' : 'Document retiré des favoris.');
+            notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $docTitle, $favoriteUrl);
+            set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
         }
     }
-    redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+    redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
 }
 
 $search = trim((string) ($_GET['q'] ?? ''));
@@ -37,6 +38,7 @@ if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
 }
 $category = trim((string) ($_GET['category'] ?? ''));
+$tag = trim((string) ($_GET['tag'] ?? ''));
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 12;
 
@@ -51,6 +53,10 @@ if ($search !== '') {
     $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
     $like = '%' . $search . '%';
     array_push($params, $like, $like, $like);
+}
+if ($tag !== '') {
+    $where[] = 'tags LIKE ?';
+    $params[] = '%' . $tag . '%';
 }
 $whereSql = $where !== [] ? (' WHERE ' . implode(' AND ', $where)) : '';
 $countStmt = db()->prepare('SELECT COUNT(*) FROM member_library_documents' . $whereSql);
@@ -137,12 +143,13 @@ ob_start();
             <?php endforeach; ?>
         </select>
         <input type="search" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
+        <input type="search" name="tag" value="<?= e($tag) ?>" placeholder="<?= e((string) $t['tag_search_ph']) ?>">
         <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-        <?php if ($search !== '' || $category !== ''): ?><a class="button secondary" href="<?= e(route_url('members_library')) ?>"><?= e((string) $t['reset']) ?></a><?php endif; ?>
+        <?php if ($search !== '' || $category !== '' || $tag !== ''): ?><a class="button secondary" href="<?= e(route_url('members_library')) ?>"><?= e((string) $t['reset']) ?></a><?php endif; ?>
     </form>
 
     <?php if ($documents === []): ?>
-        <p class="help"><?= e((string) $t['empty']) ?><?= ($search !== '' || $category !== '') ? e((string) $t['for_filters']) : '' ?>.</p>
+        <p class="help"><?= e((string) $t['empty']) ?><?= ($search !== '' || $category !== '' || $tag !== '') ? e((string) $t['for_filters']) : '' ?>.</p>
     <?php endif; ?>
 
     <div class="news-grid">
@@ -153,6 +160,7 @@ ob_start();
         <?php $docCategory = trim((string) ($document['category'] ?? 'general')); if ($docCategory === '') { $docCategory = 'general'; } ?>
         <?php $docTitle = trim((string) ($document['title'] ?? '')); if ($docTitle === '') { $docTitle = (string) $t['document']; } ?>
         <?php $docDescription = trim((string) ($document['description'] ?? '')); ?>
+        <?php $docTags = trim((string) ($document['tags'] ?? '')); ?>
         <?php $docExtract = trim((string) ($document['extracted_text'] ?? '')); ?>
         <?php $docId = (int) ($document['id'] ?? 0); ?>
         <?php $relatedDocs = $relatedByDocumentId[$docId] ?? []; ?>
@@ -161,6 +169,7 @@ ob_start();
             <p><span class="badge muted"><?= e($docCategory) ?></span> <span class="badge muted"><?= e(strtoupper($extension)) ?></span></p>
             <h3><?= e($docTitle) ?></h3>
             <?php if ($docDescription !== ''): ?><p><?= e($docDescription) ?></p><?php endif; ?>
+            <?php if ($docTags !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e($docTags) ?></p><?php endif; ?>
             <?php if ($docExtract !== ''): ?><p class="help"><?= e(mb_safe_strimwidth($docExtract, 0, 220, '...')) ?></p><?php endif; ?>
             <?php if ($extension === 'pdf'): ?>
                 <details class="admin-library-preview-toggle">
@@ -176,7 +185,7 @@ ob_start();
                     <ul class="help" style="padding-left:1rem;margin:.4rem 0;">
                         <?php foreach ($relatedDocs as $related): ?>
                             <?php $relatedTitle = trim((string) ($related['title'] ?? '')); if ($relatedTitle === '') { $relatedTitle = (string) ($t['document'] ?? 'Document'); } ?>
-                            <li><a href="<?= e(route_url_clean('members_library', ['q' => $relatedTitle, 'category' => (string) ($related['category'] ?? '')])) ?>"><?= e($relatedTitle) ?></a></li>
+                            <li><a href="<?= e(route_url_clean('members_library', ['q' => $relatedTitle, 'category' => (string) ($related['category'] ?? ''), 'tag' => $tag])) ?>"><?= e($relatedTitle) ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
@@ -187,7 +196,7 @@ ob_start();
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="toggle_favorite_document">
                     <input type="hidden" name="document_id" value="<?= (int) ($document['id'] ?? 0) ?>">
-                    <button class="button secondary" type="submit"><?= $isFavorite ? '★ Favori' : '☆ Favori' ?></button>
+                    <button class="button secondary" type="submit"><?= $isFavorite ? ('★ ' . e((string) $t['favorite'])) : ('☆ ' . e((string) $t['favorite'])) ?></button>
                 </form>
             </p>
         </article>
@@ -195,9 +204,9 @@ ob_start();
     </div>
     <?php if ($totalPages > 1): ?>
         <nav class="admin-library-pagination" aria-label="Pagination documents">
-            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
+            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'tag' => $tag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
             <span class="badge muted"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
+            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'tag' => $tag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
 </div>
