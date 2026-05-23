@@ -93,39 +93,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') !
                     ->execute([$memberId, $toolId, $label, (string) $payload]);
                 set_flash('success', $tr('preset_saved', 'Preset saved.'));
             }
-        } elseif ($action === 'log_tool_conversion') {
-            $toolId = mb_safe_substr(trim((string) ($_POST['tool_id'] ?? 'tool-unit-converter')), 0, 120);
-            $inputValue = mb_safe_substr(trim((string) ($_POST['input_value'] ?? '')), 0, 190);
-            $outputValue = mb_safe_substr(trim((string) ($_POST['output_value'] ?? '')), 0, 190);
-            $notes = mb_safe_substr(trim((string) ($_POST['notes'] ?? '')), 0, 255);
-            if ($inputValue !== '' && $outputValue !== '') {
-                db()->prepare('INSERT INTO member_tool_history (member_id, tool_id, input_value, output_value, notes) VALUES (?, ?, ?, ?, ?)')
-                    ->execute([$memberId, $toolId, $inputValue, $outputValue, $notes !== '' ? $notes : null]);
-                set_flash('success', $tr('history_saved', 'Conversion logged.'));
-            }
         } elseif ($action === 'delete_tool_preset') {
             $presetId = (int) ($_POST['preset_id'] ?? 0);
             if ($presetId > 0) {
                 db()->prepare('DELETE FROM member_tool_presets WHERE id = ? AND member_id = ?')->execute([$presetId, $memberId]);
                 set_flash('success', $tr('preset_deleted', 'Preset deleted.'));
             }
-        } elseif ($action === 'clear_tool_history') {
-            db()->prepare('DELETE FROM member_tool_history WHERE member_id = ?')->execute([$memberId]);
-            set_flash('success', $tr('history_cleared', 'History cleared.'));
         }
     }
     redirect_url(route_url('tools'));
 }
 
 $toolPresets = [];
-$toolHistory = [];
 if ($memberId > 0 && ensure_member_tools_tables()) {
     $presetStmt = db()->prepare('SELECT id, tool_id, label, payload_json, created_at FROM member_tool_presets WHERE member_id = ? ORDER BY created_at DESC, id DESC LIMIT 20');
     $presetStmt->execute([$memberId]);
     $toolPresets = $presetStmt->fetchAll() ?: [];
-    $historyStmt = db()->prepare('SELECT id, tool_id, input_value, output_value, notes, created_at FROM member_tool_history WHERE member_id = ? ORDER BY created_at DESC, id DESC LIMIT 30');
-    $historyStmt->execute([$memberId]);
-    $toolHistory = $historyStmt->fetchAll() ?: [];
 }
 
 $labelCategoryAntenna = $tr('category_antenna', 'Antenna & propagation');

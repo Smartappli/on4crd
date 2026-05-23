@@ -166,6 +166,15 @@ $adsStmt = db()->prepare("SELECT ca.*, m.callsign FROM classified_ads ca LEFT JO
 $adsStmt->execute($params);
 $allAds = $adsStmt->fetchAll() ?: [];
 
+$activeCategoryCounts = array_fill_keys(array_keys($categories), 0);
+$categoryCountStmt = db()->query("SELECT category_code, COUNT(*) AS total FROM classified_ads WHERE status = 'active' AND (expires_at IS NULL OR expires_at >= NOW()) GROUP BY category_code");
+foreach (($categoryCountStmt ? ($categoryCountStmt->fetchAll() ?: []) : []) as $countRow) {
+    $code = (string) ($countRow['category_code'] ?? '');
+    if (array_key_exists($code, $activeCategoryCounts)) {
+        $activeCategoryCounts[$code] = (int) ($countRow['total'] ?? 0);
+    }
+}
+
 $myAds = [];
 if ($user !== null) {
     $myStmt = db()->prepare('SELECT * FROM classified_ads WHERE owner_member_id = ? ORDER BY created_at DESC, id DESC');
@@ -176,122 +185,187 @@ if ($user !== null) {
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
 ?>
-<section class="stack classifieds-page">
-    <section class="card">
-        <div class="section-header">
+<section class="classifieds-page">
+    <header class="classifieds-hero">
+        <div class="classifieds-hero-copy">
+            <p class="directory-eyebrow"><?= e($t('title')) ?></p>
+            <h1><?= e($t('title')) ?></h1>
+            <p class="directory-lead"><?= e($t('lead')) ?></p>
+        </div>
+        <div class="classifieds-stats">
+            <div class="classifieds-stat">
+                <span><?= (int) $totalAds ?></span>
+                <p><?= e($t('all_ads')) ?></p>
+            </div>
+            <div class="classifieds-stat">
+                <span><?= (int) array_sum($activeCategoryCounts) ?></span>
+                <p><?= e($t('status_active')) ?></p>
+            </div>
+            <div class="classifieds-stat">
+                <span><?= (int) count($myAds) ?></span>
+                <p><?= e($t('my_ads')) ?></p>
+            </div>
+        </div>
+    </header>
+
+    <section class="classifieds-search-panel">
+        <div class="classifieds-search-header">
             <div>
-                <h1><?= e($t('title')) ?></h1>
-                <p class="help"><?= e($t('lead')) ?></p>
+                <h2><?= e($t('search_label')) ?></h2>
+                <p class="help"><?= e($t('search_placeholder')) ?></p>
             </div>
             <?php if ($user === null): ?>
                 <a class="button" href="<?= e(route_url('login')) ?>"><?= e($t('login_to_post')) ?></a>
             <?php endif; ?>
         </div>
-        <form method="get" class="grid-3">
+        <form method="get" class="classifieds-filter-form">
             <input type="hidden" name="route" value="classifieds">
-            <label><?= e($t('search_label')) ?><input type="search" name="q" value="<?= e($query) ?>" placeholder="<?= e($t('search_placeholder')) ?>"></label>
-            <label><?= e($t('category_label')) ?>
+            <label>
+                <span><?= e($t('search_label')) ?></span>
+                <input type="search" name="q" value="<?= e($query) ?>" placeholder="<?= e($t('search_placeholder')) ?>">
+            </label>
+            <label>
+                <span><?= e($t('category_label')) ?></span>
                 <select name="category">
                     <option value=""><?= e($t('all_categories')) ?></option>
                     <?php foreach ($categories as $code => $label): ?>
-                        <option value="<?= e($code) ?>" <?= $categoryFilter === $code ? 'selected' : '' ?>><?= e($label) ?></option>
+                        <option value="<?= e($code) ?>" <?= $categoryFilter === $code ? 'selected' : '' ?>><?= e($label) ?> (<?= (int) ($activeCategoryCounts[$code] ?? 0) ?>)</option>
                     <?php endforeach; ?>
                 </select>
             </label>
-            <div class="actions" style="align-self:end;"><button class="button"><?= e($t('filter')) ?></button><a class="button ghost" href="<?= e(route_url('classifieds')) ?>"><?= e($t('reset')) ?></a></div>
+            <div class="classifieds-filter-actions">
+                <button class="button"><?= e($t('filter')) ?></button>
+                <?php if ($query !== '' || $categoryFilter !== ''): ?>
+                    <a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('reset')) ?></a>
+                <?php endif; ?>
+            </div>
         </form>
+        <nav class="classifieds-category-strip" aria-label="<?= e($t('category_label')) ?>">
+            <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('classifieds', ['q' => $query])) ?>">
+                <span><?= e($t('all_categories')) ?></span>
+                <strong><?= (int) array_sum($activeCategoryCounts) ?></strong>
+            </a>
+            <?php foreach ($categories as $code => $label): ?>
+                <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('classifieds', ['q' => $query, 'category' => $code])) ?>">
+                    <span><?= e($label) ?></span>
+                    <strong><?= (int) ($activeCategoryCounts[$code] ?? 0) ?></strong>
+                </a>
+            <?php endforeach; ?>
+        </nav>
     </section>
 
     <?php if ($user !== null): ?>
-    <div class="grid-2">
-        <section class="card">
-            <h2><?= e($editing ? $t('edit') : $t('new_ad')) ?></h2>
-            <form method="post" class="stack">
+    <section class="classifieds-member-panel">
+        <section class="classifieds-editor">
+            <div class="classifieds-panel-heading">
+                <h2><?= e($editing ? $t('edit') : $t('new_ad')) ?></h2>
+                <p class="help"><?= e($t('published_30d')) ?></p>
+            </div>
+            <form method="post" class="classifieds-editor-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="save">
                 <input type="hidden" name="id" value="<?= (int) ($editing['id'] ?? 0) ?>">
-                <label><?= e($t('category_label')) ?>
+                <label><span><?= e($t('category_label')) ?></span>
                     <select name="category_code">
                         <?php foreach ($categories as $code => $label): ?>
                         <option value="<?= e($code) ?>" <?= (($editing['category_code'] ?? 'gear') === $code) ? 'selected' : '' ?>><?= e($label) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e($t('title_label')) ?><input type="text" name="title" maxlength="190" required value="<?= e((string) ($editing['title'] ?? '')) ?>"></label>
-                <label><?= e($t('description_label')) ?><textarea name="description" rows="5" required><?= e((string) ($editing['description'] ?? '')) ?></textarea></label>
-                <div class="grid-2">
-                    <label><?= e($t('price_label')) ?><input type="text" name="price" value="<?= e(number_format(((int) ($editing['price_cents'] ?? 0)) / 100, 2, ',', '')) ?>"></label>
-                    <label><?= e($t('location_label')) ?><input type="text" name="location" maxlength="120" value="<?= e((string) ($editing['location'] ?? '')) ?>"></label>
-                </div>
-                <label><?= e($t('contact_label')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($editing['contact'] ?? ((string) ($user['email'] ?? $user['callsign'] ?? '')))) ?>"></label>
-                <label><?= e($t('publication_label')) ?>
+                <label><span><?= e($t('title_label')) ?></span><input type="text" name="title" maxlength="190" required value="<?= e((string) ($editing['title'] ?? '')) ?>"></label>
+                <label class="classifieds-editor-wide"><span><?= e($t('description_label')) ?></span><textarea name="description" rows="5" required><?= e((string) ($editing['description'] ?? '')) ?></textarea></label>
+                <label><span><?= e($t('price_label')) ?></span><input type="text" name="price" value="<?= e(number_format(((int) ($editing['price_cents'] ?? 0)) / 100, 2, ',', '')) ?>"></label>
+                <label><span><?= e($t('location_label')) ?></span><input type="text" name="location" maxlength="120" value="<?= e((string) ($editing['location'] ?? '')) ?>"></label>
+                <label class="classifieds-editor-wide"><span><?= e($t('contact_label')) ?></span><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($editing['contact'] ?? ((string) ($user['email'] ?? $user['callsign'] ?? '')))) ?>"></label>
+                <label><span><?= e($t('publication_label')) ?></span>
                     <select name="status">
                         <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>><?= e($t('status_draft')) ?></option>
                         <option value="active" <?= (($editing['status'] ?? '') === 'active') ? 'selected' : '' ?>><?= e($t('published_30d')) ?></option>
                     </select>
                 </label>
-                <p><button class="button"><?= e($t('save')) ?></button><?php if ($editing): ?> <a class="button ghost" href="<?= e(route_url('classifieds')) ?>"><?= e($t('cancel')) ?></a><?php endif; ?></p>
+                <div class="classifieds-editor-actions">
+                    <button class="button"><?= e($t('save')) ?></button>
+                    <?php if ($editing): ?><a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('cancel')) ?></a><?php endif; ?>
+                </div>
             </form>
         </section>
 
-        <section class="card">
-            <h2><?= e($t('my_ads')) ?></h2>
-            <?php if ($myAds === []): ?><p class="help"><?= e($t('none')) ?></p><?php else: ?>
-                <div class="table-wrap"><table><thead><tr><th><?= e($t('title_label')) ?></th><th><?= e($t('status_label')) ?></th><th><?= e($t('actions')) ?></th></tr></thead><tbody>
+        <section class="classifieds-my-ads">
+            <div class="classifieds-panel-heading">
+                <h2><?= e($t('my_ads')) ?></h2>
+                <span class="badge muted"><?= (int) count($myAds) ?></span>
+            </div>
+            <?php if ($myAds === []): ?>
+                <div class="classifieds-empty"><h3><?= e($t('none')) ?></h3></div>
+            <?php else: ?>
+                <div class="classifieds-my-list">
                 <?php foreach ($myAds as $ad): ?>
-                    <tr>
-                        <td><strong><?= e((string) $ad['title']) ?></strong><div class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> - <?= e(format_price_eur((int) $ad['price_cents'])) ?></div></td>
-                        <td>
-                            <span class="badge muted"><?= e((string) ($statuses[$ad['status']] ?? $ad['status'])) ?></span>
-                            <?php if (!empty($ad['expires_at'])): ?><div class="help"><?= e($t('expires_on')) ?>: <?= e(date('d/m/Y', strtotime((string) $ad['expires_at']))) ?></div><?php endif; ?>
-                        </td>
-                        <td>
-                            <a href="<?= e(route_url('classifieds', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
-                            <form method="post" class="inline-form" style="display:inline-flex;gap:.4rem;margin-left:.5rem;">
+                    <article class="classifieds-my-card">
+                        <div>
+                            <h3><?= e((string) $ad['title']) ?></h3>
+                            <p class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> · <?= e(format_price_eur((int) $ad['price_cents'])) ?></p>
+                            <?php if (!empty($ad['expires_at'])): ?><p class="help"><?= e($t('expires_on')) ?>: <?= e(date('d/m/Y', strtotime((string) $ad['expires_at']))) ?></p><?php endif; ?>
+                        </div>
+                        <span class="badge muted"><?= e((string) ($statuses[$ad['status']] ?? $ad['status'])) ?></span>
+                        <div class="classifieds-my-actions">
+                            <a class="button secondary small" href="<?= e(route_url('classifieds', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
+                            <form method="post" class="classifieds-status-form">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="set_status"><input type="hidden" name="id" value="<?= (int) $ad['id'] ?>">
-                                <?php if ((string) $ad['status'] !== 'sold'): ?><button class="button ghost" name="status" value="sold"><?= e($t('mark_sold')) ?></button><?php endif; ?>
-                                <?php if ((string) $ad['status'] !== 'active'): ?><button class="button ghost" name="status" value="active"><?= e($t('reactivate')) ?></button><?php endif; ?>
-                                <?php if ((string) $ad['status'] !== 'archived'): ?><button class="button ghost" name="status" value="archived"><?= e($t('archive')) ?></button><?php endif; ?>
+                                <?php if ((string) $ad['status'] !== 'sold'): ?><button class="button secondary small" name="status" value="sold"><?= e($t('mark_sold')) ?></button><?php endif; ?>
+                                <?php if ((string) $ad['status'] !== 'active'): ?><button class="button secondary small" name="status" value="active"><?= e($t('reactivate')) ?></button><?php endif; ?>
+                                <?php if ((string) $ad['status'] !== 'archived'): ?><button class="button secondary small" name="status" value="archived"><?= e($t('archive')) ?></button><?php endif; ?>
                                 <?php if (in_array((string) $ad['status'], ['active', 'expired'], true)): ?>
-                                    <button class="button ghost" formaction="<?= e(route_url('classifieds')) ?>" name="action" value="renew"><?= e($t('renew_30d')) ?></button>
+                                    <button class="button secondary small" formaction="<?= e(route_url('classifieds')) ?>" name="action" value="renew"><?= e($t('renew_30d')) ?></button>
                                 <?php endif; ?>
                             </form>
-                        </td>
-                    </tr>
+                        </div>
+                    </article>
                 <?php endforeach; ?>
-                </tbody></table></div>
+                </div>
             <?php endif; ?>
         </section>
-    </div>
+    </section>
     <?php endif; ?>
 
-    <section class="card">
-        <div class="section-header"><h2><?= e($t('all_ads')) ?></h2><span class="badge"><?= $totalAds ?></span></div>
-        <?php if ($allAds === []): ?><p class="help"><?= e($t('none')) ?></p><?php else: ?>
-            <div class="grid-3">
+    <section class="classifieds-results">
+        <div class="classifieds-results-header">
+            <div>
+                <h2><?= e($t('all_ads')) ?></h2>
+                <p class="help"><?= e($t('lead')) ?></p>
+            </div>
+            <span class="badge"><?= (int) $totalAds ?></span>
+        </div>
+        <?php if ($allAds === []): ?>
+            <div class="classifieds-empty"><h3><?= e($t('none')) ?></h3></div>
+        <?php else: ?>
+            <div class="classifieds-grid">
                 <?php foreach ($allAds as $ad): ?>
                 <?php $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'classified_ad', (int) $ad['id']) : false; ?>
-                <article class="card feature-card" style="margin:0;">
-                    <div class="section-header">
-                        <h3 style="margin:0;"><?= e((string) $ad['title']) ?></h3>
+                <article class="classifieds-card">
+                    <div class="classifieds-card-top">
+                        <span class="badge muted"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?></span>
                         <strong class="price-tag"><?= e(format_price_eur((int) $ad['price_cents'])) ?></strong>
                     </div>
-                    <p class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> - <?= e((string) ($ad['callsign'] ?? 'N/A')) ?><?php if ((string) ($ad['location'] ?? '') !== ''): ?> - <?= e((string) $ad['location']) ?><?php endif; ?></p>
-                    <p><?= nl2br(e((string) $ad['description'])) ?></p>
-                    <p><strong><?= e($t('contact_label')) ?>:</strong> <?= e((string) $ad['contact']) ?></p>
+                    <h3><?= e((string) $ad['title']) ?></h3>
+                    <p class="classifieds-card-meta">
+                        <?= e((string) ($ad['callsign'] ?? 'N/A')) ?>
+                        <?php if ((string) ($ad['location'] ?? '') !== ''): ?> · <?= e((string) $ad['location']) ?><?php endif; ?>
+                    </p>
+                    <p class="classifieds-card-description"><?= nl2br(e(mb_safe_strimwidth((string) $ad['description'], 0, 260, '...'))) ?></p>
+                    <p class="classifieds-card-contact"><strong><?= e($t('contact_label')) ?>:</strong> <?= e((string) $ad['contact']) ?></p>
                     <?php if ($user !== null): ?>
-                        <form method="post" class="inline-form">
+                        <form method="post" class="classifieds-favorite-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="toggle_favorite">
                             <input type="hidden" name="id" value="<?= (int) $ad['id'] ?>">
-                            <button class="button secondary" type="submit"><?= e($t('favorite_label')) ?></button>
+                            <button class="button secondary" type="submit"><?= $isFavorite ? '★ ' : '☆ ' ?><?= e($t('favorite_label')) ?></button>
                         </form>
                     <?php endif; ?>
                 </article>
                 <?php endforeach; ?>
             </div>
             <?php if ($maxPage > 1): ?>
-                <div class="actions mt-3">
+                <div class="classifieds-pagination">
                     <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page - 1])) ?>"><?= e($t('previous')) ?></a><?php endif; ?>
                     <span class="pill"><?= e($t('page')) ?> <?= $page ?> / <?= $maxPage ?></span>
                     <?php if ($page < $maxPage): ?><a class="button secondary" href="<?= e(route_url_clean('classifieds', ['q' => $query, 'category' => $categoryFilter, 'page' => $page + 1])) ?>"><?= e($t('next')) ?></a><?php endif; ?>
