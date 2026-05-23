@@ -4831,6 +4831,56 @@ function member_favorites_recent(int $memberId, int $limit = 12): array
 }
 
 if (!function_exists('member_personalized_recommendations')) {
+function ensure_member_preference_table(): bool
+{
+    if (!table_exists('members')) {
+        return false;
+    }
+
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS member_preferences (
+            member_id INT NOT NULL,
+            preference_key VARCHAR(80) NOT NULL,
+            preference_value VARCHAR(255) NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (member_id, preference_key),
+            CONSTRAINT fk_member_preferences_member FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+        )'
+    );
+
+    return table_exists('member_preferences');
+}
+
+function member_preference_bool(int $memberId, string $key, bool $default = true): bool
+{
+    if ($memberId <= 0 || $key === '' || !ensure_member_preference_table()) {
+        return $default;
+    }
+
+    $stmt = db()->prepare('SELECT preference_value FROM member_preferences WHERE member_id = ? AND preference_key = ? LIMIT 1');
+    $stmt->execute([$memberId, $key]);
+    $value = $stmt->fetchColumn();
+    if ($value === false) {
+        return $default;
+    }
+
+    return in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
+}
+
+function set_member_preference_bool(int $memberId, string $key, bool $value): void
+{
+    if ($memberId <= 0 || $key === '' || !ensure_member_preference_table()) {
+        return;
+    }
+
+    $stmt = db()->prepare(
+        'INSERT INTO member_preferences (member_id, preference_key, preference_value)
+         VALUES (?, ?, ?)
+         ON DUPLICATE KEY UPDATE preference_value = VALUES(preference_value), updated_at = CURRENT_TIMESTAMP'
+    );
+    $stmt->execute([$memberId, $key, $value ? '1' : '0']);
+}
+
 function member_personalized_recommendations(int $memberId, int $limit = 6): array
 {
     $limit = max(1, min(24, $limit));
@@ -4872,6 +4922,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
                 'title' => $title,
                 'url' => route_url('article', ['slug' => (string) ($row['slug'] ?? '')]),
                 'meta' => (string) ($row['updated_at'] ?? ''),
+                'reason_key' => 'recommendation_reason_article',
             ]);
         }
     }
@@ -4894,6 +4945,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
                 'title' => $title,
                 'url' => route_url('wiki_view', ['slug' => $slug]),
                 'meta' => (string) ($row['updated_at'] ?? ''),
+                'reason_key' => 'recommendation_reason_wiki',
             ]);
         }
     }
@@ -4916,6 +4968,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
                 'title' => $title,
                 'url' => route_url('classifieds', ['q' => $title]),
                 'meta' => (string) ($row['created_at'] ?? ''),
+                'reason_key' => 'recommendation_reason_classified',
             ]);
         }
     }
@@ -4938,6 +4991,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
                 'title' => $title,
                 'url' => route_url('album', ['id' => $id]),
                 'meta' => (string) ($row['created_at'] ?? ''),
+                'reason_key' => 'recommendation_reason_album',
             ]);
         }
     }
@@ -4960,6 +5014,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
                 'title' => $title,
                 'url' => route_url_clean('members_library', ['q' => $title, 'category' => (string) ($row['category'] ?? '')]),
                 'meta' => (string) ($row['uploaded_at'] ?? ''),
+                'reason_key' => 'recommendation_reason_library',
             ]);
         }
     }

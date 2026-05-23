@@ -13,10 +13,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
     member_notifications_mark_all_read($userId);
     redirect_url(route_url('dashboard'));
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_recommendations') {
+    verify_csrf();
+    $enabled = ((string) ($_POST['recommendations_enabled'] ?? '1')) === '1';
+    set_member_preference_bool($userId, 'personalized_recommendations_enabled', $enabled);
+    set_flash('success', $t('recommendations_pref_saved'));
+    redirect_url(route_url('dashboard'));
+}
 $unreadNotifications = member_notifications_unread_count($userId);
 $recentNotifications = member_notifications_recent($userId, 6);
 $recentFavorites = member_favorites_recent($userId, 6);
-$recommendations = member_personalized_recommendations($userId, 6);
+$recommendationsEnabled = member_preference_bool($userId, 'personalized_recommendations_enabled', true);
+$recommendations = $recommendationsEnabled ? member_personalized_recommendations($userId, 6) : [];
 $dashboardPersistenceEnabled = table_exists('dashboard_widgets');
 $selected = [];
 if ($dashboardPersistenceEnabled) {
@@ -142,13 +150,27 @@ ob_start();
   </section>
   <section class="card">
     <h2 style="margin-top:0;"><?= e($t('recommendations_title')) ?></h2>
+    <form method="post" class="inline-form" style="margin:.25rem 0 1rem;">
+      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="action" value="toggle_recommendations">
+      <label style="display:flex;align-items:center;gap:.45rem;">
+        <input type="checkbox" name="recommendations_enabled" value="1" <?= $recommendationsEnabled ? 'checked' : '' ?>>
+        <span><?= e($t('recommendations_opt_in_label')) ?></span>
+      </label>
+      <button class="button secondary small" type="submit"><?= e($t('save_layout')) ?></button>
+    </form>
+    <p class="help"><?= e($t('recommendations_opt_in_help')) ?></p>
     <?php if ($recommendations === []): ?>
       <p class="help"><?= e($t('recommendations_empty')) ?></p>
     <?php else: ?>
       <ul class="stack" style="list-style:none;padding:0;margin:0;">
         <?php foreach ($recommendations as $item): ?>
-          <li class="row-between" style="gap:.8rem;">
-            <span><?= e((string) ($item['title'] ?? '')) ?></span>
+          <?php $reasonKey = (string) ($item['reason_key'] ?? ''); ?>
+          <li class="row-between" style="gap:.8rem;align-items:flex-start;">
+            <span>
+              <span><?= e((string) ($item['title'] ?? '')) ?></span><br>
+              <small class="help"><?= e($t('recommendations_why')) ?>: <?= e($t($reasonKey !== '' ? $reasonKey : 'recommendation_reason_default')) ?></small>
+            </span>
             <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
           </li>
         <?php endforeach; ?>
