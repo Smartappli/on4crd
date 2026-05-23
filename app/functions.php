@@ -8,7 +8,11 @@ function config(?string $key = null, mixed $default = null): mixed
     if ($config === null) {
         $configFile = __DIR__ . '/../config/config.php';
         if (!is_file($configFile)) {
-            throw new RuntimeException('Missing config/config.php. Copy config.sample.php first.');
+            $sampleConfigFile = __DIR__ . '/../config/config.sample.php';
+            if (PHP_SAPI !== 'cli' || !is_file($sampleConfigFile)) {
+                throw new RuntimeException('Missing config/config.php. Copy config.sample.php first.');
+            }
+            $configFile = $sampleConfigFile;
         }
         $config = require $configFile;
     }
@@ -247,7 +251,7 @@ function i18n_expand_supported_locales(array $messages, ?array $locales = null, 
 
 if (!function_exists('i18n_domain_messages')) {
 /**
- * Load a module i18n catalog from app/i18n/<domain>.php.
+ * Load a module i18n catalog from app/i18n/<domain>.php and/or app/i18n/<domain>/<locale>.php.
  *
  * @return array<string, array<string, string>>
  */
@@ -264,14 +268,33 @@ function i18n_domain_messages(string $domain): array
         return $catalogs[$domain];
     }
 
+    $messages = [];
     $path = __DIR__ . '/i18n/' . $domain . '.php';
-    if (!is_file($path)) {
-        $catalogs[$domain] = [];
-        return [];
+    if (is_file($path)) {
+        $loadedMessages = require $path;
+        if (is_array($loadedMessages)) {
+            $messages = $loadedMessages;
+        }
     }
 
-    $messages = require $path;
-    if (!is_array($messages)) {
+    $directory = __DIR__ . '/i18n/' . $domain;
+    if (is_dir($directory)) {
+        foreach (supported_locales() as $localeCode) {
+            $localePath = $directory . '/' . $localeCode . '.php';
+            if (!is_file($localePath)) {
+                continue;
+            }
+            $localeMessages = require $localePath;
+            if (is_array($localeMessages)) {
+                $messages[$localeCode] = array_replace(
+                    isset($messages[$localeCode]) && is_array($messages[$localeCode]) ? $messages[$localeCode] : [],
+                    $localeMessages
+                );
+            }
+        }
+    }
+
+    if ($messages === []) {
         $catalogs[$domain] = [];
         return [];
     }
@@ -319,11 +342,6 @@ function i18n_domain_translator(string $domain, ?string $locale = null, string $
 if (!function_exists('current_locale')) {
 function current_locale(): string
 {
-    static $resolvedLocale = null;
-    if (is_string($resolvedLocale)) {
-        return $resolvedLocale;
-    }
-
     $supported = supported_locales_map();
     $locale = strtolower((string) ($_SESSION['locale'] ?? ''));
     if ($locale === '') {
@@ -337,12 +355,10 @@ function current_locale(): string
         $locale = (string) explode('-', $locale, 2)[0];
     }
     if (!isset($supported[$locale])) {
-        $resolvedLocale = 'fr';
-        return $resolvedLocale;
+        return 'fr';
     }
 
-    $resolvedLocale = $locale;
-    return $resolvedLocale;
+    return $locale;
 }
 }
 
@@ -654,7 +670,7 @@ function maidenhead_to_coordinates(string $locator): ?array
     if (strlen($normalized) >= 6) {
         $lon += (ord($normalized[4]) - ord('A')) * (5.0 / 60.0);
         $lat += (ord($normalized[5]) - ord('A')) * (2.5 / 60.0);
-        $lonStep = 5.0 / 60.0;
+        $lonStep = 0.0;
         $latStep = 2.5 / 60.0;
     }
 
@@ -3413,7 +3429,14 @@ function qsl_normalize_date(string $value): string
 
 function qsl_normalize_time(string $value): string
 {
-    $digits = preg_replace('/[^0-9]/', '', trim($value)) ?? '';
+    $trimmed = trim($value);
+    if (preg_match('/^(\d{1,2})\D+(\d{1,2})(?:\D+\d{1,2})?$/', $trimmed, $matches) === 1) {
+        $hours = max(0, min(23, (int) $matches[1]));
+        $minutes = max(0, min(59, (int) $matches[2]));
+        return str_pad((string) $hours, 2, '0', STR_PAD_LEFT) . str_pad((string) $minutes, 2, '0', STR_PAD_LEFT);
+    }
+
+    $digits = preg_replace('/[^0-9]/', '', $trimmed) ?? '';
     if ($digits === '') {
         return '';
     }
@@ -3667,13 +3690,14 @@ if (!function_exists('answer_question_from_knowledge')) {
             'nl' => ['de','het','een','en','of','met','in','op','is','zijn','voor','van','naar','dat','dit','deze'],
         ];
         $localeStops = $stopwords[current_locale()] ?? $stopwords['fr'];
+        $globalStops = ['de'];
         $tokens = [];
         foreach ($parts as $part) {
             $token = trim((string) $part);
             if ($token === '' || mb_strlen($token) < 2) {
                 continue;
             }
-            if (in_array($token, $localeStops, true)) {
+            if (in_array($token, $localeStops, true) || in_array($token, $globalStops, true)) {
                 continue;
             }
             $tokens[$token] = true;
@@ -4847,6 +4871,96 @@ function member_favorites_recent(int $memberId, int $limit = 12): array
     $stmt = db()->prepare('SELECT target_type, target_id, target_key, title, url, created_at FROM member_favorites WHERE member_id = ? ORDER BY created_at DESC, id DESC LIMIT ' . $limit);
     $stmt->execute([$memberId]);
     return $stmt->fetchAll() ?: [];
+}
+}
+
+if (!function_exists('library_controlled_vocabulary_list')) {
+function library_controlled_vocabulary_list(): array
+{
+    return [
+        'formation',
+        'securite',
+        'legal',
+        'reglement',
+        'technique',
+        'antenne',
+        'propagation',
+        'traffic',
+        'numerique',
+        'materiel',
+        'maintenance',
+        'procedure',
+        'club',
+    ];
+}
+}
+
+if (!function_exists('library_ingestion_templates_map')) {
+function library_ingestion_templates_map(): array
+{
+    return [
+        'training' => ['category' => 'formation', 'tags' => ['formation', 'procedure', 'club']],
+        'safety' => ['category' => 'general', 'tags' => ['securite', 'procedure', 'reglement']],
+        'technical' => ['category' => 'general', 'tags' => ['technique', 'antenne', 'propagation', 'materiel']],
+        'legal' => ['category' => 'general', 'tags' => ['legal', 'reglement', 'club']],
+    ];
+}
+}
+
+if (!function_exists('library_filter_controlled_tags')) {
+function library_filter_controlled_tags(array $tags): array
+{
+    $allowed = array_fill_keys(library_controlled_vocabulary_list(), true);
+    $out = [];
+    foreach ($tags as $tag) {
+        $raw = trim((string) $tag);
+        if ($raw === '') {
+            continue;
+        }
+        $norm = mb_strtolower($raw, 'UTF-8');
+        $norm = preg_replace('/\s+/u', ' ', $norm) ?? $norm;
+        $norm = trim($norm);
+        if ($norm === '' || !isset($allowed[$norm])) {
+            continue;
+        }
+        $out[] = $raw;
+    }
+    return $out;
+}
+}
+
+if (!function_exists('editorial_blocked_reasons_from_article')) {
+/**
+ * @param array<string,mixed> $article
+ * @return list<string>
+ */
+function editorial_blocked_reasons_from_article(array $article): array
+{
+    $reasons = [];
+    $title = trim((string) ($article['title'] ?? ''));
+    $content = trim(strip_tags((string) ($article['content'] ?? '')));
+    $status = (string) ($article['status'] ?? 'draft');
+    $scheduledAt = trim((string) ($article['scheduled_at'] ?? ''));
+
+    if ($title === '') {
+        $reasons[] = 'missing_title';
+    }
+    if ($content === '') {
+        $reasons[] = 'missing_content';
+    }
+    if ($status === 'scheduled') {
+        if ($scheduledAt === '') {
+            $reasons[] = 'missing_schedule_date';
+        } else {
+            $ts = strtotime($scheduledAt);
+            if ($ts === false) {
+                $reasons[] = 'invalid_schedule_date';
+            } elseif ($ts <= time()) {
+                $reasons[] = 'stuck_in_past_schedule';
+            }
+        }
+    }
+    return $reasons;
 }
 }
 

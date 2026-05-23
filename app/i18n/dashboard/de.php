@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'Mitglieder-Dashboard',
   'meta_desc' => 'Passen Sie Ihr ON4CRD-Dashboard mit Ihren bevorzugten Widgets an.',
   'title' => 'Mitglieder-Dashboard',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Weil Sie Kleinanzeigen durchsuchen.',
   'recommendation_reason_album' => 'Weil Sie geteilte Alben ansehen.',
   'recommendation_reason_library' => 'Weil Sie Bibliotheksdokumente aufrufen.',
+  'signal_article' => 'Artikel',
+  'signal_wiki' => 'Wiki',
+  'signal_classified' => 'Kleinanzeigen',
+  'signal_album' => 'Alben',
+  'signal_library' => 'Bibliothek',
+  'activity_timeline_title' => 'Aktivitätsverlauf',
+  'activity_timeline_empty' => 'Noch keine Aktivität.',
+  'onboarding_nudges_title' => 'Einstiegshinweise',
+  'onboarding_nudges_empty' => 'Derzeit keine Hinweise.',
+  'nudge_add_favorites' => 'Fügen Sie Favoriten hinzu, um Empfehlungen zu verbessern.',
+  'nudge_review_notifications' => 'Prüfen Sie ungelesene Benachrichtigungen.',
+  'nudge_enable_recommendations' => 'Aktivieren Sie personalisierte Empfehlungen.',
 );

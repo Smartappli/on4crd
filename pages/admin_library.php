@@ -56,6 +56,16 @@ function library_tag_unique(array $tags): array
     return $out;
 }
 
+function library_controlled_vocabulary(): array
+{
+    return library_controlled_vocabulary_list();
+}
+
+function library_ingestion_templates(): array
+{
+    return library_ingestion_templates_map();
+}
+
 function ensure_member_library_categories_table(): void
 {
     db()->exec('CREATE TABLE IF NOT EXISTS member_library_categories (
@@ -265,8 +275,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $category = library_category_slug((string) ($_POST['category'] ?? 'general'));
         $title = trim((string) ($_POST['title'] ?? ''));
         $description = trim((string) ($_POST['description'] ?? ''));
-        $tags = trim((string) ($_POST['tags'] ?? ''));
-        $tags = mb_safe_substr((string) preg_replace('/\s*,\s*/', ',', $tags), 0, 255);
+        $templateKey = trim((string) ($_POST['template'] ?? ''));
+        $templates = library_ingestion_templates();
+        $selectedTemplate = $templates[$templateKey] ?? null;
+        if (is_array($selectedTemplate) && $category === 'general' && !empty($selectedTemplate['category'])) {
+            $category = library_category_slug((string) $selectedTemplate['category']);
+        }
+        $rawTags = trim((string) ($_POST['tags'] ?? ''));
+        $tagsList = library_tag_split($rawTags);
+        if (is_array($selectedTemplate) && isset($selectedTemplate['tags']) && is_array($selectedTemplate['tags'])) {
+            $tagsList = array_merge($selectedTemplate['tags'], $tagsList);
+        }
+        $tagsList = library_tag_unique($tagsList);
+        $tagsList = library_filter_controlled_tags($tagsList);
+        $tags = mb_safe_substr(implode(',', $tagsList), 0, 255);
         $file = $_FILES['document'] ?? null;
         if ($title === '' || !is_array($file)) {
             throw new RuntimeException('err_required');
@@ -363,6 +385,16 @@ ob_start();
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <input type="hidden" name="action" value="upload">
         <div class="admin-library-upload-grid">
+            <label class="admin-library-field">
+                <span><?= e((string) ($t['ingestion_template'] ?? 'Template')) ?></span>
+                <select name="template">
+                    <option value=""><?= e((string) ($t['ingestion_template_none'] ?? 'None')) ?></option>
+                    <option value="training"><?= e((string) ($t['ingestion_template_training'] ?? 'Training')) ?></option>
+                    <option value="safety"><?= e((string) ($t['ingestion_template_safety'] ?? 'Safety')) ?></option>
+                    <option value="technical"><?= e((string) ($t['ingestion_template_technical'] ?? 'Technical')) ?></option>
+                    <option value="legal"><?= e((string) ($t['ingestion_template_legal'] ?? 'Legal')) ?></option>
+                </select>
+            </label>
             <label class="admin-library-field"><span><?= e((string) $t['category_ph']) ?></span><select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>"><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select></label>
             <label class="admin-library-field"><span><?= e((string) $t['title_ph']) ?></span><input type="text" name="title" required></label>
             <label class="admin-library-field"><span><?= e((string) $t['tags_ph']) ?></span><input type="text" name="tags" placeholder="<?= e((string) $t['tags_help']) ?>"></label>

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'Leden-dashboard',
   'meta_desc' => 'Pas je ON4CRD-dashboard aan met je favoriete widgets.',
   'title' => 'Leden-dashboard',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Omdat je rubrieksadvertenties bekijkt.',
   'recommendation_reason_album' => 'Omdat je gedeelde albums bekijkt.',
   'recommendation_reason_library' => 'Omdat je bibliotheekdocumenten bekijkt.',
+  'signal_article' => 'Artikelen',
+  'signal_wiki' => 'Wiki',
+  'signal_classified' => 'Advertenties',
+  'signal_album' => 'Albums',
+  'signal_library' => 'Bibliotheek',
+  'activity_timeline_title' => 'Activiteitstijdlijn',
+  'activity_timeline_empty' => 'Nog geen activiteit.',
+  'onboarding_nudges_title' => 'Startsuggesties',
+  'onboarding_nudges_empty' => 'Momenteel geen suggesties.',
+  'nudge_add_favorites' => 'Voeg favorieten toe om aanbevelingen te verbeteren.',
+  'nudge_review_notifications' => 'Bekijk ongelezen meldingen.',
+  'nudge_enable_recommendations' => 'Schakel gepersonaliseerde aanbevelingen in.',
 );

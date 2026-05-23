@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'Panel de miembro',
   'meta_desc' => 'Personalice su panel ON4CRD.',
   'title' => 'Panel de miembro',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Porque navegas anuncios clasificados.',
   'recommendation_reason_album' => 'Porque ves albumes compartidos.',
   'recommendation_reason_library' => 'Porque consultas documentos de biblioteca.',
+  'signal_article' => 'Articulos',
+  'signal_wiki' => 'Wiki',
+  'signal_classified' => 'Anuncios',
+  'signal_album' => 'Albumes',
+  'signal_library' => 'Biblioteca',
+  'activity_timeline_title' => 'Cronologia de actividad',
+  'activity_timeline_empty' => 'Aun no hay actividad.',
+  'onboarding_nudges_title' => 'Sugerencias de inicio',
+  'onboarding_nudges_empty' => 'No hay sugerencias por ahora.',
+  'nudge_add_favorites' => 'Agregue favoritos para mejorar las recomendaciones.',
+  'nudge_review_notifications' => 'Revise las notificaciones no leidas.',
+  'nudge_enable_recommendations' => 'Active las recomendaciones personalizadas.',
 );

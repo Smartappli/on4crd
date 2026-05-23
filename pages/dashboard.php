@@ -42,6 +42,67 @@ $recommendationSignals = [
     'library' => member_preference_bool($userId, 'recommendations_signal_library_enabled', true),
 ];
 $recommendations = $recommendationsEnabled ? member_personalized_recommendations($userId, 6) : [];
+
+$timelineItems = [];
+if (table_exists('articles')) {
+    $rows = db()->query('SELECT title, slug, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC LIMIT 6')->fetchAll() ?: [];
+    foreach ($rows as $row) {
+        $timelineItems[] = [
+            'title' => (string) ($row['title'] ?? ''),
+            'date' => (string) ($row['updated_at'] ?? ''),
+            'url' => route_url('article', ['slug' => (string) ($row['slug'] ?? '')]),
+            'type' => (string) ($t('signal_article')),
+        ];
+    }
+}
+if (table_exists('classified_ads')) {
+    $rows = db()->query('SELECT title, created_at FROM classified_ads WHERE status = "active" ORDER BY created_at DESC LIMIT 6')->fetchAll() ?: [];
+    foreach ($rows as $row) {
+        $title = trim((string) ($row['title'] ?? ''));
+        $timelineItems[] = [
+            'title' => $title,
+            'date' => (string) ($row['created_at'] ?? ''),
+            'url' => route_url('classifieds', ['q' => $title]),
+            'type' => (string) ($t('signal_classified')),
+        ];
+    }
+}
+if (table_exists('albums')) {
+    $rows = db()->query('SELECT id, title, created_at FROM albums WHERE is_public = 1 ORDER BY id DESC LIMIT 6')->fetchAll() ?: [];
+    foreach ($rows as $row) {
+        $timelineItems[] = [
+            'title' => (string) ($row['title'] ?? ''),
+            'date' => (string) ($row['created_at'] ?? ''),
+            'url' => route_url('album', ['id' => (int) ($row['id'] ?? 0)]),
+            'type' => (string) ($t('signal_album')),
+        ];
+    }
+}
+if (table_exists('member_library_documents')) {
+    $rows = db()->query('SELECT title, uploaded_at, category FROM member_library_documents ORDER BY uploaded_at DESC LIMIT 6')->fetchAll() ?: [];
+    foreach ($rows as $row) {
+        $title = trim((string) ($row['title'] ?? ''));
+        $timelineItems[] = [
+            'title' => $title,
+            'date' => (string) ($row['uploaded_at'] ?? ''),
+            'url' => route_url_clean('members_library', ['q' => $title, 'category' => (string) ($row['category'] ?? '')]),
+            'type' => (string) ($t('signal_library')),
+        ];
+    }
+}
+usort($timelineItems, static fn(array $a, array $b): int => strcmp((string) ($b['date'] ?? ''), (string) ($a['date'] ?? '')));
+$timelineItems = array_slice($timelineItems, 0, 12);
+
+$nudgeItems = [];
+if ($recentFavorites === []) {
+    $nudgeItems[] = (string) ($t('nudge_add_favorites'));
+}
+if ((int) $unreadNotifications > 0) {
+    $nudgeItems[] = (string) ($t('nudge_review_notifications'));
+}
+if (!$recommendationsEnabled) {
+    $nudgeItems[] = (string) ($t('nudge_enable_recommendations'));
+}
 $dashboardPersistenceEnabled = table_exists('dashboard_widgets');
 $selected = [];
 if ($dashboardPersistenceEnabled) {
@@ -123,6 +184,36 @@ ob_start();
         ?>
       <?php endforeach; ?>
     </div>
+  </section>
+  <section class="card">
+    <h2 style="margin-top:0;"><?= e($t('activity_timeline_title')) ?></h2>
+    <?php if ($timelineItems === []): ?>
+      <p class="help"><?= e($t('activity_timeline_empty')) ?></p>
+    <?php else: ?>
+      <ul class="stack" style="list-style:none;padding:0;margin:0;">
+        <?php foreach ($timelineItems as $item): ?>
+          <li class="row-between" style="gap:.8rem;">
+            <span>
+              <strong><?= e((string) ($item['type'] ?? '')) ?></strong> · <?= e((string) ($item['title'] ?? '')) ?><br>
+              <small class="help"><?= e((string) ($item['date'] ?? '')) ?></small>
+            </span>
+            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endif; ?>
+  </section>
+  <section class="card">
+    <h2 style="margin-top:0;"><?= e($t('onboarding_nudges_title')) ?></h2>
+    <?php if ($nudgeItems === []): ?>
+      <p class="help"><?= e($t('onboarding_nudges_empty')) ?></p>
+    <?php else: ?>
+      <ul class="stack" style="margin:0;">
+        <?php foreach ($nudgeItems as $nudge): ?>
+          <li><?= e($nudge) ?></li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endif; ?>
   </section>
   <section class="card">
     <div class="row-between">

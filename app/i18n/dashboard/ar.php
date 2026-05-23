@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'لوحة تحكم العضو',
   'meta_desc' => 'خصص لوحة ON4CRD باستخدام الويدجت المفضلة لديك.',
   'title' => 'لوحة تحكم العضو',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Because you browse classifieds.',
   'recommendation_reason_album' => 'Because you view shared albums.',
   'recommendation_reason_library' => 'Because you consult library documents.',
+  'signal_article' => 'المقالات',
+  'signal_wiki' => 'الويكي',
+  'signal_classified' => 'الإعلانات',
+  'signal_album' => 'الألبومات',
+  'signal_library' => 'المكتبة',
+  'activity_timeline_title' => 'الجدول الزمني للنشاط',
+  'activity_timeline_empty' => 'لا توجد عناصر نشاط حالياً.',
+  'onboarding_nudges_title' => 'تلميحات البدء',
+  'onboarding_nudges_empty' => 'لا توجد تلميحات حالياً.',
+  'nudge_add_favorites' => 'أضف عناصر إلى المفضلة لتحسين النتائج.',
+  'nudge_review_notifications' => 'راجع الإشعارات غير المقروءة.',
+  'nudge_enable_recommendations' => 'فعّل التوصيات المخصصة.',
 );

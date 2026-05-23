@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'Панель участника',
   'meta_desc' => 'Настройте панель ON4CRD с любимыми виджетами.',
   'title' => 'Панель участника',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Because you browse classifieds.',
   'recommendation_reason_album' => 'Because you view shared albums.',
   'recommendation_reason_library' => 'Because you consult library documents.',
+  'signal_article' => 'Статьи',
+  'signal_wiki' => 'Вики',
+  'signal_classified' => 'Объявления',
+  'signal_album' => 'Альбомы',
+  'signal_library' => 'Библиотека',
+  'activity_timeline_title' => 'Лента активности',
+  'activity_timeline_empty' => 'Пока нет активности.',
+  'onboarding_nudges_title' => 'Подсказки старта',
+  'onboarding_nudges_empty' => 'Сейчас нет подсказок.',
+  'nudge_add_favorites' => 'Добавьте избранное для улучшения рекомендаций.',
+  'nudge_review_notifications' => 'Проверьте непрочитанные уведомления.',
+  'nudge_enable_recommendations' => 'Включите персонализированные рекомендации.',
 );

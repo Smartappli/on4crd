@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'সদস্য ড্যাশবোর্ড',
   'meta_desc' => 'আপনার পছন্দের উইজেট দিয়ে ON4CRD ড্যাশবোর্ড সাজান।',
   'title' => 'সদস্য ড্যাশবোর্ড',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Because you browse classifieds.',
   'recommendation_reason_album' => 'Because you view shared albums.',
   'recommendation_reason_library' => 'Because you consult library documents.',
+  'signal_article' => 'প্রবন্ধ',
+  'signal_wiki' => 'উইকি',
+  'signal_classified' => 'বিজ্ঞাপন',
+  'signal_album' => 'অ্যালবাম',
+  'signal_library' => 'লাইব্রেরি',
+  'activity_timeline_title' => 'কার্যকলাপ টাইমলাইন',
+  'activity_timeline_empty' => 'এখনো কোনো কার্যকলাপ নেই।',
+  'onboarding_nudges_title' => 'শুরুর পরামর্শ',
+  'onboarding_nudges_empty' => 'এখন কোনো পরামর্শ নেই।',
+  'nudge_add_favorites' => 'সুপারিশ উন্নত করতে ফেভারিট যোগ করুন।',
+  'nudge_review_notifications' => 'অপঠিত নোটিফিকেশন দেখুন।',
+  'nudge_enable_recommendations' => 'ব্যক্তিগতকৃত সুপারিশ চালু করুন।',
 );

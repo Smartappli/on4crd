@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'メンバーダッシュボード',
   'meta_desc' => 'お気に入りのウィジェットで ON4CRD ダッシュボードをカスタマイズします。',
   'title' => 'メンバーダッシュボード',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Because you browse classifieds.',
   'recommendation_reason_album' => 'Because you view shared albums.',
   'recommendation_reason_library' => 'Because you consult library documents.',
+  'signal_article' => '記事',
+  'signal_wiki' => 'Wiki',
+  'signal_classified' => '広告',
+  'signal_album' => 'アルバム',
+  'signal_library' => 'ライブラリ',
+  'activity_timeline_title' => 'アクティビティタイムライン',
+  'activity_timeline_empty' => '現在アクティビティはありません。',
+  'onboarding_nudges_title' => 'オンボーディング提案',
+  'onboarding_nudges_empty' => '現在提案はありません。',
+  'nudge_add_favorites' => 'おすすめ改善のためお気に入りを追加してください。',
+  'nudge_review_notifications' => '未読通知を確認してください。',
+  'nudge_enable_recommendations' => 'パーソナライズ推薦を有効化してください。',
 );

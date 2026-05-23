@@ -33,7 +33,7 @@ final class ChatbotRagRetrievalTest extends TestCase
         $exactPhraseScore = rag_weighted_score($queryTokens, 'This guide covers qsl antenna setup and tuning basics.');
         $partialOnlyScore = rag_weighted_score($queryTokens, 'Antennae and qsl-like examples are listed here.');
 
-        self::assertGreaterThan($exactPhraseScore, $partialOnlyScore);
+        self::assertGreaterThan($partialOnlyScore, $exactPhraseScore);
         self::assertGreaterThan(0.0, $exactPhraseScore);
     }
 }

@@ -36,6 +36,27 @@ Improve operator productivity and member trust by reducing UX inconsistency, tig
 
 ## New Improvement Plan
 
+## Execution Status (May 23, 2026)
+
+### Wave 5
+- [x] Admin co-pilot for tagging: duplicate detection and merge flows delivered (CLI + admin UI).
+- [x] Editorial command center: scheduled queue, blocked reasons, one-click retry, and bulk retry delivered.
+- [x] Library ingestion assistant: metadata templates plus controlled vocabulary enforcement delivered.
+
+### Wave 6
+- [x] Explainable recommendations with per-signal controls and privacy-aware opt-out delivered.
+- [x] Unified activity timeline across articles, classifieds, albums, and documents delivered on dashboard.
+- [x] Contextual onboarding nudges by role/recent behavior delivered (behavior-driven nudges).
+
+### Phase D Progress
+- [x] Incremental logic extraction started:
+  - `library_controlled_vocabulary_list()`
+  - `library_ingestion_templates_map()`
+  - `library_filter_controlled_tags()`
+  - `editorial_blocked_reasons_from_article()`
+- [x] Targeted tests added for critical helper behavior:
+  - `tests/WaveHardeningHelpersTest.php`
+
 ## Phase A (2 weeks): Stabilization & Perceived Quality
 Goal: remove visible friction and trust breakers.
 

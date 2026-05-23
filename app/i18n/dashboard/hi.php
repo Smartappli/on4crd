@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'सदस्य डैशबोर्ड',
   'meta_desc' => 'अपने पसंदीदा विजेट्स के साथ ON4CRD डैशबोर्ड को अनुकूलित करें।',
   'title' => 'सदस्य डैशबोर्ड',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Because you browse classifieds.',
   'recommendation_reason_album' => 'Because you view shared albums.',
   'recommendation_reason_library' => 'Because you consult library documents.',
+  'signal_article' => 'लेख',
+  'signal_wiki' => 'विकी',
+  'signal_classified' => 'विज्ञापन',
+  'signal_album' => 'एल्बम',
+  'signal_library' => 'पुस्तकालय',
+  'activity_timeline_title' => 'गतिविधि टाइमलाइन',
+  'activity_timeline_empty' => 'अभी कोई गतिविधि नहीं है।',
+  'onboarding_nudges_title' => 'ऑनबोर्डिंग संकेत',
+  'onboarding_nudges_empty' => 'फिलहाल कोई संकेत नहीं।',
+  'nudge_add_favorites' => 'सिफारिशें बेहतर करने के लिए फेवरेट जोड़ें।',
+  'nudge_review_notifications' => 'अपठित सूचनाएँ देखें।',
+  'nudge_enable_recommendations' => 'व्यक्तिगत सिफारिशें सक्षम करें।',
 );

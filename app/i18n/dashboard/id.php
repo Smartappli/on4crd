@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'Dasbor anggota',
   'meta_desc' => 'Sesuaikan dasbor ON4CRD dengan widget favorit Anda.',
   'title' => 'Dasbor anggota',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Karena Anda melihat iklan baris.',
   'recommendation_reason_album' => 'Karena Anda melihat album bersama.',
   'recommendation_reason_library' => 'Karena Anda membuka dokumen perpustakaan.',
+  'signal_article' => 'Artikel',
+  'signal_wiki' => 'Wiki',
+  'signal_classified' => 'Iklan',
+  'signal_album' => 'Album',
+  'signal_library' => 'Pustaka',
+  'activity_timeline_title' => 'Linimasa aktivitas',
+  'activity_timeline_empty' => 'Belum ada aktivitas.',
+  'onboarding_nudges_title' => 'Saran awal',
+  'onboarding_nudges_empty' => 'Belum ada saran.',
+  'nudge_add_favorites' => 'Tambahkan favorit untuk meningkatkan rekomendasi.',
+  'nudge_review_notifications' => 'Tinjau notifikasi yang belum dibaca.',
+  'nudge_enable_recommendations' => 'Aktifkan rekomendasi yang dipersonalisasi.',
 );

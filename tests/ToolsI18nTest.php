@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class ToolsI18nTest extends TestCase
@@ -21,15 +22,17 @@ final class ToolsI18nTest extends TestCase
         return $data;
     }
 
-    /**
-     * @dataProvider localeKeyParityProvider
-     */
+    #[DataProvider('localeKeyParityProvider')]
     public function testToolsLocaleHasSameKeysAsFrench(string $locale): void
     {
         $fr = $this->loadLocale('fr');
         $candidate = $this->loadLocale($locale);
 
-        self::assertSame(array_keys($fr), array_keys($candidate));
+        $frKeys = array_keys($fr);
+        $candidateKeys = array_keys($candidate);
+        sort($frKeys);
+        sort($candidateKeys);
+        self::assertSame($frKeys, $candidateKeys);
     }
 
     /**

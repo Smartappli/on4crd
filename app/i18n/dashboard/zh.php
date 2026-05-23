@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => '会员仪表板',
   'meta_desc' => '使用您喜欢的小组件自定义 ON4CRD 仪表板。',
   'title' => '会员仪表板',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Because you browse classifieds.',
   'recommendation_reason_album' => 'Because you view shared albums.',
   'recommendation_reason_library' => 'Because you consult library documents.',
+  'signal_article' => '文章',
+  'signal_wiki' => 'Wiki',
+  'signal_classified' => '分类信息',
+  'signal_album' => '相册',
+  'signal_library' => '资料库',
+  'activity_timeline_title' => '活动时间线',
+  'activity_timeline_empty' => '暂无活动。',
+  'onboarding_nudges_title' => '引导提示',
+  'onboarding_nudges_empty' => '当前没有提示。',
+  'nudge_add_favorites' => '添加收藏以改进推荐。',
+  'nudge_review_notifications' => '查看未读通知。',
+  'nudge_enable_recommendations' => '启用个性化推荐。',
 );

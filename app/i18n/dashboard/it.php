@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array(
+return array (
   'meta_title' => 'Dashboard membri',
   'meta_desc' => 'Personalizza il tuo dashboard ON4CRD.',
   'title' => 'Dashboard membri',
@@ -34,4 +34,16 @@ return array(
   'recommendation_reason_classified' => 'Perche consulti annunci.',
   'recommendation_reason_album' => 'Perche visualizzi album condivisi.',
   'recommendation_reason_library' => 'Perche consulti documenti della libreria.',
+  'signal_article' => 'Articoli',
+  'signal_wiki' => 'Wiki',
+  'signal_classified' => 'Annunci',
+  'signal_album' => 'Album',
+  'signal_library' => 'Biblioteca',
+  'activity_timeline_title' => 'Timeline attività',
+  'activity_timeline_empty' => 'Nessuna attività al momento.',
+  'onboarding_nudges_title' => 'Suggerimenti iniziali',
+  'onboarding_nudges_empty' => 'Nessun suggerimento al momento.',
+  'nudge_add_favorites' => 'Aggiungi preferiti per migliorare i suggerimenti.',
+  'nudge_review_notifications' => 'Controlla le notifiche non lette.',
+  'nudge_enable_recommendations' => 'Attiva le raccomandazioni personalizzate.',
 );

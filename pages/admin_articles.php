@@ -138,32 +138,7 @@ function article_unique_slug(string $slug, int $ignoreId = 0): string
  */
 function editorial_blocked_reasons(array $article): array
 {
-    $reasons = [];
-    $title = trim((string) ($article['title'] ?? ''));
-    $content = trim(strip_tags((string) ($article['content'] ?? '')));
-    $status = (string) ($article['status'] ?? 'draft');
-    $scheduledAt = trim((string) ($article['scheduled_at'] ?? ''));
-
-    if ($title === '') {
-        $reasons[] = 'missing_title';
-    }
-    if ($content === '') {
-        $reasons[] = 'missing_content';
-    }
-    if ($status === 'scheduled') {
-        if ($scheduledAt === '') {
-            $reasons[] = 'missing_schedule_date';
-        } else {
-            $ts = strtotime($scheduledAt);
-            if ($ts === false) {
-                $reasons[] = 'invalid_schedule_date';
-            } elseif ($ts <= time()) {
-                $reasons[] = 'stuck_in_past_schedule';
-            }
-        }
-    }
-
-    return $reasons;
+    return editorial_blocked_reasons_from_article($article);
 }
 
 function editorial_retry_scheduled_article(int $id): string
