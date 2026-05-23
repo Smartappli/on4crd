@@ -149,7 +149,7 @@ ob_start();
             </div>
             <div class="library-stat">
                 <span><?= (int) count($categories) ?></span>
-                <p><?= e((string) $t['all_categories']) ?></p>
+                <p><?= e((string) ($t['categories'] ?? $t['all_categories'])) ?></p>
             </div>
             <div class="library-stat">
                 <span><?= (int) $activeFiltersCount ?></span>
@@ -159,9 +159,13 @@ ob_start();
     </header>
 
     <form method="get" class="library-search-panel">
+        <div class="library-filter-heading">
+            <h2><?= e((string) ($t['category'] ?? $t['all_categories'])) ?></h2>
+            <p class="help"><?= e((string) ($t['category_help'] ?? $t['all_categories'])) ?></p>
+        </div>
         <input type="hidden" name="route" value="members_library">
         <label>
-            <span><?= e((string) $t['all_categories']) ?></span>
+            <span><?= e((string) ($t['category'] ?? $t['all_categories'])) ?></span>
             <select name="category">
                 <option value=""><?= e((string) $t['all_categories']) ?></option>
                 <?php foreach ($categories as $cat): $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
@@ -181,6 +185,20 @@ ob_start();
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
             <?php if ($search !== '' || $category !== '' || $tag !== ''): ?><a class="button secondary" href="<?= e(route_url('members_library')) ?>"><?= e((string) $t['reset']) ?></a><?php endif; ?>
         </div>
+        <?php if ($categories !== []): ?>
+            <div class="library-category-strip" aria-label="<?= e((string) ($t['categories'] ?? $t['all_categories'])) ?>">
+                <a class="library-category-pill<?= $category === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
+                    <?= e((string) $t['all_categories']) ?>
+                </a>
+                <?php foreach ($categories as $cat): ?>
+                    <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
+                    <a class="library-category-pill<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
+                        <span><?= e($catName) ?></span>
+                        <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </form>
 
     <?php if ($documents === []): ?>
