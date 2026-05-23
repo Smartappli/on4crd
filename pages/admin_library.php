@@ -190,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         db()->prepare('INSERT INTO member_library_documents (member_id, category, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?)')
             ->execute([(int) ($user['id'] ?? 0), $category, $tags, $title, $description, (string) $stored['public_path'], $extractedText]);
+        notify_member((int) ($user['id'] ?? 0), 'import', 'Library import completed', $title, route_url('admin_library'));
         set_flash('success', (string) $t['ok_added']);
         redirect('admin_library');
     } catch (Throwable $throwable) {

@@ -155,6 +155,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
 
+        if ($action === 'bulk_update_articles') {
+            $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
+            if ($ids === []) {
+                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+            }
+            $bulkOp = (string) ($_POST['bulk_op'] ?? '');
+            $allowedOps = ['draft', 'scheduled', 'published', 'delete'];
+            if (!in_array($bulkOp, $allowedOps, true)) {
+                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+            }
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            if ($bulkOp === 'delete') {
+                if (table_exists('article_translations')) {
+                    db()->prepare('DELETE FROM article_translations WHERE article_id IN (' . $placeholders . ')')->execute($ids);
+                }
+                db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
+                set_flash('success', $t('ok_deleted', 'Article supprimé.'));
+            } else {
+                $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
+                $publishedAt = $bulkOp === 'published' ? date('Y-m-d H:i:s') : null;
+                db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = COALESCE(?, published_at), updated_at = NOW() WHERE id IN (' . $placeholders . ')')
+                    ->execute(array_merge([$bulkOp, $scheduledAt, $publishedAt], $ids));
+                set_flash('success', $t('ok_saved'));
+            }
+            redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+        }
+
         if ($action === 'save_article' || $action === 'preview_article') {
             $id = (int) ($_POST['id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
@@ -219,6 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'scheduled_at' => $scheduledAtValue,
                 ]);
             } else {
+            $notifyStatus = $status;
             if ($id > 0) {
                 if (table_exists('article_revisions')) {
                     $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
@@ -248,6 +276,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
                         ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
                 }
+            }
+            if ($notifyStatus === 'published') {
+                notify_member((int) current_user()['id'], 'publication', 'Article published', $title, route_url('article', ['slug' => $slug]));
+            } elseif ($notifyStatus === 'scheduled') {
+                notify_member((int) current_user()['id'], 'publication', 'Article scheduled', $title, route_url('article', ['slug' => $slug]));
             }
             article_translation_upsert($id, 'en');
             article_translation_upsert($id, 'de');

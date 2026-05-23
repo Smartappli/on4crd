@@ -36,10 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($ids === []) {
                 throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
             }
-            $bulkOp = (string) ($_POST['bulk_op'] ?? '');
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $ownerStmt = db()->prepare('SELECT id, owner_member_id, title FROM classified_ads WHERE id IN (' . $placeholders . ')');
+            $ownerStmt->execute($ids);
+            $ownerRows = $ownerStmt->fetchAll() ?: [];
+            $bulkOp = (string) ($_POST['bulk_op'] ?? '');
             if ($bulkOp === 'delete') {
                 db()->prepare('DELETE FROM classified_ads WHERE id IN (' . $placeholders . ')')->execute($ids);
+                foreach ($ownerRows as $ownerRow) {
+                    notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
+                }
             } else {
                 $allowed = ['draft', 'active', 'sold', 'archived', 'expired'];
                 if (!in_array($bulkOp, $allowed, true)) {
@@ -48,6 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $expiresAt = $bulkOp === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
                 db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $expiresAt], $ids));
+                foreach ($ownerRows as $ownerRow) {
+                    notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Status updated to ' . $bulkOp . ': ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
+                }
             }
             set_flash('success', (string) ($t['saved'] ?? 'Saved.'));
             redirect_url(route_url('admin_classifieds'));
@@ -58,7 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'delete') {
+            $ownerStmt = db()->prepare('SELECT owner_member_id, title FROM classified_ads WHERE id = ? LIMIT 1');
+            $ownerStmt->execute([$id]);
+            $ownerRow = $ownerStmt->fetch() ?: null;
             db()->prepare('DELETE FROM classified_ads WHERE id = ?')->execute([$id]);
+            if (is_array($ownerRow)) {
+                notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
+            }
             set_flash('success', (string) ($t['deleted'] ?? 'Deleted.'));
             redirect_url(route_url('admin_classifieds'));
         }
@@ -87,6 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ?')
             ->execute([$category, $title, $description, $location, $contact, max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0'))), $status, $expiresAtValue, $id]);
+        $ownerStmt = db()->prepare('SELECT owner_member_id FROM classified_ads WHERE id = ? LIMIT 1');
+        $ownerStmt->execute([$id]);
+        $ownerId = (int) ($ownerStmt->fetchColumn() ?: 0);
+        if ($ownerId > 0) {
+            notify_member($ownerId, 'moderation', 'Classified ad moderated', 'Status updated to ' . $status . ': ' . $title, route_url('classifieds'));
+        }
         set_flash('success', (string) ($t['saved'] ?? 'Saved.'));
         redirect_url(route_url('admin_classifieds'));
     } catch (Throwable $throwable) {

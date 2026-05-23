@@ -152,6 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($importedCount <= 0) {
                 throw new RuntimeException((string) $t['no_photo_imported']);
             }
+            notify_member((int) current_user()['id'], 'import', 'Album import completed', $importedCount . ' photo(s) imported.', route_url('admin_albums'));
             if ((int) $albumRow['is_public'] === 1) {
                 notify_album_webhooks([
                     'event' => 'album.photo_uploaded',
