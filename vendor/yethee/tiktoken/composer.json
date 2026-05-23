@@ -13,7 +13,7 @@
     "mikey179/vfsstream": "^1.6.11",
     "phpbench/phpbench": "^1.2",
     "phpunit/phpunit": "^10.5.45",
-    "psalm/plugin-phpunit": "^0.19.2",
+    "psalm/plugin-phpunit": "^0.20.0",
     "vimeo/psalm": "6.10.0"
   },
   "suggest": {
