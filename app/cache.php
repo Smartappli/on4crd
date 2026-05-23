@@ -65,7 +65,13 @@ function cache_get(string $key, mixed $default = null, ?array $settings = null):
         return $default;
     }
 
-    $payload = @include $path;
+    try {
+        $payload = @include $path;
+    } catch (Throwable) {
+        @unlink($path);
+
+        return $default;
+    }
     if (!is_array($payload) || !array_key_exists('expires_at', $payload) || !array_key_exists('value', $payload)) {
         @unlink($path);
 

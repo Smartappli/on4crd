@@ -153,7 +153,7 @@ ob_start();
             </div>
             <div class="library-stat">
                 <span><?= (int) $activeFiltersCount ?></span>
-                <p><?= e((string) $t['search']) ?></p>
+                <p><?= e((string) $t['tags']) ?></p>
             </div>
         </div>
     </header>
