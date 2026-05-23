@@ -20,7 +20,7 @@
         "psr/http-message": "^1.0 || ^2.0",
         "psr/log": "^3.0",
         "smalot/pdfparser": "^2.11",
-        "yethee/tiktoken": "^0.10.0"
+        "yethee/tiktoken": "^0.12.0"
     },
     "suggest": {
         "doctrine/orm": "This is required for the DoctrineVectoreStore. This should be working with any version ^2.13.0",
