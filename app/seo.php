@@ -176,6 +176,7 @@ function seo_apply_defaults(string $route): void
         'album' => ['title' => 'Album photo', 'description' => 'Parcourez un album photo publié par le club ON4CRD.'],
         'auctions' => ['title' => 'Enchères radioamateur', 'description' => 'Découvrez les enchères de matériel radio proposées sur l’espace membres ON4CRD.'],
         'auction_view' => ['title' => 'Détail enchère', 'description' => 'Consultez les détails d’une enchère et les informations du lot proposé.'],
+        'shop' => ['title' => 'Boutique du club', 'description' => 'Catalogue des produits du club ON4CRD : textile, accessoires et documentation.'],
         'classifieds' => ['title' => 'Petites annonces', 'description' => 'Consultez les petites annonces radioamateur du club ON4CRD.'],
         'directory' => ['title' => 'Annuaire', 'description' => 'Annuaire des membres et contacts utiles du Radio Club Durnal ON4CRD.'],
         'committee' => ['title' => 'Comité', 'description' => 'Présentation du comité et de l’organisation du club ON4CRD.'],

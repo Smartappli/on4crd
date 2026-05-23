@@ -12,7 +12,7 @@ final class RouterContractTest extends TestCase
     private function extractDispatchRoutes(string $router): array
     {
         preg_match_all(
-            "/case '([^']+)': \\$dispatchPage\\('([^']+)'\\); break;/",
+            '/case \'([^\']+)\':\s*\$dispatchPage\(\'([^\']+)\'\);\s*break;/',
             $router,
             $matches,
             PREG_SET_ORDER
