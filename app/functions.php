@@ -4901,9 +4901,50 @@ function set_member_preference_bool(int $memberId, string $key, bool $value): vo
     $stmt->execute([$memberId, $key, $value ? '1' : '0']);
 }
 
+function member_preference_string(int $memberId, string $key, string $default = ''): string
+{
+    if ($memberId <= 0 || $key === '' || !ensure_member_preference_table()) {
+        return $default;
+    }
+
+    $stmt = db()->prepare('SELECT preference_value FROM member_preferences WHERE member_id = ? AND preference_key = ? LIMIT 1');
+    $stmt->execute([$memberId, $key]);
+    $value = $stmt->fetchColumn();
+    if ($value === false) {
+        return $default;
+    }
+
+    return (string) $value;
+}
+
+function set_member_preference_string(int $memberId, string $key, string $value): void
+{
+    if ($memberId <= 0 || $key === '' || !ensure_member_preference_table()) {
+        return;
+    }
+
+    $stmt = db()->prepare(
+        'INSERT INTO member_preferences (member_id, preference_key, preference_value)
+         VALUES (?, ?, ?)
+         ON DUPLICATE KEY UPDATE preference_value = VALUES(preference_value), updated_at = CURRENT_TIMESTAMP'
+    );
+    $stmt->execute([$memberId, $key, mb_safe_substr(trim($value), 0, 255)]);
+}
+
 function member_personalized_recommendations(int $memberId, int $limit = 6): array
 {
     $limit = max(1, min(24, $limit));
+    $signalPrefs = [
+        'article' => member_preference_bool($memberId, 'recommendations_signal_article_enabled', true),
+        'wiki' => member_preference_bool($memberId, 'recommendations_signal_wiki_enabled', true),
+        'classified' => member_preference_bool($memberId, 'recommendations_signal_classified_enabled', true),
+        'album' => member_preference_bool($memberId, 'recommendations_signal_album_enabled', true),
+        'library' => member_preference_bool($memberId, 'recommendations_signal_library_enabled', true),
+    ];
+    if (!in_array(true, $signalPrefs, true)) {
+        return [];
+    }
+
     $seedTypes = [];
     foreach (member_favorites_recent($memberId, 30) as $favorite) {
         $type = (string) ($favorite['target_type'] ?? '');
@@ -4924,7 +4965,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
         $items[$key] = $row;
     };
 
-    $wantsArticles = isset($seedTypes['article']) || $seedTypes === [];
+    $wantsArticles = $signalPrefs['article'] && (isset($seedTypes['article']) || $seedTypes === []);
     if ($wantsArticles && table_exists('articles')) {
         $stmt = db()->query('SELECT id, slug, title, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
@@ -4947,7 +4988,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
         }
     }
 
-    $wantsWiki = isset($seedTypes['wiki_page']) || $seedTypes === [];
+    $wantsWiki = $signalPrefs['wiki'] && (isset($seedTypes['wiki_page']) || $seedTypes === []);
     if ($wantsWiki && table_exists('wiki_pages')) {
         $stmt = db()->query('SELECT slug, title, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
@@ -4970,7 +5011,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
         }
     }
 
-    $wantsClassifieds = isset($seedTypes['classified_ad']) || $seedTypes === [];
+    $wantsClassifieds = $signalPrefs['classified'] && (isset($seedTypes['classified_ad']) || $seedTypes === []);
     if ($wantsClassifieds && table_exists('classified_ads')) {
         $stmt = db()->query('SELECT id, title, created_at FROM classified_ads WHERE status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) ORDER BY created_at DESC, id DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
@@ -4993,7 +5034,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
         }
     }
 
-    $wantsAlbums = isset($seedTypes['album']) || $seedTypes === [];
+    $wantsAlbums = $signalPrefs['album'] && (isset($seedTypes['album']) || $seedTypes === []);
     if ($wantsAlbums && table_exists('albums')) {
         $stmt = db()->query('SELECT id, title, created_at FROM albums WHERE is_public = 1 ORDER BY id DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
@@ -5016,7 +5057,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
         }
     }
 
-    $wantsLibrary = isset($seedTypes['library_document']) || $seedTypes === [];
+    $wantsLibrary = $signalPrefs['library'] && (isset($seedTypes['library_document']) || $seedTypes === []);
     if ($wantsLibrary && table_exists('member_library_documents')) {
         $stmt = db()->query('SELECT id, title, category, uploaded_at FROM member_library_documents ORDER BY uploaded_at DESC, id DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
