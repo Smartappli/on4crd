@@ -78,8 +78,8 @@ $unitConversionGroups = [
     'temperature' => [
         'label' => (string) ($t['unit_conv_group_temperature'] ?? 'Temperature'),
         'units' => [
-            'c' => ['label' => '°C', 'kind' => 'c'],
-            'f' => ['label' => '°F', 'kind' => 'f'],
+            'c' => ['label' => 'Â°C', 'kind' => 'c'],
+            'f' => ['label' => 'Â°F', 'kind' => 'f'],
             'k' => ['label' => 'K', 'kind' => 'k'],
         ],
         'presets' => ['0', '20', '100'],
@@ -100,7 +100,7 @@ $unitConversionGroups = [
     'field' => [
         'label' => (string) ($t['unit_conv_group_field'] ?? 'Niveau de signal'),
         'units' => [
-            'dbuv' => ['label' => 'dBµV', 'kind' => 'dbuv'],
+            'dbuv' => ['label' => 'dBÂµV', 'kind' => 'dbuv'],
             'sunit' => ['label' => 'S-unit', 'kind' => 'sunit'],
         ],
         'presets' => ['9', '59', '73'],
@@ -112,8 +112,8 @@ $unitConversionGroups = [
 <article class="card tool-panel is-hidden" id="tool-unit-conversions" data-tool-panel>
     <div class="section-header">
         <div>
-            <h2><?= e((string) ($t['unit_conv_title'] ?? 'Conversion d’unités')) ?></h2>
-            <p class="help"><?= e((string) ($t['unit_conv_help'] ?? 'Convertisseur multi-unités orienté radioamateur.')) ?></p>
+            <h2><?= e((string) ($t['unit_conv_title'] ?? 'Unit conversion')) ?></h2>
+            <p class="help"><?= e((string) ($t['unit_conv_help'] ?? 'Ham radio multi-unit converter.')) ?></p>
         </div>
         <button type="button" class="button ghost" id="unit-conv-swap"><?= e((string) ($t['unit_conv_swap'] ?? 'Inverser')) ?></button>
     </div>
@@ -126,11 +126,11 @@ $unitConversionGroups = [
                 <?php endforeach; ?>
             </select>
         </label>
-        <label><?= e((string) ($t['value_in'] ?? 'Valeur entrée')) ?>
+        <label><?= e((string) ($t['value_in'] ?? 'Input value')) ?>
             <input id="unit-conv-input" type="number" step="any" value="145.5" inputmode="decimal">
         </label>
-        <label><?= e((string) ($t['value_out'] ?? 'Valeur sortie')) ?>
-            <output id="unit-conv-output" class="result-box">—</output>
+        <label><?= e((string) ($t['value_out'] ?? 'Output value')) ?>
+            <output id="unit-conv-output" class="result-box">-</output>
         </label>
     </div>
 
@@ -147,11 +147,11 @@ $unitConversionGroups = [
 
     <div class="grid-2">
         <section class="inner-card">
-            <h3><?= e((string) ($t['unit_conv_reference'] ?? 'Référence')) ?></h3>
-            <p id="unit-conv-reference" class="help">—</p>
+            <h3><?= e((string) ($t['unit_conv_reference'] ?? 'Reference')) ?></h3>
+            <p id="unit-conv-reference" class="help">-</p>
         </section>
         <section class="inner-card">
-            <h3><?= e((string) ($t['unit_conv_quick_links'] ?? 'Convertisseurs détaillés')) ?></h3>
+            <h3><?= e((string) ($t['unit_conv_quick_links'] ?? 'Detailed converters')) ?></h3>
             <div class="actions">
                 <?php
                 $unitTools = [

@@ -6,5 +6,5 @@
     <label><?= e((string) $t['velocity_factor']) ?>
         <input type="number" id="quarter-wave-vf" min="0" max="1" step="0.01" value="0.95">
     </label>
-    <p class="help"><?= e((string) $t['quarter_wave_result']) ?>: <strong id="quarter-wave-length">—</strong></p>
+    <p class="help"><?= e((string) $t['quarter_wave_result']) ?>: <strong id="quarter-wave-length">-</strong></p>
 </article>

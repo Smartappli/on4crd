@@ -6,5 +6,5 @@
     <label><?= e((string) $t['incidence_deg']) ?>
         <input type="number" id="muf-angle" min="1" max="89" step="0.1" value="30">
     </label>
-    <p class="help"><?= e((string) $t['muf_result']) ?>: <strong id="muf-result">—</strong></p>
+    <p class="help"><?= e((string) $t['muf_result']) ?>: <strong id="muf-result">-</strong></p>
 </article>

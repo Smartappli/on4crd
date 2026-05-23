@@ -6,5 +6,5 @@
     <label><?= e((string) $t['sun_hours']) ?>
         <input type="number" id="solar-hours" min="0" step="0.1" value="4">
     </label>
-    <p class="help"><?= e((string) $t['daily_energy_wh']) ?>: <strong id="solar-energy">—</strong></p>
+    <p class="help"><?= e((string) $t['daily_energy_wh']) ?>: <strong id="solar-energy">-</strong></p>
 </article>

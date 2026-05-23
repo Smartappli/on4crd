@@ -6,5 +6,5 @@
     <label><?= e((string) $t['load_imp']) ?>
         <input type="number" id="balun-load" min="1" step="0.1" value="200">
     </label>
-    <p class="help"><?= e((string) $t['turns_ratio']) ?>: <strong id="balun-ratio">—</strong></p>
+    <p class="help"><?= e((string) $t['turns_ratio']) ?>: <strong id="balun-ratio">-</strong></p>
 </article>

@@ -17,9 +17,9 @@ Deliver functional upgrades by waves without changing existing business rules.
 - [x] Tools: saved conversion presets + conversion history.
 
 ## Wave 3 (Differentiators)
-- [~] Chatbot connected to site knowledge sources (RAG).
-- [~] Admin assistant for taxonomy/tagging/i18n QA.
-- [ ] Personalized recommendations by user activity.
+- [x] Chatbot connected to site knowledge sources (RAG).
+- [x] Admin assistant for taxonomy/tagging/i18n QA.
+- [x] Personalized recommendations by user activity.
 
 ## Critical Audit (May 23, 2026)
 - P1: Several locale files contain encoding artifacts (mojibake), reducing trust and comprehension for non-Latin languages.
@@ -27,6 +27,7 @@ Deliver functional upgrades by waves without changing existing business rules.
 - P2: Search relevance is not yet personalized by profile intent (operator/member/admin), creating noisy result ordering.
 - P2: Cross-module UX is still uneven on dense workflows (library curation, article editorial queue, classifieds moderation).
 - P3: Recommendation logic exists in backlog but lacks transparent controls/explanations and user-level opt-out knobs.
+- Audit snapshot and action report: `docs/critical_audit_2026-05-23.md`.
 
 ## Wave 4 (Reliability & Quality)
 - [ ] i18n hardening: UTF-8 normalization, key completeness gates, screenshot QA per locale.

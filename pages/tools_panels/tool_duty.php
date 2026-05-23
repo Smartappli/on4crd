@@ -6,5 +6,5 @@
     <label><?= e((string) $t['period_sec']) ?>
         <input type="number" id="duty-period" min="0" step="0.1" value="120">
     </label>
-    <p class="help"><?= e((string) $t['duty_cycle_result']) ?>: <strong id="duty-result">—</strong></p>
+    <p class="help"><?= e((string) $t['duty_cycle_result']) ?>: <strong id="duty-result">-</strong></p>
 </article>

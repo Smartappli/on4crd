@@ -6,5 +6,5 @@
     <label><?= e((string) $t['reflected_power']) ?>
         <input type="number" id="swr-reflected" min="0" step="0.1" value="2">
     </label>
-    <p class="help"><?= e((string) $t['swr_result']) ?>: <strong id="swr-value">—</strong></p>
+    <p class="help"><?= e((string) $t['swr_result']) ?>: <strong id="swr-value">-</strong></p>
 </article>

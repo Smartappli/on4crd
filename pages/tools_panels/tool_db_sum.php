@@ -6,5 +6,5 @@
     <label><?= e((string) $t['dbm_b']) ?>
         <input type="number" id="dbsum-b" step="0.1" value="30">
     </label>
-    <p class="help"><?= e((string) $t['dbm_sum_result']) ?>: <strong id="dbsum-result">—</strong></p>
+    <p class="help"><?= e((string) $t['dbm_sum_result']) ?>: <strong id="dbsum-result">-</strong></p>
 </article>

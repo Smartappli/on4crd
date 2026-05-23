@@ -9,8 +9,8 @@
         </div>
     </form>
     <div id="grid-tool-result" class="card is-hidden" style="margin-top:1rem;">
-        <p><strong><?= e((string) $t['found_address']) ?> :</strong> <span id="grid-found-address">—</span></p>
-        <p><strong><?= e((string) $t['coords']) ?> :</strong> <span id="grid-found-coords">—</span></p>
-        <p><strong><?= e((string) $t['locator']) ?> :</strong> <span id="grid-found-locator">—</span></p>
+        <p><strong><?= e((string) $t['found_address']) ?> :</strong> <span id="grid-found-address">-</span></p>
+        <p><strong><?= e((string) $t['coords']) ?> :</strong> <span id="grid-found-coords">-</span></p>
+        <p><strong><?= e((string) $t['locator']) ?> :</strong> <span id="grid-found-locator">-</span></p>
     </div>
 </article>

@@ -3,5 +3,5 @@
     <label><?= e((string) $t['erp_input_w']) ?>
         <input type="number" id="eirp-erp" min="0" step="0.1" value="10">
     </label>
-    <p class="help"><?= e((string) $t['eirp_result_w']) ?>: <strong id="eirp-result">—</strong></p>
+    <p class="help"><?= e((string) $t['eirp_result_w']) ?>: <strong id="eirp-result">-</strong></p>
 </article>

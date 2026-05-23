@@ -9,5 +9,5 @@
     <label><?= e((string) $t['r2_ohm']) ?>
         <input type="number" id="divider-r2" min="0" step="1" value="2200">
     </label>
-    <p class="help"><?= e((string) $t['vout_volts']) ?>: <strong id="divider-vout">—</strong></p>
+    <p class="help"><?= e((string) $t['vout_volts']) ?>: <strong id="divider-vout">-</strong></p>
 </article>

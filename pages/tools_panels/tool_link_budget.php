@@ -15,5 +15,5 @@
             <input id="lb-loss" type="number" inputmode="decimal" step="0.1" min="0" placeholder="110">
         </label>
     </div>
-    <p><strong><?= e((string) ($t['rx_power_est'] ?? 'Estimated Prx')) ?>:</strong> <span id="lb-prx">—</span></p>
+    <p><strong><?= e((string) ($t['rx_power_est'] ?? 'Estimated Prx')) ?>:</strong> <span id="lb-prx">-</span></p>
 </article>

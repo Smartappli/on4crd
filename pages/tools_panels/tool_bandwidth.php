@@ -6,5 +6,5 @@
     <label><?= e((string) $t['rolloff_factor']) ?>
         <input type="number" id="bandwidth-rolloff" min="0" step="0.01" value="0.35">
     </label>
-    <p class="help"><?= e((string) $t['bandwidth_result']) ?>: <strong id="bandwidth-result">—</strong></p>
+    <p class="help"><?= e((string) $t['bandwidth_result']) ?>: <strong id="bandwidth-result">-</strong></p>
 </article>

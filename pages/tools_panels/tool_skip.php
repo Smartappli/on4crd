@@ -6,5 +6,5 @@
     <label><?= e((string) $t['incidence_deg']) ?>
         <input type="number" id="skip-angle" min="1" max="89" step="0.1" value="30">
     </label>
-    <p class="help"><?= e((string) $t['skip_result_km']) ?>: <strong id="skip-result">—</strong></p>
+    <p class="help"><?= e((string) $t['skip_result_km']) ?>: <strong id="skip-result">-</strong></p>
 </article>

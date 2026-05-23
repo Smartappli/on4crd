@@ -9,5 +9,5 @@
     <label><?= e((string) $t['antenna_gain_dbd']) ?>
         <input type="number" id="erp-gain" step="0.1" value="3">
     </label>
-    <p class="help"><?= e((string) $t['erp_result']) ?>: <strong id="erp-result">—</strong></p>
+    <p class="help"><?= e((string) $t['erp_result']) ?>: <strong id="erp-result">-</strong></p>
 </article>

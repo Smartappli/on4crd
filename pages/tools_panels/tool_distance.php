@@ -6,5 +6,5 @@
     <label><?= e((string) $t['locator_b']) ?>
         <input type="text" id="locator-b" maxlength="6" placeholder="<?= e((string) $t['locator_b_ph']) ?>">
     </label>
-    <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">—</strong></p>
+    <p class="help"><?= e((string) $t['estimated_distance']) ?>: <strong id="locator-distance">-</strong></p>
 </article>

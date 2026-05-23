@@ -6,5 +6,5 @@
     <label><?= e((string) $t['atten_100m']) ?>
         <input type="number" id="coax-atten" min="0" step="0.01" value="6.7">
     </label>
-    <p class="help"><?= e((string) $t['coax_loss']) ?>: <strong id="coax-loss">—</strong></p>
+    <p class="help"><?= e((string) $t['coax_loss']) ?>: <strong id="coax-loss">-</strong></p>
 </article>

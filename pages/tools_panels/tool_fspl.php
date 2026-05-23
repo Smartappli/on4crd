@@ -6,5 +6,5 @@
     <label><?= e((string) $t['frequency_mhz']) ?>
         <input type="number" id="fspl-frequency" min="0" step="0.001" value="145.5">
     </label>
-    <p class="help"><?= e((string) $t['fspl_result']) ?>: <strong id="fspl-loss">—</strong></p>
+    <p class="help"><?= e((string) $t['fspl_result']) ?>: <strong id="fspl-loss">-</strong></p>
 </article>

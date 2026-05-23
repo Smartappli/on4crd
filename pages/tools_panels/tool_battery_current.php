@@ -6,5 +6,5 @@
     <label><?= e((string) $t['load_power_w']) ?>
         <input type="number" id="battery-load" min="0" step="0.1" value="50">
     </label>
-    <p class="help"><?= e((string) $t['battery_current_a']) ?>: <strong id="battery-current">—</strong></p>
+    <p class="help"><?= e((string) $t['battery_current_a']) ?>: <strong id="battery-current">-</strong></p>
 </article>

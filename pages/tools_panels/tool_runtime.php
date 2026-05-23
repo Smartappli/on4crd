@@ -6,5 +6,5 @@
     <label><?= e((string) $t['current_ma']) ?>
         <input type="number" id="runtime-current" min="0" step="1" value="500">
     </label>
-    <p class="help"><?= e((string) $t['runtime_result']) ?>: <strong id="runtime-hours">—</strong></p>
+    <p class="help"><?= e((string) $t['runtime_result']) ?>: <strong id="runtime-hours">-</strong></p>
 </article>
