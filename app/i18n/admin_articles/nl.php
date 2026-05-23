@@ -49,4 +49,12 @@ return array (
   'all_categories' => 'All categories',
   'filter' => 'Filter',
   'reset_filter' => 'Reset',
+  'revisions' => 'Versiegeschiedenis',
+  'scheduled_at' => 'Publicatiedatum',
+  'ok_revision_restored' => 'Versie hersteld.',
+  'scheduled' => 'Gepland',
+  'revision_saved_at' => 'Versie van',
+  'restore_revision' => 'Herstellen',
+  'no_revisions' => 'Geen opgeslagen versies.',
+  'confirm_restore_revision' => 'Deze versie herstellen?',
 );

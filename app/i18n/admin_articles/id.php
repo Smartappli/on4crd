@@ -49,4 +49,12 @@ return array (
   'all_categories' => 'All categories',
   'filter' => 'Filter',
   'reset_filter' => 'Reset',
+  'revisions' => 'Riwayat versi',
+  'scheduled_at' => 'Tanggal publikasi',
+  'ok_revision_restored' => 'Versi dipulihkan.',
+  'scheduled' => 'Terjadwal',
+  'revision_saved_at' => 'Versi pada',
+  'restore_revision' => 'Pulihkan',
+  'no_revisions' => 'Tidak ada versi tersimpan.',
+  'confirm_restore_revision' => 'Pulihkan versi ini?',
 );

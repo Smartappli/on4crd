@@ -49,4 +49,12 @@ return array (
   'all_categories' => 'All categories',
   'filter' => 'Filter',
   'reset_filter' => 'Reset',
+  'revisions' => 'Revision history',
+  'scheduled_at' => 'Publication date',
+  'ok_revision_restored' => 'Version restored.',
+  'scheduled' => 'Scheduled',
+  'revision_saved_at' => 'Version saved on',
+  'restore_revision' => 'Restore',
+  'no_revisions' => 'No saved revisions.',
+  'confirm_restore_revision' => 'Restore this version?',
 );

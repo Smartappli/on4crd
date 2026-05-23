@@ -49,4 +49,12 @@ return array (
   'all_categories' => 'All categories',
   'filter' => 'Filter',
   'reset_filter' => 'Reset',
+  'revisions' => 'Historico de versoes',
+  'scheduled_at' => 'Data de publicacao',
+  'ok_revision_restored' => 'Versao restaurada.',
+  'scheduled' => 'Agendado',
+  'revision_saved_at' => 'Versao de',
+  'restore_revision' => 'Restaurar',
+  'no_revisions' => 'Sem versoes guardadas.',
+  'confirm_restore_revision' => 'Restaurar esta versao?',
 );

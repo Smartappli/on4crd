@@ -49,4 +49,12 @@ return array (
   'all_categories' => 'All categories',
   'filter' => 'Filter',
   'reset_filter' => 'Reset',
+  'revisions' => 'Versionsverlauf',
+  'scheduled_at' => 'Veroeffentlichungsdatum',
+  'ok_revision_restored' => 'Version wiederhergestellt.',
+  'scheduled' => 'Geplant',
+  'revision_saved_at' => 'Version vom',
+  'restore_revision' => 'Wiederherstellen',
+  'no_revisions' => 'Keine gespeicherten Versionen.',
+  'confirm_restore_revision' => 'Diese Version wiederherstellen?',
 );
