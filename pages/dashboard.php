@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
 $unreadNotifications = member_notifications_unread_count($userId);
 $recentNotifications = member_notifications_recent($userId, 6);
 $recentFavorites = member_favorites_recent($userId, 6);
+$recommendations = member_personalized_recommendations($userId, 6);
 $dashboardPersistenceEnabled = table_exists('dashboard_widgets');
 $selected = [];
 if ($dashboardPersistenceEnabled) {
@@ -47,11 +48,10 @@ if ($selectedWidgets === []) {
 $selectedKeys = array_map(static fn(array $widget): string => (string) $widget['key'], $selectedWidgets);
 $availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);
 
-
 $safeRenderWidget = static function (string $widgetKey, array $currentUser) use ($t): string {
     try {
         return render_widget($widgetKey, $currentUser);
-    } catch (Throwable $throwable) {
+    } catch (Throwable) {
         return '<p class="help">' . e($t('widget_unavailable')) . '</p>';
     }
 };
@@ -101,40 +101,55 @@ ob_start();
   </section>
   <section class="card">
     <div class="row-between">
-      <h2 style="margin:0;">Notifications</h2>
+      <h2 style="margin:0;"><?= e($t('notifications')) ?></h2>
       <div class="actions">
-        <span class="badge muted"><?= $unreadNotifications ?> non lues</span>
+        <span class="badge muted"><?= $unreadNotifications ?> <?= e($t('unread')) ?></span>
         <form method="post" class="inline-form">
           <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
           <input type="hidden" name="action" value="mark_notifications_read">
-          <button class="button secondary small" type="submit">Tout marquer lu</button>
+          <button class="button secondary small" type="submit"><?= e($t('mark_all_read')) ?></button>
         </form>
       </div>
     </div>
     <?php if ($recentNotifications === []): ?>
-      <p class="help">Aucune notification.</p>
+      <p class="help"><?= e($t('no_notifications')) ?></p>
     <?php else: ?>
       <ul class="stack" style="list-style:none;padding:0;margin:.8rem 0 0 0;">
         <?php foreach ($recentNotifications as $item): ?>
           <li class="card" style="margin:0;">
             <strong><?= e((string) ($item['title'] ?? '')) ?></strong>
             <?php if (trim((string) ($item['body'] ?? '')) !== ''): ?><p class="help" style="margin:.35rem 0;"><?= e((string) $item['body']) ?></p><?php endif; ?>
-            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a href="<?= e((string) $item['url']) ?>">Ouvrir</a><?php endif; ?>
+            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a href="<?= e((string) $item['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
           </li>
         <?php endforeach; ?>
       </ul>
     <?php endif; ?>
   </section>
   <section class="card">
-    <h2 style="margin-top:0;">Favoris récents</h2>
+    <h2 style="margin-top:0;"><?= e($t('recent_favorites')) ?></h2>
     <?php if ($recentFavorites === []): ?>
-      <p class="help">Aucun favori enregistré.</p>
+      <p class="help"><?= e($t('no_favorites')) ?></p>
     <?php else: ?>
       <ul class="stack" style="list-style:none;padding:0;margin:0;">
         <?php foreach ($recentFavorites as $favorite): ?>
           <li class="row-between" style="gap:.8rem;">
             <span><?= e((string) ($favorite['title'] !== '' ? $favorite['title'] : $favorite['target_type'])) ?></span>
-            <?php if (trim((string) ($favorite['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $favorite['url']) ?>">Ouvrir</a><?php endif; ?>
+            <?php if (trim((string) ($favorite['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $favorite['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endif; ?>
+  </section>
+  <section class="card">
+    <h2 style="margin-top:0;"><?= e($t('recommendations_title')) ?></h2>
+    <?php if ($recommendations === []): ?>
+      <p class="help"><?= e($t('recommendations_empty')) ?></p>
+    <?php else: ?>
+      <ul class="stack" style="list-style:none;padding:0;margin:0;">
+        <?php foreach ($recommendations as $item): ?>
+          <li class="row-between" style="gap:.8rem;">
+            <span><?= e((string) ($item['title'] ?? '')) ?></span>
+            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
           </li>
         <?php endforeach; ?>
       </ul>
@@ -155,7 +170,7 @@ ob_start();
           <strong><?= e((string) $widget['title']) ?></strong>
         </header>
         <p class="help"><?= e((string) ($widget['description'] ?? '')) ?></p>
-        <div class="widget-body widget-preview" data-widget-preview="<?= e((string) $widgetKey) ?>"><p class="help">…</p></div>
+        <div class="widget-body widget-preview" data-widget-preview="<?= e((string) $widgetKey) ?>"><p class="help">...</p></div>
         <button class="button small add-widget" type="button" data-widget="<?= e($widgetKey) ?>" data-title="<?= e((string) $widget['title']) ?>"><?= e($t('add')) ?></button>
       </article>
     <?php endforeach; ?>

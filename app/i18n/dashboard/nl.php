@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array (
+return array(
   'meta_title' => 'Leden-dashboard',
   'meta_desc' => 'Pas je ON4CRD-dashboard aan met je favoriete widgets.',
   'title' => 'Leden-dashboard',
@@ -16,4 +16,12 @@ return array (
   'no_widgets' => 'Er zijn momenteel geen widgets geactiveerd.',
   'add' => 'Toevoegen',
   'close' => 'Sluiten',
+  'open' => 'Openen',
+  'unread' => 'ongelezen',
+  'mark_all_read' => 'Alles als gelezen markeren',
+  'no_notifications' => 'Geen meldingen.',
+  'recent_favorites' => 'Recente favorieten',
+  'no_favorites' => 'Nog geen favorieten opgeslagen.',
+  'recommendations_title' => 'Aanbevolen voor jou',
+  'recommendations_empty' => 'Nog geen aanbevelingen. Voeg favorieten toe voor betere suggesties.',
 );

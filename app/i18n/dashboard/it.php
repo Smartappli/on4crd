@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return array (
+return array(
   'meta_title' => 'Dashboard membri',
   'meta_desc' => 'Personalizza il tuo dashboard ON4CRD.',
   'title' => 'Dashboard membri',
@@ -16,4 +16,12 @@ return array (
   'no_widgets' => 'Nessun widget attivo.',
   'add' => 'Aggiungi',
   'close' => 'Chiudi',
+  'open' => 'Apri',
+  'unread' => 'non lette',
+  'mark_all_read' => 'Segna tutto come letto',
+  'no_notifications' => 'Nessuna notifica.',
+  'recent_favorites' => 'Preferiti recenti',
+  'no_favorites' => 'Nessun preferito salvato.',
+  'recommendations_title' => 'Consigliato per te',
+  'recommendations_empty' => 'Nessun suggerimento al momento. Aggiungi preferiti per migliorare i consigli.',
 );

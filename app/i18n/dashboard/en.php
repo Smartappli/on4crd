@@ -16,4 +16,12 @@ return array (
   'no_widgets' => 'No widgets are currently enabled.',
   'add' => 'Add',
   'close' => 'Close',
+  'open' => 'Open',
+  'unread' => 'unread',
+  'mark_all_read' => 'Mark all read',
+  'no_notifications' => 'No notifications.',
+  'recent_favorites' => 'Recent favorites',
+  'no_favorites' => 'No favorite saved yet.',
+  'recommendations_title' => 'Recommended for you',
+  'recommendations_empty' => 'No recommendations yet. Add favorites to improve suggestions.',
 );

@@ -4830,6 +4830,144 @@ function member_favorites_recent(int $memberId, int $limit = 12): array
 }
 }
 
+if (!function_exists('member_personalized_recommendations')) {
+function member_personalized_recommendations(int $memberId, int $limit = 6): array
+{
+    $limit = max(1, min(24, $limit));
+    $seedTypes = [];
+    foreach (member_favorites_recent($memberId, 30) as $favorite) {
+        $type = (string) ($favorite['target_type'] ?? '');
+        if ($type !== '') {
+            $seedTypes[$type] = true;
+        }
+    }
+
+    $items = [];
+    $pushUnique = static function (array $row) use (&$items, $limit): void {
+        if (count($items) >= $limit) {
+            return;
+        }
+        $key = (string) ($row['key'] ?? '');
+        if ($key === '' || isset($items[$key])) {
+            return;
+        }
+        $items[$key] = $row;
+    };
+
+    $wantsArticles = isset($seedTypes['article']) || $seedTypes === [];
+    if ($wantsArticles && table_exists('articles')) {
+        $stmt = db()->query('SELECT id, slug, title, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 12');
+        foreach (($stmt->fetchAll() ?: []) as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id <= 0) {
+                continue;
+            }
+            $title = trim((string) ($row['title'] ?? ''));
+            if ($title === '') {
+                $title = 'Article';
+            }
+            $pushUnique([
+                'key' => 'article:' . $id,
+                'type' => 'article',
+                'title' => $title,
+                'url' => route_url('article', ['slug' => (string) ($row['slug'] ?? '')]),
+                'meta' => (string) ($row['updated_at'] ?? ''),
+            ]);
+        }
+    }
+
+    $wantsWiki = isset($seedTypes['wiki_page']) || $seedTypes === [];
+    if ($wantsWiki && table_exists('wiki_pages')) {
+        $stmt = db()->query('SELECT slug, title, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 12');
+        foreach (($stmt->fetchAll() ?: []) as $row) {
+            $slug = trim((string) ($row['slug'] ?? ''));
+            if ($slug === '') {
+                continue;
+            }
+            $title = trim((string) ($row['title'] ?? ''));
+            if ($title === '') {
+                $title = 'Wiki';
+            }
+            $pushUnique([
+                'key' => 'wiki:' . $slug,
+                'type' => 'wiki',
+                'title' => $title,
+                'url' => route_url('wiki_view', ['slug' => $slug]),
+                'meta' => (string) ($row['updated_at'] ?? ''),
+            ]);
+        }
+    }
+
+    $wantsClassifieds = isset($seedTypes['classified_ad']) || $seedTypes === [];
+    if ($wantsClassifieds && table_exists('classified_ads')) {
+        $stmt = db()->query('SELECT id, title, created_at FROM classified_ads WHERE status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) ORDER BY created_at DESC, id DESC LIMIT 12');
+        foreach (($stmt->fetchAll() ?: []) as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id <= 0) {
+                continue;
+            }
+            $title = trim((string) ($row['title'] ?? ''));
+            if ($title === '') {
+                $title = 'Classified';
+            }
+            $pushUnique([
+                'key' => 'classified:' . $id,
+                'type' => 'classified',
+                'title' => $title,
+                'url' => route_url('classifieds', ['q' => $title]),
+                'meta' => (string) ($row['created_at'] ?? ''),
+            ]);
+        }
+    }
+
+    $wantsAlbums = isset($seedTypes['album']) || $seedTypes === [];
+    if ($wantsAlbums && table_exists('albums')) {
+        $stmt = db()->query('SELECT id, title, created_at FROM albums WHERE is_public = 1 ORDER BY id DESC LIMIT 12');
+        foreach (($stmt->fetchAll() ?: []) as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id <= 0) {
+                continue;
+            }
+            $title = trim((string) ($row['title'] ?? ''));
+            if ($title === '') {
+                $title = 'Album';
+            }
+            $pushUnique([
+                'key' => 'album:' . $id,
+                'type' => 'album',
+                'title' => $title,
+                'url' => route_url('album', ['id' => $id]),
+                'meta' => (string) ($row['created_at'] ?? ''),
+            ]);
+        }
+    }
+
+    $wantsLibrary = isset($seedTypes['library_document']) || $seedTypes === [];
+    if ($wantsLibrary && table_exists('member_library_documents')) {
+        $stmt = db()->query('SELECT id, title, category, uploaded_at FROM member_library_documents ORDER BY uploaded_at DESC, id DESC LIMIT 12');
+        foreach (($stmt->fetchAll() ?: []) as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id <= 0) {
+                continue;
+            }
+            $title = trim((string) ($row['title'] ?? ''));
+            if ($title === '') {
+                $title = 'Library document';
+            }
+            $pushUnique([
+                'key' => 'library:' . $id,
+                'type' => 'library',
+                'title' => $title,
+                'url' => route_url_clean('members_library', ['q' => $title, 'category' => (string) ($row['category'] ?? '')]),
+                'meta' => (string) ($row['uploaded_at'] ?? ''),
+            ]);
+        }
+    }
+
+    return array_values($items);
+}
+}
+
 if (!function_exists('ensure_member_notifications_table')) {
 function ensure_member_notifications_table(): bool
 {

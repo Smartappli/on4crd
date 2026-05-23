@@ -16,4 +16,12 @@ return array (
   'no_widgets' => 'Aucun widget activé pour le moment.',
   'add' => 'Ajouter',
   'close' => 'Fermer',
+  'open' => 'Ouvrir',
+  'unread' => 'non lues',
+  'mark_all_read' => 'Tout marquer lu',
+  'no_notifications' => 'Aucune notification.',
+  'recent_favorites' => 'Favoris recents',
+  'no_favorites' => 'Aucun favori enregistre.',
+  'recommendations_title' => 'Recommande pour vous',
+  'recommendations_empty' => 'Aucune recommandation pour le moment. Ajoutez des favoris pour affiner les suggestions.',
 );

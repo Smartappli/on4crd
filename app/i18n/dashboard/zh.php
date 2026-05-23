@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-return array (
+return array(
   'meta_title' => '会员仪表板',
-  'meta_desc' => '使用你喜欢的小组件自定义 ON4CRD 仪表板。',
+  'meta_desc' => '使用您喜欢的小组件自定义 ON4CRD 仪表板。',
   'title' => '会员仪表板',
   'notifications' => '通知',
   'chatbot' => '助手',
@@ -16,4 +16,12 @@ return array (
   'no_widgets' => '当前没有启用的小组件。',
   'add' => '添加',
   'close' => '关闭',
+  'open' => '打开',
+  'unread' => '未读',
+  'mark_all_read' => '全部标记为已读',
+  'no_notifications' => '暂无通知。',
+  'recent_favorites' => '最近收藏',
+  'no_favorites' => '还没有已保存的收藏。',
+  'recommendations_title' => '为你推荐',
+  'recommendations_empty' => '目前没有推荐。添加收藏可改进建议。',
 );

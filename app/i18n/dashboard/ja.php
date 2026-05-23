@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-return array (
+return array(
   'meta_title' => 'メンバーダッシュボード',
-  'meta_desc' => 'お気に入りのウィジェットでON4CRDダッシュボードをカスタマイズします。',
+  'meta_desc' => 'お気に入りのウィジェットで ON4CRD ダッシュボードをカスタマイズします。',
   'title' => 'メンバーダッシュボード',
   'notifications' => '通知',
   'chatbot' => 'アシスタント',
@@ -16,4 +16,12 @@ return array (
   'no_widgets' => '現在有効なウィジェットはありません。',
   'add' => '追加',
   'close' => '閉じる',
+  'open' => '開く',
+  'unread' => '未読',
+  'mark_all_read' => 'すべて既読にする',
+  'no_notifications' => '通知はありません。',
+  'recent_favorites' => '最近のお気に入り',
+  'no_favorites' => 'まだお気に入りは保存されていません。',
+  'recommendations_title' => 'あなたへのおすすめ',
+  'recommendations_empty' => 'まだおすすめはありません。お気に入りを追加すると提案が改善されます。',
 );
