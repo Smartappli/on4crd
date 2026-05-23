@@ -80,9 +80,21 @@ if (!is_array($moduleCatalog)) {
 
 
 $visibilityLabels = (array) ($legacyStaticMessages['home_visibility'] ?? []);
+$defaultVisibilityLabels = [
+    'public' => 'Public',
+    'members' => 'Membres',
+    'private' => 'Privé',
+];
 $moduleVisibilityLabels = [];
-foreach (array_keys($visibilityLabels['fr']) as $key) {
-    $moduleVisibilityLabels[$key] = i18n_localized_value($visibilityLabels, $homeLocale, $key);
+if (isset($visibilityLabels['fr']) && is_array($visibilityLabels['fr'])) {
+    foreach (array_keys($visibilityLabels['fr']) as $key) {
+        $moduleVisibilityLabels[$key] = i18n_localized_value($visibilityLabels, $homeLocale, $key);
+    }
+}
+foreach ($defaultVisibilityLabels as $key => $label) {
+    if (!isset($moduleVisibilityLabels[$key]) || $moduleVisibilityLabels[$key] === '') {
+        $moduleVisibilityLabels[$key] = $label;
+    }
 }
 $moduleVisibilityByCode = [];
 if (table_exists('modules')) {
