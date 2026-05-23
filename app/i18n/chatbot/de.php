@@ -29,4 +29,10 @@ return array (
   'welcome_title' => 'ON4CRD-Assistent',
   'reuse' => 'Erneut fragen',
   'copy' => 'Kopieren',
+  'sources_used' => 'Verwendete Quellen',
+  'scope' => 'Wissensbereich',
+  'scope_all' => 'Alle Quellen',
+  'scope_knowledge' => 'Wissensbasis',
+  'scope_articles' => 'Artikel',
+  'scope_library' => 'Bibliotheksdokumente',
 );

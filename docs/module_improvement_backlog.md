@@ -17,7 +17,7 @@ Deliver functional upgrades by waves without changing existing business rules.
 - [x] Tools: saved conversion presets + conversion history.
 
 ## Wave 3 (Differentiators)
-- [ ] Chatbot connected to site knowledge sources (RAG).
+- [~] Chatbot connected to site knowledge sources (RAG).
 - [ ] Admin assistant for taxonomy/tagging/i18n QA.
 - [ ] Personalized recommendations by user activity.
 

@@ -4196,9 +4196,10 @@ if (!function_exists('answer_question_from_knowledge')) {
     }
 
     /**
-     * @return array{answer:string,source:string}
+     * @param list<string> $preferredSourceTypes
+     * @return array{answer:string,source:string,sources?:array<int,array{title:string,url:string,type:string}>}
      */
-function answer_question_from_knowledge(string $question): array
+function answer_question_from_knowledge(string $question, array $preferredSourceTypes = []): array
 {
         $locale = current_locale();
         $chatbotI18n = [
@@ -4339,7 +4340,8 @@ function answer_question_from_knowledge(string $question): array
 
                 $rows = [];
                 $variants = rag_query_variants($normalized, $queryTokens);
-                $preferredSourceTypes = rag_infer_source_types($normalized);
+                $inferredSourceTypes = rag_infer_source_types($normalized);
+                $preferredSourceTypes = array_values(array_unique(array_filter(array_merge($inferredSourceTypes, $preferredSourceTypes), static fn($v): bool => is_string($v) && $v !== '')));
                 $planSteps = rag_agentic_plan($normalized, $queryTokens, $variants, $preferredSourceTypes);
                 $planTrace = [];
                 foreach ($planSteps as $step) {
@@ -4392,6 +4394,7 @@ function answer_question_from_knowledge(string $question): array
                 $bestCoverage = 0.0;
                 $secondBestScore = -1.0;
                 $bestVariantUsed = '';
+                $rankedCandidates = [];
                 $queryComplexity = max(1, count($queryTokens));
                 $sourceSeen = [];
                 $qVecMap = [];
@@ -4463,6 +4466,12 @@ function answer_question_from_knowledge(string $question): array
                     }
                     $sourceSeen[$sourceGroupKey] = $seenCount + 1;
                     $score = $sim * 5.2 + $coverage * 2.8 + $lexical * 0.7 + $sourceBoost + $recencyBoost + $phraseBoost - $duplicatePenalty;
+                    $rankedCandidates[] = [
+                        'score' => $score,
+                        'title' => trim((string) ($row['title'] ?? '')),
+                        'url' => trim((string) ($row['url'] ?? '')),
+                        'type' => $sourceType !== '' ? $sourceType : 'source',
+                    ];
                     if ($score > $bestScore) {
                         $secondBestScore = $bestScore;
                         $bestScore = $score;
@@ -4486,6 +4495,23 @@ function answer_question_from_knowledge(string $question): array
                         $best = null;
                     }
                     if ($answerAccepted && is_array($best)) {
+                        usort($rankedCandidates, static fn(array $a, array $b): int => ((float) ($b['score'] ?? 0.0)) <=> ((float) ($a['score'] ?? 0.0)));
+                        $sources = [];
+                        $seen = [];
+                        foreach ($rankedCandidates as $candidate) {
+                            $sourceTitle = trim((string) ($candidate['title'] ?? ''));
+                            $sourceUrl = trim((string) ($candidate['url'] ?? ''));
+                            $sourceType = trim((string) ($candidate['type'] ?? 'source'));
+                            $uniq = $sourceType . '|' . $sourceTitle . '|' . $sourceUrl;
+                            if ($sourceTitle === '' || isset($seen[$uniq])) {
+                                continue;
+                            }
+                            $seen[$uniq] = true;
+                            $sources[] = ['title' => $sourceTitle, 'url' => $sourceUrl, 'type' => $sourceType];
+                            if (count($sources) >= 3) {
+                                break;
+                            }
+                        }
                         $answer = $summary;
                         if ($link !== '') { $answer .= "\n\n" . (string) $chatbotT['link'] . $link; }
                         $sourceType = trim((string) ($best['source_type'] ?? 'source'));
@@ -4508,7 +4534,7 @@ function answer_question_from_knowledge(string $question): array
                                 $source .= ' · plan:' . (string) ($last['hits'] ?? '0') . 'h';
                             }
                         }
-                        return ['answer' => $answer, 'source' => $source];
+                        return ['answer' => $answer, 'source' => $source, 'sources' => $sources];
                     }
                 }
             } catch (Throwable) {

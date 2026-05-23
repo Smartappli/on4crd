@@ -12,6 +12,10 @@ if (!isset($_SESSION['chatbot_history']) || !is_array($_SESSION['chatbot_history
 $question = '';
 $response = null;
 $maxQuestionLength = 800;
+$scope = (string) ($_SESSION['chatbot_scope'] ?? 'all');
+if (!in_array($scope, ['all', 'knowledge', 'article', 'library'], true)) {
+    $scope = 'all';
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -23,6 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $question = trim((string) ($_POST['question'] ?? ''));
+        $scope = (string) ($_POST['scope'] ?? 'all');
+        if (!in_array($scope, ['all', 'knowledge', 'article', 'library'], true)) {
+            $scope = 'all';
+        }
+        $_SESSION['chatbot_scope'] = $scope;
         $question = preg_replace('/\s+/u', ' ', $question) ?? $question;
         if ($question === '') {
             throw new RuntimeException($t('err_question'));
@@ -31,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $question = mb_substr($question, 0, $maxQuestionLength);
         }
 
-        $response = answer_question_from_knowledge($question);
+        $preferredSourceTypes = $scope === 'all' ? [] : [$scope];
+        $response = answer_question_from_knowledge($question, $preferredSourceTypes);
         try {
             if (table_exists('chatbot_logs')) {
                 db()->prepare('INSERT INTO chatbot_logs (member_id, question, answer, source_name) VALUES (?, ?, ?, ?)')->execute([
@@ -48,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'question' => $question,
             'answer' => (string) $response['answer'],
             'source' => (string) $response['source'],
+            'sources' => isset($response['sources']) && is_array($response['sources']) ? $response['sources'] : [],
+            'scope' => $scope,
             'at' => date('Y-m-d H:i:s'),
         ];
 
@@ -104,6 +116,24 @@ ob_start();
                         <p><?= nl2br(e((string) $item['answer'])) ?></p>
                         <button type="button" class="chatbot-message-action" data-copy-target="chatbot-answer-<?= (int) $index ?>"><?= e($t('copy')) ?></button>
                         <span id="chatbot-answer-<?= (int) $index ?>" hidden><?= e((string) $item['answer']) ?></span>
+                        <?php $sources = isset($item['sources']) && is_array($item['sources']) ? $item['sources'] : []; ?>
+                        <?php if ($sources !== []): ?>
+                            <p class="help" style="margin:.35rem 0;"><?= e($t('sources_used')) ?></p>
+                            <ul class="help" style="list-style:none;padding:0;margin:.35rem 0;">
+                                <?php foreach ($sources as $src): ?>
+                                    <?php $srcTitle = trim((string) ($src['title'] ?? '')); if ($srcTitle === '') { continue; } ?>
+                                    <?php $srcUrl = trim((string) ($src['url'] ?? '')); ?>
+                                    <?php $srcType = trim((string) ($src['type'] ?? 'source')); ?>
+                                    <li>
+                                        <?php if ($srcUrl !== ''): ?>
+                                            <a href="<?= e($srcUrl) ?>" target="_blank" rel="noopener"><?= e($srcType) ?> · <?= e($srcTitle) ?></a>
+                                        <?php else: ?>
+                                            <span><?= e($srcType) ?> · <?= e($srcTitle) ?></span>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
                         <p class="help"><?= e($t('source')) ?> <?= e((string) $item['source']) ?> · <?= e((string) $item['at']) ?></p>
                     </article>
                 <?php endforeach; ?>
@@ -113,6 +143,13 @@ ob_start();
         <form method="post" class="chatbot-form" id="chatbot-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="ask">
+            <label for="chatbot-scope"><?= e($t('scope')) ?></label>
+            <select id="chatbot-scope" name="scope">
+                <option value="all" <?= $scope === 'all' ? 'selected' : '' ?>><?= e($t('scope_all')) ?></option>
+                <option value="knowledge" <?= $scope === 'knowledge' ? 'selected' : '' ?>><?= e($t('scope_knowledge')) ?></option>
+                <option value="article" <?= $scope === 'article' ? 'selected' : '' ?>><?= e($t('scope_articles')) ?></option>
+                <option value="library" <?= $scope === 'library' ? 'selected' : '' ?>><?= e($t('scope_library')) ?></option>
+            </select>
             <label for="chatbot-question" class="sr-only"><?= e($t('question_label')) ?></label>
             <textarea id="chatbot-question" name="question" rows="3" maxlength="<?= $maxQuestionLength ?>" placeholder="<?= e($t('placeholder')) ?>" data-wysiwyg="off" required><?= e($question) ?></textarea>
             <div class="chatbot-form-actions">
