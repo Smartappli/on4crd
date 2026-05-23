@@ -1566,6 +1566,16 @@ function apply_runtime_schema_updates(): void
             quote_en TEXT DEFAULT NULL,
             quote_de TEXT DEFAULT NULL,
             quote_nl TEXT DEFAULT NULL,
+            quote_it TEXT DEFAULT NULL,
+            quote_es TEXT DEFAULT NULL,
+            quote_pt TEXT DEFAULT NULL,
+            quote_ar TEXT DEFAULT NULL,
+            quote_hi TEXT DEFAULT NULL,
+            quote_ja TEXT DEFAULT NULL,
+            quote_zh TEXT DEFAULT NULL,
+            quote_bn TEXT DEFAULT NULL,
+            quote_ru TEXT DEFAULT NULL,
+            quote_id TEXT DEFAULT NULL,
             author VARCHAR(190) DEFAULT NULL,
             is_active TINYINT(1) NOT NULL DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1581,7 +1591,7 @@ function apply_runtime_schema_updates(): void
             db()->exec('ALTER TABLE quotes DROP COLUMN quote_text');
         }
 
-        foreach (['quote_fr', 'quote_en', 'quote_de', 'quote_nl'] as $quoteColumn) {
+        foreach (quote_locale_columns() as $quoteColumn) {
             $columnStmt = db()->prepare(
                 'SELECT COUNT(*) FROM information_schema.columns
                  WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
@@ -1732,6 +1742,33 @@ function articles_sync_scheduled_publications(): void
 }
 }
 
+function quote_locale_columns(): array
+{
+    return array_map(static fn(string $locale): string => 'quote_' . $locale, supported_locales());
+}
+
+function native_quote_fallback_for_locale(string $locale): array
+{
+    $quotes = [
+        'fr' => ['quote' => 'Chaque contact radio est une passerelle ouverte vers une autre voix.', 'author' => 'ON4CRD'],
+        'en' => ['quote' => 'Every radio contact opens a path to another voice.', 'author' => 'ON4CRD'],
+        'de' => ['quote' => 'Jeder Funkkontakt öffnet einen Weg zu einer anderen Stimme.', 'author' => 'ON4CRD'],
+        'nl' => ['quote' => 'Elk radiocontact opent een pad naar een andere stem.', 'author' => 'ON4CRD'],
+        'it' => ['quote' => 'Ogni contatto radio apre un ponte verso un’altra voce.', 'author' => 'ON4CRD'],
+        'es' => ['quote' => 'Cada contacto de radio abre un puente hacia otra voz.', 'author' => 'ON4CRD'],
+        'pt' => ['quote' => 'Cada contacto de rádio abre uma ponte para outra voz.', 'author' => 'ON4CRD'],
+        'ar' => ['quote' => 'كل اتصال لاسلكي يفتح جسراً نحو صوت آخر.', 'author' => 'ON4CRD'],
+        'hi' => ['quote' => 'हर रेडियो संपर्क किसी दूसरी आवाज़ तक एक पुल खोलता है।', 'author' => 'ON4CRD'],
+        'ja' => ['quote' => 'ひとつの無線交信が、別の声へ続く橋を開く。', 'author' => 'ON4CRD'],
+        'zh' => ['quote' => '每一次无线电通联，都是通向另一种声音的桥梁。', 'author' => 'ON4CRD'],
+        'bn' => ['quote' => 'প্রতিটি রেডিও যোগাযোগ আরেকটি কণ্ঠের দিকে একটি সেতু খুলে দেয়।', 'author' => 'ON4CRD'],
+        'ru' => ['quote' => 'Каждая радиосвязь открывает мост к другому голосу.', 'author' => 'ON4CRD'],
+        'id' => ['quote' => 'Setiap kontak radio membuka jembatan menuju suara lain.', 'author' => 'ON4CRD'],
+    ];
+
+    return $quotes[$locale] ?? $quotes['fr'];
+}
+
 function seed_quotes_from_sql_file(string $filePath): void
 {
     if (!is_file($filePath)) {
@@ -1816,14 +1853,18 @@ function random_quote_for_layout(): ?array
 
         $daySeed = date('Y-m-d');
         $offset = (int) (sprintf('%u', crc32($daySeed)) % $activeCount);
-        $quoteColumns = ['quote_fr', 'quote_en', 'quote_de', 'quote_nl', 'author'];
+        $quoteColumns = array_merge(quote_locale_columns(), ['author']);
         foreach ($quoteColumns as $quoteColumn) {
             if (!table_has_column('quotes', $quoteColumn)) {
-                return null;
+                if ($quoteColumn === 'author') {
+                    return null;
+                }
+                continue;
             }
         }
 
-        $stmt = db()->query('SELECT quote_fr, quote_en, quote_de, quote_nl, author FROM quotes' . $whereActive . ' LIMIT 1 OFFSET ' . $offset);
+        $selectColumns = array_filter($quoteColumns, static fn(string $quoteColumn): bool => table_has_column('quotes', $quoteColumn));
+        $stmt = db()->query('SELECT ' . implode(', ', $selectColumns) . ' FROM quotes' . $whereActive . ' LIMIT 1 OFFSET ' . $offset);
         if ($stmt === false) {
             return null;
         }
@@ -1836,17 +1877,19 @@ function random_quote_for_layout(): ?array
     }
 
     $locale = current_locale();
-    $localizedQuotes = [
-        'fr' => trim((string) ($row['quote_fr'] ?? '')),
-        'en' => trim((string) ($row['quote_en'] ?? '')),
-        'de' => trim((string) ($row['quote_de'] ?? '')),
-        'nl' => trim((string) ($row['quote_nl'] ?? '')),
-    ];
+    $localizedQuotes = [];
+    foreach (supported_locales() as $supportedLocale) {
+        $localizedQuotes[$supportedLocale] = trim((string) ($row['quote_' . $supportedLocale] ?? ''));
+    }
     $quote = $localizedQuotes[$locale] ?? '';
     if ($quote === '') {
-        $quote = $localizedQuotes['fr'];
+        $nativeFallback = native_quote_fallback_for_locale($locale);
+        $quote = (string) $nativeFallback['quote'];
     }
     $author = trim((string) ($row['author'] ?? ''));
+    if ($author === '' && isset($nativeFallback)) {
+        $author = (string) $nativeFallback['author'];
+    }
     if ($quote === '') {
         return null;
     }
