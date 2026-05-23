@@ -132,6 +132,68 @@ function article_unique_slug(string $slug, int $ignoreId = 0): string
     }
 }
 
+/**
+ * @param array<string,mixed> $article
+ * @return list<string>
+ */
+function editorial_blocked_reasons(array $article): array
+{
+    $reasons = [];
+    $title = trim((string) ($article['title'] ?? ''));
+    $content = trim(strip_tags((string) ($article['content'] ?? '')));
+    $status = (string) ($article['status'] ?? 'draft');
+    $scheduledAt = trim((string) ($article['scheduled_at'] ?? ''));
+
+    if ($title === '') {
+        $reasons[] = 'missing_title';
+    }
+    if ($content === '') {
+        $reasons[] = 'missing_content';
+    }
+    if ($status === 'scheduled') {
+        if ($scheduledAt === '') {
+            $reasons[] = 'missing_schedule_date';
+        } else {
+            $ts = strtotime($scheduledAt);
+            if ($ts === false) {
+                $reasons[] = 'invalid_schedule_date';
+            } elseif ($ts <= time()) {
+                $reasons[] = 'stuck_in_past_schedule';
+            }
+        }
+    }
+
+    return $reasons;
+}
+
+function editorial_retry_scheduled_article(int $id): string
+{
+    if ($id <= 0) {
+        return 'invalid';
+    }
+    $stmt = db()->prepare('SELECT id, title, content, status, scheduled_at, published_at FROM articles WHERE id = ? LIMIT 1');
+    $stmt->execute([$id]);
+    $article = $stmt->fetch() ?: null;
+    if (!is_array($article)) {
+        return 'missing';
+    }
+    $reasons = editorial_blocked_reasons($article);
+    if (in_array('missing_title', $reasons, true) || in_array('missing_content', $reasons, true)) {
+        return 'blocked_missing_fields';
+    }
+    if (in_array('stuck_in_past_schedule', $reasons, true)) {
+        db()->prepare('UPDATE articles SET status = "published", published_at = COALESCE(published_at, NOW()), updated_at = NOW() WHERE id = ?')->execute([$id]);
+        return 'published';
+    }
+    if (in_array('missing_schedule_date', $reasons, true) || in_array('invalid_schedule_date', $reasons, true)) {
+        db()->prepare('UPDATE articles SET status = "scheduled", scheduled_at = ?, updated_at = NOW() WHERE id = ?')
+            ->execute([date('Y-m-d H:i:s', time() + 3600), $id]);
+        return 'rescheduled';
+    }
+    articles_sync_scheduled_publications();
+    return 'retried';
+}
+
 $defaultCategories = [
     'antennes' => $t('cat_antennes'),
     'trafic' => $t('cat_trafic'),
@@ -342,6 +404,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('UPDATE articles SET category = "autres" WHERE category = ?')->execute([$code]);
             set_flash('success', $t('ok_category_deleted'));
             redirect('admin_articles');
+        } elseif ($action === 'retry_scheduled_article') {
+            $id = (int) ($_POST['id'] ?? 0);
+            $result = editorial_retry_scheduled_article($id);
+            if ($result === 'blocked_missing_fields') {
+                throw new RuntimeException('Retry blocked: complete title/content first.');
+            }
+            if ($result === 'invalid' || $result === 'missing') {
+                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+            }
+            set_flash('success', 'Retry applied.');
+            redirect('admin_articles');
+        } elseif ($action === 'retry_scheduled_bulk') {
+            $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
+            if ($ids === []) {
+                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+            }
+            $counts = ['published' => 0, 'rescheduled' => 0, 'retried' => 0, 'blocked_missing_fields' => 0, 'missing' => 0, 'invalid' => 0];
+            foreach ($ids as $id) {
+                $result = editorial_retry_scheduled_article($id);
+                $counts[$result] = ($counts[$result] ?? 0) + 1;
+            }
+            $message = 'Bulk retry: '
+                . $counts['published'] . ' published, '
+                . $counts['rescheduled'] . ' rescheduled, '
+                . $counts['retried'] . ' retried, '
+                . $counts['blocked_missing_fields'] . ' blocked.';
+            set_flash('success', $message);
+            redirect('admin_articles');
         }
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -400,6 +490,7 @@ if ($editingId > 0 && table_exists('article_revisions')) {
     $revisionStmt->execute([$editingId]);
     $revisions = $revisionStmt->fetchAll() ?: [];
 }
+$scheduledQueue = db()->query('SELECT id, title, slug, status, scheduled_at, updated_at, content FROM articles WHERE status = "scheduled" ORDER BY scheduled_at ASC, updated_at DESC LIMIT 50')->fetchAll() ?: [];
 
 ob_start();
 ?>
@@ -480,6 +571,55 @@ ob_start();
                 <p class="help"><?= e($t((string) ($previewPayload['status'] ?? 'draft'), (string) ($previewPayload['status'] ?? 'draft'))) ?><?php if (!empty($previewPayload['scheduled_at'])): ?> · <?= e(date('d/m/Y H:i', strtotime((string) $previewPayload['scheduled_at']))) ?><?php endif; ?></p>
                 <div><?= sanitize_rich_html((string) ($previewPayload['content'] ?? '')) ?></div>
             </article>
+        <?php endif; ?>
+    </section>
+    <section class="card">
+        <h2><?= e($t('editorial_queue', 'Editorial queue')) ?></h2>
+        <p class="help"><?= e($t('editorial_queue_help', 'Scheduled board with blocking reasons and one-click retry.')) ?></p>
+        <?php if ($scheduledQueue === []): ?>
+            <p class="help"><?= e($t('editorial_queue_empty', 'No scheduled articles in queue.')) ?></p>
+        <?php else: ?>
+            <form method="post" style="margin:0 0 .8rem 0;">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="retry_scheduled_bulk">
+                <button class="button secondary small" type="submit"><?= e($t('retry_bulk', 'Retry selected')) ?></button>
+            <div class="stack">
+                <?php foreach ($scheduledQueue as $queueItem): ?>
+                    <?php $blockedReasons = editorial_blocked_reasons((array) $queueItem); ?>
+                    <article class="article-item">
+                        <div class="row-between" style="gap:.8rem;align-items:flex-start;">
+                            <div>
+                                <p style="margin:0 0 .25rem 0;">
+                                    <label style="display:inline-flex;align-items:center;gap:.35rem;">
+                                        <input type="checkbox" name="ids[]" value="<?= (int) $queueItem['id'] ?>">
+                                        <span class="help">#<?= (int) $queueItem['id'] ?></span>
+                                    </label>
+                                </p>
+                                <h3 style="margin:.1rem 0;"><?= e((string) (($queueItem['title'] ?? '') !== '' ? $queueItem['title'] : ('#' . (int) $queueItem['id']))) ?></h3>
+                                <p class="help" style="margin:0;">
+                                    <?= e($t('scheduled_at', 'Date de publication')) ?>:
+                                    <?= e((string) (($queueItem['scheduled_at'] ?? '') !== '' ? date('d/m/Y H:i', strtotime((string) $queueItem['scheduled_at'])) : 'n/a')) ?>
+                                </p>
+                                <?php if ($blockedReasons !== []): ?>
+                                    <p class="help" style="margin:.3rem 0 0 0;color:#b54708;">
+                                        Blocked: <?= e(implode(', ', $blockedReasons)) ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                            <div class="actions">
+                                <a class="button small secondary" href="<?= e(route_url('admin_articles', ['id' => (int) $queueItem['id']])) ?>"><?= e($t('edit')) ?></a>
+                                <form method="post">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="retry_scheduled_article">
+                                    <input type="hidden" name="id" value="<?= (int) $queueItem['id'] ?>">
+                                    <button class="button small" type="submit"><?= e($t('retry', 'Retry')) ?></button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+            </form>
         <?php endif; ?>
     </section>
     <section class="card">

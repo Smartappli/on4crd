@@ -13,6 +13,49 @@ function library_category_slug(string $value): string
     return $slug !== '' ? $slug : 'general';
 }
 
+function library_tag_norm(string $value): string
+{
+    $tag = trim($value);
+    if ($tag === '') {
+        return '';
+    }
+    $tag = mb_strtolower($tag, 'UTF-8');
+    $tag = preg_replace('/\s+/u', ' ', $tag) ?? $tag;
+    return trim($tag);
+}
+
+function library_tag_split(string $value): array
+{
+    $parts = explode(',', $value);
+    $out = [];
+    foreach ($parts as $part) {
+        $tag = trim($part);
+        if ($tag !== '') {
+            $out[] = $tag;
+        }
+    }
+    return $out;
+}
+
+function library_tag_unique(array $tags): array
+{
+    $seen = [];
+    $out = [];
+    foreach ($tags as $tag) {
+        $clean = trim((string) $tag);
+        if ($clean === '') {
+            continue;
+        }
+        $key = mb_strtolower($clean, 'UTF-8');
+        if (isset($seen[$key])) {
+            continue;
+        }
+        $seen[$key] = true;
+        $out[] = $clean;
+    }
+    return $out;
+}
+
 function ensure_member_library_categories_table(): void
 {
     db()->exec('CREATE TABLE IF NOT EXISTS member_library_categories (
@@ -175,6 +218,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_flash('success', (string) $t['ok_deleted']);
             redirect('admin_library');
         }
+        if ($action === 'merge_tags') {
+            $fromTag = trim((string) ($_POST['from_tag'] ?? ''));
+            $toTag = trim((string) ($_POST['to_tag'] ?? ''));
+            if ($fromTag === '' || $toTag === '') {
+                throw new RuntimeException('err_required');
+            }
+
+            $fromNorm = library_tag_norm($fromTag);
+            $toNorm = library_tag_norm($toTag);
+            if ($fromNorm === '' || $toNorm === '') {
+                throw new RuntimeException('err_required');
+            }
+
+            $rows = db()->query('SELECT id, tags FROM member_library_documents WHERE tags IS NOT NULL AND tags <> ""')->fetchAll() ?: [];
+            $updated = 0;
+            $updateStmt = db()->prepare('UPDATE member_library_documents SET tags = ? WHERE id = ?');
+            foreach ($rows as $row) {
+                $docId = (int) ($row['id'] ?? 0);
+                if ($docId <= 0) {
+                    continue;
+                }
+                $tags = library_tag_split((string) ($row['tags'] ?? ''));
+                if ($tags === []) {
+                    continue;
+                }
+                $changed = false;
+                foreach ($tags as $idx => $tag) {
+                    if (library_tag_norm($tag) === $fromNorm) {
+                        $tags[$idx] = $toTag;
+                        $changed = true;
+                    }
+                }
+                if (!$changed) {
+                    continue;
+                }
+                $tags = library_tag_unique($tags);
+                $updateStmt->execute([implode(',', $tags), $docId]);
+                $updated++;
+            }
+
+            set_flash('success', 'Tags merged on ' . $updated . ' document(s).');
+            redirect('admin_library');
+        }
 
         $category = library_category_slug((string) ($_POST['category'] ?? 'general'));
         $title = trim((string) ($_POST['title'] ?? ''));
@@ -236,6 +322,31 @@ $stmt = db()->prepare('SELECT id, category, tags, title, description, file_path,
 $stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
 
+$tagRows = db()->query('SELECT tags FROM member_library_documents WHERE tags IS NOT NULL AND tags <> ""')->fetchAll() ?: [];
+$tagDuplicates = [];
+foreach ($tagRows as $row) {
+    $tags = library_tag_split((string) ($row['tags'] ?? ''));
+    foreach ($tags as $tag) {
+        $norm = library_tag_norm($tag);
+        if ($norm === '') {
+            continue;
+        }
+        if (!isset($tagDuplicates[$norm])) {
+            $tagDuplicates[$norm] = [];
+        }
+        $tagDuplicates[$norm][$tag] = ($tagDuplicates[$norm][$tag] ?? 0) + 1;
+    }
+}
+foreach ($tagDuplicates as $norm => $variants) {
+    if (count($variants) < 2) {
+        unset($tagDuplicates[$norm]);
+        continue;
+    }
+    arsort($variants);
+    $tagDuplicates[$norm] = $variants;
+}
+ksort($tagDuplicates);
+
 ob_start();
 ?>
 <div class="card admin-library-shell">
@@ -282,6 +393,33 @@ ob_start();
                 </form>
             <?php endforeach; ?>
         </div>
+    </section>
+
+    <section class="card admin-library-categories">
+        <h2>Tag cleanup</h2>
+        <p class="help">Normalize duplicated tag variants before moderation/export workflows.</p>
+        <form method="post" class="inline-form" style="flex-wrap:wrap;gap:.6rem;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="merge_tags">
+            <input type="text" name="from_tag" placeholder="From tag variant" required>
+            <input type="text" name="to_tag" placeholder="To canonical tag" required>
+            <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
+        </form>
+        <?php if ($tagDuplicates === []): ?>
+            <p class="help" style="margin-top:.75rem;">No duplicate tag variants detected.</p>
+        <?php else: ?>
+            <div class="admin-library-category-list" style="margin-top:.75rem;">
+                <?php foreach ($tagDuplicates as $normalized => $variants): ?>
+                    <article class="card" style="margin:0;">
+                        <strong><?= e($normalized) ?></strong>
+                        <p class="help" style="margin:.35rem 0 0 0;">
+                            <?php $chunks = []; foreach ($variants as $variant => $count) { $chunks[] = $variant . ' (' . $count . ')'; } ?>
+                            <?= e(implode(' | ', $chunks)) ?>
+                        </p>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </section>
 
     <section class="admin-library-documents">

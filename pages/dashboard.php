@@ -20,10 +20,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
     set_flash('success', $t('recommendations_pref_saved'));
     redirect_url(route_url('dashboard'));
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_recommendation_signals') {
+    verify_csrf();
+    $signalKeys = ['article', 'wiki', 'classified', 'album', 'library'];
+    foreach ($signalKeys as $signal) {
+        $enabled = isset($_POST['signals'][$signal]) && (string) $_POST['signals'][$signal] === '1';
+        set_member_preference_bool($userId, 'recommendations_signal_' . $signal . '_enabled', $enabled);
+    }
+    set_flash('success', $t('recommendations_pref_saved'));
+    redirect_url(route_url('dashboard'));
+}
 $unreadNotifications = member_notifications_unread_count($userId);
 $recentNotifications = member_notifications_recent($userId, 6);
 $recentFavorites = member_favorites_recent($userId, 6);
 $recommendationsEnabled = member_preference_bool($userId, 'personalized_recommendations_enabled', true);
+$recommendationSignals = [
+    'article' => member_preference_bool($userId, 'recommendations_signal_article_enabled', true),
+    'wiki' => member_preference_bool($userId, 'recommendations_signal_wiki_enabled', true),
+    'classified' => member_preference_bool($userId, 'recommendations_signal_classified_enabled', true),
+    'album' => member_preference_bool($userId, 'recommendations_signal_album_enabled', true),
+    'library' => member_preference_bool($userId, 'recommendations_signal_library_enabled', true),
+];
 $recommendations = $recommendationsEnabled ? member_personalized_recommendations($userId, 6) : [];
 $dashboardPersistenceEnabled = table_exists('dashboard_widgets');
 $selected = [];
@@ -160,6 +177,16 @@ ob_start();
       <button class="button secondary small" type="submit"><?= e($t('save_layout')) ?></button>
     </form>
     <p class="help"><?= e($t('recommendations_opt_in_help')) ?></p>
+    <form method="post" class="inline-form" style="margin:.25rem 0 1rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;">
+      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="action" value="toggle_recommendation_signals">
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[article]" value="1" <?= $recommendationSignals['article'] ? 'checked' : '' ?>> <span>Articles</span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[wiki]" value="1" <?= $recommendationSignals['wiki'] ? 'checked' : '' ?>> <span>Wiki</span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[classified]" value="1" <?= $recommendationSignals['classified'] ? 'checked' : '' ?>> <span>Classifieds</span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[album]" value="1" <?= $recommendationSignals['album'] ? 'checked' : '' ?>> <span>Albums</span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[library]" value="1" <?= $recommendationSignals['library'] ? 'checked' : '' ?>> <span>Library</span></label>
+      <button class="button secondary small" type="submit"><?= e($t('save_layout')) ?></button>
+    </form>
     <?php if ($recommendations === []): ?>
       <p class="help"><?= e($t('recommendations_empty')) ?></p>
     <?php else: ?>
