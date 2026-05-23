@@ -29,4 +29,10 @@ return array (
   'welcome_title' => '????????? ON4CRD',
   'reuse' => '???????? ?????',
   'copy' => '??????????',
+  'sources_used' => 'Использованные источники',
+  'scope' => 'Область источников',
+  'scope_all' => 'Все источники',
+  'scope_knowledge' => 'База знаний',
+  'scope_articles' => 'Статьи',
+  'scope_library' => 'Библиотека',
 );

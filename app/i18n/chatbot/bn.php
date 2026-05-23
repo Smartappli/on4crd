@@ -29,4 +29,10 @@ return array (
   'welcome_title' => 'ON4CRD ??????',
   'reuse' => '???? ????????',
   'copy' => '???',
+  'sources_used' => 'ব্যবহৃত উৎস',
+  'scope' => 'উৎসের পরিধি',
+  'scope_all' => 'সব উৎস',
+  'scope_knowledge' => 'জ্ঞানভান্ডার',
+  'scope_articles' => 'নিবন্ধ',
+  'scope_library' => 'লাইব্রেরি',
 );

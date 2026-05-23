@@ -29,4 +29,10 @@ return array (
   'welcome_title' => 'ON4CRD??????',
   'reuse' => '??????',
   'copy' => '???',
+  'sources_used' => '使用ソース',
+  'scope' => 'ソース範囲',
+  'scope_all' => 'すべてのソース',
+  'scope_knowledge' => 'ナレッジベース',
+  'scope_articles' => '記事',
+  'scope_library' => 'ライブラリ',
 );

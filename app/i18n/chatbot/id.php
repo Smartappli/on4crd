@@ -29,4 +29,10 @@ return array (
   'welcome_title' => 'Asisten ON4CRD',
   'reuse' => 'Tanya lagi',
   'copy' => 'Salin',
+  'sources_used' => 'Sumber yang digunakan',
+  'scope' => 'Cakupan sumber',
+  'scope_all' => 'Semua sumber',
+  'scope_knowledge' => 'Basis pengetahuan',
+  'scope_articles' => 'Artikel',
+  'scope_library' => 'Perpustakaan',
 );

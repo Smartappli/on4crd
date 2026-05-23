@@ -29,4 +29,10 @@ return array (
   'welcome_title' => 'ON4CRD ??',
   'reuse' => '????',
   'copy' => '??',
+  'sources_used' => '已用来源',
+  'scope' => '来源范围',
+  'scope_all' => '全部来源',
+  'scope_knowledge' => '知识库',
+  'scope_articles' => '文章',
+  'scope_library' => '资料库',
 );
