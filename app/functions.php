@@ -148,6 +148,13 @@ function supported_locales_map(): array
 }
 }
 
+if (!function_exists('is_rtl_locale')) {
+function is_rtl_locale(string $locale): bool
+{
+    return in_array(strtolower(trim($locale)), ['ar'], true);
+}
+}
+
 if (!function_exists('locale_fallback_chain')) {
 function locale_fallback_chain(?string $locale = null): array
 {
@@ -2523,168 +2530,10 @@ function render_layout(string $content, string $title = ''): string
         $currentTheme = 'light';
     }
     $currentLocale = strtolower((string) ($_SESSION['locale'] ?? 'fr'));
-    if (!in_array($currentLocale, ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
+    if (!in_array($currentLocale, supported_locales(), true)) {
         $currentLocale = 'fr';
     }
-    $layoutMessages = [
-        'fr' => [
-            'nav_home' => 'Accueil', 'nav_news' => 'Actualités', 'nav_shop' => 'Petites annonces', 'nav_events' => 'Événements', 'nav_tools' => 'Outils', 'nav_directory' => 'Annuaire',
-            'nav_dashboard' => 'Tableau de bord', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Articles', 'nav_library' => 'Bibliothèque', 'nav_auctions' => 'Enchères',
-            'account_space' => 'Mon espace', 'account_profile' => 'Profil', 'account_settings' => 'Paramètres', 'account_admin' => 'Administration', 'logout' => 'Déconnexion', 'login' => 'Connexion',
-            'theme_light' => 'Clair', 'theme_dark' => 'Sombre',
-            'accent_blue' => 'Bleu', 'accent_emerald' => 'Émeraude', 'accent_violet' => 'Violet', 'accent_red' => 'Rouge', 'accent_amber' => 'Ambre', 'accent_orange' => 'Orange',
-            'language_choice' => 'Choix de la langue', 'language_help' => 'Sélecteur de langue du site. Le changement est appliqué automatiquement.',
-            'theme_choice' => 'Choix du mode clair ou sombre', 'theme_help' => 'Sélecteur de thème. Le changement est appliqué automatiquement.',
-            'accent_choice' => 'Choix de la couleur', 'accent_help' => 'Sélecteur de couleur d’accent. Le changement est appliqué automatiquement.',
-            'install_app' => 'Installer l’app', 'skip_to_content' => 'Aller au contenu', 'close_menu' => 'Fermer le menu', 'main_navigation' => 'Navigation principale', 'search_label' => 'Recherche globale', 'search_placeholder' => 'Rechercher…', 'search_submit' => 'Rechercher',
-        ],
-        'en' => [
-            'nav_home' => 'Home', 'nav_news' => 'News', 'nav_shop' => 'Classifieds', 'nav_events' => 'Events', 'nav_tools' => 'Tools', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Gallery', 'nav_articles' => 'Articles', 'nav_library' => 'Library', 'nav_auctions' => 'Auctions',
-            'account_space' => 'My account', 'account_profile' => 'Profile', 'account_settings' => 'Settings', 'account_admin' => 'Administration', 'logout' => 'Log out', 'login' => 'Log in',
-            'theme_light' => 'Light', 'theme_dark' => 'Dark',
-            'accent_blue' => 'Blue', 'accent_emerald' => 'Emerald', 'accent_violet' => 'Violet', 'accent_red' => 'Red', 'accent_amber' => 'Amber', 'accent_orange' => 'Orange',
-            'language_choice' => 'Language selection', 'language_help' => 'Site language selector. Changes are applied automatically.',
-            'theme_choice' => 'Light or dark mode selection', 'theme_help' => 'Theme selector. Changes are applied automatically.',
-            'accent_choice' => 'Accent color selection', 'accent_help' => 'Accent color selector. Changes are applied automatically.',
-            'install_app' => 'Install app', 'skip_to_content' => 'Skip to content', 'close_menu' => 'Close menu', 'main_navigation' => 'Main navigation', 'search_label' => 'Global search', 'search_placeholder' => 'Search…', 'search_submit' => 'Search',
-        ],
-        'de' => [
-            'nav_home' => 'Startseite', 'nav_news' => 'Neuigkeiten', 'nav_shop' => 'Classifieds', 'nav_events' => 'Veranstaltungen', 'nav_tools' => 'Werkzeuge', 'nav_directory' => 'Verzeichnis',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerie', 'nav_articles' => 'Artikel', 'nav_library' => 'Bibliothek', 'nav_auctions' => 'Auktionen',
-            'account_space' => 'Mein Bereich', 'account_profile' => 'Profil', 'account_settings' => 'Einstellungen', 'account_admin' => 'Verwaltung', 'logout' => 'Abmelden', 'login' => 'Anmelden',
-            'theme_light' => 'Hell', 'theme_dark' => 'Dunkel',
-            'accent_blue' => 'Blau', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violett', 'accent_red' => 'Rot', 'accent_amber' => 'Bernstein', 'accent_orange' => 'Orange',
-            'language_choice' => 'Sprachauswahl', 'language_help' => 'Sprachauswahl der Website. Änderungen werden automatisch angewendet.',
-            'theme_choice' => 'Hell- oder Dunkelmodus auswählen', 'theme_help' => 'Designauswahl. Änderungen werden automatisch angewendet.',
-            'accent_choice' => 'Akzentfarbe auswählen', 'accent_help' => 'Akzentfarbauswahl. Änderungen werden automatisch angewendet.',
-            'install_app' => 'App installieren', 'skip_to_content' => 'Zum Inhalt springen', 'close_menu' => 'Menü schließen', 'main_navigation' => 'Hauptnavigation', 'search_label' => 'Globale Suche', 'search_placeholder' => 'Suchen…', 'search_submit' => 'Suchen',
-        ],
-        'nl' => [
-            'nav_home' => 'Startpagina', 'nav_news' => 'Nieuws', 'nav_shop' => 'Kleine advertenties', 'nav_events' => 'Evenementen', 'nav_tools' => 'Gereedschap', 'nav_directory' => 'Gids',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galerij', 'nav_articles' => 'Artikelen', 'nav_library' => 'Bibliotheek', 'nav_auctions' => 'Veilingen',
-            'account_space' => 'Mijn account', 'account_profile' => 'Profiel', 'account_settings' => 'Instellingen', 'account_admin' => 'Beheer', 'logout' => 'Afmelden', 'login' => 'Inloggen',
-            'theme_light' => 'Licht', 'theme_dark' => 'Donker',
-            'accent_blue' => 'Blauw', 'accent_emerald' => 'Smaragd', 'accent_violet' => 'Violet', 'accent_red' => 'Rood', 'accent_amber' => 'Amber', 'accent_orange' => 'Oranje',
-            'language_choice' => 'Taalselectie', 'language_help' => 'Taalkiezer van de site. Wijzigingen worden automatisch toegepast.',
-            'theme_choice' => 'Lichte of donkere modus kiezen', 'theme_help' => 'Themaselector. Wijzigingen worden automatisch toegepast.',
-            'accent_choice' => 'Accentkleur kiezen', 'accent_help' => 'Accentkleurselector. Wijzigingen worden automatisch toegepast.',
-            'install_app' => 'App installeren', 'skip_to_content' => 'Naar inhoud springen', 'close_menu' => 'Menu sluiten', 'main_navigation' => 'Hoofdnavigatie', 'search_label' => 'Zoeken op de site', 'search_placeholder' => 'Zoeken…', 'search_submit' => 'Zoeken',
-        ],
-        'es' => [
-            'nav_home' => 'Inicio', 'nav_news' => 'Noticias', 'nav_shop' => 'Tienda', 'nav_events' => 'Eventos', 'nav_tools' => 'Herramientas', 'nav_directory' => 'Directorio',
-            'nav_dashboard' => 'Panel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galería', 'nav_articles' => 'Artículos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Subastas',
-            'account_space' => 'Mi espacio', 'account_profile' => 'Perfil', 'account_settings' => 'Ajustes', 'account_admin' => 'Administración', 'logout' => 'Cerrar sesión', 'login' => 'Iniciar sesión',
-            'theme_light' => 'Claro', 'theme_dark' => 'Oscuro',
-            'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Rojo', 'accent_amber' => 'Ámbar', 'accent_orange' => 'Naranja',
-            'language_choice' => 'Selección de idioma', 'language_help' => 'Selector de idioma del sitio. Los cambios se aplican automáticamente.',
-            'theme_choice' => 'Selección de modo claro u oscuro', 'theme_help' => 'Selector de tema. Los cambios se aplican automáticamente.',
-            'accent_choice' => 'Selección de color', 'accent_help' => 'Selector de color de acento. Los cambios se aplican automáticamente.',
-            'install_app' => 'Instalar app', 'skip_to_content' => 'Saltar al contenido', 'close_menu' => 'Cerrar menú', 'main_navigation' => 'Navegación principal', 'search_label' => 'Búsqueda global', 'search_placeholder' => 'Buscar…', 'search_submit' => 'Buscar',
-        ],
-        'it' => [
-            'nav_home' => 'Home', 'nav_news' => 'Notizie', 'nav_shop' => 'Negozio', 'nav_events' => 'Eventi', 'nav_tools' => 'Strumenti', 'nav_directory' => 'Directory',
-            'nav_dashboard' => 'Dashboard', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galleria', 'nav_articles' => 'Articoli', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Aste',
-            'account_space' => 'Il mio spazio', 'account_profile' => 'Profilo', 'account_settings' => 'Impostazioni', 'account_admin' => 'Amministrazione', 'logout' => 'Disconnetti', 'login' => 'Accedi',
-            'theme_light' => 'Chiaro', 'theme_dark' => 'Scuro',
-            'accent_blue' => 'Blu', 'accent_emerald' => 'Smeraldo', 'accent_violet' => 'Viola', 'accent_red' => 'Rosso', 'accent_amber' => 'Ambra', 'accent_orange' => 'Arancione',
-            'language_choice' => 'Selezione lingua', 'language_help' => 'Selettore lingua del sito. Le modifiche sono applicate automaticamente.',
-            'theme_choice' => 'Selezione modalità chiara o scura', 'theme_help' => 'Selettore tema. Le modifiche sono applicate automaticamente.',
-            'accent_choice' => 'Selezione colore', 'accent_help' => 'Selettore colore di accento. Le modifiche sono applicate automaticamente.',
-            'install_app' => 'Installa app', 'skip_to_content' => 'Vai al contenuto', 'close_menu' => 'Chiudi menu', 'main_navigation' => 'Navigazione principale', 'search_label' => 'Ricerca globale', 'search_placeholder' => 'Cerca…', 'search_submit' => 'Cerca',
-        ],
-        'pt' => [
-            'nav_home' => 'Início', 'nav_news' => 'Notícias', 'nav_shop' => 'Loja', 'nav_events' => 'Eventos', 'nav_tools' => 'Ferramentas', 'nav_directory' => 'Diretório',
-            'nav_dashboard' => 'Painel', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeria', 'nav_articles' => 'Artigos', 'nav_library' => 'Biblioteca', 'nav_auctions' => 'Leilões',
-            'account_space' => 'O meu espaço', 'account_profile' => 'Perfil', 'account_settings' => 'Definições', 'account_admin' => 'Administração', 'logout' => 'Terminar sessão', 'login' => 'Iniciar sessão',
-            'theme_light' => 'Claro', 'theme_dark' => 'Escuro',
-            'accent_blue' => 'Azul', 'accent_emerald' => 'Esmeralda', 'accent_violet' => 'Violeta', 'accent_red' => 'Vermelho', 'accent_amber' => 'Âmbar', 'accent_orange' => 'Laranja',
-            'language_choice' => 'Seleção de idioma', 'language_help' => 'Seletor de idioma do site. As alterações são aplicadas automaticamente.',
-            'theme_choice' => 'Seleção de modo claro ou escuro', 'theme_help' => 'Seletor de tema. As alterações são aplicadas automaticamente.',
-            'accent_choice' => 'Seleção de cor', 'accent_help' => 'Seletor de cor de destaque. As alterações são aplicadas automaticamente.',
-            'install_app' => 'Instalar app', 'skip_to_content' => 'Saltar para o conteúdo', 'close_menu' => 'Fechar menu', 'main_navigation' => 'Navegação principal', 'search_label' => 'Pesquisa global', 'search_placeholder' => 'Pesquisar…', 'search_submit' => 'Pesquisar',
-        ],
-
-        'ar' => [
-            'nav_home' => 'الرئيسية', 'nav_news' => 'الأخبار', 'nav_shop' => 'إعلانات مبوبة', 'nav_events' => 'الفعاليات', 'nav_tools' => 'الأدوات', 'nav_directory' => 'الدليل',
-            'nav_dashboard' => 'لوحة التحكم', 'nav_wiki' => 'ويكي', 'nav_gallery' => 'المعرض', 'nav_articles' => 'مقالات', 'nav_library' => 'المكتبة', 'nav_auctions' => 'المزادات',
-            'account_space' => 'حسابي', 'account_profile' => 'الملف الشخصي', 'account_settings' => 'الإعدادات', 'account_admin' => 'الإدارة', 'logout' => 'تسجيل الخروج', 'login' => 'تسجيل الدخول',
-            'theme_light' => 'فاتح', 'theme_dark' => 'داكن',
-            'accent_blue' => 'أزرق', 'accent_emerald' => 'زمردي', 'accent_violet' => 'بنفسجي', 'accent_red' => 'أحمر', 'accent_amber' => 'كهرماني', 'accent_orange' => 'برتقالي',
-            'language_choice' => 'اختيار اللغة', 'language_help' => 'محدد لغة الموقع. يتم تطبيق التغييرات تلقائيًا.',
-            'theme_choice' => 'اختيار الوضع الفاتح أو الداكن', 'theme_help' => 'محدد النمط. يتم تطبيق التغييرات تلقائيًا.',
-            'accent_choice' => 'اختيار لون التمييز', 'accent_help' => 'محدد لون التمييز. يتم تطبيق التغييرات تلقائيًا.',
-            'install_app' => 'تثبيت التطبيق', 'skip_to_content' => 'تخطي إلى المحتوى', 'close_menu' => 'إغلاق القائمة', 'main_navigation' => 'التنقل الرئيسي', 'search_label' => 'بحث عام', 'search_placeholder' => 'بحث…', 'search_submit' => 'بحث',
-        ],
-        'hi' => [
-            'nav_home' => 'होम', 'nav_news' => 'समाचार', 'nav_shop' => 'वर्गीकृत', 'nav_events' => 'कार्यक्रम', 'nav_tools' => 'उपकरण', 'nav_directory' => 'निर्देशिका',
-            'nav_dashboard' => 'डैशबोर्ड', 'nav_wiki' => 'विकी', 'nav_gallery' => 'गैलरी', 'nav_articles' => 'लेख', 'nav_library' => 'लाइब्रेरी', 'nav_auctions' => 'नीलामी',
-            'account_space' => 'मेरा खाता', 'account_profile' => 'प्रोफ़ाइल', 'account_settings' => 'सेटिंग्स', 'account_admin' => 'प्रशासन', 'logout' => 'लॉग आउट', 'login' => 'लॉग इन',
-            'theme_light' => 'हल्का', 'theme_dark' => 'गहरा',
-            'accent_blue' => 'नीला', 'accent_emerald' => 'एमराल्ड', 'accent_violet' => 'बैंगनी', 'accent_red' => 'लाल', 'accent_amber' => 'ऐंबर', 'accent_orange' => 'नारंगी',
-            'language_choice' => 'भाषा चयन', 'language_help' => 'साइट भाषा चयनक। बदलाव स्वतः लागू होते हैं।',
-            'theme_choice' => 'लाइट या डार्क मोड चयन', 'theme_help' => 'थीम चयनक। बदलाव स्वतः लागू होते हैं।',
-            'accent_choice' => 'एक्सेंट रंग चयन', 'accent_help' => 'एक्सेंट रंग चयनक। बदलाव स्वतः लागू होते हैं।',
-            'install_app' => 'ऐप इंस्टॉल करें', 'skip_to_content' => 'सामग्री पर जाएँ', 'close_menu' => 'मेनू बंद करें', 'main_navigation' => 'मुख्य नेविगेशन', 'search_label' => 'वैश्विक खोज', 'search_placeholder' => 'खोजें…', 'search_submit' => 'खोजें',
-        ],
-        'ja' => [
-            'nav_home' => 'ホーム', 'nav_news' => 'ニュース', 'nav_shop' => 'クラシファイド', 'nav_events' => 'イベント', 'nav_tools' => 'ツール', 'nav_directory' => 'ディレクトリ',
-            'nav_dashboard' => 'ダッシュボード', 'nav_wiki' => 'ウィキ', 'nav_gallery' => 'ギャラリー', 'nav_articles' => '記事', 'nav_library' => 'ライブラリ', 'nav_auctions' => 'オークション',
-            'account_space' => 'マイアカウント', 'account_profile' => 'プロフィール', 'account_settings' => '設定', 'account_admin' => '管理', 'logout' => 'ログアウト', 'login' => 'ログイン',
-            'theme_light' => 'ライト', 'theme_dark' => 'ダーク',
-            'accent_blue' => 'ブルー', 'accent_emerald' => 'エメラルド', 'accent_violet' => 'バイオレット', 'accent_red' => 'レッド', 'accent_amber' => 'アンバー', 'accent_orange' => 'オレンジ',
-            'language_choice' => '言語選択', 'language_help' => 'サイト言語セレクター。変更は自動適用されます。',
-            'theme_choice' => 'ライト/ダークモード選択', 'theme_help' => 'テーマセレクター。変更は自動適用されます。',
-            'accent_choice' => 'アクセントカラー選択', 'accent_help' => 'アクセントカラーセレクター。変更は自動適用されます。',
-            'install_app' => 'アプリをインストール', 'skip_to_content' => 'コンテンツへスキップ', 'close_menu' => 'メニューを閉じる', 'main_navigation' => 'メインナビゲーション', 'search_label' => 'サイト内検索', 'search_placeholder' => '検索…', 'search_submit' => '検索',
-        ],
-        'zh' => [
-            'nav_home' => '首页', 'nav_news' => '新闻', 'nav_shop' => '分类信息', 'nav_events' => '活动', 'nav_tools' => '工具', 'nav_directory' => '目录',
-            'nav_dashboard' => '仪表盘', 'nav_wiki' => '维基', 'nav_gallery' => '画廊', 'nav_articles' => '文章', 'nav_library' => '资料库', 'nav_auctions' => '拍卖',
-            'account_space' => '我的账户', 'account_profile' => '个人资料', 'account_settings' => '设置', 'account_admin' => '管理', 'logout' => '退出登录', 'login' => '登录',
-            'theme_light' => '浅色', 'theme_dark' => '深色',
-            'accent_blue' => '蓝色', 'accent_emerald' => '祖母绿', 'accent_violet' => '紫色', 'accent_red' => '红色', 'accent_amber' => '琥珀色', 'accent_orange' => '橙色',
-            'language_choice' => '语言选择', 'language_help' => '站点语言选择器。更改将自动应用。',
-            'theme_choice' => '浅色/深色模式选择', 'theme_help' => '主题选择器。更改将自动应用。',
-            'accent_choice' => '强调色选择', 'accent_help' => '强调色选择器。更改将自动应用。',
-            'install_app' => '安装应用', 'skip_to_content' => '跳到内容', 'close_menu' => '关闭菜单', 'main_navigation' => '主导航', 'search_label' => '全站搜索', 'search_placeholder' => '搜索…', 'search_submit' => '搜索',
-        ],
-
-        'bn' => [
-            'nav_home' => 'হোম', 'nav_news' => 'সংবাদ', 'nav_shop' => 'শ্রেণিবদ্ধ', 'nav_events' => 'ইভেন্ট', 'nav_tools' => 'সরঞ্জাম', 'nav_directory' => 'ডিরেক্টরি',
-            'nav_dashboard' => 'ড্যাশবোর্ড', 'nav_wiki' => 'উইকি', 'nav_gallery' => 'গ্যালারি', 'nav_articles' => 'প্রবন্ধ', 'nav_library' => 'লাইব্রেরি', 'nav_auctions' => 'নিলাম',
-            'account_space' => 'আমার অ্যাকাউন্ট', 'account_profile' => 'প্রোফাইল', 'account_settings' => 'সেটিংস', 'account_admin' => 'প্রশাসন', 'logout' => 'লগআউট', 'login' => 'লগইন',
-            'theme_light' => 'লাইট', 'theme_dark' => 'ডার্ক',
-            'accent_blue' => 'নীল', 'accent_emerald' => 'এমেরাল্ড', 'accent_violet' => 'বেগুনি', 'accent_red' => 'লাল', 'accent_amber' => 'অ্যাম্বার', 'accent_orange' => 'কমলা',
-            'language_choice' => 'ভাষা নির্বাচন', 'language_help' => 'সাইটের ভাষা নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
-            'theme_choice' => 'লাইট বা ডার্ক মোড নির্বাচন', 'theme_help' => 'থিম নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
-            'accent_choice' => 'অ্যাকসেন্ট রঙ নির্বাচন', 'accent_help' => 'অ্যাকসেন্ট রঙ নির্বাচনকারী। পরিবর্তন স্বয়ংক্রিয়ভাবে প্রয়োগ হয়।',
-            'install_app' => 'অ্যাপ ইনস্টল করুন', 'skip_to_content' => 'কনটেন্টে যান', 'close_menu' => 'মেনু বন্ধ করুন', 'main_navigation' => 'মূল নেভিগেশন', 'search_label' => 'সাইট অনুসন্ধান', 'search_placeholder' => 'অনুসন্ধান…', 'search_submit' => 'অনুসন্ধান',
-        ],
-        'ru' => [
-            'nav_home' => 'Главная', 'nav_news' => 'Новости', 'nav_shop' => 'Объявления', 'nav_events' => 'События', 'nav_tools' => 'Инструменты', 'nav_directory' => 'Каталог',
-            'nav_dashboard' => 'Панель', 'nav_wiki' => 'Вики', 'nav_gallery' => 'Галерея', 'nav_articles' => 'Статьи', 'nav_library' => 'Библиотека', 'nav_auctions' => 'Аукционы',
-            'account_space' => 'Мой аккаунт', 'account_profile' => 'Профиль', 'account_settings' => 'Настройки', 'account_admin' => 'Администрирование', 'logout' => 'Выйти', 'login' => 'Войти',
-            'theme_light' => 'Светлая', 'theme_dark' => 'Тёмная',
-            'accent_blue' => 'Синий', 'accent_emerald' => 'Изумрудный', 'accent_violet' => 'Фиолетовый', 'accent_red' => 'Красный', 'accent_amber' => 'Янтарный', 'accent_orange' => 'Оранжевый',
-            'language_choice' => 'Выбор языка', 'language_help' => 'Переключатель языка сайта. Изменения применяются автоматически.',
-            'theme_choice' => 'Выбор светлой или тёмной темы', 'theme_help' => 'Переключатель темы. Изменения применяются автоматически.',
-            'accent_choice' => 'Выбор акцентного цвета', 'accent_help' => 'Переключатель акцентного цвета. Изменения применяются автоматически.',
-            'install_app' => 'Установить приложение', 'skip_to_content' => 'Перейти к содержимому', 'close_menu' => 'Закрыть меню', 'main_navigation' => 'Основная навигация', 'search_label' => 'Поиск по сайту', 'search_placeholder' => 'Поиск…', 'search_submit' => 'Поиск',
-        ],
-        'id' => [
-            'nav_home' => 'Beranda', 'nav_news' => 'Berita', 'nav_shop' => 'Iklan baris', 'nav_events' => 'Acara', 'nav_tools' => 'Alat', 'nav_directory' => 'Direktori',
-            'nav_dashboard' => 'Dasbor', 'nav_wiki' => 'Wiki', 'nav_gallery' => 'Galeri', 'nav_articles' => 'Artikel', 'nav_library' => 'Perpustakaan', 'nav_auctions' => 'Lelang',
-            'account_space' => 'Akun saya', 'account_profile' => 'Profil', 'account_settings' => 'Pengaturan', 'account_admin' => 'Administrasi', 'logout' => 'Keluar', 'login' => 'Masuk',
-            'theme_light' => 'Terang', 'theme_dark' => 'Gelap',
-            'accent_blue' => 'Biru', 'accent_emerald' => 'Zamrud', 'accent_violet' => 'Ungu', 'accent_red' => 'Merah', 'accent_amber' => 'Ambar', 'accent_orange' => 'Oranye',
-            'language_choice' => 'Pilihan bahasa', 'language_help' => 'Pemilih bahasa situs. Perubahan diterapkan otomatis.',
-            'theme_choice' => 'Pilihan mode terang/gelap', 'theme_help' => 'Pemilih tema. Perubahan diterapkan otomatis.',
-            'accent_choice' => 'Pilihan warna aksen', 'accent_help' => 'Pemilih warna aksen. Perubahan diterapkan otomatis.',
-            'install_app' => 'Instal aplikasi', 'skip_to_content' => 'Lewati ke konten', 'close_menu' => 'Tutup menu', 'main_navigation' => 'Navigasi utama', 'search_label' => 'Pencarian situs', 'search_placeholder' => 'Cari…', 'search_submit' => 'Cari',
-        ],
-    ];
-    $layoutI18n = $layoutMessages[$currentLocale] ?? $layoutMessages['fr'];
+    $layoutI18n = i18n_domain_locale('layout', $currentLocale);
     $currentAccent = strtolower((string) ($_SESSION['accent'] ?? 'blue'));
     $accentPalette = [
         'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf', 'label' => 'Bleu'],
@@ -2918,7 +2767,7 @@ function render_layout(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
     $nonce = csp_nonce();
-    $htmlDir = $currentLocale === 'ar' ? 'rtl' : 'ltr';
+    $htmlDir = is_rtl_locale($currentLocale) ? 'rtl' : 'ltr';
     return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
         . '</title>' . $metaHead
@@ -6012,8 +5861,9 @@ function csrf_token(): string
     return $_SESSION['_csrf'];
 }
 
-function preferred_locale_from_accept_language(string $header, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id']): string
+function preferred_locale_from_accept_language(string $header, ?array $supportedLocales = null): string
 {
+    $supportedLocales ??= supported_locales();
     $normalized = strtolower(trim($header));
     if ($normalized === '') {
         return 'en';
@@ -6037,8 +5887,9 @@ function preferred_locale_from_accept_language(string $header, array $supportedL
     return 'en';
 }
 
-function preferred_locale_from_host(string $host, array $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id']): string
+function preferred_locale_from_host(string $host, ?array $supportedLocales = null): string
 {
+    $supportedLocales ??= supported_locales();
     $normalizedHost = strtolower(trim($host));
     if ($normalizedHost === '') {
         return '';
@@ -6055,7 +5906,7 @@ function preferred_locale_from_host(string $host, array $supportedLocales = ['fr
 
 function initialize_user_preferences(): void
 {
-    $supportedLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+    $supportedLocales = supported_locales();
     $supportedThemes = ['light', 'dark'];
     $supportedAccents = ['blue', 'emerald', 'violet', 'red', 'amber', 'orange'];
 

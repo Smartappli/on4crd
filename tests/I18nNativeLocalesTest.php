@@ -11,7 +11,19 @@ final class I18nNativeLocalesTest extends TestCase
      */
     private function supportedLocales(): array
     {
-        return ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+        return supported_locales();
+    }
+
+    public function testSupportedLocaleSetContainsFourteenNativeLocales(): void
+    {
+        self::assertSame(['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], $this->supportedLocales());
+    }
+
+    public function testOnlyArabicUsesRtlLayoutDirection(): void
+    {
+        foreach ($this->supportedLocales() as $locale) {
+            self::assertSame($locale === 'ar', is_rtl_locale($locale), sprintf('Unexpected text direction for locale %s', $locale));
+        }
     }
 
     /**
