@@ -1569,6 +1569,24 @@ function apply_runtime_schema_updates(): void
         }
 
         db()->exec('ALTER TABLE articles MODIFY COLUMN status ENUM("draft","scheduled","published") NOT NULL DEFAULT "draft"');
+
+        db()->exec(
+            'CREATE TABLE IF NOT EXISTS article_revisions (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                article_id INT NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                slug VARCHAR(255) NOT NULL,
+                excerpt TEXT NULL,
+                content LONGTEXT NULL,
+                status VARCHAR(32) NOT NULL DEFAULT "draft",
+                category VARCHAR(120) NOT NULL DEFAULT "autres",
+                scheduled_at DATETIME NULL DEFAULT NULL,
+                published_at DATETIME NULL DEFAULT NULL,
+                author_id INT NULL DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_article_revision_article_created (article_id, created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
     }
 
 
