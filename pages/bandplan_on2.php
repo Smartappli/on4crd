@@ -1,21 +1,70 @@
 <?php
 declare(strict_types=1);
+
 require_login();
-$locale=current_locale();
-$titleMap=['fr'=>'Band planning ON2','en'=>'ON2 band plan','de'=>'ON2-Bandplan','nl'=>'ON2-bandplan','es'=>'Plan de banda ON2','it'=>'Piano di banda ON2','pt'=>'Plano de banda ON2','ar'=>'خطة نطاق ON2','hi'=>'ON2 बैंड प्लान','ja'=>'ON2 バンドプラン','zh'=>'ON2 频段规划','bn'=>'ON2 ব্যান্ড প্ল্যান','ru'=>'План диапазонов ON2','id'=>'Rencana band ON2'];$title=i18n_localized_value($titleMap,$locale,'fr');
-$hMap=['fr'=>['band'=>'Bande','freq'=>'Fréquences (MHz)','modes'=>'Modes','pwr'=>'Puissance max*','notes'=>'Notes'],'en'=>['band'=>'Band','freq'=>'Frequencies (MHz)','modes'=>'Modes','pwr'=>'Max power*','notes'=>'Notes'],'de'=>['band'=>'Band','freq'=>'Frequenzen (MHz)','modes'=>'Betriebsarten','pwr'=>'Max. Leistung*','notes'=>'Hinweise'],'nl'=>['band'=>'Band','freq'=>'Frequenties (MHz)','modes'=>'Modes','pwr'=>'Max vermogen*','notes'=>'Notities'],'es'=>['band'=>'Banda','freq'=>'Frecuencias (MHz)','modes'=>'Modos','pwr'=>'Potencia máx.*','notes'=>'Notas'],'it'=>['band'=>'Banda','freq'=>'Frequenze (MHz)','modes'=>'Modi','pwr'=>'Potenza max*','notes'=>'Note'],'pt'=>['band'=>'Banda','freq'=>'Frequências (MHz)','modes'=>'Modos','pwr'=>'Potência máx.*','notes'=>'Notas'],'ar'=>['band'=>'النطاق','freq'=>'الترددات (MHz)','modes'=>'الأنماط','pwr'=>'القدرة القصوى*','notes'=>'ملاحظات'],'hi'=>['band'=>'बैंड','freq'=>'आवृत्तियाँ (MHz)','modes'=>'मोड','pwr'=>'अधिकतम शक्ति*','notes'=>'टिप्पणियाँ'],'ja'=>['band'=>'バンド','freq'=>'周波数 (MHz)','modes'=>'モード','pwr'=>'最大出力*','notes'=>'備考'],'zh'=>['band'=>'波段','freq'=>'频率 (MHz)','modes'=>'模式','pwr'=>'最大功率*','notes'=>'备注'],'bn'=>['band'=>'ব্যান্ড','freq'=>'ফ্রিকোয়েন্সি (MHz)','modes'=>'মোড','pwr'=>'সর্বোচ্চ শক্তি*','notes'=>'নোট'],'ru'=>['band'=>'Диапазон','freq'=>'Частоты (MHz)','modes'=>'Режимы','pwr'=>'Макс. мощность*','notes'=>'Примечания'],'id'=>['band'=>'Band','freq'=>'Frekuensi (MHz)','modes'=>'Mode','pwr'=>'Daya maks*','notes'=>'Catatan']];$h=[];foreach(array_keys($hMap['fr']) as $key){$pool=[];foreach($hMap as $lang=>$items){$pool[$lang]=(string)($items[$key] ?? '');}$h[$key]=i18n_localized_value($pool,$locale,'fr');}
-$rows=[
-['160 m','1.810–2.000','CW/SSB/Data',['fr'=>'Plan IARU R1 à respecter.','en'=>'Follow IARU R1 segmentation.','de'=>'IARU-R1-Segmentierung beachten.','nl'=>'Volg IARU R1-segmentering.','es'=>'Respetar la segmentación IARU R1.','it'=>'Rispettare la segmentazione IARU R1.','pt'=>'Respeitar a segmentação IARU R1.','ar'=>'يجب الالتزام بتقسيم IARU R1.','hi'=>'IARU R1 विभाजन का पालन करें।','ja'=>'IARU R1 のバンド区分に従ってください。','zh'=>'请遵守 IARU R1 频段划分。','bn'=>'IARU R1 সেগমেন্টেশন মেনে চলুন।','ru'=>'Следуйте сегментации IARU R1.','id'=>'Ikuti segmentasi IARU R1.'],'100 W PEP'],
-['80 m','3.500–3.800','CW/SSB/Data',['fr'=>'Portion téléphonie en haut de bande.','en'=>'Phone segment in upper band.','de'=>'Telefonie im oberen Bandteil.','nl'=>'Telefonie in het bovenste banddeel.','es'=>'Segmento de telefonía en la parte alta de la banda.','it'=>'Segmento fonia nella parte alta della banda.','pt'=>'Segmento de fonia na parte alta da banda.','ar'=>'جزء الاتصالات الهاتفية في أعلى النطاق.','hi'=>'बैंड के ऊपरी हिस्से में फोन सेगमेंट।','ja'=>'バンド上部に電話帯域。','zh'=>'频段上部为话音区段。','bn'=>'ব্যান্ডের উপরের অংশে ফোন সেগমেন্ট।','ru'=>'Телефонный сегмент в верхней части диапазона.','id'=>'Segmen foni di bagian atas band.'],'100 W PEP'],
-['40 m','7.000–7.200','CW/SSB/Data',['fr'=>'Usage concours fréquent.','en'=>'Frequent contest usage.','de'=>'Häufiger Contestbetrieb.','nl'=>'Vaak contestverkeer.','es'=>'Uso frecuente en concursos.','it'=>'Uso frequente nei contest.','pt'=>'Uso frequente em concursos.','ar'=>'استخدام متكرر في المسابقات.','hi'=>'प्रतियोगिताओं में बार-बार उपयोग।','ja'=>'コンテストでの利用が多い。','zh'=>'比赛中使用频繁。','bn'=>'কনটেস্টে ঘন ঘন ব্যবহার হয়।','ru'=>'Часто используется в соревнованиях.','id'=>'Sering digunakan untuk kontes.'],'100 W PEP'],
-['20 m','14.000–14.350','CW/SSB/Data',['fr'=>'FT8 usuel sur 14.074 MHz.','en'=>'FT8 commonly on 14.074 MHz.','de'=>'FT8 üblicherweise auf 14,074 MHz.','nl'=>'FT8 meestal op 14.074 MHz.','es'=>'FT8 habitual en 14.074 MHz.','it'=>'FT8 comunemente su 14.074 MHz.','pt'=>'FT8 comum em 14.074 MHz.','ar'=>'FT8 شائع على 14.074 MHz.','hi'=>'FT8 आमतौर पर 14.074 MHz पर।','ja'=>'FT8 は通常 14.074 MHz。','zh'=>'FT8 常用频率为 14.074 MHz。','bn'=>'FT8 সাধারণত 14.074 MHz-এ।','ru'=>'FT8 обычно на 14.074 МГц.','id'=>'FT8 umumnya di 14.074 MHz.'],'100 W PEP'],
-['15 m','21.000–21.450','CW/SSB/Data',['fr'=>'Propagation diurne variable.','en'=>'Variable daytime propagation.','de'=>'Variable Tagesausbreitung.','nl'=>'Variabele dagpropagatie.','es'=>'Propagación diurna variable.','it'=>'Propagazione diurna variabile.','pt'=>'Propagação diurna variável.','ar'=>'انتشار نهاري متغير.','hi'=>'दिन के समय प्रसार परिवर्तनशील।','ja'=>'日中の伝搬は変動します。','zh'=>'白天传播条件多变。','bn'=>'দিনের বেলায় প্রোপাগেশন পরিবর্তনশীল।','ru'=>'Дневное прохождение переменное.','id'=>'Propagasi siang hari bervariasi.'],'100 W PEP'],
-['10 m','28.000–29.700','CW/SSB/FM/Data',['fr'=>'Inclut balises et sous-bande FM.','en'=>'Includes beacons and FM sub-band.','de'=>'Enthält Baken und FM-Teilband.','nl'=>'Inclusief bakens en FM-subband.','es'=>'Incluye balizas y subbanda FM.','it'=>'Include beacon e sotto-banda FM.','pt'=>'Inclui balizas e sub-banda FM.','ar'=>'يشمل منارات ونطاق FM فرعي.','hi'=>'बीकन और FM उप-बैंड शामिल हैं।','ja'=>'ビーコンと FM サブバンドを含む。','zh'=>'包含信标和 FM 子频段。','bn'=>'বীকন ও FM সাব-ব্যান্ড অন্তর্ভুক্ত।','ru'=>'Включает маяки и FM-поддиапазон.','id'=>'Mencakup beacon dan sub-band FM.'],'100 W PEP'],
-['6 m','50.000–52.000','CW/SSB/FM/Data',['fr'=>'Ouvertures sporadiques E possibles.','en'=>'Sporadic-E openings possible.','de'=>'Sporadic-E-Öffnungen möglich.','nl'=>'Sporadic-E-openingen mogelijk.','es'=>'Posibles aperturas de Esporádica-E.','it'=>'Possibili aperture di Sporadico-E.','pt'=>'Aberturas de Esporádica-E possíveis.','ar'=>'فتحات Sporadic-E ممكنة.','hi'=>'Sporadic-E खुलाव संभव।','ja'=>'スポラディックEのオープンが可能。','zh'=>'可能出现 Sporadic-E 开放。','bn'=>'Sporadic-E ওপেনিং সম্ভব।','ru'=>'Возможны прохождения Sporadic-E.','id'=>'Pembukaan Sporadic-E mungkin terjadi.'],'100 W PEP'],
-['2 m','144.000–146.000','FM/SSB/CW/Data',['fr'=>'Simplex d’appel 145.500 MHz.','en'=>'Simplex calling on 145.500 MHz.','de'=>'Simplex-Anruf auf 145,500 MHz.','nl'=>'Simplex-oproep op 145.500 MHz.','es'=>'Llamada simplex en 145.500 MHz.','it'=>'Chiamata simplex su 145.500 MHz.','pt'=>'Chamada simplex em 145.500 MHz.','ar'=>'نداء سيمبلكس على 145.500 MHz.','hi'=>'145.500 MHz पर सिंप्लेक्स कॉलिंग।','ja'=>'145.500 MHz でシンプレックス呼出。','zh'=>'145.500 MHz 单工呼叫。','bn'=>'145.500 MHz-এ সিমপ্লেক্স কলিং।','ru'=>'Симплекс-вызов на 145.500 МГц.','id'=>'Panggilan simplex pada 145.500 MHz.'],'50 W PEP'],
-['70 cm','430.000–440.000','FM/SSB/CW/DV',['fr'=>'Respecter la coordination relais locale.','en'=>'Respect local repeater coordination.','de'=>'Lokale Relaiskoordination beachten.','nl'=>'Respecteer lokale relaiscoördinatie.','es'=>'Respetar la coordinación local de repetidores.','it'=>'Rispettare il coordinamento locale dei ripetitori.','pt'=>'Respeitar a coordenação local de repetidores.','ar'=>'احترم تنسيق المكررات المحلي.','hi'=>'स्थानीय रिपीटर समन्वय का पालन करें।','ja'=>'地域リピータ調整を尊重してください。','zh'=>'请遵守本地中继协调方案。','bn'=>'স্থানীয় রিপিটার সমন্বয় মেনে চলুন।','ru'=>'Соблюдайте местную координацию ретрансляторов.','id'=>'Patuhi koordinasi repeater lokal.'],'50 W PEP'],
-['23 cm','1240–1300','FM/SSB/CW/Data',['fr'=>'Bande partagée selon usages locaux.','en'=>'Shared band depending on local usage.','de'=>'Geteiltes Band je nach lokaler Nutzung.','nl'=>'Gedeelde band volgens lokaal gebruik.','es'=>'Banda compartida según usos locales.','it'=>'Banda condivisa secondo usi locali.','pt'=>'Banda partilhada conforme usos locais.','ar'=>'نطاق مشترك حسب الاستخدامات المحلية.','hi'=>'स्थानीय उपयोग के अनुसार साझा बैंड।','ja'=>'地域利用に応じた共有バンド。','zh'=>'根据本地用途共享的频段。','bn'=>'স্থানীয় ব্যবহারের ভিত্তিতে শেয়ারড ব্যান্ড।','ru'=>'Совместный диапазон в зависимости от местного использования.','id'=>'Band berbagi sesuai penggunaan lokal.'],'50 W PEP'],
+$locale = current_locale();
+
+$titleMap = [
+    'fr' => 'ON2 band plan',
+    'en' => 'ON2 band plan',
+    'de' => 'ON2 band plan',
+    'nl' => 'ON2 band plan',
+    'es' => 'ON2 band plan',
+    'it' => 'ON2 band plan',
+    'pt' => 'ON2 band plan',
+    'ar' => 'ON2 band plan',
+    'hi' => 'ON2 band plan',
+    'ja' => 'ON2 band plan',
+    'zh' => 'ON2 band plan',
+    'bn' => 'ON2 band plan',
+    'ru' => 'ON2 band plan',
+    'id' => 'ON2 band plan',
 ];
-ob_start(); ?>
-<section class="card"><h1><?= e($title) ?></h1><p class="help">IBPT/BIPT: <a href="https://www.ibpt.be/file/cc73d96153bbd5448a56f19d925d05b1379c7f21/1891ad4029fa18396c037433ed4c2a063854f1b0/freq-fr.pdf?name=Freq-FR.pdf&type=application%2Fpdf" target="_blank" rel="noopener noreferrer">Freq‑FR.pdf</a></p><div class="table-wrap mt-3"><table><thead><tr><th><?=e($h['band'])?></th><th><?=e($h['freq'])?></th><th><?=e($h['modes'])?></th><th><?=e($h['pwr'])?></th><th><?=e($h['notes'])?></th></tr></thead><tbody><?php foreach($rows as $r): ?><tr><td><?=e($r[0])?></td><td><?=e($r[1])?></td><td><?=e($r[2])?></td><td><?=e($r[4])?></td><td><?=e(i18n_localized_value($r[3],$locale,'fr'))?></td></tr><?php endforeach; ?></tbody></table></div></section>
-<?php echo render_layout((string)ob_get_clean(),$title); ?>
+$title = i18n_localized_value($titleMap, $locale, 'en');
+
+$headers = ['band' => 'Band', 'freq' => 'Frequencies (MHz)', 'modes' => 'Modes', 'pwr' => 'Max power*', 'notes' => 'Notes'];
+$rows = [
+    ['160 m', '1.810-2.000', 'CW/SSB/Data', 'Follow IARU R1 segmentation.', '100 W PEP'],
+    ['80 m', '3.500-3.800', 'CW/SSB/Data', 'Phone segment in upper band.', '100 W PEP'],
+    ['40 m', '7.000-7.200', 'CW/SSB/Data', 'Frequent contest usage.', '100 W PEP'],
+    ['20 m', '14.000-14.350', 'CW/SSB/Data', 'FT8 commonly on 14.074 MHz.', '100 W PEP'],
+    ['15 m', '21.000-21.450', 'CW/SSB/Data', 'Variable daytime propagation.', '100 W PEP'],
+    ['10 m', '28.000-29.700', 'CW/SSB/FM/Data', 'Includes beacons and FM sub-band.', '100 W PEP'],
+    ['6 m', '50.000-52.000', 'CW/SSB/FM/Data', 'Sporadic-E openings possible.', '100 W PEP'],
+    ['2 m', '144.000-146.000', 'FM/SSB/CW/Data', 'Simplex calling on 145.500 MHz.', '50 W PEP'],
+    ['70 cm', '430.000-440.000', 'FM/SSB/CW/DV', 'Respect local repeater coordination.', '50 W PEP'],
+    ['23 cm', '1240-1300', 'FM/SSB/CW/Data', 'Shared band depending on local usage.', '50 W PEP'],
+];
+
+ob_start();
+?>
+<section class="card">
+    <h1><?= e($title) ?></h1>
+    <p class="help">IBPT/BIPT: <a href="https://www.ibpt.be/file/cc73d96153bbd5448a56f19d925d05b1379c7f21/1891ad4029fa18396c037433ed4c2a063854f1b0/freq-fr.pdf?name=Freq-FR.pdf&type=application%2Fpdf" target="_blank" rel="noopener noreferrer">Freq-FR.pdf</a></p>
+    <div class="table-wrap mt-3">
+        <table>
+            <thead>
+            <tr>
+                <th><?= e($headers['band']) ?></th>
+                <th><?= e($headers['freq']) ?></th>
+                <th><?= e($headers['modes']) ?></th>
+                <th><?= e($headers['pwr']) ?></th>
+                <th><?= e($headers['notes']) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($rows as $r): ?>
+                <tr>
+                    <td><?= e($r[0]) ?></td>
+                    <td><?= e($r[1]) ?></td>
+                    <td><?= e($r[2]) ?></td>
+                    <td><?= e($r[4]) ?></td>
+                    <td><?= e($r[3]) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</section>
+<?php
+echo render_layout((string) ob_get_clean(), $title);

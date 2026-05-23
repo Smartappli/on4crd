@@ -78,8 +78,8 @@ $unitConversionGroups = [
     'temperature' => [
         'label' => (string) ($t['unit_conv_group_temperature'] ?? 'Temperature'),
         'units' => [
-            'c' => ['label' => 'Â°C', 'kind' => 'c'],
-            'f' => ['label' => 'Â°F', 'kind' => 'f'],
+            'c' => ['label' => 'deg C', 'kind' => 'c'],
+            'f' => ['label' => 'deg F', 'kind' => 'f'],
             'k' => ['label' => 'K', 'kind' => 'k'],
         ],
         'presets' => ['0', '20', '100'],
@@ -100,7 +100,7 @@ $unitConversionGroups = [
     'field' => [
         'label' => (string) ($t['unit_conv_group_field'] ?? 'Signal level'),
         'units' => [
-            'dbuv' => ['label' => 'dBÂµV', 'kind' => 'dbuv'],
+            'dbuv' => ['label' => 'dBuV', 'kind' => 'dbuv'],
             'sunit' => ['label' => 'S-unit', 'kind' => 'sunit'],
         ],
         'presets' => ['9', '59', '73'],
