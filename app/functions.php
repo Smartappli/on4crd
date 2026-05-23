@@ -4197,7 +4197,7 @@ if (!function_exists('answer_question_from_knowledge')) {
 
     /**
      * @param list<string> $preferredSourceTypes
-     * @return array{answer:string,source:string,sources?:array<int,array{title:string,url:string,type:string}>}
+     * @return array{answer:string,source:string,sources?:array<int,array{title:string,url:string,type:string}>,confidence?:float,freshness_hours?:float|null}
      */
 function answer_question_from_knowledge(string $question, array $preferredSourceTypes = []): array
 {
@@ -4490,6 +4490,20 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                 if (is_array($best) && !$isAmbiguous && $bestScore >= $minScore && $bestCoverage >= $minCoverage && $confidence >= 0.48) {
                     $summary = trim(mb_substr((string) ($best['body'] ?? ''), 0, 480));
                     $link = trim((string) ($best['url'] ?? ''));
+                    $freshnessHours = null;
+                    $bestUpdatedAt = trim((string) ($best['updated_at'] ?? ''));
+                    if ($bestUpdatedAt !== '') {
+                        try {
+                            $freshnessHours = max(0.0, (time() - (new DateTimeImmutable($bestUpdatedAt))->getTimestamp()) / 3600.0);
+                        } catch (Throwable) {
+                            $freshnessHours = null;
+                        }
+                    }
+                    $isStaleCandidate = $freshnessHours !== null && $freshnessHours > 24.0 * 180.0;
+                    if ($isStaleCandidate && $confidence < 0.65) {
+                        $answerAccepted = false;
+                        $best = null;
+                    }
                     $answerAccepted = rag_agentic_answer_is_valid($normalized, $summary, $bestCoverage, $confidence);
                     if (!$answerAccepted) {
                         $best = null;
@@ -4534,7 +4548,13 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                                 $source .= ' · plan:' . (string) ($last['hits'] ?? '0') . 'h';
                             }
                         }
-                        return ['answer' => $answer, 'source' => $source, 'sources' => $sources];
+                        return [
+                            'answer' => $answer,
+                            'source' => $source,
+                            'sources' => $sources,
+                            'confidence' => (float) round($confidence, 2),
+                            'freshness_hours' => $freshnessHours,
+                        ];
                     }
                 }
             } catch (Throwable) {
