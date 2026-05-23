@@ -27,9 +27,9 @@ function newsletter_parse_csv_emails(string $csvContent): array
             continue;
         }
 
-        $columns = str_getcsv($line, ',');
+        $columns = str_getcsv($line, ',', '"', '\\');
         if (count($columns) <= 1) {
-            $columns = str_getcsv($line, ';');
+            $columns = str_getcsv($line, ';', '"', '\\');
         }
 
         foreach ($columns as $column) {
