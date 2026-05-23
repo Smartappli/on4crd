@@ -356,34 +356,6 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
 ob_start();
 ?>
 <section class="card">
-    <?php if ($memberId > 0): ?>
-    <section class="card" style="margin-bottom:1rem;">
-        <h2><?= e($tr('conversion_history', 'Conversion history')) ?></h2>
-        <form method="post" class="inline-form" style="flex-wrap:wrap;margin-bottom:.7rem;">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <input type="hidden" name="action" value="log_tool_conversion">
-            <input type="text" name="tool_id" value="tool-unit-converter" placeholder="tool_id">
-            <input type="text" name="input_value" placeholder="<?= e($tr('input_value', 'Input')) ?>">
-            <input type="text" name="output_value" placeholder="<?= e($tr('output_value', 'Output')) ?>">
-            <input type="text" name="notes" placeholder="<?= e($tr('notes', 'Notes')) ?>">
-            <button class="button" type="submit"><?= e($tr('log_conversion', 'Log conversion')) ?></button>
-        </form>
-        <form method="post" class="inline-form" style="margin-bottom:.7rem;">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-            <input type="hidden" name="action" value="clear_tool_history">
-            <button class="button secondary small" type="submit"><?= e($tr('clear_history', 'Clear history')) ?></button>
-        </form>
-        <?php if ($toolHistory === []): ?>
-            <p class="help"><?= e($tr('no_history', 'No conversion history.')) ?></p>
-        <?php else: ?>
-            <ul class="stack" style="list-style:none;padding:0;margin:0;">
-                <?php foreach ($toolHistory as $history): ?>
-                    <li><span class="help"><?= e((string) ($history['created_at'] ?? '')) ?></span> — <strong><?= e((string) ($history['tool_id'] ?? '')) ?></strong>: <?= e((string) ($history['input_value'] ?? '')) ?> → <?= e((string) ($history['output_value'] ?? '')) ?><?php if (trim((string) ($history['notes'] ?? '')) !== ''): ?> (<?= e((string) $history['notes']) ?>)<?php endif; ?></li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-    </section>
-    <?php endif; ?>
     <div class="tools-layout">
     <aside class="tools-index card">
         <h2><?= e($tr('tool_index')) ?></h2>
