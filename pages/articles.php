@@ -37,6 +37,7 @@ function article_category_logo(string $label): string
 
 $locale = current_locale();
 $t = i18n_domain_locale('articles', $locale);
+articles_sync_scheduled_publications();
 $GLOBALS['articles_i18n'] = $t;
 
 $themeMeta = [

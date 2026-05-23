@@ -14,6 +14,7 @@ function article_view_reading_minutes(string $html): int
 
 $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/article.php';
+articles_sync_scheduled_publications();
 $i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {

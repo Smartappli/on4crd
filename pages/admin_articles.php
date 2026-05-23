@@ -14,6 +14,7 @@ set_page_meta([
     'description' => $t('meta_desc'),
     'schema_type' => 'WebPage',
 ]);
+articles_sync_scheduled_publications();
 
 /**
  * @return array{excerpt:string,content:string}
@@ -167,8 +168,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($category === '') {
                 $category = 'autres';
             }
-            if ($title === '' || !in_array($status, ['draft', 'published'], true)) {
+            if ($title === '' || !in_array($status, ['draft', 'scheduled', 'published'], true)) {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+            }
+            $scheduledAtRaw = trim((string) ($_POST['scheduled_at'] ?? ''));
+            $scheduledAtValue = null;
+            $publishedAtValue = null;
+            if ($status === 'scheduled') {
+                if ($scheduledAtRaw === '') {
+                    throw new RuntimeException($t('err_invalid_article', 'Date de planification requise.'));
+                }
+                $scheduledTs = strtotime($scheduledAtRaw);
+                if ($scheduledTs === false) {
+                    throw new RuntimeException($t('err_invalid_article', 'Date de planification invalide.'));
+                }
+                if ($scheduledTs <= time()) {
+                    $status = 'published';
+                    $publishedAtValue = date('Y-m-d H:i:s');
+                } else {
+                    $scheduledAtValue = date('Y-m-d H:i:s', $scheduledTs);
+                }
+            } elseif ($status === 'published') {
+                $publishedAtValue = date('Y-m-d H:i:s');
             }
             $imported = import_article_document($_FILES['article_document'] ?? []);
             if ($imported['content'] !== '') {
@@ -178,9 +199,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             if ($id > 0) {
-                db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ? WHERE id = ?')->execute([$title, $slug, $excerpt, $content, $status, $category, $id]);
+                db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = COALESCE(?, published_at) WHERE id = ?')->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $id]);
             } else {
-                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, ?, ?, ?)')->execute([$title, $slug, $excerpt, $content, $status, $category, (int) current_user()['id']]);
+                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
                 $id = (int) db()->lastInsertId();
             }
             article_translation_upsert($id, 'en');
@@ -228,7 +249,7 @@ $adminCategory = slugify(trim((string) ($_GET['category'] ?? '')));
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $adminWhere = [];
 $adminParams = [];
-if (in_array($adminStatus, ['draft', 'published'], true)) {
+if (in_array($adminStatus, ['draft', 'scheduled', 'published'], true)) {
     $adminWhere[] = 'status = ?';
     $adminParams[] = $adminStatus;
 }
@@ -244,16 +265,25 @@ if ($adminSearch !== '') {
     $adminParams[] = $needle;
 }
 $adminWhereSql = $adminWhere === [] ? '' : ('WHERE ' . implode(' AND ', $adminWhere));
-$articleStmt = db()->prepare('SELECT * FROM articles ' . $adminWhereSql . ' ORDER BY updated_at DESC, id DESC LIMIT 100');
+$page = max(1, (int) ($_GET['p'] ?? 1));
+$perPage = 30;
+$countStmt = db()->prepare('SELECT COUNT(*) FROM articles ' . $adminWhereSql);
+$countStmt->execute($adminParams);
+$totalArticles = (int) ($countStmt->fetchColumn() ?: 0);
+$pagination = pagination_state($totalArticles, $page, $perPage);
+$page = $pagination['page'];
+$totalPages = $pagination['total_pages'];
+$offset = $pagination['offset'];
+$articleStmt = db()->prepare('SELECT * FROM articles ' . $adminWhereSql . ' ORDER BY updated_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $articleStmt->execute($adminParams);
 $articles = $articleStmt->fetchAll() ?: [];
 $articleStats = db()->query('SELECT status, COUNT(*) AS total FROM articles GROUP BY status')->fetchAll() ?: [];
-$articleStatMap = ['draft' => 0, 'published' => 0];
+$articleStatMap = ['draft' => 0, 'scheduled' => 0, 'published' => 0];
 foreach ($articleStats as $statRow) {
     $articleStatMap[(string) $statRow['status']] = (int) $statRow['total'];
 }
 $editingId = (int) ($_GET['id'] ?? 0);
-$editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres'];
+$editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'scheduled_at' => null];
 if ($editingId > 0) {
     $stmt = db()->prepare('SELECT * FROM articles WHERE id = ?');
     $stmt->execute([$editingId]);
@@ -289,9 +319,11 @@ ob_start();
             <label><?= e($t('status')) ?>
                 <select name="status">
                     <option value="draft" <?= (string) $editing['status'] === 'draft' ? 'selected' : '' ?>><?= e($t('draft')) ?></option>
+                    <option value="scheduled" <?= (string) $editing['status'] === 'scheduled' ? 'selected' : '' ?>><?= e($t('scheduled', 'Programmée')) ?></option>
                     <option value="published" <?= (string) $editing['status'] === 'published' ? 'selected' : '' ?>><?= e($t('published')) ?></option>
                 </select>
             </label>
+            <label><?= e($t('scheduled_at', 'Date de publication')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
             <button class="button"><?= e($t('save')) ?></button>
         </form>
         <?php if ((int) $editing['id'] > 0): ?>
@@ -306,7 +338,7 @@ ob_start();
     <section class="card">
         <div class="row-between">
             <h2><?= e($t('existing_articles')) ?></h2>
-            <span class="badge"><?= e($t('published')) ?>: <?= (int) $articleStatMap['published'] ?> · <?= e($t('draft')) ?>: <?= (int) $articleStatMap['draft'] ?></span>
+            <span class="badge"><?= e($t('published')) ?>: <?= (int) $articleStatMap['published'] ?> · <?= e($t('scheduled', 'Programmée')) ?>: <?= (int) $articleStatMap['scheduled'] ?> · <?= e($t('draft')) ?>: <?= (int) $articleStatMap['draft'] ?></span>
         </div>
         <form method="get" class="stack">
             <input type="hidden" name="route" value="admin_articles">
@@ -316,6 +348,7 @@ ob_start();
                     <select name="status">
                         <option value=""><?= e($t('all_statuses', 'Tous les statuts')) ?></option>
                         <option value="published" <?= $adminStatus === 'published' ? 'selected' : '' ?>><?= e($t('published')) ?></option>
+                        <option value="scheduled" <?= $adminStatus === 'scheduled' ? 'selected' : '' ?>><?= e($t('scheduled', 'Programmée')) ?></option>
                         <option value="draft" <?= $adminStatus === 'draft' ? 'selected' : '' ?>><?= e($t('draft')) ?></option>
                     </select>
                 </label>
@@ -340,6 +373,13 @@ ob_start();
             <?php endforeach; ?>
             <?php if ($articles === []): ?><p><?= e($t('no_articles')) ?></p><?php endif; ?>
         </div>
+        <?php if ($totalPages > 1): ?>
+            <nav class="actions mt-3">
+                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page - 1])) ?>">&larr; Prev</a><?php endif; ?>
+                <span class="badge muted"><?= $page ?> / <?= $totalPages ?></span>
+                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page + 1])) ?>">Next &rarr;</a><?php endif; ?>
+            </nav>
+        <?php endif; ?>
     </section>
     <section class="card">
         <h2><?= e($t('category_edit')) ?></h2>
