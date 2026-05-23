@@ -32,8 +32,13 @@ function import_article_document(array $file): array
 
     $originalName = trim((string) ($file['name'] ?? 'document'));
     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-    if (!in_array($extension, ['pdf', 'docx', 'txt', 'md', 'html', 'htm'], true)) {
+    $allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
+    if (!in_array($extension, $allowedExtensions, true)) {
         throw new RuntimeException($tm('allowed_formats'));
+    }
+    $size = (int) ($file['size'] ?? 0);
+    if ($size <= 0 || $size > 25 * 1024 * 1024) {
+        throw new RuntimeException($tm('upload_failed'));
     }
 
     $tmpPath = (string) ($file['tmp_name'] ?? '');
@@ -41,8 +46,24 @@ function import_article_document(array $file): array
         throw new RuntimeException($tm('invalid_doc'));
     }
 
-    $targetDir = __DIR__ . '/../storage/uploads/articles';
-    if (!is_dir($targetDir) && !mkdir($targetDir, 0775, true) && !is_dir($targetDir)) {
+    $allowedMimesByExtension = [
+        'pdf' => ['application/pdf', 'application/x-pdf'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
+        'txt' => ['text/plain', 'application/octet-stream'],
+        'md' => ['text/plain', 'text/markdown', 'application/octet-stream'],
+        'html' => ['text/html', 'text/plain', 'application/octet-stream'],
+        'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
+    ];
+    $mime = detect_uploaded_mime_type($tmpPath);
+    if (!in_array($mime, $allowedMimesByExtension[$extension] ?? [], true)) {
+        throw new RuntimeException($tm('invalid_doc'));
+    }
+    if ($extension === 'pdf' || $extension === 'docx') {
+        assert_upload_file_is_valid_signature($tmpPath, [$extension]);
+    }
+
+    $targetDir = __DIR__ . '/../storage/private/articles';
+    if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
         throw new RuntimeException($tm('create_dir'));
     }
 
@@ -56,10 +77,8 @@ function import_article_document(array $file): array
         throw new RuntimeException($tm('save_doc'));
     }
 
-    $publicPath = 'storage/uploads/articles/' . $filename;
-    $publicUrl = base_url($publicPath);
     $documentTitle = trim((string) pathinfo($originalName, PATHINFO_FILENAME));
-    $sourceLink = '<p class="help article-source-document"><a href="' . e($publicUrl) . '">' . e($tm('source_file')) . '</a></p>';
+    $sourceLabel = '<p class="help article-source-document">' . e($tm('source_file')) . ': ' . e($originalName) . '</p>';
     if (in_array($extension, ['txt', 'md'], true)) {
         $rawText = (string) file_get_contents($absolutePath);
         $content = article_import_text_to_html($rawText);
@@ -82,7 +101,7 @@ function import_article_document(array $file): array
     }
     $content = trim($content);
     if ($content !== '') {
-        $content .= "\n" . $sourceLink;
+        $content .= "\n" . $sourceLabel;
     }
 
     return [

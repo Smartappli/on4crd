@@ -21,21 +21,23 @@ function albums_admin_safe_photo_path(string $publicPath): ?string
     return safe_storage_public_path_or_null($publicPath, ['storage/uploads/albums/']);
 }
 
-function albums_admin_delete_photo_files(string $publicPath): void
+function albums_admin_delete_photo_files(string $publicPath): bool
 {
     $safePath = albums_admin_safe_photo_path($publicPath);
     if ($safePath === null) {
-        return;
+        return true;
     }
+    $ok = true;
     $absolute = dirname(__DIR__) . '/' . $safePath;
     if (is_file($absolute)) {
-        @unlink($absolute);
+        $ok = @unlink($absolute) && $ok;
     }
     $thumbPublic = album_thumbnail_public_path($safePath);
     $thumbAbsolute = dirname(__DIR__) . '/' . $thumbPublic;
     if (is_file($thumbAbsolute)) {
-        @unlink($thumbAbsolute);
+        $ok = @unlink($thumbAbsolute) && $ok;
     }
+    return $ok;
 }
 
 function albums_admin_clear_cache(): void
@@ -89,13 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $photoStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ?');
             $photoStmt->execute([$albumId]);
             $photoRows = $photoStmt->fetchAll() ?: [];
+            foreach ($photoRows as $photoRow) {
+                albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''));
+            }
             db()->beginTransaction();
             db()->prepare('DELETE FROM album_photos WHERE album_id = ?')->execute([$albumId]);
             db()->prepare('DELETE FROM albums WHERE id = ?')->execute([$albumId]);
             db()->commit();
-            foreach ($photoRows as $photoRow) {
-                albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''));
-            }
             albums_admin_clear_cache();
             set_flash('success', (string) $t['album_deleted_ok']);
             redirect('admin_albums');
