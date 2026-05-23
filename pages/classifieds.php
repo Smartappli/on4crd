@@ -115,11 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $adStmt->execute([$id]);
                 $adRow = $adStmt->fetch() ?: null;
                 if ($adRow !== null) {
-                    $title = (string) ($adRow['title'] ?? 'Annonce');
+                    $title = (string) ($adRow['title'] ?? $t('default_ad_title'));
                     $url = route_url('classifieds', ['q' => $title]);
                     $saved = favorite_toggle((int) $user['id'], 'classified_ad', (int) $adRow['id'], $title, $url);
-                    notify_member((int) $user['id'], 'favorite', $saved ? 'Favori ajouté' : 'Favori retiré', $title, $url);
-                    set_flash('success', $saved ? 'Annonce ajoutée aux favoris.' : 'Annonce retirée des favoris.');
+                    notify_member((int) $user['id'], 'favorite', $saved ? $t('favorite_added') : $t('favorite_removed'), $title, $url);
+                    set_flash('success', $saved ? $t('favorite_added_msg') : $t('favorite_removed_msg'));
                 }
             }
         }
@@ -284,7 +284,7 @@ ob_start();
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="toggle_favorite">
                             <input type="hidden" name="id" value="<?= (int) $ad['id'] ?>">
-                            <button class="button secondary" type="submit"><?= $isFavorite ? '★ Favori' : '☆ Favori' ?></button>
+                            <button class="button secondary" type="submit"><?= e($t('favorite_label')) ?></button>
                         </form>
                     <?php endif; ?>
                 </article>

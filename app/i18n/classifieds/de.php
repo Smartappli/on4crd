@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Kleinanzeigen',
   'lead' => 'Veröffentlichen und durchsuchen Sie die Funk-Kleinanzeigen des Clubs.',
@@ -57,4 +55,10 @@ return array (
   'bulk_archive' => 'Archivieren',
   'bulk_delete' => 'Loeschen',
   'prev' => 'Zurueck',
+  'default_ad_title' => 'Anzeige',
+  'favorite_added' => 'Favorit hinzugefuegt',
+  'favorite_removed' => 'Favorit entfernt',
+  'favorite_added_msg' => 'Anzeige zu Favoriten hinzugefuegt.',
+  'favorite_removed_msg' => 'Anzeige aus Favoriten entfernt.',
+  'favorite_label' => 'Favorit',
 );

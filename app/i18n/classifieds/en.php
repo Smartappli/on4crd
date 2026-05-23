@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Classifieds',
   'lead' => 'Post and browse the club ham radio classifieds.',
@@ -57,4 +55,10 @@ return array (
   'bulk_archive' => 'Archive',
   'bulk_delete' => 'Delete',
   'prev' => 'Previous',
+  'default_ad_title' => 'Classified ad',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Ad added to favorites.',
+  'favorite_removed_msg' => 'Ad removed from favorites.',
+  'favorite_label' => 'Favorite',
 );

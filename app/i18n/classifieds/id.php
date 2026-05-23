@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Iklan baris',
   'lead' => 'Pasang dan lihat iklan baris radio amatir klub.',
@@ -57,4 +55,10 @@ return array (
   'bulk_archive' => 'Arsipkan',
   'bulk_delete' => 'Hapus',
   'prev' => 'Sebelumnya',
+  'default_ad_title' => 'Iklan',
+  'favorite_added' => 'Favorit ditambahkan',
+  'favorite_removed' => 'Favorit dihapus',
+  'favorite_added_msg' => 'Iklan ditambahkan ke favorit.',
+  'favorite_removed_msg' => 'Iklan dihapus dari favorit.',
+  'favorite_label' => 'Favorit',
 );

@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Kleine advertenties',
   'lead' => 'Plaats en bekijk de radioamateuradvertenties van de club.',
@@ -57,4 +55,10 @@ return array (
   'bulk_archive' => 'Archiveren',
   'bulk_delete' => 'Verwijderen',
   'prev' => 'Vorige',
+  'default_ad_title' => 'Advertentie',
+  'favorite_added' => 'Favoriet toegevoegd',
+  'favorite_removed' => 'Favoriet verwijderd',
+  'favorite_added_msg' => 'Advertentie toegevoegd aan favorieten.',
+  'favorite_removed_msg' => 'Advertentie verwijderd uit favorieten.',
+  'favorite_label' => 'Favoriet',
 );

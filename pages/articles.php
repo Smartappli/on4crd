@@ -50,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
         $favStmt->execute([$articleId]);
         $favRow = $favStmt->fetch() ?: null;
         if ($favRow !== null) {
-            $favTitle = trim((string) ($favRow['title'] ?? 'Article'));
+            $favTitle = trim((string) ($favRow['title'] ?? (string) ($t['default_article_title'] ?? 'Article')));
             $favUrl = route_url('article', ['slug' => (string) ($favRow['slug'] ?? '')]);
             $saved = favorite_toggle((int) $user['id'], 'article', (int) $favRow['id'], $favTitle, $favUrl);
-            notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $favTitle, $favUrl);
-            set_flash('success', $saved ? 'Article added to favorites.' : 'Article removed from favorites.');
+            notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $favTitle, $favUrl);
+            set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
         }
     }
     redirect_url(route_url_clean('articles', ['theme' => (string) ($_GET['theme'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'page' => max(1, (int) ($_GET['page'] ?? 1))]));
@@ -205,7 +205,7 @@ ob_start();
                                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                         <input type="hidden" name="action" value="toggle_favorite_article">
                                         <input type="hidden" name="article_id" value="<?= (int) ($row['id'] ?? 0) ?>">
-                                        <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; Favorite' : '&#9734; Favorite' ?></button>
+                                        <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; ' . e((string) $t['favorite_label']) : '&#9734; ' . e((string) $t['favorite_label']) ?></button>
                                     </form>
                                 <?php endif; ?>
                             </p>

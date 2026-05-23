@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Classificados',
   'lead' => 'Publique e consulte os classificados de radioamador do clube.',
@@ -57,4 +55,10 @@ return array (
   'bulk_archive' => 'Arquivar',
   'bulk_delete' => 'Eliminar',
   'prev' => 'Anterior',
+  'default_ad_title' => 'Anuncio',
+  'favorite_added' => 'Favorito adicionado',
+  'favorite_removed' => 'Favorito removido',
+  'favorite_added_msg' => 'Anuncio adicionado aos favoritos.',
+  'favorite_removed_msg' => 'Anuncio removido dos favoritos.',
+  'favorite_label' => 'Favorito',
 );

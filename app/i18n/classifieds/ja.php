@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'クラシファイド',
   'lead' => 'クラブのアマチュア無線向け売買・募集情報を投稿、閲覧できます。',
@@ -57,4 +55,10 @@ return array (
   'bulk_archive' => '?????',
   'bulk_delete' => '??',
   'prev' => '??',
+  'default_ad_title' => 'Classified ad',
+  'favorite_added' => 'Favorite added',
+  'favorite_removed' => 'Favorite removed',
+  'favorite_added_msg' => 'Ad added to favorites.',
+  'favorite_removed_msg' => 'Ad removed from favorites.',
+  'favorite_label' => 'Favorite',
 );
