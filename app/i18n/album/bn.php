@@ -1,13 +1,18 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'title' => 'অ্যালবাম',
-    'gallery_unavailable' => 'গ্যালারি বর্তমানে অনুপলব্ধ.',
-    'not_found' => 'অ্যালবাম পাওয়া যায়নি.',
-    'back' => '← গ্যালারিতে ফিরে যান',
-    'photos' => 'ফটো',
-    'album_photos' => 'অ্যালবাম ছবি',
-    'none' => 'এই অ্যালবামে কোনো ছবি উপলব্ধ নেই৷',
-    'photo_alt' => 'অ্যালবাম ছবি',
-];
+return array (
+  'title' => 'Album',
+  'gallery_unavailable' => 'The gallery is currently unavailable.',
+  'not_found' => 'অ্যালবাম পাওয়া যায়নি।',
+  'back' => '← গ্যালারিতে ফিরুন',
+  'photos' => 'ছবি',
+  'album_photos' => 'অ্যালবামের ছবি',
+  'none' => 'এই অ্যালবামে কোনো ছবি নেই।',
+  'photo_alt' => 'Album photo',
+  'meta_desc' => 'ON4CRD public photo album.',
+  'page' => 'Page',
+  'pagination' => 'Photo pagination',
+  'previous' => 'আগের',
+  'next' => 'পরের',
+);

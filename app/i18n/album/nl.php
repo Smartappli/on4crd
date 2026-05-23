@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Album',
-  'gallery_unavailable' => 'De galerij is momenteel niet beschikbaar.',
+  'gallery_unavailable' => 'The gallery is currently unavailable.',
   'not_found' => 'Album niet gevonden.',
   'back' => '← Terug naar galerij',
-  'photos' => 'Foto\'s',
-  'album_photos' => 'Foto\'s van het album',
-  'none' => 'Geen foto\'s beschikbaar in dit album.',
-  'photo_alt' => 'Albumfoto',
+  'photos' => 'Fotos',
+  'album_photos' => 'Albumfotos',
+  'none' => 'Geen foto beschikbaar in dit album.',
+  'photo_alt' => 'Album photo',
+  'meta_desc' => 'ON4CRD public photo album.',
+  'page' => 'Page',
+  'pagination' => 'Photo pagination',
+  'previous' => 'Vorige',
+  'next' => 'Volgende',
 );

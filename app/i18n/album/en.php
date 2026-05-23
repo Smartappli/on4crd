@@ -8,6 +8,11 @@ return array (
   'back' => '← Back to gallery',
   'photos' => 'Photos',
   'album_photos' => 'Album photos',
-  'none' => 'No photos available in this album.',
+  'none' => 'No photo is available in this album.',
   'photo_alt' => 'Album photo',
+  'meta_desc' => 'ON4CRD public photo album.',
+  'page' => 'Page',
+  'pagination' => 'Photo pagination',
+  'previous' => 'Previous',
+  'next' => 'Next',
 );

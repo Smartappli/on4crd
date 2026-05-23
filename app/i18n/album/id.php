@@ -1,13 +1,18 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'title' => 'Album',
-    'gallery_unavailable' => 'Galeri saat ini tidak tersedia.',
-    'not_found' => 'Album tidak ditemukan.',
-    'back' => '← Kembali ke galeri',
-    'photos' => 'Foto',
-    'album_photos' => 'Foto album',
-    'none' => 'Tidak ada foto tersedia di album ini.',
-    'photo_alt' => 'Foto album',
-];
+return array (
+  'title' => 'Album',
+  'gallery_unavailable' => 'The gallery is currently unavailable.',
+  'not_found' => 'Album tidak ditemukan.',
+  'back' => '← Kembali ke galeri',
+  'photos' => 'Foto',
+  'album_photos' => 'Foto album',
+  'none' => 'Tidak ada foto di album ini.',
+  'photo_alt' => 'Album photo',
+  'meta_desc' => 'ON4CRD public photo album.',
+  'page' => 'Page',
+  'pagination' => 'Photo pagination',
+  'previous' => 'Sebelumnya',
+  'next' => 'Berikutnya',
+);

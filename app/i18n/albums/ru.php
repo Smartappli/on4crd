@@ -1,19 +1,25 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'public_albums' => 'Публичные альбомы',
-    'gallery_unavailable' => 'Галерея будет доступна после инициализации.',
-    'manage' => 'Управлять',
-    'intro' => 'Изучите деятельность клуба в фотографиях: семинары, экскурсии, конкурсы и общественные мероприятия.',
-    'albums' => 'Альбом',
-    'indexed_photos' => 'Проиндексированные фотографии',
-    'search_placeholder' => 'Поиск альбома (название, описание)',
-    'search' => 'Поиск',
-    'reset' => 'Перезагрузить',
-    'gallery' => 'Галерея',
-    'none' => 'Нет общедоступного альбома',
-    'for_search' => 'для этого поиска',
-    'cover_alt' => 'Обложка альбома',
-    'photo' => 'фото',
-];
+return array (
+  'public_albums' => 'Публичные альбомы',
+  'gallery_unavailable' => 'The gallery will be available after initialization.',
+  'manage' => 'Manage',
+  'intro' => 'Explore club activities in pictures: workshops, outings, contests and shared moments.',
+  'albums' => 'Albums',
+  'indexed_photos' => 'Indexed photos',
+  'search_placeholder' => 'Search an album by title or description',
+  'search' => 'Поиск',
+  'reset' => 'Сбросить',
+  'gallery' => 'Галерея',
+  'none' => 'Публичных альбомов нет',
+  'for_search' => ' for this search',
+  'cover_alt' => 'Album cover',
+  'photo' => 'фото',
+  'photos' => 'фото',
+  'meta_desc' => 'Public photo gallery of ON4CRD albums.',
+  'pagination' => 'Album pagination',
+  'previous' => 'Назад',
+  'next' => 'Вперед',
+  'page' => 'Page',
+);

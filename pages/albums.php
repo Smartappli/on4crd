@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_locale('albums', $locale);
+set_page_meta(['title' => (string) $t['public_albums'], 'description' => (string) $t['meta_desc']]);
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
@@ -13,6 +14,8 @@ $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 100) {
     $search = mb_substr($search, 0, 100);
 }
+$page = max(1, (int) ($_GET['p'] ?? 1));
+$perPage = 12;
 
 $params = [];
 $where = 'a.is_public = 1';
@@ -23,37 +26,49 @@ if ($search !== '') {
     $params[] = $like;
 }
 
-$rows = cache_remember('albums_public_' . md5($where . '|' . json_encode($params)), 90, static function () use ($where, $params): array {
-    $stmt = db()->prepare(
-        'SELECT a.*, 
-            (SELECT COUNT(*) FROM album_photos p WHERE p.album_id = a.id) AS photo_count,
-            (SELECT p.file_path FROM album_photos p WHERE p.album_id = a.id ORDER BY p.id DESC LIMIT 1) AS cover_path
-         FROM albums a
-         WHERE ' . $where . '
-         ORDER BY a.id DESC
-         LIMIT 120'
-    );
-    $stmt->execute($params);
-    return $stmt->fetchAll() ?: [];
-});
+$countStmt = db()->prepare('SELECT COUNT(*) FROM albums a WHERE ' . $where);
+$countStmt->execute($params);
+$totalAlbums = (int) $countStmt->fetchColumn();
+$pagination = pagination_state($totalAlbums, $page, $perPage);
+$page = $pagination['page'];
+$totalPages = $pagination['total_pages'];
+$offset = $pagination['offset'];
 
-$photoTotal = 0;
-foreach ($rows as $row) {
-    $photoTotal += (int) ($row['photo_count'] ?? 0);
-}
+$stmt = db()->prepare(
+    'SELECT a.*,
+        (SELECT COUNT(*) FROM album_photos p WHERE p.album_id = a.id) AS photo_count,
+        (SELECT p.file_path FROM album_photos p WHERE p.album_id = a.id ORDER BY p.id DESC LIMIT 1) AS cover_path
+     FROM albums a
+     WHERE ' . $where . '
+     ORDER BY a.id DESC
+     LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset
+);
+$stmt->execute($params);
+$rows = $stmt->fetchAll() ?: [];
+
+$photoTotalStmt = db()->prepare(
+    'SELECT COUNT(*)
+     FROM album_photos p
+     INNER JOIN albums a ON a.id = p.album_id
+     WHERE ' . $where
+);
+$photoTotalStmt->execute($params);
+$photoTotal = (int) $photoTotalStmt->fetchColumn();
 
 ob_start();
 ?>
 <div class="stack">
     <section class="card gallery-header">
         <div class="row-between">
-            <h1 class="album-heading-font"><?= e((string) $t['public_albums']) ?></h1>
+            <div>
+                <h1 class="album-heading-font"><?= e((string) $t['public_albums']) ?></h1>
+                <p class="help"><?= e((string) $t['intro']) ?></p>
+            </div>
         </div>
-        <p class="help"><?= e((string) $t['intro']) ?></p>
         <div class="stats-grid">
             <article class="stat-card">
                 <span class="help album-heading-font"><?= e((string) $t['albums']) ?></span>
-                <strong><?= (int) count($rows) ?></strong>
+                <strong><?= (int) $totalAlbums ?></strong>
             </article>
             <article class="stat-card">
                 <span class="help album-heading-font"><?= e((string) $t['indexed_photos']) ?></span>
@@ -77,26 +92,39 @@ ob_start();
         <?php else: ?>
             <div class="gallery-grid">
                 <?php foreach ($rows as $row):
-                    $coverPath = trim((string) ($row['cover_path'] ?? ''));
-                    $coverThumb = $coverPath !== '' ? album_thumbnail_public_path($coverPath) : '';
-                    $coverThumbAbs = $coverThumb !== '' ? dirname(__DIR__) . '/' . ltrim($coverThumb, '/') : '';
-                    $coverSrc = $coverPath !== '' && is_file($coverThumbAbs) ? $coverThumb : $coverPath;
+                    $coverPath = safe_storage_public_path_or_null((string) ($row['cover_path'] ?? ''), ['storage/uploads/albums/']);
+                    $coverThumb = $coverPath !== null ? album_thumbnail_public_path($coverPath) : '';
+                    $coverThumbAbs = $coverThumb !== '' ? dirname(__DIR__) . '/' . $coverThumb : '';
+                    $coverSrc = $coverThumb !== '' && is_file($coverThumbAbs) ? $coverThumb : ($coverPath ?? '');
                     $photoCount = (int) ($row['photo_count'] ?? 0);
                     ?>
                     <article class="gallery-item album-card">
-                        <a class="album-card-link" href="<?= e(base_url('index.php?route=album&id=' . (int) $row['id'])) ?>">
-                            <?php if ($coverPath !== ''): ?>
+                        <a class="album-card-link" href="<?= e(route_url('album', ['id' => (int) $row['id']])) ?>">
+                            <?php if ($coverSrc !== ''): ?>
                                 <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e((string) $row['title']) ?>">
                             <?php else: ?>
-                                <div class="album-card-placeholder">📷</div>
+                                <div class="album-card-placeholder" aria-hidden="true">📷</div>
                             <?php endif; ?>
                             <h2><?= e((string) $row['title']) ?></h2>
-                            <p class="help"><?= e((string) $row['description']) ?></p>
-                            <p><span class="badge muted"><?= $photoCount ?> <?= e((string) $t['photo']) ?><?= $photoCount > 1 ? 's' : '' ?></span></p>
+                            <?php if (trim((string) ($row['description'] ?? '')) !== ''): ?>
+                                <p class="help"><?= e(mb_safe_strimwidth((string) $row['description'], 0, 150, '...')) ?></p>
+                            <?php endif; ?>
+                            <p><span class="badge muted"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span></p>
                         </a>
                     </article>
                 <?php endforeach; ?>
             </div>
+            <?php if ($totalPages > 1): ?>
+                <nav class="actions mt-3" aria-label="<?= e((string) $t['pagination']) ?>">
+                    <?php if ($page > 1): ?>
+                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['q' => $search, 'p' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                    <?php endif; ?>
+                    <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
+                    <?php if ($page < $totalPages): ?>
+                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['q' => $search, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                    <?php endif; ?>
+                </nav>
+            <?php endif; ?>
         <?php endif; ?>
     </section>
 </div>

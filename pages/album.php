@@ -10,22 +10,39 @@ if (!table_exists('albums') || !table_exists('album_photos')) {
 }
 
 $albumId = (int) ($_GET['id'] ?? 0);
-$album = cache_remember('album_public_' . $albumId, 90, static function () use ($albumId) {
-    $stmt = db()->prepare('SELECT * FROM albums WHERE id = ? AND is_public = 1');
-    $stmt->execute([$albumId]);
-    return $stmt->fetch() ?: null;
-});
+$albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? AND is_public = 1');
+$albumStmt->execute([$albumId]);
+$album = $albumStmt->fetch();
 
 if (!$album) {
     echo render_layout('<div class="card"><p>' . e((string) $t['not_found']) . '</p></div>', (string) $t['title']);
     return;
 }
 
-$photos = cache_remember('album_photos_public_' . (int) $album['id'], 90, static function () use ($album): array {
-    $photosStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER BY id DESC');
-    $photosStmt->execute([(int) $album['id']]);
-    return $photosStmt->fetchAll() ?: [];
-});
+$page = max(1, (int) ($_GET['p'] ?? 1));
+$perPage = 24;
+$countStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
+$countStmt->execute([(int) $album['id']]);
+$photoTotal = (int) $countStmt->fetchColumn();
+$pagination = pagination_state($photoTotal, $page, $perPage);
+$page = $pagination['page'];
+$totalPages = $pagination['total_pages'];
+$offset = $pagination['offset'];
+
+$photosStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER BY id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$photosStmt->execute([(int) $album['id']]);
+$photos = $photosStmt->fetchAll() ?: [];
+
+$cover = $photos[0] ?? null;
+$coverPath = is_array($cover) ? safe_storage_public_path_or_null((string) ($cover['file_path'] ?? ''), ['storage/uploads/albums/']) : null;
+$pageMeta = [
+    'title' => (string) $album['title'],
+    'description' => trim((string) ($album['description'] ?? '')) !== '' ? (string) $album['description'] : (string) $t['meta_desc'],
+];
+if ($coverPath !== null) {
+    $pageMeta['image'] = base_url($coverPath);
+}
+set_page_meta($pageMeta);
 
 ob_start();
 ?>
@@ -38,7 +55,11 @@ ob_start();
     <div class="stats-grid">
         <article class="stat-card">
             <span class="help"><?= e((string) $t['photos']) ?></span>
-            <strong><?= (int) count($photos) ?></strong>
+            <strong><?= (int) $photoTotal ?></strong>
+        </article>
+        <article class="stat-card">
+            <span class="help"><?= e((string) $t['page']) ?></span>
+            <strong><?= $page ?> / <?= $totalPages ?></strong>
         </article>
     </div>
 </section>
@@ -48,20 +69,41 @@ ob_start();
     <?php if ($photos === []): ?>
         <p><?= e((string) $t['none']) ?></p>
     <?php else: ?>
-    <div class="gallery-grid">
-        <?php foreach ($photos as $photo): ?>
-            <?php
-            $filePath = (string) $photo['file_path'];
-            $thumbPath = album_thumbnail_public_path($filePath);
-            $thumbAbs = dirname(__DIR__) . '/' . ltrim($thumbPath, '/');
-            $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
-            ?>
-            <figure class="gallery-item">
-                <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e((string) ($photo['title'] ?: (string) $t['photo_alt'])) ?>">
-                <figcaption><strong><?= e((string) $photo['title']) ?></strong><br><?= e((string) $photo['caption']) ?></figcaption>
-            </figure>
-        <?php endforeach; ?>
-    </div>
+        <div class="gallery-grid">
+            <?php foreach ($photos as $photo): ?>
+                <?php
+                $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+                if ($filePath === null) {
+                    continue;
+                }
+                $thumbPath = album_thumbnail_public_path($filePath);
+                $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
+                $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
+                $title = trim((string) ($photo['title'] ?? ''));
+                $caption = trim((string) ($photo['caption'] ?? ''));
+                ?>
+                <figure class="gallery-item">
+                    <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener">
+                        <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>">
+                    </a>
+                    <figcaption>
+                        <?php if ($title !== ''): ?><strong><?= e($title) ?></strong><?php endif; ?>
+                        <?php if ($caption !== ''): ?><br><?= e($caption) ?><?php endif; ?>
+                    </figcaption>
+                </figure>
+            <?php endforeach; ?>
+        </div>
+        <?php if ($totalPages > 1): ?>
+            <nav class="actions mt-3" aria-label="<?= e((string) $t['pagination']) ?>">
+                <?php if ($page > 1): ?>
+                    <a class="button secondary" href="<?= e(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                <?php endif; ?>
+                <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
+                <?php if ($page < $totalPages): ?>
+                    <a class="button secondary" href="<?= e(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                <?php endif; ?>
+            </nav>
+        <?php endif; ?>
     <?php endif; ?>
 </section>
 <?php
