@@ -46,6 +46,23 @@ foreach (array_keys($homeExtraMessages['fr']) as $key) {
     $homeI18n[$key] = $value;
 }
 $homeTodayDate = date('d/m/Y');
+$homeFallbackBox = static function (string $message): string {
+    return '<p class="help">' . e($message) . '</p>';
+};
+$homeSafeWidget = static function (string $slug) use ($homeFallbackBox): string {
+    try {
+        return render_widget($slug);
+    } catch (Throwable) {
+        return $homeFallbackBox('Widget temporairement indisponible.');
+    }
+};
+$homeSafeHamAdvice = static function () use ($homeFallbackBox): string {
+    try {
+        return render_ham_weather_advice(current_user() ?? []);
+    } catch (Throwable) {
+        return $homeFallbackBox('Conseil radio temporairement indisponible.');
+    }
+};
 
 $user = current_user();
 $isAuthenticated = $user !== null;
@@ -57,6 +74,9 @@ $newsletterCta = '<a class="inline-flex items-center justify-center rounded-xl b
 
 
 $moduleCatalog = admin_module_cards_catalog();
+if (!is_array($moduleCatalog)) {
+    $moduleCatalog = [];
+}
 
 
 $visibilityLabels = (array) ($legacyStaticMessages['home_visibility'] ?? []);
@@ -83,6 +103,9 @@ if (table_exists('modules')) {
 $activeModules = [];
 $moduleCards = '';
 foreach ($moduleCatalog as $module) {
+    if (!is_array($module) || empty($module['route'])) {
+        continue;
+    }
     $moduleCode = (string) ($module['code'] ?? $module['module'] ?? '');
     if ($moduleCode !== '' && !module_enabled($moduleCode)) {
         continue;
@@ -178,9 +201,13 @@ if ($heroSubtitle !== '') {
 
 $moduleCount = count($activeModules);
 $heroBackgroundUrl = asset_url('assets/img/on4crd_hero.png');
-$heroImageCandidates = cache_remember('home_hero_image_candidates_v1', 300, static function (): array {
-    return glob(__DIR__ . '/../assets/img/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
-});
+try {
+    $heroImageCandidates = cache_remember('home_hero_image_candidates_v1', 300, static function (): array {
+        return glob(__DIR__ . '/../assets/img/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
+    });
+} catch (Throwable) {
+    $heroImageCandidates = [];
+}
 if ($heroImageCandidates !== []) {
     $heroBackgroundUrl = asset_url('assets/img/' . basename((string) $heroImageCandidates[array_rand($heroImageCandidates)]));
 }
@@ -252,9 +279,13 @@ if (is_array($nextEvent) && !empty($nextEvent['slug'])) {
 }
 
 $adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">' . e((string) $homeI18n['partner_ad_empty']) . '</p></div>';
-$localAdCandidates = cache_remember('home_local_ad_candidates_v1', 300, static function (): array {
-    return glob(__DIR__ . '/../assets/pub/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
-});
+try {
+    $localAdCandidates = cache_remember('home_local_ad_candidates_v1', 300, static function (): array {
+        return glob(__DIR__ . '/../assets/pub/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
+    });
+} catch (Throwable) {
+    $localAdCandidates = [];
+}
 if ($localAdCandidates !== []) {
     $localAdPath = 'assets/pub/' . basename((string) $localAdCandidates[array_rand($localAdCandidates)]);
     $adSlotHtml = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
@@ -289,10 +320,10 @@ if (is_array($featuredAd) && !empty($featuredAd['title'])) {
 
 $ubaLogoPath = 'assets/logo/UBA-Logo-Couleur-MID2.png';
 $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
-$homeWeatherHtml = render_widget('open_meteo');
-$homePropagationHtml = render_widget('propagation');
+$homeWeatherHtml = $homeSafeWidget('open_meteo');
+$homePropagationHtml = $homeSafeWidget('propagation');
 $hasHomePropagation = trim((string) $homePropagationHtml) !== '';
-$homeHamAdviceHtml = render_ham_weather_advice(current_user() ?? []);
+$homeHamAdviceHtml = $homeSafeHamAdvice();
 $hamWeatherRefreshUrl = base_url('index.php?' . http_build_query(['route' => 'home', 'ajax' => 'ham_weather']));
 $homeRadioInfoHtml = '<div class="grid gap-4">'
     . '<section>'
@@ -312,9 +343,9 @@ if (isset($_GET['ajax']) && (string) $_GET['ajax'] === 'ham_weather') {
 
     try {
         echo json_encode([
-            'weather' => render_widget('open_meteo'),
-            'propagation' => render_widget('propagation'),
-            'advice' => render_ham_weather_advice(current_user() ?? []),
+            'weather' => $homeSafeWidget('open_meteo'),
+            'propagation' => $homeSafeWidget('propagation'),
+            'advice' => $homeSafeHamAdvice(),
             'updated_at' => gmdate('c'),
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
     } catch (Throwable $e) {
@@ -325,7 +356,11 @@ if (isset($_GET['ajax']) && (string) $_GET['ajax'] === 'ham_weather') {
     return;
 }
 
-$homeQuote = random_quote_for_layout();
+try {
+    $homeQuote = random_quote_for_layout();
+} catch (Throwable) {
+    $homeQuote = null;
+}
 $homeQuoteText = (string) $homeI18n['quote_fallback'];
 $homeQuoteAuthor = '';
 if (is_array($homeQuote)) {

@@ -571,6 +571,7 @@ function render_widget(string $slug, array $user = []): string
 {
     $safeSlug = strtolower(trim($slug));
     $callsign = trim((string) ($user['callsign'] ?? 'OM'));
+    $locale = current_locale();
 
     switch ($safeSlug) {
         case 'welcome':
@@ -620,7 +621,6 @@ function render_widget(string $slug, array $user = []): string
                 . '</ul>';
 
         case 'propagation':
-            $locale = current_locale();
             $kpFeedUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
             $cacheKey = 'widget:propagation:kp-index';
             $payload = cache_remember($cacheKey, 300, static function () use ($kpFeedUrl): ?array {
@@ -690,7 +690,15 @@ function render_widget(string $slug, array $user = []): string
             $weatherCoordinates = maidenhead_to_coordinates($locator);
 
             if (table_exists('live_feeds')) {
-                $feedStmt = db()->prepare('SELECT url, cache_ttl, is_enabled FROM live_feeds WHERE code = ? LIMIT 1');
+                try {
+                $feedColumns = ['url'];
+                if (table_has_column('live_feeds', 'cache_ttl')) {
+                    $feedColumns[] = 'cache_ttl';
+                }
+                if (table_has_column('live_feeds', 'is_enabled')) {
+                    $feedColumns[] = 'is_enabled';
+                }
+                $feedStmt = db()->prepare('SELECT ' . implode(', ', $feedColumns) . ' FROM live_feeds WHERE code = ? LIMIT 1');
                 $feedStmt->execute(['open-meteo']);
                 $feedRow = $feedStmt->fetch();
                 if (is_array($feedRow)) {
@@ -702,6 +710,10 @@ function render_widget(string $slug, array $user = []): string
                         $feedUrl = $configuredUrl;
                     }
                     $cacheTtl = max(60, (int) ($feedRow['cache_ttl'] ?? 300));
+                }
+                } catch (Throwable) {
+                    $feedUrl = $defaultUrl;
+                    $cacheTtl = 300;
                 }
             }
 
@@ -1704,21 +1716,32 @@ function seed_quotes_from_radioamateur_dump(string $sql): void
 
 function random_quote_for_layout(): ?array
 {
-    if (!table_exists('quotes')) {
-        return null;
-    }
+    try {
+        if (!table_exists('quotes')) {
+            return null;
+        }
 
-    $countStmt = db()->query('SELECT COUNT(*) FROM quotes WHERE is_active = 1');
-    $activeCount = $countStmt !== false ? (int) $countStmt->fetchColumn() : 0;
-    if ($activeCount <= 0) {
-        return null;
-    }
+        $whereActive = table_has_column('quotes', 'is_active') ? ' WHERE is_active = 1' : '';
+        $countStmt = db()->query('SELECT COUNT(*) FROM quotes' . $whereActive);
+        $activeCount = $countStmt !== false ? (int) $countStmt->fetchColumn() : 0;
+        if ($activeCount <= 0) {
+            return null;
+        }
 
-    $daySeed = date('Y-m-d');
-    $offset = (int) (sprintf('%u', crc32($daySeed)) % $activeCount);
+        $daySeed = date('Y-m-d');
+        $offset = (int) (sprintf('%u', crc32($daySeed)) % $activeCount);
+        $quoteColumns = ['quote_fr', 'quote_en', 'quote_de', 'quote_nl', 'author'];
+        foreach ($quoteColumns as $quoteColumn) {
+            if (!table_has_column('quotes', $quoteColumn)) {
+                return null;
+            }
+        }
 
-    $stmt = db()->query('SELECT quote_fr, quote_en, quote_de, quote_nl, author FROM quotes WHERE is_active = 1 LIMIT 1 OFFSET ' . $offset);
-    if ($stmt === false) {
+        $stmt = db()->query('SELECT quote_fr, quote_en, quote_de, quote_nl, author FROM quotes' . $whereActive . ' LIMIT 1 OFFSET ' . $offset);
+        if ($stmt === false) {
+            return null;
+        }
+    } catch (Throwable) {
         return null;
     }
     $row = $stmt->fetch();
@@ -2078,9 +2101,27 @@ function current_user(): ?array
         return null;
     }
 
-    $stmt = db()->prepare('SELECT id, callsign, full_name, email, locator, is_active, is_committee FROM members WHERE id = ? OR auth_user_id = ? LIMIT 1');
-    $stmt->execute([$memberId, $memberId]);
-    $row = $stmt->fetch();
+    $memberColumns = ['id'];
+    foreach (['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'] as $memberColumn) {
+        if (table_has_column('members', $memberColumn)) {
+            $memberColumns[] = $memberColumn;
+        }
+    }
+    $where = 'id = ?';
+    $params = [$memberId];
+    if (table_has_column('members', 'auth_user_id')) {
+        $where .= ' OR auth_user_id = ?';
+        $params[] = $memberId;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT ' . implode(', ', $memberColumns) . ' FROM members WHERE ' . $where . ' LIMIT 1');
+        $stmt->execute($params);
+        $row = $stmt->fetch();
+    } catch (Throwable) {
+        $cache = null;
+        return null;
+    }
     if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
         unset($_SESSION['member_id']);
         $cache = null;
