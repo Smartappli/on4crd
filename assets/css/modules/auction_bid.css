@@ -1,0 +1,4 @@
+﻿/* Module CSS: auction_bid */
+[data-route="auction_bid"] .auction-bid-module {
+  min-width: 0;
+}

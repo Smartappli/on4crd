@@ -1,0 +1,4 @@
+﻿/* Module CSS: settings */
+[data-route="settings"] .settings-module {
+  min-width: 0;
+}

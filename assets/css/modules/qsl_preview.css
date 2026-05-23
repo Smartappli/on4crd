@@ -1,0 +1,4 @@
+﻿/* Module CSS: qsl_preview */
+[data-route="qsl_preview"] .qsl-preview-module {
+  min-width: 0;
+}

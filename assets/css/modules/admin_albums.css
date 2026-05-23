@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_albums */
+[data-route="admin_albums"] .admin-albums-module {
+  min-width: 0;
+}

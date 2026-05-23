@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_newsletters */
+[data-route="admin_newsletters"] .admin-newsletters-module {
+  min-width: 0;
+}

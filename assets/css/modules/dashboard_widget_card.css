@@ -1,0 +1,4 @@
+﻿/* Module CSS: dashboard_widget_card */
+[data-route="dashboard_widget_card"] .dashboard-widget-card-module {
+  min-width: 0;
+}

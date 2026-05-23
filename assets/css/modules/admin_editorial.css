@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_editorial */
+[data-route="admin_editorial"] .admin-editorial-module {
+  min-width: 0;
+}

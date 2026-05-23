@@ -1,0 +1,4 @@
+﻿/* Module CSS: membership */
+[data-route="membership"] .membership-module {
+  min-width: 0;
+}

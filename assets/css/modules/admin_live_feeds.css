@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_live_feeds */
+[data-route="admin_live_feeds"] .admin-live-feeds-module {
+  min-width: 0;
+}

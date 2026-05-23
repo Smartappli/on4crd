@@ -1,0 +1,4 @@
+﻿/* Module CSS: auction_view */
+[data-route="auction_view"] .auction-view-module {
+  min-width: 0;
+}

@@ -1,0 +1,4 @@
+﻿/* Module CSS: newsletter_public */
+[data-route="newsletter_public"] .newsletter-public-module {
+  min-width: 0;
+}

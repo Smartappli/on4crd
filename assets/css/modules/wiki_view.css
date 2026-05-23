@@ -1,0 +1,4 @@
+﻿/* Module CSS: wiki_view */
+[data-route="wiki_view"] .wiki-view-module {
+  min-width: 0;
+}

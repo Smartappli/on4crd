@@ -1,0 +1,4 @@
+﻿/* Module CSS: newsletter */
+[data-route="newsletter"] .newsletter-module {
+  min-width: 0;
+}

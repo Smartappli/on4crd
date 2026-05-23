@@ -1,0 +1,4 @@
+﻿/* Module CSS: reglement_interieur */
+[data-route="reglement_interieur"] .reglement-interieur-module {
+  min-width: 0;
+}

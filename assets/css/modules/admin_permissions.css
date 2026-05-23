@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_permissions */
+[data-route="admin_permissions"] .admin-permissions-module {
+  min-width: 0;
+}

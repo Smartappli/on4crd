@@ -1,0 +1,4 @@
+﻿/* Module CSS: relais */
+[data-route="relais"] .relais-module {
+  min-width: 0;
+}

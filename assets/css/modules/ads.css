@@ -1,0 +1,4 @@
+﻿/* Module CSS: ads */
+[data-route="ads"] .ads-module {
+  min-width: 0;
+}

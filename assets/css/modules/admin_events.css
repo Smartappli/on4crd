@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_events */
+[data-route="admin_events"] .admin-events-module {
+  min-width: 0;
+}

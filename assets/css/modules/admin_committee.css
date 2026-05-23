@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_committee */
+[data-route="admin_committee"] .admin-committee-module {
+  min-width: 0;
+}

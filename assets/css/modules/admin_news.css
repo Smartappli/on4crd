@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_news */
+[data-route="admin_news"] .admin-news-module {
+  min-width: 0;
+}

@@ -1,0 +1,4 @@
+﻿/* Module CSS: wiki_edit */
+[data-route="wiki_edit"] .wiki-edit-module {
+  min-width: 0;
+}

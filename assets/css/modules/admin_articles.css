@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_articles */
+[data-route="admin_articles"] .admin-articles-module {
+  min-width: 0;
+}

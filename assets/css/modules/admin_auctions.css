@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_auctions */
+[data-route="admin_auctions"] .admin-auctions-module {
+  min-width: 0;
+}

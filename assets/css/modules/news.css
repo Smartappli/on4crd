@@ -1,0 +1,4 @@
+﻿/* Module CSS: news */
+[data-route="news"] .news-module {
+  min-width: 0;
+}

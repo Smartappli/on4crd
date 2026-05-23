@@ -1,0 +1,4 @@
+﻿/* Module CSS: articles */
+[data-route="articles"] .articles-module {
+  min-width: 0;
+}

@@ -1,0 +1,4 @@
+﻿/* Module CSS: newsletter_unsubscribe */
+[data-route="newsletter_unsubscribe"] .newsletter-unsubscribe-module {
+  min-width: 0;
+}

@@ -1,0 +1,4 @@
+﻿/* Module CSS: profile */
+[data-route="profile"] .profile-module {
+  min-width: 0;
+}

@@ -1,0 +1,4 @@
+﻿/* Module CSS: event_view */
+[data-route="event_view"] .event-view-module {
+  min-width: 0;
+}

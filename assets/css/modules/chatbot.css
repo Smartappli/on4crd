@@ -1,0 +1,4 @@
+﻿/* Module CSS: chatbot */
+[data-route="chatbot"] .chatbot-module {
+  min-width: 0;
+}

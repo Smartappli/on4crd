@@ -2733,6 +2733,9 @@ function render_layout(string $content, string $title = ''): string
             continue;
         }
         $metaHead .= '<link rel="alternate" hreflang="' . e($lang) . '" href="' . e($url) . '">';
+        if ($lang !== 'x-default') {
+            $metaHead .= '<meta property="og:locale:alternate" content="' . e(locale_open_graph_code($lang)) . '">';
+        }
     }
     if ($metaGeoRegion !== '') {
         $metaHead .= '<meta name="geo.region" content="' . e($metaGeoRegion) . '">';

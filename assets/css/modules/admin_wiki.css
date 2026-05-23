@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_wiki */
+[data-route="admin_wiki"] .admin-wiki-module {
+  min-width: 0;
+}

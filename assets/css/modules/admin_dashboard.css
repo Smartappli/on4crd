@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_dashboard */
+[data-route="admin_dashboard"] .admin-dashboard-module {
+  min-width: 0;
+}

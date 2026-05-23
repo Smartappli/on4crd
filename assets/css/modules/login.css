@@ -1,0 +1,4 @@
+﻿/* Module CSS: login */
+[data-route="login"] .login-module {
+  min-width: 0;
+}

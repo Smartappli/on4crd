@@ -1,0 +1,4 @@
+﻿/* Module CSS: conditions_utilisation */
+[data-route="conditions_utilisation"] .conditions-utilisation-module {
+  min-width: 0;
+}

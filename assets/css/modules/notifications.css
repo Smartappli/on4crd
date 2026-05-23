@@ -1,0 +1,4 @@
+﻿/* Module CSS: notifications */
+[data-route="notifications"] .notifications-module {
+  min-width: 0;
+}

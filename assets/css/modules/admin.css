@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin */
+[data-route="admin"] .admin-module {
+  min-width: 0;
+}

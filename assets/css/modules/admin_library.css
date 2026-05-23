@@ -1,0 +1,4 @@
+﻿/* Module CSS: admin_library */
+[data-route="admin_library"] .admin-library-module {
+  min-width: 0;
+}

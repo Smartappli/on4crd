@@ -1,0 +1,4 @@
+﻿/* Module CSS: committee */
+[data-route="committee"] .committee-module {
+  min-width: 0;
+}

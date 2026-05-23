@@ -1,0 +1,4 @@
+﻿/* Module CSS: album */
+[data-route="album"] .album-module {
+  min-width: 0;
+}
