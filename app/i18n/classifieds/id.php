@@ -2,6 +2,7 @@
 return array (
   'title' => 'Iklan baris',
   'lead' => 'Pasang dan lihat iklan baris radio amatir klub.',
+  'storage_unavailable' => 'Penyimpanan iklan baris sementara tidak tersedia.',
   'new_ad' => 'Pasang iklan',
   'my_ads' => 'Iklan saya',
   'all_ads' => 'Iklan terbaru',

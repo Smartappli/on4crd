@@ -10,8 +10,8 @@ $tt = static function (string $key, string $fallback) use ($t): string {
     return $value !== '' ? $value : $fallback;
 };
 
-if (!table_exists('classified_ads')) {
-    echo render_layout('<section class="card"><h1>' . e((string) ($t['title'] ?? 'Admin classifieds')) . '</h1><p class="help">Table classified_ads missing.</p></section>', (string) ($t['title'] ?? 'Admin classifieds'));
+if (!ensure_classified_ads_table()) {
+    echo render_layout('<section class="card"><h1>' . e((string) ($t['title'] ?? 'Admin classifieds')) . '</h1><p class="help">' . e((string) ($t['storage_unavailable'] ?? 'Classifieds storage unavailable.')) . '</p></section>', (string) ($t['title'] ?? 'Admin classifieds'));
     return;
 }
 classifieds_sync_expired();

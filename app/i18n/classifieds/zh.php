@@ -2,6 +2,7 @@
 return array (
   'title' => '分类广告',
   'lead' => '发布和浏览俱乐部业余无线电分类广告。',
+  'storage_unavailable' => '分类广告存储暂时不可用。',
   'new_ad' => '发布广告',
   'my_ads' => '我的广告',
   'all_ads' => '最新广告',

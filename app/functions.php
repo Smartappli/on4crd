@@ -1606,7 +1606,36 @@ function apply_runtime_schema_updates(): void
         }
     }
 
-    if (table_exists('classified_ads')) {
+    ensure_classified_ads_table();
+
+    ensure_member_favorites_table();
+    ensure_member_notifications_table();
+}
+
+if (!function_exists('ensure_classified_ads_table')) {
+function ensure_classified_ads_table(): bool
+{
+    try {
+        db()->exec(
+            'CREATE TABLE IF NOT EXISTS classified_ads (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                owner_member_id INT NOT NULL,
+                category_code VARCHAR(32) NOT NULL DEFAULT "gear",
+                title VARCHAR(190) NOT NULL,
+                description TEXT DEFAULT NULL,
+                location VARCHAR(120) DEFAULT NULL,
+                contact VARCHAR(190) DEFAULT NULL,
+                price_cents INT NOT NULL DEFAULT 0,
+                status ENUM("draft","active","sold","archived","expired") NOT NULL DEFAULT "draft",
+                expires_at DATETIME NULL DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_classified_owner_status (owner_member_id, status),
+                INDEX idx_classified_status_created (status, created_at),
+                INDEX idx_classified_expires (expires_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+
         $columnStmt = db()->prepare(
             'SELECT COUNT(*) FROM information_schema.columns
              WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
@@ -1618,16 +1647,22 @@ function apply_runtime_schema_updates(): void
         }
 
         db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
-    }
 
-    ensure_member_favorites_table();
-    ensure_member_notifications_table();
+        return true;
+    } catch (Throwable $throwable) {
+        log_structured_event('classified_ads_table_ensure_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+
+        return false;
+    }
+}
 }
 
 if (!function_exists('classifieds_sync_expired')) {
 function classifieds_sync_expired(): void
 {
-    if (!table_exists('classified_ads')) {
+    if (!ensure_classified_ads_table()) {
         return;
     }
 

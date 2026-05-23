@@ -12,8 +12,8 @@ if (!module_enabled('classifieds')) {
     return;
 }
 
-if (!table_exists('classified_ads')) {
-    $message = '<section class="card"><h1>' . e($t('title')) . '</h1><p class="help">Module temporairement indisponible : table <code>classified_ads</code> manquante.</p></section>';
+if (!ensure_classified_ads_table()) {
+    $message = '<section class="card"><h1>' . e($t('title')) . '</h1><p class="help">' . e($t('storage_unavailable')) . '</p></section>';
     echo render_layout($message, $t('title'));
     return;
 }

@@ -2,6 +2,7 @@
 return array (
   'title' => 'Annunci',
   'lead' => 'Pubblica e consulta gli annunci radioamatoriali del club.',
+  'storage_unavailable' => 'L’archivio degli annunci è temporaneamente non disponibile.',
   'new_ad' => 'Pubblica un annuncio',
   'my_ads' => 'I miei annunci',
   'all_ads' => 'Annunci recenti',

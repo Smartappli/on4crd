@@ -2,6 +2,7 @@
 return array (
   'title' => 'Classifieds',
   'lead' => 'Post and browse the club ham radio classifieds.',
+  'storage_unavailable' => 'Classifieds storage is temporarily unavailable.',
   'new_ad' => 'Post an ad',
   'my_ads' => 'My ads',
   'all_ads' => 'Recent ads',

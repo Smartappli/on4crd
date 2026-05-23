@@ -2,6 +2,7 @@
 return array (
   'title' => 'Petites annonces',
   'lead' => 'Déposez et consultez les annonces radioamateur du club.',
+  'storage_unavailable' => 'Le stockage des petites annonces est temporairement indisponible.',
   'new_ad' => 'Déposer une annonce',
   'my_ads' => 'Mes annonces',
   'all_ads' => 'Annonces récentes',
