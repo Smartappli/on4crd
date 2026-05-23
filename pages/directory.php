@@ -7,6 +7,7 @@ $t = i18n_domain_translator('directory', $locale);
 
 $activeMembersCount = 0;
 $ubaMembersCount = 0;
+$committeeMembersCount = 0;
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 100) {
     $search = mb_substr($search, 0, 100);
@@ -124,62 +125,194 @@ if (table_exists('members')) {
     $licenceRows = [];
 }
 
+$visibleMembersCount = count($members);
+foreach ($members as $member) {
+    if ((int) ($member['is_committee'] ?? 0) === 1) {
+        $committeeMembersCount++;
+    }
+}
+$hasFilters = $search !== '' || $licenceFilter !== '';
+$licenceOptions = [];
+foreach ($licenceRows as $licenceRow) {
+    $licenceValue = trim((string) ($licenceRow['licence_class'] ?? ''));
+    if ($licenceValue === '') {
+        continue;
+    }
+    $licenceOptions[] = [
+        'value' => $licenceValue,
+        'total' => (int) ($licenceRow['total'] ?? 0),
+    ];
+}
+
+$memberInitials = static function (array $member): string {
+    $callsign = trim((string) ($member['callsign'] ?? ''));
+    if ($callsign !== '') {
+        return mb_safe_strtoupper(mb_safe_substr($callsign, 0, 2));
+    }
+
+    $name = trim((string) ($member['full_name'] ?? ''));
+    if ($name === '') {
+        return 'OM';
+    }
+
+    $parts = preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    $initials = '';
+    foreach (array_slice($parts, 0, 2) as $part) {
+        $initials .= mb_safe_strtoupper(mb_safe_substr((string) $part, 0, 1));
+    }
+
+    return $initials !== '' ? $initials : 'OM';
+};
+
 ob_start();
 ?>
-<section class="card">
-    <h2 class="text-xl font-bold text-slate-900"><?= e($t('club_numbers')) ?></h2>
-    <div class="directory-grid">
-        <article class="directory-card">
-            <h3><?= e((string) $activeMembersCount) ?></h3>
+<div class="directory-page">
+    <section class="directory-hero">
+        <div class="directory-hero-copy">
+            <p class="directory-eyebrow"><?= e($t('club_numbers')) ?></p>
+            <h1><?= e($t('members_title')) ?></h1>
+            <p class="directory-lead"><?= e($t('intro')) ?></p>
+        </div>
+        <form class="directory-search-panel" method="get" action="<?= e(base_url('index.php')) ?>">
+            <input type="hidden" name="route" value="directory">
+            <label>
+                <span><?= e($t('search_label')) ?></span>
+                <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e($t('search_placeholder')) ?>">
+            </label>
+            <label>
+                <span><?= e($t('licence_filter')) ?></span>
+                <select name="licence">
+                    <option value=""><?= e($t('all_licences')) ?></option>
+                    <?php foreach ($licenceOptions as $licenceOption): ?>
+                        <?php $licenceValue = (string) $licenceOption['value']; ?>
+                        <option value="<?= e($licenceValue) ?>" <?= $licenceFilter === $licenceValue ? 'selected' : '' ?>>
+                            <?= e($licenceValue) ?> (<?= (int) $licenceOption['total'] ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+            <div class="directory-search-actions">
+                <button type="submit" class="button"><?= e($t('apply_filters')) ?></button>
+                <?php if ($hasFilters): ?>
+                    <a class="button secondary" href="<?= e(route_url('directory')) ?>"><?= e($t('reset_filters')) ?></a>
+                <?php endif; ?>
+            </div>
+        </form>
+    </section>
+
+    <section class="directory-stats" aria-label="<?= e($t('club_numbers')) ?>">
+        <article class="directory-stat">
+            <span><?= e((string) $activeMembersCount) ?></span>
             <p><?= e($t('member_list')) ?></p>
         </article>
-        <article class="directory-card">
-            <h3><?= e((string) $ubaMembersCount) ?></h3>
+        <article class="directory-stat">
+            <span><?= e((string) $visibleMembersCount) ?></span>
+            <p><?= e($t('visible_members')) ?></p>
+        </article>
+        <article class="directory-stat">
+            <span><?= e((string) $ubaMembersCount) ?></span>
             <p><?= e($t('uba_members')) ?></p>
         </article>
-    </div>
-</section>
+        <article class="directory-stat">
+            <span><?= e((string) $committeeMembersCount) ?></span>
+            <p><?= e($t('committee')) ?></p>
+        </article>
+    </section>
 
-<section class="card mt-4">
-    <h2><?= e($t('members_title')) ?></h2>
+    <section class="directory-results">
+        <div class="directory-results-header">
+            <div>
+                <p class="directory-eyebrow"><?= e($t('results')) ?></p>
+                <h2><?= e($t('members_title')) ?></h2>
+            </div>
+            <?php if ($hasFilters): ?>
+                <div class="directory-active-filters">
+                    <?php if ($search !== ''): ?>
+                        <span><?= e($t('search_label')) ?>: <?= e($search) ?></span>
+                    <?php endif; ?>
+                    <?php if ($licenceFilter !== ''): ?>
+                        <span><?= e($t('licence')) ?>: <?= e($licenceFilter) ?></span>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
     <?php if ($members === []): ?>
-        <p><?= e($t('none')) ?></p>
+        <div class="directory-empty">
+            <h3><?= e($t('none')) ?></h3>
+            <p><?= e($t('none_help')) ?></p>
+            <?php if ($hasFilters): ?>
+                <a class="button secondary" href="<?= e(route_url('directory')) ?>"><?= e($t('reset_filters')) ?></a>
+            <?php endif; ?>
+        </div>
     <?php else: ?>
-        <div class="directory-grid">
+        <div class="directory-member-grid">
             <?php foreach ($members as $member): ?>
-                <article class="directory-card">
-                    <h3><?= e((string) $member['callsign']) ?></h3>
-                    <?php $memberAvatarSrc = member_avatar_src($member); ?>
-                    <p><img src="<?= e($memberAvatarSrc) ?>" alt="<?= e($t('avatar_of')) ?> <?= e((string) $member['callsign']) ?>" style="width:96px;height:96px;object-fit:cover;border-radius:999px;"></p>
-                    <?php if (trim((string) ($member['full_name'] ?? '')) !== ''): ?>
-                        <p><?= e((string) $member['full_name']) ?></p>
+                <?php
+                $callsign = trim((string) ($member['callsign'] ?? ''));
+                $fullName = trim((string) ($member['full_name'] ?? ''));
+                $licenceClass = trim((string) ($member['licence_class'] ?? ''));
+                $email = trim((string) ($member['email'] ?? ''));
+                $phone = trim((string) ($member['phone'] ?? ''));
+                $qth = trim((string) ($member['qth'] ?? ''));
+                $bands = trim((string) ($member['favourite_bands'] ?? ''));
+                $station = trim((string) ($member['station_equipment'] ?? ''));
+                $memberAvatarSrc = member_avatar_src($member);
+                $bandList = array_values(array_filter(array_map('trim', preg_split('/[,;\/]+/', $bands) ?: [])));
+                ?>
+                <article class="directory-member-card">
+                    <header class="directory-member-header">
+                        <div class="directory-avatar-wrap">
+                            <img class="directory-avatar" src="<?= e($memberAvatarSrc) ?>" alt="<?= e($t('avatar_of')) ?> <?= e($callsign) ?>">
+                            <span aria-hidden="true"><?= e($memberInitials($member)) ?></span>
+                        </div>
+                        <div class="directory-member-title">
+                            <h3><?= e($callsign) ?></h3>
+                            <?php if ($fullName !== ''): ?>
+                                <p><?= e($fullName) ?></p>
+                            <?php endif; ?>
+                        </div>
+                    </header>
+
+                    <div class="directory-badges">
+                        <?php if ($licenceClass !== ''): ?>
+                            <span><?= e($licenceClass) ?></span>
+                        <?php endif; ?>
+                        <?php if ((int) ($member['is_committee'] ?? 0) === 1): ?>
+                            <span><?= e((string) ($member['committee_role'] ?: $t('committee'))) ?></span>
+                        <?php endif; ?>
+                        <?php if ($qth !== ''): ?>
+                            <span>QTH <?= e($qth) ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if ($bandList !== []): ?>
+                        <div class="directory-band-list" aria-label="<?= e($t('bands')) ?>">
+                            <?php foreach (array_slice($bandList, 0, 5) as $band): ?>
+                                <span><?= e($band) ?></span>
+                            <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
-                    <?php if (trim((string) ($member['licence_class'] ?? '')) !== ''): ?>
-                        <p class="help"><?= e($t('licence')) ?> : <?= e((string) $member['licence_class']) ?></p>
+
+                    <?php if ($station !== ''): ?>
+                        <p class="directory-station"><strong><?= e($t('station')) ?>:</strong> <?= e($station) ?></p>
                     <?php endif; ?>
-                    <?php if (trim((string) ($member['email'] ?? '')) !== ''): ?>
-                        <p class="help"><?= e($t('email')) ?> : <?= e((string) $member['email']) ?></p>
-                    <?php endif; ?>
-                    <?php if (trim((string) ($member['phone'] ?? '')) !== ''): ?>
-                        <p class="help"><?= e($t('phone')) ?> : <?= e((string) $member['phone']) ?></p>
-                    <?php endif; ?>
-                    <?php if (trim((string) ($member['qth'] ?? '')) !== ''): ?>
-                        <p class="help">QTH : <?= e((string) $member['qth']) ?></p>
-                    <?php endif; ?>
-                    <?php if (trim((string) ($member['favourite_bands'] ?? '')) !== ''): ?>
-                        <p class="help"><?= e($t('bands')) ?> : <?= e((string) $member['favourite_bands']) ?></p>
-                    <?php endif; ?>
-                    <?php if (trim((string) ($member['station_equipment'] ?? '')) !== ''): ?>
-                        <p class="help"><?= e($t('station')) ?> : <?= e((string) $member['station_equipment']) ?></p>
-                    <?php endif; ?>
-                    <?php if ((int) ($member['is_committee'] ?? 0) === 1): ?>
-                        <span class="badge muted"><?= e((string) ($member['committee_role'] ?: $t('committee'))) ?></span>
+
+                    <?php if ($email !== '' || $phone !== ''): ?>
+                        <div class="directory-contact-row">
+                            <?php if ($email !== ''): ?>
+                                <a class="button small secondary" href="mailto:<?= e($email) ?>"><?= e($t('email')) ?></a>
+                            <?php endif; ?>
+                            <?php if ($phone !== ''): ?>
+                                <a class="button small secondary" href="tel:<?= e(preg_replace('/\s+/', '', $phone) ?? $phone) ?>"><?= e($t('phone')) ?></a>
+                            <?php endif; ?>
+                        </div>
                     <?php endif; ?>
                 </article>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
-</section>
+    </section>
+</div>
 <?php
 
 echo render_layout((string) ob_get_clean(), $t('layout_title'));
