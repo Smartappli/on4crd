@@ -2870,19 +2870,8 @@ function render_layout(string $content, string $title = ''): string
         . '<select id="accent-selector" class="preference-select js-auto-submit" name="accent" aria-label="' . e((string) $layoutI18n['accent_choice']) . '" aria-describedby="accent-help">' . $accentOptionHtml . '</select>'
         . '<span class="sr-only" id="accent-help">' . e((string) $layoutI18n['accent_help']) . '</span>'
         . '</form>';
-    $searchForm = '';
-    if ($currentRoute !== 'home') {
-        $searchQuery = trim((string) ($_GET['q'] ?? ''));
-        $searchForm = '<form class="toolbar-form toolbar-search-form" method="get" action="' . e(route_url('search')) . '">'
-            . '<input type="hidden" name="route" value="search">'
-            . '<label class="sr-only" for="toolbar-search">' . e((string) $layoutI18n['search_label']) . '</label>'
-            . '<input id="toolbar-search" class="toolbar-search-input" type="search" name="q" value="' . e($searchQuery) . '" placeholder="' . e((string) $layoutI18n['search_placeholder']) . '" aria-label="' . e((string) $layoutI18n['search_label']) . '">'
-            . '<button type="submit" class="button small">' . e((string) $layoutI18n['search_submit']) . '</button>'
-            . '</form>';
-    }
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
     $menuToolsHtml = '<div class="toolbar-preferences">'
-        . ($searchForm !== '' ? '<div class="toolbar-preferences-row toolbar-search-row">' . $searchForm . '</div>' : '')
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
