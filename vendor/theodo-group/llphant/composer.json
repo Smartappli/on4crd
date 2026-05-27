@@ -47,7 +47,7 @@
         "opensearch-project/opensearch-php": "^2.3",
         "pestphp/pest": "^4.0",
         "pestphp/pest-plugin-arch": "^4.0",
-        "pestphp/pest-plugin-type-coverage": "^3.0",
+        "pestphp/pest-plugin-type-coverage": "^4.0",
         "phpstan/phpstan": "^2",
         "predis/predis": "^2.2",
         "rector/rector": "^2",
