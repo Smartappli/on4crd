@@ -17,7 +17,7 @@
         "doctrine/collections": "^3.0.0",
         "doctrine/common": "^2.13.3 || ^3.2.2",
         "phpspec/prophecy": "^1.10",
-        "phpunit/phpunit": "^7.5.20 || ^8.5.23 || ^9.5.13"
+        "phpunit/phpunit": "^7.5.20 || ^8.5.23 || ^9.5.13 || ^13.0.0"
     },
     "conflict": {
         "doctrine/collections": "<1.6.8",
