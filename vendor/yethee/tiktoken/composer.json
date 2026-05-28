@@ -12,7 +12,7 @@
     "doctrine/coding-standard": "^14",
     "mikey179/vfsstream": "^1.6.11",
     "phpbench/phpbench": "^1.2",
-    "phpunit/phpunit": "^10.5.45",
+    "phpunit/phpunit": "^13.0.0",
     "psalm/plugin-phpunit": "^0.20.0",
     "vimeo/psalm": "6.10.0"
   },
