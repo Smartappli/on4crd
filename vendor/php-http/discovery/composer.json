@@ -29,7 +29,7 @@
         "php-http/message-factory": "^1.0",
         "phpspec/phpspec": "^5.1 || ^6.1 || ^7.3 || ^8.0",
         "symfony/phpunit-bridge": "^6.4.4 || ^7.0.1",
-        "sebastian/comparator": "^3.0.5 || ^4.0.8"
+        "sebastian/comparator": "^3.0.5 || ^4.0.8 || ^8.0.0"
     },
     "autoload": {
         "psr-4": {
