@@ -14,7 +14,7 @@
     "phpbench/phpbench": "^1.2",
     "phpunit/phpunit": "^13.0.0",
     "psalm/plugin-phpunit": "^0.20.0",
-    "vimeo/psalm": "6.10.0"
+    "vimeo/psalm": "6.16.1"
   },
   "suggest": {
     "ext-ffi": "To allow use LibEncoder"
