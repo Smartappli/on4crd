@@ -63,6 +63,7 @@ return [
   'spotlight_member_articles' => 'Articles',
   'spotlight_member_latest_wiki' => 'Dernière page wiki',
   'spotlight_member_latest_article' => 'Dernier article',
+  'spotlight_member_gallery' => 'Galerie',
   'spotlight_member_wiki_empty' => 'Aucune page wiki disponible pour le moment.',
   'spotlight_member_article_empty' => 'Aucun article publié pour le moment.',
   'spotlight_member_updated_on' => 'Mis à jour le',
