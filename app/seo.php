@@ -127,6 +127,7 @@ function seo_route_should_noindex(string $route): bool
         'save_dashboard',
         'widget_render',
         'profile',
+        'gdpr',
         'newsletter',
         'newsletter_unsubscribe',
         'auction_bid',
