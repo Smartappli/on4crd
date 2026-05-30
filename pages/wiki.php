@@ -31,13 +31,15 @@ try {
     $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
     $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
 
-    $themeRows = db()->query('SELECT SUBSTRING_INDEX(slug, "-", 1) AS theme, COUNT(*) AS total FROM wiki_pages GROUP BY theme ORDER BY theme ASC')->fetchAll() ?: [];
+    $themeRows = db()->query('SELECT slug FROM wiki_pages ORDER BY slug ASC')->fetchAll() ?: [];
     foreach ($themeRows as $themeRow) {
-        $themeCode = slugify((string) ($themeRow['theme'] ?? ''));
+        $slug = trim((string) ($themeRow['slug'] ?? ''));
+        $themeSeed = $slug !== '' ? explode('-', $slug, 2)[0] : '';
+        $themeCode = slugify($themeSeed);
         if ($themeCode === '' || $themeCode === 'n-a') {
             continue;
         }
-        $wikiThemes[$themeCode] = (int) ($themeRow['total'] ?? 0);
+        $wikiThemes[$themeCode] = ($wikiThemes[$themeCode] ?? 0) + 1;
     }
     if ($theme !== '' && !isset($wikiThemes[$theme])) {
         $theme = '';
@@ -102,23 +104,21 @@ ob_start();
     </section>
 
     <section class="wiki-layout">
-        <?php if ($wikiThemes !== []): ?>
-            <aside class="wiki-themes card">
-                <p class="wiki-themes-title"><?= e((string) ($t['themes'] ?? 'Thématiques')) ?></p>
-                <nav class="wiki-theme-list" aria-label="<?= e((string) ($t['themes'] ?? 'Thématiques')) ?>">
-                    <a class="wiki-theme-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
-                        <span><?= e((string) ($t['all_themes'] ?? 'Toutes les thématiques')) ?></span>
-                        <strong><?= (int) array_sum($wikiThemes) ?></strong>
+        <aside class="wiki-themes card">
+            <p class="wiki-themes-title"><?= e((string) ($t['themes'] ?? 'Thématiques')) ?></p>
+            <nav class="wiki-theme-list" aria-label="<?= e((string) ($t['themes'] ?? 'Thématiques')) ?>">
+                <a class="wiki-theme-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
+                    <span><?= e((string) ($t['all_themes'] ?? 'Toutes les thématiques')) ?></span>
+                    <strong><?= (int) ($wikiThemes !== [] ? array_sum($wikiThemes) : $totalPagesCount) ?></strong>
+                </a>
+                <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>
+                    <a class="wiki-theme-item<?= $themeCode === $theme ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeCode === $theme ? ' aria-current="page"' : '' ?>>
+                        <span><?= e(ucfirst(str_replace('-', ' ', $themeCode))) ?></span>
+                        <strong><?= (int) $themeTotal ?></strong>
                     </a>
-                    <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>
-                        <a class="wiki-theme-item<?= $themeCode === $theme ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeCode === $theme ? ' aria-current="page"' : '' ?>>
-                            <span><?= e(ucfirst(str_replace('-', ' ', $themeCode))) ?></span>
-                            <strong><?= (int) $themeTotal ?></strong>
-                        </a>
-                    <?php endforeach; ?>
-                </nav>
-            </aside>
-        <?php endif; ?>
+                <?php endforeach; ?>
+            </nav>
+        </aside>
 
         <div class="wiki-content">
             <section class="wiki-search-panel">
