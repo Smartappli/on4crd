@@ -3,7 +3,7 @@
         'name' => 'smartappli/on4crd',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '76eab350ebe1a5de3fce1c85cd36fcb48cc46bf7',
+        'reference' => '7aef6d5eab7ee259ab40b0a34641a19c1cfe8564',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -460,7 +460,7 @@
         'smartappli/on4crd' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '76eab350ebe1a5de3fce1c85cd36fcb48cc46bf7',
+            'reference' => '7aef6d5eab7ee259ab40b0a34641a19c1cfe8564',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
