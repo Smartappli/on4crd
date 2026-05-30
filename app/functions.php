@@ -438,22 +438,22 @@ function seed_modules(): void
     }
 
     $modules = [
-        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 10],
-        ['members', 'Membres', 'Espace membres et profil', 0, 1, 20],
+        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 'members', 10],
+        ['members', 'Membres', 'Espace membres et profil', 0, 1, 'members', 20],
         ['news', 'Actualités', 'Section des actualités du club', 0, 1, 30],
-        ['articles', 'Articles', 'Articles techniques', 0, 1, 40],
-        ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 50],
-        ['albums', 'Albums', 'Galerie photos', 0, 1, 60],
+        ['articles', 'Articles', 'Articles techniques', 0, 1, 'public', 40],
+        ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 'public', 50],
+        ['albums', 'Albums', 'Galerie photos', 0, 1, 'public', 60],
         ['events', 'Événements', 'Agenda du club', 0, 1, 70],
         ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 90],
-        ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 100],
+        ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 'members', 100],
         ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 110],
         ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 120],
-        ['classifieds', 'Petites annonces', 'Module petites annonces', 0, 1, 121],
+        ['classifieds', 'Petites annonces', 'Module petites annonces', 0, 1, 'public', 121],
         ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 130],
         ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 140],
         ['committee', 'Comité', 'Informations du comité', 0, 1, 150],
-        ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 160],
+        ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 'public', 160],
         ['admin', 'Administration', 'Administration générale', 1, 1, 1000],
     ];
 
