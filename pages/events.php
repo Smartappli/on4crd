@@ -164,21 +164,14 @@ ob_start();
 ?>
 <section class="page-hero">
     <div>
-        <p class="eyebrow"><?= e($t['calendar_name']) ?></p>
-        <h1 class="events-hero-title"><?= e('Agenda ON4CRD') ?></h1>
+        <p class="eyebrow events-hero-title"><?= e($t['calendar_name']) ?></p>
+        <h1><?= e('Agenda ON4CRD') ?></h1>
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
-    <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
 </section>
 
 <section class="events-layout">
     <article class="card events-calendar-card">
-        <header class="events-toolbar events-toolbar-right">
-            <div class="events-toolbar-actions">
-                <a class="button events-export-button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
-            </div>
-        </header>
-
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">

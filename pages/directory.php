@@ -20,12 +20,9 @@ if (mb_strlen($licenceFilter) > 64) {
 
 if (table_exists('members')) {
     $viewer = current_user();
-    $allowedVisibilityLevels = ['public'];
-    if ($viewer !== null) {
-        $allowedVisibilityLevels[] = 'members';
-        if ((int) ($viewer['is_committee'] ?? 0) === 1) {
-            $allowedVisibilityLevels[] = 'private';
-        }
+    $allowedVisibilityLevels = ['public', 'members'];
+    if ($viewer !== null && (int) ($viewer['is_committee'] ?? 0) === 1) {
+        $allowedVisibilityLevels[] = 'private';
     }
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
