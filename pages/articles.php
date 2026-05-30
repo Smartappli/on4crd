@@ -130,13 +130,6 @@ foreach ($pagedRows as $row) {
 if ($themeFilter !== '' && !isset($themeMeta[$themeFilter])) {
     $themeFilter = '';
 }
-$activeFiltersCount = 0;
-if ($themeFilter !== '') {
-    $activeFiltersCount++;
-}
-if ($search !== '') {
-    $activeFiltersCount++;
-}
 
 set_page_meta([
     'title' => (string) $t['page_title'],
@@ -161,10 +154,6 @@ ob_start();
             <article>
                 <span><?= e((string) $t['theme_default']) ?></span>
                 <strong><?= (int) count($themeMeta) ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) $t['results']) ?></span>
-                <strong><?= (int) $activeFiltersCount ?></strong>
             </article>
         </div>
     </section>

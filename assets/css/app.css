@@ -1940,7 +1940,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 }
 .articles-hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  grid-template-columns: repeat(2, minmax(110px, 1fr));
   gap: .75rem;
   align-content: center;
   min-width: min(100%, 24rem);
