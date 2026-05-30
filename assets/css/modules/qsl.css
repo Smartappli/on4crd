@@ -2,3 +2,10 @@
 [data-route="qsl"] .qsl-module {
   min-width: 0;
 }
+
+[data-route="qsl"] .qsl-hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  color: var(--text);
+}

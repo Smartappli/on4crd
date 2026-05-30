@@ -426,7 +426,7 @@ ob_start();
 <section class="page-hero">
     <div>
         <p class="eyebrow">QSL</p>
-        <h1><?= e($qt('studio')) ?></h1>
+        <h1 class="qsl-hero-title"><?= e($qt('studio')) ?></h1>
         <p class="help"><?= e($qt('studio_help')) ?></p>
     </div>
     <div class="qsl-hero-side">
