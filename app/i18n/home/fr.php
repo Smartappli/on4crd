@@ -44,7 +44,7 @@ return [
   'contact_people' => 'Personnes de contact',
   'club_spotlight_title' => 'A la une du club',
   'latest_news_title' => 'Dernières actualités',
-  'next_event_title' => 'Prochain événement',
+  'next_event_title' => 'Prochains événements',
   'ad_title' => 'Publicité',
   'spotlight_tool_day' => 'Actualité / Annonce',
   'spotlight_classifieds' => 'Petites annonces',
