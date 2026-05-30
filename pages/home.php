@@ -280,6 +280,7 @@ set_page_meta([
 $latestNews = null;
 $nextEvent = null;
 $featuredAd = null;
+$latestClassifiedAd = null;
 
 try {
     if (table_exists('news_posts')) {
@@ -299,6 +300,12 @@ try {
     if (module_enabled('advertising') && table_exists('ads')) {
         $featuredAd = cache_remember('home_featured_ad_v1', 60, static function () {
             return db()->query('SELECT title, description, image_path, target_url FROM ads WHERE status = "active" ORDER BY updated_at DESC LIMIT 1')->fetch();
+        });
+    }
+
+    if (module_enabled('classifieds') && table_exists('classified_ads')) {
+        $latestClassifiedAd = cache_remember('home_latest_classified_ad_v1', 60, static function () {
+            return db()->query('SELECT title, description, location, price_cents, created_at FROM classified_ads WHERE status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) ORDER BY created_at DESC, id DESC LIMIT 1')->fetch();
         });
     }
 } catch (Throwable) {
