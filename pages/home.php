@@ -107,8 +107,17 @@ if ($moduleCards === '') {
 }
 
 
-$memberModuleDefinitions = [];
 $memberModuleCards = '';
+$memberModuleDefinitions = [
+    'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title' => ['fr' => 'Tableau de bord', 'en' => 'Dashboard'], 'desc' => ['fr' => 'Retrouvez vos widgets, raccourcis et informations personnelles dans un espace centralise.', 'en' => 'Find your widgets, shortcuts and personal information in one central member area.']],
+    'members' => ['route' => 'profile', 'icon' => '☷', 'title' => ['fr' => 'Espace membre', 'en' => 'Member area'], 'desc' => ['fr' => 'Gerez votre profil, vos preferences et les informations liees a votre compte ON4CRD.', 'en' => 'Manage your profile, preferences and information linked to your ON4CRD account.']],
+    'qsl' => ['route' => 'qsl', 'icon' => '✉', 'title' => ['fr' => 'QSL', 'en' => 'QSL'], 'desc' => ['fr' => 'Preparez, visualisez et exportez vos cartes QSL depuis l espace membre.', 'en' => 'Prepare, preview and export your QSL cards from the member area.']],
+    'library' => ['route' => 'members_library', 'icon' => '▤', 'title' => ['fr' => 'Bibliotheque', 'en' => 'Library'], 'desc' => ['fr' => 'Accedez aux documents, supports techniques et ressources partages avec les membres.', 'en' => 'Access documents, technical notes and resources shared with members.']],
+    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title' => ['fr' => 'Encheres', 'en' => 'Auctions'], 'desc' => ['fr' => 'Consultez les lots disponibles et participez aux ventes organisees par le club.', 'en' => 'Browse available lots and take part in auctions organized by the club.']],
+    'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title' => ['fr' => 'Petites annonces', 'en' => 'Classifieds'], 'desc' => ['fr' => 'Publiez ou consultez les annonces radioamateurs proposees par la communaute.', 'en' => 'Post or browse amateur radio classifieds from the community.']],
+    'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title' => ['fr' => 'Assistant', 'en' => 'Assistant'], 'desc' => ['fr' => 'Posez vos questions a l assistant ON4CRD pour retrouver rapidement une information utile.', 'en' => 'Ask the ON4CRD assistant to quickly find useful information.']],
+    'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter'], 'desc' => ['fr' => 'Suivez les communications du club et gerez votre inscription aux nouvelles ON4CRD.', 'en' => 'Follow club communications and manage your ON4CRD news subscription.']],
+];
 
 if (table_exists('modules')) {
     $whereVisibility = table_has_column('modules', 'visibility') ? " AND visibility = 'members'" : '';
@@ -136,6 +145,31 @@ if (table_exists('modules')) {
             . '</div>'
             . '</a>';
     }
+}
+$memberFallbackModuleCodes = ['dashboard', 'members', 'qsl', 'library', 'auctions', 'classifieds', 'chatbot', 'newsletter'];
+foreach ($memberFallbackModuleCodes as $moduleCode) {
+    if (!isset($memberModuleDefinitions[$moduleCode])) {
+        continue;
+    }
+    if (in_array($moduleCode, ['dashboard', 'members', 'qsl', 'auctions', 'classifieds', 'chatbot'], true) && !module_enabled($moduleCode)) {
+        continue;
+    }
+    $moduleMeta = $memberModuleDefinitions[$moduleCode];
+    $moduleUrl = route_url((string) $moduleMeta['route']);
+    if (str_contains($memberModuleCards, 'href="' . e($moduleUrl) . '"')) {
+        continue;
+    }
+    $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e($moduleUrl) . '">'
+        . '<div class="flex items-center justify-between gap-3">'
+        . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
+        . '<span class="text-xl" aria-hidden="true">' . e((string) ($moduleMeta['icon'] ?? '▦')) . '</span>'
+        . '</div>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
+        . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
+        . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
+        . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
+        . '</div>'
+        . '</a>';
 }
 if ($memberModuleCards === '') {
     $memberModuleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">' . e((string) $homeI18n['member_modules_empty']) . '</div>';
