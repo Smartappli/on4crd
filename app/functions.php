@@ -2170,6 +2170,14 @@ function consume_flashes(): array
 }
 
 if (!function_exists('current_user')) {
+function mark_authenticated_response_private(): void
+{
+    if (!headers_sent()) {
+        header('Cache-Control: private, no-store, max-age=0');
+        header('Pragma: no-cache');
+    }
+}
+
 function auth_bypass_member_id(): int
 {
     $environment = strtolower(trim((string) config('app.env', 'production')));
@@ -2262,6 +2270,9 @@ function current_user(): ?array
     } elseif ($authClient !== null && $memberId > 0) {
         unset($_SESSION['member_id']);
         $memberId = 0;
+    } elseif ($authClient === null && $memberId > 0) {
+        unset($_SESSION['member_id']);
+        $memberId = 0;
     }
 
     if ($memberId <= 0) {
@@ -2270,6 +2281,7 @@ function current_user(): ?array
             $bypassUser = bypass_member_user($bypassMemberId);
             if (is_array($bypassUser)) {
                 $_SESSION['member_id'] = (int) $bypassUser['id'];
+                mark_authenticated_response_private();
                 $cache = $bypassUser;
                 return $cache;
             }
@@ -2313,6 +2325,7 @@ function current_user(): ?array
     }
 
     $_SESSION['member_id'] = (int) ($row['id'] ?? 0);
+    mark_authenticated_response_private();
     $cache = $row;
     return $cache;
 }
@@ -2353,9 +2366,51 @@ function logout_member(): void
 {
     $authClient = auth();
     if ($authClient !== null && $authClient->isLoggedIn()) {
-        $authClient->logOut();
+        try {
+            $authClient->logOut();
+        } catch (Throwable) {
+            // Continue with local cleanup even if the auth library cannot update its tables.
+        }
     }
-    unset($_SESSION['member_id']);
+
+    foreach ([
+        'member_id',
+        'auth_logged_in',
+        'auth_user_id',
+        'auth_email',
+        'auth_username',
+        'auth_status',
+        'auth_roles',
+        'auth_remembered',
+        'auth_last_resync',
+        'auth_force_logout',
+        'auth_awaiting_2fa_until',
+        'auth_awaiting_2fa_user_id',
+        'auth_awaiting_2fa_remember_duration',
+    ] as $sessionKey) {
+        unset($_SESSION[$sessionKey]);
+    }
+
+    $rememberCookieNames = ['auth_remember'];
+    if (class_exists(\Delight\Auth\Auth::class)) {
+        $rememberCookieNames[] = \Delight\Auth\Auth::createRememberCookieName(session_name());
+    }
+    $cookieParams = session_get_cookie_params();
+    foreach (array_unique($rememberCookieNames) as $cookieName) {
+        unset($_COOKIE[$cookieName]);
+        $cookieOptions = [
+            'expires' => time() - 3600,
+            'path' => $cookieParams['path'] ?? '/',
+            'secure' => (bool) ($cookieParams['secure'] ?? false),
+            'httponly' => true,
+            'samesite' => (string) ($cookieParams['samesite'] ?? 'Lax'),
+        ];
+        if (!empty($cookieParams['domain'])) {
+            $cookieOptions['domain'] = (string) $cookieParams['domain'];
+        }
+        setcookie($cookieName, '', $cookieOptions);
+    }
+
     if (session_status() === PHP_SESSION_ACTIVE) {
         session_regenerate_id(true);
     }
