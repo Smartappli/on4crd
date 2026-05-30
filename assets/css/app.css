@@ -1838,6 +1838,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   display: grid;
   gap: 1rem;
 }
+.page-hero,
 .wiki-hero,
 .wiki-view-hero,
 .wiki-edit-hero {
@@ -1852,6 +1853,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
     linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 42%),
     var(--panel);
 }
+.page-hero h1,
 .wiki-hero h1,
 .wiki-view-hero h1,
 .wiki-edit-hero h1 {
@@ -3246,12 +3248,14 @@ textarea.wysiwyg-source {
 @media (max-width: 640px) {
   .albums-hero,
   .album-detail-hero,
+  .page-hero,
   .wiki-hero,
   .wiki-view-hero,
   .wiki-edit-hero {
     padding: .9rem;
     border-radius: 18px;
   }
+  .page-hero,
   .wiki-hero,
   .wiki-view-hero,
   .wiki-edit-hero,

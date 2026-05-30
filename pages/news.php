@@ -143,6 +143,15 @@ $latestNews = cache_remember('news_latest_v1', 60, static function (): array {
 
 ob_start();
 ?>
+<section class="page-hero">
+    <div>
+        <p class="eyebrow"><?= e((string) $newsT['latest_news']) ?></p>
+        <h1><?= e((string) $newsT['title']) ?></h1>
+        <p class="help"><?= e((string) $newsT['search_lead']) ?></p>
+    </div>
+    <a class="button" href="#news-list"><?= e((string) $newsT['news_overview']) ?></a>
+</section>
+
 <section class="card">
     <h2 class="news-ui-heading"><?= e((string) $newsT['latest_news']) ?></h2>
     <?php if ($latestNews !== []): ?>

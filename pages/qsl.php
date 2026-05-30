@@ -423,6 +423,15 @@ ksort($qsoModeOptions);
 ob_start();
 ?>
 <div class="qsl-page">
+<section class="page-hero">
+    <div>
+        <p class="eyebrow">QSL</p>
+        <h1><?= e($qt('studio')) ?></h1>
+        <p class="help"><?= e($qt('studio_help')) ?></p>
+    </div>
+    <a class="button" href="#qsl-create"><?= e($qt('create_my_qsl')) ?></a>
+</section>
+
 <section class="card qsl-studio-overview">
     <h2><?= e($qt('studio')) ?></h2>
     <p class="help"><?= e($qt('studio_help')) ?></p>
