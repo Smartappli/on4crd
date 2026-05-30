@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['required' => 'Alle velden zijn verplicht.', 'auth_unavailable' => 'Authenticatiemodule niet beschikbaar. Voer composer install uit.', 'invalid_data' => 'De opgegeven gegevens zijn ongeldig.', 'already_exists' => 'Er bestaat al een account met dit e-mailadres of deze roepnaam.', 'too_many' => 'Te veel pogingen. Probeer het later opnieuw.', 'ok_created' => 'Account succesvol aangemaakt. Welkom in de ledenruimte!', 'title' => 'Ledenaccount aanmaken', 'callsign' => 'Roepnaam', 'full_name' => 'Volledige naam', 'email' => 'E-mail', 'password' => 'Wachtwoord', 'submit' => 'Mijn account aanmaken', 'already_registered' => 'Al geregistreerd?', 'login' => 'Inloggen', 'layout_title' => 'Registratie'];
+return [
+    'required' => 'Alle verplichte velden moeten worden ingevuld.',
+    'auth_unavailable' => 'Authenticatiemodule niet beschikbaar. Voer composer install uit.',
+    'invalid_data' => 'De opgegeven gegevens zijn ongeldig.',
+    'already_exists' => 'Er bestaat al een account met dit e-mailadres of deze roepnaam.',
+    'too_many' => 'Te veel pogingen. Probeer het later opnieuw.',
+    'ok_created' => 'Account succesvol aangemaakt. Welkom in de ledenruimte!',
+    'title' => 'Ledenaccount aanmaken',
+    'callsign' => 'Roepnaam',
+    'full_name' => 'Volledige naam',
+    'email' => 'E-mail',
+    'phone' => 'Telefoon',
+    'qth' => 'QTH',
+    'licence_class' => 'Licentieklasse',
+    'favourite_bands' => 'Favoriete banden',
+    'favourite_bands_placeholder' => 'Bijv. 2m, 70cm, 20m',
+    'station_equipment' => 'Station en materiaal',
+    'directory_help' => 'Deze informatie vult uw profiel in de ledenlijst. U kunt de zichtbaarheid later aanpassen in uw profiel.',
+    'password' => 'Wachtwoord',
+    'submit' => 'Mijn account aanmaken',
+    'already_registered' => 'Al geregistreerd?',
+    'login' => 'Inloggen',
+    'layout_title' => 'Registratie',
+];

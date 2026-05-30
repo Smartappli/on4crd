@@ -21,10 +21,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('err_auth_unavailable'));
         }
 
-        $authClient->forgotPassword($email, static function (string $selector, string $token): void {
-            // Intégration e-mail à brancher ici (SMTP/API) pour transmettre le lien de reset.
-            // Le callback est obligatoire pour récupérer selector/token.
+        $authClient->forgotPassword($email, static function (string $selector, string $token) use ($email): void {
+            $resetLink = route_url('reset_password', ['selector' => $selector, 'token' => $token]);
             $_SESSION['password_reset_pending'] = hash('sha256', $selector . ':' . $token);
+
+            $logDirectory = dirname(__DIR__) . '/storage/auth';
+            if (!is_dir($logDirectory)) {
+                mkdir($logDirectory, 0755, true);
+            }
+
+            file_put_contents(
+                $logDirectory . '/password_resets.log',
+                json_encode([
+                    'email' => $email,
+                    'link' => $resetLink,
+                    'created_at' => gmdate('c'),
+                    'ip' => (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+                ], JSON_UNESCAPED_SLASHES) . PHP_EOL,
+                FILE_APPEND | LOCK_EX
+            );
+
+            if (function_exists('mail')) {
+                @mail(
+                    $email,
+                    'ON4CRD - Reinitialisation du mot de passe',
+                    "Bonjour,\n\nUtilisez ce lien pour reinitialiser votre mot de passe ON4CRD :\n" . $resetLink . "\n\nSi vous n'etes pas a l'origine de cette demande, ignorez ce message.",
+                    'From: noreply@on4crd.be'
+                );
+            }
         });
 
         set_flash('success', $t('ok_sent'));
@@ -40,6 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('forgot_password');
     } catch (\Delight\Auth\TooManyRequestsException $exception) {
         set_flash('error', $t('err_too_many'));
+        redirect('forgot_password');
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
         redirect('forgot_password');
     }
 }

@@ -17,6 +17,7 @@ return array (
   'end' => 'النهاية',
   'step' => 'الزيادة',
   'view_lot' => 'عرض القطعة',
+  'subscribe_auctions' => 'الاشتراك في المزادات',
   'page' => 'صفحة',
   'previous' => 'السابق',
   'next' => 'التالي',

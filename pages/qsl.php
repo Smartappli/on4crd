@@ -423,6 +423,31 @@ ksort($qsoModeOptions);
 ob_start();
 ?>
 <div class="qsl-page">
+<section class="page-hero">
+    <div>
+        <p class="eyebrow">QSL</p>
+        <h1 class="qsl-hero-title"><?= e($qt('studio')) ?></h1>
+        <p class="help"><?= e($qt('studio_help')) ?></p>
+    </div>
+    <div class="qsl-hero-side">
+        <div class="qsl-hero-stats">
+            <article>
+                <span><?= e($qt('qso_imported_stat')) ?></span>
+                <strong><?= count($qsoRows) ?></strong>
+            </article>
+            <article>
+                <span><?= e($qt('qsl_created_stat')) ?></span>
+                <strong><?= count($qslRows) ?></strong>
+            </article>
+            <article>
+                <span><?= e($qt('backgrounds_stat')) ?></span>
+                <strong><?= count($backgroundPresets) ?></strong>
+            </article>
+        </div>
+        <a class="button" href="#qsl-create"><?= e($qt('create_my_qsl')) ?></a>
+    </div>
+</section>
+
 <section class="card qsl-studio-overview">
     <h2><?= e($qt('studio')) ?></h2>
     <p class="help"><?= e($qt('studio_help')) ?></p>
@@ -619,7 +644,7 @@ ob_start();
                     <option value="SSB"><option value="CW"><option value="FM"><option value="AM"><option value="FT8"><option value="RTTY"><option value="PSK31"><option value="DSTAR"><option value="C4FM">
                 </datalist>
                 <p class="help"><?= e($qt('choose_saved_bg')) ?> <?= e($qt('manual_hint')) ?></p>
-                <div class="qsl-live-preview-wrap" data-qsl-manual-preview data-preview-note="<?= e($qt('preview_dynamic')) ?>">
+                <div class="qsl-live-preview-wrap" data-qsl-manual-preview data-preview-note="<?= e($qt('preview_dynamic')) ?>" data-bg-image-label="<?= e($qt('label_bg_image')) ?>">
                     <h3><?= e($qt('qsl_preview_label')) ?></h3>
                     <div class="grid-2" data-manual-preview-layout>
                         <div class="qsl-live-preview">
@@ -811,8 +836,6 @@ ob_start();
     <?php endif; ?>
 </section>
 </div>
-<?php include __DIR__ . '/qsl_script.js.php'; ?>
-
 <?php
 echo render_layout((string) ob_get_clean(), 'QSL');
 

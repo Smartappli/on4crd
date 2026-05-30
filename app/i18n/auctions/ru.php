@@ -17,6 +17,7 @@ return array (
   'end' => 'Окончание',
   'step' => 'Шаг',
   'view_lot' => 'Открыть лот',
+  'subscribe_auctions' => 'Подписаться на аукционы',
   'page' => 'Страница',
   'previous' => 'Назад',
   'next' => 'Далее',

@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['required' => 'Tous les champs sont obligatoires.', 'auth_unavailable' => 'Module d’authentification indisponible. Lancez composer install.', 'invalid_data' => 'Les informations fournies sont invalides.', 'already_exists' => 'Un compte existe déjà avec cet email ou cet indicatif.', 'too_many' => 'Trop de tentatives. Merci de réessayer plus tard.', 'ok_created' => 'Compte créé avec succès. Bienvenue dans l’espace membre !', 'title' => 'Créer un compte membre', 'callsign' => 'Indicatif', 'full_name' => 'Nom complet', 'email' => 'Email', 'password' => 'Mot de passe', 'submit' => 'Créer mon compte', 'already_registered' => 'Déjà inscrit ?', 'login' => 'Se connecter', 'layout_title' => 'Inscription'];
+return [
+    'required' => 'Tous les champs obligatoires doivent être complétés.',
+    'auth_unavailable' => 'Module d’authentification indisponible. Lancez composer install.',
+    'invalid_data' => 'Les informations fournies sont invalides.',
+    'already_exists' => 'Un compte existe déjà avec cet email ou cet indicatif.',
+    'too_many' => 'Trop de tentatives. Merci de réessayer plus tard.',
+    'ok_created' => 'Compte créé avec succès. Bienvenue dans l’espace membre !',
+    'title' => 'Créer un compte membre',
+    'callsign' => 'Indicatif',
+    'full_name' => 'Nom complet',
+    'email' => 'Email',
+    'phone' => 'Téléphone',
+    'qth' => 'QTH',
+    'licence_class' => 'Classe de licence',
+    'favourite_bands' => 'Bandes favorites',
+    'favourite_bands_placeholder' => 'Ex. 2m, 70cm, 20m',
+    'station_equipment' => 'Station et matériel',
+    'directory_help' => 'Ces informations alimentent votre fiche dans l’annuaire. Vous pourrez ensuite ajuster leur visibilité dans votre profil.',
+    'password' => 'Mot de passe',
+    'submit' => 'Créer mon compte',
+    'already_registered' => 'Déjà inscrit ?',
+    'login' => 'Se connecter',
+    'layout_title' => 'Inscription',
+];

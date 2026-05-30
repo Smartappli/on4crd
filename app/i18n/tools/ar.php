@@ -12,7 +12,7 @@ return [
     'category_rf_measures' => 'قياسات RF',
     'category_radio_math' => 'رياضيات الراديو',
     'open_category' => 'عرض الأدوات',
-    'choose_tool' => 'اختر أداة',
+    'choose_tool'=>'فئات الأدوات',
     'grid_title' => 'حساب محدد الموقع من عنوان بريدي',
     'address' => 'العنوان البريدي',
     'calc_grid' => 'احسب المحدد',

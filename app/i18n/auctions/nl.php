@@ -17,6 +17,7 @@ return array (
   'end' => 'Einde',
   'step' => 'Stap',
   'view_lot' => 'Bekijk lot',
+  'subscribe_auctions' => 'Abonneren op veilingen',
   'page' => 'Pagina',
   'previous' => 'Vorige',
   'next' => 'Volgende',

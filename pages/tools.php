@@ -182,6 +182,9 @@ $powerTools = $buildTools($toolCatalog['power'] ?? []);
 $advancedPropagationTools = $buildTools($toolCatalog['advanced_propagation'] ?? []);
 $rfMeasureTools = $buildTools($toolCatalog['rf_measures'] ?? []);
 $radioMathTools = $buildTools($toolCatalog['radio_math'] ?? []);
+$toolGroups = [$locatorTools, $conversionTools, $antennaTools, $powerTools, $advancedPropagationTools, $rfMeasureTools, $radioMathTools];
+$toolsTotalCount = array_sum(array_map('count', $toolGroups));
+$toolsCategoryCount = count(array_filter($toolGroups, static fn(array $tools): bool => $tools !== []));
 set_page_meta([
     'title' => $tr('title', 'Outils radioamateur'),
     'description' => $tr('grid_title', 'Maidenhead locator map and converter'),
@@ -338,11 +341,28 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
 
 ob_start();
 ?>
+<section class="page-hero tools-hero">
+    <div>
+        <p class="eyebrow tools-hero-title"><?= e($tr('tool_index')) ?></p>
+        <h1><?= e($tr('title', 'Outils radioamateur')) ?></h1>
+        <p class="help"><?= e($tr('choose_tool')) ?></p>
+    </div>
+    <div class="tools-stats">
+        <div class="tools-stat">
+            <span><?= (int) $toolsTotalCount ?></span>
+            <p><?= e($tr('tools_stat_available', 'Outils disponibles')) ?></p>
+        </div>
+        <div class="tools-stat">
+            <span><?= (int) $toolsCategoryCount ?></span>
+            <p><?= e($tr('tools_stat_categories', 'Catégories')) ?></p>
+        </div>
+    </div>
+</section>
+
 <section class="card">
     <div class="tools-layout">
     <aside class="tools-index card">
-        <h2><?= e($tr('tool_index')) ?></h2>
-        <p class="help"><?= e($tr('choose_tool')) ?></p>
+        <p class="tools-hero-title"><?= e($tr('choose_tool')) ?></p>
         <details class="tools-index-group">
             <summary><?= e($tr('category_locators')) ?></summary>
             <ul>
@@ -414,8 +434,6 @@ ob_start();
     <p id="grid-tool-error" class="flash flash-error is-hidden" style="margin-top:1rem;"></p>
 </section>
 
-<script nonce="<?= e(csp_nonce()) ?>">
-<?php require __DIR__ . '/tools_script.js.php'; ?>
-</script>
+<script type="application/json" id="tools-i18n"><?= e(json_encode($jsI18n, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?></script>
 <?php
 echo render_layout((string) ob_get_clean(), $tr('title', 'Outils radioamateur'));
