@@ -20,6 +20,13 @@
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+[data-route="albums"] .albums-hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  color: var(--text);
+}
+
 .album-detail-hero {
   grid-template-columns: minmax(260px, 38%) minmax(0, 1fr);
 }
