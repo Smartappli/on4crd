@@ -459,6 +459,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) $homeI18n['join_title']) . '</h2><p class="mt-2 text-slate-600">' . e((string) $homeI18n['join_desc']) . '</p></div>'
     . '<div class="grid gap-2">' . $primaryCta . $newsletterCta . '</div>'
     . '</section>'
+    . $homeSponsorsTrophiesSectionHtml
     . $memberModulesSectionHtml
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="grid gap-4 lg:grid-cols-[1.15fr_.85fr]">'
@@ -470,7 +471,6 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article class="h-full rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) $homeI18n['useful_info']) . '</h3><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['meetings_info']) . '</p><p class="mt-2 text-sm text-slate-600">' . e((string) $homeI18n['venue_address']) . '</p><div class="mt-3 overflow-hidden rounded-lg border border-slate-200"><iframe class="h-64 w-full" title="' . e((string) $homeI18n['map_title']) . '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E&output=embed"></iframe></div><a class="mt-3 inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="https://www.google.com/maps?q=50%C2%B018%2754.1%22N+4%C2%B056%2742.7%22E" target="_blank" rel="noopener noreferrer">' . e((string) $homeI18n['maps_route']) . '</a></article>'
     . '</div>'
     . '</section>'
-    . $homeSponsorsTrophiesSectionHtml
     . '<section class="mt-4 grid gap-4 md:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h3 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['journalist_title']) . '</h3>'
