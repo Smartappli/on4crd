@@ -140,14 +140,16 @@ set_page_meta([
 ob_start();
 ?>
 <div class="stack">
-    <div class="card">
-        <div class="row-between">
-            <div>
-                <h1><?= e((string) $t['page_title']) ?></h1>
-                <p class="help"><?= e((string) $t['page_description']) ?></p>
-            </div>
-            <span class="badge"><?= $totalArticles ?> <?= e((string) $t['article_count']) ?></span>
+    <section class="page-hero">
+        <div>
+            <p class="eyebrow"><?= e((string) $t['layout_title']) ?></p>
+            <h1><?= e((string) $t['page_title']) ?></h1>
+            <p class="help"><?= e((string) $t['page_description']) ?></p>
         </div>
+        <span class="badge"><?= $totalArticles ?> <?= e((string) $t['article_count']) ?></span>
+    </section>
+
+    <div class="card">
         <div class="news-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
                 <?php $logoUrl = (string) ($theme['image'] ?? '');
