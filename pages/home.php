@@ -313,7 +313,6 @@ set_page_meta([
 
 $latestNews = null;
 $nextEvent = null;
-$featuredAd = null;
 $latestClassifiedAd = null;
 $latestWikiPage = null;
 $latestArticle = null;
@@ -330,12 +329,6 @@ try {
             $stmt = db()->prepare('SELECT slug, title, summary, start_at, location FROM events WHERE status = "published" AND end_at >= NOW() ORDER BY start_at ASC LIMIT 1');
             $stmt->execute();
             return $stmt->fetch();
-        });
-    }
-
-    if (module_enabled('advertising') && table_exists('ads')) {
-        $featuredAd = cache_remember('home_featured_ad_v1', 60, static function () {
-            return db()->query('SELECT title, description, image_path, target_url FROM ads WHERE status = "active" ORDER BY updated_at DESC LIMIT 1')->fetch();
         });
     }
 
@@ -591,36 +584,55 @@ try {
 } catch (Throwable) {
     $localAdCandidates = [];
 }
-if ($localAdCandidates !== []) {
-    $localAdPath = 'assets/pub/' . basename((string) $localAdCandidates[array_rand($localAdCandidates)]);
-    $adSlotHtml = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
-        . '<div class="overflow-hidden rounded-lg aspect-square w-full">'
-        . '<img class="h-full w-full object-cover" src="' . e(asset_url($localAdPath)) . '" alt="' . e((string) $homeI18n['alt_partner_ad']) . '" loading="lazy" decoding="async">'
-        . '</div>'
-        . '</div>';
-}
-if (is_array($featuredAd) && !empty($featuredAd['title'])) {
-    $adTarget = trim((string) ($featuredAd['target_url'] ?? ''));
-    $adDescription = trim((string) ($featuredAd['description'] ?? ''));
-    $adImage = trim((string) ($featuredAd['image_path'] ?? ''));
-
-    $adInner = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
-        . '<p class="text-xs font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['partner_ad_title']) . '</p>'
-        . '<h3 class="mt-2 text-lg font-bold text-slate-900">' . e((string) $featuredAd['title']) . '</h3>';
-
-    if ($adDescription !== '') {
-        $adInner .= '<p class="mt-2 text-sm text-slate-600">' . e($adDescription) . '</p>';
+try {
+    $sponsorSlides = [];
+    foreach ($localAdCandidates as $localAdCandidate) {
+        $localAdPath = 'assets/pub/' . basename((string) $localAdCandidate);
+        $sponsorSlides[] = [
+            'src' => asset_url($localAdPath),
+            'alt' => (string) $homeI18n['alt_partner_ad'],
+            'label' => (string) ($homeI18n['partner_ad_title'] ?? 'Sponsor'),
+            'url' => '',
+        ];
     }
 
-    if ($adImage !== '') {
-        $adInner .= '<div class="mt-3 overflow-hidden rounded-lg aspect-square w-full"><img class="h-full w-full object-cover" src="' . e(asset_url($adImage)) . '" alt="' . e((string) $featuredAd['title']) . '" loading="lazy" decoding="async"></div>';
+    if (module_enabled('advertising') && table_exists('ads')) {
+        $activeAds = cache_remember('home_active_ads_carousel_v1', 60, static function (): array {
+            $stmt = db()->query('SELECT title, image_path, target_url FROM ads WHERE status = "active" AND image_path <> "" ORDER BY updated_at DESC LIMIT 12');
+
+            return $stmt !== false ? ($stmt->fetchAll() ?: []) : [];
+        });
+        foreach ($activeAds as $activeAd) {
+            $adImage = trim((string) ($activeAd['image_path'] ?? ''));
+            if ($adImage === '') {
+                continue;
+            }
+
+            $sponsorSlides[] = [
+                'src' => asset_url($adImage),
+                'alt' => trim((string) ($activeAd['title'] ?? '')) !== '' ? (string) $activeAd['title'] : (string) $homeI18n['alt_partner_ad'],
+                'label' => trim((string) ($activeAd['title'] ?? '')),
+                'url' => trim((string) ($activeAd['target_url'] ?? '')),
+            ];
+        }
     }
 
-    $adInner .= '</div>';
+    $sponsorSlideHtml = '';
+    foreach ($sponsorSlides as $slide) {
+        $slideInner = '<img src="' . e((string) $slide['src']) . '" alt="' . e((string) $slide['alt']) . '" loading="lazy" decoding="async">'
+            . ((string) $slide['label'] !== '' ? '<span>' . e(mb_safe_strimwidth((string) $slide['label'], 0, 70, '...')) . '</span>' : '');
+        $sponsorSlideHtml .= (string) $slide['url'] !== ''
+            ? '<a class="home-media-slide" href="' . e((string) $slide['url']) . '" target="_blank" rel="noopener noreferrer">' . $slideInner . '</a>'
+            : '<div class="home-media-slide">' . $slideInner . '</div>';
+    }
 
-    $adSlotHtml = $adTarget !== ''
-        ? '<a class="block transition hover:-translate-y-0.5" href="' . e($adTarget) . '" target="_blank" rel="noopener noreferrer">' . $adInner . '</a>'
-        : $adInner;
+    if ($sponsorSlideHtml !== '') {
+        $adSlotHtml = '<div class="home-media-carousel" aria-label="' . e((string) ($homeI18n['home_sponsors_title'] ?? 'Nos sponsors')) . '">'
+            . '<div class="home-media-track">' . $sponsorSlideHtml . '</div>'
+            . '</div>';
+    }
+} catch (Throwable) {
+    // Keep the sponsor fallback when images cannot be loaded.
 }
 
 $trophySlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">' . e((string) ($homeI18n['home_trophies_empty'] ?? 'Les trophées du club seront affichés ici.')) . '</p></div>';
@@ -632,11 +644,16 @@ try {
     $localTrophyCandidates = [];
 }
 if ($localTrophyCandidates !== []) {
-    $localTrophyPath = 'assets/trophy/' . basename((string) $localTrophyCandidates[array_rand($localTrophyCandidates)]);
-    $trophySlotHtml = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
-        . '<div class="overflow-hidden rounded-lg aspect-square w-full">'
-        . '<img class="h-full w-full object-cover" src="' . e(asset_url($localTrophyPath)) . '" alt="' . e((string) ($homeI18n['alt_trophy_image'] ?? 'Trophée du club')) . '" loading="lazy" decoding="async">'
-        . '</div>'
+    $trophySlideHtml = '';
+    foreach ($localTrophyCandidates as $localTrophyCandidate) {
+        $localTrophyPath = 'assets/trophy/' . basename((string) $localTrophyCandidate);
+        $trophySlideHtml .= '<div class="home-media-slide">'
+            . '<img src="' . e(asset_url($localTrophyPath)) . '" alt="' . e((string) ($homeI18n['alt_trophy_image'] ?? 'Trophée du club')) . '" loading="lazy" decoding="async">'
+            . '</div>';
+    }
+
+    $trophySlotHtml = '<div class="home-media-carousel" aria-label="' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '">'
+        . '<div class="home-media-track">' . $trophySlideHtml . '</div>'
         . '</div>';
 }
 
