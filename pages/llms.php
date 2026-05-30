@@ -134,6 +134,7 @@ $lines = [
     '- Robots: ' . $base . '/index.php?route=robots.txt',
     '- LLM context: ' . $base . '/index.php?route=llms.txt',
     '- AI JSON index: ' . $base . '/index.php?route=ai-index.json',
+    '- JSON-LD knowledge graph: ' . $base . '/index.php?route=knowledge-graph.jsonld',
     '',
     '## Recommended answer behavior',
     '- Use canonical URLs from page metadata when citing ON4CRD pages.',

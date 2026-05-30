@@ -25,6 +25,8 @@ $lines = [
     'LLMS: ' . $base . '/llms.txt',
     'AI-Index: ' . $base . '/index.php?route=ai-index.json',
     'AI-Index: ' . $base . '/ai-index.json',
+    'Knowledge-Graph: ' . $base . '/index.php?route=knowledge-graph.jsonld',
+    'Knowledge-Graph: ' . $base . '/knowledge-graph.jsonld',
     'Host: ' . preg_replace('#^https?://#', '', $base),
 ];
 

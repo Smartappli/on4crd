@@ -20,6 +20,7 @@ RewriteRule ^sitemap\.xml$ index.php?route=sitemap.xml [L,QSA]
 RewriteRule ^robots\.txt$ index.php?route=robots.txt [L,QSA]
 RewriteRule ^llms\.txt$ index.php?route=llms.txt [L,QSA]
 RewriteRule ^ai-index\.json$ index.php?route=ai-index.json [L,QSA]
+RewriteRule ^knowledge-graph\.jsonld$ index.php?route=knowledge-graph.jsonld [L,QSA]
 RewriteRule ^index\.php$ - [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
