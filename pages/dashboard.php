@@ -7,6 +7,7 @@ $locale = current_locale();
 $t = i18n_domain_translator('dashboard', $locale);
 set_page_meta(['title' => $t('meta_title'), 'description' => $t('meta_desc'), 'schema_type' => 'WebPage']);
 $availableWidgets = enabled_widget_catalog();
+unset($availableWidgets['chatbot']);
 $userId = (int) ($user['id'] ?? 0);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'mark_notifications_read') {
     verify_csrf();
@@ -125,7 +126,7 @@ foreach ($selected as $row) {
     ];
 }
 if ($selectedWidgets === []) {
-    $defaultWidgetKeys = array_values(array_intersect(['welcome', 'propagation', 'club_status', 'chatbot'], array_keys($availableWidgets)));
+    $defaultWidgetKeys = array_values(array_intersect(['welcome', 'propagation', 'club_status'], array_keys($availableWidgets)));
     if ($defaultWidgetKeys === []) {
         $defaultWidgetKeys = array_slice(array_keys($availableWidgets), 0, 4);
     }
@@ -162,7 +163,6 @@ ob_start();
         <button class="button secondary small" id="open-widgets-panel" type="button" aria-controls="dashboard-widgets-panel" aria-expanded="false">🧩 <?= e($t('available_widgets')) ?></button>
         <button class="button secondary small" id="dashboard-fullscreen-toggle" type="button">⛶ <?= e($t('fullscreen')) ?></button>
         <a class="button secondary small" href="<?= e(route_url('notifications')) ?>">🔔 <?= e($t('notifications')) ?></a>
-        <a class="button secondary small" href="<?= e(route_url('chatbot')) ?>">🤖 <?= e($t('chatbot')) ?></a>
         <button class="button secondary small" id="save-dashboard" type="button" <?= $dashboardPersistenceEnabled ? '' : 'disabled' ?>>💾 <?= e($t('save_layout')) ?></button>
         <span class="help" id="dashboard-save-status" role="status" aria-live="polite"></span>
       </div>
@@ -184,77 +184,6 @@ ob_start();
         ?>
       <?php endforeach; ?>
     </div>
-  </section>
-  <section class="card">
-    <h2 style="margin-top:0;"><?= e($t('activity_timeline_title')) ?></h2>
-    <?php if ($timelineItems === []): ?>
-      <p class="help"><?= e($t('activity_timeline_empty')) ?></p>
-    <?php else: ?>
-      <ul class="stack" style="list-style:none;padding:0;margin:0;">
-        <?php foreach ($timelineItems as $item): ?>
-          <li class="row-between" style="gap:.8rem;">
-            <span>
-              <strong><?= e((string) ($item['type'] ?? '')) ?></strong> · <?= e((string) ($item['title'] ?? '')) ?><br>
-              <small class="help"><?= e((string) ($item['date'] ?? '')) ?></small>
-            </span>
-            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
-  </section>
-  <section class="card">
-    <h2 style="margin-top:0;"><?= e($t('onboarding_nudges_title')) ?></h2>
-    <?php if ($nudgeItems === []): ?>
-      <p class="help"><?= e($t('onboarding_nudges_empty')) ?></p>
-    <?php else: ?>
-      <ul class="stack" style="margin:0;">
-        <?php foreach ($nudgeItems as $nudge): ?>
-          <li><?= e($nudge) ?></li>
-        <?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
-  </section>
-  <section class="card">
-    <div class="row-between">
-      <h2 style="margin:0;"><?= e($t('notifications')) ?></h2>
-      <div class="actions">
-        <span class="badge muted"><?= $unreadNotifications ?> <?= e($t('unread')) ?></span>
-        <form method="post" class="inline-form">
-          <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-          <input type="hidden" name="action" value="mark_notifications_read">
-          <button class="button secondary small" type="submit"><?= e($t('mark_all_read')) ?></button>
-        </form>
-      </div>
-    </div>
-    <?php if ($recentNotifications === []): ?>
-      <p class="help"><?= e($t('no_notifications')) ?></p>
-    <?php else: ?>
-      <ul class="stack" style="list-style:none;padding:0;margin:.8rem 0 0 0;">
-        <?php foreach ($recentNotifications as $item): ?>
-          <li class="card" style="margin:0;">
-            <strong><?= e((string) ($item['title'] ?? '')) ?></strong>
-            <?php if (trim((string) ($item['body'] ?? '')) !== ''): ?><p class="help" style="margin:.35rem 0;"><?= e((string) $item['body']) ?></p><?php endif; ?>
-            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a href="<?= e((string) $item['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
-  </section>
-  <section class="card">
-    <h2 style="margin-top:0;"><?= e($t('recent_favorites')) ?></h2>
-    <?php if ($recentFavorites === []): ?>
-      <p class="help"><?= e($t('no_favorites')) ?></p>
-    <?php else: ?>
-      <ul class="stack" style="list-style:none;padding:0;margin:0;">
-        <?php foreach ($recentFavorites as $favorite): ?>
-          <li class="row-between" style="gap:.8rem;">
-            <span><?= e((string) ($favorite['title'] !== '' ? $favorite['title'] : $favorite['target_type'])) ?></span>
-            <?php if (trim((string) ($favorite['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $favorite['url']) ?>"><?= e($t('open')) ?></a><?php endif; ?>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
   </section>
   <section class="card">
     <h2 style="margin-top:0;"><?= e($t('recommendations_title')) ?></h2>
