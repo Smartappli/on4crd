@@ -82,7 +82,6 @@ ob_start();
             <div class="auctions-section-header">
                 <div>
                     <h2 class="auctions-section-title"><?= e($meta['title']) ?></h2>
-                    <p class="help"><?= count($groupedLots[$status]) ?> <?= count($groupedLots[$status]) > 1 ? e((string) $t['lots']) : e((string) $t['lot']) ?></p>
                 </div>
                 <span class="badge"><?= count($groupedLots[$status]) ?> <?= count($groupedLots[$status]) > 1 ? e((string) $t['lots']) : e((string) $t['lot']) ?></span>
             </div>
