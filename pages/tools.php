@@ -185,7 +185,6 @@ $radioMathTools = $buildTools($toolCatalog['radio_math'] ?? []);
 $toolGroups = [$locatorTools, $conversionTools, $antennaTools, $powerTools, $advancedPropagationTools, $rfMeasureTools, $radioMathTools];
 $toolsTotalCount = array_sum(array_map('count', $toolGroups));
 $toolsCategoryCount = count(array_filter($toolGroups, static fn(array $tools): bool => $tools !== []));
-$toolsPresetCount = count($toolPresets);
 set_page_meta([
     'title' => $tr('title', 'Outils radioamateur'),
     'description' => $tr('grid_title', 'Maidenhead locator map and converter'),
@@ -356,10 +355,6 @@ ob_start();
         <div class="tools-stat">
             <span><?= (int) $toolsCategoryCount ?></span>
             <p><?= e($tr('tools_stat_categories', 'Catégories')) ?></p>
-        </div>
-        <div class="tools-stat">
-            <span><?= (int) $toolsPresetCount ?></span>
-            <p><?= e($tr('tools_stat_presets', 'Presets sauvegardés')) ?></p>
         </div>
     </div>
 </section>
