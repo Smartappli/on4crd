@@ -162,7 +162,7 @@ ob_start();
     <a class="button" href="#news-list"><?= e((string) $newsT['news_overview']) ?></a>
 </section>
 
-<section class="card">
+<section class="card mt-4">
     <h2 class="news-ui-heading"><?= e((string) $newsT['latest_news']) ?></h2>
     <?php if ($latestNews !== []): ?>
         <div class="news-grid latest-news-grid">

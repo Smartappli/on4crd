@@ -3123,6 +3123,12 @@ textarea.wysiwyg-source {
 .tools-index h2 {
   margin-top: 0;
 }
+.tools-index-title {
+  color: inherit;
+  font: inherit;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+}
 .tools-index-group {
   border: 1px solid var(--border);
   border-radius: 14px;
