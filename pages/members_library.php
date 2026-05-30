@@ -142,19 +142,22 @@ ob_start();
             <h1><?= e((string) $t['title']) ?></h1>
             <p class="directory-lead"><?= e((string) $t['intro']) ?></p>
         </div>
-        <div class="library-stats">
-            <div class="library-stat">
-                <span><?= (int) $totalDocuments ?></span>
-                <p><?= e((string) $t['documents']) ?></p>
+        <div class="library-hero-side">
+            <div class="library-stats">
+                <div class="library-stat">
+                    <span><?= (int) $totalDocuments ?></span>
+                    <p><?= e((string) $t['documents']) ?></p>
+                </div>
+                <div class="library-stat">
+                    <span><?= (int) count($categories) ?></span>
+                    <p><?= e((string) ($t['categories'] ?? $t['all_categories'])) ?></p>
+                </div>
+                <div class="library-stat">
+                    <span><?= (int) $activeFiltersCount ?></span>
+                    <p><?= e((string) $t['tags']) ?></p>
+                </div>
             </div>
-            <div class="library-stat">
-                <span><?= (int) count($categories) ?></span>
-                <p><?= e((string) ($t['categories'] ?? $t['all_categories'])) ?></p>
-            </div>
-            <div class="library-stat">
-                <span><?= (int) $activeFiltersCount ?></span>
-                <p><?= e((string) $t['tags']) ?></p>
-            </div>
+            <a class="button library-propose-document" href="mailto:on4crd@gmail.com?subject=<?= e(rawurlencode((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD'))) ?>"><?= e((string) ($t['propose_document'] ?? 'Proposer un document')) ?></a>
         </div>
     </header>
 

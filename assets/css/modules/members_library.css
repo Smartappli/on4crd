@@ -49,6 +49,17 @@
   grid-column: 1 / -1;
 }
 
+[data-route="members_library"] .library-hero-side {
+  display: grid;
+  gap: .75rem;
+  align-content: center;
+}
+
+[data-route="members_library"] .library-propose-document {
+  width: 100%;
+  justify-content: center;
+}
+
 [data-route="members_library"] .library-themes-heading {
   display: grid;
   gap: .45rem;
