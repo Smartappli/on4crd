@@ -2967,6 +2967,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
         ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
         ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
+        ['label' => (string) $layoutI18n['nav_assistant'], 'route' => 'chatbot', 'module' => 'chatbot'],
     ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {

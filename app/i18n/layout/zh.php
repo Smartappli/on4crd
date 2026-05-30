@@ -15,6 +15,7 @@ return array (
   'nav_articles' => '文章',
   'nav_library' => '资料库',
   'nav_auctions' => '拍卖',
+  'nav_assistant' => '助手',
   'account_space' => '我的账户',
   'account_profile' => '个人资料',
   'account_settings' => '设置',
