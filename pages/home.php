@@ -176,6 +176,106 @@ if ($heroImageCandidates !== []) {
     $heroBackgroundUrl = asset_url('assets/img/' . basename((string) $heroImageCandidates[array_rand($heroImageCandidates)]));
 }
 
+$homeSeo = i18n_domain_locale('seo', $homeLocale);
+$homeUrl = route_url_with_locale('home', $homeLocale);
+$homeSearchUrl = route_url_with_locale('search', $homeLocale);
+$homeLogoUrl = asset_url('assets/logo/LOGO-CRD-HALO-2020.png');
+$homeSeoImageUrl = asset_url('assets/img/on4crd_hero.png');
+$homeSeoTitle = trim((string) ($homeSeo['home_title'] ?? 'ON4CRD Radio Club Durnal'));
+$homeSeoDescription = trim((string) ($homeSeo['home_description'] ?? 'Radio Club Durnal ON4CRD : actualités, événements, formation, outils radioamateurs et ressources locales à Durnal, Yvoir et Namur.'));
+$homeGeoPlace = trim((string) ($homeSeo['geo_placename'] ?? 'Durnal, Yvoir, Namur, Belgique'));
+
+set_page_meta([
+    'title' => $homeSeoTitle,
+    'description' => $homeSeoDescription,
+    'og_type' => 'website',
+    'schema_type' => 'WebPage',
+    'image' => $homeSeoImageUrl,
+    'image_alt' => (string) ($homeI18n['alt_hero_illustration'] ?? 'Radio Club Durnal ON4CRD'),
+    'geo_region' => 'BE-WNA',
+    'geo_placename' => $homeGeoPlace,
+    'geo_position' => '50.3150;4.9452',
+    'icbm' => '50.3150, 4.9452',
+    'latitude' => '50.3150',
+    'longitude' => '4.9452',
+    'json_ld' => [
+        [
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'Organization',
+                    '@id' => $homeUrl . '#organization',
+                    'name' => 'Radio Club Durnal ON4CRD',
+                    'alternateName' => ['ON4CRD', 'Club Radio Durnal'],
+                    'url' => $homeUrl,
+                    'logo' => [
+                        '@type' => 'ImageObject',
+                        'url' => $homeLogoUrl,
+                    ],
+                    'image' => $homeSeoImageUrl,
+                    'telephone' => ['+32496260865', '+32478789193'],
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'streetAddress' => 'Rue des Écoles',
+                        'addressLocality' => 'Purnode',
+                        'postalCode' => '5530',
+                        'addressRegion' => 'Namur',
+                        'addressCountry' => 'BE',
+                    ],
+                    'areaServed' => ['Durnal', 'Yvoir', 'Namur', 'Belgium'],
+                    'knowsAbout' => ['radioamateurisme', 'amateur radio', 'ON4CRD', 'UBA', 'QSL', 'propagation radio', 'formations radio'],
+                    'location' => ['@id' => $homeUrl . '#place'],
+                ],
+                [
+                    '@type' => 'Place',
+                    '@id' => $homeUrl . '#place',
+                    'name' => 'Bocq Arena',
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'streetAddress' => 'Rue des Écoles',
+                        'addressLocality' => 'Purnode',
+                        'postalCode' => '5530',
+                        'addressRegion' => 'Namur',
+                        'addressCountry' => 'BE',
+                    ],
+                    'geo' => [
+                        '@type' => 'GeoCoordinates',
+                        'latitude' => 50.3150,
+                        'longitude' => 4.9452,
+                    ],
+                ],
+                [
+                    '@type' => 'WebSite',
+                    '@id' => $homeUrl . '#website',
+                    'name' => 'ON4CRD.be',
+                    'url' => $homeUrl,
+                    'publisher' => ['@id' => $homeUrl . '#organization'],
+                    'inLanguage' => $homeLocale,
+                    'potentialAction' => [
+                        '@type' => 'SearchAction',
+                        'target' => $homeSearchUrl . '&q={search_term_string}',
+                        'query-input' => 'required name=search_term_string',
+                    ],
+                ],
+                [
+                    '@type' => 'WebPage',
+                    '@id' => $homeUrl . '#webpage',
+                    'url' => $homeUrl,
+                    'name' => $homeSeoTitle,
+                    'description' => $homeSeoDescription,
+                    'isPartOf' => ['@id' => $homeUrl . '#website'],
+                    'about' => ['@id' => $homeUrl . '#organization'],
+                    'primaryImageOfPage' => [
+                        '@type' => 'ImageObject',
+                        'url' => $homeSeoImageUrl,
+                    ],
+                    'inLanguage' => $homeLocale,
+                ],
+            ],
+        ],
+    ],
+]);
+
 $latestNews = null;
 $nextEvent = null;
 $featuredAd = null;

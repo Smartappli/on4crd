@@ -2814,6 +2814,16 @@ function render_layout(string $content, string $title = ''): string
     $metaGeoPosition = trim((string) ($pageMeta['geo_position'] ?? ''));
     $metaIcbm = trim((string) ($pageMeta['icbm'] ?? ''));
     $metaAlternates = (array) ($pageMeta['alternates'] ?? []);
+    $metaImage = trim((string) ($pageMeta['image'] ?? ''));
+    $metaImageAlt = trim((string) ($pageMeta['image_alt'] ?? $metaSiteName));
+    $metaLatitude = trim((string) ($pageMeta['latitude'] ?? ''));
+    $metaLongitude = trim((string) ($pageMeta['longitude'] ?? ''));
+    $jsonLdItems = [];
+    if (isset($pageMeta['json_ld'])) {
+        $jsonLdItems = is_array($pageMeta['json_ld']) && array_is_list($pageMeta['json_ld'])
+            ? $pageMeta['json_ld']
+            : [$pageMeta['json_ld']];
+    }
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
         . '<meta property="og:title" content="' . e($pageTitle) . '">'
@@ -2824,6 +2834,12 @@ function render_layout(string $content, string $title = ''): string
         . '<meta name="twitter:card" content="' . e($metaTwitterCard) . '">'
         . '<meta name="twitter:title" content="' . e($pageTitle) . '">'
         . '<meta name="twitter:description" content="' . e($metaDescription) . '">';
+    if ($metaImage !== '') {
+        $metaHead .= '<meta property="og:image" content="' . e($metaImage) . '">'
+            . '<meta property="og:image:alt" content="' . e($metaImageAlt) . '">'
+            . '<meta name="twitter:image" content="' . e($metaImage) . '">'
+            . '<meta name="twitter:image:alt" content="' . e($metaImageAlt) . '">';
+    }
     if ($metaCanonical !== '') {
         $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
             . '<meta property="og:url" content="' . e($metaCanonical) . '">';
@@ -2850,6 +2866,21 @@ function render_layout(string $content, string $title = ''): string
     }
     if ($metaIcbm !== '') {
         $metaHead .= '<meta name="ICBM" content="' . e($metaIcbm) . '">';
+    }
+    if ($metaLatitude !== '' && $metaLongitude !== '') {
+        $metaHead .= '<meta property="place:location:latitude" content="' . e($metaLatitude) . '">'
+            . '<meta property="place:location:longitude" content="' . e($metaLongitude) . '">';
+    }
+    foreach ($jsonLdItems as $jsonLdItem) {
+        if (!is_array($jsonLdItem) || $jsonLdItem === []) {
+            continue;
+        }
+        try {
+            $encodedJsonLd = json_encode($jsonLdItem, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+            $metaHead .= '<script nonce="' . e(csp_nonce()) . '" type="application/ld+json">' . $encodedJsonLd . '</script>';
+        } catch (Throwable) {
+            continue;
+        }
     }
     $year = gmdate('Y');
     $themeOptions = [
