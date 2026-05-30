@@ -154,6 +154,11 @@ final class RouterContractTest extends TestCase
             $functions,
             'Runtime schema updates must restore the public news module when production data disabled it.'
         );
+        self::assertStringContainsString(
+            "UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members')",
+            $functions,
+            'Runtime schema updates must restore the member dashboard module when production data disabled it.'
+        );
     }
 
     public function testPublicRoutesAreNotGatedByMembersOnlyModules(): void
