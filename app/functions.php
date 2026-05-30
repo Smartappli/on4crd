@@ -2606,16 +2606,58 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
 {
     $seo = i18n_domain_locale('seo', $locale);
     $routeKey = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+    $routeSeo = [
+        'ad_click' => ['title' => 'Redirection partenaire ON4CRD', 'description' => 'Redirection sécurisée vers une annonce ou un partenaire du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'admin' => ['title' => 'Administration ON4CRD', 'description' => 'Tableau d administration du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'ads' => ['title' => 'Annonces partenaires ON4CRD', 'description' => 'Annonces, partenaires et communications sponsorisées du Radio Club Durnal ON4CRD.'],
+        'bandplan_harec' => ['title' => 'Band plan HAREC', 'description' => 'Plan de bandes radioamateur HAREC et repères de fréquences pour les opérateurs ON4CRD.'],
+        'bandplan_on2' => ['title' => 'Band plan ON2', 'description' => 'Plan de bandes ON2 pour préparer ses communications radioamateurs en Belgique.'],
+        'bandplan_on3' => ['title' => 'Band plan ON3', 'description' => 'Plan de bandes ON3 et ressources pratiques pour les radioamateurs débutants.'],
+        'chatbot' => ['title' => 'Assistant ON4CRD', 'description' => 'Assistant pratique du Radio Club Durnal pour retrouver les informations du site et les ressources radioamateurs.'],
+        'code_cw' => ['title' => 'Code CW et Morse', 'description' => 'Ressources ON4CRD pour apprendre, réviser et pratiquer le code Morse CW.'],
+        'code_q' => ['title' => 'Code Q radioamateur', 'description' => 'Liste des codes Q utiles pour le trafic radioamateur et les échanges ON4CRD.'],
+        'conditions_utilisation' => ['title' => 'Conditions d utilisation ON4CRD', 'description' => 'Conditions générales d utilisation du site du Radio Club Durnal ON4CRD.'],
+        'directory' => ['title' => 'Annuaire des membres ON4CRD', 'description' => 'Annuaire radioamateur des membres visibles du Radio Club Durnal ON4CRD, indicatifs, licences et QTH.'],
+        'event_view' => ['title' => 'Détail événement ON4CRD', 'description' => 'Détail d un événement, d une réunion ou d une activité radioamateur du Radio Club Durnal.'],
+        'forgot_password' => ['title' => 'Mot de passe oublié ON4CRD', 'description' => 'Procédure de récupération d accès à l espace membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'login' => ['title' => 'Connexion membre ON4CRD', 'description' => 'Connexion sécurisée à l espace membre du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'membership' => ['title' => 'Devenir membre du CRD', 'description' => 'Informations pour devenir membre du Radio Club Durnal, rejoindre les activités et participer à la communauté ON4CRD.'],
+        'mentions_legales' => ['title' => 'Mentions légales ON4CRD', 'description' => 'Mentions légales et informations éditoriales du site Radio Club Durnal ON4CRD.'],
+        'news_view' => ['title' => 'Actualité ON4CRD', 'description' => 'Article d actualité du Radio Club Durnal ON4CRD et informations radioamateurs locales.'],
+        'newsletter' => ['title' => 'Newsletter membre ON4CRD', 'description' => 'Gestion de l abonnement newsletter pour les membres du Radio Club Durnal.', 'robots' => 'noindex,nofollow'],
+        'newsletter_unsubscribe' => ['title' => 'Désinscription newsletter ON4CRD', 'description' => 'Désinscription sécurisée de la newsletter ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'notifications' => ['title' => 'Notifications membre ON4CRD', 'description' => 'Notifications personnelles de l espace membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'register' => ['title' => 'Créer un compte ON4CRD', 'description' => 'Création d un compte membre pour accéder aux services du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'reglement_interieur' => ['title' => 'Règlement intérieur ON4CRD', 'description' => 'Règlement intérieur et cadre de fonctionnement du Radio Club Durnal.'],
+        'reset_password' => ['title' => 'Réinitialisation du mot de passe ON4CRD', 'description' => 'Réinitialisation sécurisée du mot de passe membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'save_dashboard' => ['title' => 'Sauvegarde tableau de bord ON4CRD', 'description' => 'Endpoint de sauvegarde du tableau de bord membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'settings' => ['title' => 'Préférences ON4CRD', 'description' => 'Préférences d affichage, de langue et de compte pour ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'sponsoring' => ['title' => 'Sponsoring Radio Club Durnal', 'description' => 'Possibilités de sponsoring et de partenariat avec le Radio Club Durnal ON4CRD.'],
+        'tools_geocode' => ['title' => 'Géocodage outils ON4CRD', 'description' => 'Service de géocodage utilisé par les outils radioamateurs ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'wiki' => ['title' => 'Wiki radioamateur ON4CRD', 'description' => 'Wiki collaboratif du Radio Club Durnal : procédures, techniques, ressources et connaissances radioamateurs.'],
+    ];
+    foreach ([
+        'admin_ads', 'admin_albums', 'admin_articles', 'admin_auctions', 'admin_classifieds', 'admin_committee',
+        'admin_dashboard', 'admin_dinner_reservations', 'admin_editorial', 'admin_events', 'admin_library',
+        'admin_live_feeds', 'admin_members', 'admin_modules', 'admin_news', 'admin_newsletters', 'admin_permissions',
+        'admin_press', 'admin_translation_reviews', 'admin_wiki',
+    ] as $adminRoute) {
+        $routeSeo[$adminRoute] ??= [
+            'title' => 'Administration ON4CRD',
+            'description' => 'Interface d administration du Radio Club Durnal ON4CRD.',
+            'robots' => 'noindex,nofollow',
+        ];
+    }
     $titleKey = $routeKey . '_title';
     $descriptionKey = $routeKey . '_description';
     $title = trim((string) ($pageMeta['title'] ?? ''));
     $description = trim((string) ($pageMeta['description'] ?? ''));
 
     if ($title === '') {
-        $title = trim((string) ($seo[$titleKey] ?? $seo['default_title'] ?? $siteName));
+        $title = trim((string) ($seo[$titleKey] ?? $routeSeo[$routeKey]['title'] ?? $seo['default_title'] ?? $siteName));
     }
     if ($description === '') {
-        $description = trim((string) ($seo[$descriptionKey] ?? $seo['default_description'] ?? ''));
+        $description = trim((string) ($seo[$descriptionKey] ?? $routeSeo[$routeKey]['description'] ?? $seo['default_description'] ?? ''));
     }
 
     $alternates = isset($pageMeta['alternates']) && is_array($pageMeta['alternates']) ? $pageMeta['alternates'] : [];
@@ -2633,9 +2675,49 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
         'geo_placename' => (string) ($seo['geo_placename'] ?? 'Durnal, Yvoir, Namur, Belgium'),
         'geo_position' => '50.3150;4.9452',
         'icbm' => '50.3150, 4.9452',
+        'latitude' => '50.3150',
+        'longitude' => '4.9452',
+        'schema_type' => 'WebPage',
         'alternates' => $alternates,
+        'robots' => (string) ($routeSeo[$routeKey]['robots'] ?? 'index,follow'),
     ], array_filter($pageMeta, static fn($value): bool => $value !== null && $value !== ''));
     $defaults['alternates'] = $alternates;
+    if (!isset($defaults['json_ld'])) {
+        $defaults['json_ld'] = [
+            '@context' => 'https://schema.org',
+            '@type' => (string) ($defaults['schema_type'] ?? 'WebPage'),
+            'name' => (string) $defaults['title'],
+            'description' => (string) $defaults['description'],
+            'url' => (string) $defaults['canonical'],
+            'isPartOf' => [
+                '@type' => 'WebSite',
+                'name' => $siteName,
+                'url' => route_url_with_locale('home', $locale),
+            ],
+            'about' => [
+                '@type' => 'Organization',
+                'name' => 'Radio Club Durnal ON4CRD',
+                'url' => route_url_with_locale('home', $locale),
+                'location' => [
+                    '@type' => 'Place',
+                    'name' => 'Bocq Arena',
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'streetAddress' => 'Rue des Ecoles',
+                        'postalCode' => '5530',
+                        'addressLocality' => 'Purnode',
+                        'addressRegion' => 'Namur',
+                        'addressCountry' => 'BE',
+                    ],
+                    'geo' => [
+                        '@type' => 'GeoCoordinates',
+                        'latitude' => 50.3150,
+                        'longitude' => 4.9452,
+                    ],
+                ],
+            ],
+        ];
+    }
 
     return $defaults;
 }
@@ -2676,7 +2758,12 @@ function module_css_assets_for_route(string $route): array
     $module = $moduleByRoute[$route] ?? $route;
     $assets = [];
 
-    foreach (array_unique(['home' === $module ? 'home' : $module]) as $candidate) {
+    $candidates = [$module];
+    if ($route !== $module) {
+        $candidates[] = $route;
+    }
+
+    foreach (array_unique($candidates) as $candidate) {
         $path = 'assets/css/modules/' . $candidate . '.css';
         if (is_file(dirname(__DIR__) . '/' . $path)) {
             $assets[] = $path;
