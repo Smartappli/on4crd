@@ -338,7 +338,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
 
 ob_start();
 ?>
-<section class="page-hero">
+<section class="page-hero tools-hero">
     <div>
         <p class="eyebrow tools-hero-title"><?= e($tr('tool_index')) ?></p>
         <h1><?= e($tr('title', 'Outils radioamateur')) ?></h1>

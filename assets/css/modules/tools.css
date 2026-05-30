@@ -20,6 +20,10 @@
   letter-spacing: .08em;
 }
 
+[data-route="tools"] .tools-hero {
+  margin-bottom: 1rem;
+}
+
 .tools-index {
   position: sticky;
   top: 1rem;
