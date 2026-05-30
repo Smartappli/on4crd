@@ -17,6 +17,7 @@ return array (
   'end' => 'Fin',
   'step' => 'Incremento',
   'view_lot' => 'Ver lote',
+  'subscribe_auctions' => 'Suscribirme a las subastas',
   'page' => 'Página',
   'previous' => 'Anterior',
   'next' => 'Siguiente',

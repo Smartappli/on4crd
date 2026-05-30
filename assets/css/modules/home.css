@@ -13,6 +13,40 @@
   display: block;
 }
 
+.home-events-planning {
+  min-height: 240px;
+}
+
+.home-events-calendar.fullcalendar-theme {
+  margin-top: 0;
+}
+
+.home-events-calendar .fc .fc-list {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.home-events-calendar .fc .fc-list-event-title,
+.home-events-calendar .fc .fc-list-event-time {
+  font-size: .82rem;
+}
+
+.home-events-calendar .fc .fc-list-day-cushion {
+  padding: .45rem .65rem;
+}
+
+.home-tool-day .tool-panel {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.home-tool-day .tool-panel h2 {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
 @media (max-width: 640px) {
   .home-module .text-4xl,
   [data-route="home"] .text-4xl {

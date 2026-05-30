@@ -2,6 +2,8 @@
 /config/config.php
 /storage/cache/*
 !/storage/cache/.gitkeep
+/storage/auth/*
+!/storage/auth/.htaccess
 /storage/uploads/*
 !/storage/uploads/.htaccess
 !/storage/uploads/.gitkeep

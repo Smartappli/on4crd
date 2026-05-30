@@ -130,6 +130,13 @@ foreach ($pagedRows as $row) {
 if ($themeFilter !== '' && !isset($themeMeta[$themeFilter])) {
     $themeFilter = '';
 }
+$activeFiltersCount = 0;
+if ($themeFilter !== '') {
+    $activeFiltersCount++;
+}
+if ($search !== '') {
+    $activeFiltersCount++;
+}
 
 set_page_meta([
     'title' => (string) $t['page_title'],
@@ -140,14 +147,29 @@ set_page_meta([
 ob_start();
 ?>
 <div class="stack">
-    <div class="card">
-        <div class="row-between">
-            <div>
-                <h1><?= e((string) $t['page_title']) ?></h1>
-                <p class="help"><?= e((string) $t['page_description']) ?></p>
-            </div>
-            <span class="badge"><?= $totalArticles ?> <?= e((string) $t['article_count']) ?></span>
+    <section class="page-hero">
+        <div>
+            <p class="eyebrow"><?= e((string) $t['layout_title']) ?></p>
+            <h1 class="articles-hero-title"><?= e((string) $t['page_title']) ?></h1>
+            <p class="help"><?= e((string) $t['page_description']) ?></p>
         </div>
+        <div class="articles-hero-stats">
+            <article>
+                <span><?= e((string) $t['article_count']) ?></span>
+                <strong><?= (int) $totalArticles ?></strong>
+            </article>
+            <article>
+                <span><?= e((string) $t['theme_default']) ?></span>
+                <strong><?= (int) count($themeMeta) ?></strong>
+            </article>
+            <article>
+                <span><?= e((string) $t['results']) ?></span>
+                <strong><?= (int) $activeFiltersCount ?></strong>
+            </article>
+        </div>
+    </section>
+
+    <div class="card">
         <div class="news-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
                 <?php $logoUrl = (string) ($theme['image'] ?? '');

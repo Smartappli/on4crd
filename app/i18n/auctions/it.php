@@ -17,6 +17,7 @@ return array (
   'end' => 'Fine',
   'step' => 'Rialzo',
   'view_lot' => 'Vedi lotto',
+  'subscribe_auctions' => 'Iscrivermi alle aste',
   'page' => 'Pagina',
   'previous' => 'Precedente',
   'next' => 'Successiva',

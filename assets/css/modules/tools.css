@@ -10,6 +10,62 @@
   gap: 1rem;
 }
 
+[data-route="tools"] .tools-hero-title {
+  margin: 0;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+[data-route="tools"] .tool-panel h2 {
+  margin-top: 0;
+  margin-bottom: .85rem;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+[data-route="tools"] .tools-hero {
+  margin-bottom: 1rem;
+}
+
+[data-route="tools"] .tools-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+  min-width: min(100%, 24rem);
+}
+
+[data-route="tools"] .tools-stat {
+  display: grid;
+  align-content: center;
+  min-height: 0;
+  padding: .65rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 92%, white);
+}
+
+[data-route="tools"] .tools-stat span {
+  color: var(--accent-strong);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+[data-route="tools"] .tools-stat p {
+  margin: .35rem 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 650;
+}
+
 .tools-index {
   position: sticky;
   top: 1rem;
@@ -22,5 +78,11 @@
 
   .tools-index {
     position: static;
+  }
+}
+
+@media (max-width: 900px) {
+  [data-route="tools"] .tools-stats {
+    grid-template-columns: 1fr;
   }
 }

@@ -170,7 +170,6 @@ $routeModules = [
     'save_dashboard' => 'dashboard',
     'widget_render' => 'dashboard',
     'profile' => 'members',
-    'membership' => 'members',
     'directory' => 'directory',
     'tools' => 'tools',
     'tools_geocode' => 'tools',
@@ -230,7 +229,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -271,21 +270,11 @@ switch ($route) {
     case 'notifications': $dispatchPage('pages/notifications.php'); break;
     case 'save_dashboard': $dispatchPage('pages/save_dashboard.php'); break;
     case 'widget_render': $dispatchPage('pages/widget_render.php'); break;
-    case 'dashboard_script': $dispatchPage('pages/dashboard_script.js.php'); break;
-    case 'dashboard_script_fullscreen': $dispatchPage('pages/dashboard_script_fullscreen.js.php'); break;
-    case 'dashboard_script_loader': $dispatchPage('pages/dashboard_script_loader.js.php'); break;
-    case 'dashboard_script_offcanvas': $dispatchPage('pages/dashboard_script_offcanvas.js.php'); break;
     case 'dashboard_widget_card': $dispatchPage('pages/dashboard_widget_card.php'); break;
     case 'profile': $dispatchPage('pages/profile.php'); break;
     case 'directory': $dispatchPage('pages/directory.php'); break;
     case 'tools': $dispatchPage('pages/tools.php'); break;
     case 'tools_geocode': $dispatchPage('pages/tools_geocode.php'); break;
-    case 'tools_script': $dispatchPage('pages/tools_script.js.php'); break;
-    case 'tools_script_computes': $dispatchPage('pages/tools_script_computes.js.php'); break;
-    case 'tools_script_domrefs': $dispatchPage('pages/tools_script_domrefs.js.php'); break;
-    case 'tools_script_helpers': $dispatchPage('pages/tools_script_helpers.js.php'); break;
-    case 'tools_script_initializers': $dispatchPage('pages/tools_script_initializers.js.php'); break;
-    case 'tools_script_loader': $dispatchPage('pages/tools_script_loader.js.php'); break;
     case 'committee': $dispatchPage('pages/committee.php'); break;
     case 'press': $dispatchPage('pages/press.php'); break;
     case 'schools': $dispatchPage('pages/schools.php'); break;
@@ -300,14 +289,6 @@ switch ($route) {
     case 'qsl': $dispatchPage('pages/qsl.php'); break;
     case 'qsl_preview': $dispatchPage('pages/qsl_preview.php'); break;
     case 'qsl_export': $dispatchPage('pages/qsl_export.php'); break;
-    case 'qsl_script': $dispatchPage('pages/qsl_script.js.php'); break;
-    case 'qsl_script_assistant': $dispatchPage('pages/qsl_script_assistant.js.php'); break;
-    case 'qsl_script_card_preview': $dispatchPage('pages/qsl_script_card_preview.js.php'); break;
-    case 'qsl_script_draw_assistant': $dispatchPage('pages/qsl_script_draw_assistant.js.php'); break;
-    case 'qsl_script_dropzone': $dispatchPage('pages/qsl_script_dropzone.js.php'); break;
-    case 'qsl_script_manual_preview': $dispatchPage('pages/qsl_script_manual_preview.js.php'); break;
-    case 'qsl_script_nav': $dispatchPage('pages/qsl_script_nav.js.php'); break;
-    case 'qsl_script_qso_toggle': $dispatchPage('pages/qsl_script_qso_toggle.js.php'); break;
     case 'chatbot': $dispatchPage('pages/chatbot.php'); break;
     case 'members_library': $dispatchPage('pages/members_library.php'); break;
     case 'search': $dispatchPage('pages/search.php'); break;
@@ -355,7 +336,6 @@ switch ($route) {
     case 'sitemap.xml': $dispatchPage('pages/sitemap.php'); break;
     case 'robots.txt': $dispatchPage('pages/robots.php'); break;
     case 'llms.txt': $dispatchPage('pages/llms.php'); break;
-    case 'home_script_ham_weather': $dispatchPage('pages/home_script_ham_weather.js.php'); break;
     case 'newsletter_unsubscribe': $dispatchPage('pages/newsletter_unsubscribe.php'); break;
     case 'footer_contact': $dispatchPage('pages/footer_contact.php'); break;
     case 'install.php': $dispatchPage('install.php'); break;

@@ -15,6 +15,7 @@ return array (
   'nav_articles' => 'مقالات',
   'nav_library' => 'المكتبة',
   'nav_auctions' => 'المزادات',
+  'nav_assistant' => 'المساعد',
   'account_space' => 'حسابي',
   'account_profile' => 'الملف الشخصي',
   'account_settings' => 'الإعدادات',

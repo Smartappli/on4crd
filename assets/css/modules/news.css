@@ -2,3 +2,48 @@
 [data-route="news"] .news-module {
   min-width: 0;
 }
+
+[data-route="news"] .news-hero-title {
+  margin: 0;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+[data-route="news"] .news-hero-stats {
+  display: grid;
+  min-width: min(100%, 14rem);
+  align-content: center;
+}
+
+[data-route="news"] .news-hero-stat {
+  display: grid;
+  align-content: center;
+  min-height: 96px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--panel) 92%, white);
+}
+
+[data-route="news"] .news-hero-stat strong {
+  color: var(--accent-strong);
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+[data-route="news"] .news-hero-stat span {
+  margin-top: .35rem;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+@media (max-width: 900px) {
+  [data-route="news"] .news-hero-stats {
+    min-width: 0;
+  }
+}

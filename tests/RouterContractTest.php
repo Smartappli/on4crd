@@ -138,4 +138,44 @@ final class RouterContractTest extends TestCase
             );
         }
     }
+
+    public function testNewsModuleIsSeededAsPublic(): void
+    {
+        $functions = file_get_contents(__DIR__ . '/../app/functions.php');
+        self::assertIsString($functions);
+
+        self::assertMatchesRegularExpression(
+            "/\\['news',\\s*'[^']+',\\s*'[^']+',\\s*0,\\s*1,\\s*'public',\\s*30\\]/",
+            $functions,
+            'The public news route must not be seeded with members-only module visibility.'
+        );
+        self::assertStringContainsString(
+            "UPDATE modules SET is_enabled = 1, visibility = 'public' WHERE code IN ('news'",
+            $functions,
+            'Runtime schema updates must restore the public news module when production data disabled it.'
+        );
+        self::assertStringContainsString(
+            "UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')",
+            $functions,
+            'Runtime schema updates must restore the member dashboard module when production data disabled it.'
+        );
+    }
+
+    public function testPublicRoutesAreNotGatedByMembersOnlyModules(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+
+        self::assertStringNotContainsString("'membership' => 'members'", $router);
+        self::assertContains('search', $this->extractArrayValues($router, 'publicRoutes'));
+    }
+
+    public function testAuthDoesNotCallPrivatePdoDatabaseConstructor(): void
+    {
+        $functions = file_get_contents(__DIR__ . '/../app/functions.php');
+        self::assertIsString($functions);
+
+        self::assertStringNotContainsString('new \\Delight\\Db\\PdoDatabase($pdo)', $functions);
+        self::assertStringContainsString('new \\Delight\\Auth\\Auth($pdo)', $functions);
+    }
 }

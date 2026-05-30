@@ -26,3 +26,33 @@ const enableUpdates=()=>{if(isInViewport){return;}isInViewport=true;tick();};
 if("IntersectionObserver" in window){const observer=new IntersectionObserver((entries)=>{entries.forEach((entry)=>{if(entry.isIntersecting){enableUpdates();observer.disconnect();}});},{threshold:0.1});observer.observe(root);}else{enableUpdates();}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-lastUpdateAt>=refreshMs){tick();}});
 })();
+
+(function(){
+const calendars=document.querySelectorAll("[data-home-events-calendar]");
+if(!calendars.length){return;}
+calendars.forEach((calendarEl)=>{
+let config={};
+try{config=calendarEl.dataset.calendarConfig?JSON.parse(calendarEl.dataset.calendarConfig):{};}catch(_e){config={};}
+if(!window.FullCalendar){
+const message=config.loadError||"Calendar unavailable.";
+calendarEl.insertAdjacentHTML("beforeend",`<p class="help">${message}</p>`);
+return;
+}
+const calendar=new FullCalendar.Calendar(calendarEl,{
+locale:config.locale||document.documentElement.lang||"fr",
+firstDay:1,
+height:"auto",
+initialView:config.initialView||"listMonth",
+headerToolbar:false,
+buttonText:config.buttonText||{},
+events:config.eventsUrl||"",
+eventClick(info){
+if(info.event.url){
+info.jsEvent.preventDefault();
+window.location.href=info.event.url;
+}
+}
+});
+calendar.render();
+});
+})();

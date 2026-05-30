@@ -17,6 +17,7 @@ return array (
   'end' => 'Fin',
   'step' => 'Pas',
   'view_lot' => 'Voir le lot',
+  'subscribe_auctions' => 'M’abonner aux enchères',
   'page' => 'Page',
   'previous' => 'Précédent',
   'next' => 'Suivant',
