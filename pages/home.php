@@ -328,6 +328,23 @@ if (is_array($latestNews) && !empty($latestNews['slug'])) {
         . '</a>';
 }
 
+$classifiedsHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('classifieds')) . '">'
+    . '<p>' . e((string) ($homeI18n['spotlight_classifieds_empty'] ?? 'Aucune petite annonce active pour le moment.')) . '</p>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' â†’</span>'
+    . '</a>';
+if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
+    $classifiedDescription = mb_safe_strimwidth(trim(preg_replace('/\s+/u', ' ', strip_tags((string) ($latestClassifiedAd['description'] ?? ''))) ?? ''), 0, 130, '...');
+    $classifiedLocation = trim((string) ($latestClassifiedAd['location'] ?? ''));
+    $classifiedPrice = format_price_eur((int) ($latestClassifiedAd['price_cents'] ?? 0));
+    $classifiedMeta = trim($classifiedPrice . ($classifiedLocation !== '' ? ' · ' . $classifiedLocation : ''));
+    $classifiedsHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('classifieds', ['q' => (string) $latestClassifiedAd['title']])) . '">'
+        . '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e($classifiedMeta) . '</p>'
+        . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestClassifiedAd['title']) . '</h3>'
+        . ($classifiedDescription !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($classifiedDescription) . '</p>' : '')
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' â†’</span>'
+        . '</a>';
+}
+
 $homeEventsCalendarConfig = [
     'locale' => $homeLocale,
     'initialView' => 'listMonth',
@@ -632,9 +649,10 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<h2 class="text-2xl font-bold text-slate-900">' . e((string) $homeI18n['club_spotlight_title']) . '</h2>'
     . '</header>'
     . '<div class="grid gap-4 lg:grid-cols-2">'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_tool_day']) . '</h3>' . $latestNewsHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_for_sale']) . '</h3>' . $nextEventHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $toolDayHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['latest_news_title'] ?? 'Dernières actualités')) . '</h3>' . $latestNewsHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_classifieds'] ?? 'Petites annonces')) . '</h3>' . $classifiedsHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['next_event_title'] ?? 'Prochain événement')) . '</h3>' . $nextEventHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_auction_live'] ?? 'L\'outil du jour')) . '</h3>' . $toolDayHtml . '</article>'
     . $memberSpotlightRowHtml
     . '</div>'
     . '</section>'
