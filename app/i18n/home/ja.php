@@ -47,7 +47,7 @@ return [
   'next_event_title' => '次のイベント',
   'ad_title' => '広告',
   'spotlight_tool_day' => 'ニュース / お知らせ',
-  'spotlight_for_sale' => '次のイベント',
+  'spotlight_for_sale' => '今後のイベント',
   'spotlight_auction_live' => '今日のツール',
   'spotlight_sub_1' => 'クラシファイド / オークション',
   'spotlight_sub_2' => '今日のツール',

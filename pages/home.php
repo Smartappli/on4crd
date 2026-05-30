@@ -321,27 +321,27 @@ if (is_array($latestNews) && !empty($latestNews['slug'])) {
         . '</a>';
 }
 
-$nextEventHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">' . e((string) $homeI18n['no_event']) . '</div>';
-if (is_array($nextEvent) && !empty($nextEvent['slug'])) {
-    $eventDate = !empty($nextEvent['start_at']) ? date('d/m/Y H:i', strtotime((string) $nextEvent['start_at'])) : (string) $homeI18n['event_date_tbd'];
-    $eventSummary = trim((string) ($nextEvent['summary'] ?? ''));
-    if ($eventSummary === '') {
-        $eventSummary = (string) $homeI18n['event_fallback'];
-    }
-    $eventLocation = trim((string) ($nextEvent['location'] ?? ''));
-
-    $nextEventHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('event_view', ['slug' => (string) $nextEvent['slug']])) . '">'
-        . '<p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">' . e((string) $homeI18n['next_date']) . ' · ' . e($eventDate) . '</p>'
-        . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $nextEvent['title']) . '</h3>'
-        . '<p class="mt-2 text-sm text-slate-600">' . e($eventSummary) . '</p>';
-
-    if ($eventLocation !== '') {
-        $nextEventHtml .= '<p class="mt-2 text-xs font-medium text-slate-500">' . e((string) $homeI18n['event_location']) . ' : ' . e($eventLocation) . '</p>';
-    }
-
-    $nextEventHtml .= '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) $homeI18n['view_event']) . ' →</span>'
-        . '</a>';
-}
+$homeEventsCalendarConfig = [
+    'locale' => $homeLocale,
+    'initialView' => 'listMonth',
+    'eventsUrl' => route_url('events_feed'),
+    'loadError' => (string) ($homeEventsI18n['calendar_load_error'] ?? $homeI18n['no_event']),
+    'buttonText' => [
+        'today' => (string) ($homeEventsI18n['today'] ?? 'Aujourd\'hui'),
+        'month' => (string) ($homeEventsI18n['month'] ?? 'Mois'),
+        'week' => (string) ($homeEventsI18n['week'] ?? 'Semaine'),
+        'list' => (string) ($homeEventsI18n['list'] ?? 'Planning'),
+    ],
+];
+$nextEventHtml = '<div class="home-events-planning rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">'
+    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">'
+    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">'
+    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">'
+    . '<div class="fullcalendar-theme home-events-calendar" data-home-events-calendar data-calendar-config="' . e(json_encode($homeEventsCalendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '"></div>'
+    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>'
+    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>'
+    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/' . e($homeLocale) . '.global.js"></script>'
+    . '</div>';
 
 $toolDayHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="'
     . e(route_url('tools'))
@@ -350,7 +350,54 @@ $toolDayHtml = '<a class="group block rounded-2xl border border-slate-200 bg-whi
     . '</p><span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">'
     . e((string) $homeI18n['spotlight_tool_day_cta'])
     . ' →</span></a>';
-
+try {
+    $toolsI18n = require __DIR__ . '/../app/i18n/tools.php';
+    $t = [];
+    foreach (array_keys($toolsI18n['fr'] ?? []) as $key) {
+        $value = trim(i18n_localized_value($toolsI18n, $homeLocale, (string) $key));
+        $t[(string) $key] = $value !== '' ? $value : (string) ($toolsI18n['fr'][$key] ?? '');
+    }
+    $toolTr = static function (string $key, string $fallback = '') use ($t): string {
+        $value = trim((string) ($t[$key] ?? ''));
+        return $value !== '' ? $value : $fallback;
+    };
+    $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
+    $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
+    $toolCandidates = [];
+    foreach (['locators', 'conversion', 'antenna', 'power', 'advanced_propagation', 'rf_measures', 'radio_math'] as $group) {
+        foreach (($toolCatalog[$group] ?? []) as $entry) {
+            $toolId = (string) ($entry['id'] ?? '');
+            if ($toolId === '' || empty($toolPanelMap[$toolId])) {
+                continue;
+            }
+            $partialPath = __DIR__ . '/tools_panels/' . $toolPanelMap[$toolId];
+            if (!is_file($partialPath)) {
+                continue;
+            }
+            $title = isset($entry['title']) ? (string) $entry['title'] : $toolTr((string) ($entry['title_key'] ?? ''), $toolId);
+            if (($entry['title_pattern'] ?? '') === 'conv_dot') {
+                $title = trim($toolTr((string) ($entry['left_key'] ?? '')) . ' · ' . $toolTr((string) ($entry['right_key'] ?? '')));
+            }
+            $toolCandidates[] = ['id' => $toolId, 'title' => $title !== '' ? $title : $toolId, 'path' => $partialPath];
+        }
+    }
+    if ($toolCandidates !== []) {
+        $selectedTool = $toolCandidates[array_rand($toolCandidates)];
+        ob_start();
+        include (string) $selectedTool['path'];
+        $selectedToolPanel = trim((string) ob_get_clean());
+        if ($selectedToolPanel !== '') {
+            $toolDayHtml = '<div class="home-tool-day">'
+                . '<script type="application/json" id="tools-i18n">' . e(json_encode($t, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</script>'
+                . $selectedToolPanel
+                . '<a class="mt-3 inline-flex text-sm font-semibold text-blue-600 hover:text-blue-700" href="' . e(route_url('tools')) . '#' . e((string) $selectedTool['id']) . '">'
+                . e((string) $homeI18n['spotlight_tool_day_cta']) . ' →</a>'
+                . '</div>';
+        }
+    }
+} catch (Throwable) {
+    // The static link remains available if a random tool panel cannot be rendered.
+}
 $memberSpotlightRowHtml = '';
 if ($isAuthenticated) {
     $memberSpotlightLinkClass = 'inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50';

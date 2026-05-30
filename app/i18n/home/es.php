@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'Próximo evento',
   'ad_title' => 'Publicidad',
   'spotlight_tool_day' => 'Actualidad / Anuncio',
-  'spotlight_for_sale' => 'Próximo evento',
+  'spotlight_for_sale' => 'Próximos eventos',
   'spotlight_auction_live' => 'Herramienta del día',
   'spotlight_sub_1' => 'Tienda / Subastas',
   'spotlight_sub_2' => 'Herramienta del día',

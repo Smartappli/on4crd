@@ -47,7 +47,7 @@ return [
   'next_event_title' => '下一个活动',
   'ad_title' => '广告',
   'spotlight_tool_day' => '新闻 / 公告',
-  'spotlight_for_sale' => '下一个活动',
+  'spotlight_for_sale' => '即将举行的活动',
   'spotlight_auction_live' => '今日工具',
   'spotlight_sub_1' => '分类信息 / 拍卖',
   'spotlight_sub_2' => '今日工具',

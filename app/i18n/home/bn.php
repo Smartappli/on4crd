@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'পরবর্তী ইভেন্ট',
   'ad_title' => 'বিজ্ঞাপন',
   'spotlight_tool_day' => 'সংবাদ / ঘোষণা',
-  'spotlight_for_sale' => 'পরবর্তী ইভেন্ট',
+  'spotlight_for_sale' => 'আসন্ন ইভেন্টসমূহ',
   'spotlight_auction_live' => 'আজকের টুল',
   'spotlight_sub_1' => 'ক্লাসিফাইড / নিলাম',
   'spotlight_sub_2' => 'আজকের টুল',

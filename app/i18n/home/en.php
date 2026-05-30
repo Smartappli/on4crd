@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'Next event',
   'ad_title' => 'Advertisement',
   'spotlight_tool_day' => 'News / Announcement',
-  'spotlight_for_sale' => 'Next event',
+  'spotlight_for_sale' => 'Upcoming events',
   'spotlight_auction_live' => 'Tool of the day',
   'spotlight_sub_1' => 'Classifieds / Auctions',
   'spotlight_sub_2' => 'Tool of the day',

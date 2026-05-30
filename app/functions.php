@@ -2786,6 +2786,9 @@ function module_js_assets_for_route(string $route): array
     $assets = [];
 
     $candidates = [$module];
+    if ($route === 'home') {
+        $candidates[] = 'tools';
+    }
     if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'wiki_edit'], true)) {
         $candidates[] = 'wysiwyg';
     }

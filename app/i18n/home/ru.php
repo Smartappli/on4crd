@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'Следующее событие',
   'ad_title' => 'Реклама',
   'spotlight_tool_day' => 'Новость / объявление',
-  'spotlight_for_sale' => 'Следующее событие',
+  'spotlight_for_sale' => 'Ближайшие события',
   'spotlight_auction_live' => 'Инструмент дня',
   'spotlight_sub_1' => 'Объявления / Аукционы',
   'spotlight_sub_2' => 'Инструмент дня',

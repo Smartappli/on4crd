@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'الحدث القادم',
   'ad_title' => 'إعلان',
   'spotlight_tool_day' => 'أخبار / إعلان',
-  'spotlight_for_sale' => 'الحدث القادم',
+  'spotlight_for_sale' => 'الأحداث القادمة',
   'spotlight_auction_live' => 'أداة اليوم',
   'spotlight_sub_1' => 'إعلانات مبوبة / مزادات',
   'spotlight_sub_2' => 'أداة اليوم',

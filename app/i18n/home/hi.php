@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'अगला कार्यक्रम',
   'ad_title' => 'विज्ञापन',
   'spotlight_tool_day' => 'समाचार / घोषणा',
-  'spotlight_for_sale' => 'अगला कार्यक्रम',
+  'spotlight_for_sale' => 'आगामी कार्यक्रम',
   'spotlight_auction_live' => 'आज का टूल',
   'spotlight_sub_1' => 'वर्गीकृत विज्ञापन / नीलामी',
   'spotlight_sub_2' => 'आज का टूल',

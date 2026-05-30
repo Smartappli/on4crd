@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'Volgend evenement',
   'ad_title' => 'Advertentie',
   'spotlight_tool_day' => 'Nieuws / Aankondiging',
-  'spotlight_for_sale' => 'Volgend evenement',
+  'spotlight_for_sale' => 'Komende evenementen',
   'spotlight_auction_live' => 'Tool van de dag',
   'spotlight_sub_1' => 'Kleine advertenties / Veilingen',
   'spotlight_sub_2' => 'Tool van de dag',

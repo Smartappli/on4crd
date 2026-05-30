@@ -47,7 +47,7 @@ return [
   'next_event_title' => 'Acara berikutnya',
   'ad_title' => 'Iklan',
   'spotlight_tool_day' => 'Berita / Pengumuman',
-  'spotlight_for_sale' => 'Acara berikutnya',
+  'spotlight_for_sale' => 'Acara mendatang',
   'spotlight_auction_live' => 'Alat hari ini',
   'spotlight_sub_1' => 'Iklan baris / Lelang',
   'spotlight_sub_2' => 'Alat hari ini',
