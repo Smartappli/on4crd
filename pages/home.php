@@ -343,13 +343,18 @@ $nextEventHtml = '<div class="home-events-planning rounded-2xl border border-sla
     . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/' . e($homeLocale) . '.global.js"></script>'
     . '</div>';
 
+$toolDayCta = trim((string) $homeI18n['spotlight_tool_day_cta']);
+if ($toolDayCta !== '' && !str_ends_with($toolDayCta, '→')) {
+    $toolDayCta .= ' →';
+}
+
 $toolDayHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="'
     . e(route_url('tools'))
     . '#tool-grid"><p class="text-sm font-semibold text-slate-900">'
     . e((string) $homeI18n['spotlight_tool_day_item'])
     . '</p><span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">'
-    . e((string) $homeI18n['spotlight_tool_day_cta'])
-    . ' →</span></a>';
+    . e($toolDayCta)
+    . '</span></a>';
 try {
     $toolsI18n = require __DIR__ . '/../app/i18n/tools.php';
     $t = [];
@@ -391,7 +396,7 @@ try {
                 . '<script type="application/json" id="tools-i18n">' . e(json_encode($t, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</script>'
                 . $selectedToolPanel
                 . '<a class="mt-3 inline-flex text-sm font-semibold text-blue-600 hover:text-blue-700" href="' . e(route_url('tools')) . '#' . e((string) $selectedTool['id']) . '">'
-                . e((string) $homeI18n['spotlight_tool_day_cta']) . ' →</a>'
+                . e($toolDayCta) . '</a>'
                 . '</div>';
         }
     }
