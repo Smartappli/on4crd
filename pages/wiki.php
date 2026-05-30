@@ -62,14 +62,6 @@ ob_start();
             <p class="eyebrow"><?= e((string) $t['title']) ?></p>
             <h1><?= e((string) $t['wiki_pages']) ?></h1>
             <p class="help"><?= e((string) $t['summary_fallback']) ?></p>
-            <form method="get" class="wiki-search-form wiki-hero-search">
-                <input type="hidden" name="route" value="wiki">
-                <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
-                <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-                <?php if ($search !== ''): ?>
-                    <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
-                <?php endif; ?>
-            </form>
         </div>
         <div class="wiki-hero-side">
             <div class="wiki-dashboard wiki-hero-dashboard">
@@ -90,6 +82,17 @@ ob_start();
                 <a class="button" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
             <?php endif; ?>
         </div>
+    </section>
+
+    <section class="wiki-search-panel">
+        <form method="get" class="wiki-search-form">
+            <input type="hidden" name="route" value="wiki">
+            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+            <?php if ($search !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
+            <?php endif; ?>
+        </form>
     </section>
 
     <section class="wiki-directory">
