@@ -342,6 +342,14 @@ if (is_array($nextEvent) && !empty($nextEvent['slug'])) {
         . '</a>';
 }
 
+$toolDayHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="'
+    . e(route_url('tools'))
+    . '#tool-grid"><p class="text-sm font-semibold text-slate-900">'
+    . e((string) $homeI18n['spotlight_tool_day_item'])
+    . '</p><span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">'
+    . e((string) $homeI18n['spotlight_tool_day_cta'])
+    . ' →</span></a>';
+
 $adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">' . e((string) $homeI18n['partner_ad_empty']) . '</p></div>';
 try {
     $localAdCandidates = cache_remember('home_local_ad_candidates_v1', 300, static function (): array {
@@ -547,7 +555,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="grid gap-4 lg:grid-cols-3">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_tool_day']) . '</h3>' . $latestNewsHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_for_sale']) . '</h3>' . $nextEventHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $adSlotHtml . '</article>'
+    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $toolDayHtml . '</article>'
     . '</div>'
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
