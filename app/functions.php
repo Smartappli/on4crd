@@ -156,6 +156,35 @@ function table_has_column(string $table, string $column): bool
     return $cache[$cacheKey];
 }
 
+function table_has_index(string $table, string $index): bool
+{
+    static $cache = [];
+
+    $table = strtolower(trim($table));
+    $index = strtolower(trim($index));
+    if ($table === '' || $index === '') {
+        return false;
+    }
+
+    $cacheKey = $table . '.' . $index;
+    if (array_key_exists($cacheKey, $cache)) {
+        return $cache[$cacheKey];
+    }
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.statistics
+             WHERE table_schema = DATABASE() AND table_name = ? AND index_name = ?'
+        );
+        $stmt->execute([$table, $index]);
+        $cache[$cacheKey] = (int) $stmt->fetchColumn() > 0;
+    } catch (Throwable) {
+        $cache[$cacheKey] = false;
+    }
+
+    return $cache[$cacheKey];
+}
+
 if (!function_exists('supported_locales')) {
 function supported_locales(): array
 {
@@ -1453,6 +1482,7 @@ function apply_runtime_schema_updates(): void
             token VARCHAR(255) NOT NULL,
             expires INT UNSIGNED NOT NULL,
             UNIQUE KEY users_confirmations_selector_unique (selector),
+            KEY users_confirmations_email_expires_index (email, expires),
             KEY users_confirmations_user_id_index (user_id),
             CONSTRAINT users_confirmations_user_id_foreign FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
@@ -1492,6 +1522,7 @@ function apply_runtime_schema_updates(): void
             expires INT UNSIGNED NOT NULL,
             UNIQUE KEY users_resets_selector_unique (selector),
             KEY users_resets_user_index (user),
+            KEY users_resets_user_expires_index (user, expires),
             CONSTRAINT users_resets_user_foreign FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
@@ -1501,9 +1532,20 @@ function apply_runtime_schema_updates(): void
             tokens FLOAT UNSIGNED NOT NULL,
             replenished_at INT UNSIGNED NOT NULL,
             expires_at INT UNSIGNED NOT NULL,
-            PRIMARY KEY (bucket)
+            PRIMARY KEY (bucket),
+            KEY users_throttling_expires_at_index (expires_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
+
+    if (!table_has_index('users_confirmations', 'users_confirmations_email_expires_index')) {
+        db()->exec('ALTER TABLE users_confirmations ADD INDEX users_confirmations_email_expires_index (email, expires)');
+    }
+    if (!table_has_index('users_resets', 'users_resets_user_expires_index')) {
+        db()->exec('ALTER TABLE users_resets ADD INDEX users_resets_user_expires_index (user, expires)');
+    }
+    if (!table_has_index('users_throttling', 'users_throttling_expires_at_index')) {
+        db()->exec('ALTER TABLE users_throttling ADD INDEX users_throttling_expires_at_index (expires_at)');
+    }
 
     if (table_exists('articles')) {
         $columnStmt = db()->prepare(

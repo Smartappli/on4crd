@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS users_confirmations (
     token VARCHAR(255) NOT NULL,
     expires INT UNSIGNED NOT NULL,
     UNIQUE KEY users_confirmations_selector_unique (selector),
+    KEY users_confirmations_email_expires_index (email, expires),
     KEY users_confirmations_user_id_index (user_id)
 );
 
@@ -123,7 +124,8 @@ CREATE TABLE IF NOT EXISTS users_resets (
     token VARCHAR(255) NOT NULL,
     expires INT UNSIGNED NOT NULL,
     UNIQUE KEY users_resets_selector_unique (selector),
-    KEY users_resets_user_index (user)
+    KEY users_resets_user_index (user),
+    KEY users_resets_user_expires_index (user, expires)
 );
 
 CREATE TABLE IF NOT EXISTS users_throttling (
@@ -131,7 +133,8 @@ CREATE TABLE IF NOT EXISTS users_throttling (
     tokens FLOAT UNSIGNED NOT NULL,
     replenished_at INT UNSIGNED NOT NULL,
     expires_at INT UNSIGNED NOT NULL,
-    PRIMARY KEY (bucket)
+    PRIMARY KEY (bucket),
+    KEY users_throttling_expires_at_index (expires_at)
 );
 
 CREATE TABLE IF NOT EXISTS roles (
