@@ -76,7 +76,7 @@ function render_localized_not_found(): void
 }
 
 
-if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'llms.txt', 'install.php'], true)) {
+if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'llms.txt', 'ai-index.json', 'install.php'], true)) {
     http_response_code(404);
     render_localized_not_found();
     exit;
@@ -230,7 +230,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }
@@ -338,6 +338,7 @@ switch ($route) {
     case 'sitemap.xml': $dispatchPage('pages/sitemap.php'); break;
     case 'robots.txt': $dispatchPage('pages/robots.php'); break;
     case 'llms.txt': $dispatchPage('pages/llms.php'); break;
+    case 'ai-index.json': $dispatchPage('pages/ai_index.php'); break;
     case 'newsletter_unsubscribe': $dispatchPage('pages/newsletter_unsubscribe.php'); break;
     case 'footer_contact': $dispatchPage('pages/footer_contact.php'); break;
     case 'install.php': $dispatchPage('install.php'); break;

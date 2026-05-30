@@ -3304,6 +3304,8 @@ function render_layout(string $content, string $title = ''): string
         . '</title>' . $metaHead
         . '<meta name="theme-color" content="#2f6fed">'
         . '<link rel="manifest" href="' . e(asset_url('manifest.webmanifest')) . '">'
+        . '<link rel="alternate" type="text/plain" title="LLM context" href="' . e(base_url('llms.txt')) . '">'
+        . '<link rel="alternate" type="application/json" title="AI content index" href="' . e(base_url('ai-index.json')) . '">'
         . '<link rel="icon" href="' . e(asset_url('assets/icons/icon.svg')) . '" type="image/svg+xml">'
         . '<link rel="apple-touch-icon" href="' . e(asset_url('assets/icons/apple-touch-icon.png')) . '">'
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'

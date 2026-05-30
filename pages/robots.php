@@ -23,6 +23,8 @@ $lines = [
     'Sitemap: ' . $base . '/sitemap.xml',
     'LLM: ' . $base . '/index.php?route=llms.txt',
     'LLMS: ' . $base . '/llms.txt',
+    'AI-Index: ' . $base . '/index.php?route=ai-index.json',
+    'AI-Index: ' . $base . '/ai-index.json',
     'Host: ' . preg_replace('#^https?://#', '', $base),
 ];
 
