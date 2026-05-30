@@ -17,23 +17,23 @@ $visibilityOptions = [
     'members' => $t('members'),
     'private' => $t('private'),
 ];
+$visibilityFields = [
+    'visibility_photo' => ['label' => $t('photo'), 'default' => 'members'],
+    'visibility_full_name' => ['label' => $t('full_name'), 'default' => 'members'],
+    'visibility_email' => ['label' => $t('email'), 'default' => 'members'],
+    'visibility_phone' => ['label' => $t('phone'), 'default' => 'private'],
+    'visibility_qth' => ['label' => $t('qth'), 'default' => 'members'],
+    'visibility_licence_class' => ['label' => $t('licence'), 'default' => 'members'],
+    'visibility_favourite_bands' => ['label' => $t('bands'), 'default' => 'members'],
+    'visibility_station' => ['label' => $t('station'), 'default' => 'members'],
+];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
 
     $allowedVisibilities = array_keys($visibilityOptions);
-    $visibilityFields = [
-        'visibility_photo',
-        'visibility_full_name',
-        'visibility_email',
-        'visibility_phone',
-        'visibility_qth',
-        'visibility_licence_class',
-        'visibility_favourite_bands',
-        'visibility_station',
-    ];
     $visibilityPayload = [];
-    foreach ($visibilityFields as $field) {
+    foreach (array_keys($visibilityFields) as $field) {
         $value = (string) ($_POST[$field] ?? 'members');
         $visibilityPayload[$field] = in_array($value, $allowedVisibilities, true) ? $value : 'members';
     }
@@ -120,82 +120,27 @@ ob_start();
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
         <label>
-            <?= e($t('photo')) ?>
-            <select name="visibility_photo">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_photo'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-
-        <label>
             <?= e($t('change_photo')) ?>
             <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
             <small class="help"><?= e($t('photo_help')) ?></small>
         </label>
 
-        <label>
-            <?= e($t('full_name')) ?>
-            <select name="visibility_full_name">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_full_name'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-
-        <label>
-            <?= e($t('email')) ?>
-            <select name="visibility_email">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_email'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-
-        <label>
-            <?= e($t('phone')) ?>
-            <select name="visibility_phone">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_phone'] ?? 'private') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-
-        <label>
-            <?= e($t('qth')) ?>
-            <select name="visibility_qth">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_qth'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-
-        <label>
-            <?= e($t('licence')) ?>
-            <select name="visibility_licence_class">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_licence_class'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-
-        <label>
-            <?= e($t('bands')) ?>
-            <select name="visibility_favourite_bands">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_favourite_bands'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-
-        <label>
-            <?= e($t('station')) ?>
-            <select name="visibility_station">
-                <?php foreach ($visibilityOptions as $value => $label): ?>
-                    <option value="<?= e($value) ?>" <?= ((string) ($member['visibility_station'] ?? 'members') === $value) ? 'selected' : '' ?>><?= e($label) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
+        <div class="profile-visibility-grid">
+            <?php foreach ($visibilityOptions as $visibilityValue => $visibilityLabel): ?>
+                <section class="profile-visibility-panel">
+                    <h3><?= e($visibilityValue === 'public' ? 'Visibilité publique' : ($visibilityValue === 'members' ? 'Visibilité membre' : 'Visibilité comité')) ?></h3>
+                    <div class="profile-visibility-options">
+                        <?php foreach ($visibilityFields as $fieldName => $fieldMeta): ?>
+                            <?php $currentValue = (string) ($member[$fieldName] ?? (string) $fieldMeta['default']); ?>
+                            <label class="profile-visibility-option">
+                                <input type="radio" name="<?= e($fieldName) ?>" value="<?= e($visibilityValue) ?>" <?= $currentValue === $visibilityValue ? 'checked' : '' ?>>
+                                <span><?= e((string) $fieldMeta['label']) ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php endforeach; ?>
+        </div>
 
         <button type="submit" class="button"><?= e($t('save')) ?></button>
     </form>
