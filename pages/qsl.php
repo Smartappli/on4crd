@@ -429,7 +429,23 @@ ob_start();
         <h1><?= e($qt('studio')) ?></h1>
         <p class="help"><?= e($qt('studio_help')) ?></p>
     </div>
-    <a class="button" href="#qsl-create"><?= e($qt('create_my_qsl')) ?></a>
+    <div class="qsl-hero-side">
+        <div class="qsl-hero-stats">
+            <article>
+                <span><?= e($qt('qso_imported_stat')) ?></span>
+                <strong><?= count($qsoRows) ?></strong>
+            </article>
+            <article>
+                <span><?= e($qt('qsl_created_stat')) ?></span>
+                <strong><?= count($qslRows) ?></strong>
+            </article>
+            <article>
+                <span><?= e($qt('backgrounds_stat')) ?></span>
+                <strong><?= count($backgroundPresets) ?></strong>
+            </article>
+        </div>
+        <a class="button" href="#qsl-create"><?= e($qt('create_my_qsl')) ?></a>
+    </div>
 </section>
 
 <section class="card qsl-studio-overview">

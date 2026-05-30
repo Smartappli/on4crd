@@ -47,6 +47,7 @@ $formatAuctionDate = static function (mixed $value): string {
     $timestamp = strtotime((string) $value);
     return $timestamp !== false ? date('d/m/Y H:i', $timestamp) : '';
 };
+$auctionSubscribeUrl = current_user() !== null ? route_url('newsletter') : route_url('newsletter_public');
 
 ob_start();
 ?>
@@ -57,19 +58,22 @@ ob_start();
             <h1><?= e((string) $t['meta_title']) ?></h1>
             <p class="directory-lead"><?= e((string) $t['meta_desc']) ?></p>
         </div>
-        <div class="auctions-stats">
-            <div class="auctions-stat">
-                <span><?= (int) count($groupedLots['active']) ?></span>
-                <p><?= e((string) $t['active_title']) ?></p>
+        <div class="auctions-hero-side">
+            <div class="auctions-stats">
+                <div class="auctions-stat">
+                    <span><?= (int) count($groupedLots['active']) ?></span>
+                    <p><?= e((string) $t['active_title']) ?></p>
+                </div>
+                <div class="auctions-stat">
+                    <span><?= (int) count($groupedLots['scheduled']) ?></span>
+                    <p><?= e((string) $t['scheduled_title']) ?></p>
+                </div>
+                <div class="auctions-stat">
+                    <span><?= (int) $totalLots ?></span>
+                    <p><?= e((string) $t['lots']) ?></p>
+                </div>
             </div>
-            <div class="auctions-stat">
-                <span><?= (int) count($groupedLots['scheduled']) ?></span>
-                <p><?= e((string) $t['scheduled_title']) ?></p>
-            </div>
-            <div class="auctions-stat">
-                <span><?= (int) $totalLots ?></span>
-                <p><?= e((string) $t['lots']) ?></p>
-            </div>
+            <a class="button auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux enchères")) ?></a>
         </div>
     </header>
 

@@ -17,6 +17,7 @@ return array (
   'end' => 'Berakhir',
   'step' => 'Kenaikan',
   'view_lot' => 'Lihat lot',
+  'subscribe_auctions' => 'Berlangganan lelang',
   'page' => 'Halaman',
   'previous' => 'Sebelumnya',
   'next' => 'Berikutnya',
