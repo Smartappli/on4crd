@@ -3,6 +3,7 @@
 /** @var string $homeLocale */
 $homeLocale = current_locale();
 $homeI18n = i18n_domain_locale('home', $homeLocale);
+$homeEventsI18n = i18n_domain_locale('events', $homeLocale);
 $homeTodayDate = date('d/m/Y');
 $homeFallbackBox = static function (string $message): string {
     return '<p class="help">' . e($message) . '</p>';
