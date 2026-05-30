@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => 'Articles',
   'spotlight_member_library' => 'Library',
   'spotlight_member_auctions' => 'Auctions',
+  'spotlight_member_assistant' => 'Assistant',
+  'home_other_sections_title' => 'News from other radio clubs',
   'spotlight_member_open' => 'Open',
   'repeater_title' => 'Our repeater',
   'repeater_desc' => 'Find key information about our repeater and settings.',

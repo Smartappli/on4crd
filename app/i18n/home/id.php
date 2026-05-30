@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => 'Artikel',
   'spotlight_member_library' => 'Perpustakaan',
   'spotlight_member_auctions' => 'Lelang',
+  'spotlight_member_assistant' => 'Asisten',
+  'home_other_sections_title' => 'Berita dari klub radio lain',
   'spotlight_member_open' => 'Buka',
   'repeater_title' => 'Repeater kami',
   'repeater_desc' => 'Temukan informasi penting tentang repeater dan pengaturan kami.',

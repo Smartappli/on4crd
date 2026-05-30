@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => 'लेख',
   'spotlight_member_library' => 'पुस्तकालय',
   'spotlight_member_auctions' => 'नीलामी',
+  'spotlight_member_assistant' => 'सहायक',
+  'home_other_sections_title' => 'अन्य रेडियो क्लबों की खबरें',
   'spotlight_member_open' => 'खोलें',
   'repeater_title' => 'हमारा रिपीटर',
   'repeater_desc' => 'हमारे रिपीटर और सेटिंग्स की मुख्य जानकारी देखें।',

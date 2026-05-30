@@ -443,6 +443,10 @@ if ($isAuthenticated) {
         . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('auctions')) . '">'
         . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_auctions'] ?? 'Enchères')) . '</p>'
         . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span></a></article>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_assistant'] ?? 'Assistant')) . '</h3>'
+        . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('chatbot')) . '">'
+        . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_assistant'] ?? 'Assistant')) . '</p>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span></a></article>'
         . '';
 }
 
@@ -578,7 +582,7 @@ $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols
     . '<div class="mt-4">' . $trophySlotHtml . '</div>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Dans les autres sections')) . '</h2>'
+    . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Nouvelles des autres radioclubs')) . '</h2>'
     . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_other_sections_desc'] ?? 'Le CRD valorise plusieurs pratiques radioamateurs complémentaires, des bandes HF aux modes numériques, en passant par les antennes et les activations.')) . '</p>'
     . '<div class="mt-4 grid gap-2">'
     . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_hf_title'] ?? 'HF et trafic longue distance')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_hf_desc'] ?? 'Contacts internationaux, propagation, contests et bonnes pratiques de trafic.')) . '</p></div>'

@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => 'নিবন্ধ',
   'spotlight_member_library' => 'লাইব্রেরি',
   'spotlight_member_auctions' => 'নিলাম',
+  'spotlight_member_assistant' => 'সহকারী',
+  'home_other_sections_title' => 'অন্যান্য রেডিও ক্লাবের খবর',
   'spotlight_member_open' => 'খুলুন',
   'repeater_title' => 'আমাদের রিপিটার',
   'repeater_desc' => 'আমাদের রিপিটার ও সেটিংস সম্পর্কে মূল তথ্য জানুন।',

@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => 'Artikelen',
   'spotlight_member_library' => 'Bibliotheek',
   'spotlight_member_auctions' => 'Veilingen',
+  'spotlight_member_assistant' => 'Assistent',
+  'home_other_sections_title' => 'Nieuws van andere radioclubs',
   'spotlight_member_open' => 'Openen',
   'repeater_title' => 'Ons relais',
   'repeater_desc' => 'Vind de belangrijkste informatie over ons relais en zijn parameters.',

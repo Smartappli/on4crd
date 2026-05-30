@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => 'مقالات',
   'spotlight_member_library' => 'المكتبة',
   'spotlight_member_auctions' => 'المزادات',
+  'spotlight_member_assistant' => 'المساعد',
+  'home_other_sections_title' => 'أخبار من نوادي راديو أخرى',
   'spotlight_member_open' => 'فتح',
   'repeater_title' => 'مكررنا',
   'repeater_desc' => 'اعثر على المعلومات الأساسية حول مكررنا وإعداداته.',

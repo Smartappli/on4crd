@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => '??',
   'spotlight_member_library' => '?????',
   'spotlight_member_auctions' => '??????',
+  'spotlight_member_assistant' => 'アシスタント',
+  'home_other_sections_title' => '他のラジオクラブからのニュース',
   'spotlight_member_open' => '??',
   'repeater_title' => '私たちのレピーター',
   'repeater_desc' => '当クラブのレピーターと設定に関する重要情報を確認できます。',

@@ -63,6 +63,8 @@ return [
   'spotlight_member_articles' => 'Articles',
   'spotlight_member_library' => 'Bibliothèque',
   'spotlight_member_auctions' => 'Enchères',
+  'spotlight_member_assistant' => 'Assistant',
+  'home_other_sections_title' => 'Nouvelles des autres radioclubs',
   'spotlight_member_open' => 'Ouvrir',
   'repeater_title' => 'Notre relais',
   'repeater_desc' => 'Retrouvez les informations essentielles concernant notre relais et ses paramètres.',

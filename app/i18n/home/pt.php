@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => 'Artigos',
   'spotlight_member_library' => 'Biblioteca',
   'spotlight_member_auctions' => 'Leil?es',
+  'spotlight_member_assistant' => 'Assistente',
+  'home_other_sections_title' => 'Notícias de outros radioclubes',
   'spotlight_member_open' => 'Abrir',
   'repeater_title' => 'O nosso repetidor',
   'repeater_desc' => 'Encontre as informações essenciais sobre o nosso repetidor e os seus parâmetros.',

@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => '??????',
   'spotlight_member_library' => '??????????',
   'spotlight_member_auctions' => '????????',
+  'spotlight_member_assistant' => 'Ассистент',
+  'home_other_sections_title' => 'Новости других радиоклубов',
   'spotlight_member_open' => '???????',
   'repeater_title' => 'Наш репитер',
   'repeater_desc' => 'Ключевая информация о нашем репитере и его параметрах.',

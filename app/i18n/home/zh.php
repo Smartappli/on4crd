@@ -64,6 +64,8 @@ return [
   'spotlight_member_articles' => '??',
   'spotlight_member_library' => '???',
   'spotlight_member_auctions' => '??',
+  'spotlight_member_assistant' => '助手',
+  'home_other_sections_title' => '其他无线电俱乐部新闻',
   'spotlight_member_open' => '??',
   'repeater_title' => '我们的中继台',
   'repeater_desc' => '查看我们中继台及其参数的关键信息。',
