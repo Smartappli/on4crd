@@ -78,6 +78,14 @@ $totalPosts = cache_remember($cacheBase . '_count', 45, static function () use (
         return 0;
     }
 });
+$publishedNewsCount = cache_remember('news_published_count_v1', 120, static function (): int {
+    try {
+        $stmt = db()->query('SELECT COUNT(*) FROM news_posts WHERE status = "published"');
+        return $stmt !== false ? (int) $stmt->fetchColumn() : 0;
+    } catch (Throwable) {
+        return 0;
+    }
+});
 $pagination = pagination_state($totalPosts, $page, $perPage);
 $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
@@ -153,13 +161,18 @@ $latestNews = cache_remember('news_latest_v1', 60, static function (): array {
 
 ob_start();
 ?>
-<section class="page-hero">
+<section class="page-hero news-hero">
     <div>
         <p class="eyebrow news-hero-title"><?= e((string) $newsT['latest_news']) ?></p>
         <h1><?= e((string) $newsT['title']) ?></h1>
         <p class="help"><?= e((string) $newsT['search_lead']) ?></p>
     </div>
-    <a class="button" href="#news-list"><?= e((string) $newsT['news_overview']) ?></a>
+    <div class="news-hero-stats">
+        <article class="news-hero-stat">
+            <strong><?= (int) $publishedNewsCount ?></strong>
+            <span><?= e((string) ($newsT['news_count_label'] ?? "Nombre d'actualités")) ?></span>
+        </article>
+    </div>
 </section>
 
 <section class="card mt-4">
@@ -193,92 +206,15 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<section class="card news-filters mt-4">
-    <div class="news-search-header">
-        <h1 class="news-ui-heading"><?= e((string) $newsT['search_title']) ?></h1>
-        <p class="help"><?= e((string) $newsT['search_lead']) ?></p>
-    </div>
-    <?php if ($activeFiltersCount > 0): ?>
-        <div class="news-meta-row">
-            <span class="badge muted"><?= $activeFiltersCount ?> <?= e((string) $newsT['active_filters']) ?></span>
-        </div>
-    <?php endif; ?>
-    <form method="get" class="inline-form news-search-form">
+<section class="wiki-search-panel mt-4">
+    <form method="get" class="wiki-search-form">
         <input type="hidden" name="route" value="news">
-        <label class="news-search-field news-search-field--query">
-            <span><?= e((string) $newsT['keywords']) ?></span>
-            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $newsT['keywords_placeholder']) ?>">
-        </label>
-        <label class="news-search-field">
-            <span><?= e((string) $newsT['period']) ?></span>
-            <input type="month" name="ym" value="<?= e($monthFilter) ?>">
-        </label>
-        <label class="news-search-field">
-            <span><?= e((string) $newsT['category']) ?></span>
-            <select name="category">
-                <option value=""><?= e((string) $newsT['all_categories']) ?></option>
-                <?php foreach ($categories as $category): ?>
-                    <?php $slug = (string) ($category['slug'] ?? ''); ?>
-                    <?php $categoryName = trim((string) ($category['name'] ?? '')); if ($categoryName === '') { $categoryName = (string) $newsT['category']; } ?>
-                    <option value="<?= e($slug) ?>" <?= $categoryFilter === $slug ? 'selected' : '' ?>><?= e($categoryName) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </label>
-        <label class="news-search-field">
-            <span><?= e((string) $newsT['sort_by']) ?></span>
-            <select name="sort">
-                <option value="recent" <?= $sort === 'recent' ? 'selected' : '' ?>><?= e((string) $newsT['sort_recent']) ?></option>
-                <option value="oldest" <?= $sort === 'oldest' ? 'selected' : '' ?>><?= e((string) $newsT['sort_oldest']) ?></option>
-                <option value="title" <?= $sort === 'title' ? 'selected' : '' ?>><?= e((string) $newsT['sort_title']) ?></option>
-            </select>
-        </label>
-        <div class="news-search-actions">
-            <button class="button" type="submit"><?= e((string) $newsT['apply_filters']) ?></button>
-            <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url('news')) ?>"><?= e((string) $newsT['reset']) ?></a>
-            <?php endif; ?>
-        </div>
+        <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $newsT['keywords_placeholder']) ?>">
+        <button class="button" type="submit"><?= e((string) ($newsT['search'] ?? $newsT['apply_filters'])) ?></button>
+        <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
+            <a class="button secondary" href="<?= e(route_url('news')) ?>"><?= e((string) $newsT['reset']) ?></a>
+        <?php endif; ?>
     </form>
-    <?php if ($activeFiltersCount > 0): ?>
-        <div class="news-active-filters">
-            <strong><?= e((string) $newsT['applied_filters']) ?></strong>
-            <?php if ($search !== ''): ?>
-                <span class="pill"><?= e(sprintf((string) $newsT['search_filter'], $search)) ?></span>
-            <?php endif; ?>
-            <?php if ($monthFilter !== ''): ?>
-                <span class="pill"><?= e(sprintf((string) $newsT['month_filter'], $monthFilter)) ?></span>
-            <?php endif; ?>
-            <?php if ($categoryFilter !== ''): ?>
-                <span class="pill"><?= e(sprintf((string) $newsT['category_filter'], $categoryFilter)) ?></span>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-    <?php if ($categories !== []): ?>
-        <div class="news-archives" id="news-categories">
-            <?php foreach ($categories as $category): ?>
-                <?php $slug = (string) ($category['slug'] ?? ''); ?>
-                <a class="pill" href="<?= e(route_url('news', ['category' => $slug])) ?>"<?= $categoryFilter === $slug ? ' aria-current="page"' : '' ?>>
-                    <?= e((string) ($category['name'] ?? (string) $newsT['category'])) ?> · <?= (int) ($category['total'] ?? 0) ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-    <?php if ($archives !== []): ?>
-        <div class="news-archives" id="news-archives">
-            <?php foreach ($archives as $archive):
-                $ym = (string) ($archive['ym'] ?? '');
-                if (!preg_match('/^\d{4}-\d{2}$/', $ym)) {
-                    continue;
-                }
-                [$year, $month] = explode('-', $ym);
-                $label = $month . '/' . $year;
-                ?>
-                <a class="pill" href="<?= e(route_url('news', ['ym' => $ym])) ?>"<?= $monthFilter === $ym ? ' aria-current="page"' : '' ?>>
-                    <?= e($label) ?> · <?= (int) ($archive['total'] ?? 0) ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
 </section>
 
 <section class="card mt-4" id="news-list">
