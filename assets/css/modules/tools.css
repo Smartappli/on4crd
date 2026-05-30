@@ -20,6 +20,17 @@
   letter-spacing: .08em;
 }
 
+[data-route="tools"] .tool-panel h2 {
+  margin-top: 0;
+  margin-bottom: .85rem;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
 [data-route="tools"] .tools-hero {
   margin-bottom: 1rem;
 }
