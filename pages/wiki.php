@@ -15,8 +15,13 @@ $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
 }
+$theme = slugify(trim((string) ($_GET['theme'] ?? '')));
+if ($theme === 'n-a') {
+    $theme = '';
+}
 
 $rows = [];
+$wikiThemes = [];
 $totalPagesCount = 0;
 $updatedPagesCount = 0;
 $revisionCount = 0;
@@ -26,30 +31,42 @@ try {
     $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
     $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
 
-    if ($search === '') {
-        $stmt = db()->query(
-            'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
-                (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
-             FROM wiki_pages p
-             LEFT JOIN members m ON m.id = p.author_id
-             ORDER BY p.updated_at DESC
-             LIMIT 120'
-        );
-        $rows = $stmt->fetchAll() ?: [];
-    } else {
-        $stmt = db()->prepare(
-            'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
-                (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
-             FROM wiki_pages p
-             LEFT JOIN members m ON m.id = p.author_id
-             WHERE p.title LIKE ? OR p.content LIKE ? OR p.slug LIKE ?
-             ORDER BY p.updated_at DESC
-             LIMIT 120'
-        );
-        $like = '%' . $search . '%';
-        $stmt->execute([$like, $like, $like]);
-        $rows = $stmt->fetchAll() ?: [];
+    $themeRows = db()->query('SELECT SUBSTRING_INDEX(slug, "-", 1) AS theme, COUNT(*) AS total FROM wiki_pages GROUP BY theme ORDER BY theme ASC')->fetchAll() ?: [];
+    foreach ($themeRows as $themeRow) {
+        $themeCode = slugify((string) ($themeRow['theme'] ?? ''));
+        if ($themeCode === '' || $themeCode === 'n-a') {
+            continue;
+        }
+        $wikiThemes[$themeCode] = (int) ($themeRow['total'] ?? 0);
     }
+    if ($theme !== '' && !isset($wikiThemes[$theme])) {
+        $theme = '';
+    }
+
+    $where = [];
+    $params = [];
+    if ($theme !== '') {
+        $where[] = '(p.slug = ? OR p.slug LIKE ?)';
+        $params[] = $theme;
+        $params[] = $theme . '-%';
+    }
+    if ($search !== '') {
+        $where[] = '(p.title LIKE ? OR p.content LIKE ? OR p.slug LIKE ?)';
+        $like = '%' . $search . '%';
+        array_push($params, $like, $like, $like);
+    }
+    $whereSql = $where !== [] ? (' WHERE ' . implode(' AND ', $where)) : '';
+    $stmt = db()->prepare(
+        'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
+            (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
+         FROM wiki_pages p
+         LEFT JOIN members m ON m.id = p.author_id
+         ' . $whereSql . '
+         ORDER BY p.updated_at DESC
+         LIMIT 120'
+    );
+    $stmt->execute($params);
+    $rows = $stmt->fetchAll() ?: [];
 } catch (Throwable) {
     $rows = [];
 }
@@ -84,18 +101,41 @@ ob_start();
         </div>
     </section>
 
-    <section class="wiki-search-panel">
-        <form method="get" class="wiki-search-form">
-            <input type="hidden" name="route" value="wiki">
-            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
-            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
-            <?php endif; ?>
-        </form>
-    </section>
+    <section class="wiki-layout">
+        <?php if ($wikiThemes !== []): ?>
+            <aside class="wiki-themes card">
+                <p class="wiki-themes-title"><?= e((string) ($t['themes'] ?? 'Thématiques')) ?></p>
+                <nav class="wiki-theme-list" aria-label="<?= e((string) ($t['themes'] ?? 'Thématiques')) ?>">
+                    <a class="wiki-theme-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
+                        <span><?= e((string) ($t['all_themes'] ?? 'Toutes les thématiques')) ?></span>
+                        <strong><?= (int) array_sum($wikiThemes) ?></strong>
+                    </a>
+                    <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>
+                        <a class="wiki-theme-item<?= $themeCode === $theme ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeCode === $theme ? ' aria-current="page"' : '' ?>>
+                            <span><?= e(ucfirst(str_replace('-', ' ', $themeCode))) ?></span>
+                            <strong><?= (int) $themeTotal ?></strong>
+                        </a>
+                    <?php endforeach; ?>
+                </nav>
+            </aside>
+        <?php endif; ?>
 
-    <section class="wiki-directory">
+        <div class="wiki-content">
+            <section class="wiki-search-panel">
+                <form method="get" class="wiki-search-form">
+                    <input type="hidden" name="route" value="wiki">
+                    <?php if ($theme !== ''): ?>
+                        <input type="hidden" name="theme" value="<?= e($theme) ?>">
+                    <?php endif; ?>
+                    <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+                    <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+                    <?php if ($search !== '' || $theme !== ''): ?>
+                        <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
+                    <?php endif; ?>
+                </form>
+            </section>
+
+            <section class="wiki-directory">
         <?php if ($rows === []): ?>
             <article class="wiki-empty">
                 <h2><?= e((string) $t['no_page']) ?></h2>
@@ -130,6 +170,8 @@ ob_start();
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+            </section>
+        </div>
     </section>
 </div>
 <?php
