@@ -103,7 +103,7 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190" required></label>'
     . '<label>' . e($t('phone')) . '<input type="tel" name="phone" maxlength="64" autocomplete="tel"></label>'
     . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2"></label>'
-    . '<label>' . e($t('licence_class')) . '<input type="text" name="licence_class" maxlength="64"></label>'
+    . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
     . '<label>' . e($t('favourite_bands')) . '<input type="text" name="favourite_bands" maxlength="190" placeholder="' . e($t('favourite_bands_placeholder')) . '"></label>'
     . '<label class="register-form-full">' . e($t('station_equipment')) . '<textarea name="station_equipment" rows="3" maxlength="2000"></textarea></label>'
     . '<p class="help register-form-full">' . e($t('directory_help')) . '</p>'
