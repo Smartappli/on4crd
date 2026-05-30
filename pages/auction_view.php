@@ -24,9 +24,69 @@ $minimumBid = auction_minimum_bid_cents($lot);
 $reserveCents = (int) ($lot['reserve_price_cents'] ?? 0);
 $displayPriceCents = max((int) $lot['current_price_cents'], (int) $lot['starting_price_cents']);
 $reserveReached = auction_reserve_met($lot, $displayPriceCents);
+$auctionUrl = route_url_with_locale('auction_view', $locale, ['slug' => (string) $lot['slug']]);
+$auctionDescription = (string) ($lot['summary'] ?: (string) $t['default_desc']);
 set_page_meta([
     'title' => (string) $lot['title'],
-    'description' => (string) ($lot['summary'] ?: (string) $t['default_desc']),
+    'description' => $auctionDescription,
+    'canonical' => $auctionUrl,
+    'schema_type' => 'Product',
+    'modified_time' => !empty($lot['updated_at']) ? date('c', strtotime((string) $lot['updated_at'])) : null,
+    'json_ld' => [
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'Product',
+            'name' => (string) $lot['title'],
+            'description' => $auctionDescription,
+            'url' => $auctionUrl,
+            'category' => 'amateur radio equipment',
+            'brand' => [
+                '@type' => 'Brand',
+                'name' => 'ON4CRD',
+            ],
+            'offers' => [
+                '@type' => 'Offer',
+                'url' => $auctionUrl,
+                'priceCurrency' => 'EUR',
+                'price' => number_format($displayPriceCents / 100, 2, '.', ''),
+                'availability' => $runtime === 'closed' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+                'availabilityEnds' => !empty($lot['ends_at']) ? date('c', strtotime((string) $lot['ends_at'])) : null,
+                'seller' => [
+                    '@type' => 'Organization',
+                    'name' => 'Radio Club Durnal ON4CRD',
+                    'url' => route_url_with_locale('home', $locale),
+                ],
+            ],
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => $auctionUrl,
+            ],
+        ],
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'ON4CRD',
+                    'item' => route_url_with_locale('home', $locale),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => (string) $t['bid'],
+                    'item' => route_url_with_locale('auctions', $locale),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 3,
+                    'name' => (string) $lot['title'],
+                    'item' => $auctionUrl,
+                ],
+            ],
+        ],
+    ],
 ]);
 
 ob_start();

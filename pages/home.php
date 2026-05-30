@@ -249,6 +249,10 @@ set_page_meta([
                     ],
                     'image' => $homeSeoImageUrl,
                     'telephone' => ['+32496260865', '+32478789193'],
+                    'sameAs' => [
+                        'https://www.facebook.com/groups/clubradiodurnal/',
+                        'https://www.uba.be',
+                    ],
                     'address' => [
                         '@type' => 'PostalAddress',
                         'streetAddress' => 'Rue des Écoles',

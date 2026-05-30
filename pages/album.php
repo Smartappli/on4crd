@@ -56,10 +56,67 @@ $coverPath = safe_storage_public_path_or_null((string) ($coverStmt->fetchColumn(
 $pageMeta = [
     'title' => (string) $album['title'],
     'description' => trim((string) ($album['description'] ?? '')) !== '' ? (string) $album['description'] : (string) $t['meta_desc'],
+    'canonical' => route_url_with_locale('album', $locale, ['id' => (int) $album['id']]),
+    'schema_type' => 'ImageGallery',
 ];
 if ($coverPath !== null) {
     $pageMeta['image'] = base_url($coverPath);
 }
+$imageItems = [];
+foreach (array_slice($photos, 0, 12) as $position => $photo) {
+    $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+    if ($filePath === null) {
+        continue;
+    }
+    $imageItems[] = [
+        '@type' => 'ImageObject',
+        'position' => $position + 1,
+        'url' => base_url($filePath),
+        'name' => trim((string) ($photo['title'] ?? '')) !== '' ? (string) $photo['title'] : (string) $album['title'],
+        'caption' => trim((string) ($photo['caption'] ?? '')),
+    ];
+}
+$pageMeta['json_ld'] = [
+    [
+        '@context' => 'https://schema.org',
+        '@type' => 'ImageGallery',
+        'name' => (string) $album['title'],
+        'description' => (string) $pageMeta['description'],
+        'url' => (string) $pageMeta['canonical'],
+        'numberOfItems' => $photoTotal,
+        'image' => $imageItems,
+        'inLanguage' => $locale,
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Radio Club Durnal ON4CRD',
+            'url' => route_url_with_locale('home', $locale),
+        ],
+    ],
+    [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'ON4CRD',
+                'item' => route_url_with_locale('home', $locale),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => (string) $t['title'],
+                'item' => route_url_with_locale('albums', $locale),
+            ],
+            [
+                '@type' => 'ListItem',
+                'position' => 3,
+                'name' => (string) $album['title'],
+                'item' => (string) $pageMeta['canonical'],
+            ],
+        ],
+    ],
+];
 set_page_meta($pageMeta);
 
 ob_start();

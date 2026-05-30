@@ -48,6 +48,72 @@ $revisions = $revisionStmt->fetchAll() ?: [];
 
 $author = trim((string) ($row['callsign'] ?? ''));
 $updatedAt = strtotime((string) ($row['updated_at'] ?? '')) ?: time();
+$wikiUrl = route_url_with_locale('wiki_view', $locale, ['slug' => (string) $row['slug']]);
+$wikiPlainText = trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $row['content']), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+$wikiDescription = mb_safe_strimwidth($wikiPlainText !== '' ? $wikiPlainText : $t('meta_desc'), 0, 220, '...');
+set_page_meta([
+    'title' => (string) $row['title'],
+    'description' => $wikiDescription,
+    'canonical' => $wikiUrl,
+    'schema_type' => 'TechArticle',
+    'modified_time' => date('c', $updatedAt),
+    'section' => 'Wiki ON4CRD',
+    'tags' => ['ON4CRD', 'wiki radioamateur', 'Radio Club Durnal'],
+    'json_ld' => [
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'TechArticle',
+            'headline' => (string) $row['title'],
+            'description' => $wikiDescription,
+            'url' => $wikiUrl,
+            'dateModified' => date('c', $updatedAt),
+            'wordCount' => str_word_count($wikiPlainText),
+            'inLanguage' => $locale,
+            'proficiencyLevel' => 'Beginner',
+            'about' => [
+                '@type' => 'Thing',
+                'name' => 'amateur radio',
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Radio Club Durnal ON4CRD',
+                'url' => route_url_with_locale('home', $locale),
+            ],
+            'author' => [
+                '@type' => $author !== '' ? 'Person' : 'Organization',
+                'name' => $author !== '' ? $author : 'Radio Club Durnal ON4CRD',
+            ],
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => $wikiUrl,
+            ],
+        ],
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'ON4CRD',
+                    'item' => route_url_with_locale('home', $locale),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => $t('layout'),
+                    'item' => route_url_with_locale('wiki', $locale),
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 3,
+                    'name' => (string) $row['title'],
+                    'item' => $wikiUrl,
+                ],
+            ],
+        ],
+    ],
+]);
 
 ob_start();
 ?>
