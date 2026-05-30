@@ -564,8 +564,11 @@ function extract_latest_kp_measurement(array $payload): ?array
             continue;
         }
 
-        $timestamp = trim((string) ($row[0] ?? ''));
-        $kpValue = $row[1] ?? null;
+        $timestamp = trim((string) ($row['time_tag'] ?? $row['time'] ?? $row['timestamp'] ?? $row[0] ?? ''));
+        $kpValue = $row['Kp'] ?? $row['kp'] ?? $row['kp_index'] ?? $row[1] ?? null;
+        if (is_string($kpValue)) {
+            $kpValue = str_replace(',', '.', trim($kpValue));
+        }
         if ($timestamp === '' || !is_numeric($kpValue)) {
             continue;
         }
