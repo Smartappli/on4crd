@@ -123,14 +123,27 @@ function seo_route_should_noindex(string $route): bool
 {
     $noindexRoutes = [
         'login',
+        'logout',
+        'register',
+        'forgot_password',
+        'reset_password',
         'dashboard',
+        'dashboard_widget_card',
+        'events_feed',
+        'footer_contact',
         'save_dashboard',
         'widget_render',
         'profile',
         'gdpr',
+        'members_library',
+        'settings',
         'newsletter',
         'newsletter_unsubscribe',
+        'notifications',
         'auction_bid',
+        'tools_geocode',
+        'ad_click',
+        'wiki_edit',
         'qsl',
         'qsl_preview',
         'qsl_export',
@@ -149,9 +162,14 @@ function seo_route_should_noindex(string $route): bool
         'admin_translation_reviews',
         'admin_live_feeds',
         'admin_events',
+        'admin_events_feed',
+        'admin_dinner_reservations',
+        'admin_dashboard',
+        'admin_library',
         'admin_auctions',
         'admin_classifieds',
         'admin_ads',
+        'install.php',
     ];
 
     return in_array($route, $noindexRoutes, true);
@@ -210,6 +228,8 @@ function seo_apply_defaults(string $route): void
         'geo_placename' => 'Durnal, Belgium',
         'geo_position' => '50.3150;4.9452',
         'icbm' => '50.3150, 4.9452',
+        'latitude' => '50.3150',
+        'longitude' => '4.9452',
     ];
 
     if (in_array($route, ['article', 'news_view'], true)) {
