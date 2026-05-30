@@ -361,7 +361,7 @@ ob_start();
                     <textarea name="caption" rows="3"></textarea>
                 </label>
                 <label><?= e((string) $t['files_dropzone']) ?>
-                    <div id="album-dropzone" class="card" style="border:2px dashed var(--border);padding:14px;text-align:center;cursor:pointer;">
+                    <div id="album-dropzone" class="card" style="border:2px dashed var(--border);padding:14px;text-align:center;cursor:pointer;" data-ready-files="<?= e((string) $t['ready_files']) ?>">
                         <?= e((string) $t['dropzone_hint']) ?>
                     </div>
                     <input id="album-photos-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required style="display:none;">
@@ -475,32 +475,3 @@ ob_start();
 
 echo render_layout((string) ob_get_clean(), (string) $t['manage_title']);
 ?>
-<script nonce="<?= e(csp_nonce()) ?>">
-(() => {
-    const dropzone = document.querySelector('#album-dropzone');
-    const input = document.querySelector('#album-photos-input');
-    if (!(dropzone instanceof HTMLElement) || !(input instanceof HTMLInputElement)) return;
-    const ready = <?= json_encode((string) $t['ready_files'], JSON_UNESCAPED_UNICODE) ?>;
-    const setCount = () => {
-        const count = input.files?.length || 0;
-        if (count > 0) dropzone.textContent = count + ' ' + ready;
-    };
-    dropzone.addEventListener('click', () => input.click());
-    dropzone.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        dropzone.style.background = 'var(--panel-3)';
-    });
-    dropzone.addEventListener('dragleave', () => {
-        dropzone.style.background = '';
-    });
-    dropzone.addEventListener('drop', (event) => {
-        event.preventDefault();
-        dropzone.style.background = '';
-        const files = event.dataTransfer?.files;
-        if (!files || files.length === 0) return;
-        input.files = files;
-        setCount();
-    });
-    input.addEventListener('change', setCount);
-})();
-</script>

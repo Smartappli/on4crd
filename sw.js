@@ -1,4 +1,4 @@
-const VERSION = 'v356-offline-mode';
+const VERSION = 'v357-auth-cache';
 const STATIC_CACHE = `on4crd-static-${VERSION}`;
 const PAGE_CACHE = `on4crd-pages-${VERSION}`;
 const DATA_CACHE = `on4crd-data-${VERSION}`;
@@ -79,7 +79,12 @@ async function trimCache(cacheName) {
 }
 
 function isCacheableResponse(response) {
-  return response && (response.status === 200 || response.type === 'opaque');
+  if (!response || (response.status !== 200 && response.type !== 'opaque')) {
+    return false;
+  }
+
+  const cacheControl = response.headers ? (response.headers.get('Cache-Control') || '').toLowerCase() : '';
+  return !cacheControl.includes('no-store') && !cacheControl.includes('private');
 }
 
 async function putInCache(cache, request, response, cacheName) {

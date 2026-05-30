@@ -59,28 +59,29 @@ ob_start();
 <div class="wiki-page">
     <section class="wiki-hero">
         <div>
-            <p class="eyebrow"><?= e((string) $t['title']) ?></p>
+            <p class="eyebrow wiki-hero-title"><?= e((string) $t['title']) ?></p>
             <h1><?= e((string) $t['wiki_pages']) ?></h1>
             <p class="help"><?= e((string) $t['summary_fallback']) ?></p>
         </div>
-        <?php if (has_permission('wiki.edit')): ?>
-            <a class="button" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
-        <?php endif; ?>
-    </section>
-
-    <section class="wiki-dashboard">
-        <article class="wiki-stat">
-            <span><?= e((string) $t['wiki_pages']) ?></span>
-            <strong><?= $totalPagesCount ?></strong>
-        </article>
-        <article class="wiki-stat">
-            <span><?= e((string) $t['updated_pages']) ?></span>
-            <strong><?= $updatedPagesCount ?></strong>
-        </article>
-        <article class="wiki-stat">
-            <span><?= e((string) $t['revisions']) ?></span>
-            <strong><?= $revisionCount ?></strong>
-        </article>
+        <div class="wiki-hero-side">
+            <div class="wiki-dashboard wiki-hero-dashboard">
+                <article class="wiki-stat">
+                    <span><?= e((string) $t['wiki_pages']) ?></span>
+                    <strong><?= $totalPagesCount ?></strong>
+                </article>
+                <article class="wiki-stat">
+                    <span><?= e((string) $t['updated_pages']) ?></span>
+                    <strong><?= $updatedPagesCount ?></strong>
+                </article>
+                <article class="wiki-stat">
+                    <span><?= e((string) $t['revisions']) ?></span>
+                    <strong><?= $revisionCount ?></strong>
+                </article>
+            </div>
+            <?php if (has_permission('wiki.edit')): ?>
+                <a class="button" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
+            <?php endif; ?>
+        </div>
     </section>
 
     <section class="wiki-search-panel">

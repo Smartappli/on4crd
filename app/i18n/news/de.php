@@ -29,7 +29,7 @@ return [
     'search_filter' => 'Suche: %s',
     'month_filter' => 'Monat: %s',
     'category_filter' => 'Rubrik: %s',
-    'news_overview' => 'Nachrichtenliste',
+    'news_overview' => 'Ältere Nachrichten',
     'no_match' => 'Keine Nachricht entspricht Ihrer Suche.',
     'no_match_help' => 'Ändern Sie Ihre Kriterien oder setzen Sie die Filter zurück.',
     'card_fallback_excerpt' => 'Öffnen Sie die Nachricht, um den vollständigen Artikel zu lesen.',

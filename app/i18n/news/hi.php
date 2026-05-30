@@ -29,7 +29,7 @@ return [
     'search_filter' => 'खोज: %s',
     'month_filter' => 'माह: %s',
     'category_filter' => 'अनुभाग: %s',
-    'news_overview' => 'समाचार सूची',
+    'news_overview' => 'पुराने समाचार',
     'no_match' => 'आपकी खोज से मेल खाने वाला कोई समाचार नहीं मिला।',
     'no_match_help' => 'मानदंड बदलें या फ़िल्टर रीसेट करें।',
     'card_fallback_excerpt' => 'पूरा लेख पढ़ने के लिए समाचार खोलें।',

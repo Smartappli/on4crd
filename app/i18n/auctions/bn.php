@@ -17,6 +17,7 @@ return array (
   'end' => 'শেষ',
   'step' => 'ধাপ',
   'view_lot' => 'লট দেখুন',
+  'subscribe_auctions' => 'নিলামের সদস্যতা নিন',
   'page' => 'পৃষ্ঠা',
   'previous' => 'পূর্ববর্তী',
   'next' => 'পরবর্তী',

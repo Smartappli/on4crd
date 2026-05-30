@@ -17,6 +17,7 @@ return array (
   'end' => '结束',
   'step' => '加价幅度',
   'view_lot' => '查看拍品',
+  'subscribe_auctions' => '订阅拍卖',
   'page' => '页',
   'previous' => '上一页',
   'next' => '下一页',

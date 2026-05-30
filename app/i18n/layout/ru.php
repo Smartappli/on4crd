@@ -15,6 +15,7 @@ return array (
   'nav_articles' => 'Статьи',
   'nav_library' => 'Библиотека',
   'nav_auctions' => 'Аукционы',
+  'nav_assistant' => 'Ассистент',
   'account_space' => 'Мой аккаунт',
   'account_profile' => 'Профиль',
   'account_settings' => 'Настройки',

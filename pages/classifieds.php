@@ -186,7 +186,7 @@ set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
 ?>
 <section class="classifieds-page">
-    <header class="classifieds-hero">
+    <header class="page-hero classifieds-hero">
         <div class="classifieds-hero-copy">
             <p class="directory-eyebrow"><?= e($t('title')) ?></p>
             <h1><?= e($t('title')) ?></h1>
