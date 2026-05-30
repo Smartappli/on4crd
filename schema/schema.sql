@@ -59,6 +59,30 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY users_username_unique (username)
 );
 
+CREATE TABLE IF NOT EXISTS users_2fa (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    mechanism TINYINT UNSIGNED NOT NULL,
+    seed VARCHAR(255) DEFAULT NULL,
+    created_at INT UNSIGNED NOT NULL,
+    expires_at INT UNSIGNED DEFAULT NULL,
+    UNIQUE KEY users_2fa_user_id_mechanism_unique (user_id, mechanism)
+);
+
+CREATE TABLE IF NOT EXISTS users_audit_log (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED DEFAULT NULL,
+    event_at INT UNSIGNED NOT NULL,
+    event_type VARCHAR(128) NOT NULL,
+    admin_id INT UNSIGNED DEFAULT NULL,
+    ip_address VARCHAR(49) DEFAULT NULL,
+    user_agent TEXT DEFAULT NULL,
+    details_json TEXT DEFAULT NULL,
+    KEY users_audit_log_event_at_index (event_at),
+    KEY users_audit_log_user_id_event_at_index (user_id, event_at),
+    KEY users_audit_log_user_id_event_type_event_at_index (user_id, event_type, event_at)
+);
+
 CREATE TABLE IF NOT EXISTS users_confirmations (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
@@ -78,6 +102,18 @@ CREATE TABLE IF NOT EXISTS users_remembered (
     expires INT UNSIGNED NOT NULL,
     UNIQUE KEY users_remembered_selector_unique (selector),
     KEY users_remembered_user_index (user)
+);
+
+CREATE TABLE IF NOT EXISTS users_otps (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    mechanism TINYINT UNSIGNED NOT NULL,
+    single_factor TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    selector VARCHAR(24) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    expires_at INT UNSIGNED DEFAULT NULL,
+    KEY users_otps_user_id_mechanism_index (user_id, mechanism),
+    KEY users_otps_selector_user_id_index (selector, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS users_resets (

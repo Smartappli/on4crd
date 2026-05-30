@@ -13,12 +13,13 @@ if (current_user() !== null) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
-        $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
+        $identifier = trim((string) ($_POST['callsign'] ?? ''));
+        $callsign = strtoupper($identifier);
         $password = (string) ($_POST['password'] ?? '');
         $captcha = trim((string) ($_POST['captcha'] ?? ''));
         $captchaExpected = (string) ($_SESSION['login_captcha'] ?? '');
 
-        if ($callsign === '' || $password === '' || $captcha === '') {
+        if ($identifier === '' || $password === '' || $captcha === '') {
             throw new RuntimeException((string) $t['required']);
         }
         if (!hash_equals($captchaExpected, $captcha)) {
@@ -31,8 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            $authClient->loginWithUsername($callsign, $password);
-        } catch (\Delight\Auth\UnknownUsernameException|\Delight\Auth\InvalidPasswordException $exception) {
+            if (filter_var($identifier, FILTER_VALIDATE_EMAIL) !== false) {
+                $authClient->login($identifier, $password);
+            } else {
+                $authClient->loginWithUsername($callsign, $password);
+            }
+        } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\UnknownUsernameException|\Delight\Auth\InvalidPasswordException $exception) {
             throw new RuntimeException((string) $t['invalid_credentials']);
         } catch (\Delight\Auth\TooManyRequestsException $exception) {
             throw new RuntimeException((string) $t['too_many']);
@@ -40,6 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException((string) $t['not_verified']);
         }
 
+        session_regenerate_id(true);
+        unset($_SESSION['login_captcha']);
         $_SESSION['member_id'] = (int) $authClient->getUserId();
         set_flash('success', (string) $t['login_success']);
         redirect(module_enabled('dashboard') ? 'dashboard' : 'home');

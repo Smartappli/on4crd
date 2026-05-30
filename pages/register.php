@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         )->execute([(int) $userId, $callsign, $fullName, $email, password_hash($password, PASSWORD_DEFAULT)]);
 
         $authClient->loginWithUsername($callsign, $password);
+        session_regenerate_id(true);
         $_SESSION['member_id'] = (int) $authClient->getUserId();
 
         set_flash('success', $t('ok_created'));

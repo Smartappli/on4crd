@@ -1364,6 +1364,7 @@ function ensure_directories(): void
 {
     $directories = [
         dirname(__DIR__) . '/storage/cache/data',
+        dirname(__DIR__) . '/storage/auth',
         dirname(__DIR__) . '/storage/uploads/albums',
         dirname(__DIR__) . '/storage/uploads/ads',
         dirname(__DIR__) . '/storage/uploads/members',
@@ -1401,6 +1402,33 @@ function apply_runtime_schema_updates(): void
     }
 
     db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_2fa (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED NOT NULL,
+            mechanism TINYINT UNSIGNED NOT NULL,
+            seed VARCHAR(255) DEFAULT NULL,
+            created_at INT UNSIGNED NOT NULL,
+            expires_at INT UNSIGNED DEFAULT NULL,
+            UNIQUE KEY users_2fa_user_id_mechanism_unique (user_id, mechanism),
+            CONSTRAINT users_2fa_user_id_foreign FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_audit_log (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED DEFAULT NULL,
+            event_at INT UNSIGNED NOT NULL,
+            event_type VARCHAR(128) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
+            admin_id INT UNSIGNED DEFAULT NULL,
+            ip_address VARCHAR(49) CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL,
+            user_agent TEXT DEFAULT NULL,
+            details_json TEXT DEFAULT NULL,
+            KEY users_audit_log_event_at_index (event_at),
+            KEY users_audit_log_user_id_event_at_index (user_id, event_at),
+            KEY users_audit_log_user_id_event_type_event_at_index (user_id, event_type, event_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
         'CREATE TABLE IF NOT EXISTS users_confirmations (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT UNSIGNED NOT NULL,
@@ -1423,6 +1451,20 @@ function apply_runtime_schema_updates(): void
             UNIQUE KEY users_remembered_selector_unique (selector),
             KEY users_remembered_user_index (user),
             CONSTRAINT users_remembered_user_foreign FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_otps (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED NOT NULL,
+            mechanism TINYINT UNSIGNED NOT NULL,
+            single_factor TINYINT UNSIGNED NOT NULL DEFAULT 0,
+            selector VARCHAR(24) NOT NULL,
+            token VARCHAR(255) NOT NULL,
+            expires_at INT UNSIGNED DEFAULT NULL,
+            KEY users_otps_user_id_mechanism_index (user_id, mechanism),
+            KEY users_otps_selector_user_id_index (selector, user_id),
+            CONSTRAINT users_otps_user_id_foreign FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
     db()->exec(
@@ -2205,9 +2247,11 @@ function current_user(): ?array
     $loaded = true;
 
     $memberId = (int) ($_SESSION['member_id'] ?? 0);
+    $authUserId = 0;
     $authClient = auth();
     if ($authClient !== null && $authClient->isLoggedIn()) {
-        $memberId = (int) $authClient->getUserId();
+        $authUserId = (int) $authClient->getUserId();
+        $memberId = $authUserId;
     }
 
     if ($memberId <= 0) {
@@ -2236,11 +2280,12 @@ function current_user(): ?array
             $memberColumns[] = $memberColumn;
         }
     }
-    $where = 'id = ?';
-    $params = [$memberId];
-    if (table_has_column('members', 'auth_user_id')) {
-        $where .= ' OR auth_user_id = ?';
-        $params[] = $memberId;
+    if ($authUserId > 0 && table_has_column('members', 'auth_user_id')) {
+        $where = 'auth_user_id = ?';
+        $params = [$authUserId];
+    } else {
+        $where = 'id = ?';
+        $params = [$memberId];
     }
 
     try {
@@ -2257,6 +2302,7 @@ function current_user(): ?array
         return null;
     }
 
+    $_SESSION['member_id'] = (int) ($row['id'] ?? 0);
     $cache = $row;
     return $cache;
 }
@@ -2300,6 +2346,9 @@ function logout_member(): void
         $authClient->logOut();
     }
     unset($_SESSION['member_id']);
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_regenerate_id(true);
+    }
 }
 }
 
