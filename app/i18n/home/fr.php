@@ -55,6 +55,7 @@ return [
   'spotlight_sub_placeholder' => 'Contenu bientôt disponible…',
   'spotlight_tool_day_item' => 'Calcul de la grille depuis une adresse postale',
   'spotlight_tool_day_cta' => 'Ouvrir cet outil',
+  'spotlight_member_wiki_articles' => 'Wiki / Articles',
   'repeater_title' => 'Notre relais',
   'repeater_desc' => 'Retrouvez les informations essentielles concernant notre relais et ses paramètres.',
   'repeater_cta' => 'Consulter les informations du relais',

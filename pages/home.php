@@ -350,6 +350,26 @@ $toolDayHtml = '<a class="group block rounded-2xl border border-slate-200 bg-whi
     . e((string) $homeI18n['spotlight_tool_day_cta'])
     . ' →</span></a>';
 
+$memberSpotlightRowHtml = '';
+if ($isAuthenticated) {
+    $memberSpotlightLinkClass = 'inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50';
+    $memberSpotlightRowHtml = '<div class="mt-4 grid gap-4 lg:grid-cols-3">'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_wiki_articles'] ?? 'Wiki / Articles')) . '</h3>'
+        . '<div class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="grid gap-2 sm:grid-cols-2">'
+        . '<a class="' . $memberSpotlightLinkClass . '" href="' . e(route_url('wiki')) . '">' . e((string) ($homeI18n['spotlight_member_wiki'] ?? 'Wiki')) . '</a>'
+        . '<a class="' . $memberSpotlightLinkClass . '" href="' . e(route_url('articles')) . '">' . e((string) ($homeI18n['spotlight_member_articles'] ?? 'Articles')) . '</a>'
+        . '</div></div></article>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_library'] ?? 'Bibliothèque')) . '</h3>'
+        . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('members_library')) . '">'
+        . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_library'] ?? 'Bibliothèque')) . '</p>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span></a></article>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_auctions'] ?? 'Enchères')) . '</h3>'
+        . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('auctions')) . '">'
+        . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_auctions'] ?? 'Enchères')) . '</p>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span></a></article>'
+        . '</div>';
+}
+
 $adSlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">' . e((string) $homeI18n['partner_ad_empty']) . '</p></div>';
 try {
     $localAdCandidates = cache_remember('home_local_ad_candidates_v1', 300, static function (): array {
@@ -557,6 +577,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_for_sale']) . '</h3>' . $nextEventHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $homeI18n['spotlight_auction_live']) . '</h3>' . $toolDayHtml . '</article>'
     . '</div>'
+    . $memberSpotlightRowHtml
     . '</section>'
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="mb-5 max-w-3xl"><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['join_benefits_title'] ?? 'Ce que le CRD vous apporte')) . '</h2><p class="mt-2 text-slate-600">' . e((string) ($homeI18n['join_benefits_desc'] ?? 'Rejoindre le club, c’est avancer avec un cadre clair, des activités concrètes et une communauté disponible pour progresser en radioamateurisme.')) . '</p></div>'
