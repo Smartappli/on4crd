@@ -51,7 +51,7 @@ $formatAuctionDate = static function (mixed $value): string {
 ob_start();
 ?>
 <section class="auctions-page">
-    <header class="auctions-hero">
+    <header class="page-hero auctions-hero">
         <div class="auctions-hero-copy">
             <p class="directory-eyebrow"><?= e((string) $t['meta_title']) ?></p>
             <h1><?= e((string) $t['meta_title']) ?></h1>

@@ -14,7 +14,17 @@ foreach ($newsFallback as $key => $value) {
 }
 
 if (!table_exists('news_posts')) {
-    echo render_layout('<div class="card"><h1>' . e((string) $newsT['title']) . '</h1><p>' . e((string) $newsT['unavailable']) . '</p></div>', (string) $newsT['title']);
+    echo render_layout(
+        '<section class="page-hero">'
+            . '<div>'
+            . '<p class="eyebrow">' . e((string) $newsT['latest_news']) . '</p>'
+            . '<h1>' . e((string) $newsT['title']) . '</h1>'
+            . '<p class="help">' . e((string) $newsT['search_lead']) . '</p>'
+            . '</div>'
+        . '</section>'
+        . '<div class="card mt-4"><p>' . e((string) $newsT['unavailable']) . '</p></div>',
+        (string) $newsT['title']
+    );
     return;
 }
 

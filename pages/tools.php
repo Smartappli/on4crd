@@ -338,6 +338,15 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
 
 ob_start();
 ?>
+<section class="page-hero">
+    <div>
+        <p class="eyebrow"><?= e($tr('tool_index')) ?></p>
+        <h1><?= e($tr('title', 'Outils radioamateur')) ?></h1>
+        <p class="help"><?= e($tr('choose_tool')) ?></p>
+    </div>
+    <a class="button" href="#tools-content"><?= e($tr('grid_title', 'Maidenhead locator map and converter')) ?></a>
+</section>
+
 <section class="card">
     <div class="tools-layout">
     <aside class="tools-index card">

@@ -1860,6 +1860,47 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   margin: .15rem 0 .35rem;
   font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
+.auctions-hero.page-hero,
+.classifieds-hero.page-hero,
+.library-hero.page-hero {
+  box-shadow: none;
+}
+.auctions-hero.page-hero .auctions-hero-copy,
+.classifieds-hero.page-hero .classifieds-hero-copy,
+.library-hero.page-hero .library-hero-copy {
+  min-height: 0;
+  padding: 0;
+}
+.auctions-hero.page-hero .auctions-hero-copy h1,
+.classifieds-hero.page-hero .classifieds-hero-copy h1,
+.library-hero.page-hero .library-hero-copy h1 {
+  margin: .15rem 0 .35rem;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.1;
+}
+.auctions-hero.page-hero .auctions-stats,
+.classifieds-hero.page-hero .classifieds-stats,
+.library-hero.page-hero .library-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: min(100%, 24rem);
+}
+.auctions-hero.page-hero .auctions-stat,
+.classifieds-hero.page-hero .classifieds-stat,
+.library-hero.page-hero .library-stat {
+  min-height: 0;
+  padding: .65rem .75rem;
+  border-radius: 14px;
+}
+.auctions-hero.page-hero .auctions-stat span,
+.classifieds-hero.page-hero .classifieds-stat span,
+.library-hero.page-hero .library-stat span {
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+}
+.auctions-hero.page-hero .auctions-stat p,
+.classifieds-hero.page-hero .classifieds-stat p,
+.library-hero.page-hero .library-stat p {
+  font-size: .82rem;
+}
 .wiki-dashboard {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2633,6 +2674,9 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   grid-template-columns: minmax(0, 1.75fr) minmax(280px, .95fr);
   gap: 1rem;
   align-items: start;
+}
+.page-hero + .events-layout {
+  margin-top: 1rem;
 }
 .events-toolbar {
   display: flex;
