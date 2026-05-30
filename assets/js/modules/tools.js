@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     const readJsonConfig = (id, fallback) => {
         const node = document.getElementById(id);
         if (!node) return fallback;
@@ -297,11 +297,11 @@
         const sync = () => {
             const x = Number(input.value);
             if (!Number.isFinite(x)) {
-                output.textContent = 'â€”';
+                output.textContent = '—';
                 return;
             }
             const y = convert(x);
-            output.textContent = Number.isFinite(y) ? y.toFixed(6).replace(/\.?(0+)$/, '') : 'â€”';
+            output.textContent = Number.isFinite(y) ? y.toFixed(6).replace(/\.?(0+)$/, '') : '—';
         };
         input.addEventListener('input', sync);
         sync();
@@ -341,7 +341,7 @@
         }
 
         const formatNumber = (value) => {
-            if (!Number.isFinite(value)) return 'â€”';
+            if (!Number.isFinite(value)) return '—';
             const abs = Math.abs(value);
             if (abs !== 0 && (abs >= 1e7 || abs < 1e-4)) {
                 return value.toExponential(6).replace(/\.?0+e/, 'e');
@@ -421,8 +421,8 @@
             const to = units[toSelect.value];
             const value = Number(input.value);
             if (!from || !to || !Number.isFinite(value)) {
-                output.textContent = 'â€”';
-                if (reference instanceof HTMLElement) reference.textContent = 'â€”';
+                output.textContent = '—';
+                if (reference instanceof HTMLElement) reference.textContent = '—';
                 return;
             }
 
@@ -500,7 +500,7 @@
                 if (!(freqInput instanceof HTMLInputElement) || !freqOut) return;
                 const mhz = Number(freqInput.value);
                 if (!Number.isFinite(mhz) || mhz <= 0) {
-                    freqOut.textContent = 'â€”';
+                    freqOut.textContent = '—';
                     return;
                 }
                 const meters = 299.792458 / mhz;
@@ -512,7 +512,7 @@
                 if (!(wattsInput instanceof HTMLInputElement) || !dbmOut) return;
                 const watts = Number(wattsInput.value);
                 if (!Number.isFinite(watts) || watts <= 0) {
-                    dbmOut.textContent = 'â€”';
+                    dbmOut.textContent = '—';
                     return;
                 }
                 const dbm = 10 * Math.log10(watts * 1000);
@@ -523,7 +523,7 @@
                 if (!(dbmInput instanceof HTMLInputElement) || !wattsOut) return;
                 const dbm = Number(dbmInput.value);
                 if (!Number.isFinite(dbm)) {
-                    wattsOut.textContent = 'â€”';
+                    wattsOut.textContent = '—';
                     return;
                 }
                 const watts = Math.pow(10, dbm / 10) / 1000;
@@ -607,7 +607,7 @@
                 const p1 = locatorToLatLon(locatorA.value);
                 const p2 = locatorToLatLon(locatorB.value);
                 if (!p1 || !p2) {
-                    locatorDistance.textContent = 'â€”';
+                    locatorDistance.textContent = '—';
                     return;
                 }
                 locatorDistance.textContent = `${haversineKm(p1, p2).toFixed(1)} ${i18n.km_unit}`;
@@ -717,7 +717,7 @@
     };
     const formatOhms = (value) => {
         if (!Number.isFinite(value)) {
-            return 'â€”';
+            return '—';
         }
         if (value >= 1000) {
             return `${(value / 1000).toFixed(3)} kΩ`;
@@ -730,14 +730,14 @@
         const fMHz = Number(filterFreq.value);
         const z = Number(filterImpedance.value);
         if (!Number.isFinite(fMHz) || fMHz <= 0 || !Number.isFinite(z) || z <= 0) {
-            filterL.textContent = 'â€”';
-            filterC.textContent = 'â€”';
+            filterL.textContent = '—';
+            filterC.textContent = '—';
             return;
         }
         const f = fMHz * 1e6;
         const lHenrys = z / (2 * Math.PI * f);
         const cFarads = 1 / (2 * Math.PI * f * z);
-        filterL.textContent = `${(lHenrys * 1e6).toFixed(3)} ÂµH`;
+        filterL.textContent = `${(lHenrys * 1e6).toFixed(3)} µH`;
         filterC.textContent = `${(cFarads * 1e12).toFixed(2)} pF`;
     };
     const computeBalun = () => {
@@ -745,18 +745,18 @@
         const zin = Number(balunSource.value);
         const zout = Number(balunLoad.value);
         if (!Number.isFinite(zin) || zin <= 0 || !Number.isFinite(zout) || zout <= 0) {
-            balunRatio.textContent = 'â€”';
+            balunRatio.textContent = '—';
             return;
         }
         const ratio = Math.sqrt(zout / zin);
         const powerRatio = zout / zin;
-        balunRatio.textContent = `1:${ratio.toFixed(2)} (Z ${zin}:${zout} â‰ˆ ${powerRatio.toFixed(2)}:1)`;
+        balunRatio.textContent = `1:${ratio.toFixed(2)} (Z ${zin}:${zout} ≈ ${powerRatio.toFixed(2)}:1)`;
     };
     const computeSWR = () => {
         if (!(swrInput instanceof HTMLInputElement) || !swrRl) return;
         const swr = Number(swrInput.value);
         if (!Number.isFinite(swr) || swr < 1) {
-            swrRl.textContent = 'â€”';
+            swrRl.textContent = '—';
             return;
         }
         const gamma = (swr - 1) / (swr + 1);
@@ -768,7 +768,7 @@
         const len = Number(coaxLength.value);
         const att = Number(coaxAtten.value);
         if (!Number.isFinite(len) || len < 0 || !Number.isFinite(att) || att < 0) {
-            coaxLoss.textContent = 'â€”';
+            coaxLoss.textContent = '—';
             return;
         }
         const loss = (len / 100) * att;
@@ -780,7 +780,7 @@
         const d = Number(fsplDistance.value);
         const f = Number(fsplFrequency.value);
         if (!Number.isFinite(d) || d <= 0 || !Number.isFinite(f) || f <= 0) {
-            fsplLoss.textContent = 'â€”';
+            fsplLoss.textContent = '—';
             return;
         }
         const loss = 32.44 + (20 * Math.log10(d)) + (20 * Math.log10(f));
@@ -792,7 +792,7 @@
         const capacity = Number(runtimeCapacity.value);
         const current = Number(runtimeCurrent.value);
         if (!Number.isFinite(capacity) || capacity <= 0 || !Number.isFinite(current) || current <= 0) {
-            runtimeHours.textContent = 'â€”';
+            runtimeHours.textContent = '—';
             return;
         }
         const hours = capacity / current;
@@ -804,7 +804,7 @@
         const rate = Number(bandwidthRate.value);
         const rolloff = Number(bandwidthRolloff.value);
         if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(rolloff) || rolloff < 0) {
-            bandwidthResult.textContent = 'â€”';
+            bandwidthResult.textContent = '—';
             return;
         }
         const bw = rate * (1 + rolloff);
@@ -815,7 +815,7 @@
         const f = Number(quarterWaveFrequency.value);
         const vf = Number(quarterWaveVf.value);
         if (!Number.isFinite(f) || f <= 0 || !Number.isFinite(vf) || vf <= 0 || vf > 1) {
-            quarterWaveLength.textContent = 'â€”';
+            quarterWaveLength.textContent = '—';
             return;
         }
         const meters = (71.25 / f) * vf;
@@ -828,7 +828,7 @@
         const loss = Number(erpLoss.value);
         const gain = Number(erpGain.value);
         if (!Number.isFinite(pwr) || pwr <= 0 || !Number.isFinite(loss) || !Number.isFinite(gain)) {
-            erpResult.textContent = 'â€”';
+            erpResult.textContent = '—';
             return;
         }
         const netDb = gain - loss;
@@ -841,7 +841,7 @@
         if (!(dipoleFrequency instanceof HTMLInputElement) || !dipoleLength) return;
         const f = Number(dipoleFrequency.value);
         if (!Number.isFinite(f) || f <= 0) {
-            dipoleLength.textContent = 'â€”';
+            dipoleLength.textContent = '—';
             return;
         }
         const lengthMeters = 143 / f;
@@ -854,7 +854,7 @@
         const tx = Number(dutyTx.value);
         const period = Number(dutyPeriod.value);
         if (!Number.isFinite(tx) || tx < 0 || !Number.isFinite(period) || period <= 0 || tx > period) {
-            dutyResult.textContent = 'â€”';
+            dutyResult.textContent = '—';
             return;
         }
         dutyResult.textContent = `${((tx / period) * 100).toFixed(1)} %`;
@@ -865,7 +865,7 @@
         const r1 = Number(dividerR1.value);
         const r2 = Number(dividerR2.value);
         if (!Number.isFinite(vin) || vin < 0 || !Number.isFinite(r1) || r1 <= 0 || !Number.isFinite(r2) || r2 <= 0) {
-            dividerVout.textContent = 'â€”';
+            dividerVout.textContent = '—';
             return;
         }
         const vout = vin * (r2 / (r1 + r2));
@@ -876,8 +876,8 @@
         if (!(mismatchSwr instanceof HTMLInputElement) || !mismatchGamma || !mismatchLoss) return;
         const swr = Number(mismatchSwr.value);
         if (!Number.isFinite(swr) || swr < 1) {
-            mismatchGamma.textContent = 'â€”';
-            mismatchLoss.textContent = 'â€”';
+            mismatchGamma.textContent = '—';
+            mismatchLoss.textContent = '—';
             return;
         }
         const gamma = (swr - 1) / (swr + 1);
@@ -891,7 +891,7 @@
         const target = Number(resistorTarget.value);
         const maxCount = Math.max(1, Math.min(3, Math.round(Number(resistorMaxCount.value))));
         if (!Number.isFinite(target) || target <= 0) {
-            resistorBest.textContent = 'â€”';
+            resistorBest.textContent = '—';
             return;
         }
 
@@ -906,15 +906,15 @@
 
         const candidates = [];
         for (const r of standardValues) {
-            candidates.push({ eq: r, text: `${r.toLocaleString('fr-BE')} Î©` });
+            candidates.push({ eq: r, text: `${r.toLocaleString('fr-BE')} Ω` });
         }
         if (maxCount >= 2) {
             for (const r1 of standardValues) {
                 for (const r2 of standardValues) {
                     const s = r1 + r2;
                     const p = 1 / ((1 / r1) + (1 / r2));
-                    candidates.push({ eq: s, text: `${r1.toLocaleString('fr-BE')}Î© + ${r2.toLocaleString('fr-BE')}Î©` });
-                    candidates.push({ eq: p, text: `${r1.toLocaleString('fr-BE')}Î© // ${r2.toLocaleString('fr-BE')}Î©` });
+                    candidates.push({ eq: s, text: `${r1.toLocaleString('fr-BE')}Ω + ${r2.toLocaleString('fr-BE')}Ω` });
+                    candidates.push({ eq: p, text: `${r1.toLocaleString('fr-BE')}Ω // ${r2.toLocaleString('fr-BE')}Ω` });
                 }
             }
         }
@@ -927,11 +927,11 @@
             }
         }
         if (!best) {
-            resistorBest.textContent = 'â€”';
+            resistorBest.textContent = '—';
             return;
         }
         const pctError = (best.error / target) * 100;
-        resistorBest.textContent = `${best.text} â‰ˆ ${best.eq.toFixed(2)} Î© (Î” ${pctError.toFixed(2)}%)`;
+        resistorBest.textContent = `${best.text} ≈ ${best.eq.toFixed(2)} Ω (Δ ${pctError.toFixed(2)}%)`;
     };
 
     const computeSolarEnergy = () => {
@@ -939,7 +939,7 @@
         const watts = Number(solarWatts.value);
         const hours = Number(solarHours.value);
         if (!Number.isFinite(watts) || watts < 0 || !Number.isFinite(hours) || hours < 0) {
-            solarEnergy.textContent = 'â€”';
+            solarEnergy.textContent = '—';
             return;
         }
         solarEnergy.textContent = `${(watts * hours).toFixed(1)} Wh`;
@@ -950,7 +950,7 @@
         const voltage = Number(batteryVoltage.value);
         const load = Number(batteryLoad.value);
         if (!Number.isFinite(voltage) || voltage <= 0 || !Number.isFinite(load) || load < 0) {
-            batteryCurrent.textContent = 'â€”';
+            batteryCurrent.textContent = '—';
             return;
         }
         batteryCurrent.textContent = `${(load / voltage).toFixed(2)} A`;
@@ -962,7 +962,7 @@
         const f = Number(xlFreq.value);
         const lMicro = Number(xlInductance.value);
         if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(lMicro) || lMicro <= 0 || lMicro > 1e6) {
-            xlResult.textContent = 'â€”';
+            xlResult.textContent = '—';
             return;
         }
         const l = lMicro * 1e-6;
@@ -975,7 +975,7 @@
         const f = Number(xcFreq.value);
         const cPico = Number(xcCapacitance.value);
         if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(cPico) || cPico <= 0 || cPico > 1e9) {
-            xcResult.textContent = 'â€”';
+            xcResult.textContent = '—';
             return;
         }
         const c = cPico * 1e-12;
@@ -988,7 +988,7 @@
         const fof2 = Number(mufFof2.value);
         const angle = Number(mufAngle.value);
         if (!Number.isFinite(fof2) || fof2 <= 0 || !Number.isFinite(angle) || angle <= 0 || angle >= 90) {
-            mufResult.textContent = 'â€”';
+            mufResult.textContent = '—';
             return;
         }
         const radians = angle * Math.PI / 180;
@@ -1001,7 +1001,7 @@
         if (!(eirpErp instanceof HTMLInputElement) || !eirpResult) return;
         const erp = Number(eirpErp.value);
         if (!Number.isFinite(erp) || erp < 0) {
-            eirpResult.textContent = 'â€”';
+            eirpResult.textContent = '—';
             return;
         }
         const eirp = erp * 1.64;
@@ -1014,7 +1014,7 @@
         const h = Number(skipHeight.value);
         const angle = Number(skipAngle.value);
         if (!Number.isFinite(h) || h <= 0 || !Number.isFinite(angle) || angle <= 0 || angle >= 90) {
-            skipResult.textContent = 'â€”';
+            skipResult.textContent = '—';
             return;
         }
         const radians = angle * Math.PI / 180;
@@ -1028,7 +1028,7 @@
         const a = Number(dbsumA.value);
         const b = Number(dbsumB.value);
         if (!Number.isFinite(a) || !Number.isFinite(b)) {
-            dbsumResult.textContent = 'â€”';
+            dbsumResult.textContent = '—';
             return;
         }
         const mw = (10 ** (a / 10)) + (10 ** (b / 10));
@@ -1050,7 +1050,7 @@
         if (!(dbwDbwInput instanceof HTMLInputElement) || !dbwResult) return;
         const dbw = Number(dbwDbwInput.value);
         if (!Number.isFinite(dbw)) {
-            dbwResult.textContent = 'â€”';
+            dbwResult.textContent = '—';
             return;
         }
         dbwResult.textContent = `${(dbw + 30).toFixed(2)} dBm`;
@@ -1061,11 +1061,11 @@
         if (!(dbuvDbm instanceof HTMLInputElement) || !dbuvResult) return;
         const dbm = Number(dbuvDbm.value);
         if (!Number.isFinite(dbm)) {
-            dbuvResult.textContent = 'â€”';
+            dbuvResult.textContent = '—';
             return;
         }
         const dbuv = dbm + 107;
-        dbuvResult.textContent = `${dbuv.toFixed(2)} ${i18n.dbuv_label || 'dBÂµV'}`;
+        dbuvResult.textContent = `${dbuv.toFixed(2)} ${i18n.dbuv_label || 'dBµV'}`;
     };
 
 
@@ -1073,7 +1073,7 @@
         if (!(gainDbd instanceof HTMLInputElement) || !gainDbi) return;
         const dbd = Number(gainDbd.value);
         if (!Number.isFinite(dbd)) {
-            gainDbi.textContent = 'â€”';
+            gainDbi.textContent = '—';
             return;
         }
         gainDbi.textContent = `${(dbd + 2.15).toFixed(2)} dBi`;
@@ -1102,7 +1102,7 @@
         const grx = Number(lbGrx.value);
         const loss = Number(lbLoss.value);
         if (![ptx, gtx, grx, loss].every((v) => Number.isFinite(v))) {
-            lbPrx.textContent = 'â€”';
+            lbPrx.textContent = '—';
             return;
         }
         lbPrx.textContent = `${(ptx + gtx + grx - loss).toFixed(2)} dBm`;
