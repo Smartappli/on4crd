@@ -105,9 +105,9 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2"></label>'
     . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
     . '<label>' . e($t('favourite_bands')) . '<input type="text" name="favourite_bands" maxlength="190" placeholder="' . e($t('favourite_bands_placeholder')) . '"></label>'
+    . '<label>' . e($t('password')) . '<input type="password" name="password" minlength="8" required></label>'
     . '<label class="register-form-full">' . e($t('station_equipment')) . '<textarea name="station_equipment" rows="3" maxlength="2000"></textarea></label>'
     . '<p class="help register-form-full">' . e($t('directory_help')) . '</p>'
-    . '<label>' . e($t('password')) . '<input type="password" name="password" minlength="8" required></label>'
     . '<div class="register-form-full"><button class="button">' . e($t('submit')) . '</button></div></form>'
     . '<p>' . e($t('already_registered')) . ' <a href="' . e(route_url('login')) . '">' . e($t('login')) . '</a></p>'
     . '</div>';
