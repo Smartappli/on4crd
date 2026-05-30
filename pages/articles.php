@@ -150,7 +150,7 @@ ob_start();
     <section class="page-hero">
         <div>
             <p class="eyebrow"><?= e((string) $t['layout_title']) ?></p>
-            <h1><?= e((string) $t['page_title']) ?></h1>
+            <h1 class="articles-hero-title"><?= e((string) $t['page_title']) ?></h1>
             <p class="help"><?= e((string) $t['page_description']) ?></p>
         </div>
         <div class="articles-hero-stats">
