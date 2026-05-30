@@ -11,6 +11,17 @@ foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
 }
 
+$calendarConfig = [
+    'locale' => $locale,
+    'eventsUrl' => route_url('admin_events_feed'),
+    'buttonText' => [
+        'today' => (string) $t['today'],
+        'month' => (string) $t['month'],
+        'week' => (string) $t['week'],
+        'list' => (string) $t['list'],
+    ],
+];
+
 set_page_meta([
     'title' => (string) $t['layout'],
     'description' => (string) $t['meta_desc'],
@@ -101,7 +112,7 @@ ob_start();
     </section>
     <section class="card">
         <h2><?= e((string) $t['saved_events']) ?></h2>
-        <?php if ($rows === []): ?><p><?= e((string) $t['no_event']) ?></p><?php else: ?><ul class="list-clean list-spaced"><?php foreach ($rows as $row): ?><li><a href="<?= e(route_url('admin_events', ['edit' => (int) $row['id']])) ?>"><?= e((string) $row['title']) ?></a><span class="help"><?= e(date('d/m/Y H:i', strtotime((string) $row['start_at']))) ?> — <?= e((string) $row['kind']) ?></span></li><?php endforeach; ?></ul><?php endif; ?>
+        <?php if ($rows === []): ?><p><?= e((string) $t['no_event']) ?></p><?php else: ?><ul class="list-clean list-spaced"><?php foreach ($rows as $row): ?><li><a href="<?= e(route_url('admin_events', ['edit' => (int) $row['id']])) ?>"><?= e((string) $row['title']) ?></a><span class="help"><?= e(date('d/m/Y H:i', strtotime((string) $row['start_at']))) ?> â€” <?= e((string) $row['kind']) ?></span></li><?php endforeach; ?></ul><?php endif; ?>
 
         <?php if ($rows !== []): ?>
             <hr>
@@ -110,41 +121,13 @@ ob_start();
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">
-            <div id="admin-events-calendar" class="fullcalendar-theme"></div>
+            <div id="admin-events-calendar" class="fullcalendar-theme" data-calendar-config="<?= e(json_encode($calendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"></div>
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/<?= e($locale) ?>.global.js"></script>
-            <script nonce="<?= e(csp_nonce()) ?>">
-                (() => {
-                    const calendarEl = document.getElementById('admin-events-calendar');
-                    if (!calendarEl || !window.FullCalendar) {
-                        return;
-                    }
-
-                    const calendar = new FullCalendar.Calendar(calendarEl, {
-                        locale: <?= json_encode($locale) ?>,
-                        firstDay: 1,
-                        height: 'auto',
-                        initialView: 'dayGridMonth',
-                        headerToolbar: {
-                            left: 'prev,next today',
-                            center: 'title',
-                            right: 'dayGridMonth,timeGridWeek,listMonth'
-                        },
-                        buttonText: {
-                            today: <?= json_encode((string) $t['today']) ?>,
-                            month: <?= json_encode((string) $t['month']) ?>,
-                            week: <?= json_encode((string) $t['week']) ?>,
-                            list: <?= json_encode((string) $t['list']) ?>
-                        },
-                        events: <?= json_encode(route_url('admin_events_feed')) ?>
-                    });
-
-                    calendar.render();
-                })();
-            </script>
         <?php endif; ?>
     </section>
 </div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);
+

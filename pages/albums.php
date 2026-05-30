@@ -81,7 +81,7 @@ ob_start();
     <section class="albums-hero">
         <div>
             <p class="eyebrow"><?= e((string) $t['gallery']) ?></p>
-            <h1><?= e((string) $t['public_albums']) ?></h1>
+            <h1 class="albums-hero-title"><?= e((string) $t['public_albums']) ?></h1>
             <p><?= e((string) $t['intro']) ?></p>
         </div>
         <div class="albums-hero-stats">

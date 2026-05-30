@@ -17,6 +17,7 @@ return array (
   'end' => '終了',
   'step' => '増分',
   'view_lot' => 'ロットを見る',
+  'subscribe_auctions' => 'オークションを購読',
   'page' => 'ページ',
   'previous' => '前へ',
   'next' => '次へ',

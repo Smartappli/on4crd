@@ -560,6 +560,9 @@ textarea:focus-visible {
   margin-inline: auto;
   padding: 1rem;
 }
+.login-card.register-card {
+  max-width: 760px;
+}
 .login-card h1 {
   margin-top: .2rem;
   margin-bottom: .8rem;
@@ -569,9 +572,23 @@ textarea:focus-visible {
   margin: .55rem 0;
 }
 .login-card input[type="text"],
+.login-card input[type="email"],
+.login-card input[type="tel"],
 .login-card input[type="password"] {
   padding: .62rem .75rem;
   border-radius: 12px;
+}
+.register-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem 1rem;
+}
+.register-form label {
+  margin: 0;
+  min-width: 0;
+}
+.register-form-full {
+  grid-column: 1 / -1;
 }
 .login-card .button {
   width: 100%;
@@ -637,7 +654,7 @@ textarea:focus-visible {
 .flash-error { color: var(--danger); background: rgba(180,35,24,.08); }
 .flash-success { color: var(--success); background: rgba(18,123,63,.08); }
 label { display:block; font-weight:600; margin:.7rem 0; }
-input[type="text"], input[type="email"], input[type="password"], input[type="file"], select, textarea { width:100%; padding:.75rem .9rem; border:1px solid var(--border); border-radius:14px; background: var(--panel); color: var(--text); margin-top:.35rem; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"], select, textarea { width:100%; padding:.75rem .9rem; border:1px solid var(--border); border-radius:14px; background: var(--panel); color: var(--text); margin-top:.35rem; }
 textarea { resize: vertical; }
 .form-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:1rem; }
 .profile-grid { display:grid; grid-template-columns: 260px 1fr; gap:1rem; }
@@ -649,7 +666,7 @@ textarea { resize: vertical; }
 .directory-page { display: grid; gap: 1rem; }
 .directory-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(320px, .85fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: stretch;
   padding: 1.15rem;
@@ -691,12 +708,9 @@ textarea { resize: vertical; }
 }
 .directory-search-panel {
   display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(190px, .45fr) auto;
   gap: .75rem;
-  align-content: start;
-  padding: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--panel) 92%, white);
+  align-items: end;
 }
 .directory-search-panel label {
   margin: 0;
@@ -708,30 +722,36 @@ textarea { resize: vertical; }
   gap: .55rem;
   align-items: center;
 }
-.directory-stats {
+.directory-hero-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: .8rem;
+  grid-template-columns: repeat(2, minmax(130px, 1fr));
+  gap: .75rem;
+  align-content: center;
 }
-.directory-stat {
-  min-height: 112px;
+.directory-hero-stats article {
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel-2);
+  text-align: center;
+}
+.directory-hero-stats span {
+  display: block;
+  color: var(--muted);
+  font-size: .9rem;
+}
+.directory-hero-stats strong {
+  display: block;
+  margin-top: .25rem;
+  color: var(--text);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.directory-toolbar {
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: 18px;
   background: var(--panel);
-  box-shadow: var(--shadow);
-}
-.directory-stat span {
-  display: block;
-  font-size: clamp(1.7rem, 3vw, 2.5rem);
-  line-height: 1;
-  font-weight: 800;
-  color: var(--accent-strong);
-}
-.directory-stat p {
-  margin: .45rem 0 0;
-  color: var(--muted);
-  font-weight: 650;
 }
 .directory-results {
   display: grid;
@@ -910,6 +930,15 @@ textarea { resize: vertical; }
 .library-stats {
   display: grid;
   gap: .75rem;
+}
+.auctions-hero-side {
+  display: grid;
+  gap: .75rem;
+  align-content: center;
+  min-width: min(100%, 24rem);
+}
+.auctions-subscribe-button {
+  justify-content: center;
 }
 .auctions-stat,
 .library-stat {
@@ -1630,6 +1659,34 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   display: grid;
   gap: 1rem;
 }
+.qsl-hero-side {
+  display: grid;
+  gap: .75rem;
+  min-width: min(100%, 24rem);
+}
+.qsl-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+}
+.qsl-hero-stats article {
+  padding: .65rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel-2);
+}
+.qsl-hero-stats span {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+}
+.qsl-hero-stats strong {
+  display: block;
+  margin-top: .25rem;
+  color: var(--text);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  line-height: 1;
+}
 .qsl-kpis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -1838,6 +1895,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   display: grid;
   gap: 1rem;
 }
+.page-hero,
 .wiki-hero,
 .wiki-view-hero,
 .wiki-edit-hero {
@@ -1852,11 +1910,99 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
     linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 42%),
     var(--panel);
 }
+.page-hero h1,
 .wiki-hero h1,
 .wiki-view-hero h1,
 .wiki-edit-hero h1 {
   margin: .15rem 0 .35rem;
   font-size: clamp(1.8rem, 3vw, 2.8rem);
+}
+.wiki-hero > div:first-child {
+  min-width: 0;
+}
+.wiki-hero-side {
+  display: grid;
+  gap: .75rem;
+  min-width: min(100%, 24rem);
+}
+.wiki-hero-dashboard {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.wiki-hero-dashboard .wiki-stat {
+  padding: .65rem .75rem;
+  border-radius: 14px;
+}
+.wiki-hero-dashboard .wiki-stat strong {
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+}
+.wiki-hero-dashboard .wiki-stat span {
+  font-size: .82rem;
+}
+.articles-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  gap: .75rem;
+  align-content: center;
+  min-width: min(100%, 24rem);
+}
+.articles-hero-stats article {
+  padding: .65rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel-2);
+}
+.articles-hero-stats span {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+}
+.articles-hero-stats strong {
+  display: block;
+  margin-top: .2rem;
+  color: var(--accent-strong);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  line-height: 1;
+}
+.auctions-hero.page-hero,
+.classifieds-hero.page-hero,
+.library-hero.page-hero {
+  box-shadow: none;
+}
+.auctions-hero.page-hero .auctions-hero-copy,
+.classifieds-hero.page-hero .classifieds-hero-copy,
+.library-hero.page-hero .library-hero-copy {
+  min-height: 0;
+  padding: 0;
+}
+.auctions-hero.page-hero .auctions-hero-copy h1,
+.classifieds-hero.page-hero .classifieds-hero-copy h1,
+.library-hero.page-hero .library-hero-copy h1 {
+  margin: .15rem 0 .35rem;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.1;
+}
+.auctions-hero.page-hero .auctions-stats,
+.classifieds-hero.page-hero .classifieds-stats,
+.library-hero.page-hero .library-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: min(100%, 24rem);
+}
+.auctions-hero.page-hero .auctions-stat,
+.classifieds-hero.page-hero .classifieds-stat,
+.library-hero.page-hero .library-stat {
+  min-height: 0;
+  padding: .65rem .75rem;
+  border-radius: 14px;
+}
+.auctions-hero.page-hero .auctions-stat span,
+.classifieds-hero.page-hero .classifieds-stat span,
+.library-hero.page-hero .library-stat span {
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+}
+.auctions-hero.page-hero .auctions-stat p,
+.classifieds-hero.page-hero .classifieds-stat p,
+.library-hero.page-hero .library-stat p {
+  font-size: .82rem;
 }
 .wiki-dashboard {
   display: grid;
@@ -2301,8 +2447,8 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   .nav-mobile-tools .preference-select { width: 100%; min-width: 0; }
   .nav-row { width: 100%; flex-direction: column; gap: 0; }
   .nav a, .nav-link-button { padding:.55rem .7rem; border-bottom:1px solid var(--border); border-radius: 0; width: 100%; text-align: left; }
-  .hero, .grid-2, .grid-3, .grid-4, .profile-grid, .form-grid, .widget-grid, .home-grid, .split, .latest-news-grid, .directory-hero, .auctions-hero, .library-hero, .library-search-panel, .classifieds-hero, .classifieds-filter-form, .classifieds-member-panel { grid-template-columns: 1fr; }
-  .directory-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero, .grid-2, .grid-3, .grid-4, .profile-grid, .form-grid, .register-form, .widget-grid, .home-grid, .split, .latest-news-grid, .directory-hero, .directory-search-panel, .auctions-hero, .library-hero, .library-search-panel, .classifieds-hero, .classifieds-filter-form, .classifieds-member-panel { grid-template-columns: 1fr; }
+  .directory-hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .auctions-stats, .library-stats, .classifieds-stats { grid-template-columns: 1fr; }
   .library-filter-heading {
     display: grid;
@@ -2367,6 +2513,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   }
   .card, .hero-panel { padding: 1rem; border-radius: 20px; }
   .directory-hero,
+  .directory-toolbar,
   .directory-results,
   .auctions-hero,
   .library-hero,
@@ -2387,7 +2534,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
     min-height: 0;
     padding: .35rem;
   }
-  .directory-stats,
+  .directory-hero-stats,
   .auctions-stats,
   .library-stats,
   .directory-member-grid,
@@ -2631,6 +2778,9 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   grid-template-columns: minmax(0, 1.75fr) minmax(280px, .95fr);
   gap: 1rem;
   align-items: start;
+}
+.page-hero + .events-layout {
+  margin-top: 1rem;
 }
 .events-toolbar {
   display: flex;
@@ -2988,9 +3138,6 @@ textarea.wysiwyg-source {
 .tools-index {
   margin-bottom: 1rem;
 }
-.tools-index h2 {
-  margin-top: 0;
-}
 .tools-index-group {
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -3246,12 +3393,14 @@ textarea.wysiwyg-source {
 @media (max-width: 640px) {
   .albums-hero,
   .album-detail-hero,
+  .page-hero,
   .wiki-hero,
   .wiki-view-hero,
   .wiki-edit-hero {
     padding: .9rem;
     border-radius: 18px;
   }
+  .page-hero,
   .wiki-hero,
   .wiki-view-hero,
   .wiki-edit-hero,
@@ -3259,8 +3408,22 @@ textarea.wysiwyg-source {
     flex-direction: column;
     align-items: stretch;
   }
+  .wiki-hero-side {
+    min-width: 0;
+  }
+  .qsl-hero-side {
+    min-width: 0;
+  }
+  .wiki-hero-dashboard {
+    grid-template-columns: 1fr;
+  }
+  .articles-hero-stats {
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
   .albums-hero-stats,
   .album-detail-stats,
+  .qsl-hero-stats,
   .wiki-dashboard,
   .wiki-edit-grid {
     grid-template-columns: 1fr;

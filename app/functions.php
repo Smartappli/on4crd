@@ -78,11 +78,7 @@ function auth(): ?\Delight\Auth\Auth
 
     $pdo = db();
     try {
-        if (class_exists(\Delight\Db\PdoDatabase::class)) {
-            $auth = new \Delight\Auth\Auth(new \Delight\Db\PdoDatabase($pdo));
-        } else {
-            $auth = new \Delight\Auth\Auth($pdo);
-        }
+        $auth = new \Delight\Auth\Auth($pdo);
     } catch (Throwable $throwable) {
         $auth = null;
         return null;
@@ -148,6 +144,35 @@ function table_has_column(string $table, string $column): bool
              WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
         );
         $stmt->execute([$table, $column]);
+        $cache[$cacheKey] = (int) $stmt->fetchColumn() > 0;
+    } catch (Throwable) {
+        $cache[$cacheKey] = false;
+    }
+
+    return $cache[$cacheKey];
+}
+
+function table_has_index(string $table, string $index): bool
+{
+    static $cache = [];
+
+    $table = strtolower(trim($table));
+    $index = strtolower(trim($index));
+    if ($table === '' || $index === '') {
+        return false;
+    }
+
+    $cacheKey = $table . '.' . $index;
+    if (array_key_exists($cacheKey, $cache)) {
+        return $cache[$cacheKey];
+    }
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.statistics
+             WHERE table_schema = DATABASE() AND table_name = ? AND index_name = ?'
+        );
+        $stmt->execute([$table, $index]);
         $cache[$cacheKey] = (int) $stmt->fetchColumn() > 0;
     } catch (Throwable) {
         $cache[$cacheKey] = false;
@@ -438,32 +463,45 @@ function seed_modules(): void
     }
 
     $modules = [
-        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 10],
-        ['members', 'Membres', 'Espace membres et profil', 0, 1, 20],
-        ['news', 'Actualités', 'Section des actualités du club', 0, 1, 30],
-        ['articles', 'Articles', 'Articles techniques', 0, 1, 40],
-        ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 50],
-        ['albums', 'Albums', 'Galerie photos', 0, 1, 60],
-        ['events', 'Événements', 'Agenda du club', 0, 1, 70],
-        ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 90],
-        ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 100],
-        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 110],
-        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 120],
-        ['classifieds', 'Petites annonces', 'Module petites annonces', 0, 1, 121],
-        ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 130],
-        ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 140],
-        ['committee', 'Comité', 'Informations du comité', 0, 1, 150],
-        ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 160],
-        ['admin', 'Administration', 'Administration générale', 1, 1, 1000],
+        ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 'members', 10],
+        ['members', 'Membres', 'Espace membres et profil', 0, 1, 'members', 20],
+        ['news', 'Actualités', 'Section des actualités du club', 0, 1, 'public', 30],
+        ['articles', 'Articles', 'Articles techniques', 0, 1, 'public', 40],
+        ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 'public', 50],
+        ['albums', 'Albums', 'Galerie photos', 0, 1, 'public', 60],
+        ['events', 'Événements', 'Agenda du club', 0, 1, 'public', 70],
+        ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 'public', 90],
+        ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 'members', 100],
+        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 'public', 110],
+        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 'public', 120],
+        ['classifieds', 'Petites annonces', 'Module petites annonces', 0, 1, 'public', 121],
+        ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 'public', 130],
+        ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 'public', 140],
+        ['committee', 'Comité', 'Informations du comité', 0, 1, 'public', 150],
+        ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 'public', 160],
+        ['admin', 'Administration', 'Administration générale', 1, 1, 'admin', 1000],
     ];
 
-    $stmt = db()->prepare(
-        'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
-         VALUES (?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
-    );
+    $hasVisibility = table_has_column('modules', 'visibility');
+    if ($hasVisibility) {
+        $stmt = db()->prepare(
+            'INSERT INTO modules (code, label, description, is_core, is_enabled, visibility, sort_order)
+             VALUES (?, ?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), visibility = VALUES(visibility), sort_order = VALUES(sort_order)'
+        );
+    } else {
+        $stmt = db()->prepare(
+            'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
+             VALUES (?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
+        );
+    }
 
     foreach ($modules as $module) {
+        if (!$hasVisibility) {
+            unset($module[5]);
+            $module = array_values($module);
+        }
         $stmt->execute($module);
     }
 }
@@ -554,18 +592,21 @@ function maidenhead_to_coordinates(string $locator): ?array
 
 function extract_latest_kp_measurement(array $payload): ?array
 {
-    if (count($payload) <= 1) {
+    if ($payload === []) {
         return null;
     }
 
-    for ($index = count($payload) - 1; $index >= 1; $index--) {
+    for ($index = count($payload) - 1; $index >= 0; $index--) {
         $row = $payload[$index] ?? null;
         if (!is_array($row)) {
             continue;
         }
 
-        $timestamp = trim((string) ($row[0] ?? ''));
-        $kpValue = $row[1] ?? null;
+        $timestamp = trim((string) ($row['time_tag'] ?? $row['time'] ?? $row['timestamp'] ?? $row[0] ?? ''));
+        $kpValue = $row['Kp'] ?? $row['kp'] ?? $row['kp_index'] ?? $row[1] ?? null;
+        if (is_string($kpValue)) {
+            $kpValue = str_replace(',', '.', trim($kpValue));
+        }
         if ($timestamp === '' || !is_numeric($kpValue)) {
             continue;
         }
@@ -1364,6 +1405,7 @@ function ensure_directories(): void
 {
     $directories = [
         dirname(__DIR__) . '/storage/cache/data',
+        dirname(__DIR__) . '/storage/auth',
         dirname(__DIR__) . '/storage/uploads/albums',
         dirname(__DIR__) . '/storage/uploads/ads',
         dirname(__DIR__) . '/storage/uploads/members',
@@ -1401,6 +1443,33 @@ function apply_runtime_schema_updates(): void
     }
 
     db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_2fa (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED NOT NULL,
+            mechanism TINYINT UNSIGNED NOT NULL,
+            seed VARCHAR(255) DEFAULT NULL,
+            created_at INT UNSIGNED NOT NULL,
+            expires_at INT UNSIGNED DEFAULT NULL,
+            UNIQUE KEY users_2fa_user_id_mechanism_unique (user_id, mechanism),
+            CONSTRAINT users_2fa_user_id_foreign FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_audit_log (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED DEFAULT NULL,
+            event_at INT UNSIGNED NOT NULL,
+            event_type VARCHAR(128) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
+            admin_id INT UNSIGNED DEFAULT NULL,
+            ip_address VARCHAR(49) CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL,
+            user_agent TEXT DEFAULT NULL,
+            details_json TEXT DEFAULT NULL,
+            KEY users_audit_log_event_at_index (event_at),
+            KEY users_audit_log_user_id_event_at_index (user_id, event_at),
+            KEY users_audit_log_user_id_event_type_event_at_index (user_id, event_type, event_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
         'CREATE TABLE IF NOT EXISTS users_confirmations (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT UNSIGNED NOT NULL,
@@ -1409,6 +1478,7 @@ function apply_runtime_schema_updates(): void
             token VARCHAR(255) NOT NULL,
             expires INT UNSIGNED NOT NULL,
             UNIQUE KEY users_confirmations_selector_unique (selector),
+            KEY users_confirmations_email_expires_index (email, expires),
             KEY users_confirmations_user_id_index (user_id),
             CONSTRAINT users_confirmations_user_id_foreign FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
@@ -1426,6 +1496,20 @@ function apply_runtime_schema_updates(): void
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
     db()->exec(
+        'CREATE TABLE IF NOT EXISTS users_otps (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED NOT NULL,
+            mechanism TINYINT UNSIGNED NOT NULL,
+            single_factor TINYINT UNSIGNED NOT NULL DEFAULT 0,
+            selector VARCHAR(24) NOT NULL,
+            token VARCHAR(255) NOT NULL,
+            expires_at INT UNSIGNED DEFAULT NULL,
+            KEY users_otps_user_id_mechanism_index (user_id, mechanism),
+            KEY users_otps_selector_user_id_index (selector, user_id),
+            CONSTRAINT users_otps_user_id_foreign FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
         'CREATE TABLE IF NOT EXISTS users_resets (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user INT UNSIGNED NOT NULL,
@@ -1434,6 +1518,7 @@ function apply_runtime_schema_updates(): void
             expires INT UNSIGNED NOT NULL,
             UNIQUE KEY users_resets_selector_unique (selector),
             KEY users_resets_user_index (user),
+            KEY users_resets_user_expires_index (user, expires),
             CONSTRAINT users_resets_user_foreign FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
@@ -1443,9 +1528,20 @@ function apply_runtime_schema_updates(): void
             tokens FLOAT UNSIGNED NOT NULL,
             replenished_at INT UNSIGNED NOT NULL,
             expires_at INT UNSIGNED NOT NULL,
-            PRIMARY KEY (bucket)
+            PRIMARY KEY (bucket),
+            KEY users_throttling_expires_at_index (expires_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
+
+    if (!table_has_index('users_confirmations', 'users_confirmations_email_expires_index')) {
+        db()->exec('ALTER TABLE users_confirmations ADD INDEX users_confirmations_email_expires_index (email, expires)');
+    }
+    if (!table_has_index('users_resets', 'users_resets_user_expires_index')) {
+        db()->exec('ALTER TABLE users_resets ADD INDEX users_resets_user_expires_index (user, expires)');
+    }
+    if (!table_has_index('users_throttling', 'users_throttling_expires_at_index')) {
+        db()->exec('ALTER TABLE users_throttling ADD INDEX users_throttling_expires_at_index (expires_at)');
+    }
 
     if (table_exists('articles')) {
         $columnStmt = db()->prepare(
@@ -1557,6 +1653,9 @@ function apply_runtime_schema_updates(): void
         if (!$hasVisibility) {
             db()->exec('ALTER TABLE modules ADD COLUMN visibility ENUM("public","members","admin") NOT NULL DEFAULT "members" AFTER is_enabled');
         }
+        db()->exec("UPDATE modules SET is_enabled = 1, visibility = 'public' WHERE code IN ('news', 'articles', 'wiki', 'albums', 'events', 'auctions', 'chatbot', 'advertising', 'classifieds', 'press', 'education', 'committee', 'directory')");
+        db()->exec("UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')");
+        db()->exec("UPDATE modules SET visibility = 'admin' WHERE code = 'admin'");
     }
 
     db()->exec(
@@ -2125,8 +2224,21 @@ function consume_flashes(): array
 }
 
 if (!function_exists('current_user')) {
+function mark_authenticated_response_private(): void
+{
+    if (!headers_sent()) {
+        header('Cache-Control: private, no-store, max-age=0');
+        header('Pragma: no-cache');
+    }
+}
+
 function auth_bypass_member_id(): int
 {
+    $environment = strtolower(trim((string) config('app.env', 'production')));
+    if ($environment !== 'development') {
+        return 0;
+    }
+
     $configuredBypassId = max(0, (int) config('app.auth_bypass_member_id', 0));
     if ($configuredBypassId > 0) {
         return $configuredBypassId;
@@ -2153,7 +2265,6 @@ function auth_bypass_member_id(): int
         return max(0, $firstActiveMemberId);
     }
 
-    $environment = strtolower(trim((string) config('app.env', 'production')));
     $allowDevelopmentBypass = (bool) config('app.disable_login_in_development', false);
     $route = (string) ($_GET['route'] ?? 'home');
     $memberBypassRoutes = [
@@ -2168,7 +2279,7 @@ function auth_bypass_member_id(): int
         'auction_bid',
         'newsletter',
     ];
-    if (!$allowDevelopmentBypass || $environment !== 'development' || !table_exists('members') || !in_array($route, $memberBypassRoutes, true)) {
+    if (!$allowDevelopmentBypass || !table_exists('members') || !in_array($route, $memberBypassRoutes, true)) {
         return 0;
     }
 
@@ -2205,9 +2316,17 @@ function current_user(): ?array
     $loaded = true;
 
     $memberId = (int) ($_SESSION['member_id'] ?? 0);
+    $authUserId = 0;
     $authClient = auth();
     if ($authClient !== null && $authClient->isLoggedIn()) {
-        $memberId = (int) $authClient->getUserId();
+        $authUserId = (int) $authClient->getUserId();
+        $memberId = $authUserId;
+    } elseif ($authClient !== null && $memberId > 0) {
+        unset($_SESSION['member_id']);
+        $memberId = 0;
+    } elseif ($authClient === null && $memberId > 0) {
+        unset($_SESSION['member_id']);
+        $memberId = 0;
     }
 
     if ($memberId <= 0) {
@@ -2216,6 +2335,7 @@ function current_user(): ?array
             $bypassUser = bypass_member_user($bypassMemberId);
             if (is_array($bypassUser)) {
                 $_SESSION['member_id'] = (int) $bypassUser['id'];
+                mark_authenticated_response_private();
                 $cache = $bypassUser;
                 return $cache;
             }
@@ -2236,11 +2356,12 @@ function current_user(): ?array
             $memberColumns[] = $memberColumn;
         }
     }
-    $where = 'id = ?';
-    $params = [$memberId];
-    if (table_has_column('members', 'auth_user_id')) {
-        $where .= ' OR auth_user_id = ?';
-        $params[] = $memberId;
+    if ($authUserId > 0 && table_has_column('members', 'auth_user_id')) {
+        $where = 'auth_user_id = ?';
+        $params = [$authUserId];
+    } else {
+        $where = 'id = ?';
+        $params = [$memberId];
     }
 
     try {
@@ -2257,6 +2378,8 @@ function current_user(): ?array
         return null;
     }
 
+    $_SESSION['member_id'] = (int) ($row['id'] ?? 0);
+    mark_authenticated_response_private();
     $cache = $row;
     return $cache;
 }
@@ -2297,9 +2420,54 @@ function logout_member(): void
 {
     $authClient = auth();
     if ($authClient !== null && $authClient->isLoggedIn()) {
-        $authClient->logOut();
+        try {
+            $authClient->logOut();
+        } catch (Throwable) {
+            // Continue with local cleanup even if the auth library cannot update its tables.
+        }
     }
-    unset($_SESSION['member_id']);
+
+    foreach ([
+        'member_id',
+        'auth_logged_in',
+        'auth_user_id',
+        'auth_email',
+        'auth_username',
+        'auth_status',
+        'auth_roles',
+        'auth_remembered',
+        'auth_last_resync',
+        'auth_force_logout',
+        'auth_awaiting_2fa_until',
+        'auth_awaiting_2fa_user_id',
+        'auth_awaiting_2fa_remember_duration',
+    ] as $sessionKey) {
+        unset($_SESSION[$sessionKey]);
+    }
+
+    $rememberCookieNames = ['auth_remember'];
+    if (class_exists(\Delight\Auth\Auth::class)) {
+        $rememberCookieNames[] = \Delight\Auth\Auth::createRememberCookieName(session_name());
+    }
+    $cookieParams = session_get_cookie_params();
+    foreach (array_unique($rememberCookieNames) as $cookieName) {
+        unset($_COOKIE[$cookieName]);
+        $cookieOptions = [
+            'expires' => time() - 3600,
+            'path' => $cookieParams['path'] ?? '/',
+            'secure' => (bool) ($cookieParams['secure'] ?? false),
+            'httponly' => true,
+            'samesite' => (string) ($cookieParams['samesite'] ?? 'Lax'),
+        ];
+        if (!empty($cookieParams['domain'])) {
+            $cookieOptions['domain'] = (string) $cookieParams['domain'];
+        }
+        setcookie($cookieName, '', $cookieOptions);
+    }
+
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_regenerate_id(true);
+    }
 }
 }
 
@@ -2547,16 +2715,58 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
 {
     $seo = i18n_domain_locale('seo', $locale);
     $routeKey = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+    $routeSeo = [
+        'ad_click' => ['title' => 'Redirection partenaire ON4CRD', 'description' => 'Redirection sécurisée vers une annonce ou un partenaire du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'admin' => ['title' => 'Administration ON4CRD', 'description' => 'Tableau d administration du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'ads' => ['title' => 'Annonces partenaires ON4CRD', 'description' => 'Annonces, partenaires et communications sponsorisées du Radio Club Durnal ON4CRD.'],
+        'bandplan_harec' => ['title' => 'Band plan HAREC', 'description' => 'Plan de bandes radioamateur HAREC et repères de fréquences pour les opérateurs ON4CRD.'],
+        'bandplan_on2' => ['title' => 'Band plan ON2', 'description' => 'Plan de bandes ON2 pour préparer ses communications radioamateurs en Belgique.'],
+        'bandplan_on3' => ['title' => 'Band plan ON3', 'description' => 'Plan de bandes ON3 et ressources pratiques pour les radioamateurs débutants.'],
+        'chatbot' => ['title' => 'Assistant ON4CRD', 'description' => 'Assistant pratique du Radio Club Durnal pour retrouver les informations du site et les ressources radioamateurs.'],
+        'code_cw' => ['title' => 'Code CW et Morse', 'description' => 'Ressources ON4CRD pour apprendre, réviser et pratiquer le code Morse CW.'],
+        'code_q' => ['title' => 'Code Q radioamateur', 'description' => 'Liste des codes Q utiles pour le trafic radioamateur et les échanges ON4CRD.'],
+        'conditions_utilisation' => ['title' => 'Conditions d utilisation ON4CRD', 'description' => 'Conditions générales d utilisation du site du Radio Club Durnal ON4CRD.'],
+        'directory' => ['title' => 'Annuaire des membres ON4CRD', 'description' => 'Annuaire radioamateur des membres visibles du Radio Club Durnal ON4CRD, indicatifs, licences et QTH.'],
+        'event_view' => ['title' => 'Détail événement ON4CRD', 'description' => 'Détail d un événement, d une réunion ou d une activité radioamateur du Radio Club Durnal.'],
+        'forgot_password' => ['title' => 'Mot de passe oublié ON4CRD', 'description' => 'Procédure de récupération d accès à l espace membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'login' => ['title' => 'Connexion membre ON4CRD', 'description' => 'Connexion sécurisée à l espace membre du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'membership' => ['title' => 'Devenir membre du CRD', 'description' => 'Informations pour devenir membre du Radio Club Durnal, rejoindre les activités et participer à la communauté ON4CRD.'],
+        'mentions_legales' => ['title' => 'Mentions légales ON4CRD', 'description' => 'Mentions légales et informations éditoriales du site Radio Club Durnal ON4CRD.'],
+        'news_view' => ['title' => 'Actualité ON4CRD', 'description' => 'Article d actualité du Radio Club Durnal ON4CRD et informations radioamateurs locales.'],
+        'newsletter' => ['title' => 'Newsletter membre ON4CRD', 'description' => 'Gestion de l abonnement newsletter pour les membres du Radio Club Durnal.', 'robots' => 'noindex,nofollow'],
+        'newsletter_unsubscribe' => ['title' => 'Désinscription newsletter ON4CRD', 'description' => 'Désinscription sécurisée de la newsletter ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'notifications' => ['title' => 'Notifications membre ON4CRD', 'description' => 'Notifications personnelles de l espace membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'register' => ['title' => 'Créer un compte ON4CRD', 'description' => 'Création d un compte membre pour accéder aux services du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'reglement_interieur' => ['title' => 'Règlement intérieur ON4CRD', 'description' => 'Règlement intérieur et cadre de fonctionnement du Radio Club Durnal.'],
+        'reset_password' => ['title' => 'Réinitialisation du mot de passe ON4CRD', 'description' => 'Réinitialisation sécurisée du mot de passe membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'save_dashboard' => ['title' => 'Sauvegarde tableau de bord ON4CRD', 'description' => 'Endpoint de sauvegarde du tableau de bord membre ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'settings' => ['title' => 'Préférences ON4CRD', 'description' => 'Préférences d affichage, de langue et de compte pour ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'sponsoring' => ['title' => 'Sponsoring Radio Club Durnal', 'description' => 'Possibilités de sponsoring et de partenariat avec le Radio Club Durnal ON4CRD.'],
+        'tools_geocode' => ['title' => 'Géocodage outils ON4CRD', 'description' => 'Service de géocodage utilisé par les outils radioamateurs ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'wiki' => ['title' => 'Wiki radioamateur ON4CRD', 'description' => 'Wiki collaboratif du Radio Club Durnal : procédures, techniques, ressources et connaissances radioamateurs.'],
+    ];
+    foreach ([
+        'admin_ads', 'admin_albums', 'admin_articles', 'admin_auctions', 'admin_classifieds', 'admin_committee',
+        'admin_dashboard', 'admin_dinner_reservations', 'admin_editorial', 'admin_events', 'admin_library',
+        'admin_live_feeds', 'admin_members', 'admin_modules', 'admin_news', 'admin_newsletters', 'admin_permissions',
+        'admin_press', 'admin_translation_reviews', 'admin_wiki',
+    ] as $adminRoute) {
+        $routeSeo[$adminRoute] ??= [
+            'title' => 'Administration ON4CRD',
+            'description' => 'Interface d administration du Radio Club Durnal ON4CRD.',
+            'robots' => 'noindex,nofollow',
+        ];
+    }
     $titleKey = $routeKey . '_title';
     $descriptionKey = $routeKey . '_description';
     $title = trim((string) ($pageMeta['title'] ?? ''));
     $description = trim((string) ($pageMeta['description'] ?? ''));
 
     if ($title === '') {
-        $title = trim((string) ($seo[$titleKey] ?? $seo['default_title'] ?? $siteName));
+        $title = trim((string) ($seo[$titleKey] ?? $routeSeo[$routeKey]['title'] ?? $seo['default_title'] ?? $siteName));
     }
     if ($description === '') {
-        $description = trim((string) ($seo[$descriptionKey] ?? $seo['default_description'] ?? ''));
+        $description = trim((string) ($seo[$descriptionKey] ?? $routeSeo[$routeKey]['description'] ?? $seo['default_description'] ?? ''));
     }
 
     $alternates = isset($pageMeta['alternates']) && is_array($pageMeta['alternates']) ? $pageMeta['alternates'] : [];
@@ -2574,9 +2784,49 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
         'geo_placename' => (string) ($seo['geo_placename'] ?? 'Durnal, Yvoir, Namur, Belgium'),
         'geo_position' => '50.3150;4.9452',
         'icbm' => '50.3150, 4.9452',
+        'latitude' => '50.3150',
+        'longitude' => '4.9452',
+        'schema_type' => 'WebPage',
         'alternates' => $alternates,
+        'robots' => (string) ($routeSeo[$routeKey]['robots'] ?? 'index,follow'),
     ], array_filter($pageMeta, static fn($value): bool => $value !== null && $value !== ''));
     $defaults['alternates'] = $alternates;
+    if (!isset($defaults['json_ld'])) {
+        $defaults['json_ld'] = [
+            '@context' => 'https://schema.org',
+            '@type' => (string) ($defaults['schema_type'] ?? 'WebPage'),
+            'name' => (string) $defaults['title'],
+            'description' => (string) $defaults['description'],
+            'url' => (string) $defaults['canonical'],
+            'isPartOf' => [
+                '@type' => 'WebSite',
+                'name' => $siteName,
+                'url' => route_url_with_locale('home', $locale),
+            ],
+            'about' => [
+                '@type' => 'Organization',
+                'name' => 'Radio Club Durnal ON4CRD',
+                'url' => route_url_with_locale('home', $locale),
+                'location' => [
+                    '@type' => 'Place',
+                    'name' => 'Bocq Arena',
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'streetAddress' => 'Rue des Ecoles',
+                        'postalCode' => '5530',
+                        'addressLocality' => 'Purnode',
+                        'addressRegion' => 'Namur',
+                        'addressCountry' => 'BE',
+                    ],
+                    'geo' => [
+                        '@type' => 'GeoCoordinates',
+                        'latitude' => 50.3150,
+                        'longitude' => 4.9452,
+                    ],
+                ],
+            ],
+        ];
+    }
 
     return $defaults;
 }
@@ -2617,8 +2867,43 @@ function module_css_assets_for_route(string $route): array
     $module = $moduleByRoute[$route] ?? $route;
     $assets = [];
 
-    foreach (array_unique(['home' === $module ? 'home' : $module]) as $candidate) {
+    $candidates = [$module];
+    if ($route !== $module) {
+        $candidates[] = $route;
+    }
+
+    foreach (array_unique($candidates) as $candidate) {
         $path = 'assets/css/modules/' . $candidate . '.css';
+        if (is_file(dirname(__DIR__) . '/' . $path)) {
+            $assets[] = $path;
+        }
+    }
+
+    return $assets;
+}
+
+function module_js_assets_for_route(string $route): array
+{
+    $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+    $moduleByRoute = [
+        'event_view' => 'events',
+        'save_dashboard' => 'dashboard',
+        'widget_render' => 'dashboard',
+        'wiki_edit' => 'wiki_edit',
+    ];
+    $module = $moduleByRoute[$route] ?? $route;
+    $assets = [];
+
+    $candidates = [$module];
+    if ($route === 'home') {
+        $candidates[] = 'tools';
+    }
+    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'wiki_edit'], true)) {
+        $candidates[] = 'wysiwyg';
+    }
+
+    foreach (array_unique($candidates) as $candidate) {
+        $path = 'assets/js/modules/' . $candidate . '.js';
         if (is_file(dirname(__DIR__) . '/' . $path)) {
             $assets[] = $path;
         }
@@ -2682,6 +2967,7 @@ function render_layout(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
         ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
         ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
+        ['label' => (string) $layoutI18n['nav_assistant'], 'route' => 'chatbot', 'module' => 'chatbot'],
     ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {
@@ -2755,6 +3041,16 @@ function render_layout(string $content, string $title = ''): string
     $metaGeoPosition = trim((string) ($pageMeta['geo_position'] ?? ''));
     $metaIcbm = trim((string) ($pageMeta['icbm'] ?? ''));
     $metaAlternates = (array) ($pageMeta['alternates'] ?? []);
+    $metaImage = trim((string) ($pageMeta['image'] ?? ''));
+    $metaImageAlt = trim((string) ($pageMeta['image_alt'] ?? $metaSiteName));
+    $metaLatitude = trim((string) ($pageMeta['latitude'] ?? ''));
+    $metaLongitude = trim((string) ($pageMeta['longitude'] ?? ''));
+    $jsonLdItems = [];
+    if (isset($pageMeta['json_ld'])) {
+        $jsonLdItems = is_array($pageMeta['json_ld']) && array_is_list($pageMeta['json_ld'])
+            ? $pageMeta['json_ld']
+            : [$pageMeta['json_ld']];
+    }
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
         . '<meta property="og:title" content="' . e($pageTitle) . '">'
@@ -2765,6 +3061,12 @@ function render_layout(string $content, string $title = ''): string
         . '<meta name="twitter:card" content="' . e($metaTwitterCard) . '">'
         . '<meta name="twitter:title" content="' . e($pageTitle) . '">'
         . '<meta name="twitter:description" content="' . e($metaDescription) . '">';
+    if ($metaImage !== '') {
+        $metaHead .= '<meta property="og:image" content="' . e($metaImage) . '">'
+            . '<meta property="og:image:alt" content="' . e($metaImageAlt) . '">'
+            . '<meta name="twitter:image" content="' . e($metaImage) . '">'
+            . '<meta name="twitter:image:alt" content="' . e($metaImageAlt) . '">';
+    }
     if ($metaCanonical !== '') {
         $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
             . '<meta property="og:url" content="' . e($metaCanonical) . '">';
@@ -2791,6 +3093,21 @@ function render_layout(string $content, string $title = ''): string
     }
     if ($metaIcbm !== '') {
         $metaHead .= '<meta name="ICBM" content="' . e($metaIcbm) . '">';
+    }
+    if ($metaLatitude !== '' && $metaLongitude !== '') {
+        $metaHead .= '<meta property="place:location:latitude" content="' . e($metaLatitude) . '">'
+            . '<meta property="place:location:longitude" content="' . e($metaLongitude) . '">';
+    }
+    foreach ($jsonLdItems as $jsonLdItem) {
+        if (!is_array($jsonLdItem) || $jsonLdItem === []) {
+            continue;
+        }
+        try {
+            $encodedJsonLd = json_encode($jsonLdItem, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+            $metaHead .= '<script nonce="' . e(csp_nonce()) . '" type="application/ld+json">' . $encodedJsonLd . '</script>';
+        } catch (Throwable) {
+            continue;
+        }
     }
     $year = gmdate('Y');
     $themeOptions = [
@@ -2881,6 +3198,10 @@ function render_layout(string $content, string $title = ''): string
     foreach (module_css_assets_for_route($currentRoute) as $moduleCssPath) {
         $moduleCssHtml .= '<link rel="stylesheet" href="' . e(asset_url($moduleCssPath)) . '">';
     }
+    $moduleJsHtml = '';
+    foreach (module_js_assets_for_route($currentRoute) as $moduleJsPath) {
+        $moduleJsHtml .= '<script nonce="' . e($nonce) . '" src="' . e(asset_url($moduleJsPath)) . '" defer></script>';
+    }
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
@@ -2904,6 +3225,7 @@ function render_layout(string $content, string $title = ''): string
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
+        . $moduleJsHtml
         . '</body></html>';
 }
 }

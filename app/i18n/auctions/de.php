@@ -17,6 +17,7 @@ return array (
   'end' => 'Ende',
   'step' => 'Schritt',
   'view_lot' => 'Los anzeigen',
+  'subscribe_auctions' => 'Auktionen abonnieren',
   'page' => 'Seite',
   'previous' => 'Zurück',
   'next' => 'Weiter',

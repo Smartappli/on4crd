@@ -2,3 +2,13 @@
 [data-route="events"] .events-module {
   min-width: 0;
 }
+
+[data-route="events"] .events-hero-title {
+  margin: 0;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}

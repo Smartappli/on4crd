@@ -17,6 +17,7 @@ return array (
   'end' => 'समाप्ति',
   'step' => 'वृद्धि',
   'view_lot' => 'लॉट देखें',
+  'subscribe_auctions' => 'नीलामियों की सदस्यता लें',
   'page' => 'पृष्ठ',
   'previous' => 'पिछला',
   'next' => 'अगला',

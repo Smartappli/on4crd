@@ -29,7 +29,7 @@ return [
     'search_filter' => 'Zoeken: %s',
     'month_filter' => 'Maand: %s',
     'category_filter' => 'Rubriek: %s',
-    'news_overview' => 'Nieuwslijst',
+    'news_overview' => 'Ouder nieuws',
     'no_match' => 'Geen nieuws komt overeen met uw zoekopdracht.',
     'no_match_help' => 'Wijzig uw criteria of reset de filters.',
     'card_fallback_excerpt' => 'Open het nieuwsbericht om het volledige artikel te lezen.',

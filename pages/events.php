@@ -143,105 +143,43 @@ $calendarView = match ($view) {
     default => 'dayGridMonth',
 };
 $initialDate = $view === 'week' ? $weekDate->format('Y-m-d') : $monthDate->format('Y-m-d');
+$calendarConfig = [
+    'locale' => $locale,
+    'initialView' => $calendarView,
+    'initialDate' => $initialDate,
+    'eventsUrl' => route_url('events_feed'),
+    'eventLabel' => $t['event'],
+    'noSummary' => $t['no_summary'],
+    'locationTbd' => $t['location_tbd'],
+    'loadError' => $t['calendar_load_error'],
+    'buttonText' => [
+        'today' => $t['today'],
+        'month' => $t['month'],
+        'week' => $t['week'],
+        'list' => $t['list'],
+    ],
+];
 
 ob_start();
 ?>
+<section class="page-hero">
+    <div>
+        <p class="eyebrow events-hero-title"><?= e($t['calendar_name']) ?></p>
+        <h1><?= e('Agenda ON4CRD') ?></h1>
+        <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
+    </div>
+    <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
+</section>
+
 <section class="events-layout">
     <article class="card events-calendar-card">
-        <header class="events-toolbar events-toolbar-right">
-            <div class="events-toolbar-actions">
-                <a class="button events-export-button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
-            </div>
-        </header>
-
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">
-        <div id="events-calendar" class="fullcalendar-theme"></div>
+        <div id="events-calendar" class="fullcalendar-theme" data-calendar-config="<?= e(json_encode($calendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"></div>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/fr.global.js"></script>
-        <script nonce="<?= e(csp_nonce()) ?>">
-            (() => {
-                const calendarEl = document.getElementById('events-calendar');
-                if (!calendarEl || !window.FullCalendar) {
-                    calendarEl?.insertAdjacentHTML('beforeend', '<p class="help"><?= e($t['calendar_load_error']) ?></p>');
-                    return;
-                }
-                const detail = {
-                    title: document.getElementById('event-detail-title'),
-                    summary: document.getElementById('event-detail-summary'),
-                    start: document.getElementById('event-detail-start'),
-                    end: document.getElementById('event-detail-end'),
-                    location: document.getElementById('event-detail-location'),
-                    link: document.getElementById('event-detail-link'),
-                    external: document.getElementById('event-detail-external')
-                };
-
-                const updateDetails = (event) => {
-                    const props = event.extendedProps || {};
-                    if (detail.title) detail.title.textContent = event.title || <?= json_encode($t['event']) ?>;
-                    if (detail.summary) detail.summary.textContent = props.summary || <?= json_encode($t['no_summary']) ?>;
-                    if (detail.start) detail.start.textContent = props.startLabel || '';
-                    if (detail.end) detail.end.textContent = props.endLabel || '';
-                    if (detail.location) detail.location.textContent = props.location || <?= json_encode($t['location_tbd']) ?>;
-                    if (detail.link) detail.link.setAttribute('href', event.url || '#');
-                    if (detail.external) {
-                        const externalUrl = props.externalUrl || '';
-                        detail.external.setAttribute('href', externalUrl || '#');
-                        detail.external.classList.toggle('is-hidden', !externalUrl);
-                    }
-                };
-                const formatDate = (date) => {
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const day = String(date.getDate()).padStart(2, '0');
-                    return `${year}-${month}-${day}`;
-                };
-
-                const calendar = new FullCalendar.Calendar(calendarEl, {
-                    locale: <?= json_encode($locale) ?>,
-                    firstDay: 1,
-                    height: 'auto',
-                    initialView: <?= json_encode($calendarView) ?>,
-                    initialDate: <?= json_encode($initialDate) ?>,
-                    headerToolbar: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,listMonth'
-                    },
-                    buttonText: {
-                        today: <?= json_encode($t['today']) ?>,
-                        month: <?= json_encode($t['month']) ?>,
-                        week: <?= json_encode($t['week']) ?>,
-                        list: <?= json_encode($t['list']) ?>
-                    },
-                    events: <?= json_encode(route_url('events_feed')) ?>,
-                    eventClick(info) {
-                        info.jsEvent.preventDefault();
-                        updateDetails(info.event);
-                    },
-                    datesSet(info) {
-                        const params = new URLSearchParams(window.location.search);
-                        const viewMap = {
-                            dayGridMonth: 'month',
-                            timeGridWeek: 'week',
-                            listMonth: 'list'
-                        };
-                        const route = params.get('route') || 'events';
-                        const currentView = viewMap[info.view.type] || 'month';
-                        const monthAnchor = info.view.currentStart instanceof Date ? info.view.currentStart : info.start;
-                        const weekAnchor = info.start instanceof Date ? info.start : monthAnchor;
-                        params.set('route', route);
-                        params.set('view', currentView);
-                        params.set('ym', formatDate(monthAnchor).slice(0, 7));
-                        params.set('week', formatDate(weekAnchor));
-                        history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
-                    }
-                });
-                calendar.render();
-            })();
-        </script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/<?= e($locale) ?>.global.js"></script>
     </article>
 
     <aside class="card events-detail-card" id="event-detail">
@@ -265,3 +203,4 @@ ob_start();
 </section>
 <?php
 echo render_layout((string) ob_get_clean(), $t['title']);
+
