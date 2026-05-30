@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 declare(strict_types=1);
 
 $locale = current_locale();
@@ -185,7 +185,7 @@ ob_start();
         <div id="events-calendar" class="fullcalendar-theme" data-calendar-config="<?= e(json_encode($calendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"></div>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/fr.global.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/<?= e($locale) ?>.global.js"></script>
     </article>
 
     <aside class="card events-detail-card" id="event-detail">

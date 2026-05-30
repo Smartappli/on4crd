@@ -298,7 +298,8 @@
 
 
 
-// Dashboard panel controls(() => {
+// Dashboard panel controls
+(() => {
   const panel = document.getElementById('dashboard-widgets-panel');
   const backdrop = document.getElementById('dashboard-widgets-backdrop');
   const openBtn = document.getElementById('open-widgets-panel');
@@ -323,7 +324,8 @@
   backdrop.addEventListener('click', close);
 })();
 
-// Dashboard fullscreen control(() => {
+// Dashboard fullscreen control
+(() => {
   const fsBtn = document.getElementById('dashboard-fullscreen-toggle');
   const shell = document.getElementById('dashboard-shell');
   if (!fsBtn || !shell || !document.fullscreenEnabled) return;
@@ -341,7 +343,8 @@
   });
 })();
 
-// Dashboard lazy widget previews(() => {
+// Dashboard lazy widget previews
+(() => {
   const config = window.dashboardConfig || {};
   const renderBase = typeof config.renderBase === 'string' ? config.renderBase : '';
   if (!renderBase) return;
@@ -398,4 +401,5 @@
   observer.observe(panel, { attributes: true, attributeFilter: ['class'] });
   lazyLoadVisiblePreviews();
 })();
+
 

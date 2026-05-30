@@ -175,7 +175,7 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
             card.style.backgroundSize = 'cover';
             card.style.backgroundPosition = 'center';
             if (note) {
-                note.textContent = "<?= addslashes($qt('label_bg_image')) ?>";
+                note.textContent = previewRoot.getAttribute('data-bg-image-label') || '';
             }
         } else if (type === 'gradient') {
             card.style.background = `linear-gradient(135deg, ${primary}, ${secondary})`;
@@ -189,7 +189,7 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
             card.style.backgroundSize = '';
             card.style.backgroundPosition = '';
             if (note) {
-                note.textContent = "<?= addslashes($qt('label_bg_image')) ?>";
+                note.textContent = previewRoot.getAttribute('data-bg-image-label') || '';
             }
         }
 
@@ -353,4 +353,5 @@ document.querySelectorAll('[data-qso-toggle]').forEach((button) => {
 })();
 
 })();
+
 

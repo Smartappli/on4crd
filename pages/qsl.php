@@ -628,7 +628,7 @@ ob_start();
                     <option value="SSB"><option value="CW"><option value="FM"><option value="AM"><option value="FT8"><option value="RTTY"><option value="PSK31"><option value="DSTAR"><option value="C4FM">
                 </datalist>
                 <p class="help"><?= e($qt('choose_saved_bg')) ?> <?= e($qt('manual_hint')) ?></p>
-                <div class="qsl-live-preview-wrap" data-qsl-manual-preview data-preview-note="<?= e($qt('preview_dynamic')) ?>">
+                <div class="qsl-live-preview-wrap" data-qsl-manual-preview data-preview-note="<?= e($qt('preview_dynamic')) ?>" data-bg-image-label="<?= e($qt('label_bg_image')) ?>">
                     <h3><?= e($qt('qsl_preview_label')) ?></h3>
                     <div class="grid-2" data-manual-preview-layout>
                         <div class="qsl-live-preview">
