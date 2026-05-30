@@ -340,7 +340,7 @@ ob_start();
 ?>
 <section class="page-hero">
     <div>
-        <p class="eyebrow"><?= e($tr('tool_index')) ?></p>
+        <p class="eyebrow tools-hero-title"><?= e($tr('tool_index')) ?></p>
         <h1><?= e($tr('title', 'Outils radioamateur')) ?></h1>
         <p class="help"><?= e($tr('choose_tool')) ?></p>
     </div>

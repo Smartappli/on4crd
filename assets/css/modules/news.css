@@ -5,6 +5,8 @@
 
 [data-route="news"] .news-hero-title {
   margin: 0;
+  font-family: inherit;
+  font-weight: 700;
   font-size: clamp(2rem, 3.2vw, 3rem);
   line-height: 1.05;
   color: var(--text);

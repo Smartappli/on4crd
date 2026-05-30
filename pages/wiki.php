@@ -59,7 +59,7 @@ ob_start();
 <div class="wiki-page">
     <section class="wiki-hero">
         <div>
-            <p class="eyebrow"><?= e((string) $t['title']) ?></p>
+            <p class="eyebrow wiki-hero-title"><?= e((string) $t['title']) ?></p>
             <h1><?= e((string) $t['wiki_pages']) ?></h1>
             <p class="help"><?= e((string) $t['summary_fallback']) ?></p>
         </div>
