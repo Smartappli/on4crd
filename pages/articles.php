@@ -158,21 +158,25 @@ ob_start();
         </div>
     </section>
 
-    <div class="card">
-        <div class="news-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
+    <section class="articles-layout">
+        <aside class="articles-index card">
+            <p class="articles-index-title"><?= e((string) $t['theme_default']) ?></p>
+            <nav class="articles-category-list" aria-label="<?= e((string) $t['theme_default']) ?>">
+                <a class="articles-category-item<?= $themeFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>">
+                    <span><?= e((string) ($t['all_categories'] ?? $t['theme_default'])) ?></span>
+                    <strong><?= (int) array_sum($themeCounts) ?></strong>
+                </a>
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
-                <?php $logoUrl = (string) ($theme['image'] ?? '');
-                if ($logoUrl === '') {
-                    $logoUrl = article_category_logo((string) $theme['label']);
-                }
-                ?>
-                <a class="feature-card" href="<?= e(route_url('articles', ['theme' => $themeCode])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?> style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;text-decoration:none;">
-                    <img src="<?= e($logoUrl) ?>" alt="<?= e((string) $theme['label']) ?>" loading="lazy" width="72" height="72" style="width:72px;height:72px;object-fit:cover;border-radius:16px;">
+                <a class="articles-category-item<?= $themeFilter === $themeCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
                     <span><?= e((string) $theme['label']) ?></span>
-                    <small><?= (int) ($themeCounts[$themeCode] ?? 0) ?> <?= e((string) $t['article_count']) ?></small>
+                    <strong><?= (int) ($themeCounts[$themeCode] ?? 0) ?></strong>
                 </a>
             <?php endforeach; ?>
-        </div>
+            </nav>
+        </aside>
+
+        <div class="articles-content">
+    <div class="card">
         <form method="get" class="inline-form" style="margin: 1rem 0 0;">
             <input type="hidden" name="route" value="articles">
             <?php if ($themeFilter !== ''): ?>
@@ -237,6 +241,8 @@ ob_start();
             <?php endif; ?>
         </div>
     <?php endif; ?>
+        </div>
+    </section>
 </div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout_title']);

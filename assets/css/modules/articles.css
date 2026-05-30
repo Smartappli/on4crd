@@ -13,3 +13,88 @@
   text-transform: uppercase;
   letter-spacing: .08em;
 }
+
+[data-route="articles"] .articles-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+[data-route="articles"] .articles-index {
+  position: sticky;
+  top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+[data-route="articles"] .articles-index-title {
+  margin: 0;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+[data-route="articles"] .articles-category-list,
+[data-route="articles"] .articles-content {
+  display: grid;
+  gap: .65rem;
+}
+
+[data-route="articles"] .articles-content {
+  gap: 1rem;
+}
+
+[data-route="articles"] .articles-category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  min-height: 2.55rem;
+  padding: .65rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+  transition: border-color .16s ease, background .16s ease, transform .16s ease;
+}
+
+[data-route="articles"] .articles-category-item:hover,
+[data-route="articles"] .articles-category-item.is-active {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+}
+
+[data-route="articles"] .articles-category-item span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-route="articles"] .articles-category-item strong {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+  color: var(--accent-strong);
+  font-size: .82rem;
+}
+
+@media (max-width: 920px) {
+  [data-route="articles"] .articles-layout {
+    grid-template-columns: 1fr;
+  }
+
+  [data-route="articles"] .articles-index {
+    position: static;
+  }
+}
