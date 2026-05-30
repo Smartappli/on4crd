@@ -150,4 +150,13 @@ final class RouterContractTest extends TestCase
             'The public news route must not be seeded with members-only module visibility.'
         );
     }
+
+    public function testPublicRoutesAreNotGatedByMembersOnlyModules(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+
+        self::assertStringNotContainsString("'membership' => 'members'", $router);
+        self::assertContains('search', $this->extractArrayValues($router, 'publicRoutes'));
+    }
 }
