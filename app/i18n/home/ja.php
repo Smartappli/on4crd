@@ -44,8 +44,12 @@ return [
   'contact_people' => '連絡先',
   'club_spotlight_title' => 'クラブの注目情報',
   'latest_news_title' => '最新ニュース',
-  'next_event_title' => '次のイベント',
+  'next_event_title' => '今後のイベント',
   'ad_title' => '広告',
+  'spotlight_classifieds' => 'クラシファイド広告',
+  'spotlight_classifieds_empty' => '現在有効なクラシファイド広告はありません。',
+  'spotlight_classifieds_cta' => '広告を見る',
+
   'spotlight_tool_day' => 'ニュース / お知らせ',
   'spotlight_for_sale' => '今後のイベント',
   'spotlight_auction_live' => '今日のツール',

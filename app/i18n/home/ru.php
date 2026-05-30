@@ -44,8 +44,12 @@ return [
   'contact_people' => 'Контактные лица',
   'club_spotlight_title' => 'Главное в клубе',
   'latest_news_title' => 'Последние новости',
-  'next_event_title' => 'Следующее событие',
+  'next_event_title' => 'Ближайшие события',
   'ad_title' => 'Реклама',
+  'spotlight_classifieds' => 'Объявления',
+  'spotlight_classifieds_empty' => 'Сейчас нет активных объявлений.',
+  'spotlight_classifieds_cta' => 'Смотреть объявления',
+
   'spotlight_tool_day' => 'Новость / объявление',
   'spotlight_for_sale' => 'Ближайшие события',
   'spotlight_auction_live' => 'Инструмент дня',

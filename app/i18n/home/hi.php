@@ -44,8 +44,12 @@ return [
   'contact_people' => 'संपर्क व्यक्ति',
   'club_spotlight_title' => 'क्लब की झलकियाँ',
   'latest_news_title' => 'ताज़ा समाचार',
-  'next_event_title' => 'अगला कार्यक्रम',
+  'next_event_title' => 'आगामी कार्यक्रम',
   'ad_title' => 'विज्ञापन',
+  'spotlight_classifieds' => 'वर्गीकृत विज्ञापन',
+  'spotlight_classifieds_empty' => 'फिलहाल कोई सक्रिय वर्गीकृत विज्ञापन नहीं है।',
+  'spotlight_classifieds_cta' => 'विज्ञापन देखें',
+
   'spotlight_tool_day' => 'समाचार / घोषणा',
   'spotlight_for_sale' => 'आगामी कार्यक्रम',
   'spotlight_auction_live' => 'आज का टूल',

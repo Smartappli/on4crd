@@ -44,8 +44,12 @@ return [
   'contact_people' => 'Narahubung',
   'club_spotlight_title' => 'Sorotan klub',
   'latest_news_title' => 'Berita terbaru',
-  'next_event_title' => 'Acara berikutnya',
+  'next_event_title' => 'Acara mendatang',
   'ad_title' => 'Iklan',
+  'spotlight_classifieds' => 'Iklan baris',
+  'spotlight_classifieds_empty' => 'Saat ini belum ada iklan baris aktif.',
+  'spotlight_classifieds_cta' => 'Lihat iklan',
+
   'spotlight_tool_day' => 'Berita / Pengumuman',
   'spotlight_for_sale' => 'Acara mendatang',
   'spotlight_auction_live' => 'Alat hari ini',

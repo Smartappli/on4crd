@@ -44,8 +44,12 @@ return [
   'contact_people' => 'Contactpersonen',
   'club_spotlight_title' => 'In de kijker van de club',
   'latest_news_title' => 'Laatste nieuws',
-  'next_event_title' => 'Volgend evenement',
+  'next_event_title' => 'Komende evenementen',
   'ad_title' => 'Advertentie',
+  'spotlight_classifieds' => 'Zoekertjes',
+  'spotlight_classifieds_empty' => 'Momenteel zijn er geen actieve zoekertjes.',
+  'spotlight_classifieds_cta' => 'Bekijk zoekertjes',
+
   'spotlight_tool_day' => 'Nieuws / Aankondiging',
   'spotlight_for_sale' => 'Komende evenementen',
   'spotlight_auction_live' => 'Tool van de dag',

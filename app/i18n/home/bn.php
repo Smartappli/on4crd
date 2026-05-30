@@ -44,8 +44,12 @@ return [
   'contact_people' => 'যোগাযোগের ব্যক্তি',
   'club_spotlight_title' => 'ক্লাবের সেরা অংশ',
   'latest_news_title' => 'সর্বশেষ সংবাদ',
-  'next_event_title' => 'পরবর্তী ইভেন্ট',
+  'next_event_title' => 'আসন্ন ইভেন্টসমূহ',
   'ad_title' => 'বিজ্ঞাপন',
+  'spotlight_classifieds' => 'ছোট বিজ্ঞাপন',
+  'spotlight_classifieds_empty' => 'এই মুহূর্তে কোনো সক্রিয় ছোট বিজ্ঞাপন নেই.',
+  'spotlight_classifieds_cta' => 'বিজ্ঞাপন দেখুন',
+
   'spotlight_tool_day' => 'সংবাদ / ঘোষণা',
   'spotlight_for_sale' => 'আসন্ন ইভেন্টসমূহ',
   'spotlight_auction_live' => 'আজকের টুল',

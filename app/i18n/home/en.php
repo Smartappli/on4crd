@@ -44,8 +44,12 @@ return [
   'contact_people' => 'Contact persons',
   'club_spotlight_title' => 'Club highlights',
   'latest_news_title' => 'Latest news',
-  'next_event_title' => 'Next event',
+  'next_event_title' => 'Upcoming events',
   'ad_title' => 'Advertisement',
+  'spotlight_classifieds' => 'Classified ads',
+  'spotlight_classifieds_empty' => 'No active classified ads at the moment.',
+  'spotlight_classifieds_cta' => 'View classified ads',
+
   'spotlight_tool_day' => 'News / Announcement',
   'spotlight_for_sale' => 'Upcoming events',
   'spotlight_auction_live' => 'Tool of the day',

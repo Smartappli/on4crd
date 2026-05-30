@@ -44,8 +44,12 @@ return [
   'contact_people' => 'جهات الاتصال',
   'club_spotlight_title' => 'أبرز ما في النادي',
   'latest_news_title' => 'آخر الأخبار',
-  'next_event_title' => 'الحدث القادم',
+  'next_event_title' => 'الفعاليات القادمة',
   'ad_title' => 'إعلان',
+  'spotlight_classifieds' => 'الإعلانات المبوبة',
+  'spotlight_classifieds_empty' => 'لا توجد إعلانات مبوبة نشطة حالياً.',
+  'spotlight_classifieds_cta' => 'عرض الإعلانات',
+
   'spotlight_tool_day' => 'أخبار / إعلان',
   'spotlight_for_sale' => 'الأحداث القادمة',
   'spotlight_auction_live' => 'أداة اليوم',
