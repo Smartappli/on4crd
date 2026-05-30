@@ -42,7 +42,7 @@ return [
   'map_title' => 'Carte Google Map - Radio Club Durnal',
   'address_title' => 'Adresse',
   'contact_people' => 'Personnes de contact',
-  'club_spotlight_title' => 'À la une du club',
+  'club_spotlight_title' => 'A la une du club',
   'latest_news_title' => 'Dernière actualité',
   'next_event_title' => 'Prochain événement',
   'ad_title' => 'Publicité',
