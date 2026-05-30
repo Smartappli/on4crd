@@ -7,7 +7,7 @@ $locale = current_locale();
 $t = i18n_domain_translator('profile', $locale);
 
 set_page_meta([
-    'title' => $t('meta_title'),
+    'title' => 'Vie privée',
     'description' => $t('meta_desc'),
     'schema_type' => 'ProfilePage',
 ]);
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 
     set_flash('success', $t('saved'));
-    redirect('profile');
+    redirect('gdpr');
 }
 
 $stmt = db()->prepare(
@@ -105,7 +105,7 @@ ob_start();
 ?>
 <div class="stack">
 <div class="card">
-    <h1><?= e($t('title')) ?></h1>
+    <h1>Vie privée</h1>
     <?php $avatarSrc = member_avatar_src($member); ?>
     <p><img src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>" style="max-width:180px;border-radius:12px;"></p>
     <p><strong><?= e($t('callsign')) ?> :</strong> <?= e((string) ($member['callsign'] ?? '')) ?></p>
@@ -148,4 +148,4 @@ ob_start();
 </div>
 <?php
 
-echo render_layout((string) ob_get_clean(), $t('title'));
+echo render_layout((string) ob_get_clean(), 'Vie privée');

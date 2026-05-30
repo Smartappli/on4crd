@@ -1,15 +1,15 @@
-﻿/* Module CSS: profile */
-[data-route="profile"] .profile-module {
+/* Module CSS: gdpr */
+[data-route="gdpr"] .profile-module {
   min-width: 0;
 }
 
-[data-route="profile"] .profile-visibility-grid {
+[data-route="gdpr"] .profile-visibility-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
-[data-route="profile"] .profile-visibility-panel {
+[data-route="gdpr"] .profile-visibility-panel {
   display: grid;
   gap: .75rem;
   padding: 1rem;
@@ -18,7 +18,7 @@
   background: var(--panel-2);
 }
 
-[data-route="profile"] .profile-visibility-panel h3 {
+[data-route="gdpr"] .profile-visibility-panel h3 {
   margin: 0;
   color: var(--accent-strong);
   font-size: .85rem;
@@ -27,12 +27,12 @@
   letter-spacing: .08em;
 }
 
-[data-route="profile"] .profile-visibility-options {
+[data-route="gdpr"] .profile-visibility-options {
   display: grid;
   gap: .45rem;
 }
 
-[data-route="profile"] .profile-visibility-option {
+[data-route="gdpr"] .profile-visibility-option {
   display: flex;
   align-items: center;
   gap: .5rem;
@@ -42,7 +42,7 @@
 }
 
 @media (max-width: 900px) {
-  [data-route="profile"] .profile-visibility-grid {
+  [data-route="gdpr"] .profile-visibility-grid {
     grid-template-columns: 1fr;
   }
 }
