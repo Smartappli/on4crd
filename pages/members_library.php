@@ -158,8 +158,9 @@ ob_start();
         </div>
     </header>
 
-    <?php if ($categories !== []): ?>
-        <section class="card library-themes-section">
+    <section class="library-layout">
+        <?php if ($categories !== []): ?>
+        <aside class="library-themes-section">
             <div class="library-themes-heading">
                 <p class="library-theme-title"><?= e((string) ($t['topics'] ?? 'Thématiques')) ?></p>
                 <p class="help"><?= e((string) ($t['category_help'] ?? $t['all_categories'])) ?></p>
@@ -177,9 +178,10 @@ ob_start();
                     </a>
                 <?php endforeach; ?>
             </div>
-        </section>
-    <?php endif; ?>
+        </aside>
+        <?php endif; ?>
 
+        <div class="library-content">
     <form method="get" class="library-search-panel">
         <div class="library-filter-heading">
             <h2><?= e((string) ($t['category'] ?? $t['all_categories'])) ?></h2>
@@ -207,20 +209,6 @@ ob_start();
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
             <?php if ($search !== '' || $category !== '' || $tag !== ''): ?><a class="button secondary" href="<?= e(route_url('members_library')) ?>"><?= e((string) $t['reset']) ?></a><?php endif; ?>
         </div>
-        <?php if ($categories !== []): ?>
-            <div class="library-category-strip" aria-label="<?= e((string) ($t['categories'] ?? $t['all_categories'])) ?>">
-                <a class="library-category-pill<?= $category === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
-                    <?= e((string) $t['all_categories']) ?>
-                </a>
-                <?php foreach ($categories as $cat): ?>
-                    <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
-                    <a class="library-category-pill<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
-                        <span><?= e($catName) ?></span>
-                        <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
     </form>
 
     <?php if ($documents === []): ?>
@@ -290,5 +278,7 @@ ob_start();
             <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'tag' => $tag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
+        </div>
+    </section>
 </section>
 <?php echo render_layout((string) ob_get_clean(), (string) $t['title']);
