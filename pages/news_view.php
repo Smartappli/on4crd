@@ -48,6 +48,7 @@ $newsModifiedAt = !empty($post['updated_at']) ? date('c', strtotime((string) $po
 set_page_meta([
     'title' => (string) $post['title'],
     'description' => $newsDescription,
+    'ai_summary' => $newsDescription,
     'canonical' => $newsUrl,
     'og_type' => 'article',
     'schema_type' => 'NewsArticle',
@@ -55,11 +56,14 @@ set_page_meta([
     'modified_time' => $newsModifiedAt,
     'section' => (string) ($t['published_on'] ?? 'Actualite'),
     'tags' => ['ON4CRD', 'Radio Club Durnal', 'actualite radioamateur'],
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'actualite radioamateur', 'Belgique', 'Namur'],
+    'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         '@context' => 'https://schema.org',
         '@type' => 'NewsArticle',
         'headline' => (string) $post['title'],
         'description' => $newsDescription,
+        'abstract' => $newsDescription,
         'url' => $newsUrl,
         'datePublished' => $newsPublishedAt,
         'dateModified' => $newsModifiedAt,

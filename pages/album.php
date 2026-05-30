@@ -56,8 +56,11 @@ $coverPath = safe_storage_public_path_or_null((string) ($coverStmt->fetchColumn(
 $pageMeta = [
     'title' => (string) $album['title'],
     'description' => trim((string) ($album['description'] ?? '')) !== '' ? (string) $album['description'] : (string) $t['meta_desc'],
+    'ai_summary' => trim((string) ($album['description'] ?? '')) !== '' ? (string) $album['description'] : (string) $t['meta_desc'],
     'canonical' => route_url_with_locale('album', $locale, ['id' => (int) $album['id']]),
     'schema_type' => 'ImageGallery',
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'album photo', 'radioamateur', 'activites club'],
+    'citation_author' => 'Radio Club Durnal ON4CRD',
 ];
 if ($coverPath !== null) {
     $pageMeta['image'] = base_url($coverPath);

@@ -29,9 +29,12 @@ $auctionDescription = (string) ($lot['summary'] ?: (string) $t['default_desc']);
 set_page_meta([
     'title' => (string) $lot['title'],
     'description' => $auctionDescription,
+    'ai_summary' => $auctionDescription,
     'canonical' => $auctionUrl,
     'schema_type' => 'Product',
     'modified_time' => !empty($lot['updated_at']) ? date('c', strtotime((string) $lot['updated_at'])) : null,
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'enchere radioamateur', 'materiel radioamateur'],
+    'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         [
             '@context' => 'https://schema.org',

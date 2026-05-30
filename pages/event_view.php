@@ -71,11 +71,14 @@ if ($location !== '') {
 set_page_meta([
     'title' => (string) $event['title'],
     'description' => $summary,
+    'ai_summary' => $summary,
     'canonical' => $eventUrl,
     'schema_type' => 'Event',
     'modified_time' => !empty($event['updated_at']) ? date('c', strtotime((string) $event['updated_at'])) : $startAt->format(DATE_ATOM),
     'section' => (string) ($t['title'] ?? 'Evenement'),
     'tags' => ['ON4CRD', 'Radio Club Durnal', 'evenement radioamateur'],
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'evenement radioamateur', 'agenda radioamateur', 'Namur'],
+    'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => $eventJsonLd,
 ]);
 

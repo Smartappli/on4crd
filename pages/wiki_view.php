@@ -54,17 +54,21 @@ $wikiDescription = mb_safe_strimwidth($wikiPlainText !== '' ? $wikiPlainText : $
 set_page_meta([
     'title' => (string) $row['title'],
     'description' => $wikiDescription,
+    'ai_summary' => $wikiDescription,
     'canonical' => $wikiUrl,
     'schema_type' => 'TechArticle',
     'modified_time' => date('c', $updatedAt),
     'section' => 'Wiki ON4CRD',
     'tags' => ['ON4CRD', 'wiki radioamateur', 'Radio Club Durnal'],
+    'keywords' => ['ON4CRD', 'wiki radioamateur', 'documentation radioamateur', 'Radio Club Durnal'],
+    'citation_author' => $author !== '' ? $author : 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         [
             '@context' => 'https://schema.org',
             '@type' => 'TechArticle',
             'headline' => (string) $row['title'],
             'description' => $wikiDescription,
+            'abstract' => $wikiDescription,
             'url' => $wikiUrl,
             'dateModified' => date('c', $updatedAt),
             'wordCount' => str_word_count($wikiPlainText),

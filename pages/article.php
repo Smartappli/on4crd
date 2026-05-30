@@ -66,6 +66,7 @@ $articleModifiedAt = !empty($row['updated_at']) ? date('c', strtotime((string) $
 set_page_meta([
     'title' => (string) $row['title_localized'],
     'description' => $articleDescription,
+    'ai_summary' => mb_safe_strimwidth($articlePlainText !== '' ? $articlePlainText : $articleDescription, 0, 280, '...'),
     'canonical' => $articleUrl,
     'og_type' => 'article',
     'schema_type' => 'Article',
@@ -73,11 +74,14 @@ set_page_meta([
     'modified_time' => $articleModifiedAt,
     'section' => $categoryLabel,
     'tags' => array_filter([$categoryLabel, 'radioamateur', 'ON4CRD']),
+    'keywords' => array_filter([$categoryLabel, 'radioamateur', 'article technique', 'Radio Club Durnal', 'ON4CRD']),
+    'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         '@context' => 'https://schema.org',
         '@type' => 'Article',
         'headline' => (string) $row['title_localized'],
         'description' => $articleDescription,
+        'abstract' => mb_safe_strimwidth($articlePlainText !== '' ? $articlePlainText : $articleDescription, 0, 280, '...'),
         'url' => $articleUrl,
         'datePublished' => $articlePublishedAt,
         'dateModified' => $articleModifiedAt,

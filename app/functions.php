@@ -3101,6 +3101,15 @@ function render_layout(string $content, string $title = ''): string
     $metaImageAlt = trim((string) ($pageMeta['image_alt'] ?? $metaSiteName));
     $metaLatitude = trim((string) ($pageMeta['latitude'] ?? ''));
     $metaLongitude = trim((string) ($pageMeta['longitude'] ?? ''));
+    $metaAiSummary = trim((string) ($pageMeta['ai_summary'] ?? $metaDescription));
+    $metaCitationAuthor = trim((string) ($pageMeta['citation_author'] ?? 'Radio Club Durnal ON4CRD'));
+    $metaKeywords = [];
+    foreach (array_merge((array) ($pageMeta['keywords'] ?? []), (array) ($pageMeta['tags'] ?? [])) as $keyword) {
+        $keyword = trim((string) $keyword);
+        if ($keyword !== '') {
+            $metaKeywords[$keyword] = true;
+        }
+    }
     $jsonLdItems = [];
     if (isset($pageMeta['json_ld'])) {
         $jsonLdItems = is_array($pageMeta['json_ld']) && array_is_list($pageMeta['json_ld'])
@@ -3109,6 +3118,11 @@ function render_layout(string $content, string $title = ''): string
     }
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
+        . '<meta name="dcterms.title" content="' . e($pageTitle) . '">'
+        . '<meta name="dcterms.description" content="' . e($metaAiSummary) . '">'
+        . '<meta name="citation_title" content="' . e($pageTitle) . '">'
+        . '<meta name="citation_author" content="' . e($metaCitationAuthor) . '">'
+        . '<meta name="citation_abstract" content="' . e($metaAiSummary) . '">'
         . '<meta property="og:title" content="' . e($pageTitle) . '">'
         . '<meta property="og:description" content="' . e($metaDescription) . '">'
         . '<meta property="og:type" content="' . e($metaOgType) . '">'
@@ -3125,7 +3139,13 @@ function render_layout(string $content, string $title = ''): string
     }
     if ($metaCanonical !== '') {
         $metaHead .= '<link rel="canonical" href="' . e($metaCanonical) . '">'
-            . '<meta property="og:url" content="' . e($metaCanonical) . '">';
+            . '<meta property="og:url" content="' . e($metaCanonical) . '">'
+            . '<meta name="citation_public_url" content="' . e($metaCanonical) . '">';
+    }
+    if ($metaKeywords !== []) {
+        $keywords = implode(', ', array_keys($metaKeywords));
+        $metaHead .= '<meta name="keywords" content="' . e($keywords) . '">'
+            . '<meta name="citation_keywords" content="' . e($keywords) . '">';
     }
     foreach ($metaAlternates as $hreflang => $href) {
         $lang = trim((string) $hreflang);
@@ -3156,12 +3176,14 @@ function render_layout(string $content, string $title = ''): string
     }
     if (!empty($pageMeta['published_time'])) {
         $publishedTime = trim((string) $pageMeta['published_time']);
-        $metaHead .= '<meta property="article:published_time" content="' . e($publishedTime) . '">';
+        $metaHead .= '<meta property="article:published_time" content="' . e($publishedTime) . '">'
+            . '<meta name="citation_publication_date" content="' . e($publishedTime) . '">';
     }
     if (!empty($pageMeta['modified_time'])) {
         $modifiedTime = trim((string) $pageMeta['modified_time']);
         $metaHead .= '<meta property="article:modified_time" content="' . e($modifiedTime) . '">'
-            . '<meta property="og:updated_time" content="' . e($modifiedTime) . '">';
+            . '<meta property="og:updated_time" content="' . e($modifiedTime) . '">'
+            . '<meta name="citation_online_date" content="' . e($modifiedTime) . '">';
     }
     if (!empty($pageMeta['section'])) {
         $metaHead .= '<meta property="article:section" content="' . e((string) $pageMeta['section']) . '">';
