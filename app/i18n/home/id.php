@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'Cari',
   'spotlight_sub_placeholder' => 'Konten akan segera tersedia.',
   'spotlight_tool_day_item' => 'Perhitungan grid dari alamat pos',
-  'spotlight_tool_day_cta' => 'Buka alat ini',
+  'spotlight_tool_day_cta' => 'Alat lainnya',
   'spotlight_member_wiki_articles' => 'Wiki / Artikel',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => 'Artikel',

@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'بحث',
   'spotlight_sub_placeholder' => 'المحتوى متاح قريباً.',
   'spotlight_tool_day_item' => 'حساب الشبكة انطلاقاً من عنوان بريدي',
-  'spotlight_tool_day_cta' => 'فتح هذه الأداة',
+  'spotlight_tool_day_cta' => 'المزيد من الأدوات',
   'spotlight_member_wiki_articles' => 'ويكي / مقالات',
   'spotlight_member_wiki' => 'ويكي',
   'spotlight_member_articles' => 'مقالات',

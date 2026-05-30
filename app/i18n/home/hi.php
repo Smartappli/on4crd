@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'खोज',
   'spotlight_sub_placeholder' => 'सामग्री जल्द उपलब्ध होगी।',
   'spotlight_tool_day_item' => 'डाक पते से ग्रिड गणना',
-  'spotlight_tool_day_cta' => 'यह टूल खोलें',
+  'spotlight_tool_day_cta' => 'और टूल',
   'spotlight_member_wiki_articles' => 'विकी / लेख',
   'spotlight_member_wiki' => 'विकी',
   'spotlight_member_articles' => 'लेख',

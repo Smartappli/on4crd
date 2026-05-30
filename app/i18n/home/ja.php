@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'æ¤œç´¢',
   'spotlight_sub_placeholder' => 'コンテンツは近日公開予定です。',
   'spotlight_tool_day_item' => '住所からグリッドを計算',
-  'spotlight_tool_day_cta' => 'このツールを開く',
+  'spotlight_tool_day_cta' => 'その他のツール',
   'spotlight_member_wiki_articles' => 'Wiki / ??',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => '??',

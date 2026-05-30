@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'Cerca',
   'spotlight_sub_placeholder' => 'Contenuto disponibile a breve.',
   'spotlight_tool_day_item' => 'Calcolo grid da un indirizzo postale',
-  'spotlight_tool_day_cta' => 'Apri questo strumento',
+  'spotlight_tool_day_cta' => 'Altri strumenti',
   'spotlight_member_wiki_articles' => 'Wiki / Articoli',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => 'Articoli',

@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'অনুসন্ধান',
   'spotlight_sub_placeholder' => 'কনটেন্ট শিগগিরই আসছে।',
   'spotlight_tool_day_item' => 'ডাক ঠিকানা থেকে গ্রিড গণনা',
-  'spotlight_tool_day_cta' => 'এই টুল খুলুন',
+  'spotlight_tool_day_cta' => 'আরও টুল',
   'spotlight_member_wiki_articles' => 'উইকি / নিবন্ধ',
   'spotlight_member_wiki' => 'উইকি',
   'spotlight_member_articles' => 'নিবন্ধ',

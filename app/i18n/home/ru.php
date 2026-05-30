@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'Поиск',
   'spotlight_sub_placeholder' => 'Контент скоро появится.',
   'spotlight_tool_day_item' => 'Расчёт грид-квадрата по почтовому адресу',
-  'spotlight_tool_day_cta' => 'Открыть этот инструмент',
+  'spotlight_tool_day_cta' => 'Ещё инструменты',
   'spotlight_member_wiki_articles' => '???? / ??????',
   'spotlight_member_wiki' => '????',
   'spotlight_member_articles' => '??????',

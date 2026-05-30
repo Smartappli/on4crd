@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'Rechercher',
   'spotlight_sub_placeholder' => 'Contenu bientôt disponible…',
   'spotlight_tool_day_item' => 'Calcul de la grille depuis une adresse postale',
-  'spotlight_tool_day_cta' => 'Ouvrir cet outil',
+  'spotlight_tool_day_cta' => 'Plus d\'outils',
   'spotlight_member_wiki_articles' => 'Wiki / Articles',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => 'Articles',

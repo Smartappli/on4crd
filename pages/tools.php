@@ -350,7 +350,6 @@ ob_start();
 <section class="card">
     <div class="tools-layout">
     <aside class="tools-index card">
-        <h2 class="tools-index-title"><?= e($tr('tool_ranking', 'Classement des outils')) ?></h2>
         <p class="help"><?= e($tr('choose_tool')) ?></p>
         <details class="tools-index-group">
             <summary><?= e($tr('category_locators')) ?></summary>

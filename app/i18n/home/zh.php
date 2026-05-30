@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'æœç´¢',
   'spotlight_sub_placeholder' => '内容即将上线。',
   'spotlight_tool_day_item' => '根据邮政地址计算网格',
-  'spotlight_tool_day_cta' => '打开此工具',
+  'spotlight_tool_day_cta' => '更多工具',
   'spotlight_member_wiki_articles' => 'Wiki / ??',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => '??',

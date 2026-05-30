@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'Search',
   'spotlight_sub_placeholder' => 'Content coming soon.',
   'spotlight_tool_day_item' => 'Grid calculation from a postal address',
-  'spotlight_tool_day_cta' => 'Open this tool',
+  'spotlight_tool_day_cta' => 'More tools',
   'spotlight_member_wiki_articles' => 'Wiki / Articles',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => 'Articles',

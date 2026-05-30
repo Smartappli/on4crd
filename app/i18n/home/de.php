@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'Suchen',
   'spotlight_sub_placeholder' => 'Inhalte folgen in Kürze.',
   'spotlight_tool_day_item' => 'Grid-Berechnung aus einer Postadresse',
-  'spotlight_tool_day_cta' => 'Werkzeug öffnen',
+  'spotlight_tool_day_cta' => 'Mehr Werkzeuge',
   'spotlight_member_wiki_articles' => 'Wiki / Artikel',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => 'Artikel',

@@ -54,7 +54,7 @@ return [
   'spotlight_sub_3' => 'Zoeken',
   'spotlight_sub_placeholder' => 'Inhoud binnenkort beschikbaar.',
   'spotlight_tool_day_item' => 'Grid berekenen vanaf een postadres',
-  'spotlight_tool_day_cta' => 'Tool openen',
+  'spotlight_tool_day_cta' => 'Meer tools',
   'spotlight_member_wiki_articles' => 'Wiki / Artikelen',
   'spotlight_member_wiki' => 'Wiki',
   'spotlight_member_articles' => 'Artikelen',
