@@ -10,6 +10,9 @@ $tr = static fn(string $key): string => (string) ($t[$key] ?? ($i18n['fr'][$key]
 $contactItems = [$tr('contact_item_1'), $tr('contact_item_2')];
 $requiredItems = [$tr('required_item_1'), $tr('required_item_2'), $tr('required_item_3'), $tr('required_item_4'), $tr('required_item_5'), $tr('required_item_6')];
 $reviewItems = [$tr('review_item_1'), $tr('review_item_2'), $tr('review_item_3')];
+$membershipImagePath = '/assets/membership/membership.jpg';
+$membershipImageAbsolutePath = __DIR__ . '/../assets/membership/membership.jpg';
+$membershipImageUrl = is_file($membershipImageAbsolutePath) ? base_url($membershipImagePath) : '';
 
 $renderList = static function (array $items): string {
     $html = '';
@@ -23,9 +26,11 @@ $content = '<section class="rounded-3xl border border-slate-200 bg-gradient-to-r
     . '<span class="inline-flex rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">' . e($tr('badge')) . '</span>'
     . '<h1 class="mt-4 text-3xl font-extrabold text-slate-900 lg:text-4xl">' . e($tr('title')) . '</h1>'
     . '<p class="mt-3 max-w-3xl text-slate-700">' . e($tr('intro')) . '</p>'
-    . '<figure class="mt-6 mx-auto w-full max-w-xs overflow-hidden rounded-2xl border border-slate-200 bg-white">'
-    . '<img class="aspect-square h-auto w-full object-contain" src="' . e(base_url('assets/membership/membership.jpg')) . '" alt="' . e($tr('image_alt')) . '" loading="lazy">'
-    . '</figure>'
+    . ($membershipImageUrl !== ''
+        ? '<figure class="mt-6 mx-auto w-full max-w-xs overflow-hidden rounded-2xl border border-slate-200 bg-white">'
+            . '<img class="aspect-square h-auto w-full object-contain" src="' . e($membershipImageUrl) . '" alt="' . e($tr('image_alt')) . '" loading="lazy">'
+        . '</figure>'
+        : '')
     . '</section>'
     . '<section class="mt-4 grid gap-4 lg:grid-cols-2">'
     . '<article class="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm">'
