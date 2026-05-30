@@ -820,8 +820,6 @@ ob_start();
     <?php endif; ?>
 </section>
 </div>
-<?php include __DIR__ . '/qsl_script.js.php'; ?>
-
 <?php
 echo render_layout((string) ob_get_clean(), 'QSL');
 
