@@ -19,6 +19,8 @@ final class SeoHelpersTest extends TestCase
             'z' => '3',
             '_csrf' => 'secret',
             'maintenance_bypass' => 'token',
+            'utm_source' => 'newsletter',
+            'fbclid' => 'tracking',
             'a' => '1',
         ];
 
@@ -52,5 +54,23 @@ final class SeoHelpersTest extends TestCase
         $meta = (array) ($_SESSION['_page_meta'] ?? []);
         self::assertSame('noindex,nofollow', $meta['robots'] ?? null);
         self::assertSame('website', $meta['og_type'] ?? null);
+    }
+
+    public function testLocalizedSeoDefaultsPreservesContentIdentifiersAndDropsTracking(): void
+    {
+        $_GET = [
+            'route' => 'article',
+            'slug' => 'antenne-vhf',
+            'utm_source' => 'newsletter',
+            'fbclid' => 'tracking',
+        ];
+
+        $meta = localized_seo_defaults('article', 'fr', [], 'ON4CRD');
+
+        self::assertStringContainsString('route=article', (string) $meta['canonical']);
+        self::assertStringContainsString('slug=antenne-vhf', (string) $meta['canonical']);
+        self::assertStringNotContainsString('utm_source', (string) $meta['canonical']);
+        self::assertStringNotContainsString('fbclid', (string) $meta['canonical']);
+        self::assertStringContainsString('slug=antenne-vhf', (string) $meta['alternates']['en']);
     }
 }

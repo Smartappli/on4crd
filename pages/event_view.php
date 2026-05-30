@@ -37,6 +37,48 @@ if ($summary === '') {
     $summary = $t['summary_fallback'];
 }
 
+$eventUrl = route_url_with_locale('event_view', $locale, ['slug' => $slug]);
+$eventStatus = $endAt < new DateTimeImmutable('now') ? 'https://schema.org/EventCompleted' : 'https://schema.org/EventScheduled';
+$eventJsonLd = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Event',
+    'name' => (string) $event['title'],
+    'description' => $summary,
+    'url' => $eventUrl,
+    'startDate' => $startAt->format(DATE_ATOM),
+    'endDate' => $endAt->format(DATE_ATOM),
+    'eventStatus' => $eventStatus,
+    'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+    'inLanguage' => $locale,
+    'organizer' => [
+        '@type' => 'Organization',
+        'name' => 'Radio Club Durnal ON4CRD',
+        'url' => route_url_with_locale('home', $locale),
+    ],
+];
+if ($location !== '') {
+    $eventJsonLd['location'] = [
+        '@type' => 'Place',
+        'name' => $location,
+        'address' => [
+            '@type' => 'PostalAddress',
+            'addressLocality' => $location,
+            'addressCountry' => 'BE',
+        ],
+    ];
+}
+
+set_page_meta([
+    'title' => (string) $event['title'],
+    'description' => $summary,
+    'canonical' => $eventUrl,
+    'schema_type' => 'Event',
+    'modified_time' => !empty($event['updated_at']) ? date('c', strtotime((string) $event['updated_at'])) : $startAt->format(DATE_ATOM),
+    'section' => (string) ($t['title'] ?? 'Evenement'),
+    'tags' => ['ON4CRD', 'Radio Club Durnal', 'evenement radioamateur'],
+    'json_ld' => $eventJsonLd,
+]);
+
 ob_start();
 ?>
 <article class="card events-single-card">

@@ -36,6 +36,49 @@ $publishedAtRaw = (string) ($post['published_at'] ?? $post['updated_at'] ?? '');
 $publishedAt = $publishedAtRaw !== '' ? date('d/m/Y H:i', strtotime($publishedAtRaw)) : (string) $t['date_unknown'];
 $excerpt = trim((string) ($post['excerpt'] ?? ''));
 $content = trim((string) ($post['content'] ?? ''));
+$newsDescription = $excerpt !== '' ? $excerpt : trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($content), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+if ($newsDescription === '') {
+    $newsDescription = (string) $t['content_soon'];
+}
+$newsDescription = mb_substr($newsDescription, 0, 220);
+$newsUrl = route_url_with_locale('news_view', $locale, ['slug' => $slug]);
+$newsPublishedAt = $publishedAtRaw !== '' ? date('c', strtotime($publishedAtRaw)) : null;
+$newsModifiedAt = !empty($post['updated_at']) ? date('c', strtotime((string) $post['updated_at'])) : $newsPublishedAt;
+
+set_page_meta([
+    'title' => (string) $post['title'],
+    'description' => $newsDescription,
+    'canonical' => $newsUrl,
+    'og_type' => 'article',
+    'schema_type' => 'NewsArticle',
+    'published_time' => $newsPublishedAt,
+    'modified_time' => $newsModifiedAt,
+    'section' => (string) ($t['published_on'] ?? 'Actualite'),
+    'tags' => ['ON4CRD', 'Radio Club Durnal', 'actualite radioamateur'],
+    'json_ld' => [
+        '@context' => 'https://schema.org',
+        '@type' => 'NewsArticle',
+        'headline' => (string) $post['title'],
+        'description' => $newsDescription,
+        'url' => $newsUrl,
+        'datePublished' => $newsPublishedAt,
+        'dateModified' => $newsModifiedAt,
+        'inLanguage' => $locale,
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Radio Club Durnal ON4CRD',
+            'url' => route_url_with_locale('home', $locale),
+        ],
+        'author' => [
+            '@type' => 'Organization',
+            'name' => 'Radio Club Durnal ON4CRD',
+        ],
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => $newsUrl,
+        ],
+    ],
+]);
 
 ob_start();
 ?>

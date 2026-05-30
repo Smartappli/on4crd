@@ -185,10 +185,47 @@ $radioMathTools = $buildTools($toolCatalog['radio_math'] ?? []);
 $toolGroups = [$locatorTools, $conversionTools, $antennaTools, $powerTools, $advancedPropagationTools, $rfMeasureTools, $radioMathTools];
 $toolsTotalCount = array_sum(array_map('count', $toolGroups));
 $toolsCategoryCount = count(array_filter($toolGroups, static fn(array $tools): bool => $tools !== []));
+$toolsUrl = route_url_with_locale('tools', $locale);
+$toolsListItems = [];
+$toolPosition = 1;
+foreach ($toolGroups as $toolGroup) {
+    foreach ($toolGroup as $tool) {
+        $toolId = (string) ($tool['id'] ?? '');
+        $toolTitle = (string) ($tool['title'] ?? '');
+        if ($toolId === '' || $toolTitle === '') {
+            continue;
+        }
+        $toolsListItems[] = [
+            '@type' => 'ListItem',
+            'position' => $toolPosition++,
+            'name' => $toolTitle,
+            'url' => $toolsUrl . '#' . rawurlencode($toolId),
+        ];
+    }
+}
 set_page_meta([
     'title' => $tr('title', 'Outils radioamateur'),
     'description' => $tr('grid_title', 'Maidenhead locator map and converter'),
+    'canonical' => $toolsUrl,
     'schema_type' => 'WebPage',
+    'json_ld' => [
+        '@context' => 'https://schema.org',
+        '@type' => 'ItemList',
+        'name' => $tr('title', 'Outils radioamateur'),
+        'description' => $tr('choose_tool', 'Choisissez un outil radioamateur.'),
+        'url' => $toolsUrl,
+        'numberOfItems' => count($toolsListItems),
+        'itemListElement' => $toolsListItems,
+        'about' => [
+            '@type' => 'Thing',
+            'name' => 'amateur radio tools',
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Radio Club Durnal ON4CRD',
+            'url' => route_url_with_locale('home', $locale),
+        ],
+    ],
 ]);
 $jsI18n = [
     'err_enter_address' => $tr('err_enter_address'),

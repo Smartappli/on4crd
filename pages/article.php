@@ -58,12 +58,51 @@ $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (
 $category = slugify((string) ($row['category'] ?? 'autres'));
 $categoryLabel = ucwords(str_replace('-', ' ', $category));
 $readingMinutes = article_view_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? ''));
+$articlePlainText = article_view_plain_text((string) ($row['content_localized'] ?? $row['content'] ?? ''));
+$articleDescription = trim((string) ($row['excerpt_localized'] ?? '')) !== '' ? (string) $row['excerpt_localized'] : (string) $t['meta_fallback'];
+$articleUrl = route_url_with_locale('article', $locale, ['slug' => (string) $row['slug']]);
+$articlePublishedAt = !empty($row['created_at']) ? date('c', strtotime((string) $row['created_at'])) : null;
+$articleModifiedAt = !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : null;
 set_page_meta([
     'title' => (string) $row['title_localized'],
-    'description' => trim((string) ($row['excerpt_localized'] ?? '')) !== '' ? (string) $row['excerpt_localized'] : (string) $t['meta_fallback'],
+    'description' => $articleDescription,
+    'canonical' => $articleUrl,
+    'og_type' => 'article',
     'schema_type' => 'Article',
-    'published_time' => !empty($row['created_at']) ? date('c', strtotime((string) $row['created_at'])) : null,
-    'modified_time' => !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : null,
+    'published_time' => $articlePublishedAt,
+    'modified_time' => $articleModifiedAt,
+    'section' => $categoryLabel,
+    'tags' => array_filter([$categoryLabel, 'radioamateur', 'ON4CRD']),
+    'json_ld' => [
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        'headline' => (string) $row['title_localized'],
+        'description' => $articleDescription,
+        'url' => $articleUrl,
+        'datePublished' => $articlePublishedAt,
+        'dateModified' => $articleModifiedAt,
+        'articleSection' => $categoryLabel,
+        'wordCount' => str_word_count($articlePlainText),
+        'inLanguage' => $locale,
+        'isPartOf' => [
+            '@type' => 'WebSite',
+            'name' => (string) config('app.site_name', 'ON4CRD'),
+            'url' => route_url_with_locale('home', $locale),
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Radio Club Durnal ON4CRD',
+            'url' => route_url_with_locale('home', $locale),
+        ],
+        'author' => [
+            '@type' => 'Organization',
+            'name' => 'Radio Club Durnal ON4CRD',
+        ],
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => $articleUrl,
+        ],
+    ],
 ]);
 $relatedStmt = db()->prepare('SELECT id, slug, title, excerpt, content, updated_at FROM articles WHERE status = "published" AND category = ? AND id <> ? ORDER BY updated_at DESC, id DESC LIMIT 3');
 $relatedStmt->execute([$category, (int) $row['id']]);

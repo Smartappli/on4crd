@@ -6,9 +6,15 @@ declare(strict_types=1);
  */
 function seo_build_canonical_query(array $query): string
 {
-    $blocked = ['_csrf', 'maintenance_bypass'];
+    $blocked = ['_csrf', 'maintenance_bypass', 'fbclid', 'gclid', 'msclkid', 'mc_cid', 'mc_eid'];
     foreach ($blocked as $key) {
         unset($query[$key]);
+    }
+    foreach (array_keys($query) as $key) {
+        $normalizedKey = strtolower((string) $key);
+        if (str_starts_with($normalizedKey, 'utm_')) {
+            unset($query[$key]);
+        }
     }
 
     ksort($query);

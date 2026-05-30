@@ -76,7 +76,7 @@ function render_localized_not_found(): void
 }
 
 
-if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'install.php'], true)) {
+if (str_contains($route, '.') && !in_array($route, ['sitemap.xml', 'robots.txt', 'llms.txt', 'install.php'], true)) {
     http_response_code(404);
     render_localized_not_found();
     exit;

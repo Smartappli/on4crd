@@ -20,7 +20,9 @@ $lines = [
     'Disallow: /storage/uploads/',
     '',
     'Sitemap: ' . $base . '/index.php?route=sitemap.xml',
+    'Sitemap: ' . $base . '/sitemap.xml',
     'LLM: ' . $base . '/index.php?route=llms.txt',
+    'LLMS: ' . $base . '/llms.txt',
     'Host: ' . preg_replace('#^https?://#', '', $base),
 ];
 

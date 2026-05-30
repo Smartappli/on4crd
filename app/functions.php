@@ -2073,7 +2073,7 @@ function asset_url(string $path): string
 if (!function_exists('route_url')) {
 function route_url(string $route, array $query = []): string
 {
-    static $directPhpRoutes = ['install.php' => true, 'sitemap.xml' => true, 'robots.txt' => true];
+    static $directPhpRoutes = ['install.php' => true, 'sitemap.xml' => true, 'robots.txt' => true, 'llms.txt' => true];
 
     $route = trim($route);
     if ($route === '' || $route === 'home') {
@@ -2711,6 +2711,22 @@ function route_url_with_locale(string $route, string $locale, array $query = [])
     return route_url_clean($route, $query);
 }
 
+function seo_public_current_query(): array
+{
+    $query = (array) $_GET;
+    foreach (['route', 'lang', 'locale', '_csrf', 'maintenance_bypass', 'fbclid', 'gclid', 'msclkid', 'mc_cid', 'mc_eid'] as $key) {
+        unset($query[$key]);
+    }
+    foreach (array_keys($query) as $key) {
+        if (str_starts_with(strtolower((string) $key), 'utm_')) {
+            unset($query[$key]);
+        }
+    }
+
+    ksort($query);
+    return clean_query_params($query);
+}
+
 function localized_seo_defaults(string $route, string $locale, array $pageMeta, string $siteName): array
 {
     $seo = i18n_domain_locale('seo', $locale);
@@ -2806,16 +2822,17 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
         $description = trim((string) ($seo[$descriptionKey] ?? $routeSeo[$routeKey]['description'] ?? $seo['default_description'] ?? ''));
     }
 
+    $canonicalQuery = seo_public_current_query();
     $alternates = isset($pageMeta['alternates']) && is_array($pageMeta['alternates']) ? $pageMeta['alternates'] : [];
     foreach (supported_locales() as $supportedLocale) {
-        $alternates[$supportedLocale] = route_url_with_locale($canonicalRoute, $supportedLocale);
+        $alternates[$supportedLocale] = route_url_with_locale($canonicalRoute, $supportedLocale, $canonicalQuery);
     }
-    $alternates['x-default'] = route_url_with_locale($canonicalRoute, 'fr');
+    $alternates['x-default'] = route_url_with_locale($canonicalRoute, 'fr', $canonicalQuery);
 
     $defaults = array_replace([
         'title' => $title,
         'description' => $description,
-        'canonical' => route_url_with_locale($canonicalRoute, $locale),
+        'canonical' => route_url_with_locale($canonicalRoute, $locale, $canonicalQuery),
         'locale' => str_replace('-', '_', locale_open_graph_code($locale)),
         'geo_region' => 'BE-WNA',
         'geo_placename' => (string) ($seo['geo_placename'] ?? 'Durnal, Yvoir, Namur, Belgium'),
@@ -3136,6 +3153,24 @@ function render_layout(string $content, string $title = ''): string
     if ($metaLatitude !== '' && $metaLongitude !== '') {
         $metaHead .= '<meta property="place:location:latitude" content="' . e($metaLatitude) . '">'
             . '<meta property="place:location:longitude" content="' . e($metaLongitude) . '">';
+    }
+    if (!empty($pageMeta['published_time'])) {
+        $publishedTime = trim((string) $pageMeta['published_time']);
+        $metaHead .= '<meta property="article:published_time" content="' . e($publishedTime) . '">';
+    }
+    if (!empty($pageMeta['modified_time'])) {
+        $modifiedTime = trim((string) $pageMeta['modified_time']);
+        $metaHead .= '<meta property="article:modified_time" content="' . e($modifiedTime) . '">'
+            . '<meta property="og:updated_time" content="' . e($modifiedTime) . '">';
+    }
+    if (!empty($pageMeta['section'])) {
+        $metaHead .= '<meta property="article:section" content="' . e((string) $pageMeta['section']) . '">';
+    }
+    foreach ((array) ($pageMeta['tags'] ?? []) as $tag) {
+        $tag = trim((string) $tag);
+        if ($tag !== '') {
+            $metaHead .= '<meta property="article:tag" content="' . e($tag) . '">';
+        }
     }
     foreach ($jsonLdItems as $jsonLdItem) {
         if (!is_array($jsonLdItem) || $jsonLdItem === []) {

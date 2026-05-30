@@ -13,6 +13,75 @@ $reviewItems = [$tr('review_item_1'), $tr('review_item_2'), $tr('review_item_3')
 $membershipImagePath = '/assets/membership/membership.jpg';
 $membershipImageAbsolutePath = __DIR__ . '/../assets/membership/membership.jpg';
 $membershipImageUrl = is_file($membershipImageAbsolutePath) ? base_url($membershipImagePath) : '';
+$membershipUrl = route_url_with_locale('membership', $locale);
+
+set_page_meta([
+    'title' => $tr('title'),
+    'description' => $tr('intro'),
+    'canonical' => $membershipUrl,
+    'schema_type' => 'WebPage',
+    'json_ld' => [
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => $tr('how_title'),
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => $tr('how_text') . ' ' . implode(' ', $contactItems),
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => $tr('required_title'),
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => implode(' ', $requiredItems),
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => $tr('review_title'),
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => $tr('review_intro') . ' ' . implode(' ', $reviewItems),
+                    ],
+                ],
+            ],
+        ],
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'HowTo',
+            'name' => $tr('title'),
+            'description' => $tr('intro'),
+            'url' => $membershipUrl,
+            'step' => [
+                [
+                    '@type' => 'HowToStep',
+                    'name' => $tr('how_title'),
+                    'text' => $tr('how_text'),
+                ],
+                [
+                    '@type' => 'HowToStep',
+                    'name' => $tr('required_title'),
+                    'text' => implode(' ', $requiredItems),
+                ],
+                [
+                    '@type' => 'HowToStep',
+                    'name' => $tr('review_title'),
+                    'text' => $tr('review_intro') . ' ' . implode(' ', $reviewItems),
+                ],
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Radio Club Durnal ON4CRD',
+                'url' => route_url_with_locale('home', $locale),
+            ],
+        ],
+    ],
+]);
 
 $renderList = static function (array $items): string {
     $html = '';
