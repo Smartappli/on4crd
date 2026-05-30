@@ -352,7 +352,7 @@ $toolDayHtml = '<a class="group block rounded-2xl border border-slate-200 bg-whi
     . e(route_url('tools'))
     . '#tool-grid"><p class="text-sm font-semibold text-slate-900">'
     . e((string) $homeI18n['spotlight_tool_day_item'])
-    . '</p><span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">'
+    . '</p><span class="mt-3 flex justify-end text-sm font-semibold text-blue-600 group-hover:text-blue-700">'
     . e($toolDayCta)
     . '</span></a>';
 try {
@@ -395,7 +395,7 @@ try {
             $toolDayHtml = '<div class="home-tool-day">'
                 . '<script type="application/json" id="tools-i18n">' . e(json_encode($t, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</script>'
                 . $selectedToolPanel
-                . '<a class="mt-3 inline-flex text-sm font-semibold text-blue-600 hover:text-blue-700" href="' . e(route_url('tools')) . '#' . e((string) $selectedTool['id']) . '">'
+                . '<a class="mt-3 flex justify-end text-sm font-semibold text-blue-600 hover:text-blue-700" href="' . e(route_url('tools')) . '#' . e((string) $selectedTool['id']) . '">'
                 . e($toolDayCta) . '</a>'
                 . '</div>';
         }

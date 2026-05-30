@@ -1119,7 +1119,12 @@
             knownToolIds.add(targetId);
         }
     });
-    document.querySelectorAll('[data-tool-panel]').forEach((panel) => toolPanelsCache.set(panel.id, panel));
+    document.querySelectorAll('[data-tool-panel]').forEach((panel) => {
+        if (/^tool-[a-z0-9-]+$/.test(panel.id)) {
+            knownToolIds.add(panel.id);
+        }
+        toolPanelsCache.set(panel.id, panel);
+    });
 
     const getToolPanels = () => Array.from(document.querySelectorAll('[data-tool-panel]'));
 
@@ -1222,7 +1227,10 @@
             link.classList.toggle('is-active', isActive);
         });
     };
-    const initialTool = window.location.hash ? window.location.hash.slice(1) : 'tool-grid';
+    const embeddedPanels = getToolPanels();
+    const initialTool = window.location.hash
+        ? window.location.hash.slice(1)
+        : (embeddedPanels.length === 1 ? embeddedPanels[0].id : 'tool-grid');
     setActiveTool(initialTool);
     const resolveToolTarget = (eventTarget) => {
         const baseElement = eventTarget instanceof Element
