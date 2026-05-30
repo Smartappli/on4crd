@@ -138,4 +138,16 @@ final class RouterContractTest extends TestCase
             );
         }
     }
+
+    public function testNewsModuleIsSeededAsPublic(): void
+    {
+        $functions = file_get_contents(__DIR__ . '/../app/functions.php');
+        self::assertIsString($functions);
+
+        self::assertMatchesRegularExpression(
+            "/\\['news',\\s*'[^']+',\\s*'[^']+',\\s*0,\\s*1,\\s*'public',\\s*30\\]/",
+            $functions,
+            'The public news route must not be seeded with members-only module visibility.'
+        );
+    }
 }

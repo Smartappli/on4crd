@@ -440,30 +440,43 @@ function seed_modules(): void
     $modules = [
         ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 'members', 10],
         ['members', 'Membres', 'Espace membres et profil', 0, 1, 'members', 20],
-        ['news', 'Actualités', 'Section des actualités du club', 0, 1, 30],
+        ['news', 'Actualités', 'Section des actualités du club', 0, 1, 'public', 30],
         ['articles', 'Articles', 'Articles techniques', 0, 1, 'public', 40],
         ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 'public', 50],
         ['albums', 'Albums', 'Galerie photos', 0, 1, 'public', 60],
-        ['events', 'Événements', 'Agenda du club', 0, 1, 70],
-        ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 90],
+        ['events', 'Événements', 'Agenda du club', 0, 1, 'public', 70],
+        ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 'public', 90],
         ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 'members', 100],
-        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 110],
-        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 120],
+        ['chatbot', 'Raymond vous répond', 'Assistant conversationnel intégré au tableau de bord des membres', 0, 1, 'public', 110],
+        ['advertising', 'Publicités', 'Gestion des annonces/publicités', 0, 1, 'public', 120],
         ['classifieds', 'Petites annonces', 'Module petites annonces', 0, 1, 'public', 121],
-        ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 130],
-        ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 140],
-        ['committee', 'Comité', 'Informations du comité', 0, 1, 150],
+        ['press', 'Presse', 'Communiqués et contacts presse', 0, 1, 'public', 130],
+        ['education', 'Éducation', 'Activités écoles/formation', 0, 1, 'public', 140],
+        ['committee', 'Comité', 'Informations du comité', 0, 1, 'public', 150],
         ['directory', 'Annuaire', 'Annuaire public du club', 0, 1, 'public', 160],
-        ['admin', 'Administration', 'Administration générale', 1, 1, 1000],
+        ['admin', 'Administration', 'Administration générale', 1, 1, 'admin', 1000],
     ];
 
-    $stmt = db()->prepare(
-        'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
-         VALUES (?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
-    );
+    $hasVisibility = table_has_column('modules', 'visibility');
+    if ($hasVisibility) {
+        $stmt = db()->prepare(
+            'INSERT INTO modules (code, label, description, is_core, is_enabled, visibility, sort_order)
+             VALUES (?, ?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), visibility = VALUES(visibility), sort_order = VALUES(sort_order)'
+        );
+    } else {
+        $stmt = db()->prepare(
+            'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
+             VALUES (?, ?, ?, ?, ?, ?)
+             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
+        );
+    }
 
     foreach ($modules as $module) {
+        if (!$hasVisibility) {
+            unset($module[5]);
+            $module = array_values($module);
+        }
         $stmt->execute($module);
     }
 }
@@ -1602,6 +1615,8 @@ function apply_runtime_schema_updates(): void
         if (!$hasVisibility) {
             db()->exec('ALTER TABLE modules ADD COLUMN visibility ENUM("public","members","admin") NOT NULL DEFAULT "members" AFTER is_enabled');
         }
+        db()->exec("UPDATE modules SET visibility = 'public' WHERE code IN ('news', 'articles', 'wiki', 'albums', 'events', 'auctions', 'chatbot', 'advertising', 'classifieds', 'press', 'education', 'committee', 'directory') AND visibility = 'members'");
+        db()->exec("UPDATE modules SET visibility = 'admin' WHERE code = 'admin'");
     }
 
     db()->exec(
