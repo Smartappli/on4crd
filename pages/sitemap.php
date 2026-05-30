@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$xml = cache_remember('seo_sitemap_xml_v3', 300, static function (): string {
+$xml = cache_remember('seo_sitemap_xml_v4', 300, static function (): string {
     $base = rtrim((string) config('app.base_url', ''), '/');
     if ($base === '') {
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -34,13 +34,18 @@ $xml = cache_remember('seo_sitemap_xml_v3', 300, static function (): string {
         ['route' => 'mentions_legales', 'priority' => '0.3', 'changefreq' => 'yearly'],
         ['route' => 'reglement_interieur', 'priority' => '0.3', 'changefreq' => 'yearly'],
         ['route' => 'sponsoring', 'priority' => '0.5', 'changefreq' => 'monthly'],
+        ['route' => 'code_q', 'priority' => '0.5', 'changefreq' => 'yearly'],
+        ['route' => 'code_cw', 'priority' => '0.5', 'changefreq' => 'yearly'],
+        ['route' => 'bandplan_on3', 'priority' => '0.5', 'changefreq' => 'yearly'],
+        ['route' => 'bandplan_on2', 'priority' => '0.5', 'changefreq' => 'yearly'],
+        ['route' => 'bandplan_harec', 'priority' => '0.5', 'changefreq' => 'yearly'],
         ['route' => 'articles', 'module' => 'articles', 'priority' => '0.8', 'changefreq' => 'weekly'],
         ['route' => 'wiki', 'module' => 'wiki', 'priority' => '0.8', 'changefreq' => 'weekly'],
         ['route' => 'albums', 'module' => 'albums', 'priority' => '0.7', 'changefreq' => 'weekly'],
         ['route' => 'classifieds', 'module' => 'classifieds', 'priority' => '0.7', 'changefreq' => 'daily'],
         ['route' => 'chatbot', 'module' => 'chatbot', 'priority' => '0.6', 'changefreq' => 'weekly'],
         ['route' => 'directory', 'module' => 'directory', 'priority' => '0.7', 'changefreq' => 'weekly'],
-        ['route' => 'tools', 'module' => 'tools', 'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['route' => 'tools', 'priority' => '0.8', 'changefreq' => 'monthly'],
         ['route' => 'committee', 'module' => 'committee', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'press', 'module' => 'press', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'schools', 'module' => 'education', 'priority' => '0.6', 'changefreq' => 'monthly'],
