@@ -155,7 +155,7 @@ final class RouterContractTest extends TestCase
             'Runtime schema updates must restore the public news module when production data disabled it.'
         );
         self::assertStringContainsString(
-            "UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members')",
+            "UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')",
             $functions,
             'Runtime schema updates must restore the member dashboard module when production data disabled it.'
         );
