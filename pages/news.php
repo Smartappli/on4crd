@@ -78,6 +78,14 @@ $totalPosts = cache_remember($cacheBase . '_count', 45, static function () use (
         return 0;
     }
 });
+$publishedNewsCount = cache_remember('news_published_count_v1', 120, static function (): int {
+    try {
+        $stmt = db()->query('SELECT COUNT(*) FROM news_posts WHERE status = "published"');
+        return $stmt !== false ? (int) $stmt->fetchColumn() : 0;
+    } catch (Throwable) {
+        return 0;
+    }
+});
 $pagination = pagination_state($totalPosts, $page, $perPage);
 $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
@@ -153,13 +161,18 @@ $latestNews = cache_remember('news_latest_v1', 60, static function (): array {
 
 ob_start();
 ?>
-<section class="page-hero">
+<section class="page-hero news-hero">
     <div>
         <p class="eyebrow news-hero-title"><?= e((string) $newsT['latest_news']) ?></p>
         <h1><?= e((string) $newsT['title']) ?></h1>
         <p class="help"><?= e((string) $newsT['search_lead']) ?></p>
     </div>
-    <a class="button" href="#news-list"><?= e((string) $newsT['news_overview']) ?></a>
+    <div class="news-hero-stats">
+        <article class="news-hero-stat">
+            <strong><?= (int) $publishedNewsCount ?></strong>
+            <span><?= e((string) ($newsT['news_count_label'] ?? "Nombre d'actualités")) ?></span>
+        </article>
+    </div>
 </section>
 
 <section class="card mt-4">
