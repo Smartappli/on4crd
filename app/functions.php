@@ -554,11 +554,11 @@ function maidenhead_to_coordinates(string $locator): ?array
 
 function extract_latest_kp_measurement(array $payload): ?array
 {
-    if (count($payload) <= 1) {
+    if ($payload === []) {
         return null;
     }
 
-    for ($index = count($payload) - 1; $index >= 1; $index--) {
+    for ($index = count($payload) - 1; $index >= 0; $index--) {
         $row = $payload[$index] ?? null;
         if (!is_array($row)) {
             continue;

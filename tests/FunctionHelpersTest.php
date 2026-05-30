@@ -155,4 +155,17 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame('2026-05-30T03:00:00', $result['timestamp']);
         self::assertSame(3.00, round((float) $result['kp'], 2));
     }
+
+    public function testExtractLatestKpMeasurementSupportsSingleNoaaObjectRow(): void
+    {
+        $payload = [
+            ['time_tag' => '2026-05-30T06:00:00', 'Kp' => 1.33, 'station_count' => 8],
+        ];
+
+        $result = extract_latest_kp_measurement($payload);
+
+        self::assertIsArray($result);
+        self::assertSame('2026-05-30T06:00:00', $result['timestamp']);
+        self::assertSame(1.33, round((float) $result['kp'], 2));
+    }
 }
