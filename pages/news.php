@@ -209,6 +209,12 @@ ob_start();
 <section class="wiki-search-panel mt-4">
     <form method="get" class="wiki-search-form">
         <input type="hidden" name="route" value="news">
+        <?php if ($categoryFilter !== ''): ?>
+            <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
+        <?php endif; ?>
+        <?php if ($monthFilter !== ''): ?>
+            <input type="hidden" name="ym" value="<?= e($monthFilter) ?>">
+        <?php endif; ?>
         <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $newsT['keywords_placeholder']) ?>">
         <button class="button" type="submit"><?= e((string) ($newsT['search'] ?? $newsT['apply_filters'])) ?></button>
         <?php if ($search !== '' || $monthFilter !== '' || $categoryFilter !== ''): ?>
@@ -217,7 +223,29 @@ ob_start();
     </form>
 </section>
 
-<section class="card mt-4" id="news-list">
+<section class="news-layout mt-4">
+    <aside class="news-categories card">
+        <p class="news-ui-heading"><?= e((string) ($newsT['categories'] ?? $newsT['default_section'])) ?></p>
+        <nav class="news-category-list" aria-label="<?= e((string) ($newsT['categories'] ?? $newsT['default_section'])) ?>">
+            <a class="news-category-item" href="<?= e(route_url_clean('news', ['q' => $search, 'ym' => $monthFilter])) ?>"<?= $categoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                <span><?= e((string) ($newsT['all_categories'] ?? $newsT['default_section'])) ?></span>
+                <strong><?= (int) $publishedNewsCount ?></strong>
+            </a>
+            <?php foreach ($categories as $cat): ?>
+                <?php $catSlug = trim((string) ($cat['slug'] ?? '')); if ($catSlug === '') { continue; } ?>
+                <a class="news-category-item" href="<?= e(route_url_clean('news', ['category' => $catSlug, 'q' => $search, 'ym' => $monthFilter])) ?>"<?= $categoryFilter === $catSlug ? ' aria-current="page"' : '' ?>>
+                    <span><?= e((string) ($cat['name'] ?? $catSlug)) ?></span>
+                    <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
+                </a>
+            <?php endforeach; ?>
+        </nav>
+        <?php if ($categories === []): ?>
+            <p class="help"><?= e((string) ($newsT['no_news_yet'] ?? 'Aucune actualité.')) ?></p>
+        <?php endif; ?>
+    </aside>
+
+    <div class="news-content">
+<section class="card" id="news-list">
         <h2 class="news-ui-heading"><?= e((string) $newsT['news_overview']) ?></h2>
         <?php if ($posts === []): ?>
             <div class="news-empty-state">
@@ -254,7 +282,7 @@ ob_start();
 </section>
 
 <?php if ($totalPosts > $perPage): ?>
-    <section class="card mt-4">
+    <section class="card">
         <div class="row-between">
             <p class="help"><?= e((string) $newsT['page']) ?> <?= (int) $page ?> / <?= (int) $totalPages ?> — <?= e(sprintf((string) $newsT['news_count'], (int) $totalPosts)) ?></p>
             <p class="actions">
@@ -268,6 +296,8 @@ ob_start();
         </div>
     </section>
 <?php endif; ?>
+    </div>
+</section>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $newsT['title']);
 

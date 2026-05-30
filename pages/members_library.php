@@ -162,7 +162,6 @@ ob_start();
     </header>
 
     <section class="library-layout">
-        <?php if ($categories !== []): ?>
         <aside class="library-themes-section">
             <div class="library-themes-heading">
                 <p class="library-theme-title"><?= e((string) ($t['topics'] ?? 'Thématiques')) ?></p>
@@ -173,6 +172,9 @@ ob_start();
                     <span><?= e((string) $t['all_categories']) ?></span>
                     <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $categories)) ?></strong>
                 </a>
+                <?php if ($categories === []): ?>
+                    <p class="help"><?= e((string) ($t['empty'] ?? 'Aucun document trouvé.')) ?></p>
+                <?php endif; ?>
                 <?php foreach ($categories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
                     <a class="library-theme-card<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
@@ -182,7 +184,6 @@ ob_start();
                 <?php endforeach; ?>
             </div>
         </aside>
-        <?php endif; ?>
 
         <div class="library-content">
     <form method="get" class="library-search-panel">
