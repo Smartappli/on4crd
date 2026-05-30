@@ -149,6 +149,11 @@ final class RouterContractTest extends TestCase
             $functions,
             'The public news route must not be seeded with members-only module visibility.'
         );
+        self::assertStringContainsString(
+            "UPDATE modules SET is_enabled = 1, visibility = 'public' WHERE code IN ('news'",
+            $functions,
+            'Runtime schema updates must restore the public news module when production data disabled it.'
+        );
     }
 
     public function testPublicRoutesAreNotGatedByMembersOnlyModules(): void
