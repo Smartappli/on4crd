@@ -733,6 +733,7 @@ textarea { resize: vertical; }
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--panel-2);
+  text-align: center;
 }
 .directory-hero-stats span {
   display: block;

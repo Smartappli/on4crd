@@ -28,7 +28,8 @@ if (table_exists('members')) {
 
     $sql = 'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, photo_path, avatar_path, is_committee, committee_role, visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
         FROM members
-        WHERE is_active = 1';
+        WHERE is_active = 1
+          AND UPPER(callsign) <> "ON4CRD"';
     $params = [];
 
     if ($search !== '') {
@@ -59,6 +60,7 @@ if (table_exists('members')) {
                 SUM(CASE WHEN UPPER(COALESCE(licence_class, "")) LIKE "%UBA%" AND visibility_licence_class IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
          WHERE is_active = 1
+           AND UPPER(callsign) <> "ON4CRD"
            AND (
                visibility_photo IN (' . $visibilityPlaceholders . ')
                OR visibility_full_name IN (' . $visibilityPlaceholders . ')
@@ -117,7 +119,7 @@ if (table_exists('members')) {
     unset($member);
     $members = array_values($members);
 
-    $licenceRows = db()->query('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND licence_class IS NOT NULL AND licence_class <> "" GROUP BY licence_class ORDER BY licence_class ASC')->fetchAll() ?: [];
+    $licenceRows = db()->query('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND UPPER(callsign) <> "ON4CRD" AND licence_class IS NOT NULL AND licence_class <> "" GROUP BY licence_class ORDER BY licence_class ASC')->fetchAll() ?: [];
 } else {
     $licenceRows = [];
 }
