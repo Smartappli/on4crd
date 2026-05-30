@@ -1860,6 +1860,31 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   margin: .15rem 0 .35rem;
   font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
+.wiki-hero > div:first-child {
+  min-width: 0;
+}
+.wiki-hero-search {
+  margin-top: .8rem;
+  max-width: 46rem;
+}
+.wiki-hero-side {
+  display: grid;
+  gap: .75rem;
+  min-width: min(100%, 24rem);
+}
+.wiki-hero-dashboard {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.wiki-hero-dashboard .wiki-stat {
+  padding: .65rem .75rem;
+  border-radius: 14px;
+}
+.wiki-hero-dashboard .wiki-stat strong {
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+}
+.wiki-hero-dashboard .wiki-stat span {
+  font-size: .82rem;
+}
 .auctions-hero.page-hero,
 .classifieds-hero.page-hero,
 .library-hero.page-hero {
@@ -3306,6 +3331,14 @@ textarea.wysiwyg-source {
   .album-tile-footer {
     flex-direction: column;
     align-items: stretch;
+  }
+  .wiki-hero-side,
+  .wiki-hero-search {
+    min-width: 0;
+    max-width: none;
+  }
+  .wiki-hero-dashboard {
+    grid-template-columns: 1fr;
   }
   .albums-hero-stats,
   .album-detail-stats,

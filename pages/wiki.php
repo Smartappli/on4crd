@@ -62,36 +62,34 @@ ob_start();
             <p class="eyebrow"><?= e((string) $t['title']) ?></p>
             <h1><?= e((string) $t['wiki_pages']) ?></h1>
             <p class="help"><?= e((string) $t['summary_fallback']) ?></p>
+            <form method="get" class="wiki-search-form wiki-hero-search">
+                <input type="hidden" name="route" value="wiki">
+                <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+                <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+                <?php if ($search !== ''): ?>
+                    <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
+                <?php endif; ?>
+            </form>
         </div>
-        <?php if (has_permission('wiki.edit')): ?>
-            <a class="button" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
-        <?php endif; ?>
-    </section>
-
-    <section class="wiki-dashboard">
-        <article class="wiki-stat">
-            <span><?= e((string) $t['wiki_pages']) ?></span>
-            <strong><?= $totalPagesCount ?></strong>
-        </article>
-        <article class="wiki-stat">
-            <span><?= e((string) $t['updated_pages']) ?></span>
-            <strong><?= $updatedPagesCount ?></strong>
-        </article>
-        <article class="wiki-stat">
-            <span><?= e((string) $t['revisions']) ?></span>
-            <strong><?= $revisionCount ?></strong>
-        </article>
-    </section>
-
-    <section class="wiki-search-panel">
-        <form method="get" class="wiki-search-form">
-            <input type="hidden" name="route" value="wiki">
-            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
-            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
+        <div class="wiki-hero-side">
+            <div class="wiki-dashboard wiki-hero-dashboard">
+                <article class="wiki-stat">
+                    <span><?= e((string) $t['wiki_pages']) ?></span>
+                    <strong><?= $totalPagesCount ?></strong>
+                </article>
+                <article class="wiki-stat">
+                    <span><?= e((string) $t['updated_pages']) ?></span>
+                    <strong><?= $updatedPagesCount ?></strong>
+                </article>
+                <article class="wiki-stat">
+                    <span><?= e((string) $t['revisions']) ?></span>
+                    <strong><?= $revisionCount ?></strong>
+                </article>
+            </div>
+            <?php if (has_permission('wiki.edit')): ?>
+                <a class="button" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
             <?php endif; ?>
-        </form>
+        </div>
     </section>
 
     <section class="wiki-directory">
