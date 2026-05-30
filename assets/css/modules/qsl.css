@@ -6,9 +6,10 @@
 [data-route="qsl"] .qsl-hero-title {
   margin: 0;
   font-family: inherit;
-  font-weight: 700;
-  font-size: clamp(2rem, 3.2vw, 3rem);
-  line-height: 1.05;
-  color: var(--text);
-  letter-spacing: 0;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
