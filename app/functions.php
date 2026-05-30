@@ -2169,6 +2169,11 @@ function consume_flashes(): array
 if (!function_exists('current_user')) {
 function auth_bypass_member_id(): int
 {
+    $environment = strtolower(trim((string) config('app.env', 'production')));
+    if ($environment !== 'development') {
+        return 0;
+    }
+
     $configuredBypassId = max(0, (int) config('app.auth_bypass_member_id', 0));
     if ($configuredBypassId > 0) {
         return $configuredBypassId;
@@ -2195,7 +2200,6 @@ function auth_bypass_member_id(): int
         return max(0, $firstActiveMemberId);
     }
 
-    $environment = strtolower(trim((string) config('app.env', 'production')));
     $allowDevelopmentBypass = (bool) config('app.disable_login_in_development', false);
     $route = (string) ($_GET['route'] ?? 'home');
     $memberBypassRoutes = [
@@ -2210,7 +2214,7 @@ function auth_bypass_member_id(): int
         'auction_bid',
         'newsletter',
     ];
-    if (!$allowDevelopmentBypass || $environment !== 'development' || !table_exists('members') || !in_array($route, $memberBypassRoutes, true)) {
+    if (!$allowDevelopmentBypass || !table_exists('members') || !in_array($route, $memberBypassRoutes, true)) {
         return 0;
     }
 
@@ -2252,6 +2256,9 @@ function current_user(): ?array
     if ($authClient !== null && $authClient->isLoggedIn()) {
         $authUserId = (int) $authClient->getUserId();
         $memberId = $authUserId;
+    } elseif ($authClient !== null && $memberId > 0) {
+        unset($_SESSION['member_id']);
+        $memberId = 0;
     }
 
     if ($memberId <= 0) {
