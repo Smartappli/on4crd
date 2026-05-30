@@ -1,4 +1,27 @@
 <?php
 declare(strict_types=1);
 
-return ['required' => '所有字段均为必填。', 'auth_unavailable' => '认证模块不可用。请运行 composer install。', 'invalid_data' => '提供的信息无效。', 'already_exists' => '已存在使用此电子邮箱或呼号的账户。', 'too_many' => '尝试次数过多。请稍后再试。', 'ok_created' => '账户创建成功。欢迎进入会员区！', 'title' => '创建会员账户', 'callsign' => '呼号', 'full_name' => '全名', 'email' => '电子邮箱', 'password' => '密码', 'submit' => '创建我的账户', 'already_registered' => '已经注册？', 'login' => '登录', 'layout_title' => '注册'];
+return [
+    'required' => '必须填写所有必填字段。',
+    'auth_unavailable' => '身份验证模块不可用。请运行 composer install。',
+    'invalid_data' => '提供的信息无效。',
+    'already_exists' => '已存在使用此邮箱或呼号的账户。',
+    'too_many' => '尝试次数过多。请稍后再试。',
+    'ok_created' => '账户已成功创建。欢迎进入会员区！',
+    'title' => '创建会员账户',
+    'callsign' => '呼号',
+    'full_name' => '全名',
+    'email' => '电子邮件',
+    'phone' => '电话',
+    'qth' => 'QTH',
+    'licence_class' => '执照等级',
+    'favourite_bands' => '常用频段',
+    'favourite_bands_placeholder' => '例如 2m, 70cm, 20m',
+    'station_equipment' => '电台与设备',
+    'directory_help' => '这些信息将用于填写您在目录中的资料。之后可在个人资料中调整可见性。',
+    'password' => '密码',
+    'submit' => '创建我的账户',
+    'already_registered' => '已经注册？',
+    'login' => '登录',
+    'layout_title' => '注册',
+];
