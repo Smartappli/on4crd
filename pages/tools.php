@@ -182,6 +182,10 @@ $powerTools = $buildTools($toolCatalog['power'] ?? []);
 $advancedPropagationTools = $buildTools($toolCatalog['advanced_propagation'] ?? []);
 $rfMeasureTools = $buildTools($toolCatalog['rf_measures'] ?? []);
 $radioMathTools = $buildTools($toolCatalog['radio_math'] ?? []);
+$toolGroups = [$locatorTools, $conversionTools, $antennaTools, $powerTools, $advancedPropagationTools, $rfMeasureTools, $radioMathTools];
+$toolsTotalCount = array_sum(array_map('count', $toolGroups));
+$toolsCategoryCount = count(array_filter($toolGroups, static fn(array $tools): bool => $tools !== []));
+$toolsPresetCount = count($toolPresets);
 set_page_meta([
     'title' => $tr('title', 'Outils radioamateur'),
     'description' => $tr('grid_title', 'Maidenhead locator map and converter'),
@@ -344,7 +348,20 @@ ob_start();
         <h1><?= e($tr('title', 'Outils radioamateur')) ?></h1>
         <p class="help"><?= e($tr('choose_tool')) ?></p>
     </div>
-    <a class="button" href="#tools-content"><?= e($tr('grid_title', 'Maidenhead locator map and converter')) ?></a>
+    <div class="tools-stats">
+        <div class="tools-stat">
+            <span><?= (int) $toolsTotalCount ?></span>
+            <p><?= e($tr('tools_stat_available', 'Outils disponibles')) ?></p>
+        </div>
+        <div class="tools-stat">
+            <span><?= (int) $toolsCategoryCount ?></span>
+            <p><?= e($tr('tools_stat_categories', 'Catégories')) ?></p>
+        </div>
+        <div class="tools-stat">
+            <span><?= (int) $toolsPresetCount ?></span>
+            <p><?= e($tr('tools_stat_presets', 'Presets sauvegardés')) ?></p>
+        </div>
+    </div>
 </section>
 
 <section class="card">
