@@ -10,9 +10,86 @@
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
+[data-route="members_library"] .library-theme-title {
+  margin: 0;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+[data-route="members_library"] .library-themes-section {
+  display: grid;
+  gap: 1rem;
+}
+
+[data-route="members_library"] .library-themes-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+[data-route="members_library"] .library-themes-heading .help {
+  margin: 0;
+  max-width: 56ch;
+}
+
+[data-route="members_library"] .library-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: .75rem;
+}
+
+[data-route="members_library"] .library-theme-card {
+  display: grid;
+  gap: .55rem;
+  min-height: 96px;
+  padding: .85rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 92%, white);
+  text-decoration: none;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+
+[data-route="members_library"] .library-theme-card:hover,
+[data-route="members_library"] .library-theme-card.is-active {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+[data-route="members_library"] .library-theme-card span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-route="members_library"] .library-theme-card strong {
+  color: var(--accent-strong);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  line-height: 1;
+}
+
 @media (max-width: 640px) {
   .library-grid,
   .library-category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  [data-route="members_library"] .library-themes-heading {
+    display: grid;
+    align-items: start;
+  }
+
+  [data-route="members_library"] .library-theme-grid {
     grid-template-columns: 1fr;
   }
 }

@@ -158,6 +158,28 @@ ob_start();
         </div>
     </header>
 
+    <?php if ($categories !== []): ?>
+        <section class="card library-themes-section">
+            <div class="library-themes-heading">
+                <p class="library-theme-title"><?= e((string) ($t['topics'] ?? 'Thématiques')) ?></p>
+                <p class="help"><?= e((string) ($t['category_help'] ?? $t['all_categories'])) ?></p>
+            </div>
+            <div class="library-theme-grid" aria-label="<?= e((string) ($t['topics'] ?? 'Thématiques')) ?>">
+                <a class="library-theme-card<?= $category === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
+                    <span><?= e((string) $t['all_categories']) ?></span>
+                    <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $categories)) ?></strong>
+                </a>
+                <?php foreach ($categories as $cat): ?>
+                    <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
+                    <a class="library-theme-card<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
+                        <span><?= e($catName) ?></span>
+                        <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </section>
+    <?php endif; ?>
+
     <form method="get" class="library-search-panel">
         <div class="library-filter-heading">
             <h2><?= e((string) ($t['category'] ?? $t['all_categories'])) ?></h2>
