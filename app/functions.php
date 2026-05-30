@@ -2997,6 +2997,7 @@ function render_layout(string $content, string $title = ''): string
     $authHtml = '';
     if ($user !== null) {
         $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
+        $accountPrivacyLabel = (string) ($layoutI18n['account_privacy'] ?? 'Vie privée');
         $adminMenuLink = '';
         if (has_permission('admin.access')) {
             $adminMenuLink = '<hr class="account-menu-separator">'
@@ -3007,6 +3008,7 @@ function render_layout(string $content, string $title = ''): string
             . '<summary class="button small account-menu-trigger">' . e($accountLabel) . '</summary>'
             . '<div class="account-menu-panel">'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('profile') . '#privacy') . '">' . e($accountPrivacyLabel) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('settings')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
             . $adminMenuLink
             . '<hr class="account-menu-separator">'

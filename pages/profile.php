@@ -113,7 +113,7 @@ ob_start();
     <p><strong><?= e($t('email')) ?> :</strong> <?= e((string) ($member['email'] ?? '')) ?></p>
 </div>
 
-<section class="card">
+<section class="card" id="privacy">
     <h2><?= e($t('directory_visibility')) ?></h2>
     <p class="help"><?= e($t('visibility_help')) ?></p>
     <form method="post" class="stack" enctype="multipart/form-data">
