@@ -15,6 +15,7 @@ return array (
   'nav_articles' => '記事',
   'nav_library' => 'ライブラリ',
   'nav_auctions' => 'オークション',
+  'nav_assistant' => 'アシスタント',
   'account_space' => 'マイアカウント',
   'account_profile' => 'プロフィール',
   'account_settings' => '設定',

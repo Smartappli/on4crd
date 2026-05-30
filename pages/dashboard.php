@@ -316,6 +316,5 @@ ob_start();
     <?php endforeach; ?>
   </div>
 </aside>
-<?php include __DIR__ . '/dashboard_script.js.php'; ?>
 <?php
 echo render_layout((string) ob_get_clean(), $t('title'));

@@ -15,6 +15,7 @@ return array (
   'nav_articles' => 'लेख',
   'nav_library' => 'लाइब्रेरी',
   'nav_auctions' => 'नीलामी',
+  'nav_assistant' => 'सहायक',
   'account_space' => 'मेरा खाता',
   'account_profile' => 'प्रोफ़ाइल',
   'account_settings' => 'सेटिंग्स',

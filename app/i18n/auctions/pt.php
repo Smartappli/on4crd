@@ -17,6 +17,7 @@ return array (
   'end' => 'Fim',
   'step' => 'Incremento',
   'view_lot' => 'Ver lote',
+  'subscribe_auctions' => 'Subscrever leilões',
   'page' => 'Página',
   'previous' => 'Anterior',
   'next' => 'Seguinte',

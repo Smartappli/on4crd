@@ -15,6 +15,7 @@ return array (
   'nav_articles' => 'Artikel',
   'nav_library' => 'Perpustakaan',
   'nav_auctions' => 'Lelang',
+  'nav_assistant' => 'Asisten',
   'account_space' => 'Akun saya',
   'account_profile' => 'Profil',
   'account_settings' => 'Pengaturan',

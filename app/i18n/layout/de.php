@@ -15,6 +15,7 @@ return array (
   'nav_articles' => 'Artikel',
   'nav_library' => 'Bibliothek',
   'nav_auctions' => 'Auktionen',
+  'nav_assistant' => 'Assistent',
   'account_space' => 'Mein Bereich',
   'account_profile' => 'Profil',
   'account_settings' => 'Einstellungen',

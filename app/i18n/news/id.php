@@ -29,7 +29,7 @@ return [
     'search_filter' => 'Pencarian: %s',
     'month_filter' => 'Bulan: %s',
     'category_filter' => 'Bagian: %s',
-    'news_overview' => 'Daftar berita',
+    'news_overview' => 'Berita lama',
     'no_match' => 'Tidak ada berita yang cocok dengan pencarian Anda.',
     'no_match_help' => 'Ubah kriteria atau atur ulang filter.',
     'card_fallback_excerpt' => 'Buka berita untuk membaca artikel lengkap.',

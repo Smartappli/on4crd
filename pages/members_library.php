@@ -136,7 +136,7 @@ if ($documents !== []) {
 ob_start();
 ?>
 <section class="members-library-page">
-    <header class="library-hero">
+    <header class="page-hero library-hero">
         <div class="library-hero-copy">
             <p class="directory-eyebrow"><?= e((string) $t['title']) ?></p>
             <h1><?= e((string) $t['title']) ?></h1>
