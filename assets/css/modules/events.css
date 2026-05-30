@@ -2,3 +2,10 @@
 [data-route="events"] .events-module {
   min-width: 0;
 }
+
+[data-route="events"] .events-hero-title {
+  color: inherit;
+  font: inherit;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+}

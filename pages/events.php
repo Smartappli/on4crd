@@ -165,7 +165,7 @@ ob_start();
 <section class="page-hero">
     <div>
         <p class="eyebrow"><?= e($t['calendar_name']) ?></p>
-        <h1><?= e($t['title']) ?></h1>
+        <h1 class="events-hero-title"><?= e('Agenda ON4CRD') ?></h1>
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
     <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
