@@ -281,6 +281,8 @@ $latestNews = null;
 $nextEvent = null;
 $featuredAd = null;
 $latestClassifiedAd = null;
+$latestWikiPage = null;
+$latestArticle = null;
 
 try {
     if (table_exists('news_posts')) {
@@ -306,6 +308,18 @@ try {
     if (module_enabled('classifieds') && table_exists('classified_ads')) {
         $latestClassifiedAd = cache_remember('home_latest_classified_ad_v1', 60, static function () {
             return db()->query('SELECT title, description, location, price_cents, created_at FROM classified_ads WHERE status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) ORDER BY created_at DESC, id DESC LIMIT 1')->fetch();
+        });
+    }
+
+    if (module_enabled('wiki') && table_exists('wiki_pages')) {
+        $latestWikiPage = cache_remember('home_latest_wiki_page_v1', 60, static function () {
+            return db()->query('SELECT slug, title, content, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 1')->fetch();
+        });
+    }
+
+    if (module_enabled('articles') && table_exists('articles')) {
+        $latestArticle = cache_remember('home_latest_article_v1', 60, static function () {
+            return db()->query('SELECT id, slug, title, excerpt, content, created_at, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 1')->fetch();
         });
     }
 } catch (Throwable) {
@@ -342,6 +356,40 @@ if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestClassifiedAd['title']) . '</h3>'
         . ($classifiedDescription !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($classifiedDescription) . '</p>' : '')
         . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' â†’</span>'
+        . '</a>';
+}
+
+$latestWikiHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('wiki')) . '">'
+    . '<p>' . e((string) ($homeI18n['spotlight_member_wiki_empty'] ?? 'Aucune page wiki disponible pour le moment.')) . '</p>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
+    . '</a>';
+if (is_array($latestWikiPage) && !empty($latestWikiPage['slug'])) {
+    $wikiExcerpt = mb_safe_strimwidth(trim((string) preg_replace('/\s+/u', ' ', strip_tags((string) ($latestWikiPage['content'] ?? '')))), 0, 130, '...');
+    $wikiDate = !empty($latestWikiPage['updated_at']) ? date('d/m/Y', strtotime((string) $latestWikiPage['updated_at'])) : '';
+    $latestWikiHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('wiki_view', ['slug' => (string) $latestWikiPage['slug']])) . '">'
+        . ($wikiDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e((string) ($homeI18n['spotlight_member_updated_on'] ?? 'Mis à jour le')) . ' ' . e($wikiDate) . '</p>' : '')
+        . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestWikiPage['title']) . '</h3>'
+        . ($wikiExcerpt !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($wikiExcerpt) . '</p>' : '')
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
+        . '</a>';
+}
+
+$latestArticleHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('articles')) . '">'
+    . '<p>' . e((string) ($homeI18n['spotlight_member_article_empty'] ?? 'Aucun article publié pour le moment.')) . '</p>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
+    . '</a>';
+if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
+    $latestArticle = localized_article_row($latestArticle);
+    $articleExcerpt = trim((string) ($latestArticle['excerpt_localized'] ?? $latestArticle['excerpt'] ?? ''));
+    if ($articleExcerpt === '') {
+        $articleExcerpt = mb_safe_strimwidth(trim((string) preg_replace('/\s+/u', ' ', strip_tags((string) ($latestArticle['content_localized'] ?? $latestArticle['content'] ?? '')))), 0, 130, '...');
+    }
+    $articleDate = !empty($latestArticle['updated_at']) ? date('d/m/Y', strtotime((string) $latestArticle['updated_at'])) : '';
+    $latestArticleHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('article', ['slug' => (string) $latestArticle['slug']])) . '">'
+        . ($articleDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e((string) ($homeI18n['spotlight_member_updated_on'] ?? 'Mis à jour le')) . ' ' . e($articleDate) . '</p>' : '')
+        . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) ($latestArticle['title_localized'] ?? $latestArticle['title'] ?? '')) . '</h3>'
+        . ($articleExcerpt !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($articleExcerpt) . '</p>' : '')
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' →</span>'
         . '</a>';
 }
 
@@ -429,12 +477,8 @@ try {
 }
 $memberSpotlightRowHtml = '';
 if ($isAuthenticated) {
-    $memberSpotlightLinkClass = 'inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50';
-    $memberSpotlightRowHtml = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_wiki_articles'] ?? 'Wiki / Articles')) . '</h3>'
-        . '<div class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="grid gap-2 sm:grid-cols-2">'
-        . '<a class="' . $memberSpotlightLinkClass . '" href="' . e(route_url('wiki')) . '">' . e((string) ($homeI18n['spotlight_member_wiki'] ?? 'Wiki')) . '</a>'
-        . '<a class="' . $memberSpotlightLinkClass . '" href="' . e(route_url('articles')) . '">' . e((string) ($homeI18n['spotlight_member_articles'] ?? 'Articles')) . '</a>'
-        . '</div></div></article>'
+    $memberSpotlightRowHtml = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_wiki'] ?? 'Dernière page wiki')) . '</h3>' . $latestWikiHtml . '</article>'
+        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_article'] ?? 'Dernier article')) . '</h3>' . $latestArticleHtml . '</article>'
         . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_library'] ?? 'Bibliothèque')) . '</h3>'
         . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('members_library')) . '">'
         . '<p class="text-sm font-semibold text-slate-900">' . e((string) ($homeI18n['spotlight_member_library'] ?? 'Bibliothèque')) . '</p>'
@@ -583,12 +627,12 @@ $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Nouvelles des autres radioclubs')) . '</h2>'
-    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_other_sections_desc'] ?? 'Le CRD valorise plusieurs pratiques radioamateurs complémentaires, des bandes HF aux modes numériques, en passant par les antennes et les activations.')) . '</p>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_other_sections_desc'] ?? 'Suivez les annonces, événements et initiatives relayés par les radioclubs voisins afin de garder le lien avec la communauté radioamateur.')) . '</p>'
     . '<div class="mt-4 grid gap-2">'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_hf_title'] ?? 'HF et trafic longue distance')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_hf_desc'] ?? 'Contacts internationaux, propagation, contests et bonnes pratiques de trafic.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_vhf_title'] ?? 'VHF/UHF et relais')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_vhf_desc'] ?? 'Expérimentations locales, antennes, relais et liaisons de proximité.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_digital_title'] ?? 'Modes numériques')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_digital_desc'] ?? 'FT8, DMR, APRS, logiciels radio et échanges autour des outils modernes.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_activation_title'] ?? 'Activations et terrain')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_activation_desc'] ?? 'Sorties radio, essais d’antennes, portable et activités pratiques.')) . '</p></div>'
+    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_hf_title'] ?? 'Activités des clubs voisins')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_hf_desc'] ?? 'Réunions, portes ouvertes, présentations et nouvelles locales partagées par les autres associations radioamateurs.')) . '</p></div>'
+    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_vhf_title'] ?? 'Événements et brocantes')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_vhf_desc'] ?? 'Salons, bourses, activations et rendez-vous publics organisés par les radioclubs de la région.')) . '</p></div>'
+    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_digital_title'] ?? 'Formations et conférences')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_digital_desc'] ?? 'Cours, ateliers techniques, conférences et retours d’expérience proposés par les clubs partenaires.')) . '</p></div>'
+    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_activation_title'] ?? 'Relais et projets partagés')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_activation_desc'] ?? 'Mises à jour de relais, expérimentations collectives et projets communs ouverts aux radioamateurs.')) . '</p></div>'
     . '</div>'
     . '</article>'
     . '</section>';
