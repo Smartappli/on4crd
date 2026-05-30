@@ -458,7 +458,7 @@ $spotlightToolCard = '<article><h3 class="mb-2 text-sm font-semibold uppercase t
 $spotlightPlaceholderOneCard = $spotlightPlaceholderCard((string) $homeI18n['spotlight_sub_1'], (string) $homeI18n['spotlight_sub_placeholder']);
 $spotlightPlaceholderThreeCard = $spotlightPlaceholderCard((string) $homeI18n['spotlight_sub_3'], (string) $homeI18n['spotlight_sub_placeholder']);
 
-$homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols-2">'
+$homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols-3">'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="flex items-start justify-between gap-4">'
     . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_sponsors_title'] ?? 'Nos sponsors')) . '</h2>'
@@ -475,6 +475,16 @@ $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols
     . '<div class="rounded-2xl border border-amber-200 bg-amber-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-amber-700">HF</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_1_title'] ?? 'Concours')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_1_desc'] ?? 'Participation et progression en trafic radio.')) . '</p></div>'
     . '<div class="rounded-2xl border border-blue-200 bg-blue-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-blue-700">VHF</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_2_title'] ?? 'Activations')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_2_desc'] ?? 'Sorties, essais et projets autour des antennes.')) . '</p></div>'
     . '<div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">CRD</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_3_title'] ?? 'Club')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_3_desc'] ?? 'Réalisations communes et engagement des membres.')) . '</p></div>'
+    . '</div>'
+    . '</article>'
+    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Autres sections')) . '</h2>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_other_sections_desc'] ?? 'Accédez rapidement aux espaces utiles pour suivre la vie du club, préparer une activité ou consulter les ressources publiques.')) . '</p>'
+    . '<div class="mt-4 grid gap-2">'
+    . '<a class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:bg-blue-50" href="' . e(route_url('news')) . '">' . e((string) ($homeI18n['home_other_news'] ?? 'Actualités du club')) . '</a>'
+    . '<a class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:bg-blue-50" href="' . e(route_url('events')) . '">' . e((string) ($homeI18n['home_other_events'] ?? 'Agenda et événements')) . '</a>'
+    . '<a class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:bg-blue-50" href="' . e(route_url('tools')) . '">' . e((string) ($homeI18n['home_other_tools'] ?? 'Outils radioamateurs')) . '</a>'
+    . '<a class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-blue-200 hover:bg-blue-50" href="' . e(route_url('articles')) . '">' . e((string) ($homeI18n['home_other_articles'] ?? 'Articles techniques')) . '</a>'
     . '</div>'
     . '</article>'
     . '</section>';
