@@ -483,7 +483,7 @@ $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols
     . '<span class="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">CRD</span>'
     . '</div>'
     . '<div class="mt-4">' . $adSlotHtml . '</div>'
-    . '<div class="mt-4 flex"><a class="inline-flex w-auto items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('sponsoring')) . '">' . e((string) ($homeI18n['home_sponsors_cta'] ?? 'Voir les possibilités de sponsoring')) . '</a></div>'
+    . '<div class="mt-4 flex"><a class="inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('sponsoring')) . '">' . e((string) ($homeI18n['home_sponsors_cta'] ?? 'Devenir sponsor')) . '</a></div>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="flex items-start justify-between gap-4">'
