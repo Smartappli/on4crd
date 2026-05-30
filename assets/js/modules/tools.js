@@ -720,9 +720,9 @@
             return 'â€”';
         }
         if (value >= 1000) {
-            return `${(value / 1000).toFixed(3)} kÎ©`;
+            return `${(value / 1000).toFixed(3)} kΩ`;
         }
-        return `${value.toFixed(2)} Î©`;
+        return `${value.toFixed(2)} Ω`;
     };
 
     const computeFilter = () => {
