@@ -2,3 +2,10 @@
 [data-route="dashboard"] .dashboard-module {
   min-width: 0;
 }
+
+[data-route="dashboard"] .dashboard-heading {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  color: var(--text);
+}

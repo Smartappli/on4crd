@@ -32,6 +32,15 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+[data-route="wiki"] .wiki-hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .wiki-grid {
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
 }

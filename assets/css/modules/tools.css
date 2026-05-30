@@ -10,6 +10,15 @@
   gap: 1rem;
 }
 
+[data-route="tools"] .tools-hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .tools-index {
   position: sticky;
   top: 1rem;

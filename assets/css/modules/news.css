@@ -2,3 +2,12 @@
 [data-route="news"] .news-module {
   min-width: 0;
 }
+
+[data-route="news"] .news-hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+}

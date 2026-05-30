@@ -155,7 +155,7 @@ ob_start();
 ?>
 <section class="page-hero">
     <div>
-        <p class="eyebrow"><?= e((string) $newsT['latest_news']) ?></p>
+        <p class="eyebrow news-hero-title"><?= e((string) $newsT['latest_news']) ?></p>
         <h1><?= e((string) $newsT['title']) ?></h1>
         <p class="help"><?= e((string) $newsT['search_lead']) ?></p>
     </div>
