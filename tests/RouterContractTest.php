@@ -164,4 +164,13 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString("'membership' => 'members'", $router);
         self::assertContains('search', $this->extractArrayValues($router, 'publicRoutes'));
     }
+
+    public function testAuthDoesNotCallPrivatePdoDatabaseConstructor(): void
+    {
+        $functions = file_get_contents(__DIR__ . '/../app/functions.php');
+        self::assertIsString($functions);
+
+        self::assertStringNotContainsString('new \\Delight\\Db\\PdoDatabase($pdo)', $functions);
+        self::assertStringContainsString('new \\Delight\\Auth\\Auth($pdo)', $functions);
+    }
 }

@@ -78,11 +78,7 @@ function auth(): ?\Delight\Auth\Auth
 
     $pdo = db();
     try {
-        if (class_exists(\Delight\Db\PdoDatabase::class)) {
-            $auth = new \Delight\Auth\Auth(new \Delight\Db\PdoDatabase($pdo));
-        } else {
-            $auth = new \Delight\Auth\Auth($pdo);
-        }
+        $auth = new \Delight\Auth\Auth($pdo);
     } catch (Throwable $throwable) {
         $auth = null;
         return null;
