@@ -628,16 +628,11 @@ $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols
     . '<span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-700">CRD</span>'
     . '</div>'
     . '<div class="mt-4">' . $trophySlotHtml . '</div>'
+    . '<a class="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('albums')) . '">' . e((string) ($homeI18n['home_trophies_cta'] ?? 'Voir la galerie')) . '</a>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Nouvelles des autres radioclubs')) . '</h2>'
     . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_other_sections_desc'] ?? 'Suivez les annonces, événements et initiatives relayés par les radioclubs voisins afin de garder le lien avec la communauté radioamateur.')) . '</p>'
-    . '<div class="mt-4 grid gap-2">'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_hf_title'] ?? 'Activités des clubs voisins')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_hf_desc'] ?? 'Réunions, portes ouvertes, présentations et nouvelles locales partagées par les autres associations radioamateurs.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_vhf_title'] ?? 'Événements et brocantes')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_vhf_desc'] ?? 'Salons, bourses, activations et rendez-vous publics organisés par les radioclubs de la région.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_digital_title'] ?? 'Formations et conférences')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_digital_desc'] ?? 'Cours, ateliers techniques, conférences et retours d’expérience proposés par les clubs partenaires.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"><h3 class="text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_section_activation_title'] ?? 'Relais et projets partagés')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_section_activation_desc'] ?? 'Mises à jour de relais, expérimentations collectives et projets communs ouverts aux radioamateurs.')) . '</p></div>'
-    . '</div>'
     . '</article>'
     . '</section>';
 
@@ -716,12 +711,12 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><h3 class="text-lg font-semibold text-slate-900">' . e((string) ($homeI18n['join_benefit_3_title'] ?? 'Un réseau local actif')) . '</h3><p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['join_benefit_3_desc'] ?? 'Le CRD facilite les contacts entre passionnés, l’accès aux informations utiles et la participation à la vie du club.')) . '</p></article>'
     . '</div>'
     . '</section>'
+    . $memberModulesSectionHtml
     . '<section class="mt-4 grid gap-4 rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-50 to-white p-6 shadow-sm lg:grid-cols-[1.8fr_1fr] lg:items-center">'
     . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) $homeI18n['join_title']) . '</h2><p class="mt-2 text-slate-600">' . e((string) $homeI18n['join_desc']) . '</p></div>'
     . '<div class="grid gap-2">' . $primaryCta . $newsletterCta . '</div>'
     . '</section>'
     . $homeSponsorsTrophiesSectionHtml
-    . $memberModulesSectionHtml
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="grid gap-4 lg:grid-cols-[1.15fr_.85fr]">'
     . '<div class="grid gap-4">'
