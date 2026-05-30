@@ -2686,6 +2686,33 @@ function module_css_assets_for_route(string $route): array
     return $assets;
 }
 
+function module_js_assets_for_route(string $route): array
+{
+    $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+    $moduleByRoute = [
+        'event_view' => 'events',
+        'save_dashboard' => 'dashboard',
+        'widget_render' => 'dashboard',
+        'wiki_edit' => 'wiki_edit',
+    ];
+    $module = $moduleByRoute[$route] ?? $route;
+    $assets = [];
+
+    $candidates = [$module];
+    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'wiki_edit'], true)) {
+        $candidates[] = 'wysiwyg';
+    }
+
+    foreach (array_unique($candidates) as $candidate) {
+        $path = 'assets/js/modules/' . $candidate . '.js';
+        if (is_file(dirname(__DIR__) . '/' . $path)) {
+            $assets[] = $path;
+        }
+    }
+
+    return $assets;
+}
+
 function render_layout(string $content, string $title = ''): string
 {
     $flashes = consume_flashes();
@@ -2971,6 +2998,10 @@ function render_layout(string $content, string $title = ''): string
     foreach (module_css_assets_for_route($currentRoute) as $moduleCssPath) {
         $moduleCssHtml .= '<link rel="stylesheet" href="' . e(asset_url($moduleCssPath)) . '">';
     }
+    $moduleJsHtml = '';
+    foreach (module_js_assets_for_route($currentRoute) as $moduleJsPath) {
+        $moduleJsHtml .= '<script nonce="' . e($nonce) . '" src="' . e(asset_url($moduleJsPath)) . '" defer></script>';
+    }
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
@@ -2994,6 +3025,7 @@ function render_layout(string $content, string $title = ''): string
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
+        . $moduleJsHtml
         . '</body></html>';
 }
 }

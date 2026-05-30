@@ -602,12 +602,6 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '</section>';
 
 
-$homeScriptNonce = csp_nonce();
-ob_start();
-include __DIR__ . '/home_script_ham_weather.js.php';
-$homeWeatherScript = trim((string) ob_get_clean());
-$content .= '<script nonce="' . e($homeScriptNonce) . '">' . $homeWeatherScript . '</script>';
-
 echo render_layout($content, (string) ($homeI18n['page_title'] ?? 'Accueil'));
 
 
