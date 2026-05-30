@@ -382,6 +382,23 @@ if (is_array($featuredAd) && !empty($featuredAd['title'])) {
         : $adInner;
 }
 
+$trophySlotHtml = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500"><p class="mt-2">' . e((string) ($homeI18n['home_trophies_empty'] ?? 'Les trophées du club seront affichés ici.')) . '</p></div>';
+try {
+    $localTrophyCandidates = cache_remember('home_local_trophy_candidates_v1', 300, static function (): array {
+        return glob(__DIR__ . '/../assets/trophy/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
+    });
+} catch (Throwable) {
+    $localTrophyCandidates = [];
+}
+if ($localTrophyCandidates !== []) {
+    $localTrophyPath = 'assets/trophy/' . basename((string) $localTrophyCandidates[array_rand($localTrophyCandidates)]);
+    $trophySlotHtml = '<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">'
+        . '<div class="overflow-hidden rounded-lg aspect-square w-full">'
+        . '<img class="h-full w-full object-cover" src="' . e(asset_url($localTrophyPath)) . '" alt="' . e((string) ($homeI18n['alt_trophy_image'] ?? 'Trophée du club')) . '" loading="lazy" decoding="async">'
+        . '</div>'
+        . '</div>';
+}
+
 $ubaLogoPath = 'assets/logo/UBA-Logo-Couleur-MID2.png';
 $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = $homeSafeWidget('open_meteo');
@@ -466,16 +483,15 @@ $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols
     . '<span class="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">CRD</span>'
     . '</div>'
     . '<div class="mt-4">' . $adSlotHtml . '</div>'
-    . '<a class="mt-4 inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('sponsoring')) . '">' . e((string) ($homeI18n['home_sponsors_cta'] ?? 'Voir les possibilités de sponsoring')) . '</a>'
+    . '<div class="mt-4 flex"><a class="inline-flex w-auto items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('sponsoring')) . '">' . e((string) ($homeI18n['home_sponsors_cta'] ?? 'Voir les possibilités de sponsoring')) . '</a></div>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
-    . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '</h2>'
-    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_trophies_desc'] ?? 'Les activités du club valorisent la technique, la participation aux concours et les réalisations collectives.')) . '</p>'
-    . '<div class="mt-4 grid gap-3 sm:grid-cols-3">'
-    . '<div class="rounded-2xl border border-amber-200 bg-amber-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-amber-700">HF</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_1_title'] ?? 'Concours')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_1_desc'] ?? 'Participation et progression en trafic radio.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-blue-200 bg-blue-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-blue-700">VHF</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_2_title'] ?? 'Activations')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_2_desc'] ?? 'Sorties, essais et projets autour des antennes.')) . '</p></div>'
-    . '<div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">CRD</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_3_title'] ?? 'Club')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_3_desc'] ?? 'Réalisations communes et engagement des membres.')) . '</p></div>'
+    . '<div class="flex items-start justify-between gap-4">'
+    . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '</h2>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_trophies_desc'] ?? 'Les activités du club valorisent la technique, la participation aux concours et les réalisations collectives.')) . '</p></div>'
+    . '<span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-700">CRD</span>'
     . '</div>'
+    . '<div class="mt-4">' . $trophySlotHtml . '</div>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Dans les autres sections')) . '</h2>'
