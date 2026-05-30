@@ -358,6 +358,27 @@ $spotlightToolCard = '<article><h3 class="mb-2 text-sm font-semibold uppercase t
 $spotlightPlaceholderOneCard = $spotlightPlaceholderCard((string) $homeI18n['spotlight_sub_1'], (string) $homeI18n['spotlight_sub_placeholder']);
 $spotlightPlaceholderThreeCard = $spotlightPlaceholderCard((string) $homeI18n['spotlight_sub_3'], (string) $homeI18n['spotlight_sub_placeholder']);
 
+$homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols-2">'
+    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<div class="flex items-start justify-between gap-4">'
+    . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_sponsors_title'] ?? 'Nos sponsors')) . '</h2>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_sponsors_desc'] ?? 'Des partenaires locaux et radioamateurs soutiennent les activités, les projets et la visibilité du CRD.')) . '</p></div>'
+    . '<span class="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700">CRD</span>'
+    . '</div>'
+    . '<div class="mt-4">' . $adSlotHtml . '</div>'
+    . '<a class="mt-4 inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('sponsoring')) . '">' . e((string) ($homeI18n['home_sponsors_cta'] ?? 'Voir les possibilités de sponsoring')) . '</a>'
+    . '</article>'
+    . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
+    . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '</h2>'
+    . '<p class="mt-2 text-sm leading-6 text-slate-600">' . e((string) ($homeI18n['home_trophies_desc'] ?? 'Les activités du club valorisent la technique, la participation aux concours et les réalisations collectives.')) . '</p>'
+    . '<div class="mt-4 grid gap-3 sm:grid-cols-3">'
+    . '<div class="rounded-2xl border border-amber-200 bg-amber-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-amber-700">HF</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_1_title'] ?? 'Concours')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_1_desc'] ?? 'Participation et progression en trafic radio.')) . '</p></div>'
+    . '<div class="rounded-2xl border border-blue-200 bg-blue-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-blue-700">VHF</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_2_title'] ?? 'Activations')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_2_desc'] ?? 'Sorties, essais et projets autour des antennes.')) . '</p></div>'
+    . '<div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">CRD</p><h3 class="mt-2 text-sm font-bold text-slate-900">' . e((string) ($homeI18n['home_trophy_3_title'] ?? 'Club')) . '</h3><p class="mt-1 text-xs leading-5 text-slate-600">' . e((string) ($homeI18n['home_trophy_3_desc'] ?? 'Réalisations communes et engagement des membres.')) . '</p></div>'
+    . '</div>'
+    . '</article>'
+    . '</section>';
+
 $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm" aria-label="' . e((string) $homeI18n['quote_aria']) . '">'
     . '<h2 class="text-xl font-bold text-slate-900">' . e((string) $homeI18n['quote_day']) . '</h2>'
@@ -425,6 +446,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div><h2 class="text-2xl font-extrabold text-slate-900">' . e((string) $homeI18n['join_title']) . '</h2><p class="mt-2 text-slate-600">' . e((string) $homeI18n['join_desc']) . '</p></div>'
     . '<div class="grid gap-2">' . $primaryCta . $newsletterCta . '</div>'
     . '</section>'
+    . $homeSponsorsTrophiesSectionHtml
     . '<section class="mt-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<div class="grid gap-4 lg:grid-cols-[1.15fr_.85fr]">'
     . '<div class="grid gap-4">'
