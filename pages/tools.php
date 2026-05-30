@@ -423,6 +423,6 @@ ob_start();
     <p id="grid-tool-error" class="flash flash-error is-hidden" style="margin-top:1rem;"></p>
 </section>
 
-<script nonce="<?= e(csp_nonce()) ?>">window.toolsI18n = <?= json_encode($jsI18n, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;</script>
+<script type="application/json" id="tools-i18n"><?= e(json_encode($jsI18n, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?></script>
 <?php
 echo render_layout((string) ob_get_clean(), $tr('title', 'Outils radioamateur'));

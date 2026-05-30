@@ -173,6 +173,27 @@ ob_start();
             <h1><?= e($t('members_title')) ?></h1>
             <p class="directory-lead"><?= e($t('intro')) ?></p>
         </div>
+        <div class="directory-hero-stats" aria-label="<?= e($t('club_numbers')) ?>">
+            <article>
+                <span><?= e($t('member_list')) ?></span>
+                <strong><?= e((string) $activeMembersCount) ?></strong>
+            </article>
+            <article>
+                <span><?= e($t('visible_members')) ?></span>
+                <strong><?= e((string) $visibleMembersCount) ?></strong>
+            </article>
+            <article>
+                <span><?= e($t('uba_members')) ?></span>
+                <strong><?= e((string) $ubaMembersCount) ?></strong>
+            </article>
+            <article>
+                <span><?= e($t('committee')) ?></span>
+                <strong><?= e((string) $committeeMembersCount) ?></strong>
+            </article>
+        </div>
+    </section>
+
+    <section class="directory-toolbar">
         <form class="directory-search-panel" method="get" action="<?= e(base_url('index.php')) ?>">
             <input type="hidden" name="route" value="directory">
             <label>
@@ -198,25 +219,6 @@ ob_start();
                 <?php endif; ?>
             </div>
         </form>
-    </section>
-
-    <section class="directory-stats" aria-label="<?= e($t('club_numbers')) ?>">
-        <article class="directory-stat">
-            <span><?= e((string) $activeMembersCount) ?></span>
-            <p><?= e($t('member_list')) ?></p>
-        </article>
-        <article class="directory-stat">
-            <span><?= e((string) $visibleMembersCount) ?></span>
-            <p><?= e($t('visible_members')) ?></p>
-        </article>
-        <article class="directory-stat">
-            <span><?= e((string) $ubaMembersCount) ?></span>
-            <p><?= e($t('uba_members')) ?></p>
-        </article>
-        <article class="directory-stat">
-            <span><?= e((string) $committeeMembersCount) ?></span>
-            <p><?= e($t('committee')) ?></p>
-        </article>
     </section>
 
     <section class="directory-results">

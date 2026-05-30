@@ -1,5 +1,14 @@
 (function () {
-  const config = window.dinnerReservationConfig || {};
+  const configNode = document.getElementById('dinner-reservation-config');
+  let config = window.dinnerReservationConfig || {};
+  if (configNode) {
+    try {
+      const parsed = JSON.parse(configNode.textContent || '{}');
+      if (parsed && typeof parsed === 'object') config = parsed;
+    } catch (_error) {
+      config = {};
+    }
+  }
   const starterOptions = config.starterOptions || {};
   const mainOptions = config.mainOptions || {};
   const dessertOptions = config.dessertOptions || {};

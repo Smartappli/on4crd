@@ -1,5 +1,15 @@
 ﻿(function () {
-    const i18n = window.toolsI18n || {};
+    const readJsonConfig = (id, fallback) => {
+        const node = document.getElementById(id);
+        if (!node) return fallback;
+        try {
+            const parsed = JSON.parse(node.textContent || '{}');
+            return parsed && typeof parsed === 'object' ? parsed : fallback;
+        } catch (_error) {
+            return fallback;
+        }
+    };
+    const i18n = readJsonConfig('tools-i18n', window.toolsI18n || {});
     const toMaidenhead = (latitude, longitude, precision = 6) => {
         const safeLat = Math.max(-89.999999, Math.min(89.999999, latitude));
         const safeLon = Math.max(-179.999999, Math.min(179.999999, longitude));

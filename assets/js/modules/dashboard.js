@@ -1,12 +1,24 @@
 ﻿(function () {
   const grid = document.getElementById('dashboard-grid');
-  if (!grid || !window.dashboardConfig) {
+  const readDashboardConfig = () => {
+    if (grid?.dataset.config) {
+      try {
+        const parsed = JSON.parse(grid.dataset.config);
+        if (parsed && typeof parsed === 'object') return parsed;
+      } catch (_error) {
+        return {};
+      }
+    }
+    return window.dashboardConfig || {};
+  };
+  const dashboardConfig = readDashboardConfig();
+  if (!grid || !dashboardConfig.renderBase) {
     return;
   }
 
-  const renderBase = window.dashboardConfig.renderBase;
-  const csrf = window.dashboardConfig.csrf;
-  const saveEnabled = Boolean(window.dashboardConfig.saveEnabled);
+  const renderBase = dashboardConfig.renderBase;
+  const csrf = dashboardConfig.csrf;
+  const saveEnabled = Boolean(dashboardConfig.saveEnabled);
   const saveButton = document.getElementById('save-dashboard');
   const saveStatus = document.getElementById('dashboard-save-status');
   const addWidgetContainer = document.querySelector('.split-home aside .stack');
@@ -49,7 +61,7 @@
         }
         return { key, config };
       }).filter(Boolean);
-      const response = await fetch(window.dashboardConfig.saveUrl, {
+      const response = await fetch(dashboardConfig.saveUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -211,8 +223,17 @@
 })();
 
 (function () {
-  if (!window.dashboardConfig) return;
-  const refreshMs = Number(window.dashboardConfig.refreshMs || 0);
+  const grid = document.getElementById('dashboard-grid');
+  let dashboardConfig = window.dashboardConfig || {};
+  if (grid?.dataset.config) {
+    try {
+      const parsed = JSON.parse(grid.dataset.config);
+      if (parsed && typeof parsed === 'object') dashboardConfig = parsed;
+    } catch (_error) {
+      dashboardConfig = {};
+    }
+  }
+  const refreshMs = Number(dashboardConfig.refreshMs || 0);
   if (!refreshMs) return;
 
   const inFlightWidgets = new Set();
@@ -224,7 +245,7 @@
     if (!widgetKey || !body || inFlightWidgets.has(widgetKey)) return;
 
     inFlightWidgets.add(widgetKey);
-    fetch(window.dashboardConfig.renderBase + encodeURIComponent(widgetKey), {
+    fetch(dashboardConfig.renderBase + encodeURIComponent(widgetKey), {
       headers: { 'X-Requested-With': 'XMLHttpRequest' },
       credentials: 'same-origin'
     })
@@ -345,7 +366,16 @@
 
 // Dashboard lazy widget previews
 (() => {
-  const config = window.dashboardConfig || {};
+  const grid = document.getElementById('dashboard-grid');
+  let config = window.dashboardConfig || {};
+  if (grid?.dataset.config) {
+    try {
+      const parsed = JSON.parse(grid.dataset.config);
+      if (parsed && typeof parsed === 'object') config = parsed;
+    } catch (_error) {
+      config = {};
+    }
+  }
   const renderBase = typeof config.renderBase === 'string' ? config.renderBase : '';
   if (!renderBase) return;
 
