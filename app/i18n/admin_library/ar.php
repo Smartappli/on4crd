@@ -33,7 +33,7 @@ return array (
   'ok_category_deleted' => 'Category deleted. Its documents were moved to General.',
   'ok_deleted' => 'Document deleted.',
   'empty' => 'No document in the library yet.',
-  'confirm_delete' => 'Delete this item permanently?',
+  'confirm_delete' => 'حذف هذا العنصر نهائيا؟',
   'delete_document' => 'حذف المستند',
   'tags_ph' => 'Tags',
   'tags_help' => 'Example: legal,safety,training',

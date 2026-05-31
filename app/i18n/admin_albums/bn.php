@@ -49,10 +49,10 @@ return array (
   'upload_help' => 'Accepted formats: JPG, PNG and WEBP. Maximum size: 8 MB per image.',
   'no_albums' => 'No album has been created yet.',
   'view_public' => 'View public page',
-  'confirm_delete_album' => 'Delete this album and all its photos?',
+  'confirm_delete_album' => 'এই অ্যালবাম ও সব ছবি মুছে ফেলবেন?',
   'delete_album' => 'Delete album',
   'no_photos' => 'No photo has been uploaded yet.',
   'open' => 'খুলুন',
   'photo' => 'Photo',
-  'confirm_delete_photo' => 'Delete this photo permanently?',
+  'confirm_delete_photo' => 'এই ছবিটি স্থায়ীভাবে মুছে ফেলবেন?',
 );

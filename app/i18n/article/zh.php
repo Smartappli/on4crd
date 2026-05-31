@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 return array (
   'not_found' => '未找到文章。',
   'layout_article' => '文章',
@@ -8,10 +10,10 @@ return array (
   'previous_article' => 'Previous article',
   'next_article' => 'Next article',
   'related_articles' => 'Related articles',
-  'favorite_label' => '??',
-  'favorite_added' => '?????',
-  'favorite_removed' => '?????',
-  'favorite_added_msg' => '????????',
-  'favorite_removed_msg' => '??????????',
-  'default_article_title' => '??',
+  'favorite_label' => '收藏',
+  'favorite_added' => '已加入收藏',
+  'favorite_removed' => '已从收藏移除',
+  'favorite_added_msg' => '文章已加入收藏。',
+  'favorite_removed_msg' => '文章已从收藏移除。',
+  'default_article_title' => '文章',
 );

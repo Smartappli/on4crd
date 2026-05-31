@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Citação do dia',
   'ham_weather' => 'Meteorologia radioamador',
   'ham_weather_desc' => 'As recomendações são calculadas automaticamente com base na sua localização, hora, meteorologia e propagação para identificar as bandas e modos mais favoráveis para QSO.',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Classificados',
   'spotlight_classifieds_empty' => 'Não há classificados ativos no momento.',
   'spotlight_classifieds_cta' => 'Ver classificados',
-
   'spotlight_tool_day' => 'Notícia / Anúncio',
   'spotlight_for_sale' => 'Próximos eventos',
   'spotlight_auction_live' => 'Ferramenta do dia',
@@ -69,7 +68,7 @@ return [
   'spotlight_member_article_empty' => 'Nao ha artigo publicado de momento.',
   'spotlight_member_updated_on' => 'Atualizado em',
   'spotlight_member_library' => 'Biblioteca',
-  'spotlight_member_auctions' => 'Leil?es',
+  'spotlight_member_auctions' => 'Leilões',
   'spotlight_member_assistant' => 'Assistente',
   'home_other_sections_title' => 'Notícias de outros radioclubes',
   'home_other_sections_desc' => 'Acompanhe anuncios, eventos e iniciativas partilhados por radioclubes vizinhos para manter a ligacao com a comunidade radioamadora.',
@@ -142,4 +141,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Citação em destaque',
   'clock_aria' => 'Relógios UTC e local',
-];
+);

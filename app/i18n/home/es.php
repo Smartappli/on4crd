@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Cita del día',
   'ham_weather' => 'Meteorología para radioaficionados',
   'ham_weather_desc' => 'Las recomendaciones se calculan automáticamente según su ubicación, hora, meteorología y propagación para identificar las bandas y modos más favorables para QSO.',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Anuncios clasificados',
   'spotlight_classifieds_empty' => 'No hay anuncios clasificados activos por el momento.',
   'spotlight_classifieds_cta' => 'Ver anuncios',
-
   'spotlight_tool_day' => 'Actualidad / Anuncio',
   'spotlight_for_sale' => 'Próximos eventos',
   'spotlight_auction_live' => 'Herramienta del día',
@@ -58,10 +57,10 @@ return [
   'spotlight_sub_3' => 'Buscar',
   'spotlight_sub_placeholder' => 'Contenido disponible próximamente.',
   'spotlight_tool_day_item' => 'Cálculo de grid desde una dirección postal',
-  'spotlight_tool_day_cta' => 'M?s herramientas',
-  'spotlight_member_wiki_articles' => 'Wiki / Art?culos',
+  'spotlight_tool_day_cta' => 'Más herramientas',
+  'spotlight_member_wiki_articles' => 'Wiki / Artículos',
   'spotlight_member_wiki' => 'Wiki',
-  'spotlight_member_articles' => 'Art?culos',
+  'spotlight_member_articles' => 'Artículos',
   'spotlight_member_latest_wiki' => 'Ultima pagina wiki',
   'spotlight_member_latest_article' => 'Ultimo articulo',
   'spotlight_member_gallery' => 'Galería',
@@ -142,4 +141,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Cita destacada',
   'clock_aria' => 'Relojes UTC y local',
-];
+);

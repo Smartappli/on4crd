@@ -99,7 +99,7 @@ return array (
   'create_help' => 'Choose your goal: detailed manual creation or instant ADIF import.',
   'step_a' => 'Step A',
   'step_b' => 'Step B',
-  'need_now' => 'What do you need now?',
+  'need_now' => 'Di cosa hai bisogno ora?',
   'manual_flow' => 'Create a manual QSL',
   'adif_flow' => 'Import ADIF QSOs',
   'guided_manual_form' => 'Guided manual form',

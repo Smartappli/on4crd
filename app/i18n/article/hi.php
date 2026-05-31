@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 return array (
   'not_found' => 'लेख नहीं मिला।',
   'layout_article' => 'लेख',
@@ -8,10 +10,10 @@ return array (
   'previous_article' => 'Previous article',
   'next_article' => 'Next article',
   'related_articles' => 'Related articles',
-  'favorite_label' => '???????',
-  'favorite_added' => '??????? ????? ???',
-  'favorite_removed' => '??????? ????? ???',
-  'favorite_added_msg' => '??? ??????? ??? ????? ????',
-  'favorite_removed_msg' => '??? ??????? ?? ????? ????',
-  'default_article_title' => '???',
+  'favorite_label' => 'पसंदीदा',
+  'favorite_added' => 'पसंदीदा में जोड़ा गया',
+  'favorite_removed' => 'पसंदीदा से हटाया गया',
+  'favorite_added_msg' => 'लेख पसंदीदा में जोड़ा गया।',
+  'favorite_removed_msg' => 'लेख पसंदीदा से हटाया गया।',
+  'default_article_title' => 'लेख',
 );

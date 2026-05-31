@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Zitat des Tages',
   'ham_weather' => 'Funkwetter',
   'ham_weather_desc' => 'Die Empfehlungen werden automatisch aus Standort, Tageszeit, Wetter und Ausbreitung berechnet, um die besten Bänder und Betriebsarten für QSOs zu ermitteln.',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Kleinanzeigen',
   'spotlight_classifieds_empty' => 'Derzeit keine aktiven Kleinanzeigen.',
   'spotlight_classifieds_cta' => 'Kleinanzeigen ansehen',
-
   'spotlight_tool_day' => 'Nachricht / Ankündigung',
   'spotlight_for_sale' => 'Nächste Ereignisse',
   'spotlight_auction_live' => 'Werkzeug des Tages',
@@ -81,7 +80,7 @@ return [
   'home_section_digital_desc' => 'Kurse, technische Workshops, Vortraege und Erfahrungsberichte von Partnerclubs.',
   'home_section_activation_title' => 'Relais und gemeinsame Projekte',
   'home_section_activation_desc' => 'Relais-Updates, gemeinsame Experimente und Projekte fuer Funkamateure.',
-  'spotlight_member_open' => '?ffnen',
+  'spotlight_member_open' => 'Öffnen',
   'repeater_title' => 'Unser Relais',
   'repeater_desc' => 'Finden Sie die wichtigsten Informationen über unser Relais und seine Parameter.',
   'repeater_cta' => 'Relaisinformationen ansehen',
@@ -142,4 +141,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Hervorgehobenes Zitat',
   'clock_aria' => 'UTC- und Ortszeituhren',
-];
+);

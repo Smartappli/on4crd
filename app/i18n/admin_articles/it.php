@@ -42,7 +42,7 @@ return array (
   'err_invalid_article' => 'Invalid article.',
   'ok_deleted' => 'Article deleted.',
   'slug_placeholder' => 'generated-from-title',
-  'confirm_delete' => 'Delete this article?',
+  'confirm_delete' => 'Eliminare questo articolo?',
   'delete_article' => 'Delete article',
   'search' => 'Search',
   'all_statuses' => 'All statuses',
