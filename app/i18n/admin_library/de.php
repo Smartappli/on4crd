@@ -18,7 +18,7 @@ return array (
   'next' => 'Weiter',
   'page' => 'Seite',
   'err_required' => 'Es sind ein Titel und ein Dokument erforderlich.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'Die Datei muss ein gueltiges PDF-, DOCX-, TXT-, Markdown- oder HTML-Dokument sein.',
   'err_size' => 'Das Dokument überschreitet die zulässige Grenze von 25 MB.',
   'err_upload' => 'Das Hochladen des Dokuments ist fehlgeschlagen.',
   'ok_added' => 'Dokument zur Mitgliedsbibliothek hinzugefügt.',

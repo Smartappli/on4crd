@@ -18,7 +18,7 @@ return array (
   'next' => '次へ',
   'page' => 'ページ',
   'err_required' => 'タイトルと書類が必要です。',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'ファイルは有効な PDF、DOCX、TXT、Markdown、または HTML ドキュメントである必要があります。',
   'err_size' => 'ドキュメントは許容制限の 25 MB を超えています。',
   'err_upload' => 'ドキュメントのアップロードに失敗しました。',
   'ok_added' => 'ドキュメントがメンバー ライブラリに追加されました。',

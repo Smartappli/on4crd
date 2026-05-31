@@ -18,7 +18,7 @@ return array (
   'next' => '下一页',
   'page' => '页',
   'err_required' => '需要标题和文件。',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => '文件必须是有效的 PDF、DOCX、TXT、Markdown 或 HTML 文档。',
   'err_size' => '该文档超出了 25 MB 的允许限制。',
   'err_upload' => '文档上传失败。',
   'ok_added' => '文档已添加至成员库。',

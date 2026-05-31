@@ -18,7 +18,7 @@ return array (
   'next' => 'التالي',
   'page' => 'صفحة',
   'err_required' => 'مطلوب عنوان ووثيقة.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'يجب أن يكون الملف مستند PDF أو DOCX أو TXT أو Markdown أو HTML صالحًا.',
   'err_size' => 'يتجاوز المستند الحد المسموح به وهو 25 ميجابايت.',
   'err_upload' => 'فشل تحميل المستند.',
   'ok_added' => 'تمت إضافة المستند إلى مكتبة الأعضاء.',

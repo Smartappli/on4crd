@@ -18,7 +18,7 @@ return array (
   'next' => 'Volgende',
   'page' => 'Pagina',
   'err_required' => 'Een titel en een document zijn vereist.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'Het bestand moet een geldig PDF-, DOCX-, TXT-, Markdown- of HTML-document zijn.',
   'err_size' => 'Het document overschrijdt de toegestane limiet van 25 MB.',
   'err_upload' => 'Het uploaden van het document is mislukt.',
   'ok_added' => 'Document toegevoegd aan de ledenbibliotheek.',

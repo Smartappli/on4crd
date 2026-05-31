@@ -18,7 +18,7 @@ return array (
   'next' => 'Вперед',
   'page' => 'Страница',
   'err_required' => 'Требуется титул и документ.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'Файл должен быть действительным документом PDF, DOCX, TXT, Markdown или HTML.',
   'err_size' => 'Размер документа превышает разрешенный лимит в 25 МБ.',
   'err_upload' => 'Загрузка документа не удалась.',
   'ok_added' => 'Документ добавлен в библиотеку участников.',

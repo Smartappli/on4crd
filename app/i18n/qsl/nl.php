@@ -89,7 +89,7 @@ return array (
   'preset_forest' => 'Bos',
   'preset_slate' => 'Leisteen',
   'table_background' => 'Achtergrond',
-  'table_type' => 'Vriendelijk',
+  'table_type' => 'Type',
   'table_default' => 'Standaard',
   'table_actions' => 'Acties',
   'type_image' => 'Afbeelding',

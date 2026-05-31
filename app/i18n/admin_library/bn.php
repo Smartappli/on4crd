@@ -18,7 +18,7 @@ return array (
   'next' => 'পরের',
   'page' => 'পাতা',
   'err_required' => 'একটি শিরোনাম এবং একটি নথি প্রয়োজন.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'ফাইলটি একটি বৈধ PDF, DOCX, TXT, Markdown বা HTML নথি হতে হবে।',
   'err_size' => 'নথিটি 25 MB এর অনুমোদিত সীমা অতিক্রম করেছে৷',
   'err_upload' => 'দস্তাবেজ আপলোড ব্যর্থ হয়েছে.',
   'ok_added' => 'সদস্য লাইব্রেরিতে নথি যোগ করা হয়েছে।',

@@ -18,7 +18,7 @@ return array (
   'next' => 'Berikutnya',
   'page' => 'Halaman',
   'err_required' => 'Judul dan dokumen diperlukan.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'File harus berupa dokumen PDF, DOCX, TXT, Markdown, atau HTML yang valid.',
   'err_size' => 'Dokumen tersebut melebihi batas yang diizinkan yaitu 25 MB.',
   'err_upload' => 'Pengunggahan dokumen gagal.',
   'ok_added' => 'Dokumen ditambahkan ke perpustakaan anggota.',

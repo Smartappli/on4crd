@@ -18,7 +18,7 @@ return array (
   'next' => 'अगला',
   'page' => 'पेज',
   'err_required' => 'एक शीर्षक और एक दस्तावेज़ आवश्यक है.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'फ़ाइल एक मान्य PDF, DOCX, TXT, Markdown या HTML दस्तावेज़ होनी चाहिए।',
   'err_size' => 'दस्तावेज़ 25 एमबी की अनुमत सीमा से अधिक है।',
   'err_upload' => 'दस्तावेज़ अपलोड विफल रहा.',
   'ok_added' => 'दस्तावेज़ को सदस्य लाइब्रेरी में जोड़ा गया.',
