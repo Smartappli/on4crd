@@ -184,7 +184,7 @@ function table_has_index(string $table, string $index): bool
 if (!function_exists('supported_locales')) {
 function supported_locales(): array
 {
-    static $locales = ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+    static $locales = ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'bg', 'hr', 'cs', 'da', 'et', 'fi', 'el', 'hu', 'ga', 'lv', 'lt', 'mt', 'pl', 'ro', 'sk', 'sl', 'sv', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
     return $locales;
 }
 }
@@ -3218,6 +3218,23 @@ function render_layout(string $content, string $title = ''): string
         'es' => ['icon' => '🇪🇸', 'label' => 'Español'],
         'it' => ['icon' => '🇮🇹', 'label' => 'Italiano'],
         'pt' => ['icon' => '🇵🇹', 'label' => 'Português'],
+        'bg' => ['icon' => '🇧🇬', 'label' => 'Български'],
+        'hr' => ['icon' => '🇭🇷', 'label' => 'Hrvatski'],
+        'cs' => ['icon' => '🇨🇿', 'label' => 'Čeština'],
+        'da' => ['icon' => '🇩🇰', 'label' => 'Dansk'],
+        'et' => ['icon' => '🇪🇪', 'label' => 'Eesti'],
+        'fi' => ['icon' => '🇫🇮', 'label' => 'Suomi'],
+        'el' => ['icon' => '🇬🇷', 'label' => 'Ελληνικά'],
+        'hu' => ['icon' => '🇭🇺', 'label' => 'Magyar'],
+        'ga' => ['icon' => '🇮🇪', 'label' => 'Gaeilge'],
+        'lv' => ['icon' => '🇱🇻', 'label' => 'Latviešu'],
+        'lt' => ['icon' => '🇱🇹', 'label' => 'Lietuvių'],
+        'mt' => ['icon' => '🇲🇹', 'label' => 'Malti'],
+        'pl' => ['icon' => '🇵🇱', 'label' => 'Polski'],
+        'ro' => ['icon' => '🇷🇴', 'label' => 'Română'],
+        'sk' => ['icon' => '🇸🇰', 'label' => 'Slovenčina'],
+        'sl' => ['icon' => '🇸🇮', 'label' => 'Slovenščina'],
+        'sv' => ['icon' => '🇸🇪', 'label' => 'Svenska'],
         'ar' => ['icon' => '🇸🇦', 'label' => 'العربية'],
         'hi' => ['icon' => '🇮🇳', 'label' => 'हिन्दी'],
         'ja' => ['icon' => '🇯🇵', 'label' => '日本語'],
