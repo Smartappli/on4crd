@@ -120,6 +120,34 @@ $memberModuleDefinitions = [
     'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title' => ['fr' => 'Assistant', 'en' => 'Assistant'], 'desc' => ['fr' => 'Posez vos questions a l assistant ON4CRD pour retrouver rapidement une information utile.', 'en' => 'Ask the ON4CRD assistant to quickly find useful information.']],
     'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter'], 'desc' => ['fr' => 'Suivez les communications du club et gerez votre inscription aux nouvelles ON4CRD.', 'en' => 'Follow club communications and manage your ON4CRD news subscription.']],
 ];
+$memberModuleIconPaths = [
+    'dashboard' => '<rect width="7" height="9" x="3" y="3" rx="1.5"></rect><rect width="7" height="5" x="14" y="3" rx="1.5"></rect><rect width="7" height="9" x="14" y="12" rx="1.5"></rect><rect width="7" height="5" x="3" y="16" rx="1.5"></rect>',
+    'members' => '<path d="M18 21a6 6 0 0 0-12 0"></path><circle cx="12" cy="8" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path>',
+    'qsl' => '<rect width="18" height="14" x="3" y="5" rx="2"></rect><path d="m3 7 9 6 9-6"></path><path d="M7 17h4"></path>',
+    'library' => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2"></path><path d="M8 7h8"></path><path d="M8 11h6"></path>',
+    'auctions' => '<path d="m14 13-8.5 8.5"></path><path d="m9 8 7 7"></path><path d="m12 5 7 7"></path><path d="m5 11 7-7"></path><path d="m2 22 6-6"></path>',
+    'classifieds' => '<path d="M20.6 13.5 13.5 20.6a2 2 0 0 1-2.8 0L3 12.9V4h8.9l8.7 8.7a2 2 0 0 1 0 2.8Z"></path><circle cx="7.5" cy="7.5" r=".8"></circle>',
+    'chatbot' => '<path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="3"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M9 13v2"></path><path d="M15 13v2"></path>',
+    'newsletter' => '<path d="M4 4h16v16H4z"></path><path d="M8 8h8"></path><path d="M8 12h8"></path><path d="M8 16h5"></path>',
+];
+$memberModuleIconClasses = [
+    'dashboard' => 'border-sky-200 bg-sky-50 text-sky-700 group-hover:border-sky-300 group-hover:bg-sky-100',
+    'members' => 'border-emerald-200 bg-emerald-50 text-emerald-700 group-hover:border-emerald-300 group-hover:bg-emerald-100',
+    'qsl' => 'border-blue-200 bg-blue-50 text-blue-700 group-hover:border-blue-300 group-hover:bg-blue-100',
+    'library' => 'border-amber-200 bg-amber-50 text-amber-700 group-hover:border-amber-300 group-hover:bg-amber-100',
+    'auctions' => 'border-rose-200 bg-rose-50 text-rose-700 group-hover:border-rose-300 group-hover:bg-rose-100',
+    'classifieds' => 'border-cyan-200 bg-cyan-50 text-cyan-700 group-hover:border-cyan-300 group-hover:bg-cyan-100',
+    'chatbot' => 'border-violet-200 bg-violet-50 text-violet-700 group-hover:border-violet-300 group-hover:bg-violet-100',
+    'newsletter' => 'border-indigo-200 bg-indigo-50 text-indigo-700 group-hover:border-indigo-300 group-hover:bg-indigo-100',
+];
+$renderMemberModuleIcon = static function (string $moduleCode) use ($memberModuleIconPaths, $memberModuleIconClasses): string {
+    $path = $memberModuleIconPaths[$moduleCode] ?? '<rect width="7" height="7" x="3" y="3" rx="1.5"></rect><rect width="7" height="7" x="14" y="3" rx="1.5"></rect><rect width="7" height="7" x="14" y="14" rx="1.5"></rect><rect width="7" height="7" x="3" y="14" rx="1.5"></rect>';
+    $classes = $memberModuleIconClasses[$moduleCode] ?? 'border-slate-200 bg-slate-50 text-slate-700 group-hover:border-slate-300 group-hover:bg-slate-100';
+
+    return '<span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition ' . $classes . '" aria-hidden="true">'
+        . '<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' . $path . '</svg>'
+        . '</span>';
+};
 
 if (table_exists('modules')) {
     $whereVisibility = table_has_column('modules', 'visibility') ? " AND visibility = 'members'" : '';
