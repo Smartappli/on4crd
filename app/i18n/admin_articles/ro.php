@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Relansarea efectuată.',
   'retry_applied_published' => 'Relansare efectuată: articol publicat.',
   'retry_applied_rescheduled' => 'Relansare efectuată: resetare planificare (+1 oră).',
-  'retry_bulk_summary' => 'Memento de grup: ZXQ0QXZ publicat, ZXQ1QXZ reprogramat, mementouri ZXQ2QXZ, ZXQ3QXZ blocat.',
+  'retry_bulk_summary' => 'Memento de grup: %d publicat, %d reprogramat, mementouri %d, %d blocat.',
   'blocked_reasons' => 'Motive de blocare',
 );

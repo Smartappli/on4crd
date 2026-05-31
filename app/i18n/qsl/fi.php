@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dynaaminen esikatselu lomakekenttien mukaan.',
   'adif_processing' => 'ADIF-tiedostoja käsitellään...',
   'adif_import_error' => 'ADIF-tuonti epäonnistui.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO -tuonti(t) ZXQ1QXZ-tiedosto(ista).',
+  'adif_imported_status' => '{imported} QSO -tuonti(t) {files}-tiedosto(ista).',
   'design_help' => 'Valitse taustatyyppi. Lomake mukautuu automaattisesti ja esikatselu päivittyy livenä.',
   'label_solid' => 'Yksivärinen',
   'label_palette' => 'Ennalta määritetty paletti',

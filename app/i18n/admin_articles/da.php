@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Genlancering udført.',
   'retry_applied_published' => 'Genlancering udført: artikel offentliggjort.',
   'retry_applied_rescheduled' => 'Genstart udført: planlægningsnulstilling (+1 time).',
-  'retry_bulk_summary' => 'Gruppepåmindelse: ZXQ0QXZ offentliggjort, ZXQ1QXZ omlagt, ZXQ2QXZ påmindelser, ZXQ3QXZ blokeret.',
+  'retry_bulk_summary' => 'Gruppepåmindelse: %d offentliggjort, %d omlagt, %d påmindelser, %d blokeret.',
   'blocked_reasons' => 'Blokerende årsager',
 );

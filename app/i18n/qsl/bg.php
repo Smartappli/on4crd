@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Динамичен преглед според полетата на формата.',
   'adif_processing' => 'Извършва се обработка на ADIF файлове...',
   'adif_import_error' => 'Импортирането на ADIF е неуспешно.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO импорт(и) от ZXQ1QXZ файл(ове).',
+  'adif_imported_status' => '{imported} QSO импорт(и) от {files} файл(ове).',
   'design_help' => 'Изберете тип фон. Формулярът се адаптира автоматично и прегледът се актуализира на живо.',
   'label_solid' => 'Плътен цвят',
   'label_palette' => 'Предварително зададена палитра',

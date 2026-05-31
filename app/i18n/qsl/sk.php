@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dynamický náhľad podľa polí formulára.',
   'adif_processing' => 'Prebieha spracovanie súborov ADIF...',
   'adif_import_error' => 'Import ADIF zlyhal.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO import(y) zo súboru(ov) ZXQ1QXZ.',
+  'adif_imported_status' => '{imported} QSO import(y) zo súboru(ov) {files}.',
   'design_help' => 'Vyberte typ pozadia. Formulár sa automaticky prispôsobí a náhľad sa aktualizuje naživo.',
   'label_solid' => 'Jednofarebná',
   'label_palette' => 'Preddefinovaná paleta',

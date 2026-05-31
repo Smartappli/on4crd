@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Taaskäivitamine viidi läbi.',
   'retry_applied_published' => 'Taaskäivitamine teostatud: artikkel avaldatud.',
   'retry_applied_rescheduled' => 'Taaskäivitamine teostatud: planeerimise lähtestamine (+1 tund).',
-  'retry_bulk_summary' => 'Grupi meeldetuletus: ZXQ0QXZ on avaldatud, ZXQ1QXZ ajakava muudetud, ZXQ2QXZ meeldetuletused, ZXQ3QXZ blokeeritud.',
+  'retry_bulk_summary' => 'Grupi meeldetuletus: %d on avaldatud, %d ajakava muudetud, %d meeldetuletused, %d blokeeritud.',
   'blocked_reasons' => 'Blokeerimise põhjused',
 );

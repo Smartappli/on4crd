@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dinaminė peržiūra pagal formos laukus.',
   'adif_processing' => 'Apdorojami ADIF failai...',
   'adif_import_error' => 'Nepavyko importuoti ADIF.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO importavimas (-ai) iš ZXQ1QXZ failo (-ų).',
+  'adif_imported_status' => '{imported} QSO importavimas (-ai) iš {files} failo (-ų).',
   'design_help' => 'Pasirinkite fono tipą. Forma prisitaiko automatiškai, o peržiūra atnaujinama tiesiogiai.',
   'label_solid' => 'Vienspalvis',
   'label_palette' => 'Iš anksto nustatyta paletė',

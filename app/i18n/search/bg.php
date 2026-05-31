@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Съобщения',
   'source_albums' => 'Албуми',
   'results_title' => 'Резултати',
-  'results_for' => 'ZXQ0QXZ резултат(и) за "ZXQ1QXZ"',
+  'results_for' => '%d резултат(и) за "%s"',
   'start_title' => 'Започнете търсене',
   'start_hint' => 'Въведете поне два знака, за да разгледате съдържанието на сайта.',
   'open_result' => 'Отворете',

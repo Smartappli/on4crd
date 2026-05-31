@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Réamhamharc dinimiciúil de réir na réimsí foirme.',
   'adif_processing' => 'Comhaid ADIF á bpróiseáil ar siúl...',
   'adif_import_error' => 'Theip ar allmhairiú ADIF.',
-  'adif_imported_status' => 'Iompórtáil(í) ZXQ0QXZ QSO ó chomhad(í) ZXQ1QXZ.',
+  'adif_imported_status' => 'Iompórtáil(í) {imported} QSO ó chomhad(í) {files}.',
   'design_help' => 'Roghnaigh cineál cúlra. Déanann an fhoirm oiriúnú go huathoibríoch agus tá na nuashonruithe réamhamhairc beo.',
   'label_solid' => 'Dath soladach',
   'label_palette' => 'Pailéad réamhshainithe',

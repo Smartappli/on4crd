@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Ponovni zagon izveden.',
   'retry_applied_published' => 'Ponovni zagon izveden: članek objavljen.',
   'retry_applied_rescheduled' => 'Ponovni zagon je bil izveden: ponastavitev načrtovanja (+1 ura).',
-  'retry_bulk_summary' => 'Skupinski opomnik: ZXQ0QXZ objavljen, ZXQ1QXZ prestavljen, ZXQ2QXZ opomniki, ZXQ3QXZ blokiran.',
+  'retry_bulk_summary' => 'Skupinski opomnik: %d objavljen, %d prestavljen, %d opomniki, %d blokiran.',
   'blocked_reasons' => 'Razlogi za blokiranje',
 );

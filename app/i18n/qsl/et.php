@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dünaamiline eelvaade vastavalt vormiväljadele.',
   'adif_processing' => 'ADIF-failide töötlemine on pooleli...',
   'adif_import_error' => 'ADIF import ebaõnnestus.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO importimine ZXQ1QXZ-faili(de)st.',
+  'adif_imported_status' => '{imported} QSO importimine {files}-faili(de)st.',
   'design_help' => 'Valige tausta tüüp. Vorm kohandub automaatselt ja eelvaadet värskendatakse reaalajas.',
   'label_solid' => 'Ühevärviline',
   'label_palette' => 'Eelmääratletud palett',

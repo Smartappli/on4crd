@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dinamiskais priekšskatījums atbilstoši veidlapas laukiem.',
   'adif_processing' => 'Notiek ADIF failu apstrāde...',
   'adif_import_error' => 'ADIF importēšana neizdevās.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO importēšana(-i) no ZXQ1QXZ faila(-iem).',
+  'adif_imported_status' => '{imported} QSO importēšana(-i) no {files} faila(-iem).',
   'design_help' => 'Izvēlieties fona veidu. Veidlapa tiek automātiski pielāgota, un priekšskatījums tiek atjaunināts tiešraidē.',
   'label_solid' => 'Vienkrāsains',
   'label_palette' => 'Iepriekš noteikta palete',

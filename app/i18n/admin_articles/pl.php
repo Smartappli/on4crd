@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Ponowne uruchomienie przeprowadzone.',
   'retry_applied_published' => 'Przeprowadzono wznowienie: artykuł opublikowany.',
   'retry_applied_rescheduled' => 'Przeprowadzono ponowne uruchomienie: reset planowania (+1 godzina).',
-  'retry_bulk_summary' => 'Przypomnienie grupowe: ZXQ0QXZ opublikowane, ZXQ1QXZ przełożone, przypomnienia ZXQ2QXZ, ZXQ3QXZ zablokowane.',
+  'retry_bulk_summary' => 'Przypomnienie grupowe: %d opublikowane, %d przełożone, przypomnienia %d, %d zablokowane.',
   'blocked_reasons' => 'Powody blokowania',
 );

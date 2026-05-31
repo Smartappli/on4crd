@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Kilde tag',
   'tag_to_ph' => 'Kanonisk tag',
   'tag_duplicates_empty' => 'Der blev ikke fundet nogen duplikerede tagvarianter.',
-  'ok_tags_merged' => 'Tags slået sammen på ZXQ0QXZ dokument(er).',
+  'ok_tags_merged' => 'Tags slået sammen på %d dokument(er).',
   'ingestion_template' => 'Indtagelsesmodel',
   'ingestion_template_none' => 'Ingen',
   'ingestion_template_training' => 'Træning',

@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Anunturi',
   'source_albums' => 'Albume',
   'results_title' => 'Rezultate',
-  'results_for' => 'Rezultat(e) ZXQ0QXZ pentru „ZXQ1QXZ”',
+  'results_for' => 'Rezultat(e) %d pentru „%s”',
   'start_title' => 'Începeți o căutare',
   'start_hint' => 'Introduceți cel puțin două caractere pentru a explora conținutul site-ului.',
   'open_result' => 'Deschide',

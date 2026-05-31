@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Previzualizare dinamică în funcție de câmpurile formularului.',
   'adif_processing' => 'Se procesează fișierele ADIF în curs...',
   'adif_import_error' => 'Importul ADIF a eșuat.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO import(e) din fișier(ele) ZXQ1QXZ.',
+  'adif_imported_status' => '{imported} QSO import(e) din fișier(ele) {files}.',
   'design_help' => 'Alegeți un tip de fundal. Formularul se adaptează automat, iar previzualizarea se actualizează live.',
   'label_solid' => 'Culoare solidă',
   'label_palette' => 'Paletă predefinită',

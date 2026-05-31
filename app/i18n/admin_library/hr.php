@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Oznaka izvora',
   'tag_to_ph' => 'Kanonska oznaka',
   'tag_duplicates_empty' => 'Nisu otkrivene duple varijante oznake.',
-  'ok_tags_merged' => 'Oznake spojene na ZXQ0QXZ dokumentu(ima).',
+  'ok_tags_merged' => 'Oznake spojene na %d dokumentu(ima).',
   'ingestion_template' => 'Model gutanja',
   'ingestion_template_none' => 'Nijedan',
   'ingestion_template_training' => 'Trening',

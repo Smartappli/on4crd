@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Zdrojová značka',
   'tag_to_ph' => 'Kanonický štítok',
   'tag_duplicates_empty' => 'Nenašli sa žiadne duplicitné varianty značiek.',
-  'ok_tags_merged' => 'Značky sa zlúčili do dokumentov ZXQ0QXZ.',
+  'ok_tags_merged' => 'Značky sa zlúčili do dokumentov %d.',
   'ingestion_template' => 'Model požitia',
   'ingestion_template_none' => 'žiadne',
   'ingestion_template_training' => 'Školenie',

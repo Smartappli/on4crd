@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Provedeno opětovné spuštění.',
   'retry_applied_published' => 'Restartováno: článek publikován.',
   'retry_applied_rescheduled' => 'Provedeno opětovné spuštění: resetování plánování (+1 hodina).',
-  'retry_bulk_summary' => 'Skupinové připomenutí: ZXQ0QXZ zveřejněno, ZXQ1QXZ přeplánováno, ZXQ2QXZ připomenutí, ZXQ3QXZ blokováno.',
+  'retry_bulk_summary' => 'Skupinové připomenutí: %d zveřejněno, %d přeplánováno, %d připomenutí, %d blokováno.',
   'blocked_reasons' => 'Důvody blokování',
 );

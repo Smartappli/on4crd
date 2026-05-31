@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dynamisk forhåndsvisning i henhold til formularfelterne.',
   'adif_processing' => 'Behandler ADIF-filer i gang...',
   'adif_import_error' => 'ADIF import mislykkedes.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO import(er) fra ZXQ1QXZ fil(er).',
+  'adif_imported_status' => '{imported} QSO import(er) fra {files} fil(er).',
   'design_help' => 'Vælg en baggrundstype. Formularen tilpasser sig automatisk, og forhåndsvisningen opdateres live.',
   'label_solid' => 'Ensfarvet',
   'label_palette' => 'Foruddefineret palet',

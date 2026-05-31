@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Uudelleenkäynnistys suoritettu.',
   'retry_applied_published' => 'Uudelleenjulkaisu suoritettu: artikkeli julkaistu.',
   'retry_applied_rescheduled' => 'Uudelleenkäynnistys suoritettu: suunnittelun nollaus (+1 tunti).',
-  'retry_bulk_summary' => 'Ryhmämuistutus: ZXQ0QXZ julkaistu, ZXQ1QXZ ajoitettu uudelleen, ZXQ2QXZ-muistutukset, ZXQ3QXZ estetty.',
+  'retry_bulk_summary' => 'Ryhmämuistutus: %d julkaistu, %d ajoitettu uudelleen, %d-muistutukset, %d estetty.',
   'blocked_reasons' => 'Eston syyt',
 );

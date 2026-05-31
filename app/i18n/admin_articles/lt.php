@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Atliktas pakartotinis paleidimas.',
   'retry_applied_published' => 'Atliktas pakartotinis paleidimas: paskelbtas straipsnis.',
   'retry_applied_rescheduled' => 'Atliktas pakartotinis paleidimas: planavimo atstatymas (+1 val.).',
-  'retry_bulk_summary' => 'Grupės priminimas: ZXQ0QXZ paskelbtas, ZXQ1QXZ perkeltas, ZXQ2QXZ priminimai, ZXQ3QXZ užblokuotas.',
+  'retry_bulk_summary' => 'Grupės priminimas: %d paskelbtas, %d perkeltas, %d priminimai, %d užblokuotas.',
   'blocked_reasons' => 'Blokavimo priežastys',
 );

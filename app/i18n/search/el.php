@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Ανακοινώσεις',
   'source_albums' => 'Άλμπουμ',
   'results_title' => 'Αποτελέσματα',
-  'results_for' => 'ZXQ0QXZ αποτελέσματα για "ZXQ1QXZ"',
+  'results_for' => '%d αποτελέσματα για "%s"',
   'start_title' => 'Ξεκινήστε μια αναζήτηση',
   'start_hint' => 'Εισαγάγετε τουλάχιστον δύο χαρακτήρες για να εξερευνήσετε τα περιεχόμενα του ιστότοπου.',
   'open_result' => 'Ανοίξτε',

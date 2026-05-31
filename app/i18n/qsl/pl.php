@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Podgląd dynamiczny według pól formularza.',
   'adif_processing' => 'Trwa przetwarzanie plików ADIF...',
   'adif_import_error' => 'Import ADIF nie powiódł się.',
-  'adif_imported_status' => 'Import ZXQ0QXZ QSO z pliku(ów) ZXQ1QXZ.',
+  'adif_imported_status' => 'Import {imported} QSO z pliku(ów) {files}.',
   'design_help' => 'Wybierz typ tła. Formularz dostosowuje się automatycznie, a podgląd jest aktualizowany na bieżąco.',
   'label_solid' => 'Jednolity kolor',
   'label_palette' => 'Predefiniowana paleta',

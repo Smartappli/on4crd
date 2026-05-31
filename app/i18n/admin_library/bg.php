@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Изходен етикет',
   'tag_to_ph' => 'Каноничен етикет',
   'tag_duplicates_empty' => 'Не са открити дублиращи се варианти на маркер.',
-  'ok_tags_merged' => 'Етикети, обединени в ZXQ0QXZ документ(и).',
+  'ok_tags_merged' => 'Етикети, обединени в %d документ(и).',
   'ingestion_template' => 'Модел на поглъщане',
   'ingestion_template_none' => 'Няма',
   'ingestion_template_training' => 'обучение',

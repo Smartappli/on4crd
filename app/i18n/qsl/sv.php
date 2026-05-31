@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dynamisk förhandsgranskning enligt formulärfälten.',
   'adif_processing' => 'Bearbetar ADIF-filer pågår...',
   'adif_import_error' => 'ADIF-import misslyckades.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO import(er) från ZXQ1QXZ fil(er).',
+  'adif_imported_status' => '{imported} QSO import(er) från {files} fil(er).',
   'design_help' => 'Välj en bakgrundstyp. Formuläret anpassas automatiskt och förhandsvisningen uppdateras live.',
   'label_solid' => 'Enfärgad',
   'label_palette' => 'Fördefinierad palett',

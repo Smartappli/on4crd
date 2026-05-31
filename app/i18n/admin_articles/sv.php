@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Återlansering genomförd.',
   'retry_applied_published' => 'Nylansering genomförd: artikel publicerad.',
   'retry_applied_rescheduled' => 'Återstart utförd: återställning av planering (+1 timme).',
-  'retry_bulk_summary' => 'Grupppåminnelse: ZXQ0QXZ publicerad, ZXQ1QXZ omplanerad, ZXQ2QXZ-påminnelser, ZXQ3QXZ blockerad.',
+  'retry_bulk_summary' => 'Grupppåminnelse: %d publicerad, %d omplanerad, %d-påminnelser, %d blockerad.',
   'blocked_reasons' => 'Blockerande skäl',
 );

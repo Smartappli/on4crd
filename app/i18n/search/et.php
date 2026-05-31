@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Teated',
   'source_albums' => 'Albumid',
   'results_title' => 'Tulemused',
-  'results_for' => 'ZXQ0QXZ tulemus(ed) otsingule "ZXQ1QXZ"',
+  'results_for' => '%d tulemus(ed) otsingule "%s"',
   'start_title' => 'Alustage otsingut',
   'start_hint' => 'Sisestage saidi sisu uurimiseks vähemalt kaks tähemärki.',
   'open_result' => 'Avatud',

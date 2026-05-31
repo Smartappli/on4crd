@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Ilmoitukset',
   'source_albums' => 'Albumit',
   'results_title' => 'Tulokset',
-  'results_for' => 'ZXQ0QXZ tulos(t) haulle "ZXQ1QXZ"',
+  'results_for' => '%d tulos(t) haulle "%s"',
   'start_title' => 'Aloita haku',
   'start_hint' => 'Syötä vähintään kaksi merkkiä tutustuaksesi sivuston sisältöön.',
   'open_result' => 'Avaa',

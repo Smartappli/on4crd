@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Avota tags',
   'tag_to_ph' => 'Kanoniskā atzīme',
   'tag_duplicates_empty' => 'Nav konstatēti dublikāti tagu varianti.',
-  'ok_tags_merged' => 'Tagi sapludināti ZXQ0QXZ dokumentā(-os).',
+  'ok_tags_merged' => 'Tagi sapludināti %d dokumentā(-os).',
   'ingestion_template' => 'Norīšanas modelis',
   'ingestion_template_none' => 'Nav',
   'ingestion_template_training' => 'Apmācība',

@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Skelbimai',
   'source_albums' => 'Albumai',
   'results_title' => 'Rezultatai',
-  'results_for' => 'ZXQ0QXZ rezultatas (-ai) pagal „ZXQ1QXZ“',
+  'results_for' => '%d rezultatas (-ai) pagal „%s“',
   'start_title' => 'Pradėkite paiešką',
   'start_hint' => 'Įveskite bent du simbolius, kad peržiūrėtumėte svetainės turinį.',
   'open_result' => 'Atidaryti',

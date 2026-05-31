@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Preview dinamiku skond l-oqsma tal-formola.',
   'adif_processing' => 'Jipproċessaw fajls ADIF għaddejjin...',
   'adif_import_error' => 'L-importazzjoni ADIF falliet.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO importazzjoni(i) minn fajl(s) ZXQ1QXZ.',
+  'adif_imported_status' => '{imported} QSO importazzjoni(i) minn fajl(s) {files}.',
   'design_help' => 'Agħżel tip ta \'sfond. Il-formola tadatta awtomatikament u l-preview jaġġorna live.',
   'label_solid' => 'Kulur solidu',
   'label_palette' => 'Paletta predefinita',

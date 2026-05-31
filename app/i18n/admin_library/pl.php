@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Znacznik źródłowy',
   'tag_to_ph' => 'Znacznik kanoniczny',
   'tag_duplicates_empty' => 'Nie wykryto zduplikowanych wariantów tagu.',
-  'ok_tags_merged' => 'Tagi połączone w dokumentach ZXQ0QXZ.',
+  'ok_tags_merged' => 'Tagi połączone w dokumentach %d.',
   'ingestion_template' => 'Model spożycia',
   'ingestion_template_none' => 'Żadne',
   'ingestion_template_training' => 'Szkolenie',

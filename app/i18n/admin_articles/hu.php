@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Az újraindítás megtörtént.',
   'retry_applied_published' => 'Újraindítás megtörtént: cikk megjelent.',
   'retry_applied_rescheduled' => 'Újraindítás megtörtént: tervezési visszaállítás (+1 óra).',
-  'retry_bulk_summary' => 'Csoportos emlékeztető: ZXQ0QXZ közzétéve, ZXQ1QXZ átütemezett, ZXQ2QXZ emlékeztetők, ZXQ3QXZ blokkolva.',
+  'retry_bulk_summary' => 'Csoportos emlékeztető: %d közzétéve, %d átütemezett, %d emlékeztetők, %d blokkolva.',
   'blocked_reasons' => 'Blokkolás okok',
 );

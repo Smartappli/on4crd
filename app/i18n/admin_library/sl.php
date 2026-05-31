@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Izvorna oznaka',
   'tag_to_ph' => 'Kanonična oznaka',
   'tag_duplicates_empty' => 'Podvojene različice oznake niso bile zaznane.',
-  'ok_tags_merged' => 'Oznake so bile združene v dokumentih ZXQ0QXZ.',
+  'ok_tags_merged' => 'Oznake so bile združene v dokumentih %d.',
   'ingestion_template' => 'Model zaužitja',
   'ingestion_template_none' => 'Noben',
   'ingestion_template_training' => 'Usposabljanje',

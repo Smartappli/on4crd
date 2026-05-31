@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Közlemények',
   'source_albums' => 'Albumok',
   'results_title' => 'Eredmények',
-  'results_for' => 'ZXQ0QXZ találat(ok) a "ZXQ1QXZ" kifejezésre',
+  'results_for' => '%d találat(ok) a "%s" kifejezésre',
   'start_title' => 'Indítsa el a keresést',
   'start_hint' => 'Írjon be legalább két karaktert a webhely tartalmának felfedezéséhez.',
   'open_result' => 'Nyissa meg',

@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Meddelelser',
   'source_albums' => 'Albums',
   'results_title' => 'Resultater',
-  'results_for' => 'ZXQ0QXZ resultater for "ZXQ1QXZ"',
+  'results_for' => '%d resultater for "%s"',
   'start_title' => 'Start en søgning',
   'start_hint' => 'Indtast mindst to tegn for at udforske webstedets indhold.',
   'open_result' => 'Åbn',

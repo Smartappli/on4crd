@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Tnedija mill-ġdid imwettqa.',
   'retry_applied_published' => 'Tnedija mill-ġdid imwettqa: artikolu ppubblikat.',
   'retry_applied_rescheduled' => 'Tnedija mill-ġdid imwettqa: reset tal-ippjanar (+1 siegħa).',
-  'retry_bulk_summary' => 'Tfakkira tal-grupp: ZXQ0QXZ ippubblikata, ZXQ1QXZ skedata mill-ġdid, ZXQ2QXZ tfakkiriet, ZXQ3QXZ imblukkata.',
+  'retry_bulk_summary' => 'Tfakkira tal-grupp: %d ippubblikata, %d skedata mill-ġdid, %d tfakkiriet, %d imblukkata.',
   'blocked_reasons' => 'Raġunijiet ta\' imblukkar',
 );

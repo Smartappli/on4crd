@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Lähdetunniste',
   'tag_to_ph' => 'Kanoninen tunniste',
   'tag_duplicates_empty' => 'Päällekkäisiä tunnistemuunnelmia ei havaittu.',
-  'ok_tags_merged' => 'Tunnisteet yhdistettiin ZXQ0QXZ-asiakirjoihin.',
+  'ok_tags_merged' => 'Tunnisteet yhdistettiin %d-asiakirjoihin.',
   'ingestion_template' => 'Nielemismalli',
   'ingestion_template_none' => 'Ei mitään',
   'ingestion_template_training' => 'Koulutus',

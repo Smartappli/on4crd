@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Oznamy',
   'source_albums' => 'Albumy',
   'results_title' => 'Výsledky',
-  'results_for' => 'Výsledky ZXQ0QXZ pre "ZXQ1QXZ"',
+  'results_for' => 'Výsledky %d pre "%s"',
   'start_title' => 'Spustite vyhľadávanie',
   'start_hint' => 'Ak chcete preskúmať obsah stránky, zadajte aspoň dva znaky.',
   'open_result' => 'Otvorte',

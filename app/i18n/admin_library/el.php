@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Ετικέτα πηγής',
   'tag_to_ph' => 'Κανονική ετικέτα',
   'tag_duplicates_empty' => 'Δεν εντοπίστηκαν διπλότυπες παραλλαγές ετικέτας.',
-  'ok_tags_merged' => 'Ετικέτες συγχωνεύτηκαν σε έγγραφα ZXQ0QXZ.',
+  'ok_tags_merged' => 'Ετικέτες συγχωνεύτηκαν σε έγγραφα %d.',
   'ingestion_template' => 'Μοντέλο κατάποσης',
   'ingestion_template_none' => 'Κανένα',
   'ingestion_template_training' => 'Εκπαίδευση',

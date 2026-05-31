@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Avviżi',
   'source_albums' => 'Albums',
   'results_title' => 'Riżultati',
-  'results_for' => 'Riżultat(i) ZXQ0QXZ għal "ZXQ1QXZ"',
+  'results_for' => 'Riżultat(i) %d għal "%s"',
   'start_title' => 'Ibda tfittxija',
   'start_hint' => 'Daħħal mill-inqas żewġ karattri biex tesplora l-kontenut tas-sit.',
   'open_result' => 'Miftuħa',

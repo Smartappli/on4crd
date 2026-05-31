@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Lähtemärgend',
   'tag_to_ph' => 'Kanooniline silt',
   'tag_duplicates_empty' => 'Korduvaid märgendivariante ei tuvastatud.',
-  'ok_tags_merged' => 'ZXQ0QXZ-dokumendi(te) sildid on liidetud.',
+  'ok_tags_merged' => '%d-dokumendi(te) sildid on liidetud.',
   'ingestion_template' => 'Allaneelamise mudel',
   'ingestion_template_none' => 'Mitte ühtegi',
   'ingestion_template_training' => 'Koolitus',

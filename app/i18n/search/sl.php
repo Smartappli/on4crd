@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Obvestila',
   'source_albums' => 'Albumi',
   'results_title' => 'Rezultati',
-  'results_for' => 'ZXQ0QXZ rezultat(i) za "ZXQ1QXZ"',
+  'results_for' => '%d rezultat(i) za "%s"',
   'start_title' => 'Začni iskanje',
   'start_hint' => 'Vnesite vsaj dva znaka za raziskovanje vsebine spletnega mesta.',
   'open_result' => 'Odpri',

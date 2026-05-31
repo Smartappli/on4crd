@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Tikketta tas-sors',
   'tag_to_ph' => 'Tikketta kanonika',
   'tag_duplicates_empty' => 'Ebda varjanti ta\' tag duplikati misjuba.',
-  'ok_tags_merged' => 'Tikketti magħquda fuq dokument(i) ZXQ0QXZ.',
+  'ok_tags_merged' => 'Tikketti magħquda fuq dokument(i) %d.',
   'ingestion_template' => 'Mudell ta\' inġestjoni',
   'ingestion_template_none' => 'Xejn',
   'ingestion_template_training' => 'Taħriġ',

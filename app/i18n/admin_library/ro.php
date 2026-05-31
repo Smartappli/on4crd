@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Eticheta sursă',
   'tag_to_ph' => 'Etichetă canonică',
   'tag_duplicates_empty' => 'Nu au fost detectate variante de etichetă duplicate.',
-  'ok_tags_merged' => 'Etichetele au fost îmbinate pe documentele ZXQ0QXZ.',
+  'ok_tags_merged' => 'Etichetele au fost îmbinate pe documentele %d.',
   'ingestion_template' => 'Model de ingestie',
   'ingestion_template_none' => 'Nici unul',
   'ingestion_template_training' => 'Antrenamentul',

@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Källtagg',
   'tag_to_ph' => 'Kanonisk tagg',
   'tag_duplicates_empty' => 'Inga dubbletter av taggvarianter upptäcktes.',
-  'ok_tags_merged' => 'Taggar sammanslagna på ZXQ0QXZ-dokument.',
+  'ok_tags_merged' => 'Taggar sammanslagna på %d-dokument.',
   'ingestion_template' => 'Förtäringsmodell',
   'ingestion_template_none' => 'Inga',
   'ingestion_template_training' => 'Utbildning',

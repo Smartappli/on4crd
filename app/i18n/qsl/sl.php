@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dinamični predogled glede na polja obrazca.',
   'adif_processing' => 'Poteka obdelava datotek ADIF ...',
   'adif_import_error' => 'Uvoz ADIF ni uspel.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO uvozi iz datotek ZXQ1QXZ.',
+  'adif_imported_status' => '{imported} QSO uvozi iz datotek {files}.',
   'design_help' => 'Izberite vrsto ozadja. Obrazec se samodejno prilagaja in predogled se posodablja v živo.',
   'label_solid' => 'Enobarvno',
   'label_palette' => 'Vnaprej določena paleta',

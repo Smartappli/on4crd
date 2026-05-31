@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Šaltinio žyma',
   'tag_to_ph' => 'Kanoninė žyma',
   'tag_duplicates_empty' => 'Pasikartojančių žymos variantų neaptikta.',
-  'ok_tags_merged' => 'Žymos sujungtos ZXQ0QXZ dokumente (-uose).',
+  'ok_tags_merged' => 'Žymos sujungtos %d dokumente (-uose).',
   'ingestion_template' => 'Nurijimo modelis',
   'ingestion_template_none' => 'Nėra',
   'ingestion_template_training' => 'Treniruotės',

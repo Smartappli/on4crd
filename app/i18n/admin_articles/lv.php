@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Atkārtota palaišana veikta.',
   'retry_applied_published' => 'Atkārtota palaišana veikta: raksts publicēts.',
   'retry_applied_rescheduled' => 'Atkārtota palaišana veikta: plānošanas atiestatīšana (+1 stunda).',
-  'retry_bulk_summary' => 'Grupas atgādinājums: ZXQ0QXZ publicēts, ZXQ1QXZ pārplānots, ZXQ2QXZ atgādinājumi, ZXQ3QXZ bloķēts.',
+  'retry_bulk_summary' => 'Grupas atgādinājums: %d publicēts, %d pārplānots, %d atgādinājumi, %d bloķēts.',
   'blocked_reasons' => 'Bloķēšanas iemesli',
 );

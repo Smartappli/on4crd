@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Paziņojumi',
   'source_albums' => 'Albumi',
   'results_title' => 'Rezultāti',
-  'results_for' => 'ZXQ0QXZ rezultāts(-i) vaicājumam "ZXQ1QXZ"',
+  'results_for' => '%d rezultāts(-i) vaicājumam "%s"',
   'start_title' => 'Sāciet meklēšanu',
   'start_hint' => 'Ievadiet vismaz divas rakstzīmes, lai izpētītu vietnes saturu.',
   'open_result' => 'Atvērt',

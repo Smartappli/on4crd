@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Clib foinse',
   'tag_to_ph' => 'Clib Canonical',
   'tag_duplicates_empty' => 'Níor aimsíodh aon leagan dúblach de chlib.',
-  'ok_tags_merged' => 'Comhcheangail ar dhoiciméad(í) ZXQ0QXZ.',
+  'ok_tags_merged' => 'Comhcheangail ar dhoiciméad(í) %d.',
   'ingestion_template' => 'Múnla ionghabhála',
   'ingestion_template_none' => 'Dada',
   'ingestion_template_training' => 'Traenáil',

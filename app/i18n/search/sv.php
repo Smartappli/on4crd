@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Meddelanden',
   'source_albums' => 'Album',
   'results_title' => 'Resultat',
-  'results_for' => 'ZXQ0QXZ resultat för "ZXQ1QXZ"',
+  'results_for' => '%d resultat för "%s"',
   'start_title' => 'Starta en sökning',
   'start_hint' => 'Ange minst två tecken för att utforska webbplatsens innehåll.',
   'open_result' => 'Öppna',

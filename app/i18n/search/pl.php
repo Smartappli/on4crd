@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Ogłoszenia',
   'source_albums' => 'Albumy',
   'results_title' => 'Wyniki',
-  'results_for' => 'Wyniki ZXQ0QXZ dla „ZXQ1QXZ”',
+  'results_for' => 'Wyniki %d dla „%s”',
   'start_title' => 'Rozpocznij wyszukiwanie',
   'start_hint' => 'Wprowadź co najmniej dwa znaki, aby zapoznać się z zawartością witryny.',
   'open_result' => 'Otwórz',

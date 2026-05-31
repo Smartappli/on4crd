@@ -26,7 +26,7 @@ return array (
   'source_classifieds' => 'Fógraí',
   'source_albums' => 'Albaim',
   'results_title' => 'Torthaí',
-  'results_for' => 'Torthaí ZXQ0QXZ le haghaidh "ZXQ1QXZ"',
+  'results_for' => 'Torthaí %d le haghaidh "%s"',
   'start_title' => 'Tosaigh le cuardach',
   'start_hint' => 'Cuir isteach dhá charachtar ar a laghad chun ábhar an tsuímh a fhiosrú.',
   'open_result' => 'Oscail',

@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Athsheoladh déanta.',
   'retry_applied_published' => 'Athsheoladh déanta: alt foilsithe.',
   'retry_applied_rescheduled' => 'Athsheoladh déanta: athsheoladh pleanála (+ 1 uair).',
-  'retry_bulk_summary' => 'Meabhrúchán grúpa: ZXQ0QXZ foilsithe, ZXQ1QXZ athsceidealaithe, meabhrúcháin ZXQ2QXZ, bac ar ZXQ3QXZ.',
+  'retry_bulk_summary' => 'Meabhrúchán grúpa: %d foilsithe, %d athsceidealaithe, meabhrúcháin %d, bac ar %d.',
   'blocked_reasons' => 'Cúiseanna blocála',
 );

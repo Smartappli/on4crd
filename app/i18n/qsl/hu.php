@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Dinamikus előnézet az űrlapmezők szerint.',
   'adif_processing' => 'A ADIF fájlok feldolgozása folyamatban...',
   'adif_import_error' => 'A ADIF importálása sikertelen.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO importálás(ok) ZXQ1QXZ fájl(ok)ból.',
+  'adif_imported_status' => '{imported} QSO importálás(ok) {files} fájl(ok)ból.',
   'design_help' => 'Válasszon egy háttértípust. Az űrlap automatikusan alkalmazkodik, és az előnézet élőben frissül.',
   'label_solid' => 'Egyszínű',
   'label_palette' => 'Előre definiált paletta',

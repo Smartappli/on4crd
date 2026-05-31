@@ -69,6 +69,6 @@ return array (
   'retry_applied' => 'Ponovno pokretanje izvršeno.',
   'retry_applied_published' => 'Ponovno pokretanje provedeno: članak objavljen.',
   'retry_applied_rescheduled' => 'Ponovno pokretanje izvršeno: resetiranje planiranja (+1 sat).',
-  'retry_bulk_summary' => 'Grupni podsjetnik: ZXQ0QXZ objavljen, ZXQ1QXZ odgođen, ZXQ2QXZ podsjetnici, ZXQ3QXZ blokiran.',
+  'retry_bulk_summary' => 'Grupni podsjetnik: %d objavljen, %d odgođen, %d podsjetnici, %d blokiran.',
   'blocked_reasons' => 'Razlozi blokiranja',
 );

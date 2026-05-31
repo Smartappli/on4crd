@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Δυναμική προεπισκόπηση σύμφωνα με τα πεδία της φόρμας.',
   'adif_processing' => 'Επεξεργασία αρχείων ADIF σε εξέλιξη...',
   'adif_import_error' => 'Η εισαγωγή ADIF απέτυχε.',
-  'adif_imported_status' => 'ZXQ0QXZ QSO εισαγωγή(α) από αρχεία ZXQ1QXZ.',
+  'adif_imported_status' => '{imported} QSO εισαγωγή(α) από αρχεία {files}.',
   'design_help' => 'Επιλέξτε έναν τύπο φόντου. Η φόρμα προσαρμόζεται αυτόματα και η προεπισκόπηση ενημερώνεται ζωντανά.',
   'label_solid' => 'Μονόχρωμο',
   'label_palette' => 'Προκαθορισμένη παλέτα',

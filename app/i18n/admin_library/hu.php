@@ -50,7 +50,7 @@ return array (
   'tag_from_ph' => 'Forrás címke',
   'tag_to_ph' => 'Kanonikus címke',
   'tag_duplicates_empty' => 'Nem észleltünk ismétlődő címkeváltozatokat.',
-  'ok_tags_merged' => 'A címkék egyesítve a ZXQ0QXZ dokumentum(ok)on.',
+  'ok_tags_merged' => 'A címkék egyesítve a %d dokumentum(ok)on.',
   'ingestion_template' => 'Lenyelési modell',
   'ingestion_template_none' => 'Egyik sem',
   'ingestion_template_training' => 'Képzés',
