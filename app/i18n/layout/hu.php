@@ -27,7 +27,7 @@ return array (
   'accent_emerald' => 'Smaragd',
   'accent_violet' => 'Lila',
   'accent_red' => 'Piros',
-  'accent_amber' => 'Amber',
+  'accent_amber' => 'Borostyán',
   'accent_orange' => 'narancssárga',
   'language_choice' => 'Nyelvválasztás',
   'language_help' => 'Webhely nyelvválasztója. A módosítás automatikusan alkalmazásra kerül.',

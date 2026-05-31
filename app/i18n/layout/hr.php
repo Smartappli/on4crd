@@ -24,7 +24,7 @@ return array (
   'theme_light' => 'čisto',
   'theme_dark' => 'tamno',
   'accent_blue' => 'Plava',
-  'accent_emerald' => 'Emerald',
+  'accent_emerald' => 'Smaragd',
   'accent_violet' => 'Ljubičasta',
   'accent_red' => 'crveno',
   'accent_amber' => 'Jantar',

@@ -1,15 +1,14 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
-  'nav_home' => 'Home',
+  'nav_home' => 'Casa',
   'nav_news' => 'Notizie',
   'nav_shop' => 'Negozio',
   'nav_events' => 'Eventi',
   'nav_tools' => 'Strumenti',
-  'nav_directory' => 'Directory',
-  'nav_dashboard' => 'Dashboard',
+  'nav_directory' => 'Direttorio',
+  'nav_dashboard' => 'Pannello di controllo',
   'nav_wiki' => 'Wiki',
   'nav_gallery' => 'Galleria',
   'nav_articles' => 'Articoli',

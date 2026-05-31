@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => '今日语录',
   'ham_weather' => '业余无线电天气',
   'ham_weather_desc' => '系统会根据您的位置、时间、天气和传播情况自动计算建议，帮助选择最适合 QSO 的波段与模式。',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => '分类广告',
   'spotlight_classifieds_empty' => '目前没有有效的分类广告。',
   'spotlight_classifieds_cta' => '查看广告',
-
   'spotlight_tool_day' => '新闻 / 公告',
   'spotlight_for_sale' => '即将举行的活动',
   'spotlight_auction_live' => '今日工具',
@@ -60,7 +59,7 @@ return [
   'spotlight_tool_day_item' => '根据邮政地址计算网格',
   'spotlight_tool_day_cta' => '更多工具',
   'spotlight_member_wiki_articles' => 'Wiki / 文章',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => '维基百科',
   'spotlight_member_articles' => '文章',
   'spotlight_member_latest_wiki' => '最新维基页面',
   'spotlight_member_latest_article' => '最新文章',
@@ -97,9 +96,9 @@ return [
   'member_audience' => '会员',
   'page_title' => '首页',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
-  'venue_line_3' => '5530 Purnode',
+  'venue_line_1' => '博克竞技场',
+  'venue_line_2' => '学校街',
+  'venue_line_3' => '第5530章',
   'alt_partner_ad' => '合作伙伴广告',
   'alt_hero_illustration' => 'ON4CRD 插图',
   'alt_uba_logo' => 'UBA 标志',
@@ -140,7 +139,7 @@ return [
   'local_datetime' => '本地日期/时间',
   'hero_tagline' => 'ON4CRD · 连接、实验、分享',
   'ham_weather_aria' => '业余无线电天气',
-  'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
+  'venue_address' => '博克竞技场，Rue des Écoles，5530 Purnode',
   'quote_aria' => '精选语录',
   'clock_aria' => 'UTC 与本地时钟',
-];
+);

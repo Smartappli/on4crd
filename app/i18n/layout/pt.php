@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -10,7 +9,7 @@ return array (
   'nav_tools' => 'Ferramentas',
   'nav_directory' => 'Diretório',
   'nav_dashboard' => 'Painel',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Wikipédia',
   'nav_gallery' => 'Galeria',
   'nav_articles' => 'Artigos',
   'nav_library' => 'Biblioteca',

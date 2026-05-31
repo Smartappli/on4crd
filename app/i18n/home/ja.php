@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => '今日の名言',
   'ham_weather' => 'アマチュア無線天気',
   'ham_weather_desc' => '位置情報、時間帯、天候、伝搬状況から、QSOに最適なバンドとモードを自動で算出します。',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'クラシファイド広告',
   'spotlight_classifieds_empty' => '現在有効なクラシファイド広告はありません。',
   'spotlight_classifieds_cta' => '広告を見る',
-
   'spotlight_tool_day' => 'ニュース / お知らせ',
   'spotlight_for_sale' => '今後のイベント',
   'spotlight_auction_live' => '今日のツール',
@@ -60,7 +59,7 @@ return [
   'spotlight_tool_day_item' => '住所からグリッドを計算',
   'spotlight_tool_day_cta' => 'その他のツール',
   'spotlight_member_wiki_articles' => 'Wiki / 記事',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'ウィキ',
   'spotlight_member_articles' => '記事',
   'spotlight_member_latest_wiki' => '最新のWikiページ',
   'spotlight_member_latest_article' => '最新の記事',
@@ -97,9 +96,9 @@ return [
   'member_audience' => 'メンバー',
   'page_title' => 'ホーム',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
-  'venue_line_3' => '5530 Purnode',
+  'venue_line_1' => 'ボック アリーナ',
+  'venue_line_2' => 'リュー デ ゼコール',
+  'venue_line_3' => '5530 プルノード',
   'alt_partner_ad' => 'パートナー広告',
   'alt_hero_illustration' => 'ON4CRDイラスト',
   'alt_uba_logo' => 'UBAロゴ',
@@ -143,4 +142,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => '注目の引用',
   'clock_aria' => 'UTCと現地の時計',
-];
+);

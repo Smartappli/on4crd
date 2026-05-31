@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Kutipan hari ini',
   'ham_weather' => 'Cuaca radio amatir',
   'ham_weather_desc' => 'Rekomendasi dihitung otomatis dari lokasi, waktu, cuaca, dan propagasi untuk menentukan band serta mode QSO yang paling sesuai.',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Iklan baris',
   'spotlight_classifieds_empty' => 'Saat ini belum ada iklan baris aktif.',
   'spotlight_classifieds_cta' => 'Lihat iklan',
-
   'spotlight_tool_day' => 'Berita / Pengumuman',
   'spotlight_for_sale' => 'Acara mendatang',
   'spotlight_auction_live' => 'Alat hari ini',
@@ -97,12 +96,12 @@ return [
   'member_audience' => 'Anggota',
   'page_title' => 'Beranda',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
+  'venue_line_1' => 'Arena Bocq',
+  'venue_line_2' => 'Rue des Ecoles',
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Iklan mitra',
   'alt_hero_illustration' => 'Ilustrasi ON4CRD',
-  'alt_uba_logo' => 'Logo UBA',
+  'alt_uba_logo' => 'logo UB',
   'alt_repeater_logo' => 'Logo repeater',
   'journalist_title' => 'Apakah Anda jurnalis?',
   'journalist_desc' => 'Akses kit pers kami langsung untuk menyiapkan publikasi dan laporan Anda.',
@@ -143,4 +142,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Kutipan unggulan',
   'clock_aria' => 'Jam UTC dan lokal',
-];
+);

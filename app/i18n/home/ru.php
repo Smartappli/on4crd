@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Цитата дня',
   'ham_weather' => 'Погода для радиолюбителей',
   'ham_weather_desc' => 'Рекомендации автоматически рассчитываются по вашему местоположению, времени, погоде и прохождению для выбора лучших диапазонов и режимов QSO.',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Объявления',
   'spotlight_classifieds_empty' => 'Сейчас нет активных объявлений.',
   'spotlight_classifieds_cta' => 'Смотреть объявления',
-
   'spotlight_tool_day' => 'Новость / объявление',
   'spotlight_for_sale' => 'Ближайшие события',
   'spotlight_auction_live' => 'Инструмент дня',
@@ -97,9 +96,9 @@ return [
   'member_audience' => 'Участники',
   'page_title' => 'Главная',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
-  'venue_line_3' => '5530 Purnode',
+  'venue_line_1' => 'Бок Арена',
+  'venue_line_2' => 'Рю де Эколь',
+  'venue_line_3' => '5530 Пурноде',
   'alt_partner_ad' => 'Партнёрская реклама',
   'alt_hero_illustration' => 'Иллюстрация ON4CRD',
   'alt_uba_logo' => 'Логотип UBA',
@@ -140,7 +139,7 @@ return [
   'local_datetime' => 'Местная дата/время',
   'hero_tagline' => 'ON4CRD · Связывать, экспериментировать, делиться',
   'ham_weather_aria' => 'Погода для радиолюбителей',
-  'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
+  'venue_address' => 'Бок Арена, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Избранная цитата',
   'clock_aria' => 'Часы UTC и местные',
-];
+);

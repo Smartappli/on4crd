@@ -27,7 +27,7 @@ return array (
   'accent_emerald' => 'Smaragdi',
   'accent_violet' => 'Violetti',
   'accent_red' => 'Punainen',
-  'accent_amber' => 'Amber',
+  'accent_amber' => 'Keltainen',
   'accent_orange' => 'Oranssi',
   'language_choice' => 'Kielen valinta',
   'language_help' => 'Sivuston kielen valitsin. Muutos otetaan käyttöön automaattisesti.',

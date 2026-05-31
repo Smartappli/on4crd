@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'দিনের উক্তি',
   'ham_weather' => 'রেডিও অপেশাদার আবহাওয়া',
   'ham_weather_desc' => 'আপনার অবস্থান, সময়, আবহাওয়া ও প্রোপাগেশন অনুযায়ী QSO-এর জন্য সবচেয়ে উপযোগী ব্যান্ড ও মোড স্বয়ংক্রিয়ভাবে নির্ধারণ করা হয়।',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'ছোট বিজ্ঞাপন',
   'spotlight_classifieds_empty' => 'এই মুহূর্তে কোনো সক্রিয় ছোট বিজ্ঞাপন নেই.',
   'spotlight_classifieds_cta' => 'বিজ্ঞাপন দেখুন',
-
   'spotlight_tool_day' => 'সংবাদ / ঘোষণা',
   'spotlight_for_sale' => 'আসন্ন ইভেন্টসমূহ',
   'spotlight_auction_live' => 'আজকের টুল',
@@ -97,9 +96,9 @@ return [
   'member_audience' => 'সদস্যরা',
   'page_title' => 'হোম',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
-  'venue_line_3' => '5530 Purnode',
+  'venue_line_1' => 'বোক এরিনা',
+  'venue_line_2' => 'রুয়ে দেস ইকোলেস',
+  'venue_line_3' => '5530 পুরনোড',
   'alt_partner_ad' => 'পার্টনার বিজ্ঞাপন',
   'alt_hero_illustration' => 'ON4CRD ইলাস্ট্রেশন',
   'alt_uba_logo' => 'UBA লোগো',
@@ -143,4 +142,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'নির্বাচিত উক্তি',
   'clock_aria' => 'UTC ও স্থানীয় ঘড়ি',
-];
+);

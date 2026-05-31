@@ -27,7 +27,7 @@ return array (
   'accent_emerald' => 'Smaragd',
   'accent_violet' => 'Lila',
   'accent_red' => 'Röd',
-  'accent_amber' => 'Amber',
+  'accent_amber' => 'Bärnsten',
   'accent_orange' => 'Orange',
   'language_choice' => 'Språkval',
   'language_help' => 'Webbplatsens språkväljare. Ändringen tillämpas automatiskt.',

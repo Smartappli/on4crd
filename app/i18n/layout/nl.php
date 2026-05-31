@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -26,7 +25,7 @@ return array (
   'theme_dark' => 'Donker',
   'accent_blue' => 'Blauw',
   'accent_emerald' => 'Smaragd',
-  'accent_violet' => 'Violet',
+  'accent_violet' => 'Paars',
   'accent_red' => 'Rood',
   'accent_amber' => 'Amber',
   'accent_orange' => 'Oranje',
