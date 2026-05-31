@@ -65,7 +65,7 @@ function installer_build_config_php(array $values): string
             'site_name' => $values['site_name'],
             'base_url' => $values['base_url'],
             'default_locale' => 'fr',
-            'supported_locales' => ['fr', 'en', 'de', 'nl'],
+            'supported_locales' => ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'bg', 'hr', 'cs', 'da', 'et', 'fi', 'el', 'hu', 'ga', 'lv', 'lt', 'mt', 'pl', 'ro', 'sk', 'sl', 'sv', 'ar', 'bn', 'hi', 'id', 'ja', 'ru', 'zh'],
             'session_name' => 'on4crd_session',
             'allow_install' => true,
             'maintenance' => [
