@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 return array (
   'title' => 'Iklan baris',
   'lead' => 'Pasang dan lihat iklan baris radio amatir klub.',
@@ -20,7 +22,7 @@ return array (
   'category_label' => 'Kategori',
   'status_label' => 'Status',
   'actions' => 'Tindakan',
-  'edit' => 'Edit',
+  'edit' => 'Sunting',
   'mark_sold' => 'Tandai terjual',
   'reactivate' => 'Aktifkan kembali',
   'none' => 'Belum ada iklan.',
@@ -33,8 +35,8 @@ return array (
   'search_label' => 'Cari',
   'search_placeholder' => 'Judul, deskripsi, lokasi',
   'all_categories' => 'Semua kategori',
-  'filter' => 'Filter',
-  'reset' => 'Reset',
+  'filter' => 'Menyaring',
+  'reset' => 'Mengatur ulang',
   'login_to_post' => 'Masuk untuk memasang',
   'cancel' => 'Batal',
   'archive' => 'Arsipkan',
