@@ -33,7 +33,7 @@ return array (
   'col_title' => 'Titulo',
   'col_placement' => 'Ubicacion',
   'col_status' => 'Estado',
-  'col_impr' => 'Impr.',
+  'col_impr' => 'Imprimir',
   'col_clicks' => 'Clics',
   'col_ctr' => 'CTR',
   'col_actions' => 'Acciones',

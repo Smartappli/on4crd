@@ -40,7 +40,7 @@ return array (
   'send' => 'poslati',
   'already_sent' => 'Već poslano',
   'email' => 'E-mail',
-  'csv_ph' => 'email\\nfoo@example.org\\nbar@example.org',
+  'csv_ph' => 'e-pošta \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Nema pretplatnika.',
   'no_campaigns' => 'Nema kampanje.',
 );

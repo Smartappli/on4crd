@@ -9,7 +9,7 @@ return array (
   'label' => 'Il-kliem',
   'url' => 'URL',
   'parser' => 'Parser',
-  'cache_ttl' => 'Cache TTL',
+  'cache_ttl' => 'TTL cache',
   'refresh' => 'Aġġorna l-browser',
   'notes' => 'Noti',
   'save' => 'Ħlief',

@@ -40,7 +40,7 @@ return array (
   'send' => 'Küldés',
   'already_sent' => 'Már elküldve',
   'email' => 'E-mail',
-  'csv_ph' => 'email\\nfoo@example.org\\nbar@example.org',
+  'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Nincsenek előfizetők.',
   'no_campaigns' => 'Nincs kampány.',
 );

@@ -39,8 +39,8 @@ return array (
   'sent_results' => 'Odoslané %d / zlyhania %d',
   'send' => 'Odoslať',
   'already_sent' => 'Už odoslané',
-  'email' => 'Email',
-  'csv_ph' => 'email\\nfoo@example.org\\nbar@example.org',
+  'email' => 'E-mail',
+  'csv_ph' => 'e-mail \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Žiadni odberatelia.',
   'no_campaigns' => 'Žiadna kampaň.',
 );

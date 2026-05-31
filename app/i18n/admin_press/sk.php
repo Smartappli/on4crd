@@ -8,7 +8,7 @@ return array (
   'releases_title' => 'Tlačové správy',
   'full_name' => 'Celé meno',
   'role' => 'Role',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Telefón',
   'notes' => 'Poznámky',
   'order' => 'Objednať',

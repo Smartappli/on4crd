@@ -9,7 +9,7 @@ return array (
   'label' => 'Ordlyd',
   'url' => 'URL',
   'parser' => 'Parser',
-  'cache_ttl' => 'Cache TTL',
+  'cache_ttl' => 'TTL cache',
   'refresh' => 'Browser opdatering',
   'notes' => 'Noter',
   'save' => 'Gem',

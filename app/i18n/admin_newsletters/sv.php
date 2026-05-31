@@ -40,7 +40,7 @@ return array (
   'send' => 'Skicka',
   'already_sent' => 'Redan skickat',
   'email' => 'E-post',
-  'csv_ph' => 'email\\nfoo@example.org\\nbar@example.org',
+  'csv_ph' => 'e-post \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Inga prenumeranter.',
   'no_campaigns' => 'Ingen kampanj.',
 );

@@ -9,7 +9,7 @@ return array (
   'label' => 'Formulare',
   'url' => 'URL',
   'parser' => 'Analizator',
-  'cache_ttl' => 'Cache TTL',
+  'cache_ttl' => 'cache TTL',
   'refresh' => 'Reîmprospătare browser',
   'notes' => 'Note',
   'save' => 'Salva',

@@ -19,7 +19,7 @@ return array (
   'title' => 'Titlu',
   'summary' => 'Rezumat',
   'publish_date' => 'Data publicării',
-  'pdf_doc' => 'Document PDF',
+  'pdf_doc' => 'document PDF',
   'th_date' => 'Data',
   'th_file' => 'Fişier',
   'open' => 'deschide',

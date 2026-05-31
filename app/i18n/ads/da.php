@@ -21,7 +21,7 @@ return array (
   'label_placement' => 'Placering',
   'label_format' => 'Format',
   'label_target_url' => 'URL mål',
-  'label_start' => 'Start',
+  'label_start' => 'Starte',
   'label_duration_days' => 'Varighed (dage)',
   'label_max_impressions' => 'Maksimalt antal skærme',
   'label_weight' => 'Vægt/prioritet',

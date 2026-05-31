@@ -19,7 +19,7 @@ return array (
   'label_title' => 'Titel',
   'label_description' => 'Beskrivning',
   'label_placement' => 'Placering',
-  'label_format' => 'Format',
+  'label_format' => 'Formatera',
   'label_target_url' => 'URL mål',
   'label_start' => 'Starta',
   'label_duration_days' => 'Varaktighet (dagar)',

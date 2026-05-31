@@ -21,7 +21,7 @@ return array (
   'label_placement' => 'Plaatsing',
   'label_format' => 'Formaat',
   'label_target_url' => 'Doel-URL',
-  'label_start' => 'Start',
+  'label_start' => 'Begin',
   'label_duration_days' => 'Duur (dagen)',
   'label_max_impressions' => 'Maximum aantal vertoningen',
   'label_weight' => 'Gewicht / prioriteit',

@@ -9,7 +9,7 @@ return array (
   'label' => 'Formulering',
   'url' => 'URL',
   'parser' => 'Parser',
-  'cache_ttl' => 'Cache TTL',
+  'cache_ttl' => 'TTL-cache',
   'refresh' => 'Uppdatera webbläsaren',
   'notes' => 'Anteckningar',
   'save' => 'Spara',

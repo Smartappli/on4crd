@@ -40,7 +40,7 @@ return array (
   'send' => 'Ibgħat',
   'already_sent' => 'Diġà mibgħuta',
   'email' => 'E-mail',
-  'csv_ph' => 'email\\nfoo@example.org\\nbar@example.org',
+  'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Ebda abbonati.',
   'no_campaigns' => 'L-ebda kampanja.',
 );
