@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 return [
     'db' => [
-        'dsn' => 'mysql:host=smartappwyon4crd.mysql.db;port=3306;dbname=smartappwyon4crd;charset=utf8mb4',
-        'user' => 'smartappwyon4crd',
-        'pass' => 'Rei3Le5eon4crd',
+        'dsn' => 'mysql:host=localhost;port=3306;dbname=on4crd;charset=utf8mb4',
+        'user' => 'on4crd',
+        'pass' => 'change-me',
     ],
     'app' => [
         'site_name' => 'ON4CRD v3.6.1',
@@ -30,7 +30,7 @@ return [
         ],
     ],
     'security' => [
-        'csrf_key' => 'change-me-please',
+        'csrf_key' => 'replace-with-a-random-32-byte-secret',
     ],
     'cache' => [
         'enabled' => true,
