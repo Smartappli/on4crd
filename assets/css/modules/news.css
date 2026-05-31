@@ -42,11 +42,6 @@
   font-weight: 650;
 }
 
-[data-route="news"] .news-content {
-  display: grid;
-  gap: 1rem;
-}
-
 @media (max-width: 900px) {
   [data-route="news"] .news-hero-stats {
     min-width: 0;
