@@ -429,7 +429,7 @@ if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
 
 $homeEventsCalendarConfig = [
     'locale' => $homeLocale,
-    'initialView' => 'listMonth',
+    'initialView' => 'dayGridMonth',
     'eventsUrl' => route_url('events_feed'),
     'loadError' => (string) ($homeEventsI18n['calendar_load_error'] ?? $homeI18n['no_event']),
     'buttonText' => [
