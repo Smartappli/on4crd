@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'اقتباس اليوم',
   'ham_weather' => 'طقس هواة الراديو',
   'ham_weather_desc' => 'يتم حساب التوصيات تلقائياً حسب موقعك والوقت والطقس والانتشار لتحديد أفضل النطاقات والأنماط لإجراء QSO.',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'الإعلانات المبوبة',
   'spotlight_classifieds_empty' => 'لا توجد إعلانات مبوبة نشطة حالياً.',
   'spotlight_classifieds_cta' => 'عرض الإعلانات',
-
   'spotlight_tool_day' => 'أخبار / إعلان',
   'spotlight_for_sale' => 'الأحداث القادمة',
   'spotlight_auction_live' => 'أداة اليوم',
@@ -97,9 +96,9 @@ return [
   'member_audience' => 'الأعضاء',
   'page_title' => 'الرئيسية',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
-  'venue_line_3' => '5530 Purnode',
+  'venue_line_1' => 'ساحة بوك',
+  'venue_line_2' => 'شارع المدارس',
+  'venue_line_3' => '5530 بورنود',
   'alt_partner_ad' => 'إعلان شريك',
   'alt_hero_illustration' => 'رسم ON4CRD',
   'alt_uba_logo' => 'شعار UBA',
@@ -143,4 +142,4 @@ return [
   'venue_address' => 'Bocq Arena، Rue des Écoles، 5530 Purnode',
   'quote_aria' => 'اقتباس مميز',
   'clock_aria' => 'ساعات UTC والمحلية',
-];
+);

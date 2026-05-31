@@ -121,7 +121,7 @@ return array (
   'join_benefit_3_desc' => 'A CRD megkönnyíti a kapcsolatokat a rajongók között, a hasznos információkhoz való hozzáférést és a klubéletben való részvételt.',
   'contact_title' => 'Vegye fel velünk a kapcsolatot',
   'contact_name' => 'Név',
-  'contact_email' => 'E-mail',
+  'contact_email' => 'Email',
   'contact_message' => 'Üzenet',
   'contact_send' => 'Küldés',
   'important_info_title' => 'Fontos információk',

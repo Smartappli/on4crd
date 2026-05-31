@@ -101,7 +101,7 @@ return array (
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Reklama partnera',
   'alt_hero_illustration' => 'Ilustracja ON4CRD',
-  'alt_uba_logo' => 'Logo UBA',
+  'alt_uba_logo' => 'logo UBA',
   'alt_repeater_logo' => 'Logo przekaźnika',
   'journalist_title' => 'Jesteś dziennikarzem',
   'journalist_desc' => 'Uzyskaj bezpośredni dostęp do naszego zestawu prasowego, aby przygotować publikacje i raporty.',

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'आज का उद्धरण',
   'ham_weather' => 'शौकिया रेडियो मौसम',
   'ham_weather_desc' => 'आपके स्थान, समय, मौसम और प्रसार के आधार पर QSO के लिए सर्वोत्तम बैंड और मोड स्वतः निर्धारित किए जाते हैं।',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'वर्गीकृत विज्ञापन',
   'spotlight_classifieds_empty' => 'फिलहाल कोई सक्रिय वर्गीकृत विज्ञापन नहीं है।',
   'spotlight_classifieds_cta' => 'विज्ञापन देखें',
-
   'spotlight_tool_day' => 'समाचार / घोषणा',
   'spotlight_for_sale' => 'आगामी कार्यक्रम',
   'spotlight_auction_live' => 'आज का टूल',
@@ -97,9 +96,9 @@ return [
   'member_audience' => 'सदस्य',
   'page_title' => 'होम',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
-  'venue_line_3' => '5530 Purnode',
+  'venue_line_1' => 'बोक्क एरिना',
+  'venue_line_2' => 'रुए डेस इकोल्स',
+  'venue_line_3' => '5530 पूर्णोड',
   'alt_partner_ad' => 'साझेदार विज्ञापन',
   'alt_hero_illustration' => 'ON4CRD चित्रण',
   'alt_uba_logo' => 'UBA लोगो',
@@ -140,7 +139,7 @@ return [
   'local_datetime' => 'स्थानीय दिनांक/समय',
   'hero_tagline' => 'ON4CRD · जुड़ें, प्रयोग करें, साझा करें',
   'ham_weather_aria' => 'शौकिया रेडियो मौसम',
-  'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
+  'venue_address' => 'बोक्क एरेना, रुए डेस इकोल्स, 5530 पूर्णोड',
   'quote_aria' => 'चयनित उद्धरण',
   'clock_aria' => 'UTC और स्थानीय घड़ियाँ',
-];
+);

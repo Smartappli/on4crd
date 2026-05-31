@@ -101,7 +101,7 @@ return array (
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Partnerreklaam',
   'alt_hero_illustration' => 'Illustratsioon ON4CRD',
-  'alt_uba_logo' => 'Logo UBA',
+  'alt_uba_logo' => 'UBA logo',
   'alt_repeater_logo' => 'Relee logo',
   'journalist_title' => 'Sa oled ajakirjanik',
   'journalist_desc' => 'Juurdepääs otse meie pressikomplektile, et koostada oma väljaandeid ja aruandeid.',

@@ -121,7 +121,7 @@ return array (
   'join_benefit_3_desc' => 'Το CRD διευκολύνει τις επαφές μεταξύ των ενθουσιωδών, την πρόσβαση σε χρήσιμες πληροφορίες και τη συμμετοχή στη ζωή του κλαμπ.',
   'contact_title' => 'Επικοινωνήστε μαζί μας',
   'contact_name' => 'Όνομα',
-  'contact_email' => 'Email',
+  'contact_email' => 'E-mail',
   'contact_message' => 'Μήνυμα',
   'contact_send' => 'Αποστολή',
   'important_info_title' => 'Σημαντικές πληροφορίες',
