@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'تم حذف الصورة.',
   'album_label' => 'الألبوم',
   'dropzone_hint' => 'قم بإسقاط الصور هنا أو انقر لتحديدها.',
-  'yes' => 'Yes',
+  'yes' => 'نعم',
   'no' => 'No',
   'edit_albums' => 'تحرير الألبومات',
   'save' => 'حفظ',

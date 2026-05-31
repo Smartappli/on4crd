@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'Foto excluída.',
   'album_label' => 'Álbum',
   'dropzone_hint' => 'Solte as fotos aqui ou clique para selecioná-las.',
-  'yes' => 'Yes',
+  'yes' => 'Sim',
   'no' => 'No',
   'edit_albums' => 'Editar álbuns',
   'save' => 'Guardar',

@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'Foto dihapus.',
   'album_label' => 'Album',
   'dropzone_hint' => 'Letakkan foto di sini atau klik untuk memilihnya.',
-  'yes' => 'Yes',
+  'yes' => 'Ya',
   'no' => 'No',
   'edit_albums' => 'Mengedit album',
   'save' => 'Simpan',

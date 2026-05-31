@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'Foto verwijderd.',
   'album_label' => 'Album',
   'dropzone_hint' => 'Zet hier foto\'s neer of klik om ze te selecteren.',
-  'yes' => 'Yes',
+  'yes' => 'Ja',
   'no' => 'No',
   'edit_albums' => 'Albums bewerken',
   'save' => 'Opslaan',

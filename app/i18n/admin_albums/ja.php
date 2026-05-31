@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => '写真が削除されました。',
   'album_label' => 'アルバム',
   'dropzone_hint' => '写真をここにドロップするか、クリックして選択します。',
-  'yes' => 'Yes',
+  'yes' => 'はい',
   'no' => 'No',
   'edit_albums' => 'アルバムを編集する',
   'save' => '保存',

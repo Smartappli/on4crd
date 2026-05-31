@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => '照片已删除。',
   'album_label' => '专辑',
   'dropzone_hint' => '将照片拖放到此处或单击以选择它们。',
-  'yes' => 'Yes',
+  'yes' => '是的',
   'no' => 'No',
   'edit_albums' => '编辑相册',
   'save' => '保存',

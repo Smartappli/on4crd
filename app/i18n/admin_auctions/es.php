@@ -17,7 +17,7 @@ return array (
   'min_increment' => 'Incremento mínimo',
   'buy_now' => 'Compra inmediata',
   'start' => 'Inicio',
-  'end' => 'Fin',
+  'end' => 'FIN',
   'status' => 'Estado',
   'save_lot' => 'Guardar lote',
   'saved_lots' => 'Lotes guardados',

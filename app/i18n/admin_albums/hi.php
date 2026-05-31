@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'फोटो हटा दिया गया.',
   'album_label' => 'एल्बम',
   'dropzone_hint' => 'फ़ोटो यहां छोड़ें या उन्हें चुनने के लिए क्लिक करें।',
-  'yes' => 'Yes',
+  'yes' => 'हाँ',
   'no' => 'No',
   'edit_albums' => 'एल्बम संपादित करें',
   'save' => 'सहेजें',

@@ -1,4 +1,35 @@
 <?php
 declare(strict_types=1);
 
-return ['event_saved' => 'Evento guardado.', 'layout' => 'Administración agenda', 'title_required' => 'Título obligatorio.', 'form_title' => 'un evento', 'edit' => 'Editar', 'create' => 'Crear', 'title' => 'Título', 'slug' => 'Slug', 'summary' => 'Resumen', 'description' => 'Descripción', 'start' => 'Inicio', 'end' => 'Fin', 'location' => 'Lugar', 'external_url' => 'URL externa', 'type' => 'Tipo', 'status' => 'Estado', 'type_club' => 'Club', 'type_contest' => 'Concurso', 'draft' => 'Borrador', 'published' => 'Publicado', 'save' => 'Guardar', 'saved_events' => 'Eventos guardados', 'no_event' => 'Sin evento.', 'calendar_view' => 'Vista calendario', 'calendar_help' => 'Haga clic en un evento para editarlo.', 'today' => 'Hoy', 'month' => 'Mes', 'week' => 'Semana', 'list' => 'Lista', 'meta_desc' => 'Gestión de eventos y calendario del sitio.'];
+return array (
+  'event_saved' => 'Evento guardado.',
+  'layout' => 'Administración agenda',
+  'title_required' => 'Título obligatorio.',
+  'form_title' => 'un evento',
+  'edit' => 'Editar',
+  'create' => 'Crear',
+  'title' => 'Título',
+  'slug' => 'Slug',
+  'summary' => 'Resumen',
+  'description' => 'Descripción',
+  'start' => 'Inicio',
+  'end' => 'FIN',
+  'location' => 'Lugar',
+  'external_url' => 'URL externa',
+  'type' => 'Tipo',
+  'status' => 'Estado',
+  'type_club' => 'Club',
+  'type_contest' => 'Concurso',
+  'draft' => 'Borrador',
+  'published' => 'Publicado',
+  'save' => 'Guardar',
+  'saved_events' => 'Eventos guardados',
+  'no_event' => 'Sin evento.',
+  'calendar_view' => 'Vista calendario',
+  'calendar_help' => 'Haga clic en un evento para editarlo.',
+  'today' => 'Hoy',
+  'month' => 'Mes',
+  'week' => 'Semana',
+  'list' => 'Lista',
+  'meta_desc' => 'Gestión de eventos y calendario del sitio.',
+);

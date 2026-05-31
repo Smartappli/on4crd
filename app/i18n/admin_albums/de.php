@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'Foto gelöscht.',
   'album_label' => 'Album',
   'dropzone_hint' => 'Legen Sie Fotos hier ab oder klicken Sie, um sie auszuwählen.',
-  'yes' => 'Yes',
+  'yes' => 'Ja',
   'no' => 'No',
   'edit_albums' => 'Alben bearbeiten',
   'save' => 'Speichern',
