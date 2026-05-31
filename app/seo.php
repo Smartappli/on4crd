@@ -58,7 +58,7 @@ function seo_build_canonical_url(string $route): string
 
 function seo_supported_locales(): array
 {
-    return ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+    return supported_locales();
 }
 
 /**
