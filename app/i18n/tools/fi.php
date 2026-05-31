@@ -177,7 +177,7 @@ return array (
   'dbm_to_dbuv_result' => 'arvioitu dBµV',
   'unit_conv_title' => 'Yksikkömuunnos',
   'unit_conv_help' => 'Valitse tulos:',
-  'unit_conv_group_rf' => 'Radio / RF',
+  'unit_conv_group_rf' => 'Radio/RF',
   'unit_conv_group_power' => 'Tehoa',
   'unit_conv_group_voltage' => 'Sinimuotoinen jännite',
   'unit_conv_group_length' => 'Pituus',

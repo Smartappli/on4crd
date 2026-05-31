@@ -27,7 +27,7 @@ return array (
   'location' => 'Asukoht',
   'location_value' => 'Yvoir (Durnal)',
   'power' => 'Võimsus',
-  'power_value' => '25 W',
+  'power_value' => '25W',
   'altitude' => 'Kõrgus',
   'altitude_value' => '314 m',
   'tx' => 'Sisend (TX)',

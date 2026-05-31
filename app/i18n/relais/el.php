@@ -29,7 +29,7 @@ return array (
   'power' => 'Δύναμη',
   'power_value' => '25 Δ',
   'altitude' => 'Υψόμετρο',
-  'altitude_value' => '314 m',
+  'altitude_value' => '314 μ',
   'tx' => 'Είσοδος (TX)',
   'rx' => 'Έξοδος (RX)',
   'unit_mhz' => 'MHz',

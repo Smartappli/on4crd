@@ -191,6 +191,6 @@ return array (
   'unit_conv_from' => 'Od',
   'unit_conv_to' => 'Směrem k',
   'unit_conv_presets' => 'Rychlé hodnoty',
-  'unit_conv_reference' => 'Reference',
+  'unit_conv_reference' => 'Odkaz',
   'unit_conv_quick_links' => 'Detailní převodníky',
 );

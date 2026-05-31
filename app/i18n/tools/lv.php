@@ -177,7 +177,7 @@ return array (
   'dbm_to_dbuv_result' => 'aprēķinātais dBµV',
   'unit_conv_title' => 'Vienību konvertēšana',
   'unit_conv_help' => 'Atlasiet reklāmguvumu:',
-  'unit_conv_group_rf' => 'Radio / RF',
+  'unit_conv_group_rf' => 'Radio/RF',
   'unit_conv_group_power' => 'Jauda',
   'unit_conv_group_voltage' => 'Sinusoidālais spriegums',
   'unit_conv_group_length' => 'Garums',

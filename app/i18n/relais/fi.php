@@ -27,7 +27,7 @@ return array (
   'location' => 'Sijainti',
   'location_value' => 'Yvoir (Durnal)',
   'power' => 'Tehoa',
-  'power_value' => '25 W',
+  'power_value' => '25W',
   'altitude' => 'Korkeus',
   'altitude_value' => '314 m',
   'tx' => 'Tulo (TX)',

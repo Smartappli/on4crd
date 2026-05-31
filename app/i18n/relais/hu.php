@@ -27,7 +27,7 @@ return array (
   'location' => 'Helyszín',
   'location_value' => 'Yvoir (Durnal)',
   'power' => 'Erő',
-  'power_value' => '25 W',
+  'power_value' => '25W',
   'altitude' => 'Magasság',
   'altitude_value' => '314 m',
   'tx' => 'Bemenet (TX)',

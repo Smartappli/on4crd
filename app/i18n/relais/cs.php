@@ -27,7 +27,7 @@ return array (
   'location' => 'Umístění',
   'location_value' => 'Yvoir (Durnal)',
   'power' => 'Moc',
-  'power_value' => '25 W',
+  'power_value' => '25W',
   'altitude' => 'Nadmořská výška',
   'altitude_value' => '314 m',
   'tx' => 'Vstup (TX)',

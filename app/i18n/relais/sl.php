@@ -29,7 +29,7 @@ return array (
   'power' => 'Moč',
   'power_value' => '25 W',
   'altitude' => 'Nadmorska višina',
-  'altitude_value' => '314 m',
+  'altitude_value' => '314m',
   'tx' => 'Vhod (TX)',
   'rx' => 'Izhod (RX)',
   'unit_mhz' => 'MHz',

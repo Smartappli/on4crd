@@ -177,7 +177,7 @@ return array (
   'dbm_to_dbuv_result' => 'procijenjeni dBµV',
   'unit_conv_title' => 'Pretvorba jedinica',
   'unit_conv_help' => 'Odaberite konverziju:',
-  'unit_conv_group_rf' => 'Radio / RF',
+  'unit_conv_group_rf' => 'Radio/RF',
   'unit_conv_group_power' => 'Snaga',
   'unit_conv_group_voltage' => 'Sinusni napon',
   'unit_conv_group_length' => 'Duljina',
