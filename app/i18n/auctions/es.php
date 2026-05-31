@@ -14,7 +14,7 @@ return array (
   'lots' => 'lotes',
   'default_summary' => 'Lote de subasta del club.',
   'start' => 'Inicio',
-  'end' => 'Fin',
+  'end' => 'FIN',
   'step' => 'Incremento',
   'view_lot' => 'Ver lote',
   'subscribe_auctions' => 'Suscribirme a las subastas',

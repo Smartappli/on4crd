@@ -35,7 +35,7 @@ return array (
   'col_status' => 'Statuss',
   'col_impr' => 'Drukāt',
   'col_clicks' => 'Klikšķi',
-  'col_ctr' => 'CTR',
+  'col_ctr' => 'VKS',
   'col_actions' => 'Darbības',
   'computed_end' => 'Aprēķinātais beigas:',
   'no_end_date' => 'bez datuma ierobežojuma',

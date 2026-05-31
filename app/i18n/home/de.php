@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Gute Praxis:',
   'vhf_voice_value' => '145.500 MHz (regionaler Simplex-Anruf]',
   'cw_qrp_label' => 'CW-QRP-Frequenzen:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'Rufzeichen + QTH + gewünschter Verkehr ansagen',
   'map_title' => 'Google-Karte - Radio Club Durnal',
   'address_title' => 'Adresse',

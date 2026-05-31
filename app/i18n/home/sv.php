@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Bra reflex:',
   'vhf_voice_value' => '145.500 MHz (regionalt simplexsamtal)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'meddela anropssignal + QTH + trafik sökt',
   'map_title' => 'Google Map - Radio Club Durnal',
   'address_title' => 'Adress',

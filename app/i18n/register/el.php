@@ -11,7 +11,7 @@ return array (
   'title' => 'Δημιουργία λογαριασμού μέλους',
   'callsign' => 'Ενδεικτικά',
   'full_name' => 'Πλήρες όνομα',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Τηλέφωνο',
   'qth' => 'QTH',
   'licence_class' => 'Κατηγορία άδειας',

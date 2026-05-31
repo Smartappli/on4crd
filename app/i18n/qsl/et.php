@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Ees SVG',
   'back_svg' => 'Tagasi SVG',
   'manual_hint' => 'Väljad tähis, riba, režiim ja RST normaliseeritakse tippimise ajal suurtähtedeks.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 miljonit',
   'mode_placeholder' => 'SSB',
 );

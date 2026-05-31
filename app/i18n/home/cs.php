@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Dobrý reflex:',
   'vhf_voice_value' => '145.500 MHz (regionální simplexní volání)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'oznámit volací značku + QTH + hledaný provoz',
   'map_title' => 'Mapa Google - Radio Club Durnal',
   'address_title' => 'Adresa',

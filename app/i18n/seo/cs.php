@@ -43,7 +43,7 @@ return array (
   'login_description' => 'Bezpečné připojení k členské oblasti ON4CRD.',
   'register_title' => 'Registrace ON4CRD',
   'register_description' => 'Vytvořte si členský účet ON4CRD a připojte se ke klubovým službám.',
-  'newsletter_public_title' => 'Newsletter ON4CRD',
+  'newsletter_public_title' => 'ON4CRD Newsletter',
   'newsletter_public_description' => 'Přihlaste se k odběru veřejného zpravodaje Radio Club Durnal.',
   'dashboard_title' => 'Panel člena',
   'dashboard_description' => 'Uživatelský řídicí panel člena ON4CRD.',

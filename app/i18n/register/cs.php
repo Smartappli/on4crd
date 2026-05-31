@@ -11,7 +11,7 @@ return array (
   'title' => 'Vytvořte si členský účet',
   'callsign' => 'Orientační',
   'full_name' => 'Celé jméno',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence_class' => 'Licenční třída',

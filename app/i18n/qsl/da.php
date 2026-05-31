@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Front SVG',
   'back_svg' => 'Tilbage SVG',
   'manual_hint' => 'Betegnelses-, bånd-, tilstands- og RST-felterne normaliseres til store bogstaver under indtastning.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 mio',
   'mode_placeholder' => 'SSB',
 );

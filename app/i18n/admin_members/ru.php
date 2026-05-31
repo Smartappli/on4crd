@@ -10,7 +10,7 @@ return array (
   'th_callsign' => 'Позывной',
   'th_name' => 'Имя',
   'th_email' => 'Электронная почта',
-  'th_locator' => 'Locator',
+  'th_locator' => 'Локатор',
   'th_active' => 'Активен',
   'th_committee' => 'Комитет',
   'th_actions' => 'Действия',

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-return [
-  'default_title' => 'ON4CRD Radio Club Durnal',
+return array (
+  'default_title' => 'ON4CRD Radioclub Durnal',
   'default_description' => 'Radio Club Durnal ON4CRD: nieuws, evenementen, opleiding, radioamateurtools en lokale bronnen in Durnal, Yvoir en Namen.',
   'geo_placename' => 'Durnal, Yvoir, Namen, België',
   'home_title' => 'ON4CRD Radio Club Durnal',
@@ -53,4 +53,4 @@ return [
   'qsl_description' => 'Radio Club Durnal ON4CRD: nieuws, evenementen, opleiding, radioamateurtools en lokale bronnen in Durnal, Yvoir en Namen.',
   'members_library_title' => 'ON4CRD Radio Club Durnal',
   'members_library_description' => 'Radio Club Durnal ON4CRD: nieuws, evenementen, opleiding, radioamateurtools en lokale bronnen in Durnal, Yvoir en Namen.',
-];
+);

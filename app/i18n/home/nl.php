@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Goede reflex:',
   'vhf_voice_value' => '145.500 MHz (regionale simplex-oproep]',
   'cw_qrp_label' => 'CW QRP-frequenties:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'roepnaam + QTH + gewenst verkeer aankondigen',
   'map_title' => 'Google Maps - Radioclub Durnal',
   'address_title' => 'Adres',

@@ -35,7 +35,7 @@ return array (
   'col_status' => 'Stav',
   'col_impr' => 'Tlačiť',
   'col_clicks' => 'Kliknutia',
-  'col_ctr' => 'CTR',
+  'col_ctr' => 'MP',
   'col_actions' => 'Akcie',
   'computed_end' => 'Vypočítaný koniec:',
   'no_end_date' => 'bez obmedzenia dátumu',

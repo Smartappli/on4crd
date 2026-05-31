@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Jó reflex:',
   'vhf_voice_value' => '145.500 MHz (regionális szimplex hívás)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'hívójel bemondása + QTH + keresett forgalom',
   'map_title' => 'Google Térkép - Radio Club Durnal',
   'address_title' => 'Cím',

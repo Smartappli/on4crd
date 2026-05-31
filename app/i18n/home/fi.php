@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Hyvä refleksi:',
   'vhf_voice_value' => '145.500 MHz (alueellinen simplex-puhelu)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'ilmoittaa kutsumerkki + QTH + haettu liikenne',
   'map_title' => 'Google-kartta - Radio Club Durnal',
   'address_title' => 'Osoite',

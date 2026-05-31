@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Dober refleks:',
   'vhf_voice_value' => '145.500 MHz (regionalni enostavni klic)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'objavi klicni znak + QTH + iskani promet',
   'map_title' => 'Google Zemljevid - Radio klub Durnal',
   'address_title' => 'Naslov',

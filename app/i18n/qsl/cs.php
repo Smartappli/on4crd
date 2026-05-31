@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Přední SVG',
   'back_svg' => 'Zpět SVG',
   'manual_hint' => 'The designator, band, mode and RST fields are normalized to uppercase during typing.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 mil',
   'mode_placeholder' => 'SSB',
 );

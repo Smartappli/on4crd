@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Добър рефлекс:',
   'vhf_voice_value' => '145.500 MHz (регионално симплексно повикване)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'обяви позивна + QTH + търсен трафик',
   'map_title' => 'Google Map - Радиоклуб Дюрнал',
   'address_title' => 'Адрес',

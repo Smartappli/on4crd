@@ -7,7 +7,7 @@ return array (
   'back' => '← Volver al calendario',
   'summary_fallback' => 'Encuentre toda la información útil sobre este evento.',
   'start' => 'Inicio',
-  'end' => 'Fin',
+  'end' => 'FIN',
   'location' => 'Lugar',
   'tbd' => 'Por confirmar',
   'site' => 'Sitio del evento',

@@ -87,7 +87,7 @@ return array (
   'uba_title' => '比利时皇家业余无线电联盟',
   'uba_desc' => 'Radio Club Durnal 隶属于比利时业余无线电联盟。',
   'uba_cta' => '访问 UBA 网站',
-  'ibpt_title' => 'BIPT',
+  'ibpt_title' => '商务英语培训中心',
   'ibpt_desc' => '面向业余无线电操作员私人休闲使用的官方信息。',
   'ibpt_cta' => '打开 IBPT 页面',
   'member_modules_title' => '会员可用模块',

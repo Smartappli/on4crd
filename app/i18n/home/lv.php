@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Labs reflekss:',
   'vhf_voice_value' => '145.500 MHz (reģionālais simplekss zvans)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'paziņot izsaukuma signālu + QTH + meklētā satiksme',
   'map_title' => 'Google karte - Radio Club Durnal',
   'address_title' => 'Adrese',

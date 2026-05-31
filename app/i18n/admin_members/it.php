@@ -10,7 +10,7 @@ return array (
   'th_callsign' => 'Nominativo',
   'th_name' => 'Nome',
   'th_email' => 'E-mail',
-  'th_locator' => 'Locator',
+  'th_locator' => 'Localizzatore',
   'th_active' => 'Attivo',
   'th_committee' => 'Comitato',
   'th_actions' => 'Azioni',

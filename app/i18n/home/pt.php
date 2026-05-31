@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Boa prática:',
   'vhf_voice_value' => '145.500 MHz (chamada simplex regional]',
   'cw_qrp_label' => 'Frequências CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'anunciar indicativo + QTH + tráfego pretendido',
   'map_title' => 'Peta Google - Radio Club Durnal',
   'address_title' => 'Endereço',

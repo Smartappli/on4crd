@@ -20,7 +20,7 @@ return array (
   'photo_help' => '任意 — JPG、PNG、WEBP形式、最大6 MB。',
   'full_name' => '氏名',
   'phone' => '電話',
-  'qth' => 'QTH',
+  'qth' => 'クイーンズランド州',
   'licence' => 'ライセンス',
   'bands' => 'お気に入りバンド',
   'station' => '無線局',

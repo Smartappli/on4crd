@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Geras refleksas:',
   'vhf_voice_value' => '145.500 MHz (regioninis vienašalis skambutis)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'paskelbti šaukinį + QTH + ieškomas eismas',
   'map_title' => 'Google žemėlapis – Radijo klubas Durnal',
   'address_title' => 'Adresas',

@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'Dobry refleks:',
   'vhf_voice_value' => '145.500 MHz (regionalne połączenie simpleksowe)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'ogłosić znak wywoławczy + QTH + poszukiwany ruch',
   'map_title' => 'Mapa Google - Klub Radiowy Durnal',
   'address_title' => 'Adres',

@@ -9,7 +9,7 @@ return array (
   'all_marked_read' => 'Kaikki ilmoitukset on merkitty luetuiksi.',
   'marked_read' => 'Ilmoitus merkitty luetuksi.',
   'unread' => 'Lukematon',
-  'read' => 'Lue',
+  'read' => 'Lukea',
   'filter_all' => 'Kaikki ilmoitukset',
   'filter_unread' => 'Vain lukematon',
   'filter' => 'Suodata',

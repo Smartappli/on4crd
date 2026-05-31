@@ -18,7 +18,7 @@ return array (
   'mode_value' => 'FM-repeatermodus + EchoLink',
   'input' => 'Ingangsfrequentie ( TX )',
   'output' => 'Uitgangsfrequentie ( RX )',
-  'shift' => 'Shift',
+  'shift' => 'Verschuiving',
   'subtone' => 'CTCSS-subtoon',
   'polarization' => 'Polarisatie',
   'polarization_value' => 'Verticaal 6,5 dBi',

@@ -35,7 +35,7 @@ return array (
   'col_status' => 'Būsena',
   'col_impr' => 'Spausdinti',
   'col_clicks' => 'Paspaudimai',
-  'col_ctr' => 'CTR',
+  'col_ctr' => 'PR',
   'col_actions' => 'Veiksmai',
   'computed_end' => 'Apskaičiuota pabaiga:',
   'no_end_date' => 'be datos limito',

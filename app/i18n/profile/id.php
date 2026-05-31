@@ -10,7 +10,7 @@ return array (
   'saved' => 'Preferensi visibilitas diperbarui.',
   'title' => 'Profil',
   'avatar_alt' => 'Avatar anggota',
-  'callsign' => 'Callsign',
+  'callsign' => 'tanda panggilan',
   'name' => 'Nama',
   'email' => 'E-mail',
   'directory_visibility' => 'Visibilitas direktori',

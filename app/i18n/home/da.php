@@ -37,7 +37,7 @@ return array (
   'good_practice_label' => 'God refleks:',
   'vhf_voice_value' => '145.500 MHz (regionalt simplex-opkald)',
   'cw_qrp_label' => 'QRG CW QRP:',
-  'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
+  'cw_qrp_value' => '7,030 MHz • 14,060 MHz',
   'good_practice_value' => 'meddele kaldesignal + QTH + trafik eftersøgt',
   'map_title' => 'Google Map - Radio Club Durnal',
   'address_title' => 'Adresse',
