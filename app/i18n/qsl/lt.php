@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Priekyje SVG',
   'back_svg' => 'Atgal SVG',
   'manual_hint' => 'Įvedant žymeklį, juostą, režimą ir RST laukai normalizuojami didžiosiomis raidėmis.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 mln',
   'mode_placeholder' => 'SSB',
 );

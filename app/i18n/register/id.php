@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Terlalu banyak percobaan. Silakan coba lagi nanti.',
   'ok_created' => 'Akun berhasil dibuat. Selamat datang di area anggota!',
   'title' => 'Buat akun anggota',
-  'callsign' => 'Callsign',
+  'callsign' => 'tanda panggilan',
   'full_name' => 'Nama lengkap',
   'email' => 'E-mail',
   'phone' => 'Telepon',

@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Priekšējais SVG',
   'back_svg' => 'Aizmugure SVG',
   'manual_hint' => 'Apzīmētāja, joslas, režīma un RST lauki rakstīšanas laikā tiek normalizēti ar lielajiem burtiem.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 miljoni',
   'mode_placeholder' => 'SSB',
 );

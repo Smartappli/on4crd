@@ -27,7 +27,7 @@ return array (
   'location' => 'Standort',
   'location_value' => 'Yvoir (Durnal)',
   'power' => 'Leistung',
-  'power_value' => '25 W',
+  'power_value' => '25W',
   'altitude' => 'Höhe',
   'altitude_value' => '314 m',
   'tx' => 'Eingang ( TX )',

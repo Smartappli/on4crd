@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Predná SVG',
   'back_svg' => 'Späť SVG',
   'manual_hint' => 'Polia označenia, pásma, režimu a RST sa počas písania normalizujú na veľké písmená.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 mil',
   'mode_placeholder' => 'SSB',
 );

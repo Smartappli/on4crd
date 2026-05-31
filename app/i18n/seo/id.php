@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-return [
-  'default_title' => 'ON4CRD Radio Club Durnal',
+return array (
+  'default_title' => 'Klub Radio ON4CRD Durnal',
   'default_description' => 'Radio Club Durnal ON4CRD: berita, acara, pelatihan, alat radio amatir, dan sumber daya lokal di Durnal, Yvoir, dan Namur.',
   'geo_placename' => 'Durnal, Yvoir, Namur, Belgia',
   'home_title' => 'ON4CRD Radio Club Durnal',
@@ -53,4 +53,4 @@ return [
   'qsl_description' => 'Radio Club Durnal ON4CRD: berita, acara, pelatihan, alat radio amatir, dan sumber daya lokal di Durnal, Yvoir, dan Namur.',
   'members_library_title' => 'ON4CRD Radio Club Durnal',
   'members_library_description' => 'Radio Club Durnal ON4CRD: berita, acara, pelatihan, alat radio amatir, dan sumber daya lokal di Durnal, Yvoir, dan Namur.',
-];
+);

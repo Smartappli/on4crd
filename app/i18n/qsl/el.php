@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Εμπρός SVG',
   'back_svg' => 'Πίσω SVG',
   'manual_hint' => 'Τα πεδία προσδιορισμού, ζώνης, λειτουργίας και RST κανονικοποιούνται σε κεφαλαία κατά την πληκτρολόγηση.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 εκ',
   'mode_placeholder' => 'SSB',
 );

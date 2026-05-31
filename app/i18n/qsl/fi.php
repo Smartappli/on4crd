@@ -148,6 +148,6 @@ return array (
   'front_svg' => 'Edessä SVG',
   'back_svg' => 'Takaosa SVG',
   'manual_hint' => 'Tunniste-, kaista-, tila- ja RST-kentät normalisoidaan isoin kirjaimin kirjoittamisen aikana.',
-  'band_placeholder' => '20M',
+  'band_placeholder' => '20 milj',
   'mode_placeholder' => 'SSB',
 );
