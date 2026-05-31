@@ -12,7 +12,7 @@ return array (
   'avatar_alt' => 'Avatar člena',
   'callsign' => 'Orientační',
   'name' => 'Jméno',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'directory_visibility' => 'Viditelnost v adresáři',
   'visibility_help' => 'Vyberte, kdo může zobrazit jednotlivé informace: veřejné, přihlášení členové nebo výbor.',
   'photo' => 'Profilový obrázek',

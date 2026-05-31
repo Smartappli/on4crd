@@ -12,7 +12,7 @@ return array (
   'avatar_alt' => 'Avatar anggota',
   'callsign' => 'Callsign',
   'name' => 'Nama',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'directory_visibility' => 'Visibilitas direktori',
   'visibility_help' => 'Pilih siapa yang dapat melihat setiap informasi: publik, anggota yang masuk, atau komite.',
   'photo' => 'Foto profil',

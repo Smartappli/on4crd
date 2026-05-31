@@ -16,5 +16,5 @@ return array (
   'unsubscribe' => 'Disiscriviti',
   'email_label' => 'Email di contatto',
   'subscribe' => 'Iscriviti',
-  'layout_title' => 'Newsletter',
+  'layout_title' => 'Notiziario',
 );

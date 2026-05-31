@@ -16,5 +16,5 @@ return array (
   'unsubscribe' => 'Berhenti berlangganan',
   'email_label' => 'Email kontak',
   'subscribe' => 'Berlangganan',
-  'layout_title' => 'Newsletter',
+  'layout_title' => 'Buletin',
 );

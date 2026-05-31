@@ -16,5 +16,5 @@ return array (
   'unsubscribe' => 'Cancelar subscrição',
   'email_label' => 'Email de contacto',
   'subscribe' => 'Subscrever',
-  'layout_title' => 'Newsletter',
+  'layout_title' => 'Boletim informativo',
 );

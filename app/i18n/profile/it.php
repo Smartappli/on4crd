@@ -12,7 +12,7 @@ return array (
   'avatar_alt' => 'Avatar membro',
   'callsign' => 'Nominativo',
   'name' => 'Nome',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'directory_visibility' => 'Visibilità in rubrica',
   'visibility_help' => 'Scegli chi può vedere ogni informazione: pubblico, membri autenticati o comitato.',
   'photo' => 'Foto profilo',

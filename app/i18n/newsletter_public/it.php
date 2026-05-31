@@ -7,6 +7,6 @@ return array (
   'invalid_email' => 'Indirizzo email non valido.',
   'ok' => 'La tua iscrizione alla newsletter è confermata.',
   'intro' => 'Ricevi le notizie del Radio Club Durnal direttamente via email.',
-  'email_label' => 'Email newsletter',
+  'email_label' => 'Newsletter via e-mail',
   'submit' => 'Iscriviti alla newsletter',
 );

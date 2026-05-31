@@ -16,5 +16,5 @@ return array (
   'unsubscribe' => 'Odhlásit odběr',
   'email_label' => 'Kontaktní email',
   'subscribe' => 'Přihlásit se k odběru',
-  'layout_title' => 'Newsletter',
+  'layout_title' => 'Bulletin',
 );
