@@ -13,7 +13,7 @@ return array (
   'tracked_click_aria' => 'Deschideți linkul de clic urmărit',
   'campaigns' => 'Campanii',
   'impressions_total' => 'Vizualizări cumulate',
-  'ctr_global' => 'CTR global',
+  'ctr_global' => 'CTR total',
   'latest_campaigns' => 'Ultimele campanii',
   'no_campaigns' => 'Nu există campanii recente.',
   'placements_title' => 'Plasări de publicitate',
