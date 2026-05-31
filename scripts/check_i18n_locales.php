@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 $files = glob($root . '/pages/*.php') ?: [];
-$requiredLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'bn', 'hi', 'id', 'ja', 'ru', 'zh'];
+$requiredLocales = ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'bg', 'hr', 'cs', 'da', 'et', 'fi', 'el', 'hu', 'ga', 'lv', 'lt', 'mt', 'pl', 'ro', 'sk', 'sl', 'sv', 'ar', 'bn', 'hi', 'id', 'ja', 'ru', 'zh'];
 $homeRequiredLocales = $requiredLocales;
 $required = array_map(static fn (string $locale): string => "'" . $locale . "'", $requiredLocales);
 $issues = [];

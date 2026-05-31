@@ -14,9 +14,9 @@ final class I18nNativeLocalesTest extends TestCase
         return supported_locales();
     }
 
-    public function testSupportedLocaleSetContainsFourteenNativeLocales(): void
+    public function testSupportedLocaleSetContainsConfiguredLocales(): void
     {
-        self::assertSame(['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], $this->supportedLocales());
+        self::assertSame(['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'bg', 'hr', 'cs', 'da', 'et', 'fi', 'el', 'hu', 'ga', 'lv', 'lt', 'mt', 'pl', 'ro', 'sk', 'sl', 'sv', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], $this->supportedLocales());
     }
 
     public function testOnlyArabicUsesRtlLayoutDirection(): void

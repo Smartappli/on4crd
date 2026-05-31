@@ -74,7 +74,7 @@ $graph = [
             'name' => 'ON4CRD.be',
             'url' => $homeUrl,
             'publisher' => ['@id' => $homeUrl . '#organization'],
-            'inLanguage' => ['fr', 'en', 'nl', 'de', 'es', 'it', 'pt'],
+            'inLanguage' => supported_locales(),
             'potentialAction' => [
                 '@type' => 'SearchAction',
                 'target' => $url('search', ['q' => '{search_term_string}']),

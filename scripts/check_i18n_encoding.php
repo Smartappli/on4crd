@@ -6,7 +6,7 @@ $i18nRoot = $root . '/app/i18n';
 
 $strict = in_array('--strict', $argv, true);
 $json = in_array('--json', $argv, true);
-$knownLocales = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+$knownLocales = ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'bg', 'hr', 'cs', 'da', 'et', 'fi', 'el', 'hu', 'ga', 'lv', 'lt', 'mt', 'pl', 'ro', 'sk', 'sl', 'sv', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
 
 /**
  * Heuristics for common UTF-8 mojibake artifacts produced by double/mis-decoding.

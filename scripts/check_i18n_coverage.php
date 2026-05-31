@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__) . '/app/i18n';
-$expected = ['fr', 'en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
+$expected = ['fr', 'en', 'de', 'nl', 'it', 'es', 'pt', 'bg', 'hr', 'cs', 'da', 'et', 'fi', 'el', 'hu', 'ga', 'lv', 'lt', 'mt', 'pl', 'ro', 'sk', 'sl', 'sv', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
 
 $moduleIndexFiles = glob($root . '/*.php') ?: [];
 $missingIssues = [];
@@ -33,7 +33,7 @@ foreach ($moduleIndexFiles as $indexFile) {
 }
 
 if ($missingIssues === [] && $extraIssues === []) {
-    echo "OK: all i18n modules with locale directories match the expected 14 locales.\n";
+    echo "OK: all i18n modules with locale directories match the expected locales.\n";
     exit(0);
 }
 
