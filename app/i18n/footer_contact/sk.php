@@ -6,7 +6,7 @@ return array (
   'invalid_form' => 'Vyplňte prosím správne kontaktný formulár.',
   'subject' => 'Nová päta správy kontaktu ON4CRD',
   'label_name' => 'Meno',
-  'label_email' => 'Email',
+  'label_email' => 'E-mail',
   'label_message' => 'Správa',
   'ok_sent' => 'Vaša správa bola odoslaná.',
   'err_send' => 'Momentálne nie je možné odoslať správu.',

@@ -121,7 +121,7 @@ return array (
   'join_benefit_3_desc' => 'CRD usnadňuje kontakty mezi nadšenci, přístup k užitečným informacím a účast na klubovém životě.',
   'contact_title' => 'Kontaktujte nás',
   'contact_name' => 'Jméno',
-  'contact_email' => 'Email',
+  'contact_email' => 'E-mail',
   'contact_message' => 'Zpráva',
   'contact_send' => 'Odeslat',
   'important_info_title' => 'Důležité informace',

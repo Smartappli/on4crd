@@ -12,5 +12,5 @@ return array (
   'title' => 'Ξεχάσατε τον κωδικό πρόσβασης',
   'submit' => 'Αποστολή συνδέσμου',
   'back_login' => 'Επιστροφή στην είσοδο',
-  'email_label' => 'Email',
+  'email_label' => 'E-mail',
 );

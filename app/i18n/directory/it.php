@@ -19,7 +19,7 @@ return array (
   'reset_filters' => 'Cancella',
   'results' => 'Risultati',
   'licence' => 'Licenza',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Telefono',
   'bands' => 'Bande',
   'station' => 'Stazione',

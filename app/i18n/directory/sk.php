@@ -19,7 +19,7 @@ return array (
   'reset_filters' => 'Jasné',
   'results' => 'Výsledky',
   'licence' => 'Licencia',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Telefón',
   'bands' => 'kapely',
   'station' => 'Stredisko',

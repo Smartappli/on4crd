@@ -19,7 +19,7 @@ return array (
   'reset_filters' => 'Jasný',
   'results' => 'Výsledky',
   'licence' => 'Licence',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Telefon',
   'bands' => 'Kapely',
   'station' => 'Resort',

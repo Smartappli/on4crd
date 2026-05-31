@@ -10,7 +10,7 @@ return array (
   'members_title' => 'Lista de miembros',
   'none' => 'No se encontró ningún miembro.',
   'none_help' => 'Prueba otra búsqueda o borra los filtros activos.',
-  'avatar_of' => 'Avatar de',
+  'avatar_of' => 'avatar de',
   'search_label' => 'Buscar',
   'search_placeholder' => 'Indicativo o nombre',
   'licence_filter' => 'Filtrar por licencia',

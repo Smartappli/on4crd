@@ -6,7 +6,7 @@ return array (
   'not_found_msg' => 'Den anmodede begivenhed er ikke tilgængelig.',
   'back' => '← Tilbage til kalender',
   'summary_fallback' => 'Find alle nyttige oplysninger om denne begivenhed.',
-  'start' => 'Start',
+  'start' => 'Starte',
   'end' => 'Slut',
   'location' => 'Beliggenhed',
   'tbd' => 'Skal bekræftes',

@@ -19,7 +19,7 @@ return array (
   'reset_filters' => 'Очистить',
   'results' => 'Результаты',
   'licence' => 'Лицензия',
-  'email' => 'Email',
+  'email' => 'Электронная почта',
   'phone' => 'Телефон',
   'bands' => 'Диапазоны',
   'station' => 'Станция',

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Citazione del giorno',
   'ham_weather' => 'Meteorologia radioamatoriale',
   'ham_weather_desc' => 'Le raccomandazioni sono calcolate automaticamente in base a posizione, orario, meteo e propagazione per identificare le bande e i modi più favorevoli ai QSO.',
@@ -39,7 +39,7 @@ return [
   'cw_qrp_label' => 'Frequenze CW QRP:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
   'good_practice_value' => 'annunciare nominativo + QTH + traffico richiesto',
-  'map_title' => 'Google Map - Radio Club Durnal',
+  'map_title' => 'Mappa Google - Radio Club Durnal',
   'address_title' => 'Indirizzo',
   'contact_people' => 'Persone di contatto',
   'club_spotlight_title' => 'In evidenza del club',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Annunci',
   'spotlight_classifieds_empty' => 'Nessun annuncio attivo al momento.',
   'spotlight_classifieds_cta' => 'Vedi gli annunci',
-
   'spotlight_tool_day' => 'Notizie / Annuncio',
   'spotlight_for_sale' => 'Prossimi eventi',
   'spotlight_auction_live' => 'Strumento del giorno',
@@ -99,10 +98,10 @@ return [
   'club_name' => 'Radio Club Durnal',
   'venue_line_1' => 'Bocq Arena',
   'venue_line_2' => 'Rue des Écoles',
-  'venue_line_3' => '5530 Purnode',
+  'venue_line_3' => '5530 Purnodo',
   'alt_partner_ad' => 'Pubblicità partner',
   'alt_hero_illustration' => 'Illustrazione ON4CRD',
-  'alt_uba_logo' => 'Logo UBA',
+  'alt_uba_logo' => 'Il logo dell\'UBA',
   'alt_repeater_logo' => 'Logo del ripetitore',
   'journalist_title' => 'Sei giornalista?',
   'journalist_desc' => 'Accedi direttamente al nostro dossier stampa per preparare articoli e servizi.',
@@ -143,4 +142,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Citazione in evidenza',
   'clock_aria' => 'Orologi UTC e locale',
-];
+);

@@ -96,7 +96,7 @@ return array (
   'member_audience' => 'Mitglieder',
   'page_title' => 'Startseite',
   'club_name' => 'Radio Club Durnal',
-  'venue_line_1' => 'Bocq Arena',
+  'venue_line_1' => 'Bocq-Arena',
   'venue_line_2' => 'Rue des Écoles',
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Partnerwerbung',

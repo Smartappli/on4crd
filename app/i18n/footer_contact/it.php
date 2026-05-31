@@ -6,7 +6,7 @@ return array (
   'invalid_form' => 'Compila correttamente il modulo di contatto.',
   'subject' => 'Nuovo messaggio contatto footer ON4CRD',
   'label_name' => 'Nome',
-  'label_email' => 'Email',
+  'label_email' => 'E-mail',
   'label_message' => 'Messaggio',
   'ok_sent' => 'Il tuo messaggio è stato inviato.',
   'err_send' => 'Impossibile inviare il messaggio ora.',

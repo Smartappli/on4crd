@@ -101,7 +101,7 @@ return array (
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Oglašavanje partnera',
   'alt_hero_illustration' => 'Ilustracija ON4CRD',
-  'alt_uba_logo' => 'Logo UBA',
+  'alt_uba_logo' => 'UBA logo',
   'alt_repeater_logo' => 'Logo releja',
   'journalist_title' => 'Vi ste novinar',
   'journalist_desc' => 'Izravno pristupite našem kompletu za tisak kako biste pripremili svoje publikacije i izvješća.',

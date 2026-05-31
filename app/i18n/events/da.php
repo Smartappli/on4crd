@@ -14,7 +14,7 @@ return array (
   'week' => 'uge',
   'list' => 'Liste',
   'detail' => 'Detalje',
-  'start' => 'Start',
+  'start' => 'Starte',
   'end' => 'Slut',
   'location' => 'Beliggenhed',
   'view_sheet' => 'Se filen',

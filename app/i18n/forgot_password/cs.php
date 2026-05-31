@@ -12,5 +12,5 @@ return array (
   'title' => 'Zapomenuté heslo',
   'submit' => 'Odeslat odkaz',
   'back_login' => 'Návrat k přihlášení',
-  'email_label' => 'Email',
+  'email_label' => 'E-mail',
 );

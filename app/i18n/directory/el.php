@@ -19,7 +19,7 @@ return array (
   'reset_filters' => 'Καθαρό',
   'results' => 'Αποτελέσματα',
   'licence' => 'Άδεια',
-  'email' => 'Email',
+  'email' => 'E-mail',
   'phone' => 'Τηλέφωνο',
   'bands' => 'Μπάντες',
   'station' => 'Θέρετρο',

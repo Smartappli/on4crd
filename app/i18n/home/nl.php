@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'quote_day' => 'Quote van de dag',
   'ham_weather' => 'Zendweer voor radioamateurs',
   'ham_weather_desc' => 'Aanbevelingen worden automatisch berekend op basis van uw locatie, tijdstip, weer en propagatie om de beste banden en modes voor QSO te bepalen.',
@@ -39,7 +39,7 @@ return [
   'cw_qrp_label' => 'CW QRP-frequenties:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
   'good_practice_value' => 'roepnaam + QTH + gewenst verkeer aankondigen',
-  'map_title' => 'Google Map - Radio Club Durnal',
+  'map_title' => 'Google Maps - Radioclub Durnal',
   'address_title' => 'Adres',
   'contact_people' => 'Contactpersonen',
   'club_spotlight_title' => 'In de kijker van de club',
@@ -49,7 +49,6 @@ return [
   'spotlight_classifieds' => 'Zoekertjes',
   'spotlight_classifieds_empty' => 'Momenteel zijn er geen actieve zoekertjes.',
   'spotlight_classifieds_cta' => 'Bekijk zoekertjes',
-
   'spotlight_tool_day' => 'Nieuws / Aankondiging',
   'spotlight_for_sale' => 'Komende evenementen',
   'spotlight_auction_live' => 'Tool van de dag',
@@ -98,7 +97,7 @@ return [
   'page_title' => 'Startpagina',
   'club_name' => 'Radio Club Durnal',
   'venue_line_1' => 'Bocq Arena',
-  'venue_line_2' => 'Rue des Écoles',
+  'venue_line_2' => 'Rue des Ecoles',
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Partneradvertentie',
   'alt_hero_illustration' => 'ON4CRD-illustratie',
@@ -143,4 +142,4 @@ return [
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Uitgelichte quote',
   'clock_aria' => 'UTC- en lokale klokken',
-];
+);

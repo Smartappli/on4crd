@@ -6,7 +6,7 @@ return array (
   'not_found_msg' => 'Het gevraagde evenement is niet beschikbaar.',
   'back' => '← Terug naar kalender',
   'summary_fallback' => 'Vind alle nuttige informatie over dit evenement.',
-  'start' => 'Start',
+  'start' => 'Begin',
   'end' => 'Einde',
   'location' => 'Locatie',
   'tbd' => 'Nog te bevestigen',
