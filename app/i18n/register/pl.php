@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Wszystkie pola obowiązkowe muszą zostać wypełnione.',
+  'auth_unavailable' => 'Moduł uwierzytelniający niedostępny. Uruchom instalację kompozytora.',
+  'invalid_data' => 'Podane informacje są nieprawidłowe.',
+  'already_exists' => 'Konto z tym adresem e-mail lub kodem już istnieje.',
+  'too_many' => 'Zbyt wiele prób. Spróbuj ponownie później.',
+  'ok_created' => 'Konto utworzone pomyślnie. Witamy w strefie członkowskiej!',
+  'title' => 'Utwórz konto członkowskie',
+  'callsign' => 'Orientacyjne',
+  'full_name' => 'Pełne imię i nazwisko',
+  'email' => 'E-mail',
+  'phone' => 'Telefon',
+  'qth' => 'QTH',
+  'licence_class' => 'Klasa licencji',
+  'favourite_bands' => 'Ulubione zespoły',
+  'favourite_bands_placeholder' => 'Np. 2m, 70cm, 20m',
+  'station_equipment' => 'Stacja i wyposażenie',
+  'directory_help' => 'Ta informacja wypełnia Twój wpis w katalogu. Następnie możesz dostosować ich widoczność w swoim profilu.',
+  'password' => 'Hasło',
+  'submit' => 'Utwórz moje konto',
+  'already_registered' => 'Już zarejestrowany?',
+  'login' => 'Zaloguj się',
+  'layout_title' => 'Rejestracja',
+);

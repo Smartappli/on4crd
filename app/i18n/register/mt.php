@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'L-oqsma obbligatorji kollha għandhom jimtlew.',
+  'auth_unavailable' => 'Modulu ta\' awtentikazzjoni mhux disponibbli. Mexxi l-installazzjoni tal-kompożitur.',
+  'invalid_data' => 'L-informazzjoni pprovduta hija invalida.',
+  'already_exists' => 'Kont diġà jeżisti b\'din l-email jew kodiċi.',
+  'too_many' => 'Wisq tentattivi. Jekk jogħġbok erġa\' pprova aktar tard.',
+  'ok_created' => 'Kont maħluq b\'suċċess. Merħba fiż-żona tal-membri!',
+  'title' => 'Oħloq kont membru',
+  'callsign' => 'Indikattiv',
+  'full_name' => 'Isem sħiħ',
+  'email' => 'E-mail',
+  'phone' => 'Telefon',
+  'qth' => 'QTH',
+  'licence_class' => 'Klassi tal-liċenza',
+  'favourite_bands' => 'Bands favoriti',
+  'favourite_bands_placeholder' => 'Eż. 2m, 70cm, 20m',
+  'station_equipment' => 'Stazzjon u tagħmir',
+  'directory_help' => 'Din l-informazzjoni timla l-lista tiegħek fid-direttorju. Imbagħad tista \'taġġusta l-viżibilità tagħhom fil-profil tiegħek.',
+  'password' => 'Password',
+  'submit' => 'Oħloq il-kont tiegħi',
+  'already_registered' => 'Diġà rreġistrat?',
+  'login' => 'Idħol',
+  'layout_title' => 'Reġistrazzjoni',
+);

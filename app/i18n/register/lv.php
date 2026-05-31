@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Jāaizpilda visi obligātie lauki.',
+  'auth_unavailable' => 'Autentifikācijas modulis nav pieejams. Palaidiet komponista instalēšanu.',
+  'invalid_data' => 'Sniegtā informācija nav derīga.',
+  'already_exists' => 'Konts ar šo e-pasta adresi vai kodu jau pastāv.',
+  'too_many' => 'Pārāk daudz mēģinājumu. Lūdzu, vēlāk mēģiniet vēlreiz.',
+  'ok_created' => 'Konts veiksmīgi izveidots. Laipni lūgti dalībnieku zonā!',
+  'title' => 'Izveidojiet dalībnieka kontu',
+  'callsign' => 'Indikatīvs',
+  'full_name' => 'Pilns vārds',
+  'email' => 'E-pasts',
+  'phone' => 'Tālrunis',
+  'qth' => 'QTH',
+  'licence_class' => 'Licences klase',
+  'favourite_bands' => 'Mīļākās grupas',
+  'favourite_bands_placeholder' => 'Piem. 2m, 70cm, 20m',
+  'station_equipment' => 'Stacija un aprīkojums',
+  'directory_help' => 'Šī informācija aizpilda jūsu ierakstu direktorijā. Pēc tam varat pielāgot viņu redzamību savā profilā.',
+  'password' => 'Parole',
+  'submit' => 'Izveidojiet manu kontu',
+  'already_registered' => 'Vai jau reģistrēts?',
+  'login' => 'Piesakieties',
+  'layout_title' => 'Reģistrācija',
+);

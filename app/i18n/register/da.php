@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Alle obligatoriske felter skal udfyldes.',
+  'auth_unavailable' => 'Godkendelsesmodulet er ikke tilgængeligt. Kør komponistinstallation.',
+  'invalid_data' => 'De angivne oplysninger er ugyldige.',
+  'already_exists' => 'Der findes allerede en konto med denne e-mail eller kode.',
+  'too_many' => 'For mange forsøg. Prøv venligst igen senere.',
+  'ok_created' => 'Konto oprettet. Velkommen til medlemsområdet!',
+  'title' => 'Opret en medlemskonto',
+  'callsign' => 'Vejledende',
+  'full_name' => 'Fulde navn',
+  'email' => 'E-mail',
+  'phone' => 'Telefon',
+  'qth' => 'QTH',
+  'licence_class' => 'Licens klasse',
+  'favourite_bands' => 'Yndlingsbands',
+  'favourite_bands_placeholder' => 'Eks. 2m, 70cm, 20m',
+  'station_equipment' => 'Station og udstyr',
+  'directory_help' => 'Disse oplysninger udfylder din fortegnelse i mappen. Du kan derefter justere deres synlighed i din profil.',
+  'password' => 'Adgangskode',
+  'submit' => 'Opret min konto',
+  'already_registered' => 'Allerede registreret?',
+  'login' => 'Log ind',
+  'layout_title' => 'Registrering',
+);

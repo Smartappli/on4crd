@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Alla obligatoriska fält måste fyllas i.',
+  'auth_unavailable' => 'Autentiseringsmodulen är inte tillgänglig. Kör installation av kompositör.',
+  'invalid_data' => 'Den angivna informationen är ogiltig.',
+  'already_exists' => 'Det finns redan ett konto med den här e-postadressen eller koden.',
+  'too_many' => 'För många försök. Försök igen senare.',
+  'ok_created' => 'Kontot har skapats. Välkommen till medlemsområdet!',
+  'title' => 'Skapa ett medlemskonto',
+  'callsign' => 'Vägledande',
+  'full_name' => 'Fullständigt namn',
+  'email' => 'E-post',
+  'phone' => 'Telefon',
+  'qth' => 'QTH',
+  'licence_class' => 'Licensklass',
+  'favourite_bands' => 'Favoritband',
+  'favourite_bands_placeholder' => 'Ex. 2m, 70cm, 20m',
+  'station_equipment' => 'Station och utrustning',
+  'directory_help' => 'Denna information fyller i din lista i katalogen. Du kan sedan justera deras synlighet i din profil.',
+  'password' => 'Lösenord',
+  'submit' => 'Skapa mitt konto',
+  'already_registered' => 'Redan registrerad?',
+  'login' => 'Logga in',
+  'layout_title' => 'Registrering',
+);

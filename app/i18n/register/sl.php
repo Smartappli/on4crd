@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Vsa obvezna polja morajo biti izpolnjena.',
+  'auth_unavailable' => 'Modul za preverjanje pristnosti ni na voljo. Zaženite namestitev skladatelja.',
+  'invalid_data' => 'Podani podatki so neveljavni.',
+  'already_exists' => 'Račun s tem e-poštnim naslovom ali kodo že obstaja.',
+  'too_many' => 'Preveč poskusov. Poskusite znova pozneje.',
+  'ok_created' => 'Račun je bil uspešno ustvarjen. Dobrodošli v območju za člane!',
+  'title' => 'Ustvari članski račun',
+  'callsign' => 'Indikativno',
+  'full_name' => 'Polno ime',
+  'email' => 'E-pošta',
+  'phone' => 'Telefon',
+  'qth' => 'QTH',
+  'licence_class' => 'Razred licence',
+  'favourite_bands' => 'Najljubši bendi',
+  'favourite_bands_placeholder' => 'npr. 2 m, 70 cm, 20 m',
+  'station_equipment' => 'Postaja in oprema',
+  'directory_help' => 'Te informacije zapolnijo vaš seznam v imeniku. Nato lahko prilagodite njihovo vidnost v svojem profilu.',
+  'password' => 'Geslo',
+  'submit' => 'Ustvari moj račun',
+  'already_registered' => 'Ste že registrirani?',
+  'login' => 'Prijavite se',
+  'layout_title' => 'Registracija',
+);

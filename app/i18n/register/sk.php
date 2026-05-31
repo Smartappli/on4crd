@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Všetky povinné polia musia byť vyplnené.',
+  'auth_unavailable' => 'Autentifikačný modul nie je k dispozícii. Spustite inštaláciu skladateľa.',
+  'invalid_data' => 'Poskytnuté informácie sú neplatné.',
+  'already_exists' => 'Účet s týmto e-mailom alebo kódom už existuje.',
+  'too_many' => 'Príliš veľa pokusov. Skúste to znova neskôr.',
+  'ok_created' => 'Účet bol úspešne vytvorený. Vitajte v sekcii pre členov!',
+  'title' => 'Vytvorte si členský účet',
+  'callsign' => 'Orientačné',
+  'full_name' => 'Celé meno',
+  'email' => 'Email',
+  'phone' => 'Telefón',
+  'qth' => 'QTH',
+  'licence_class' => 'Trieda licencie',
+  'favourite_bands' => 'Obľúbené kapely',
+  'favourite_bands_placeholder' => 'Napr. 2 m, 70 cm, 20 m',
+  'station_equipment' => 'Stanica a vybavenie',
+  'directory_help' => 'Tieto informácie vyplnia váš záznam v adresári. Ich viditeľnosť si potom môžete upraviť vo svojom profile.',
+  'password' => 'heslo',
+  'submit' => 'Vytvoriť môj účet',
+  'already_registered' => 'Už ste zaregistrovaný?',
+  'login' => 'Prihláste sa',
+  'layout_title' => 'Registrácia',
+);

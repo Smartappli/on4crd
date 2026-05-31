@@ -1,0 +1,27 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Sva obavezna polja moraju biti ispunjena.',
+  'auth_unavailable' => 'Modul za provjeru autentičnosti nije dostupan. Pokrenite instalaciju skladatelja.',
+  'invalid_data' => 'Navedeni podaci nisu valjani.',
+  'already_exists' => 'Račun s ovom e-poštom ili kodom već postoji.',
+  'too_many' => 'Previše pokušaja. Pokušajte ponovno kasnije.',
+  'ok_created' => 'Račun je uspješno kreiran. Dobrodošli u područje za članove!',
+  'title' => 'Napravite članski račun',
+  'callsign' => 'Indikativno',
+  'full_name' => 'Puno ime',
+  'email' => 'E-mail',
+  'phone' => 'Telefon',
+  'qth' => 'QTH',
+  'licence_class' => 'Klasa licence',
+  'favourite_bands' => 'Omiljeni bendovi',
+  'favourite_bands_placeholder' => 'npr. 2m, 70cm, 20m',
+  'station_equipment' => 'Stanica i oprema',
+  'directory_help' => 'Ove informacije popunjavaju vaš unos u imeniku. Tada možete prilagoditi njihovu vidljivost u svom profilu.',
+  'password' => 'Lozinka',
+  'submit' => 'Napravi moj račun',
+  'already_registered' => 'Već ste registrirani?',
+  'login' => 'Prijavite se',
+  'layout_title' => 'Registracija',
+);
