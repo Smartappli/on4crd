@@ -177,7 +177,7 @@ return array (
   'dbm_to_dbuv_result' => 'ocenjeni dBµV',
   'unit_conv_title' => 'Pretvorba enot',
   'unit_conv_help' => 'Izberite konverzijo:',
-  'unit_conv_group_rf' => 'Radio / RF',
+  'unit_conv_group_rf' => 'Radio/RF',
   'unit_conv_group_power' => 'Moč',
   'unit_conv_group_voltage' => 'Sinusna napetost',
   'unit_conv_group_length' => 'Dolžina',

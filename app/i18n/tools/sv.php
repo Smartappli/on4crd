@@ -177,7 +177,7 @@ return array (
   'dbm_to_dbuv_result' => 'uppskattad dBµV',
   'unit_conv_title' => 'Enhetskonvertering',
   'unit_conv_help' => 'Välj en konvertering:',
-  'unit_conv_group_rf' => 'Radio / RF',
+  'unit_conv_group_rf' => 'Radio/RF',
   'unit_conv_group_power' => 'Kraft',
   'unit_conv_group_voltage' => 'Sinusformad spänning',
   'unit_conv_group_length' => 'Längd',

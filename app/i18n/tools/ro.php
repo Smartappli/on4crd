@@ -177,7 +177,7 @@ return array (
   'dbm_to_dbuv_result' => 'dBµV estimat',
   'unit_conv_title' => 'Conversie de unitate',
   'unit_conv_help' => 'Selectați o conversie:',
-  'unit_conv_group_rf' => 'Radio / RF',
+  'unit_conv_group_rf' => 'Radio/RF',
   'unit_conv_group_power' => 'Putere',
   'unit_conv_group_voltage' => 'Tensiune sinusoidală',
   'unit_conv_group_length' => 'Lungime',
