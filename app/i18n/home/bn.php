@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => 'IBPT পৃষ্ঠা খুলুন',
   'member_modules_title' => 'সদস্যদের জন্য উপলব্ধ মডিউল',
   'member_modules_empty' => 'এই মুহূর্তে কোনো সদস্য মডিউল উপলব্ধ নেই।',
+  'member_modules_join_cta' => 'সদস্য হন',
   'member_audience' => 'সদস্যরা',
   'page_title' => 'হোম',
   'club_name' => 'Radio Club Durnal',

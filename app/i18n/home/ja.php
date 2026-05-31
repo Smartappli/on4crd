@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => 'IBPTページを開く',
   'member_modules_title' => 'メンバー向けモジュール',
   'member_modules_empty' => '現在利用可能なメンバーモジュールはありません。',
+  'member_modules_join_cta' => 'メンバーになる',
   'member_audience' => 'メンバー',
   'page_title' => 'ホーム',
   'club_name' => 'Radio Club Durnal',

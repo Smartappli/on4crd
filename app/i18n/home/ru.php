@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => 'Открыть страницу IBPT',
   'member_modules_title' => 'Модули, доступные участникам',
   'member_modules_empty' => 'Сейчас нет доступных модулей для участников.',
+  'member_modules_join_cta' => 'Стать участником',
   'member_audience' => 'Участники',
   'page_title' => 'Главная',
   'club_name' => 'Radio Club Durnal',

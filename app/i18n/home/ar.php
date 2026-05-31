@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => 'فتح صفحة IBPT',
   'member_modules_title' => 'الوحدات المتاحة للأعضاء',
   'member_modules_empty' => 'لا توجد وحدات أعضاء متاحة حالياً.',
+  'member_modules_join_cta' => 'كن عضواً',
   'member_audience' => 'الأعضاء',
   'page_title' => 'الرئيسية',
   'club_name' => 'Radio Club Durnal',

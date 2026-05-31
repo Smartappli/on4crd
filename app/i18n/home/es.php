@@ -92,6 +92,7 @@ return array (
   'ibpt_cta' => 'Abrir la página del IBPT',
   'member_modules_title' => 'Módulos accesibles para socios',
   'member_modules_empty' => 'No hay módulos de socios disponibles actualmente.',
+  'member_modules_join_cta' => 'Hacerse socio',
   'member_audience' => 'Socios',
   'page_title' => 'Inicio',
   'club_name' => 'Radio Club Durnal',

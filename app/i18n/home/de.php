@@ -92,6 +92,7 @@ return array (
   'ibpt_cta' => 'BIPT-Seite öffnen',
   'member_modules_title' => 'Module für Mitglieder',
   'member_modules_empty' => 'Derzeit sind keine Mitgliedermodule verfügbar.',
+  'member_modules_join_cta' => 'Mitglied werden',
   'member_audience' => 'Mitglieder',
   'page_title' => 'Startseite',
   'club_name' => 'Radio Club Durnal',

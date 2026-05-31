@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => 'Buka halaman IBPT',
   'member_modules_title' => 'Modul yang tersedia untuk anggota',
   'member_modules_empty' => 'Saat ini tidak ada modul anggota yang tersedia.',
+  'member_modules_join_cta' => 'Menjadi anggota',
   'member_audience' => 'Anggota',
   'page_title' => 'Beranda',
   'club_name' => 'Radio Club Durnal',

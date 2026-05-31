@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => 'Open BIPT page',
   'member_modules_title' => 'Modules available to members',
   'member_modules_empty' => 'No member modules are currently available.',
+  'member_modules_join_cta' => 'Become a member',
   'member_audience' => 'Members',
   'page_title' => 'Home',
   'club_name' => 'Radio Club Durnal',

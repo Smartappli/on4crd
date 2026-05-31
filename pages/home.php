@@ -108,6 +108,8 @@ if ($moduleCards === '') {
 
 
 $memberModuleCards = '';
+$memberModulesJoinCta = (string) ($homeI18n['member_modules_join_cta'] ?? 'Devenir membre');
+$memberModuleCodesRendered = [];
 $memberModuleDefinitions = [
     'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title' => ['fr' => 'Tableau de bord', 'en' => 'Dashboard'], 'desc' => ['fr' => 'Retrouvez vos widgets, raccourcis et informations personnelles dans un espace centralise.', 'en' => 'Find your widgets, shortcuts and personal information in one central member area.']],
     'members' => ['route' => 'profile', 'icon' => '☷', 'title' => ['fr' => 'Espace membre', 'en' => 'Member area'], 'desc' => ['fr' => 'Gerez votre profil, vos preferences et les informations liees a votre compte ON4CRD.', 'en' => 'Manage your profile, preferences and information linked to your ON4CRD account.']],
@@ -141,9 +143,10 @@ if (table_exists('modules')) {
             . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
             . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
             . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
-            . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
+            . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e($memberModulesJoinCta) . ' →</span>'
             . '</div>'
             . '</a>';
+        $memberModuleCodesRendered[] = $moduleCode;
     }
 }
 $memberFallbackModuleCodes = ['dashboard', 'members', 'qsl', 'library', 'auctions', 'classifieds', 'chatbot', 'newsletter'];
@@ -155,8 +158,7 @@ foreach ($memberFallbackModuleCodes as $moduleCode) {
         continue;
     }
     $moduleMeta = $memberModuleDefinitions[$moduleCode];
-    $moduleUrl = route_url((string) $moduleMeta['route']);
-    if (str_contains($memberModuleCards, 'href="' . e($moduleUrl) . '"')) {
+    if (in_array($moduleCode, $memberModuleCodesRendered, true)) {
         continue;
     }
     $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">'
@@ -167,9 +169,10 @@ foreach ($memberFallbackModuleCodes as $moduleCode) {
         . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
         . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
         . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
-        . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e((string) $homeI18n['open']) . ' →</span>'
+        . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e($memberModulesJoinCta) . ' →</span>'
         . '</div>'
         . '</a>';
+    $memberModuleCodesRendered[] = $moduleCode;
 }
 if ($memberModuleCards === '') {
     $memberModuleCards = '<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">' . e((string) $homeI18n['member_modules_empty']) . '</div>';

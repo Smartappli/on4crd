@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => '打开 IBPT 页面',
   'member_modules_title' => '会员可用模块',
   'member_modules_empty' => '当前没有可用的会员模块。',
+  'member_modules_join_cta' => '成为会员',
   'member_audience' => '会员',
   'page_title' => '首页',
   'club_name' => 'Radio Club Durnal',

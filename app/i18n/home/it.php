@@ -93,6 +93,7 @@ return [
   'ibpt_cta' => 'Apri la pagina IBPT',
   'member_modules_title' => 'Moduli accessibili ai soci',
   'member_modules_empty' => 'Nessun modulo soci disponibile al momento.',
+  'member_modules_join_cta' => 'Diventa socio',
   'member_audience' => 'Soci',
   'page_title' => 'Pagina iniziale',
   'club_name' => 'Radio Club Durnal',
