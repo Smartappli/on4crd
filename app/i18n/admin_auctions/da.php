@@ -16,7 +16,7 @@ return array (
   'reserve_price' => 'Reservepris',
   'min_increment' => 'Ikke minimal',
   'buy_now' => 'Køb nu',
-  'start' => 'Start',
+  'start' => 'Starte',
   'end' => 'Slut',
   'status' => 'Status',
   'save_lot' => 'Gem batch',

@@ -16,7 +16,7 @@ return array (
   'reserve_price' => 'Minimumprijs',
   'min_increment' => 'Minimale stap',
   'buy_now' => 'Direct kopen',
-  'start' => 'Start',
+  'start' => 'Begin',
   'end' => 'Einde',
   'status' => 'Status',
   'save_lot' => 'Lot opslaan',

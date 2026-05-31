@@ -34,7 +34,7 @@ return array (
   'no_articles' => 'Nincsenek cikkek.',
   'custom_category_ph' => 'pl.: propagation-vhf',
   'cat_antennes' => 'Antennák',
-  'cat_trafic' => 'Traffic & DX',
+  'cat_trafic' => 'Forgalom és DX',
   'cat_numerique' => 'Digitális módok',
   'cat_materiel' => 'Berendezés és állomás',
   'cat_formation' => 'Képzés',
