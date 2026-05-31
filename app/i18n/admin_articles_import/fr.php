@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return [
-    'upload_failed' => 'Le televersement du document a echoue.',
+    'upload_failed' => 'Le téléversement du document a échoué.',
     'allowed_formats' => 'Formats autorises : PDF, DOCX, TXT, MD ou HTML.',
     'invalid_doc' => 'Document importe invalide.',
     'create_dir' => 'Impossible de creer le repertoire de stockage des articles.',

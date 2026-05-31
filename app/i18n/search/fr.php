@@ -5,7 +5,7 @@ return [
     'title' => 'Recherche',
     'eyebrow' => 'Recherche globale',
     'lead' => 'Trouvez rapidement des actualités, articles, pages wiki, documents, annonces et albums.',
-    'placeholder' => 'Indicatif, mot-clé, thème, document...',
+    'placeholder' => 'Indicatif, mot-clé, thème, document…',
     'query_label' => 'Votre recherche',
     'source_label' => 'Source',
     'submit' => 'Rechercher',

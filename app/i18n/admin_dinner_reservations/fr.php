@@ -7,7 +7,7 @@ return [
     'title' => 'Réservations dîner annuel',
     'export_csv' => 'Exporter Excel (CSV)',
     'reservation_name' => 'Nom de la réservation',
-    'reservation_name_ph' => 'Ex: Famille Dupont',
+    'reservation_name_ph' => 'Ex. : Famille Dupont',
     'add_line' => 'Ajouter une ligne',
     'total_to_pay' => 'Total à payer :',
     'notes' => 'Notes',

@@ -36,6 +36,6 @@ return array (
   'unit_hz' => 'Hz',
   'p1' => 'Accès Echolink mis en place pour nos amis hors de portée du relais de Durnal.',
   'p2' => 'Merci de privilégier le VHF si vous êtes à portée du relais. Balise vocale toutes les 15 min.',
-  'p3' => 'Le Relais SVXlink installé est l’implémentation d’un lien SVXLink (Echolink) avec un Relais FM existant. Ici: ONØCRD – Sysop ON4DL – Suppléant ON5GB. « svxlink » est un système de service vocal à usage général pour l\'utilisation de la radio « amateur » .',
+  'p3' => 'Le Relais SVXlink installé est l’implémentation d’un lien SVXLink (Echolink) avec un Relais FM existant. Ici : ONØCRD – Sysop ON4DL – Suppléant ON5GB. « svxlink » est un système de service vocal à usage général pour l\'utilisation de la radio « amateur ».',
   'p4' => 'Avec la collaboration de ON4LS est né depuis ce 18/03/2021 un accès Echolink sur ONØCRD. Par ceci nous ouvrons une porte à nos amis afin de garder contact avec les OM’s de la zone couverte par le relais.',
 );

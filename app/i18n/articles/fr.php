@@ -27,9 +27,9 @@ return array (
   'results' => 'R�sultats',
   'reading_minutes' => 'min de lecture',
   'favorite_label' => 'Favori',
-  'favorite_added' => 'Favori ajoute',
+  'favorite_added' => 'Favori ajouté',
   'favorite_removed' => 'Favori retire',
-  'favorite_added_msg' => 'Article ajoute aux favoris.',
+  'favorite_added_msg' => 'Article ajouté aux favoris.',
   'favorite_removed_msg' => 'Article retire des favoris.',
   'default_article_title' => 'Article',
 );

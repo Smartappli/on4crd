@@ -9,9 +9,9 @@ return array (
   'next_article' => 'Article suivant',
   'related_articles' => 'Articles li�s',
   'favorite_label' => 'Favori',
-  'favorite_added' => 'Favori ajoute',
+  'favorite_added' => 'Favori ajouté',
   'favorite_removed' => 'Favori retire',
-  'favorite_added_msg' => 'Article ajoute aux favoris.',
+  'favorite_added_msg' => 'Article ajouté aux favoris.',
   'favorite_removed_msg' => 'Article retire des favoris.',
   'default_article_title' => 'Article',
 );

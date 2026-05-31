@@ -1,7 +1,7 @@
 <?php
 return [
-    'missing_q' => 'Parametre q manquant.',
-    'service_down' => 'Service de geocodage indisponible.',
+    'missing_q' => 'Paramètre q manquant.',
+    'service_down' => 'Service de géocodage indisponible.',
     'address_not_found' => 'Adresse introuvable.',
-    'invalid_coords' => 'Coordonnees invalides recues.',
+    'invalid_coords' => 'Coordonnées invalides reçues.',
 ];
