@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Klubi arvudes',
+  'intro' => 'Otsige üles nähtavad klubiliikmed, nende koodid, litsentsid, QTH ja kontaktandmed vastavalt nende privaatsuseelistustele.',
+  'member_list' => 'Liikmete nimekiri',
+  'visible_members' => 'Nähtavad profiilid',
+  'uba_members' => 'UBA liikmed',
+  'members_title' => 'Liikmete nimekiri',
+  'none' => 'Ühtegi liiget ei leitud.',
+  'none_help' => 'Proovige teist otsingut või eemaldage aktiivsed filtrid.',
+  'avatar_of' => 'avatar',
+  'search_label' => 'Otsi',
+  'search_placeholder' => 'Näitaja või nimi',
+  'licence_filter' => 'Filtreerige litsentsi järgi',
+  'all_licences' => 'Kõik litsentsid',
+  'apply_filters' => 'Filter',
+  'reset_filters' => 'Selge',
+  'results' => 'Tulemused',
+  'licence' => 'Litsents',
+  'email' => 'Meil',
+  'phone' => 'Telefon',
+  'bands' => 'Bändid',
+  'station' => 'Kuurort',
+  'committee' => 'komitee',
+  'layout_title' => 'Kataloog',
+);

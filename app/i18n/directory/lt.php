@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Klubas skaičiais',
+  'intro' => 'Raskite matomus klubo narius, jų kodus, licencijas, QTH ir kontaktinę informaciją pagal jų privatumo nuostatas.',
+  'member_list' => 'Narių sąrašas',
+  'visible_members' => 'Matomi profiliai',
+  'uba_members' => 'UBA nariai',
+  'members_title' => 'Narių sąrašas',
+  'none' => 'Narių nerasta.',
+  'none_help' => 'Išbandykite kitą paiešką arba pašalinkite aktyvius filtrus.',
+  'avatar_of' => 'avataras',
+  'search_label' => 'Ieškoti',
+  'search_placeholder' => 'Rodiklis arba pavadinimas',
+  'licence_filter' => 'Filtruoti pagal licenciją',
+  'all_licences' => 'Visos licencijos',
+  'apply_filters' => 'Filtruoti',
+  'reset_filters' => 'Aišku',
+  'results' => 'Rezultatai',
+  'licence' => 'Licencija',
+  'email' => 'El. paštas',
+  'phone' => 'Telefonas',
+  'bands' => 'Juostos',
+  'station' => 'Kurortas',
+  'committee' => 'komitetas',
+  'layout_title' => 'Katalogas',
+);

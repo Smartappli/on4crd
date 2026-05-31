@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Klub v številkah',
+  'intro' => 'Poiščite vidne člane kluba, njihove kode, licence, QTH in kontaktne podatke glede na njihove nastavitve zasebnosti.',
+  'member_list' => 'Seznam članov',
+  'visible_members' => 'Vidni profili',
+  'uba_members' => 'Člani UBA',
+  'members_title' => 'Seznam članov',
+  'none' => 'Ni članov.',
+  'none_help' => 'Poskusite z drugim iskanjem ali odstranite aktivne filtre.',
+  'avatar_of' => 'avatar od',
+  'search_label' => 'Iskanje',
+  'search_placeholder' => 'Indikator ali ime',
+  'licence_filter' => 'Filtriraj po licenci',
+  'all_licences' => 'Vse licence',
+  'apply_filters' => 'Filter',
+  'reset_filters' => 'jasno',
+  'results' => 'Rezultati',
+  'licence' => 'Licenca',
+  'email' => 'E-pošta',
+  'phone' => 'Telefon',
+  'bands' => 'Godbe',
+  'station' => 'Letovišče',
+  'committee' => 'odbor',
+  'layout_title' => 'Imenik',
+);

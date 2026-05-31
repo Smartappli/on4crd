@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Klubben i siffror',
+  'intro' => 'Hitta synliga klubbmedlemmar, deras koder, licenser, QTH och kontaktinformation enligt deras integritetspreferenser.',
+  'member_list' => 'Förteckning över medlemmar',
+  'visible_members' => 'Synliga profiler',
+  'uba_members' => 'UBA medlemmar',
+  'members_title' => 'Förteckning över medlemmar',
+  'none' => 'Inga medlemmar hittades.',
+  'none_help' => 'Försök med en annan sökning eller ta bort aktiva filter.',
+  'avatar_of' => 'avatar av',
+  'search_label' => 'Sök',
+  'search_placeholder' => 'Indikator eller namn',
+  'licence_filter' => 'Filtrera efter licens',
+  'all_licences' => 'Alla licenser',
+  'apply_filters' => 'Filtrera',
+  'reset_filters' => 'Rensa',
+  'results' => 'Resultat',
+  'licence' => 'Licens',
+  'email' => 'E-post',
+  'phone' => 'Telefon',
+  'bands' => 'Band',
+  'station' => 'Resort',
+  'committee' => 'kommittén',
+  'layout_title' => 'Katalog',
+);

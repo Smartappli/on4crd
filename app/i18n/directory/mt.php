@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Il-klabb fiċ-ċifri',
+  'intro' => 'Sib membri tal-klabb viżibbli, il-kodiċijiet, il-liċenzji, QTH u l-informazzjoni ta \'kuntatt tagħhom skont il-preferenzi tal-privatezza tagħhom.',
+  'member_list' => 'Lista ta\' membri',
+  'visible_members' => 'Profili viżibbli',
+  'uba_members' => 'UBA Membri',
+  'members_title' => 'Lista ta\' membri',
+  'none' => 'Ma nstab l-ebda membru.',
+  'none_help' => 'Ipprova tfittxija oħra jew neħħi l-filtri attivi.',
+  'avatar_of' => 'avatar ta\'',
+  'search_label' => 'Għar-riċerka',
+  'search_placeholder' => 'Indikatur jew isem',
+  'licence_filter' => 'Iffiltra bil-liċenzja',
+  'all_licences' => 'Il-liċenzji kollha',
+  'apply_filters' => 'Iffiltra',
+  'reset_filters' => 'Biex tħassar',
+  'results' => 'Riżultati',
+  'licence' => 'Liċenzja',
+  'email' => 'E-mail',
+  'phone' => 'Telefon',
+  'bands' => 'Baned',
+  'station' => 'Stazzjon',
+  'committee' => 'Kumitat',
+  'layout_title' => 'Direttorju',
+);

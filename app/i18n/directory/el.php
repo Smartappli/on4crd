@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Ο σύλλογος σε αριθμούς',
+  'intro' => 'Βρείτε ορατά μέλη του συλλόγου, τους κωδικούς, τις άδειές τους, το QTH και τα στοιχεία επικοινωνίας σύμφωνα με τις προτιμήσεις απορρήτου τους.',
+  'member_list' => 'Κατάλογος μελών',
+  'visible_members' => 'Ορατά προφίλ',
+  'uba_members' => 'UBA Μέλη',
+  'members_title' => 'Κατάλογος μελών',
+  'none' => 'Δεν βρέθηκαν μέλη.',
+  'none_help' => 'Δοκιμάστε άλλη αναζήτηση ή αφαιρέστε τα ενεργά φίλτρα.',
+  'avatar_of' => 'avatar του',
+  'search_label' => 'Αναζήτηση',
+  'search_placeholder' => 'Ένδειξη ή όνομα',
+  'licence_filter' => 'Φιλτράρισμα κατά άδεια',
+  'all_licences' => 'Όλες οι άδειες',
+  'apply_filters' => 'Φίλτρο',
+  'reset_filters' => 'Καθαρό',
+  'results' => 'Αποτελέσματα',
+  'licence' => 'Άδεια',
+  'email' => 'Email',
+  'phone' => 'Τηλέφωνο',
+  'bands' => 'Μπάντες',
+  'station' => 'Θέρετρο',
+  'committee' => 'Επιτροπή',
+  'layout_title' => 'Κατάλογος',
+);

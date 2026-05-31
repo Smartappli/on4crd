@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Klubs skaitļos',
+  'intro' => 'Atrodiet redzamos kluba biedrus, viņu kodus, licences, QTH un kontaktinformāciju atbilstoši viņu privātuma vēlmēm.',
+  'member_list' => 'Dalībnieku saraksts',
+  'visible_members' => 'Redzamie profili',
+  'uba_members' => 'UBA biedri',
+  'members_title' => 'Dalībnieku saraksts',
+  'none' => 'Nav atrasts neviens dalībnieks.',
+  'none_help' => 'Izmēģiniet citu meklēšanu vai noņemiet aktīvos filtrus.',
+  'avatar_of' => 'iemiesojums no',
+  'search_label' => 'Meklēt',
+  'search_placeholder' => 'Indikators vai nosaukums',
+  'licence_filter' => 'Filtrēt pēc licences',
+  'all_licences' => 'Visas licences',
+  'apply_filters' => 'Filtrs',
+  'reset_filters' => 'Skaidrs',
+  'results' => 'Rezultāti',
+  'licence' => 'Licence',
+  'email' => 'E-pasts',
+  'phone' => 'Tālrunis',
+  'bands' => 'Grupas',
+  'station' => 'Kūrorts',
+  'committee' => 'komiteja',
+  'layout_title' => 'Katalogs',
+);

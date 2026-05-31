@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Klubi lukuina',
+  'intro' => 'Löydä näkyvät klubin jäsenet, heidän koodinsa, lisenssinsä, QTH ja yhteystiedot heidän yksityisyysasetustensa mukaan.',
+  'member_list' => 'Lista jäsenistä',
+  'visible_members' => 'Näkyvät profiilit',
+  'uba_members' => 'UBA jäsenet',
+  'members_title' => 'Lista jäsenistä',
+  'none' => 'Jäseniä ei löytynyt.',
+  'none_help' => 'Kokeile toista hakua tai poista aktiiviset suodattimet.',
+  'avatar_of' => 'avatar',
+  'search_label' => 'Etsi',
+  'search_placeholder' => 'Indikaattori tai nimi',
+  'licence_filter' => 'Suodata lisenssin mukaan',
+  'all_licences' => 'Kaikki lisenssit',
+  'apply_filters' => 'Suodata',
+  'reset_filters' => 'Selkeä',
+  'results' => 'Tulokset',
+  'licence' => 'Lisenssi',
+  'email' => 'Sähköposti',
+  'phone' => 'Puhelin',
+  'bands' => 'Bändit',
+  'station' => 'Lomakeskus',
+  'committee' => 'komitea',
+  'layout_title' => 'Hakemisto',
+);

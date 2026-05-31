@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'Klub v číslech',
+  'intro' => 'Najděte viditelné členy klubu, jejich kódy, licence, QTH a kontaktní informace podle jejich preferencí ochrany soukromí.',
+  'member_list' => 'Seznam členů',
+  'visible_members' => 'Viditelné profily',
+  'uba_members' => 'Členové UBA',
+  'members_title' => 'Seznam členů',
+  'none' => 'Nebyli nalezeni žádní členové.',
+  'none_help' => 'Zkuste jiné vyhledávání nebo odstraňte aktivní filtry.',
+  'avatar_of' => 'avatar z',
+  'search_label' => 'Hledat',
+  'search_placeholder' => 'Indikátor nebo jméno',
+  'licence_filter' => 'Filtrovat podle licence',
+  'all_licences' => 'Všechny licence',
+  'apply_filters' => 'Filtr',
+  'reset_filters' => 'Jasný',
+  'results' => 'Výsledky',
+  'licence' => 'Licence',
+  'email' => 'Email',
+  'phone' => 'Telefon',
+  'bands' => 'Kapely',
+  'station' => 'Resort',
+  'committee' => 'výboru',
+  'layout_title' => 'Adresář',
+);

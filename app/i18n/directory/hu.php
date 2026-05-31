@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'A klub számokban',
+  'intro' => 'Keresse meg a látható klubtagokat, kódjaikat, licenceiket, QTH-t és kapcsolatfelvételi adatait az adatvédelmi beállításaik szerint.',
+  'member_list' => 'Tagok listája',
+  'visible_members' => 'Látható profilok',
+  'uba_members' => 'UBA tagok',
+  'members_title' => 'Tagok listája',
+  'none' => 'Nem találhatók tagok.',
+  'none_help' => 'Próbálkozzon másik kereséssel vagy távolítsa el az aktív szűrőket.',
+  'avatar_of' => 'avatarja',
+  'search_label' => 'Keresés',
+  'search_placeholder' => 'Jelző vagy név',
+  'licence_filter' => 'Szűrés licenc szerint',
+  'all_licences' => 'Minden engedély',
+  'apply_filters' => 'Szűrés',
+  'reset_filters' => 'Világos',
+  'results' => 'Eredmények',
+  'licence' => 'Licenc',
+  'email' => 'E-mail',
+  'phone' => 'Telefon',
+  'bands' => 'Zenekarok',
+  'station' => 'Üdülőhely',
+  'committee' => 'bizottság',
+  'layout_title' => 'Címtár',
+);

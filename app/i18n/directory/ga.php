@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'club_numbers' => 'An club i bhfigiúirí',
+  'intro' => 'Aimsigh baill infheicthe an chlub, a gcóid, a gceadúnais, QTH agus faisnéis teagmhála de réir a roghanna príobháideachais.',
+  'member_list' => 'Liosta ball',
+  'visible_members' => 'Próifílí infheicthe',
+  'uba_members' => 'Baill UBA',
+  'members_title' => 'Liosta ball',
+  'none' => 'Níor aimsíodh aon bhall.',
+  'none_help' => 'Bain triail as cuardach eile nó bain na scagairí gníomhacha.',
+  'avatar_of' => 'avatar de',
+  'search_label' => 'Cuardach',
+  'search_placeholder' => 'Táscaire nó ainm',
+  'licence_filter' => 'Scag le ceadúnas',
+  'all_licences' => 'Gach ceadúnas',
+  'apply_filters' => 'Scagaire',
+  'reset_filters' => 'Glan',
+  'results' => 'Torthaí',
+  'licence' => 'Ceadúnas',
+  'email' => 'Ríomhphost',
+  'phone' => 'Teileafón',
+  'bands' => 'Bannaí',
+  'station' => 'Saoire',
+  'committee' => 'Coiste',
+  'layout_title' => 'Eolaire',
+);
