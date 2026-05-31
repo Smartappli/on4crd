@@ -1,0 +1,20 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'required' => 'Vyžadujú sa poverenia.',
+  'captcha_invalid' => 'Neplatný obrázok captcha.',
+  'auth_unavailable' => 'Autentifikačný modul nie je k dispozícii. Spustite inštaláciu skladateľa.',
+  'invalid_credentials' => 'Neplatný kód alebo heslo.',
+  'too_many' => 'Príliš veľa pokusov o pripojenie. Skúste to znova o niekoľko minút.',
+  'not_verified' => 'Váš účet ešte nie je overený.',
+  'login_success' => 'Pripojenie úspešné.',
+  'title' => 'Pripojenie',
+  'callsign' => 'Orientačné',
+  'password' => 'heslo',
+  'captcha_question' => 'Captcha: koľko',
+  'login' => 'Prihláste sa',
+  'forgot_password' => 'Zabudli ste heslo?',
+  'no_member' => 'Ešte nie ste členom?',
+  'create_account' => 'Vytvorte si účet',
+);
