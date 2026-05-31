@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'member_updated' => 'Člen bol aktualizovaný.',
+  'title' => 'Vedenie členov',
+  'layout' => 'členov',
+  'meta_desc' => 'Správa profilov členov.',
+  'members' => 'členov',
+  'th_callsign' => 'Orientačné',
+  'th_name' => 'Meno',
+  'th_email' => 'Email',
+  'th_locator' => 'Lokátor',
+  'th_active' => 'Aktívne',
+  'th_committee' => 'výboru',
+  'th_actions' => 'Akcie',
+  'save' => 'Uložiť',
+  'err_callsign' => 'Vyžaduje sa indikátor.',
+  'err_email' => 'Neplatný email.',
+  'err_locator' => 'Neplatný lokátor.',
+  'search' => 'Vyhľadajte člena',
+  'search_ph' => 'Volací znak, meno, email…',
+  'search_btn' => 'OK',
+);

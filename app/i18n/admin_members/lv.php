@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'member_updated' => 'Dalībnieks atjaunināts.',
+  'title' => 'Biedru vadība',
+  'layout' => 'Biedri',
+  'meta_desc' => 'Dalībnieku profilu pārvaldība.',
+  'members' => 'Biedri',
+  'th_callsign' => 'Indikatīvs',
+  'th_name' => 'Vārds',
+  'th_email' => 'E-pasts',
+  'th_locator' => 'Lokators',
+  'th_active' => 'Aktīvs',
+  'th_committee' => 'komiteja',
+  'th_actions' => 'Darbības',
+  'save' => 'Saglabāt',
+  'err_callsign' => 'Nepieciešams rādītājs.',
+  'err_email' => 'Nederīgs e-pasts.',
+  'err_locator' => 'Nederīgs vietrādis.',
+  'search' => 'Meklēt dalībnieku',
+  'search_ph' => 'Izsaukuma signāls, vārds, e-pasts…',
+  'search_btn' => 'OK',
+);

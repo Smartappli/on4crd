@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'member_updated' => 'Član ažuriran.',
+  'title' => 'Upravljanje članovima',
+  'layout' => 'članovi',
+  'meta_desc' => 'Upravljanje profilima članova.',
+  'members' => 'članovi',
+  'th_callsign' => 'Indikativno',
+  'th_name' => 'Ime',
+  'th_email' => 'E-mail',
+  'th_locator' => 'Lokator',
+  'th_active' => 'Aktivno',
+  'th_committee' => 'Povjerenstvo',
+  'th_actions' => 'Radnje',
+  'save' => 'spremiti',
+  'err_callsign' => 'Potreban indikator.',
+  'err_email' => 'Nevažeća e-pošta.',
+  'err_locator' => 'Nevažeći lokator.',
+  'search' => 'Potražite člana',
+  'search_ph' => 'Pozivni znak, ime, email…',
+  'search_btn' => 'OK',
+);

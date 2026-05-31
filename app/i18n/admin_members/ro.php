@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'member_updated' => 'Membru actualizat.',
+  'title' => 'Managementul membrilor',
+  'layout' => 'Membrii',
+  'meta_desc' => 'Gestionarea profilurilor membrilor.',
+  'members' => 'Membrii',
+  'th_callsign' => 'Indicativ',
+  'th_name' => 'Nume',
+  'th_email' => 'E-mail',
+  'th_locator' => 'Localizator',
+  'th_active' => 'Activ',
+  'th_committee' => 'Comitet',
+  'th_actions' => 'Acțiuni',
+  'save' => 'Salva',
+  'err_callsign' => 'Indicator necesar.',
+  'err_email' => 'E-mail nevalid.',
+  'err_locator' => 'Localizator nevalid.',
+  'search' => 'Căutați un membru',
+  'search_ph' => 'Indicativ, nume, e-mail...',
+  'search_btn' => 'OK',
+);
