@@ -37,7 +37,7 @@ return [
   'good_practice_label' => 'ممارسة جيدة:',
   'vhf_voice_value' => '145.500 MHz (نداء بسيط إقليمي]',
   'cw_qrp_label' => 'ترددات CW QRP:',
-  'cw_qrp_value' => '7.030 MHz � 14.060 MHz (ترددات CW QRP]',
+  'cw_qrp_value' => '7.030 MHz • 14.060 MHz (ترددات CW QRP)',
   'good_practice_value' => 'أعلن النداء + QTH + نوع الاتصال المطلوب',
   'map_title' => 'خريطة Google - Radio Club Durnal',
   'address_title' => 'العنوان',
@@ -139,7 +139,7 @@ return [
   'local_datetime' => 'التاريخ/الوقت المحلي',
   'hero_tagline' => 'ON4CRD · تواصل، جرّب، شارك',
   'ham_weather_aria' => 'طقس هواة الراديو',
-  'venue_address' => 'Bocq Arena، Rue des �coles، 5530 Purnode',
+  'venue_address' => 'Bocq Arena، Rue des Écoles، 5530 Purnode',
   'quote_aria' => 'اقتباس مميز',
   'clock_aria' => 'ساعات UTC والمحلية',
 ];
