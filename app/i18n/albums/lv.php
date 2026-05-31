@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Publiskie albumi',
+  'gallery_unavailable' => 'Galerija būs pieejama pēc inicializācijas.',
+  'manage' => 'Pārvaldīt',
+  'intro' => 'Izpētiet kluba aktivitātes attēlos: darbnīcas, izbraukumus, konkursus un kopienas dzīves mirkļus.',
+  'albums' => 'Albumi',
+  'indexed_photos' => 'Indeksētas fotogrāfijas',
+  'search_placeholder' => 'Meklējiet albumu pēc nosaukuma vai apraksta',
+  'search' => 'Meklēt',
+  'reset' => 'Atiestatīt',
+  'gallery' => 'Galerija',
+  'none' => 'Publisks albums nav pieejams',
+  'for_search' => 'šim pētījumam',
+  'cover_alt' => 'albuma vāks',
+  'photo' => 'foto',
+  'photos' => 'attēlus',
+  'meta_desc' => 'ON4CRD albumu publiskā fotogalerija.',
+  'pagination' => 'Albuma lappuse',
+  'previous' => 'Iepriekšējais',
+  'next' => 'Tālāk',
+  'page' => 'Lapa',
+);

@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Verejné albumy',
+  'gallery_unavailable' => 'Galéria bude dostupná po inicializácii.',
+  'manage' => 'Spravovať',
+  'intro' => 'Preskúmajte aktivity klubu v obrazoch: workshopy, výlety, súťaže a momenty komunitného života.',
+  'albums' => 'Albumy',
+  'indexed_photos' => 'Indexované fotografie',
+  'search_placeholder' => 'Vyhľadajte album podľa názvu alebo popisu',
+  'search' => 'Hľadať',
+  'reset' => 'Resetovať',
+  'gallery' => 'Galéria',
+  'none' => 'Nie sú k dispozícii žiadne verejné albumy',
+  'for_search' => 'pre tento výskum',
+  'cover_alt' => 'obal albumu',
+  'photo' => 'fotografiu',
+  'photos' => 'obrázky',
+  'meta_desc' => 'Verejná fotogaléria albumov ON4CRD.',
+  'pagination' => 'Stránkovanie albumu',
+  'previous' => 'Predchádzajúce',
+  'next' => 'Ďalej',
+  'page' => 'Stránka',
+);

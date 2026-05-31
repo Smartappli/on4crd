@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Albam poiblí',
+  'gallery_unavailable' => 'Beidh an gailearaí ar fáil tar éis é a thúsú.',
+  'manage' => 'Bainistigh',
+  'intro' => 'Déan gníomhaíochtaí an chlub a iniúchadh le híomhánna: ceardlanna, turais, comórtais agus tráthanna de shaol an phobail.',
+  'albums' => 'Albaim',
+  'indexed_photos' => 'Grianghraif innéacsaithe',
+  'search_placeholder' => 'Cuardaigh albam de réir teidil nó tuairisce',
+  'search' => 'Cuardach',
+  'reset' => 'Athshocraigh',
+  'gallery' => 'Gailearaí',
+  'none' => 'Níl albaim phoiblí ar fáil',
+  'for_search' => 'don taighde seo',
+  'cover_alt' => 'clúdach albam',
+  'photo' => 'grianghraf',
+  'photos' => 'pictiúir',
+  'meta_desc' => 'Gailearaí grianghraf poiblí d\'albaim ON4CRD.',
+  'pagination' => 'Leathanaigh albam',
+  'previous' => 'Roimhe Seo',
+  'next' => 'Ar aghaidh',
+  'page' => 'Leathanach',
+);

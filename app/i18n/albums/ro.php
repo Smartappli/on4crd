@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Albume publice',
+  'gallery_unavailable' => 'Galeria va fi disponibilă după inițializare.',
+  'manage' => 'Gestionează',
+  'intro' => 'Explorați activitățile clubului în imagini: ateliere, ieșiri, concursuri și momente de viață comunitară.',
+  'albums' => 'Albume',
+  'indexed_photos' => 'Fotografii indexate',
+  'search_placeholder' => 'Căutați un album după titlu sau descriere',
+  'search' => 'A cerceta',
+  'reset' => 'Resetați',
+  'gallery' => 'Galerie',
+  'none' => 'Nu există albume publice disponibile',
+  'for_search' => 'pentru această cercetare',
+  'cover_alt' => 'coperta albumului',
+  'photo' => 'fotografie',
+  'photos' => 'poze',
+  'meta_desc' => 'Galerie foto publică a albumelor ON4CRD.',
+  'pagination' => 'Paginare album',
+  'previous' => 'Anterior',
+  'next' => 'Urmând',
+  'page' => 'Pagină',
+);

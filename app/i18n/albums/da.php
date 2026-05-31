@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Offentlige albums',
+  'gallery_unavailable' => 'Galleriet vil være tilgængeligt efter initialisering.',
+  'manage' => 'Administrer',
+  'intro' => 'Udforsk klubbens aktiviteter i billeder: workshops, udflugter, konkurrencer og øjeblikke i samfundslivet.',
+  'albums' => 'Albums',
+  'indexed_photos' => 'Indekserede billeder',
+  'search_placeholder' => 'Søg efter et album efter titel eller beskrivelse',
+  'search' => 'Søg',
+  'reset' => 'Nulstil',
+  'gallery' => 'Galleri',
+  'none' => 'Ingen tilgængelige offentlige albums',
+  'for_search' => 'for denne forskning',
+  'cover_alt' => 'albumcover',
+  'photo' => 'foto',
+  'photos' => 'billeder',
+  'meta_desc' => 'Offentligt fotogalleri af ON4CRD-album.',
+  'pagination' => 'Album paginering',
+  'previous' => 'Forrige',
+  'next' => 'Næste',
+  'page' => 'Side',
+);

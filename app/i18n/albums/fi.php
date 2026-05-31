@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Julkiset albumit',
+  'gallery_unavailable' => 'Galleria on käytettävissä alustamisen jälkeen.',
+  'manage' => 'Hallitse',
+  'intro' => 'Tutustu klubin toimintaan kuvissa: työpajoja, retkiä, kilpailuja ja yhteisön elämän hetkiä.',
+  'albums' => 'Albumit',
+  'indexed_photos' => 'Indeksoidut kuvat',
+  'search_placeholder' => 'Hae albumia nimen tai kuvauksen perusteella',
+  'search' => 'Etsi',
+  'reset' => 'Nollaa',
+  'gallery' => 'Galleria',
+  'none' => 'Julkisia albumeita ei ole saatavilla',
+  'for_search' => 'tätä tutkimusta varten',
+  'cover_alt' => 'albumin kansi',
+  'photo' => 'valokuva',
+  'photos' => 'kuvia',
+  'meta_desc' => 'Julkinen kuvagalleria ON4CRD-albumeista.',
+  'pagination' => 'Albumin sivutus',
+  'previous' => 'Edellinen',
+  'next' => 'Seuraavaksi',
+  'page' => 'Sivu',
+);

@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Vieši albumai',
+  'gallery_unavailable' => 'Galerija bus pasiekiama po inicijavimo.',
+  'manage' => 'Tvarkyti',
+  'intro' => 'Tyrinėkite klubo veiklą vaizduose: dirbtuvėse, išvykose, konkursuose ir bendruomenės gyvenimo akimirkose.',
+  'albums' => 'Albumai',
+  'indexed_photos' => 'Indeksuotos nuotraukos',
+  'search_placeholder' => 'Ieškokite albumo pagal pavadinimą arba aprašą',
+  'search' => 'Ieškoti',
+  'reset' => 'Nustatyti iš naujo',
+  'gallery' => 'Galerija',
+  'none' => 'Viešųjų albumų nėra',
+  'for_search' => 'šiam tyrimui',
+  'cover_alt' => 'albumo viršelis',
+  'photo' => 'nuotrauka',
+  'photos' => 'paveikslėlius',
+  'meta_desc' => 'Vieša ON4CRD albumų nuotraukų galerija.',
+  'pagination' => 'Albumo puslapių skirstymas',
+  'previous' => 'Ankstesnis',
+  'next' => 'Kitas',
+  'page' => 'Puslapis',
+);

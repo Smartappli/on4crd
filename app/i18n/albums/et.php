@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'public_albums' => 'Avalikud albumid',
+  'gallery_unavailable' => 'Galerii on saadaval pärast lähtestamist.',
+  'manage' => 'Halda',
+  'intro' => 'Tutvuge klubi tegemistega piltidena: töötoad, väljasõidud, võistlused ja kogukonnaelu hetked.',
+  'albums' => 'Albumid',
+  'indexed_photos' => 'Indekseeritud fotod',
+  'search_placeholder' => 'Otsige albumit pealkirja või kirjelduse järgi',
+  'search' => 'Otsi',
+  'reset' => 'Lähtesta',
+  'gallery' => 'Galerii',
+  'none' => 'Avalikke albumeid pole saadaval',
+  'for_search' => 'selle uuringu jaoks',
+  'cover_alt' => 'albumi kaas',
+  'photo' => 'foto',
+  'photos' => 'pilte',
+  'meta_desc' => 'Avalik fotogalerii ON4CRD albumitest.',
+  'pagination' => 'Albumi lehekülgede vahetamine',
+  'previous' => 'Eelmine',
+  'next' => 'Edasi',
+  'page' => 'Lehekülg',
+);
