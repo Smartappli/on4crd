@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Otsi',
+  'eyebrow' => 'Globaalne otsing',
+  'lead' => 'Otsige kiiresti uudiseid, artikleid, vikilehti, dokumente, teadaandeid ja albumeid.',
+  'placeholder' => 'Indikaator, märksõna, teema, dokument...',
+  'query_label' => 'Sinu otsing',
+  'source_label' => 'Allikas',
+  'submit' => 'Otsi',
+  'count' => 'tulemus(ed)',
+  'empty' => 'Sellele otsingule pole tulemusi.',
+  'empty_help' => 'Proovige lühemat märksõna, muud allikat või teistsugust õigekirja.',
+  'query_too_short' => 'Sisestage vähemalt 2 tähemärki.',
+  'previous' => 'Eelmine',
+  'next' => 'Edasi',
+  'page' => 'Lehekülg',
+  'pagination' => 'Leheküljed',
+  'meta_desc' => 'Globaalne otsing ON4CRD saidi sisus.',
+  'source_all' => 'Kõik',
+  'source_news' => 'Uudised',
+  'source_articles' => 'Üksused',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Raamatukogu',
+  'source_classifieds' => 'Teated',
+  'source_albums' => 'Albumid',
+  'results_title' => 'Tulemused',
+  'results_for' => 'ZXQ0QXZ tulemus(ed) otsingule "ZXQ1QXZ"',
+  'start_title' => 'Alustage otsingut',
+  'start_hint' => 'Sisestage saidi sisu uurimiseks vähemalt kaks tähemärki.',
+  'open_result' => 'Avatud',
+);

@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Søg',
+  'eyebrow' => 'Global søgning',
+  'lead' => 'Find hurtigt nyheder, artikler, wiki-sider, dokumenter, meddelelser og album.',
+  'placeholder' => 'Indikator, nøgleord, tema, dokument...',
+  'query_label' => 'Din søgning',
+  'source_label' => 'Kilde',
+  'submit' => 'Søg',
+  'count' => 'resultat(er)',
+  'empty' => 'Ingen resultater for denne søgning.',
+  'empty_help' => 'Prøv et kortere søgeord, en anden kilde eller en anden stavemåde.',
+  'query_too_short' => 'Indtast venligst mindst 2 tegn.',
+  'previous' => 'Forrige',
+  'next' => 'Næste',
+  'page' => 'Side',
+  'pagination' => 'Sideinddeling',
+  'meta_desc' => 'Global søgning ON4CRD i webstedets indhold.',
+  'source_all' => 'Alting',
+  'source_news' => 'Nyheder',
+  'source_articles' => 'genstande',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Bibliotek',
+  'source_classifieds' => 'Meddelelser',
+  'source_albums' => 'Albums',
+  'results_title' => 'Resultater',
+  'results_for' => 'ZXQ0QXZ resultater for "ZXQ1QXZ"',
+  'start_title' => 'Start en søgning',
+  'start_hint' => 'Indtast mindst to tegn for at udforske webstedets indhold.',
+  'open_result' => 'Åbn',
+);

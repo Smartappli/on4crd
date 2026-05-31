@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Keresés',
+  'eyebrow' => 'Globális keresés',
+  'lead' => 'Gyorsan kereshet híreket, cikkeket, wikioldalakat, dokumentumokat, közleményeket és albumokat.',
+  'placeholder' => 'Mutató, kulcsszó, téma, dokumentum...',
+  'query_label' => 'A keresésed',
+  'source_label' => 'Forrás',
+  'submit' => 'Keresés',
+  'count' => 'eredmény(ek)',
+  'empty' => 'Nincs találat erre a keresésre.',
+  'empty_help' => 'Próbálkozzon rövidebb kulcsszóval, másik forrással vagy más írásmóddal.',
+  'query_too_short' => 'Kérjük, adjon meg legalább 2 karaktert.',
+  'previous' => 'Előző',
+  'next' => 'Következő',
+  'page' => 'oldal',
+  'pagination' => 'Lapozás',
+  'meta_desc' => 'Globális keresés ON4CRD a webhely tartalmában.',
+  'source_all' => 'Mindent',
+  'source_news' => 'Hírek',
+  'source_articles' => 'Tételek',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Könyvtár',
+  'source_classifieds' => 'Közlemények',
+  'source_albums' => 'Albumok',
+  'results_title' => 'Eredmények',
+  'results_for' => 'ZXQ0QXZ találat(ok) a "ZXQ1QXZ" kifejezésre',
+  'start_title' => 'Indítsa el a keresést',
+  'start_hint' => 'Írjon be legalább két karaktert a webhely tartalmának felfedezéséhez.',
+  'open_result' => 'Nyissa meg',
+);

@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Traži',
+  'eyebrow' => 'Globalna pretraga',
+  'lead' => 'Brzo pronađite vijesti, članke, wiki stranice, dokumente, najave i albume.',
+  'placeholder' => 'Indikator, ključna riječ, tema, dokument...',
+  'query_label' => 'Vaša pretraga',
+  'source_label' => 'Izvor',
+  'submit' => 'Traži',
+  'count' => 'rezultat(i)',
+  'empty' => 'Nema rezultata za ovu pretragu.',
+  'empty_help' => 'Pokušajte s kraćom ključnom riječi, drugim izvorom ili drugačijim pravopisom.',
+  'query_too_short' => 'Unesite najmanje 2 znaka.',
+  'previous' => 'Prethodno',
+  'next' => 'Dalje',
+  'page' => 'Stranica',
+  'pagination' => 'Paginacija',
+  'meta_desc' => 'Globalno pretraživanje ON4CRD u sadržaju stranice.',
+  'source_all' => 'sve',
+  'source_news' => 'Vijesti',
+  'source_articles' => 'Predmeti',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Knjižnica',
+  'source_classifieds' => 'Obavijesti',
+  'source_albums' => 'Albumi',
+  'results_title' => 'Rezultati',
+  'results_for' => 'ZXQ0QXZ rezultat(i) za "ZXQ1QXZ"',
+  'start_title' => 'Započnite pretragu',
+  'start_hint' => 'Unesite najmanje dva znaka da biste istražili sadržaj stranice.',
+  'open_result' => 'Otvoreno',
+);

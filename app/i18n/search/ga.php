@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Cuardach',
+  'eyebrow' => 'Cuardach domhanda',
+  'lead' => 'Aimsigh go tapa nuacht, ailt, leathanaigh vicí, doiciméid, fógraí agus albaim.',
+  'placeholder' => 'Táscaire, eochairfhocal, téama, doiciméad...',
+  'query_label' => 'Do chuardach',
+  'source_label' => 'Foinse',
+  'submit' => 'Cuardach',
+  'count' => 'toradh',
+  'empty' => 'Níl aon torthaí ar an gcuardach seo.',
+  'empty_help' => 'Bain triail as eochairfhocal níos giorra, foinse eile, nó litriú eile.',
+  'query_too_short' => 'Cuir isteach 2 charachtar ar a laghad.',
+  'previous' => 'Roimhe Seo',
+  'next' => 'Ar aghaidh',
+  'page' => 'Leathanach',
+  'pagination' => 'Leathanaigh',
+  'meta_desc' => 'Cuardach domhanda ON4CRD in inneachar an tsuímh.',
+  'source_all' => 'Gach rud',
+  'source_news' => 'Nuacht',
+  'source_articles' => 'Míreanna',
+  'source_wiki' => 'Vicí',
+  'source_library' => 'Leabharlann',
+  'source_classifieds' => 'Fógraí',
+  'source_albums' => 'Albaim',
+  'results_title' => 'Torthaí',
+  'results_for' => 'Torthaí ZXQ0QXZ le haghaidh "ZXQ1QXZ"',
+  'start_title' => 'Tosaigh le cuardach',
+  'start_hint' => 'Cuir isteach dhá charachtar ar a laghad chun ábhar an tsuímh a fhiosrú.',
+  'open_result' => 'Oscail',
+);

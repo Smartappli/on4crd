@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Ieškoti',
+  'eyebrow' => 'Pasaulinė paieška',
+  'lead' => 'Greitai raskite naujienas, straipsnius, wiki puslapius, dokumentus, pranešimus ir albumus.',
+  'placeholder' => 'Rodiklis, raktinis žodis, tema, dokumentas...',
+  'query_label' => 'Jūsų paieška',
+  'source_label' => 'Šaltinis',
+  'submit' => 'Ieškoti',
+  'count' => 'rezultatas (-ai)',
+  'empty' => 'Nėra šios paieškos rezultatų.',
+  'empty_help' => 'Išbandykite trumpesnį raktinį žodį, kitą šaltinį arba kitą rašybą.',
+  'query_too_short' => 'Įveskite bent 2 simbolius.',
+  'previous' => 'Ankstesnis',
+  'next' => 'Kitas',
+  'page' => 'Puslapis',
+  'pagination' => 'Puslapių rašymas',
+  'meta_desc' => 'Pasaulinė paieška ON4CRD svetainės turinyje.',
+  'source_all' => 'Viskas',
+  'source_news' => 'Naujienos',
+  'source_articles' => 'Daiktai',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'biblioteka',
+  'source_classifieds' => 'Skelbimai',
+  'source_albums' => 'Albumai',
+  'results_title' => 'Rezultatai',
+  'results_for' => 'ZXQ0QXZ rezultatas (-ai) pagal „ZXQ1QXZ“',
+  'start_title' => 'Pradėkite paiešką',
+  'start_hint' => 'Įveskite bent du simbolius, kad peržiūrėtumėte svetainės turinį.',
+  'open_result' => 'Atidaryti',
+);

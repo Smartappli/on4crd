@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Szukaj',
+  'eyebrow' => 'Globalne wyszukiwanie',
+  'lead' => 'Szybko znajduj wiadomości, artykuły, strony wiki, dokumenty, ogłoszenia i albumy.',
+  'placeholder' => 'Wskaźnik, słowo kluczowe, motyw, dokument...',
+  'query_label' => 'Twoje wyszukiwanie',
+  'source_label' => 'Źródło',
+  'submit' => 'Szukaj',
+  'count' => 'wynik(i)',
+  'empty' => 'Brak wyników dla tego wyszukiwania.',
+  'empty_help' => 'Spróbuj użyć krótszego słowa kluczowego, innego źródła lub innej pisowni.',
+  'query_too_short' => 'Proszę wpisać co najmniej 2 znaki.',
+  'previous' => 'Poprzedni',
+  'next' => 'Następny',
+  'page' => 'Strona',
+  'pagination' => 'Paginacja',
+  'meta_desc' => 'Wyszukiwanie globalne ON4CRD w treści serwisu.',
+  'source_all' => 'Wszystko',
+  'source_news' => 'Wiadomości',
+  'source_articles' => 'Przedmioty',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Biblioteka',
+  'source_classifieds' => 'Ogłoszenia',
+  'source_albums' => 'Albumy',
+  'results_title' => 'Wyniki',
+  'results_for' => 'Wyniki ZXQ0QXZ dla „ZXQ1QXZ”',
+  'start_title' => 'Rozpocznij wyszukiwanie',
+  'start_hint' => 'Wprowadź co najmniej dwa znaki, aby zapoznać się z zawartością witryny.',
+  'open_result' => 'Otwórz',
+);

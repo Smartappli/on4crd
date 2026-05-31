@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Meklēt',
+  'eyebrow' => 'Globālā meklēšana',
+  'lead' => 'Ātri atrodiet ziņas, rakstus, wiki lapas, dokumentus, paziņojumus un albumus.',
+  'placeholder' => 'Indikators, atslēgvārds, tēma, dokuments...',
+  'query_label' => 'Jūsu meklēšana',
+  'source_label' => 'Avots',
+  'submit' => 'Meklēt',
+  'count' => 'rezultāts(-i)',
+  'empty' => 'Šai meklēšanai nav rezultātu.',
+  'empty_help' => 'Izmēģiniet īsāku atslēgvārdu, citu avotu vai citu pareizrakstību.',
+  'query_too_short' => 'Lūdzu, ievadiet vismaz 2 rakstzīmes.',
+  'previous' => 'Iepriekšējais',
+  'next' => 'Tālāk',
+  'page' => 'Lapa',
+  'pagination' => 'Lapu šķirošana',
+  'meta_desc' => 'Globālā meklēšana ON4CRD vietnes saturā.',
+  'source_all' => 'Viss',
+  'source_news' => 'Jaunumi',
+  'source_articles' => 'Preces',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Bibliotēka',
+  'source_classifieds' => 'Paziņojumi',
+  'source_albums' => 'Albumi',
+  'results_title' => 'Rezultāti',
+  'results_for' => 'ZXQ0QXZ rezultāts(-i) vaicājumam "ZXQ1QXZ"',
+  'start_title' => 'Sāciet meklēšanu',
+  'start_hint' => 'Ievadiet vismaz divas rakstzīmes, lai izpētītu vietnes saturu.',
+  'open_result' => 'Atvērt',
+);

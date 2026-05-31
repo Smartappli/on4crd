@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Sök',
+  'eyebrow' => 'Global sökning',
+  'lead' => 'Hitta snabbt nyheter, artiklar, wikisidor, dokument, meddelanden och album.',
+  'placeholder' => 'Indikator, nyckelord, tema, dokument...',
+  'query_label' => 'Din sökning',
+  'source_label' => 'Källa',
+  'submit' => 'Sök',
+  'count' => 'resultat',
+  'empty' => 'Inga resultat för denna sökning.',
+  'empty_help' => 'Försök med ett kortare sökord, en annan källa eller en annan stavning.',
+  'query_too_short' => 'Ange minst 2 tecken.',
+  'previous' => 'Föregående',
+  'next' => 'Nästa',
+  'page' => 'Sida',
+  'pagination' => 'Paginering',
+  'meta_desc' => 'Global sökning ON4CRD i webbplatsens innehåll.',
+  'source_all' => 'Allt',
+  'source_news' => 'Nyheter',
+  'source_articles' => 'Föremål',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Bibliotek',
+  'source_classifieds' => 'Meddelanden',
+  'source_albums' => 'Album',
+  'results_title' => 'Resultat',
+  'results_for' => 'ZXQ0QXZ resultat för "ZXQ1QXZ"',
+  'start_title' => 'Starta en sökning',
+  'start_hint' => 'Ange minst två tecken för att utforska webbplatsens innehåll.',
+  'open_result' => 'Öppna',
+);

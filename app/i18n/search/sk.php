@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Hľadať',
+  'eyebrow' => 'Globálne vyhľadávanie',
+  'lead' => 'Rýchlo vyhľadajte novinky, články, wiki stránky, dokumenty, oznámenia a albumy.',
+  'placeholder' => 'Indikátor, kľúčové slovo, téma, dokument...',
+  'query_label' => 'Vaše hľadanie',
+  'source_label' => 'Zdroj',
+  'submit' => 'Hľadať',
+  'count' => 'výsledok(y)',
+  'empty' => 'Žiadne výsledky pre toto vyhľadávanie.',
+  'empty_help' => 'Skúste kratšie kľúčové slovo, iný zdroj alebo iný pravopis.',
+  'query_too_short' => 'Zadajte aspoň 2 znaky.',
+  'previous' => 'Predchádzajúce',
+  'next' => 'Ďalej',
+  'page' => 'Stránka',
+  'pagination' => 'Stránkovanie',
+  'meta_desc' => 'Globálne vyhľadávanie ON4CRD v obsahu stránky.',
+  'source_all' => 'Všetko',
+  'source_news' => 'Správy',
+  'source_articles' => 'Položky',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Knižnica',
+  'source_classifieds' => 'Oznamy',
+  'source_albums' => 'Albumy',
+  'results_title' => 'Výsledky',
+  'results_for' => 'Výsledky ZXQ0QXZ pre "ZXQ1QXZ"',
+  'start_title' => 'Spustite vyhľadávanie',
+  'start_hint' => 'Ak chcete preskúmať obsah stránky, zadajte aspoň dva znaky.',
+  'open_result' => 'Otvorte',
+);

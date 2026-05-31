@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Cercetare',
+  'eyebrow' => 'Căutare globală',
+  'lead' => 'Găsiți rapid știri, articole, pagini wiki, documente, anunțuri și albume.',
+  'placeholder' => 'Indicator, cuvânt cheie, temă, document...',
+  'query_label' => 'Căutarea dvs',
+  'source_label' => 'Sursă',
+  'submit' => 'A cerceta',
+  'count' => 'rezultate)',
+  'empty' => 'Nu există rezultate pentru această căutare.',
+  'empty_help' => 'Încercați un cuvânt cheie mai scurt, o altă sursă sau o ortografie diferită.',
+  'query_too_short' => 'Vă rugăm să introduceți cel puțin 2 caractere.',
+  'previous' => 'Anterior',
+  'next' => 'Urmând',
+  'page' => 'Pagină',
+  'pagination' => 'Paging',
+  'meta_desc' => 'Căutare globală ON4CRD în conținutul site-ului.',
+  'source_all' => 'Toate',
+  'source_news' => 'Ştiri',
+  'source_articles' => 'Articole',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Bibliotecă',
+  'source_classifieds' => 'Anunturi',
+  'source_albums' => 'Albume',
+  'results_title' => 'Rezultate',
+  'results_for' => 'Rezultat(e) ZXQ0QXZ pentru „ZXQ1QXZ”',
+  'start_title' => 'Începeți o căutare',
+  'start_hint' => 'Introduceți cel puțin două caractere pentru a explora conținutul site-ului.',
+  'open_result' => 'Deschide',
+);

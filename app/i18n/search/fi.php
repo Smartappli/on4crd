@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Etsi',
+  'eyebrow' => 'Globaali haku',
+  'lead' => 'Löydä nopeasti uutisia, artikkeleita, wikisivuja, asiakirjoja, ilmoituksia ja albumeja.',
+  'placeholder' => 'Ilmaisin, avainsana, teema, asiakirja...',
+  'query_label' => 'Sinun hakusi',
+  'source_label' => 'lähde',
+  'submit' => 'Etsi',
+  'count' => 'tulos (tulokset)',
+  'empty' => 'Ei tuloksia tälle haulle.',
+  'empty_help' => 'Kokeile lyhyempää avainsanaa, toista lähdettä tai erilaista kirjoitusasua.',
+  'query_too_short' => 'Kirjoita vähintään 2 merkkiä.',
+  'previous' => 'Edellinen',
+  'next' => 'Seuraavaksi',
+  'page' => 'Sivu',
+  'pagination' => 'Sivutus',
+  'meta_desc' => 'Globaali haku ON4CRD sivuston sisällöstä.',
+  'source_all' => 'Kaikki',
+  'source_news' => 'Uutiset',
+  'source_articles' => 'Tuotteet',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Kirjasto',
+  'source_classifieds' => 'Ilmoitukset',
+  'source_albums' => 'Albumit',
+  'results_title' => 'Tulokset',
+  'results_for' => 'ZXQ0QXZ tulos(t) haulle "ZXQ1QXZ"',
+  'start_title' => 'Aloita haku',
+  'start_hint' => 'Syötä vähintään kaksi merkkiä tutustuaksesi sivuston sisältöön.',
+  'open_result' => 'Avaa',
+);

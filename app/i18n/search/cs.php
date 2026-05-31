@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Hledat',
+  'eyebrow' => 'Globální vyhledávání',
+  'lead' => 'Rychle vyhledejte zprávy, články, wiki stránky, dokumenty, oznámení a alba.',
+  'placeholder' => 'Indikátor, klíčové slovo, téma, dokument...',
+  'query_label' => 'Vaše hledání',
+  'source_label' => 'Zdroj',
+  'submit' => 'Hledat',
+  'count' => 'výsledek(y)',
+  'empty' => 'Žádné výsledky pro toto hledání.',
+  'empty_help' => 'Zkuste kratší klíčové slovo, jiný zdroj nebo jiný pravopis.',
+  'query_too_short' => 'Zadejte prosím alespoň 2 znaky.',
+  'previous' => 'Předchozí',
+  'next' => 'Další',
+  'page' => 'stránku',
+  'pagination' => 'Stránkování',
+  'meta_desc' => 'Globální vyhledávání ON4CRD v obsahu webu.',
+  'source_all' => 'Všechno',
+  'source_news' => 'Novinky',
+  'source_articles' => 'Položky',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Knihovna',
+  'source_classifieds' => 'Oznámení',
+  'source_albums' => 'alba',
+  'results_title' => 'Výsledky',
+  'results_for' => 'Výsledky ZXQ0QXZ pro "ZXQ1QXZ"',
+  'start_title' => 'Spusťte vyhledávání',
+  'start_hint' => 'Chcete-li prozkoumat obsah webu, zadejte alespoň dva znaky.',
+  'open_result' => 'Otevřít',
+);

@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'title' => 'Riċerka',
+  'eyebrow' => 'Tfittxija globali',
+  'lead' => 'Sib malajr aħbarijiet, artikli, paġni wiki, dokumenti, avviżi u albums.',
+  'placeholder' => 'Indikatur, keyword, tema, dokument...',
+  'query_label' => 'It-tfittxija tiegħek',
+  'source_label' => 'Sors',
+  'submit' => 'Għar-riċerka',
+  'count' => 'riżultati)',
+  'empty' => 'Ebda riżultat għal din it-tfittxija.',
+  'empty_help' => 'Ipprova keyword iqsar, sors ieħor, jew ortografija differenti.',
+  'query_too_short' => 'Jekk jogħġbok daħħal mill-inqas 2 karattri.',
+  'previous' => 'Preċedenti',
+  'next' => 'Wara',
+  'page' => 'Paġna',
+  'pagination' => 'Paging',
+  'meta_desc' => 'Tfittxija globali ON4CRD fil-kontenut tas-sit.',
+  'source_all' => 'Kollha',
+  'source_news' => 'Aħbarijiet',
+  'source_articles' => 'Oġġetti',
+  'source_wiki' => 'Wiki',
+  'source_library' => 'Librerija',
+  'source_classifieds' => 'Avviżi',
+  'source_albums' => 'Albums',
+  'results_title' => 'Riżultati',
+  'results_for' => 'Riżultat(i) ZXQ0QXZ għal "ZXQ1QXZ"',
+  'start_title' => 'Ibda tfittxija',
+  'start_hint' => 'Daħħal mill-inqas żewġ karattri biex tesplora l-kontenut tas-sit.',
+  'open_result' => 'Miftuħa',
+);
