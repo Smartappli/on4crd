@@ -13,7 +13,7 @@ return array (
   'lot' => 'lot',
   'lots' => 'loten',
   'default_summary' => 'Clubveiling-lot.',
-  'start' => 'Start',
+  'start' => 'Begin',
   'end' => 'Einde',
   'step' => 'Stap',
   'view_lot' => 'Bekijk lot',

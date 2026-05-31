@@ -14,7 +14,7 @@ return array (
   'question_label' => 'Spørgsmål',
   'placeholder' => 'Eks.: Hvor finder man QSL-procedurerne?',
   'kbd_help' => 'Enter for at sende Shift+Enter til linjeskift',
-  'send' => 'Send',
+  'send' => 'Sende',
   's1_q' => 'Hvordan eksporterer jeg en QSL?',
   's1_l' => 'Eksporter en QSL',
   's2_q' => 'Hvad er HF-båndplanerne?',

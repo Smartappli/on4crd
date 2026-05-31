@@ -19,7 +19,7 @@ return array (
   'previous' => 'Előző',
   'next' => 'Következő',
   'theme_antennes' => 'Antennák',
-  'theme_trafic' => 'Traffic & DX',
+  'theme_trafic' => 'Forgalom és DX',
   'theme_numerique' => 'Digitális módok',
   'theme_materiel' => 'Berendezés és állomás',
   'theme_formation' => 'Képzés',

@@ -13,7 +13,7 @@ return array (
   'lot' => 'meget',
   'lots' => 'partier',
   'default_summary' => 'Klub auktionsparti.',
-  'start' => 'Start',
+  'start' => 'Starte',
   'end' => 'Slut',
   'step' => 'Ikke',
   'view_lot' => 'Se grunden',

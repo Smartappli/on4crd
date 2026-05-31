@@ -1,13 +1,15 @@
 <?php
+declare(strict_types=1);
+
 return array (
   'not_found' => 'Artikel niet gevonden.',
   'layout_article' => 'Artikel',
   'meta_fallback' => 'Technisch ON4CRD-artikel',
-  'back_to_articles' => 'Back to articles',
-  'reading_minutes' => 'min read',
-  'previous_article' => 'Previous article',
-  'next_article' => 'Next article',
-  'related_articles' => 'Related articles',
+  'back_to_articles' => 'Terug naar artikelen',
+  'reading_minutes' => 'min gelezen',
+  'previous_article' => 'Vorig artikel',
+  'next_article' => 'Volgend artikel',
+  'related_articles' => 'Gerelateerde artikelen',
   'favorite_label' => 'Favoriet',
   'favorite_added' => 'Favoriet toegevoegd',
   'favorite_removed' => 'Favoriet verwijderd',
