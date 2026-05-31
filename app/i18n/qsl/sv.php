@@ -132,7 +132,7 @@ return array (
   'qso_imported_stat' => 'QSO importerad',
   'qsl_created_stat' => 'QSL skapad',
   'backgrounds_stat' => 'fonder',
-  'format' => 'Format',
+  'format' => 'Formatera',
   'table_call' => 'Vägledande',
   'table_date' => 'Datum',
   'table_utc' => 'UTC',

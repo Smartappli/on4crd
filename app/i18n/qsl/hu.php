@@ -85,7 +85,7 @@ return array (
   'fallback_background' => 'Háttér',
   'preset_club_blue' => 'Klub kék',
   'preset_sunset' => 'Naplemente',
-  'preset_aurora' => 'Aurora',
+  'preset_aurora' => 'Hajnal',
   'preset_forest' => 'Fúró',
   'preset_slate' => 'Pala',
   'table_background' => 'Háttér',

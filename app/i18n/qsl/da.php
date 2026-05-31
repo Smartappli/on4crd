@@ -89,7 +89,7 @@ return array (
   'preset_forest' => 'Bore',
   'preset_slate' => 'Skifer',
   'table_background' => 'Baggrund',
-  'table_type' => 'Type',
+  'table_type' => 'Slags',
   'table_default' => 'Standard',
   'table_actions' => 'Handlinger',
   'type_image' => 'Billede',

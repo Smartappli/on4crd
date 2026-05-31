@@ -85,7 +85,7 @@ return array (
   'fallback_background' => 'φόντο',
   'preset_club_blue' => 'Club μπλε',
   'preset_sunset' => 'Ηλιοβασίλεμα',
-  'preset_aurora' => 'Aurora',
+  'preset_aurora' => 'Αυγή',
   'preset_forest' => 'τρυπάνι',
   'preset_slate' => 'Σχιστόλιθος',
   'table_background' => 'φόντο',
