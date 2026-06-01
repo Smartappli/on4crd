@@ -166,17 +166,21 @@ ob_start();
     <section class="card members-library-search-panel">
         <form method="get" class="inline-form members-library-search-form">
             <input type="hidden" name="route" value="members_library">
-            <select name="category" aria-label="<?= e((string) ($t['category'] ?? $t['all_categories'])) ?>">
-                <option value=""><?= e((string) $t['all_categories']) ?></option>
-                <?php foreach ($categories as $cat): $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
-                    <option value="<?= e($catName) ?>" <?= $catName === $category ? 'selected' : '' ?>><?= e($catName) ?> (<?= (int) ($cat['total'] ?? 0) ?>)</option>
-                <?php endforeach; ?>
-            </select>
-            <input type="search" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
-            <input type="search" name="tag" value="<?= e($tag) ?>" placeholder="<?= e((string) $t['tag_search_ph']) ?>">
+            <?php if ($category !== ''): ?>
+                <input type="hidden" name="category" value="<?= e($category) ?>">
+            <?php endif; ?>
+            <?php if ($tag !== ''): ?>
+                <input type="hidden" name="tag" value="<?= e($tag) ?>">
+            <?php endif; ?>
+            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== '' || $category !== '' || $tag !== ''): ?><a class="button secondary" href="<?= e(route_url('members_library')) ?>"><?= e((string) $t['reset']) ?></a><?php endif; ?>
+            <?php if ($search !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'tag' => $tag])) ?>"><?= e((string) $t['reset']) ?></a>
+            <?php endif; ?>
         </form>
+        <?php if ($search !== '' || $category !== '' || $tag !== ''): ?>
+            <p class="help"><?= e((string) $t['documents']) ?> : <?= (int) $totalDocuments ?></p>
+        <?php endif; ?>
     </section>
 
     <section class="members-library-layout">
