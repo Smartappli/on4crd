@@ -1,10 +1,79 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
   <title id="title">ON4CRD</title>
-  <desc id="desc">Icône maskable ON4CRD</desc>
-  <rect width="512" height="512" rx="112" fill="#2f6fed"></rect>
-  <circle cx="256" cy="176" r="74" fill="#ffffff" opacity="0.14"></circle>
-  <path d="M138 318c0-65 53-118 118-118s118 53 118 118" fill="none" stroke="#ffffff" stroke-width="24" stroke-linecap="round"></path>
-  <circle cx="256" cy="318" r="18" fill="#ffffff"></circle>
-  <path d="M192 318h128" stroke="#ffffff" stroke-width="18" stroke-linecap="round"></path>
-  <text x="256" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="68" font-weight="700" fill="#ffffff">ON4CRD</text>
+  <desc id="desc">Icone maskable inspiree du logo Radio Club Durnal ON4CRD</desc>
+  <defs>
+    <radialGradient id="sea" cx="50%" cy="42%" r="64%">
+      <stop offset="0" stop-color="#2f7cc7"/>
+      <stop offset=".62" stop-color="#0b3e8e"/>
+      <stop offset="1" stop-color="#041f72"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset=".72" stop-color="#0036d9"/>
+      <stop offset=".9" stop-color="#0517d8"/>
+      <stop offset="1" stop-color="#0610aa"/>
+    </radialGradient>
+    <linearGradient id="radioBody" x1="128" x2="384" y1="250" y2="334">
+      <stop offset="0" stop-color="#1c2735"/>
+      <stop offset=".48" stop-color="#65717c"/>
+      <stop offset="1" stop-color="#151d28"/>
+    </linearGradient>
+    <path id="topArc" d="M89 196a178 178 0 0 1 334 0"/>
+    <path id="bottomArc" d="M142 382a150 150 0 0 0 228 0"/>
+    <clipPath id="innerClip">
+      <circle cx="256" cy="256" r="202"/>
+    </clipPath>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="#0713a9"/>
+  <circle cx="256" cy="256" r="250" fill="url(#halo)"/>
+  <circle cx="256" cy="256" r="214" fill="#0534c9"/>
+  <circle cx="256" cy="256" r="196" fill="url(#sea)" stroke="#021674" stroke-width="8"/>
+
+  <g clip-path="url(#innerClip)">
+    <path d="M112 228c34-54 78-89 139-102 74-16 134 7 180 53v75H112z" fill="#204d9b"/>
+    <path d="M118 255c38-14 61-30 82-51 19-19 45-28 72-17 20 8 36 4 55-8 29-18 64-9 93 12v95H118z" fill="#c9d3ca" opacity=".88"/>
+    <path d="M107 280c28-34 48-50 72-41 20 8 29-2 45-18 22-22 55-21 75 2 17 19 35 21 57 8 29-18 64-8 91 21v73H107z" fill="#405f4b" opacity=".8"/>
+    <path d="M92 329c45-42 85-38 128-16 38 20 66 17 103-9 39-28 78-24 119 11v77H92z" fill="#1d2a3d" opacity=".92"/>
+    <path d="M68 150c22 43 23 101 1 169l-42-26V184z" fill="#b9c1c8"/>
+    <path d="M444 150c-22 43-23 101-1 169l42-26V184z" fill="#b9c1c8"/>
+    <path d="M51 164c23 42 26 91 5 147l18 10c26-63 25-119-1-169z" fill="#5c6570"/>
+    <path d="M461 164c-23 42-26 91-5 147l-18 10c-26-63-25-119 1-169z" fill="#5c6570"/>
+  </g>
+
+  <text font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700" letter-spacing="2">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">
+      <tspan fill="#ffffff">Club Radio </tspan><tspan fill="#e3342f">Durnal</tspan>
+    </textPath>
+  </text>
+
+  <g transform="translate(256 154)">
+    <path d="M0-58 30 0 0 58-30 0z" fill="#0b1b27" stroke="#f9d923" stroke-width="5"/>
+    <text x="0" y="-12" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#f9d923">UIB</text>
+    <path d="M0-44v88M-13-22 13 22M13-22-13 22" stroke="#f9d923" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="5" fill="#f9d923"/>
+  </g>
+
+  <g transform="translate(256 292)">
+    <rect x="-142" y="-45" width="284" height="90" rx="10" fill="#141922" stroke="#c8cdd2" stroke-width="5"/>
+    <rect x="-129" y="-33" width="258" height="66" rx="5" fill="url(#radioBody)" stroke="#0a0d12" stroke-width="3"/>
+    <rect x="-103" y="-19" width="120" height="24" rx="3" fill="#7f2d20" stroke="#141922" stroke-width="2"/>
+    <rect x="-95" y="-13" width="104" height="11" rx="2" fill="#d9b37c" opacity=".9"/>
+    <circle cx="66" cy="0" r="31" fill="#111827" stroke="#b6bdc5" stroke-width="5"/>
+    <circle cx="66" cy="0" r="18" fill="#4b5563" stroke="#0f172a" stroke-width="4"/>
+    <circle cx="116" cy="-19" r="13" fill="#1f2937" stroke="#c8cdd2" stroke-width="3"/>
+    <circle cx="116" cy="20" r="13" fill="#1f2937" stroke="#c8cdd2" stroke-width="3"/>
+    <g fill="#c8cdd2">
+      <circle cx="-114" cy="-18" r="4"/>
+      <circle cx="-114" cy="0" r="4"/>
+      <circle cx="-114" cy="18" r="4"/>
+      <circle cx="-86" cy="20" r="4"/>
+      <circle cx="-68" cy="20" r="4"/>
+      <circle cx="-50" cy="20" r="4"/>
+    </g>
+  </g>
+
+  <text x="256" y="381" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="900" fill="#ffe65a" stroke="#06115d" stroke-width="4" paint-order="stroke">ON4CRD</text>
+  <text font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="800" letter-spacing="1.5" fill="#ffe65a">
+    <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">WWW.ON4CRD.BE</textPath>
+  </text>
 </svg>
