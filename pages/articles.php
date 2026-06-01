@@ -158,6 +158,23 @@ ob_start();
         </div>
     </section>
 
+    <section class="card articles-search-panel">
+        <form method="get" class="inline-form articles-search-form">
+            <input type="hidden" name="route" value="articles">
+            <?php if ($themeFilter !== ''): ?>
+                <input type="hidden" name="theme" value="<?= e($themeFilter) ?>">
+            <?php endif; ?>
+            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+            <?php if ($search !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter])) ?>"><?= e((string) $t['reset_search']) ?></a>
+            <?php endif; ?>
+        </form>
+        <?php if ($search !== '' || $themeFilter !== ''): ?>
+            <p class="help"><?= e((string) $t['results']) ?> : <?= $totalArticles ?></p>
+        <?php endif; ?>
+    </section>
+
     <section class="articles-layout">
         <aside class="articles-index card">
             <p class="articles-index-title"><?= e((string) $t['theme_default']) ?></p>
@@ -176,25 +193,11 @@ ob_start();
         </aside>
 
         <div class="articles-content">
-    <div class="card">
-        <form method="get" class="inline-form" style="margin: 1rem 0 0;">
-            <input type="hidden" name="route" value="articles">
-            <?php if ($themeFilter !== ''): ?>
-                <input type="hidden" name="theme" value="<?= e($themeFilter) ?>">
-            <?php endif; ?>
-            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
-            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter])) ?>"><?= e((string) $t['reset_search']) ?></a>
-            <?php endif; ?>
-        </form>
-        <?php if ($themeFilter !== ''): ?>
+    <?php if ($themeFilter !== ''): ?>
+        <div class="card">
             <p><a class="pill" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
-        <?php endif; ?>
-        <?php if ($search !== '' || $themeFilter !== ''): ?>
-            <p class="help"><?= e((string) $t['results']) ?> : <?= $totalArticles ?></p>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 
     <?php if ($groupedArticles === []): ?>
         <div class="card">
