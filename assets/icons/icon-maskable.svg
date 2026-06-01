@@ -20,14 +20,14 @@
     <path id="topArc" d="M89 196a178 178 0 0 1 334 0"/>
     <path id="bottomArc" d="M142 382a150 150 0 0 0 228 0"/>
     <clipPath id="innerClip">
-      <circle cx="256" cy="256" r="202"/>
+      <circle cx="256" cy="256" r="226"/>
     </clipPath>
   </defs>
 
   <rect width="512" height="512" rx="112" fill="#0713a9"/>
   <circle cx="256" cy="256" r="250" fill="url(#halo)"/>
   <circle cx="256" cy="256" r="214" fill="#0534c9"/>
-  <circle cx="256" cy="256" r="196" fill="url(#sea)" stroke="#021674" stroke-width="8"/>
+  <circle cx="256" cy="256" r="220" fill="url(#sea)" stroke="#021674" stroke-width="8"/>
 
   <g clip-path="url(#innerClip)">
     <path d="M112 228c34-54 78-89 139-102 74-16 134 7 180 53v75H112z" fill="#204d9b"/>
@@ -53,7 +53,7 @@
     <circle cx="0" cy="0" r="5" fill="#f9d923"/>
   </g>
 
-  <g transform="translate(256 292)">
+  <g transform="translate(256 276)">
     <rect x="-142" y="-45" width="284" height="90" rx="10" fill="#141922" stroke="#c8cdd2" stroke-width="5"/>
     <rect x="-129" y="-33" width="258" height="66" rx="5" fill="url(#radioBody)" stroke="#0a0d12" stroke-width="3"/>
     <rect x="-103" y="-19" width="120" height="24" rx="3" fill="#7f2d20" stroke="#141922" stroke-width="2"/>
