@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Technical articles',
   'page_description' => 'ON4CRD technical articles about amateur radio, equipment and operations.',
   'manage' => 'Manage',
-  'article_count' => 'article(s)',
+  'article_count' => 'Article(s)',
   'reset_filter' => 'Reset filter',
   'search_placeholder' => 'Search for an article',
   'search' => 'Search',
