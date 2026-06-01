@@ -2,3 +2,59 @@
 [data-route="profile"] .profile-module {
   min-width: 0;
 }
+
+[data-route="profile"] .profile-fieldset {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+[data-route="profile"] .profile-fieldset legend {
+  font-weight: 700;
+  padding: 0 .35rem;
+}
+
+[data-route="profile"] .profile-form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+[data-route="profile"] .profile-form-wide {
+  grid-column: 1 / -1;
+}
+
+[data-route="profile"] .profile-visibility-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+[data-route="profile"] .profile-visibility-panel {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .85rem;
+}
+
+[data-route="profile"] .profile-visibility-panel h3 {
+  font-size: 1rem;
+  margin: 0 0 .75rem;
+}
+
+[data-route="profile"] .profile-visibility-options {
+  display: grid;
+  gap: .5rem;
+}
+
+[data-route="profile"] .profile-visibility-option {
+  align-items: center;
+  display: flex;
+  gap: .5rem;
+}
+
+@media (max-width: 760px) {
+  [data-route="profile"] .profile-form-grid,
+  [data-route="profile"] .profile-visibility-grid {
+    grid-template-columns: 1fr;
+  }
+}
