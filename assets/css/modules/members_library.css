@@ -10,9 +10,31 @@
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
+[data-route="members_library"] .library-hero-side {
+  align-content: center;
+  display: grid;
+  gap: .85rem;
+  justify-items: end;
+  min-width: min(100%, 24rem);
+}
+
+[data-route="members_library"] .library-propose-document {
+  justify-content: center;
+  width: max-content;
+}
+
 @media (max-width: 640px) {
   .library-grid,
   .library-category-grid {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="members_library"] .library-hero-side {
+    justify-items: stretch;
+    min-width: 0;
+  }
+
+  [data-route="members_library"] .library-propose-document {
+    width: 100%;
   }
 }
