@@ -202,6 +202,15 @@ ob_start();
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
         <fieldset class="profile-fieldset">
+            <legend><?= e($t('photo_section')) ?></legend>
+        <label>
+            <?= e($t('change_photo')) ?>
+            <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+            <small class="help"><?= e($t('photo_help')) ?></small>
+        </label>
+        </fieldset>
+
+        <fieldset class="profile-fieldset">
             <legend><?= e($t('identity_section')) ?></legend>
             <div class="profile-form-grid">
                 <label><?= e($t('callsign')) ?><input type="text" name="callsign" maxlength="32" required value="<?= e((string) ($member['callsign'] ?? '')) ?>"></label>
@@ -236,15 +245,6 @@ ob_start();
                 <label class="profile-form-wide"><?= e($t('antennas')) ?><textarea name="antennas" rows="3" maxlength="4000"><?= e((string) ($member['antennas'] ?? '')) ?></textarea></label>
                 <label class="profile-form-wide"><?= e($t('interests')) ?><textarea name="interests" rows="3" maxlength="4000"><?= e((string) ($member['interests'] ?? '')) ?></textarea></label>
             </div>
-        </fieldset>
-
-        <fieldset class="profile-fieldset">
-            <legend><?= e($t('photo_section')) ?></legend>
-        <label>
-            <?= e($t('change_photo')) ?>
-            <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
-            <small class="help"><?= e($t('photo_help')) ?></small>
-        </label>
         </fieldset>
 
         <button type="submit" class="button"><?= e($t('save')) ?></button>
