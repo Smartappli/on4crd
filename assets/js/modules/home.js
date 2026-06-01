@@ -19,7 +19,7 @@ slide.tabIndex=active?0:-1;
 };
 const start=()=>{
 if(timer||slides.length<2||window.matchMedia("(prefers-reduced-motion: reduce)").matches){return;}
-timer=window.setInterval(()=>show(index+1),3500);
+timer=window.setInterval(()=>show(index+1),7000);
 };
 const stop=()=>{if(!timer){return;}window.clearInterval(timer);timer=null;};
 carousel.classList.add("is-ready");
