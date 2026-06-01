@@ -132,46 +132,64 @@ $member = $stmt->fetch() ?: [];
 
 ob_start();
 ?>
-<div class="stack">
-<div class="card">
-    <h1>Vie privée</h1>
+<div class="gdpr-page stack">
+<div class="card gdpr-hero">
+    <div class="gdpr-identity">
     <?php $avatarSrc = member_avatar_src($member); ?>
-    <p><img src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>" style="max-width:180px;border-radius:12px;"></p>
-    <p><strong><?= e($t('callsign')) ?> :</strong> <?= e((string) ($member['callsign'] ?? '')) ?></p>
-    <p><strong><?= e($t('name')) ?> :</strong> <?= e((string) ($member['full_name'] ?? '')) ?></p>
-    <p><strong><?= e($t('email')) ?> :</strong> <?= e((string) ($member['email'] ?? '')) ?></p>
+        <img class="gdpr-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
+        <div>
+            <h1>Vie privée</h1>
+            <dl class="gdpr-profile-summary">
+                <div><dt><?= e($t('callsign')) ?></dt><dd><?= e((string) ($member['callsign'] ?? '')) ?></dd></div>
+                <div><dt><?= e($t('name')) ?></dt><dd><?= e((string) ($member['full_name'] ?? '')) ?></dd></div>
+                <div><dt><?= e($t('email')) ?></dt><dd><?= e((string) ($member['email'] ?? '')) ?></dd></div>
+            </dl>
+        </div>
+    </div>
 </div>
 
-<section class="card" id="privacy">
-    <h2><?= e($t('directory_visibility')) ?></h2>
-    <p class="help"><?= e($t('visibility_help')) ?></p>
+<section class="card gdpr-privacy-card" id="privacy">
+    <div class="gdpr-section-heading">
+        <div>
+            <h2><?= e($t('directory_visibility')) ?></h2>
+            <p class="help"><?= e($t('visibility_help')) ?></p>
+        </div>
+    </div>
     <form method="post" class="stack" enctype="multipart/form-data">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
-        <label>
-            <?= e($t('change_photo')) ?>
-            <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
-            <small class="help"><?= e($t('photo_help')) ?></small>
-        </label>
+        <div class="gdpr-photo-panel">
+            <label>
+                <span><?= e($t('change_photo')) ?></span>
+                <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                <small class="help"><?= e($t('photo_help')) ?></small>
+            </label>
+        </div>
 
-        <div class="profile-visibility-grid">
-            <?php foreach ($visibilityOptions as $visibilityValue => $visibilityLabel): ?>
-                <section class="profile-visibility-panel">
-                    <h3><?= e($visibilityLabel) ?></h3>
-                    <div class="profile-visibility-options">
-                        <?php foreach ($visibilityFields as $fieldName => $fieldMeta): ?>
-                            <?php $currentValue = (string) ($member[$fieldName] ?? (string) $fieldMeta['default']); ?>
-                            <label class="profile-visibility-option">
-                                <input type="radio" name="<?= e($fieldName) ?>" value="<?= e($visibilityValue) ?>" <?= $currentValue === $visibilityValue ? 'checked' : '' ?>>
-                                <span><?= e((string) $fieldMeta['label']) ?></span>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                </section>
+        <div class="gdpr-visibility-table" role="table" aria-label="<?= e($t('directory_visibility')) ?>">
+            <div class="gdpr-visibility-header" role="row">
+                <span role="columnheader"><?= e($t('profile_settings')) ?></span>
+                <?php foreach ($visibilityOptions as $visibilityLabel): ?>
+                    <span role="columnheader"><?= e($visibilityLabel) ?></span>
+                <?php endforeach; ?>
+            </div>
+            <?php foreach ($visibilityFields as $fieldName => $fieldMeta): ?>
+                <?php $currentValue = (string) ($member[$fieldName] ?? (string) $fieldMeta['default']); ?>
+                <div class="gdpr-visibility-row" role="row">
+                    <span class="gdpr-field-label" role="cell"><?= e((string) $fieldMeta['label']) ?></span>
+                    <?php foreach ($visibilityOptions as $visibilityValue => $visibilityLabel): ?>
+                        <label class="gdpr-choice" role="cell">
+                            <input type="radio" name="<?= e($fieldName) ?>" value="<?= e($visibilityValue) ?>" <?= $currentValue === $visibilityValue ? 'checked' : '' ?>>
+                            <span><?= e($visibilityLabel) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
             <?php endforeach; ?>
         </div>
 
-        <button type="submit" class="button"><?= e($t('save')) ?></button>
+        <div class="gdpr-actions">
+            <button type="submit" class="button"><?= e($t('save')) ?></button>
+        </div>
     </form>
 </section>
 </div>
