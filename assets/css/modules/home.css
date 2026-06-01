@@ -89,6 +89,12 @@
   flex-direction: column;
 }
 
+.home-sponsor-carousel .home-media-slide img {
+  max-height: none;
+  width: auto;
+  height: auto;
+}
+
 .home-sponsor-carousel.is-ready .home-media-slide {
   display: none;
 }
