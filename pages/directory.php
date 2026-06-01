@@ -26,7 +26,7 @@ if (table_exists('members')) {
     }
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
-    $sql = 'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, photo_path, avatar_path, is_committee, committee_role, visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
+    $sql = 'SELECT callsign, full_name, email, phone, country, qth, locator, licence_class, qrz_url, is_uba_member, uba_member_number, favourite_bands, favourite_modes, station_equipment, antennas, photo_path, avatar_path, is_committee, committee_role, visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_licence_class, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas
         FROM members
         WHERE is_active = 1
           AND UPPER(callsign) <> "ON4CRD"';
@@ -57,7 +57,7 @@ if (table_exists('members')) {
 
     $countsStmt = db()->prepare(
         'SELECT COUNT(*) AS active_total,
-                SUM(CASE WHEN UPPER(COALESCE(licence_class, "")) LIKE "%UBA%" AND visibility_licence_class IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
+                SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
          WHERE is_active = 1
            AND UPPER(callsign) <> "ON4CRD"
@@ -66,17 +66,23 @@ if (table_exists('members')) {
                OR visibility_full_name IN (' . $visibilityPlaceholders . ')
                OR visibility_email IN (' . $visibilityPlaceholders . ')
                OR visibility_phone IN (' . $visibilityPlaceholders . ')
+               OR visibility_country IN (' . $visibilityPlaceholders . ')
                OR visibility_qth IN (' . $visibilityPlaceholders . ')
+               OR visibility_locator IN (' . $visibilityPlaceholders . ')
                OR visibility_licence_class IN (' . $visibilityPlaceholders . ')
+               OR visibility_qrz IN (' . $visibilityPlaceholders . ')
+               OR visibility_uba IN (' . $visibilityPlaceholders . ')
                OR visibility_favourite_bands IN (' . $visibilityPlaceholders . ')
+               OR visibility_favourite_modes IN (' . $visibilityPlaceholders . ')
                OR visibility_station IN (' . $visibilityPlaceholders . ')
+               OR visibility_antennas IN (' . $visibilityPlaceholders . ')
            )'
     );
     $countParams = [];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
     }
-    for ($i = 0; $i < 8; $i++) {
+    for ($i = 0; $i < 14; $i++) {
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $countParams[] = $visibilityLevel;
         }
@@ -91,10 +97,17 @@ if (table_exists('members')) {
         'full_name' => 'visibility_full_name',
         'email' => 'visibility_email',
         'phone' => 'visibility_phone',
+        'country' => 'visibility_country',
         'qth' => 'visibility_qth',
+        'locator' => 'visibility_locator',
         'licence_class' => 'visibility_licence_class',
+        'qrz_url' => 'visibility_qrz',
+        'is_uba_member' => 'visibility_uba',
+        'uba_member_number' => 'visibility_uba',
         'favourite_bands' => 'visibility_favourite_bands',
+        'favourite_modes' => 'visibility_favourite_modes',
         'station_equipment' => 'visibility_station',
+        'antennas' => 'visibility_antennas',
     ];
 
     foreach ($members as $index => &$member) {
@@ -107,6 +120,9 @@ if (table_exists('members')) {
 
         $hasVisibleData = false;
         foreach (array_keys($fieldVisibilityMap) as $field) {
+            if ($field === 'is_uba_member' && (int) ($member[$field] ?? 0) !== 1) {
+                continue;
+            }
             if (trim((string) ($member[$field] ?? '')) !== '') {
                 $hasVisibleData = true;
                 break;
@@ -254,11 +270,17 @@ ob_start();
                 $licenceClass = trim((string) ($member['licence_class'] ?? ''));
                 $email = trim((string) ($member['email'] ?? ''));
                 $phone = trim((string) ($member['phone'] ?? ''));
+                $country = trim((string) ($member['country'] ?? ''));
                 $qth = trim((string) ($member['qth'] ?? ''));
+                $grid = trim((string) ($member['locator'] ?? ''));
+                $qrzUrl = trim((string) ($member['qrz_url'] ?? ''));
                 $bands = trim((string) ($member['favourite_bands'] ?? ''));
+                $modes = trim((string) ($member['favourite_modes'] ?? ''));
                 $station = trim((string) ($member['station_equipment'] ?? ''));
+                $antennas = trim((string) ($member['antennas'] ?? ''));
                 $memberAvatarSrc = member_avatar_src($member);
                 $bandList = array_values(array_filter(array_map('trim', preg_split('/[,;\/]+/', $bands) ?: [])));
+                $modeList = array_values(array_filter(array_map('trim', preg_split('/[,;\/]+/', $modes) ?: [])));
                 ?>
                 <article class="directory-member-card">
                     <header class="directory-member-header">
@@ -284,6 +306,15 @@ ob_start();
                         <?php if ($qth !== ''): ?>
                             <span>QTH <?= e($qth) ?></span>
                         <?php endif; ?>
+                        <?php if ($country !== ''): ?>
+                            <span><?= e($country) ?></span>
+                        <?php endif; ?>
+                        <?php if ($grid !== ''): ?>
+                            <span><?= e($t('grid')) ?> <?= e($grid) ?></span>
+                        <?php endif; ?>
+                        <?php if ((int) ($member['is_uba_member'] ?? 0) === 1): ?>
+                            <span><?= e($t('uba_member')) ?><?= trim((string) ($member['uba_member_number'] ?? '')) !== '' ? ' ' . e((string) $member['uba_member_number']) : '' ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <?php if ($bandList !== []): ?>
@@ -294,17 +325,32 @@ ob_start();
                         </div>
                     <?php endif; ?>
 
+                    <?php if ($modeList !== []): ?>
+                        <div class="directory-band-list" aria-label="<?= e($t('modes')) ?>">
+                            <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
+                                <span><?= e($mode) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
                     <?php if ($station !== ''): ?>
                         <p class="directory-station"><strong><?= e($t('station')) ?>:</strong> <?= e($station) ?></p>
                     <?php endif; ?>
 
-                    <?php if ($email !== '' || $phone !== ''): ?>
+                    <?php if ($antennas !== ''): ?>
+                        <p class="directory-station"><strong><?= e($t('antennas')) ?>:</strong> <?= e($antennas) ?></p>
+                    <?php endif; ?>
+
+                    <?php if ($email !== '' || $phone !== '' || $qrzUrl !== ''): ?>
                         <div class="directory-contact-row">
                             <?php if ($email !== ''): ?>
                                 <a class="button small secondary" href="mailto:<?= e($email) ?>"><?= e($t('email')) ?></a>
                             <?php endif; ?>
                             <?php if ($phone !== ''): ?>
                                 <a class="button small secondary" href="tel:<?= e(preg_replace('/\s+/', '', $phone) ?? $phone) ?>"><?= e($t('phone')) ?></a>
+                            <?php endif; ?>
+                            <?php if ($qrzUrl !== ''): ?>
+                                <a class="button small secondary" href="<?= e($qrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
