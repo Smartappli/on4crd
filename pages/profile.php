@@ -12,31 +12,6 @@ set_page_meta([
     'schema_type' => 'ProfilePage',
 ]);
 
-$visibilityOptions = [
-    'public' => $t('public'),
-    'members' => $t('members'),
-    'private' => $t('private'),
-];
-$visibilityFields = [
-    'visibility_photo' => ['label' => $t('photo'), 'default' => 'members'],
-    'visibility_full_name' => ['label' => $t('full_name'), 'default' => 'members'],
-    'visibility_email' => ['label' => $t('email'), 'default' => 'members'],
-    'visibility_phone' => ['label' => $t('phone'), 'default' => 'private'],
-    'visibility_country' => ['label' => $t('country'), 'default' => 'members'],
-    'visibility_qth' => ['label' => $t('qth'), 'default' => 'members'],
-    'visibility_locator' => ['label' => $t('grid'), 'default' => 'members'],
-    'visibility_bio' => ['label' => $t('bio'), 'default' => 'members'],
-    'visibility_licence_class' => ['label' => $t('licence'), 'default' => 'members'],
-    'visibility_qsl' => ['label' => $t('qsl_info'), 'default' => 'members'],
-    'visibility_qrz' => ['label' => $t('qrz_url'), 'default' => 'members'],
-    'visibility_uba' => ['label' => $t('uba_member'), 'default' => 'members'],
-    'visibility_favourite_bands' => ['label' => $t('bands'), 'default' => 'members'],
-    'visibility_favourite_modes' => ['label' => $t('favourite_modes'), 'default' => 'members'],
-    'visibility_station' => ['label' => $t('station'), 'default' => 'members'],
-    'visibility_antennas' => ['label' => $t('antennas'), 'default' => 'members'],
-    'visibility_interests' => ['label' => $t('interests'), 'default' => 'members'],
-];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -103,13 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $qrzUrl = qrz_profile_url_for_callsign($callsign);
 
-        $allowedVisibilities = array_keys($visibilityOptions);
-        $visibilityPayload = [];
-        foreach (array_keys($visibilityFields) as $field) {
-            $value = (string) ($_POST[$field] ?? 'members');
-            $visibilityPayload[$field] = in_array($value, $allowedVisibilities, true) ? $value : 'members';
-        }
-
         $newPhotoPath = trim((string) ($currentMember['photo_path'] ?? ''));
         $newAvatarPath = trim((string) ($currentMember['avatar_path'] ?? ''));
         if (isset($_FILES['photo']) && is_array($_FILES['photo']) && (int) ($_FILES['photo']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
@@ -153,27 +121,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              uba_member_number = ?,
              station_equipment = ?,
              antennas = ?,
-             max_power = ?,
-             favourite_bands = ?,
-             favourite_modes = ?,
-             interests = ?,
-             visibility_photo = ?,
-             visibility_full_name = ?,
-             visibility_email = ?,
-             visibility_phone = ?,
-             visibility_country = ?,
-             visibility_qth = ?,
-             visibility_locator = ?,
-             visibility_bio = ?,
-             visibility_licence_class = ?,
-             visibility_qsl = ?,
-             visibility_qrz = ?,
-             visibility_uba = ?,
-             visibility_favourite_bands = ?,
-             visibility_favourite_modes = ?,
-             visibility_station = ?,
-             visibility_antennas = ?,
-             visibility_interests = ?
+              max_power = ?,
+              favourite_bands = ?,
+              favourite_modes = ?,
+              interests = ?
          WHERE id = ?'
         );
         $stmt->execute([
@@ -204,23 +155,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $favouriteBands !== '' ? $favouriteBands : null,
             $favouriteModes !== '' ? $favouriteModes : null,
             $interests !== '' ? $interests : null,
-            $visibilityPayload['visibility_photo'],
-            $visibilityPayload['visibility_full_name'],
-            $visibilityPayload['visibility_email'],
-            $visibilityPayload['visibility_phone'],
-            $visibilityPayload['visibility_country'],
-            $visibilityPayload['visibility_qth'],
-            $visibilityPayload['visibility_locator'],
-            $visibilityPayload['visibility_bio'],
-            $visibilityPayload['visibility_licence_class'],
-            $visibilityPayload['visibility_qsl'],
-            $visibilityPayload['visibility_qrz'],
-            $visibilityPayload['visibility_uba'],
-            $visibilityPayload['visibility_favourite_bands'],
-            $visibilityPayload['visibility_favourite_modes'],
-            $visibilityPayload['visibility_station'],
-            $visibilityPayload['visibility_antennas'],
-            $visibilityPayload['visibility_interests'],
             $memberId,
         ]);
 
@@ -243,10 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stmt = db()->prepare(
     'SELECT callsign, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
-            favourite_bands, favourite_modes, interests, photo_path, avatar_path,
-            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
-            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
-            visibility_station, visibility_antennas, visibility_interests
+            favourite_bands, favourite_modes, interests, photo_path, avatar_path
      FROM members
      WHERE id = ? LIMIT 1'
 );
@@ -314,28 +245,6 @@ ob_start();
             <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
             <small class="help"><?= e($t('photo_help')) ?></small>
         </label>
-        </fieldset>
-
-        <fieldset class="profile-fieldset" id="privacy">
-            <legend><?= e($t('directory_visibility')) ?></legend>
-            <p class="help"><?= e($t('visibility_help')) ?></p>
-
-        <div class="profile-visibility-grid">
-            <?php foreach ($visibilityOptions as $visibilityValue => $visibilityLabel): ?>
-                <section class="profile-visibility-panel">
-                    <h3><?= e($visibilityLabel) ?></h3>
-                    <div class="profile-visibility-options">
-                        <?php foreach ($visibilityFields as $fieldName => $fieldMeta): ?>
-                            <?php $currentValue = (string) ($member[$fieldName] ?? (string) $fieldMeta['default']); ?>
-                            <label class="profile-visibility-option">
-                                <input type="radio" name="<?= e($fieldName) ?>" value="<?= e($visibilityValue) ?>" <?= $currentValue === $visibilityValue ? 'checked' : '' ?>>
-                                <span><?= e((string) $fieldMeta['label']) ?></span>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                </section>
-            <?php endforeach; ?>
-        </div>
         </fieldset>
 
         <button type="submit" class="button"><?= e($t('save')) ?></button>

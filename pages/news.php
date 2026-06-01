@@ -145,20 +145,6 @@ $archives = cache_remember('news_archives_v1', 120, static function (): array {
     }
 });
 
-$latestNews = cache_remember('news_latest_v1', 60, static function (): array {
-    try {
-        $latestNewsStmt = db()->query('SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.name AS section_name
-            FROM news_posts p
-            LEFT JOIN news_sections s ON s.id = p.section_id
-            WHERE p.status = "published"
-            ORDER BY COALESCE(p.published_at, p.updated_at) DESC
-            LIMIT 2');
-        return $latestNewsStmt ? ($latestNewsStmt->fetchAll() ?: []) : [];
-    } catch (Throwable) {
-        return [];
-    }
-});
-
 ob_start();
 ?>
 <section class="page-hero news-hero">
@@ -173,37 +159,6 @@ ob_start();
             <span><?= e((string) ($newsT['news_count_label'] ?? "Nombre d'actualités")) ?></span>
         </article>
     </div>
-</section>
-
-<section class="card mt-4">
-    <h2 class="news-ui-heading"><?= e((string) $newsT['latest_news']) ?></h2>
-    <?php if ($latestNews !== []): ?>
-        <div class="news-grid latest-news-grid">
-            <?php foreach ($latestNews as $latestPost): ?>
-                <?php
-                $latestDateRaw = (string) ($latestPost['published_at'] ?? $latestPost['updated_at'] ?? '');
-                $latestDate = $latestDateRaw !== '' ? date('d/m/Y', strtotime($latestDateRaw)) : (string) $newsT['unknown_date'];
-                $latestExcerpt = trim((string) ($latestPost['excerpt'] ?? ''));
-                if ($latestExcerpt === '') {
-                    $latestExcerpt = (string) $newsT['latest_fallback_excerpt'];
-                }
-                ?>
-                <article class="news-card feature-card">
-                    <a class="news-card-link" href="<?= e(route_url('news_view', ['slug' => (string) ($latestPost['slug'] ?? '')])) ?>">
-                        <span class="badge muted"><?= e((string) ($latestPost['section_name'] ?? (string) $newsT['default_section'])) ?></span>
-                        <h3><?= e((string) ($latestPost['title'] ?? (string) $newsT['default_section'])) ?></h3>
-                        <p class="help"><?= e((string) $newsT['published_on']) ?> <?= e($latestDate) ?></p>
-                        <p><?= e($latestExcerpt) ?></p>
-                        <span class="news-card-cta"><?= e((string) $newsT['read_news']) ?></span>
-                    </a>
-                </article>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <div class="news-empty-state">
-            <p><?= e((string) $newsT['no_news_yet']) ?></p>
-        </div>
-    <?php endif; ?>
 </section>
 
 <section class="wiki-search-panel mt-4">
