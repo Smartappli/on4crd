@@ -31,6 +31,16 @@
       <stop offset=".78" stop-color="#7b858f"/>
       <stop offset="1" stop-color="#171f2a"/>
     </linearGradient>
+    <linearGradient id="displayGlow" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f7d796"/>
+      <stop offset=".45" stop-color="#b97939"/>
+      <stop offset="1" stop-color="#4b1f19"/>
+    </linearGradient>
+    <linearGradient id="diamondFace" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#13283a"/>
+      <stop offset=".48" stop-color="#05080c"/>
+      <stop offset="1" stop-color="#192d3a"/>
+    </linearGradient>
     <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
       <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000b45" flood-opacity=".55"/>
     </filter>
@@ -50,12 +60,26 @@
     <path d="M78 216c31-50 80-84 148-98 84-17 151 10 207 66v76H78z" fill="#173f95"/>
     <path d="M111 247c29-18 50-34 70-55 26-28 62-40 97-24 25 11 43 6 66-10 34-23 69-12 104 18v110H111z" fill="#d9d4be" opacity=".9"/>
     <path d="M105 249c37-10 58-25 79-46 18-18 42-27 67-19 23 7 40 3 61-11 28-18 57-15 90 7-20 6-43 17-58 31-19 17-34 19-58 10-31-11-55-2-82 24-26 25-48 32-99 28z" fill="#f1d9a9" opacity=".85"/>
+    <path d="M172 220c17-16 37-27 62-33 14-3 27 2 41 8-20 7-34 19-48 32-18 17-35 20-55 13z" fill="#7f8c56" opacity=".7"/>
+    <path d="M287 190c20-13 47-22 79-13 22 6 41 20 59 36-37-5-60 4-82 22-22 17-39 20-66 8-22-10-42-8-61 5 17-24 40-42 71-58z" fill="#d7c38d" opacity=".82"/>
+    <path d="M332 205c14-5 34-4 52 7 15 9 27 24 36 44-31-18-59-22-83-13-24 9-44 3-58-13 14-10 31-18 53-25z" fill="#eef2dc" opacity=".5"/>
+    <path d="M204 172c7-8 19-13 33-16 15-3 26 0 36 5-24 3-42 13-54 26-7 7-16 11-27 11 1-10 5-19 12-26z" fill="#f4ead0" opacity=".55"/>
+    <path d="M155 232l9-5 7 6-7 8-10-3z" fill="#13216b" opacity=".9"/>
+    <path d="M166 224l8-7 10 5-5 9-10-1z" fill="#d1b85c" opacity=".9"/>
+    <path d="M181 219l6 3-2 7-8-1z" fill="#bb2a2a" opacity=".9"/>
+    <path d="M197 238c10 4 21 4 32-3 9-5 19-6 30-2-19 18-38 26-58 23-15-2-27-8-37-16 11-5 22-6 33-2z" fill="#263c32" opacity=".55"/>
     <path d="M130 285c26-38 54-48 86-32 24 12 38 4 56-14 24-25 57-20 78 2 20 22 42 20 69 2 25-17 51-7 73 19v66H130z" fill="#5e734c" opacity=".78"/>
     <path d="M76 326c49-41 91-38 135-17 39 19 68 16 105-10 43-30 88-23 134 12v82H76z" fill="#1b2333" opacity=".93"/>
     <path d="M49 143c30 47 33 113 8 187l-36-24V173z" fill="url(#metalSide)"/>
     <path d="M463 143c-30 47-33 113-8 187l36-24V173z" fill="url(#metalSide)"/>
     <path d="M54 163c21 39 24 91 5 148l16 10c25-62 24-119-2-171z" fill="#5c6570"/>
     <path d="M458 163c-21 39-24 91-5 148l-16 10c-25-62-24-119 2-171z" fill="#5c6570"/>
+    <g stroke="#eef3f6" stroke-linecap="round" opacity=".5">
+      <path d="M34 181c14 29 15 68 2 114" stroke-width="3"/>
+      <path d="M46 175c17 37 18 81 2 132" stroke-width="2"/>
+      <path d="M478 181c-14 29-15 68-2 114" stroke-width="3"/>
+      <path d="M466 175c-17 37-18 81-2 132" stroke-width="2"/>
+    </g>
   </g>
 
   <text font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" letter-spacing="2" stroke="#071061" stroke-width="2" paint-order="stroke">
@@ -65,8 +89,10 @@
   </text>
 
   <g transform="translate(256 154)">
-    <path d="M0-58 30 0 0 58-30 0z" fill="#0b1b27" stroke="#f9d923" stroke-width="5"/>
+    <path d="M0-58 30 0 0 58-30 0z" fill="url(#diamondFace)" stroke="#f9d923" stroke-width="5"/>
+    <path d="M0-45 20 0 0 45-20 0z" fill="none" stroke="#f9d923" stroke-width="1.5" opacity=".75"/>
     <text x="0" y="-12" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#f9d923">UIB</text>
+    <text x="0" y="9" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#f9d923">ON4CRD</text>
     <path d="M0-44v88M-13-22 13 22M13-22-13 22" stroke="#f9d923" stroke-width="3" stroke-linecap="round"/>
     <circle cx="0" cy="0" r="5" fill="#f9d923"/>
   </g>
@@ -75,22 +101,36 @@
     <rect x="-150" y="-48" width="300" height="96" rx="8" fill="#111821" stroke="#d3d7db" stroke-width="5"/>
     <rect x="-137" y="-36" width="274" height="72" rx="4" fill="url(#radioFace)" stroke="#070b10" stroke-width="3"/>
     <rect x="-121" y="-26" width="132" height="27" rx="2" fill="#65261e" stroke="#151b23" stroke-width="2"/>
-    <rect x="-112" y="-20" width="114" height="12" rx="1.5" fill="#d8b46d"/>
+    <rect x="-112" y="-20" width="114" height="12" rx="1.5" fill="url(#displayGlow)"/>
+    <path d="M-107-14h100M-103-18v9M-88-18v9M-73-18v9M-58-18v9M-43-18v9M-28-18v9M-13-18v9" stroke="#2d1710" stroke-width=".9" opacity=".45"/>
     <text x="-55" y="-10" text-anchor="middle" font-family="Arial, sans-serif" font-size="7" font-weight="700" fill="#2b1710">YAESU FT-991</text>
     <rect x="-116" y="9" width="34" height="16" rx="2" fill="#202936" stroke="#9aa3ab" stroke-width="1.5"/>
     <rect x="-75" y="9" width="38" height="16" rx="2" fill="#202936" stroke="#9aa3ab" stroke-width="1.5"/>
+    <text x="-99" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="700" fill="#aeb7bf">MODE</text>
+    <text x="-56" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="700" fill="#aeb7bf">BAND</text>
+    <path d="M25-27h30M25-19h24M25-11h28" stroke="#c8cdd2" stroke-width="2" stroke-linecap="round" opacity=".75"/>
     <circle cx="58" cy="1" r="31" fill="#111827" stroke="#d2d6dc" stroke-width="5"/>
     <circle cx="58" cy="1" r="20" fill="#4b5563" stroke="#0f172a" stroke-width="4"/>
     <circle cx="58" cy="1" r="7" fill="#111827"/>
+    <path d="M45-11l26 24M71-11L45 13" stroke="#9aa3ab" stroke-width="2" stroke-linecap="round" opacity=".7"/>
     <circle cx="106" cy="-22" r="13" fill="#1f2937" stroke="#c8cdd2" stroke-width="3"/>
     <circle cx="132" cy="-22" r="9" fill="#1f2937" stroke="#c8cdd2" stroke-width="2.5"/>
     <circle cx="106" cy="21" r="13" fill="#1f2937" stroke="#c8cdd2" stroke-width="3"/>
     <circle cx="132" cy="21" r="9" fill="#1f2937" stroke="#c8cdd2" stroke-width="2.5"/>
+    <g stroke="#7b858f" stroke-width="1.2" stroke-linecap="round" opacity=".85">
+      <path d="M97-32l18 18"/>
+      <path d="M126-29l12 12"/>
+      <path d="M97 12l18 18"/>
+      <path d="M126 14l12 12"/>
+    </g>
     <g fill="#c8cdd2">
       <circle cx="-130" cy="-23" r="3.5"/>
       <circle cx="-130" cy="-8" r="3.5"/>
       <circle cx="-130" cy="7" r="3.5"/>
       <circle cx="-130" cy="22" r="3.5"/>
+      <circle cx="-36" cy="-24" r="2.8"/>
+      <circle cx="-24" cy="-24" r="2.8"/>
+      <circle cx="-12" cy="-24" r="2.8"/>
       <circle cx="-20" cy="18" r="3.5"/>
       <circle cx="-4" cy="18" r="3.5"/>
       <circle cx="12" cy="18" r="3.5"/>
