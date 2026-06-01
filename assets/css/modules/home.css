@@ -85,21 +85,25 @@
   color: rgb(30 41 59);
 }
 
-.home-sponsor-carousel .home-media-slide {
+.home-sponsor-carousel .home-media-slide,
+.home-trophy-carousel .home-media-slide {
   flex-direction: column;
 }
 
-.home-sponsor-carousel .home-media-slide img {
+.home-sponsor-carousel .home-media-slide img,
+.home-trophy-carousel .home-media-slide img {
   max-height: none;
   width: auto;
   height: auto;
 }
 
-.home-sponsor-carousel.is-ready .home-media-slide {
+.home-sponsor-carousel.is-ready .home-media-slide,
+.home-trophy-carousel.is-ready .home-media-slide {
   display: none;
 }
 
-.home-sponsor-carousel.is-ready .home-media-slide.is-active {
+.home-sponsor-carousel.is-ready .home-media-slide.is-active,
+.home-trophy-carousel.is-ready .home-media-slide.is-active {
   display: flex;
   animation: homeSponsorFade .45s ease both;
 }

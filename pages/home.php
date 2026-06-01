@@ -686,7 +686,7 @@ if ($localTrophyCandidates !== []) {
             . '</div>';
     }
 
-    $trophySlotHtml = '<div class="home-media-carousel" aria-label="' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '">'
+    $trophySlotHtml = '<div class="home-media-carousel home-trophy-carousel" data-home-trophy-carousel aria-label="' . e((string) ($homeI18n['home_trophies_title'] ?? 'Nos trophées')) . '">'
         . '<div class="home-media-track">' . $trophySlideHtml . '</div>'
         . '</div>';
 }
