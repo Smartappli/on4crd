@@ -202,29 +202,32 @@ ob_start();
         </div>
     </form>
     <?php if ($themeFilter !== ''): ?>
-        <div class="card">
+        <div class="library-empty articles-active-filter">
             <p><a class="pill" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
         </div>
     <?php endif; ?>
 
     <?php if ($groupedArticles === []): ?>
-        <div class="card">
-            <p><?= e((string) $t['no_article_for_theme']) ?></p>
+        <div class="library-empty">
+            <h3><?= e((string) $t['no_article_for_theme']) ?></h3>
         </div>
     <?php else: ?>
         <?php foreach ($groupedArticles as $themeCode => $themeRows): ?>
-            <section class="card">
+            <section class="articles-topic-section">
                 <h2><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></h2>
-                <div class="news-grid">
+                <div class="library-document-grid articles-document-grid">
                     <?php foreach ($themeRows as $row): ?>
                         <?php $row = localized_article_row($row); ?>
                         <?php $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) ($row['id'] ?? 0)) : false; ?>
-                        <article class="news-card feature-card">
-                            <span class="badge muted"><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></span>
+                        <article class="library-document-card articles-document-card">
+                            <div class="library-card-top">
+                                <span class="badge muted"><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></span>
+                                <span class="badge muted"><?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></span>
+                            </div>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
-                            <p class="help"><?= e(date('d/m/Y', strtotime((string) $row['updated_at']))) ?> · <?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
+                            <p class="help"><?= e(date('d/m/Y', strtotime((string) $row['updated_at']))) ?></p>
                             <p><?= e(article_card_excerpt($row)) ?></p>
-                            <p class="actions">
+                            <div class="library-card-actions">
                                 <a class="button secondary" href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['read_article']) ?></a>
                                 <?php if ($user !== null): ?>
                                     <form method="post" class="inline-form">
@@ -234,7 +237,7 @@ ob_start();
                                         <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; ' . e((string) $t['favorite_label']) : '&#9734; ' . e((string) $t['favorite_label']) ?></button>
                                     </form>
                                 <?php endif; ?>
-                            </p>
+                            </div>
                         </article>
                     <?php endforeach; ?>
                 </div>
@@ -242,18 +245,18 @@ ob_start();
         <?php endforeach; ?>
     <?php endif; ?>
     <?php if ($maxPage > 1): ?>
-        <div class="card actions">
+        <nav class="admin-library-pagination" aria-label="Pagination articles">
             <?php if ($page > 1): ?>
                 <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'q' => $search, 'page' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
             <?php endif; ?>
-            <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $maxPage ?></span>
+            <span class="badge muted"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $maxPage ?></span>
             <?php if ($page < $maxPage): ?>
                 <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'q' => $search, 'page' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
             <?php endif; ?>
-        </div>
+        </nav>
     <?php endif; ?>
         </div>
     </section>
-</div>
+</section>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout_title']);
