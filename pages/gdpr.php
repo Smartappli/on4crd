@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $stmt = db()->prepare(
-    'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, photo_path, avatar_path,
+    'SELECT callsign, full_name, email, phone, country, qth, locator, bio, licence_class, qsl_via, qrz_url, is_uba_member, favourite_bands, favourite_modes, station_equipment, antennas, interests, photo_path, avatar_path,
             visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
             visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
             visibility_station, visibility_antennas, visibility_interests
