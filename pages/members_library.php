@@ -219,7 +219,7 @@ ob_start();
                 <?php $relatedDocs = $relatedByDocumentId[$docId] ?? []; ?>
                 <?php $isFavorite = favorite_is_saved((int) $user['id'], 'library_document', (int) ($document['id'] ?? 0)); ?>
                 <article class="news-card feature-card members-library-document-card">
-                    <span class="badge muted"><?= e($docCategory) ?> Â· <?= e(strtoupper($extension)) ?></span>
+                    <span class="badge muted"><?= e($docCategory) ?> / <?= e(strtoupper($extension)) ?></span>
                     <h3><?= e($docTitle) ?></h3>
                     <?php if ($docDescription !== ''): ?><p><?= e($docDescription) ?></p><?php endif; ?>
                     <?php if ($docTags !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e($docTags) ?></p><?php endif; ?>
@@ -249,7 +249,7 @@ ob_start();
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="toggle_favorite_document">
                             <input type="hidden" name="document_id" value="<?= (int) ($document['id'] ?? 0) ?>">
-                            <button class="button secondary" type="submit"><?= $isFavorite ? ('â˜… ' . e((string) $t['favorite'])) : ('â˜† ' . e((string) $t['favorite'])) ?></button>
+                            <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; ' . e((string) $t['favorite']) : '&#9734; ' . e((string) $t['favorite']) ?></button>
                         </form>
                     </p>
                 </article>
