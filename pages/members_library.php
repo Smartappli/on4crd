@@ -141,23 +141,25 @@ ob_start();
             <p class="eyebrow"><?= e((string) $t['title']) ?></p>
             <h1 class="members-library-heading"><?= e((string) $t['title']) ?></h1>
             <p class="help"><?= e((string) $t['intro']) ?></p>
+        </div>
+        <div class="members-library-hero-side">
+            <div class="articles-hero-stats members-library-stats">
+                <article>
+                    <span><?= e((string) $t['documents']) ?></span>
+                    <strong><?= (int) $totalDocuments ?></strong>
+                </article>
+                <article>
+                    <span><?= e((string) ($t['categories'] ?? $t['all_categories'])) ?></span>
+                    <strong><?= (int) count($categories) ?></strong>
+                </article>
+                <article>
+                    <span><?= e((string) $t['tags']) ?></span>
+                    <strong><?= (int) $activeFiltersCount ?></strong>
+                </article>
+            </div>
             <p class="members-library-hero-action">
                 <a class="button" href="mailto:on4crd@gmail.com?subject=<?= e(rawurlencode((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliotheque ON4CRD'))) ?>"><?= e((string) ($t['propose_document'] ?? 'Proposer un document')) ?></a>
             </p>
-        </div>
-        <div class="articles-hero-stats members-library-stats">
-            <article>
-                <span><?= e((string) $t['documents']) ?></span>
-                <strong><?= (int) $totalDocuments ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) ($t['categories'] ?? $t['all_categories'])) ?></span>
-                <strong><?= (int) count($categories) ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) $t['tags']) ?></span>
-                <strong><?= (int) $activeFiltersCount ?></strong>
-            </article>
         </div>
     </section>
 

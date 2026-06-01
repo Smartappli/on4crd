@@ -16,8 +16,15 @@
   letter-spacing: .08em;
 }
 
+[data-route="members_library"] .members-library-hero-side {
+  display: grid;
+  gap: .85rem;
+  justify-items: stretch;
+}
+
 [data-route="members_library"] .members-library-hero-action {
-  margin: .85rem 0 0;
+  margin: 0;
+  text-align: right;
 }
 
 [data-route="members_library"] .members-library-search-panel {
@@ -94,5 +101,9 @@
 
   [data-route="members_library"] .members-library-index {
     position: static;
+  }
+
+  [data-route="members_library"] .members-library-hero-action {
+    text-align: left;
   }
 }
