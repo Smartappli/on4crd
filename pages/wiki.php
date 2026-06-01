@@ -138,6 +138,12 @@ ob_start();
         </aside>
 
         <div class="wiki-content">
+            <?php if ($theme !== ''): ?>
+                <div class="card">
+                    <p><a class="pill" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>"><?= e((string) $t['reset']) ?></a></p>
+                </div>
+            <?php endif; ?>
+
             <section class="wiki-directory">
         <?php if ($rows === []): ?>
             <article class="wiki-empty">
