@@ -27,6 +27,11 @@
   text-align: right;
 }
 
+[data-route="members_library"] .members-library-hero-action .button {
+  width: 100%;
+  justify-content: center;
+}
+
 [data-route="members_library"] .members-library-search-panel {
   margin-top: .35rem;
   padding-block: .65rem;
