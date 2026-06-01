@@ -139,48 +139,40 @@ set_page_meta([
 
 ob_start();
 ?>
-<div class="stack">
-    <section class="page-hero">
-        <div>
-            <p class="eyebrow"><?= e((string) $t['layout_title']) ?></p>
-            <h1 class="articles-hero-title"><?= e((string) $t['page_title']) ?></h1>
-            <p class="help"><?= e((string) $t['page_description']) ?></p>
+<section class="articles-page members-library-page">
+    <header class="page-hero library-hero articles-hero">
+        <div class="library-hero-copy">
+            <p class="directory-eyebrow"><?= e((string) $t['layout_title']) ?></p>
+            <h1><?= e((string) $t['page_title']) ?></h1>
+            <p class="directory-lead"><?= e((string) $t['page_description']) ?></p>
         </div>
-        <div class="articles-hero-stats">
-            <article>
-                <span><?= e((string) $t['article_count']) ?></span>
-                <strong><?= (int) $totalArticles ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) $t['theme_default']) ?></span>
-                <strong><?= (int) count($themeMeta) ?></strong>
-            </article>
+        <div class="library-hero-side articles-hero-side">
+            <div class="library-stats">
+                <div class="library-stat">
+                    <span><?= (int) $totalArticles ?></span>
+                    <p><?= e((string) $t['article_count']) ?></p>
+                </div>
+                <div class="library-stat">
+                    <span><?= (int) count($themeMeta) ?></span>
+                    <p><?= e((string) $t['theme_default']) ?></p>
+                </div>
+                <div class="library-stat">
+                    <span><?= (int) ($search !== '' ? 1 : 0) + (int) ($themeFilter !== '' ? 1 : 0) ?></span>
+                    <p><?= e((string) $t['results']) ?></p>
+                </div>
+            </div>
         </div>
-    </section>
+    </header>
 
-    <section class="card articles-search-panel">
-        <form method="get" class="inline-form articles-search-form">
-            <input type="hidden" name="route" value="articles">
-            <?php if ($themeFilter !== ''): ?>
-                <input type="hidden" name="theme" value="<?= e($themeFilter) ?>">
-            <?php endif; ?>
-            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
-            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter])) ?>"><?= e((string) $t['reset_search']) ?></a>
-            <?php endif; ?>
-        </form>
-        <?php if ($search !== '' || $themeFilter !== ''): ?>
-            <p class="help"><?= e((string) $t['results']) ?> : <?= $totalArticles ?></p>
-        <?php endif; ?>
-    </section>
-
-    <section class="articles-layout">
-        <aside class="articles-index card">
-            <p class="articles-index-title"><?= e((string) $t['theme_default']) ?></p>
-            <nav class="articles-category-list" aria-label="<?= e((string) $t['theme_default']) ?>">
+    <section class="library-layout articles-layout">
+        <aside class="library-themes-section articles-index">
+            <div class="library-themes-heading">
+                <p class="library-theme-title"><?= e((string) $t['theme_default']) ?></p>
+                <p class="help"><?= e((string) $t['page_description']) ?></p>
+            </div>
+            <nav class="library-theme-grid articles-category-list" aria-label="<?= e((string) $t['theme_default']) ?>">
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
-                <a class="articles-category-item<?= $themeFilter === $themeCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
+                <a class="library-theme-card articles-category-item<?= $themeFilter === $themeCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
                     <span><?= e((string) $theme['label']) ?></span>
                     <strong><?= (int) ($themeCounts[$themeCode] ?? 0) ?></strong>
                 </a>
@@ -188,7 +180,27 @@ ob_start();
             </nav>
         </aside>
 
-        <div class="articles-content">
+        <div class="library-content articles-content">
+    <form method="get" class="library-search-panel articles-search-panel">
+        <div class="library-filter-heading">
+            <h2><?= e((string) $t['search']) ?></h2>
+            <p class="help"><?= e((string) $t['search_placeholder']) ?></p>
+        </div>
+        <input type="hidden" name="route" value="articles">
+        <?php if ($themeFilter !== ''): ?>
+            <input type="hidden" name="theme" value="<?= e($themeFilter) ?>">
+        <?php endif; ?>
+        <label class="library-search-query">
+            <span><?= e((string) $t['search']) ?></span>
+            <input type="search" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+        </label>
+        <div class="library-search-actions">
+            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+            <?php if ($search !== '' || $themeFilter !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter])) ?>"><?= e((string) $t['reset_search']) ?></a>
+            <?php endif; ?>
+        </div>
+    </form>
     <?php if ($themeFilter !== ''): ?>
         <div class="card">
             <p><a class="pill" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
