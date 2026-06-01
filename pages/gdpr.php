@@ -137,13 +137,12 @@ $profileViews = [
     'private' => ['title' => 'Vue ' . strtolower($t('private'))],
 ];
 $profilePreviewRows = [];
+$profileAllPreviewRows = [];
 foreach (array_keys($profileViews) as $viewer) {
     $profilePreviewRows[$viewer] = [];
+    $profileAllPreviewRows[$viewer] = [];
     foreach ($profilePreviewFields as $fieldName => $fieldMeta) {
         $visibility = (string) ($member[(string) $fieldMeta['visibility']] ?? 'members');
-        if (!$visibilityAllows($viewer, $visibility)) {
-            continue;
-        }
         $value = trim((string) ($member[$fieldName] ?? ''));
         if ($fieldName === 'is_uba_member') {
             $value = (int) ($member[$fieldName] ?? 0) === 1 ? 'Oui' : '';
@@ -151,7 +150,16 @@ foreach (array_keys($profileViews) as $viewer) {
         if ($value === '') {
             continue;
         }
-        $profilePreviewRows[$viewer][] = ['label' => (string) $fieldMeta['label'], 'value' => $value];
+        $previewRow = [
+            'label' => (string) $fieldMeta['label'],
+            'value' => $value,
+            'visibility_field' => (string) $fieldMeta['visibility'],
+            'visible' => $visibilityAllows($viewer, $visibility),
+        ];
+        $profileAllPreviewRows[$viewer][] = $previewRow;
+        if ((bool) $previewRow['visible']) {
+            $profilePreviewRows[$viewer][] = $previewRow;
+        }
     }
 }
 
@@ -165,40 +173,23 @@ ob_start();
             <?php $canSeePhoto = $visibilityAllows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
             <section class="gdpr-profile-view">
                 <header>
-                    <?php if ($canSeePhoto): ?>
-                        <img class="gdpr-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
-                    <?php endif; ?>
+                    <img class="gdpr-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>" data-gdpr-photo data-gdpr-visibility-field="visibility_photo" <?= $canSeePhoto ? '' : 'hidden' ?>>
                     <div>
                         <h2><?= e((string) $view['title']) ?></h2>
                         <p class="gdpr-callsign"><?= e((string) ($member['callsign'] ?? '')) ?></p>
                     </div>
                 </header>
-                <?php if ($profilePreviewRows[(string) $viewer] === []): ?>
-                    <p class="help">Aucune information visible.</p>
-                <?php else: ?>
-                    <dl class="gdpr-profile-summary">
-                        <?php foreach ($profilePreviewRows[(string) $viewer] as $previewRow): ?>
-                            <div>
-                                <dt><?= e((string) $previewRow['label']) ?></dt>
-                                <dd><?= e((string) $previewRow['value']) ?></dd>
-                            </div>
-                        <?php endforeach; ?>
-                    </dl>
-                <?php endif; ?>
+                <p class="help" data-gdpr-empty <?= $profilePreviewRows[(string) $viewer] === [] ? '' : 'hidden' ?>>Aucune information visible.</p>
+                <dl class="gdpr-profile-summary">
+                    <?php foreach ($profileAllPreviewRows[(string) $viewer] as $previewRow): ?>
+                        <div data-gdpr-preview-row data-gdpr-visibility-field="<?= e((string) $previewRow['visibility_field']) ?>" <?= (bool) $previewRow['visible'] ? '' : 'hidden' ?>>
+                            <dt><?= e((string) $previewRow['label']) ?></dt>
+                            <dd><?= e((string) $previewRow['value']) ?></dd>
+                        </div>
+                    <?php endforeach; ?>
+                </dl>
             </section>
         <?php endforeach; ?>
-    </div>
-    <div class="gdpr-identity">
-    <?php $avatarSrc = member_avatar_src($member); ?>
-        <img class="gdpr-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
-        <div>
-            <h1>Vie privée</h1>
-            <dl class="gdpr-profile-summary">
-                <div><dt><?= e($t('callsign')) ?></dt><dd><?= e((string) ($member['callsign'] ?? '')) ?></dd></div>
-                <div><dt><?= e($t('name')) ?></dt><dd><?= e((string) ($member['full_name'] ?? '')) ?></dd></div>
-                <div><dt><?= e($t('email')) ?></dt><dd><?= e((string) ($member['email'] ?? '')) ?></dd></div>
-            </dl>
-        </div>
     </div>
 </div>
 
