@@ -21,8 +21,13 @@ return array (
   'licence' => 'Licence',
   'email' => 'Email',
   'phone' => 'Phone',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
   'bands' => 'Bands',
+  'modes' => 'Modes',
   'station' => 'Station',
+  'antennas' => 'Antennas',
   'committee' => 'Committee',
   'layout_title' => 'Directory',
 );
