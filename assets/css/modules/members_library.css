@@ -28,7 +28,8 @@
 }
 
 [data-route="members_library"] .members-library-search-panel {
-  margin-top: 1rem;
+  margin-top: .35rem;
+  padding-block: .65rem;
 }
 
 [data-route="members_library"] .members-library-search-form {
