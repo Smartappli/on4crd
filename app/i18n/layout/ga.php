@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Cúntóir',
   'account_space' => 'Mo spás',
   'account_profile' => 'Próifíl',
-  'account_settings' => 'Socruithe',
+  'account_settings' => 'Príobháideachas',
   'account_admin' => 'Riarachán',
   'logout' => 'Dícheangail',
   'login' => 'Ceangal',

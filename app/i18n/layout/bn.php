@@ -18,7 +18,7 @@ return array (
   'nav_assistant' => 'সহকারী',
   'account_space' => 'আমার অ্যাকাউন্ট',
   'account_profile' => 'প্রোফাইল',
-  'account_settings' => 'সেটিংস',
+  'account_settings' => 'গোপনীয়তা',
   'account_admin' => 'প্রশাসন',
   'logout' => 'লগআউট',
   'login' => 'লগইন',

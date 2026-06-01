@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Βοηθός',
   'account_space' => 'Ο χώρος μου',
   'account_profile' => 'Προφίλ',
-  'account_settings' => 'Ρυθμίσεις',
+  'account_settings' => 'Απόρρητο',
   'account_admin' => 'Διοίκηση',
   'logout' => 'Αποσύνδεση',
   'login' => 'Σύνδεση',

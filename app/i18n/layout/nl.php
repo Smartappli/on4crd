@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'Mijn account',
   'account_profile' => 'Profiel',
-  'account_settings' => 'Instellingen',
+  'account_settings' => 'Privacy',
   'account_admin' => 'Beheer',
   'logout' => 'Afmelden',
   'login' => 'Inloggen',

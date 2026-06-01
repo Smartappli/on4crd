@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Asistents',
   'account_space' => 'Mana telpa',
   'account_profile' => 'Profils',
-  'account_settings' => 'Iestatījumi',
+  'account_settings' => 'Privātums',
   'account_admin' => 'Administrācija',
   'logout' => 'Atvienot',
   'login' => 'Savienojums',

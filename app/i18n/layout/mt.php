@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'L-ispazju tiegħi',
   'account_profile' => 'Profil',
-  'account_settings' => 'Settings',
+  'account_settings' => 'Privatezza',
   'account_admin' => 'Amministrazzjoni',
   'logout' => 'Skonnettja',
   'login' => 'Konnessjoni',

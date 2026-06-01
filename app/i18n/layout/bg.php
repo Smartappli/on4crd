@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Помощник',
   'account_space' => 'Моето пространство',
   'account_profile' => 'Профил',
-  'account_settings' => 'Настройки',
+  'account_settings' => 'Поверителност',
   'account_admin' => 'Администрация',
   'logout' => 'Прекъснете връзката',
   'login' => 'Връзка',

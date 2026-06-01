@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'Mitt utrymme',
   'account_profile' => 'Profil',
-  'account_settings' => 'Inställningar',
+  'account_settings' => 'Integritet',
   'account_admin' => 'Administration',
   'logout' => 'Koppla från',
   'login' => 'Anslutning',

@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Asistent',
   'account_space' => 'Spațiul meu',
   'account_profile' => 'Profil',
-  'account_settings' => 'Setări',
+  'account_settings' => 'Confidențialitate',
   'account_admin' => 'Administrare',
   'logout' => 'Deconecta',
   'login' => 'Conexiune',

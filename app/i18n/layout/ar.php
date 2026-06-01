@@ -18,7 +18,7 @@ return array (
   'nav_assistant' => 'المساعد',
   'account_space' => 'حسابي',
   'account_profile' => 'الملف الشخصي',
-  'account_settings' => 'الإعدادات',
+  'account_settings' => 'الخصوصية',
   'account_admin' => 'الإدارة',
   'logout' => 'تسجيل الخروج',
   'login' => 'تسجيل الدخول',

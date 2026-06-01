@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Asszisztens',
   'account_space' => 'Az én terem',
   'account_profile' => 'Profil',
-  'account_settings' => 'Beállítások elemre',
+  'account_settings' => 'Adatvédelem',
   'account_admin' => 'Adminisztráció',
   'logout' => 'Leválasztás',
   'login' => 'Csatlakozás',

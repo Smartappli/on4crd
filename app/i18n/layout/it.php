@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Assistente',
   'account_space' => 'Il mio spazio',
   'account_profile' => 'Profilo',
-  'account_settings' => 'Impostazioni',
+  'account_settings' => 'Privacy',
   'account_admin' => 'Amministrazione',
   'logout' => 'Disconnetti',
   'login' => 'Accedi',

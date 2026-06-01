@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'asistent',
   'account_space' => 'Môj priestor',
   'account_profile' => 'Profil',
-  'account_settings' => 'Nastavenia',
+  'account_settings' => 'Súkromie',
   'account_admin' => 'Administrácia',
   'logout' => 'Odpojiť',
   'login' => 'Pripojenie',

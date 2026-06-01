@@ -18,7 +18,7 @@ return array (
   'nav_assistant' => 'Asisten',
   'account_space' => 'Akun saya',
   'account_profile' => 'Profil',
-  'account_settings' => 'Pengaturan',
+  'account_settings' => 'Privasi',
   'account_admin' => 'Administrasi',
   'logout' => 'Keluar',
   'login' => 'Masuk',

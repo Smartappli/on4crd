@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Asistentas',
   'account_space' => 'Mano erdvė',
   'account_profile' => 'Profilis',
-  'account_settings' => 'Nustatymai',
+  'account_settings' => 'Privatumas',
   'account_admin' => 'Administravimas',
   'logout' => 'Atsijungti',
   'login' => 'Ryšys',

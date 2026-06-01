@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'Mit rum',
   'account_profile' => 'Profil',
-  'account_settings' => 'Indstillinger',
+  'account_settings' => 'Privatliv',
   'account_admin' => 'Administration',
   'logout' => 'Afbryd forbindelsen',
   'login' => 'Forbindelse',

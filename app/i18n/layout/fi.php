@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Assistant',
   'account_space' => 'Minun tilani',
   'account_profile' => 'Profiili',
-  'account_settings' => 'Asetukset',
+  'account_settings' => 'Yksityisyys',
   'account_admin' => 'Hallinto',
   'logout' => 'Katkaise yhteys',
   'login' => 'Yhteys',

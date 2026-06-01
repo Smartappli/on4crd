@@ -18,7 +18,7 @@ return array (
   'nav_assistant' => '助手',
   'account_space' => '我的账户',
   'account_profile' => '个人资料',
-  'account_settings' => '设置',
+  'account_settings' => '隐私',
   'account_admin' => '管理',
   'logout' => '退出登录',
   'login' => '登录',

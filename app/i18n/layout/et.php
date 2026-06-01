@@ -17,7 +17,7 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'Minu ruum',
   'account_profile' => 'Profiil',
-  'account_settings' => 'Seaded',
+  'account_settings' => 'Privaatsus',
   'account_admin' => 'Administreerimine',
   'logout' => 'Katkesta ühendus',
   'login' => 'Ühendus',
