@@ -159,6 +159,35 @@ ob_start();
 ?>
 <div class="gdpr-page stack">
 <div class="card gdpr-hero">
+    <?php $avatarSrc = member_avatar_src($member); ?>
+    <div class="gdpr-profile-views">
+        <?php foreach ($profileViews as $viewer => $view): ?>
+            <?php $canSeePhoto = $visibilityAllows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
+            <section class="gdpr-profile-view">
+                <header>
+                    <?php if ($canSeePhoto): ?>
+                        <img class="gdpr-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
+                    <?php endif; ?>
+                    <div>
+                        <h2><?= e((string) $view['title']) ?></h2>
+                        <p class="gdpr-callsign"><?= e((string) ($member['callsign'] ?? '')) ?></p>
+                    </div>
+                </header>
+                <?php if ($profilePreviewRows[(string) $viewer] === []): ?>
+                    <p class="help">Aucune information visible.</p>
+                <?php else: ?>
+                    <dl class="gdpr-profile-summary">
+                        <?php foreach ($profilePreviewRows[(string) $viewer] as $previewRow): ?>
+                            <div>
+                                <dt><?= e((string) $previewRow['label']) ?></dt>
+                                <dd><?= e((string) $previewRow['value']) ?></dd>
+                            </div>
+                        <?php endforeach; ?>
+                    </dl>
+                <?php endif; ?>
+            </section>
+        <?php endforeach; ?>
+    </div>
     <div class="gdpr-identity">
     <?php $avatarSrc = member_avatar_src($member); ?>
         <img class="gdpr-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
