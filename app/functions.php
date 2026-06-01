@@ -1626,9 +1626,21 @@ function apply_runtime_schema_updates(): void
         );
         $requiredColumns = [
             'auth_user_id' => 'ALTER TABLE members ADD COLUMN auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE',
+            'country' => 'ALTER TABLE members ADD COLUMN country VARCHAR(190) DEFAULT NULL',
+            'is_uba_member' => 'ALTER TABLE members ADD COLUMN is_uba_member TINYINT(1) NOT NULL DEFAULT 0',
+            'uba_member_number' => 'ALTER TABLE members ADD COLUMN uba_member_number VARCHAR(64) DEFAULT NULL',
             'visibility_full_name' => 'ALTER TABLE members ADD COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_country' => 'ALTER TABLE members ADD COLUMN visibility_country ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_locator' => 'ALTER TABLE members ADD COLUMN visibility_locator ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_bio' => 'ALTER TABLE members ADD COLUMN visibility_bio ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_licence_class' => 'ALTER TABLE members ADD COLUMN visibility_licence_class ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_qsl' => 'ALTER TABLE members ADD COLUMN visibility_qsl ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_qrz' => 'ALTER TABLE members ADD COLUMN visibility_qrz ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_uba' => 'ALTER TABLE members ADD COLUMN visibility_uba ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_favourite_bands' => 'ALTER TABLE members ADD COLUMN visibility_favourite_bands ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_favourite_modes' => 'ALTER TABLE members ADD COLUMN visibility_favourite_modes ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_antennas' => 'ALTER TABLE members ADD COLUMN visibility_antennas ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_interests' => 'ALTER TABLE members ADD COLUMN visibility_interests ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_photo' => 'ALTER TABLE members ADD COLUMN visibility_photo ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'avatar_path' => 'ALTER TABLE members ADD COLUMN avatar_path VARCHAR(255) DEFAULT NULL',
         ];
@@ -1997,6 +2009,45 @@ function random_quote_for_layout(): ?array
         'quote' => $quote,
         'author' => $author,
     ];
+}
+
+function qrz_profile_url_for_callsign(string $callsign): ?string
+{
+    $callsign = strtoupper(trim($callsign));
+    if ($callsign === '' || preg_match('/^[A-Z0-9\/-]{2,32}$/', $callsign) !== 1) {
+        return null;
+    }
+
+    $url = 'https://www.qrz.com/db/' . rawurlencode($callsign);
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => "User-Agent: ON4CRD Profile Validator\r\nAccept: text/html\r\n",
+            'ignore_errors' => true,
+            'timeout' => 4,
+        ],
+    ]);
+
+    $body = @file_get_contents($url, false, $context, 0, 262144);
+    if (!is_string($body) || $body === '') {
+        return null;
+    }
+
+    $statusLine = (string) ($http_response_header[0] ?? '');
+    if (!preg_match('/\s(2\d\d|3\d\d)\s/', $statusLine)) {
+        return null;
+    }
+
+    $normalizedBody = strtolower($body);
+    if (
+        str_contains($normalizedBody, 'not found') ||
+        str_contains($normalizedBody, 'no such callsign') ||
+        str_contains($normalizedBody, 'callsign not found')
+    ) {
+        return null;
+    }
+
+    return $url;
 }
 
 if (!function_exists('base_url')) {
