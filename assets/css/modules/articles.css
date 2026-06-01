@@ -22,6 +22,11 @@
   margin: 0;
 }
 
+[data-route="articles"] .articles-hero-stats {
+  grid-template-columns: repeat(2, minmax(110px, 1fr));
+  min-width: min(100%, 16rem);
+}
+
 [data-route="articles"] .articles-layout {
   display: grid;
   grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
