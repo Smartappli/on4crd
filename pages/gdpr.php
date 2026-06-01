@@ -104,6 +104,57 @@ $stmt = db()->prepare(
 $stmt->execute([$memberId]);
 $member = $stmt->fetch() ?: [];
 
+$visibilityAllows = static function (string $viewer, string $visibility): bool {
+    if ($viewer === 'private') {
+        return true;
+    }
+    if ($viewer === 'members') {
+        return in_array($visibility, ['public', 'members'], true);
+    }
+    return $visibility === 'public';
+};
+$profilePreviewFields = [
+    'full_name' => ['label' => $t('full_name'), 'visibility' => 'visibility_full_name'],
+    'email' => ['label' => $t('email'), 'visibility' => 'visibility_email'],
+    'phone' => ['label' => $t('phone'), 'visibility' => 'visibility_phone'],
+    'country' => ['label' => $t('country'), 'visibility' => 'visibility_country'],
+    'qth' => ['label' => $t('qth'), 'visibility' => 'visibility_qth'],
+    'locator' => ['label' => $t('grid'), 'visibility' => 'visibility_locator'],
+    'bio' => ['label' => $t('bio'), 'visibility' => 'visibility_bio'],
+    'licence_class' => ['label' => $t('licence'), 'visibility' => 'visibility_licence_class'],
+    'qsl_via' => ['label' => $t('qsl_info'), 'visibility' => 'visibility_qsl'],
+    'qrz_url' => ['label' => $t('qrz_url'), 'visibility' => 'visibility_qrz'],
+    'is_uba_member' => ['label' => $t('uba_member'), 'visibility' => 'visibility_uba'],
+    'favourite_bands' => ['label' => $t('bands'), 'visibility' => 'visibility_favourite_bands'],
+    'favourite_modes' => ['label' => $t('favourite_modes'), 'visibility' => 'visibility_favourite_modes'],
+    'station_equipment' => ['label' => $t('station'), 'visibility' => 'visibility_station'],
+    'antennas' => ['label' => $t('antennas'), 'visibility' => 'visibility_antennas'],
+    'interests' => ['label' => $t('interests'), 'visibility' => 'visibility_interests'],
+];
+$profileViews = [
+    'public' => ['title' => 'Vue ' . strtolower($t('public'))],
+    'members' => ['title' => 'Vue ' . strtolower($t('members'))],
+    'private' => ['title' => 'Vue ' . strtolower($t('private'))],
+];
+$profilePreviewRows = [];
+foreach (array_keys($profileViews) as $viewer) {
+    $profilePreviewRows[$viewer] = [];
+    foreach ($profilePreviewFields as $fieldName => $fieldMeta) {
+        $visibility = (string) ($member[(string) $fieldMeta['visibility']] ?? 'members');
+        if (!$visibilityAllows($viewer, $visibility)) {
+            continue;
+        }
+        $value = trim((string) ($member[$fieldName] ?? ''));
+        if ($fieldName === 'is_uba_member') {
+            $value = (int) ($member[$fieldName] ?? 0) === 1 ? 'Oui' : '';
+        }
+        if ($value === '') {
+            continue;
+        }
+        $profilePreviewRows[$viewer][] = ['label' => (string) $fieldMeta['label'], 'value' => $value];
+    }
+}
+
 ob_start();
 ?>
 <div class="gdpr-page stack">
