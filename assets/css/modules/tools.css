@@ -45,14 +45,17 @@
 [data-route="tools"] .tools-stat {
   display: grid;
   align-content: center;
+  justify-items: center;
   min-height: 0;
   padding: .65rem .75rem;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: color-mix(in srgb, var(--panel) 92%, white);
+  text-align: center;
 }
 
 [data-route="tools"] .tools-stat span {
+  order: 1;
   color: var(--accent-strong);
   font-size: clamp(1.15rem, 2vw, 1.55rem);
   font-weight: 800;
@@ -60,6 +63,7 @@
 }
 
 [data-route="tools"] .tools-stat p {
+  order: 2;
   margin: .35rem 0 0;
   color: var(--muted);
   font-size: .82rem;

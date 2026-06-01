@@ -2,7 +2,10 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$messages = i18n_domain_locale('classifieds', $locale);
+$messages = array_replace(
+    i18n_domain_locale('classifieds', $locale),
+    i18n_domain_locale('classifieds_manage', $locale)
+);
 $t = static function (string $key) use ($messages): string {
     return (string) ($messages[$key] ?? $key);
 };
@@ -109,25 +112,25 @@ $myStmt = db()->prepare('SELECT * FROM classified_ads WHERE owner_member_id = ? 
 $myStmt->execute([(int) $user['id']]);
 $myAds = $myStmt->fetchAll() ?: [];
 
-set_page_meta(['title' => $t('new_ad') . ' - ' . $t('title'), 'description' => $t('lead')]);
+set_page_meta(['title' => $t('manage_page_title'), 'description' => $t('manage_page_description')]);
 ob_start();
 ?>
 <section class="classifieds-page classifieds-manage-page">
     <header class="page-hero classifieds-hero">
         <div class="classifieds-hero-copy">
             <p class="directory-eyebrow"><?= e($t('title')) ?></p>
-            <h1><?= e($t('new_ad')) ?></h1>
-            <p class="directory-lead"><?= e($t('lead')) ?></p>
+            <h1><?= e($t('manage_hero_title')) ?></h1>
+            <p class="directory-lead"><?= e($t('manage_page_description')) ?></p>
         </div>
         <p class="classifieds-manage-back">
-            <a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('all_ads')) ?></a>
+            <a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('manage_back_to_ads')) ?></a>
         </p>
     </header>
 
     <section class="classifieds-member-panel">
         <section class="classifieds-editor">
             <div class="classifieds-panel-heading">
-                <h2><?= e($editing ? $t('edit') : $t('new_ad')) ?></h2>
+                <h2><?= e($editing ? $t('edit') : $t('manage_submit_section')) ?></h2>
                 <p class="help"><?= e($t('published_30d')) ?></p>
             </div>
             <form method="post" class="classifieds-editor-form">
@@ -161,7 +164,7 @@ ob_start();
 
         <section class="classifieds-my-ads">
             <div class="classifieds-panel-heading">
-                <h2><?= e($t('my_ads')) ?></h2>
+                <h2><?= e($t('manage_my_ads_section')) ?></h2>
                 <span class="badge muted"><?= (int) count($myAds) ?></span>
             </div>
             <?php if ($myAds === []): ?>
@@ -199,4 +202,4 @@ ob_start();
 </section>
 <?php
 
-echo render_layout((string) ob_get_clean(), $t('new_ad') . ' - ' . $t('title'));
+echo render_layout((string) ob_get_clean(), $t('manage_page_title'));

@@ -1963,6 +1963,58 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   font-size: clamp(1.15rem, 2vw, 1.55rem);
   line-height: 1;
 }
+.directory-hero-stats article,
+.albums-hero-stats article,
+.album-detail-stats article,
+.qsl-hero-stats article,
+.articles-hero-stats article,
+.news-hero-stat,
+.auctions-stat,
+.library-stat,
+.classifieds-stat {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 0;
+  padding: .65rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 92%, white);
+  text-align: center;
+}
+.directory-hero-stats strong,
+.albums-hero-stats strong,
+.album-detail-stats strong,
+.qsl-hero-stats strong,
+.articles-hero-stats strong,
+.news-hero-stat strong,
+.auctions-stat span,
+.library-stat span,
+.classifieds-stat span {
+  display: block;
+  order: 1;
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1;
+}
+.directory-hero-stats span,
+.albums-hero-stats span,
+.album-detail-stats span,
+.qsl-hero-stats span,
+.articles-hero-stats span,
+.news-hero-stat span,
+.auctions-stat p,
+.library-stat p,
+.classifieds-stat p {
+  display: block;
+  order: 2;
+  margin: .35rem 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 650;
+}
 .auctions-hero.page-hero,
 .classifieds-hero.page-hero,
 .library-hero.page-hero {
