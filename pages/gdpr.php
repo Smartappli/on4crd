@@ -171,7 +171,7 @@ ob_start();
     <div class="gdpr-profile-views">
         <?php foreach ($profileViews as $viewer => $view): ?>
             <?php $canSeePhoto = $visibilityAllows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
-            <section class="gdpr-profile-view">
+            <section class="gdpr-profile-view" data-gdpr-view="<?= e((string) $viewer) ?>">
                 <header>
                     <img class="gdpr-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>" data-gdpr-photo data-gdpr-visibility-field="visibility_photo" <?= $canSeePhoto ? '' : 'hidden' ?>>
                     <div>
