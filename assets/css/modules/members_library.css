@@ -6,14 +6,12 @@
 }
 
 [data-route="members_library"] .members-library-heading {
-  margin: 0;
+  margin: .15rem 0 .35rem;
   font-family: inherit;
-  color: var(--accent-strong);
-  font-size: .78rem;
-  font-weight: 800;
-  line-height: 1.2;
-  text-transform: uppercase;
-  letter-spacing: .08em;
+  color: var(--text);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 [data-route="members_library"] .members-library-hero-side {

@@ -1917,6 +1917,39 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   margin: .15rem 0 .35rem;
   font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
+.directory-hero-copy h1,
+.auctions-hero-copy h1,
+.library-hero-copy h1,
+.classifieds-hero-copy h1,
+.albums-hero h1,
+.album-detail-hero h1,
+.hero-copy h1 {
+  margin: .15rem 0 .35rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+.directory-eyebrow,
+.eyebrow {
+  color: var(--accent-strong);
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.directory-lead,
+.hero-lead,
+.page-hero .help,
+.wiki-hero .help,
+.wiki-view-hero .help,
+.wiki-edit-hero .help {
+  color: var(--muted);
+  font-family: inherit;
+}
 .wiki-hero > div:first-child {
   min-width: 0;
 }
