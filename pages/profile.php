@@ -177,23 +177,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stmt = db()->prepare(
     'SELECT callsign, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
-            favourite_bands, favourite_modes, interests, photo_path, avatar_path
+            favourite_bands, favourite_modes, interests, photo_path, avatar_path,
+            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
+            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
+            visibility_station, visibility_antennas, visibility_interests
      FROM members
      WHERE id = ? LIMIT 1'
 );
 $stmt->execute([$memberId]);
 $member = $stmt->fetch() ?: [];
 
+$visibilityAllows = static function (string $viewer, string $visibility): bool {
+    if ($viewer === 'private') {
+        return true;
+    }
+    if ($viewer === 'members') {
+        return in_array($visibility, ['public', 'members'], true);
+    }
+    return $visibility === 'public';
+};
+$profilePreviewFields = [
+    'full_name' => ['label' => $t('full_name'), 'visibility' => 'visibility_full_name'],
+    'email' => ['label' => $t('email'), 'visibility' => 'visibility_email'],
+    'phone' => ['label' => $t('phone'), 'visibility' => 'visibility_phone'],
+    'country' => ['label' => $t('country'), 'visibility' => 'visibility_country'],
+    'qth' => ['label' => $t('qth'), 'visibility' => 'visibility_qth'],
+    'locator' => ['label' => $t('grid'), 'visibility' => 'visibility_locator'],
+    'bio' => ['label' => $t('bio'), 'visibility' => 'visibility_bio'],
+    'licence_class' => ['label' => $t('licence'), 'visibility' => 'visibility_licence_class'],
+    'qsl_via' => ['label' => $t('qsl_info'), 'visibility' => 'visibility_qsl'],
+    'qrz_url' => ['label' => $t('qrz_url'), 'visibility' => 'visibility_qrz'],
+    'is_uba_member' => ['label' => $t('uba_member'), 'visibility' => 'visibility_uba'],
+    'favourite_bands' => ['label' => $t('bands'), 'visibility' => 'visibility_favourite_bands'],
+    'favourite_modes' => ['label' => $t('favourite_modes'), 'visibility' => 'visibility_favourite_modes'],
+    'station_equipment' => ['label' => $t('station'), 'visibility' => 'visibility_station'],
+    'antennas' => ['label' => $t('antennas'), 'visibility' => 'visibility_antennas'],
+    'interests' => ['label' => $t('interests'), 'visibility' => 'visibility_interests'],
+];
+$profileViews = [
+    'public' => ['title' => 'Vue ' . strtolower($t('public'))],
+    'members' => ['title' => 'Vue ' . strtolower($t('members'))],
+    'private' => ['title' => 'Vue ' . strtolower($t('private'))],
+];
+$profilePreviewRows = [];
+foreach (array_keys($profileViews) as $viewer) {
+    $profilePreviewRows[$viewer] = [];
+    foreach ($profilePreviewFields as $fieldName => $fieldMeta) {
+        $visibility = (string) ($member[(string) $fieldMeta['visibility']] ?? 'members');
+        if (!$visibilityAllows($viewer, $visibility)) {
+            continue;
+        }
+        $value = trim((string) ($member[$fieldName] ?? ''));
+        if ($fieldName === 'is_uba_member') {
+            $value = (int) ($member[$fieldName] ?? 0) === 1 ? 'Oui' : '';
+        }
+        if ($value === '') {
+            continue;
+        }
+        $profilePreviewRows[$viewer][] = ['label' => (string) $fieldMeta['label'], 'value' => $value];
+    }
+}
+
 ob_start();
 ?>
 <div class="stack">
-<div class="card">
-    <h1><?= e($t('title')) ?></h1>
+<div class="card profile-hero">
     <?php $avatarSrc = member_avatar_src($member); ?>
-    <p><img src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>" style="max-width:180px;border-radius:12px;"></p>
-    <p><strong><?= e($t('callsign')) ?> :</strong> <?= e((string) ($member['callsign'] ?? '')) ?></p>
-    <p><strong><?= e($t('name')) ?> :</strong> <?= e((string) ($member['full_name'] ?? '')) ?></p>
-    <p><strong><?= e($t('email')) ?> :</strong> <?= e((string) ($member['email'] ?? '')) ?></p>
+    <div class="profile-preview-views">
+        <?php foreach ($profileViews as $viewer => $view): ?>
+            <?php $canSeePhoto = $visibilityAllows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
+            <section class="profile-preview-view">
+                <header>
+                    <?php if ($canSeePhoto): ?>
+                        <img class="profile-preview-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
+                    <?php endif; ?>
+                    <div>
+                        <h2><?= e((string) $view['title']) ?></h2>
+                        <p class="profile-preview-callsign"><?= e((string) ($member['callsign'] ?? '')) ?></p>
+                    </div>
+                </header>
+                <?php if ($profilePreviewRows[(string) $viewer] === []): ?>
+                    <p class="help">Aucune information visible.</p>
+                <?php else: ?>
+                    <dl class="profile-preview-summary">
+                        <?php foreach ($profilePreviewRows[(string) $viewer] as $previewRow): ?>
+                            <div>
+                                <dt><?= e((string) $previewRow['label']) ?></dt>
+                                <dd><?= e((string) $previewRow['value']) ?></dd>
+                            </div>
+                        <?php endforeach; ?>
+                    </dl>
+                <?php endif; ?>
+            </section>
+        <?php endforeach; ?>
+    </div>
 </div>
 
 <section class="card">
