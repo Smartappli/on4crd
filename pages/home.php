@@ -654,8 +654,7 @@ try {
 
     $sponsorSlideHtml = '';
     foreach ($sponsorSlides as $slide) {
-        $slideInner = '<img src="' . e((string) $slide['src']) . '" alt="' . e((string) $slide['alt']) . '" loading="lazy" decoding="async">'
-            . ((string) $slide['label'] !== '' ? '<span>' . e(mb_safe_strimwidth((string) $slide['label'], 0, 70, '...')) . '</span>' : '');
+        $slideInner = '<img src="' . e((string) $slide['src']) . '" alt="' . e((string) $slide['alt']) . '" loading="lazy" decoding="async">';
         $sponsorSlideHtml .= (string) $slide['url'] !== ''
             ? '<a class="home-media-slide" href="' . e((string) $slide['url']) . '" target="_blank" rel="noopener noreferrer">' . $slideInner . '</a>'
             : '<div class="home-media-slide">' . $slideInner . '</div>';
