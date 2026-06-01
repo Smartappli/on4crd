@@ -24,5 +24,10 @@ return array (
   'bands' => 'Baned',
   'station' => 'Stazzjon',
   'committee' => 'Kumitat',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Modes',
+  'antennas' => 'Antenni',
   'layout_title' => 'Direttorju',
 );

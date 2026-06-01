@@ -24,5 +24,10 @@ return array (
   'bands' => 'बैंड',
   'station' => 'स्टेशन',
   'committee' => 'समिति',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'मोड',
+  'antennas' => 'एंटेना',
   'layout_title' => 'निर्देशिका',
 );

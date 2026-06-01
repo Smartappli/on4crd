@@ -24,5 +24,10 @@ return array (
   'bands' => 'Juostos',
   'station' => 'Kurortas',
   'committee' => 'komitetas',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Režimai',
+  'antennas' => 'Antenos',
   'layout_title' => 'Katalogas',
 );

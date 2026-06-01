@@ -24,5 +24,10 @@ return array (
   'bands' => 'Bannaí',
   'station' => 'Saoire',
   'committee' => 'Coiste',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Modhanna',
+  'antennas' => 'Aeróga',
   'layout_title' => 'Eolaire',
 );

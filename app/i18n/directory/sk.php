@@ -24,5 +24,10 @@ return array (
   'bands' => 'kapely',
   'station' => 'Stredisko',
   'committee' => 'výboru',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Módy',
+  'antennas' => 'Antény',
   'layout_title' => 'Adresár',
 );

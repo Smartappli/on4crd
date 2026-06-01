@@ -24,5 +24,10 @@ return array (
   'bands' => 'Bands',
   'station' => 'Resort',
   'committee' => 'udvalg',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Modes',
+  'antennas' => 'Antenner',
   'layout_title' => 'Vejviser',
 );

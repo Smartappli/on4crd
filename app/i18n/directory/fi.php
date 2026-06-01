@@ -24,5 +24,10 @@ return array (
   'bands' => 'Bändit',
   'station' => 'Lomakeskus',
   'committee' => 'komitea',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Modet',
+  'antennas' => 'Antennit',
   'layout_title' => 'Hakemisto',
 );

@@ -24,5 +24,10 @@ return array (
   'bands' => 'Benzi',
   'station' => 'Gara',
   'committee' => 'Comitet',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Moduri',
+  'antennas' => 'Antene',
   'layout_title' => 'Director',
 );

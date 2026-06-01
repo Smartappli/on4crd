@@ -24,5 +24,10 @@ return array (
   'bands' => 'النطاقات',
   'station' => 'المحطة',
   'committee' => 'اللجنة',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'الأوضاع',
+  'antennas' => 'الهوائيات',
   'layout_title' => 'الدليل',
 );

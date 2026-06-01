@@ -24,5 +24,10 @@ return array (
   'bands' => 'Kapely',
   'station' => 'Resort',
   'committee' => 'výboru',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Módy',
+  'antennas' => 'Antény',
   'layout_title' => 'Adresář',
 );

@@ -24,5 +24,10 @@ return array (
   'bands' => 'Grupas',
   'station' => 'Kūrorts',
   'committee' => 'komiteja',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Režīmi',
+  'antennas' => 'Antenas',
   'layout_title' => 'Katalogs',
 );

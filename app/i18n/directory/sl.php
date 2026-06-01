@@ -24,5 +24,10 @@ return array (
   'bands' => 'Godbe',
   'station' => 'Letovišče',
   'committee' => 'odbor',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Načini',
+  'antennas' => 'Antene',
   'layout_title' => 'Imenik',
 );

@@ -24,5 +24,10 @@ return array (
   'bands' => '波段',
   'station' => '电台',
   'committee' => '委员会',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => '模式',
+  'antennas' => '天线',
   'layout_title' => '名录',
 );

@@ -24,5 +24,10 @@ return array (
   'bands' => 'Zenekarok',
   'station' => 'Üdülőhely',
   'committee' => 'bizottság',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Módok',
+  'antennas' => 'Antennák',
   'layout_title' => 'Címtár',
 );

@@ -24,5 +24,10 @@ return array (
   'bands' => 'Zespoły',
   'station' => 'Ośrodek',
   'committee' => 'Komitet',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Emisje',
+  'antennas' => 'Anteny',
   'layout_title' => 'Katalog',
 );

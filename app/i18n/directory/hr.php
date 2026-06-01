@@ -24,5 +24,10 @@ return array (
   'bands' => 'Bendovi',
   'station' => 'Odmaralište',
   'committee' => 'Povjerenstvo',
+  'grid' => 'Grid',
+  'qrz' => 'QRZ',
+  'uba_member' => 'UBA',
+  'modes' => 'Načini rada',
+  'antennas' => 'Antene',
   'layout_title' => 'Imenik',
 );
