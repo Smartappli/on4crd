@@ -103,6 +103,23 @@ ob_start();
         </div>
     </section>
 
+    <section class="card wiki-search-panel">
+        <form method="get" class="inline-form wiki-search-form">
+            <input type="hidden" name="route" value="wiki">
+            <?php if ($theme !== ''): ?>
+                <input type="hidden" name="theme" value="<?= e($theme) ?>">
+            <?php endif; ?>
+            <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
+            <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
+            <?php if ($search !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url_clean('wiki', ['theme' => $theme])) ?>"><?= e((string) $t['reset']) ?></a>
+            <?php endif; ?>
+        </form>
+        <?php if ($search !== '' || $theme !== ''): ?>
+            <p class="help"><?= e((string) $t['wiki_pages']) ?> : <?= (int) count($rows) ?></p>
+        <?php endif; ?>
+    </section>
+
     <section class="wiki-layout">
         <aside class="wiki-themes card">
             <p class="wiki-themes-title"><?= e((string) ($t['themes'] ?? 'Thématiques')) ?></p>
@@ -121,20 +138,6 @@ ob_start();
         </aside>
 
         <div class="wiki-content">
-            <section class="wiki-search-panel">
-                <form method="get" class="wiki-search-form">
-                    <input type="hidden" name="route" value="wiki">
-                    <?php if ($theme !== ''): ?>
-                        <input type="hidden" name="theme" value="<?= e($theme) ?>">
-                    <?php endif; ?>
-                    <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
-                    <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-                    <?php if ($search !== '' || $theme !== ''): ?>
-                        <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
-                    <?php endif; ?>
-                </form>
-            </section>
-
             <section class="wiki-directory">
         <?php if ($rows === []): ?>
             <article class="wiki-empty">
