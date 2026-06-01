@@ -47,33 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $visibilityPayload[$field] = in_array($value, $allowedVisibilities, true) ? $value : 'members';
     }
 
-    $photoPathStmt = db()->prepare('SELECT photo_path FROM members WHERE id = ? LIMIT 1');
-    $photoPathStmt->execute([$memberId]);
-    $existingPhotoPath = trim((string) ($photoPathStmt->fetchColumn() ?: ''));
-    $newPhotoPath = $existingPhotoPath;
-    $avatarStmt = db()->prepare('SELECT avatar_path FROM members WHERE id = ? LIMIT 1');
-    $avatarStmt->execute([$memberId]);
-    $newAvatarPath = trim((string) ($avatarStmt->fetchColumn() ?: ''));
-    if (isset($_FILES['photo']) && is_array($_FILES['photo']) && (int) ($_FILES['photo']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
-        $savedFilename = secure_move_uploaded_file(
-            $_FILES['photo'],
-            dirname(__DIR__) . '/storage/uploads/members',
-            'member_' . $memberId,
-            ['jpg', 'jpeg', 'png', 'webp'],
-            6 * 1024 * 1024
-        );
-        $newPhotoPath = 'storage/uploads/members/' . $savedFilename;
-        $generatedAvatarPath = generate_member_avatar_from_photo($newPhotoPath, $memberId);
-        if ($generatedAvatarPath !== null && $generatedAvatarPath !== '') {
-            $newAvatarPath = $generatedAvatarPath;
-        }
-    }
-
     $stmt = db()->prepare(
         'UPDATE members
-         SET photo_path = ?,
-             avatar_path = ?,
-             visibility_photo = ?,
+         SET visibility_photo = ?,
              visibility_full_name = ?,
              visibility_email = ?,
              visibility_phone = ?,
@@ -93,8 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          WHERE id = ?'
     );
     $stmt->execute([
-        $newPhotoPath,
-        $newAvatarPath,
         $visibilityPayload['visibility_photo'],
         $visibilityPayload['visibility_full_name'],
         $visibilityPayload['visibility_email'],
@@ -155,16 +129,8 @@ ob_start();
             <p class="help"><?= e($t('visibility_help')) ?></p>
         </div>
     </div>
-    <form method="post" class="stack" enctype="multipart/form-data">
+    <form method="post" class="stack">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-
-        <div class="gdpr-photo-panel">
-            <label>
-                <span><?= e($t('change_photo')) ?></span>
-                <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
-                <small class="help"><?= e($t('photo_help')) ?></small>
-            </label>
-        </div>
 
         <div class="gdpr-visibility-table" role="table" aria-label="<?= e($t('directory_visibility')) ?>">
             <div class="gdpr-visibility-header" role="row">
