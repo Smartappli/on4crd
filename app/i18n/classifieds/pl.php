@@ -6,6 +6,7 @@ return array (
   'lead' => 'Publikuj i oglądaj reklamy klubu w amatorskim radiu.',
   'storage_unavailable' => 'Magazyn ogłoszeń jest chwilowo niedostępny.',
   'new_ad' => 'Opublikuj ogłoszenie',
+  'propose_ad' => 'Zaproponuj ogłoszenie',
   'my_ads' => 'Moje reklamy',
   'all_ads' => 'Najnowsze ogłoszenia',
   'save' => 'Zapisz',

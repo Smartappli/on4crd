@@ -4,6 +4,7 @@ return array (
   'lead' => 'Veröffentlichen und durchsuchen Sie die Funk-Kleinanzeigen des Clubs.',
   'storage_unavailable' => 'Der Speicher für Kleinanzeigen ist vorübergehend nicht verfügbar.',
   'new_ad' => 'Anzeige aufgeben',
+  'propose_ad' => 'Kleinanzeige vorschlagen',
   'my_ads' => 'Meine Anzeigen',
   'all_ads' => 'Neueste Anzeigen',
   'save' => 'Speichern',

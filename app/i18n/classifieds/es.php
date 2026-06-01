@@ -4,6 +4,7 @@ return array (
   'lead' => 'Publica y consulta los anuncios de radioaficionados del club.',
   'storage_unavailable' => 'El almacenamiento de anuncios no está disponible temporalmente.',
   'new_ad' => 'Publicar un anuncio',
+  'propose_ad' => 'Proponer un anuncio clasificado',
   'my_ads' => 'Mis anuncios',
   'all_ads' => 'Anuncios recientes',
   'save' => 'Guardar',

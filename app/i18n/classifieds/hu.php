@@ -6,6 +6,7 @@ return array (
   'lead' => 'Tegye fel és tekintse meg a klub rádióamatőr hirdetéseit.',
   'storage_unavailable' => 'Az apróhirdetések tárhelye átmenetileg nem érhető el.',
   'new_ad' => 'Adj fel egy hirdetést',
+  'propose_ad' => 'Apróhirdetés javaslata',
   'my_ads' => 'Saját hirdetéseim',
   'all_ads' => 'Friss bejelentések',
   'save' => 'Mentés',

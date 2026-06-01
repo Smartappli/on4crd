@@ -6,6 +6,7 @@ return array (
   'lead' => 'Lägg upp och se klubbens amatörradioannonser.',
   'storage_unavailable' => 'Annonslagring är tillfälligt otillgänglig.',
   'new_ad' => 'Lägg upp en annons',
+  'propose_ad' => 'Föreslå en radannons',
   'my_ads' => 'Mina annonser',
   'all_ads' => 'Senaste meddelanden',
   'save' => 'Spara',

@@ -4,6 +4,7 @@ return array (
   'lead' => 'Plaats en bekijk de radioamateuradvertenties van de club.',
   'storage_unavailable' => 'De opslag voor advertenties is tijdelijk niet beschikbaar.',
   'new_ad' => 'Advertentie plaatsen',
+  'propose_ad' => 'Een zoekertje voorstellen',
   'my_ads' => 'Mijn advertenties',
   'all_ads' => 'Recente advertenties',
   'save' => 'Opslaan',

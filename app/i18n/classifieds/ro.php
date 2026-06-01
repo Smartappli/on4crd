@@ -6,6 +6,7 @@ return array (
   'lead' => 'Postați și vizualizați reclamele de radio amatori ale clubului.',
   'storage_unavailable' => 'Stocarea de anunțuri este temporar indisponibilă.',
   'new_ad' => 'Postați un anunț',
+  'propose_ad' => 'Propune un anunț clasificat',
   'my_ads' => 'Reclamele mele',
   'all_ads' => 'Anunțuri recente',
   'save' => 'Salva',

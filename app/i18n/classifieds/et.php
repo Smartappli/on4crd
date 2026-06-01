@@ -6,6 +6,7 @@ return array (
   'lead' => 'Postitage ja vaadake klubi raadioamatöörkuulutusi.',
   'storage_unavailable' => 'Kuulutuste salvestusruum pole ajutiselt saadaval.',
   'new_ad' => 'Postitage kuulutus',
+  'propose_ad' => 'Paku välja kuulutus',
   'my_ads' => 'Minu reklaamid',
   'all_ads' => 'Viimased teadaanded',
   'save' => 'Salvesta',

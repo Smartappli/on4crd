@@ -197,6 +197,7 @@ $routeModules = [
     'albums' => 'albums',
     'album' => 'albums',
     'classifieds' => 'classifieds',
+    'classifieds_manage' => 'classifieds',
     'ads' => 'advertising',
     'admin_classifieds' => 'classifieds',
     'admin_ads' => 'advertising',
@@ -286,6 +287,7 @@ switch ($route) {
     case 'event_view': $dispatchPage('pages/event_view.php'); break;
     case 'auctions': $dispatchPage('pages/auctions.php'); break;
     case 'classifieds': $dispatchPage('pages/classifieds.php'); break;
+    case 'classifieds_manage': $dispatchPage('pages/classifieds_manage.php'); break;
     case 'auction_view': $dispatchPage('pages/auction_view.php'); break;
     case 'auction_bid': $dispatchPage('pages/auction_bid.php'); break;
     case 'qsl': $dispatchPage('pages/qsl.php'); break;

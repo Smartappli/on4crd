@@ -6,6 +6,7 @@ return array (
   'lead' => 'Post u ara r-reklami tar-radju tad-dilettanti tal-klabb.',
   'storage_unavailable' => 'Il-ħażna tal-klassifika hija temporanjament mhux disponibbli.',
   'new_ad' => 'Ibgħat reklam',
+  'propose_ad' => 'Ipproponi reklam klassifikat',
   'my_ads' => 'Ir-reklami tiegħi',
   'all_ads' => 'Avviżi riċenti',
   'save' => 'Ħlief',

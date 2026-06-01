@@ -6,6 +6,7 @@ return array (
   'lead' => 'Skelbkite ir peržiūrėkite klubo radijo mėgėjų skelbimus.',
   'storage_unavailable' => 'Skelbimų saugykla laikinai nepasiekiama.',
   'new_ad' => 'Paskelbti skelbimą',
+  'propose_ad' => 'Pasiūlyti skelbimą',
   'my_ads' => 'Mano skelbimai',
   'all_ads' => 'Naujausi pranešimai',
   'save' => 'Išsaugoti',

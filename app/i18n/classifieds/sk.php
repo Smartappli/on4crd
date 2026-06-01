@@ -6,6 +6,7 @@ return array (
   'lead' => 'Uverejňujte a prezerajte si klubové rádioamatérske inzeráty.',
   'storage_unavailable' => 'Úložisko inzercie je dočasne nedostupné.',
   'new_ad' => 'Uverejniť inzerát',
+  'propose_ad' => 'Navrhnúť inzerát',
   'my_ads' => 'Moje inzeráty',
   'all_ads' => 'Nedávne oznámenia',
   'save' => 'Uložiť',

@@ -6,6 +6,7 @@ return array (
   'lead' => 'Post agus féach ar fhógraí raidió amaitéaracha an chlub.',
   'storage_unavailable' => 'Níl stóras Classifieds ar fáil go sealadach.',
   'new_ad' => 'Post fógra',
+  'propose_ad' => 'Mol fógra rangaithe',
   'my_ads' => 'Mo fógraí',
   'all_ads' => 'Fógraí le déanaí',
   'save' => 'Sábháil',

@@ -6,6 +6,7 @@ return array (
   'lead' => 'Ievietojiet un skatiet kluba amatieru radio sludinājumus.',
   'storage_unavailable' => 'Sludinājumu krātuve īslaicīgi nav pieejama.',
   'new_ad' => 'Ievietojiet sludinājumu',
+  'propose_ad' => 'Ierosināt sludinājumu',
   'my_ads' => 'Manas reklāmas',
   'all_ads' => 'Jaunākie paziņojumi',
   'save' => 'Saglabāt',

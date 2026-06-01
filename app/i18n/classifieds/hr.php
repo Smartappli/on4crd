@@ -6,6 +6,7 @@ return array (
   'lead' => 'Objavite i pregledajte radioamaterske oglase kluba.',
   'storage_unavailable' => 'Skladište malih oglasa je privremeno nedostupno.',
   'new_ad' => 'Objavite oglas',
+  'propose_ad' => 'Predložite mali oglas',
   'my_ads' => 'Moji oglasi',
   'all_ads' => 'Nedavne najave',
   'save' => 'spremiti',

@@ -6,6 +6,7 @@ return array (
   'lead' => 'Post og se klubbens amatørradioannoncer.',
   'storage_unavailable' => 'Opbevaring af rubrikannoncer er midlertidigt utilgængelig.',
   'new_ad' => 'Send en annonce',
+  'propose_ad' => 'Foreslå en annonce',
   'my_ads' => 'Mine annoncer',
   'all_ads' => 'Seneste meddelelser',
   'save' => 'Gem',

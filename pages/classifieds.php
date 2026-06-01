@@ -192,19 +192,24 @@ ob_start();
             <h1><?= e($t('title')) ?></h1>
             <p class="directory-lead"><?= e($t('lead')) ?></p>
         </div>
-        <div class="classifieds-stats">
-            <div class="classifieds-stat">
-                <span><?= (int) $totalAds ?></span>
-                <p><?= e($t('all_ads')) ?></p>
+        <div class="classifieds-hero-side">
+            <div class="classifieds-stats">
+                <div class="classifieds-stat">
+                    <span><?= (int) $totalAds ?></span>
+                    <p><?= e($t('all_ads')) ?></p>
+                </div>
+                <div class="classifieds-stat">
+                    <span><?= (int) array_sum($activeCategoryCounts) ?></span>
+                    <p><?= e($t('status_active')) ?></p>
+                </div>
+                <div class="classifieds-stat">
+                    <span><?= (int) count($myAds) ?></span>
+                    <p><?= e($t('my_ads')) ?></p>
+                </div>
             </div>
-            <div class="classifieds-stat">
-                <span><?= (int) array_sum($activeCategoryCounts) ?></span>
-                <p><?= e($t('status_active')) ?></p>
-            </div>
-            <div class="classifieds-stat">
-                <span><?= (int) count($myAds) ?></span>
-                <p><?= e($t('my_ads')) ?></p>
-            </div>
+            <p class="classifieds-hero-action">
+                <a class="button" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_ad')) ?></a>
+            </p>
         </div>
     </header>
 
@@ -254,78 +259,6 @@ ob_start();
         </nav>
     </section>
 
-    <?php if ($user !== null): ?>
-    <section class="classifieds-member-panel">
-        <section class="classifieds-editor">
-            <div class="classifieds-panel-heading">
-                <h2><?= e($editing ? $t('edit') : $t('new_ad')) ?></h2>
-                <p class="help"><?= e($t('published_30d')) ?></p>
-            </div>
-            <form method="post" class="classifieds-editor-form">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="save">
-                <input type="hidden" name="id" value="<?= (int) ($editing['id'] ?? 0) ?>">
-                <label><span><?= e($t('category_label')) ?></span>
-                    <select name="category_code">
-                        <?php foreach ($categories as $code => $label): ?>
-                        <option value="<?= e($code) ?>" <?= (($editing['category_code'] ?? 'gear') === $code) ? 'selected' : '' ?>><?= e($label) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-                <label><span><?= e($t('title_label')) ?></span><input type="text" name="title" maxlength="190" required value="<?= e((string) ($editing['title'] ?? '')) ?>"></label>
-                <label class="classifieds-editor-wide"><span><?= e($t('description_label')) ?></span><textarea name="description" rows="5" required><?= e((string) ($editing['description'] ?? '')) ?></textarea></label>
-                <label><span><?= e($t('price_label')) ?></span><input type="text" name="price" value="<?= e(number_format(((int) ($editing['price_cents'] ?? 0)) / 100, 2, ',', '')) ?>"></label>
-                <label><span><?= e($t('location_label')) ?></span><input type="text" name="location" maxlength="120" value="<?= e((string) ($editing['location'] ?? '')) ?>"></label>
-                <label class="classifieds-editor-wide"><span><?= e($t('contact_label')) ?></span><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($editing['contact'] ?? ((string) ($user['email'] ?? $user['callsign'] ?? '')))) ?>"></label>
-                <label><span><?= e($t('publication_label')) ?></span>
-                    <select name="status">
-                        <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>><?= e($t('status_draft')) ?></option>
-                        <option value="active" <?= (($editing['status'] ?? '') === 'active') ? 'selected' : '' ?>><?= e($t('published_30d')) ?></option>
-                    </select>
-                </label>
-                <div class="classifieds-editor-actions">
-                    <button class="button"><?= e($t('save')) ?></button>
-                    <?php if ($editing): ?><a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('cancel')) ?></a><?php endif; ?>
-                </div>
-            </form>
-        </section>
-
-        <section class="classifieds-my-ads">
-            <div class="classifieds-panel-heading">
-                <h2><?= e($t('my_ads')) ?></h2>
-                <span class="badge muted"><?= (int) count($myAds) ?></span>
-            </div>
-            <?php if ($myAds === []): ?>
-                <div class="classifieds-empty"><h3><?= e($t('none')) ?></h3></div>
-            <?php else: ?>
-                <div class="classifieds-my-list">
-                <?php foreach ($myAds as $ad): ?>
-                    <article class="classifieds-my-card">
-                        <div>
-                            <h3><?= e((string) $ad['title']) ?></h3>
-                            <p class="help"><?= e((string) ($categories[$ad['category_code']] ?? $ad['category_code'])) ?> · <?= e(format_price_eur((int) $ad['price_cents'])) ?></p>
-                            <?php if (!empty($ad['expires_at'])): ?><p class="help"><?= e($t('expires_on')) ?>: <?= e(date('d/m/Y', strtotime((string) $ad['expires_at']))) ?></p><?php endif; ?>
-                        </div>
-                        <span class="badge muted"><?= e((string) ($statuses[$ad['status']] ?? $ad['status'])) ?></span>
-                        <div class="classifieds-my-actions">
-                            <a class="button secondary small" href="<?= e(route_url('classifieds', ['edit' => (int) $ad['id']])) ?>"><?= e($t('edit')) ?></a>
-                            <form method="post" class="classifieds-status-form">
-                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="set_status"><input type="hidden" name="id" value="<?= (int) $ad['id'] ?>">
-                                <?php if ((string) $ad['status'] !== 'sold'): ?><button class="button secondary small" name="status" value="sold"><?= e($t('mark_sold')) ?></button><?php endif; ?>
-                                <?php if ((string) $ad['status'] !== 'active'): ?><button class="button secondary small" name="status" value="active"><?= e($t('reactivate')) ?></button><?php endif; ?>
-                                <?php if ((string) $ad['status'] !== 'archived'): ?><button class="button secondary small" name="status" value="archived"><?= e($t('archive')) ?></button><?php endif; ?>
-                                <?php if (in_array((string) $ad['status'], ['active', 'expired'], true)): ?>
-                                    <button class="button secondary small" formaction="<?= e(route_url('classifieds')) ?>" name="action" value="renew"><?= e($t('renew_30d')) ?></button>
-                                <?php endif; ?>
-                            </form>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </section>
-    </section>
-    <?php endif; ?>
 
     <section class="classifieds-results">
         <div class="classifieds-results-header">

@@ -6,6 +6,7 @@ return array (
   'lead' => 'Julkaise ja katso seuran radioamatöörimainoksia.',
   'storage_unavailable' => 'Luokiteltujen tietojen tallennustila ei ole tilapäisesti käytettävissä.',
   'new_ad' => 'Lähetä ilmoitus',
+  'propose_ad' => 'Ehdota ilmoitusta',
   'my_ads' => 'Minun mainokseni',
   'all_ads' => 'Viimeaikaiset ilmoitukset',
   'save' => 'Tallenna',

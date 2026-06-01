@@ -8,8 +8,32 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+[data-route="classifieds"] .classifieds-hero-side {
+  display: grid;
+  gap: .75rem;
+  min-width: min(100%, 24rem);
+}
+
+[data-route="classifieds"] .classifieds-hero-action {
+  margin: 0;
+}
+
+[data-route="classifieds"] .classifieds-hero-action .button {
+  width: 100%;
+  justify-content: center;
+}
+
+[data-route="classifieds"] .classifieds-stat {
+  justify-items: center;
+  text-align: center;
+}
+
 @media (max-width: 640px) {
   .classifieds-grid {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="classifieds"] .classifieds-hero-side {
+    min-width: 0;
   }
 }

@@ -4,6 +4,7 @@ return array (
   'lead' => 'Publique e consulte os classificados de radioamador do clube.',
   'storage_unavailable' => 'O armazenamento dos classificados está temporariamente indisponível.',
   'new_ad' => 'Publicar um anúncio',
+  'propose_ad' => 'Propor um anúncio classificado',
   'my_ads' => 'Os meus anúncios',
   'all_ads' => 'Anúncios recentes',
   'save' => 'Guardar',

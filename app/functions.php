@@ -2964,6 +2964,7 @@ function module_css_assets_for_route(string $route): array
         'album' => 'albums',
         'auction_bid' => 'auctions',
         'auction_view' => 'auctions',
+        'classifieds_manage' => 'classifieds',
         'event_view' => 'events',
         'news_view' => 'news',
         'wiki_edit' => 'wiki',
@@ -3003,7 +3004,7 @@ function module_js_assets_for_route(string $route): array
     if ($route === 'home') {
         $candidates[] = 'tools';
     }
-    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'wiki_edit'], true)) {
+    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'classifieds_manage', 'wiki_edit'], true)) {
         $candidates[] = 'wysiwyg';
     }
 

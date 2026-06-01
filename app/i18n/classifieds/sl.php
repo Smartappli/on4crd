@@ -6,6 +6,7 @@ return array (
   'lead' => 'Objavite in si oglejte klubske radioamaterske oglase.',
   'storage_unavailable' => 'Shramba za male oglase začasno ni na voljo.',
   'new_ad' => 'Objavite oglas',
+  'propose_ad' => 'Predlagaj mali oglas',
   'my_ads' => 'Moji oglasi',
   'all_ads' => 'Zadnje objave',
   'save' => 'Shrani',
