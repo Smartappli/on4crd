@@ -1,4 +1,8 @@
-[data-route="members_library"] .members-library-article-design,
+[data-route="members_library"] .members-library-article-design {
+  display: grid;
+  gap: 1rem;
+}
+
 [data-route="members_library"] .members-library-category-list,
 [data-route="members_library"] .members-library-content {
   display: grid;
@@ -31,7 +35,7 @@
 }
 
 [data-route="members_library"] .members-library-search-panel {
-  margin-top: .35rem;
+  margin-top: 0;
   padding-block: .65rem;
 }
 

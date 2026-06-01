@@ -33,7 +33,7 @@
 }
 
 [data-route="wiki"] .wiki-search-panel {
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 [data-route="wiki"] .wiki-search-form {
