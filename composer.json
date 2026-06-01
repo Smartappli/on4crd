@@ -12,7 +12,7 @@
   },
   "scripts": {
     "lint": "php tools/lint.php",
-    "test": "vendor/bin/phpunit --configuration phpunit.xml.dist --testdox"
+    "test": "@php vendor/bin/phpunit --configuration phpunit.xml.dist --testdox"
   },
   "config": {
     "allow-plugins": {

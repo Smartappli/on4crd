@@ -163,10 +163,10 @@ if (table_exists('modules')) {
             continue;
         }
         $moduleMeta = $memberModuleDefinitions[$moduleCode];
-        $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">' 
-            . '<div class="flex items-center justify-between gap-3">'
+        $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">'
+            . '<div class="flex items-center gap-3">'
+            . $renderMemberModuleIcon($moduleCode)
             . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
-            . '<span class="text-xl" aria-hidden="true">' . e((string) ($moduleMeta['icon'] ?? '📦')) . '</span>'
             . '</div>'
             . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
             . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
@@ -190,9 +190,9 @@ foreach ($memberFallbackModuleCodes as $moduleCode) {
         continue;
     }
     $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">'
-        . '<div class="flex items-center justify-between gap-3">'
+        . '<div class="flex items-center gap-3">'
+        . $renderMemberModuleIcon($moduleCode)
         . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
-        . '<span class="text-xl" aria-hidden="true">' . e((string) ($moduleMeta['icon'] ?? '▦')) . '</span>'
         . '</div>'
         . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
         . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
