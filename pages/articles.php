@@ -179,10 +179,6 @@ ob_start();
         <aside class="articles-index card">
             <p class="articles-index-title"><?= e((string) $t['theme_default']) ?></p>
             <nav class="articles-category-list" aria-label="<?= e((string) $t['theme_default']) ?>">
-                <a class="articles-category-item<?= $themeFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>">
-                    <span><?= e((string) ($t['all_categories'] ?? $t['layout_title'])) ?></span>
-                    <strong><?= (int) array_sum($themeCounts) ?></strong>
-                </a>
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
                 <a class="articles-category-item<?= $themeFilter === $themeCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
                     <span><?= e((string) $theme['label']) ?></span>
