@@ -7,7 +7,7 @@ return array (
   'page_title' => 'প্রযুক্তিগত নিবন্ধ',
   'page_description' => 'অপেশাদার রেডিও, সরঞ্জাম এবং অপারেশন সম্পর্কে ON4CRD প্রযুক্তিগত নিবন্ধ।',
   'manage' => 'পরিচালনা করুন',
-  'article_count' => 'নিবন্ধ(গুলি)',
+  'article_count' => 'নিবন্ধ',
   'reset_filter' => 'ফিল্টার রিসেট করুন',
   'search_placeholder' => 'একটি নিবন্ধ জন্য অনুসন্ধান করুন',
   'search' => 'অনুসন্ধান করুন',

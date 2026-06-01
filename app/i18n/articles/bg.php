@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Технически статии',
   'page_description' => 'ON4CRD технически статии за любителско радио, оборудване и практика.',
   'manage' => 'Управлявайте',
-  'article_count' => 'артикул(и)',
+  'article_count' => 'Статия(и)',
   'reset_filter' => 'Нулирайте филтъра',
   'search_placeholder' => 'Търсене на артикул',
   'search' => 'Търсене',

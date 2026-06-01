@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Tekniske artikler',
   'page_description' => 'ON4CRD tekniske artikler om amatørradio, udstyr og praksis.',
   'manage' => 'Administrer',
-  'article_count' => 'vare(r)',
+  'article_count' => 'Artikel/artikler',
   'reset_filter' => 'Nulstil filter',
   'search_placeholder' => 'Søg efter en vare',
   'search' => 'Søg',

@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Tekniset artikkelit',
   'page_description' => 'ON4CRD teknisiä artikkeleita amatööriradiosta, laitteista ja harjoituksista.',
   'manage' => 'Hallitse',
-  'article_count' => 'tuote(t)',
+  'article_count' => 'Artikkeli(t)',
   'reset_filter' => 'Nollaa suodatin',
   'search_placeholder' => 'Etsi kohde',
   'search' => 'Etsi',

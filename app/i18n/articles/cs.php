@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Technické články',
   'page_description' => 'ON4CRD technické články o amatérském rádiu, vybavení a praxi.',
   'manage' => 'Spravovat',
-  'article_count' => 'položky',
+  'article_count' => 'Článek(y)',
   'reset_filter' => 'Resetovat filtr',
   'search_placeholder' => 'Vyhledejte položku',
   'search' => 'Hledat',

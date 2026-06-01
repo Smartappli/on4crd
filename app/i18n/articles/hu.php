@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Műszaki cikkek',
   'page_description' => 'ON4CRD műszaki cikkek rádióamatőrről, berendezésekről és gyakorlatról.',
   'manage' => 'Kezelése',
-  'article_count' => 'elem(ek)',
+  'article_count' => 'Cikk(ek)',
   'reset_filter' => 'Szűrő visszaállítása',
   'search_placeholder' => 'Keressen egy elemet',
   'search' => 'Keresés',

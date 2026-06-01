@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Tehnički članci',
   'page_description' => 'ON4CRD tehnički članci o radioamaterstvu, opremi i praksi.',
   'manage' => 'Upravljaj',
-  'article_count' => 'predmet(i)',
+  'article_count' => 'Članak(ci)',
   'reset_filter' => 'Resetiraj filter',
   'search_placeholder' => 'Potražite stavku',
   'search' => 'Traži',

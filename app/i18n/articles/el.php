@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Τεχνικά άρθρα',
   'page_description' => 'ON4CRD τεχνικά άρθρα για τον ραδιοερασιτέχνη, τον εξοπλισμό και την πρακτική.',
   'manage' => 'Διαχείριση',
-  'article_count' => 'στοιχείο(α)',
+  'article_count' => 'Άρθρο(α)',
   'reset_filter' => 'Επαναφορά φίλτρου',
   'search_placeholder' => 'Αναζήτηση για ένα αντικείμενο',
   'search' => 'Αναζήτηση',

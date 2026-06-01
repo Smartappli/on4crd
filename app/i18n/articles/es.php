@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Artículos técnicos',
   'page_description' => 'Artículos técnicos de ON4CRD sobre radioafición, equipos y práctica.',
   'manage' => 'Gestionar',
-  'article_count' => 'artículo(s)',
+  'article_count' => 'Artículo(s)',
   'reset_filter' => 'Restablecer filtro',
   'search_placeholder' => 'Buscar un artículo',
   'search' => 'Buscar',

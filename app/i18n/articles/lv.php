@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Tehniskie raksti',
   'page_description' => 'ON4CRD tehniskie raksti par radioamatieru, aprīkojumu un praksi.',
   'manage' => 'Pārvaldīt',
-  'article_count' => 'prece(s)',
+  'article_count' => 'Raksts(i)',
   'reset_filter' => 'Atiestatīt filtru',
   'search_placeholder' => 'Meklēt preci',
   'search' => 'Meklēt',

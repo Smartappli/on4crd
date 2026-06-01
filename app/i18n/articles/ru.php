@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Технические статьи',
   'page_description' => 'Технические статьи ON4CRD о любительском радио, оборудовании и эксплуатации.',
   'manage' => 'Управлять',
-  'article_count' => 'статья(и)',
+  'article_count' => 'Статья(и)',
   'reset_filter' => 'Сбросить фильтр',
   'search_placeholder' => 'Искать статью',
   'search' => 'Поиск',

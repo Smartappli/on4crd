@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Earraí teicniúla',
   'page_description' => 'ON4CRD earraí teicniúla ar raidió amaitéarach, trealamh agus cleachtas.',
   'manage' => 'Bainistigh',
-  'article_count' => 'mír(í)',
+  'article_count' => 'Alt(anna)',
   'reset_filter' => 'Athshocraigh scagaire',
   'search_placeholder' => 'Cuardaigh le haghaidh earra',
   'search' => 'Cuardach',

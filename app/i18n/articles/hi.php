@@ -7,7 +7,7 @@ return array (
   'page_title' => 'तकनीकी लेख',
   'page_description' => 'शौकिया रेडियो, उपकरण और संचालन के बारे में ON4CRD तकनीकी लेख।',
   'manage' => 'प्रबंधित करना',
-  'article_count' => 'आलेख',
+  'article_count' => 'लेख',
   'reset_filter' => 'फ़िल्टर रीसेट करें',
   'search_placeholder' => 'एक लेख खोजें',
   'search' => 'खोज',

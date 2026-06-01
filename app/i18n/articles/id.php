@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Artikel teknis',
   'page_description' => 'Artikel teknis ON4CRD tentang radio amatir, peralatan dan operasi.',
   'manage' => 'Mengelola',
-  'article_count' => 'artikel',
+  'article_count' => 'Artikel',
   'reset_filter' => 'Setel ulang penyaring',
   'search_placeholder' => 'Cari artikel',
   'search' => 'Mencari',

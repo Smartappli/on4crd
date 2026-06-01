@@ -7,7 +7,7 @@ return array (
   'page_title' => 'المقالات الفنية',
   'page_description' => 'مقالات تقنية ON4CRD حول راديو الهواة والمعدات والعمليات.',
   'manage' => 'يدير',
-  'article_count' => 'المقالة (المقالات)',
+  'article_count' => 'المقالات',
   'reset_filter' => 'إعادة تعيين عامل التصفية',
   'search_placeholder' => 'ابحث عن مقالة',
   'search' => 'يبحث',

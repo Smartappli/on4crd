@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Tekniska artiklar',
   'page_description' => 'ON4CRD tekniska artiklar om amatörradio, utrustning och övningar.',
   'manage' => 'Hantera',
-  'article_count' => 'föremål',
+  'article_count' => 'Artikel/artiklar',
   'reset_filter' => 'Återställ filter',
   'search_placeholder' => 'Sök efter ett föremål',
   'search' => 'Sök',

@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Artikli tekniċi',
   'page_description' => 'ON4CRD artikoli tekniċi dwar ir-radju tad-dilettanti, tagħmir u prattika.',
   'manage' => 'Immaniġġja',
-  'article_count' => 'oġġetti)',
+  'article_count' => 'Artiklu/i',
   'reset_filter' => 'Irrisettja l-filtru',
   'search_placeholder' => 'Fittex għal oġġett',
   'search' => 'Għar-riċerka',

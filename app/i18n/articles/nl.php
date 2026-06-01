@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Technische artikels',
   'page_description' => 'ON4CRD technische artikels over radioamateurisme, materiaal en praktijk.',
   'manage' => 'Beheren',
-  'article_count' => 'artikel(en)',
+  'article_count' => 'Artikel(en)',
   'reset_filter' => 'Filter resetten',
   'search_placeholder' => 'Zoek een artikel',
   'search' => 'Zoeken',

@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Artykuły techniczne',
   'page_description' => 'ON4CRD artykuły techniczne dotyczące krótkofalarstwa, sprzętu i praktyki.',
   'manage' => 'Zarządzaj',
-  'article_count' => 'przedmiot(y)',
+  'article_count' => 'Artykuł(y)',
   'reset_filter' => 'Zresetuj filtr',
   'search_placeholder' => 'Wyszukaj przedmiot',
   'search' => 'Szukaj',

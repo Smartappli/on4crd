@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Articole tehnice',
   'page_description' => 'ON4CRD articole tehnice despre radioamatori, echipamente și practică.',
   'manage' => 'Gestionează',
-  'article_count' => 'articole)',
+  'article_count' => 'Articol(e)',
   'reset_filter' => 'Resetați filtrul',
   'search_placeholder' => 'Căutați un articol',
   'search' => 'A cerceta',

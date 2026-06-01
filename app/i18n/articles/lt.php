@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Techniniai straipsniai',
   'page_description' => 'ON4CRD techniniai straipsniai apie radijo mėgėją, įrangą ir praktiką.',
   'manage' => 'Tvarkyti',
-  'article_count' => 'prekė (-ės)',
+  'article_count' => 'Straipsnis(-iai)',
   'reset_filter' => 'Iš naujo nustatykite filtrą',
   'search_placeholder' => 'Ieškokite elemento',
   'search' => 'Ieškoti',

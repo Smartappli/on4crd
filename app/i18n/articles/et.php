@@ -7,7 +7,7 @@ return array (
   'page_title' => 'Tehnilised artiklid',
   'page_description' => 'ON4CRD tehnilised artiklid amatöörraadio, seadmete ja praktika kohta.',
   'manage' => 'Halda',
-  'article_count' => 'üksus(id)',
+  'article_count' => 'Artikkel(id)',
   'reset_filter' => 'Lähtestage filter',
   'search_placeholder' => 'Otsige üksust',
   'search' => 'Otsi',
