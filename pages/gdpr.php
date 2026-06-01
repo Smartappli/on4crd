@@ -22,10 +22,19 @@ $visibilityFields = [
     'visibility_full_name' => ['label' => $t('full_name'), 'default' => 'members'],
     'visibility_email' => ['label' => $t('email'), 'default' => 'members'],
     'visibility_phone' => ['label' => $t('phone'), 'default' => 'private'],
+    'visibility_country' => ['label' => $t('country'), 'default' => 'members'],
     'visibility_qth' => ['label' => $t('qth'), 'default' => 'members'],
+    'visibility_locator' => ['label' => $t('grid'), 'default' => 'members'],
+    'visibility_bio' => ['label' => $t('bio'), 'default' => 'members'],
     'visibility_licence_class' => ['label' => $t('licence'), 'default' => 'members'],
+    'visibility_qsl' => ['label' => $t('qsl_info'), 'default' => 'members'],
+    'visibility_qrz' => ['label' => $t('qrz_url'), 'default' => 'members'],
+    'visibility_uba' => ['label' => $t('uba_member'), 'default' => 'members'],
     'visibility_favourite_bands' => ['label' => $t('bands'), 'default' => 'members'],
+    'visibility_favourite_modes' => ['label' => $t('favourite_modes'), 'default' => 'members'],
     'visibility_station' => ['label' => $t('station'), 'default' => 'members'],
+    'visibility_antennas' => ['label' => $t('antennas'), 'default' => 'members'],
+    'visibility_interests' => ['label' => $t('interests'), 'default' => 'members'],
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -68,10 +77,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              visibility_full_name = ?,
              visibility_email = ?,
              visibility_phone = ?,
+             visibility_country = ?,
              visibility_qth = ?,
+             visibility_locator = ?,
+             visibility_bio = ?,
              visibility_licence_class = ?,
+             visibility_qsl = ?,
+             visibility_qrz = ?,
+             visibility_uba = ?,
              visibility_favourite_bands = ?,
-             visibility_station = ?
+             visibility_favourite_modes = ?,
+             visibility_station = ?,
+             visibility_antennas = ?,
+             visibility_interests = ?
          WHERE id = ?'
     );
     $stmt->execute([
@@ -81,10 +99,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $visibilityPayload['visibility_full_name'],
         $visibilityPayload['visibility_email'],
         $visibilityPayload['visibility_phone'],
+        $visibilityPayload['visibility_country'],
         $visibilityPayload['visibility_qth'],
+        $visibilityPayload['visibility_locator'],
+        $visibilityPayload['visibility_bio'],
         $visibilityPayload['visibility_licence_class'],
+        $visibilityPayload['visibility_qsl'],
+        $visibilityPayload['visibility_qrz'],
+        $visibilityPayload['visibility_uba'],
         $visibilityPayload['visibility_favourite_bands'],
+        $visibilityPayload['visibility_favourite_modes'],
         $visibilityPayload['visibility_station'],
+        $visibilityPayload['visibility_antennas'],
+        $visibilityPayload['visibility_interests'],
         $memberId,
     ]);
 
@@ -94,7 +121,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $stmt = db()->prepare(
     'SELECT callsign, full_name, email, phone, qth, licence_class, favourite_bands, station_equipment, photo_path, avatar_path,
-            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
+            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
+            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
+            visibility_station, visibility_antennas, visibility_interests
      FROM members
      WHERE id = ? LIMIT 1'
 );
@@ -128,7 +157,7 @@ ob_start();
         <div class="profile-visibility-grid">
             <?php foreach ($visibilityOptions as $visibilityValue => $visibilityLabel): ?>
                 <section class="profile-visibility-panel">
-                    <h3><?= e($visibilityValue === 'public' ? 'Visibilité publique' : ($visibilityValue === 'members' ? 'Visibilité membre' : 'Visibilité comité')) ?></h3>
+                    <h3><?= e($visibilityLabel) ?></h3>
                     <div class="profile-visibility-options">
                         <?php foreach ($visibilityFields as $fieldName => $fieldMeta): ?>
                             <?php $currentValue = (string) ($member[$fieldName] ?? (string) $fieldMeta['default']); ?>

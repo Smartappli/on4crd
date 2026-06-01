@@ -22,10 +22,19 @@ $visibilityFields = [
     'visibility_full_name' => ['label' => $t('full_name'), 'default' => 'members'],
     'visibility_email' => ['label' => $t('email'), 'default' => 'members'],
     'visibility_phone' => ['label' => $t('phone'), 'default' => 'private'],
+    'visibility_country' => ['label' => $t('country'), 'default' => 'members'],
     'visibility_qth' => ['label' => $t('qth'), 'default' => 'members'],
+    'visibility_locator' => ['label' => $t('grid'), 'default' => 'members'],
+    'visibility_bio' => ['label' => $t('bio'), 'default' => 'members'],
     'visibility_licence_class' => ['label' => $t('licence'), 'default' => 'members'],
+    'visibility_qsl' => ['label' => $t('qsl_info'), 'default' => 'members'],
+    'visibility_qrz' => ['label' => $t('qrz_url'), 'default' => 'members'],
+    'visibility_uba' => ['label' => $t('uba_member'), 'default' => 'members'],
     'visibility_favourite_bands' => ['label' => $t('bands'), 'default' => 'members'],
+    'visibility_favourite_modes' => ['label' => $t('favourite_modes'), 'default' => 'members'],
     'visibility_station' => ['label' => $t('station'), 'default' => 'members'],
+    'visibility_antennas' => ['label' => $t('antennas'), 'default' => 'members'],
+    'visibility_interests' => ['label' => $t('interests'), 'default' => 'members'],
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -36,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fullName = trim((string) ($_POST['full_name'] ?? ''));
         $email = trim((string) ($_POST['email'] ?? ''));
         $phone = trim((string) ($_POST['phone'] ?? ''));
+        $country = trim((string) ($_POST['country'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
         $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
         $bio = trim((string) ($_POST['bio'] ?? ''));
@@ -46,8 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $qslVia = trim((string) ($_POST['qsl_via'] ?? ''));
         $lotwUsername = trim((string) ($_POST['lotw_username'] ?? ''));
         $eqslUsername = trim((string) ($_POST['eqsl_username'] ?? ''));
-        $qrzUrl = trim((string) ($_POST['qrz_url'] ?? ''));
         $website = trim((string) ($_POST['website'] ?? ''));
+        $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
+        $ubaMemberNumber = trim((string) ($_POST['uba_member_number'] ?? ''));
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
         $antennas = trim((string) ($_POST['antennas'] ?? ''));
         $maxPower = trim((string) ($_POST['max_power'] ?? ''));
@@ -67,10 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
             throw new RuntimeException($t('invalid_locator'));
         }
-        foreach (['qrz_url' => $qrzUrl, 'website' => $website] as $urlValue) {
-            if ($urlValue !== '' && filter_var($urlValue, FILTER_VALIDATE_URL) === false) {
-                throw new RuntimeException($t('invalid_url'));
-            }
+        if ($website !== '' && filter_var($website, FILTER_VALIDATE_URL) === false) {
+            throw new RuntimeException($t('invalid_url'));
         }
 
         $currentStmt = db()->prepare('SELECT auth_user_id, callsign, email, photo_path, avatar_path FROM members WHERE id = ? LIMIT 1');
@@ -91,6 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('auth_identifier_taken'));
             }
         }
+
+        $qrzUrl = qrz_profile_url_for_callsign($callsign);
 
         $allowedVisibilities = array_keys($visibilityOptions);
         $visibilityPayload = [];
@@ -123,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              full_name = ?,
              email = ?,
              phone = ?,
+             country = ?,
              qth = ?,
              locator = ?,
              bio = ?,
@@ -137,6 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              eqsl_username = ?,
              qrz_url = ?,
              website = ?,
+             is_uba_member = ?,
+             uba_member_number = ?,
              station_equipment = ?,
              antennas = ?,
              max_power = ?,
@@ -147,10 +161,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              visibility_full_name = ?,
              visibility_email = ?,
              visibility_phone = ?,
+             visibility_country = ?,
              visibility_qth = ?,
+             visibility_locator = ?,
+             visibility_bio = ?,
              visibility_licence_class = ?,
+             visibility_qsl = ?,
+             visibility_qrz = ?,
+             visibility_uba = ?,
              visibility_favourite_bands = ?,
-             visibility_station = ?
+             visibility_favourite_modes = ?,
+             visibility_station = ?,
+             visibility_antennas = ?,
+             visibility_interests = ?
          WHERE id = ?'
         );
         $stmt->execute([
@@ -158,6 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $fullName,
             $email,
             $phone !== '' ? $phone : null,
+            $country !== '' ? $country : null,
             $qth !== '' ? $qth : null,
             $locator !== '' ? $locator : null,
             $bio !== '' ? $bio : null,
@@ -170,8 +194,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $qslVia !== '' ? $qslVia : null,
             $lotwUsername !== '' ? $lotwUsername : null,
             $eqslUsername !== '' ? $eqslUsername : null,
-            $qrzUrl !== '' ? $qrzUrl : null,
+            $qrzUrl,
             $website !== '' ? $website : null,
+            $isUbaMember,
+            $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
             $stationEquipment !== '' ? $stationEquipment : null,
             $antennas !== '' ? $antennas : null,
             $maxPower !== '' ? $maxPower : null,
@@ -182,10 +208,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $visibilityPayload['visibility_full_name'],
             $visibilityPayload['visibility_email'],
             $visibilityPayload['visibility_phone'],
+            $visibilityPayload['visibility_country'],
             $visibilityPayload['visibility_qth'],
+            $visibilityPayload['visibility_locator'],
+            $visibilityPayload['visibility_bio'],
             $visibilityPayload['visibility_licence_class'],
+            $visibilityPayload['visibility_qsl'],
+            $visibilityPayload['visibility_qrz'],
+            $visibilityPayload['visibility_uba'],
             $visibilityPayload['visibility_favourite_bands'],
+            $visibilityPayload['visibility_favourite_modes'],
             $visibilityPayload['visibility_station'],
+            $visibilityPayload['visibility_antennas'],
+            $visibilityPayload['visibility_interests'],
             $memberId,
         ]);
 
@@ -206,10 +241,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $stmt = db()->prepare(
-    'SELECT callsign, full_name, email, phone, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
-            qsl_via, lotw_username, eqsl_username, qrz_url, website, station_equipment, antennas, max_power,
+    'SELECT callsign, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
+            qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
             favourite_bands, favourite_modes, interests, photo_path, avatar_path,
-            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_qth, visibility_licence_class, visibility_favourite_bands, visibility_station
+            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
+            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
+            visibility_station, visibility_antennas, visibility_interests
      FROM members
      WHERE id = ? LIMIT 1'
 );
@@ -240,8 +277,9 @@ ob_start();
                 <label><?= e($t('full_name')) ?><input type="text" name="full_name" maxlength="190" required value="<?= e((string) ($member['full_name'] ?? '')) ?>"></label>
                 <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
+                <label><?= e($t('country')) ?><input type="text" name="country" maxlength="190" value="<?= e((string) ($member['country'] ?? '')) ?>"></label>
                 <label><?= e($t('qth')) ?><input type="text" name="qth" maxlength="190" value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
-                <label><?= e($t('locator')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
+                <label><?= e($t('grid')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
                 <label class="profile-form-wide"><?= e($t('bio')) ?><textarea name="bio" rows="4" maxlength="4000"><?= e((string) ($member['bio'] ?? '')) ?></textarea></label>
             </div>
         </fieldset>
@@ -256,8 +294,10 @@ ob_start();
                 <label><?= e($t('qsl_via')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
                 <label><?= e($t('lotw_username')) ?><input type="text" name="lotw_username" maxlength="190" value="<?= e((string) ($member['lotw_username'] ?? '')) ?>"></label>
                 <label><?= e($t('eqsl_username')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
-                <label><?= e($t('qrz_url')) ?><input type="url" name="qrz_url" maxlength="255" value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
+                <label><?= e($t('qrz_url')) ?><input type="url" maxlength="255" readonly value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"><small class="help"><?= e($t('qrz_help')) ?></small></label>
                 <label><?= e($t('website')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
+                <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" <?= (int) ($member['is_uba_member'] ?? 0) === 1 ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>
+                <label><?= e($t('uba_member_number')) ?><input type="text" name="uba_member_number" maxlength="64" value="<?= e((string) ($member['uba_member_number'] ?? '')) ?>"></label>
                 <label><?= e($t('max_power')) ?><input type="text" name="max_power" maxlength="64" value="<?= e((string) ($member['max_power'] ?? '')) ?>"></label>
                 <label><?= e($t('bands')) ?><input type="text" name="favourite_bands" maxlength="190" value="<?= e((string) ($member['favourite_bands'] ?? '')) ?>"></label>
                 <label><?= e($t('favourite_modes')) ?><input type="text" name="favourite_modes" maxlength="190" value="<?= e((string) ($member['favourite_modes'] ?? '')) ?>"></label>
