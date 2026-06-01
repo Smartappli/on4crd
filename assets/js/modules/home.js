@@ -1,4 +1,39 @@
 (function(){
+const carousels=document.querySelectorAll("[data-home-sponsor-carousel]");
+if(!carousels.length){return;}
+carousels.forEach((carousel)=>{
+const slides=Array.from(carousel.querySelectorAll(".home-media-slide"));
+if(!slides.length){return;}
+let index=0;
+let timer=null;
+const show=(nextIndex)=>{
+index=(nextIndex+slides.length)%slides.length;
+slides.forEach((slide,slideIndex)=>{
+const active=slideIndex===index;
+slide.classList.toggle("is-active",active);
+slide.setAttribute("aria-hidden",active?"false":"true");
+if(slide instanceof HTMLAnchorElement){
+slide.tabIndex=active?0:-1;
+}
+});
+};
+const start=()=>{
+if(timer||slides.length<2||window.matchMedia("(prefers-reduced-motion: reduce)").matches){return;}
+timer=window.setInterval(()=>show(index+1),3500);
+};
+const stop=()=>{if(!timer){return;}window.clearInterval(timer);timer=null;};
+carousel.classList.add("is-ready");
+show(0);
+carousel.addEventListener("mouseenter",stop);
+carousel.addEventListener("mouseleave",start);
+carousel.addEventListener("focusin",stop);
+carousel.addEventListener("focusout",start);
+document.addEventListener("visibilitychange",()=>{if(document.hidden){stop();}else{start();}});
+start();
+});
+})();
+
+(function(){
 const root=document.querySelector("[data-ham-weather-root]");
 if(!root){return;}
 const weather=root.querySelector("[data-ham-weather-weather]");

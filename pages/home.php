@@ -662,7 +662,7 @@ try {
     }
 
     if ($sponsorSlideHtml !== '') {
-        $adSlotHtml = '<div class="home-media-carousel" aria-label="' . e((string) ($homeI18n['home_sponsors_title'] ?? 'Nos sponsors')) . '">'
+        $adSlotHtml = '<div class="home-media-carousel home-sponsor-carousel" data-home-sponsor-carousel aria-label="' . e((string) ($homeI18n['home_sponsors_title'] ?? 'Nos sponsors')) . '">'
             . '<div class="home-media-track">' . $sponsorSlideHtml . '</div>'
             . '</div>';
     }
