@@ -42,9 +42,19 @@
   box-shadow: none;
 }
 
-.home-tool-day .tool-panel h2 {
-  font-size: 1rem;
-  line-height: 1.25;
+[data-route="home"] .home-tool-day-title,
+[data-route="home"] .home-tool-day .tool-panel h2 {
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+[data-route="home"] .home-tool-day .tool-panel h2 {
+  margin-top: 0;
+  margin-bottom: .85rem;
 }
 
 .home-media-carousel {

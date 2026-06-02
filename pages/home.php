@@ -836,7 +836,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['latest_news_title'] ?? 'Dernières actualités')) . '</h3>' . $latestNewsHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_classifieds'] ?? 'Petites annonces')) . '</h3>' . $classifiedsHtml . '</article>'
     . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['next_event_title'] ?? 'Prochain événement')) . '</h3>' . $nextEventHtml . '</article>'
-    . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_auction_live'] ?? 'L\'outil du jour')) . '</h3>' . $toolDayHtml . '</article>'
+    . '<article><h3 class="home-tool-day-title mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_auction_live'] ?? 'L\'outil du jour')) . '</h3>' . $toolDayHtml . '</article>'
     . $memberSpotlightRowHtml
     . '</div>'
     . '</section>'
