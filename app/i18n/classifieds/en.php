@@ -5,6 +5,8 @@ return array (
   'storage_unavailable' => 'Classifieds storage is temporarily unavailable.',
   'new_ad' => 'Post an ad',
   'propose_ad' => 'Propose a classified ad',
+  'propose_category' => 'Propose a category',
+  'propose_category_subject' => 'Category proposal for ON4CRD classifieds',
   'my_ads' => 'My ads',
   'all_ads' => 'Recent ads',
   'save' => 'Save',

@@ -209,6 +209,7 @@ ob_start();
             </div>
             <p class="classifieds-hero-action">
                 <a class="button" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_ad')) ?></a>
+                <a class="button secondary" href="mailto:on4crd@gmail.com?subject=<?= e(rawurlencode($t('propose_category_subject'))) ?>"><?= e($t('propose_category')) ?></a>
             </p>
         </div>
     </header>

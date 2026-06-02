@@ -5,6 +5,8 @@ return array (
   'storage_unavailable' => 'Le stockage des petites annonces est temporairement indisponible.',
   'new_ad' => 'Déposer une annonce',
   'propose_ad' => 'Proposer une petite annonce',
+  'propose_category' => 'Proposer une catégorie',
+  'propose_category_subject' => 'Proposition de catégorie pour les petites annonces ON4CRD',
   'my_ads' => 'Mes annonces',
   'all_ads' => 'Annonces récentes',
   'save' => 'Enregistrer',
