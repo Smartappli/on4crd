@@ -5,9 +5,11 @@ $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/login.php';
 $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
+$nextUrl = safe_login_next_url((string) ($_POST['next'] ?? $_GET['next'] ?? ''));
+$defaultLoginRedirectUrl = route_url(module_enabled('dashboard') ? 'dashboard' : 'home');
 
 if (current_user() !== null) {
-    redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
+    redirect_url($nextUrl ?? $defaultLoginRedirectUrl);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         unset($_SESSION['login_captcha']);
         $_SESSION['member_id'] = (int) $authClient->getUserId();
         set_flash('success', (string) $t['login_success']);
-        redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
+        redirect_url($nextUrl ?? $defaultLoginRedirectUrl);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
-        redirect('login');
+        redirect_url(route_url('login', $nextUrl !== null ? ['next' => $nextUrl] : []));
     }
 }
 
@@ -63,6 +65,7 @@ $_SESSION['login_captcha'] = (string) $captchaExpected;
 
 $content = '<div class="card narrow login-card"><h1>' . e((string) $t['title']) . '</h1>'
     . '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+    . ($nextUrl !== null ? '<input type="hidden" name="next" value="' . e($nextUrl) . '">' : '')
     . '<label>' . e((string) $t['callsign']) . '<input type="text" name="callsign" required></label>'
     . '<label>' . e((string) $t['password']) . '<input type="password" name="password" required></label>'
     . '<label>' . e((string) $t['captcha_question']) . ' ' . $captchaA . ' + ' . $captchaB . ' ?'

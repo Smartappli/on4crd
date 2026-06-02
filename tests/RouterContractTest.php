@@ -197,4 +197,13 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('new \\Delight\\Db\\PdoDatabase($pdo)', $functions);
         self::assertStringContainsString('new \\Delight\\Auth\\Auth($pdo)', $functions);
     }
+
+    public function testModuleAndLoginGuardsPreserveNextRoute(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+
+        self::assertStringContainsString('require_module_enabled($routeModules[$route], $route);', $router);
+        self::assertStringContainsString('require_login(login_next_url_for_route($route, $_GET));', $router);
+    }
 }

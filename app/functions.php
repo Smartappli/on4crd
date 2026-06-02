@@ -2238,6 +2238,87 @@ function route_url_clean(string $route, array $query = []): string
 }
 }
 
+if (!function_exists('login_next_url_for_route')) {
+/**
+ * Build a safe internal target URL for the login `next` parameter.
+ *
+ * @param array<string, mixed> $query
+ */
+function login_next_url_for_route(string $route, array $query = []): ?string
+{
+    $route = trim($route);
+    if ($route === '' || preg_match('/^[a-z0-9_]+$/', $route) !== 1) {
+        return null;
+    }
+
+    unset($query['route'], $query['next'], $query['_csrf']);
+
+    return route_url_clean($route, $query);
+}
+}
+
+if (!function_exists('safe_login_next_url')) {
+function safe_login_next_url(string $next): ?string
+{
+    $next = trim($next);
+    if ($next === '' || preg_match('/[\r\n]/', $next) === 1) {
+        return null;
+    }
+
+    $parts = parse_url($next);
+    if (!is_array($parts)) {
+        return null;
+    }
+
+    $baseParts = parse_url(base_url('/'));
+    if (!is_array($baseParts)) {
+        return null;
+    }
+
+    if (isset($parts['scheme']) || isset($parts['host'])) {
+        $nextScheme = strtolower((string) ($parts['scheme'] ?? ''));
+        $baseScheme = strtolower((string) ($baseParts['scheme'] ?? ''));
+        $nextHost = strtolower((string) ($parts['host'] ?? ''));
+        $baseHost = strtolower((string) ($baseParts['host'] ?? ''));
+        $nextPort = (int) ($parts['port'] ?? 0);
+        $basePort = (int) ($baseParts['port'] ?? 0);
+        if ($nextScheme !== $baseScheme || $nextHost !== $baseHost || $nextPort !== $basePort) {
+            return null;
+        }
+    } elseif (!str_starts_with($next, '/') || str_starts_with($next, '//')) {
+        return null;
+    }
+
+    $query = [];
+    if (isset($parts['query'])) {
+        parse_str((string) $parts['query'], $query);
+    }
+    $route = trim((string) ($query['route'] ?? ''));
+    if ($route === '' || preg_match('/^[a-z0-9_]+$/', $route) !== 1) {
+        return null;
+    }
+
+    $blockedRoutes = [
+        'login',
+        'logout',
+        'register',
+        'forgot_password',
+        'reset_password',
+        'toggle_theme',
+        'set_language',
+        'set_accent',
+        'set_theme',
+    ];
+    if (in_array($route, $blockedRoutes, true)) {
+        return null;
+    }
+
+    unset($query['route'], $query['next'], $query['_csrf']);
+
+    return route_url_clean($route, $query);
+}
+}
+
 if (!function_exists('pagination_state')) {
 /**
  * Normalize common pagination values for list pages.
@@ -2494,7 +2575,7 @@ function current_user(): ?array
 }
 
 if (!function_exists('require_login')) {
-function require_login(): array
+function require_login(?string $nextUrl = null): array
 {
     $user = current_user();
     if ($user === null) {
@@ -2516,7 +2597,12 @@ function require_login(): array
             default => 'Veuillez vous connecter pour continuer.',
         };
         set_flash('error', $message);
-        redirect('login');
+        $loginQuery = [];
+        $safeNextUrl = $nextUrl !== null ? safe_login_next_url($nextUrl) : null;
+        if ($safeNextUrl !== null) {
+            $loginQuery['next'] = $safeNextUrl;
+        }
+        redirect_url(route_url('login', $loginQuery));
     }
 
     return $user;
@@ -2660,10 +2746,16 @@ function module_visible_for_current_user(string $module): bool
 }
 
 if (!function_exists('require_module_enabled')) {
-function require_module_enabled(string $module): void
+function require_module_enabled(string $module, ?string $nextRoute = null): void
 {
     if (module_enabled($module) && module_visible_for_current_user($module)) {
         return;
+    }
+
+    $row = module_row($module);
+    $visibility = (string) ($row['visibility'] ?? 'public');
+    if (module_enabled($module) && current_user() === null && in_array($visibility, ['members', 'admin'], true)) {
+        require_login(login_next_url_for_route($nextRoute ?? (string) ($_GET['route'] ?? ''), $_GET));
     }
 
     http_response_code(404);

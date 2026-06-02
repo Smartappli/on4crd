@@ -68,6 +68,30 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(64, strlen($token));
     }
 
+    public function testLoginNextUrlForRoutePreservesSafeQuery(): void
+    {
+        $next = login_next_url_for_route('auction_view', [
+            'route' => 'auction_view',
+            'id' => 42,
+            'next' => 'https://evil.test/',
+            '_csrf' => 'token',
+        ]);
+
+        self::assertSame(route_url('auction_view', ['id' => 42]), $next);
+    }
+
+    public function testSafeLoginNextUrlRejectsExternalUrl(): void
+    {
+        self::assertNull(safe_login_next_url('https://evil.test/index.php?route=qsl'));
+    }
+
+    public function testSafeLoginNextUrlRebuildsInternalRouteUrl(): void
+    {
+        $next = safe_login_next_url('/index.php?route=qsl_export&id=7&next=https%3A%2F%2Fevil.test');
+
+        self::assertSame(route_url('qsl_export', ['id' => '7']), $next);
+    }
+
     public function testValidateRemoteFeedUrlRejectsLocalNetworks(): void
     {
         $this->expectException(RuntimeException::class);
