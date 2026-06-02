@@ -4,8 +4,35 @@ $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('settings', $locale);
 $rt = i18n_domain_translator('dashboard', $locale);
+$newsletterT = i18n_domain_translator('newsletter', $locale);
 $userId = (int) ($user['id'] ?? 0);
+newsletter_ensure_tables();
+$memberEmail = newsletter_normalize_email((string) ($user['email'] ?? ''));
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_newsletter') {
+    try {
+        verify_csrf();
+        $newsletterAction = (string) ($_POST['newsletter_action'] ?? '');
+        if ($newsletterAction === 'subscribe') {
+            $email = newsletter_normalize_email((string) ($_POST['email'] ?? $memberEmail));
+            if ($email === '') {
+                throw new RuntimeException($newsletterT('err_invalid_email'));
+            }
+            newsletter_upsert_subscriber($email, $userId, 'member_settings');
+            set_flash('success', $newsletterT('ok_subscribed'));
+        } elseif ($newsletterAction === 'unsubscribe') {
+            $currentNewsletter = newsletter_subscriber_for_member($userId);
+            if ($currentNewsletter === null) {
+                throw new RuntimeException($newsletterT('err_no_sub'));
+            }
+            newsletter_set_subscriber_status((int) $currentNewsletter['id'], 'unsubscribed');
+            set_flash('success', $newsletterT('ok_unsubscribed'));
+        }
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+    }
+    redirect_url(route_url('settings'));
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_recommendations') {
     verify_csrf();
     $enabled = ((string) ($_POST['recommendations_enabled'] ?? '1')) === '1';
@@ -33,10 +60,39 @@ $recommendationSignals = [
     'library' => member_preference_bool($userId, 'recommendations_signal_library_enabled', true),
 ];
 $recommendations = $recommendationsEnabled ? member_personalized_recommendations($userId, 6) : [];
+$currentNewsletter = newsletter_subscriber_for_member($userId);
+$newsletterSubscribed = $currentNewsletter !== null && (string) ($currentNewsletter['status'] ?? '') === 'active';
+$newsletterEmail = newsletter_normalize_email((string) ($currentNewsletter['email'] ?? $memberEmail));
 
 $pageTitle = (string) ($t['title'] ?? 'Account settings');
 ob_start();
 ?>
+<section class="card">
+  <h2 style="margin-top:0;"><?= e($newsletterT('title')) ?></h2>
+  <p><?= e($newsletterT('intro')) ?></p>
+  <?php if ($newsletterSubscribed): ?>
+    <p><strong><?= e($newsletterT('status')) ?></strong> <?= e($newsletterT('subscribed')) ?> (<?= e($newsletterEmail) ?>)</p>
+    <form method="post" class="inline-form" style="margin:.25rem 0 0;">
+      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="action" value="toggle_newsletter">
+      <input type="hidden" name="newsletter_action" value="unsubscribe">
+      <button class="button danger small" type="submit"><?= e($newsletterT('unsubscribe')) ?></button>
+    </form>
+  <?php else: ?>
+    <p><strong><?= e($newsletterT('status')) ?></strong> <?= e($newsletterT('not_subscribed')) ?></p>
+    <form method="post" class="inline-form" style="margin:.25rem 0 0;gap:.7rem;align-items:flex-end;">
+      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="action" value="toggle_newsletter">
+      <input type="hidden" name="newsletter_action" value="subscribe">
+      <label style="display:grid;gap:.25rem;">
+        <span><?= e($newsletterT('email_label')) ?></span>
+        <input type="email" name="email" value="<?= e($newsletterEmail) ?>" required>
+      </label>
+      <button class="button small" type="submit"><?= e($newsletterT('subscribe')) ?></button>
+    </form>
+  <?php endif; ?>
+</section>
+
 <section class="card">
   <h2 style="margin-top:0;"><?= e($rt('recommendations_title')) ?></h2>
   <form method="post" class="inline-form" style="margin:.25rem 0 1rem;">
