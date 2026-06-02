@@ -143,6 +143,8 @@ final class RouterContractTest extends TestCase
     {
         $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
         self::assertIsString($schema);
+        $updates = file_get_contents(__DIR__ . '/../app/runtime_schema_updates.php');
+        self::assertIsString($updates);
 
         self::assertMatchesRegularExpression(
             "/\\['news',\\s*'[^']+',\\s*'[^']+',\\s*0,\\s*1,\\s*'public',\\s*30\\]/",
@@ -151,12 +153,12 @@ final class RouterContractTest extends TestCase
         );
         self::assertStringContainsString(
             "UPDATE modules SET is_enabled = 1, visibility = 'public' WHERE code IN ('news'",
-            $schema,
+            $updates,
             'Runtime schema updates must restore the public news module when production data disabled it.'
         );
         self::assertStringContainsString(
             "UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')",
-            $schema,
+            $updates,
             'Runtime schema updates must restore the member dashboard module when production data disabled it.'
         );
     }
@@ -210,6 +212,12 @@ final class RouterContractTest extends TestCase
         self::assertIsString($schema);
         self::assertStringContainsString('function runtime_schema_version(): string', $schema);
         self::assertStringContainsString('function apply_runtime_schema_updates_if_needed(?string $markerPath = null): bool', $schema);
+        self::assertStringContainsString("require_once __DIR__ . '/runtime_schema_updates.php';", $schema);
+        self::assertStringNotContainsString('function apply_runtime_schema_updates(): void', $schema);
+
+        $updates = file_get_contents(__DIR__ . '/../app/runtime_schema_updates.php');
+        self::assertIsString($updates);
+        self::assertStringContainsString('function apply_runtime_schema_updates(): void', $updates);
     }
 
     public function testRouteSpecificHelpersAreLoadedLazily(): void
