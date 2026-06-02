@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Rubrikannoncer',
   'lead' => 'Post og se klubbens amatørradioannoncer.',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Meddelelse føjet til favoritter.',
   'favorite_removed_msg' => 'Annonce fjernet fra favoritter.',
   'favorite_label' => 'Favorit',
+  'propose_category' => 'Foreslå en kategori',
+  'propose_category_subject' => 'Kategoriforslag til ON4CRD-annoncer',
+  'propose_category_intro' => 'Beskriv den ønskede kategori. Klubben gennemgår den, før den tilføjes til annoncerne.',
+  'propose_category_email_intro' => 'Nyt kategoriforslag til ON4CRD-annoncer.',
+  'propose_category_name_label' => 'Kategorinavn',
+  'propose_category_name_placeholder' => 'F.eks. antenner, tilbehør, komponenter',
+  'propose_category_sender_name_label' => 'Dit navn',
+  'propose_category_sender_email_label' => 'Din e-mail',
+  'propose_category_details_label' => 'Detaljer / begrundelse',
+  'propose_category_details_placeholder' => 'Forklar hvilken type annoncer den gælder, eller hvorfor kategorien er nyttig.',
+  'propose_category_submit' => 'Send forslag',
+  'propose_category_cancel' => 'Annuller',
+  'propose_category_close' => 'Luk',
+  'propose_category_invalid' => 'Udfyld formularen korrekt.',
+  'propose_category_sent' => 'Kategoriforslag sendt.',
+  'propose_category_failed' => 'Forslaget kunne ikke sendes. Prøv igen senere.',
 );

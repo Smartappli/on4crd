@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Rangaithe',
   'lead' => 'Post agus féach ar fhógraí raidió amaitéaracha an chlub.',
   'storage_unavailable' => 'Níl stóras Classifieds ar fáil go sealadach.',
   'new_ad' => 'Post fógra',
-  'propose_ad' => 'Mol fógra rangaithe',
+  'propose_ad' => 'Mol fógra',
   'my_ads' => 'Mo fógraí',
   'all_ads' => 'Fógraí le déanaí',
   'save' => 'Sábháil',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Cuireadh fógra leis na ceanáin.',
   'favorite_removed_msg' => 'Baineadh an fógra de cheanáin.',
   'favorite_label' => 'is fearr leat',
+  'propose_category' => 'Mol catagóir',
+  'propose_category_subject' => 'Moladh catagóire do na fógraí beaga ON4CRD',
+  'propose_category_intro' => 'Déan cur síos ar an gcatagóir atá uait. Déanfaidh an club athbhreithniú uirthi sula gcuirfear leis na fógraí í.',
+  'propose_category_email_intro' => 'Moladh catagóire nua do na fógraí beaga ON4CRD.',
+  'propose_category_name_label' => 'Ainm na catagóire',
+  'propose_category_name_placeholder' => 'M.sh. aeróga, gabhálais, comhpháirteanna',
+  'propose_category_sender_name_label' => 'D\'ainm',
+  'propose_category_sender_email_label' => 'Do ríomhphost',
+  'propose_category_details_label' => 'Sonraí / cúis',
+  'propose_category_details_placeholder' => 'Mínigh cén cineál fógraí atá i gceist nó cén fáth a bhfuil sí úsáideach.',
+  'propose_category_submit' => 'Seol an moladh',
+  'propose_category_cancel' => 'Cealaigh',
+  'propose_category_close' => 'Dún',
+  'propose_category_invalid' => 'Líon an fhoirm mholta i gceart, le do thoil.',
+  'propose_category_sent' => 'Seoladh an moladh catagóire.',
+  'propose_category_failed' => 'Níorbh fhéidir an moladh a sheoladh. Bain triail eile as níos déanaí.',
 );

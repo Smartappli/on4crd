@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Skelbimai',
   'lead' => 'Skelbkite ir peržiūrėkite klubo radijo mėgėjų skelbimus.',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Skelbimas įtrauktas į mėgstamiausius.',
   'favorite_removed_msg' => 'Skelbimas pašalintas iš mėgstamiausių.',
   'favorite_label' => 'Mėgstamiausias',
+  'propose_category' => 'Pasiūlyti kategoriją',
+  'propose_category_subject' => 'Kategorijos pasiūlymas ON4CRD skelbimams',
+  'propose_category_intro' => 'Aprašykite norimą kategoriją. Klubas ją peržiūrės prieš pridėdamas prie skelbimų.',
+  'propose_category_email_intro' => 'Naujas kategorijos pasiūlymas ON4CRD skelbimams.',
+  'propose_category_name_label' => 'Kategorijos pavadinimas',
+  'propose_category_name_placeholder' => 'Pvz., antenos, priedai, komponentai',
+  'propose_category_sender_name_label' => 'Jūsų vardas',
+  'propose_category_sender_email_label' => 'Jūsų el. paštas',
+  'propose_category_details_label' => 'Išsami informacija / pagrindimas',
+  'propose_category_details_placeholder' => 'Paaiškinkite, kokio tipo skelbimams ji skirta arba kodėl naudinga.',
+  'propose_category_submit' => 'Siųsti pasiūlymą',
+  'propose_category_cancel' => 'Atšaukti',
+  'propose_category_close' => 'Uždaryti',
+  'propose_category_invalid' => 'Teisingai užpildykite pasiūlymo formą.',
+  'propose_category_sent' => 'Kategorijos pasiūlymas išsiųstas.',
+  'propose_category_failed' => 'Pasiūlymo nepavyko išsiųsti. Bandykite vėliau.',
 );

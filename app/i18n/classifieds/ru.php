@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Объявления',
   'lead' => 'Публикуйте и просматривайте клубные радиолюбительские объявления.',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Объявление добавлено в избранное.',
   'favorite_removed_msg' => 'Объявление удалено из избранного.',
   'favorite_label' => 'Любимый',
+  'propose_category' => 'Предложить категорию',
+  'propose_category_subject' => 'Предложение категории для объявлений ON4CRD',
+  'propose_category_intro' => 'Опишите желаемую категорию. Клуб проверит ее перед добавлением в объявления.',
+  'propose_category_email_intro' => 'Новое предложение категории для объявлений ON4CRD.',
+  'propose_category_name_label' => 'Название категории',
+  'propose_category_name_placeholder' => 'Например: антенны, аксессуары, компоненты',
+  'propose_category_sender_name_label' => 'Ваше имя',
+  'propose_category_sender_email_label' => 'Ваш e-mail',
+  'propose_category_details_label' => 'Подробности / обоснование',
+  'propose_category_details_placeholder' => 'Объясните, для какого типа объявлений она нужна или чем полезна.',
+  'propose_category_submit' => 'Отправить предложение',
+  'propose_category_cancel' => 'Отмена',
+  'propose_category_close' => 'Закрыть',
+  'propose_category_invalid' => 'Пожалуйста, корректно заполните форму предложения.',
+  'propose_category_sent' => 'Предложение категории отправлено.',
+  'propose_category_failed' => 'Не удалось отправить предложение. Попробуйте позже.',
 );

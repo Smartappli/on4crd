@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'वर्गीकृत विज्ञापन',
   'lead' => 'क्लब के हैम रेडियो विज्ञापन पोस्ट करें और देखें।',
   'storage_unavailable' => 'विज्ञापन संग्रह अस्थायी रूप से उपलब्ध नहीं है।',
   'new_ad' => 'विज्ञापन पोस्ट करें',
-  'propose_ad' => 'एक वर्गीकृत विज्ञापन प्रस्तावित करें',
+  'propose_ad' => 'विज्ञापन प्रस्तावित करें',
   'my_ads' => 'मेरे विज्ञापन',
   'all_ads' => 'हाल के विज्ञापन',
   'save' => 'सहेजें',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'विज्ञापन पसंदीदा में जोड़ा गया.',
   'favorite_removed_msg' => 'विज्ञापन पसंदीदा से हटा दिया गया.',
   'favorite_label' => 'पसंदीदा',
+  'propose_category' => 'श्रेणी प्रस्तावित करें',
+  'propose_category_subject' => 'ON4CRD छोटी घोषणाओं के लिए श्रेणी प्रस्ताव',
+  'propose_category_intro' => 'इच्छित श्रेणी का वर्णन करें। क्लब इसे छोटी घोषणाओं में जोड़ने से पहले समीक्षा करेगा।',
+  'propose_category_email_intro' => 'ON4CRD छोटी घोषणाओं के लिए नया श्रेणी प्रस्ताव।',
+  'propose_category_name_label' => 'श्रेणी का नाम',
+  'propose_category_name_placeholder' => 'उदाहरण: एंटेना, सहायक उपकरण, घटक',
+  'propose_category_sender_name_label' => 'आपका नाम',
+  'propose_category_sender_email_label' => 'आपका ईमेल',
+  'propose_category_details_label' => 'विवरण / कारण',
+  'propose_category_details_placeholder' => 'बताएं कि यह किस प्रकार के विज्ञापनों के लिए है या यह क्यों उपयोगी है।',
+  'propose_category_submit' => 'प्रस्ताव भेजें',
+  'propose_category_cancel' => 'रद्द करें',
+  'propose_category_close' => 'बंद करें',
+  'propose_category_invalid' => 'कृपया प्रस्ताव फ़ॉर्म सही ढंग से पूरा करें।',
+  'propose_category_sent' => 'श्रेणी प्रस्ताव भेजा गया।',
+  'propose_category_failed' => 'प्रस्ताव भेजा नहीं जा सका। बाद में फिर प्रयास करें।',
 );

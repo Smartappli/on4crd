@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Klassifikati',
   'lead' => 'Post u ara r-reklami tar-radju tad-dilettanti tal-klabb.',
   'storage_unavailable' => 'Il-ħażna tal-klassifika hija temporanjament mhux disponibbli.',
   'new_ad' => 'Ibgħat reklam',
-  'propose_ad' => 'Ipproponi reklam klassifikat',
+  'propose_ad' => 'Ipproponi reklam',
   'my_ads' => 'Ir-reklami tiegħi',
   'all_ads' => 'Avviżi riċenti',
   'save' => 'Ħlief',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Avviż miżjud mal-favoriti.',
   'favorite_removed_msg' => 'Reklam imneħħi mill-favoriti.',
   'favorite_label' => 'Favorit',
+  'propose_category' => 'Ipproponi kategorija',
+  'propose_category_subject' => 'Proposta ta’ kategorija għar-reklami żgħar ON4CRD',
+  'propose_category_intro' => 'Iddeskrivi l-kategorija mixtieqa. Il-klabb jirrevediha qabel iżidha mar-reklami żgħar.',
+  'propose_category_email_intro' => 'Proposta ġdida ta’ kategorija għar-reklami żgħar ON4CRD.',
+  'propose_category_name_label' => 'Isem il-kategorija',
+  'propose_category_name_placeholder' => 'Eż. antenni, aċċessorji, komponenti',
+  'propose_category_sender_name_label' => 'Ismek',
+  'propose_category_sender_email_label' => 'L-e-mail tiegħek',
+  'propose_category_details_label' => 'Dettalji / ġustifikazzjoni',
+  'propose_category_details_placeholder' => 'Spjega x’tip ta’ reklami tkopri jew għaliex hija utli.',
+  'propose_category_submit' => 'Ibgħat il-proposta',
+  'propose_category_cancel' => 'Ikkanċella',
+  'propose_category_close' => 'Agħlaq',
+  'propose_category_invalid' => 'Jekk jogħġbok imla l-formola tal-proposta b’mod korrett.',
+  'propose_category_sent' => 'Il-proposta tal-kategorija ntbagħtet.',
+  'propose_category_failed' => 'Il-proposta ma setgħetx tintbagħat. Erġa’ pprova aktar tard.',
 );

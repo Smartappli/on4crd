@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Inzerce',
   'lead' => 'Posílejte a prohlížejte si klubové radioamatérské inzeráty.',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Oznámení přidáno do oblíbených.',
   'favorite_removed_msg' => 'Reklama odstraněna z oblíbených.',
   'favorite_label' => 'Oblíbené',
+  'propose_category' => 'Navrhnout kategorii',
+  'propose_category_subject' => 'Návrh kategorie pro inzerci ON4CRD',
+  'propose_category_intro' => 'Popište požadovanou kategorii. Klub ji před přidáním do inzerce zkontroluje.',
+  'propose_category_email_intro' => 'Nový návrh kategorie pro inzerci ON4CRD.',
+  'propose_category_name_label' => 'Název kategorie',
+  'propose_category_name_placeholder' => 'Např. antény, příslušenství, součástky',
+  'propose_category_sender_name_label' => 'Vaše jméno',
+  'propose_category_sender_email_label' => 'Váš e-mail',
+  'propose_category_details_label' => 'Detaily / zdůvodnění',
+  'propose_category_details_placeholder' => 'Vysvětlete, jaký typ inzerátů zahrnuje nebo proč je užitečná.',
+  'propose_category_submit' => 'Odeslat návrh',
+  'propose_category_cancel' => 'Zrušit',
+  'propose_category_close' => 'Zavřít',
+  'propose_category_invalid' => 'Vyplňte prosím formulář správně.',
+  'propose_category_sent' => 'Návrh kategorie odeslán.',
+  'propose_category_failed' => 'Návrh se nepodařilo odeslat. Zkuste to později.',
 );

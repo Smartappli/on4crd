@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Apróhirdetések',
   'lead' => 'Tegye fel és tekintse meg a klub rádióamatőr hirdetéseit.',
   'storage_unavailable' => 'Az apróhirdetések tárhelye átmenetileg nem érhető el.',
   'new_ad' => 'Adj fel egy hirdetést',
-  'propose_ad' => 'Apróhirdetés javaslata',
+  'propose_ad' => 'Hirdetés javaslata',
   'my_ads' => 'Saját hirdetéseim',
   'all_ads' => 'Friss bejelentések',
   'save' => 'Mentés',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'A bejelentés hozzáadva a kedvencekhez.',
   'favorite_removed_msg' => 'A hirdetés eltávolítva a kedvencek közül.',
   'favorite_label' => 'Kedvenc',
+  'propose_category' => 'Kategória javaslata',
+  'propose_category_subject' => 'Kategóriajavaslat az ON4CRD apróhirdetésekhez',
+  'propose_category_intro' => 'Írja le a kívánt kategóriát. A klub ellenőrzi, mielőtt hozzáadja az apróhirdetésekhez.',
+  'propose_category_email_intro' => 'Új kategóriajavaslat az ON4CRD apróhirdetésekhez.',
+  'propose_category_name_label' => 'Kategória neve',
+  'propose_category_name_placeholder' => 'Pl. antennák, tartozékok, alkatrészek',
+  'propose_category_sender_name_label' => 'Az Ön neve',
+  'propose_category_sender_email_label' => 'Az Ön e-mail címe',
+  'propose_category_details_label' => 'Részletek / indoklás',
+  'propose_category_details_placeholder' => 'Magyarázza el, milyen hirdetésekre vonatkozik vagy miért hasznos.',
+  'propose_category_submit' => 'Javaslat elküldése',
+  'propose_category_cancel' => 'Mégse',
+  'propose_category_close' => 'Bezárás',
+  'propose_category_invalid' => 'Kérjük, töltse ki helyesen a javaslati űrlapot.',
+  'propose_category_sent' => 'Kategóriajavaslat elküldve.',
+  'propose_category_failed' => 'A javaslatot nem sikerült elküldeni. Próbálja újra később.',
 );

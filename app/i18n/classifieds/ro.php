@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Anunturi',
   'lead' => 'Postați și vizualizați reclamele de radio amatori ale clubului.',
   'storage_unavailable' => 'Stocarea de anunțuri este temporar indisponibilă.',
   'new_ad' => 'Postați un anunț',
-  'propose_ad' => 'Propune un anunț clasificat',
+  'propose_ad' => 'Propune un anunț',
   'my_ads' => 'Reclamele mele',
   'all_ads' => 'Anunțuri recente',
   'save' => 'Salva',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Anunț adăugat la favorite.',
   'favorite_removed_msg' => 'Anunț eliminat din favorite.',
   'favorite_label' => 'Favorit',
+  'propose_category' => 'Propune o categorie',
+  'propose_category_subject' => 'Propunere de categorie pentru anunțurile ON4CRD',
+  'propose_category_intro' => 'Descrieți categoria dorită. Clubul o va verifica înainte de a o adăuga la anunțuri.',
+  'propose_category_email_intro' => 'Propunere nouă de categorie pentru anunțurile ON4CRD.',
+  'propose_category_name_label' => 'Numele categoriei',
+  'propose_category_name_placeholder' => 'Ex. antene, accesorii, componente',
+  'propose_category_sender_name_label' => 'Numele dvs.',
+  'propose_category_sender_email_label' => 'E-mailul dvs.',
+  'propose_category_details_label' => 'Detalii / justificare',
+  'propose_category_details_placeholder' => 'Explicați ce tip de anunțuri vizează sau de ce este utilă.',
+  'propose_category_submit' => 'Trimite propunerea',
+  'propose_category_cancel' => 'Anulează',
+  'propose_category_close' => 'Închide',
+  'propose_category_invalid' => 'Completați corect formularul de propunere.',
+  'propose_category_sent' => 'Propunerea de categorie a fost trimisă.',
+  'propose_category_failed' => 'Propunerea nu a putut fi trimisă. Încercați mai târziu.',
 );

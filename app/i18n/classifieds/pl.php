@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Ogłoszenia',
   'lead' => 'Publikuj i oglądaj reklamy klubu w amatorskim radiu.',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Ogłoszenie dodane do ulubionych.',
   'favorite_removed_msg' => 'Ogłoszenie usunięte z ulubionych.',
   'favorite_label' => 'Ulubiony',
+  'propose_category' => 'Zaproponuj kategorię',
+  'propose_category_subject' => 'Propozycja kategorii dla ogłoszeń ON4CRD',
+  'propose_category_intro' => 'Opisz potrzebną kategorię. Klub sprawdzi ją przed dodaniem do ogłoszeń.',
+  'propose_category_email_intro' => 'Nowa propozycja kategorii dla ogłoszeń ON4CRD.',
+  'propose_category_name_label' => 'Nazwa kategorii',
+  'propose_category_name_placeholder' => 'Np. anteny, akcesoria, komponenty',
+  'propose_category_sender_name_label' => 'Twoje imię i nazwisko',
+  'propose_category_sender_email_label' => 'Twój e-mail',
+  'propose_category_details_label' => 'Szczegóły / uzasadnienie',
+  'propose_category_details_placeholder' => 'Wyjaśnij, jakiego typu ogłoszeń dotyczy lub dlaczego jest przydatna.',
+  'propose_category_submit' => 'Wyślij propozycję',
+  'propose_category_cancel' => 'Anuluj',
+  'propose_category_close' => 'Zamknij',
+  'propose_category_invalid' => 'Wypełnij poprawnie formularz propozycji.',
+  'propose_category_sent' => 'Propozycja kategorii wysłana.',
+  'propose_category_failed' => 'Nie udało się wysłać propozycji. Spróbuj później.',
 );

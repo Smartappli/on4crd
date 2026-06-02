@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'শ্রেণিবদ্ধ বিজ্ঞাপন',
   'lead' => 'ক্লাবের হ্যাম রেডিও বিজ্ঞাপন পোস্ট করুন এবং দেখুন।',
   'storage_unavailable' => 'বিজ্ঞাপনের সংরক্ষণাগার সাময়িকভাবে উপলভ্য নয়।',
   'new_ad' => 'বিজ্ঞাপন পোস্ট করুন',
-  'propose_ad' => 'একটি শ্রেণিবদ্ধ বিজ্ঞাপন প্রস্তাব করুন',
+  'propose_ad' => 'একটি বিজ্ঞাপন প্রস্তাব করুন',
   'my_ads' => 'আমার বিজ্ঞাপন',
   'all_ads' => 'সাম্প্রতিক বিজ্ঞাপন',
   'save' => 'সংরক্ষণ',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'বিজ্ঞাপন ফেভারিট যোগ করা হয়েছে.',
   'favorite_removed_msg' => 'বিজ্ঞাপন প্রিয় থেকে সরানো হয়েছে.',
   'favorite_label' => 'প্রিয়',
+  'propose_category' => 'একটি বিভাগ প্রস্তাব করুন',
+  'propose_category_subject' => 'ON4CRD ছোট বিজ্ঞাপনের জন্য বিভাগ প্রস্তাব',
+  'propose_category_intro' => 'কাঙ্ক্ষিত বিভাগটি বর্ণনা করুন। ক্লাব এটি ছোট বিজ্ঞাপনে যোগ করার আগে পর্যালোচনা করবে।',
+  'propose_category_email_intro' => 'ON4CRD ছোট বিজ্ঞাপনের জন্য নতুন বিভাগ প্রস্তাব।',
+  'propose_category_name_label' => 'বিভাগের নাম',
+  'propose_category_name_placeholder' => 'যেমন: অ্যান্টেনা, আনুষঙ্গিক, উপাদান',
+  'propose_category_sender_name_label' => 'আপনার নাম',
+  'propose_category_sender_email_label' => 'আপনার ইমেল',
+  'propose_category_details_label' => 'বিস্তারিত / যুক্তি',
+  'propose_category_details_placeholder' => 'কোন ধরনের বিজ্ঞাপনের জন্য বা কেন এটি উপকারী তা ব্যাখ্যা করুন।',
+  'propose_category_submit' => 'প্রস্তাব পাঠান',
+  'propose_category_cancel' => 'বাতিল',
+  'propose_category_close' => 'বন্ধ করুন',
+  'propose_category_invalid' => 'অনুগ্রহ করে প্রস্তাব ফর্মটি সঠিকভাবে পূরণ করুন।',
+  'propose_category_sent' => 'বিভাগ প্রস্তাব পাঠানো হয়েছে।',
+  'propose_category_failed' => 'প্রস্তাব পাঠানো যায়নি। পরে আবার চেষ্টা করুন।',
 );

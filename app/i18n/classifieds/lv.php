@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Sludinājumi',
   'lead' => 'Ievietojiet un skatiet kluba amatieru radio sludinājumus.',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Paziņojums pievienots izlasei.',
   'favorite_removed_msg' => 'Reklāma noņemta no izlases.',
   'favorite_label' => 'Mīļākais',
+  'propose_category' => 'Ierosināt kategoriju',
+  'propose_category_subject' => 'Kategorijas priekšlikums ON4CRD sludinājumiem',
+  'propose_category_intro' => 'Aprakstiet vēlamo kategoriju. Klubs to pārbaudīs pirms pievienošanas sludinājumiem.',
+  'propose_category_email_intro' => 'Jauns kategorijas priekšlikums ON4CRD sludinājumiem.',
+  'propose_category_name_label' => 'Kategorijas nosaukums',
+  'propose_category_name_placeholder' => 'Piem., antenas, piederumi, komponenti',
+  'propose_category_sender_name_label' => 'Jūsu vārds',
+  'propose_category_sender_email_label' => 'Jūsu e-pasts',
+  'propose_category_details_label' => 'Detaļas / pamatojums',
+  'propose_category_details_placeholder' => 'Paskaidrojiet, kāda veida sludinājumiem tā paredzēta vai kāpēc tā ir noderīga.',
+  'propose_category_submit' => 'Nosūtīt priekšlikumu',
+  'propose_category_cancel' => 'Atcelt',
+  'propose_category_close' => 'Aizvērt',
+  'propose_category_invalid' => 'Lūdzu, pareizi aizpildiet priekšlikuma veidlapu.',
+  'propose_category_sent' => 'Kategorijas priekšlikums nosūtīts.',
+  'propose_category_failed' => 'Priekšlikumu neizdevās nosūtīt. Mēģiniet vēlāk.',
 );

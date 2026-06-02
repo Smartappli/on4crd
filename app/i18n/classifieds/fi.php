@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Luokitellut',
   'lead' => 'Julkaise ja katso seuran radioamatöörimainoksia.',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Ilmoitus lisätty suosikkeihin.',
   'favorite_removed_msg' => 'Mainos poistettu suosikeista.',
   'favorite_label' => 'Suosikki',
+  'propose_category' => 'Ehdota kategoriaa',
+  'propose_category_subject' => 'Kategoriaehdotus ON4CRD:n ilmoituksille',
+  'propose_category_intro' => 'Kuvaile haluttu kategoria. Kerho tarkistaa sen ennen lisäämistä ilmoituksiin.',
+  'propose_category_email_intro' => 'Uusi kategoriaehdotus ON4CRD:n ilmoituksille.',
+  'propose_category_name_label' => 'Kategorian nimi',
+  'propose_category_name_placeholder' => 'Esim. antennit, tarvikkeet, komponentit',
+  'propose_category_sender_name_label' => 'Nimesi',
+  'propose_category_sender_email_label' => 'Sähköpostisi',
+  'propose_category_details_label' => 'Tiedot / perustelu',
+  'propose_category_details_placeholder' => 'Kerro, minkä tyyppisiä ilmoituksia se koskee tai miksi kategoria on hyödyllinen.',
+  'propose_category_submit' => 'Lähetä ehdotus',
+  'propose_category_cancel' => 'Peruuta',
+  'propose_category_close' => 'Sulje',
+  'propose_category_invalid' => 'Täytä ehdotuslomake oikein.',
+  'propose_category_sent' => 'Kategoriaehdotus lähetetty.',
+  'propose_category_failed' => 'Ehdotusta ei voitu lähettää. Yritä myöhemmin uudelleen.',
 );

@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Iklan baris',
   'lead' => 'Pasang dan lihat iklan baris radio amatir klub.',
   'storage_unavailable' => 'Penyimpanan iklan baris sementara tidak tersedia.',
   'new_ad' => 'Pasang iklan',
-  'propose_ad' => 'Ajukan iklan baris',
+  'propose_ad' => 'Usulkan iklan',
   'my_ads' => 'Iklan saya',
   'all_ads' => 'Iklan terbaru',
   'save' => 'Simpan',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Iklan ditambahkan ke favorit.',
   'favorite_removed_msg' => 'Iklan dihapus dari favorit.',
   'favorite_label' => 'Favorit',
+  'propose_category' => 'Usulkan kategori',
+  'propose_category_subject' => 'Usulan kategori untuk iklan baris ON4CRD',
+  'propose_category_intro' => 'Jelaskan kategori yang diinginkan. Klub akan meninjaunya sebelum menambahkannya ke iklan baris.',
+  'propose_category_email_intro' => 'Usulan kategori baru untuk iklan baris ON4CRD.',
+  'propose_category_name_label' => 'Nama kategori',
+  'propose_category_name_placeholder' => 'Mis. antena, aksesori, komponen',
+  'propose_category_sender_name_label' => 'Nama Anda',
+  'propose_category_sender_email_label' => 'E-mail Anda',
+  'propose_category_details_label' => 'Detail / alasan',
+  'propose_category_details_placeholder' => 'Jelaskan jenis iklan yang terkait atau mengapa kategori ini berguna.',
+  'propose_category_submit' => 'Kirim usulan',
+  'propose_category_cancel' => 'Batal',
+  'propose_category_close' => 'Tutup',
+  'propose_category_invalid' => 'Harap lengkapi formulir usulan dengan benar.',
+  'propose_category_sent' => 'Usulan kategori terkirim.',
+  'propose_category_failed' => 'Usulan tidak dapat dikirim. Coba lagi nanti.',
 );

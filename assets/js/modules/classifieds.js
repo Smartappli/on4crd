@@ -1,6 +1,6 @@
 (function () {
   const dialog = document.getElementById('classifieds-category-dialog');
-  if (!(dialog instanceof HTMLDialogElement)) {
+  if (typeof HTMLDialogElement === 'undefined' || !(dialog instanceof HTMLDialogElement)) {
     return;
   }
 

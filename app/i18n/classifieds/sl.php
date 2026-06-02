@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Mali oglasi',
   'lead' => 'Objavite in si oglejte klubske radioamaterske oglase.',
   'storage_unavailable' => 'Shramba za male oglase začasno ni na voljo.',
   'new_ad' => 'Objavite oglas',
-  'propose_ad' => 'Predlagaj mali oglas',
+  'propose_ad' => 'Predlagaj oglas',
   'my_ads' => 'Moji oglasi',
   'all_ads' => 'Zadnje objave',
   'save' => 'Shrani',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Obvestilo dodano med priljubljene.',
   'favorite_removed_msg' => 'Oglas odstranjen iz priljubljenih.',
   'favorite_label' => 'Najljubša',
+  'propose_category' => 'Predlagaj kategorijo',
+  'propose_category_subject' => 'Predlog kategorije za male oglase ON4CRD',
+  'propose_category_intro' => 'Opišite želeno kategorijo. Klub jo bo pregledal, preden jo doda med oglase.',
+  'propose_category_email_intro' => 'Nov predlog kategorije za male oglase ON4CRD.',
+  'propose_category_name_label' => 'Ime kategorije',
+  'propose_category_name_placeholder' => 'Npr. antene, dodatki, komponente',
+  'propose_category_sender_name_label' => 'Vaše ime',
+  'propose_category_sender_email_label' => 'Vaš e-mail',
+  'propose_category_details_label' => 'Podrobnosti / utemeljitev',
+  'propose_category_details_placeholder' => 'Pojasnite, katero vrsto oglasov zajema ali zakaj je koristna.',
+  'propose_category_submit' => 'Pošlji predlog',
+  'propose_category_cancel' => 'Prekliči',
+  'propose_category_close' => 'Zapri',
+  'propose_category_invalid' => 'Pravilno izpolnite obrazec za predlog.',
+  'propose_category_sent' => 'Predlog kategorije poslan.',
+  'propose_category_failed' => 'Predloga ni bilo mogoče poslati. Poskusite pozneje.',
 );

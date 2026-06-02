@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'クラシファイド',
   'lead' => 'クラブのアマチュア無線向け売買・募集情報を投稿、閲覧できます。',
   'storage_unavailable' => '掲示板の保存領域は一時的に利用できません。',
   'new_ad' => '広告を投稿',
-  'propose_ad' => 'クラシファイド広告を提案',
+  'propose_ad' => '広告を提案する',
   'my_ads' => '自分の広告',
   'all_ads' => '最近の広告',
   'save' => '保存',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => '広告がお気に入りに追加されました。',
   'favorite_removed_msg' => '広告がお気に入りから削除されました。',
   'favorite_label' => 'お気に入り',
+  'propose_category' => 'カテゴリーを提案する',
+  'propose_category_subject' => 'ON4CRDクラシファイドのカテゴリー提案',
+  'propose_category_intro' => '希望するカテゴリーを説明してください。クラブが確認してからクラシファイドに追加します。',
+  'propose_category_email_intro' => 'ON4CRDクラシファイドへの新しいカテゴリー提案。',
+  'propose_category_name_label' => 'カテゴリー名',
+  'propose_category_name_placeholder' => '例: アンテナ、アクセサリー、部品',
+  'propose_category_sender_name_label' => 'お名前',
+  'propose_category_sender_email_label' => 'メールアドレス',
+  'propose_category_details_label' => '詳細 / 理由',
+  'propose_category_details_placeholder' => '対象となる広告の種類や、このカテゴリーが有用な理由を説明してください。',
+  'propose_category_submit' => '提案を送信',
+  'propose_category_cancel' => 'キャンセル',
+  'propose_category_close' => '閉じる',
+  'propose_category_invalid' => '提案フォームを正しく入力してください。',
+  'propose_category_sent' => 'カテゴリー提案を送信しました。',
+  'propose_category_failed' => '提案を送信できませんでした。後でもう一度お試しください。',
 );

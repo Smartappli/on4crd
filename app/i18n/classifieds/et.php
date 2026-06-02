@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Kuulutused',
   'lead' => 'Postitage ja vaadake klubi raadioamatöörkuulutusi.',
   'storage_unavailable' => 'Kuulutuste salvestusruum pole ajutiselt saadaval.',
   'new_ad' => 'Postitage kuulutus',
-  'propose_ad' => 'Paku välja kuulutus',
+  'propose_ad' => 'Paku kuulutus',
   'my_ads' => 'Minu reklaamid',
   'all_ads' => 'Viimased teadaanded',
   'save' => 'Salvesta',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Teade lisati lemmikute hulka.',
   'favorite_removed_msg' => 'Kuulutus eemaldati lemmikute hulgast.',
   'favorite_label' => 'Lemmik',
+  'propose_category' => 'Paku kategooria',
+  'propose_category_subject' => 'Kategooria ettepanek ON4CRD kuulutustele',
+  'propose_category_intro' => 'Kirjeldage soovitud kategooriat. Klubi vaatab selle üle enne kuulutustesse lisamist.',
+  'propose_category_email_intro' => 'Uus kategooria ettepanek ON4CRD kuulutustele.',
+  'propose_category_name_label' => 'Kategooria nimi',
+  'propose_category_name_placeholder' => 'Nt antennid, tarvikud, komponendid',
+  'propose_category_sender_name_label' => 'Teie nimi',
+  'propose_category_sender_email_label' => 'Teie e-post',
+  'propose_category_details_label' => 'Üksikasjad / põhjendus',
+  'propose_category_details_placeholder' => 'Selgitage, millist tüüpi kuulutusi see hõlmab või miks see kasulik on.',
+  'propose_category_submit' => 'Saada ettepanek',
+  'propose_category_cancel' => 'Tühista',
+  'propose_category_close' => 'Sule',
+  'propose_category_invalid' => 'Palun täitke ettepaneku vorm õigesti.',
+  'propose_category_sent' => 'Kategooria ettepanek saadetud.',
+  'propose_category_failed' => 'Ettepanekut ei saanud saata. Proovige hiljem uuesti.',
 );

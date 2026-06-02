@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Annonser',
   'lead' => 'Lägg upp och se klubbens amatörradioannonser.',
   'storage_unavailable' => 'Annonslagring är tillfälligt otillgänglig.',
   'new_ad' => 'Lägg upp en annons',
-  'propose_ad' => 'Föreslå en radannons',
+  'propose_ad' => 'Föreslå en annons',
   'my_ads' => 'Mina annonser',
   'all_ads' => 'Senaste meddelanden',
   'save' => 'Spara',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Meddelande har lagts till i favoriter.',
   'favorite_removed_msg' => 'Annons borttagen från favoriter.',
   'favorite_label' => 'Favorit',
+  'propose_category' => 'Föreslå en kategori',
+  'propose_category_subject' => 'Kategoriförslag för ON4CRD-annonser',
+  'propose_category_intro' => 'Beskriv önskad kategori. Klubben granskar den innan den läggs till i annonserna.',
+  'propose_category_email_intro' => 'Nytt kategoriförslag för ON4CRD-annonser.',
+  'propose_category_name_label' => 'Kategorinamn',
+  'propose_category_name_placeholder' => 'T.ex. antenner, tillbehör, komponenter',
+  'propose_category_sender_name_label' => 'Ditt namn',
+  'propose_category_sender_email_label' => 'Din e-post',
+  'propose_category_details_label' => 'Detaljer / motivering',
+  'propose_category_details_placeholder' => 'Förklara vilken typ av annonser den gäller eller varför den är användbar.',
+  'propose_category_submit' => 'Skicka förslag',
+  'propose_category_cancel' => 'Avbryt',
+  'propose_category_close' => 'Stäng',
+  'propose_category_invalid' => 'Fyll i förslagsformuläret korrekt.',
+  'propose_category_sent' => 'Kategoriförslag skickat.',
+  'propose_category_failed' => 'Förslaget kunde inte skickas. Försök igen senare.',
 );

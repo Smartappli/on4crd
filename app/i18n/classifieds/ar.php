@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'الإعلانات المبوبة',
   'lead' => 'انشر وتصفح إعلانات هواة الراديو الخاصة بالنادي.',
   'storage_unavailable' => 'تخزين الإعلانات غير متاح مؤقتًا.',
   'new_ad' => 'نشر إعلان',
-  'propose_ad' => 'اقتراح إعلان مبوب',
+  'propose_ad' => 'اقتراح إعلان',
   'my_ads' => 'إعلاناتي',
   'all_ads' => 'أحدث الإعلانات',
   'save' => 'حفظ',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'تمت إضافة الإعلان إلى المفضلة.',
   'favorite_removed_msg' => 'تمت إزالة الإعلان من المفضلة.',
   'favorite_label' => 'مفضل',
+  'propose_category' => 'اقتراح فئة',
+  'propose_category_subject' => 'اقتراح فئة لإعلانات ON4CRD الصغيرة',
+  'propose_category_intro' => 'صف الفئة المطلوبة. سيقوم النادي بمراجعتها قبل إضافتها إلى الإعلانات الصغيرة.',
+  'propose_category_email_intro' => 'اقتراح فئة جديد لإعلانات ON4CRD الصغيرة.',
+  'propose_category_name_label' => 'اسم الفئة',
+  'propose_category_name_placeholder' => 'مثال: هوائيات، ملحقات، مكونات',
+  'propose_category_sender_name_label' => 'اسمك',
+  'propose_category_sender_email_label' => 'بريدك الإلكتروني',
+  'propose_category_details_label' => 'التفاصيل / المبرر',
+  'propose_category_details_placeholder' => 'اشرح نوع الإعلانات المعنية أو سبب فائدة هذه الفئة.',
+  'propose_category_submit' => 'إرسال الاقتراح',
+  'propose_category_cancel' => 'إلغاء',
+  'propose_category_close' => 'إغلاق',
+  'propose_category_invalid' => 'يرجى إكمال نموذج الاقتراح بشكل صحيح.',
+  'propose_category_sent' => 'تم إرسال اقتراح الفئة.',
+  'propose_category_failed' => 'تعذر إرسال الاقتراح. حاول مرة أخرى لاحقًا.',
 );

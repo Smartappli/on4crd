@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Αγγελίες',
   'lead' => 'Δημοσιεύστε και δείτε τις ραδιοερασιτεχνικές διαφημίσεις του συλλόγου.',
   'storage_unavailable' => 'Η αποθήκευση αγγελιών δεν είναι προσωρινά διαθέσιμη.',
   'new_ad' => 'Δημοσιεύστε μια αγγελία',
-  'propose_ad' => 'Προτείνετε μια μικρή αγγελία',
+  'propose_ad' => 'Προτείνετε μια αγγελία',
   'my_ads' => 'Οι διαφημίσεις μου',
   'all_ads' => 'Πρόσφατες ανακοινώσεις',
   'save' => 'Αποθήκευση',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Η ανακοίνωση προστέθηκε στα αγαπημένα.',
   'favorite_removed_msg' => 'Η διαφήμιση αφαιρέθηκε από τα αγαπημένα.',
   'favorite_label' => 'Αγαπημένο',
+  'propose_category' => 'Προτείνετε μια κατηγορία',
+  'propose_category_subject' => 'Πρόταση κατηγορίας για τις αγγελίες ON4CRD',
+  'propose_category_intro' => 'Περιγράψτε την επιθυμητή κατηγορία. Ο σύλλογος θα την ελέγξει πριν την προσθέσει στις αγγελίες.',
+  'propose_category_email_intro' => 'Νέα πρόταση κατηγορίας για τις αγγελίες ON4CRD.',
+  'propose_category_name_label' => 'Όνομα κατηγορίας',
+  'propose_category_name_placeholder' => 'Π.χ. κεραίες, αξεσουάρ, εξαρτήματα',
+  'propose_category_sender_name_label' => 'Το όνομά σας',
+  'propose_category_sender_email_label' => 'Το e-mail σας',
+  'propose_category_details_label' => 'Λεπτομέρειες / αιτιολόγηση',
+  'propose_category_details_placeholder' => 'Εξηγήστε ποιον τύπο αγγελιών αφορά ή γιατί είναι χρήσιμη.',
+  'propose_category_submit' => 'Αποστολή πρότασης',
+  'propose_category_cancel' => 'Ακύρωση',
+  'propose_category_close' => 'Κλείσιμο',
+  'propose_category_invalid' => 'Συμπληρώστε σωστά τη φόρμα πρότασης.',
+  'propose_category_sent' => 'Η πρόταση κατηγορίας στάλθηκε.',
+  'propose_category_failed' => 'Δεν ήταν δυνατή η αποστολή της πρότασης. Δοκιμάστε ξανά αργότερα.',
 );

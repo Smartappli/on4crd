@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => '分类广告',
   'lead' => '发布和浏览俱乐部业余无线电分类广告。',
   'storage_unavailable' => '分类广告存储暂时不可用。',
   'new_ad' => '发布广告',
-  'propose_ad' => '提交分类广告',
+  'propose_ad' => '提议一个广告',
   'my_ads' => '我的广告',
   'all_ads' => '最新广告',
   'save' => '保存',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => '广告已添加至收藏夹。',
   'favorite_removed_msg' => '广告已从收藏夹中删除。',
   'favorite_label' => '最喜欢的',
+  'propose_category' => '提议一个类别',
+  'propose_category_subject' => 'ON4CRD 分类广告类别提议',
+  'propose_category_intro' => '请描述所需类别。俱乐部会审核后再添加到分类广告中。',
+  'propose_category_email_intro' => 'ON4CRD 分类广告的新类别提议。',
+  'propose_category_name_label' => '类别名称',
+  'propose_category_name_placeholder' => '例如：天线、配件、组件',
+  'propose_category_sender_name_label' => '您的姓名',
+  'propose_category_sender_email_label' => '您的电子邮箱',
+  'propose_category_details_label' => '详情 / 理由',
+  'propose_category_details_placeholder' => '说明涉及的广告类型或该类别的用途。',
+  'propose_category_submit' => '发送提议',
+  'propose_category_cancel' => '取消',
+  'propose_category_close' => '关闭',
+  'propose_category_invalid' => '请正确填写提议表单。',
+  'propose_category_sent' => '类别提议已发送。',
+  'propose_category_failed' => '无法发送提议。请稍后再试。',
 );

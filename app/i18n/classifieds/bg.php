@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 return array (
   'title' => 'Обяви',
   'lead' => 'Публикувайте и разглеждайте радиолюбителските обяви на клуба.',
   'storage_unavailable' => 'Хранилището за малки обяви е временно недостъпно.',
   'new_ad' => 'Публикувайте обява',
-  'propose_ad' => 'Предложете малка обява',
+  'propose_ad' => 'Предложете обява',
   'my_ads' => 'Моите обяви',
   'all_ads' => 'Последни съобщения',
   'save' => 'Запазване',
@@ -65,4 +63,20 @@ return array (
   'favorite_added_msg' => 'Обявата е добавена към любими.',
   'favorite_removed_msg' => 'Рекламата е премахната от любими.',
   'favorite_label' => 'Любима',
+  'propose_category' => 'Предложете категория',
+  'propose_category_subject' => 'Предложение за категория за малките обяви на ON4CRD',
+  'propose_category_intro' => 'Опишете желаната категория. Клубът ще я прегледа, преди да я добави към малките обяви.',
+  'propose_category_email_intro' => 'Ново предложение за категория за малките обяви на ON4CRD.',
+  'propose_category_name_label' => 'Име на категорията',
+  'propose_category_name_placeholder' => 'Напр. антени, аксесоари, компоненти',
+  'propose_category_sender_name_label' => 'Вашето име',
+  'propose_category_sender_email_label' => 'Вашият e-mail',
+  'propose_category_details_label' => 'Подробности / обосновка',
+  'propose_category_details_placeholder' => 'Обяснете какъв тип обяви ще включва или защо е полезна.',
+  'propose_category_submit' => 'Изпрати предложението',
+  'propose_category_cancel' => 'Отказ',
+  'propose_category_close' => 'Затвори',
+  'propose_category_invalid' => 'Моля, попълнете правилно формуляра.',
+  'propose_category_sent' => 'Предложението за категория е изпратено.',
+  'propose_category_failed' => 'Предложението не можа да бъде изпратено. Опитайте по-късно.',
 );
