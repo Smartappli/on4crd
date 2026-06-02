@@ -590,6 +590,23 @@ function maidenhead_to_coordinates(string $locator): ?array
     ];
 }
 
+function extract_kp_measurement_from_row(array $row): ?array
+{
+    $timestamp = trim((string) ($row['time_tag'] ?? $row['time'] ?? $row['timestamp'] ?? $row[0] ?? ''));
+    $kpValue = $row['Kp'] ?? $row['kp'] ?? $row['kp_index'] ?? $row[1] ?? null;
+    if (is_string($kpValue)) {
+        $kpValue = str_replace(',', '.', trim($kpValue));
+    }
+    if ($timestamp === '' || !is_numeric($kpValue)) {
+        return null;
+    }
+
+    return [
+        'timestamp' => $timestamp,
+        'kp' => (float) $kpValue,
+    ];
+}
+
 function extract_latest_kp_measurement(array $payload): ?array
 {
     if ($payload === []) {
@@ -602,22 +619,64 @@ function extract_latest_kp_measurement(array $payload): ?array
             continue;
         }
 
-        $timestamp = trim((string) ($row['time_tag'] ?? $row['time'] ?? $row['timestamp'] ?? $row[0] ?? ''));
-        $kpValue = $row['Kp'] ?? $row['kp'] ?? $row['kp_index'] ?? $row[1] ?? null;
-        if (is_string($kpValue)) {
-            $kpValue = str_replace(',', '.', trim($kpValue));
-        }
-        if ($timestamp === '' || !is_numeric($kpValue)) {
+        $measurement = extract_kp_measurement_from_row($row);
+        if ($measurement === null) {
             continue;
         }
 
-        return [
-            'timestamp' => $timestamp,
-            'kp' => (float) $kpValue,
-        ];
+        return $measurement;
     }
 
     return null;
+}
+
+function extract_kp_trend(array $payload, int $comparisonOffset = 3): ?float
+{
+    if ($payload === []) {
+        return null;
+    }
+
+    $comparisonOffset = max(1, $comparisonOffset);
+    $measurements = [];
+    foreach ($payload as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+
+        $measurement = extract_kp_measurement_from_row($row);
+        if ($measurement !== null) {
+            $measurements[] = $measurement;
+        }
+    }
+
+    if (count($measurements) <= $comparisonOffset) {
+        return null;
+    }
+
+    $latest = $measurements[count($measurements) - 1];
+    $older = $measurements[count($measurements) - 1 - $comparisonOffset];
+
+    return ((float) $latest['kp']) - ((float) $older['kp']);
+}
+
+function kp_trend_summary(?float $trend, string $locale): ?string
+{
+    if (!is_numeric($trend)) {
+        return null;
+    }
+
+    $labels = match ($locale) {
+        'en' => ['trend' => 'Trend:', 'rising' => 'rising', 'falling' => 'falling', 'stable' => 'stable'],
+        default => ['trend' => 'Tendance :', 'rising' => 'en hausse', 'falling' => 'en baisse', 'stable' => 'stable'],
+    };
+    $state = match (true) {
+        $trend >= 0.4 => 'rising',
+        $trend <= -0.4 => 'falling',
+        default => 'stable',
+    };
+    $delta = ($trend > 0 ? '+' : '') . number_format($trend, 1, ',', '');
+
+    return $labels['trend'] . ' ' . $labels[$state] . ' (Δ ' . $delta . ')';
 }
 
 function render_widget(string $slug, array $user = []): string
