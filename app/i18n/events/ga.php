@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Nasc seachtrach',
   'no_event' => 'Níl aon imeachtaí foilsithe fós.',
   'calendar_name' => 'Dialann ON4CRD',
-  'ics_filename' => 'ar4crd-imeachtaí.ics',
+  'ics_filename' => 'ar4crd-imeachtaí.ics',  'propose_event' => 'Mol imeacht',  'propose_event_subject' => 'Moladh imeachta ON4CRD',  'propose_event_body' => 'Dia dhuit, ba mhaith liom imeacht ON4CRD a mholadh. Teideal: Dáta/am: Suíomh: Cur síos: Teagmháil:',
 );

@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Extern länk',
   'no_event' => 'Inga evenemang publicerade ännu.',
   'calendar_name' => 'Dagbok ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Föreslå ett evenemang',  'propose_event_subject' => 'Förslag på ON4CRD-evenemang',  'propose_event_body' => 'Hej, jag vill föreslå ett ON4CRD-evenemang. Titel: Datum/tid: Plats: Beskrivning: Kontakt:',
 );

@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Vanjska poveznica',
   'no_event' => 'Još nema objavljenih događaja.',
   'calendar_name' => 'Dnevnik ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Predloži događaj',  'propose_event_subject' => 'Prijedlog događaja ON4CRD',  'propose_event_body' => 'Pozdrav, želim predložiti ON4CRD događaj. Naslov: Datum/vrijeme: Lokacija: Opis: Kontakt:',
 );

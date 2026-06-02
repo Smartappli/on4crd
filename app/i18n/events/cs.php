@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Externí odkaz',
   'no_event' => 'Dosud nebyly zveřejněny žádné události.',
   'calendar_name' => 'Diář ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Navrhnout událost',  'propose_event_subject' => 'Návrh události ON4CRD',  'propose_event_body' => 'Dobrý den, rád(a) bych navrhl(a) událost ON4CRD. Název: Datum/čas: Místo: Popis: Kontakt:',
 );

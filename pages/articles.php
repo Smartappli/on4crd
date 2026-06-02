@@ -136,6 +136,10 @@ set_page_meta([
     'description' => (string) $t['page_description'],
     'schema_type' => 'CollectionPage',
 ]);
+$categoryProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_category_subject'])
+    . '&body=' . rawurlencode((string) $t['propose_category_body']);
+$articleProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_article_subject'])
+    . '&body=' . rawurlencode((string) $t['propose_article_body']);
 
 ob_start();
 ?>
@@ -146,15 +150,21 @@ ob_start();
             <h1 class="articles-hero-title"><?= e((string) $t['page_title']) ?></h1>
             <p class="help"><?= e((string) $t['page_description']) ?></p>
         </div>
-        <div class="articles-hero-stats">
-            <article>
-                <span><?= e((string) $t['article_count']) ?></span>
-                <strong><?= (int) $totalArticles ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) $t['theme_default']) ?></span>
-                <strong><?= (int) count($themeMeta) ?></strong>
-            </article>
+        <div class="articles-hero-side">
+            <div class="articles-hero-stats">
+                <article>
+                    <span><?= e((string) $t['article_count']) ?></span>
+                    <strong><?= (int) $totalArticles ?></strong>
+                </article>
+                <article>
+                    <span><?= e((string) $t['theme_default']) ?></span>
+                    <strong><?= (int) count($themeMeta) ?></strong>
+                </article>
+            </div>
+            <div class="articles-hero-actions">
+                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>"><?= e((string) $t['propose_category']) ?></a>
+                <a class="button" href="<?= e($articleProposalUrl) ?>"><?= e((string) $t['propose_article']) ?></a>
+            </div>
         </div>
     </section>
 

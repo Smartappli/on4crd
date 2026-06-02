@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Ulkoinen linkki',
   'no_event' => 'Ei vielä julkaistuja tapahtumia.',
   'calendar_name' => 'Päiväkirja ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Ehdota tapahtumaa',  'propose_event_subject' => 'ON4CRD-tapahtumaehdotus',  'propose_event_body' => 'Hei, haluaisin ehdottaa ON4CRD-tapahtumaa. Otsikko: Päivä/aika: Paikka: Kuvaus: Yhteystiedot:',
 );

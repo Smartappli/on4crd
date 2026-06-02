@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Väline link',
   'no_event' => 'Ühtegi sündmust pole veel avaldatud.',
   'calendar_name' => 'Päevik ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Paku sündmust',  'propose_event_subject' => 'ON4CRD sündmuse ettepanek',  'propose_event_body' => 'Tere, soovin pakkuda ON4CRD sündmust. Pealkiri: Kuupäev/kellaaeg: Asukoht: Kirjeldus: Kontakt:',
 );

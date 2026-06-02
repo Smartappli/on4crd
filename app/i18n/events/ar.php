@@ -22,4 +22,7 @@ return [
     'no_event' => 'لا توجد فعاليات منشورة حاليًا.',
     'calendar_name' => 'تقويم ON4CRD',
     'ics_filename' => 'on4crd-الأحداث-ar.ics',
+    'propose_event' => 'اقترح فعالية',
+    'propose_event_subject' => 'اقتراح فعالية ON4CRD',
+    'propose_event_body' => 'مرحبًا، أود اقتراح فعالية لـ ON4CRD. العنوان: التاريخ/الوقت: المكان: الوصف: جهة الاتصال:',
 ];

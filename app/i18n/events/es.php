@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Enlace externo',
   'no_event' => 'No hay eventos publicados por el momento.',
   'calendar_name' => 'Agenda ON4CRD',
-  'ics_filename' => 'on4crd-eventos.ics',
+  'ics_filename' => 'on4crd-eventos.ics',  'propose_event' => 'Proponer un evento',  'propose_event_subject' => 'Propuesta de evento ON4CRD',  'propose_event_body' => 'Hola, quisiera proponer un evento ON4CRD. Título: Fecha/hora: Lugar: Descripción: Contacto:',
 );

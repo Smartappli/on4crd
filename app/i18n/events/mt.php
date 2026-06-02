@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Link esterna',
   'no_event' => 'S\'issa l-ebda avveniment ippubblikat.',
   'calendar_name' => 'Djarju ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Ipproponi avveniment',  'propose_event_subject' => 'Proposta ta’ avveniment ON4CRD',  'propose_event_body' => 'Bonġu, nixtieq nipproponi avveniment ON4CRD. Titlu: Data/ħin: Post: Deskrizzjoni: Kuntatt:',
 );

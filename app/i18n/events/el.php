@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Εξωτερικός σύνδεσμος',
   'no_event' => 'Δεν έχουν δημοσιευθεί ακόμη εκδηλώσεις.',
   'calendar_name' => 'Ημερολόγιο ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Προτείνετε μια εκδήλωση',  'propose_event_subject' => 'Πρόταση εκδήλωσης ON4CRD',  'propose_event_body' => 'Γεια σας, θα ήθελα να προτείνω μια εκδήλωση ON4CRD. Τίτλος: Ημερομηνία/ώρα: Τοποθεσία: Περιγραφή: Επικοινωνία:',
 );

@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Išorinė nuoroda',
   'no_event' => 'Dar nėra paskelbtų įvykių.',
   'calendar_name' => 'Dienoraštis ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Pasiūlyti renginį',  'propose_event_subject' => 'ON4CRD renginio pasiūlymas',  'propose_event_body' => 'Sveiki, norėčiau pasiūlyti ON4CRD renginį. Pavadinimas: Data/laikas: Vieta: Aprašymas: Kontaktas:',
 );

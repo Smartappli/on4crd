@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Külső link',
   'no_event' => 'Még nincsenek közzétett események.',
   'calendar_name' => 'Napló ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Esemény javaslata',  'propose_event_subject' => 'ON4CRD eseményjavaslat',  'propose_event_body' => 'Üdvözlöm, szeretnék javasolni egy ON4CRD eseményt. Cím: Dátum/idő: Helyszín: Leírás: Kapcsolat:',
 );

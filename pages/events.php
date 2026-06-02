@@ -159,6 +159,8 @@ $calendarConfig = [
         'list' => $t['list'],
     ],
 ];
+$proposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_event_subject'])
+    . '&body=' . rawurlencode((string) $t['propose_event_body']);
 
 ob_start();
 ?>
@@ -168,7 +170,10 @@ ob_start();
         <h1><?= e('Agenda ON4CRD') ?></h1>
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
-    <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
+    <div class="events-hero-actions">
+        <a class="button secondary" href="<?= e($proposalUrl) ?>"><?= e($t['propose_event']) ?></a>
+        <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
+    </div>
 </section>
 
 <section class="events-layout">

@@ -12,3 +12,24 @@
   text-transform: uppercase;
   letter-spacing: .08em;
 }
+
+[data-route="events"] .events-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: .55rem;
+}
+
+[data-route="events"] .events-hero-actions .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  [data-route="events"] .events-hero-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+}

@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Външна връзка',
   'no_event' => 'Все още няма публикувани събития.',
   'calendar_name' => 'Дневник ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Предложи събитие',  'propose_event_subject' => 'Предложение за събитие ON4CRD',  'propose_event_body' => 'Здравейте, бих искал(а) да предложа събитие на ON4CRD. Заглавие: Дата/час: Място: Описание: Контакт:',
 );

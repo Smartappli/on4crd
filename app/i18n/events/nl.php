@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Externe link',
   'no_event' => 'Momenteel geen gepubliceerde evenementen.',
   'calendar_name' => 'ON4CRD Agenda',
-  'ics_filename' => 'on4crd-evenementen.ics',
+  'ics_filename' => 'on4crd-evenementen.ics',  'propose_event' => 'Evenement voorstellen',  'propose_event_subject' => 'ON4CRD evenementvoorstel',  'propose_event_body' => 'Hallo, ik wil een ON4CRD-evenement voorstellen. Titel: Datum/tijd: Locatie: Beschrijving: Contact:',
 );

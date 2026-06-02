@@ -21,5 +21,5 @@ return array (
   'external_link' => 'Ārējā saite',
   'no_event' => 'Vēl nav publicēts neviens pasākums.',
   'calendar_name' => 'Dienasgrāmata ON4CRD',
-  'ics_filename' => 'on4crd-events.ics',
+  'ics_filename' => 'on4crd-events.ics',  'propose_event' => 'Ierosināt pasākumu',  'propose_event_subject' => 'ON4CRD pasākuma priekšlikums',  'propose_event_body' => 'Sveiki, vēlos ierosināt ON4CRD pasākumu. Nosaukums: Datums/laiks: Vieta: Apraksts: Kontaktpersona:',
 );
