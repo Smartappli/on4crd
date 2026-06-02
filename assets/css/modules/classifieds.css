@@ -22,6 +22,7 @@
 }
 
 [data-route="classifieds"] .classifieds-hero-action .button {
+  display: inline-flex;
   flex: 1 1 11rem;
   justify-content: center;
 }
