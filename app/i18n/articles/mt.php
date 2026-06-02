@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Artikolu żid mal-favoriti.',
   'favorite_removed_msg' => 'Artiklu mneħħi mill-favoriti.',
   'default_article_title' => 'Artikolu',
+  'propose_category' => 'Ipproponi kategorija',
+  'propose_category_subject' => 'Proposta ta’ kategorija ta’ artikli ON4CRD',
+  'propose_category_body' => 'Bonġu,
+
+nixtieq nipproponi kategorija ġdida ta’ artikli.
+
+Isem il-kategorija:
+Raġuni:
+Kuntatt:',
+  'propose_article' => 'Ipproponi artiklu',
+  'propose_article_subject' => 'Proposta ta’ artiklu ON4CRD',
+  'propose_article_body' => 'Bonġu,
+
+nixtieq nipproponi artiklu tekniku ON4CRD.
+
+Titlu:
+Kategorija:
+Sommarju:
+Kuntatt:',
 );

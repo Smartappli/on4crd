@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Article added to favorites.',
   'favorite_removed_msg' => 'Article removed from favorites.',
   'default_article_title' => 'Article',
+  'propose_category' => 'Suggest a category',
+  'propose_category_subject' => 'ON4CRD article category suggestion',
+  'propose_category_body' => 'Hello,
+
+I would like to suggest a new article category.
+
+Category name:
+Reason:
+Contact:',
+  'propose_article' => 'Suggest an article',
+  'propose_article_subject' => 'ON4CRD article suggestion',
+  'propose_article_body' => 'Hello,
+
+I would like to suggest an ON4CRD technical article.
+
+Title:
+Category:
+Summary:
+Contact:',
 );

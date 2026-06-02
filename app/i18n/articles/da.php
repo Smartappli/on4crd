@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Artikel tilføjes til favoritter.',
   'favorite_removed_msg' => 'Artikel fjernet fra favoritter.',
   'default_article_title' => 'Vare',
+  'propose_category' => 'Foreslå en kategori',
+  'propose_category_subject' => 'Forslag til ON4CRD-artikelkategori',
+  'propose_category_body' => 'Hej,
+
+jeg vil gerne foreslå en ny artikelkategori.
+
+Kategorinavn:
+Begrundelse:
+Kontakt:',
+  'propose_article' => 'Foreslå en artikel',
+  'propose_article_subject' => 'Forslag til ON4CRD-artikel',
+  'propose_article_body' => 'Hej,
+
+jeg vil gerne foreslå en teknisk ON4CRD-artikel.
+
+Titel:
+Kategori:
+Resumé:
+Kontakt:',
 );

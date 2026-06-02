@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Artikel lägg till favoriter.',
   'favorite_removed_msg' => 'Artikel borttagen från favoriter.',
   'default_article_title' => 'Objekt',
+  'propose_category' => 'Föreslå en kategori',
+  'propose_category_subject' => 'Förslag på ON4CRD-artikelkategori',
+  'propose_category_body' => 'Hej,
+
+jag vill föreslå en ny artikelkategori.
+
+Kategorinamn:
+Motivering:
+Kontakt:',
+  'propose_article' => 'Föreslå en artikel',
+  'propose_article_subject' => 'Förslag på ON4CRD-artikel',
+  'propose_article_body' => 'Hej,
+
+jag vill föreslå en teknisk ON4CRD-artikel.
+
+Titel:
+Kategori:
+Sammanfattning:
+Kontakt:',
 );

@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Airteagal add to Favorites.',
   'favorite_removed_msg' => 'Airteagal bainte de cheanáin.',
   'default_article_title' => 'Mír',
+  'propose_category' => 'Mol catagóir',
+  'propose_category_subject' => 'Moladh catagóire alt ON4CRD',
+  'propose_category_body' => 'Dia dhuit,
+
+ba mhaith liom catagóir nua alt a mholadh.
+
+Ainm na catagóire:
+Cúis:
+Teagmháil:',
+  'propose_article' => 'Mol alt',
+  'propose_article_subject' => 'Moladh alt ON4CRD',
+  'propose_article_body' => 'Dia dhuit,
+
+ba mhaith liom alt teicniúil ON4CRD a mholadh.
+
+Teideal:
+Catagóir:
+Achoimre:
+Teagmháil:',
 );

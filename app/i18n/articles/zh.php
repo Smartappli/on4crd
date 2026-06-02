@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => '文章已加入收藏。',
   'favorite_removed_msg' => '文章已从收藏移除。',
   'default_article_title' => '文章',
+  'propose_category' => '提议类别',
+  'propose_category_subject' => 'ON4CRD 文章类别提议',
+  'propose_category_body' => '您好，
+
+我想提议一个新的文章类别。
+
+类别名称：
+理由：
+联系方式：',
+  'propose_article' => '提议文章',
+  'propose_article_subject' => 'ON4CRD 文章提议',
+  'propose_article_body' => '您好，
+
+我想提议一篇 ON4CRD 技术文章。
+
+标题：
+类别：
+摘要：
+联系方式：',
 );

@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Rakstu pievienot izlasei.',
   'favorite_removed_msg' => 'Raksts noņemts no izlases.',
   'default_article_title' => 'Vienums',
+  'propose_category' => 'Ierosināt kategoriju',
+  'propose_category_subject' => 'ON4CRD rakstu kategorijas priekšlikums',
+  'propose_category_body' => 'Sveiki,
+
+vēlos ierosināt jaunu rakstu kategoriju.
+
+Kategorijas nosaukums:
+Pamatojums:
+Kontaktinformācija:',
+  'propose_article' => 'Ierosināt rakstu',
+  'propose_article_subject' => 'ON4CRD raksta priekšlikums',
+  'propose_article_body' => 'Sveiki,
+
+vēlos ierosināt ON4CRD tehnisku rakstu.
+
+Nosaukums:
+Kategorija:
+Kopsavilkums:
+Kontaktinformācija:',
 );

@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Přidat článek do oblíbených.',
   'favorite_removed_msg' => 'Článek odstraněn z oblíbených.',
   'default_article_title' => 'Položka',
+  'propose_category' => 'Navrhnout kategorii',
+  'propose_category_subject' => 'Návrh kategorie článků ON4CRD',
+  'propose_category_body' => 'Dobrý den,
+
+rád(a) bych navrhl(a) novou kategorii článků.
+
+Název kategorie:
+Odůvodnění:
+Kontakt:',
+  'propose_article' => 'Navrhnout článek',
+  'propose_article_subject' => 'Návrh článku ON4CRD',
+  'propose_article_body' => 'Dobrý den,
+
+rád(a) bych navrhl(a) technický článek ON4CRD.
+
+Název:
+Kategorie:
+Shrnutí:
+Kontakt:',
 );

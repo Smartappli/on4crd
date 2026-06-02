@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Добавете статия към любими.',
   'favorite_removed_msg' => 'Статията е премахната от любимите.',
   'default_article_title' => 'Артикул',
+  'propose_category' => 'Предложи категория',
+  'propose_category_subject' => 'Предложение за категория статии ON4CRD',
+  'propose_category_body' => 'Здравейте,
+
+бих искал(а) да предложа нова категория статии.
+
+Име на категорията:
+Мотивация:
+Контакт:',
+  'propose_article' => 'Предложи статия',
+  'propose_article_subject' => 'Предложение за статия ON4CRD',
+  'propose_article_body' => 'Здравейте,
+
+бих искал(а) да предложа техническа статия за ON4CRD.
+
+Заглавие:
+Категория:
+Резюме:
+Контакт:',
 );

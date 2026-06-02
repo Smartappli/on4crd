@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => '記事をお気に入りに追加しました。',
   'favorite_removed_msg' => '記事をお気に入りから削除しました。',
   'default_article_title' => '記事',
+  'propose_category' => 'カテゴリーを提案',
+  'propose_category_subject' => 'ON4CRD 記事カテゴリー提案',
+  'propose_category_body' => 'こんにちは。
+
+新しい記事カテゴリーを提案したいです。
+
+カテゴリー名：
+理由：
+連絡先：',
+  'propose_article' => '記事を提案',
+  'propose_article_subject' => 'ON4CRD 記事提案',
+  'propose_article_body' => 'こんにちは。
+
+ON4CRD の技術記事を提案したいです。
+
+タイトル：
+カテゴリー：
+概要：
+連絡先：',
 );

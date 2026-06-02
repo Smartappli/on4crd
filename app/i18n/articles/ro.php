@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Articolul se adaugă la favorite.',
   'favorite_removed_msg' => 'Articol eliminat din favorite.',
   'default_article_title' => 'Articol',
+  'propose_category' => 'Propune o categorie',
+  'propose_category_subject' => 'Propunere de categorie de articole ON4CRD',
+  'propose_category_body' => 'Bună ziua,
+
+aș dori să propun o nouă categorie de articole.
+
+Numele categoriei:
+Motivație:
+Contact:',
+  'propose_article' => 'Propune un articol',
+  'propose_article_subject' => 'Propunere de articol ON4CRD',
+  'propose_article_body' => 'Bună ziua,
+
+aș dori să propun un articol tehnic ON4CRD.
+
+Titlu:
+Categorie:
+Rezumat:
+Contact:',
 );

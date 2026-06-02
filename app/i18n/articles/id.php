@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Artikel ditambahkan ke favorit.',
   'favorite_removed_msg' => 'Artikel dihapus dari favorit.',
   'default_article_title' => 'Artikel',
+  'propose_category' => 'Usulkan kategori',
+  'propose_category_subject' => 'Usulan kategori artikel ON4CRD',
+  'propose_category_body' => 'Halo,
+
+saya ingin mengusulkan kategori artikel baru.
+
+Nama kategori:
+Alasan:
+Kontak:',
+  'propose_article' => 'Usulkan artikel',
+  'propose_article_subject' => 'Usulan artikel ON4CRD',
+  'propose_article_body' => 'Halo,
+
+saya ingin mengusulkan artikel teknis ON4CRD.
+
+Judul:
+Kategori:
+Ringkasan:
+Kontak:',
 );

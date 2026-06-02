@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Artikli lisamine lemmikute hulka.',
   'favorite_removed_msg' => 'Artikkel eemaldati lemmikutest.',
   'default_article_title' => 'Üksus',
+  'propose_category' => 'Paku kategooriat',
+  'propose_category_subject' => 'ON4CRD artiklikategooria ettepanek',
+  'propose_category_body' => 'Tere,
+
+soovin pakkuda uut artiklikategooriat.
+
+Kategooria nimi:
+Põhjendus:
+Kontakt:',
+  'propose_article' => 'Paku artiklit',
+  'propose_article_subject' => 'ON4CRD artikli ettepanek',
+  'propose_article_body' => 'Tere,
+
+soovin pakkuda ON4CRD tehnilist artiklit.
+
+Pealkiri:
+Kategooria:
+Kokkuvõte:
+Kontakt:',
 );

@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Cikk hozzáadása a kedvencekhez.',
   'favorite_removed_msg' => 'A cikk eltávolítva a kedvencek közül.',
   'default_article_title' => 'Tétel',
+  'propose_category' => 'Kategória javaslata',
+  'propose_category_subject' => 'ON4CRD cikk-kategória javaslat',
+  'propose_category_body' => 'Üdvözlöm,
+
+szeretnék javasolni egy új cikk-kategóriát.
+
+Kategória neve:
+Indoklás:
+Kapcsolat:',
+  'propose_article' => 'Cikk javaslata',
+  'propose_article_subject' => 'ON4CRD cikkjavaslat',
+  'propose_article_body' => 'Üdvözlöm,
+
+szeretnék javasolni egy ON4CRD technikai cikket.
+
+Cím:
+Kategória:
+Összefoglaló:
+Kapcsolat:',
 );

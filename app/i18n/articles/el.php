@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Προσθήκη άρθρου στα αγαπημένα.',
   'favorite_removed_msg' => 'Το άρθρο αφαιρέθηκε από τα αγαπημένα.',
   'default_article_title' => 'Στοιχείο',
+  'propose_category' => 'Προτείνετε κατηγορία',
+  'propose_category_subject' => 'Πρόταση κατηγορίας άρθρων ON4CRD',
+  'propose_category_body' => 'Γεια σας,
+
+θα ήθελα να προτείνω μια νέα κατηγορία άρθρων.
+
+Όνομα κατηγορίας:
+Αιτιολόγηση:
+Επικοινωνία:',
+  'propose_article' => 'Προτείνετε άρθρο',
+  'propose_article_subject' => 'Πρόταση άρθρου ON4CRD',
+  'propose_article_body' => 'Γεια σας,
+
+θα ήθελα να προτείνω ένα τεχνικό άρθρο ON4CRD.
+
+Τίτλος:
+Κατηγορία:
+Περίληψη:
+Επικοινωνία:',
 );

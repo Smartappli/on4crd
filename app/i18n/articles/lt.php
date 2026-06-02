@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Straipsnis įtrauktas į mėgstamiausius.',
   'favorite_removed_msg' => 'Straipsnis pašalintas iš mėgstamiausių.',
   'default_article_title' => 'Prekė',
+  'propose_category' => 'Pasiūlyti kategoriją',
+  'propose_category_subject' => 'ON4CRD straipsnių kategorijos pasiūlymas',
+  'propose_category_body' => 'Sveiki,
+
+norėčiau pasiūlyti naują straipsnių kategoriją.
+
+Kategorijos pavadinimas:
+Pagrindimas:
+Kontaktas:',
+  'propose_article' => 'Pasiūlyti straipsnį',
+  'propose_article_subject' => 'ON4CRD straipsnio pasiūlymas',
+  'propose_article_body' => 'Sveiki,
+
+norėčiau pasiūlyti ON4CRD techninį straipsnį.
+
+Pavadinimas:
+Kategorija:
+Santrauka:
+Kontaktas:',
 );

@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'নিবন্ধটি প্রিয়তে যোগ করা হয়েছে।',
   'favorite_removed_msg' => 'নিবন্ধটি প্রিয় থেকে সরানো হয়েছে।',
   'default_article_title' => 'নিবন্ধ',
+  'propose_category' => 'বিভাগ প্রস্তাব করুন',
+  'propose_category_subject' => 'ON4CRD নিবন্ধ বিভাগের প্রস্তাব',
+  'propose_category_body' => 'হ্যালো,
+
+আমি একটি নতুন নিবন্ধ বিভাগ প্রস্তাব করতে চাই।
+
+বিভাগের নাম:
+কারণ:
+যোগাযোগ:',
+  'propose_article' => 'নিবন্ধ প্রস্তাব করুন',
+  'propose_article_subject' => 'ON4CRD নিবন্ধ প্রস্তাব',
+  'propose_article_body' => 'হ্যালো,
+
+আমি একটি ON4CRD প্রযুক্তিগত নিবন্ধ প্রস্তাব করতে চাই।
+
+শিরোনাম:
+বিভাগ:
+সারাংশ:
+যোগাযোগ:',
 );

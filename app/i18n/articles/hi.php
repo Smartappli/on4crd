@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'लेख पसंदीदा में जोड़ा गया।',
   'favorite_removed_msg' => 'लेख पसंदीदा से हटाया गया।',
   'default_article_title' => 'लेख',
+  'propose_category' => 'श्रेणी प्रस्तावित करें',
+  'propose_category_subject' => 'ON4CRD लेख श्रेणी प्रस्ताव',
+  'propose_category_body' => 'नमस्ते,
+
+मैं लेखों की नई श्रेणी प्रस्तावित करना चाहता/चाहती हूँ।
+
+श्रेणी का नाम:
+कारण:
+संपर्क:',
+  'propose_article' => 'लेख प्रस्तावित करें',
+  'propose_article_subject' => 'ON4CRD लेख प्रस्ताव',
+  'propose_article_body' => 'नमस्ते,
+
+मैं ON4CRD के लिए तकनीकी लेख प्रस्तावित करना चाहता/चाहती हूँ।
+
+शीर्षक:
+श्रेणी:
+सारांश:
+संपर्क:',
 );

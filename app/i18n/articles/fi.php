@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Artikkeli lisää suosikkeihin.',
   'favorite_removed_msg' => 'Artikkeli poistettu suosikeista.',
   'default_article_title' => 'Tuote',
+  'propose_category' => 'Ehdota kategoriaa',
+  'propose_category_subject' => 'ON4CRD-artikkelikategorian ehdotus',
+  'propose_category_body' => 'Hei,
+
+haluaisin ehdottaa uutta artikkelikategoriaa.
+
+Kategorian nimi:
+Perustelu:
+Yhteystiedot:',
+  'propose_article' => 'Ehdota artikkelia',
+  'propose_article_subject' => 'ON4CRD-artikkeliehdotus',
+  'propose_article_body' => 'Hei,
+
+haluaisin ehdottaa ON4CRD:n teknistä artikkelia.
+
+Otsikko:
+Kategoria:
+Tiivistelmä:
+Yhteystiedot:',
 );

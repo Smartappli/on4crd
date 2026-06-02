@@ -32,4 +32,23 @@ return array (
   'favorite_added_msg' => 'Članek dodaj med priljubljene.',
   'favorite_removed_msg' => 'Članek odstranjen iz priljubljenih.',
   'default_article_title' => 'Postavka',
+  'propose_category' => 'Predlagaj kategorijo',
+  'propose_category_subject' => 'Predlog kategorije člankov ON4CRD',
+  'propose_category_body' => 'Pozdravljeni,
+
+rad(a) bi predlagal(a) novo kategorijo člankov.
+
+Ime kategorije:
+Utemeljitev:
+Kontakt:',
+  'propose_article' => 'Predlagaj članek',
+  'propose_article_subject' => 'Predlog članka ON4CRD',
+  'propose_article_body' => 'Pozdravljeni,
+
+rad(a) bi predlagal(a) tehnični članek ON4CRD.
+
+Naslov:
+Kategorija:
+Povzetek:
+Kontakt:',
 );
