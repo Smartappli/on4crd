@@ -171,10 +171,51 @@ ob_start();
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
     <div class="events-hero-actions">
-        <a class="button secondary" href="<?= e($proposalUrl) ?>"><?= e($t['propose_event']) ?></a>
+        <button class="button secondary" type="button" data-event-proposal-open data-event-proposal-fallback="<?= e($proposalUrl) ?>" aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($t['propose_event']) ?></button>
         <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
     </div>
 </section>
+
+<dialog class="events-proposal-dialog" id="events-proposal-dialog" aria-labelledby="events-proposal-title">
+    <div class="events-proposal-dialog-card">
+        <div class="events-proposal-dialog-header">
+            <div>
+                <p class="events-hero-title"><?= e($t['calendar_name']) ?></p>
+                <h2 id="events-proposal-title"><?= e($t['propose_event']) ?></h2>
+                <p class="help"><?= e($t['propose_event_intro']) ?></p>
+            </div>
+            <button class="events-proposal-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
+        </div>
+        <form class="events-proposal-form" data-event-proposal-form data-event-proposal-recipient="on4crd@gmail.com" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+            <label>
+                <span><?= e($t['propose_event_title_label']) ?></span>
+                <input type="text" name="proposal_title" maxlength="160" required>
+            </label>
+            <div class="events-proposal-form-grid">
+                <label>
+                    <span><?= e($t['propose_event_datetime_label']) ?></span>
+                    <input type="text" name="proposal_datetime" maxlength="160">
+                </label>
+                <label>
+                    <span><?= e($t['propose_event_location_label']) ?></span>
+                    <input type="text" name="proposal_location" maxlength="160">
+                </label>
+            </div>
+            <label>
+                <span><?= e($t['propose_event_description_label']) ?></span>
+                <textarea name="proposal_description" rows="5" maxlength="1600"></textarea>
+            </label>
+            <label>
+                <span><?= e($t['propose_event_contact_label']) ?></span>
+                <input type="text" name="proposal_contact" maxlength="220" required>
+            </label>
+            <div class="events-proposal-dialog-actions">
+                <button class="button" type="submit"><?= e($t['propose_event_submit']) ?></button>
+                <button class="button secondary" type="button" data-event-proposal-close><?= e($t['propose_event_cancel']) ?></button>
+            </div>
+        </form>
+    </div>
+</dialog>
 
 <section class="events-layout">
     <article class="card events-calendar-card">
