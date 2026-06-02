@@ -68,34 +68,35 @@ $pageTitle = (string) ($t['title'] ?? 'Account settings');
 ob_start();
 ?>
 <section class="card">
-  <h2 style="margin-top:0;"><?= e($newsletterT('title')) ?></h2>
-  <p><?= e($newsletterT('intro')) ?></p>
-  <?php if ($newsletterSubscribed): ?>
-    <p><strong><?= e($newsletterT('status')) ?></strong> <?= e($newsletterT('subscribed')) ?> (<?= e($newsletterEmail) ?>)</p>
-    <form method="post" class="inline-form" style="margin:.25rem 0 0;">
-      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-      <input type="hidden" name="action" value="toggle_newsletter">
-      <input type="hidden" name="newsletter_action" value="unsubscribe">
-      <button class="button danger small" type="submit"><?= e($newsletterT('unsubscribe')) ?></button>
-    </form>
-  <?php else: ?>
-    <p><strong><?= e($newsletterT('status')) ?></strong> <?= e($newsletterT('not_subscribed')) ?></p>
-    <form method="post" class="inline-form" style="margin:.25rem 0 0;gap:.7rem;align-items:flex-end;">
-      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-      <input type="hidden" name="action" value="toggle_newsletter">
-      <input type="hidden" name="newsletter_action" value="subscribe">
-      <label style="display:grid;gap:.25rem;">
-        <span><?= e($newsletterT('email_label')) ?></span>
-        <input type="email" name="email" value="<?= e($newsletterEmail) ?>" required>
-      </label>
-      <button class="button small" type="submit"><?= e($newsletterT('subscribe')) ?></button>
-    </form>
-  <?php endif; ?>
-</section>
+  <section aria-labelledby="settings-newsletter-title">
+    <h2 id="settings-newsletter-title" style="margin-top:0;"><?= e($newsletterT('title')) ?></h2>
+    <p><?= e($newsletterT('intro')) ?></p>
+    <?php if ($newsletterSubscribed): ?>
+      <p><strong><?= e($newsletterT('status')) ?></strong> <?= e($newsletterT('subscribed')) ?> (<?= e($newsletterEmail) ?>)</p>
+      <form method="post" class="inline-form" style="margin:.25rem 0 0;">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <input type="hidden" name="action" value="toggle_newsletter">
+        <input type="hidden" name="newsletter_action" value="unsubscribe">
+        <button class="button danger small" type="submit"><?= e($newsletterT('unsubscribe')) ?></button>
+      </form>
+    <?php else: ?>
+      <p><strong><?= e($newsletterT('status')) ?></strong> <?= e($newsletterT('not_subscribed')) ?></p>
+      <form method="post" class="inline-form" style="margin:.25rem 0 0;gap:.7rem;align-items:flex-end;">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <input type="hidden" name="action" value="toggle_newsletter">
+        <input type="hidden" name="newsletter_action" value="subscribe">
+        <label style="display:grid;gap:.25rem;">
+          <span><?= e($newsletterT('email_label')) ?></span>
+          <input type="email" name="email" value="<?= e($newsletterEmail) ?>" required>
+        </label>
+        <button class="button small" type="submit"><?= e($newsletterT('subscribe')) ?></button>
+      </form>
+    <?php endif; ?>
+  </section>
 
-<section class="card">
-  <h2 style="margin-top:0;"><?= e($rt('recommendations_title')) ?></h2>
-  <form method="post" class="inline-form" style="margin:.25rem 0 1rem;">
+  <section aria-labelledby="settings-recommendations-title" style="border-top:1px solid var(--border);margin-top:1.5rem;padding-top:1.5rem;">
+    <h2 id="settings-recommendations-title" style="margin-top:0;"><?= e($rt('recommendations_title')) ?></h2>
+    <form method="post" class="inline-form" style="margin:.25rem 0 1rem;">
     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
     <input type="hidden" name="action" value="toggle_recommendations">
     <label style="display:flex;align-items:center;gap:.45rem;">
@@ -103,9 +104,9 @@ ob_start();
       <span><?= e($rt('recommendations_opt_in_label')) ?></span>
     </label>
     <button class="button secondary small" type="submit"><?= e($rt('save_layout')) ?></button>
-  </form>
-  <p class="help"><?= e($rt('recommendations_opt_in_help')) ?></p>
-  <form method="post" class="inline-form" style="margin:.25rem 0 1rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;">
+    </form>
+    <p class="help"><?= e($rt('recommendations_opt_in_help')) ?></p>
+    <form method="post" class="inline-form" style="margin:.25rem 0 1rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;">
     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
     <input type="hidden" name="action" value="toggle_recommendation_signals">
     <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[article]" value="1" <?= $recommendationSignals['article'] ? 'checked' : '' ?>> <span><?= e($rt('signal_article')) ?></span></label>
@@ -114,11 +115,11 @@ ob_start();
     <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[album]" value="1" <?= $recommendationSignals['album'] ? 'checked' : '' ?>> <span><?= e($rt('signal_album')) ?></span></label>
     <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[library]" value="1" <?= $recommendationSignals['library'] ? 'checked' : '' ?>> <span><?= e($rt('signal_library')) ?></span></label>
     <button class="button secondary small" type="submit"><?= e($rt('save_layout')) ?></button>
-  </form>
-  <?php if ($recommendations === []): ?>
-    <p class="help"><?= e($rt('recommendations_empty')) ?></p>
-  <?php else: ?>
-    <ul class="stack" style="list-style:none;padding:0;margin:0;">
+    </form>
+    <?php if ($recommendations === []): ?>
+      <p class="help"><?= e($rt('recommendations_empty')) ?></p>
+    <?php else: ?>
+      <ul class="stack" style="list-style:none;padding:0;margin:0;">
       <?php foreach ($recommendations as $item): ?>
         <?php $reasonKey = (string) ($item['reason_key'] ?? ''); ?>
         <li class="row-between" style="gap:.8rem;align-items:flex-start;">
@@ -129,8 +130,9 @@ ob_start();
           <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e($rt('open')) ?></a><?php endif; ?>
         </li>
       <?php endforeach; ?>
-    </ul>
-  <?php endif; ?>
+      </ul>
+    <?php endif; ?>
+  </section>
 </section>
 <?php
 echo render_layout((string) ob_get_clean(), $pageTitle);
