@@ -45,10 +45,48 @@ if ($user !== null && !empty($_GET['edit'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user = require_login();
     try {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? 'save');
+
+        if ($action === 'propose_category') {
+            $proposalName = trim(strip_tags((string) ($_POST['proposal_name'] ?? '')));
+            $proposalEmail = trim((string) ($_POST['proposal_email'] ?? ''));
+            $proposalCategory = trim(strip_tags((string) ($_POST['proposal_category'] ?? '')));
+            $proposalDetails = trim(strip_tags((string) ($_POST['proposal_details'] ?? '')));
+
+            if (
+                $proposalName === ''
+                || !filter_var($proposalEmail, FILTER_VALIDATE_EMAIL)
+                || $proposalCategory === ''
+                || mb_strlen($proposalCategory) > 120
+                || mb_strlen($proposalDetails) > 1200
+            ) {
+                throw new RuntimeException($t('propose_category_invalid'));
+            }
+
+            $safeName = str_replace(["\r", "\n"], ' ', $proposalName);
+            $safeEmail = str_replace(["\r", "\n"], '', $proposalEmail);
+            $subject = $t('propose_category_subject');
+            $body = $t('propose_category_email_intro') . "\n\n"
+                . $t('propose_category_name_label') . ': ' . $proposalCategory . "\n"
+                . $t('propose_category_sender_name_label') . ': ' . $safeName . "\n"
+                . $t('propose_category_sender_email_label') . ': ' . $safeEmail . "\n\n"
+                . $t('propose_category_details_label') . ":\n" . ($proposalDetails !== '' ? $proposalDetails : '-') . "\n";
+            $headers = 'From: ON4CRD Website <no-reply@on4crd.be>' . "\r\n"
+                . 'Reply-To: ' . $safeEmail . "\r\n"
+                . 'Content-Type: text/plain; charset=UTF-8';
+
+            if (@mail('on4crd@gmail.com', $subject, $body, $headers)) {
+                set_flash('success', $t('propose_category_sent'));
+            } else {
+                set_flash('error', $t('propose_category_failed'));
+            }
+
+            redirect_url(route_url('classifieds'));
+        }
+
+        $user = require_login();
 
         if ($action === 'save') {
             $id = (int) ($_POST['id'] ?? 0);
@@ -182,6 +220,16 @@ if ($user !== null) {
     $myAds = $myStmt->fetchAll() ?: [];
 }
 
+$proposalPrefillName = '';
+$proposalPrefillEmail = '';
+if ($user !== null) {
+    $proposalPrefillName = trim((string) ($user['full_name'] ?? ''));
+    if ($proposalPrefillName === '') {
+        $proposalPrefillName = trim((string) ($user['callsign'] ?? ''));
+    }
+    $proposalPrefillEmail = trim((string) ($user['email'] ?? ''));
+}
+
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
 ?>
@@ -209,10 +257,49 @@ ob_start();
             </div>
             <p class="classifieds-hero-action">
                 <a class="button" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_ad')) ?></a>
-                <a class="button secondary" href="mailto:on4crd@gmail.com?subject=<?= e(rawurlencode($t('propose_category_subject'))) ?>"><?= e($t('propose_category')) ?></a>
+                <button class="button secondary" type="button" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($t('propose_category')) ?></button>
             </p>
         </div>
     </header>
+
+    <dialog class="classifieds-category-dialog" id="classifieds-category-dialog" aria-labelledby="classifieds-category-title">
+        <div class="classifieds-category-dialog-card">
+            <div class="classifieds-category-dialog-header">
+                <div>
+                    <p class="directory-eyebrow"><?= e($t('category_label')) ?></p>
+                    <h2 id="classifieds-category-title"><?= e($t('propose_category')) ?></h2>
+                    <p class="help"><?= e($t('propose_category_intro')) ?></p>
+                </div>
+                <button class="classifieds-category-dialog-close" type="button" data-classifieds-category-close aria-label="<?= e($t('propose_category_close')) ?>">&times;</button>
+            </div>
+            <form method="post" class="classifieds-category-form">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_category">
+                <label>
+                    <span><?= e($t('propose_category_name_label')) ?></span>
+                    <input type="text" name="proposal_category" maxlength="120" required placeholder="<?= e($t('propose_category_name_placeholder')) ?>">
+                </label>
+                <div class="classifieds-category-form-grid">
+                    <label>
+                        <span><?= e($t('propose_category_sender_name_label')) ?></span>
+                        <input type="text" name="proposal_name" maxlength="190" required value="<?= e($proposalPrefillName) ?>">
+                    </label>
+                    <label>
+                        <span><?= e($t('propose_category_sender_email_label')) ?></span>
+                        <input type="email" name="proposal_email" maxlength="190" required value="<?= e($proposalPrefillEmail) ?>">
+                    </label>
+                </div>
+                <label>
+                    <span><?= e($t('propose_category_details_label')) ?></span>
+                    <textarea name="proposal_details" rows="4" maxlength="1200" placeholder="<?= e($t('propose_category_details_placeholder')) ?>"></textarea>
+                </label>
+                <div class="classifieds-category-dialog-actions">
+                    <button class="button" type="submit"><?= e($t('propose_category_submit')) ?></button>
+                    <button class="button secondary" type="button" data-classifieds-category-close><?= e($t('propose_category_cancel')) ?></button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 
     <section class="classifieds-search-panel">
         <div class="classifieds-search-header">
