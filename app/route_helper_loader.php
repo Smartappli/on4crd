@@ -24,6 +24,7 @@ function app_load_route_helpers(string $route): void
         'member_media.php' => ['directory', 'gdpr', 'profile'],
         'auction_helpers.php' => ['auctions', 'auction_view', 'auction_bid', 'admin_auctions'],
         'admin_helpers.php' => ['admin'],
+        'newsletter.php' => ['newsletter', 'newsletter_public', 'newsletter_unsubscribe', 'settings', 'admin_newsletters'],
     ];
 
     if ($route === '__all') {

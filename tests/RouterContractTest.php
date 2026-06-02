@@ -224,11 +224,16 @@ final class RouterContractTest extends TestCase
         self::assertIsString($router);
         self::assertStringContainsString('app_load_route_helpers($route);', $router);
 
+        $bootstrap = file_get_contents(__DIR__ . '/../app/bootstrap.php');
+        self::assertIsString($bootstrap);
+        self::assertStringNotContainsString("require_once __DIR__ . '/newsletter.php';", $bootstrap);
+
         $loader = file_get_contents(__DIR__ . '/../app/route_helper_loader.php');
         self::assertIsString($loader);
         self::assertStringContainsString("'widgets.php' => ['home'", $loader);
         self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
         self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);
+        self::assertStringContainsString("'newsletter.php' => ['newsletter'", $loader);
     }
 
     public function testModuleAndLoginGuardsPreserveNextRoute(): void

@@ -41,7 +41,6 @@ require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/cache.php';
 require_once __DIR__ . '/observability.php';
 require_once __DIR__ . '/maintenance.php';
-require_once __DIR__ . '/newsletter.php';
 require_once __DIR__ . '/seo.php';
 
 initialize_user_preferences();
