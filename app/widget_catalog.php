@@ -1,0 +1,49 @@
+<?php
+declare(strict_types=1);
+
+if (!function_exists('widget_catalog')) {
+function widget_catalog(): array
+{
+    return [
+        'propagation' => [
+            'title' => 'Propagation',
+            'description' => 'Indicateurs géomagnétiques en temps réel pour vos QSO.',
+        ],
+        'open_meteo' => [
+            'title' => 'Météo locale',
+            'description' => 'Conditions météo locales en temps réel pour l’activité radio.',
+        ],
+    ];
+}
+}
+
+
+if (!function_exists('enabled_widget_catalog')) {
+function enabled_widget_catalog(): array
+{
+    $catalog = widget_catalog();
+    if (!table_exists('dashboard_widget_settings')) {
+        return $catalog;
+    }
+
+    $rows = db()->query('SELECT widget_key, is_enabled FROM dashboard_widget_settings');
+    $settings = $rows !== false ? ($rows->fetchAll() ?: []) : [];
+    $enabledMap = [];
+    foreach ($settings as $row) {
+        $key = (string) ($row['widget_key'] ?? '');
+        if ($key === '') {
+            continue;
+        }
+        $enabledMap[$key] = (int) ($row['is_enabled'] ?? 0) === 1;
+    }
+
+    $filtered = [];
+    foreach ($catalog as $key => $meta) {
+        if (($enabledMap[$key] ?? true) === true) {
+            $filtered[$key] = $meta;
+        }
+    }
+
+    return $filtered;
+}
+}
