@@ -46,7 +46,16 @@ function seo_build_canonical_url(string $route): string
     );
 
     $queryString = seo_build_canonical_query($query);
-    $url = $base . '/index.php?route=' . rawurlencode($route);
+    $directRoutes = [
+        'sitemap.xml' => true,
+        'robots.txt' => true,
+        'llms.txt' => true,
+        'ai-index.json' => true,
+        'knowledge-graph.jsonld' => true,
+    ];
+    $url = isset($directRoutes[$route])
+        ? $base . '/' . $route
+        : $base . '/index.php?route=' . rawurlencode($route);
 
     if ($queryString !== '') {
         $url .= '&' . $queryString;
@@ -145,6 +154,8 @@ function seo_route_should_noindex(string $route): bool
         'settings',
         'newsletter',
         'newsletter_unsubscribe',
+        'ai-index.json',
+        'knowledge-graph.jsonld',
         'notifications',
         'auction_bid',
         'tools_geocode',
