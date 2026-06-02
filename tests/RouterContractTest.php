@@ -238,10 +238,17 @@ final class RouterContractTest extends TestCase
 
         $loader = file_get_contents(__DIR__ . '/../app/route_helper_loader.php');
         self::assertIsString($loader);
+        self::assertStringContainsString("'module_catalog.php' => ['home'", $loader);
         self::assertStringContainsString("'widgets.php' => ['home'", $loader);
+        self::assertStringContainsString("'album_helpers.php' => ['home'", $loader);
         self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
         self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);
         self::assertStringContainsString("'newsletter.php' => ['newsletter'", $loader);
+        self::assertStringNotContainsString("'admin_helpers.php' => ['home'", $loader);
+
+        $moduleCatalog = file_get_contents(__DIR__ . '/../app/module_catalog.php');
+        self::assertIsString($moduleCatalog);
+        self::assertStringContainsString('function admin_module_cards_catalog(): array', $moduleCatalog);
     }
 
     public function testModuleAndLoginGuardsPreserveNextRoute(): void

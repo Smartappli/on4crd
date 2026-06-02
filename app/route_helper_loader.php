@@ -9,6 +9,7 @@ function app_load_helper_file(string $filename): void
 function app_load_route_helpers(string $route): void
 {
     $helperRoutes = [
+        'module_catalog.php' => ['home', 'admin', 'admin_dashboard'],
         'widgets.php' => ['home', 'dashboard', 'save_dashboard', 'widget_render', 'dashboard_widget_card', 'admin_dashboard'],
         'qsl_helpers.php' => ['qsl', 'qsl_preview', 'qsl_export'],
         'knowledge_helpers.php' => ['chatbot'],
@@ -20,7 +21,7 @@ function app_load_route_helpers(string $route): void
         'committee_helpers.php' => ['committee', 'admin_editorial'],
         'news_helpers.php' => ['admin_news'],
         'press_helpers.php' => ['press', 'admin_press'],
-        'album_helpers.php' => ['admin_albums'],
+        'album_helpers.php' => ['home', 'admin_albums'],
         'member_media.php' => ['directory', 'gdpr', 'profile'],
         'auction_helpers.php' => ['auctions', 'auction_view', 'auction_bid', 'admin_auctions'],
         'admin_helpers.php' => ['admin'],
