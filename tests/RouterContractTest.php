@@ -141,22 +141,22 @@ final class RouterContractTest extends TestCase
 
     public function testNewsModuleIsSeededAsPublic(): void
     {
-        $functions = file_get_contents(__DIR__ . '/../app/functions.php');
-        self::assertIsString($functions);
+        $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
+        self::assertIsString($schema);
 
         self::assertMatchesRegularExpression(
             "/\\['news',\\s*'[^']+',\\s*'[^']+',\\s*0,\\s*1,\\s*'public',\\s*30\\]/",
-            $functions,
+            $schema,
             'The public news route must not be seeded with members-only module visibility.'
         );
         self::assertStringContainsString(
             "UPDATE modules SET is_enabled = 1, visibility = 'public' WHERE code IN ('news'",
-            $functions,
+            $schema,
             'Runtime schema updates must restore the public news module when production data disabled it.'
         );
         self::assertStringContainsString(
             "UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')",
-            $functions,
+            $schema,
             'Runtime schema updates must restore the member dashboard module when production data disabled it.'
         );
     }
@@ -191,11 +191,11 @@ final class RouterContractTest extends TestCase
 
     public function testAuthDoesNotCallPrivatePdoDatabaseConstructor(): void
     {
-        $functions = file_get_contents(__DIR__ . '/../app/functions.php');
-        self::assertIsString($functions);
+        $core = file_get_contents(__DIR__ . '/../app/core.php');
+        self::assertIsString($core);
 
-        self::assertStringNotContainsString('new \\Delight\\Db\\PdoDatabase($pdo)', $functions);
-        self::assertStringContainsString('new \\Delight\\Auth\\Auth($pdo)', $functions);
+        self::assertStringNotContainsString('new \\Delight\\Db\\PdoDatabase($pdo)', $core);
+        self::assertStringContainsString('new \\Delight\\Auth\\Auth($pdo)', $core);
     }
 
     public function testModuleAndLoginGuardsPreserveNextRoute(): void
