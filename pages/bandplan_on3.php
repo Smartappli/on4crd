@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require_login();
-
 $locale = current_locale();
 $static = require __DIR__ . '/../app/i18n/static_pages_legacy.php';
 $domain = $static['bandplan_on3'] ?? [];

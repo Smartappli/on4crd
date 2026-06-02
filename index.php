@@ -220,18 +220,18 @@ $routeModules = [
     'admin_dashboard' => 'admin',
     'admin_auctions' => 'admin',
     'settings' => 'members',
-    'code_q' => 'members',
-    'code_cw' => 'members',
-    'bandplan_on3' => 'members',
-    'bandplan_on2' => 'members',
-    'bandplan_harec' => 'members',
+    'code_q' => 'education',
+    'code_cw' => 'education',
+    'bandplan_on3' => 'education',
+    'bandplan_on2' => 'education',
+    'bandplan_harec' => 'education',
 ];
 
 if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route]);
 }
 
-$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login();
 }

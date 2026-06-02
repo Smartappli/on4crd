@@ -168,6 +168,25 @@ final class RouterContractTest extends TestCase
 
         self::assertStringNotContainsString("'membership' => 'members'", $router);
         self::assertContains('search', $this->extractArrayValues($router, 'publicRoutes'));
+
+        $publicEducationRoutes = [
+            'code_q',
+            'code_cw',
+            'bandplan_on3',
+            'bandplan_on2',
+            'bandplan_harec',
+        ];
+        $publicRoutes = $this->extractArrayValues($router, 'publicRoutes');
+
+        foreach ($publicEducationRoutes as $route) {
+            self::assertContains($route, $publicRoutes, sprintf('Route %s must be public.', $route));
+            self::assertStringNotContainsString(sprintf("'%s' => 'members'", $route), $router, sprintf('Route %s must not be gated by the members module.', $route));
+            self::assertStringContainsString(sprintf("'%s' => 'education'", $route), $router, sprintf('Route %s must use the public education module gate.', $route));
+
+            $page = file_get_contents(__DIR__ . '/../pages/' . $route . '.php');
+            self::assertIsString($page);
+            self::assertStringNotContainsString('require_login();', $page, sprintf('Public route %s must not require a login in its page controller.', $route));
+        }
     }
 
     public function testAuthDoesNotCallPrivatePdoDatabaseConstructor(): void

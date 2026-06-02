@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('code_q', $locale);
 $title = (string) ($t['title'] ?? 'Amateur radio Q-code (extended)');
