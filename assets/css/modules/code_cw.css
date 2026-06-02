@@ -1,4 +1,57 @@
-﻿/* Module CSS: code_cw */
+/* Module CSS: code_cw */
 [data-route="code_cw"] .code-cw-module {
   min-width: 0;
+}
+
+[data-route="code_cw"] .code-cw-module th,
+[data-route="code_cw"] .code-cw-module td {
+  padding: .9rem 1rem;
+  vertical-align: middle;
+}
+
+[data-route="code_cw"] .code-cw-chart,
+[data-route="code_cw"] .code-cw-prosigns {
+  min-width: 32rem;
+}
+
+[data-route="code_cw"] .code-cw-symbol {
+  width: 1%;
+  color: var(--text);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+[data-route="code_cw"] .code-cw-sequence {
+  display: inline-flex;
+  align-items: center;
+  min-width: 5.2rem;
+  padding: .28rem .6rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+  color: var(--accent-strong);
+  font-family: "Cascadia Mono", "JetBrains Mono", Consolas, monospace;
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: .18em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  [data-route="code_cw"] .code-cw-module th,
+  [data-route="code_cw"] .code-cw-module td {
+    padding: .75rem;
+  }
+
+  [data-route="code_cw"] .code-cw-chart,
+  [data-route="code_cw"] .code-cw-prosigns {
+    min-width: 28rem;
+  }
+
+  [data-route="code_cw"] .code-cw-sequence {
+    min-width: 4.6rem;
+    letter-spacing: .12em;
+  }
 }

@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = (string) ($_POST['action'] ?? 'save');
 
         if ($action === 'propose_category') {
+            $user = require_login();
             $proposalName = trim(strip_tags((string) ($_POST['proposal_name'] ?? '')));
             $proposalEmail = trim((string) ($_POST['proposal_email'] ?? ''));
             $proposalCategory = trim(strip_tags((string) ($_POST['proposal_category'] ?? '')));
@@ -257,11 +258,16 @@ ob_start();
             </div>
             <p class="classifieds-hero-action">
                 <a class="button" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_ad')) ?></a>
-                <button class="button secondary" type="button" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($t('propose_category')) ?></button>
+                <?php if ($user !== null): ?>
+                    <button class="button secondary" type="button" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($t('propose_category')) ?></button>
+                <?php else: ?>
+                    <a class="button secondary" href="<?= e(route_url('login')) ?>"><?= e($t('login_to_post')) ?></a>
+                <?php endif; ?>
             </p>
         </div>
     </header>
 
+    <?php if ($user !== null): ?>
     <dialog class="classifieds-category-dialog" id="classifieds-category-dialog" aria-labelledby="classifieds-category-title">
         <div class="classifieds-category-dialog-card">
             <div class="classifieds-category-dialog-header">
@@ -300,6 +306,7 @@ ob_start();
             </form>
         </div>
     </dialog>
+    <?php endif; ?>
 
     <section class="classifieds-search-panel">
         <div class="classifieds-search-header">
