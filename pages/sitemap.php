@@ -11,15 +11,22 @@ $xml = cache_remember('seo_sitemap_xml_v4', 300, static function (): string {
         $base = $scheme . '://' . $host;
     }
 
-    /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string}> $entries */
+    /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
     $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries, $base): void {
         $urlQuery = array_merge(['route' => $route], $query);
+        $alternates = [];
+        foreach (supported_locales() as $locale) {
+            $alternates[$locale] = route_url_with_locale($route, $locale, $query);
+        }
+        $alternates['x-default'] = route_url_with_locale($route, 'fr', $query);
+
         $entries[] = [
             'loc' => $base . '/index.php?' . http_build_query($urlQuery, '', '&', PHP_QUERY_RFC3986),
             'lastmod' => $lastmod ?? gmdate('c'),
             'priority' => $priority,
             'changefreq' => $changefreq,
+            'alternates' => $alternates,
         ];
     };
 
@@ -153,10 +160,13 @@ $xml = cache_remember('seo_sitemap_xml_v4', 300, static function (): string {
     $entries = array_values(array_unique($entries, SORT_REGULAR));
 
     $buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    $buffer .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    $buffer .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">';
     foreach ($entries as $entry) {
         $buffer .= '<url>';
         $buffer .= '<loc>' . e((string) $entry['loc']) . '</loc>';
+        foreach ((array) ($entry['alternates'] ?? []) as $hreflang => $href) {
+            $buffer .= '<xhtml:link rel="alternate" hreflang="' . e((string) $hreflang) . '" href="' . e((string) $href) . '"/>';
+        }
         $buffer .= '<lastmod>' . e((string) $entry['lastmod']) . '</lastmod>';
         $buffer .= '<changefreq>' . e((string) $entry['changefreq']) . '</changefreq>';
         $buffer .= '<priority>' . e((string) $entry['priority']) . '</priority>';

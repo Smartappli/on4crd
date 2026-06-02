@@ -3,31 +3,39 @@ declare(strict_types=1);
 
 header('Content-Type: text/plain; charset=utf-8');
 
-$base = rtrim((string) config('app.base_url', ''), '/');
-if ($base === '') {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
-    $base = $scheme . '://' . $host;
+$base = base_url();
+$disallowRules = [
+    '/index.php?route=admin',
+    '/index.php?route=dashboard',
+    '/index.php?route=profile',
+    '/index.php?route=settings',
+    '/index.php?route=qsl',
+    '/storage/cache/',
+    '/storage/uploads/',
+];
+
+$lines = ['User-agent: *', 'Allow: /'];
+foreach ($disallowRules as $rule) {
+    $lines[] = 'Disallow: ' . $rule;
 }
 
-$lines = [
-    'User-agent: *',
-    'Allow: /',
-    'Disallow: /index.php?route=admin',
-    'Disallow: /index.php?route=dashboard',
-    'Disallow: /index.php?route=qsl',
-    'Disallow: /storage/cache/',
-    'Disallow: /storage/uploads/',
+$answerEngineAgents = ['GPTBot', 'ChatGPT-User', 'OAI-SearchBot', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'CCBot'];
+foreach ($answerEngineAgents as $agent) {
+    $lines[] = '';
+    $lines[] = 'User-agent: ' . $agent;
+    $lines[] = 'Allow: /';
+    foreach ($disallowRules as $rule) {
+        $lines[] = 'Disallow: ' . $rule;
+    }
+}
+
+$lines = array_merge($lines, [
     '',
-    'Sitemap: ' . $base . '/index.php?route=sitemap.xml',
-    'Sitemap: ' . $base . '/sitemap.xml',
-    'LLM: ' . $base . '/index.php?route=llms.txt',
-    'LLMS: ' . $base . '/llms.txt',
-    'AI-Index: ' . $base . '/index.php?route=ai-index.json',
-    'AI-Index: ' . $base . '/ai-index.json',
-    'Knowledge-Graph: ' . $base . '/index.php?route=knowledge-graph.jsonld',
-    'Knowledge-Graph: ' . $base . '/knowledge-graph.jsonld',
-    'Host: ' . preg_replace('#^https?://#', '', $base),
-];
+    'Sitemap: ' . route_url('sitemap.xml'),
+    'LLMS: ' . route_url('llms.txt'),
+    'AI-Index: ' . route_url('ai-index.json'),
+    'Knowledge-Graph: ' . route_url('knowledge-graph.jsonld'),
+    'Host: ' . (string) parse_url($base, PHP_URL_HOST),
+]);
 
 echo implode("\n", $lines) . "\n";

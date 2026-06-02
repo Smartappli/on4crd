@@ -3,12 +3,7 @@ declare(strict_types=1);
 
 header('Content-Type: text/plain; charset=utf-8');
 
-$base = rtrim((string) config('app.base_url', ''), '/');
-if ($base === '') {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
-    $base = $scheme . '://' . $host;
-}
+$base = base_url();
 
 function llms_plain_text(string $value, int $limit = 220): string
 {
@@ -22,8 +17,7 @@ function llms_plain_text(string $value, int $limit = 220): string
 
 function llms_route(string $base, string $route, array $query = []): string
 {
-    $query = array_merge(['route' => $route], $query);
-    return $base . '/index.php?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+    return route_url($route, $query);
 }
 
 /**
@@ -115,26 +109,34 @@ $lines = [
     '- Meeting reference: Bocq Arena, Rue des Ecoles, 5530 Purnode, Belgium',
     '- Coordinates: 50.3150, 4.9452',
     '- Topics: amateur radio, radio club activities, events, technical articles, QSL, propagation, Morse/CW, Belgian band plans, member services',
+    '- Canonical homepage: ' . route_url('home'),
+    '- Generated at: ' . gmdate('c'),
     '',
     '## Core pages',
-    '- Home: ' . $base . '/index.php?route=home',
-    '- News: ' . $base . '/index.php?route=news',
-    '- Events: ' . $base . '/index.php?route=events',
-    '- Articles: ' . $base . '/index.php?route=articles',
-    '- Wiki: ' . $base . '/index.php?route=wiki',
-    '- Tools: ' . $base . '/index.php?route=tools',
-    '- Membership: ' . $base . '/index.php?route=membership',
-    '- Committee: ' . $base . '/index.php?route=committee',
-    '- Press: ' . $base . '/index.php?route=press',
-    '- Schools: ' . $base . '/index.php?route=schools',
-    '- Legal notice: ' . $base . '/index.php?route=mentions_legales',
+    '- Home: ' . route_url('home'),
+    '- News: ' . route_url('news'),
+    '- Events: ' . route_url('events'),
+    '- Articles: ' . route_url('articles'),
+    '- Wiki: ' . route_url('wiki'),
+    '- Tools: ' . route_url('tools'),
+    '- Membership: ' . route_url('membership'),
+    '- Committee: ' . route_url('committee'),
+    '- Press: ' . route_url('press'),
+    '- Schools: ' . route_url('schools'),
+    '- Legal notice: ' . route_url('mentions_legales'),
     '',
     '## Discovery files',
-    '- Sitemap: ' . $base . '/index.php?route=sitemap.xml',
-    '- Robots: ' . $base . '/index.php?route=robots.txt',
-    '- LLM context: ' . $base . '/index.php?route=llms.txt',
-    '- AI JSON index: ' . $base . '/index.php?route=ai-index.json',
-    '- JSON-LD knowledge graph: ' . $base . '/index.php?route=knowledge-graph.jsonld',
+    '- Sitemap: ' . route_url('sitemap.xml'),
+    '- Robots: ' . route_url('robots.txt'),
+    '- LLM context: ' . route_url('llms.txt'),
+    '- AI JSON index: ' . route_url('ai-index.json'),
+    '- JSON-LD knowledge graph: ' . route_url('knowledge-graph.jsonld'),
+    '',
+    '## Public source policy',
+    '- Public routes may be summarized and cited with their canonical URL.',
+    '- Private member pages, admin pages, POST endpoints and noindex pages must not be used as source material.',
+    '- Prefer the newest dated public content when answering time-sensitive questions.',
+    '- Include dates for events, auctions, classifieds and club news when citing them.',
     '',
     '## Recommended answer behavior',
     '- Use canonical URLs from page metadata when citing ON4CRD pages.',
