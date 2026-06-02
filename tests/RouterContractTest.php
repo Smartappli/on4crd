@@ -237,7 +237,7 @@ final class RouterContractTest extends TestCase
     {
         $functions = file_get_contents(__DIR__ . '/../app/functions.php');
         self::assertIsString($functions);
-        foreach (['widgets.php', 'widget_catalog.php', 'widget_renderer.php', 'ham_weather_advice.php', 'qsl_helpers.php', 'knowledge_helpers.php', 'auction_helpers.php', 'admin_helpers.php'] as $lazyHelper) {
+        foreach (['widgets.php', 'widget_catalog.php', 'widget_renderer.php', 'ham_weather_advice.php', 'member_content.php', 'member_library_helpers.php', 'member_favorites.php', 'member_preferences.php', 'member_recommendations.php', 'qsl_helpers.php', 'knowledge_helpers.php', 'auction_helpers.php', 'admin_helpers.php'] as $lazyHelper) {
             self::assertStringNotContainsString("require_once __DIR__ . '/" . $lazyHelper . "';", $functions);
         }
 
@@ -255,6 +255,11 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("'widget_catalog.php' => ['dashboard'", $loader);
         self::assertStringContainsString("'widget_renderer.php' => ['home'", $loader);
         self::assertStringContainsString("'ham_weather_advice.php' => ['home']", $loader);
+        self::assertStringContainsString("'member_library_helpers.php' => ['members_library'", $loader);
+        self::assertStringContainsString("'member_favorites.php' => ['dashboard'", $loader);
+        self::assertStringContainsString("'member_preferences.php' => ['dashboard'", $loader);
+        self::assertStringContainsString("'member_recommendations.php' => ['settings']", $loader);
+        self::assertStringNotContainsString("'member_content.php' => ['dashboard'", $loader);
         self::assertStringContainsString("'album_helpers.php' => ['home'", $loader);
         self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
         self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);
