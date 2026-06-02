@@ -191,6 +191,19 @@ final class RouterContractTest extends TestCase
         }
     }
 
+    public function testDirectDiscoveryRoutesPreserveExtensions(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+
+        foreach (['sitemap.xml', 'robots.txt', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld'] as $route) {
+            self::assertStringContainsString("'" . $route . "'", $router);
+            self::assertStringContainsString("case '" . $route . "':", $router);
+        }
+        self::assertStringContainsString('$directDiscoveryRoutes', $router);
+        self::assertStringContainsString('$pathBasename', $router);
+    }
+
     public function testAuthDoesNotCallPrivatePdoDatabaseConstructor(): void
     {
         $core = file_get_contents(__DIR__ . '/../app/core.php');

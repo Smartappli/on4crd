@@ -3,18 +3,10 @@ declare(strict_types=1);
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$xml = cache_remember('seo_sitemap_xml_v4', 300, static function (): string {
-    $base = rtrim((string) config('app.base_url', ''), '/');
-    if ($base === '') {
-        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-        $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
-        $base = $scheme . '://' . $host;
-    }
-
+$xml = cache_remember('seo_sitemap_xml_v5', 300, static function (): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
-    $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries, $base): void {
-        $urlQuery = array_merge(['route' => $route], $query);
+    $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries): void {
         $alternates = [];
         foreach (supported_locales() as $locale) {
             $alternates[$locale] = route_url_with_locale($route, $locale, $query);
@@ -22,7 +14,7 @@ $xml = cache_remember('seo_sitemap_xml_v4', 300, static function (): string {
         $alternates['x-default'] = route_url_with_locale($route, 'fr', $query);
 
         $entries[] = [
-            'loc' => $base . '/index.php?' . http_build_query($urlQuery, '', '&', PHP_QUERY_RFC3986),
+            'loc' => route_url($route, $query),
             'lastmod' => $lastmod ?? gmdate('c'),
             'priority' => $priority,
             'changefreq' => $changefreq,

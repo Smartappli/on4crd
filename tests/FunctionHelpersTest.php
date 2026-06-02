@@ -92,6 +92,16 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(route_url('qsl_export', ['id' => '7']), $next);
     }
 
+    public function testRouteUrlUsesDirectDiscoveryFiles(): void
+    {
+        self::assertStringEndsWith('/sitemap.xml', route_url('sitemap.xml'));
+        self::assertStringEndsWith('/robots.txt', route_url('robots.txt'));
+        self::assertStringEndsWith('/llms.txt', route_url('llms.txt'));
+        self::assertStringEndsWith('/ai-index.json', route_url('ai-index.json'));
+        self::assertStringEndsWith('/knowledge-graph.jsonld', route_url('knowledge-graph.jsonld'));
+        self::assertStringEndsWith('/ai-index.json?fresh=1', route_url('ai-index.json', ['fresh' => '1']));
+    }
+
     public function testValidateRemoteFeedUrlRejectsLocalNetworks(): void
     {
         $this->expectException(RuntimeException::class);

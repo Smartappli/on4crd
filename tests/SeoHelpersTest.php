@@ -11,6 +11,7 @@ final class SeoHelpersTest extends TestCase
         parent::setUp();
         $_SESSION['_page_meta'] = [];
         $_GET = [];
+        $_SERVER = [];
     }
 
     public function testSeoBuildCanonicalQueryFiltersTechnicalParamsAndSortsKeys(): void
@@ -31,6 +32,8 @@ final class SeoHelpersTest extends TestCase
     {
         self::assertTrue(seo_route_should_noindex('admin_newsletters'));
         self::assertTrue(seo_route_should_noindex('newsletter'));
+        self::assertTrue(seo_route_should_noindex('ai-index.json'));
+        self::assertTrue(seo_route_should_noindex('knowledge-graph.jsonld'));
         self::assertFalse(seo_route_should_noindex('shop'));
     }
 
@@ -72,5 +75,50 @@ final class SeoHelpersTest extends TestCase
         self::assertStringNotContainsString('utm_source', (string) $meta['canonical']);
         self::assertStringNotContainsString('fbclid', (string) $meta['canonical']);
         self::assertStringContainsString('slug=antenne-vhf', (string) $meta['alternates']['en']);
+    }
+
+    public function testSeoCanonicalUrlUsesDirectDiscoveryEndpoints(): void
+    {
+        $_SERVER['HTTP_HOST'] = 'on4crd.test';
+
+        self::assertSame('http://on4crd.test/ai-index.json', seo_build_canonical_url('ai-index.json'));
+        self::assertSame('http://on4crd.test/knowledge-graph.jsonld', seo_build_canonical_url('knowledge-graph.jsonld'));
+    }
+
+    public function testLocalizedSeoDefaultsAddsGeoMetadataForAnswerEngines(): void
+    {
+        $meta = localized_seo_defaults('tools', 'fr', [], 'ON4CRD');
+
+        self::assertSame('public_webpage', $meta['content_type'] ?? null);
+        self::assertNotEmpty($meta['ai_summary'] ?? '');
+        self::assertIsArray($meta['json_ld'] ?? null);
+        self::assertSame('ON4CRD', $meta['json_ld']['isPartOf']['name'] ?? null);
+        self::assertSame('Radio Club Durnal ON4CRD', $meta['json_ld']['publisher']['name'] ?? null);
+        self::assertStringEndsWith('#webpage', (string) ($meta['json_ld']['@id'] ?? ''));
+    }
+
+    public function testGeoDiscoveryFilesExposeAnswerEngineSignals(): void
+    {
+        $robots = file_get_contents(__DIR__ . '/../pages/robots.php');
+        self::assertIsString($robots);
+        self::assertStringContainsString('GPTBot', $robots);
+        self::assertStringContainsString("route_url('ai-index.json')", $robots);
+        self::assertStringContainsString("route_url('knowledge-graph.jsonld')", $robots);
+
+        $sitemap = file_get_contents(__DIR__ . '/../pages/sitemap.php');
+        self::assertIsString($sitemap);
+        self::assertStringContainsString('xmlns:xhtml="http://www.w3.org/1999/xhtml"', $sitemap);
+        self::assertStringContainsString('<xhtml:link rel="alternate"', $sitemap);
+
+        $aiIndex = file_get_contents(__DIR__ . '/../pages/ai_index.php');
+        self::assertIsString($aiIndex);
+        self::assertStringContainsString("'schema_version' => '1.1'", $aiIndex);
+        self::assertStringContainsString("'answer_engine_policy' =>", $aiIndex);
+        self::assertStringContainsString("'knowledge_graph' =>", $aiIndex);
+
+        $knowledgeGraph = file_get_contents(__DIR__ . '/../pages/knowledge_graph.php');
+        self::assertIsString($knowledgeGraph);
+        self::assertStringContainsString("'@type' => 'Dataset'", $knowledgeGraph);
+        self::assertStringContainsString("'@type' => 'DataCatalog'", $knowledgeGraph);
     }
 }
