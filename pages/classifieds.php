@@ -237,8 +237,8 @@ ob_start();
 <section class="classifieds-page">
     <header class="page-hero classifieds-hero">
         <div class="classifieds-hero-copy">
-            <p class="directory-eyebrow"><?= e($t('title')) ?></p>
-            <h1><?= e($t('title')) ?></h1>
+            <p class="directory-eyebrow classifieds-hero-title"><?= e($t('title')) ?></p>
+            <h1 class="classifieds-hero-heading"><?= e($t('title')) ?></h1>
             <p class="directory-lead"><?= e($t('lead')) ?></p>
         </div>
         <div class="classifieds-hero-side">
@@ -261,7 +261,7 @@ ob_start();
                 <?php if ($user !== null): ?>
                     <button class="button secondary" type="button" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($t('propose_category')) ?></button>
                 <?php else: ?>
-                    <a class="button secondary" href="<?= e(route_url('login')) ?>"><?= e($t('login_to_post')) ?></a>
+                    <a class="button secondary" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_category')) ?></a>
                 <?php endif; ?>
             </p>
         </div>
@@ -308,51 +308,32 @@ ob_start();
     </dialog>
     <?php endif; ?>
 
-    <section class="classifieds-search-panel">
-        <div class="classifieds-search-header">
-            <div>
-                <h2><?= e($t('search_label')) ?></h2>
-                <p class="help"><?= e($t('search_placeholder')) ?></p>
-            </div>
-            <?php if ($user === null): ?>
-                <a class="button" href="<?= e(route_url('login')) ?>"><?= e($t('login_to_post')) ?></a>
-            <?php endif; ?>
-        </div>
-        <form method="get" class="classifieds-filter-form">
+    <section class="wiki-search-panel classifieds-search-bar">
+        <form method="get" class="wiki-search-form classifieds-search-form">
             <input type="hidden" name="route" value="classifieds">
-            <label>
-                <span><?= e($t('search_label')) ?></span>
-                <input type="search" name="q" value="<?= e($query) ?>" placeholder="<?= e($t('search_placeholder')) ?>">
-            </label>
-            <label>
-                <span><?= e($t('category_label')) ?></span>
-                <select name="category">
-                    <option value=""><?= e($t('all_categories')) ?></option>
-                    <?php foreach ($categories as $code => $label): ?>
-                        <option value="<?= e($code) ?>" <?= $categoryFilter === $code ? 'selected' : '' ?>><?= e($label) ?> (<?= (int) ($activeCategoryCounts[$code] ?? 0) ?>)</option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <div class="classifieds-filter-actions">
-                <button class="button"><?= e($t('filter')) ?></button>
-                <?php if ($query !== '' || $categoryFilter !== ''): ?>
-                    <a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('reset')) ?></a>
-                <?php endif; ?>
-            </div>
+            <?php if ($categoryFilter !== ''): ?>
+                <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
+            <?php endif; ?>
+            <input type="text" name="q" value="<?= e($query) ?>" placeholder="<?= e($t('search_placeholder')) ?>">
+            <button class="button" type="submit"><?= e($t('filter')) ?></button>
+            <?php if ($query !== '' || $categoryFilter !== ''): ?>
+                <a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('reset')) ?></a>
+            <?php endif; ?>
         </form>
-        <nav class="classifieds-category-strip" aria-label="<?= e($t('category_label')) ?>">
-            <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('classifieds', ['q' => $query])) ?>">
-                <span><?= e($t('all_categories')) ?></span>
-                <strong><?= (int) array_sum($activeCategoryCounts) ?></strong>
-            </a>
-            <?php foreach ($categories as $code => $label): ?>
-                <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('classifieds', ['q' => $query, 'category' => $code])) ?>">
-                    <span><?= e($label) ?></span>
-                    <strong><?= (int) ($activeCategoryCounts[$code] ?? 0) ?></strong>
-                </a>
-            <?php endforeach; ?>
-        </nav>
     </section>
+
+    <nav class="classifieds-category-strip classifieds-category-filter" aria-label="<?= e($t('category_label')) ?>">
+        <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('classifieds', ['q' => $query])) ?>">
+            <span><?= e($t('all_categories')) ?></span>
+            <strong><?= (int) array_sum($activeCategoryCounts) ?></strong>
+        </a>
+        <?php foreach ($categories as $code => $label): ?>
+            <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('classifieds', ['q' => $query, 'category' => $code])) ?>">
+                <span><?= e($label) ?></span>
+                <strong><?= (int) ($activeCategoryCounts[$code] ?? 0) ?></strong>
+            </a>
+        <?php endforeach; ?>
+    </nav>
 
 
     <section class="classifieds-results">

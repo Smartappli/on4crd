@@ -184,8 +184,8 @@ ob_start();
 <div class="directory-page">
     <section class="directory-hero">
         <div class="directory-hero-copy">
-            <p class="directory-eyebrow"><?= e($t('club_numbers')) ?></p>
-            <h1><?= e($t('members_title')) ?></h1>
+            <p class="directory-eyebrow directory-hero-title"><?= e($t('club_numbers')) ?></p>
+            <h1 class="directory-hero-heading"><?= e($t('members_title')) ?></h1>
             <p class="directory-lead"><?= e($t('intro')) ?></p>
         </div>
         <div class="directory-hero-stats" aria-label="<?= e($t('club_numbers')) ?>">
