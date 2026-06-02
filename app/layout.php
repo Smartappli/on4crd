@@ -91,11 +91,13 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
 {
     $seo = i18n_domain_locale('seo', $locale);
     $routeKey = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
-    $canonicalRoute = in_array($route, ['install.php', 'sitemap.xml', 'robots.txt', 'llms.txt'], true) ? $route : $routeKey;
+    $discoveryRoutes = ['install.php', 'sitemap.xml', 'robots.txt', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld'];
+    $canonicalRoute = in_array($route, $discoveryRoutes, true) ? $route : $routeKey;
     $routeSeo = [
         'ad_click' => ['title' => 'Redirection partenaire ON4CRD', 'description' => 'Redirection securisee vers une annonce ou un partenaire du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
         'admin' => ['title' => 'Administration ON4CRD', 'description' => 'Tableau d administration du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
         'ads' => ['title' => 'Annonces partenaires ON4CRD', 'description' => 'Annonces, partenaires et communications sponsorisees du Radio Club Durnal ON4CRD.'],
+        'aiindexjson' => ['title' => 'AI index ON4CRD', 'description' => 'Index JSON public des contenus ON4CRD pour assistants et moteurs generatifs.', 'robots' => 'noindex,follow'],
         'album' => ['title' => 'Album photo ON4CRD', 'description' => 'Album photo public des activites, sorties et evenements du Radio Club Durnal ON4CRD.'],
         'albums' => ['title' => 'Galerie photo ON4CRD', 'description' => 'Galerie des albums publics du Radio Club Durnal ON4CRD.'],
         'article' => ['title' => 'Article ON4CRD', 'description' => 'Article radioamateur publie par le Radio Club Durnal ON4CRD.'],
@@ -123,6 +125,7 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
         'gdpr' => ['title' => 'Vie privee ON4CRD', 'description' => 'Gestion des preferences de confidentialite et de visibilite du profil membre ON4CRD.', 'robots' => 'noindex,nofollow'],
         'home' => ['title' => 'Radio Club Durnal ON4CRD', 'description' => 'Portail du Radio Club Durnal ON4CRD : actualites, evenements, outils et ressources radioamateurs.'],
         'installphp' => ['title' => 'Installation ON4CRD', 'description' => 'Endpoint d installation technique ON4CRD.', 'robots' => 'noindex,nofollow'],
+        'knowledgegraphjsonld' => ['title' => 'Knowledge graph ON4CRD', 'description' => 'Graphe JSON-LD public du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,follow'],
         'llmstxt' => ['title' => 'LLMS ON4CRD', 'description' => 'Fichier de contexte public pour assistants et moteurs de recherche.', 'robots' => 'noindex,follow'],
         'login' => ['title' => 'Connexion membre ON4CRD', 'description' => 'Connexion securisee a l espace membre du Radio Club Durnal ON4CRD.', 'robots' => 'noindex,nofollow'],
         'logout' => ['title' => 'Deconnexion ON4CRD', 'description' => 'Deconnexion securisee de l espace membre ON4CRD.', 'robots' => 'noindex,nofollow'],
@@ -201,6 +204,8 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
         'latitude' => '50.3150',
         'longitude' => '4.9452',
         'schema_type' => 'WebPage',
+        'content_type' => 'public_webpage',
+        'ai_summary' => $description,
         'alternates' => $alternates,
         'robots' => (string) ($routeSeo[$routeKey]['robots'] ?? 'index,follow'),
     ], array_filter($pageMeta, static fn($value): bool => $value !== null && $value !== ''));
@@ -209,12 +214,19 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
         $defaults['json_ld'] = [
             '@context' => 'https://schema.org',
             '@type' => (string) ($defaults['schema_type'] ?? 'WebPage'),
+            '@id' => (string) $defaults['canonical'] . '#webpage',
             'name' => (string) $defaults['title'],
             'description' => (string) $defaults['description'],
             'url' => (string) $defaults['canonical'],
+            'inLanguage' => $locale,
             'isPartOf' => [
                 '@type' => 'WebSite',
                 'name' => $siteName,
+                'url' => route_url_with_locale('home', $locale),
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Radio Club Durnal ON4CRD',
                 'url' => route_url_with_locale('home', $locale),
             ],
             'about' => [
@@ -240,6 +252,12 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
                 ],
             ],
         ];
+        if (!empty($defaults['image'])) {
+            $defaults['json_ld']['primaryImageOfPage'] = [
+                '@type' => 'ImageObject',
+                'url' => (string) $defaults['image'],
+            ];
+        }
     }
 
     return $defaults;
@@ -463,6 +481,7 @@ function render_layout(string $content, string $title = ''): string
     $metaLatitude = trim((string) ($pageMeta['latitude'] ?? ''));
     $metaLongitude = trim((string) ($pageMeta['longitude'] ?? ''));
     $metaAiSummary = trim((string) ($pageMeta['ai_summary'] ?? $metaDescription));
+    $metaContentType = trim((string) ($pageMeta['content_type'] ?? $pageMeta['schema_type'] ?? 'WebPage'));
     $metaCitationAuthor = trim((string) ($pageMeta['citation_author'] ?? 'Radio Club Durnal ON4CRD'));
     $metaKeywords = [];
     foreach (array_merge((array) ($pageMeta['keywords'] ?? []), (array) ($pageMeta['tags'] ?? [])) as $keyword) {
@@ -479,8 +498,15 @@ function render_layout(string $content, string $title = ''): string
     }
     $metaHead = '<meta name="description" content="' . e($metaDescription) . '">'
         . '<meta name="robots" content="' . e($metaRobots) . '">'
+        . '<meta name="language" content="' . e($currentLocale) . '">'
+        . '<meta name="ai-summary" content="' . e($metaAiSummary) . '">'
+        . '<meta name="answer-engine-summary" content="' . e($metaAiSummary) . '">'
+        . '<meta name="content-type" content="' . e($metaContentType) . '">'
         . '<meta name="dcterms.title" content="' . e($pageTitle) . '">'
         . '<meta name="dcterms.description" content="' . e($metaAiSummary) . '">'
+        . '<meta name="dcterms.language" content="' . e($currentLocale) . '">'
+        . '<meta name="dcterms.publisher" content="' . e($metaSiteName) . '">'
+        . '<meta name="dcterms.type" content="' . e($metaContentType) . '">'
         . '<meta name="citation_title" content="' . e($pageTitle) . '">'
         . '<meta name="citation_author" content="' . e($metaCitationAuthor) . '">'
         . '<meta name="citation_abstract" content="' . e($metaAiSummary) . '">'
@@ -506,6 +532,7 @@ function render_layout(string $content, string $title = ''): string
     if ($metaKeywords !== []) {
         $keywords = implode(', ', array_keys($metaKeywords));
         $metaHead .= '<meta name="keywords" content="' . e($keywords) . '">'
+            . '<meta name="dcterms.subject" content="' . e($keywords) . '">'
             . '<meta name="citation_keywords" content="' . e($keywords) . '">';
     }
     foreach ($metaAlternates as $hreflang => $href) {

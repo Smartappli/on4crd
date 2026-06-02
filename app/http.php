@@ -75,7 +75,14 @@ function asset_url(string $path): string
 if (!function_exists('route_url')) {
 function route_url(string $route, array $query = []): string
 {
-    static $directPhpRoutes = ['install.php' => true, 'sitemap.xml' => true, 'robots.txt' => true, 'llms.txt' => true];
+    static $directRoutes = [
+        'install.php' => true,
+        'sitemap.xml' => true,
+        'robots.txt' => true,
+        'llms.txt' => true,
+        'ai-index.json' => true,
+        'knowledge-graph.jsonld' => true,
+    ];
 
     $route = trim($route);
     if ($route === '' || $route === 'home') {
@@ -86,13 +93,13 @@ function route_url(string $route, array $query = []): string
         return base_url('/?' . http_build_query($query));
     }
 
-    if (str_ends_with($route, '.php')) {
-        $normalizedRoute = ltrim($route, '/');
-        if (isset($directPhpRoutes[$normalizedRoute])) {
-            $suffix = $query === [] ? '' : ('?' . http_build_query($query));
-            return base_url('/' . $normalizedRoute . $suffix);
-        }
+    $normalizedRoute = ltrim($route, '/');
+    if (isset($directRoutes[$normalizedRoute])) {
+        $suffix = $query === [] ? '' : ('?' . http_build_query($query));
+        return base_url('/' . $normalizedRoute . $suffix);
+    }
 
+    if (str_ends_with($route, '.php')) {
         $route = pathinfo($normalizedRoute, PATHINFO_FILENAME);
     }
 

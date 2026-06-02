@@ -13,7 +13,11 @@ if ($route === '') {
     $requestUriPath = parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
     $path = is_string($requestUriPath) ? trim($requestUriPath, '/') : '';
     if ($path !== '' && $path !== 'index.php') {
-        $route = strtolower(pathinfo($path, PATHINFO_FILENAME));
+        $directDiscoveryRoutes = ['sitemap.xml', 'robots.txt', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld'];
+        $pathBasename = strtolower(basename($path));
+        $route = in_array($pathBasename, $directDiscoveryRoutes, true)
+            ? $pathBasename
+            : strtolower(pathinfo($path, PATHINFO_FILENAME));
     }
 }
 
