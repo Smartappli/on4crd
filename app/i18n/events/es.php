@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Eventos',
   'agenda_unavailable' => 'La agenda aún no está disponible.',
-  'export' => 'Exportar',
+  'export' => 'Exportar el calendario',
   'calendar_load_error' => 'No se puede cargar el calendario interactivo.',
   'event' => 'Evento',
   'no_summary' => 'No hay resumen disponible.',

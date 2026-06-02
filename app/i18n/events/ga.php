@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Imeachtaí',
   'agenda_unavailable' => 'Níl an clár oibre ar fáil go fóill.',
-  'export' => 'Easpórtáil',
+  'export' => 'Easpórtáil an féilire',
   'calendar_load_error' => 'Ní féidir an féilire idirghníomhach a lódáil.',
   'event' => 'Imeacht',
   'no_summary' => 'Níl achoimre ar fáil.',

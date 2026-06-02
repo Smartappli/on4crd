@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Události',
   'agenda_unavailable' => 'Agenda zatím není k dispozici.',
-  'export' => 'Exportovat',
+  'export' => 'Exportovat kalendář',
   'calendar_load_error' => 'Interaktivní kalendář nelze načíst.',
   'event' => 'Událost',
   'no_summary' => 'Není k dispozici žádné shrnutí.',

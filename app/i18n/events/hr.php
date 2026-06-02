@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Događaji',
   'agenda_unavailable' => 'Dnevni red još nije dostupan.',
-  'export' => 'Izvoz',
+  'export' => 'Izvezi kalendar',
   'calendar_load_error' => 'Nije moguće učitati interaktivni kalendar.',
   'event' => 'događaj',
   'no_summary' => 'Nema dostupnog sažetka.',

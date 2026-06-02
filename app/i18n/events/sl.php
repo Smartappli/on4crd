@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Dogodki',
   'agenda_unavailable' => 'Dnevni red še ni na voljo.',
-  'export' => 'Izvozi',
+  'export' => 'Izvozi koledar',
   'calendar_load_error' => 'Interaktivnega koledarja ni mogoče naložiti.',
   'event' => 'Dogodek',
   'no_summary' => 'Povzetek ni na voljo.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Sündmused',
   'agenda_unavailable' => 'Päevakava pole veel saadaval.',
-  'export' => 'Ekspordi',
+  'export' => 'Ekspordi kalender',
   'calendar_load_error' => 'Interaktiivset kalendrit ei saa laadida.',
   'event' => 'Sündmus',
   'no_summary' => 'Kokkuvõte pole saadaval.',

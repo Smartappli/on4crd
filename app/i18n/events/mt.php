@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Avvenimenti',
   'agenda_unavailable' => 'L-aġenda għadha mhix disponibbli.',
-  'export' => 'Esportazzjoni',
+  'export' => 'Esporta l-kalendarju',
   'calendar_load_error' => 'Ma jistax tagħbija kalendarju interattiv.',
   'event' => 'Avveniment',
   'no_summary' => 'Ebda sommarju disponibbli.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Begivenheder',
   'agenda_unavailable' => 'Dagsordenen foreligger endnu ikke.',
-  'export' => 'Eksporter',
+  'export' => 'Eksporter kalenderen',
   'calendar_load_error' => 'Den interaktive kalender kunne ikke indlæses.',
   'event' => 'Begivenhed',
   'no_summary' => 'Ingen oversigt tilgængelig.',

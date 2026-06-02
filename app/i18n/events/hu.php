@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Események',
   'agenda_unavailable' => 'A napirend még nem elérhető.',
-  'export' => 'Exportálás',
+  'export' => 'Naptár exportálása',
   'calendar_load_error' => 'Nem sikerült betölteni az interaktív naptárat.',
   'event' => 'Esemény',
   'no_summary' => 'Nem érhető el összefoglaló.',

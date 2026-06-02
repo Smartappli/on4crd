@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Udalosti',
   'agenda_unavailable' => 'Agenda ešte nie je k dispozícii.',
-  'export' => 'Exportovať',
+  'export' => 'Exportovať kalendár',
   'calendar_load_error' => 'Interaktívny kalendár sa nepodarilo načítať.',
   'event' => 'Udalosť',
   'no_summary' => 'Nie je k dispozícii žiadny súhrn.',

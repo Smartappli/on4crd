@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'събития',
   'agenda_unavailable' => 'Дневният ред все още не е наличен.',
-  'export' => 'Експортиране',
+  'export' => 'Експортиране на календара',
   'calendar_load_error' => 'Интерактивният календар не може да се зареди.',
   'event' => 'Събитие',
   'no_summary' => 'Няма налично резюме.',

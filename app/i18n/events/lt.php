@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Renginiai',
   'agenda_unavailable' => 'Darbotvarkė dar nepateikta.',
-  'export' => 'Eksportuoti',
+  'export' => 'Eksportuoti kalendorių',
   'calendar_load_error' => 'Nepavyko įkelti interaktyvaus kalendoriaus.',
   'event' => 'Renginys',
   'no_summary' => 'Santrauka nepasiekiama.',

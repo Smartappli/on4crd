@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Tapahtumat',
   'agenda_unavailable' => 'Esityslista ei ole vielä saatavilla.',
-  'export' => 'Vie',
+  'export' => 'Vie kalenteri',
   'calendar_load_error' => 'Interaktiivisen kalenterin lataaminen epäonnistui.',
   'event' => 'Tapahtuma',
   'no_summary' => 'Yhteenvetoa ei ole saatavilla.',

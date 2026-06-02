@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Evenementen',
   'agenda_unavailable' => 'De agenda is nog niet beschikbaar.',
-  'export' => 'Exporteren',
+  'export' => 'Kalender exporteren',
   'calendar_load_error' => 'Interactieve kalender kon niet geladen worden.',
   'event' => 'Evenement',
   'no_summary' => 'Geen samenvatting beschikbaar.',

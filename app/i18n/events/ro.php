@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Evenimente',
   'agenda_unavailable' => 'Agenda nu este încă disponibilă.',
-  'export' => 'Export',
+  'export' => 'Exportă calendarul',
   'calendar_load_error' => 'Nu se poate încărca calendarul interactiv.',
   'event' => 'Eveniment',
   'no_summary' => 'Nu este disponibil un rezumat.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Wydarzenia',
   'agenda_unavailable' => 'Porządek obrad nie jest jeszcze dostępny.',
-  'export' => 'Eksportuj',
+  'export' => 'Eksportuj kalendarz',
   'calendar_load_error' => 'Nie można załadować interaktywnego kalendarza.',
   'event' => 'Wydarzenie',
   'no_summary' => 'Brak podsumowania.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Pasākumi',
   'agenda_unavailable' => 'Darba kārtība vēl nav pieejama.',
-  'export' => 'Eksportēt',
+  'export' => 'Eksportēt kalendāru',
   'calendar_load_error' => 'Nevar ielādēt interaktīvo kalendāru.',
   'event' => 'Pasākums',
   'no_summary' => 'Nav pieejams kopsavilkums.',

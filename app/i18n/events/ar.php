@@ -4,7 +4,7 @@ declare(strict_types=1);
 return [
     'title' => 'الفعاليات',
     'agenda_unavailable' => 'التقويم غير متاح بعد.',
-    'export' => 'تصدير',
+    'export' => 'تصدير التقويم',
     'calendar_load_error' => 'تعذّر تحميل التقويم التفاعلي.',
     'event' => 'فعالية',
     'no_summary' => 'لا يوجد ملخص متاح.',
