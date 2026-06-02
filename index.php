@@ -236,6 +236,7 @@ if (!in_array($route, $publicRoutes, true)) {
     require_login(login_next_url_for_route($route, $_GET));
 }
 
+app_load_route_helpers($route);
 
 $dispatchPage = static function (string $relativePath): void {
     $path = __DIR__ . '/' . ltrim($relativePath, '/');

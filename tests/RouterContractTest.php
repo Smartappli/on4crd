@@ -198,6 +198,39 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('new \\Delight\\Auth\\Auth($pdo)', $core);
     }
 
+    public function testBootstrapUsesVersionedRuntimeSchemaUpdates(): void
+    {
+        $bootstrap = file_get_contents(__DIR__ . '/../app/bootstrap.php');
+        self::assertIsString($bootstrap);
+
+        self::assertStringContainsString('apply_runtime_schema_updates_if_needed();', $bootstrap);
+        self::assertStringNotContainsString('apply_runtime_schema_updates();', $bootstrap);
+
+        $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
+        self::assertIsString($schema);
+        self::assertStringContainsString('function runtime_schema_version(): string', $schema);
+        self::assertStringContainsString('function apply_runtime_schema_updates_if_needed(?string $markerPath = null): bool', $schema);
+    }
+
+    public function testRouteSpecificHelpersAreLoadedLazily(): void
+    {
+        $functions = file_get_contents(__DIR__ . '/../app/functions.php');
+        self::assertIsString($functions);
+        foreach (['widgets.php', 'qsl_helpers.php', 'knowledge_helpers.php', 'auction_helpers.php', 'admin_helpers.php'] as $lazyHelper) {
+            self::assertStringNotContainsString("require_once __DIR__ . '/" . $lazyHelper . "';", $functions);
+        }
+
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+        self::assertStringContainsString('app_load_route_helpers($route);', $router);
+
+        $loader = file_get_contents(__DIR__ . '/../app/route_helper_loader.php');
+        self::assertIsString($loader);
+        self::assertStringContainsString("'widgets.php' => ['home'", $loader);
+        self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
+        self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);
+    }
+
     public function testModuleAndLoginGuardsPreserveNextRoute(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');

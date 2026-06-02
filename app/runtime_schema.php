@@ -119,8 +119,66 @@ function ensure_directories(): void
     }
 }
 
+function runtime_schema_version(): string
+{
+    return '2026-06-02.1';
+}
+
+function runtime_schema_marker_path(): string
+{
+    $directory = dirname(__DIR__) . '/storage/cache';
+    if (!is_dir($directory)) {
+        @mkdir($directory, 0775, true);
+    }
+
+    return $directory . '/runtime-schema.version';
+}
+
+function apply_runtime_schema_updates_if_needed(?string $markerPath = null): bool
+{
+    $markerPath ??= runtime_schema_marker_path();
+    $expectedVersion = runtime_schema_version();
+    $currentVersion = is_file($markerPath) ? trim((string) @file_get_contents($markerPath)) : '';
+    if ($currentVersion !== '' && hash_equals($expectedVersion, $currentVersion)) {
+        return false;
+    }
+
+    $lockPath = $markerPath . '.lock';
+    $lockDirectory = dirname($lockPath);
+    if (!is_dir($lockDirectory)) {
+        @mkdir($lockDirectory, 0775, true);
+    }
+
+    $lockHandle = @fopen($lockPath, 'c');
+    if ($lockHandle === false) {
+        apply_runtime_schema_updates();
+        @file_put_contents($markerPath, $expectedVersion, LOCK_EX);
+        return true;
+    }
+
+    try {
+        flock($lockHandle, LOCK_EX);
+        $currentVersion = is_file($markerPath) ? trim((string) @file_get_contents($markerPath)) : '';
+        if ($currentVersion !== '' && hash_equals($expectedVersion, $currentVersion)) {
+            return false;
+        }
+
+        apply_runtime_schema_updates();
+        @file_put_contents($markerPath, $expectedVersion, LOCK_EX);
+
+        return true;
+    } finally {
+        flock($lockHandle, LOCK_UN);
+        fclose($lockHandle);
+    }
+}
+
 function apply_runtime_schema_updates(): void
 {
+    require_once __DIR__ . '/content_helpers.php';
+    require_once __DIR__ . '/member_content.php';
+    require_once __DIR__ . '/notifications.php';
+
     if (!table_exists('users')) {
         db()->exec(
             'CREATE TABLE users (

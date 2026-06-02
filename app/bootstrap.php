@@ -49,4 +49,4 @@ initialize_user_preferences();
 setup_observability((array) ($bootstrapConfig['observability'] ?? []));
 apply_security_headers();
 ensure_directories();
-apply_runtime_schema_updates();
+apply_runtime_schema_updates_if_needed();

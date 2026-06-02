@@ -7,6 +7,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 require_once __DIR__ . '/../app/functions.php';
+app_load_route_helpers('__all');
 require_once __DIR__ . '/../app/cache.php';
 
 require_once __DIR__ . '/../app/maintenance.php';
