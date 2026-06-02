@@ -769,6 +769,8 @@ function render_widget(string $slug, array $user = []): string
                 return '<p class="help">' . e($unavailableMessage) . '</p>';
             }
             $latestKp = (float) ($measurement['kp'] ?? 0.0);
+            $kpTrend = is_array($payload) ? extract_kp_trend($payload) : null;
+            $kpTrendSummary = kp_trend_summary($kpTrend, $locale);
 
             $geomagneticFr = match (true) {
                 $latestKp < 2.0 => 'Très calme',
@@ -789,6 +791,7 @@ function render_widget(string $slug, array $user = []): string
             };
             return '<ul class="list-clean">'
                 . '<li><strong>Kp : ' . e(number_format($latestKp, 1, ',', '')) . '</strong> — ' . e($geomagnetic) . '</li>'
+                . ($kpTrendSummary !== null ? '<li><strong>' . e($kpTrendSummary) . '</strong></li>' : '')
                 . '</ul>';
 
         case 'open_meteo':
@@ -1330,14 +1333,9 @@ function render_ham_weather_advice(array $user = []): string
     $precipitation = is_numeric($currentWeather['precipitation'] ?? null) ? (float) $currentWeather['precipitation'] : 0.0;
     $measurement = is_array($kpPayload) ? extract_latest_kp_measurement($kpPayload) : null;
     $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : null;
-    $kpTrend = 0.0;
-    if (is_array($kpPayload) && count($kpPayload) >= 4) {
-        $latest = extract_latest_kp_measurement($kpPayload);
-        $older = extract_latest_kp_measurement(array_slice($kpPayload, 0, max(0, count($kpPayload) - 3)));
-        if (is_array($latest) && is_array($older)) {
-            $kpTrend = ((float) ($latest['kp'] ?? ($kp ?? 3.0))) - ((float) ($older['kp'] ?? ($kp ?? 3.0)));
-        }
-    }
+    $kpTrend = is_array($kpPayload) ? extract_kp_trend($kpPayload) : null;
+    $kpTrendForScoring = is_numeric($kpTrend) ? (float) $kpTrend : 0.0;
+    $kpTrendSummary = kp_trend_summary($kpTrend, $locale);
     $kpForScoring = is_numeric($kp) ? (float) $kp : 3.0;
 
     $month = (int) gmdate('n');
@@ -1354,7 +1352,7 @@ function render_ham_weather_advice(array $user = []): string
 
     $hfScore = 65.0;
     $hfScore += $kpForScoring <= 1.5 ? 20.0 : ($kpForScoring <= 3.0 ? 10.0 : ($kpForScoring <= 4.5 ? 1.0 : -20.0));
-    $hfScore += $kpTrend <= -0.8 ? 6.0 : ($kpTrend >= 0.8 ? -8.0 : 0.0);
+    $hfScore += $kpTrendForScoring <= -0.8 ? 6.0 : ($kpTrendForScoring >= 0.8 ? -8.0 : 0.0);
     $hfScore += $isDaytime ? 10.0 : -4.0;
     $hfScore += ($wind <= 18.0 ? 8.0 : ($wind <= 30.0 ? 2.0 : -10.0));
     $hfScore += ($humidity >= 35 && $humidity <= 85) ? 3.0 : -5.0;
@@ -1406,7 +1404,7 @@ function render_ham_weather_advice(array $user = []): string
         . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h, nuages ' . e((string) $cloudCover) . '%, pluie ' . e(number_format($precipitation, 1, ',', '')) . ' mm/h</li>'
         . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> '
         . (is_numeric($kp)
-            ? 'Kp=' . e(number_format((float) $kp, 1, ',', '')) . ' (Δ ' . e(number_format($kpTrend, 1, ',', '')) . ')'
+            ? 'Kp=' . e(number_format((float) $kp, 1, ',', '')) . ($kpTrendSummary !== null ? '; ' . e($kpTrendSummary) : '')
             : e((string) $i18n['kp_unavailable']))
         . '</li>'
         . '<li><strong>' . e((string) $i18n['updated_at']) . '</strong> ' . e($updatedLabel) . '</li>'

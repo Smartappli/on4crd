@@ -126,6 +126,19 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(3.33, round((float) $result['kp'], 2));
     }
 
+    public function testExtractKpTrendComparesLatestWithOlderMeasurement(): void
+    {
+        $payload = [
+            ['time_tag', 'kp_index'],
+            ['2026-04-26 00:00:00.000', '2.00'],
+            ['2026-04-26 03:00:00.000', '2.33'],
+            ['2026-04-26 06:00:00.000', '2.67'],
+            ['2026-04-26 09:00:00.000', '3.33'],
+        ];
+
+        self::assertSame(1.33, round((float) extract_kp_trend($payload, 3), 2));
+    }
+
     public function testExtractLatestKpMeasurementSkipsInvalidTrailingRows(): void
     {
         $payload = [
