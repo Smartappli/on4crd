@@ -67,8 +67,8 @@ $newsletterEmail = newsletter_normalize_email((string) ($currentNewsletter['emai
 $pageTitle = (string) ($t['title'] ?? 'Account settings');
 ob_start();
 ?>
-<section class="card">
-  <section aria-labelledby="settings-newsletter-title">
+<section class="card settings-module settings-preferences">
+  <section class="settings-preferences-panel settings-preferences-newsletter" aria-labelledby="settings-newsletter-title">
     <h2 id="settings-newsletter-title" style="margin-top:0;"><?= e($newsletterT('title')) ?></h2>
     <p><?= e($newsletterT('intro')) ?></p>
     <?php if ($newsletterSubscribed): ?>
@@ -94,42 +94,42 @@ ob_start();
     <?php endif; ?>
   </section>
 
-  <section aria-labelledby="settings-recommendations-title" style="border-top:1px solid var(--border);margin-top:1.5rem;padding-top:1.5rem;">
+  <section class="settings-preferences-panel settings-preferences-recommendations" aria-labelledby="settings-recommendations-title">
     <h2 id="settings-recommendations-title" style="margin-top:0;"><?= e($rt('recommendations_title')) ?></h2>
     <form method="post" class="inline-form" style="margin:.25rem 0 1rem;">
-    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-    <input type="hidden" name="action" value="toggle_recommendations">
-    <label style="display:flex;align-items:center;gap:.45rem;">
-      <input type="checkbox" name="recommendations_enabled" value="1" <?= $recommendationsEnabled ? 'checked' : '' ?>>
-      <span><?= e($rt('recommendations_opt_in_label')) ?></span>
-    </label>
-    <button class="button secondary small" type="submit"><?= e($rt('save_layout')) ?></button>
+      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="action" value="toggle_recommendations">
+      <label style="display:flex;align-items:center;gap:.45rem;">
+        <input type="checkbox" name="recommendations_enabled" value="1" <?= $recommendationsEnabled ? 'checked' : '' ?>>
+        <span><?= e($rt('recommendations_opt_in_label')) ?></span>
+      </label>
+      <button class="button secondary small" type="submit"><?= e($rt('save_layout')) ?></button>
     </form>
     <p class="help"><?= e($rt('recommendations_opt_in_help')) ?></p>
     <form method="post" class="inline-form" style="margin:.25rem 0 1rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;">
-    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-    <input type="hidden" name="action" value="toggle_recommendation_signals">
-    <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[article]" value="1" <?= $recommendationSignals['article'] ? 'checked' : '' ?>> <span><?= e($rt('signal_article')) ?></span></label>
-    <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[wiki]" value="1" <?= $recommendationSignals['wiki'] ? 'checked' : '' ?>> <span><?= e($rt('signal_wiki')) ?></span></label>
-    <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[classified]" value="1" <?= $recommendationSignals['classified'] ? 'checked' : '' ?>> <span><?= e($rt('signal_classified')) ?></span></label>
-    <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[album]" value="1" <?= $recommendationSignals['album'] ? 'checked' : '' ?>> <span><?= e($rt('signal_album')) ?></span></label>
-    <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[library]" value="1" <?= $recommendationSignals['library'] ? 'checked' : '' ?>> <span><?= e($rt('signal_library')) ?></span></label>
-    <button class="button secondary small" type="submit"><?= e($rt('save_layout')) ?></button>
+      <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="action" value="toggle_recommendation_signals">
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[article]" value="1" <?= $recommendationSignals['article'] ? 'checked' : '' ?>> <span><?= e($rt('signal_article')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[wiki]" value="1" <?= $recommendationSignals['wiki'] ? 'checked' : '' ?>> <span><?= e($rt('signal_wiki')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[classified]" value="1" <?= $recommendationSignals['classified'] ? 'checked' : '' ?>> <span><?= e($rt('signal_classified')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[album]" value="1" <?= $recommendationSignals['album'] ? 'checked' : '' ?>> <span><?= e($rt('signal_album')) ?></span></label>
+      <label style="display:flex;align-items:center;gap:.35rem;"><input type="checkbox" name="signals[library]" value="1" <?= $recommendationSignals['library'] ? 'checked' : '' ?>> <span><?= e($rt('signal_library')) ?></span></label>
+      <button class="button secondary small" type="submit"><?= e($rt('save_layout')) ?></button>
     </form>
     <?php if ($recommendations === []): ?>
       <p class="help"><?= e($rt('recommendations_empty')) ?></p>
     <?php else: ?>
       <ul class="stack" style="list-style:none;padding:0;margin:0;">
-      <?php foreach ($recommendations as $item): ?>
-        <?php $reasonKey = (string) ($item['reason_key'] ?? ''); ?>
-        <li class="row-between" style="gap:.8rem;align-items:flex-start;">
-          <span>
-            <span><?= e((string) ($item['title'] ?? '')) ?></span><br>
-            <small class="help"><?= e($rt('recommendations_why')) ?>: <?= e($rt($reasonKey !== '' ? $reasonKey : 'recommendation_reason_default')) ?></small>
-          </span>
-          <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e($rt('open')) ?></a><?php endif; ?>
-        </li>
-      <?php endforeach; ?>
+        <?php foreach ($recommendations as $item): ?>
+          <?php $reasonKey = (string) ($item['reason_key'] ?? ''); ?>
+          <li class="row-between" style="gap:.8rem;align-items:flex-start;">
+            <span>
+              <span><?= e((string) ($item['title'] ?? '')) ?></span><br>
+              <small class="help"><?= e($rt('recommendations_why')) ?>: <?= e($rt($reasonKey !== '' ? $reasonKey : 'recommendation_reason_default')) ?></small>
+            </span>
+            <?php if (trim((string) ($item['url'] ?? '')) !== ''): ?><a class="button secondary small" href="<?= e((string) $item['url']) ?>"><?= e($rt('open')) ?></a><?php endif; ?>
+          </li>
+        <?php endforeach; ?>
       </ul>
     <?php endif; ?>
   </section>

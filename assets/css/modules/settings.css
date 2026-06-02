@@ -2,3 +2,32 @@
 [data-route="settings"] .settings-module {
   min-width: 0;
 }
+
+[data-route="settings"] .settings-preferences {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+[data-route="settings"] .settings-preferences-panel {
+  min-width: 0;
+}
+
+[data-route="settings"] .settings-preferences-recommendations {
+  border-left: 1px solid var(--border);
+  padding-left: 1.5rem;
+}
+
+@media (max-width: 860px) {
+  [data-route="settings"] .settings-preferences {
+    grid-template-columns: 1fr;
+  }
+
+  [data-route="settings"] .settings-preferences-recommendations {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    padding-left: 0;
+    padding-top: 1.25rem;
+  }
+}
