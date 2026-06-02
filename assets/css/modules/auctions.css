@@ -8,6 +8,10 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+[data-route="auctions"] .auctions-hero-copy h1 {
+  font-weight: 400;
+}
+
 .auctions-section-title {
   margin: 0;
   color: var(--accent-strong);
