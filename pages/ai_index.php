@@ -4,16 +4,8 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: public, max-age=300');
 
-$base = rtrim((string) config('app.base_url', ''), '/');
-if ($base === '') {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
-    $base = $scheme . '://' . $host;
-}
-
-$buildUrl = static function (string $route, array $query = []) use ($base): string {
-    $query = array_merge(['route' => $route], $query);
-    return $base . '/index.php?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+$buildUrl = static function (string $route, array $query = []): string {
+    return route_url($route, $query);
 };
 
 $plainText = static function (string $value, int $limit = 240): string {
@@ -93,7 +85,7 @@ if (module_enabled('wiki') && table_exists('wiki_pages')) {
 }
 
 $payload = [
-    'schema_version' => '1.0',
+    'schema_version' => '1.1',
     'generated_at' => gmdate('c'),
     'site' => [
         'name' => 'Radio Club Durnal ON4CRD',
@@ -101,18 +93,24 @@ $payload = [
         'type' => 'AmateurRadioClub',
         'url' => $buildUrl('home'),
         'language' => 'fr',
+        'available_languages' => supported_locales(),
         'location' => [
             'name' => 'Durnal / Yvoir, Province de Namur, Belgium',
             'latitude' => 50.3150,
             'longitude' => 4.9452,
         ],
         'topics' => ['amateur radio', 'radioamateurisme', 'QSL', 'Morse CW', 'propagation radio', 'Belgian band plans', 'club events'],
+        'same_as' => [
+            'https://www.facebook.com/groups/clubradiodurnal/',
+            'https://www.uba.be',
+        ],
     ],
     'discovery' => [
         'sitemap' => $buildUrl('sitemap.xml'),
         'robots' => $buildUrl('robots.txt'),
         'llms' => $buildUrl('llms.txt'),
         'ai_index' => $buildUrl('ai-index.json'),
+        'knowledge_graph' => $buildUrl('knowledge-graph.jsonld'),
     ],
     'canonical_pages' => [
         ['name' => 'Home', 'url' => $buildUrl('home')],
@@ -124,12 +122,20 @@ $payload = [
         ['name' => 'Membership', 'url' => $buildUrl('membership')],
         ['name' => 'Press', 'url' => $buildUrl('press')],
         ['name' => 'Schools', 'url' => $buildUrl('schools')],
+        ['name' => 'Code Q', 'url' => $buildUrl('code_q')],
+        ['name' => 'Code CW', 'url' => $buildUrl('code_cw')],
+        ['name' => 'Band plan ON3', 'url' => $buildUrl('bandplan_on3')],
+        ['name' => 'Band plan ON2', 'url' => $buildUrl('bandplan_on2')],
+        ['name' => 'Band plan HAREC', 'url' => $buildUrl('bandplan_harec')],
     ],
     'recent_public_content' => $recent,
     'answer_engine_policy' => [
         'prefer_canonical_urls' => true,
         'verify_time_sensitive_pages' => ['events', 'auctions', 'classifieds', 'membership'],
         'exclude_private_routes' => true,
+        'excluded_route_prefixes' => ['admin', 'dashboard', 'profile', 'settings', 'qsl', 'notifications'],
+        'allowed_source_types' => ['public page', 'public news', 'public article', 'public event', 'public wiki page', 'public album'],
+        'citation_required' => true,
         'summary_guidance' => 'Use public page metadata and canonical URLs. Do not infer private member information.',
     ],
 ];
