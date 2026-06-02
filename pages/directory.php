@@ -239,7 +239,6 @@ ob_start();
     <section class="directory-results">
         <div class="directory-results-header">
             <div>
-                <p class="directory-eyebrow"><?= e($t('results')) ?></p>
                 <h2><?= e($t('members_title')) ?></h2>
             </div>
             <?php if ($hasFilters): ?>
