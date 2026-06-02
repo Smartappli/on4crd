@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'Mana telpa',
   'account_profile' => 'Profils',
   'account_settings' => 'Privātums',
+  'account_requests' => 'Mani pieprasījumi',
   'account_admin' => 'Administrācija',
   'logout' => 'Atvienot',
   'login' => 'Savienojums',

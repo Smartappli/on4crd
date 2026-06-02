@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'Mo spás',
   'account_profile' => 'Próifíl',
   'account_settings' => 'Príobháideachas',
+  'account_requests' => 'M’iarratais',
   'account_admin' => 'Riarachán',
   'logout' => 'Dícheangail',
   'login' => 'Ceangal',

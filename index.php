@@ -175,6 +175,7 @@ $routeModules = [
     'widget_render' => 'dashboard',
     'profile' => 'members',
     'gdpr' => 'members',
+    'my_requests' => 'members',
     'directory' => 'directory',
     'tools' => 'tools',
     'tools_geocode' => 'tools',
@@ -280,6 +281,7 @@ switch ($route) {
     case 'dashboard_widget_card': $dispatchPage('pages/dashboard_widget_card.php'); break;
     case 'profile': $dispatchPage('pages/profile.php'); break;
     case 'gdpr': $dispatchPage('pages/gdpr.php'); break;
+    case 'my_requests': $dispatchPage('pages/my_requests.php'); break;
     case 'directory': $dispatchPage('pages/directory.php'); break;
     case 'tools': $dispatchPage('pages/tools.php'); break;
     case 'tools_geocode': $dispatchPage('pages/tools_geocode.php'); break;

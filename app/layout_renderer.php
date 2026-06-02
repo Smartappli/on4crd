@@ -212,6 +212,7 @@ function render_layout_impl(string $content, string $title = ''): string
             . '<div class="account-menu-panel">'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('gdpr')) . '">' . e($accountPrivacyLabel) . '</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('my_requests')) . '">' . e((string) ($layoutI18n['account_requests'] ?? 'Mes demandes')) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('settings')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
             . $adminMenuLink
             . '<hr class="account-menu-separator">'

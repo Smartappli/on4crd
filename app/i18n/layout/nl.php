@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'Mijn account',
   'account_profile' => 'Profiel',
   'account_settings' => 'Privacy',
+  'account_requests' => 'Mijn aanvragen',
   'account_admin' => 'Beheer',
   'logout' => 'Afmelden',
   'login' => 'Inloggen',

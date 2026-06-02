@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'Az én terem',
   'account_profile' => 'Profil',
   'account_settings' => 'Adatvédelem',
+  'account_requests' => 'Saját kérelmeim',
   'account_admin' => 'Adminisztráció',
   'logout' => 'Leválasztás',
   'login' => 'Csatlakozás',

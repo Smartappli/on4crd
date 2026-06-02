@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'L-ispazju tiegħi',
   'account_profile' => 'Profil',
   'account_settings' => 'Privatezza',
+  'account_requests' => 'It-talbiet tiegħi',
   'account_admin' => 'Amministrazzjoni',
   'logout' => 'Skonnettja',
   'login' => 'Konnessjoni',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'Moj prostor',
   'account_profile' => 'Profil',
   'account_settings' => 'Zasebnost',
+  'account_requests' => 'Moje zahteve',
   'account_admin' => 'Administracija',
   'logout' => 'Prekini povezavo',
   'login' => 'Povezava',

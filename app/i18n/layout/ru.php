@@ -19,6 +19,7 @@ return array (
   'account_space' => 'Мой аккаунт',
   'account_profile' => 'Профиль',
   'account_settings' => 'Конфиденциальность',
+  'account_requests' => 'Мои заявки',
   'account_admin' => 'Администрирование',
   'logout' => 'Выйти',
   'login' => 'Войти',

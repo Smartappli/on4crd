@@ -19,6 +19,7 @@ return array (
   'account_space' => 'My account',
   'account_profile' => 'Profile',
   'account_settings' => 'Privacy',
+  'account_requests' => 'My requests',
   'account_admin' => 'Administration',
   'logout' => 'Log out',
   'login' => 'Log in',

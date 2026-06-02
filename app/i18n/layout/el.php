@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'Ο χώρος μου',
   'account_profile' => 'Προφίλ',
   'account_settings' => 'Απόρρητο',
+  'account_requests' => 'Τα αιτήματά μου',
   'account_admin' => 'Διοίκηση',
   'logout' => 'Αποσύνδεση',
   'login' => 'Σύνδεση',

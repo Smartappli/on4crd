@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -18,6 +19,7 @@ return array (
   'account_space' => 'Mit rum',
   'account_profile' => 'Profil',
   'account_settings' => 'Privatliv',
+  'account_requests' => 'Mine anmodninger',
   'account_admin' => 'Administration',
   'logout' => 'Afbryd forbindelsen',
   'login' => 'Forbindelse',

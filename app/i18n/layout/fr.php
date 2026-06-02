@@ -19,6 +19,7 @@ return array (
   'account_space' => 'Mon espace',
   'account_profile' => 'Profil',
   'account_settings' => 'Paramètres',
+  'account_requests' => 'Mes demandes',
   'account_admin' => 'Administration',
   'logout' => 'Déconnexion',
   'login' => 'Connexion',
