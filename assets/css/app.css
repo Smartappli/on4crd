@@ -654,7 +654,7 @@ textarea:focus-visible {
 .flash-error { color: var(--danger); background: rgba(180,35,24,.08); }
 .flash-success { color: var(--success); background: rgba(18,123,63,.08); }
 label { display:block; font-weight:600; margin:.7rem 0; }
-input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"], select, textarea { width:100%; padding:.75rem .9rem; border:1px solid var(--border); border-radius:14px; background: var(--panel); color: var(--text); margin-top:.35rem; }
+input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="password"], input[type="file"], select, textarea { width:100%; padding:.75rem .9rem; border:1px solid var(--border); border-radius:14px; background: var(--panel); color: var(--text); margin-top:.35rem; }
 textarea { resize: vertical; }
 .country-with-flag {
   display: inline-flex;
