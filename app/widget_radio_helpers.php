@@ -23,7 +23,7 @@ function maidenhead_to_coordinates(string $locator): ?array
     if (strlen($normalized) >= 6) {
         $lon += (ord($normalized[4]) - ord('A')) * (5.0 / 60.0);
         $lat += (ord($normalized[5]) - ord('A')) * (2.5 / 60.0);
-        $lonStep = 5.0 / 60.0;
+        $lonStep = 0.0;
         $latStep = 2.5 / 60.0;
     }
 
