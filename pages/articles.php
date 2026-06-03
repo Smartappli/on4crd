@@ -162,11 +162,42 @@ ob_start();
                 </article>
             </div>
             <div class="articles-hero-actions">
-                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>"><?= e((string) $t['propose_category']) ?></a>
+                <button class="button secondary" type="button" data-articles-category-open data-articles-category-fallback="<?= e($categoryProposalUrl) ?>" aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e((string) $t['propose_category']) ?></button>
                 <a class="button" href="<?= e($articleProposalUrl) ?>"><?= e((string) $t['propose_article']) ?></a>
             </div>
         </div>
     </section>
+
+    <dialog class="articles-category-dialog" id="articles-category-dialog" aria-labelledby="articles-category-title">
+        <div class="articles-category-dialog-card">
+            <div class="articles-category-dialog-header">
+                <div>
+                    <p class="articles-category-dialog-eyebrow"><?= e((string) $t['theme_default']) ?></p>
+                    <h2 id="articles-category-title"><?= e((string) $t['propose_category']) ?></h2>
+                    <p class="help"><?= e((string) $t['propose_category_intro']) ?></p>
+                </div>
+                <button class="articles-category-dialog-close" type="button" data-articles-category-close aria-label="<?= e((string) $t['propose_category_close']) ?>">&times;</button>
+            </div>
+            <form class="articles-category-form" method="dialog" data-articles-category-form data-articles-category-recipient="on4crd@gmail.com" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
+                <label>
+                    <span><?= e((string) $t['propose_category_name_label']) ?></span>
+                    <input type="text" name="proposal_category" maxlength="160" required>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_category_reason_label']) ?></span>
+                    <textarea name="proposal_reason" rows="5" maxlength="1600"></textarea>
+                </label>
+                <label>
+                    <span><?= e((string) $t['propose_category_contact_label']) ?></span>
+                    <input type="text" name="proposal_contact" maxlength="220" required>
+                </label>
+                <div class="articles-category-dialog-actions">
+                    <button class="button" type="submit"><?= e((string) $t['propose_category_submit']) ?></button>
+                    <button class="button secondary" type="button" data-articles-category-close><?= e((string) $t['propose_category_cancel']) ?></button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 
     <section class="card articles-search-panel">
         <form method="get" class="inline-form articles-search-form">

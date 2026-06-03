@@ -51,4 +51,12 @@ Titolo:
 Categoria:
 Riassunto:
 Contatto:',
+  'propose_category_intro' => 'Descrivi la categoria desiderata. Verrà preparata un’e-mail precompilata per il comitato.',
+  'propose_category_body_intro' => 'Buongiorno, vorrei proporre una nuova categoria di articoli.',
+  'propose_category_name_label' => 'Nome categoria',
+  'propose_category_reason_label' => 'Motivazione',
+  'propose_category_contact_label' => 'Contatto',
+  'propose_category_submit' => 'Prepara e-mail',
+  'propose_category_cancel' => 'Annulla',
+  'propose_category_close' => 'Chiudi',
 );

@@ -51,4 +51,12 @@ return array (
 类别：
 摘要：
 联系方式：',
+  'propose_category_intro' => '描述您想建议的类别。系统将为委员会准备一封预填电子邮件。',
+  'propose_category_body_intro' => '您好，我想建议一个新的文章类别。',
+  'propose_category_name_label' => '类别名称',
+  'propose_category_reason_label' => '理由',
+  'propose_category_contact_label' => '联系方式',
+  'propose_category_submit' => '准备电子邮件',
+  'propose_category_cancel' => '取消',
+  'propose_category_close' => '关闭',
 );

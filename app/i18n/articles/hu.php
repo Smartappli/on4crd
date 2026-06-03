@@ -51,4 +51,12 @@ Cím:
 Kategória:
 Összefoglaló:
 Kapcsolat:',
+  'propose_category_intro' => 'Írja le a kívánt kategóriát. A bizottság számára előre kitöltött e-mail készül.',
+  'propose_category_body_intro' => 'Üdvözlöm, szeretnék javasolni egy új cikk-kategóriát.',
+  'propose_category_name_label' => 'Kategória neve',
+  'propose_category_reason_label' => 'Indoklás',
+  'propose_category_contact_label' => 'Kapcsolat',
+  'propose_category_submit' => 'E-mail előkészítése',
+  'propose_category_cancel' => 'Mégse',
+  'propose_category_close' => 'Bezárás',
 );

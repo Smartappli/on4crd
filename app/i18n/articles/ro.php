@@ -51,4 +51,12 @@ Titlu:
 Categorie:
 Rezumat:
 Contact:',
+  'propose_category_intro' => 'Descrieți categoria dorită. Va fi pregătit un e-mail precompletat pentru comitet.',
+  'propose_category_body_intro' => 'Bună ziua, aș dori să propun o nouă categorie de articole.',
+  'propose_category_name_label' => 'Numele categoriei',
+  'propose_category_reason_label' => 'Motivație',
+  'propose_category_contact_label' => 'Contact',
+  'propose_category_submit' => 'Pregătește e-mailul',
+  'propose_category_cancel' => 'Anulează',
+  'propose_category_close' => 'Închide',
 );

@@ -51,4 +51,12 @@ return array (
 Κατηγορία:
 Περίληψη:
 Επικοινωνία:',
+  'propose_category_intro' => 'Περιγράψτε την επιθυμητή κατηγορία. Θα ετοιμαστεί ένα προσυμπληρωμένο e-mail για την επιτροπή.',
+  'propose_category_body_intro' => 'Γεια σας, θα ήθελα να προτείνω μια νέα κατηγορία άρθρων.',
+  'propose_category_name_label' => 'Όνομα κατηγορίας',
+  'propose_category_reason_label' => 'Αιτιολόγηση',
+  'propose_category_contact_label' => 'Επικοινωνία',
+  'propose_category_submit' => 'Προετοιμασία e-mail',
+  'propose_category_cancel' => 'Ακύρωση',
+  'propose_category_close' => 'Κλείσιμο',
 );

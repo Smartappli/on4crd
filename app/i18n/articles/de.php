@@ -51,4 +51,12 @@ Titel:
 Kategorie:
 Zusammenfassung:
 Kontakt:',
+  'propose_category_intro' => 'Beschreiben Sie die gewünschte Kategorie. Eine vorausgefüllte E-Mail wird für den Ausschuss vorbereitet.',
+  'propose_category_body_intro' => 'Hallo, ich möchte eine neue Artikelkategorie vorschlagen.',
+  'propose_category_name_label' => 'Kategoriename',
+  'propose_category_reason_label' => 'Begründung',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'E-Mail vorbereiten',
+  'propose_category_cancel' => 'Abbrechen',
+  'propose_category_close' => 'Schließen',
 );

@@ -51,4 +51,12 @@ Naslov:
 Kategorija:
 Povzetek:
 Kontakt:',
+  'propose_category_intro' => 'Opišite želeno kategorijo. Za odbor bo pripravljeno vnaprej izpolnjeno e-sporočilo.',
+  'propose_category_body_intro' => 'Pozdravljeni, rad/rada bi predlagal/a novo kategorijo člankov.',
+  'propose_category_name_label' => 'Ime kategorije',
+  'propose_category_reason_label' => 'Utemeljitev',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Pripravi e-pošto',
+  'propose_category_cancel' => 'Prekliči',
+  'propose_category_close' => 'Zapri',
 );

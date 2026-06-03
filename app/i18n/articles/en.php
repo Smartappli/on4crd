@@ -51,4 +51,12 @@ Title:
 Category:
 Summary:
 Contact:',
+  'propose_category_intro' => 'Describe the category you would like to suggest. A prefilled email will be prepared for the committee.',
+  'propose_category_body_intro' => 'Hello, I would like to suggest a new article category.',
+  'propose_category_name_label' => 'Category name',
+  'propose_category_reason_label' => 'Reason',
+  'propose_category_contact_label' => 'Contact',
+  'propose_category_submit' => 'Prepare email',
+  'propose_category_cancel' => 'Cancel',
+  'propose_category_close' => 'Close',
 );

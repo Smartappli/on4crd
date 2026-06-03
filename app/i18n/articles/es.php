@@ -51,4 +51,12 @@ Título:
 Categoría:
 Resumen:
 Contacto:',
+  'propose_category_intro' => 'Describe la categoría que quieres proponer. Se preparará un correo electrónico prellenado para el comité.',
+  'propose_category_body_intro' => 'Hola, me gustaría proponer una nueva categoría de artículos.',
+  'propose_category_name_label' => 'Nombre de la categoría',
+  'propose_category_reason_label' => 'Motivación',
+  'propose_category_contact_label' => 'Contacto',
+  'propose_category_submit' => 'Preparar correo',
+  'propose_category_cancel' => 'Cancelar',
+  'propose_category_close' => 'Cerrar',
 );

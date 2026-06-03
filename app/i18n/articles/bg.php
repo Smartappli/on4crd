@@ -51,4 +51,12 @@ return array (
 Категория:
 Резюме:
 Контакт:',
+  'propose_category_intro' => 'Опишете желаната категория. Ще бъде подготвен предварително попълнен имейл до комитета.',
+  'propose_category_body_intro' => 'Здравейте, бих искал/а да предложа нова категория статии.',
+  'propose_category_name_label' => 'Име на категорията',
+  'propose_category_reason_label' => 'Мотивация',
+  'propose_category_contact_label' => 'Контакт',
+  'propose_category_submit' => 'Подготви имейл',
+  'propose_category_cancel' => 'Отказ',
+  'propose_category_close' => 'Затвори',
 );

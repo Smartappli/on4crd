@@ -51,4 +51,12 @@ Nosaukums:
 Kategorija:
 Kopsavilkums:
 Kontaktinformācija:',
+  'propose_category_intro' => 'Aprakstiet vēlamo kategoriju. Komitejai tiks sagatavots iepriekš aizpildīts e-pasts.',
+  'propose_category_body_intro' => 'Labdien, vēlos ierosināt jaunu rakstu kategoriju.',
+  'propose_category_name_label' => 'Kategorijas nosaukums',
+  'propose_category_reason_label' => 'Pamatojums',
+  'propose_category_contact_label' => 'Kontaktinformācija',
+  'propose_category_submit' => 'Sagatavot e-pastu',
+  'propose_category_cancel' => 'Atcelt',
+  'propose_category_close' => 'Aizvērt',
 );

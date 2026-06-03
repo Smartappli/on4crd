@@ -51,4 +51,12 @@ Titel:
 Kategori:
 Sammanfattning:
 Kontakt:',
+  'propose_category_intro' => 'Beskriv den önskade kategorin. Ett förifyllt e-postmeddelande förbereds till kommittén.',
+  'propose_category_body_intro' => 'Hej, jag vill föreslå en ny artikelkategori.',
+  'propose_category_name_label' => 'Kategorinamn',
+  'propose_category_reason_label' => 'Motivering',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Förbered e-post',
+  'propose_category_cancel' => 'Avbryt',
+  'propose_category_close' => 'Stäng',
 );

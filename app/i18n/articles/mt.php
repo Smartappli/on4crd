@@ -51,4 +51,12 @@ Titlu:
 Kategorija:
 Sommarju:
 Kuntatt:',
+  'propose_category_intro' => 'Iddeskrivi l-kategorija mixtieqa. Se titħejja email mimlija minn qabel għall-kumitat.',
+  'propose_category_body_intro' => 'Bonġu, nixtieq nipproponi kategorija ġdida ta’ artikli.',
+  'propose_category_name_label' => 'Isem il-kategorija',
+  'propose_category_reason_label' => 'Raġuni',
+  'propose_category_contact_label' => 'Kuntatt',
+  'propose_category_submit' => 'Ipprepara email',
+  'propose_category_cancel' => 'Ikkanċella',
+  'propose_category_close' => 'Agħlaq',
 );

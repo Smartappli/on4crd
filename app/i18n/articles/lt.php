@@ -51,4 +51,12 @@ Pavadinimas:
 Kategorija:
 Santrauka:
 Kontaktas:',
+  'propose_category_intro' => 'Aprašykite norimą kategoriją. Komitetui bus parengtas iš anksto užpildytas el. laiškas.',
+  'propose_category_body_intro' => 'Sveiki, norėčiau pasiūlyti naują straipsnių kategoriją.',
+  'propose_category_name_label' => 'Kategorijos pavadinimas',
+  'propose_category_reason_label' => 'Pagrindimas',
+  'propose_category_contact_label' => 'Kontaktas',
+  'propose_category_submit' => 'Parengti el. laišką',
+  'propose_category_cancel' => 'Atšaukti',
+  'propose_category_close' => 'Uždaryti',
 );

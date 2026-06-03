@@ -51,4 +51,12 @@ Titel:
 Categorie:
 Samenvatting:
 Contact:',
+  'propose_category_intro' => 'Beschrijf de gewenste categorie. Er wordt een vooraf ingevulde e-mail voor het comité voorbereid.',
+  'propose_category_body_intro' => 'Hallo, ik wil een nieuwe artikelcategorie voorstellen.',
+  'propose_category_name_label' => 'Categorienaam',
+  'propose_category_reason_label' => 'Motivatie',
+  'propose_category_contact_label' => 'Contact',
+  'propose_category_submit' => 'E-mail voorbereiden',
+  'propose_category_cancel' => 'Annuleren',
+  'propose_category_close' => 'Sluiten',
 );

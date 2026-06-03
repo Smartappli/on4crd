@@ -51,4 +51,12 @@ Pealkiri:
 Kategooria:
 Kokkuvõte:
 Kontakt:',
+  'propose_category_intro' => 'Kirjeldage soovitud kategooriat. Komiteele valmistatakse ette eeltäidetud e-kiri.',
+  'propose_category_body_intro' => 'Tere, soovin pakkuda uut artiklikategooriat.',
+  'propose_category_name_label' => 'Kategooria nimi',
+  'propose_category_reason_label' => 'Põhjendus',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Valmista e-kiri',
+  'propose_category_cancel' => 'Tühista',
+  'propose_category_close' => 'Sulge',
 );

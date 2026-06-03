@@ -51,4 +51,12 @@ Tytuł:
 Kategoria:
 Streszczenie:
 Kontakt:',
+  'propose_category_intro' => 'Opisz proponowaną kategorię. Dla komitetu zostanie przygotowany wstępnie wypełniony e-mail.',
+  'propose_category_body_intro' => 'Dzień dobry, chciałbym/chciałabym zaproponować nową kategorię artykułów.',
+  'propose_category_name_label' => 'Nazwa kategorii',
+  'propose_category_reason_label' => 'Uzasadnienie',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Przygotuj e-mail',
+  'propose_category_cancel' => 'Anuluj',
+  'propose_category_close' => 'Zamknij',
 );

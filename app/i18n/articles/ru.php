@@ -51,4 +51,12 @@ return array (
 Категория:
 Краткое описание:
 Контакт:',
+  'propose_category_intro' => 'Опишите желаемую категорию. Для комитета будет подготовлено предварительно заполненное письмо.',
+  'propose_category_body_intro' => 'Здравствуйте, я хотел(а) бы предложить новую категорию статей.',
+  'propose_category_name_label' => 'Название категории',
+  'propose_category_reason_label' => 'Обоснование',
+  'propose_category_contact_label' => 'Контакт',
+  'propose_category_submit' => 'Подготовить письмо',
+  'propose_category_cancel' => 'Отмена',
+  'propose_category_close' => 'Закрыть',
 );

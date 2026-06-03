@@ -51,4 +51,12 @@ Teideal:
 Catagóir:
 Achoimre:
 Teagmháil:',
+  'propose_category_intro' => 'Déan cur síos ar an gcatagóir atá uait. Ullmhófar ríomhphost réamhlíonta don choiste.',
+  'propose_category_body_intro' => 'Dia duit, ba mhaith liom catagóir nua alt a mholadh.',
+  'propose_category_name_label' => 'Ainm na catagóire',
+  'propose_category_reason_label' => 'Cúis',
+  'propose_category_contact_label' => 'Teagmháil',
+  'propose_category_submit' => 'Ullmhaigh ríomhphost',
+  'propose_category_cancel' => 'Cealaigh',
+  'propose_category_close' => 'Dún',
 );

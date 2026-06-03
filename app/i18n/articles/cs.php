@@ -51,4 +51,12 @@ Název:
 Kategorie:
 Shrnutí:
 Kontakt:',
+  'propose_category_intro' => 'Popište požadovanou kategorii. Pro výbor bude připraven předvyplněný e-mail.',
+  'propose_category_body_intro' => 'Dobrý den, rád/ráda bych navrhl/a novou kategorii článků.',
+  'propose_category_name_label' => 'Název kategorie',
+  'propose_category_reason_label' => 'Odůvodnění',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Připravit e-mail',
+  'propose_category_cancel' => 'Zrušit',
+  'propose_category_close' => 'Zavřít',
 );

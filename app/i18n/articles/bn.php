@@ -51,4 +51,12 @@ return array (
 বিভাগ:
 সারাংশ:
 যোগাযোগ:',
+  'propose_category_intro' => 'আপনার প্রস্তাবিত বিভাগটি বর্ণনা করুন। কমিটির জন্য একটি পূর্বভর্তি ইমেল প্রস্তুত করা হবে।',
+  'propose_category_body_intro' => 'নমস্কার, আমি একটি নতুন নিবন্ধ বিভাগ প্রস্তাব করতে চাই।',
+  'propose_category_name_label' => 'বিভাগের নাম',
+  'propose_category_reason_label' => 'কারণ',
+  'propose_category_contact_label' => 'যোগাযোগ',
+  'propose_category_submit' => 'ইমেল প্রস্তুত করুন',
+  'propose_category_cancel' => 'বাতিল',
+  'propose_category_close' => 'বন্ধ করুন',
 );

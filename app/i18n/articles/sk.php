@@ -51,4 +51,12 @@ Názov:
 Kategória:
 Zhrnutie:
 Kontakt:',
+  'propose_category_intro' => 'Popíšte požadovanú kategóriu. Pre výbor sa pripraví predvyplnený e-mail.',
+  'propose_category_body_intro' => 'Dobrý deň, rád/rada by som navrhol/navrhla novú kategóriu článkov.',
+  'propose_category_name_label' => 'Názov kategórie',
+  'propose_category_reason_label' => 'Odôvodnenie',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Pripraviť e-mail',
+  'propose_category_cancel' => 'Zrušiť',
+  'propose_category_close' => 'Zavrieť',
 );

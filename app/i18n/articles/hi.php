@@ -51,4 +51,12 @@ return array (
 श्रेणी:
 सारांश:
 संपर्क:',
+  'propose_category_intro' => 'वांछित श्रेणी का वर्णन करें। समिति के लिए पहले से भरा हुआ ईमेल तैयार किया जाएगा।',
+  'propose_category_body_intro' => 'नमस्ते, मैं एक नई लेख श्रेणी प्रस्तावित करना चाहता/चाहती हूँ।',
+  'propose_category_name_label' => 'श्रेणी का नाम',
+  'propose_category_reason_label' => 'कारण',
+  'propose_category_contact_label' => 'संपर्क',
+  'propose_category_submit' => 'ईमेल तैयार करें',
+  'propose_category_cancel' => 'रद्द करें',
+  'propose_category_close' => 'बंद करें',
 );

@@ -51,4 +51,12 @@ return array (
 الفئة:
 الملخص:
 جهة الاتصال:',
+  'propose_category_intro' => 'صِف الفئة المطلوبة. سيتم إعداد رسالة بريد إلكتروني معبأة مسبقًا للجنة.',
+  'propose_category_body_intro' => 'مرحبًا، أود اقتراح فئة جديدة للمقالات.',
+  'propose_category_name_label' => 'اسم الفئة',
+  'propose_category_reason_label' => 'السبب',
+  'propose_category_contact_label' => 'التواصل',
+  'propose_category_submit' => 'إعداد البريد الإلكتروني',
+  'propose_category_cancel' => 'إلغاء',
+  'propose_category_close' => 'إغلاق',
 );

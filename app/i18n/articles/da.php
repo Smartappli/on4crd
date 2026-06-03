@@ -51,4 +51,12 @@ Titel:
 Kategori:
 Resumé:
 Kontakt:',
+  'propose_category_intro' => 'Beskriv den ønskede kategori. En forudfyldt e-mail forberedes til udvalget.',
+  'propose_category_body_intro' => 'Hej, jeg vil gerne foreslå en ny artikelkategori.',
+  'propose_category_name_label' => 'Kategorinavn',
+  'propose_category_reason_label' => 'Begrundelse',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Forbered e-mail',
+  'propose_category_cancel' => 'Annuller',
+  'propose_category_close' => 'Luk',
 );

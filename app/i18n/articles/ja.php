@@ -51,4 +51,12 @@ ON4CRD の技術記事を提案したいです。
 カテゴリー：
 概要：
 連絡先：',
+  'propose_category_intro' => '希望するカテゴリを説明してください。委員会宛ての入力済みメールを準備します。',
+  'propose_category_body_intro' => 'こんにちは。新しい記事カテゴリを提案したいです。',
+  'propose_category_name_label' => 'カテゴリ名',
+  'propose_category_reason_label' => '理由',
+  'propose_category_contact_label' => '連絡先',
+  'propose_category_submit' => 'メールを準備',
+  'propose_category_cancel' => 'キャンセル',
+  'propose_category_close' => '閉じる',
 );

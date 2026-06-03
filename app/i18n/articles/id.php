@@ -51,4 +51,12 @@ Judul:
 Kategori:
 Ringkasan:
 Kontak:',
+  'propose_category_intro' => 'Jelaskan kategori yang ingin Anda usulkan. Email yang sudah terisi akan disiapkan untuk komite.',
+  'propose_category_body_intro' => 'Halo, saya ingin mengusulkan kategori artikel baru.',
+  'propose_category_name_label' => 'Nama kategori',
+  'propose_category_reason_label' => 'Alasan',
+  'propose_category_contact_label' => 'Kontak',
+  'propose_category_submit' => 'Siapkan email',
+  'propose_category_cancel' => 'Batal',
+  'propose_category_close' => 'Tutup',
 );

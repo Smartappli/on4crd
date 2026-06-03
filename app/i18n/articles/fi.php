@@ -51,4 +51,12 @@ Otsikko:
 Kategoria:
 Tiivistelmä:
 Yhteystiedot:',
+  'propose_category_intro' => 'Kuvaile haluamasi kategoria. Komitealle valmistellaan esitäytetty sähköposti.',
+  'propose_category_body_intro' => 'Hei, haluaisin ehdottaa uutta artikkelikategoriaa.',
+  'propose_category_name_label' => 'Kategorian nimi',
+  'propose_category_reason_label' => 'Perustelu',
+  'propose_category_contact_label' => 'Yhteystiedot',
+  'propose_category_submit' => 'Valmistele sähköposti',
+  'propose_category_cancel' => 'Peruuta',
+  'propose_category_close' => 'Sulje',
 );
