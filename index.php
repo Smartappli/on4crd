@@ -199,6 +199,7 @@ $routeModules = [
     'article_propose' => 'articles',
     'wiki' => 'wiki',
     'wiki_edit' => 'wiki',
+    'wiki_propose' => 'wiki',
     'wiki_view' => 'wiki',
     'albums' => 'albums',
     'album' => 'albums',
@@ -313,6 +314,7 @@ switch ($route) {
     case 'article_propose': $dispatchPage('pages/article_propose.php'); break;
     case 'wiki': $dispatchPage('pages/wiki.php'); break;
     case 'wiki_edit': $dispatchPage('pages/wiki_edit.php'); break;
+    case 'wiki_propose': $dispatchPage('pages/wiki_propose.php'); break;
     case 'wiki_view': $dispatchPage('pages/wiki_view.php'); break;
     case 'albums': $dispatchPage('pages/albums.php'); break;
     case 'album': $dispatchPage('pages/album.php'); break;

@@ -57,9 +57,15 @@ if (!is_float($lat) || !is_float($lon)) {
     return;
 }
 
+$locator = coordinates_to_maidenhead($lat, $lon, 6);
+$zones = member_profile_radio_zones_for_coordinates($lat, $lon);
+
 echo json_encode([
     'ok' => true,
     'display_name' => (string) ($row['display_name'] ?? $query),
     'lat' => $lat,
     'lon' => $lon,
+    'locator' => $locator,
+    'cq_zone' => $zones['cq_zone'] ?? null,
+    'itu_zone' => $zones['itu_zone'] ?? null,
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
