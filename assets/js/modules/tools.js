@@ -59,6 +59,8 @@
     let foundAddress = null;
     let foundCoords = null;
     let foundLocator = null;
+    let foundCqZone = null;
+    let foundItuZone = null;
     let errorBox = null;
     let freqInput = null;
     let freqOut = null;
@@ -158,6 +160,8 @@
         foundAddress = document.getElementById('grid-found-address');
         foundCoords = document.getElementById('grid-found-coords');
         foundLocator = document.getElementById('grid-found-locator');
+        foundCqZone = document.getElementById('grid-found-cq-zone');
+        foundItuZone = document.getElementById('grid-found-itu-zone');
         errorBox = document.getElementById('grid-tool-error');
         freqInput = document.getElementById('freq-mhz');
         freqOut = document.getElementById('freq-wavelength');
@@ -485,10 +489,12 @@
                     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
                         throw new Error(i18n.err_invalid_coords);
                     }
-                    const locator = toMaidenhead(lat, lon, 6);
+                    const locator = payload.locator || toMaidenhead(lat, lon, 6);
                     if (foundAddress) foundAddress.textContent = payload.display_name || query;
                     if (foundCoords) foundCoords.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
                     if (foundLocator) foundLocator.textContent = locator;
+                    if (foundCqZone) foundCqZone.textContent = payload.cq_zone || '-';
+                    if (foundItuZone) foundItuZone.textContent = payload.itu_zone || '-';
                     result?.classList.remove('is-hidden');
                 } catch (error) {
                     setError(error instanceof Error ? error.message : i18n.err_grid_calc);

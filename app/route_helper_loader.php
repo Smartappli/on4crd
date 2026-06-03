@@ -28,7 +28,7 @@ function app_load_route_helpers(string $route): void
         'press_helpers.php' => ['press', 'admin_press'],
         'album_helpers.php' => ['home', 'admin_albums'],
         'member_media.php' => ['directory', 'gdpr', 'profile'],
-        'member_profile_helpers.php' => ['directory', 'gdpr', 'profile', 'register'],
+        'member_profile_helpers.php' => ['directory', 'gdpr', 'profile', 'register', 'tools_geocode'],
         'auction_helpers.php' => ['auctions', 'auction_view', 'auction_bid', 'admin_auctions'],
         'admin_helpers.php' => ['admin'],
         'newsletter.php' => ['newsletter', 'newsletter_public', 'newsletter_unsubscribe', 'settings', 'admin_newsletters'],

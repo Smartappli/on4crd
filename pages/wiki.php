@@ -19,6 +19,7 @@ $theme = slugify(trim((string) ($_GET['theme'] ?? '')));
 if ($theme === 'n-a') {
     $theme = '';
 }
+$themeProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode('Proposition de thématique wiki ON4CRD');
 
 $rows = [];
 $wikiThemes = [];
@@ -97,11 +98,37 @@ ob_start();
                     <strong><?= $revisionCount ?></strong>
                 </article>
             </div>
-            <?php if (has_permission('wiki.edit')): ?>
-                <a class="button" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
-            <?php endif; ?>
+            <div class="wiki-hero-actions">
+                <button class="button secondary" type="button" data-wiki-theme-open data-wiki-theme-fallback="<?= e($themeProposalUrl) ?>" aria-haspopup="dialog" aria-controls="wiki-theme-dialog">Proposer une thématique</button>
+                <a class="button" href="<?= e(route_url('wiki_propose')) ?>">Proposer une page</a>
+                <?php if (has_permission('wiki.edit')): ?>
+                    <a class="button secondary" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
+                <?php endif; ?>
+            </div>
         </div>
     </section>
+
+    <dialog class="wiki-theme-dialog" id="wiki-theme-dialog" aria-labelledby="wiki-theme-dialog-title">
+        <div class="wiki-theme-dialog-card">
+            <div class="wiki-theme-dialog-header">
+                <div>
+                    <p class="wiki-theme-dialog-eyebrow"><?= e((string) ($t['themes'] ?? 'Thématiques')) ?></p>
+                    <h2 id="wiki-theme-dialog-title">Proposer une thématique</h2>
+                    <p class="help">Indiquez la thématique à ajouter et les pages qui devraient y être liées.</p>
+                </div>
+                <button class="wiki-theme-dialog-close" type="button" data-wiki-theme-close aria-label="Fermer">&times;</button>
+            </div>
+            <form class="wiki-theme-form" method="dialog" data-wiki-theme-form data-wiki-theme-recipient="on4crd@gmail.com" data-wiki-theme-subject="Proposition de thématique wiki ON4CRD" data-wiki-theme-intro="Proposition de thématique wiki :">
+                <label><span>Nom de la thématique</span><input type="text" name="proposal_theme" maxlength="160" required></label>
+                <label><span>Pourquoi l'ajouter ?</span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+                <label><span>Votre contact</span><input type="text" name="proposal_contact" maxlength="220" required></label>
+                <div class="wiki-theme-dialog-actions">
+                    <button class="button" type="submit">Envoyer la proposition</button>
+                    <button class="button secondary" type="button" data-wiki-theme-close>Annuler</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 
     <section class="card wiki-search-panel">
         <form method="get" class="inline-form wiki-search-form">
