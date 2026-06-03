@@ -8,9 +8,16 @@
     { label: 'B', command: 'bold', title: 'Gras' },
     { label: 'I', command: 'italic', title: 'Italique' },
     { label: 'U', command: 'underline', title: 'SoulignÃ©' },
+    { label: 'S', command: 'strikeThrough', title: 'BarrÃ©' },
     { label: 'â€¢ Liste', command: 'insertUnorderedList', title: 'Liste Ã  puces' },
     { label: '1. Liste', command: 'insertOrderedList', title: 'Liste numÃ©rotÃ©e' },
+    { label: 'â€œ Citation', command: 'formatBlock', value: 'blockquote', title: 'Citation' },
+    { label: 'Code', command: 'formatBlock', value: 'pre', title: 'Bloc de code' },
     { label: 'Lien', command: 'createLink', title: 'InsÃ©rer un lien' },
+    { label: 'HR', command: 'insertHorizontalRule', title: 'Ligne horizontale' },
+    { label: 'â†�', command: 'undo', title: 'Annuler' },
+    { label: 'â†’', command: 'redo', title: 'RÃ©tablir' },
+    { label: 'Nettoyer', command: 'removeFormat', title: 'Supprimer le formatage' },
   ];
 
   const applyCommand = (editor, command) => {
@@ -55,6 +62,28 @@
     const toolbar = document.createElement('div');
     toolbar.className = 'wysiwyg-toolbar';
 
+    const formatSelect = document.createElement('select');
+    formatSelect.className = 'wysiwyg-control';
+    formatSelect.title = 'Format';
+    [
+      { value: 'p', label: 'Paragraphe' },
+      { value: 'h2', label: 'Titre 2' },
+      { value: 'h3', label: 'Titre 3' },
+      { value: 'h4', label: 'Titre 4' },
+      { value: 'blockquote', label: 'Citation' },
+      { value: 'pre', label: 'Code' },
+    ].forEach((optionConfig) => {
+      const option = document.createElement('option');
+      option.value = optionConfig.value;
+      option.textContent = optionConfig.label;
+      formatSelect.appendChild(option);
+    });
+    formatSelect.addEventListener('change', () => {
+      applyCommandWithValue(editor, 'formatBlock', formatSelect.value || 'p');
+      editor.dispatchEvent(new Event('input'));
+    });
+    toolbar.appendChild(formatSelect);
+
     const fontSizeSelect = document.createElement('select');
     fontSizeSelect.className = 'wysiwyg-control';
     fontSizeSelect.title = 'Taille de police';
@@ -86,13 +115,45 @@
     });
     toolbar.appendChild(fontColorInput);
 
+    const alignSelect = document.createElement('select');
+    alignSelect.className = 'wysiwyg-control';
+    alignSelect.title = 'Alignement';
+    [
+      { value: '', label: 'Alignement' },
+      { value: 'justifyLeft', label: 'Gauche' },
+      { value: 'justifyCenter', label: 'Centre' },
+      { value: 'justifyRight', label: 'Droite' },
+      { value: 'justifyFull', label: 'JustifiÃ©' },
+    ].forEach((optionConfig) => {
+      const option = document.createElement('option');
+      option.value = optionConfig.value;
+      option.textContent = optionConfig.label;
+      alignSelect.appendChild(option);
+    });
+    alignSelect.addEventListener('change', () => {
+      if (alignSelect.value) {
+        applyCommand(editor, alignSelect.value);
+        editor.dispatchEvent(new Event('input'));
+      }
+      alignSelect.value = '';
+    });
+    toolbar.appendChild(alignSelect);
+
     toolbarButtons.forEach((buttonConfig) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'ghost small';
       button.textContent = buttonConfig.label;
       button.title = buttonConfig.title;
-      button.addEventListener('click', () => applyCommand(editor, buttonConfig.command));
+      button.addEventListener('click', () => {
+        if (buttonConfig.value) {
+          applyCommandWithValue(editor, buttonConfig.command, buttonConfig.value);
+          editor.dispatchEvent(new Event('input'));
+          return;
+        }
+        applyCommand(editor, buttonConfig.command);
+        editor.dispatchEvent(new Event('input'));
+      });
       toolbar.appendChild(button);
     });
 

@@ -64,6 +64,7 @@ function module_css_assets_for_route(string $route): array
         'event_view' => 'events',
         'news_view' => 'news',
         'wiki_edit' => 'wiki',
+        'wiki_propose' => 'wiki',
         'wiki_view' => 'wiki',
     ];
     $module = $moduleByRoute[$route] ?? $route;
@@ -92,6 +93,7 @@ function module_js_assets_for_route(string $route): array
         'save_dashboard' => 'dashboard',
         'widget_render' => 'dashboard',
         'wiki_edit' => 'wiki_edit',
+        'wiki_propose' => 'wiki_edit',
     ];
     $module = $moduleByRoute[$route] ?? $route;
     $assets = [];
@@ -100,7 +102,7 @@ function module_js_assets_for_route(string $route): array
     if ($route === 'home') {
         $candidates[] = 'tools';
     }
-    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'classifieds_manage', 'wiki_edit'], true)) {
+    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'classifieds_manage', 'wiki_edit', 'wiki_propose'], true)) {
         $candidates[] = 'wysiwyg';
     }
 
