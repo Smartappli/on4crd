@@ -157,6 +157,35 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('Belgique', $html);
     }
 
+    public function testCoordinatesToMaidenheadBuildsSixCharacterGrid(): void
+    {
+        self::assertSame('JO20LH', coordinates_to_maidenhead(50.3150, 4.9452));
+        self::assertSame('JO20', coordinates_to_maidenhead(50.3150, 4.9452, 4));
+        self::assertNull(coordinates_to_maidenhead(91.0, 4.9452));
+    }
+
+    public function testMemberProfilePostalAddressRequiresAllParts(): void
+    {
+        self::assertTrue(member_profile_postal_address_is_complete('Belgique', 'Rue des Ecoles', '5530', 'Purnode'));
+        self::assertFalse(member_profile_postal_address_is_complete('Belgique', '', '5530', 'Purnode'));
+    }
+
+    public function testMemberProfileRadioZonesResolveKnownCountries(): void
+    {
+        self::assertSame(
+            ['cq_zone' => '14', 'itu_zone' => '27'],
+            member_profile_radio_zones_for_coordinates(50.85, 4.35, 'BE')
+        );
+        self::assertSame(
+            ['cq_zone' => '15', 'itu_zone' => '28'],
+            member_profile_radio_zones_for_coordinates(48.2, 16.37, 'Autriche')
+        );
+        self::assertSame(
+            ['cq_zone' => '3', 'itu_zone' => '6'],
+            member_profile_radio_zones_for_coordinates(37.77, -122.42, 'US')
+        );
+    }
+
     public function testMemberNameHelpersSplitAndComposeFullName(): void
     {
         self::assertSame('Jean Dupont', member_full_name_from_parts(' Jean ', ' Dupont '));
