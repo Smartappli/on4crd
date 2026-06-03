@@ -23,7 +23,7 @@ function maidenhead_to_coordinates(string $locator): ?array
     if (strlen($normalized) >= 6) {
         $lon += (ord($normalized[4]) - ord('A')) * (5.0 / 60.0);
         $lat += (ord($normalized[5]) - ord('A')) * (2.5 / 60.0);
-        $lonStep = 0.0;
+        $lonStep = 5.0 / 60.0;
         $latStep = 2.5 / 60.0;
     }
 
@@ -31,6 +31,46 @@ function maidenhead_to_coordinates(string $locator): ?array
         'latitude' => $lat + ($latStep / 2.0),
         'longitude' => $lon + ($lonStep / 2.0),
     ];
+}
+
+function coordinates_to_maidenhead(float $latitude, float $longitude, int $length = 6): ?string
+{
+    if (!is_finite($latitude) || !is_finite($longitude) || $latitude < -90.0 || $latitude > 90.0 || $longitude < -180.0 || $longitude > 180.0) {
+        return null;
+    }
+
+    $length = $length >= 6 ? 6 : 4;
+    $latitude = min(89.999999, max(-90.0, $latitude));
+    $longitude = min(179.999999, max(-180.0, $longitude));
+
+    $adjustedLongitude = $longitude + 180.0;
+    $adjustedLatitude = $latitude + 90.0;
+
+    $fieldLongitude = (int) floor($adjustedLongitude / 20.0);
+    $fieldLatitude = (int) floor($adjustedLatitude / 10.0);
+    $adjustedLongitude -= $fieldLongitude * 20.0;
+    $adjustedLatitude -= $fieldLatitude * 10.0;
+
+    $squareLongitude = (int) floor($adjustedLongitude / 2.0);
+    $squareLatitude = (int) floor($adjustedLatitude);
+    $locator = chr(ord('A') + $fieldLongitude)
+        . chr(ord('A') + $fieldLatitude)
+        . (string) $squareLongitude
+        . (string) $squareLatitude;
+
+    if ($length === 4) {
+        return $locator;
+    }
+
+    $adjustedLongitude -= $squareLongitude * 2.0;
+    $adjustedLatitude -= $squareLatitude;
+
+    $subsquareLongitude = (int) floor($adjustedLongitude / (5.0 / 60.0));
+    $subsquareLatitude = (int) floor($adjustedLatitude / (2.5 / 60.0));
+
+    return $locator
+        . chr(ord('A') + max(0, min(23, $subsquareLongitude)))
+        . chr(ord('A') + max(0, min(23, $subsquareLatitude)));
 }
 
 function extract_kp_measurement_from_row(array $row): ?array
