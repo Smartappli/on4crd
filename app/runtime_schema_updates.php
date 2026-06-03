@@ -282,11 +282,22 @@ function apply_runtime_schema_updates(): void
             }
         }
 
-        if (table_has_column('members', 'first_name') && table_has_column('members', 'last_name') && table_has_column('members', 'full_name')) {
+        $memberColumnsExist = static function (array $columnNames) use ($columnStmt): bool {
+            foreach ($columnNames as $columnName) {
+                $columnStmt->execute(['members', $columnName]);
+                if ((int) $columnStmt->fetchColumn() === 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        if ($memberColumnsExist(['first_name', 'last_name', 'full_name'])) {
             db()->exec('UPDATE members SET first_name = TRIM(SUBSTRING_INDEX(full_name, " ", 1)) WHERE (first_name IS NULL OR first_name = "") AND full_name IS NOT NULL AND full_name <> ""');
             db()->exec('UPDATE members SET last_name = NULLIF(TRIM(CASE WHEN LOCATE(" ", full_name) > 0 THEN SUBSTRING(full_name, LOCATE(" ", full_name) + 1) ELSE "" END), "") WHERE (last_name IS NULL OR last_name = "") AND full_name IS NOT NULL AND full_name <> ""');
         }
-        if (table_has_column('members', 'visibility_full_name')) {
+        if ($memberColumnsExist(['visibility_full_name'])) {
             db()->exec('ALTER TABLE members MODIFY COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "private"');
         }
     }
