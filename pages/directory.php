@@ -307,8 +307,6 @@ ob_start();
                 $addDetail((string) $profileT('postal_code'), $postalCode);
                 $addDetail((string) $profileT('address'), $address);
                 $addDetail((string) $profileT('operator_since'), $operatorSince);
-                $addDetail((string) $profileT('cq_zone'), $cqZone);
-                $addDetail((string) $profileT('itu_zone'), $ituZone);
                 $addDetail((string) $profileT('qsl_via'), $qslVia);
                 $addDetail((string) $profileT('lotw_username'), $lotwUsername);
                 $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
@@ -344,6 +342,18 @@ ob_start();
                         <?php endif; ?>
                         <?php if ($grid !== ''): ?>
                             <span><?= e($t('grid')) ?> <?= e($grid) ?></span>
+                        <?php endif; ?>
+                        <?php if ($cqZone !== ''): ?>
+                            <span><?= e($profileT('cq_zone')) ?> <?= e($cqZone) ?></span>
+                        <?php endif; ?>
+                        <?php if ($ituZone !== ''): ?>
+                            <span><?= e($profileT('itu_zone')) ?> <?= e($ituZone) ?></span>
+                        <?php endif; ?>
+                        <?php if ($email !== ''): ?>
+                            <span><?= e($profileT('email')) ?> <?= e($email) ?></span>
+                        <?php endif; ?>
+                        <?php if ($phone !== ''): ?>
+                            <span><?= e($profileT('phone')) ?> <?= e($phone) ?></span>
                         <?php endif; ?>
                         <?php if ((int) ($member['is_uba_member'] ?? 0) === 1): ?>
                             <span><?= e($t('uba_member')) ?><?= trim((string) ($member['uba_member_number'] ?? '')) !== '' ? ' ' . e((string) $member['uba_member_number']) : '' ?></span>
@@ -389,14 +399,8 @@ ob_start();
                         <p class="directory-station"><strong><?= e($t('antennas')) ?>:</strong> <?= e($antennas) ?></p>
                     <?php endif; ?>
 
-                    <?php if ($email !== '' || $phone !== '' || $safeQrzUrl !== null || $safeWebsite !== null): ?>
+                    <?php if ($safeQrzUrl !== null || $safeWebsite !== null): ?>
                         <div class="directory-contact-row">
-                            <?php if ($email !== ''): ?>
-                                <a class="button small secondary" href="mailto:<?= e($email) ?>"><?= e($t('email')) ?></a>
-                            <?php endif; ?>
-                            <?php if ($phone !== ''): ?>
-                                <a class="button small secondary" href="tel:<?= e(preg_replace('/\s+/', '', $phone) ?? $phone) ?>"><?= e($t('phone')) ?></a>
-                            <?php endif; ?>
                             <?php if ($safeQrzUrl !== null): ?>
                                 <a class="button small secondary" href="<?= e($safeQrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
                             <?php endif; ?>
