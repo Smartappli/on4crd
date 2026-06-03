@@ -16,7 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
-        $fullName = trim((string) ($_POST['full_name'] ?? ''));
+        $firstName = trim((string) ($_POST['first_name'] ?? ''));
+        $lastName = trim((string) ($_POST['last_name'] ?? ''));
+        $fullName = member_full_name_from_parts($firstName, $lastName);
         $email = trim((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
         $phone = trim((string) ($_POST['phone'] ?? ''));
@@ -26,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $favouriteBands = trim((string) ($_POST['favourite_bands'] ?? ''));
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
 
-        if ($callsign === '' || $fullName === '' || $email === '' || $password === '') {
+        if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '' || $password === '') {
             throw new RuntimeException($t('required'));
         }
 
@@ -47,15 +49,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         db()->prepare(
             'INSERT INTO members (
-                 auth_user_id, callsign, full_name, email, password_hash,
+                 auth_user_id, callsign, first_name, last_name, full_name, email, password_hash,
                  country, phone, qth, licence_class, favourite_bands, station_equipment,
                  visibility_full_name, visibility_email, visibility_country, visibility_phone, visibility_qth,
                  visibility_licence_class, visibility_favourite_bands, visibility_station,
                  is_active
              )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "members", "members", "private", "members", "members", "members", "members", 1)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "members", "members", "private", "members", "members", "members", "members", 1)
              ON DUPLICATE KEY UPDATE
                  callsign = VALUES(callsign),
+                 first_name = VALUES(first_name),
+                 last_name = VALUES(last_name),
                  full_name = VALUES(full_name),
                  email = VALUES(email),
                  password_hash = VALUES(password_hash),
@@ -77,6 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         )->execute([
             (int) $userId,
             $callsign,
+            $firstName,
+            $lastName,
             $fullName,
             $email,
             password_hash($password, PASSWORD_DEFAULT),
@@ -107,7 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $content = '<div class="card narrow login-card register-card"><h1>' . e($t('title')) . '</h1>'
     . '<form method="post" class="register-form"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . '<label>' . e($t('callsign')) . '<input type="text" name="callsign" maxlength="32" required></label>'
-    . '<label>' . e($t('full_name')) . '<input type="text" name="full_name" maxlength="190" required></label>'
+    . '<label>' . e($t('first_name')) . '<input type="text" name="first_name" maxlength="95" required></label>'
+    . '<label>' . e($t('last_name')) . '<input type="text" name="last_name" maxlength="95" required></label>'
     . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190" required></label>'
     . '<label>' . e($t('phone')) . '<input type="tel" name="phone" maxlength="64" autocomplete="tel"></label>'
     . '<label>' . e($t('country')) . '<select name="country" class="country-select">' . member_country_select_options_html('Belgique') . '</select></label>'

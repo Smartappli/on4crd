@@ -17,7 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
 
         $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
-        $fullName = trim((string) ($_POST['full_name'] ?? ''));
+        $firstName = trim((string) ($_POST['first_name'] ?? ''));
+        $lastName = trim((string) ($_POST['last_name'] ?? ''));
+        $fullName = member_full_name_from_parts($firstName, $lastName);
         $email = trim((string) ($_POST['email'] ?? ''));
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $country = trim((string) ($_POST['country'] ?? ''));
@@ -41,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $favouriteModes = trim((string) ($_POST['favourite_modes'] ?? ''));
         $interests = trim((string) ($_POST['interests'] ?? ''));
 
-        if ($callsign === '' || $fullName === '' || $email === '') {
+        if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '') {
             throw new RuntimeException($t('required'));
         }
-        if (mb_strlen($callsign) > 32 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190) {
+        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190) {
             throw new RuntimeException($t('too_long'));
         }
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -103,6 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = db()->prepare(
             'UPDATE members
          SET callsign = ?,
+             first_name = ?,
+             last_name = ?,
              full_name = ?,
              email = ?,
              phone = ?,
@@ -133,6 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $stmt->execute([
             $callsign,
+            $firstName,
+            $lastName,
             $fullName,
             $email,
             $phone !== '' ? $phone : null,
@@ -182,6 +188,7 @@ $stmt = db()->prepare('SELECT ' . member_profile_select_columns_sql() . ' FROM m
 $stmt->execute([$memberId]);
 $member = $stmt->fetch() ?: [];
 $member = member_backfill_missing_qrz_url($memberId, is_array($member) ? $member : []);
+$member = member_with_name_parts($member);
 
 $profileViews = [
     'public' => ['title' => 'Vue ' . strtolower($t('public'))],
@@ -246,7 +253,8 @@ ob_start();
             <legend><?= e($t('identity_section')) ?></legend>
             <div class="profile-form-grid">
                 <label><?= e($t('callsign')) ?><input type="text" name="callsign" maxlength="32" required value="<?= e((string) ($member['callsign'] ?? '')) ?>"></label>
-                <label><?= e($t('full_name')) ?><input type="text" name="full_name" maxlength="190" required value="<?= e((string) ($member['full_name'] ?? '')) ?>"></label>
+                <label><?= e($t('first_name')) ?><input type="text" name="first_name" maxlength="95" required value="<?= e((string) ($member['first_name'] ?? '')) ?>"></label>
+                <label><?= e($t('last_name')) ?><input type="text" name="last_name" maxlength="95" required value="<?= e((string) ($member['last_name'] ?? '')) ?>"></label>
                 <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
                 <label><?= e($t('country')) ?><select name="country" class="country-select"><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
