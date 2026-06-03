@@ -180,6 +180,57 @@ function member_profile_visibility_allows(string $viewer, string $visibility): b
 }
 }
 
+if (!function_exists('member_name_parts_from_full_name')) {
+/**
+ * @return array{first_name:string, last_name:string}
+ */
+function member_name_parts_from_full_name(string $fullName): array
+{
+    $fullName = trim(preg_replace('/\s+/', ' ', $fullName) ?? $fullName);
+    if ($fullName === '') {
+        return ['first_name' => '', 'last_name' => ''];
+    }
+
+    $parts = preg_split('/\s+/', $fullName, 2) ?: [];
+
+    return [
+        'first_name' => trim((string) ($parts[0] ?? '')),
+        'last_name' => trim((string) ($parts[1] ?? '')),
+    ];
+}
+}
+
+if (!function_exists('member_full_name_from_parts')) {
+function member_full_name_from_parts(string $firstName, string $lastName): string
+{
+    return trim(preg_replace('/\s+/', ' ', trim($firstName) . ' ' . trim($lastName)) ?? '');
+}
+}
+
+if (!function_exists('member_with_name_parts')) {
+/**
+ * @param array<string, mixed> $member
+ * @return array<string, mixed>
+ */
+function member_with_name_parts(array $member): array
+{
+    $firstName = trim((string) ($member['first_name'] ?? ''));
+    $lastName = trim((string) ($member['last_name'] ?? ''));
+    if ($firstName !== '' || $lastName !== '') {
+        $member['first_name'] = $firstName;
+        $member['last_name'] = $lastName;
+
+        return $member;
+    }
+
+    $parts = member_name_parts_from_full_name((string) ($member['full_name'] ?? ''));
+    $member['first_name'] = $parts['first_name'];
+    $member['last_name'] = $parts['last_name'];
+
+    return $member;
+}
+}
+
 if (!function_exists('member_profile_visibility_fields')) {
 /**
  * @return array<string, array{label:string, default:string}>
@@ -321,7 +372,7 @@ function member_profile_preview_rows(array $member, string $viewer, callable $t,
 if (!function_exists('member_profile_select_columns_sql')) {
 function member_profile_select_columns_sql(): string
 {
-    return 'callsign, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
+    return 'callsign, first_name, last_name, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
             favourite_bands, favourite_modes, interests, photo_path, avatar_path,
             visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,

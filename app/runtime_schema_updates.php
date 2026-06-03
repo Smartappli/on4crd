@@ -247,6 +247,8 @@ function apply_runtime_schema_updates(): void
         );
         $requiredColumns = [
             'auth_user_id' => 'ALTER TABLE members ADD COLUMN auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE',
+            'first_name' => 'ALTER TABLE members ADD COLUMN first_name VARCHAR(95) DEFAULT NULL AFTER callsign',
+            'last_name' => 'ALTER TABLE members ADD COLUMN last_name VARCHAR(95) DEFAULT NULL AFTER first_name',
             'country' => 'ALTER TABLE members ADD COLUMN country VARCHAR(190) DEFAULT NULL',
             'is_uba_member' => 'ALTER TABLE members ADD COLUMN is_uba_member TINYINT(1) NOT NULL DEFAULT 0',
             'uba_member_number' => 'ALTER TABLE members ADD COLUMN uba_member_number VARCHAR(64) DEFAULT NULL',
@@ -272,6 +274,11 @@ function apply_runtime_schema_updates(): void
             if (!$hasColumn) {
                 db()->exec($statement);
             }
+        }
+
+        if (table_has_column('members', 'first_name') && table_has_column('members', 'last_name') && table_has_column('members', 'full_name')) {
+            db()->exec('UPDATE members SET first_name = TRIM(SUBSTRING_INDEX(full_name, " ", 1)) WHERE (first_name IS NULL OR first_name = "") AND full_name IS NOT NULL AND full_name <> ""');
+            db()->exec('UPDATE members SET last_name = NULLIF(TRIM(CASE WHEN LOCATE(" ", full_name) > 0 THEN SUBSTRING(full_name, LOCATE(" ", full_name) + 1) ELSE "" END), "") WHERE (last_name IS NULL OR last_name = "") AND full_name IS NOT NULL AND full_name <> ""');
         }
     }
 
