@@ -21,10 +21,7 @@ if (mb_strlen($licenceFilter) > 64) {
 
 if (table_exists('members')) {
     $viewer = current_user();
-    $allowedVisibilityLevels = ['public', 'members'];
-    if ($viewer !== null && (int) ($viewer['is_committee'] ?? 0) === 1) {
-        $allowedVisibilityLevels[] = 'private';
-    }
+    $allowedVisibilityLevels = member_profile_allowed_visibility_levels(is_array($viewer) ? $viewer : null);
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
     $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role

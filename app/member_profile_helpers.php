@@ -441,6 +441,26 @@ function member_profile_visibility_allows(string $viewer, string $visibility): b
 }
 }
 
+if (!function_exists('member_profile_allowed_visibility_levels')) {
+/**
+ * @param array<string, mixed>|null $viewer
+ * @return list<string>
+ */
+function member_profile_allowed_visibility_levels(?array $viewer): array
+{
+    if ($viewer === null) {
+        return ['public'];
+    }
+
+    $levels = ['public', 'members'];
+    if ((int) ($viewer['is_committee'] ?? 0) === 1) {
+        $levels[] = 'private';
+    }
+
+    return $levels;
+}
+}
+
 if (!function_exists('member_name_parts_from_full_name')) {
 /**
  * @return array{first_name:string, last_name:string}

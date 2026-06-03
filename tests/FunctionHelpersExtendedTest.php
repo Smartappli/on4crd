@@ -218,6 +218,13 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('private', $fields['visibility_postal_code']['default']);
     }
 
+    public function testMemberProfileAllowedVisibilityLevelsMatchViewerRole(): void
+    {
+        self::assertSame(['public'], member_profile_allowed_visibility_levels(null));
+        self::assertSame(['public', 'members'], member_profile_allowed_visibility_levels(['is_committee' => 0]));
+        self::assertSame(['public', 'members', 'private'], member_profile_allowed_visibility_levels(['is_committee' => 1]));
+    }
+
     public function testMemberProfilePreviewRowsHideSensitiveFieldsByDefault(): void
     {
         $t = static fn(string $key): string => $key;
