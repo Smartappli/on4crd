@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'アシスタント',
   'account_space' => 'マイアカウント',
   'account_profile' => 'プロフィール',
+  'account_privacy' => 'プライバシー',
   'account_settings' => 'プライバシー',
   'account_requests' => '自分の依頼',
   'account_admin' => '管理',

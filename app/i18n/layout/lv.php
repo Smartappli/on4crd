@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Asistents',
   'account_space' => 'Mana telpa',
   'account_profile' => 'Profils',
+  'account_privacy' => 'Privātums',
   'account_settings' => 'Privātums',
   'account_requests' => 'Mani pieprasījumi',
   'account_admin' => 'Administrācija',

@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Asistente',
   'account_space' => 'Mi espacio',
   'account_profile' => 'Perfil',
+  'account_privacy' => 'Privacidad',
   'account_settings' => 'Privacidad',
   'account_requests' => 'Mis solicitudes',
   'account_admin' => 'Administración',

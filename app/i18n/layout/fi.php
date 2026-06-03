@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Assistant',
   'account_space' => 'Minun tilani',
   'account_profile' => 'Profiili',
+  'account_privacy' => 'Yksityisyys',
   'account_settings' => 'Yksityisyys',
   'account_requests' => 'Omat pyynnöt',
   'account_admin' => 'Hallinto',

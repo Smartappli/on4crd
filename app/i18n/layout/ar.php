@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'المساعد',
   'account_space' => 'حسابي',
   'account_profile' => 'الملف الشخصي',
+  'account_privacy' => 'الخصوصية',
   'account_settings' => 'الخصوصية',
   'account_requests' => 'طلباتي',
   'account_admin' => 'الإدارة',

@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Помощник',
   'account_space' => 'Моето пространство',
   'account_profile' => 'Профил',
+  'account_privacy' => 'Поверителност',
   'account_settings' => 'Поверителност',
   'account_requests' => 'Моите заявки',
   'account_admin' => 'Администрация',

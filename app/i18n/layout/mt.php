@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'L-ispazju tiegħi',
   'account_profile' => 'Profil',
+  'account_privacy' => 'Privatezza',
   'account_settings' => 'Privatezza',
   'account_requests' => 'It-talbiet tiegħi',
   'account_admin' => 'Amministrazzjoni',

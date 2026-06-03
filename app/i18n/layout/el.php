@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Βοηθός',
   'account_space' => 'Ο χώρος μου',
   'account_profile' => 'Προφίλ',
+  'account_privacy' => 'Απόρρητο',
   'account_settings' => 'Απόρρητο',
   'account_requests' => 'Τα αιτήματά μου',
   'account_admin' => 'Διοίκηση',

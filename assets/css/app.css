@@ -789,8 +789,8 @@ textarea { resize: vertical; }
   justify-content: flex-end;
 }
 .directory-active-filters span,
-.directory-badges span,
-.directory-band-list span {
+.directory-badges > span,
+.directory-band-list > span {
   display: inline-flex;
   align-items: center;
   min-height: 1.85rem;
@@ -872,12 +872,12 @@ textarea { resize: vertical; }
   flex-wrap: wrap;
   gap: .4rem;
 }
-.directory-badges span:first-child {
+.directory-badges > span:first-child {
   color: var(--accent-strong);
   background: color-mix(in srgb, var(--accent) 10%, var(--panel));
   border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
 }
-.directory-band-list span {
+.directory-band-list > span {
   color: color-mix(in srgb, #047857 88%, var(--text));
   background: color-mix(in srgb, #059669 10%, var(--panel));
   border-color: color-mix(in srgb, #059669 28%, var(--border));

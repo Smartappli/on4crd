@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'Mit rum',
   'account_profile' => 'Profil',
+  'account_privacy' => 'Privatliv',
   'account_settings' => 'Privatliv',
   'account_requests' => 'Mine anmodninger',
   'account_admin' => 'Administration',

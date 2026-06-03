@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Asszisztens',
   'account_space' => 'Az én terem',
   'account_profile' => 'Profil',
+  'account_privacy' => 'Adatvédelem',
   'account_settings' => 'Adatvédelem',
   'account_requests' => 'Saját kérelmeim',
   'account_admin' => 'Adminisztráció',

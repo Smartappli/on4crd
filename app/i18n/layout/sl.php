@@ -18,6 +18,7 @@ return array (
   'nav_assistant' => 'Pomočnik',
   'account_space' => 'Moj prostor',
   'account_profile' => 'Profil',
+  'account_privacy' => 'Zasebnost',
   'account_settings' => 'Zasebnost',
   'account_requests' => 'Moje zahteve',
   'account_admin' => 'Administracija',
