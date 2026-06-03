@@ -138,8 +138,6 @@ set_page_meta([
 ]);
 $categoryProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_category_subject'])
     . '&body=' . rawurlencode((string) $t['propose_category_body']);
-$articleProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_article_subject'])
-    . '&body=' . rawurlencode((string) $t['propose_article_body']);
 
 ob_start();
 ?>
@@ -163,7 +161,7 @@ ob_start();
             </div>
             <div class="articles-hero-actions">
                 <button class="button secondary" type="button" data-articles-category-open data-articles-category-fallback="<?= e($categoryProposalUrl) ?>" aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e((string) $t['propose_category']) ?></button>
-                <a class="button" href="<?= e($articleProposalUrl) ?>"><?= e((string) $t['propose_article']) ?></a>
+                <a class="button" href="<?= e(route_url('article_propose')) ?>"><?= e((string) $t['propose_article']) ?></a>
             </div>
         </div>
     </section>

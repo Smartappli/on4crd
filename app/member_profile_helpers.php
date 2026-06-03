@@ -465,7 +465,7 @@ if (!function_exists('member_profile_operator_since_options_html')) {
 function member_profile_operator_since_options_html(string $currentValue = ''): string
 {
     $currentValue = trim($currentValue);
-    $html = '<option value=""></option>';
+    $html = '';
     $currentYear = (int) date('Y');
 
     if ($currentValue !== '' && preg_match('/^\d{4}$/', $currentValue) !== 1) {
@@ -474,7 +474,8 @@ function member_profile_operator_since_options_html(string $currentValue = ''): 
 
     for ($year = $currentYear; $year >= 1900; $year--) {
         $yearValue = (string) $year;
-        $html .= '<option value="' . e($yearValue) . '"' . ($currentValue === $yearValue ? ' selected' : '') . '>' . e($yearValue) . '</option>';
+        $selected = $currentValue === $yearValue || ($currentValue === '' && $year === $currentYear);
+        $html .= '<option value="' . e($yearValue) . '"' . ($selected ? ' selected' : '') . '>' . e($yearValue) . '</option>';
     }
 
     return $html;

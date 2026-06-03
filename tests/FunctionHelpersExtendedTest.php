@@ -230,7 +230,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         $html = member_profile_operator_since_options_html('2020');
 
         self::assertStringContainsString('<option value="2020" selected>2020</option>', $html);
-        self::assertStringContainsString('<option value=""></option>', $html);
+        self::assertStringNotContainsString('<option value=""></option>', $html);
     }
 
     public function testMemberProfilePreviewRowsHideSensitiveFieldsByDefault(): void

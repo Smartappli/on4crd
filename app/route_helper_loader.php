@@ -21,7 +21,7 @@ function app_load_route_helpers(string $route): void
         'member_recommendations.php' => ['settings'],
         'notifications.php' => ['dashboard', 'notifications', 'articles', 'article', 'albums', 'album', 'classifieds', 'members_library', 'admin_articles', 'admin_albums', 'admin_classifieds', 'admin_library', 'admin_news'],
         'article_import_helpers.php' => ['admin_articles', 'admin_library'],
-        'article_helpers.php' => ['home', 'articles', 'article', 'admin_articles'],
+        'article_helpers.php' => ['home', 'articles', 'article', 'article_propose', 'admin_articles'],
         'ads_helpers.php' => ['ads', 'admin_ads', 'ad_click'],
         'committee_helpers.php' => ['committee', 'admin_editorial'],
         'news_helpers.php' => ['admin_news'],

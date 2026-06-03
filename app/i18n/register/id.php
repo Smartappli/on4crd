@@ -9,7 +9,7 @@ return array (
   'too_many' => 'Terlalu banyak percobaan. Silakan coba lagi nanti.',
   'ok_created' => 'Akun berhasil dibuat. Selamat datang di area anggota!',
   'title' => 'Buat akun anggota',
-  'callsign' => 'tanda panggilan',
+  'callsign' => 'Indicatif / Identifiant LoTW',
   'full_name' => 'Nama lengkap',
   'first_name' => 'First name',
   'last_name' => 'Last name',

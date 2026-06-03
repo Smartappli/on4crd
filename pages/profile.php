@@ -302,7 +302,6 @@ ob_start();
                 <label><?= e($t('itu_zone')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
                 <p class="help profile-form-wide"><?= e($t('auto_radio_location_help')) ?></p>
                 <label><?= e($t('qsl_via')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
-                <label><?= e($t('lotw_username')) ?><input type="text" name="lotw_username" maxlength="190" value="<?= e((string) ($member['lotw_username'] ?? '')) ?>"></label>
                 <label><?= e($t('eqsl_username')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
                 <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" maxlength="255" readonly value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
                 <label><?= e($t('website')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>

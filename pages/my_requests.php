@@ -18,40 +18,53 @@ set_page_meta([
 $shortcuts = [
     [
         'title' => (string) ($t['profile_title'] ?? 'Profil'),
-        'description' => (string) ($t['profile_desc'] ?? 'Mettre à jour vos informations de membre.'),
+        'description' => (string) ($t['profile_desc'] ?? 'Mettre Ã  jour vos informations de membre.'),
         'url' => route_url('profile'),
         'cta' => (string) ($t['profile_cta'] ?? 'Ouvrir le profil'),
     ],
     [
-        'title' => (string) ($t['privacy_title'] ?? 'Vie privée'),
-        'description' => (string) ($t['privacy_desc'] ?? 'Gérer la visibilité de vos données dans l’annuaire.'),
+        'title' => (string) ($t['privacy_title'] ?? 'Vie privÃ©e'),
+        'description' => (string) ($t['privacy_desc'] ?? 'GÃ©rer la visibilitÃ© de vos donnÃ©es dans lâ€™annuaire.'),
         'url' => route_url('gdpr'),
-        'cta' => (string) ($t['privacy_cta'] ?? 'Gérer la vie privée'),
+        'cta' => (string) ($t['privacy_cta'] ?? 'GÃ©rer la vie privÃ©e'),
     ],
     [
-        'title' => (string) ($t['events_title'] ?? 'Événements'),
-        'description' => (string) ($t['events_desc'] ?? 'Proposer un événement au club depuis la page agenda.'),
+        'title' => (string) ($t['events_title'] ?? 'Ã‰vÃ©nements'),
+        'description' => (string) ($t['events_desc'] ?? 'Proposer un Ã©vÃ©nement au club depuis la page agenda.'),
         'url' => route_url('events'),
-        'cta' => (string) ($t['events_cta'] ?? 'Voir l’agenda'),
+        'cta' => (string) ($t['events_cta'] ?? 'Voir lâ€™agenda'),
     ],
     [
         'title' => (string) ($t['articles_title'] ?? 'Articles'),
-        'description' => (string) ($t['articles_desc'] ?? 'Proposer un article ou une catégorie depuis la page articles.'),
+        'description' => (string) ($t['articles_desc'] ?? 'Proposer un article ou une catÃ©gorie depuis la page articles.'),
         'url' => route_url('articles'),
         'cta' => (string) ($t['articles_cta'] ?? 'Voir les articles'),
     ],
     [
         'title' => (string) ($t['classifieds_title'] ?? 'Petites annonces'),
-        'description' => (string) ($t['classifieds_desc'] ?? 'Gérer vos annonces ou proposer une catégorie.'),
+        'description' => (string) ($t['classifieds_desc'] ?? 'GÃ©rer vos annonces ou proposer une catÃ©gorie.'),
         'url' => route_url('classifieds_manage'),
-        'cta' => (string) ($t['classifieds_cta'] ?? 'Gérer mes annonces'),
+        'cta' => (string) ($t['classifieds_cta'] ?? 'GÃ©rer mes annonces'),
     ],
     [
-        'title' => (string) ($t['settings_title'] ?? 'Paramètres'),
-        'description' => (string) ($t['settings_desc'] ?? 'Adapter vos préférences de compte.'),
+        'title' => (string) ($t['settings_title'] ?? 'ParamÃ¨tres'),
+        'description' => (string) ($t['settings_desc'] ?? 'Adapter vos prÃ©fÃ©rences de compte.'),
         'url' => route_url('settings'),
-        'cta' => (string) ($t['settings_cta'] ?? 'Ouvrir les paramètres'),
+        'cta' => (string) ($t['settings_cta'] ?? 'Ouvrir les paramÃ¨tres'),
     ],
+];
+
+$submittedArticles = [];
+if (table_exists('articles') && table_has_column('articles', 'author_id')) {
+    $stmt = db()->prepare('SELECT id, slug, title, status, category, created_at, updated_at FROM articles WHERE author_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
+    $stmt->execute([(int) $user['id']]);
+    $submittedArticles = $stmt->fetchAll() ?: [];
+}
+
+$statusLabels = [
+    'draft' => (string) ($t['article_status_draft'] ?? 'En validation'),
+    'scheduled' => (string) ($t['article_status_scheduled'] ?? 'Planifie'),
+    'published' => (string) ($t['article_status_published'] ?? 'Publie'),
 ];
 
 ob_start();
@@ -75,18 +88,44 @@ ob_start();
                 <h2><?= e((string) ($t['status_title'] ?? 'Demandes enregistrées')) ?></h2>
                 <p class="help"><?= e((string) ($t['empty_body'] ?? 'Les demandes enregistrées par le site apparaîtront ici.')) ?></p>
             </div>
-            <span class="badge muted">0</span>
+            <span class="badge muted"><?= (int) count($submittedArticles) ?></span>
         </div>
-        <div class="my-requests-empty">
-            <strong><?= e((string) ($t['empty_title'] ?? 'Aucune demande pour le moment')) ?></strong>
-            <p><?= e((string) ($t['empty_hint'] ?? 'Utilisez les raccourcis ci-dessous pour accéder aux démarches disponibles.')) ?></p>
-        </div>
+        <?php if ($submittedArticles === []): ?>
+            <div class="my-requests-empty">
+                <strong><?= e((string) ($t['empty_title'] ?? 'Aucune demande pour le moment')) ?></strong>
+                <p><?= e((string) ($t['empty_hint'] ?? 'Utilisez les raccourcis ci-dessous pour accéder aux démarches disponibles.')) ?></p>
+            </div>
+        <?php else: ?>
+            <div class="my-requests-grid">
+                <?php foreach ($submittedArticles as $article): ?>
+                    <?php
+                    $articleStatus = (string) ($article['status'] ?? 'draft');
+                    $articleTitle = trim((string) ($article['title'] ?? ''));
+                    if ($articleTitle === '') {
+                        $articleTitle = 'Article';
+                    }
+                    $articleUrl = $articleStatus === 'published' && trim((string) ($article['slug'] ?? '')) !== ''
+                        ? route_url('article', ['slug' => (string) $article['slug']])
+                        : '';
+                    ?>
+                    <article class="my-requests-shortcut">
+                        <span class="badge muted"><?= e((string) ($statusLabels[$articleStatus] ?? $articleStatus)) ?></span>
+                        <h3><?= e($articleTitle) ?></h3>
+                        <p><?= e((string) ($t['articles_title'] ?? 'Articles')) ?> · <?= e((string) ($article['category'] ?? 'autres')) ?></p>
+                        <p class="help"><?= e(date('d/m/Y', strtotime((string) ($article['updated_at'] ?? $article['created_at'] ?? 'now')))) ?></p>
+                        <?php if ($articleUrl !== ''): ?>
+                            <a class="button secondary small" href="<?= e($articleUrl) ?>"><?= e((string) ($t['article_open'] ?? 'Ouvrir')) ?></a>
+                        <?php endif; ?>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </section>
 
     <section class="card my-requests-shortcuts" aria-labelledby="my-requests-shortcuts-title">
         <div class="my-requests-section-heading">
             <h2 id="my-requests-shortcuts-title"><?= e((string) ($t['shortcuts_title'] ?? 'Raccourcis utiles')) ?></h2>
-            <p class="help"><?= e((string) ($t['shortcuts_intro'] ?? 'Accédez rapidement aux pages liées aux demandes et préférences de votre compte.')) ?></p>
+            <p class="help"><?= e((string) ($t['shortcuts_intro'] ?? 'AccÃ©dez rapidement aux pages liÃ©es aux demandes et prÃ©fÃ©rences de votre compte.')) ?></p>
         </div>
         <div class="my-requests-grid">
             <?php foreach ($shortcuts as $shortcut): ?>

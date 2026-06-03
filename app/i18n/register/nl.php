@@ -9,7 +9,7 @@ return [
     'too_many' => 'Te veel pogingen. Probeer het later opnieuw.',
     'ok_created' => 'Account succesvol aangemaakt. Welkom in de ledenruimte!',
     'title' => 'Ledenaccount aanmaken',
-    'callsign' => 'Roepnaam',
+    'callsign' => 'Indicatif / Identifiant LoTW',
     'full_name' => 'Volledige naam',
     'first_name' => 'Voornaam',
     'last_name' => 'Achternaam',
