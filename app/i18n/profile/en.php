@@ -44,6 +44,7 @@ return array (
   'operator_since' => 'Operator since',
   'cq_zone' => 'CQ zone',
   'itu_zone' => 'ITU zone',
+  'auto_radio_location_help' => 'When country, address, postal code and QTH are filled in, grid, CQ zone and ITU zone are completed automatically if these fields are empty.',
   'qsl_via' => 'QSL via',
   'lotw_username' => 'LoTW username',
   'eqsl_username' => 'eQSL username',

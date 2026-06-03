@@ -61,6 +61,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_url'));
         }
 
+        if ($locator === '' || $cqZone === '' || $ituZone === '') {
+            $computedRadioLocation = member_profile_radio_location_from_address($country, $address, $postalCode, $qth);
+            if (is_array($computedRadioLocation)) {
+                if ($locator === '') {
+                    $locator = (string) ($computedRadioLocation['locator'] ?? '');
+                }
+                if ($cqZone === '') {
+                    $cqZone = (string) ($computedRadioLocation['cq_zone'] ?? '');
+                }
+                if ($ituZone === '') {
+                    $ituZone = (string) ($computedRadioLocation['itu_zone'] ?? '');
+                }
+            }
+        }
+        if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
+            throw new RuntimeException($t('invalid_locator'));
+        }
+
         $currentStmt = db()->prepare('SELECT auth_user_id, callsign, email, photo_path, avatar_path, qrz_url FROM members WHERE id = ? LIMIT 1');
         $currentStmt->execute([$memberId]);
         $currentMember = $currentStmt->fetch() ?: [];
@@ -279,6 +297,7 @@ ob_start();
                 <label><?= e($t('operator_since')) ?><input type="text" name="operator_since" maxlength="32" value="<?= e((string) ($member['operator_since'] ?? '')) ?>"></label>
                 <label><?= e($t('cq_zone')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
                 <label><?= e($t('itu_zone')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
+                <p class="help profile-form-wide"><?= e($t('auto_radio_location_help')) ?></p>
                 <label><?= e($t('qsl_via')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
                 <label><?= e($t('lotw_username')) ?><input type="text" name="lotw_username" maxlength="190" value="<?= e((string) ($member['lotw_username'] ?? '')) ?>"></label>
                 <label><?= e($t('eqsl_username')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
