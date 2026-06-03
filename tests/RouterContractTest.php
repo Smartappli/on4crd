@@ -74,6 +74,31 @@ final class RouterContractTest extends TestCase
         }
     }
 
+    public function testPageControllerStaticIncludesReferenceExistingFiles(): void
+    {
+        $pageFiles = glob(__DIR__ . '/../pages/*.php');
+        self::assertIsArray($pageFiles);
+
+        foreach ($pageFiles as $file) {
+            $contents = file_get_contents((string) $file);
+            self::assertIsString($contents);
+
+            preg_match_all(
+                '/\b(?:require|require_once|include|include_once)\s+__DIR__\s*\.\s*\'([^\']+)\'\s*;/',
+                $contents,
+                $matches
+            );
+
+            foreach ($matches[1] as $relativePath) {
+                $target = dirname((string) $file) . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $relativePath);
+                self::assertFileExists(
+                    $target,
+                    sprintf('Page file %s references missing static include %s', basename((string) $file), $relativePath)
+                );
+            }
+        }
+    }
+
     public function testSensitiveRoutesAreNotPublic(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
