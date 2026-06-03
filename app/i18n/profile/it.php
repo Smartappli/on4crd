@@ -22,7 +22,7 @@ return array (
   'first_name' => 'Nome',
   'last_name' => 'Cognome',
   'phone' => 'Telefono',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'licence' => 'Licenza',
   'bands' => 'Bande preferite',
   'station' => 'Stazione',

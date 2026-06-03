@@ -22,7 +22,7 @@ return array (
   'first_name' => 'First name',
   'last_name' => 'Last name',
   'phone' => 'फ़ोन',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'licence' => 'लाइसेंस',
   'bands' => 'पसंदीदा बैंड',
   'station' => 'स्टेशन',

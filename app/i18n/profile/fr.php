@@ -36,7 +36,7 @@ return array (
   'country' => 'Pays',
   'address' => 'Adresse',
   'postal_code' => 'Code postal',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'locator' => 'Locator',
   'grid' => 'Grid',
   'bio' => 'Bio',

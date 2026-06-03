@@ -22,7 +22,7 @@ return array (
   'first_name' => 'First name',
   'last_name' => 'Last name',
   'phone' => 'Teileafón',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'licence' => 'Ceadúnas',
   'bands' => 'Na bannaí is fearr leat',
   'station' => 'Saoire',

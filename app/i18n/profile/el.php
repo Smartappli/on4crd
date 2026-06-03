@@ -22,7 +22,7 @@ return array (
   'first_name' => 'First name',
   'last_name' => 'Last name',
   'phone' => 'Τηλέφωνο',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'licence' => 'Άδεια',
   'bands' => 'Αγαπημένα συγκροτήματα',
   'station' => 'Θέρετρο',

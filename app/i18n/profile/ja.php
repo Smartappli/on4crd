@@ -22,7 +22,7 @@ return array (
   'first_name' => 'First name',
   'last_name' => 'Last name',
   'phone' => '電話',
-  'qth' => 'クイーンズランド州',
+  'qth' => 'QTH / Localité',
   'licence' => 'ライセンス',
   'bands' => 'お気に入りバンド',
   'station' => '無線局',

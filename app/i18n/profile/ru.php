@@ -22,7 +22,7 @@ return array (
   'first_name' => 'First name',
   'last_name' => 'Last name',
   'phone' => 'Телефон',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'licence' => 'Лицензия',
   'bands' => 'Любимые диапазоны',
   'station' => 'Станция',

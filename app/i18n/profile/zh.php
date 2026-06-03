@@ -22,7 +22,7 @@ return array (
   'first_name' => 'First name',
   'last_name' => 'Last name',
   'phone' => '电话',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'licence' => '执照',
   'bands' => '常用波段',
   'station' => '电台',

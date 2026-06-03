@@ -22,7 +22,7 @@ return array (
   'first_name' => 'First name',
   'last_name' => 'Last name',
   'phone' => 'Puhelin',
-  'qth' => 'QTH',
+  'qth' => 'QTH / Localité',
   'licence' => 'Lisenssi',
   'bands' => 'Suosikkibändejä',
   'station' => 'Lomakeskus',
