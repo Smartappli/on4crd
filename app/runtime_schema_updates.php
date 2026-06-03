@@ -250,10 +250,16 @@ function apply_runtime_schema_updates(): void
             'first_name' => 'ALTER TABLE members ADD COLUMN first_name VARCHAR(95) DEFAULT NULL AFTER callsign',
             'last_name' => 'ALTER TABLE members ADD COLUMN last_name VARCHAR(95) DEFAULT NULL AFTER first_name',
             'country' => 'ALTER TABLE members ADD COLUMN country VARCHAR(190) DEFAULT NULL',
+            'address' => 'ALTER TABLE members ADD COLUMN address VARCHAR(255) DEFAULT NULL AFTER country',
+            'postal_code' => 'ALTER TABLE members ADD COLUMN postal_code VARCHAR(32) DEFAULT NULL AFTER address',
             'is_uba_member' => 'ALTER TABLE members ADD COLUMN is_uba_member TINYINT(1) NOT NULL DEFAULT 0',
             'uba_member_number' => 'ALTER TABLE members ADD COLUMN uba_member_number VARCHAR(64) DEFAULT NULL',
-            'visibility_full_name' => 'ALTER TABLE members ADD COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_full_name' => 'ALTER TABLE members ADD COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_first_name' => 'ALTER TABLE members ADD COLUMN visibility_first_name ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_last_name' => 'ALTER TABLE members ADD COLUMN visibility_last_name ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_country' => 'ALTER TABLE members ADD COLUMN visibility_country ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_address' => 'ALTER TABLE members ADD COLUMN visibility_address ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_postal_code' => 'ALTER TABLE members ADD COLUMN visibility_postal_code ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_locator' => 'ALTER TABLE members ADD COLUMN visibility_locator ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_bio' => 'ALTER TABLE members ADD COLUMN visibility_bio ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_licence_class' => 'ALTER TABLE members ADD COLUMN visibility_licence_class ENUM("public","members","private") NOT NULL DEFAULT "members"',
@@ -279,6 +285,9 @@ function apply_runtime_schema_updates(): void
         if (table_has_column('members', 'first_name') && table_has_column('members', 'last_name') && table_has_column('members', 'full_name')) {
             db()->exec('UPDATE members SET first_name = TRIM(SUBSTRING_INDEX(full_name, " ", 1)) WHERE (first_name IS NULL OR first_name = "") AND full_name IS NOT NULL AND full_name <> ""');
             db()->exec('UPDATE members SET last_name = NULLIF(TRIM(CASE WHEN LOCATE(" ", full_name) > 0 THEN SUBSTRING(full_name, LOCATE(" ", full_name) + 1) ELSE "" END), "") WHERE (last_name IS NULL OR last_name = "") AND full_name IS NOT NULL AND full_name <> ""');
+        }
+        if (table_has_column('members', 'visibility_full_name')) {
+            db()->exec('ALTER TABLE members MODIFY COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "private"');
         }
     }
 
