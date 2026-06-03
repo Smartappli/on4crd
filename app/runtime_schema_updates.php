@@ -297,8 +297,17 @@ function apply_runtime_schema_updates(): void
             db()->exec('UPDATE members SET first_name = TRIM(SUBSTRING_INDEX(full_name, " ", 1)) WHERE (first_name IS NULL OR first_name = "") AND full_name IS NOT NULL AND full_name <> ""');
             db()->exec('UPDATE members SET last_name = NULLIF(TRIM(CASE WHEN LOCATE(" ", full_name) > 0 THEN SUBSTRING(full_name, LOCATE(" ", full_name) + 1) ELSE "" END), "") WHERE (last_name IS NULL OR last_name = "") AND full_name IS NOT NULL AND full_name <> ""');
         }
-        if ($memberColumnsExist(['visibility_full_name'])) {
-            db()->exec('ALTER TABLE members MODIFY COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "private"');
+        $visibilityDefaults = [
+            'visibility_full_name' => 'private',
+            'visibility_first_name' => 'members',
+            'visibility_last_name' => 'private',
+            'visibility_address' => 'private',
+            'visibility_postal_code' => 'private',
+        ];
+        foreach ($visibilityDefaults as $visibilityColumn => $visibilityDefault) {
+            if ($memberColumnsExist([$visibilityColumn])) {
+                db()->exec('ALTER TABLE members MODIFY COLUMN ' . $visibilityColumn . ' ENUM("public","members","private") NOT NULL DEFAULT "' . $visibilityDefault . '"');
+            }
         }
     }
 

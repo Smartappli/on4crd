@@ -29,47 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $visibilityPayload[$field] = in_array($value, $allowedVisibilities, true) ? $value : 'members';
     }
 
-    $stmt = db()->prepare(
-        'UPDATE members
-         SET visibility_photo = ?,
-             visibility_full_name = ?,
-             visibility_email = ?,
-             visibility_phone = ?,
-             visibility_country = ?,
-             visibility_qth = ?,
-             visibility_locator = ?,
-             visibility_bio = ?,
-             visibility_licence_class = ?,
-             visibility_qsl = ?,
-             visibility_qrz = ?,
-             visibility_uba = ?,
-             visibility_favourite_bands = ?,
-             visibility_favourite_modes = ?,
-             visibility_station = ?,
-             visibility_antennas = ?,
-             visibility_interests = ?
-         WHERE id = ?'
-    );
-    $stmt->execute([
-        $visibilityPayload['visibility_photo'],
-        $visibilityPayload['visibility_full_name'],
-        $visibilityPayload['visibility_email'],
-        $visibilityPayload['visibility_phone'],
-        $visibilityPayload['visibility_country'],
-        $visibilityPayload['visibility_qth'],
-        $visibilityPayload['visibility_locator'],
-        $visibilityPayload['visibility_bio'],
-        $visibilityPayload['visibility_licence_class'],
-        $visibilityPayload['visibility_qsl'],
-        $visibilityPayload['visibility_qrz'],
-        $visibilityPayload['visibility_uba'],
-        $visibilityPayload['visibility_favourite_bands'],
-        $visibilityPayload['visibility_favourite_modes'],
-        $visibilityPayload['visibility_station'],
-        $visibilityPayload['visibility_antennas'],
-        $visibilityPayload['visibility_interests'],
-        $memberId,
-    ]);
+    $assignments = implode(', ', array_map(
+        static fn(string $field): string => $field . ' = ?',
+        array_keys($visibilityFields)
+    ));
+    $stmt = db()->prepare('UPDATE members SET ' . $assignments . ' WHERE id = ?');
+    $stmt->execute([...array_values($visibilityPayload), $memberId]);
 
     set_flash('success', $t('saved'));
     redirect('gdpr');
@@ -79,6 +44,7 @@ $stmt = db()->prepare('SELECT ' . member_profile_select_columns_sql() . ' FROM m
 $stmt->execute([$memberId]);
 $member = $stmt->fetch() ?: [];
 $member = member_backfill_missing_qrz_url($memberId, is_array($member) ? $member : []);
+$member = member_with_name_parts($member);
 
 $profileViews = [
     'public' => ['title' => 'Vue ' . strtolower($t('public'))],

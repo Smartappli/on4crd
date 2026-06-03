@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim((string) ($_POST['email'] ?? ''));
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $country = trim((string) ($_POST['country'] ?? ''));
+        $address = trim((string) ($_POST['address'] ?? ''));
+        $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
         $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
         $bio = trim((string) ($_POST['bio'] ?? ''));
@@ -46,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '') {
             throw new RuntimeException($t('required'));
         }
-        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190) {
+        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32) {
             throw new RuntimeException($t('too_long'));
         }
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -111,6 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              email = ?,
              phone = ?,
              country = ?,
+             address = ?,
+             postal_code = ?,
              qth = ?,
              locator = ?,
              bio = ?,
@@ -143,6 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email,
             $phone !== '' ? $phone : null,
             $country !== '' ? $country : null,
+            $address !== '' ? $address : null,
+            $postalCode !== '' ? $postalCode : null,
             $qth !== '' ? $qth : null,
             $locator !== '' ? $locator : null,
             $bio !== '' ? $bio : null,
@@ -258,6 +264,8 @@ ob_start();
                 <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
                 <label><?= e($t('country')) ?><select name="country" class="country-select"><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
+                <label><?= e($t('address')) ?><input type="text" name="address" maxlength="255" value="<?= e((string) ($member['address'] ?? '')) ?>" autocomplete="street-address"></label>
+                <label><?= e($t('postal_code')) ?><input type="text" name="postal_code" maxlength="32" value="<?= e((string) ($member['postal_code'] ?? '')) ?>" autocomplete="postal-code"></label>
                 <label><?= e($t('qth')) ?><input type="text" name="qth" maxlength="190" value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
                 <label><?= e($t('grid')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
                 <label class="profile-form-wide"><?= e($t('bio')) ?><textarea name="bio" rows="4" maxlength="4000"><?= e((string) ($member['bio'] ?? '')) ?></textarea></label>
