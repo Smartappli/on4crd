@@ -7,16 +7,16 @@
   const toolbarButtons = [
     { label: 'B', command: 'bold', title: 'Gras' },
     { label: 'I', command: 'italic', title: 'Italique' },
-    { label: 'U', command: 'underline', title: 'SoulignÃ©' },
-    { label: 'S', command: 'strikeThrough', title: 'BarrÃ©' },
-    { label: 'â€¢ Liste', command: 'insertUnorderedList', title: 'Liste Ã  puces' },
-    { label: '1. Liste', command: 'insertOrderedList', title: 'Liste numÃ©rotÃ©e' },
-    { label: 'â€œ Citation', command: 'formatBlock', value: 'blockquote', title: 'Citation' },
+    { label: 'U', command: 'underline', title: 'Souligne' },
+    { label: 'S', command: 'strikeThrough', title: 'Barre' },
+    { label: 'Liste puces', command: 'insertUnorderedList', title: 'Liste a puces' },
+    { label: 'Liste 1-2', command: 'insertOrderedList', title: 'Liste numerotee' },
+    { label: 'Citation', command: 'formatBlock', value: 'blockquote', title: 'Citation' },
     { label: 'Code', command: 'formatBlock', value: 'pre', title: 'Bloc de code' },
-    { label: 'Lien', command: 'createLink', title: 'InsÃ©rer un lien' },
+    { label: 'Lien', command: 'createLink', title: 'Inserer un lien' },
     { label: 'HR', command: 'insertHorizontalRule', title: 'Ligne horizontale' },
-    { label: 'â†�', command: 'undo', title: 'Annuler' },
-    { label: 'â†’', command: 'redo', title: 'RÃ©tablir' },
+    { label: 'Annuler', command: 'undo', title: 'Annuler' },
+    { label: 'Retablir', command: 'redo', title: 'Retablir' },
     { label: 'Nettoyer', command: 'removeFormat', title: 'Supprimer le formatage' },
   ];
 
@@ -102,7 +102,7 @@
       { value: '3', label: 'Texte normal' },
       { value: '2', label: 'Petit' },
       { value: '4', label: 'Grand' },
-      { value: '5', label: 'TrÃ¨s grand' },
+      { value: '5', label: 'Tres grand' },
     ].forEach((optionConfig) => {
       const option = document.createElement('option');
       option.value = optionConfig.value;
@@ -134,7 +134,7 @@
       { value: 'justifyLeft', label: 'Gauche' },
       { value: 'justifyCenter', label: 'Centre' },
       { value: 'justifyRight', label: 'Droite' },
-      { value: 'justifyFull', label: 'JustifiÃ©' },
+      { value: 'justifyFull', label: 'Justifie' },
     ].forEach((optionConfig) => {
       const option = document.createElement('option');
       option.value = optionConfig.value;
@@ -152,9 +152,9 @@
 
     if (isFullEditor) {
       [
-        { label: 'Image', command: 'insertImage', title: 'Insérer une image par URL' },
-        { label: 'Tableau', command: 'insertTable', title: 'Insérer un tableau' },
-        { label: 'Délier', command: 'unlink', title: 'Supprimer le lien' },
+        { label: 'Image', command: 'insertImage', title: 'Inserer une image par URL' },
+        { label: 'Tableau', command: 'insertTable', title: 'Inserer un tableau' },
+        { label: 'Delier', command: 'unlink', title: 'Supprimer le lien' },
       ].forEach((buttonConfig) => {
         const button = document.createElement('button');
         button.type = 'button';
@@ -218,7 +218,7 @@
 
         const extension = file.name.toLowerCase();
         if (extension.endsWith('.doc')) {
-          window.alert('Le format .doc nâ€™est pas supportÃ© directement. Merci dâ€™enregistrer en .docx puis de rÃ©importer.');
+          window.alert('Le format .doc n est pas supporte directement. Merci d enregistrer en .docx puis de reimporter.');
           return;
         }
 
