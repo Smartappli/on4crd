@@ -1,0 +1,381 @@
+<?php
+declare(strict_types=1);
+
+if (!function_exists('member_country_options')) {
+/**
+ * @return array<string, string>
+ */
+function member_country_options(): array
+{
+    return [
+        'BE' => 'Belgique',
+        'FR' => 'France',
+        'NL' => 'Pays-Bas',
+        'LU' => 'Luxembourg',
+        'DE' => 'Allemagne',
+        'GB' => 'Royaume-Uni',
+        'CH' => 'Suisse',
+        'IT' => 'Italie',
+        'ES' => 'Espagne',
+        'PT' => 'Portugal',
+        'IE' => 'Irlande',
+        'DK' => 'Danemark',
+        'SE' => 'Suede',
+        'NO' => 'Norvege',
+        'FI' => 'Finlande',
+        'AT' => 'Autriche',
+        'PL' => 'Pologne',
+        'CZ' => 'Tchequie',
+        'SK' => 'Slovaquie',
+        'HU' => 'Hongrie',
+        'RO' => 'Roumanie',
+        'BG' => 'Bulgarie',
+        'GR' => 'Grece',
+        'US' => 'Etats-Unis',
+        'CA' => 'Canada',
+        'MA' => 'Maroc',
+        'DZ' => 'Algerie',
+        'TN' => 'Tunisie',
+    ];
+}
+}
+
+if (!function_exists('member_country_key')) {
+function member_country_key(string $country): string
+{
+    $country = strtolower(trim($country));
+    $country = strtr($country, [
+        'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', 'ã' => 'a', 'å' => 'a',
+        'ç' => 'c',
+        'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e',
+        'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i',
+        'ñ' => 'n',
+        'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'ö' => 'o', 'õ' => 'o',
+        'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u',
+        'ý' => 'y', 'ÿ' => 'y',
+    ]);
+    $country = preg_replace('/[^a-z0-9]+/', '-', $country) ?? $country;
+
+    return trim($country, '-');
+}
+}
+
+if (!function_exists('member_country_code_for')) {
+function member_country_code_for(string $country): string
+{
+    $country = trim($country);
+    if (preg_match('/^[A-Za-z]{2}$/', $country) === 1) {
+        return strtoupper($country);
+    }
+
+    $options = member_country_options();
+    $key = member_country_key($country);
+    foreach ($options as $code => $label) {
+        if ($key === member_country_key($label)) {
+            return $code;
+        }
+    }
+
+    $aliases = [
+        'belgium' => 'BE',
+        'belgie' => 'BE',
+        'belgien' => 'BE',
+        'netherlands' => 'NL',
+        'nederland' => 'NL',
+        'holland' => 'NL',
+        'pays-bas' => 'NL',
+        'germany' => 'DE',
+        'deutschland' => 'DE',
+        'united-kingdom' => 'GB',
+        'uk' => 'GB',
+        'great-britain' => 'GB',
+        'switzerland' => 'CH',
+        'spain' => 'ES',
+        'italy' => 'IT',
+        'ireland' => 'IE',
+        'united-states' => 'US',
+        'usa' => 'US',
+        'canada' => 'CA',
+    ];
+
+    return (string) ($aliases[$key] ?? '');
+}
+}
+
+if (!function_exists('member_country_code_to_flag')) {
+function member_country_code_to_flag(string $countryCode): string
+{
+    $countryCode = strtoupper(trim($countryCode));
+    if (preg_match('/^[A-Z]{2}$/', $countryCode) !== 1) {
+        return '';
+    }
+
+    $flag = '';
+    for ($i = 0; $i < 2; $i++) {
+        $flag .= html_entity_decode('&#' . (127397 + ord($countryCode[$i])) . ';', ENT_NOQUOTES, 'UTF-8');
+    }
+
+    return $flag;
+}
+}
+
+if (!function_exists('member_country_flag')) {
+function member_country_flag(string $country): string
+{
+    return member_country_code_to_flag(member_country_code_for($country));
+}
+}
+
+if (!function_exists('member_country_html')) {
+function member_country_html(string $country): string
+{
+    $country = trim($country);
+    if ($country === '') {
+        return '';
+    }
+
+    $flag = member_country_flag($country);
+    if ($flag === '') {
+        return e($country);
+    }
+
+    return '<span class="country-with-flag"><span class="country-flag" aria-hidden="true">' . e($flag) . '</span><span>' . e($country) . '</span></span>';
+}
+}
+
+if (!function_exists('member_country_select_options_html')) {
+function member_country_select_options_html(string $currentCountry = ''): string
+{
+    $currentCountry = trim($currentCountry);
+    $selectedCode = member_country_code_for($currentCountry);
+    $currentKey = member_country_key($currentCountry);
+    $html = '<option value=""></option>';
+    $options = member_country_options();
+
+    if ($currentCountry !== '' && $selectedCode === '' && $currentKey !== '') {
+        $html .= '<option value="' . e($currentCountry) . '" selected>' . member_country_flag($currentCountry) . ' ' . e($currentCountry) . '</option>';
+    }
+
+    foreach ($options as $code => $label) {
+        $selected = ($selectedCode !== '' && $selectedCode === $code) || ($currentKey !== '' && $currentKey === member_country_key($label));
+        $text = trim(member_country_code_to_flag($code) . ' ' . $label);
+        $html .= '<option value="' . e($label) . '"' . ($selected ? ' selected' : '') . '>' . e($text) . '</option>';
+    }
+
+    return $html;
+}
+}
+
+if (!function_exists('member_profile_visibility_allows')) {
+function member_profile_visibility_allows(string $viewer, string $visibility): bool
+{
+    if ($viewer === 'private') {
+        return true;
+    }
+    if ($viewer === 'members') {
+        return in_array($visibility, ['public', 'members'], true);
+    }
+
+    return $visibility === 'public';
+}
+}
+
+if (!function_exists('member_profile_visibility_fields')) {
+/**
+ * @return array<string, array{label:string, default:string}>
+ */
+function member_profile_visibility_fields(callable $t): array
+{
+    return [
+        'visibility_photo' => ['label' => (string) $t('photo'), 'default' => 'members'],
+        'visibility_full_name' => ['label' => (string) $t('full_name'), 'default' => 'members'],
+        'visibility_email' => ['label' => (string) $t('email'), 'default' => 'members'],
+        'visibility_phone' => ['label' => (string) $t('phone'), 'default' => 'private'],
+        'visibility_country' => ['label' => (string) $t('country'), 'default' => 'members'],
+        'visibility_qth' => ['label' => (string) $t('qth'), 'default' => 'members'],
+        'visibility_locator' => ['label' => (string) $t('grid'), 'default' => 'members'],
+        'visibility_bio' => ['label' => (string) $t('bio'), 'default' => 'members'],
+        'visibility_licence_class' => ['label' => (string) $t('licence'), 'default' => 'members'],
+        'visibility_qsl' => ['label' => (string) $t('qsl_info'), 'default' => 'members'],
+        'visibility_qrz' => ['label' => (string) $t('qrz_url'), 'default' => 'members'],
+        'visibility_uba' => ['label' => (string) $t('uba_member'), 'default' => 'members'],
+        'visibility_favourite_bands' => ['label' => (string) $t('bands'), 'default' => 'members'],
+        'visibility_favourite_modes' => ['label' => (string) $t('favourite_modes'), 'default' => 'members'],
+        'visibility_station' => ['label' => (string) $t('station'), 'default' => 'members'],
+        'visibility_antennas' => ['label' => (string) $t('antennas'), 'default' => 'members'],
+        'visibility_interests' => ['label' => (string) $t('interests'), 'default' => 'members'],
+    ];
+}
+}
+
+if (!function_exists('member_profile_preview_fields')) {
+/**
+ * @return array<string, array{label:string, visibility:string, type?:string}>
+ */
+function member_profile_preview_fields(callable $t): array
+{
+    return [
+        'full_name' => ['label' => (string) $t('full_name'), 'visibility' => 'visibility_full_name'],
+        'email' => ['label' => (string) $t('email'), 'visibility' => 'visibility_email'],
+        'phone' => ['label' => (string) $t('phone'), 'visibility' => 'visibility_phone'],
+        'country' => ['label' => (string) $t('country'), 'visibility' => 'visibility_country', 'type' => 'country'],
+        'qth' => ['label' => (string) $t('qth'), 'visibility' => 'visibility_qth'],
+        'locator' => ['label' => (string) $t('grid'), 'visibility' => 'visibility_locator'],
+        'bio' => ['label' => (string) $t('bio'), 'visibility' => 'visibility_bio'],
+        'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class'],
+        'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_licence_class'],
+        'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_licence_class'],
+        'itu_zone' => ['label' => (string) $t('itu_zone'), 'visibility' => 'visibility_licence_class'],
+        'qsl_via' => ['label' => (string) $t('qsl_via'), 'visibility' => 'visibility_qsl'],
+        'lotw_username' => ['label' => (string) $t('lotw_username'), 'visibility' => 'visibility_qsl'],
+        'eqsl_username' => ['label' => (string) $t('eqsl_username'), 'visibility' => 'visibility_qsl'],
+        'qrz_url' => ['label' => (string) $t('qrz_url'), 'visibility' => 'visibility_qrz', 'type' => 'url'],
+        'website' => ['label' => (string) $t('website'), 'visibility' => 'visibility_qrz', 'type' => 'url'],
+        'is_uba_member' => ['label' => (string) $t('uba_member'), 'visibility' => 'visibility_uba', 'type' => 'bool'],
+        'uba_member_number' => ['label' => (string) $t('uba_member_number'), 'visibility' => 'visibility_uba'],
+        'favourite_bands' => ['label' => (string) $t('bands'), 'visibility' => 'visibility_favourite_bands'],
+        'favourite_modes' => ['label' => (string) $t('favourite_modes'), 'visibility' => 'visibility_favourite_modes'],
+        'station_equipment' => ['label' => (string) $t('station'), 'visibility' => 'visibility_station'],
+        'antennas' => ['label' => (string) $t('antennas'), 'visibility' => 'visibility_antennas'],
+        'max_power' => ['label' => (string) $t('max_power'), 'visibility' => 'visibility_station'],
+        'interests' => ['label' => (string) $t('interests'), 'visibility' => 'visibility_interests'],
+    ];
+}
+}
+
+if (!function_exists('member_profile_display_row')) {
+/**
+ * @param array<string, mixed> $member
+ * @param array{label:string, visibility:string, type?:string} $fieldMeta
+ * @return array{label:string, text:string, html:string}|null
+ */
+function member_profile_display_row(array $member, string $fieldName, array $fieldMeta): ?array
+{
+    $type = (string) ($fieldMeta['type'] ?? 'text');
+    if ($type === 'bool') {
+        if ((int) ($member[$fieldName] ?? 0) !== 1) {
+            return null;
+        }
+        $text = 'Oui';
+        return ['label' => (string) $fieldMeta['label'], 'text' => $text, 'html' => e($text)];
+    }
+
+    $text = trim((string) ($member[$fieldName] ?? ''));
+    if ($text === '') {
+        return null;
+    }
+
+    if ($type === 'country') {
+        return ['label' => (string) $fieldMeta['label'], 'text' => $text, 'html' => member_country_html($text)];
+    }
+
+    if ($type === 'url') {
+        $safeUrl = sanitize_href_attribute($text);
+        if ($safeUrl === '') {
+            return null;
+        }
+        return [
+            'label' => (string) $fieldMeta['label'],
+            'text' => $text,
+            'html' => '<a href="' . e($safeUrl) . '" target="_blank" rel="noopener noreferrer">' . e($text) . '</a>',
+        ];
+    }
+
+    return ['label' => (string) $fieldMeta['label'], 'text' => $text, 'html' => e($text)];
+}
+}
+
+if (!function_exists('member_profile_preview_rows')) {
+/**
+ * @param array<string, mixed> $member
+ * @return list<array{label:string, text:string, html:string, visibility_field:string, visible:bool}>
+ */
+function member_profile_preview_rows(array $member, string $viewer, callable $t, bool $includeHiddenRows = false): array
+{
+    $rows = [];
+    foreach (member_profile_preview_fields($t) as $fieldName => $fieldMeta) {
+        $row = member_profile_display_row($member, $fieldName, $fieldMeta);
+        if ($row === null) {
+            continue;
+        }
+
+        $visibilityField = (string) $fieldMeta['visibility'];
+        $visible = member_profile_visibility_allows($viewer, (string) ($member[$visibilityField] ?? 'members'));
+        if (!$visible && !$includeHiddenRows) {
+            continue;
+        }
+
+        $rows[] = [
+            'label' => $row['label'],
+            'text' => $row['text'],
+            'html' => $row['html'],
+            'visibility_field' => $visibilityField,
+            'visible' => $visible,
+        ];
+    }
+
+    return $rows;
+}
+}
+
+if (!function_exists('member_profile_select_columns_sql')) {
+function member_profile_select_columns_sql(): string
+{
+    return 'callsign, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
+            qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
+            favourite_bands, favourite_modes, interests, photo_path, avatar_path,
+            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
+            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
+            visibility_station, visibility_antennas, visibility_interests';
+}
+}
+
+if (!function_exists('member_qrz_url_for_profile_save')) {
+function member_qrz_url_for_profile_save(string $newCallsign, string $previousCallsign = '', string $existingQrzUrl = ''): ?string
+{
+    $newCallsign = strtoupper(trim($newCallsign));
+    $previousCallsign = strtoupper(trim($previousCallsign));
+    $existingQrzUrl = trim($existingQrzUrl);
+
+    if ($newCallsign === '') {
+        return $existingQrzUrl !== '' ? $existingQrzUrl : null;
+    }
+
+    if ($existingQrzUrl !== '' && ($previousCallsign === '' || $previousCallsign === $newCallsign)) {
+        return $existingQrzUrl;
+    }
+
+    $verifiedUrl = qrz_profile_url_for_callsign($newCallsign);
+    if ($verifiedUrl !== null && $verifiedUrl !== '') {
+        return $verifiedUrl;
+    }
+
+    return ($previousCallsign === $newCallsign && $existingQrzUrl !== '') ? $existingQrzUrl : null;
+}
+}
+
+if (!function_exists('member_backfill_missing_qrz_url')) {
+/**
+ * @param array<string, mixed> $member
+ * @return array<string, mixed>
+ */
+function member_backfill_missing_qrz_url(int $memberId, array $member): array
+{
+    $callsign = strtoupper(trim((string) ($member['callsign'] ?? '')));
+    $existingQrzUrl = trim((string) ($member['qrz_url'] ?? ''));
+    if ($memberId <= 0 || $callsign === '' || $existingQrzUrl !== '' || !table_exists('members')) {
+        return $member;
+    }
+
+    $verifiedUrl = qrz_profile_url_for_callsign($callsign);
+    if ($verifiedUrl === null || $verifiedUrl === '') {
+        return $member;
+    }
+
+    db()->prepare('UPDATE members SET qrz_url = ? WHERE id = ? AND (qrz_url IS NULL OR qrz_url = "") LIMIT 1')
+        ->execute([$verifiedUrl, $memberId]);
+    $member['qrz_url'] = $verifiedUrl;
+
+    return $member;
+}
+}
