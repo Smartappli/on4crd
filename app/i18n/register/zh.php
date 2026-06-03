@@ -11,6 +11,8 @@ return [
     'title' => '创建会员账户',
     'callsign' => '呼号',
     'full_name' => '全名',
+    'first_name' => 'First name',
+    'last_name' => 'Last name',
     'email' => '电子邮件',
     'phone' => '电话',
     'country' => 'Country',

@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Byt profilbild',
   'photo_help' => 'Valfritt — formaten JPG, PNG eller WEBP, max 6 MB.',
   'full_name' => 'Fullständigt namn',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Licens',

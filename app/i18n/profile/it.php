@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Cambia foto profilo',
   'photo_help' => 'Opzionale — formati JPG, PNG o WEBP, max 6 MB.',
   'full_name' => 'Nome completo',
+  'first_name' => 'Nome',
+  'last_name' => 'Cognome',
   'phone' => 'Telefono',
   'qth' => 'QTH',
   'licence' => 'Licenza',

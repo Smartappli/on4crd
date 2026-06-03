@@ -11,6 +11,8 @@ return array (
   'title' => 'Luo jäsentili',
   'callsign' => 'Ohjeellinen',
   'full_name' => 'Koko nimi',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'Sähköposti',
   'phone' => 'Puhelin',
     'country' => 'Country',

@@ -11,6 +11,8 @@ return [
     'title' => 'Ledenaccount aanmaken',
     'callsign' => 'Roepnaam',
     'full_name' => 'Volledige naam',
+    'first_name' => 'Voornaam',
+    'last_name' => 'Achternaam',
     'email' => 'E-mail',
     'phone' => 'Telefoon',
     'country' => 'Land',

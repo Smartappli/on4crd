@@ -11,6 +11,8 @@ return array (
   'title' => 'Cruthaigh cuntas ball',
   'callsign' => 'táscach',
   'full_name' => 'Ainm iomlán',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'Ríomhphost',
   'phone' => 'Teileafón',
     'country' => 'Country',

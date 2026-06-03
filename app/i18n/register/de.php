@@ -11,6 +11,8 @@ return [
     'title' => 'Mitgliedskonto erstellen',
     'callsign' => 'Rufzeichen',
     'full_name' => 'Vollständiger Name',
+    'first_name' => 'Vorname',
+    'last_name' => 'Nachname',
     'email' => 'E-Mail',
     'phone' => 'Telefon',
     'country' => 'Land',

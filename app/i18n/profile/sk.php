@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Zmeniť profilový obrázok',
   'photo_help' => 'Voliteľné — formáty JPG, PNG alebo WEBP, maximálne 6 MB.',
   'full_name' => 'Celé meno',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefón',
   'qth' => 'QTH',
   'licence' => 'Licencia',

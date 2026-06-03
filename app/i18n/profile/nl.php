@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Profielfoto wijzigen',
   'photo_help' => 'Optioneel — JPG-, PNG- of WEBP-formaat, max. 6 MB.',
   'full_name' => 'Volledige naam',
+  'first_name' => 'Voornaam',
+  'last_name' => 'Achternaam',
   'phone' => 'Telefoon',
   'qth' => 'QTH',
   'licence' => 'Licentie',

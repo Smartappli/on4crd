@@ -11,6 +11,8 @@ return [
     'title' => 'সদস্য অ্যাকাউন্ট তৈরি করুন',
     'callsign' => 'কলসাইন',
     'full_name' => 'পূর্ণ নাম',
+    'first_name' => 'First name',
+    'last_name' => 'Last name',
     'email' => 'ইমেল',
     'phone' => 'ফোন',
     'country' => 'Country',

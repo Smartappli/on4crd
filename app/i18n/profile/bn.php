@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'প্রোফাইল ছবি পরিবর্তন করুন',
   'photo_help' => 'ঐচ্ছিক — JPG, PNG বা WEBP ফরম্যাট, সর্বোচ্চ ৬ MB।',
   'full_name' => 'পূর্ণ নাম',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'ফোন',
   'qth' => 'QTH',
   'licence' => 'লাইসেন্স',

@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Athraigh pictiúr próifíle',
   'photo_help' => 'Roghnach - formáidí JPG, PNG nó WEBP, uasmhéid 6 MB.',
   'full_name' => 'Ainm iomlán',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Teileafón',
   'qth' => 'QTH',
   'licence' => 'Ceadúnas',

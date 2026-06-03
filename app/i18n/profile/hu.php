@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Profilkép módosítása',
   'photo_help' => 'Opcionális – JPG, PNG vagy WEBP formátumok, legfeljebb 6 MB.',
   'full_name' => 'Teljes név',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Licenc',

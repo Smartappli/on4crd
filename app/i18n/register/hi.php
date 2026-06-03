@@ -11,6 +11,8 @@ return [
     'title' => 'सदस्य खाता बनाएँ',
     'callsign' => 'कॉलसाइन',
     'full_name' => 'पूरा नाम',
+    'first_name' => 'First name',
+    'last_name' => 'Last name',
     'email' => 'ईमेल',
     'phone' => 'फ़ोन',
     'country' => 'Country',

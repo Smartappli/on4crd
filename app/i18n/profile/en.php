@@ -30,6 +30,8 @@ return array (
   'change_photo' => 'Change profile photo',
   'photo_help' => 'Optional — JPG, PNG or WEBP formats, max 6 MB.',
   'full_name' => 'Full name',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Phone',
   'country' => 'Country',
   'qth' => 'QTH',

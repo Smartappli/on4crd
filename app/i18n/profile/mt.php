@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Ibdel l-istampa tal-profil',
   'photo_help' => 'Fakultattiv — formati JPG, PNG jew WEBP, max 6 MB.',
   'full_name' => 'Isem sħiħ',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Liċenzja',

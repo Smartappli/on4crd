@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Vaihda profiilikuva',
   'photo_help' => 'Valinnainen — JPG-, PNG- tai WEBP-muodot, enintään 6 Mt.',
   'full_name' => 'Koko nimi',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Puhelin',
   'qth' => 'QTH',
   'licence' => 'Lisenssi',

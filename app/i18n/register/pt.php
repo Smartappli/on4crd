@@ -11,6 +11,8 @@ return array (
   'title' => 'Criar uma conta de membro',
   'callsign' => 'Indicativo',
   'full_name' => 'Nome completo',
+  'first_name' => 'Nome',
+  'last_name' => 'Apelido',
   'email' => 'E-mail',
   'phone' => 'Telefone',
     'country' => 'Pais',

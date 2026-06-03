@@ -11,6 +11,8 @@ return array (
   'title' => 'Hozzon létre egy tagi fiókot',
   'callsign' => 'Tájékoztató',
   'full_name' => 'Teljes név',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-mail',
   'phone' => 'Telefon',
     'country' => 'Country',

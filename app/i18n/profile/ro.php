@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Schimbați poza de profil',
   'photo_help' => 'Opțional — formatele JPG, PNG sau WEBP, max 6 MB.',
   'full_name' => 'Numele complet',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Licenţă',

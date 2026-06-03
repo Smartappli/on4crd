@@ -11,6 +11,8 @@ return array (
   'title' => 'Δημιουργία λογαριασμού μέλους',
   'callsign' => 'Ενδεικτικά',
   'full_name' => 'Πλήρες όνομα',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-mail',
   'phone' => 'Τηλέφωνο',
     'country' => 'Country',

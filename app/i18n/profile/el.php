@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Αλλαγή εικόνας προφίλ',
   'photo_help' => 'Προαιρετικά — Μορφές JPG, PNG ή WEBP, έως 6 MB.',
   'full_name' => 'Πλήρες όνομα',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Τηλέφωνο',
   'qth' => 'QTH',
   'licence' => 'Άδεια',

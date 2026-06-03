@@ -11,6 +11,8 @@ return array (
   'title' => 'Sukurkite nario paskyrą',
   'callsign' => 'Orientacinė',
   'full_name' => 'Pilnas vardas',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'El. paštas',
   'phone' => 'Telefonas',
     'country' => 'Country',

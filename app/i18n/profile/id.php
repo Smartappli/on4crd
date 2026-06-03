@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Ubah foto profil',
   'photo_help' => 'Opsional — format JPG, PNG, atau WEBP, maks. 6 MB.',
   'full_name' => 'Nama lengkap',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telepon',
   'qth' => 'QTH',
   'licence' => 'Lisensi',

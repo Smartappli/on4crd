@@ -11,6 +11,8 @@ return array (
   'title' => 'Skapa ett medlemskonto',
   'callsign' => 'Vägledande',
   'full_name' => 'Fullständigt namn',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-post',
   'phone' => 'Telefon',
     'country' => 'Land',

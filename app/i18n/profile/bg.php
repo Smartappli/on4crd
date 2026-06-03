@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Промяна на профилна снимка',
   'photo_help' => 'По избор — формати JPG, PNG или WEBP, максимум 6 MB.',
   'full_name' => 'Пълно име',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Телефон',
   'qth' => 'QTH',
   'licence' => 'Лиценз',

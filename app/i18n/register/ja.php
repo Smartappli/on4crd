@@ -11,6 +11,8 @@ return array (
   'title' => 'メンバーアカウント作成',
   'callsign' => 'コールサイン',
   'full_name' => '氏名',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'メール',
   'phone' => '電話',
     'country' => 'Country',

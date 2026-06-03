@@ -11,6 +11,8 @@ return array (
   'title' => 'Napravite članski račun',
   'callsign' => 'Indikativno',
   'full_name' => 'Puno ime',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-mail',
   'phone' => 'Telefon',
     'country' => 'Country',

@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'تغيير صورة الملف الشخصي',
   'photo_help' => 'اختياري — صيغ JPG أو PNG أو WEBP، بحد أقصى 6 م.ب.',
   'full_name' => 'الاسم الكامل',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'الهاتف',
   'qth' => 'QTH',
   'licence' => 'الرخصة',

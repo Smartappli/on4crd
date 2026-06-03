@@ -11,6 +11,8 @@ return [
     'title' => 'إنشاء حساب عضو',
     'callsign' => 'إشارة النداء',
     'full_name' => 'الاسم الكامل',
+    'first_name' => 'First name',
+    'last_name' => 'Last name',
     'email' => 'البريد الإلكتروني',
     'phone' => 'الهاتف',
     'country' => 'Country',

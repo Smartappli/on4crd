@@ -11,6 +11,8 @@ return array (
   'title' => 'Създайте членски акаунт',
   'callsign' => 'Показателно',
   'full_name' => 'Пълно име',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'Имейл',
   'phone' => 'Телефон',
     'country' => 'Country',

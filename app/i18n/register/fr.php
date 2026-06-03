@@ -11,6 +11,8 @@ return [
     'title' => 'Créer un compte membre',
     'callsign' => 'Indicatif',
     'full_name' => 'Nom complet',
+    'first_name' => 'Prénom',
+    'last_name' => 'Nom',
     'email' => 'Email',
     'phone' => 'Téléphone',
     'country' => 'Pays',

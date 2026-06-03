@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Zmień zdjęcie profilowe',
   'photo_help' => 'Opcjonalnie — formaty JPG, PNG lub WEBP, maks. 6 MB.',
   'full_name' => 'Pełne imię i nazwisko',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Licencja',

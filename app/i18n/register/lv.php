@@ -11,6 +11,8 @@ return array (
   'title' => 'Izveidojiet dalībnieka kontu',
   'callsign' => 'Indikatīvs',
   'full_name' => 'Pilns vārds',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-pasts',
   'phone' => 'Tālrunis',
     'country' => 'Country',

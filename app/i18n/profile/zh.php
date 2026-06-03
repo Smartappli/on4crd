@@ -19,6 +19,8 @@ return array (
   'change_photo' => '更改个人资料照片',
   'photo_help' => '可选 — JPG、PNG 或 WEBP 格式，最大 6 MB。',
   'full_name' => '全名',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => '电话',
   'qth' => 'QTH',
   'licence' => '执照',

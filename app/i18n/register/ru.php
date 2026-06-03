@@ -11,6 +11,8 @@ return array (
   'title' => 'Создать учетную запись участника',
   'callsign' => 'Позывной',
   'full_name' => 'Полное имя',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'Электронная почта',
   'phone' => 'Телефон',
     'country' => 'Country',

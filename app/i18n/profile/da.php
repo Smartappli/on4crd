@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Skift profilbillede',
   'photo_help' => 'Valgfrit — JPG, PNG eller WEBP formater, maks. 6 MB.',
   'full_name' => 'Fulde navn',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Licens',

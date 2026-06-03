@@ -11,6 +11,8 @@ return array (
   'title' => 'Opret en medlemskonto',
   'callsign' => 'Vejledende',
   'full_name' => 'Fulde navn',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-mail',
   'phone' => 'Telefon',
     'country' => 'Land',

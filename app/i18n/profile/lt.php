@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Keisti profilio nuotrauką',
   'photo_help' => 'Pasirinktinai – JPG, PNG arba WEBP formatai, maks. 6 MB.',
   'full_name' => 'Pilnas vardas',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefonas',
   'qth' => 'QTH',
   'licence' => 'Licencija',

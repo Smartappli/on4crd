@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Mainīt profila attēlu',
   'photo_help' => 'Pēc izvēles — JPG, PNG vai WEBP formāti, ne vairāk kā 6 MB.',
   'full_name' => 'Pilns vārds',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Tālrunis',
   'qth' => 'QTH',
   'licence' => 'Licence',

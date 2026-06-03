@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'प्रोफ़ाइल फ़ोटो बदलें',
   'photo_help' => 'वैकल्पिक — JPG, PNG या WEBP प्रारूप, अधिकतम 6 MB।',
   'full_name' => 'पूरा नाम',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'फ़ोन',
   'qth' => 'QTH',
   'licence' => 'लाइसेंस',

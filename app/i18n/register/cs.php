@@ -11,6 +11,8 @@ return array (
   'title' => 'Vytvořte si členský účet',
   'callsign' => 'Orientační',
   'full_name' => 'Celé jméno',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-mail',
   'phone' => 'Telefon',
     'country' => 'Country',

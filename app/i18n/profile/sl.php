@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Spremeni sliko profila',
   'photo_help' => 'Izbirno — formati JPG, PNG ali WEBP, največ 6 MB.',
   'full_name' => 'Polno ime',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Licenca',

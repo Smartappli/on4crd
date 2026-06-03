@@ -11,6 +11,8 @@ return array (
   'title' => 'Loo liikmekonto',
   'callsign' => 'Soovituslik',
   'full_name' => 'Täisnimi',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'Meil',
   'phone' => 'Telefon',
     'country' => 'Country',

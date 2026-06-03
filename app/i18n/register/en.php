@@ -11,6 +11,8 @@ return [
     'title' => 'Create a member account',
     'callsign' => 'Callsign',
     'full_name' => 'Full name',
+    'first_name' => 'First name',
+    'last_name' => 'Last name',
     'email' => 'Email',
     'phone' => 'Phone',
     'country' => 'Country',

@@ -11,6 +11,8 @@ return array (
   'title' => 'Crea un account membro',
   'callsign' => 'Nominativo',
   'full_name' => 'Nome completo',
+  'first_name' => 'Nome',
+  'last_name' => 'Cognome',
   'email' => 'E-mail',
   'phone' => 'Telefono',
     'country' => 'Paese',

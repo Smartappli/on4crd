@@ -11,6 +11,8 @@ return array (
   'title' => 'Utwórz konto członkowskie',
   'callsign' => 'Orientacyjne',
   'full_name' => 'Pełne imię i nazwisko',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'email' => 'E-mail',
   'phone' => 'Telefon',
     'country' => 'Country',

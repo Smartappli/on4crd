@@ -19,6 +19,8 @@ return array (
   'change_photo' => 'Muuda profiilipilti',
   'photo_help' => 'Valikuline — formaadid JPG, PNG või WEBP, max 6 MB.',
   'full_name' => 'Täisnimi',
+  'first_name' => 'First name',
+  'last_name' => 'Last name',
   'phone' => 'Telefon',
   'qth' => 'QTH',
   'licence' => 'Litsents',
