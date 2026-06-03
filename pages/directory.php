@@ -34,9 +34,25 @@ if (table_exists('members')) {
     $params = [];
 
     if ($search !== '') {
-        $sql .= ' AND (callsign LIKE ? OR (full_name LIKE ? AND visibility_full_name IN (' . $visibilityPlaceholders . ')))';
+        $sql .= ' AND (callsign LIKE ?
+            OR (first_name LIKE ? AND visibility_first_name IN (' . $visibilityPlaceholders . '))
+            OR (last_name LIKE ? AND visibility_last_name IN (' . $visibilityPlaceholders . '))
+            OR (address LIKE ? AND visibility_address IN (' . $visibilityPlaceholders . '))
+            OR (postal_code LIKE ? AND visibility_postal_code IN (' . $visibilityPlaceholders . ')))';
         $like = '%' . $search . '%';
         $params[] = $like;
+        $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
+        $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
+        $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
         $params[] = $like;
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $params[] = $visibilityLevel;
@@ -96,6 +112,7 @@ if (table_exists('members')) {
     }
 
     foreach ($members as $index => &$member) {
+        $member = member_with_name_parts($member);
         foreach ($fieldVisibilityMap as $field => $visibilityField) {
             $visibility = (string) ($member[$visibilityField] ?? 'private');
             if (!in_array($visibility, $allowedVisibilityLevels, true)) {

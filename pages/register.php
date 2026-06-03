@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = (string) ($_POST['password'] ?? '');
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $country = trim((string) ($_POST['country'] ?? ''));
+        $address = trim((string) ($_POST['address'] ?? ''));
+        $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
         $licenceClass = trim((string) ($_POST['licence_class'] ?? ''));
         $favouriteBands = trim((string) ($_POST['favourite_bands'] ?? ''));
@@ -30,6 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '' || $password === '') {
             throw new RuntimeException($t('required'));
+        }
+        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32) {
+            throw new RuntimeException($t('invalid_data'));
         }
 
         $authClient = auth();
@@ -50,12 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         db()->prepare(
             'INSERT INTO members (
                  auth_user_id, callsign, first_name, last_name, full_name, email, password_hash,
-                 country, phone, qth, licence_class, favourite_bands, station_equipment,
-                 visibility_full_name, visibility_email, visibility_country, visibility_phone, visibility_qth,
+                 country, address, postal_code, phone, qth, licence_class, favourite_bands, station_equipment,
+                 visibility_first_name, visibility_last_name, visibility_full_name, visibility_email, visibility_country,
+                 visibility_address, visibility_postal_code, visibility_phone, visibility_qth,
                  visibility_licence_class, visibility_favourite_bands, visibility_station,
                  is_active
              )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "members", "members", "private", "members", "members", "members", "members", 1)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", 1)
              ON DUPLICATE KEY UPDATE
                  callsign = VALUES(callsign),
                  first_name = VALUES(first_name),
@@ -64,14 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  email = VALUES(email),
                  password_hash = VALUES(password_hash),
                  country = VALUES(country),
+                 address = VALUES(address),
+                 postal_code = VALUES(postal_code),
                  phone = VALUES(phone),
                  qth = VALUES(qth),
                  licence_class = VALUES(licence_class),
                  favourite_bands = VALUES(favourite_bands),
                  station_equipment = VALUES(station_equipment),
+                 visibility_first_name = VALUES(visibility_first_name),
+                 visibility_last_name = VALUES(visibility_last_name),
                  visibility_full_name = VALUES(visibility_full_name),
                  visibility_email = VALUES(visibility_email),
                  visibility_country = VALUES(visibility_country),
+                 visibility_address = VALUES(visibility_address),
+                 visibility_postal_code = VALUES(visibility_postal_code),
                  visibility_phone = VALUES(visibility_phone),
                  visibility_qth = VALUES(visibility_qth),
                  visibility_licence_class = VALUES(visibility_licence_class),
@@ -87,6 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email,
             password_hash($password, PASSWORD_DEFAULT),
             $country !== '' ? $country : null,
+            $address !== '' ? $address : null,
+            $postalCode !== '' ? $postalCode : null,
             $phone !== '' ? $phone : null,
             $qth !== '' ? $qth : null,
             $licenceClass !== '' ? $licenceClass : null,
@@ -118,6 +132,8 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190" required></label>'
     . '<label>' . e($t('phone')) . '<input type="tel" name="phone" maxlength="64" autocomplete="tel"></label>'
     . '<label>' . e($t('country')) . '<select name="country" class="country-select">' . member_country_select_options_html('Belgique') . '</select></label>'
+    . '<label>' . e($t('address')) . '<input type="text" name="address" maxlength="255" autocomplete="street-address"></label>'
+    . '<label>' . e($t('postal_code')) . '<input type="text" name="postal_code" maxlength="32" autocomplete="postal-code"></label>'
     . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2"></label>'
     . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
     . '<label class="register-form-full">' . e($t('station_equipment')) . '<textarea name="station_equipment" rows="3" maxlength="2000"></textarea></label>'
