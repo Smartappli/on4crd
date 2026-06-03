@@ -239,10 +239,13 @@ function member_profile_visibility_fields(callable $t): array
 {
     return [
         'visibility_photo' => ['label' => (string) $t('photo'), 'default' => 'members'],
-        'visibility_full_name' => ['label' => (string) $t('full_name'), 'default' => 'members'],
+        'visibility_first_name' => ['label' => (string) $t('first_name'), 'default' => 'members'],
+        'visibility_last_name' => ['label' => (string) $t('last_name'), 'default' => 'private'],
         'visibility_email' => ['label' => (string) $t('email'), 'default' => 'members'],
         'visibility_phone' => ['label' => (string) $t('phone'), 'default' => 'private'],
         'visibility_country' => ['label' => (string) $t('country'), 'default' => 'members'],
+        'visibility_address' => ['label' => (string) $t('address'), 'default' => 'private'],
+        'visibility_postal_code' => ['label' => (string) $t('postal_code'), 'default' => 'private'],
         'visibility_qth' => ['label' => (string) $t('qth'), 'default' => 'members'],
         'visibility_locator' => ['label' => (string) $t('grid'), 'default' => 'members'],
         'visibility_bio' => ['label' => (string) $t('bio'), 'default' => 'members'],
@@ -266,10 +269,13 @@ if (!function_exists('member_profile_preview_fields')) {
 function member_profile_preview_fields(callable $t): array
 {
     return [
-        'full_name' => ['label' => (string) $t('full_name'), 'visibility' => 'visibility_full_name'],
+        'first_name' => ['label' => (string) $t('first_name'), 'visibility' => 'visibility_first_name'],
+        'last_name' => ['label' => (string) $t('last_name'), 'visibility' => 'visibility_last_name'],
         'email' => ['label' => (string) $t('email'), 'visibility' => 'visibility_email'],
         'phone' => ['label' => (string) $t('phone'), 'visibility' => 'visibility_phone'],
         'country' => ['label' => (string) $t('country'), 'visibility' => 'visibility_country', 'type' => 'country'],
+        'address' => ['label' => (string) $t('address'), 'visibility' => 'visibility_address'],
+        'postal_code' => ['label' => (string) $t('postal_code'), 'visibility' => 'visibility_postal_code'],
         'qth' => ['label' => (string) $t('qth'), 'visibility' => 'visibility_qth'],
         'locator' => ['label' => (string) $t('grid'), 'visibility' => 'visibility_locator'],
         'bio' => ['label' => (string) $t('bio'), 'visibility' => 'visibility_bio'],
@@ -344,6 +350,7 @@ if (!function_exists('member_profile_preview_rows')) {
 function member_profile_preview_rows(array $member, string $viewer, callable $t, bool $includeHiddenRows = false): array
 {
     $rows = [];
+    $visibilityDefaults = member_profile_visibility_fields($t);
     foreach (member_profile_preview_fields($t) as $fieldName => $fieldMeta) {
         $row = member_profile_display_row($member, $fieldName, $fieldMeta);
         if ($row === null) {
@@ -351,7 +358,8 @@ function member_profile_preview_rows(array $member, string $viewer, callable $t,
         }
 
         $visibilityField = (string) $fieldMeta['visibility'];
-        $visible = member_profile_visibility_allows($viewer, (string) ($member[$visibilityField] ?? 'members'));
+        $defaultVisibility = (string) ($visibilityDefaults[$visibilityField]['default'] ?? 'members');
+        $visible = member_profile_visibility_allows($viewer, (string) ($member[$visibilityField] ?? $defaultVisibility));
         if (!$visible && !$includeHiddenRows) {
             continue;
         }
@@ -372,10 +380,10 @@ function member_profile_preview_rows(array $member, string $viewer, callable $t,
 if (!function_exists('member_profile_select_columns_sql')) {
 function member_profile_select_columns_sql(): string
 {
-    return 'callsign, first_name, last_name, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
+    return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
             favourite_bands, favourite_modes, interests, photo_path, avatar_path,
-            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
+            visibility_photo, visibility_full_name, visibility_first_name, visibility_last_name, visibility_email, visibility_phone, visibility_country, visibility_address, visibility_postal_code, visibility_qth, visibility_locator, visibility_bio,
             visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
             visibility_station, visibility_antennas, visibility_interests';
 }
