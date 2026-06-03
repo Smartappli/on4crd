@@ -110,7 +110,7 @@ ob_start();
                 <?php endforeach; ?>
             </select></label>
             <label>Resume<textarea name="excerpt" rows="3" maxlength="2000" placeholder="Court resume affiche dans la liste des articles."></textarea></label>
-            <label>Contenu mis en page<textarea name="content" rows="16" maxlength="50000" required placeholder="<h2>Titre de section</h2>&#10;<p>Votre texte...</p>&#10;<ul><li>Point important</li></ul>"></textarea></label>
+            <label>Contenu mis en page<textarea name="content" rows="16" maxlength="50000" data-wysiwyg="full" required placeholder="<h2>Titre de section</h2>&#10;<p>Votre texte...</p>&#10;<ul><li>Point important</li></ul>"></textarea></label>
             <p class="help">Le HTML est nettoye automatiquement. Les scripts, iframes et attributs dangereux sont retires avant validation.</p>
             <div class="actions">
                 <button class="button" type="submit">Soumettre pour validation</button>

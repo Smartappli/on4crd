@@ -58,6 +58,7 @@ function module_css_assets_for_route(string $route): array
     $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
     $moduleByRoute = [
         'album' => 'albums',
+        'article_propose' => 'articles',
         'auction_bid' => 'auctions',
         'auction_view' => 'auctions',
         'classifieds_manage' => 'classifieds',
@@ -90,6 +91,7 @@ function module_js_assets_for_route(string $route): array
     $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
     $moduleByRoute = [
         'event_view' => 'events',
+        'article_propose' => 'articles',
         'save_dashboard' => 'dashboard',
         'widget_render' => 'dashboard',
         'wiki_edit' => 'wiki_edit',
@@ -102,7 +104,7 @@ function module_js_assets_for_route(string $route): array
     if ($route === 'home') {
         $candidates[] = 'tools';
     }
-    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'classifieds_manage', 'wiki_edit', 'wiki_propose'], true)) {
+    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'article_propose', 'classifieds', 'classifieds_manage', 'wiki_edit', 'wiki_propose'], true)) {
         $candidates[] = 'wysiwyg';
     }
 
