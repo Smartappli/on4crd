@@ -118,6 +118,42 @@ function apply_runtime_schema_updates(): void
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
     );
 
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS roles (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            code VARCHAR(100) NOT NULL UNIQUE,
+            label VARCHAR(190) NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS permissions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            code VARCHAR(120) NOT NULL UNIQUE,
+            label VARCHAR(190) NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS role_permissions (
+            role_id INT NOT NULL,
+            permission_id INT NOT NULL,
+            PRIMARY KEY (role_id, permission_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS member_roles (
+            member_id INT NOT NULL,
+            role_id INT NOT NULL,
+            PRIMARY KEY (member_id, role_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS member_permissions (
+            member_id INT NOT NULL,
+            permission_id INT NOT NULL,
+            PRIMARY KEY (member_id, permission_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
     if (!table_has_index('users_confirmations', 'users_confirmations_email_expires_index')) {
         db()->exec('ALTER TABLE users_confirmations ADD INDEX users_confirmations_email_expires_index (email, expires)');
     }
@@ -254,6 +290,8 @@ function apply_runtime_schema_updates(): void
         db()->exec("UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')");
         db()->exec("UPDATE modules SET visibility = 'admin' WHERE code = 'admin'");
     }
+
+    ensure_configured_administrator_roles();
 
     db()->exec(
         'CREATE TABLE IF NOT EXISTS quotes (

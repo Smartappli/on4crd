@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Celé jméno',
   'email' => 'E-mail',
   'phone' => 'Telefon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Licenční třída',
   'favourite_bands' => 'Oblíbené kapely',

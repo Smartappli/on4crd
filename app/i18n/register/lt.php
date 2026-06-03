@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Pilnas vardas',
   'email' => 'El. paštas',
   'phone' => 'Telefonas',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Licencijos klasė',
   'favourite_bands' => 'Mėgstamiausios grupės',

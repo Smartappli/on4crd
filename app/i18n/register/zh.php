@@ -13,6 +13,7 @@ return [
     'full_name' => '全名',
     'email' => '电子邮件',
     'phone' => '电话',
+    'country' => 'Country',
     'qth' => 'QTH',
     'licence_class' => '执照等级',
     'favourite_bands' => '常用频段',

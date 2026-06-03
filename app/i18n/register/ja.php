@@ -13,6 +13,7 @@ return array (
   'full_name' => '氏名',
   'email' => 'メール',
   'phone' => '電話',
+    'country' => 'Country',
   'qth' => 'クイーンズランド州',
   'licence_class' => 'ライセンスクラス',
   'favourite_bands' => 'お気に入りのバンド',

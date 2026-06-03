@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Polno ime',
   'email' => 'E-pošta',
   'phone' => 'Telefon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Razred licence',
   'favourite_bands' => 'Najljubši bendi',

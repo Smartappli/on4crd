@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Isem sħiħ',
   'email' => 'E-mail',
   'phone' => 'Telefon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Klassi tal-liċenza',
   'favourite_bands' => 'Bands favoriti',

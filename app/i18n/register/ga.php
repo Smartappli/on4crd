@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Ainm iomlán',
   'email' => 'Ríomhphost',
   'phone' => 'Teileafón',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Aicme ceadúnais',
   'favourite_bands' => 'Na bannaí is fearr leat',

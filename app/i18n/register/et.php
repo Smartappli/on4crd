@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Täisnimi',
   'email' => 'Meil',
   'phone' => 'Telefon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Litsentsi klass',
   'favourite_bands' => 'Lemmikbändid',

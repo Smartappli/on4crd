@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Koko nimi',
   'email' => 'Sähköposti',
   'phone' => 'Puhelin',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Lisenssiluokka',
   'favourite_bands' => 'Suosikkibändejä',

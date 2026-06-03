@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Nama lengkap',
   'email' => 'E-mail',
   'phone' => 'Telepon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Kelas lisensi',
   'favourite_bands' => 'Band favorit',

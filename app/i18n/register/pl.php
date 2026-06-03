@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Pełne imię i nazwisko',
   'email' => 'E-mail',
   'phone' => 'Telefon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Klasa licencji',
   'favourite_bands' => 'Ulubione zespoły',

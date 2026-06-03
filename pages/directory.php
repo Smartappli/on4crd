@@ -4,6 +4,7 @@ declare(strict_types=1);
 $members = [];
 $locale = current_locale();
 $t = i18n_domain_translator('directory', $locale);
+$profileT = i18n_domain_translator('profile', $locale);
 
 $activeMembersCount = 0;
 $ubaMembersCount = 0;
@@ -26,7 +27,7 @@ if (table_exists('members')) {
     }
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
-    $sql = 'SELECT callsign, full_name, email, phone, country, qth, locator, licence_class, qrz_url, is_uba_member, uba_member_number, favourite_bands, favourite_modes, station_equipment, antennas, photo_path, avatar_path, is_committee, committee_role, visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_licence_class, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas
+    $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role
         FROM members
         WHERE is_active = 1
           AND UPPER(callsign) <> "ON4CRD"';
@@ -55,34 +56,28 @@ if (table_exists('members')) {
     $stmt->execute($params);
     $members = $stmt->fetchAll() ?: [];
 
+    $directoryVisibilityFields = array_keys(member_profile_visibility_fields($profileT));
+    $visibleProfileConditions = implode(
+        ' OR ',
+        array_map(
+            static fn(string $field): string => $field . ' IN (' . $visibilityPlaceholders . ')',
+            $directoryVisibilityFields
+        )
+    );
+
     $countsStmt = db()->prepare(
         'SELECT COUNT(*) AS active_total,
                 SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
          WHERE is_active = 1
            AND UPPER(callsign) <> "ON4CRD"
-           AND (
-               visibility_photo IN (' . $visibilityPlaceholders . ')
-               OR visibility_full_name IN (' . $visibilityPlaceholders . ')
-               OR visibility_email IN (' . $visibilityPlaceholders . ')
-               OR visibility_phone IN (' . $visibilityPlaceholders . ')
-               OR visibility_country IN (' . $visibilityPlaceholders . ')
-               OR visibility_qth IN (' . $visibilityPlaceholders . ')
-               OR visibility_locator IN (' . $visibilityPlaceholders . ')
-               OR visibility_licence_class IN (' . $visibilityPlaceholders . ')
-               OR visibility_qrz IN (' . $visibilityPlaceholders . ')
-               OR visibility_uba IN (' . $visibilityPlaceholders . ')
-               OR visibility_favourite_bands IN (' . $visibilityPlaceholders . ')
-               OR visibility_favourite_modes IN (' . $visibilityPlaceholders . ')
-               OR visibility_station IN (' . $visibilityPlaceholders . ')
-               OR visibility_antennas IN (' . $visibilityPlaceholders . ')
-           )'
+           AND (' . $visibleProfileConditions . ')'
     );
     $countParams = [];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
     }
-    for ($i = 0; $i < 14; $i++) {
+    foreach ($directoryVisibilityFields as $_visibilityField) {
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $countParams[] = $visibilityLevel;
         }
@@ -94,21 +89,11 @@ if (table_exists('members')) {
 
     $fieldVisibilityMap = [
         'photo_path' => 'visibility_photo',
-        'full_name' => 'visibility_full_name',
-        'email' => 'visibility_email',
-        'phone' => 'visibility_phone',
-        'country' => 'visibility_country',
-        'qth' => 'visibility_qth',
-        'locator' => 'visibility_locator',
-        'licence_class' => 'visibility_licence_class',
-        'qrz_url' => 'visibility_qrz',
-        'is_uba_member' => 'visibility_uba',
-        'uba_member_number' => 'visibility_uba',
-        'favourite_bands' => 'visibility_favourite_bands',
-        'favourite_modes' => 'visibility_favourite_modes',
-        'station_equipment' => 'visibility_station',
-        'antennas' => 'visibility_antennas',
+        'avatar_path' => 'visibility_photo',
     ];
+    foreach (member_profile_preview_fields($profileT) as $field => $fieldMeta) {
+        $fieldVisibilityMap[$field] = (string) $fieldMeta['visibility'];
+    }
 
     foreach ($members as $index => &$member) {
         foreach ($fieldVisibilityMap as $field => $visibilityField) {
@@ -273,6 +258,18 @@ ob_start();
                 $qth = trim((string) ($member['qth'] ?? ''));
                 $grid = trim((string) ($member['locator'] ?? ''));
                 $qrzUrl = trim((string) ($member['qrz_url'] ?? ''));
+                $website = trim((string) ($member['website'] ?? ''));
+                $safeQrzUrl = $qrzUrl !== '' ? sanitize_href_attribute($qrzUrl) : null;
+                $safeWebsite = $website !== '' ? sanitize_href_attribute($website) : null;
+                $bio = trim((string) ($member['bio'] ?? ''));
+                $operatorSince = trim((string) ($member['operator_since'] ?? ''));
+                $cqZone = trim((string) ($member['cq_zone'] ?? ''));
+                $ituZone = trim((string) ($member['itu_zone'] ?? ''));
+                $qslVia = trim((string) ($member['qsl_via'] ?? ''));
+                $lotwUsername = trim((string) ($member['lotw_username'] ?? ''));
+                $eqslUsername = trim((string) ($member['eqsl_username'] ?? ''));
+                $maxPower = trim((string) ($member['max_power'] ?? ''));
+                $interests = trim((string) ($member['interests'] ?? ''));
                 $bands = trim((string) ($member['favourite_bands'] ?? ''));
                 $modes = trim((string) ($member['favourite_modes'] ?? ''));
                 $station = trim((string) ($member['station_equipment'] ?? ''));
@@ -280,6 +277,21 @@ ob_start();
                 $memberAvatarSrc = member_avatar_src($member);
                 $bandList = array_values(array_filter(array_map('trim', preg_split('/[,;\/]+/', $bands) ?: [])));
                 $modeList = array_values(array_filter(array_map('trim', preg_split('/[,;\/]+/', $modes) ?: [])));
+                $detailRows = [];
+                $addDetail = static function (string $label, string $value) use (&$detailRows): void {
+                    $value = trim($value);
+                    if ($value !== '') {
+                        $detailRows[] = ['label' => $label, 'value' => $value];
+                    }
+                };
+                $addDetail((string) $profileT('operator_since'), $operatorSince);
+                $addDetail((string) $profileT('cq_zone'), $cqZone);
+                $addDetail((string) $profileT('itu_zone'), $ituZone);
+                $addDetail((string) $profileT('qsl_via'), $qslVia);
+                $addDetail((string) $profileT('lotw_username'), $lotwUsername);
+                $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
+                $addDetail((string) $profileT('max_power'), $maxPower);
+                $addDetail((string) $profileT('interests'), $interests);
                 ?>
                 <article class="directory-member-card">
                     <header class="directory-member-header">
@@ -306,7 +318,7 @@ ob_start();
                             <span>QTH <?= e($qth) ?></span>
                         <?php endif; ?>
                         <?php if ($country !== ''): ?>
-                            <span><?= e($country) ?></span>
+                            <span><?= member_country_html($country) ?></span>
                         <?php endif; ?>
                         <?php if ($grid !== ''): ?>
                             <span><?= e($t('grid')) ?> <?= e($grid) ?></span>
@@ -315,6 +327,21 @@ ob_start();
                             <span><?= e($t('uba_member')) ?><?= trim((string) ($member['uba_member_number'] ?? '')) !== '' ? ' ' . e((string) $member['uba_member_number']) : '' ?></span>
                         <?php endif; ?>
                     </div>
+
+                    <?php if ($bio !== ''): ?>
+                        <p class="directory-station"><?= e($bio) ?></p>
+                    <?php endif; ?>
+
+                    <?php if ($detailRows !== []): ?>
+                        <dl class="directory-detail-list">
+                            <?php foreach ($detailRows as $detailRow): ?>
+                                <div>
+                                    <dt><?= e((string) $detailRow['label']) ?></dt>
+                                    <dd><?= e((string) $detailRow['value']) ?></dd>
+                                </div>
+                            <?php endforeach; ?>
+                        </dl>
+                    <?php endif; ?>
 
                     <?php if ($bandList !== []): ?>
                         <div class="directory-band-list" aria-label="<?= e($t('bands')) ?>">
@@ -340,7 +367,7 @@ ob_start();
                         <p class="directory-station"><strong><?= e($t('antennas')) ?>:</strong> <?= e($antennas) ?></p>
                     <?php endif; ?>
 
-                    <?php if ($email !== '' || $phone !== '' || $qrzUrl !== ''): ?>
+                    <?php if ($email !== '' || $phone !== '' || $safeQrzUrl !== null || $safeWebsite !== null): ?>
                         <div class="directory-contact-row">
                             <?php if ($email !== ''): ?>
                                 <a class="button small secondary" href="mailto:<?= e($email) ?>"><?= e($t('email')) ?></a>
@@ -348,8 +375,11 @@ ob_start();
                             <?php if ($phone !== ''): ?>
                                 <a class="button small secondary" href="tel:<?= e(preg_replace('/\s+/', '', $phone) ?? $phone) ?>"><?= e($t('phone')) ?></a>
                             <?php endif; ?>
-                            <?php if ($qrzUrl !== ''): ?>
-                                <a class="button small secondary" href="<?= e($qrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
+                            <?php if ($safeQrzUrl !== null): ?>
+                                <a class="button small secondary" href="<?= e($safeQrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
+                            <?php endif; ?>
+                            <?php if ($safeWebsite !== null): ?>
+                                <a class="button small secondary" href="<?= e($safeWebsite) ?>" target="_blank" rel="noopener"><?= e($profileT('website')) ?></a>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>

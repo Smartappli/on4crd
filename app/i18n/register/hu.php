@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Teljes név',
   'email' => 'E-mail',
   'phone' => 'Telefon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Licenc osztály',
   'favourite_bands' => 'Kedvenc zenekarok',

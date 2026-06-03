@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Celé meno',
   'email' => 'E-mail',
   'phone' => 'Telefón',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Trieda licencie',
   'favourite_bands' => 'Obľúbené kapely',

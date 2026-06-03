@@ -13,6 +13,7 @@ return [
     'full_name' => 'الاسم الكامل',
     'email' => 'البريد الإلكتروني',
     'phone' => 'الهاتف',
+    'country' => 'Country',
     'qth' => 'QTH',
     'licence_class' => 'فئة الرخصة',
     'favourite_bands' => 'النطاقات المفضلة',

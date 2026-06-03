@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Numele complet',
   'email' => 'E-mail',
   'phone' => 'Telefon',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Clasa de licență',
   'favourite_bands' => 'Trupele preferate',

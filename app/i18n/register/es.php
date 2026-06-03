@@ -13,6 +13,7 @@ return [
     'full_name' => 'Nombre completo',
     'email' => 'Correo electrónico',
     'phone' => 'Teléfono',
+    'country' => 'Pais',
     'qth' => 'QTH',
     'licence_class' => 'Clase de licencia',
     'favourite_bands' => 'Bandas favoritas',

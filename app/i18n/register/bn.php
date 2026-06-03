@@ -13,6 +13,7 @@ return [
     'full_name' => 'পূর্ণ নাম',
     'email' => 'ইমেল',
     'phone' => 'ফোন',
+    'country' => 'Country',
     'qth' => 'QTH',
     'licence_class' => 'লাইসেন্স শ্রেণি',
     'favourite_bands' => 'প্রিয় ব্যান্ড',

@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Pilns vārds',
   'email' => 'E-pasts',
   'phone' => 'Tālrunis',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Licences klase',
   'favourite_bands' => 'Mīļākās grupas',

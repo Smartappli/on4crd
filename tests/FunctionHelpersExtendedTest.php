@@ -147,4 +147,45 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString('<script', $html);
     }
 
+    public function testMemberCountryHelpersFormatKnownCountryWithFlag(): void
+    {
+        self::assertSame('BE', member_country_code_for('Belgique'));
+        self::assertNotSame('', member_country_flag('Belgique'));
+
+        $html = member_country_html('Belgique');
+        self::assertStringContainsString('country-with-flag', $html);
+        self::assertStringContainsString('Belgique', $html);
+    }
+
+    public function testMemberProfilePreviewRowsIncludeNonEmptyExtendedFields(): void
+    {
+        $t = static fn(string $key): string => $key;
+        $member = [
+            'country' => 'Belgique',
+            'operator_since' => '2020',
+            'cq_zone' => '14',
+            'qrz_url' => 'https://www.qrz.com/db/ON4DG',
+            'visibility_country' => 'public',
+            'visibility_licence_class' => 'public',
+            'visibility_qrz' => 'public',
+        ];
+
+        $rows = member_profile_preview_rows($member, 'public', $t);
+        $labels = array_column($rows, 'label');
+
+        self::assertContains('country', $labels);
+        self::assertContains('operator_since', $labels);
+        self::assertContains('cq_zone', $labels);
+        self::assertContains('qrz_url', $labels);
+        self::assertStringContainsString('country-with-flag', (string) $rows[0]['html']);
+    }
+
+    public function testMemberQrzSaveKeepsExistingUrlForSameCallsign(): void
+    {
+        self::assertSame(
+            'https://www.qrz.com/db/ON4DG',
+            member_qrz_url_for_profile_save('ON4DG', 'ON4DG', 'https://www.qrz.com/db/ON4DG')
+        );
+    }
+
 }

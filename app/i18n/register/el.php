@@ -13,6 +13,7 @@ return array (
   'full_name' => 'Πλήρες όνομα',
   'email' => 'E-mail',
   'phone' => 'Τηλέφωνο',
+    'country' => 'Country',
   'qth' => 'QTH',
   'licence_class' => 'Κατηγορία άδειας',
   'favourite_bands' => 'Αγαπημένα συγκροτήματα',

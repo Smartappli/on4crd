@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_url'));
         }
 
-        $currentStmt = db()->prepare('SELECT auth_user_id, callsign, email, photo_path, avatar_path FROM members WHERE id = ? LIMIT 1');
+        $currentStmt = db()->prepare('SELECT auth_user_id, callsign, email, photo_path, avatar_path, qrz_url FROM members WHERE id = ? LIMIT 1');
         $currentStmt->execute([$memberId]);
         $currentMember = $currentStmt->fetch() ?: [];
 
@@ -76,7 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        $qrzUrl = qrz_profile_url_for_callsign($callsign);
+        $qrzUrl = member_qrz_url_for_profile_save(
+            $callsign,
+            (string) ($currentMember['callsign'] ?? ''),
+            (string) ($currentMember['qrz_url'] ?? '')
+        );
 
         $newPhotoPath = trim((string) ($currentMember['photo_path'] ?? ''));
         $newAvatarPath = trim((string) ($currentMember['avatar_path'] ?? ''));
@@ -174,46 +178,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$stmt = db()->prepare(
-    'SELECT callsign, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
-            qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
-            favourite_bands, favourite_modes, interests, photo_path, avatar_path,
-            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
-            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
-            visibility_station, visibility_antennas, visibility_interests
-     FROM members
-     WHERE id = ? LIMIT 1'
-);
+$stmt = db()->prepare('SELECT ' . member_profile_select_columns_sql() . ' FROM members WHERE id = ? LIMIT 1');
 $stmt->execute([$memberId]);
 $member = $stmt->fetch() ?: [];
+$member = member_backfill_missing_qrz_url($memberId, is_array($member) ? $member : []);
 
-$visibilityAllows = static function (string $viewer, string $visibility): bool {
-    if ($viewer === 'private') {
-        return true;
-    }
-    if ($viewer === 'members') {
-        return in_array($visibility, ['public', 'members'], true);
-    }
-    return $visibility === 'public';
-};
-$profilePreviewFields = [
-    'full_name' => ['label' => $t('full_name'), 'visibility' => 'visibility_full_name'],
-    'email' => ['label' => $t('email'), 'visibility' => 'visibility_email'],
-    'phone' => ['label' => $t('phone'), 'visibility' => 'visibility_phone'],
-    'country' => ['label' => $t('country'), 'visibility' => 'visibility_country'],
-    'qth' => ['label' => $t('qth'), 'visibility' => 'visibility_qth'],
-    'locator' => ['label' => $t('grid'), 'visibility' => 'visibility_locator'],
-    'bio' => ['label' => $t('bio'), 'visibility' => 'visibility_bio'],
-    'licence_class' => ['label' => $t('licence'), 'visibility' => 'visibility_licence_class'],
-    'qsl_via' => ['label' => $t('qsl_info'), 'visibility' => 'visibility_qsl'],
-    'qrz_url' => ['label' => $t('qrz_url'), 'visibility' => 'visibility_qrz'],
-    'is_uba_member' => ['label' => $t('uba_member'), 'visibility' => 'visibility_uba'],
-    'favourite_bands' => ['label' => $t('bands'), 'visibility' => 'visibility_favourite_bands'],
-    'favourite_modes' => ['label' => $t('favourite_modes'), 'visibility' => 'visibility_favourite_modes'],
-    'station_equipment' => ['label' => $t('station'), 'visibility' => 'visibility_station'],
-    'antennas' => ['label' => $t('antennas'), 'visibility' => 'visibility_antennas'],
-    'interests' => ['label' => $t('interests'), 'visibility' => 'visibility_interests'],
-];
 $profileViews = [
     'public' => ['title' => 'Vue ' . strtolower($t('public'))],
     'members' => ['title' => 'Vue ' . strtolower($t('members'))],
@@ -221,21 +190,7 @@ $profileViews = [
 ];
 $profilePreviewRows = [];
 foreach (array_keys($profileViews) as $viewer) {
-    $profilePreviewRows[$viewer] = [];
-    foreach ($profilePreviewFields as $fieldName => $fieldMeta) {
-        $visibility = (string) ($member[(string) $fieldMeta['visibility']] ?? 'members');
-        if (!$visibilityAllows($viewer, $visibility)) {
-            continue;
-        }
-        $value = trim((string) ($member[$fieldName] ?? ''));
-        if ($fieldName === 'is_uba_member') {
-            $value = (int) ($member[$fieldName] ?? 0) === 1 ? 'Oui' : '';
-        }
-        if ($value === '') {
-            continue;
-        }
-        $profilePreviewRows[$viewer][] = ['label' => (string) $fieldMeta['label'], 'value' => $value];
-    }
+    $profilePreviewRows[$viewer] = member_profile_preview_rows($member, (string) $viewer, $t);
 }
 
 ob_start();
@@ -245,7 +200,7 @@ ob_start();
     <?php $avatarSrc = member_avatar_src($member); ?>
     <div class="profile-preview-views">
         <?php foreach ($profileViews as $viewer => $view): ?>
-            <?php $canSeePhoto = $visibilityAllows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
+            <?php $canSeePhoto = member_profile_visibility_allows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
             <section class="profile-preview-view">
                 <header>
                     <?php if ($canSeePhoto): ?>
@@ -263,7 +218,7 @@ ob_start();
                         <?php foreach ($profilePreviewRows[(string) $viewer] as $previewRow): ?>
                             <div>
                                 <dt><?= e((string) $previewRow['label']) ?></dt>
-                                <dd><?= e((string) $previewRow['value']) ?></dd>
+                                <dd><?= (string) $previewRow['html'] ?></dd>
                             </div>
                         <?php endforeach; ?>
                     </dl>
@@ -294,7 +249,7 @@ ob_start();
                 <label><?= e($t('full_name')) ?><input type="text" name="full_name" maxlength="190" required value="<?= e((string) ($member['full_name'] ?? '')) ?>"></label>
                 <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
-                <label><?= e($t('country')) ?><input type="text" name="country" maxlength="190" value="<?= e((string) ($member['country'] ?? '')) ?>"></label>
+                <label><?= e($t('country')) ?><select name="country" class="country-select"><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
                 <label><?= e($t('qth')) ?><input type="text" name="qth" maxlength="190" value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
                 <label><?= e($t('grid')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
                 <label class="profile-form-wide"><?= e($t('bio')) ?><textarea name="bio" rows="4" maxlength="4000"><?= e((string) ($member['bio'] ?? '')) ?></textarea></label>

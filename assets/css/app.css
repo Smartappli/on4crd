@@ -656,6 +656,20 @@ textarea:focus-visible {
 label { display:block; font-weight:600; margin:.7rem 0; }
 input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"], select, textarea { width:100%; padding:.75rem .9rem; border:1px solid var(--border); border-radius:14px; background: var(--panel); color: var(--text); margin-top:.35rem; }
 textarea { resize: vertical; }
+.country-with-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: .38rem;
+  min-width: 0;
+}
+.country-flag {
+  flex: 0 0 auto;
+  font-size: 1.05em;
+  line-height: 1;
+}
+.country-select {
+  font-weight: 650;
+}
 .form-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:1rem; }
 .profile-grid { display:grid; grid-template-columns: 260px 1fr; gap:1rem; }
 .avatar { width:72px; height:72px; object-fit:cover; border-radius:50%; border:2px solid var(--border); background: var(--panel); }
@@ -872,6 +886,27 @@ textarea { resize: vertical; }
   margin: 0;
   color: var(--muted);
   font-size: .93rem;
+}
+.directory-detail-list {
+  display: grid;
+  gap: .45rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+.directory-detail-list div {
+  min-width: 0;
+}
+.directory-detail-list dt {
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 800;
+  margin: 0;
+  text-transform: uppercase;
+}
+.directory-detail-list dd {
+  font-weight: 700;
+  margin: .08rem 0 0;
+  overflow-wrap: anywhere;
 }
 .directory-contact-row {
   margin-top: auto;
