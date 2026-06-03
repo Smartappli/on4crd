@@ -461,6 +461,26 @@ function member_profile_allowed_visibility_levels(?array $viewer): array
 }
 }
 
+if (!function_exists('member_profile_operator_since_options_html')) {
+function member_profile_operator_since_options_html(string $currentValue = ''): string
+{
+    $currentValue = trim($currentValue);
+    $html = '<option value=""></option>';
+    $currentYear = (int) date('Y');
+
+    if ($currentValue !== '' && preg_match('/^\d{4}$/', $currentValue) !== 1) {
+        $html .= '<option value="' . e($currentValue) . '" selected>' . e($currentValue) . '</option>';
+    }
+
+    for ($year = $currentYear; $year >= 1900; $year--) {
+        $yearValue = (string) $year;
+        $html .= '<option value="' . e($yearValue) . '"' . ($currentValue === $yearValue ? ' selected' : '') . '>' . e($yearValue) . '</option>';
+    }
+
+    return $html;
+}
+}
+
 if (!function_exists('member_name_parts_from_full_name')) {
 /**
  * @return array{first_name:string, last_name:string}

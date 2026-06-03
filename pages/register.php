@@ -26,8 +26,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $address = trim((string) ($_POST['address'] ?? ''));
         $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
+        $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
+        $bio = trim((string) ($_POST['bio'] ?? ''));
         $licenceClass = trim((string) ($_POST['licence_class'] ?? ''));
+        $operatorSince = trim((string) ($_POST['operator_since'] ?? ''));
+        $cqZone = trim((string) ($_POST['cq_zone'] ?? ''));
+        $ituZone = trim((string) ($_POST['itu_zone'] ?? ''));
+        $qslVia = trim((string) ($_POST['qsl_via'] ?? ''));
+        $lotwUsername = trim((string) ($_POST['lotw_username'] ?? ''));
+        $eqslUsername = trim((string) ($_POST['eqsl_username'] ?? ''));
+        $website = trim((string) ($_POST['website'] ?? ''));
+        $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
+        $ubaMemberNumber = trim((string) ($_POST['uba_member_number'] ?? ''));
+        $antennas = trim((string) ($_POST['antennas'] ?? ''));
+        $maxPower = trim((string) ($_POST['max_power'] ?? ''));
         $favouriteBands = trim((string) ($_POST['favourite_bands'] ?? ''));
+        $favouriteModes = trim((string) ($_POST['favourite_modes'] ?? ''));
+        $interests = trim((string) ($_POST['interests'] ?? ''));
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
 
         if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '' || $password === '') {
@@ -36,6 +51,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32) {
             throw new RuntimeException($t('invalid_data'));
         }
+        if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
+            throw new RuntimeException($t('invalid_data'));
+        }
+        if ($website !== '' && filter_var($website, FILTER_VALIDATE_URL) === false) {
+            throw new RuntimeException($t('invalid_data'));
+        }
+
+        if ($locator === '' || $cqZone === '' || $ituZone === '') {
+            $computedRadioLocation = member_profile_radio_location_from_address($country, $address, $postalCode, $qth);
+            if (is_array($computedRadioLocation)) {
+                if ($locator === '') {
+                    $locator = (string) ($computedRadioLocation['locator'] ?? '');
+                }
+                if ($cqZone === '') {
+                    $cqZone = (string) ($computedRadioLocation['cq_zone'] ?? '');
+                }
+                if ($ituZone === '') {
+                    $ituZone = (string) ($computedRadioLocation['itu_zone'] ?? '');
+                }
+            }
+        }
+        if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
+            throw new RuntimeException($t('invalid_data'));
+        }
+        $qrzUrl = member_qrz_url_for_profile_save($callsign);
+        $lotwUsername = (string) member_lotw_username_for_profile_save($callsign, $lotwUsername);
 
         $authClient = auth();
         if ($authClient === null) {
@@ -55,13 +96,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         db()->prepare(
             'INSERT INTO members (
                  auth_user_id, callsign, first_name, last_name, full_name, email, password_hash,
-                 country, address, postal_code, phone, qth, licence_class, favourite_bands, station_equipment,
+                 country, address, postal_code, phone, qth, locator, bio, licence_class, operator_since,
+                 cq_zone, itu_zone, qsl_via, lotw_username, eqsl_username, qrz_url, website,
+                 is_uba_member, uba_member_number, favourite_bands, favourite_modes, station_equipment,
+                 antennas, max_power, interests,
                  visibility_first_name, visibility_last_name, visibility_full_name, visibility_email, visibility_country,
-                 visibility_address, visibility_postal_code, visibility_phone, visibility_qth,
-                 visibility_licence_class, visibility_favourite_bands, visibility_station,
+                 visibility_address, visibility_postal_code, visibility_phone, visibility_qth, visibility_locator, visibility_bio,
+                 visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas, visibility_interests,
                  is_active
              )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", 1)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
              ON DUPLICATE KEY UPDATE
                  callsign = VALUES(callsign),
                  first_name = VALUES(first_name),
@@ -74,9 +118,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  postal_code = VALUES(postal_code),
                  phone = VALUES(phone),
                  qth = VALUES(qth),
+                 locator = VALUES(locator),
+                 bio = VALUES(bio),
                  licence_class = VALUES(licence_class),
+                 operator_since = VALUES(operator_since),
+                 cq_zone = VALUES(cq_zone),
+                 itu_zone = VALUES(itu_zone),
+                 qsl_via = VALUES(qsl_via),
+                 lotw_username = VALUES(lotw_username),
+                 eqsl_username = VALUES(eqsl_username),
+                 qrz_url = VALUES(qrz_url),
+                 website = VALUES(website),
+                 is_uba_member = VALUES(is_uba_member),
+                 uba_member_number = VALUES(uba_member_number),
                  favourite_bands = VALUES(favourite_bands),
+                 favourite_modes = VALUES(favourite_modes),
                  station_equipment = VALUES(station_equipment),
+                 antennas = VALUES(antennas),
+                 max_power = VALUES(max_power),
+                 interests = VALUES(interests),
                  visibility_first_name = VALUES(visibility_first_name),
                  visibility_last_name = VALUES(visibility_last_name),
                  visibility_full_name = VALUES(visibility_full_name),
@@ -86,9 +146,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  visibility_postal_code = VALUES(visibility_postal_code),
                  visibility_phone = VALUES(visibility_phone),
                  visibility_qth = VALUES(visibility_qth),
+                 visibility_locator = VALUES(visibility_locator),
+                 visibility_bio = VALUES(visibility_bio),
                  visibility_licence_class = VALUES(visibility_licence_class),
+                 visibility_qsl = VALUES(visibility_qsl),
+                 visibility_qrz = VALUES(visibility_qrz),
+                 visibility_uba = VALUES(visibility_uba),
                  visibility_favourite_bands = VALUES(visibility_favourite_bands),
+                 visibility_favourite_modes = VALUES(visibility_favourite_modes),
                  visibility_station = VALUES(visibility_station),
+                 visibility_antennas = VALUES(visibility_antennas),
+                 visibility_interests = VALUES(visibility_interests),
                  is_active = 1'
         )->execute([
             (int) $userId,
@@ -103,9 +171,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postalCode !== '' ? $postalCode : null,
             $phone !== '' ? $phone : null,
             $qth !== '' ? $qth : null,
+            $locator !== '' ? $locator : null,
+            $bio !== '' ? $bio : null,
             $licenceClass !== '' ? $licenceClass : null,
+            $operatorSince !== '' ? $operatorSince : null,
+            $cqZone !== '' ? $cqZone : null,
+            $ituZone !== '' ? $ituZone : null,
+            $qslVia !== '' ? $qslVia : null,
+            $lotwUsername !== '' ? $lotwUsername : null,
+            $eqslUsername !== '' ? $eqslUsername : null,
+            $qrzUrl,
+            $website !== '' ? $website : null,
+            $isUbaMember,
+            $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
             $favouriteBands !== '' ? $favouriteBands : null,
+            $favouriteModes !== '' ? $favouriteModes : null,
             $stationEquipment !== '' ? $stationEquipment : null,
+            $antennas !== '' ? $antennas : null,
+            $maxPower !== '' ? $maxPower : null,
+            $interests !== '' ? $interests : null,
         ]);
 
         if (in_array($callsign, configured_administrator_callsigns(), true)) {
@@ -124,6 +208,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$operatorSinceOptionsHtml = member_profile_operator_since_options_html('');
+
 $content = '<div class="card narrow login-card register-card"><h1>' . e($t('title')) . '</h1>'
     . '<form method="post" class="register-form"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . '<label>' . e($t('callsign')) . '<input type="text" name="callsign" maxlength="32" required></label>'
@@ -135,9 +221,25 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('address')) . '<input type="text" name="address" maxlength="255" autocomplete="street-address"></label>'
     . '<label>' . e($t('postal_code')) . '<input type="text" name="postal_code" maxlength="32" autocomplete="postal-code"></label>'
     . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2"></label>'
+    . '<label>' . e($t('grid')) . '<input type="text" name="locator" maxlength="6"></label>'
+    . '<label class="register-form-full">' . e($t('bio')) . '<textarea name="bio" rows="3" maxlength="4000"></textarea></label>'
     . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
-    . '<label class="register-form-full">' . e($t('station_equipment')) . '<textarea name="station_equipment" rows="3" maxlength="2000"></textarea></label>'
+    . '<label>' . e($t('operator_since')) . '<select name="operator_since">' . $operatorSinceOptionsHtml . '</select></label>'
+    . '<label>' . e($t('cq_zone')) . '<input type="text" name="cq_zone" maxlength="16"></label>'
+    . '<label>' . e($t('itu_zone')) . '<input type="text" name="itu_zone" maxlength="16"></label>'
+    . '<p class="help register-form-full">' . e($t('auto_radio_location_help')) . '</p>'
+    . '<label>' . e($t('qsl_via')) . '<input type="text" name="qsl_via" maxlength="190"></label>'
+    . '<label>' . e($t('lotw_username')) . '<input type="text" name="lotw_username" maxlength="190"></label>'
+    . '<label>' . e($t('eqsl_username')) . '<input type="text" name="eqsl_username" maxlength="190"></label>'
+    . '<label>' . e($t('website')) . '<input type="url" name="website" maxlength="255"></label>'
+    . '<label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1"> <span>' . e($t('uba_member')) . '</span></label>'
+    . '<label>' . e($t('uba_member_number')) . '<input type="text" name="uba_member_number" maxlength="64"></label>'
+    . '<label class="register-form-full">' . e($t('station_equipment')) . '<textarea name="station_equipment" rows="3" maxlength="4000"></textarea></label>'
+    . '<label class="register-form-full">' . e($t('antennas')) . '<textarea name="antennas" rows="3" maxlength="4000"></textarea></label>'
+    . '<label>' . e($t('max_power')) . '<input type="text" name="max_power" maxlength="64"></label>'
     . '<label>' . e($t('favourite_bands')) . '<input type="text" name="favourite_bands" maxlength="190" placeholder="' . e($t('favourite_bands_placeholder')) . '"></label>'
+    . '<label>' . e($t('favourite_modes')) . '<input type="text" name="favourite_modes" maxlength="190"></label>'
+    . '<label class="register-form-full">' . e($t('interests')) . '<textarea name="interests" rows="3" maxlength="4000"></textarea></label>'
     . '<label>' . e($t('password')) . '<input type="password" name="password" minlength="8" required></label>'
     . '<p class="help register-form-full">' . e($t('directory_help')) . '</p>'
     . '<div class="register-form-full"><button class="button">' . e($t('submit')) . '</button></div></form>'

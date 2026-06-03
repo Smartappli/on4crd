@@ -225,6 +225,8 @@ foreach (array_keys($profileViews) as $viewer) {
     $profilePreviewRows[$viewer] = member_profile_preview_rows($member, (string) $viewer, $t);
 }
 
+$operatorSinceOptionsHtml = member_profile_operator_since_options_html((string) ($member['operator_since'] ?? ''));
+
 ob_start();
 ?>
 <div class="stack">
@@ -295,7 +297,7 @@ ob_start();
             <legend><?= e($t('radio_section')) ?></legend>
             <div class="profile-form-grid">
                 <label><?= e($t('licence')) ?><input type="text" name="licence_class" maxlength="64" value="<?= e((string) ($member['licence_class'] ?? '')) ?>"></label>
-                <label><?= e($t('operator_since')) ?><input type="text" name="operator_since" maxlength="32" value="<?= e((string) ($member['operator_since'] ?? '')) ?>"></label>
+                <label><?= e($t('operator_since')) ?><select name="operator_since"><?= $operatorSinceOptionsHtml ?></select></label>
                 <label><?= e($t('cq_zone')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
                 <label><?= e($t('itu_zone')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
                 <p class="help profile-form-wide"><?= e($t('auto_radio_location_help')) ?></p>

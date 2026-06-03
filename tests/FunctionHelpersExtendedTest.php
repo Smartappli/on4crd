@@ -225,6 +225,14 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame(['public', 'members', 'private'], member_profile_allowed_visibility_levels(['is_committee' => 1]));
     }
 
+    public function testMemberProfileOperatorSinceOptionsIncludesCurrentSelection(): void
+    {
+        $html = member_profile_operator_since_options_html('2020');
+
+        self::assertStringContainsString('<option value="2020" selected>2020</option>', $html);
+        self::assertStringContainsString('<option value=""></option>', $html);
+    }
+
     public function testMemberProfilePreviewRowsHideSensitiveFieldsByDefault(): void
     {
         $t = static fn(string $key): string => $key;
