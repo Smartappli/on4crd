@@ -28,6 +28,16 @@
       document.execCommand('createLink', false, url);
       return;
     }
+    if (command === 'insertImage') {
+      const url = window.prompt('URL de l image (https://...)', 'https://');
+      if (!url) return;
+      document.execCommand('insertImage', false, url);
+      return;
+    }
+    if (command === 'insertTable') {
+      document.execCommand('insertHTML', false, '<table><tbody><tr><th>Colonne 1</th><th>Colonne 2</th></tr><tr><td>Valeur 1</td><td>Valeur 2</td></tr></tbody></table>');
+      return;
+    }
     document.execCommand(command, false, null);
   };
 
@@ -55,6 +65,7 @@
   textareas.forEach((textarea, index) => {
     if (textarea.dataset.wysiwygApplied === '1') return;
     textarea.dataset.wysiwygApplied = '1';
+    const isFullEditor = textarea.dataset.wysiwyg === 'full';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'wysiwyg';
@@ -139,6 +150,25 @@
     });
     toolbar.appendChild(alignSelect);
 
+    if (isFullEditor) {
+      [
+        { label: 'Image', command: 'insertImage', title: 'Insérer une image par URL' },
+        { label: 'Tableau', command: 'insertTable', title: 'Insérer un tableau' },
+        { label: 'Délier', command: 'unlink', title: 'Supprimer le lien' },
+      ].forEach((buttonConfig) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ghost small';
+        button.textContent = buttonConfig.label;
+        button.title = buttonConfig.title;
+        button.addEventListener('click', () => {
+          applyCommand(editor, buttonConfig.command);
+          editor.dispatchEvent(new Event('input'));
+        });
+        toolbar.appendChild(button);
+      });
+    }
+
     toolbarButtons.forEach((buttonConfig) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -169,7 +199,7 @@
       textarea.value = editor.innerHTML;
     };
 
-    if (currentRoute === 'admin_news' && textarea.name === 'content') {
+    if ((currentRoute === 'admin_news' || isFullEditor) && textarea.name === 'content') {
       const importButton = document.createElement('button');
       importButton.type = 'button';
       importButton.className = 'ghost small';
@@ -210,6 +240,32 @@
 
       toolbar.appendChild(importButton);
       toolbar.appendChild(fileInput);
+    }
+
+    if (isFullEditor) {
+      const sourceButton = document.createElement('button');
+      sourceButton.type = 'button';
+      sourceButton.className = 'ghost small';
+      sourceButton.textContent = 'HTML';
+      sourceButton.title = 'Afficher ou masquer le HTML source';
+      let sourceVisible = false;
+      sourceButton.addEventListener('click', () => {
+        if (sourceVisible) {
+          editor.innerHTML = textarea.value && textarea.value.trim() !== '' ? textarea.value : '<p><br></p>';
+          editor.hidden = false;
+          textarea.style.display = '';
+          textarea.classList.add('wysiwyg-source');
+          sourceVisible = false;
+          return;
+        }
+        sync();
+        editor.hidden = true;
+        textarea.style.display = 'block';
+        textarea.classList.remove('wysiwyg-source');
+        textarea.focus();
+        sourceVisible = true;
+      });
+      toolbar.appendChild(sourceButton);
     }
 
     editor.addEventListener('input', sync);

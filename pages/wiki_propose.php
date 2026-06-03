@@ -81,7 +81,7 @@ ob_start();
             <label><?= e($t('slug_label')) ?><input type="text" name="slug" maxlength="190" placeholder="theme-titre-de-page"></label>
         </div>
         <label><?= e($t('content_label')) ?>
-            <textarea name="content" rows="22" maxlength="50000" required><p></p></textarea>
+            <textarea name="content" rows="22" maxlength="50000" data-wysiwyg="full" required><p></p></textarea>
         </label>
         <div class="actions">
             <button class="button" type="submit">Proposer la page</button>
