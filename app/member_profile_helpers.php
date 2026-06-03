@@ -674,6 +674,20 @@ function member_qrz_url_for_profile_save(string $newCallsign, string $previousCa
 }
 }
 
+if (!function_exists('member_lotw_username_for_profile_save')) {
+function member_lotw_username_for_profile_save(string $callsign, string $lotwUsername): ?string
+{
+    $lotwUsername = trim($lotwUsername);
+    if ($lotwUsername !== '') {
+        return $lotwUsername;
+    }
+
+    $callsign = strtoupper(trim($callsign));
+
+    return $callsign !== '' ? $callsign : null;
+}
+}
+
 if (!function_exists('member_backfill_missing_qrz_url')) {
 /**
  * @param array<string, mixed> $member

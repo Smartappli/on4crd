@@ -273,4 +273,11 @@ final class FunctionHelpersExtendedTest extends TestCase
         );
     }
 
+    public function testMemberLotwUsernameDefaultsToCallsignWhenEmpty(): void
+    {
+        self::assertSame('ON4DG', member_lotw_username_for_profile_save(' on4dg ', ''));
+        self::assertSame('custom-lotw', member_lotw_username_for_profile_save('ON4DG', ' custom-lotw '));
+        self::assertNull(member_lotw_username_for_profile_save('', ''));
+    }
+
 }

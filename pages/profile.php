@@ -103,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (string) ($currentMember['callsign'] ?? ''),
             (string) ($currentMember['qrz_url'] ?? '')
         );
+        $lotwUsername = (string) member_lotw_username_for_profile_save($callsign, $lotwUsername);
 
         $newPhotoPath = trim((string) ($currentMember['photo_path'] ?? ''));
         $newAvatarPath = trim((string) ($currentMember['avatar_path'] ?? ''));
