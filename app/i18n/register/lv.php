@@ -16,6 +16,8 @@ return array (
   'email' => 'E-pasts',
   'phone' => 'Tālrunis',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Licences klase',
   'favourite_bands' => 'Mīļākās grupas',

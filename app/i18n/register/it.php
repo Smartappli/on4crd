@@ -16,6 +16,8 @@ return array (
   'email' => 'E-mail',
   'phone' => 'Telefono',
     'country' => 'Paese',
+    'address' => 'Indirizzo',
+    'postal_code' => 'Codice postale',
   'qth' => 'QTH',
   'licence_class' => 'Classe di licenza',
   'favourite_bands' => 'Bande preferite',

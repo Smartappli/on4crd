@@ -27,6 +27,8 @@ return array (
   'bands' => 'Bevorzugte Bänder',
   'station' => 'Station',
   'country' => 'Land',
+  'address' => 'Adresse',
+  'postal_code' => 'Postleitzahl',
   'required' => 'Callsign, full name and email are required.',
   'too_long' => 'One or more fields exceed the allowed length.',
   'invalid_email' => 'The email address is invalid.',

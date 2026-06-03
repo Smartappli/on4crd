@@ -16,6 +16,8 @@ return array (
   'email' => 'E-mail',
   'phone' => 'Telefón',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Trieda licencie',
   'favourite_bands' => 'Obľúbené kapely',

@@ -16,6 +16,8 @@ return array (
   'email' => 'Sähköposti',
   'phone' => 'Puhelin',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Lisenssiluokka',
   'favourite_bands' => 'Suosikkibändejä',

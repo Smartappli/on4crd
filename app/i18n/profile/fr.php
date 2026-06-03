@@ -34,6 +34,8 @@ return array (
   'last_name' => 'Nom',
   'phone' => 'Téléphone',
   'country' => 'Pays',
+  'address' => 'Adresse',
+  'postal_code' => 'Code postal',
   'qth' => 'QTH',
   'locator' => 'Locator',
   'grid' => 'Grid',

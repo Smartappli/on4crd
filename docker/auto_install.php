@@ -108,6 +108,13 @@ foreach (array_keys($permissions) as $code) {
 
 $callsign = strtoupper(trim((string) $options['admin-callsign']));
 $name = trim((string) $options['admin-name']);
+$nameParts = preg_split('/\s+/', $name, 2) ?: [];
+$firstName = trim((string) ($nameParts[0] ?? ''));
+$lastName = trim((string) ($nameParts[1] ?? ''));
+if ($lastName === '') {
+    $lastName = $firstName !== '' ? $firstName : $callsign;
+    $firstName = '';
+}
 $email = trim((string) $options['admin-email']);
 $passwordHash = password_hash((string) $options['admin-password'], PASSWORD_ARGON2ID);
 $registeredAt = time();
@@ -126,15 +133,17 @@ if ($authUserId <= 0) {
 }
 
 $pdo->prepare(
-    'INSERT INTO members (auth_user_id, callsign, full_name, email, password_hash, is_active)
-     VALUES (?, ?, ?, ?, ?, 1)
+    'INSERT INTO members (auth_user_id, callsign, first_name, last_name, full_name, email, password_hash, is_active)
+     VALUES (?, ?, ?, ?, ?, ?, ?, 1)
      ON DUPLICATE KEY UPDATE
          auth_user_id = VALUES(auth_user_id),
+         first_name = VALUES(first_name),
+         last_name = VALUES(last_name),
          full_name = VALUES(full_name),
          email = VALUES(email),
          password_hash = VALUES(password_hash),
          is_active = 1'
-)->execute([$authUserId, $callsign, $name, $email !== '' ? $email : null, $passwordHash]);
+)->execute([$authUserId, $callsign, $firstName !== '' ? $firstName : null, $lastName, $name, $email !== '' ? $email : null, $passwordHash]);
 
 $memberIdStmt = $pdo->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
 $memberIdStmt->execute([$callsign]);

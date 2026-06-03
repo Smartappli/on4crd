@@ -16,6 +16,8 @@ return [
     'email' => 'البريد الإلكتروني',
     'phone' => 'الهاتف',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
     'qth' => 'QTH',
     'licence_class' => 'فئة الرخصة',
     'favourite_bands' => 'النطاقات المفضلة',

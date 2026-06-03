@@ -240,9 +240,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         seed_modules(); seed_dashboard_widgets(); seed_ad_placements(); seed_live_feeds();
 
         $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? 'ON4CRD')));
-        $fullName = trim((string) ($_POST['full_name'] ?? 'Administrateur'));
+        $firstName = trim((string) ($_POST['first_name'] ?? ''));
+        $lastName = trim((string) ($_POST['last_name'] ?? 'Administrateur'));
+        $fullName = trim(preg_replace('/\s+/', ' ', $firstName . ' ' . $lastName) ?? '');
         $email = trim((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
+        if ($firstName === '' || $lastName === '') { throw new RuntimeException('Nom et prénom requis.'); }
         if ($password === '') { throw new RuntimeException('Mot de passe requis.'); }
         $hash = password_hash($password, PASSWORD_ARGON2ID);
         $nowTs = time();
@@ -260,10 +263,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         db()->prepare(
-            'INSERT INTO members (auth_user_id, callsign, full_name, email, password_hash, qth, locator, bio, is_active)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+            'INSERT INTO members (auth_user_id, callsign, first_name, last_name, full_name, email, password_hash, qth, locator, bio, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
              ON DUPLICATE KEY UPDATE
                  auth_user_id = VALUES(auth_user_id),
+                 first_name = VALUES(first_name),
+                 last_name = VALUES(last_name),
                  full_name = VALUES(full_name),
                  email = VALUES(email),
                  password_hash = VALUES(password_hash),
@@ -271,7 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  locator = VALUES(locator),
                  bio = VALUES(bio),
                  is_active = 1'
-        )->execute([$authUserId, $callsign, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
+        )->execute([$authUserId, $callsign, $firstName, $lastName, $fullName, $email !== '' ? $email : null, $hash, 'Durnal', 'JO20', 'Administrateur principal du site']);
 
         $memberIdStmt = db()->prepare('SELECT id FROM members WHERE callsign = ? LIMIT 1');
         $memberIdStmt->execute([$callsign]);
@@ -292,6 +297,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $content = '<div class="card"><h1>Installation ON4CRD v3.6.1</h1><p class="help">Étape 2/2 — initialisation de la base et création du compte administrateur.</p>';
 if ($message !== '') { $content .= '<div class="flash flash-success">' . e($message) . '</div>'; }
 if ($error !== '') { $content .= '<div class="flash flash-error">' . e($error) . '</div>'; }
-$content .= '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><label>Indicatif admin<input type="text" name="callsign" value="ON4CRD" required></label><label>Nom complet<input type="text" name="full_name" value="Administrateur" required></label><label>Email<input type="email" name="email"></label><label>Mot de passe<input type="password" name="password" required></label><button class="button">Installer</button></form></div>';
+$content .= '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><label>Indicatif admin<input type="text" name="callsign" value="ON4CRD" required></label><label>Nom<input type="text" name="last_name" value="Administrateur" required></label><label>Prénom<input type="text" name="first_name" required></label><label>Email<input type="email" name="email"></label><label>Mot de passe<input type="password" name="password" required></label><button class="button">Installer</button></form></div>';
 
 installer_render_html('Installation', $content);

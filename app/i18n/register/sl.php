@@ -16,6 +16,8 @@ return array (
   'email' => 'E-pošta',
   'phone' => 'Telefon',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Razred licence',
   'favourite_bands' => 'Najljubši bendi',

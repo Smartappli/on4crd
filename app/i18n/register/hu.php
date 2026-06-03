@@ -16,6 +16,8 @@ return array (
   'email' => 'E-mail',
   'phone' => 'Telefon',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Licenc osztály',
   'favourite_bands' => 'Kedvenc zenekarok',

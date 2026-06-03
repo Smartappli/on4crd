@@ -72,7 +72,8 @@ if (table_exists('members')) {
     $stmt->execute($params);
     $members = $stmt->fetchAll() ?: [];
 
-    $directoryVisibilityFields = array_keys(member_profile_visibility_fields($profileT));
+    $directoryVisibilityFieldMeta = member_profile_visibility_fields($profileT);
+    $directoryVisibilityFields = array_keys($directoryVisibilityFieldMeta);
     $visibleProfileConditions = implode(
         ' OR ',
         array_map(
@@ -114,7 +115,7 @@ if (table_exists('members')) {
     foreach ($members as $index => &$member) {
         $member = member_with_name_parts($member);
         foreach ($fieldVisibilityMap as $field => $visibilityField) {
-            $visibility = (string) ($member[$visibilityField] ?? 'private');
+            $visibility = (string) ($member[$visibilityField] ?? (string) ($directoryVisibilityFieldMeta[$visibilityField]['default'] ?? 'private'));
             if (!in_array($visibility, $allowedVisibilityLevels, true)) {
                 $member[$field] = '';
             }
@@ -167,7 +168,7 @@ $memberInitials = static function (array $member): string {
         return mb_safe_strtoupper(mb_safe_substr($callsign, 0, 2));
     }
 
-    $name = trim((string) ($member['full_name'] ?? ''));
+    $name = member_full_name_from_parts((string) ($member['first_name'] ?? ''), (string) ($member['last_name'] ?? ''));
     if ($name === '') {
         return 'OM';
     }
@@ -267,11 +268,13 @@ ob_start();
             <?php foreach ($members as $member): ?>
                 <?php
                 $callsign = trim((string) ($member['callsign'] ?? ''));
-                $fullName = trim((string) ($member['full_name'] ?? ''));
+                $displayName = member_full_name_from_parts((string) ($member['first_name'] ?? ''), (string) ($member['last_name'] ?? ''));
                 $licenceClass = trim((string) ($member['licence_class'] ?? ''));
                 $email = trim((string) ($member['email'] ?? ''));
                 $phone = trim((string) ($member['phone'] ?? ''));
                 $country = trim((string) ($member['country'] ?? ''));
+                $address = trim((string) ($member['address'] ?? ''));
+                $postalCode = trim((string) ($member['postal_code'] ?? ''));
                 $qth = trim((string) ($member['qth'] ?? ''));
                 $grid = trim((string) ($member['locator'] ?? ''));
                 $qrzUrl = trim((string) ($member['qrz_url'] ?? ''));
@@ -301,6 +304,8 @@ ob_start();
                         $detailRows[] = ['label' => $label, 'value' => $value];
                     }
                 };
+                $addDetail((string) $profileT('postal_code'), $postalCode);
+                $addDetail((string) $profileT('address'), $address);
                 $addDetail((string) $profileT('operator_since'), $operatorSince);
                 $addDetail((string) $profileT('cq_zone'), $cqZone);
                 $addDetail((string) $profileT('itu_zone'), $ituZone);
@@ -318,8 +323,8 @@ ob_start();
                         </div>
                         <div class="directory-member-title">
                             <h3><?= e($callsign) ?></h3>
-                            <?php if ($fullName !== ''): ?>
-                                <p><?= e($fullName) ?></p>
+                            <?php if ($displayName !== ''): ?>
+                                <p><?= e($displayName) ?></p>
                             <?php endif; ?>
                         </div>
                     </header>

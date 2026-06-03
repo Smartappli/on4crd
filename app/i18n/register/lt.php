@@ -16,6 +16,8 @@ return array (
   'email' => 'El. paštas',
   'phone' => 'Telefonas',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Licencijos klasė',
   'favourite_bands' => 'Mėgstamiausios grupės',

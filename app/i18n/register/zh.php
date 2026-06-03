@@ -16,6 +16,8 @@ return [
     'email' => '电子邮件',
     'phone' => '电话',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
     'qth' => 'QTH',
     'licence_class' => '执照等级',
     'favourite_bands' => '常用频段',

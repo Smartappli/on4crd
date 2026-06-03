@@ -16,6 +16,8 @@ return array (
   'email' => 'メール',
   'phone' => '電話',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'クイーンズランド州',
   'licence_class' => 'ライセンスクラス',
   'favourite_bands' => 'お気に入りのバンド',

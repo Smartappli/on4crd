@@ -16,6 +16,8 @@ return array (
   'email' => 'Электронная почта',
   'phone' => 'Телефон',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Класс лицензии',
   'favourite_bands' => 'Любимые диапазоны',

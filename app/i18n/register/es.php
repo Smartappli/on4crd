@@ -16,6 +16,8 @@ return [
     'email' => 'Correo electrónico',
     'phone' => 'Teléfono',
     'country' => 'Pais',
+    'address' => 'Dirección',
+    'postal_code' => 'Código postal',
     'qth' => 'QTH',
     'licence_class' => 'Clase de licencia',
     'favourite_bands' => 'Bandas favoritas',

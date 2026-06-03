@@ -16,6 +16,8 @@ return [
     'email' => 'ইমেল',
     'phone' => 'ফোন',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
     'qth' => 'QTH',
     'licence_class' => 'লাইসেন্স শ্রেণি',
     'favourite_bands' => 'প্রিয় ব্যান্ড',

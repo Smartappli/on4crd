@@ -16,6 +16,8 @@ return array (
   'email' => 'E-mail',
   'phone' => 'Τηλέφωνο',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Κατηγορία άδειας',
   'favourite_bands' => 'Αγαπημένα συγκροτήματα',

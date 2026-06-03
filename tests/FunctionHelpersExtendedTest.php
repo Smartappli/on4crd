@@ -178,6 +178,41 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('Dupont', $member['last_name']);
     }
 
+    public function testMemberProfileVisibilityDefaultsProtectSensitiveIdentityFields(): void
+    {
+        $t = static fn(string $key): string => $key;
+        $fields = member_profile_visibility_fields($t);
+
+        self::assertSame('members', $fields['visibility_first_name']['default']);
+        self::assertSame('private', $fields['visibility_last_name']['default']);
+        self::assertSame('private', $fields['visibility_address']['default']);
+        self::assertSame('private', $fields['visibility_postal_code']['default']);
+    }
+
+    public function testMemberProfilePreviewRowsHideSensitiveFieldsByDefault(): void
+    {
+        $t = static fn(string $key): string => $key;
+        $member = [
+            'first_name' => 'Jean',
+            'last_name' => 'Dupont',
+            'address' => 'Rue de la Radio 1',
+            'postal_code' => '5530',
+        ];
+
+        $memberRows = member_profile_preview_rows($member, 'members', $t);
+        $memberLabels = array_column($memberRows, 'label');
+        self::assertContains('first_name', $memberLabels);
+        self::assertNotContains('last_name', $memberLabels);
+        self::assertNotContains('address', $memberLabels);
+        self::assertNotContains('postal_code', $memberLabels);
+
+        $privateRows = member_profile_preview_rows($member, 'private', $t);
+        $privateLabels = array_column($privateRows, 'label');
+        self::assertContains('last_name', $privateLabels);
+        self::assertContains('address', $privateLabels);
+        self::assertContains('postal_code', $privateLabels);
+    }
+
     public function testMemberProfilePreviewRowsIncludeNonEmptyExtendedFields(): void
     {
         $t = static fn(string $key): string => $key;

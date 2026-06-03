@@ -16,6 +16,8 @@ return array (
   'email' => 'Meil',
   'phone' => 'Telefon',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Litsentsi klass',
   'favourite_bands' => 'Lemmikbändid',

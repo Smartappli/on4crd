@@ -16,6 +16,8 @@ return array (
   'email' => 'Ríomhphost',
   'phone' => 'Teileafón',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
   'qth' => 'QTH',
   'licence_class' => 'Aicme ceadúnais',
   'favourite_bands' => 'Na bannaí is fearr leat',

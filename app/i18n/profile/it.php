@@ -38,6 +38,8 @@ return array (
   'radio_section' => 'Radio information',
   'photo_section' => 'Photo',
   'country' => 'Paese',
+  'address' => 'Indirizzo',
+  'postal_code' => 'Codice postale',
   'locator' => 'Locator',
   'grid' => 'Grid',
   'bio' => 'Bio',

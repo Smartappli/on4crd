@@ -16,6 +16,8 @@ return [
     'email' => 'Email',
     'phone' => 'Phone',
     'country' => 'Country',
+    'address' => 'Address',
+    'postal_code' => 'Postal code',
     'qth' => 'QTH',
     'licence_class' => 'Licence class',
     'favourite_bands' => 'Favourite bands',

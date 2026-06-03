@@ -24,9 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $allowedVisibilities = array_keys($visibilityOptions);
     $visibilityPayload = [];
-    foreach (array_keys($visibilityFields) as $field) {
-        $value = (string) ($_POST[$field] ?? 'members');
-        $visibilityPayload[$field] = in_array($value, $allowedVisibilities, true) ? $value : 'members';
+    foreach ($visibilityFields as $field => $fieldMeta) {
+        $defaultVisibility = (string) ($fieldMeta['default'] ?? 'members');
+        $value = (string) ($_POST[$field] ?? $defaultVisibility);
+        $visibilityPayload[$field] = in_array($value, $allowedVisibilities, true) ? $value : $defaultVisibility;
     }
 
     $assignments = implode(', ', array_map(
