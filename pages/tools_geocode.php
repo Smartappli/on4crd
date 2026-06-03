@@ -58,7 +58,10 @@ if (!is_float($lat) || !is_float($lon)) {
 }
 
 $locator = coordinates_to_maidenhead($lat, $lon, 6);
-$zones = member_profile_radio_zones_for_coordinates($lat, $lon);
+$addressDetails = isset($row['address']) && is_array($row['address']) ? $row['address'] : [];
+$countryCode = strtoupper(trim((string) ($addressDetails['country_code'] ?? '')));
+$country = $countryCode !== '' ? $countryCode : (string) ($addressDetails['country'] ?? '');
+$zones = member_profile_radio_zones_for_coordinates($lat, $lon, $country);
 
 echo json_encode([
     'ok' => true,
