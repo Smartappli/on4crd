@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/widget_radio_helpers.php';
+
 if (!function_exists('member_country_options')) {
 /**
  * @return array<string, string>
@@ -163,6 +165,265 @@ function member_country_select_options_html(string $currentCountry = ''): string
     }
 
     return $html;
+}
+}
+
+if (!function_exists('member_profile_postal_address_is_complete')) {
+function member_profile_postal_address_is_complete(string $country, string $address, string $postalCode, string $qth): bool
+{
+    return trim($country) !== '' && trim($address) !== '' && trim($postalCode) !== '' && trim($qth) !== '';
+}
+}
+
+if (!function_exists('member_profile_postal_address_query')) {
+function member_profile_postal_address_query(string $country, string $address, string $postalCode, string $qth): string
+{
+    $parts = array_filter([
+        trim($address),
+        trim($postalCode),
+        trim($qth),
+        trim($country),
+    ], static fn(string $part): bool => $part !== '');
+
+    return implode(', ', $parts);
+}
+}
+
+if (!function_exists('member_profile_geocode_postal_address')) {
+/**
+ * @return array{lat:float, lon:float, display_name:string, country_code:string}|null
+ */
+function member_profile_geocode_postal_address(string $country, string $address, string $postalCode, string $qth): ?array
+{
+    if (!member_profile_postal_address_is_complete($country, $address, $postalCode, $qth)) {
+        return null;
+    }
+
+    $query = member_profile_postal_address_query($country, $address, $postalCode, $qth);
+    if ($query === '') {
+        return null;
+    }
+
+    $cacheKey = 'profile_geocode_' . sha1(mb_strtolower($query));
+
+    return cache_remember($cacheKey, 30 * 24 * 60 * 60, static function () use ($query, $country): ?array {
+        $url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&q=' . rawurlencode($query);
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 8,
+                'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Profile/1.0\r\n",
+            ],
+        ]);
+
+        $response = @file_get_contents($url, false, $context);
+        if ($response === false || trim($response) === '') {
+            return null;
+        }
+
+        $rows = json_decode($response, true);
+        if (!is_array($rows) || $rows === []) {
+            return null;
+        }
+
+        $row = $rows[0] ?? null;
+        if (!is_array($row) || !isset($row['lat'], $row['lon']) || !is_numeric($row['lat']) || !is_numeric($row['lon'])) {
+            return null;
+        }
+
+        $lat = (float) $row['lat'];
+        $lon = (float) $row['lon'];
+        if (!is_finite($lat) || !is_finite($lon) || $lat < -90.0 || $lat > 90.0 || $lon < -180.0 || $lon > 180.0) {
+            return null;
+        }
+
+        $addressDetails = isset($row['address']) && is_array($row['address']) ? $row['address'] : [];
+        $countryCode = strtoupper(trim((string) ($addressDetails['country_code'] ?? '')));
+        if ($countryCode === '') {
+            $countryCode = member_country_code_for($country);
+        }
+
+        return [
+            'lat' => $lat,
+            'lon' => $lon,
+            'display_name' => trim((string) ($row['display_name'] ?? $query)),
+            'country_code' => $countryCode,
+        ];
+    });
+}
+}
+
+if (!function_exists('member_profile_zone_pair')) {
+/**
+ * @return array{cq_zone:string, itu_zone:string}
+ */
+function member_profile_zone_pair(string $cqZone, string $ituZone): array
+{
+    return ['cq_zone' => $cqZone, 'itu_zone' => $ituZone];
+}
+}
+
+if (!function_exists('member_profile_radio_zones_for_us')) {
+/**
+ * @return array{cq_zone:string, itu_zone:string}
+ */
+function member_profile_radio_zones_for_us(float $latitude, float $longitude): array
+{
+    if ($latitude >= 51.0 && $longitude <= -130.0) {
+        return member_profile_zone_pair('1', '1');
+    }
+    if ($latitude >= 18.0 && $latitude <= 23.0 && $longitude >= -162.0 && $longitude <= -154.0) {
+        return member_profile_zone_pair('31', '61');
+    }
+    if ($longitude < -110.0) {
+        return member_profile_zone_pair('3', '6');
+    }
+    if ($longitude < -90.0) {
+        return member_profile_zone_pair('4', '7');
+    }
+
+    return member_profile_zone_pair('5', '8');
+}
+}
+
+if (!function_exists('member_profile_radio_zones_for_canada')) {
+/**
+ * @return array{cq_zone:string, itu_zone:string}
+ */
+function member_profile_radio_zones_for_canada(float $latitude, float $longitude): array
+{
+    if ($longitude >= -70.0 && $latitude >= 50.0) {
+        return member_profile_zone_pair('2', '9');
+    }
+    if ($longitude >= -70.0) {
+        return member_profile_zone_pair('5', '9');
+    }
+    if ($longitude >= -90.0) {
+        return member_profile_zone_pair('4', '4');
+    }
+    if ($longitude >= -110.0) {
+        return member_profile_zone_pair('4', '3');
+    }
+    if ($longitude >= -141.5) {
+        return member_profile_zone_pair('3', '2');
+    }
+
+    return member_profile_zone_pair('1', '2');
+}
+}
+
+if (!function_exists('member_profile_radio_zones_for_coordinates')) {
+/**
+ * @return array{cq_zone:string, itu_zone:string}
+ */
+function member_profile_radio_zones_for_coordinates(float $latitude, float $longitude, string $country): array
+{
+    $countryCode = member_country_code_for($country);
+    if ($countryCode === '' && preg_match('/^[A-Za-z]{2}$/', trim($country)) === 1) {
+        $countryCode = strtoupper(trim($country));
+    }
+
+    if ($countryCode === 'US') {
+        return member_profile_radio_zones_for_us($latitude, $longitude);
+    }
+    if ($countryCode === 'CA') {
+        return member_profile_radio_zones_for_canada($latitude, $longitude);
+    }
+    if ($countryCode === 'FR') {
+        if ($latitude >= 41.0 && $latitude <= 43.2 && $longitude >= 8.4 && $longitude <= 9.8) {
+            return member_profile_zone_pair('15', '28');
+        }
+
+        return member_profile_zone_pair('14', '27');
+    }
+    if ($countryCode === 'ES') {
+        if ($latitude >= 27.0 && $latitude <= 30.5 && $longitude >= -19.0 && $longitude <= -13.0) {
+            return member_profile_zone_pair('33', '36');
+        }
+        if ($latitude >= 35.0 && $latitude <= 36.5 && $longitude >= -6.5 && $longitude <= -1.0) {
+            return member_profile_zone_pair('33', '37');
+        }
+
+        return member_profile_zone_pair('14', '37');
+    }
+    if ($countryCode === 'PT') {
+        if ($latitude >= 30.0 && $latitude <= 34.0 && $longitude >= -18.0 && $longitude <= -15.0) {
+            return member_profile_zone_pair('33', '36');
+        }
+        if ($latitude >= 36.0 && $latitude <= 40.5 && $longitude >= -32.0 && $longitude <= -24.0) {
+            return member_profile_zone_pair('14', '36');
+        }
+
+        return member_profile_zone_pair('14', '37');
+    }
+    if ($countryCode === 'IT') {
+        if ($latitude < 36.8 && $longitude >= 11.5 && $longitude <= 13.5) {
+            return member_profile_zone_pair('33', '37');
+        }
+
+        return member_profile_zone_pair('15', '28');
+    }
+
+    $singleCountryZones = [
+        'BE' => ['14', '27'],
+        'NL' => ['14', '27'],
+        'LU' => ['14', '27'],
+        'DE' => ['14', '28'],
+        'GB' => ['14', '27'],
+        'CH' => ['14', '28'],
+        'IE' => ['14', '27'],
+        'DK' => ['14', '18'],
+        'SE' => ['14', '18'],
+        'NO' => ['14', '18'],
+        'FI' => ['15', '18'],
+        'AT' => ['15', '28'],
+        'PL' => ['15', '28'],
+        'CZ' => ['15', '28'],
+        'SK' => ['15', '28'],
+        'HU' => ['15', '28'],
+        'RO' => ['20', '28'],
+        'BG' => ['20', '28'],
+        'GR' => ['20', '28'],
+        'MA' => ['33', '37'],
+        'DZ' => ['33', '37'],
+        'TN' => ['33', '37'],
+    ];
+
+    if (!isset($singleCountryZones[$countryCode])) {
+        return member_profile_zone_pair('', '');
+    }
+
+    return member_profile_zone_pair($singleCountryZones[$countryCode][0], $singleCountryZones[$countryCode][1]);
+}
+}
+
+if (!function_exists('member_profile_radio_location_from_address')) {
+/**
+ * @return array{locator:string, cq_zone:string, itu_zone:string, lat:float, lon:float, display_name:string}|null
+ */
+function member_profile_radio_location_from_address(string $country, string $address, string $postalCode, string $qth): ?array
+{
+    $geocoded = member_profile_geocode_postal_address($country, $address, $postalCode, $qth);
+    if ($geocoded === null) {
+        return null;
+    }
+
+    $locator = coordinates_to_maidenhead((float) $geocoded['lat'], (float) $geocoded['lon'], 6);
+    if ($locator === null || $locator === '') {
+        return null;
+    }
+
+    $zoneCountry = (string) ($geocoded['country_code'] !== '' ? $geocoded['country_code'] : $country);
+    $zones = member_profile_radio_zones_for_coordinates((float) $geocoded['lat'], (float) $geocoded['lon'], $zoneCountry);
+
+    return [
+        'locator' => $locator,
+        'cq_zone' => $zones['cq_zone'],
+        'itu_zone' => $zones['itu_zone'],
+        'lat' => (float) $geocoded['lat'],
+        'lon' => (float) $geocoded['lon'],
+        'display_name' => (string) $geocoded['display_name'],
+    ];
 }
 }
 
