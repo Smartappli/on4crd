@@ -157,6 +157,27 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('Belgique', $html);
     }
 
+    public function testMemberNameHelpersSplitAndComposeFullName(): void
+    {
+        self::assertSame('Jean Dupont', member_full_name_from_parts(' Jean ', ' Dupont '));
+        self::assertSame(
+            ['first_name' => 'Jean', 'last_name' => 'Dupont'],
+            member_name_parts_from_full_name(' Jean   Dupont ')
+        );
+        self::assertSame(
+            ['first_name' => 'Jean', 'last_name' => ''],
+            member_name_parts_from_full_name('Jean')
+        );
+    }
+
+    public function testMemberWithNamePartsBackfillsFromFullName(): void
+    {
+        $member = member_with_name_parts(['full_name' => 'Jean Dupont']);
+
+        self::assertSame('Jean', $member['first_name']);
+        self::assertSame('Dupont', $member['last_name']);
+    }
+
     public function testMemberProfilePreviewRowsIncludeNonEmptyExtendedFields(): void
     {
         $t = static fn(string $key): string => $key;
