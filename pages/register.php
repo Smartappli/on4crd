@@ -229,7 +229,6 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('itu_zone')) . '<input type="text" name="itu_zone" maxlength="16"></label>'
     . '<p class="help register-form-full">' . e($t('auto_radio_location_help')) . '</p>'
     . '<label>' . e($t('qsl_via')) . '<input type="text" name="qsl_via" maxlength="190"></label>'
-    . '<label>' . e($t('lotw_username')) . '<input type="text" name="lotw_username" maxlength="190"></label>'
     . '<label>' . e($t('eqsl_username')) . '<input type="text" name="eqsl_username" maxlength="190"></label>'
     . '<label>' . e($t('website')) . '<input type="url" name="website" maxlength="255"></label>'
     . '<label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1"> <span>' . e($t('uba_member')) . '</span></label>'
