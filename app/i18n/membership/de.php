@@ -7,7 +7,7 @@ return array (
   'intro' => 'Hier finden Sie das Verfahren, um einen Mitgliedschaftsantrag bei der CRD-Sektion einzureichen.',
   'image_alt' => 'CRD-Mitgliedschaftsbild',
   'how_title' => 'Wie wird man Mitglied beim CRD?',
-  'how_text' => 'Senden Sie zunächst einen Antrag per E-Mail (on4crd.be) an den CM (Clubpräsidenten) der CRD-Sektion.',
+  'how_text' => 'Senden Sie zunächst einen Antrag per E-Mail (crdurnal@gmail.com) an den CM (Clubpräsidenten) der CRD-Sektion.',
   'postal_title' => 'Antrag per Post',
   'contact_item_1' => 'Radioclub Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

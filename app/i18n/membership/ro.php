@@ -7,7 +7,7 @@ return array (
   'intro' => 'Iată procedura de depunere a unei cereri de aderare la secțiunea CRD.',
   'image_alt' => 'Vizual de membru CRD',
   'how_title' => 'Cum devii membru CRD?',
-  'how_text' => 'Trimiteți o solicitare prin e-mail (on4crd.be) către CM (președintele clubului) al secțiunii CRD.',
+  'how_text' => 'Trimiteți o solicitare prin e-mail (crdurnal@gmail.com) către CM (președintele clubului) al secțiunii CRD.',
   'postal_title' => 'Solicitare prin posta',
   'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

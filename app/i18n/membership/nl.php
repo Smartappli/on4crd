@@ -7,7 +7,7 @@ return array (
   'intro' => 'Hier vindt u de procedure om een lidmaatschapsaanvraag in te dienen bij de CRD-sectie.',
   'image_alt' => 'Afbeelding CRD-lidmaatschap',
   'how_title' => 'Hoe wordt u lid van CRD?',
-  'how_text' => 'Dien eerst een aanvraag in per e-mail (on4crd.be) bij de CM (clubvoorzitter) van de CRD-sectie.',
+  'how_text' => 'Dien eerst een aanvraag in per e-mail (crdurnal@gmail.com) bij de CM (clubvoorzitter) van de CRD-sectie.',
   'postal_title' => 'Aanvraag per post',
   'contact_item_1' => 'Radioclub Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

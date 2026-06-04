@@ -7,7 +7,7 @@ return array (
   'intro' => 'Tässä on menettely jäsenyyshakemuksen lähettämiseksi CRD-osioon.',
   'image_alt' => 'Jäsenyyskuva CRD',
   'how_title' => 'Miten sinusta tulee CRD:n jäsen?',
-  'how_text' => 'Lähetä pyyntö sähköpostitse (on4crd.be) CRD-osion CM:lle (klubipresidentti).',
+  'how_text' => 'Lähetä pyyntö sähköpostitse (crdurnal@gmail.com) CRD-osion CM:lle (klubipresidentti).',
   'postal_title' => 'Pyydä postitse',
   'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

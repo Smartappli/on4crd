@@ -7,7 +7,7 @@ return array (
   'intro' => 'Ακολουθεί η διαδικασία υποβολής αίτησης για ένταξη στην ενότητα CRD.',
   'image_alt' => 'Συνδρομή οπτικό CRD',
   'how_title' => 'Πώς γίνεστε μέλος του CRD;',
-  'how_text' => 'Υποβάλετε ένα αίτημα μέσω email (on4crd.be) στον CM (πρόεδρο του συλλόγου) της ενότητας CRD.',
+  'how_text' => 'Υποβάλετε ένα αίτημα μέσω email (crdurnal@gmail.com) στον CM (πρόεδρο του συλλόγου) της ενότητας CRD.',
   'postal_title' => 'Αίτημα μέσω ταχυδρομείου',
   'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',
