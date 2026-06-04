@@ -96,6 +96,7 @@ const scenarios: ToolScenario[] = [
       { action: 'fill', selector: '#swr-forward', value: '50' },
       { action: 'fill', selector: '#swr-reflected', value: '2' },
       { action: 'expectText', selector: '#swr-value', text: '1.50' },
+      { action: 'expectText', selector: '#swr-return-loss', text: '13.98 dB' },
     ],
   },
   {
