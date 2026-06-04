@@ -283,7 +283,6 @@ ob_start();
                 $cqZone = trim((string) ($member['cq_zone'] ?? ''));
                 $ituZone = trim((string) ($member['itu_zone'] ?? ''));
                 $qslVia = trim((string) ($member['qsl_via'] ?? ''));
-                $lotwUsername = trim((string) ($member['lotw_username'] ?? ''));
                 $eqslUsername = trim((string) ($member['eqsl_username'] ?? ''));
                 $maxPower = trim((string) ($member['max_power'] ?? ''));
                 $interests = trim((string) ($member['interests'] ?? ''));
@@ -303,9 +302,7 @@ ob_start();
                 };
                 $addDetail((string) $profileT('postal_code'), $postalCode);
                 $addDetail((string) $profileT('address'), $address);
-                $addDetail((string) $profileT('operator_since'), $operatorSince);
                 $addDetail((string) $profileT('qsl_via'), $qslVia);
-                $addDetail((string) $profileT('lotw_username'), $lotwUsername);
                 $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
                 $addDetail((string) $profileT('max_power'), $maxPower);
                 $addDetail((string) $profileT('interests'), $interests);
@@ -327,6 +324,9 @@ ob_start();
                     <div class="directory-badges">
                         <?php if ($licenceClass !== ''): ?>
                             <span><?= e($licenceClass) ?></span>
+                        <?php endif; ?>
+                        <?php if ($operatorSince !== ''): ?>
+                            <span><?= e($profileT('operator_since')) ?> <?= e($operatorSince) ?></span>
                         <?php endif; ?>
                         <?php if ((int) ($member['is_committee'] ?? 0) === 1): ?>
                             <span><?= e((string) ($member['committee_role'] ?: $t('committee'))) ?></span>
