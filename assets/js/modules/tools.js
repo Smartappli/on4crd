@@ -275,7 +275,17 @@
         }
 
         const value = Number(normalized);
-        return Number.isFinite(value) ? value : NaN;
+        if (!Number.isFinite(value)) {
+            return NaN;
+        }
+
+        const min = input?.dataset?.min !== undefined ? Number(input.dataset.min) : NaN;
+        const max = input?.dataset?.max !== undefined ? Number(input.dataset.max) : NaN;
+        if ((Number.isFinite(min) && value < min) || (Number.isFinite(max) && value > max)) {
+            return NaN;
+        }
+
+        return value;
     };
 
     const initializedTools = new Set();
@@ -777,7 +787,7 @@
         const forward = readNumberInput(swrForward);
         const reflected = readNumberInput(swrReflected);
         if (!Number.isFinite(forward) || forward <= 0 || !Number.isFinite(reflected) || reflected < 0 || reflected >= forward) {
-            swrValue.textContent = 'â€”';
+            swrValue.textContent = '—';
             return;
         }
 
