@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Kutipan unggulan',
   'clock_aria' => 'Jam UTC dan lokal',
+  'alt_trophy_image' => 'Gambar trofi klub',
+  'home_sponsors_cta' => 'Menjadi sponsor',
+  'home_sponsors_desc' => 'Mitra lokal dan radio amatir mendukung kegiatan, proyek, dan visibilitas CRD.',
+  'home_sponsors_title' => 'Sponsor kami',
+  'home_trophies_cta' => 'Lihat galeri',
+  'home_trophies_desc' => 'Kegiatan klub menonjolkan teknik, partisipasi kontes, dan pencapaian bersama.',
+  'home_trophies_empty' => 'Saat ini belum ada trofi yang tersedia.',
+  'home_trophies_title' => 'Trofi kami',
+  'spotlight_member_gallery_empty' => 'Saat ini belum ada gambar galeri yang tersedia.',
 );

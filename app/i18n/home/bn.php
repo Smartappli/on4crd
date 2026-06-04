@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'নির্বাচিত উক্তি',
   'clock_aria' => 'UTC ও স্থানীয় ঘড়ি',
+  'alt_trophy_image' => 'ক্লাব ট্রফির ছবি',
+  'home_sponsors_cta' => 'স্পনসর হন',
+  'home_sponsors_desc' => 'স্থানীয় অংশীদার ও রেডিও অপেশাদাররা CRD-এর কার্যক্রম, প্রকল্প ও পরিচিতিকে সমর্থন করেন।',
+  'home_sponsors_title' => 'আমাদের স্পনসররা',
+  'home_trophies_cta' => 'গ্যালারি দেখুন',
+  'home_trophies_desc' => 'ক্লাবের কার্যক্রম প্রযুক্তি, প্রতিযোগিতায় অংশগ্রহণ এবং সম্মিলিত অর্জনকে তুলে ধরে।',
+  'home_trophies_empty' => 'এই মুহূর্তে কোনো ট্রফি উপলভ্য নেই।',
+  'home_trophies_title' => 'আমাদের ট্রফি',
+  'spotlight_member_gallery_empty' => 'এই মুহূর্তে কোনো গ্যালারি ছবি উপলভ্য নেই।',
 );

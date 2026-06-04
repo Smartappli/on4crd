@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Kwotazzjoni dehru',
   'clock_aria' => 'UTC u arloġġi lokali',
+  'alt_trophy_image' => 'Immaġni tat-trofew tal-klabb',
+  'home_sponsors_cta' => 'Sir sponsor',
+  'home_sponsors_desc' => 'Imsieħba lokali u radioamateurs jappoġġjaw l-attivitajiet, il-proġetti u l-viżibilità tas-CRD.',
+  'home_sponsors_title' => 'L-isponsors tagħna',
+  'home_trophies_cta' => 'Ara l-gallerija',
+  'home_trophies_desc' => 'L-attivitajiet tal-klabb jenfasizzaw it-teknika, il-parteċipazzjoni fil-kompetizzjonijiet u l-kisbiet kollettivi.',
+  'home_trophies_empty' => 'Bħalissa m’hemm l-ebda trofew disponibbli.',
+  'home_trophies_title' => 'It-trofej tagħna',
+  'spotlight_member_gallery_empty' => 'Bħalissa m’hemm l-ebda immaġni tal-gallerija disponibbli.',
 );

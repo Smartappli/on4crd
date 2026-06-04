@@ -406,7 +406,7 @@ if (is_array($latestNews) && !empty($latestNews['slug'])) {
 
 $classifiedsHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('classifieds')) . '">'
     . '<p>' . e((string) ($homeI18n['spotlight_classifieds_empty'] ?? 'Aucune petite annonce active pour le moment.')) . '</p>'
-    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' â†’</span>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' →</span>'
     . '</a>';
 if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
     $classifiedDescription = mb_safe_strimwidth(trim(preg_replace('/\s+/u', ' ', strip_tags((string) ($latestClassifiedAd['description'] ?? ''))) ?? ''), 0, 130, '...');
@@ -417,7 +417,7 @@ if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
         . '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e($classifiedMeta) . '</p>'
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestClassifiedAd['title']) . '</h3>'
         . ($classifiedDescription !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($classifiedDescription) . '</p>' : '')
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' â†’</span>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' →</span>'
         . '</a>';
 }
 

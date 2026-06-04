@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => '注目の引用',
   'clock_aria' => 'UTCと現地の時計',
+  'alt_trophy_image' => 'クラブトロフィーの画像',
+  'home_sponsors_cta' => 'スポンサーになる',
+  'home_sponsors_desc' => '地域のパートナーとアマチュア無線家が、CRDの活動、プロジェクト、認知向上を支援しています。',
+  'home_sponsors_title' => 'スポンサー',
+  'home_trophies_cta' => 'ギャラリーを見る',
+  'home_trophies_desc' => 'クラブの活動は、技術、コンテスト参加、共同の成果を紹介します。',
+  'home_trophies_empty' => '現在利用できるトロフィーはありません。',
+  'home_trophies_title' => 'トロフィー',
+  'spotlight_member_gallery_empty' => '現在利用できるギャラリー画像はありません。',
 );

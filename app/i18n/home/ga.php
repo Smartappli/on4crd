@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Athfhriotail faoi thrácht',
   'clock_aria' => 'UTC agus cloig áitiúla',
+  'alt_trophy_image' => 'Íomhá de dhuais an chlub',
+  'home_sponsors_cta' => 'Bí i do urraitheoir',
+  'home_sponsors_desc' => 'Tacaíonn comhpháirtithe áitiúla agus raidióamaitéaraigh le gníomhaíochtaí, tionscadail agus infheictheacht CRD.',
+  'home_sponsors_title' => 'Ár n-urraitheoirí',
+  'home_trophies_cta' => 'Féach ar an ngailearaí',
+  'home_trophies_desc' => 'Cuireann gníomhaíochtaí an chlub béim ar theicníc, rannpháirtíocht i gcomórtais agus éachtaí comhchoiteanna.',
+  'home_trophies_empty' => 'Níl aon duais ar fáil faoi láthair.',
+  'home_trophies_title' => 'Ár nduaiseanna',
+  'spotlight_member_gallery_empty' => 'Níl aon íomhá ghailearaí ar fáil faoi láthair.',
 );

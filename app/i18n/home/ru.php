@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Бок Арена, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Избранная цитата',
   'clock_aria' => 'Часы UTC и местные',
+  'alt_trophy_image' => 'Изображение клубного трофея',
+  'home_sponsors_cta' => 'Стать спонсором',
+  'home_sponsors_desc' => 'Местные партнеры и радиолюбители поддерживают деятельность, проекты и узнаваемость CRD.',
+  'home_sponsors_title' => 'Наши спонсоры',
+  'home_trophies_cta' => 'Смотреть галерею',
+  'home_trophies_desc' => 'Деятельность клуба подчеркивает технику, участие в соревнованиях и общие достижения.',
+  'home_trophies_empty' => 'Сейчас нет доступных трофеев.',
+  'home_trophies_title' => 'Наши трофеи',
+  'spotlight_member_gallery_empty' => 'Сейчас нет доступного изображения галереи.',
 );

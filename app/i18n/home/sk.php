@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Odporúčaný citát',
   'clock_aria' => 'UTC a miestne hodiny',
+  'alt_trophy_image' => 'Obrázok klubovej trofeje',
+  'home_sponsors_cta' => 'Staňte sa sponzorom',
+  'home_sponsors_desc' => 'Miestni partneri a rádioamatéri podporujú aktivity, projekty a viditeľnosť CRD.',
+  'home_sponsors_title' => 'Naši sponzori',
+  'home_trophies_cta' => 'Zobraziť galériu',
+  'home_trophies_desc' => 'Klubové aktivity zdôrazňujú techniku, účasť v súťažiach a spoločné úspechy.',
+  'home_trophies_empty' => 'Momentálne nie je k dispozícii žiadna trofej.',
+  'home_trophies_title' => 'Naše trofeje',
+  'spotlight_member_gallery_empty' => 'Momentálne nie je k dispozícii žiadny obrázok galérie.',
 );

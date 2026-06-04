@@ -24,7 +24,7 @@ return array (
   'theme_materiel' => 'Matériel & station',
   'theme_formation' => 'Formation',
   'theme_autres' => 'Autres thématiques',
-  'results' => 'R�sultats',
+  'results' => 'Résultats',
   'reading_minutes' => 'min de lecture',
   'favorite_label' => 'Favori',
   'favorite_added' => 'Favori ajouté',

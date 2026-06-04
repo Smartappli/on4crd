@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Teminė citata',
   'clock_aria' => 'UTC ir vietiniai laikrodžiai',
+  'alt_trophy_image' => 'Klubo trofėjaus vaizdas',
+  'home_sponsors_cta' => 'Tapti rėmėju',
+  'home_sponsors_desc' => 'Vietos partneriai ir radijo mėgėjai remia CRD veiklas, projektus ir matomumą.',
+  'home_sponsors_title' => 'Mūsų rėmėjai',
+  'home_trophies_cta' => 'Peržiūrėti galeriją',
+  'home_trophies_desc' => 'Klubo veiklos pabrėžia techniką, dalyvavimą varžybose ir bendrus pasiekimus.',
+  'home_trophies_empty' => 'Šiuo metu nėra jokio trofėjaus.',
+  'home_trophies_title' => 'Mūsų trofėjai',
+  'spotlight_member_gallery_empty' => 'Šiuo metu nėra jokio galerijos vaizdo.',
 );

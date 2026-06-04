@@ -142,4 +142,13 @@ return array (
   'venue_address' => '博克竞技场，Rue des Écoles，5530 Purnode',
   'quote_aria' => '精选语录',
   'clock_aria' => 'UTC 与本地时钟',
+  'alt_trophy_image' => '俱乐部奖杯图片',
+  'home_sponsors_cta' => '成为赞助商',
+  'home_sponsors_desc' => '本地合作伙伴和业余无线电爱好者支持 CRD 的活动、项目和影响力。',
+  'home_sponsors_title' => '我们的赞助商',
+  'home_trophies_cta' => '查看图库',
+  'home_trophies_desc' => '俱乐部活动展示技术能力、竞赛参与和集体成果。',
+  'home_trophies_empty' => '目前没有可用的奖杯。',
+  'home_trophies_title' => '我们的奖杯',
+  'spotlight_member_gallery_empty' => '目前没有可用的图库图片。',
 );

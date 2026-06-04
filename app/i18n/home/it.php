@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, Rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Citazione in evidenza',
   'clock_aria' => 'Orologi UTC e locale',
+  'alt_trophy_image' => 'Immagine del trofeo del club',
+  'home_sponsors_cta' => 'Diventa sponsor',
+  'home_sponsors_desc' => 'Partner locali e radioamatori sostengono le attività, i progetti e la visibilità del CRD.',
+  'home_sponsors_title' => 'I nostri sponsor',
+  'home_trophies_cta' => 'Vedi la galleria',
+  'home_trophies_desc' => 'Le attività del club valorizzano la tecnica, la partecipazione ai contest e i risultati collettivi.',
+  'home_trophies_empty' => 'Nessun trofeo disponibile al momento.',
+  'home_trophies_title' => 'I nostri trofei',
+  'spotlight_member_gallery_empty' => 'Nessuna immagine della galleria disponibile al momento.',
 );

@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena، Rue des Écoles، 5530 Purnode',
   'quote_aria' => 'اقتباس مميز',
   'clock_aria' => 'ساعات UTC والمحلية',
+  'alt_trophy_image' => 'صورة جائزة النادي',
+  'home_sponsors_cta' => 'كن راعياً',
+  'home_sponsors_desc' => 'يدعم الشركاء المحليون وهواة الراديو أنشطة CRD ومشاريعه وظهوره.',
+  'home_sponsors_title' => 'رعاتنا',
+  'home_trophies_cta' => 'عرض المعرض',
+  'home_trophies_desc' => 'تبرز أنشطة النادي المهارة التقنية والمشاركة في المسابقات والإنجازات الجماعية.',
+  'home_trophies_empty' => 'لا توجد جائزة متاحة في الوقت الحالي.',
+  'home_trophies_title' => 'جوائزنا',
+  'spotlight_member_gallery_empty' => 'لا توجد صورة معرض متاحة في الوقت الحالي.',
 );

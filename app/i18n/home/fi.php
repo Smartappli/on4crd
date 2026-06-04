@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Suositeltu lainaus',
   'clock_aria' => 'UTC ja paikalliset kellot',
+  'alt_trophy_image' => 'Kerhon pokaalin kuva',
+  'home_sponsors_cta' => 'Ryhdy sponsoriksi',
+  'home_sponsors_desc' => 'Paikalliset kumppanit ja radioamatöörit tukevat CRD:n toimintaa, projekteja ja näkyvyyttä.',
+  'home_sponsors_title' => 'Sponsorimme',
+  'home_trophies_cta' => 'Katso galleria',
+  'home_trophies_desc' => 'Kerhon toiminta korostaa tekniikkaa, kilpailuihin osallistumista ja yhteisiä saavutuksia.',
+  'home_trophies_empty' => 'Tällä hetkellä ei ole yhtään pokaalia saatavilla.',
+  'home_trophies_title' => 'Pokaalimme',
+  'spotlight_member_gallery_empty' => 'Tällä hetkellä ei ole galleriakuvaa saatavilla.',
 );

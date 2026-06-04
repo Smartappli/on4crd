@@ -142,4 +142,13 @@ return array (
   'venue_address' => 'Bocq Arena, rue des Écoles, 5530 Purnode',
   'quote_aria' => 'Predstavljeni citat',
   'clock_aria' => 'UTC in lokalne ure',
+  'alt_trophy_image' => 'Slika klubskega pokala',
+  'home_sponsors_cta' => 'Postani sponzor',
+  'home_sponsors_desc' => 'Lokalni partnerji in radioamaterji podpirajo dejavnosti, projekte in prepoznavnost CRD.',
+  'home_sponsors_title' => 'Naši sponzorji',
+  'home_trophies_cta' => 'Oglej si galerijo',
+  'home_trophies_desc' => 'Dejavnosti kluba poudarjajo tehniko, sodelovanje na tekmovanjih in skupne dosežke.',
+  'home_trophies_empty' => 'Trenutno ni na voljo nobene trofeje.',
+  'home_trophies_title' => 'Naše trofeje',
+  'spotlight_member_gallery_empty' => 'Trenutno ni na voljo nobene slike v galeriji.',
 );
