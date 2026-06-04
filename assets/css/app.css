@@ -822,13 +822,15 @@ textarea { resize: vertical; }
 .directory-band-list > span {
   display: inline-flex;
   align-items: center;
-  min-height: 1.85rem;
+  flex: 0 0 auto;
+  min-height: 1.45rem;
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--panel-2);
-  padding: .32rem .62rem;
-  font-size: .82rem;
+  padding: .18rem .5rem;
+  font-size: .78rem;
   font-weight: 700;
+  line-height: 1.15;
   color: var(--text);
 }
 .directory-member-grid {
@@ -899,7 +901,8 @@ textarea { resize: vertical; }
 .directory-band-list {
   display: flex;
   flex-wrap: wrap;
-  gap: .4rem;
+  align-items: center;
+  gap: .25rem .32rem;
 }
 .directory-badges > span:first-child {
   color: var(--accent-strong);
