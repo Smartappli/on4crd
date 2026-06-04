@@ -482,6 +482,81 @@ function member_profile_operator_since_options_html(string $currentValue = ''): 
 }
 }
 
+if (!function_exists('member_profile_favourite_band_choices')) {
+/**
+ * @return list<string>
+ */
+function member_profile_favourite_band_choices(): array
+{
+    return ['160m', '80m', '60m', '40m', '30m', '20m', '17m', '15m', '12m', '10m', '6m', '4m', '2m', '70cm', '23cm', '13cm', 'QO-100', 'Satellite'];
+}
+}
+
+if (!function_exists('member_profile_favourite_mode_choices')) {
+/**
+ * @return list<string>
+ */
+function member_profile_favourite_mode_choices(): array
+{
+    return ['AM', 'FM', 'SSB', 'CW', 'FT8', 'FT4', 'RTTY', 'PSK31', 'JS8Call', 'SSTV', 'DMR', 'D-STAR', 'C4FM', 'EchoLink'];
+}
+}
+
+if (!function_exists('member_profile_parse_choice_list')) {
+/**
+ * @return list<string>
+ */
+function member_profile_parse_choice_list(string $value): array
+{
+    $choices = [];
+    foreach (preg_split('/\s*,\s*/', trim($value)) ?: [] as $choice) {
+        $choice = trim($choice);
+        if ($choice !== '' && !in_array($choice, $choices, true)) {
+            $choices[] = $choice;
+        }
+    }
+
+    return $choices;
+}
+}
+
+if (!function_exists('member_profile_normalize_choice_post')) {
+/**
+ * @param mixed $value
+ * @param list<string> $allowedChoices
+ */
+function member_profile_normalize_choice_post(mixed $value, array $allowedChoices): string
+{
+    $postedChoices = is_array($value) ? $value : member_profile_parse_choice_list((string) $value);
+    $selectedChoices = [];
+    foreach ($postedChoices as $choice) {
+        $choice = trim((string) $choice);
+        if (in_array($choice, $allowedChoices, true) && !in_array($choice, $selectedChoices, true)) {
+            $selectedChoices[] = $choice;
+        }
+    }
+
+    return implode(', ', $selectedChoices);
+}
+}
+
+if (!function_exists('member_profile_checkbox_group_html')) {
+/**
+ * @param list<string> $choices
+ */
+function member_profile_checkbox_group_html(string $name, array $choices, string $currentValue = ''): string
+{
+    $selectedChoices = member_profile_parse_choice_list($currentValue);
+    $html = '<div class="profile-choice-group">';
+    foreach ($choices as $choice) {
+        $isSelected = in_array($choice, $selectedChoices, true);
+        $html .= '<label class="profile-choice"><input type="checkbox" name="' . e($name) . '[]" value="' . e($choice) . '"' . ($isSelected ? ' checked' : '') . '> <span>' . e($choice) . '</span></label>';
+    }
+
+    return $html . '</div>';
+}
+}
+
 if (!function_exists('member_name_parts_from_full_name')) {
 /**
  * @return array{first_name:string, last_name:string}

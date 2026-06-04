@@ -234,6 +234,27 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('<option value=""></option>', $html);
     }
 
+    public function testMemberProfileChoicePostKeepsAllowedValuesOnly(): void
+    {
+        self::assertSame(
+            '2m, 70cm',
+            member_profile_normalize_choice_post(['2m', 'bad', '70cm', '2m'], member_profile_favourite_band_choices())
+        );
+        self::assertSame(
+            'FM, FT8',
+            member_profile_normalize_choice_post('FM, bad, FT8', member_profile_favourite_mode_choices())
+        );
+    }
+
+    public function testMemberProfileCheckboxGroupMarksCurrentValues(): void
+    {
+        $html = member_profile_checkbox_group_html('favourite_modes', ['FM', 'SSB'], 'SSB');
+
+        self::assertStringContainsString('name="favourite_modes[]"', $html);
+        self::assertStringContainsString('value="SSB" checked', $html);
+        self::assertStringNotContainsString('value="FM" checked', $html);
+    }
+
     public function testMemberProfilePreviewRowsHideSensitiveFieldsByDefault(): void
     {
         $t = static fn(string $key): string => $key;
