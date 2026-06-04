@@ -141,6 +141,7 @@
     let ohmVoltage = null;
     let ohmCurrent = null;
     let ohmResistance = null;
+    let ohmEditedFields = [];
     let lbPtx = null;
     let lbGtx = null;
     let lbGrx = null;
@@ -676,9 +677,9 @@
             computeDbmFromDbw();
         },
         'tool-ohm-law': () => {
-            ohmVoltage?.addEventListener('input', computeOhmLaw);
-            ohmCurrent?.addEventListener('input', computeOhmLaw);
-            ohmResistance?.addEventListener('input', computeOhmLaw);
+            ohmVoltage?.addEventListener('input', () => computeOhmLaw('voltage'));
+            ohmCurrent?.addEventListener('input', () => computeOhmLaw('current'));
+            ohmResistance?.addEventListener('input', () => computeOhmLaw('resistance'));
             computeOhmLaw();
         },
         'tool-vpp-vrms': () => initSimpleConverter('tool-vpp-vrms'),
@@ -1090,15 +1091,59 @@
 
 
 
-    const computeOhmLaw = () => {
+    const computeOhmLaw = (changedField = '') => {
         if (!(ohmVoltage instanceof HTMLInputElement) || !(ohmCurrent instanceof HTMLInputElement) || !(ohmResistance instanceof HTMLInputElement)) return;
-        const values = [Number(ohmVoltage.value), Number(ohmCurrent.value), Number(ohmResistance.value)];
-        const valid = values.map((v) => Number.isFinite(v) && v > 0);
-        const count = valid.filter(Boolean).length;
-        if (count !== 2) return;
-        if (!valid[0] && valid[1] && valid[2]) ohmVoltage.value = (values[1] * values[2]).toFixed(2);
-        if (!valid[1] && valid[0] && valid[2]) ohmCurrent.value = (values[0] / values[2]).toFixed(3);
-        if (!valid[2] && valid[0] && valid[1]) ohmResistance.value = (values[0] / values[1]).toFixed(2);
+        const fieldNames = ['voltage', 'current', 'resistance'];
+        const fields = {
+            voltage: ohmVoltage,
+            current: ohmCurrent,
+            resistance: ohmResistance,
+        };
+        const values = Object.fromEntries(fieldNames.map((name) => [name, Number(fields[name].value)]));
+        const validFields = fieldNames.filter((name) => Number.isFinite(values[name]) && values[name] > 0);
+
+        if (fieldNames.includes(changedField)) {
+            ohmEditedFields = ohmEditedFields.filter((name) => name !== changedField);
+            ohmEditedFields.push(changedField);
+        }
+
+        if (validFields.length < 2) {
+            return;
+        }
+
+        let targetField = '';
+        if (validFields.length === 2) {
+            targetField = fieldNames.find((name) => !validFields.includes(name)) || '';
+        } else {
+            const recentSources = ohmEditedFields.filter((name) => validFields.includes(name)).slice(-2);
+            if (recentSources.length >= 2) {
+                targetField = fieldNames.find((name) => !recentSources.includes(name)) || '';
+            } else if (changedField === 'voltage') {
+                targetField = 'current';
+            } else if (changedField === 'current') {
+                targetField = 'voltage';
+            } else if (changedField === 'resistance') {
+                targetField = 'current';
+            }
+        }
+
+        if (!targetField) {
+            return;
+        }
+
+        const computed = {
+            voltage: () => values.current * values.resistance,
+            current: () => values.resistance > 0 ? values.voltage / values.resistance : NaN,
+            resistance: () => values.current > 0 ? values.voltage / values.current : NaN,
+        }[targetField]();
+
+        if (!Number.isFinite(computed) || computed <= 0) {
+            return;
+        }
+
+        const digits = targetField === 'current' ? 3 : 2;
+        fields[targetField].value = computed.toFixed(digits).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
+        ohmEditedFields = ohmEditedFields.filter((name) => name !== targetField);
     };
 
     const computeLinkBudget = () => {

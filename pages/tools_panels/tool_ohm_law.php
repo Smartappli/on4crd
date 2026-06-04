@@ -1,6 +1,6 @@
 <article id="tool-ohm-law" data-tool-panel class="card tool-panel is-hidden">
     <h2><?= e((string) ($t['ohm_law_calc'] ?? "Loi d'Ohm")) ?></h2>
-    <p class="help"><?= e((string) ($t['ohm_law_help'] ?? 'Enter two values to compute the third.')) ?></p>
+    <p class="help"><?= e((string) ($t['ohm_law_help'] ?? 'Enter two values, or edit one of three values, to compute the missing or dependent value.')) ?></p>
     <div class="grid-auto">
         <label><?= e((string) ($t['voltage_v'] ?? 'Tension (V)')) ?>
             <input id="ohm-voltage" type="number" inputmode="decimal" step="0.01" min="0" placeholder="12">
@@ -12,5 +12,5 @@
             <input id="ohm-resistance" type="number" inputmode="decimal" step="0.01" min="0" placeholder="6">
         </label>
     </div>
-    <p class="help"><?= e((string) ($t['ohm_law_hint'] ?? 'If exactly 2 fields are filled, the 3rd is computed automatically.')) ?></p>
+    <p class="help"><?= e((string) ($t['ohm_law_hint'] ?? 'When all three fields are filled, the two last edited fields are kept and the third is recalculated.')) ?></p>
 </article>
