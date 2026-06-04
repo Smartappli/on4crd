@@ -314,7 +314,19 @@ ob_start();
                             <span aria-hidden="true"><?= e($memberInitials($member)) ?></span>
                         </div>
                         <div class="directory-member-title">
-                            <h3><?= e($callsign) ?></h3>
+                            <div class="directory-title-row">
+                                <h3><?= e($callsign) ?></h3>
+                                <?php if ($safeQrzUrl !== null || $safeWebsite !== null): ?>
+                                    <div class="directory-profile-links">
+                                        <?php if ($safeQrzUrl !== null): ?>
+                                            <a href="<?= e($safeQrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
+                                        <?php endif; ?>
+                                        <?php if ($safeWebsite !== null): ?>
+                                            <a href="<?= e($safeWebsite) ?>" target="_blank" rel="noopener"><?= e($profileT('website')) ?></a>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                             <?php if ($displayName !== ''): ?>
                                 <p><?= e($displayName) ?></p>
                             <?php endif; ?>
@@ -355,6 +367,9 @@ ob_start();
                         <?php if ((int) ($member['is_uba_member'] ?? 0) === 1): ?>
                             <span><?= e($t('uba_member')) ?><?= trim((string) ($member['uba_member_number'] ?? '')) !== '' ? ' ' . e((string) $member['uba_member_number']) : '' ?></span>
                         <?php endif; ?>
+                        <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
+                            <span><?= e($mode) ?></span>
+                        <?php endforeach; ?>
                     </div>
 
                     <?php if ($bio !== ''): ?>
@@ -380,14 +395,6 @@ ob_start();
                         </div>
                     <?php endif; ?>
 
-                    <?php if ($modeList !== []): ?>
-                        <div class="directory-band-list" aria-label="<?= e($t('modes')) ?>">
-                            <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
-                                <span><?= e($mode) ?></span>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-
                     <?php if ($station !== ''): ?>
                         <p class="directory-station"><strong><?= e($t('station')) ?>:</strong> <?= e($station) ?></p>
                     <?php endif; ?>
@@ -396,16 +403,6 @@ ob_start();
                         <p class="directory-station"><strong><?= e($t('antennas')) ?>:</strong> <?= e($antennas) ?></p>
                     <?php endif; ?>
 
-                    <?php if ($safeQrzUrl !== null || $safeWebsite !== null): ?>
-                        <div class="directory-contact-row">
-                            <?php if ($safeQrzUrl !== null): ?>
-                                <a class="button small secondary" href="<?= e($safeQrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
-                            <?php endif; ?>
-                            <?php if ($safeWebsite !== null): ?>
-                                <a class="button small secondary" href="<?= e($safeWebsite) ?>" target="_blank" rel="noopener"><?= e($profileT('website')) ?></a>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
                 </article>
             <?php endforeach; ?>
         </div>
