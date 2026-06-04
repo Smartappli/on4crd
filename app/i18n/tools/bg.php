@@ -60,7 +60,7 @@ return array (
   'err_invalid_coords' => 'ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸ Ð½ÐµÐ²Ð°Ð»Ð¸Ð´Ð½Ð¸ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ð¸.',
   'err_tool_load' => 'Ð¢Ð¾Ð·Ð¸ Ð¸Ð½ÑÑ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚ Ð½Ðµ Ð¼Ð¾Ð¶Ðµ Ð´Ð° Ð±ÑŠÐ´Ðµ Ð·Ð°Ñ€ÐµÐ´ÐµÐ½ Ð² Ð¼Ð¾Ð¼ÐµÐ½Ñ‚Ð°.',
   'err_grid_calc' => 'Ð“Ñ€ÐµÑˆÐºÐ° Ð¿Ñ€Ð¸ Ð¸Ð·Ñ‡Ð¸ÑÐ»ÑÐ²Ð°Ð½Ðµ Ð½Ð° Ð¼Ñ€ÐµÐ¶Ð°Ñ‚Ð°.',
-  'addr_ph' => 'ÐŸÑ€.: Rue des Ã‰coles 1, 5530 Purnode, Ð‘ÐµÐ»Ð³Ð¸Ñ',
+  'addr_ph' => 'ÐŸÑ€.: Rue des Écoles 1, 5530 Purnode, Ð‘ÐµÐ»Ð³Ð¸Ñ',
   'freq_ph' => 'ÐŸÑ€.: 145.500',
   'watts_ph' => 'ÐŸÑ€.: 10',
   'dbm_ph' => 'ÐŸÑ€.: 40',
@@ -193,9 +193,8 @@ return array (
   'unit_conv_presets' => 'Ð‘ÑŠÑ€Ð·Ð¸ ÑÑ‚Ð¾Ð¹Ð½Ð¾ÑÑ‚Ð¸',
   'unit_conv_reference' => 'ÑÐ¿Ñ€Ð°Ð²ÐºÐ°',
   'unit_conv_quick_links' => 'ÐŸÐ¾Ð´Ñ€Ð¾Ð±Ð½Ð¸ ÐºÐ¾Ð½Ð²ÐµÑ€Ñ‚Ð¾Ñ€Ð¸',
-    'forward_power' => 'Forward power (W)',
-    'reflected_power' => 'Reflected power (W)',
-    'swr_result' => 'Calculated SWR',
-    'dbw_calc' => 'dBm <-> dBW conversion',
-
+  'forward_power' => 'Forward power (W)',
+  'reflected_power' => 'Reflected power (W)',
+  'swr_result' => 'Calculated SWR',
+  'dbw_calc' => 'dBm <-> dBW conversion',
 );

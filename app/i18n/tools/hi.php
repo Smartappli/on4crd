@@ -146,7 +146,7 @@ return array (
   'dbm_from_dbw' => 'dBm (dBW à¤¸à¥‡)',
   'xl_calc' => 'à¤†à¤—à¤®à¤¨à¤¾à¤¤à¥à¤®à¤• à¤ªà¥à¤°à¤¤à¤¿à¤•à¥à¤°à¤¿à¤¯à¤¾ (à¤à¤•à¥à¤¸à¤à¤²)',
   'xc_calc' => 'à¤•à¥ˆà¤ªà¥‡à¤¸à¤¿à¤Ÿà¤¿à¤µ à¤°à¤¿à¤à¤•à¥à¤¶à¤¨ (XC)',
-  'inductance_uh' => 'à¤ªà¥à¤°à¥‡à¤°à¤•à¤¤à¥à¤µ (Î¼H)',
+  'inductance_uh' => 'à¤ªà¥à¤°à¥‡à¤°à¤•à¤¤à¥à¤µ (μH)',
   'capacitance_pf' => 'à¤§à¤¾à¤°à¤¿à¤¤à¤¾ (à¤ªà¥€à¤à¤«)',
   'reactance_result_ohm' => 'à¤ªà¥à¤°à¤¤à¤¿à¤•à¥à¤°à¤¿à¤¯à¤¾ (Ω)',
   'vpp_vrms_calc' => 'Vpp à¤¸à¥‡ Vrms',
@@ -193,9 +193,8 @@ return array (
   'unit_conv_presets' => 'à¤¤à¥à¤µà¤°à¤¿à¤¤ à¤®à¥‚à¤²à¥à¤¯',
   'unit_conv_reference' => 'à¤¸à¤‚à¤¦à¤°à¥à¤­',
   'unit_conv_quick_links' => 'à¤µà¤¿à¤¸à¥à¤¤à¥ƒà¤¤ à¤•à¤¨à¤µà¤°à¥à¤Ÿà¤°à¥à¤¸',
-    'forward_power' => 'Forward power (W)',
-    'reflected_power' => 'Reflected power (W)',
-    'swr_result' => 'Calculated SWR',
-    'dbw_calc' => 'dBm <-> dBW conversion',
-
+  'forward_power' => 'Forward power (W)',
+  'reflected_power' => 'Reflected power (W)',
+  'swr_result' => 'Calculated SWR',
+  'dbw_calc' => 'dBm <-> dBW conversion',
 );
