@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $eqslUsername = trim((string) ($_POST['eqsl_username'] ?? ''));
         $website = trim((string) ($_POST['website'] ?? ''));
         $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
-        $ubaMemberNumber = trim((string) ($_POST['uba_member_number'] ?? ''));
+        $ubaMemberNumber = $isUbaMember === 1 ? trim((string) ($_POST['uba_member_number'] ?? '')) : '';
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
         $antennas = trim((string) ($_POST['antennas'] ?? ''));
         $favouriteBands = member_profile_normalize_choice_post($_POST['favourite_bands'] ?? [], member_profile_favourite_band_choices());
@@ -315,9 +315,10 @@ ob_start();
                 <label><?= $helpFieldLabel($t('qsl_via'), 'profile-qsl-via-help', $t('qsl_via_help')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('eqsl_username'), 'profile-eqsl-help', $t('eqsl_username_help')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
                 <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble profile-help-bubble-right" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" maxlength="255" readonly value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
-                <label><?= e($t('website')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
-                <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" <?= (int) ($member['is_uba_member'] ?? 0) === 1 ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>
-                <label><?= e($t('uba_member_number')) ?><input type="text" name="uba_member_number" maxlength="64" value="<?= e((string) ($member['uba_member_number'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('website'), 'profile-website-help', $t('website_help')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
+                <?php $isUbaMemberChecked = (int) ($member['is_uba_member'] ?? 0) === 1; ?>
+                <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" data-uba-member-toggle <?= $isUbaMemberChecked ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>
+                <label><?= $helpFieldLabel($t('uba_member_number'), 'profile-uba-member-number-help', $t('uba_member_number_help')) ?><input type="text" name="uba_member_number" class="profile-uba-number-input" maxlength="64" value="<?= e((string) ($member['uba_member_number'] ?? '')) ?>" data-uba-member-number <?= $isUbaMemberChecked ? '' : 'disabled' ?>></label>
                 <fieldset class="profile-choice-fieldset profile-form-wide"><legend><?= e($t('bands')) ?></legend><?= $favouriteBandsOptionsHtml ?></fieldset>
                 <fieldset class="profile-choice-fieldset profile-form-wide"><legend><?= e($t('favourite_modes')) ?></legend><?= $favouriteModesOptionsHtml ?></fieldset>
                 <label class="profile-form-wide"><?= e($t('station')) ?><textarea name="station_equipment" rows="4" maxlength="4000"><?= e((string) ($member['station_equipment'] ?? '')) ?></textarea></label>
