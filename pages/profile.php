@@ -222,7 +222,8 @@ foreach (array_keys($profileViews) as $viewer) {
     $profilePreviewRows[$viewer] = member_profile_preview_rows($member, (string) $viewer, $t);
 }
 
-$operatorSinceOptionsHtml = member_profile_operator_since_options_html((string) ($member['operator_since'] ?? ''));
+$operatorSinceValue = trim((string) ($member['operator_since'] ?? ''));
+$operatorSinceOptionsHtml = member_profile_operator_since_options_html($operatorSinceValue !== '' ? $operatorSinceValue : (string) date('Y'));
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices(), (string) ($member['favourite_bands'] ?? ''));
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices(), (string) ($member['favourite_modes'] ?? ''));
 $requiredFieldHelp = $locale === 'fr' ? 'Champ obligatoire.' : 'Required field.';
