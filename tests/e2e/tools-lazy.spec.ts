@@ -10,5 +10,5 @@ test('tools lazy flow: click -> fetch panel -> init calc', async ({ page }) => {
   await expect(page.locator('#tool-power')).toBeVisible();
 
   await page.fill('#power-watts', '10');
-  await expect(page.locator('#power-dbm')).not.toHaveText('—');
+  await expect(page.locator('#power-dbm')).not.toHaveText(/^\u2014$/);
 });
