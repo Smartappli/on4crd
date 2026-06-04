@@ -129,7 +129,7 @@ function current_user(): ?array
     }
 
     $memberColumns = ['id'];
-    foreach (['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'] as $memberColumn) {
+    foreach (['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required'] as $memberColumn) {
         if (table_has_column('members', $memberColumn)) {
             $memberColumns[] = $memberColumn;
         }
@@ -160,6 +160,34 @@ function current_user(): ?array
     mark_authenticated_response_private();
     $cache = $row;
     return $cache;
+}
+}
+
+if (!function_exists('member_password_change_required')) {
+function member_password_change_required(?array $user = null): bool
+{
+    $user ??= current_user();
+    if (!is_array($user)) {
+        return false;
+    }
+
+    if (array_key_exists('password_change_required', $user)) {
+        return (int) ($user['password_change_required'] ?? 0) === 1;
+    }
+
+    $memberId = (int) ($user['id'] ?? 0);
+    if ($memberId <= 0 || !table_exists('members') || !table_has_column('members', 'password_change_required')) {
+        return false;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT password_change_required FROM members WHERE id = ? LIMIT 1');
+        $stmt->execute([$memberId]);
+
+        return (int) $stmt->fetchColumn() === 1;
+    } catch (Throwable) {
+        return false;
+    }
 }
 }
 
