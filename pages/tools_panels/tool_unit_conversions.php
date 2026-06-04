@@ -160,6 +160,10 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
                     'tool-kw-w', 'tool-hz-khz', 'tool-in-mm', 'tool-c-f', 'tool-vpp-vrms', 'tool-sunit-dbuv',
                 ];
                 $unitToolFallbackLabels = [
+                    'tool-power' => (string) ($t['power'] ?? 'Power (W <-> dBm)'),
+                    'tool-freq-wave' => (string) ($t['freq_wave'] ?? 'Frequency to wavelength'),
+                    'tool-dbuv' => (string) ($t['dbuv_calc'] ?? 'dBm to dBuV'),
+                    'tool-gain-conv' => (string) ($t['gain_conv_calc'] ?? 'dBd to dBi'),
                     'tool-kw-w' => (string) ($t['kw_w_calc'] ?? 'kW to W'),
                     'tool-hz-khz' => (string) ($t['hz_khz_calc'] ?? 'Hz to kHz'),
                     'tool-in-mm' => (string) ($t['in_mm_calc'] ?? 'Inch to mm'),
