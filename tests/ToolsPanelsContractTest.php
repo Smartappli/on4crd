@@ -82,8 +82,10 @@ final class ToolsPanelsContractTest extends TestCase
     }
 
     #[DataProvider('panelProvider')]
-    public function testEveryMappedPanelIsClientInitializable(string $toolId): void
+    public function testEveryMappedPanelIsClientInitializable(string $toolId, string $panelFile): void
     {
+        self::assertNotSame('', $panelFile);
+
         $initializers = $this->extractJsObjectKeys('toolInitializers');
 
         self::assertContains($toolId, $initializers, sprintf('Tool %s has no client initializer in tools.js.', $toolId));
@@ -159,6 +161,16 @@ final class ToolsPanelsContractTest extends TestCase
         }
     }
 
+    public function testToolNavigationPreservesBrowserHistory(): void
+    {
+        $js = file_get_contents(__DIR__ . '/../assets/js/modules/tools.js');
+        self::assertIsString($js);
+
+        self::assertStringContainsString('window.history.pushState', $js, 'Tool navigation clicks must create browser history entries.');
+        self::assertStringContainsString("window.addEventListener('popstate'", $js, 'Tool navigation must react to browser back/forward.');
+        self::assertStringNotContainsString('window.history.replaceState(null, \'\', `#${targetId}`)', $js, 'Tool navigation must not replace the previous tool history entry.');
+    }
+
     private function renderPanel(string $panelFile): string
     {
         $path = __DIR__ . '/../pages/tools_panels/' . $panelFile;
@@ -202,9 +214,11 @@ final class ToolsPanelsContractTest extends TestCase
 
         $keys = [];
         $inside = false;
+        $depth = 0;
         foreach ($js as $line) {
             if (!$inside && str_contains((string) $line, 'const ' . $objectName . ' = {')) {
                 $inside = true;
+                $depth = 1;
                 continue;
             }
 
@@ -212,12 +226,13 @@ final class ToolsPanelsContractTest extends TestCase
                 continue;
             }
 
-            if (trim((string) $line) === '};') {
-                break;
-            }
-
             if (preg_match('/^\s*[\'"]([^\'"]+)[\'"]\s*:/', (string) $line, $matches) === 1) {
                 $keys[] = (string) $matches[1];
+            }
+
+            $depth += substr_count((string) $line, '{') - substr_count((string) $line, '}');
+            if ($depth <= 0) {
+                break;
             }
         }
 
