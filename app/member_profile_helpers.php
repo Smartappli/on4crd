@@ -670,7 +670,6 @@ function member_profile_preview_fields(callable $t): array
         'favourite_modes' => ['label' => (string) $t('favourite_modes'), 'visibility' => 'visibility_favourite_modes'],
         'station_equipment' => ['label' => (string) $t('station'), 'visibility' => 'visibility_station'],
         'antennas' => ['label' => (string) $t('antennas'), 'visibility' => 'visibility_antennas'],
-        'max_power' => ['label' => (string) $t('max_power'), 'visibility' => 'visibility_station'],
         'interests' => ['label' => (string) $t('interests'), 'visibility' => 'visibility_interests'],
     ];
 }
@@ -785,7 +784,7 @@ function member_profile_select_columns_sql(): string
     ];
 
     return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, licence_class, operator_since, cq_zone, itu_zone,
-            qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
+            qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas,
             favourite_bands, favourite_modes, interests, photo_path, avatar_path, '
             . implode(', ', $visibilityColumns);
 }
