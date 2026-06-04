@@ -128,7 +128,7 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
             </select>
         </label>
         <label><?= e((string) ($t['value_in'] ?? 'Input value')) ?>
-            <input id="unit-conv-input" type="number" step="any" value="145.5" inputmode="decimal">
+            <input id="unit-conv-input" type="text" step="any" value="145.5" inputmode="decimal">
         </label>
         <label><?= e((string) ($t['value_out'] ?? 'Output value')) ?>
             <output id="unit-conv-output" class="result-box">-</output>
