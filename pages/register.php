@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $interests = trim((string) ($_POST['interests'] ?? ''));
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
 
-        if ($callsign === '' || $firstName === '' || $lastName === '' || $password === '') {
+        if ($callsign === '' || $firstName === '' || $lastName === '' || $country === '' || $qth === '' || $password === '') {
             throw new RuntimeException($t('required'));
         }
-        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32) {
+        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($country) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32 || mb_strlen($qth) > 190) {
             throw new RuntimeException($t('invalid_data'));
         }
         if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -219,10 +219,10 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('first_name')) . '<input type="text" name="first_name" maxlength="95" required></label>'
     . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190"></label>'
     . '<label>' . e($t('phone')) . '<input type="tel" name="phone" maxlength="64" autocomplete="tel"></label>'
-    . '<label>' . e($t('country')) . '<select name="country" class="country-select">' . member_country_select_options_html('Belgique') . '</select></label>'
+    . '<label>' . e($t('country')) . '<select name="country" class="country-select" required>' . member_country_select_options_html('Belgique') . '</select></label>'
     . '<label>' . e($t('address')) . '<input type="text" name="address" maxlength="255" autocomplete="street-address"></label>'
     . '<label>' . e($t('postal_code')) . '<input type="text" name="postal_code" maxlength="32" autocomplete="postal-code"></label>'
-    . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2"></label>'
+    . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2" required></label>'
     . '<label>' . e($t('grid')) . '<input type="text" name="locator" maxlength="6"></label>'
     . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
     . '<label>' . e($t('operator_since')) . '<select name="operator_since">' . $operatorSinceOptionsHtml . '</select></label>'

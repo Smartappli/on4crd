@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $favouriteModes = member_profile_normalize_choice_post($_POST['favourite_modes'] ?? [], member_profile_favourite_mode_choices());
         $interests = trim((string) ($_POST['interests'] ?? ''));
 
-        if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '') {
+        if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '' || $country === '' || $qth === '') {
             throw new RuntimeException($t('required'));
         }
-        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32) {
+        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($country) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32 || mb_strlen($qth) > 190) {
             throw new RuntimeException($t('too_long'));
         }
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -296,10 +296,10 @@ ob_start();
                 <label><?= $requiredFieldLabel($t('first_name'), 'profile-required-first-name') ?><input type="text" name="first_name" maxlength="95" required value="<?= e((string) ($member['first_name'] ?? '')) ?>"></label>
                 <label><?= $requiredFieldLabel($t('email'), 'profile-required-email') ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
-                <label><?= e($t('country')) ?><select name="country" class="country-select"><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
+                <label><?= $requiredFieldLabel($t('country'), 'profile-required-country') ?><select name="country" class="country-select" required><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
                 <label><?= e($t('address')) ?><input type="text" name="address" maxlength="255" value="<?= e((string) ($member['address'] ?? '')) ?>" autocomplete="street-address"></label>
                 <label><?= e($t('postal_code')) ?><input type="text" name="postal_code" maxlength="32" value="<?= e((string) ($member['postal_code'] ?? '')) ?>" autocomplete="postal-code"></label>
-                <label><?= e($t('qth')) ?><input type="text" name="qth" maxlength="190" value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('qth'), 'profile-required-qth') ?><input type="text" name="qth" maxlength="190" required value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('grid'), 'profile-grid-help', $t('grid_help')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
             </div>
         </fieldset>
