@@ -228,6 +228,14 @@ foreach (array_keys($profileViews) as $viewer) {
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html((string) ($member['operator_since'] ?? ''));
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices(), (string) ($member['favourite_bands'] ?? ''));
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices(), (string) ($member['favourite_modes'] ?? ''));
+$requiredFieldHelp = $locale === 'fr' ? 'Champ obligatoire.' : 'Required field.';
+$requiredFieldLabel = static function (string $label, string $tooltipId) use ($requiredFieldHelp): string {
+    return '<span class="profile-label-with-help">' . e($label)
+        . '<span class="profile-help-tooltip">'
+        . '<button type="button" class="profile-help-trigger profile-required-help-trigger" aria-label="' . e($requiredFieldHelp) . '" aria-describedby="' . e($tooltipId) . '">!</button>'
+        . '<span id="' . e($tooltipId) . '" class="profile-help-bubble" role="tooltip">' . e($requiredFieldHelp) . '</span>'
+        . '</span></span>';
+};
 
 ob_start();
 ?>
@@ -281,10 +289,10 @@ ob_start();
         <fieldset class="profile-fieldset">
             <legend><?= e($t('identity_section')) ?></legend>
             <div class="profile-form-grid">
-                <label><?= e($t('callsign')) ?><input type="text" name="callsign" maxlength="32" required value="<?= e((string) ($member['callsign'] ?? '')) ?>"></label>
-                <label><?= e($t('last_name')) ?><input type="text" name="last_name" maxlength="95" required value="<?= e((string) ($member['last_name'] ?? '')) ?>"></label>
-                <label><?= e($t('first_name')) ?><input type="text" name="first_name" maxlength="95" required value="<?= e((string) ($member['first_name'] ?? '')) ?>"></label>
-                <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('callsign'), 'profile-required-callsign') ?><input type="text" name="callsign" maxlength="32" required value="<?= e((string) ($member['callsign'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('last_name'), 'profile-required-last-name') ?><input type="text" name="last_name" maxlength="95" required value="<?= e((string) ($member['last_name'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('first_name'), 'profile-required-first-name') ?><input type="text" name="first_name" maxlength="95" required value="<?= e((string) ($member['first_name'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('email'), 'profile-required-email') ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
                 <label><?= e($t('country')) ?><select name="country" class="country-select"><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
                 <label><?= e($t('address')) ?><input type="text" name="address" maxlength="255" value="<?= e((string) ($member['address'] ?? '')) ?>" autocomplete="street-address"></label>
@@ -318,7 +326,9 @@ ob_start();
             </div>
         </fieldset>
 
-        <button type="submit" class="button"><?= e($t('save')) ?></button>
+        <div class="profile-form-actions">
+            <button type="submit" class="button"><?= e($t('save')) ?></button>
+        </div>
     </form>
 </section>
 </div>
