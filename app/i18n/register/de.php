@@ -24,7 +24,6 @@ return [
     'station_equipment' => 'Station und AusrÃ¼stung',
     'directory_help' => 'Diese Informationen fÃ¼llen Ihren Eintrag im Verzeichnis. Sie kÃ¶nnen die Sichtbarkeit spÃ¤ter in Ihrem Profil anpassen.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

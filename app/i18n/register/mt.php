@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Stazzjon u tagÄ§mir',
   'directory_help' => 'Din l-informazzjoni timla l-lista tiegÄ§ek fid-direttorju. ImbagÄ§ad tista \'taÄ¡Ä¡usta l-viÅ¼ibilitÃ  tagÄ§hom fil-profil tiegÄ§ek.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

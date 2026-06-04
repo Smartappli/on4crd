@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'StÃ¡isiÃºn agus trealamh',
   'directory_help' => 'ÃirÃ­onn an fhaisnÃ©is seo do liostÃº san eolaire. Is fÃ©idir leat a n-infheictheacht i do phrÃ³ifÃ­l a choigeartÃº ansin.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

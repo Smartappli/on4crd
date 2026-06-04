@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Postaja in oprema',
   'directory_help' => 'Te informacije zapolnijo vaÅ¡ seznam v imeniku. Nato lahko prilagodite njihovo vidnost v svojem profilu.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

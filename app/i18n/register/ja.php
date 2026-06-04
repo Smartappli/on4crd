@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'ç„¡ç·šå±€ã¨è¨­å‚™',
   'directory_help' => 'ã“ã‚Œã‚‰ã®æƒ…å ±ã¯ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã«åæ˜ ã•ã‚Œã¾ã™ã€‚å…¬é–‹ç¯„å›²ã¯å¾Œã§ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã‹ã‚‰å¤‰æ›´ã§ãã¾ã™ã€‚',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

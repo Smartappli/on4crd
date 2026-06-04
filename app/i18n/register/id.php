@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Stasiun dan peralatan',
   'directory_help' => 'Informasi ini mengisi profil Anda di direktori. Anda dapat menyesuaikan visibilitasnya nanti di profil.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

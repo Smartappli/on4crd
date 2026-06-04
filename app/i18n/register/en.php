@@ -24,7 +24,6 @@ return [
     'station_equipment' => 'Station and equipment',
     'directory_help' => 'These details populate your directory profile. You can adjust their visibility later in your profile.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

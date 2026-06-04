@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Stanice a vybavenÃ­',
   'directory_help' => 'Tyto informace vyplnÃ­ vÃ¡Å¡ zÃ¡znam v adresÃ¡Å™i. Jejich viditelnost si pak mÅ¯Å¾ete upravit ve svÃ©m profilu.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

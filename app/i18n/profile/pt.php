@@ -42,7 +42,6 @@ return array (
   'postal_code' => 'CÃ³digo postal',
   'locator' => 'Locator',
   'grid' => 'Grid',
-  'bio' => 'Bio',
   'operator_since' => 'Operator since',
   'cq_zone' => 'CQ zone',
   'itu_zone' => 'ITU zone',

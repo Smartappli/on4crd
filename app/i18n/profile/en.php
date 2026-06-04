@@ -39,7 +39,6 @@ return array (
   'qth' => 'QTH / LocalitÃ©',
   'locator' => 'Locator',
   'grid' => 'Grid',
-  'bio' => 'Bio',
   'licence' => 'Licence',
   'operator_since' => 'Operator since',
   'cq_zone' => 'CQ zone',

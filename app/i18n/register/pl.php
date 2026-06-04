@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Stacja i wyposaÅ¼enie',
   'directory_help' => 'Ta informacja wypeÅ‚nia TwÃ³j wpis w katalogu. NastÄ™pnie moÅ¼esz dostosowaÄ‡ ich widocznoÅ›Ä‡ w swoim profilu.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

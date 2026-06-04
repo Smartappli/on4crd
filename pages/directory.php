@@ -278,7 +278,6 @@ ob_start();
                 $website = trim((string) ($member['website'] ?? ''));
                 $safeQrzUrl = $qrzUrl !== '' ? sanitize_href_attribute($qrzUrl) : null;
                 $safeWebsite = $website !== '' ? sanitize_href_attribute($website) : null;
-                $bio = trim((string) ($member['bio'] ?? ''));
                 $operatorSince = trim((string) ($member['operator_since'] ?? ''));
                 $cqZone = trim((string) ($member['cq_zone'] ?? ''));
                 $ituZone = trim((string) ($member['itu_zone'] ?? ''));
@@ -371,10 +370,6 @@ ob_start();
                             <span><?= e($mode) ?></span>
                         <?php endforeach; ?>
                     </div>
-
-                    <?php if ($bio !== ''): ?>
-                        <p class="directory-station"><?= e($bio) ?></p>
-                    <?php endif; ?>
 
                     <?php if ($detailRows !== []): ?>
                         <dl class="directory-detail-list">

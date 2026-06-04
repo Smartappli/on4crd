@@ -625,7 +625,6 @@ function member_profile_visibility_fields(callable $t): array
         'visibility_postal_code' => ['label' => (string) $t('postal_code'), 'default' => 'private'],
         'visibility_qth' => ['label' => (string) $t('qth'), 'default' => 'members'],
         'visibility_locator' => ['label' => (string) $t('grid'), 'default' => 'members'],
-        'visibility_bio' => ['label' => (string) $t('bio'), 'default' => 'members'],
         'visibility_licence_class' => ['label' => (string) $t('licence'), 'default' => 'members'],
         'visibility_operator_since' => ['label' => (string) $t('operator_since'), 'default' => 'members'],
         'visibility_qsl' => ['label' => (string) $t('qsl_info'), 'default' => 'members'],
@@ -656,7 +655,6 @@ function member_profile_preview_fields(callable $t): array
         'postal_code' => ['label' => (string) $t('postal_code'), 'visibility' => 'visibility_postal_code'],
         'qth' => ['label' => (string) $t('qth'), 'visibility' => 'visibility_qth'],
         'locator' => ['label' => (string) $t('grid'), 'visibility' => 'visibility_locator'],
-        'bio' => ['label' => (string) $t('bio'), 'visibility' => 'visibility_bio'],
         'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class'],
         'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_operator_since'],
         'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_licence_class'],
@@ -774,7 +772,6 @@ function member_profile_select_columns_sql(): string
         $visibilityColumnSql('visibility_postal_code', 'private'),
         $visibilityColumnSql('visibility_qth'),
         $visibilityColumnSql('visibility_locator'),
-        $visibilityColumnSql('visibility_bio'),
         $visibilityColumnSql('visibility_licence_class'),
         $visibilityColumnSql('visibility_operator_since'),
         $visibilityColumnSql('visibility_qsl'),
@@ -787,7 +784,7 @@ function member_profile_select_columns_sql(): string
         $visibilityColumnSql('visibility_interests'),
     ];
 
-    return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
+    return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, licence_class, operator_since, cq_zone, itu_zone,
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
             favourite_bands, favourite_modes, interests, photo_path, avatar_path, '
             . implode(', ', $visibilityColumns);

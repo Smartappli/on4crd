@@ -39,7 +39,6 @@ return [
     'qth' => 'QTH / Localité',
     'locator' => 'Locator',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'licence' => 'Licence',
     'operator_since' => 'Opérateur depuis',
     'cq_zone' => 'Zone CQ',

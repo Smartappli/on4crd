@@ -24,7 +24,6 @@ return [
     'station_equipment' => 'EstaciÃ³n y equipo',
     'directory_help' => 'Estos datos alimentan su ficha en el directorio. PodrÃ¡ ajustar su visibilidad mÃ¡s tarde en su perfil.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

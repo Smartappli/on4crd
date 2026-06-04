@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'StaÈ›ie È™i echipamente',
   'directory_help' => 'Aceste informaÈ›ii populeazÄƒ lista dvs. Ã®n director. Apoi le puteÈ›i ajusta vizibilitatea Ã®n profilul dvs.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

@@ -24,7 +24,6 @@ return [
     'station_equipment' => 'ç”µå°ä¸Žè®¾å¤‡',
     'directory_help' => 'è¿™äº›ä¿¡æ¯å°†ç”¨äºŽå¡«å†™æ‚¨åœ¨ç›®å½•ä¸­çš„èµ„æ–™ã€‚ä¹‹åŽå¯åœ¨ä¸ªäººèµ„æ–™ä¸­è°ƒæ•´å¯è§æ€§ã€‚',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

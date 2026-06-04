@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Station og udstyr',
   'directory_help' => 'Disse oplysninger udfylder din fortegnelse i mappen. Du kan derefter justere deres synlighed i din profil.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

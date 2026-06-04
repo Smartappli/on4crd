@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Stacija un aprÄ«kojums',
   'directory_help' => 'Å Ä« informÄcija aizpilda jÅ«su ierakstu direktorijÄ. PÄ“c tam varat pielÄgot viÅ†u redzamÄ«bu savÄ profilÄ.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

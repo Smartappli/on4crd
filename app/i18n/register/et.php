@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Jaam ja varustus',
   'directory_help' => 'See teave tÃ¤idab teie kirje kataloogis. SeejÃ¤rel saate nende nÃ¤htavust oma profiilis reguleerida.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

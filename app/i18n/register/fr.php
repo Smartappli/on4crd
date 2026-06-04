@@ -24,7 +24,6 @@ return [
     'station_equipment' => 'Station et matériel',
     'directory_help' => 'Ces informations alimentent votre fiche dans l’annuaire. Vous pourrez ensuite ajuster leur visibilité dans votre profil.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Opérateur depuis',
     'cq_zone' => 'Zone CQ',
     'itu_zone' => 'Zone ITU',

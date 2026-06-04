@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
         $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
-        $bio = trim((string) ($_POST['bio'] ?? ''));
         $licenceClass = trim((string) ($_POST['licence_class'] ?? ''));
         $operatorSince = trim((string) ($_POST['operator_since'] ?? ''));
         $cqZone = trim((string) ($_POST['cq_zone'] ?? ''));
@@ -136,7 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              postal_code = ?,
              qth = ?,
              locator = ?,
-             bio = ?,
              photo_path = ?,
              avatar_path = ?,
              licence_class = ?,
@@ -170,7 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $postalCode !== '' ? $postalCode : null,
             $qth !== '' ? $qth : null,
             $locator !== '' ? $locator : null,
-            $bio !== '' ? $bio : null,
             $newPhotoPath !== '' ? $newPhotoPath : null,
             $newAvatarPath !== '' ? $newAvatarPath : null,
             $licenceClass !== '' ? $licenceClass : null,
@@ -299,7 +296,6 @@ ob_start();
                 <label><?= e($t('postal_code')) ?><input type="text" name="postal_code" maxlength="32" value="<?= e((string) ($member['postal_code'] ?? '')) ?>" autocomplete="postal-code"></label>
                 <label><?= e($t('qth')) ?><input type="text" name="qth" maxlength="190" value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
                 <label><?= e($t('grid')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
-                <label class="profile-form-wide"><?= e($t('bio')) ?><textarea name="bio" rows="4" maxlength="4000"><?= e((string) ($member['bio'] ?? '')) ?></textarea></label>
             </div>
         </fieldset>
 

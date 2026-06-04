@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Stazione e attrezzatura',
   'directory_help' => 'Queste informazioni alimentano la tua scheda nella directory. Potrai modificarne la visibilitÃ  piÃ¹ tardi nel profilo.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

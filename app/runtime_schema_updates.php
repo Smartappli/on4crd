@@ -264,7 +264,6 @@ function apply_runtime_schema_updates(): void
             'visibility_postal_code' => 'ALTER TABLE members ADD COLUMN visibility_postal_code ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_qth' => 'ALTER TABLE members ADD COLUMN visibility_qth ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_locator' => 'ALTER TABLE members ADD COLUMN visibility_locator ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_bio' => 'ALTER TABLE members ADD COLUMN visibility_bio ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_licence_class' => 'ALTER TABLE members ADD COLUMN visibility_licence_class ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_operator_since' => 'ALTER TABLE members ADD COLUMN visibility_operator_since ENUM("public","members","private") NOT NULL DEFAULT "members" AFTER visibility_licence_class',
             'visibility_qsl' => 'ALTER TABLE members ADD COLUMN visibility_qsl ENUM("public","members","private") NOT NULL DEFAULT "members"',

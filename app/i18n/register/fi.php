@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Asema ja varusteet',
   'directory_help' => 'NÃ¤mÃ¤ tiedot tÃ¤yttÃ¤vÃ¤t tietosi hakemistossa. Voit sitten sÃ¤Ã¤tÃ¤Ã¤ heidÃ¤n nÃ¤kyvyyttÃ¤Ã¤n profiilissasi.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'ÃllomÃ¡s Ã©s felszerelÃ©s',
   'directory_help' => 'Ez az informÃ¡ciÃ³ feltÃ¶lti az adatlapjÃ¡t a cÃ­mtÃ¡rban. EzutÃ¡n beÃ¡llÃ­thatja a lÃ¡thatÃ³sÃ¡gÃ¡t a profiljÃ¡ban.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

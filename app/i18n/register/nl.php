@@ -24,7 +24,6 @@ return [
     'station_equipment' => 'Station en materiaal',
     'directory_help' => 'Deze informatie vult uw profiel in de ledenlijst. U kunt de zichtbaarheid later aanpassen in uw profiel.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',

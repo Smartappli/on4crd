@@ -24,7 +24,6 @@ return array (
   'station_equipment' => 'Stotis ir Ä¯ranga',
   'directory_help' => 'Å i informacija uÅ¾pildo jÅ«sÅ³ sÄ…raÅ¡Ä… kataloge. Tada galite reguliuoti jÅ³ matomumÄ… savo profilyje.',
     'grid' => 'Grid',
-    'bio' => 'Bio',
     'operator_since' => 'Operator since',
     'cq_zone' => 'CQ zone',
     'itu_zone' => 'ITU zone',
