@@ -118,6 +118,20 @@ final class ToolsPanelsContractTest extends TestCase
         }
     }
 
+    public function testEveryMappedPanelHasAnE2eScenario(): void
+    {
+        $spec = file_get_contents(__DIR__ . '/e2e/tools-all-calculators.spec.ts');
+        self::assertIsString($spec);
+
+        foreach (array_keys(self::panelMap()) as $toolId) {
+            self::assertMatchesRegularExpression(
+                '/(?:id:\s*|unitConversionSteps\(|simpleConverterScenario\()\'' . preg_quote((string) $toolId, '/') . '\'/',
+                $spec,
+                sprintf('Tool %s has no scenario in tools-all-calculators.spec.ts.', (string) $toolId)
+            );
+        }
+    }
+
     public function testUnitConversionQuickLinksNeverExposeRawToolIdsAsLabels(): void
     {
         foreach (['tool_unit_converter.php', 'tool_unit_conversions.php'] as $panelFile) {
