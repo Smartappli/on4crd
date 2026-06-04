@@ -249,6 +249,7 @@ function apply_runtime_schema_updates(): void
             'auth_user_id' => 'ALTER TABLE members ADD COLUMN auth_user_id INT UNSIGNED DEFAULT NULL UNIQUE',
             'first_name' => 'ALTER TABLE members ADD COLUMN first_name VARCHAR(95) DEFAULT NULL AFTER callsign',
             'last_name' => 'ALTER TABLE members ADD COLUMN last_name VARCHAR(95) DEFAULT NULL AFTER first_name',
+            'password_change_required' => 'ALTER TABLE members ADD COLUMN password_change_required TINYINT(1) NOT NULL DEFAULT 0 AFTER password_hash',
             'country' => 'ALTER TABLE members ADD COLUMN country VARCHAR(190) DEFAULT NULL',
             'address' => 'ALTER TABLE members ADD COLUMN address VARCHAR(255) DEFAULT NULL AFTER country',
             'postal_code' => 'ALTER TABLE members ADD COLUMN postal_code VARCHAR(32) DEFAULT NULL AFTER address',

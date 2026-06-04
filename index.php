@@ -174,6 +174,7 @@ $routeModules = [
     'save_dashboard' => 'dashboard',
     'widget_render' => 'dashboard',
     'profile' => 'members',
+    'change_password' => 'members',
     'gdpr' => 'members',
     'my_requests' => 'members',
     'directory' => 'directory',
@@ -243,6 +244,17 @@ if (!in_array($route, $publicRoutes, true)) {
     require_login(login_next_url_for_route($route, $_GET));
 }
 
+$passwordChangeExemptRoutes = ['change_password', 'logout'];
+$passwordChangeUser = current_user();
+if (
+    $passwordChangeUser !== null
+    && member_password_change_required($passwordChangeUser)
+    && !in_array($route, $passwordChangeExemptRoutes, true)
+) {
+    set_flash('error', t_page('change_password', 'forced_notice'));
+    redirect('change_password');
+}
+
 app_load_route_helpers($route);
 
 $dispatchPage = static function (string $relativePath): void {
@@ -282,6 +294,7 @@ switch ($route) {
     case 'widget_render': $dispatchPage('pages/widget_render.php'); break;
     case 'dashboard_widget_card': $dispatchPage('pages/dashboard_widget_card.php'); break;
     case 'profile': $dispatchPage('pages/profile.php'); break;
+    case 'change_password': $dispatchPage('pages/change_password.php'); break;
     case 'gdpr': $dispatchPage('pages/gdpr.php'); break;
     case 'my_requests': $dispatchPage('pages/my_requests.php'); break;
     case 'directory': $dispatchPage('pages/directory.php'); break;

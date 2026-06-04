@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         db()->prepare(
             'INSERT INTO members (
-                 auth_user_id, callsign, first_name, last_name, full_name, email, password_hash,
+                 auth_user_id, callsign, first_name, last_name, full_name, email, password_hash, password_change_required,
                  country, address, postal_code, phone, qth, locator, licence_class, operator_since,
                  cq_zone, itu_zone, qsl_via, lotw_username, eqsl_username, qrz_url, website,
                  is_uba_member, uba_member_number, favourite_bands, favourite_modes, station_equipment,
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  visibility_licence_class, visibility_operator_since, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas, visibility_interests,
                  is_active
              )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
              ON DUPLICATE KEY UPDATE
                  callsign = VALUES(callsign),
                  first_name = VALUES(first_name),
@@ -115,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  full_name = VALUES(full_name),
                  email = VALUES(email),
                  password_hash = VALUES(password_hash),
+                 password_change_required = VALUES(password_change_required),
                  country = VALUES(country),
                  address = VALUES(address),
                  postal_code = VALUES(postal_code),
@@ -166,6 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $fullName,
             $email !== '' ? $email : null,
             password_hash($password, PASSWORD_DEFAULT),
+            1,
             $country !== '' ? $country : null,
             $address !== '' ? $address : null,
             $postalCode !== '' ? $postalCode : null,
@@ -199,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['member_id'] = (int) $authClient->getUserId();
 
         set_flash('success', $t('ok_created'));
-        redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
+        redirect('change_password');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect('register');

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS members (
     full_name VARCHAR(190) NOT NULL,
     email VARCHAR(190) DEFAULT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    password_change_required TINYINT(1) NOT NULL DEFAULT 0,
     country VARCHAR(190) DEFAULT NULL,
     address VARCHAR(255) DEFAULT NULL,
     postal_code VARCHAR(32) DEFAULT NULL,
