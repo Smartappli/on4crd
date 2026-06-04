@@ -78,8 +78,9 @@
     let balunSource = null;
     let balunLoad = null;
     let balunRatio = null;
-    let swrInput = null;
-    let swrRl = null;
+    let swrForward = null;
+    let swrReflected = null;
+    let swrValue = null;
     let fsplDistance = null;
     let fsplFrequency = null;
     let fsplLoss = null;
@@ -180,8 +181,9 @@
         balunSource = document.getElementById('balun-source');
         balunLoad = document.getElementById('balun-load');
         balunRatio = document.getElementById('balun-ratio');
-        swrInput = document.getElementById('swr-input');
-        swrRl = document.getElementById('swr-rl');
+        swrForward = document.getElementById('swr-forward');
+        swrReflected = document.getElementById('swr-reflected');
+        swrValue = document.getElementById('swr-value');
         fsplDistance = document.getElementById('fspl-distance');
         fsplFrequency = document.getElementById('fspl-frequency');
         fsplLoss = document.getElementById('fspl-loss');
@@ -266,6 +268,16 @@
     };
     const clearError = () => errorBox?.classList.add('is-hidden');
 
+    const readNumberInput = (input) => {
+        const normalized = String(input?.value || '').trim().replace(/\s+/g, '').replace(',', '.');
+        if (normalized === '' || !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(normalized)) {
+            return NaN;
+        }
+
+        const value = Number(normalized);
+        return Number.isFinite(value) ? value : NaN;
+    };
+
     const initializedTools = new Set();
     const simpleToolConverters = {
         'tool-vpp-vrms': (x) => x / (2 * Math.sqrt(2)),
@@ -300,7 +312,7 @@
         const convert = simpleToolConverters[toolId];
         if (!(input instanceof HTMLInputElement) || !output || typeof convert !== 'function') return;
         const sync = () => {
-            const x = Number(input.value);
+            const x = readNumberInput(input);
             if (!Number.isFinite(x)) {
                 output.textContent = '—';
                 return;
@@ -424,7 +436,7 @@
             const units = activeUnits();
             const from = units[fromSelect.value];
             const to = units[toSelect.value];
-            const value = Number(input.value);
+            const value = readNumberInput(input.value);
             if (!from || !to || !Number.isFinite(value)) {
                 output.textContent = '—';
                 if (reference instanceof HTMLElement) reference.textContent = '—';
@@ -505,7 +517,7 @@
         'tool-freq-wave': () => {
             freqInput?.addEventListener('input', () => {
                 if (!(freqInput instanceof HTMLInputElement) || !freqOut) return;
-                const mhz = Number(freqInput.value);
+                const mhz = readNumberInput(freqInput.value);
                 if (!Number.isFinite(mhz) || mhz <= 0) {
                     freqOut.textContent = '—';
                     return;
@@ -517,7 +529,7 @@
         'tool-power': () => {
             wattsInput?.addEventListener('input', () => {
                 if (!(wattsInput instanceof HTMLInputElement) || !dbmOut) return;
-                const watts = Number(wattsInput.value);
+                const watts = readNumberInput(wattsInput.value);
                 if (!Number.isFinite(watts) || watts <= 0) {
                     dbmOut.textContent = '—';
                     return;
@@ -528,7 +540,7 @@
 
             dbmInput?.addEventListener('input', () => {
                 if (!(dbmInput instanceof HTMLInputElement) || !wattsOut) return;
-                const dbm = Number(dbmInput.value);
+                const dbm = readNumberInput(dbmInput.value);
                 if (!Number.isFinite(dbm)) {
                     wattsOut.textContent = '—';
                     return;
@@ -734,8 +746,8 @@
 
     const computeFilter = () => {
         if (!(filterFreq instanceof HTMLInputElement) || !(filterImpedance instanceof HTMLInputElement) || !filterL || !filterC) return;
-        const fMHz = Number(filterFreq.value);
-        const z = Number(filterImpedance.value);
+        const fMHz = readNumberInput(filterFreq.value);
+        const z = readNumberInput(filterImpedance.value);
         if (!Number.isFinite(fMHz) || fMHz <= 0 || !Number.isFinite(z) || z <= 0) {
             filterL.textContent = '—';
             filterC.textContent = '—';
@@ -749,8 +761,8 @@
     };
     const computeBalun = () => {
         if (!(balunSource instanceof HTMLInputElement) || !(balunLoad instanceof HTMLInputElement) || !balunRatio) return;
-        const zin = Number(balunSource.value);
-        const zout = Number(balunLoad.value);
+        const zin = readNumberInput(balunSource.value);
+        const zout = readNumberInput(balunLoad.value);
         if (!Number.isFinite(zin) || zin <= 0 || !Number.isFinite(zout) || zout <= 0) {
             balunRatio.textContent = '—';
             return;
@@ -761,7 +773,7 @@
     };
     const computeSWR = () => {
         if (!(swrInput instanceof HTMLInputElement) || !swrRl) return;
-        const swr = Number(swrInput.value);
+        const swr = readNumberInput(swrInput.value);
         if (!Number.isFinite(swr) || swr < 1) {
             swrRl.textContent = '—';
             return;
@@ -772,8 +784,8 @@
     };
     const computeCoaxLoss = () => {
         if (!(coaxLength instanceof HTMLInputElement) || !(coaxAtten instanceof HTMLInputElement) || !coaxLoss) return;
-        const len = Number(coaxLength.value);
-        const att = Number(coaxAtten.value);
+        const len = readNumberInput(coaxLength.value);
+        const att = readNumberInput(coaxAtten.value);
         if (!Number.isFinite(len) || len < 0 || !Number.isFinite(att) || att < 0) {
             coaxLoss.textContent = '—';
             return;
@@ -784,8 +796,8 @@
 
     const computeFspl = () => {
         if (!(fsplDistance instanceof HTMLInputElement) || !(fsplFrequency instanceof HTMLInputElement) || !fsplLoss) return;
-        const d = Number(fsplDistance.value);
-        const f = Number(fsplFrequency.value);
+        const d = readNumberInput(fsplDistance.value);
+        const f = readNumberInput(fsplFrequency.value);
         if (!Number.isFinite(d) || d <= 0 || !Number.isFinite(f) || f <= 0) {
             fsplLoss.textContent = '—';
             return;
@@ -796,8 +808,8 @@
 
     const computeRuntime = () => {
         if (!(runtimeCapacity instanceof HTMLInputElement) || !(runtimeCurrent instanceof HTMLInputElement) || !runtimeHours) return;
-        const capacity = Number(runtimeCapacity.value);
-        const current = Number(runtimeCurrent.value);
+        const capacity = readNumberInput(runtimeCapacity.value);
+        const current = readNumberInput(runtimeCurrent.value);
         if (!Number.isFinite(capacity) || capacity <= 0 || !Number.isFinite(current) || current <= 0) {
             runtimeHours.textContent = '—';
             return;
@@ -808,8 +820,8 @@
 
     const computeBandwidth = () => {
         if (!(bandwidthRate instanceof HTMLInputElement) || !(bandwidthRolloff instanceof HTMLInputElement) || !bandwidthResult) return;
-        const rate = Number(bandwidthRate.value);
-        const rolloff = Number(bandwidthRolloff.value);
+        const rate = readNumberInput(bandwidthRate.value);
+        const rolloff = readNumberInput(bandwidthRolloff.value);
         if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(rolloff) || rolloff < 0) {
             bandwidthResult.textContent = '—';
             return;
@@ -819,8 +831,8 @@
     };
     const computeQuarterWave = () => {
         if (!(quarterWaveFrequency instanceof HTMLInputElement) || !(quarterWaveVf instanceof HTMLInputElement) || !quarterWaveLength) return;
-        const f = Number(quarterWaveFrequency.value);
-        const vf = Number(quarterWaveVf.value);
+        const f = readNumberInput(quarterWaveFrequency.value);
+        const vf = readNumberInput(quarterWaveVf.value);
         if (!Number.isFinite(f) || f <= 0 || !Number.isFinite(vf) || vf <= 0 || vf > 1) {
             quarterWaveLength.textContent = '—';
             return;
@@ -831,9 +843,9 @@
 
     const computeErp = () => {
         if (!(erpPower instanceof HTMLInputElement) || !(erpLoss instanceof HTMLInputElement) || !(erpGain instanceof HTMLInputElement) || !erpResult) return;
-        const pwr = Number(erpPower.value);
-        const loss = Number(erpLoss.value);
-        const gain = Number(erpGain.value);
+        const pwr = readNumberInput(erpPower.value);
+        const loss = readNumberInput(erpLoss.value);
+        const gain = readNumberInput(erpGain.value);
         if (!Number.isFinite(pwr) || pwr <= 0 || !Number.isFinite(loss) || !Number.isFinite(gain)) {
             erpResult.textContent = '—';
             return;
@@ -846,7 +858,7 @@
 
     const computeDipole = () => {
         if (!(dipoleFrequency instanceof HTMLInputElement) || !dipoleLength) return;
-        const f = Number(dipoleFrequency.value);
+        const f = readNumberInput(dipoleFrequency.value);
         if (!Number.isFinite(f) || f <= 0) {
             dipoleLength.textContent = '—';
             return;
@@ -858,8 +870,8 @@
 
     const computeDutyCycle = () => {
         if (!(dutyTx instanceof HTMLInputElement) || !(dutyPeriod instanceof HTMLInputElement) || !dutyResult) return;
-        const tx = Number(dutyTx.value);
-        const period = Number(dutyPeriod.value);
+        const tx = readNumberInput(dutyTx.value);
+        const period = readNumberInput(dutyPeriod.value);
         if (!Number.isFinite(tx) || tx < 0 || !Number.isFinite(period) || period <= 0 || tx > period) {
             dutyResult.textContent = '—';
             return;
@@ -868,9 +880,9 @@
     };
     const computeDivider = () => {
         if (!(dividerVin instanceof HTMLInputElement) || !(dividerR1 instanceof HTMLInputElement) || !(dividerR2 instanceof HTMLInputElement) || !dividerVout) return;
-        const vin = Number(dividerVin.value);
-        const r1 = Number(dividerR1.value);
-        const r2 = Number(dividerR2.value);
+        const vin = readNumberInput(dividerVin.value);
+        const r1 = readNumberInput(dividerR1.value);
+        const r2 = readNumberInput(dividerR2.value);
         if (!Number.isFinite(vin) || vin < 0 || !Number.isFinite(r1) || r1 <= 0 || !Number.isFinite(r2) || r2 <= 0) {
             dividerVout.textContent = '—';
             return;
@@ -881,7 +893,7 @@
 
     const computeMismatchLoss = () => {
         if (!(mismatchSwr instanceof HTMLInputElement) || !mismatchGamma || !mismatchLoss) return;
-        const swr = Number(mismatchSwr.value);
+        const swr = readNumberInput(mismatchSwr.value);
         if (!Number.isFinite(swr) || swr < 1) {
             mismatchGamma.textContent = '—';
             mismatchLoss.textContent = '—';
@@ -895,8 +907,8 @@
 
     const computeResistorCombo = () => {
         if (!(resistorTarget instanceof HTMLInputElement) || !(resistorMaxCount instanceof HTMLInputElement) || !resistorBest) return;
-        const target = Number(resistorTarget.value);
-        const maxCount = Math.max(1, Math.min(3, Math.round(Number(resistorMaxCount.value))));
+        const target = readNumberInput(resistorTarget.value);
+        const maxCount = Math.max(1, Math.min(3, Math.round(readNumberInput(resistorMaxCount.value))));
         if (!Number.isFinite(target) || target <= 0) {
             resistorBest.textContent = '—';
             return;
@@ -943,8 +955,8 @@
 
     const computeSolarEnergy = () => {
         if (!(solarWatts instanceof HTMLInputElement) || !(solarHours instanceof HTMLInputElement) || !solarEnergy) return;
-        const watts = Number(solarWatts.value);
-        const hours = Number(solarHours.value);
+        const watts = readNumberInput(solarWatts.value);
+        const hours = readNumberInput(solarHours.value);
         if (!Number.isFinite(watts) || watts < 0 || !Number.isFinite(hours) || hours < 0) {
             solarEnergy.textContent = '—';
             return;
@@ -954,8 +966,8 @@
 
     const computeBatteryCurrent = () => {
         if (!(batteryVoltage instanceof HTMLInputElement) || !(batteryLoad instanceof HTMLInputElement) || !batteryCurrent) return;
-        const voltage = Number(batteryVoltage.value);
-        const load = Number(batteryLoad.value);
+        const voltage = readNumberInput(batteryVoltage.value);
+        const load = readNumberInput(batteryLoad.value);
         if (!Number.isFinite(voltage) || voltage <= 0 || !Number.isFinite(load) || load < 0) {
             batteryCurrent.textContent = '—';
             return;
@@ -966,8 +978,8 @@
 
     const computeXl = () => {
         if (!(xlFreq instanceof HTMLInputElement) || !(xlInductance instanceof HTMLInputElement) || !xlResult) return;
-        const f = Number(xlFreq.value);
-        const lMicro = Number(xlInductance.value);
+        const f = readNumberInput(xlFreq.value);
+        const lMicro = readNumberInput(xlInductance.value);
         if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(lMicro) || lMicro <= 0 || lMicro > 1e6) {
             xlResult.textContent = '—';
             return;
@@ -979,8 +991,8 @@
 
     const computeXc = () => {
         if (!(xcFreq instanceof HTMLInputElement) || !(xcCapacitance instanceof HTMLInputElement) || !xcResult) return;
-        const f = Number(xcFreq.value);
-        const cPico = Number(xcCapacitance.value);
+        const f = readNumberInput(xcFreq.value);
+        const cPico = readNumberInput(xcCapacitance.value);
         if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(cPico) || cPico <= 0 || cPico > 1e9) {
             xcResult.textContent = '—';
             return;
@@ -992,8 +1004,8 @@
 
     const computeMuf = () => {
         if (!(mufFof2 instanceof HTMLInputElement) || !(mufAngle instanceof HTMLInputElement) || !mufResult) return;
-        const fof2 = Number(mufFof2.value);
-        const angle = Number(mufAngle.value);
+        const fof2 = readNumberInput(mufFof2.value);
+        const angle = readNumberInput(mufAngle.value);
         if (!Number.isFinite(fof2) || fof2 <= 0 || !Number.isFinite(angle) || angle <= 0 || angle >= 90) {
             mufResult.textContent = '—';
             return;
@@ -1006,7 +1018,7 @@
 
     const computeEirp = () => {
         if (!(eirpErp instanceof HTMLInputElement) || !eirpResult) return;
-        const erp = Number(eirpErp.value);
+        const erp = readNumberInput(eirpErp.value);
         if (!Number.isFinite(erp) || erp < 0) {
             eirpResult.textContent = '—';
             return;
@@ -1018,8 +1030,8 @@
 
     const computeSkipDistance = () => {
         if (!(skipHeight instanceof HTMLInputElement) || !(skipAngle instanceof HTMLInputElement) || !skipResult) return;
-        const h = Number(skipHeight.value);
-        const angle = Number(skipAngle.value);
+        const h = readNumberInput(skipHeight.value);
+        const angle = readNumberInput(skipAngle.value);
         if (!Number.isFinite(h) || h <= 0 || !Number.isFinite(angle) || angle <= 0 || angle >= 90) {
             skipResult.textContent = '—';
             return;
@@ -1032,8 +1044,8 @@
 
     const computeDbSum = () => {
         if (!(dbsumA instanceof HTMLInputElement) || !(dbsumB instanceof HTMLInputElement) || !dbsumResult) return;
-        const a = Number(dbsumA.value);
-        const b = Number(dbsumB.value);
+        const a = readNumberInput(dbsumA.value);
+        const b = readNumberInput(dbsumB.value);
         if (!Number.isFinite(a) || !Number.isFinite(b)) {
             dbsumResult.textContent = '—';
             return;
@@ -1045,7 +1057,7 @@
 
     const computeDbwFromDbm = () => {
         if (!(dbwDbm instanceof HTMLInputElement) || !(dbwDbwInput instanceof HTMLInputElement)) return;
-        const dbm = Number(dbwDbm.value);
+        const dbm = readNumberInput(dbwDbm.value);
         if (!Number.isFinite(dbm)) {
             dbwDbwInput.value = '';
             return;
@@ -1055,7 +1067,7 @@
 
     const computeDbmFromDbw = () => {
         if (!(dbwDbwInput instanceof HTMLInputElement) || !dbwResult) return;
-        const dbw = Number(dbwDbwInput.value);
+        const dbw = readNumberInput(dbwDbwInput.value);
         if (!Number.isFinite(dbw)) {
             dbwResult.textContent = '—';
             return;
@@ -1066,7 +1078,7 @@
 
     const computeDbuv = () => {
         if (!(dbuvDbm instanceof HTMLInputElement) || !dbuvResult) return;
-        const dbm = Number(dbuvDbm.value);
+        const dbm = readNumberInput(dbuvDbm.value);
         if (!Number.isFinite(dbm)) {
             dbuvResult.textContent = '—';
             return;
@@ -1078,7 +1090,7 @@
 
     const computeGainConversion = () => {
         if (!(gainDbd instanceof HTMLInputElement) || !gainDbi) return;
-        const dbd = Number(gainDbd.value);
+        const dbd = readNumberInput(gainDbd.value);
         if (!Number.isFinite(dbd)) {
             gainDbi.textContent = '—';
             return;
@@ -1161,10 +1173,10 @@
 
     const computeLinkBudget = () => {
         if (!(lbPtx instanceof HTMLInputElement) || !(lbGtx instanceof HTMLInputElement) || !(lbGrx instanceof HTMLInputElement) || !(lbLoss instanceof HTMLInputElement) || !lbPrx) return;
-        const ptx = Number(lbPtx.value);
-        const gtx = Number(lbGtx.value);
-        const grx = Number(lbGrx.value);
-        const loss = Number(lbLoss.value);
+        const ptx = readNumberInput(lbPtx.value);
+        const gtx = readNumberInput(lbGtx.value);
+        const grx = readNumberInput(lbGrx.value);
+        const loss = readNumberInput(lbLoss.value);
         if (![ptx, gtx, grx, loss].every((v) => Number.isFinite(v))) {
             lbPrx.textContent = '—';
             return;
