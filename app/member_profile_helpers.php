@@ -758,11 +758,15 @@ function member_profile_preview_rows(array $member, string $viewer, callable $t,
 if (!function_exists('member_profile_select_columns_sql')) {
 function member_profile_select_columns_sql(): string
 {
+    $operatorSinceVisibilityColumn = table_has_column('members', 'visibility_operator_since')
+        ? 'visibility_operator_since'
+        : "'members' AS visibility_operator_since";
+
     return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
             favourite_bands, favourite_modes, interests, photo_path, avatar_path,
             visibility_photo, visibility_full_name, visibility_first_name, visibility_last_name, visibility_email, visibility_phone, visibility_country, visibility_address, visibility_postal_code, visibility_qth, visibility_locator, visibility_bio,
-            visibility_licence_class, visibility_operator_since, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
+            visibility_licence_class, ' . $operatorSinceVisibilityColumn . ', visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
             visibility_station, visibility_antennas, visibility_interests';
 }
 }

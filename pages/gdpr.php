@@ -17,7 +17,11 @@ $visibilityOptions = [
     'members' => $t('members'),
     'private' => $t('private'),
 ];
-$visibilityFields = member_profile_visibility_fields($t);
+$visibilityFields = array_filter(
+    member_profile_visibility_fields($t),
+    static fn(array $fieldMeta, string $fieldName): bool => table_has_column('members', $fieldName),
+    ARRAY_FILTER_USE_BOTH
+);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
