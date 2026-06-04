@@ -45,10 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $interests = trim((string) ($_POST['interests'] ?? ''));
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
 
-        if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '' || $password === '') {
+        if ($callsign === '' || $firstName === '' || $lastName === '' || $password === '') {
             throw new RuntimeException($t('required'));
         }
         if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32) {
+            throw new RuntimeException($t('invalid_data'));
+        }
+        if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new RuntimeException($t('invalid_data'));
         }
         if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
@@ -84,7 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            $userId = $authClient->registerWithUniqueUsername($email, $password, $callsign);
+            $authEmail = $email !== '' ? $email : strtolower($callsign) . '@local.invalid';
+            $userId = $authClient->registerWithUniqueUsername($authEmail, $password, $callsign);
         } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException|\Delight\Auth\InvalidUsernameException $exception) {
             throw new RuntimeException($t('invalid_data'));
         } catch (\Delight\Auth\UserAlreadyExistsException|\Delight\Auth\DuplicateUsernameException $exception) {
@@ -102,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  antennas, max_power, interests,
                  visibility_first_name, visibility_last_name, visibility_full_name, visibility_email, visibility_country,
                  visibility_address, visibility_postal_code, visibility_phone, visibility_qth, visibility_locator, visibility_bio,
-                 visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas, visibility_interests,
+                 visibility_licence_class, visibility_operator_since, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas, visibility_interests,
                  is_active
              )
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
@@ -149,6 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  visibility_locator = VALUES(visibility_locator),
                  visibility_bio = VALUES(visibility_bio),
                  visibility_licence_class = VALUES(visibility_licence_class),
+                 visibility_operator_since = VALUES(visibility_operator_since),
                  visibility_qsl = VALUES(visibility_qsl),
                  visibility_qrz = VALUES(visibility_qrz),
                  visibility_uba = VALUES(visibility_uba),
@@ -164,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $firstName,
             $lastName,
             $fullName,
-            $email,
+            $email !== '' ? $email : null,
             password_hash($password, PASSWORD_DEFAULT),
             $country !== '' ? $country : null,
             $address !== '' ? $address : null,
@@ -215,7 +220,7 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('callsign')) . '<input type="text" name="callsign" maxlength="32" required></label>'
     . '<label>' . e($t('last_name')) . '<input type="text" name="last_name" maxlength="95" required></label>'
     . '<label>' . e($t('first_name')) . '<input type="text" name="first_name" maxlength="95" required></label>'
-    . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190" required></label>'
+    . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190"></label>'
     . '<label>' . e($t('phone')) . '<input type="tel" name="phone" maxlength="64" autocomplete="tel"></label>'
     . '<label>' . e($t('country')) . '<select name="country" class="country-select">' . member_country_select_options_html('Belgique') . '</select></label>'
     . '<label>' . e($t('address')) . '<input type="text" name="address" maxlength="255" autocomplete="street-address"></label>'

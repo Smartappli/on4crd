@@ -465,7 +465,7 @@ if (!function_exists('member_profile_operator_since_options_html')) {
 function member_profile_operator_since_options_html(string $currentValue = ''): string
 {
     $currentValue = trim($currentValue);
-    $html = '';
+    $html = '<option value=""></option>';
     $currentYear = (int) date('Y');
 
     if ($currentValue !== '' && preg_match('/^\d{4}$/', $currentValue) !== 1) {
@@ -552,6 +552,7 @@ function member_profile_visibility_fields(callable $t): array
         'visibility_locator' => ['label' => (string) $t('grid'), 'default' => 'members'],
         'visibility_bio' => ['label' => (string) $t('bio'), 'default' => 'members'],
         'visibility_licence_class' => ['label' => (string) $t('licence'), 'default' => 'members'],
+        'visibility_operator_since' => ['label' => (string) $t('operator_since'), 'default' => 'members'],
         'visibility_qsl' => ['label' => (string) $t('qsl_info'), 'default' => 'members'],
         'visibility_qrz' => ['label' => (string) $t('qrz_url'), 'default' => 'members'],
         'visibility_uba' => ['label' => (string) $t('uba_member'), 'default' => 'members'],
@@ -582,7 +583,7 @@ function member_profile_preview_fields(callable $t): array
         'locator' => ['label' => (string) $t('grid'), 'visibility' => 'visibility_locator'],
         'bio' => ['label' => (string) $t('bio'), 'visibility' => 'visibility_bio'],
         'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class'],
-        'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_licence_class'],
+        'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_operator_since'],
         'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_licence_class'],
         'itu_zone' => ['label' => (string) $t('itu_zone'), 'visibility' => 'visibility_licence_class'],
         'qsl_via' => ['label' => (string) $t('qsl_via'), 'visibility' => 'visibility_qsl'],
@@ -686,7 +687,7 @@ function member_profile_select_columns_sql(): string
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
             favourite_bands, favourite_modes, interests, photo_path, avatar_path,
             visibility_photo, visibility_full_name, visibility_first_name, visibility_last_name, visibility_email, visibility_phone, visibility_country, visibility_address, visibility_postal_code, visibility_qth, visibility_locator, visibility_bio,
-            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
+            visibility_licence_class, visibility_operator_since, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
             visibility_station, visibility_antennas, visibility_interests';
 }
 }

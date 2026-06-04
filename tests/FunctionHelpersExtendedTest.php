@@ -216,6 +216,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('private', $fields['visibility_last_name']['default']);
         self::assertSame('private', $fields['visibility_address']['default']);
         self::assertSame('private', $fields['visibility_postal_code']['default']);
+        self::assertSame('members', $fields['visibility_operator_since']['default']);
     }
 
     public function testMemberProfileAllowedVisibilityLevelsMatchViewerRole(): void
@@ -230,7 +231,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         $html = member_profile_operator_since_options_html('2020');
 
         self::assertStringContainsString('<option value="2020" selected>2020</option>', $html);
-        self::assertStringNotContainsString('<option value=""></option>', $html);
+        self::assertStringContainsString('<option value=""></option>', $html);
     }
 
     public function testMemberProfilePreviewRowsHideSensitiveFieldsByDefault(): void
@@ -266,7 +267,7 @@ final class FunctionHelpersExtendedTest extends TestCase
             'cq_zone' => '14',
             'qrz_url' => 'https://www.qrz.com/db/ON4DG',
             'visibility_country' => 'public',
-            'visibility_licence_class' => 'public',
+            'visibility_operator_since' => 'public',
             'visibility_qrz' => 'public',
         ];
 

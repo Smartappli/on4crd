@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS members (
     visibility_locator ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_bio ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_licence_class ENUM('public','members','private') NOT NULL DEFAULT 'members',
+    visibility_operator_since ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_qsl ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_qrz ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_uba ENUM('public','members','private') NOT NULL DEFAULT 'members',
