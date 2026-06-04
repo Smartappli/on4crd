@@ -79,4 +79,45 @@ final class I18nNativeLocalesTest extends TestCase
             }
         }
     }
+
+    public function testHomePageUsesDefinedHomeI18nKeys(): void
+    {
+        $homePage = file_get_contents(__DIR__ . '/../pages/home.php');
+        self::assertIsString($homePage);
+
+        preg_match_all('/\$homeI18n\[[\'"]([^\'"]+)[\'"]\]/', $homePage, $matches);
+        $usedKeys = array_values(array_unique($matches[1] ?? []));
+        sort($usedKeys);
+
+        self::assertNotEmpty($usedKeys);
+
+        foreach ($this->supportedLocales() as $locale) {
+            $messages = $this->loadLocaleFile(__DIR__ . '/../app/i18n/home/' . $locale . '.php');
+            $missingKeys = array_values(array_diff($usedKeys, array_keys($messages)));
+
+            self::assertSame(
+                [],
+                $missingKeys,
+                sprintf('Missing home i18n keys used by pages/home.php in app/i18n/home/%s.php', $locale)
+            );
+        }
+    }
+
+    public function testFrenchLocaleFilesAreValidUtf8AndReadable(): void
+    {
+        $files = glob(__DIR__ . '/../app/i18n/*/fr.php');
+        self::assertIsArray($files);
+        self::assertNotEmpty($files);
+
+        foreach ($files as $file) {
+            $contents = file_get_contents((string) $file);
+            self::assertIsString($contents);
+
+            self::assertSame(1, preg_match('//u', $contents), sprintf('French locale file is not valid UTF-8: %s', $file));
+            self::assertStringNotContainsString("\u{FFFD}", $contents, sprintf('French locale file contains replacement characters: %s', $file));
+
+            $messages = $this->loadLocaleFile((string) $file);
+            self::assertNotEmpty($messages, sprintf('French locale file is not readable as a message array: %s', $file));
+        }
+    }
 }
