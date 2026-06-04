@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $eqslUsername = trim((string) ($_POST['eqsl_username'] ?? ''));
         $website = trim((string) ($_POST['website'] ?? ''));
         $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
-        $ubaMemberNumber = trim((string) ($_POST['uba_member_number'] ?? ''));
+        $ubaMemberNumber = $isUbaMember === 1 ? trim((string) ($_POST['uba_member_number'] ?? '')) : '';
         $antennas = trim((string) ($_POST['antennas'] ?? ''));
         $favouriteBands = member_profile_normalize_choice_post($_POST['favourite_bands'] ?? [], member_profile_favourite_band_choices());
         $favouriteModes = member_profile_normalize_choice_post($_POST['favourite_modes'] ?? [], member_profile_favourite_mode_choices());
@@ -230,8 +230,8 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('qsl_via')) . '<input type="text" name="qsl_via" maxlength="190"></label>'
     . '<label>' . e($t('eqsl_username')) . '<input type="text" name="eqsl_username" maxlength="190"></label>'
     . '<label>' . e($t('website')) . '<input type="url" name="website" maxlength="255"></label>'
-    . '<label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1"> <span>' . e($t('uba_member')) . '</span></label>'
-    . '<label>' . e($t('uba_member_number')) . '<input type="text" name="uba_member_number" maxlength="64"></label>'
+    . '<label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" data-uba-member-toggle> <span>' . e($t('uba_member')) . '</span></label>'
+    . '<label>' . e($t('uba_member_number')) . '<input type="text" name="uba_member_number" maxlength="64" data-uba-member-number disabled></label>'
     . '<label class="register-form-full">' . e($t('station_equipment')) . '<textarea name="station_equipment" rows="3" maxlength="4000"></textarea></label>'
     . '<label class="register-form-full">' . e($t('antennas')) . '<textarea name="antennas" rows="3" maxlength="4000"></textarea></label>'
     . '<fieldset class="profile-choice-fieldset register-form-full"><legend>' . e($t('favourite_bands')) . '</legend>' . $favouriteBandsOptionsHtml . '</fieldset>'
