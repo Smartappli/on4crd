@@ -111,15 +111,21 @@ $memberModuleCards = '';
 $memberModulesJoinCta = (string) ($homeI18n['member_modules_join_cta'] ?? 'Devenir membre');
 $memberModuleCodesRendered = [];
 $memberModuleDefinitions = [
-    'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title' => ['fr' => 'Tableau de bord', 'en' => 'Dashboard'], 'desc' => ['fr' => 'Retrouvez vos widgets, raccourcis et informations personnelles dans un espace centralise.', 'en' => 'Find your widgets, shortcuts and personal information in one central member area.']],
-    'members' => ['route' => 'profile', 'icon' => '☷', 'title' => ['fr' => 'Espace membre', 'en' => 'Member area'], 'desc' => ['fr' => 'Gerez votre profil, vos preferences et les informations liees a votre compte ON4CRD.', 'en' => 'Manage your profile, preferences and information linked to your ON4CRD account.']],
-    'qsl' => ['route' => 'qsl', 'icon' => '✉', 'title' => ['fr' => 'QSL', 'en' => 'QSL'], 'desc' => ['fr' => 'Preparez, visualisez et exportez vos cartes QSL depuis l espace membre.', 'en' => 'Prepare, preview and export your QSL cards from the member area.']],
-    'library' => ['route' => 'members_library', 'icon' => '▤', 'title' => ['fr' => 'Bibliotheque', 'en' => 'Library'], 'desc' => ['fr' => 'Accedez aux documents, supports techniques et ressources partages avec les membres.', 'en' => 'Access documents, technical notes and resources shared with members.']],
-    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title' => ['fr' => 'Encheres', 'en' => 'Auctions'], 'desc' => ['fr' => 'Consultez les lots disponibles et participez aux ventes organisees par le club.', 'en' => 'Browse available lots and take part in auctions organized by the club.']],
-    'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title' => ['fr' => 'Petites annonces', 'en' => 'Classifieds'], 'desc' => ['fr' => 'Publiez ou consultez les annonces radioamateurs proposees par la communaute.', 'en' => 'Post or browse amateur radio classifieds from the community.']],
-    'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title' => ['fr' => 'Assistant', 'en' => 'Assistant'], 'desc' => ['fr' => 'Posez vos questions a l assistant ON4CRD pour retrouver rapidement une information utile.', 'en' => 'Ask the ON4CRD assistant to quickly find useful information.']],
-    'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter'], 'desc' => ['fr' => 'Suivez les communications du club et gerez votre inscription aux nouvelles ON4CRD.', 'en' => 'Follow club communications and manage your ON4CRD news subscription.']],
+    'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title_key' => 'member_module_dashboard_title', 'desc_key' => 'member_module_dashboard_desc', 'title_fallback' => 'Tableau de bord', 'desc_fallback' => 'Retrouvez vos widgets, raccourcis et informations personnelles dans un espace membre centralisé.'],
+    'members' => ['route' => 'profile', 'icon' => '☷', 'title_key' => 'member_module_members_title', 'desc_key' => 'member_module_members_desc', 'title_fallback' => 'Espace membre', 'desc_fallback' => 'Gérez votre profil, vos préférences et les informations liées à votre compte ON4CRD.'],
+    'qsl' => ['route' => 'qsl', 'icon' => '✉', 'title_key' => 'member_module_qsl_title', 'desc_key' => 'member_module_qsl_desc', 'title_fallback' => 'QSL', 'desc_fallback' => 'Préparez, visualisez et exportez vos cartes QSL depuis l’espace membre.'],
+    'library' => ['route' => 'members_library', 'icon' => '▤', 'title_key' => 'member_module_library_title', 'desc_key' => 'member_module_library_desc', 'title_fallback' => 'Bibliothèque', 'desc_fallback' => 'Accédez aux documents, supports techniques et ressources partagés avec les membres.'],
+    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title_key' => 'member_module_auctions_title', 'desc_key' => 'member_module_auctions_desc', 'title_fallback' => 'Enchères', 'desc_fallback' => 'Consultez les lots disponibles et participez aux ventes organisées par le club.'],
+    'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title_key' => 'member_module_classifieds_title', 'desc_key' => 'member_module_classifieds_desc', 'title_fallback' => 'Petites annonces', 'desc_fallback' => 'Publiez ou consultez les annonces radioamateurs proposées par la communauté.'],
+    'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title_key' => 'member_module_chatbot_title', 'desc_key' => 'member_module_chatbot_desc', 'title_fallback' => 'Assistant', 'desc_fallback' => 'Posez vos questions à l’assistant ON4CRD pour retrouver rapidement une information utile.'],
+    'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title_key' => 'member_module_newsletter_title', 'desc_key' => 'member_module_newsletter_desc', 'title_fallback' => 'Newsletter', 'desc_fallback' => 'Suivez les communications du club et gérez votre inscription aux nouvelles ON4CRD.'],
 ];
+$memberModuleText = static function (array $moduleMeta, string $field, string $fallback = '') use ($homeI18n): string {
+    $key = (string) ($moduleMeta[$field . '_key'] ?? '');
+    $value = $key !== '' ? trim((string) ($homeI18n[$key] ?? '')) : '';
+
+    return $value !== '' ? $value : (string) ($moduleMeta[$field . '_fallback'] ?? $fallback);
+};
 $memberModuleIconPaths = [
     'dashboard' => '<rect width="7" height="9" x="3" y="3" rx="1.5"></rect><rect width="7" height="5" x="14" y="3" rx="1.5"></rect><rect width="7" height="9" x="14" y="12" rx="1.5"></rect><rect width="7" height="5" x="3" y="16" rx="1.5"></rect>',
     'members' => '<path d="M18 21a6 6 0 0 0-12 0"></path><circle cx="12" cy="8" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path>',
@@ -166,9 +172,9 @@ if (table_exists('modules')) {
         $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">'
             . '<div class="flex items-center gap-3">'
             . $renderMemberModuleIcon($moduleCode)
-            . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
+            . '<h3 class="text-lg font-semibold text-slate-900">' . e($memberModuleText($moduleMeta, 'title', $moduleCode)) . '</h3>'
             . '</div>'
-            . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
+            . '<p class="mt-2 text-sm text-slate-600">' . e($memberModuleText($moduleMeta, 'desc')) . '</p>'
             . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
             . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
             . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e($memberModulesJoinCta) . ' →</span>'
@@ -192,9 +198,9 @@ foreach ($memberFallbackModuleCodes as $moduleCode) {
     $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">'
         . '<div class="flex items-center gap-3">'
         . $renderMemberModuleIcon($moduleCode)
-        . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
+        . '<h3 class="text-lg font-semibold text-slate-900">' . e($memberModuleText($moduleMeta, 'title', $moduleCode)) . '</h3>'
         . '</div>'
-        . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e($memberModuleText($moduleMeta, 'desc')) . '</p>'
         . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
         . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
         . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e($memberModulesJoinCta) . ' →</span>'

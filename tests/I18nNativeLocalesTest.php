@@ -103,6 +103,33 @@ final class I18nNativeLocalesTest extends TestCase
         }
     }
 
+    public function testHomeMemberModuleTranslationKeysExistForEveryLocale(): void
+    {
+        $homePage = file_get_contents(__DIR__ . '/../pages/home.php');
+        self::assertIsString($homePage);
+
+        preg_match_all('/[\'"](member_module_[a-z0-9_]+)[\'"]/', $homePage, $matches);
+        $memberModuleKeys = array_values(array_unique($matches[1] ?? []));
+        sort($memberModuleKeys);
+
+        self::assertCount(16, $memberModuleKeys);
+
+        foreach ($this->supportedLocales() as $locale) {
+            $messages = $this->loadLocaleFile(__DIR__ . '/../app/i18n/home/' . $locale . '.php');
+            $missingKeys = array_values(array_diff($memberModuleKeys, array_keys($messages)));
+
+            self::assertSame(
+                [],
+                $missingKeys,
+                sprintf('Missing member module home i18n keys in app/i18n/home/%s.php', $locale)
+            );
+
+            foreach ($memberModuleKeys as $key) {
+                self::assertNotSame('', trim((string) ($messages[$key] ?? '')), sprintf('Empty member module translation %s in app/i18n/home/%s.php', $key, $locale));
+            }
+        }
+    }
+
     public function testFrenchLocaleFilesAreValidUtf8AndReadable(): void
     {
         $files = glob(__DIR__ . '/../app/i18n/*/fr.php');
