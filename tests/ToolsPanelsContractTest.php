@@ -134,9 +134,22 @@ final class ToolsPanelsContractTest extends TestCase
 
     public function testUnitConversionQuickLinksNeverExposeRawToolIdsAsLabels(): void
     {
+        $quickLinkIds = [
+            'tool-power',
+            'tool-freq-wave',
+            'tool-dbuv',
+            'tool-gain-conv',
+            'tool-kw-w',
+            'tool-hz-khz',
+            'tool-in-mm',
+            'tool-c-f',
+            'tool-vpp-vrms',
+            'tool-sunit-dbuv',
+        ];
+
         foreach (['tool_unit_converter.php', 'tool_unit_conversions.php'] as $panelFile) {
             $html = $this->renderPanel($panelFile);
-            foreach (['tool-kw-w', 'tool-hz-khz', 'tool-in-mm', 'tool-c-f', 'tool-vpp-vrms', 'tool-sunit-dbuv'] as $rawLabel) {
+            foreach ($quickLinkIds as $rawLabel) {
                 self::assertStringNotContainsString(
                     '>' . $rawLabel . '<',
                     $html,
