@@ -1281,7 +1281,7 @@
 
     let activeToolRequestToken = 0;
 
-    const setActiveTool = async (requestedId) => {
+    const setActiveTool = async (requestedId, options = {}) => {
         const requestToken = ++activeToolRequestToken;
         let id = requestedId;
         if (!id) {
@@ -1316,6 +1316,9 @@
             return;
         }
 
+        if (options.pushHistory === true && window.location.hash.slice(1) !== id) {
+            window.history.pushState(null, '', `#${id}`);
+        }
         clearError();
         initToolIfNeeded(id);
         getToolPanels().forEach((panel) => {
@@ -1369,13 +1372,14 @@
         }
 
         event.preventDefault();
-        window.history.replaceState(null, '', `#${targetId}`);
-        setActiveTool(targetId);
+        setActiveTool(targetId, { pushHistory: true });
     });
-    window.addEventListener('hashchange', () => {
+    const syncToolFromLocation = () => {
         const hashTool = window.location.hash ? window.location.hash.slice(1) : 'tool-grid';
         setActiveTool(hashTool);
-    });
+    };
+    window.addEventListener('hashchange', syncToolFromLocation);
+    window.addEventListener('popstate', syncToolFromLocation);
 
 
 })();

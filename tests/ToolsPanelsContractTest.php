@@ -167,6 +167,7 @@ final class ToolsPanelsContractTest extends TestCase
         self::assertIsString($js);
 
         self::assertStringContainsString('window.history.pushState', $js, 'Tool navigation clicks must create browser history entries.');
+        self::assertStringContainsString("setActiveTool(targetId, { pushHistory: true })", $js, 'Tool navigation must push history only through the resolved activation path.');
         self::assertStringContainsString("window.addEventListener('popstate'", $js, 'Tool navigation must react to browser back/forward.');
         self::assertStringNotContainsString('window.history.replaceState(null, \'\', `#${targetId}`)', $js, 'Tool navigation must not replace the previous tool history entry.');
     }
