@@ -27,7 +27,7 @@ return array (
   'licence_help' => 'Radio amateur licence class. Enter the licence level or category matching your authorization.',
   'bands' => 'Ø§Ù„Ù†Ø·Ø§Ù‚Ø§Øª Ø§Ù„Ù…ÙØ¶Ù„Ø©',
   'station' => 'Ø§Ù„Ù…Ø­Ø·Ø©',
-  'required' => 'Callsign, full name and email are required.',
+  'required' => 'ÙŠØ¬Ø¨ Ø¥ÙƒÙ…Ø§Ù„ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ø­Ù‚ÙˆÙ„ Ø§Ù„Ø¥Ù„Ø²Ø§Ù…ÙŠØ©.',
   'too_long' => 'One or more fields exceed the allowed length.',
   'invalid_email' => 'The email address is invalid.',
   'invalid_locator' => 'The locator must use the Maidenhead format, for example JO20 or JO20AB.',

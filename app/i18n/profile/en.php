@@ -8,7 +8,7 @@ return array (
   'members' => 'Members',
   'private' => 'Committee',
   'saved' => 'Profile updated.',
-  'required' => 'Callsign, full name and email are required.',
+  'required' => 'All required fields must be completed.',
   'too_long' => 'One or more fields exceed the allowed length.',
   'invalid_email' => 'The email address is invalid.',
   'invalid_locator' => 'The locator must use the Maidenhead format, for example JO20 or JO20AB.',

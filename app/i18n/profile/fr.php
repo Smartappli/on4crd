@@ -8,7 +8,7 @@ return [
     'members' => 'Membres',
     'private' => 'Comité',
     'saved' => 'Profil mis à jour.',
-    'required' => 'L’indicatif, le nom, le prénom et l’email sont obligatoires.',
+    'required' => 'Tous les champs obligatoires doivent être complétés.',
     'too_long' => 'Un ou plusieurs champs dépassent la longueur autorisée.',
     'invalid_email' => 'L’adresse email n’est pas valide.',
     'invalid_locator' => 'Le locator doit être au format Maidenhead, par exemple JO20 ou JO20AB.',
