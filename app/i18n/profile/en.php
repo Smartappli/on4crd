@@ -40,6 +40,7 @@ return array (
   'locator' => 'Locator',
   'grid' => 'Grid',
   'licence' => 'Licence',
+  'licence_help' => 'Radio amateur licence class. Enter the licence level or category matching your authorization.',
   'operator_since' => 'Operator since',
   'cq_zone' => 'CQ zone',
   'itu_zone' => 'ITU zone',

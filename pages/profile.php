@@ -228,7 +228,7 @@ $requiredFieldLabel = static function (string $label, string $tooltipId) use ($r
     return '<span class="profile-label-with-help">' . e($label)
         . '<span class="profile-help-tooltip">'
         . '<button type="button" class="profile-help-trigger profile-required-help-trigger" aria-label="' . e($requiredFieldHelp) . '" aria-describedby="' . e($tooltipId) . '">!</button>'
-        . '<span id="' . e($tooltipId) . '" class="profile-help-bubble" role="tooltip">' . e($requiredFieldHelp) . '</span>'
+        . '<span id="' . e($tooltipId) . '" class="profile-help-bubble profile-help-bubble-right" role="tooltip">' . e($requiredFieldHelp) . '</span>'
         . '</span></span>';
 };
 $helpFieldLabel = static function (string $label, string $tooltipId, string $helpText): string {
@@ -307,7 +307,7 @@ ob_start();
         <fieldset class="profile-fieldset">
             <legend><?= e($t('radio_section')) ?></legend>
             <div class="profile-form-grid">
-                <label><?= e($t('licence')) ?><input type="text" name="licence_class" maxlength="64" value="<?= e((string) ($member['licence_class'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('licence'), 'profile-licence-help', $t('licence_help')) ?><input type="text" name="licence_class" maxlength="64" value="<?= e((string) ($member['licence_class'] ?? '')) ?>"></label>
                 <label><?= e($t('operator_since')) ?><select name="operator_since"><?= $operatorSinceOptionsHtml ?></select></label>
                 <label><?= $helpFieldLabel($t('cq_zone'), 'profile-cq-zone-help', $t('cq_zone_help')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('itu_zone'), 'profile-itu-zone-help', $t('itu_zone_help')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>

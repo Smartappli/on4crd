@@ -24,6 +24,7 @@ return array (
   'phone' => 'TeileafÃ³n',
   'qth' => 'QTH / LocalitÃ©',
   'licence' => 'CeadÃºnas',
+  'licence_help' => 'Radio amateur licence class. Enter the licence level or category matching your authorization.',
   'bands' => 'Na bannaÃ­ is fearr leat',
   'station' => 'Saoire',
   'required' => 'Callsign, full name and email are required.',

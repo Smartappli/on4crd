@@ -40,6 +40,7 @@ return [
     'locator' => 'Locator',
     'grid' => 'Grid',
     'licence' => 'Licence',
+    'licence_help' => 'Classe de licence radioamateur. Indiquez le niveau ou la catégorie de licence correspondant à votre autorisation.',
     'operator_since' => 'Opérateur depuis',
     'cq_zone' => 'Zone CQ',
     'itu_zone' => 'Zone ITU',

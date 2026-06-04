@@ -24,6 +24,7 @@ return array (
   'phone' => 'Puhelin',
   'qth' => 'QTH / LocalitÃ©',
   'licence' => 'Lisenssi',
+  'licence_help' => 'Radio amateur licence class. Enter the licence level or category matching your authorization.',
   'bands' => 'SuosikkibÃ¤ndejÃ¤',
   'station' => 'Lomakeskus',
   'required' => 'Callsign, full name and email are required.',

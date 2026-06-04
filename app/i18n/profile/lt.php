@@ -24,6 +24,7 @@ return array (
   'phone' => 'Telefonas',
   'qth' => 'QTH / LocalitÃ©',
   'licence' => 'Licencija',
+  'licence_help' => 'Radio amateur licence class. Enter the licence level or category matching your authorization.',
   'bands' => 'MÄ—gstamiausios grupÄ—s',
   'station' => 'Kurortas',
   'required' => 'Callsign, full name and email are required.',
