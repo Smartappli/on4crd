@@ -1091,6 +1091,18 @@
 
 
 
+    const parseOhmDecimal = (input) => {
+        const normalized = String(input.value || '').trim().replace(/\s+/g, '').replace(',', '.');
+        if (normalized === '' || !/^(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/.test(normalized)) {
+            return NaN;
+        }
+
+        const value = Number(normalized);
+        return Number.isFinite(value) ? value : NaN;
+    };
+
+    const formatOhmDecimal = (value) => Number(value).toFixed(2);
+
     const computeOhmLaw = (changedField = '') => {
         if (!(ohmVoltage instanceof HTMLInputElement) || !(ohmCurrent instanceof HTMLInputElement) || !(ohmResistance instanceof HTMLInputElement)) return;
         const fieldNames = ['voltage', 'current', 'resistance'];
@@ -1099,12 +1111,14 @@
             current: ohmCurrent,
             resistance: ohmResistance,
         };
-        const values = Object.fromEntries(fieldNames.map((name) => [name, Number(fields[name].value)]));
+        const values = Object.fromEntries(fieldNames.map((name) => [name, parseOhmDecimal(fields[name])]));
         const validFields = fieldNames.filter((name) => Number.isFinite(values[name]) && values[name] > 0);
 
         if (fieldNames.includes(changedField)) {
             ohmEditedFields = ohmEditedFields.filter((name) => name !== changedField);
-            ohmEditedFields.push(changedField);
+            if (validFields.includes(changedField)) {
+                ohmEditedFields.push(changedField);
+            }
         }
 
         if (validFields.length < 2) {
@@ -1116,7 +1130,7 @@
             targetField = fieldNames.find((name) => !validFields.includes(name)) || '';
         } else {
             const recentSources = ohmEditedFields.filter((name) => validFields.includes(name)).slice(-2);
-            if (recentSources.length >= 2) {
+            if (recentSources.length >= 2 && recentSources.includes(changedField)) {
                 targetField = fieldNames.find((name) => !recentSources.includes(name)) || '';
             } else if (changedField === 'voltage') {
                 targetField = 'current';
@@ -1141,8 +1155,7 @@
             return;
         }
 
-        const digits = targetField === 'current' ? 3 : 2;
-        fields[targetField].value = computed.toFixed(digits).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
+        fields[targetField].value = formatOhmDecimal(computed);
         ohmEditedFields = ohmEditedFields.filter((name) => name !== targetField);
     };
 
