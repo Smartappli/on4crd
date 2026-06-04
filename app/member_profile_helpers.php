@@ -758,16 +758,39 @@ function member_profile_preview_rows(array $member, string $viewer, callable $t,
 if (!function_exists('member_profile_select_columns_sql')) {
 function member_profile_select_columns_sql(): string
 {
-    $operatorSinceVisibilityColumn = table_has_column('members', 'visibility_operator_since')
-        ? 'visibility_operator_since'
-        : "'members' AS visibility_operator_since";
+    $visibilityColumnSql = static function (string $column, string $default = 'members'): string {
+        return table_has_column('members', $column) ? $column : "'" . $default . "' AS " . $column;
+    };
+
+    $visibilityColumns = [
+        $visibilityColumnSql('visibility_photo'),
+        $visibilityColumnSql('visibility_full_name', 'private'),
+        $visibilityColumnSql('visibility_first_name'),
+        $visibilityColumnSql('visibility_last_name', 'private'),
+        $visibilityColumnSql('visibility_email'),
+        $visibilityColumnSql('visibility_phone', 'private'),
+        $visibilityColumnSql('visibility_country'),
+        $visibilityColumnSql('visibility_address', 'private'),
+        $visibilityColumnSql('visibility_postal_code', 'private'),
+        $visibilityColumnSql('visibility_qth'),
+        $visibilityColumnSql('visibility_locator'),
+        $visibilityColumnSql('visibility_bio'),
+        $visibilityColumnSql('visibility_licence_class'),
+        $visibilityColumnSql('visibility_operator_since'),
+        $visibilityColumnSql('visibility_qsl'),
+        $visibilityColumnSql('visibility_qrz'),
+        $visibilityColumnSql('visibility_uba'),
+        $visibilityColumnSql('visibility_favourite_bands'),
+        $visibilityColumnSql('visibility_favourite_modes'),
+        $visibilityColumnSql('visibility_station'),
+        $visibilityColumnSql('visibility_antennas'),
+        $visibilityColumnSql('visibility_interests'),
+    ];
 
     return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
             qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
-            favourite_bands, favourite_modes, interests, photo_path, avatar_path,
-            visibility_photo, visibility_full_name, visibility_first_name, visibility_last_name, visibility_email, visibility_phone, visibility_country, visibility_address, visibility_postal_code, visibility_qth, visibility_locator, visibility_bio,
-            visibility_licence_class, ' . $operatorSinceVisibilityColumn . ', visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
-            visibility_station, visibility_antennas, visibility_interests';
+            favourite_bands, favourite_modes, interests, photo_path, avatar_path, '
+            . implode(', ', $visibilityColumns);
 }
 }
 
