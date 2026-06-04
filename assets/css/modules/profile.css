@@ -168,11 +168,32 @@
   top: 100%;
 }
 
+[data-route="profile"] .profile-help-bubble-right {
+  bottom: auto;
+  left: calc(100% + .55rem);
+  right: auto;
+  top: 50%;
+  transform: translate(.25rem, -50%);
+}
+
+[data-route="profile"] .profile-help-bubble-right::after {
+  border: .35rem solid transparent;
+  border-right-color: #0f172a;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 [data-route="profile"] .profile-help-tooltip:hover .profile-help-bubble,
 [data-route="profile"] .profile-help-trigger:focus-visible + .profile-help-bubble {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
+}
+
+[data-route="profile"] .profile-help-tooltip:hover .profile-help-bubble-right,
+[data-route="profile"] .profile-help-trigger:focus-visible + .profile-help-bubble-right {
+  transform: translate(0, -50%);
 }
 
 [data-route="profile"] .profile-visibility-grid {
