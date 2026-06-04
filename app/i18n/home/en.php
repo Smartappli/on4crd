@@ -35,7 +35,7 @@ return [
   'ham_info_title' => 'Ham radio information',
   'vhf_voice_label' => 'VHF voice:',
   'good_practice_label' => 'Good practice:',
-  'vhf_voice_value' => '145.500 MHz (regional simplex calling]',
+  'vhf_voice_value' => '145.500 MHz (regional simplex calling)',
   'cw_qrp_label' => 'CW QRP frequencies:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
   'good_practice_value' => 'announce callsign + QTH + requested traffic',

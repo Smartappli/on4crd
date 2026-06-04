@@ -35,7 +35,7 @@ return array (
   'ham_info_title' => 'Informazioni radioamatoriali',
   'vhf_voice_label' => 'Fonìa VHF:',
   'good_practice_label' => 'Buona pratica:',
-  'vhf_voice_value' => '145.500 MHz (chiamata simplex regionale]',
+  'vhf_voice_value' => '145.500 MHz (chiamata simplex regionale)',
   'cw_qrp_label' => 'Frequenze CW QRP:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
   'good_practice_value' => 'annunciare nominativo + QTH + traffico richiesto',

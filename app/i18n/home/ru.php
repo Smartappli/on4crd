@@ -35,7 +35,7 @@ return array (
   'ham_info_title' => 'Информация для радиолюбителей',
   'vhf_voice_label' => 'VHF голос:',
   'good_practice_label' => 'Хорошая практика:',
-  'vhf_voice_value' => '145.500 MHz (региональный simplex-вызов]',
+  'vhf_voice_value' => '145.500 MHz (региональный simplex-вызов)',
   'cw_qrp_label' => 'Частоты CW QRP:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz (частоты CW QRP)',
   'good_practice_value' => 'объявляйте позывной + QTH + запрашиваемый трафик',

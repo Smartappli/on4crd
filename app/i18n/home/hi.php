@@ -35,7 +35,7 @@ return array (
   'ham_info_title' => 'शौकिया रेडियो जानकारी',
   'vhf_voice_label' => 'VHF वॉइस:',
   'good_practice_label' => 'अच्छी प्रथा:',
-  'vhf_voice_value' => '145.500 MHz (क्षेत्रीय सिंप्लेक्स कॉलिंग]',
+  'vhf_voice_value' => '145.500 MHz (क्षेत्रीय सिंप्लेक्स कॉलिंग)',
   'cw_qrp_label' => 'CW QRP आवृत्तियाँ:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz (CW QRP आवृत्तियाँ)',
   'good_practice_value' => 'कॉलसाइन + QTH + अपेक्षित ट्रैफिक घोषित करें',

@@ -35,7 +35,7 @@ return array (
   'ham_info_title' => 'রেডিও অপেশাদার তথ্য',
   'vhf_voice_label' => 'VHF ভয়েস:',
   'good_practice_label' => 'ভাল অনুশীলন:',
-  'vhf_voice_value' => '145.500 MHz (আঞ্চলিক সিমপ্লেক্স কলিং]',
+  'vhf_voice_value' => '145.500 MHz (আঞ্চলিক সিমপ্লেক্স কলিং)',
   'cw_qrp_label' => 'CW QRP ফ্রিকোয়েন্সি:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz (CW QRP ফ্রিকোয়েন্সি)',
   'good_practice_value' => 'কলসাইন + QTH + প্রয়োজনীয় ট্রাফিক ঘোষণা করুন',

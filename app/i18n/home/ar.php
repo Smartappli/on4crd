@@ -35,7 +35,7 @@ return array (
   'ham_info_title' => 'معلومات هواة الراديو',
   'vhf_voice_label' => 'الصوت VHF:',
   'good_practice_label' => 'ممارسة جيدة:',
-  'vhf_voice_value' => '145.500 MHz (نداء بسيط إقليمي]',
+  'vhf_voice_value' => '145.500 MHz (نداء بسيط إقليمي)',
   'cw_qrp_label' => 'ترددات CW QRP:',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz (ترددات CW QRP)',
   'good_practice_value' => 'أعلن النداء + QTH + نوع الاتصال المطلوب',

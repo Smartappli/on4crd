@@ -35,7 +35,7 @@ return [
   'ham_info_title' => 'Informations radioamateur',
   'vhf_voice_label' => 'Phonie VHF :',
   'good_practice_label' => 'Bon réflexe :',
-  'vhf_voice_value' => '145.500 MHz (appel simplex régional]',
+  'vhf_voice_value' => '145.500 MHz (appel simplex régional)',
   'cw_qrp_label' => 'QRG CW QRP :',
   'cw_qrp_value' => '7.030 MHz • 14.060 MHz',
   'good_practice_value' => 'annoncer indicatif + QTH + trafic recherché',
