@@ -1,7 +1,37 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'fr' => require __DIR__ . '/change_password/fr.php',
-    'en' => require __DIR__ . '/change_password/en.php',
-];
+$messages = [];
+$messages['fr'] = require __DIR__ . '/change_password/fr.php';
+$messages['en'] = require __DIR__ . '/change_password/en.php';
+$messages['de'] = require __DIR__ . '/change_password/de.php';
+$messages['nl'] = require __DIR__ . '/change_password/nl.php';
+$messages['it'] = require __DIR__ . '/change_password/it.php';
+$messages['es'] = require __DIR__ . '/change_password/es.php';
+$messages['pt'] = require __DIR__ . '/change_password/pt.php';
+$messages['bg'] = require __DIR__ . '/change_password/bg.php';
+$messages['hr'] = require __DIR__ . '/change_password/hr.php';
+$messages['cs'] = require __DIR__ . '/change_password/cs.php';
+$messages['da'] = require __DIR__ . '/change_password/da.php';
+$messages['et'] = require __DIR__ . '/change_password/et.php';
+$messages['fi'] = require __DIR__ . '/change_password/fi.php';
+$messages['el'] = require __DIR__ . '/change_password/el.php';
+$messages['hu'] = require __DIR__ . '/change_password/hu.php';
+$messages['ga'] = require __DIR__ . '/change_password/ga.php';
+$messages['lv'] = require __DIR__ . '/change_password/lv.php';
+$messages['lt'] = require __DIR__ . '/change_password/lt.php';
+$messages['mt'] = require __DIR__ . '/change_password/mt.php';
+$messages['pl'] = require __DIR__ . '/change_password/pl.php';
+$messages['ro'] = require __DIR__ . '/change_password/ro.php';
+$messages['sk'] = require __DIR__ . '/change_password/sk.php';
+$messages['sl'] = require __DIR__ . '/change_password/sl.php';
+$messages['sv'] = require __DIR__ . '/change_password/sv.php';
+$messages['ar'] = require __DIR__ . '/change_password/ar.php';
+$messages['hi'] = require __DIR__ . '/change_password/hi.php';
+$messages['ja'] = require __DIR__ . '/change_password/ja.php';
+$messages['zh'] = require __DIR__ . '/change_password/zh.php';
+$messages['bn'] = require __DIR__ . '/change_password/bn.php';
+$messages['ru'] = require __DIR__ . '/change_password/ru.php';
+$messages['id'] = require __DIR__ . '/change_password/id.php';
+
+return $messages;
