@@ -193,4 +193,9 @@ return [
     'unit_conv_presets' => 'Valeurs rapides',
     'unit_conv_reference' => 'Référence',
     'unit_conv_quick_links' => 'Convertisseurs détaillés',
+    'forward_power' => 'Puissance directe (W)',
+    'reflected_power' => 'Puissance réfléchie (W)',
+    'swr_result' => 'ROS calculé',
+    'dbw_calc' => 'Conversion dBm ↔ dBW',
+
 ];

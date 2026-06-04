@@ -81,6 +81,7 @@
     let swrForward = null;
     let swrReflected = null;
     let swrValue = null;
+    let swrReturnLoss = null;
     let fsplDistance = null;
     let fsplFrequency = null;
     let fsplLoss = null;
@@ -184,6 +185,7 @@
         swrForward = document.getElementById('swr-forward');
         swrReflected = document.getElementById('swr-reflected');
         swrValue = document.getElementById('swr-value');
+        swrReturnLoss = document.getElementById('swr-return-loss');
         fsplDistance = document.getElementById('fspl-distance');
         fsplFrequency = document.getElementById('fspl-frequency');
         fsplLoss = document.getElementById('fspl-loss');
@@ -788,12 +790,16 @@
         const reflected = readNumberInput(swrReflected);
         if (!Number.isFinite(forward) || forward <= 0 || !Number.isFinite(reflected) || reflected < 0 || reflected >= forward) {
             swrValue.textContent = '—';
+            if (swrReturnLoss) swrReturnLoss.textContent = '—';
             return;
         }
 
         const gamma = Math.sqrt(reflected / forward);
         const swr = (1 + gamma) / (1 - gamma);
         swrValue.textContent = swr.toFixed(2);
+        if (swrReturnLoss) {
+            swrReturnLoss.textContent = gamma === 0 ? '∞ dB' : `${(-20 * Math.log10(gamma)).toFixed(2)} dB`;
+        }
     };
     const computeCoaxLoss = () => {
         if (!(coaxLength instanceof HTMLInputElement) || !(coaxAtten instanceof HTMLInputElement) || !coaxLoss) return;
