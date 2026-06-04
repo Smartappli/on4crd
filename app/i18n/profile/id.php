@@ -55,7 +55,6 @@ return array (
   'uba_member' => 'Anggota UBA',
   'uba_member_number' => 'Nomor anggota UBA',
   'qsl_info' => 'Informasi QSL',
-  'max_power' => 'Maximum power',
     'favourite_modes' => 'Preferred modes',
   'antennas' => 'Antennas',
   'interests' => 'Interests',

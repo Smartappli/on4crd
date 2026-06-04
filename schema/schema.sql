@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS members (
     uba_member_number VARCHAR(64) DEFAULT NULL,
     station_equipment TEXT DEFAULT NULL,
     antennas TEXT DEFAULT NULL,
-    max_power VARCHAR(64) DEFAULT NULL,
     favourite_bands VARCHAR(190) DEFAULT NULL,
     favourite_modes VARCHAR(190) DEFAULT NULL,
     interests TEXT DEFAULT NULL,

@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ubaMemberNumber = trim((string) ($_POST['uba_member_number'] ?? ''));
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
         $antennas = trim((string) ($_POST['antennas'] ?? ''));
-        $maxPower = trim((string) ($_POST['max_power'] ?? ''));
         $favouriteBands = member_profile_normalize_choice_post($_POST['favourite_bands'] ?? [], member_profile_favourite_band_choices());
         $favouriteModes = member_profile_normalize_choice_post($_POST['favourite_modes'] ?? [], member_profile_favourite_mode_choices());
         $interests = trim((string) ($_POST['interests'] ?? ''));
@@ -150,7 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              uba_member_number = ?,
              station_equipment = ?,
              antennas = ?,
-              max_power = ?,
               favourite_bands = ?,
               favourite_modes = ?,
               interests = ?
@@ -183,7 +181,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
             $stationEquipment !== '' ? $stationEquipment : null,
             $antennas !== '' ? $antennas : null,
-            $maxPower !== '' ? $maxPower : null,
             $favouriteBands !== '' ? $favouriteBands : null,
             $favouriteModes !== '' ? $favouriteModes : null,
             $interests !== '' ? $interests : null,
@@ -314,7 +311,6 @@ ob_start();
                 <label><?= e($t('website')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
                 <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" <?= (int) ($member['is_uba_member'] ?? 0) === 1 ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>
                 <label><?= e($t('uba_member_number')) ?><input type="text" name="uba_member_number" maxlength="64" value="<?= e((string) ($member['uba_member_number'] ?? '')) ?>"></label>
-                <label><?= e($t('max_power')) ?><input type="text" name="max_power" maxlength="64" value="<?= e((string) ($member['max_power'] ?? '')) ?>"></label>
                 <fieldset class="profile-choice-fieldset profile-form-wide"><legend><?= e($t('bands')) ?></legend><?= $favouriteBandsOptionsHtml ?></fieldset>
                 <fieldset class="profile-choice-fieldset profile-form-wide"><legend><?= e($t('favourite_modes')) ?></legend><?= $favouriteModesOptionsHtml ?></fieldset>
                 <label class="profile-form-wide"><?= e($t('station')) ?><textarea name="station_equipment" rows="4" maxlength="4000"><?= e((string) ($member['station_equipment'] ?? '')) ?></textarea></label>

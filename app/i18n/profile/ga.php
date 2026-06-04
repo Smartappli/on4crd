@@ -55,7 +55,6 @@ return array (
   'uba_member' => 'Ball UBA',
   'uba_member_number' => 'Uimhir bhall UBA',
   'qsl_info' => 'FaisnÃ©is QSL',
-  'max_power' => 'Maximum power',
     'favourite_modes' => 'Preferred modes',
   'antennas' => 'Antennas',
   'interests' => 'Interests',

@@ -55,7 +55,6 @@ return array (
   'uba_member' => 'UBAä¼šå“¡',
   'uba_member_number' => 'UBAä¼šå“¡ç•ªå·',
   'qsl_info' => 'QSLæƒ…å ±',
-  'max_power' => 'Maximum power',
     'favourite_modes' => 'Preferred modes',
   'antennas' => 'Antennas',
   'interests' => 'Interests',

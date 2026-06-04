@@ -38,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
         $ubaMemberNumber = trim((string) ($_POST['uba_member_number'] ?? ''));
         $antennas = trim((string) ($_POST['antennas'] ?? ''));
-        $maxPower = trim((string) ($_POST['max_power'] ?? ''));
         $favouriteBands = member_profile_normalize_choice_post($_POST['favourite_bands'] ?? [], member_profile_favourite_band_choices());
         $favouriteModes = member_profile_normalize_choice_post($_POST['favourite_modes'] ?? [], member_profile_favourite_mode_choices());
         $interests = trim((string) ($_POST['interests'] ?? ''));
@@ -102,13 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  country, address, postal_code, phone, qth, locator, licence_class, operator_since,
                  cq_zone, itu_zone, qsl_via, lotw_username, eqsl_username, qrz_url, website,
                  is_uba_member, uba_member_number, favourite_bands, favourite_modes, station_equipment,
-                 antennas, max_power, interests,
+                 antennas, interests,
                  visibility_first_name, visibility_last_name, visibility_full_name, visibility_email, visibility_country,
                  visibility_address, visibility_postal_code, visibility_phone, visibility_qth, visibility_locator,
                  visibility_licence_class, visibility_operator_since, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas, visibility_interests,
                  is_active
              )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
              ON DUPLICATE KEY UPDATE
                  callsign = VALUES(callsign),
                  first_name = VALUES(first_name),
@@ -137,7 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  favourite_modes = VALUES(favourite_modes),
                  station_equipment = VALUES(station_equipment),
                  antennas = VALUES(antennas),
-                 max_power = VALUES(max_power),
                  interests = VALUES(interests),
                  visibility_first_name = VALUES(visibility_first_name),
                  visibility_last_name = VALUES(visibility_last_name),
@@ -189,7 +187,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $favouriteModes !== '' ? $favouriteModes : null,
             $stationEquipment !== '' ? $stationEquipment : null,
             $antennas !== '' ? $antennas : null,
-            $maxPower !== '' ? $maxPower : null,
             $interests !== '' ? $interests : null,
         ]);
 
@@ -237,7 +234,6 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('uba_member_number')) . '<input type="text" name="uba_member_number" maxlength="64"></label>'
     . '<label class="register-form-full">' . e($t('station_equipment')) . '<textarea name="station_equipment" rows="3" maxlength="4000"></textarea></label>'
     . '<label class="register-form-full">' . e($t('antennas')) . '<textarea name="antennas" rows="3" maxlength="4000"></textarea></label>'
-    . '<label>' . e($t('max_power')) . '<input type="text" name="max_power" maxlength="64"></label>'
     . '<fieldset class="profile-choice-fieldset register-form-full"><legend>' . e($t('favourite_bands')) . '</legend>' . $favouriteBandsOptionsHtml . '</fieldset>'
     . '<fieldset class="profile-choice-fieldset register-form-full"><legend>' . e($t('favourite_modes')) . '</legend>' . $favouriteModesOptionsHtml . '</fieldset>'
     . '<label class="register-form-full">' . e($t('interests')) . '<textarea name="interests" rows="3" maxlength="4000"></textarea></label>'

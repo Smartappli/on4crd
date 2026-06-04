@@ -35,7 +35,6 @@ return [
     'uba_member' => 'UBA member',
     'uba_member_number' => 'UBA member number',
     'antennas' => 'Antennas',
-    'max_power' => 'Maximum power',
     'favourite_modes' => 'Preferred modes',
     'interests' => 'Interests',
     'password' => 'à¦ªà¦¾à¦¸à¦“à¦¯à¦¼à¦¾à¦°à§à¦¡',

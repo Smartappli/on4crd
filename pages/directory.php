@@ -283,7 +283,6 @@ ob_start();
                 $ituZone = trim((string) ($member['itu_zone'] ?? ''));
                 $qslVia = trim((string) ($member['qsl_via'] ?? ''));
                 $eqslUsername = trim((string) ($member['eqsl_username'] ?? ''));
-                $maxPower = trim((string) ($member['max_power'] ?? ''));
                 $interests = trim((string) ($member['interests'] ?? ''));
                 $bands = trim((string) ($member['favourite_bands'] ?? ''));
                 $modes = trim((string) ($member['favourite_modes'] ?? ''));
@@ -303,7 +302,6 @@ ob_start();
                 $addDetail((string) $profileT('address'), $address);
                 $addDetail((string) $profileT('qsl_via'), $qslVia);
                 $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
-                $addDetail((string) $profileT('max_power'), $maxPower);
                 $addDetail((string) $profileT('interests'), $interests);
                 ?>
                 <article class="directory-member-card">

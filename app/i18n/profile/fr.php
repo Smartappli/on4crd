@@ -53,7 +53,6 @@ return [
     'uba_member' => 'Membre UBA',
     'uba_member_number' => 'Numéro de membre UBA',
     'qsl_info' => 'Informations QSL',
-    'max_power' => 'Puissance maximale',
     'bands' => 'Bandes préférées',
     'favourite_modes' => 'Modes préférés',
     'station' => 'Station',
