@@ -1,0 +1,7570 @@
+# I18n Audit
+
+Domains: 86
+Locales: 31
+
+| Locale | Files | Missing | Load Errors | Empty | Mojibake | Placeholder | Same FR | Same EN |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| fr | 86 | 0 | 0 | 0 | 0 | 0 | 0 | 74 |
+| en | 86 | 0 | 0 | 0 | 0 | 0 | 74 | 0 |
+| de | 86 | 0 | 0 | 0 | 0 | 0 | 22 | 93 |
+| nl | 86 | 0 | 0 | 0 | 0 | 0 | 25 | 91 |
+| it | 86 | 0 | 0 | 0 | 0 | 0 | 19 | 195 |
+| es | 86 | 0 | 0 | 0 | 0 | 0 | 17 | 192 |
+| pt | 86 | 0 | 0 | 0 | 0 | 0 | 18 | 192 |
+| bg | 86 | 0 | 0 | 0 | 0 | 0 | 17 | 260 |
+| hr | 86 | 0 | 0 | 0 | 0 | 0 | 23 | 267 |
+| cs | 86 | 0 | 0 | 0 | 0 | 0 | 24 | 269 |
+| da | 86 | 0 | 0 | 0 | 0 | 0 | 33 | 281 |
+| et | 86 | 0 | 0 | 0 | 0 | 0 | 21 | 267 |
+| fi | 86 | 0 | 0 | 0 | 0 | 0 | 26 | 272 |
+| el | 86 | 0 | 0 | 0 | 0 | 0 | 24 | 268 |
+| hu | 86 | 0 | 0 | 0 | 0 | 0 | 23 | 267 |
+| ga | 86 | 0 | 0 | 0 | 0 | 0 | 19 | 261 |
+| lv | 86 | 0 | 0 | 0 | 0 | 0 | 19 | 262 |
+| lt | 86 | 0 | 0 | 0 | 0 | 0 | 19 | 262 |
+| mt | 86 | 0 | 0 | 0 | 0 | 0 | 28 | 277 |
+| pl | 86 | 0 | 0 | 0 | 0 | 0 | 20 | 261 |
+| ro | 86 | 0 | 0 | 0 | 0 | 0 | 26 | 269 |
+| sk | 86 | 0 | 0 | 0 | 0 | 0 | 24 | 269 |
+| sl | 86 | 0 | 0 | 0 | 0 | 0 | 22 | 265 |
+| sv | 86 | 0 | 0 | 0 | 0 | 0 | 27 | 273 |
+| ar | 86 | 0 | 0 | 0 | 0 | 0 | 10 | 196 |
+| hi | 86 | 0 | 0 | 0 | 0 | 0 | 9 | 195 |
+| ja | 86 | 0 | 0 | 0 | 0 | 0 | 10 | 202 |
+| zh | 86 | 0 | 0 | 0 | 0 | 0 | 9 | 196 |
+| bn | 86 | 0 | 0 | 0 | 0 | 0 | 13 | 204 |
+| ru | 86 | 0 | 0 | 0 | 0 | 0 | 9 | 199 |
+| id | 86 | 0 | 0 | 0 | 0 | 0 | 18 | 252 |
+
+## Domains With English Fallback Suspicions
+- `admin`: ar=6, bg=6, bn=6, cs=6, da=6, el=6, et=6, fi=6, fr=1, ga=6, hi=6, hr=6, hu=6, id=6, ja=6, lt=6, lv=6, mt=6, pl=6, ro=6, ru=6, sk=6, sl=6, sv=6, zh=6
+- `admin_ads`: ar=1, bg=1, cs=1, da=1, de=1, el=1, es=1, et=1, fi=1, fr=4, hr=1, hu=1, id=1, it=1, lt=1, lv=1, mt=1, nl=1, pt=1, ro=1, sk=1, sl=1, sv=1
+- `admin_albums`: fr=1
+- `admin_articles`: fr=1
+- `admin_auctions`: fr=2
+- `admin_dashboard`: cs=1, da=1, fr=1, nl=1, sk=1
+- `admin_dinner_reservations`: da=1, fr=1, sv=1
+- `admin_events`: fr=1
+- `admin_library`: fr=1
+- `admin_live_feeds`: fr=1
+- `admin_module_cards`: ar=3, bg=33, bn=3, cs=33, da=33, de=4, el=33, es=3, et=33, fi=33, fr=2, ga=33, hi=3, hr=33, hu=33, id=3, it=4, ja=3, lt=33, lv=33, mt=33, nl=4, pl=33, pt=4, ro=33, ru=3, sk=33, sl=33, sv=33, zh=3
+- `admin_newsletters`: ar=4, bg=4, bn=4, cs=4, da=4, de=4, el=4, es=4, et=4, fi=4, fr=1, ga=4, hi=4, hr=4, hu=4, id=4, it=4, ja=4, lt=4, lv=4, mt=5, nl=4, pl=4, pt=4, ro=4, ru=4, sk=4, sl=4, sv=4, zh=4
+- `admin_permissions`: fr=1
+- `admin_privacy`: ar=20, bg=20, bn=20, cs=20, da=20, el=20, es=20, et=20, fi=20, fr=1, ga=20, hi=20, hr=20, hu=20, id=20, it=20, ja=20, lt=20, lv=20, mt=20, pl=20, pt=20, ro=20, ru=20, sk=20, sl=20, sv=20, zh=20
+- `admin_wiki`: da=2, sv=2
+- `ads`: fr=3
+- `articles`: fr=2
+- `bandplan_harec`: ar=17, bg=17, bn=17, cs=17, da=17, el=17, es=17, et=17, fi=17, ga=17, hi=17, hr=17, hu=17, id=17, it=17, ja=17, lt=17, lv=17, mt=17, pl=17, pt=17, ro=17, ru=17, sk=17, sl=17, sv=17, zh=17
+- `bandplan_on2`: ar=13, bg=13, bn=13, cs=13, da=13, el=13, es=13, et=13, fi=13, ga=13, hi=13, hr=13, hu=13, id=13, it=13, ja=13, lt=13, lv=13, mt=13, pl=13, pt=13, ro=13, ru=13, sk=13, sl=13, sv=13, zh=13
+- `bandplan_on3`: ar=10, bg=10, bn=10, cs=10, da=10, el=10, es=10, et=10, fi=10, ga=10, hi=10, hr=10, hu=10, id=10, it=10, ja=10, lt=10, lv=10, mt=10, pl=10, pt=10, ro=10, ru=10, sk=10, sl=10, sv=10, zh=10
+- `chatbot`: fr=3
+- `classifieds`: fr=2
+- `code_cw`: da=2, et=1, fi=1, fr=1, hu=1, lv=1, nl=1, pl=1, ro=1, sl=1, sv=2
+- `dashboard`: fi=1, fr=3
+- `donation`: ar=18, bg=18, bn=18, cs=18, da=18, el=18, es=18, et=18, fi=18, ga=18, hi=18, hr=18, hu=18, id=18, it=18, ja=18, lt=18, lv=18, mt=18, pl=18, pt=18, ro=18, ru=18, sk=18, sl=18, sv=18, zh=18
+- `events`: bg=1, cs=1, da=1, el=1, et=1, fi=1, fr=1, hr=1, hu=1, lt=1, lv=1, mt=1, pl=1, ro=1, sk=1, sl=1, sv=1
+- `forgot_password`: da=1
+- `gdpr`: ar=28, bg=28, bn=28, cs=28, da=28, el=28, es=28, et=28, fi=28, fr=1, ga=28, hi=28, hr=28, hu=28, id=28, it=28, ja=28, lt=28, lv=28, mt=28, pl=28, pt=28, ro=28, ru=28, sk=28, sl=28, sv=28, zh=28
+- `home`: ar=1, bg=1, bn=2, cs=3, da=6, de=5, el=5, es=3, et=5, fi=5, fr=10, ga=2, hi=1, hr=5, hu=3, id=3, it=6, ja=2, lt=2, lv=2, mt=7, nl=4, pl=2, pt=3, ro=5, ru=1, sk=3, sl=3, sv=4, zh=1
+- `layout`: cs=1, da=2, fi=1, fr=3, nl=1, sk=1, sv=1
+- `login`: it=1, mt=1
+- `members_library`: fr=2, nl=1, ro=1
+- `membership`: bn=1, cs=1, da=1, el=1, es=1, fi=1, fr=1, hu=1, id=1, ja=1, mt=1, ro=1, sl=1, sv=1, zh=1
+- `my_requests`: ar=25, bg=25, bn=25, cs=25, da=25, de=25, el=25, es=25, et=25, fi=25, fr=1, ga=25, hi=25, hr=25, hu=25, id=25, it=25, ja=25, lt=25, lv=25, mt=25, nl=25, pl=25, pt=25, ro=25, ru=25, sk=25, sl=25, sv=25, zh=25
+- `newsletter`: ar=3, bg=3, bn=3, cs=3, da=3, de=4, el=3, es=3, et=3, fi=3, fr=1, ga=3, hi=3, hr=4, hu=3, id=3, it=3, ja=3, lt=3, lv=3, mt=5, nl=3, pl=3, pt=3, ro=3, ru=3, sk=4, sl=3, sv=3, zh=3
+- `newsletter_public`: ar=3, bg=3, bn=3, cs=3, da=3, de=3, el=3, es=3, et=3, fi=3, ga=3, hi=3, hr=3, hu=3, id=3, it=3, ja=3, lt=3, lv=3, mt=3, nl=3, pl=3, pt=3, ro=3, ru=3, sk=3, sl=3, sv=3, zh=3
+- `newsletter_unsubscribe`: de=1, fr=1, hr=1, mt=1, sk=1
+- `notifications`: fr=1
+- `profile`: ar=26, bg=26, bn=26, cs=26, da=26, de=23, el=26, es=23, et=26, fi=26, fr=2, ga=26, hi=26, hr=26, hu=26, id=26, it=23, ja=26, lt=26, lv=26, mt=26, nl=23, pl=26, pt=23, ro=26, ru=26, sk=26, sl=26, sv=26, zh=26
+- `qsl`: da=2, de=1, nl=1
+- `register`: ar=13, bg=13, bn=13, cs=13, da=13, de=10, el=13, es=10, et=13, fi=13, fr=1, ga=13, hi=13, hr=13, hu=13, id=13, it=11, ja=13, lt=13, lv=13, mt=14, nl=10, pl=13, pt=10, ro=13, ru=13, sk=13, sl=13, sv=13, zh=13
+- `relais`: bn=1, cs=1, da=1, de=1, el=1, es=1, et=1, fi=1, fr=2, ga=1, hr=1, hu=1, id=1, lt=1, nl=1, pl=1, pt=2, ro=1, sk=1, sl=1, sv=1
+- `schools`: sk=1
+- `search`: fr=2
+- `seo`: bg=1, cs=3, da=2, de=1, el=2, es=1, et=1, fi=2, fr=1, hr=1, hu=3, it=1, lt=1, lv=1, mt=1, ro=2, sk=2, sl=1, sv=2
+- `sponsoring`: de=1, fr=1, nl=1, pl=1
+- `tools`: ar=5, bg=8, bn=11, cs=9, da=10, de=9, el=9, es=8, et=9, fi=10, fr=10, ga=10, hi=5, hr=8, hu=8, id=56, it=7, ja=10, lt=8, lv=8, mt=12, nl=7, pl=7, pt=8, ro=8, ru=9, sk=8, sl=8, sv=9, zh=5
+- `upload_messages`: bg=29, cs=29, da=29, el=29, et=29, fi=29, ga=29, hr=29, hu=29, lt=29, lv=29, mt=29, pl=29, ro=29, sk=29, sl=29, sv=29
+- `wiki_edit`: id=1
+
+## Findings
+- `fr` `admin` `layout` `same_as_en`: Administration
+- `en` `admin` `layout` `same_as_fr`: Administration
+- `bg` `admin` `layout` `same_as_fr`: Administration
+- `bg` `admin` `layout` `same_as_en`: Administration
+- `bg` `admin` `title` `same_as_en`: Centralized administration
+- `bg` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `bg` `admin` `search_label` `same_as_en`: Quick search
+- `bg` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `bg` `admin` `empty` `same_as_en`: No module matches your search.
+- `hr` `admin` `layout` `same_as_fr`: Administration
+- `hr` `admin` `layout` `same_as_en`: Administration
+- `hr` `admin` `title` `same_as_en`: Centralized administration
+- `hr` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `hr` `admin` `search_label` `same_as_en`: Quick search
+- `hr` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `hr` `admin` `empty` `same_as_en`: No module matches your search.
+- `cs` `admin` `layout` `same_as_fr`: Administration
+- `cs` `admin` `layout` `same_as_en`: Administration
+- `cs` `admin` `title` `same_as_en`: Centralized administration
+- `cs` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `cs` `admin` `search_label` `same_as_en`: Quick search
+- `cs` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `cs` `admin` `empty` `same_as_en`: No module matches your search.
+- `da` `admin` `layout` `same_as_fr`: Administration
+- `da` `admin` `layout` `same_as_en`: Administration
+- `da` `admin` `title` `same_as_en`: Centralized administration
+- `da` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `da` `admin` `search_label` `same_as_en`: Quick search
+- `da` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `da` `admin` `empty` `same_as_en`: No module matches your search.
+- `et` `admin` `layout` `same_as_fr`: Administration
+- `et` `admin` `layout` `same_as_en`: Administration
+- `et` `admin` `title` `same_as_en`: Centralized administration
+- `et` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `et` `admin` `search_label` `same_as_en`: Quick search
+- `et` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `et` `admin` `empty` `same_as_en`: No module matches your search.
+- `fi` `admin` `layout` `same_as_fr`: Administration
+- `fi` `admin` `layout` `same_as_en`: Administration
+- `fi` `admin` `title` `same_as_en`: Centralized administration
+- `fi` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `fi` `admin` `search_label` `same_as_en`: Quick search
+- `fi` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `fi` `admin` `empty` `same_as_en`: No module matches your search.
+- `el` `admin` `layout` `same_as_fr`: Administration
+- `el` `admin` `layout` `same_as_en`: Administration
+- `el` `admin` `title` `same_as_en`: Centralized administration
+- `el` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `el` `admin` `search_label` `same_as_en`: Quick search
+- `el` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `el` `admin` `empty` `same_as_en`: No module matches your search.
+- `hu` `admin` `layout` `same_as_fr`: Administration
+- `hu` `admin` `layout` `same_as_en`: Administration
+- `hu` `admin` `title` `same_as_en`: Centralized administration
+- `hu` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `hu` `admin` `search_label` `same_as_en`: Quick search
+- `hu` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `hu` `admin` `empty` `same_as_en`: No module matches your search.
+- `ga` `admin` `layout` `same_as_fr`: Administration
+- `ga` `admin` `layout` `same_as_en`: Administration
+- `ga` `admin` `title` `same_as_en`: Centralized administration
+- `ga` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `ga` `admin` `search_label` `same_as_en`: Quick search
+- `ga` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `ga` `admin` `empty` `same_as_en`: No module matches your search.
+- `lv` `admin` `layout` `same_as_fr`: Administration
+- `lv` `admin` `layout` `same_as_en`: Administration
+- `lv` `admin` `title` `same_as_en`: Centralized administration
+- `lv` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `lv` `admin` `search_label` `same_as_en`: Quick search
+- `lv` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `lv` `admin` `empty` `same_as_en`: No module matches your search.
+- `lt` `admin` `layout` `same_as_fr`: Administration
+- `lt` `admin` `layout` `same_as_en`: Administration
+- `lt` `admin` `title` `same_as_en`: Centralized administration
+- `lt` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `lt` `admin` `search_label` `same_as_en`: Quick search
+- `lt` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `lt` `admin` `empty` `same_as_en`: No module matches your search.
+- `mt` `admin` `layout` `same_as_fr`: Administration
+- `mt` `admin` `layout` `same_as_en`: Administration
+- `mt` `admin` `title` `same_as_en`: Centralized administration
+- `mt` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `mt` `admin` `search_label` `same_as_en`: Quick search
+- `mt` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `mt` `admin` `empty` `same_as_en`: No module matches your search.
+- `pl` `admin` `layout` `same_as_fr`: Administration
+- `pl` `admin` `layout` `same_as_en`: Administration
+- `pl` `admin` `title` `same_as_en`: Centralized administration
+- `pl` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `pl` `admin` `search_label` `same_as_en`: Quick search
+- `pl` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `pl` `admin` `empty` `same_as_en`: No module matches your search.
+- `ro` `admin` `layout` `same_as_fr`: Administration
+- `ro` `admin` `layout` `same_as_en`: Administration
+- `ro` `admin` `title` `same_as_en`: Centralized administration
+- `ro` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `ro` `admin` `search_label` `same_as_en`: Quick search
+- `ro` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `ro` `admin` `empty` `same_as_en`: No module matches your search.
+- `sk` `admin` `layout` `same_as_fr`: Administration
+- `sk` `admin` `layout` `same_as_en`: Administration
+- `sk` `admin` `title` `same_as_en`: Centralized administration
+- `sk` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `sk` `admin` `search_label` `same_as_en`: Quick search
+- `sk` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `sk` `admin` `empty` `same_as_en`: No module matches your search.
+- `sl` `admin` `layout` `same_as_fr`: Administration
+- `sl` `admin` `layout` `same_as_en`: Administration
+- `sl` `admin` `title` `same_as_en`: Centralized administration
+- `sl` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `sl` `admin` `search_label` `same_as_en`: Quick search
+- `sl` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `sl` `admin` `empty` `same_as_en`: No module matches your search.
+- `sv` `admin` `layout` `same_as_fr`: Administration
+- `sv` `admin` `layout` `same_as_en`: Administration
+- `sv` `admin` `title` `same_as_en`: Centralized administration
+- `sv` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `sv` `admin` `search_label` `same_as_en`: Quick search
+- `sv` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `sv` `admin` `empty` `same_as_en`: No module matches your search.
+- `ar` `admin` `layout` `same_as_fr`: Administration
+- `ar` `admin` `layout` `same_as_en`: Administration
+- `ar` `admin` `title` `same_as_en`: Centralized administration
+- `ar` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `ar` `admin` `search_label` `same_as_en`: Quick search
+- `ar` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `ar` `admin` `empty` `same_as_en`: No module matches your search.
+- `hi` `admin` `layout` `same_as_fr`: Administration
+- `hi` `admin` `layout` `same_as_en`: Administration
+- `hi` `admin` `title` `same_as_en`: Centralized administration
+- `hi` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `hi` `admin` `search_label` `same_as_en`: Quick search
+- `hi` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `hi` `admin` `empty` `same_as_en`: No module matches your search.
+- `ja` `admin` `layout` `same_as_fr`: Administration
+- `ja` `admin` `layout` `same_as_en`: Administration
+- `ja` `admin` `title` `same_as_en`: Centralized administration
+- `ja` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `ja` `admin` `search_label` `same_as_en`: Quick search
+- `ja` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `ja` `admin` `empty` `same_as_en`: No module matches your search.
+- `zh` `admin` `layout` `same_as_fr`: Administration
+- `zh` `admin` `layout` `same_as_en`: Administration
+- `zh` `admin` `title` `same_as_en`: Centralized administration
+- `zh` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `zh` `admin` `search_label` `same_as_en`: Quick search
+- `zh` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `zh` `admin` `empty` `same_as_en`: No module matches your search.
+- `bn` `admin` `layout` `same_as_fr`: Administration
+- `bn` `admin` `layout` `same_as_en`: Administration
+- `bn` `admin` `title` `same_as_en`: Centralized administration
+- `bn` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `bn` `admin` `search_label` `same_as_en`: Quick search
+- `bn` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `bn` `admin` `empty` `same_as_en`: No module matches your search.
+- `ru` `admin` `layout` `same_as_fr`: Administration
+- `ru` `admin` `layout` `same_as_en`: Administration
+- `ru` `admin` `title` `same_as_en`: Centralized administration
+- `ru` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `ru` `admin` `search_label` `same_as_en`: Quick search
+- `ru` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `ru` `admin` `empty` `same_as_en`: No module matches your search.
+- `id` `admin` `layout` `same_as_fr`: Administration
+- `id` `admin` `layout` `same_as_en`: Administration
+- `id` `admin` `title` `same_as_en`: Centralized administration
+- `id` `admin` `lead` `same_as_en`: All admin modules and tools are grouped in this single dashboard.
+- `id` `admin` `search_label` `same_as_en`: Quick search
+- `id` `admin` `search_placeholder` `same_as_en`: Module, tool, description...
+- `id` `admin` `empty` `same_as_en`: No module matches your search.
+- `fr` `admin_ads` `col_placement` `same_as_en`: Placement
+- `fr` `admin_ads` `col_description` `same_as_en`: Description
+- `fr` `admin_ads` `label_description` `same_as_en`: Description
+- `fr` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `en` `admin_ads` `col_placement` `same_as_fr`: Placement
+- `en` `admin_ads` `col_description` `same_as_fr`: Description
+- `en` `admin_ads` `label_description` `same_as_fr`: Description
+- `en` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `de` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `de` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `nl` `admin_ads` `campaigns` `same_as_fr`: Campagnes
+- `nl` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `nl` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `it` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `it` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `es` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `es` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `pt` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `pt` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `bg` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `bg` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `hr` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `hr` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `cs` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `cs` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `da` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `da` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `et` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `et` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `fi` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `fi` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `el` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `el` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `hu` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `hu` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `lv` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `lv` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `lt` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `lt` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `mt` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `mt` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `ro` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `ro` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `sk` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `sk` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `sl` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `sl` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `sv` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `sv` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `ar` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `ar` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `id` `admin_ads` `placeholder_code` `same_as_fr`: club_sidebar
+- `id` `admin_ads` `placeholder_code` `same_as_en`: club_sidebar
+- `fr` `admin_albums` `description` `same_as_en`: Description
+- `en` `admin_albums` `description` `same_as_fr`: Description
+- `ro` `admin_albums` `public_album` `same_as_fr`: Album public
+- `fr` `admin_articles` `layout` `same_as_en`: Articles
+- `en` `admin_articles` `layout` `same_as_fr`: Articles
+- `nl` `admin_articles` `cat_antennes` `same_as_fr`: Antennes
+- `fr` `admin_auctions` `description` `same_as_en`: Description
+- `fr` `admin_auctions` `image_url` `same_as_en`: Image URL
+- `en` `admin_auctions` `description` `same_as_fr`: Description
+- `en` `admin_auctions` `image_url` `same_as_fr`: Image URL
+- `fr` `admin_dashboard` `layout` `same_as_en`: Dashboard
+- `en` `admin_dashboard` `layout` `same_as_fr`: Dashboard
+- `nl` `admin_dashboard` `layout` `same_as_fr`: Dashboard
+- `nl` `admin_dashboard` `layout` `same_as_en`: Dashboard
+- `cs` `admin_dashboard` `layout` `same_as_fr`: Dashboard
+- `cs` `admin_dashboard` `layout` `same_as_en`: Dashboard
+- `da` `admin_dashboard` `title` `same_as_fr`: Administration dashboard
+- `da` `admin_dashboard` `layout` `same_as_fr`: Dashboard
+- `da` `admin_dashboard` `layout` `same_as_en`: Dashboard
+- `sk` `admin_dashboard` `layout` `same_as_fr`: Dashboard
+- `sk` `admin_dashboard` `layout` `same_as_en`: Dashboard
+- `fr` `admin_dinner_reservations` `csv_reservation_id` `same_as_en`: Reservation ID
+- `en` `admin_dinner_reservations` `csv_reservation_id` `same_as_fr`: Reservation ID
+- `da` `admin_dinner_reservations` `csv_reservation_id` `same_as_fr`: Reservation ID
+- `da` `admin_dinner_reservations` `csv_reservation_id` `same_as_en`: Reservation ID
+- `sv` `admin_dinner_reservations` `csv_reservation_id` `same_as_fr`: Reservation ID
+- `sv` `admin_dinner_reservations` `csv_reservation_id` `same_as_en`: Reservation ID
+- `fr` `admin_events` `description` `same_as_en`: Description
+- `en` `admin_events` `description` `same_as_fr`: Description
+- `fr` `admin_library` `documents` `same_as_en`: Documents
+- `en` `admin_library` `documents` `same_as_fr`: Documents
+- `fr` `admin_live_feeds` `cache_ttl` `same_as_en`: Cache TTL
+- `en` `admin_live_feeds` `cache_ttl` `same_as_fr`: Cache TTL
+- `fr` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `fr` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `en` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `en` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `de` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `de` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `de` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `de` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `de` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `nl` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `nl` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `nl` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `nl` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `it` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `it` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `it` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `it` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `it` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `es` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `es` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `es` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `pt` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `pt` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `pt` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `pt` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `pt` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `bg` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `bg` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `bg` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `bg` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `bg` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `bg` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `bg` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `bg` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `bg` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `bg` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `bg` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `bg` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `bg` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `bg` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `bg` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `bg` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `bg` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `bg` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `bg` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `bg` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `bg` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `bg` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `bg` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `bg` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `bg` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `bg` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `bg` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `bg` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `bg` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `bg` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `bg` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `bg` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `bg` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `bg` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `bg` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `hr` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `hr` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `hr` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `hr` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `hr` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `hr` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `hr` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `hr` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `hr` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `hr` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `hr` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `hr` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `hr` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `hr` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `hr` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `hr` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `hr` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `hr` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `hr` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `hr` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `hr` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `hr` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `hr` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `hr` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `hr` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `hr` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `hr` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `hr` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `hr` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `hr` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `hr` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `hr` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `hr` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `hr` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `hr` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `cs` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `cs` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `cs` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `cs` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `cs` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `cs` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `cs` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `cs` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `cs` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `cs` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `cs` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `cs` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `cs` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `cs` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `cs` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `cs` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `cs` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `cs` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `cs` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `cs` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `cs` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `cs` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `cs` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `cs` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `cs` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `cs` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `cs` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `cs` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `cs` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `cs` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `cs` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `cs` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `cs` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `cs` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `cs` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `da` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `da` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `da` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `da` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `da` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `da` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `da` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `da` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `da` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `da` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `da` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `da` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `da` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `da` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `da` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `da` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `da` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `da` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `da` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `da` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `da` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `da` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `da` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `da` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `da` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `da` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `da` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `da` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `da` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `da` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `da` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `da` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `da` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `da` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `da` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `et` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `et` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `et` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `et` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `et` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `et` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `et` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `et` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `et` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `et` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `et` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `et` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `et` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `et` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `et` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `et` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `et` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `et` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `et` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `et` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `et` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `et` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `et` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `et` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `et` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `et` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `et` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `et` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `et` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `et` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `et` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `et` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `et` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `et` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `et` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `fi` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `fi` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `fi` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `fi` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `fi` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `fi` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `fi` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `fi` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `fi` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `fi` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `fi` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `fi` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `fi` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `fi` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `fi` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `fi` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `fi` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `fi` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `fi` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `fi` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `fi` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `fi` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `fi` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `fi` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `fi` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `fi` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `fi` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `fi` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `fi` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `fi` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `fi` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `fi` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `fi` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `fi` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `fi` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `el` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `el` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `el` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `el` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `el` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `el` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `el` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `el` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `el` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `el` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `el` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `el` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `el` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `el` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `el` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `el` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `el` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `el` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `el` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `el` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `el` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `el` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `el` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `el` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `el` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `el` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `el` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `el` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `el` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `el` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `el` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `el` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `el` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `el` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `el` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `hu` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `hu` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `hu` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `hu` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `hu` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `hu` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `hu` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `hu` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `hu` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `hu` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `hu` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `hu` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `hu` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `hu` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `hu` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `hu` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `hu` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `hu` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `hu` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `hu` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `hu` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `hu` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `hu` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `hu` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `hu` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `hu` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `hu` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `hu` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `hu` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `hu` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `hu` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `hu` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `hu` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `hu` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `hu` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `ga` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `ga` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `ga` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `ga` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `ga` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `ga` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `ga` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `ga` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `ga` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `ga` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `ga` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `ga` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `ga` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `ga` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `ga` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `ga` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `ga` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `ga` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `ga` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `ga` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `ga` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `ga` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `ga` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `ga` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `ga` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `ga` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `ga` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `ga` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `ga` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `ga` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `ga` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `ga` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `ga` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `ga` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `ga` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `lv` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `lv` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `lv` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `lv` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `lv` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `lv` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `lv` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `lv` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `lv` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `lv` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `lv` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `lv` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `lv` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `lv` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `lv` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `lv` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `lv` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `lv` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `lv` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `lv` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `lv` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `lv` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `lv` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `lv` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `lv` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `lv` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `lv` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `lv` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `lv` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `lv` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `lv` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `lv` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `lv` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `lv` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `lv` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `lt` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `lt` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `lt` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `lt` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `lt` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `lt` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `lt` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `lt` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `lt` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `lt` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `lt` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `lt` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `lt` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `lt` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `lt` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `lt` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `lt` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `lt` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `lt` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `lt` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `lt` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `lt` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `lt` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `lt` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `lt` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `lt` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `lt` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `lt` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `lt` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `lt` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `lt` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `lt` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `lt` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `lt` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `lt` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `mt` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `mt` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `mt` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `mt` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `mt` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `mt` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `mt` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `mt` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `mt` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `mt` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `mt` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `mt` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `mt` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `mt` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `mt` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `mt` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `mt` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `mt` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `mt` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `mt` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `mt` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `mt` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `mt` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `mt` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `mt` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `mt` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `mt` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `mt` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `mt` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `mt` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `mt` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `mt` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `mt` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `mt` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `mt` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `pl` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `pl` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `pl` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `pl` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `pl` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `pl` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `pl` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `pl` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `pl` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `pl` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `pl` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `pl` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `pl` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `pl` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `pl` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `pl` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `pl` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `pl` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `pl` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `pl` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `pl` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `pl` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `pl` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `pl` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `pl` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `pl` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `pl` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `pl` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `pl` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `pl` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `pl` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `pl` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `pl` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `pl` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `pl` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `ro` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `ro` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `ro` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `ro` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `ro` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `ro` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `ro` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `ro` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `ro` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `ro` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `ro` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `ro` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `ro` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `ro` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `ro` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `ro` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `ro` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `ro` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `ro` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `ro` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `ro` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `ro` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `ro` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `ro` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `ro` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `ro` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `ro` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `ro` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `ro` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `ro` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `ro` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `ro` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `ro` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `ro` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `ro` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `sk` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `sk` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `sk` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `sk` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `sk` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `sk` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `sk` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `sk` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `sk` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `sk` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `sk` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `sk` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `sk` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `sk` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `sk` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `sk` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `sk` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `sk` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `sk` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `sk` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `sk` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `sk` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `sk` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `sk` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `sk` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `sk` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `sk` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `sk` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `sk` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `sk` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `sk` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `sk` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `sk` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `sk` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `sk` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `sl` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `sl` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `sl` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `sl` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `sl` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `sl` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `sl` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `sl` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `sl` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `sl` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `sl` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `sl` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `sl` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `sl` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `sl` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `sl` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `sl` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `sl` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `sl` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `sl` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `sl` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `sl` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `sl` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `sl` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `sl` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `sl` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `sl` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `sl` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `sl` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `sl` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `sl` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `sl` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `sl` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `sl` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `sl` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `sv` `admin_module_cards` `admin_modules_desc` `same_as_en`: Enable, disable and globally manage modules.
+- `sv` `admin_module_cards` `admin_members_title` `same_as_en`: Member management
+- `sv` `admin_module_cards` `admin_members_desc` `same_as_en`: Member profiles, active status and committee.
+- `sv` `admin_module_cards` `admin_permissions_title` `same_as_en`: Roles & permissions
+- `sv` `admin_module_cards` `admin_permissions_desc` `same_as_en`: Role assignment and permissions matrix.
+- `sv` `admin_module_cards` `admin_news_desc` `same_as_en`: Sections, writing and moderation.
+- `sv` `admin_module_cards` `admin_articles_title` `same_as_fr`: Articles
+- `sv` `admin_module_cards` `admin_articles_title` `same_as_en`: Articles
+- `sv` `admin_module_cards` `admin_articles_desc` `same_as_en`: Public technical articles.
+- `sv` `admin_module_cards` `admin_committee_title` `same_as_en`: Committee
+- `sv` `admin_module_cards` `admin_committee_desc` `same_as_en`: Committee members, role, order and biography.
+- `sv` `admin_module_cards` `admin_press_desc` `same_as_en`: Press contacts, dated releases and downloadable documents.
+- `sv` `admin_module_cards` `admin_events_desc` `same_as_en`: Club events and local contests shown in live widgets.
+- `sv` `admin_module_cards` `admin_dinner_reservations_title` `same_as_en`: Annual dinner
+- `sv` `admin_module_cards` `admin_dinner_reservations_desc` `same_as_en`: Reservations, meal/dessert lines, quantities and auto total.
+- `sv` `admin_module_cards` `admin_auctions_title` `same_as_en`: Auctions
+- `sv` `admin_module_cards` `admin_auctions_desc` `same_as_en`: Lots, scheduling, bids and closing.
+- `sv` `admin_module_cards` `admin_editorial_title` `same_as_en`: Multilingual editorial
+- `sv` `admin_module_cards` `admin_editorial_desc` `same_as_en`: French source, EN/DE/NL auto translation and manual review.
+- `sv` `admin_module_cards` `admin_translation_reviews_title` `same_as_en`: Translation reviews
+- `sv` `admin_module_cards` `admin_translation_reviews_desc` `same_as_en`: Validation workflow for news/article translations.
+- `sv` `admin_module_cards` `admin_dashboard_title` `same_as_en`: Dashboard widgets
+- `sv` `admin_module_cards` `admin_dashboard_desc` `same_as_en`: Enable widgets available to members.
+- `sv` `admin_module_cards` `admin_live_feeds_title` `same_as_en`: Live feeds
+- `sv` `admin_module_cards` `admin_live_feeds_desc` `same_as_en`: Fine control of radio feeds, TTL, URLs and activation.
+- `sv` `admin_module_cards` `admin_newsletters_title` `same_as_fr`: Newsletter
+- `sv` `admin_module_cards` `admin_newsletters_title` `same_as_en`: Newsletter
+- `sv` `admin_module_cards` `admin_newsletters_desc` `same_as_en`: Subscribers, CSV import and email campaigns.
+- `sv` `admin_module_cards` `admin_wiki_desc` `same_as_en`: Collaborative pages and revisions.
+- `sv` `admin_module_cards` `admin_albums_desc` `same_as_en`: Public gallery and social sync.
+- `sv` `admin_module_cards` `admin_library_desc` `same_as_en`: Manage PDF documents from the members library.
+- `sv` `admin_module_cards` `admin_ads_desc` `same_as_en`: Ad inventory, placements and statistics.
+- `sv` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `sv` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `sv` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `ar` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `ar` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `ar` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `hi` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `hi` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `hi` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `ja` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `ja` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `ja` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `zh` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `zh` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `zh` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `bn` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `bn` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `bn` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `ru` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `ru` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `ru` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `id` `admin_module_cards` `admin_privacy_desc` `same_as_en`: Data requests, export, erasure and follow-up.
+- `id` `admin_module_cards` `admin_classifieds_title` `same_as_en`: Classifieds
+- `id` `admin_module_cards` `admin_classifieds_desc` `same_as_en`: Moderate member classifieds.
+- `fr` `admin_newsletters` `csv_ph` `same_as_en`: email\nfoo@example.org\nbar@example.org
+- `en` `admin_newsletters` `csv_ph` `same_as_fr`: email\nfoo@example.org\nbar@example.org
+- `de` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `de` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `de` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `de` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `nl` `admin_newsletters` `campaigns` `same_as_fr`: Campagnes
+- `nl` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `nl` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `nl` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `nl` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `it` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `it` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `it` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `it` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `es` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `es` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `es` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `es` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `pt` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `pt` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `pt` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `pt` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `bg` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `bg` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `bg` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `bg` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `hr` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `hr` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `hr` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `hr` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `cs` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `cs` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `cs` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `cs` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `da` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `da` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `da` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `da` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `et` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `et` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `et` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `et` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `fi` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `fi` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `fi` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `fi` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `el` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `el` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `el` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `el` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `hu` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `hu` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `hu` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `hu` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `ga` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `ga` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `ga` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `ga` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `lv` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `lv` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `lv` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `lv` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `lt` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `lt` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `lt` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `lt` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `mt` `admin_newsletters` `unsubscribe` `same_as_en`: Unsubscribe
+- `mt` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `mt` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `mt` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `mt` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `pl` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `pl` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `pl` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `pl` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `ro` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `ro` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `ro` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `ro` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `sk` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `sk` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `sk` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `sk` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `sl` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `sl` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `sl` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `sl` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `sv` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `sv` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `sv` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `sv` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `ar` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `ar` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `ar` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `ar` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `hi` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `hi` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `hi` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `hi` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `ja` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `ja` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `ja` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `ja` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `zh` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `zh` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `zh` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `zh` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `bn` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `bn` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `bn` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `bn` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `ru` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `ru` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `ru` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `ru` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `id` `admin_newsletters` `err_consent_proof_required` `same_as_en`: Consent proof is required.
+- `id` `admin_newsletters` `consent_proof` `same_as_en`: Consent proof
+- `id` `admin_newsletters` `consent_proof_ph` `same_as_en`: Example: signed form on 2026-06-05
+- `id` `admin_newsletters` `consent_admin_help` `same_as_en`: Adding, importing or reactivating requires explicit consent proof.
+- `fr` `admin_permissions` `th_permission` `same_as_en`: Permission
+- `en` `admin_permissions` `th_permission` `same_as_fr`: Permission
+- `fr` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `en` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `it` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `it` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `it` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `it` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `it` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `it` `admin_privacy` `processed` `same_as_en`: Processed
+- `it` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `it` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `it` `admin_privacy` `no_events` `same_as_en`: No event.
+- `it` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `it` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `it` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `it` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `it` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `it` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `it` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `it` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `it` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `it` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `it` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `it` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `es` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `es` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `es` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `es` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `es` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `es` `admin_privacy` `processed` `same_as_en`: Processed
+- `es` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `es` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `es` `admin_privacy` `no_events` `same_as_en`: No event.
+- `es` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `es` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `es` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `es` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `es` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `es` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `es` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `es` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `es` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `es` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `es` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `es` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `pt` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `pt` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `pt` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `pt` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `pt` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `pt` `admin_privacy` `processed` `same_as_en`: Processed
+- `pt` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `pt` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `pt` `admin_privacy` `no_events` `same_as_en`: No event.
+- `pt` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `pt` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `pt` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `pt` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `pt` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `pt` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `pt` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `pt` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `pt` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `pt` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `pt` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `pt` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `bg` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `bg` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `bg` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `bg` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `bg` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `bg` `admin_privacy` `processed` `same_as_en`: Processed
+- `bg` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `bg` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `bg` `admin_privacy` `no_events` `same_as_en`: No event.
+- `bg` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `bg` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `bg` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `bg` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `bg` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `bg` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `bg` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `bg` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `bg` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `bg` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `bg` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `bg` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `hr` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `hr` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `hr` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `hr` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `hr` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `hr` `admin_privacy` `processed` `same_as_en`: Processed
+- `hr` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `hr` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `hr` `admin_privacy` `no_events` `same_as_en`: No event.
+- `hr` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `hr` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `hr` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `hr` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `hr` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `hr` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `hr` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `hr` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `hr` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `hr` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `hr` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `hr` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `cs` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `cs` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `cs` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `cs` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `cs` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `cs` `admin_privacy` `processed` `same_as_en`: Processed
+- `cs` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `cs` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `cs` `admin_privacy` `no_events` `same_as_en`: No event.
+- `cs` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `cs` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `cs` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `cs` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `cs` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `cs` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `cs` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `cs` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `cs` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `cs` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `cs` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `cs` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `da` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `da` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `da` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `da` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `da` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `da` `admin_privacy` `processed` `same_as_en`: Processed
+- `da` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `da` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `da` `admin_privacy` `no_events` `same_as_en`: No event.
+- `da` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `da` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `da` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `da` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `da` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `da` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `da` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `da` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `da` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `da` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `da` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `da` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `et` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `et` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `et` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `et` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `et` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `et` `admin_privacy` `processed` `same_as_en`: Processed
+- `et` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `et` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `et` `admin_privacy` `no_events` `same_as_en`: No event.
+- `et` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `et` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `et` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `et` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `et` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `et` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `et` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `et` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `et` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `et` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `et` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `et` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `fi` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `fi` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `fi` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `fi` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `fi` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `fi` `admin_privacy` `processed` `same_as_en`: Processed
+- `fi` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `fi` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `fi` `admin_privacy` `no_events` `same_as_en`: No event.
+- `fi` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `fi` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `fi` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `fi` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `fi` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `fi` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `fi` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `fi` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `fi` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `fi` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `fi` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `fi` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `el` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `el` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `el` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `el` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `el` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `el` `admin_privacy` `processed` `same_as_en`: Processed
+- `el` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `el` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `el` `admin_privacy` `no_events` `same_as_en`: No event.
+- `el` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `el` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `el` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `el` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `el` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `el` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `el` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `el` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `el` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `el` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `el` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `el` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `hu` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `hu` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `hu` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `hu` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `hu` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `hu` `admin_privacy` `processed` `same_as_en`: Processed
+- `hu` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `hu` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `hu` `admin_privacy` `no_events` `same_as_en`: No event.
+- `hu` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `hu` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `hu` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `hu` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `hu` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `hu` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `hu` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `hu` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `hu` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `hu` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `hu` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `hu` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `ga` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `ga` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `ga` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `ga` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `ga` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `ga` `admin_privacy` `processed` `same_as_en`: Processed
+- `ga` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `ga` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `ga` `admin_privacy` `no_events` `same_as_en`: No event.
+- `ga` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `ga` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `ga` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `ga` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `ga` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `ga` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `ga` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `ga` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `ga` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `ga` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `ga` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `ga` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `lv` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `lv` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `lv` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `lv` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `lv` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `lv` `admin_privacy` `processed` `same_as_en`: Processed
+- `lv` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `lv` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `lv` `admin_privacy` `no_events` `same_as_en`: No event.
+- `lv` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `lv` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `lv` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `lv` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `lv` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `lv` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `lv` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `lv` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `lv` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `lv` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `lv` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `lv` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `lt` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `lt` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `lt` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `lt` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `lt` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `lt` `admin_privacy` `processed` `same_as_en`: Processed
+- `lt` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `lt` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `lt` `admin_privacy` `no_events` `same_as_en`: No event.
+- `lt` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `lt` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `lt` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `lt` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `lt` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `lt` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `lt` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `lt` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `lt` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `lt` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `lt` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `lt` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `mt` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `mt` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `mt` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `mt` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `mt` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `mt` `admin_privacy` `processed` `same_as_en`: Processed
+- `mt` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `mt` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `mt` `admin_privacy` `no_events` `same_as_en`: No event.
+- `mt` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `mt` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `mt` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `mt` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `mt` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `mt` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `mt` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `mt` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `mt` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `mt` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `mt` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `mt` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `pl` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `pl` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `pl` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `pl` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `pl` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `pl` `admin_privacy` `processed` `same_as_en`: Processed
+- `pl` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `pl` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `pl` `admin_privacy` `no_events` `same_as_en`: No event.
+- `pl` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `pl` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `pl` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `pl` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `pl` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `pl` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `pl` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `pl` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `pl` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `pl` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `pl` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `pl` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `ro` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `ro` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `ro` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `ro` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `ro` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `ro` `admin_privacy` `processed` `same_as_en`: Processed
+- `ro` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `ro` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `ro` `admin_privacy` `no_events` `same_as_en`: No event.
+- `ro` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `ro` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `ro` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `ro` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `ro` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `ro` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `ro` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `ro` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `ro` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `ro` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `ro` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `ro` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `sk` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `sk` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `sk` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `sk` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `sk` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `sk` `admin_privacy` `processed` `same_as_en`: Processed
+- `sk` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `sk` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `sk` `admin_privacy` `no_events` `same_as_en`: No event.
+- `sk` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `sk` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `sk` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `sk` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `sk` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `sk` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `sk` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `sk` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `sk` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `sk` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `sk` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `sk` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `sl` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `sl` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `sl` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `sl` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `sl` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `sl` `admin_privacy` `processed` `same_as_en`: Processed
+- `sl` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `sl` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `sl` `admin_privacy` `no_events` `same_as_en`: No event.
+- `sl` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `sl` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `sl` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `sl` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `sl` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `sl` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `sl` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `sl` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `sl` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `sl` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `sl` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `sl` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `sv` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `sv` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `sv` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `sv` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `sv` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `sv` `admin_privacy` `processed` `same_as_en`: Processed
+- `sv` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `sv` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `sv` `admin_privacy` `no_events` `same_as_en`: No event.
+- `sv` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `sv` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `sv` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `sv` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `sv` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `sv` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `sv` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `sv` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `sv` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `sv` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `sv` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `sv` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `ar` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `ar` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `ar` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `ar` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `ar` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `ar` `admin_privacy` `processed` `same_as_en`: Processed
+- `ar` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `ar` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `ar` `admin_privacy` `no_events` `same_as_en`: No event.
+- `ar` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `ar` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `ar` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `ar` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `ar` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `ar` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `ar` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `ar` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `ar` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `ar` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `ar` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `ar` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `hi` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `hi` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `hi` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `hi` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `hi` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `hi` `admin_privacy` `processed` `same_as_en`: Processed
+- `hi` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `hi` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `hi` `admin_privacy` `no_events` `same_as_en`: No event.
+- `hi` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `hi` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `hi` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `hi` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `hi` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `hi` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `hi` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `hi` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `hi` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `hi` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `hi` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `hi` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `ja` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `ja` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `ja` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `ja` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `ja` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `ja` `admin_privacy` `processed` `same_as_en`: Processed
+- `ja` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `ja` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `ja` `admin_privacy` `no_events` `same_as_en`: No event.
+- `ja` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `ja` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `ja` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `ja` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `ja` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `ja` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `ja` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `ja` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `ja` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `ja` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `ja` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `ja` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `zh` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `zh` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `zh` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `zh` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `zh` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `zh` `admin_privacy` `processed` `same_as_en`: Processed
+- `zh` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `zh` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `zh` `admin_privacy` `no_events` `same_as_en`: No event.
+- `zh` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `zh` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `zh` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `zh` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `zh` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `zh` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `zh` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `zh` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `zh` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `zh` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `zh` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `zh` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `bn` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `bn` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `bn` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `bn` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `bn` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `bn` `admin_privacy` `processed` `same_as_en`: Processed
+- `bn` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `bn` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `bn` `admin_privacy` `no_events` `same_as_en`: No event.
+- `bn` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `bn` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `bn` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `bn` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `bn` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `bn` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `bn` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `bn` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `bn` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `bn` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `bn` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `bn` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `ru` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `ru` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `ru` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `ru` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `ru` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `ru` `admin_privacy` `processed` `same_as_en`: Processed
+- `ru` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `ru` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `ru` `admin_privacy` `no_events` `same_as_en`: No event.
+- `ru` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `ru` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `ru` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `ru` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `ru` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `ru` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `ru` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `ru` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `ru` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `ru` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `ru` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `ru` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `id` `admin_privacy` `title` `same_as_en`: GDPR Administration
+- `id` `admin_privacy` `meta_desc` `same_as_en`: Process ON4CRD GDPR requests.
+- `id` `admin_privacy` `request_updated` `same_as_en`: GDPR request updated.
+- `id` `admin_privacy` `files_processed_summary` `same_as_en`: Files processed: %d deleted, %d already missing, %d failed.
+- `id` `admin_privacy` `intro` `same_as_en`: Access is restricted to the privacy.manage permission. Status changes, anonymizations, and file processing are logged.
+- `id` `admin_privacy` `processed` `same_as_en`: Processed
+- `id` `admin_privacy` `resolution` `same_as_en`: Resolution
+- `id` `admin_privacy` `anonymization` `same_as_en`: Anonymization
+- `id` `admin_privacy` `no_events` `same_as_en`: No event.
+- `id` `admin_privacy` `events_count` `same_as_en`: %d event(s)
+- `id` `admin_privacy` `apply_erasure` `same_as_en`: Apply automatic anonymization if the status changes to resolved.
+- `id` `admin_privacy` `admin_notes` `same_as_en`: Administrator notes
+- `id` `admin_privacy` `none` `same_as_en`: No GDPR request.
+- `id` `admin_privacy` `type_rectification` `same_as_fr`: Rectification
+- `id` `admin_privacy` `type_rectification` `same_as_en`: Rectification
+- `id` `admin_privacy` `type_restriction` `same_as_en`: Restriction
+- `id` `admin_privacy` `type_objection` `same_as_en`: Objection
+- `id` `admin_privacy` `type_portability` `same_as_en`: Portability
+- `id` `admin_privacy` `status_in_progress` `same_as_en`: In progress
+- `id` `admin_privacy` `status_resolved` `same_as_en`: Resolved
+- `id` `admin_privacy` `status_rejected` `same_as_en`: Rejected
+- `da` `admin_wiki` `title` `same_as_en`: Wiki administration
+- `da` `admin_wiki` `layout` `same_as_en`: Wiki administration
+- `sv` `admin_wiki` `title` `same_as_en`: Wiki administration
+- `sv` `admin_wiki` `layout` `same_as_en`: Wiki administration
+- `fr` `ads` `label_description` `same_as_en`: Description
+- `fr` `ads` `label_placement` `same_as_en`: Placement
+- `fr` `ads` `col_placement` `same_as_en`: Placement
+- `en` `ads` `label_description` `same_as_fr`: Description
+- `en` `ads` `label_placement` `same_as_fr`: Placement
+- `en` `ads` `col_placement` `same_as_fr`: Placement
+- `fr` `articles` `article_count` `same_as_en`: Article(s)
+- `fr` `articles` `layout_title` `same_as_en`: Articles
+- `en` `articles` `article_count` `same_as_fr`: Article(s)
+- `en` `articles` `layout_title` `same_as_fr`: Articles
+- `nl` `articles` `theme_antennes` `same_as_fr`: Antennes
+- `it` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `it` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `it` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `it` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `it` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `it` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `it` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `it` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `it` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `it` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `it` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `it` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `it` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `it` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `it` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `it` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `it` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `es` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `es` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `es` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `es` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `es` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `es` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `es` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `es` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `es` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `es` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `es` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `es` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `es` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `es` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `es` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `es` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `es` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `pt` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `pt` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `pt` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `pt` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `pt` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `pt` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `pt` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `pt` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `pt` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `pt` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `pt` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `pt` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `pt` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `pt` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `pt` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `pt` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `pt` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `bg` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `bg` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `bg` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `bg` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `bg` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `bg` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `bg` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `bg` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `bg` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `bg` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `bg` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `bg` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `bg` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `bg` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `bg` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `bg` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `bg` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `hr` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `hr` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hr` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `hr` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `hr` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `hr` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `hr` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `hr` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `hr` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `hr` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `hr` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `hr` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `hr` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `hr` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `hr` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `hr` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `hr` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `cs` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `cs` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `cs` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `cs` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `cs` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `cs` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `cs` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `cs` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `cs` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `cs` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `cs` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `cs` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `cs` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `cs` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `cs` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `cs` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `cs` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `da` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `da` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `da` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `da` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `da` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `da` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `da` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `da` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `da` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `da` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `da` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `da` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `da` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `da` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `da` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `da` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `da` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `et` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `et` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `et` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `et` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `et` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `et` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `et` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `et` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `et` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `et` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `et` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `et` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `et` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `et` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `et` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `et` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `et` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `fi` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `fi` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `fi` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `fi` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `fi` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `fi` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `fi` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `fi` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `fi` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `fi` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `fi` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `fi` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `fi` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `fi` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `fi` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `fi` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `fi` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `el` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `el` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `el` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `el` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `el` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `el` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `el` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `el` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `el` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `el` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `el` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `el` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `el` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `el` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `el` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `el` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `el` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `hu` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `hu` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hu` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `hu` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `hu` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `hu` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `hu` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `hu` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `hu` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `hu` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `hu` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `hu` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `hu` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `hu` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `hu` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `hu` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `hu` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `ga` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `ga` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ga` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `ga` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `ga` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `ga` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `ga` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `ga` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `ga` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `ga` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `ga` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `ga` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `ga` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `ga` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `ga` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `ga` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `ga` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `lv` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `lv` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `lv` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `lv` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `lv` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `lv` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `lv` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `lv` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `lv` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `lv` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `lv` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `lv` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `lv` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `lv` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `lv` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `lv` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `lv` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `lt` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `lt` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `lt` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `lt` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `lt` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `lt` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `lt` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `lt` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `lt` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `lt` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `lt` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `lt` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `lt` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `lt` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `lt` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `lt` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `lt` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `mt` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `mt` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `mt` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `mt` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `mt` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `mt` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `mt` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `mt` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `mt` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `mt` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `mt` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `mt` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `mt` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `mt` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `mt` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `mt` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `mt` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `pl` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `pl` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `pl` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `pl` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `pl` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `pl` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `pl` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `pl` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `pl` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `pl` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `pl` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `pl` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `pl` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `pl` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `pl` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `pl` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `pl` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `ro` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `ro` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ro` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `ro` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `ro` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `ro` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `ro` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `ro` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `ro` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `ro` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `ro` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `ro` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `ro` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `ro` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `ro` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `ro` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `ro` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `sk` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `sk` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sk` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `sk` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `sk` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `sk` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `sk` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `sk` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `sk` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `sk` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `sk` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `sk` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `sk` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `sk` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `sk` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `sk` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `sk` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `sl` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `sl` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sl` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `sl` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `sl` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `sl` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `sl` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `sl` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `sl` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `sl` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `sl` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `sl` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `sl` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `sl` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `sl` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `sl` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `sl` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `sv` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `sv` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sv` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `sv` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `sv` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `sv` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `sv` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `sv` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `sv` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `sv` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `sv` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `sv` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `sv` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `sv` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `sv` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `sv` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `sv` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `ar` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `ar` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ar` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `ar` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `ar` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `ar` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `ar` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `ar` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `ar` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `ar` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `ar` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `ar` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `ar` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `ar` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `ar` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `ar` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `ar` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `hi` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `hi` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hi` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `hi` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `hi` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `hi` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `hi` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `hi` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `hi` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `hi` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `hi` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `hi` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `hi` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `hi` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `hi` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `hi` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `hi` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `ja` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `ja` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ja` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `ja` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `ja` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `ja` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `ja` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `ja` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `ja` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `ja` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `ja` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `ja` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `ja` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `ja` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `ja` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `ja` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `ja` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `zh` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `zh` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `zh` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `zh` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `zh` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `zh` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `zh` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `zh` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `zh` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `zh` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `zh` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `zh` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `zh` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `zh` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `zh` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `zh` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `zh` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `bn` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `bn` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `bn` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `bn` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `bn` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `bn` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `bn` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `bn` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `bn` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `bn` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `bn` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `bn` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `bn` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `bn` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `bn` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `bn` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `bn` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `ru` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `ru` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ru` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `ru` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `ru` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `ru` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `ru` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `ru` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `ru` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `ru` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `ru` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `ru` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `ru` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `ru` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `ru` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `ru` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `ru` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `id` `bandplan_harec` `title` `same_as_en`: HAREC band plan
+- `id` `bandplan_harec` `header_freq` `same_as_en`: Frequencies (MHz)
+- `id` `bandplan_harec` `header_power` `same_as_en`: Max power*
+- `id` `bandplan_harec` `note_160m` `same_as_en`: Lower segment mainly CW.
+- `id` `bandplan_harec` `note_80m` `same_as_en`: Local/regional NVIS usage.
+- `id` `bandplan_harec` `note_60m` `same_as_en`: Channels/segments per IBPT publication.
+- `id` `bandplan_harec` `note_40m` `same_as_en`: High international activity.
+- `id` `bandplan_harec` `note_30m` `same_as_en`: Generally no phone operation.
+- `id` `bandplan_harec` `note_20m` `same_as_en`: 14.074 MHz commonly used for FT8.
+- `id` `bandplan_harec` `note_17m` `same_as_en`: WARC band.
+- `id` `bandplan_harec` `note_15m` `same_as_en`: Propagation often favorable by day.
+- `id` `bandplan_harec` `note_12m` `same_as_en`: WARC band.
+- `id` `bandplan_harec` `note_10m` `same_as_en`: Includes beacons and local FM.
+- `id` `bandplan_harec` `note_6m` `same_as_en`: Sporadic-E openings.
+- `id` `bandplan_harec` `note_2m` `same_as_en`: 145.500 simplex calling.
+- `id` `bandplan_harec` `note_70cm` `same_as_en`: Analog and digital repeaters.
+- `id` `bandplan_harec` `note_23cm` `same_as_en`: Shared usage depending on areas.
+- `it` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `it` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `it` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `it` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `it` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `it` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `it` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `it` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `it` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `it` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `it` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `it` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `it` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `es` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `es` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `es` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `es` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `es` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `es` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `es` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `es` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `es` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `es` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `es` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `es` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `es` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `pt` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `pt` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `pt` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `pt` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `pt` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `pt` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `pt` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `pt` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `pt` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `pt` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `pt` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `pt` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `pt` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `bg` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `bg` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `bg` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `bg` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `bg` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `bg` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `bg` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `bg` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `bg` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `bg` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `bg` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `bg` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `bg` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `hr` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `hr` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hr` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `hr` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `hr` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `hr` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `hr` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `hr` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `hr` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `hr` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `hr` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `hr` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `hr` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `cs` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `cs` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `cs` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `cs` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `cs` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `cs` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `cs` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `cs` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `cs` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `cs` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `cs` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `cs` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `cs` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `da` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `da` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `da` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `da` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `da` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `da` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `da` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `da` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `da` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `da` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `da` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `da` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `da` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `et` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `et` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `et` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `et` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `et` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `et` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `et` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `et` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `et` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `et` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `et` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `et` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `et` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `fi` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `fi` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `fi` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `fi` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `fi` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `fi` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `fi` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `fi` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `fi` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `fi` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `fi` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `fi` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `fi` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `el` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `el` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `el` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `el` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `el` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `el` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `el` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `el` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `el` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `el` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `el` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `el` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `el` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `hu` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `hu` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hu` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `hu` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `hu` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `hu` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `hu` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `hu` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `hu` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `hu` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `hu` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `hu` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `hu` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `ga` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `ga` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ga` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `ga` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `ga` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `ga` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `ga` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `ga` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `ga` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `ga` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `ga` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `ga` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `ga` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `lv` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `lv` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `lv` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `lv` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `lv` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `lv` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `lv` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `lv` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `lv` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `lv` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `lv` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `lv` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `lv` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `lt` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `lt` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `lt` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `lt` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `lt` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `lt` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `lt` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `lt` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `lt` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `lt` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `lt` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `lt` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `lt` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `mt` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `mt` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `mt` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `mt` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `mt` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `mt` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `mt` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `mt` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `mt` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `mt` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `mt` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `mt` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `mt` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `pl` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `pl` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `pl` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `pl` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `pl` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `pl` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `pl` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `pl` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `pl` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `pl` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `pl` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `pl` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `pl` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `ro` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `ro` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ro` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `ro` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `ro` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `ro` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `ro` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `ro` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `ro` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `ro` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `ro` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `ro` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `ro` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `sk` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `sk` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sk` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `sk` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `sk` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `sk` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `sk` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `sk` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `sk` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `sk` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `sk` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `sk` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `sk` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `sl` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `sl` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sl` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `sl` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `sl` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `sl` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `sl` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `sl` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `sl` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `sl` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `sl` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `sl` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `sl` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `sv` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `sv` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sv` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `sv` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `sv` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `sv` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `sv` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `sv` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `sv` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `sv` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `sv` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `sv` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `sv` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `ar` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `ar` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ar` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `ar` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `ar` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `ar` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `ar` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `ar` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `ar` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `ar` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `ar` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `ar` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `ar` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `hi` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `hi` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hi` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `hi` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `hi` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `hi` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `hi` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `hi` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `hi` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `hi` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `hi` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `hi` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `hi` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `ja` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `ja` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ja` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `ja` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `ja` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `ja` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `ja` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `ja` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `ja` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `ja` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `ja` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `ja` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `ja` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `zh` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `zh` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `zh` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `zh` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `zh` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `zh` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `zh` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `zh` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `zh` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `zh` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `zh` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `zh` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `zh` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `bn` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `bn` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `bn` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `bn` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `bn` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `bn` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `bn` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `bn` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `bn` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `bn` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `bn` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `bn` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `bn` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `ru` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `ru` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ru` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `ru` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `ru` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `ru` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `ru` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `ru` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `ru` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `ru` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `ru` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `ru` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `ru` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `id` `bandplan_on2` `title` `same_as_en`: ON2 band plan
+- `id` `bandplan_on2` `header_freq` `same_as_en`: Frequencies (MHz)
+- `id` `bandplan_on2` `header_power` `same_as_en`: Max power*
+- `id` `bandplan_on2` `note_160m` `same_as_en`: Follow IARU R1 segmentation.
+- `id` `bandplan_on2` `note_80m` `same_as_en`: Phone segment in upper band.
+- `id` `bandplan_on2` `note_40m` `same_as_en`: Frequent contest usage.
+- `id` `bandplan_on2` `note_20m` `same_as_en`: FT8 commonly on 14.074 MHz.
+- `id` `bandplan_on2` `note_15m` `same_as_en`: Variable daytime propagation.
+- `id` `bandplan_on2` `note_10m` `same_as_en`: Includes beacons and FM sub-band.
+- `id` `bandplan_on2` `note_6m` `same_as_en`: Sporadic-E openings possible.
+- `id` `bandplan_on2` `note_2m` `same_as_en`: Simplex calling on 145.500 MHz.
+- `id` `bandplan_on2` `note_70cm` `same_as_en`: Respect local repeater coordination.
+- `id` `bandplan_on2` `note_23cm` `same_as_en`: Shared band depending on local usage.
+- `it` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `it` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `it` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `it` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `it` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `it` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `it` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `it` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `it` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `it` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `es` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `es` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `es` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `es` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `es` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `es` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `es` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `es` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `es` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `es` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `pt` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `pt` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `pt` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `pt` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `pt` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `pt` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `pt` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `pt` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `pt` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `pt` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `bg` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `bg` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `bg` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `bg` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `bg` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `bg` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `bg` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `bg` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `bg` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `bg` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `hr` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `hr` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hr` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `hr` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `hr` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `hr` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `hr` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `hr` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `hr` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `hr` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `cs` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `cs` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `cs` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `cs` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `cs` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `cs` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `cs` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `cs` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `cs` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `cs` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `da` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `da` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `da` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `da` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `da` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `da` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `da` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `da` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `da` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `da` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `et` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `et` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `et` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `et` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `et` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `et` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `et` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `et` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `et` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `et` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `fi` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `fi` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `fi` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `fi` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `fi` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `fi` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `fi` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `fi` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `fi` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `fi` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `el` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `el` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `el` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `el` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `el` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `el` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `el` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `el` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `el` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `el` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `hu` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `hu` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hu` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `hu` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `hu` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `hu` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `hu` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `hu` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `hu` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `hu` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `ga` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `ga` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ga` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `ga` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `ga` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `ga` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `ga` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `ga` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `ga` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `ga` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `lv` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `lv` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `lv` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `lv` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `lv` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `lv` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `lv` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `lv` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `lv` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `lv` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `lt` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `lt` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `lt` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `lt` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `lt` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `lt` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `lt` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `lt` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `lt` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `lt` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `mt` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `mt` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `mt` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `mt` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `mt` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `mt` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `mt` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `mt` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `mt` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `mt` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `pl` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `pl` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `pl` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `pl` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `pl` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `pl` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `pl` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `pl` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `pl` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `pl` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `ro` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `ro` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ro` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `ro` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `ro` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `ro` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `ro` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `ro` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `ro` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `ro` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `sk` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `sk` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sk` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `sk` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `sk` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `sk` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `sk` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `sk` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `sk` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `sk` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `sl` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `sl` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sl` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `sl` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `sl` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `sl` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `sl` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `sl` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `sl` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `sl` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `sv` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `sv` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `sv` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `sv` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `sv` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `sv` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `sv` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `sv` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `sv` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `sv` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `ar` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `ar` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ar` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `ar` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `ar` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `ar` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `ar` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `ar` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `ar` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `ar` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `hi` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `hi` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `hi` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `hi` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `hi` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `hi` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `hi` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `hi` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `hi` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `hi` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `ja` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `ja` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ja` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `ja` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `ja` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `ja` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `ja` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `ja` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `ja` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `ja` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `zh` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `zh` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `zh` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `zh` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `zh` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `zh` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `zh` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `zh` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `zh` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `zh` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `bn` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `bn` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `bn` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `bn` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `bn` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `bn` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `bn` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `bn` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `bn` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `bn` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `ru` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `ru` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `ru` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `ru` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `ru` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `ru` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `ru` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `ru` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `ru` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `ru` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `id` `bandplan_on3` `title` `same_as_en`: ON3 band plan
+- `id` `bandplan_on3` `header_freq` `same_as_en`: Frequencies (MHz)
+- `id` `bandplan_on3` `header_power` `same_as_en`: Max power*
+- `id` `bandplan_on3` `note_80m` `same_as_en`: ON3 limited segment per authorization.
+- `id` `bandplan_on3` `note_40m` `same_as_en`: Partial use per regulation.
+- `id` `bandplan_on3` `note_15m` `same_as_en`: Mostly daytime openings.
+- `id` `bandplan_on3` `note_10m` `same_as_en`: Sub-bands per IARU plan.
+- `id` `bandplan_on3` `note_2m` `same_as_en`: 145.500 MHz simplex calling.
+- `id` `bandplan_on3` `note_70cm` `same_as_en`: Follow the local repeater plan.
+- `id` `bandplan_on3` `note_23cm` `same_as_en`: Shared segments, filtering recommended.
+- `fr` `chatbot` `question_label` `same_as_en`: Question
+- `fr` `chatbot` `history_count` `same_as_en`: messages
+- `fr` `chatbot` `scope_articles` `same_as_en`: Articles
+- `en` `chatbot` `question_label` `same_as_fr`: Question
+- `en` `chatbot` `history_count` `same_as_fr`: messages
+- `en` `chatbot` `scope_articles` `same_as_fr`: Articles
+- `fr` `classifieds` `description_label` `same_as_en`: Description
+- `fr` `classifieds` `publication_label` `same_as_en`: Publication
+- `en` `classifieds` `description_label` `same_as_fr`: Description
+- `en` `classifieds` `publication_label` `same_as_fr`: Publication
+- `fr` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `en` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `nl` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `nl` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `da` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `da` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `da` `code_cw` `prosign_bt` `same_as_en`: Separator
+- `et` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `et` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `fi` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `fi` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `hu` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `hu` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `lv` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `lv` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `pl` `code_cw` `prosign_bt` `same_as_en`: Separator
+- `ro` `code_cw` `prosign_bt` `same_as_en`: Separator
+- `sl` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `sl` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `sv` `code_cw` `prosigns` `same_as_fr`: Prosigns
+- `sv` `code_cw` `prosigns` `same_as_en`: Prosigns
+- `sv` `code_cw` `prosign_bt` `same_as_en`: Separator
+- `fr` `dashboard` `notifications` `same_as_en`: Notifications
+- `fr` `dashboard` `chatbot` `same_as_en`: Assistant
+- `fr` `dashboard` `signal_article` `same_as_en`: Articles
+- `en` `dashboard` `notifications` `same_as_fr`: Notifications
+- `en` `dashboard` `chatbot` `same_as_fr`: Assistant
+- `en` `dashboard` `signal_article` `same_as_fr`: Articles
+- `fi` `dashboard` `chatbot` `same_as_fr`: Assistant
+- `fi` `dashboard` `chatbot` `same_as_en`: Assistant
+- `nl` `directory` `antennas` `same_as_fr`: Antennes
+- `it` `donation` `badge` `same_as_en`: Club support
+- `it` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `it` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `it` `donation` `primary_cta` `same_as_en`: Request donation details
+- `it` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `it` `donation` `support_title` `same_as_en`: What your donation supports
+- `it` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `it` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `it` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `it` `donation` `process_title` `same_as_en`: How to proceed
+- `it` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `it` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `it` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `it` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `it` `donation` `contact_title` `same_as_en`: Donation details request
+- `it` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `it` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `it` `donation` `contact_send` `same_as_en`: Send my request
+- `es` `donation` `badge` `same_as_en`: Club support
+- `es` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `es` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `es` `donation` `primary_cta` `same_as_en`: Request donation details
+- `es` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `es` `donation` `support_title` `same_as_en`: What your donation supports
+- `es` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `es` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `es` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `es` `donation` `process_title` `same_as_en`: How to proceed
+- `es` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `es` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `es` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `es` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `es` `donation` `contact_title` `same_as_en`: Donation details request
+- `es` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `es` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `es` `donation` `contact_send` `same_as_en`: Send my request
+- `pt` `donation` `badge` `same_as_en`: Club support
+- `pt` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `pt` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `pt` `donation` `primary_cta` `same_as_en`: Request donation details
+- `pt` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `pt` `donation` `support_title` `same_as_en`: What your donation supports
+- `pt` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `pt` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `pt` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `pt` `donation` `process_title` `same_as_en`: How to proceed
+- `pt` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `pt` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `pt` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `pt` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `pt` `donation` `contact_title` `same_as_en`: Donation details request
+- `pt` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `pt` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `pt` `donation` `contact_send` `same_as_en`: Send my request
+- `bg` `donation` `badge` `same_as_en`: Club support
+- `bg` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `bg` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `bg` `donation` `primary_cta` `same_as_en`: Request donation details
+- `bg` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `bg` `donation` `support_title` `same_as_en`: What your donation supports
+- `bg` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `bg` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `bg` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `bg` `donation` `process_title` `same_as_en`: How to proceed
+- `bg` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `bg` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `bg` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `bg` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `bg` `donation` `contact_title` `same_as_en`: Donation details request
+- `bg` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `bg` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `bg` `donation` `contact_send` `same_as_en`: Send my request
+- `hr` `donation` `badge` `same_as_en`: Club support
+- `hr` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `hr` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `hr` `donation` `primary_cta` `same_as_en`: Request donation details
+- `hr` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `hr` `donation` `support_title` `same_as_en`: What your donation supports
+- `hr` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `hr` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `hr` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `hr` `donation` `process_title` `same_as_en`: How to proceed
+- `hr` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `hr` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `hr` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `hr` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `hr` `donation` `contact_title` `same_as_en`: Donation details request
+- `hr` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `hr` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `hr` `donation` `contact_send` `same_as_en`: Send my request
+- `cs` `donation` `badge` `same_as_en`: Club support
+- `cs` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `cs` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `cs` `donation` `primary_cta` `same_as_en`: Request donation details
+- `cs` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `cs` `donation` `support_title` `same_as_en`: What your donation supports
+- `cs` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `cs` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `cs` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `cs` `donation` `process_title` `same_as_en`: How to proceed
+- `cs` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `cs` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `cs` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `cs` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `cs` `donation` `contact_title` `same_as_en`: Donation details request
+- `cs` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `cs` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `cs` `donation` `contact_send` `same_as_en`: Send my request
+- `da` `donation` `badge` `same_as_en`: Club support
+- `da` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `da` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `da` `donation` `primary_cta` `same_as_en`: Request donation details
+- `da` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `da` `donation` `support_title` `same_as_en`: What your donation supports
+- `da` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `da` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `da` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `da` `donation` `process_title` `same_as_en`: How to proceed
+- `da` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `da` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `da` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `da` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `da` `donation` `contact_title` `same_as_en`: Donation details request
+- `da` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `da` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `da` `donation` `contact_send` `same_as_en`: Send my request
+- `et` `donation` `badge` `same_as_en`: Club support
+- `et` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `et` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `et` `donation` `primary_cta` `same_as_en`: Request donation details
+- `et` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `et` `donation` `support_title` `same_as_en`: What your donation supports
+- `et` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `et` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `et` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `et` `donation` `process_title` `same_as_en`: How to proceed
+- `et` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `et` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `et` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `et` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `et` `donation` `contact_title` `same_as_en`: Donation details request
+- `et` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `et` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `et` `donation` `contact_send` `same_as_en`: Send my request
+- `fi` `donation` `badge` `same_as_en`: Club support
+- `fi` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `fi` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `fi` `donation` `primary_cta` `same_as_en`: Request donation details
+- `fi` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `fi` `donation` `support_title` `same_as_en`: What your donation supports
+- `fi` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `fi` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `fi` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `fi` `donation` `process_title` `same_as_en`: How to proceed
+- `fi` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `fi` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `fi` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `fi` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `fi` `donation` `contact_title` `same_as_en`: Donation details request
+- `fi` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `fi` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `fi` `donation` `contact_send` `same_as_en`: Send my request
+- `el` `donation` `badge` `same_as_en`: Club support
+- `el` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `el` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `el` `donation` `primary_cta` `same_as_en`: Request donation details
+- `el` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `el` `donation` `support_title` `same_as_en`: What your donation supports
+- `el` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `el` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `el` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `el` `donation` `process_title` `same_as_en`: How to proceed
+- `el` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `el` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `el` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `el` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `el` `donation` `contact_title` `same_as_en`: Donation details request
+- `el` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `el` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `el` `donation` `contact_send` `same_as_en`: Send my request
+- `hu` `donation` `badge` `same_as_en`: Club support
+- `hu` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `hu` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `hu` `donation` `primary_cta` `same_as_en`: Request donation details
+- `hu` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `hu` `donation` `support_title` `same_as_en`: What your donation supports
+- `hu` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `hu` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `hu` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `hu` `donation` `process_title` `same_as_en`: How to proceed
+- `hu` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `hu` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `hu` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `hu` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `hu` `donation` `contact_title` `same_as_en`: Donation details request
+- `hu` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `hu` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `hu` `donation` `contact_send` `same_as_en`: Send my request
+- `ga` `donation` `badge` `same_as_en`: Club support
+- `ga` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `ga` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `ga` `donation` `primary_cta` `same_as_en`: Request donation details
+- `ga` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `ga` `donation` `support_title` `same_as_en`: What your donation supports
+- `ga` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `ga` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `ga` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `ga` `donation` `process_title` `same_as_en`: How to proceed
+- `ga` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `ga` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `ga` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `ga` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `ga` `donation` `contact_title` `same_as_en`: Donation details request
+- `ga` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `ga` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `ga` `donation` `contact_send` `same_as_en`: Send my request
+- `lv` `donation` `badge` `same_as_en`: Club support
+- `lv` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `lv` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `lv` `donation` `primary_cta` `same_as_en`: Request donation details
+- `lv` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `lv` `donation` `support_title` `same_as_en`: What your donation supports
+- `lv` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `lv` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `lv` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `lv` `donation` `process_title` `same_as_en`: How to proceed
+- `lv` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `lv` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `lv` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `lv` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `lv` `donation` `contact_title` `same_as_en`: Donation details request
+- `lv` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `lv` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `lv` `donation` `contact_send` `same_as_en`: Send my request
+- `lt` `donation` `badge` `same_as_en`: Club support
+- `lt` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `lt` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `lt` `donation` `primary_cta` `same_as_en`: Request donation details
+- `lt` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `lt` `donation` `support_title` `same_as_en`: What your donation supports
+- `lt` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `lt` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `lt` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `lt` `donation` `process_title` `same_as_en`: How to proceed
+- `lt` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `lt` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `lt` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `lt` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `lt` `donation` `contact_title` `same_as_en`: Donation details request
+- `lt` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `lt` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `lt` `donation` `contact_send` `same_as_en`: Send my request
+- `mt` `donation` `badge` `same_as_en`: Club support
+- `mt` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `mt` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `mt` `donation` `primary_cta` `same_as_en`: Request donation details
+- `mt` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `mt` `donation` `support_title` `same_as_en`: What your donation supports
+- `mt` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `mt` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `mt` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `mt` `donation` `process_title` `same_as_en`: How to proceed
+- `mt` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `mt` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `mt` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `mt` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `mt` `donation` `contact_title` `same_as_en`: Donation details request
+- `mt` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `mt` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `mt` `donation` `contact_send` `same_as_en`: Send my request
+- `pl` `donation` `badge` `same_as_en`: Club support
+- `pl` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `pl` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `pl` `donation` `primary_cta` `same_as_en`: Request donation details
+- `pl` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `pl` `donation` `support_title` `same_as_en`: What your donation supports
+- `pl` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `pl` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `pl` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `pl` `donation` `process_title` `same_as_en`: How to proceed
+- `pl` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `pl` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `pl` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `pl` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `pl` `donation` `contact_title` `same_as_en`: Donation details request
+- `pl` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `pl` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `pl` `donation` `contact_send` `same_as_en`: Send my request
+- `ro` `donation` `badge` `same_as_en`: Club support
+- `ro` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `ro` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `ro` `donation` `primary_cta` `same_as_en`: Request donation details
+- `ro` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `ro` `donation` `support_title` `same_as_en`: What your donation supports
+- `ro` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `ro` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `ro` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `ro` `donation` `process_title` `same_as_en`: How to proceed
+- `ro` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `ro` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `ro` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `ro` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `ro` `donation` `contact_title` `same_as_en`: Donation details request
+- `ro` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `ro` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `ro` `donation` `contact_send` `same_as_en`: Send my request
+- `sk` `donation` `badge` `same_as_en`: Club support
+- `sk` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `sk` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `sk` `donation` `primary_cta` `same_as_en`: Request donation details
+- `sk` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `sk` `donation` `support_title` `same_as_en`: What your donation supports
+- `sk` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `sk` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `sk` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `sk` `donation` `process_title` `same_as_en`: How to proceed
+- `sk` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `sk` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `sk` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `sk` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `sk` `donation` `contact_title` `same_as_en`: Donation details request
+- `sk` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `sk` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `sk` `donation` `contact_send` `same_as_en`: Send my request
+- `sl` `donation` `badge` `same_as_en`: Club support
+- `sl` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `sl` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `sl` `donation` `primary_cta` `same_as_en`: Request donation details
+- `sl` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `sl` `donation` `support_title` `same_as_en`: What your donation supports
+- `sl` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `sl` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `sl` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `sl` `donation` `process_title` `same_as_en`: How to proceed
+- `sl` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `sl` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `sl` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `sl` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `sl` `donation` `contact_title` `same_as_en`: Donation details request
+- `sl` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `sl` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `sl` `donation` `contact_send` `same_as_en`: Send my request
+- `sv` `donation` `badge` `same_as_en`: Club support
+- `sv` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `sv` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `sv` `donation` `primary_cta` `same_as_en`: Request donation details
+- `sv` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `sv` `donation` `support_title` `same_as_en`: What your donation supports
+- `sv` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `sv` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `sv` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `sv` `donation` `process_title` `same_as_en`: How to proceed
+- `sv` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `sv` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `sv` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `sv` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `sv` `donation` `contact_title` `same_as_en`: Donation details request
+- `sv` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `sv` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `sv` `donation` `contact_send` `same_as_en`: Send my request
+- `ar` `donation` `badge` `same_as_en`: Club support
+- `ar` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `ar` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `ar` `donation` `primary_cta` `same_as_en`: Request donation details
+- `ar` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `ar` `donation` `support_title` `same_as_en`: What your donation supports
+- `ar` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `ar` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `ar` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `ar` `donation` `process_title` `same_as_en`: How to proceed
+- `ar` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `ar` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `ar` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `ar` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `ar` `donation` `contact_title` `same_as_en`: Donation details request
+- `ar` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `ar` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `ar` `donation` `contact_send` `same_as_en`: Send my request
+- `hi` `donation` `badge` `same_as_en`: Club support
+- `hi` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `hi` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `hi` `donation` `primary_cta` `same_as_en`: Request donation details
+- `hi` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `hi` `donation` `support_title` `same_as_en`: What your donation supports
+- `hi` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `hi` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `hi` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `hi` `donation` `process_title` `same_as_en`: How to proceed
+- `hi` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `hi` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `hi` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `hi` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `hi` `donation` `contact_title` `same_as_en`: Donation details request
+- `hi` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `hi` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `hi` `donation` `contact_send` `same_as_en`: Send my request
+- `ja` `donation` `badge` `same_as_en`: Club support
+- `ja` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `ja` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `ja` `donation` `primary_cta` `same_as_en`: Request donation details
+- `ja` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `ja` `donation` `support_title` `same_as_en`: What your donation supports
+- `ja` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `ja` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `ja` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `ja` `donation` `process_title` `same_as_en`: How to proceed
+- `ja` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `ja` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `ja` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `ja` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `ja` `donation` `contact_title` `same_as_en`: Donation details request
+- `ja` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `ja` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `ja` `donation` `contact_send` `same_as_en`: Send my request
+- `zh` `donation` `badge` `same_as_en`: Club support
+- `zh` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `zh` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `zh` `donation` `primary_cta` `same_as_en`: Request donation details
+- `zh` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `zh` `donation` `support_title` `same_as_en`: What your donation supports
+- `zh` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `zh` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `zh` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `zh` `donation` `process_title` `same_as_en`: How to proceed
+- `zh` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `zh` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `zh` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `zh` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `zh` `donation` `contact_title` `same_as_en`: Donation details request
+- `zh` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `zh` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `zh` `donation` `contact_send` `same_as_en`: Send my request
+- `bn` `donation` `badge` `same_as_en`: Club support
+- `bn` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `bn` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `bn` `donation` `primary_cta` `same_as_en`: Request donation details
+- `bn` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `bn` `donation` `support_title` `same_as_en`: What your donation supports
+- `bn` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `bn` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `bn` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `bn` `donation` `process_title` `same_as_en`: How to proceed
+- `bn` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `bn` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `bn` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `bn` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `bn` `donation` `contact_title` `same_as_en`: Donation details request
+- `bn` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `bn` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `bn` `donation` `contact_send` `same_as_en`: Send my request
+- `ru` `donation` `badge` `same_as_en`: Club support
+- `ru` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `ru` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `ru` `donation` `primary_cta` `same_as_en`: Request donation details
+- `ru` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `ru` `donation` `support_title` `same_as_en`: What your donation supports
+- `ru` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `ru` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `ru` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `ru` `donation` `process_title` `same_as_en`: How to proceed
+- `ru` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `ru` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `ru` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `ru` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `ru` `donation` `contact_title` `same_as_en`: Donation details request
+- `ru` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `ru` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `ru` `donation` `contact_send` `same_as_en`: Send my request
+- `id` `donation` `badge` `same_as_en`: Club support
+- `id` `donation` `title` `same_as_en`: Donate to Radio Club Durnal
+- `id` `donation` `intro` `same_as_en`: This page is dedicated to one-off donations supporting CRD activities, equipment and amateur radio projects.
+- `id` `donation` `primary_cta` `same_as_en`: Request donation details
+- `id` `donation` `sponsoring_cta` `same_as_en`: View sponsorship
+- `id` `donation` `support_title` `same_as_en`: What your donation supports
+- `id` `donation` `support_item_1` `same_as_en`: Maintenance of radio equipment, antennas and gear used during activities.
+- `id` `donation` `support_item_2` `same_as_en`: Technical projects, demonstrations and amateur radio activities open to the public.
+- `id` `donation` `support_item_3` `same_as_en`: Club life, meetings, educational material and training initiatives.
+- `id` `donation` `process_title` `same_as_en`: How to proceed
+- `id` `donation` `process_intro` `same_as_en`: The committee confirms the current details before any payment to avoid transfer errors.
+- `id` `donation` `process_item_1` `same_as_en`: Send your request using the form below.
+- `id` `donation` `process_item_2` `same_as_en`: The committee replies with the details and payment reference to use.
+- `id` `donation` `process_item_3` `same_as_en`: Include your contact details if you want the club to be able to follow up about the donation.
+- `id` `donation` `contact_title` `same_as_en`: Donation details request
+- `id` `donation` `contact_intro` `same_as_en`: Simply explain that you would like to donate to CRD. The message will be sent to the committee.
+- `id` `donation` `security_note` `same_as_en`: Do not send sensitive banking data in this form. The committee will provide suitable instructions in its reply.
+- `id` `donation` `contact_send` `same_as_en`: Send my request
+- `fr` `events` `propose_event_description_label` `same_as_en`: Description
+- `en` `events` `propose_event_description_label` `same_as_fr`: Description
+- `es` `events` `calendar_name` `same_as_fr`: Agenda ON4CRD
+- `pt` `events` `calendar_name` `same_as_fr`: Agenda ON4CRD
+- `bg` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `hr` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `cs` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `da` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `et` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `fi` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `el` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `hu` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `lv` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `lt` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `mt` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `pl` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `ro` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `sk` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `sl` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `sv` `events` `ics_filename` `same_as_en`: on4crd-events.ics
+- `da` `forgot_password` `submit` `same_as_en`: Send link
+- `fr` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `en` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `it` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `it` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `it` `gdpr` `notice_version` `same_as_en`: Notice version
+- `it` `gdpr` `member_rights` `same_as_en`: Member rights
+- `it` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `it` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `it` `gdpr` `your_rights` `same_as_en`: Your rights
+- `it` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `it` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `it` `gdpr` `export_button` `same_as_en`: Export my data
+- `it` `gdpr` `request_type` `same_as_en`: Request type
+- `it` `gdpr` `request_notes` `same_as_en`: Useful details
+- `it` `gdpr` `request_submit` `same_as_en`: Submit request
+- `it` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `it` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `it` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `it` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `it` `gdpr` `type_objection` `same_as_en`: Objection
+- `it` `gdpr` `type_portability` `same_as_en`: Portability
+- `it` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `it` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `it` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `it` `gdpr` `table_processing` `same_as_en`: Processing
+- `it` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `it` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `it` `gdpr` `view_public` `same_as_en`: Public view
+- `it` `gdpr` `view_members` `same_as_en`: Members view
+- `it` `gdpr` `view_private` `same_as_en`: Private view
+- `it` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `es` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `es` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `es` `gdpr` `notice_version` `same_as_en`: Notice version
+- `es` `gdpr` `member_rights` `same_as_en`: Member rights
+- `es` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `es` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `es` `gdpr` `your_rights` `same_as_en`: Your rights
+- `es` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `es` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `es` `gdpr` `export_button` `same_as_en`: Export my data
+- `es` `gdpr` `request_type` `same_as_en`: Request type
+- `es` `gdpr` `request_notes` `same_as_en`: Useful details
+- `es` `gdpr` `request_submit` `same_as_en`: Submit request
+- `es` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `es` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `es` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `es` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `es` `gdpr` `type_objection` `same_as_en`: Objection
+- `es` `gdpr` `type_portability` `same_as_en`: Portability
+- `es` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `es` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `es` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `es` `gdpr` `table_processing` `same_as_en`: Processing
+- `es` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `es` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `es` `gdpr` `view_public` `same_as_en`: Public view
+- `es` `gdpr` `view_members` `same_as_en`: Members view
+- `es` `gdpr` `view_private` `same_as_en`: Private view
+- `es` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `pt` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `pt` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `pt` `gdpr` `notice_version` `same_as_en`: Notice version
+- `pt` `gdpr` `member_rights` `same_as_en`: Member rights
+- `pt` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `pt` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `pt` `gdpr` `your_rights` `same_as_en`: Your rights
+- `pt` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `pt` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `pt` `gdpr` `export_button` `same_as_en`: Export my data
+- `pt` `gdpr` `request_type` `same_as_en`: Request type
+- `pt` `gdpr` `request_notes` `same_as_en`: Useful details
+- `pt` `gdpr` `request_submit` `same_as_en`: Submit request
+- `pt` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `pt` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `pt` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `pt` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `pt` `gdpr` `type_objection` `same_as_en`: Objection
+- `pt` `gdpr` `type_portability` `same_as_en`: Portability
+- `pt` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `pt` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `pt` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `pt` `gdpr` `table_processing` `same_as_en`: Processing
+- `pt` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `pt` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `pt` `gdpr` `view_public` `same_as_en`: Public view
+- `pt` `gdpr` `view_members` `same_as_en`: Members view
+- `pt` `gdpr` `view_private` `same_as_en`: Private view
+- `pt` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `bg` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `bg` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `bg` `gdpr` `notice_version` `same_as_en`: Notice version
+- `bg` `gdpr` `member_rights` `same_as_en`: Member rights
+- `bg` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `bg` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `bg` `gdpr` `your_rights` `same_as_en`: Your rights
+- `bg` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `bg` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `bg` `gdpr` `export_button` `same_as_en`: Export my data
+- `bg` `gdpr` `request_type` `same_as_en`: Request type
+- `bg` `gdpr` `request_notes` `same_as_en`: Useful details
+- `bg` `gdpr` `request_submit` `same_as_en`: Submit request
+- `bg` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `bg` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `bg` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `bg` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `bg` `gdpr` `type_objection` `same_as_en`: Objection
+- `bg` `gdpr` `type_portability` `same_as_en`: Portability
+- `bg` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `bg` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `bg` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `bg` `gdpr` `table_processing` `same_as_en`: Processing
+- `bg` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `bg` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `bg` `gdpr` `view_public` `same_as_en`: Public view
+- `bg` `gdpr` `view_members` `same_as_en`: Members view
+- `bg` `gdpr` `view_private` `same_as_en`: Private view
+- `bg` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `hr` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `hr` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `hr` `gdpr` `notice_version` `same_as_en`: Notice version
+- `hr` `gdpr` `member_rights` `same_as_en`: Member rights
+- `hr` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `hr` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `hr` `gdpr` `your_rights` `same_as_en`: Your rights
+- `hr` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `hr` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `hr` `gdpr` `export_button` `same_as_en`: Export my data
+- `hr` `gdpr` `request_type` `same_as_en`: Request type
+- `hr` `gdpr` `request_notes` `same_as_en`: Useful details
+- `hr` `gdpr` `request_submit` `same_as_en`: Submit request
+- `hr` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `hr` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `hr` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `hr` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `hr` `gdpr` `type_objection` `same_as_en`: Objection
+- `hr` `gdpr` `type_portability` `same_as_en`: Portability
+- `hr` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `hr` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `hr` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `hr` `gdpr` `table_processing` `same_as_en`: Processing
+- `hr` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `hr` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `hr` `gdpr` `view_public` `same_as_en`: Public view
+- `hr` `gdpr` `view_members` `same_as_en`: Members view
+- `hr` `gdpr` `view_private` `same_as_en`: Private view
+- `hr` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `cs` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `cs` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `cs` `gdpr` `notice_version` `same_as_en`: Notice version
+- `cs` `gdpr` `member_rights` `same_as_en`: Member rights
+- `cs` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `cs` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `cs` `gdpr` `your_rights` `same_as_en`: Your rights
+- `cs` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `cs` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `cs` `gdpr` `export_button` `same_as_en`: Export my data
+- `cs` `gdpr` `request_type` `same_as_en`: Request type
+- `cs` `gdpr` `request_notes` `same_as_en`: Useful details
+- `cs` `gdpr` `request_submit` `same_as_en`: Submit request
+- `cs` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `cs` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `cs` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `cs` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `cs` `gdpr` `type_objection` `same_as_en`: Objection
+- `cs` `gdpr` `type_portability` `same_as_en`: Portability
+- `cs` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `cs` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `cs` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `cs` `gdpr` `table_processing` `same_as_en`: Processing
+- `cs` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `cs` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `cs` `gdpr` `view_public` `same_as_en`: Public view
+- `cs` `gdpr` `view_members` `same_as_en`: Members view
+- `cs` `gdpr` `view_private` `same_as_en`: Private view
+- `cs` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `da` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `da` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `da` `gdpr` `notice_version` `same_as_en`: Notice version
+- `da` `gdpr` `member_rights` `same_as_en`: Member rights
+- `da` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `da` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `da` `gdpr` `your_rights` `same_as_en`: Your rights
+- `da` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `da` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `da` `gdpr` `export_button` `same_as_en`: Export my data
+- `da` `gdpr` `request_type` `same_as_en`: Request type
+- `da` `gdpr` `request_notes` `same_as_en`: Useful details
+- `da` `gdpr` `request_submit` `same_as_en`: Submit request
+- `da` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `da` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `da` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `da` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `da` `gdpr` `type_objection` `same_as_en`: Objection
+- `da` `gdpr` `type_portability` `same_as_en`: Portability
+- `da` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `da` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `da` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `da` `gdpr` `table_processing` `same_as_en`: Processing
+- `da` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `da` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `da` `gdpr` `view_public` `same_as_en`: Public view
+- `da` `gdpr` `view_members` `same_as_en`: Members view
+- `da` `gdpr` `view_private` `same_as_en`: Private view
+- `da` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `et` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `et` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `et` `gdpr` `notice_version` `same_as_en`: Notice version
+- `et` `gdpr` `member_rights` `same_as_en`: Member rights
+- `et` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `et` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `et` `gdpr` `your_rights` `same_as_en`: Your rights
+- `et` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `et` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `et` `gdpr` `export_button` `same_as_en`: Export my data
+- `et` `gdpr` `request_type` `same_as_en`: Request type
+- `et` `gdpr` `request_notes` `same_as_en`: Useful details
+- `et` `gdpr` `request_submit` `same_as_en`: Submit request
+- `et` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `et` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `et` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `et` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `et` `gdpr` `type_objection` `same_as_en`: Objection
+- `et` `gdpr` `type_portability` `same_as_en`: Portability
+- `et` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `et` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `et` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `et` `gdpr` `table_processing` `same_as_en`: Processing
+- `et` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `et` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `et` `gdpr` `view_public` `same_as_en`: Public view
+- `et` `gdpr` `view_members` `same_as_en`: Members view
+- `et` `gdpr` `view_private` `same_as_en`: Private view
+- `et` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `fi` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `fi` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `fi` `gdpr` `notice_version` `same_as_en`: Notice version
+- `fi` `gdpr` `member_rights` `same_as_en`: Member rights
+- `fi` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `fi` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `fi` `gdpr` `your_rights` `same_as_en`: Your rights
+- `fi` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `fi` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `fi` `gdpr` `export_button` `same_as_en`: Export my data
+- `fi` `gdpr` `request_type` `same_as_en`: Request type
+- `fi` `gdpr` `request_notes` `same_as_en`: Useful details
+- `fi` `gdpr` `request_submit` `same_as_en`: Submit request
+- `fi` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `fi` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `fi` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `fi` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `fi` `gdpr` `type_objection` `same_as_en`: Objection
+- `fi` `gdpr` `type_portability` `same_as_en`: Portability
+- `fi` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `fi` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `fi` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `fi` `gdpr` `table_processing` `same_as_en`: Processing
+- `fi` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `fi` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `fi` `gdpr` `view_public` `same_as_en`: Public view
+- `fi` `gdpr` `view_members` `same_as_en`: Members view
+- `fi` `gdpr` `view_private` `same_as_en`: Private view
+- `fi` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `el` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `el` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `el` `gdpr` `notice_version` `same_as_en`: Notice version
+- `el` `gdpr` `member_rights` `same_as_en`: Member rights
+- `el` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `el` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `el` `gdpr` `your_rights` `same_as_en`: Your rights
+- `el` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `el` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `el` `gdpr` `export_button` `same_as_en`: Export my data
+- `el` `gdpr` `request_type` `same_as_en`: Request type
+- `el` `gdpr` `request_notes` `same_as_en`: Useful details
+- `el` `gdpr` `request_submit` `same_as_en`: Submit request
+- `el` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `el` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `el` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `el` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `el` `gdpr` `type_objection` `same_as_en`: Objection
+- `el` `gdpr` `type_portability` `same_as_en`: Portability
+- `el` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `el` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `el` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `el` `gdpr` `table_processing` `same_as_en`: Processing
+- `el` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `el` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `el` `gdpr` `view_public` `same_as_en`: Public view
+- `el` `gdpr` `view_members` `same_as_en`: Members view
+- `el` `gdpr` `view_private` `same_as_en`: Private view
+- `el` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `hu` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `hu` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `hu` `gdpr` `notice_version` `same_as_en`: Notice version
+- `hu` `gdpr` `member_rights` `same_as_en`: Member rights
+- `hu` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `hu` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `hu` `gdpr` `your_rights` `same_as_en`: Your rights
+- `hu` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `hu` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `hu` `gdpr` `export_button` `same_as_en`: Export my data
+- `hu` `gdpr` `request_type` `same_as_en`: Request type
+- `hu` `gdpr` `request_notes` `same_as_en`: Useful details
+- `hu` `gdpr` `request_submit` `same_as_en`: Submit request
+- `hu` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `hu` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `hu` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `hu` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `hu` `gdpr` `type_objection` `same_as_en`: Objection
+- `hu` `gdpr` `type_portability` `same_as_en`: Portability
+- `hu` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `hu` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `hu` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `hu` `gdpr` `table_processing` `same_as_en`: Processing
+- `hu` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `hu` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `hu` `gdpr` `view_public` `same_as_en`: Public view
+- `hu` `gdpr` `view_members` `same_as_en`: Members view
+- `hu` `gdpr` `view_private` `same_as_en`: Private view
+- `hu` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `ga` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `ga` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `ga` `gdpr` `notice_version` `same_as_en`: Notice version
+- `ga` `gdpr` `member_rights` `same_as_en`: Member rights
+- `ga` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `ga` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `ga` `gdpr` `your_rights` `same_as_en`: Your rights
+- `ga` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `ga` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `ga` `gdpr` `export_button` `same_as_en`: Export my data
+- `ga` `gdpr` `request_type` `same_as_en`: Request type
+- `ga` `gdpr` `request_notes` `same_as_en`: Useful details
+- `ga` `gdpr` `request_submit` `same_as_en`: Submit request
+- `ga` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `ga` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `ga` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `ga` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `ga` `gdpr` `type_objection` `same_as_en`: Objection
+- `ga` `gdpr` `type_portability` `same_as_en`: Portability
+- `ga` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `ga` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `ga` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `ga` `gdpr` `table_processing` `same_as_en`: Processing
+- `ga` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `ga` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `ga` `gdpr` `view_public` `same_as_en`: Public view
+- `ga` `gdpr` `view_members` `same_as_en`: Members view
+- `ga` `gdpr` `view_private` `same_as_en`: Private view
+- `ga` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `lv` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `lv` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `lv` `gdpr` `notice_version` `same_as_en`: Notice version
+- `lv` `gdpr` `member_rights` `same_as_en`: Member rights
+- `lv` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `lv` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `lv` `gdpr` `your_rights` `same_as_en`: Your rights
+- `lv` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `lv` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `lv` `gdpr` `export_button` `same_as_en`: Export my data
+- `lv` `gdpr` `request_type` `same_as_en`: Request type
+- `lv` `gdpr` `request_notes` `same_as_en`: Useful details
+- `lv` `gdpr` `request_submit` `same_as_en`: Submit request
+- `lv` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `lv` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `lv` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `lv` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `lv` `gdpr` `type_objection` `same_as_en`: Objection
+- `lv` `gdpr` `type_portability` `same_as_en`: Portability
+- `lv` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `lv` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `lv` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `lv` `gdpr` `table_processing` `same_as_en`: Processing
+- `lv` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `lv` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `lv` `gdpr` `view_public` `same_as_en`: Public view
+- `lv` `gdpr` `view_members` `same_as_en`: Members view
+- `lv` `gdpr` `view_private` `same_as_en`: Private view
+- `lv` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `lt` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `lt` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `lt` `gdpr` `notice_version` `same_as_en`: Notice version
+- `lt` `gdpr` `member_rights` `same_as_en`: Member rights
+- `lt` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `lt` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `lt` `gdpr` `your_rights` `same_as_en`: Your rights
+- `lt` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `lt` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `lt` `gdpr` `export_button` `same_as_en`: Export my data
+- `lt` `gdpr` `request_type` `same_as_en`: Request type
+- `lt` `gdpr` `request_notes` `same_as_en`: Useful details
+- `lt` `gdpr` `request_submit` `same_as_en`: Submit request
+- `lt` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `lt` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `lt` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `lt` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `lt` `gdpr` `type_objection` `same_as_en`: Objection
+- `lt` `gdpr` `type_portability` `same_as_en`: Portability
+- `lt` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `lt` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `lt` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `lt` `gdpr` `table_processing` `same_as_en`: Processing
+- `lt` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `lt` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `lt` `gdpr` `view_public` `same_as_en`: Public view
+- `lt` `gdpr` `view_members` `same_as_en`: Members view
+- `lt` `gdpr` `view_private` `same_as_en`: Private view
+- `lt` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `mt` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `mt` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `mt` `gdpr` `notice_version` `same_as_en`: Notice version
+- `mt` `gdpr` `member_rights` `same_as_en`: Member rights
+- `mt` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `mt` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `mt` `gdpr` `your_rights` `same_as_en`: Your rights
+- `mt` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `mt` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `mt` `gdpr` `export_button` `same_as_en`: Export my data
+- `mt` `gdpr` `request_type` `same_as_en`: Request type
+- `mt` `gdpr` `request_notes` `same_as_en`: Useful details
+- `mt` `gdpr` `request_submit` `same_as_en`: Submit request
+- `mt` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `mt` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `mt` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `mt` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `mt` `gdpr` `type_objection` `same_as_en`: Objection
+- `mt` `gdpr` `type_portability` `same_as_en`: Portability
+- `mt` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `mt` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `mt` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `mt` `gdpr` `table_processing` `same_as_en`: Processing
+- `mt` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `mt` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `mt` `gdpr` `view_public` `same_as_en`: Public view
+- `mt` `gdpr` `view_members` `same_as_en`: Members view
+- `mt` `gdpr` `view_private` `same_as_en`: Private view
+- `mt` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `pl` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `pl` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `pl` `gdpr` `notice_version` `same_as_en`: Notice version
+- `pl` `gdpr` `member_rights` `same_as_en`: Member rights
+- `pl` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `pl` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `pl` `gdpr` `your_rights` `same_as_en`: Your rights
+- `pl` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `pl` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `pl` `gdpr` `export_button` `same_as_en`: Export my data
+- `pl` `gdpr` `request_type` `same_as_en`: Request type
+- `pl` `gdpr` `request_notes` `same_as_en`: Useful details
+- `pl` `gdpr` `request_submit` `same_as_en`: Submit request
+- `pl` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `pl` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `pl` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `pl` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `pl` `gdpr` `type_objection` `same_as_en`: Objection
+- `pl` `gdpr` `type_portability` `same_as_en`: Portability
+- `pl` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `pl` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `pl` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `pl` `gdpr` `table_processing` `same_as_en`: Processing
+- `pl` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `pl` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `pl` `gdpr` `view_public` `same_as_en`: Public view
+- `pl` `gdpr` `view_members` `same_as_en`: Members view
+- `pl` `gdpr` `view_private` `same_as_en`: Private view
+- `pl` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `ro` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `ro` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `ro` `gdpr` `notice_version` `same_as_en`: Notice version
+- `ro` `gdpr` `member_rights` `same_as_en`: Member rights
+- `ro` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `ro` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `ro` `gdpr` `your_rights` `same_as_en`: Your rights
+- `ro` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `ro` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `ro` `gdpr` `export_button` `same_as_en`: Export my data
+- `ro` `gdpr` `request_type` `same_as_en`: Request type
+- `ro` `gdpr` `request_notes` `same_as_en`: Useful details
+- `ro` `gdpr` `request_submit` `same_as_en`: Submit request
+- `ro` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `ro` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `ro` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `ro` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `ro` `gdpr` `type_objection` `same_as_en`: Objection
+- `ro` `gdpr` `type_portability` `same_as_en`: Portability
+- `ro` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `ro` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `ro` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `ro` `gdpr` `table_processing` `same_as_en`: Processing
+- `ro` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `ro` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `ro` `gdpr` `view_public` `same_as_en`: Public view
+- `ro` `gdpr` `view_members` `same_as_en`: Members view
+- `ro` `gdpr` `view_private` `same_as_en`: Private view
+- `ro` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `sk` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `sk` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `sk` `gdpr` `notice_version` `same_as_en`: Notice version
+- `sk` `gdpr` `member_rights` `same_as_en`: Member rights
+- `sk` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `sk` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `sk` `gdpr` `your_rights` `same_as_en`: Your rights
+- `sk` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `sk` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `sk` `gdpr` `export_button` `same_as_en`: Export my data
+- `sk` `gdpr` `request_type` `same_as_en`: Request type
+- `sk` `gdpr` `request_notes` `same_as_en`: Useful details
+- `sk` `gdpr` `request_submit` `same_as_en`: Submit request
+- `sk` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `sk` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `sk` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `sk` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `sk` `gdpr` `type_objection` `same_as_en`: Objection
+- `sk` `gdpr` `type_portability` `same_as_en`: Portability
+- `sk` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `sk` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `sk` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `sk` `gdpr` `table_processing` `same_as_en`: Processing
+- `sk` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `sk` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `sk` `gdpr` `view_public` `same_as_en`: Public view
+- `sk` `gdpr` `view_members` `same_as_en`: Members view
+- `sk` `gdpr` `view_private` `same_as_en`: Private view
+- `sk` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `sl` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `sl` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `sl` `gdpr` `notice_version` `same_as_en`: Notice version
+- `sl` `gdpr` `member_rights` `same_as_en`: Member rights
+- `sl` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `sl` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `sl` `gdpr` `your_rights` `same_as_en`: Your rights
+- `sl` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `sl` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `sl` `gdpr` `export_button` `same_as_en`: Export my data
+- `sl` `gdpr` `request_type` `same_as_en`: Request type
+- `sl` `gdpr` `request_notes` `same_as_en`: Useful details
+- `sl` `gdpr` `request_submit` `same_as_en`: Submit request
+- `sl` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `sl` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `sl` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `sl` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `sl` `gdpr` `type_objection` `same_as_en`: Objection
+- `sl` `gdpr` `type_portability` `same_as_en`: Portability
+- `sl` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `sl` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `sl` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `sl` `gdpr` `table_processing` `same_as_en`: Processing
+- `sl` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `sl` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `sl` `gdpr` `view_public` `same_as_en`: Public view
+- `sl` `gdpr` `view_members` `same_as_en`: Members view
+- `sl` `gdpr` `view_private` `same_as_en`: Private view
+- `sl` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `sv` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `sv` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `sv` `gdpr` `notice_version` `same_as_en`: Notice version
+- `sv` `gdpr` `member_rights` `same_as_en`: Member rights
+- `sv` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `sv` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `sv` `gdpr` `your_rights` `same_as_en`: Your rights
+- `sv` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `sv` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `sv` `gdpr` `export_button` `same_as_en`: Export my data
+- `sv` `gdpr` `request_type` `same_as_en`: Request type
+- `sv` `gdpr` `request_notes` `same_as_en`: Useful details
+- `sv` `gdpr` `request_submit` `same_as_en`: Submit request
+- `sv` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `sv` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `sv` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `sv` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `sv` `gdpr` `type_objection` `same_as_en`: Objection
+- `sv` `gdpr` `type_portability` `same_as_en`: Portability
+- `sv` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `sv` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `sv` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `sv` `gdpr` `table_processing` `same_as_en`: Processing
+- `sv` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `sv` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `sv` `gdpr` `view_public` `same_as_en`: Public view
+- `sv` `gdpr` `view_members` `same_as_en`: Members view
+- `sv` `gdpr` `view_private` `same_as_en`: Private view
+- `sv` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `ar` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `ar` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `ar` `gdpr` `notice_version` `same_as_en`: Notice version
+- `ar` `gdpr` `member_rights` `same_as_en`: Member rights
+- `ar` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `ar` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `ar` `gdpr` `your_rights` `same_as_en`: Your rights
+- `ar` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `ar` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `ar` `gdpr` `export_button` `same_as_en`: Export my data
+- `ar` `gdpr` `request_type` `same_as_en`: Request type
+- `ar` `gdpr` `request_notes` `same_as_en`: Useful details
+- `ar` `gdpr` `request_submit` `same_as_en`: Submit request
+- `ar` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `ar` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `ar` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `ar` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `ar` `gdpr` `type_objection` `same_as_en`: Objection
+- `ar` `gdpr` `type_portability` `same_as_en`: Portability
+- `ar` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `ar` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `ar` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `ar` `gdpr` `table_processing` `same_as_en`: Processing
+- `ar` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `ar` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `ar` `gdpr` `view_public` `same_as_en`: Public view
+- `ar` `gdpr` `view_members` `same_as_en`: Members view
+- `ar` `gdpr` `view_private` `same_as_en`: Private view
+- `ar` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `hi` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `hi` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `hi` `gdpr` `notice_version` `same_as_en`: Notice version
+- `hi` `gdpr` `member_rights` `same_as_en`: Member rights
+- `hi` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `hi` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `hi` `gdpr` `your_rights` `same_as_en`: Your rights
+- `hi` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `hi` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `hi` `gdpr` `export_button` `same_as_en`: Export my data
+- `hi` `gdpr` `request_type` `same_as_en`: Request type
+- `hi` `gdpr` `request_notes` `same_as_en`: Useful details
+- `hi` `gdpr` `request_submit` `same_as_en`: Submit request
+- `hi` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `hi` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `hi` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `hi` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `hi` `gdpr` `type_objection` `same_as_en`: Objection
+- `hi` `gdpr` `type_portability` `same_as_en`: Portability
+- `hi` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `hi` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `hi` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `hi` `gdpr` `table_processing` `same_as_en`: Processing
+- `hi` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `hi` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `hi` `gdpr` `view_public` `same_as_en`: Public view
+- `hi` `gdpr` `view_members` `same_as_en`: Members view
+- `hi` `gdpr` `view_private` `same_as_en`: Private view
+- `hi` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `ja` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `ja` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `ja` `gdpr` `notice_version` `same_as_en`: Notice version
+- `ja` `gdpr` `member_rights` `same_as_en`: Member rights
+- `ja` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `ja` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `ja` `gdpr` `your_rights` `same_as_en`: Your rights
+- `ja` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `ja` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `ja` `gdpr` `export_button` `same_as_en`: Export my data
+- `ja` `gdpr` `request_type` `same_as_en`: Request type
+- `ja` `gdpr` `request_notes` `same_as_en`: Useful details
+- `ja` `gdpr` `request_submit` `same_as_en`: Submit request
+- `ja` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `ja` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `ja` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `ja` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `ja` `gdpr` `type_objection` `same_as_en`: Objection
+- `ja` `gdpr` `type_portability` `same_as_en`: Portability
+- `ja` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `ja` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `ja` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `ja` `gdpr` `table_processing` `same_as_en`: Processing
+- `ja` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `ja` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `ja` `gdpr` `view_public` `same_as_en`: Public view
+- `ja` `gdpr` `view_members` `same_as_en`: Members view
+- `ja` `gdpr` `view_private` `same_as_en`: Private view
+- `ja` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `zh` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `zh` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `zh` `gdpr` `notice_version` `same_as_en`: Notice version
+- `zh` `gdpr` `member_rights` `same_as_en`: Member rights
+- `zh` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `zh` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `zh` `gdpr` `your_rights` `same_as_en`: Your rights
+- `zh` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `zh` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `zh` `gdpr` `export_button` `same_as_en`: Export my data
+- `zh` `gdpr` `request_type` `same_as_en`: Request type
+- `zh` `gdpr` `request_notes` `same_as_en`: Useful details
+- `zh` `gdpr` `request_submit` `same_as_en`: Submit request
+- `zh` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `zh` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `zh` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `zh` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `zh` `gdpr` `type_objection` `same_as_en`: Objection
+- `zh` `gdpr` `type_portability` `same_as_en`: Portability
+- `zh` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `zh` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `zh` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `zh` `gdpr` `table_processing` `same_as_en`: Processing
+- `zh` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `zh` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `zh` `gdpr` `view_public` `same_as_en`: Public view
+- `zh` `gdpr` `view_members` `same_as_en`: Members view
+- `zh` `gdpr` `view_private` `same_as_en`: Private view
+- `zh` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `bn` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `bn` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `bn` `gdpr` `notice_version` `same_as_en`: Notice version
+- `bn` `gdpr` `member_rights` `same_as_en`: Member rights
+- `bn` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `bn` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `bn` `gdpr` `your_rights` `same_as_en`: Your rights
+- `bn` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `bn` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `bn` `gdpr` `export_button` `same_as_en`: Export my data
+- `bn` `gdpr` `request_type` `same_as_en`: Request type
+- `bn` `gdpr` `request_notes` `same_as_en`: Useful details
+- `bn` `gdpr` `request_submit` `same_as_en`: Submit request
+- `bn` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `bn` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `bn` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `bn` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `bn` `gdpr` `type_objection` `same_as_en`: Objection
+- `bn` `gdpr` `type_portability` `same_as_en`: Portability
+- `bn` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `bn` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `bn` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `bn` `gdpr` `table_processing` `same_as_en`: Processing
+- `bn` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `bn` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `bn` `gdpr` `view_public` `same_as_en`: Public view
+- `bn` `gdpr` `view_members` `same_as_en`: Members view
+- `bn` `gdpr` `view_private` `same_as_en`: Private view
+- `bn` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `ru` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `ru` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `ru` `gdpr` `notice_version` `same_as_en`: Notice version
+- `ru` `gdpr` `member_rights` `same_as_en`: Member rights
+- `ru` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `ru` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `ru` `gdpr` `your_rights` `same_as_en`: Your rights
+- `ru` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `ru` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `ru` `gdpr` `export_button` `same_as_en`: Export my data
+- `ru` `gdpr` `request_type` `same_as_en`: Request type
+- `ru` `gdpr` `request_notes` `same_as_en`: Useful details
+- `ru` `gdpr` `request_submit` `same_as_en`: Submit request
+- `ru` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `ru` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `ru` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `ru` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `ru` `gdpr` `type_objection` `same_as_en`: Objection
+- `ru` `gdpr` `type_portability` `same_as_en`: Portability
+- `ru` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `ru` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `ru` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `ru` `gdpr` `table_processing` `same_as_en`: Processing
+- `ru` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `ru` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `ru` `gdpr` `view_public` `same_as_en`: Public view
+- `ru` `gdpr` `view_members` `same_as_en`: Members view
+- `ru` `gdpr` `view_private` `same_as_en`: Private view
+- `ru` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `id` `gdpr` `title` `same_as_en`: Privacy and GDPR
+- `id` `gdpr` `meta_desc` `same_as_en`: ON4CRD GDPR notice, data subject rights, and profile visibility settings.
+- `id` `gdpr` `notice_version` `same_as_en`: Notice version
+- `id` `gdpr` `member_rights` `same_as_en`: Member rights
+- `id` `gdpr` `public_contact_prefix` `same_as_en`: Public contact for any personal data request
+- `id` `gdpr` `login_help` `same_as_en`: Sign in to export your data, submit a GDPR request, and manage your profile visibility.
+- `id` `gdpr` `your_rights` `same_as_en`: Your rights
+- `id` `gdpr` `rights_help` `same_as_en`: Direct export and tracked requests with pseudonymized technical data.
+- `id` `gdpr` `export_help` `same_as_en`: Download a JSON copy of the data linked to your account, including a manifest of known personal files.
+- `id` `gdpr` `export_button` `same_as_en`: Export my data
+- `id` `gdpr` `request_type` `same_as_en`: Request type
+- `id` `gdpr` `request_notes` `same_as_en`: Useful details
+- `id` `gdpr` `request_submit` `same_as_en`: Submit request
+- `id` `gdpr` `request_saved` `same_as_en`: Your GDPR request has been recorded.
+- `id` `gdpr` `type_rectification` `same_as_fr`: Rectification
+- `id` `gdpr` `type_rectification` `same_as_en`: Rectification
+- `id` `gdpr` `type_restriction` `same_as_en`: Restriction
+- `id` `gdpr` `type_objection` `same_as_en`: Objection
+- `id` `gdpr` `type_portability` `same_as_en`: Portability
+- `id` `gdpr` `status_in_progress` `same_as_en`: In progress
+- `id` `gdpr` `status_resolved` `same_as_en`: Resolved
+- `id` `gdpr` `status_rejected` `same_as_en`: Rejected
+- `id` `gdpr` `table_processing` `same_as_en`: Processing
+- `id` `gdpr` `table_resolution` `same_as_en`: Resolution
+- `id` `gdpr` `anonymization` `same_as_en`: Anonymization
+- `id` `gdpr` `view_public` `same_as_en`: Public view
+- `id` `gdpr` `view_members` `same_as_en`: Members view
+- `id` `gdpr` `view_private` `same_as_en`: Private view
+- `id` `gdpr` `empty_visible_info` `same_as_en`: No visible information.
+- `fr` `home` `cw_qrp_value` `same_as_en`: 7.030 MHz • 14.060 MHz
+- `fr` `home` `spotlight_member_wiki_articles` `same_as_en`: Wiki / Articles
+- `fr` `home` `spotlight_member_articles` `same_as_en`: Articles
+- `fr` `home` `spotlight_member_assistant` `same_as_en`: Assistant
+- `fr` `home` `member_module_chatbot_title` `same_as_en`: Assistant
+- `fr` `home` `member_module_newsletter_title` `same_as_en`: Newsletter
+- `fr` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `fr` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `fr` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `fr` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `en` `home` `cw_qrp_value` `same_as_fr`: 7.030 MHz • 14.060 MHz
+- `en` `home` `spotlight_member_wiki_articles` `same_as_fr`: Wiki / Articles
+- `en` `home` `spotlight_member_articles` `same_as_fr`: Articles
+- `en` `home` `spotlight_member_assistant` `same_as_fr`: Assistant
+- `en` `home` `member_module_chatbot_title` `same_as_fr`: Assistant
+- `en` `home` `member_module_newsletter_title` `same_as_fr`: Newsletter
+- `en` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `en` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `en` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `en` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `de` `home` `member_module_newsletter_title` `same_as_fr`: Newsletter
+- `de` `home` `member_module_newsletter_title` `same_as_en`: Newsletter
+- `de` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `de` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `de` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `de` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `de` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `de` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `de` `home` `link_sponsoring` `same_as_fr`: Sponsoring
+- `de` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `nl` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `nl` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `nl` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `nl` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `nl` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `nl` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `nl` `home` `link_sponsoring` `same_as_fr`: Sponsoring
+- `nl` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `it` `home` `cw_qrp_value` `same_as_fr`: 7.030 MHz • 14.060 MHz
+- `it` `home` `cw_qrp_value` `same_as_en`: 7.030 MHz • 14.060 MHz
+- `it` `home` `member_module_newsletter_title` `same_as_fr`: Newsletter
+- `it` `home` `member_module_newsletter_title` `same_as_en`: Newsletter
+- `it` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `it` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `it` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `it` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `it` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `it` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `it` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `es` `home` `map_title` `same_as_en`: Google Map - Radio Club Durnal
+- `es` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `es` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `es` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `pt` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `pt` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `pt` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `pt` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `pt` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `bg` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `bg` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `bg` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `hr` `home` `cw_qrp_value` `same_as_fr`: 7.030 MHz • 14.060 MHz
+- `hr` `home` `cw_qrp_value` `same_as_en`: 7.030 MHz • 14.060 MHz
+- `hr` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `hr` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `hr` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `hr` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `hr` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `hr` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `hr` `home` `alt_uba_logo` `same_as_en`: UBA logo
+- `hr` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `cs` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `cs` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `cs` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `cs` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `cs` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `cs` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `cs` `home` `alt_uba_logo` `same_as_fr`: Logo UBA
+- `cs` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `da` `home` `map_title` `same_as_en`: Google Map - Radio Club Durnal
+- `da` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `da` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `da` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `da` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `da` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `da` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `da` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `da` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `da` `home` `alt_hero_illustration` `same_as_fr`: Illustration ON4CRD
+- `da` `home` `alt_uba_logo` `same_as_en`: UBA logo
+- `da` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `et` `home` `map_title` `same_as_en`: Google Map - Radio Club Durnal
+- `et` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `et` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `et` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `et` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `et` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `et` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `et` `home` `alt_uba_logo` `same_as_en`: UBA logo
+- `et` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `fi` `home` `spotlight_member_assistant` `same_as_fr`: Assistant
+- `fi` `home` `spotlight_member_assistant` `same_as_en`: Assistant
+- `fi` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `fi` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `fi` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `fi` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `fi` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `fi` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `fi` `home` `alt_uba_logo` `same_as_en`: UBA logo
+- `fi` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `el` `home` `cw_qrp_value` `same_as_fr`: 7.030 MHz • 14.060 MHz
+- `el` `home` `cw_qrp_value` `same_as_en`: 7.030 MHz • 14.060 MHz
+- `el` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `el` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `el` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `el` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `el` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `el` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `el` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `el` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `el` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `hu` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `hu` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `hu` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `hu` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `hu` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `hu` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `hu` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `ga` `home` `cw_qrp_value` `same_as_fr`: 7.030 MHz • 14.060 MHz
+- `ga` `home` `cw_qrp_value` `same_as_en`: 7.030 MHz • 14.060 MHz
+- `ga` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `ga` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `ga` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `lv` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `lv` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `lv` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `lv` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `lv` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `lt` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `lt` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `lt` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `lt` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `lt` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `mt` `home` `cw_qrp_value` `same_as_fr`: 7.030 MHz • 14.060 MHz
+- `mt` `home` `cw_qrp_value` `same_as_en`: 7.030 MHz • 14.060 MHz
+- `mt` `home` `map_title` `same_as_en`: Google Map - Radio Club Durnal
+- `mt` `home` `member_module_newsletter_title` `same_as_fr`: Newsletter
+- `mt` `home` `member_module_newsletter_title` `same_as_en`: Newsletter
+- `mt` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `mt` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `mt` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `mt` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `mt` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `mt` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `mt` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `mt` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `mt` `home` `alt_uba_logo` `same_as_fr`: Logo UBA
+- `mt` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `pl` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `pl` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `pl` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `pl` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `pl` `home` `link_sponsoring` `same_as_fr`: Sponsoring
+- `pl` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `ro` `home` `cw_qrp_value` `same_as_fr`: 7.030 MHz • 14.060 MHz
+- `ro` `home` `cw_qrp_value` `same_as_en`: 7.030 MHz • 14.060 MHz
+- `ro` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `ro` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `ro` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `ro` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `ro` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `ro` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `ro` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `ro` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `ro` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `sk` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `sk` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `sk` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `sk` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `sk` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `sk` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `sk` `home` `alt_uba_logo` `same_as_fr`: Logo UBA
+- `sk` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `sl` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `sl` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `sl` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `sl` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `sl` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `sl` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `sl` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `sv` `home` `map_title` `same_as_en`: Google Map - Radio Club Durnal
+- `sv` `home` `venue_line_1` `same_as_fr`: Bocq Arena
+- `sv` `home` `venue_line_1` `same_as_en`: Bocq Arena
+- `sv` `home` `venue_line_2` `same_as_fr`: Rue des Écoles
+- `sv` `home` `venue_line_2` `same_as_en`: Rue des Écoles
+- `sv` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `sv` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `sv` `home` `alt_hero_illustration` `same_as_fr`: Illustration ON4CRD
+- `sv` `home` `venue_address` `same_as_fr`: Bocq Arena, rue des Écoles, 5530 Purnode
+- `ar` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `ar` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `hi` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `hi` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `ja` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `ja` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `ja` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `zh` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `zh` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `bn` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `bn` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `bn` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `ru` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `ru` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `id` `home` `club_name` `same_as_fr`: Radio Club Durnal
+- `id` `home` `club_name` `same_as_en`: Radio Club Durnal
+- `id` `home` `venue_line_3` `same_as_fr`: 5530 Purnode
+- `id` `home` `venue_line_3` `same_as_en`: 5530 Purnode
+- `id` `home` `venue_address` `same_as_en`: Bocq Arena, Rue des Écoles, 5530 Purnode
+- `fr` `layout` `nav_articles` `same_as_en`: Articles
+- `fr` `layout` `nav_assistant` `same_as_en`: Assistant
+- `fr` `layout` `account_admin` `same_as_en`: Administration
+- `en` `layout` `nav_articles` `same_as_fr`: Articles
+- `en` `layout` `nav_assistant` `same_as_fr`: Assistant
+- `en` `layout` `account_admin` `same_as_fr`: Administration
+- `nl` `layout` `nav_dashboard` `same_as_en`: Dashboard
+- `cs` `layout` `nav_dashboard` `same_as_en`: Dashboard
+- `da` `layout` `nav_dashboard` `same_as_en`: Dashboard
+- `da` `layout` `account_admin` `same_as_fr`: Administration
+- `da` `layout` `account_admin` `same_as_en`: Administration
+- `fi` `layout` `nav_assistant` `same_as_fr`: Assistant
+- `fi` `layout` `nav_assistant` `same_as_en`: Assistant
+- `sk` `layout` `nav_dashboard` `same_as_en`: Dashboard
+- `sv` `layout` `account_admin` `same_as_fr`: Administration
+- `sv` `layout` `account_admin` `same_as_en`: Administration
+- `it` `login` `password` `same_as_en`: Password
+- `mt` `login` `password` `same_as_en`: Password
+- `fr` `members_library` `documents` `same_as_en`: Documents
+- `fr` `members_library` `document` `same_as_en`: Document
+- `en` `members_library` `documents` `same_as_fr`: Documents
+- `en` `members_library` `document` `same_as_fr`: Document
+- `nl` `members_library` `document` `same_as_fr`: Document
+- `nl` `members_library` `document` `same_as_en`: Document
+- `ro` `members_library` `document` `same_as_fr`: Document
+- `ro` `members_library` `document` `same_as_en`: Document
+- `fr` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `en` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `de` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `de` `membership` `required_item_3` `same_as_fr`: Adresse.
+- `nl` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `it` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `es` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `es` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `es` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `pt` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `bg` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `hr` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `cs` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `cs` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `cs` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `da` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `da` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `da` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `da` `membership` `required_item_3` `same_as_fr`: Adresse.
+- `et` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `fi` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `fi` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `fi` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `el` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `el` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `el` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `hu` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `hu` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `hu` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `ga` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `lv` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `lt` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `mt` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `mt` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `mt` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `pl` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `ro` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `ro` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `ro` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `sk` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `sl` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `sl` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `sl` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `sv` `membership` `contact_item_1` `same_as_fr`: Radio Club Durnal - Bocq Arena
+- `sv` `membership` `contact_item_1` `same_as_en`: Radio Club Durnal - Bocq Arena
+- `sv` `membership` `contact_item_2` `same_as_fr`: Rue des Écoles, 5530 Purnode
+- `ja` `membership` `contact_item_2` `same_as_en`: Rue des Ecoles, 5530 Purnode
+- `zh` `membership` `contact_item_2` `same_as_en`: Rue des Ecoles, 5530 Purnode
+- `bn` `membership` `contact_item_2` `same_as_en`: Rue des Ecoles, 5530 Purnode
+- `id` `membership` `contact_item_2` `same_as_en`: Rue des Ecoles, 5530 Purnode
+- `fr` `my_requests` `articles_title` `same_as_en`: Articles
+- `en` `my_requests` `articles_title` `same_as_fr`: Articles
+- `de` `my_requests` `title` `same_as_en`: My requests
+- `de` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `de` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `de` `my_requests` `badge` `same_as_en`: Member area
+- `de` `my_requests` `status_title` `same_as_en`: Registered requests
+- `de` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `de` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `de` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `de` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `de` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `de` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `de` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `de` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `de` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `de` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `de` `my_requests` `events_cta` `same_as_en`: View calendar
+- `de` `my_requests` `articles_title` `same_as_fr`: Articles
+- `de` `my_requests` `articles_title` `same_as_en`: Articles
+- `de` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `de` `my_requests` `articles_cta` `same_as_en`: View articles
+- `de` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `de` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `de` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `de` `my_requests` `settings_title` `same_as_en`: Settings
+- `de` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `de` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `nl` `my_requests` `title` `same_as_en`: My requests
+- `nl` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `nl` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `nl` `my_requests` `badge` `same_as_en`: Member area
+- `nl` `my_requests` `status_title` `same_as_en`: Registered requests
+- `nl` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `nl` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `nl` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `nl` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `nl` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `nl` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `nl` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `nl` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `nl` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `nl` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `nl` `my_requests` `events_cta` `same_as_en`: View calendar
+- `nl` `my_requests` `articles_title` `same_as_fr`: Articles
+- `nl` `my_requests` `articles_title` `same_as_en`: Articles
+- `nl` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `nl` `my_requests` `articles_cta` `same_as_en`: View articles
+- `nl` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `nl` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `nl` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `nl` `my_requests` `settings_title` `same_as_en`: Settings
+- `nl` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `nl` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `it` `my_requests` `title` `same_as_en`: My requests
+- `it` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `it` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `it` `my_requests` `badge` `same_as_en`: Member area
+- `it` `my_requests` `status_title` `same_as_en`: Registered requests
+- `it` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `it` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `it` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `it` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `it` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `it` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `it` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `it` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `it` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `it` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `it` `my_requests` `events_cta` `same_as_en`: View calendar
+- `it` `my_requests` `articles_title` `same_as_fr`: Articles
+- `it` `my_requests` `articles_title` `same_as_en`: Articles
+- `it` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `it` `my_requests` `articles_cta` `same_as_en`: View articles
+- `it` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `it` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `it` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `it` `my_requests` `settings_title` `same_as_en`: Settings
+- `it` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `it` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `es` `my_requests` `title` `same_as_en`: My requests
+- `es` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `es` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `es` `my_requests` `badge` `same_as_en`: Member area
+- `es` `my_requests` `status_title` `same_as_en`: Registered requests
+- `es` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `es` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `es` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `es` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `es` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `es` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `es` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `es` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `es` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `es` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `es` `my_requests` `events_cta` `same_as_en`: View calendar
+- `es` `my_requests` `articles_title` `same_as_fr`: Articles
+- `es` `my_requests` `articles_title` `same_as_en`: Articles
+- `es` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `es` `my_requests` `articles_cta` `same_as_en`: View articles
+- `es` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `es` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `es` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `es` `my_requests` `settings_title` `same_as_en`: Settings
+- `es` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `es` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `pt` `my_requests` `title` `same_as_en`: My requests
+- `pt` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `pt` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `pt` `my_requests` `badge` `same_as_en`: Member area
+- `pt` `my_requests` `status_title` `same_as_en`: Registered requests
+- `pt` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `pt` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `pt` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `pt` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `pt` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `pt` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `pt` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `pt` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `pt` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `pt` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `pt` `my_requests` `events_cta` `same_as_en`: View calendar
+- `pt` `my_requests` `articles_title` `same_as_fr`: Articles
+- `pt` `my_requests` `articles_title` `same_as_en`: Articles
+- `pt` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `pt` `my_requests` `articles_cta` `same_as_en`: View articles
+- `pt` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `pt` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `pt` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `pt` `my_requests` `settings_title` `same_as_en`: Settings
+- `pt` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `pt` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `bg` `my_requests` `title` `same_as_en`: My requests
+- `bg` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `bg` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `bg` `my_requests` `badge` `same_as_en`: Member area
+- `bg` `my_requests` `status_title` `same_as_en`: Registered requests
+- `bg` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `bg` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `bg` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `bg` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `bg` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `bg` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `bg` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `bg` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `bg` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `bg` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `bg` `my_requests` `events_cta` `same_as_en`: View calendar
+- `bg` `my_requests` `articles_title` `same_as_fr`: Articles
+- `bg` `my_requests` `articles_title` `same_as_en`: Articles
+- `bg` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `bg` `my_requests` `articles_cta` `same_as_en`: View articles
+- `bg` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `bg` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `bg` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `bg` `my_requests` `settings_title` `same_as_en`: Settings
+- `bg` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `bg` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `hr` `my_requests` `title` `same_as_en`: My requests
+- `hr` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `hr` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `hr` `my_requests` `badge` `same_as_en`: Member area
+- `hr` `my_requests` `status_title` `same_as_en`: Registered requests
+- `hr` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `hr` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `hr` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `hr` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `hr` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `hr` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `hr` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `hr` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `hr` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `hr` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `hr` `my_requests` `events_cta` `same_as_en`: View calendar
+- `hr` `my_requests` `articles_title` `same_as_fr`: Articles
+- `hr` `my_requests` `articles_title` `same_as_en`: Articles
+- `hr` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `hr` `my_requests` `articles_cta` `same_as_en`: View articles
+- `hr` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `hr` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `hr` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `hr` `my_requests` `settings_title` `same_as_en`: Settings
+- `hr` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `hr` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `cs` `my_requests` `title` `same_as_en`: My requests
+- `cs` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `cs` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `cs` `my_requests` `badge` `same_as_en`: Member area
+- `cs` `my_requests` `status_title` `same_as_en`: Registered requests
+- `cs` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `cs` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `cs` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `cs` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `cs` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `cs` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `cs` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `cs` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `cs` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `cs` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `cs` `my_requests` `events_cta` `same_as_en`: View calendar
+- `cs` `my_requests` `articles_title` `same_as_fr`: Articles
+- `cs` `my_requests` `articles_title` `same_as_en`: Articles
+- `cs` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `cs` `my_requests` `articles_cta` `same_as_en`: View articles
+- `cs` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `cs` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `cs` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `cs` `my_requests` `settings_title` `same_as_en`: Settings
+- `cs` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `cs` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `da` `my_requests` `title` `same_as_en`: My requests
+- `da` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `da` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `da` `my_requests` `badge` `same_as_en`: Member area
+- `da` `my_requests` `status_title` `same_as_en`: Registered requests
+- `da` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `da` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `da` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `da` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `da` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `da` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `da` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `da` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `da` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `da` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `da` `my_requests` `events_cta` `same_as_en`: View calendar
+- `da` `my_requests` `articles_title` `same_as_fr`: Articles
+- `da` `my_requests` `articles_title` `same_as_en`: Articles
+- `da` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `da` `my_requests` `articles_cta` `same_as_en`: View articles
+- `da` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `da` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `da` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `da` `my_requests` `settings_title` `same_as_en`: Settings
+- `da` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `da` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `et` `my_requests` `title` `same_as_en`: My requests
+- `et` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `et` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `et` `my_requests` `badge` `same_as_en`: Member area
+- `et` `my_requests` `status_title` `same_as_en`: Registered requests
+- `et` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `et` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `et` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `et` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `et` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `et` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `et` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `et` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `et` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `et` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `et` `my_requests` `events_cta` `same_as_en`: View calendar
+- `et` `my_requests` `articles_title` `same_as_fr`: Articles
+- `et` `my_requests` `articles_title` `same_as_en`: Articles
+- `et` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `et` `my_requests` `articles_cta` `same_as_en`: View articles
+- `et` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `et` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `et` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `et` `my_requests` `settings_title` `same_as_en`: Settings
+- `et` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `et` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `fi` `my_requests` `title` `same_as_en`: My requests
+- `fi` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `fi` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `fi` `my_requests` `badge` `same_as_en`: Member area
+- `fi` `my_requests` `status_title` `same_as_en`: Registered requests
+- `fi` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `fi` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `fi` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `fi` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `fi` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `fi` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `fi` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `fi` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `fi` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `fi` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `fi` `my_requests` `events_cta` `same_as_en`: View calendar
+- `fi` `my_requests` `articles_title` `same_as_fr`: Articles
+- `fi` `my_requests` `articles_title` `same_as_en`: Articles
+- `fi` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `fi` `my_requests` `articles_cta` `same_as_en`: View articles
+- `fi` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `fi` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `fi` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `fi` `my_requests` `settings_title` `same_as_en`: Settings
+- `fi` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `fi` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `el` `my_requests` `title` `same_as_en`: My requests
+- `el` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `el` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `el` `my_requests` `badge` `same_as_en`: Member area
+- `el` `my_requests` `status_title` `same_as_en`: Registered requests
+- `el` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `el` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `el` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `el` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `el` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `el` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `el` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `el` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `el` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `el` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `el` `my_requests` `events_cta` `same_as_en`: View calendar
+- `el` `my_requests` `articles_title` `same_as_fr`: Articles
+- `el` `my_requests` `articles_title` `same_as_en`: Articles
+- `el` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `el` `my_requests` `articles_cta` `same_as_en`: View articles
+- `el` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `el` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `el` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `el` `my_requests` `settings_title` `same_as_en`: Settings
+- `el` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `el` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `hu` `my_requests` `title` `same_as_en`: My requests
+- `hu` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `hu` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `hu` `my_requests` `badge` `same_as_en`: Member area
+- `hu` `my_requests` `status_title` `same_as_en`: Registered requests
+- `hu` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `hu` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `hu` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `hu` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `hu` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `hu` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `hu` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `hu` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `hu` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `hu` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `hu` `my_requests` `events_cta` `same_as_en`: View calendar
+- `hu` `my_requests` `articles_title` `same_as_fr`: Articles
+- `hu` `my_requests` `articles_title` `same_as_en`: Articles
+- `hu` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `hu` `my_requests` `articles_cta` `same_as_en`: View articles
+- `hu` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `hu` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `hu` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `hu` `my_requests` `settings_title` `same_as_en`: Settings
+- `hu` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `hu` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `ga` `my_requests` `title` `same_as_en`: My requests
+- `ga` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `ga` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `ga` `my_requests` `badge` `same_as_en`: Member area
+- `ga` `my_requests` `status_title` `same_as_en`: Registered requests
+- `ga` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `ga` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `ga` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `ga` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `ga` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `ga` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `ga` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `ga` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `ga` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `ga` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `ga` `my_requests` `events_cta` `same_as_en`: View calendar
+- `ga` `my_requests` `articles_title` `same_as_fr`: Articles
+- `ga` `my_requests` `articles_title` `same_as_en`: Articles
+- `ga` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `ga` `my_requests` `articles_cta` `same_as_en`: View articles
+- `ga` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `ga` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `ga` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `ga` `my_requests` `settings_title` `same_as_en`: Settings
+- `ga` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `ga` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `lv` `my_requests` `title` `same_as_en`: My requests
+- `lv` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `lv` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `lv` `my_requests` `badge` `same_as_en`: Member area
+- `lv` `my_requests` `status_title` `same_as_en`: Registered requests
+- `lv` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `lv` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `lv` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `lv` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `lv` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `lv` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `lv` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `lv` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `lv` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `lv` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `lv` `my_requests` `events_cta` `same_as_en`: View calendar
+- `lv` `my_requests` `articles_title` `same_as_fr`: Articles
+- `lv` `my_requests` `articles_title` `same_as_en`: Articles
+- `lv` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `lv` `my_requests` `articles_cta` `same_as_en`: View articles
+- `lv` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `lv` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `lv` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `lv` `my_requests` `settings_title` `same_as_en`: Settings
+- `lv` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `lv` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `lt` `my_requests` `title` `same_as_en`: My requests
+- `lt` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `lt` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `lt` `my_requests` `badge` `same_as_en`: Member area
+- `lt` `my_requests` `status_title` `same_as_en`: Registered requests
+- `lt` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `lt` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `lt` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `lt` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `lt` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `lt` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `lt` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `lt` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `lt` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `lt` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `lt` `my_requests` `events_cta` `same_as_en`: View calendar
+- `lt` `my_requests` `articles_title` `same_as_fr`: Articles
+- `lt` `my_requests` `articles_title` `same_as_en`: Articles
+- `lt` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `lt` `my_requests` `articles_cta` `same_as_en`: View articles
+- `lt` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `lt` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `lt` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `lt` `my_requests` `settings_title` `same_as_en`: Settings
+- `lt` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `lt` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `mt` `my_requests` `title` `same_as_en`: My requests
+- `mt` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `mt` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `mt` `my_requests` `badge` `same_as_en`: Member area
+- `mt` `my_requests` `status_title` `same_as_en`: Registered requests
+- `mt` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `mt` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `mt` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `mt` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `mt` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `mt` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `mt` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `mt` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `mt` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `mt` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `mt` `my_requests` `events_cta` `same_as_en`: View calendar
+- `mt` `my_requests` `articles_title` `same_as_fr`: Articles
+- `mt` `my_requests` `articles_title` `same_as_en`: Articles
+- `mt` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `mt` `my_requests` `articles_cta` `same_as_en`: View articles
+- `mt` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `mt` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `mt` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `mt` `my_requests` `settings_title` `same_as_en`: Settings
+- `mt` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `mt` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `pl` `my_requests` `title` `same_as_en`: My requests
+- `pl` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `pl` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `pl` `my_requests` `badge` `same_as_en`: Member area
+- `pl` `my_requests` `status_title` `same_as_en`: Registered requests
+- `pl` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `pl` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `pl` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `pl` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `pl` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `pl` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `pl` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `pl` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `pl` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `pl` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `pl` `my_requests` `events_cta` `same_as_en`: View calendar
+- `pl` `my_requests` `articles_title` `same_as_fr`: Articles
+- `pl` `my_requests` `articles_title` `same_as_en`: Articles
+- `pl` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `pl` `my_requests` `articles_cta` `same_as_en`: View articles
+- `pl` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `pl` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `pl` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `pl` `my_requests` `settings_title` `same_as_en`: Settings
+- `pl` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `pl` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `ro` `my_requests` `title` `same_as_en`: My requests
+- `ro` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `ro` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `ro` `my_requests` `badge` `same_as_en`: Member area
+- `ro` `my_requests` `status_title` `same_as_en`: Registered requests
+- `ro` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `ro` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `ro` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `ro` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `ro` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `ro` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `ro` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `ro` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `ro` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `ro` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `ro` `my_requests` `events_cta` `same_as_en`: View calendar
+- `ro` `my_requests` `articles_title` `same_as_fr`: Articles
+- `ro` `my_requests` `articles_title` `same_as_en`: Articles
+- `ro` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `ro` `my_requests` `articles_cta` `same_as_en`: View articles
+- `ro` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `ro` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `ro` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `ro` `my_requests` `settings_title` `same_as_en`: Settings
+- `ro` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `ro` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `sk` `my_requests` `title` `same_as_en`: My requests
+- `sk` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `sk` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `sk` `my_requests` `badge` `same_as_en`: Member area
+- `sk` `my_requests` `status_title` `same_as_en`: Registered requests
+- `sk` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `sk` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `sk` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `sk` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `sk` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `sk` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `sk` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `sk` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `sk` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `sk` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `sk` `my_requests` `events_cta` `same_as_en`: View calendar
+- `sk` `my_requests` `articles_title` `same_as_fr`: Articles
+- `sk` `my_requests` `articles_title` `same_as_en`: Articles
+- `sk` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `sk` `my_requests` `articles_cta` `same_as_en`: View articles
+- `sk` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `sk` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `sk` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `sk` `my_requests` `settings_title` `same_as_en`: Settings
+- `sk` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `sk` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `sl` `my_requests` `title` `same_as_en`: My requests
+- `sl` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `sl` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `sl` `my_requests` `badge` `same_as_en`: Member area
+- `sl` `my_requests` `status_title` `same_as_en`: Registered requests
+- `sl` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `sl` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `sl` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `sl` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `sl` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `sl` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `sl` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `sl` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `sl` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `sl` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `sl` `my_requests` `events_cta` `same_as_en`: View calendar
+- `sl` `my_requests` `articles_title` `same_as_fr`: Articles
+- `sl` `my_requests` `articles_title` `same_as_en`: Articles
+- `sl` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `sl` `my_requests` `articles_cta` `same_as_en`: View articles
+- `sl` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `sl` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `sl` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `sl` `my_requests` `settings_title` `same_as_en`: Settings
+- `sl` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `sl` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `sv` `my_requests` `title` `same_as_en`: My requests
+- `sv` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `sv` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `sv` `my_requests` `badge` `same_as_en`: Member area
+- `sv` `my_requests` `status_title` `same_as_en`: Registered requests
+- `sv` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `sv` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `sv` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `sv` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `sv` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `sv` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `sv` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `sv` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `sv` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `sv` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `sv` `my_requests` `events_cta` `same_as_en`: View calendar
+- `sv` `my_requests` `articles_title` `same_as_fr`: Articles
+- `sv` `my_requests` `articles_title` `same_as_en`: Articles
+- `sv` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `sv` `my_requests` `articles_cta` `same_as_en`: View articles
+- `sv` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `sv` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `sv` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `sv` `my_requests` `settings_title` `same_as_en`: Settings
+- `sv` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `sv` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `ar` `my_requests` `title` `same_as_en`: My requests
+- `ar` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `ar` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `ar` `my_requests` `badge` `same_as_en`: Member area
+- `ar` `my_requests` `status_title` `same_as_en`: Registered requests
+- `ar` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `ar` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `ar` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `ar` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `ar` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `ar` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `ar` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `ar` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `ar` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `ar` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `ar` `my_requests` `events_cta` `same_as_en`: View calendar
+- `ar` `my_requests` `articles_title` `same_as_fr`: Articles
+- `ar` `my_requests` `articles_title` `same_as_en`: Articles
+- `ar` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `ar` `my_requests` `articles_cta` `same_as_en`: View articles
+- `ar` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `ar` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `ar` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `ar` `my_requests` `settings_title` `same_as_en`: Settings
+- `ar` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `ar` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `hi` `my_requests` `title` `same_as_en`: My requests
+- `hi` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `hi` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `hi` `my_requests` `badge` `same_as_en`: Member area
+- `hi` `my_requests` `status_title` `same_as_en`: Registered requests
+- `hi` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `hi` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `hi` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `hi` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `hi` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `hi` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `hi` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `hi` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `hi` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `hi` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `hi` `my_requests` `events_cta` `same_as_en`: View calendar
+- `hi` `my_requests` `articles_title` `same_as_fr`: Articles
+- `hi` `my_requests` `articles_title` `same_as_en`: Articles
+- `hi` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `hi` `my_requests` `articles_cta` `same_as_en`: View articles
+- `hi` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `hi` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `hi` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `hi` `my_requests` `settings_title` `same_as_en`: Settings
+- `hi` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `hi` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `ja` `my_requests` `title` `same_as_en`: My requests
+- `ja` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `ja` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `ja` `my_requests` `badge` `same_as_en`: Member area
+- `ja` `my_requests` `status_title` `same_as_en`: Registered requests
+- `ja` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `ja` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `ja` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `ja` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `ja` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `ja` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `ja` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `ja` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `ja` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `ja` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `ja` `my_requests` `events_cta` `same_as_en`: View calendar
+- `ja` `my_requests` `articles_title` `same_as_fr`: Articles
+- `ja` `my_requests` `articles_title` `same_as_en`: Articles
+- `ja` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `ja` `my_requests` `articles_cta` `same_as_en`: View articles
+- `ja` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `ja` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `ja` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `ja` `my_requests` `settings_title` `same_as_en`: Settings
+- `ja` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `ja` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `zh` `my_requests` `title` `same_as_en`: My requests
+- `zh` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `zh` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `zh` `my_requests` `badge` `same_as_en`: Member area
+- `zh` `my_requests` `status_title` `same_as_en`: Registered requests
+- `zh` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `zh` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `zh` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `zh` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `zh` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `zh` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `zh` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `zh` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `zh` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `zh` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `zh` `my_requests` `events_cta` `same_as_en`: View calendar
+- `zh` `my_requests` `articles_title` `same_as_fr`: Articles
+- `zh` `my_requests` `articles_title` `same_as_en`: Articles
+- `zh` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `zh` `my_requests` `articles_cta` `same_as_en`: View articles
+- `zh` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `zh` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `zh` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `zh` `my_requests` `settings_title` `same_as_en`: Settings
+- `zh` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `zh` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `bn` `my_requests` `title` `same_as_en`: My requests
+- `bn` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `bn` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `bn` `my_requests` `badge` `same_as_en`: Member area
+- `bn` `my_requests` `status_title` `same_as_en`: Registered requests
+- `bn` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `bn` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `bn` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `bn` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `bn` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `bn` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `bn` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `bn` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `bn` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `bn` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `bn` `my_requests` `events_cta` `same_as_en`: View calendar
+- `bn` `my_requests` `articles_title` `same_as_fr`: Articles
+- `bn` `my_requests` `articles_title` `same_as_en`: Articles
+- `bn` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `bn` `my_requests` `articles_cta` `same_as_en`: View articles
+- `bn` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `bn` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `bn` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `bn` `my_requests` `settings_title` `same_as_en`: Settings
+- `bn` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `bn` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `ru` `my_requests` `title` `same_as_en`: My requests
+- `ru` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `ru` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `ru` `my_requests` `badge` `same_as_en`: Member area
+- `ru` `my_requests` `status_title` `same_as_en`: Registered requests
+- `ru` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `ru` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `ru` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `ru` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `ru` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `ru` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `ru` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `ru` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `ru` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `ru` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `ru` `my_requests` `events_cta` `same_as_en`: View calendar
+- `ru` `my_requests` `articles_title` `same_as_fr`: Articles
+- `ru` `my_requests` `articles_title` `same_as_en`: Articles
+- `ru` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `ru` `my_requests` `articles_cta` `same_as_en`: View articles
+- `ru` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `ru` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `ru` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `ru` `my_requests` `settings_title` `same_as_en`: Settings
+- `ru` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `ru` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `id` `my_requests` `title` `same_as_en`: My requests
+- `id` `my_requests` `meta_desc` `same_as_en`: Request tracking and useful shortcuts for the ON4CRD member area.
+- `id` `my_requests` `intro` `same_as_en`: Track requests submitted from your member area here.
+- `id` `my_requests` `badge` `same_as_en`: Member area
+- `id` `my_requests` `status_title` `same_as_en`: Registered requests
+- `id` `my_requests` `empty_title` `same_as_en`: No requests yet
+- `id` `my_requests` `empty_body` `same_as_en`: Requests registered by the site will appear here.
+- `id` `my_requests` `empty_hint` `same_as_en`: Use the shortcuts below to access the available actions.
+- `id` `my_requests` `shortcuts_title` `same_as_en`: Useful shortcuts
+- `id` `my_requests` `shortcuts_intro` `same_as_en`: Quickly access pages related to your requests and account preferences.
+- `id` `my_requests` `profile_desc` `same_as_en`: Update your member information.
+- `id` `my_requests` `profile_cta` `same_as_en`: Open profile
+- `id` `my_requests` `privacy_desc` `same_as_en`: Manage the visibility of your data in the directory.
+- `id` `my_requests` `privacy_cta` `same_as_en`: Manage privacy
+- `id` `my_requests` `events_desc` `same_as_en`: Suggest an event to the club from the calendar page.
+- `id` `my_requests` `events_cta` `same_as_en`: View calendar
+- `id` `my_requests` `articles_title` `same_as_fr`: Articles
+- `id` `my_requests` `articles_title` `same_as_en`: Articles
+- `id` `my_requests` `articles_desc` `same_as_en`: Suggest an article or category from the articles page.
+- `id` `my_requests` `articles_cta` `same_as_en`: View articles
+- `id` `my_requests` `classifieds_title` `same_as_en`: Classifieds
+- `id` `my_requests` `classifieds_desc` `same_as_en`: Manage your classifieds or suggest a category.
+- `id` `my_requests` `classifieds_cta` `same_as_en`: Manage my classifieds
+- `id` `my_requests` `settings_title` `same_as_en`: Settings
+- `id` `my_requests` `settings_desc` `same_as_en`: Adjust your account preferences.
+- `id` `my_requests` `settings_cta` `same_as_en`: Open settings
+- `fr` `newsletter` `layout_title` `same_as_en`: Newsletter
+- `en` `newsletter` `layout_title` `same_as_fr`: Newsletter
+- `de` `newsletter` `layout_title` `same_as_fr`: Newsletter
+- `de` `newsletter` `layout_title` `same_as_en`: Newsletter
+- `de` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `de` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `de` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `nl` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `nl` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `nl` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `it` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `it` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `it` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `es` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `es` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `es` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `pt` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `pt` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `pt` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `bg` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `bg` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `bg` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `hr` `newsletter` `layout_title` `same_as_fr`: Newsletter
+- `hr` `newsletter` `layout_title` `same_as_en`: Newsletter
+- `hr` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `hr` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `hr` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `cs` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `cs` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `cs` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `da` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `da` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `da` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `et` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `et` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `et` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `fi` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `fi` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `fi` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `el` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `el` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `el` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `hu` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `hu` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `hu` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `ga` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ga` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ga` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `lv` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `lv` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `lv` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `lt` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `lt` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `lt` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `mt` `newsletter` `unsubscribe` `same_as_en`: Unsubscribe
+- `mt` `newsletter` `layout_title` `same_as_fr`: Newsletter
+- `mt` `newsletter` `layout_title` `same_as_en`: Newsletter
+- `mt` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `mt` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `mt` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `pl` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `pl` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `pl` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `ro` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ro` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ro` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `sk` `newsletter` `layout_title` `same_as_fr`: Newsletter
+- `sk` `newsletter` `layout_title` `same_as_en`: Newsletter
+- `sk` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `sk` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `sk` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `sl` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `sl` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `sl` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `sv` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `sv` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `sv` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `ar` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ar` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ar` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `hi` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `hi` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `hi` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `ja` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ja` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ja` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `zh` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `zh` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `zh` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `bn` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `bn` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `bn` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `ru` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ru` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ru` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `id` `newsletter` `consent_required` `same_as_en`: Newsletter consent is required.
+- `id` `newsletter` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `id` `newsletter` `consent_proof_member` `same_as_en`: Member newsletter consent
+- `de` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `de` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `de` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `nl` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `nl` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `nl` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `it` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `it` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `it` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `es` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `es` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `es` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `pt` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `pt` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `pt` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `bg` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `bg` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `bg` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `hr` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `hr` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `hr` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `cs` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `cs` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `cs` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `da` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `da` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `da` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `et` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `et` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `et` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `fi` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `fi` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `fi` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `el` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `el` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `el` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `hu` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `hu` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `hu` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `ga` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ga` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ga` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `lv` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `lv` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `lv` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `lt` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `lt` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `lt` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `mt` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `mt` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `mt` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `pl` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `pl` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `pl` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `ro` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ro` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ro` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `sk` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `sk` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `sk` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `sl` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `sl` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `sl` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `sv` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `sv` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `sv` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `ar` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ar` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ar` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `hi` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `hi` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `hi` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `ja` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ja` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ja` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `zh` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `zh` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `zh` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `bn` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `bn` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `bn` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `ru` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `ru` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `ru` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `id` `newsletter_public` `consent_required` `same_as_en`: Newsletter consent is required.
+- `id` `newsletter_public` `consent_label` `same_as_en`: I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.
+- `id` `newsletter_public` `consent_proof_public` `same_as_en`: Public newsletter form consent
+- `fr` `newsletter_unsubscribe` `heading` `same_as_en`: Newsletter
+- `en` `newsletter_unsubscribe` `heading` `same_as_fr`: Newsletter
+- `de` `newsletter_unsubscribe` `heading` `same_as_fr`: Newsletter
+- `de` `newsletter_unsubscribe` `heading` `same_as_en`: Newsletter
+- `hr` `newsletter_unsubscribe` `heading` `same_as_fr`: Newsletter
+- `hr` `newsletter_unsubscribe` `heading` `same_as_en`: Newsletter
+- `mt` `newsletter_unsubscribe` `heading` `same_as_fr`: Newsletter
+- `mt` `newsletter_unsubscribe` `heading` `same_as_en`: Newsletter
+- `sk` `newsletter_unsubscribe` `heading` `same_as_fr`: Newsletter
+- `sk` `newsletter_unsubscribe` `heading` `same_as_en`: Newsletter
+- `fr` `notifications` `title` `same_as_en`: Notifications
+- `en` `notifications` `title` `same_as_fr`: Notifications
+- `fr` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `fr` `profile` `qth` `same_as_en`: QTH / Localité
+- `en` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `en` `profile` `qth` `same_as_fr`: QTH / Localité
+- `de` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `de` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `de` `profile` `qth` `same_as_fr`: QTH / Localité
+- `de` `profile` `qth` `same_as_en`: QTH / Localité
+- `de` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `de` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `de` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `de` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `de` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `de` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `de` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `de` `profile` `profile_settings` `same_as_en`: Profile settings
+- `de` `profile` `identity_section` `same_as_en`: Identity and contact
+- `de` `profile` `radio_section` `same_as_en`: Radio information
+- `de` `profile` `operator_since` `same_as_en`: Operator since
+- `de` `profile` `itu_zone` `same_as_en`: ITU zone
+- `de` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `de` `profile` `lotw_username` `same_as_en`: LoTW username
+- `de` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `de` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `de` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `de` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `de` `profile` `antennas` `same_as_en`: Antennas
+- `de` `profile` `interests` `same_as_en`: Interests
+- `de` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `nl` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `nl` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `nl` `profile` `qth` `same_as_fr`: QTH / Localité
+- `nl` `profile` `qth` `same_as_en`: QTH / Localité
+- `nl` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `nl` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `nl` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `nl` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `nl` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `nl` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `nl` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `nl` `profile` `profile_settings` `same_as_en`: Profile settings
+- `nl` `profile` `identity_section` `same_as_en`: Identity and contact
+- `nl` `profile` `radio_section` `same_as_en`: Radio information
+- `nl` `profile` `operator_since` `same_as_en`: Operator since
+- `nl` `profile` `itu_zone` `same_as_en`: ITU zone
+- `nl` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `nl` `profile` `lotw_username` `same_as_en`: LoTW username
+- `nl` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `nl` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `nl` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `nl` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `nl` `profile` `antennas` `same_as_en`: Antennas
+- `nl` `profile` `interests` `same_as_en`: Interests
+- `nl` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `it` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `it` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `it` `profile` `qth` `same_as_fr`: QTH / Localité
+- `it` `profile` `qth` `same_as_en`: QTH / Localité
+- `it` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `it` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `it` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `it` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `it` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `it` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `it` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `it` `profile` `profile_settings` `same_as_en`: Profile settings
+- `it` `profile` `identity_section` `same_as_en`: Identity and contact
+- `it` `profile` `radio_section` `same_as_en`: Radio information
+- `it` `profile` `operator_since` `same_as_en`: Operator since
+- `it` `profile` `itu_zone` `same_as_en`: ITU zone
+- `it` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `it` `profile` `lotw_username` `same_as_en`: LoTW username
+- `it` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `it` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `it` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `it` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `it` `profile` `antennas` `same_as_en`: Antennas
+- `it` `profile` `interests` `same_as_en`: Interests
+- `it` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `es` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `es` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `es` `profile` `qth` `same_as_fr`: QTH / Localité
+- `es` `profile` `qth` `same_as_en`: QTH / Localité
+- `es` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `es` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `es` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `es` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `es` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `es` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `es` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `es` `profile` `profile_settings` `same_as_en`: Profile settings
+- `es` `profile` `identity_section` `same_as_en`: Identity and contact
+- `es` `profile` `radio_section` `same_as_en`: Radio information
+- `es` `profile` `operator_since` `same_as_en`: Operator since
+- `es` `profile` `itu_zone` `same_as_en`: ITU zone
+- `es` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `es` `profile` `lotw_username` `same_as_en`: LoTW username
+- `es` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `es` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `es` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `es` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `es` `profile` `antennas` `same_as_en`: Antennas
+- `es` `profile` `interests` `same_as_en`: Interests
+- `es` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `pt` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `pt` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `pt` `profile` `qth` `same_as_fr`: QTH / Localité
+- `pt` `profile` `qth` `same_as_en`: QTH / Localité
+- `pt` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `pt` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `pt` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `pt` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `pt` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `pt` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `pt` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `pt` `profile` `profile_settings` `same_as_en`: Profile settings
+- `pt` `profile` `identity_section` `same_as_en`: Identity and contact
+- `pt` `profile` `radio_section` `same_as_en`: Radio information
+- `pt` `profile` `operator_since` `same_as_en`: Operator since
+- `pt` `profile` `itu_zone` `same_as_en`: ITU zone
+- `pt` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `pt` `profile` `lotw_username` `same_as_en`: LoTW username
+- `pt` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `pt` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `pt` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `pt` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `pt` `profile` `antennas` `same_as_en`: Antennas
+- `pt` `profile` `interests` `same_as_en`: Interests
+- `pt` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `bg` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `bg` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `bg` `profile` `first_name` `same_as_en`: First name
+- `bg` `profile` `last_name` `same_as_en`: Last name
+- `bg` `profile` `qth` `same_as_fr`: QTH / Localité
+- `bg` `profile` `qth` `same_as_en`: QTH / Localité
+- `bg` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `bg` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `bg` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `bg` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `bg` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `bg` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `bg` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `bg` `profile` `profile_settings` `same_as_en`: Profile settings
+- `bg` `profile` `identity_section` `same_as_en`: Identity and contact
+- `bg` `profile` `radio_section` `same_as_en`: Radio information
+- `bg` `profile` `postal_code` `same_as_en`: Postal code
+- `bg` `profile` `operator_since` `same_as_en`: Operator since
+- `bg` `profile` `itu_zone` `same_as_en`: ITU zone
+- `bg` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `bg` `profile` `lotw_username` `same_as_en`: LoTW username
+- `bg` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `bg` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `bg` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `bg` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `bg` `profile` `antennas` `same_as_en`: Antennas
+- `bg` `profile` `interests` `same_as_en`: Interests
+- `bg` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `hr` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `hr` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `hr` `profile` `first_name` `same_as_en`: First name
+- `hr` `profile` `last_name` `same_as_en`: Last name
+- `hr` `profile` `qth` `same_as_fr`: QTH / Localité
+- `hr` `profile` `qth` `same_as_en`: QTH / Localité
+- `hr` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `hr` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `hr` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `hr` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `hr` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `hr` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `hr` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `hr` `profile` `profile_settings` `same_as_en`: Profile settings
+- `hr` `profile` `identity_section` `same_as_en`: Identity and contact
+- `hr` `profile` `radio_section` `same_as_en`: Radio information
+- `hr` `profile` `postal_code` `same_as_en`: Postal code
+- `hr` `profile` `operator_since` `same_as_en`: Operator since
+- `hr` `profile` `itu_zone` `same_as_en`: ITU zone
+- `hr` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `hr` `profile` `lotw_username` `same_as_en`: LoTW username
+- `hr` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `hr` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `hr` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `hr` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `hr` `profile` `antennas` `same_as_en`: Antennas
+- `hr` `profile` `interests` `same_as_en`: Interests
+- `hr` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `cs` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `cs` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `cs` `profile` `first_name` `same_as_en`: First name
+- `cs` `profile` `last_name` `same_as_en`: Last name
+- `cs` `profile` `qth` `same_as_fr`: QTH / Localité
+- `cs` `profile` `qth` `same_as_en`: QTH / Localité
+- `cs` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `cs` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `cs` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `cs` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `cs` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `cs` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `cs` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `cs` `profile` `profile_settings` `same_as_en`: Profile settings
+- `cs` `profile` `identity_section` `same_as_en`: Identity and contact
+- `cs` `profile` `radio_section` `same_as_en`: Radio information
+- `cs` `profile` `postal_code` `same_as_en`: Postal code
+- `cs` `profile` `operator_since` `same_as_en`: Operator since
+- `cs` `profile` `itu_zone` `same_as_en`: ITU zone
+- `cs` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `cs` `profile` `lotw_username` `same_as_en`: LoTW username
+- `cs` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `cs` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `cs` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `cs` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `cs` `profile` `antennas` `same_as_en`: Antennas
+- `cs` `profile` `interests` `same_as_en`: Interests
+- `cs` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `da` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `da` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `da` `profile` `first_name` `same_as_en`: First name
+- `da` `profile` `last_name` `same_as_en`: Last name
+- `da` `profile` `qth` `same_as_fr`: QTH / Localité
+- `da` `profile` `qth` `same_as_en`: QTH / Localité
+- `da` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `da` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `da` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `da` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `da` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `da` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `da` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `da` `profile` `profile_settings` `same_as_en`: Profile settings
+- `da` `profile` `identity_section` `same_as_en`: Identity and contact
+- `da` `profile` `radio_section` `same_as_en`: Radio information
+- `da` `profile` `postal_code` `same_as_en`: Postal code
+- `da` `profile` `operator_since` `same_as_en`: Operator since
+- `da` `profile` `itu_zone` `same_as_en`: ITU zone
+- `da` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `da` `profile` `lotw_username` `same_as_en`: LoTW username
+- `da` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `da` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `da` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `da` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `da` `profile` `antennas` `same_as_en`: Antennas
+- `da` `profile` `interests` `same_as_en`: Interests
+- `da` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `et` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `et` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `et` `profile` `first_name` `same_as_en`: First name
+- `et` `profile` `last_name` `same_as_en`: Last name
+- `et` `profile` `qth` `same_as_fr`: QTH / Localité
+- `et` `profile` `qth` `same_as_en`: QTH / Localité
+- `et` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `et` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `et` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `et` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `et` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `et` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `et` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `et` `profile` `profile_settings` `same_as_en`: Profile settings
+- `et` `profile` `identity_section` `same_as_en`: Identity and contact
+- `et` `profile` `radio_section` `same_as_en`: Radio information
+- `et` `profile` `postal_code` `same_as_en`: Postal code
+- `et` `profile` `operator_since` `same_as_en`: Operator since
+- `et` `profile` `itu_zone` `same_as_en`: ITU zone
+- `et` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `et` `profile` `lotw_username` `same_as_en`: LoTW username
+- `et` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `et` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `et` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `et` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `et` `profile` `antennas` `same_as_en`: Antennas
+- `et` `profile` `interests` `same_as_en`: Interests
+- `et` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `fi` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `fi` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `fi` `profile` `first_name` `same_as_en`: First name
+- `fi` `profile` `last_name` `same_as_en`: Last name
+- `fi` `profile` `qth` `same_as_fr`: QTH / Localité
+- `fi` `profile` `qth` `same_as_en`: QTH / Localité
+- `fi` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `fi` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `fi` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `fi` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `fi` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `fi` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `fi` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `fi` `profile` `profile_settings` `same_as_en`: Profile settings
+- `fi` `profile` `identity_section` `same_as_en`: Identity and contact
+- `fi` `profile` `radio_section` `same_as_en`: Radio information
+- `fi` `profile` `postal_code` `same_as_en`: Postal code
+- `fi` `profile` `operator_since` `same_as_en`: Operator since
+- `fi` `profile` `itu_zone` `same_as_en`: ITU zone
+- `fi` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `fi` `profile` `lotw_username` `same_as_en`: LoTW username
+- `fi` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `fi` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `fi` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `fi` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `fi` `profile` `antennas` `same_as_en`: Antennas
+- `fi` `profile` `interests` `same_as_en`: Interests
+- `fi` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `el` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `el` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `el` `profile` `first_name` `same_as_en`: First name
+- `el` `profile` `last_name` `same_as_en`: Last name
+- `el` `profile` `qth` `same_as_fr`: QTH / Localité
+- `el` `profile` `qth` `same_as_en`: QTH / Localité
+- `el` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `el` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `el` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `el` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `el` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `el` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `el` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `el` `profile` `profile_settings` `same_as_en`: Profile settings
+- `el` `profile` `identity_section` `same_as_en`: Identity and contact
+- `el` `profile` `radio_section` `same_as_en`: Radio information
+- `el` `profile` `postal_code` `same_as_en`: Postal code
+- `el` `profile` `operator_since` `same_as_en`: Operator since
+- `el` `profile` `itu_zone` `same_as_en`: ITU zone
+- `el` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `el` `profile` `lotw_username` `same_as_en`: LoTW username
+- `el` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `el` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `el` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `el` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `el` `profile` `antennas` `same_as_en`: Antennas
+- `el` `profile` `interests` `same_as_en`: Interests
+- `el` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `hu` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `hu` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `hu` `profile` `first_name` `same_as_en`: First name
+- `hu` `profile` `last_name` `same_as_en`: Last name
+- `hu` `profile` `qth` `same_as_fr`: QTH / Localité
+- `hu` `profile` `qth` `same_as_en`: QTH / Localité
+- `hu` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `hu` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `hu` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `hu` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `hu` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `hu` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `hu` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `hu` `profile` `profile_settings` `same_as_en`: Profile settings
+- `hu` `profile` `identity_section` `same_as_en`: Identity and contact
+- `hu` `profile` `radio_section` `same_as_en`: Radio information
+- `hu` `profile` `postal_code` `same_as_en`: Postal code
+- `hu` `profile` `operator_since` `same_as_en`: Operator since
+- `hu` `profile` `itu_zone` `same_as_en`: ITU zone
+- `hu` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `hu` `profile` `lotw_username` `same_as_en`: LoTW username
+- `hu` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `hu` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `hu` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `hu` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `hu` `profile` `antennas` `same_as_en`: Antennas
+- `hu` `profile` `interests` `same_as_en`: Interests
+- `hu` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ga` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ga` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ga` `profile` `first_name` `same_as_en`: First name
+- `ga` `profile` `last_name` `same_as_en`: Last name
+- `ga` `profile` `qth` `same_as_fr`: QTH / Localité
+- `ga` `profile` `qth` `same_as_en`: QTH / Localité
+- `ga` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `ga` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `ga` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `ga` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `ga` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `ga` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `ga` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `ga` `profile` `profile_settings` `same_as_en`: Profile settings
+- `ga` `profile` `identity_section` `same_as_en`: Identity and contact
+- `ga` `profile` `radio_section` `same_as_en`: Radio information
+- `ga` `profile` `postal_code` `same_as_en`: Postal code
+- `ga` `profile` `operator_since` `same_as_en`: Operator since
+- `ga` `profile` `itu_zone` `same_as_en`: ITU zone
+- `ga` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `ga` `profile` `lotw_username` `same_as_en`: LoTW username
+- `ga` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `ga` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `ga` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `ga` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `ga` `profile` `antennas` `same_as_en`: Antennas
+- `ga` `profile` `interests` `same_as_en`: Interests
+- `ga` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `lv` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `lv` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `lv` `profile` `first_name` `same_as_en`: First name
+- `lv` `profile` `last_name` `same_as_en`: Last name
+- `lv` `profile` `qth` `same_as_fr`: QTH / Localité
+- `lv` `profile` `qth` `same_as_en`: QTH / Localité
+- `lv` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `lv` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `lv` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `lv` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `lv` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `lv` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `lv` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `lv` `profile` `profile_settings` `same_as_en`: Profile settings
+- `lv` `profile` `identity_section` `same_as_en`: Identity and contact
+- `lv` `profile` `radio_section` `same_as_en`: Radio information
+- `lv` `profile` `postal_code` `same_as_en`: Postal code
+- `lv` `profile` `operator_since` `same_as_en`: Operator since
+- `lv` `profile` `itu_zone` `same_as_en`: ITU zone
+- `lv` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `lv` `profile` `lotw_username` `same_as_en`: LoTW username
+- `lv` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `lv` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `lv` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `lv` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `lv` `profile` `antennas` `same_as_en`: Antennas
+- `lv` `profile` `interests` `same_as_en`: Interests
+- `lv` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `lt` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `lt` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `lt` `profile` `first_name` `same_as_en`: First name
+- `lt` `profile` `last_name` `same_as_en`: Last name
+- `lt` `profile` `qth` `same_as_fr`: QTH / Localité
+- `lt` `profile` `qth` `same_as_en`: QTH / Localité
+- `lt` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `lt` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `lt` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `lt` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `lt` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `lt` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `lt` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `lt` `profile` `profile_settings` `same_as_en`: Profile settings
+- `lt` `profile` `identity_section` `same_as_en`: Identity and contact
+- `lt` `profile` `radio_section` `same_as_en`: Radio information
+- `lt` `profile` `postal_code` `same_as_en`: Postal code
+- `lt` `profile` `operator_since` `same_as_en`: Operator since
+- `lt` `profile` `itu_zone` `same_as_en`: ITU zone
+- `lt` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `lt` `profile` `lotw_username` `same_as_en`: LoTW username
+- `lt` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `lt` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `lt` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `lt` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `lt` `profile` `antennas` `same_as_en`: Antennas
+- `lt` `profile` `interests` `same_as_en`: Interests
+- `lt` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `mt` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `mt` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `mt` `profile` `first_name` `same_as_en`: First name
+- `mt` `profile` `last_name` `same_as_en`: Last name
+- `mt` `profile` `qth` `same_as_fr`: QTH / Localité
+- `mt` `profile` `qth` `same_as_en`: QTH / Localité
+- `mt` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `mt` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `mt` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `mt` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `mt` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `mt` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `mt` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `mt` `profile` `profile_settings` `same_as_en`: Profile settings
+- `mt` `profile` `identity_section` `same_as_en`: Identity and contact
+- `mt` `profile` `radio_section` `same_as_en`: Radio information
+- `mt` `profile` `postal_code` `same_as_en`: Postal code
+- `mt` `profile` `operator_since` `same_as_en`: Operator since
+- `mt` `profile` `itu_zone` `same_as_en`: ITU zone
+- `mt` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `mt` `profile` `lotw_username` `same_as_en`: LoTW username
+- `mt` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `mt` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `mt` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `mt` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `mt` `profile` `antennas` `same_as_en`: Antennas
+- `mt` `profile` `interests` `same_as_en`: Interests
+- `mt` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `pl` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `pl` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `pl` `profile` `first_name` `same_as_en`: First name
+- `pl` `profile` `last_name` `same_as_en`: Last name
+- `pl` `profile` `qth` `same_as_fr`: QTH / Localité
+- `pl` `profile` `qth` `same_as_en`: QTH / Localité
+- `pl` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `pl` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `pl` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `pl` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `pl` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `pl` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `pl` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `pl` `profile` `profile_settings` `same_as_en`: Profile settings
+- `pl` `profile` `identity_section` `same_as_en`: Identity and contact
+- `pl` `profile` `radio_section` `same_as_en`: Radio information
+- `pl` `profile` `postal_code` `same_as_en`: Postal code
+- `pl` `profile` `operator_since` `same_as_en`: Operator since
+- `pl` `profile` `itu_zone` `same_as_en`: ITU zone
+- `pl` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `pl` `profile` `lotw_username` `same_as_en`: LoTW username
+- `pl` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `pl` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `pl` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `pl` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `pl` `profile` `antennas` `same_as_en`: Antennas
+- `pl` `profile` `interests` `same_as_en`: Interests
+- `pl` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ro` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ro` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ro` `profile` `first_name` `same_as_en`: First name
+- `ro` `profile` `last_name` `same_as_en`: Last name
+- `ro` `profile` `qth` `same_as_fr`: QTH / Localité
+- `ro` `profile` `qth` `same_as_en`: QTH / Localité
+- `ro` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `ro` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `ro` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `ro` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `ro` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `ro` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `ro` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `ro` `profile` `profile_settings` `same_as_en`: Profile settings
+- `ro` `profile` `identity_section` `same_as_en`: Identity and contact
+- `ro` `profile` `radio_section` `same_as_en`: Radio information
+- `ro` `profile` `postal_code` `same_as_en`: Postal code
+- `ro` `profile` `operator_since` `same_as_en`: Operator since
+- `ro` `profile` `itu_zone` `same_as_en`: ITU zone
+- `ro` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `ro` `profile` `lotw_username` `same_as_en`: LoTW username
+- `ro` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `ro` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `ro` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `ro` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `ro` `profile` `antennas` `same_as_en`: Antennas
+- `ro` `profile` `interests` `same_as_en`: Interests
+- `ro` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `sk` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `sk` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `sk` `profile` `first_name` `same_as_en`: First name
+- `sk` `profile` `last_name` `same_as_en`: Last name
+- `sk` `profile` `qth` `same_as_fr`: QTH / Localité
+- `sk` `profile` `qth` `same_as_en`: QTH / Localité
+- `sk` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `sk` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `sk` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `sk` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `sk` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `sk` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `sk` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `sk` `profile` `profile_settings` `same_as_en`: Profile settings
+- `sk` `profile` `identity_section` `same_as_en`: Identity and contact
+- `sk` `profile` `radio_section` `same_as_en`: Radio information
+- `sk` `profile` `postal_code` `same_as_en`: Postal code
+- `sk` `profile` `operator_since` `same_as_en`: Operator since
+- `sk` `profile` `itu_zone` `same_as_en`: ITU zone
+- `sk` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `sk` `profile` `lotw_username` `same_as_en`: LoTW username
+- `sk` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `sk` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `sk` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `sk` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `sk` `profile` `antennas` `same_as_en`: Antennas
+- `sk` `profile` `interests` `same_as_en`: Interests
+- `sk` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `sl` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `sl` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `sl` `profile` `first_name` `same_as_en`: First name
+- `sl` `profile` `last_name` `same_as_en`: Last name
+- `sl` `profile` `qth` `same_as_fr`: QTH / Localité
+- `sl` `profile` `qth` `same_as_en`: QTH / Localité
+- `sl` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `sl` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `sl` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `sl` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `sl` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `sl` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `sl` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `sl` `profile` `profile_settings` `same_as_en`: Profile settings
+- `sl` `profile` `identity_section` `same_as_en`: Identity and contact
+- `sl` `profile` `radio_section` `same_as_en`: Radio information
+- `sl` `profile` `postal_code` `same_as_en`: Postal code
+- `sl` `profile` `operator_since` `same_as_en`: Operator since
+- `sl` `profile` `itu_zone` `same_as_en`: ITU zone
+- `sl` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `sl` `profile` `lotw_username` `same_as_en`: LoTW username
+- `sl` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `sl` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `sl` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `sl` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `sl` `profile` `antennas` `same_as_en`: Antennas
+- `sl` `profile` `interests` `same_as_en`: Interests
+- `sl` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `sv` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `sv` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `sv` `profile` `first_name` `same_as_en`: First name
+- `sv` `profile` `last_name` `same_as_en`: Last name
+- `sv` `profile` `qth` `same_as_fr`: QTH / Localité
+- `sv` `profile` `qth` `same_as_en`: QTH / Localité
+- `sv` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `sv` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `sv` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `sv` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `sv` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `sv` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `sv` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `sv` `profile` `profile_settings` `same_as_en`: Profile settings
+- `sv` `profile` `identity_section` `same_as_en`: Identity and contact
+- `sv` `profile` `radio_section` `same_as_en`: Radio information
+- `sv` `profile` `postal_code` `same_as_en`: Postal code
+- `sv` `profile` `operator_since` `same_as_en`: Operator since
+- `sv` `profile` `itu_zone` `same_as_en`: ITU zone
+- `sv` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `sv` `profile` `lotw_username` `same_as_en`: LoTW username
+- `sv` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `sv` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `sv` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `sv` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `sv` `profile` `antennas` `same_as_en`: Antennas
+- `sv` `profile` `interests` `same_as_en`: Interests
+- `sv` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ar` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ar` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ar` `profile` `first_name` `same_as_en`: First name
+- `ar` `profile` `last_name` `same_as_en`: Last name
+- `ar` `profile` `qth` `same_as_fr`: QTH / Localité
+- `ar` `profile` `qth` `same_as_en`: QTH / Localité
+- `ar` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `ar` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `ar` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `ar` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `ar` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `ar` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `ar` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `ar` `profile` `profile_settings` `same_as_en`: Profile settings
+- `ar` `profile` `identity_section` `same_as_en`: Identity and contact
+- `ar` `profile` `radio_section` `same_as_en`: Radio information
+- `ar` `profile` `postal_code` `same_as_en`: Postal code
+- `ar` `profile` `operator_since` `same_as_en`: Operator since
+- `ar` `profile` `itu_zone` `same_as_en`: ITU zone
+- `ar` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `ar` `profile` `lotw_username` `same_as_en`: LoTW username
+- `ar` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `ar` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `ar` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `ar` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `ar` `profile` `antennas` `same_as_en`: Antennas
+- `ar` `profile` `interests` `same_as_en`: Interests
+- `ar` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `hi` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `hi` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `hi` `profile` `first_name` `same_as_en`: First name
+- `hi` `profile` `last_name` `same_as_en`: Last name
+- `hi` `profile` `qth` `same_as_fr`: QTH / Localité
+- `hi` `profile` `qth` `same_as_en`: QTH / Localité
+- `hi` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `hi` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `hi` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `hi` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `hi` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `hi` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `hi` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `hi` `profile` `profile_settings` `same_as_en`: Profile settings
+- `hi` `profile` `identity_section` `same_as_en`: Identity and contact
+- `hi` `profile` `radio_section` `same_as_en`: Radio information
+- `hi` `profile` `postal_code` `same_as_en`: Postal code
+- `hi` `profile` `operator_since` `same_as_en`: Operator since
+- `hi` `profile` `itu_zone` `same_as_en`: ITU zone
+- `hi` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `hi` `profile` `lotw_username` `same_as_en`: LoTW username
+- `hi` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `hi` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `hi` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `hi` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `hi` `profile` `antennas` `same_as_en`: Antennas
+- `hi` `profile` `interests` `same_as_en`: Interests
+- `hi` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ja` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ja` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ja` `profile` `first_name` `same_as_en`: First name
+- `ja` `profile` `last_name` `same_as_en`: Last name
+- `ja` `profile` `qth` `same_as_fr`: QTH / Localité
+- `ja` `profile` `qth` `same_as_en`: QTH / Localité
+- `ja` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `ja` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `ja` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `ja` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `ja` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `ja` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `ja` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `ja` `profile` `profile_settings` `same_as_en`: Profile settings
+- `ja` `profile` `identity_section` `same_as_en`: Identity and contact
+- `ja` `profile` `radio_section` `same_as_en`: Radio information
+- `ja` `profile` `postal_code` `same_as_en`: Postal code
+- `ja` `profile` `operator_since` `same_as_en`: Operator since
+- `ja` `profile` `itu_zone` `same_as_en`: ITU zone
+- `ja` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `ja` `profile` `lotw_username` `same_as_en`: LoTW username
+- `ja` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `ja` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `ja` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `ja` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `ja` `profile` `antennas` `same_as_en`: Antennas
+- `ja` `profile` `interests` `same_as_en`: Interests
+- `ja` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `zh` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `zh` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `zh` `profile` `first_name` `same_as_en`: First name
+- `zh` `profile` `last_name` `same_as_en`: Last name
+- `zh` `profile` `qth` `same_as_fr`: QTH / Localité
+- `zh` `profile` `qth` `same_as_en`: QTH / Localité
+- `zh` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `zh` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `zh` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `zh` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `zh` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `zh` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `zh` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `zh` `profile` `profile_settings` `same_as_en`: Profile settings
+- `zh` `profile` `identity_section` `same_as_en`: Identity and contact
+- `zh` `profile` `radio_section` `same_as_en`: Radio information
+- `zh` `profile` `postal_code` `same_as_en`: Postal code
+- `zh` `profile` `operator_since` `same_as_en`: Operator since
+- `zh` `profile` `itu_zone` `same_as_en`: ITU zone
+- `zh` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `zh` `profile` `lotw_username` `same_as_en`: LoTW username
+- `zh` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `zh` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `zh` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `zh` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `zh` `profile` `antennas` `same_as_en`: Antennas
+- `zh` `profile` `interests` `same_as_en`: Interests
+- `zh` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `bn` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `bn` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `bn` `profile` `first_name` `same_as_en`: First name
+- `bn` `profile` `last_name` `same_as_en`: Last name
+- `bn` `profile` `qth` `same_as_fr`: QTH / Localité
+- `bn` `profile` `qth` `same_as_en`: QTH / Localité
+- `bn` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `bn` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `bn` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `bn` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `bn` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `bn` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `bn` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `bn` `profile` `profile_settings` `same_as_en`: Profile settings
+- `bn` `profile` `identity_section` `same_as_en`: Identity and contact
+- `bn` `profile` `radio_section` `same_as_en`: Radio information
+- `bn` `profile` `postal_code` `same_as_en`: Postal code
+- `bn` `profile` `operator_since` `same_as_en`: Operator since
+- `bn` `profile` `itu_zone` `same_as_en`: ITU zone
+- `bn` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `bn` `profile` `lotw_username` `same_as_en`: LoTW username
+- `bn` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `bn` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `bn` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `bn` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `bn` `profile` `antennas` `same_as_en`: Antennas
+- `bn` `profile` `interests` `same_as_en`: Interests
+- `bn` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ru` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ru` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ru` `profile` `first_name` `same_as_en`: First name
+- `ru` `profile` `last_name` `same_as_en`: Last name
+- `ru` `profile` `qth` `same_as_fr`: QTH / Localité
+- `ru` `profile` `qth` `same_as_en`: QTH / Localité
+- `ru` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `ru` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `ru` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `ru` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `ru` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `ru` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `ru` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `ru` `profile` `profile_settings` `same_as_en`: Profile settings
+- `ru` `profile` `identity_section` `same_as_en`: Identity and contact
+- `ru` `profile` `radio_section` `same_as_en`: Radio information
+- `ru` `profile` `postal_code` `same_as_en`: Postal code
+- `ru` `profile` `operator_since` `same_as_en`: Operator since
+- `ru` `profile` `itu_zone` `same_as_en`: ITU zone
+- `ru` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `ru` `profile` `lotw_username` `same_as_en`: LoTW username
+- `ru` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `ru` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `ru` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `ru` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `ru` `profile` `antennas` `same_as_en`: Antennas
+- `ru` `profile` `interests` `same_as_en`: Interests
+- `ru` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `id` `profile` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `id` `profile` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `id` `profile` `first_name` `same_as_en`: First name
+- `id` `profile` `last_name` `same_as_en`: Last name
+- `id` `profile` `qth` `same_as_fr`: QTH / Localité
+- `id` `profile` `qth` `same_as_en`: QTH / Localité
+- `id` `profile` `licence_help` `same_as_en`: Radio amateur licence class. Enter the licence level or category matching your authorization.
+- `id` `profile` `too_long` `same_as_en`: One or more fields exceed the allowed length.
+- `id` `profile` `invalid_email` `same_as_en`: The email address is invalid.
+- `id` `profile` `invalid_locator` `same_as_en`: The locator must use the Maidenhead format, for example JO20 or JO20AB.
+- `id` `profile` `invalid_url` `same_as_en`: Links must be valid full URLs.
+- `id` `profile` `callsign_taken` `same_as_en`: This callsign is already used.
+- `id` `profile` `auth_identifier_taken` `same_as_en`: This email or callsign is already used by another account.
+- `id` `profile` `profile_settings` `same_as_en`: Profile settings
+- `id` `profile` `identity_section` `same_as_en`: Identity and contact
+- `id` `profile` `radio_section` `same_as_en`: Radio information
+- `id` `profile` `postal_code` `same_as_en`: Postal code
+- `id` `profile` `operator_since` `same_as_en`: Operator since
+- `id` `profile` `itu_zone` `same_as_en`: ITU zone
+- `id` `profile` `qsl_via_help` `same_as_en`: How you prefer QSL cards to be exchanged, for example bureau, direct, or via a QSL manager.
+- `id` `profile` `lotw_username` `same_as_en`: LoTW username
+- `id` `profile` `eqsl_username` `same_as_en`: eQSL username
+- `id` `profile` `eqsl_username_help` `same_as_en`: Your eQSL.cc username for electronic QSL exchanges.
+- `id` `profile` `website_help` `same_as_en`: Optional personal or station website. Use a complete URL starting with https:// or http://.
+- `id` `profile` `uba_member_number_help` `same_as_en`: Enter your UBA member number only if the UBA member checkbox is selected.
+- `id` `profile` `antennas` `same_as_en`: Antennas
+- `id` `profile` `interests` `same_as_en`: Interests
+- `id` `profile` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `de` `qsl` `type_gradient` `same_as_en`: Gradient
+- `nl` `qsl` `records_count` `same_as_en`: record(s)
+- `da` `qsl` `live_preview` `same_as_en`: Live preview
+- `da` `qsl` `front_svg` `same_as_en`: Front SVG
+- `fr` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `en` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `de` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `de` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `de` `register` `operator_since` `same_as_en`: Operator since
+- `de` `register` `itu_zone` `same_as_en`: ITU zone
+- `de` `register` `lotw_username` `same_as_en`: LoTW username
+- `de` `register` `eqsl_username` `same_as_en`: eQSL username
+- `de` `register` `uba_member` `same_as_en`: UBA member
+- `de` `register` `uba_member_number` `same_as_en`: UBA member number
+- `de` `register` `antennas` `same_as_en`: Antennas
+- `de` `register` `interests` `same_as_en`: Interests
+- `de` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `nl` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `nl` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `nl` `register` `operator_since` `same_as_en`: Operator since
+- `nl` `register` `itu_zone` `same_as_en`: ITU zone
+- `nl` `register` `lotw_username` `same_as_en`: LoTW username
+- `nl` `register` `eqsl_username` `same_as_en`: eQSL username
+- `nl` `register` `uba_member` `same_as_en`: UBA member
+- `nl` `register` `uba_member_number` `same_as_en`: UBA member number
+- `nl` `register` `antennas` `same_as_en`: Antennas
+- `nl` `register` `interests` `same_as_en`: Interests
+- `nl` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `it` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `it` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `it` `register` `operator_since` `same_as_en`: Operator since
+- `it` `register` `itu_zone` `same_as_en`: ITU zone
+- `it` `register` `lotw_username` `same_as_en`: LoTW username
+- `it` `register` `eqsl_username` `same_as_en`: eQSL username
+- `it` `register` `uba_member` `same_as_en`: UBA member
+- `it` `register` `uba_member_number` `same_as_en`: UBA member number
+- `it` `register` `antennas` `same_as_en`: Antennas
+- `it` `register` `interests` `same_as_en`: Interests
+- `it` `register` `password` `same_as_en`: Password
+- `it` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `es` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `es` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `es` `register` `operator_since` `same_as_en`: Operator since
+- `es` `register` `itu_zone` `same_as_en`: ITU zone
+- `es` `register` `lotw_username` `same_as_en`: LoTW username
+- `es` `register` `eqsl_username` `same_as_en`: eQSL username
+- `es` `register` `uba_member` `same_as_en`: UBA member
+- `es` `register` `uba_member_number` `same_as_en`: UBA member number
+- `es` `register` `antennas` `same_as_en`: Antennas
+- `es` `register` `interests` `same_as_en`: Interests
+- `es` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `pt` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `pt` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `pt` `register` `operator_since` `same_as_en`: Operator since
+- `pt` `register` `itu_zone` `same_as_en`: ITU zone
+- `pt` `register` `lotw_username` `same_as_en`: LoTW username
+- `pt` `register` `eqsl_username` `same_as_en`: eQSL username
+- `pt` `register` `uba_member` `same_as_en`: UBA member
+- `pt` `register` `uba_member_number` `same_as_en`: UBA member number
+- `pt` `register` `antennas` `same_as_en`: Antennas
+- `pt` `register` `interests` `same_as_en`: Interests
+- `pt` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `bg` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `bg` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `bg` `register` `first_name` `same_as_en`: First name
+- `bg` `register` `last_name` `same_as_en`: Last name
+- `bg` `register` `postal_code` `same_as_en`: Postal code
+- `bg` `register` `operator_since` `same_as_en`: Operator since
+- `bg` `register` `itu_zone` `same_as_en`: ITU zone
+- `bg` `register` `lotw_username` `same_as_en`: LoTW username
+- `bg` `register` `eqsl_username` `same_as_en`: eQSL username
+- `bg` `register` `uba_member` `same_as_en`: UBA member
+- `bg` `register` `uba_member_number` `same_as_en`: UBA member number
+- `bg` `register` `antennas` `same_as_en`: Antennas
+- `bg` `register` `interests` `same_as_en`: Interests
+- `bg` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `hr` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `hr` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `hr` `register` `first_name` `same_as_en`: First name
+- `hr` `register` `last_name` `same_as_en`: Last name
+- `hr` `register` `postal_code` `same_as_en`: Postal code
+- `hr` `register` `operator_since` `same_as_en`: Operator since
+- `hr` `register` `itu_zone` `same_as_en`: ITU zone
+- `hr` `register` `lotw_username` `same_as_en`: LoTW username
+- `hr` `register` `eqsl_username` `same_as_en`: eQSL username
+- `hr` `register` `uba_member` `same_as_en`: UBA member
+- `hr` `register` `uba_member_number` `same_as_en`: UBA member number
+- `hr` `register` `antennas` `same_as_en`: Antennas
+- `hr` `register` `interests` `same_as_en`: Interests
+- `hr` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `cs` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `cs` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `cs` `register` `first_name` `same_as_en`: First name
+- `cs` `register` `last_name` `same_as_en`: Last name
+- `cs` `register` `postal_code` `same_as_en`: Postal code
+- `cs` `register` `operator_since` `same_as_en`: Operator since
+- `cs` `register` `itu_zone` `same_as_en`: ITU zone
+- `cs` `register` `lotw_username` `same_as_en`: LoTW username
+- `cs` `register` `eqsl_username` `same_as_en`: eQSL username
+- `cs` `register` `uba_member` `same_as_en`: UBA member
+- `cs` `register` `uba_member_number` `same_as_en`: UBA member number
+- `cs` `register` `antennas` `same_as_en`: Antennas
+- `cs` `register` `interests` `same_as_en`: Interests
+- `cs` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `da` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `da` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `da` `register` `first_name` `same_as_en`: First name
+- `da` `register` `last_name` `same_as_en`: Last name
+- `da` `register` `postal_code` `same_as_en`: Postal code
+- `da` `register` `operator_since` `same_as_en`: Operator since
+- `da` `register` `itu_zone` `same_as_en`: ITU zone
+- `da` `register` `lotw_username` `same_as_en`: LoTW username
+- `da` `register` `eqsl_username` `same_as_en`: eQSL username
+- `da` `register` `uba_member` `same_as_en`: UBA member
+- `da` `register` `uba_member_number` `same_as_en`: UBA member number
+- `da` `register` `antennas` `same_as_en`: Antennas
+- `da` `register` `interests` `same_as_en`: Interests
+- `da` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `et` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `et` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `et` `register` `first_name` `same_as_en`: First name
+- `et` `register` `last_name` `same_as_en`: Last name
+- `et` `register` `postal_code` `same_as_en`: Postal code
+- `et` `register` `operator_since` `same_as_en`: Operator since
+- `et` `register` `itu_zone` `same_as_en`: ITU zone
+- `et` `register` `lotw_username` `same_as_en`: LoTW username
+- `et` `register` `eqsl_username` `same_as_en`: eQSL username
+- `et` `register` `uba_member` `same_as_en`: UBA member
+- `et` `register` `uba_member_number` `same_as_en`: UBA member number
+- `et` `register` `antennas` `same_as_en`: Antennas
+- `et` `register` `interests` `same_as_en`: Interests
+- `et` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `fi` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `fi` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `fi` `register` `first_name` `same_as_en`: First name
+- `fi` `register` `last_name` `same_as_en`: Last name
+- `fi` `register` `postal_code` `same_as_en`: Postal code
+- `fi` `register` `operator_since` `same_as_en`: Operator since
+- `fi` `register` `itu_zone` `same_as_en`: ITU zone
+- `fi` `register` `lotw_username` `same_as_en`: LoTW username
+- `fi` `register` `eqsl_username` `same_as_en`: eQSL username
+- `fi` `register` `uba_member` `same_as_en`: UBA member
+- `fi` `register` `uba_member_number` `same_as_en`: UBA member number
+- `fi` `register` `antennas` `same_as_en`: Antennas
+- `fi` `register` `interests` `same_as_en`: Interests
+- `fi` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `el` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `el` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `el` `register` `first_name` `same_as_en`: First name
+- `el` `register` `last_name` `same_as_en`: Last name
+- `el` `register` `postal_code` `same_as_en`: Postal code
+- `el` `register` `operator_since` `same_as_en`: Operator since
+- `el` `register` `itu_zone` `same_as_en`: ITU zone
+- `el` `register` `lotw_username` `same_as_en`: LoTW username
+- `el` `register` `eqsl_username` `same_as_en`: eQSL username
+- `el` `register` `uba_member` `same_as_en`: UBA member
+- `el` `register` `uba_member_number` `same_as_en`: UBA member number
+- `el` `register` `antennas` `same_as_en`: Antennas
+- `el` `register` `interests` `same_as_en`: Interests
+- `el` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `hu` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `hu` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `hu` `register` `first_name` `same_as_en`: First name
+- `hu` `register` `last_name` `same_as_en`: Last name
+- `hu` `register` `postal_code` `same_as_en`: Postal code
+- `hu` `register` `operator_since` `same_as_en`: Operator since
+- `hu` `register` `itu_zone` `same_as_en`: ITU zone
+- `hu` `register` `lotw_username` `same_as_en`: LoTW username
+- `hu` `register` `eqsl_username` `same_as_en`: eQSL username
+- `hu` `register` `uba_member` `same_as_en`: UBA member
+- `hu` `register` `uba_member_number` `same_as_en`: UBA member number
+- `hu` `register` `antennas` `same_as_en`: Antennas
+- `hu` `register` `interests` `same_as_en`: Interests
+- `hu` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ga` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ga` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ga` `register` `first_name` `same_as_en`: First name
+- `ga` `register` `last_name` `same_as_en`: Last name
+- `ga` `register` `postal_code` `same_as_en`: Postal code
+- `ga` `register` `operator_since` `same_as_en`: Operator since
+- `ga` `register` `itu_zone` `same_as_en`: ITU zone
+- `ga` `register` `lotw_username` `same_as_en`: LoTW username
+- `ga` `register` `eqsl_username` `same_as_en`: eQSL username
+- `ga` `register` `uba_member` `same_as_en`: UBA member
+- `ga` `register` `uba_member_number` `same_as_en`: UBA member number
+- `ga` `register` `antennas` `same_as_en`: Antennas
+- `ga` `register` `interests` `same_as_en`: Interests
+- `ga` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `lv` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `lv` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `lv` `register` `first_name` `same_as_en`: First name
+- `lv` `register` `last_name` `same_as_en`: Last name
+- `lv` `register` `postal_code` `same_as_en`: Postal code
+- `lv` `register` `operator_since` `same_as_en`: Operator since
+- `lv` `register` `itu_zone` `same_as_en`: ITU zone
+- `lv` `register` `lotw_username` `same_as_en`: LoTW username
+- `lv` `register` `eqsl_username` `same_as_en`: eQSL username
+- `lv` `register` `uba_member` `same_as_en`: UBA member
+- `lv` `register` `uba_member_number` `same_as_en`: UBA member number
+- `lv` `register` `antennas` `same_as_en`: Antennas
+- `lv` `register` `interests` `same_as_en`: Interests
+- `lv` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `lt` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `lt` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `lt` `register` `first_name` `same_as_en`: First name
+- `lt` `register` `last_name` `same_as_en`: Last name
+- `lt` `register` `postal_code` `same_as_en`: Postal code
+- `lt` `register` `operator_since` `same_as_en`: Operator since
+- `lt` `register` `itu_zone` `same_as_en`: ITU zone
+- `lt` `register` `lotw_username` `same_as_en`: LoTW username
+- `lt` `register` `eqsl_username` `same_as_en`: eQSL username
+- `lt` `register` `uba_member` `same_as_en`: UBA member
+- `lt` `register` `uba_member_number` `same_as_en`: UBA member number
+- `lt` `register` `antennas` `same_as_en`: Antennas
+- `lt` `register` `interests` `same_as_en`: Interests
+- `lt` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `mt` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `mt` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `mt` `register` `first_name` `same_as_en`: First name
+- `mt` `register` `last_name` `same_as_en`: Last name
+- `mt` `register` `postal_code` `same_as_en`: Postal code
+- `mt` `register` `operator_since` `same_as_en`: Operator since
+- `mt` `register` `itu_zone` `same_as_en`: ITU zone
+- `mt` `register` `lotw_username` `same_as_en`: LoTW username
+- `mt` `register` `eqsl_username` `same_as_en`: eQSL username
+- `mt` `register` `uba_member` `same_as_en`: UBA member
+- `mt` `register` `uba_member_number` `same_as_en`: UBA member number
+- `mt` `register` `antennas` `same_as_en`: Antennas
+- `mt` `register` `interests` `same_as_en`: Interests
+- `mt` `register` `password` `same_as_en`: Password
+- `mt` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `pl` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `pl` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `pl` `register` `first_name` `same_as_en`: First name
+- `pl` `register` `last_name` `same_as_en`: Last name
+- `pl` `register` `postal_code` `same_as_en`: Postal code
+- `pl` `register` `operator_since` `same_as_en`: Operator since
+- `pl` `register` `itu_zone` `same_as_en`: ITU zone
+- `pl` `register` `lotw_username` `same_as_en`: LoTW username
+- `pl` `register` `eqsl_username` `same_as_en`: eQSL username
+- `pl` `register` `uba_member` `same_as_en`: UBA member
+- `pl` `register` `uba_member_number` `same_as_en`: UBA member number
+- `pl` `register` `antennas` `same_as_en`: Antennas
+- `pl` `register` `interests` `same_as_en`: Interests
+- `pl` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ro` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ro` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ro` `register` `first_name` `same_as_en`: First name
+- `ro` `register` `last_name` `same_as_en`: Last name
+- `ro` `register` `postal_code` `same_as_en`: Postal code
+- `ro` `register` `operator_since` `same_as_en`: Operator since
+- `ro` `register` `itu_zone` `same_as_en`: ITU zone
+- `ro` `register` `lotw_username` `same_as_en`: LoTW username
+- `ro` `register` `eqsl_username` `same_as_en`: eQSL username
+- `ro` `register` `uba_member` `same_as_en`: UBA member
+- `ro` `register` `uba_member_number` `same_as_en`: UBA member number
+- `ro` `register` `antennas` `same_as_en`: Antennas
+- `ro` `register` `interests` `same_as_en`: Interests
+- `ro` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `sk` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `sk` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `sk` `register` `first_name` `same_as_en`: First name
+- `sk` `register` `last_name` `same_as_en`: Last name
+- `sk` `register` `postal_code` `same_as_en`: Postal code
+- `sk` `register` `operator_since` `same_as_en`: Operator since
+- `sk` `register` `itu_zone` `same_as_en`: ITU zone
+- `sk` `register` `lotw_username` `same_as_en`: LoTW username
+- `sk` `register` `eqsl_username` `same_as_en`: eQSL username
+- `sk` `register` `uba_member` `same_as_en`: UBA member
+- `sk` `register` `uba_member_number` `same_as_en`: UBA member number
+- `sk` `register` `antennas` `same_as_en`: Antennas
+- `sk` `register` `interests` `same_as_en`: Interests
+- `sk` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `sl` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `sl` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `sl` `register` `first_name` `same_as_en`: First name
+- `sl` `register` `last_name` `same_as_en`: Last name
+- `sl` `register` `postal_code` `same_as_en`: Postal code
+- `sl` `register` `operator_since` `same_as_en`: Operator since
+- `sl` `register` `itu_zone` `same_as_en`: ITU zone
+- `sl` `register` `lotw_username` `same_as_en`: LoTW username
+- `sl` `register` `eqsl_username` `same_as_en`: eQSL username
+- `sl` `register` `uba_member` `same_as_en`: UBA member
+- `sl` `register` `uba_member_number` `same_as_en`: UBA member number
+- `sl` `register` `antennas` `same_as_en`: Antennas
+- `sl` `register` `interests` `same_as_en`: Interests
+- `sl` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `sv` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `sv` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `sv` `register` `first_name` `same_as_en`: First name
+- `sv` `register` `last_name` `same_as_en`: Last name
+- `sv` `register` `postal_code` `same_as_en`: Postal code
+- `sv` `register` `operator_since` `same_as_en`: Operator since
+- `sv` `register` `itu_zone` `same_as_en`: ITU zone
+- `sv` `register` `lotw_username` `same_as_en`: LoTW username
+- `sv` `register` `eqsl_username` `same_as_en`: eQSL username
+- `sv` `register` `uba_member` `same_as_en`: UBA member
+- `sv` `register` `uba_member_number` `same_as_en`: UBA member number
+- `sv` `register` `antennas` `same_as_en`: Antennas
+- `sv` `register` `interests` `same_as_en`: Interests
+- `sv` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ar` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ar` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ar` `register` `first_name` `same_as_en`: First name
+- `ar` `register` `last_name` `same_as_en`: Last name
+- `ar` `register` `postal_code` `same_as_en`: Postal code
+- `ar` `register` `operator_since` `same_as_en`: Operator since
+- `ar` `register` `itu_zone` `same_as_en`: ITU zone
+- `ar` `register` `lotw_username` `same_as_en`: LoTW username
+- `ar` `register` `eqsl_username` `same_as_en`: eQSL username
+- `ar` `register` `uba_member` `same_as_en`: UBA member
+- `ar` `register` `uba_member_number` `same_as_en`: UBA member number
+- `ar` `register` `antennas` `same_as_en`: Antennas
+- `ar` `register` `interests` `same_as_en`: Interests
+- `ar` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `hi` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `hi` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `hi` `register` `first_name` `same_as_en`: First name
+- `hi` `register` `last_name` `same_as_en`: Last name
+- `hi` `register` `postal_code` `same_as_en`: Postal code
+- `hi` `register` `operator_since` `same_as_en`: Operator since
+- `hi` `register` `itu_zone` `same_as_en`: ITU zone
+- `hi` `register` `lotw_username` `same_as_en`: LoTW username
+- `hi` `register` `eqsl_username` `same_as_en`: eQSL username
+- `hi` `register` `uba_member` `same_as_en`: UBA member
+- `hi` `register` `uba_member_number` `same_as_en`: UBA member number
+- `hi` `register` `antennas` `same_as_en`: Antennas
+- `hi` `register` `interests` `same_as_en`: Interests
+- `hi` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ja` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ja` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ja` `register` `first_name` `same_as_en`: First name
+- `ja` `register` `last_name` `same_as_en`: Last name
+- `ja` `register` `postal_code` `same_as_en`: Postal code
+- `ja` `register` `operator_since` `same_as_en`: Operator since
+- `ja` `register` `itu_zone` `same_as_en`: ITU zone
+- `ja` `register` `lotw_username` `same_as_en`: LoTW username
+- `ja` `register` `eqsl_username` `same_as_en`: eQSL username
+- `ja` `register` `uba_member` `same_as_en`: UBA member
+- `ja` `register` `uba_member_number` `same_as_en`: UBA member number
+- `ja` `register` `antennas` `same_as_en`: Antennas
+- `ja` `register` `interests` `same_as_en`: Interests
+- `ja` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `zh` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `zh` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `zh` `register` `first_name` `same_as_en`: First name
+- `zh` `register` `last_name` `same_as_en`: Last name
+- `zh` `register` `postal_code` `same_as_en`: Postal code
+- `zh` `register` `operator_since` `same_as_en`: Operator since
+- `zh` `register` `itu_zone` `same_as_en`: ITU zone
+- `zh` `register` `lotw_username` `same_as_en`: LoTW username
+- `zh` `register` `eqsl_username` `same_as_en`: eQSL username
+- `zh` `register` `uba_member` `same_as_en`: UBA member
+- `zh` `register` `uba_member_number` `same_as_en`: UBA member number
+- `zh` `register` `antennas` `same_as_en`: Antennas
+- `zh` `register` `interests` `same_as_en`: Interests
+- `zh` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `bn` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `bn` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `bn` `register` `first_name` `same_as_en`: First name
+- `bn` `register` `last_name` `same_as_en`: Last name
+- `bn` `register` `postal_code` `same_as_en`: Postal code
+- `bn` `register` `operator_since` `same_as_en`: Operator since
+- `bn` `register` `itu_zone` `same_as_en`: ITU zone
+- `bn` `register` `lotw_username` `same_as_en`: LoTW username
+- `bn` `register` `eqsl_username` `same_as_en`: eQSL username
+- `bn` `register` `uba_member` `same_as_en`: UBA member
+- `bn` `register` `uba_member_number` `same_as_en`: UBA member number
+- `bn` `register` `antennas` `same_as_en`: Antennas
+- `bn` `register` `interests` `same_as_en`: Interests
+- `bn` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `ru` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `ru` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `ru` `register` `first_name` `same_as_en`: First name
+- `ru` `register` `last_name` `same_as_en`: Last name
+- `ru` `register` `postal_code` `same_as_en`: Postal code
+- `ru` `register` `operator_since` `same_as_en`: Operator since
+- `ru` `register` `itu_zone` `same_as_en`: ITU zone
+- `ru` `register` `lotw_username` `same_as_en`: LoTW username
+- `ru` `register` `eqsl_username` `same_as_en`: eQSL username
+- `ru` `register` `uba_member` `same_as_en`: UBA member
+- `ru` `register` `uba_member_number` `same_as_en`: UBA member number
+- `ru` `register` `antennas` `same_as_en`: Antennas
+- `ru` `register` `interests` `same_as_en`: Interests
+- `ru` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `id` `register` `callsign` `same_as_fr`: Indicatif / Identifiant LoTW
+- `id` `register` `callsign` `same_as_en`: Indicatif / Identifiant LoTW
+- `id` `register` `first_name` `same_as_en`: First name
+- `id` `register` `last_name` `same_as_en`: Last name
+- `id` `register` `postal_code` `same_as_en`: Postal code
+- `id` `register` `operator_since` `same_as_en`: Operator since
+- `id` `register` `itu_zone` `same_as_en`: ITU zone
+- `id` `register` `lotw_username` `same_as_en`: LoTW username
+- `id` `register` `eqsl_username` `same_as_en`: eQSL username
+- `id` `register` `uba_member` `same_as_en`: UBA member
+- `id` `register` `uba_member_number` `same_as_en`: UBA member number
+- `id` `register` `antennas` `same_as_en`: Antennas
+- `id` `register` `interests` `same_as_en`: Interests
+- `id` `register` `geocode_consent` `same_as_en`: Automatically calculate locator and radio zones through Nominatim with my postal address.
+- `fr` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `fr` `relais` `altitude` `same_as_en`: Altitude
+- `en` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `en` `relais` `altitude` `same_as_fr`: Altitude
+- `de` `relais` `polarization` `same_as_fr`: Polarisation
+- `de` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `de` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `nl` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `nl` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `it` `relais` `polarization_value` `same_as_fr`: Verticale 6,5 dBi
+- `es` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `es` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `pt` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `pt` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `pt` `relais` `altitude` `same_as_fr`: Altitude
+- `pt` `relais` `altitude` `same_as_en`: Altitude
+- `hr` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `hr` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `cs` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `cs` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `da` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `da` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `et` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `et` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `fi` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `fi` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `el` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `el` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `hu` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `hu` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `ga` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `ga` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `lt` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `lt` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `pl` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `pl` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `ro` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `ro` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `sk` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `sk` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `sl` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `sl` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `sv` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `sv` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `bn` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `bn` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `id` `relais` `location_value` `same_as_fr`: Yvoir (Durnal)
+- `id` `relais` `location_value` `same_as_en`: Yvoir (Durnal)
+- `sk` `schools` `pill_discovery` `same_as_en`: Discovery
+- `fr` `search` `pagination` `same_as_en`: Pagination
+- `fr` `search` `source_articles` `same_as_en`: Articles
+- `en` `search` `pagination` `same_as_fr`: Pagination
+- `en` `search` `source_articles` `same_as_fr`: Articles
+- `fr` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `en` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `de` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `de` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `it` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `it` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `es` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `es` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `bg` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `hr` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `cs` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `cs` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `cs` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `cs` `seo` `newsletter_public_title` `same_as_en`: ON4CRD Newsletter
+- `da` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `da` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `da` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `et` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `fi` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `fi` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `fi` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `el` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `el` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `el` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `hu` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `hu` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `hu` `seo` `geo_placename` `same_as_en`: Durnal, Yvoir, Namur, Belgium
+- `hu` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `lv` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `lt` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `mt` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `mt` `seo` `newsletter_public_title` `same_as_fr`: Newsletter ON4CRD
+- `pl` `seo` `sponsoring_title` `same_as_fr`: Sponsoring ON4CRD
+- `ro` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `ro` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `ro` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `sk` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `sk` `seo` `newsletter_public_title` `same_as_en`: ON4CRD Newsletter
+- `sl` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `sv` `seo` `default_title` `same_as_fr`: ON4CRD Radio Club Durnal
+- `sv` `seo` `default_title` `same_as_en`: ON4CRD Radio Club Durnal
+- `sv` `seo` `wiki_title` `same_as_en`: ON4CRD Wiki
+- `fr` `sponsoring` `title` `same_as_en`: Sponsoring
+- `en` `sponsoring` `title` `same_as_fr`: Sponsoring
+- `de` `sponsoring` `title` `same_as_fr`: Sponsoring
+- `de` `sponsoring` `title` `same_as_en`: Sponsoring
+- `nl` `sponsoring` `title` `same_as_fr`: Sponsoring
+- `nl` `sponsoring` `title` `same_as_en`: Sponsoring
+- `pl` `sponsoring` `title` `same_as_fr`: Sponsoring
+- `pl` `sponsoring` `title` `same_as_en`: Sponsoring
+- `fr` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `fr` `tools` `watts` `same_as_en`: Watts (W)
+- `fr` `tools` `inductance` `same_as_en`: Inductance (µH)
+- `fr` `tools` `distance_km` `same_as_en`: Distance (km)
+- `fr` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `fr` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `fr` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `fr` `tools` `inductance_uh` `same_as_en`: Inductance (µH)
+- `fr` `tools` `unit_conv_group_rf` `same_as_en`: Radio / RF
+- `fr` `tools` `unit_conv_group_rotation` `same_as_en`: Rotation
+- `en` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `en` `tools` `watts` `same_as_fr`: Watts (W)
+- `en` `tools` `inductance` `same_as_fr`: Inductance (µH)
+- `en` `tools` `distance_km` `same_as_fr`: Distance (km)
+- `en` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `en` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `en` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `en` `tools` `inductance_uh` `same_as_fr`: Inductance (µH)
+- `en` `tools` `unit_conv_group_rf` `same_as_fr`: Radio / RF
+- `en` `tools` `unit_conv_group_rotation` `same_as_fr`: Rotation
+- `de` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `de` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `de` `tools` `locator_a` `same_as_en`: Locator A
+- `de` `tools` `locator_b` `same_as_en`: Locator B
+- `de` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `de` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `de` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `de` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `de` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `de` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `de` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `de` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `nl` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `nl` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `nl` `tools` `dbm_a` `same_as_fr`: Niveau A (dBm)
+- `nl` `tools` `dbm_b` `same_as_fr`: Niveau B (dBm)
+- `nl` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `nl` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `nl` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `nl` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `nl` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `nl` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `nl` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `nl` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `it` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `it` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `it` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `it` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `it` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `it` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `it` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `it` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `it` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `it` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `es` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `es` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `es` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `es` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `es` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `es` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `es` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `es` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `es` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `es` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `es` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `es` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `pt` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `pt` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `pt` `tools` `watts` `same_as_fr`: Watts (W)
+- `pt` `tools` `watts` `same_as_en`: Watts (W)
+- `pt` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `pt` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `pt` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `pt` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `pt` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `pt` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `pt` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `pt` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `bg` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `bg` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `bg` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `bg` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `bg` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `bg` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `bg` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `bg` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `bg` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `bg` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `bg` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `bg` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `hr` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `hr` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `hr` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `hr` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `hr` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `hr` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `hr` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `hr` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `hr` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `hr` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `hr` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `hr` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `cs` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `cs` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `cs` `tools` `impedance` `same_as_en`: Impedance (Ω)
+- `cs` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `cs` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `cs` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `cs` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `cs` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `cs` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `cs` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `cs` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `cs` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `cs` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `da` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `da` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `da` `tools` `dbm_a` `same_as_fr`: Niveau A (dBm)
+- `da` `tools` `dbm_b` `same_as_fr`: Niveau B (dBm)
+- `da` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `da` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `da` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `da` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `da` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `da` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `da` `tools` `unit_conv_group_rotation` `same_as_fr`: Rotation
+- `da` `tools` `unit_conv_group_rotation` `same_as_en`: Rotation
+- `da` `tools` `unit_conv_reference` `same_as_en`: Reference
+- `da` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `da` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `da` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `da` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `et` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `et` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `et` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `et` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `et` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `et` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `et` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `et` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `et` `tools` `wh_j_calc` `same_as_en`: Wh to Joules
+- `et` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `et` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `et` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `et` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `fi` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `fi` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `fi` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `fi` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `fi` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `fi` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `fi` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `fi` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `fi` `tools` `vpp_vrms_calc` `same_as_en`: Vpp to Vrms
+- `fi` `tools` `vrms_vpp_calc` `same_as_en`: Vrms to Vpp
+- `fi` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `fi` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `fi` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `fi` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `el` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `el` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `el` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `el` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `el` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `el` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `el` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `el` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `el` `tools` `wh_j_calc` `same_as_en`: Wh to Joules
+- `el` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `el` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `el` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `el` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `hu` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `hu` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `hu` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `hu` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `hu` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `hu` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `hu` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `hu` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `hu` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `hu` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `hu` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `hu` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `ga` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ga` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ga` `tools` `watts` `same_as_fr`: Watts (W)
+- `ga` `tools` `watts` `same_as_en`: Watts (W)
+- `ga` `tools` `impedance` `same_as_en`: Impedance (Ω)
+- `ga` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `ga` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `ga` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `ga` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `ga` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `ga` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `ga` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `ga` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `ga` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `ga` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `lv` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `lv` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `lv` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `lv` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `lv` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `lv` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `lv` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `lv` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `lv` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `lv` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `lv` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `lv` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `lt` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `lt` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `lt` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `lt` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `lt` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `lt` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `lt` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `lt` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `lt` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `lt` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `lt` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `lt` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `mt` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `mt` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `mt` `tools` `watts` `same_as_fr`: Watts (W)
+- `mt` `tools` `watts` `same_as_en`: Watts (W)
+- `mt` `tools` `duty_cycle_calc` `same_as_en`: Duty cycle
+- `mt` `tools` `duty_cycle_result` `same_as_en`: Duty cycle
+- `mt` `tools` `erp_input_w` `same_as_en`: Input ERP (W)
+- `mt` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `mt` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `mt` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `mt` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `mt` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `mt` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `mt` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `mt` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `mt` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `mt` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `pl` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `pl` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `pl` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `pl` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `pl` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `pl` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `pl` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `pl` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `pl` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `pl` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `ro` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ro` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ro` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `ro` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `ro` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `ro` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `ro` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `ro` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `ro` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `ro` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `ro` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `ro` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `sk` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `sk` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `sk` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `sk` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `sk` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `sk` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `sk` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `sk` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `sk` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `sk` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `sk` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `sk` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `sl` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `sl` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `sl` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `sl` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `sl` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `sl` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `sl` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `sl` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `sl` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `sl` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `sl` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `sl` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `sv` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `sv` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `sv` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `sv` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `sv` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `sv` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `sv` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `sv` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `sv` `tools` `unit_conv_group_rotation` `same_as_fr`: Rotation
+- `sv` `tools` `unit_conv_group_rotation` `same_as_en`: Rotation
+- `sv` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `sv` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `sv` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `sv` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `ar` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ar` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ar` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `ar` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `ar` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `ar` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `hi` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `hi` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `hi` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `hi` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `hi` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `hi` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `ja` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ja` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ja` `tools` `locator` `same_as_en`: Maidenhead locator
+- `ja` `tools` `cutoff_freq` `same_as_en`: Cutoff frequency (MHz)
+- `ja` `tools` `frequency_mhz` `same_as_en`: Frequency (MHz)
+- `ja` `tools` `critical_freq_mhz` `same_as_en`: Critical frequency foF2 (MHz)
+- `ja` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `ja` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `ja` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `ja` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `ja` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `ja` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `zh` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `zh` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `zh` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `zh` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `zh` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `zh` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `bn` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `bn` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `bn` `tools` `locator` `same_as_en`: Maidenhead locator
+- `bn` `tools` `cutoff_freq` `same_as_en`: Cutoff frequency (MHz)
+- `bn` `tools` `critical_freq_mhz` `same_as_en`: Critical frequency foF2 (MHz)
+- `bn` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `bn` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `bn` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `bn` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `bn` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `bn` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `bn` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `bn` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `bn` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `bn` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `ru` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ru` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `ru` `tools` `locator` `same_as_en`: Maidenhead locator
+- `ru` `tools` `cutoff_freq` `same_as_en`: Cutoff frequency (MHz)
+- `ru` `tools` `frequency_mhz` `same_as_en`: Frequency (MHz)
+- `ru` `tools` `critical_freq_mhz` `same_as_en`: Critical frequency foF2 (MHz)
+- `ru` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `ru` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `ru` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `ru` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `id` `tools` `grid_title` `same_as_fr`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `id` `tools` `grid_title` `same_as_en`: Calcul du grid et les zones CG/ITU depuis une adresse postale
+- `id` `tools` `battery_voltage_v` `same_as_en`: Battery voltage (V)
+- `id` `tools` `load_power_w` `same_as_en`: Load power (W)
+- `id` `tools` `muftool_calc` `same_as_en`: Simplified MUF
+- `id` `tools` `critical_freq_mhz` `same_as_en`: Critical frequency foF2 (MHz)
+- `id` `tools` `incidence_deg` `same_as_en`: Incidence angle (°)
+- `id` `tools` `virtual_height_km` `same_as_en`: Virtual height (km)
+- `id` `tools` `eirp_calc` `same_as_en`: ERP → EIRP conversion
+- `id` `tools` `erp_input_w` `same_as_en`: Input ERP (W)
+- `id` `tools` `eirp_result_w` `same_as_en`: Estimated EIRP (W)
+- `id` `tools` `dbm_a` `same_as_en`: Level A (dBm)
+- `id` `tools` `dbm_b` `same_as_en`: Level B (dBm)
+- `id` `tools` `gain_conv_calc` `same_as_en`: dBd ↔ dBi conversion
+- `id` `tools` `dbi_result` `same_as_en`: Gain in dBi
+- `id` `tools` `dbuv_calc` `same_as_en`: dBm ↔ dBµV conversion (50Ω)
+- `id` `tools` `resistor_combo_calc` `same_as_en`: Resistor combo finder (E12)
+- `id` `tools` `target_resistance_ohm` `same_as_en`: Target resistance (Ω)
+- `id` `tools` `resistor_count_max` `same_as_en`: Max resistor count
+- `id` `tools` `resistor_combo_result` `same_as_en`: Best combination
+- `id` `tools` `voltage_v` `same_as_en`: Voltage (V)
+- `id` `tools` `current_a` `same_as_en`: Current (A)
+- `id` `tools` `resistance_ohm` `same_as_en`: Resistance (Ω)
+- `id` `tools` `tx_power_dbm` `same_as_fr`: Ptx (dBm)
+- `id` `tools` `tx_power_dbm` `same_as_en`: Ptx (dBm)
+- `id` `tools` `tx_gain_dbi` `same_as_fr`: Gtx (dBi)
+- `id` `tools` `tx_gain_dbi` `same_as_en`: Gtx (dBi)
+- `id` `tools` `rx_gain_dbi` `same_as_fr`: Grx (dBi)
+- `id` `tools` `rx_gain_dbi` `same_as_en`: Grx (dBi)
+- `id` `tools` `dbw_ph` `same_as_en`: E.g.: 10
+- `id` `tools` `inductance_uh` `same_as_fr`: Inductance (µH)
+- `id` `tools` `inductance_uh` `same_as_en`: Inductance (µH)
+- `id` `tools` `capacitance_pf` `same_as_en`: Capacitance (pF)
+- `id` `tools` `reactance_result_ohm` `same_as_en`: Reactance (Ω)
+- `id` `tools` `vpp_vrms_calc` `same_as_en`: Vpp to Vrms
+- `id` `tools` `vrms_vpp_calc` `same_as_en`: Vrms to Vpp
+- `id` `tools` `vpk_vrms_calc` `same_as_en`: Vpk to Vrms
+- `id` `tools` `hz_khz_calc` `same_as_en`: Hz to kHz
+- `id` `tools` `khz_mhz_calc` `same_as_en`: kHz to MHz
+- `id` `tools` `mhz_ghz_calc` `same_as_en`: MHz to GHz
+- `id` `tools` `c_f_calc` `same_as_en`: °C to °F
+- `id` `tools` `f_c_calc` `same_as_en`: °F to °C
+- `id` `tools` `pa_db_calc` `same_as_en`: Pa to dB SPL
+- `id` `tools` `db_pa_calc` `same_as_en`: dB SPL to Pa
+- `id` `tools` `wh_j_calc` `same_as_en`: Wh to Joules
+- `id` `tools` `rpm_rps_calc` `same_as_en`: RPM to RPS
+- `id` `tools` `rps_rpm_calc` `same_as_en`: RPS to RPM
+- `id` `tools` `value_in` `same_as_en`: Input value
+- `id` `tools` `sunit_dbuv_calc` `same_as_en`: S-unit to dBµV
+- `id` `tools` `dbuv_sunit_calc` `same_as_en`: dBµV to S-unit
+- `id` `tools` `unit_conv_group_rf` `same_as_fr`: Radio / RF
+- `id` `tools` `unit_conv_group_rf` `same_as_en`: Radio / RF
+- `id` `tools` `unit_conv_group_voltage` `same_as_en`: Sine voltage
+- `id` `tools` `unit_conv_group_temperature` `same_as_en`: Temperature
+- `id` `tools` `unit_conv_group_rotation` `same_as_fr`: Rotation
+- `id` `tools` `unit_conv_group_rotation` `same_as_en`: Rotation
+- `id` `tools` `unit_conv_group_field` `same_as_en`: Signal level
+- `id` `tools` `unit_conv_reference` `same_as_en`: Reference
+- `id` `tools` `unit_conv_quick_links` `same_as_en`: Detailed converters
+- `id` `tools` `forward_power` `same_as_en`: Forward power (W)
+- `id` `tools` `reflected_power` `same_as_en`: Reflected power (W)
+- `id` `tools` `swr_result` `same_as_en`: Calculated SWR
+- `id` `tools` `dbw_calc` `same_as_en`: dBm <-> dBW conversion
+- `bg` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `bg` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `bg` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `bg` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `bg` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `bg` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `bg` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `bg` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `bg` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `bg` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `bg` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `bg` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `bg` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `bg` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `bg` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `bg` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `bg` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `bg` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `bg` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `bg` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `bg` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `bg` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `bg` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `bg` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `bg` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `bg` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `bg` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `bg` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `bg` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `hr` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `hr` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `hr` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `hr` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `hr` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `hr` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `hr` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `hr` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `hr` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `hr` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `hr` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `hr` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `hr` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `hr` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `hr` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `hr` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `hr` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `hr` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `hr` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `hr` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `hr` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `hr` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `hr` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `hr` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `hr` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `hr` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `hr` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `hr` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `hr` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `cs` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `cs` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `cs` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `cs` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `cs` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `cs` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `cs` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `cs` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `cs` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `cs` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `cs` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `cs` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `cs` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `cs` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `cs` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `cs` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `cs` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `cs` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `cs` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `cs` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `cs` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `cs` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `cs` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `cs` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `cs` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `cs` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `cs` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `cs` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `cs` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `da` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `da` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `da` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `da` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `da` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `da` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `da` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `da` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `da` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `da` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `da` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `da` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `da` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `da` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `da` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `da` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `da` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `da` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `da` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `da` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `da` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `da` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `da` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `da` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `da` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `da` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `da` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `da` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `da` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `et` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `et` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `et` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `et` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `et` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `et` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `et` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `et` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `et` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `et` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `et` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `et` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `et` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `et` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `et` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `et` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `et` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `et` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `et` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `et` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `et` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `et` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `et` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `et` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `et` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `et` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `et` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `et` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `et` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `fi` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `fi` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `fi` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `fi` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `fi` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `fi` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `fi` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `fi` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `fi` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `fi` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `fi` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `fi` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `fi` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `fi` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `fi` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `fi` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `fi` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `fi` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `fi` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `fi` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `fi` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `fi` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `fi` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `fi` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `fi` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `fi` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `fi` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `fi` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `fi` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `el` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `el` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `el` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `el` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `el` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `el` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `el` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `el` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `el` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `el` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `el` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `el` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `el` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `el` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `el` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `el` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `el` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `el` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `el` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `el` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `el` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `el` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `el` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `el` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `el` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `el` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `el` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `el` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `el` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `hu` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `hu` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `hu` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `hu` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `hu` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `hu` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `hu` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `hu` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `hu` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `hu` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `hu` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `hu` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `hu` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `hu` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `hu` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `hu` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `hu` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `hu` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `hu` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `hu` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `hu` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `hu` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `hu` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `hu` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `hu` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `hu` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `hu` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `hu` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `hu` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `ga` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `ga` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `ga` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `ga` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `ga` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `ga` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `ga` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `ga` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `ga` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `ga` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `ga` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `ga` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `ga` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `ga` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `ga` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `ga` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `ga` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `ga` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `ga` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `ga` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `ga` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `ga` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `ga` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `ga` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `ga` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `ga` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `ga` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `ga` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `ga` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `lv` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `lv` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `lv` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `lv` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `lv` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `lv` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `lv` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `lv` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `lv` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `lv` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `lv` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `lv` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `lv` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `lv` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `lv` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `lv` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `lv` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `lv` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `lv` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `lv` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `lv` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `lv` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `lv` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `lv` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `lv` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `lv` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `lv` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `lv` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `lv` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `lt` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `lt` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `lt` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `lt` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `lt` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `lt` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `lt` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `lt` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `lt` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `lt` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `lt` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `lt` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `lt` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `lt` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `lt` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `lt` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `lt` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `lt` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `lt` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `lt` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `lt` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `lt` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `lt` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `lt` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `lt` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `lt` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `lt` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `lt` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `lt` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `mt` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `mt` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `mt` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `mt` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `mt` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `mt` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `mt` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `mt` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `mt` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `mt` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `mt` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `mt` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `mt` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `mt` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `mt` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `mt` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `mt` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `mt` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `mt` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `mt` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `mt` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `mt` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `mt` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `mt` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `mt` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `mt` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `mt` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `mt` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `mt` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `pl` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `pl` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `pl` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `pl` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `pl` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `pl` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `pl` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `pl` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `pl` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `pl` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `pl` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `pl` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `pl` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `pl` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `pl` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `pl` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `pl` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `pl` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `pl` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `pl` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `pl` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `pl` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `pl` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `pl` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `pl` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `pl` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `pl` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `pl` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `pl` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `ro` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `ro` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `ro` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `ro` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `ro` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `ro` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `ro` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `ro` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `ro` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `ro` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `ro` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `ro` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `ro` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `ro` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `ro` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `ro` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `ro` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `ro` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `ro` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `ro` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `ro` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `ro` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `ro` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `ro` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `ro` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `ro` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `ro` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `ro` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `ro` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `sk` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `sk` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `sk` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `sk` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `sk` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `sk` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `sk` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `sk` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `sk` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `sk` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `sk` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `sk` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `sk` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `sk` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `sk` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `sk` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `sk` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `sk` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `sk` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `sk` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `sk` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `sk` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `sk` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `sk` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `sk` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `sk` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `sk` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `sk` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `sk` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `sl` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `sl` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `sl` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `sl` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `sl` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `sl` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `sl` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `sl` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `sl` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `sl` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `sl` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `sl` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `sl` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `sl` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `sl` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `sl` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `sl` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `sl` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `sl` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `sl` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `sl` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `sl` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `sl` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `sl` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `sl` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `sl` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `sl` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `sl` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `sl` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `sv` `upload_messages` `uploaded_unreadable` `same_as_en`: Uploaded file is unreadable.
+- `sv` `upload_messages` `invalid_signature` `same_as_en`: Invalid file signature for the expected type.
+- `sv` `upload_messages` `upload_failed` `same_as_en`: Upload failed.
+- `sv` `upload_messages` `upload_invalid` `same_as_en`: Invalid uploaded file.
+- `sv` `upload_messages` `file_too_large_or_empty` `same_as_en`: File is too large or empty.
+- `sv` `upload_messages` `extension_not_allowed` `same_as_en`: File extension is not allowed.
+- `sv` `upload_messages` `mime_not_allowed` `same_as_en`: File MIME type is not allowed.
+- `sv` `upload_messages` `cannot_create_destination_dir` `same_as_en`: Unable to create destination folder.
+- `sv` `upload_messages` `cannot_move_uploaded_file` `same_as_en`: Unable to move uploaded file.
+- `sv` `upload_messages` `uploaded_image_unreadable` `same_as_en`: Uploaded image is unreadable.
+- `sv` `upload_messages` `uploaded_image_invalid` `same_as_en`: Uploaded image is invalid.
+- `sv` `upload_messages` `cannot_create_temp_file` `same_as_en`: Unable to create a temporary file.
+- `sv` `upload_messages` `image_metadata_cleanup_failed` `same_as_en`: Failed to clean image metadata.
+- `sv` `upload_messages` `missing_image` `same_as_en`: Missing image.
+- `sv` `upload_messages` `qsl_bg_upload_failed` `same_as_en`: QSL background image upload failed.
+- `sv` `upload_messages` `qsl_bg_invalid` `same_as_en`: Invalid QSL background image.
+- `sv` `upload_messages` `qsl_bg_not_supported` `same_as_en`: Unsupported background image (JPG, PNG or WEBP).
+- `sv` `upload_messages` `qsl_bg_too_large` `same_as_en`: Background image is too large (max 6 MB).
+- `sv` `upload_messages` `qsl_bg_unreadable` `same_as_en`: QSL background image is unreadable.
+- `sv` `upload_messages` `invalid_csrf_token` `same_as_en`: Invalid CSRF token.
+- `sv` `upload_messages` `too_many_login_attempts` `same_as_en`: Too many login attempts. Please try again later.
+- `sv` `upload_messages` `invalid_url` `same_as_en`: Invalid URL.
+- `sv` `upload_messages` `invalid_relative_url` `same_as_en`: Invalid relative URL.
+- `sv` `upload_messages` `only_http_https_allowed` `same_as_en`: Only HTTP and HTTPS URLs are allowed.
+- `sv` `upload_messages` `invalid_product` `same_as_en`: Invalid product.
+- `sv` `upload_messages` `product_unavailable` `same_as_en`: Product unavailable.
+- `sv` `upload_messages` `invalid_product_in_cart` `same_as_en`: Invalid product in cart.
+- `sv` `upload_messages` `cart_empty` `same_as_en`: Cart is empty.
+- `sv` `upload_messages` `insufficient_stock_for` `same_as_en`: Insufficient stock for
+- `id` `wiki_edit` `layout` `same_as_en`: Edit wiki
