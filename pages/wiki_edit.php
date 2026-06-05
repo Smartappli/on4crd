@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require_permission('wiki.edit');
+require_permission('wiki.moderate');
 
 $locale = current_locale();
 $t = i18n_domain_translator('wiki_edit', $locale);
@@ -34,8 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
         $slug = slugify((string) ($_POST['slug'] ?? $title));
 
-        if ($title === '' || trim(strip_tags($content)) === '') {
+        if ($title === '' || trim(strip_tags($content)) === '' || $slug === '') {
             throw new RuntimeException($t('content_label'));
+        }
+        if (mb_strlen($title) > 190 || mb_strlen($slug) > 190 || mb_strlen($content) > 50000) {
+            throw new RuntimeException('Un des champs dépasse la longueur autorisée.');
         }
 
         $slugStmt = db()->prepare('SELECT id FROM wiki_pages WHERE slug = ? AND id <> ? LIMIT 1');
@@ -46,9 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($id > 0) {
             db()->prepare('INSERT INTO wiki_revisions (wiki_page_id, member_id, content) VALUES (?, ?, ?)')->execute([$id, (int) $user['id'], (string) $page['content']]);
-            db()->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, author_id = ? WHERE id = ?')->execute([$title, $slug, $content, (int) $user['id'], $id]);
+            db()->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, author_id = ?, status = "published" WHERE id = ?')->execute([$title, $slug, $content, (int) $user['id'], $id]);
         } else {
-            db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id) VALUES (?, ?, ?, ?)')->execute([$title, $slug, $content, (int) $user['id']]);
+            db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id, status) VALUES (?, ?, ?, ?, "published")')->execute([$title, $slug, $content, (int) $user['id']]);
         }
 
         set_flash('success', $t('saved'));
@@ -73,11 +76,11 @@ ob_start();
     <form method="post" class="wiki-edit-form">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <div class="wiki-edit-grid">
-            <label><?= e($t('title_label')) ?><input type="text" name="title" value="<?= e((string) $page['title']) ?>" required></label>
-            <label><?= e($t('slug_label')) ?><input type="text" name="slug" value="<?= e((string) $page['slug']) ?>"></label>
+            <label><?= e($t('title_label')) ?><input type="text" name="title" value="<?= e((string) $page['title']) ?>" maxlength="190" required></label>
+            <label><?= e($t('slug_label')) ?><input type="text" name="slug" value="<?= e((string) $page['slug']) ?>" maxlength="190"></label>
         </div>
         <label><?= e($t('content_label')) ?>
-            <textarea name="content" rows="22"><?= e((string) $page['content']) ?></textarea>
+            <textarea name="content" rows="22" maxlength="50000"><?= e((string) $page['content']) ?></textarea>
         </label>
         <div class="actions">
             <button class="button" type="submit"><?= e($t('save')) ?></button>

@@ -80,8 +80,9 @@ if ($category !== '') {
 if ($tag !== '') {
     $activeFiltersCount++;
 }
-$documentProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD'));
-$categoryProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD'));
+$contactEmail = site_contact_email();
+$documentProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD'));
+$categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD'));
 
 $relatedByDocumentId = [];
 if ($documents !== []) {
@@ -176,7 +177,7 @@ ob_start();
                 </div>
                 <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="dialog" data-members-library-proposal-form data-members-library-recipient="on4crd@gmail.com" data-members-library-subject="<?= e((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_category_body_intro'] ?? 'Proposition de catégorie pour la bibliotheque membres :')) ?>">
+            <form class="members-library-dialog-form" method="dialog" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_category_body_intro'] ?? 'Proposition de catégorie pour la bibliothèque membres :')) ?>">
                 <label><span><?= e((string) ($t['propose_category_name'] ?? 'Nom de la catégorie')) ?></span><input type="text" name="proposal_category" maxlength="160" required></label>
                 <label><span><?= e((string) ($t['propose_category_reason'] ?? 'Pourquoi ajouter cette catégorie ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) ($t['proposal_contact'] ?? 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
@@ -198,7 +199,7 @@ ob_start();
                 </div>
                 <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="dialog" data-members-library-proposal-form data-members-library-recipient="on4crd@gmail.com" data-members-library-subject="<?= e((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_document_body_intro'] ?? 'Proposition de document pour la bibliotheque membres :')) ?>">
+            <form class="members-library-dialog-form" method="dialog" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_document_body_intro'] ?? 'Proposition de document pour la bibliothèque membres :')) ?>">
                 <label><span><?= e((string) ($t['propose_document_title'] ?? 'Titre du document')) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
                 <label><span><?= e((string) ($t['propose_document_category'] ?? 'Catégorie souhaitée')) ?></span><input type="text" name="proposal_category" maxlength="160"></label>
                 <label><span><?= e((string) ($t['propose_document_link'] ?? 'Lien ou source')) ?></span><input type="text" name="proposal_link" maxlength="500"></label>

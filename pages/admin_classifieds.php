@@ -19,6 +19,7 @@ classifieds_sync_expired();
 $categories = ['gear' => (string) ($t['gear'] ?? 'Gear'), 'wanted' => (string) ($t['wanted'] ?? 'Wanted'), 'service' => (string) ($t['service'] ?? 'Service')];
 $statuses = [
     'draft' => (string) ($t['draft'] ?? 'Draft'),
+    'pending' => (string) ($t['pending'] ?? 'En validation'),
     'active' => (string) ($t['active'] ?? 'Active'),
     'sold' => (string) ($t['sold'] ?? 'Sold'),
     'archived' => (string) ($t['archived'] ?? 'Archived'),
@@ -47,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
                 }
             } else {
-                $allowed = ['draft', 'active', 'sold', 'archived', 'expired'];
+                $allowed = ['draft', 'pending', 'active', 'sold', 'archived', 'expired'];
                 if (!in_array($bulkOp, $allowed, true)) {
                     throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
                 }
@@ -84,9 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = trim((string) ($_POST['description'] ?? ''));
         $location = trim((string) ($_POST['location'] ?? ''));
         $contact = trim((string) ($_POST['contact'] ?? ''));
-        if ($title === '' || $description === '' || $contact === '' || !isset($categories[$category]) || !isset($statuses[$status])) {
+        if (!isset($statuses[$status])) {
             throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
         }
+        classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, (string) ($t['invalid'] ?? 'Invalid data.'));
 
         $expiresAtRaw = trim((string) ($_POST['expires_at'] ?? ''));
         $expiresAtValue = null;
@@ -225,6 +227,7 @@ ob_start();
             <div class="inline-form" style="margin-bottom:.7rem;">
                 <select name="bulk_op">
                     <option value="active"><?= e((string) ($t['bulk_publish'] ?? 'Publish (active)')) ?></option>
+                    <option value="pending"><?= e((string) ($t['bulk_to_pending'] ?? 'Set pending')) ?></option>
                     <option value="draft"><?= e((string) ($t['bulk_to_draft'] ?? 'Set draft')) ?></option>
                     <option value="sold"><?= e((string) ($t['bulk_to_sold'] ?? 'Set sold')) ?></option>
                     <option value="archived"><?= e((string) ($t['bulk_archive'] ?? 'Archive')) ?></option>

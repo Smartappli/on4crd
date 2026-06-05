@@ -62,6 +62,13 @@ function albums_admin_clear_cache(): void
     cache_forget('admin_albums_photos_total_v2');
 }
 
+function albums_admin_validate_text_lengths(string $title, string $description = '', string $caption = ''): void
+{
+    if (mb_strlen($title) > 190 || mb_strlen($description) > 10000 || mb_strlen($caption) > 5000) {
+        throw new RuntimeException('Un des champs dépasse la longueur autorisée.');
+    }
+}
+
 if (!albums_admin_tables_ready()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
     return;
@@ -77,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
             $isPublic = isset($_POST['is_public']) ? 1 : 0;
+            albums_admin_validate_text_lengths($title, $description);
             if ($title === '') {
                 throw new RuntimeException((string) $t['title_required']);
             }
@@ -91,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
             $isPublic = isset($_POST['is_public']) ? 1 : 0;
+            albums_admin_validate_text_lengths($title, $description);
             if ($albumId <= 0 || $title === '') {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
@@ -108,13 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $photoStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ?');
             $photoStmt->execute([$albumId]);
             $photoRows = $photoStmt->fetchAll() ?: [];
-            foreach ($photoRows as $photoRow) {
-                albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''));
-            }
             db()->beginTransaction();
             db()->prepare('DELETE FROM album_photos WHERE album_id = ?')->execute([$albumId]);
             db()->prepare('DELETE FROM albums WHERE id = ?')->execute([$albumId]);
             db()->commit();
+            foreach ($photoRows as $photoRow) {
+                if (!albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''))) {
+                    log_structured_event('album_photo_file_delete_failed', ['album_id' => $albumId]);
+                }
+            }
             albums_admin_clear_cache();
             set_flash('success', (string) $t['album_deleted_ok']);
             redirect('admin_albums');

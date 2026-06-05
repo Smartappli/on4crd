@@ -65,7 +65,7 @@
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const recipient = form.dataset.membersLibraryRecipient || 'on4crd@gmail.com';
+      const recipient = form.dataset.membersLibraryRecipient || 'crdurnal@gmail.com';
       const subject = form.dataset.membersLibrarySubject || '';
       const intro = form.dataset.membersLibraryIntro || '';
       const fields = Array.from(form.querySelectorAll('[name]')).map((field) => field.getAttribute('name')).filter(Boolean);

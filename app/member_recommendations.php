@@ -66,7 +66,8 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
 
     $wantsWiki = $signalPrefs['wiki'] && (isset($seedTypes['wiki_page']) || $seedTypes === []);
     if ($wantsWiki && table_exists('wiki_pages')) {
-        $stmt = db()->query('SELECT slug, title, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 12');
+        $wikiStatusWhere = table_has_column('wiki_pages', 'status') ? ' WHERE status = "published"' : '';
+        $stmt = db()->query('SELECT slug, title, updated_at FROM wiki_pages' . $wikiStatusWhere . ' ORDER BY updated_at DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
             $slug = trim((string) ($row['slug'] ?? ''));
             if ($slug === '') {

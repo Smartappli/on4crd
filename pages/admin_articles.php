@@ -20,7 +20,7 @@ $previewPayload = null;
 /**
  * @return array{excerpt:string,content:string}
  */
-function import_article_document(array $file): array
+function import_article_document(array $file, bool $persist = true): array
 {
     $locale = current_locale();
     $tm = i18n_domain_translator('admin_articles_import', $locale);
@@ -63,20 +63,26 @@ function import_article_document(array $file): array
     if ($extension === 'pdf' || $extension === 'docx') {
         assert_upload_file_is_valid_signature($tmpPath, [$extension]);
     }
-
-    $targetDir = __DIR__ . '/../storage/private/articles';
-    if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
-        throw new RuntimeException($tm('create_dir'));
+    if ($extension === 'docx') {
+        article_assert_docx_document($tmpPath);
     }
 
-    $basename = slugify(pathinfo($originalName, PATHINFO_FILENAME));
-    if ($basename === '') {
-        $basename = 'article';
-    }
-    $filename = $basename . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
-    $absolutePath = $targetDir . '/' . $filename;
-    if (!move_uploaded_file($tmpPath, $absolutePath)) {
-        throw new RuntimeException($tm('save_doc'));
+    $absolutePath = $tmpPath;
+    if ($persist) {
+        $targetDir = __DIR__ . '/../storage/private/articles';
+        if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
+            throw new RuntimeException($tm('create_dir'));
+        }
+
+        $basename = slugify(pathinfo($originalName, PATHINFO_FILENAME));
+        if ($basename === '') {
+            $basename = 'article';
+        }
+        $filename = $basename . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
+        $absolutePath = $targetDir . '/' . $filename;
+        if (!move_uploaded_file($tmpPath, $absolutePath)) {
+            throw new RuntimeException($tm('save_doc'));
+        }
     }
 
     $documentTitle = trim((string) pathinfo($originalName, PATHINFO_FILENAME));
@@ -111,6 +117,24 @@ function import_article_document(array $file): array
         'excerpt' => $tm('imported_doc') . ' ' . $documentTitle,
         'content' => $content,
     ];
+}
+
+function article_assert_docx_document(string $path): void
+{
+    $locale = current_locale();
+    $tm = i18n_domain_translator('admin_articles_import', $locale);
+    if (class_exists('ZipArchive')) {
+        $zip = new ZipArchive();
+        if ($zip->open($path) !== true) {
+            throw new RuntimeException($tm('invalid_doc'));
+        }
+        $hasContentTypes = $zip->locateName('[Content_Types].xml') !== false;
+        $hasDocument = $zip->locateName('word/document.xml') !== false;
+        $zip->close();
+        if (!$hasContentTypes || !$hasDocument) {
+            throw new RuntimeException($tm('invalid_doc'));
+        }
+    }
 }
 
 function article_unique_slug(string $slug, int $ignoreId = 0): string
@@ -311,12 +335,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($status === 'rejected') {
                 $moderationNoteValue = $moderationNote !== '' ? $moderationNote : 'Refuse par moderation.';
             }
-            $imported = import_article_document($_FILES['article_document'] ?? []);
+            $imported = import_article_document($_FILES['article_document'] ?? [], $action !== 'preview_article');
             if ($imported['content'] !== '') {
                 $content = $imported['content'];
                 if ($excerpt === '') {
                     $excerpt = $imported['excerpt'];
                 }
+            }
+            if (
+                mb_strlen($title) > 190
+                || mb_strlen($slugInput) > 190
+                || mb_strlen($excerpt) > 2000
+                || mb_strlen($content) > 50000
+                || mb_strlen($category) > 120
+            ) {
+                throw new RuntimeException($t('err_invalid_article', 'Un des champs dépasse la longueur autorisée.'));
             }
             if ($action === 'preview_article') {
                 $previewPayload = [

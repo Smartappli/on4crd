@@ -51,11 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $slug = wiki_propose_unique_slug($title, $slugInput);
-        db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id) VALUES (?, ?, ?, ?)')
+        db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id, status) VALUES (?, ?, ?, ?, "pending")')
             ->execute([$title, $slug, $content, (int) $user['id']]);
 
-        set_flash('success', 'Page wiki proposée.');
-        redirect_url(route_url('wiki_view', ['slug' => $slug]));
+        set_flash('success', 'Page wiki proposée. Elle sera publiée après validation.');
+        redirect_url(route_url('wiki'));
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect('wiki_propose');
@@ -69,7 +69,7 @@ ob_start();
         <div>
             <p class="eyebrow">Wiki</p>
             <h1>Proposer une page wiki</h1>
-            <p class="help">Rédigez une nouvelle page avec du HTML simple. La page sera créée avec votre compte comme auteur.</p>
+            <p class="help">Rédigez une nouvelle page avec du HTML simple. Elle sera relue avant publication.</p>
         </div>
         <a class="button secondary" href="<?= e(route_url('wiki')) ?>">Wiki</a>
     </section>

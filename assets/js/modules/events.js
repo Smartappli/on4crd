@@ -95,7 +95,7 @@
   if (form) {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const recipient = form.dataset.eventProposalRecipient || 'on4crd@gmail.com';
+      const recipient = form.dataset.eventProposalRecipient || 'crdurnal@gmail.com';
       const subject = form.dataset.eventProposalSubject || '';
       const intro = form.dataset.eventProposalIntro || '';
       const fields = [
