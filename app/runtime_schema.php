@@ -14,6 +14,7 @@ function seed_modules(): void
         ['articles', 'Articles', 'Articles techniques', 0, 1, 'public', 40],
         ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 'public', 50],
         ['albums', 'Albums', 'Galerie photos', 0, 1, 'public', 60],
+        ['tools', 'Outils', 'Calculateurs et outils radioamateurs', 0, 1, 'public', 65],
         ['events', 'Événements', 'Agenda du club', 0, 1, 'public', 70],
         ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 'public', 90],
         ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 'members', 100],

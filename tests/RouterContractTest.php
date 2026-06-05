@@ -38,6 +38,24 @@ final class RouterContractTest extends TestCase
         return $values;
     }
 
+    /**
+     * @return array<string, string>
+     */
+    private function extractAssocStringArray(string $source, string $variableName): array
+    {
+        $pattern = sprintf("/\\$%s = \\[(.*?)\\];/s", preg_quote($variableName, '/'));
+        preg_match($pattern, $source, $match);
+        self::assertNotEmpty($match, sprintf('Could not extract $%s', $variableName));
+
+        preg_match_all("/'([^']+)'\\s*=>\\s*'([^']+)'/", $match[1], $matches, PREG_SET_ORDER);
+        $values = [];
+        foreach ($matches as $routeMatch) {
+            $values[(string) $routeMatch[1]] = (string) $routeMatch[2];
+        }
+
+        return $values;
+    }
+
     public function testEachSwitchCaseReferencesAnExistingPageFile(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
@@ -213,6 +231,36 @@ final class RouterContractTest extends TestCase
             $page = file_get_contents(__DIR__ . '/../pages/' . $route . '.php');
             self::assertIsString($page);
             self::assertStringNotContainsString('require_login();', $page, sprintf('Public route %s must not require a login in its page controller.', $route));
+        }
+    }
+
+    public function testRouteModuleMappingsCoverManagedRoutesAndSeededModules(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+        $routeModules = $this->extractAssocStringArray($router, 'routeModules');
+
+        foreach ([
+            'dashboard_widget_card' => 'dashboard',
+            'members_library' => 'members',
+            'tools' => 'tools',
+            'tools_geocode' => 'tools',
+            'relais' => 'education',
+            'events_feed' => 'events',
+            'admin_members' => 'admin',
+            'admin_library' => 'admin',
+            'admin_events_feed' => 'admin',
+        ] as $route => $module) {
+            self::assertSame($module, $routeModules[$route] ?? null, sprintf('Route %s must be gated by module %s.', $route, $module));
+        }
+
+        $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
+        self::assertIsString($schema);
+        preg_match_all("/\\['([a-z0-9_]+)',\\s*'[^']+',\\s*'[^']+',\\s*[01],\\s*[01],\\s*'(?:public|members|admin)'/", $schema, $moduleMatches);
+        $seededModules = array_values(array_unique($moduleMatches[1] ?? []));
+
+        foreach (array_unique(array_values($routeModules)) as $module) {
+            self::assertContains($module, $seededModules, sprintf('Module %s is referenced by routeModules but not seeded.', $module));
         }
     }
 
