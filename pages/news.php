@@ -120,11 +120,11 @@ $posts = cache_remember($cacheBase . '_page_' . $page, 45, static function () us
     }
 });
 
-$categories = cache_remember('news_categories_v1', 120, static function (): array {
+$categories = cache_remember('news_categories_v2', 120, static function (): array {
     try {
         return db()->query('SELECT s.slug, s.name, COUNT(p.id) AS total
             FROM news_sections s
-            INNER JOIN news_posts p ON p.section_id = s.id AND p.status = "published"
+            LEFT JOIN news_posts p ON p.section_id = s.id AND p.status = "published"
             GROUP BY s.id, s.slug, s.name
             ORDER BY s.sort_order ASC, s.name ASC')->fetchAll() ?: [];
     } catch (Throwable) {
@@ -145,6 +145,12 @@ $archives = cache_remember('news_archives_v1', 120, static function (): array {
     }
 });
 
+$contactEmail = site_contact_email();
+$newsProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $newsT['propose_news_subject'])
+    . '&body=' . rawurlencode((string) $newsT['propose_news_body_intro']);
+$categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $newsT['propose_category_subject'])
+    . '&body=' . rawurlencode((string) $newsT['propose_category_body_intro']);
+
 ob_start();
 ?>
 <section class="page-hero news-hero">
@@ -153,13 +159,87 @@ ob_start();
         <h1><?= e((string) $newsT['title']) ?></h1>
         <p class="help"><?= e((string) $newsT['search_lead']) ?></p>
     </div>
-    <div class="news-hero-stats">
-        <article class="news-hero-stat">
-            <strong><?= (int) $publishedNewsCount ?></strong>
-            <span><?= e((string) ($newsT['news_count_label'] ?? "Nombre d'actualités")) ?></span>
-        </article>
+    <div class="news-hero-side">
+        <div class="news-hero-stats">
+            <article class="news-hero-stat">
+                <strong><?= (int) $publishedNewsCount ?></strong>
+                <span><?= e((string) ($newsT['news_count_label'] ?? "Nombre d'actualit?s")) ?></span>
+            </article>
+        </div>
+        <div class="news-hero-actions" aria-label="<?= e((string) $newsT['news_actions']) ?>">
+            <button class="button" type="button" data-news-proposal-open="news-proposal-dialog" data-news-proposal-fallback="<?= e($newsProposalUrl) ?>" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e((string) $newsT['propose_news']) ?></button>
+            <button class="button secondary" type="button" data-news-proposal-open="news-category-proposal-dialog" data-news-proposal-fallback="<?= e($categoryProposalUrl) ?>" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e((string) $newsT['propose_category']) ?></button>
+        </div>
     </div>
 </section>
+
+<dialog class="news-proposal-dialog" id="news-proposal-dialog" aria-labelledby="news-proposal-title">
+    <div class="news-proposal-dialog-card">
+        <div class="news-proposal-dialog-header">
+            <div>
+                <p class="news-hero-title"><?= e((string) $newsT['latest_news']) ?></p>
+                <h2 id="news-proposal-title"><?= e((string) $newsT['propose_news']) ?></h2>
+                <p class="help"><?= e((string) $newsT['propose_news_intro']) ?></p>
+            </div>
+            <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
+        </div>
+        <form class="news-proposal-form" method="dialog" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_news_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_news_body_intro']) ?>">
+            <label>
+                <span><?= e((string) $newsT['propose_news_title_label']) ?></span>
+                <input type="text" name="proposal_title" maxlength="190" required>
+            </label>
+            <label>
+                <span><?= e((string) $newsT['propose_news_summary_label']) ?></span>
+                <textarea name="proposal_summary" rows="5" maxlength="1800" required></textarea>
+            </label>
+            <div class="news-proposal-form-grid">
+                <label>
+                    <span><?= e((string) $newsT['propose_news_source_label']) ?></span>
+                    <input type="text" name="proposal_source" maxlength="500">
+                </label>
+                <label>
+                    <span><?= e((string) $newsT['propose_news_contact_label']) ?></span>
+                    <input type="text" name="proposal_contact" maxlength="220" required>
+                </label>
+            </div>
+            <div class="news-proposal-dialog-actions">
+                <button class="button" type="submit"><?= e((string) $newsT['proposal_submit']) ?></button>
+                <button class="button secondary" type="button" data-news-proposal-close><?= e((string) $newsT['proposal_cancel']) ?></button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<dialog class="news-proposal-dialog" id="news-category-proposal-dialog" aria-labelledby="news-category-proposal-title">
+    <div class="news-proposal-dialog-card">
+        <div class="news-proposal-dialog-header">
+            <div>
+                <p class="news-hero-title"><?= e((string) $newsT['category']) ?></p>
+                <h2 id="news-category-proposal-title"><?= e((string) $newsT['propose_category']) ?></h2>
+                <p class="help"><?= e((string) $newsT['propose_category_intro']) ?></p>
+            </div>
+            <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
+        </div>
+        <form class="news-proposal-form" method="dialog" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_category_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_category_body_intro']) ?>">
+            <label>
+                <span><?= e((string) $newsT['propose_category_name']) ?></span>
+                <input type="text" name="proposal_category" maxlength="160" required>
+            </label>
+            <label>
+                <span><?= e((string) $newsT['propose_category_reason']) ?></span>
+                <textarea name="proposal_reason" rows="5" maxlength="1600"></textarea>
+            </label>
+            <label>
+                <span><?= e((string) $newsT['proposal_contact']) ?></span>
+                <input type="text" name="proposal_contact" maxlength="220" required>
+            </label>
+            <div class="news-proposal-dialog-actions">
+                <button class="button" type="submit"><?= e((string) $newsT['proposal_submit']) ?></button>
+                <button class="button secondary" type="button" data-news-proposal-close><?= e((string) $newsT['proposal_cancel']) ?></button>
+            </div>
+        </form>
+    </div>
+</dialog>
 
 <section class="wiki-search-panel mt-4">
     <form method="get" class="wiki-search-form">

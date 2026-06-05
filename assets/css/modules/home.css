@@ -13,6 +13,14 @@
   display: block;
 }
 
+body[data-route="home"] main.layout.container.py-6 {
+  padding-bottom: .75rem;
+}
+
+body[data-route="home"] .site-footer {
+  margin-top: .5rem;
+}
+
 .home-events-planning {
   min-height: 240px;
 }

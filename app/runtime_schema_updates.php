@@ -358,6 +358,8 @@ function apply_runtime_schema_updates(): void
         db()->exec("UPDATE modules SET visibility = 'admin' WHERE code = 'admin'");
     }
 
+    seed_news_sections();
+
     ensure_configured_administrator_roles();
 
     db()->exec(

@@ -57,6 +57,28 @@ function seed_dashboard_widgets(): void
     // Hook conservé pour compatibilité installateur.
 }
 
+function seed_news_sections(): void
+{
+    if (!table_exists('news_sections')) {
+        return;
+    }
+
+    $sections = [
+        ['on4crd', 'ON4CRD', 10],
+        ['autre-club', 'Autre club', 20],
+        ['contests', 'Contests', 30],
+    ];
+
+    $stmt = db()->prepare(
+        'INSERT INTO news_sections (slug, name, sort_order)
+         VALUES (?, ?, ?)
+         ON DUPLICATE KEY UPDATE name = VALUES(name), sort_order = VALUES(sort_order)'
+    );
+    foreach ($sections as $section) {
+        $stmt->execute($section);
+    }
+}
+
 function seed_ad_placements(): void
 {
     if (!table_exists('ad_placements')) {
@@ -122,7 +144,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-05.3';
+    return '2026-06-05.4';
 }
 
 function runtime_schema_marker_path(): string

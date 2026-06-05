@@ -206,6 +206,23 @@ final class RouterContractTest extends TestCase
         );
     }
 
+    public function testNewsSectionsAreSeeded(): void
+    {
+        $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
+        self::assertIsString($schema);
+        $updates = file_get_contents(__DIR__ . '/../app/runtime_schema_updates.php');
+        self::assertIsString($updates);
+        $installer = file_get_contents(__DIR__ . '/../install.php');
+        self::assertIsString($installer);
+
+        self::assertStringContainsString('function seed_news_sections(): void', $schema);
+        self::assertStringContainsString("['on4crd', 'ON4CRD', 10]", $schema);
+        self::assertStringContainsString("['autre-club', 'Autre club', 20]", $schema);
+        self::assertStringContainsString("['contests', 'Contests', 30]", $schema);
+        self::assertStringContainsString('seed_news_sections();', $updates);
+        self::assertStringContainsString('seed_news_sections();', $installer);
+    }
+
     public function testPublicRoutesAreNotGatedByMembersOnlyModules(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
