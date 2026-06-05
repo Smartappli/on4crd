@@ -134,7 +134,7 @@ function newsletter_upsert_subscriber(
     string $email,
     ?int $memberId = null,
     string $source = 'admin',
-    bool $reactivateExisting = true,
+    bool $reactivateExisting = false,
     string $consentProof = ''
 ): bool
 {
@@ -146,6 +146,9 @@ function newsletter_upsert_subscriber(
     }
     $normalizedSource = mb_safe_substr(trim($source), 0, 32);
     $proof = mb_safe_substr(trim($consentProof), 0, 255);
+    if ($proof === '') {
+        return false;
+    }
     $hasConsentColumns = newsletter_column_exists('consented_at')
         && newsletter_column_exists('consent_ip_hash')
         && newsletter_column_exists('consent_user_agent_hash')
@@ -183,7 +186,7 @@ function newsletter_upsert_subscriber(
             $params[] = privacy_request_ip_hash() ?: null;
             $params[] = privacy_request_user_agent_hash() ?: null;
             $params[] = privacy_current_notice_version();
-            $params[] = $proof !== '' ? $proof : ('Action explicite: ' . $normalizedSource);
+            $params[] = $proof;
         }
         $params[] = (int) $row['id'];
         $stmt = db()->prepare('UPDATE newsletter_subscribers SET ' . implode(', ', $sets) . ' WHERE id = ?');
@@ -214,7 +217,7 @@ function newsletter_upsert_subscriber(
         $values[] = privacy_request_ip_hash() ?: null;
         $values[] = privacy_request_user_agent_hash() ?: null;
         $values[] = privacy_current_notice_version();
-        $values[] = $proof !== '' ? $proof : ('Action explicite: ' . $normalizedSource);
+        $values[] = $proof;
     }
 
     $columnSql = implode(', ', array_map(static fn (string $column): string => '`' . str_replace('`', '``', $column) . '`', $columns));

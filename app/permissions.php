@@ -24,6 +24,7 @@ function core_permission_catalog(): array
         'ads.moderate' => 'Moderer les publicites',
         'ads.manage_all' => 'Gerer toutes les publicites et statistiques',
         'modules.manage' => 'Gerer les modules du site',
+        'privacy.manage' => 'Traiter les demandes RGPD',
         'press.manage' => 'Gerer les contacts et communiques de presse',
         'editorial.manage' => 'Gerer les contenus editoriaux multilingues',
         'translations.review' => 'Relire et valider les traductions',

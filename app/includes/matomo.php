@@ -1,17 +1,18 @@
 <?php
 declare(strict_types=1);
-?>
-<!-- Matomo tracking include: collez ici votre code Matomo unique. Ce fichier est inclus dans toutes les pages HTML via render_layout(). -->
-<?php
+
 $matomoUrl = rtrim((string) config('tracking.matomo_url', ''), '/');
 $matomoSiteId = (string) config('tracking.matomo_site_id', '');
 $matomoRequireConsent = (bool) config('tracking.matomo_require_consent', true);
 $matomoDisableCookies = (bool) config('tracking.matomo_disable_cookies', true);
 $matomoConsentGiven = (string) ($_COOKIE['on4crd_tracking_consent'] ?? '') === '1';
 $matomoCanTrack = $matomoUrl !== '' && $matomoSiteId !== '' && (!$matomoRequireConsent || $matomoConsentGiven);
+
+if (!$matomoCanTrack) {
+    return;
+}
 ?>
-<?php if ($matomoCanTrack): ?>
-<script>
+<script nonce="<?= e(csp_nonce()) ?>">
   var _paq = window._paq = window._paq || [];
   _paq.push(['setDoNotTrack', true]);
   _paq.push(['setUserIsAnonymous', true]);
@@ -34,4 +35,3 @@ $matomoCanTrack = $matomoUrl !== '' && $matomoSiteId !== '' && (!$matomoRequireC
     s.parentNode.insertBefore(g, s);
   })();
 </script>
-<?php endif; ?>

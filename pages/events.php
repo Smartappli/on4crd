@@ -14,6 +14,8 @@ foreach (array_keys($i18n['fr']) as $key) {
     }
     $t[$key] = i18n_localized_value($pool, $locale, 'fr');
 }
+$calendarLocale = fullcalendar_locale_code($locale);
+$calendarLocaleAsset = fullcalendar_locale_asset_url($locale);
 
 if (!table_exists('events')) {
     echo render_layout('<div class="card"><h1>' . e($t['title']) . '</h1><p>' . e($t['agenda_unavailable']) . '</p></div>', $t['title']);
@@ -144,7 +146,7 @@ $calendarView = match ($view) {
 };
 $initialDate = $view === 'week' ? $weekDate->format('Y-m-d') : $monthDate->format('Y-m-d');
 $calendarConfig = [
-    'locale' => $locale,
+    'locale' => $calendarLocale,
     'initialView' => $calendarView,
     'initialDate' => $initialDate,
     'eventsUrl' => route_url('events_feed'),
@@ -219,13 +221,13 @@ ob_start();
 
 <section class="events-layout">
     <article class="card events-calendar-card">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">
+        <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/skeleton.css')) ?>">
+        <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/theme.css')) ?>">
+        <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/palette.css')) ?>">
         <div id="events-calendar" class="fullcalendar-theme" data-calendar-config="<?= e(json_encode($calendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"></div>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/<?= e($locale) ?>.global.js"></script>
+        <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) ?>"></script>
+        <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) ?>"></script>
+        <script src="<?= e($calendarLocaleAsset) ?>"></script>
     </article>
 
     <aside class="card events-detail-card" id="event-detail">

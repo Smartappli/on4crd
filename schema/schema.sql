@@ -588,13 +588,36 @@ CREATE TABLE IF NOT EXISTS privacy_requests (
     status ENUM('pending','in_progress','resolved','rejected') NOT NULL DEFAULT 'pending',
     notes TEXT DEFAULT NULL,
     admin_notes TEXT DEFAULT NULL,
+    processed_by_member_id INT DEFAULT NULL,
+    processed_at DATETIME DEFAULT NULL,
+    erasure_completed_at DATETIME DEFAULT NULL,
     request_ip_hash CHAR(64) DEFAULT NULL,
     request_user_agent_hash CHAR(64) DEFAULT NULL,
     notice_version VARCHAR(32) DEFAULT NULL,
     requested_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     resolved_at DATETIME DEFAULT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_privacy_requests_member (member_id),
-    INDEX idx_privacy_requests_status (status)
+    INDEX idx_privacy_requests_status (status),
+    INDEX idx_privacy_requests_processed_by (processed_by_member_id)
+);
+
+CREATE TABLE IF NOT EXISTS privacy_request_events (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    request_id INT NOT NULL,
+    member_id INT DEFAULT NULL,
+    admin_member_id INT DEFAULT NULL,
+    event_type VARCHAR(64) NOT NULL,
+    from_status VARCHAR(32) DEFAULT NULL,
+    to_status VARCHAR(32) DEFAULT NULL,
+    notes TEXT DEFAULT NULL,
+    ip_hash CHAR(64) DEFAULT NULL,
+    user_agent_hash CHAR(64) DEFAULT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_privacy_events_request (request_id),
+    INDEX idx_privacy_events_member (member_id),
+    INDEX idx_privacy_events_admin (admin_member_id),
+    INDEX idx_privacy_events_created (created_at)
 );
 
 CREATE TABLE IF NOT EXISTS newsletter_campaigns (

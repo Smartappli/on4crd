@@ -12,6 +12,7 @@ set_page_meta([
 ]);
 
 $noticeSections = privacy_notice_sections();
+$privacyContact = privacy_contact_config();
 $visibilityOptions = [
     'public' => $t('public'),
     'members' => $t('members'),
@@ -119,6 +120,7 @@ ob_start();
     <?php if ($user === null): ?>
         <section class="card gdpr-privacy-card">
             <h2>Droits des membres</h2>
+            <p>Contact public pour toute demande donnees personnelles: <a href="mailto:<?= e($privacyContact['controller_email']) ?>"><?= e($privacyContact['controller_email']) ?></a>.</p>
             <p>Connectez-vous pour exporter vos donnees, deposer une demande RGPD et regler la visibilite de votre profil.</p>
             <p><a class="button" href="<?= e(route_url('login')) ?>">Se connecter</a></p>
         </section>
@@ -134,7 +136,7 @@ ob_start();
                 <form method="post" class="stack">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="export_data">
-                    <p>Telechargez une copie JSON des donnees rattachees a votre compte.</p>
+                    <p>Telechargez une copie JSON des donnees rattachees a votre compte, avec manifeste des fichiers personnels connus.</p>
                     <button type="submit" class="button">Exporter mes donnees</button>
                 </form>
                 <form method="post" class="stack">
@@ -159,13 +161,17 @@ ob_start();
             <?php if ($privacyRequests !== []): ?>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>Demande</th><th>Statut</th><th>Date</th><th>Resolution</th></tr></thead>
+                        <thead><tr><th>Demande</th><th>Statut</th><th>Date</th><th>Traitement</th><th>Resolution</th></tr></thead>
                         <tbody>
                             <?php foreach ($privacyRequests as $request): ?>
                                 <tr>
                                     <td><?= e((string) $request['request_type']) ?></td>
                                     <td><?= e((string) $request['status']) ?></td>
                                     <td><?= e((string) $request['requested_at']) ?></td>
+                                    <td>
+                                        <?= e((string) ($request['processed_at'] ?? '')) ?>
+                                        <?php if (!empty($request['erasure_completed_at'])): ?><div class="help">Anonymisation: <?= e((string) $request['erasure_completed_at']) ?></div><?php endif; ?>
+                                    </td>
                                     <td><?= e((string) ($request['resolved_at'] ?? '')) ?></td>
                                 </tr>
                             <?php endforeach; ?>

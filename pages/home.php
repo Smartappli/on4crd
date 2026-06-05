@@ -2,6 +2,8 @@
 
 /** @var string $homeLocale */
 $homeLocale = current_locale();
+$homeFullCalendarLocale = fullcalendar_locale_code($homeLocale);
+$homeFullCalendarLocaleAsset = fullcalendar_locale_asset_url($homeLocale);
 $homeI18n = i18n_domain_locale('home', $homeLocale);
 $homeEventsI18n = i18n_domain_locale('events', $homeLocale);
 $homeTodayDate = date('d/m/Y');
@@ -464,7 +466,7 @@ if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
 }
 
 $homeEventsCalendarConfig = [
-    'locale' => $homeLocale,
+    'locale' => $homeFullCalendarLocale,
     'initialView' => 'dayGridMonth',
     'eventsUrl' => route_url('events_feed'),
     'loadError' => (string) ($homeEventsI18n['calendar_load_error'] ?? $homeI18n['no_event']),
@@ -476,13 +478,13 @@ $homeEventsCalendarConfig = [
     ],
 ];
 $nextEventHtml = '<div class="home-events-planning rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">'
-    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">'
-    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">'
-    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">'
+    . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/skeleton.css')) . '">'
+    . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/theme.css')) . '">'
+    . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/palette.css')) . '">'
     . '<div class="fullcalendar-theme home-events-calendar" data-home-events-calendar data-calendar-config="' . e(json_encode($homeEventsCalendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '"></div>'
-    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>'
-    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>'
-    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/' . e($homeLocale) . '.global.js"></script>'
+    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) . '"></script>'
+    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) . '"></script>'
+    . '<script src="' . e($homeFullCalendarLocaleAsset) . '"></script>'
     . '</div>';
 
 $toolDayCta = trim((string) $homeI18n['spotlight_tool_day_cta']);
@@ -894,5 +896,4 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
 
 
 echo render_layout($content, (string) ($homeI18n['page_title'] ?? 'Accueil'));
-
 
