@@ -38,18 +38,19 @@
         "myclabs/deep-copy": "^1.13.4",
         "phar-io/manifest": "^2.0.4",
         "phar-io/version": "^3.2.1",
-        "phpunit/php-code-coverage": "^14.1.9",
+        "phpunit/php-code-coverage": "^14.2",
         "phpunit/php-file-iterator": "^7.0.0",
         "phpunit/php-invoker": "^7.0.0",
         "phpunit/php-text-template": "^6.0.0",
         "phpunit/php-timer": "^9.0.0",
         "sebastian/cli-parser": "^5.0.0",
-        "sebastian/comparator": "^8.2.1",
-        "sebastian/diff": "^8.3.0",
+        "sebastian/comparator": "^8.3.0",
+        "sebastian/diff": "^9.0",
         "sebastian/environment": "^9.3.2",
         "sebastian/exporter": "^8.1.0",
+        "sebastian/file-filter": "^1.0",
         "sebastian/git-state": "^1.0",
-        "sebastian/global-state": "^9.0.0",
+        "sebastian/global-state": "^9.0.1",
         "sebastian/object-enumerator": "^8.0.0",
         "sebastian/recursion-context": "^8.0.0",
         "sebastian/type": "^7.0.1",
@@ -59,6 +60,17 @@
     "config": {
         "platform": {
             "php": "8.4.1"
+        },
+        "policy": {
+            "malware": {
+                "audit": "fail"
+            },
+            "security-advisory": {
+                "audit": "fail"
+            },
+            "abandoned": {
+                "audit": "fail"
+            }
         },
         "classmap-authoritative": true,
         "optimize-autoloader": true,
@@ -121,7 +133,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "13.1-dev"
+            "dev-main": "13.2-dev"
         }
     }
 }
