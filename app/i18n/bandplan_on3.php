@@ -1,65 +1,37 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'fr' => [
-        'title' => 'Band plan ON3',
-        'header_band' => 'Bande',
-        'header_freq' => 'Fréquences (MHz)',
-        'header_modes' => 'Modes',
-        'header_power' => 'Puissance max*',
-        'header_notes' => 'Notes',
-        'note_80m' => 'Segment ON3 limité selon autorisation.',
-        'note_40m' => 'Utilisation partielle selon réglementation.',
-        'note_15m' => 'Ouverture surtout diurne.',
-        'note_10m' => 'Sous-bandes selon plan IARU.',
-        'note_2m' => '145.500 MHz appel simplex.',
-        'note_70cm' => 'Respecter le plan relais local.',
-        'note_23cm' => 'Portions partagées, filtrage conseillé.',
-    ],
-    'en' => [
-        'title' => 'ON3 band plan',
-        'header_band' => 'Band',
-        'header_freq' => 'Frequencies (MHz)',
-        'header_modes' => 'Modes',
-        'header_power' => 'Max power*',
-        'header_notes' => 'Notes',
-        'note_80m' => 'ON3 limited segment per authorization.',
-        'note_40m' => 'Partial use per regulation.',
-        'note_15m' => 'Mostly daytime openings.',
-        'note_10m' => 'Sub-bands per IARU plan.',
-        'note_2m' => '145.500 MHz simplex calling.',
-        'note_70cm' => 'Follow the local repeater plan.',
-        'note_23cm' => 'Shared segments, filtering recommended.',
-    ],
-    'de' => [
-        'title' => 'ON3-Bandplan',
-        'header_band' => 'Band',
-        'header_freq' => 'Frequenzen (MHz)',
-        'header_modes' => 'Betriebsarten',
-        'header_power' => 'Max. Leistung*',
-        'header_notes' => 'Hinweise',
-        'note_80m' => 'ON3-Segment gemäß Genehmigung begrenzt.',
-        'note_40m' => 'Teilweise Nutzung gemäß Regulierung.',
-        'note_15m' => 'Öffnungen meist tagsüber.',
-        'note_10m' => 'Teilbänder gemäß IARU-Plan.',
-        'note_2m' => '145.500 MHz Simplex-Anruf.',
-        'note_70cm' => 'Lokalen Relaisplan beachten.',
-        'note_23cm' => 'Geteilte Segmente, Filterung empfohlen.',
-    ],
-    'nl' => [
-        'title' => 'ON3-bandplan',
-        'header_band' => 'Band',
-        'header_freq' => 'Frequenties (MHz)',
-        'header_modes' => 'Modes',
-        'header_power' => 'Max. vermogen*',
-        'header_notes' => 'Notities',
-        'note_80m' => 'ON3 beperkt segment volgens vergunning.',
-        'note_40m' => 'Gedeeltelijk gebruik volgens regelgeving.',
-        'note_15m' => 'Openingen vooral overdag.',
-        'note_10m' => 'Subbanden volgens IARU-plan.',
-        'note_2m' => '145.500 MHz simplex-oproep.',
-        'note_70cm' => 'Volg het lokale relaisplan.',
-        'note_23cm' => 'Gedeelde segmenten, filtering aanbevolen.',
-    ],
-];
+$messages = [];
+$messages['fr'] = require __DIR__ . '/bandplan_on3/fr.php';
+$messages['en'] = require __DIR__ . '/bandplan_on3/en.php';
+$messages['de'] = require __DIR__ . '/bandplan_on3/de.php';
+$messages['nl'] = require __DIR__ . '/bandplan_on3/nl.php';
+$messages['it'] = require __DIR__ . '/bandplan_on3/it.php';
+$messages['es'] = require __DIR__ . '/bandplan_on3/es.php';
+$messages['pt'] = require __DIR__ . '/bandplan_on3/pt.php';
+$messages['bg'] = require __DIR__ . '/bandplan_on3/bg.php';
+$messages['hr'] = require __DIR__ . '/bandplan_on3/hr.php';
+$messages['cs'] = require __DIR__ . '/bandplan_on3/cs.php';
+$messages['da'] = require __DIR__ . '/bandplan_on3/da.php';
+$messages['et'] = require __DIR__ . '/bandplan_on3/et.php';
+$messages['fi'] = require __DIR__ . '/bandplan_on3/fi.php';
+$messages['el'] = require __DIR__ . '/bandplan_on3/el.php';
+$messages['hu'] = require __DIR__ . '/bandplan_on3/hu.php';
+$messages['ga'] = require __DIR__ . '/bandplan_on3/ga.php';
+$messages['lv'] = require __DIR__ . '/bandplan_on3/lv.php';
+$messages['lt'] = require __DIR__ . '/bandplan_on3/lt.php';
+$messages['mt'] = require __DIR__ . '/bandplan_on3/mt.php';
+$messages['pl'] = require __DIR__ . '/bandplan_on3/pl.php';
+$messages['ro'] = require __DIR__ . '/bandplan_on3/ro.php';
+$messages['sk'] = require __DIR__ . '/bandplan_on3/sk.php';
+$messages['sl'] = require __DIR__ . '/bandplan_on3/sl.php';
+$messages['sv'] = require __DIR__ . '/bandplan_on3/sv.php';
+$messages['ar'] = require __DIR__ . '/bandplan_on3/ar.php';
+$messages['hi'] = require __DIR__ . '/bandplan_on3/hi.php';
+$messages['ja'] = require __DIR__ . '/bandplan_on3/ja.php';
+$messages['zh'] = require __DIR__ . '/bandplan_on3/zh.php';
+$messages['bn'] = require __DIR__ . '/bandplan_on3/bn.php';
+$messages['ru'] = require __DIR__ . '/bandplan_on3/ru.php';
+$messages['id'] = require __DIR__ . '/bandplan_on3/id.php';
+
+return $messages;

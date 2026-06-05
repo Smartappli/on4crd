@@ -1,82 +1,37 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'fr' => [
-        'layout' => 'Administration',
-        'title' => 'Administration centralisée',
-        'lead' => 'Tous les modules et outils d’administration sont regroupés dans ce tableau de bord unique.',
-        'search_label' => 'Recherche rapide',
-        'search_placeholder' => 'Module, outil, description...',
-        'search_cta' => 'Filtrer',
-        'search_reset' => 'Réinitialiser',
-        'empty' => 'Aucun module ne correspond à la recherche.',
-        'open' => 'Ouvrir',
-    ],
-    'en' => [
-        'layout' => 'Administration',
-        'title' => 'Centralized administration',
-        'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-        'search_label' => 'Quick search',
-        'search_placeholder' => 'Module, tool, description...',
-        'search_cta' => 'Filter',
-        'search_reset' => 'Reset',
-        'empty' => 'No module matches your search.',
-        'open' => 'Open',
-    ],
-    'de' => [
-        'layout' => 'Verwaltung',
-        'title' => 'Zentralisierte Verwaltung',
-        'lead' => 'Alle Verwaltungs-Module und Werkzeuge sind in diesem einzigen Dashboard gebündelt.',
-        'search_label' => 'Schnellsuche',
-        'search_placeholder' => 'Modul, Werkzeug, Beschreibung...',
-        'search_cta' => 'Filtern',
-        'search_reset' => 'Zurücksetzen',
-        'empty' => 'Kein Modul entspricht Ihrer Suche.',
-        'open' => 'Öffnen',
-    ],
-    'nl' => [
-        'layout' => 'Beheer',
-        'title' => 'Gecentraliseerd beheer',
-        'lead' => 'Alle beheermodules en tools zijn gegroepeerd in dit ene dashboard.',
-        'search_label' => 'Snel zoeken',
-        'search_placeholder' => 'Module, tool, beschrijving...',
-        'search_cta' => 'Filteren',
-        'search_reset' => 'Reset',
-        'empty' => 'Geen module komt overeen met je zoekopdracht.',
-        'open' => 'Openen',
-    ],
-    'es' => [
-        'layout' => 'Administración',
-        'title' => 'Administración centralizada',
-        'lead' => 'Todos los módulos y herramientas de administración se agrupan en este panel único.',
-        'search_label' => 'Búsqueda rápida',
-        'search_placeholder' => 'Módulo, herramienta, descripción...',
-        'search_cta' => 'Filtrar',
-        'search_reset' => 'Restablecer',
-        'empty' => 'Ningún módulo coincide con su búsqueda.',
-        'open' => 'Abrir',
-    ],
-    'it' => [
-        'layout' => 'Amministrazione',
-        'title' => 'Amministrazione centralizzata',
-        'lead' => 'Tutti i moduli e gli strumenti di amministrazione sono raccolti in questa dashboard unica.',
-        'search_label' => 'Ricerca rapida',
-        'search_placeholder' => 'Modulo, strumento, descrizione...',
-        'search_cta' => 'Filtra',
-        'search_reset' => 'Reimposta',
-        'empty' => 'Nessun modulo corrisponde alla ricerca.',
-        'open' => 'Apri',
-    ],
-    'pt' => [
-        'layout' => 'Administração',
-        'title' => 'Administração centralizada',
-        'lead' => 'Todos os módulos e ferramentas de administração estão agrupados neste painel único.',
-        'search_label' => 'Pesquisa rápida',
-        'search_placeholder' => 'Módulo, ferramenta, descrição...',
-        'search_cta' => 'Filtrar',
-        'search_reset' => 'Repor',
-        'empty' => 'Nenhum módulo corresponde à sua pesquisa.',
-        'open' => 'Abrir',
-    ],
-];
+$messages = [];
+$messages['fr'] = require __DIR__ . '/admin/fr.php';
+$messages['en'] = require __DIR__ . '/admin/en.php';
+$messages['de'] = require __DIR__ . '/admin/de.php';
+$messages['nl'] = require __DIR__ . '/admin/nl.php';
+$messages['it'] = require __DIR__ . '/admin/it.php';
+$messages['es'] = require __DIR__ . '/admin/es.php';
+$messages['pt'] = require __DIR__ . '/admin/pt.php';
+$messages['bg'] = require __DIR__ . '/admin/bg.php';
+$messages['hr'] = require __DIR__ . '/admin/hr.php';
+$messages['cs'] = require __DIR__ . '/admin/cs.php';
+$messages['da'] = require __DIR__ . '/admin/da.php';
+$messages['et'] = require __DIR__ . '/admin/et.php';
+$messages['fi'] = require __DIR__ . '/admin/fi.php';
+$messages['el'] = require __DIR__ . '/admin/el.php';
+$messages['hu'] = require __DIR__ . '/admin/hu.php';
+$messages['ga'] = require __DIR__ . '/admin/ga.php';
+$messages['lv'] = require __DIR__ . '/admin/lv.php';
+$messages['lt'] = require __DIR__ . '/admin/lt.php';
+$messages['mt'] = require __DIR__ . '/admin/mt.php';
+$messages['pl'] = require __DIR__ . '/admin/pl.php';
+$messages['ro'] = require __DIR__ . '/admin/ro.php';
+$messages['sk'] = require __DIR__ . '/admin/sk.php';
+$messages['sl'] = require __DIR__ . '/admin/sl.php';
+$messages['sv'] = require __DIR__ . '/admin/sv.php';
+$messages['ar'] = require __DIR__ . '/admin/ar.php';
+$messages['hi'] = require __DIR__ . '/admin/hi.php';
+$messages['ja'] = require __DIR__ . '/admin/ja.php';
+$messages['zh'] = require __DIR__ . '/admin/zh.php';
+$messages['bn'] = require __DIR__ . '/admin/bn.php';
+$messages['ru'] = require __DIR__ . '/admin/ru.php';
+$messages['id'] = require __DIR__ . '/admin/id.php';
+
+return $messages;

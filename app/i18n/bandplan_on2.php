@@ -1,77 +1,37 @@
 <?php
 declare(strict_types=1);
 
-return [
-    'fr' => [
-        'title' => 'Band plan ON2',
-        'header_band' => 'Bande',
-        'header_freq' => 'Fréquences (MHz)',
-        'header_modes' => 'Modes',
-        'header_power' => 'Puissance max*',
-        'header_notes' => 'Notes',
-        'note_160m' => 'Suivre la segmentation IARU R1.',
-        'note_80m' => 'Segment phonie dans le haut de bande.',
-        'note_40m' => 'Usage fréquent en contests.',
-        'note_20m' => 'FT8 couramment sur 14.074 MHz.',
-        'note_15m' => 'Propagation diurne variable.',
-        'note_10m' => 'Inclut les balises et la sous-bande FM.',
-        'note_6m' => 'Ouvertures Sporadic-E possibles.',
-        'note_2m' => 'Appel simplex sur 145.500 MHz.',
-        'note_70cm' => 'Respecter la coordination locale des relais.',
-        'note_23cm' => 'Bande partagée selon les usages locaux.',
-    ],
-    'en' => [
-        'title' => 'ON2 band plan',
-        'header_band' => 'Band',
-        'header_freq' => 'Frequencies (MHz)',
-        'header_modes' => 'Modes',
-        'header_power' => 'Max power*',
-        'header_notes' => 'Notes',
-        'note_160m' => 'Follow IARU R1 segmentation.',
-        'note_80m' => 'Phone segment in upper band.',
-        'note_40m' => 'Frequent contest usage.',
-        'note_20m' => 'FT8 commonly on 14.074 MHz.',
-        'note_15m' => 'Variable daytime propagation.',
-        'note_10m' => 'Includes beacons and FM sub-band.',
-        'note_6m' => 'Sporadic-E openings possible.',
-        'note_2m' => 'Simplex calling on 145.500 MHz.',
-        'note_70cm' => 'Respect local repeater coordination.',
-        'note_23cm' => 'Shared band depending on local usage.',
-    ],
-    'de' => [
-        'title' => 'ON2-Bandplan',
-        'header_band' => 'Band',
-        'header_freq' => 'Frequenzen (MHz)',
-        'header_modes' => 'Betriebsarten',
-        'header_power' => 'Max. Leistung*',
-        'header_notes' => 'Hinweise',
-        'note_160m' => 'IARU-R1-Segmentierung beachten.',
-        'note_80m' => 'Phonie-Segment im oberen Bandbereich.',
-        'note_40m' => 'Häufige Contest-Nutzung.',
-        'note_20m' => 'FT8 häufig auf 14.074 MHz.',
-        'note_15m' => 'Variable Tagesausbreitung.',
-        'note_10m' => 'Enthält Baken und FM-Teilband.',
-        'note_6m' => 'Sporadic-E-Öffnungen möglich.',
-        'note_2m' => 'Simplex-Anruf auf 145.500 MHz.',
-        'note_70cm' => 'Lokale Relaiskoordination beachten.',
-        'note_23cm' => 'Geteiltes Band je nach lokaler Nutzung.',
-    ],
-    'nl' => [
-        'title' => 'ON2-bandplan',
-        'header_band' => 'Band',
-        'header_freq' => 'Frequenties (MHz)',
-        'header_modes' => 'Modes',
-        'header_power' => 'Max. vermogen*',
-        'header_notes' => 'Notities',
-        'note_160m' => 'Volg de IARU R1-segmentatie.',
-        'note_80m' => 'Telefoniesegment in het bovenste banddeel.',
-        'note_40m' => 'Veelvuldig contestgebruik.',
-        'note_20m' => 'FT8 vaak op 14.074 MHz.',
-        'note_15m' => 'Variabele dagpropagatie.',
-        'note_10m' => 'Inclusief bakens en FM-subband.',
-        'note_6m' => 'Sporadic-E-openingen mogelijk.',
-        'note_2m' => 'Simplex-oproep op 145.500 MHz.',
-        'note_70cm' => 'Respecteer lokale relaiscoördinatie.',
-        'note_23cm' => 'Gedeelde band afhankelijk van lokaal gebruik.',
-    ],
-];
+$messages = [];
+$messages['fr'] = require __DIR__ . '/bandplan_on2/fr.php';
+$messages['en'] = require __DIR__ . '/bandplan_on2/en.php';
+$messages['de'] = require __DIR__ . '/bandplan_on2/de.php';
+$messages['nl'] = require __DIR__ . '/bandplan_on2/nl.php';
+$messages['it'] = require __DIR__ . '/bandplan_on2/it.php';
+$messages['es'] = require __DIR__ . '/bandplan_on2/es.php';
+$messages['pt'] = require __DIR__ . '/bandplan_on2/pt.php';
+$messages['bg'] = require __DIR__ . '/bandplan_on2/bg.php';
+$messages['hr'] = require __DIR__ . '/bandplan_on2/hr.php';
+$messages['cs'] = require __DIR__ . '/bandplan_on2/cs.php';
+$messages['da'] = require __DIR__ . '/bandplan_on2/da.php';
+$messages['et'] = require __DIR__ . '/bandplan_on2/et.php';
+$messages['fi'] = require __DIR__ . '/bandplan_on2/fi.php';
+$messages['el'] = require __DIR__ . '/bandplan_on2/el.php';
+$messages['hu'] = require __DIR__ . '/bandplan_on2/hu.php';
+$messages['ga'] = require __DIR__ . '/bandplan_on2/ga.php';
+$messages['lv'] = require __DIR__ . '/bandplan_on2/lv.php';
+$messages['lt'] = require __DIR__ . '/bandplan_on2/lt.php';
+$messages['mt'] = require __DIR__ . '/bandplan_on2/mt.php';
+$messages['pl'] = require __DIR__ . '/bandplan_on2/pl.php';
+$messages['ro'] = require __DIR__ . '/bandplan_on2/ro.php';
+$messages['sk'] = require __DIR__ . '/bandplan_on2/sk.php';
+$messages['sl'] = require __DIR__ . '/bandplan_on2/sl.php';
+$messages['sv'] = require __DIR__ . '/bandplan_on2/sv.php';
+$messages['ar'] = require __DIR__ . '/bandplan_on2/ar.php';
+$messages['hi'] = require __DIR__ . '/bandplan_on2/hi.php';
+$messages['ja'] = require __DIR__ . '/bandplan_on2/ja.php';
+$messages['zh'] = require __DIR__ . '/bandplan_on2/zh.php';
+$messages['bn'] = require __DIR__ . '/bandplan_on2/bn.php';
+$messages['ru'] = require __DIR__ . '/bandplan_on2/ru.php';
+$messages['id'] = require __DIR__ . '/bandplan_on2/id.php';
+
+return $messages;

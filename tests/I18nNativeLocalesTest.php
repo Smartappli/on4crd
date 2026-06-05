@@ -56,6 +56,26 @@ final class I18nNativeLocalesTest extends TestCase
         }
     }
 
+    public function testEveryI18nDomainLoaderHasNativeLocaleDirectory(): void
+    {
+        $domainLoaders = glob(__DIR__ . '/../app/i18n/*.php');
+        self::assertIsArray($domainLoaders);
+        self::assertNotEmpty($domainLoaders);
+
+        foreach ($domainLoaders as $loaderPath) {
+            $domain = basename((string) $loaderPath, '.php');
+            $directory = __DIR__ . '/../app/i18n/' . $domain;
+
+            self::assertDirectoryExists($directory, sprintf('Missing native locale directory app/i18n/%s', $domain));
+            foreach ($this->supportedLocales() as $locale) {
+                self::assertFileExists(
+                    $directory . '/' . $locale . '.php',
+                    sprintf('Missing native locale file app/i18n/%s/%s.php', $domain, $locale)
+                );
+            }
+        }
+    }
+
     public function testEveryModularI18nDomainKeepsLocaleKeyParity(): void
     {
         $directories = glob(__DIR__ . '/../app/i18n/*', GLOB_ONLYDIR);
