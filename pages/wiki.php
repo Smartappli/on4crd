@@ -19,7 +19,8 @@ $theme = slugify(trim((string) ($_GET['theme'] ?? '')));
 if ($theme === 'n-a') {
     $theme = '';
 }
-$themeProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode('Proposition de thématique wiki ON4CRD');
+$contactEmail = site_contact_email();
+$themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode('Proposition de thématique wiki ON4CRD');
 
 $rows = [];
 $wikiThemes = [];
@@ -28,11 +29,11 @@ $updatedPagesCount = 0;
 $revisionCount = 0;
 
 try {
-    $totalPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages')->fetchColumn();
-    $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
+    $totalPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE status = "published"')->fetchColumn();
+    $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE status = "published" AND updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
     $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
 
-    $themeRows = db()->query('SELECT slug FROM wiki_pages ORDER BY slug ASC')->fetchAll() ?: [];
+    $themeRows = db()->query('SELECT slug FROM wiki_pages WHERE status = "published" ORDER BY slug ASC')->fetchAll() ?: [];
     foreach ($themeRows as $themeRow) {
         $slug = trim((string) ($themeRow['slug'] ?? ''));
         $themeSeed = $slug !== '' ? explode('-', $slug, 2)[0] : '';
@@ -58,7 +59,8 @@ try {
         $like = '%' . $search . '%';
         array_push($params, $like, $like, $like);
     }
-    $whereSql = $where !== [] ? (' WHERE ' . implode(' AND ', $where)) : '';
+    array_unshift($where, 'p.status = "published"');
+    $whereSql = ' WHERE ' . implode(' AND ', $where);
     $stmt = db()->prepare(
         'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
             (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
@@ -101,7 +103,7 @@ ob_start();
             <div class="wiki-hero-actions">
                 <button class="button secondary" type="button" data-wiki-theme-open data-wiki-theme-fallback="<?= e($themeProposalUrl) ?>" aria-haspopup="dialog" aria-controls="wiki-theme-dialog">Proposer une thématique</button>
                 <a class="button" href="<?= e(route_url('wiki_propose')) ?>">Proposer une page</a>
-                <?php if (has_permission('wiki.edit')): ?>
+                <?php if (has_permission('wiki.moderate')): ?>
                     <a class="button secondary" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
                 <?php endif; ?>
             </div>
@@ -118,7 +120,7 @@ ob_start();
                 </div>
                 <button class="wiki-theme-dialog-close" type="button" data-wiki-theme-close aria-label="Fermer">&times;</button>
             </div>
-            <form class="wiki-theme-form" method="dialog" data-wiki-theme-form data-wiki-theme-recipient="on4crd@gmail.com" data-wiki-theme-subject="Proposition de thématique wiki ON4CRD" data-wiki-theme-intro="Proposition de thématique wiki :">
+            <form class="wiki-theme-form" method="dialog" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="Proposition de thématique wiki ON4CRD" data-wiki-theme-intro="Proposition de thématique wiki :">
                 <label><span>Nom de la thématique</span><input type="text" name="proposal_theme" maxlength="160" required></label>
                 <label><span>Pourquoi l'ajouter ?</span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span>Votre contact</span><input type="text" name="proposal_contact" maxlength="220" required></label>
