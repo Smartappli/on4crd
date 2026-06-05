@@ -123,6 +123,7 @@ $lines = [
     '- Wiki: ' . route_url('wiki'),
     '- Tools: ' . route_url('tools'),
     '- Membership: ' . route_url('membership'),
+    '- Donation: ' . route_url('donation'),
     '- Committee: ' . route_url('committee'),
     '- Press: ' . route_url('press'),
     '- Schools: ' . route_url('schools'),

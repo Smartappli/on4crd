@@ -28,6 +28,7 @@ $xml = cache_remember('seo_sitemap_xml_v6', 300, static function (): string {
         ['route' => 'news', 'priority' => '0.9', 'changefreq' => 'daily'],
         ['route' => 'search', 'priority' => '0.7', 'changefreq' => 'weekly'],
         ['route' => 'membership', 'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['route' => 'donation', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'newsletter_public', 'priority' => '0.5', 'changefreq' => 'monthly'],
         ['route' => 'conditions_utilisation', 'priority' => '0.3', 'changefreq' => 'yearly'],
         ['route' => 'mentions_legales', 'priority' => '0.3', 'changefreq' => 'yearly'],

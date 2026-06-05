@@ -246,7 +246,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route], $route);
 }
 
-$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'donation', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login(login_next_url_for_route($route, $_GET));
 }
@@ -282,6 +282,7 @@ switch ($route) {
     case 'forgot_password': $dispatchPage('pages/forgot_password.php'); break;
     case 'reset_password': $dispatchPage('pages/reset_password.php'); break;
     case 'membership': $dispatchPage('pages/membership.php'); break;
+    case 'donation': $dispatchPage('pages/donation.php'); break;
     case 'conditions_utilisation': $dispatchPage('pages/conditions_utilisation.php'); break;
     case 'mentions_legales': $dispatchPage('pages/mentions_legales.php'); break;
     case 'reglement_interieur': $dispatchPage('pages/reglement_interieur.php'); break;

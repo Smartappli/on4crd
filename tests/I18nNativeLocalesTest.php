@@ -130,6 +130,18 @@ final class I18nNativeLocalesTest extends TestCase
         }
     }
 
+    public function testHomeDonationLinkTargetsDedicatedDonationRoute(): void
+    {
+        $homePage = file_get_contents(__DIR__ . '/../pages/home.php');
+        self::assertIsString($homePage);
+
+        self::assertMatchesRegularExpression(
+            '/route_url\(\'donation\'\)\)\s*\.\s*\'">\'\s*\.\s*e\(\(string\)\s*\$homeI18n\[\'link_donate\'\]\)/',
+            $homePage,
+            'The "Faire un don" home link must target the dedicated donation page, not membership or sponsoring.'
+        );
+    }
+
     public function testEveryVisibleRoutedPageUsesAModularI18nDomain(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');

@@ -123,6 +123,7 @@ $payload = [
         ['name' => 'Wiki', 'url' => $buildUrl('wiki')],
         ['name' => 'Tools', 'url' => $buildUrl('tools')],
         ['name' => 'Membership', 'url' => $buildUrl('membership')],
+        ['name' => 'Donation', 'url' => $buildUrl('donation')],
         ['name' => 'Press', 'url' => $buildUrl('press')],
         ['name' => 'Schools', 'url' => $buildUrl('schools')],
         ['name' => 'Code Q', 'url' => $buildUrl('code_q')],
