@@ -25,13 +25,98 @@
 }
 
 [data-route="members_library"] .members-library-hero-action {
-  margin: 0;
-  text-align: right;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  justify-content: flex-end;
 }
 
 [data-route="members_library"] .members-library-hero-action .button {
-  width: 100%;
+  display: inline-flex;
   justify-content: center;
+}
+
+[data-route="members_library"] .members-library-dialog {
+  width: min(94vw, 620px);
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  background: transparent;
+  color: var(--text);
+}
+
+[data-route="members_library"] .members-library-dialog::backdrop {
+  background: rgba(15, 23, 42, .62);
+  backdrop-filter: blur(5px);
+}
+
+[data-route="members_library"] .members-library-dialog-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+[data-route="members_library"] .members-library-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+[data-route="members_library"] .members-library-dialog-header h2 {
+  margin: .15rem 0 .35rem;
+}
+
+[data-route="members_library"] .members-library-dialog-eyebrow {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+[data-route="members_library"] .members-library-dialog-close {
+  display: inline-grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+[data-route="members_library"] .members-library-dialog-form {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="members_library"] .members-library-dialog-form label {
+  margin: 0;
+}
+
+[data-route="members_library"] .members-library-dialog-form label span {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+[data-route="members_library"] .members-library-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  justify-content: flex-end;
 }
 
 [data-route="members_library"] .members-library-search-panel {
@@ -112,6 +197,11 @@
   }
 
   [data-route="members_library"] .members-library-hero-action {
-    text-align: left;
+    justify-content: flex-start;
+  }
+
+  [data-route="members_library"] .members-library-dialog-actions .button {
+    width: 100%;
+    justify-content: center;
   }
 }

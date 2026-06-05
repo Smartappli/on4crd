@@ -35,6 +35,18 @@
   letter-spacing: -.015em;
 }
 
+[data-route="directory"] .directory-search-panel label:first-of-type > span,
+[data-route="directory"] .directory-results-header h2 {
+  margin: 0;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
 @media (max-width: 640px) {
   .directory-grid {
     grid-template-columns: 1fr;

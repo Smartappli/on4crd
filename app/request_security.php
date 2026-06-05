@@ -118,9 +118,9 @@ function apply_security_headers(): void
     }
 
     $nonce = csp_nonce();
-    $scriptSrc = ["'self'", "'nonce-" . $nonce . "'", 'https://cdn.tailwindcss.com', 'https://cdn.jsdelivr.net'];
+    $scriptSrc = ["'self'", "'nonce-" . $nonce . "'"];
     $imgSrc = ["'self'", 'data:', 'https:'];
-    $styleSrc = ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'];
+    $styleSrc = ["'self'", "'unsafe-inline'"];
     $connectSrc = ["'self'"];
     $frameSrc = ["'self'", 'https://www.google.com', 'https://maps.google.com'];
 

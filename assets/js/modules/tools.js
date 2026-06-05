@@ -59,6 +59,8 @@
     let foundAddress = null;
     let foundCoords = null;
     let foundLocator = null;
+    let foundCqZone = null;
+    let foundItuZone = null;
     let errorBox = null;
     let freqInput = null;
     let freqOut = null;
@@ -76,8 +78,10 @@
     let balunSource = null;
     let balunLoad = null;
     let balunRatio = null;
-    let swrInput = null;
-    let swrRl = null;
+    let swrForward = null;
+    let swrReflected = null;
+    let swrValue = null;
+    let swrReturnLoss = null;
     let fsplDistance = null;
     let fsplFrequency = null;
     let fsplLoss = null;
@@ -139,6 +143,7 @@
     let ohmVoltage = null;
     let ohmCurrent = null;
     let ohmResistance = null;
+    let ohmEditedFields = [];
     let lbPtx = null;
     let lbGtx = null;
     let lbGrx = null;
@@ -158,6 +163,8 @@
         foundAddress = document.getElementById('grid-found-address');
         foundCoords = document.getElementById('grid-found-coords');
         foundLocator = document.getElementById('grid-found-locator');
+        foundCqZone = document.getElementById('grid-found-cq-zone');
+        foundItuZone = document.getElementById('grid-found-itu-zone');
         errorBox = document.getElementById('grid-tool-error');
         freqInput = document.getElementById('freq-mhz');
         freqOut = document.getElementById('freq-wavelength');
@@ -175,8 +182,10 @@
         balunSource = document.getElementById('balun-source');
         balunLoad = document.getElementById('balun-load');
         balunRatio = document.getElementById('balun-ratio');
-        swrInput = document.getElementById('swr-input');
-        swrRl = document.getElementById('swr-rl');
+        swrForward = document.getElementById('swr-forward');
+        swrReflected = document.getElementById('swr-reflected');
+        swrValue = document.getElementById('swr-value');
+        swrReturnLoss = document.getElementById('swr-return-loss');
         fsplDistance = document.getElementById('fspl-distance');
         fsplFrequency = document.getElementById('fspl-frequency');
         fsplLoss = document.getElementById('fspl-loss');
@@ -261,6 +270,26 @@
     };
     const clearError = () => errorBox?.classList.add('is-hidden');
 
+    const readNumberInput = (input) => {
+        const normalized = String(input?.value || '').trim().replace(/\s+/g, '').replace(/,/g, '.');
+        if (normalized === '' || !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(normalized)) {
+            return NaN;
+        }
+
+        const value = Number(normalized);
+        if (!Number.isFinite(value)) {
+            return NaN;
+        }
+
+        const min = input?.dataset?.min !== undefined ? Number(input.dataset.min) : NaN;
+        const max = input?.dataset?.max !== undefined ? Number(input.dataset.max) : NaN;
+        if ((Number.isFinite(min) && value < min) || (Number.isFinite(max) && value > max)) {
+            return NaN;
+        }
+
+        return value;
+    };
+
     const initializedTools = new Set();
     const simpleToolConverters = {
         'tool-vpp-vrms': (x) => x / (2 * Math.sqrt(2)),
@@ -295,7 +324,7 @@
         const convert = simpleToolConverters[toolId];
         if (!(input instanceof HTMLInputElement) || !output || typeof convert !== 'function') return;
         const sync = () => {
-            const x = Number(input.value);
+            const x = readNumberInput(input);
             if (!Number.isFinite(x)) {
                 output.textContent = '—';
                 return;
@@ -419,7 +448,7 @@
             const units = activeUnits();
             const from = units[fromSelect.value];
             const to = units[toSelect.value];
-            const value = Number(input.value);
+            const value = readNumberInput(input);
             if (!from || !to || !Number.isFinite(value)) {
                 output.textContent = '—';
                 if (reference instanceof HTMLElement) reference.textContent = '—';
@@ -485,10 +514,12 @@
                     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
                         throw new Error(i18n.err_invalid_coords);
                     }
-                    const locator = toMaidenhead(lat, lon, 6);
+                    const locator = payload.locator || toMaidenhead(lat, lon, 6);
                     if (foundAddress) foundAddress.textContent = payload.display_name || query;
                     if (foundCoords) foundCoords.textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
                     if (foundLocator) foundLocator.textContent = locator;
+                    if (foundCqZone) foundCqZone.textContent = payload.cq_zone || '-';
+                    if (foundItuZone) foundItuZone.textContent = payload.itu_zone || '-';
                     result?.classList.remove('is-hidden');
                 } catch (error) {
                     setError(error instanceof Error ? error.message : i18n.err_grid_calc);
@@ -498,7 +529,7 @@
         'tool-freq-wave': () => {
             freqInput?.addEventListener('input', () => {
                 if (!(freqInput instanceof HTMLInputElement) || !freqOut) return;
-                const mhz = Number(freqInput.value);
+                const mhz = readNumberInput(freqInput);
                 if (!Number.isFinite(mhz) || mhz <= 0) {
                     freqOut.textContent = '—';
                     return;
@@ -510,7 +541,7 @@
         'tool-power': () => {
             wattsInput?.addEventListener('input', () => {
                 if (!(wattsInput instanceof HTMLInputElement) || !dbmOut) return;
-                const watts = Number(wattsInput.value);
+                const watts = readNumberInput(wattsInput);
                 if (!Number.isFinite(watts) || watts <= 0) {
                     dbmOut.textContent = '—';
                     return;
@@ -521,7 +552,7 @@
 
             dbmInput?.addEventListener('input', () => {
                 if (!(dbmInput instanceof HTMLInputElement) || !wattsOut) return;
-                const dbm = Number(dbmInput.value);
+                const dbm = readNumberInput(dbmInput);
                 if (!Number.isFinite(dbm)) {
                     wattsOut.textContent = '—';
                     return;
@@ -538,7 +569,8 @@
             computeBalun();
         },
         'tool-swr': () => {
-            swrInput?.addEventListener('input', computeSWR);
+            swrForward?.addEventListener('input', computeSWR);
+            swrReflected?.addEventListener('input', computeSWR);
             computeSWR();
         },
         'tool-fspl': () => {
@@ -670,9 +702,9 @@
             computeDbmFromDbw();
         },
         'tool-ohm-law': () => {
-            ohmVoltage?.addEventListener('input', computeOhmLaw);
-            ohmCurrent?.addEventListener('input', computeOhmLaw);
-            ohmResistance?.addEventListener('input', computeOhmLaw);
+            ohmVoltage?.addEventListener('input', () => computeOhmLaw('voltage'));
+            ohmCurrent?.addEventListener('input', () => computeOhmLaw('current'));
+            ohmResistance?.addEventListener('input', () => computeOhmLaw('resistance'));
             computeOhmLaw();
         },
         'tool-vpp-vrms': () => initSimpleConverter('tool-vpp-vrms'),
@@ -727,8 +759,8 @@
 
     const computeFilter = () => {
         if (!(filterFreq instanceof HTMLInputElement) || !(filterImpedance instanceof HTMLInputElement) || !filterL || !filterC) return;
-        const fMHz = Number(filterFreq.value);
-        const z = Number(filterImpedance.value);
+        const fMHz = readNumberInput(filterFreq);
+        const z = readNumberInput(filterImpedance);
         if (!Number.isFinite(fMHz) || fMHz <= 0 || !Number.isFinite(z) || z <= 0) {
             filterL.textContent = '—';
             filterC.textContent = '—';
@@ -742,8 +774,8 @@
     };
     const computeBalun = () => {
         if (!(balunSource instanceof HTMLInputElement) || !(balunLoad instanceof HTMLInputElement) || !balunRatio) return;
-        const zin = Number(balunSource.value);
-        const zout = Number(balunLoad.value);
+        const zin = readNumberInput(balunSource);
+        const zout = readNumberInput(balunLoad);
         if (!Number.isFinite(zin) || zin <= 0 || !Number.isFinite(zout) || zout <= 0) {
             balunRatio.textContent = '—';
             return;
@@ -753,20 +785,26 @@
         balunRatio.textContent = `1:${ratio.toFixed(2)} (Z ${zin}:${zout} ≈ ${powerRatio.toFixed(2)}:1)`;
     };
     const computeSWR = () => {
-        if (!(swrInput instanceof HTMLInputElement) || !swrRl) return;
-        const swr = Number(swrInput.value);
-        if (!Number.isFinite(swr) || swr < 1) {
-            swrRl.textContent = '—';
+        if (!(swrForward instanceof HTMLInputElement) || !(swrReflected instanceof HTMLInputElement) || !swrValue) return;
+        const forward = readNumberInput(swrForward);
+        const reflected = readNumberInput(swrReflected);
+        if (!Number.isFinite(forward) || forward <= 0 || !Number.isFinite(reflected) || reflected < 0 || reflected >= forward) {
+            swrValue.textContent = '—';
+            if (swrReturnLoss) swrReturnLoss.textContent = '—';
             return;
         }
-        const gamma = (swr - 1) / (swr + 1);
-        const rl = -20 * Math.log10(Math.max(gamma, 1e-12));
-        swrRl.textContent = `${rl.toFixed(2)} dB`;
+
+        const gamma = Math.sqrt(reflected / forward);
+        const swr = (1 + gamma) / (1 - gamma);
+        swrValue.textContent = swr.toFixed(2);
+        if (swrReturnLoss) {
+            swrReturnLoss.textContent = gamma === 0 ? '∞ dB' : `${(-20 * Math.log10(gamma)).toFixed(2)} dB`;
+        }
     };
     const computeCoaxLoss = () => {
         if (!(coaxLength instanceof HTMLInputElement) || !(coaxAtten instanceof HTMLInputElement) || !coaxLoss) return;
-        const len = Number(coaxLength.value);
-        const att = Number(coaxAtten.value);
+        const len = readNumberInput(coaxLength);
+        const att = readNumberInput(coaxAtten);
         if (!Number.isFinite(len) || len < 0 || !Number.isFinite(att) || att < 0) {
             coaxLoss.textContent = '—';
             return;
@@ -777,8 +815,8 @@
 
     const computeFspl = () => {
         if (!(fsplDistance instanceof HTMLInputElement) || !(fsplFrequency instanceof HTMLInputElement) || !fsplLoss) return;
-        const d = Number(fsplDistance.value);
-        const f = Number(fsplFrequency.value);
+        const d = readNumberInput(fsplDistance);
+        const f = readNumberInput(fsplFrequency);
         if (!Number.isFinite(d) || d <= 0 || !Number.isFinite(f) || f <= 0) {
             fsplLoss.textContent = '—';
             return;
@@ -789,8 +827,8 @@
 
     const computeRuntime = () => {
         if (!(runtimeCapacity instanceof HTMLInputElement) || !(runtimeCurrent instanceof HTMLInputElement) || !runtimeHours) return;
-        const capacity = Number(runtimeCapacity.value);
-        const current = Number(runtimeCurrent.value);
+        const capacity = readNumberInput(runtimeCapacity);
+        const current = readNumberInput(runtimeCurrent);
         if (!Number.isFinite(capacity) || capacity <= 0 || !Number.isFinite(current) || current <= 0) {
             runtimeHours.textContent = '—';
             return;
@@ -801,8 +839,8 @@
 
     const computeBandwidth = () => {
         if (!(bandwidthRate instanceof HTMLInputElement) || !(bandwidthRolloff instanceof HTMLInputElement) || !bandwidthResult) return;
-        const rate = Number(bandwidthRate.value);
-        const rolloff = Number(bandwidthRolloff.value);
+        const rate = readNumberInput(bandwidthRate);
+        const rolloff = readNumberInput(bandwidthRolloff);
         if (!Number.isFinite(rate) || rate <= 0 || !Number.isFinite(rolloff) || rolloff < 0) {
             bandwidthResult.textContent = '—';
             return;
@@ -812,8 +850,8 @@
     };
     const computeQuarterWave = () => {
         if (!(quarterWaveFrequency instanceof HTMLInputElement) || !(quarterWaveVf instanceof HTMLInputElement) || !quarterWaveLength) return;
-        const f = Number(quarterWaveFrequency.value);
-        const vf = Number(quarterWaveVf.value);
+        const f = readNumberInput(quarterWaveFrequency);
+        const vf = readNumberInput(quarterWaveVf);
         if (!Number.isFinite(f) || f <= 0 || !Number.isFinite(vf) || vf <= 0 || vf > 1) {
             quarterWaveLength.textContent = '—';
             return;
@@ -824,9 +862,9 @@
 
     const computeErp = () => {
         if (!(erpPower instanceof HTMLInputElement) || !(erpLoss instanceof HTMLInputElement) || !(erpGain instanceof HTMLInputElement) || !erpResult) return;
-        const pwr = Number(erpPower.value);
-        const loss = Number(erpLoss.value);
-        const gain = Number(erpGain.value);
+        const pwr = readNumberInput(erpPower);
+        const loss = readNumberInput(erpLoss);
+        const gain = readNumberInput(erpGain);
         if (!Number.isFinite(pwr) || pwr <= 0 || !Number.isFinite(loss) || !Number.isFinite(gain)) {
             erpResult.textContent = '—';
             return;
@@ -839,7 +877,7 @@
 
     const computeDipole = () => {
         if (!(dipoleFrequency instanceof HTMLInputElement) || !dipoleLength) return;
-        const f = Number(dipoleFrequency.value);
+        const f = readNumberInput(dipoleFrequency);
         if (!Number.isFinite(f) || f <= 0) {
             dipoleLength.textContent = '—';
             return;
@@ -851,8 +889,8 @@
 
     const computeDutyCycle = () => {
         if (!(dutyTx instanceof HTMLInputElement) || !(dutyPeriod instanceof HTMLInputElement) || !dutyResult) return;
-        const tx = Number(dutyTx.value);
-        const period = Number(dutyPeriod.value);
+        const tx = readNumberInput(dutyTx);
+        const period = readNumberInput(dutyPeriod);
         if (!Number.isFinite(tx) || tx < 0 || !Number.isFinite(period) || period <= 0 || tx > period) {
             dutyResult.textContent = '—';
             return;
@@ -861,9 +899,9 @@
     };
     const computeDivider = () => {
         if (!(dividerVin instanceof HTMLInputElement) || !(dividerR1 instanceof HTMLInputElement) || !(dividerR2 instanceof HTMLInputElement) || !dividerVout) return;
-        const vin = Number(dividerVin.value);
-        const r1 = Number(dividerR1.value);
-        const r2 = Number(dividerR2.value);
+        const vin = readNumberInput(dividerVin);
+        const r1 = readNumberInput(dividerR1);
+        const r2 = readNumberInput(dividerR2);
         if (!Number.isFinite(vin) || vin < 0 || !Number.isFinite(r1) || r1 <= 0 || !Number.isFinite(r2) || r2 <= 0) {
             dividerVout.textContent = '—';
             return;
@@ -874,7 +912,7 @@
 
     const computeMismatchLoss = () => {
         if (!(mismatchSwr instanceof HTMLInputElement) || !mismatchGamma || !mismatchLoss) return;
-        const swr = Number(mismatchSwr.value);
+        const swr = readNumberInput(mismatchSwr);
         if (!Number.isFinite(swr) || swr < 1) {
             mismatchGamma.textContent = '—';
             mismatchLoss.textContent = '—';
@@ -888,8 +926,8 @@
 
     const computeResistorCombo = () => {
         if (!(resistorTarget instanceof HTMLInputElement) || !(resistorMaxCount instanceof HTMLInputElement) || !resistorBest) return;
-        const target = Number(resistorTarget.value);
-        const maxCount = Math.max(1, Math.min(3, Math.round(Number(resistorMaxCount.value))));
+        const target = readNumberInput(resistorTarget);
+        const maxCount = Math.max(1, Math.min(3, Math.round(readNumberInput(resistorMaxCount))));
         if (!Number.isFinite(target) || target <= 0) {
             resistorBest.textContent = '—';
             return;
@@ -936,8 +974,8 @@
 
     const computeSolarEnergy = () => {
         if (!(solarWatts instanceof HTMLInputElement) || !(solarHours instanceof HTMLInputElement) || !solarEnergy) return;
-        const watts = Number(solarWatts.value);
-        const hours = Number(solarHours.value);
+        const watts = readNumberInput(solarWatts);
+        const hours = readNumberInput(solarHours);
         if (!Number.isFinite(watts) || watts < 0 || !Number.isFinite(hours) || hours < 0) {
             solarEnergy.textContent = '—';
             return;
@@ -947,8 +985,8 @@
 
     const computeBatteryCurrent = () => {
         if (!(batteryVoltage instanceof HTMLInputElement) || !(batteryLoad instanceof HTMLInputElement) || !batteryCurrent) return;
-        const voltage = Number(batteryVoltage.value);
-        const load = Number(batteryLoad.value);
+        const voltage = readNumberInput(batteryVoltage);
+        const load = readNumberInput(batteryLoad);
         if (!Number.isFinite(voltage) || voltage <= 0 || !Number.isFinite(load) || load < 0) {
             batteryCurrent.textContent = '—';
             return;
@@ -959,8 +997,8 @@
 
     const computeXl = () => {
         if (!(xlFreq instanceof HTMLInputElement) || !(xlInductance instanceof HTMLInputElement) || !xlResult) return;
-        const f = Number(xlFreq.value);
-        const lMicro = Number(xlInductance.value);
+        const f = readNumberInput(xlFreq);
+        const lMicro = readNumberInput(xlInductance);
         if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(lMicro) || lMicro <= 0 || lMicro > 1e6) {
             xlResult.textContent = '—';
             return;
@@ -972,8 +1010,8 @@
 
     const computeXc = () => {
         if (!(xcFreq instanceof HTMLInputElement) || !(xcCapacitance instanceof HTMLInputElement) || !xcResult) return;
-        const f = Number(xcFreq.value);
-        const cPico = Number(xcCapacitance.value);
+        const f = readNumberInput(xcFreq);
+        const cPico = readNumberInput(xcCapacitance);
         if (!Number.isFinite(f) || f <= 0 || f > 1e6 || !Number.isFinite(cPico) || cPico <= 0 || cPico > 1e9) {
             xcResult.textContent = '—';
             return;
@@ -985,8 +1023,8 @@
 
     const computeMuf = () => {
         if (!(mufFof2 instanceof HTMLInputElement) || !(mufAngle instanceof HTMLInputElement) || !mufResult) return;
-        const fof2 = Number(mufFof2.value);
-        const angle = Number(mufAngle.value);
+        const fof2 = readNumberInput(mufFof2);
+        const angle = readNumberInput(mufAngle);
         if (!Number.isFinite(fof2) || fof2 <= 0 || !Number.isFinite(angle) || angle <= 0 || angle >= 90) {
             mufResult.textContent = '—';
             return;
@@ -999,7 +1037,7 @@
 
     const computeEirp = () => {
         if (!(eirpErp instanceof HTMLInputElement) || !eirpResult) return;
-        const erp = Number(eirpErp.value);
+        const erp = readNumberInput(eirpErp);
         if (!Number.isFinite(erp) || erp < 0) {
             eirpResult.textContent = '—';
             return;
@@ -1011,8 +1049,8 @@
 
     const computeSkipDistance = () => {
         if (!(skipHeight instanceof HTMLInputElement) || !(skipAngle instanceof HTMLInputElement) || !skipResult) return;
-        const h = Number(skipHeight.value);
-        const angle = Number(skipAngle.value);
+        const h = readNumberInput(skipHeight);
+        const angle = readNumberInput(skipAngle);
         if (!Number.isFinite(h) || h <= 0 || !Number.isFinite(angle) || angle <= 0 || angle >= 90) {
             skipResult.textContent = '—';
             return;
@@ -1025,8 +1063,8 @@
 
     const computeDbSum = () => {
         if (!(dbsumA instanceof HTMLInputElement) || !(dbsumB instanceof HTMLInputElement) || !dbsumResult) return;
-        const a = Number(dbsumA.value);
-        const b = Number(dbsumB.value);
+        const a = readNumberInput(dbsumA);
+        const b = readNumberInput(dbsumB);
         if (!Number.isFinite(a) || !Number.isFinite(b)) {
             dbsumResult.textContent = '—';
             return;
@@ -1037,29 +1075,33 @@
     };
 
     const computeDbwFromDbm = () => {
-        if (!(dbwDbm instanceof HTMLInputElement) || !(dbwDbwInput instanceof HTMLInputElement)) return;
-        const dbm = Number(dbwDbm.value);
+        if (!(dbwDbm instanceof HTMLInputElement) || !(dbwDbwInput instanceof HTMLInputElement) || !dbwResult) return;
+        const dbm = readNumberInput(dbwDbm);
         if (!Number.isFinite(dbm)) {
             dbwDbwInput.value = '';
+            dbwResult.textContent = '—';
             return;
         }
         dbwDbwInput.value = (dbm - 30).toFixed(2);
+        dbwResult.textContent = `${dbm.toFixed(2)} dBm`;
     };
 
     const computeDbmFromDbw = () => {
-        if (!(dbwDbwInput instanceof HTMLInputElement) || !dbwResult) return;
-        const dbw = Number(dbwDbwInput.value);
+        if (!(dbwDbwInput instanceof HTMLInputElement) || !(dbwDbm instanceof HTMLInputElement) || !dbwResult) return;
+        const dbw = readNumberInput(dbwDbwInput);
         if (!Number.isFinite(dbw)) {
             dbwResult.textContent = '—';
             return;
         }
-        dbwResult.textContent = `${(dbw + 30).toFixed(2)} dBm`;
+        const dbm = dbw + 30;
+        dbwDbm.value = dbm.toFixed(2);
+        dbwResult.textContent = `${dbm.toFixed(2)} dBm`;
     };
 
 
     const computeDbuv = () => {
         if (!(dbuvDbm instanceof HTMLInputElement) || !dbuvResult) return;
-        const dbm = Number(dbuvDbm.value);
+        const dbm = readNumberInput(dbuvDbm);
         if (!Number.isFinite(dbm)) {
             dbuvResult.textContent = '—';
             return;
@@ -1071,7 +1113,7 @@
 
     const computeGainConversion = () => {
         if (!(gainDbd instanceof HTMLInputElement) || !gainDbi) return;
-        const dbd = Number(gainDbd.value);
+        const dbd = readNumberInput(gainDbd);
         if (!Number.isFinite(dbd)) {
             gainDbi.textContent = '—';
             return;
@@ -1084,23 +1126,80 @@
 
 
 
-    const computeOhmLaw = () => {
+    const parseOhmDecimal = (input) => {
+        const normalized = String(input.value || '').trim().replace(/\s+/g, '').replace(/,/g, '.');
+        if (normalized === '' || !/^(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/.test(normalized)) {
+            return NaN;
+        }
+
+        const value = Number(normalized);
+        return Number.isFinite(value) ? value : NaN;
+    };
+
+    const formatOhmDecimal = (value) => Number(value).toFixed(2);
+
+    const computeOhmLaw = (changedField = '') => {
         if (!(ohmVoltage instanceof HTMLInputElement) || !(ohmCurrent instanceof HTMLInputElement) || !(ohmResistance instanceof HTMLInputElement)) return;
-        const values = [Number(ohmVoltage.value), Number(ohmCurrent.value), Number(ohmResistance.value)];
-        const valid = values.map((v) => Number.isFinite(v) && v > 0);
-        const count = valid.filter(Boolean).length;
-        if (count !== 2) return;
-        if (!valid[0] && valid[1] && valid[2]) ohmVoltage.value = (values[1] * values[2]).toFixed(2);
-        if (!valid[1] && valid[0] && valid[2]) ohmCurrent.value = (values[0] / values[2]).toFixed(3);
-        if (!valid[2] && valid[0] && valid[1]) ohmResistance.value = (values[0] / values[1]).toFixed(2);
+        const fieldNames = ['voltage', 'current', 'resistance'];
+        const fields = {
+            voltage: ohmVoltage,
+            current: ohmCurrent,
+            resistance: ohmResistance,
+        };
+        const values = Object.fromEntries(fieldNames.map((name) => [name, parseOhmDecimal(fields[name])]));
+        const validFields = fieldNames.filter((name) => Number.isFinite(values[name]) && values[name] > 0);
+
+        if (fieldNames.includes(changedField)) {
+            ohmEditedFields = ohmEditedFields.filter((name) => name !== changedField);
+            if (validFields.includes(changedField)) {
+                ohmEditedFields.push(changedField);
+            }
+        }
+
+        if (validFields.length < 2) {
+            return;
+        }
+
+        let targetField = '';
+        if (validFields.length === 2) {
+            targetField = fieldNames.find((name) => !validFields.includes(name)) || '';
+        } else {
+            const recentSources = ohmEditedFields.filter((name) => validFields.includes(name)).slice(-2);
+            if (recentSources.length >= 2 && recentSources.includes(changedField)) {
+                targetField = fieldNames.find((name) => !recentSources.includes(name)) || '';
+            } else if (changedField === 'voltage') {
+                targetField = 'current';
+            } else if (changedField === 'current') {
+                targetField = 'voltage';
+            } else if (changedField === 'resistance') {
+                targetField = 'current';
+            }
+        }
+
+        if (!targetField) {
+            return;
+        }
+
+        const computed = {
+            voltage: () => values.current * values.resistance,
+            current: () => values.resistance > 0 ? values.voltage / values.resistance : NaN,
+            resistance: () => values.current > 0 ? values.voltage / values.current : NaN,
+        }[targetField]();
+
+        if (!Number.isFinite(computed) || computed <= 0) {
+            return;
+        }
+
+        fields[targetField].value = formatOhmDecimal(computed);
+        ohmEditedFields = ohmEditedFields.filter((name) => name !== targetField);
     };
 
     const computeLinkBudget = () => {
         if (!(lbPtx instanceof HTMLInputElement) || !(lbGtx instanceof HTMLInputElement) || !(lbGrx instanceof HTMLInputElement) || !(lbLoss instanceof HTMLInputElement) || !lbPrx) return;
-        const ptx = Number(lbPtx.value);
-        const gtx = Number(lbGtx.value);
-        const grx = Number(lbGrx.value);
-        const loss = Number(lbLoss.value);
+        const ptx = readNumberInput(lbPtx);
+        const gtx = readNumberInput(lbGtx);
+        const grx = readNumberInput(lbGrx);
+        const loss = readNumberInput(lbLoss);
         if (![ptx, gtx, grx, loss].every((v) => Number.isFinite(v))) {
             lbPrx.textContent = '—';
             return;
@@ -1182,7 +1281,7 @@
 
     let activeToolRequestToken = 0;
 
-    const setActiveTool = async (requestedId) => {
+    const setActiveTool = async (requestedId, options = {}) => {
         const requestToken = ++activeToolRequestToken;
         let id = requestedId;
         if (!id) {
@@ -1217,6 +1316,9 @@
             return;
         }
 
+        if (options.pushHistory === true && window.location.hash.slice(1) !== id) {
+            window.history.pushState(null, '', `#${id}`);
+        }
         clearError();
         initToolIfNeeded(id);
         getToolPanels().forEach((panel) => {
@@ -1270,13 +1372,14 @@
         }
 
         event.preventDefault();
-        window.history.replaceState(null, '', `#${targetId}`);
-        setActiveTool(targetId);
+        setActiveTool(targetId, { pushHistory: true });
     });
-    window.addEventListener('hashchange', () => {
+    const syncToolFromLocation = () => {
         const hashTool = window.location.hash ? window.location.hash.slice(1) : 'tool-grid';
         setActiveTool(hashTool);
-    });
+    };
+    window.addEventListener('hashchange', syncToolFromLocation);
+    window.addEventListener('popstate', syncToolFromLocation);
 
 
 })();

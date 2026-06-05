@@ -24,7 +24,7 @@ return array (
   'bands' => 'Bändid',
   'station' => 'Kuurort',
   'committee' => 'komitee',
-  'grid' => 'Grid',
+  'grid' => 'Võre',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Režiimid',

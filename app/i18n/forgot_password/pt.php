@@ -13,4 +13,11 @@ return array (
   'submit' => 'Enviar ligação',
   'back_login' => 'Voltar ao login',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Redefinição de senha',
+  'email_body' => 'Olá,
+
+Use este link para redefinir sua senha do ON4CRD:
+{reset_link}
+
+Se você não solicitou isso, ignore esta mensagem.',
 );

@@ -1,4 +1,34 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'উইকি', 'unavailable' => 'পৃষ্ঠা ইনিশিয়ালাইজেশনের পর উইকি উপলব্ধ হবে।', 'new_pages' => 'নতুন পৃষ্ঠা', 'updated_pages' => 'আপডেট হওয়া পৃষ্ঠা', 'most_read' => 'সর্বাধিক পঠিত', 'new_page' => 'নতুন পৃষ্ঠা', 'search_placeholder' => 'পৃষ্ঠা খুঁজুন (শিরোনাম বা বিষয়বস্তু)', 'search' => 'অনুসন্ধান', 'reset' => 'রিসেট', 'wiki_pages' => 'উইকি পৃষ্ঠা', 'no_page' => 'কোনো পৃষ্ঠা পাওয়া যায়নি', 'for_search' => ' এই অনুসন্ধানের জন্য', 'summary_fallback' => 'সম্পূর্ণ বিষয়বস্তু দেখতে এই পৃষ্ঠাটি খুলুন।', 'updated_at' => 'আপডেট:', 'revisions' => 'সংশোধন', 'open_page' => 'পৃষ্ঠা খুলুন'];
+return array (
+  'title' => 'উইকি',
+  'unavailable' => 'পৃষ্ঠা ইনিশিয়ালাইজেশনের পর উইকি উপলব্ধ হবে।',
+  'new_pages' => 'নতুন পৃষ্ঠা',
+  'updated_pages' => 'আপডেট হওয়া পৃষ্ঠা',
+  'most_read' => 'সর্বাধিক পঠিত',
+  'new_page' => 'নতুন পৃষ্ঠা',
+  'search_placeholder' => 'পৃষ্ঠা খুঁজুন (শিরোনাম বা বিষয়বস্তু)',
+  'search' => 'অনুসন্ধান',
+  'reset' => 'রিসেট',
+  'wiki_pages' => 'উইকি পৃষ্ঠা',
+  'no_page' => 'কোনো পৃষ্ঠা পাওয়া যায়নি',
+  'for_search' => ' এই অনুসন্ধানের জন্য',
+  'summary_fallback' => 'সম্পূর্ণ বিষয়বস্তু দেখতে এই পৃষ্ঠাটি খুলুন।',
+  'updated_at' => 'আপডেট:',
+  'revisions' => 'সংশোধন',
+  'open_page' => 'পৃষ্ঠা খুলুন',
+  'themes' => 'থিম',
+  'all_themes' => 'সব থিম',
+  'propose_theme_subject' => 'ON4CRD উইকি থিম প্রস্তাব',
+  'propose_theme' => 'একটি থিম প্রস্তাব',
+  'propose_page' => 'একটি পৃষ্ঠা সাজেস্ট করুন',
+  'propose_theme_intro' => 'যোগ করার জন্য থিম এবং এটির সাথে লিঙ্ক করা উচিত এমন পৃষ্ঠাগুলি বর্ণনা করুন।',
+  'close' => 'বন্ধ',
+  'propose_theme_body_intro' => 'উইকি থিম প্রস্তাব:',
+  'propose_theme_name' => 'থিমের নাম',
+  'propose_theme_reason' => 'কেন এটা যোগ?',
+  'propose_theme_contact' => 'আপনার পরিচিতি',
+  'propose_theme_submit' => 'প্রস্তাব পাঠান',
+  'cancel' => 'বাতিল করুন',
+);

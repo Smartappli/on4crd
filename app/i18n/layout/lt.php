@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -17,7 +18,9 @@ return array (
   'nav_assistant' => 'Asistentas',
   'account_space' => 'Mano erdvė',
   'account_profile' => 'Profilis',
+  'account_privacy' => 'Privatumas',
   'account_settings' => 'Privatumas',
+  'account_requests' => 'Mano prašymai',
   'account_admin' => 'Administravimas',
   'logout' => 'Atsijungti',
   'login' => 'Ryšys',

@@ -13,4 +13,11 @@ return array (
   'submit' => 'Invia link',
   'back_login' => 'Torna al login',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Reimpostazione della password',
+  'email_body' => 'Ciao,
+
+Utilizza questo collegamento per reimpostare la password ON4CRD:
+{reset_link}
+
+Se non lo hai richiesto, ignora questo messaggio.',
 );

@@ -24,7 +24,7 @@ return array (
   'bands' => 'Band',
   'station' => 'Stasiun',
   'committee' => 'Komite',
-  'grid' => 'Grid',
+  'grid' => 'jaringan',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Mode',

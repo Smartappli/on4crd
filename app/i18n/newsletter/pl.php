@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Adres e-mail do kontaktu',
   'subscribe' => 'Subskrybuj',
   'layout_title' => 'Biuletyn',
+  'consent_required' => 'Wymagana jest zgoda na newsletter.',
+  'consent_label' => 'Wyrażam zgodę na otrzymywanie newslettera ON4CRD i rozumiem, że w każdej chwili mogę zrezygnować z subskrypcji.',
+  'consent_proof_member' => 'Zgoda użytkownika na newsletter',
 );

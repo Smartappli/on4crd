@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Přidat článek do oblíbených.',
   'favorite_removed_msg' => 'Článek odstraněn z oblíbených.',
   'default_article_title' => 'Položka',
+  'propose_category' => 'Navrhnout kategorii',
+  'propose_category_subject' => 'Návrh kategorie článků ON4CRD',
+  'propose_category_body' => 'Dobrý den,
+
+rád(a) bych navrhl(a) novou kategorii článků.
+
+Název kategorie:
+Odůvodnění:
+Kontakt:',
+  'propose_article' => 'Navrhnout článek',
+  'propose_article_subject' => 'Návrh článku ON4CRD',
+  'propose_article_body' => 'Dobrý den,
+
+rád(a) bych navrhl(a) technický článek ON4CRD.
+
+Název:
+Kategorie:
+Shrnutí:
+Kontakt:',
+  'propose_category_intro' => 'Popište požadovanou kategorii. Pro výbor bude připraven předvyplněný e-mail.',
+  'propose_category_body_intro' => 'Dobrý den, rád/ráda bych navrhl/a novou kategorii článků.',
+  'propose_category_name_label' => 'Název kategorie',
+  'propose_category_reason_label' => 'Odůvodnění',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Připravit e-mail',
+  'propose_category_cancel' => 'Zrušit',
+  'propose_category_close' => 'Zavřít',
+  'error_invalid_user' => 'Neplatný uživatel.',
+  'error_wait_before_next' => 'Před navržením dalšího článku prosím počkejte jednu minutu.',
+  'error_daily_limit' => 'Bylo dosaženo limitu: maximálně 5 návrhů článků za 24 hodin.',
+  'propose_article_meta_desc' => 'Navrhněte a odešlete článek k ověření.',
+  'module_unavailable' => 'Modul články je dočasně nedostupný.',
+  'error_field_too_long' => 'Jedno z polí přesahuje povolenou délku.',
+  'error_title_content_required' => 'Název a obsah jsou povinné.',
+  'error_content_empty_after_cleanup' => 'Obsah článku je po vyčištění prázdný.',
+  'propose_article_success' => 'Článek odeslán k ověření.',
+  'error_article_save_failed' => 'Momentálně nelze článek uložit.',
+  'propose_article_help' => 'Uspořádejte svůj článek nadpisy, odstavci, seznamy a odkazy. Bude uložen ve vašem obsahu a před zveřejněním ověřen.',
+  'my_contents' => 'Můj obsah',
+  'article_title_label' => 'Název článku',
+  'category_label' => 'Kategorie',
+  'excerpt_label' => 'Shrnutí',
+  'excerpt_placeholder' => 'Krátké shrnutí zobrazené v seznamu článků.',
+  'content_label' => 'Formátovaný obsah',
+  'content_placeholder' => '<h2>Název sekce</h2>
+<p>Váš text...</p>
+<ul><li>Důležitý bod</li></ul>',
+  'html_cleanup_help' => 'HTML se čistí automaticky. Skripty, prvky iframe a nebezpečné atributy jsou před ověřením odstraněny.',
+  'submit_for_review' => 'Odeslat k ověření',
 );

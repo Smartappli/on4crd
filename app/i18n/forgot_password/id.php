@@ -13,4 +13,11 @@ return array (
   'submit' => 'Kirim tautan',
   'back_login' => 'Kembali ke login',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Reset kata sandi',
+  'email_body' => 'Halo,
+
+Gunakan tautan ini untuk mengatur ulang kata sandi ON4CRD Anda:
+{reset_link}
+
+Jika Anda tidak memintanya, abaikan pesan ini.',
 );

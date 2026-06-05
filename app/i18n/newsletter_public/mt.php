@@ -9,4 +9,7 @@ return array (
   'intro' => 'Irċievi aħbarijiet minn Radio Club Durnal direttament bl-email.',
   'email_label' => 'Newsletter bil-posta elettronika',
   'submit' => 'Abbona għan-newsletter',
+  'consent_required' => 'Huwa meħtieġ kunsens għall-newsletter.',
+  'consent_label' => 'Naqbel li nirċievi n-newsletter ON4CRD u nifhem li nista\' nneħħi l-abbonament fi kwalunkwe ħin.',
+  'consent_proof_public' => 'Newsletter pubbliku forma kunsens',
 );

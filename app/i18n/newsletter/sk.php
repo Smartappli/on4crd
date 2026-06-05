@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Kontaktný email',
   'subscribe' => 'Prihlásiť sa na odber',
   'layout_title' => 'Newsletter',
+  'consent_required' => 'Vyžaduje sa súhlas s newsletterom.',
+  'consent_label' => 'Súhlasím s odoberaním noviniek ON4CRD a rozumiem, že ich odber môžem kedykoľvek zrušiť.',
+  'consent_proof_member' => 'Súhlas člena s newsletterom',
 );

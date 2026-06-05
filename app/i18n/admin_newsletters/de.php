@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'E-Mail an \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Keine Abonnenten.',
   'no_campaigns' => 'Keine Kampagnen.',
+  'err_consent_proof_required' => 'Ein Einwilligungsnachweis ist erforderlich.',
+  'consent_proof' => 'Einwilligungsnachweis',
+  'consent_proof_ph' => 'Beispiel: unterschriebenes Formular am 2026-06-05',
+  'consent_admin_help' => 'Für das Hinzufügen, Importieren oder Reaktivieren ist ein ausdrücklicher Einwilligungsnachweis erforderlich.',
+  'consent' => 'Zustimmung',
 );

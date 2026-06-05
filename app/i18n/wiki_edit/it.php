@@ -12,4 +12,13 @@ return array (
   'save' => 'Salva',
   'layout' => 'Modifica wiki',
   'meta_desc' => 'Crea o modifica una pagina wiki.',
+  'propose_title' => 'Suggerisci una pagina wiki',
+  'propose_meta_desc' => 'Crea una nuova pagina wiki dall\'area membri.',
+  'error_title_content_required' => 'Titolo e contenuto sono obbligatori.',
+  'error_field_too_long' => 'Uno dei campi supera la lunghezza consentita.',
+  'propose_success' => 'Pagina Wiki inviata. Verrà pubblicato dopo la convalida.',
+  'wiki_label' => 'Wiki',
+  'propose_help' => 'Scrivi una nuova pagina con un semplice HTML. Verrà revisionato prima della pubblicazione.',
+  'propose_submit' => 'Invia pagina',
+  'cancel' => 'Cancellare',
 );

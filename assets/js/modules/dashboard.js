@@ -243,6 +243,7 @@
     const widgetKey = card.dataset.widget;
     const body = card.querySelector('.widget-body');
     if (!widgetKey || !body || inFlightWidgets.has(widgetKey)) return;
+    if (body.querySelector('[data-widget-refresh="manual"]')) return;
 
     inFlightWidgets.add(widgetKey);
     fetch(dashboardConfig.renderBase + encodeURIComponent(widgetKey), {

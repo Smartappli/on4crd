@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Contact e-mail',
   'subscribe' => 'Inschrijven',
   'layout_title' => 'Nieuwsbrief',
+  'consent_required' => 'Toestemming voor de nieuwsbrief is vereist.',
+  'consent_label' => 'Ik ga akkoord met het ontvangen van de ON4CRD-nieuwsbrief en begrijp dat ik me op elk moment kan afmelden.',
+  'consent_proof_member' => 'Toestemming voor de nieuwsbrief van leden',
 );

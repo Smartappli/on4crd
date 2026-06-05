@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -17,7 +18,9 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'Minu ruum',
   'account_profile' => 'Profiil',
+  'account_privacy' => 'Privaatsus',
   'account_settings' => 'Privaatsus',
+  'account_requests' => 'Minu taotlused',
   'account_admin' => 'Administreerimine',
   'logout' => 'Katkesta ühendus',
   'login' => 'Ühendus',

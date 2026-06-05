@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'लेख पसंदीदा में जोड़ा गया।',
   'favorite_removed_msg' => 'लेख पसंदीदा से हटाया गया।',
   'default_article_title' => 'लेख',
+  'propose_category' => 'श्रेणी प्रस्तावित करें',
+  'propose_category_subject' => 'ON4CRD लेख श्रेणी प्रस्ताव',
+  'propose_category_body' => 'नमस्ते,
+
+मैं लेखों की नई श्रेणी प्रस्तावित करना चाहता/चाहती हूँ।
+
+श्रेणी का नाम:
+कारण:
+संपर्क:',
+  'propose_article' => 'लेख प्रस्तावित करें',
+  'propose_article_subject' => 'ON4CRD लेख प्रस्ताव',
+  'propose_article_body' => 'नमस्ते,
+
+मैं ON4CRD के लिए तकनीकी लेख प्रस्तावित करना चाहता/चाहती हूँ।
+
+शीर्षक:
+श्रेणी:
+सारांश:
+संपर्क:',
+  'propose_category_intro' => 'वांछित श्रेणी का वर्णन करें। समिति के लिए पहले से भरा हुआ ईमेल तैयार किया जाएगा।',
+  'propose_category_body_intro' => 'नमस्ते, मैं एक नई लेख श्रेणी प्रस्तावित करना चाहता/चाहती हूँ।',
+  'propose_category_name_label' => 'श्रेणी का नाम',
+  'propose_category_reason_label' => 'कारण',
+  'propose_category_contact_label' => 'संपर्क',
+  'propose_category_submit' => 'ईमेल तैयार करें',
+  'propose_category_cancel' => 'रद्द करें',
+  'propose_category_close' => 'बंद करें',
+  'error_invalid_user' => 'अमान्य उपयोगकर्ता.',
+  'error_wait_before_next' => 'कृपया किसी अन्य लेख का प्रस्ताव देने से पहले एक मिनट प्रतीक्षा करें।',
+  'error_daily_limit' => 'सीमा पूरी हो गई: प्रति 24 घंटे में अधिकतम 5 लेख प्रस्ताव।',
+  'propose_article_meta_desc' => 'सत्यापन के लिए एक लेख का मसौदा तैयार करें और सबमिट करें।',
+  'module_unavailable' => 'आलेख मॉड्यूल अस्थायी रूप से अनुपलब्ध है.',
+  'error_field_too_long' => 'फ़ील्ड में से एक की लंबाई अनुमत लंबाई से अधिक है.',
+  'error_title_content_required' => 'शीर्षक और सामग्री आवश्यक है.',
+  'error_content_empty_after_cleanup' => 'सफ़ाई के बाद लेख सामग्री खाली है.',
+  'propose_article_success' => 'आलेख सत्यापन हेतु प्रस्तुत किया गया।',
+  'error_article_save_failed' => 'लेख को अभी सहेजने में असमर्थ.',
+  'propose_article_help' => 'अपने लेख को शीर्षकों, अनुच्छेदों, सूचियों और लिंक के साथ प्रस्तुत करें। इसे आपकी सामग्री में सहेजा जाएगा और प्रकाशन से पहले मान्य किया जाएगा।',
+  'my_contents' => 'मेरी सामग्री',
+  'article_title_label' => 'लेख का शीर्षक',
+  'category_label' => 'श्रेणी',
+  'excerpt_label' => 'सारांश',
+  'excerpt_placeholder' => 'लेख सूची में संक्षिप्त सारांश प्रदर्शित किया गया है।',
+  'content_label' => 'स्वरूपित सामग्री',
+  'content_placeholder' => '<h2>अनुभाग शीर्षक</h2>
+<p>आपका पाठ...</p>
+<ul><li>महत्वपूर्ण बिंदु</li></ul>',
+  'html_cleanup_help' => 'HTML स्वचालित रूप से साफ़ हो जाती है. सत्यापन से पहले स्क्रिप्ट, आईफ्रेम और खतरनाक विशेषताएँ हटा दी जाती हैं।',
+  'submit_for_review' => 'सत्यापन के लिए सबमिट करें',
 );

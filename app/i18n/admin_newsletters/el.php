@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Δεν υπάρχουν συνδρομητές.',
   'no_campaigns' => 'Καμία καμπάνια.',
+  'err_consent_proof_required' => 'Απαιτείται απόδειξη συγκατάθεσης.',
+  'consent_proof' => 'Απόδειξη συγκατάθεσης',
+  'consent_proof_ph' => 'Παράδειγμα: υπογεγραμμένη φόρμα στο 2026-06-05',
+  'consent_admin_help' => 'Η προσθήκη, εισαγωγή ή επανενεργοποίηση απαιτεί ρητή απόδειξη συγκατάθεσης.',
+  'consent' => 'Συναίνεση',
 );

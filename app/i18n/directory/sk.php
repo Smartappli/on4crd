@@ -24,7 +24,7 @@ return array (
   'bands' => 'kapely',
   'station' => 'Stredisko',
   'committee' => 'výboru',
-  'grid' => 'Grid',
+  'grid' => 'Mriežka',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Módy',

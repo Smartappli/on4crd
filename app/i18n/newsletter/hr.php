@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Kontakt email',
   'subscribe' => 'Pretplatite se',
   'layout_title' => 'Newsletter',
+  'consent_required' => 'Potreban je pristanak za newsletter.',
+  'consent_label' => 'Slažem se s primanjem ON4CRD biltena i razumijem da se mogu odjaviti u bilo kojem trenutku.',
+  'consent_proof_member' => 'Pristanak za slanje biltena članova',
 );

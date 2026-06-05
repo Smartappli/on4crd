@@ -13,4 +13,11 @@ return array (
   'submit' => 'Seol nasc',
   'back_login' => 'Fill ar logáil isteach',
   'email_label' => 'Ríomhphost',
+  'email_subject' => 'ON4CRD - Athshocrú pasfhocal',
+  'email_body' => 'Dia duit,
+
+Úsáid an nasc seo chun do phasfhocal ON4CRD a athshocrú:
+{reset_link}
+
+Murar iarr tú é seo, déan neamhaird den teachtaireacht seo.',
 );

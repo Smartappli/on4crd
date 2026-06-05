@@ -24,6 +24,36 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame('ecole-radio-club-2026', slugify('École Radio Club 2026'));
     }
 
+    public function testWikiSlugBaseFallsBackAndTrimsToDatabaseLimit(): void
+    {
+        self::assertSame('wiki', wiki_slug_base('!!!'));
+        self::assertSame(190, strlen(wiki_slug_base(str_repeat('a', 250))));
+    }
+
+    public function testWikiSlugCandidateKeepsCollisionSuffixWithinDatabaseLimit(): void
+    {
+        $candidate = wiki_slug_candidate(str_repeat('a', 190), 2);
+
+        self::assertSame(190, strlen($candidate));
+        self::assertSame(str_repeat('a', 188) . '-2', $candidate);
+    }
+
+    public function testNewsSlugCandidateKeepsCollisionSuffixWithinDatabaseLimit(): void
+    {
+        $candidate = news_slug_candidate(str_repeat('n', 190), 12);
+
+        self::assertSame(190, strlen($candidate));
+        self::assertSame(str_repeat('n', 187) . '-12', $candidate);
+    }
+
+    public function testArticleSlugCandidateKeepsCollisionSuffixWithinDatabaseLimit(): void
+    {
+        $candidate = article_slug_candidate(str_repeat('a', 190), 12);
+
+        self::assertSame(190, strlen($candidate));
+        self::assertSame(str_repeat('a', 187) . '-12', $candidate);
+    }
+
     public function testNormalizeHttpUrlRejectsJavascriptScheme(): void
     {
         $this->expectException(RuntimeException::class);
@@ -214,5 +244,78 @@ final class FunctionHelpersTest extends TestCase
         self::assertIsArray($result);
         self::assertSame('2026-05-30T06:00:00', $result['timestamp']);
         self::assertSame(1.33, round((float) $result['kp'], 2));
+    }
+
+    public function testHamqslCatalogIsDerivedFromSingleVariantRegistry(): void
+    {
+        $variants = hamqsl_widget_variants();
+        $catalog = hamqsl_widget_catalog();
+
+        self::assertArrayHasKey('hamqsl_hf_vhf', $variants);
+        self::assertSame(array_keys($variants), array_keys($catalog));
+        self::assertSame($variants['hamqsl_hf_vhf']['title'], $catalog['hamqsl_hf_vhf']['title']);
+    }
+
+    public function testHamqslWidgetRenderKeepsSourceCreditAndManualRefreshPolicy(): void
+    {
+        $html = render_widget('hamqsl_band_conditions');
+
+        self::assertStringContainsString('href="https://www.hamqsl.com/solar.html"', $html);
+        self::assertStringContainsString('src="https://www.hamqsl.com/solarbc.php"', $html);
+        self::assertStringContainsString('data-widget-refresh="manual"', $html);
+        self::assertStringContainsString('HAMQSL / N0NBH', $html);
+    }
+
+    public function testWidgetCatalogCoversDashboardRendererSlugs(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        self::assertIsString($renderer);
+        preg_match_all('/case\s+\'([^\']+)\'\s*:/', $renderer, $matches);
+
+        foreach ($matches[1] as $slug) {
+            if ($slug === 'chatbot') {
+                continue;
+            }
+            self::assertArrayHasKey($slug, $catalog, sprintf('Widget "%s" is renderable but missing from widget_catalog().', $slug));
+        }
+    }
+
+    public function testApplicationPhpFilesDoNotContainCommonMojibakeSequences(): void
+    {
+        $root = dirname(__DIR__);
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveCallbackFilterIterator(
+                new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
+                static function (SplFileInfo $file): bool {
+                    $path = str_replace('\\', '/', $file->getPathname());
+                    return !str_contains($path, '/vendor/')
+                        && !str_contains($path, '/.git/')
+                        && !str_contains($path, '/tests/')
+                        && !str_contains($path, '/.phpunit.cache/');
+                }
+            )
+        );
+        $pattern = '/(?:\x{00C3}[\x{0080}-\x{00BF}\x{0192}\x{2030}]|\x{00C2}[\x{0080}-\x{00BF}]|\x{00E2}[\x{0080}-\x{00BF}\x{201A}\x{20AC}\x{201C}\x{201D}\x{2122}]{2})/u';
+        $findings = [];
+
+        foreach ($iterator as $file) {
+            if (!$file instanceof SplFileInfo || !$file->isFile() || $file->getExtension() !== 'php') {
+                continue;
+            }
+            $path = str_replace('\\', '/', $file->getPathname());
+            if (str_ends_with($path, '/pages/admin_translation_reviews.php')) {
+                continue;
+            }
+            $source = file_get_contents($path);
+            if (!is_string($source)) {
+                continue;
+            }
+            if (preg_match($pattern, $source) === 1) {
+                $findings[] = str_replace(str_replace('\\', '/', $root) . '/', '', $path);
+            }
+        }
+
+        self::assertSame([], $findings);
     }
 }

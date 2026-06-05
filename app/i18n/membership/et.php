@@ -7,7 +7,7 @@ return array (
   'intro' => 'Siin on CRD sektsiooni liikmeks astumise avalduse esitamise kord.',
   'image_alt' => 'Liikmelisuse visuaal CRD',
   'how_title' => 'Kuidas saada CRD liikmeks?',
-  'how_text' => 'Esitage taotlus e-posti teel (on4crd.be) CRD sektsiooni CM-le (klubi president).',
+  'how_text' => 'Esitage taotlus e-posti teel (crdurnal@gmail.com) CRD sektsiooni CM-le (klubi president).',
   'postal_title' => 'Taotlemine posti teel',
   'contact_item_1' => 'Raadioklubi Durnal – Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

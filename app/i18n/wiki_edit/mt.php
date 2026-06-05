@@ -12,4 +12,13 @@ return array (
   'save' => 'Ħlief',
   'layout' => 'Editja wiki',
   'meta_desc' => 'Oħloq jew editja paġna wiki.',
+  'propose_title' => 'Issuġġerixxi paġna wiki',
+  'propose_meta_desc' => 'Oħloq paġna wiki ġdida miż-żona tal-membri.',
+  'error_title_content_required' => 'It-titlu u l-kontenut huma meħtieġa.',
+  'error_field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
+  'propose_success' => 'Il-paġna Wiki sottomessa. Din tiġi ppubblikata wara l-validazzjoni.',
+  'wiki_label' => 'Wiki',
+  'propose_help' => 'Ikteb paġna ġdida b\'HTML sempliċi. Se jiġi rivedut qabel il-pubblikazzjoni.',
+  'propose_submit' => 'Issottometti paġna',
+  'cancel' => 'Ikkanċella',
 );

@@ -13,4 +13,11 @@ return array (
   'submit' => 'Wyślij link',
   'back_login' => 'Wróć do logowania',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Reset hasła',
+  'email_body' => 'Witam,
+
+Użyj tego linku, aby zresetować hasło ON4CRD:
+{reset_link}
+
+Jeśli nie prosiłeś o to, zignoruj tę wiadomość.',
 );

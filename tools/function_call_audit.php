@@ -24,7 +24,24 @@ $keywords = array_fill_keys([
     'if','else','elseif','for','foreach','while','switch','case','default','new','clone','echo','print','include','require','include_once','require_once','return','isset','empty','array','list','exit','die','match'
 ], true);
 $optionalExtensionFunctions = array_fill_keys([
+    'finfo_close',
+    'finfo_file',
+    'finfo_open',
+    'imagealphablending',
+    'imagecolorallocatealpha',
+    'imagecopyresampled',
+    'imagecreatefromjpeg',
+    'imagecreatefrompng',
+    'imagecreatefromstring',
+    'imagecreatetruecolor',
     'imagecreatefromwebp',
+    'imagedestroy',
+    'imagefill',
+    'imagejpeg',
+    'imagepng',
+    'imagesavealpha',
+    'imagesx',
+    'imagesy',
     'imagewebp',
 ], true);
 

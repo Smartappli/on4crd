@@ -2,3 +2,10 @@
 [data-route="chatbot"] .chatbot-module {
   min-width: 0;
 }
+
+[data-route="chatbot"] .chatbot-illustration {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+}

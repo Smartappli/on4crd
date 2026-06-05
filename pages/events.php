@@ -14,6 +14,8 @@ foreach (array_keys($i18n['fr']) as $key) {
     }
     $t[$key] = i18n_localized_value($pool, $locale, 'fr');
 }
+$calendarLocale = fullcalendar_locale_code($locale);
+$calendarLocaleAsset = fullcalendar_locale_asset_url($locale);
 
 if (!table_exists('events')) {
     echo render_layout('<div class="card"><h1>' . e($t['title']) . '</h1><p>' . e($t['agenda_unavailable']) . '</p></div>', $t['title']);
@@ -115,13 +117,18 @@ if (!$weekDate instanceof DateTimeImmutable) {
 
 $eventCards = [];
 foreach ($rows as $event) {
-    $startAt = new DateTimeImmutable((string) $event['start_at']);
-    $endAt = new DateTimeImmutable((string) $event['end_at']);
+    try {
+        $startAt = new DateTimeImmutable((string) $event['start_at']);
+        $endAt = new DateTimeImmutable((string) $event['end_at']);
+    } catch (Throwable) {
+        continue;
+    }
 
     $summary = trim((string) ($event['summary'] ?? ''));
     if ($summary === '') {
         $summary = trim(strip_tags((string) ($event['description'] ?? '')));
     }
+    $externalUrl = sanitize_href_attribute((string) ($event['external_url'] ?? '')) ?? '';
 
     $eventCards[(int) $event['id']] = [
         'id' => (int) $event['id'],
@@ -131,7 +138,7 @@ foreach ($rows as $event) {
         'endLabel' => $endAt->format('d/m/Y H:i'),
         'location' => trim((string) ($event['location'] ?? '')),
         'detailUrl' => route_url('event_view', ['slug' => (string) $event['slug']]),
-        'externalUrl' => trim((string) ($event['external_url'] ?? '')),
+        'externalUrl' => $externalUrl,
     ];
 
 }
@@ -144,7 +151,7 @@ $calendarView = match ($view) {
 };
 $initialDate = $view === 'week' ? $weekDate->format('Y-m-d') : $monthDate->format('Y-m-d');
 $calendarConfig = [
-    'locale' => $locale,
+    'locale' => $calendarLocale,
     'initialView' => $calendarView,
     'initialDate' => $initialDate,
     'eventsUrl' => route_url('events_feed'),
@@ -159,6 +166,9 @@ $calendarConfig = [
         'list' => $t['list'],
     ],
 ];
+$contactEmail = site_contact_email();
+$proposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_event_subject'])
+    . '&body=' . rawurlencode((string) $t['propose_event_body']);
 
 ob_start();
 ?>
@@ -168,18 +178,62 @@ ob_start();
         <h1><?= e('Agenda ON4CRD') ?></h1>
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
-    <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
+    <div class="events-hero-actions">
+        <button class="button secondary" type="button" data-event-proposal-open data-event-proposal-fallback="<?= e($proposalUrl) ?>" aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($t['propose_event']) ?></button>
+        <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
+    </div>
 </section>
+
+<dialog class="events-proposal-dialog" id="events-proposal-dialog" aria-labelledby="events-proposal-title">
+    <div class="events-proposal-dialog-card">
+        <div class="events-proposal-dialog-header">
+            <div>
+                <p class="events-hero-title"><?= e($t['calendar_name']) ?></p>
+                <h2 id="events-proposal-title"><?= e($t['propose_event']) ?></h2>
+                <p class="help"><?= e($t['propose_event_intro']) ?></p>
+            </div>
+            <button class="events-proposal-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
+        </div>
+        <form class="events-proposal-form" method="dialog" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+            <label>
+                <span><?= e($t['propose_event_title_label']) ?></span>
+                <input type="text" name="proposal_title" maxlength="160" required>
+            </label>
+            <div class="events-proposal-form-grid">
+                <label>
+                    <span><?= e($t['propose_event_datetime_label']) ?></span>
+                    <input type="text" name="proposal_datetime" maxlength="160">
+                </label>
+                <label>
+                    <span><?= e($t['propose_event_location_label']) ?></span>
+                    <input type="text" name="proposal_location" maxlength="160">
+                </label>
+            </div>
+            <label>
+                <span><?= e($t['propose_event_description_label']) ?></span>
+                <textarea name="proposal_description" rows="5" maxlength="1600"></textarea>
+            </label>
+            <label>
+                <span><?= e($t['propose_event_contact_label']) ?></span>
+                <input type="text" name="proposal_contact" maxlength="220" required>
+            </label>
+            <div class="events-proposal-dialog-actions">
+                <button class="button" type="submit"><?= e($t['propose_event_submit']) ?></button>
+                <button class="button secondary" type="button" data-event-proposal-close><?= e($t['propose_event_cancel']) ?></button>
+            </div>
+        </form>
+    </div>
+</dialog>
 
 <section class="events-layout">
     <article class="card events-calendar-card">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">
+        <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/skeleton.css')) ?>">
+        <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/theme.css')) ?>">
+        <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/palette.css')) ?>">
         <div id="events-calendar" class="fullcalendar-theme" data-calendar-config="<?= e(json_encode($calendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"></div>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/<?= e($locale) ?>.global.js"></script>
+        <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) ?>"></script>
+        <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) ?>"></script>
+        <script src="<?= e($calendarLocaleAsset) ?>"></script>
     </article>
 
     <aside class="card events-detail-card" id="event-detail">

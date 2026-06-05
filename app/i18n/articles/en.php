@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Article added to favorites.',
   'favorite_removed_msg' => 'Article removed from favorites.',
   'default_article_title' => 'Article',
+  'propose_category' => 'Suggest a category',
+  'propose_category_subject' => 'ON4CRD article category suggestion',
+  'propose_category_body' => 'Hello,
+
+I would like to suggest a new article category.
+
+Category name:
+Reason:
+Contact:',
+  'propose_article' => 'Suggest an article',
+  'propose_article_subject' => 'ON4CRD article suggestion',
+  'propose_article_body' => 'Hello,
+
+I would like to suggest an ON4CRD technical article.
+
+Title:
+Category:
+Summary:
+Contact:',
+  'propose_category_intro' => 'Describe the category you would like to suggest. A prefilled email will be prepared for the committee.',
+  'propose_category_body_intro' => 'Hello, I would like to suggest a new article category.',
+  'propose_category_name_label' => 'Category name',
+  'propose_category_reason_label' => 'Reason',
+  'propose_category_contact_label' => 'Contact',
+  'propose_category_submit' => 'Prepare email',
+  'propose_category_cancel' => 'Cancel',
+  'propose_category_close' => 'Close',
+  'error_invalid_user' => 'Invalid user.',
+  'error_wait_before_next' => 'Please wait one minute before proposing another article.',
+  'error_daily_limit' => 'Limit reached: maximum 5 article proposals per 24 hours.',
+  'propose_article_meta_desc' => 'Draft and submit an article for validation.',
+  'module_unavailable' => 'The articles module is temporarily unavailable.',
+  'error_field_too_long' => 'One of the fields exceeds the allowed length.',
+  'error_title_content_required' => 'Title and content are required.',
+  'error_content_empty_after_cleanup' => 'The article content is empty after cleanup.',
+  'propose_article_success' => 'Article submitted for validation.',
+  'error_article_save_failed' => 'Unable to save the article right now.',
+  'propose_article_help' => 'Lay out your article with headings, paragraphs, lists and links. It will be saved in your content and validated before publication.',
+  'my_contents' => 'My content',
+  'article_title_label' => 'Article title',
+  'category_label' => 'Category',
+  'excerpt_label' => 'Summary',
+  'excerpt_placeholder' => 'Short summary displayed in the article list.',
+  'content_label' => 'Formatted content',
+  'content_placeholder' => '<h2>Section title</h2>
+<p>Your text...</p>
+<ul><li>Important point</li></ul>',
+  'html_cleanup_help' => 'HTML is cleaned automatically. Scripts, iframes and dangerous attributes are removed before validation.',
+  'submit_for_review' => 'Submit for validation',
 );

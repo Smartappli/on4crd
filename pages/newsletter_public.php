@@ -19,8 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($email === '') {
             throw new RuntimeException($t('invalid_email'));
         }
+        if ((string) ($_POST['newsletter_consent'] ?? '') !== '1') {
+            throw new RuntimeException($t('consent_required'));
+        }
 
-        if (!newsletter_upsert_subscriber($email, null, 'public_form')) {
+        if (!newsletter_upsert_subscriber($email, null, 'public_form', true, $t('consent_proof_public'))) {
             throw new RuntimeException($t('invalid_email'));
         }
 
@@ -41,6 +44,11 @@ ob_start();
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
         <label for="newsletter-public-email"><?= e($t('email_label')) ?></label>
         <input id="newsletter-public-email" type="email" name="email" value="<?= e($prefillEmail) ?>" required>
+        <label class="checkbox-row">
+            <input type="checkbox" name="newsletter_consent" value="1" required>
+            <span><?= e($t('consent_label')) ?></span>
+        </label>
+        <?= privacy_notice_short_html('newsletter') ?>
         <button type="submit" class="button"><?= e($t('submit')) ?></button>
     </form>
 </div>

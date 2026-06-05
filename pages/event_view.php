@@ -26,12 +26,18 @@ if (!is_array($event)) {
     return;
 }
 
-$startAt = new DateTimeImmutable((string) $event['start_at']);
-$endAt = new DateTimeImmutable((string) $event['end_at']);
+try {
+    $startAt = new DateTimeImmutable((string) $event['start_at']);
+    $endAt = new DateTimeImmutable((string) $event['end_at']);
+} catch (Throwable) {
+    http_response_code(404);
+    echo render_layout('<div class="card"><h1>' . e($t['not_found']) . '</h1><p>' . e($t['not_found_msg']) . '</p></div>', $t['title']);
+    return;
+}
 $summary = trim((string) ($event['summary'] ?? ''));
 $description = trim((string) ($event['description'] ?? ''));
 $location = trim((string) ($event['location'] ?? ''));
-$externalUrl = trim((string) ($event['external_url'] ?? ''));
+$externalUrl = sanitize_href_attribute((string) ($event['external_url'] ?? '')) ?? '';
 
 if ($summary === '') {
     $summary = $t['summary_fallback'];
@@ -97,7 +103,7 @@ ob_start();
 
     <?php if ($description !== ''): ?>
         <section class="events-single-description">
-            <?= $description ?>
+            <?= sanitize_rich_html($description) ?>
         </section>
     <?php endif; ?>
 

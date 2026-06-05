@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -17,7 +18,9 @@ return array (
   'nav_assistant' => 'asistent',
   'account_space' => 'Môj priestor',
   'account_profile' => 'Profil',
+  'account_privacy' => 'Súkromie',
   'account_settings' => 'Súkromie',
+  'account_requests' => 'Moje žiadosti',
   'account_admin' => 'Administrácia',
   'logout' => 'Odpojiť',
   'login' => 'Pripojenie',

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$xml = cache_remember('seo_sitemap_xml_v5', 300, static function (): string {
+$xml = cache_remember('seo_sitemap_xml_v6', 300, static function (): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
     $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries): void {
@@ -28,6 +28,7 @@ $xml = cache_remember('seo_sitemap_xml_v5', 300, static function (): string {
         ['route' => 'news', 'priority' => '0.9', 'changefreq' => 'daily'],
         ['route' => 'search', 'priority' => '0.7', 'changefreq' => 'weekly'],
         ['route' => 'membership', 'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['route' => 'donation', 'priority' => '0.6', 'changefreq' => 'monthly'],
         ['route' => 'newsletter_public', 'priority' => '0.5', 'changefreq' => 'monthly'],
         ['route' => 'conditions_utilisation', 'priority' => '0.3', 'changefreq' => 'yearly'],
         ['route' => 'mentions_legales', 'priority' => '0.3', 'changefreq' => 'yearly'],
@@ -93,14 +94,14 @@ $xml = cache_remember('seo_sitemap_xml_v5', 300, static function (): string {
 
     if (module_enabled('wiki') && table_exists('wiki_pages')) {
         try {
-        $wikiPages = db()->query('SELECT slug, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 500')->fetchAll();
-        foreach ($wikiPages as $row) {
-            if (empty($row['slug'])) {
-                continue;
-            }
+            $wikiPages = db()->query('SELECT slug, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 500')->fetchAll();
+            foreach ($wikiPages as $row) {
+                if (empty($row['slug'])) {
+                    continue;
+                }
 
                 $addEntry('wiki_view', '0.6', 'monthly', ['slug' => (string) $row['slug']], !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : null);
-        }
+            }
         } catch (Throwable) {
         }
     }

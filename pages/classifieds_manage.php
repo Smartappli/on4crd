@@ -31,6 +31,7 @@ $categories = [
 ];
 $statuses = [
     'draft' => $t('status_draft'),
+    'pending' => (string) ($messages['status_pending'] ?? 'En validation'),
     'active' => $t('status_active'),
     'sold' => $t('status_sold'),
     'archived' => $t('status_archived'),
@@ -61,21 +62,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $location = trim((string) ($_POST['location'] ?? ''));
             $contact = trim((string) ($_POST['contact'] ?? ''));
             $priceCents = max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0')));
-            $requestedStatus = (string) ($_POST['status'] ?? 'draft');
-            if (!in_array($requestedStatus, ['draft', 'active', 'sold', 'archived'], true)) {
-                $requestedStatus = 'draft';
-            }
-
-            if ($title === '' || $description === '' || $contact === '' || !isset($categories[$category])) {
-                throw new RuntimeException($t('invalid'));
-            }
+            $requestedStatus = classifieds_member_publication_status((string) ($_POST['status'] ?? 'draft'));
+            classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, $t('invalid'));
 
             $expiresAt = $requestedStatus === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
             if ($id > 0) {
+                if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
+                    throw new RuntimeException($t('missing'));
+                }
                 $stmt = db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
                 $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt, $id, (int) $user['id']]);
                 set_flash('success', $t('updated_ok'));
             } else {
+                classifieds_enforce_submission_limits((int) $user['id']);
                 $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt]);
                 set_flash('success', $t('created_ok'));
@@ -84,10 +83,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'set_status') {
             $id = (int) ($_POST['id'] ?? 0);
+            if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
+                throw new RuntimeException($t('missing'));
+            }
             $status = (string) ($_POST['status'] ?? 'active');
-            if (!in_array($status, ['draft', 'active', 'sold', 'archived'], true)) {
+            if (!in_array($status, ['draft', 'pending', 'active', 'sold', 'archived'], true)) {
                 throw new RuntimeException($t('invalid'));
             }
+            $status = classifieds_member_publication_status($status);
             $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
             $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
             $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
@@ -96,8 +99,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'renew') {
             $id = (int) ($_POST['id'] ?? 0);
-            $stmt = db()->prepare('UPDATE classified_ads SET status = "active", expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-            $stmt->execute([date('Y-m-d H:i:s', time() + (30 * 86400)), $id, (int) $user['id']]);
+            if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
+                throw new RuntimeException($t('missing'));
+            }
+            $status = has_permission('ads.moderate') ? 'active' : 'pending';
+            $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+            $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
+            $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
             set_flash('success', $t('renewed_ok'));
         }
 
@@ -152,7 +160,7 @@ ob_start();
                 <label><span><?= e($t('publication_label')) ?></span>
                     <select name="status">
                         <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>><?= e($t('status_draft')) ?></option>
-                        <option value="active" <?= (($editing['status'] ?? '') === 'active') ? 'selected' : '' ?>><?= e($t('published_30d')) ?></option>
+                        <option value="active" <?= in_array((string) ($editing['status'] ?? ''), ['active', 'pending'], true) ? 'selected' : '' ?>><?= e(has_permission('ads.moderate') ? $t('published_30d') : 'Soumettre pour validation') ?></option>
                     </select>
                 </label>
                 <div class="classifieds-editor-actions">

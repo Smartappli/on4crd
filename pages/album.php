@@ -15,6 +15,7 @@ $albumStmt->execute([$albumId]);
 $album = $albumStmt->fetch();
 
 if (!$album) {
+    http_response_code(404);
     echo render_layout('<div class="card"><p>' . e((string) $t['not_found']) . '</p></div>', (string) $t['title']);
     return;
 }

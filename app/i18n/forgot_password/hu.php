@@ -13,4 +13,11 @@ return array (
   'submit' => 'Link küldése',
   'back_login' => 'Vissza a bejelentkezéshez',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Jelszó visszaállítása',
+  'email_body' => 'Hello!
+
+Használja ezt a hivatkozást az ON4CRD jelszavának visszaállításához:
+{reset_link}
+
+Ha nem ezt kérte, hagyja figyelmen kívül ezt az üzenetet.',
 );

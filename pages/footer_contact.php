@@ -31,7 +31,7 @@ $headers = 'From: ON4CRD Website <no-reply@on4crd.be>' . "\r\n"
     . 'Reply-To: ' . $safeEmail . "\r\n"
     . 'Content-Type: text/plain; charset=UTF-8';
 
-$sent = @mail('on4crd@gmail.com', $subject, $body, $headers);
+$sent = @mail('crdurnal@gmail.com', $subject, $body, $headers);
 
 if ($sent) {
     set_flash('success', $t('ok_sent'));

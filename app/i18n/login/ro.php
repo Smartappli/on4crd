@@ -13,7 +13,7 @@ return array (
   'callsign' => 'Indicativ',
   'password' => 'Parolă',
   'captcha_question' => 'Captcha: câte',
-  'login' => 'Log in',
+  'login' => 'Autentificare',
   'forgot_password' => 'Parola uitată?',
   'no_member' => 'Nu sunteți încă membru?',
   'create_account' => 'Creați un cont',

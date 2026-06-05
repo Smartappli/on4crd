@@ -45,7 +45,7 @@ return [
         ['id' => 'tool-db-sum', 'title_key' => 'db_sum_calc'],
         ['id' => 'tool-dbuv', 'title_key' => 'dbuv_calc'],
         ['id' => 'tool-gain-conv', 'title_key' => 'gain_conv_calc'],
-        ['id' => 'tool-dbw', 'title' => 'dBm ↔ dBW'],
+        ['id' => 'tool-dbw', 'title_key' => 'dbw_calc'],
         ['id' => 'tool-ohm-law', 'title_key' => 'ohm_law_calc'],
         ['id' => 'tool-link-budget', 'title_key' => 'link_budget_calc'],
     ],

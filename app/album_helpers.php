@@ -26,6 +26,17 @@ function notify_album_webhooks(array $album): void
         if ($url === '') {
             continue;
         }
+        try {
+            $url = validate_remote_feed_url($url) ?? '';
+            if ($url === '' || strtolower((string) parse_url($url, PHP_URL_SCHEME)) !== 'https') {
+                continue;
+            }
+        } catch (Throwable $throwable) {
+            log_structured_event('album_webhook_url_rejected', [
+                'message' => $throwable->getMessage(),
+            ]);
+            continue;
+        }
         $ctx = stream_context_create([
             'http' => [
                 'method' => 'POST',

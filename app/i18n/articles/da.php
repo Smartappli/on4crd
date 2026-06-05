@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Artikel tilføjes til favoritter.',
   'favorite_removed_msg' => 'Artikel fjernet fra favoritter.',
   'default_article_title' => 'Vare',
+  'propose_category' => 'Foreslå en kategori',
+  'propose_category_subject' => 'Forslag til ON4CRD-artikelkategori',
+  'propose_category_body' => 'Hej,
+
+jeg vil gerne foreslå en ny artikelkategori.
+
+Kategorinavn:
+Begrundelse:
+Kontakt:',
+  'propose_article' => 'Foreslå en artikel',
+  'propose_article_subject' => 'Forslag til ON4CRD-artikel',
+  'propose_article_body' => 'Hej,
+
+jeg vil gerne foreslå en teknisk ON4CRD-artikel.
+
+Titel:
+Kategori:
+Resumé:
+Kontakt:',
+  'propose_category_intro' => 'Beskriv den ønskede kategori. En forudfyldt e-mail forberedes til udvalget.',
+  'propose_category_body_intro' => 'Hej, jeg vil gerne foreslå en ny artikelkategori.',
+  'propose_category_name_label' => 'Kategorinavn',
+  'propose_category_reason_label' => 'Begrundelse',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Forbered e-mail',
+  'propose_category_cancel' => 'Annuller',
+  'propose_category_close' => 'Luk',
+  'error_invalid_user' => 'Ugyldig bruger.',
+  'error_wait_before_next' => 'Vent venligst et minut, før du foreslår en anden artikel.',
+  'error_daily_limit' => 'Grænse nået: maksimalt 5 artikelforslag pr. 24 timer.',
+  'propose_article_meta_desc' => 'Udarbejd og indsend en artikel til validering.',
+  'module_unavailable' => 'Artikelmodulet er midlertidigt utilgængeligt.',
+  'error_field_too_long' => 'Et af felterne overskrider den tilladte længde.',
+  'error_title_content_required' => 'Titel og indhold er påkrævet.',
+  'error_content_empty_after_cleanup' => 'Artiklens indhold er tomt efter oprydning.',
+  'propose_article_success' => 'Artikel indsendt til validering.',
+  'error_article_save_failed' => 'Kunne ikke gemme artiklen lige nu.',
+  'propose_article_help' => 'Læg din artikel op med overskrifter, afsnit, lister og links. Det vil blive gemt i dit indhold og valideret før offentliggørelse.',
+  'my_contents' => 'Mit indhold',
+  'article_title_label' => 'Artiklens titel',
+  'category_label' => 'Kategori',
+  'excerpt_label' => 'Resumé',
+  'excerpt_placeholder' => 'Kort oversigt vist i artikellisten.',
+  'content_label' => 'Formateret indhold',
+  'content_placeholder' => '<h2>Sektionstitel</h2>
+<p>Din tekst...</p>
+<ul><li>Vigtigt punkt</li></ul>',
+  'html_cleanup_help' => 'HTML renses automatisk. Scripts, iframes og farlige attributter fjernes før validering.',
+  'submit_for_review' => 'Send til validering',
 );

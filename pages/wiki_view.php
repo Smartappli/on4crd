@@ -20,11 +20,12 @@ if (!ensure_wiki_tables()) {
 }
 
 $slug = trim((string) ($_GET['slug'] ?? ''));
+$canModerateWiki = has_permission('wiki.moderate');
 $stmt = db()->prepare(
     'SELECT p.*, m.callsign
      FROM wiki_pages p
      LEFT JOIN members m ON m.id = p.author_id
-     WHERE p.slug = ?
+     WHERE p.slug = ?' . ($canModerateWiki ? '' : ' AND p.status = "published"') . '
      LIMIT 1'
 );
 $stmt->execute([$slug]);
@@ -48,6 +49,8 @@ $revisions = $revisionStmt->fetchAll() ?: [];
 
 $author = trim((string) ($row['callsign'] ?? ''));
 $updatedAt = strtotime((string) ($row['updated_at'] ?? '')) ?: time();
+$wikiStatus = (string) ($row['status'] ?? 'published');
+$isPublished = $wikiStatus === 'published';
 $wikiUrl = route_url_with_locale('wiki_view', $locale, ['slug' => (string) $row['slug']]);
 $wikiPlainText = trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $row['content']), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
 $wikiDescription = mb_safe_strimwidth($wikiPlainText !== '' ? $wikiPlainText : $t('meta_desc'), 0, 220, '...');
@@ -55,6 +58,7 @@ set_page_meta([
     'title' => (string) $row['title'],
     'description' => $wikiDescription,
     'ai_summary' => $wikiDescription,
+    'robots' => $isPublished ? 'index,follow' : 'noindex,nofollow',
     'canonical' => $wikiUrl,
     'schema_type' => 'TechArticle',
     'modified_time' => date('c', $updatedAt),
@@ -129,11 +133,12 @@ ob_start();
             <p class="help">
                 <?= e(date('d/m/Y H:i', $updatedAt)) ?>
                 <?php if ($author !== ''): ?> · <?= e($author) ?><?php endif; ?>
+                <?php if (!$isPublished): ?> · <span class="badge muted"><?= e($wikiStatus) ?></span><?php endif; ?>
             </p>
         </div>
         <div class="wiki-view-actions">
             <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($t('layout')) ?></a>
-            <?php if (has_permission('wiki.edit')): ?>
+            <?php if ($canModerateWiki): ?>
                 <a class="button" href="<?= e(route_url('wiki_edit', ['id' => (int) $row['id']])) ?>"><?= e($t('edit')) ?></a>
             <?php endif; ?>
         </div>

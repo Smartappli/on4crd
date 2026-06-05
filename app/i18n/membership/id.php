@@ -7,7 +7,7 @@ return array (
   'intro' => 'Berikut prosedur untuk mengajukan permohonan keanggotaan ke seksi CRD.',
   'image_alt' => 'Gambar keanggotaan CRD',
   'how_title' => 'Bagaimana menjadi anggota CRD?',
-  'how_text' => 'Pertama, kirim permohonan melalui email (on4crd.be) kepada CM (ketua klub) seksi CRD.',
+  'how_text' => 'Pertama, kirim permohonan melalui email (crdurnal@gmail.com) kepada CM (ketua klub) seksi CRD.',
   'postal_title' => 'Permohonan lewat pos',
   'contact_item_1' => 'Klub Radio Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',

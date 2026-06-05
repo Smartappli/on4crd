@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Kontakt e-post',
   'subscribe' => 'Prenumerera',
   'layout_title' => 'Nyhetsbrev',
+  'consent_required' => 'Samtycke för nyhetsbrev krävs.',
+  'consent_label' => 'Jag samtycker till att ta emot ON4CRD-nyhetsbrevet och förstår att jag kan avsluta prenumerationen när som helst.',
+  'consent_proof_member' => 'Medlemsnyhetsbrev samtycke',
 );

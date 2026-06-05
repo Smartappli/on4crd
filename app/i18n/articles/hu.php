@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Cikk hozzáadása a kedvencekhez.',
   'favorite_removed_msg' => 'A cikk eltávolítva a kedvencek közül.',
   'default_article_title' => 'Tétel',
+  'propose_category' => 'Kategória javaslata',
+  'propose_category_subject' => 'ON4CRD cikk-kategória javaslat',
+  'propose_category_body' => 'Üdvözlöm,
+
+szeretnék javasolni egy új cikk-kategóriát.
+
+Kategória neve:
+Indoklás:
+Kapcsolat:',
+  'propose_article' => 'Cikk javaslata',
+  'propose_article_subject' => 'ON4CRD cikkjavaslat',
+  'propose_article_body' => 'Üdvözlöm,
+
+szeretnék javasolni egy ON4CRD technikai cikket.
+
+Cím:
+Kategória:
+Összefoglaló:
+Kapcsolat:',
+  'propose_category_intro' => 'Írja le a kívánt kategóriát. A bizottság számára előre kitöltött e-mail készül.',
+  'propose_category_body_intro' => 'Üdvözlöm, szeretnék javasolni egy új cikk-kategóriát.',
+  'propose_category_name_label' => 'Kategória neve',
+  'propose_category_reason_label' => 'Indoklás',
+  'propose_category_contact_label' => 'Kapcsolat',
+  'propose_category_submit' => 'E-mail előkészítése',
+  'propose_category_cancel' => 'Mégse',
+  'propose_category_close' => 'Bezárás',
+  'error_invalid_user' => 'Érvénytelen felhasználó.',
+  'error_wait_before_next' => 'Kérjük, várjon egy percet, mielőtt újabb cikket javasolna.',
+  'error_daily_limit' => 'Elérte a határt: legfeljebb 5 cikkjavaslat 24 óránként.',
+  'propose_article_meta_desc' => 'Tervezzen és nyújtson be egy cikket érvényesítésre.',
+  'module_unavailable' => 'A cikkek modul átmenetileg nem érhető el.',
+  'error_field_too_long' => 'Az egyik mező túllépi a megengedett hosszt.',
+  'error_title_content_required' => 'A cím és a tartalom kötelező.',
+  'error_content_empty_after_cleanup' => 'A cikk tartalma a tisztítás után üres.',
+  'propose_article_success' => 'Érvényesítésre benyújtott cikk.',
+  'error_article_save_failed' => 'A cikket jelenleg nem lehet menteni.',
+  'propose_article_help' => 'Helyezze el cikkét címsorokkal, bekezdésekkel, listákkal és hivatkozásokkal. A rendszer elmenti a tartalomba, és a közzététel előtt érvényesíti.',
+  'my_contents' => 'Az én tartalmam',
+  'article_title_label' => 'Cikk címe',
+  'category_label' => 'Kategória',
+  'excerpt_label' => 'Összegzés',
+  'excerpt_placeholder' => 'Rövid összefoglaló a cikklistában.',
+  'content_label' => 'Formázott tartalom',
+  'content_placeholder' => '<h2>A szakasz címe</h2>
+<p>Az Ön szövege...</p>
+<ul><li>IFontos pont</li></ul>',
+  'html_cleanup_help' => 'A HTML automatikusan megtisztul. A szkripteket, iframe-eket és veszélyes attribútumokat az érvényesítés előtt eltávolítjuk.',
+  'submit_for_review' => 'Nyújtsa be érvényesítésre',
 );

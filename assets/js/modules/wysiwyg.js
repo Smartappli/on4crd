@@ -2,15 +2,26 @@
   const textareas = document.querySelectorAll('textarea:not([data-wysiwyg="off"])');
   if (!textareas.length) return;
   const currentRoute = new URLSearchParams(window.location.search).get('route') || 'home';
+  const currentScriptUrl = document.currentScript instanceof HTMLScriptElement ? document.currentScript.src : '';
+  const mammothAssetUrl = currentScriptUrl
+    ? new URL('../../vendor/mammoth/1.8.0/mammoth.browser.min.js', currentScriptUrl).href
+    : '/assets/vendor/mammoth/1.8.0/mammoth.browser.min.js';
 
   const syncHandlers = [];
   const toolbarButtons = [
     { label: 'B', command: 'bold', title: 'Gras' },
     { label: 'I', command: 'italic', title: 'Italique' },
-    { label: 'U', command: 'underline', title: 'SoulignÃ©' },
-    { label: 'â€¢ Liste', command: 'insertUnorderedList', title: 'Liste Ã  puces' },
-    { label: '1. Liste', command: 'insertOrderedList', title: 'Liste numÃ©rotÃ©e' },
-    { label: 'Lien', command: 'createLink', title: 'InsÃ©rer un lien' },
+    { label: 'U', command: 'underline', title: 'Souligne' },
+    { label: 'S', command: 'strikeThrough', title: 'Barre' },
+    { label: 'Liste puces', command: 'insertUnorderedList', title: 'Liste a puces' },
+    { label: 'Liste 1-2', command: 'insertOrderedList', title: 'Liste numerotee' },
+    { label: 'Citation', command: 'formatBlock', value: 'blockquote', title: 'Citation' },
+    { label: 'Code', command: 'formatBlock', value: 'pre', title: 'Bloc de code' },
+    { label: 'Lien', command: 'createLink', title: 'Inserer un lien' },
+    { label: 'HR', command: 'insertHorizontalRule', title: 'Ligne horizontale' },
+    { label: 'Annuler', command: 'undo', title: 'Annuler' },
+    { label: 'Retablir', command: 'redo', title: 'Retablir' },
+    { label: 'Nettoyer', command: 'removeFormat', title: 'Supprimer le formatage' },
   ];
 
   const applyCommand = (editor, command) => {
@@ -19,6 +30,16 @@
       const url = window.prompt('URL du lien (https://...)', 'https://');
       if (!url) return;
       document.execCommand('createLink', false, url);
+      return;
+    }
+    if (command === 'insertImage') {
+      const url = window.prompt('URL de l image (https://...)', 'https://');
+      if (!url) return;
+      document.execCommand('insertImage', false, url);
+      return;
+    }
+    if (command === 'insertTable') {
+      document.execCommand('insertHTML', false, '<table><tbody><tr><th>Colonne 1</th><th>Colonne 2</th></tr><tr><td>Valeur 1</td><td>Valeur 2</td></tr></tbody></table>');
       return;
     }
     document.execCommand(command, false, null);
@@ -35,7 +56,7 @@
     if (!mammothLoader) {
       mammothLoader = new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+        script.src = mammothAssetUrl;
         script.async = true;
         script.onload = () => resolve(window.mammoth);
         script.onerror = () => reject(new Error('Impossible de charger le convertisseur Word.'));
@@ -48,12 +69,35 @@
   textareas.forEach((textarea, index) => {
     if (textarea.dataset.wysiwygApplied === '1') return;
     textarea.dataset.wysiwygApplied = '1';
+    const isFullEditor = textarea.dataset.wysiwyg === 'full';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'wysiwyg';
 
     const toolbar = document.createElement('div');
     toolbar.className = 'wysiwyg-toolbar';
+
+    const formatSelect = document.createElement('select');
+    formatSelect.className = 'wysiwyg-control';
+    formatSelect.title = 'Format';
+    [
+      { value: 'p', label: 'Paragraphe' },
+      { value: 'h2', label: 'Titre 2' },
+      { value: 'h3', label: 'Titre 3' },
+      { value: 'h4', label: 'Titre 4' },
+      { value: 'blockquote', label: 'Citation' },
+      { value: 'pre', label: 'Code' },
+    ].forEach((optionConfig) => {
+      const option = document.createElement('option');
+      option.value = optionConfig.value;
+      option.textContent = optionConfig.label;
+      formatSelect.appendChild(option);
+    });
+    formatSelect.addEventListener('change', () => {
+      applyCommandWithValue(editor, 'formatBlock', formatSelect.value || 'p');
+      editor.dispatchEvent(new Event('input'));
+    });
+    toolbar.appendChild(formatSelect);
 
     const fontSizeSelect = document.createElement('select');
     fontSizeSelect.className = 'wysiwyg-control';
@@ -62,7 +106,7 @@
       { value: '3', label: 'Texte normal' },
       { value: '2', label: 'Petit' },
       { value: '4', label: 'Grand' },
-      { value: '5', label: 'TrÃ¨s grand' },
+      { value: '5', label: 'Tres grand' },
     ].forEach((optionConfig) => {
       const option = document.createElement('option');
       option.value = optionConfig.value;
@@ -86,13 +130,64 @@
     });
     toolbar.appendChild(fontColorInput);
 
+    const alignSelect = document.createElement('select');
+    alignSelect.className = 'wysiwyg-control';
+    alignSelect.title = 'Alignement';
+    [
+      { value: '', label: 'Alignement' },
+      { value: 'justifyLeft', label: 'Gauche' },
+      { value: 'justifyCenter', label: 'Centre' },
+      { value: 'justifyRight', label: 'Droite' },
+      { value: 'justifyFull', label: 'Justifie' },
+    ].forEach((optionConfig) => {
+      const option = document.createElement('option');
+      option.value = optionConfig.value;
+      option.textContent = optionConfig.label;
+      alignSelect.appendChild(option);
+    });
+    alignSelect.addEventListener('change', () => {
+      if (alignSelect.value) {
+        applyCommand(editor, alignSelect.value);
+        editor.dispatchEvent(new Event('input'));
+      }
+      alignSelect.value = '';
+    });
+    toolbar.appendChild(alignSelect);
+
+    if (isFullEditor) {
+      [
+        { label: 'Image', command: 'insertImage', title: 'Inserer une image par URL' },
+        { label: 'Tableau', command: 'insertTable', title: 'Inserer un tableau' },
+        { label: 'Delier', command: 'unlink', title: 'Supprimer le lien' },
+      ].forEach((buttonConfig) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ghost small';
+        button.textContent = buttonConfig.label;
+        button.title = buttonConfig.title;
+        button.addEventListener('click', () => {
+          applyCommand(editor, buttonConfig.command);
+          editor.dispatchEvent(new Event('input'));
+        });
+        toolbar.appendChild(button);
+      });
+    }
+
     toolbarButtons.forEach((buttonConfig) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'ghost small';
       button.textContent = buttonConfig.label;
       button.title = buttonConfig.title;
-      button.addEventListener('click', () => applyCommand(editor, buttonConfig.command));
+      button.addEventListener('click', () => {
+        if (buttonConfig.value) {
+          applyCommandWithValue(editor, buttonConfig.command, buttonConfig.value);
+          editor.dispatchEvent(new Event('input'));
+          return;
+        }
+        applyCommand(editor, buttonConfig.command);
+        editor.dispatchEvent(new Event('input'));
+      });
       toolbar.appendChild(button);
     });
 
@@ -108,7 +203,7 @@
       textarea.value = editor.innerHTML;
     };
 
-    if (currentRoute === 'admin_news' && textarea.name === 'content') {
+    if ((currentRoute === 'admin_news' || isFullEditor) && textarea.name === 'content') {
       const importButton = document.createElement('button');
       importButton.type = 'button';
       importButton.className = 'ghost small';
@@ -127,7 +222,7 @@
 
         const extension = file.name.toLowerCase();
         if (extension.endsWith('.doc')) {
-          window.alert('Le format .doc nâ€™est pas supportÃ© directement. Merci dâ€™enregistrer en .docx puis de rÃ©importer.');
+          window.alert('Le format .doc n est pas supporte directement. Merci d enregistrer en .docx puis de reimporter.');
           return;
         }
 
@@ -149,6 +244,32 @@
 
       toolbar.appendChild(importButton);
       toolbar.appendChild(fileInput);
+    }
+
+    if (isFullEditor) {
+      const sourceButton = document.createElement('button');
+      sourceButton.type = 'button';
+      sourceButton.className = 'ghost small';
+      sourceButton.textContent = 'HTML';
+      sourceButton.title = 'Afficher ou masquer le HTML source';
+      let sourceVisible = false;
+      sourceButton.addEventListener('click', () => {
+        if (sourceVisible) {
+          editor.innerHTML = textarea.value && textarea.value.trim() !== '' ? textarea.value : '<p><br></p>';
+          editor.hidden = false;
+          textarea.style.display = '';
+          textarea.classList.add('wysiwyg-source');
+          sourceVisible = false;
+          return;
+        }
+        sync();
+        editor.hidden = true;
+        textarea.style.display = 'block';
+        textarea.classList.remove('wysiwyg-source');
+        textarea.focus();
+        sourceVisible = true;
+      });
+      toolbar.appendChild(sourceButton);
     }
 
     editor.addEventListener('input', sync);

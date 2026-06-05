@@ -25,7 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'add_subscriber') {
             $email = (string) ($_POST['email'] ?? '');
-            if (!newsletter_upsert_subscriber($email, null, 'admin')) {
+            $proof = trim((string) ($_POST['consent_proof'] ?? ''));
+            if ($proof === '') {
+                throw new RuntimeException((string) $t['err_consent_proof_required']);
+            }
+            if (!newsletter_upsert_subscriber($email, null, 'admin', true, $proof)) {
                 throw new RuntimeException((string) $t['err_invalid_email']);
             }
             set_flash('success', (string) $t['ok_subscriber_saved']);
@@ -34,12 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($content === '') {
                 throw new RuntimeException((string) $t['err_csv_required']);
             }
-            $count = newsletter_import_csv($content);
+            $proof = trim((string) ($_POST['consent_proof'] ?? ''));
+            if ($proof === '') {
+                throw new RuntimeException((string) $t['err_consent_proof_required']);
+            }
+            $count = newsletter_import_csv($content, $proof);
             set_flash('success', $count . ' ' . (string) $t['ok_csv_import']);
         } elseif ($action === 'set_status') {
             $id = (int) ($_POST['subscriber_id'] ?? 0);
             $status = (string) ($_POST['status'] ?? '');
-            if (!newsletter_set_subscriber_status($id, $status)) {
+            $proof = trim((string) ($_POST['consent_proof'] ?? ''));
+            if ($status === 'active' && $proof === '') {
+                throw new RuntimeException((string) $t['err_consent_proof_required']);
+            }
+            if (!newsletter_set_subscriber_status($id, $status, $proof)) {
                 throw new RuntimeException((string) $t['err_status_update']);
             }
             set_flash('success', (string) $t['ok_status_updated']);
@@ -84,6 +96,10 @@ ob_start();
             <label><?= e((string) $t['email_to_add']) ?>
                 <input type="email" name="email" required>
             </label>
+            <label><?= e((string) $t['consent_proof']) ?>
+                <input type="text" name="consent_proof" maxlength="255" required placeholder="<?= e((string) $t['consent_proof_ph']) ?>">
+            </label>
+            <p class="help"><?= e((string) $t['consent_admin_help']) ?></p>
             <p><button class="button"><?= e((string) $t['add_or_reactivate']) ?></button></p>
         </form>
 
@@ -93,6 +109,9 @@ ob_start();
             <input type="hidden" name="action" value="import_csv">
             <label><?= e((string) $t['csv_content']) ?>
                 <textarea name="csv_content" rows="8" placeholder="<?= e((string) $t['csv_ph']) ?>" required></textarea>
+            </label>
+            <label><?= e((string) $t['consent_proof']) ?>
+                <input type="text" name="consent_proof" maxlength="255" required placeholder="<?= e((string) $t['consent_proof_ph']) ?>">
             </label>
             <p><button class="button secondary"><?= e((string) $t['import']) ?></button></p>
         </form>
@@ -105,13 +124,25 @@ ob_start();
                     <tr>
                         <td><?= e((string) $subscriber['email']) ?></td>
                         <td><?= e((string) ($subscriber['callsign'] ?? '')) ?> <?= e((string) ($subscriber['full_name'] ?? '')) ?></td>
-                        <td><?= e((string) $subscriber['status']) ?></td>
+                        <td>
+                            <?= e((string) $subscriber['status']) ?>
+                            <?php if (!empty($subscriber['consented_at']) || !empty($subscriber['consent_proof'])): ?>
+                                <div class="help">
+                                    <?= e((string) $t['consent']) ?>:
+                                    <?= e((string) ($subscriber['consented_at'] ?? '')) ?>
+                                    <?= e((string) ($subscriber['consent_proof'] ?? '')) ?>
+                                </div>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <form method="post" style="display:inline-block">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                 <input type="hidden" name="action" value="set_status">
                                 <input type="hidden" name="subscriber_id" value="<?= (int) $subscriber['id'] ?>">
                                 <input type="hidden" name="status" value="<?= (string) $subscriber['status'] === 'active' ? 'unsubscribed' : 'active' ?>">
+                                <?php if ((string) $subscriber['status'] !== 'active'): ?>
+                                    <input type="text" name="consent_proof" maxlength="255" required placeholder="<?= e((string) $t['consent_proof_ph']) ?>">
+                                <?php endif; ?>
                                 <button class="button small secondary" type="submit"><?= (string) $subscriber['status'] === 'active' ? e((string) $t['unsubscribe']) : e((string) $t['reactivate']) ?></button>
                             </form>
                             <form method="post" style="display:inline-block" onsubmit="return confirm('<?= e((string) $t['confirm_delete_subscriber']) ?>');">

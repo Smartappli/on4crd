@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Articolul se adaugă la favorite.',
   'favorite_removed_msg' => 'Articol eliminat din favorite.',
   'default_article_title' => 'Articol',
+  'propose_category' => 'Propune o categorie',
+  'propose_category_subject' => 'Propunere de categorie de articole ON4CRD',
+  'propose_category_body' => 'Bună ziua,
+
+aș dori să propun o nouă categorie de articole.
+
+Numele categoriei:
+Motivație:
+Contact:',
+  'propose_article' => 'Propune un articol',
+  'propose_article_subject' => 'Propunere de articol ON4CRD',
+  'propose_article_body' => 'Bună ziua,
+
+aș dori să propun un articol tehnic ON4CRD.
+
+Titlu:
+Categorie:
+Rezumat:
+Contact:',
+  'propose_category_intro' => 'Descrieți categoria dorită. Va fi pregătit un e-mail precompletat pentru comitet.',
+  'propose_category_body_intro' => 'Bună ziua, aș dori să propun o nouă categorie de articole.',
+  'propose_category_name_label' => 'Numele categoriei',
+  'propose_category_reason_label' => 'Motivație',
+  'propose_category_contact_label' => 'Contact',
+  'propose_category_submit' => 'Pregătește e-mailul',
+  'propose_category_cancel' => 'Anulează',
+  'propose_category_close' => 'Închide',
+  'error_invalid_user' => 'Utilizator nevalid.',
+  'error_wait_before_next' => 'Vă rugăm să așteptați un minut înainte de a propune un alt articol.',
+  'error_daily_limit' => 'Limită atinsă: maxim 5 propuneri de articole pe 24 de ore.',
+  'propose_article_meta_desc' => 'Elaborați și trimiteți un articol pentru validare.',
+  'module_unavailable' => 'Modulul articole este temporar indisponibil.',
+  'error_field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
+  'error_title_content_required' => 'Titlul și conținutul sunt obligatorii.',
+  'error_content_empty_after_cleanup' => 'Conținutul articolului este gol după curățare.',
+  'propose_article_success' => 'Articol trimis spre validare.',
+  'error_article_save_failed' => 'Nu se poate salva articolul acum.',
+  'propose_article_help' => 'Așezați-vă articolul cu titluri, paragrafe, liste și link-uri. Acesta va fi salvat în conținutul dvs. și validat înainte de publicare.',
+  'my_contents' => 'Conținutul meu',
+  'article_title_label' => 'Titlul articolului',
+  'category_label' => 'categorie',
+  'excerpt_label' => 'Rezumat',
+  'excerpt_placeholder' => 'Scurt rezumat afișat în lista de articole.',
+  'content_label' => 'Conținut formatat',
+  'content_placeholder' => '<h2>Titlul secțiunii</h2>
+<p>Textul dvs....</p>
+<ul><li>Punct important</li></ul>',
+  'html_cleanup_help' => 'HTML este curățat automat. Scripturile, cadrele iframe și atributele periculoase sunt eliminate înainte de validare.',
+  'submit_for_review' => 'Trimiteți pentru validare',
 );

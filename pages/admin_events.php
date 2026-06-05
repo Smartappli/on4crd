@@ -10,9 +10,11 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
 }
+$calendarLocale = fullcalendar_locale_code($locale);
+$calendarLocaleAsset = fullcalendar_locale_asset_url($locale);
 
 $calendarConfig = [
-    'locale' => $locale,
+    'locale' => $calendarLocale,
     'eventsUrl' => route_url('admin_events_feed'),
     'buttonText' => [
         'today' => (string) $t['today'],
@@ -28,6 +30,54 @@ set_page_meta([
     'robots' => 'noindex,nofollow',
 ]);
 
+function admin_event_slug_base(string $value, int $maxLength = 190): string
+{
+    $base = slugify($value);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'event';
+    }
+    if (strlen($base) > $maxLength) {
+        $base = substr($base, 0, $maxLength);
+    }
+
+    $base = trim($base, '-');
+    return $base !== '' ? $base : 'event';
+}
+
+function admin_event_slug_candidate(string $base, int $suffix = 0, int $maxLength = 190): string
+{
+    $base = admin_event_slug_base($base, $maxLength);
+    if ($suffix <= 1) {
+        return $base;
+    }
+
+    $suffixText = '-' . $suffix;
+    $prefixLength = max(1, $maxLength - strlen($suffixText));
+    $prefix = rtrim(substr($base, 0, $prefixLength), '-');
+    if ($prefix === '') {
+        $prefix = substr('event', 0, $prefixLength);
+    }
+
+    return $prefix . $suffixText;
+}
+
+function admin_event_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 190): string
+{
+    $base = admin_event_slug_base($value, $maxLength);
+    $suffix = 1;
+    do {
+        $candidate = admin_event_slug_candidate($base, $suffix, $maxLength);
+        $stmt = db()->prepare('SELECT id FROM events WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, max(0, $ignoreId)]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Impossible de générer un slug événement unique.');
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -36,20 +86,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($title === '') {
             throw new RuntimeException((string) $t['title_required']);
         }
-        $slug = slugify((string) ($_POST['slug'] ?? $title));
-        $startAt = str_replace('T', ' ', (string) ($_POST['start_at'] ?? '')) . ':00';
-        $endAt = str_replace('T', ' ', (string) ($_POST['end_at'] ?? '')) . ':00';
+        if ($id > 0) {
+            $eventStmt = db()->prepare('SELECT id FROM events WHERE id = ? LIMIT 1');
+            $eventStmt->execute([$id]);
+            if (!$eventStmt->fetchColumn()) {
+                throw new RuntimeException((string) $t['no_event']);
+            }
+        }
+        $slugInput = trim((string) ($_POST['slug'] ?? ''));
+        $slug = admin_event_unique_slug($slugInput !== '' ? $slugInput : $title, $id);
+        $startRaw = trim((string) ($_POST['start_at'] ?? ''));
+        $endRaw = trim((string) ($_POST['end_at'] ?? ''));
+        $startTs = $startRaw !== '' ? strtotime($startRaw) : false;
+        $endTs = $endRaw !== '' ? strtotime($endRaw) : false;
+        if ($startTs === false || $endTs === false || $endTs <= $startTs) {
+            throw new RuntimeException((string) $t['title_required']);
+        }
+        $kind = (string) ($_POST['kind'] ?? 'club');
+        if (!in_array($kind, ['club', 'contest'], true)) {
+            $kind = 'club';
+        }
+        $status = (string) ($_POST['status'] ?? 'published');
+        if (!in_array($status, ['draft', 'published'], true)) {
+            $status = 'draft';
+        }
+        $externalUrlInput = trim((string) ($_POST['external_url'] ?? ''));
         $params = [
             $slug,
             $title,
             trim((string) ($_POST['summary'] ?? '')),
             sanitize_rich_html((string) ($_POST['description'] ?? '')),
-            (string) ($_POST['kind'] ?? 'club'),
-            $startAt,
-            $endAt,
+            $kind,
+            date('Y-m-d H:i:s', $startTs),
+            date('Y-m-d H:i:s', $endTs),
             trim((string) ($_POST['location'] ?? '')),
-            normalize_http_url((string) ($_POST['external_url'] ?? ''), true),
-            (string) ($_POST['status'] ?? 'published'),
+            $externalUrlInput !== '' ? normalize_http_url($externalUrlInput, true) : null,
+            $status,
         ];
         if ($id > 0) {
             db()->prepare('UPDATE events SET slug = ?, title = ?, summary = ?, description = ?, kind = ?, start_at = ?, end_at = ?, location = ?, external_url = ?, status = ? WHERE id = ?')
@@ -112,19 +184,19 @@ ob_start();
     </section>
     <section class="card">
         <h2><?= e((string) $t['saved_events']) ?></h2>
-        <?php if ($rows === []): ?><p><?= e((string) $t['no_event']) ?></p><?php else: ?><ul class="list-clean list-spaced"><?php foreach ($rows as $row): ?><li><a href="<?= e(route_url('admin_events', ['edit' => (int) $row['id']])) ?>"><?= e((string) $row['title']) ?></a><span class="help"><?= e(date('d/m/Y H:i', strtotime((string) $row['start_at']))) ?> â€” <?= e((string) $row['kind']) ?></span></li><?php endforeach; ?></ul><?php endif; ?>
+        <?php if ($rows === []): ?><p><?= e((string) $t['no_event']) ?></p><?php else: ?><ul class="list-clean list-spaced"><?php foreach ($rows as $row): ?><li><a href="<?= e(route_url('admin_events', ['edit' => (int) $row['id']])) ?>"><?= e((string) $row['title']) ?></a><span class="help"><?= e(date('d/m/Y H:i', strtotime((string) $row['start_at']))) ?> — <?= e((string) $row['kind']) ?></span></li><?php endforeach; ?></ul><?php endif; ?>
 
         <?php if ($rows !== []): ?>
             <hr>
             <h3><?= e((string) $t['calendar_view']) ?></h3>
             <p class="help"><?= e((string) $t['calendar_help']) ?></p>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">
+            <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/skeleton.css')) ?>">
+            <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/theme.css')) ?>">
+            <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/palette.css')) ?>">
             <div id="admin-events-calendar" class="fullcalendar-theme" data-calendar-config="<?= e(json_encode($calendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"></div>
-            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/<?= e($locale) ?>.global.js"></script>
+            <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) ?>"></script>
+            <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) ?>"></script>
+            <script src="<?= e($calendarLocaleAsset) ?>"></script>
         <?php endif; ?>
     </section>
 </div>

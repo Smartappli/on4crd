@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'e-mail\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Brak subskrybentów.',
   'no_campaigns' => 'Brak kampanii.',
+  'err_consent_proof_required' => 'Wymagany jest dowód zgody.',
+  'consent_proof' => 'Dowód zgody',
+  'consent_proof_ph' => 'Przykład: podpisany formularz na 2026-06-05',
+  'consent_admin_help' => 'Dodawanie, importowanie lub ponowna aktywacja wymaga wyraźnego potwierdzenia zgody.',
+  'consent' => 'Zgoda',
 );

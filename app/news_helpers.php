@@ -40,6 +40,70 @@ function can_submit_news_in_section(int|array $user, int $sectionId): bool
     return in_array($sectionId, managed_section_ids_for_member($memberId), true);
 }
 
+function news_slug_base(string $value, int $maxLength = 190): string
+{
+    $maxLength = max(1, $maxLength);
+    $base = slugify($value);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'news';
+    }
+    if (strlen($base) > $maxLength) {
+        $base = substr($base, 0, $maxLength);
+    }
+
+    $base = trim($base, '-');
+    return $base !== '' ? $base : 'news';
+}
+
+function news_slug_candidate(string $base, int $suffix = 0, int $maxLength = 190): string
+{
+    $maxLength = max(1, $maxLength);
+    $base = news_slug_base($base, $maxLength);
+    if ($suffix <= 1) {
+        return $base;
+    }
+
+    $suffixText = '-' . $suffix;
+    $prefixLength = max(1, $maxLength - strlen($suffixText));
+    $prefix = rtrim(substr($base, 0, $prefixLength), '-');
+    if ($prefix === '') {
+        $prefix = substr('news', 0, $prefixLength);
+    }
+
+    return $prefix . $suffixText;
+}
+
+function news_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 190): string
+{
+    $base = news_slug_base($value, $maxLength);
+    $suffix = 1;
+    do {
+        $candidate = news_slug_candidate($base, $suffix, $maxLength);
+        $stmt = db()->prepare('SELECT id FROM news_posts WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, max(0, $ignoreId)]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Impossible de générer un slug actualité unique.');
+}
+
+function can_edit_news_post(array $post, int $memberId): bool
+{
+    if ($memberId <= 0) {
+        return false;
+    }
+    if (has_permission('news.moderate')) {
+        return true;
+    }
+
+    $authorId = (int) ($post['author_id'] ?? 0);
+    $sectionId = (int) ($post['section_id'] ?? 0);
+    return $authorId === $memberId || can_submit_news_in_section($memberId, $sectionId);
+}
+
 function news_translation_upsert(int $newsId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void
 {
     if ($newsId <= 0 || $locale === 'fr' || !table_exists('news_translations')) {

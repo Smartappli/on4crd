@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Toolbox',
+  'title' => 'Rīkkopa',
   'tool_index' => 'Instrumentu klasifikācija',
   'category_locators' => 'Orientieri un ģeogrāfiskā atrašanās vieta',
   'category_conversions' => 'Radio konversijas',
@@ -13,7 +13,7 @@ return array (
   'category_radio_math' => 'Radio matemātika',
   'open_category' => 'Skatīt rīkus',
   'choose_tool' => 'Rīku kategorijas',
-  'grid_title' => 'Režģa aprēķins no pasta adreses',
+  'grid_title' => 'Calcul du grid un les zones CG/ITU depuis une adresse postale',
   'address' => 'Pasta adrese',
   'calc_grid' => 'Aprēķiniet režģi',
   'found_address' => 'Adrese atrasta',
@@ -132,11 +132,11 @@ return array (
   'resistor_count_max' => 'Maksimālais rezistoru skaits',
   'resistor_combo_result' => 'Labākā kombinācija',
   'ohm_law_calc' => 'Oma likums',
-  'ohm_law_help' => 'Ievadiet divas vērtības, lai aprēķinātu trešo.',
+  'ohm_law_help' => 'Ievadiet divas vērtības vai mainiet vienu no trim vērtībām, lai aprēķinātu trūkstošo vai atkarīgo vērtību.',
   'voltage_v' => 'Spriegums (V)',
   'current_a' => 'Pašreizējais (A)',
   'resistance_ohm' => 'Pretestība (Ω)',
-  'ohm_law_hint' => 'Ja ir aizpildīti tieši 2 lauki, 3. tiek aprēķināts automātiski.',
+  'ohm_law_hint' => 'Kad visi trīs lauki ir aizpildīti, tiek saglabātas divas pēdējās labotās vērtības un trešā tiek pārrēķināta.',
   'link_budget_calc' => 'Sadarbības budžets',
   'link_budget_help' => 'Saņemtās jaudas aprēķins: Prx = Ptx + Gtx + Grx - zudumi.',
   'tx_power_dbm' => 'Ptx (dBm)',
@@ -193,4 +193,8 @@ return array (
   'unit_conv_presets' => 'Ātrās vērtības',
   'unit_conv_reference' => 'Atsauce',
   'unit_conv_quick_links' => 'Detalizēti pārveidotāji',
+  'forward_power' => 'Jauda uz priekšu (W)',
+  'reflected_power' => 'Atstarotā jauda (W)',
+  'swr_result' => 'Aprēķināts SWR',
+  'dbw_calc' => 'dBm <-> dBW conversion',
 );

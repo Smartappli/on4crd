@@ -74,7 +74,7 @@ $results = [];
 
 if ($hasQuery && $isQueryLongEnough) {
     $cacheKey = 'site_search_v2_' . current_locale() . '_' . md5(mb_strtolower($q));
-    $results = cache_remember($cacheKey, 120, static function () use ($q, $tokens): array {
+    $results = cache_remember($cacheKey, 120, static function () use ($q, $tokens, $locale): array {
         $like = '%' . $q . '%';
         $queryLikes = array_map(static fn(string $term): string => '%' . $term . '%', $tokens);
         $collected = [];
@@ -121,21 +121,43 @@ if ($hasQuery && $isQueryLongEnough) {
 
         if ($shouldSearch('articles') && table_exists('articles')) {
             try {
-                $where = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
-                $params = [$like, $like, $like];
-                foreach ($queryLikes as $termLike) {
-                    $where .= ' OR (title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
-                    array_push($params, $termLike, $termLike, $termLike);
+                $translationJoin = '';
+                $translationWhere = '';
+                $params = [];
+                if ($locale !== 'fr' && table_exists('article_translations')) {
+                    $publicStatuses = article_translation_public_statuses();
+                    $statusPlaceholders = implode(',', array_fill(0, count($publicStatuses), '?'));
+                    $translationJoin = ' LEFT JOIN article_translations tr ON tr.article_id = a.id AND tr.locale = ? AND tr.status IN (' . $statusPlaceholders . ')';
+                    array_push($params, $locale, ...$publicStatuses);
+                    $translationWhere = ' OR tr.title LIKE ? OR tr.excerpt LIKE ? OR tr.content LIKE ?';
                 }
-                $stmt = db()->prepare('SELECT title, excerpt, slug, content, category FROM articles WHERE status = "published" AND (' . $where . ') ORDER BY updated_at DESC LIMIT 35');
+
+                $where = '(a.title LIKE ? OR a.excerpt LIKE ? OR a.content LIKE ?' . $translationWhere . ')';
+                array_push($params, $like, $like, $like);
+                if ($translationWhere !== '') {
+                    array_push($params, $like, $like, $like);
+                }
+                foreach ($queryLikes as $termLike) {
+                    $where .= ' OR (a.title LIKE ? OR a.excerpt LIKE ? OR a.content LIKE ?' . $translationWhere . ')';
+                    array_push($params, $termLike, $termLike, $termLike);
+                    if ($translationWhere !== '') {
+                        array_push($params, $termLike, $termLike, $termLike);
+                    }
+                }
+                $stmt = db()->prepare('SELECT a.id, a.title, a.excerpt, a.slug, a.content, a.category, a.published_at, a.created_at, a.updated_at
+                    FROM articles a' . $translationJoin . '
+                    WHERE a.status = "published" AND (' . $where . ')
+                    ORDER BY ' . article_publication_sort_expression_for_alias('a') . ' DESC, a.id DESC
+                    LIMIT 35');
                 $stmt->execute($params);
                 foreach ($stmt->fetchAll() ?: [] as $row) {
-                    $title = trim((string) ($row['title'] ?? ''));
+                    $row = localized_article_row($row);
+                    $title = trim((string) ($row['title_localized'] ?? $row['title'] ?? ''));
                     if ($title === '') {
                         continue;
                     }
-                    $summary = search_snippet((string) ($row['excerpt'] ?? ''));
-                    $body = search_snippet((string) ($row['content'] ?? ''), 360);
+                    $summary = search_snippet((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? ''));
+                    $body = search_snippet((string) ($row['content_localized'] ?? $row['content'] ?? ''), 360);
                     if ($summary === '') {
                         $summary = $body;
                     }

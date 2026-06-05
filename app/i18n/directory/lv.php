@@ -24,7 +24,7 @@ return array (
   'bands' => 'Grupas',
   'station' => 'Kūrorts',
   'committee' => 'komiteja',
-  'grid' => 'Grid',
+  'grid' => 'Režģis',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Režīmi',

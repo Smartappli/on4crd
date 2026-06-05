@@ -24,7 +24,7 @@ return array (
   'bands' => 'Bande',
   'station' => 'Stazione',
   'committee' => 'Comitato',
-  'grid' => 'Grid',
+  'grid' => 'Griglia',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Modi',

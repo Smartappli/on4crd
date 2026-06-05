@@ -29,6 +29,94 @@
 })();
 
 (function () {
+  const dialog = document.getElementById('events-proposal-dialog');
+  const openButtons = document.querySelectorAll('[data-event-proposal-open]');
+  if (!dialog || openButtons.length === 0) {
+    return;
+  }
+
+  const fallbackUrl = openButtons[0].dataset.eventProposalFallback || '';
+  if (typeof HTMLDialogElement === 'undefined' || !(dialog instanceof HTMLDialogElement)) {
+    openButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (fallbackUrl) {
+          window.location.href = fallbackUrl;
+        }
+      });
+    });
+    return;
+  }
+
+  const closeButtons = dialog.querySelectorAll('[data-event-proposal-close]');
+  const form = dialog.querySelector('[data-event-proposal-form]');
+  const firstField = dialog.querySelector('input[name="proposal_title"]');
+
+  const openDialog = () => {
+    if (!dialog.open) {
+      dialog.showModal();
+    }
+    if (firstField instanceof HTMLElement) {
+      firstField.focus();
+    }
+  };
+
+  const closeDialog = () => {
+    if (dialog.open) {
+      dialog.close();
+    }
+  };
+
+  const fieldValue = (name) => {
+    const field = dialog.querySelector(`[name="${name}"]`);
+    return field && 'value' in field ? String(field.value).trim() : '';
+  };
+
+  const fieldLabel = (name) => {
+    const field = dialog.querySelector(`[name="${name}"]`);
+    const label = field ? field.closest('label') : null;
+    const labelText = label ? label.querySelector('span') : null;
+    return labelText ? labelText.textContent.trim() : name;
+  };
+
+  openButtons.forEach((button) => {
+    button.addEventListener('click', openDialog);
+  });
+
+  closeButtons.forEach((button) => {
+    button.addEventListener('click', closeDialog);
+  });
+
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) {
+      closeDialog();
+    }
+  });
+
+  if (form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const recipient = form.dataset.eventProposalRecipient || 'crdurnal@gmail.com';
+      const subject = form.dataset.eventProposalSubject || '';
+      const intro = form.dataset.eventProposalIntro || '';
+      const fields = [
+        'proposal_title',
+        'proposal_datetime',
+        'proposal_location',
+        'proposal_description',
+        'proposal_contact'
+      ];
+      const body = [
+        intro,
+        ...fields.map((name) => `${fieldLabel(name)}: ${fieldValue(name)}`)
+      ].filter(Boolean).join('\n');
+
+      window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      closeDialog();
+    });
+  }
+})();
+
+(function () {
   const calendarEl = document.getElementById('events-calendar');
   if (!calendarEl) return;
 

@@ -1,4 +1,34 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'ويكي', 'unavailable' => 'ستتوفر الويكي بعد تهيئة الصفحات.', 'new_pages' => 'صفحات جديدة', 'updated_pages' => 'صفحات محدّثة', 'most_read' => 'الأكثر قراءة', 'new_page' => 'صفحة جديدة', 'search_placeholder' => 'ابحث عن صفحة (العنوان أو المحتوى)', 'search' => 'بحث', 'reset' => 'إعادة تعيين', 'wiki_pages' => 'صفحات الويكي', 'no_page' => 'لم يتم العثور على صفحة', 'for_search' => ' لهذا البحث', 'summary_fallback' => 'افتح هذه الصفحة للوصول إلى المحتوى الكامل.', 'updated_at' => 'آخر تحديث:', 'revisions' => 'المراجعات', 'open_page' => 'فتح الصفحة'];
+return array (
+  'title' => 'ويكي',
+  'unavailable' => 'ستتوفر الويكي بعد تهيئة الصفحات.',
+  'new_pages' => 'صفحات جديدة',
+  'updated_pages' => 'صفحات محدّثة',
+  'most_read' => 'الأكثر قراءة',
+  'new_page' => 'صفحة جديدة',
+  'search_placeholder' => 'ابحث عن صفحة (العنوان أو المحتوى)',
+  'search' => 'بحث',
+  'reset' => 'إعادة تعيين',
+  'wiki_pages' => 'صفحات الويكي',
+  'no_page' => 'لم يتم العثور على صفحة',
+  'for_search' => ' لهذا البحث',
+  'summary_fallback' => 'افتح هذه الصفحة للوصول إلى المحتوى الكامل.',
+  'updated_at' => 'آخر تحديث:',
+  'revisions' => 'المراجعات',
+  'open_page' => 'فتح الصفحة',
+  'themes' => 'المواضيع',
+  'all_themes' => 'جميع المواضيع',
+  'propose_theme_subject' => 'اقتراح موضوع ويكي ON4CRD',
+  'propose_theme' => 'اقتراح موضوع',
+  'propose_page' => 'اقترح صفحة',
+  'propose_theme_intro' => 'قم بوصف الموضوع المراد إضافته والصفحات التي يجب ربطها به.',
+  'close' => 'إغلاق',
+  'propose_theme_body_intro' => 'اقتراح موضوع ويكي:',
+  'propose_theme_name' => 'اسم الموضوع',
+  'propose_theme_reason' => 'لماذا إضافته؟',
+  'propose_theme_contact' => 'جهة الاتصال الخاصة بك',
+  'propose_theme_submit' => 'إرسال الاقتراح',
+  'cancel' => 'إلغاء',
+);

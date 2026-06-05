@@ -24,7 +24,7 @@ return array (
   'bands' => '波段',
   'station' => '电台',
   'committee' => '委员会',
-  'grid' => 'Grid',
+  'grid' => '网格',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => '模式',

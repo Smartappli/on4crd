@@ -9,4 +9,7 @@ return array (
   'intro' => 'Vastaanota uutisia Radio Club Durnalista suoraan sähköpostitse.',
   'email_label' => 'Sähköposti uutiskirje',
   'submit' => 'Tilaa uutiskirje',
+  'consent_required' => 'Uutiskirjeen suostumus vaaditaan.',
+  'consent_label' => 'Hyväksyn ON4CRD-uutiskirjeen vastaanottamisen ja ymmärrän, että voin peruuttaa tilauksen milloin tahansa.',
+  'consent_proof_public' => 'Julkisen uutiskirjeen suostumus',
 );

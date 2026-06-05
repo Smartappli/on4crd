@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'имейл\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Няма абонати.',
   'no_campaigns' => 'Без кампания.',
+  'err_consent_proof_required' => 'Изисква се доказателство за съгласие.',
+  'consent_proof' => 'Доказателство за съгласие',
+  'consent_proof_ph' => 'Пример: подписан формуляр на 2026-06-05',
+  'consent_admin_help' => 'Добавянето, импортирането или повторното активиране изисква изрично доказателство за съгласие.',
+  'consent' => 'Съгласие',
 );

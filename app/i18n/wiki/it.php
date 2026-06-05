@@ -1,4 +1,34 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki', 'unavailable' => 'Il wiki sarà disponibile dopo l\'inizializzazione delle pagine.', 'new_pages' => 'Nuove pagine', 'updated_pages' => 'Pagine aggiornate', 'most_read' => 'Più lette', 'new_page' => 'Nuova pagina', 'search_placeholder' => 'Cerca una pagina (titolo o contenuto)', 'search' => 'Cerca', 'reset' => 'Reimposta', 'wiki_pages' => 'Pagine wiki', 'no_page' => 'Nessuna pagina trovata', 'for_search' => ' per questa ricerca', 'summary_fallback' => 'Apri questa pagina per vedere il contenuto completo.', 'updated_at' => 'Aggiornato:', 'revisions' => 'Revisioni', 'open_page' => 'Apri pagina'];
+return array (
+  'title' => 'Wiki',
+  'unavailable' => 'Il wiki sarà disponibile dopo l\'inizializzazione delle pagine.',
+  'new_pages' => 'Nuove pagine',
+  'updated_pages' => 'Pagine aggiornate',
+  'most_read' => 'Più lette',
+  'new_page' => 'Nuova pagina',
+  'search_placeholder' => 'Cerca una pagina (titolo o contenuto)',
+  'search' => 'Cerca',
+  'reset' => 'Reimposta',
+  'wiki_pages' => 'Pagine wiki',
+  'no_page' => 'Nessuna pagina trovata',
+  'for_search' => ' per questa ricerca',
+  'summary_fallback' => 'Apri questa pagina per vedere il contenuto completo.',
+  'updated_at' => 'Aggiornato:',
+  'revisions' => 'Revisioni',
+  'open_page' => 'Apri pagina',
+  'themes' => 'Temi',
+  'all_themes' => 'Tutti i temi',
+  'propose_theme_subject' => 'Proposta del tema wiki ON4CRD',
+  'propose_theme' => 'Suggerisci un tema',
+  'propose_page' => 'Suggerisci una pagina',
+  'propose_theme_intro' => 'Descrivi il tema da aggiungere e le pagine che dovrebbero essere collegate ad esso.',
+  'close' => 'Vicino',
+  'propose_theme_body_intro' => 'Proposta tema Wiki:',
+  'propose_theme_name' => 'Nome del tema',
+  'propose_theme_reason' => 'Perché aggiungerlo?',
+  'propose_theme_contact' => 'Il tuo contatto',
+  'propose_theme_submit' => 'Invia proposta',
+  'cancel' => 'Cancellare',
+);

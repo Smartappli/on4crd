@@ -7,7 +7,7 @@ return array (
   'intro' => 'Hawnhekk hawn il-proċedura biex tiġi sottomessa applikazzjoni għal sħubija fit-taqsima CRD.',
   'image_alt' => 'Sħubija viżwali CRD',
   'how_title' => 'Kif issir membru ta\' CRD?',
-  'how_text' => 'Ibgħat talba bl-email (on4crd.be) lil CM (president tal-klabb) tas-sezzjoni CRD.',
+  'how_text' => 'Ibgħat talba bl-email (crdurnal@gmail.com) lil CM (president tal-klabb) tas-sezzjoni CRD.',
   'postal_title' => 'Talba bil-posta',
   'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

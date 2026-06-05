@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'e-mail \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Ingen abonnenter.',
   'no_campaigns' => 'Ingen kampagne.',
+  'err_consent_proof_required' => 'Samtykke bevis er påkrævet.',
+  'consent_proof' => 'Samtykke bevis',
+  'consent_proof_ph' => 'Eksempel: underskrevet formular på 2026-06-05',
+  'consent_admin_help' => 'Tilføjelse, import eller genaktivering kræver eksplicit samtykkebevis.',
+  'consent' => 'Samtykke',
 );

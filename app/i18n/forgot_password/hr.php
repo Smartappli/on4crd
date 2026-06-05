@@ -13,4 +13,11 @@ return array (
   'submit' => 'Pošalji link',
   'back_login' => 'Povratak na prijavu',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Ponovno postavljanje lozinke',
+  'email_body' => 'Pozdrav,
+
+Upotrijebite ovu poveznicu za ponovno postavljanje lozinke za ON4CRD:
+{reset_link}
+
+Ako niste zatražili ovu radnju, zanemarite ovu poruku.',
 );

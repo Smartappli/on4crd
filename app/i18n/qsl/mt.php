@@ -90,7 +90,7 @@ return array (
   'preset_slate' => 'Lavanja',
   'table_background' => 'Qiegħ',
   'table_type' => 'Tip',
-  'table_default' => 'Default',
+  'table_default' => 'Predefinit',
   'table_actions' => 'Azzjonijiet',
   'type_image' => 'Stampa',
   'type_gradient' => 'Iddegrada',
