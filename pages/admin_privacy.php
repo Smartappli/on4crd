@@ -4,10 +4,26 @@ declare(strict_types=1);
 require_permission('privacy.manage');
 $adminUser = require_login();
 privacy_ensure_tables();
+$locale = current_locale();
+$t = i18n_domain_translator('admin_privacy', $locale);
+$requestTypeLabels = [
+    'access' => $t('type_access'),
+    'rectification' => $t('type_rectification'),
+    'erasure' => $t('type_erasure'),
+    'restriction' => $t('type_restriction'),
+    'objection' => $t('type_objection'),
+    'portability' => $t('type_portability'),
+];
+$requestStatusLabels = [
+    'pending' => $t('status_pending'),
+    'in_progress' => $t('status_in_progress'),
+    'resolved' => $t('status_resolved'),
+    'rejected' => $t('status_rejected'),
+];
 
 set_page_meta([
-    'title' => 'Administration RGPD',
-    'description' => 'Traitement des demandes RGPD ON4CRD.',
+    'title' => $t('title'),
+    'description' => $t('meta_desc'),
     'robots' => 'noindex,nofollow',
 ]);
 
@@ -23,9 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $result = privacy_update_request_status($id, $status, $adminNotes, (int) ($adminUser['id'] ?? 0), $applyErasure);
         $fileStats = (array) ($result['files'] ?? []);
-        $message = 'Demande RGPD mise à jour.';
+        $message = $t('request_updated');
         if ($applyErasure) {
-            $message .= ' Fichiers traités: ' . (int) ($fileStats['deleted'] ?? 0) . ' supprimés, ' . (int) ($fileStats['missing'] ?? 0) . ' déjà absents, ' . (int) ($fileStats['failed'] ?? 0) . ' en échec.';
+            $message .= ' ' . sprintf(
+                $t('files_processed_summary'),
+                (int) ($fileStats['deleted'] ?? 0),
+                (int) ($fileStats['missing'] ?? 0),
+                (int) ($fileStats['failed'] ?? 0)
+            );
         }
         set_flash('success', $message);
     } catch (Throwable $throwable) {
@@ -56,20 +77,20 @@ $eventsByRequest = privacy_request_events_for_request_ids($requestIds);
 ob_start();
 ?>
 <section class="card">
-    <h1>Administration RGPD</h1>
-    <p class="help">Accès réservé à la permission privacy.manage. Les changements de statut, anonymisations et traitements de fichiers sont journalisés.</p>
+    <h1><?= e($t('title')) ?></h1>
+    <p class="help"><?= e($t('intro')) ?></p>
     <div class="table-wrap">
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Membre</th>
-                    <th>Type</th>
-                    <th>Statut</th>
-                    <th>Dates</th>
-                    <th>Notes</th>
-                    <th>Historique</th>
-                    <th>Action</th>
+                    <th><?= e($t('id')) ?></th>
+                    <th><?= e($t('member')) ?></th>
+                    <th><?= e($t('type')) ?></th>
+                    <th><?= e($t('status')) ?></th>
+                    <th><?= e($t('dates')) ?></th>
+                    <th><?= e($t('notes')) ?></th>
+                    <th><?= e($t('history')) ?></th>
+                    <th><?= e($t('action')) ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -85,13 +106,13 @@ ob_start();
                         <?= e((string) ($request['callsign'] ?? '')) ?>
                         <div class="help"><?= e((string) ($request['full_name'] ?? '')) ?> <?= e((string) ($request['email'] ?? '')) ?></div>
                     </td>
-                    <td><?= e($requestType) ?></td>
-                    <td><?= e((string) $request['status']) ?></td>
+                    <td><?= e($requestTypeLabels[$requestType] ?? $requestType) ?></td>
+                    <td><?= e($requestStatusLabels[(string) $request['status']] ?? (string) $request['status']) ?></td>
                     <td>
                         <?= e((string) $request['requested_at']) ?>
-                        <?php if (!empty($request['processed_at'])): ?><div class="help">Traité: <?= e((string) $request['processed_at']) ?> <?= e((string) ($request['processed_by_callsign'] ?? '')) ?></div><?php endif; ?>
-                        <?php if (!empty($request['resolved_at'])): ?><div class="help">Résolution: <?= e((string) $request['resolved_at']) ?></div><?php endif; ?>
-                        <?php if (!empty($request['erasure_completed_at'])): ?><div class="help">Anonymisation: <?= e((string) $request['erasure_completed_at']) ?></div><?php endif; ?>
+                        <?php if (!empty($request['processed_at'])): ?><div class="help"><?= e($t('processed')) ?>: <?= e((string) $request['processed_at']) ?> <?= e((string) ($request['processed_by_callsign'] ?? '')) ?></div><?php endif; ?>
+                        <?php if (!empty($request['resolved_at'])): ?><div class="help"><?= e($t('resolution')) ?>: <?= e((string) $request['resolved_at']) ?></div><?php endif; ?>
+                        <?php if (!empty($request['erasure_completed_at'])): ?><div class="help"><?= e($t('anonymization')) ?>: <?= e((string) $request['erasure_completed_at']) ?></div><?php endif; ?>
                     </td>
                     <td>
                         <div><?= nl2br(e((string) ($request['notes'] ?? ''))) ?></div>
@@ -99,10 +120,10 @@ ob_start();
                     </td>
                     <td>
                         <?php if ($requestEvents === []): ?>
-                            <span class="help">Aucun événement.</span>
+                            <span class="help"><?= e($t('no_events')) ?></span>
                         <?php else: ?>
                             <details>
-                                <summary><?= count($requestEvents) ?> événement(s)</summary>
+                                <summary><?= e(sprintf($t('events_count'), count($requestEvents))) ?></summary>
                                 <ul class="list-clean list-spaced">
                                     <?php foreach ($requestEvents as $event): ?>
                                         <li>
@@ -121,32 +142,32 @@ ob_start();
                         <form method="post" class="stack">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="request_id" value="<?= $requestId ?>">
-                            <label>Statut
+                            <label><?= e($t('status')) ?>
                                 <select name="status">
                                     <?php foreach ($statuses as $status): ?>
-                                        <option value="<?= e($status) ?>" <?= (string) $request['status'] === $status ? 'selected' : '' ?>><?= e($status) ?></option>
+                                        <option value="<?= e($status) ?>" <?= (string) $request['status'] === $status ? 'selected' : '' ?>><?= e($requestStatusLabels[$status] ?? $status) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </label>
                             <?php if ($requestType === 'erasure'): ?>
                                 <label class="checkbox">
                                     <input type="checkbox" name="apply_erasure" value="1">
-                                    <span>Appliquer l'anonymisation automatique si le statut passe à resolved.</span>
+                                    <span><?= e($t('apply_erasure')) ?></span>
                                 </label>
                             <?php endif; ?>
-                            <label>Notes administrateur
+                            <label><?= e($t('admin_notes')) ?>
                                 <textarea name="admin_notes" rows="3" maxlength="2000"><?= e((string) ($request['admin_notes'] ?? '')) ?></textarea>
                             </label>
-                            <button class="button small" type="submit">Mettre à jour</button>
+                            <button class="button small" type="submit"><?= e($t('update')) ?></button>
                         </form>
                     </td>
                 </tr>
             <?php endforeach; ?>
-            <?php if ($requests === []): ?><tr><td colspan="8">Aucune demande RGPD.</td></tr><?php endif; ?>
+            <?php if ($requests === []): ?><tr><td colspan="8"><?= e($t('none')) ?></td></tr><?php endif; ?>
             </tbody>
         </table>
     </div>
 </section>
 <?php
 
-echo render_layout((string) ob_get_clean(), 'Administration RGPD');
+echo render_layout((string) ob_get_clean(), $t('title'));

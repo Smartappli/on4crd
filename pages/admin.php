@@ -4,7 +4,6 @@ declare(strict_types=1);
 require_permission('admin.access');
 $locale = current_locale();
 $t = admin_dashboard_translations($locale);
-$openLabel = ['fr' => 'Ouvrir', 'en' => 'Open', 'de' => 'Öffnen', 'es' => 'Abrir', 'it' => 'Apri', 'pt' => 'Abrir', 'nl' => 'Openen', 'ar' => 'فتح', 'hi' => 'खोलें', 'ja' => '開く', 'zh' => '打开', 'bn' => 'খুলুন', 'ru' => 'Открыть', 'id' => 'Buka'][$locale] ?? 'Ouvrir';
 $adminCardIcons = [
     'admin_modules' => '🧩',
     'admin_permissions' => '🔐',
@@ -51,7 +50,7 @@ ob_start();
                 <p><?= e((string) $card['desc']) ?></p>
                 <div class="row-between" style="margin-top:.75rem;">
                     <span></span>
-                    <span class="admin-open-cta"><?= e($openLabel) ?> →</span>
+                    <span class="admin-open-cta"><?= e((string) $t['open']) ?> →</span>
                 </div>
             </a>
         <?php endforeach; ?>
