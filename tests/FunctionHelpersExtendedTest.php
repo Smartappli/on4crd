@@ -363,12 +363,62 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertContains('id', $targets);
     }
 
+    public function testArticleTranslationPublicStatusesExcludePendingReview(): void
+    {
+        $statuses = article_translation_public_statuses();
+
+        self::assertSame(['reviewed', 'auto'], $statuses);
+        self::assertNotContains('needs_review', $statuses);
+        self::assertNotContains('missing', $statuses);
+    }
+
+    public function testArticleTranslationDeeplTargetsCoverEveryArticleLocale(): void
+    {
+        foreach (article_translation_target_locales() as $locale) {
+            self::assertNotNull(article_translation_deepl_target($locale), 'Missing DeepL target for ' . $locale);
+        }
+
+        self::assertSame('HR', article_translation_deepl_target('hr'));
+        self::assertSame('GA', article_translation_deepl_target('ga'));
+        self::assertSame('MT', article_translation_deepl_target('mt'));
+        self::assertSame('HI', article_translation_deepl_target('hi'));
+        self::assertSame('BN', article_translation_deepl_target('bn'));
+    }
+
     public function testArticleTranslationSourceHashTracksSourceChanges(): void
     {
         $baseHash = article_translation_source_hash('Titre', 'Resume', '<p>Contenu</p>');
 
         self::assertSame($baseHash, article_translation_source_hash(' Titre ', ' Resume ', ' <p>Contenu</p> '));
         self::assertNotSame($baseHash, article_translation_source_hash('Titre', 'Resume', '<p>Contenu modifie</p>'));
+    }
+
+    public function testArticlePublicationDatetimePrefersPublishedAt(): void
+    {
+        self::assertSame('2026-06-03 09:30:00', article_publication_datetime([
+            'published_at' => '2026-06-03 09:30:00',
+            'created_at' => '2026-06-01 08:00:00',
+            'updated_at' => '2026-06-04 10:00:00',
+        ]));
+        self::assertSame('2026-06-01 08:00:00', article_publication_datetime([
+            'published_at' => null,
+            'created_at' => '2026-06-01 08:00:00',
+            'updated_at' => '2026-06-04 10:00:00',
+        ]));
+        self::assertNull(article_publication_datetime([
+            'published_at' => '',
+            'created_at' => 'not-a-date',
+            'updated_at' => '',
+        ]));
+    }
+
+    public function testArticleDuplicateSlugErrorDetectsUniqueViolation(): void
+    {
+        $exception = new PDOException('SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry "article" for key "articles.slug"');
+        $exception->errorInfo = ['23000', 1062, 'Duplicate entry "article" for key "articles.slug"'];
+
+        self::assertTrue(article_is_duplicate_slug_error($exception));
+        self::assertFalse(article_is_duplicate_slug_error(new RuntimeException('Duplicate entry')));
     }
 
 }
