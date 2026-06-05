@@ -94,9 +94,9 @@ return [
     ],
     'legal' => [
         'publication_manager' => 'Comité du Radio Club Durnal ON4CRD',
-        'hosting_name' => 'Infrastructure technique exploitée pour le compte du club',
-        'hosting_address' => 'À compléter avec les coordonnées de l’hébergeur effectif',
-        'hosting_url' => '',
+        'hosting_name' => 'OVH SAS (OVHcloud)',
+        'hosting_address' => '2 rue Kellermann, 59100 Roubaix, France',
+        'hosting_url' => 'https://www.ovhcloud.com/',
     ],
     'social' => [
         'album_webhooks' => [

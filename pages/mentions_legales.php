@@ -13,9 +13,9 @@ $clubName = trim((string) config('privacy.controller_name', 'Radio Club Durnal O
 $clubEmail = site_contact_email();
 $clubAddress = trim((string) config('privacy.controller_postal_address', 'Rue des Ecoles, 5530 Purnode, Belgique'));
 $publicationManager = trim((string) config('legal.publication_manager', 'Comité du Radio Club Durnal ON4CRD'));
-$hostingName = trim((string) config('legal.hosting_name', 'Infrastructure technique exploitée pour le compte du club'));
-$hostingAddress = trim((string) config('legal.hosting_address', 'Informations disponibles sur demande auprès du club'));
-$hostingUrl = trim((string) config('legal.hosting_url', ''));
+$hostingName = trim((string) config('legal.hosting_name', 'OVH SAS (OVHcloud)'));
+$hostingAddress = trim((string) config('legal.hosting_address', '2 rue Kellermann, 59100 Roubaix, France'));
+$hostingUrl = trim((string) config('legal.hosting_url', 'https://www.ovhcloud.com/'));
 
 $replaceLegalPlaceholders = static function (string $value) use (
     $clubName,
