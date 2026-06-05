@@ -207,6 +207,23 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('Dupont', $member['last_name']);
     }
 
+    public function testMemberContactEmailDefaultsToClubAddressWhenMissing(): void
+    {
+        self::assertSame('crdurnal@gmail.com', member_contact_email_from_input(''));
+        self::assertSame('crdurnal@gmail.com', member_contact_email_from_input('   '));
+        self::assertSame('member@example.test', member_contact_email_from_input(' member@example.test '));
+    }
+
+    public function testMemberSharedContactEmailUsesUniqueAuthEmail(): void
+    {
+        $authEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4CRD');
+
+        self::assertNotSame('crdurnal@gmail.com', $authEmail);
+        self::assertStringStartsWith('on4crd-', $authEmail);
+        self::assertStringEndsWith('@local.invalid', $authEmail);
+        self::assertSame('member@example.test', member_auth_email_for_contact_email('member@example.test', 'ON4CRD'));
+    }
+
     public function testMemberProfileVisibilityDefaultsProtectSensitiveIdentityFields(): void
     {
         $t = static fn(string $key): string => $key;

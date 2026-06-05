@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $firstName = trim((string) ($_POST['first_name'] ?? ''));
         $lastName = trim((string) ($_POST['last_name'] ?? ''));
         $fullName = member_full_name_from_parts($firstName, $lastName);
-        $email = trim((string) ($_POST['email'] ?? ''));
+        $email = member_contact_email_from_input((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $country = trim((string) ($_POST['country'] ?? ''));
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($country) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32 || mb_strlen($qth) > 190) {
             throw new RuntimeException($t('invalid_data'));
         }
-        if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new RuntimeException($t('invalid_data'));
         }
         if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            $authEmail = $email !== '' ? $email : strtolower($callsign) . '@local.invalid';
+            $authEmail = member_auth_email_for_contact_email($email, $callsign);
             $userId = $authClient->registerWithUniqueUsername($authEmail, $password, $callsign);
         } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException|\Delight\Auth\InvalidUsernameException $exception) {
             throw new RuntimeException($t('invalid_data'));
@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $firstName,
             $lastName,
             $fullName,
-            $email !== '' ? $email : null,
+            $email,
             password_hash($password, PASSWORD_DEFAULT),
             1,
             $country !== '' ? $country : null,
@@ -217,7 +217,7 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('callsign')) . '<input type="text" name="callsign" maxlength="32" required></label>'
     . '<label>' . e($t('last_name')) . '<input type="text" name="last_name" maxlength="95" required></label>'
     . '<label>' . e($t('first_name')) . '<input type="text" name="first_name" maxlength="95" required></label>'
-    . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190"></label>'
+    . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190" placeholder="' . e(member_default_contact_email()) . '"></label>'
     . '<label>' . e($t('phone')) . '<input type="tel" name="phone" maxlength="64" autocomplete="tel"></label>'
     . '<label>' . e($t('country')) . '<select name="country" class="country-select" required>' . member_country_select_options_html('Belgique') . '</select></label>'
     . '<label>' . e($t('address')) . '<input type="text" name="address" maxlength="255" autocomplete="street-address"></label>'

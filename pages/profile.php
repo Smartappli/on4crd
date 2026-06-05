@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $firstName = trim((string) ($_POST['first_name'] ?? ''));
         $lastName = trim((string) ($_POST['last_name'] ?? ''));
         $fullName = member_full_name_from_parts($firstName, $lastName);
-        $email = trim((string) ($_POST['email'] ?? ''));
+        $email = member_contact_email_from_input((string) ($_POST['email'] ?? ''));
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $country = trim((string) ($_POST['country'] ?? ''));
         $address = trim((string) ($_POST['address'] ?? ''));
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $favouriteModes = member_profile_normalize_choice_post($_POST['favourite_modes'] ?? [], member_profile_favourite_mode_choices());
         $interests = trim((string) ($_POST['interests'] ?? ''));
 
-        if ($callsign === '' || $firstName === '' || $lastName === '' || $email === '' || $country === '' || $qth === '') {
+        if ($callsign === '' || $firstName === '' || $lastName === '' || $country === '' || $qth === '') {
             throw new RuntimeException($t('required'));
         }
         if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($country) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32 || mb_strlen($qth) > 190) {
@@ -88,9 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $authUserId = (int) ($currentMember['auth_user_id'] ?? 0);
+        $authEmail = member_auth_email_for_contact_email($email, $callsign);
         if ($authUserId > 0 && table_exists('users')) {
             $duplicateUserStmt = db()->prepare('SELECT COUNT(*) FROM users WHERE (email = ? OR username = ?) AND id <> ?');
-            $duplicateUserStmt->execute([$email, $callsign, $authUserId]);
+            $duplicateUserStmt->execute([$authEmail, $callsign, $authUserId]);
             if ((int) $duplicateUserStmt->fetchColumn() > 0) {
                 throw new RuntimeException($t('auth_identifier_taken'));
             }
@@ -188,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if ($authUserId > 0 && table_exists('users')) {
-            db()->prepare('UPDATE users SET email = ?, username = ? WHERE id = ? LIMIT 1')->execute([$email, $callsign, $authUserId]);
+            db()->prepare('UPDATE users SET email = ?, username = ? WHERE id = ? LIMIT 1')->execute([$authEmail, $callsign, $authUserId]);
         }
 
         db()->commit();
@@ -208,6 +209,9 @@ $stmt->execute([$memberId]);
 $member = $stmt->fetch() ?: [];
 $member = member_backfill_missing_qrz_url($memberId, is_array($member) ? $member : []);
 $member = member_with_name_parts($member);
+if (trim((string) ($member['email'] ?? '')) === '') {
+    $member['email'] = member_default_contact_email();
+}
 
 $profileViews = [
     'public' => ['title' => 'Vue ' . strtolower($t('public'))],
@@ -294,7 +298,7 @@ ob_start();
                 <label><?= $requiredFieldLabel($t('callsign'), 'profile-required-callsign') ?><input type="text" name="callsign" maxlength="32" required value="<?= e((string) ($member['callsign'] ?? '')) ?>"></label>
                 <label><?= $requiredFieldLabel($t('last_name'), 'profile-required-last-name') ?><input type="text" name="last_name" maxlength="95" required value="<?= e((string) ($member['last_name'] ?? '')) ?>"></label>
                 <label><?= $requiredFieldLabel($t('first_name'), 'profile-required-first-name') ?><input type="text" name="first_name" maxlength="95" required value="<?= e((string) ($member['first_name'] ?? '')) ?>"></label>
-                <label><?= $requiredFieldLabel($t('email'), 'profile-required-email') ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
+                <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" placeholder="<?= e(member_default_contact_email()) ?>" value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
                 <label><?= $requiredFieldLabel($t('country'), 'profile-required-country') ?><select name="country" class="country-select" required><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
                 <label><?= e($t('address')) ?><input type="text" name="address" maxlength="255" value="<?= e((string) ($member['address'] ?? '')) ?>" autocomplete="street-address"></label>

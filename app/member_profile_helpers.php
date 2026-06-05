@@ -3,6 +3,57 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/widget_radio_helpers.php';
 
+if (!function_exists('member_default_contact_email')) {
+function member_default_contact_email(): string
+{
+    $configuredEmail = trim((string) config('app.default_member_email', 'crdurnal@gmail.com'));
+
+    return filter_var($configuredEmail, FILTER_VALIDATE_EMAIL) !== false ? $configuredEmail : 'crdurnal@gmail.com';
+}
+}
+
+if (!function_exists('member_contact_email_from_input')) {
+function member_contact_email_from_input(string $email): string
+{
+    $email = trim($email);
+
+    return $email !== '' ? $email : member_default_contact_email();
+}
+}
+
+if (!function_exists('member_contact_email_uses_shared_default')) {
+function member_contact_email_uses_shared_default(string $email): bool
+{
+    return strcasecmp(trim($email), member_default_contact_email()) === 0;
+}
+}
+
+if (!function_exists('member_auth_email_for_shared_contact')) {
+function member_auth_email_for_shared_contact(string $callsign): string
+{
+    $normalizedCallsign = strtolower(trim($callsign));
+    $localPart = preg_replace('/[^a-z0-9]+/', '-', $normalizedCallsign) ?? '';
+    $localPart = trim($localPart, '-');
+    if ($localPart === '') {
+        $localPart = 'member';
+    }
+
+    return $localPart . '-' . substr(sha1(strtoupper(trim($callsign))), 0, 10) . '@local.invalid';
+}
+}
+
+if (!function_exists('member_auth_email_for_contact_email')) {
+function member_auth_email_for_contact_email(string $contactEmail, string $callsign): string
+{
+    $contactEmail = member_contact_email_from_input($contactEmail);
+    if (!member_contact_email_uses_shared_default($contactEmail)) {
+        return $contactEmail;
+    }
+
+    return member_auth_email_for_shared_contact($callsign);
+}
+}
+
 if (!function_exists('member_country_options')) {
 /**
  * @return array<string, string>
