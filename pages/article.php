@@ -61,8 +61,10 @@ $readingMinutes = article_view_reading_minutes((string) ($row['content_localized
 $articlePlainText = article_view_plain_text((string) ($row['content_localized'] ?? $row['content'] ?? ''));
 $articleDescription = trim((string) ($row['excerpt_localized'] ?? '')) !== '' ? (string) $row['excerpt_localized'] : (string) $t['meta_fallback'];
 $articleUrl = route_url_with_locale('article', $locale, ['slug' => (string) $row['slug']]);
-$articlePublishedAt = !empty($row['created_at']) ? date('c', strtotime((string) $row['created_at'])) : null;
+$articlePublishedRaw = article_publication_datetime($row);
+$articlePublishedAt = $articlePublishedRaw !== null ? date('c', strtotime($articlePublishedRaw)) : null;
 $articleModifiedAt = !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : null;
+$articleDisplayDate = $articlePublishedRaw !== null ? date('d/m/Y', strtotime($articlePublishedRaw)) : '';
 set_page_meta([
     'title' => (string) $row['title_localized'],
     'description' => $articleDescription,
@@ -108,16 +110,18 @@ set_page_meta([
         ],
     ],
 ]);
-$relatedStmt = db()->prepare('SELECT id, slug, title, excerpt, content, updated_at FROM articles WHERE status = "published" AND category = ? AND id <> ? ORDER BY updated_at DESC, id DESC LIMIT 3');
+$articlePublicationSort = article_publication_sort_expression();
+$articleOrderDate = $articlePublishedRaw ?? (string) ($row['updated_at'] ?? '');
+$relatedStmt = db()->prepare('SELECT id, slug, title, excerpt, content, published_at, created_at, updated_at FROM articles WHERE status = "published" AND category = ? AND id <> ? ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT 3');
 $relatedStmt->execute([$category, (int) $row['id']]);
 $relatedRows = $relatedStmt->fetchAll() ?: [];
 
-$previousStmt = db()->prepare('SELECT slug, title FROM articles WHERE status = "published" AND updated_at > ? AND id <> ? ORDER BY updated_at ASC, id ASC LIMIT 1');
-$previousStmt->execute([(string) $row['updated_at'], (int) $row['id']]);
+$previousStmt = db()->prepare('SELECT slug, title FROM articles WHERE status = "published" AND ' . $articlePublicationSort . ' > ? AND id <> ? ORDER BY ' . $articlePublicationSort . ' ASC, id ASC LIMIT 1');
+$previousStmt->execute([$articleOrderDate, (int) $row['id']]);
 $previous = $previousStmt->fetch() ?: null;
 
-$nextStmt = db()->prepare('SELECT slug, title FROM articles WHERE status = "published" AND updated_at < ? AND id <> ? ORDER BY updated_at DESC, id DESC LIMIT 1');
-$nextStmt->execute([(string) $row['updated_at'], (int) $row['id']]);
+$nextStmt = db()->prepare('SELECT slug, title FROM articles WHERE status = "published" AND ' . $articlePublicationSort . ' < ? AND id <> ? ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT 1');
+$nextStmt->execute([$articleOrderDate, (int) $row['id']]);
 $next = $nextStmt->fetch() ?: null;
 
 ob_start();
