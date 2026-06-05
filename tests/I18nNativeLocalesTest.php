@@ -206,6 +206,25 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertSame([], $missing);
     }
 
+    public function testAdminModuleCardsUseModularI18nDomain(): void
+    {
+        $moduleCatalog = file_get_contents(__DIR__ . '/../app/module_catalog.php');
+        self::assertIsString($moduleCatalog);
+        self::assertStringContainsString("i18n_domain_messages('admin_module_cards')", $moduleCatalog);
+
+        $messages = i18n_domain_messages('admin_module_cards');
+        self::assertNotEmpty($messages);
+
+        foreach (admin_module_cards_catalog() as $card) {
+            $route = (string) ($card['route'] ?? '');
+            self::assertNotSame('', $route);
+            foreach ($this->supportedLocales() as $locale) {
+                self::assertNotSame('', trim((string) ($messages[$locale][$route . '_title'] ?? '')), sprintf('Missing admin module title for %s in %s.', $route, $locale));
+                self::assertNotSame('', trim((string) ($messages[$locale][$route . '_desc'] ?? '')), sprintf('Missing admin module description for %s in %s.', $route, $locale));
+            }
+        }
+    }
+
     public function testFrenchLocaleFilesAreValidUtf8AndReadable(): void
     {
         $files = glob(__DIR__ . '/../app/i18n/*/fr.php');
