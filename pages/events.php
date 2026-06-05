@@ -117,13 +117,18 @@ if (!$weekDate instanceof DateTimeImmutable) {
 
 $eventCards = [];
 foreach ($rows as $event) {
-    $startAt = new DateTimeImmutable((string) $event['start_at']);
-    $endAt = new DateTimeImmutable((string) $event['end_at']);
+    try {
+        $startAt = new DateTimeImmutable((string) $event['start_at']);
+        $endAt = new DateTimeImmutable((string) $event['end_at']);
+    } catch (Throwable) {
+        continue;
+    }
 
     $summary = trim((string) ($event['summary'] ?? ''));
     if ($summary === '') {
         $summary = trim(strip_tags((string) ($event['description'] ?? '')));
     }
+    $externalUrl = sanitize_href_attribute((string) ($event['external_url'] ?? '')) ?? '';
 
     $eventCards[(int) $event['id']] = [
         'id' => (int) $event['id'],
@@ -133,7 +138,7 @@ foreach ($rows as $event) {
         'endLabel' => $endAt->format('d/m/Y H:i'),
         'location' => trim((string) ($event['location'] ?? '')),
         'detailUrl' => route_url('event_view', ['slug' => (string) $event['slug']]),
-        'externalUrl' => trim((string) ($event['external_url'] ?? '')),
+        'externalUrl' => $externalUrl,
     ];
 
 }
