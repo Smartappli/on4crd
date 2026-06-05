@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'layout' => 'Amministrazzjoni',
+  'title' => 'Amministrazzjoni ċentralizzata',
+  'lead' => 'Il-moduli u l-għodod kollha tal-amministrazzjoni huma miġbura f\'dan id-daxxbord uniku.',
+  'search_label' => 'Tfittxija malajr',
+  'search_placeholder' => 'Modulu, għodda, deskrizzjoni...',
+  'search_cta' => 'Iffiltra',
+  'search_reset' => 'Irrisettja',
+  'empty' => 'L-ebda modulu ma jaqbel mat-tfittxija tiegħek.',
+  'open' => 'Miftuħa',
 );

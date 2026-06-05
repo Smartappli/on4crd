@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
+  'layout' => 'Administreerimine',
+  'title' => 'Tsentraliseeritud haldus',
+  'lead' => 'Kõik administraatori moodulid ja tööriistad on koondatud sellele ühele armatuurlauale.',
+  'search_label' => 'Kiire otsing',
+  'search_placeholder' => 'Moodul, tööriist, kirjeldus...',
   'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'search_reset' => 'Lähtesta',
+  'empty' => 'Ükski moodul ei vasta teie otsingule.',
+  'open' => 'Avatud',
 );

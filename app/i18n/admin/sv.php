@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 return array (
   'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'title' => 'Centraliserad administration',
+  'lead' => 'Alla administratörsmoduler och verktyg är grupperade i denna enda instrumentpanel.',
+  'search_label' => 'Snabbsökning',
+  'search_placeholder' => 'Modul, verktyg, beskrivning...',
+  'search_cta' => 'Filtrera',
+  'search_reset' => 'Återställ',
+  'empty' => 'Ingen modul matchar din sökning.',
+  'open' => 'Öppna',
 );

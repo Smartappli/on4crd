@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'layout' => 'Administrasi',
+  'title' => 'Administrasi terpusat',
+  'lead' => 'Semua modul dan alat admin dikelompokkan dalam satu dasbor ini.',
+  'search_label' => 'Pencarian cepat',
+  'search_placeholder' => 'Modul, alat, deskripsi...',
+  'search_cta' => 'Menyaring',
+  'search_reset' => 'Setel ulang',
+  'empty' => 'Tidak ada modul yang cocok dengan pencarian Anda.',
+  'open' => 'Buka',
 );

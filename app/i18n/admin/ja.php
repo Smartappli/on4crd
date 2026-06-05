@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'layout' => '管理',
+  'title' => '一元管理',
+  'lead' => 'すべての管理モジュールとツールがこの 1 つのダッシュボードにグループ化されています。',
+  'search_label' => 'クイック検索',
+  'search_placeholder' => 'モジュール、ツール、説明...',
+  'search_cta' => 'フィルター',
+  'search_reset' => 'リセット',
+  'empty' => '検索に一致するモジュールはありません。',
+  'open' => '開く',
 );

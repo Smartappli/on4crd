@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'layout' => 'Administracja',
+  'title' => 'Scentralizowana administracja',
+  'lead' => 'Wszystkie moduły i narzędzia administracyjne są zgrupowane w jednym panelu kontrolnym.',
+  'search_label' => 'Szybkie wyszukiwanie',
+  'search_placeholder' => 'Moduł, narzędzie, opis...',
+  'search_cta' => 'Filtruj',
+  'search_reset' => 'Zresetuj',
+  'empty' => 'Żaden moduł nie pasuje do Twojego wyszukiwania.',
+  'open' => 'Otwórz',
 );

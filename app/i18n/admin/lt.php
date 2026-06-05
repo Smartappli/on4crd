@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'layout' => 'Administravimas',
+  'title' => 'Centralizuotas administravimas',
+  'lead' => 'Visi administravimo moduliai ir įrankiai yra sugrupuoti šioje vienoje informacijos suvestinėje.',
+  'search_label' => 'Greita paieška',
+  'search_placeholder' => 'Modulis, įrankis, aprašymas...',
+  'search_cta' => 'Filtruoti',
+  'search_reset' => 'Nustatyti iš naujo',
+  'empty' => 'Nė vienas modulis neatitinka jūsų paieškos.',
+  'open' => 'Atidaryti',
 );

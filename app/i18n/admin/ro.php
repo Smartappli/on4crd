@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'layout' => 'Administrare',
+  'title' => 'Administrare centralizată',
+  'lead' => 'Toate modulele și instrumentele de administrare sunt grupate în acest singur tablou de bord.',
+  'search_label' => 'Căutare rapidă',
+  'search_placeholder' => 'Modul, instrument, descriere...',
+  'search_cta' => 'Filtru',
+  'search_reset' => 'Resetați',
+  'empty' => 'Niciun modul nu corespunde căutării dvs.',
+  'open' => 'Deschide',
 );

@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
-  'search_cta' => 'Filter',
+  'layout' => 'Adminisztráció',
+  'title' => 'Központosított ügyintézés',
+  'lead' => 'Az összes adminisztrációs modul és eszköz ezen az egyetlen irányítópulton van csoportosítva.',
+  'search_label' => 'Gyors keresés',
+  'search_placeholder' => 'Modul, eszköz, leírás...',
+  'search_cta' => 'Szűrés',
   'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'empty' => 'Egyetlen modul sem felel meg a keresésnek.',
+  'open' => 'Nyissa meg',
 );

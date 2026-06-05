@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Administration',
-  'title' => 'Centralized administration',
-  'lead' => 'All admin modules and tools are grouped in this single dashboard.',
-  'search_label' => 'Quick search',
-  'search_placeholder' => 'Module, tool, description...',
+  'layout' => 'Administracija',
+  'title' => 'Centralizirana administracija',
+  'lead' => 'Vsi skrbniški moduli in orodja so združeni v eno samo nadzorno ploščo.',
+  'search_label' => 'Hitro iskanje',
+  'search_placeholder' => 'Modul, orodje, opis...',
   'search_cta' => 'Filter',
-  'search_reset' => 'Reset',
-  'empty' => 'No module matches your search.',
-  'open' => 'Open',
+  'search_reset' => 'Ponastavi',
+  'empty' => 'Noben modul se ne ujema z vašim iskanjem.',
+  'open' => 'Odpri',
 );
