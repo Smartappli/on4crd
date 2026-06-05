@@ -6,9 +6,7 @@ require_once __DIR__ . '/widget_radio_helpers.php';
 if (!function_exists('member_default_contact_email')) {
 function member_default_contact_email(): string
 {
-    $configuredEmail = trim((string) config('app.default_member_email', 'crdurnal@gmail.com'));
-
-    return filter_var($configuredEmail, FILTER_VALIDATE_EMAIL) !== false ? $configuredEmail : 'crdurnal@gmail.com';
+    return 'crdurnal@gmail.com';
 }
 }
 
