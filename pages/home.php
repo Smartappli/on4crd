@@ -386,8 +386,9 @@ try {
     }
 
     if (module_enabled('articles') && table_exists('articles')) {
-        $latestArticle = cache_remember('home_latest_article_v1', 60, static function () {
-            return db()->query('SELECT id, slug, title, excerpt, content, created_at, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 1')->fetch();
+        $latestArticle = cache_remember('home_latest_article_v2', 60, static function () {
+            $sort = article_publication_sort_expression();
+            return db()->query('SELECT id, slug, title, excerpt, content, published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . $sort . ' DESC, id DESC LIMIT 1')->fetch();
         });
     }
 } catch (Throwable) {
@@ -452,7 +453,8 @@ if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
     if ($articleExcerpt === '') {
         $articleExcerpt = mb_safe_strimwidth(trim((string) preg_replace('/\s+/u', ' ', strip_tags((string) ($latestArticle['content_localized'] ?? $latestArticle['content'] ?? '')))), 0, 130, '...');
     }
-    $articleDate = !empty($latestArticle['updated_at']) ? date('d/m/Y', strtotime((string) $latestArticle['updated_at'])) : '';
+    $articlePublished = article_publication_datetime($latestArticle);
+    $articleDate = $articlePublished !== null ? date('d/m/Y', strtotime($articlePublished)) : '';
     $latestArticleHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('article', ['slug' => (string) $latestArticle['slug']])) . '">'
         . ($articleDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e((string) ($homeI18n['spotlight_member_updated_on'] ?? 'Mis à jour le')) . ' ' . e($articleDate) . '</p>' : '')
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) ($latestArticle['title_localized'] ?? $latestArticle['title'] ?? '')) . '</h3>'
@@ -892,6 +894,5 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
 
 
 echo render_layout($content, (string) ($homeI18n['page_title'] ?? 'Accueil'));
-
 
 

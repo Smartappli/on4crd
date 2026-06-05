@@ -138,7 +138,7 @@ ob_start();
     <h1><?= e((string) $row['title_localized']) ?></h1>
     <p class="help">
         <?= e($categoryLabel) ?> ·
-        <?= e(date('d/m/Y', strtotime((string) $row['updated_at']))) ?> ·
+        <?= e($articleDisplayDate) ?> ·
         <?= $readingMinutes ?> <?= e((string) $t['reading_minutes']) ?>
     </p>
     <?php if (trim((string) ($row['excerpt_localized'] ?? '')) !== ''): ?>

@@ -115,7 +115,8 @@ $pagination = pagination_state($totalArticles, $page, $perPage);
 $page = $pagination['page'];
 $maxPage = $pagination['total_pages'];
 $offset = $pagination['offset'];
-$dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY updated_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$articlePublicationSort = article_publication_sort_expression();
+$dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $dataStmt->execute($whereParams);
 $pagedRows = $dataStmt->fetchAll() ?: [];
 $groupedArticles = [];
@@ -245,11 +246,12 @@ ob_start();
                 <div class="news-grid">
                     <?php foreach ($themeRows as $row): ?>
                         <?php $row = localized_article_row($row); ?>
+                        <?php $articleDate = article_publication_datetime($row); ?>
                         <?php $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) ($row['id'] ?? 0)) : false; ?>
                         <article class="news-card feature-card">
                             <span class="badge muted"><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></span>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
-                            <p class="help"><?= e(date('d/m/Y', strtotime((string) $row['updated_at']))) ?> · <?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
+                            <p class="help"><?= $articleDate !== null ? e(date('d/m/Y', strtotime($articleDate))) . ' · ' : '' ?><?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
                             <p><?= e(article_card_excerpt($row)) ?></p>
                             <p class="actions">
                                 <a class="button secondary" href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['read_article']) ?></a>
