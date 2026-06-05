@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'e-mail \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Žádní předplatitelé.',
   'no_campaigns' => 'Žádná kampaň.',
+  'err_consent_proof_required' => 'Je vyžadován důkaz souhlasu.',
+  'consent_proof' => 'Důkaz souhlasu',
+  'consent_proof_ph' => 'Příklad: podepsaný formulář na 2026-06-05',
+  'consent_admin_help' => 'Přidání, import nebo opětovná aktivace vyžaduje výslovný souhlas.',
+  'consent' => 'Souhlas',
 );

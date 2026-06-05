@@ -24,6 +24,7 @@ function core_permission_catalog(): array
         'ads.moderate' => 'Moderer les publicites',
         'ads.manage_all' => 'Gerer toutes les publicites et statistiques',
         'modules.manage' => 'Gerer les modules du site',
+        'privacy.manage' => 'Traiter les demandes RGPD',
         'press.manage' => 'Gerer les contacts et communiques de presse',
         'editorial.manage' => 'Gerer les contenus editoriaux multilingues',
         'translations.review' => 'Relire et valider les traductions',
@@ -85,7 +86,7 @@ function ensure_core_roles_permissions(): bool
         $rolePermissions = [
             'admin' => array_keys($permissions),
             'super_admin' => array_keys($permissions),
-            'member' => ['dashboard.manage', 'wiki.edit', 'qsl.manage'],
+            'member' => ['dashboard.manage', 'qsl.manage'],
         ];
         $rolePermissionStmt = db()->prepare('INSERT IGNORE INTO role_permissions (role_id, permission_id) VALUES (?, ?)');
         foreach ($rolePermissions as $roleCode => $permissionCodes) {
@@ -99,6 +100,13 @@ function ensure_core_roles_permissions(): bool
                     $rolePermissionStmt->execute([$roleId, $permissionId]);
                 }
             }
+        }
+
+        $memberRoleId = (int) ($roleMap['member'] ?? 0);
+        $wikiEditPermissionId = (int) ($permissionMap['wiki.edit'] ?? 0);
+        if ($memberRoleId > 0 && $wikiEditPermissionId > 0) {
+            db()->prepare('DELETE FROM role_permissions WHERE role_id = ? AND permission_id = ?')
+                ->execute([$memberRoleId, $wikiEditPermissionId]);
         }
     } catch (Throwable) {
         return false;

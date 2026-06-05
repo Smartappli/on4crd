@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'ok_updated' => 'Dashboard-widgets opdateret.',
-  'title' => 'Administration dashboard',
+  'title' => 'Administrationsdashboard',
   'help' => 'Aktiver/deaktiver de tilgængelige widgets på medlemsdashboardet.',
   'save' => 'Gem',
   'layout' => 'Dashboard',

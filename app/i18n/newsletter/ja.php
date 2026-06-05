@@ -17,4 +17,7 @@ return array (
   'email_label' => '連絡先メール',
   'subscribe' => '購読する',
   'layout_title' => 'ニュースレター',
+  'consent_required' => 'ニュースレターの同意が必要です。',
+  'consent_label' => '私は、ON4CRD ニュースレターの受信に同意し、いつでも購読を解除できることを理解しています。',
+  'consent_proof_member' => '会員向けニュースレターの同意',
 );

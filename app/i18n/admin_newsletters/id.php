@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Tidak ada pelanggan.',
   'no_campaigns' => 'Tidak ada kampanye.',
+  'err_consent_proof_required' => 'Bukti persetujuan diperlukan.',
+  'consent_proof' => 'Bukti persetujuan',
+  'consent_proof_ph' => 'Contoh: formulir yang ditandatangani di 2026-06-05',
+  'consent_admin_help' => 'Menambah, mengimpor, atau mengaktifkan kembali memerlukan bukti persetujuan eksplisit.',
+  'consent' => 'Persetujuan',
 );

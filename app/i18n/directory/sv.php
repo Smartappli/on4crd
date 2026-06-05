@@ -24,7 +24,7 @@ return array (
   'bands' => 'Band',
   'station' => 'Resort',
   'committee' => 'kommittén',
-  'grid' => 'Grid',
+  'grid' => 'Rutnät',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Lägen',

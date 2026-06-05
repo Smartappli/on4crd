@@ -56,6 +56,26 @@ final class I18nNativeLocalesTest extends TestCase
         }
     }
 
+    public function testEveryI18nDomainLoaderHasNativeLocaleDirectory(): void
+    {
+        $domainLoaders = glob(__DIR__ . '/../app/i18n/*.php');
+        self::assertIsArray($domainLoaders);
+        self::assertNotEmpty($domainLoaders);
+
+        foreach ($domainLoaders as $loaderPath) {
+            $domain = basename((string) $loaderPath, '.php');
+            $directory = __DIR__ . '/../app/i18n/' . $domain;
+
+            self::assertDirectoryExists($directory, sprintf('Missing native locale directory app/i18n/%s', $domain));
+            foreach ($this->supportedLocales() as $locale) {
+                self::assertFileExists(
+                    $directory . '/' . $locale . '.php',
+                    sprintf('Missing native locale file app/i18n/%s/%s.php', $domain, $locale)
+                );
+            }
+        }
+    }
+
     public function testEveryModularI18nDomainKeepsLocaleKeyParity(): void
     {
         $directories = glob(__DIR__ . '/../app/i18n/*', GLOB_ONLYDIR);
@@ -126,6 +146,113 @@ final class I18nNativeLocalesTest extends TestCase
 
             foreach ($memberModuleKeys as $key) {
                 self::assertNotSame('', trim((string) ($messages[$key] ?? '')), sprintf('Empty member module translation %s in app/i18n/home/%s.php', $key, $locale));
+            }
+        }
+    }
+
+    public function testHomeDonationLinkTargetsDedicatedDonationRoute(): void
+    {
+        $homePage = file_get_contents(__DIR__ . '/../pages/home.php');
+        self::assertIsString($homePage);
+
+        self::assertMatchesRegularExpression(
+            '/route_url\(\'donation\'\)\)\s*\.\s*\'">\'\s*\.\s*e\(\(string\)\s*\$homeI18n\[\'link_donate\'\]\)/',
+            $homePage,
+            'The "Faire un don" home link must target the dedicated donation page, not membership or sponsoring.'
+        );
+    }
+
+    public function testEveryVisibleRoutedPageUsesAModularI18nDomain(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+        preg_match_all(
+            '/case \'([^\']+)\':\s*\$dispatchPage\(\'([^\']+)\'\);\s*break;/',
+            $router,
+            $routeMatches,
+            PREG_SET_ORDER
+        );
+
+        $domainFiles = glob(__DIR__ . '/../app/i18n/*.php') ?: [];
+        $domainDirectories = glob(__DIR__ . '/../app/i18n/*', GLOB_ONLYDIR) ?: [];
+        $domains = [];
+        foreach (array_merge($domainFiles, $domainDirectories) as $path) {
+            $domains[basename((string) $path, '.php')] = true;
+        }
+
+        $technicalPages = [
+            'ad_click',
+            'admin_events_feed',
+            'ai_index',
+            'dashboard_widget_card',
+            'events_feed',
+            'knowledge_graph',
+            'llms',
+            'newsletter_unsubscribe',
+            'qsl_export',
+            'qsl_preview',
+            'robots',
+            'save_dashboard',
+            'sitemap',
+            'tools_geocode',
+            'widget_render',
+        ];
+        $missing = [];
+
+        foreach ($routeMatches as $match) {
+            $route = (string) $match[1];
+            $relativePath = (string) $match[2];
+            if (!str_starts_with($relativePath, 'pages/')) {
+                continue;
+            }
+
+            $page = basename($relativePath, '.php');
+            if (in_array($page, $technicalPages, true) || in_array($route, $technicalPages, true)) {
+                continue;
+            }
+
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+            preg_match_all('/i18n_domain_(?:locale|translator|messages)\([\'"]([^\'"]+)[\'"]/', $source, $domainMatches);
+            preg_match_all('/t_page\([\'"]([^\'"]+)[\'"]/', $source, $tPageMatches);
+            preg_match_all('#/i18n/([a-z0-9_]+)(?:\.php|/)#', $source, $requireMatches);
+
+            $usedDomains = array_unique(array_merge(
+                $domainMatches[1] ?? [],
+                $tPageMatches[1] ?? [],
+                $requireMatches[1] ?? []
+            ));
+            if (str_contains($source, 'admin_dashboard_translations(')) {
+                $usedDomains[] = 'admin';
+            }
+
+            $usedDomains = array_values(array_filter(
+                $usedDomains,
+                static fn(string $domain): bool => isset($domains[$domain])
+            ));
+            if ($usedDomains === []) {
+                $missing[] = $route . ' -> ' . $relativePath;
+            }
+        }
+
+        self::assertSame([], $missing);
+    }
+
+    public function testAdminModuleCardsUseModularI18nDomain(): void
+    {
+        $moduleCatalog = file_get_contents(__DIR__ . '/../app/module_catalog.php');
+        self::assertIsString($moduleCatalog);
+        self::assertStringContainsString("i18n_domain_messages('admin_module_cards')", $moduleCatalog);
+
+        $messages = i18n_domain_messages('admin_module_cards');
+        self::assertNotEmpty($messages);
+
+        foreach (admin_module_cards_catalog() as $card) {
+            $route = (string) ($card['route'] ?? '');
+            self::assertNotSame('', $route);
+            foreach ($this->supportedLocales() as $locale) {
+                self::assertNotSame('', trim((string) ($messages[$locale][$route . '_title'] ?? '')), sprintf('Missing admin module title for %s in %s.', $route, $locale));
+                self::assertNotSame('', trim((string) ($messages[$locale][$route . '_desc'] ?? '')), sprintf('Missing admin module description for %s in %s.', $route, $locale));
             }
         }
     }

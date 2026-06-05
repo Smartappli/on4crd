@@ -24,7 +24,7 @@ return array (
   'bands' => 'Godbe',
   'station' => 'Letovišče',
   'committee' => 'odbor',
-  'grid' => 'Grid',
+  'grid' => 'Mreža',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Načini',

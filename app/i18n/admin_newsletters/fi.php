@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'sähköposti\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Ei tilaajia.',
   'no_campaigns' => 'Ei kampanjaa.',
+  'err_consent_proof_required' => 'Suostumustodistus vaaditaan.',
+  'consent_proof' => 'Suostumustodistus',
+  'consent_proof_ph' => 'Esimerkki: allekirjoitettu lomake 2026-06-05:ssä',
+  'consent_admin_help' => 'Lisääminen, tuonti tai uudelleenaktivointi vaatii nimenomaisen suostumuksen todisteen.',
+  'consent' => 'Suostumus',
 );

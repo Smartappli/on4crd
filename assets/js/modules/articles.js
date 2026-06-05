@@ -65,7 +65,7 @@
   if (form) {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const recipient = form.dataset.articlesCategoryRecipient || 'on4crd@gmail.com';
+      const recipient = form.dataset.articlesCategoryRecipient || 'crdurnal@gmail.com';
       const subject = form.dataset.articlesCategorySubject || '';
       const intro = form.dataset.articlesCategoryIntro || '';
       const fields = [

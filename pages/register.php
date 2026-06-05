@@ -19,13 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $firstName = trim((string) ($_POST['first_name'] ?? ''));
         $lastName = trim((string) ($_POST['last_name'] ?? ''));
         $fullName = member_full_name_from_parts($firstName, $lastName);
-        $email = trim((string) ($_POST['email'] ?? ''));
+        $email = member_contact_email_from_input((string) ($_POST['email'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $country = trim((string) ($_POST['country'] ?? ''));
         $address = trim((string) ($_POST['address'] ?? ''));
         $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
+        $allowGeocode = (string) ($_POST['allow_geocode'] ?? '') === '1';
         $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
         $licenceClass = trim((string) ($_POST['licence_class'] ?? ''));
         $operatorSince = trim((string) ($_POST['operator_since'] ?? ''));
@@ -49,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($country) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32 || mb_strlen($qth) > 190) {
             throw new RuntimeException($t('invalid_data'));
         }
-        if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new RuntimeException($t('invalid_data'));
         }
         if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_data'));
         }
 
-        if ($locator === '' || $cqZone === '' || $ituZone === '') {
+        if ($allowGeocode && ($locator === '' || $cqZone === '' || $ituZone === '')) {
             $computedRadioLocation = member_profile_radio_location_from_address($country, $address, $postalCode, $qth);
             if (is_array($computedRadioLocation)) {
                 if ($locator === '') {
@@ -85,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         try {
-            $authEmail = $email !== '' ? $email : strtolower($callsign) . '@local.invalid';
+            $authEmail = member_auth_email_for_contact_email($email, $callsign);
             $userId = $authClient->registerWithUniqueUsername($authEmail, $password, $callsign);
         } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException|\Delight\Auth\InvalidUsernameException $exception) {
             throw new RuntimeException($t('invalid_data'));
@@ -107,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  visibility_licence_class, visibility_operator_since, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas, visibility_interests,
                  is_active
              )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "private", "members", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", 1)
              ON DUPLICATE KEY UPDATE
                  callsign = VALUES(callsign),
                  first_name = VALUES(first_name),
@@ -165,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $firstName,
             $lastName,
             $fullName,
-            $email !== '' ? $email : null,
+            $email,
             password_hash($password, PASSWORD_DEFAULT),
             1,
             $country !== '' ? $country : null,
@@ -217,13 +218,15 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('callsign')) . '<input type="text" name="callsign" maxlength="32" required></label>'
     . '<label>' . e($t('last_name')) . '<input type="text" name="last_name" maxlength="95" required></label>'
     . '<label>' . e($t('first_name')) . '<input type="text" name="first_name" maxlength="95" required></label>'
-    . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190"></label>'
+    . '<label>' . e($t('email')) . '<input type="email" name="email" maxlength="190" placeholder="' . e(member_default_contact_email()) . '"></label>'
     . '<label>' . e($t('phone')) . '<input type="tel" name="phone" maxlength="64" autocomplete="tel"></label>'
     . '<label>' . e($t('country')) . '<select name="country" class="country-select" required>' . member_country_select_options_html('Belgique') . '</select></label>'
     . '<label>' . e($t('address')) . '<input type="text" name="address" maxlength="255" autocomplete="street-address"></label>'
     . '<label>' . e($t('postal_code')) . '<input type="text" name="postal_code" maxlength="32" autocomplete="postal-code"></label>'
     . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2" required></label>'
     . '<label>' . e($t('grid')) . '<input type="text" name="locator" maxlength="6"></label>'
+    . '<label class="register-form-full checkbox-row"><input type="checkbox" name="allow_geocode" value="1"> <span>' . e($t('geocode_consent')) . '</span></label>'
+    . privacy_notice_short_html('register')
     . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
     . '<label>' . e($t('operator_since')) . '<select name="operator_since">' . $operatorSinceOptionsHtml . '</select></label>'
     . '<label>' . e($t('cq_zone')) . '<input type="text" name="cq_zone" maxlength="16"></label>'

@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'ईमेल \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'कोई ग्राहक नहीं.',
   'no_campaigns' => 'कोई अभियान नहीं.',
+  'err_consent_proof_required' => 'सहमति प्रमाण आवश्यक है.',
+  'consent_proof' => 'सहमति प्रमाण',
+  'consent_proof_ph' => 'उदाहरण: 2026-06-05 पर हस्ताक्षरित फॉर्म',
+  'consent_admin_help' => 'जोड़ने, आयात करने या पुनः सक्रिय करने के लिए स्पष्ट सहमति प्रमाण की आवश्यकता होती है।',
+  'consent' => 'सहमति',
 );

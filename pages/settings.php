@@ -18,7 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
             if ($email === '') {
                 throw new RuntimeException($newsletterT('err_invalid_email'));
             }
-            newsletter_upsert_subscriber($email, $userId, 'member_settings');
+            if ((string) ($_POST['newsletter_consent'] ?? '') !== '1') {
+                throw new RuntimeException($newsletterT('consent_required'));
+            }
+            newsletter_upsert_subscriber($email, $userId, 'member_settings', true, $newsletterT('consent_proof_member'));
             set_flash('success', $newsletterT('ok_subscribed'));
         } elseif ($newsletterAction === 'unsubscribe') {
             $currentNewsletter = newsletter_subscriber_for_member($userId);
@@ -89,8 +92,13 @@ ob_start();
           <span><?= e($newsletterT('email_label')) ?></span>
           <input type="email" name="email" value="<?= e($newsletterEmail) ?>" required>
         </label>
+        <label style="display:flex;align-items:center;gap:.45rem;max-width:34rem;">
+          <input type="checkbox" name="newsletter_consent" value="1" required>
+          <span><?= e($newsletterT('consent_label')) ?></span>
+        </label>
         <button class="button small" type="submit"><?= e($newsletterT('subscribe')) ?></button>
       </form>
+      <?= privacy_notice_short_html('newsletter') ?>
     <?php endif; ?>
   </section>
 

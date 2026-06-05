@@ -2,6 +2,10 @@
   const textareas = document.querySelectorAll('textarea:not([data-wysiwyg="off"])');
   if (!textareas.length) return;
   const currentRoute = new URLSearchParams(window.location.search).get('route') || 'home';
+  const currentScriptUrl = document.currentScript instanceof HTMLScriptElement ? document.currentScript.src : '';
+  const mammothAssetUrl = currentScriptUrl
+    ? new URL('../../vendor/mammoth/1.8.0/mammoth.browser.min.js', currentScriptUrl).href
+    : '/assets/vendor/mammoth/1.8.0/mammoth.browser.min.js';
 
   const syncHandlers = [];
   const toolbarButtons = [
@@ -52,7 +56,7 @@
     if (!mammothLoader) {
       mammothLoader = new Promise((resolve, reject) => {
         const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+        script.src = mammothAssetUrl;
         script.async = true;
         script.onload = () => resolve(window.mammoth);
         script.onerror = () => reject(new Error('Impossible de charger le convertisseur Word.'));

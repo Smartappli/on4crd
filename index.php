@@ -173,17 +173,20 @@ $routeModules = [
     'notifications' => 'dashboard',
     'save_dashboard' => 'dashboard',
     'widget_render' => 'dashboard',
+    'dashboard_widget_card' => 'dashboard',
     'profile' => 'members',
     'change_password' => 'members',
-    'gdpr' => 'members',
     'my_requests' => 'members',
+    'members_library' => 'members',
     'directory' => 'directory',
     'tools' => 'tools',
     'tools_geocode' => 'tools',
     'committee' => 'committee',
     'press' => 'press',
     'schools' => 'education',
+    'relais' => 'education',
     'events' => 'events',
+    'events_feed' => 'events',
     'event_view' => 'events',
     'auctions' => 'auctions',
     'auction_view' => 'auctions',
@@ -212,7 +215,9 @@ $routeModules = [
     'ad_click' => 'advertising',
     'admin' => 'admin',
     'admin_permissions' => 'admin',
+    'admin_members' => 'admin',
     'admin_newsletters' => 'admin',
+    'admin_privacy' => 'admin',
     'admin_modules' => 'admin',
     'admin_articles' => 'admin',
     'admin_committee' => 'admin',
@@ -224,7 +229,9 @@ $routeModules = [
     'admin_translation_reviews' => 'admin',
     'admin_live_feeds' => 'admin',
     'admin_events' => 'admin',
+    'admin_events_feed' => 'admin',
     'admin_dinner_reservations' => 'admin',
+    'admin_library' => 'admin',
     'admin_dashboard' => 'admin',
     'admin_auctions' => 'admin',
     'settings' => 'members',
@@ -239,7 +246,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route], $route);
 }
 
-$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'donation', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login(login_next_url_for_route($route, $_GET));
 }
@@ -275,6 +282,7 @@ switch ($route) {
     case 'forgot_password': $dispatchPage('pages/forgot_password.php'); break;
     case 'reset_password': $dispatchPage('pages/reset_password.php'); break;
     case 'membership': $dispatchPage('pages/membership.php'); break;
+    case 'donation': $dispatchPage('pages/donation.php'); break;
     case 'conditions_utilisation': $dispatchPage('pages/conditions_utilisation.php'); break;
     case 'mentions_legales': $dispatchPage('pages/mentions_legales.php'); break;
     case 'reglement_interieur': $dispatchPage('pages/reglement_interieur.php'); break;
@@ -335,6 +343,7 @@ switch ($route) {
     case 'admin_permissions': $dispatchPage('pages/admin_permissions.php'); break;
     case 'admin_members': $dispatchPage('pages/admin_members.php'); break;
     case 'admin_newsletters': $dispatchPage('pages/admin_newsletters.php'); break;
+    case 'admin_privacy': $dispatchPage('pages/admin_privacy.php'); break;
     case 'admin_modules': $dispatchPage('pages/admin_modules.php'); break;
     case 'admin_articles': $dispatchPage('pages/admin_articles.php'); break;
     case 'admin_committee': $dispatchPage('pages/admin_committee.php'); break;

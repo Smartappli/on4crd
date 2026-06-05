@@ -17,4 +17,7 @@ return array (
   'email_label' => 'E-mail de contact',
   'subscribe' => 'Abonați-vă',
   'layout_title' => 'Buletin informativ',
+  'consent_required' => 'Este necesar consimțământul pentru buletinul informativ.',
+  'consent_label' => 'Sunt de acord să primesc buletinul informativ ON4CRD și înțeleg că mă pot dezabona în orice moment.',
+  'consent_proof_member' => 'Consimțământul buletinului informativ al membrilor',
 );

@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Kontakt-E-Mail',
   'subscribe' => 'Abonnieren',
   'layout_title' => 'Newsletter',
+  'consent_required' => 'Eine Einwilligung zum Newsletter ist erforderlich.',
+  'consent_label' => 'Ich stimme dem Erhalt des ON4CRD-Newsletters zu und verstehe, dass ich mich jederzeit abmelden kann.',
+  'consent_proof_member' => 'Einwilligung zum Mitglieder-Newsletter',
 );

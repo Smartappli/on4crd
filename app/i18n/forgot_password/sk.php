@@ -13,4 +13,11 @@ return array (
   'submit' => 'Odoslať odkaz',
   'back_login' => 'Návrat k prihláseniu',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD – Obnovenie hesla',
+  'email_body' => 'Dobrý deň,
+
+Na obnovenie hesla ON4CRD použite tento odkaz:
+{reset_link}
+
+Ak ste o to nepožiadali, túto správu ignorujte.',
 );

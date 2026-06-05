@@ -13,4 +13,11 @@ return array (
   'submit' => 'Lähetä linkki',
   'back_login' => 'Palaa kirjautumiseen',
   'email_label' => 'Sähköposti',
+  'email_subject' => 'ON4CRD - Salasanan palautus',
+  'email_body' => 'Hei,
+
+Käytä tätä linkkiä nollataksesi ON4CRD-salasanasi:
+{reset_link}
+
+Jos et pyytänyt tätä, jätä tämä viesti huomioimatta.',
 );

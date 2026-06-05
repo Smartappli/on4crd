@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'correo electrónico \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'No hay suscriptores.',
   'no_campaigns' => 'No hay campañas.',
+  'err_consent_proof_required' => 'Se requiere prueba de consentimiento.',
+  'consent_proof' => 'Prueba de consentimiento',
+  'consent_proof_ph' => 'Ejemplo: formulario firmado en 2026-06-05',
+  'consent_admin_help' => 'Agregar, importar o reactivar requiere prueba de consentimiento explícito.',
+  'consent' => 'Consentir',
 );

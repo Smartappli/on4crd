@@ -70,8 +70,33 @@ return [
         'directory' => __DIR__ . '/../storage/cache/data',
     ],
     'tracking' => [
-        'matomo_url' => 'https://stats.smartappli.eu/',
-        'matomo_site_id' => '4',
+        // Renseigner uniquement si une instance Matomo est contractualisee et activee.
+        'matomo_url' => '',
+        'matomo_site_id' => '',
+        'matomo_require_consent' => true,
+        'matomo_disable_cookies' => true,
+    ],
+    'privacy' => [
+        'controller_name' => 'Radio Club Durnal ON4CRD',
+        'controller_email' => 'crdurnal@gmail.com',
+        'controller_postal_address' => 'Rue des Ecoles, 5530 Purnode, Belgique',
+        'dpo_email' => '',
+        'supervisory_authority' => 'Autorité de protection des données, https://www.autoriteprotectiondonnees.be/',
+        'retention' => [
+            'technical_logs_months' => 13,
+            'chatbot_days' => 180,
+            'newsletter_deliveries_months' => 24,
+            'read_notifications_months' => 24,
+            'privacy_requests_years' => 5,
+            'password_reset_log_days' => 90,
+            'geocode_cache_days' => 30,
+        ],
+    ],
+    'legal' => [
+        'publication_manager' => 'Comité du Radio Club Durnal ON4CRD',
+        'hosting_name' => 'OVH SAS (OVHcloud)',
+        'hosting_address' => '2 rue Kellermann, 59100 Roubaix, France',
+        'hosting_url' => 'https://www.ovhcloud.com/',
     ],
     'social' => [
         'album_webhooks' => [

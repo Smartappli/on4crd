@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Toolbox',
+  'title' => 'Súprava nástrojov',
   'tool_index' => 'Klasifikácia nástrojov',
   'category_locators' => 'Orientačné body a geolokácia',
   'category_conversions' => 'Rádiové konverzie',
@@ -13,7 +13,7 @@ return array (
   'category_radio_math' => 'Rádiová matematika',
   'open_category' => 'Zobraziť nástroje',
   'choose_tool' => 'Kategórie nástrojov',
-  'grid_title' => 'Calcul du grid et les zones CG/ITU depuis une adresse postale',
+  'grid_title' => 'Výpočet siete a zón CG/ITU od poštovej adresy',
   'address' => 'Poštová adresa',
   'calc_grid' => 'Vypočítajte mriežku',
   'found_address' => 'Adresa bola nájdená',
@@ -193,8 +193,8 @@ return array (
   'unit_conv_presets' => 'Rýchle hodnoty',
   'unit_conv_reference' => 'Odkaz',
   'unit_conv_quick_links' => 'Podrobné prevodníky',
-  'forward_power' => 'Forward power (W)',
-  'reflected_power' => 'Reflected power (W)',
-  'swr_result' => 'Calculated SWR',
+  'forward_power' => 'Dopredný výkon (W)',
+  'reflected_power' => 'Odrazený výkon (W)',
+  'swr_result' => 'Vypočítané SWR',
   'dbw_calc' => 'dBm <-> dBW conversion',
 );

@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'e-mail\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Fără abonați.',
   'no_campaigns' => 'Fără campanie.',
+  'err_consent_proof_required' => 'Este necesară dovada consimțământului.',
+  'consent_proof' => 'Dovada consimțământului',
+  'consent_proof_ph' => 'Exemplu: formular semnat pe 2026-06-05',
+  'consent_admin_help' => 'Adăugarea, importarea sau reactivarea necesită dovada consimțământului explicit.',
+  'consent' => 'Consimțământ',
 );

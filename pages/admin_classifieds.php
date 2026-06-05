@@ -19,6 +19,7 @@ classifieds_sync_expired();
 $categories = ['gear' => (string) ($t['gear'] ?? 'Gear'), 'wanted' => (string) ($t['wanted'] ?? 'Wanted'), 'service' => (string) ($t['service'] ?? 'Service')];
 $statuses = [
     'draft' => (string) ($t['draft'] ?? 'Draft'),
+    'pending' => (string) ($t['pending'] ?? 'En validation'),
     'active' => (string) ($t['active'] ?? 'Active'),
     'sold' => (string) ($t['sold'] ?? 'Sold'),
     'archived' => (string) ($t['archived'] ?? 'Archived'),
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int) ($_POST['id'] ?? 0);
 
         if ($action === 'bulk_update') {
-            $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
+            $ids = array_values(array_unique(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0)));
             if ($ids === []) {
                 throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
             }
@@ -40,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ownerStmt = db()->prepare('SELECT id, owner_member_id, title FROM classified_ads WHERE id IN (' . $placeholders . ')');
             $ownerStmt->execute($ids);
             $ownerRows = $ownerStmt->fetchAll() ?: [];
+            if (count($ownerRows) !== count($ids)) {
+                throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+            }
             $bulkOp = (string) ($_POST['bulk_op'] ?? '');
             if ($bulkOp === 'delete') {
                 db()->prepare('DELETE FROM classified_ads WHERE id IN (' . $placeholders . ')')->execute($ids);
@@ -47,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
                 }
             } else {
-                $allowed = ['draft', 'active', 'sold', 'archived', 'expired'];
+                $allowed = ['draft', 'pending', 'active', 'sold', 'archived', 'expired'];
                 if (!in_array($bulkOp, $allowed, true)) {
                     throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
                 }
@@ -66,14 +70,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
         }
 
+        $ownerStmt = db()->prepare('SELECT owner_member_id, title FROM classified_ads WHERE id = ? LIMIT 1');
+        $ownerStmt->execute([$id]);
+        $ownerRow = $ownerStmt->fetch() ?: null;
+        if (!is_array($ownerRow)) {
+            throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+        }
+
         if ($action === 'delete') {
-            $ownerStmt = db()->prepare('SELECT owner_member_id, title FROM classified_ads WHERE id = ? LIMIT 1');
-            $ownerStmt->execute([$id]);
-            $ownerRow = $ownerStmt->fetch() ?: null;
             db()->prepare('DELETE FROM classified_ads WHERE id = ?')->execute([$id]);
-            if (is_array($ownerRow)) {
-                notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
-            }
+            notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
             set_flash('success', (string) ($t['deleted'] ?? 'Deleted.'));
             redirect_url(route_url('admin_classifieds'));
         }
@@ -84,9 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = trim((string) ($_POST['description'] ?? ''));
         $location = trim((string) ($_POST['location'] ?? ''));
         $contact = trim((string) ($_POST['contact'] ?? ''));
-        if ($title === '' || $description === '' || $contact === '' || !isset($categories[$category]) || !isset($statuses[$status])) {
+        if (!isset($statuses[$status])) {
             throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
         }
+        classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, (string) ($t['invalid'] ?? 'Invalid data.'));
 
         $expiresAtRaw = trim((string) ($_POST['expires_at'] ?? ''));
         $expiresAtValue = null;
@@ -102,9 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ?')
             ->execute([$category, $title, $description, $location, $contact, max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0'))), $status, $expiresAtValue, $id]);
-        $ownerStmt = db()->prepare('SELECT owner_member_id FROM classified_ads WHERE id = ? LIMIT 1');
-        $ownerStmt->execute([$id]);
-        $ownerId = (int) ($ownerStmt->fetchColumn() ?: 0);
+        $ownerId = (int) ($ownerRow['owner_member_id'] ?? 0);
         if ($ownerId > 0) {
             notify_member($ownerId, 'moderation', 'Classified ad moderated', 'Status updated to ' . $status . ': ' . $title, route_url('classifieds'));
         }
@@ -225,6 +230,7 @@ ob_start();
             <div class="inline-form" style="margin-bottom:.7rem;">
                 <select name="bulk_op">
                     <option value="active"><?= e((string) ($t['bulk_publish'] ?? 'Publish (active)')) ?></option>
+                    <option value="pending"><?= e((string) ($t['bulk_to_pending'] ?? 'Set pending')) ?></option>
                     <option value="draft"><?= e((string) ($t['bulk_to_draft'] ?? 'Set draft')) ?></option>
                     <option value="sold"><?= e((string) ($t['bulk_to_sold'] ?? 'Set sold')) ?></option>
                     <option value="archived"><?= e((string) ($t['bulk_archive'] ?? 'Archive')) ?></option>

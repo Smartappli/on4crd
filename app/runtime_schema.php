@@ -14,6 +14,7 @@ function seed_modules(): void
         ['articles', 'Articles', 'Articles techniques', 0, 1, 'public', 40],
         ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 'public', 50],
         ['albums', 'Albums', 'Galerie photos', 0, 1, 'public', 60],
+        ['tools', 'Outils', 'Calculateurs et outils radioamateurs', 0, 1, 'public', 65],
         ['events', 'Événements', 'Agenda du club', 0, 1, 'public', 70],
         ['auctions', 'Enchères', 'Ventes aux enchères', 0, 1, 'public', 90],
         ['qsl', 'QSL', 'Gestion des cartes QSL', 0, 1, 'members', 100],
@@ -54,6 +55,28 @@ function seed_modules(): void
 function seed_dashboard_widgets(): void
 {
     // Hook conservé pour compatibilité installateur.
+}
+
+function seed_news_sections(): void
+{
+    if (!table_exists('news_sections')) {
+        return;
+    }
+
+    $sections = [
+        ['on4crd', 'ON4CRD', 10],
+        ['autre-club', 'Autre club', 20],
+        ['contests', 'Contests', 30],
+    ];
+
+    $stmt = db()->prepare(
+        'INSERT INTO news_sections (slug, name, sort_order)
+         VALUES (?, ?, ?)
+         ON DUPLICATE KEY UPDATE name = VALUES(name), sort_order = VALUES(sort_order)'
+    );
+    foreach ($sections as $section) {
+        $stmt->execute($section);
+    }
 }
 
 function seed_ad_placements(): void
@@ -121,7 +144,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-04.2';
+    return '2026-06-05.4';
 }
 
 function runtime_schema_marker_path(): string

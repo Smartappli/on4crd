@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Kapcsolattartási e-mail',
   'subscribe' => 'Iratkozz fel',
   'layout_title' => 'Hírlevél',
+  'consent_required' => 'A hírlevélhez hozzájárulás szükséges.',
+  'consent_label' => 'Hozzájárulok, hogy megkapom az ON4CRD hírlevelet, és tudomásul veszem, hogy bármikor leiratkozhatok.',
+  'consent_proof_member' => 'Tagi hírlevél hozzájárulása',
 );

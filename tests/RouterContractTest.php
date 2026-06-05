@@ -38,6 +38,24 @@ final class RouterContractTest extends TestCase
         return $values;
     }
 
+    /**
+     * @return array<string, string>
+     */
+    private function extractAssocStringArray(string $source, string $variableName): array
+    {
+        $pattern = sprintf("/\\$%s = \\[(.*?)\\];/s", preg_quote($variableName, '/'));
+        preg_match($pattern, $source, $match);
+        self::assertNotEmpty($match, sprintf('Could not extract $%s', $variableName));
+
+        preg_match_all("/'([^']+)'\\s*=>\\s*'([^']+)'/", $match[1], $matches, PREG_SET_ORDER);
+        $values = [];
+        foreach ($matches as $routeMatch) {
+            $values[(string) $routeMatch[1]] = (string) $routeMatch[2];
+        }
+
+        return $values;
+    }
+
     public function testEachSwitchCaseReferencesAnExistingPageFile(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
@@ -188,6 +206,23 @@ final class RouterContractTest extends TestCase
         );
     }
 
+    public function testNewsSectionsAreSeeded(): void
+    {
+        $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
+        self::assertIsString($schema);
+        $updates = file_get_contents(__DIR__ . '/../app/runtime_schema_updates.php');
+        self::assertIsString($updates);
+        $installer = file_get_contents(__DIR__ . '/../install.php');
+        self::assertIsString($installer);
+
+        self::assertStringContainsString('function seed_news_sections(): void', $schema);
+        self::assertStringContainsString("['on4crd', 'ON4CRD', 10]", $schema);
+        self::assertStringContainsString("['autre-club', 'Autre club', 20]", $schema);
+        self::assertStringContainsString("['contests', 'Contests', 30]", $schema);
+        self::assertStringContainsString('seed_news_sections();', $updates);
+        self::assertStringContainsString('seed_news_sections();', $installer);
+    }
+
     public function testPublicRoutesAreNotGatedByMembersOnlyModules(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
@@ -213,6 +248,36 @@ final class RouterContractTest extends TestCase
             $page = file_get_contents(__DIR__ . '/../pages/' . $route . '.php');
             self::assertIsString($page);
             self::assertStringNotContainsString('require_login();', $page, sprintf('Public route %s must not require a login in its page controller.', $route));
+        }
+    }
+
+    public function testRouteModuleMappingsCoverManagedRoutesAndSeededModules(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        self::assertIsString($router);
+        $routeModules = $this->extractAssocStringArray($router, 'routeModules');
+
+        foreach ([
+            'dashboard_widget_card' => 'dashboard',
+            'members_library' => 'members',
+            'tools' => 'tools',
+            'tools_geocode' => 'tools',
+            'relais' => 'education',
+            'events_feed' => 'events',
+            'admin_members' => 'admin',
+            'admin_library' => 'admin',
+            'admin_events_feed' => 'admin',
+        ] as $route => $module) {
+            self::assertSame($module, $routeModules[$route] ?? null, sprintf('Route %s must be gated by module %s.', $route, $module));
+        }
+
+        $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
+        self::assertIsString($schema);
+        preg_match_all("/\\['([a-z0-9_]+)',\\s*'[^']+',\\s*'[^']+',\\s*[01],\\s*[01],\\s*'(?:public|members|admin)'/", $schema, $moduleMatches);
+        $seededModules = array_values(array_unique($moduleMatches[1] ?? []));
+
+        foreach (array_unique(array_values($routeModules)) as $module) {
+            self::assertContains($module, $seededModules, sprintf('Module %s is referenced by routeModules but not seeded.', $module));
         }
     }
 
@@ -285,6 +350,8 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("'member_preferences.php' => ['dashboard'", $loader);
         self::assertStringContainsString("'member_recommendations.php' => ['settings']", $loader);
         self::assertStringNotContainsString("'member_content.php' => ['dashboard'", $loader);
+        self::assertStringContainsString("'article_helpers.php' => ['home', 'dashboard', 'search'", $loader);
+        self::assertStringContainsString("'llms.txt', 'ai-index.json'", $loader);
         self::assertStringContainsString("'album_helpers.php' => ['home'", $loader);
         self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
         self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);

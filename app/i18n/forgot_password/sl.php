@@ -13,4 +13,11 @@ return array (
   'submit' => 'Pošlji povezavo',
   'back_login' => 'Nazaj na prijavo',
   'email_label' => 'E-pošta',
+  'email_subject' => 'ON4CRD - Ponastavitev gesla',
+  'email_body' => 'Pozdravljeni
+
+Za ponastavitev gesla ON4CRD uporabite to povezavo:
+{reset_link}
+
+Če tega niste zahtevali, prezrite to sporočilo.',
 );

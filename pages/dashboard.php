@@ -21,11 +21,12 @@ $recommendationsEnabled = member_preference_bool($userId, 'personalized_recommen
 
 $timelineItems = [];
 if (table_exists('articles')) {
-    $rows = db()->query('SELECT title, slug, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC LIMIT 6')->fetchAll() ?: [];
+    $rows = db()->query('SELECT id, title, slug, published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . article_publication_sort_expression() . ' DESC, id DESC LIMIT 6')->fetchAll() ?: [];
     foreach ($rows as $row) {
+        $row = localized_article_row($row);
         $timelineItems[] = [
-            'title' => (string) ($row['title'] ?? ''),
-            'date' => (string) ($row['updated_at'] ?? ''),
+            'title' => (string) ($row['title_localized'] ?? $row['title'] ?? ''),
+            'date' => (string) (article_publication_datetime($row) ?? ''),
             'url' => route_url('article', ['slug' => (string) ($row['slug'] ?? '')]),
             'type' => (string) ($t('signal_article')),
         ];

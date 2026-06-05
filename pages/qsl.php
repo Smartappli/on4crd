@@ -696,8 +696,8 @@ ob_start();
         </section>
     </div>
 </section>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.css">
-<script nonce="<?= e(csp_nonce()) ?>" src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
+<link rel="stylesheet" href="<?= e(asset_url('assets/vendor/dropzone/5.9.3/dist/min/dropzone.min.css')) ?>">
+<script nonce="<?= e(csp_nonce()) ?>" src="<?= e(asset_url('assets/vendor/dropzone/5.9.3/dist/min/dropzone.min.js')) ?>"></script>
 
 <section class="card" id="qsl-view" data-qsl-panel="manage">
     <div class="row-between">

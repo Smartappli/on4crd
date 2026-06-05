@@ -43,7 +43,7 @@ return array (
   'login_description' => 'Konnessjoni sigura għaż-żona tal-membri ON4CRD.',
   'register_title' => 'Reġistrazzjoni ON4CRD',
   'register_description' => 'Oħloq kont tal-membru ON4CRD u ingħaqad mas-servizzi tal-klabb.',
-  'newsletter_public_title' => 'Newsletter ON4CRD',
+  'newsletter_public_title' => 'ON4CRD Newsletter',
   'newsletter_public_description' => 'Abbona man-newsletter pubblika tar-Radju Club Durnal.',
   'dashboard_title' => 'Dashboard tal-Membri',
   'dashboard_description' => 'Custom Member Dashboard ON4CRD.',

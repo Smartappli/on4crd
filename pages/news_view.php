@@ -97,7 +97,7 @@ ob_start();
 
     <?php if ($content !== ''): ?>
         <section class="inner-card">
-            <?= $content ?>
+            <?= sanitize_rich_html($content) ?>
         </section>
     <?php else: ?>
         <p><?= e((string) $t['content_soon']) ?></p>

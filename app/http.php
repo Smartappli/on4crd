@@ -72,6 +72,33 @@ function asset_url(string $path): string
 }
 }
 
+if (!function_exists('fullcalendar_locale_code')) {
+function fullcalendar_locale_code(string $locale): string
+{
+    $normalized = strtolower(str_replace('_', '-', trim($locale)));
+    $base = explode('-', $normalized)[0] ?? $normalized;
+    $map = [
+        'en' => 'en-gb',
+        'zh' => 'zh-cn',
+        'bn' => 'en-gb',
+        'ga' => 'en-gb',
+        'hi' => 'en-gb',
+        'mt' => 'en-gb',
+    ];
+    $candidate = $map[$base] ?? $base;
+    $path = dirname(__DIR__) . '/assets/vendor/fullcalendar/7.0.0-rc.2/locales/' . $candidate . '.global.js';
+
+    return is_file($path) ? $candidate : 'en-gb';
+}
+}
+
+if (!function_exists('fullcalendar_locale_asset_url')) {
+function fullcalendar_locale_asset_url(string $locale): string
+{
+    return asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/locales/' . fullcalendar_locale_code($locale) . '.global.js');
+}
+}
+
 if (!function_exists('route_url')) {
 function route_url(string $route, array $query = []): string
 {

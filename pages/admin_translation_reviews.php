@@ -26,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = (string) ($_POST['action'] ?? '');
         $id = (int) ($_POST['id'] ?? 0);
         $locale = (string) ($_POST['locale'] ?? 'en');
-        if (!in_array($locale, ['en', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'], true)) {
+        $reviewableLocales = array_values(array_filter(supported_locales(), static fn(string $supportedLocale): bool => $supportedLocale !== 'fr'));
+        if (!in_array($locale, $reviewableLocales, true)) {
             throw new RuntimeException((string) $tr('invalid_lang', 'Invalid language.'));
         }
         if ($action === 'review_news_translation') {
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([
                 trim((string) ($_POST['title'] ?? '')),
                 trim((string) ($_POST['excerpt'] ?? '')),
-                sanitize_rich_html((string) ($_POST['content'] ?? '')),
+                article_sanitize_content((string) ($_POST['content'] ?? '')),
                 (int) current_user()['id'],
                 $id,
                 $locale,

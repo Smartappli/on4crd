@@ -24,7 +24,7 @@ return array (
   'bands' => 'Bannaí',
   'station' => 'Saoire',
   'committee' => 'Coiste',
-  'grid' => 'Grid',
+  'grid' => 'Greille',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Modhanna',

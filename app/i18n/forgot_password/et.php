@@ -13,4 +13,11 @@ return array (
   'submit' => 'Saada link',
   'back_login' => 'Tagasi sisselogimise juurde',
   'email_label' => 'Meil',
+  'email_subject' => 'ON4CRD – parooli lähtestamine',
+  'email_body' => 'Tere,
+
+Kasutage seda linki ON4CRD parooli lähtestamiseks:
+{reset_link}
+
+Kui te seda ei taotlenud, ignoreerige seda sõnumit.',
 );

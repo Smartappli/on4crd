@@ -14,7 +14,7 @@ return array (
   'subtone_status_value' => 'Ya / Ya (enc./des.)',
   'callsign' => 'tanda panggilan',
   'channel' => 'Saluran',
-  'mode' => 'Mode',
+  'mode' => 'Modus',
   'mode_value' => 'Mode pengulang FM + EchoLink',
   'input' => 'Frekuensi masukan (TX)',
   'output' => 'Frekuensi keluaran (RX)',

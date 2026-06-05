@@ -14,7 +14,7 @@ return array (
   'subtone_status_value' => 'Ja / Ja (inkl./dec.)',
   'callsign' => 'Vejledende',
   'channel' => 'Kanal',
-  'mode' => 'Mode',
+  'mode' => 'tilstand',
   'mode_value' => 'FM Repeater Mode + EchoLink',
   'input' => 'Indgangsfrekvens (TX)',
   'output' => 'Udgangsfrekvens (RX)',

@@ -47,6 +47,50 @@ function auction_lot_by_id(int $lotId): ?array
     return $row ?: null;
 }
 
+function auction_slug_base(string $value, int $maxLength = 190): string
+{
+    $base = slugify($value);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'lot';
+    }
+
+    return substr($base, 0, $maxLength);
+}
+
+function auction_slug_candidate(string $base, int $suffix, int $maxLength = 190): string
+{
+    if ($suffix <= 1) {
+        return substr($base, 0, $maxLength);
+    }
+
+    $suffixText = '-' . $suffix;
+    $prefixLength = max(1, $maxLength - strlen($suffixText));
+    $prefix = rtrim(substr($base, 0, $prefixLength), '-');
+    if ($prefix === '') {
+        $prefix = substr('lot', 0, $prefixLength);
+    }
+
+    return $prefix . $suffixText;
+}
+
+function auction_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 190): string
+{
+    $base = auction_slug_base($value, $maxLength);
+    $suffix = 1;
+
+    do {
+        $candidate = auction_slug_candidate($base, $suffix, $maxLength);
+        $stmt = db()->prepare('SELECT id FROM auction_lots WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, max(0, $ignoreId)]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Unable to generate a unique auction slug.');
+}
+
 function auction_bids_for_lot(int $lotId, int $limit = 20): array
 {
     if (!table_exists('auction_bids')) {
@@ -90,8 +134,16 @@ function auction_runtime_status(array $lot): string
     }
 
     $now = new DateTimeImmutable('now');
-    $startsAt = new DateTimeImmutable((string) $lot['starts_at']);
-    $endsAt = new DateTimeImmutable((string) $lot['ends_at']);
+    try {
+        $startsAt = new DateTimeImmutable((string) $lot['starts_at']);
+        $endsAt = new DateTimeImmutable((string) $lot['ends_at']);
+    } catch (Throwable) {
+        return 'draft';
+    }
+
+    if ($endsAt <= $startsAt) {
+        return 'draft';
+    }
     if ($status !== 'closed' && $now >= $endsAt) {
         return 'closed';
     }

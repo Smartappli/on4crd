@@ -24,7 +24,7 @@ return array (
   'bands' => 'Benzi',
   'station' => 'Gara',
   'committee' => 'Comitet',
-  'grid' => 'Grid',
+  'grid' => 'Grilă',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Moduri',

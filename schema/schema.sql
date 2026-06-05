@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS members (
     committee_role VARCHAR(190) DEFAULT NULL,
     committee_bio TEXT DEFAULT NULL,
     committee_sort_order INT NOT NULL DEFAULT 100,
-    visibility_email ENUM('public','members','private') NOT NULL DEFAULT 'members',
+    visibility_email ENUM('public','members','private') NOT NULL DEFAULT 'private',
     visibility_phone ENUM('public','members','private') NOT NULL DEFAULT 'private',
     visibility_full_name ENUM('public','members','private') NOT NULL DEFAULT 'private',
     visibility_first_name ENUM('public','members','private') NOT NULL DEFAULT 'members',
@@ -44,19 +44,19 @@ CREATE TABLE IF NOT EXISTS members (
     visibility_country ENUM('public','members','private') NOT NULL DEFAULT 'members',
     visibility_address ENUM('public','members','private') NOT NULL DEFAULT 'private',
     visibility_postal_code ENUM('public','members','private') NOT NULL DEFAULT 'private',
-    visibility_qth ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_locator ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_licence_class ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_operator_since ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_qsl ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_qrz ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_uba ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_favourite_bands ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_favourite_modes ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_station ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_antennas ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_interests ENUM('public','members','private') NOT NULL DEFAULT 'members',
-    visibility_photo ENUM('public','members','private') NOT NULL DEFAULT 'members',
+    visibility_qth ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_locator ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_licence_class ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_operator_since ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_qsl ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_qrz ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_uba ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_favourite_bands ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_favourite_modes ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_station ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_antennas ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_interests ENUM('public','members','private') NOT NULL DEFAULT 'private',
+    visibility_photo ENUM('public','members','private') NOT NULL DEFAULT 'private',
     visibility_online ENUM('public','members','private') NOT NULL DEFAULT 'members',
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -270,8 +270,11 @@ CREATE TABLE IF NOT EXISTS articles (
     title VARCHAR(190) NOT NULL,
     excerpt TEXT DEFAULT NULL,
     content LONGTEXT NOT NULL,
-    status ENUM('draft','published') NOT NULL DEFAULT 'draft',
+    status ENUM('draft','pending','scheduled','published','rejected') NOT NULL DEFAULT 'draft',
     category VARCHAR(120) NOT NULL DEFAULT 'autres',
+    scheduled_at DATETIME NULL DEFAULT NULL,
+    published_at DATETIME NULL DEFAULT NULL,
+    moderation_note TEXT DEFAULT NULL,
     author_id INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -283,6 +286,8 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     title VARCHAR(190) NOT NULL,
     content LONGTEXT NOT NULL,
     author_id INT DEFAULT NULL,
+    status ENUM('pending','published','rejected') NOT NULL DEFAULT 'published',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -311,7 +316,7 @@ CREATE TABLE IF NOT EXISTS albums (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(190) NOT NULL,
     description TEXT DEFAULT NULL,
-    is_public TINYINT(1) NOT NULL DEFAULT 1,
+    is_public TINYINT(1) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -566,11 +571,55 @@ CREATE TABLE IF NOT EXISTS newsletter_subscribers (
     source VARCHAR(32) NOT NULL DEFAULT 'admin',
     subscribe_token CHAR(48) NOT NULL,
     unsubscribe_token CHAR(48) NOT NULL,
+    consented_at DATETIME DEFAULT NULL,
+    consent_ip_hash CHAR(64) DEFAULT NULL,
+    consent_user_agent_hash CHAR(64) DEFAULT NULL,
+    consent_notice_version VARCHAR(32) DEFAULT NULL,
+    consent_proof VARCHAR(255) DEFAULT NULL,
     unsubscribed_at DATETIME DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_newsletter_member (member_id),
     INDEX idx_newsletter_status (status)
+);
+
+CREATE TABLE IF NOT EXISTS privacy_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    request_type ENUM('access','rectification','erasure','restriction','objection','portability') NOT NULL,
+    status ENUM('pending','in_progress','resolved','rejected') NOT NULL DEFAULT 'pending',
+    notes TEXT DEFAULT NULL,
+    admin_notes TEXT DEFAULT NULL,
+    processed_by_member_id INT DEFAULT NULL,
+    processed_at DATETIME DEFAULT NULL,
+    erasure_completed_at DATETIME DEFAULT NULL,
+    request_ip_hash CHAR(64) DEFAULT NULL,
+    request_user_agent_hash CHAR(64) DEFAULT NULL,
+    notice_version VARCHAR(32) DEFAULT NULL,
+    requested_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    resolved_at DATETIME DEFAULT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_privacy_requests_member (member_id),
+    INDEX idx_privacy_requests_status (status),
+    INDEX idx_privacy_requests_processed_by (processed_by_member_id)
+);
+
+CREATE TABLE IF NOT EXISTS privacy_request_events (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    request_id INT NOT NULL,
+    member_id INT DEFAULT NULL,
+    admin_member_id INT DEFAULT NULL,
+    event_type VARCHAR(64) NOT NULL,
+    from_status VARCHAR(32) DEFAULT NULL,
+    to_status VARCHAR(32) DEFAULT NULL,
+    notes TEXT DEFAULT NULL,
+    ip_hash CHAR(64) DEFAULT NULL,
+    user_agent_hash CHAR(64) DEFAULT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_privacy_events_request (request_id),
+    INDEX idx_privacy_events_member (member_id),
+    INDEX idx_privacy_events_admin (admin_member_id),
+    INDEX idx_privacy_events_created (created_at)
 );
 
 CREATE TABLE IF NOT EXISTS newsletter_campaigns (
@@ -636,7 +685,8 @@ CREATE TABLE IF NOT EXISTS classified_ads (
     location VARCHAR(120) DEFAULT NULL,
     contact VARCHAR(190) DEFAULT NULL,
     price_cents INT NOT NULL DEFAULT 0,
-    status ENUM('active','sold','archived') NOT NULL DEFAULT 'active',
+    status ENUM('draft','pending','active','sold','archived','expired') NOT NULL DEFAULT 'draft',
+    expires_at DATETIME NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_classified_owner_status (owner_member_id, status),

@@ -25,7 +25,7 @@ return array (
   'member' => 'Membru',
   'status' => 'Status',
   'actions' => 'Azzjonijiet',
-  'unsubscribe' => 'Unsubscribe',
+  'unsubscribe' => 'Ħassar l-abbonament',
   'reactivate' => 'Attiva mill-ġdid',
   'confirm_delete_subscriber' => 'Tħassar dan l-abbonat?',
   'delete' => 'ĦaSsar',
@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Ebda abbonati.',
   'no_campaigns' => 'L-ebda kampanja.',
+  'err_consent_proof_required' => 'Prova tal-kunsens hija meħtieġa.',
+  'consent_proof' => 'Prova ta\' kunsens',
+  'consent_proof_ph' => 'Eżempju: formola ffirmata fuq 2026-06-05',
+  'consent_admin_help' => 'Iż-żieda, l-importazzjoni jew ir-riattivazzjoni teħtieġ prova ta\' kunsens espliċitu.',
+  'consent' => 'Kunsens',
 );

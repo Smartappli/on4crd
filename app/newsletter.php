@@ -1,6 +1,23 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/privacy_helpers.php';
+
+function newsletter_column_exists(string $column): bool
+{
+    try {
+        $stmt = db()->prepare(
+            'SELECT COUNT(*) FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = "newsletter_subscribers" AND column_name = ?'
+        );
+        $stmt->execute([$column]);
+
+        return (int) $stmt->fetchColumn() > 0;
+    } catch (Throwable $exception) {
+        return false;
+    }
+}
+
 function newsletter_generate_token(): string
 {
     return bin2hex(random_bytes(24));
@@ -54,6 +71,11 @@ function newsletter_ensure_tables(): void
             source VARCHAR(32) NOT NULL DEFAULT "admin",
             subscribe_token CHAR(48) NOT NULL,
             unsubscribe_token CHAR(48) NOT NULL,
+            consented_at DATETIME DEFAULT NULL,
+            consent_ip_hash CHAR(64) DEFAULT NULL,
+            consent_user_agent_hash CHAR(64) DEFAULT NULL,
+            consent_notice_version VARCHAR(32) DEFAULT NULL,
+            consent_proof VARCHAR(255) DEFAULT NULL,
             unsubscribed_at DATETIME DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -61,6 +83,23 @@ function newsletter_ensure_tables(): void
             INDEX idx_newsletter_status (status)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
     );
+
+    $columns = [
+        'consented_at' => 'DATETIME DEFAULT NULL',
+        'consent_ip_hash' => 'CHAR(64) DEFAULT NULL',
+        'consent_user_agent_hash' => 'CHAR(64) DEFAULT NULL',
+        'consent_notice_version' => 'VARCHAR(32) DEFAULT NULL',
+        'consent_proof' => 'VARCHAR(255) DEFAULT NULL',
+    ];
+    foreach ($columns as $column => $definition) {
+        if (!newsletter_column_exists($column)) {
+            try {
+                db()->exec('ALTER TABLE newsletter_subscribers ADD COLUMN `' . $column . '` ' . $definition);
+            } catch (Throwable $exception) {
+                // Consent columns are used when available; legacy installs may require manual migration.
+            }
+        }
+    }
 
     db()->exec(
         'CREATE TABLE IF NOT EXISTS newsletter_campaigns (
@@ -91,34 +130,101 @@ function newsletter_ensure_tables(): void
     );
 }
 
-function newsletter_upsert_subscriber(string $email, ?int $memberId = null, string $source = 'admin'): bool
+function newsletter_upsert_subscriber(
+    string $email,
+    ?int $memberId = null,
+    string $source = 'admin',
+    bool $reactivateExisting = false,
+    string $consentProof = ''
+): bool
 {
+    newsletter_ensure_tables();
+
     $normalized = newsletter_normalize_email($email);
     if ($normalized === '') {
         return false;
     }
     $normalizedSource = mb_safe_substr(trim($source), 0, 32);
+    $proof = mb_safe_substr(trim($consentProof), 0, 255);
+    if ($proof === '') {
+        return false;
+    }
+    $hasConsentColumns = newsletter_column_exists('consented_at')
+        && newsletter_column_exists('consent_ip_hash')
+        && newsletter_column_exists('consent_user_agent_hash')
+        && newsletter_column_exists('consent_notice_version')
+        && newsletter_column_exists('consent_proof');
 
-    $existing = db()->prepare('SELECT id FROM newsletter_subscribers WHERE email = ? LIMIT 1');
+    $existing = db()->prepare('SELECT id, status FROM newsletter_subscribers WHERE email = ? LIMIT 1');
     $existing->execute([$normalized]);
     $row = $existing->fetch();
 
     if ($row) {
-        $stmt = db()->prepare('UPDATE newsletter_subscribers SET status = "active", unsubscribed_at = NULL, member_id = COALESCE(?, member_id), source = ?, updated_at = NOW() WHERE id = ?');
-        $stmt->execute([$memberId, $normalizedSource, (int) $row['id']]);
+        if ((string) ($row['status'] ?? '') === 'unsubscribed' && !$reactivateExisting) {
+            if ($memberId !== null) {
+                db()->prepare('UPDATE newsletter_subscribers SET member_id = COALESCE(member_id, ?), updated_at = NOW() WHERE id = ?')
+                    ->execute([$memberId, (int) $row['id']]);
+            }
+
+            return false;
+        }
+
+        $sets = [
+            'status = "active"',
+            'unsubscribed_at = NULL',
+            'member_id = COALESCE(?, member_id)',
+            'source = ?',
+            'updated_at = NOW()',
+        ];
+        $params = [$memberId, $normalizedSource];
+        if ($hasConsentColumns) {
+            $sets[] = 'consented_at = NOW()';
+            $sets[] = 'consent_ip_hash = ?';
+            $sets[] = 'consent_user_agent_hash = ?';
+            $sets[] = 'consent_notice_version = ?';
+            $sets[] = 'consent_proof = ?';
+            $params[] = privacy_request_ip_hash() ?: null;
+            $params[] = privacy_request_user_agent_hash() ?: null;
+            $params[] = privacy_current_notice_version();
+            $params[] = $proof;
+        }
+        $params[] = (int) $row['id'];
+        $stmt = db()->prepare('UPDATE newsletter_subscribers SET ' . implode(', ', $sets) . ' WHERE id = ?');
+        $stmt->execute($params);
 
         return true;
     }
 
-    $stmt = db()->prepare('INSERT INTO newsletter_subscribers (email, member_id, status, source, subscribe_token, unsubscribe_token) VALUES (?, ?, "active", ?, ?, ?)');
-
-    return $stmt->execute([
+    $columns = ['email', 'member_id', 'status', 'source', 'subscribe_token', 'unsubscribe_token'];
+    $values = [
         $normalized,
         $memberId,
+        'active',
         $normalizedSource,
         newsletter_generate_token(),
         newsletter_generate_token(),
-    ]);
+    ];
+
+    if ($hasConsentColumns) {
+        $columns = array_merge($columns, [
+            'consented_at',
+            'consent_ip_hash',
+            'consent_user_agent_hash',
+            'consent_notice_version',
+            'consent_proof',
+        ]);
+        $values[] = date('Y-m-d H:i:s');
+        $values[] = privacy_request_ip_hash() ?: null;
+        $values[] = privacy_request_user_agent_hash() ?: null;
+        $values[] = privacy_current_notice_version();
+        $values[] = $proof;
+    }
+
+    $columnSql = implode(', ', array_map(static fn (string $column): string => '`' . str_replace('`', '``', $column) . '`', $columns));
+    $placeholders = implode(', ', array_fill(0, count($columns), '?'));
+    $stmt = db()->prepare('INSERT INTO newsletter_subscribers (' . $columnSql . ') VALUES (' . $placeholders . ')');
+
+    return $stmt->execute($values);
 }
 
 function newsletter_unsubscribe_by_token(string $token): bool
@@ -134,14 +240,46 @@ function newsletter_unsubscribe_by_token(string $token): bool
     return $stmt->rowCount() > 0;
 }
 
-function newsletter_set_subscriber_status(int $id, string $status): bool
+function newsletter_set_subscriber_status(int $id, string $status, string $consentProof = ''): bool
 {
+    newsletter_ensure_tables();
+
     if (!in_array($status, ['active', 'unsubscribed'], true)) {
         return false;
     }
 
-    $stmt = db()->prepare('UPDATE newsletter_subscribers SET status = ?, unsubscribed_at = CASE WHEN ? = "unsubscribed" THEN NOW() ELSE NULL END WHERE id = ?');
-    $stmt->execute([$status, $status, $id]);
+    $proof = trim($consentProof);
+    if ($status === 'active' && $proof === '') {
+        return false;
+    }
+
+    $sets = [
+        'status = ?',
+        'unsubscribed_at = CASE WHEN ? = "unsubscribed" THEN NOW() ELSE NULL END',
+        'source = CASE WHEN ? = "active" THEN "admin_status" ELSE source END',
+    ];
+    $params = [$status, $status, $status];
+    if ($status === 'active'
+        && newsletter_column_exists('consented_at')
+        && newsletter_column_exists('consent_ip_hash')
+        && newsletter_column_exists('consent_user_agent_hash')
+        && newsletter_column_exists('consent_notice_version')
+        && newsletter_column_exists('consent_proof')
+    ) {
+        $sets[] = 'consented_at = NOW()';
+        $sets[] = 'consent_ip_hash = ?';
+        $sets[] = 'consent_user_agent_hash = ?';
+        $sets[] = 'consent_notice_version = ?';
+        $sets[] = 'consent_proof = ?';
+        $params[] = privacy_request_ip_hash() ?: null;
+        $params[] = privacy_request_user_agent_hash() ?: null;
+        $params[] = privacy_current_notice_version();
+        $params[] = mb_safe_substr($proof, 0, 255);
+    }
+    $params[] = $id;
+
+    $stmt = db()->prepare('UPDATE newsletter_subscribers SET ' . implode(', ', $sets) . ' WHERE id = ?');
+    $stmt->execute($params);
 
     return $stmt->rowCount() > 0;
 }
@@ -156,6 +294,8 @@ function newsletter_delete_subscriber(int $id): bool
 
 function newsletter_subscriber_for_member(int $memberId): ?array
 {
+    newsletter_ensure_tables();
+
     $stmt = db()->prepare('SELECT * FROM newsletter_subscribers WHERE member_id = ? LIMIT 1');
     $stmt->execute([$memberId]);
     $row = $stmt->fetch();
@@ -163,12 +303,17 @@ function newsletter_subscriber_for_member(int $memberId): ?array
     return $row ?: null;
 }
 
-function newsletter_import_csv(string $csvContent): int
+function newsletter_import_csv(string $csvContent, string $consentProof = ''): int
 {
+    $proof = trim($consentProof);
+    if ($proof === '') {
+        return 0;
+    }
+
     $emails = newsletter_parse_csv_emails($csvContent);
     $count = 0;
     foreach ($emails as $email) {
-        if (newsletter_upsert_subscriber($email, null, 'import_csv')) {
+        if (newsletter_upsert_subscriber($email, null, 'import_csv', true, $proof)) {
             $count++;
         }
     }

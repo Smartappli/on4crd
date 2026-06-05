@@ -3,6 +3,55 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/widget_radio_helpers.php';
 
+if (!function_exists('member_default_contact_email')) {
+function member_default_contact_email(): string
+{
+    return 'crdurnal@gmail.com';
+}
+}
+
+if (!function_exists('member_contact_email_from_input')) {
+function member_contact_email_from_input(string $email): string
+{
+    $email = trim($email);
+
+    return $email !== '' ? $email : member_default_contact_email();
+}
+}
+
+if (!function_exists('member_contact_email_uses_shared_default')) {
+function member_contact_email_uses_shared_default(string $email): bool
+{
+    return strcasecmp(trim($email), member_default_contact_email()) === 0;
+}
+}
+
+if (!function_exists('member_auth_email_for_shared_contact')) {
+function member_auth_email_for_shared_contact(string $callsign): string
+{
+    $normalizedCallsign = strtolower(trim($callsign));
+    $localPart = preg_replace('/[^a-z0-9]+/', '-', $normalizedCallsign) ?? '';
+    $localPart = trim($localPart, '-');
+    if ($localPart === '') {
+        $localPart = 'member';
+    }
+
+    return $localPart . '-' . substr(sha1(strtoupper(trim($callsign))), 0, 10) . '@local.invalid';
+}
+}
+
+if (!function_exists('member_auth_email_for_contact_email')) {
+function member_auth_email_for_contact_email(string $contactEmail, string $callsign): string
+{
+    $contactEmail = member_contact_email_from_input($contactEmail);
+    if (!member_contact_email_uses_shared_default($contactEmail)) {
+        return $contactEmail;
+    }
+
+    return member_auth_email_for_shared_contact($callsign);
+}
+}
+
 if (!function_exists('member_country_options')) {
 /**
  * @return array<string, string>
@@ -615,26 +664,26 @@ if (!function_exists('member_profile_visibility_fields')) {
 function member_profile_visibility_fields(callable $t): array
 {
     return [
-        'visibility_photo' => ['label' => (string) $t('photo'), 'default' => 'members'],
+        'visibility_photo' => ['label' => (string) $t('photo'), 'default' => 'private'],
         'visibility_first_name' => ['label' => (string) $t('first_name'), 'default' => 'members'],
         'visibility_last_name' => ['label' => (string) $t('last_name'), 'default' => 'private'],
-        'visibility_email' => ['label' => (string) $t('email'), 'default' => 'members'],
+        'visibility_email' => ['label' => (string) $t('email'), 'default' => 'private'],
         'visibility_phone' => ['label' => (string) $t('phone'), 'default' => 'private'],
         'visibility_country' => ['label' => (string) $t('country'), 'default' => 'members'],
         'visibility_address' => ['label' => (string) $t('address'), 'default' => 'private'],
         'visibility_postal_code' => ['label' => (string) $t('postal_code'), 'default' => 'private'],
-        'visibility_qth' => ['label' => (string) $t('qth'), 'default' => 'members'],
-        'visibility_locator' => ['label' => (string) $t('grid'), 'default' => 'members'],
-        'visibility_licence_class' => ['label' => (string) $t('licence'), 'default' => 'members'],
-        'visibility_operator_since' => ['label' => (string) $t('operator_since'), 'default' => 'members'],
-        'visibility_qsl' => ['label' => (string) $t('qsl_info'), 'default' => 'members'],
-        'visibility_qrz' => ['label' => (string) $t('qrz_url'), 'default' => 'members'],
-        'visibility_uba' => ['label' => (string) $t('uba_member'), 'default' => 'members'],
-        'visibility_favourite_bands' => ['label' => (string) $t('bands'), 'default' => 'members'],
-        'visibility_favourite_modes' => ['label' => (string) $t('favourite_modes'), 'default' => 'members'],
-        'visibility_station' => ['label' => (string) $t('station'), 'default' => 'members'],
-        'visibility_antennas' => ['label' => (string) $t('antennas'), 'default' => 'members'],
-        'visibility_interests' => ['label' => (string) $t('interests'), 'default' => 'members'],
+        'visibility_qth' => ['label' => (string) $t('qth'), 'default' => 'private'],
+        'visibility_locator' => ['label' => (string) $t('grid'), 'default' => 'private'],
+        'visibility_licence_class' => ['label' => (string) $t('licence'), 'default' => 'private'],
+        'visibility_operator_since' => ['label' => (string) $t('operator_since'), 'default' => 'private'],
+        'visibility_qsl' => ['label' => (string) $t('qsl_info'), 'default' => 'private'],
+        'visibility_qrz' => ['label' => (string) $t('qrz_url'), 'default' => 'private'],
+        'visibility_uba' => ['label' => (string) $t('uba_member'), 'default' => 'private'],
+        'visibility_favourite_bands' => ['label' => (string) $t('bands'), 'default' => 'private'],
+        'visibility_favourite_modes' => ['label' => (string) $t('favourite_modes'), 'default' => 'private'],
+        'visibility_station' => ['label' => (string) $t('station'), 'default' => 'private'],
+        'visibility_antennas' => ['label' => (string) $t('antennas'), 'default' => 'private'],
+        'visibility_interests' => ['label' => (string) $t('interests'), 'default' => 'private'],
     ];
 }
 }
@@ -657,8 +706,8 @@ function member_profile_preview_fields(callable $t): array
         'locator' => ['label' => (string) $t('grid'), 'visibility' => 'visibility_locator'],
         'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class'],
         'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_operator_since'],
-        'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_licence_class'],
-        'itu_zone' => ['label' => (string) $t('itu_zone'), 'visibility' => 'visibility_licence_class'],
+        'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_country'],
+        'itu_zone' => ['label' => (string) $t('itu_zone'), 'visibility' => 'visibility_country'],
         'qsl_via' => ['label' => (string) $t('qsl_via'), 'visibility' => 'visibility_qsl'],
         'lotw_username' => ['label' => (string) $t('lotw_username'), 'visibility' => 'visibility_qsl'],
         'eqsl_username' => ['label' => (string) $t('eqsl_username'), 'visibility' => 'visibility_qsl'],
@@ -760,27 +809,27 @@ function member_profile_select_columns_sql(): string
     };
 
     $visibilityColumns = [
-        $visibilityColumnSql('visibility_photo'),
+        $visibilityColumnSql('visibility_photo', 'private'),
         $visibilityColumnSql('visibility_full_name', 'private'),
         $visibilityColumnSql('visibility_first_name'),
         $visibilityColumnSql('visibility_last_name', 'private'),
-        $visibilityColumnSql('visibility_email'),
+        $visibilityColumnSql('visibility_email', 'private'),
         $visibilityColumnSql('visibility_phone', 'private'),
         $visibilityColumnSql('visibility_country'),
         $visibilityColumnSql('visibility_address', 'private'),
         $visibilityColumnSql('visibility_postal_code', 'private'),
-        $visibilityColumnSql('visibility_qth'),
-        $visibilityColumnSql('visibility_locator'),
-        $visibilityColumnSql('visibility_licence_class'),
-        $visibilityColumnSql('visibility_operator_since'),
-        $visibilityColumnSql('visibility_qsl'),
-        $visibilityColumnSql('visibility_qrz'),
-        $visibilityColumnSql('visibility_uba'),
-        $visibilityColumnSql('visibility_favourite_bands'),
-        $visibilityColumnSql('visibility_favourite_modes'),
-        $visibilityColumnSql('visibility_station'),
-        $visibilityColumnSql('visibility_antennas'),
-        $visibilityColumnSql('visibility_interests'),
+        $visibilityColumnSql('visibility_qth', 'private'),
+        $visibilityColumnSql('visibility_locator', 'private'),
+        $visibilityColumnSql('visibility_licence_class', 'private'),
+        $visibilityColumnSql('visibility_operator_since', 'private'),
+        $visibilityColumnSql('visibility_qsl', 'private'),
+        $visibilityColumnSql('visibility_qrz', 'private'),
+        $visibilityColumnSql('visibility_uba', 'private'),
+        $visibilityColumnSql('visibility_favourite_bands', 'private'),
+        $visibilityColumnSql('visibility_favourite_modes', 'private'),
+        $visibilityColumnSql('visibility_station', 'private'),
+        $visibilityColumnSql('visibility_antennas', 'private'),
+        $visibilityColumnSql('visibility_interests', 'private'),
     ];
 
     return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, licence_class, operator_since, cq_zone, itu_zone,

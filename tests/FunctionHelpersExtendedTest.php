@@ -40,6 +40,25 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNull(sanitize_href_attribute("/ok\r\njavascript:alert(1)"));
     }
 
+    public function testArticleSanitizeContentStripsUnsupportedTagsAndAttributes(): void
+    {
+        $html = '<p id="intro" style="position:fixed">Intro</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a>';
+
+        $clean = article_sanitize_content($html);
+
+        self::assertStringContainsString('<p>Intro</p>', $clean);
+        self::assertStringContainsString('Send', $clean);
+        self::assertStringContainsString('rel="noopener noreferrer"', $clean);
+        self::assertStringNotContainsString('style=', $clean);
+        self::assertStringNotContainsString('id=', $clean);
+        self::assertStringNotContainsString('class=', $clean);
+        self::assertStringNotContainsString('<form', $clean);
+        self::assertStringNotContainsString('<input', $clean);
+        self::assertStringNotContainsString('<button', $clean);
+        self::assertStringNotContainsString('javascript:', $clean);
+        self::assertStringNotContainsString('onclick', $clean);
+    }
+
     public function testExtractLatestKpMeasurementReturnsNullWhenPayloadHasOnlyHeader(): void
     {
         $payload = [
@@ -147,6 +166,42 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString('<script', $html);
     }
 
+    public function testUploadSignatureValidatorAcceptsDocxZipHeader(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'docx-sig-');
+        self::assertIsString($tmp);
+        file_put_contents($tmp, "PK\x03\x04" . str_repeat("\0", 16));
+
+        try {
+            assert_upload_file_is_valid_signature($tmp, ['docx']);
+            self::assertTrue(true);
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
+    public function testUploadSignatureValidatorAllowsTextExtensionsWithoutBinarySignature(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'txt-sig-');
+        self::assertIsString($tmp);
+        file_put_contents($tmp, 'plain text document');
+
+        try {
+            assert_upload_file_is_valid_signature($tmp, ['txt']);
+            self::assertTrue(true);
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
+    public function testClassifiedsPayloadValidationRejectsOversizedFields(): void
+    {
+        $categories = ['gear' => 'Gear'];
+        classifieds_validate_payload('gear', 'Title', 'Description', 'Namur', 'contact@example.test', $categories, 'Invalid');
+        $this->expectException(RuntimeException::class);
+        classifieds_validate_payload('gear', str_repeat('x', 191), 'Description', 'Namur', 'contact@example.test', $categories, 'Invalid');
+    }
+
     public function testMemberCountryHelpersFormatKnownCountryWithFlag(): void
     {
         self::assertSame('BE', member_country_code_for('Belgique'));
@@ -207,6 +262,23 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('Dupont', $member['last_name']);
     }
 
+    public function testMemberContactEmailDefaultsToClubAddressWhenMissing(): void
+    {
+        self::assertSame('crdurnal@gmail.com', member_contact_email_from_input(''));
+        self::assertSame('crdurnal@gmail.com', member_contact_email_from_input('   '));
+        self::assertSame('member@example.test', member_contact_email_from_input(' member@example.test '));
+    }
+
+    public function testMemberSharedContactEmailUsesUniqueAuthEmail(): void
+    {
+        $authEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4CRD');
+
+        self::assertNotSame('crdurnal@gmail.com', $authEmail);
+        self::assertStringStartsWith('on4crd-', $authEmail);
+        self::assertStringEndsWith('@local.invalid', $authEmail);
+        self::assertSame('member@example.test', member_auth_email_for_contact_email('member@example.test', 'ON4CRD'));
+    }
+
     public function testMemberProfileVisibilityDefaultsProtectSensitiveIdentityFields(): void
     {
         $t = static fn(string $key): string => $key;
@@ -216,7 +288,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('private', $fields['visibility_last_name']['default']);
         self::assertSame('private', $fields['visibility_address']['default']);
         self::assertSame('private', $fields['visibility_postal_code']['default']);
-        self::assertSame('members', $fields['visibility_operator_since']['default']);
+        self::assertSame('private', $fields['visibility_operator_since']['default']);
     }
 
     public function testMemberProfileAllowedVisibilityLevelsMatchViewerRole(): void
@@ -315,6 +387,105 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('ON4DG', member_lotw_username_for_profile_save(' on4dg ', ''));
         self::assertSame('custom-lotw', member_lotw_username_for_profile_save('ON4DG', ' custom-lotw '));
         self::assertNull(member_lotw_username_for_profile_save('', ''));
+    }
+
+    public function testArticleTranslationTargetLocalesCoverEveryNonFrenchLocale(): void
+    {
+        $targets = article_translation_target_locales();
+
+        self::assertNotContains('fr', $targets);
+        self::assertSame(count(supported_locales()) - 1, count($targets));
+        self::assertContains('en', $targets);
+        self::assertContains('id', $targets);
+    }
+
+    public function testArticleTranslationPublicStatusesExcludePendingReview(): void
+    {
+        $statuses = article_translation_public_statuses();
+
+        self::assertSame(['reviewed', 'auto'], $statuses);
+        self::assertNotContains('needs_review', $statuses);
+        self::assertNotContains('missing', $statuses);
+    }
+
+    public function testArticleTranslationDeeplTargetsCoverEveryArticleLocale(): void
+    {
+        foreach (article_translation_target_locales() as $locale) {
+            self::assertNotNull(article_translation_deepl_target($locale), 'Missing DeepL target for ' . $locale);
+        }
+
+        self::assertSame('HR', article_translation_deepl_target('hr'));
+        self::assertSame('GA', article_translation_deepl_target('ga'));
+        self::assertSame('MT', article_translation_deepl_target('mt'));
+        self::assertSame('HI', article_translation_deepl_target('hi'));
+        self::assertSame('BN', article_translation_deepl_target('bn'));
+    }
+
+    public function testArticleTranslationSourceHashTracksSourceChanges(): void
+    {
+        $baseHash = article_translation_source_hash('Titre', 'Resume', '<p>Contenu</p>');
+
+        self::assertSame($baseHash, article_translation_source_hash(' Titre ', ' Resume ', ' <p>Contenu</p> '));
+        self::assertNotSame($baseHash, article_translation_source_hash('Titre', 'Resume', '<p>Contenu modifie</p>'));
+    }
+
+    public function testArticleTranslationPendingFallbackDetectsSourceCopiesOnly(): void
+    {
+        $source = [
+            'title' => 'Titre',
+            'excerpt' => 'Resume',
+            'content' => '<p>Contenu</p>',
+        ];
+
+        self::assertTrue(article_translation_pending_row_is_source_fallback([
+            'status' => 'needs_review',
+            'title' => ' Titre ',
+            'excerpt' => ' Resume ',
+            'content' => ' <p>Contenu</p> ',
+        ], $source));
+        self::assertFalse(article_translation_pending_row_is_source_fallback([
+            'status' => 'needs_review',
+            'title' => 'Translated title',
+            'excerpt' => 'Resume',
+            'content' => '<p>Contenu</p>',
+        ], $source));
+        self::assertFalse(article_translation_pending_row_is_source_fallback([
+            'status' => 'auto',
+            'title' => 'Titre',
+            'excerpt' => 'Resume',
+            'content' => '<p>Contenu</p>',
+        ], $source));
+    }
+
+    public function testArticlePublicationDatetimePrefersPublishedAt(): void
+    {
+        self::assertSame('2026-06-03 09:30:00', article_publication_datetime([
+            'published_at' => '2026-06-03 09:30:00',
+            'created_at' => '2026-06-01 08:00:00',
+            'updated_at' => '2026-06-04 10:00:00',
+        ]));
+        self::assertSame('2026-06-01 08:00:00', article_publication_datetime([
+            'published_at' => null,
+            'created_at' => '2026-06-01 08:00:00',
+            'updated_at' => '2026-06-04 10:00:00',
+        ]));
+        self::assertNull(article_publication_datetime([
+            'published_at' => '',
+            'created_at' => 'not-a-date',
+            'updated_at' => '',
+        ]));
+        self::assertSame('COALESCE(published_at, created_at, updated_at)', article_publication_sort_expression());
+        self::assertSame('COALESCE(a.published_at, a.created_at, a.updated_at)', article_publication_sort_expression_for_alias('a'));
+        self::assertSame('COALESCE(published_at, created_at, updated_at)', article_publication_sort_expression_for_alias('bad.alias'));
+    }
+
+    public function testArticleDuplicateSlugErrorDetectsUniqueViolation(): void
+    {
+        $exception = new PDOException('SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry "article" for key "articles.slug"');
+        $exception->errorInfo = ['23000', 1062, 'Duplicate entry "article" for key "articles.slug"'];
+
+        self::assertTrue(article_is_duplicate_slug_error($exception));
+        self::assertFalse(article_is_duplicate_slug_error(new RuntimeException('Duplicate entry')));
     }
 
 }

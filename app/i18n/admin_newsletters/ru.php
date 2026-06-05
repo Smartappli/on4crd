@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'электронная почта \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Нет подписчиков.',
   'no_campaigns' => 'Никаких кампаний.',
+  'err_consent_proof_required' => 'Требуется подтверждение согласия.',
+  'consent_proof' => 'Доказательство согласия',
+  'consent_proof_ph' => 'Пример: подписанная форма на 2026-06-05',
+  'consent_admin_help' => 'Для добавления, импорта или повторной активации требуется явное подтверждение согласия.',
+  'consent' => 'Согласие',
 );

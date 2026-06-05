@@ -70,6 +70,9 @@ $themeMeta = [
 ];
 
 $themeFilter = slugify(trim((string) ($_GET['theme'] ?? '')));
+if ($themeFilter === 'n-a') {
+    $themeFilter = '';
+}
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
@@ -93,6 +96,9 @@ foreach (array_keys($themeCounts) as $themeCode) {
         $themeMeta[$themeCode] = ['label' => ucwords(str_replace('-', ' ', $themeCode)), 'image' => null];
     }
 }
+if ($themeFilter !== '' && !isset($themeMeta[$themeFilter])) {
+    $themeFilter = '';
+}
 
 $whereParts = ['status = "published"'];
 $whereParams = [];
@@ -115,7 +121,8 @@ $pagination = pagination_state($totalArticles, $page, $perPage);
 $page = $pagination['page'];
 $maxPage = $pagination['total_pages'];
 $offset = $pagination['offset'];
-$dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY updated_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$articlePublicationSort = article_publication_sort_expression();
+$dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $dataStmt->execute($whereParams);
 $pagedRows = $dataStmt->fetchAll() ?: [];
 $groupedArticles = [];
@@ -127,16 +134,13 @@ foreach ($pagedRows as $row) {
     $groupedArticles[$theme][] = $row;
 }
 
-if ($themeFilter !== '' && !isset($themeMeta[$themeFilter])) {
-    $themeFilter = '';
-}
-
 set_page_meta([
     'title' => (string) $t['page_title'],
     'description' => (string) $t['page_description'],
     'schema_type' => 'CollectionPage',
 ]);
-$categoryProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_category_subject'])
+$contactEmail = site_contact_email();
+$categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_category_subject'])
     . '&body=' . rawurlencode((string) $t['propose_category_body']);
 
 ob_start();
@@ -176,7 +180,7 @@ ob_start();
                 </div>
                 <button class="articles-category-dialog-close" type="button" data-articles-category-close aria-label="<?= e((string) $t['propose_category_close']) ?>">&times;</button>
             </div>
-            <form class="articles-category-form" method="dialog" data-articles-category-form data-articles-category-recipient="on4crd@gmail.com" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
+            <form class="articles-category-form" method="dialog" data-articles-category-form data-articles-category-recipient="<?= e($contactEmail) ?>" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
                 <label>
                     <span><?= e((string) $t['propose_category_name_label']) ?></span>
                     <input type="text" name="proposal_category" maxlength="160" required>
@@ -245,11 +249,12 @@ ob_start();
                 <div class="news-grid">
                     <?php foreach ($themeRows as $row): ?>
                         <?php $row = localized_article_row($row); ?>
+                        <?php $articleDate = article_publication_datetime($row); ?>
                         <?php $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) ($row['id'] ?? 0)) : false; ?>
                         <article class="news-card feature-card">
                             <span class="badge muted"><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></span>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
-                            <p class="help"><?= e(date('d/m/Y', strtotime((string) $row['updated_at']))) ?> · <?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
+                            <p class="help"><?= $articleDate !== null ? e(date('d/m/Y', strtotime($articleDate))) . ' · ' : '' ?><?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
                             <p><?= e(article_card_excerpt($row)) ?></p>
                             <p class="actions">
                                 <a class="button secondary" href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['read_article']) ?></a>

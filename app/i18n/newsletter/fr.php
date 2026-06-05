@@ -5,6 +5,7 @@ return array (
   'meta_title' => 'Préférences newsletter',
   'meta_desc' => 'Gestion de votre abonnement newsletter ON4CRD.',
   'err_invalid_email' => 'Adresse email invalide.',
+  'consent_required' => 'Le consentement newsletter est requis.',
   'ok_subscribed' => 'Vous êtes abonné à la newsletter.',
   'err_no_sub' => 'Aucun abonnement trouvé.',
   'ok_unsubscribed' => 'Vous êtes désabonné de la newsletter.',
@@ -15,6 +16,8 @@ return array (
   'not_subscribed' => 'non abonné',
   'unsubscribe' => 'Se désabonner',
   'email_label' => 'Email de contact',
+  'consent_label' => 'J accepte de recevoir la newsletter ON4CRD et je comprends que je peux me desabonner a tout moment.',
+  'consent_proof_member' => 'Consentement espace membre newsletter',
   'subscribe' => 'S\'abonner',
   'layout_title' => 'Newsletter',
 );
