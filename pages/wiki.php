@@ -1,10 +1,15 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 $locale = current_locale();
 $i18n = require __DIR__ . '/../app/i18n/wiki.php';
 $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
+$tr = static function (string $key, string $fallback) use ($t): string {
+    $value = trim((string) ($t[$key] ?? ''));
+
+    return $value !== '' ? $value : $fallback;
+};
 
 if (!ensure_wiki_tables()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['unavailable']) . '</p></div>', (string) $t['title']);
@@ -20,7 +25,7 @@ if ($theme === 'n-a') {
     $theme = '';
 }
 $contactEmail = site_contact_email();
-$themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode('Proposition de thématique wiki ON4CRD');
+$themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD'));
 
 $rows = [];
 $wikiThemes = [];
@@ -101,8 +106,8 @@ ob_start();
                 </article>
             </div>
             <div class="wiki-hero-actions">
-                <button class="button secondary" type="button" data-wiki-theme-open data-wiki-theme-fallback="<?= e($themeProposalUrl) ?>" aria-haspopup="dialog" aria-controls="wiki-theme-dialog">Proposer une thématique</button>
-                <a class="button" href="<?= e(route_url('wiki_propose')) ?>">Proposer une page</a>
+                <button class="button secondary" type="button" data-wiki-theme-open data-wiki-theme-fallback="<?= e($themeProposalUrl) ?>" aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></button>
+                <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
                 <?php if (has_permission('wiki.moderate')): ?>
                     <a class="button secondary" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
                 <?php endif; ?>
@@ -114,19 +119,19 @@ ob_start();
         <div class="wiki-theme-dialog-card">
             <div class="wiki-theme-dialog-header">
                 <div>
-                    <p class="wiki-theme-dialog-eyebrow"><?= e((string) ($t['themes'] ?? 'Thématiques')) ?></p>
-                    <h2 id="wiki-theme-dialog-title">Proposer une thématique</h2>
-                    <p class="help">Indiquez la thématique à ajouter et les pages qui devraient y être liées.</p>
+                    <p class="wiki-theme-dialog-eyebrow"><?= e($tr('themes', 'Thématiques')) ?></p>
+                    <h2 id="wiki-theme-dialog-title"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></h2>
+                    <p class="help"><?= e($tr('propose_theme_intro', 'Indiquez la thématique à ajouter et les pages qui devraient y être liées.')) ?></p>
                 </div>
-                <button class="wiki-theme-dialog-close" type="button" data-wiki-theme-close aria-label="Fermer">&times;</button>
+                <button class="wiki-theme-dialog-close" type="button" data-wiki-theme-close aria-label="<?= e($tr('close', 'Fermer')) ?>">&times;</button>
             </div>
-            <form class="wiki-theme-form" method="dialog" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="Proposition de thématique wiki ON4CRD" data-wiki-theme-intro="Proposition de thématique wiki :">
-                <label><span>Nom de la thématique</span><input type="text" name="proposal_theme" maxlength="160" required></label>
-                <label><span>Pourquoi l'ajouter ?</span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
-                <label><span>Votre contact</span><input type="text" name="proposal_contact" maxlength="220" required></label>
+            <form class="wiki-theme-form" method="dialog" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="<?= e($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD')) ?>" data-wiki-theme-intro="<?= e($tr('propose_theme_body_intro', 'Proposition de thématique wiki :')) ?>">
+                <label><span><?= e($tr('propose_theme_name', 'Nom de la thématique')) ?></span><input type="text" name="proposal_theme" maxlength="160" required></label>
+                <label><span><?= e($tr('propose_theme_reason', 'Pourquoi l\'ajouter ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+                <label><span><?= e($tr('propose_theme_contact', 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" required></label>
                 <div class="wiki-theme-dialog-actions">
-                    <button class="button" type="submit">Envoyer la proposition</button>
-                    <button class="button secondary" type="button" data-wiki-theme-close>Annuler</button>
+                    <button class="button" type="submit"><?= e($tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
+                    <button class="button secondary" type="button" data-wiki-theme-close><?= e($tr('cancel', 'Annuler')) ?></button>
                 </div>
             </form>
         </div>
@@ -151,10 +156,10 @@ ob_start();
 
     <section class="wiki-layout">
         <aside class="wiki-themes card">
-            <p class="wiki-themes-title"><?= e((string) ($t['themes'] ?? 'Thématiques')) ?></p>
-            <nav class="wiki-theme-list" aria-label="<?= e((string) ($t['themes'] ?? 'Thématiques')) ?>">
+            <p class="wiki-themes-title"><?= e($tr('themes', 'Thématiques')) ?></p>
+            <nav class="wiki-theme-list" aria-label="<?= e($tr('themes', 'Thématiques')) ?>">
                 <a class="wiki-theme-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
-                    <span><?= e((string) ($t['all_themes'] ?? 'Toutes les thématiques')) ?></span>
+                    <span><?= e($tr('all_themes', 'Toutes les thématiques')) ?></span>
                     <strong><?= (int) ($wikiThemes !== [] ? array_sum($wikiThemes) : $totalPagesCount) ?></strong>
                 </a>
                 <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>
