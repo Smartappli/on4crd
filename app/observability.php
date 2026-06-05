@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/privacy_helpers.php';
+
 /**
  * @param array<string, mixed> $config
  */
@@ -81,7 +83,7 @@ function log_structured_event(string $event, array $context = []): void
         'event' => $event,
         'request_id' => (string) ($_SESSION['request_id'] ?? ''),
         'route' => (string) ($_GET['route'] ?? 'home'),
-        'ip' => (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+        'ip_hash' => privacy_request_ip_hash(),
     ];
 
     foreach ($context as $key => $value) {

@@ -29,6 +29,7 @@ function app_load_route_helpers(string $route): void
         'album_helpers.php' => ['home', 'admin_albums'],
         'member_media.php' => ['directory', 'gdpr', 'profile'],
         'member_profile_helpers.php' => ['directory', 'gdpr', 'profile', 'register', 'tools_geocode'],
+        'privacy_helpers.php' => ['forgot_password', 'register', 'profile', 'gdpr', 'my_requests', 'newsletter', 'newsletter_public', 'newsletter_unsubscribe', 'settings', 'admin_newsletters', 'ads', 'admin_ads', 'ad_click', 'admin_privacy'],
         'auction_helpers.php' => ['auctions', 'auction_view', 'auction_bid', 'admin_auctions'],
         'admin_helpers.php' => ['admin'],
         'newsletter.php' => ['newsletter', 'newsletter_public', 'newsletter_unsubscribe', 'settings', 'admin_newsletters'],

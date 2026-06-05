@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/privacy_helpers.php';
+
 /**
  * @return array<string, array{label:string,width:int,height:int}>
  */
@@ -122,7 +124,7 @@ function ad_daily_stats(int $adId): array
     if ($adId <= 0 || !table_exists('ad_events')) {
         return [];
     }
-    $stmt = db()->prepare('SELECT DATE(created_at) AS day, SUM(event_type = "view") AS impressions, SUM(event_type = "click") AS clicks FROM ad_events WHERE ad_id = ? GROUP BY DATE(created_at) ORDER BY day DESC LIMIT 30');
+    $stmt = db()->prepare('SELECT DATE(created_at) AS day, SUM(event_type = "impression") AS impressions, SUM(event_type = "click") AS clicks FROM ad_events WHERE ad_id = ? GROUP BY DATE(created_at) ORDER BY day DESC LIMIT 30');
     $stmt->execute([$adId]);
     return $stmt->fetchAll() ?: [];
 }
@@ -132,14 +134,30 @@ function log_ad_event(int $adId, string $eventType, string $placementCode = ''):
     if ($adId <= 0 || !table_exists('ad_events')) {
         return;
     }
-    db()->prepare('INSERT INTO ad_events (ad_id, event_type, placement_code, ip_address, user_agent) VALUES (?, ?, ?, ?, ?)')
-        ->execute([
-            $adId,
-            $eventType,
-            $placementCode,
-            (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
-            substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
-        ]);
+
+    if ($eventType === 'view') {
+        $eventType = 'impression';
+    }
+    if (!in_array($eventType, ['impression', 'click'], true)) {
+        return;
+    }
+
+    $columns = ['ad_id', 'event_type', 'placement_code'];
+    $values = [$adId, $eventType, $placementCode];
+
+    if (table_has_column('ad_events', 'ip_hash')) {
+        $columns[] = 'ip_hash';
+        $values[] = privacy_request_ip_hash() ?: null;
+    }
+    if (table_has_column('ad_events', 'user_agent_hash')) {
+        $columns[] = 'user_agent_hash';
+        $values[] = privacy_request_user_agent_hash() ?: null;
+    }
+
+    $placeholders = implode(', ', array_fill(0, count($columns), '?'));
+    $columnSql = implode(', ', array_map(static fn (string $column): string => '`' . str_replace('`', '``', $column) . '`', $columns));
+    db()->prepare('INSERT INTO ad_events (' . $columnSql . ') VALUES (' . $placeholders . ')')
+        ->execute($values);
 }
 
 function handle_ad_image_upload(?array $upload, string $callsign, string $existingPath = ''): ?string

@@ -31,12 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             file_put_contents(
-                $logDirectory . '/password_resets.log',
+                $logDirectory . '/password_reset_requests.log',
                 json_encode([
-                    'email' => $email,
-                    'link' => $resetLink,
+                    'email_hash' => privacy_hash_value($email),
+                    'selector_hash' => privacy_hash_value($selector),
                     'created_at' => gmdate('c'),
-                    'ip' => (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+                    'ip_hash' => privacy_request_ip_hash(),
                 ], JSON_UNESCAPED_SLASHES) . PHP_EOL,
                 FILE_APPEND | LOCK_EX
             );
