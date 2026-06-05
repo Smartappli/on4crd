@@ -270,8 +270,11 @@ CREATE TABLE IF NOT EXISTS articles (
     title VARCHAR(190) NOT NULL,
     excerpt TEXT DEFAULT NULL,
     content LONGTEXT NOT NULL,
-    status ENUM('draft','published') NOT NULL DEFAULT 'draft',
+    status ENUM('draft','pending','scheduled','published','rejected') NOT NULL DEFAULT 'draft',
     category VARCHAR(120) NOT NULL DEFAULT 'autres',
+    scheduled_at DATETIME NULL DEFAULT NULL,
+    published_at DATETIME NULL DEFAULT NULL,
+    moderation_note TEXT DEFAULT NULL,
     author_id INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

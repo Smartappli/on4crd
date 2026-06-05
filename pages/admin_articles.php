@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 declare(strict_types=1);
 
 require_permission('articles.manage');
@@ -570,7 +570,7 @@ ob_start();
                                 <input type="hidden" name="action" value="restore_revision">
                                 <input type="hidden" name="article_id" value="<?= (int) $editing['id'] ?>">
                                 <input type="hidden" name="revision_id" value="<?= (int) $revision['id'] ?>">
-                                <span class="help"><?= e($t('revision_saved_at', 'Version du')) ?> <?= e(date('d/m/Y H:i', strtotime((string) $revision['created_at']))) ?> · <?= e($t((string) $revision['status'], (string) $revision['status'])) ?></span>
+                                <span class="help"><?= e($t('revision_saved_at', 'Version du')) ?> <?= e(date('d/m/Y H:i', strtotime((string) $revision['created_at']))) ?> · <?= e($articleStatusLabel((string) $revision['status'])) ?></span>
                                 <button class="button small secondary" type="submit" onclick="return confirm('<?= e($t('confirm_restore_revision', 'Restaurer cette version ?')) ?>');"><?= e($t('restore_revision', 'Restaurer')) ?></button>
                             </form>
                         <?php endforeach; ?>
@@ -590,8 +590,8 @@ ob_start();
                 <?php if (trim((string) ($previewPayload['excerpt'] ?? '')) !== ''): ?>
                     <p><?= e((string) $previewPayload['excerpt']) ?></p>
                 <?php endif; ?>
-                <p class="help"><?= e($t((string) ($previewPayload['status'] ?? 'draft'), (string) ($previewPayload['status'] ?? 'draft'))) ?><?php if (!empty($previewPayload['scheduled_at'])): ?> · <?= e(date('d/m/Y H:i', strtotime((string) $previewPayload['scheduled_at']))) ?><?php endif; ?></p>
-                <div><?= sanitize_rich_html((string) ($previewPayload['content'] ?? '')) ?></div>
+                <p class="help"><?= e($articleStatusLabel((string) ($previewPayload['status'] ?? 'draft'))) ?><?php if (!empty($previewPayload['scheduled_at'])): ?> · <?= e(date('d/m/Y H:i', strtotime((string) $previewPayload['scheduled_at']))) ?><?php endif; ?></p>
+                <div><?= article_sanitize_content((string) ($previewPayload['content'] ?? '')) ?></div>
             </article>
         <?php endif; ?>
     </section>
@@ -647,7 +647,7 @@ ob_start();
     <section class="card">
         <div class="row-between">
             <h2><?= e($t('existing_articles')) ?></h2>
-            <span class="badge"><?= e($t('published')) ?>: <?= (int) $articleStatMap['published'] ?> · <?= e($t('scheduled', 'Programmée')) ?>: <?= (int) $articleStatMap['scheduled'] ?> · <?= e($t('draft')) ?>: <?= (int) $articleStatMap['draft'] ?></span>
+            <span class="badge"><?php $statusStats = []; foreach (['pending', 'draft', 'scheduled', 'published', 'rejected'] as $statusCode) { $statusStats[] = $articleStatusLabel($statusCode) . ': ' . (int) ($articleStatMap[$statusCode] ?? 0); } echo e(implode(' · ', $statusStats)); ?></span>
         </div>
         <form method="get" class="stack">
             <input type="hidden" name="route" value="admin_articles">
@@ -656,9 +656,9 @@ ob_start();
                 <label><?= e($t('status')) ?>
                     <select name="status">
                         <option value=""><?= e($t('all_statuses', 'Tous les statuts')) ?></option>
-                        <option value="published" <?= $adminStatus === 'published' ? 'selected' : '' ?>><?= e($t('published')) ?></option>
-                        <option value="scheduled" <?= $adminStatus === 'scheduled' ? 'selected' : '' ?>><?= e($t('scheduled', 'Programmée')) ?></option>
-                        <option value="draft" <?= $adminStatus === 'draft' ? 'selected' : '' ?>><?= e($t('draft')) ?></option>
+                        <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
+                            <option value="<?= e($statusCode) ?>" <?= $adminStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </label>
                 <label><?= e($t('category')) ?>
@@ -676,7 +676,7 @@ ob_start();
             <?php foreach ($articles as $article): ?>
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
-                    <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?> · <span class="badge muted"><?= e($t((string) $article['status'], (string) $article['status'])) ?></span></p>
+                    <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?> · <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>

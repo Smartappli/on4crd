@@ -40,6 +40,25 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNull(sanitize_href_attribute("/ok\r\njavascript:alert(1)"));
     }
 
+    public function testArticleSanitizeContentStripsUnsupportedTagsAndAttributes(): void
+    {
+        $html = '<p id="intro" style="position:fixed">Intro</p><form><input name="token" value="secret"><button>Send</button></form><a href="javascript:alert(1)" onclick="evil()">Bad</a><a href="/articles" target="_blank" class="external">OK</a>';
+
+        $clean = article_sanitize_content($html);
+
+        self::assertStringContainsString('<p>Intro</p>', $clean);
+        self::assertStringContainsString('Send', $clean);
+        self::assertStringContainsString('rel="noopener noreferrer"', $clean);
+        self::assertStringNotContainsString('style=', $clean);
+        self::assertStringNotContainsString('id=', $clean);
+        self::assertStringNotContainsString('class=', $clean);
+        self::assertStringNotContainsString('<form', $clean);
+        self::assertStringNotContainsString('<input', $clean);
+        self::assertStringNotContainsString('<button', $clean);
+        self::assertStringNotContainsString('javascript:', $clean);
+        self::assertStringNotContainsString('onclick', $clean);
+    }
+
     public function testExtractLatestKpMeasurementReturnsNullWhenPayloadHasOnlyHeader(): void
     {
         $payload = [

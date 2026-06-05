@@ -185,7 +185,12 @@ function apply_runtime_schema_updates(): void
             db()->exec('ALTER TABLE articles ADD COLUMN published_at DATETIME NULL DEFAULT NULL AFTER scheduled_at');
         }
 
-        db()->exec('ALTER TABLE articles MODIFY COLUMN status ENUM("draft","scheduled","published") NOT NULL DEFAULT "draft"');
+        $columnStmt->execute(['articles', 'moderation_note']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE articles ADD COLUMN moderation_note TEXT DEFAULT NULL AFTER published_at');
+        }
+
+        db()->exec('ALTER TABLE articles MODIFY COLUMN status ENUM("draft","pending","scheduled","published","rejected") NOT NULL DEFAULT "draft"');
 
         db()->exec(
             'CREATE TABLE IF NOT EXISTS article_revisions (

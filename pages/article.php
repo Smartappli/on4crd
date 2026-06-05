@@ -141,7 +141,7 @@ ob_start();
         <p class="lead"><?= e((string) $row['excerpt_localized']) ?></p>
     <?php endif; ?>
     <div class="article-content">
-        <?= sanitize_rich_html((string) $row['content_localized']) ?>
+        <?= article_sanitize_content((string) $row['content_localized']) ?>
     </div>
 </article>
 

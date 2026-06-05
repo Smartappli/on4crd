@@ -56,15 +56,17 @@ $shortcuts = [
 
 $submittedArticles = [];
 if (table_exists('articles') && table_has_column('articles', 'author_id')) {
-    $stmt = db()->prepare('SELECT id, slug, title, status, category, created_at, updated_at FROM articles WHERE author_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
+    $stmt = db()->prepare('SELECT id, slug, title, status, category, moderation_note, created_at, updated_at FROM articles WHERE author_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
     $stmt->execute([(int) $user['id']]);
     $submittedArticles = $stmt->fetchAll() ?: [];
 }
 
 $statusLabels = [
-    'draft' => (string) ($t['article_status_draft'] ?? 'En validation'),
+    'draft' => (string) ($t['article_status_draft'] ?? 'Brouillon'),
+    'pending' => (string) ($t['article_status_pending'] ?? 'En validation'),
     'scheduled' => (string) ($t['article_status_scheduled'] ?? 'Planifie'),
     'published' => (string) ($t['article_status_published'] ?? 'Publie'),
+    'rejected' => (string) ($t['article_status_rejected'] ?? 'Refuse'),
 ];
 
 ob_start();
@@ -113,6 +115,9 @@ ob_start();
                         <h3><?= e($articleTitle) ?></h3>
                         <p><?= e((string) ($t['articles_title'] ?? 'Articles')) ?> · <?= e((string) ($article['category'] ?? 'autres')) ?></p>
                         <p class="help"><?= e(date('d/m/Y', strtotime((string) ($article['updated_at'] ?? $article['created_at'] ?? 'now')))) ?></p>
+                        <?php if (trim((string) ($article['moderation_note'] ?? '')) !== ''): ?>
+                            <p class="help"><?= e((string) ($t['moderation_note'] ?? 'Note de moderation')) ?>: <?= e((string) $article['moderation_note']) ?></p>
+                        <?php endif; ?>
                         <?php if ($articleUrl !== ''): ?>
                             <a class="button secondary small" href="<?= e($articleUrl) ?>"><?= e((string) ($t['article_open'] ?? 'Ouvrir')) ?></a>
                         <?php endif; ?>
