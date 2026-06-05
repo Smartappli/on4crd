@@ -271,7 +271,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int) ($_POST['id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
             $slugInput = trim((string) ($_POST['slug'] ?? ''));
-            $slug = article_unique_slug($slugInput !== '' ? $slugInput : $title, $id);
+            $slugSource = $slugInput !== '' ? $slugInput : $title;
+            $slug = article_unique_slug($slugSource, $id);
             $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
             $content = article_sanitize_content((string) ($_POST['content'] ?? ''));
             $status = (string) ($_POST['status'] ?? 'draft');
@@ -288,6 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $scheduledAtRaw = trim((string) ($_POST['scheduled_at'] ?? ''));
             $scheduledAtValue = null;
             $publishedAtValue = null;
+            $publishNow = false;
             if ($status === 'scheduled') {
                 if ($scheduledAtRaw === '') {
                     throw new RuntimeException($t('err_invalid_article', 'Date de planification requise.'));
@@ -298,12 +300,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 if ($scheduledTs <= time()) {
                     $status = 'published';
-                    $publishedAtValue = date('Y-m-d H:i:s');
+                    $publishNow = true;
                 } else {
                     $scheduledAtValue = date('Y-m-d H:i:s', $scheduledTs);
                 }
             } elseif ($status === 'published') {
-                $publishedAtValue = date('Y-m-d H:i:s');
+                $publishNow = true;
             }
             $moderationNoteValue = null;
             if ($status === 'rejected') {
@@ -340,42 +342,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $notifyStatus = $status;
                 $authorId = (int) current_user()['id'];
-                db()->beginTransaction();
-                if ($id > 0) {
-                    $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
-                    $previousStmt->execute([$id]);
-                    $previous = $previousStmt->fetch() ?: null;
-                    if (!is_array($previous)) {
-                        throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
-                    }
-                    $authorId = isset($previous['author_id']) ? (int) $previous['author_id'] : 0;
-                    if (table_exists('article_revisions')) {
-                        db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                            ->execute([
-                                $id,
-                                (string) ($previous['title'] ?? ''),
-                                (string) ($previous['slug'] ?? ''),
-                                (string) ($previous['excerpt'] ?? ''),
-                                (string) ($previous['content'] ?? ''),
-                                (string) ($previous['status'] ?? 'draft'),
-                                (string) ($previous['category'] ?? 'autres'),
-                                $previous['scheduled_at'] ?? null,
-                                $previous['published_at'] ?? null,
-                                isset($previous['author_id']) ? (int) $previous['author_id'] : null,
-                            ]);
-                    }
-                    db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id = ?')
-                        ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, $id]);
-                } else {
-                    db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, scheduled_at, published_at, moderation_note, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                        ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, (int) current_user()['id']]);
-                    $id = (int) db()->lastInsertId();
-                    if (table_exists('article_revisions')) {
-                        db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                            ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
+                $maxSlugAttempts = 5;
+                for ($slugAttempt = 0; $slugAttempt < $maxSlugAttempts; $slugAttempt++) {
+                    $slug = article_unique_slug($slugSource, $id);
+                    try {
+                        db()->beginTransaction();
+                        if ($id > 0) {
+                            $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
+                            $previousStmt->execute([$id]);
+                            $previous = $previousStmt->fetch() ?: null;
+                            if (!is_array($previous)) {
+                                throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                            }
+                            $authorId = isset($previous['author_id']) ? (int) $previous['author_id'] : 0;
+                            $existingPublishedAt = trim((string) ($previous['published_at'] ?? ''));
+                            $publishedAtValue = $publishNow ? ($existingPublishedAt !== '' ? $existingPublishedAt : date('Y-m-d H:i:s')) : null;
+                            if (table_exists('article_revisions')) {
+                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                    ->execute([
+                                        $id,
+                                        (string) ($previous['title'] ?? ''),
+                                        (string) ($previous['slug'] ?? ''),
+                                        (string) ($previous['excerpt'] ?? ''),
+                                        (string) ($previous['content'] ?? ''),
+                                        (string) ($previous['status'] ?? 'draft'),
+                                        (string) ($previous['category'] ?? 'autres'),
+                                        $previous['scheduled_at'] ?? null,
+                                        $previous['published_at'] ?? null,
+                                        isset($previous['author_id']) ? (int) $previous['author_id'] : null,
+                                    ]);
+                            }
+                            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id = ?')
+                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, $id]);
+                        } else {
+                            $publishedAtValue = $publishNow ? date('Y-m-d H:i:s') : null;
+                            db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, scheduled_at, published_at, moderation_note, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, (int) current_user()['id']]);
+                            $id = (int) db()->lastInsertId();
+                            if (table_exists('article_revisions')) {
+                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                    ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
+                            }
+                        }
+                        db()->commit();
+                        break;
+                    } catch (Throwable $saveThrowable) {
+                        if (db()->inTransaction()) {
+                            db()->rollBack();
+                        }
+                        if (!article_is_duplicate_slug_error($saveThrowable) || $slugAttempt === $maxSlugAttempts - 1) {
+                            throw $saveThrowable;
+                        }
+                        usleep(20000 * ($slugAttempt + 1));
                     }
                 }
-                db()->commit();
 
                 if (in_array($notifyStatus, ['published', 'scheduled'], true)) {
                     try {
@@ -406,6 +426,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             if (table_exists('article_translations')) {
                 db()->prepare('DELETE FROM article_translations WHERE article_id = ?')->execute([$id]);
+            }
+            if (table_exists('article_revisions')) {
+                db()->prepare('DELETE FROM article_revisions WHERE article_id = ?')->execute([$id]);
             }
             db()->prepare('DELETE FROM articles WHERE id = ?')->execute([$id]);
             set_flash('success', $t('ok_deleted', 'Article supprimé.'));
