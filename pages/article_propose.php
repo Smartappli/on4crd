@@ -29,6 +29,29 @@ function article_propose_unique_slug(string $title): string
     }
 }
 
+function article_propose_enforce_submission_limits(int $memberId): void
+{
+    if ($memberId <= 0) {
+        throw new RuntimeException('Utilisateur invalide.');
+    }
+
+    $lastStmt = db()->prepare('SELECT created_at FROM articles WHERE author_id = ? ORDER BY created_at DESC, id DESC LIMIT 1');
+    $lastStmt->execute([$memberId]);
+    $lastCreatedAt = $lastStmt->fetchColumn();
+    if (is_string($lastCreatedAt) && $lastCreatedAt !== '') {
+        $lastTs = strtotime($lastCreatedAt);
+        if ($lastTs !== false && $lastTs > time() - 60) {
+            throw new RuntimeException('Veuillez patienter une minute avant de proposer un autre article.');
+        }
+    }
+
+    $countStmt = db()->prepare('SELECT COUNT(*) FROM articles WHERE author_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)');
+    $countStmt->execute([$memberId]);
+    if ((int) ($countStmt->fetchColumn() ?: 0) >= 5) {
+        throw new RuntimeException('Limite atteinte: maximum 5 propositions d\'article par 24 heures.');
+    }
+}
+
 $title = $label('propose_article', 'Proposer un article');
 $categories = [
     'antennes' => $label('theme_antennes', 'Antennes'),
@@ -68,20 +91,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Le titre et le contenu sont obligatoires.');
         }
 
-        $content = sanitize_rich_html($rawContent);
+        article_propose_enforce_submission_limits((int) $user['id']);
+
+        $content = article_sanitize_content($rawContent);
         if (trim(strip_tags($content)) === '') {
             throw new RuntimeException('Le contenu de l\'article est vide apres nettoyage.');
         }
 
         $slug = article_propose_unique_slug($articleTitle);
-        db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "draft", ?, ?)')
+        db()->beginTransaction();
+        db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?)')
             ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, (int) $user['id']]);
-        article_translations_sync_all((int) db()->lastInsertId());
+        $articleId = (int) db()->lastInsertId();
+        db()->commit();
+
+        try {
+            article_translations_sync_all($articleId);
+        } catch (Throwable) {
+            set_flash('warning', 'Article enregistre, mais les traductions automatiques devront etre relancees.');
+        }
 
         set_flash('success', 'Article soumis pour validation.');
         redirect('my_requests');
     } catch (Throwable $throwable) {
-        set_flash('error', $throwable->getMessage());
+        if (db()->inTransaction()) {
+            db()->rollBack();
+        }
+        $message = $throwable instanceof PDOException
+            ? 'Impossible d\'enregistrer l\'article pour le moment.'
+            : $throwable->getMessage();
+        set_flash('error', $message);
         redirect('article_propose');
     }
 }

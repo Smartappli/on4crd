@@ -52,6 +52,170 @@ function article_translation_target_locales(): array
     ));
 }
 
+function article_sanitize_content(string $html): string
+{
+    $html = trim(sanitize_rich_html($html));
+    if ($html === '') {
+        return '';
+    }
+
+    $allowedTags = array_fill_keys([
+        'p',
+        'br',
+        'strong',
+        'b',
+        'em',
+        'i',
+        'u',
+        'ul',
+        'ol',
+        'li',
+        'h2',
+        'h3',
+        'h4',
+        'blockquote',
+        'pre',
+        'code',
+        'a',
+        'img',
+        'figure',
+        'figcaption',
+        'table',
+        'thead',
+        'tbody',
+        'tr',
+        'th',
+        'td',
+        'hr',
+    ], true);
+    $allowedAttributes = [
+        'a' => ['href' => true, 'title' => true, 'target' => true, 'rel' => true],
+        'img' => ['src' => true, 'alt' => true, 'title' => true, 'width' => true, 'height' => true, 'loading' => true],
+        'th' => ['colspan' => true, 'rowspan' => true],
+        'td' => ['colspan' => true, 'rowspan' => true],
+    ];
+
+    $dom = new DOMDocument();
+    $previousUseInternalErrors = libxml_use_internal_errors(true);
+    $dom->loadHTML('<!doctype html><html><body>' . $html . '</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    libxml_clear_errors();
+    libxml_use_internal_errors($previousUseInternalErrors);
+
+    $allNodes = $dom->getElementsByTagName('*');
+    for ($i = $allNodes->length - 1; $i >= 0; $i--) {
+        $node = $allNodes->item($i);
+        if (!$node instanceof DOMElement) {
+            continue;
+        }
+
+        $tag = strtolower($node->tagName);
+        if ($tag === 'html' || $tag === 'body') {
+            continue;
+        }
+
+        if (!isset($allowedTags[$tag])) {
+            $parent = $node->parentNode;
+            if ($parent === null) {
+                continue;
+            }
+            while ($node->firstChild !== null) {
+                $parent->insertBefore($node->firstChild, $node);
+            }
+            $parent->removeChild($node);
+            continue;
+        }
+
+        $allowedForTag = $allowedAttributes[$tag] ?? [];
+        if ($node->hasAttributes()) {
+            $toRemove = [];
+            foreach ($node->attributes as $attribute) {
+                $name = strtolower($attribute->name);
+                if (!isset($allowedForTag[$name])) {
+                    $toRemove[] = $attribute->name;
+                }
+            }
+            foreach ($toRemove as $attrName) {
+                $node->removeAttribute($attrName);
+            }
+        }
+
+        if ($tag === 'a') {
+            if ($node->hasAttribute('href')) {
+                $safeHref = sanitize_href_attribute($node->getAttribute('href'));
+                if ($safeHref === null) {
+                    $node->removeAttribute('href');
+                } else {
+                    $node->setAttribute('href', $safeHref);
+                }
+            }
+            $target = strtolower(trim($node->getAttribute('target')));
+            if ($target !== '' && !in_array($target, ['_blank', '_self'], true)) {
+                $node->removeAttribute('target');
+                $target = '';
+            }
+            if ($target === '_blank') {
+                $node->setAttribute('rel', 'noopener noreferrer');
+            } elseif ($node->hasAttribute('rel')) {
+                $rel = trim((string) preg_replace('/[^a-z0-9 _-]+/i', '', $node->getAttribute('rel')));
+                if ($rel === '') {
+                    $node->removeAttribute('rel');
+                } else {
+                    $node->setAttribute('rel', $rel);
+                }
+            }
+        }
+
+        if ($tag === 'img') {
+            $safeSrc = $node->hasAttribute('src') ? sanitize_image_src_attribute($node->getAttribute('src')) : null;
+            if ($safeSrc === null) {
+                if ($node->parentNode !== null) {
+                    $node->parentNode->removeChild($node);
+                }
+                continue;
+            }
+            $node->setAttribute('src', $safeSrc);
+            $node->setAttribute('loading', 'lazy');
+            foreach (['width', 'height'] as $dimension) {
+                if (!$node->hasAttribute($dimension)) {
+                    continue;
+                }
+                $value = (int) $node->getAttribute($dimension);
+                if ($value <= 0 || $value > 2000 || !preg_match('/^\d+$/', $node->getAttribute($dimension))) {
+                    $node->removeAttribute($dimension);
+                } else {
+                    $node->setAttribute($dimension, (string) $value);
+                }
+            }
+        }
+
+        if ($tag === 'td' || $tag === 'th') {
+            foreach (['colspan', 'rowspan'] as $span) {
+                if (!$node->hasAttribute($span)) {
+                    continue;
+                }
+                $value = (int) $node->getAttribute($span);
+                if ($value <= 0 || $value > 20 || !preg_match('/^\d+$/', $node->getAttribute($span))) {
+                    $node->removeAttribute($span);
+                } else {
+                    $node->setAttribute($span, (string) $value);
+                }
+            }
+        }
+    }
+
+    $body = $dom->getElementsByTagName('body')->item(0);
+    if (!$body) {
+        return '';
+    }
+
+    $result = '';
+    foreach ($body->childNodes as $child) {
+        $result .= $dom->saveHTML($child);
+    }
+
+    return trim($result);
+}
+
 function article_translation_deepl_target(string $locale): ?string
 {
     $locale = strtolower(trim($locale));
@@ -187,7 +351,7 @@ function article_translation_auto_fields(array $source, string $locale): array
         return [
             'title' => trim($translated[0]) !== '' ? trim($translated[0]) : $sourceTitle,
             'excerpt' => trim($translated[1]) !== '' ? trim($translated[1]) : $sourceExcerpt,
-            'content' => trim($translated[2]) !== '' ? sanitize_rich_html($translated[2]) : $sourceContent,
+            'content' => trim($translated[2]) !== '' ? article_sanitize_content($translated[2]) : $sourceContent,
             'status' => 'auto',
         ];
     }
@@ -233,7 +397,7 @@ function article_translation_upsert(int $articleId, string $locale, ?string $tit
         $fields = [
             'title' => trim((string) ($title ?? '')) !== '' ? trim((string) $title) : $sourceFields['title'],
             'excerpt' => trim((string) ($summary ?? '')) !== '' ? trim((string) $summary) : $sourceFields['excerpt'],
-            'content' => trim((string) ($content ?? '')) !== '' ? sanitize_rich_html((string) $content) : $sourceFields['content'],
+            'content' => trim((string) ($content ?? '')) !== '' ? article_sanitize_content((string) $content) : $sourceFields['content'],
             'status' => 'needs_review',
         ];
     }

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 
 require_permission('articles.manage');
@@ -86,7 +86,7 @@ function import_article_document(array $file): array
         $content = article_import_text_to_html($rawText);
     } elseif (in_array($extension, ['html', 'htm'], true)) {
         $rawHtml = (string) file_get_contents($absolutePath);
-        $content = sanitize_rich_html($rawHtml);
+        $content = article_sanitize_content($rawHtml);
     } elseif ($extension === 'docx') {
         $content = article_extract_docx_html($absolutePath);
         if ($content === '') {
@@ -105,6 +105,7 @@ function import_article_document(array $file): array
     if ($content !== '') {
         $content .= "\n" . $sourceLabel;
     }
+    $content = article_sanitize_content($content);
 
     return [
         'excerpt' => $tm('imported_doc') . ' ' . $documentTitle,
@@ -187,6 +188,15 @@ foreach ($existingCategoryRows as $existingCategoryRow) {
     }
 }
 
+$articleStatusChoices = [
+    'draft' => $t('draft', 'Brouillon'),
+    'pending' => $t('pending', 'En validation'),
+    'scheduled' => $t('scheduled', 'Programme'),
+    'published' => $t('published', 'Publie'),
+    'rejected' => $t('rejected', 'Refuse'),
+];
+$articleStatusLabel = static fn(string $status): string => $articleStatusChoices[$status] ?? $status;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -198,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }
             $bulkOp = (string) ($_POST['bulk_op'] ?? '');
-            $allowedOps = ['draft', 'scheduled', 'published', 'delete'];
+            $allowedOps = array_merge(array_keys($articleStatusChoices), ['delete']);
             if (!in_array($bulkOp, $allowedOps, true)) {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }
@@ -212,8 +222,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
                 $publishedAt = $bulkOp === 'published' ? date('Y-m-d H:i:s') : null;
-                db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = COALESCE(?, published_at), updated_at = NOW() WHERE id IN (' . $placeholders . ')')
-                    ->execute(array_merge([$bulkOp, $scheduledAt, $publishedAt], $ids));
+                $moderationNote = $bulkOp === 'rejected' ? 'Refuse par moderation.' : null;
+                db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
+                    ->execute(array_merge([$bulkOp, $scheduledAt, $publishedAt, $moderationNote], $ids));
                 set_flash('success', $t('ok_saved'));
             }
             redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
@@ -225,15 +236,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slugInput = trim((string) ($_POST['slug'] ?? ''));
             $slug = article_unique_slug($slugInput !== '' ? $slugInput : $title, $id);
             $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
-            $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
+            $content = article_sanitize_content((string) ($_POST['content'] ?? ''));
             $status = (string) ($_POST['status'] ?? 'draft');
+            $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
             $categoryChoice = trim((string) ($_POST['category'] ?? 'autres'));
             $customCategory = slugify(trim((string) ($_POST['category_custom'] ?? '')));
             $category = $categoryChoice === '__custom__' ? $customCategory : slugify($categoryChoice);
             if ($category === '') {
                 $category = 'autres';
             }
-            if ($title === '' || !in_array($status, ['draft', 'scheduled', 'published'], true)) {
+            if ($title === '' || !isset($articleStatusChoices[$status])) {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }
             $scheduledAtRaw = trim((string) ($_POST['scheduled_at'] ?? ''));
@@ -256,6 +268,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($status === 'published') {
                 $publishedAtValue = date('Y-m-d H:i:s');
             }
+            $moderationNoteValue = null;
+            if ($status === 'rejected') {
+                $moderationNoteValue = $moderationNote !== '' ? $moderationNote : 'Refuse par moderation.';
+            }
             $imported = import_article_document($_FILES['article_document'] ?? []);
             if ($imported['content'] !== '') {
                 $content = $imported['content'];
@@ -271,6 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'status' => $status,
                     'category' => $category,
                     'scheduled_at' => $scheduledAtValue,
+                    'moderation_note' => $moderationNoteValue,
                 ];
                 $editing = array_merge((array) $editing, [
                     'id' => $id,
@@ -281,15 +298,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'status' => $status,
                     'category' => $category,
                     'scheduled_at' => $scheduledAtValue,
+                    'moderation_note' => $moderationNoteValue,
                 ]);
             } else {
-            $notifyStatus = $status;
-            if ($id > 0) {
-                if (table_exists('article_revisions')) {
+                $notifyStatus = $status;
+                $authorId = (int) current_user()['id'];
+                db()->beginTransaction();
+                if ($id > 0) {
                     $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
                     $previousStmt->execute([$id]);
                     $previous = $previousStmt->fetch() ?: null;
-                    if (is_array($previous)) {
+                    if (!is_array($previous)) {
+                        throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
+                    }
+                    $authorId = isset($previous['author_id']) ? (int) $previous['author_id'] : 0;
+                    if (table_exists('article_revisions')) {
                         db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
                             ->execute([
                                 $id,
@@ -304,24 +327,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 isset($previous['author_id']) ? (int) $previous['author_id'] : null,
                             ]);
                     }
+                    db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id = ?')
+                        ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, $id]);
+                } else {
+                    db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, scheduled_at, published_at, moderation_note, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                        ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, (int) current_user()['id']]);
+                    $id = (int) db()->lastInsertId();
+                    if (table_exists('article_revisions')) {
+                        db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                            ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
+                    }
                 }
-                db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = COALESCE(?, published_at) WHERE id = ?')->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $id]);
-            } else {
-                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
-                $id = (int) db()->lastInsertId();
-                if (table_exists('article_revisions')) {
-                    db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                        ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
+                db()->commit();
+
+                try {
+                    article_translations_sync_all($id);
+                } catch (Throwable) {
+                    set_flash('warning', 'Article enregistre, mais les traductions automatiques devront etre relancees.');
                 }
-            }
-            if ($notifyStatus === 'published') {
-                notify_member((int) current_user()['id'], 'publication', 'Article published', $title, route_url('article', ['slug' => $slug]));
-            } elseif ($notifyStatus === 'scheduled') {
-                notify_member((int) current_user()['id'], 'publication', 'Article scheduled', $title, route_url('article', ['slug' => $slug]));
-            }
-            article_translations_sync_all($id);
-            set_flash('success', $t('ok_saved'));
-            redirect('admin_articles');
+
+                $currentUserId = (int) current_user()['id'];
+                if ($authorId > 0 && $authorId !== $currentUserId) {
+                    if ($notifyStatus === 'published') {
+                        notify_member($authorId, 'publication', 'Article publie', $title, route_url('article', ['slug' => $slug]));
+                    } elseif ($notifyStatus === 'scheduled') {
+                        notify_member($authorId, 'publication', 'Article planifie', $title, route_url('my_requests'));
+                    } elseif ($notifyStatus === 'rejected') {
+                        notify_member($authorId, 'moderation', 'Article refuse', $moderationNoteValue ?? $title, route_url('my_requests'));
+                    }
+                }
+
+                set_flash('success', $t('ok_saved'));
+                redirect('admin_articles');
             }
         } elseif ($action === 'delete_article') {
             $id = (int) ($_POST['id'] ?? 0);
@@ -415,6 +452,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('admin_articles');
         }
     } catch (Throwable $throwable) {
+        if (db()->inTransaction()) {
+            db()->rollBack();
+        }
         set_flash('error', $throwable->getMessage());
         redirect('admin_articles');
     }
@@ -425,7 +465,7 @@ $adminCategory = slugify(trim((string) ($_GET['category'] ?? '')));
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $adminWhere = [];
 $adminParams = [];
-if (in_array($adminStatus, ['draft', 'scheduled', 'published'], true)) {
+if (isset($articleStatusChoices[$adminStatus])) {
     $adminWhere[] = 'status = ?';
     $adminParams[] = $adminStatus;
 }
@@ -454,12 +494,12 @@ $articleStmt = db()->prepare('SELECT * FROM articles ' . $adminWhereSql . ' ORDE
 $articleStmt->execute($adminParams);
 $articles = $articleStmt->fetchAll() ?: [];
 $articleStats = db()->query('SELECT status, COUNT(*) AS total FROM articles GROUP BY status')->fetchAll() ?: [];
-$articleStatMap = ['draft' => 0, 'scheduled' => 0, 'published' => 0];
+$articleStatMap = array_fill_keys(array_keys($articleStatusChoices), 0);
 foreach ($articleStats as $statRow) {
     $articleStatMap[(string) $statRow['status']] = (int) $statRow['total'];
 }
 $editingId = (int) ($_GET['id'] ?? 0);
-$editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'scheduled_at' => null];
+$editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'scheduled_at' => null, 'moderation_note' => null];
 if ($editingId > 0) {
     $stmt = db()->prepare('SELECT * FROM articles WHERE id = ?');
     $stmt->execute([$editingId]);
@@ -501,12 +541,13 @@ ob_start();
             <label><?= e($t('content_simple_html')) ?><textarea name="content" rows="16"><?= e((string) $editing['content']) ?></textarea></label>
             <label><?= e($t('status')) ?>
                 <select name="status">
-                    <option value="draft" <?= (string) $editing['status'] === 'draft' ? 'selected' : '' ?>><?= e($t('draft')) ?></option>
-                    <option value="scheduled" <?= (string) $editing['status'] === 'scheduled' ? 'selected' : '' ?>><?= e($t('scheduled', 'Programmée')) ?></option>
-                    <option value="published" <?= (string) $editing['status'] === 'published' ? 'selected' : '' ?>><?= e($t('published')) ?></option>
+                    <?php foreach ($articleStatusChoices as $statusCode => $statusLabel): ?>
+                        <option value="<?= e($statusCode) ?>" <?= (string) $editing['status'] === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
+                    <?php endforeach; ?>
                 </select>
             </label>
             <label><?= e($t('scheduled_at', 'Date de publication')) ?><input type="datetime-local" name="scheduled_at" value="<?= !empty($editing['scheduled_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $editing['scheduled_at']))) : '' ?>"></label>
+            <label><?= e($t('moderation_note', 'Note de moderation')) ?><textarea name="moderation_note" rows="3" placeholder="<?= e($t('moderation_note_help', 'Visible par le proposant si l article est refuse.')) ?>"><?= e((string) ($editing['moderation_note'] ?? '')) ?></textarea></label>
             <button class="button"><?= e($t('save')) ?></button>
             <button class="button secondary" type="submit" name="action" value="preview_article"><?= e($t('preview', 'Prévisualiser')) ?></button>
         </form>
