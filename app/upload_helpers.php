@@ -78,16 +78,22 @@ function assert_upload_file_is_valid_signature(string $tmpPath, array $allowedEx
         'docx' => "PK\x03\x04",
     ];
 
+    $hasKnownSignature = false;
     foreach ($allowedExtensions as $extension) {
         $extension = strtolower((string) $extension);
         if (!isset($known[$extension])) {
             continue;
         }
+        $hasKnownSignature = true;
         if (str_starts_with($signature, $known[$extension])) {
             if ($extension !== 'webp' || str_contains(substr($signature, 8), 'WEBP')) {
                 return;
             }
         }
+    }
+
+    if (!$hasKnownSignature) {
+        return;
     }
 
     throw new RuntimeException(upload_i18n_message('invalid_signature'));
@@ -122,11 +128,16 @@ function secure_move_uploaded_file(
         throw new RuntimeException(upload_i18n_message('extension_not_allowed'));
     }
 
+    $allowedMimesForExtension = $allowedMimes;
+    if (isset($allowedMimes[$extension]) && is_array($allowedMimes[$extension])) {
+        $allowedMimesForExtension = $allowedMimes[$extension];
+    }
+
     $mime = detect_uploaded_mime_type($tmpPath);
-    if (!in_array($mime, $allowedMimes, true)) {
+    if (!in_array($mime, $allowedMimesForExtension, true)) {
         throw new RuntimeException(upload_i18n_message('mime_not_allowed'));
     }
-    assert_upload_file_is_valid_signature($tmpPath, $allowedExtensions);
+    assert_upload_file_is_valid_signature($tmpPath, [$extension]);
 
     $sanitizedTmpPath = $tmpPath;
     if (in_array($extension, ['jpg', 'jpeg', 'png', 'webp'], true)) {

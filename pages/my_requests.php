@@ -18,39 +18,39 @@ set_page_meta([
 $shortcuts = [
     [
         'title' => (string) ($t['profile_title'] ?? 'Profil'),
-        'description' => (string) ($t['profile_desc'] ?? 'Mettre Ã  jour vos informations de membre.'),
+        'description' => (string) ($t['profile_desc'] ?? 'Mettre à jour vos informations de membre.'),
         'url' => route_url('profile'),
         'cta' => (string) ($t['profile_cta'] ?? 'Ouvrir le profil'),
     ],
     [
-        'title' => (string) ($t['privacy_title'] ?? 'Vie privÃ©e'),
-        'description' => (string) ($t['privacy_desc'] ?? 'GÃ©rer la visibilitÃ© de vos donnÃ©es dans lâ€™annuaire.'),
+        'title' => (string) ($t['privacy_title'] ?? 'Vie privée'),
+        'description' => (string) ($t['privacy_desc'] ?? 'Gérer la visibilité de vos données dans l’annuaire.'),
         'url' => route_url('gdpr'),
-        'cta' => (string) ($t['privacy_cta'] ?? 'GÃ©rer la vie privÃ©e'),
+        'cta' => (string) ($t['privacy_cta'] ?? 'Gérer la vie privée'),
     ],
     [
-        'title' => (string) ($t['events_title'] ?? 'Ã‰vÃ©nements'),
-        'description' => (string) ($t['events_desc'] ?? 'Proposer un Ã©vÃ©nement au club depuis la page agenda.'),
+        'title' => (string) ($t['events_title'] ?? 'Événements'),
+        'description' => (string) ($t['events_desc'] ?? 'Proposer un événement au club depuis la page agenda.'),
         'url' => route_url('events'),
-        'cta' => (string) ($t['events_cta'] ?? 'Voir lâ€™agenda'),
+        'cta' => (string) ($t['events_cta'] ?? 'Voir l’agenda'),
     ],
     [
         'title' => (string) ($t['articles_title'] ?? 'Articles'),
-        'description' => (string) ($t['articles_desc'] ?? 'Proposer un article ou une catÃ©gorie depuis la page articles.'),
+        'description' => (string) ($t['articles_desc'] ?? 'Proposer un article ou une catégorie depuis la page articles.'),
         'url' => route_url('articles'),
         'cta' => (string) ($t['articles_cta'] ?? 'Voir les articles'),
     ],
     [
         'title' => (string) ($t['classifieds_title'] ?? 'Petites annonces'),
-        'description' => (string) ($t['classifieds_desc'] ?? 'GÃ©rer vos annonces ou proposer une catÃ©gorie.'),
+        'description' => (string) ($t['classifieds_desc'] ?? 'Gérer vos annonces ou proposer une catégorie.'),
         'url' => route_url('classifieds_manage'),
-        'cta' => (string) ($t['classifieds_cta'] ?? 'GÃ©rer mes annonces'),
+        'cta' => (string) ($t['classifieds_cta'] ?? 'Gérer mes annonces'),
     ],
     [
-        'title' => (string) ($t['settings_title'] ?? 'ParamÃ¨tres'),
-        'description' => (string) ($t['settings_desc'] ?? 'Adapter vos prÃ©fÃ©rences de compte.'),
+        'title' => (string) ($t['settings_title'] ?? 'Paramètres'),
+        'description' => (string) ($t['settings_desc'] ?? 'Adapter vos préférences de compte.'),
         'url' => route_url('settings'),
-        'cta' => (string) ($t['settings_cta'] ?? 'Ouvrir les paramÃ¨tres'),
+        'cta' => (string) ($t['settings_cta'] ?? 'Ouvrir les paramètres'),
     ],
 ];
 
@@ -144,7 +144,7 @@ ob_start();
     <section class="card my-requests-shortcuts" aria-labelledby="my-requests-shortcuts-title">
         <div class="my-requests-section-heading">
             <h2 id="my-requests-shortcuts-title"><?= e((string) ($t['shortcuts_title'] ?? 'Raccourcis utiles')) ?></h2>
-            <p class="help"><?= e((string) ($t['shortcuts_intro'] ?? 'AccÃ©dez rapidement aux pages liÃ©es aux demandes et prÃ©fÃ©rences de votre compte.')) ?></p>
+            <p class="help"><?= e((string) ($t['shortcuts_intro'] ?? 'Accédez rapidement aux pages liées aux demandes et préférences de votre compte.')) ?></p>
         </div>
         <div class="my-requests-grid">
             <?php foreach ($shortcuts as $shortcut): ?>
