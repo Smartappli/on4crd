@@ -195,6 +195,20 @@ function classifieds_validate_payload(
 }
 }
 
+if (!function_exists('classifieds_member_ad_exists')) {
+function classifieds_member_ad_exists(int $adId, int $memberId): bool
+{
+    if ($adId <= 0 || $memberId <= 0) {
+        return false;
+    }
+
+    $stmt = db()->prepare('SELECT id FROM classified_ads WHERE id = ? AND owner_member_id = ? LIMIT 1');
+    $stmt->execute([$adId, $memberId]);
+
+    return (bool) $stmt->fetchColumn();
+}
+}
+
 if (!function_exists('classifieds_member_publication_status')) {
 function classifieds_member_publication_status(string $requestedStatus): string
 {

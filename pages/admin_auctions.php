@@ -26,27 +26,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($title === '') {
             throw new RuntimeException((string) $t['err_title_required']);
         }
-        $slug = trim((string) ($_POST['slug'] ?? ''));
-        if ($slug === '') {
-            $slug = slugify($title);
+        if (mb_strlen($title) > 190 || mb_strlen(trim((string) ($_POST['summary'] ?? ''))) > 10000) {
+            throw new RuntimeException((string) $t['err_title_required']);
         }
+        if ($id > 0 && auction_lot_by_id($id) === null) {
+            throw new RuntimeException((string) $t['err_title_required']);
+        }
+        $slugInput = trim((string) ($_POST['slug'] ?? ''));
+        $slug = auction_unique_slug($slugInput !== '' ? $slugInput : $title, $id);
         $startsAtRaw = trim((string) ($_POST['starts_at'] ?? ''));
         $endsAtRaw = trim((string) ($_POST['ends_at'] ?? ''));
-        $startsAt = $startsAtRaw !== '' ? str_replace('T', ' ', $startsAtRaw) . ':00' : date('Y-m-d H:i:s');
-        $endsAt = $endsAtRaw !== '' ? str_replace('T', ' ', $endsAtRaw) . ':00' : date('Y-m-d H:i:s', strtotime('+7 days'));
+        $startsAtTs = $startsAtRaw !== '' ? strtotime($startsAtRaw) : time();
+        $endsAtTs = $endsAtRaw !== '' ? strtotime($endsAtRaw) : strtotime('+7 days');
+        if ($startsAtTs === false || $endsAtTs === false || $endsAtTs <= $startsAtTs) {
+            throw new RuntimeException((string) $t['err_title_required']);
+        }
+        $status = (string) ($_POST['status'] ?? 'draft');
+        if (!in_array($status, ['draft', 'scheduled', 'active', 'closed', 'cancelled'], true)) {
+            throw new RuntimeException((string) $t['err_title_required']);
+        }
+        $startingPrice = max(0, parse_price_to_cents((string) ($_POST['starting_price'] ?? '0')));
+        $reservePrice = trim((string) ($_POST['reserve_price'] ?? '')) !== '' ? max(0, parse_price_to_cents((string) $_POST['reserve_price'])) : null;
+        $minIncrement = max(1, parse_price_to_cents((string) ($_POST['min_increment'] ?? '0')));
+        $buyNowPrice = trim((string) ($_POST['buy_now_price'] ?? '')) !== '' ? max(0, parse_price_to_cents((string) $_POST['buy_now_price'])) : null;
         $params = [
             $slug,
             $title,
             trim((string) ($_POST['summary'] ?? '')),
             sanitize_rich_html((string) ($_POST['description'] ?? '')),
             sanitize_image_src_attribute((string) ($_POST['image_url'] ?? '')) ?? '',
-            parse_price_to_cents((string) ($_POST['starting_price'] ?? '0')),
-            trim((string) ($_POST['reserve_price'] ?? '')) !== '' ? parse_price_to_cents((string) $_POST['reserve_price']) : null,
-            parse_price_to_cents((string) ($_POST['min_increment'] ?? '0')),
-            trim((string) ($_POST['buy_now_price'] ?? '')) !== '' ? parse_price_to_cents((string) $_POST['buy_now_price']) : null,
-            $startsAt,
-            $endsAt,
-            (string) ($_POST['status'] ?? 'draft'),
+            $startingPrice,
+            $reservePrice,
+            $minIncrement,
+            $buyNowPrice,
+            date('Y-m-d H:i:s', $startsAtTs),
+            date('Y-m-d H:i:s', $endsAtTs),
+            $status,
         ];
         if ($id > 0) {
             db()->prepare('UPDATE auction_lots SET slug = ?, title = ?, summary = ?, description = ?, image_url = ?, starting_price_cents = ?, reserve_price_cents = ?, min_increment_cents = ?, buy_now_price_cents = ?, starts_at = ?, ends_at = ?, status = ? WHERE id = ?')
