@@ -103,6 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($albumId <= 0 || $title === '') {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
+            $albumStmt = db()->prepare('SELECT id FROM albums WHERE id = ? LIMIT 1');
+            $albumStmt->execute([$albumId]);
+            if (!$albumStmt->fetchColumn()) {
+                throw new RuntimeException((string) $t['invalid_album']);
+            }
             db()->prepare('UPDATE albums SET title = ?, description = ?, is_public = ? WHERE id = ?')->execute([$title, $description, $isPublic, $albumId]);
             albums_admin_clear_cache();
             set_flash('success', (string) $t['updated_ok']);
@@ -112,6 +117,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'delete_album') {
             $albumId = (int) ($_POST['album_id'] ?? 0);
             if ($albumId <= 0) {
+                throw new RuntimeException((string) $t['invalid_album']);
+            }
+            $albumStmt = db()->prepare('SELECT id FROM albums WHERE id = ? LIMIT 1');
+            $albumStmt->execute([$albumId]);
+            if (!$albumStmt->fetchColumn()) {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
             $photoStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ?');
@@ -234,6 +244,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($photoId <= 0 || $title === '') {
                 throw new RuntimeException((string) $t['invalid_photo']);
             }
+            $photoStmt = db()->prepare('SELECT id FROM album_photos WHERE id = ? LIMIT 1');
+            $photoStmt->execute([$photoId]);
+            if (!$photoStmt->fetchColumn()) {
+                throw new RuntimeException((string) $t['invalid_photo']);
+            }
             db()->prepare('UPDATE album_photos SET title = ?, caption = ? WHERE id = ?')->execute([$title, $caption, $photoId]);
             albums_admin_clear_cache();
             set_flash('success', (string) $t['photo_updated_ok']);
@@ -248,11 +263,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $photoStmt = db()->prepare('SELECT file_path FROM album_photos WHERE id = ?');
             $photoStmt->execute([$photoId]);
             $photoRow = $photoStmt->fetch();
+            if (!is_array($photoRow)) {
+                throw new RuntimeException((string) $t['invalid_photo']);
+            }
             db()->prepare('DELETE FROM album_photos WHERE id = ?')->execute([$photoId]);
-            if (is_array($photoRow)) {
-                if (!albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''))) {
-                    log_structured_event('album_photo_file_delete_failed', ['photo_id' => $photoId]);
-                }
+            if (!albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''))) {
+                log_structured_event('album_photo_file_delete_failed', ['photo_id' => $photoId]);
             }
             albums_admin_clear_cache();
             set_flash('success', (string) $t['photo_deleted_ok']);
