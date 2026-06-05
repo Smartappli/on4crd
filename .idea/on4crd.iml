@@ -58,6 +58,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/theodo-group/llphant" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/yethee/tiktoken" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/file-filter" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

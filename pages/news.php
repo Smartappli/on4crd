@@ -167,8 +167,8 @@ ob_start();
             </article>
         </div>
         <div class="news-hero-actions" aria-label="<?= e((string) $newsT['news_actions']) ?>">
-            <button class="button" type="button" data-news-proposal-open="news-proposal-dialog" data-news-proposal-fallback="<?= e($newsProposalUrl) ?>" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e((string) $newsT['propose_news']) ?></button>
-            <button class="button secondary" type="button" data-news-proposal-open="news-category-proposal-dialog" data-news-proposal-fallback="<?= e($categoryProposalUrl) ?>" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e((string) $newsT['propose_category']) ?></button>
+            <a class="button" href="<?= e($newsProposalUrl) ?>" data-news-proposal-open="news-proposal-dialog" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e((string) $newsT['propose_news']) ?></a>
+            <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-news-proposal-open="news-category-proposal-dialog" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e((string) $newsT['propose_category']) ?></a>
         </div>
     </div>
 </section>
