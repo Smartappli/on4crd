@@ -30,6 +30,54 @@ set_page_meta([
     'robots' => 'noindex,nofollow',
 ]);
 
+function admin_event_slug_base(string $value, int $maxLength = 190): string
+{
+    $base = slugify($value);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'event';
+    }
+    if (strlen($base) > $maxLength) {
+        $base = substr($base, 0, $maxLength);
+    }
+
+    $base = trim($base, '-');
+    return $base !== '' ? $base : 'event';
+}
+
+function admin_event_slug_candidate(string $base, int $suffix = 0, int $maxLength = 190): string
+{
+    $base = admin_event_slug_base($base, $maxLength);
+    if ($suffix <= 1) {
+        return $base;
+    }
+
+    $suffixText = '-' . $suffix;
+    $prefixLength = max(1, $maxLength - strlen($suffixText));
+    $prefix = rtrim(substr($base, 0, $prefixLength), '-');
+    if ($prefix === '') {
+        $prefix = substr('event', 0, $prefixLength);
+    }
+
+    return $prefix . $suffixText;
+}
+
+function admin_event_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 190): string
+{
+    $base = admin_event_slug_base($value, $maxLength);
+    $suffix = 1;
+    do {
+        $candidate = admin_event_slug_candidate($base, $suffix, $maxLength);
+        $stmt = db()->prepare('SELECT id FROM events WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, max(0, $ignoreId)]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Impossible de générer un slug événement unique.');
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -38,20 +86,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($title === '') {
             throw new RuntimeException((string) $t['title_required']);
         }
-        $slug = slugify((string) ($_POST['slug'] ?? $title));
-        $startAt = str_replace('T', ' ', (string) ($_POST['start_at'] ?? '')) . ':00';
-        $endAt = str_replace('T', ' ', (string) ($_POST['end_at'] ?? '')) . ':00';
+        if ($id > 0) {
+            $eventStmt = db()->prepare('SELECT id FROM events WHERE id = ? LIMIT 1');
+            $eventStmt->execute([$id]);
+            if (!$eventStmt->fetchColumn()) {
+                throw new RuntimeException((string) $t['no_event']);
+            }
+        }
+        $slugInput = trim((string) ($_POST['slug'] ?? ''));
+        $slug = admin_event_unique_slug($slugInput !== '' ? $slugInput : $title, $id);
+        $startRaw = trim((string) ($_POST['start_at'] ?? ''));
+        $endRaw = trim((string) ($_POST['end_at'] ?? ''));
+        $startTs = $startRaw !== '' ? strtotime($startRaw) : false;
+        $endTs = $endRaw !== '' ? strtotime($endRaw) : false;
+        if ($startTs === false || $endTs === false || $endTs <= $startTs) {
+            throw new RuntimeException((string) $t['title_required']);
+        }
+        $kind = (string) ($_POST['kind'] ?? 'club');
+        if (!in_array($kind, ['club', 'contest'], true)) {
+            $kind = 'club';
+        }
+        $status = (string) ($_POST['status'] ?? 'published');
+        if (!in_array($status, ['draft', 'published'], true)) {
+            $status = 'draft';
+        }
+        $externalUrlInput = trim((string) ($_POST['external_url'] ?? ''));
         $params = [
             $slug,
             $title,
             trim((string) ($_POST['summary'] ?? '')),
             sanitize_rich_html((string) ($_POST['description'] ?? '')),
-            (string) ($_POST['kind'] ?? 'club'),
-            $startAt,
-            $endAt,
+            $kind,
+            date('Y-m-d H:i:s', $startTs),
+            date('Y-m-d H:i:s', $endTs),
             trim((string) ($_POST['location'] ?? '')),
-            normalize_http_url((string) ($_POST['external_url'] ?? ''), true),
-            (string) ($_POST['status'] ?? 'published'),
+            $externalUrlInput !== '' ? normalize_http_url($externalUrlInput, true) : null,
+            $status,
         ];
         if ($id > 0) {
             db()->prepare('UPDATE events SET slug = ?, title = ?, summary = ?, description = ?, kind = ?, start_at = ?, end_at = ?, location = ?, external_url = ?, status = ? WHERE id = ?')
