@@ -23,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $result = privacy_update_request_status($id, $status, $adminNotes, (int) ($adminUser['id'] ?? 0), $applyErasure);
         $fileStats = (array) ($result['files'] ?? []);
-        $message = 'Demande RGPD mise a jour.';
+        $message = 'Demande RGPD mise à jour.';
         if ($applyErasure) {
-            $message .= ' Fichiers traites: ' . (int) ($fileStats['deleted'] ?? 0) . ' supprimes, ' . (int) ($fileStats['missing'] ?? 0) . ' deja absents, ' . (int) ($fileStats['failed'] ?? 0) . ' en echec.';
+            $message .= ' Fichiers traités: ' . (int) ($fileStats['deleted'] ?? 0) . ' supprimés, ' . (int) ($fileStats['missing'] ?? 0) . ' déjà absents, ' . (int) ($fileStats['failed'] ?? 0) . ' en échec.';
         }
         set_flash('success', $message);
     } catch (Throwable $throwable) {
@@ -57,7 +57,7 @@ ob_start();
 ?>
 <section class="card">
     <h1>Administration RGPD</h1>
-    <p class="help">Acces reserve a la permission privacy.manage. Les changements de statut, anonymisations et traitements de fichiers sont journalises.</p>
+    <p class="help">Accès réservé à la permission privacy.manage. Les changements de statut, anonymisations et traitements de fichiers sont journalisés.</p>
     <div class="table-wrap">
         <table>
             <thead>
@@ -89,8 +89,8 @@ ob_start();
                     <td><?= e((string) $request['status']) ?></td>
                     <td>
                         <?= e((string) $request['requested_at']) ?>
-                        <?php if (!empty($request['processed_at'])): ?><div class="help">Traite: <?= e((string) $request['processed_at']) ?> <?= e((string) ($request['processed_by_callsign'] ?? '')) ?></div><?php endif; ?>
-                        <?php if (!empty($request['resolved_at'])): ?><div class="help">Resolution: <?= e((string) $request['resolved_at']) ?></div><?php endif; ?>
+                        <?php if (!empty($request['processed_at'])): ?><div class="help">Traité: <?= e((string) $request['processed_at']) ?> <?= e((string) ($request['processed_by_callsign'] ?? '')) ?></div><?php endif; ?>
+                        <?php if (!empty($request['resolved_at'])): ?><div class="help">Résolution: <?= e((string) $request['resolved_at']) ?></div><?php endif; ?>
                         <?php if (!empty($request['erasure_completed_at'])): ?><div class="help">Anonymisation: <?= e((string) $request['erasure_completed_at']) ?></div><?php endif; ?>
                     </td>
                     <td>
@@ -99,10 +99,10 @@ ob_start();
                     </td>
                     <td>
                         <?php if ($requestEvents === []): ?>
-                            <span class="help">Aucun evenement.</span>
+                            <span class="help">Aucun événement.</span>
                         <?php else: ?>
                             <details>
-                                <summary><?= count($requestEvents) ?> evenement(s)</summary>
+                                <summary><?= count($requestEvents) ?> événement(s)</summary>
                                 <ul class="list-clean list-spaced">
                                     <?php foreach ($requestEvents as $event): ?>
                                         <li>
@@ -131,13 +131,13 @@ ob_start();
                             <?php if ($requestType === 'erasure'): ?>
                                 <label class="checkbox">
                                     <input type="checkbox" name="apply_erasure" value="1">
-                                    <span>Appliquer l anonymisation automatique si le statut passe a resolved.</span>
+                                    <span>Appliquer l'anonymisation automatique si le statut passe à resolved.</span>
                                 </label>
                             <?php endif; ?>
                             <label>Notes administrateur
                                 <textarea name="admin_notes" rows="3" maxlength="2000"><?= e((string) ($request['admin_notes'] ?? '')) ?></textarea>
                             </label>
-                            <button class="button small" type="submit">Mettre a jour</button>
+                            <button class="button small" type="submit">Mettre à jour</button>
                         </form>
                     </td>
                 </tr>

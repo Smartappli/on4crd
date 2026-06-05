@@ -6,8 +6,8 @@ $locale = current_locale();
 $t = i18n_domain_translator('profile', $locale);
 
 set_page_meta([
-    'title' => 'Vie privee et RGPD',
-    'description' => 'Notice RGPD ON4CRD, droits des personnes et reglages de visibilite.',
+    'title' => 'Vie privée et RGPD',
+    'description' => 'Notice RGPD ON4CRD, droits des personnes et réglages de visibilité.',
     'schema_type' => 'WebPage',
 ]);
 
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $type = (string) ($_POST['request_type'] ?? 'access');
         $notes = (string) ($_POST['request_notes'] ?? '');
         privacy_create_request($memberId, $type, $notes);
-        set_flash('success', 'Votre demande RGPD a ete enregistree.');
+        set_flash('success', 'Votre demande RGPD a été enregistrée.');
         redirect('gdpr');
     }
 
@@ -105,7 +105,7 @@ ob_start();
 ?>
 <div class="gdpr-page stack">
     <section class="card gdpr-privacy-card">
-        <h1>Vie privee et RGPD</h1>
+        <h1>Vie privée et RGPD</h1>
         <p class="help">Version de notice: <?= e(privacy_current_notice_version()) ?></p>
         <div class="grid-2">
             <?php foreach ($noticeSections as $title => $body): ?>
@@ -120,8 +120,8 @@ ob_start();
     <?php if ($user === null): ?>
         <section class="card gdpr-privacy-card">
             <h2>Droits des membres</h2>
-            <p>Contact public pour toute demande donnees personnelles: <a href="mailto:<?= e($privacyContact['controller_email']) ?>"><?= e($privacyContact['controller_email']) ?></a>.</p>
-            <p>Connectez-vous pour exporter vos donnees, deposer une demande RGPD et regler la visibilite de votre profil.</p>
+            <p>Contact public pour toute demande concernant les données personnelles: <a href="mailto:<?= e($privacyContact['controller_email']) ?>"><?= e($privacyContact['controller_email']) ?></a>.</p>
+            <p>Connectez-vous pour exporter vos données, déposer une demande RGPD et régler la visibilité de votre profil.</p>
             <p><a class="button" href="<?= e(route_url('login')) ?>">Se connecter</a></p>
         </section>
     <?php else: ?>
@@ -129,30 +129,30 @@ ob_start();
             <div class="gdpr-section-heading">
                 <div>
                     <h2>Vos droits</h2>
-                    <p class="help">Export direct et demandes tracees avec donnees techniques pseudonymisees.</p>
+                    <p class="help">Export direct et demandes tracées avec données techniques pseudonymisées.</p>
                 </div>
             </div>
             <div class="grid-2">
                 <form method="post" class="stack">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="export_data">
-                    <p>Telechargez une copie JSON des donnees rattachees a votre compte, avec manifeste des fichiers personnels connus.</p>
-                    <button type="submit" class="button">Exporter mes donnees</button>
+                    <p>Téléchargez une copie JSON des données rattachées à votre compte, avec manifeste des fichiers personnels connus.</p>
+                    <button type="submit" class="button">Exporter mes données</button>
                 </form>
                 <form method="post" class="stack">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="privacy_request">
                     <label>Type de demande
                         <select name="request_type" required>
-                            <option value="access">Acces</option>
+                            <option value="access">Accès</option>
                             <option value="rectification">Rectification</option>
                             <option value="erasure">Suppression</option>
                             <option value="restriction">Limitation</option>
                             <option value="objection">Opposition</option>
-                            <option value="portability">Portabilite</option>
+                            <option value="portability">Portabilité</option>
                         </select>
                     </label>
-                    <label>Precision utile
+                    <label>Précision utile
                         <textarea name="request_notes" rows="4" maxlength="2000"></textarea>
                     </label>
                     <button type="submit" class="button secondary">Enregistrer la demande</button>
@@ -161,7 +161,7 @@ ob_start();
             <?php if ($privacyRequests !== []): ?>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>Demande</th><th>Statut</th><th>Date</th><th>Traitement</th><th>Resolution</th></tr></thead>
+                        <thead><tr><th>Demande</th><th>Statut</th><th>Date</th><th>Traitement</th><th>Résolution</th></tr></thead>
                         <tbody>
                             <?php foreach ($privacyRequests as $request): ?>
                                 <tr>
@@ -249,4 +249,4 @@ ob_start();
 </div>
 <?php
 
-echo render_layout((string) ob_get_clean(), 'Vie privee et RGPD');
+echo render_layout((string) ob_get_clean(), 'Vie privée et RGPD');

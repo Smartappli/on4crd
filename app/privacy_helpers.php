@@ -118,7 +118,7 @@ if (!function_exists('privacy_contact_config')) {
             'controller_email' => trim((string) config('privacy.controller_email', 'crdurnal@gmail.com')),
             'controller_postal_address' => trim((string) config('privacy.controller_postal_address', 'Rue des Ecoles, 5530 Purnode, Belgique')),
             'dpo_email' => trim((string) config('privacy.dpo_email', '')),
-            'supervisory_authority' => trim((string) config('privacy.supervisory_authority', 'Autorite de protection des donnees, https://www.autoriteprotectiondonnees.be/')),
+            'supervisory_authority' => trim((string) config('privacy.supervisory_authority', 'Autorité de protection des données, https://www.autoriteprotectiondonnees.be/')),
         ];
     }
 }
@@ -1249,11 +1249,11 @@ if (!function_exists('privacy_notice_short_html')) {
     {
         $link = function_exists('route_url') ? route_url('gdpr') : 'index.php?route=gdpr';
         $messages = [
-            'register' => 'Les donnees du compte servent a creer le profil, securiser les acces et afficher uniquement les informations que vous rendez visibles. Le geocodage postal externe est optionnel.',
-            'profile' => 'Les informations du profil restent controlees par vos reglages de visibilite. Le geocodage postal externe ne part que si vous le demandez.',
-            'newsletter' => 'La newsletter exige un consentement explicite. Une preuve de consentement et des donnees techniques pseudonymisees sont conservees.',
-            'geocode' => 'Si vous cochez le geocodage automatique, l adresse postale saisie est transmise a Nominatim et le resultat est garde en cache 30 jours.',
-            'default' => 'Les donnees personnelles sont limitees aux usages du site, avec export, opposition et demande de suppression disponibles.',
+            'register' => 'Les données du compte servent à créer le profil, sécuriser les accès et afficher uniquement les informations que vous rendez visibles. Le géocodage postal externe est optionnel.',
+            'profile' => 'Les informations du profil restent contrôlées par vos réglages de visibilité. Le géocodage postal externe ne part que si vous le demandez.',
+            'newsletter' => 'La newsletter exige un consentement explicite. Une preuve de consentement et des données techniques pseudonymisées sont conservées.',
+            'geocode' => 'Si vous cochez le géocodage automatique, l\'adresse postale saisie est transmise à Nominatim et le résultat est gardé en cache 30 jours.',
+            'default' => 'Les données personnelles sont limitées aux usages du site, avec export, opposition et demande de suppression disponibles.',
         ];
         $message = $messages[$context] ?? $messages['default'];
 
@@ -1266,22 +1266,22 @@ if (!function_exists('privacy_notice_sections')) {
     {
         $contact = privacy_contact_config();
         $matomoConfigured = trim((string) config('tracking.matomo_url', '')) !== '' && trim((string) config('tracking.matomo_site_id', '')) !== '';
-        $dpo = $contact['dpo_email'] !== '' ? ' DPO/contact dedie: ' . $contact['dpo_email'] . '.' : '';
+        $dpo = $contact['dpo_email'] !== '' ? ' DPO/contact dédié: ' . $contact['dpo_email'] . '.' : '';
         $trackingText = $matomoConfigured
-            ? 'Une mesure audience Matomo peut etre chargee uniquement selon la configuration de consentement, avec anonymisation et cookies desactives si configure.'
-            : 'Aucune mesure audience externe n est chargee par defaut; Matomo reste desactive tant qu aucune instance n est configuree.';
+            ? 'Une mesure d\'audience Matomo peut être chargée uniquement selon la configuration de consentement, avec anonymisation et cookies désactivés si configuré.'
+            : 'Aucune mesure d\'audience externe n\'est chargée par défaut; Matomo reste désactivé tant qu\'aucune instance n\'est configurée.';
 
         return [
             'Responsable du traitement' => $contact['controller_name'] . ' est responsable du traitement. Contact public: ' . $contact['controller_email'] . '. Adresse: ' . $contact['controller_postal_address'] . '.' . $dpo,
-            'Finalites' => 'Gestion des comptes, annuaire radioamateur, publication de contenus, proposition d articles, moderation, securite, statistiques techniques internes, newsletter, boutique/evenements et demandes RGPD.',
-            'Bases legales' => 'Execution du service pour le compte membre, interet legitime pour la securite et la moderation, obligations legales pour certains journaux/transactions, consentement pour la newsletter, le tracking non essentiel et le geocodage postal externe.',
-            'Donnees traitees' => 'Identite radioamateur, email, profil, visibilites, contenus publies, documents televerses, preferences, abonnements, historiques techniques pseudonymises, demandes RGPD, logs de securite et traces de consentement.',
-            'Destinataires' => 'Administrateurs habilites, membres selon vos reglages de visibilite, visiteurs pour les contenus publics, hebergeur du site, prestataires email strictement necessaires, Google Maps si vous affichez la carte integree et Nominatim uniquement si vous activez le geocodage. Les bibliotheques front principales sont servies localement, sans CDN public.',
-            'Conservation' => 'Compte conserve tant qu il est actif. Logs techniques: ' . privacy_retention_value('technical_logs_months', 13) . ' mois. Chatbot: ' . privacy_retention_value('chatbot_days', 180) . ' jours. Newsletter livraisons: ' . privacy_retention_value('newsletter_deliveries_months', 24) . ' mois. Notifications lues: ' . privacy_retention_value('read_notifications_months', 24) . ' mois. Demandes RGPD resolues: ' . privacy_retention_value('privacy_requests_years', 5) . ' ans. Reset password: ' . privacy_retention_value('password_reset_log_days', 90) . ' jours. Cache geocodage: ' . privacy_retention_value('geocode_cache_days', 30) . ' jours.',
-            'Droits' => 'Vous pouvez demander acces, export, rectification, limitation, opposition, portabilite et suppression. L export JSON est disponible depuis cette page pour les membres connectes; la suppression lance une anonymisation controlee avec journal d action.',
-            'Cookies et mesure' => 'Les cookies indispensables servent a la session, a la securite et aux preferences de langue/theme. ' . $trackingText,
-            'Securite' => 'Les IP et user-agents applicatifs sont pseudonymises par HMAC avec un secret local persistant. Les actions RGPD administratives sont journalisees avec identifiant administrateur, statut et horodatage.',
-            'Contact et reclamation' => 'Pour toute demande relative aux donnees personnelles: ' . $contact['controller_email'] . '. Les membres connectes peuvent aussi utiliser le formulaire de cette page. Autorite de controle: ' . $contact['supervisory_authority'] . '.',
+            'Finalités' => 'Gestion des comptes, annuaire radioamateur, publication de contenus, proposition d\'articles, modération, sécurité, statistiques techniques internes, newsletter, boutique/événements et demandes RGPD.',
+            'Bases légales' => 'Exécution du service pour le compte membre, intérêt légitime pour la sécurité et la modération, obligations légales pour certains journaux/transactions, consentement pour la newsletter, le tracking non essentiel et le géocodage postal externe.',
+            'Données traitées' => 'Identité radioamateur, email, profil, visibilités, contenus publiés, documents téléversés, préférences, abonnements, historiques techniques pseudonymisés, demandes RGPD, logs de sécurité et traces de consentement.',
+            'Destinataires' => 'Administrateurs habilités, membres selon vos réglages de visibilité, visiteurs pour les contenus publics, hébergeur du site, prestataires email strictement nécessaires, Google Maps si vous affichez la carte intégrée et Nominatim uniquement si vous activez le géocodage. Les bibliothèques front principales sont servies localement, sans CDN public.',
+            'Conservation' => 'Compte conservé tant qu\'il est actif. Logs techniques: ' . privacy_retention_value('technical_logs_months', 13) . ' mois. Chatbot: ' . privacy_retention_value('chatbot_days', 180) . ' jours. Newsletter livraisons: ' . privacy_retention_value('newsletter_deliveries_months', 24) . ' mois. Notifications lues: ' . privacy_retention_value('read_notifications_months', 24) . ' mois. Demandes RGPD résolues: ' . privacy_retention_value('privacy_requests_years', 5) . ' ans. Reset password: ' . privacy_retention_value('password_reset_log_days', 90) . ' jours. Cache géocodage: ' . privacy_retention_value('geocode_cache_days', 30) . ' jours.',
+            'Droits' => 'Vous pouvez demander accès, export, rectification, limitation, opposition, portabilité et suppression. L\'export JSON est disponible depuis cette page pour les membres connectés; la suppression lance une anonymisation contrôlée avec journal d\'action.',
+            'Cookies et mesure' => 'Les cookies indispensables servent à la session, à la sécurité et aux préférences de langue/theme. ' . $trackingText,
+            'Sécurité' => 'Les IP et user-agents applicatifs sont pseudonymisés par HMAC avec un secret local persistant. Les actions RGPD administratives sont journalisées avec identifiant administrateur, statut et horodatage.',
+            'Contact et réclamation' => 'Pour toute demande relative aux données personnelles: ' . $contact['controller_email'] . '. Les membres connectés peuvent aussi utiliser le formulaire de cette page. Autorité de contrôle: ' . $contact['supervisory_authority'] . '.',
         ];
     }
 }

@@ -499,6 +499,7 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<link rel="apple-touch-icon" href="' . e(asset_url('assets/icons/apple-touch-icon.png')) . '">'
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . $moduleCssHtml
+        . '<link rel="stylesheet" href="' . e(asset_url('assets/css/tailwind-local.css')) . '">'
         . '</head><body data-route="' . e($currentRoute) . '" data-sw-url="' . e(base_url('sw.js')) . '">'
         . '<a class="skip-link" href="#main-content">' . e((string) ($layoutI18n['skip_to_content'] ?? 'Skip to content')) . '</a>'
         . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'

@@ -81,7 +81,7 @@ return [
         'controller_email' => 'crdurnal@gmail.com',
         'controller_postal_address' => 'Rue des Ecoles, 5530 Purnode, Belgique',
         'dpo_email' => '',
-        'supervisory_authority' => 'Autorite de protection des donnees, https://www.autoriteprotectiondonnees.be/',
+        'supervisory_authority' => 'Autorité de protection des données, https://www.autoriteprotectiondonnees.be/',
         'retention' => [
             'technical_logs_months' => 13,
             'chatbot_days' => 180,
