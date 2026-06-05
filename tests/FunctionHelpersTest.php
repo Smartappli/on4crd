@@ -265,4 +265,57 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('data-widget-refresh="manual"', $html);
         self::assertStringContainsString('HAMQSL / N0NBH', $html);
     }
+
+    public function testWidgetCatalogCoversDashboardRendererSlugs(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        self::assertIsString($renderer);
+        preg_match_all('/case\s+\'([^\']+)\'\s*:/', $renderer, $matches);
+
+        foreach ($matches[1] as $slug) {
+            if ($slug === 'chatbot') {
+                continue;
+            }
+            self::assertArrayHasKey($slug, $catalog, sprintf('Widget "%s" is renderable but missing from widget_catalog().', $slug));
+        }
+    }
+
+    public function testApplicationPhpFilesDoNotContainCommonMojibakeSequences(): void
+    {
+        $root = dirname(__DIR__);
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveCallbackFilterIterator(
+                new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
+                static function (SplFileInfo $file): bool {
+                    $path = str_replace('\\', '/', $file->getPathname());
+                    return !str_contains($path, '/vendor/')
+                        && !str_contains($path, '/.git/')
+                        && !str_contains($path, '/tests/')
+                        && !str_contains($path, '/.phpunit.cache/');
+                }
+            )
+        );
+        $pattern = '/(?:\x{00C3}[\x{0080}-\x{00BF}\x{0192}\x{2030}]|\x{00C2}[\x{0080}-\x{00BF}]|\x{00E2}[\x{0080}-\x{00BF}\x{201A}\x{20AC}\x{201C}\x{201D}\x{2122}]{2})/u';
+        $findings = [];
+
+        foreach ($iterator as $file) {
+            if (!$file instanceof SplFileInfo || !$file->isFile() || $file->getExtension() !== 'php') {
+                continue;
+            }
+            $path = str_replace('\\', '/', $file->getPathname());
+            if (str_ends_with($path, '/pages/admin_translation_reviews.php')) {
+                continue;
+            }
+            $source = file_get_contents($path);
+            if (!is_string($source)) {
+                continue;
+            }
+            if (preg_match($pattern, $source) === 1) {
+                $findings[] = str_replace(str_replace('\\', '/', $root) . '/', '', $path);
+            }
+        }
+
+        self::assertSame([], $findings);
+    }
 }
