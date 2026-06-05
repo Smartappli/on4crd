@@ -59,7 +59,7 @@ return array (
     'QTB' => 'Jgħodd il-kliem?',
     'QTC' => 'Messaġġi biex jittrasmettu',
     'QTD' => 'Kemm imur it-traffiku?',
-    'QTE' => 'True bearing',
+    'QTE' => 'Rilevament veru',
     'QTF' => 'Pożizzjoni mill-bearings',
     'QTG' => 'Ittrasmetti żewġ sing',
     'QTH' => 'Pożizzjoni ġeografika',

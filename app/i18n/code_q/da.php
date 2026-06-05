@@ -31,7 +31,7 @@ return array (
     'QRY' => 'Hvad er min tur?',
     'QRZ' => 'Hvem ringer til mig?',
     'QSA' => 'Signalstyrke',
-    'QSB' => 'Signal fading',
+    'QSB' => 'Signaludfading',
     'QSD' => 'Defekt nøglering',
     'QSE' => 'Estimeret frekvensforskydning',
     'QSF' => 'Skal jeg sende en besked?',
