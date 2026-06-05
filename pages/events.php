@@ -161,7 +161,8 @@ $calendarConfig = [
         'list' => $t['list'],
     ],
 ];
-$proposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_event_subject'])
+$contactEmail = site_contact_email();
+$proposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_event_subject'])
     . '&body=' . rawurlencode((string) $t['propose_event_body']);
 
 ob_start();
@@ -188,7 +189,7 @@ ob_start();
             </div>
             <button class="events-proposal-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
         </div>
-        <form class="events-proposal-form" method="dialog" data-event-proposal-form data-event-proposal-recipient="on4crd@gmail.com" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+        <form class="events-proposal-form" method="dialog" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
             <label>
                 <span><?= e($t['propose_event_title_label']) ?></span>
                 <input type="text" name="proposal_title" maxlength="160" required>

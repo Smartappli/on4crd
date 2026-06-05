@@ -60,7 +60,7 @@
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const recipient = form.dataset.wikiThemeRecipient || 'on4crd@gmail.com';
+    const recipient = form.dataset.wikiThemeRecipient || 'crdurnal@gmail.com';
     const subject = form.dataset.wikiThemeSubject || '';
     const intro = form.dataset.wikiThemeIntro || '';
     const fields = ['proposal_theme', 'proposal_reason', 'proposal_contact'];

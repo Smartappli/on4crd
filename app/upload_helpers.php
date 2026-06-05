@@ -75,6 +75,7 @@ function assert_upload_file_is_valid_signature(string $tmpPath, array $allowedEx
         'jpeg' => "\xFF\xD8\xFF",
         'png' => "\x89PNG\r\n\x1A\n",
         'webp' => 'RIFF',
+        'docx' => "PK\x03\x04",
     ];
 
     foreach ($allowedExtensions as $extension) {

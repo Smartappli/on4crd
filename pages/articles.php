@@ -137,7 +137,8 @@ set_page_meta([
     'description' => (string) $t['page_description'],
     'schema_type' => 'CollectionPage',
 ]);
-$categoryProposalUrl = 'mailto:on4crd@gmail.com?subject=' . rawurlencode((string) $t['propose_category_subject'])
+$contactEmail = site_contact_email();
+$categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_category_subject'])
     . '&body=' . rawurlencode((string) $t['propose_category_body']);
 
 ob_start();
@@ -177,7 +178,7 @@ ob_start();
                 </div>
                 <button class="articles-category-dialog-close" type="button" data-articles-category-close aria-label="<?= e((string) $t['propose_category_close']) ?>">&times;</button>
             </div>
-            <form class="articles-category-form" method="dialog" data-articles-category-form data-articles-category-recipient="on4crd@gmail.com" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
+            <form class="articles-category-form" method="dialog" data-articles-category-form data-articles-category-recipient="<?= e($contactEmail) ?>" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
                 <label>
                     <span><?= e((string) $t['propose_category_name_label']) ?></span>
                     <input type="text" name="proposal_category" maxlength="160" required>

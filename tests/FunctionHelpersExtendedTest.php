@@ -166,6 +166,28 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString('<script', $html);
     }
 
+    public function testUploadSignatureValidatorAcceptsDocxZipHeader(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'docx-sig-');
+        self::assertIsString($tmp);
+        file_put_contents($tmp, "PK\x03\x04" . str_repeat("\0", 16));
+
+        try {
+            assert_upload_file_is_valid_signature($tmp, ['docx']);
+            self::assertTrue(true);
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
+    public function testClassifiedsPayloadValidationRejectsOversizedFields(): void
+    {
+        $categories = ['gear' => 'Gear'];
+        classifieds_validate_payload('gear', 'Title', 'Description', 'Namur', 'contact@example.test', $categories, 'Invalid');
+        $this->expectException(RuntimeException::class);
+        classifieds_validate_payload('gear', str_repeat('x', 191), 'Description', 'Namur', 'contact@example.test', $categories, 'Invalid');
+    }
+
     public function testMemberCountryHelpersFormatKnownCountryWithFlag(): void
     {
         self::assertSame('BE', member_country_code_for('Belgique'));

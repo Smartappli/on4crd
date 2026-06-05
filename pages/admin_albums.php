@@ -144,12 +144,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $title = trim((string) ($_POST['title'] ?? ''));
             $caption = trim((string) ($_POST['caption'] ?? ''));
+            albums_admin_validate_text_lengths($title, '', $caption);
             $files = $_FILES['photos'] ?? $_FILES['photo'] ?? null;
             $insertPhotoStmt = db()->prepare('INSERT INTO album_photos (album_id, sort_order, title, caption, file_path) VALUES (?, ?, ?, ?, ?)');
             $importedCount = 0;
             $lastTitle = $title !== '' ? $title : (string) $t['photo'];
             $orderStmt = db()->prepare('SELECT COALESCE(MAX(sort_order), 0) FROM album_photos WHERE album_id = ?');
-
+            $uploadBatch = [];
             if (is_array($files) && is_array($files['name'] ?? null)) {
                 $total = count($files['name']);
                 for ($i = 0; $i < $total; $i++) {
@@ -163,27 +164,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ((int) $single['error'] === UPLOAD_ERR_NO_FILE) {
                         continue;
                     }
+                    $uploadBatch[] = $single;
+                }
+            } else {
+                $uploadBatch[] = is_array($files) ? $files : null;
+            }
+
+            $uploadBatch = array_values(array_filter($uploadBatch, static fn($item): bool => is_array($item)));
+            if ($uploadBatch === []) {
+                throw new RuntimeException((string) $t['no_photo_imported']);
+            }
+            if (count($uploadBatch) > 20) {
+                throw new RuntimeException('Maximum 20 photos par import.');
+            }
+            $totalBytes = array_sum(array_map(static fn(array $item): int => max(0, (int) ($item['size'] ?? 0)), $uploadBatch));
+            if ($totalBytes > 80 * 1024 * 1024) {
+                throw new RuntimeException('Le lot de photos dépasse 80 Mo.');
+            }
+
+            $createdPaths = [];
+            try {
+                $orderStmt->execute([$albumId]);
+                $nextOrder = (int) ($orderStmt->fetchColumn() ?: 0);
+                db()->beginTransaction();
+                foreach ($uploadBatch as $single) {
                     $path = handle_album_upload($single, (string) (current_user()['callsign'] ?? 'album'));
-                    $photoTitle = $title !== '' && $total === 1 ? $title : pathinfo((string) $single['name'], PATHINFO_FILENAME);
+                    $createdPaths[] = $path;
+                    $photoTitle = $title !== '' && count($uploadBatch) === 1 ? $title : pathinfo((string) ($single['name'] ?? ''), PATHINFO_FILENAME);
                     $photoTitle = trim($photoTitle) !== '' ? trim($photoTitle) : (string) $t['photo'];
-                    $orderStmt->execute([$albumId]);
-                    $nextOrder = (int) ($orderStmt->fetchColumn() ?: 0) + 1;
+                    if (mb_strlen($photoTitle) > 190) {
+                        $photoTitle = mb_substr($photoTitle, 0, 190);
+                    }
+                    $nextOrder++;
                     $insertPhotoStmt->execute([$albumId, $nextOrder, $photoTitle, $caption, $path]);
                     $lastTitle = $photoTitle;
                     $importedCount++;
                 }
-            } else {
-                $path = handle_album_upload(is_array($files) ? $files : null, (string) (current_user()['callsign'] ?? 'album'));
-                $photoTitle = $title !== '' ? $title : (string) $t['photo'];
-                $orderStmt->execute([$albumId]);
-                $nextOrder = (int) ($orderStmt->fetchColumn() ?: 0) + 1;
-                $insertPhotoStmt->execute([$albumId, $nextOrder, $photoTitle, $caption, $path]);
-                $lastTitle = $photoTitle;
-                $importedCount = 1;
-            }
-
-            if ($importedCount <= 0) {
-                throw new RuntimeException((string) $t['no_photo_imported']);
+                db()->commit();
+            } catch (Throwable $throwable) {
+                if (db()->inTransaction()) {
+                    db()->rollBack();
+                }
+                foreach ($createdPaths as $createdPath) {
+                    albums_admin_delete_photo_files($createdPath);
+                }
+                throw $throwable;
             }
             notify_member((int) current_user()['id'], 'import', 'Album import completed', $importedCount . ' photo(s) imported.', route_url('admin_albums'));
             if ((int) $albumRow['is_public'] === 1) {
@@ -205,6 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $photoId = (int) ($_POST['photo_id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
             $caption = trim((string) ($_POST['caption'] ?? ''));
+            albums_admin_validate_text_lengths($title, '', $caption);
             if ($photoId <= 0 || $title === '') {
                 throw new RuntimeException((string) $t['invalid_photo']);
             }
@@ -224,7 +250,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $photoRow = $photoStmt->fetch();
             db()->prepare('DELETE FROM album_photos WHERE id = ?')->execute([$photoId]);
             if (is_array($photoRow)) {
-                albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''));
+                if (!albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''))) {
+                    log_structured_event('album_photo_file_delete_failed', ['photo_id' => $photoId]);
+                }
             }
             albums_admin_clear_cache();
             set_flash('success', (string) $t['photo_deleted_ok']);
@@ -263,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'rebuild_thumbnails') {
-            $photoRows = db()->query('SELECT file_path FROM album_photos ORDER BY id DESC')->fetchAll() ?: [];
+            $photoRows = db()->query('SELECT file_path FROM album_photos ORDER BY id DESC LIMIT 500')->fetchAll() ?: [];
             $created = 0;
             foreach ($photoRows as $photoRow) {
                 $safePath = albums_admin_safe_photo_path((string) ($photoRow['file_path'] ?? ''));
