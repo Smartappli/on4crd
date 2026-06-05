@@ -9,7 +9,7 @@ return array (
   'intro' => 'Faigh nuacht ó Radio Club Durnal go díreach trí ríomhphost.',
   'email_label' => 'Nuachtlitir ríomhphoist',
   'submit' => 'Liostáil leis an nuachtlitir',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_public' => 'Public newsletter form consent',
+  'consent_required' => 'Tá toiliú nuachtlitir ag teastáil.',
+  'consent_label' => 'Aontaím an nuachtlitir ON4CRD a fháil agus tuigim gur féidir liom díliostáil am ar bith.',
+  'consent_proof_public' => 'Nuachtlitir phoiblí toiliú foirm',
 );

@@ -1,40 +1,38 @@
-# I18n Audit After Native Translation Pass
+﻿# I18n Sequential Module Audit
 
-Domains: 86
-Locales: 31
+Date: 2026-06-05
 
-| Locale | Files | Missing | Load | Empty | Mojibake | Placeholder |
-|---|---:|---:|---:|---:|---:|---:|
-| fr | 86 | 0 | 0 | 0 | 0 | 0 |
-| en | 86 | 0 | 0 | 0 | 0 | 0 |
-| de | 86 | 0 | 0 | 0 | 0 | 0 |
-| nl | 86 | 0 | 0 | 0 | 0 | 0 |
-| it | 86 | 0 | 0 | 0 | 0 | 0 |
-| es | 86 | 0 | 0 | 0 | 0 | 0 |
-| pt | 86 | 0 | 0 | 0 | 0 | 0 |
-| bg | 86 | 0 | 0 | 0 | 0 | 0 |
-| hr | 86 | 0 | 0 | 0 | 0 | 0 |
-| cs | 86 | 0 | 0 | 0 | 0 | 0 |
-| da | 86 | 0 | 0 | 0 | 0 | 0 |
-| et | 86 | 0 | 0 | 0 | 0 | 0 |
-| fi | 86 | 0 | 0 | 0 | 0 | 0 |
-| el | 86 | 0 | 0 | 0 | 0 | 0 |
-| hu | 86 | 0 | 0 | 0 | 0 | 0 |
-| ga | 86 | 0 | 0 | 0 | 0 | 0 |
-| lv | 86 | 0 | 0 | 0 | 0 | 0 |
-| lt | 86 | 0 | 0 | 0 | 0 | 0 |
-| mt | 86 | 0 | 0 | 0 | 0 | 0 |
-| pl | 86 | 0 | 0 | 0 | 0 | 0 |
-| ro | 86 | 0 | 0 | 0 | 0 | 0 |
-| sk | 86 | 0 | 0 | 0 | 0 | 0 |
-| sl | 86 | 0 | 0 | 0 | 0 | 0 |
-| sv | 86 | 0 | 0 | 0 | 0 | 0 |
-| ar | 86 | 0 | 0 | 0 | 0 | 0 |
-| hi | 86 | 0 | 0 | 0 | 0 | 0 |
-| ja | 86 | 0 | 0 | 0 | 0 | 0 |
-| zh | 86 | 0 | 0 | 0 | 0 | 0 |
-| bn | 86 | 0 | 0 | 0 | 0 | 0 |
-| ru | 86 | 0 | 0 | 0 | 0 | 0 |
-| id | 86 | 0 | 0 | 0 | 0 | 0 |
+## Scope
 
-Findings: 0
+- Modules audited: 86
+- Locales per module: 31
+- Locale catalogs loaded: 2666
+- String values checked: 71083
+
+## Corrections Applied
+
+- Sequential fallback scan after the previous native translation pass: 2508 actionable candidate values.
+- Automatic protected translation pass: 1935 values updated across 247 files.
+- Manual targeted corrections after review: 33 additional labels/sentences corrected.
+- Technical/shared terms are explicitly allowlisted in the audit tooling to avoid false positives for radio terms, units, brands, route/code identifiers, filenames, and terms that are natively shared across target languages.
+
+## Final Audit Results
+
+| Check | Result |
+|---|---:|
+| Module-by-module audit errors | 0 |
+| Module-by-module audit warnings | 0 |
+| Systematic i18n audit errors | 0 |
+| Systematic i18n audit warnings | 0 |
+| Placeholder/token leaks | 0 |
+| PHP syntax errors in new tools | 0 |
+| PHPUnit tests | 413 tests / 15673 assertions OK |
+
+## Tools Added
+
+- `tools/i18n_module_sequential_audit.php`: strict module-by-module audit with structural checks, placeholder/tag checks, mojibake checks, suspicious fragment checks, and isolated fallback detection.
+- `tools/i18n_translate_identical_values.php`: protected sequential fixer for isolated values identical to `fr` or `en`, with placeholders and radio/technical terms preserved.
+
+## Detailed Report
+
+- `storage/i18n-module-audit-final.txt` contains the final per-module audit output. Every module is reported with `errors=0 warnings=0`.

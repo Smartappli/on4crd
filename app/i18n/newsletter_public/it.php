@@ -9,7 +9,7 @@ return array (
   'intro' => 'Ricevi le notizie del Radio Club Durnal direttamente via email.',
   'email_label' => 'Newsletter via e-mail',
   'submit' => 'Iscriviti alla newsletter',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_public' => 'Public newsletter form consent',
+  'consent_required' => 'È necessario il consenso alla newsletter.',
+  'consent_label' => 'Accetto di ricevere la newsletter ON4CRD e comprendo che posso annullare l\'iscrizione in qualsiasi momento.',
+  'consent_proof_public' => 'Consenso al modulo newsletter pubblica',
 );

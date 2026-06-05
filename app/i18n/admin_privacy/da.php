@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'GDPR Administration',
+  'title' => 'GDPR-administration',
   'meta_desc' => 'Behandle ON4CRD GDPR anmodninger.',
   'request_updated' => 'GDPR anmodning opdateret.',
   'files_processed_summary' => 'Filer behandlet: %d slettet, %d mangler allerede, %d mislykkedes.',

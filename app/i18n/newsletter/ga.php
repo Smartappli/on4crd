@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Ríomhphost teagmhála',
   'subscribe' => 'Liostáil',
   'layout_title' => 'Nuachtlitir',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Tá toiliú nuachtlitir ag teastáil.',
+  'consent_label' => 'Aontaím an nuachtlitir ON4CRD a fháil agus tuigim gur féidir liom díliostáil am ar bith.',
+  'consent_proof_member' => 'Toiliú nuachtlitir na mball',
 );

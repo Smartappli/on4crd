@@ -17,7 +17,7 @@ return array (
   'email_label' => 'संपर्क ईमेल',
   'subscribe' => 'सदस्यता लें',
   'layout_title' => 'न्यूज़लेटर',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'न्यूज़लैटर की सहमति आवश्यक है.',
+  'consent_label' => 'मैं ON4CRD न्यूज़लेटर प्राप्त करने के लिए सहमत हूं और समझता हूं कि मैं किसी भी समय सदस्यता समाप्त कर सकता हूं।',
+  'consent_proof_member' => 'सदस्य न्यूज़लेटर सहमति',
 );

@@ -24,7 +24,7 @@ return array (
   'bands' => 'Μπάντες',
   'station' => 'Θέρετρο',
   'committee' => 'Επιτροπή',
-  'grid' => 'Grid',
+  'grid' => 'Πλέγμα',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Τρόποι',

@@ -41,7 +41,7 @@ return array (
   'admin_ads_title' => '広告',
   'admin_ads_desc' => '広告在庫、配置、統計。',
   'admin_privacy_title' => 'GDPR',
-  'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
-  'admin_classifieds_title' => 'Classifieds',
-  'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_privacy_desc' => 'データのリクエスト、エクスポート、消去、フォローアップ。',
+  'admin_classifieds_title' => '広告',
+  'admin_classifieds_desc' => '会員のクラシファイド広告をモデレーションします。',
 );

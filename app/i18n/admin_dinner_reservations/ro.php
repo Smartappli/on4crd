@@ -33,7 +33,7 @@ return array (
   'csv_starter' => 'Intrare',
   'csv_starter_price' => 'Preț de intrare',
   'csv_meal_enabled' => 'Mâncare activă',
-  'csv_meal' => 'Plat',
+  'csv_meal' => 'Fel de mâncare',
   'csv_meal_price' => 'Pret fix',
   'csv_dessert_enabled' => 'Desertul activ',
   'csv_dessert' => 'Desert',

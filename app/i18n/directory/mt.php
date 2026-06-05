@@ -27,7 +27,7 @@ return array (
   'grid' => 'Grid',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
-  'modes' => 'Modes',
+  'modes' => 'Modi',
   'antennas' => 'Antenni',
   'layout_title' => 'Direttorju',
 );

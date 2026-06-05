@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 return array (
   'title' => 'ON2-bandplan',
-  'header_band' => 'Band',
+  'header_band' => 'Bandje',
   'header_freq' => 'Frequenties (MHz)',
-  'header_modes' => 'Modes',
+  'header_modes' => 'Modi',
   'header_power' => 'Max. vermogen*',
   'header_notes' => 'Notities',
   'note_160m' => 'Volg de IARU R1-segmentatie.',

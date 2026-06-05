@@ -24,7 +24,7 @@ return array (
   'bands' => 'Juostos',
   'station' => 'Kurortas',
   'committee' => 'komitetas',
-  'grid' => 'Grid',
+  'grid' => 'Tinklelis',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Režimai',

@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Kontaktinis el',
   'subscribe' => 'Prenumeruoti',
   'layout_title' => 'Naujienlaiškis',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Būtinas sutikimas gauti naujienlaiškį.',
+  'consent_label' => 'Sutinku gauti ON4CRD naujienlaiškį ir suprantu, kad galiu bet kada atsisakyti prenumeratos.',
+  'consent_proof_member' => 'Nario naujienlaiškio sutikimas',
 );

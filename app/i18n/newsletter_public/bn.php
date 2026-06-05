@@ -9,7 +9,7 @@ return array (
   'intro' => 'রেডিও ক্লাব দুরনাল-এর খবর সরাসরি ইমেইলে পান।',
   'email_label' => 'নিউজলেটার ইমেইল',
   'submit' => 'নিউজলেটারে সাবস্ক্রাইব করুন',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_public' => 'Public newsletter form consent',
+  'consent_required' => 'নিউজলেটার সম্মতি প্রয়োজন.',
+  'consent_label' => 'আমি ON4CRD নিউজলেটার পেতে সম্মত এবং বুঝি যে আমি যেকোনো সময় সদস্যতা ত্যাগ করতে পারি।',
+  'consent_proof_public' => 'পাবলিক নিউজলেটার ফর্ম সম্মতি',
 );

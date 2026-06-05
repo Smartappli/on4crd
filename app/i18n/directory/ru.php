@@ -24,7 +24,7 @@ return array (
   'bands' => 'Диапазоны',
   'station' => 'Станция',
   'committee' => 'Комитет',
-  'grid' => 'Grid',
+  'grid' => 'Сетка',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Режимы',

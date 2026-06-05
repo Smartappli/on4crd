@@ -41,7 +41,7 @@ return array (
   'admin_ads_title' => 'الإعلانات',
   'admin_ads_desc' => 'إدارة المخزون الإعلاني والمواضع والإحصاءات.',
   'admin_privacy_title' => 'GDPR',
-  'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
-  'admin_classifieds_title' => 'Classifieds',
-  'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_privacy_desc' => 'طلبات البيانات وتصديرها ومحوها ومتابعتها.',
+  'admin_classifieds_title' => 'الإعلانات المبوبة',
+  'admin_classifieds_desc' => 'الإعلانات المبوبة للأعضاء المعتدلين.',
 );

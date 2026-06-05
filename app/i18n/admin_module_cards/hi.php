@@ -41,7 +41,7 @@ return array (
   'admin_ads_title' => 'विज्ञापन',
   'admin_ads_desc' => 'विज्ञापन इन्वेंटरी, प्लेसमेंट और आँकड़े।',
   'admin_privacy_title' => 'GDPR',
-  'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
-  'admin_classifieds_title' => 'Classifieds',
-  'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_privacy_desc' => 'डेटा अनुरोध, निर्यात, मिटाना और अनुवर्ती कार्रवाई।',
+  'admin_classifieds_title' => 'वर्गीकृत',
+  'admin_classifieds_desc' => 'मध्यम सदस्य वर्गीकृत.',
 );

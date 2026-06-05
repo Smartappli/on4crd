@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Email di contatto',
   'subscribe' => 'Iscriviti',
   'layout_title' => 'Notiziario',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'È necessario il consenso alla newsletter.',
+  'consent_label' => 'Accetto di ricevere la newsletter ON4CRD e comprendo che posso annullare l\'iscrizione in qualsiasi momento.',
+  'consent_proof_member' => 'Consenso alla newsletter dei membri',
 );

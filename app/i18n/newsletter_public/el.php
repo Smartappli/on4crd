@@ -9,7 +9,7 @@ return array (
   'intro' => 'Λάβετε νέα από το Radio Club Durnal απευθείας μέσω email.',
   'email_label' => 'Ενημερωτικό δελτίο ηλεκτρονικού ταχυδρομείου',
   'submit' => 'Εγγραφείτε στο ενημερωτικό δελτίο',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_public' => 'Public newsletter form consent',
+  'consent_required' => 'Απαιτείται συγκατάθεση για το ενημερωτικό δελτίο.',
+  'consent_label' => 'Συμφωνώ να λαμβάνω το ενημερωτικό δελτίο ON4CRD και κατανοώ ότι μπορώ να καταργήσω την εγγραφή μου ανά πάσα στιγμή.',
+  'consent_proof_public' => 'Έντυπο συγκατάθεσης για δημόσιο ενημερωτικό δελτίο',
 );

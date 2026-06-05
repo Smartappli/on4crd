@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Email kontak',
   'subscribe' => 'Berlangganan',
   'layout_title' => 'Buletin',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Diperlukan persetujuan buletin.',
+  'consent_label' => 'Saya setuju untuk menerima buletin ON4CRD dan memahami bahwa saya dapat berhenti berlangganan kapan saja.',
+  'consent_proof_member' => 'Persetujuan buletin anggota',
 );

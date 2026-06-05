@@ -17,7 +17,7 @@ return array (
   'email_label' => '联系邮箱',
   'subscribe' => '订阅',
   'layout_title' => '通讯',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => '需要新闻通讯同意。',
+  'consent_label' => '我同意接收 ON4CRD 新闻通讯并了解我可以随时取消订阅。',
+  'consent_proof_member' => '会员通讯同意',
 );

@@ -28,7 +28,7 @@ return array (
   'admin_translation_reviews_desc' => 'Valideringsworkflow for nyheder/artikeloversættelser.',
   'admin_dashboard_title' => 'Dashboard-widgets',
   'admin_dashboard_desc' => 'Aktiver widgets, der er tilgængelige for medlemmer.',
-  'admin_live_feeds_title' => 'Live feeds',
+  'admin_live_feeds_title' => 'Livefeeds',
   'admin_live_feeds_desc' => 'Fin kontrol af radiofeeds, TTL, URL\'er og aktivering.',
   'admin_newsletters_title' => 'Nyhedsbrev',
   'admin_newsletters_desc' => 'Abonnenter, CSV import og e-mail-kampagner.',

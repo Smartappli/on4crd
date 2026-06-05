@@ -7,7 +7,7 @@ return array (
   'badge' => 'Pedagogika',
   'title' => 'Amatérske rádio vysvetlilo školám, jasne a konkrétne.',
   'lead' => 'Klub môže ponúknuť aktivity prispôsobené úrovni študentov: objavovanie rádia, ukážky spojení, bezpečnosť, jednoduchá elektronika a pôsobenie v technických profesiách.',
-  'pill_discovery' => 'Discovery',
+  'pill_discovery' => 'Objavovanie',
   'pill_demos' => 'Demonštrácie',
   'pill_tech' => 'Technická',
   'formats' => 'Možné formáty',

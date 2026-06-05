@@ -9,7 +9,7 @@ return array (
   'intro' => 'Radio Club Durnal की खबरें सीधे ईमेल पर प्राप्त करें।',
   'email_label' => 'न्यूज़लेटर ईमेल',
   'submit' => 'न्यूज़लेटर सदस्यता लें',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_public' => 'Public newsletter form consent',
+  'consent_required' => 'न्यूज़लैटर की सहमति आवश्यक है.',
+  'consent_label' => 'मैं ON4CRD न्यूज़लेटर प्राप्त करने के लिए सहमत हूं और समझता हूं कि मैं किसी भी समय सदस्यता समाप्त कर सकता हूं।',
+  'consent_proof_public' => 'सार्वजनिक समाचार पत्र प्रपत्र सहमति',
 );

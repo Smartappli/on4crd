@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Kontakt email',
   'subscribe' => 'Abonner',
   'layout_title' => 'Nyhedsbrev',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Der kræves samtykke til nyhedsbrevet.',
+  'consent_label' => 'Jeg accepterer at modtage ON4CRD-nyhedsbrevet og forstår, at jeg til enhver tid kan afmelde mig.',
+  'consent_proof_member' => 'Samtykke til medlemsnyhedsbrev',
 );

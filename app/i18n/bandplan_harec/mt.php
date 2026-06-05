@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'HAREC band plan',
+  'title' => 'HAREC band pjan',
   'header_band' => 'Banda',
   'header_freq' => 'Frekwenzi (MHz)',
   'header_modes' => 'Modi',

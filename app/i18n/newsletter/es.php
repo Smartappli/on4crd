@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Correo de contacto',
   'subscribe' => 'Suscribirse',
   'layout_title' => 'Boletín',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Se requiere el consentimiento del boletín.',
+  'consent_label' => 'Acepto recibir el boletín informativo ON4CRD y entiendo que puedo cancelar mi suscripción en cualquier momento.',
+  'consent_proof_member' => 'Consentimiento del boletín informativo para miembros',
 );

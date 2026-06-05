@@ -10,6 +10,6 @@ return array (
   'slug_label' => 'Slug',
   'content_label' => 'Konten (HTML sederhana)',
   'save' => 'Simpan',
-  'layout' => 'Edit wiki',
+  'layout' => 'Sunting wiki',
   'meta_desc' => 'Buat atau edit halaman wiki.',
 );

@@ -19,7 +19,7 @@ return array (
   'resolution' => 'Rezolucija',
   'anonymization' => 'Anonimizacija',
   'no_events' => 'Nema događaja.',
-  'events_count' => '%d event(s)',
+  'events_count' => '%d događaj(i)',
   'apply_erasure' => 'Primijeni automatsku anonimizaciju ako se status promijeni u resolved.',
   'admin_notes' => 'Bilješke administratora',
   'update' => 'Ažurirati',

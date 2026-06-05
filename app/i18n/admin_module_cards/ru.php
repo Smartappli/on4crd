@@ -41,7 +41,7 @@ return array (
   'admin_ads_title' => 'Реклама',
   'admin_ads_desc' => 'Рекламный инвентарь, размещения и статистика.',
   'admin_privacy_title' => 'GDPR',
-  'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
-  'admin_classifieds_title' => 'Classifieds',
-  'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_privacy_desc' => 'Запросы данных, экспорт, удаление и отслеживание.',
+  'admin_classifieds_title' => 'Объявления',
+  'admin_classifieds_desc' => 'Объявления модераторов.',
 );

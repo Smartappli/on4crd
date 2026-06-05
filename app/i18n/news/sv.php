@@ -16,7 +16,7 @@ return array (
   'active_filters' => 'Aktiva filter',
   'keywords' => 'Nyckelord',
   'keywords_placeholder' => 'Titel, innehåll eller avsnitt',
-  'period' => 'Period',
+  'period' => 'Tidsperiod',
   'category' => 'Rubrik',
   'all_categories' => 'Alla avsnitt',
   'sort_by' => 'Sortering',

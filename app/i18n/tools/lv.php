@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Toolbox',
+  'title' => 'Rīkkopa',
   'tool_index' => 'Instrumentu klasifikācija',
   'category_locators' => 'Orientieri un ģeogrāfiskā atrašanās vieta',
   'category_conversions' => 'Radio konversijas',
@@ -13,7 +13,7 @@ return array (
   'category_radio_math' => 'Radio matemātika',
   'open_category' => 'Skatīt rīkus',
   'choose_tool' => 'Rīku kategorijas',
-  'grid_title' => 'Calcul du grid et les zones CG/ITU depuis une adresse postale',
+  'grid_title' => 'Calcul du grid un les zones CG/ITU depuis une adresse postale',
   'address' => 'Pasta adrese',
   'calc_grid' => 'Aprēķiniet režģi',
   'found_address' => 'Adrese atrasta',
@@ -193,8 +193,8 @@ return array (
   'unit_conv_presets' => 'Ātrās vērtības',
   'unit_conv_reference' => 'Atsauce',
   'unit_conv_quick_links' => 'Detalizēti pārveidotāji',
-  'forward_power' => 'Forward power (W)',
-  'reflected_power' => 'Reflected power (W)',
-  'swr_result' => 'Calculated SWR',
+  'forward_power' => 'Jauda uz priekšu (W)',
+  'reflected_power' => 'Atstarotā jauda (W)',
+  'swr_result' => 'Aprēķināts SWR',
   'dbw_calc' => 'dBm <-> dBW conversion',
 );

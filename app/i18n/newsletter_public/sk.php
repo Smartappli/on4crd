@@ -9,7 +9,7 @@ return array (
   'intro' => 'Dostávajte novinky z Rádio klubu Durnal priamo e-mailom.',
   'email_label' => 'Emailový newsletter',
   'submit' => 'Prihláste sa na odber noviniek',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_public' => 'Public newsletter form consent',
+  'consent_required' => 'Vyžaduje sa súhlas s newsletterom.',
+  'consent_label' => 'Súhlasím s odoberaním noviniek ON4CRD a rozumiem, že ich odber môžem kedykoľvek zrušiť.',
+  'consent_proof_public' => 'Súhlas s formulárom verejného bulletinu',
 );

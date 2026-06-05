@@ -41,7 +41,7 @@ return array (
   'admin_ads_title' => 'Iklan',
   'admin_ads_desc' => 'Inventaris iklan, penempatan, dan statistik.',
   'admin_privacy_title' => 'GDPR',
-  'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
-  'admin_classifieds_title' => 'Classifieds',
-  'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_privacy_desc' => 'Permintaan data, ekspor, penghapusan, dan tindak lanjut.',
+  'admin_classifieds_title' => 'Iklan Baris',
+  'admin_classifieds_desc' => 'Iklan baris anggota moderat.',
 );

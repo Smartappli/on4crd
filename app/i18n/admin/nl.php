@@ -8,7 +8,7 @@ return array (
   'search_label' => 'Snel zoeken',
   'search_placeholder' => 'Module, tool, beschrijving...',
   'search_cta' => 'Filteren',
-  'search_reset' => 'Reset',
+  'search_reset' => 'Opnieuw instellen',
   'empty' => 'Geen module komt overeen met je zoekopdracht.',
   'open' => 'Openen',
 );

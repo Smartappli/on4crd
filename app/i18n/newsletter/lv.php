@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Saziņas e-pasts',
   'subscribe' => 'Abonēt',
   'layout_title' => 'Biļetens',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Nepieciešama piekrišana biļetenam.',
+  'consent_label' => 'Es piekrītu saņemt ON4CRD biļetenu un saprotu, ka varu anulēt abonementu jebkurā laikā.',
+  'consent_proof_member' => 'Dalībnieka piekrišana informatīvajam izdevumam',
 );

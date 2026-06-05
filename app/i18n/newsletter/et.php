@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Kontaktmeiliaadress',
   'subscribe' => 'Telli',
   'layout_title' => 'Infoleht',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Nõusolek uudiskirja saamiseks on vajalik.',
+  'consent_label' => 'Nõustun ON4CRD uudiskirja saamisega ja mõistan, et saan tellimusest igal ajal loobuda.',
+  'consent_proof_member' => 'Liikme uudiskirja nõusolek',
 );

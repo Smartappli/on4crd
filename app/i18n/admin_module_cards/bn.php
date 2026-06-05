@@ -41,7 +41,7 @@ return array (
   'admin_ads_title' => 'বিজ্ঞাপন',
   'admin_ads_desc' => 'বিজ্ঞাপন ইনভেন্টরি, প্লেসমেন্ট ও পরিসংখ্যান।',
   'admin_privacy_title' => 'GDPR',
-  'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
-  'admin_classifieds_title' => 'Classifieds',
-  'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_privacy_desc' => 'ডেটা অনুরোধ, রপ্তানি, মুছে ফেলা এবং ফলো-আপ।',
+  'admin_classifieds_title' => 'শ্রেণীবদ্ধ',
+  'admin_classifieds_desc' => 'পরিমিত সদস্য শ্রেণীবদ্ধ.',
 );

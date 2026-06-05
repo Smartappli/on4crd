@@ -41,7 +41,7 @@ return array (
   'admin_ads_title' => '广告',
   'admin_ads_desc' => '广告库存、投放位与统计。',
   'admin_privacy_title' => 'GDPR',
-  'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
-  'admin_classifieds_title' => 'Classifieds',
-  'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_privacy_desc' => '数据请求、导出、删除和后续。',
+  'admin_classifieds_title' => '分类广告',
+  'admin_classifieds_desc' => '温和的会员分类。',
 );

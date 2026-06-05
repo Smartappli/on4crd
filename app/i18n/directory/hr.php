@@ -24,7 +24,7 @@ return array (
   'bands' => 'Bendovi',
   'station' => 'Odmaralište',
   'committee' => 'Povjerenstvo',
-  'grid' => 'Grid',
+  'grid' => 'Mreža',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Načini rada',

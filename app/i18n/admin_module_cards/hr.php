@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'admin_modules_title' => 'Moduli',
   'admin_modules_desc' => 'Omogućite, onemogućite i globalno upravljajte modulima.',
-  'admin_members_title' => 'Member management',
+  'admin_members_title' => 'Upravljanje članovima',
   'admin_members_desc' => 'Profili članova, aktivni status i povjerenstvo.',
   'admin_permissions_title' => 'Uloge i dopuštenja',
   'admin_permissions_desc' => 'Matrica dodjele uloga i dopuštenja.',
@@ -20,7 +20,7 @@ return array (
   'admin_events_desc' => 'Klupski događaji i lokalna natjecanja prikazani u live widgetima.',
   'admin_dinner_reservations_title' => 'Godišnja večera',
   'admin_dinner_reservations_desc' => 'Rezervacije, redovi za obroke/desert, količine i automatski zbroj.',
-  'admin_auctions_title' => 'Auctions',
+  'admin_auctions_title' => 'Aukcije',
   'admin_auctions_desc' => 'Partije, rasporedi, ponude i zatvaranje.',
   'admin_editorial_title' => 'Višejezični uvodnik',
   'admin_editorial_desc' => 'Francuski izvor, EN/DE/NL automatski prijevod i ručni pregled.',

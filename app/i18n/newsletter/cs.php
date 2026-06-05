@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Kontaktní email',
   'subscribe' => 'Přihlásit se k odběru',
   'layout_title' => 'Bulletin',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Je vyžadován souhlas s newsletterem.',
+  'consent_label' => 'Souhlasím se zasíláním newsletteru ON4CRD a rozumím tomu, že se mohu kdykoli odhlásit.',
+  'consent_proof_member' => 'Souhlas člena s newsletterem',
 );

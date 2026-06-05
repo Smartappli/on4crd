@@ -28,7 +28,7 @@ return array (
   'classifieds_title' => 'Klassifikati',
   'classifieds_desc' => 'Immaniġġja l-klassifika tiegħek jew tissuġġerixxi kategorija.',
   'classifieds_cta' => 'Immaniġġja l-klassifika tiegħi',
-  'settings_title' => 'Settings',
+  'settings_title' => 'Issettjar',
   'settings_desc' => 'Aġġusta l-preferenzi tal-kont tiegħek.',
   'settings_cta' => 'Iftaħ is-settings',
 );

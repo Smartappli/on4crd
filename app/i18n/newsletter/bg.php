@@ -17,7 +17,7 @@ return array (
   'email_label' => 'Имейл за връзка',
   'subscribe' => 'Абонирайте се',
   'layout_title' => 'Бюлетин',
-  'consent_required' => 'Newsletter consent is required.',
-  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
-  'consent_proof_member' => 'Member newsletter consent',
+  'consent_required' => 'Изисква се съгласие за бюлетин.',
+  'consent_label' => 'Съгласен съм да получавам бюлетина на ON4CRD и разбирам, че мога да се отпиша по всяко време.',
+  'consent_proof_member' => 'Съгласие за бюлетин на членове',
 );
