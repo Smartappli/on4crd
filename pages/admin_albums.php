@@ -337,7 +337,8 @@ ob_start();
                 <label><?= e((string) $t['description']) ?>
                     <textarea name="description" rows="4"></textarea>
                 </label>
-                <label><input type="checkbox" name="is_public" checked> <?= e((string) $t['public_album']) ?></label>
+                <label><input type="checkbox" name="is_public"> <?= e((string) $t['public_album']) ?></label>
+                <p class="help">Par defaut, un nouvel album reste prive jusqu a publication explicite.</p>
                 <button class="button"><?= e((string) $t['create_album']) ?></button>
             </form>
         </section>

@@ -114,7 +114,7 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
     foreach ([
         'admin_ads', 'admin_albums', 'admin_articles', 'admin_auctions', 'admin_classifieds', 'admin_committee',
         'admin_dashboard', 'admin_dinner_reservations', 'admin_editorial', 'admin_events', 'admin_events_feed', 'admin_library',
-        'admin_live_feeds', 'admin_members', 'admin_modules', 'admin_news', 'admin_newsletters', 'admin_permissions',
+        'admin_live_feeds', 'admin_members', 'admin_modules', 'admin_news', 'admin_newsletters', 'admin_permissions', 'admin_privacy',
         'admin_press', 'admin_translation_reviews', 'admin_wiki',
     ] as $adminRoute) {
         $routeSeo[$adminRoute] ??= [

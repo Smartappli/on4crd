@@ -17,4 +17,7 @@ return array (
   'email_label' => 'بريد التواصل',
   'subscribe' => 'اشتراك',
   'layout_title' => 'النشرة',
+  'consent_required' => 'Newsletter consent is required.',
+  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
+  'consent_proof_member' => 'Member newsletter consent',
 );

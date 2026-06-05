@@ -42,4 +42,5 @@ return array (
   'already_registered' => 'Ste že registrirani?',
   'login' => 'Prijavite se',
   'layout_title' => 'Registracija',
+  'geocode_consent' => 'Automatically calculate locator and radio zones through Nominatim with my postal address.',
 );

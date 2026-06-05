@@ -251,7 +251,7 @@ ob_start();
     <?php $avatarSrc = member_avatar_src($member); ?>
     <div class="profile-preview-views">
         <?php foreach ($profileViews as $viewer => $view): ?>
-            <?php $canSeePhoto = member_profile_visibility_allows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
+            <?php $canSeePhoto = member_profile_visibility_allows((string) $viewer, (string) ($member['visibility_photo'] ?? 'private')); ?>
             <section class="profile-preview-view">
                 <header>
                     <?php if ($canSeePhoto): ?>

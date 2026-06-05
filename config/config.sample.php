@@ -72,6 +72,8 @@ return [
     'tracking' => [
         'matomo_url' => 'https://stats.smartappli.eu/',
         'matomo_site_id' => '4',
+        'matomo_require_consent' => true,
+        'matomo_disable_cookies' => true,
     ],
     'social' => [
         'album_webhooks' => [

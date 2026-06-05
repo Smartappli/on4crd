@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Email επικοινωνίας',
   'subscribe' => 'Εγγραφείτε',
   'layout_title' => 'Ενημερωτικό δελτίο',
+  'consent_required' => 'Newsletter consent is required.',
+  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
+  'consent_proof_member' => 'Member newsletter consent',
 );

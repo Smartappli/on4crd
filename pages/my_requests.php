@@ -60,6 +60,8 @@ if (table_exists('articles') && table_has_column('articles', 'author_id')) {
     $stmt->execute([(int) $user['id']]);
     $submittedArticles = $stmt->fetchAll() ?: [];
 }
+$privacyRequests = privacy_member_requests((int) $user['id']);
+$registeredRequestsCount = count($submittedArticles) + count($privacyRequests);
 
 $statusLabels = [
     'draft' => (string) ($t['article_status_draft'] ?? 'Brouillon'),
@@ -90,15 +92,27 @@ ob_start();
                 <h2><?= e((string) ($t['status_title'] ?? 'Demandes enregistrées')) ?></h2>
                 <p class="help"><?= e((string) ($t['empty_body'] ?? 'Les demandes enregistrées par le site apparaîtront ici.')) ?></p>
             </div>
-            <span class="badge muted"><?= (int) count($submittedArticles) ?></span>
+            <span class="badge muted"><?= (int) $registeredRequestsCount ?></span>
         </div>
-        <?php if ($submittedArticles === []): ?>
+        <?php if ($submittedArticles === [] && $privacyRequests === []): ?>
             <div class="my-requests-empty">
                 <strong><?= e((string) ($t['empty_title'] ?? 'Aucune demande pour le moment')) ?></strong>
                 <p><?= e((string) ($t['empty_hint'] ?? 'Utilisez les raccourcis ci-dessous pour accéder aux démarches disponibles.')) ?></p>
             </div>
         <?php else: ?>
             <div class="my-requests-grid">
+                <?php foreach ($privacyRequests as $request): ?>
+                    <article class="my-requests-shortcut">
+                        <span class="badge muted"><?= e((string) ($request['status'] ?? 'pending')) ?></span>
+                        <h3>RGPD: <?= e((string) ($request['request_type'] ?? 'access')) ?></h3>
+                        <p><?= e((string) ($t['privacy_title'] ?? 'Vie privee')) ?></p>
+                        <p class="help"><?= e(date('d/m/Y', strtotime((string) ($request['requested_at'] ?? 'now')))) ?></p>
+                        <?php if (trim((string) ($request['admin_notes'] ?? '')) !== ''): ?>
+                            <p class="help"><?= e((string) $request['admin_notes']) ?></p>
+                        <?php endif; ?>
+                        <a class="button secondary small" href="<?= e(route_url('gdpr')) ?>"><?= e((string) ($t['privacy_cta'] ?? 'Gerer la vie privee')) ?></a>
+                    </article>
+                <?php endforeach; ?>
                 <?php foreach ($submittedArticles as $article): ?>
                     <?php
                     $articleStatus = (string) ($article['status'] ?? 'draft');

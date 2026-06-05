@@ -9,4 +9,7 @@ return array (
   'intro' => 'Radio Club Durnal のニュースをメールで直接受け取りましょう。',
   'email_label' => 'ニュースレターメール',
   'submit' => 'ニュースレターに登録',
+  'consent_required' => 'Newsletter consent is required.',
+  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
+  'consent_proof_public' => 'Public newsletter form consent',
 );

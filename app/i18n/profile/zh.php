@@ -67,4 +67,5 @@ return array (
   'antennas' => 'Antennas',
   'interests' => 'Interests',
   'save' => '保存',
+  'geocode_consent' => 'Automatically calculate locator and radio zones through Nominatim with my postal address.',
 );

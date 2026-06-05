@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Kontaktni email',
   'subscribe' => 'Naročite se',
   'layout_title' => 'Glasilo',
+  'consent_required' => 'Newsletter consent is required.',
+  'consent_label' => 'I agree to receive the ON4CRD newsletter and understand that I can unsubscribe at any time.',
+  'consent_proof_member' => 'Member newsletter consent',
 );

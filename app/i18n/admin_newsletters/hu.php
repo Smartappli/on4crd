@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Nincsenek előfizetők.',
   'no_campaigns' => 'Nincs kampány.',
+  'err_consent_proof_required' => 'Consent proof is required.',
+  'consent_proof' => 'Consent proof',
+  'consent_proof_ph' => 'Example: signed form on 2026-06-05',
+  'consent_admin_help' => 'Adding, importing or reactivating requires explicit consent proof.',
+  'consent' => 'Consent',
 );

@@ -42,4 +42,5 @@ return array (
   'already_registered' => 'ইতিমধ্যে নিবন্ধিত?',
   'login' => 'লগ ইন',
   'layout_title' => 'নিবন্ধন',
+  'geocode_consent' => 'Automatically calculate locator and radio zones through Nominatim with my postal address.',
 );

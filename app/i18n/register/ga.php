@@ -42,4 +42,5 @@ return array (
   'already_registered' => 'Cláraithe cheana féin?',
   'login' => 'Logáil isteach',
   'layout_title' => 'Clárú',
+  'geocode_consent' => 'Automatically calculate locator and radio zones through Nominatim with my postal address.',
 );

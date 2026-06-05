@@ -252,7 +252,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('private', $fields['visibility_last_name']['default']);
         self::assertSame('private', $fields['visibility_address']['default']);
         self::assertSame('private', $fields['visibility_postal_code']['default']);
-        self::assertSame('members', $fields['visibility_operator_since']['default']);
+        self::assertSame('private', $fields['visibility_operator_since']['default']);
     }
 
     public function testMemberProfileAllowedVisibilityLevelsMatchViewerRole(): void

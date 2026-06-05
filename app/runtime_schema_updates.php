@@ -434,4 +434,6 @@ function apply_runtime_schema_updates(): void
 
     ensure_member_favorites_table();
     ensure_member_notifications_table();
+    privacy_ensure_tables();
+    privacy_purge_expired_data();
 }

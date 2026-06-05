@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $address = trim((string) ($_POST['address'] ?? ''));
         $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
+        $allowGeocode = (string) ($_POST['allow_geocode'] ?? '') === '1';
         $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
         $licenceClass = trim((string) ($_POST['licence_class'] ?? ''));
         $operatorSince = trim((string) ($_POST['operator_since'] ?? ''));
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_data'));
         }
 
-        if ($locator === '' || $cqZone === '' || $ituZone === '') {
+        if ($allowGeocode && ($locator === '' || $cqZone === '' || $ituZone === '')) {
             $computedRadioLocation = member_profile_radio_location_from_address($country, $address, $postalCode, $qth);
             if (is_array($computedRadioLocation)) {
                 if ($locator === '') {
@@ -107,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  visibility_licence_class, visibility_operator_since, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas, visibility_interests,
                  is_active
              )
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "members", "members", "private", "private", "private", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", "members", 1)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "members", "private", "private", "private", "members", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", "private", 1)
              ON DUPLICATE KEY UPDATE
                  callsign = VALUES(callsign),
                  first_name = VALUES(first_name),
@@ -224,6 +225,8 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('postal_code')) . '<input type="text" name="postal_code" maxlength="32" autocomplete="postal-code"></label>'
     . '<label>' . e($t('qth')) . '<input type="text" name="qth" maxlength="190" autocomplete="address-level2" required></label>'
     . '<label>' . e($t('grid')) . '<input type="text" name="locator" maxlength="6"></label>'
+    . '<label class="register-form-full checkbox-row"><input type="checkbox" name="allow_geocode" value="1"> <span>' . e($t('geocode_consent')) . '</span></label>'
+    . privacy_notice_short_html('register')
     . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
     . '<label>' . e($t('operator_since')) . '<select name="operator_since">' . $operatorSinceOptionsHtml . '</select></label>'
     . '<label>' . e($t('cq_zone')) . '<input type="text" name="cq_zone" maxlength="16"></label>'
