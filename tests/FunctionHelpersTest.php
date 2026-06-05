@@ -38,6 +38,22 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(str_repeat('a', 188) . '-2', $candidate);
     }
 
+    public function testNewsSlugCandidateKeepsCollisionSuffixWithinDatabaseLimit(): void
+    {
+        $candidate = news_slug_candidate(str_repeat('n', 190), 12);
+
+        self::assertSame(190, strlen($candidate));
+        self::assertSame(str_repeat('n', 187) . '-12', $candidate);
+    }
+
+    public function testArticleSlugCandidateKeepsCollisionSuffixWithinDatabaseLimit(): void
+    {
+        $candidate = article_slug_candidate(str_repeat('a', 190), 12);
+
+        self::assertSame(190, strlen($candidate));
+        self::assertSame(str_repeat('a', 187) . '-12', $candidate);
+    }
+
     public function testNormalizeHttpUrlRejectsJavascriptScheme(): void
     {
         $this->expectException(RuntimeException::class);

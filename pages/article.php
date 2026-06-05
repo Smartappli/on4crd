@@ -33,6 +33,7 @@ $stmt->execute([$slug]);
 $row = $stmt->fetch();
 
 if (!$row) {
+    http_response_code(404);
     echo render_layout('<div class="card"><p>' . e((string) $t['not_found']) . '</p></div>', (string) $t['layout_article']);
     return;
 }

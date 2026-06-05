@@ -70,6 +70,9 @@ $themeMeta = [
 ];
 
 $themeFilter = slugify(trim((string) ($_GET['theme'] ?? '')));
+if ($themeFilter === 'n-a') {
+    $themeFilter = '';
+}
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
@@ -92,6 +95,9 @@ foreach (array_keys($themeCounts) as $themeCode) {
     if (!isset($themeMeta[$themeCode])) {
         $themeMeta[$themeCode] = ['label' => ucwords(str_replace('-', ' ', $themeCode)), 'image' => null];
     }
+}
+if ($themeFilter !== '' && !isset($themeMeta[$themeFilter])) {
+    $themeFilter = '';
 }
 
 $whereParts = ['status = "published"'];
@@ -126,10 +132,6 @@ foreach ($pagedRows as $row) {
         $theme = 'autres';
     }
     $groupedArticles[$theme][] = $row;
-}
-
-if ($themeFilter !== '' && !isset($themeMeta[$themeFilter])) {
-    $themeFilter = '';
 }
 
 set_page_meta([
