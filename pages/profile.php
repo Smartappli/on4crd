@@ -113,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 dirname(__DIR__) . '/storage/uploads/members',
                 'member_' . $memberId,
                 ['jpg', 'jpeg', 'png', 'webp'],
+                ['image/jpeg', 'image/png', 'image/webp'],
                 6 * 1024 * 1024
             );
             $newPhotoPath = 'storage/uploads/members/' . $savedFilename;

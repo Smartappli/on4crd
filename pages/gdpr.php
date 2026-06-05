@@ -4,10 +4,11 @@ declare(strict_types=1);
 $user = current_user();
 $locale = current_locale();
 $t = i18n_domain_translator('profile', $locale);
+$gt = i18n_domain_translator('gdpr', $locale);
 
 set_page_meta([
-    'title' => 'Vie privée et RGPD',
-    'description' => 'Notice RGPD ON4CRD, droits des personnes et réglages de visibilité.',
+    'title' => $gt('title'),
+    'description' => $gt('meta_desc'),
     'schema_type' => 'WebPage',
 ]);
 
@@ -17,6 +18,20 @@ $visibilityOptions = [
     'public' => $t('public'),
     'members' => $t('members'),
     'private' => $t('private'),
+];
+$requestTypeLabels = [
+    'access' => $gt('type_access'),
+    'rectification' => $gt('type_rectification'),
+    'erasure' => $gt('type_erasure'),
+    'restriction' => $gt('type_restriction'),
+    'objection' => $gt('type_objection'),
+    'portability' => $gt('type_portability'),
+];
+$requestStatusLabels = [
+    'pending' => $gt('status_pending'),
+    'in_progress' => $gt('status_in_progress'),
+    'resolved' => $gt('status_resolved'),
+    'rejected' => $gt('status_rejected'),
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $type = (string) ($_POST['request_type'] ?? 'access');
         $notes = (string) ($_POST['request_notes'] ?? '');
         privacy_create_request($memberId, $type, $notes);
-        set_flash('success', 'Votre demande RGPD a été enregistrée.');
+        set_flash('success', $gt('request_saved'));
         redirect('gdpr');
     }
 
@@ -87,9 +102,9 @@ if ($user !== null) {
     $member = member_with_name_parts($member);
 
     $profileViews = [
-        'public' => ['title' => 'Vue ' . strtolower($t('public'))],
-        'members' => ['title' => 'Vue ' . strtolower($t('members'))],
-        'private' => ['title' => 'Vue ' . strtolower($t('private'))],
+        'public' => ['title' => $gt('view_public')],
+        'members' => ['title' => $gt('view_members')],
+        'private' => ['title' => $gt('view_private')],
     ];
     foreach (array_keys($profileViews) as $viewer) {
         $profileAllPreviewRows[$viewer] = member_profile_preview_rows($member, (string) $viewer, $t, true);
@@ -105,8 +120,8 @@ ob_start();
 ?>
 <div class="gdpr-page stack">
     <section class="card gdpr-privacy-card">
-        <h1>Vie privée et RGPD</h1>
-        <p class="help">Version de notice: <?= e(privacy_current_notice_version()) ?></p>
+        <h1><?= e($gt('title')) ?></h1>
+        <p class="help"><?= e($gt('notice_version')) ?>: <?= e(privacy_current_notice_version()) ?></p>
         <div class="grid-2">
             <?php foreach ($noticeSections as $title => $body): ?>
                 <article class="gdpr-notice-section">
@@ -119,58 +134,55 @@ ob_start();
 
     <?php if ($user === null): ?>
         <section class="card gdpr-privacy-card">
-            <h2>Droits des membres</h2>
-            <p>Contact public pour toute demande concernant les données personnelles: <a href="mailto:<?= e($privacyContact['controller_email']) ?>"><?= e($privacyContact['controller_email']) ?></a>.</p>
-            <p>Connectez-vous pour exporter vos données, déposer une demande RGPD et régler la visibilité de votre profil.</p>
-            <p><a class="button" href="<?= e(route_url('login')) ?>">Se connecter</a></p>
+            <h2><?= e($gt('member_rights')) ?></h2>
+            <p><?= e($gt('public_contact_prefix')) ?>: <a href="mailto:<?= e($privacyContact['controller_email']) ?>"><?= e($privacyContact['controller_email']) ?></a>.</p>
+            <p><?= e($gt('login_help')) ?></p>
+            <p><a class="button" href="<?= e(route_url('login')) ?>"><?= e($gt('login')) ?></a></p>
         </section>
     <?php else: ?>
         <section class="card gdpr-privacy-card">
             <div class="gdpr-section-heading">
                 <div>
-                    <h2>Vos droits</h2>
-                    <p class="help">Export direct et demandes tracées avec données techniques pseudonymisées.</p>
+                    <h2><?= e($gt('your_rights')) ?></h2>
+                    <p class="help"><?= e($gt('rights_help')) ?></p>
                 </div>
             </div>
             <div class="grid-2">
                 <form method="post" class="stack">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="export_data">
-                    <p>Téléchargez une copie JSON des données rattachées à votre compte, avec manifeste des fichiers personnels connus.</p>
-                    <button type="submit" class="button">Exporter mes données</button>
+                    <p><?= e($gt('export_help')) ?></p>
+                    <button type="submit" class="button"><?= e($gt('export_button')) ?></button>
                 </form>
                 <form method="post" class="stack">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="privacy_request">
-                    <label>Type de demande
+                    <label><?= e($gt('request_type')) ?>
                         <select name="request_type" required>
-                            <option value="access">Accès</option>
-                            <option value="rectification">Rectification</option>
-                            <option value="erasure">Suppression</option>
-                            <option value="restriction">Limitation</option>
-                            <option value="objection">Opposition</option>
-                            <option value="portability">Portabilité</option>
+                            <?php foreach ($requestTypeLabels as $typeValue => $typeLabel): ?>
+                                <option value="<?= e($typeValue) ?>"><?= e($typeLabel) ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </label>
-                    <label>Précision utile
+                    <label><?= e($gt('request_notes')) ?>
                         <textarea name="request_notes" rows="4" maxlength="2000"></textarea>
                     </label>
-                    <button type="submit" class="button secondary">Enregistrer la demande</button>
+                    <button type="submit" class="button secondary"><?= e($gt('request_submit')) ?></button>
                 </form>
             </div>
             <?php if ($privacyRequests !== []): ?>
                 <div class="table-wrap">
                     <table>
-                        <thead><tr><th>Demande</th><th>Statut</th><th>Date</th><th>Traitement</th><th>Résolution</th></tr></thead>
+                        <thead><tr><th><?= e($gt('table_request')) ?></th><th><?= e($gt('table_status')) ?></th><th><?= e($gt('table_date')) ?></th><th><?= e($gt('table_processing')) ?></th><th><?= e($gt('table_resolution')) ?></th></tr></thead>
                         <tbody>
                             <?php foreach ($privacyRequests as $request): ?>
                                 <tr>
-                                    <td><?= e((string) $request['request_type']) ?></td>
-                                    <td><?= e((string) $request['status']) ?></td>
+                                    <td><?= e($requestTypeLabels[(string) $request['request_type']] ?? (string) $request['request_type']) ?></td>
+                                    <td><?= e($requestStatusLabels[(string) $request['status']] ?? (string) $request['status']) ?></td>
                                     <td><?= e((string) $request['requested_at']) ?></td>
                                     <td>
                                         <?= e((string) ($request['processed_at'] ?? '')) ?>
-                                        <?php if (!empty($request['erasure_completed_at'])): ?><div class="help">Anonymisation: <?= e((string) $request['erasure_completed_at']) ?></div><?php endif; ?>
+                                        <?php if (!empty($request['erasure_completed_at'])): ?><div class="help"><?= e($gt('anonymization')) ?>: <?= e((string) $request['erasure_completed_at']) ?></div><?php endif; ?>
                                     </td>
                                     <td><?= e((string) ($request['resolved_at'] ?? '')) ?></td>
                                 </tr>
@@ -194,7 +206,7 @@ ob_start();
                                 <p class="gdpr-callsign"><?= e((string) ($member['callsign'] ?? '')) ?></p>
                             </div>
                         </header>
-                        <p class="help" data-gdpr-empty <?= $profilePreviewRows[(string) $viewer] === [] ? '' : 'hidden' ?>>Aucune information visible.</p>
+                        <p class="help" data-gdpr-empty <?= $profilePreviewRows[(string) $viewer] === [] ? '' : 'hidden' ?>><?= e($gt('empty_visible_info')) ?></p>
                         <dl class="gdpr-profile-summary">
                             <?php foreach ($profileAllPreviewRows[(string) $viewer] as $previewRow): ?>
                                 <div data-gdpr-preview-row data-gdpr-visibility-field="<?= e((string) $previewRow['visibility_field']) ?>" <?= (bool) $previewRow['visible'] ? '' : 'hidden' ?>>
@@ -249,4 +261,4 @@ ob_start();
 </div>
 <?php
 
-echo render_layout((string) ob_get_clean(), 'Vie privée et RGPD');
+echo render_layout((string) ob_get_clean(), $gt('title'));
