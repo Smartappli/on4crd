@@ -12,8 +12,10 @@ function localized_article_row(array $row): array
         $articleId = (int) ($row['id'] ?? 0);
         if ($articleId > 0 && table_exists('article_translations')) {
             try {
-                $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? AND status IN ("reviewed", "auto") ORDER BY CASE status WHEN "reviewed" THEN 0 ELSE 1 END, updated_at DESC LIMIT 1');
-                $stmt->execute([$articleId, $locale]);
+                $publicStatuses = article_translation_public_statuses();
+                $statusPlaceholders = implode(',', array_fill(0, count($publicStatuses), '?'));
+                $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? AND status IN (' . $statusPlaceholders . ') ORDER BY CASE status WHEN "reviewed" THEN 0 ELSE 1 END, updated_at DESC LIMIT 1');
+                $stmt->execute(array_merge([$articleId, $locale], $publicStatuses));
                 $translation = $stmt->fetch();
                 if (is_array($translation)) {
                     foreach (['title', 'excerpt', 'content'] as $field) {
@@ -66,7 +68,20 @@ function article_publication_datetime(array $row): ?string
 
 function article_publication_sort_expression(): string
 {
-    return 'COALESCE(published_at, created_at, updated_at)';
+    return article_publication_sort_expression_for_alias(null);
+}
+
+function article_publication_sort_expression_for_alias(?string $alias): string
+{
+    $prefix = '';
+    if ($alias !== null) {
+        $alias = trim($alias);
+        if ($alias !== '' && preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $alias) === 1) {
+            $prefix = $alias . '.';
+        }
+    }
+
+    return 'COALESCE(' . $prefix . 'published_at, ' . $prefix . 'created_at, ' . $prefix . 'updated_at)';
 }
 
 function article_is_duplicate_slug_error(Throwable $throwable): bool
@@ -87,6 +102,25 @@ function article_is_duplicate_slug_error(Throwable $throwable): bool
             || str_contains($message, 'unique')
             || str_contains($message, 'slug')
         );
+}
+
+/**
+ * @param array<string,mixed> $existing
+ * @param array{title:string,excerpt:string,content:string} $source
+ */
+function article_translation_pending_row_is_source_fallback(array $existing, array $source): bool
+{
+    if ((string) ($existing['status'] ?? '') !== 'needs_review') {
+        return false;
+    }
+
+    foreach (['title', 'excerpt', 'content'] as $field) {
+        if (trim((string) ($existing[$field] ?? '')) !== trim((string) ($source[$field] ?? ''))) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -437,12 +471,15 @@ function article_translation_upsert(int $articleId, string $locale, ?string $tit
     ];
     $sourceHash = article_translation_source_hash($sourceFields['title'], $sourceFields['excerpt'], $sourceFields['content']);
 
-    $existingStmt = db()->prepare('SELECT status, source_hash FROM article_translations WHERE article_id = ? AND locale = ? LIMIT 1');
+    $existingStmt = db()->prepare('SELECT status, source_hash, title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? LIMIT 1');
     $existingStmt->execute([$articleId, $locale]);
     $existing = $existingStmt->fetch() ?: null;
     if ($title === null && $summary === null && $content === null && is_array($existing) && (string) ($existing['source_hash'] ?? '') === $sourceHash) {
         $existingStatus = (string) ($existing['status'] ?? '');
-        if (in_array($existingStatus, ['reviewed', 'auto', 'needs_review'], true)) {
+        if (in_array($existingStatus, ['reviewed', 'auto'], true)) {
+            return;
+        }
+        if ($existingStatus === 'needs_review' && !article_translation_pending_row_is_source_fallback($existing, $sourceFields)) {
             return;
         }
     }
