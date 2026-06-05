@@ -319,9 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($notifyStatus === 'scheduled') {
                 notify_member((int) current_user()['id'], 'publication', 'Article scheduled', $title, route_url('article', ['slug' => $slug]));
             }
-            article_translation_upsert($id, 'en');
-            article_translation_upsert($id, 'de');
-            article_translation_upsert($id, 'nl');
+            article_translations_sync_all($id);
             set_flash('success', $t('ok_saved'));
             redirect('admin_articles');
             }

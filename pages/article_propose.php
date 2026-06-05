@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slug = article_propose_unique_slug($articleTitle);
         db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "draft", ?, ?)')
             ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, (int) $user['id']]);
+        article_translations_sync_all((int) db()->lastInsertId());
 
         set_flash('success', 'Article soumis pour validation.');
         redirect('my_requests');

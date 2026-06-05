@@ -36,6 +36,170 @@ function localized_article_row(array $row): array
     return $row;
 }
 
+function article_translation_source_hash(string $title, string $excerpt, string $content): string
+{
+    return sha1(trim($title) . "\n---excerpt---\n" . trim($excerpt) . "\n---content---\n" . trim($content));
+}
+
+/**
+ * @return list<string>
+ */
+function article_translation_target_locales(): array
+{
+    return array_values(array_filter(
+        supported_locales(),
+        static fn(string $locale): bool => $locale !== 'fr'
+    ));
+}
+
+function article_translation_deepl_target(string $locale): ?string
+{
+    $locale = strtolower(trim($locale));
+    $targets = [
+        'en' => 'EN',
+        'de' => 'DE',
+        'nl' => 'NL',
+        'it' => 'IT',
+        'es' => 'ES',
+        'pt' => 'PT-PT',
+        'bg' => 'BG',
+        'cs' => 'CS',
+        'da' => 'DA',
+        'et' => 'ET',
+        'fi' => 'FI',
+        'el' => 'EL',
+        'hu' => 'HU',
+        'lv' => 'LV',
+        'lt' => 'LT',
+        'pl' => 'PL',
+        'ro' => 'RO',
+        'sk' => 'SK',
+        'sl' => 'SL',
+        'sv' => 'SV',
+        'ar' => 'AR',
+        'ja' => 'JA',
+        'zh' => 'ZH-HANS',
+        'ru' => 'RU',
+        'id' => 'ID',
+    ];
+
+    return $targets[$locale] ?? null;
+}
+
+/**
+ * @param list<string> $texts
+ * @return list<string>|null
+ */
+function article_translation_deepl_translate(array $texts, string $locale): ?array
+{
+    static $deeplUnavailable = false;
+
+    if ($deeplUnavailable) {
+        return null;
+    }
+
+    $texts = array_values(array_map(static fn(string $text): string => trim($text), $texts));
+    if ($texts === [] || implode('', $texts) === '') {
+        return null;
+    }
+
+    if (strtolower((string) config('translation.provider', 'none')) !== 'deepl') {
+        return null;
+    }
+
+    $apiKey = trim((string) config('translation.deepl_api_key', ''));
+    $targetLang = article_translation_deepl_target($locale);
+    if ($apiKey === '' || $targetLang === null) {
+        return null;
+    }
+
+    $configuredEndpoint = trim((string) config('translation.deepl_api_url', ''));
+    $endpoint = $configuredEndpoint !== ''
+        ? $configuredEndpoint
+        : (str_ends_with($apiKey, ':fx') ? 'https://api-free.deepl.com/v2/translate' : 'https://api.deepl.com/v2/translate');
+
+    $body = http_build_query([
+        'auth_key' => $apiKey,
+        'source_lang' => 'FR',
+        'target_lang' => $targetLang,
+        'tag_handling' => 'html',
+        'preserve_formatting' => '1',
+    ], '', '&', PHP_QUERY_RFC3986);
+    foreach ($texts as $text) {
+        $body .= '&text=' . rawurlencode($text);
+    }
+
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+            'content' => $body,
+            'timeout' => 6,
+            'ignore_errors' => true,
+        ],
+    ]);
+
+    try {
+        $response = @file_get_contents($endpoint, false, $context);
+    } catch (Throwable) {
+        $deeplUnavailable = true;
+        return null;
+    }
+    if (!is_string($response) || trim($response) === '') {
+        $deeplUnavailable = true;
+        return null;
+    }
+
+    $payload = json_decode($response, true);
+    if (!is_array($payload) || !isset($payload['translations']) || !is_array($payload['translations'])) {
+        $deeplUnavailable = true;
+        return null;
+    }
+
+    $translated = [];
+    foreach ($payload['translations'] as $translation) {
+        if (!is_array($translation)) {
+            $deeplUnavailable = true;
+            return null;
+        }
+        $translated[] = (string) ($translation['text'] ?? '');
+    }
+
+    if (count($translated) !== count($texts)) {
+        $deeplUnavailable = true;
+        return null;
+    }
+
+    return $translated;
+}
+
+/**
+ * @param array{title:string,excerpt:string,content:string} $source
+ * @return array{title:string,excerpt:string,content:string,status:string}
+ */
+function article_translation_auto_fields(array $source, string $locale): array
+{
+    $sourceTitle = (string) ($source['title'] ?? '');
+    $sourceExcerpt = (string) ($source['excerpt'] ?? '');
+    $sourceContent = (string) ($source['content'] ?? '');
+    $translated = article_translation_deepl_translate([$sourceTitle, $sourceExcerpt, $sourceContent], $locale);
+    if (is_array($translated)) {
+        return [
+            'title' => trim($translated[0]) !== '' ? trim($translated[0]) : $sourceTitle,
+            'excerpt' => trim($translated[1]) !== '' ? trim($translated[1]) : $sourceExcerpt,
+            'content' => trim($translated[2]) !== '' ? sanitize_rich_html($translated[2]) : $sourceContent,
+            'status' => 'auto',
+        ];
+    }
+
+    return [
+        'title' => $sourceTitle,
+        'excerpt' => $sourceExcerpt,
+        'content' => $sourceContent,
+        'status' => 'needs_review',
+    ];
+}
+
 function article_translation_upsert(int $articleId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void
 {
     if ($articleId <= 0 || $locale === 'fr' || !table_exists('article_translations')) {
@@ -49,27 +213,48 @@ function article_translation_upsert(int $articleId, string $locale, ?string $tit
         return;
     }
 
-    $finalTitle = trim((string) ($title ?? ''));
-    $finalExcerpt = trim((string) ($summary ?? ''));
-    $finalContent = trim((string) ($content ?? ''));
-    if ($finalTitle === '') {
-        $finalTitle = (string) ($source['title'] ?? '');
-    }
-    if ($finalExcerpt === '') {
-        $finalExcerpt = (string) ($source['excerpt'] ?? '');
-    }
-    if ($finalContent === '') {
-        $finalContent = (string) ($source['content'] ?? '');
+    $sourceFields = [
+        'title' => (string) ($source['title'] ?? ''),
+        'excerpt' => (string) ($source['excerpt'] ?? ''),
+        'content' => (string) ($source['content'] ?? ''),
+    ];
+    $sourceHash = article_translation_source_hash($sourceFields['title'], $sourceFields['excerpt'], $sourceFields['content']);
+
+    $existingStmt = db()->prepare('SELECT status, source_hash FROM article_translations WHERE article_id = ? AND locale = ? LIMIT 1');
+    $existingStmt->execute([$articleId, $locale]);
+    $existing = $existingStmt->fetch() ?: null;
+    if ($title === null && $summary === null && $content === null && is_array($existing) && (string) ($existing['status'] ?? '') === 'reviewed' && (string) ($existing['source_hash'] ?? '') === $sourceHash) {
+        return;
     }
 
-    $status = ($title === null && $summary === null && $content === null) ? 'auto' : 'needs_review';
+    if ($title === null && $summary === null && $content === null) {
+        $fields = article_translation_auto_fields($sourceFields, $locale);
+    } else {
+        $fields = [
+            'title' => trim((string) ($title ?? '')) !== '' ? trim((string) $title) : $sourceFields['title'],
+            'excerpt' => trim((string) ($summary ?? '')) !== '' ? trim((string) $summary) : $sourceFields['excerpt'],
+            'content' => trim((string) ($content ?? '')) !== '' ? sanitize_rich_html((string) $content) : $sourceFields['content'],
+            'status' => 'needs_review',
+        ];
+    }
 
-    $update = db()->prepare('UPDATE article_translations SET title = ?, excerpt = ?, content = ?, status = ?, updated_at = NOW() WHERE article_id = ? AND locale = ?');
-    $update->execute([$finalTitle, $finalExcerpt, $finalContent, $status, $articleId, $locale]);
+    $update = db()->prepare('UPDATE article_translations SET source_hash = ?, title = ?, excerpt = ?, content = ?, status = ?, reviewed_by = NULL, reviewed_at = NULL, updated_at = NOW() WHERE article_id = ? AND locale = ?');
+    $update->execute([$sourceHash, $fields['title'], $fields['excerpt'], $fields['content'], $fields['status'], $articleId, $locale]);
     if ($update->rowCount() > 0) {
         return;
     }
 
-    db()->prepare('INSERT INTO article_translations (article_id, locale, title, excerpt, content, status) VALUES (?, ?, ?, ?, ?, ?)')
-        ->execute([$articleId, $locale, $finalTitle, $finalExcerpt, $finalContent, $status]);
+    db()->prepare('INSERT INTO article_translations (article_id, locale, source_hash, title, excerpt, content, status) VALUES (?, ?, ?, ?, ?, ?, ?)')
+        ->execute([$articleId, $locale, $sourceHash, $fields['title'], $fields['excerpt'], $fields['content'], $fields['status']]);
+}
+
+function article_translations_sync_all(int $articleId): int
+{
+    $count = 0;
+    foreach (article_translation_target_locales() as $locale) {
+        article_translation_upsert($articleId, $locale);
+        $count++;
+    }
+
+    return $count;
 }

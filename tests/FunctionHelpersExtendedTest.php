@@ -334,4 +334,22 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNull(member_lotw_username_for_profile_save('', ''));
     }
 
+    public function testArticleTranslationTargetLocalesCoverEveryNonFrenchLocale(): void
+    {
+        $targets = article_translation_target_locales();
+
+        self::assertNotContains('fr', $targets);
+        self::assertSame(count(supported_locales()) - 1, count($targets));
+        self::assertContains('en', $targets);
+        self::assertContains('id', $targets);
+    }
+
+    public function testArticleTranslationSourceHashTracksSourceChanges(): void
+    {
+        $baseHash = article_translation_source_hash('Titre', 'Resume', '<p>Contenu</p>');
+
+        self::assertSame($baseHash, article_translation_source_hash(' Titre ', ' Resume ', ' <p>Contenu</p> '));
+        self::assertNotSame($baseHash, article_translation_source_hash('Titre', 'Resume', '<p>Contenu modifie</p>'));
+    }
+
 }
