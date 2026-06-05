@@ -137,26 +137,6 @@ function article_assert_docx_document(string $path): void
     }
 }
 
-function article_unique_slug(string $slug, int $ignoreId = 0): string
-{
-    $base = slugify($slug);
-    if ($base === '' || $base === 'n-a') {
-        $base = 'article';
-    }
-
-    $candidate = $base;
-    $suffix = 2;
-    while (true) {
-        $stmt = db()->prepare('SELECT id FROM articles WHERE slug = ? AND id <> ? LIMIT 1');
-        $stmt->execute([$candidate, $ignoreId]);
-        if (!$stmt->fetchColumn()) {
-            return $candidate;
-        }
-        $candidate = $base . '-' . $suffix;
-        $suffix++;
-    }
-}
-
 /**
  * @param array<string,mixed> $article
  * @return list<string>

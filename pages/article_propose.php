@@ -9,26 +9,6 @@ $label = static function (string $key, string $fallback) use ($articlesI18n): st
     return $value !== '' ? $value : $fallback;
 };
 
-function article_propose_unique_slug(string $title): string
-{
-    $base = slugify($title);
-    if ($base === '' || $base === 'n-a') {
-        $base = 'article';
-    }
-
-    $candidate = $base;
-    $suffix = 2;
-    while (true) {
-        $stmt = db()->prepare('SELECT id FROM articles WHERE slug = ? LIMIT 1');
-        $stmt->execute([$candidate]);
-        if (!$stmt->fetchColumn()) {
-            return $candidate;
-        }
-        $candidate = $base . '-' . $suffix;
-        $suffix++;
-    }
-}
-
 function article_propose_enforce_submission_limits(int $memberId): void
 {
     if ($memberId <= 0) {
@@ -100,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $maxSlugAttempts = 5;
         for ($slugAttempt = 0; $slugAttempt < $maxSlugAttempts; $slugAttempt++) {
-            $slug = article_propose_unique_slug($articleTitle);
+            $slug = article_unique_slug($articleTitle);
             try {
                 db()->beginTransaction();
                 db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?)')

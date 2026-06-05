@@ -104,6 +104,56 @@ function article_is_duplicate_slug_error(Throwable $throwable): bool
         );
 }
 
+function article_slug_base(string $value, int $maxLength = 190): string
+{
+    $maxLength = max(1, $maxLength);
+    $base = slugify($value);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'article';
+    }
+    if (strlen($base) > $maxLength) {
+        $base = substr($base, 0, $maxLength);
+    }
+
+    $base = trim($base, '-');
+    return $base !== '' ? $base : 'article';
+}
+
+function article_slug_candidate(string $base, int $suffix = 0, int $maxLength = 190): string
+{
+    $maxLength = max(1, $maxLength);
+    $base = article_slug_base($base, $maxLength);
+    if ($suffix <= 1) {
+        return $base;
+    }
+
+    $suffixText = '-' . $suffix;
+    $prefixLength = max(1, $maxLength - strlen($suffixText));
+    $prefix = rtrim(substr($base, 0, $prefixLength), '-');
+    if ($prefix === '') {
+        $prefix = substr('article', 0, $prefixLength);
+    }
+
+    return $prefix . $suffixText;
+}
+
+function article_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 190): string
+{
+    $base = article_slug_base($value, $maxLength);
+    $suffix = 1;
+    do {
+        $candidate = article_slug_candidate($base, $suffix, $maxLength);
+        $stmt = db()->prepare('SELECT id FROM articles WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, max(0, $ignoreId)]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Impossible de générer un slug article unique.');
+}
+
 /**
  * @param array<string,mixed> $existing
  * @param array{title:string,excerpt:string,content:string} $source
