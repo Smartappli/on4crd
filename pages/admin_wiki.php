@@ -30,6 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id <= 0 || !in_array($status, ['pending', 'published', 'rejected'], true)) {
             throw new RuntimeException('Page wiki invalide.');
         }
+        $pageStmt = db()->prepare('SELECT id FROM wiki_pages WHERE id = ? LIMIT 1');
+        $pageStmt->execute([$id]);
+        if (!$pageStmt->fetchColumn()) {
+            throw new RuntimeException('Page wiki introuvable.');
+        }
         db()->prepare('UPDATE wiki_pages SET status = ?, updated_at = NOW() WHERE id = ?')->execute([$status, $id]);
         set_flash('success', 'Statut wiki enregistré.');
     } catch (Throwable $throwable) {

@@ -16,26 +16,6 @@ if (!ensure_wiki_tables()) {
     return;
 }
 
-function wiki_propose_unique_slug(string $title, string $slugInput = ''): string
-{
-    $base = slugify($slugInput !== '' ? $slugInput : $title);
-    if ($base === '' || $base === 'n-a') {
-        $base = 'wiki';
-    }
-
-    $candidate = $base;
-    $suffix = 2;
-    while (true) {
-        $stmt = db()->prepare('SELECT id FROM wiki_pages WHERE slug = ? LIMIT 1');
-        $stmt->execute([$candidate]);
-        if (!$stmt->fetchColumn()) {
-            return $candidate;
-        }
-        $candidate = $base . '-' . $suffix;
-        $suffix++;
-    }
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -50,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Un des champs dépasse la longueur autorisée.');
         }
 
-        $slug = wiki_propose_unique_slug($title, $slugInput);
+        $slug = wiki_unique_slug($title, $slugInput);
         db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id, status) VALUES (?, ?, ?, ?, "pending")')
             ->execute([$title, $slug, $content, (int) $user['id']]);
 

@@ -93,14 +93,14 @@ $xml = cache_remember('seo_sitemap_xml_v5', 300, static function (): string {
 
     if (module_enabled('wiki') && table_exists('wiki_pages')) {
         try {
-        $wikiPages = db()->query('SELECT slug, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 500')->fetchAll();
-        foreach ($wikiPages as $row) {
-            if (empty($row['slug'])) {
-                continue;
-            }
+            $wikiPages = db()->query('SELECT slug, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 500')->fetchAll();
+            foreach ($wikiPages as $row) {
+                if (empty($row['slug'])) {
+                    continue;
+                }
 
                 $addEntry('wiki_view', '0.6', 'monthly', ['slug' => (string) $row['slug']], !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : null);
-        }
+            }
         } catch (Throwable) {
         }
     }

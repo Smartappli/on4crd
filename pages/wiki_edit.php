@@ -24,7 +24,13 @@ $page = ['id' => 0, 'title' => '', 'slug' => '', 'content' => '<p></p>', 'update
 if ($id > 0) {
     $stmt = db()->prepare('SELECT * FROM wiki_pages WHERE id = ? LIMIT 1');
     $stmt->execute([$id]);
-    $page = $stmt->fetch() ?: $page;
+    $existingPage = $stmt->fetch();
+    if (!$existingPage) {
+        http_response_code(404);
+        echo render_layout('<div class="card"><h1>' . e($t('layout')) . '</h1><p>' . e(t_page('wiki_view', 'not_found', $locale)) . '</p></div>', $t('layout'));
+        return;
+    }
+    $page = $existingPage;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -80,7 +86,7 @@ ob_start();
             <label><?= e($t('slug_label')) ?><input type="text" name="slug" value="<?= e((string) $page['slug']) ?>" maxlength="190"></label>
         </div>
         <label><?= e($t('content_label')) ?>
-            <textarea name="content" rows="22" maxlength="50000"><?= e((string) $page['content']) ?></textarea>
+            <textarea name="content" rows="22" maxlength="50000" data-wysiwyg="full"><?= e((string) $page['content']) ?></textarea>
         </label>
         <div class="actions">
             <button class="button" type="submit"><?= e($t('save')) ?></button>

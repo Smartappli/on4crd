@@ -24,6 +24,20 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame('ecole-radio-club-2026', slugify('École Radio Club 2026'));
     }
 
+    public function testWikiSlugBaseFallsBackAndTrimsToDatabaseLimit(): void
+    {
+        self::assertSame('wiki', wiki_slug_base('!!!'));
+        self::assertSame(190, strlen(wiki_slug_base(str_repeat('a', 250))));
+    }
+
+    public function testWikiSlugCandidateKeepsCollisionSuffixWithinDatabaseLimit(): void
+    {
+        $candidate = wiki_slug_candidate(str_repeat('a', 190), 2);
+
+        self::assertSame(190, strlen($candidate));
+        self::assertSame(str_repeat('a', 188) . '-2', $candidate);
+    }
+
     public function testNormalizeHttpUrlRejectsJavascriptScheme(): void
     {
         $this->expectException(RuntimeException::class);

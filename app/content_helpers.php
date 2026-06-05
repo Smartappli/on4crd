@@ -75,8 +75,14 @@ function ensure_wiki_tables(): bool
         if (!table_has_column('wiki_pages', 'created_at')) {
             db()->exec('ALTER TABLE wiki_pages ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER status');
         }
+        if (!table_has_column('wiki_pages', 'updated_at')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at');
+        }
         if (!table_has_index('wiki_pages', 'idx_wiki_status_updated')) {
             db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_status_updated (status, updated_at)');
+        }
+        if (!table_has_index('wiki_pages', 'idx_wiki_updated')) {
+            db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_updated (updated_at)');
         }
 
         db()->exec(
@@ -89,6 +95,12 @@ function ensure_wiki_tables(): bool
                 INDEX idx_wiki_revision_page (wiki_page_id, created_at)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
+        if (!table_has_column('wiki_revisions', 'created_at')) {
+            db()->exec('ALTER TABLE wiki_revisions ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+        }
+        if (!table_has_index('wiki_revisions', 'idx_wiki_revision_page')) {
+            db()->exec('ALTER TABLE wiki_revisions ADD INDEX idx_wiki_revision_page (wiki_page_id, created_at)');
+        }
 
         return true;
     } catch (Throwable $throwable) {
@@ -98,6 +110,64 @@ function ensure_wiki_tables(): bool
 
         return false;
     }
+}
+}
+
+if (!function_exists('wiki_slug_base')) {
+function wiki_slug_base(string $title, string $slugInput = '', int $maxLength = 190): string
+{
+    $maxLength = max(1, $maxLength);
+    $base = slugify($slugInput !== '' ? $slugInput : $title);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'wiki';
+    }
+
+    if (strlen($base) > $maxLength) {
+        $base = substr($base, 0, $maxLength);
+    }
+
+    $base = trim($base, '-');
+    return $base !== '' ? $base : 'wiki';
+}
+}
+
+if (!function_exists('wiki_slug_candidate')) {
+function wiki_slug_candidate(string $base, int $suffix = 0, int $maxLength = 190): string
+{
+    $maxLength = max(1, $maxLength);
+    $base = wiki_slug_base($base, '', $maxLength);
+    if ($suffix <= 1) {
+        return $base;
+    }
+
+    $suffixText = '-' . $suffix;
+    $prefixLength = max(1, $maxLength - strlen($suffixText));
+    $prefix = rtrim(substr($base, 0, $prefixLength), '-');
+    if ($prefix === '') {
+        $prefix = substr('wiki', 0, $prefixLength);
+    }
+
+    return $prefix . $suffixText;
+}
+}
+
+if (!function_exists('wiki_unique_slug')) {
+function wiki_unique_slug(string $title, string $slugInput = '', int $ignoreId = 0, int $maxLength = 190): string
+{
+    $base = wiki_slug_base($title, $slugInput, $maxLength);
+    $suffix = 1;
+
+    do {
+        $candidate = wiki_slug_candidate($base, $suffix, $maxLength);
+        $stmt = db()->prepare('SELECT id FROM wiki_pages WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, max(0, $ignoreId)]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Impossible de générer un slug wiki unique.');
 }
 }
 

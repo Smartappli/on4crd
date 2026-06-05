@@ -382,8 +382,8 @@ try {
     }
 
     if (module_enabled('wiki') && table_exists('wiki_pages')) {
-        $latestWikiPage = cache_remember('home_latest_wiki_page_v1', 60, static function () {
-            return db()->query('SELECT slug, title, content, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 1')->fetch();
+        $latestWikiPage = cache_remember('home_latest_wiki_page_v2', 60, static function () {
+            return db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 1')->fetch();
         });
     }
 
@@ -896,4 +896,3 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
 
 
 echo render_layout($content, (string) ($homeI18n['page_title'] ?? 'Accueil'));
-
