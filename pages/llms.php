@@ -46,14 +46,17 @@ function llms_recent_public_content_lines(string $base): array
 
     if (module_enabled('articles') && table_exists('articles')) {
         try {
-            $rows = db()->query('SELECT slug, title, excerpt, category, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC LIMIT 5')->fetchAll() ?: [];
+            $rows = db()->query('SELECT id, slug, title, excerpt, category, published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . article_publication_sort_expression() . ' DESC, id DESC LIMIT 5')->fetchAll() ?: [];
             if ($rows !== []) {
                 $sections[] = '';
                 $sections[] = '## Recent technical articles';
                 foreach ($rows as $row) {
-                    $summary = llms_plain_text((string) ($row['excerpt'] ?? ''));
+                    $row = localized_article_row($row);
+                    $summary = llms_plain_text((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? ''));
+                    $date = article_publication_datetime($row);
+                    $datePrefix = $date !== null ? '[' . date('Y-m-d', strtotime($date)) . '] ' : '';
                     $category = trim((string) ($row['category'] ?? ''));
-                    $sections[] = '- ' . (string) ($row['title'] ?? '') . ($category !== '' ? ' (' . $category . ')' : '') . ': ' . llms_route($base, 'article', ['slug' => (string) ($row['slug'] ?? '')]) . ($summary !== '' ? ' - ' . $summary : '');
+                    $sections[] = '- ' . $datePrefix . (string) ($row['title_localized'] ?? $row['title'] ?? '') . ($category !== '' ? ' (' . $category . ')' : '') . ': ' . llms_route($base, 'article', ['slug' => (string) ($row['slug'] ?? '')]) . ($summary !== '' ? ' - ' . $summary : '');
                 }
             }
         } catch (Throwable) {

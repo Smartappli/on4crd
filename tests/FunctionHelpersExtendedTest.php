@@ -393,6 +393,34 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNotSame($baseHash, article_translation_source_hash('Titre', 'Resume', '<p>Contenu modifie</p>'));
     }
 
+    public function testArticleTranslationPendingFallbackDetectsSourceCopiesOnly(): void
+    {
+        $source = [
+            'title' => 'Titre',
+            'excerpt' => 'Resume',
+            'content' => '<p>Contenu</p>',
+        ];
+
+        self::assertTrue(article_translation_pending_row_is_source_fallback([
+            'status' => 'needs_review',
+            'title' => ' Titre ',
+            'excerpt' => ' Resume ',
+            'content' => ' <p>Contenu</p> ',
+        ], $source));
+        self::assertFalse(article_translation_pending_row_is_source_fallback([
+            'status' => 'needs_review',
+            'title' => 'Translated title',
+            'excerpt' => 'Resume',
+            'content' => '<p>Contenu</p>',
+        ], $source));
+        self::assertFalse(article_translation_pending_row_is_source_fallback([
+            'status' => 'auto',
+            'title' => 'Titre',
+            'excerpt' => 'Resume',
+            'content' => '<p>Contenu</p>',
+        ], $source));
+    }
+
     public function testArticlePublicationDatetimePrefersPublishedAt(): void
     {
         self::assertSame('2026-06-03 09:30:00', article_publication_datetime([
@@ -410,6 +438,9 @@ final class FunctionHelpersExtendedTest extends TestCase
             'created_at' => 'not-a-date',
             'updated_at' => '',
         ]));
+        self::assertSame('COALESCE(published_at, created_at, updated_at)', article_publication_sort_expression());
+        self::assertSame('COALESCE(a.published_at, a.created_at, a.updated_at)', article_publication_sort_expression_for_alias('a'));
+        self::assertSame('COALESCE(published_at, created_at, updated_at)', article_publication_sort_expression_for_alias('bad.alias'));
     }
 
     public function testArticleDuplicateSlugErrorDetectsUniqueViolation(): void

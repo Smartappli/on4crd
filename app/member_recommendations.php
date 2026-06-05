@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/member_favorites.php';
 require_once __DIR__ . '/member_preferences.php';
+require_once __DIR__ . '/article_helpers.php';
 
 if (!function_exists('member_personalized_recommendations')) {
 function member_personalized_recommendations(int $memberId, int $limit = 6): array
@@ -41,13 +42,14 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
 
     $wantsArticles = $signalPrefs['article'] && (isset($seedTypes['article']) || $seedTypes === []);
     if ($wantsArticles && table_exists('articles')) {
-        $stmt = db()->query('SELECT id, slug, title, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 12');
+        $stmt = db()->query('SELECT id, slug, title, published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . article_publication_sort_expression() . ' DESC, id DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
+            $row = localized_article_row($row);
             $id = (int) ($row['id'] ?? 0);
             if ($id <= 0) {
                 continue;
             }
-            $title = trim((string) ($row['title'] ?? ''));
+            $title = trim((string) ($row['title_localized'] ?? $row['title'] ?? ''));
             if ($title === '') {
                 $title = 'Article';
             }
@@ -56,7 +58,7 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
                 'type' => 'article',
                 'title' => $title,
                 'url' => route_url('article', ['slug' => (string) ($row['slug'] ?? '')]),
-                'meta' => (string) ($row['updated_at'] ?? ''),
+                'meta' => (string) (article_publication_datetime($row) ?? ''),
                 'reason_key' => 'recommendation_reason_article',
             ]);
         }

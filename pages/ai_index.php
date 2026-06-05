@@ -38,13 +38,16 @@ if (module_enabled('news') && table_exists('news_posts')) {
 
 if (module_enabled('articles') && table_exists('articles')) {
     try {
-        $rows = db()->query('SELECT slug, title, excerpt, category, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC LIMIT 10')->fetchAll() ?: [];
+        $rows = db()->query('SELECT id, slug, title, excerpt, category, published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . article_publication_sort_expression() . ' DESC, id DESC LIMIT 10')->fetchAll() ?: [];
         foreach ($rows as $row) {
+            $row = localized_article_row($row);
+            $published = article_publication_datetime($row);
             $recent['articles'][] = [
-                'title' => (string) ($row['title'] ?? ''),
+                'title' => (string) ($row['title_localized'] ?? $row['title'] ?? ''),
                 'url' => $buildUrl('article', ['slug' => (string) ($row['slug'] ?? '')]),
-                'summary' => $plainText((string) ($row['excerpt'] ?? '')),
+                'summary' => $plainText((string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? '')),
                 'category' => (string) ($row['category'] ?? ''),
+                'published_at' => $published !== null ? date('c', strtotime($published)) : null,
                 'updated_at' => !empty($row['updated_at']) ? date('c', strtotime((string) $row['updated_at'])) : null,
             ];
         }

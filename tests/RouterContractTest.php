@@ -285,6 +285,8 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("'member_preferences.php' => ['dashboard'", $loader);
         self::assertStringContainsString("'member_recommendations.php' => ['settings']", $loader);
         self::assertStringNotContainsString("'member_content.php' => ['dashboard'", $loader);
+        self::assertStringContainsString("'article_helpers.php' => ['home', 'dashboard', 'search'", $loader);
+        self::assertStringContainsString("'llms.txt', 'ai-index.json'", $loader);
         self::assertStringContainsString("'album_helpers.php' => ['home'", $loader);
         self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
         self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);
