@@ -180,6 +180,20 @@ final class FunctionHelpersExtendedTest extends TestCase
         }
     }
 
+    public function testUploadSignatureValidatorAllowsTextExtensionsWithoutBinarySignature(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'txt-sig-');
+        self::assertIsString($tmp);
+        file_put_contents($tmp, 'plain text document');
+
+        try {
+            assert_upload_file_is_valid_signature($tmp, ['txt']);
+            self::assertTrue(true);
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
     public function testClassifiedsPayloadValidationRejectsOversizedFields(): void
     {
         $categories = ['gear' => 'Gear'];

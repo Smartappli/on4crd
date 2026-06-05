@@ -109,49 +109,26 @@ function library_store_upload(array $file, int $memberId): array
         'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
     ];
 
-    $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
-    if ($error !== UPLOAD_ERR_OK) {
-        throw new RuntimeException('err_upload');
-    }
-    $size = (int) ($file['size'] ?? 0);
-    if ($size <= 0 || $size > 25 * 1024 * 1024) {
-        throw new RuntimeException('err_size');
-    }
-    $tmpName = (string) ($file['tmp_name'] ?? '');
-    if ($tmpName === '' || !is_uploaded_file($tmpName)) {
-        throw new RuntimeException('err_upload');
-    }
     $originalName = (string) ($file['name'] ?? '');
     $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
     if (!in_array($extension, $allowedExtensions, true)) {
         throw new RuntimeException('err_invalid');
     }
 
-    $mime = detect_uploaded_mime_type($tmpName);
-    if (!in_array($mime, $allowedMimes[$extension] ?? [], true)) {
-        throw new RuntimeException('err_invalid');
-    }
-    $signature = (string) @file_get_contents($tmpName, false, null, 0, 8);
-    if ($extension === 'pdf' && !str_starts_with($signature, '%PDF-')) {
-        throw new RuntimeException('err_invalid');
-    }
-    if ($extension === 'docx' && !str_starts_with($signature, "PK\x03\x04")) {
-        throw new RuntimeException('err_invalid');
-    }
-
     $targetDir = dirname(__DIR__) . '/storage/uploads/library';
-    if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)) {
-        throw new RuntimeException('err_upload');
-    }
     $base = slugify(pathinfo($originalName, PATHINFO_FILENAME));
     if ($base === '') {
         $base = 'document';
     }
-    $filename = 'doc_' . $memberId . '-' . $base . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
+    $filename = secure_move_uploaded_file(
+        $file,
+        $targetDir,
+        'doc_' . $memberId . '-' . $base,
+        $allowedExtensions,
+        $allowedMimes,
+        25 * 1024 * 1024
+    );
     $destination = $targetDir . '/' . $filename;
-    if (!move_uploaded_file($tmpName, $destination)) {
-        throw new RuntimeException('err_upload');
-    }
 
     return [
         'public_path' => 'storage/uploads/library/' . $filename,
