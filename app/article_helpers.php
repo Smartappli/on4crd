@@ -12,7 +12,7 @@ function localized_article_row(array $row): array
         $articleId = (int) ($row['id'] ?? 0);
         if ($articleId > 0 && table_exists('article_translations')) {
             try {
-                $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? ORDER BY CASE status WHEN "reviewed" THEN 0 WHEN "auto" THEN 1 ELSE 2 END, updated_at DESC LIMIT 1');
+                $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? AND status IN ("reviewed", "auto") ORDER BY CASE status WHEN "reviewed" THEN 0 ELSE 1 END, updated_at DESC LIMIT 1');
                 $stmt->execute([$articleId, $locale]);
                 $translation = $stmt->fetch();
                 if (is_array($translation)) {
@@ -39,6 +39,54 @@ function localized_article_row(array $row): array
 function article_translation_source_hash(string $title, string $excerpt, string $content): string
 {
     return sha1(trim($title) . "\n---excerpt---\n" . trim($excerpt) . "\n---content---\n" . trim($content));
+}
+
+/**
+ * @return list<string>
+ */
+function article_translation_public_statuses(): array
+{
+    return ['reviewed', 'auto'];
+}
+
+/**
+ * @param array<string,mixed> $row
+ */
+function article_publication_datetime(array $row): ?string
+{
+    foreach (['published_at', 'created_at', 'updated_at'] as $field) {
+        $value = trim((string) ($row[$field] ?? ''));
+        if ($value !== '' && strtotime($value) !== false) {
+            return $value;
+        }
+    }
+
+    return null;
+}
+
+function article_publication_sort_expression(): string
+{
+    return 'COALESCE(published_at, created_at, updated_at)';
+}
+
+function article_is_duplicate_slug_error(Throwable $throwable): bool
+{
+    if (!$throwable instanceof PDOException) {
+        return false;
+    }
+
+    $errorInfo = $throwable->errorInfo ?? [];
+    $sqlState = (string) ($errorInfo[0] ?? $throwable->getCode());
+    $driverCode = (string) ($errorInfo[1] ?? '');
+    $message = strtolower($throwable->getMessage());
+
+    return $sqlState === '23000'
+        && (
+            $driverCode === '1062'
+            || str_contains($message, 'duplicate')
+            || str_contains($message, 'unique')
+            || str_contains($message, 'slug')
+        );
 }
 
 /**
@@ -227,22 +275,27 @@ function article_translation_deepl_target(string $locale): ?string
         'es' => 'ES',
         'pt' => 'PT-PT',
         'bg' => 'BG',
+        'hr' => 'HR',
         'cs' => 'CS',
         'da' => 'DA',
         'et' => 'ET',
         'fi' => 'FI',
         'el' => 'EL',
         'hu' => 'HU',
+        'ga' => 'GA',
         'lv' => 'LV',
         'lt' => 'LT',
+        'mt' => 'MT',
         'pl' => 'PL',
         'ro' => 'RO',
         'sk' => 'SK',
         'sl' => 'SL',
         'sv' => 'SV',
         'ar' => 'AR',
+        'hi' => 'HI',
         'ja' => 'JA',
         'zh' => 'ZH-HANS',
+        'bn' => 'BN',
         'ru' => 'RU',
         'id' => 'ID',
     ];
