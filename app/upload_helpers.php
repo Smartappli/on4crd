@@ -14,6 +14,9 @@ function detect_uploaded_mime_type(string $tmpPath): string
     if (!is_file($tmpPath)) {
         return '';
     }
+    if (!function_exists('finfo_open') || !function_exists('finfo_file') || !function_exists('finfo_close')) {
+        return '';
+    }
 
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     if ($finfo === false) {
