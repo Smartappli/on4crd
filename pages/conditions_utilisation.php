@@ -84,10 +84,10 @@ ob_start();
 
     <section class="card">
         <h2><?= e((string) ($messages['related_pages_title'] ?? 'Pages associées')) ?></h2>
-        <p>
+        <div class="actions">
             <a class="button secondary" href="<?= e(route_url('mentions_legales')) ?>"><?= e((string) ($messages['legal_link_label'] ?? 'Mentions légales')) ?></a>
             <a class="button secondary" href="<?= e(route_url('gdpr')) ?>"><?= e((string) ($messages['privacy_link_label'] ?? 'Vie privée et RGPD')) ?></a>
-        </p>
+        </div>
     </section>
 </div>
 <?php

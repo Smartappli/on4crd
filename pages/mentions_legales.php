@@ -103,10 +103,10 @@ ob_start();
 
     <section class="card">
         <h2><?= e((string) ($messages['related_pages_title'] ?? 'Pages associées')) ?></h2>
-        <p>
+        <div class="actions">
             <a class="button secondary" href="<?= e(route_url('conditions_utilisation')) ?>"><?= e((string) ($messages['terms_link_label'] ?? 'Conditions générales d\'utilisation')) ?></a>
             <a class="button secondary" href="<?= e(route_url('gdpr')) ?>"><?= e((string) ($messages['privacy_link_label'] ?? 'Vie privée et RGPD')) ?></a>
-        </p>
+        </div>
     </section>
 </div>
 <?php
