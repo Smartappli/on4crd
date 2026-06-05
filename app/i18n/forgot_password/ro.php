@@ -13,4 +13,11 @@ return array (
   'submit' => 'Trimite link',
   'back_login' => 'Reveniți la autentificare',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Resetarea parolei',
+  'email_body' => 'buna ziua,
+
+Utilizați acest link pentru a vă reseta parola ON4CRD:
+{reset_link}
+
+Dacă nu ați solicitat acest lucru, ignorați acest mesaj.',
 );

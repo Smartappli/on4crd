@@ -14,7 +14,10 @@ foreach ($files as $file) {
     if (!str_contains($content, 'render_layout(')) {
         $noLayout[] = basename($file);
     }
-    if (preg_match('/render_layout\([^\n]+,\s*\'[^\']+[À-ÿA-Za-z][^\']*\'\)/u', $content) === 1 && str_contains(basename($file), 'admin')) {
+    if (
+        preg_match('#render_layout\(\s*(?:\$[A-Za-z_][A-Za-z0-9_]*|\(string\)\s*ob_get_clean\(\)|ob_get_clean\(\))\s*,\s*["\'][^"\']+[A-Za-zÀ-ÿ][^"\']*["\']\s*\)#u', $content) === 1
+        && str_contains(basename($file), 'admin')
+    ) {
         $hardcodedAdminTitles[] = basename($file);
     }
 }

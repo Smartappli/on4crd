@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('err_auth_unavailable'));
         }
 
-        $authClient->forgotPassword($email, static function (string $selector, string $token) use ($email): void {
+        $authClient->forgotPassword($email, static function (string $selector, string $token) use ($email, $t): void {
             $resetLink = route_url('reset_password', ['selector' => $selector, 'token' => $token]);
             $_SESSION['password_reset_pending'] = hash('sha256', $selector . ':' . $token);
 
@@ -42,10 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
 
             if (function_exists('mail')) {
+                $body = str_replace('{reset_link}', $resetLink, $t('email_body'));
                 @mail(
                     $email,
-                    'ON4CRD - Reinitialisation du mot de passe',
-                    "Bonjour,\n\nUtilisez ce lien pour reinitialiser votre mot de passe ON4CRD :\n" . $resetLink . "\n\nSi vous n'etes pas a l'origine de cette demande, ignorez ce message.",
+                    $t('email_subject'),
+                    $body,
                     'From: noreply@on4crd.be'
                 );
             }

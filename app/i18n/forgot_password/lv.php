@@ -13,4 +13,11 @@ return array (
   'submit' => 'Nosūtīt saiti',
   'back_login' => 'Atgriezties uz pieteikšanos',
   'email_label' => 'E-pasts',
+  'email_subject' => 'ON4CRD — paroles atiestatīšana',
+  'email_body' => 'Sveiki!
+
+Izmantojiet šo saiti, lai atiestatītu ON4CRD paroli:
+{reset_link}
+
+Ja jūs to nepieprasījāt, ignorējiet šo ziņojumu.',
 );

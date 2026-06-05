@@ -13,4 +13,11 @@ return array (
   'submit' => 'Skicka länk',
   'back_login' => 'Återgå till inloggning',
   'email_label' => 'E-post',
+  'email_subject' => 'ON4CRD - Lösenordsåterställning',
+  'email_body' => 'Hej!
+
+Använd den här länken för att återställa ditt ON4CRD-lösenord:
+{reset_link}
+
+Om du inte begärde detta, ignorera detta meddelande.',
 );
