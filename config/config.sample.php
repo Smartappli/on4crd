@@ -92,6 +92,12 @@ return [
             'geocode_cache_days' => 30,
         ],
     ],
+    'legal' => [
+        'publication_manager' => 'Comité du Radio Club Durnal ON4CRD',
+        'hosting_name' => 'Infrastructure technique exploitée pour le compte du club',
+        'hosting_address' => 'À compléter avec les coordonnées de l’hébergeur effectif',
+        'hosting_url' => '',
+    ],
     'social' => [
         'album_webhooks' => [
             // 'https://hook.example.com/public-album'
