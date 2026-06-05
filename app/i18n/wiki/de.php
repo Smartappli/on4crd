@@ -1,4 +1,34 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki', 'unavailable' => 'Das Wiki ist nach der Initialisierung der Seiten verfügbar.', 'new_pages' => 'Neue Seiten', 'updated_pages' => 'Aktualisierte Seiten', 'most_read' => 'Am meisten gelesen', 'new_page' => 'Neue Seite', 'search_placeholder' => 'Seite suchen (Titel oder Inhalt)', 'search' => 'Suchen', 'reset' => 'Zurücksetzen', 'wiki_pages' => 'Wiki-Seiten', 'no_page' => 'Keine Seite gefunden', 'for_search' => ' für diese Suche', 'summary_fallback' => 'Öffnen Sie diese Seite, um den vollständigen Inhalt zu sehen.', 'updated_at' => 'Aktualisiert:', 'revisions' => 'Revisionen', 'open_page' => 'Seite öffnen'];
+return array (
+  'title' => 'Wiki',
+  'unavailable' => 'Das Wiki ist nach der Initialisierung der Seiten verfügbar.',
+  'new_pages' => 'Neue Seiten',
+  'updated_pages' => 'Aktualisierte Seiten',
+  'most_read' => 'Am meisten gelesen',
+  'new_page' => 'Neue Seite',
+  'search_placeholder' => 'Seite suchen (Titel oder Inhalt)',
+  'search' => 'Suchen',
+  'reset' => 'Zurücksetzen',
+  'wiki_pages' => 'Wiki-Seiten',
+  'no_page' => 'Keine Seite gefunden',
+  'for_search' => ' für diese Suche',
+  'summary_fallback' => 'Öffnen Sie diese Seite, um den vollständigen Inhalt zu sehen.',
+  'updated_at' => 'Aktualisiert:',
+  'revisions' => 'Revisionen',
+  'open_page' => 'Seite öffnen',
+  'themes' => 'Themen',
+  'all_themes' => 'Alle Themen',
+  'propose_theme_subject' => 'Vorschlag für ein ON4CRD-Wiki-Theme',
+  'propose_theme' => 'Schlagen Sie ein Thema vor',
+  'propose_page' => 'Schlagen Sie eine Seite vor',
+  'propose_theme_intro' => 'Beschreiben Sie das hinzuzufügende Thema und die Seiten, die damit verknüpft werden sollen.',
+  'close' => 'Schließen',
+  'propose_theme_body_intro' => 'Wiki-Themenvorschlag:',
+  'propose_theme_name' => 'Themenname',
+  'propose_theme_reason' => 'Warum es hinzufügen?',
+  'propose_theme_contact' => 'Ihr Ansprechpartner',
+  'propose_theme_submit' => 'Vorschlag senden',
+  'cancel' => 'Abbrechen',
+);

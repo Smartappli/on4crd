@@ -12,4 +12,13 @@ return array (
   'save' => 'Salva',
   'layout' => 'Editați wiki',
   'meta_desc' => 'Creați sau editați o pagină wiki.',
+  'propose_title' => 'Sugerați o pagină wiki',
+  'propose_meta_desc' => 'Creați o nouă pagină wiki din zona de membri.',
+  'error_title_content_required' => 'Titlul și conținutul sunt obligatorii.',
+  'error_field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
+  'propose_success' => 'Pagina Wiki trimisă. Acesta va fi publicat după validare.',
+  'wiki_label' => 'Wiki',
+  'propose_help' => 'Scrieți o pagină nouă cu HTML simplu. Acesta va fi revizuit înainte de publicare.',
+  'propose_submit' => 'Trimite pagina',
+  'cancel' => 'Anulează',
 );

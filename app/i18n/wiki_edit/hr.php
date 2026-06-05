@@ -12,4 +12,13 @@ return array (
   'save' => 'spremiti',
   'layout' => 'Uredi wiki',
   'meta_desc' => 'Izradite ili uredite wiki stranicu.',
+  'propose_title' => 'Predložite wiki stranicu',
+  'propose_meta_desc' => 'Stvorite novu wiki stranicu iz područja za članove.',
+  'error_title_content_required' => 'Naslov i sadržaj su obavezni.',
+  'error_field_too_long' => 'Jedno od polja premašuje dopuštenu duljinu.',
+  'propose_success' => 'Wiki stranica poslana. Bit će objavljen nakon provjere.',
+  'wiki_label' => 'Wiki',
+  'propose_help' => 'Napišite novu stranicu s jednostavnim HTML-om. Bit će pregledan prije objave.',
+  'propose_submit' => 'Pošalji stranicu',
+  'cancel' => 'Odustani',
 );
