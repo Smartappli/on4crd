@@ -98,11 +98,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Le contenu de l\'article est vide apres nettoyage.');
         }
 
-        $slug = article_propose_unique_slug($articleTitle);
-        db()->beginTransaction();
-        db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?)')
-            ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, (int) $user['id']]);
-        db()->commit();
+        $maxSlugAttempts = 5;
+        for ($slugAttempt = 0; $slugAttempt < $maxSlugAttempts; $slugAttempt++) {
+            $slug = article_propose_unique_slug($articleTitle);
+            try {
+                db()->beginTransaction();
+                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?)')
+                    ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, (int) $user['id']]);
+                db()->commit();
+                break;
+            } catch (Throwable $submitThrowable) {
+                if (db()->inTransaction()) {
+                    db()->rollBack();
+                }
+                if (!article_is_duplicate_slug_error($submitThrowable) || $slugAttempt === $maxSlugAttempts - 1) {
+                    throw $submitThrowable;
+                }
+                usleep(20000 * ($slugAttempt + 1));
+            }
+        }
 
         set_flash('success', 'Article soumis pour validation.');
         redirect('my_requests');
