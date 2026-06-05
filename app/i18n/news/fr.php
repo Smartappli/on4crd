@@ -57,4 +57,7 @@ return [
     'proposal_submit' => 'Envoyer la proposition',
     'proposal_cancel' => 'Annuler',
     'proposal_close' => 'Fermer',
+    'categories' => 'Rubriques',
+    'search' => 'Rechercher',
+    'news_count_label' => 'Nombre d’actualités',
 ];

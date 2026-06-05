@@ -57,4 +57,7 @@ return [
     'proposal_submit' => 'Send suggestion',
     'proposal_cancel' => 'Cancel',
     'proposal_close' => 'Close',
+    'categories' => 'Sections',
+    'search' => 'Search',
+    'news_count_label' => 'News items',
 ];

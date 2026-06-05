@@ -57,4 +57,7 @@ return array (
   'proposal_submit' => 'Invia proposta',
   'proposal_cancel' => 'Cancellare',
   'proposal_close' => 'Vicino',
+  'categories' => 'Sezioni',
+  'search' => 'Fare ricerca',
+  'news_count_label' => 'Numero di notizie',
 );
