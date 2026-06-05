@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/hamqsl_widgets.php';
+
 if (!function_exists('widget_catalog')) {
 function widget_catalog(): array
 {
@@ -13,7 +15,7 @@ function widget_catalog(): array
             'title' => 'Météo locale',
             'description' => 'Conditions météo locales en temps réel pour l’activité radio.',
         ],
-    ];
+    ] + hamqsl_widget_catalog();
 }
 }
 

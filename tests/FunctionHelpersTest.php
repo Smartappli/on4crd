@@ -245,4 +245,24 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame('2026-05-30T06:00:00', $result['timestamp']);
         self::assertSame(1.33, round((float) $result['kp'], 2));
     }
+
+    public function testHamqslCatalogIsDerivedFromSingleVariantRegistry(): void
+    {
+        $variants = hamqsl_widget_variants();
+        $catalog = hamqsl_widget_catalog();
+
+        self::assertArrayHasKey('hamqsl_hf_vhf', $variants);
+        self::assertSame(array_keys($variants), array_keys($catalog));
+        self::assertSame($variants['hamqsl_hf_vhf']['title'], $catalog['hamqsl_hf_vhf']['title']);
+    }
+
+    public function testHamqslWidgetRenderKeepsSourceCreditAndManualRefreshPolicy(): void
+    {
+        $html = render_widget('hamqsl_band_conditions');
+
+        self::assertStringContainsString('href="https://www.hamqsl.com/solar.html"', $html);
+        self::assertStringContainsString('src="https://www.hamqsl.com/solarbc.php"', $html);
+        self::assertStringContainsString('data-widget-refresh="manual"', $html);
+        self::assertStringContainsString('HAMQSL / N0NBH', $html);
+    }
 }

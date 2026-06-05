@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/hamqsl_widgets.php';
 require_once __DIR__ . '/widget_radio_helpers.php';
 
 if (!function_exists('render_widget')) {
@@ -9,6 +10,10 @@ function render_widget(string $slug, array $user = []): string
     $safeSlug = strtolower(trim($slug));
     $callsign = trim((string) ($user['callsign'] ?? 'OM'));
     $locale = current_locale();
+
+    if (hamqsl_widget_variant($safeSlug) !== null) {
+        return render_hamqsl_widget($safeSlug);
+    }
 
     switch ($safeSlug) {
         case 'welcome':
