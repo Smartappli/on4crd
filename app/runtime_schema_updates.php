@@ -6,6 +6,7 @@ function apply_runtime_schema_updates(): void
     require_once __DIR__ . '/content_helpers.php';
     require_once __DIR__ . '/member_content.php';
     require_once __DIR__ . '/notifications.php';
+    require_once __DIR__ . '/privacy_helpers.php';
 
     if (!table_exists('users')) {
         db()->exec(
@@ -245,6 +246,10 @@ function apply_runtime_schema_updates(): void
         }
     }
 
+    if (table_exists('albums') && table_has_column('albums', 'is_public')) {
+        db()->exec('ALTER TABLE albums MODIFY COLUMN is_public TINYINT(1) NOT NULL DEFAULT 0');
+    }
+
     if (table_exists('members')) {
         $columnStmt = db()->prepare(
             'SELECT COUNT(*) FROM information_schema.columns
@@ -260,7 +265,7 @@ function apply_runtime_schema_updates(): void
             'postal_code' => 'ALTER TABLE members ADD COLUMN postal_code VARCHAR(32) DEFAULT NULL AFTER address',
             'is_uba_member' => 'ALTER TABLE members ADD COLUMN is_uba_member TINYINT(1) NOT NULL DEFAULT 0',
             'uba_member_number' => 'ALTER TABLE members ADD COLUMN uba_member_number VARCHAR(64) DEFAULT NULL',
-            'visibility_email' => 'ALTER TABLE members ADD COLUMN visibility_email ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_email' => 'ALTER TABLE members ADD COLUMN visibility_email ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_phone' => 'ALTER TABLE members ADD COLUMN visibility_phone ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_full_name' => 'ALTER TABLE members ADD COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_first_name' => 'ALTER TABLE members ADD COLUMN visibility_first_name ENUM("public","members","private") NOT NULL DEFAULT "members"',
@@ -268,19 +273,19 @@ function apply_runtime_schema_updates(): void
             'visibility_country' => 'ALTER TABLE members ADD COLUMN visibility_country ENUM("public","members","private") NOT NULL DEFAULT "members"',
             'visibility_address' => 'ALTER TABLE members ADD COLUMN visibility_address ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_postal_code' => 'ALTER TABLE members ADD COLUMN visibility_postal_code ENUM("public","members","private") NOT NULL DEFAULT "private"',
-            'visibility_qth' => 'ALTER TABLE members ADD COLUMN visibility_qth ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_locator' => 'ALTER TABLE members ADD COLUMN visibility_locator ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_licence_class' => 'ALTER TABLE members ADD COLUMN visibility_licence_class ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_operator_since' => 'ALTER TABLE members ADD COLUMN visibility_operator_since ENUM("public","members","private") NOT NULL DEFAULT "members" AFTER visibility_licence_class',
-            'visibility_qsl' => 'ALTER TABLE members ADD COLUMN visibility_qsl ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_qrz' => 'ALTER TABLE members ADD COLUMN visibility_qrz ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_uba' => 'ALTER TABLE members ADD COLUMN visibility_uba ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_favourite_bands' => 'ALTER TABLE members ADD COLUMN visibility_favourite_bands ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_favourite_modes' => 'ALTER TABLE members ADD COLUMN visibility_favourite_modes ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_station' => 'ALTER TABLE members ADD COLUMN visibility_station ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_antennas' => 'ALTER TABLE members ADD COLUMN visibility_antennas ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_interests' => 'ALTER TABLE members ADD COLUMN visibility_interests ENUM("public","members","private") NOT NULL DEFAULT "members"',
-            'visibility_photo' => 'ALTER TABLE members ADD COLUMN visibility_photo ENUM("public","members","private") NOT NULL DEFAULT "members"',
+            'visibility_qth' => 'ALTER TABLE members ADD COLUMN visibility_qth ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_locator' => 'ALTER TABLE members ADD COLUMN visibility_locator ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_licence_class' => 'ALTER TABLE members ADD COLUMN visibility_licence_class ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_operator_since' => 'ALTER TABLE members ADD COLUMN visibility_operator_since ENUM("public","members","private") NOT NULL DEFAULT "private" AFTER visibility_licence_class',
+            'visibility_qsl' => 'ALTER TABLE members ADD COLUMN visibility_qsl ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_qrz' => 'ALTER TABLE members ADD COLUMN visibility_qrz ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_uba' => 'ALTER TABLE members ADD COLUMN visibility_uba ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_favourite_bands' => 'ALTER TABLE members ADD COLUMN visibility_favourite_bands ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_favourite_modes' => 'ALTER TABLE members ADD COLUMN visibility_favourite_modes ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_station' => 'ALTER TABLE members ADD COLUMN visibility_station ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_antennas' => 'ALTER TABLE members ADD COLUMN visibility_antennas ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_interests' => 'ALTER TABLE members ADD COLUMN visibility_interests ENUM("public","members","private") NOT NULL DEFAULT "private"',
+            'visibility_photo' => 'ALTER TABLE members ADD COLUMN visibility_photo ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'avatar_path' => 'ALTER TABLE members ADD COLUMN avatar_path VARCHAR(255) DEFAULT NULL',
         ];
 
@@ -308,11 +313,27 @@ function apply_runtime_schema_updates(): void
             db()->exec('UPDATE members SET last_name = NULLIF(TRIM(CASE WHEN LOCATE(" ", full_name) > 0 THEN SUBSTRING(full_name, LOCATE(" ", full_name) + 1) ELSE "" END), "") WHERE (last_name IS NULL OR last_name = "") AND full_name IS NOT NULL AND full_name <> ""');
         }
         $visibilityDefaults = [
+            'visibility_photo' => 'private',
             'visibility_full_name' => 'private',
             'visibility_first_name' => 'members',
             'visibility_last_name' => 'private',
+            'visibility_email' => 'private',
+            'visibility_country' => 'members',
             'visibility_address' => 'private',
             'visibility_postal_code' => 'private',
+            'visibility_phone' => 'private',
+            'visibility_qth' => 'private',
+            'visibility_locator' => 'private',
+            'visibility_licence_class' => 'private',
+            'visibility_operator_since' => 'private',
+            'visibility_qsl' => 'private',
+            'visibility_qrz' => 'private',
+            'visibility_uba' => 'private',
+            'visibility_favourite_bands' => 'private',
+            'visibility_favourite_modes' => 'private',
+            'visibility_station' => 'private',
+            'visibility_antennas' => 'private',
+            'visibility_interests' => 'private',
         ];
         foreach ($visibilityDefaults as $visibilityColumn => $visibilityDefault) {
             if ($memberColumnsExist([$visibilityColumn])) {

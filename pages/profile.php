@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $address = trim((string) ($_POST['address'] ?? ''));
         $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
+        $allowGeocode = (string) ($_POST['allow_geocode'] ?? '') === '1';
         $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
         $licenceClass = trim((string) ($_POST['licence_class'] ?? ''));
         $operatorSince = trim((string) ($_POST['operator_since'] ?? ''));
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_url'));
         }
 
-        if ($locator === '' || $cqZone === '' || $ituZone === '') {
+        if ($allowGeocode && ($locator === '' || $cqZone === '' || $ituZone === '')) {
             $computedRadioLocation = member_profile_radio_location_from_address($country, $address, $postalCode, $qth);
             if (is_array($computedRadioLocation)) {
                 if ($locator === '') {
@@ -306,6 +307,11 @@ ob_start();
                 <label><?= $requiredFieldLabel($t('qth'), 'profile-required-qth') ?><input type="text" name="qth" maxlength="190" required value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('grid'), 'profile-grid-help', $t('grid_help')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
             </div>
+            <label class="profile-checkbox" style="margin-top:.75rem;">
+                <input type="checkbox" name="allow_geocode" value="1">
+                <span><?= e($t('geocode_consent')) ?></span>
+            </label>
+            <?= privacy_notice_short_html('profile') ?>
         </fieldset>
 
         <fieldset class="profile-fieldset">
