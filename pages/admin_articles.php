@@ -220,6 +220,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (table_exists('article_translations')) {
                     db()->prepare('DELETE FROM article_translations WHERE article_id IN (' . $placeholders . ')')->execute($ids);
                 }
+                if (table_exists('article_revisions')) {
+                    db()->prepare('DELETE FROM article_revisions WHERE article_id IN (' . $placeholders . ')')->execute($ids);
+                }
                 db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
                 set_flash('success', $t('ok_deleted', 'Article supprimé.'));
             } else {
@@ -227,10 +230,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $bulkRowsStmt->execute($ids);
                 $bulkRows = $bulkRowsStmt->fetchAll() ?: [];
                 $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
-                $publishedAt = $bulkOp === 'published' ? date('Y-m-d H:i:s') : null;
                 $moderationNote = $bulkOp === 'rejected' ? 'Refuse par moderation.' : null;
-                db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
-                    ->execute(array_merge([$bulkOp, $scheduledAt, $publishedAt, $moderationNote], $ids));
+                $publishedAtSql = $bulkOp === 'published' ? 'COALESCE(published_at, NOW())' : 'NULL';
+                db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ' . $publishedAtSql . ', moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
+                    ->execute(array_merge([$bulkOp, $scheduledAt, $moderationNote], $ids));
                 $translationSyncFailed = false;
                 $currentUserId = (int) current_user()['id'];
                 foreach ($bulkRows as $bulkRow) {
