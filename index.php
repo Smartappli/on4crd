@@ -175,7 +175,6 @@ $routeModules = [
     'widget_render' => 'dashboard',
     'profile' => 'members',
     'change_password' => 'members',
-    'gdpr' => 'members',
     'my_requests' => 'members',
     'directory' => 'directory',
     'tools' => 'tools',
@@ -213,6 +212,7 @@ $routeModules = [
     'admin' => 'admin',
     'admin_permissions' => 'admin',
     'admin_newsletters' => 'admin',
+    'admin_privacy' => 'admin',
     'admin_modules' => 'admin',
     'admin_articles' => 'admin',
     'admin_committee' => 'admin',
@@ -239,7 +239,7 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route], $route);
 }
 
-$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
 if (!in_array($route, $publicRoutes, true)) {
     require_login(login_next_url_for_route($route, $_GET));
 }
@@ -335,6 +335,7 @@ switch ($route) {
     case 'admin_permissions': $dispatchPage('pages/admin_permissions.php'); break;
     case 'admin_members': $dispatchPage('pages/admin_members.php'); break;
     case 'admin_newsletters': $dispatchPage('pages/admin_newsletters.php'); break;
+    case 'admin_privacy': $dispatchPage('pages/admin_privacy.php'); break;
     case 'admin_modules': $dispatchPage('pages/admin_modules.php'); break;
     case 'admin_articles': $dispatchPage('pages/admin_articles.php'); break;
     case 'admin_committee': $dispatchPage('pages/admin_committee.php'); break;

@@ -168,6 +168,7 @@ function seo_route_should_noindex(string $route): bool
         'admin',
         'admin_permissions',
         'admin_newsletters',
+        'admin_privacy',
         'admin_modules',
         'admin_articles',
         'admin_committee',
