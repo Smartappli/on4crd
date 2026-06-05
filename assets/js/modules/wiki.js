@@ -5,13 +5,7 @@
     return;
   }
 
-  const fallbackUrl = openButton.dataset.wikiThemeFallback || '';
   if (typeof HTMLDialogElement === 'undefined' || !(dialog instanceof HTMLDialogElement)) {
-    openButton.addEventListener('click', () => {
-      if (fallbackUrl) {
-        window.location.href = fallbackUrl;
-      }
-    });
     return;
   }
 
@@ -33,7 +27,8 @@
     return labelText ? labelText.textContent.trim() : name;
   };
 
-  openButton.addEventListener('click', () => {
+  openButton.addEventListener('click', (event) => {
+    event.preventDefault();
     if (!dialog.open) {
       dialog.showModal();
     }

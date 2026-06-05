@@ -25,7 +25,8 @@ if ($theme === 'n-a') {
     $theme = '';
 }
 $contactEmail = site_contact_email();
-$themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD'));
+$themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD'))
+    . '&body=' . rawurlencode($tr('propose_theme_body_intro', 'Proposition de thématique wiki :'));
 
 $rows = [];
 $wikiThemes = [];
@@ -106,7 +107,7 @@ ob_start();
                 </article>
             </div>
             <div class="wiki-hero-actions">
-                <button class="button secondary" type="button" data-wiki-theme-open data-wiki-theme-fallback="<?= e($themeProposalUrl) ?>" aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></button>
+                <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></a>
                 <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
                 <?php if (has_permission('wiki.moderate')): ?>
                     <a class="button secondary" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>

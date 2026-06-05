@@ -164,7 +164,7 @@ ob_start();
                 </article>
             </div>
             <div class="articles-hero-actions">
-                <button class="button secondary" type="button" data-articles-category-open data-articles-category-fallback="<?= e($categoryProposalUrl) ?>" aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e((string) $t['propose_category']) ?></button>
+                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-articles-category-open aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e((string) $t['propose_category']) ?></a>
                 <a class="button" href="<?= e(route_url('article_propose')) ?>"><?= e((string) $t['propose_article']) ?></a>
             </div>
         </div>

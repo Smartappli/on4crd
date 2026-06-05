@@ -238,6 +238,43 @@ if ($user !== null) {
     }
     $proposalPrefillEmail = trim((string) ($user['email'] ?? ''));
 }
+$showCategoryProposalForm = $user !== null && (string) ($_GET['propose_category'] ?? '') === '1';
+$renderCategoryProposalForm = static function (bool $dialogMode) use ($t, $proposalPrefillName, $proposalPrefillEmail): string {
+    ob_start();
+    ?>
+    <form method="post" class="classifieds-category-form">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <input type="hidden" name="action" value="propose_category">
+        <label>
+            <span><?= e($t('propose_category_name_label')) ?></span>
+            <input type="text" name="proposal_category" maxlength="120" required placeholder="<?= e($t('propose_category_name_placeholder')) ?>">
+        </label>
+        <div class="classifieds-category-form-grid">
+            <label>
+                <span><?= e($t('propose_category_sender_name_label')) ?></span>
+                <input type="text" name="proposal_name" maxlength="190" required value="<?= e($proposalPrefillName) ?>">
+            </label>
+            <label>
+                <span><?= e($t('propose_category_sender_email_label')) ?></span>
+                <input type="email" name="proposal_email" maxlength="190" required value="<?= e($proposalPrefillEmail) ?>">
+            </label>
+        </div>
+        <label>
+            <span><?= e($t('propose_category_details_label')) ?></span>
+            <textarea name="proposal_details" rows="4" maxlength="1200" placeholder="<?= e($t('propose_category_details_placeholder')) ?>"></textarea>
+        </label>
+        <div class="classifieds-category-dialog-actions">
+            <button class="button" type="submit"><?= e($t('propose_category_submit')) ?></button>
+            <?php if ($dialogMode): ?>
+                <button class="button secondary" type="button" data-classifieds-category-close><?= e($t('propose_category_cancel')) ?></button>
+            <?php else: ?>
+                <a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('propose_category_cancel')) ?></a>
+            <?php endif; ?>
+        </div>
+    </form>
+    <?php
+    return (string) ob_get_clean();
+};
 
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
@@ -267,7 +304,7 @@ ob_start();
             <p class="classifieds-hero-action">
                 <a class="button" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_ad')) ?></a>
                 <?php if ($user !== null): ?>
-                    <button class="button secondary" type="button" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($t('propose_category')) ?></button>
+                    <a class="button secondary" href="<?= e(route_url('classifieds', ['propose_category' => '1'])) ?>" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($t('propose_category')) ?></a>
                 <?php else: ?>
                     <a class="button secondary" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_category')) ?></a>
                 <?php endif; ?>
@@ -276,6 +313,19 @@ ob_start();
     </header>
 
     <?php if ($user !== null): ?>
+    <?php if ($showCategoryProposalForm): ?>
+    <section class="card classifieds-category-inline" id="classifieds-category-inline">
+        <div class="classifieds-category-dialog-header">
+            <div>
+                <p class="directory-eyebrow"><?= e($t('category_label')) ?></p>
+                <h2><?= e($t('propose_category')) ?></h2>
+                <p class="help"><?= e($t('propose_category_intro')) ?></p>
+            </div>
+        </div>
+        <?= $renderCategoryProposalForm(false) ?>
+    </section>
+    <?php endif; ?>
+
     <dialog class="classifieds-category-dialog" id="classifieds-category-dialog" aria-labelledby="classifieds-category-title">
         <div class="classifieds-category-dialog-card">
             <div class="classifieds-category-dialog-header">
@@ -286,32 +336,7 @@ ob_start();
                 </div>
                 <button class="classifieds-category-dialog-close" type="button" data-classifieds-category-close aria-label="<?= e($t('propose_category_close')) ?>">&times;</button>
             </div>
-            <form method="post" class="classifieds-category-form">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="propose_category">
-                <label>
-                    <span><?= e($t('propose_category_name_label')) ?></span>
-                    <input type="text" name="proposal_category" maxlength="120" required placeholder="<?= e($t('propose_category_name_placeholder')) ?>">
-                </label>
-                <div class="classifieds-category-form-grid">
-                    <label>
-                        <span><?= e($t('propose_category_sender_name_label')) ?></span>
-                        <input type="text" name="proposal_name" maxlength="190" required value="<?= e($proposalPrefillName) ?>">
-                    </label>
-                    <label>
-                        <span><?= e($t('propose_category_sender_email_label')) ?></span>
-                        <input type="email" name="proposal_email" maxlength="190" required value="<?= e($proposalPrefillEmail) ?>">
-                    </label>
-                </div>
-                <label>
-                    <span><?= e($t('propose_category_details_label')) ?></span>
-                    <textarea name="proposal_details" rows="4" maxlength="1200" placeholder="<?= e($t('propose_category_details_placeholder')) ?>"></textarea>
-                </label>
-                <div class="classifieds-category-dialog-actions">
-                    <button class="button" type="submit"><?= e($t('propose_category_submit')) ?></button>
-                    <button class="button secondary" type="button" data-classifieds-category-close><?= e($t('propose_category_cancel')) ?></button>
-                </div>
-            </form>
+            <?= $renderCategoryProposalForm(true) ?>
         </div>
     </dialog>
     <?php endif; ?>

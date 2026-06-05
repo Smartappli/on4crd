@@ -371,4 +371,76 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('require_module_enabled($routeModules[$route], $route);', $router);
         self::assertStringContainsString('require_login(login_next_url_for_route($route, $_GET));', $router);
     }
+
+    public function testProposalDialogTriggersKeepNativeFallbacks(): void
+    {
+        $contracts = [
+            'pages/articles.php' => ['data-articles-category-open'],
+            'pages/classifieds.php' => ['data-classifieds-category-open'],
+            'pages/events.php' => ['data-event-proposal-open'],
+            'pages/members_library.php' => [
+                'data-members-library-modal-open="members-library-category-dialog"',
+                'data-members-library-modal-open="members-library-document-dialog"',
+            ],
+            'pages/news.php' => [
+                'data-news-proposal-open="news-proposal-dialog"',
+                'data-news-proposal-open="news-category-proposal-dialog"',
+            ],
+            'pages/wiki.php' => ['data-wiki-theme-open'],
+        ];
+
+        foreach ($contracts as $relativePath => $attributes) {
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+
+            foreach ($attributes as $attribute) {
+                $matchingLines = array_values(array_filter(
+                    explode("\n", $source),
+                    static fn(string $line): bool => str_contains($line, $attribute)
+                ));
+
+                self::assertNotEmpty(
+                    $matchingLines,
+                    sprintf('%s must contain proposal trigger %s.', $relativePath, $attribute)
+                );
+
+                self::assertStringContainsString(
+                    '<a ',
+                    $matchingLines[0],
+                    sprintf('%s must expose %s as a native link, not a JavaScript-only button.', $relativePath, $attribute)
+                );
+                self::assertStringContainsString('href=', $matchingLines[0], sprintf('%s native trigger %s must have an href fallback.', $relativePath, $attribute));
+                self::assertStringNotContainsString('<button', $matchingLines[0], sprintf('%s native trigger %s must not be a button.', $relativePath, $attribute));
+            }
+        }
+
+        $legacyFallbacks = [
+            'data-articles-category-fallback',
+            'data-event-proposal-fallback',
+            'data-members-library-fallback',
+            'data-news-proposal-fallback',
+            'data-wiki-theme-fallback',
+            'dataset.articlesCategoryFallback',
+            'dataset.eventProposalFallback',
+            'dataset.membersLibraryFallback',
+            'dataset.newsProposalFallback',
+            'dataset.wikiThemeFallback',
+        ];
+
+        foreach (array_keys($contracts) as $relativePath) {
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+            foreach ($legacyFallbacks as $fallback) {
+                self::assertStringNotContainsString($fallback, $source, sprintf('%s still contains legacy fallback attribute %s.', $relativePath, $fallback));
+            }
+        }
+
+        foreach (glob(__DIR__ . '/../assets/js/modules/*.js') ?: [] as $path) {
+            $source = file_get_contents((string) $path);
+            self::assertIsString($source);
+            foreach ($legacyFallbacks as $fallback) {
+                self::assertStringNotContainsString($fallback, $source, sprintf('%s still contains legacy fallback logic %s.', basename((string) $path), $fallback));
+            }
+        }
+    }
 }

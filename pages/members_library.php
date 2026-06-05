@@ -161,8 +161,8 @@ ob_start();
                 </article>
             </div>
             <div class="members-library-hero-action">
-                <button class="button secondary" type="button" data-members-library-modal-open="members-library-category-dialog" data-members-library-fallback="<?= e($categoryProposalUrl) ?>" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) ($t['propose_category'] ?? 'Proposer une catégorie')) ?></button>
-                <button class="button" type="button" data-members-library-modal-open="members-library-document-dialog" data-members-library-fallback="<?= e($documentProposalUrl) ?>" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) ($t['propose_document'] ?? 'Proposer un document')) ?></button>
+                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) ($t['propose_category'] ?? 'Proposer une catégorie')) ?></a>
+                <a class="button" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) ($t['propose_document'] ?? 'Proposer un document')) ?></a>
             </div>
         </div>
     </section>

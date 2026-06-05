@@ -179,7 +179,7 @@ ob_start();
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
     <div class="events-hero-actions">
-        <button class="button secondary" type="button" data-event-proposal-open data-event-proposal-fallback="<?= e($proposalUrl) ?>" aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($t['propose_event']) ?></button>
+        <a class="button secondary" href="<?= e($proposalUrl) ?>" data-event-proposal-open aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($t['propose_event']) ?></a>
         <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
     </div>
 </section>

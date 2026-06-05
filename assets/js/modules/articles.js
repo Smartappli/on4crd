@@ -5,15 +5,7 @@
     return;
   }
 
-  const fallbackUrl = openButtons[0].dataset.articlesCategoryFallback || '';
   if (typeof HTMLDialogElement === 'undefined' || !(dialog instanceof HTMLDialogElement)) {
-    openButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        if (fallbackUrl) {
-          window.location.href = fallbackUrl;
-        }
-      });
-    });
     return;
   }
 
@@ -21,7 +13,8 @@
   const form = dialog.querySelector('[data-articles-category-form]');
   const firstField = dialog.querySelector('input[name="proposal_category"]');
 
-  const openDialog = () => {
+  const openDialog = (event) => {
+    event.preventDefault();
     if (!dialog.open) {
       dialog.showModal();
     }
