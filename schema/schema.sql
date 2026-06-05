@@ -286,6 +286,8 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     title VARCHAR(190) NOT NULL,
     content LONGTEXT NOT NULL,
     author_id INT DEFAULT NULL,
+    status ENUM('pending','published','rejected') NOT NULL DEFAULT 'published',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -683,7 +685,8 @@ CREATE TABLE IF NOT EXISTS classified_ads (
     location VARCHAR(120) DEFAULT NULL,
     contact VARCHAR(190) DEFAULT NULL,
     price_cents INT NOT NULL DEFAULT 0,
-    status ENUM('active','sold','archived') NOT NULL DEFAULT 'active',
+    status ENUM('draft','pending','active','sold','archived','expired') NOT NULL DEFAULT 'draft',
+    expires_at DATETIME NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_classified_owner_status (owner_member_id, status),

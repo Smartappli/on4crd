@@ -15,7 +15,7 @@ function ensure_classified_ads_table(): bool
                 location VARCHAR(120) DEFAULT NULL,
                 contact VARCHAR(190) DEFAULT NULL,
                 price_cents INT NOT NULL DEFAULT 0,
-                status ENUM("draft","active","sold","archived","expired") NOT NULL DEFAULT "draft",
+                status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft",
                 expires_at DATETIME NULL DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -35,7 +35,7 @@ function ensure_classified_ads_table(): bool
             db()->exec('ALTER TABLE classified_ads ADD COLUMN expires_at DATETIME NULL DEFAULT NULL AFTER status');
         }
 
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
+        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
 
         return true;
     } catch (Throwable $throwable) {
@@ -59,10 +59,25 @@ function ensure_wiki_tables(): bool
                 title VARCHAR(190) NOT NULL,
                 content LONGTEXT NOT NULL,
                 author_id INT DEFAULT NULL,
+                status ENUM("pending","published","rejected") NOT NULL DEFAULT "published",
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_wiki_status_updated (status, updated_at),
                 INDEX idx_wiki_updated (updated_at)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
+
+        if (!table_has_column('wiki_pages', 'status')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN status ENUM("pending","published","rejected") NOT NULL DEFAULT "published" AFTER author_id');
+        } else {
+            db()->exec('ALTER TABLE wiki_pages MODIFY COLUMN status ENUM("pending","published","rejected") NOT NULL DEFAULT "published"');
+        }
+        if (!table_has_column('wiki_pages', 'created_at')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER status');
+        }
+        if (!table_has_index('wiki_pages', 'idx_wiki_status_updated')) {
+            db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_status_updated (status, updated_at)');
+        }
 
         db()->exec(
             'CREATE TABLE IF NOT EXISTS wiki_revisions (
@@ -82,6 +97,69 @@ function ensure_wiki_tables(): bool
         ]);
 
         return false;
+    }
+}
+}
+
+if (!function_exists('classifieds_validate_payload')) {
+function classifieds_validate_payload(
+    string $category,
+    string $title,
+    string $description,
+    string $location,
+    string $contact,
+    array $categories,
+    string $message
+): void {
+    if ($title === '' || $description === '' || $contact === '' || !isset($categories[$category])) {
+        throw new RuntimeException($message);
+    }
+    if (
+        mb_strlen($title) > 190
+        || mb_strlen($description) > 10000
+        || mb_strlen($location) > 120
+        || mb_strlen($contact) > 190
+    ) {
+        throw new RuntimeException($message);
+    }
+}
+}
+
+if (!function_exists('classifieds_member_publication_status')) {
+function classifieds_member_publication_status(string $requestedStatus): string
+{
+    if (!in_array($requestedStatus, ['draft', 'pending', 'active', 'sold', 'archived'], true)) {
+        return 'draft';
+    }
+    if ($requestedStatus === 'active' && !has_permission('ads.moderate')) {
+        return 'pending';
+    }
+
+    return $requestedStatus;
+}
+}
+
+if (!function_exists('classifieds_enforce_submission_limits')) {
+function classifieds_enforce_submission_limits(int $memberId): void
+{
+    if ($memberId <= 0) {
+        throw new RuntimeException('Utilisateur invalide.');
+    }
+
+    $lastStmt = db()->prepare('SELECT created_at FROM classified_ads WHERE owner_member_id = ? ORDER BY created_at DESC, id DESC LIMIT 1');
+    $lastStmt->execute([$memberId]);
+    $lastCreatedAt = $lastStmt->fetchColumn();
+    if (is_string($lastCreatedAt) && $lastCreatedAt !== '') {
+        $lastTs = strtotime($lastCreatedAt);
+        if ($lastTs !== false && $lastTs > time() - 60) {
+            throw new RuntimeException('Veuillez patienter une minute avant de proposer une autre annonce.');
+        }
+    }
+
+    $countStmt = db()->prepare('SELECT COUNT(*) FROM classified_ads WHERE owner_member_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)');
+    $countStmt->execute([$memberId]);
+    if ((int) ($countStmt->fetchColumn() ?: 0) >= 5) {
+        throw new RuntimeException('Limite atteinte: maximum 5 annonces par 24 heures.');
     }
 }
 }
