@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 $messages = i18n_domain_locale('mentions_legales', current_locale());
 
-$title = (string) ($messages['title'] ?? 'Mentions légales');
+$text = static fn (string $key): string => (string) ($messages[$key] ?? $key);
+
+$title = $text('title');
 $summary = (string) ($messages['summary'] ?? $messages['body'] ?? '');
 $sections = isset($messages['sections']) && is_array($messages['sections']) ? $messages['sections'] : [];
-$updatedAtLabel = (string) ($messages['updated_at_label'] ?? 'Dernière mise à jour');
-$updatedAt = (string) ($messages['updated_at'] ?? '05 juin 2026');
+$updatedAtLabel = $text('updated_at_label');
+$updatedAt = $text('updated_at');
+$notProvided = $text('not_provided');
 
 $clubName = trim((string) config('privacy.controller_name', 'Radio Club Durnal ON4CRD'));
 $clubEmail = site_contact_email();
@@ -24,7 +27,8 @@ $replaceLegalPlaceholders = static function (string $value) use (
     $publicationManager,
     $hostingName,
     $hostingAddress,
-    $hostingUrl
+    $hostingUrl,
+    $notProvided
 ): string {
     return strtr($value, [
         '{club_name}' => $clubName,
@@ -33,7 +37,7 @@ $replaceLegalPlaceholders = static function (string $value) use (
         '{publication_manager}' => $publicationManager,
         '{hosting_name}' => $hostingName,
         '{hosting_address}' => $hostingAddress,
-        '{hosting_url}' => $hostingUrl !== '' ? $hostingUrl : 'non renseigné',
+        '{hosting_url}' => $hostingUrl !== '' ? $hostingUrl : $notProvided,
     ]);
 };
 
@@ -66,17 +70,17 @@ ob_start();
     </section>
 
     <section class="card">
-        <h2><?= e((string) ($messages['identity_title'] ?? 'Éditeur et hébergement')) ?></h2>
+        <h2><?= e($text('identity_title')) ?></h2>
         <dl>
-            <dt><?= e((string) ($messages['identity_editor'] ?? 'Éditeur du site')) ?></dt>
+            <dt><?= e($text('identity_editor')) ?></dt>
             <dd><?= e($clubName) ?></dd>
-            <dt><?= e((string) ($messages['identity_address'] ?? 'Adresse')) ?></dt>
+            <dt><?= e($text('identity_address')) ?></dt>
             <dd><?= e($clubAddress) ?></dd>
-            <dt><?= e((string) ($messages['identity_contact'] ?? 'Contact')) ?></dt>
+            <dt><?= e($text('identity_contact')) ?></dt>
             <dd><a href="mailto:<?= e($clubEmail) ?>"><?= e($clubEmail) ?></a></dd>
-            <dt><?= e((string) ($messages['identity_publication_manager'] ?? 'Responsable de publication')) ?></dt>
+            <dt><?= e($text('identity_publication_manager')) ?></dt>
             <dd><?= e($publicationManager) ?></dd>
-            <dt><?= e((string) ($messages['identity_hosting'] ?? 'Hébergement')) ?></dt>
+            <dt><?= e($text('identity_hosting')) ?></dt>
             <dd>
                 <?= e($hostingName) ?><br>
                 <?= e($hostingAddress) ?>
@@ -102,10 +106,10 @@ ob_start();
     <?php endforeach; ?>
 
     <section class="card">
-        <h2><?= e((string) ($messages['related_pages_title'] ?? 'Pages associées')) ?></h2>
+        <h2><?= e($text('related_pages_title')) ?></h2>
         <div class="actions">
-            <a class="button secondary" href="<?= e(route_url('conditions_utilisation')) ?>"><?= e((string) ($messages['terms_link_label'] ?? 'Conditions générales d\'utilisation')) ?></a>
-            <a class="button secondary" href="<?= e(route_url('gdpr')) ?>"><?= e((string) ($messages['privacy_link_label'] ?? 'Vie privée et RGPD')) ?></a>
+            <a class="button secondary" href="<?= e(route_url('conditions_utilisation')) ?>"><?= e($text('terms_link_label')) ?></a>
+            <a class="button secondary" href="<?= e(route_url('gdpr')) ?>"><?= e($text('privacy_link_label')) ?></a>
         </div>
     </section>
 </div>
