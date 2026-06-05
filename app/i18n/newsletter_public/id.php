@@ -9,4 +9,7 @@ return array (
   'intro' => 'Terima berita Radio Club Durnal langsung melalui email.',
   'email_label' => 'Email buletin',
   'submit' => 'Berlangganan buletin',
+  'consent_required' => 'Diperlukan persetujuan buletin.',
+  'consent_label' => 'Saya setuju untuk menerima buletin ON4CRD dan memahami bahwa saya dapat berhenti berlangganan kapan saja.',
+  'consent_proof_public' => 'Persetujuan formulir buletin publik',
 );

@@ -17,13 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
 
         $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
-        $fullName = trim((string) ($_POST['full_name'] ?? ''));
-        $email = trim((string) ($_POST['email'] ?? ''));
+        $firstName = trim((string) ($_POST['first_name'] ?? ''));
+        $lastName = trim((string) ($_POST['last_name'] ?? ''));
+        $fullName = member_full_name_from_parts($firstName, $lastName);
+        $email = member_contact_email_from_input((string) ($_POST['email'] ?? ''));
         $phone = trim((string) ($_POST['phone'] ?? ''));
         $country = trim((string) ($_POST['country'] ?? ''));
+        $address = trim((string) ($_POST['address'] ?? ''));
+        $postalCode = trim((string) ($_POST['postal_code'] ?? ''));
         $qth = trim((string) ($_POST['qth'] ?? ''));
+        $allowGeocode = (string) ($_POST['allow_geocode'] ?? '') === '1';
         $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
-        $bio = trim((string) ($_POST['bio'] ?? ''));
         $licenceClass = trim((string) ($_POST['licence_class'] ?? ''));
         $operatorSince = trim((string) ($_POST['operator_since'] ?? ''));
         $cqZone = trim((string) ($_POST['cq_zone'] ?? ''));
@@ -33,18 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $eqslUsername = trim((string) ($_POST['eqsl_username'] ?? ''));
         $website = trim((string) ($_POST['website'] ?? ''));
         $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
-        $ubaMemberNumber = trim((string) ($_POST['uba_member_number'] ?? ''));
+        $ubaMemberNumber = $isUbaMember === 1 ? trim((string) ($_POST['uba_member_number'] ?? '')) : '';
         $stationEquipment = trim((string) ($_POST['station_equipment'] ?? ''));
         $antennas = trim((string) ($_POST['antennas'] ?? ''));
-        $maxPower = trim((string) ($_POST['max_power'] ?? ''));
-        $favouriteBands = trim((string) ($_POST['favourite_bands'] ?? ''));
-        $favouriteModes = trim((string) ($_POST['favourite_modes'] ?? ''));
+        $favouriteBands = member_profile_normalize_choice_post($_POST['favourite_bands'] ?? [], member_profile_favourite_band_choices());
+        $favouriteModes = member_profile_normalize_choice_post($_POST['favourite_modes'] ?? [], member_profile_favourite_mode_choices());
         $interests = trim((string) ($_POST['interests'] ?? ''));
 
-        if ($callsign === '' || $fullName === '' || $email === '') {
+        if ($callsign === '' || $firstName === '' || $lastName === '' || $country === '' || $qth === '') {
             throw new RuntimeException($t('required'));
         }
-        if (mb_strlen($callsign) > 32 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190) {
+        if (mb_strlen($callsign) > 32 || mb_strlen($firstName) > 95 || mb_strlen($lastName) > 95 || mb_strlen($fullName) > 190 || mb_strlen($email) > 190 || mb_strlen($country) > 190 || mb_strlen($address) > 255 || mb_strlen($postalCode) > 32 || mb_strlen($qth) > 190) {
             throw new RuntimeException($t('too_long'));
         }
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -57,7 +60,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_url'));
         }
 
-        $currentStmt = db()->prepare('SELECT auth_user_id, callsign, email, photo_path, avatar_path FROM members WHERE id = ? LIMIT 1');
+        if ($allowGeocode && ($locator === '' || $cqZone === '' || $ituZone === '')) {
+            $computedRadioLocation = member_profile_radio_location_from_address($country, $address, $postalCode, $qth);
+            if (is_array($computedRadioLocation)) {
+                if ($locator === '') {
+                    $locator = (string) ($computedRadioLocation['locator'] ?? '');
+                }
+                if ($cqZone === '') {
+                    $cqZone = (string) ($computedRadioLocation['cq_zone'] ?? '');
+                }
+                if ($ituZone === '') {
+                    $ituZone = (string) ($computedRadioLocation['itu_zone'] ?? '');
+                }
+            }
+        }
+        if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
+            throw new RuntimeException($t('invalid_locator'));
+        }
+
+        $currentStmt = db()->prepare('SELECT auth_user_id, callsign, email, photo_path, avatar_path, qrz_url FROM members WHERE id = ? LIMIT 1');
         $currentStmt->execute([$memberId]);
         $currentMember = $currentStmt->fetch() ?: [];
 
@@ -68,15 +89,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $authUserId = (int) ($currentMember['auth_user_id'] ?? 0);
+        $authEmail = member_auth_email_for_contact_email($email, $callsign);
         if ($authUserId > 0 && table_exists('users')) {
             $duplicateUserStmt = db()->prepare('SELECT COUNT(*) FROM users WHERE (email = ? OR username = ?) AND id <> ?');
-            $duplicateUserStmt->execute([$email, $callsign, $authUserId]);
+            $duplicateUserStmt->execute([$authEmail, $callsign, $authUserId]);
             if ((int) $duplicateUserStmt->fetchColumn() > 0) {
                 throw new RuntimeException($t('auth_identifier_taken'));
             }
         }
 
-        $qrzUrl = qrz_profile_url_for_callsign($callsign);
+        $qrzUrl = member_qrz_url_for_profile_save(
+            $callsign,
+            (string) ($currentMember['callsign'] ?? ''),
+            (string) ($currentMember['qrz_url'] ?? '')
+        );
+        $lotwUsername = (string) member_lotw_username_for_profile_save($callsign, $lotwUsername);
 
         $newPhotoPath = trim((string) ($currentMember['photo_path'] ?? ''));
         $newAvatarPath = trim((string) ($currentMember['avatar_path'] ?? ''));
@@ -86,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 dirname(__DIR__) . '/storage/uploads/members',
                 'member_' . $memberId,
                 ['jpg', 'jpeg', 'png', 'webp'],
+                ['image/jpeg', 'image/png', 'image/webp'],
                 6 * 1024 * 1024
             );
             $newPhotoPath = 'storage/uploads/members/' . $savedFilename;
@@ -99,13 +127,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = db()->prepare(
             'UPDATE members
          SET callsign = ?,
+             first_name = ?,
+             last_name = ?,
              full_name = ?,
              email = ?,
              phone = ?,
              country = ?,
+             address = ?,
+             postal_code = ?,
              qth = ?,
              locator = ?,
-             bio = ?,
              photo_path = ?,
              avatar_path = ?,
              licence_class = ?,
@@ -121,7 +152,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              uba_member_number = ?,
              station_equipment = ?,
              antennas = ?,
-              max_power = ?,
               favourite_bands = ?,
               favourite_modes = ?,
               interests = ?
@@ -129,13 +159,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $stmt->execute([
             $callsign,
+            $firstName,
+            $lastName,
             $fullName,
             $email,
             $phone !== '' ? $phone : null,
             $country !== '' ? $country : null,
+            $address !== '' ? $address : null,
+            $postalCode !== '' ? $postalCode : null,
             $qth !== '' ? $qth : null,
             $locator !== '' ? $locator : null,
-            $bio !== '' ? $bio : null,
             $newPhotoPath !== '' ? $newPhotoPath : null,
             $newAvatarPath !== '' ? $newAvatarPath : null,
             $licenceClass !== '' ? $licenceClass : null,
@@ -151,7 +184,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
             $stationEquipment !== '' ? $stationEquipment : null,
             $antennas !== '' ? $antennas : null,
-            $maxPower !== '' ? $maxPower : null,
             $favouriteBands !== '' ? $favouriteBands : null,
             $favouriteModes !== '' ? $favouriteModes : null,
             $interests !== '' ? $interests : null,
@@ -159,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if ($authUserId > 0 && table_exists('users')) {
-            db()->prepare('UPDATE users SET email = ?, username = ? WHERE id = ? LIMIT 1')->execute([$email, $callsign, $authUserId]);
+            db()->prepare('UPDATE users SET email = ?, username = ? WHERE id = ? LIMIT 1')->execute([$authEmail, $callsign, $authUserId]);
         }
 
         db()->commit();
@@ -174,46 +206,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$stmt = db()->prepare(
-    'SELECT callsign, full_name, email, phone, country, qth, locator, bio, licence_class, operator_since, cq_zone, itu_zone,
-            qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas, max_power,
-            favourite_bands, favourite_modes, interests, photo_path, avatar_path,
-            visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_bio,
-            visibility_licence_class, visibility_qsl, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes,
-            visibility_station, visibility_antennas, visibility_interests
-     FROM members
-     WHERE id = ? LIMIT 1'
-);
+$stmt = db()->prepare('SELECT ' . member_profile_select_columns_sql() . ' FROM members WHERE id = ? LIMIT 1');
 $stmt->execute([$memberId]);
 $member = $stmt->fetch() ?: [];
+$member = member_backfill_missing_qrz_url($memberId, is_array($member) ? $member : []);
+$member = member_with_name_parts($member);
+if (trim((string) ($member['email'] ?? '')) === '') {
+    $member['email'] = member_default_contact_email();
+}
 
-$visibilityAllows = static function (string $viewer, string $visibility): bool {
-    if ($viewer === 'private') {
-        return true;
-    }
-    if ($viewer === 'members') {
-        return in_array($visibility, ['public', 'members'], true);
-    }
-    return $visibility === 'public';
-};
-$profilePreviewFields = [
-    'full_name' => ['label' => $t('full_name'), 'visibility' => 'visibility_full_name'],
-    'email' => ['label' => $t('email'), 'visibility' => 'visibility_email'],
-    'phone' => ['label' => $t('phone'), 'visibility' => 'visibility_phone'],
-    'country' => ['label' => $t('country'), 'visibility' => 'visibility_country'],
-    'qth' => ['label' => $t('qth'), 'visibility' => 'visibility_qth'],
-    'locator' => ['label' => $t('grid'), 'visibility' => 'visibility_locator'],
-    'bio' => ['label' => $t('bio'), 'visibility' => 'visibility_bio'],
-    'licence_class' => ['label' => $t('licence'), 'visibility' => 'visibility_licence_class'],
-    'qsl_via' => ['label' => $t('qsl_info'), 'visibility' => 'visibility_qsl'],
-    'qrz_url' => ['label' => $t('qrz_url'), 'visibility' => 'visibility_qrz'],
-    'is_uba_member' => ['label' => $t('uba_member'), 'visibility' => 'visibility_uba'],
-    'favourite_bands' => ['label' => $t('bands'), 'visibility' => 'visibility_favourite_bands'],
-    'favourite_modes' => ['label' => $t('favourite_modes'), 'visibility' => 'visibility_favourite_modes'],
-    'station_equipment' => ['label' => $t('station'), 'visibility' => 'visibility_station'],
-    'antennas' => ['label' => $t('antennas'), 'visibility' => 'visibility_antennas'],
-    'interests' => ['label' => $t('interests'), 'visibility' => 'visibility_interests'],
-];
 $profileViews = [
     'public' => ['title' => 'Vue ' . strtolower($t('public'))],
     'members' => ['title' => 'Vue ' . strtolower($t('members'))],
@@ -221,22 +222,28 @@ $profileViews = [
 ];
 $profilePreviewRows = [];
 foreach (array_keys($profileViews) as $viewer) {
-    $profilePreviewRows[$viewer] = [];
-    foreach ($profilePreviewFields as $fieldName => $fieldMeta) {
-        $visibility = (string) ($member[(string) $fieldMeta['visibility']] ?? 'members');
-        if (!$visibilityAllows($viewer, $visibility)) {
-            continue;
-        }
-        $value = trim((string) ($member[$fieldName] ?? ''));
-        if ($fieldName === 'is_uba_member') {
-            $value = (int) ($member[$fieldName] ?? 0) === 1 ? 'Oui' : '';
-        }
-        if ($value === '') {
-            continue;
-        }
-        $profilePreviewRows[$viewer][] = ['label' => (string) $fieldMeta['label'], 'value' => $value];
-    }
+    $profilePreviewRows[$viewer] = member_profile_preview_rows($member, (string) $viewer, $t);
 }
+
+$operatorSinceValue = trim((string) ($member['operator_since'] ?? ''));
+$operatorSinceOptionsHtml = member_profile_operator_since_options_html($operatorSinceValue !== '' ? $operatorSinceValue : (string) date('Y'));
+$favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices(), (string) ($member['favourite_bands'] ?? ''));
+$favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices(), (string) ($member['favourite_modes'] ?? ''));
+$requiredFieldHelp = $locale === 'fr' ? 'Champ obligatoire.' : 'Required field.';
+$requiredFieldLabel = static function (string $label, string $tooltipId) use ($requiredFieldHelp): string {
+    return '<span class="profile-label-with-help">' . e($label)
+        . '<span class="profile-help-tooltip">'
+        . '<button type="button" class="profile-help-trigger profile-required-help-trigger" aria-label="' . e($requiredFieldHelp) . '" aria-describedby="' . e($tooltipId) . '">!</button>'
+        . '<span id="' . e($tooltipId) . '" class="profile-help-bubble profile-help-bubble-right" role="tooltip">' . e($requiredFieldHelp) . '</span>'
+        . '</span></span>';
+};
+$helpFieldLabel = static function (string $label, string $tooltipId, string $helpText): string {
+    return '<span class="profile-label-with-help">' . e($label)
+        . '<span class="profile-help-tooltip">'
+        . '<button type="button" class="profile-help-trigger" aria-label="' . e($helpText) . '" aria-describedby="' . e($tooltipId) . '">?</button>'
+        . '<span id="' . e($tooltipId) . '" class="profile-help-bubble profile-help-bubble-right" role="tooltip">' . e($helpText) . '</span>'
+        . '</span></span>';
+};
 
 ob_start();
 ?>
@@ -245,7 +252,7 @@ ob_start();
     <?php $avatarSrc = member_avatar_src($member); ?>
     <div class="profile-preview-views">
         <?php foreach ($profileViews as $viewer => $view): ?>
-            <?php $canSeePhoto = $visibilityAllows((string) $viewer, (string) ($member['visibility_photo'] ?? 'members')); ?>
+            <?php $canSeePhoto = member_profile_visibility_allows((string) $viewer, (string) ($member['visibility_photo'] ?? 'private')); ?>
             <section class="profile-preview-view">
                 <header>
                     <?php if ($canSeePhoto): ?>
@@ -263,7 +270,7 @@ ob_start();
                         <?php foreach ($profilePreviewRows[(string) $viewer] as $previewRow): ?>
                             <div>
                                 <dt><?= e((string) $previewRow['label']) ?></dt>
-                                <dd><?= e((string) $previewRow['value']) ?></dd>
+                                <dd><?= (string) $previewRow['html'] ?></dd>
                             </div>
                         <?php endforeach; ?>
                     </dl>
@@ -290,41 +297,50 @@ ob_start();
         <fieldset class="profile-fieldset">
             <legend><?= e($t('identity_section')) ?></legend>
             <div class="profile-form-grid">
-                <label><?= e($t('callsign')) ?><input type="text" name="callsign" maxlength="32" required value="<?= e((string) ($member['callsign'] ?? '')) ?>"></label>
-                <label><?= e($t('full_name')) ?><input type="text" name="full_name" maxlength="190" required value="<?= e((string) ($member['full_name'] ?? '')) ?>"></label>
-                <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" required value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('callsign'), 'profile-required-callsign') ?><input type="text" name="callsign" maxlength="32" required value="<?= e((string) ($member['callsign'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('last_name'), 'profile-required-last-name') ?><input type="text" name="last_name" maxlength="95" required value="<?= e((string) ($member['last_name'] ?? '')) ?>"></label>
+                <label><?= $requiredFieldLabel($t('first_name'), 'profile-required-first-name') ?><input type="text" name="first_name" maxlength="95" required value="<?= e((string) ($member['first_name'] ?? '')) ?>"></label>
+                <label><?= e($t('email')) ?><input type="email" name="email" maxlength="190" placeholder="<?= e(member_default_contact_email()) ?>" value="<?= e((string) ($member['email'] ?? '')) ?>"></label>
                 <label><?= e($t('phone')) ?><input type="tel" name="phone" maxlength="64" value="<?= e((string) ($member['phone'] ?? '')) ?>" autocomplete="tel"></label>
-                <label><?= e($t('country')) ?><input type="text" name="country" maxlength="190" value="<?= e((string) ($member['country'] ?? '')) ?>"></label>
-                <label><?= e($t('qth')) ?><input type="text" name="qth" maxlength="190" value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
-                <label><?= e($t('grid')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
-                <label class="profile-form-wide"><?= e($t('bio')) ?><textarea name="bio" rows="4" maxlength="4000"><?= e((string) ($member['bio'] ?? '')) ?></textarea></label>
+                <label><?= $requiredFieldLabel($t('country'), 'profile-required-country') ?><select name="country" class="country-select" required><?= member_country_select_options_html((string) ($member['country'] ?? '')) ?></select></label>
+                <label><?= e($t('address')) ?><input type="text" name="address" maxlength="255" value="<?= e((string) ($member['address'] ?? '')) ?>" autocomplete="street-address"></label>
+                <label><?= e($t('postal_code')) ?><input type="text" name="postal_code" maxlength="32" value="<?= e((string) ($member['postal_code'] ?? '')) ?>" autocomplete="postal-code"></label>
+                <label><?= $requiredFieldLabel($t('qth'), 'profile-required-qth') ?><input type="text" name="qth" maxlength="190" required value="<?= e((string) ($member['qth'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('grid'), 'profile-grid-help', $t('grid_help')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
             </div>
+            <label class="profile-checkbox" style="margin-top:.75rem;">
+                <input type="checkbox" name="allow_geocode" value="1">
+                <span><?= e($t('geocode_consent')) ?></span>
+            </label>
+            <?= privacy_notice_short_html('profile') ?>
         </fieldset>
 
         <fieldset class="profile-fieldset">
             <legend><?= e($t('radio_section')) ?></legend>
             <div class="profile-form-grid">
-                <label><?= e($t('licence')) ?><input type="text" name="licence_class" maxlength="64" value="<?= e((string) ($member['licence_class'] ?? '')) ?>"></label>
-                <label><?= e($t('operator_since')) ?><input type="text" name="operator_since" maxlength="32" value="<?= e((string) ($member['operator_since'] ?? '')) ?>"></label>
-                <label><?= e($t('cq_zone')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
-                <label><?= e($t('itu_zone')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
-                <label><?= e($t('qsl_via')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
-                <label><?= e($t('lotw_username')) ?><input type="text" name="lotw_username" maxlength="190" value="<?= e((string) ($member['lotw_username'] ?? '')) ?>"></label>
-                <label><?= e($t('eqsl_username')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
-                <label><?= e($t('qrz_url')) ?><input type="url" maxlength="255" readonly value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"><small class="help"><?= e($t('qrz_help')) ?></small></label>
-                <label><?= e($t('website')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
-                <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" <?= (int) ($member['is_uba_member'] ?? 0) === 1 ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>
-                <label><?= e($t('uba_member_number')) ?><input type="text" name="uba_member_number" maxlength="64" value="<?= e((string) ($member['uba_member_number'] ?? '')) ?>"></label>
-                <label><?= e($t('max_power')) ?><input type="text" name="max_power" maxlength="64" value="<?= e((string) ($member['max_power'] ?? '')) ?>"></label>
-                <label><?= e($t('bands')) ?><input type="text" name="favourite_bands" maxlength="190" value="<?= e((string) ($member['favourite_bands'] ?? '')) ?>"></label>
-                <label><?= e($t('favourite_modes')) ?><input type="text" name="favourite_modes" maxlength="190" value="<?= e((string) ($member['favourite_modes'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('licence'), 'profile-licence-help', $t('licence_help')) ?><input type="text" name="licence_class" maxlength="64" value="<?= e((string) ($member['licence_class'] ?? '')) ?>"></label>
+                <label><?= e($t('operator_since')) ?><select name="operator_since"><?= $operatorSinceOptionsHtml ?></select></label>
+                <label><?= $helpFieldLabel($t('cq_zone'), 'profile-cq-zone-help', $t('cq_zone_help')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('itu_zone'), 'profile-itu-zone-help', $t('itu_zone_help')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
+                <p class="help profile-form-wide"><?= e($t('auto_radio_location_help')) ?></p>
+                <label><?= $helpFieldLabel($t('qsl_via'), 'profile-qsl-via-help', $t('qsl_via_help')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('eqsl_username'), 'profile-eqsl-help', $t('eqsl_username_help')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
+                <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble profile-help-bubble-right" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" maxlength="255" readonly value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('website'), 'profile-website-help', $t('website_help')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
+                <?php $isUbaMemberChecked = (int) ($member['is_uba_member'] ?? 0) === 1; ?>
+                <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" data-uba-member-toggle <?= $isUbaMemberChecked ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>
+                <label><?= $helpFieldLabel($t('uba_member_number'), 'profile-uba-member-number-help', $t('uba_member_number_help')) ?><input type="text" name="uba_member_number" class="profile-uba-number-input" maxlength="64" value="<?= e((string) ($member['uba_member_number'] ?? '')) ?>" data-uba-member-number <?= $isUbaMemberChecked ? '' : 'disabled' ?>></label>
+                <fieldset class="profile-choice-fieldset profile-form-wide"><legend><?= e($t('bands')) ?></legend><?= $favouriteBandsOptionsHtml ?></fieldset>
+                <fieldset class="profile-choice-fieldset profile-form-wide"><legend><?= e($t('favourite_modes')) ?></legend><?= $favouriteModesOptionsHtml ?></fieldset>
                 <label class="profile-form-wide"><?= e($t('station')) ?><textarea name="station_equipment" rows="4" maxlength="4000"><?= e((string) ($member['station_equipment'] ?? '')) ?></textarea></label>
                 <label class="profile-form-wide"><?= e($t('antennas')) ?><textarea name="antennas" rows="3" maxlength="4000"><?= e((string) ($member['antennas'] ?? '')) ?></textarea></label>
                 <label class="profile-form-wide"><?= e($t('interests')) ?><textarea name="interests" rows="3" maxlength="4000"><?= e((string) ($member['interests'] ?? '')) ?></textarea></label>
             </div>
         </fieldset>
 
-        <button type="submit" class="button"><?= e($t('save')) ?></button>
+        <div class="profile-form-actions">
+            <button type="submit" class="button"><?= e($t('save')) ?></button>
+        </div>
     </form>
 </section>
 </div>

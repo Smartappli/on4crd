@@ -17,6 +17,17 @@
   gap: .55rem;
 }
 
+.site-search-summary h2 {
+  color: var(--accent-strong);
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
 @media (max-width: 640px) {
   .site-search-source-tabs {
     flex-wrap: nowrap;

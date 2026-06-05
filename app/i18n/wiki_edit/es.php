@@ -12,4 +12,13 @@ return array (
   'save' => 'Guardar',
   'layout' => 'Editar wiki',
   'meta_desc' => 'Crear o editar una página wiki.',
+  'propose_title' => 'Sugerir una página wiki',
+  'propose_meta_desc' => 'Cree una nueva página wiki desde el área de miembros.',
+  'error_title_content_required' => 'El título y el contenido son obligatorios.',
+  'error_field_too_long' => 'Uno de los campos excede la longitud permitida.',
+  'propose_success' => 'Página wiki enviada. Se publicará después de la validación.',
+  'wiki_label' => 'Wiki',
+  'propose_help' => 'Escribe una nueva página con HTML simple. Será revisado antes de su publicación.',
+  'propose_submit' => 'Enviar página',
+  'cancel' => 'Cancelar',
 );

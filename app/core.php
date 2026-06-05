@@ -96,7 +96,28 @@ function table_exists(string $table): bool
         return false;
     }
     if (is_array($cache)) {
-        return isset($cache[$normalized]);
+        if (isset($cache[$normalized])) {
+            return true;
+        }
+        if (array_key_exists($normalized, $fallbackCache)) {
+            return $fallbackCache[$normalized];
+        }
+
+        try {
+            $stmt = db()->prepare(
+                'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?'
+            );
+            $stmt->execute([$normalized]);
+            $exists = (int) $stmt->fetchColumn() > 0;
+            $fallbackCache[$normalized] = $exists;
+            if ($exists) {
+                $cache[$normalized] = true;
+            }
+
+            return $exists;
+        } catch (Throwable) {
+            return false;
+        }
     }
 
     try {
@@ -135,7 +156,10 @@ function table_has_column(string $table, string $column): bool
 
     $cacheKey = $table . '.' . $column;
     if (array_key_exists($cacheKey, $cache)) {
-        return $cache[$cacheKey];
+        if ($cache[$cacheKey]) {
+            return true;
+        }
+        // A runtime migration may have added this column after an earlier miss.
     }
 
     try {
@@ -164,7 +188,10 @@ function table_has_index(string $table, string $index): bool
 
     $cacheKey = $table . '.' . $index;
     if (array_key_exists($cacheKey, $cache)) {
-        return $cache[$cacheKey];
+        if ($cache[$cacheKey]) {
+            return true;
+        }
+        // A runtime migration may have added this index after an earlier miss.
     }
 
     try {

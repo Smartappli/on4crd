@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'e-mail \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Geen abonnees.',
   'no_campaigns' => 'Geen campagnes.',
+  'err_consent_proof_required' => 'Bewijs van toestemming is vereist.',
+  'consent_proof' => 'Bewijs van toestemming',
+  'consent_proof_ph' => 'Voorbeeld: ondertekend formulier op 2026-06-05',
+  'consent_admin_help' => 'Voor het toevoegen, importeren of reactiveren is expliciet toestemmingsbewijs vereist.',
+  'consent' => 'Toestemming',
 );

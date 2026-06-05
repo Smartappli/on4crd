@@ -24,7 +24,7 @@ return array (
   'bands' => 'ব্যান্ড',
   'station' => 'স্টেশন',
   'committee' => 'কমিটি',
-  'grid' => 'Grid',
+  'grid' => 'গ্রিড',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'মোড',

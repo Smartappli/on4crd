@@ -25,6 +25,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'save_post') {
             $postId = (int) ($_POST['post_id'] ?? 0);
             $sectionId = (int) ($_POST['section_id'] ?? 0);
+            $sectionStmt = db()->prepare('SELECT id FROM news_sections WHERE id = ? LIMIT 1');
+            $sectionStmt->execute([$sectionId]);
+            if (!$sectionStmt->fetchColumn()) {
+                throw new RuntimeException((string) $t['cant_publish']);
+            }
+            $existingPost = null;
+            if ($postId > 0) {
+                $existingStmt = db()->prepare('SELECT id, author_id, section_id FROM news_posts WHERE id = ? LIMIT 1');
+                $existingStmt->execute([$postId]);
+                $existingPost = $existingStmt->fetch() ?: null;
+                if (!is_array($existingPost) || !can_edit_news_post($existingPost, (int) $user['id'])) {
+                    throw new RuntimeException((string) $t['cant_publish']);
+                }
+            }
             if (!has_permission('news.moderate') && !can_submit_news_in_section((int) $user['id'], $sectionId)) {
                 throw new RuntimeException((string) $t['cant_publish']);
             }
@@ -37,8 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($slug === '') {
                 $slug = slugify($title);
             }
+            $slug = news_unique_slug($slug, $postId);
             $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
             $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
+            if (mb_strlen($title) > 190 || mb_strlen($slug) > 190 || mb_strlen($excerpt) > 2000 || mb_strlen($content) > 50000) {
+                throw new RuntimeException((string) $t['title_required']);
+            }
             if ($postId > 0) {
                 db()->prepare('UPDATE news_posts SET section_id = ?, slug = ?, title = ?, excerpt = ?, content = ?, status = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')->execute([$sectionId, $slug, $title, $excerpt, $content, $status, $postId]);
             } else {
@@ -59,6 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!in_array($status, ['draft', 'pending', 'published', 'rejected'], true)) {
                 throw new RuntimeException((string) $t['invalid_status']);
             }
+            $postStmt = db()->prepare('SELECT id FROM news_posts WHERE id = ? LIMIT 1');
+            $postStmt->execute([$postId]);
+            if (!$postStmt->fetchColumn()) {
+                throw new RuntimeException((string) $t['invalid_status']);
+            }
             $note = trim((string) ($_POST['moderation_note'] ?? ''));
             db()->prepare('UPDATE news_posts SET status = ?, moderation_note = ?, moderator_id = ?, published_at = CASE WHEN ? = "published" THEN NOW() ELSE published_at END WHERE id = ?')->execute([$status, $note, (int) $user['id'], $status, $postId]);
             set_flash('success', (string) $t['moderation_saved']);
@@ -67,7 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'assign_section_manager') {
             require_permission('news.moderate');
-            db()->prepare('INSERT IGNORE INTO news_section_managers (member_id, section_id) VALUES (?, ?)')->execute([(int) ($_POST['member_id'] ?? 0), (int) ($_POST['section_id'] ?? 0)]);
+            $memberId = (int) ($_POST['member_id'] ?? 0);
+            $sectionId = (int) ($_POST['section_id'] ?? 0);
+            $memberStmt = db()->prepare('SELECT id FROM members WHERE id = ? AND is_active = 1 LIMIT 1');
+            $memberStmt->execute([$memberId]);
+            $sectionStmt = db()->prepare('SELECT id FROM news_sections WHERE id = ? LIMIT 1');
+            $sectionStmt->execute([$sectionId]);
+            if (!$memberStmt->fetchColumn() || !$sectionStmt->fetchColumn()) {
+                throw new RuntimeException((string) $t['cant_publish']);
+            }
+            db()->prepare('INSERT IGNORE INTO news_section_managers (member_id, section_id) VALUES (?, ?)')->execute([$memberId, $sectionId]);
             set_flash('success', (string) $t['manager_added']);
             redirect('admin_news');
         }

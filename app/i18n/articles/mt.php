@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Artikolu żid mal-favoriti.',
   'favorite_removed_msg' => 'Artiklu mneħħi mill-favoriti.',
   'default_article_title' => 'Artikolu',
+  'propose_category' => 'Ipproponi kategorija',
+  'propose_category_subject' => 'Proposta ta’ kategorija ta’ artikli ON4CRD',
+  'propose_category_body' => 'Bonġu,
+
+nixtieq nipproponi kategorija ġdida ta’ artikli.
+
+Isem il-kategorija:
+Raġuni:
+Kuntatt:',
+  'propose_article' => 'Ipproponi artiklu',
+  'propose_article_subject' => 'Proposta ta’ artiklu ON4CRD',
+  'propose_article_body' => 'Bonġu,
+
+nixtieq nipproponi artiklu tekniku ON4CRD.
+
+Titlu:
+Kategorija:
+Sommarju:
+Kuntatt:',
+  'propose_category_intro' => 'Iddeskrivi l-kategorija mixtieqa. Se titħejja email mimlija minn qabel għall-kumitat.',
+  'propose_category_body_intro' => 'Bonġu, nixtieq nipproponi kategorija ġdida ta’ artikli.',
+  'propose_category_name_label' => 'Isem il-kategorija',
+  'propose_category_reason_label' => 'Raġuni',
+  'propose_category_contact_label' => 'Kuntatt',
+  'propose_category_submit' => 'Ipprepara email',
+  'propose_category_cancel' => 'Ikkanċella',
+  'propose_category_close' => 'Agħlaq',
+  'error_invalid_user' => 'Utent invalidu.',
+  'error_wait_before_next' => 'Jekk jogħġbok stenna minuta qabel tipproponi artiklu ieħor.',
+  'error_daily_limit' => 'Limitu milħuq: massimu ta\' 5 proposti ta\' artikoli kull 24 siegħa.',
+  'propose_article_meta_desc' => 'Abbozza u ssottometti artikolu għall-validazzjoni.',
+  'module_unavailable' => 'Il-modulu tal-artikoli mhux disponibbli temporanjament.',
+  'error_field_too_long' => 'Wieħed mill-oqsma jaqbeż it-tul permess.',
+  'error_title_content_required' => 'It-titlu u l-kontenut huma meħtieġa.',
+  'error_content_empty_after_cleanup' => 'Il-kontenut tal-artiklu huwa vojt wara t-tindif.',
+  'propose_article_success' => 'Artikolu sottomess għall-validazzjoni.',
+  'error_article_save_failed' => 'Ma tistax tissejvja l-artiklu bħalissa.',
+  'propose_article_help' => 'Qabbel l-artiklu tiegħek b\'intestaturi, paragrafi, listi u links. Se jiġi ffrankat fil-kontenut tiegħek u ivvalidat qabel il-pubblikazzjoni.',
+  'my_contents' => 'Il-kontenut tiegħi',
+  'article_title_label' => 'Titolu ta\' l-artikolu',
+  'category_label' => 'Kategorija',
+  'excerpt_label' => 'Sommarju',
+  'excerpt_placeholder' => 'Sommarju qasir muri fil-lista tal-artikoli.',
+  'content_label' => 'Kontenut ifformattjat',
+  'content_placeholder' => '<h2>Titolu tas-sezzjoni</h2>
+<p>It-test tiegħek...</p>
+<ul><li>Punt importanti</li></ul>',
+  'html_cleanup_help' => 'HTML jitnaddaf awtomatikament. Skripts, iframes u attributi perikolużi jitneħħew qabel il-validazzjoni.',
+  'submit_for_review' => 'Issottometti għall-validazzjoni',
 );

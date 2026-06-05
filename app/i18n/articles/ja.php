@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => '記事をお気に入りに追加しました。',
   'favorite_removed_msg' => '記事をお気に入りから削除しました。',
   'default_article_title' => '記事',
+  'propose_category' => 'カテゴリーを提案',
+  'propose_category_subject' => 'ON4CRD 記事カテゴリー提案',
+  'propose_category_body' => 'こんにちは。
+
+新しい記事カテゴリーを提案したいです。
+
+カテゴリー名：
+理由：
+連絡先：',
+  'propose_article' => '記事を提案',
+  'propose_article_subject' => 'ON4CRD 記事提案',
+  'propose_article_body' => 'こんにちは。
+
+ON4CRD の技術記事を提案したいです。
+
+タイトル：
+カテゴリー：
+概要：
+連絡先：',
+  'propose_category_intro' => '希望するカテゴリを説明してください。委員会宛ての入力済みメールを準備します。',
+  'propose_category_body_intro' => 'こんにちは。新しい記事カテゴリを提案したいです。',
+  'propose_category_name_label' => 'カテゴリ名',
+  'propose_category_reason_label' => '理由',
+  'propose_category_contact_label' => '連絡先',
+  'propose_category_submit' => 'メールを準備',
+  'propose_category_cancel' => 'キャンセル',
+  'propose_category_close' => '閉じる',
+  'error_invalid_user' => '無効なユーザーです。',
+  'error_wait_before_next' => '別の記事を提案するまで 1 分お待ちください。',
+  'error_daily_limit' => '制限に達しました: 24 時間あたり最大 5 つの記事提案。',
+  'propose_article_meta_desc' => '検証のために記事の下書きを作成して送信します。',
+  'module_unavailable' => '記事モジュールは一時的に利用できなくなります。',
+  'error_field_too_long' => 'フィールドの 1 つが許可された長さを超えています。',
+  'error_title_content_required' => 'タイトルと内容は必須です。',
+  'error_content_empty_after_cleanup' => 'クリーンアップ後、記事のコンテンツは空になります。',
+  'propose_article_success' => '検証のために送信された記事。',
+  'error_article_save_failed' => '現在記事を保存できません。',
+  'propose_article_help' => '見出し、段落、リスト、リンクを使用して記事をレイアウトします。コンテンツに保存され、公開前に検証されます。',
+  'my_contents' => '私のコンテンツ',
+  'article_title_label' => '記事タイトル',
+  'category_label' => 'カテゴリ',
+  'excerpt_label' => '概要',
+  'excerpt_placeholder' => '記事リストに短い要約が表示されます。',
+  'content_label' => 'フォーマットされたコンテンツ',
+  'content_placeholder' => '<h2>セクションタイトル</h2>
+<p>あなたのテキスト...</p>
+<ul><li>重要なポイント</li></ul>',
+  'html_cleanup_help' => 'HTML は自動的にクリーンアップされます。スクリプト、iframe、危険な属性は検証前に削除されます。',
+  'submit_for_review' => '検証のために送信する',
 );

@@ -40,17 +40,30 @@ final class ToolsI18nTest extends TestCase
      */
     public static function localeKeyParityProvider(): array
     {
-        return [
-            'it' => ['it'],
-            'pt' => ['pt'],
-            'id' => ['id'],
-            'ar' => ['ar'],
-            'bn' => ['bn'],
-            'ja' => ['ja'],
-            'zh' => ['zh'],
-            'ru' => ['ru'],
-            'hi' => ['hi'],
-        ];
+        $messages = require __DIR__ . '/../app/i18n/tools.php';
+        unset($messages['fr']);
+
+        $cases = [];
+        foreach (array_keys($messages) as $locale) {
+            $cases[(string) $locale] = [(string) $locale];
+        }
+
+        return $cases;
+    }
+
+    public function testToolsLocalesDoNotContainCommonTechnicalMojibake(): void
+    {
+        $messages = require __DIR__ . '/../app/i18n/tools.php';
+        self::assertIsArray($messages);
+
+        $badFragments = ['Âµ', 'Â°', 'Î©', 'â†’', 'â†”', 'â€™', 'â€œ', 'â€“', 'â€”'];
+        foreach ($messages as $locale => $translations) {
+            self::assertIsArray($translations);
+            $joined = implode("\n", array_map('strval', $translations));
+            foreach ($badFragments as $fragment) {
+                self::assertStringNotContainsString($fragment, $joined, sprintf('Locale %s contains mojibake fragment %s.', (string) $locale, $fragment));
+            }
+        }
     }
 
     public function testItalianToolsLocaleDoesNotContainKnownSpanishFragments(): void

@@ -58,12 +58,14 @@ function module_css_assets_for_route(string $route): array
     $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
     $moduleByRoute = [
         'album' => 'albums',
+        'article_propose' => 'articles',
         'auction_bid' => 'auctions',
         'auction_view' => 'auctions',
         'classifieds_manage' => 'classifieds',
         'event_view' => 'events',
         'news_view' => 'news',
         'wiki_edit' => 'wiki',
+        'wiki_propose' => 'wiki',
         'wiki_view' => 'wiki',
     ];
     $module = $moduleByRoute[$route] ?? $route;
@@ -89,9 +91,11 @@ function module_js_assets_for_route(string $route): array
     $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
     $moduleByRoute = [
         'event_view' => 'events',
+        'article_propose' => 'articles',
         'save_dashboard' => 'dashboard',
         'widget_render' => 'dashboard',
         'wiki_edit' => 'wiki_edit',
+        'wiki_propose' => 'wiki_edit',
     ];
     $module = $moduleByRoute[$route] ?? $route;
     $assets = [];
@@ -100,7 +104,7 @@ function module_js_assets_for_route(string $route): array
     if ($route === 'home') {
         $candidates[] = 'tools';
     }
-    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'classifieds', 'classifieds_manage', 'wiki_edit'], true)) {
+    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'article_propose', 'classifieds', 'classifieds_manage', 'wiki_edit', 'wiki_propose'], true)) {
         $candidates[] = 'wysiwyg';
     }
 
@@ -212,6 +216,7 @@ function render_layout_impl(string $content, string $title = ''): string
             . '<div class="account-menu-panel">'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('gdpr')) . '">' . e($accountPrivacyLabel) . '</a>'
+            . '<a class="account-menu-link" href="' . e(route_url('my_requests')) . '">' . e((string) ($layoutI18n['account_requests'] ?? 'Mes demandes')) . '</a>'
             . '<a class="account-menu-link" href="' . e(route_url('settings')) . '">' . e((string) $layoutI18n['account_settings']) . '</a>'
             . $adminMenuLink
             . '<hr class="account-menu-separator">'
@@ -473,6 +478,13 @@ function render_layout_impl(string $content, string $title = ''): string
     foreach (module_js_assets_for_route($currentRoute) as $moduleJsPath) {
         $moduleJsHtml .= '<script nonce="' . e($nonce) . '" src="' . e(asset_url($moduleJsPath)) . '" defer></script>';
     }
+    $matomoHtml = '';
+    $matomoIncludePath = __DIR__ . '/includes/matomo.php';
+    if (is_file($matomoIncludePath)) {
+        ob_start();
+        include $matomoIncludePath;
+        $matomoHtml = (string) ob_get_clean();
+    }
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" class="notranslate" translate="no" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'
         . e($pageTitle)
@@ -487,8 +499,7 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<link rel="apple-touch-icon" href="' . e(asset_url('assets/icons/apple-touch-icon.png')) . '">'
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . $moduleCssHtml
-        . '<script nonce="' . e($nonce) . '" src="https://cdn.tailwindcss.com"></script>'
-        . '<script nonce="' . e($nonce) . '">tailwind.config={theme:{extend:{colors:{club:{900:"#0f172a",700:"#1d4ed8",500:"#3b82f6",100:"#dbeafe"}}}}};</script>'
+        . '<link rel="stylesheet" href="' . e(asset_url('assets/css/tailwind-local.css')) . '">'
         . '</head><body data-route="' . e($currentRoute) . '" data-sw-url="' . e(base_url('sw.js')) . '">'
         . '<a class="skip-link" href="#main-content">' . e((string) ($layoutI18n['skip_to_content'] ?? 'Skip to content')) . '</a>'
         . '<header class="topbar"><div class="brand-wrap"><div class="brand-mark"><img class="brand-mark-img" src="' . e(asset_url('assets/logo/LOGO-CRD-HALO-2020.png')) . '" alt="Logo ON4CRD"></div><a class="brand" href="' . e(route_url('home')) . '">'
@@ -501,6 +512,7 @@ function render_layout_impl(string $content, string $title = ''): string
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'
         . $moduleJsHtml
+        . $matomoHtml
         . '</body></html>';
 }
 }

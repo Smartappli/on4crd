@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Članek dodaj med priljubljene.',
   'favorite_removed_msg' => 'Članek odstranjen iz priljubljenih.',
   'default_article_title' => 'Postavka',
+  'propose_category' => 'Predlagaj kategorijo',
+  'propose_category_subject' => 'Predlog kategorije člankov ON4CRD',
+  'propose_category_body' => 'Pozdravljeni,
+
+rad(a) bi predlagal(a) novo kategorijo člankov.
+
+Ime kategorije:
+Utemeljitev:
+Kontakt:',
+  'propose_article' => 'Predlagaj članek',
+  'propose_article_subject' => 'Predlog članka ON4CRD',
+  'propose_article_body' => 'Pozdravljeni,
+
+rad(a) bi predlagal(a) tehnični članek ON4CRD.
+
+Naslov:
+Kategorija:
+Povzetek:
+Kontakt:',
+  'propose_category_intro' => 'Opišite želeno kategorijo. Za odbor bo pripravljeno vnaprej izpolnjeno e-sporočilo.',
+  'propose_category_body_intro' => 'Pozdravljeni, rad/rada bi predlagal/a novo kategorijo člankov.',
+  'propose_category_name_label' => 'Ime kategorije',
+  'propose_category_reason_label' => 'Utemeljitev',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Pripravi e-pošto',
+  'propose_category_cancel' => 'Prekliči',
+  'propose_category_close' => 'Zapri',
+  'error_invalid_user' => 'Neveljaven uporabnik.',
+  'error_wait_before_next' => 'Počakajte eno minuto, preden predlagate drug članek.',
+  'error_daily_limit' => 'Dosežena omejitev: največ 5 predlogov člankov v 24 urah.',
+  'propose_article_meta_desc' => 'Osnutek in predložitev članka v potrditev.',
+  'module_unavailable' => 'Modul članki začasno ni na voljo.',
+  'error_field_too_long' => 'Eno od polj presega dovoljeno dolžino.',
+  'error_title_content_required' => 'Naslov in vsebina sta obvezna.',
+  'error_content_empty_after_cleanup' => 'Vsebina članka je po čiščenju prazna.',
+  'propose_article_success' => 'Članek poslan v potrditev.',
+  'error_article_save_failed' => 'Članka trenutno ni mogoče shraniti.',
+  'propose_article_help' => 'Opremite svoj članek z naslovi, odstavki, seznami in povezavami. Shranjeno bo v vaši vsebini in pred objavo potrjeno.',
+  'my_contents' => 'Moja vsebina',
+  'article_title_label' => 'Naslov članka',
+  'category_label' => 'Kategorija',
+  'excerpt_label' => 'Povzetek',
+  'excerpt_placeholder' => 'Kratek povzetek, prikazan na seznamu člankov.',
+  'content_label' => 'Oblikovana vsebina',
+  'content_placeholder' => '<h2> Naslov razdelka</h2>
+<p>Vaše besedilo...</p>
+<ul><li>IPomembna točka</li></ul>',
+  'html_cleanup_help' => 'HTML se samodejno očisti. Skripti, iframe in nevarni atributi so pred preverjanjem odstranjeni.',
+  'submit_for_review' => 'Pošlji v potrditev',
 );

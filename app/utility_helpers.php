@@ -44,6 +44,14 @@ function storage_path(string $path = ''): string
 }
 }
 
+if (!function_exists('site_contact_email')) {
+function site_contact_email(): string
+{
+    $email = trim((string) config('privacy.controller_email', 'crdurnal@gmail.com'));
+    return filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : 'crdurnal@gmail.com';
+}
+}
+
 if (!function_exists('llphant_embedding_generator')) {
 function llphant_embedding_generator(): ?object
 {

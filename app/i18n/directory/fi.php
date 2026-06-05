@@ -24,7 +24,7 @@ return array (
   'bands' => 'Bändit',
   'station' => 'Lomakeskus',
   'committee' => 'komitea',
-  'grid' => 'Grid',
+  'grid' => 'Ruudukko',
   'qrz' => 'QRZ',
   'uba_member' => 'UBA',
   'modes' => 'Modet',

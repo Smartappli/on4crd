@@ -17,4 +17,7 @@ return array (
   'email_label' => 'যোগাযোগের ইমেইল',
   'subscribe' => 'সাবস্ক্রাইব',
   'layout_title' => 'নিউজলেটার',
+  'consent_required' => 'নিউজলেটার সম্মতি প্রয়োজন.',
+  'consent_label' => 'আমি ON4CRD নিউজলেটার পেতে সম্মত এবং বুঝি যে আমি যেকোনো সময় সদস্যতা ত্যাগ করতে পারি।',
+  'consent_proof_member' => 'সদস্য নিউজলেটার সম্মতি',
 );

@@ -5,7 +5,7 @@ return [
     'intro' => 'Here is the process to submit a membership request to the CRD section.',
     'image_alt' => 'CRD membership visual',
     'how_title' => 'How do you become a CRD member?',
-    'how_text' => 'First, submit a request by email (on4crd.be) to the CM (club president) of the CRD section.',
+    'how_text' => 'First, submit a request by email (crdurnal@gmail.com) to the CM (club president) of the CRD section.',
     'postal_title' => 'Postal request',
     'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
     'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',

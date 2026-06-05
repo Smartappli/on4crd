@@ -7,7 +7,7 @@ return array (
   'intro' => 'Seo é an nós imeachta chun iarratas ar bhallraíocht a chur isteach sa rannóg CRD.',
   'image_alt' => 'Ballraíocht amhairc CRD',
   'how_title' => 'Conas is féidir leat a bheith i do bhall de CRD?',
-  'how_text' => 'Cuir iarratas isteach trí ríomhphost (on4crd.be) chuig CM (uachtarán an chlub) den rannóg CRD.',
+  'how_text' => 'Cuir iarratas isteach trí ríomhphost (crdurnal@gmail.com) chuig CM (uachtarán an chlub) den rannóg CRD.',
   'postal_title' => 'Iarratas tríd an bpost',
   'contact_item_1' => 'Club Raidió Durnal - Airéine Bocq',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

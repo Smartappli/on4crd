@@ -2,6 +2,8 @@
 
 /** @var string $homeLocale */
 $homeLocale = current_locale();
+$homeFullCalendarLocale = fullcalendar_locale_code($homeLocale);
+$homeFullCalendarLocaleAsset = fullcalendar_locale_asset_url($homeLocale);
 $homeI18n = i18n_domain_locale('home', $homeLocale);
 $homeEventsI18n = i18n_domain_locale('events', $homeLocale);
 $homeTodayDate = date('d/m/Y');
@@ -111,15 +113,21 @@ $memberModuleCards = '';
 $memberModulesJoinCta = (string) ($homeI18n['member_modules_join_cta'] ?? 'Devenir membre');
 $memberModuleCodesRendered = [];
 $memberModuleDefinitions = [
-    'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title' => ['fr' => 'Tableau de bord', 'en' => 'Dashboard'], 'desc' => ['fr' => 'Retrouvez vos widgets, raccourcis et informations personnelles dans un espace centralise.', 'en' => 'Find your widgets, shortcuts and personal information in one central member area.']],
-    'members' => ['route' => 'profile', 'icon' => '☷', 'title' => ['fr' => 'Espace membre', 'en' => 'Member area'], 'desc' => ['fr' => 'Gerez votre profil, vos preferences et les informations liees a votre compte ON4CRD.', 'en' => 'Manage your profile, preferences and information linked to your ON4CRD account.']],
-    'qsl' => ['route' => 'qsl', 'icon' => '✉', 'title' => ['fr' => 'QSL', 'en' => 'QSL'], 'desc' => ['fr' => 'Preparez, visualisez et exportez vos cartes QSL depuis l espace membre.', 'en' => 'Prepare, preview and export your QSL cards from the member area.']],
-    'library' => ['route' => 'members_library', 'icon' => '▤', 'title' => ['fr' => 'Bibliotheque', 'en' => 'Library'], 'desc' => ['fr' => 'Accedez aux documents, supports techniques et ressources partages avec les membres.', 'en' => 'Access documents, technical notes and resources shared with members.']],
-    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title' => ['fr' => 'Encheres', 'en' => 'Auctions'], 'desc' => ['fr' => 'Consultez les lots disponibles et participez aux ventes organisees par le club.', 'en' => 'Browse available lots and take part in auctions organized by the club.']],
-    'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title' => ['fr' => 'Petites annonces', 'en' => 'Classifieds'], 'desc' => ['fr' => 'Publiez ou consultez les annonces radioamateurs proposees par la communaute.', 'en' => 'Post or browse amateur radio classifieds from the community.']],
-    'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title' => ['fr' => 'Assistant', 'en' => 'Assistant'], 'desc' => ['fr' => 'Posez vos questions a l assistant ON4CRD pour retrouver rapidement une information utile.', 'en' => 'Ask the ON4CRD assistant to quickly find useful information.']],
-    'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title' => ['fr' => 'Newsletter', 'en' => 'Newsletter'], 'desc' => ['fr' => 'Suivez les communications du club et gerez votre inscription aux nouvelles ON4CRD.', 'en' => 'Follow club communications and manage your ON4CRD news subscription.']],
+    'dashboard' => ['route' => 'dashboard', 'icon' => '▦', 'title_key' => 'member_module_dashboard_title', 'desc_key' => 'member_module_dashboard_desc', 'title_fallback' => 'Tableau de bord', 'desc_fallback' => 'Retrouvez vos widgets, raccourcis et informations personnelles dans un espace membre centralisé.'],
+    'members' => ['route' => 'profile', 'icon' => '☷', 'title_key' => 'member_module_members_title', 'desc_key' => 'member_module_members_desc', 'title_fallback' => 'Espace membre', 'desc_fallback' => 'Gérez votre profil, vos préférences et les informations liées à votre compte ON4CRD.'],
+    'qsl' => ['route' => 'qsl', 'icon' => '✉', 'title_key' => 'member_module_qsl_title', 'desc_key' => 'member_module_qsl_desc', 'title_fallback' => 'QSL', 'desc_fallback' => 'Préparez, visualisez et exportez vos cartes QSL depuis l’espace membre.'],
+    'library' => ['route' => 'members_library', 'icon' => '▤', 'title_key' => 'member_module_library_title', 'desc_key' => 'member_module_library_desc', 'title_fallback' => 'Bibliothèque', 'desc_fallback' => 'Accédez aux documents, supports techniques et ressources partagés avec les membres.'],
+    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title_key' => 'member_module_auctions_title', 'desc_key' => 'member_module_auctions_desc', 'title_fallback' => 'Enchères', 'desc_fallback' => 'Consultez les lots disponibles et participez aux ventes organisées par le club.'],
+    'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title_key' => 'member_module_classifieds_title', 'desc_key' => 'member_module_classifieds_desc', 'title_fallback' => 'Petites annonces', 'desc_fallback' => 'Publiez ou consultez les annonces radioamateurs proposées par la communauté.'],
+    'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title_key' => 'member_module_chatbot_title', 'desc_key' => 'member_module_chatbot_desc', 'title_fallback' => 'Assistant', 'desc_fallback' => 'Posez vos questions à l’assistant ON4CRD pour retrouver rapidement une information utile.'],
+    'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title_key' => 'member_module_newsletter_title', 'desc_key' => 'member_module_newsletter_desc', 'title_fallback' => 'Newsletter', 'desc_fallback' => 'Suivez les communications du club et gérez votre inscription aux nouvelles ON4CRD.'],
 ];
+$memberModuleText = static function (array $moduleMeta, string $field, string $fallback = '') use ($homeI18n): string {
+    $key = (string) ($moduleMeta[$field . '_key'] ?? '');
+    $value = $key !== '' ? trim((string) ($homeI18n[$key] ?? '')) : '';
+
+    return $value !== '' ? $value : (string) ($moduleMeta[$field . '_fallback'] ?? $fallback);
+};
 $memberModuleIconPaths = [
     'dashboard' => '<rect width="7" height="9" x="3" y="3" rx="1.5"></rect><rect width="7" height="5" x="14" y="3" rx="1.5"></rect><rect width="7" height="9" x="14" y="12" rx="1.5"></rect><rect width="7" height="5" x="3" y="16" rx="1.5"></rect>',
     'members' => '<path d="M18 21a6 6 0 0 0-12 0"></path><circle cx="12" cy="8" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path>',
@@ -166,9 +174,9 @@ if (table_exists('modules')) {
         $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">'
             . '<div class="flex items-center gap-3">'
             . $renderMemberModuleIcon($moduleCode)
-            . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
+            . '<h3 class="text-lg font-semibold text-slate-900">' . e($memberModuleText($moduleMeta, 'title', $moduleCode)) . '</h3>'
             . '</div>'
-            . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
+            . '<p class="mt-2 text-sm text-slate-600">' . e($memberModuleText($moduleMeta, 'desc')) . '</p>'
             . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
             . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
             . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e($memberModulesJoinCta) . ' →</span>'
@@ -192,9 +200,9 @@ foreach ($memberFallbackModuleCodes as $moduleCode) {
     $memberModuleCards .= '<a class="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" href="' . e(route_url('membership')) . '">'
         . '<div class="flex items-center gap-3">'
         . $renderMemberModuleIcon($moduleCode)
-        . '<h3 class="text-lg font-semibold text-slate-900">' . e(i18n_localized_value((array) ($moduleMeta['title'] ?? []), $homeLocale, $moduleCode)) . '</h3>'
+        . '<h3 class="text-lg font-semibold text-slate-900">' . e($memberModuleText($moduleMeta, 'title', $moduleCode)) . '</h3>'
         . '</div>'
-        . '<p class="mt-2 text-sm text-slate-600">' . e(i18n_localized_value((array) ($moduleMeta['desc'] ?? []), $homeLocale, '')) . '</p>'
+        . '<p class="mt-2 text-sm text-slate-600">' . e($memberModuleText($moduleMeta, 'desc')) . '</p>'
         . '<div class="mt-auto pt-4 flex items-center justify-between gap-3">'
         . '<span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">' . e((string) $homeI18n['member_audience']) . '</span>'
         . '<span class="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700 transition group-hover:border-blue-300 group-hover:bg-blue-100">' . e($memberModulesJoinCta) . ' →</span>'
@@ -374,14 +382,15 @@ try {
     }
 
     if (module_enabled('wiki') && table_exists('wiki_pages')) {
-        $latestWikiPage = cache_remember('home_latest_wiki_page_v1', 60, static function () {
-            return db()->query('SELECT slug, title, content, updated_at FROM wiki_pages ORDER BY updated_at DESC LIMIT 1')->fetch();
+        $latestWikiPage = cache_remember('home_latest_wiki_page_v2', 60, static function () {
+            return db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 1')->fetch();
         });
     }
 
     if (module_enabled('articles') && table_exists('articles')) {
-        $latestArticle = cache_remember('home_latest_article_v1', 60, static function () {
-            return db()->query('SELECT id, slug, title, excerpt, content, created_at, updated_at FROM articles WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 1')->fetch();
+        $latestArticle = cache_remember('home_latest_article_v2', 60, static function () {
+            $sort = article_publication_sort_expression();
+            return db()->query('SELECT id, slug, title, excerpt, content, published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . $sort . ' DESC, id DESC LIMIT 1')->fetch();
         });
     }
 } catch (Throwable) {
@@ -406,7 +415,7 @@ if (is_array($latestNews) && !empty($latestNews['slug'])) {
 
 $classifiedsHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('classifieds')) . '">'
     . '<p>' . e((string) ($homeI18n['spotlight_classifieds_empty'] ?? 'Aucune petite annonce active pour le moment.')) . '</p>'
-    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' â†’</span>'
+    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' →</span>'
     . '</a>';
 if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
     $classifiedDescription = mb_safe_strimwidth(trim(preg_replace('/\s+/u', ' ', strip_tags((string) ($latestClassifiedAd['description'] ?? ''))) ?? ''), 0, 130, '...');
@@ -417,7 +426,7 @@ if (is_array($latestClassifiedAd) && !empty($latestClassifiedAd['title'])) {
         . '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e($classifiedMeta) . '</p>'
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) $latestClassifiedAd['title']) . '</h3>'
         . ($classifiedDescription !== '' ? '<p class="mt-2 text-sm text-slate-600">' . e($classifiedDescription) . '</p>' : '')
-        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' â†’</span>'
+        . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_classifieds_cta'] ?? 'Voir les annonces')) . ' →</span>'
         . '</a>';
 }
 
@@ -446,7 +455,8 @@ if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
     if ($articleExcerpt === '') {
         $articleExcerpt = mb_safe_strimwidth(trim((string) preg_replace('/\s+/u', ' ', strip_tags((string) ($latestArticle['content_localized'] ?? $latestArticle['content'] ?? '')))), 0, 130, '...');
     }
-    $articleDate = !empty($latestArticle['updated_at']) ? date('d/m/Y', strtotime((string) $latestArticle['updated_at'])) : '';
+    $articlePublished = article_publication_datetime($latestArticle);
+    $articleDate = $articlePublished !== null ? date('d/m/Y', strtotime($articlePublished)) : '';
     $latestArticleHtml = '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('article', ['slug' => (string) $latestArticle['slug']])) . '">'
         . ($articleDate !== '' ? '<p class="text-xs font-semibold uppercase tracking-wide text-blue-700">' . e((string) ($homeI18n['spotlight_member_updated_on'] ?? 'Mis à jour le')) . ' ' . e($articleDate) . '</p>' : '')
         . '<h3 class="mt-2 text-lg font-bold text-slate-900 group-hover:text-blue-700">' . e((string) ($latestArticle['title_localized'] ?? $latestArticle['title'] ?? '')) . '</h3>'
@@ -456,7 +466,7 @@ if (is_array($latestArticle) && !empty($latestArticle['slug'])) {
 }
 
 $homeEventsCalendarConfig = [
-    'locale' => $homeLocale,
+    'locale' => $homeFullCalendarLocale,
     'initialView' => 'dayGridMonth',
     'eventsUrl' => route_url('events_feed'),
     'loadError' => (string) ($homeEventsI18n['calendar_load_error'] ?? $homeI18n['no_event']),
@@ -468,13 +478,13 @@ $homeEventsCalendarConfig = [
     ],
 ];
 $nextEventHtml = '<div class="home-events-planning rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">'
-    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/skeleton.css">'
-    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/theme.css">'
-    . '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/palette.css">'
+    . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/skeleton.css')) . '">'
+    . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/theme.css')) . '">'
+    . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/palette.css')) . '">'
     . '<div class="fullcalendar-theme home-events-calendar" data-home-events-calendar data-calendar-config="' . e(json_encode($homeEventsCalendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '"></div>'
-    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/all.global.js"></script>'
-    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/themes/classic/global.js"></script>'
-    . '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0-rc.2/locales/' . e($homeLocale) . '.global.js"></script>'
+    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) . '"></script>'
+    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) . '"></script>'
+    . '<script src="' . e($homeFullCalendarLocaleAsset) . '"></script>'
     . '</div>';
 
 $toolDayCta = trim((string) $homeI18n['spotlight_tool_day_cta']);
@@ -880,12 +890,9 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '<div class="grid gap-6 lg:grid-cols-3">'
     . '<article><h3 class="text-lg font-bold text-slate-900">' . e((string) $homeI18n['address_title']) . '</h3><p class="mt-3 text-sm text-slate-700">' . e((string) $homeI18n['club_name']) . '</p><p class="text-sm text-slate-700">' . e((string) $homeI18n['venue_line_1']) . '</p><p class="text-sm text-slate-700">' . e((string) $homeI18n['venue_line_2']) . '</p><p class="text-sm text-slate-700">' . e((string) $homeI18n['venue_line_3']) . '</p><p class="mt-4 text-lg font-bold text-slate-900">' . e((string) $homeI18n['contact_people']) . '</p><p class="text-sm text-slate-700">ON4BEN : +32 496 260 865</p><p class="text-sm text-slate-700">ON4DG : +32 478 789 193</p></article>'
     . '<article><h3 class="text-lg font-bold text-slate-900">' . e((string) $homeI18n['contact_title']) . '</h3><form class="mt-3 grid gap-2" method="post" action="' . e(route_url('footer_contact')) . '"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '"><input type="hidden" name="return_route" value="home"><label for="home-contact-name" class="sr-only">' . e((string) $homeI18n['contact_name']) . '</label><input id="home-contact-name" type="text" name="name" placeholder="' . e((string) $homeI18n['contact_name']) . '" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"><label for="home-contact-email" class="sr-only">' . e((string) $homeI18n['contact_email']) . '</label><input id="home-contact-email" type="email" name="email" placeholder="' . e((string) $homeI18n['contact_email']) . '" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"><label for="home-contact-message" class="sr-only">' . e((string) $homeI18n['contact_message']) . '</label><textarea id="home-contact-message" name="message" placeholder="' . e((string) $homeI18n['contact_message']) . '" rows="3" maxlength="2000" data-wysiwyg="off" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea><button type="submit" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">' . e((string) $homeI18n['contact_send']) . '</button></form></article>'
-    . '<article><h3 class="text-lg font-bold text-slate-900">' . e((string) $homeI18n['important_info_title']) . '</h3><ul class="mt-3 list-inside list-disc space-y-1 text-sm text-slate-700"><li><a class="hover:underline" href="' . e(route_url('conditions_utilisation')) . '">' . e((string) $homeI18n['link_terms']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('mentions_legales')) . '">' . e((string) $homeI18n['link_legal']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('reglement_interieur')) . '">' . e((string) $homeI18n['link_internal_rules']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('membership')) . '">' . e((string) $homeI18n['link_donate']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('sponsoring')) . '">' . e((string) $homeI18n['link_sponsoring']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('code_q')) . '">' . e((string) $homeI18n['link_code_q']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('code_cw')) . '">' . e((string) $homeI18n['link_code_cw']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('bandplan_on3')) . '">' . e((string) $homeI18n['link_bandplan_on3']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('bandplan_on2')) . '">' . e((string) $homeI18n['link_bandplan_on2']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('bandplan_harec')) . '">' . e((string) $homeI18n['link_bandplan_harec']) . '</a></li></ul></article>'
+    . '<article><h3 class="text-lg font-bold text-slate-900">' . e((string) $homeI18n['important_info_title']) . '</h3><ul class="mt-3 list-inside list-disc space-y-1 text-sm text-slate-700"><li><a class="hover:underline" href="' . e(route_url('conditions_utilisation')) . '">' . e((string) $homeI18n['link_terms']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('mentions_legales')) . '">' . e((string) $homeI18n['link_legal']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('reglement_interieur')) . '">' . e((string) $homeI18n['link_internal_rules']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('donation')) . '">' . e((string) $homeI18n['link_donate']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('sponsoring')) . '">' . e((string) $homeI18n['link_sponsoring']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('code_q')) . '">' . e((string) $homeI18n['link_code_q']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('code_cw')) . '">' . e((string) $homeI18n['link_code_cw']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('bandplan_on3')) . '">' . e((string) $homeI18n['link_bandplan_on3']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('bandplan_on2')) . '">' . e((string) $homeI18n['link_bandplan_on2']) . '</a></li><li><a class="hover:underline" href="' . e(route_url('bandplan_harec')) . '">' . e((string) $homeI18n['link_bandplan_harec']) . '</a></li></ul></article>'
     . '</div>'
     . '</section>';
 
 
 echo render_layout($content, (string) ($homeI18n['page_title'] ?? 'Accueil'));
-
-
-

@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Artikel lägg till favoriter.',
   'favorite_removed_msg' => 'Artikel borttagen från favoriter.',
   'default_article_title' => 'Objekt',
+  'propose_category' => 'Föreslå en kategori',
+  'propose_category_subject' => 'Förslag på ON4CRD-artikelkategori',
+  'propose_category_body' => 'Hej,
+
+jag vill föreslå en ny artikelkategori.
+
+Kategorinamn:
+Motivering:
+Kontakt:',
+  'propose_article' => 'Föreslå en artikel',
+  'propose_article_subject' => 'Förslag på ON4CRD-artikel',
+  'propose_article_body' => 'Hej,
+
+jag vill föreslå en teknisk ON4CRD-artikel.
+
+Titel:
+Kategori:
+Sammanfattning:
+Kontakt:',
+  'propose_category_intro' => 'Beskriv den önskade kategorin. Ett förifyllt e-postmeddelande förbereds till kommittén.',
+  'propose_category_body_intro' => 'Hej, jag vill föreslå en ny artikelkategori.',
+  'propose_category_name_label' => 'Kategorinamn',
+  'propose_category_reason_label' => 'Motivering',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Förbered e-post',
+  'propose_category_cancel' => 'Avbryt',
+  'propose_category_close' => 'Stäng',
+  'error_invalid_user' => 'Ogiltig användare.',
+  'error_wait_before_next' => 'Vänta en minut innan du föreslår en annan artikel.',
+  'error_daily_limit' => 'Gräns uppnådd: max 5 artikelförslag per 24 timmar.',
+  'propose_article_meta_desc' => 'Utarbeta och skicka in en artikel för validering.',
+  'module_unavailable' => 'Artikelmodulen är tillfälligt otillgänglig.',
+  'error_field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
+  'error_title_content_required' => 'Titel och innehåll krävs.',
+  'error_content_empty_after_cleanup' => 'Artikelinnehållet är tomt efter rensning.',
+  'propose_article_success' => 'Artikel inlämnad för validering.',
+  'error_article_save_failed' => 'Det går inte att spara artikeln just nu.',
+  'propose_article_help' => 'Lägg upp din artikel med rubriker, stycken, listor och länkar. Det kommer att sparas i ditt innehåll och valideras innan publicering.',
+  'my_contents' => 'Mitt innehåll',
+  'article_title_label' => 'Artikeltitel',
+  'category_label' => 'Kategori',
+  'excerpt_label' => 'Sammanfattning',
+  'excerpt_placeholder' => 'Kort sammanfattning visas i artikellistan.',
+  'content_label' => 'Formaterat innehåll',
+  'content_placeholder' => '<h2>Sektionstitel</h2>
+<p>Din text...</p>
+<ul><li>Viktig punkt</li></ul>',
+  'html_cleanup_help' => 'HTML rensas automatiskt. Skript, iframes och farliga attribut tas bort före validering.',
+  'submit_for_review' => 'Skicka in för validering',
 );

@@ -29,6 +29,7 @@ foreach ($rows as $event) {
     if ($summary === '') {
         $summary = trim(strip_tags((string) ($event['description'] ?? '')));
     }
+    $externalUrl = sanitize_href_attribute((string) ($event['external_url'] ?? '')) ?? '';
 
     $calendarEvents[] = [
         'id' => (string) ((int) $event['id']),
@@ -39,7 +40,7 @@ foreach ($rows as $event) {
         'extendedProps' => [
             'summary' => $summary,
             'location' => trim((string) ($event['location'] ?? '')),
-            'externalUrl' => trim((string) ($event['external_url'] ?? '')),
+            'externalUrl' => $externalUrl,
             'startLabel' => $startAt->format('d/m/Y H:i'),
             'endLabel' => $endAt->format('d/m/Y H:i'),
         ],

@@ -14,7 +14,7 @@ return array (
   'subtone_status_value' => 'Jā/Jā (iek./dec.)',
   'callsign' => 'Indikatīvs',
   'channel' => 'Kanāls',
-  'mode' => 'Mode',
+  'mode' => 'Režīms',
   'mode_value' => 'FM atkārtotāja režīms + EchoLink',
   'input' => 'Ievades frekvence (TX)',
   'output' => 'Izejas frekvence (RX)',

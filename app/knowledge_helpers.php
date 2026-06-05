@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/article_helpers.php';
+
 if (!function_exists('answer_question_from_knowledge')) {
     /**
      * @return list<string>
@@ -649,7 +651,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                             }
                         }
                         if (table_exists('articles')) {
-                            $rows = db()->query('SELECT slug,title,excerpt,content FROM articles WHERE status = "published" ORDER BY updated_at DESC LIMIT 120')->fetchAll() ?: [];
+                            $rows = db()->query('SELECT id, slug, title, excerpt, content, published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . article_publication_sort_expression() . ' DESC, id DESC LIMIT 120')->fetchAll() ?: [];
                             foreach ($rows as $row) {
                                 if (!is_array($row)) { continue; }
                                 $slug = trim((string) ($row['slug'] ?? ''));
@@ -968,17 +970,35 @@ function answer_question_from_knowledge(string $question, array $preferredSource
         if (table_exists('articles')) {
             try {
                 $whereParts = [];
+                $translationJoin = '';
+                $translationWhere = '';
                 $params = [];
+                if (current_locale() !== 'fr' && table_exists('article_translations')) {
+                    $publicStatuses = article_translation_public_statuses();
+                    $statusPlaceholders = implode(',', array_fill(0, count($publicStatuses), '?'));
+                    $translationJoin = ' LEFT JOIN article_translations tr ON tr.article_id = a.id AND tr.locale = ? AND tr.status IN (' . $statusPlaceholders . ')';
+                    array_push($params, current_locale(), ...$publicStatuses);
+                    $translationWhere = ' OR tr.title LIKE ? OR tr.excerpt LIKE ? OR tr.content LIKE ?';
+                }
                 foreach ($ragLikeTerms as $term) {
                     $like = '%' . $term . '%';
-                    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+                    $whereParts[] = '(a.title LIKE ? OR a.excerpt LIKE ? OR a.content LIKE ?' . $translationWhere . ')';
                     array_push($params, $like, $like, $like);
+                    if ($translationWhere !== '') {
+                        array_push($params, $like, $like, $like);
+                    }
                 }
                 if ($whereParts === []) {
-                    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+                    $whereParts[] = '(a.title LIKE ? OR a.excerpt LIKE ? OR a.content LIKE ?' . $translationWhere . ')';
                     array_push($params, '%'.$question.'%', '%'.$question.'%', '%'.$question.'%');
+                    if ($translationWhere !== '') {
+                        array_push($params, '%'.$question.'%', '%'.$question.'%', '%'.$question.'%');
+                    }
                 }
-                $sql = 'SELECT title, excerpt, content, slug FROM articles WHERE status = "published" AND (' . implode(' OR ', $whereParts) . ') ORDER BY updated_at DESC LIMIT 25';
+                $sql = 'SELECT a.id, a.title, a.excerpt, a.content, a.slug, a.published_at, a.created_at, a.updated_at
+                    FROM articles a' . $translationJoin . '
+                    WHERE a.status = "published" AND (' . implode(' OR ', $whereParts) . ')
+                    ORDER BY ' . article_publication_sort_expression_for_alias('a') . ' DESC, a.id DESC LIMIT 25';
                 $stmt = db()->prepare($sql);
                 $stmt->execute($params);
                 $articles = $stmt->fetchAll();
@@ -988,10 +1008,14 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                     if (!is_array($row)) {
                         continue;
                     }
-                    $score = rag_weighted_score($queryTokens, (string) ($row['title'] ?? '')) * 2.0
-                        + rag_weighted_score($queryTokens, (string) ($row['excerpt'] ?? ''))
-                        + rag_weighted_score($queryTokens, (string) ($row['content'] ?? ''));
-                    $score += rag_query_coverage($queryTokens, (string) (($row['title'] ?? '') . ' ' . ($row['excerpt'] ?? '') . ' ' . ($row['content'] ?? ''))) * 3.0;
+                    $row = localized_article_row($row);
+                    $titleText = (string) ($row['title_localized'] ?? $row['title'] ?? '');
+                    $excerptText = (string) ($row['excerpt_localized'] ?? $row['excerpt'] ?? '');
+                    $contentText = (string) ($row['content_localized'] ?? $row['content'] ?? '');
+                    $score = rag_weighted_score($queryTokens, $titleText) * 2.0
+                        + rag_weighted_score($queryTokens, $excerptText)
+                        + rag_weighted_score($queryTokens, $contentText);
+                    $score += rag_query_coverage($queryTokens, $titleText . ' ' . $excerptText . ' ' . $contentText) * 3.0;
                     if ($score > $articleScore) {
                         $articleScore = $score;
                         $article = $row;

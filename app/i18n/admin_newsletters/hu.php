@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'email \\n foo@example.org \\n bar@example.org',
   'no_subscribers' => 'Nincsenek előfizetők.',
   'no_campaigns' => 'Nincs kampány.',
+  'err_consent_proof_required' => 'Hozzájárulás igazolása szükséges.',
+  'consent_proof' => 'Hozzájárulás igazolása',
+  'consent_proof_ph' => 'Példa: aláírt űrlap 2026-06-05-en',
+  'consent_admin_help' => 'A hozzáadáshoz, importáláshoz vagy újraaktiváláshoz kifejezett hozzájárulás szükséges.',
+  'consent' => 'Hozzájárulás',
 );

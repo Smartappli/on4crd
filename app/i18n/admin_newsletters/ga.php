@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'ríomhphost\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Gan síntiúsóirí.',
   'no_campaigns' => 'Gan feachtas.',
+  'err_consent_proof_required' => 'Teastaíonn cruthúnas toilithe.',
+  'consent_proof' => 'Cruthúnas toiliú',
+  'consent_proof_ph' => 'Sampla: foirm shínithe ar 2026-06-05',
+  'consent_admin_help' => 'Teastaíonn cruthúnas toilithe follasach chun suimiú, iompórtáil nó athghníomhachtú.',
+  'consent' => 'Toiliú',
 );

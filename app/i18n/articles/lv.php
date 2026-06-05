@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Rakstu pievienot izlasei.',
   'favorite_removed_msg' => 'Raksts noņemts no izlases.',
   'default_article_title' => 'Vienums',
+  'propose_category' => 'Ierosināt kategoriju',
+  'propose_category_subject' => 'ON4CRD rakstu kategorijas priekšlikums',
+  'propose_category_body' => 'Sveiki,
+
+vēlos ierosināt jaunu rakstu kategoriju.
+
+Kategorijas nosaukums:
+Pamatojums:
+Kontaktinformācija:',
+  'propose_article' => 'Ierosināt rakstu',
+  'propose_article_subject' => 'ON4CRD raksta priekšlikums',
+  'propose_article_body' => 'Sveiki,
+
+vēlos ierosināt ON4CRD tehnisku rakstu.
+
+Nosaukums:
+Kategorija:
+Kopsavilkums:
+Kontaktinformācija:',
+  'propose_category_intro' => 'Aprakstiet vēlamo kategoriju. Komitejai tiks sagatavots iepriekš aizpildīts e-pasts.',
+  'propose_category_body_intro' => 'Labdien, vēlos ierosināt jaunu rakstu kategoriju.',
+  'propose_category_name_label' => 'Kategorijas nosaukums',
+  'propose_category_reason_label' => 'Pamatojums',
+  'propose_category_contact_label' => 'Kontaktinformācija',
+  'propose_category_submit' => 'Sagatavot e-pastu',
+  'propose_category_cancel' => 'Atcelt',
+  'propose_category_close' => 'Aizvērt',
+  'error_invalid_user' => 'Nederīgs lietotājs.',
+  'error_wait_before_next' => 'Lūdzu, uzgaidiet vienu minūti, pirms piedāvājat citu rakstu.',
+  'error_daily_limit' => 'Sasniegts ierobežojums: maksimāli 5 rakstu priekšlikumi 24 stundās.',
+  'propose_article_meta_desc' => 'Izstrādājiet un iesniedziet rakstu apstiprināšanai.',
+  'module_unavailable' => 'Rakstu modulis īslaicīgi nav pieejams.',
+  'error_field_too_long' => 'Viens no laukiem pārsniedz atļauto garumu.',
+  'error_title_content_required' => 'Nepieciešams nosaukums un saturs.',
+  'error_content_empty_after_cleanup' => 'Raksta saturs pēc tīrīšanas ir tukšs.',
+  'propose_article_success' => 'Raksts iesniegts apstiprināšanai.',
+  'error_article_save_failed' => 'Šobrīd rakstu nevar saglabāt.',
+  'propose_article_help' => 'Izkārtojiet savu rakstu ar virsrakstiem, rindkopām, sarakstiem un saitēm. Tas tiks saglabāts jūsu saturā un apstiprināts pirms publicēšanas.',
+  'my_contents' => 'Mans saturs',
+  'article_title_label' => 'Raksta nosaukums',
+  'category_label' => 'Kategorija',
+  'excerpt_label' => 'Kopsavilkums',
+  'excerpt_placeholder' => 'Īss kopsavilkums parādīts rakstu sarakstā.',
+  'content_label' => 'Formatēts saturs',
+  'content_placeholder' => '<h2>Sadaļas nosaukums</h2>
+<p>Jūsu teksts...</p>
+<ul><li>ISvarīgs punkts</li></ul>',
+  'html_cleanup_help' => 'HTML tiek notīrīts automātiski. Skripti, iframe un bīstamie atribūti tiek noņemti pirms validācijas.',
+  'submit_for_review' => 'Iesniedziet apstiprināšanai',
 );

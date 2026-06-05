@@ -7,7 +7,7 @@ return array (
   'intro' => 'Itt található a CRD szekcióhoz való tagsági kérelem benyújtásának eljárása.',
   'image_alt' => 'Tagsági vizuál CRD',
   'how_title' => 'Hogyan lehetsz a CRD tagja?',
-  'how_text' => 'Nyújtsa be kérelmét e-mailben (on4crd.be) a CM (klubelnök) részére a CRD szekcióban.',
+  'how_text' => 'Nyújtsa be kérelmét e-mailben (crdurnal@gmail.com) a CM (klubelnök) részére a CRD szekcióban.',
   'postal_title' => 'Érdeklődni postai úton',
   'contact_item_1' => 'Radio Club Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

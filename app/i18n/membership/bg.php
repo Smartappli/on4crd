@@ -7,7 +7,7 @@ return array (
   'intro' => 'Ето процедурата за подаване на молба за членство в секцията CRD.',
   'image_alt' => 'Визуализация за членство CRD',
   'how_title' => 'Как се става член на CRD?',
-  'how_text' => 'Изпратете заявка по имейл (on4crd.be) до CM (президент на клуба) от секцията CRD.',
+  'how_text' => 'Изпратете заявка по имейл (crdurnal@gmail.com) до CM (президент на клуба) от секцията CRD.',
   'postal_title' => 'Заявка по пощата',
   'contact_item_1' => 'Радио клуб Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

@@ -1,4 +1,34 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki', 'unavailable' => 'The wiki will be available after page initialization.', 'new_pages' => 'New pages', 'updated_pages' => 'Updated pages', 'most_read' => 'Most read', 'new_page' => 'New page', 'search_placeholder' => 'Search for a page (title or content)', 'search' => 'Search', 'reset' => 'Reset', 'wiki_pages' => 'Wiki pages', 'no_page' => 'No page found', 'for_search' => ' for this search', 'summary_fallback' => 'Open this page to access the full content.', 'updated_at' => 'Updated:', 'revisions' => 'Revisions', 'open_page' => 'Open page'];
+return array (
+  'title' => 'Wiki',
+  'unavailable' => 'The wiki will be available after page initialization.',
+  'new_pages' => 'New pages',
+  'updated_pages' => 'Updated pages',
+  'most_read' => 'Most read',
+  'new_page' => 'New page',
+  'search_placeholder' => 'Search for a page (title or content)',
+  'search' => 'Search',
+  'reset' => 'Reset',
+  'wiki_pages' => 'Wiki pages',
+  'no_page' => 'No page found',
+  'for_search' => ' for this search',
+  'summary_fallback' => 'Open this page to access the full content.',
+  'updated_at' => 'Updated:',
+  'revisions' => 'Revisions',
+  'open_page' => 'Open page',
+  'themes' => 'Themes',
+  'all_themes' => 'All themes',
+  'propose_theme_subject' => 'ON4CRD wiki theme proposal',
+  'propose_theme' => 'Suggest a theme',
+  'propose_page' => 'Suggest a page',
+  'propose_theme_intro' => 'Describe the theme to add and the pages that should be linked to it.',
+  'close' => 'Close',
+  'propose_theme_body_intro' => 'Wiki theme proposal:',
+  'propose_theme_name' => 'Theme name',
+  'propose_theme_reason' => 'Why add it?',
+  'propose_theme_contact' => 'Your contact',
+  'propose_theme_submit' => 'Send proposal',
+  'cancel' => 'Cancel',
+);

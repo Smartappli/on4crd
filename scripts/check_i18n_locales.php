@@ -157,24 +157,51 @@ function extract_locale_blocks(string $content, array $locales): array
     return $blocks;
 }
 
+$homeRequiredKeys = [
+    'member_modules_title',
+    'member_modules_empty',
+    'member_audience',
+    'page_title',
+    'club_name',
+    'venue_line_1',
+    'venue_line_2',
+    'venue_line_3',
+    'alt_partner_ad',
+    'alt_hero_illustration',
+    'alt_uba_logo',
+    'alt_repeater_logo',
+];
+
+$homeDir = $root . '/app/i18n/home';
 $homeFile = $root . '/pages/home.php';
-if (is_file($homeFile)) {
+if (is_dir($homeDir)) {
+    foreach ($homeRequiredLocales as $locale) {
+        $path = $homeDir . '/' . $locale . '.php';
+        if (!is_file($path)) {
+            $issues[] = ['home.php', ['missing_locale_file_' . $locale]];
+            continue;
+        }
+
+        $messages = require $path;
+        if (!is_array($messages)) {
+            $issues[] = ['home.php', ['invalid_locale_file_' . $locale]];
+            continue;
+        }
+
+        $missingKeys = [];
+        foreach ($homeRequiredKeys as $key) {
+            if (!array_key_exists($key, $messages)) {
+                $missingKeys[] = $locale . ':' . $key;
+            }
+        }
+
+        if ($missingKeys !== []) {
+            $issues[] = ['home.php', $missingKeys];
+        }
+    }
+} elseif (is_file($homeFile)) {
     $homeContent = (string) file_get_contents($homeFile);
     $localeBlocks = extract_locale_blocks($homeContent, $homeRequiredLocales);
-    $homeRequiredKeys = [
-        'member_modules_title',
-        'member_modules_empty',
-        'member_audience',
-        'page_title',
-        'club_name',
-        'venue_line_1',
-        'venue_line_2',
-        'venue_line_3',
-        'alt_partner_ad',
-        'alt_hero_illustration',
-        'alt_uba_logo',
-        'alt_repeater_logo',
-    ];
 
     foreach ($homeRequiredLocales as $locale) {
         if (!isset($localeBlocks[$locale])) {

@@ -74,13 +74,13 @@ foreach ($lineColumnUpdates as $columnName => $statement) {
 $starterOptionsByLocale = [
     'fr' => ['potage' => 'Potage maison', 'croquettes' => 'Croquettes de fromage', 'salade' => 'Petite salade'],
     'en' => ['potage' => 'Homemade soup', 'croquettes' => 'Cheese croquettes', 'salade' => 'Small salad'],
-    'de' => ['potage' => 'Hausgemachte Suppe', 'croquettes' => 'KÃ¤sekroketten', 'salade' => 'Kleiner Salat'],
+    'de' => ['potage' => 'Hausgemachte Suppe', 'croquettes' => 'Käsekroketten', 'salade' => 'Kleiner Salat'],
     'nl' => ['potage' => 'Huisgemaakte soep', 'croquettes' => 'Kaaskroketten', 'salade' => 'Kleine salade'],
 ];
 $mainOptionsByLocale = [
-    'fr' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Boulettes sauce tomate', 'vegetarien' => 'Assiette vÃ©gÃ©tarienne'],
+    'fr' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Boulettes sauce tomate', 'vegetarien' => 'Assiette végétarienne'],
     'en' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Meatballs in tomato sauce', 'vegetarien' => 'Vegetarian plate'],
-    'de' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'FleischbÃ¤llchen in Tomatensauce', 'vegetarien' => 'Vegetarischer Teller'],
+    'de' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Fleischbällchen in Tomatensauce', 'vegetarien' => 'Vegetarischer Teller'],
     'nl' => ['vol_au_vent' => 'Vol-au-vent', 'boulettes' => 'Gehaktballetjes in tomatensaus', 'vegetarien' => 'Vegetarisch bord'],
 ];
 $dessertOptionsByLocale = [
@@ -320,7 +320,7 @@ ob_start();
 
         <div class="row-between">
             <button type="button" class="button secondary" id="add-dinner-line"><?= e((string) $t['add_line']) ?></button>
-            <strong><?= e((string) $t['total_to_pay']) ?> <span id="dinner-total">0,00 â‚¬</span></strong>
+            <strong><?= e((string) $t['total_to_pay']) ?> <span id="dinner-total">0,00 €</span></strong>
         </div>
 
         <label>
@@ -340,7 +340,7 @@ ob_start();
         <?php foreach ($reservations as $reservation): ?>
             <?php $reservationId = (int) $reservation['id']; ?>
             <article class="inner-card mt-4">
-                <h3><?= e((string) $reservation['reserved_by']) ?> â€” <?= e((string) $reservation['created_at']) ?></h3>
+                <h3><?= e((string) $reservation['reserved_by']) ?> — <?= e((string) $reservation['created_at']) ?></h3>
                 <p><strong><?= e((string) $t['total']) ?></strong>  <?= e(format_price_eur((int) $reservation['total_cents'])) ?></p>
                 <?php if (trim((string) ($reservation['notes'] ?? '')) !== ''): ?>
                     <p class="help"><?= nl2br(e((string) $reservation['notes'])) ?></p>
@@ -358,9 +358,9 @@ ob_start();
                     <tbody>
                     <?php foreach (($linesByReservation[$reservationId] ?? []) as $line): ?>
                         <tr>
-                            <td><?= (int) ($line['starter_enabled'] ?? 0) === 1 ? e((string) $line['starter_label']) . ' (' . e(format_price_eur((int) $line['starter_price_cents'])) . ')' : 'â€”' ?></td>
-                            <td><?= (int) ($line['meal_enabled'] ?? 0) === 1 ? e((string) $line['meal_label']) . ' (' . e(format_price_eur((int) $line['meal_price_cents'])) . ')' : 'â€”' ?></td>
-                            <td><?= (int) ($line['dessert_enabled'] ?? 0) === 1 ? e((string) $line['dessert_label']) . ' (' . e(format_price_eur((int) $line['dessert_price_cents'])) . ')' : 'â€”' ?></td>
+                            <td><?= (int) ($line['starter_enabled'] ?? 0) === 1 ? e((string) $line['starter_label']) . ' (' . e(format_price_eur((int) $line['starter_price_cents'])) . ')' : '—' ?></td>
+                            <td><?= (int) ($line['meal_enabled'] ?? 0) === 1 ? e((string) $line['meal_label']) . ' (' . e(format_price_eur((int) $line['meal_price_cents'])) . ')' : '—' ?></td>
+                            <td><?= (int) ($line['dessert_enabled'] ?? 0) === 1 ? e((string) $line['dessert_label']) . ' (' . e(format_price_eur((int) $line['dessert_price_cents'])) . ')' : '—' ?></td>
                             <td><?= (int) $line['quantity'] ?></td>
                             <td><?= e(format_price_eur((int) $line['line_total_cents'])) ?></td>
                         </tr>

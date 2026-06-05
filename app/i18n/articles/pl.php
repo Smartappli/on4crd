@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Artykuł dodaj do ulubionych.',
   'favorite_removed_msg' => 'Artykuł usunięty z ulubionych.',
   'default_article_title' => 'Przedmiot',
+  'propose_category' => 'Zaproponuj kategorię',
+  'propose_category_subject' => 'Propozycja kategorii artykułów ON4CRD',
+  'propose_category_body' => 'Dzień dobry,
+
+chciałbym/chciałabym zaproponować nową kategorię artykułów.
+
+Nazwa kategorii:
+Uzasadnienie:
+Kontakt:',
+  'propose_article' => 'Zaproponuj artykuł',
+  'propose_article_subject' => 'Propozycja artykułu ON4CRD',
+  'propose_article_body' => 'Dzień dobry,
+
+chciałbym/chciałabym zaproponować techniczny artykuł ON4CRD.
+
+Tytuł:
+Kategoria:
+Streszczenie:
+Kontakt:',
+  'propose_category_intro' => 'Opisz proponowaną kategorię. Dla komitetu zostanie przygotowany wstępnie wypełniony e-mail.',
+  'propose_category_body_intro' => 'Dzień dobry, chciałbym/chciałabym zaproponować nową kategorię artykułów.',
+  'propose_category_name_label' => 'Nazwa kategorii',
+  'propose_category_reason_label' => 'Uzasadnienie',
+  'propose_category_contact_label' => 'Kontakt',
+  'propose_category_submit' => 'Przygotuj e-mail',
+  'propose_category_cancel' => 'Anuluj',
+  'propose_category_close' => 'Zamknij',
+  'error_invalid_user' => 'Nieprawidłowy użytkownik.',
+  'error_wait_before_next' => 'Poczekaj minutę, zanim zaproponujesz kolejny artykuł.',
+  'error_daily_limit' => 'Osiągnięto limit: maksymalnie 5 propozycji artykułów na 24 godziny.',
+  'propose_article_meta_desc' => 'Przygotuj i prześlij artykuł do weryfikacji.',
+  'module_unavailable' => 'Moduł artykułów jest chwilowo niedostępny.',
+  'error_field_too_long' => 'Jedno z pól przekracza dozwoloną długość.',
+  'error_title_content_required' => 'Tytuł i treść są wymagane.',
+  'error_content_empty_after_cleanup' => 'Po oczyszczeniu treść artykułu jest pusta.',
+  'propose_article_success' => 'Artykuł przesłany do weryfikacji.',
+  'error_article_save_failed' => 'Nie można teraz zapisać artykułu.',
+  'propose_article_help' => 'Układaj swój artykuł za pomocą nagłówków, akapitów, list i linków. Zostanie on zapisany w Twojej treści i sprawdzony przed publikacją.',
+  'my_contents' => 'Moja treść',
+  'article_title_label' => 'Tytuł artykułu',
+  'category_label' => 'Kategoria',
+  'excerpt_label' => 'Podsumowanie',
+  'excerpt_placeholder' => 'Krótkie podsumowanie wyświetlane na liście artykułów.',
+  'content_label' => 'Sformatowana treść',
+  'content_placeholder' => '<h2>Tytuł sekcji</h2>
+<p>Twój tekst...</p>
+<ul><li>Ważny punkt</li></ul>',
+  'html_cleanup_help' => 'HTML jest czyszczony automatycznie. Skrypty, ramki iframe i niebezpieczne atrybuty są usuwane przed walidacją.',
+  'submit_for_review' => 'Prześlij do sprawdzenia',
 );

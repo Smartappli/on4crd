@@ -7,7 +7,7 @@ return array (
   'intro' => 'CRDセクションへの入会申請手順はこちらです。',
   'image_alt' => 'CRD入会イメージ',
   'how_title' => 'CRD会員になるには？',
-  'how_text' => 'まず、CRDセクションのCM（クラブ会長）へメール（on4crd.be）で申請してください。',
+  'how_text' => 'まず、CRDセクションのCM（クラブ会長）へメール（crdurnal@gmail.com）で申請してください。',
   'postal_title' => '郵送での申請',
   'contact_item_1' => 'ラジオ クラブ ダーナル - ボック アリーナ',
   'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',

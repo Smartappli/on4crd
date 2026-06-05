@@ -7,7 +7,7 @@ return array (
   'intro' => 'Oto procedura składania wniosku o członkostwo w sekcji CRD.',
   'image_alt' => 'Wizualizacja członkostwa CRD',
   'how_title' => 'Jak zostać członkiem CRD?',
-  'how_text' => 'Złóż wniosek e-mailem (on4crd.be) do CM (prezesa klubu) sekcji CRD.',
+  'how_text' => 'Złóż wniosek e-mailem (crdurnal@gmail.com) do CM (prezesa klubu) sekcji CRD.',
   'postal_title' => 'Zapytanie pocztą',
   'contact_item_1' => 'Klub Radiowy Durnal – Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Artikkeli lisää suosikkeihin.',
   'favorite_removed_msg' => 'Artikkeli poistettu suosikeista.',
   'default_article_title' => 'Tuote',
+  'propose_category' => 'Ehdota kategoriaa',
+  'propose_category_subject' => 'ON4CRD-artikkelikategorian ehdotus',
+  'propose_category_body' => 'Hei,
+
+haluaisin ehdottaa uutta artikkelikategoriaa.
+
+Kategorian nimi:
+Perustelu:
+Yhteystiedot:',
+  'propose_article' => 'Ehdota artikkelia',
+  'propose_article_subject' => 'ON4CRD-artikkeliehdotus',
+  'propose_article_body' => 'Hei,
+
+haluaisin ehdottaa ON4CRD:n teknistä artikkelia.
+
+Otsikko:
+Kategoria:
+Tiivistelmä:
+Yhteystiedot:',
+  'propose_category_intro' => 'Kuvaile haluamasi kategoria. Komitealle valmistellaan esitäytetty sähköposti.',
+  'propose_category_body_intro' => 'Hei, haluaisin ehdottaa uutta artikkelikategoriaa.',
+  'propose_category_name_label' => 'Kategorian nimi',
+  'propose_category_reason_label' => 'Perustelu',
+  'propose_category_contact_label' => 'Yhteystiedot',
+  'propose_category_submit' => 'Valmistele sähköposti',
+  'propose_category_cancel' => 'Peruuta',
+  'propose_category_close' => 'Sulje',
+  'error_invalid_user' => 'Virheellinen käyttäjä.',
+  'error_wait_before_next' => 'Odota minuutti ennen kuin ehdotat uutta artikkelia.',
+  'error_daily_limit' => 'Raja saavutettu: enintään 5 artikkeliehdotusta 24 tunnin aikana.',
+  'propose_article_meta_desc' => 'Luonnostele ja lähetä artikkeli validoitavaksi.',
+  'module_unavailable' => 'Artikkelimoduuli on tilapäisesti poissa käytöstä.',
+  'error_field_too_long' => 'Yksi kentistä ylittää sallitun pituuden.',
+  'error_title_content_required' => 'Otsikko ja sisältö ovat pakollisia.',
+  'error_content_empty_after_cleanup' => 'Artikkelin sisältö on tyhjä siivouksen jälkeen.',
+  'propose_article_success' => 'Artikkeli lähetetty validoitavaksi.',
+  'error_article_save_failed' => 'Artikkelia ei voi tallentaa juuri nyt.',
+  'propose_article_help' => 'Asettele artikkelisi otsikoilla, kappaleilla, luetteloilla ja linkeillä. Se tallennetaan sisältöösi ja vahvistetaan ennen julkaisemista.',
+  'my_contents' => 'Minun sisältöni',
+  'article_title_label' => 'Artikkelin otsikko',
+  'category_label' => 'Luokka',
+  'excerpt_label' => 'Yhteenveto',
+  'excerpt_placeholder' => 'Lyhyt yhteenveto näkyy artikkeliluettelossa.',
+  'content_label' => 'Muotoiltu sisältö',
+  'content_placeholder' => '<h2>Osan otsikko</h2>
+<p>Sinun tekstisi...</p>
+<ul><li>Itärkeä kohta</li></ul>',
+  'html_cleanup_help' => 'HTML puhdistetaan automaattisesti. Skriptit, iframe-kehykset ja vaaralliset attribuutit poistetaan ennen vahvistusta.',
+  'submit_for_review' => 'Lähetä vahvistettavaksi',
 );

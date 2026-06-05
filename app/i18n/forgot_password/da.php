@@ -10,7 +10,14 @@ return array (
   'err_reset_disabled' => 'Nulstilling er deaktiveret for denne konto.',
   'err_too_many' => 'For mange anmodninger. Prøv igen senere.',
   'title' => 'Glemt adgangskode',
-  'submit' => 'Send link',
+  'submit' => 'Send linket',
   'back_login' => 'Vend tilbage til login',
   'email_label' => 'E-mail',
+  'email_subject' => 'ON4CRD - Nulstilling af adgangskode',
+  'email_body' => 'Hej
+
+Brug dette link til at nulstille din ON4CRD-adgangskode:
+{reset_link}
+
+Hvis du ikke har anmodet om dette, skal du ignorere denne besked.',
 );

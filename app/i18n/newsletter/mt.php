@@ -13,8 +13,11 @@ return array (
   'status' => 'Stat attwali:',
   'subscribed' => 'abbonat',
   'not_subscribed' => 'mhux sottoskritt',
-  'unsubscribe' => 'Unsubscribe',
+  'unsubscribe' => 'Ħassar l-abbonament',
   'email_label' => 'Kuntatt email',
   'subscribe' => 'Abbona',
   'layout_title' => 'Newsletter',
+  'consent_required' => 'Huwa meħtieġ kunsens għall-newsletter.',
+  'consent_label' => 'Naqbel li nirċievi n-newsletter ON4CRD u nifhem li nista\' nneħħi l-abbonament fi kwalunkwe ħin.',
+  'consent_proof_member' => 'Kunsens ta\' newsletter tal-Membri',
 );

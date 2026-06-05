@@ -7,7 +7,7 @@ return array (
   'intro' => 'Šeit ir norādīta dalības pieteikuma iesniegšanas procedūra sadaļā CRD.',
   'image_alt' => 'Dalības vizuālais attēls CRD',
   'how_title' => 'Kā kļūt par CRD dalībnieku?',
-  'how_text' => 'Iesniedziet pieprasījumu pa e-pastu (on4crd.be) CM (kluba prezidentam) sadaļā CRD.',
+  'how_text' => 'Iesniedziet pieprasījumu pa e-pastu (crdurnal@gmail.com) CM (kluba prezidentam) sadaļā CRD.',
   'postal_title' => 'Pieprasījums pa pastu',
   'contact_item_1' => 'Radio klubs Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

@@ -128,7 +128,7 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
             </select>
         </label>
         <label><?= e((string) ($t['value_in'] ?? 'Input value')) ?>
-            <input id="unit-conv-input" type="number" step="any" value="145.5" inputmode="decimal">
+            <input id="unit-conv-input" type="text" data-step="any" value="145.5" inputmode="decimal">
         </label>
         <label><?= e((string) ($t['value_out'] ?? 'Output value')) ?>
             <output id="unit-conv-output" class="result-box">-</output>
@@ -159,6 +159,18 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
                     'tool-power', 'tool-freq-wave', 'tool-dbuv', 'tool-gain-conv',
                     'tool-kw-w', 'tool-hz-khz', 'tool-in-mm', 'tool-c-f', 'tool-vpp-vrms', 'tool-sunit-dbuv',
                 ];
+                $unitToolFallbackLabels = [
+                    'tool-power' => (string) ($t['power'] ?? 'Power (W <-> dBm)'),
+                    'tool-freq-wave' => (string) ($t['freq_wave'] ?? 'Frequency to wavelength'),
+                    'tool-dbuv' => (string) ($t['dbuv_calc'] ?? 'dBm to dBuV'),
+                    'tool-gain-conv' => (string) ($t['gain_conv_calc'] ?? 'dBd to dBi'),
+                    'tool-kw-w' => (string) ($t['kw_w_calc'] ?? 'kW to W'),
+                    'tool-hz-khz' => (string) ($t['hz_khz_calc'] ?? 'Hz to kHz'),
+                    'tool-in-mm' => (string) ($t['in_mm_calc'] ?? 'Inch to mm'),
+                    'tool-c-f' => (string) ($t['c_f_calc'] ?? 'C to F'),
+                    'tool-vpp-vrms' => (string) ($t['vpp_vrms_calc'] ?? 'Vpp to Vrms'),
+                    'tool-sunit-dbuv' => (string) ($t['sunit_dbuv_calc'] ?? 'S-unit to dBuV'),
+                ];
                 foreach ($unitTools as $unitToolId):
                     $unitLabel = '';
                     foreach ($conversionTools as $tool) {
@@ -174,7 +186,7 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
                         }
                     }
                     if ($unitLabel === '') {
-                        $unitLabel = $unitToolId;
+                        $unitLabel = $unitToolFallbackLabels[$unitToolId] ?? $unitToolId;
                     }
                 ?>
                     <a class="button secondary" href="#<?= e($unitToolId) ?>" data-tool-target="<?= e($unitToolId) ?>"><?= e($unitLabel) ?></a>

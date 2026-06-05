@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -17,7 +18,9 @@ return array (
   'nav_assistant' => 'Assistente',
   'account_space' => 'Il mio spazio',
   'account_profile' => 'Profilo',
+  'account_privacy' => 'Privacy',
   'account_settings' => 'Privacy',
+  'account_requests' => 'Le mie richieste',
   'account_admin' => 'Amministrazione',
   'logout' => 'Disconnetti',
   'login' => 'Accedi',

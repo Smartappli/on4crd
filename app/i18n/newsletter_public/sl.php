@@ -9,4 +9,7 @@ return array (
   'intro' => 'Prejemajte novice Radio Cluba Durnal neposredno po e-pošti.',
   'email_label' => 'E-novice',
   'submit' => 'Naročite se na glasilo',
+  'consent_required' => 'Zahtevano je soglasje za glasilo.',
+  'consent_label' => 'Strinjam se s prejemanjem glasila ON4CRD in razumem, da se lahko kadar koli odjavim.',
+  'consent_proof_public' => 'Javno glasilo obrazec soglasje',
 );

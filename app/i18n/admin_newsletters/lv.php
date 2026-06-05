@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'e-pasts\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Nav abonentu.',
   'no_campaigns' => 'Nav kampaņas.',
+  'err_consent_proof_required' => 'Nepieciešams piekrišanas apliecinājums.',
+  'consent_proof' => 'Piekrišanas pierādījums',
+  'consent_proof_ph' => 'Piemērs: parakstīta veidlapa 2026-06-05',
+  'consent_admin_help' => 'Lai pievienotu, importētu vai atkārtoti aktivizētu, ir nepieciešams skaidrs piekrišanas pierādījums.',
+  'consent' => 'Piekrišana',
 );

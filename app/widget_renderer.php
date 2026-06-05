@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/hamqsl_widgets.php';
 require_once __DIR__ . '/widget_radio_helpers.php';
 
 if (!function_exists('render_widget')) {
@@ -9,6 +10,10 @@ function render_widget(string $slug, array $user = []): string
     $safeSlug = strtolower(trim($slug));
     $callsign = trim((string) ($user['callsign'] ?? 'OM'));
     $locale = current_locale();
+
+    if (hamqsl_widget_variant($safeSlug) !== null) {
+        return render_hamqsl_widget($safeSlug);
+    }
 
     switch ($safeSlug) {
         case 'welcome':
@@ -30,7 +35,17 @@ function render_widget(string $slug, array $user = []): string
                 return '<p class="help">Module événements indisponible.</p>';
             }
 
-            $rows = db()->query('SELECT title, starts_at FROM events WHERE starts_at IS NOT NULL ORDER BY starts_at ASC LIMIT 3');
+            $dateColumn = table_has_column('events', 'start_at')
+                ? 'start_at'
+                : (table_has_column('events', 'starts_at') ? 'starts_at' : '');
+            if ($dateColumn === '') {
+                return '<p class="help">Agenda indisponible.</p>';
+            }
+
+            $rows = db()->query(
+                'SELECT title, ' . $dateColumn . ' AS event_start_at FROM events WHERE '
+                . $dateColumn . ' IS NOT NULL AND ' . $dateColumn . ' >= NOW() ORDER BY ' . $dateColumn . ' ASC LIMIT 3'
+            );
             $events = $rows !== false ? ($rows->fetchAll() ?: []) : [];
             if ($events === []) {
                 return '<p class="help">Aucun événement à venir.</p>';
@@ -39,7 +54,7 @@ function render_widget(string $slug, array $user = []): string
             $html = '<ul class="list-clean">';
             foreach ($events as $event) {
                 $title = e((string) ($event['title'] ?? 'Événement'));
-                $startsAt = e((string) ($event['starts_at'] ?? ''));
+                $startsAt = e((string) ($event['event_start_at'] ?? ''));
                 $html .= '<li><strong>' . $title . '</strong><br><span class="help">' . $startsAt . '</span></li>';
             }
             $html .= '</ul>';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 $members = [];
 $locale = current_locale();
 $t = i18n_domain_translator('directory', $locale);
+$profileT = i18n_domain_translator('profile', $locale);
 
 $activeMembersCount = 0;
 $ubaMembersCount = 0;
@@ -20,22 +21,35 @@ if (mb_strlen($licenceFilter) > 64) {
 
 if (table_exists('members')) {
     $viewer = current_user();
-    $allowedVisibilityLevels = ['public', 'members'];
-    if ($viewer !== null && (int) ($viewer['is_committee'] ?? 0) === 1) {
-        $allowedVisibilityLevels[] = 'private';
-    }
+    $allowedVisibilityLevels = member_profile_allowed_visibility_levels(is_array($viewer) ? $viewer : null);
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
-    $sql = 'SELECT callsign, full_name, email, phone, country, qth, locator, licence_class, qrz_url, is_uba_member, uba_member_number, favourite_bands, favourite_modes, station_equipment, antennas, photo_path, avatar_path, is_committee, committee_role, visibility_photo, visibility_full_name, visibility_email, visibility_phone, visibility_country, visibility_qth, visibility_locator, visibility_licence_class, visibility_qrz, visibility_uba, visibility_favourite_bands, visibility_favourite_modes, visibility_station, visibility_antennas
+    $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role
         FROM members
         WHERE is_active = 1
           AND UPPER(callsign) <> "ON4CRD"';
     $params = [];
 
     if ($search !== '') {
-        $sql .= ' AND (callsign LIKE ? OR (full_name LIKE ? AND visibility_full_name IN (' . $visibilityPlaceholders . ')))';
+        $sql .= ' AND (callsign LIKE ?
+            OR (first_name LIKE ? AND visibility_first_name IN (' . $visibilityPlaceholders . '))
+            OR (last_name LIKE ? AND visibility_last_name IN (' . $visibilityPlaceholders . '))
+            OR (address LIKE ? AND visibility_address IN (' . $visibilityPlaceholders . '))
+            OR (postal_code LIKE ? AND visibility_postal_code IN (' . $visibilityPlaceholders . ')))';
         $like = '%' . $search . '%';
         $params[] = $like;
+        $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
+        $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
+        $params[] = $like;
+        foreach ($allowedVisibilityLevels as $visibilityLevel) {
+            $params[] = $visibilityLevel;
+        }
         $params[] = $like;
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $params[] = $visibilityLevel;
@@ -55,34 +69,29 @@ if (table_exists('members')) {
     $stmt->execute($params);
     $members = $stmt->fetchAll() ?: [];
 
+    $directoryVisibilityFieldMeta = member_profile_visibility_fields($profileT);
+    $directoryVisibilityFields = array_keys($directoryVisibilityFieldMeta);
+    $visibleProfileConditions = implode(
+        ' OR ',
+        array_map(
+            static fn(string $field): string => $field . ' IN (' . $visibilityPlaceholders . ')',
+            $directoryVisibilityFields
+        )
+    );
+
     $countsStmt = db()->prepare(
         'SELECT COUNT(*) AS active_total,
                 SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
          WHERE is_active = 1
            AND UPPER(callsign) <> "ON4CRD"
-           AND (
-               visibility_photo IN (' . $visibilityPlaceholders . ')
-               OR visibility_full_name IN (' . $visibilityPlaceholders . ')
-               OR visibility_email IN (' . $visibilityPlaceholders . ')
-               OR visibility_phone IN (' . $visibilityPlaceholders . ')
-               OR visibility_country IN (' . $visibilityPlaceholders . ')
-               OR visibility_qth IN (' . $visibilityPlaceholders . ')
-               OR visibility_locator IN (' . $visibilityPlaceholders . ')
-               OR visibility_licence_class IN (' . $visibilityPlaceholders . ')
-               OR visibility_qrz IN (' . $visibilityPlaceholders . ')
-               OR visibility_uba IN (' . $visibilityPlaceholders . ')
-               OR visibility_favourite_bands IN (' . $visibilityPlaceholders . ')
-               OR visibility_favourite_modes IN (' . $visibilityPlaceholders . ')
-               OR visibility_station IN (' . $visibilityPlaceholders . ')
-               OR visibility_antennas IN (' . $visibilityPlaceholders . ')
-           )'
+           AND (' . $visibleProfileConditions . ')'
     );
     $countParams = [];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
     }
-    for ($i = 0; $i < 14; $i++) {
+    foreach ($directoryVisibilityFields as $_visibilityField) {
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $countParams[] = $visibilityLevel;
         }
@@ -94,25 +103,16 @@ if (table_exists('members')) {
 
     $fieldVisibilityMap = [
         'photo_path' => 'visibility_photo',
-        'full_name' => 'visibility_full_name',
-        'email' => 'visibility_email',
-        'phone' => 'visibility_phone',
-        'country' => 'visibility_country',
-        'qth' => 'visibility_qth',
-        'locator' => 'visibility_locator',
-        'licence_class' => 'visibility_licence_class',
-        'qrz_url' => 'visibility_qrz',
-        'is_uba_member' => 'visibility_uba',
-        'uba_member_number' => 'visibility_uba',
-        'favourite_bands' => 'visibility_favourite_bands',
-        'favourite_modes' => 'visibility_favourite_modes',
-        'station_equipment' => 'visibility_station',
-        'antennas' => 'visibility_antennas',
+        'avatar_path' => 'visibility_photo',
     ];
+    foreach (member_profile_preview_fields($profileT) as $field => $fieldMeta) {
+        $fieldVisibilityMap[$field] = (string) $fieldMeta['visibility'];
+    }
 
     foreach ($members as $index => &$member) {
+        $member = member_with_name_parts($member);
         foreach ($fieldVisibilityMap as $field => $visibilityField) {
-            $visibility = (string) ($member[$visibilityField] ?? 'private');
+            $visibility = (string) ($member[$visibilityField] ?? (string) ($directoryVisibilityFieldMeta[$visibilityField]['default'] ?? 'private'));
             if (!in_array($visibility, $allowedVisibilityLevels, true)) {
                 $member[$field] = '';
             }
@@ -165,7 +165,7 @@ $memberInitials = static function (array $member): string {
         return mb_safe_strtoupper(mb_safe_substr($callsign, 0, 2));
     }
 
-    $name = trim((string) ($member['full_name'] ?? ''));
+    $name = member_full_name_from_parts((string) ($member['first_name'] ?? ''), (string) ($member['last_name'] ?? ''));
     if ($name === '') {
         return 'OM';
     }
@@ -239,7 +239,6 @@ ob_start();
     <section class="directory-results">
         <div class="directory-results-header">
             <div>
-                <p class="directory-eyebrow"><?= e($t('results')) ?></p>
                 <h2><?= e($t('members_title')) ?></h2>
             </div>
             <?php if ($hasFilters): ?>
@@ -266,14 +265,25 @@ ob_start();
             <?php foreach ($members as $member): ?>
                 <?php
                 $callsign = trim((string) ($member['callsign'] ?? ''));
-                $fullName = trim((string) ($member['full_name'] ?? ''));
+                $displayName = member_full_name_from_parts((string) ($member['first_name'] ?? ''), (string) ($member['last_name'] ?? ''));
                 $licenceClass = trim((string) ($member['licence_class'] ?? ''));
                 $email = trim((string) ($member['email'] ?? ''));
                 $phone = trim((string) ($member['phone'] ?? ''));
                 $country = trim((string) ($member['country'] ?? ''));
+                $address = trim((string) ($member['address'] ?? ''));
+                $postalCode = trim((string) ($member['postal_code'] ?? ''));
                 $qth = trim((string) ($member['qth'] ?? ''));
                 $grid = trim((string) ($member['locator'] ?? ''));
                 $qrzUrl = trim((string) ($member['qrz_url'] ?? ''));
+                $website = trim((string) ($member['website'] ?? ''));
+                $safeQrzUrl = $qrzUrl !== '' ? sanitize_href_attribute($qrzUrl) : null;
+                $safeWebsite = $website !== '' ? sanitize_href_attribute($website) : null;
+                $operatorSince = trim((string) ($member['operator_since'] ?? ''));
+                $cqZone = trim((string) ($member['cq_zone'] ?? ''));
+                $ituZone = trim((string) ($member['itu_zone'] ?? ''));
+                $qslVia = trim((string) ($member['qsl_via'] ?? ''));
+                $eqslUsername = trim((string) ($member['eqsl_username'] ?? ''));
+                $interests = trim((string) ($member['interests'] ?? ''));
                 $bands = trim((string) ($member['favourite_bands'] ?? ''));
                 $modes = trim((string) ($member['favourite_modes'] ?? ''));
                 $station = trim((string) ($member['station_equipment'] ?? ''));
@@ -281,6 +291,18 @@ ob_start();
                 $memberAvatarSrc = member_avatar_src($member);
                 $bandList = array_values(array_filter(array_map('trim', preg_split('/[,;\/]+/', $bands) ?: [])));
                 $modeList = array_values(array_filter(array_map('trim', preg_split('/[,;\/]+/', $modes) ?: [])));
+                $detailRows = [];
+                $addDetail = static function (string $label, string $value) use (&$detailRows): void {
+                    $value = trim($value);
+                    if ($value !== '') {
+                        $detailRows[] = ['label' => $label, 'value' => $value];
+                    }
+                };
+                $addDetail((string) $profileT('postal_code'), $postalCode);
+                $addDetail((string) $profileT('address'), $address);
+                $addDetail((string) $profileT('qsl_via'), $qslVia);
+                $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
+                $addDetail((string) $profileT('interests'), $interests);
                 ?>
                 <article class="directory-member-card">
                     <header class="directory-member-header">
@@ -289,9 +311,21 @@ ob_start();
                             <span aria-hidden="true"><?= e($memberInitials($member)) ?></span>
                         </div>
                         <div class="directory-member-title">
-                            <h3><?= e($callsign) ?></h3>
-                            <?php if ($fullName !== ''): ?>
-                                <p><?= e($fullName) ?></p>
+                            <div class="directory-title-row">
+                                <h3><?= e($callsign) ?></h3>
+                                <?php if ($safeQrzUrl !== null || $safeWebsite !== null): ?>
+                                    <div class="directory-profile-links">
+                                        <?php if ($safeQrzUrl !== null): ?>
+                                            <a href="<?= e($safeQrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
+                                        <?php endif; ?>
+                                        <?php if ($safeWebsite !== null): ?>
+                                            <a href="<?= e($safeWebsite) ?>" target="_blank" rel="noopener"><?= e($profileT('website')) ?></a>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <?php if ($displayName !== ''): ?>
+                                <p><?= e($displayName) ?></p>
                             <?php endif; ?>
                         </div>
                     </header>
@@ -300,6 +334,9 @@ ob_start();
                         <?php if ($licenceClass !== ''): ?>
                             <span><?= e($licenceClass) ?></span>
                         <?php endif; ?>
+                        <?php if ($operatorSince !== ''): ?>
+                            <span><?= e($profileT('operator_since')) ?> <?= e($operatorSince) ?></span>
+                        <?php endif; ?>
                         <?php if ((int) ($member['is_committee'] ?? 0) === 1): ?>
                             <span><?= e((string) ($member['committee_role'] ?: $t('committee'))) ?></span>
                         <?php endif; ?>
@@ -307,28 +344,46 @@ ob_start();
                             <span>QTH <?= e($qth) ?></span>
                         <?php endif; ?>
                         <?php if ($country !== ''): ?>
-                            <span><?= e($country) ?></span>
+                            <span><?= member_country_html($country) ?></span>
                         <?php endif; ?>
                         <?php if ($grid !== ''): ?>
                             <span><?= e($t('grid')) ?> <?= e($grid) ?></span>
                         <?php endif; ?>
+                        <?php if ($cqZone !== ''): ?>
+                            <span><?= e($profileT('cq_zone')) ?> <?= e($cqZone) ?></span>
+                        <?php endif; ?>
+                        <?php if ($ituZone !== ''): ?>
+                            <span><?= e($profileT('itu_zone')) ?> <?= e($ituZone) ?></span>
+                        <?php endif; ?>
+                        <?php if ($email !== ''): ?>
+                            <span><?= e($profileT('email')) ?> <?= e($email) ?></span>
+                        <?php endif; ?>
+                        <?php if ($phone !== ''): ?>
+                            <span><?= e($profileT('phone')) ?> <?= e($phone) ?></span>
+                        <?php endif; ?>
                         <?php if ((int) ($member['is_uba_member'] ?? 0) === 1): ?>
                             <span><?= e($t('uba_member')) ?><?= trim((string) ($member['uba_member_number'] ?? '')) !== '' ? ' ' . e((string) $member['uba_member_number']) : '' ?></span>
                         <?php endif; ?>
+                        <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
+                            <span><?= e($mode) ?></span>
+                        <?php endforeach; ?>
                     </div>
+
+                    <?php if ($detailRows !== []): ?>
+                        <dl class="directory-detail-list">
+                            <?php foreach ($detailRows as $detailRow): ?>
+                                <div>
+                                    <dt><?= e((string) $detailRow['label']) ?></dt>
+                                    <dd><?= e((string) $detailRow['value']) ?></dd>
+                                </div>
+                            <?php endforeach; ?>
+                        </dl>
+                    <?php endif; ?>
 
                     <?php if ($bandList !== []): ?>
                         <div class="directory-band-list" aria-label="<?= e($t('bands')) ?>">
                             <?php foreach (array_slice($bandList, 0, 5) as $band): ?>
                                 <span><?= e($band) ?></span>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($modeList !== []): ?>
-                        <div class="directory-band-list" aria-label="<?= e($t('modes')) ?>">
-                            <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
-                                <span><?= e($mode) ?></span>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
@@ -341,19 +396,6 @@ ob_start();
                         <p class="directory-station"><strong><?= e($t('antennas')) ?>:</strong> <?= e($antennas) ?></p>
                     <?php endif; ?>
 
-                    <?php if ($email !== '' || $phone !== '' || $qrzUrl !== ''): ?>
-                        <div class="directory-contact-row">
-                            <?php if ($email !== ''): ?>
-                                <a class="button small secondary" href="mailto:<?= e($email) ?>"><?= e($t('email')) ?></a>
-                            <?php endif; ?>
-                            <?php if ($phone !== ''): ?>
-                                <a class="button small secondary" href="tel:<?= e(preg_replace('/\s+/', '', $phone) ?? $phone) ?>"><?= e($t('phone')) ?></a>
-                            <?php endif; ?>
-                            <?php if ($qrzUrl !== ''): ?>
-                                <a class="button small secondary" href="<?= e($qrzUrl) ?>" target="_blank" rel="noopener"><?= e($t('qrz')) ?></a>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
                 </article>
             <?php endforeach; ?>
         </div>

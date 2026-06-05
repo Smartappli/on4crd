@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Toolbox',
+  'title' => 'Sada nástrojů',
   'tool_index' => 'Klasifikace nástrojů',
   'category_locators' => 'Orientační body a geolokace',
   'category_conversions' => 'Rádiové konverze',
@@ -13,7 +13,7 @@ return array (
   'category_radio_math' => 'Rádiová matematika',
   'open_category' => 'Zobrazit nástroje',
   'choose_tool' => 'Kategorie nástrojů',
-  'grid_title' => 'Výpočet mřížky z poštovní adresy',
+  'grid_title' => 'Výpočet sítě a zón CG/ITU je z poštovní adresy',
   'address' => 'Poštovní adresa',
   'calc_grid' => 'Vypočítejte mřížku',
   'found_address' => 'Adresa nalezena',
@@ -132,11 +132,11 @@ return array (
   'resistor_count_max' => 'Maximální počet rezistorů',
   'resistor_combo_result' => 'Nejlepší kombinace',
   'ohm_law_calc' => 'Ohmův zákon',
-  'ohm_law_help' => 'Zadejte dvě hodnoty pro výpočet třetí.',
+  'ohm_law_help' => 'Zadejte dvě hodnoty nebo upravte jednu ze tří hodnot pro výpočet chybějící nebo závislé hodnoty.',
   'voltage_v' => 'Napětí (V)',
   'current_a' => 'proud (A)',
   'resistance_ohm' => 'Odpor (Ω)',
-  'ohm_law_hint' => 'Pokud jsou vyplněna přesně 2 pole, automaticky se vypočítá 3.',
+  'ohm_law_hint' => 'Když jsou vyplněna všechna tři pole, zachovají se dvě naposledy upravené hodnoty a třetí se přepočítá.',
   'link_budget_calc' => 'Styčný rozpočet',
   'link_budget_help' => 'Výpočet přijímaného výkonu: Prx = Ptx + Gtx + Grx - ztráty.',
   'tx_power_dbm' => 'Ptx (dBm)',
@@ -193,4 +193,8 @@ return array (
   'unit_conv_presets' => 'Rychlé hodnoty',
   'unit_conv_reference' => 'Odkaz',
   'unit_conv_quick_links' => 'Detailní převodníky',
+  'forward_power' => 'Dopředný výkon (W)',
+  'reflected_power' => 'Odražený výkon (W)',
+  'swr_result' => 'Vypočtené SWR',
+  'dbw_calc' => 'dBm <-> dBW conversion',
 );

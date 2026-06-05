@@ -7,7 +7,7 @@ return array (
   'intro' => 'CRD সেকশনে সদস্যপদের আবেদন জমা দেওয়ার প্রক্রিয়া এখানে দেওয়া হলো।',
   'image_alt' => 'CRD সদস্যপদ ছবি',
   'how_title' => 'কীভাবে CRD সদস্য হবেন?',
-  'how_text' => 'প্রথমে, CRD সেকশনের CM (ক্লাব সভাপতি) এর কাছে ইমেইল (on4crd.be) করে আবেদন পাঠান।',
+  'how_text' => 'প্রথমে, CRD সেকশনের CM (ক্লাব সভাপতি) এর কাছে ইমেইল (crdurnal@gmail.com) করে আবেদন পাঠান।',
   'postal_title' => 'ডাকযোগে আবেদন',
   'contact_item_1' => 'রেডিও ক্লাব ডুরনাল - বোক এরিনা',
   'contact_item_2' => 'Rue des Ecoles, 5530 Purnode',

@@ -1,0 +1,102 @@
+/* Module CSS: my_requests */
+[data-route="my_requests"] .my-requests-page {
+  min-width: 0;
+}
+
+[data-route="my_requests"] .my-requests-hero {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+[data-route="my_requests"] .my-requests-hero h1 {
+  margin: .45rem 0 .3rem;
+}
+
+[data-route="my_requests"] .my-requests-member {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: grid;
+  gap: .2rem;
+  min-width: 180px;
+  padding: .9rem 1rem;
+  text-align: right;
+}
+
+[data-route="my_requests"] .my-requests-member span {
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+[data-route="my_requests"] .my-requests-member strong {
+  color: var(--accent-strong);
+  overflow-wrap: anywhere;
+}
+
+[data-route="my_requests"] .my-requests-status h2,
+[data-route="my_requests"] .my-requests-section-heading h2 {
+  margin-top: 0;
+}
+
+[data-route="my_requests"] .my-requests-empty {
+  background: color-mix(in srgb, var(--accent-500) 8%, transparent);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+[data-route="my_requests"] .my-requests-empty p {
+  color: var(--muted);
+  margin: .35rem 0 0;
+}
+
+[data-route="my_requests"] .my-requests-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+[data-route="my_requests"] .my-requests-shortcut {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: grid;
+  gap: .75rem;
+  padding: 1rem;
+}
+
+[data-route="my_requests"] .my-requests-shortcut h3 {
+  margin: 0;
+}
+
+[data-route="my_requests"] .my-requests-shortcut p {
+  color: var(--muted);
+  margin: 0;
+}
+
+[data-route="my_requests"] .my-requests-shortcut .button {
+  justify-self: start;
+}
+
+@media (max-width: 900px) {
+  [data-route="my_requests"] .my-requests-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  [data-route="my_requests"] .my-requests-hero {
+    grid-template-columns: 1fr;
+  }
+
+  [data-route="my_requests"] .my-requests-member {
+    text-align: left;
+  }
+
+  [data-route="my_requests"] .my-requests-grid {
+    grid-template-columns: 1fr;
+  }
+}

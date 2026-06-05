@@ -9,4 +9,7 @@ return array (
   'intro' => 'Saņemiet ziņas no Radio Club Durnal tieši pa e-pastu.',
   'email_label' => 'E-pasta biļetens',
   'submit' => 'Abonējiet biļetenu',
+  'consent_required' => 'Nepieciešama piekrišana biļetenam.',
+  'consent_label' => 'Es piekrītu saņemt ON4CRD biļetenu un saprotu, ka varu anulēt abonementu jebkurā laikā.',
+  'consent_proof_public' => 'Publiskā biļetena veidlapas piekrišana',
 );

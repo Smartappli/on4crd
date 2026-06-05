@@ -1,4 +1,34 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki', 'unavailable' => 'Le wiki sera disponible après initialisation des pages.', 'new_pages' => 'Nouvelles pages', 'updated_pages' => 'Pages modifiées', 'most_read' => 'Les plus lues', 'new_page' => 'Nouvelle page', 'search_placeholder' => 'Rechercher une page (titre ou contenu)', 'search' => 'Rechercher', 'reset' => 'Réinitialiser', 'wiki_pages' => 'Pages du wiki', 'no_page' => 'Aucune page trouvée', 'for_search' => ' pour cette recherche', 'summary_fallback' => 'Consulter cette page pour accéder au contenu complet.', 'updated_at' => 'Mise à jour :', 'revisions' => 'Révisions', 'open_page' => 'Ouvrir la page'];
+return array (
+  'title' => 'Wiki',
+  'unavailable' => 'Le wiki sera disponible après initialisation des pages.',
+  'new_pages' => 'Nouvelles pages',
+  'updated_pages' => 'Pages modifiées',
+  'most_read' => 'Les plus lues',
+  'new_page' => 'Nouvelle page',
+  'search_placeholder' => 'Rechercher une page (titre ou contenu)',
+  'search' => 'Rechercher',
+  'reset' => 'Réinitialiser',
+  'wiki_pages' => 'Pages du wiki',
+  'no_page' => 'Aucune page trouvée',
+  'for_search' => ' pour cette recherche',
+  'summary_fallback' => 'Consulter cette page pour accéder au contenu complet.',
+  'updated_at' => 'Mise à jour :',
+  'revisions' => 'Révisions',
+  'open_page' => 'Ouvrir la page',
+  'themes' => 'Thématiques',
+  'all_themes' => 'Toutes les thématiques',
+  'propose_theme_subject' => 'Proposition de thématique wiki ON4CRD',
+  'propose_theme' => 'Proposer une thématique',
+  'propose_page' => 'Proposer une page',
+  'propose_theme_intro' => 'Indiquez la thématique à ajouter et les pages qui devraient y être liées.',
+  'close' => 'Fermer',
+  'propose_theme_body_intro' => 'Proposition de thématique wiki :',
+  'propose_theme_name' => 'Nom de la thématique',
+  'propose_theme_reason' => 'Pourquoi l\'ajouter ?',
+  'propose_theme_contact' => 'Votre contact',
+  'propose_theme_submit' => 'Envoyer la proposition',
+  'cancel' => 'Annuler',
+);

@@ -7,7 +7,7 @@ return array (
   'intro' => 'Čia yra paraiškos dėl narystės pateikimo CRD skyriui tvarka.',
   'image_alt' => 'Narystės vizualinis vaizdas CRD',
   'how_title' => 'Kaip tapti CRD nariu?',
-  'how_text' => 'Pateikite užklausą el. paštu (on4crd.be) CM (klubo prezidentui) iš CRD skyriaus.',
+  'how_text' => 'Pateikite užklausą el. paštu (crdurnal@gmail.com) CM (klubo prezidentui) iš CRD skyriaus.',
   'postal_title' => 'Prašymas paštu',
   'contact_item_1' => 'Radijo klubas Durnal – Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

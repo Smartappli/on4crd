@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -17,7 +18,9 @@ return array (
   'nav_assistant' => 'Assistent',
   'account_space' => 'Mitt utrymme',
   'account_profile' => 'Profil',
+  'account_privacy' => 'Integritet',
   'account_settings' => 'Integritet',
+  'account_requests' => 'Mina förfrågningar',
   'account_admin' => 'Administration',
   'logout' => 'Koppla från',
   'login' => 'Anslutning',

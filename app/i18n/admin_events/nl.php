@@ -18,7 +18,7 @@ return array (
   'external_url' => 'Externe URL',
   'type' => 'Vriendelijk',
   'status' => 'Status',
-  'type_club' => 'Club',
+  'type_club' => 'Clubje',
   'type_contest' => 'Wedstrijd',
   'draft' => 'Concept',
   'published' => 'Gepubliceerd',

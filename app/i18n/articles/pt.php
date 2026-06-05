@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Artigo adicionado aos favoritos.',
   'favorite_removed_msg' => 'Artigo removido dos favoritos.',
   'default_article_title' => 'Artigo',
+  'propose_category' => 'Propor uma categoria',
+  'propose_category_subject' => 'Proposta de categoria de artigos ON4CRD',
+  'propose_category_body' => 'Olá,
+
+gostaria de propor uma nova categoria de artigos.
+
+Nome da categoria:
+Motivação:
+Contacto:',
+  'propose_article' => 'Propor um artigo',
+  'propose_article_subject' => 'Proposta de artigo ON4CRD',
+  'propose_article_body' => 'Olá,
+
+gostaria de propor um artigo técnico ON4CRD.
+
+Título:
+Categoria:
+Resumo:
+Contacto:',
+  'propose_category_intro' => 'Descreva a categoria desejada. Será preparado um e-mail pré-preenchido para o comité.',
+  'propose_category_body_intro' => 'Olá, gostaria de propor uma nova categoria de artigos.',
+  'propose_category_name_label' => 'Nome da categoria',
+  'propose_category_reason_label' => 'Motivação',
+  'propose_category_contact_label' => 'Contacto',
+  'propose_category_submit' => 'Preparar e-mail',
+  'propose_category_cancel' => 'Cancelar',
+  'propose_category_close' => 'Fechar',
+  'error_invalid_user' => 'Usuário inválido.',
+  'error_wait_before_next' => 'Aguarde um minuto antes de propor outro artigo.',
+  'error_daily_limit' => 'Limite atingido: máximo de 5 propostas de artigos por 24 horas.',
+  'propose_article_meta_desc' => 'Elabore e envie um artigo para validação.',
+  'module_unavailable' => 'O módulo de artigos está temporariamente indisponível.',
+  'error_field_too_long' => 'Um dos campos excede o comprimento permitido.',
+  'error_title_content_required' => 'Título e conteúdo são obrigatórios.',
+  'error_content_empty_after_cleanup' => 'O conteúdo do artigo fica vazio após a limpeza.',
+  'propose_article_success' => 'Artigo submetido para validação.',
+  'error_article_save_failed' => 'Não é possível salvar o artigo no momento.',
+  'propose_article_help' => 'Organize seu artigo com títulos, parágrafos, listas e links. Ele será salvo em seu conteúdo e validado antes da publicação.',
+  'my_contents' => 'Meu conteúdo',
+  'article_title_label' => 'Título do artigo',
+  'category_label' => 'Categoria',
+  'excerpt_label' => 'Resumo',
+  'excerpt_placeholder' => 'Breve resumo exibido na lista de artigos.',
+  'content_label' => 'Conteúdo formatado',
+  'content_placeholder' => '<h2>Título da seção</h2>
+<p>Seu texto...</p>
+<ul><li>Ponto importante</li></ul>',
+  'html_cleanup_help' => 'O HTML é limpo automaticamente. Scripts, iframes e atributos perigosos são removidos antes da validação.',
+  'submit_for_review' => 'Enviar para validação',
 );

@@ -32,4 +32,53 @@ return array (
   'favorite_added_msg' => 'Airteagal add to Favorites.',
   'favorite_removed_msg' => 'Airteagal bainte de cheanáin.',
   'default_article_title' => 'Mír',
+  'propose_category' => 'Mol catagóir',
+  'propose_category_subject' => 'Moladh catagóire alt ON4CRD',
+  'propose_category_body' => 'Dia dhuit,
+
+ba mhaith liom catagóir nua alt a mholadh.
+
+Ainm na catagóire:
+Cúis:
+Teagmháil:',
+  'propose_article' => 'Mol alt',
+  'propose_article_subject' => 'Moladh alt ON4CRD',
+  'propose_article_body' => 'Dia dhuit,
+
+ba mhaith liom alt teicniúil ON4CRD a mholadh.
+
+Teideal:
+Catagóir:
+Achoimre:
+Teagmháil:',
+  'propose_category_intro' => 'Déan cur síos ar an gcatagóir atá uait. Ullmhófar ríomhphost réamhlíonta don choiste.',
+  'propose_category_body_intro' => 'Dia duit, ba mhaith liom catagóir nua alt a mholadh.',
+  'propose_category_name_label' => 'Ainm na catagóire',
+  'propose_category_reason_label' => 'Cúis',
+  'propose_category_contact_label' => 'Teagmháil',
+  'propose_category_submit' => 'Ullmhaigh ríomhphost',
+  'propose_category_cancel' => 'Cealaigh',
+  'propose_category_close' => 'Dún',
+  'error_invalid_user' => 'Úsáideoir neamhbhailí.',
+  'error_wait_before_next' => 'Fan nóiméad le do thoil roimh alt eile a mholadh.',
+  'error_daily_limit' => 'Teorainn bainte amach: 5 thogra alt ar a mhéad in aghaidh an 24 uair.',
+  'propose_article_meta_desc' => 'Dréachtaigh agus cuir isteach alt lena bhailíochtú.',
+  'module_unavailable' => 'Níl an modúl earraí ar fáil go sealadach.',
+  'error_field_too_long' => 'Tá ceann de na réimsí níos mó ná an fad ceadaithe.',
+  'error_title_content_required' => 'Teideal agus ábhar ag teastáil.',
+  'error_content_empty_after_cleanup' => 'Tá ábhar an ailt folamh tar éis glantacháin.',
+  'propose_article_success' => 'Airteagal curtha isteach lena bhailíochtú.',
+  'error_article_save_failed' => 'Ní féidir an t-alt a shábháil faoi láthair.',
+  'propose_article_help' => 'Leag amach d’alt le ceannteidil, ailt, liostaí agus naisc. Déanfar é a shábháil i d\'ábhar agus a bhailíochtú roimh fhoilsiú.',
+  'my_contents' => 'Mo ábhar',
+  'article_title_label' => 'Teideal an ailt',
+  'category_label' => 'Catagóir',
+  'excerpt_label' => 'Achoimre',
+  'excerpt_placeholder' => 'Achoimre ghearr ar taispeáint i liosta na n-alt.',
+  'content_label' => 'Ábhar formáidithe',
+  'content_placeholder' => '<h2>Section teideal</h2>
+<p>Do théacs...</p>
+<ul><li> Pointe tábhachtach</li></ul>',
+  'html_cleanup_help' => 'Glantar HTML go huathoibríoch. Baintear scripteanna, iframes agus tréithe contúirteacha roimh bhailíochtú.',
+  'submit_for_review' => 'Cuir isteach le haghaidh bailíochtaithe',
 );

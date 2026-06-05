@@ -7,7 +7,7 @@ return array (
   'intro' => 'Evo postupka podnošenja zahtjeva za članstvo u sekciji CRD.',
   'image_alt' => 'Vizualni prikaz članstva CRD',
   'how_title' => 'Kako se postaje član CRD?',
-  'how_text' => 'Pošaljite zahtjev e-poštom (on4crd.be) na CM (predsjednik kluba) sekcije CRD.',
+  'how_text' => 'Pošaljite zahtjev e-poštom (crdurnal@gmail.com) na CM (predsjednik kluba) sekcije CRD.',
   'postal_title' => 'Zahtjev poštom',
   'contact_item_1' => 'Radio klub Durnal - Bocq Arena',
   'contact_item_2' => 'Rue des Écoles, 5530 Purnode',

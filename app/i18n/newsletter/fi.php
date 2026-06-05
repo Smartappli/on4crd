@@ -17,4 +17,7 @@ return array (
   'email_label' => 'Yhteydenotto sähköposti',
   'subscribe' => 'Tilaa',
   'layout_title' => 'Uutiskirje',
+  'consent_required' => 'Uutiskirjeen suostumus vaaditaan.',
+  'consent_label' => 'Hyväksyn ON4CRD-uutiskirjeen vastaanottamisen ja ymmärrän, että voin peruuttaa tilauksen milloin tahansa.',
+  'consent_proof_member' => 'Jäsenen uutiskirjeen suostumus',
 );

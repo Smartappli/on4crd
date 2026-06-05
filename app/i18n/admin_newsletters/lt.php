@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'paštas\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Prenumeratorių nėra.',
   'no_campaigns' => 'Jokios kampanijos.',
+  'err_consent_proof_required' => 'Būtinas sutikimo įrodymas.',
+  'consent_proof' => 'Sutikimo įrodymas',
+  'consent_proof_ph' => 'Pavyzdys: pasirašyta forma 2026-06-05',
+  'consent_admin_help' => 'Norint pridėti, importuoti ar suaktyvinti iš naujo, reikalingas aiškus sutikimo įrodymas.',
+  'consent' => 'Sutikimas',
 );

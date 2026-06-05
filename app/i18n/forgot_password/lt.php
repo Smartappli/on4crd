@@ -13,4 +13,11 @@ return array (
   'submit' => 'Siųsti nuorodą',
   'back_login' => 'Grįžti į prisijungimą',
   'email_label' => 'El. paštas',
+  'email_subject' => 'ON4CRD – slaptažodžio nustatymas iš naujo',
+  'email_body' => 'Sveiki,
+
+Naudokite šią nuorodą norėdami iš naujo nustatyti ON4CRD slaptažodį:
+{reset_link}
+
+Jei to neprašėte, ignoruokite šį pranešimą.',
 );

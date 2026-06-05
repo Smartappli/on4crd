@@ -43,4 +43,9 @@ return array (
   'csv_ph' => 'e-pošta\\nfoo@example.org\\nbar@example.org',
   'no_subscribers' => 'Ni naročnikov.',
   'no_campaigns' => 'Brez kampanje.',
+  'err_consent_proof_required' => 'Zahteva se dokazilo o soglasju.',
+  'consent_proof' => 'Dokazilo o privolitvi',
+  'consent_proof_ph' => 'Primer: podpisan obrazec na 2026-06-05',
+  'consent_admin_help' => 'Za dodajanje, uvoz ali ponovno aktiviranje je potrebno izrecno dokazilo o soglasju.',
+  'consent' => 'Soglasje',
 );
