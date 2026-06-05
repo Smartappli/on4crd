@@ -196,6 +196,9 @@ $articleStatusChoices = [
     'rejected' => $t('rejected', 'Refuse'),
 ];
 $articleStatusLabel = static fn(string $status): string => $articleStatusChoices[$status] ?? $status;
+$editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'scheduled_at' => null, 'moderation_note' => null];
+$editing = $editingDefault;
+$editingId = (int) ($_GET['id'] ?? 0);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -220,11 +223,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
                 set_flash('success', $t('ok_deleted', 'Article supprimé.'));
             } else {
+                $bulkRowsStmt = db()->prepare('SELECT id, title, slug, author_id FROM articles WHERE id IN (' . $placeholders . ')');
+                $bulkRowsStmt->execute($ids);
+                $bulkRows = $bulkRowsStmt->fetchAll() ?: [];
                 $scheduledAt = $bulkOp === 'scheduled' ? date('Y-m-d H:i:s', time() + 3600) : null;
                 $publishedAt = $bulkOp === 'published' ? date('Y-m-d H:i:s') : null;
                 $moderationNote = $bulkOp === 'rejected' ? 'Refuse par moderation.' : null;
                 db()->prepare('UPDATE articles SET status = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $scheduledAt, $publishedAt, $moderationNote], $ids));
+                $translationSyncFailed = false;
+                $currentUserId = (int) current_user()['id'];
+                foreach ($bulkRows as $bulkRow) {
+                    $articleId = (int) ($bulkRow['id'] ?? 0);
+                    if ($articleId > 0 && in_array($bulkOp, ['published', 'scheduled'], true)) {
+                        try {
+                            article_translations_sync_all($articleId);
+                        } catch (Throwable) {
+                            $translationSyncFailed = true;
+                        }
+                    }
+                    $authorId = isset($bulkRow['author_id']) ? (int) $bulkRow['author_id'] : 0;
+                    if ($authorId <= 0 || $authorId === $currentUserId) {
+                        continue;
+                    }
+                    $articleTitle = (string) ($bulkRow['title'] ?? '');
+                    $articleSlug = (string) ($bulkRow['slug'] ?? '');
+                    if ($bulkOp === 'published') {
+                        notify_member($authorId, 'publication', 'Article publie', $articleTitle, route_url('article', ['slug' => $articleSlug]));
+                    } elseif ($bulkOp === 'scheduled') {
+                        notify_member($authorId, 'publication', 'Article planifie', $articleTitle, route_url('my_requests'));
+                    } elseif ($bulkOp === 'rejected') {
+                        notify_member($authorId, 'moderation', 'Article refuse', $moderationNote, route_url('my_requests'));
+                    }
+                }
+                if ($translationSyncFailed) {
+                    set_flash('warning', 'Certains articles sont enregistres, mais leurs traductions automatiques devront etre relancees.');
+                }
                 set_flash('success', $t('ok_saved'));
             }
             redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
@@ -340,10 +374,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 db()->commit();
 
-                try {
-                    article_translations_sync_all($id);
-                } catch (Throwable) {
-                    set_flash('warning', 'Article enregistre, mais les traductions automatiques devront etre relancees.');
+                if (in_array($notifyStatus, ['published', 'scheduled'], true)) {
+                    try {
+                        article_translations_sync_all($id);
+                    } catch (Throwable) {
+                        set_flash('warning', 'Article enregistre, mais les traductions automatiques devront etre relancees.');
+                    }
                 }
 
                 $currentUserId = (int) current_user()['id'];
@@ -383,18 +419,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_array($revision)) {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }
-            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = ?, updated_at = NOW() WHERE id = ?')
+            $restoredStatus = (string) ($revision['status'] ?? 'draft');
+            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')
                 ->execute([
                     (string) ($revision['title'] ?? ''),
                     (string) ($revision['slug'] ?? ''),
                     (string) ($revision['excerpt'] ?? ''),
                     (string) ($revision['content'] ?? ''),
-                    (string) ($revision['status'] ?? 'draft'),
+                    $restoredStatus,
                     (string) ($revision['category'] ?? 'autres'),
                     $revision['scheduled_at'] ?? null,
                     $revision['published_at'] ?? null,
                     $articleId,
                 ]);
+            if (in_array($restoredStatus, ['published', 'scheduled'], true)) {
+                try {
+                    article_translations_sync_all($articleId);
+                } catch (Throwable) {
+                    set_flash('warning', 'Version restauree, mais les traductions automatiques devront etre relancees.');
+                }
+            }
             set_flash('success', $t('ok_revision_restored', 'Version restaurée.'));
             redirect_url(route_url('admin_articles', ['id' => $articleId]));
         } elseif ($action === 'save_category') {
@@ -498,12 +542,16 @@ $articleStatMap = array_fill_keys(array_keys($articleStatusChoices), 0);
 foreach ($articleStats as $statRow) {
     $articleStatMap[(string) $statRow['status']] = (int) $statRow['total'];
 }
-$editingId = (int) ($_GET['id'] ?? 0);
-$editing = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'scheduled_at' => null, 'moderation_note' => null];
-if ($editingId > 0) {
-    $stmt = db()->prepare('SELECT * FROM articles WHERE id = ?');
-    $stmt->execute([$editingId]);
-    $editing = $stmt->fetch() ?: $editing;
+if ($previewPayload === null) {
+    $editingId = (int) ($_GET['id'] ?? 0);
+    $editing = $editingDefault;
+    if ($editingId > 0) {
+        $stmt = db()->prepare('SELECT * FROM articles WHERE id = ?');
+        $stmt->execute([$editingId]);
+        $editing = $stmt->fetch() ?: $editing;
+    }
+} else {
+    $editingId = (int) ($editing['id'] ?? 0);
 }
 $revisions = [];
 if ($editingId > 0 && table_exists('article_revisions')) {

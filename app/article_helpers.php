@@ -387,8 +387,11 @@ function article_translation_upsert(int $articleId, string $locale, ?string $tit
     $existingStmt = db()->prepare('SELECT status, source_hash FROM article_translations WHERE article_id = ? AND locale = ? LIMIT 1');
     $existingStmt->execute([$articleId, $locale]);
     $existing = $existingStmt->fetch() ?: null;
-    if ($title === null && $summary === null && $content === null && is_array($existing) && (string) ($existing['status'] ?? '') === 'reviewed' && (string) ($existing['source_hash'] ?? '') === $sourceHash) {
-        return;
+    if ($title === null && $summary === null && $content === null && is_array($existing) && (string) ($existing['source_hash'] ?? '') === $sourceHash) {
+        $existingStatus = (string) ($existing['status'] ?? '');
+        if (in_array($existingStatus, ['reviewed', 'auto', 'needs_review'], true)) {
+            return;
+        }
     }
 
     if ($title === null && $summary === null && $content === null) {

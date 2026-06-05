@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([
                 trim((string) ($_POST['title'] ?? '')),
                 trim((string) ($_POST['excerpt'] ?? '')),
-                sanitize_rich_html((string) ($_POST['content'] ?? '')),
+                article_sanitize_content((string) ($_POST['content'] ?? '')),
                 (int) current_user()['id'],
                 $id,
                 $locale,

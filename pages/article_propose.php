@@ -102,14 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         db()->beginTransaction();
         db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?)')
             ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, (int) $user['id']]);
-        $articleId = (int) db()->lastInsertId();
         db()->commit();
-
-        try {
-            article_translations_sync_all($articleId);
-        } catch (Throwable) {
-            set_flash('warning', 'Article enregistre, mais les traductions automatiques devront etre relancees.');
-        }
 
         set_flash('success', 'Article soumis pour validation.');
         redirect('my_requests');
