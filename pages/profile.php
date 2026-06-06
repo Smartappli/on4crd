@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $qslVia = trim((string) ($_POST['qsl_via'] ?? ''));
         $lotwUsername = trim((string) ($_POST['lotw_username'] ?? ''));
         $eqslUsername = trim((string) ($_POST['eqsl_username'] ?? ''));
+        $submittedQrzUrl = trim((string) ($_POST['qrz_url'] ?? ''));
         $website = trim((string) ($_POST['website'] ?? ''));
         $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
         $ubaMemberNumber = $isUbaMember === 1 ? trim((string) ($_POST['uba_member_number'] ?? '')) : '';
@@ -57,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_locator'));
         }
         if ($website !== '' && filter_var($website, FILTER_VALIDATE_URL) === false) {
+            throw new RuntimeException($t('invalid_url'));
+        }
+        if ($submittedQrzUrl !== '' && filter_var($submittedQrzUrl, FILTER_VALIDATE_URL) === false) {
             throw new RuntimeException($t('invalid_url'));
         }
 
@@ -101,7 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $qrzUrl = member_qrz_url_for_profile_save(
             $callsign,
             (string) ($currentMember['callsign'] ?? ''),
-            (string) ($currentMember['qrz_url'] ?? '')
+            (string) ($currentMember['qrz_url'] ?? ''),
+            $submittedQrzUrl
         );
         $lotwUsername = (string) member_lotw_username_for_profile_save($callsign, $lotwUsername);
 
@@ -325,7 +330,7 @@ ob_start();
                 <p class="help profile-form-wide"><?= e($t('auto_radio_location_help')) ?></p>
                 <label><?= $helpFieldLabel($t('qsl_via'), 'profile-qsl-via-help', $t('qsl_via_help')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('eqsl_username'), 'profile-eqsl-help', $t('eqsl_username_help')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
-                <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble profile-help-bubble-right" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" maxlength="255" readonly value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
+                <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble profile-help-bubble-right" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" name="qrz_url" maxlength="255" value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('website'), 'profile-website-help', $t('website_help')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
                 <?php $isUbaMemberChecked = (int) ($member['is_uba_member'] ?? 0) === 1; ?>
                 <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" data-uba-member-toggle <?= $isUbaMemberChecked ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>

@@ -54,7 +54,7 @@ return array (
   'eqsl_username' => 'Identifiant eQSL',
   'eqsl_username_help' => 'Votre identifiant eQSL.cc pour les échanges de QSL électroniques.',
   'qrz_url' => 'URL QRZ',
-  'qrz_help' => 'Ce lien est vérifié automatiquement sur base de l’indicatif lors de l’enregistrement.',
+  'qrz_help' => 'URL de votre page QRZ. Vous pouvez la modifier manuellement ; laissez le champ vide pour utiliser le lien QRZ calculé depuis l’indicatif.',
   'website' => 'Site web',
   'website_help' => 'Site personnel ou site de station optionnel. Utilisez une URL complète commençant par https:// ou http://.',
   'uba_member' => 'Membre UBA',

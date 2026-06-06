@@ -54,7 +54,7 @@ return array (
   'eqsl_username' => 'eQSL username',
   'eqsl_username_help' => 'Your eQSL.cc username for electronic QSL exchanges.',
   'qrz_url' => 'QRZ URL',
-  'qrz_help' => 'This link is checked automatically from the callsign when saving.',
+  'qrz_help' => 'URL of your QRZ page. You can edit it manually; leave the field empty to use the QRZ link computed from the callsign.',
   'website' => 'Website',
   'website_help' => 'Optional personal or station website. Use a complete URL starting with https:// or http://.',
   'uba_member' => 'UBA member',

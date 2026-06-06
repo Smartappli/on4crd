@@ -495,6 +495,14 @@ final class FunctionHelpersExtendedTest extends TestCase
         );
     }
 
+    public function testMemberQrzSaveUsesSubmittedUrlWhenProvided(): void
+    {
+        self::assertSame(
+            'https://www.qrz.com/db/ON7ZB',
+            member_qrz_url_for_profile_save('ON4DG', 'ON4DG', 'https://www.qrz.com/db/ON4DG', ' https://www.qrz.com/db/ON7ZB ')
+        );
+    }
+
     public function testMemberLotwUsernameDefaultsToCallsignWhenEmpty(): void
     {
         self::assertSame('ON4DG', member_lotw_username_for_profile_save(' on4dg ', ''));

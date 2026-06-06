@@ -606,4 +606,14 @@ final class RouterContractTest extends TestCase
 
         self::assertStringContainsString('name="allow_geocode" value="1" checked', $profile);
     }
+
+    public function testProfileQrzUrlFieldIsEditable(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        self::assertIsString($profile);
+
+        self::assertStringContainsString('name="qrz_url"', $profile);
+        self::assertStringContainsString('$submittedQrzUrl = trim((string) ($_POST[\'qrz_url\'] ?? \'\'));', $profile);
+        self::assertStringNotContainsString('name="qrz_url" maxlength="255" readonly', $profile);
+    }
 }

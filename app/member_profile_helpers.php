@@ -940,11 +940,16 @@ function member_profile_select_columns_sql(): string
 }
 
 if (!function_exists('member_qrz_url_for_profile_save')) {
-function member_qrz_url_for_profile_save(string $newCallsign, string $previousCallsign = '', string $existingQrzUrl = ''): ?string
+function member_qrz_url_for_profile_save(string $newCallsign, string $previousCallsign = '', string $existingQrzUrl = '', string $submittedQrzUrl = ''): ?string
 {
     $newCallsign = strtoupper(trim($newCallsign));
     $previousCallsign = strtoupper(trim($previousCallsign));
     $existingQrzUrl = trim($existingQrzUrl);
+    $submittedQrzUrl = trim($submittedQrzUrl);
+
+    if ($submittedQrzUrl !== '') {
+        return $submittedQrzUrl;
+    }
 
     if ($newCallsign === '') {
         return $existingQrzUrl !== '' ? $existingQrzUrl : null;
