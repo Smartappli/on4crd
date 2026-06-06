@@ -709,6 +709,7 @@ function render_ham_weather_advice(array $user = []): string
         . '<li><strong>' . e((string) $i18n['bands']) . '</strong> ' . e(implode(' • ', $bands)) . '</li>'
         . '<li><strong>' . e((string) $i18n['modes']) . '</strong> ' . e(implode(' • ', $modes)) . '</li>'
         . '<li><strong>' . e((string) $i18n['window']) . '</strong> ' . e($timeWindow) . '</li>'
+        . '<li><strong>' . e($propagationLabel) . '</strong> ' . e($propagationSummary) . '</li>'
         . '</ul>'
         . '</section>'
         . '</div>';

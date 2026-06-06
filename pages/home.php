@@ -705,8 +705,8 @@ $ubaLogoPath = 'assets/logo/UBA-Logo-Couleur-MID2.png';
 $ibptLogoPath = 'assets/logo/logo_IBPT.png';
 $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = $homeSafeWidget('open_meteo');
-$homePropagationHtml = $homeSafeWidget('propagation');
-$hasHomePropagation = trim((string) $homePropagationHtml) !== '';
+$homePropagationHtml = '';
+$hasHomePropagation = false;
 $homeHamAdviceHtml = $homeSafeHamAdvice();
 $hamWeatherRefreshUrl = base_url('index.php?' . http_build_query(['route' => 'home', 'ajax' => 'ham_weather']));
 $homeRadioInfoHtml = '<div class="grid gap-4">'
@@ -728,7 +728,7 @@ if (isset($_GET['ajax']) && (string) $_GET['ajax'] === 'ham_weather') {
     try {
         echo json_encode([
             'weather' => $homeSafeWidget('open_meteo'),
-            'propagation' => $homeSafeWidget('propagation'),
+            'propagation' => '',
             'advice' => $homeSafeHamAdvice(),
             'updated_at' => gmdate('c'),
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
