@@ -361,6 +361,24 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(87, $nestedCurrent['relative_humidity_2m']);
     }
 
+    public function testDashboardWeatherWidgetUsesAgrometAsPrimarySource(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        self::assertIsString($renderer);
+
+        self::assertArrayHasKey('open_meteo', $catalog);
+        self::assertStringContainsString('Agromet', (string) ($catalog['open_meteo']['description'] ?? ''));
+        self::assertStringContainsString("case 'open_meteo':", $renderer);
+        self::assertStringContainsString("env('AGROMET_API_TOKEN'", $renderer);
+        self::assertStringContainsString('ham_agromet_hourly_url()', $renderer);
+        self::assertStringContainsString('ham_agromet_current_weather($payload)', $renderer);
+        self::assertStringContainsString('widget:weather:agromet:', $renderer);
+        self::assertStringContainsString("'temperature' => 'Temperature'", $renderer);
+        self::assertStringContainsString("'humidity' => 'Humidite'", $renderer);
+        self::assertStringContainsString("'rain' => 'Pluie'", $renderer);
+    }
+
     public function testDashboardWidgetCatalogScrollsFromLeftInsidePanel(): void
     {
         $css = file_get_contents(__DIR__ . '/../assets/css/app.css');

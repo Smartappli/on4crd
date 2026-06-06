@@ -16,8 +16,8 @@ function widget_catalog(): array
             'description' => 'Indicateurs géomagnétiques en temps réel pour vos QSO.',
         ],
         'open_meteo' => [
-            'title' => 'Météo locale',
-            'description' => 'Conditions météo locales en temps réel pour l’activité radio.',
+            'title' => 'Meteo locale',
+            'description' => 'Conditions locales via Agromet avec secours Open-Meteo.',
         ],
         'ham_weather_advice' => [
             'title' => 'Meteo radioamateur',

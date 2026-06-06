@@ -89,137 +89,169 @@ function render_widget(string $slug, array $user = []): string
                 . '</ul>';
 
         case 'open_meteo':
-            $defaultUrl = 'https://api.open-meteo.com/v1/forecast?latitude=50.3150&longitude=4.9452&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=Europe%2FBrussels';
-            $feedUrl = $defaultUrl;
             $cacheTtl = 300;
             $defaultLocator = 'JO20LI';
             $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
             $locator = $memberLocator !== '' ? $memberLocator : $defaultLocator;
-            $usingClubDefaultLocator = $memberLocator === '';
             $weatherCoordinates = maidenhead_to_coordinates($locator);
+            $fallbackFeedUrl = 'https://api.open-meteo.com/v1/forecast?latitude=50.3150&longitude=4.9452&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation&timezone=Europe%2FBrussels';
+            $fallbackFeedEnabled = true;
 
             if (table_exists('live_feeds')) {
                 try {
-                $feedColumns = ['url'];
-                if (table_has_column('live_feeds', 'cache_ttl')) {
-                    $feedColumns[] = 'cache_ttl';
-                }
-                if (table_has_column('live_feeds', 'is_enabled')) {
-                    $feedColumns[] = 'is_enabled';
-                }
-                $feedStmt = db()->prepare('SELECT ' . implode(', ', $feedColumns) . ' FROM live_feeds WHERE code = ? LIMIT 1');
-                $feedStmt->execute(['open-meteo']);
-                $feedRow = $feedStmt->fetch();
-                if (is_array($feedRow)) {
-                    if ((int) ($feedRow['is_enabled'] ?? 1) !== 1) {
-                        return '<p class="help">Flux Open‑Meteo désactivé dans l’administration.</p>';
+                    $feedColumns = ['url'];
+                    if (table_has_column('live_feeds', 'cache_ttl')) {
+                        $feedColumns[] = 'cache_ttl';
                     }
-                    $configuredUrl = trim((string) ($feedRow['url'] ?? ''));
-                    if ($configuredUrl !== '') {
-                        $feedUrl = $configuredUrl;
+                    if (table_has_column('live_feeds', 'is_enabled')) {
+                        $feedColumns[] = 'is_enabled';
                     }
-                    $cacheTtl = max(60, (int) ($feedRow['cache_ttl'] ?? 300));
-                }
+                    $feedStmt = db()->prepare('SELECT ' . implode(', ', $feedColumns) . ' FROM live_feeds WHERE code = ? LIMIT 1');
+                    $feedStmt->execute(['open-meteo']);
+                    $feedRow = $feedStmt->fetch();
+                    if (is_array($feedRow)) {
+                        $fallbackFeedEnabled = (int) ($feedRow['is_enabled'] ?? 1) === 1;
+                        $configuredUrl = trim((string) ($feedRow['url'] ?? ''));
+                        if ($configuredUrl !== '') {
+                            $fallbackFeedUrl = $configuredUrl;
+                        }
+                        $cacheTtl = max(60, (int) ($feedRow['cache_ttl'] ?? 300));
+                    }
                 } catch (Throwable) {
-                    $feedUrl = $defaultUrl;
+                    $fallbackFeedUrl = 'https://api.open-meteo.com/v1/forecast?latitude=50.3150&longitude=4.9452&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation&timezone=Europe%2FBrussels';
+                    $fallbackFeedEnabled = true;
                     $cacheTtl = 300;
                 }
             }
 
-            if ($weatherCoordinates !== null) {
-                $feedUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
-                    'latitude' => number_format($weatherCoordinates['latitude'], 4, '.', ''),
-                    'longitude' => number_format($weatherCoordinates['longitude'], 4, '.', ''),
-                    'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
-                    'timezone' => 'auto',
-                ]);
+            $current = null;
+            $sourceLabel = 'Agromet';
+            $agrometToken = trim((string) env('AGROMET_API_TOKEN', ''));
+            if ($agrometToken !== '') {
+                $agrometUrl = ham_agromet_hourly_url();
+                $current = cache_remember('widget:weather:agromet:' . sha1($agrometUrl), $cacheTtl, static function () use ($agrometUrl, $agrometToken): ?array {
+                    $payload = ham_agromet_api_json($agrometUrl, $agrometToken);
+                    return is_array($payload) ? ham_agromet_current_weather($payload) : null;
+                });
             }
 
-            $cacheKey = 'widget:open-meteo:' . sha1($feedUrl . '|' . $locator);
-            $payload = cache_remember($cacheKey, $cacheTtl, static function () use ($feedUrl): ?array {
-                $context = stream_context_create([
-                    'http' => [
-                        'method' => 'GET',
-                        'timeout' => 6,
-                        'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Widget/1.0\r\n",
-                    ],
-                ]);
-                $raw = @file_get_contents($feedUrl, false, $context);
-                if (!is_string($raw) || trim($raw) === '') {
-                    return null;
+            if (!is_array($current) && $fallbackFeedEnabled) {
+                $sourceLabel = 'Open-Meteo';
+                if ($weatherCoordinates !== null) {
+                    $fallbackFeedUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
+                        'latitude' => number_format($weatherCoordinates['latitude'], 4, '.', ''),
+                        'longitude' => number_format($weatherCoordinates['longitude'], 4, '.', ''),
+                        'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
+                        'timezone' => 'auto',
+                    ]);
                 }
-                $decoded = json_decode($raw, true);
-                return is_array($decoded) ? $decoded : null;
-            });
+                $payload = cache_remember('widget:weather:open-meteo:' . sha1($fallbackFeedUrl . '|' . $locator), $cacheTtl, static function () use ($fallbackFeedUrl): ?array {
+                    $context = stream_context_create([
+                        'http' => [
+                            'method' => 'GET',
+                            'timeout' => 6,
+                            'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Widget/1.0\r\n",
+                        ],
+                    ]);
+                    $raw = @file_get_contents($fallbackFeedUrl, false, $context);
+                    if (!is_string($raw) || trim($raw) === '') {
+                        return null;
+                    }
+                    $decoded = json_decode($raw, true);
+                    return is_array($decoded) ? $decoded : null;
+                });
+                $current = is_array($payload) && is_array($payload['current'] ?? null) ? $payload['current'] : null;
+            }
 
-            if (!is_array($payload)) {
+            if (!is_array($current)) {
                 $weatherUnavailable = match ($locale) {
                     'en' => 'Weather data is currently unavailable.',
-                    'de' => 'Wetterdaten sind derzeit nicht verfügbar.',
-                    'nl' => 'Weergegevens zijn momenteel niet beschikbaar.',
-                    'es' => 'Los datos meteorológicos no están disponibles por el momento.',
-                    'it' => 'I dati meteo non sono disponibili al momento.',
-                    'pt' => 'Os dados meteorológicos não estão disponíveis no momento.',
-                    'ar' => 'بيانات الطقس غير متاحة حالياً.',
-                    'hi' => 'मौसम डेटा फिलहाल उपलब्ध नहीं है।',
-                    'ja' => '現在、天気データは利用できません。',
-                    'zh' => '当前天气数据不可用。',
-                    'bn' => 'এই মুহূর্তে আবহাওয়ার তথ্য পাওয়া যাচ্ছে না।',
-                    'ru' => 'Метеоданные сейчас недоступны.',
-                    'id' => 'Data cuaca saat ini tidak tersedia.',
-                    default => 'Données météo indisponibles pour le moment.',
+                    default => 'Donnees meteo indisponibles pour le moment.',
                 };
                 return '<p class="help">' . e($weatherUnavailable) . '</p>';
             }
 
-            $current = is_array($payload['current'] ?? null) ? $payload['current'] : [];
-            $weatherCode = (int) ($current['weather_code'] ?? -1);
-            $weatherLabels = match ($locale) {
-                'en' => ['clear', 'cloudy', 'fog', 'rain', 'freezing_rain', 'snow', 'storm', 'variable'],
-                'de' => ['Klarer Himmel', 'Bewölkt', 'Nebel', 'Regen', 'Gefrierender Regen', 'Schnee', 'Gewitter', 'Wechselhafte Bedingungen'],
-                'nl' => ['Heldere hemel', 'Bewolkt', 'Mist', 'Regen', 'IJzel', 'Sneeuw', 'Onweer', 'Wisselende omstandigheden'],
-                'es' => ['Cielo despejado', 'Nublado', 'Niebla', 'Lluvia', 'Lluvia helada', 'Nieve', 'Tormenta', 'Condiciones variables'],
-                'it' => ['Cielo sereno', 'Nuvoloso', 'Nebbia', 'Pioggia', 'Pioggia gelata', 'Neve', 'Temporale', 'Condizioni variabili'],
-                'pt' => ['Céu limpo', 'Nublado', 'Nevoeiro', 'Chuva', 'Chuva gelada', 'Neve', 'Trovoada', 'Condições variáveis'],
-                'ar' => ['سماء صافية', 'غائم', 'ضباب', 'مطر', 'مطر متجمد', 'ثلج', 'عاصفة رعدية', 'ظروف متغيرة'],
-                'hi' => ['आसमान साफ़', 'बादल', 'कोहरा', 'बारिश', 'जमी हुई बारिश', 'बर्फ़', 'आंधी-तूफ़ान', 'परिवर्ती परिस्थितियाँ'],
-                'ja' => ['快晴', '曇り', '霧', '雨', '凍雨', '雪', '雷雨', '変わりやすい状況'],
-                'zh' => ['晴朗', '多云', '有雾', '降雨', '冻雨', '降雪', '雷暴', '天气多变'],
-                'bn' => ['আকাশ পরিষ্কার', 'মেঘলা', 'কুয়াশা', 'বৃষ্টি', 'বরফমিশ্রিত বৃষ্টি', 'তুষার', 'বজ্রঝড়', 'পরিবর্তনশীল অবস্থা'],
-                'ru' => ['Ясно', 'Облачно', 'Туман', 'Дождь', 'Ледяной дождь', 'Снег', 'Гроза', 'Переменные условия'],
-                'id' => ['Langit cerah', 'Berawan', 'Berkabut', 'Hujan', 'Hujan beku', 'Salju', 'Badai petir', 'Kondisi berubah-ubah'],
-                default => ['Ciel dégagé', 'Nuageux', 'Brouillard', 'Pluie', 'Pluie verglaçante', 'Neige', 'Orage', 'Conditions variables'],
-            };
-            $weatherText = match ($weatherCode) {
-                0 => $weatherLabels[0],
-                1, 2, 3 => $weatherLabels[1],
-                45, 48 => $weatherLabels[2],
-                51, 53, 55, 61, 63, 65, 80, 81, 82 => $weatherLabels[3],
-                56, 57, 66, 67 => $weatherLabels[4],
-                71, 73, 75, 77, 85, 86 => $weatherLabels[5],
-                95, 96, 99 => $weatherLabels[6],
-                default => $weatherLabels[7],
-            };
-            $weatherPrefix = match ($locale) {
-                'en' => 'Weather:',
-                'de' => 'Wetter:',
-                'nl' => 'Weer:',
-                'es' => 'Tiempo:',
-                'it' => 'Meteo:',
-                'pt' => 'Tempo:',
-                'ar' => 'الطقس:',
-                'hi' => 'मौसम:',
-                'ja' => '天気:',
-                'zh' => '天气：',
-                'bn' => 'আবহাওয়া:',
-                'ru' => 'Погода:',
-                'id' => 'Cuaca:',
-                default => 'Météo:',
-            };
-            return '<ul class="list-clean">'
-                . '<li><strong>' . e($weatherPrefix) . ' ' . e($weatherText) . '</strong></li>'
-                . '</ul>';
+            $temperature = is_numeric($current['temperature_2m'] ?? null) ? (float) $current['temperature_2m'] : null;
+            $humidity = is_numeric($current['relative_humidity_2m'] ?? null) ? (int) round((float) $current['relative_humidity_2m']) : null;
+            $wind = is_numeric($current['wind_speed_10m'] ?? null) ? (float) $current['wind_speed_10m'] : null;
+            $precipitation = is_numeric($current['precipitation'] ?? null) ? (float) $current['precipitation'] : null;
+            $weatherCode = is_numeric($current['weather_code'] ?? null) ? (int) $current['weather_code'] : null;
 
+            $labels = match ($locale) {
+                'en' => [
+                    'weather' => 'Weather',
+                    'source' => 'Source',
+                    'temperature' => 'Temperature',
+                    'humidity' => 'Humidity',
+                    'wind' => 'Wind',
+                    'rain' => 'Rain',
+                    'dry' => 'Dry local conditions',
+                    'rainy' => 'Rain observed',
+                    'windy' => 'Sustained wind',
+                    'humid' => 'Humid air',
+                    'variable' => 'Variable conditions',
+                    'clear' => 'Clear sky',
+                    'cloudy' => 'Cloudy',
+                    'fog' => 'Fog',
+                    'snow' => 'Snow',
+                    'storm' => 'Storm',
+                ],
+                default => [
+                    'weather' => 'Meteo',
+                    'source' => 'Source',
+                    'temperature' => 'Temperature',
+                    'humidity' => 'Humidite',
+                    'wind' => 'Vent',
+                    'rain' => 'Pluie',
+                    'dry' => 'Conditions locales seches',
+                    'rainy' => 'Pluie observee',
+                    'windy' => 'Vent soutenu',
+                    'humid' => 'Air humide',
+                    'variable' => 'Conditions variables',
+                    'clear' => 'Ciel degage',
+                    'cloudy' => 'Nuageux',
+                    'fog' => 'Brouillard',
+                    'snow' => 'Neige',
+                    'storm' => 'Orage',
+                ],
+            };
+
+            $summary = match ($weatherCode) {
+                0 => $labels['clear'],
+                1, 2, 3 => $labels['cloudy'],
+                45, 48 => $labels['fog'],
+                51, 53, 55, 61, 63, 65, 80, 81, 82 => $labels['rainy'],
+                71, 73, 75, 77, 85, 86 => $labels['snow'],
+                95, 96, 99 => $labels['storm'],
+                default => null,
+            };
+            if ($summary === null) {
+                $summary = match (true) {
+                    is_numeric($precipitation) && $precipitation >= 0.2 => $labels['rainy'],
+                    is_numeric($wind) && $wind >= 30.0 => $labels['windy'],
+                    is_numeric($humidity) && $humidity >= 90 => $labels['humid'],
+                    default => $labels['dry'],
+                };
+            }
+
+            $items = [
+                '<li><strong>' . e((string) $labels['weather']) . ' : ' . e((string) $summary) . '</strong></li>',
+                '<li><strong>' . e((string) $labels['source']) . ' :</strong> ' . e($sourceLabel) . '</li>',
+            ];
+            if (is_numeric($temperature)) {
+                $items[] = '<li><strong>' . e((string) $labels['temperature']) . ' :</strong> ' . e(number_format((float) $temperature, 1, ',', '')) . '&deg;C</li>';
+            }
+            if (is_numeric($humidity)) {
+                $items[] = '<li><strong>' . e((string) $labels['humidity']) . ' :</strong> ' . e((string) $humidity) . '%</li>';
+            }
+            if (is_numeric($wind)) {
+                $items[] = '<li><strong>' . e((string) $labels['wind']) . ' :</strong> ' . e(number_format((float) $wind, 1, ',', '')) . ' km/h</li>';
+            }
+            if (is_numeric($precipitation)) {
+                $items[] = '<li><strong>' . e((string) $labels['rain']) . ' :</strong> ' . e(number_format((float) $precipitation, 1, ',', '')) . ' mm/h</li>';
+            }
+
+            return '<ul class="list-clean">' . implode('', $items) . '</ul>';
         default:
             $widgetUnavailable = match ($locale) {
                 'en' => 'Widget unavailable.',
