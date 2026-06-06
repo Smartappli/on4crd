@@ -636,14 +636,28 @@ final class RouterContractTest extends TestCase
     {
         $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
         self::assertIsString($profile);
         self::assertIsString($register);
+        self::assertIsString($directory);
 
         self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member[\'licence_class\'] ?? \'\'));', $profile);
         self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t);', $register);
         self::assertStringContainsString('<select name="licence_class"><?= $licenceClassOptionsHtml ?></select>', $profile);
+        self::assertStringContainsString('member_profile_licence_class_display_text($profileT, $licenceValue)', $directory);
+        self::assertStringContainsString('$licenceFilterLabel = member_profile_licence_class_display_text($profileT, $licenceFilter);', $directory);
+        self::assertStringContainsString('$licenceClass = member_profile_licence_class_display_text($profileT, (string) ($member[\'licence_class\'] ?? \'\'));', $directory);
         self::assertStringNotContainsString('<option value="ON3">ON3</option>', $register);
         self::assertStringNotContainsString('<option value="ON2">ON2</option>', $register);
+    }
+
+    public function testDirectoryDisplaysPostalCodeThroughProfileFieldMetadata(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        self::assertIsString($directory);
+
+        self::assertStringContainsString('$profilePreviewFields = member_profile_preview_fields($profileT);', $directory);
+        self::assertStringContainsString("member_profile_display_row(\$member, 'postal_code', \$profilePreviewFields['postal_code'])", $directory);
     }
 
     public function testGdprReusesProfileFieldsAndVisibilitySettings(): void
