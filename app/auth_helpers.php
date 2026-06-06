@@ -83,6 +83,89 @@ function bypass_member_user(int $memberId): ?array
     return $row;
 }
 
+function authenticated_member_columns(): array
+{
+    $memberColumns = ['id'];
+    foreach (['auth_user_id', 'callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required', 'password_reset_forced_at'] as $memberColumn) {
+        if (table_has_column('members', $memberColumn)) {
+            $memberColumns[] = $memberColumn;
+        }
+    }
+
+    return array_values(array_unique($memberColumns));
+}
+
+function authenticated_member_row(\Delight\Auth\Auth $authClient, int $sessionMemberId = 0): ?array
+{
+    if (!$authClient->isLoggedIn() || !table_exists('members')) {
+        return null;
+    }
+
+    $authUserId = (int) $authClient->getUserId();
+    if ($authUserId <= 0) {
+        return null;
+    }
+
+    $memberColumns = authenticated_member_columns();
+    $selectColumns = implode(', ', $memberColumns);
+    $hasAuthUserIdColumn = table_has_column('members', 'auth_user_id');
+    $authUsername = strtoupper(trim((string) $authClient->getUsername()));
+
+    try {
+        if ($hasAuthUserIdColumn) {
+            $stmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE auth_user_id = ? LIMIT 1');
+            $stmt->execute([$authUserId]);
+            $row = $stmt->fetch();
+            if (is_array($row) && (int) ($row['is_active'] ?? 0) === 1) {
+                return $row;
+            }
+            if (is_array($row)) {
+                return null;
+            }
+        }
+
+        if ($authUsername !== '') {
+            $fallbackStmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE UPPER(callsign) = ? LIMIT 1');
+            $fallbackStmt->execute([$authUsername]);
+            $fallbackRow = $fallbackStmt->fetch();
+            if (is_array($fallbackRow) && (int) ($fallbackRow['is_active'] ?? 0) === 1) {
+                if (!$hasAuthUserIdColumn) {
+                    return $fallbackRow;
+                }
+
+                $linkedAuthUserId = (int) ($fallbackRow['auth_user_id'] ?? 0);
+                if ($linkedAuthUserId === $authUserId) {
+                    return $fallbackRow;
+                }
+                if ($linkedAuthUserId === 0) {
+                    $repairStmt = db()->prepare('UPDATE members SET auth_user_id = ? WHERE id = ? AND (auth_user_id IS NULL OR auth_user_id = 0) LIMIT 1');
+                    $repairStmt->execute([$authUserId, (int) $fallbackRow['id']]);
+                    if ($repairStmt->rowCount() > 0) {
+                        $fallbackRow['auth_user_id'] = $authUserId;
+                        return $fallbackRow;
+                    }
+                }
+            }
+        }
+
+        if (!$hasAuthUserIdColumn && $sessionMemberId > 0) {
+            $sessionStmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE id = ? LIMIT 1');
+            $sessionStmt->execute([$sessionMemberId]);
+            $sessionRow = $sessionStmt->fetch();
+            if (is_array($sessionRow) && (int) ($sessionRow['is_active'] ?? 0) === 1) {
+                $sessionCallsign = strtoupper(trim((string) ($sessionRow['callsign'] ?? '')));
+                if ($authUsername === '' || hash_equals($authUsername, $sessionCallsign)) {
+                    return $sessionRow;
+                }
+            }
+        }
+    } catch (Throwable) {
+        return null;
+    }
+
+    return null;
+}
+
 function current_user(): ?array
 {
     static $cache = null;
@@ -94,11 +177,24 @@ function current_user(): ?array
     $loaded = true;
 
     $memberId = (int) ($_SESSION['member_id'] ?? 0);
-    $authUserId = 0;
     $authClient = auth();
     if ($authClient !== null && $authClient->isLoggedIn()) {
-        $authUserId = (int) $authClient->getUserId();
-        $memberId = $authUserId;
+        $row = authenticated_member_row($authClient, $memberId);
+        if (!is_array($row)) {
+            try {
+                $authClient->logOut();
+            } catch (Throwable) {
+                // Keep the local cleanup below even if the auth library cannot update its tables.
+            }
+            unset($_SESSION['member_id']);
+            $cache = null;
+            return null;
+        }
+
+        $_SESSION['member_id'] = (int) ($row['id'] ?? 0);
+        mark_authenticated_response_private();
+        $cache = $row;
+        return $cache;
     } elseif ($authClient !== null && $memberId > 0) {
         unset($_SESSION['member_id']);
         $memberId = 0;
@@ -122,70 +218,6 @@ function current_user(): ?array
         $cache = null;
         return null;
     }
-
-    if (!table_exists('members')) {
-        $cache = null;
-        return null;
-    }
-
-    $memberColumns = ['id'];
-    $hasAuthUserIdColumn = table_has_column('members', 'auth_user_id');
-    foreach (['auth_user_id', 'callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required', 'password_reset_forced_at'] as $memberColumn) {
-        if (table_has_column('members', $memberColumn)) {
-            $memberColumns[] = $memberColumn;
-        }
-    }
-    $lookupByAuthUserId = $authUserId > 0 && $hasAuthUserIdColumn;
-    if ($lookupByAuthUserId) {
-        $where = 'auth_user_id = ?';
-        $params = [$authUserId];
-    } else {
-        $where = 'id = ?';
-        $params = [$memberId];
-    }
-
-    try {
-        $stmt = db()->prepare('SELECT ' . implode(', ', $memberColumns) . ' FROM members WHERE ' . $where . ' LIMIT 1');
-        $stmt->execute($params);
-        $row = $stmt->fetch();
-
-        if ((!is_array($row) || $row === []) && $lookupByAuthUserId) {
-            $authUsername = strtoupper(trim((string) $authClient->getUsername()));
-            if ($authUsername !== '') {
-                $fallbackStmt = db()->prepare('SELECT ' . implode(', ', $memberColumns) . ' FROM members WHERE UPPER(callsign) = ? LIMIT 1');
-                $fallbackStmt->execute([$authUsername]);
-                $fallbackRow = $fallbackStmt->fetch();
-                if (is_array($fallbackRow) && (int) ($fallbackRow['is_active'] ?? 0) === 1) {
-                    $linkedAuthUserId = (int) ($fallbackRow['auth_user_id'] ?? 0);
-                    $canUseFallbackRow = $linkedAuthUserId === $authUserId;
-                    if ($linkedAuthUserId === 0) {
-                        $repairStmt = db()->prepare('UPDATE members SET auth_user_id = ? WHERE id = ? AND (auth_user_id IS NULL OR auth_user_id = 0) LIMIT 1');
-                        $repairStmt->execute([$authUserId, (int) $fallbackRow['id']]);
-                        $canUseFallbackRow = $repairStmt->rowCount() > 0;
-                        if ($canUseFallbackRow) {
-                            $fallbackRow['auth_user_id'] = $authUserId;
-                        }
-                    }
-                    if ($canUseFallbackRow) {
-                        $row = $fallbackRow;
-                    }
-                }
-            }
-        }
-    } catch (Throwable) {
-        $cache = null;
-        return null;
-    }
-    if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
-        unset($_SESSION['member_id']);
-        $cache = null;
-        return null;
-    }
-
-    $_SESSION['member_id'] = (int) ($row['id'] ?? 0);
-    mark_authenticated_response_private();
-    $cache = $row;
-    return $cache;
 }
 }
 
