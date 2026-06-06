@@ -562,4 +562,38 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("redirect('my_requests');", $wiki);
         self::assertStringContainsString('status = "accepted"', $wiki);
     }
+
+    public function testPublicContentProposalAreasIncludeAlbumsAndAuctions(): void
+    {
+        $helpers = file_get_contents(__DIR__ . '/../app/content_helpers.php');
+        $requests = file_get_contents(__DIR__ . '/../pages/my_requests.php');
+        self::assertIsString($helpers);
+        self::assertIsString($requests);
+
+        self::assertStringContainsString("'albums' => true", $helpers);
+        self::assertStringContainsString("'auctions' => true", $helpers);
+        self::assertStringContainsString("'albums' => 'albums'", $requests);
+        self::assertStringContainsString("'auctions' => 'auctions'", $requests);
+    }
+
+    public function testRequestedModulesAutoValidateForAdministratorsAndKeepMemberQueue(): void
+    {
+        $contracts = [
+            'pages/events.php' => ["has_permission('events.manage')", "content_proposal_create((int) \$user['id'], 'events', 'content'", "redirect('my_requests')"],
+            'pages/news.php' => ["has_permission('news.moderate')", "INSERT INTO news_posts", "INSERT INTO news_sections", "redirect('my_requests')"],
+            'pages/albums.php' => ["has_permission('albums.manage')", "INSERT INTO albums", "content_proposal_create((int) \$user['id'], 'albums', 'content'", "redirect('my_requests')"],
+            'pages/members_library.php' => ["has_permission('admin.access')", "INSERT INTO member_library_categories", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "redirect('my_requests')"],
+            'pages/auctions.php' => ["has_permission('auctions.manage')", "INSERT INTO auction_lots", "content_proposal_create((int) \$user['id'], 'auctions', 'content'", "redirect('my_requests')"],
+            'pages/classifieds.php' => ["classifieds_can_moderate()", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "redirect('my_requests')"],
+            'pages/classifieds_manage.php' => ["content_proposal_accepted_categories('classifieds', 32)"],
+        ];
+
+        foreach ($contracts as $relativePath => $needles) {
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+            foreach ($needles as $needle) {
+                self::assertStringContainsString($needle, $source, sprintf('%s must contain %s.', $relativePath, $needle));
+            }
+        }
+    }
 }
