@@ -377,15 +377,19 @@ final class RouterContractTest extends TestCase
         $router = file_get_contents(__DIR__ . '/../index.php');
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
         $adminMembers = file_get_contents(__DIR__ . '/../pages/admin_members.php');
+        $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');
         self::assertIsString($router);
         self::assertIsString($register);
         self::assertIsString($adminMembers);
+        self::assertIsString($authHelpers);
 
         self::assertStringContainsString('member_password_change_required($passwordChangeUser)', $router);
         self::assertStringContainsString('forced_notice', $router);
         self::assertMatchesRegularExpression('/password_hash\(\$password, PASSWORD_DEFAULT\),\s*0,/', $register);
         self::assertStringContainsString('redirect(module_enabled(\'dashboard\') ? \'dashboard\' : \'home\');', $register);
         self::assertStringContainsString('password_change_required = ?', $adminMembers);
+        self::assertStringContainsString('password_reset_forced_at = ?', $adminMembers);
+        self::assertStringContainsString('password_reset_forced_at', $authHelpers);
     }
 
     public function testConfiguredAdministratorsIncludeOn8cj(): void
