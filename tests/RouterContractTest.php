@@ -536,4 +536,18 @@ final class RouterContractTest extends TestCase
             }
         }
     }
+
+    public function testWikiPageProposalReplacesDirectNewPageForModerators(): void
+    {
+        $wiki = file_get_contents(__DIR__ . '/../pages/wiki.php');
+        $wikiPropose = file_get_contents(__DIR__ . '/../pages/wiki_propose.php');
+        self::assertIsString($wiki);
+        self::assertIsString($wikiPropose);
+
+        self::assertStringNotContainsString("route_url('wiki_edit')", $wiki);
+        self::assertStringContainsString("route_url('wiki_propose')", $wiki);
+        self::assertStringContainsString("\$autoPublish = has_permission('wiki.moderate');", $wikiPropose);
+        self::assertStringContainsString("\$status = \$autoPublish ? 'published' : 'pending';", $wikiPropose);
+        self::assertStringContainsString("route_url('wiki_view', ['slug' => \$slug])", $wikiPropose);
+    }
 }

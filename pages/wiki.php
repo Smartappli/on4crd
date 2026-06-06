@@ -149,9 +149,6 @@ ob_start();
             <div class="wiki-hero-actions">
                 <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></a>
                 <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
-                <?php if (has_permission('wiki.moderate')): ?>
-                    <a class="button secondary" href="<?= e(route_url('wiki_edit')) ?>"><?= e((string) $t['new_page']) ?></a>
-                <?php endif; ?>
             </div>
         </div>
     </section>
