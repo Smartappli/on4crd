@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/hamqsl_widgets.php';
+require_once __DIR__ . '/ham_weather_advice.php';
 require_once __DIR__ . '/widget_radio_helpers.php';
 
 if (!function_exists('render_widget')) {
@@ -71,6 +72,9 @@ function render_widget(string $slug, array $user = []): string
                 . '<li><a href="' . e(route_url('qsl')) . '">QSL</a></li>'
                 . '<li><a href="' . e(route_url('newsletter')) . '">Newsletter</a></li>'
                 . '</ul>';
+
+        case 'ham_weather_advice':
+            return render_ham_weather_advice($user);
 
         case 'propagation':
             $kpFeedUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';

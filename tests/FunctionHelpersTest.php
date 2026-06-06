@@ -281,6 +281,20 @@ final class FunctionHelpersTest extends TestCase
         }
     }
 
+    public function testDashboardCatalogExposesHamWeatherAdviceWidget(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        self::assertIsString($renderer);
+        self::assertIsString($dashboard);
+
+        self::assertArrayHasKey('ham_weather_advice', $catalog);
+        self::assertStringContainsString("case 'ham_weather_advice':", $renderer);
+        self::assertStringContainsString('render_ham_weather_advice($user)', $renderer);
+        self::assertStringContainsString("'welcome', 'ham_weather_advice', 'propagation'", $dashboard);
+    }
+
     public function testApplicationPhpFilesDoNotContainCommonMojibakeSequences(): void
     {
         $root = dirname(__DIR__);

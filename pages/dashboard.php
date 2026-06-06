@@ -102,7 +102,7 @@ foreach ($selected as $row) {
     ];
 }
 if ($selectedWidgets === []) {
-    $defaultWidgetKeys = array_values(array_intersect(['welcome', 'propagation', 'club_status'], array_keys($availableWidgets)));
+    $defaultWidgetKeys = array_values(array_intersect(['welcome', 'ham_weather_advice', 'propagation', 'club_status'], array_keys($availableWidgets)));
     if ($defaultWidgetKeys === []) {
         $defaultWidgetKeys = array_slice(array_keys($availableWidgets), 0, 4);
     }

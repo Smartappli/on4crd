@@ -31,6 +31,10 @@ function widget_catalog(): array
             'title' => 'Météo locale',
             'description' => 'Conditions météo locales en temps réel pour l’activité radio.',
         ],
+        'ham_weather_advice' => [
+            'title' => 'Meteo radioamateur',
+            'description' => 'Score QSO, bandes, modes et creneau conseille depuis les donnees meteo et propagation.',
+        ],
     ] + hamqsl_widget_catalog();
 }
 }
