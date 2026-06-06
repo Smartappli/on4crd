@@ -23,6 +23,7 @@ function core_permission_catalog(): array
         'ads.submit' => 'Gerer ses publicites',
         'ads.moderate' => 'Moderer les publicites',
         'ads.manage_all' => 'Gerer toutes les publicites et statistiques',
+        'classifieds.moderate' => 'Moderer les petites annonces',
         'modules.manage' => 'Gerer les modules du site',
         'privacy.manage' => 'Traiter les demandes RGPD',
         'press.manage' => 'Gerer les contacts et communiques de presse',

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require_permission('ads.moderate');
+require_permission('classifieds.moderate');
 
 $locale = current_locale();
 $t = i18n_domain_locale('classifieds', $locale);
@@ -37,6 +37,22 @@ $notifyModeration = static function (int $ownerId, string $body) use ($tText): v
         notify_member($ownerId, 'moderation', $tText('notification_moderated_title'), $body, route_url('classifieds'));
     }
 };
+$deleteFavoriteLinks = static function (array $ids): void {
+    $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn(int $id): bool => $id > 0)));
+    if ($ids === [] || !table_exists('member_favorites')) {
+        return;
+    }
+
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    try {
+        db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')
+            ->execute(array_merge(['classified_ad'], $ids));
+    } catch (Throwable $throwable) {
+        log_structured_event('classified_favorites_cleanup_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+    }
+};
 $deleteConfirm = json_encode($tText('delete_confirm'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 if (!is_string($deleteConfirm)) {
     $deleteConfirm = '"delete_confirm"';
@@ -63,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $bulkOp = (string) ($_POST['bulk_op'] ?? '');
             if ($bulkOp === 'delete') {
                 db()->prepare('DELETE FROM classified_ads WHERE id IN (' . $placeholders . ')')->execute($ids);
+                $deleteFavoriteLinks($ids);
                 foreach ($ownerRows as $ownerRow) {
                     $notifyModeration((int) ($ownerRow['owner_member_id'] ?? 0), $formatText('notification_removed_body', [
                         '{title}' => (string) ($ownerRow['title'] ?? ''),
@@ -100,6 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'delete') {
             db()->prepare('DELETE FROM classified_ads WHERE id = ?')->execute([$id]);
+            $deleteFavoriteLinks([$id]);
             $notifyModeration((int) ($ownerRow['owner_member_id'] ?? 0), $formatText('notification_removed_body', [
                 '{title}' => (string) ($ownerRow['title'] ?? ''),
             ]));

@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
                 throw new RuntimeException($t('missing'));
             }
-            $status = has_permission('ads.moderate') ? 'active' : 'pending';
+            $status = classifieds_can_moderate() ? 'active' : 'pending';
             $expiresAt = classifieds_expires_at_for_status($status);
             $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
             $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
@@ -164,7 +164,7 @@ ob_start();
                 <label><span><?= e($t('publication_label')) ?></span>
                     <select name="status">
                         <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>><?= e($t('status_draft')) ?></option>
-                        <option value="active" <?= in_array((string) ($editing['status'] ?? ''), ['active', 'pending'], true) ? 'selected' : '' ?>><?= e(has_permission('ads.moderate') ? $t('published_30d') : $t('submit_for_review')) ?></option>
+                        <option value="active" <?= in_array((string) ($editing['status'] ?? ''), ['active', 'pending'], true) ? 'selected' : '' ?>><?= e(classifieds_can_moderate() ? $t('published_30d') : $t('submit_for_review')) ?></option>
                     </select>
                 </label>
                 <div class="classifieds-editor-actions">

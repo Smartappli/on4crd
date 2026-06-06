@@ -231,6 +231,19 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame(0, parse_price_to_cents('-12,50'));
     }
 
+    public function testClassifiedsModerationUsesDedicatedPermission(): void
+    {
+        self::assertArrayHasKey('classifieds.moderate', core_permission_catalog());
+
+        $classifiedsCards = array_values(array_filter(
+            admin_module_cards_catalog(),
+            static fn(array $card): bool => (string) ($card['route'] ?? '') === 'admin_classifieds'
+        ));
+
+        self::assertCount(1, $classifiedsCards);
+        self::assertSame('classifieds.moderate', (string) ($classifiedsCards[0]['permission'] ?? ''));
+    }
+
     public function testPasswordChangeRequiredRequiresAdminForcedMarker(): void
     {
         self::assertFalse(member_password_change_required([

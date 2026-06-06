@@ -42,6 +42,7 @@ if (!function_exists('render_sitemap_xml')) { function render_sitemap_xml(): str
 if (!function_exists('format_price_eur')) { function format_price_eur(int $amountCents): string { return ''; } }
 if (!function_exists('format_integer_or_unlimited')) { function format_integer_or_unlimited(?int $value): string { return ''; } }
 if (!function_exists('parse_price_to_cents')) { function parse_price_to_cents(string $price): int { return 0; } }
+if (!function_exists('classifieds_can_moderate')) { function classifieds_can_moderate(): bool { return false; } }
 
 if (!function_exists('auction_status_label')) { function auction_status_label(string $status): string { return $status; } }
 if (!function_exists('ad_status_label')) { function ad_status_label(string $status): string { return $status; } }

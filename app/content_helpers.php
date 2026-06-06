@@ -62,12 +62,25 @@ function ensure_classified_ads_table(): bool
         db()->exec('UPDATE classified_ads SET category_code = "gear" WHERE category_code IS NULL OR category_code = ""');
         db()->exec('UPDATE classified_ads SET title = "Classified ad" WHERE title IS NULL OR title = ""');
         db()->exec('UPDATE classified_ads SET price_cents = 0 WHERE price_cents IS NULL OR price_cents < 0');
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN category_code VARCHAR(32) NOT NULL DEFAULT "gear"');
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN title VARCHAR(190) NOT NULL');
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN location VARCHAR(120) DEFAULT NULL');
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN contact VARCHAR(190) DEFAULT NULL');
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN price_cents INT NOT NULL DEFAULT 0');
+
+        if (classifieds_column_requires_modify('status', 'enum("draft","pending","active","sold","archived","expired")', false, 'draft')) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
+        }
+        if (classifieds_column_requires_modify('category_code', 'varchar(32)', false, 'gear')) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN category_code VARCHAR(32) NOT NULL DEFAULT "gear"');
+        }
+        if (classifieds_column_requires_modify('title', 'varchar(190)', false, null)) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN title VARCHAR(190) NOT NULL');
+        }
+        if (classifieds_column_requires_modify('location', 'varchar(120)', true, null)) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN location VARCHAR(120) DEFAULT NULL');
+        }
+        if (classifieds_column_requires_modify('contact', 'varchar(190)', true, null)) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN contact VARCHAR(190) DEFAULT NULL');
+        }
+        if (classifieds_column_requires_modify('price_cents', 'int', false, '0')) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN price_cents INT NOT NULL DEFAULT 0');
+        }
 
         if (!table_has_index('classified_ads', 'idx_classified_owner_status')) {
             db()->exec('ALTER TABLE classified_ads ADD INDEX idx_classified_owner_status (owner_member_id, status)');
@@ -87,6 +100,57 @@ function ensure_classified_ads_table(): bool
 
         return false;
     }
+}
+}
+
+if (!function_exists('classifieds_column_metadata')) {
+/**
+ * @return array{type:string,nullable:bool,default:?string}|null
+ */
+function classifieds_column_metadata(string $column): ?array
+{
+    try {
+        $stmt = db()->prepare(
+            'SELECT COLUMN_TYPE, IS_NULLABLE, COLUMN_DEFAULT
+             FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?
+             LIMIT 1'
+        );
+        $stmt->execute(['classified_ads', $column]);
+        $row = $stmt->fetch();
+    } catch (Throwable) {
+        return null;
+    }
+
+    if (!is_array($row)) {
+        return null;
+    }
+
+    return [
+        'type' => strtolower(str_replace("'", '"', (string) ($row['COLUMN_TYPE'] ?? ''))),
+        'nullable' => strtoupper((string) ($row['IS_NULLABLE'] ?? 'YES')) === 'YES',
+        'default' => array_key_exists('COLUMN_DEFAULT', $row) && $row['COLUMN_DEFAULT'] !== null ? (string) $row['COLUMN_DEFAULT'] : null,
+    ];
+}
+}
+
+if (!function_exists('classifieds_column_requires_modify')) {
+function classifieds_column_requires_modify(string $column, string $expectedType, bool $expectedNullable, ?string $expectedDefault): bool
+{
+    $metadata = classifieds_column_metadata($column);
+    if ($metadata === null) {
+        return false;
+    }
+
+    $actualType = $metadata['type'];
+    $expectedType = strtolower(str_replace("'", '"', $expectedType));
+    $typeMatches = $expectedType === 'int'
+        ? str_starts_with($actualType, 'int')
+        : $actualType === $expectedType;
+
+    return !$typeMatches
+        || $metadata['nullable'] !== $expectedNullable
+        || $metadata['default'] !== $expectedDefault;
 }
 }
 
@@ -236,6 +300,13 @@ function classifieds_expires_at_for_status(string $status, ?int $now = null): ?s
 }
 }
 
+if (!function_exists('classifieds_can_moderate')) {
+function classifieds_can_moderate(): bool
+{
+    return has_permission('classifieds.moderate');
+}
+}
+
 if (!function_exists('classifieds_validate_payload')) {
 function classifieds_validate_payload(
     string $category,
@@ -280,7 +351,7 @@ function classifieds_member_publication_status(string $requestedStatus): string
     if (!in_array($requestedStatus, ['draft', 'pending', 'active', 'sold', 'archived'], true)) {
         return 'draft';
     }
-    if ($requestedStatus === 'active' && !has_permission('ads.moderate')) {
+    if ($requestedStatus === 'active' && !classifieds_can_moderate()) {
         return 'pending';
     }
 
@@ -322,11 +393,17 @@ function classifieds_enforce_submission_limits(int $memberId, array $messages = 
 if (!function_exists('classifieds_sync_expired')) {
 function classifieds_sync_expired(): void
 {
-    if (!ensure_classified_ads_table()) {
+    if (!table_exists('classified_ads')) {
         return;
     }
 
-    db()->exec('UPDATE classified_ads SET status = "expired", updated_at = NOW() WHERE status = "active" AND expires_at IS NOT NULL AND expires_at < NOW()');
+    try {
+        db()->exec('UPDATE classified_ads SET status = "expired", updated_at = NOW() WHERE status = "active" AND expires_at IS NOT NULL AND expires_at < NOW()');
+    } catch (Throwable $throwable) {
+        log_structured_event('classified_ads_expire_sync_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+    }
 }
 }
 

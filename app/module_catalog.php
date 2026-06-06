@@ -33,7 +33,7 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_library', 'permission' => 'admin.access'],
         ['route' => 'admin_ads', 'module' => 'advertising'],
         ['route' => 'admin_privacy', 'permission' => 'privacy.manage'],
-        ['route' => 'admin_classifieds', 'module' => 'classifieds', 'permission' => 'ads.moderate'],
+        ['route' => 'admin_classifieds', 'module' => 'classifieds', 'permission' => 'classifieds.moderate'],
     ];
 
     $messages = i18n_domain_messages('admin_module_cards');
