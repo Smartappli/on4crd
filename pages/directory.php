@@ -31,13 +31,13 @@ if (table_exists('members')) {
     $params = ['ON4CRD'];
 
     if ($search !== '') {
-        $sql .= ' AND (callsign LIKE ?
+        $sql .= ' AND (UPPER(callsign) LIKE ?
             OR (first_name LIKE ? AND visibility_first_name IN (' . $visibilityPlaceholders . '))
             OR (last_name LIKE ? AND visibility_last_name IN (' . $visibilityPlaceholders . '))
             OR (address LIKE ? AND visibility_address IN (' . $visibilityPlaceholders . '))
             OR (postal_code LIKE ? AND visibility_postal_code IN (' . $visibilityPlaceholders . ')))';
         $like = '%' . $search . '%';
-        $params[] = $like;
+        $params[] = '%' . mb_safe_strtoupper($search) . '%';
         $params[] = $like;
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $params[] = $visibilityLevel;

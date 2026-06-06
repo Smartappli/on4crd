@@ -341,6 +341,15 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('function member_delete_unlinked_auth_user(int $authUserId): void', $helpers);
     }
 
+    public function testDirectorySearchMatchesCallsignsCaseInsensitively(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        self::assertIsString($directory);
+
+        self::assertStringContainsString('UPPER(callsign) LIKE ?', $directory);
+        self::assertStringContainsString("mb_safe_strtoupper(\$search)", $directory);
+    }
+
     public function testRouteSpecificHelpersAreLoadedLazily(): void
     {
         $functions = file_get_contents(__DIR__ . '/../app/functions.php');
