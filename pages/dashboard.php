@@ -89,7 +89,7 @@ if ($dashboardPersistenceEnabled) {
 }
 $selectedWidgets = [];
 $seenSelected = [];
-$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links'];
+$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links', 'propagation'];
 $hadLegacyUtilityWidget = false;
 foreach ($selected as $row) {
     $widgetKey = (string) ($row['widget_key'] ?? '');
@@ -107,7 +107,7 @@ foreach ($selected as $row) {
     ];
 }
 $radioDefaultWidgetKeys = array_values(array_intersect(
-    array_merge(['welcome', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog())),
+    array_merge(['welcome', 'radio_clocks', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog())),
     array_keys($availableWidgets)
 ));
 if ($selectedWidgets === []) {
@@ -126,7 +126,12 @@ if ($selectedWidgets === []) {
     }
 }
 $selectedKeys = array_map(static fn(array $widget): string => (string) $widget['key'], $selectedWidgets);
-$availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);
+$catalogHiddenWidgetKeys = ['welcome'];
+$availableToAdd = array_filter(
+    $availableWidgets,
+    static fn(string $key): bool => !in_array($key, $selectedKeys, true) && !in_array($key, $catalogHiddenWidgetKeys, true),
+    ARRAY_FILTER_USE_KEY
+);
 
 $safeRenderWidget = static function (string $widgetKey, array $currentUser) use ($t): string {
     try {

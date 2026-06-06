@@ -26,68 +26,26 @@ function render_widget(string $slug, array $user = []): string
         case 'ham_weather_advice':
             return render_ham_weather_advice($user);
 
-        case 'propagation':
-            $kpFeedUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
-            $cacheKey = 'widget:propagation:kp-index';
-            $payload = cache_remember($cacheKey, 300, static function () use ($kpFeedUrl): ?array {
-                $context = stream_context_create([
-                    'http' => [
-                        'method' => 'GET',
-                        'timeout' => 6,
-                        'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Widget/1.0\r\n",
-                    ],
-                ]);
-                $raw = @file_get_contents($kpFeedUrl, false, $context);
-                if (!is_string($raw) || trim($raw) === '') {
-                    return null;
-                }
-                $decoded = json_decode($raw, true);
-                return is_array($decoded) ? $decoded : null;
-            });
-
-            $measurement = is_array($payload) ? extract_latest_kp_measurement($payload) : null;
-            if (!is_array($measurement)) {
-                $unavailableMessage = match ($locale) {
-                    'en' => 'Propagation data is currently unavailable.',
-                    'de' => 'Ausbreitungsdaten sind derzeit nicht verfügbar.',
-                    'nl' => 'Propagatiegegevens zijn momenteel niet beschikbaar.',
-                    'es' => 'Los datos de propagación no están disponibles actualmente.',
-                    'it' => 'I dati di propagazione non sono attualmente disponibili.',
-                    'pt' => 'Os dados de propagação estão indisponíveis no momento.',
-                    'ar' => 'بيانات الانتشار غير متاحة حالياً.',
-                    'hi' => 'प्रसार डेटा इस समय उपलब्ध नहीं है।',
-                    'ja' => '現在、伝搬データを利用できません。',
-                    'zh' => '当前无法获取传播数据。',
-                    default => 'Les données de propagation sont actuellement indisponibles.',
-                };
-                return '<p class="help">' . e($unavailableMessage) . '</p>';
-            }
-            $latestKp = (float) ($measurement['kp'] ?? 0.0);
-            $kpTrend = is_array($payload) ? extract_kp_trend($payload) : null;
-            $kpTrendSummary = kp_trend_summary($kpTrend, $locale);
-
-            $geomagneticFr = match (true) {
-                $latestKp < 2.0 => 'Très calme',
-                $latestKp < 4.0 => 'Calme',
-                $latestKp < 5.0 => 'Actif',
-                $latestKp < 7.0 => 'Perturbé',
-                default => 'Orage géomagnétique',
+        case 'radio_clocks':
+            $todayUtc = gmdate('d/m/Y');
+            $todayLocal = (new DateTimeImmutable('now'))->format('d/m/Y');
+            $clockLabels = match ($locale) {
+                'en' => ['utc' => 'UTC date/time', 'local' => 'Local date/time'],
+                default => ['utc' => 'Date/heure UTC', 'local' => 'Date/heure locale'],
             };
-            $geomagnetic = match ($locale) {
-                'en' => match (true) {
-                    $latestKp < 2.0 => 'Very quiet',
-                    $latestKp < 4.0 => 'Quiet',
-                    $latestKp < 5.0 => 'Active',
-                    $latestKp < 7.0 => 'Disturbed',
-                    default => 'Geomagnetic storm',
-                },
-                default => $geomagneticFr,
-            };
-            return '<ul class="list-clean">'
-                . '<li><strong>Kp : ' . e(number_format($latestKp, 1, ',', '')) . '</strong> — ' . e($geomagnetic) . '</li>'
-                . ($kpTrendSummary !== null ? '<li><strong>' . e($kpTrendSummary) . '</strong></li>' : '')
-                . '</ul>';
 
+            return '<div class="grid-2">'
+                . '<article class="inner-card">'
+                . '<p class="help"><strong>' . e($clockLabels['utc']) . '</strong></p>'
+                . '<p><span data-live-date data-timezone="UTC" aria-live="polite">' . e($todayUtc) . '</span><br>'
+                . '<time data-live-clock data-timezone="UTC" aria-live="polite">--:--:--</time></p>'
+                . '</article>'
+                . '<article class="inner-card">'
+                . '<p class="help"><strong>' . e($clockLabels['local']) . '</strong></p>'
+                . '<p><span data-live-date data-timezone="local" aria-live="polite">' . e($todayLocal) . '</span><br>'
+                . '<time data-live-clock data-timezone="local" aria-live="polite">--:--:--</time></p>'
+                . '</article>'
+                . '</div>';
         case 'open_meteo':
             $cacheTtl = 300;
             $defaultLocator = 'JO20LI';
