@@ -87,6 +87,8 @@ $statusLabels = [
 
 $proposalAreaLabels = [
     'articles' => $text('articles_title', 'Articles'),
+    'albums' => $text('albums_title', 'Albums'),
+    'auctions' => $text('auctions_title', $isFrench ? 'Encheres' : 'Auctions'),
     'classifieds' => $text('classifieds_title', 'Classifieds'),
     'events' => $text('events_title', 'Events'),
     'members_library' => $text('library_title', $isFrench ? 'Bibliotheque membres' : 'Member library'),
@@ -99,6 +101,8 @@ $proposalTypeLabels = [
 ];
 $proposalAreaRoutes = [
     'articles' => 'articles',
+    'albums' => 'albums',
+    'auctions' => 'auctions',
     'classifieds' => 'classifieds',
     'events' => 'events',
     'members_library' => 'members_library',
