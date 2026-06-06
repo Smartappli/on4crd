@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Pregătește e-mailul',
   'propose_event_cancel' => 'Anulează',
   'propose_event_close' => 'Închide',
+  'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
 );

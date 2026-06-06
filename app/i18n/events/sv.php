@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Förbered e-post',
   'propose_event_cancel' => 'Avbryt',
   'propose_event_close' => 'Stäng',
+  'proposal_recorded' => 'Förslaget har sparats i ditt innehåll.',
 );

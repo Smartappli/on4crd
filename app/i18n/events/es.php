@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Preparar correo',
   'propose_event_cancel' => 'Cancelar',
   'propose_event_close' => 'Cerrar',
+  'proposal_recorded' => 'Propuesta guardada en tus contenidos.',
 );

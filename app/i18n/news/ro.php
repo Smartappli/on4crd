@@ -60,4 +60,5 @@ return array (
   'categories' => 'Secțiuni',
   'search' => 'Caută',
   'news_count_label' => 'Numărul de știri',
+  'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
 );

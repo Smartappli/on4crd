@@ -81,4 +81,5 @@ Yhteystiedot:',
 <ul><li>Itärkeä kohta</li></ul>',
   'html_cleanup_help' => 'HTML puhdistetaan automaattisesti. Skriptit, iframe-kehykset ja vaaralliset attribuutit poistetaan ennen vahvistusta.',
   'submit_for_review' => 'Lähetä vahvistettavaksi',
+  'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
 );

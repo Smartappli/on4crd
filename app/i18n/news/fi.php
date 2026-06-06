@@ -60,4 +60,5 @@ return array (
   'categories' => 'Osat',
   'search' => 'Etsi',
   'news_count_label' => 'Uutisten määrä',
+  'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
 );

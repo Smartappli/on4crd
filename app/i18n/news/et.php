@@ -60,4 +60,5 @@ return array (
   'categories' => 'Sektsioonid',
   'search' => 'Otsi',
   'news_count_label' => 'Uudiste arv',
+  'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
 );

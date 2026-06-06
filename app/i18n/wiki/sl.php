@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Vaš kontakt',
   'propose_theme_submit' => 'Pošlji predlog',
   'cancel' => 'Prekliči',
+  'proposal_recorded' => 'Predlog je shranjen med vašo vsebino.',
 );

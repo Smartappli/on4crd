@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Contactul dvs',
   'propose_theme_submit' => 'Trimiteți propunerea',
   'cancel' => 'Anulează',
+  'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
 );

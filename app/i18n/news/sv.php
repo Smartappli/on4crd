@@ -60,4 +60,5 @@ return array (
   'categories' => 'Avsnitt',
   'search' => 'Sök',
   'news_count_label' => 'Antal nyheter',
+  'proposal_recorded' => 'Förslaget har sparats i ditt innehåll.',
 );

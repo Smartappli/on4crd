@@ -60,4 +60,5 @@ return array (
   'categories' => 'Secties',
   'search' => 'Zoeken',
   'news_count_label' => 'Aantal nieuws',
+  'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
 );

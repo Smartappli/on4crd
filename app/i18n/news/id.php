@@ -60,4 +60,5 @@ return array (
   'categories' => 'Bagian',
   'search' => 'Cari',
   'news_count_label' => 'Jumlah berita',
+  'proposal_recorded' => 'Usulan disimpan di konten Anda.',
 );

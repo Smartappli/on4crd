@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'E-mail voorbereiden',
   'propose_event_cancel' => 'Annuleren',
   'propose_event_close' => 'Sluiten',
+  'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
 );

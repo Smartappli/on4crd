@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Mėgstamiausias pašalintas',
   'favorite_added_msg' => 'Dokumentas įtrauktas į mėgstamiausius.',
   'favorite_removed_msg' => 'Dokumentas pašalintas iš mėgstamiausių.',
+  'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
 );

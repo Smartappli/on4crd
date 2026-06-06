@@ -81,4 +81,5 @@ Kontakt:',
 <ul><li>IVažna točka</li></ul>',
   'html_cleanup_help' => 'HTML se automatski čisti. Skripte, iframe i opasni atributi uklanjaju se prije provjere valjanosti.',
   'submit_for_review' => 'Pošaljite na provjeru valjanosti',
+  'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
 );

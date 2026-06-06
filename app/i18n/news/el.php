@@ -60,4 +60,5 @@ return array (
   'categories' => 'Ενότητες',
   'search' => 'Αναζήτηση',
   'news_count_label' => 'Αριθμός ειδήσεων',
+  'proposal_recorded' => 'Η πρόταση αποθηκεύτηκε στο περιεχόμενό σας.',
 );

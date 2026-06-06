@@ -60,4 +60,5 @@ return array (
   'categories' => 'Разделы',
   'search' => 'Поиск',
   'news_count_label' => 'Количество новостей',
+  'proposal_recorded' => 'Предложение сохранено в ваших материалах.',
 );

@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Jūsų kontaktas',
   'propose_theme_submit' => 'Siųsti pasiūlymą',
   'cancel' => 'Atšaukti',
+  'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
 );

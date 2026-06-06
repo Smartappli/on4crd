@@ -60,4 +60,5 @@ return array (
   'categories' => 'Sadaļas',
   'search' => 'Meklēt',
   'news_count_label' => 'Ziņu skaits',
+  'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
 );

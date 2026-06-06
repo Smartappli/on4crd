@@ -60,4 +60,5 @@ return array (
   'categories' => '部分',
   'search' => '去研究',
   'news_count_label' => '新闻数量',
+  'proposal_recorded' => '建议已保存到你的内容中。',
 );

@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Il-kuntatt tiegħek',
   'propose_theme_submit' => 'Ibgħat proposta',
   'cancel' => 'Ikkanċella',
+  'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
 );

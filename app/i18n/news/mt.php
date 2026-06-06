@@ -60,4 +60,5 @@ return array (
   'categories' => 'Taqsimiet',
   'search' => 'Fittex',
   'news_count_label' => 'Numru ta\' aħbarijiet',
+  'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
 );

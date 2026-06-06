@@ -407,7 +407,7 @@ final class RouterContractTest extends TestCase
         $loader = file_get_contents(__DIR__ . '/../app/route_helper_loader.php');
         self::assertIsString($loader);
         self::assertStringContainsString("'module_catalog.php' => ['home'", $loader);
-        self::assertStringContainsString("'widget_catalog.php' => ['dashboard'", $loader);
+        self::assertStringContainsString("'widget_catalog.php' => ['dashboard', 'save_dashboard', 'widget_render'", $loader);
         self::assertStringContainsString("'widget_renderer.php' => ['home'", $loader);
         self::assertStringContainsString("'ham_weather_advice.php' => ['home']", $loader);
         self::assertStringContainsString("'member_library_helpers.php' => ['members_library'", $loader);

@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Favoriet verwijderd',
   'favorite_added_msg' => 'Document toegevoegd aan favorieten.',
   'favorite_removed_msg' => 'Document verwijderd uit favorieten.',
+  'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
 );

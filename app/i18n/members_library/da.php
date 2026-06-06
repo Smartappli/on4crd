@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Favorit fjernet',
   'favorite_added_msg' => 'Dokument føjet til favoritter.',
   'favorite_removed_msg' => 'Dokument fjernet fra favoritter.',
+  'proposal_recorded' => 'Forslaget er gemt i dit indhold.',
 );

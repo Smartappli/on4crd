@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Pripraviť e-mail',
   'propose_event_cancel' => 'Zrušiť',
   'propose_event_close' => 'Zavrieť',
+  'proposal_recorded' => 'Návrh bol uložený vo vašom obsahu.',
 );

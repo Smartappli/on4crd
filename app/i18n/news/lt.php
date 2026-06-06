@@ -60,4 +60,5 @@ return array (
   'categories' => 'Skyriai',
   'search' => 'Ieškoti',
   'news_count_label' => 'Naujienų skaičius',
+  'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
 );

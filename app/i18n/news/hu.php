@@ -60,4 +60,5 @@ return array (
   'categories' => 'szakaszok',
   'search' => 'Keresés',
   'news_count_label' => 'Hírek száma',
+  'proposal_recorded' => 'A javaslat mentve lett a tartalmai közé.',
 );

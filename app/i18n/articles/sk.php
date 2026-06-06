@@ -81,4 +81,5 @@ Kontakt:',
 <ul><li>Dôležitý bod</li></ul>',
   'html_cleanup_help' => 'HTML sa čistí automaticky. Skripty, prvky iframe a nebezpečné atribúty sú pred overením odstránené.',
   'submit_for_review' => 'Odoslať na overenie',
+  'proposal_recorded' => 'Návrh bol uložený vo vašom obsahu.',
 );

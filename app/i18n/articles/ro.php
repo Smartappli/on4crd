@@ -81,4 +81,5 @@ Contact:',
 <ul><li>Punct important</li></ul>',
   'html_cleanup_help' => 'HTML este curățat automat. Scripturile, cadrele iframe și atributele periculoase sunt eliminate înainte de validare.',
   'submit_for_review' => 'Trimiteți pentru validare',
+  'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
 );

@@ -81,4 +81,5 @@ Contact:',
 <ul><li>Belangrijk punt</li></ul>',
   'html_cleanup_help' => 'HTML wordt automatisch opgeschoond. Scripts, iframes en gevaarlijke attributen worden vóór validatie verwijderd.',
   'submit_for_review' => 'Verzenden voor validatie',
+  'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
 );

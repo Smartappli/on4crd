@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Teie kontakt',
   'propose_theme_submit' => 'Saada ettepanek',
   'cancel' => 'Tühista',
+  'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
 );

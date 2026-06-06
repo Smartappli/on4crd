@@ -60,4 +60,5 @@ return array (
   'categories' => 'セクション',
   'search' => '検索',
   'news_count_label' => 'ニュース数',
+  'proposal_recorded' => '提案はあなたのコンテンツに保存されました。',
 );

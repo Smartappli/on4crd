@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Uw contactpersoon',
   'propose_theme_submit' => 'Voorstel verzenden',
   'cancel' => 'Annuleer',
+  'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
 );

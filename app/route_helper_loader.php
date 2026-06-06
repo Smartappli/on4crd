@@ -10,7 +10,7 @@ function app_load_route_helpers(string $route): void
 {
     $helperRoutes = [
         'module_catalog.php' => ['home', 'admin', 'admin_dashboard'],
-        'widget_catalog.php' => ['dashboard', 'save_dashboard', 'admin_dashboard'],
+        'widget_catalog.php' => ['dashboard', 'save_dashboard', 'widget_render', 'admin_dashboard'],
         'widget_renderer.php' => ['home', 'dashboard', 'widget_render'],
         'ham_weather_advice.php' => ['home'],
         'qsl_helpers.php' => ['qsl', 'qsl_preview', 'qsl_export'],

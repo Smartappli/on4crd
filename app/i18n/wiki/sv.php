@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Din kontakt',
   'propose_theme_submit' => 'Skicka förslag',
   'cancel' => 'Avbryt',
+  'proposal_recorded' => 'Förslaget har sparats i ditt innehåll.',
 );

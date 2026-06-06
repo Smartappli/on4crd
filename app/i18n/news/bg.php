@@ -60,4 +60,5 @@ return array (
   'categories' => 'Раздели',
   'search' => 'Търсене',
   'news_count_label' => 'Брой новини',
+  'proposal_recorded' => 'Предложението е запазено във вашето съдържание.',
 );

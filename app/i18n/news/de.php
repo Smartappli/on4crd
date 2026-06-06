@@ -60,4 +60,5 @@ return array (
   'categories' => 'Abschnitte',
   'search' => 'Suchen',
   'news_count_label' => 'Anzahl der Nachrichten',
+  'proposal_recorded' => 'Vorschlag in Ihren Inhalten gespeichert.',
 );

@@ -60,4 +60,5 @@ return array (
   'categories' => 'अनुभाग',
   'search' => 'खोजें',
   'news_count_label' => 'समाचारों की संख्या',
+  'proposal_recorded' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
 );

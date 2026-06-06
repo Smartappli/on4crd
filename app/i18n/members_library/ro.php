@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Favorit eliminat',
   'favorite_added_msg' => 'Document adăugat la favorite.',
   'favorite_removed_msg' => 'Document eliminat din favorite.',
+  'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
 );

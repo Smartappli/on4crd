@@ -60,4 +60,5 @@ return array (
   'categories' => 'Sekce',
   'search' => 'Hledat',
   'news_count_label' => 'Počet novinek',
+  'proposal_recorded' => 'Návrh byl uložen do vašeho obsahu.',
 );

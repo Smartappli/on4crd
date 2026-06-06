@@ -60,4 +60,5 @@ return array (
   'categories' => 'বিভাগসমূহ',
   'search' => 'অনুসন্ধান করুন',
   'news_count_label' => 'খবরের সংখ্যা',
+  'proposal_recorded' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
 );

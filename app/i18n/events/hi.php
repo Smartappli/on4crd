@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'ईमेल तैयार करें',
   'propose_event_cancel' => 'रद्द करें',
   'propose_event_close' => 'बंद करें',
+  'proposal_recorded' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
 );

@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Ulubione usunięte',
   'favorite_added_msg' => 'Dokument dodany do ulubionych.',
   'favorite_removed_msg' => 'Dokument usunięty z ulubionych.',
+  'proposal_recorded' => 'Propozycja została zapisana w Twoich treściach.',
 );

@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Lemmik eemaldatud',
   'favorite_added_msg' => 'Dokument lisati lemmikute hulka.',
   'favorite_removed_msg' => 'Dokument eemaldati lemmikute hulgast.',
+  'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
 );

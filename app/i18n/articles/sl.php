@@ -81,4 +81,5 @@ Kontakt:',
 <ul><li>IPomembna točka</li></ul>',
   'html_cleanup_help' => 'HTML se samodejno očisti. Skripti, iframe in nevarni atributi so pred preverjanjem odstranjeni.',
   'submit_for_review' => 'Pošlji v potrditev',
+  'proposal_recorded' => 'Predlog je shranjen med vašo vsebino.',
 );

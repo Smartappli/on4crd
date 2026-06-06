@@ -81,4 +81,5 @@ Kapcsolat:',
 <ul><li>IFontos pont</li></ul>',
   'html_cleanup_help' => 'A HTML automatikusan megtisztul. A szkripteket, iframe-eket és veszélyes attribútumokat az érvényesítés előtt eltávolítjuk.',
   'submit_for_review' => 'Nyújtsa be érvényesítésre',
+  'proposal_recorded' => 'A javaslat mentve lett a tartalmai közé.',
 );

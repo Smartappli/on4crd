@@ -60,4 +60,5 @@ return array (
   'categories' => 'Ailt',
   'search' => 'Cuardach',
   'news_count_label' => 'Líon na nuachta',
+  'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
 );

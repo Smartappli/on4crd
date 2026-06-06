@@ -60,4 +60,5 @@ return array (
   'categories' => 'Secciones',
   'search' => 'investigar',
   'news_count_label' => 'numero de noticias',
+  'proposal_recorded' => 'Propuesta guardada en tus contenidos.',
 );

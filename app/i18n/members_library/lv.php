@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Izlase noņemta',
   'favorite_added_msg' => 'Dokuments pievienots izlasei.',
   'favorite_removed_msg' => 'Dokuments noņemts no izlases.',
+  'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
 );

@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'あなたの連絡先',
   'propose_theme_submit' => '提案を送信する',
   'cancel' => 'キャンセル',
+  'proposal_recorded' => '提案はあなたのコンテンツに保存されました。',
 );

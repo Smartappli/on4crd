@@ -60,4 +60,5 @@ return array (
   'categories' => 'Sekcije',
   'search' => 'Traži',
   'news_count_label' => 'Broj vijesti',
+  'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
 );

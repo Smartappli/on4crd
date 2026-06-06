@@ -60,4 +60,5 @@ return array (
   'categories' => 'Oddelki',
   'search' => 'Iskanje',
   'news_count_label' => 'Število novic',
+  'proposal_recorded' => 'Predlog je shranjen med vašo vsebino.',
 );

@@ -81,4 +81,5 @@ Kontakt:',
 <ul><li>Viktig punkt</li></ul>',
   'html_cleanup_help' => 'HTML rensas automatiskt. Skript, iframes och farliga attribut tas bort före validering.',
   'submit_for_review' => 'Skicka in för validering',
+  'proposal_recorded' => 'Förslaget har sparats i ditt innehåll.',
 );

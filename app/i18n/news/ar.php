@@ -60,4 +60,5 @@ return array (
   'categories' => 'الأقسام',
   'search' => 'بحث',
   'news_count_label' => 'عدد الأخبار',
+  'proposal_recorded' => 'تم حفظ الاقتراح في محتواك.',
 );

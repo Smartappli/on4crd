@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Pripremi e-poštu',
   'propose_event_cancel' => 'Odustani',
   'propose_event_close' => 'Zatvori',
+  'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
 );

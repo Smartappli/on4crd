@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Valmista e-kiri',
   'propose_event_cancel' => 'Tühista',
   'propose_event_close' => 'Sulge',
+  'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
 );

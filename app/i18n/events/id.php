@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Siapkan email',
   'propose_event_cancel' => 'Batal',
   'propose_event_close' => 'Tutup',
+  'proposal_recorded' => 'Usulan disimpan di konten Anda.',
 );

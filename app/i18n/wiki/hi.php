@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'आपका संपर्क',
   'propose_theme_submit' => 'प्रस्ताव भेजें',
   'cancel' => 'रद्द करें',
+  'proposal_recorded' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
 );
