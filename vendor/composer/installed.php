@@ -3,7 +3,7 @@
         'name' => 'smartappli/on4crd',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e53b668ff0676aa339dba8aa9286e50c5be2aeea',
+        'reference' => '048a1cde6044ff64efdd95fde80770b25e5f5a0d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -192,6 +192,15 @@
             'install_path' => __DIR__ . '/../phpoffice/phpword',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'phpstan/phpstan' => array(
+            'pretty_version' => '2.2.2',
+            'version' => '2.2.2.0',
+            'reference' => 'e5cc34d491a90e79c216d824f60fe21fd4d93bd6',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpstan/phpstan',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'phpunit/php-code-coverage' => array(
             'pretty_version' => '14.2.0',
@@ -469,7 +478,7 @@
         'smartappli/on4crd' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e53b668ff0676aa339dba8aa9286e50c5be2aeea',
+            'reference' => '048a1cde6044ff64efdd95fde80770b25e5f5a0d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
