@@ -423,10 +423,10 @@ final class FunctionHelpersExtendedTest extends TestCase
     {
         $t = static fn(string $key): string => [
             'licence_none' => 'Aucune',
-            'licence_onl' => 'ONL',
-            'licence_base' => 'Licence de base',
-            'licence_intermediate' => 'Licence intermédiaire',
-            'licence_on1' => 'ON1',
+            'licence_onl' => 'Ecouteur (ONL)',
+            'licence_base' => 'Licence de base (ON3)',
+            'licence_intermediate' => 'Licence intermédiaire (ON2)',
+            'licence_on1' => 'Ancienne licence (ON1)',
             'licence_harec' => 'HAREC',
             'licence_other' => 'Autre',
         ][$key] ?? $key;
@@ -434,11 +434,12 @@ final class FunctionHelpersExtendedTest extends TestCase
         $html = member_profile_licence_class_options_html($t, 'ON2');
 
         self::assertStringContainsString('value="ON2" selected', $html);
-        self::assertStringContainsString('Licence intermédiaire', $html);
+        self::assertStringContainsString('Licence intermédiaire (ON2)', $html);
         self::assertStringContainsString('value="ON3"', $html);
-        self::assertStringContainsString('Licence de base', $html);
+        self::assertStringContainsString('Licence de base (ON3)', $html);
         self::assertStringContainsString('value="ON1"', $html);
-        self::assertStringContainsString('>ON1</option>', $html);
+        self::assertStringContainsString('>Ancienne licence (ON1)</option>', $html);
+        self::assertStringContainsString('>Ecouteur (ONL)</option>', $html);
         self::assertStringNotContainsString('>ON2</option>', $html);
         self::assertStringNotContainsString('>ON3</option>', $html);
     }
