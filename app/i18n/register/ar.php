@@ -43,4 +43,10 @@ return array (
   'login' => 'تسجيل الدخول',
   'layout_title' => 'التسجيل',
   'geocode_consent' => 'حساب محدد المواقع ومناطق الراديو تلقائيًا من خلال Nominatim باستخدام عنواني البريدي.',
+  'licence_none' => 'لا توجد',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'رخصة أساسية',
+  'licence_intermediate' => 'رخصة متوسطة',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'أخرى',
 );

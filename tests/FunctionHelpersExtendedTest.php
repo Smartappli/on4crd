@@ -419,6 +419,27 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('<option value=""></option>', $html);
     }
 
+    public function testMemberProfileLicenceClassOptionsUseTranslatedLabelsAndKeepCodes(): void
+    {
+        $t = static fn(string $key): string => [
+            'licence_none' => 'Aucune',
+            'licence_onl' => 'ONL',
+            'licence_base' => 'Licence de base',
+            'licence_intermediate' => 'Licence intermédiaire',
+            'licence_harec' => 'HAREC',
+            'licence_other' => 'Autre',
+        ][$key] ?? $key;
+
+        $html = member_profile_licence_class_options_html($t, 'ON2');
+
+        self::assertStringContainsString('value="ON2" selected', $html);
+        self::assertStringContainsString('Licence intermédiaire', $html);
+        self::assertStringContainsString('value="ON3"', $html);
+        self::assertStringContainsString('Licence de base', $html);
+        self::assertStringNotContainsString('>ON2</option>', $html);
+        self::assertStringNotContainsString('>ON3</option>', $html);
+    }
+
     public function testMemberProfileChoicePostKeepsAllowedValuesOnly(): void
     {
         self::assertSame(

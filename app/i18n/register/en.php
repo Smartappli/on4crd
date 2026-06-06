@@ -43,4 +43,10 @@ return array (
   'login' => 'Log in',
   'layout_title' => 'Register',
   'geocode_consent' => 'Automatically calculate locator and radio zones through Nominatim with my postal address.',
+  'licence_none' => 'None',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Basic licence',
+  'licence_intermediate' => 'Intermediate licence',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Other',
 );

@@ -43,4 +43,10 @@ return array (
   'login' => 'Inloggen',
   'layout_title' => 'Registratie',
   'geocode_consent' => 'Bereken automatisch de locatie- en radiozones via Nominatim met mijn postadres.',
+  'licence_none' => 'Geen',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Basislicentie',
+  'licence_intermediate' => 'Intermediaire licentie',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Andere',
 );

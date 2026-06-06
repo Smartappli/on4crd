@@ -616,4 +616,33 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('$submittedQrzUrl = trim((string) ($_POST[\'qrz_url\'] ?? \'\'));', $profile);
         self::assertStringNotContainsString('name="qrz_url" maxlength="255" readonly', $profile);
     }
+
+    public function testProfilePhotoUploadHasLivePreview(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        $profileJs = file_get_contents(__DIR__ . '/../assets/js/modules/profile.js');
+        self::assertIsString($profile);
+        self::assertIsString($profileJs);
+
+        self::assertStringContainsString('$profilePhotoPreviewSrc = member_avatar_src($member);', $profile);
+        self::assertStringContainsString('class="profile-photo-upload-grid"', $profile);
+        self::assertStringContainsString('data-profile-photo-input', $profile);
+        self::assertStringContainsString('data-profile-photo-preview', $profile);
+        self::assertStringContainsString('URL.createObjectURL(file)', $profileJs);
+        self::assertStringContainsString('URL.revokeObjectURL(previewObjectUrl)', $profileJs);
+    }
+
+    public function testProfileAndRegisterUseSharedLicenceClassChoices(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        self::assertIsString($profile);
+        self::assertIsString($register);
+
+        self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member[\'licence_class\'] ?? \'\'));', $profile);
+        self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t);', $register);
+        self::assertStringContainsString('<select name="licence_class"><?= $licenceClassOptionsHtml ?></select>', $profile);
+        self::assertStringNotContainsString('<option value="ON3">ON3</option>', $register);
+        self::assertStringNotContainsString('<option value="ON2">ON2</option>', $register);
+    }
 }

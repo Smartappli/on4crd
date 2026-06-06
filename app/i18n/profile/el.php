@@ -68,4 +68,10 @@ return array (
   'interests' => 'Ενδιαφέροντα',
   'save' => 'Αποθήκευση',
   'geocode_consent' => 'Υπολογίστε αυτόματα τις ζώνες εντοπισμού και ραδιοφώνου μέσω του Nominatim με την ταχυδρομική μου διεύθυνση.',
+  'licence_none' => 'Καμία',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Βασική άδεια',
+  'licence_intermediate' => 'Ενδιάμεση άδεια',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Άλλο',
 );

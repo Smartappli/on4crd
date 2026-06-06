@@ -68,4 +68,10 @@ return array (
   'interests' => 'আগ্রহ',
   'save' => 'সংরক্ষণ',
   'geocode_consent' => 'আমার ডাক ঠিকানা সহ Nominatim এর মাধ্যমে স্বয়ংক্রিয়ভাবে লোকেটার এবং রেডিও অঞ্চল গণনা করুন।',
+  'licence_none' => 'নেই',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'বেসিক লাইসেন্স',
+  'licence_intermediate' => 'মধ্যবর্তী লাইসেন্স',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'অন্যান্য',
 );

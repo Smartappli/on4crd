@@ -68,4 +68,10 @@ return array (
   'interests' => 'Interesi',
   'save' => 'spremiti',
   'geocode_consent' => 'Automatski izračunaj lokator i radio zone putem Nominatim s mojom poštanskom adresom.',
+  'licence_none' => 'Nema',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Osnovna licenca',
+  'licence_intermediate' => 'Srednja licenca',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Ostalo',
 );

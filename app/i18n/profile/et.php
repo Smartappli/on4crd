@@ -68,4 +68,10 @@ return array (
   'interests' => 'Huvid',
   'save' => 'Salvesta',
   'geocode_consent' => 'Arvutage automaatselt lokaatori- ja raadiotsoonid Nominatim kaudu minu postiaadressiga.',
+  'licence_none' => 'Puudub',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Baaslitsents',
+  'licence_intermediate' => 'Kesktaseme litsents',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Muu',
 );

@@ -68,4 +68,10 @@ return array (
   'interests' => 'Zanimanja',
   'save' => 'Shrani',
   'geocode_consent' => 'Samodejno izračunaj lokator in radijska območja prek Nominatim z mojim poštnim naslovom.',
+  'licence_none' => 'Brez',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Osnovna licenca',
+  'licence_intermediate' => 'Vmesna licenca',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Drugo',
 );

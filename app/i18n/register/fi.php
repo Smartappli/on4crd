@@ -43,4 +43,10 @@ return array (
   'login' => 'Kirjaudu sisään',
   'layout_title' => 'Rekisteröityminen',
   'geocode_consent' => 'Laske automaattisesti paikannus- ja radiovyöhykkeet Nominatim:n kautta postiosoitteellani.',
+  'licence_none' => 'Ei mitään',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Peruslupa',
+  'licence_intermediate' => 'Keskitason lupa',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Muu',
 );

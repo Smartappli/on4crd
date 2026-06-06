@@ -68,4 +68,10 @@ return array (
   'interests' => '兴趣',
   'save' => '保存',
   'geocode_consent' => '通过 Nominatim 使用我的邮政地址自动计算定位器和无线电区域。',
+  'licence_none' => '无',
+  'licence_onl' => 'ONL',
+  'licence_base' => '基础执照',
+  'licence_intermediate' => '中级执照',
+  'licence_harec' => 'HAREC',
+  'licence_other' => '其他',
 );

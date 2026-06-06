@@ -43,4 +43,10 @@ return array (
   'login' => 'ログイン',
   'layout_title' => '登録',
   'geocode_consent' => '私の住所を使用して、Nominatim を通じてロケーターと無線ゾーンを自動的に計算します。',
+  'licence_none' => 'なし',
+  'licence_onl' => 'ONL',
+  'licence_base' => '基本ライセンス',
+  'licence_intermediate' => '中級ライセンス',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'その他',
 );

@@ -68,4 +68,10 @@ return array (
   'interests' => 'रुचियाँ',
   'save' => 'सहेजें',
   'geocode_consent' => 'मेरे डाक पते के साथ Nominatim के माध्यम से स्वचालित रूप से लोकेटर और रेडियो ज़ोन की गणना करें।',
+  'licence_none' => 'कोई नहीं',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'मूल लाइसेंस',
+  'licence_intermediate' => 'मध्यवर्ती लाइसेंस',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'अन्य',
 );

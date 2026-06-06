@@ -68,4 +68,10 @@ return array (
   'interests' => 'Centres d’intérêt',
   'save' => 'Enregistrer',
   'geocode_consent' => 'Calculer automatiquement le locator et les zones radio via Nominatim avec mon adresse postale.',
+  'licence_none' => 'Aucune',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Licence de base',
+  'licence_intermediate' => 'Licence intermédiaire',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Autre',
 );

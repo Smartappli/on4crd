@@ -43,4 +43,10 @@ return array (
   'login' => 'Iniciar sesión',
   'layout_title' => 'Registro',
   'geocode_consent' => 'Calcular automáticamente localizador y zonas de radio a través de Nominatim con mi dirección postal.',
+  'licence_none' => 'Ninguna',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Licencia básica',
+  'licence_intermediate' => 'Licencia intermedia',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Otra',
 );

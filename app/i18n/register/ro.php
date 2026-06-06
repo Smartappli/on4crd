@@ -43,4 +43,10 @@ return array (
   'login' => 'Autentificare',
   'layout_title' => 'Înregistrare',
   'geocode_consent' => 'Calculați automat zonele de localizare și radio prin Nominatim cu adresa mea poștală.',
+  'licence_none' => 'Niciuna',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Licență de bază',
+  'licence_intermediate' => 'Licență intermediară',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Alta',
 );

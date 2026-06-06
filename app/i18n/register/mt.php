@@ -43,4 +43,10 @@ return array (
   'login' => 'Idħol',
   'layout_title' => 'Reġistrazzjoni',
   'geocode_consent' => 'Ikkalkula awtomatikament iż-żoni tal-lokalizzatur u tar-radju permezz ta \'Nominatim bl-indirizz postali tiegħi.',
+  'licence_none' => 'L-ebda',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Liċenzja bażika',
+  'licence_intermediate' => 'Liċenzja intermedja',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Oħra',
 );

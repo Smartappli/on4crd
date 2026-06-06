@@ -68,4 +68,10 @@ return array (
   'interests' => 'Zainteresowania',
   'save' => 'Zapisz',
   'geocode_consent' => 'Automatycznie obliczaj lokalizator i strefy radiowe za pomocą Nominatim na podstawie mojego adresu pocztowego.',
+  'licence_none' => 'Brak',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Licencja podstawowa',
+  'licence_intermediate' => 'Licencja pośrednia',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Inne',
 );

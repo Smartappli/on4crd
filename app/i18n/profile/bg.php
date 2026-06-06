@@ -68,4 +68,10 @@ return array (
   'interests' => 'Интереси',
   'save' => 'Запазване',
   'geocode_consent' => 'Автоматично изчисляване на локатор и радиозони чрез Nominatim с моя пощенски адрес.',
+  'licence_none' => 'Няма',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Основен лиценз',
+  'licence_intermediate' => 'Междинен лиценз',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Друго',
 );

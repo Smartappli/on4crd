@@ -68,4 +68,10 @@ return array (
   'interests' => 'Záujmy',
   'save' => 'Uložiť',
   'geocode_consent' => 'Automaticky vypočítať lokátor a rádiové zóny cez Nominatim s mojou poštovou adresou.',
+  'licence_none' => 'Žiadna',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Základná licencia',
+  'licence_intermediate' => 'Stredná licencia',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Iné',
 );

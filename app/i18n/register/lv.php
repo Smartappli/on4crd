@@ -43,4 +43,10 @@ return array (
   'login' => 'Piesakieties',
   'layout_title' => 'Reģistrācija',
   'geocode_consent' => 'Automātiski aprēķināt lokatora un radio zonas, izmantojot Nominatim, izmantojot manu pasta adresi.',
+  'licence_none' => 'Nav',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Pamatlicence',
+  'licence_intermediate' => 'Vidēja līmeņa licence',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Cita',
 );

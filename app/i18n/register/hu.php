@@ -43,4 +43,10 @@ return array (
   'login' => 'Jelentkezzen be',
   'layout_title' => 'Regisztráció',
   'geocode_consent' => 'Automatikusan számítja ki a lokátor- és rádiózónákat az Nominatim-en keresztül a postai címemmel.',
+  'licence_none' => 'Nincs',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Alapengedély',
+  'licence_intermediate' => 'Középszintű engedély',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Egyéb',
 );

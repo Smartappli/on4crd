@@ -68,4 +68,10 @@ return array (
   'interests' => 'Minat',
   'save' => 'Simpan',
   'geocode_consent' => 'Secara otomatis menghitung pencari lokasi dan zona radio melalui Nominatim dengan alamat pos saya.',
+  'licence_none' => 'Tidak ada',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Lisensi dasar',
+  'licence_intermediate' => 'Lisensi menengah',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Lainnya',
 );

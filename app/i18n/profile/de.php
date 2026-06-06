@@ -68,4 +68,10 @@ return array (
   'interests' => 'Interessen',
   'save' => 'Speichern',
   'geocode_consent' => 'Berechnen Sie automatisch Ortungs- und Funkzonen über Nominatim mit meiner Postanschrift.',
+  'licence_none' => 'Keine',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Basislizenz',
+  'licence_intermediate' => 'Zwischenlizenz',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Andere',
 );

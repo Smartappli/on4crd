@@ -43,4 +43,10 @@ return array (
   'login' => 'Logga in',
   'layout_title' => 'Registrering',
   'geocode_consent' => 'Beräkna automatiskt lokaliserings- och radiozoner genom Nominatim med min postadress.',
+  'licence_none' => 'Ingen',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Grundlicens',
+  'licence_intermediate' => 'Mellanlicens',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Annat',
 );

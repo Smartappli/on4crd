@@ -68,4 +68,10 @@ return array (
   'interests' => 'Pomėgiai',
   'save' => 'Išsaugoti',
   'geocode_consent' => 'Automatiškai apskaičiuokite lokatoriaus ir radijo zonas per Nominatim su mano pašto adresu.',
+  'licence_none' => 'Nėra',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Bazinė licencija',
+  'licence_intermediate' => 'Vidutinė licencija',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Kita',
 );

@@ -43,4 +43,10 @@ return array (
   'login' => 'Logáil isteach',
   'layout_title' => 'Clárú',
   'geocode_consent' => 'Ríomh aimsitheoir agus criosanna raidió go huathoibríoch trí Nominatim le mo sheoladh poist.',
+  'licence_none' => 'Ceann ar bith',
+  'licence_onl' => 'ONL',
+  'licence_base' => 'Ceadúnas bunúsach',
+  'licence_intermediate' => 'Ceadúnas idirmheánach',
+  'licence_harec' => 'HAREC',
+  'licence_other' => 'Eile',
 );
