@@ -463,6 +463,8 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('value="no_qsl"', $html);
         self::assertStringContainsString('Pas de QSL', $html);
         self::assertStringContainsString('value="Via ON4CRD" selected', $legacyHtml);
+        self::assertSame('Pas de QSL', member_profile_qsl_via_display_text($t, 'no_qsl'));
+        self::assertSame('Via ON4CRD', member_profile_qsl_via_display_text($t, 'Via ON4CRD'));
     }
 
     public function testMemberProfileChoicePostKeepsAllowedValuesOnly(): void
