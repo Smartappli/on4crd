@@ -607,6 +607,38 @@ function member_profile_operator_since_options_html(string $currentValue = ''): 
 }
 }
 
+if (!function_exists('member_profile_licence_class_options_html')) {
+function member_profile_licence_class_options_html(callable $t, string $currentValue = ''): string
+{
+    $currentValue = trim($currentValue);
+    $choices = [
+        '' => '',
+        'Aucune' => (string) $t('licence_none'),
+        'ONL' => (string) $t('licence_onl'),
+        'ON3' => (string) $t('licence_base'),
+        'ON2' => (string) $t('licence_intermediate'),
+        'HAREC' => (string) $t('licence_harec'),
+        'Autre' => (string) $t('licence_other'),
+    ];
+
+    $html = '';
+    $hasCurrentValue = $currentValue === '';
+    foreach ($choices as $value => $label) {
+        if ($value === $currentValue) {
+            $hasCurrentValue = true;
+        }
+
+        $html .= '<option value="' . e($value) . '"' . ($value === $currentValue ? ' selected' : '') . '>' . e($label) . '</option>';
+    }
+
+    if (!$hasCurrentValue) {
+        $html .= '<option value="' . e($currentValue) . '" selected>' . e($currentValue) . '</option>';
+    }
+
+    return $html;
+}
+}
+
 if (!function_exists('member_profile_favourite_band_choices')) {
 /**
  * @return list<string>

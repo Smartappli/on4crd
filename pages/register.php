@@ -226,6 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html('');
+$licenceClassOptionsHtml = member_profile_licence_class_options_html($t);
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices());
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices());
 
@@ -243,7 +244,7 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('grid')) . '<input type="text" name="locator" maxlength="6"></label>'
     . '<label class="register-form-full checkbox-row"><input type="checkbox" name="allow_geocode" value="1"> <span>' . e($t('geocode_consent')) . '</span></label>'
     . privacy_notice_short_html('register')
-    . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
+    . '<label>' . e($t('licence_class')) . '<select name="licence_class">' . $licenceClassOptionsHtml . '</select></label>'
     . '<label>' . e($t('operator_since')) . '<select name="operator_since">' . $operatorSinceOptionsHtml . '</select></label>'
     . '<label>' . e($t('cq_zone')) . '<input type="text" name="cq_zone" maxlength="16"></label>'
     . '<label>' . e($t('itu_zone')) . '<input type="text" name="itu_zone" maxlength="16"></label>'
