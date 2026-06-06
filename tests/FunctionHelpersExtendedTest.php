@@ -244,6 +244,33 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('classifieds.moderate', (string) ($classifiedsCards[0]['permission'] ?? ''));
     }
 
+    public function testContentProposalPayloadSanitizesAndValidatesInput(): void
+    {
+        $payload = content_proposal_payload(
+            12,
+            'articles',
+            'category',
+            "  <b>Antennes</b>\n",
+            content_proposal_details_text(['Reason' => '<script>bad()</script>Useful category']),
+            "member@example.test\r\n",
+            'source'
+        );
+
+        self::assertSame(12, $payload['member_id']);
+        self::assertSame('articles', $payload['area']);
+        self::assertSame('category', $payload['proposal_type']);
+        self::assertSame('Antennes', $payload['title']);
+        self::assertSame('Reason: bad()Useful category', $payload['summary']);
+        self::assertSame('member@example.test', $payload['contact']);
+    }
+
+    public function testContentProposalPayloadRejectsUnknownArea(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        content_proposal_payload(12, 'unknown', 'category', 'Title');
+    }
+
     public function testPasswordChangeRequiredRequiresAdminForcedMarker(): void
     {
         self::assertFalse(member_password_change_required([

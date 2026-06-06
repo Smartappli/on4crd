@@ -564,6 +564,7 @@ if (!function_exists('privacy_export_member_data')) {
             ['ads', 'owner_member_id'],
             ['ad_events', 'member_id'],
             ['article_proposals', 'member_id'],
+            ['content_proposals', 'member_id'],
             ['articles', 'author_id'],
             ['article_revisions', 'author_id'],
             ['news_posts', 'author_id'],
@@ -946,6 +947,7 @@ if (!function_exists('privacy_apply_member_erasure_db')) {
             ['chatbot_logs', 'member_id'],
             ['ad_events', 'member_id'],
             ['article_proposals', 'member_id'],
+            ['content_proposals', 'member_id'],
             ['classified_ads', 'owner_member_id'],
         ] as [$table, $column]) {
             $operations[$table] = privacy_delete_rows_by_column($table, $column, $memberId);

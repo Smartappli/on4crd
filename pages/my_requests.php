@@ -5,6 +5,7 @@ $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('my_requests', $locale);
 $text = static fn (string $key, ?string $fallback = null): string => (string) ($t[$key] ?? $fallback ?? $key);
+$isFrench = $locale === 'fr';
 
 $title = $text('title');
 $intro = $text('intro');
@@ -76,25 +77,25 @@ $statusLabels = [
     'scheduled' => $text('article_status_scheduled', 'Scheduled'),
     'published' => $text('article_status_published', 'Published'),
     'active' => $text('classified_status_active', 'Active'),
-    'sold' => $text('classified_status_sold', 'Sold'),
-    'archived' => $text('classified_status_archived', 'Archived'),
-    'expired' => $text('classified_status_expired', 'Expired'),
+    'sold' => $text('classified_status_sold', $isFrench ? 'Vendue' : 'Sold'),
+    'archived' => $text('classified_status_archived', $isFrench ? 'Archivee' : 'Archived'),
+    'expired' => $text('classified_status_expired', $isFrench ? 'Expiree' : 'Expired'),
     'rejected' => $text('article_status_rejected', 'Rejected'),
-    'reviewed' => $text('proposal_status_reviewed', 'Reviewed'),
-    'accepted' => $text('proposal_status_accepted', 'Accepted'),
+    'reviewed' => $text('proposal_status_reviewed', $isFrench ? 'Relue' : 'Reviewed'),
+    'accepted' => $text('proposal_status_accepted', $isFrench ? 'Acceptee' : 'Accepted'),
 ];
 
 $proposalAreaLabels = [
     'articles' => $text('articles_title', 'Articles'),
     'classifieds' => $text('classifieds_title', 'Classifieds'),
     'events' => $text('events_title', 'Events'),
-    'members_library' => $text('library_title', 'Member library'),
-    'news' => $text('news_title', 'News'),
+    'members_library' => $text('library_title', $isFrench ? 'Bibliotheque membres' : 'Member library'),
+    'news' => $text('news_title', $isFrench ? 'Actualites' : 'News'),
     'wiki' => $text('wiki_title', 'Wiki'),
 ];
 $proposalTypeLabels = [
-    'category' => $text('proposal_type_category', 'Category proposal'),
-    'content' => $text('proposal_type_content', 'Content proposal'),
+    'category' => $text('proposal_type_category', $isFrench ? 'Proposition de categorie' : 'Category proposal'),
+    'content' => $text('proposal_type_content', $isFrench ? 'Proposition de contenu' : 'Content proposal'),
 ];
 $proposalAreaRoutes = [
     'articles' => 'articles',
@@ -163,12 +164,12 @@ if (table_exists('wiki_pages') && table_has_column('wiki_pages', 'author_id')) {
             $cards[] = [
                 'timestamp' => $timestampFor($updatedAt),
                 'status' => (string) ($statusLabels[$wikiStatus] ?? $wikiStatus),
-                'title' => trim((string) ($wikiPage['title'] ?? '')) !== '' ? (string) $wikiPage['title'] : $text('wiki_default_title', 'Wiki page'),
+                'title' => trim((string) ($wikiPage['title'] ?? '')) !== '' ? (string) $wikiPage['title'] : $text('wiki_default_title', $isFrench ? 'Page wiki' : 'Wiki page'),
                 'meta' => $text('wiki_title', 'Wiki'),
                 'date' => $formatRequestDate($updatedAt),
                 'note' => '',
                 'url' => $wikiStatus === 'published' && trim((string) ($wikiPage['slug'] ?? '')) !== '' ? route_url('wiki_view', ['slug' => (string) $wikiPage['slug']]) : route_url('wiki'),
-                'cta' => $text('content_open', 'Open'),
+                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -191,12 +192,12 @@ if (table_exists('classified_ads') && table_has_column('classified_ads', 'owner_
             $cards[] = [
                 'timestamp' => $timestampFor($updatedAt),
                 'status' => (string) ($statusLabels[$adStatus] ?? $adStatus),
-                'title' => trim((string) ($ad['title'] ?? '')) !== '' ? (string) $ad['title'] : $text('classified_default_title', 'Classified ad'),
+                'title' => trim((string) ($ad['title'] ?? '')) !== '' ? (string) $ad['title'] : $text('classified_default_title', $isFrench ? 'Annonce' : 'Classified ad'),
                 'meta' => $meta,
                 'date' => $formatRequestDate($updatedAt),
-                'note' => trim((string) ($ad['expires_at'] ?? '')) !== '' ? $text('expires_on', 'Expires on') . ': ' . $formatRequestDate((string) $ad['expires_at']) : '',
+                'note' => trim((string) ($ad['expires_at'] ?? '')) !== '' ? $text('expires_on', $isFrench ? 'Expire le' : 'Expires on') . ': ' . $formatRequestDate((string) $ad['expires_at']) : '',
                 'url' => route_url('classifieds_manage', ['edit' => (int) ($ad['id'] ?? 0)]),
-                'cta' => $text('content_manage', 'Manage'),
+                'cta' => $text('content_manage', $isFrench ? 'Gerer' : 'Manage'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -224,12 +225,12 @@ if (ensure_content_proposals_table()) {
             $cards[] = [
                 'timestamp' => $timestampFor($updatedAt),
                 'status' => (string) ($statusLabels[$proposalStatus] ?? $proposalStatus),
-                'title' => (string) ($proposalTypeLabels[$proposalType] ?? $proposalType) . ': ' . (string) ($proposal['title'] ?? $text('proposal_default_title', 'Proposal')),
+                'title' => (string) ($proposalTypeLabels[$proposalType] ?? $proposalType) . ': ' . (string) ($proposal['title'] ?? $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal')),
                 'meta' => (string) ($proposalAreaLabels[$area] ?? $area),
                 'date' => $formatRequestDate($updatedAt),
                 'note' => implode("\n", $noteParts),
                 'url' => route_url($route),
-                'cta' => $text('content_open', 'Open'),
+                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
             ];
         }
     } catch (Throwable $throwable) {
@@ -280,7 +281,7 @@ ob_start();
                             <p class="help"><?= nl2br(e((string) $card['note'])) ?></p>
                         <?php endif; ?>
                         <?php if (trim((string) ($card['url'] ?? '')) !== ''): ?>
-                            <a class="button secondary small" href="<?= e((string) $card['url']) ?>"><?= e((string) ($card['cta'] ?? $text('content_open', 'Open'))) ?></a>
+                            <a class="button secondary small" href="<?= e((string) $card['url']) ?>"><?= e((string) ($card['cta'] ?? $text('content_open', $isFrench ? 'Ouvrir' : 'Open'))) ?></a>
                         <?php endif; ?>
                     </article>
                 <?php endforeach; ?>

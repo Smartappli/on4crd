@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
             redirect('my_requests');
         }
 

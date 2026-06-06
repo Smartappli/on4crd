@@ -85,7 +85,7 @@
     }
   });
 
-  if (form) {
+  if (form && String(form.getAttribute('method') || '').toLowerCase() === 'dialog') {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const recipient = form.dataset.eventProposalRecipient || 'crdurnal@gmail.com';
