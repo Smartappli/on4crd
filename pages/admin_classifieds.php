@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!in_array($bulkOp, $allowed, true)) {
                     throw new RuntimeException($tText('invalid'));
                 }
-                $expiresAt = $bulkOp === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+                $expiresAt = classifieds_expires_at_for_status($bulkOp);
                 db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $expiresAt], $ids));
                 foreach ($ownerRows as $ownerRow) {
@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $expiresAtValue = $expiresAtDate->format('Y-m-d H:i:s');
         } elseif ($status === 'active') {
-            $expiresAtValue = date('Y-m-d H:i:s', time() + (30 * 86400));
+            $expiresAtValue = classifieds_expires_at_for_status($status);
         }
 
         db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ?')

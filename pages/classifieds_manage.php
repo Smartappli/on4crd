@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $requestedStatus = classifieds_member_publication_status((string) ($_POST['status'] ?? 'draft'));
             classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, $t('invalid'));
 
-            $expiresAt = $requestedStatus === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+            $expiresAt = classifieds_expires_at_for_status($requestedStatus);
             if ($id > 0) {
                 if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
                     throw new RuntimeException($t('missing'));
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('invalid'));
             }
             $status = classifieds_member_publication_status($status);
-            $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+            $expiresAt = classifieds_expires_at_for_status($status);
             $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
             $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
             set_flash('success', $t('status_ok'));
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('missing'));
             }
             $status = has_permission('ads.moderate') ? 'active' : 'pending';
-            $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+            $expiresAt = classifieds_expires_at_for_status($status);
             $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
             $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
             set_flash('success', $t('renewed_ok'));
