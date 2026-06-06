@@ -16,6 +16,39 @@ if (!ensure_wiki_tables()) {
     return;
 }
 
+$user = current_user();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+
+        if ($action === 'propose_theme') {
+            $user = require_login(route_url('wiki'));
+            $proposalTitle = (string) ($_POST['proposal_theme'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                $tr('propose_theme_reason', 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'wiki', 'category', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site($tr('propose_theme_subject', 'Wiki theme proposal'), [
+                'area' => 'wiki',
+                'proposal_type' => 'category',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', $tr('proposal_recorded', 'Proposal saved in your content area.'));
+            redirect('my_requests');
+        }
+
+        throw new RuntimeException($tr('invalid', 'Invalid request.'));
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('wiki'));
+    }
+}
+
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
@@ -27,6 +60,13 @@ if ($theme === 'n-a') {
 $contactEmail = site_contact_email();
 $themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD'))
     . '&body=' . rawurlencode($tr('propose_theme_body_intro', 'Proposition de thématique wiki :'));
+$proposalContactDefault = '';
+if ($user !== null) {
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
+}
 
 $rows = [];
 $wikiThemes = [];
@@ -126,10 +166,14 @@ ob_start();
                 </div>
                 <button class="wiki-theme-dialog-close" type="button" data-wiki-theme-close aria-label="<?= e($tr('close', 'Fermer')) ?>">&times;</button>
             </div>
-            <form class="wiki-theme-form" method="dialog" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="<?= e($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD')) ?>" data-wiki-theme-intro="<?= e($tr('propose_theme_body_intro', 'Proposition de thématique wiki :')) ?>">
+            <form class="wiki-theme-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="<?= e($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD')) ?>" data-wiki-theme-intro="<?= e($tr('propose_theme_body_intro', 'Proposition de thématique wiki :')) ?>">
+                <?php if ($user !== null): ?>
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_theme">
+                <?php endif; ?>
                 <label><span><?= e($tr('propose_theme_name', 'Nom de la thématique')) ?></span><input type="text" name="proposal_theme" maxlength="160" required></label>
                 <label><span><?= e($tr('propose_theme_reason', 'Pourquoi l\'ajouter ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
-                <label><span><?= e($tr('propose_theme_contact', 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" required></label>
+                <label><span><?= e($tr('propose_theme_contact', 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="wiki-theme-dialog-actions">
                     <button class="button" type="submit"><?= e($tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
                     <button class="button secondary" type="button" data-wiki-theme-close><?= e($tr('cancel', 'Annuler')) ?></button>

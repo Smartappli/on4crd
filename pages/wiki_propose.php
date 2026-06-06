@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([$title, $slug, $content, (int) $user['id']]);
 
         set_flash('success', $tr('propose_success', 'Page wiki proposée. Elle sera publiée après validation.'));
-        redirect_url(route_url('wiki'));
+        redirect('my_requests');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect('wiki_propose');

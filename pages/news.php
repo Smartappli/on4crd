@@ -28,6 +28,60 @@ if (!table_exists('news_posts')) {
     return;
 }
 
+$user = current_user();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+        $user = require_login(route_url('news'));
+
+        if ($action === 'propose_news') {
+            $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
+            $proposalSource = (string) ($_POST['proposal_source'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) $newsT['propose_news_summary_label'] => (string) ($_POST['proposal_summary'] ?? ''),
+                (string) $newsT['propose_news_source_label'] => $proposalSource,
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'news', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalSource);
+            content_proposal_notify_site((string) $newsT['propose_news_subject'], [
+                'area' => 'news',
+                'proposal_type' => 'content',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($newsT['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+            redirect('my_requests');
+        }
+
+        if ($action === 'propose_category') {
+            $proposalTitle = (string) ($_POST['proposal_category'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) $newsT['propose_category_reason'] => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'news', 'category', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site((string) $newsT['propose_category_subject'], [
+                'area' => 'news',
+                'proposal_type' => 'category',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($newsT['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+            redirect('my_requests');
+        }
+
+        throw new RuntimeException((string) ($newsT['invalid'] ?? 'Invalid request.'));
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('news'));
+    }
+}
+
 $posts = [];
 $search = trim((string) ($_GET['q'] ?? ''));
 $monthFilter = trim((string) ($_GET['ym'] ?? ''));
@@ -150,6 +204,13 @@ $newsProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawur
     . '&body=' . rawurlencode((string) $newsT['propose_news_body_intro']);
 $categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $newsT['propose_category_subject'])
     . '&body=' . rawurlencode((string) $newsT['propose_category_body_intro']);
+$proposalContactDefault = '';
+if ($user !== null) {
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
+}
 
 ob_start();
 ?>
@@ -183,7 +244,11 @@ ob_start();
             </div>
             <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
         </div>
-        <form class="news-proposal-form" method="dialog" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_news_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_news_body_intro']) ?>">
+        <form class="news-proposal-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_news_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_news_body_intro']) ?>">
+            <?php if ($user !== null): ?>
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_news">
+            <?php endif; ?>
             <label>
                 <span><?= e((string) $newsT['propose_news_title_label']) ?></span>
                 <input type="text" name="proposal_title" maxlength="190" required>
@@ -199,7 +264,7 @@ ob_start();
                 </label>
                 <label>
                     <span><?= e((string) $newsT['propose_news_contact_label']) ?></span>
-                    <input type="text" name="proposal_contact" maxlength="220" required>
+                    <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
                 </label>
             </div>
             <div class="news-proposal-dialog-actions">
@@ -220,7 +285,11 @@ ob_start();
             </div>
             <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
         </div>
-        <form class="news-proposal-form" method="dialog" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_category_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_category_body_intro']) ?>">
+        <form class="news-proposal-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_category_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_category_body_intro']) ?>">
+            <?php if ($user !== null): ?>
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_category">
+            <?php endif; ?>
             <label>
                 <span><?= e((string) $newsT['propose_category_name']) ?></span>
                 <input type="text" name="proposal_category" maxlength="160" required>
@@ -231,7 +300,7 @@ ob_start();
             </label>
             <label>
                 <span><?= e((string) $newsT['proposal_contact']) ?></span>
-                <input type="text" name="proposal_contact" maxlength="220" required>
+                <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
             <div class="news-proposal-dialog-actions">
                 <button class="button" type="submit"><?= e((string) $newsT['proposal_submit']) ?></button>

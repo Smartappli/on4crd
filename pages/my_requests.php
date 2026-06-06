@@ -4,7 +4,7 @@ declare(strict_types=1);
 $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('my_requests', $locale);
-$text = static fn (string $key): string => (string) ($t[$key] ?? $key);
+$text = static fn (string $key, ?string $fallback = null): string => (string) ($t[$key] ?? $fallback ?? $key);
 
 $title = $text('title');
 $intro = $text('intro');
@@ -55,22 +55,190 @@ $shortcuts = [
     ],
 ];
 
-$submittedArticles = [];
-if (table_exists('articles') && table_has_column('articles', 'author_id')) {
-    $stmt = db()->prepare('SELECT id, slug, title, status, category, moderation_note, created_at, updated_at FROM articles WHERE author_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
-    $stmt->execute([(int) $user['id']]);
-    $submittedArticles = $stmt->fetchAll() ?: [];
-}
-$privacyRequests = privacy_member_requests((int) $user['id']);
-$registeredRequestsCount = count($submittedArticles) + count($privacyRequests);
+$formatRequestDate = static function (mixed $value): string {
+    $timestamp = strtotime((string) ($value ?: 'now'));
+    if ($timestamp === false) {
+        $timestamp = time();
+    }
+
+    return date('d/m/Y', $timestamp);
+};
+
+$timestampFor = static function (mixed $value): int {
+    $timestamp = strtotime((string) ($value ?: 'now'));
+
+    return $timestamp !== false ? $timestamp : time();
+};
 
 $statusLabels = [
-    'draft' => $text('article_status_draft'),
-    'pending' => $text('article_status_pending'),
-    'scheduled' => $text('article_status_scheduled'),
-    'published' => $text('article_status_published'),
-    'rejected' => $text('article_status_rejected'),
+    'draft' => $text('article_status_draft', 'Draft'),
+    'pending' => $text('article_status_pending', 'Pending review'),
+    'scheduled' => $text('article_status_scheduled', 'Scheduled'),
+    'published' => $text('article_status_published', 'Published'),
+    'active' => $text('classified_status_active', 'Active'),
+    'sold' => $text('classified_status_sold', 'Sold'),
+    'archived' => $text('classified_status_archived', 'Archived'),
+    'expired' => $text('classified_status_expired', 'Expired'),
+    'rejected' => $text('article_status_rejected', 'Rejected'),
+    'reviewed' => $text('proposal_status_reviewed', 'Reviewed'),
+    'accepted' => $text('proposal_status_accepted', 'Accepted'),
 ];
+
+$proposalAreaLabels = [
+    'articles' => $text('articles_title', 'Articles'),
+    'classifieds' => $text('classifieds_title', 'Classifieds'),
+    'events' => $text('events_title', 'Events'),
+    'members_library' => $text('library_title', 'Member library'),
+    'news' => $text('news_title', 'News'),
+    'wiki' => $text('wiki_title', 'Wiki'),
+];
+$proposalTypeLabels = [
+    'category' => $text('proposal_type_category', 'Category proposal'),
+    'content' => $text('proposal_type_content', 'Content proposal'),
+];
+$proposalAreaRoutes = [
+    'articles' => 'articles',
+    'classifieds' => 'classifieds',
+    'events' => 'events',
+    'members_library' => 'members_library',
+    'news' => 'news',
+    'wiki' => 'wiki',
+];
+
+$cards = [];
+
+$privacyRequests = privacy_member_requests((int) $user['id']);
+foreach ($privacyRequests as $request) {
+    $requestedAt = (string) ($request['requested_at'] ?? 'now');
+    $notes = trim((string) ($request['admin_notes'] ?? ''));
+    $cards[] = [
+        'timestamp' => $timestampFor($requestedAt),
+        'status' => (string) ($request['status'] ?? 'pending'),
+        'title' => $text('privacy_request_prefix') . ': ' . (string) ($request['request_type'] ?? 'access'),
+        'meta' => $text('privacy_title'),
+        'date' => $formatRequestDate($requestedAt),
+        'note' => $notes,
+        'url' => route_url('gdpr'),
+        'cta' => $text('privacy_cta'),
+    ];
+}
+
+if (table_exists('articles') && table_has_column('articles', 'author_id')) {
+    try {
+        $stmt = db()->prepare('SELECT id, slug, title, status, category, moderation_note, created_at, updated_at FROM articles WHERE author_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
+        $stmt->execute([(int) $user['id']]);
+        foreach (($stmt->fetchAll() ?: []) as $article) {
+            $articleStatus = (string) ($article['status'] ?? 'draft');
+            $articleTitle = trim((string) ($article['title'] ?? ''));
+            if ($articleTitle === '') {
+                $articleTitle = $text('article_default_title', 'Article');
+            }
+            $articleUrl = $articleStatus === 'published' && trim((string) ($article['slug'] ?? '')) !== ''
+                ? route_url('article', ['slug' => (string) $article['slug']])
+                : '';
+            $updatedAt = (string) ($article['updated_at'] ?? $article['created_at'] ?? 'now');
+            $cards[] = [
+                'timestamp' => $timestampFor($updatedAt),
+                'status' => (string) ($statusLabels[$articleStatus] ?? $articleStatus),
+                'title' => $articleTitle,
+                'meta' => $text('articles_title') . ' / ' . (string) ($article['category'] ?? $text('category_default', 'Other')),
+                'date' => $formatRequestDate($updatedAt),
+                'note' => trim((string) ($article['moderation_note'] ?? '')) !== '' ? $text('moderation_note', 'Moderation note') . ': ' . (string) $article['moderation_note'] : '',
+                'url' => $articleUrl,
+                'cta' => $text('article_open', 'Open'),
+            ];
+        }
+    } catch (Throwable $throwable) {
+        log_structured_event('my_requests_articles_load_failed', ['message' => $throwable->getMessage()]);
+    }
+}
+
+if (table_exists('wiki_pages') && table_has_column('wiki_pages', 'author_id')) {
+    try {
+        $stmt = db()->prepare('SELECT id, slug, title, status, created_at, updated_at FROM wiki_pages WHERE author_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
+        $stmt->execute([(int) $user['id']]);
+        foreach (($stmt->fetchAll() ?: []) as $wikiPage) {
+            $wikiStatus = (string) ($wikiPage['status'] ?? 'pending');
+            $updatedAt = (string) ($wikiPage['updated_at'] ?? $wikiPage['created_at'] ?? 'now');
+            $cards[] = [
+                'timestamp' => $timestampFor($updatedAt),
+                'status' => (string) ($statusLabels[$wikiStatus] ?? $wikiStatus),
+                'title' => trim((string) ($wikiPage['title'] ?? '')) !== '' ? (string) $wikiPage['title'] : $text('wiki_default_title', 'Wiki page'),
+                'meta' => $text('wiki_title', 'Wiki'),
+                'date' => $formatRequestDate($updatedAt),
+                'note' => '',
+                'url' => $wikiStatus === 'published' && trim((string) ($wikiPage['slug'] ?? '')) !== '' ? route_url('wiki_view', ['slug' => (string) $wikiPage['slug']]) : route_url('wiki'),
+                'cta' => $text('content_open', 'Open'),
+            ];
+        }
+    } catch (Throwable $throwable) {
+        log_structured_event('my_requests_wiki_load_failed', ['message' => $throwable->getMessage()]);
+    }
+}
+
+if (table_exists('classified_ads') && table_has_column('classified_ads', 'owner_member_id')) {
+    try {
+        $stmt = db()->prepare('SELECT id, category_code, title, price_cents, status, expires_at, created_at, updated_at FROM classified_ads WHERE owner_member_id = ? ORDER BY updated_at DESC, id DESC LIMIT 50');
+        $stmt->execute([(int) $user['id']]);
+        foreach (($stmt->fetchAll() ?: []) as $ad) {
+            $adStatus = (string) ($ad['status'] ?? 'draft');
+            $updatedAt = (string) ($ad['updated_at'] ?? $ad['created_at'] ?? 'now');
+            $price = function_exists('format_price_eur') ? format_price_eur((int) ($ad['price_cents'] ?? 0)) : '';
+            $meta = $text('classifieds_title') . ' / ' . (string) ($ad['category_code'] ?? $text('category_default', 'Other'));
+            if ($price !== '') {
+                $meta .= ' / ' . $price;
+            }
+            $cards[] = [
+                'timestamp' => $timestampFor($updatedAt),
+                'status' => (string) ($statusLabels[$adStatus] ?? $adStatus),
+                'title' => trim((string) ($ad['title'] ?? '')) !== '' ? (string) $ad['title'] : $text('classified_default_title', 'Classified ad'),
+                'meta' => $meta,
+                'date' => $formatRequestDate($updatedAt),
+                'note' => trim((string) ($ad['expires_at'] ?? '')) !== '' ? $text('expires_on', 'Expires on') . ': ' . $formatRequestDate((string) $ad['expires_at']) : '',
+                'url' => route_url('classifieds_manage', ['edit' => (int) ($ad['id'] ?? 0)]),
+                'cta' => $text('content_manage', 'Manage'),
+            ];
+        }
+    } catch (Throwable $throwable) {
+        log_structured_event('my_requests_classifieds_load_failed', ['message' => $throwable->getMessage()]);
+    }
+}
+
+if (ensure_content_proposals_table()) {
+    try {
+        $stmt = db()->prepare('SELECT id, area, proposal_type, title, summary, contact, source_ref, status, moderation_note, created_at, updated_at FROM content_proposals WHERE member_id = ? ORDER BY updated_at DESC, id DESC LIMIT 100');
+        $stmt->execute([(int) $user['id']]);
+        foreach (($stmt->fetchAll() ?: []) as $proposal) {
+            $area = (string) ($proposal['area'] ?? '');
+            $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
+            $proposalStatus = (string) ($proposal['status'] ?? 'pending');
+            $updatedAt = (string) ($proposal['updated_at'] ?? $proposal['created_at'] ?? 'now');
+            $route = (string) ($proposalAreaRoutes[$area] ?? 'my_requests');
+            $noteParts = [];
+            if (trim((string) ($proposal['summary'] ?? '')) !== '') {
+                $noteParts[] = trim((string) $proposal['summary']);
+            }
+            if (trim((string) ($proposal['moderation_note'] ?? '')) !== '') {
+                $noteParts[] = $text('moderation_note', 'Moderation note') . ': ' . trim((string) $proposal['moderation_note']);
+            }
+            $cards[] = [
+                'timestamp' => $timestampFor($updatedAt),
+                'status' => (string) ($statusLabels[$proposalStatus] ?? $proposalStatus),
+                'title' => (string) ($proposalTypeLabels[$proposalType] ?? $proposalType) . ': ' . (string) ($proposal['title'] ?? $text('proposal_default_title', 'Proposal')),
+                'meta' => (string) ($proposalAreaLabels[$area] ?? $area),
+                'date' => $formatRequestDate($updatedAt),
+                'note' => implode("\n", $noteParts),
+                'url' => route_url($route),
+                'cta' => $text('content_open', 'Open'),
+            ];
+        }
+    } catch (Throwable $throwable) {
+        log_structured_event('my_requests_proposals_load_failed', ['message' => $throwable->getMessage()]);
+    }
+}
+
+usort($cards, static fn (array $a, array $b): int => ((int) ($b['timestamp'] ?? 0)) <=> ((int) ($a['timestamp'] ?? 0)));
+$registeredRequestsCount = count($cards);
 
 ob_start();
 ?>
@@ -95,46 +263,24 @@ ob_start();
             </div>
             <span class="badge muted"><?= (int) $registeredRequestsCount ?></span>
         </div>
-        <?php if ($submittedArticles === [] && $privacyRequests === []): ?>
+        <?php if ($cards === []): ?>
             <div class="my-requests-empty">
                 <strong><?= e($text('empty_title')) ?></strong>
                 <p><?= e($text('empty_hint')) ?></p>
             </div>
         <?php else: ?>
             <div class="my-requests-grid">
-                <?php foreach ($privacyRequests as $request): ?>
+                <?php foreach ($cards as $card): ?>
                     <article class="my-requests-shortcut">
-                        <span class="badge muted"><?= e((string) ($request['status'] ?? 'pending')) ?></span>
-                        <h3><?= e($text('privacy_request_prefix')) ?>: <?= e((string) ($request['request_type'] ?? 'access')) ?></h3>
-                        <p><?= e($text('privacy_title')) ?></p>
-                        <p class="help"><?= e(date('d/m/Y', strtotime((string) ($request['requested_at'] ?? 'now')))) ?></p>
-                        <?php if (trim((string) ($request['admin_notes'] ?? '')) !== ''): ?>
-                            <p class="help"><?= e((string) $request['admin_notes']) ?></p>
+                        <span class="badge muted"><?= e((string) ($card['status'] ?? '')) ?></span>
+                        <h3><?= e((string) ($card['title'] ?? '')) ?></h3>
+                        <p><?= e((string) ($card['meta'] ?? '')) ?></p>
+                        <p class="help"><?= e((string) ($card['date'] ?? '')) ?></p>
+                        <?php if (trim((string) ($card['note'] ?? '')) !== ''): ?>
+                            <p class="help"><?= nl2br(e((string) $card['note'])) ?></p>
                         <?php endif; ?>
-                        <a class="button secondary small" href="<?= e(route_url('gdpr')) ?>"><?= e($text('privacy_cta')) ?></a>
-                    </article>
-                <?php endforeach; ?>
-                <?php foreach ($submittedArticles as $article): ?>
-                    <?php
-                    $articleStatus = (string) ($article['status'] ?? 'draft');
-                    $articleTitle = trim((string) ($article['title'] ?? ''));
-                    if ($articleTitle === '') {
-                        $articleTitle = $text('article_default_title');
-                    }
-                    $articleUrl = $articleStatus === 'published' && trim((string) ($article['slug'] ?? '')) !== ''
-                        ? route_url('article', ['slug' => (string) $article['slug']])
-                        : '';
-                    ?>
-                    <article class="my-requests-shortcut">
-                        <span class="badge muted"><?= e((string) ($statusLabels[$articleStatus] ?? $articleStatus)) ?></span>
-                        <h3><?= e($articleTitle) ?></h3>
-                        <p><?= e($text('articles_title')) ?> · <?= e((string) ($article['category'] ?? $text('category_default'))) ?></p>
-                        <p class="help"><?= e(date('d/m/Y', strtotime((string) ($article['updated_at'] ?? $article['created_at'] ?? 'now')))) ?></p>
-                        <?php if (trim((string) ($article['moderation_note'] ?? '')) !== ''): ?>
-                            <p class="help"><?= e($text('moderation_note')) ?>: <?= e((string) $article['moderation_note']) ?></p>
-                        <?php endif; ?>
-                        <?php if ($articleUrl !== ''): ?>
-                            <a class="button secondary small" href="<?= e($articleUrl) ?>"><?= e($text('article_open')) ?></a>
+                        <?php if (trim((string) ($card['url'] ?? '')) !== ''): ?>
+                            <a class="button secondary small" href="<?= e((string) $card['url']) ?>"><?= e((string) ($card['cta'] ?? $text('content_open', 'Open'))) ?></a>
                         <?php endif; ?>
                     </article>
                 <?php endforeach; ?>

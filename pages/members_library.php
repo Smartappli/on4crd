@@ -13,24 +13,76 @@ if (!ensure_member_library_table()) {
     return;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite_document') {
-    verify_csrf();
-    $documentId = (int) ($_POST['document_id'] ?? 0);
-    if ($documentId > 0) {
-        $docStmt = db()->prepare('SELECT id, title, category, tags FROM member_library_documents WHERE id = ? LIMIT 1');
-        $docStmt->execute([$documentId]);
-        $docRow = $docStmt->fetch() ?: null;
-        if ($docRow !== null) {
-            $docTitle = trim((string) ($docRow['title'] ?? 'Document'));
-            $docCategory = trim((string) ($docRow['category'] ?? ''));
-            $docTags = trim((string) ($docRow['tags'] ?? ''));
-            $favoriteUrl = route_url_clean('members_library', ['q' => $docTitle, 'category' => $docCategory, 'tag' => $docTags]);
-            $saved = favorite_toggle((int) $user['id'], 'library_document', (int) $docRow['id'], $docTitle, $favoriteUrl);
-            notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $docTitle, $favoriteUrl);
-            set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+
+        if ($action === 'toggle_favorite_document') {
+            $documentId = (int) ($_POST['document_id'] ?? 0);
+            if ($documentId > 0) {
+                $docStmt = db()->prepare('SELECT id, title, category, tags FROM member_library_documents WHERE id = ? LIMIT 1');
+                $docStmt->execute([$documentId]);
+                $docRow = $docStmt->fetch() ?: null;
+                if ($docRow !== null) {
+                    $docTitle = trim((string) ($docRow['title'] ?? 'Document'));
+                    $docCategory = trim((string) ($docRow['category'] ?? ''));
+                    $docTags = trim((string) ($docRow['tags'] ?? ''));
+                    $favoriteUrl = route_url_clean('members_library', ['q' => $docTitle, 'category' => $docCategory, 'tag' => $docTags]);
+                    $saved = favorite_toggle((int) $user['id'], 'library_document', (int) $docRow['id'], $docTitle, $favoriteUrl);
+                    notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $docTitle, $favoriteUrl);
+                    set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
+                }
+            }
+            redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
         }
+
+        if ($action === 'propose_category') {
+            $proposalTitle = (string) ($_POST['proposal_category'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) ($t['propose_category_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'category', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site((string) ($t['propose_category_subject'] ?? 'Library category proposal'), [
+                'area' => 'members_library',
+                'proposal_type' => 'category',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+            redirect('my_requests');
+        }
+
+        if ($action === 'propose_document') {
+            $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
+            $proposalLink = (string) ($_POST['proposal_link'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) ($t['propose_document_category'] ?? 'Category') => (string) ($_POST['proposal_category'] ?? ''),
+                (string) ($t['propose_document_link'] ?? 'Link or source') => $proposalLink,
+                (string) ($t['propose_document_description'] ?? 'Description') => (string) ($_POST['proposal_description'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalLink);
+            content_proposal_notify_site((string) ($t['propose_document_subject'] ?? 'Library document proposal'), [
+                'area' => 'members_library',
+                'proposal_type' => 'content',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+            redirect('my_requests');
+        }
+
+        throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('members_library'));
     }
-    redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
 }
 
 $search = trim((string) ($_GET['q'] ?? ''));
@@ -177,7 +229,9 @@ ob_start();
                 </div>
                 <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="dialog" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_category_body_intro'] ?? 'Proposition de catégorie pour la bibliothèque membres :')) ?>">
+            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_category_body_intro'] ?? 'Proposition de catégorie pour la bibliothèque membres :')) ?>">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_category">
                 <label><span><?= e((string) ($t['propose_category_name'] ?? 'Nom de la catégorie')) ?></span><input type="text" name="proposal_category" maxlength="160" required></label>
                 <label><span><?= e((string) ($t['propose_category_reason'] ?? 'Pourquoi ajouter cette catégorie ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) ($t['proposal_contact'] ?? 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
@@ -199,7 +253,9 @@ ob_start();
                 </div>
                 <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="dialog" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_document_body_intro'] ?? 'Proposition de document pour la bibliothèque membres :')) ?>">
+            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_document_body_intro'] ?? 'Proposition de document pour la bibliothèque membres :')) ?>">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_document">
                 <label><span><?= e((string) ($t['propose_document_title'] ?? 'Titre du document')) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
                 <label><span><?= e((string) ($t['propose_document_category'] ?? 'Catégorie souhaitée')) ?></span><input type="text" name="proposal_category" maxlength="160"></label>
                 <label><span><?= e((string) ($t['propose_document_link'] ?? 'Lien ou source')) ?></span><input type="text" name="proposal_link" maxlength="500"></label>

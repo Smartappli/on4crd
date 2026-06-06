@@ -51,25 +51,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('propose_category_invalid'));
             }
 
-            $safeName = str_replace(["\r", "\n"], ' ', $proposalName);
-            $safeEmail = str_replace(["\r", "\n"], '', $proposalEmail);
-            $subject = $t('propose_category_subject');
-            $body = $t('propose_category_email_intro') . "\n\n"
-                . $t('propose_category_name_label') . ': ' . $proposalCategory . "\n"
-                . $t('propose_category_sender_name_label') . ': ' . $safeName . "\n"
-                . $t('propose_category_sender_email_label') . ': ' . $safeEmail . "\n\n"
-                . $t('propose_category_details_label') . ":\n" . ($proposalDetails !== '' ? $proposalDetails : '-') . "\n";
-            $headers = 'From: ON4CRD Website <no-reply@on4crd.be>' . "\r\n"
-                . 'Reply-To: ' . $safeEmail . "\r\n"
-                . 'Content-Type: text/plain; charset=UTF-8';
+            $summary = content_proposal_details_text([
+                $t('propose_category_sender_name_label') => $proposalName,
+                $t('propose_category_details_label') => $proposalDetails,
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'classifieds', 'category', $proposalCategory, $summary, $proposalEmail);
+            content_proposal_notify_site($t('propose_category_subject'), [
+                'area' => 'classifieds',
+                'proposal_type' => 'category',
+                'title' => content_proposal_clean_single_line($proposalCategory, 190),
+                'summary' => $summary,
+                'contact' => content_proposal_clean_single_line($proposalEmail, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
 
-            if (@mail(site_contact_email(), $subject, $body, $headers)) {
-                set_flash('success', $t('propose_category_sent'));
-            } else {
-                set_flash('error', $t('propose_category_failed'));
-            }
-
-            redirect_url(route_url('classifieds'));
+            set_flash('success', $t('propose_category_sent'));
+            redirect('my_requests');
         }
 
         $user = require_login();

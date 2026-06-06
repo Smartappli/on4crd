@@ -22,6 +22,41 @@ if (!table_exists('events')) {
     return;
 }
 
+$user = current_user();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+
+        if ($action === 'propose_event') {
+            $user = require_login(route_url('events'));
+            $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) $t['propose_event_datetime_label'] => (string) ($_POST['proposal_datetime'] ?? ''),
+                (string) $t['propose_event_location_label'] => (string) ($_POST['proposal_location'] ?? ''),
+                (string) $t['propose_event_description_label'] => (string) ($_POST['proposal_description'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'events', 'content', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site((string) $t['propose_event_subject'], [
+                'area' => 'events',
+                'proposal_type' => 'content',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+            redirect('my_requests');
+        }
+
+        throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('events'));
+    }
+}
+
 $rows = [];
 try {
     $stmt = db()->query('SELECT id, slug, title, summary, description, start_at, end_at, location, external_url FROM events WHERE status = "published" ORDER BY start_at ASC, id ASC');
@@ -169,6 +204,13 @@ $calendarConfig = [
 $contactEmail = site_contact_email();
 $proposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_event_subject'])
     . '&body=' . rawurlencode((string) $t['propose_event_body']);
+$proposalContactDefault = '';
+if ($user !== null) {
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
+}
 
 ob_start();
 ?>
@@ -194,7 +236,11 @@ ob_start();
             </div>
             <button class="events-proposal-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
         </div>
-        <form class="events-proposal-form" method="dialog" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+        <form class="events-proposal-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+            <?php if ($user !== null): ?>
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_event">
+            <?php endif; ?>
             <label>
                 <span><?= e($t['propose_event_title_label']) ?></span>
                 <input type="text" name="proposal_title" maxlength="160" required>
@@ -215,7 +261,7 @@ ob_start();
             </label>
             <label>
                 <span><?= e($t['propose_event_contact_label']) ?></span>
-                <input type="text" name="proposal_contact" maxlength="220" required>
+                <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
             <div class="events-proposal-dialog-actions">
                 <button class="button" type="submit"><?= e($t['propose_event_submit']) ?></button>

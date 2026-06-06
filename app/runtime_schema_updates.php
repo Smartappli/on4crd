@@ -451,6 +451,7 @@ function apply_runtime_schema_updates(): void
 
     ensure_classified_ads_table();
     ensure_wiki_tables();
+    ensure_content_proposals_table();
 
     ensure_member_favorites_table();
     ensure_member_notifications_table();
