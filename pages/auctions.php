@@ -1,13 +1,87 @@
 <?php
 declare(strict_types=1);
 
-$lots = cache_remember('auction_public_lots_60_v1', 60, static fn(): array => auction_public_lots(60));
 $locale = current_locale();
 $t = i18n_domain_locale('auctions', $locale);
 set_page_meta([
     'title' => (string) $t['meta_title'],
     'description' => (string) $t['meta_desc'],
 ]);
+
+$user = current_user();
+$canManageAuctions = has_permission('auctions.manage');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        $user = require_login(route_url('auctions'));
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+        if ($action !== 'propose_lot') {
+            throw new RuntimeException('Demande invalide.');
+        }
+        $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
+        $proposalSummary = (string) ($_POST['proposal_summary'] ?? '');
+        $proposalDescription = (string) ($_POST['proposal_description'] ?? '');
+        $proposalPrice = (string) ($_POST['proposal_price'] ?? '0');
+        $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+        $title = content_proposal_clean_single_line($proposalTitle, 190);
+        $summary = content_proposal_clean_multiline($proposalSummary, 1000);
+        $descriptionText = content_proposal_clean_multiline($proposalDescription, 5000);
+        $contact = content_proposal_clean_single_line($proposalContact, 220);
+        if ($title === '') {
+            throw new RuntimeException('Demande invalide.');
+        }
+
+        if (has_permission('auctions.manage')) {
+            if (!table_exists('auction_lots')) {
+                throw new RuntimeException('Stockage des encheres indisponible.');
+            }
+            $slug = auction_unique_slug($title);
+            $startingPrice = max(0, parse_price_to_cents($proposalPrice));
+            $descriptionHtml = $descriptionText !== '' ? '<p>' . nl2br(e($descriptionText), false) . '</p>' : '';
+            if ($contact !== '') {
+                $descriptionHtml .= '<p><strong>Contact:</strong> ' . e($contact) . '</p>';
+            }
+            $startsAt = time();
+            $endsAt = strtotime('+7 days', $startsAt);
+            db()->prepare('INSERT INTO auction_lots (slug, title, summary, description, image_url, starting_price_cents, reserve_price_cents, min_increment_cents, buy_now_price_cents, starts_at, ends_at, status) VALUES (?, ?, ?, ?, "", ?, NULL, 100, NULL, ?, ?, "active")')
+                ->execute([
+                    $slug,
+                    $title,
+                    $summary !== '' ? $summary : mb_safe_strimwidth($descriptionText, 0, 280, '...'),
+                    sanitize_rich_html($descriptionHtml),
+                    $startingPrice,
+                    date('Y-m-d H:i:s', $startsAt),
+                    date('Y-m-d H:i:s', $endsAt ?: ($startsAt + 7 * 86400)),
+                ]);
+            cache_forget('auction_public_lots_60_v1');
+            set_flash('success', 'Lot cree et valide directement.');
+            redirect_url(route_url('auction_view', ['slug' => $slug]));
+        }
+
+        $proposalDetails = content_proposal_details_text([
+            'Resume' => $summary,
+            'Prix de depart' => $proposalPrice,
+            'Description' => $descriptionText,
+        ]);
+        $proposalId = content_proposal_create((int) $user['id'], 'auctions', 'content', $title, $proposalDetails, $contact);
+        content_proposal_notify_site('Proposition de lot ON4CRD', [
+            'area' => 'auctions',
+            'proposal_type' => 'content',
+            'title' => $title,
+            'summary' => $proposalDetails,
+            'contact' => $contact,
+            'source_ref' => 'content_proposals#' . $proposalId,
+        ]);
+        set_flash('success', 'Proposition enregistree dans vos contenus.');
+        redirect('my_requests');
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('auctions'));
+    }
+}
+
+$lots = cache_remember('auction_public_lots_60_v1', 60, static fn(): array => auction_public_lots(60));
 
 $groupedLots = [
     'active' => [],
