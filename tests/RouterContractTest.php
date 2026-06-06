@@ -350,6 +350,18 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("mb_safe_strtoupper(\$search)", $directory);
     }
 
+    public function testCurrentUserRepairsMissingAuthUserLinkByCallsign(): void
+    {
+        $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');
+        self::assertIsString($authHelpers);
+
+        self::assertStringContainsString('$authClient->getUsername()', $authHelpers);
+        self::assertStringContainsString('UPPER(callsign) = ?', $authHelpers);
+        self::assertStringContainsString('$linkedAuthUserId === $authUserId', $authHelpers);
+        self::assertStringContainsString('$linkedAuthUserId === 0', $authHelpers);
+        self::assertStringContainsString('UPDATE members SET auth_user_id = ? WHERE id = ? AND (auth_user_id IS NULL OR auth_user_id = 0) LIMIT 1', $authHelpers);
+    }
+
     public function testRouteSpecificHelpersAreLoadedLazily(): void
     {
         $functions = file_get_contents(__DIR__ . '/../app/functions.php');

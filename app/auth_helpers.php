@@ -129,12 +129,14 @@ function current_user(): ?array
     }
 
     $memberColumns = ['id'];
-    foreach (['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required', 'password_reset_forced_at'] as $memberColumn) {
+    $hasAuthUserIdColumn = table_has_column('members', 'auth_user_id');
+    foreach (['auth_user_id', 'callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required', 'password_reset_forced_at'] as $memberColumn) {
         if (table_has_column('members', $memberColumn)) {
             $memberColumns[] = $memberColumn;
         }
     }
-    if ($authUserId > 0 && table_has_column('members', 'auth_user_id')) {
+    $lookupByAuthUserId = $authUserId > 0 && $hasAuthUserIdColumn;
+    if ($lookupByAuthUserId) {
         $where = 'auth_user_id = ?';
         $params = [$authUserId];
     } else {
@@ -146,6 +148,30 @@ function current_user(): ?array
         $stmt = db()->prepare('SELECT ' . implode(', ', $memberColumns) . ' FROM members WHERE ' . $where . ' LIMIT 1');
         $stmt->execute($params);
         $row = $stmt->fetch();
+
+        if ((!is_array($row) || $row === []) && $lookupByAuthUserId) {
+            $authUsername = strtoupper(trim((string) $authClient->getUsername()));
+            if ($authUsername !== '') {
+                $fallbackStmt = db()->prepare('SELECT ' . implode(', ', $memberColumns) . ' FROM members WHERE UPPER(callsign) = ? LIMIT 1');
+                $fallbackStmt->execute([$authUsername]);
+                $fallbackRow = $fallbackStmt->fetch();
+                if (is_array($fallbackRow) && (int) ($fallbackRow['is_active'] ?? 0) === 1) {
+                    $linkedAuthUserId = (int) ($fallbackRow['auth_user_id'] ?? 0);
+                    $canUseFallbackRow = $linkedAuthUserId === $authUserId;
+                    if ($linkedAuthUserId === 0) {
+                        $repairStmt = db()->prepare('UPDATE members SET auth_user_id = ? WHERE id = ? AND (auth_user_id IS NULL OR auth_user_id = 0) LIMIT 1');
+                        $repairStmt->execute([$authUserId, (int) $fallbackRow['id']]);
+                        $canUseFallbackRow = $repairStmt->rowCount() > 0;
+                        if ($canUseFallbackRow) {
+                            $fallbackRow['auth_user_id'] = $authUserId;
+                        }
+                    }
+                    if ($canUseFallbackRow) {
+                        $row = $fallbackRow;
+                    }
+                }
+            }
+        }
     } catch (Throwable) {
         $cache = null;
         return null;
