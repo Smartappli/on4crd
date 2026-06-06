@@ -639,6 +639,52 @@ function member_profile_licence_class_options_html(callable $t, string $currentV
 }
 }
 
+if (!function_exists('member_profile_qsl_via_choices')) {
+/**
+ * @return array<string, string>
+ */
+function member_profile_qsl_via_choices(callable $t): array
+{
+    return [
+        '' => '',
+        'bureau' => (string) $t('qsl_choice_bureau'),
+        'direct' => (string) $t('qsl_choice_direct'),
+        'bureau_direct' => (string) $t('qsl_choice_bureau_direct'),
+        'lotw' => (string) $t('qsl_choice_lotw'),
+        'eqsl' => (string) $t('qsl_choice_eqsl'),
+        'lotw_eqsl' => (string) $t('qsl_choice_lotw_eqsl'),
+        'qrz' => (string) $t('qsl_choice_qrz'),
+        'manager' => (string) $t('qsl_choice_manager'),
+        'no_qsl' => (string) $t('qsl_choice_no_qsl'),
+        'other' => (string) $t('qsl_choice_other'),
+    ];
+}
+}
+
+if (!function_exists('member_profile_qsl_via_options_html')) {
+function member_profile_qsl_via_options_html(callable $t, string $currentValue = ''): string
+{
+    $currentValue = trim($currentValue);
+    $choices = member_profile_qsl_via_choices($t);
+
+    $html = '';
+    $hasCurrentValue = $currentValue === '';
+    foreach ($choices as $value => $label) {
+        if ($value === $currentValue) {
+            $hasCurrentValue = true;
+        }
+
+        $html .= '<option value="' . e($value) . '"' . ($value === $currentValue ? ' selected' : '') . '>' . e($label) . '</option>';
+    }
+
+    if (!$hasCurrentValue) {
+        $html .= '<option value="' . e($currentValue) . '" selected>' . e($currentValue) . '</option>';
+    }
+
+    return $html;
+}
+}
+
 if (!function_exists('member_profile_favourite_band_choices')) {
 /**
  * @return list<string>
@@ -798,7 +844,7 @@ function member_profile_visibility_fields(callable $t): array
 
 if (!function_exists('member_profile_preview_fields')) {
 /**
- * @return array<string, array{label:string, visibility:string, type?:string}>
+ * @return array<string, array{label:string, visibility:string, type?:string, choices?:array<string, string>}>
  */
 function member_profile_preview_fields(callable $t): array
 {
@@ -816,7 +862,7 @@ function member_profile_preview_fields(callable $t): array
         'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_operator_since'],
         'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_country'],
         'itu_zone' => ['label' => (string) $t('itu_zone'), 'visibility' => 'visibility_country'],
-        'qsl_via' => ['label' => (string) $t('qsl_via'), 'visibility' => 'visibility_qsl'],
+        'qsl_via' => ['label' => (string) $t('qsl_via'), 'visibility' => 'visibility_qsl', 'type' => 'choice', 'choices' => member_profile_qsl_via_choices($t)],
         'lotw_username' => ['label' => (string) $t('lotw_username'), 'visibility' => 'visibility_qsl'],
         'eqsl_username' => ['label' => (string) $t('eqsl_username'), 'visibility' => 'visibility_qsl'],
         'qrz_url' => ['label' => (string) $t('qrz_url'), 'visibility' => 'visibility_qrz', 'type' => 'url'],
@@ -859,7 +905,7 @@ function member_directory_card_has_visible_content(array $member, array $visible
 if (!function_exists('member_profile_display_row')) {
 /**
  * @param array<string, mixed> $member
- * @param array{label:string, visibility:string, type?:string} $fieldMeta
+ * @param array{label:string, visibility:string, type?:string, choices?:array<string, string>} $fieldMeta
  * @return array{label:string, text:string, html:string}|null
  */
 function member_profile_display_row(array $member, string $fieldName, array $fieldMeta): ?array
@@ -880,6 +926,13 @@ function member_profile_display_row(array $member, string $fieldName, array $fie
 
     if ($type === 'country') {
         return ['label' => (string) $fieldMeta['label'], 'text' => $text, 'html' => member_country_html($text)];
+    }
+
+    if ($type === 'choice') {
+        $choices = is_array($fieldMeta['choices'] ?? null) ? $fieldMeta['choices'] : [];
+        $displayText = (string) ($choices[$text] ?? $text);
+
+        return ['label' => (string) $fieldMeta['label'], 'text' => $displayText, 'html' => e($displayText)];
     }
 
     if ($type === 'url') {

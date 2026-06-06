@@ -227,6 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html('');
 $licenceClassOptionsHtml = member_profile_licence_class_options_html($t);
+$qslViaOptionsHtml = member_profile_qsl_via_options_html($t);
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices());
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices());
 
@@ -249,7 +250,7 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('cq_zone')) . '<input type="text" name="cq_zone" maxlength="16"></label>'
     . '<label>' . e($t('itu_zone')) . '<input type="text" name="itu_zone" maxlength="16"></label>'
     . '<p class="help register-form-full">' . e($t('auto_radio_location_help')) . '</p>'
-    . '<label>' . e($t('qsl_via')) . '<input type="text" name="qsl_via" maxlength="190"></label>'
+    . '<label>' . e($t('qsl_via')) . '<select name="qsl_via">' . $qslViaOptionsHtml . '</select></label>'
     . '<label>' . e($t('eqsl_username')) . '<input type="text" name="eqsl_username" maxlength="190"></label>'
     . '<label>' . e($t('website')) . '<input type="url" name="website" maxlength="255"></label>'
     . '<label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" data-uba-member-toggle> <span>' . e($t('uba_member')) . '</span></label>'

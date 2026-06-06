@@ -234,6 +234,7 @@ $profilePhotoPreviewSrc = member_avatar_src($member);
 $operatorSinceValue = trim((string) ($member['operator_since'] ?? ''));
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html($operatorSinceValue !== '' ? $operatorSinceValue : (string) date('Y'));
 $licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member['licence_class'] ?? ''));
+$qslViaOptionsHtml = member_profile_qsl_via_options_html($t, (string) ($member['qsl_via'] ?? ''));
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices(), (string) ($member['favourite_bands'] ?? ''));
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices(), (string) ($member['favourite_modes'] ?? ''));
 $requiredFieldHelp = $locale === 'fr' ? 'Champ obligatoire.' : 'Required field.';
@@ -335,7 +336,7 @@ ob_start();
                 <label><?= $helpFieldLabel($t('cq_zone'), 'profile-cq-zone-help', $t('cq_zone_help')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('itu_zone'), 'profile-itu-zone-help', $t('itu_zone_help')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
                 <p class="help profile-form-wide"><?= e($t('auto_radio_location_help')) ?></p>
-                <label><?= $helpFieldLabel($t('qsl_via'), 'profile-qsl-via-help', $t('qsl_via_help')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('qsl_via'), 'profile-qsl-via-help', $t('qsl_via_help')) ?><select name="qsl_via"><?= $qslViaOptionsHtml ?></select></label>
                 <label><?= $helpFieldLabel($t('eqsl_username'), 'profile-eqsl-help', $t('eqsl_username_help')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
                 <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble profile-help-bubble-right" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" name="qrz_url" maxlength="255" value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('website'), 'profile-website-help', $t('website_help')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
