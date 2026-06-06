@@ -52,6 +52,9 @@
   if (!form) {
     return;
   }
+  if (String(form.getAttribute('method') || '').toLowerCase() !== 'dialog') {
+    return;
+  }
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
