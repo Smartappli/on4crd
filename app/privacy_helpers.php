@@ -821,7 +821,8 @@ if (!function_exists('privacy_update_members_for_erasure')) {
         $set('callsign', 'ERASED' . $memberId);
         $set('full_name', 'Compte supprime ' . $memberId);
         $set('password_hash', password_hash(bin2hex(random_bytes(24)), PASSWORD_DEFAULT));
-        $set('password_change_required', 1);
+        $set('password_change_required', 0);
+        $set('password_reset_forced_at', null);
         $set('is_active', 0);
         $set('is_committee', 0);
         $set('committee_sort_order', 100);
