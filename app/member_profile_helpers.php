@@ -617,6 +617,7 @@ function member_profile_licence_class_options_html(callable $t, string $currentV
         'ONL' => (string) $t('licence_onl'),
         'ON3' => (string) $t('licence_base'),
         'ON2' => (string) $t('licence_intermediate'),
+        'ON1' => (string) $t('licence_on1'),
         'HAREC' => (string) $t('licence_harec'),
         'Autre' => (string) $t('licence_other'),
     ];
