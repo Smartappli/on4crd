@@ -61,6 +61,10 @@ $sourceDefinitions = [
     'classifieds' => ['label' => (string) ($t['source_classifieds'] ?? 'Classifieds')],
     'albums' => ['label' => (string) ($t['source_albums'] ?? 'Albums')],
 ];
+$classifiedsSearchVisible = module_enabled('classifieds') && module_visible_for_current_user('classifieds');
+if (!$classifiedsSearchVisible) {
+    unset($sourceDefinitions['classifieds']);
+}
 $source = strtolower(trim((string) ($_GET['source'] ?? 'all')));
 if (!isset($sourceDefinitions[$source])) {
     $source = 'all';
@@ -73,7 +77,7 @@ $perPage = 10;
 $results = [];
 
 if ($hasQuery && $isQueryLongEnough) {
-    $cacheKey = 'site_search_v2_' . current_locale() . '_' . md5(mb_strtolower($q));
+    $cacheKey = 'site_search_v3_' . current_locale() . '_' . ($classifiedsSearchVisible ? 'classifieds_visible' : 'classifieds_hidden') . '_' . md5(mb_strtolower($q));
     $results = cache_remember($cacheKey, 120, static function () use ($q, $tokens, $locale): array {
         $like = '%' . $q . '%';
         $queryLikes = array_map(static fn(string $term): string => '%' . $term . '%', $tokens);

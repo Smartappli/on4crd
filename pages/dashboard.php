@@ -32,8 +32,8 @@ if (table_exists('articles')) {
         ];
     }
 }
-if (table_exists('classified_ads')) {
-    $rows = db()->query('SELECT title, created_at FROM classified_ads WHERE status = "active" ORDER BY created_at DESC LIMIT 6')->fetchAll() ?: [];
+if (module_enabled('classifieds') && module_visible_for_current_user('classifieds') && table_exists('classified_ads')) {
+    $rows = db()->query('SELECT title, created_at FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' ORDER BY created_at DESC LIMIT 6')->fetchAll() ?: [];
     foreach ($rows as $row) {
         $title = trim((string) ($row['title'] ?? ''));
         $timelineItems[] = [

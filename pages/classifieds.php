@@ -24,31 +24,13 @@ $categories = [
     'wanted' => $t('category_wanted'),
     'service' => $t('category_service'),
 ];
-$statuses = [
-    'draft' => $t('status_draft'),
-    'pending' => $t('status_pending'),
-    'active' => $t('status_active'),
-    'sold' => $t('status_sold'),
-    'archived' => $t('status_archived'),
-    'expired' => $t('status_expired'),
-];
 
 $user = current_user();
-$editing = null;
-if ($user !== null && !empty($_GET['edit'])) {
-    $stmt = db()->prepare('SELECT * FROM classified_ads WHERE id = ? AND owner_member_id = ? LIMIT 1');
-    $stmt->execute([(int) $_GET['edit'], (int) $user['id']]);
-    $editing = $stmt->fetch() ?: null;
-    if ($editing === null) {
-        set_flash('error', $t('missing'));
-        redirect_url(route_url('classifieds'));
-    }
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
-        $action = (string) ($_POST['action'] ?? 'save');
+        $action = (string) ($_POST['action'] ?? '');
 
         if ($action === 'propose_category') {
             $user = require_login();
@@ -92,79 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $user = require_login();
 
-        if ($action === 'save') {
-            $id = (int) ($_POST['id'] ?? 0);
-            $category = (string) ($_POST['category_code'] ?? 'gear');
-            $title = trim((string) ($_POST['title'] ?? ''));
-            $description = trim((string) ($_POST['description'] ?? ''));
-            $location = trim((string) ($_POST['location'] ?? ''));
-            $contact = trim((string) ($_POST['contact'] ?? ''));
-            $priceCents = max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0')));
-            $requestedStatus = classifieds_member_publication_status((string) ($_POST['status'] ?? 'draft'));
-            classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, $t('invalid'));
-
-            if ($id > 0) {
-                if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
-                    throw new RuntimeException($t('missing'));
-                }
-                $expiresAt = null;
-                if ($requestedStatus === 'active') {
-                    $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
-                }
-                $stmt = db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-                $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt, $id, (int) $user['id']]);
-                set_flash('success', $t('updated_ok'));
-            } else {
-                classifieds_enforce_submission_limits((int) $user['id'], [
-                    'invalid_user' => $t('limit_invalid_user'),
-                    'rate_limited' => $t('limit_rate_limited'),
-                    'daily_limit' => $t('limit_daily'),
-                ]);
-                $expiresAt = null;
-                if ($requestedStatus === 'active') {
-                    $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
-                }
-                $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-                $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt]);
-                set_flash('success', $t('created_ok'));
-            }
-        }
-
-        if ($action === 'set_status') {
-            $id = (int) ($_POST['id'] ?? 0);
-            if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
-                throw new RuntimeException($t('missing'));
-            }
-            $status = (string) ($_POST['status'] ?? 'active');
-            if (!in_array($status, ['draft', 'pending', 'active', 'sold', 'archived'], true)) {
-                throw new RuntimeException($t('invalid'));
-            }
-            $status = classifieds_member_publication_status($status);
-            $expiresAt = null;
-            if ($status === 'active') {
-                $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
-            }
-            $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-            $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
-            set_flash('success', $t('status_ok'));
-        }
-
-        if ($action === 'renew') {
-            $id = (int) ($_POST['id'] ?? 0);
-            if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
-                throw new RuntimeException($t('missing'));
-            }
-            $status = has_permission('ads.moderate') ? 'active' : 'pending';
-            $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
-            $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-            $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
-            set_flash('success', $t('renewed_ok'));
-        }
-
         if ($action === 'toggle_favorite') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id > 0) {
-                $adStmt = db()->prepare('SELECT id, title FROM classified_ads WHERE id = ? AND status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) LIMIT 1');
+                $adStmt = db()->prepare('SELECT id, title FROM classified_ads WHERE id = ? AND ' . classifieds_active_where_sql() . ' LIMIT 1');
                 $adStmt->execute([$id]);
                 $adRow = $adStmt->fetch() ?: null;
                 if ($adRow !== null) {
@@ -175,6 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     set_flash('success', $saved ? $t('favorite_added_msg') : $t('favorite_removed_msg'));
                 }
             }
+        } else {
+            throw new RuntimeException($t('invalid'));
         }
 
         redirect_url(route_url('classifieds'));
@@ -191,7 +106,7 @@ if (mb_strlen($query) > 120) {
 }
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
-$where = ["ca.status = 'active'", '(ca.expires_at IS NULL OR ca.expires_at >= NOW())'];
+$where = [classifieds_active_where_sql('ca')];
 $params = [];
 
 if (isset($categories[$categoryFilter])) {
@@ -220,7 +135,7 @@ $adsStmt->execute($params);
 $allAds = $adsStmt->fetchAll() ?: [];
 
 $activeCategoryCounts = array_fill_keys(array_keys($categories), 0);
-$categoryCountStmt = db()->query("SELECT category_code, COUNT(*) AS total FROM classified_ads WHERE status = 'active' AND (expires_at IS NULL OR expires_at >= NOW()) GROUP BY category_code");
+$categoryCountStmt = db()->query('SELECT category_code, COUNT(*) AS total FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' GROUP BY category_code');
 foreach (($categoryCountStmt ? ($categoryCountStmt->fetchAll() ?: []) : []) as $countRow) {
     $code = (string) ($countRow['category_code'] ?? '');
     if (array_key_exists($code, $activeCategoryCounts)) {

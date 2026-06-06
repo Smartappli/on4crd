@@ -25,17 +25,59 @@ function ensure_classified_ads_table(): bool
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
 
-        $columnStmt = db()->prepare(
-            'SELECT COUNT(*) FROM information_schema.columns
-             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
-        );
-
-        $columnStmt->execute(['classified_ads', 'expires_at']);
-        if ((int) $columnStmt->fetchColumn() === 0) {
+        if (!table_has_column('classified_ads', 'owner_member_id')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN owner_member_id INT NOT NULL DEFAULT 0 AFTER id');
+        }
+        if (!table_has_column('classified_ads', 'category_code')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN category_code VARCHAR(32) NOT NULL DEFAULT "gear" AFTER owner_member_id');
+        }
+        if (!table_has_column('classified_ads', 'title')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Classified ad" AFTER category_code');
+        }
+        if (!table_has_column('classified_ads', 'description')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN description TEXT DEFAULT NULL AFTER title');
+        }
+        if (!table_has_column('classified_ads', 'location')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN location VARCHAR(120) DEFAULT NULL AFTER description');
+        }
+        if (!table_has_column('classified_ads', 'contact')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN contact VARCHAR(190) DEFAULT NULL AFTER location');
+        }
+        if (!table_has_column('classified_ads', 'price_cents')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN price_cents INT NOT NULL DEFAULT 0 AFTER contact');
+        }
+        if (!table_has_column('classified_ads', 'status')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft" AFTER price_cents');
+        }
+        if (!table_has_column('classified_ads', 'expires_at')) {
             db()->exec('ALTER TABLE classified_ads ADD COLUMN expires_at DATETIME NULL DEFAULT NULL AFTER status');
         }
+        if (!table_has_column('classified_ads', 'created_at')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER expires_at');
+        }
+        if (!table_has_column('classified_ads', 'updated_at')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at');
+        }
 
+        db()->exec('UPDATE classified_ads SET category_code = "gear" WHERE category_code IS NULL OR category_code = ""');
+        db()->exec('UPDATE classified_ads SET title = "Classified ad" WHERE title IS NULL OR title = ""');
+        db()->exec('UPDATE classified_ads SET price_cents = 0 WHERE price_cents IS NULL OR price_cents < 0');
         db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
+        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN category_code VARCHAR(32) NOT NULL DEFAULT "gear"');
+        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN title VARCHAR(190) NOT NULL');
+        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN location VARCHAR(120) DEFAULT NULL');
+        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN contact VARCHAR(190) DEFAULT NULL');
+        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN price_cents INT NOT NULL DEFAULT 0');
+
+        if (!table_has_index('classified_ads', 'idx_classified_owner_status')) {
+            db()->exec('ALTER TABLE classified_ads ADD INDEX idx_classified_owner_status (owner_member_id, status)');
+        }
+        if (!table_has_index('classified_ads', 'idx_classified_status_created')) {
+            db()->exec('ALTER TABLE classified_ads ADD INDEX idx_classified_status_created (status, created_at)');
+        }
+        if (!table_has_index('classified_ads', 'idx_classified_expires')) {
+            db()->exec('ALTER TABLE classified_ads ADD INDEX idx_classified_expires (expires_at)');
+        }
 
         return true;
     } catch (Throwable $throwable) {
@@ -168,6 +210,29 @@ function wiki_unique_slug(string $title, string $slugInput = '', int $ignoreId =
     } while ($suffix < 10000);
 
     throw new RuntimeException('Impossible de générer un slug wiki unique.');
+}
+}
+
+if (!function_exists('classifieds_active_where_sql')) {
+function classifieds_active_where_sql(string $alias = ''): string
+{
+    $prefix = '';
+    if ($alias !== '' && preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $alias) === 1) {
+        $prefix = $alias . '.';
+    }
+
+    return $prefix . 'status = "active" AND (' . $prefix . 'expires_at IS NULL OR ' . $prefix . 'expires_at >= NOW())';
+}
+}
+
+if (!function_exists('classifieds_expires_at_for_status')) {
+function classifieds_expires_at_for_status(string $status, ?int $now = null): ?string
+{
+    if ($status !== 'active') {
+        return null;
+    }
+
+    return date('Y-m-d H:i:s', ($now ?? time()) + (30 * 86400));
 }
 }
 

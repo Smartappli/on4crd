@@ -202,6 +202,35 @@ final class FunctionHelpersExtendedTest extends TestCase
         classifieds_validate_payload('gear', str_repeat('x', 191), 'Description', 'Namur', 'contact@example.test', $categories, 'Invalid');
     }
 
+    public function testClassifiedsActiveWhereSqlSupportsOptionalAlias(): void
+    {
+        self::assertSame(
+            'status = "active" AND (expires_at IS NULL OR expires_at >= NOW())',
+            classifieds_active_where_sql()
+        );
+        self::assertSame(
+            'ca.status = "active" AND (ca.expires_at IS NULL OR ca.expires_at >= NOW())',
+            classifieds_active_where_sql('ca')
+        );
+    }
+
+    public function testClassifiedsExpirationAppliesOnlyToActiveStatus(): void
+    {
+        self::assertSame('2026-06-07 12:00:00', classifieds_expires_at_for_status('active', strtotime('2026-05-08 12:00:00')));
+        self::assertNull(classifieds_expires_at_for_status('pending', strtotime('2026-05-08 12:00:00')));
+    }
+
+    public function testParsePriceToCentsHandlesEuropeanAndUsSeparators(): void
+    {
+        self::assertSame(1250, parse_price_to_cents('12,50'));
+        self::assertSame(1250, parse_price_to_cents('12.50'));
+        self::assertSame(123456, parse_price_to_cents('1 234,56'));
+        self::assertSame(123456, parse_price_to_cents('1.234,56'));
+        self::assertSame(123456, parse_price_to_cents('1,234.56'));
+        self::assertSame(123400, parse_price_to_cents('1.234'));
+        self::assertSame(0, parse_price_to_cents('-12,50'));
+    }
+
     public function testPasswordChangeRequiredRequiresAdminForcedMarker(): void
     {
         self::assertFalse(member_password_change_required([
