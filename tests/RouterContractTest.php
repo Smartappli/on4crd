@@ -646,6 +646,19 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('<option value="ON2">ON2</option>', $register);
     }
 
+    public function testGdprReusesProfileFieldsAndVisibilitySettings(): void
+    {
+        $gdpr = file_get_contents(__DIR__ . '/../pages/gdpr.php');
+        self::assertIsString($gdpr);
+
+        self::assertStringContainsString('member_profile_select_columns_sql()', $gdpr);
+        self::assertStringContainsString('member_profile_visibility_fields($t)', $gdpr);
+        self::assertStringContainsString('member_profile_preview_rows($member, (string) $viewer, $t, true)', $gdpr);
+        self::assertStringContainsString('$gt(\'profile_data_title\')', $gdpr);
+        self::assertStringContainsString('$gt(\'profile_data_help\')', $gdpr);
+        self::assertStringContainsString('gdpr-callsign', $gdpr);
+    }
+
     public function testProfileAndRegisterUseSharedQslViaChoices(): void
     {
         $profile = file_get_contents(__DIR__ . '/../pages/profile.php');

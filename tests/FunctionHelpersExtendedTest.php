@@ -426,6 +426,7 @@ final class FunctionHelpersExtendedTest extends TestCase
             'licence_onl' => 'ONL',
             'licence_base' => 'Licence de base',
             'licence_intermediate' => 'Licence intermédiaire',
+            'licence_on1' => 'ON1',
             'licence_harec' => 'HAREC',
             'licence_other' => 'Autre',
         ][$key] ?? $key;
@@ -436,6 +437,8 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('Licence intermédiaire', $html);
         self::assertStringContainsString('value="ON3"', $html);
         self::assertStringContainsString('Licence de base', $html);
+        self::assertStringContainsString('value="ON1"', $html);
+        self::assertStringContainsString('>ON1</option>', $html);
         self::assertStringNotContainsString('>ON2</option>', $html);
         self::assertStringNotContainsString('>ON3</option>', $html);
     }
@@ -560,6 +563,53 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('QSL via', $rows[0]['label']);
         self::assertSame('Pas de QSL', $rows[0]['text']);
         self::assertSame('Pas de QSL', $rows[0]['html']);
+    }
+
+    public function testMemberProfileSelectColumnsCoverProfileAndGdprFields(): void
+    {
+        $selectSql = member_profile_select_columns_sql();
+        foreach ([
+            'callsign',
+            'first_name',
+            'last_name',
+            'full_name',
+            'email',
+            'phone',
+            'country',
+            'address',
+            'postal_code',
+            'qth',
+            'locator',
+            'licence_class',
+            'operator_since',
+            'cq_zone',
+            'itu_zone',
+            'qsl_via',
+            'lotw_username',
+            'eqsl_username',
+            'qrz_url',
+            'website',
+            'is_uba_member',
+            'uba_member_number',
+            'station_equipment',
+            'antennas',
+            'favourite_bands',
+            'favourite_modes',
+            'interests',
+            'photo_path',
+            'avatar_path',
+            'visibility_photo',
+            'visibility_licence_class',
+            'visibility_qsl',
+            'visibility_qrz',
+            'visibility_favourite_bands',
+            'visibility_favourite_modes',
+            'visibility_station',
+            'visibility_antennas',
+            'visibility_interests',
+        ] as $column) {
+            self::assertStringContainsString($column, $selectSql, sprintf('%s must be selected for profile/GDPR previews.', $column));
+        }
     }
 
     public function testMemberQrzSaveKeepsExistingUrlForSameCallsign(): void
