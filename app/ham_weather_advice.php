@@ -528,6 +528,24 @@ function render_ham_weather_advice(array $user = []): string
         ],
     ];
     $i18n = $messages[$locale] ?? $messages['fr'];
+    $propagationLabel = match ($locale) {
+        'en' => 'HF propagation:',
+        'de' => 'HF-Ausbreitung:',
+        'nl' => 'HF-propagatie:',
+        'es' => 'Propagacion HF:',
+        'it' => 'Propagazione HF:',
+        'pt' => 'Propagacao HF:',
+        default => 'Propagation HF :',
+    };
+    $propagationStates = match ($locale) {
+        'en' => ['quiet' => 'quiet', 'usable' => 'usable', 'disturbed' => 'disturbed', 'stormy' => 'stormy', 'unavailable' => 'unavailable'],
+        'de' => ['quiet' => 'ruhig', 'usable' => 'nutzbar', 'disturbed' => 'gestoert', 'stormy' => 'stuermisch', 'unavailable' => 'nicht verfuegbar'],
+        'nl' => ['quiet' => 'rustig', 'usable' => 'bruikbaar', 'disturbed' => 'verstoord', 'stormy' => 'stormachtig', 'unavailable' => 'niet beschikbaar'],
+        'es' => ['quiet' => 'tranquila', 'usable' => 'utilizable', 'disturbed' => 'perturbada', 'stormy' => 'tormentosa', 'unavailable' => 'no disponible'],
+        'it' => ['quiet' => 'calma', 'usable' => 'utilizzabile', 'disturbed' => 'disturbata', 'stormy' => 'tempestosa', 'unavailable' => 'non disponibile'],
+        'pt' => ['quiet' => 'calma', 'usable' => 'utilizavel', 'disturbed' => 'perturbada', 'stormy' => 'tempestuosa', 'unavailable' => 'indisponivel'],
+        default => ['quiet' => 'calme', 'usable' => 'exploitable', 'disturbed' => 'perturbee', 'stormy' => 'orage magnetique', 'unavailable' => 'indisponible'],
+    };
     $defaultLocator = 'JO20LI';
     $memberLocator = strtoupper(trim((string) ($user['locator'] ?? '')));
     if ($memberLocator === '' && isset($user['id']) && is_numeric($user['id']) && table_exists('members')) {
@@ -624,6 +642,17 @@ function render_ham_weather_advice(array $user = []): string
     $kpTrend = is_array($kpPayload) ? extract_kp_trend($kpPayload) : null;
     $kpTrendForScoring = is_numeric($kpTrend) ? (float) $kpTrend : 0.0;
     $kpForScoring = is_numeric($kp) ? (float) $kp : 3.0;
+    $propagationStateKey = match (true) {
+        !is_numeric($kp) => 'unavailable',
+        $kpForScoring <= 2.0 && $kpTrendForScoring < 0.8 => 'quiet',
+        $kpForScoring <= 4.0 => 'usable',
+        $kpForScoring <= 5.0 => 'disturbed',
+        default => 'stormy',
+    };
+    $propagationSummary = (string) ($propagationStates[$propagationStateKey] ?? $propagationStates['unavailable']);
+    if (is_numeric($kp)) {
+        $propagationSummary .= ' (Kp ' . number_format((float) $kp, 1, ',', '') . ')';
+    }
 
     $month = (int) gmdate('n');
     if ($localTime !== '') {
