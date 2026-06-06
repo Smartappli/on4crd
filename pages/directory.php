@@ -262,7 +262,6 @@ ob_start();
                 $operatorSince = trim((string) ($member['operator_since'] ?? ''));
                 $cqZone = trim((string) ($member['cq_zone'] ?? ''));
                 $ituZone = trim((string) ($member['itu_zone'] ?? ''));
-                $qslVia = member_profile_qsl_via_display_text($profileT, (string) ($member['qsl_via'] ?? ''));
                 $eqslUsername = trim((string) ($member['eqsl_username'] ?? ''));
                 $interests = trim((string) ($member['interests'] ?? ''));
                 $bands = trim((string) ($member['favourite_bands'] ?? ''));
@@ -280,8 +279,8 @@ ob_start();
                     }
                 };
                 $postalCodeRow = member_profile_display_row($member, 'postal_code', $profilePreviewFields['postal_code']);
+                $qslViaRow = member_profile_display_row($member, 'qsl_via', $profilePreviewFields['qsl_via']);
                 $addDetail((string) $profileT('address'), $address);
-                $addDetail((string) $profileT('qsl_via'), $qslVia);
                 $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
                 $addDetail((string) $profileT('interests'), $interests);
                 ?>
@@ -332,6 +331,9 @@ ob_start();
                         <?php endif; ?>
                         <?php if ($grid !== ''): ?>
                             <span><?= e($t('grid')) ?> <?= e($grid) ?></span>
+                        <?php endif; ?>
+                        <?php if ($qslViaRow !== null): ?>
+                            <span><?= e((string) $qslViaRow['label']) ?> <?= e((string) $qslViaRow['text']) ?></span>
                         <?php endif; ?>
                         <?php if ($cqZone !== ''): ?>
                             <span><?= e($profileT('cq_zone')) ?> <?= e($cqZone) ?></span>
