@@ -57,7 +57,7 @@ $xml = cache_remember('seo_sitemap_xml_v6', 300, static function (): string {
 
     foreach ($staticRoutes as $row) {
         $module = (string) ($row['module'] ?? '');
-        if ($module !== '' && !module_enabled($module)) {
+        if ($module !== '' && (!module_enabled($module) || !module_visible_for_current_user($module))) {
             continue;
         }
 

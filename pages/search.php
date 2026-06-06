@@ -241,7 +241,7 @@ if ($hasQuery && $isQueryLongEnough) {
             }
         }
 
-        if ($shouldSearch('classifieds') && table_exists('classified_ads')) {
+        if ($shouldSearch('classifieds') && module_enabled('classifieds') && module_visible_for_current_user('classifieds') && table_exists('classified_ads')) {
             try {
                 $where = '(title LIKE ? OR description LIKE ? OR location LIKE ?)';
                 $params = [$like, $like, $like];
@@ -249,7 +249,7 @@ if ($hasQuery && $isQueryLongEnough) {
                     $where .= ' OR (title LIKE ? OR description LIKE ? OR location LIKE ?)';
                     array_push($params, $termLike, $termLike, $termLike);
                 }
-                $stmt = db()->prepare('SELECT title, description, location, price_cents FROM classified_ads WHERE status = "active" AND (' . $where . ') ORDER BY updated_at DESC LIMIT 35');
+                $stmt = db()->prepare('SELECT title, description, location, price_cents FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' AND (' . $where . ') ORDER BY updated_at DESC LIMIT 35');
                 $stmt->execute($params);
                 foreach ($stmt->fetchAll() ?: [] as $row) {
                     $title = trim((string) ($row['title'] ?? ''));

@@ -89,8 +89,8 @@ function member_personalized_recommendations(int $memberId, int $limit = 6): arr
     }
 
     $wantsClassifieds = $signalPrefs['classified'] && (isset($seedTypes['classified_ad']) || $seedTypes === []);
-    if ($wantsClassifieds && table_exists('classified_ads')) {
-        $stmt = db()->query('SELECT id, title, created_at FROM classified_ads WHERE status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) ORDER BY created_at DESC, id DESC LIMIT 12');
+    if ($wantsClassifieds && module_enabled('classifieds') && module_visible_for_current_user('classifieds') && table_exists('classified_ads')) {
+        $stmt = db()->query('SELECT id, title, created_at FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' ORDER BY created_at DESC, id DESC LIMIT 12');
         foreach (($stmt->fetchAll() ?: []) as $row) {
             $id = (int) ($row['id'] ?? 0);
             if ($id <= 0) {

@@ -375,9 +375,9 @@ try {
         });
     }
 
-    if (module_enabled('classifieds') && table_exists('classified_ads')) {
+    if (module_enabled('classifieds') && module_visible_for_current_user('classifieds') && table_exists('classified_ads')) {
         $latestClassifiedAd = cache_remember('home_latest_classified_ad_v1', 60, static function () {
-            return db()->query('SELECT title, description, location, price_cents, created_at FROM classified_ads WHERE status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) ORDER BY created_at DESC, id DESC LIMIT 1')->fetch();
+            return db()->query('SELECT title, description, location, price_cents, created_at FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' ORDER BY created_at DESC, id DESC LIMIT 1')->fetch();
         });
     }
 
