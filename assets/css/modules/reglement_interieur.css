@@ -2,3 +2,37 @@
 [data-route="reglement_interieur"] .reglement-interieur-module {
   min-width: 0;
 }
+
+[data-route="reglement_interieur"] .reglement-interieur-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 34%);
+  gap: 1.25rem;
+  align-items: center;
+}
+
+[data-route="reglement_interieur"] .reglement-interieur-hero-copy {
+  min-width: 0;
+}
+
+[data-route="reglement_interieur"] .reglement-interieur-illustration {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel-2);
+  box-shadow: var(--shadow);
+}
+
+[data-route="reglement_interieur"] .reglement-interieur-illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+@media (max-width: 760px) {
+  [data-route="reglement_interieur"] .reglement-interieur-hero {
+    grid-template-columns: 1fr;
+  }
+}
