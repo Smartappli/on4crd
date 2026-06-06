@@ -292,7 +292,7 @@ final class FunctionHelpersTest extends TestCase
         self::assertArrayHasKey('ham_weather_advice', $catalog);
         self::assertStringContainsString("case 'ham_weather_advice':", $renderer);
         self::assertStringContainsString('render_ham_weather_advice($user)', $renderer);
-        self::assertStringContainsString("array_merge(['welcome', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog()))", $dashboard);
+        self::assertStringContainsString("array_merge(['welcome', 'radio_clocks', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog()))", $dashboard);
     }
 
     public function testHamWeatherAdviceWidgetHidesHeadingAndCalculationDetails(): void
@@ -379,6 +379,24 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString("'rain' => 'Pluie'", $renderer);
     }
 
+    public function testDashboardClockWidgetUsesHomeLiveClockMarkupAndPropagationIsRemoved(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        self::assertIsString($renderer);
+        self::assertIsString($dashboard);
+
+        self::assertArrayHasKey('radio_clocks', $catalog);
+        self::assertArrayNotHasKey('propagation', $catalog);
+        self::assertStringContainsString("case 'radio_clocks':", $renderer);
+        self::assertStringNotContainsString("case 'propagation':", $renderer);
+        self::assertStringContainsString('data-live-date data-timezone="UTC"', $renderer);
+        self::assertStringContainsString('data-live-clock data-timezone="local"', $renderer);
+        self::assertStringContainsString('$catalogHiddenWidgetKeys = [\'welcome\'];', $dashboard);
+        self::assertStringContainsString('!in_array($key, $catalogHiddenWidgetKeys, true)', $dashboard);
+    }
+
     public function testDashboardWidgetCatalogScrollsFromLeftInsidePanel(): void
     {
         $css = file_get_contents(__DIR__ . '/../assets/css/app.css');
@@ -401,11 +419,11 @@ final class FunctionHelpersTest extends TestCase
         foreach (array_keys(hamqsl_widget_catalog()) as $hamqslKey) {
             self::assertArrayHasKey($hamqslKey, $catalog);
         }
-        foreach (['club_status', 'events', 'quick_links'] as $removedKey) {
+        foreach (['club_status', 'events', 'quick_links', 'propagation'] as $removedKey) {
             self::assertArrayNotHasKey($removedKey, $catalog);
             self::assertStringNotContainsString("case '" . $removedKey . "':", $renderer);
         }
-        self::assertStringContainsString("\$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links'];", $dashboard);
+        self::assertStringContainsString("\$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links', 'propagation'];", $dashboard);
         self::assertStringContainsString('$hadLegacyUtilityWidget', $dashboard);
         self::assertStringContainsString('$radioDefaultWidgetKeys', $dashboard);
     }
