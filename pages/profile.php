@@ -232,6 +232,7 @@ foreach (array_keys($profileViews) as $viewer) {
 
 $operatorSinceValue = trim((string) ($member['operator_since'] ?? ''));
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html($operatorSinceValue !== '' ? $operatorSinceValue : (string) date('Y'));
+$licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member['licence_class'] ?? ''));
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices(), (string) ($member['favourite_bands'] ?? ''));
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices(), (string) ($member['favourite_modes'] ?? ''));
 $requiredFieldHelp = $locale === 'fr' ? 'Champ obligatoire.' : 'Required field.';
@@ -323,7 +324,7 @@ ob_start();
         <fieldset class="profile-fieldset">
             <legend><?= e($t('radio_section')) ?></legend>
             <div class="profile-form-grid">
-                <label><?= $helpFieldLabel($t('licence'), 'profile-licence-help', $t('licence_help')) ?><input type="text" name="licence_class" maxlength="64" value="<?= e((string) ($member['licence_class'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('licence'), 'profile-licence-help', $t('licence_help')) ?><select name="licence_class"><?= $licenceClassOptionsHtml ?></select></label>
                 <label><?= e($t('operator_since')) ?><select name="operator_since"><?= $operatorSinceOptionsHtml ?></select></label>
                 <label><?= $helpFieldLabel($t('cq_zone'), 'profile-cq-zone-help', $t('cq_zone_help')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('itu_zone'), 'profile-itu-zone-help', $t('itu_zone_help')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
