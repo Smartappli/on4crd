@@ -205,8 +205,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $authClient->loginWithUsername($callsign, $password);
-        session_regenerate_id(true);
-        $_SESSION['member_id'] = (int) $authClient->getUserId();
+        $memberRow = authenticated_member_row($authClient, (int) ($_SESSION['member_id'] ?? 0));
+        if ($memberRow === null) {
+            try {
+                $authClient->logOut();
+            } catch (Throwable) {
+                // The local session is cleared below even if the auth backend cannot update its tables.
+            }
+            unset($_SESSION['member_id']);
+            throw new RuntimeException($t('auth_unavailable'));
+        }
+        $_SESSION['member_id'] = (int) ($memberRow['id'] ?? 0);
 
         set_flash('success', $t('ok_created'));
         redirect(module_enabled('dashboard') ? 'dashboard' : 'home');

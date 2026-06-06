@@ -356,6 +356,9 @@ final class RouterContractTest extends TestCase
         self::assertIsString($authHelpers);
 
         self::assertStringContainsString('function authenticated_member_row(\\Delight\\Auth\\Auth $authClient, int $sessionMemberId = 0): ?array', $authHelpers);
+        self::assertStringContainsString('function authenticated_member_create_from_auth_user(\\Delight\\Auth\\Auth $authClient, string $authUsername): ?array', $authHelpers);
+        self::assertStringContainsString("preg_match('/^[A-Z0-9]{3,32}$/', \$authUsername)", $authHelpers);
+        self::assertStringContainsString('INSERT INTO members (', $authHelpers);
         self::assertStringContainsString('$authClient->getUsername()', $authHelpers);
         self::assertStringContainsString('UPPER(callsign) = ?', $authHelpers);
         self::assertStringContainsString('$linkedAuthUserId === $authUserId', $authHelpers);
@@ -372,6 +375,17 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("throw new RuntimeException((string) (\$t['member_unavailable'] ?? \$t['auth_unavailable']));", $login);
         self::assertStringContainsString("\$_SESSION['member_id'] = (int) (\$memberRow['id'] ?? 0);", $login);
         self::assertStringNotContainsString('session_regenerate_id(true);', $login);
+    }
+
+    public function testRegisterStoresResolvedMemberIdAfterAutoLogin(): void
+    {
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        self::assertIsString($register);
+
+        self::assertStringContainsString('authenticated_member_row($authClient', $register);
+        self::assertStringContainsString("\$_SESSION['member_id'] = (int) (\$memberRow['id'] ?? 0);", $register);
+        self::assertStringNotContainsString('session_regenerate_id(true);', $register);
+        self::assertStringNotContainsString("\$_SESSION['member_id'] = (int) \$authClient->getUserId();", $register);
     }
 
     public function testRouteSpecificHelpersAreLoadedLazily(): void
