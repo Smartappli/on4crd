@@ -230,6 +230,7 @@ foreach (array_keys($profileViews) as $viewer) {
     $profilePreviewRows[$viewer] = member_profile_preview_rows($member, (string) $viewer, $t);
 }
 
+$profilePhotoPreviewSrc = member_avatar_src($member);
 $operatorSinceValue = trim((string) ($member['operator_since'] ?? ''));
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html($operatorSinceValue !== '' ? $operatorSinceValue : (string) date('Y'));
 $licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member['licence_class'] ?? ''));
@@ -255,14 +256,13 @@ ob_start();
 ?>
 <div class="stack">
 <div class="card profile-hero">
-    <?php $avatarSrc = member_avatar_src($member); ?>
     <div class="profile-preview-views">
         <?php foreach ($profileViews as $viewer => $view): ?>
             <?php $canSeePhoto = member_profile_visibility_allows((string) $viewer, (string) ($member['visibility_photo'] ?? 'private')); ?>
             <section class="profile-preview-view">
                 <header>
                     <?php if ($canSeePhoto): ?>
-                        <img class="profile-preview-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
+                        <img class="profile-preview-avatar" src="<?= e($profilePhotoPreviewSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
                     <?php endif; ?>
                     <div>
                         <h2><?= e((string) $view['title']) ?></h2>
@@ -293,11 +293,17 @@ ob_start();
 
         <fieldset class="profile-fieldset">
             <legend><?= e($t('photo_section')) ?></legend>
-        <label>
-            <?= e($t('change_photo')) ?>
-            <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
-            <small class="help"><?= e($t('photo_help')) ?></small>
-        </label>
+            <div class="profile-photo-upload-grid">
+                <label class="profile-photo-upload-control">
+                    <?= e($t('change_photo')) ?>
+                    <input id="profile-photo-input" type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" data-profile-photo-input>
+                    <small class="help"><?= e($t('photo_help')) ?></small>
+                </label>
+                <figure class="profile-photo-preview-card" aria-label="<?= e($t('photo')) ?>">
+                    <img class="profile-photo-preview-image" src="<?= e($profilePhotoPreviewSrc) ?>" alt="<?= e($t('avatar_alt')) ?>" data-profile-photo-preview>
+                    <figcaption class="help"><?= e($t('photo')) ?></figcaption>
+                </figure>
+            </div>
         </fieldset>
 
         <fieldset class="profile-fieldset">
