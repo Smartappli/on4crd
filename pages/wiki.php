@@ -150,26 +150,24 @@ ob_start();
             <h1><?= e((string) $t['wiki_pages']) ?></h1>
             <p class="help"><?= e((string) $t['summary_fallback']) ?></p>
         </div>
-        <div class="wiki-hero-side">
-            <div class="wiki-dashboard wiki-hero-dashboard">
-                <article class="wiki-stat">
-                    <span><?= e((string) $t['wiki_pages']) ?></span>
-                    <strong><?= $totalPagesCount ?></strong>
-                </article>
-                <article class="wiki-stat">
-                    <span><?= e((string) $t['updated_pages']) ?></span>
-                    <strong><?= $updatedPagesCount ?></strong>
-                </article>
-                <article class="wiki-stat">
-                    <span><?= e((string) $t['revisions']) ?></span>
-                    <strong><?= $revisionCount ?></strong>
-                </article>
-            </div>
-            <div class="wiki-hero-actions">
-                <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Creer une categorie') : $tr('propose_theme', 'Proposer une thematique')) ?></a>
-                <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
-            </div>
+        <div class="wiki-hero-stats">
+            <article>
+                <span><?= e((string) $t['wiki_pages']) ?></span>
+                <strong><?= $totalPagesCount ?></strong>
+            </article>
+            <article>
+                <span><?= e((string) $t['updated_pages']) ?></span>
+                <strong><?= $updatedPagesCount ?></strong>
+            </article>
+            <article>
+                <span><?= e((string) $t['revisions']) ?></span>
+                <strong><?= $revisionCount ?></strong>
+            </article>
         </div>
+        <p class="actions wiki-hero-actions">
+            <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Creer une categorie') : $tr('propose_theme', 'Proposer une thematique')) ?></a>
+            <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
+        </p>
     </section>
 
     <dialog class="wiki-theme-dialog" id="wiki-theme-dialog" aria-labelledby="wiki-theme-dialog-title">
