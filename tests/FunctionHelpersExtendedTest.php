@@ -291,10 +291,15 @@ final class FunctionHelpersExtendedTest extends TestCase
     public function testMemberSharedContactEmailUsesUniqueAuthEmail(): void
     {
         $authEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4CRD');
+        $otherAuthEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON8CJ');
 
         self::assertNotSame('crdurnal@gmail.com', $authEmail);
+        self::assertNotSame('crdurnal@gmail.com', $otherAuthEmail);
+        self::assertNotSame($authEmail, $otherAuthEmail);
         self::assertStringStartsWith('on4crd-', $authEmail);
+        self::assertStringStartsWith('on8cj-', $otherAuthEmail);
         self::assertStringEndsWith('@local.invalid', $authEmail);
+        self::assertStringEndsWith('@local.invalid', $otherAuthEmail);
         self::assertSame('member@example.test', member_auth_email_for_contact_email('member@example.test', 'ON4CRD'));
     }
 

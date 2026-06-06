@@ -298,6 +298,23 @@ function apply_runtime_schema_updates(): void
             }
         }
 
+        $uniqueEmailIndexStmt = db()->prepare(
+            'SELECT index_name
+             FROM information_schema.statistics
+             WHERE table_schema = DATABASE()
+               AND table_name = "members"
+               AND non_unique = 0
+             GROUP BY index_name
+             HAVING GROUP_CONCAT(column_name ORDER BY seq_in_index SEPARATOR ",") = "email"'
+        );
+        $uniqueEmailIndexStmt->execute();
+        foreach ($uniqueEmailIndexStmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $indexName) {
+            $indexName = trim((string) $indexName);
+            if ($indexName !== '' && strcasecmp($indexName, 'PRIMARY') !== 0) {
+                db()->exec('ALTER TABLE members DROP INDEX `' . str_replace('`', '``', $indexName) . '`');
+            }
+        }
+
         $memberColumnsExist = static function (array $columnNames) use ($columnStmt): bool {
             foreach ($columnNames as $columnName) {
                 $columnStmt->execute(['members', $columnName]);
