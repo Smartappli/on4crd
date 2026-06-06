@@ -79,6 +79,8 @@ Vous pouvez personnaliser les variables via un fichier `.env` à la racine:
 - `DB_NAME`, `DB_USER`, `DB_PASS`, `DB_ROOT_PASS`
 - `APP_URL`
 - `ADMIN_CALLSIGN`, `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`
+- `AGROMET_API_TOKEN` pour alimenter la météo radioamateur via Agromet
+- `AGROMET_STATION_SIDS` pour choisir les stations Pameseb, par défaut `1,26`
 
 Exemple rapide:
 

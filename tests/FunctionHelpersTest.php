@@ -345,6 +345,21 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(0.1, $current['precipitation']);
         self::assertEqualsWithDelta(13.32, $current['wind_speed_10m'], 0.001);
         self::assertSame('2026-06-06T11:00:00+02:00', $current['time']);
+
+        $nestedPayload = [
+            'results' => [[
+                'datetime' => '2026-06-06T12:00:00+02:00',
+                'station' => ['sid' => 26],
+                'measurements' => [
+                    ['sensor' => ['code' => 'tsa'], 'value' => 15.2],
+                    ['sensor' => ['code' => 'hra'], 'value' => 87],
+                ],
+            ]],
+        ];
+        $nestedCurrent = ham_agromet_current_weather($nestedPayload);
+        self::assertIsArray($nestedCurrent);
+        self::assertSame(15.2, $nestedCurrent['temperature_2m']);
+        self::assertSame(87, $nestedCurrent['relative_humidity_2m']);
     }
 
     public function testDashboardWidgetCatalogScrollsFromLeftInsidePanel(): void

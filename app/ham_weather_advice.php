@@ -94,6 +94,14 @@ function ham_agromet_row_station(array $row): string
         if (is_scalar($value) && trim((string) $value) !== '') {
             return trim((string) $value);
         }
+        if (is_array($value)) {
+            foreach (['sid', 'id', 'code', 'name'] as $nestedKey) {
+                $nestedValue = $value[$nestedKey] ?? null;
+                if (is_scalar($nestedValue) && trim((string) $nestedValue) !== '') {
+                    return trim((string) $nestedValue);
+                }
+            }
+        }
     }
 
     return 'default';
@@ -114,14 +122,30 @@ function ham_agromet_numeric_value(array $row, string $sensor): ?float
     foreach (['data', 'values', 'measurements'] as $containerKey) {
         $container = $row[$containerKey] ?? null;
         if (is_array($container)) {
-            $value = ham_agromet_numeric_value($container, $sensor);
-            if ($value !== null) {
-                return $value;
+            if (array_is_list($container)) {
+                foreach ($container as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+                    $value = ham_agromet_numeric_value($item, $sensor);
+                    if ($value !== null) {
+                        return $value;
+                    }
+                }
+            } else {
+                $value = ham_agromet_numeric_value($container, $sensor);
+                if ($value !== null) {
+                    return $value;
+                }
             }
         }
     }
 
-    $rowSensor = strtolower(trim((string) ($row['sensor'] ?? $row['code'] ?? $row['parameter'] ?? $row['variable'] ?? '')));
+    $rowSensorRaw = $row['sensor'] ?? $row['code'] ?? $row['parameter'] ?? $row['variable'] ?? '';
+    if (is_array($rowSensorRaw)) {
+        $rowSensorRaw = $rowSensorRaw['code'] ?? $rowSensorRaw['name'] ?? $rowSensorRaw['id'] ?? '';
+    }
+    $rowSensor = is_scalar($rowSensorRaw) ? strtolower(trim((string) $rowSensorRaw)) : '';
     if ($rowSensor === $sensor) {
         foreach (['value', 'valeur', 'measurement', 'mesure'] as $valueKey) {
             $value = $row[$valueKey] ?? null;
