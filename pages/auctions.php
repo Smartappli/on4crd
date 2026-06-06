@@ -156,9 +156,32 @@ ob_start();
                     <p><?= e((string) $t['lots']) ?></p>
                 </div>
             </div>
-            <p class="actions">`n                <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? 'Creer un lot' : 'Proposer un lot') ?></a>`n                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux encheres")) ?></a>`n            </p>
+            <p class="actions">
+                <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? 'Creer un lot' : 'Proposer un lot') ?></a>
+                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux encheres")) ?></a>
+            </p>
         </div>
     </header>
+
+    <?php if ($showLotProposalForm): ?>
+    <section class="card">
+        <h2><?= e($canManageAuctions ? 'Creer un lot' : 'Proposer un lot') ?></h2>
+        <p class="help"><?= e($canManageAuctions ? 'Le lot sera active directement pour 7 jours.' : 'Votre proposition sera envoyee en validation et visible dans Mes contenus.') ?></p>
+        <form method="post" class="stack">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="propose_lot">
+            <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
+            <label><span>Resume</span><input type="text" name="proposal_summary" maxlength="1000"></label>
+            <label><span>Prix de depart</span><input type="text" name="proposal_price" placeholder="0,00"></label>
+            <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
+            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <p class="actions">
+                <button class="button" type="submit"><?= e($canManageAuctions ? 'Creer' : 'Envoyer la proposition') ?></button>
+                <a class="button secondary" href="<?= e(route_url('auctions')) ?>">Annuler</a>
+            </p>
+        </form>
+    </section>
+    <?php endif; ?>
 
     <?php foreach ($sections as $status => $meta): ?>
         <section class="auctions-section auctions-section-<?= e($status) ?>">
