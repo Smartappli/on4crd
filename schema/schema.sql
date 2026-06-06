@@ -690,5 +690,6 @@ CREATE TABLE IF NOT EXISTS classified_ads (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_classified_owner_status (owner_member_id, status),
-    INDEX idx_classified_status_created (status, created_at)
+    INDEX idx_classified_status_created (status, created_at),
+    INDEX idx_classified_expires (expires_at)
 );
