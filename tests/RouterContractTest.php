@@ -550,4 +550,16 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("\$status = \$autoPublish ? 'published' : 'pending';", $wikiPropose);
         self::assertStringContainsString("route_url('wiki_view', ['slug' => \$slug])", $wikiPropose);
     }
+
+    public function testWikiCategoryProposalIsDirectForModeratorsAndPendingForMembers(): void
+    {
+        $wiki = file_get_contents(__DIR__ . '/../pages/wiki.php');
+        self::assertIsString($wiki);
+
+        self::assertStringContainsString("\$autoAccept = has_permission('wiki.moderate');", $wiki);
+        self::assertStringContainsString("\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", $wiki);
+        self::assertStringContainsString("if (!\$autoAccept) {", $wiki);
+        self::assertStringContainsString("redirect('my_requests');", $wiki);
+        self::assertStringContainsString('status = "accepted"', $wiki);
+    }
 }
