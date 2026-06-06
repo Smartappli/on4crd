@@ -389,9 +389,11 @@ final class FunctionHelpersTest extends TestCase
         $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
         $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
         $appJs = file_get_contents(__DIR__ . '/../assets/js/app.js');
+        $dashboardJs = file_get_contents(__DIR__ . '/../assets/js/modules/dashboard.js');
         self::assertIsString($renderer);
         self::assertIsString($dashboard);
         self::assertIsString($appJs);
+        self::assertIsString($dashboardJs);
 
         self::assertArrayHasKey('radio_clocks', $catalog);
         self::assertArrayNotHasKey('propagation', $catalog);
