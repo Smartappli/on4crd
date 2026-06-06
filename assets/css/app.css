@@ -866,6 +866,7 @@ textarea { resize: vertical; }
 }
 .directory-active-filters span,
 .directory-badges > span,
+.directory-mode-list > span,
 .directory-band-list > span {
   display: inline-flex;
   align-items: center;
@@ -971,6 +972,7 @@ textarea { resize: vertical; }
   text-transform: uppercase;
 }
 .directory-badges,
+.directory-mode-list,
 .directory-band-list {
   display: flex;
   flex-wrap: wrap;
@@ -981,6 +983,23 @@ textarea { resize: vertical; }
   color: var(--accent-strong);
   background: color-mix(in srgb, var(--accent) 10%, var(--panel));
   border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+}
+.directory-radio-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: .45rem;
+  align-items: start;
+}
+.directory-mode-list {
+  justify-content: flex-start;
+}
+.directory-band-list {
+  justify-content: flex-end;
+}
+.directory-mode-list > span {
+  color: color-mix(in srgb, #1d4ed8 90%, var(--text));
+  background: color-mix(in srgb, #3b82f6 12%, var(--panel));
+  border-color: color-mix(in srgb, #2563eb 32%, var(--border));
 }
 .directory-band-list > span {
   color: color-mix(in srgb, #047857 88%, var(--text));

@@ -658,6 +658,23 @@ final class RouterContractTest extends TestCase
 
         self::assertStringContainsString('$profilePreviewFields = member_profile_preview_fields($profileT);', $directory);
         self::assertStringContainsString("member_profile_display_row(\$member, 'postal_code', \$profilePreviewFields['postal_code'])", $directory);
+        self::assertStringContainsString("<?= e((string) \$postalCodeRow['label']) ?> <?= e((string) \$postalCodeRow['text']) ?>", $directory);
+        self::assertStringNotContainsString('$addDetail((string) $postalCodeRow[\'label\'], (string) $postalCodeRow[\'text\']);', $directory);
+    }
+
+    public function testDirectorySeparatesRadioModesAndBands(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        $css = file_get_contents(__DIR__ . '/../assets/css/app.css');
+        self::assertIsString($directory);
+        self::assertIsString($css);
+
+        self::assertStringContainsString('class="directory-radio-row"', $directory);
+        self::assertStringContainsString('class="directory-mode-list"', $directory);
+        self::assertStringContainsString('class="directory-band-list"', $directory);
+        self::assertStringContainsString('.directory-radio-row', $css);
+        self::assertStringContainsString('.directory-mode-list > span', $css);
+        self::assertStringContainsString('justify-content: flex-end;', $css);
     }
 
     public function testGdprReusesProfileFieldsAndVisibilitySettings(): void
