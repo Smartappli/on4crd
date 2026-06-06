@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 $messages = i18n_domain_locale('conditions_utilisation', current_locale());
 
-$title = (string) ($messages['title'] ?? 'Conditions générales d\'utilisation');
+$text = static fn (string $key): string => (string) ($messages[$key] ?? $key);
+
+$title = $text('title');
 $summary = (string) ($messages['summary'] ?? $messages['body'] ?? '');
 $sections = isset($messages['sections']) && is_array($messages['sections']) ? $messages['sections'] : [];
-$updatedAtLabel = (string) ($messages['updated_at_label'] ?? 'Dernière mise à jour');
-$updatedAt = (string) ($messages['updated_at'] ?? '05 juin 2026');
+$updatedAtLabel = $text('updated_at_label');
+$updatedAt = $text('updated_at');
 
 $clubName = trim((string) config('privacy.controller_name', 'Radio Club Durnal ON4CRD'));
 $clubEmail = site_contact_email();
@@ -48,20 +50,20 @@ ob_start();
         <h1><?= e($title) ?></h1>
         <?= $renderTextBlocks($summary) ?>
         <p class="help">
-            <?= e((string) ($messages['service_reference'] ?? 'Service édité par')) ?> :
+            <?= e($text('service_reference')) ?> :
             <?= e($clubName) ?>,
             <a href="mailto:<?= e($clubEmail) ?>"><?= e($clubEmail) ?></a>
         </p>
     </section>
 
     <section class="card">
-        <h2><?= e((string) ($messages['identity_title'] ?? 'Référence du service')) ?></h2>
+        <h2><?= e($text('identity_title')) ?></h2>
         <dl>
-            <dt><?= e((string) ($messages['identity_editor'] ?? 'Éditeur')) ?></dt>
+            <dt><?= e($text('identity_editor')) ?></dt>
             <dd><?= e($clubName) ?></dd>
-            <dt><?= e((string) ($messages['identity_contact'] ?? 'Contact')) ?></dt>
+            <dt><?= e($text('identity_contact')) ?></dt>
             <dd><a href="mailto:<?= e($clubEmail) ?>"><?= e($clubEmail) ?></a></dd>
-            <dt><?= e((string) ($messages['identity_address'] ?? 'Adresse')) ?></dt>
+            <dt><?= e($text('identity_address')) ?></dt>
             <dd><?= e($clubAddress) ?></dd>
         </dl>
     </section>
@@ -83,10 +85,10 @@ ob_start();
     <?php endforeach; ?>
 
     <section class="card">
-        <h2><?= e((string) ($messages['related_pages_title'] ?? 'Pages associées')) ?></h2>
+        <h2><?= e($text('related_pages_title')) ?></h2>
         <div class="actions">
-            <a class="button secondary" href="<?= e(route_url('mentions_legales')) ?>"><?= e((string) ($messages['legal_link_label'] ?? 'Mentions légales')) ?></a>
-            <a class="button secondary" href="<?= e(route_url('gdpr')) ?>"><?= e((string) ($messages['privacy_link_label'] ?? 'Vie privée et RGPD')) ?></a>
+            <a class="button secondary" href="<?= e(route_url('mentions_legales')) ?>"><?= e($text('legal_link_label')) ?></a>
+            <a class="button secondary" href="<?= e(route_url('gdpr')) ?>"><?= e($text('privacy_link_label')) ?></a>
         </div>
     </section>
 </div>

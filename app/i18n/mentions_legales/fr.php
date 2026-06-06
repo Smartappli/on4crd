@@ -3,17 +3,57 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Mentions légales',
-  'body' => 'Éditeur du site : Radio Club ON4CRD.
-
-Responsable de publication : le comité du Radio Club ON4CRD.
-
-Contact : utilisez le formulaire de contact du site ou les coordonnées publiées dans l’espace membre.
-
-Hébergement : infrastructure technique opérée pour le compte du club.
-
-Propriété intellectuelle : les contenus (textes, images, documents, logos) publiés sur ce site restent la propriété de leurs auteurs respectifs ou du Radio Club ON4CRD. Toute reproduction totale ou partielle sans autorisation préalable est interdite, sauf exceptions légales.
-
-Données personnelles : les données traitées via les formulaires et espaces membres sont utilisées pour la gestion des activités du club et l’administration du site. Vous pouvez demander l’accès, la rectification ou la suppression de vos données conformément à la réglementation applicable.
-
-Limitation de responsabilité : malgré le soin apporté à la publication, ON4CRD ne garantit pas l’absence d’erreurs ou d’interruptions et ne peut être tenu responsable d’un usage inadapté des informations publiées.',
+  'summary' => 'Cette page rassemble les informations d\'identification, de publication, d\'hébergement et de responsabilité applicables au site ON4CRD.',
+  'body' => 'Cette page rassemble les informations d\'identification, de publication, d\'hébergement et de responsabilité applicables au site ON4CRD.',
+  'updated_at_label' => 'Dernière mise à jour',
+  'updated_at' => '2026-06-05',
+  'not_provided' => 'non renseigné',
+  'identity_title' => 'Éditeur et hébergement',
+  'identity_editor' => 'Éditeur du site',
+  'identity_address' => 'Adresse',
+  'identity_contact' => 'Contact',
+  'identity_publication_manager' => 'Responsable de publication',
+  'identity_hosting' => 'Hébergement',
+  'related_pages_title' => 'Pages associées',
+  'terms_link_label' => 'Conditions générales d\'utilisation',
+  'privacy_link_label' => 'Vie privée et RGPD',
+  'sections' =>
+  array (
+    0 =>
+    array (
+      'title' => 'Éditeur du site',
+      'body' => 'Le site est édité par {club_name}. Les demandes relatives au site peuvent être adressées à {contact_email} ou à l\'adresse postale suivante : {postal_address}.',
+    ),
+    1 =>
+    array (
+      'title' => 'Responsable de publication',
+      'body' => 'Le responsable de publication est : {publication_manager}.',
+    ),
+    2 =>
+    array (
+      'title' => 'Hébergement',
+      'body' => 'L\'hébergement technique est assuré par {hosting_name}, {hosting_address}. Site de l\'hébergeur : {hosting_url}.',
+    ),
+    3 =>
+    array (
+      'title' => 'Propriété intellectuelle',
+      'body' => 'Les textes, images, documents, logos et supports publiés sur le site restent la propriété de leurs auteurs respectifs ou du club. Toute reproduction ou réutilisation doit respecter la source, les droits applicables et l\'autorisation éventuelle de l\'auteur.',
+    ),
+    4 =>
+    array (
+      'title' => 'Responsabilité',
+      'body' => 'Le club veille à publier des informations utiles et vérifiées, mais ne garantit pas l\'absence d\'erreur, d\'omission ou d\'interruption. Les informations techniques ou réglementaires doivent être vérifiées auprès des sources officielles lorsqu\'elles fondent une décision.',
+    ),
+    5 =>
+    array (
+      'title' => 'Données personnelles',
+      'body' => 'Les informations relatives aux traitements de données personnelles, aux droits des personnes concernées et aux demandes de contact sont détaillées dans la page Vie privée et RGPD.',
+    ),
+    6 =>
+    array (
+      'title' => 'Signalement',
+      'body' => 'Pour signaler une erreur, un contenu problématique, une atteinte aux droits ou un incident de sécurité, contactez le club via {contact_email}.',
+    ),
+  ),
+  'default_publication_manager' => 'Comité du Radio Club Durnal ON4CRD',
 );

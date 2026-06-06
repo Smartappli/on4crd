@@ -4,9 +4,10 @@ declare(strict_types=1);
 $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('my_requests', $locale);
+$text = static fn (string $key): string => (string) ($t[$key] ?? $key);
 
-$title = (string) ($t['title'] ?? 'Mes demandes');
-$intro = (string) ($t['intro'] ?? 'Suivez ici les demandes introduites depuis votre espace membre.');
+$title = $text('title');
+$intro = $text('intro');
 
 set_page_meta([
     'title' => $title,
@@ -17,40 +18,40 @@ set_page_meta([
 
 $shortcuts = [
     [
-        'title' => (string) ($t['profile_title'] ?? 'Profil'),
-        'description' => (string) ($t['profile_desc'] ?? 'Mettre à jour vos informations de membre.'),
+        'title' => $text('profile_title'),
+        'description' => $text('profile_desc'),
         'url' => route_url('profile'),
-        'cta' => (string) ($t['profile_cta'] ?? 'Ouvrir le profil'),
+        'cta' => $text('profile_cta'),
     ],
     [
-        'title' => (string) ($t['privacy_title'] ?? 'Vie privée'),
-        'description' => (string) ($t['privacy_desc'] ?? 'Gérer la visibilité de vos données dans l’annuaire.'),
+        'title' => $text('privacy_title'),
+        'description' => $text('privacy_desc'),
         'url' => route_url('gdpr'),
-        'cta' => (string) ($t['privacy_cta'] ?? 'Gérer la vie privée'),
+        'cta' => $text('privacy_cta'),
     ],
     [
-        'title' => (string) ($t['events_title'] ?? 'Événements'),
-        'description' => (string) ($t['events_desc'] ?? 'Proposer un événement au club depuis la page agenda.'),
+        'title' => $text('events_title'),
+        'description' => $text('events_desc'),
         'url' => route_url('events'),
-        'cta' => (string) ($t['events_cta'] ?? 'Voir l’agenda'),
+        'cta' => $text('events_cta'),
     ],
     [
-        'title' => (string) ($t['articles_title'] ?? 'Articles'),
-        'description' => (string) ($t['articles_desc'] ?? 'Proposer un article ou une catégorie depuis la page articles.'),
+        'title' => $text('articles_title'),
+        'description' => $text('articles_desc'),
         'url' => route_url('articles'),
-        'cta' => (string) ($t['articles_cta'] ?? 'Voir les articles'),
+        'cta' => $text('articles_cta'),
     ],
     [
-        'title' => (string) ($t['classifieds_title'] ?? 'Petites annonces'),
-        'description' => (string) ($t['classifieds_desc'] ?? 'Gérer vos annonces ou proposer une catégorie.'),
+        'title' => $text('classifieds_title'),
+        'description' => $text('classifieds_desc'),
         'url' => route_url('classifieds_manage'),
-        'cta' => (string) ($t['classifieds_cta'] ?? 'Gérer mes annonces'),
+        'cta' => $text('classifieds_cta'),
     ],
     [
-        'title' => (string) ($t['settings_title'] ?? 'Paramètres'),
-        'description' => (string) ($t['settings_desc'] ?? 'Adapter vos préférences de compte.'),
+        'title' => $text('settings_title'),
+        'description' => $text('settings_desc'),
         'url' => route_url('settings'),
-        'cta' => (string) ($t['settings_cta'] ?? 'Ouvrir les paramètres'),
+        'cta' => $text('settings_cta'),
     ],
 ];
 
@@ -64,11 +65,11 @@ $privacyRequests = privacy_member_requests((int) $user['id']);
 $registeredRequestsCount = count($submittedArticles) + count($privacyRequests);
 
 $statusLabels = [
-    'draft' => (string) ($t['article_status_draft'] ?? 'Brouillon'),
-    'pending' => (string) ($t['article_status_pending'] ?? 'En validation'),
-    'scheduled' => (string) ($t['article_status_scheduled'] ?? 'Planifie'),
-    'published' => (string) ($t['article_status_published'] ?? 'Publie'),
-    'rejected' => (string) ($t['article_status_rejected'] ?? 'Refuse'),
+    'draft' => $text('article_status_draft'),
+    'pending' => $text('article_status_pending'),
+    'scheduled' => $text('article_status_scheduled'),
+    'published' => $text('article_status_published'),
+    'rejected' => $text('article_status_rejected'),
 ];
 
 ob_start();
@@ -76,12 +77,12 @@ ob_start();
 <div class="my-requests-page stack">
     <section class="card my-requests-hero">
         <div>
-            <span class="badge muted"><?= e((string) ($t['badge'] ?? 'Espace membre')) ?></span>
+            <span class="badge muted"><?= e($text('badge')) ?></span>
             <h1><?= e($title) ?></h1>
             <p class="help"><?= e($intro) ?></p>
         </div>
         <div class="my-requests-member">
-            <span><?= e((string) ($t['member_label'] ?? 'Membre')) ?></span>
+            <span><?= e($text('member_label')) ?></span>
             <strong><?= e(trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) ($user['email'] ?? '')) ?></strong>
         </div>
     </section>
@@ -89,28 +90,28 @@ ob_start();
     <section class="card my-requests-status">
         <div class="row-between">
             <div>
-                <h2><?= e((string) ($t['status_title'] ?? 'Demandes enregistrées')) ?></h2>
-                <p class="help"><?= e((string) ($t['empty_body'] ?? 'Les demandes enregistrées par le site apparaîtront ici.')) ?></p>
+                <h2><?= e($text('status_title')) ?></h2>
+                <p class="help"><?= e($text('empty_body')) ?></p>
             </div>
             <span class="badge muted"><?= (int) $registeredRequestsCount ?></span>
         </div>
         <?php if ($submittedArticles === [] && $privacyRequests === []): ?>
             <div class="my-requests-empty">
-                <strong><?= e((string) ($t['empty_title'] ?? 'Aucune demande pour le moment')) ?></strong>
-                <p><?= e((string) ($t['empty_hint'] ?? 'Utilisez les raccourcis ci-dessous pour accéder aux démarches disponibles.')) ?></p>
+                <strong><?= e($text('empty_title')) ?></strong>
+                <p><?= e($text('empty_hint')) ?></p>
             </div>
         <?php else: ?>
             <div class="my-requests-grid">
                 <?php foreach ($privacyRequests as $request): ?>
                     <article class="my-requests-shortcut">
                         <span class="badge muted"><?= e((string) ($request['status'] ?? 'pending')) ?></span>
-                        <h3>RGPD: <?= e((string) ($request['request_type'] ?? 'access')) ?></h3>
-                        <p><?= e((string) ($t['privacy_title'] ?? 'Vie privee')) ?></p>
+                        <h3><?= e($text('privacy_request_prefix')) ?>: <?= e((string) ($request['request_type'] ?? 'access')) ?></h3>
+                        <p><?= e($text('privacy_title')) ?></p>
                         <p class="help"><?= e(date('d/m/Y', strtotime((string) ($request['requested_at'] ?? 'now')))) ?></p>
                         <?php if (trim((string) ($request['admin_notes'] ?? '')) !== ''): ?>
                             <p class="help"><?= e((string) $request['admin_notes']) ?></p>
                         <?php endif; ?>
-                        <a class="button secondary small" href="<?= e(route_url('gdpr')) ?>"><?= e((string) ($t['privacy_cta'] ?? 'Gerer la vie privee')) ?></a>
+                        <a class="button secondary small" href="<?= e(route_url('gdpr')) ?>"><?= e($text('privacy_cta')) ?></a>
                     </article>
                 <?php endforeach; ?>
                 <?php foreach ($submittedArticles as $article): ?>
@@ -118,7 +119,7 @@ ob_start();
                     $articleStatus = (string) ($article['status'] ?? 'draft');
                     $articleTitle = trim((string) ($article['title'] ?? ''));
                     if ($articleTitle === '') {
-                        $articleTitle = 'Article';
+                        $articleTitle = $text('article_default_title');
                     }
                     $articleUrl = $articleStatus === 'published' && trim((string) ($article['slug'] ?? '')) !== ''
                         ? route_url('article', ['slug' => (string) $article['slug']])
@@ -127,13 +128,13 @@ ob_start();
                     <article class="my-requests-shortcut">
                         <span class="badge muted"><?= e((string) ($statusLabels[$articleStatus] ?? $articleStatus)) ?></span>
                         <h3><?= e($articleTitle) ?></h3>
-                        <p><?= e((string) ($t['articles_title'] ?? 'Articles')) ?> · <?= e((string) ($article['category'] ?? 'autres')) ?></p>
+                        <p><?= e($text('articles_title')) ?> · <?= e((string) ($article['category'] ?? $text('category_default'))) ?></p>
                         <p class="help"><?= e(date('d/m/Y', strtotime((string) ($article['updated_at'] ?? $article['created_at'] ?? 'now')))) ?></p>
                         <?php if (trim((string) ($article['moderation_note'] ?? '')) !== ''): ?>
-                            <p class="help"><?= e((string) ($t['moderation_note'] ?? 'Note de moderation')) ?>: <?= e((string) $article['moderation_note']) ?></p>
+                            <p class="help"><?= e($text('moderation_note')) ?>: <?= e((string) $article['moderation_note']) ?></p>
                         <?php endif; ?>
                         <?php if ($articleUrl !== ''): ?>
-                            <a class="button secondary small" href="<?= e($articleUrl) ?>"><?= e((string) ($t['article_open'] ?? 'Ouvrir')) ?></a>
+                            <a class="button secondary small" href="<?= e($articleUrl) ?>"><?= e($text('article_open')) ?></a>
                         <?php endif; ?>
                     </article>
                 <?php endforeach; ?>
@@ -143,8 +144,8 @@ ob_start();
 
     <section class="card my-requests-shortcuts" aria-labelledby="my-requests-shortcuts-title">
         <div class="my-requests-section-heading">
-            <h2 id="my-requests-shortcuts-title"><?= e((string) ($t['shortcuts_title'] ?? 'Raccourcis utiles')) ?></h2>
-            <p class="help"><?= e((string) ($t['shortcuts_intro'] ?? 'Accédez rapidement aux pages liées aux demandes et préférences de votre compte.')) ?></p>
+            <h2 id="my-requests-shortcuts-title"><?= e($text('shortcuts_title')) ?></h2>
+            <p class="help"><?= e($text('shortcuts_intro')) ?></p>
         </div>
         <div class="my-requests-grid">
             <?php foreach ($shortcuts as $shortcut): ?>

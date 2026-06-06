@@ -3,17 +3,57 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Aviso legal',
-  'body' => 'Editor del sitio web: Radio Club ON4CRD.
-
-Responsable de publicación: el comité de Radio Club ON4CRD.
-
-Contacto: utilice el formulario de contacto del sitio web o los datos disponibles en el área de miembros.
-
-Alojamiento: infraestructura técnica operada en nombre del club.
-
-Propiedad intelectual: los contenidos (textos, imágenes, documentos, logotipos) publicados en este sitio siguen siendo propiedad de sus autores respectivos o de Radio Club ON4CRD. Queda prohibida la reproducción total o parcial sin autorización previa, salvo excepciones legales.
-
-Datos personales: los datos tratados mediante formularios y áreas de miembros se utilizan para la gestión de las actividades del club y la administración del sitio. Puede solicitar acceso, rectificación o eliminación de sus datos conforme a la normativa aplicable.
-
-Limitación de responsabilidad: pese al cuidado en la publicación, ON4CRD no garantiza la ausencia de errores o interrupciones del servicio y no puede ser responsable del uso inadecuado de la información publicada.',
+  'summary' => 'Esta página enumera la información de identificación, publicación, alojamiento y responsabilidad aplicable al sitio web ON4CRD.',
+  'body' => 'Esta página enumera la información de identificación, publicación, alojamiento y responsabilidad aplicable al sitio web ON4CRD.',
+  'updated_at_label' => 'Última actualización',
+  'updated_at' => '2026-06-05',
+  'not_provided' => 'no proporcionado',
+  'identity_title' => 'Editor y alojamiento',
+  'identity_editor' => 'Editor del sitio web',
+  'identity_address' => 'DIRECCIÓN',
+  'identity_contact' => 'Contact',
+  'identity_publication_manager' => 'Responsable de publicaciones',
+  'identity_hosting' => 'Alojamiento',
+  'related_pages_title' => 'Páginas relacionadas',
+  'terms_link_label' => 'Condiciones de uso',
+  'privacy_link_label' => 'Privacidad y GDPR',
+  'sections' =>
+  array (
+    0 =>
+    array (
+      'title' => 'Editor del sitio web',
+      'body' => 'El sitio web es publicado por {club_name}. Las solicitudes relacionadas con el sitio web podrán enviarse a {contact_email} o a la siguiente dirección postal: {postal_address}.',
+    ),
+    1 =>
+    array (
+      'title' => 'Responsable de publicaciones',
+      'body' => 'El responsable de la publicación es: {publication_manager}.',
+    ),
+    2 =>
+    array (
+      'title' => 'Alojamiento',
+      'body' => 'El alojamiento técnico lo proporciona {hosting_name}, {hosting_address}. Sitio web del proveedor de hosting: {hosting_url}.',
+    ),
+    3 =>
+    array (
+      'title' => 'Propiedad intelectual',
+      'body' => 'Los textos, imágenes, documentos, logotipos y materiales publicados en el sitio son propiedad de sus respectivos autores o del club. Cualquier reproducción o reutilización debe respetar la fuente, los derechos aplicables y cualquier permiso del autor.',
+    ),
+    4 =>
+    array (
+      'title' => 'Responsabilidad',
+      'body' => 'El club trabaja para publicar información útil y contrastada, pero no garantiza la ausencia de errores, omisiones o interrupciones. La información técnica o regulatoria debe cotejarse con fuentes oficiales cuando respalda una decisión.',
+    ),
+    5 =>
+    array (
+      'title' => 'Datos personales',
+      'body' => 'La información sobre el tratamiento de datos personales, derechos de los interesados ​​y solicitudes de contacto se detalla en la página de Privacidad y GDPR.',
+    ),
+    6 =>
+    array (
+      'title' => 'Informes',
+      'body' => 'Para informar un error, contenido problemático, infracción de derechos o incidente de seguridad, comuníquese con el club en {contact_email}.',
+    ),
+  ),
+  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
 );
