@@ -16,7 +16,7 @@
 
 [data-route="reglement_interieur"] .reglement-interieur-illustration {
   justify-self: end;
-  margin: 0;
+  margin: .75rem 0;
   width: min(100%, 220px);
   overflow: hidden;
   border: 1px solid var(--border);
