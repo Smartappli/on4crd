@@ -21,4 +21,7 @@ return array (
   'search' => 'Meklēt dalībnieku',
   'search_ph' => 'Izsaukuma signāls, vārds, e-pasts…',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Parole',
+  'password_reset_force' => 'Piespiediet nākamo pieteikšanos',
+  'password_reset_unavailable' => 'Nav pieejams',
 );

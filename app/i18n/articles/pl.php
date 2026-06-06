@@ -81,4 +81,5 @@ Kontakt:',
 <ul><li>Ważny punkt</li></ul>',
   'html_cleanup_help' => 'HTML jest czyszczony automatycznie. Skrypty, ramki iframe i niebezpieczne atrybuty są usuwane przed walidacją.',
   'submit_for_review' => 'Prześlij do sprawdzenia',
+  'proposal_recorded' => 'Propozycja została zapisana w Twoich treściach.',
 );

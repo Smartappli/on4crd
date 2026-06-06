@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Żid il-favoriti biex ittejjeb ir-rakkomandazzjonijiet.',
   'nudge_review_notifications' => 'Iċċekkja notifiki mhux moqrija.',
   'nudge_enable_recommendations' => 'Ippermetti rakkomandazzjonijiet personalizzati.',
+  'save_unavailable' => 'Il-ħażna mhix disponibbli: it-tabella dashboard_widgets hija nieqsa.',
+  'saving' => 'Qed jinħażen...',
+  'invalid_server_response' => 'Tweġiba tas-server mhix valida.',
+  'save_error' => 'Żball fil-ħażna.',
+  'layout_saved_at' => 'It-tqassim ġie ssejvjat fi {time}.',
+  'remove_widget' => 'Neħħi l-widget',
+  'preview_unavailable' => 'Il-preview mhuwiex disponibbli.',
+  'loading' => 'Qed jitgħabba...',
+  'load_widget_error' => 'Il-widget ma setax jitgħabba.',
 );

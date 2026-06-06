@@ -81,4 +81,5 @@ return array (
 <ul><li>要点</li></ul>',
   'html_cleanup_help' => 'HTML 会自动清理。在验证之前删除脚本、iframe 和危险属性。',
   'submit_for_review' => '提交验证',
+  'proposal_recorded' => '建议已保存到你的内容中。',
 );

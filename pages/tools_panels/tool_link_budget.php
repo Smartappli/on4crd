@@ -1,4 +1,8 @@
-<article id="tool-link-budget" data-tool-panel class="card tool-panel is-hidden">
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article id="tool-link-budget" data-tool-panel class="card tool-panel is-hidden">
     <h2><?= e((string) ($t['link_budget_calc'] ?? 'Link budget')) ?></h2>
     <p class="help"><?= e((string) ($t['link_budget_help'] ?? 'Received power: Prx = Ptx + Gtx + Grx - losses.')) ?></p>
     <div class="grid-auto">

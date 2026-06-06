@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Favorite removed',
   'favorite_added_msg' => 'Document added to favorites.',
   'favorite_removed_msg' => 'Document removed from favorites.',
+  'proposal_recorded' => 'Proposal saved in your content area.',
 );

@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Cuir ceanáin leis chun moltaí a fheabhsú.',
   'nudge_review_notifications' => 'Seiceáil fógraí neamhléite.',
   'nudge_enable_recommendations' => 'Cumasaigh moltaí pearsantaithe.',
+  'save_unavailable' => 'Níl sábháil ar fáil: tá an tábla dashboard_widgets ar iarraidh.',
+  'saving' => 'Á shábháil...',
+  'invalid_server_response' => 'Freagra neamhbhailí ón bhfreastalaí.',
+  'save_error' => 'Earráid sábhála.',
+  'layout_saved_at' => 'Sábháladh an leagan amach ag {time}.',
+  'remove_widget' => 'Bain an ghiuirléid',
+  'preview_unavailable' => 'Níl réamhamharc ar fáil.',
+  'loading' => 'Á luchtú...',
+  'load_widget_error' => 'Níorbh fhéidir an ghiuirléid a luchtú.',
 );

@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Przygotuj e-mail',
   'propose_event_cancel' => 'Anuluj',
   'propose_event_close' => 'Zamknij',
+  'proposal_recorded' => 'Propozycja została zapisana w Twoich treściach.',
 );

@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Váš kontakt',
   'propose_theme_submit' => 'Odeslat návrh',
   'cancel' => 'Zrušit',
+  'proposal_recorded' => 'Návrh byl uložen do vašeho obsahu.',
 );

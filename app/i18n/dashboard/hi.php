@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'सिफारिशें बेहतर करने के लिए फेवरेट जोड़ें।',
   'nudge_review_notifications' => 'अपठित सूचनाएँ देखें।',
   'nudge_enable_recommendations' => 'व्यक्तिगत सिफारिशें सक्षम करें।',
+  'save_unavailable' => 'सहेजना उपलब्ध नहीं है: dashboard_widgets तालिका अनुपस्थित है.',
+  'saving' => 'सहेजा जा रहा है...',
+  'invalid_server_response' => 'अमान्य सर्वर प्रतिक्रिया.',
+  'save_error' => 'सहेजने में त्रुटि.',
+  'layout_saved_at' => 'लेआउट {time} पर सहेजा गया.',
+  'remove_widget' => 'विजेट हटाएं',
+  'preview_unavailable' => 'पूर्वावलोकन उपलब्ध नहीं है.',
+  'loading' => 'लोड हो रहा है...',
+  'load_widget_error' => 'विजेट लोड नहीं किया जा सका.',
 );

@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Su contacto',
   'propose_theme_submit' => 'Enviar propuesta',
   'cancel' => 'Cancelar',
+  'proposal_recorded' => 'Propuesta guardada en tus contenidos.',
 );

@@ -260,6 +260,7 @@ function apply_runtime_schema_updates(): void
             'first_name' => 'ALTER TABLE members ADD COLUMN first_name VARCHAR(95) DEFAULT NULL AFTER callsign',
             'last_name' => 'ALTER TABLE members ADD COLUMN last_name VARCHAR(95) DEFAULT NULL AFTER first_name',
             'password_change_required' => 'ALTER TABLE members ADD COLUMN password_change_required TINYINT(1) NOT NULL DEFAULT 0 AFTER password_hash',
+            'password_reset_forced_at' => 'ALTER TABLE members ADD COLUMN password_reset_forced_at DATETIME DEFAULT NULL AFTER password_change_required',
             'country' => 'ALTER TABLE members ADD COLUMN country VARCHAR(190) DEFAULT NULL',
             'address' => 'ALTER TABLE members ADD COLUMN address VARCHAR(255) DEFAULT NULL AFTER country',
             'postal_code' => 'ALTER TABLE members ADD COLUMN postal_code VARCHAR(32) DEFAULT NULL AFTER address',
@@ -294,6 +295,23 @@ function apply_runtime_schema_updates(): void
             $hasColumn = (int) $columnStmt->fetchColumn() > 0;
             if (!$hasColumn) {
                 db()->exec($statement);
+            }
+        }
+
+        $uniqueEmailIndexStmt = db()->prepare(
+            "SELECT index_name
+             FROM information_schema.statistics
+             WHERE table_schema = DATABASE()
+               AND table_name = ?
+               AND non_unique = 0
+             GROUP BY index_name
+             HAVING GROUP_CONCAT(column_name ORDER BY seq_in_index SEPARATOR ',') = ?"
+        );
+        $uniqueEmailIndexStmt->execute(['members', 'email']);
+        foreach ($uniqueEmailIndexStmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $indexName) {
+            $indexName = trim((string) $indexName);
+            if ($indexName !== '' && strcasecmp($indexName, 'PRIMARY') !== 0) {
+                db()->exec('ALTER TABLE members DROP INDEX `' . str_replace('`', '``', $indexName) . '`');
             }
         }
 
@@ -433,6 +451,7 @@ function apply_runtime_schema_updates(): void
 
     ensure_classified_ads_table();
     ensure_wiki_tables();
+    ensure_content_proposals_table();
 
     ensure_member_favorites_table();
     ensure_member_notifications_table();

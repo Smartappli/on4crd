@@ -23,6 +23,7 @@ function core_permission_catalog(): array
         'ads.submit' => 'Gerer ses publicites',
         'ads.moderate' => 'Moderer les publicites',
         'ads.manage_all' => 'Gerer toutes les publicites et statistiques',
+        'classifieds.moderate' => 'Moderer les petites annonces',
         'modules.manage' => 'Gerer les modules du site',
         'privacy.manage' => 'Traiter les demandes RGPD',
         'press.manage' => 'Gerer les contacts et communiques de presse',
@@ -42,7 +43,7 @@ if (!function_exists('configured_administrator_callsigns')) {
  */
 function configured_administrator_callsigns(): array
 {
-    return ['ON4DG', 'ON5MDB'];
+    return ['ON4DG', 'ON5MDB', 'ON8CJ', 'ON7ZB', 'ON4BEN'];
 }
 }
 

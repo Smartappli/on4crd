@@ -11,25 +11,17 @@ function widget_catalog(): array
             'title' => 'Bienvenue',
             'description' => 'Message d accueil du tableau de bord membre.',
         ],
-        'club_status' => [
-            'title' => 'Statut du club',
-            'description' => 'Resume des modules actifs et de la configuration du site.',
-        ],
-        'events' => [
-            'title' => 'Agenda',
-            'description' => 'Prochains evenements du club.',
-        ],
-        'quick_links' => [
-            'title' => 'Raccourcis',
-            'description' => 'Acces rapides vers les pages membres principales.',
-        ],
-        'propagation' => [
-            'title' => 'Propagation',
-            'description' => 'Indicateurs géomagnétiques en temps réel pour vos QSO.',
-        ],
         'open_meteo' => [
-            'title' => 'Météo locale',
-            'description' => 'Conditions météo locales en temps réel pour l’activité radio.',
+            'title' => 'Meteo locale',
+            'description' => 'Conditions locales via Agromet avec secours Open-Meteo.',
+        ],
+        'radio_clocks' => [
+            'title' => 'Horloges radio',
+            'description' => 'Deux horloges synchronisees pour la date et heure UTC et locale.',
+        ],
+        'ham_weather_advice' => [
+            'title' => 'Meteo radioamateur',
+            'description' => 'Score QSO, bandes, modes et creneau conseille depuis les donnees meteo et propagation.',
         ],
     ] + hamqsl_widget_catalog();
 }

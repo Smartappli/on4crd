@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Valmistele sähköposti',
   'propose_event_cancel' => 'Peruuta',
   'propose_event_close' => 'Sulje',
+  'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
 );

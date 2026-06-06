@@ -21,4 +21,7 @@ return array (
   'search' => 'Cari anggota',
   'search_ph' => 'Callsign, nama, email…',
   'search_btn' => 'Cari',
+  'th_password_reset' => 'Kata sandi',
+  'password_reset_force' => 'Paksa login berikutnya',
+  'password_reset_unavailable' => 'Tidak tersedia',
 );

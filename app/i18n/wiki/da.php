@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Din kontakt',
   'propose_theme_submit' => 'Send forslag',
   'cancel' => 'Annuller',
+  'proposal_recorded' => 'Forslaget er gemt i dit indhold.',
 );

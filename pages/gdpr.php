@@ -194,6 +194,12 @@ ob_start();
         </section>
 
         <div class="card gdpr-hero">
+            <div class="gdpr-section-heading">
+                <div>
+                    <h2><?= e($gt('profile_data_title')) ?></h2>
+                    <p class="help"><?= e($gt('profile_data_help')) ?></p>
+                </div>
+            </div>
             <?php $avatarSrc = member_avatar_src($member); ?>
             <div class="gdpr-profile-views">
                 <?php foreach ($profileViews as $viewer => $view): ?>

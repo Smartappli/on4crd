@@ -21,4 +21,7 @@ return array (
   'search' => 'सदस्य खोजें',
   'search_ph' => 'कॉलसाइन, नाम, ईमेल…',
   'search_btn' => 'खोजें',
+  'th_password_reset' => '???????',
+  'password_reset_force' => 'अगले लॉगिन पर बल दें',
+  'password_reset_unavailable' => 'अनुपलब्ध',
 );

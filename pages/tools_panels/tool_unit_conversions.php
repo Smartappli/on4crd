@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+$t = isset($t) && is_array($t) ? $t : [];
+$conversionTools = isset($conversionTools) && is_array($conversionTools) ? $conversionTools : [];
+$radioMathTools = isset($radioMathTools) && is_array($radioMathTools) ? $radioMathTools : [];
 $unitConversionGroups = [
     'rf' => [
         'label' => (string) ($t['unit_conv_group_rf'] ?? 'Radio / RF'),
@@ -179,7 +182,7 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
                             break;
                         }
                     }
-                    foreach ($radioMathTools ?? [] as $tool) {
+                    foreach ($radioMathTools as $tool) {
                         if ($unitLabel === '' && (string) ($tool['id'] ?? '') === $unitToolId) {
                             $unitLabel = (string) ($tool['title'] ?? '');
                             break;

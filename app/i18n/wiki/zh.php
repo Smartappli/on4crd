@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => '您的联系方式',
   'propose_theme_submit' => '发送提案',
   'cancel' => '取消',
+  'proposal_recorded' => '建议已保存到你的内容中。',
 );

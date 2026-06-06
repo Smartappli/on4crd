@@ -5,6 +5,7 @@ return array (
   'required' => 'Reikalingi kredencialai.',
   'captcha_invalid' => 'Netinkama captcha.',
   'auth_unavailable' => 'Autentifikavimo modulis nepasiekiamas. Paleiskite kompozitoriaus diegimą.',
+  'member_unavailable' => 'Prisijungimas patvirtintas, bet nerastas atitinkamas aktyvus nario profilis.',
   'invalid_credentials' => 'Neteisingas kodas arba slaptažodis.',
   'too_many' => 'Per daug bandymų prisijungti. Bandykite dar kartą po kelių minučių.',
   'not_verified' => 'Jūsų paskyra dar nepatvirtinta.',

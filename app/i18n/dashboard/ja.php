@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'おすすめ改善のためお気に入りを追加してください。',
   'nudge_review_notifications' => '未読通知を確認してください。',
   'nudge_enable_recommendations' => 'パーソナライズ推薦を有効化してください。',
+  'save_unavailable' => '保存できません: dashboard_widgets テーブルがありません。',
+  'saving' => '保存中...',
+  'invalid_server_response' => 'サーバー応答が無効です。',
+  'save_error' => '保存エラーです。',
+  'layout_saved_at' => 'レイアウトを {time} に保存しました。',
+  'remove_widget' => 'ウィジェットを削除',
+  'preview_unavailable' => 'プレビューを利用できません。',
+  'loading' => '読み込み中...',
+  'load_widget_error' => 'ウィジェットを読み込めませんでした。',
 );

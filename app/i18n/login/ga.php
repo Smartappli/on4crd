@@ -5,6 +5,7 @@ return array (
   'required' => 'Dintiúir ag teastáil.',
   'captcha_invalid' => 'Captcha neamhbhailí.',
   'auth_unavailable' => 'Níl modúl fíordheimhnithe ar fáil. Rith suiteáil cumadóir.',
+  'member_unavailable' => 'Fíoraíodh an logáil isteach, ach níor aimsíodh próifíl bhall ghníomhach chomhfhreagrach.',
   'invalid_credentials' => 'Cód nó pasfhocal neamhbhailí.',
   'too_many' => 'An iomarca iarrachtaí nasctha. Bain triail eile as i gceann cúpla bomaite.',
   'not_verified' => 'Níl do chuntas fíoraithe fós.',

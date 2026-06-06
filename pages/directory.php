@@ -5,6 +5,7 @@ $members = [];
 $locale = current_locale();
 $t = i18n_domain_translator('directory', $locale);
 $profileT = i18n_domain_translator('profile', $locale);
+$profilePreviewFields = member_profile_preview_fields($profileT);
 
 $activeMembersCount = 0;
 $ubaMembersCount = 0;
@@ -27,17 +28,17 @@ if (table_exists('members')) {
     $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role
         FROM members
         WHERE is_active = 1
-          AND UPPER(callsign) <> "ON4CRD"';
-    $params = [];
+          AND UPPER(callsign) <> ?';
+    $params = ['ON4CRD'];
 
     if ($search !== '') {
-        $sql .= ' AND (callsign LIKE ?
+        $sql .= ' AND (UPPER(callsign) LIKE ?
             OR (first_name LIKE ? AND visibility_first_name IN (' . $visibilityPlaceholders . '))
             OR (last_name LIKE ? AND visibility_last_name IN (' . $visibilityPlaceholders . '))
             OR (address LIKE ? AND visibility_address IN (' . $visibilityPlaceholders . '))
             OR (postal_code LIKE ? AND visibility_postal_code IN (' . $visibilityPlaceholders . ')))';
         $like = '%' . $search . '%';
-        $params[] = $like;
+        $params[] = '%' . mb_safe_strtoupper($search) . '%';
         $params[] = $like;
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $params[] = $visibilityLevel;
@@ -69,43 +70,29 @@ if (table_exists('members')) {
     $stmt->execute($params);
     $members = $stmt->fetchAll() ?: [];
 
-    $directoryVisibilityFieldMeta = member_profile_visibility_fields($profileT);
-    $directoryVisibilityFields = array_keys($directoryVisibilityFieldMeta);
-    $visibleProfileConditions = implode(
-        ' OR ',
-        array_map(
-            static fn(string $field): string => $field . ' IN (' . $visibilityPlaceholders . ')',
-            $directoryVisibilityFields
-        )
-    );
-
     $countsStmt = db()->prepare(
         'SELECT COUNT(*) AS active_total,
                 SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
          WHERE is_active = 1
-           AND UPPER(callsign) <> "ON4CRD"
-           AND (' . $visibleProfileConditions . ')'
+           AND UPPER(callsign) <> ?'
     );
     $countParams = [];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
     }
-    foreach ($directoryVisibilityFields as $_visibilityField) {
-        foreach ($allowedVisibilityLevels as $visibilityLevel) {
-            $countParams[] = $visibilityLevel;
-        }
-    }
+    $countParams[] = 'ON4CRD';
     $countsStmt->execute($countParams);
     $countsRow = $countsStmt->fetch() ?: [];
     $activeMembersCount = (int) ($countsRow['active_total'] ?? 0);
     $ubaMembersCount = (int) ($countsRow['uba_total'] ?? 0);
 
+    $directoryVisibilityFieldMeta = member_profile_visibility_fields($profileT);
     $fieldVisibilityMap = [
         'photo_path' => 'visibility_photo',
         'avatar_path' => 'visibility_photo',
     ];
-    foreach (member_profile_preview_fields($profileT) as $field => $fieldMeta) {
+    foreach ($profilePreviewFields as $field => $fieldMeta) {
         $fieldVisibilityMap[$field] = (string) $fieldMeta['visibility'];
     }
 
@@ -118,24 +105,16 @@ if (table_exists('members')) {
             }
         }
 
-        $hasVisibleData = false;
-        foreach (array_keys($fieldVisibilityMap) as $field) {
-            if ($field === 'is_uba_member' && (int) ($member[$field] ?? 0) !== 1) {
-                continue;
-            }
-            if (trim((string) ($member[$field] ?? '')) !== '') {
-                $hasVisibleData = true;
-                break;
-            }
-        }
-        if (!$hasVisibleData) {
+        if (!member_directory_card_has_visible_content($member, array_keys($fieldVisibilityMap))) {
             unset($members[$index]);
         }
     }
     unset($member);
     $members = array_values($members);
 
-    $licenceRows = db()->query('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND UPPER(callsign) <> "ON4CRD" AND licence_class IS NOT NULL AND licence_class <> "" GROUP BY licence_class ORDER BY licence_class ASC')->fetchAll() ?: [];
+    $licenceStmt = db()->prepare('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND UPPER(callsign) <> ? AND licence_class IS NOT NULL AND licence_class <> ? GROUP BY licence_class ORDER BY licence_class ASC');
+    $licenceStmt->execute(['ON4CRD', '']);
+    $licenceRows = $licenceStmt->fetchAll() ?: [];
 } else {
     $licenceRows = [];
 }
@@ -155,9 +134,12 @@ foreach ($licenceRows as $licenceRow) {
     }
     $licenceOptions[] = [
         'value' => $licenceValue,
+        'label' => member_profile_licence_class_display_text($profileT, $licenceValue),
         'total' => (int) ($licenceRow['total'] ?? 0),
     ];
 }
+
+$licenceFilterLabel = member_profile_licence_class_display_text($profileT, $licenceFilter);
 
 $memberInitials = static function (array $member): string {
     $callsign = trim((string) ($member['callsign'] ?? ''));
@@ -222,7 +204,7 @@ ob_start();
                     <?php foreach ($licenceOptions as $licenceOption): ?>
                         <?php $licenceValue = (string) $licenceOption['value']; ?>
                         <option value="<?= e($licenceValue) ?>" <?= $licenceFilter === $licenceValue ? 'selected' : '' ?>>
-                            <?= e($licenceValue) ?> (<?= (int) $licenceOption['total'] ?>)
+                            <?= e((string) $licenceOption['label']) ?> (<?= (int) $licenceOption['total'] ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -247,7 +229,7 @@ ob_start();
                         <span><?= e($t('search_label')) ?>: <?= e($search) ?></span>
                     <?php endif; ?>
                     <?php if ($licenceFilter !== ''): ?>
-                        <span><?= e($t('licence')) ?>: <?= e($licenceFilter) ?></span>
+                        <span><?= e($t('licence')) ?>: <?= e($licenceFilterLabel) ?></span>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
@@ -266,12 +248,11 @@ ob_start();
                 <?php
                 $callsign = trim((string) ($member['callsign'] ?? ''));
                 $displayName = member_full_name_from_parts((string) ($member['first_name'] ?? ''), (string) ($member['last_name'] ?? ''));
-                $licenceClass = trim((string) ($member['licence_class'] ?? ''));
+                $licenceClass = member_profile_licence_class_display_text($profileT, (string) ($member['licence_class'] ?? ''));
                 $email = trim((string) ($member['email'] ?? ''));
                 $phone = trim((string) ($member['phone'] ?? ''));
                 $country = trim((string) ($member['country'] ?? ''));
                 $address = trim((string) ($member['address'] ?? ''));
-                $postalCode = trim((string) ($member['postal_code'] ?? ''));
                 $qth = trim((string) ($member['qth'] ?? ''));
                 $grid = trim((string) ($member['locator'] ?? ''));
                 $qrzUrl = trim((string) ($member['qrz_url'] ?? ''));
@@ -281,7 +262,6 @@ ob_start();
                 $operatorSince = trim((string) ($member['operator_since'] ?? ''));
                 $cqZone = trim((string) ($member['cq_zone'] ?? ''));
                 $ituZone = trim((string) ($member['itu_zone'] ?? ''));
-                $qslVia = trim((string) ($member['qsl_via'] ?? ''));
                 $eqslUsername = trim((string) ($member['eqsl_username'] ?? ''));
                 $interests = trim((string) ($member['interests'] ?? ''));
                 $bands = trim((string) ($member['favourite_bands'] ?? ''));
@@ -298,9 +278,9 @@ ob_start();
                         $detailRows[] = ['label' => $label, 'value' => $value];
                     }
                 };
-                $addDetail((string) $profileT('postal_code'), $postalCode);
+                $postalCodeRow = member_profile_display_row($member, 'postal_code', $profilePreviewFields['postal_code']);
+                $qslViaRow = member_profile_display_row($member, 'qsl_via', $profilePreviewFields['qsl_via']);
                 $addDetail((string) $profileT('address'), $address);
-                $addDetail((string) $profileT('qsl_via'), $qslVia);
                 $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
                 $addDetail((string) $profileT('interests'), $interests);
                 ?>
@@ -346,8 +326,14 @@ ob_start();
                         <?php if ($country !== ''): ?>
                             <span><?= member_country_html($country) ?></span>
                         <?php endif; ?>
+                        <?php if ($postalCodeRow !== null): ?>
+                            <span><?= e((string) $postalCodeRow['label']) ?> <?= e((string) $postalCodeRow['text']) ?></span>
+                        <?php endif; ?>
                         <?php if ($grid !== ''): ?>
                             <span><?= e($t('grid')) ?> <?= e($grid) ?></span>
+                        <?php endif; ?>
+                        <?php if ($qslViaRow !== null): ?>
+                            <span><?= e((string) $qslViaRow['label']) ?> <?= e((string) $qslViaRow['text']) ?></span>
                         <?php endif; ?>
                         <?php if ($cqZone !== ''): ?>
                             <span><?= e($profileT('cq_zone')) ?> <?= e($cqZone) ?></span>
@@ -364,9 +350,6 @@ ob_start();
                         <?php if ((int) ($member['is_uba_member'] ?? 0) === 1): ?>
                             <span><?= e($t('uba_member')) ?><?= trim((string) ($member['uba_member_number'] ?? '')) !== '' ? ' ' . e((string) $member['uba_member_number']) : '' ?></span>
                         <?php endif; ?>
-                        <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
-                            <span><?= e($mode) ?></span>
-                        <?php endforeach; ?>
                     </div>
 
                     <?php if ($detailRows !== []): ?>
@@ -380,11 +363,22 @@ ob_start();
                         </dl>
                     <?php endif; ?>
 
-                    <?php if ($bandList !== []): ?>
-                        <div class="directory-band-list" aria-label="<?= e($t('bands')) ?>">
-                            <?php foreach (array_slice($bandList, 0, 5) as $band): ?>
-                                <span><?= e($band) ?></span>
-                            <?php endforeach; ?>
+                    <?php if ($modeList !== [] || $bandList !== []): ?>
+                        <div class="directory-radio-row">
+                            <?php if ($modeList !== []): ?>
+                                <div class="directory-mode-list" aria-label="<?= e($profileT('favourite_modes')) ?>">
+                                    <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
+                                        <span><?= e($mode) ?></span>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($bandList !== []): ?>
+                                <div class="directory-band-list" aria-label="<?= e($t('bands')) ?>">
+                                    <?php foreach (array_slice($bandList, 0, 5) as $band): ?>
+                                        <span><?= e($band) ?></span>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
 

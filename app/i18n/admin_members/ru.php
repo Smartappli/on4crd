@@ -21,4 +21,7 @@ return array (
   'search' => 'Найти участника',
   'search_ph' => 'Позывной, имя, email…',
   'search_btn' => 'Найти',
+  'th_password_reset' => '??????',
+  'password_reset_force' => 'Принудительно при следующем входе в систему',
+  'password_reset_unavailable' => 'Недоступно',
 );

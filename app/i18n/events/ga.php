@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Ullmhaigh ríomhphost',
   'propose_event_cancel' => 'Cealaigh',
   'propose_event_close' => 'Dún',
+  'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
 );

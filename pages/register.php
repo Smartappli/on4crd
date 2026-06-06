@@ -85,10 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('auth_unavailable'));
         }
 
+        $authEmail = member_auth_email_for_contact_email($email, $callsign);
+        member_cleanup_registration_auth_orphan($authEmail, $callsign);
+        $userId = 0;
         try {
-            $authEmail = member_auth_email_for_contact_email($email, $callsign);
             $userId = $authClient->registerWithUniqueUsername($authEmail, $password, $callsign);
-        } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException|\Delight\Auth\InvalidUsernameException $exception) {
+        } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException $exception) {
             throw new RuntimeException($t('invalid_data'));
         } catch (\Delight\Auth\UserAlreadyExistsException|\Delight\Auth\DuplicateUsernameException $exception) {
             throw new RuntimeException($t('already_exists'));
@@ -96,8 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('too_many'));
         }
 
-        db()->prepare(
-            'INSERT INTO members (
+        try {
+            db()->prepare(
+                'INSERT INTO members (
                  auth_user_id, callsign, first_name, last_name, full_name, email, password_hash, password_change_required,
                  country, address, postal_code, phone, qth, locator, licence_class, operator_since,
                  cq_zone, itu_zone, qsl_via, lotw_username, eqsl_username, qrz_url, website,
@@ -160,49 +163,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  visibility_antennas = VALUES(visibility_antennas),
                  visibility_interests = VALUES(visibility_interests),
                  is_active = 1'
-        )->execute([
-            (int) $userId,
-            $callsign,
-            $firstName,
-            $lastName,
-            $fullName,
-            $email,
-            password_hash($password, PASSWORD_DEFAULT),
-            1,
-            $country !== '' ? $country : null,
-            $address !== '' ? $address : null,
-            $postalCode !== '' ? $postalCode : null,
-            $phone !== '' ? $phone : null,
-            $qth !== '' ? $qth : null,
-            $locator !== '' ? $locator : null,
-            $licenceClass !== '' ? $licenceClass : null,
-            $operatorSince !== '' ? $operatorSince : null,
-            $cqZone !== '' ? $cqZone : null,
-            $ituZone !== '' ? $ituZone : null,
-            $qslVia !== '' ? $qslVia : null,
-            $lotwUsername !== '' ? $lotwUsername : null,
-            $eqslUsername !== '' ? $eqslUsername : null,
-            $qrzUrl,
-            $website !== '' ? $website : null,
-            $isUbaMember,
-            $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
-            $favouriteBands !== '' ? $favouriteBands : null,
-            $favouriteModes !== '' ? $favouriteModes : null,
-            $stationEquipment !== '' ? $stationEquipment : null,
-            $antennas !== '' ? $antennas : null,
-            $interests !== '' ? $interests : null,
-        ]);
+            )->execute([
+                (int) $userId,
+                $callsign,
+                $firstName,
+                $lastName,
+                $fullName,
+                $email,
+                password_hash($password, PASSWORD_DEFAULT),
+                0,
+                $country !== '' ? $country : null,
+                $address !== '' ? $address : null,
+                $postalCode !== '' ? $postalCode : null,
+                $phone !== '' ? $phone : null,
+                $qth !== '' ? $qth : null,
+                $locator !== '' ? $locator : null,
+                $licenceClass !== '' ? $licenceClass : null,
+                $operatorSince !== '' ? $operatorSince : null,
+                $cqZone !== '' ? $cqZone : null,
+                $ituZone !== '' ? $ituZone : null,
+                $qslVia !== '' ? $qslVia : null,
+                $lotwUsername !== '' ? $lotwUsername : null,
+                $eqslUsername !== '' ? $eqslUsername : null,
+                $qrzUrl,
+                $website !== '' ? $website : null,
+                $isUbaMember,
+                $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
+                $favouriteBands !== '' ? $favouriteBands : null,
+                $favouriteModes !== '' ? $favouriteModes : null,
+                $stationEquipment !== '' ? $stationEquipment : null,
+                $antennas !== '' ? $antennas : null,
+                $interests !== '' ? $interests : null,
+            ]);
+        } catch (Throwable $exception) {
+            member_delete_unlinked_auth_user((int) $userId);
+            throw $exception;
+        }
 
         if (in_array($callsign, configured_administrator_callsigns(), true)) {
             ensure_configured_administrator_roles([$callsign]);
         }
 
         $authClient->loginWithUsername($callsign, $password);
-        session_regenerate_id(true);
-        $_SESSION['member_id'] = (int) $authClient->getUserId();
+        $memberRow = authenticated_member_row($authClient, (int) ($_SESSION['member_id'] ?? 0));
+        if ($memberRow === null) {
+            try {
+                $authClient->logOut();
+            } catch (Throwable) {
+                // The local session is cleared below even if the auth backend cannot update its tables.
+            }
+            unset($_SESSION['member_id']);
+            throw new RuntimeException($t('auth_unavailable'));
+        }
+        $_SESSION['member_id'] = (int) ($memberRow['id'] ?? 0);
 
         set_flash('success', $t('ok_created'));
-        redirect('change_password');
+        redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect('register');
@@ -210,6 +226,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html('');
+$licenceClassOptionsHtml = member_profile_licence_class_options_html($t);
+$qslViaOptionsHtml = member_profile_qsl_via_options_html($t);
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices());
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices());
 
@@ -227,12 +245,12 @@ $content = '<div class="card narrow login-card register-card"><h1>' . e($t('titl
     . '<label>' . e($t('grid')) . '<input type="text" name="locator" maxlength="6"></label>'
     . '<label class="register-form-full checkbox-row"><input type="checkbox" name="allow_geocode" value="1"> <span>' . e($t('geocode_consent')) . '</span></label>'
     . privacy_notice_short_html('register')
-    . '<label>' . e($t('licence_class')) . '<select name="licence_class"><option value="Aucune">Aucune</option><option value="ONL">ONL</option><option value="ON3">ON3</option><option value="ON2">ON2</option><option value="HAREC">HAREC</option><option value="Autre">Autre</option></select></label>'
+    . '<label>' . e($t('licence_class')) . '<select name="licence_class">' . $licenceClassOptionsHtml . '</select></label>'
     . '<label>' . e($t('operator_since')) . '<select name="operator_since">' . $operatorSinceOptionsHtml . '</select></label>'
     . '<label>' . e($t('cq_zone')) . '<input type="text" name="cq_zone" maxlength="16"></label>'
     . '<label>' . e($t('itu_zone')) . '<input type="text" name="itu_zone" maxlength="16"></label>'
     . '<p class="help register-form-full">' . e($t('auto_radio_location_help')) . '</p>'
-    . '<label>' . e($t('qsl_via')) . '<input type="text" name="qsl_via" maxlength="190"></label>'
+    . '<label>' . e($t('qsl_via')) . '<select name="qsl_via">' . $qslViaOptionsHtml . '</select></label>'
     . '<label>' . e($t('eqsl_username')) . '<input type="text" name="eqsl_username" maxlength="190"></label>'
     . '<label>' . e($t('website')) . '<input type="url" name="website" maxlength="255"></label>'
     . '<label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" data-uba-member-toggle> <span>' . e($t('uba_member')) . '</span></label>'

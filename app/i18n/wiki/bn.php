@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'আপনার পরিচিতি',
   'propose_theme_submit' => 'প্রস্তাব পাঠান',
   'cancel' => 'বাতিল করুন',
+  'proposal_recorded' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
 );

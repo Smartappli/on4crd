@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Prepare email',
   'propose_event_cancel' => 'Cancel',
   'propose_event_close' => 'Close',
+  'proposal_recorded' => 'Proposal saved in your content area.',
 );

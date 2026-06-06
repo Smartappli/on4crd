@@ -81,4 +81,5 @@ Contact:',
 <ul><li>Important point</li></ul>',
   'html_cleanup_help' => 'HTML is cleaned automatically. Scripts, iframes and dangerous attributes are removed before validation.',
   'submit_for_review' => 'Submit for validation',
+  'proposal_recorded' => 'Proposal saved in your content area.',
 );

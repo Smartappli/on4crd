@@ -47,57 +47,59 @@
     });
   });
 
-  const liveClocks = document.querySelectorAll('[data-live-clock]');
-  const liveDates = document.querySelectorAll('[data-live-date]');
-  if (liveClocks.length > 0) {
-    const formatterCache = new Map();
-    const dateFormatterCache = new Map();
-    const defaultLocale = document.documentElement.lang || 'fr-FR';
-    const getFormatter = (timeZone, locale) => {
-      const cacheKey = `${timeZone}|${locale}`;
-      if (!formatterCache.has(cacheKey)) {
-        formatterCache.set(cacheKey, new Intl.DateTimeFormat(locale, {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
+  const formatterCache = new Map();
+  const dateFormatterCache = new Map();
+  const defaultLocale = document.documentElement.lang || 'fr-FR';
+  const getFormatter = (timeZone, locale) => {
+    const cacheKey = `${timeZone}|${locale}`;
+    if (!formatterCache.has(cacheKey)) {
+      formatterCache.set(cacheKey, new Intl.DateTimeFormat(locale, {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone,
+        timeZoneName: 'short',
+      }));
+    }
+    return formatterCache.get(cacheKey);
+  };
+  const updateClocks = () => {
+    const liveClocks = document.querySelectorAll('[data-live-clock]');
+    const liveDates = document.querySelectorAll('[data-live-date]');
+    if (liveClocks.length === 0 && liveDates.length === 0) {
+      return;
+    }
+    const now = new Date();
+    liveClocks.forEach((clockNode) => {
+      const zoneValue = clockNode.getAttribute('data-timezone') || 'UTC';
+      const localeValue = clockNode.getAttribute('data-locale') || defaultLocale;
+      const timeZone = zoneValue === 'local'
+        ? Intl.DateTimeFormat().resolvedOptions().timeZone
+        : zoneValue;
+      clockNode.textContent = getFormatter(timeZone, localeValue).format(now);
+      clockNode.setAttribute('datetime', now.toISOString());
+    });
+    liveDates.forEach((dateNode) => {
+      const zoneValue = dateNode.getAttribute('data-timezone') || 'UTC';
+      const localeValue = dateNode.getAttribute('data-locale') || defaultLocale;
+      const timeZone = zoneValue === 'local'
+        ? Intl.DateTimeFormat().resolvedOptions().timeZone
+        : zoneValue;
+      const cacheKey = `${timeZone}|${localeValue}`;
+      if (!dateFormatterCache.has(cacheKey)) {
+        dateFormatterCache.set(cacheKey, new Intl.DateTimeFormat(localeValue, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
           timeZone,
-          timeZoneName: 'short',
         }));
       }
-      return formatterCache.get(cacheKey);
-    };
-    const updateClocks = () => {
-      const now = new Date();
-      liveClocks.forEach((clockNode) => {
-        const zoneValue = clockNode.getAttribute('data-timezone') || 'UTC';
-        const localeValue = clockNode.getAttribute('data-locale') || defaultLocale;
-        const timeZone = zoneValue === 'local'
-          ? Intl.DateTimeFormat().resolvedOptions().timeZone
-          : zoneValue;
-        clockNode.textContent = getFormatter(timeZone, localeValue).format(now);
-        clockNode.setAttribute('datetime', now.toISOString());
-      });
-      liveDates.forEach((dateNode) => {
-        const zoneValue = dateNode.getAttribute('data-timezone') || 'UTC';
-        const localeValue = dateNode.getAttribute('data-locale') || defaultLocale;
-        const timeZone = zoneValue === 'local'
-          ? Intl.DateTimeFormat().resolvedOptions().timeZone
-          : zoneValue;
-        const cacheKey = `${timeZone}|${localeValue}`;
-        if (!dateFormatterCache.has(cacheKey)) {
-          dateFormatterCache.set(cacheKey, new Intl.DateTimeFormat(localeValue, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            timeZone,
-          }));
-        }
-        dateNode.textContent = dateFormatterCache.get(cacheKey).format(now);
-      });
-    };
-    updateClocks();
-    window.setInterval(updateClocks, 1000);
-  }
+      dateNode.textContent = dateFormatterCache.get(cacheKey).format(now);
+    });
+  };
+  window.ON4CRDUpdateLiveClocks = updateClocks;
+  updateClocks();
+  window.setInterval(updateClocks, 1000);
 
   let deferredInstallPrompt = null;
   const installButtons = document.querySelectorAll('[data-pwa-install]');

@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Dodajte favorite kako biste poboljšali preporuke.',
   'nudge_review_notifications' => 'Provjerite nepročitane obavijesti.',
   'nudge_enable_recommendations' => 'Omogući personalizirane preporuke.',
+  'save_unavailable' => 'Spremanje nije dostupno: nedostaje tablica dashboard_widgets.',
+  'saving' => 'Spremanje...',
+  'invalid_server_response' => 'Neispravan odgovor poslužitelja.',
+  'save_error' => 'Pogreška pri spremanju.',
+  'layout_saved_at' => 'Raspored je spremljen u {time}.',
+  'remove_widget' => 'Ukloni widget',
+  'preview_unavailable' => 'Pregled nije dostupan.',
+  'loading' => 'Učitavanje...',
+  'load_widget_error' => 'Widget nije moguće učitati.',
 );

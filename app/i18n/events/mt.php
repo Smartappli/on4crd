@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Ipprepara email',
   'propose_event_cancel' => 'Ikkanċella',
   'propose_event_close' => 'Agħlaq',
+  'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
 );

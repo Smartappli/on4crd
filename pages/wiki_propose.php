@@ -4,6 +4,7 @@ declare(strict_types=1);
 $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_translator('wiki_edit', $locale);
+$autoPublish = has_permission('wiki.moderate');
 $tr = static function (string $key, string $fallback) use ($t): string {
     $value = trim($t($key));
 
@@ -36,11 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $slug = wiki_unique_slug($title, $slugInput);
-        db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id, status) VALUES (?, ?, ?, ?, "pending")')
-            ->execute([$title, $slug, $content, (int) $user['id']]);
+        $status = $autoPublish ? 'published' : 'pending';
+        db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id, status) VALUES (?, ?, ?, ?, ?)')
+            ->execute([$title, $slug, $content, (int) $user['id'], $status]);
 
-        set_flash('success', $tr('propose_success', 'Page wiki proposÃ©e. Elle sera publiÃ©e aprÃ¨s validation.'));
-        redirect_url(route_url('wiki'));
+        if ($autoPublish) {
+            set_flash('success', $tr('propose_success_published', 'Page wiki publiee automatiquement.'));
+            redirect_url(route_url('wiki_view', ['slug' => $slug]));
+        }
+
+        set_flash('success', $tr('propose_success', 'Page wiki proposée. Elle sera publiée après validation.'));
+        redirect('my_requests');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect('wiki_propose');
@@ -54,7 +61,9 @@ ob_start();
         <div>
             <p class="eyebrow"><?= e($tr('wiki_label', 'Wiki')) ?></p>
             <h1><?= e($tr('propose_title', 'Proposer une page wiki')) ?></h1>
-            <p class="help"><?= e($tr('propose_help', 'RÃ©digez une nouvelle page avec du HTML simple. Elle sera relue avant publication.')) ?></p>
+            <p class="help"><?= e($autoPublish
+                ? $tr('propose_help_auto_publish', 'Avec vos droits de moderation, la page sera publiee automatiquement.')
+                : $tr('propose_help', 'Rédigez une nouvelle page avec du HTML simple. Elle sera relue avant publication.')) ?></p>
         </div>
         <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($tr('wiki_label', 'Wiki')) ?></a>
     </section>
@@ -69,7 +78,7 @@ ob_start();
             <textarea name="content" rows="22" maxlength="50000" data-wysiwyg="full" required><p></p></textarea>
         </label>
         <div class="actions">
-            <button class="button" type="submit"><?= e($tr('propose_submit', 'Proposer la page')) ?></button>
+            <button class="button" type="submit"><?= e($autoPublish ? $tr('propose_submit_publish', 'Publier la page') : $tr('propose_submit', 'Proposer la page')) ?></button>
             <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($tr('cancel', 'Annuler')) ?></a>
         </div>
     </form>

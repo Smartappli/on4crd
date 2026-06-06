@@ -25,17 +25,14 @@
   };
 
   openButtons.forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
       const dialogId = button.dataset.membersLibraryModalOpen || '';
       const dialog = document.getElementById(dialogId);
-      const fallbackUrl = button.dataset.membersLibraryFallback || '';
       if (!supportsDialog || !(dialog instanceof HTMLDialogElement)) {
-        if (fallbackUrl) {
-          window.location.href = fallbackUrl;
-        }
         return;
       }
 
+      event.preventDefault();
       if (!dialog.open) {
         dialog.showModal();
       }
@@ -60,6 +57,9 @@
 
     const form = dialog.querySelector('[data-members-library-proposal-form]');
     if (!form) {
+      return;
+    }
+    if (String(form.getAttribute('method') || '').toLowerCase() !== 'dialog') {
       return;
     }
 

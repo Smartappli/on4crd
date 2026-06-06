@@ -16,6 +16,24 @@
     return;
   }
 
+  const messages = dashboardConfig.i18n && typeof dashboardConfig.i18n === 'object' ? dashboardConfig.i18n : {};
+  const t = (key, fallback) => {
+    const value = messages[key];
+    return typeof value === 'string' && value.trim() !== '' ? value : fallback;
+  };
+  const formatMessage = (key, fallback, replacements) => (
+    t(key, fallback).replace(/\{([a-z0-9_]+)\}/gi, (match, token) => (
+      Object.prototype.hasOwnProperty.call(replacements, token) ? String(replacements[token]) : match
+    ))
+  );
+  const helpHtml = (message) => {
+    const p = document.createElement('p');
+    p.className = 'help';
+    p.textContent = message;
+    const wrapper = document.createElement('div');
+    wrapper.appendChild(p);
+    return wrapper.innerHTML;
+  };
   const renderBase = dashboardConfig.renderBase;
   const csrf = dashboardConfig.csrf;
   const saveEnabled = Boolean(dashboardConfig.saveEnabled);
@@ -23,6 +41,7 @@
   const saveStatus = document.getElementById('dashboard-save-status');
   const addWidgetContainer = document.querySelector('.split-home aside .stack');
   const addWidgetTemplates = new Map();
+  const hiddenCatalogWidgets = new Set(['welcome']);
   let dragged = null;
   let isSaving = false;
 
@@ -34,7 +53,7 @@
 
   async function saveDashboardLayout() {
     if (!saveEnabled) {
-      setSaveStatus('Sauvegarde indisponible (table dashboard_widgets absente).', true);
+      setSaveStatus(t('save_unavailable', 'Saving is unavailable because the dashboard_widgets table is missing.'), true);
       return;
     }
     if (isSaving) {
@@ -42,7 +61,7 @@
     }
     isSaving = true;
     if (saveButton) saveButton.disabled = true;
-    setSaveStatus('Enregistrementâ€¦', false);
+    setSaveStatus(t('saving', 'Saving...'), false);
 
     try {
       const widgets = [...grid.querySelectorAll('.widget-card')].map((card) => {
@@ -71,13 +90,13 @@
         credentials: 'same-origin',
         body: JSON.stringify({ _csrf: csrf, widgets })
       });
-      const data = await response.json().catch(() => ({ ok: false, error: 'RÃ©ponse serveur invalide.' }));
+      const data = await response.json().catch(() => ({ ok: false, error: t('invalid_server_response', 'Invalid server response.') }));
       if (!response.ok || !data.ok) {
-        throw new Error(data.error || 'Erreur de sauvegarde');
+        throw new Error(data.error || t('save_error', 'Save error.'));
       }
-      setSaveStatus(`Disposition enregistrÃ©e Ã  ${new Date().toLocaleTimeString()}.`, false);
+      setSaveStatus(formatMessage('layout_saved_at', 'Layout saved at {time}.', { time: new Date().toLocaleTimeString() }), false);
     } catch (error) {
-      setSaveStatus(error instanceof Error ? error.message : 'Erreur de sauvegarde.', true);
+      setSaveStatus(error instanceof Error ? error.message : t('save_error', 'Save error.'), true);
     } finally {
       if (saveButton) saveButton.disabled = false;
       isSaving = false;
@@ -101,6 +120,9 @@
   }
 
   function addWidgetOption(widgetKey, title) {
+    if (hiddenCatalogWidgets.has(widgetKey)) {
+      return;
+    }
     if (!addWidgetContainer || !widgetKey) {
       return;
     }
@@ -114,7 +136,7 @@
     const widgetTitle = title || template.title || widgetKey;
     const article = document.createElement('article');
     article.className = 'widget-card';
-    article.innerHTML = `<header><strong></strong></header><p class="help"></p><div class="widget-body widget-preview"></div><button class="button small add-widget" type="button">Ajouter</button>`;
+    article.innerHTML = '<header><strong></strong></header><p class="help"></p><div class="widget-body widget-preview"></div><button class="button small add-widget" type="button"></button>';
     const titleNode = article.querySelector('header strong');
     if (titleNode) {
       titleNode.textContent = widgetTitle;
@@ -130,12 +152,13 @@
     }
     const previewNode = article.querySelector('.widget-preview');
     if (previewNode) {
-      previewNode.innerHTML = template.previewHtml || '<p class="help">PrÃ©visualisation indisponible.</p>';
+      previewNode.innerHTML = template.previewHtml || helpHtml(t('preview_unavailable', 'Preview unavailable.'));
     }
     const button = article.querySelector('.add-widget');
     if (!button) {
       return;
     }
+    button.textContent = t('add', 'Add');
     button.dataset.widget = widgetKey;
     button.dataset.title = widgetTitle;
     bindAddWidgetButton(button);
@@ -152,7 +175,7 @@
       dragged = null;
       saveDashboardLayout();
     });
-    card.querySelector('.remove-widget')?.setAttribute('aria-label', 'Retirer le widget');
+    card.querySelector('.remove-widget')?.setAttribute('aria-label', t('remove_widget', 'Remove widget'));
     card.querySelector('.remove-widget')?.addEventListener('click', () => {
       const widgetKey = card.dataset.widget || '';
       const widgetTitle = card.querySelector('header strong')?.textContent?.trim() || widgetKey;
@@ -169,10 +192,19 @@
     card.dataset.widget = widgetKey;
     card.dataset.widgetConfig = '{}';
     card.classList.add('is-loading');
-    card.innerHTML = '<header><strong></strong><button class="ghost remove-widget" type="button" aria-label="Retirer le widget">âœ•</button></header><div class="widget-body">Chargementâ€¦</div>';
+    card.innerHTML = '<header><strong></strong><button class="ghost remove-widget" type="button"></button></header><div class="widget-body"></div>';
     const titleNode = card.querySelector('header strong');
     if (titleNode) {
       titleNode.textContent = title;
+    }
+    const removeButton = card.querySelector('.remove-widget');
+    if (removeButton) {
+      removeButton.setAttribute('aria-label', t('remove_widget', 'Remove widget'));
+      removeButton.textContent = '\u00d7';
+    }
+    const bodyNode = card.querySelector('.widget-body');
+    if (bodyNode) {
+      bodyNode.textContent = t('loading', 'Loading...');
     }
     bindCard(card);
     fetch(renderBase + encodeURIComponent(widgetKey), {
@@ -185,7 +217,7 @@
         card.classList.remove('is-loading');
       })
       .catch(() => {
-        card.querySelector('.widget-body').innerHTML = '<p>Impossible de charger le widget.</p>';
+        card.querySelector('.widget-body').innerHTML = helpHtml(t('load_widget_error', 'Unable to load widget.'));
         card.classList.add('is-error');
         card.classList.remove('is-loading');
       });

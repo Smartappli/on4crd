@@ -57,4 +57,8 @@ return array (
   'proposal_submit' => 'Voorstel verzenden',
   'proposal_cancel' => 'Annuleer',
   'proposal_close' => 'Sluiten',
+  'categories' => 'Secties',
+  'search' => 'Zoeken',
+  'news_count_label' => 'Aantal nieuws',
+  'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
 );

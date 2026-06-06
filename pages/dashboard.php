@@ -32,8 +32,8 @@ if (table_exists('articles')) {
         ];
     }
 }
-if (table_exists('classified_ads')) {
-    $rows = db()->query('SELECT title, created_at FROM classified_ads WHERE status = "active" ORDER BY created_at DESC LIMIT 6')->fetchAll() ?: [];
+if (module_enabled('classifieds') && module_visible_for_current_user('classifieds') && table_exists('classified_ads')) {
+    $rows = db()->query('SELECT title, created_at FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' ORDER BY created_at DESC LIMIT 6')->fetchAll() ?: [];
     foreach ($rows as $row) {
         $title = trim((string) ($row['title'] ?? ''));
         $timelineItems[] = [
@@ -89,8 +89,13 @@ if ($dashboardPersistenceEnabled) {
 }
 $selectedWidgets = [];
 $seenSelected = [];
+$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links', 'propagation'];
+$hadLegacyUtilityWidget = false;
 foreach ($selected as $row) {
     $widgetKey = (string) ($row['widget_key'] ?? '');
+    if (in_array($widgetKey, $legacyUtilityWidgetKeys, true)) {
+        $hadLegacyUtilityWidget = true;
+    }
     if ($widgetKey === '' || !array_key_exists($widgetKey, $availableWidgets) || isset($seenSelected[$widgetKey])) {
         continue;
     }
@@ -101,15 +106,32 @@ foreach ($selected as $row) {
         'config' => is_array($decodedConfig) ? $decodedConfig : [],
     ];
 }
+$radioDefaultWidgetKeys = array_values(array_intersect(
+    array_merge(['welcome', 'radio_clocks', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog())),
+    array_keys($availableWidgets)
+));
 if ($selectedWidgets === []) {
-    $defaultWidgetKeys = array_values(array_intersect(['welcome', 'propagation', 'club_status'], array_keys($availableWidgets)));
+    $defaultWidgetKeys = $radioDefaultWidgetKeys;
     if ($defaultWidgetKeys === []) {
         $defaultWidgetKeys = array_slice(array_keys($availableWidgets), 0, 4);
     }
     $selectedWidgets = array_map(static fn(string $key): array => ['key' => $key, 'config' => []], $defaultWidgetKeys);
+} elseif ($hadLegacyUtilityWidget) {
+    foreach ($radioDefaultWidgetKeys as $widgetKey) {
+        if (isset($seenSelected[$widgetKey])) {
+            continue;
+        }
+        $seenSelected[$widgetKey] = true;
+        $selectedWidgets[] = ['key' => $widgetKey, 'config' => []];
+    }
 }
 $selectedKeys = array_map(static fn(array $widget): string => (string) $widget['key'], $selectedWidgets);
-$availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);
+$catalogHiddenWidgetKeys = ['welcome'];
+$availableToAdd = array_filter(
+    $availableWidgets,
+    static fn(string $key): bool => !in_array($key, $selectedKeys, true) && !in_array($key, $catalogHiddenWidgetKeys, true),
+    ARRAY_FILTER_USE_KEY
+);
 
 $safeRenderWidget = static function (string $widgetKey, array $currentUser) use ($t): string {
     try {
@@ -125,6 +147,18 @@ $dashboardConfig = [
     'saveEnabled' => $dashboardPersistenceEnabled,
     'refreshMs' => 90000,
     'csrf' => csrf_token(),
+    'i18n' => [
+        'add' => $t('add'),
+        'save_unavailable' => $t('save_unavailable'),
+        'saving' => $t('saving'),
+        'invalid_server_response' => $t('invalid_server_response'),
+        'save_error' => $t('save_error'),
+        'layout_saved_at' => $t('layout_saved_at'),
+        'remove_widget' => $t('remove_widget'),
+        'preview_unavailable' => $t('preview_unavailable'),
+        'loading' => $t('loading'),
+        'load_widget_error' => $t('load_widget_error'),
+    ],
 ];
 
 ob_start();

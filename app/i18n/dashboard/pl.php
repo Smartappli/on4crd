@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Dodaj ulubione, aby ulepszyć rekomendacje.',
   'nudge_review_notifications' => 'Sprawdź nieprzeczytane powiadomienia.',
   'nudge_enable_recommendations' => 'Włącz spersonalizowane rekomendacje.',
+  'save_unavailable' => 'Zapisywanie jest niedostępne: brakuje tabeli dashboard_widgets.',
+  'saving' => 'Zapisywanie...',
+  'invalid_server_response' => 'Nieprawidłowa odpowiedź serwera.',
+  'save_error' => 'Błąd zapisu.',
+  'layout_saved_at' => 'Układ zapisano o {time}.',
+  'remove_widget' => 'Usuń widżet',
+  'preview_unavailable' => 'Podgląd niedostępny.',
+  'loading' => 'Ładowanie...',
+  'load_widget_error' => 'Nie można załadować widżetu.',
 );

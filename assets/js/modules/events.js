@@ -35,15 +35,7 @@
     return;
   }
 
-  const fallbackUrl = openButtons[0].dataset.eventProposalFallback || '';
   if (typeof HTMLDialogElement === 'undefined' || !(dialog instanceof HTMLDialogElement)) {
-    openButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        if (fallbackUrl) {
-          window.location.href = fallbackUrl;
-        }
-      });
-    });
     return;
   }
 
@@ -51,7 +43,8 @@
   const form = dialog.querySelector('[data-event-proposal-form]');
   const firstField = dialog.querySelector('input[name="proposal_title"]');
 
-  const openDialog = () => {
+  const openDialog = (event) => {
+    event.preventDefault();
     if (!dialog.open) {
       dialog.showModal();
     }
@@ -92,7 +85,7 @@
     }
   });
 
-  if (form) {
+  if (form && String(form.getAttribute('method') || '').toLowerCase() === 'dialog') {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const recipient = form.dataset.eventProposalRecipient || 'crdurnal@gmail.com';

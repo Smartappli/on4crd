@@ -5,6 +5,7 @@ return array (
   'required' => 'Sunt necesare acreditări.',
   'captcha_invalid' => 'Captcha nevalid.',
   'auth_unavailable' => 'Modul de autentificare indisponibil. Rulați instalarea compozitorului.',
+  'member_unavailable' => 'Autentificarea a fost validată, dar nu a fost găsit niciun profil activ de membru corespunzător.',
   'invalid_credentials' => 'Cod sau parolă nevalidă.',
   'too_many' => 'Prea multe încercări de conectare. Încercați din nou peste câteva minute.',
   'not_verified' => 'Contul dvs. nu este încă verificat.',

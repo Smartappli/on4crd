@@ -10,19 +10,35 @@ function member_default_contact_email(): string
 }
 }
 
+if (!function_exists('member_shared_contact_emails')) {
+/**
+ * @return list<string>
+ */
+function member_shared_contact_emails(): array
+{
+    return [
+        member_default_contact_email(),
+        'crddurnal@gmail.com',
+    ];
+}
+}
+
 if (!function_exists('member_contact_email_from_input')) {
 function member_contact_email_from_input(string $email): string
 {
     $email = trim($email);
+    if ($email === '') {
+        return member_default_contact_email();
+    }
 
-    return $email !== '' ? $email : member_default_contact_email();
+    return member_contact_email_uses_shared_default($email) ? member_default_contact_email() : $email;
 }
 }
 
 if (!function_exists('member_contact_email_uses_shared_default')) {
 function member_contact_email_uses_shared_default(string $email): bool
 {
-    return strcasecmp(trim($email), member_default_contact_email()) === 0;
+    return in_array(strtolower(trim($email)), member_shared_contact_emails(), true);
 }
 }
 
@@ -49,6 +65,66 @@ function member_auth_email_for_contact_email(string $contactEmail, string $calls
     }
 
     return member_auth_email_for_shared_contact($callsign);
+}
+}
+
+if (!function_exists('member_auth_user_is_linked_to_member')) {
+function member_auth_user_is_linked_to_member(int $authUserId): bool
+{
+    if ($authUserId <= 0 || !table_exists('members') || !table_has_column('members', 'auth_user_id')) {
+        return false;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT COUNT(*) FROM members WHERE auth_user_id = ?');
+        $stmt->execute([$authUserId]);
+
+        return (int) $stmt->fetchColumn() > 0;
+    } catch (Throwable) {
+        return true;
+    }
+}
+}
+
+if (!function_exists('member_delete_unlinked_auth_user')) {
+function member_delete_unlinked_auth_user(int $authUserId): void
+{
+    if ($authUserId <= 0 || !table_exists('users') || member_auth_user_is_linked_to_member($authUserId)) {
+        return;
+    }
+
+    try {
+        db()->prepare('DELETE FROM users WHERE id = ? LIMIT 1')->execute([$authUserId]);
+    } catch (Throwable) {
+        // Do not mask the original registration failure if cleanup is unavailable.
+    }
+}
+}
+
+if (!function_exists('member_cleanup_registration_auth_orphan')) {
+function member_cleanup_registration_auth_orphan(string $authEmail, string $callsign): void
+{
+    $authEmail = trim($authEmail);
+    $callsign = strtoupper(trim($callsign));
+    if ($authEmail === '' || $callsign === '' || !table_exists('users')) {
+        return;
+    }
+
+    try {
+        $emails = [$authEmail];
+        if (member_contact_email_uses_shared_default($authEmail) || str_ends_with($authEmail, '@local.invalid')) {
+            $emails = array_merge($emails, member_shared_contact_emails());
+        }
+        $emails = array_values(array_unique($emails));
+        $placeholders = implode(',', array_fill(0, count($emails), '?'));
+        $stmt = db()->prepare('SELECT id FROM users WHERE username = ? AND email IN (' . $placeholders . ')');
+        $stmt->execute(array_merge([$callsign], $emails));
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $authUserId) {
+            member_delete_unlinked_auth_user((int) $authUserId);
+        }
+    } catch (Throwable) {
+        // A linked account will still be rejected by the auth layer.
+    }
 }
 }
 
@@ -531,6 +607,123 @@ function member_profile_operator_since_options_html(string $currentValue = ''): 
 }
 }
 
+if (!function_exists('member_profile_licence_class_choices')) {
+/**
+ * @return array<string, string>
+ */
+function member_profile_licence_class_choices(callable $t): array
+{
+    return [
+        '' => '',
+        'Aucune' => (string) $t('licence_none'),
+        'ONL' => (string) $t('licence_onl'),
+        'ON3' => (string) $t('licence_base'),
+        'ON2' => (string) $t('licence_intermediate'),
+        'ON1' => (string) $t('licence_on1'),
+        'HAREC' => (string) $t('licence_harec'),
+        'Autre' => (string) $t('licence_other'),
+    ];
+}
+}
+
+if (!function_exists('member_profile_licence_class_options_html')) {
+function member_profile_licence_class_options_html(callable $t, string $currentValue = ''): string
+{
+    $currentValue = trim($currentValue);
+    $choices = member_profile_licence_class_choices($t);
+
+    $html = '';
+    $hasCurrentValue = $currentValue === '';
+    foreach ($choices as $value => $label) {
+        if ($value === $currentValue) {
+            $hasCurrentValue = true;
+        }
+
+        $html .= '<option value="' . e($value) . '"' . ($value === $currentValue ? ' selected' : '') . '>' . e($label) . '</option>';
+    }
+
+    if (!$hasCurrentValue) {
+        $html .= '<option value="' . e($currentValue) . '" selected>' . e($currentValue) . '</option>';
+    }
+
+    return $html;
+}
+}
+
+if (!function_exists('member_profile_licence_class_display_text')) {
+function member_profile_licence_class_display_text(callable $t, string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return '';
+    }
+
+    $choices = member_profile_licence_class_choices($t);
+
+    return (string) ($choices[$value] ?? $value);
+}
+}
+
+if (!function_exists('member_profile_qsl_via_choices')) {
+/**
+ * @return array<string, string>
+ */
+function member_profile_qsl_via_choices(callable $t): array
+{
+    return [
+        '' => '',
+        'bureau' => (string) $t('qsl_choice_bureau'),
+        'direct' => (string) $t('qsl_choice_direct'),
+        'bureau_direct' => (string) $t('qsl_choice_bureau_direct'),
+        'lotw' => (string) $t('qsl_choice_lotw'),
+        'eqsl' => (string) $t('qsl_choice_eqsl'),
+        'lotw_eqsl' => (string) $t('qsl_choice_lotw_eqsl'),
+        'qrz' => (string) $t('qsl_choice_qrz'),
+        'manager' => (string) $t('qsl_choice_manager'),
+        'no_qsl' => (string) $t('qsl_choice_no_qsl'),
+        'other' => (string) $t('qsl_choice_other'),
+    ];
+}
+}
+
+if (!function_exists('member_profile_qsl_via_options_html')) {
+function member_profile_qsl_via_options_html(callable $t, string $currentValue = ''): string
+{
+    $currentValue = trim($currentValue);
+    $choices = member_profile_qsl_via_choices($t);
+
+    $html = '';
+    $hasCurrentValue = $currentValue === '';
+    foreach ($choices as $value => $label) {
+        if ($value === $currentValue) {
+            $hasCurrentValue = true;
+        }
+
+        $html .= '<option value="' . e($value) . '"' . ($value === $currentValue ? ' selected' : '') . '>' . e($label) . '</option>';
+    }
+
+    if (!$hasCurrentValue) {
+        $html .= '<option value="' . e($currentValue) . '" selected>' . e($currentValue) . '</option>';
+    }
+
+    return $html;
+}
+}
+
+if (!function_exists('member_profile_qsl_via_display_text')) {
+function member_profile_qsl_via_display_text(callable $t, string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return '';
+    }
+
+    $choices = member_profile_qsl_via_choices($t);
+
+    return (string) ($choices[$value] ?? $value);
+}
+}
+
 if (!function_exists('member_profile_favourite_band_choices')) {
 /**
  * @return list<string>
@@ -690,7 +883,7 @@ function member_profile_visibility_fields(callable $t): array
 
 if (!function_exists('member_profile_preview_fields')) {
 /**
- * @return array<string, array{label:string, visibility:string, type?:string}>
+ * @return array<string, array{label:string, visibility:string, type?:string, choices?:array<string, string>}>
  */
 function member_profile_preview_fields(callable $t): array
 {
@@ -704,11 +897,11 @@ function member_profile_preview_fields(callable $t): array
         'postal_code' => ['label' => (string) $t('postal_code'), 'visibility' => 'visibility_postal_code'],
         'qth' => ['label' => (string) $t('qth'), 'visibility' => 'visibility_qth'],
         'locator' => ['label' => (string) $t('grid'), 'visibility' => 'visibility_locator'],
-        'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class'],
+        'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class', 'type' => 'choice', 'choices' => member_profile_licence_class_choices($t)],
         'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_operator_since'],
         'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_country'],
         'itu_zone' => ['label' => (string) $t('itu_zone'), 'visibility' => 'visibility_country'],
-        'qsl_via' => ['label' => (string) $t('qsl_via'), 'visibility' => 'visibility_qsl'],
+        'qsl_via' => ['label' => (string) $t('qsl_via'), 'visibility' => 'visibility_qsl', 'type' => 'choice', 'choices' => member_profile_qsl_via_choices($t)],
         'lotw_username' => ['label' => (string) $t('lotw_username'), 'visibility' => 'visibility_qsl'],
         'eqsl_username' => ['label' => (string) $t('eqsl_username'), 'visibility' => 'visibility_qsl'],
         'qrz_url' => ['label' => (string) $t('qrz_url'), 'visibility' => 'visibility_qrz', 'type' => 'url'],
@@ -724,10 +917,34 @@ function member_profile_preview_fields(callable $t): array
 }
 }
 
+if (!function_exists('member_directory_card_has_visible_content')) {
+/**
+ * @param array<string, mixed> $member
+ * @param list<string> $visibleFields
+ */
+function member_directory_card_has_visible_content(array $member, array $visibleFields): bool
+{
+    if (trim((string) ($member['callsign'] ?? '')) !== '') {
+        return true;
+    }
+
+    foreach ($visibleFields as $field) {
+        if ($field === 'is_uba_member' && (int) ($member[$field] ?? 0) !== 1) {
+            continue;
+        }
+        if (trim((string) ($member[$field] ?? '')) !== '') {
+            return true;
+        }
+    }
+
+    return false;
+}
+}
+
 if (!function_exists('member_profile_display_row')) {
 /**
  * @param array<string, mixed> $member
- * @param array{label:string, visibility:string, type?:string} $fieldMeta
+ * @param array{label:string, visibility:string, type?:string, choices?:array<string, string>} $fieldMeta
  * @return array{label:string, text:string, html:string}|null
  */
 function member_profile_display_row(array $member, string $fieldName, array $fieldMeta): ?array
@@ -748,6 +965,12 @@ function member_profile_display_row(array $member, string $fieldName, array $fie
 
     if ($type === 'country') {
         return ['label' => (string) $fieldMeta['label'], 'text' => $text, 'html' => member_country_html($text)];
+    }
+
+    if ($type === 'choice') {
+        $displayText = (string) ((is_array($fieldMeta['choices'] ?? null) ? $fieldMeta['choices'] : [])[$text] ?? $text);
+
+        return ['label' => (string) $fieldMeta['label'], 'text' => $displayText, 'html' => e($displayText)];
     }
 
     if ($type === 'url') {
@@ -840,11 +1063,16 @@ function member_profile_select_columns_sql(): string
 }
 
 if (!function_exists('member_qrz_url_for_profile_save')) {
-function member_qrz_url_for_profile_save(string $newCallsign, string $previousCallsign = '', string $existingQrzUrl = ''): ?string
+function member_qrz_url_for_profile_save(string $newCallsign, string $previousCallsign = '', string $existingQrzUrl = '', string $submittedQrzUrl = ''): ?string
 {
     $newCallsign = strtoupper(trim($newCallsign));
     $previousCallsign = strtoupper(trim($previousCallsign));
     $existingQrzUrl = trim($existingQrzUrl);
+    $submittedQrzUrl = trim($submittedQrzUrl);
+
+    if ($submittedQrzUrl !== '') {
+        return $submittedQrzUrl;
+    }
 
     if ($newCallsign === '') {
         return $existingQrzUrl !== '' ? $existingQrzUrl : null;

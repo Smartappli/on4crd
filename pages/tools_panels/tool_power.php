@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-power" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-power" data-tool-panel>
     <h2><?= e((string) $t['conv']) ?> - <?= e((string) $t['power']) ?></h2>
     <label><?= e((string) $t['watts']) ?>
         <input type="text" inputmode="decimal" id="power-watts" data-min="0" data-step="0.001" placeholder="<?= e((string) $t['watts_ph']) ?>">

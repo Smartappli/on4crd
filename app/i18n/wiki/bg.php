@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Вашият контакт',
   'propose_theme_submit' => 'Изпратете предложение',
   'cancel' => 'Отказ',
+  'proposal_recorded' => 'Предложението е запазено във вашето съдържание.',
 );

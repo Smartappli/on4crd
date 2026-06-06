@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $qslVia = trim((string) ($_POST['qsl_via'] ?? ''));
         $lotwUsername = trim((string) ($_POST['lotw_username'] ?? ''));
         $eqslUsername = trim((string) ($_POST['eqsl_username'] ?? ''));
+        $submittedQrzUrl = trim((string) ($_POST['qrz_url'] ?? ''));
         $website = trim((string) ($_POST['website'] ?? ''));
         $isUbaMember = isset($_POST['is_uba_member']) ? 1 : 0;
         $ubaMemberNumber = $isUbaMember === 1 ? trim((string) ($_POST['uba_member_number'] ?? '')) : '';
@@ -57,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('invalid_locator'));
         }
         if ($website !== '' && filter_var($website, FILTER_VALIDATE_URL) === false) {
+            throw new RuntimeException($t('invalid_url'));
+        }
+        if ($submittedQrzUrl !== '' && filter_var($submittedQrzUrl, FILTER_VALIDATE_URL) === false) {
             throw new RuntimeException($t('invalid_url'));
         }
 
@@ -101,7 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $qrzUrl = member_qrz_url_for_profile_save(
             $callsign,
             (string) ($currentMember['callsign'] ?? ''),
-            (string) ($currentMember['qrz_url'] ?? '')
+            (string) ($currentMember['qrz_url'] ?? ''),
+            $submittedQrzUrl
         );
         $lotwUsername = (string) member_lotw_username_for_profile_save($callsign, $lotwUsername);
 
@@ -225,8 +230,11 @@ foreach (array_keys($profileViews) as $viewer) {
     $profilePreviewRows[$viewer] = member_profile_preview_rows($member, (string) $viewer, $t);
 }
 
+$profilePhotoPreviewSrc = member_avatar_src($member);
 $operatorSinceValue = trim((string) ($member['operator_since'] ?? ''));
 $operatorSinceOptionsHtml = member_profile_operator_since_options_html($operatorSinceValue !== '' ? $operatorSinceValue : (string) date('Y'));
+$licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member['licence_class'] ?? ''));
+$qslViaOptionsHtml = member_profile_qsl_via_options_html($t, (string) ($member['qsl_via'] ?? ''));
 $favouriteBandsOptionsHtml = member_profile_checkbox_group_html('favourite_bands', member_profile_favourite_band_choices(), (string) ($member['favourite_bands'] ?? ''));
 $favouriteModesOptionsHtml = member_profile_checkbox_group_html('favourite_modes', member_profile_favourite_mode_choices(), (string) ($member['favourite_modes'] ?? ''));
 $requiredFieldHelp = $locale === 'fr' ? 'Champ obligatoire.' : 'Required field.';
@@ -249,14 +257,13 @@ ob_start();
 ?>
 <div class="stack">
 <div class="card profile-hero">
-    <?php $avatarSrc = member_avatar_src($member); ?>
     <div class="profile-preview-views">
         <?php foreach ($profileViews as $viewer => $view): ?>
             <?php $canSeePhoto = member_profile_visibility_allows((string) $viewer, (string) ($member['visibility_photo'] ?? 'private')); ?>
             <section class="profile-preview-view">
                 <header>
                     <?php if ($canSeePhoto): ?>
-                        <img class="profile-preview-avatar" src="<?= e($avatarSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
+                        <img class="profile-preview-avatar" src="<?= e($profilePhotoPreviewSrc) ?>" alt="<?= e($t('avatar_alt')) ?>">
                     <?php endif; ?>
                     <div>
                         <h2><?= e((string) $view['title']) ?></h2>
@@ -287,11 +294,17 @@ ob_start();
 
         <fieldset class="profile-fieldset">
             <legend><?= e($t('photo_section')) ?></legend>
-        <label>
-            <?= e($t('change_photo')) ?>
-            <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
-            <small class="help"><?= e($t('photo_help')) ?></small>
-        </label>
+            <div class="profile-photo-upload-grid">
+                <label class="profile-photo-upload-control">
+                    <?= e($t('change_photo')) ?>
+                    <input id="profile-photo-input" type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" data-profile-photo-input>
+                    <small class="help"><?= e($t('photo_help')) ?></small>
+                </label>
+                <figure class="profile-photo-preview-card" aria-label="<?= e($t('photo')) ?>">
+                    <img class="profile-photo-preview-image" src="<?= e($profilePhotoPreviewSrc) ?>" alt="<?= e($t('avatar_alt')) ?>" data-profile-photo-preview>
+                    <figcaption class="help"><?= e($t('photo')) ?></figcaption>
+                </figure>
+            </div>
         </fieldset>
 
         <fieldset class="profile-fieldset">
@@ -309,7 +322,7 @@ ob_start();
                 <label><?= $helpFieldLabel($t('grid'), 'profile-grid-help', $t('grid_help')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
             </div>
             <label class="profile-checkbox" style="margin-top:.75rem;">
-                <input type="checkbox" name="allow_geocode" value="1">
+                <input type="checkbox" name="allow_geocode" value="1" checked>
                 <span><?= e($t('geocode_consent')) ?></span>
             </label>
             <?= privacy_notice_short_html('profile') ?>
@@ -318,14 +331,14 @@ ob_start();
         <fieldset class="profile-fieldset">
             <legend><?= e($t('radio_section')) ?></legend>
             <div class="profile-form-grid">
-                <label><?= $helpFieldLabel($t('licence'), 'profile-licence-help', $t('licence_help')) ?><input type="text" name="licence_class" maxlength="64" value="<?= e((string) ($member['licence_class'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('licence'), 'profile-licence-help', $t('licence_help')) ?><select name="licence_class"><?= $licenceClassOptionsHtml ?></select></label>
                 <label><?= e($t('operator_since')) ?><select name="operator_since"><?= $operatorSinceOptionsHtml ?></select></label>
                 <label><?= $helpFieldLabel($t('cq_zone'), 'profile-cq-zone-help', $t('cq_zone_help')) ?><input type="text" name="cq_zone" maxlength="16" value="<?= e((string) ($member['cq_zone'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('itu_zone'), 'profile-itu-zone-help', $t('itu_zone_help')) ?><input type="text" name="itu_zone" maxlength="16" value="<?= e((string) ($member['itu_zone'] ?? '')) ?>"></label>
                 <p class="help profile-form-wide"><?= e($t('auto_radio_location_help')) ?></p>
-                <label><?= $helpFieldLabel($t('qsl_via'), 'profile-qsl-via-help', $t('qsl_via_help')) ?><input type="text" name="qsl_via" maxlength="190" value="<?= e((string) ($member['qsl_via'] ?? '')) ?>"></label>
+                <label><?= $helpFieldLabel($t('qsl_via'), 'profile-qsl-via-help', $t('qsl_via_help')) ?><select name="qsl_via"><?= $qslViaOptionsHtml ?></select></label>
                 <label><?= $helpFieldLabel($t('eqsl_username'), 'profile-eqsl-help', $t('eqsl_username_help')) ?><input type="text" name="eqsl_username" maxlength="190" value="<?= e((string) ($member['eqsl_username'] ?? '')) ?>"></label>
-                <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble profile-help-bubble-right" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" maxlength="255" readonly value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
+                <label class="profile-qrz-field"><span class="profile-label-with-help"><?= e($t('qrz_url')) ?><span class="profile-help-tooltip"><button type="button" class="profile-help-trigger" aria-label="<?= e($t('qrz_help')) ?>" aria-describedby="profile-qrz-help">?</button><span id="profile-qrz-help" class="profile-help-bubble profile-help-bubble-right" role="tooltip"><?= e($t('qrz_help')) ?></span></span></span><input type="url" name="qrz_url" maxlength="255" value="<?= e((string) ($member['qrz_url'] ?? '')) ?>"></label>
                 <label><?= $helpFieldLabel($t('website'), 'profile-website-help', $t('website_help')) ?><input type="url" name="website" maxlength="255" value="<?= e((string) ($member['website'] ?? '')) ?>"></label>
                 <?php $isUbaMemberChecked = (int) ($member['is_uba_member'] ?? 0) === 1; ?>
                 <label class="profile-checkbox"><input type="checkbox" name="is_uba_member" value="1" data-uba-member-toggle <?= $isUbaMemberChecked ? 'checked' : '' ?>> <span><?= e($t('uba_member')) ?></span></label>

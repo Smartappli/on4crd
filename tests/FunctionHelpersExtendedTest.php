@@ -202,6 +202,94 @@ final class FunctionHelpersExtendedTest extends TestCase
         classifieds_validate_payload('gear', str_repeat('x', 191), 'Description', 'Namur', 'contact@example.test', $categories, 'Invalid');
     }
 
+    public function testClassifiedsActiveWhereSqlSupportsOptionalAlias(): void
+    {
+        self::assertSame(
+            'status = "active" AND (expires_at IS NULL OR expires_at >= NOW())',
+            classifieds_active_where_sql()
+        );
+        self::assertSame(
+            'ca.status = "active" AND (ca.expires_at IS NULL OR ca.expires_at >= NOW())',
+            classifieds_active_where_sql('ca')
+        );
+    }
+
+    public function testClassifiedsExpirationAppliesOnlyToActiveStatus(): void
+    {
+        self::assertSame('2026-06-07 12:00:00', classifieds_expires_at_for_status('active', strtotime('2026-05-08 12:00:00')));
+        self::assertNull(classifieds_expires_at_for_status('pending', strtotime('2026-05-08 12:00:00')));
+    }
+
+    public function testParsePriceToCentsHandlesEuropeanAndUsSeparators(): void
+    {
+        self::assertSame(1250, parse_price_to_cents('12,50'));
+        self::assertSame(1250, parse_price_to_cents('12.50'));
+        self::assertSame(123456, parse_price_to_cents('1 234,56'));
+        self::assertSame(123456, parse_price_to_cents('1.234,56'));
+        self::assertSame(123456, parse_price_to_cents('1,234.56'));
+        self::assertSame(123400, parse_price_to_cents('1.234'));
+        self::assertSame(0, parse_price_to_cents('-12,50'));
+    }
+
+    public function testClassifiedsModerationUsesDedicatedPermission(): void
+    {
+        self::assertArrayHasKey('classifieds.moderate', core_permission_catalog());
+
+        $classifiedsCards = array_values(array_filter(
+            admin_module_cards_catalog(),
+            static fn(array $card): bool => (string) ($card['route'] ?? '') === 'admin_classifieds'
+        ));
+
+        self::assertCount(1, $classifiedsCards);
+        self::assertSame('classifieds.moderate', (string) ($classifiedsCards[0]['permission'] ?? ''));
+    }
+
+    public function testContentProposalPayloadSanitizesAndValidatesInput(): void
+    {
+        $payload = content_proposal_payload(
+            12,
+            'articles',
+            'category',
+            "  <b>Antennes</b>\n",
+            content_proposal_details_text(['Reason' => '<script>bad()</script>Useful category']),
+            "member@example.test\r\n",
+            'source'
+        );
+
+        self::assertSame(12, $payload['member_id']);
+        self::assertSame('articles', $payload['area']);
+        self::assertSame('category', $payload['proposal_type']);
+        self::assertSame('Antennes', $payload['title']);
+        self::assertSame('Reason: bad()Useful category', $payload['summary']);
+        self::assertSame('member@example.test', $payload['contact']);
+    }
+
+    public function testContentProposalPayloadRejectsUnknownArea(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        content_proposal_payload(12, 'unknown', 'category', 'Title');
+    }
+
+    public function testPasswordChangeRequiredRequiresAdminForcedMarker(): void
+    {
+        self::assertFalse(member_password_change_required([
+            'id' => 1,
+            'password_change_required' => 1,
+            'password_reset_forced_at' => null,
+        ]));
+        self::assertFalse(member_password_change_required([
+            'id' => 1,
+            'password_change_required' => 0,
+            'password_reset_forced_at' => '2026-06-06 12:00:00',
+        ]));
+        self::assertTrue(member_password_change_required([
+            'id' => 1,
+            'password_change_required' => 1,
+            'password_reset_forced_at' => '2026-06-06 12:00:00',
+        ]));
+    }
+
     public function testMemberCountryHelpersFormatKnownCountryWithFlag(): void
     {
         self::assertSame('BE', member_country_code_for('Belgique'));
@@ -266,16 +354,31 @@ final class FunctionHelpersExtendedTest extends TestCase
     {
         self::assertSame('crdurnal@gmail.com', member_contact_email_from_input(''));
         self::assertSame('crdurnal@gmail.com', member_contact_email_from_input('   '));
+        self::assertSame('crdurnal@gmail.com', member_contact_email_from_input(' crddurnal@gmail.com '));
         self::assertSame('member@example.test', member_contact_email_from_input(' member@example.test '));
     }
 
     public function testMemberSharedContactEmailUsesUniqueAuthEmail(): void
     {
         $authEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4CRD');
+        $otherAuthEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON8CJ');
+        $on4benAuthEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4BEN');
+        $on4benTypoAuthEmail = member_auth_email_for_contact_email('crddurnal@gmail.com', 'ON4BEN');
 
         self::assertNotSame('crdurnal@gmail.com', $authEmail);
+        self::assertNotSame('crdurnal@gmail.com', $otherAuthEmail);
+        self::assertNotSame('crdurnal@gmail.com', $on4benAuthEmail);
+        self::assertNotSame('crddurnal@gmail.com', $on4benTypoAuthEmail);
+        self::assertNotSame($authEmail, $otherAuthEmail);
+        self::assertNotSame($authEmail, $on4benAuthEmail);
+        self::assertNotSame($otherAuthEmail, $on4benAuthEmail);
+        self::assertSame($on4benAuthEmail, $on4benTypoAuthEmail);
         self::assertStringStartsWith('on4crd-', $authEmail);
+        self::assertStringStartsWith('on8cj-', $otherAuthEmail);
+        self::assertStringStartsWith('on4ben-', $on4benAuthEmail);
         self::assertStringEndsWith('@local.invalid', $authEmail);
+        self::assertStringEndsWith('@local.invalid', $otherAuthEmail);
+        self::assertStringEndsWith('@local.invalid', $on4benAuthEmail);
         self::assertSame('member@example.test', member_auth_email_for_contact_email('member@example.test', 'ON4CRD'));
     }
 
@@ -298,12 +401,77 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame(['public', 'members', 'private'], member_profile_allowed_visibility_levels(['is_committee' => 1]));
     }
 
+    public function testDirectoryCardKeepsCallsignOnlyMembersVisible(): void
+    {
+        $visibleFields = ['first_name', 'country', 'is_uba_member'];
+
+        self::assertTrue(member_directory_card_has_visible_content(['callsign' => 'ON4BEN'], $visibleFields));
+        self::assertTrue(member_directory_card_has_visible_content(['callsign' => 'ON7ZB'], $visibleFields));
+        self::assertTrue(member_directory_card_has_visible_content(['callsign' => '', 'country' => 'Belgique'], $visibleFields));
+        self::assertFalse(member_directory_card_has_visible_content(['callsign' => '', 'country' => '', 'is_uba_member' => 0], $visibleFields));
+    }
+
     public function testMemberProfileOperatorSinceOptionsIncludesCurrentSelection(): void
     {
         $html = member_profile_operator_since_options_html('2020');
 
         self::assertStringContainsString('<option value="2020" selected>2020</option>', $html);
         self::assertStringContainsString('<option value=""></option>', $html);
+    }
+
+    public function testMemberProfileLicenceClassOptionsUseTranslatedLabelsAndKeepCodes(): void
+    {
+        $t = static fn(string $key): string => [
+            'licence_none' => 'Aucune',
+            'licence_onl' => 'Ecouteur (ONL)',
+            'licence_base' => 'Licence de base (ON3)',
+            'licence_intermediate' => 'Licence intermédiaire (ON2)',
+            'licence_on1' => 'Ancienne licence (ON1)',
+            'licence_harec' => 'HAREC',
+            'licence_other' => 'Autre',
+        ][$key] ?? $key;
+
+        $html = member_profile_licence_class_options_html($t, 'ON2');
+
+        self::assertStringContainsString('value="ON2" selected', $html);
+        self::assertStringContainsString('Licence intermédiaire (ON2)', $html);
+        self::assertStringContainsString('value="ON3"', $html);
+        self::assertStringContainsString('Licence de base (ON3)', $html);
+        self::assertStringContainsString('value="ON1"', $html);
+        self::assertStringContainsString('>Ancienne licence (ON1)</option>', $html);
+        self::assertStringContainsString('>Ecouteur (ONL)</option>', $html);
+        self::assertStringNotContainsString('>ON2</option>', $html);
+        self::assertStringNotContainsString('>ON3</option>', $html);
+        self::assertSame('Licence intermédiaire (ON2)', member_profile_licence_class_display_text($t, 'ON2'));
+        self::assertSame('Licence de base (ON3)', member_profile_licence_class_display_text($t, 'ON3'));
+        self::assertSame('Licence radioamateur', member_profile_licence_class_display_text($t, 'Licence radioamateur'));
+    }
+
+    public function testMemberProfileQslViaOptionsUseTranslatedLabelsAndKeepLegacyValues(): void
+    {
+        $t = static fn(string $key): string => [
+            'qsl_choice_bureau' => 'Bureau',
+            'qsl_choice_direct' => 'Direct',
+            'qsl_choice_bureau_direct' => 'Bureau ou direct',
+            'qsl_choice_lotw' => 'LoTW',
+            'qsl_choice_eqsl' => 'eQSL',
+            'qsl_choice_lotw_eqsl' => 'LoTW + eQSL',
+            'qsl_choice_qrz' => 'QRZ.com',
+            'qsl_choice_manager' => 'manager QSL',
+            'qsl_choice_no_qsl' => 'Pas de QSL',
+            'qsl_choice_other' => 'Autre',
+        ][$key] ?? $key;
+
+        $html = member_profile_qsl_via_options_html($t, 'bureau_direct');
+        $legacyHtml = member_profile_qsl_via_options_html($t, 'Via ON4CRD');
+
+        self::assertStringContainsString('value="bureau_direct" selected', $html);
+        self::assertStringContainsString('Bureau ou direct', $html);
+        self::assertStringContainsString('value="no_qsl"', $html);
+        self::assertStringContainsString('Pas de QSL', $html);
+        self::assertStringContainsString('value="Via ON4CRD" selected', $legacyHtml);
+        self::assertSame('Pas de QSL', member_profile_qsl_via_display_text($t, 'no_qsl'));
+        self::assertSame('Via ON4CRD', member_profile_qsl_via_display_text($t, 'Via ON4CRD'));
     }
 
     public function testMemberProfileChoicePostKeepsAllowedValuesOnly(): void
@@ -374,11 +542,117 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('country-with-flag', (string) $rows[0]['html']);
     }
 
+    public function testMemberProfilePreviewRowsTranslateQslChoiceCodes(): void
+    {
+        $t = static fn(string $key): string => [
+            'qsl_via' => 'QSL via',
+            'qsl_choice_bureau' => 'Bureau',
+            'qsl_choice_direct' => 'Direct',
+            'qsl_choice_bureau_direct' => 'Bureau ou direct',
+            'qsl_choice_lotw' => 'LoTW',
+            'qsl_choice_eqsl' => 'eQSL',
+            'qsl_choice_lotw_eqsl' => 'LoTW + eQSL',
+            'qsl_choice_qrz' => 'QRZ.com',
+            'qsl_choice_manager' => 'manager QSL',
+            'qsl_choice_no_qsl' => 'Pas de QSL',
+            'qsl_choice_other' => 'Autre',
+        ][$key] ?? $key;
+        $member = [
+            'qsl_via' => 'no_qsl',
+            'visibility_qsl' => 'public',
+        ];
+
+        $rows = member_profile_preview_rows($member, 'public', $t);
+
+        self::assertSame('QSL via', $rows[0]['label']);
+        self::assertSame('Pas de QSL', $rows[0]['text']);
+        self::assertSame('Pas de QSL', $rows[0]['html']);
+    }
+
+    public function testMemberProfilePreviewRowsTranslateLicenceClassCodes(): void
+    {
+        $t = static fn(string $key): string => [
+            'licence' => 'Licence',
+            'licence_none' => 'Aucune',
+            'licence_onl' => 'Ecouteur (ONL)',
+            'licence_base' => 'Licence de base (ON3)',
+            'licence_intermediate' => 'Licence intermédiaire (ON2)',
+            'licence_on1' => 'Ancienne licence (ON1)',
+            'licence_harec' => 'HAREC',
+            'licence_other' => 'Autre',
+        ][$key] ?? $key;
+        $member = [
+            'licence_class' => 'ON3',
+            'visibility_licence_class' => 'public',
+        ];
+
+        $rows = member_profile_preview_rows($member, 'public', $t);
+
+        self::assertSame('Licence', $rows[0]['label']);
+        self::assertSame('Licence de base (ON3)', $rows[0]['text']);
+        self::assertSame('Licence de base (ON3)', $rows[0]['html']);
+    }
+
+    public function testMemberProfileSelectColumnsCoverProfileAndGdprFields(): void
+    {
+        $selectSql = member_profile_select_columns_sql();
+        foreach ([
+            'callsign',
+            'first_name',
+            'last_name',
+            'full_name',
+            'email',
+            'phone',
+            'country',
+            'address',
+            'postal_code',
+            'qth',
+            'locator',
+            'licence_class',
+            'operator_since',
+            'cq_zone',
+            'itu_zone',
+            'qsl_via',
+            'lotw_username',
+            'eqsl_username',
+            'qrz_url',
+            'website',
+            'is_uba_member',
+            'uba_member_number',
+            'station_equipment',
+            'antennas',
+            'favourite_bands',
+            'favourite_modes',
+            'interests',
+            'photo_path',
+            'avatar_path',
+            'visibility_photo',
+            'visibility_licence_class',
+            'visibility_qsl',
+            'visibility_qrz',
+            'visibility_favourite_bands',
+            'visibility_favourite_modes',
+            'visibility_station',
+            'visibility_antennas',
+            'visibility_interests',
+        ] as $column) {
+            self::assertStringContainsString($column, $selectSql, sprintf('%s must be selected for profile/GDPR previews.', $column));
+        }
+    }
+
     public function testMemberQrzSaveKeepsExistingUrlForSameCallsign(): void
     {
         self::assertSame(
             'https://www.qrz.com/db/ON4DG',
             member_qrz_url_for_profile_save('ON4DG', 'ON4DG', 'https://www.qrz.com/db/ON4DG')
+        );
+    }
+
+    public function testMemberQrzSaveUsesSubmittedUrlWhenProvided(): void
+    {
+        self::assertSame(
+            'https://www.qrz.com/db/ON7ZB',
+            member_qrz_url_for_profile_save('ON4DG', 'ON4DG', 'https://www.qrz.com/db/ON4DG', ' https://www.qrz.com/db/ON7ZB ')
         );
     }
 

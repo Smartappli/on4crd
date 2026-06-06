@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'جهة الاتصال الخاصة بك',
   'propose_theme_submit' => 'إرسال الاقتراح',
   'cancel' => 'إلغاء',
+  'proposal_recorded' => 'تم حفظ الاقتراح في محتواك.',
 );

@@ -81,4 +81,5 @@ Kuntatt:',
 <ul><li>Punt importanti</li></ul>',
   'html_cleanup_help' => 'HTML jitnaddaf awtomatikament. Skripts, iframes u attributi perikolużi jitneħħew qabel il-validazzjoni.',
   'submit_for_review' => 'Issottometti għall-validazzjoni',
+  'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
 );

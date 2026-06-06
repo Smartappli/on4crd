@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Voeg favorieten toe om aanbevelingen te verbeteren.',
   'nudge_review_notifications' => 'Bekijk ongelezen meldingen.',
   'nudge_enable_recommendations' => 'Schakel gepersonaliseerde aanbevelingen in.',
+  'save_unavailable' => 'Opslaan niet beschikbaar: de tabel dashboard_widgets ontbreekt.',
+  'saving' => 'Opslaan...',
+  'invalid_server_response' => 'Ongeldig serverantwoord.',
+  'save_error' => 'Opslagfout.',
+  'layout_saved_at' => 'Indeling opgeslagen om {time}.',
+  'remove_widget' => 'Widget verwijderen',
+  'preview_unavailable' => 'Voorbeeld niet beschikbaar.',
+  'loading' => 'Laden...',
+  'load_widget_error' => 'Widget kan niet worden geladen.',
 );

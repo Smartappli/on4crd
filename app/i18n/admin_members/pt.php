@@ -21,4 +21,7 @@ return array (
   'search' => 'Pesquisar membro',
   'search_ph' => 'Indicativo, nome, email…',
   'search_btn' => 'Pesquisar',
+  'th_password_reset' => 'Palavra-passe',
+  'password_reset_force' => 'Forçar no próximo login',
+  'password_reset_unavailable' => 'Indisponível',
 );

@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Dodajte priljubljene, da izboljšate priporočila.',
   'nudge_review_notifications' => 'Preverite neprebrana obvestila.',
   'nudge_enable_recommendations' => 'Omogoči prilagojena priporočila.',
+  'save_unavailable' => 'Shranjevanje ni na voljo: manjka tabela dashboard_widgets.',
+  'saving' => 'Shranjevanje...',
+  'invalid_server_response' => 'Neveljaven odgovor strežnika.',
+  'save_error' => 'Napaka pri shranjevanju.',
+  'layout_saved_at' => 'Postavitev je bila shranjena ob {time}.',
+  'remove_widget' => 'Odstrani gradnik',
+  'preview_unavailable' => 'Predogled ni na voljo.',
+  'loading' => 'Nalaganje...',
+  'load_widget_error' => 'Gradnika ni bilo mogoče naložiti.',
 );

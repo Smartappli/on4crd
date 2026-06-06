@@ -564,6 +564,7 @@ if (!function_exists('privacy_export_member_data')) {
             ['ads', 'owner_member_id'],
             ['ad_events', 'member_id'],
             ['article_proposals', 'member_id'],
+            ['content_proposals', 'member_id'],
             ['articles', 'author_id'],
             ['article_revisions', 'author_id'],
             ['news_posts', 'author_id'],
@@ -821,7 +822,8 @@ if (!function_exists('privacy_update_members_for_erasure')) {
         $set('callsign', 'ERASED' . $memberId);
         $set('full_name', 'Compte supprime ' . $memberId);
         $set('password_hash', password_hash(bin2hex(random_bytes(24)), PASSWORD_DEFAULT));
-        $set('password_change_required', 1);
+        $set('password_change_required', 0);
+        $set('password_reset_forced_at', null);
         $set('is_active', 0);
         $set('is_committee', 0);
         $set('committee_sort_order', 100);
@@ -945,6 +947,7 @@ if (!function_exists('privacy_apply_member_erasure_db')) {
             ['chatbot_logs', 'member_id'],
             ['ad_events', 'member_id'],
             ['article_proposals', 'member_id'],
+            ['content_proposals', 'member_id'],
             ['classified_ads', 'owner_member_id'],
         ] as [$table, $column]) {
             $operations[$table] = privacy_delete_rows_by_column($table, $column, $memberId);

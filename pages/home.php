@@ -375,9 +375,9 @@ try {
         });
     }
 
-    if (module_enabled('classifieds') && table_exists('classified_ads')) {
+    if (module_enabled('classifieds') && module_visible_for_current_user('classifieds') && table_exists('classified_ads')) {
         $latestClassifiedAd = cache_remember('home_latest_classified_ad_v1', 60, static function () {
-            return db()->query('SELECT title, description, location, price_cents, created_at FROM classified_ads WHERE status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) ORDER BY created_at DESC, id DESC LIMIT 1')->fetch();
+            return db()->query('SELECT title, description, location, price_cents, created_at FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' ORDER BY created_at DESC, id DESC LIMIT 1')->fetch();
         });
     }
 
@@ -705,8 +705,8 @@ $ubaLogoPath = 'assets/logo/UBA-Logo-Couleur-MID2.png';
 $ibptLogoPath = 'assets/logo/logo_IBPT.png';
 $relaisLogoPath = 'assets/logo/CRD-Echolink.jpg';
 $homeWeatherHtml = $homeSafeWidget('open_meteo');
-$homePropagationHtml = $homeSafeWidget('propagation');
-$hasHomePropagation = trim((string) $homePropagationHtml) !== '';
+$homePropagationHtml = '';
+$hasHomePropagation = false;
 $homeHamAdviceHtml = $homeSafeHamAdvice();
 $hamWeatherRefreshUrl = base_url('index.php?' . http_build_query(['route' => 'home', 'ajax' => 'ham_weather']));
 $homeRadioInfoHtml = '<div class="grid gap-4">'
@@ -728,7 +728,7 @@ if (isset($_GET['ajax']) && (string) $_GET['ajax'] === 'ham_weather') {
     try {
         echo json_encode([
             'weather' => $homeSafeWidget('open_meteo'),
-            'propagation' => $homeSafeWidget('propagation'),
+            'propagation' => '',
             'advice' => $homeSafeHamAdvice(),
             'updated_at' => gmdate('c'),
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);

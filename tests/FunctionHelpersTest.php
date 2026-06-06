@@ -281,6 +281,224 @@ final class FunctionHelpersTest extends TestCase
         }
     }
 
+    public function testDashboardCatalogExposesHamWeatherAdviceWidget(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        $appJs = file_get_contents(__DIR__ . '/../assets/js/app.js');
+        $dashboardJs = file_get_contents(__DIR__ . '/../assets/js/modules/dashboard.js');
+        self::assertIsString($renderer);
+        self::assertIsString($dashboard);
+        self::assertIsString($appJs);
+        self::assertIsString($dashboardJs);
+
+        self::assertArrayHasKey('ham_weather_advice', $catalog);
+        self::assertStringContainsString("case 'ham_weather_advice':", $renderer);
+        self::assertStringContainsString('render_ham_weather_advice($user)', $renderer);
+        self::assertStringContainsString("array_merge(['welcome', 'radio_clocks', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog()))", $dashboard);
+    }
+
+    public function testHamWeatherAdviceWidgetHidesHeadingAndCalculationDetails(): void
+    {
+        $source = file_get_contents(__DIR__ . '/../app/ham_weather_advice.php');
+        self::assertIsString($source);
+        $returnBlock = strstr($source, 'return \'<div class="grid gap-4">\'');
+        self::assertIsString($returnBlock);
+
+        foreach (['radio_info', 'input_info', 'location', 'local_hour', 'local_weather', 'geomagnetic', 'updated_at'] as $detailKey) {
+            self::assertStringNotContainsString('$i18n[\'' . $detailKey . '\']', $returnBlock);
+        }
+        self::assertStringContainsString('noaa-planetary-k-index.json', $source);
+        self::assertStringContainsString('$propagationLabel', $returnBlock);
+        self::assertStringContainsString('$propagationSummary', $returnBlock);
+    }
+
+    public function testHomeUsesHamWeatherAdviceForPropagationInsteadOfRemovedWidget(): void
+    {
+        $home = file_get_contents(__DIR__ . '/../pages/home.php');
+        self::assertIsString($home);
+
+        self::assertStringNotContainsString("\$homeSafeWidget('propagation')", $home);
+        self::assertStringContainsString("'propagation' => ''", $home);
+        self::assertStringContainsString('$homeHamAdviceHtml = $homeSafeHamAdvice();', $home);
+    }
+
+    public function testHamWeatherAdviceUsesAgrometTokenFromEnvironment(): void
+    {
+        $source = file_get_contents(__DIR__ . '/../app/ham_weather_advice.php');
+        self::assertIsString($source);
+
+        self::assertStringContainsString("env('AGROMET_API_TOKEN'", $source);
+        self::assertStringContainsString("sprintf('Authorization: Token %s', \$token)", $source);
+        self::assertStringNotContainsString('my secret token', $source);
+    }
+
+    public function testAgrometHourlyUrlUsesConfigurableStationsAndRecentDates(): void
+    {
+        $_SERVER['AGROMET_API_BASE_URL'] = 'https://example.test/agromet';
+        $_SERVER['AGROMET_STATION_SIDS'] = '2,3';
+
+        $url = ham_agromet_hourly_url(new DateTimeImmutable('2026-06-06T12:00:00+02:00'));
+
+        self::assertSame('https://example.test/agromet/tsa,plu,hra,vvt/2,3/2026-06-05/2026-06-06/', $url);
+    }
+
+    public function testAgrometCurrentWeatherMapsLatestHourlyMeasurements(): void
+    {
+        $payload = [
+            'results' => [
+                ['datetime' => '2026-06-06T10:00:00+02:00', 'sid' => 1, 'tsa' => 12.0, 'hra' => 80, 'plu' => 0.0, 'vvt' => 2.0],
+                ['datetime' => '2026-06-06T11:00:00+02:00', 'sid' => 26, 'tsa' => 14.1, 'hra' => 91, 'plu' => 0.1, 'vvt' => 3.7],
+            ],
+        ];
+
+        $current = ham_agromet_current_weather($payload);
+
+        self::assertIsArray($current);
+        self::assertSame(14.1, $current['temperature_2m']);
+        self::assertSame(91, $current['relative_humidity_2m']);
+        self::assertSame(0.1, $current['precipitation']);
+        self::assertEqualsWithDelta(13.32, $current['wind_speed_10m'], 0.001);
+        self::assertSame('2026-06-06T11:00:00+02:00', $current['time']);
+
+        $nestedPayload = [
+            'results' => [[
+                'datetime' => '2026-06-06T12:00:00+02:00',
+                'station' => ['sid' => 26],
+                'measurements' => [
+                    ['sensor' => ['code' => 'tsa'], 'value' => 15.2],
+                    ['sensor' => ['code' => 'hra'], 'value' => 87],
+                ],
+            ]],
+        ];
+        $nestedCurrent = ham_agromet_current_weather($nestedPayload);
+        self::assertIsArray($nestedCurrent);
+        self::assertSame(15.2, $nestedCurrent['temperature_2m']);
+        self::assertSame(87, $nestedCurrent['relative_humidity_2m']);
+    }
+
+    public function testDashboardWeatherWidgetUsesAgrometAsPrimarySource(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $css = file_get_contents(__DIR__ . '/../assets/css/app.css');
+        self::assertIsString($renderer);
+        self::assertIsString($css);
+
+        self::assertArrayHasKey('open_meteo', $catalog);
+        self::assertStringContainsString('Agromet', (string) ($catalog['open_meteo']['description'] ?? ''));
+        self::assertStringContainsString("case 'open_meteo':", $renderer);
+        self::assertStringContainsString("env('AGROMET_API_TOKEN'", $renderer);
+        self::assertStringContainsString('ham_agromet_hourly_url()', $renderer);
+        self::assertStringContainsString('ham_agromet_current_weather($payload)', $renderer);
+        self::assertStringContainsString('widget:weather:agromet:', $renderer);
+        self::assertStringContainsString("'temperature' => 'Temperature'", $renderer);
+        self::assertStringContainsString("'humidity' => 'Humidite'", $renderer);
+        self::assertStringContainsString("'rain' => 'Pluie'", $renderer);
+        self::assertStringContainsString('dashboard-weather-grid', $renderer);
+        self::assertStringContainsString('dashboard-weather-item', $renderer);
+        self::assertStringContainsString('.dashboard-weather-grid', $css);
+        self::assertStringContainsString('grid-template-columns: repeat(2, minmax(0, 1fr));', $css);
+        self::assertStringContainsString('.widget-card[data-widget="open_meteo"]', $css);
+        self::assertStringContainsString('gap: .45rem;', $css);
+        self::assertStringContainsString('padding: .4rem .55rem;', $css);
+    }
+
+    public function testDashboardJavascriptUsesLocalizedMessages(): void
+    {
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        $dashboardJs = file_get_contents(__DIR__ . '/../assets/js/modules/dashboard.js');
+        self::assertIsString($dashboard);
+        self::assertIsString($dashboardJs);
+
+        $keys = [
+            'save_unavailable',
+            'saving',
+            'invalid_server_response',
+            'save_error',
+            'layout_saved_at',
+            'remove_widget',
+            'preview_unavailable',
+            'loading',
+            'load_widget_error',
+        ];
+
+        self::assertStringContainsString("'i18n' => [", $dashboard);
+        foreach ($keys as $key) {
+            self::assertStringContainsString("'" . $key . "' => \$t('" . $key . "')", $dashboard);
+        }
+        self::assertStringContainsString('dashboardConfig.i18n', $dashboardJs);
+
+        foreach (['Sauvegarde indisponible', 'Enregistrement', 'Réponse serveur invalide', 'Erreur de sauvegarde', 'Disposition enregistrée', 'Retirer le widget', 'Prévisualisation indisponible', 'Chargement', 'Impossible de charger'] as $hardCodedFrench) {
+            self::assertStringNotContainsString($hardCodedFrench, $dashboardJs);
+        }
+
+        $messages = i18n_domain_messages('dashboard');
+        foreach (supported_locales() as $locale) {
+            foreach ($keys as $key) {
+                self::assertNotSame('', trim((string) ($messages[$locale][$key] ?? '')), sprintf('Missing dashboard JS translation %s for %s.', $key, $locale));
+            }
+        }
+    }
+
+    public function testDashboardClockWidgetUsesHomeLiveClockMarkupAndPropagationIsRemoved(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        $appJs = file_get_contents(__DIR__ . '/../assets/js/app.js');
+        $dashboardJs = file_get_contents(__DIR__ . '/../assets/js/modules/dashboard.js');
+        self::assertIsString($renderer);
+        self::assertIsString($dashboard);
+        self::assertIsString($appJs);
+        self::assertIsString($dashboardJs);
+
+        self::assertArrayHasKey('radio_clocks', $catalog);
+        self::assertArrayNotHasKey('propagation', $catalog);
+        self::assertStringContainsString("case 'radio_clocks':", $renderer);
+        self::assertStringNotContainsString("case 'propagation':", $renderer);
+        self::assertStringContainsString('data-live-date data-timezone="UTC"', $renderer);
+        self::assertStringContainsString('data-live-clock data-timezone="local"', $renderer);
+        self::assertStringContainsString('$catalogHiddenWidgetKeys = [\'welcome\'];', $dashboard);
+        self::assertStringContainsString('!in_array($key, $catalogHiddenWidgetKeys, true)', $dashboard);
+        self::assertStringContainsString("const hiddenCatalogWidgets = new Set(['welcome']);", $dashboardJs);
+        self::assertStringContainsString('hiddenCatalogWidgets.has(widgetKey)', $dashboardJs);
+        self::assertStringContainsString('window.ON4CRDUpdateLiveClocks = updateClocks;', $appJs);
+        self::assertStringContainsString("document.querySelectorAll('[data-live-clock]')", $appJs);
+    }
+
+    public function testDashboardWidgetCatalogScrollsFromLeftInsidePanel(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../assets/css/app.css');
+        self::assertIsString($css);
+        $css = str_replace("\r\n", "\n", $css);
+
+        self::assertStringContainsString(".dashboard-offcanvas {\n", $css);
+        self::assertStringContainsString("  direction: rtl;\n", $css);
+        self::assertStringContainsString('.dashboard-offcanvas > * { direction: ltr; }', $css);
+    }
+
+    public function testDashboardCatalogRestoresHamqslAndRemovesLegacyUtilityWidgets(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        self::assertIsString($renderer);
+        self::assertIsString($dashboard);
+
+        foreach (array_keys(hamqsl_widget_catalog()) as $hamqslKey) {
+            self::assertArrayHasKey($hamqslKey, $catalog);
+        }
+        foreach (['club_status', 'events', 'quick_links', 'propagation'] as $removedKey) {
+            self::assertArrayNotHasKey($removedKey, $catalog);
+            self::assertStringNotContainsString("case '" . $removedKey . "':", $renderer);
+        }
+        self::assertStringContainsString("\$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links', 'propagation'];", $dashboard);
+        self::assertStringContainsString('$hadLegacyUtilityWidget', $dashboard);
+        self::assertStringContainsString('$radioDefaultWidgetKeys', $dashboard);
+    }
+
     public function testApplicationPhpFilesDoNotContainCommonMojibakeSequences(): void
     {
         $root = dirname(__DIR__);

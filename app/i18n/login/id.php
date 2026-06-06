@@ -5,6 +5,7 @@ return array (
   'required' => 'Kredensial wajib diisi.',
   'captcha_invalid' => 'Captcha tidak valid.',
   'auth_unavailable' => 'Modul autentikasi tidak tersedia. Jalankan composer install.',
+  'member_unavailable' => 'Login tervalidasi, tetapi profil anggota aktif yang sesuai tidak ditemukan.',
   'invalid_credentials' => 'Callsign atau kata sandi tidak valid.',
   'too_many' => 'Terlalu banyak percobaan login. Coba lagi dalam beberapa menit.',
   'not_verified' => 'Akun Anda belum diverifikasi.',

@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Favorit uklonjen',
   'favorite_added_msg' => 'Dokument dodan u favorite.',
   'favorite_removed_msg' => 'Dokument je uklonjen iz favorita.',
+  'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
 );

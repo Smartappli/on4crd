@@ -21,4 +21,7 @@ return array (
   'search' => 'সদস্য খুঁজুন',
   'search_ph' => 'কলসাইন, নাম, ইমেইল…',
   'search_btn' => 'খুঁজুন',
+  'th_password_reset' => '??????????',
+  'password_reset_force' => 'পরবর্তী লগইন করতে বাধ্য করুন',
+  'password_reset_unavailable' => 'অনুপলব্ধ',
 );

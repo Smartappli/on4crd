@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Suosikki poistettu',
   'favorite_added_msg' => 'Asiakirja lisätty suosikkeihin.',
   'favorite_removed_msg' => 'Asiakirja poistettu suosikeista.',
+  'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
 );

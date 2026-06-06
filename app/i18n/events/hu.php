@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'E-mail előkészítése',
   'propose_event_cancel' => 'Mégse',
   'propose_event_close' => 'Bezárás',
+  'proposal_recorded' => 'A javaslat mentve lett a tartalmai közé.',
 );

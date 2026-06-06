@@ -8,7 +8,8 @@
   const closeButtons = dialog.querySelectorAll('[data-classifieds-category-close]');
   const firstField = dialog.querySelector('input[name="proposal_category"]');
 
-  const openDialog = () => {
+  const openDialog = (event) => {
+    event.preventDefault();
     if (!dialog.open) {
       dialog.showModal();
     }

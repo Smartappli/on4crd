@@ -37,4 +37,6 @@ return array (
   'view_members' => 'Dalībnieku skats',
   'view_private' => 'Privāts skats',
   'empty_visible_info' => 'Nav redzamas informācijas.',
+  'profile_data_title' => 'Profile data',
+  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
 );

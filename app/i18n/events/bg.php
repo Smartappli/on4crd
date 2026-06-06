@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Подготви имейл',
   'propose_event_cancel' => 'Отказ',
   'propose_event_close' => 'Затвори',
+  'proposal_recorded' => 'Предложението е запазено във вашето съдържание.',
 );

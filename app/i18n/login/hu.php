@@ -5,6 +5,7 @@ return array (
   'required' => 'Hitelesítési adatok szükségesek.',
   'captcha_invalid' => 'Érvénytelen captcha.',
   'auth_unavailable' => 'A hitelesítési modul nem érhető el. Futtassa a zeneszerző telepítését.',
+  'member_unavailable' => 'A bejelentkezés sikeres volt, de nem található megfelelő aktív tagi profil.',
   'invalid_credentials' => 'Érvénytelen kód vagy jelszó.',
   'too_many' => 'Túl sok kapcsolódási kísérlet. Próbálja újra néhány perc múlva.',
   'not_verified' => 'Fiókja még nincs igazolva.',

@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Il-favorit jitneħħa',
   'favorite_added_msg' => 'Dokument miżjud mal-favoriti.',
   'favorite_removed_msg' => 'Dokument imneħħi mill-favoriti.',
+  'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
 );

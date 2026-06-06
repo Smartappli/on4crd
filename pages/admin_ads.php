@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('UPDATE ads SET status = ?, moderation_note = ? WHERE id = ?')->execute([$status, $note, $adId]);
             set_flash('success', (string) $t['ad_updated']);
-            redirect('admin_ads', ['refresh' => '1']);
+            redirect_url(route_url('admin_ads', ['refresh' => '1']));
         }
         if ($action === 'add_placement') {
             $code = slugify((string) ($_POST['code'] ?? ''));
@@ -42,11 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO ad_placements (code, name, description, sort_order, is_active) VALUES (?, ?, ?, ?, 1)')->execute([$code, $name, $description, $sortOrder]);
             set_flash('success', (string) $t['placement_added']);
-            redirect('admin_ads', ['refresh' => '1']);
+            redirect_url(route_url('admin_ads', ['refresh' => '1']));
         }
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
-        redirect('admin_ads', ['refresh' => '1']);
+        redirect_url(route_url('admin_ads', ['refresh' => '1']));
     }
 }
 

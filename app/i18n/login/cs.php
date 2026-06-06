@@ -5,6 +5,7 @@ return array (
   'required' => 'Jsou vyžadovány přihlašovací údaje.',
   'captcha_invalid' => 'Neplatný obrázek captcha.',
   'auth_unavailable' => 'Autentizační modul není k dispozici. Spusťte instalaci skladatele.',
+  'member_unavailable' => 'Přihlášení bylo ověřeno, ale nebyl nalezen odpovídající aktivní členský profil.',
   'invalid_credentials' => 'Neplatný kód nebo heslo.',
   'too_many' => 'Příliš mnoho pokusů o připojení. Zkuste to znovu za několik minut.',
   'not_verified' => 'Váš účet ještě není ověřen.',

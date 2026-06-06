@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => '添加收藏以改进推荐。',
   'nudge_review_notifications' => '查看未读通知。',
   'nudge_enable_recommendations' => '启用个性化推荐。',
+  'save_unavailable' => '无法保存：缺少 dashboard_widgets 表。',
+  'saving' => '正在保存...',
+  'invalid_server_response' => '服务器响应无效。',
+  'save_error' => '保存错误。',
+  'layout_saved_at' => '布局已于 {time} 保存。',
+  'remove_widget' => '移除小组件',
+  'preview_unavailable' => '预览不可用。',
+  'loading' => '正在加载...',
+  'load_widget_error' => '无法加载小组件。',
 );

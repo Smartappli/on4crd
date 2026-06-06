@@ -5,24 +5,75 @@ $locale = current_locale();
 $t = i18n_domain_locale('albums', $locale);
 set_page_meta(['title' => (string) $t['public_albums'], 'description' => (string) $t['meta_desc']]);
 $user = current_user();
+$canManageAlbums = has_permission('albums.manage');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite_album') {
-    $user = require_login();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+    $action = (string) ($_POST['action'] ?? '');
+    $user = require_login(route_url('albums'));
     verify_csrf();
-    $albumId = (int) ($_POST['album_id'] ?? 0);
-    if ($albumId > 0) {
-        $favStmt = db()->prepare('SELECT id, title FROM albums WHERE id = ? AND is_public = 1 LIMIT 1');
-        $favStmt->execute([$albumId]);
-        $favRow = $favStmt->fetch() ?: null;
-        if ($favRow !== null) {
-            $favTitle = trim((string) ($favRow['title'] ?? 'Album'));
-            $favUrl = route_url('album', ['id' => (int) $favRow['id']]);
-            $saved = favorite_toggle((int) $user['id'], 'album', (int) $favRow['id'], $favTitle, $favUrl);
-            notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $favTitle, $favUrl);
-            set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
+
+    if ($action === 'toggle_favorite_album') {
+        $albumId = (int) ($_POST['album_id'] ?? 0);
+        if ($albumId > 0) {
+            $favStmt = db()->prepare('SELECT id, title FROM albums WHERE id = ? AND is_public = 1 LIMIT 1');
+            $favStmt->execute([$albumId]);
+            $favRow = $favStmt->fetch() ?: null;
+            if ($favRow !== null) {
+                $favTitle = trim((string) ($favRow['title'] ?? 'Album'));
+                $favUrl = route_url('album', ['id' => (int) $favRow['id']]);
+                $saved = favorite_toggle((int) $user['id'], 'album', (int) $favRow['id'], $favTitle, $favUrl);
+                notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $favTitle, $favUrl);
+                set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
+            }
         }
+        redirect_url(route_url_clean('albums', ['q' => (string) ($_GET['q'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
     }
-    redirect_url(route_url_clean('albums', ['q' => (string) ($_GET['q'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+
+    if ($action === 'propose_album') {
+        if (!table_exists('albums')) {
+            throw new RuntimeException((string) $t['gallery_unavailable']);
+        }
+        $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
+        $proposalDescription = (string) ($_POST['proposal_description'] ?? '');
+        $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+        $title = content_proposal_clean_single_line($proposalTitle, 190);
+        $description = content_proposal_clean_multiline($proposalDescription, 5000);
+        $contact = content_proposal_clean_single_line($proposalContact, 220);
+        if ($title === '') {
+            throw new RuntimeException('Demande invalide.');
+        }
+        if (has_permission('albums.manage')) {
+            db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, 1)')
+                ->execute([$title, $description !== '' ? $description : null]);
+            $albumId = (int) db()->lastInsertId();
+            cache_forget('admin_albums_list_v2');
+            cache_forget('admin_albums_photos_total_v2');
+            cache_forget('home_public_album_random_photos_v1');
+            set_flash('success', 'Album cree et valide directement.');
+            redirect_url(route_url('album', ['id' => $albumId]));
+        }
+        $summary = content_proposal_details_text([
+            'Description' => $description,
+        ]);
+        $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, $contact);
+        content_proposal_notify_site('Proposition d album ON4CRD', [
+            'area' => 'albums',
+            'proposal_type' => 'content',
+            'title' => content_proposal_clean_single_line($title, 190),
+            'summary' => $summary,
+            'contact' => $contact,
+            'source_ref' => 'content_proposals#' . $proposalId,
+        ]);
+        set_flash('success', 'Proposition enregistree dans vos contenus.');
+        redirect('my_requests');
+    }
+
+    throw new RuntimeException('Demande invalide.');
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('albums'));
+    }
 }
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
@@ -74,6 +125,15 @@ $photoTotalStmt = db()->prepare(
 );
 $photoTotalStmt->execute($params);
 $photoTotal = (int) $photoTotalStmt->fetchColumn();
+$proposalContactDefault = '';
+if ($user !== null) {
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
+}
+$showAlbumProposalForm = $user !== null && (string) ($_GET['propose_album'] ?? '') === '1';
+$albumProposalUrl = $user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums')]);
 
 ob_start();
 ?>
@@ -94,7 +154,28 @@ ob_start();
                 <strong><?= (int) $photoTotal ?></strong>
             </article>
         </div>
+        <p class="actions">
+            <a class="button" href="<?= e($albumProposalUrl) ?>"><?= e($canManageAlbums ? 'Creer un album' : 'Proposer un album') ?></a>
+        </p>
     </section>
+
+    <?php if ($showAlbumProposalForm): ?>
+    <section class="card">
+        <h2><?= e($canManageAlbums ? 'Creer un album' : 'Proposer un album') ?></h2>
+        <p class="help"><?= e($canManageAlbums ? 'L album sera public directement.' : 'Votre proposition sera envoyee en validation et visible dans Mes contenus.') ?></p>
+        <form method="post" class="stack">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="propose_album">
+            <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
+            <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
+            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <p class="actions">
+                <button class="button" type="submit"><?= e($canManageAlbums ? 'Creer' : 'Envoyer la proposition') ?></button>
+                <a class="button secondary" href="<?= e(route_url('albums')) ?>">Annuler</a>
+            </p>
+        </form>
+    </section>
+    <?php endif; ?>
 
     <section class="albums-toolbar">
         <form method="get" class="albums-search-form">

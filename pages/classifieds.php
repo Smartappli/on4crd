@@ -8,7 +8,7 @@ $t = static function (string $key) use ($messages): string {
 };
 
 if (!module_enabled('classifieds')) {
-    echo render_layout('<div class="card"><p>Module disabled.</p></div>', $t('title'));
+    echo render_layout('<div class="card"><p>' . e($t('module_disabled')) . '</p></div>', $t('title'));
     return;
 }
 
@@ -24,31 +24,15 @@ $categories = [
     'wanted' => $t('category_wanted'),
     'service' => $t('category_service'),
 ];
-$statuses = [
-    'draft' => $t('status_draft'),
-    'pending' => (string) ($messages['status_pending'] ?? 'En validation'),
-    'active' => $t('status_active'),
-    'sold' => $t('status_sold'),
-    'archived' => $t('status_archived'),
-    'expired' => $t('status_expired'),
-];
+$categories += content_proposal_accepted_categories('classifieds', 32);
 
 $user = current_user();
-$editing = null;
-if ($user !== null && !empty($_GET['edit'])) {
-    $stmt = db()->prepare('SELECT * FROM classified_ads WHERE id = ? AND owner_member_id = ? LIMIT 1');
-    $stmt->execute([(int) $_GET['edit'], (int) $user['id']]);
-    $editing = $stmt->fetch() ?: null;
-    if ($editing === null) {
-        set_flash('error', $t('missing'));
-        redirect_url(route_url('classifieds'));
-    }
-}
+$canModerateClassifieds = classifieds_can_moderate();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
-        $action = (string) ($_POST['action'] ?? 'save');
+        $action = (string) ($_POST['action'] ?? '');
 
         if ($action === 'propose_category') {
             $user = require_login();
@@ -59,7 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (
                 $proposalName === ''
+                || mb_strlen($proposalName) > 190
                 || !filter_var($proposalEmail, FILTER_VALIDATE_EMAIL)
+                || mb_strlen($proposalEmail) > 190
                 || $proposalCategory === ''
                 || mb_strlen($proposalCategory) > 120
                 || mb_strlen($proposalDetails) > 1200
@@ -67,98 +53,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('propose_category_invalid'));
             }
 
-            $safeName = str_replace(["\r", "\n"], ' ', $proposalName);
-            $safeEmail = str_replace(["\r", "\n"], '', $proposalEmail);
-            $subject = $t('propose_category_subject');
-            $body = $t('propose_category_email_intro') . "\n\n"
-                . $t('propose_category_name_label') . ': ' . $proposalCategory . "\n"
-                . $t('propose_category_sender_name_label') . ': ' . $safeName . "\n"
-                . $t('propose_category_sender_email_label') . ': ' . $safeEmail . "\n\n"
-                . $t('propose_category_details_label') . ":\n" . ($proposalDetails !== '' ? $proposalDetails : '-') . "\n";
-            $headers = 'From: ON4CRD Website <no-reply@on4crd.be>' . "\r\n"
-                . 'Reply-To: ' . $safeEmail . "\r\n"
-                . 'Content-Type: text/plain; charset=UTF-8';
-
-            if (@mail(site_contact_email(), $subject, $body, $headers)) {
-                set_flash('success', $t('propose_category_sent'));
-            } else {
-                set_flash('error', $t('propose_category_failed'));
+            $summary = content_proposal_details_text([
+                $t('propose_category_sender_name_label') => $proposalName,
+                $t('propose_category_details_label') => $proposalDetails,
+            ]);
+            $autoAccept = classifieds_can_moderate();
+            $proposalStatus = $autoAccept ? 'accepted' : 'pending';
+            $proposalId = content_proposal_create((int) $user['id'], 'classifieds', 'category', $proposalCategory, $summary, $proposalEmail, '', $proposalStatus);
+            if ($autoAccept) {
+                set_flash('success', 'Categorie creee et validee directement.');
+                redirect_url(route_url_clean('classifieds', ['category' => content_proposal_category_code($proposalCategory, 32, 'classifieds')]));
             }
+            content_proposal_notify_site($t('propose_category_subject'), [
+                'area' => 'classifieds',
+                'proposal_type' => 'category',
+                'title' => content_proposal_clean_single_line($proposalCategory, 190),
+                'summary' => $summary,
+                'contact' => content_proposal_clean_single_line($proposalEmail, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
 
-            redirect_url(route_url('classifieds'));
+            set_flash('success', $t('propose_category_sent'));
+            redirect('my_requests');
         }
 
         $user = require_login();
 
-        if ($action === 'save') {
-            $id = (int) ($_POST['id'] ?? 0);
-            $category = (string) ($_POST['category_code'] ?? 'gear');
-            $title = trim((string) ($_POST['title'] ?? ''));
-            $description = trim((string) ($_POST['description'] ?? ''));
-            $location = trim((string) ($_POST['location'] ?? ''));
-            $contact = trim((string) ($_POST['contact'] ?? ''));
-            $priceCents = max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0')));
-            $requestedStatus = classifieds_member_publication_status((string) ($_POST['status'] ?? 'draft'));
-            classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, $t('invalid'));
-
-            if ($id > 0) {
-                if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
-                    throw new RuntimeException($t('missing'));
-                }
-                $expiresAt = null;
-                if ($requestedStatus === 'active') {
-                    $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
-                }
-                $stmt = db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-                $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt, $id, (int) $user['id']]);
-                set_flash('success', $t('updated_ok'));
-            } else {
-                classifieds_enforce_submission_limits((int) $user['id']);
-                $expiresAt = null;
-                if ($requestedStatus === 'active') {
-                    $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
-                }
-                $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-                $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt]);
-                set_flash('success', $t('created_ok'));
-            }
-        }
-
-        if ($action === 'set_status') {
-            $id = (int) ($_POST['id'] ?? 0);
-            if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
-                throw new RuntimeException($t('missing'));
-            }
-            $status = (string) ($_POST['status'] ?? 'active');
-            if (!in_array($status, ['draft', 'pending', 'active', 'sold', 'archived'], true)) {
-                throw new RuntimeException($t('invalid'));
-            }
-            $status = classifieds_member_publication_status($status);
-            $expiresAt = null;
-            if ($status === 'active') {
-                $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
-            }
-            $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-            $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
-            set_flash('success', $t('status_ok'));
-        }
-
-        if ($action === 'renew') {
-            $id = (int) ($_POST['id'] ?? 0);
-            if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
-                throw new RuntimeException($t('missing'));
-            }
-            $status = has_permission('ads.moderate') ? 'active' : 'pending';
-            $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
-            $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
-            $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
-            set_flash('success', $t('renewed_ok'));
-        }
-
         if ($action === 'toggle_favorite') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id > 0) {
-                $adStmt = db()->prepare('SELECT id, title FROM classified_ads WHERE id = ? AND status = "active" AND (expires_at IS NULL OR expires_at >= NOW()) LIMIT 1');
+                $adStmt = db()->prepare('SELECT id, title FROM classified_ads WHERE id = ? AND ' . classifieds_active_where_sql() . ' LIMIT 1');
                 $adStmt->execute([$id]);
                 $adRow = $adStmt->fetch() ?: null;
                 if ($adRow !== null) {
@@ -169,6 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     set_flash('success', $saved ? $t('favorite_added_msg') : $t('favorite_removed_msg'));
                 }
             }
+        } else {
+            throw new RuntimeException($t('invalid'));
         }
 
         redirect_url(route_url('classifieds'));
@@ -185,7 +111,7 @@ if (mb_strlen($query) > 120) {
 }
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
-$where = ["ca.status = 'active'", '(ca.expires_at IS NULL OR ca.expires_at >= NOW())'];
+$where = [classifieds_active_where_sql('ca')];
 $params = [];
 
 if (isset($categories[$categoryFilter])) {
@@ -214,7 +140,7 @@ $adsStmt->execute($params);
 $allAds = $adsStmt->fetchAll() ?: [];
 
 $activeCategoryCounts = array_fill_keys(array_keys($categories), 0);
-$categoryCountStmt = db()->query("SELECT category_code, COUNT(*) AS total FROM classified_ads WHERE status = 'active' AND (expires_at IS NULL OR expires_at >= NOW()) GROUP BY category_code");
+$categoryCountStmt = db()->query('SELECT category_code, COUNT(*) AS total FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' GROUP BY category_code');
 foreach (($categoryCountStmt ? ($categoryCountStmt->fetchAll() ?: []) : []) as $countRow) {
     $code = (string) ($countRow['category_code'] ?? '');
     if (array_key_exists($code, $activeCategoryCounts)) {
@@ -238,6 +164,43 @@ if ($user !== null) {
     }
     $proposalPrefillEmail = trim((string) ($user['email'] ?? ''));
 }
+$showCategoryProposalForm = $user !== null && (string) ($_GET['propose_category'] ?? '') === '1';
+$renderCategoryProposalForm = static function (bool $dialogMode) use ($t, $proposalPrefillName, $proposalPrefillEmail, $canModerateClassifieds): string {
+    ob_start();
+    ?>
+    <form method="post" class="classifieds-category-form">
+        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+        <input type="hidden" name="action" value="propose_category">
+        <label>
+            <span><?= e($t('propose_category_name_label')) ?></span>
+            <input type="text" name="proposal_category" maxlength="120" required placeholder="<?= e($t('propose_category_name_placeholder')) ?>">
+        </label>
+        <div class="classifieds-category-form-grid">
+            <label>
+                <span><?= e($t('propose_category_sender_name_label')) ?></span>
+                <input type="text" name="proposal_name" maxlength="190" required value="<?= e($proposalPrefillName) ?>">
+            </label>
+            <label>
+                <span><?= e($t('propose_category_sender_email_label')) ?></span>
+                <input type="email" name="proposal_email" maxlength="190" required value="<?= e($proposalPrefillEmail) ?>">
+            </label>
+        </div>
+        <label>
+            <span><?= e($t('propose_category_details_label')) ?></span>
+            <textarea name="proposal_details" rows="4" maxlength="1200" placeholder="<?= e($t('propose_category_details_placeholder')) ?>"></textarea>
+        </label>
+        <div class="classifieds-category-dialog-actions">
+            <button class="button" type="submit"><?= e($canModerateClassifieds ? 'Creer' : $t('propose_category_submit')) ?></button>
+            <?php if ($dialogMode): ?>
+                <button class="button secondary" type="button" data-classifieds-category-close><?= e($t('propose_category_cancel')) ?></button>
+            <?php else: ?>
+                <a class="button secondary" href="<?= e(route_url('classifieds')) ?>"><?= e($t('propose_category_cancel')) ?></a>
+            <?php endif; ?>
+        </div>
+    </form>
+    <?php
+    return (string) ob_get_clean();
+};
 
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
@@ -267,7 +230,7 @@ ob_start();
             <p class="classifieds-hero-action">
                 <a class="button" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_ad')) ?></a>
                 <?php if ($user !== null): ?>
-                    <button class="button secondary" type="button" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($t('propose_category')) ?></button>
+                    <a class="button secondary" href="<?= e(route_url('classifieds', ['propose_category' => '1'])) ?>" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($canModerateClassifieds ? 'Creer une categorie' : $t('propose_category')) ?></a>
                 <?php else: ?>
                     <a class="button secondary" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_category')) ?></a>
                 <?php endif; ?>
@@ -276,42 +239,30 @@ ob_start();
     </header>
 
     <?php if ($user !== null): ?>
+    <?php if ($showCategoryProposalForm): ?>
+    <section class="card classifieds-category-inline" id="classifieds-category-inline">
+        <div class="classifieds-category-dialog-header">
+            <div>
+                <p class="directory-eyebrow"><?= e($t('category_label')) ?></p>
+                <h2><?= e($canModerateClassifieds ? 'Creer une categorie' : $t('propose_category')) ?></h2>
+                <p class="help"><?= e($canModerateClassifieds ? 'La categorie sera validee directement.' : $t('propose_category_intro')) ?></p>
+            </div>
+        </div>
+        <?= $renderCategoryProposalForm(false) ?>
+    </section>
+    <?php endif; ?>
+
     <dialog class="classifieds-category-dialog" id="classifieds-category-dialog" aria-labelledby="classifieds-category-title">
         <div class="classifieds-category-dialog-card">
             <div class="classifieds-category-dialog-header">
                 <div>
                     <p class="directory-eyebrow"><?= e($t('category_label')) ?></p>
-                    <h2 id="classifieds-category-title"><?= e($t('propose_category')) ?></h2>
-                    <p class="help"><?= e($t('propose_category_intro')) ?></p>
+                    <h2 id="classifieds-category-title"><?= e($canModerateClassifieds ? 'Creer une categorie' : $t('propose_category')) ?></h2>
+                    <p class="help"><?= e($canModerateClassifieds ? 'La categorie sera validee directement.' : $t('propose_category_intro')) ?></p>
                 </div>
                 <button class="classifieds-category-dialog-close" type="button" data-classifieds-category-close aria-label="<?= e($t('propose_category_close')) ?>">&times;</button>
             </div>
-            <form method="post" class="classifieds-category-form">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="propose_category">
-                <label>
-                    <span><?= e($t('propose_category_name_label')) ?></span>
-                    <input type="text" name="proposal_category" maxlength="120" required placeholder="<?= e($t('propose_category_name_placeholder')) ?>">
-                </label>
-                <div class="classifieds-category-form-grid">
-                    <label>
-                        <span><?= e($t('propose_category_sender_name_label')) ?></span>
-                        <input type="text" name="proposal_name" maxlength="190" required value="<?= e($proposalPrefillName) ?>">
-                    </label>
-                    <label>
-                        <span><?= e($t('propose_category_sender_email_label')) ?></span>
-                        <input type="email" name="proposal_email" maxlength="190" required value="<?= e($proposalPrefillEmail) ?>">
-                    </label>
-                </div>
-                <label>
-                    <span><?= e($t('propose_category_details_label')) ?></span>
-                    <textarea name="proposal_details" rows="4" maxlength="1200" placeholder="<?= e($t('propose_category_details_placeholder')) ?>"></textarea>
-                </label>
-                <div class="classifieds-category-dialog-actions">
-                    <button class="button" type="submit"><?= e($t('propose_category_submit')) ?></button>
-                    <button class="button secondary" type="button" data-classifieds-category-close><?= e($t('propose_category_cancel')) ?></button>
-                </div>
-            </form>
+            <?= $renderCategoryProposalForm(true) ?>
         </div>
     </dialog>
     <?php endif; ?>
@@ -365,7 +316,7 @@ ob_start();
                     </div>
                     <h3><?= e((string) $ad['title']) ?></h3>
                     <p class="classifieds-card-meta">
-                        <?= e((string) ($ad['callsign'] ?? 'N/A')) ?>
+                        <?= e((string) ($ad['callsign'] ?? $t('not_available'))) ?>
                         <?php if ((string) ($ad['location'] ?? '') !== ''): ?> · <?= e((string) $ad['location']) ?><?php endif; ?>
                     </p>
                     <p class="classifieds-card-description"><?= nl2br(e(mb_safe_strimwidth((string) $ad['description'], 0, 260, '...'))) ?></p>

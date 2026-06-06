@@ -21,4 +21,7 @@ return array (
   'search' => 'Ieškoti nario',
   'search_ph' => 'Skambinimas, vardas, el.',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Slapta?odis',
+  'password_reset_force' => 'Priverskite kitą prisijungimą',
+  'password_reset_unavailable' => 'Nepasiekiamas',
 );

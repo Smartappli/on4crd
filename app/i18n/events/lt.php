@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Parengti el. laišką',
   'propose_event_cancel' => 'Atšaukti',
   'propose_event_close' => 'Uždaryti',
+  'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
 );

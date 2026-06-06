@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Do theagmhálaí',
   'propose_theme_submit' => 'Seol togra',
   'cancel' => 'Cealaigh',
+  'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
 );

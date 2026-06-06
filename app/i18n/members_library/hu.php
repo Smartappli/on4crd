@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Kedvenc eltávolítva',
   'favorite_added_msg' => 'A dokumentum hozzáadva a kedvencekhez.',
   'favorite_removed_msg' => 'A dokumentum eltávolítva a kedvencek közül.',
+  'proposal_recorded' => 'A javaslat mentve lett a tartalmai közé.',
 );

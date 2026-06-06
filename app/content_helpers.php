@@ -25,17 +25,72 @@ function ensure_classified_ads_table(): bool
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
 
-        $columnStmt = db()->prepare(
-            'SELECT COUNT(*) FROM information_schema.columns
-             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
-        );
-
-        $columnStmt->execute(['classified_ads', 'expires_at']);
-        if ((int) $columnStmt->fetchColumn() === 0) {
+        if (!table_has_column('classified_ads', 'owner_member_id')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN owner_member_id INT NOT NULL DEFAULT 0 AFTER id');
+        }
+        if (!table_has_column('classified_ads', 'category_code')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN category_code VARCHAR(32) NOT NULL DEFAULT "gear" AFTER owner_member_id');
+        }
+        if (!table_has_column('classified_ads', 'title')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Classified ad" AFTER category_code');
+        }
+        if (!table_has_column('classified_ads', 'description')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN description TEXT DEFAULT NULL AFTER title');
+        }
+        if (!table_has_column('classified_ads', 'location')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN location VARCHAR(120) DEFAULT NULL AFTER description');
+        }
+        if (!table_has_column('classified_ads', 'contact')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN contact VARCHAR(190) DEFAULT NULL AFTER location');
+        }
+        if (!table_has_column('classified_ads', 'price_cents')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN price_cents INT NOT NULL DEFAULT 0 AFTER contact');
+        }
+        if (!table_has_column('classified_ads', 'status')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft" AFTER price_cents');
+        }
+        if (!table_has_column('classified_ads', 'expires_at')) {
             db()->exec('ALTER TABLE classified_ads ADD COLUMN expires_at DATETIME NULL DEFAULT NULL AFTER status');
         }
+        if (!table_has_column('classified_ads', 'created_at')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER expires_at');
+        }
+        if (!table_has_column('classified_ads', 'updated_at')) {
+            db()->exec('ALTER TABLE classified_ads ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at');
+        }
 
-        db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
+        db()->exec('UPDATE classified_ads SET category_code = "gear" WHERE category_code IS NULL OR category_code = ""');
+        db()->exec('UPDATE classified_ads SET title = "Classified ad" WHERE title IS NULL OR title = ""');
+        db()->exec('UPDATE classified_ads SET price_cents = 0 WHERE price_cents IS NULL OR price_cents < 0');
+
+        if (classifieds_column_requires_modify('status', 'enum("draft","pending","active","sold","archived","expired")', false, 'draft')) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN status ENUM("draft","pending","active","sold","archived","expired") NOT NULL DEFAULT "draft"');
+        }
+        if (classifieds_column_requires_modify('category_code', 'varchar(32)', false, 'gear')) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN category_code VARCHAR(32) NOT NULL DEFAULT "gear"');
+        }
+        if (classifieds_column_requires_modify('title', 'varchar(190)', false, null)) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN title VARCHAR(190) NOT NULL');
+        }
+        if (classifieds_column_requires_modify('location', 'varchar(120)', true, null)) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN location VARCHAR(120) DEFAULT NULL');
+        }
+        if (classifieds_column_requires_modify('contact', 'varchar(190)', true, null)) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN contact VARCHAR(190) DEFAULT NULL');
+        }
+        if (classifieds_column_requires_modify('price_cents', 'int', false, '0')) {
+            db()->exec('ALTER TABLE classified_ads MODIFY COLUMN price_cents INT NOT NULL DEFAULT 0');
+        }
+
+        if (!table_has_index('classified_ads', 'idx_classified_owner_status')) {
+            db()->exec('ALTER TABLE classified_ads ADD INDEX idx_classified_owner_status (owner_member_id, status)');
+        }
+        if (!table_has_index('classified_ads', 'idx_classified_status_created')) {
+            db()->exec('ALTER TABLE classified_ads ADD INDEX idx_classified_status_created (status, created_at)');
+        }
+        if (!table_has_index('classified_ads', 'idx_classified_expires')) {
+            db()->exec('ALTER TABLE classified_ads ADD INDEX idx_classified_expires (expires_at)');
+        }
 
         return true;
     } catch (Throwable $throwable) {
@@ -45,6 +100,57 @@ function ensure_classified_ads_table(): bool
 
         return false;
     }
+}
+}
+
+if (!function_exists('classifieds_column_metadata')) {
+/**
+ * @return array{type:string,nullable:bool,default:?string}|null
+ */
+function classifieds_column_metadata(string $column): ?array
+{
+    try {
+        $stmt = db()->prepare(
+            'SELECT COLUMN_TYPE, IS_NULLABLE, COLUMN_DEFAULT
+             FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?
+             LIMIT 1'
+        );
+        $stmt->execute(['classified_ads', $column]);
+        $row = $stmt->fetch();
+    } catch (Throwable) {
+        return null;
+    }
+
+    if (!is_array($row)) {
+        return null;
+    }
+
+    return [
+        'type' => strtolower(str_replace("'", '"', (string) ($row['COLUMN_TYPE'] ?? ''))),
+        'nullable' => strtoupper((string) ($row['IS_NULLABLE'] ?? 'YES')) === 'YES',
+        'default' => array_key_exists('COLUMN_DEFAULT', $row) && $row['COLUMN_DEFAULT'] !== null ? (string) $row['COLUMN_DEFAULT'] : null,
+    ];
+}
+}
+
+if (!function_exists('classifieds_column_requires_modify')) {
+function classifieds_column_requires_modify(string $column, string $expectedType, bool $expectedNullable, ?string $expectedDefault): bool
+{
+    $metadata = classifieds_column_metadata($column);
+    if ($metadata === null) {
+        return false;
+    }
+
+    $actualType = $metadata['type'];
+    $expectedType = strtolower(str_replace("'", '"', $expectedType));
+    $typeMatches = $expectedType === 'int'
+        ? str_starts_with($actualType, 'int')
+        : $actualType === $expectedType;
+
+    return !$typeMatches
+        || $metadata['nullable'] !== $expectedNullable
+        || $metadata['default'] !== $expectedDefault;
 }
 }
 
@@ -171,6 +277,36 @@ function wiki_unique_slug(string $title, string $slugInput = '', int $ignoreId =
 }
 }
 
+if (!function_exists('classifieds_active_where_sql')) {
+function classifieds_active_where_sql(string $alias = ''): string
+{
+    $prefix = '';
+    if ($alias !== '' && preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $alias) === 1) {
+        $prefix = $alias . '.';
+    }
+
+    return $prefix . 'status = "active" AND (' . $prefix . 'expires_at IS NULL OR ' . $prefix . 'expires_at >= NOW())';
+}
+}
+
+if (!function_exists('classifieds_expires_at_for_status')) {
+function classifieds_expires_at_for_status(string $status, ?int $now = null): ?string
+{
+    if ($status !== 'active') {
+        return null;
+    }
+
+    return date('Y-m-d H:i:s', ($now ?? time()) + (30 * 86400));
+}
+}
+
+if (!function_exists('classifieds_can_moderate')) {
+function classifieds_can_moderate(): bool
+{
+    return has_permission('classifieds.moderate');
+}
+}
+
 if (!function_exists('classifieds_validate_payload')) {
 function classifieds_validate_payload(
     string $category,
@@ -215,7 +351,7 @@ function classifieds_member_publication_status(string $requestedStatus): string
     if (!in_array($requestedStatus, ['draft', 'pending', 'active', 'sold', 'archived'], true)) {
         return 'draft';
     }
-    if ($requestedStatus === 'active' && !has_permission('ads.moderate')) {
+    if ($requestedStatus === 'active' && !classifieds_can_moderate()) {
         return 'pending';
     }
 
@@ -224,10 +360,16 @@ function classifieds_member_publication_status(string $requestedStatus): string
 }
 
 if (!function_exists('classifieds_enforce_submission_limits')) {
-function classifieds_enforce_submission_limits(int $memberId): void
+function classifieds_enforce_submission_limits(int $memberId, array $messages = []): void
 {
+    $messages = array_replace([
+        'invalid_user' => 'Invalid user.',
+        'rate_limited' => 'Please wait one minute before submitting another ad.',
+        'daily_limit' => 'Limit reached: maximum 5 ads per 24 hours.',
+    ], $messages);
+
     if ($memberId <= 0) {
-        throw new RuntimeException('Utilisateur invalide.');
+        throw new RuntimeException((string) $messages['invalid_user']);
     }
 
     $lastStmt = db()->prepare('SELECT created_at FROM classified_ads WHERE owner_member_id = ? ORDER BY created_at DESC, id DESC LIMIT 1');
@@ -236,14 +378,14 @@ function classifieds_enforce_submission_limits(int $memberId): void
     if (is_string($lastCreatedAt) && $lastCreatedAt !== '') {
         $lastTs = strtotime($lastCreatedAt);
         if ($lastTs !== false && $lastTs > time() - 60) {
-            throw new RuntimeException('Veuillez patienter une minute avant de proposer une autre annonce.');
+            throw new RuntimeException((string) $messages['rate_limited']);
         }
     }
 
     $countStmt = db()->prepare('SELECT COUNT(*) FROM classified_ads WHERE owner_member_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)');
     $countStmt->execute([$memberId]);
     if ((int) ($countStmt->fetchColumn() ?: 0) >= 5) {
-        throw new RuntimeException('Limite atteinte: maximum 5 annonces par 24 heures.');
+        throw new RuntimeException((string) $messages['daily_limit']);
     }
 }
 }
@@ -251,11 +393,326 @@ function classifieds_enforce_submission_limits(int $memberId): void
 if (!function_exists('classifieds_sync_expired')) {
 function classifieds_sync_expired(): void
 {
-    if (!ensure_classified_ads_table()) {
+    if (!table_exists('classified_ads')) {
         return;
     }
 
-    db()->exec('UPDATE classified_ads SET status = "expired", updated_at = NOW() WHERE status = "active" AND expires_at IS NOT NULL AND expires_at < NOW()');
+    try {
+        db()->exec('UPDATE classified_ads SET status = "expired", updated_at = NOW() WHERE status = "active" AND expires_at IS NOT NULL AND expires_at < NOW()');
+    } catch (Throwable $throwable) {
+        log_structured_event('classified_ads_expire_sync_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+    }
+}
+}
+
+if (!function_exists('ensure_content_proposals_table')) {
+function ensure_content_proposals_table(): bool
+{
+    try {
+        db()->exec(
+            'CREATE TABLE IF NOT EXISTS content_proposals (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                member_id INT NOT NULL,
+                area VARCHAR(64) NOT NULL,
+                proposal_type ENUM("category","content") NOT NULL DEFAULT "content",
+                title VARCHAR(190) NOT NULL,
+                summary TEXT DEFAULT NULL,
+                contact VARCHAR(220) DEFAULT NULL,
+                source_ref VARCHAR(500) DEFAULT NULL,
+                status ENUM("pending","reviewed","accepted","rejected") NOT NULL DEFAULT "pending",
+                moderation_note TEXT DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_content_proposals_member_created (member_id, created_at),
+                INDEX idx_content_proposals_status_area (status, area),
+                INDEX idx_content_proposals_type (proposal_type)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+
+        $columns = [
+            'member_id' => 'ALTER TABLE content_proposals ADD COLUMN member_id INT NOT NULL DEFAULT 0 AFTER id',
+            'area' => 'ALTER TABLE content_proposals ADD COLUMN area VARCHAR(64) NOT NULL DEFAULT "articles" AFTER member_id',
+            'proposal_type' => 'ALTER TABLE content_proposals ADD COLUMN proposal_type ENUM("category","content") NOT NULL DEFAULT "content" AFTER area',
+            'title' => 'ALTER TABLE content_proposals ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Proposal" AFTER proposal_type',
+            'summary' => 'ALTER TABLE content_proposals ADD COLUMN summary TEXT DEFAULT NULL AFTER title',
+            'contact' => 'ALTER TABLE content_proposals ADD COLUMN contact VARCHAR(220) DEFAULT NULL AFTER summary',
+            'source_ref' => 'ALTER TABLE content_proposals ADD COLUMN source_ref VARCHAR(500) DEFAULT NULL AFTER contact',
+            'status' => 'ALTER TABLE content_proposals ADD COLUMN status ENUM("pending","reviewed","accepted","rejected") NOT NULL DEFAULT "pending" AFTER source_ref',
+            'moderation_note' => 'ALTER TABLE content_proposals ADD COLUMN moderation_note TEXT DEFAULT NULL AFTER status',
+            'created_at' => 'ALTER TABLE content_proposals ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER moderation_note',
+            'updated_at' => 'ALTER TABLE content_proposals ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at',
+        ];
+
+        foreach ($columns as $column => $statement) {
+            if (!table_has_column('content_proposals', $column)) {
+                db()->exec($statement);
+            }
+        }
+
+        if (!table_has_index('content_proposals', 'idx_content_proposals_member_created')) {
+            db()->exec('ALTER TABLE content_proposals ADD INDEX idx_content_proposals_member_created (member_id, created_at)');
+        }
+        if (!table_has_index('content_proposals', 'idx_content_proposals_status_area')) {
+            db()->exec('ALTER TABLE content_proposals ADD INDEX idx_content_proposals_status_area (status, area)');
+        }
+        if (!table_has_index('content_proposals', 'idx_content_proposals_type')) {
+            db()->exec('ALTER TABLE content_proposals ADD INDEX idx_content_proposals_type (proposal_type)');
+        }
+
+        return true;
+    } catch (Throwable $throwable) {
+        log_structured_event('content_proposals_table_ensure_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+
+        return false;
+    }
+}
+}
+
+if (!function_exists('content_proposal_allowed_areas')) {
+/**
+ * @return array<string, true>
+ */
+function content_proposal_allowed_areas(): array
+{
+    return [
+        'articles' => true,
+        'albums' => true,
+        'auctions' => true,
+        'classifieds' => true,
+        'events' => true,
+        'members_library' => true,
+        'news' => true,
+        'wiki' => true,
+    ];
+}
+}
+
+if (!function_exists('content_proposal_clean_single_line')) {
+function content_proposal_clean_single_line(string $value, int $maxLength): string
+{
+    $value = str_replace(["\r", "\n"], ' ', strip_tags($value));
+    $value = trim((string) preg_replace('/\s+/u', ' ', $value));
+    if ($value !== '' && mb_strlen($value) > $maxLength) {
+        throw new RuntimeException('Invalid content proposal.');
+    }
+
+    return $value;
+}
+}
+
+if (!function_exists('content_proposal_clean_multiline')) {
+function content_proposal_clean_multiline(string $value, int $maxLength): string
+{
+    $value = str_replace(["\r\n", "\r"], "\n", strip_tags($value));
+    $value = trim((string) preg_replace('/[ \t]+/u', ' ', $value));
+    if ($value !== '' && mb_strlen($value) > $maxLength) {
+        throw new RuntimeException('Invalid content proposal.');
+    }
+
+    return $value;
+}
+}
+
+if (!function_exists('content_proposal_details_text')) {
+/**
+ * @param array<string, mixed> $details
+ */
+function content_proposal_details_text(array $details): string
+{
+    $lines = [];
+    foreach ($details as $label => $value) {
+        $label = content_proposal_clean_single_line((string) $label, 120);
+        $value = content_proposal_clean_multiline((string) $value, 1800);
+        if ($label === '' || $value === '') {
+            continue;
+        }
+        $lines[] = $label . ': ' . $value;
+    }
+
+    return content_proposal_clean_multiline(implode("\n", $lines), 5000);
+}
+}
+
+if (!function_exists('content_proposal_category_code')) {
+function content_proposal_category_code(string $title, int $maxLength = 120, string $fallback = 'category'): string
+{
+    $maxLength = max(1, $maxLength);
+    $code = slugify($title);
+    if ($code === '' || $code === 'n-a') {
+        $code = slugify($fallback);
+    }
+    if ($code === '' || $code === 'n-a') {
+        $code = 'category';
+    }
+    if (strlen($code) > $maxLength) {
+        $code = rtrim(substr($code, 0, $maxLength), '-');
+    }
+
+    return $code !== '' ? $code : 'category';
+}
+}
+
+if (!function_exists('content_proposal_accepted_categories')) {
+/**
+ * @return array<string, string>
+ */
+function content_proposal_accepted_categories(string $area, int $maxCodeLength = 120): array
+{
+    if (!ensure_content_proposals_table()) {
+        return [];
+    }
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT title
+             FROM content_proposals
+             WHERE area = ?
+               AND proposal_type = "category"
+               AND status = "accepted"
+             ORDER BY updated_at ASC, id ASC'
+        );
+        $stmt->execute([$area]);
+    } catch (Throwable) {
+        return [];
+    }
+
+    $categories = [];
+    foreach (($stmt->fetchAll() ?: []) as $row) {
+        $title = content_proposal_clean_single_line((string) ($row['title'] ?? ''), 190);
+        if ($title === '') {
+            continue;
+        }
+        $code = content_proposal_category_code($title, $maxCodeLength, $area);
+        if (!isset($categories[$code])) {
+            $categories[$code] = $title;
+        }
+    }
+
+    return $categories;
+}
+}
+
+if (!function_exists('content_proposal_payload')) {
+/**
+ * @return array{member_id:int,area:string,proposal_type:string,title:string,summary:string,contact:string,source_ref:string,status:string}
+ */
+function content_proposal_payload(
+    int $memberId,
+    string $area,
+    string $proposalType,
+    string $title,
+    string $summary = '',
+    string $contact = '',
+    string $sourceRef = '',
+    string $status = 'pending'
+): array {
+    $area = content_proposal_clean_single_line($area, 64);
+    $proposalType = content_proposal_clean_single_line($proposalType, 24);
+    $title = content_proposal_clean_single_line($title, 190);
+    $summary = content_proposal_clean_multiline($summary, 5000);
+    $contact = content_proposal_clean_single_line($contact, 220);
+    $sourceRef = content_proposal_clean_single_line($sourceRef, 500);
+    $status = content_proposal_clean_single_line($status, 32);
+
+    if (
+        $memberId <= 0
+        || !isset(content_proposal_allowed_areas()[$area])
+        || !in_array($proposalType, ['category', 'content'], true)
+        || !in_array($status, ['pending', 'reviewed', 'accepted', 'rejected'], true)
+        || $title === ''
+    ) {
+        throw new RuntimeException('Invalid content proposal.');
+    }
+
+    return [
+        'member_id' => $memberId,
+        'area' => $area,
+        'proposal_type' => $proposalType,
+        'title' => $title,
+        'summary' => $summary,
+        'contact' => $contact,
+        'source_ref' => $sourceRef,
+        'status' => $status,
+    ];
+}
+}
+
+if (!function_exists('content_proposal_create')) {
+function content_proposal_create(
+    int $memberId,
+    string $area,
+    string $proposalType,
+    string $title,
+    string $summary = '',
+    string $contact = '',
+    string $sourceRef = '',
+    string $status = 'pending'
+): int {
+    if (!ensure_content_proposals_table()) {
+        throw new RuntimeException('Content proposal storage is unavailable.');
+    }
+
+    $payload = content_proposal_payload($memberId, $area, $proposalType, $title, $summary, $contact, $sourceRef, $status);
+    db()->prepare(
+        'INSERT INTO content_proposals (member_id, area, proposal_type, title, summary, contact, source_ref, status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+    )->execute([
+        $payload['member_id'],
+        $payload['area'],
+        $payload['proposal_type'],
+        $payload['title'],
+        $payload['summary'] !== '' ? $payload['summary'] : null,
+        $payload['contact'] !== '' ? $payload['contact'] : null,
+        $payload['source_ref'] !== '' ? $payload['source_ref'] : null,
+        $payload['status'],
+    ]);
+
+    return (int) db()->lastInsertId();
+}
+}
+
+if (!function_exists('content_proposal_notify_site')) {
+/**
+ * @param array{area:string,proposal_type:string,title:string,summary:string,contact:string,source_ref:string} $proposal
+ */
+function content_proposal_notify_site(string $subject, array $proposal): bool
+{
+    $subject = content_proposal_clean_single_line($subject, 190);
+    $contact = content_proposal_clean_single_line((string) ($proposal['contact'] ?? ''), 220);
+    $body = [
+        'Nouvelle proposition ON4CRD',
+        '',
+        'Espace: ' . content_proposal_clean_single_line((string) ($proposal['area'] ?? ''), 64),
+        'Type: ' . content_proposal_clean_single_line((string) ($proposal['proposal_type'] ?? ''), 24),
+        'Titre: ' . content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 190),
+    ];
+
+    $summary = content_proposal_clean_multiline((string) ($proposal['summary'] ?? ''), 5000);
+    if ($summary !== '') {
+        $body[] = '';
+        $body[] = $summary;
+    }
+    $sourceRef = content_proposal_clean_single_line((string) ($proposal['source_ref'] ?? ''), 500);
+    if ($sourceRef !== '') {
+        $body[] = '';
+        $body[] = 'Source: ' . $sourceRef;
+    }
+    if ($contact !== '') {
+        $body[] = '';
+        $body[] = 'Contact: ' . $contact;
+    }
+
+    $headers = 'From: ON4CRD Website <no-reply@on4crd.be>' . "\r\n"
+        . 'Content-Type: text/plain; charset=UTF-8';
+    if (filter_var($contact, FILTER_VALIDATE_EMAIL)) {
+        $headers .= "\r\n" . 'Reply-To: ' . $contact;
+    }
+
+    return @mail(site_contact_email(), $subject !== '' ? $subject : 'Nouvelle proposition ON4CRD', implode("\n", $body) . "\n", $headers);
 }
 }
 

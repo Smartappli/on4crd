@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Προετοιμασία e-mail',
   'propose_event_cancel' => 'Ακύρωση',
   'propose_event_close' => 'Κλείσιμο',
+  'proposal_recorded' => 'Η πρόταση αποθηκεύτηκε στο περιεχόμενό σας.',
 );

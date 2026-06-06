@@ -40,7 +40,7 @@ $modules = [
     'articles' => table_count_if_exists('articles', 'status = "published"'),
     'wiki' => table_count_if_exists('wiki_pages'),
     'library_docs' => table_count_if_exists('member_library_documents'),
-    'classified_ads_active' => table_count_if_exists('classified_ads', 'status = "active"'),
+    'classified_ads_active' => table_count_if_exists('classified_ads', classifieds_active_where_sql()),
     'rag_chunks' => table_count_if_exists('rag_chunks'),
 ];
 

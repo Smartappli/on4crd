@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Jūsu kontaktpersona',
   'propose_theme_submit' => 'Nosūtīt priekšlikumu',
   'cancel' => 'Atcelt',
+  'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
 );

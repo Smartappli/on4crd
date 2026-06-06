@@ -90,6 +90,34 @@ function news_unique_slug(string $value, int $ignoreId = 0, int $maxLength = 190
     throw new RuntimeException('Impossible de générer un slug actualité unique.');
 }
 
+function news_default_section_id(): int
+{
+    if (!table_exists('news_sections')) {
+        return 0;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT id FROM news_sections WHERE slug = ? LIMIT 1');
+        $stmt->execute(['on4crd']);
+        $sectionId = (int) ($stmt->fetchColumn() ?: 0);
+        if ($sectionId > 0) {
+            return $sectionId;
+        }
+
+        $sectionId = (int) (db()->query('SELECT id FROM news_sections ORDER BY sort_order ASC, id ASC LIMIT 1')->fetchColumn() ?: 0);
+        if ($sectionId > 0) {
+            return $sectionId;
+        }
+
+        db()->prepare('INSERT INTO news_sections (slug, name, sort_order) VALUES (?, ?, ?)')
+            ->execute(['on4crd', 'ON4CRD', 10]);
+
+        return (int) db()->lastInsertId();
+    } catch (Throwable) {
+        return 0;
+    }
+}
+
 function can_edit_news_post(array $post, int $memberId): bool
 {
     if ($memberId <= 0) {

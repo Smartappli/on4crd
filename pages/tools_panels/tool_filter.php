@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-filter" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-filter" data-tool-panel>
     <h2><?= e((string) $t['filter_calc']) ?></h2>
     <label><?= e((string) $t['cutoff_freq']) ?>
         <input type="text" inputmode="decimal" id="filter-freq" data-min="0" data-step="0.001" placeholder="<?= e((string) $t['freq_ph']) ?>">

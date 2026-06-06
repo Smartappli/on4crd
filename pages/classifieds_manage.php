@@ -11,7 +11,7 @@ $t = static function (string $key) use ($messages): string {
 };
 
 if (!module_enabled('classifieds')) {
-    echo render_layout('<div class="card"><p>Module disabled.</p></div>', $t('title'));
+    echo render_layout('<div class="card"><p>' . e($t('module_disabled')) . '</p></div>', $t('title'));
     return;
 }
 
@@ -29,9 +29,10 @@ $categories = [
     'wanted' => $t('category_wanted'),
     'service' => $t('category_service'),
 ];
+$categories += content_proposal_accepted_categories('classifieds', 32);
 $statuses = [
     'draft' => $t('status_draft'),
-    'pending' => (string) ($messages['status_pending'] ?? 'En validation'),
+    'pending' => $t('status_pending'),
     'active' => $t('status_active'),
     'sold' => $t('status_sold'),
     'archived' => $t('status_archived'),
@@ -65,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $requestedStatus = classifieds_member_publication_status((string) ($_POST['status'] ?? 'draft'));
             classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, $t('invalid'));
 
-            $expiresAt = $requestedStatus === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+            $expiresAt = classifieds_expires_at_for_status($requestedStatus);
             if ($id > 0) {
                 if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
                     throw new RuntimeException($t('missing'));
@@ -74,7 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt, $id, (int) $user['id']]);
                 set_flash('success', $t('updated_ok'));
             } else {
-                classifieds_enforce_submission_limits((int) $user['id']);
+                classifieds_enforce_submission_limits((int) $user['id'], [
+                    'invalid_user' => $t('limit_invalid_user'),
+                    'rate_limited' => $t('limit_rate_limited'),
+                    'daily_limit' => $t('limit_daily'),
+                ]);
                 $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt]);
                 set_flash('success', $t('created_ok'));
@@ -91,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('invalid'));
             }
             $status = classifieds_member_publication_status($status);
-            $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+            $expiresAt = classifieds_expires_at_for_status($status);
             $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
             $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
             set_flash('success', $t('status_ok'));
@@ -102,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!classifieds_member_ad_exists($id, (int) $user['id'])) {
                 throw new RuntimeException($t('missing'));
             }
-            $status = has_permission('ads.moderate') ? 'active' : 'pending';
-            $expiresAt = $status === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+            $status = classifieds_can_moderate() ? 'active' : 'pending';
+            $expiresAt = classifieds_expires_at_for_status($status);
             $stmt = db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id = ? AND owner_member_id = ?');
             $stmt->execute([$status, $expiresAt, $id, (int) $user['id']]);
             set_flash('success', $t('renewed_ok'));
@@ -160,7 +165,7 @@ ob_start();
                 <label><span><?= e($t('publication_label')) ?></span>
                     <select name="status">
                         <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>><?= e($t('status_draft')) ?></option>
-                        <option value="active" <?= in_array((string) ($editing['status'] ?? ''), ['active', 'pending'], true) ? 'selected' : '' ?>><?= e(has_permission('ads.moderate') ? $t('published_30d') : 'Soumettre pour validation') ?></option>
+                        <option value="active" <?= in_array((string) ($editing['status'] ?? ''), ['active', 'pending'], true) ? 'selected' : '' ?>><?= e(classifieds_can_moderate() ? $t('published_30d') : $t('submit_for_review')) ?></option>
                     </select>
                 </label>
                 <div class="classifieds-editor-actions">

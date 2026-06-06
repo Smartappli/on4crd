@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Προσθέστε αγαπημένα για να βελτιώσετε τις προτάσεις.',
   'nudge_review_notifications' => 'Ελέγξτε τις μη αναγνωσμένες ειδοποιήσεις.',
   'nudge_enable_recommendations' => 'Ενεργοποιήστε εξατομικευμένες προτάσεις.',
+  'save_unavailable' => 'Η αποθήκευση δεν είναι διαθέσιμη: λείπει ο πίνακας dashboard_widgets.',
+  'saving' => 'Αποθήκευση...',
+  'invalid_server_response' => 'Μη έγκυρη απόκριση διακομιστή.',
+  'save_error' => 'Σφάλμα αποθήκευσης.',
+  'layout_saved_at' => 'Η διάταξη αποθηκεύτηκε στις {time}.',
+  'remove_widget' => 'Αφαίρεση widget',
+  'preview_unavailable' => 'Η προεπισκόπηση δεν είναι διαθέσιμη.',
+  'loading' => 'Φόρτωση...',
+  'load_widget_error' => 'Δεν ήταν δυνατή η φόρτωση του widget.',
 );

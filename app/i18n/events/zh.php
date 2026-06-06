@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => '准备电子邮件',
   'propose_event_cancel' => '取消',
   'propose_event_close' => '关闭',
+  'proposal_recorded' => '建议已保存到你的内容中。',
 );

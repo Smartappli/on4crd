@@ -83,6 +83,165 @@ function bypass_member_user(int $memberId): ?array
     return $row;
 }
 
+function authenticated_member_columns(): array
+{
+    $memberColumns = ['id'];
+    foreach (['auth_user_id', 'callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required', 'password_reset_forced_at'] as $memberColumn) {
+        if (table_has_column('members', $memberColumn)) {
+            $memberColumns[] = $memberColumn;
+        }
+    }
+
+    return array_values(array_unique($memberColumns));
+}
+
+function authenticated_member_create_from_auth_user(\Delight\Auth\Auth $authClient, string $authUsername): ?array
+{
+    $authUsername = strtoupper(trim($authUsername));
+    if (
+        $authUsername === ''
+        || preg_match('/^[A-Z0-9]{3,32}$/', $authUsername) !== 1
+        || !table_exists('members')
+        || !table_has_column('members', 'callsign')
+        || !table_has_column('members', 'full_name')
+        || !table_has_column('members', 'password_hash')
+    ) {
+        return null;
+    }
+
+    try {
+        $existingStmt = db()->prepare('SELECT id FROM members WHERE UPPER(callsign) = ? LIMIT 1');
+        $existingStmt->execute([$authUsername]);
+        if ((int) $existingStmt->fetchColumn() > 0) {
+            return null;
+        }
+
+        $columns = ['callsign', 'full_name', 'password_hash'];
+        $values = [
+            $authUsername,
+            $authUsername,
+            password_hash(bin2hex(random_bytes(24)), PASSWORD_DEFAULT),
+        ];
+
+        if (table_has_column('members', 'auth_user_id')) {
+            $columns[] = 'auth_user_id';
+            $values[] = (int) $authClient->getUserId();
+        }
+        if (table_has_column('members', 'email')) {
+            $authEmail = trim((string) $authClient->getEmail());
+            $columns[] = 'email';
+            $values[] = (filter_var($authEmail, FILTER_VALIDATE_EMAIL) !== false && !str_ends_with(strtolower($authEmail), '@local.invalid'))
+                ? $authEmail
+                : null;
+        }
+        if (table_has_column('members', 'is_active')) {
+            $columns[] = 'is_active';
+            $values[] = 1;
+        }
+
+        $quotedColumns = array_map(static fn(string $column): string => '`' . str_replace('`', '``', $column) . '`', $columns);
+        $placeholders = implode(', ', array_fill(0, count($columns), '?'));
+        $stmt = db()->prepare('INSERT INTO members (' . implode(', ', $quotedColumns) . ') VALUES (' . $placeholders . ')');
+        $stmt->execute($values);
+
+        $memberColumns = authenticated_member_columns();
+        $selectColumns = implode(', ', $memberColumns);
+        if (table_has_column('members', 'auth_user_id')) {
+            $createdStmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE auth_user_id = ? LIMIT 1');
+            $createdStmt->execute([(int) $authClient->getUserId()]);
+        } else {
+            $createdStmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE UPPER(callsign) = ? LIMIT 1');
+            $createdStmt->execute([$authUsername]);
+        }
+
+        $row = $createdStmt->fetch();
+        return is_array($row) && (int) ($row['is_active'] ?? 0) === 1 ? $row : null;
+    } catch (Throwable) {
+        return null;
+    }
+}
+
+function authenticated_member_row(\Delight\Auth\Auth $authClient, int $sessionMemberId = 0): ?array
+{
+    if (!$authClient->isLoggedIn() || !table_exists('members')) {
+        return null;
+    }
+
+    $authUserId = (int) $authClient->getUserId();
+    if ($authUserId <= 0) {
+        return null;
+    }
+
+    $memberColumns = authenticated_member_columns();
+    $selectColumns = implode(', ', $memberColumns);
+    $hasAuthUserIdColumn = table_has_column('members', 'auth_user_id');
+    $authUsername = strtoupper(trim((string) $authClient->getUsername()));
+
+    try {
+        if ($hasAuthUserIdColumn) {
+            $stmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE auth_user_id = ? LIMIT 1');
+            $stmt->execute([$authUserId]);
+            $row = $stmt->fetch();
+            if (is_array($row) && (int) ($row['is_active'] ?? 0) === 1) {
+                return $row;
+            }
+            if (is_array($row)) {
+                return null;
+            }
+        }
+
+        if ($authUsername !== '') {
+            $fallbackStmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE UPPER(callsign) = ? LIMIT 1');
+            $fallbackStmt->execute([$authUsername]);
+            $fallbackRow = $fallbackStmt->fetch();
+            if (is_array($fallbackRow) && (int) ($fallbackRow['is_active'] ?? 0) !== 1) {
+                return null;
+            }
+            if (is_array($fallbackRow)) {
+                if (!$hasAuthUserIdColumn) {
+                    return $fallbackRow;
+                }
+
+                $linkedAuthUserId = (int) ($fallbackRow['auth_user_id'] ?? 0);
+                if ($linkedAuthUserId === $authUserId) {
+                    return $fallbackRow;
+                }
+                if ($linkedAuthUserId === 0) {
+                    $repairStmt = db()->prepare('UPDATE members SET auth_user_id = ? WHERE id = ? AND (auth_user_id IS NULL OR auth_user_id = 0) LIMIT 1');
+                    $repairStmt->execute([$authUserId, (int) $fallbackRow['id']]);
+                    if ($repairStmt->rowCount() > 0) {
+                        $fallbackRow['auth_user_id'] = $authUserId;
+                        return $fallbackRow;
+                    }
+                }
+
+                return null;
+            }
+
+            $createdRow = authenticated_member_create_from_auth_user($authClient, $authUsername);
+            if (is_array($createdRow)) {
+                return $createdRow;
+            }
+        }
+
+        if (!$hasAuthUserIdColumn && $sessionMemberId > 0) {
+            $sessionStmt = db()->prepare('SELECT ' . $selectColumns . ' FROM members WHERE id = ? LIMIT 1');
+            $sessionStmt->execute([$sessionMemberId]);
+            $sessionRow = $sessionStmt->fetch();
+            if (is_array($sessionRow) && (int) ($sessionRow['is_active'] ?? 0) === 1) {
+                $sessionCallsign = strtoupper(trim((string) ($sessionRow['callsign'] ?? '')));
+                if ($authUsername === '' || hash_equals($authUsername, $sessionCallsign)) {
+                    return $sessionRow;
+                }
+            }
+        }
+    } catch (Throwable) {
+        return null;
+    }
+
+    return null;
+}
+
 function current_user(): ?array
 {
     static $cache = null;
@@ -94,11 +253,24 @@ function current_user(): ?array
     $loaded = true;
 
     $memberId = (int) ($_SESSION['member_id'] ?? 0);
-    $authUserId = 0;
     $authClient = auth();
     if ($authClient !== null && $authClient->isLoggedIn()) {
-        $authUserId = (int) $authClient->getUserId();
-        $memberId = $authUserId;
+        $row = authenticated_member_row($authClient, $memberId);
+        if (!is_array($row)) {
+            try {
+                $authClient->logOut();
+            } catch (Throwable) {
+                // Keep the local cleanup below even if the auth library cannot update its tables.
+            }
+            unset($_SESSION['member_id']);
+            $cache = null;
+            return null;
+        }
+
+        $_SESSION['member_id'] = (int) ($row['id'] ?? 0);
+        mark_authenticated_response_private();
+        $cache = $row;
+        return $cache;
     } elseif ($authClient !== null && $memberId > 0) {
         unset($_SESSION['member_id']);
         $memberId = 0;
@@ -122,44 +294,6 @@ function current_user(): ?array
         $cache = null;
         return null;
     }
-
-    if (!table_exists('members')) {
-        $cache = null;
-        return null;
-    }
-
-    $memberColumns = ['id'];
-    foreach (['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required'] as $memberColumn) {
-        if (table_has_column('members', $memberColumn)) {
-            $memberColumns[] = $memberColumn;
-        }
-    }
-    if ($authUserId > 0 && table_has_column('members', 'auth_user_id')) {
-        $where = 'auth_user_id = ?';
-        $params = [$authUserId];
-    } else {
-        $where = 'id = ?';
-        $params = [$memberId];
-    }
-
-    try {
-        $stmt = db()->prepare('SELECT ' . implode(', ', $memberColumns) . ' FROM members WHERE ' . $where . ' LIMIT 1');
-        $stmt->execute($params);
-        $row = $stmt->fetch();
-    } catch (Throwable) {
-        $cache = null;
-        return null;
-    }
-    if (!is_array($row) || (int) ($row['is_active'] ?? 0) !== 1) {
-        unset($_SESSION['member_id']);
-        $cache = null;
-        return null;
-    }
-
-    $_SESSION['member_id'] = (int) ($row['id'] ?? 0);
-    mark_authenticated_response_private();
-    $cache = $row;
-    return $cache;
 }
 }
 
@@ -171,20 +305,29 @@ function member_password_change_required(?array $user = null): bool
         return false;
     }
 
-    if (array_key_exists('password_change_required', $user)) {
-        return (int) ($user['password_change_required'] ?? 0) === 1;
+    if (array_key_exists('password_reset_forced_at', $user)) {
+        return (int) ($user['password_change_required'] ?? 0) === 1
+            && trim((string) ($user['password_reset_forced_at'] ?? '')) !== '';
     }
 
     $memberId = (int) ($user['id'] ?? 0);
-    if ($memberId <= 0 || !table_exists('members') || !table_has_column('members', 'password_change_required')) {
+    if (
+        $memberId <= 0
+        || !table_exists('members')
+        || !table_has_column('members', 'password_change_required')
+        || !table_has_column('members', 'password_reset_forced_at')
+    ) {
         return false;
     }
 
     try {
-        $stmt = db()->prepare('SELECT password_change_required FROM members WHERE id = ? LIMIT 1');
+        $stmt = db()->prepare('SELECT password_change_required, password_reset_forced_at FROM members WHERE id = ? LIMIT 1');
         $stmt->execute([$memberId]);
+        $row = $stmt->fetch();
 
-        return (int) $stmt->fetchColumn() === 1;
+        return is_array($row)
+            && (int) ($row['password_change_required'] ?? 0) === 1
+            && trim((string) ($row['password_reset_forced_at'] ?? '')) !== '';
     } catch (Throwable) {
         return false;
     }

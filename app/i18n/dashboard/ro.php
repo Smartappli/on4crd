@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Adăugați favorite pentru a îmbunătăți recomandările.',
   'nudge_review_notifications' => 'Verificați notificările necitite.',
   'nudge_enable_recommendations' => 'Activați recomandările personalizate.',
+  'save_unavailable' => 'Salvarea nu este disponibilă: lipsește tabelul dashboard_widgets.',
+  'saving' => 'Se salvează...',
+  'invalid_server_response' => 'Răspuns invalid de la server.',
+  'save_error' => 'Eroare la salvare.',
+  'layout_saved_at' => 'Aranjamentul a fost salvat la {time}.',
+  'remove_widget' => 'Elimină widgetul',
+  'preview_unavailable' => 'Previzualizarea nu este disponibilă.',
+  'loading' => 'Se încarcă...',
+  'load_widget_error' => 'Widgetul nu a putut fi încărcat.',
 );

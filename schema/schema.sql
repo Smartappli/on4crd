@@ -312,6 +312,24 @@ CREATE TABLE IF NOT EXISTS wiki_revisions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS content_proposals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    area VARCHAR(64) NOT NULL,
+    proposal_type ENUM('category','content') NOT NULL DEFAULT 'content',
+    title VARCHAR(190) NOT NULL,
+    summary TEXT DEFAULT NULL,
+    contact VARCHAR(220) DEFAULT NULL,
+    source_ref VARCHAR(500) DEFAULT NULL,
+    status ENUM('pending','reviewed','accepted','rejected') NOT NULL DEFAULT 'pending',
+    moderation_note TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_content_proposals_member_created (member_id, created_at),
+    INDEX idx_content_proposals_status_area (status, area),
+    INDEX idx_content_proposals_type (proposal_type)
+);
+
 CREATE TABLE IF NOT EXISTS albums (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(190) NOT NULL,
@@ -690,5 +708,6 @@ CREATE TABLE IF NOT EXISTS classified_ads (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_classified_owner_status (owner_member_id, status),
-    INDEX idx_classified_status_created (status, created_at)
+    INDEX idx_classified_status_created (status, created_at),
+    INDEX idx_classified_expires (expires_at)
 );

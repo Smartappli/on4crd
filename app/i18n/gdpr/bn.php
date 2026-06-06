@@ -37,4 +37,6 @@ return array (
   'view_members' => 'সদস্যদের দেখুন',
   'view_private' => 'ব্যক্তিগত ভিউ',
   'empty_visible_info' => 'কোন দৃশ্যমান তথ্য.',
+  'profile_data_title' => 'Profile data',
+  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
 );

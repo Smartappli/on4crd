@@ -21,4 +21,7 @@ return array (
   'search' => 'Αναζήτηση μέλους',
   'search_ph' => 'Κλήση, όνομα, email…',
   'search_btn' => 'OK',
+  'th_password_reset' => '??????? ?????????',
+  'password_reset_force' => 'Επιβολή στην επόμενη σύνδεση',
+  'password_reset_unavailable' => 'Μη διαθέσιμο',
 );

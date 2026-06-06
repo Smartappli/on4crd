@@ -1,30 +1,62 @@
 <?php
 declare(strict_types=1);
 
-require_permission('ads.moderate');
+require_permission('classifieds.moderate');
 
 $locale = current_locale();
 $t = i18n_domain_locale('classifieds', $locale);
-$tt = static function (string $key, string $fallback) use ($t): string {
+$tText = static function (string $key) use ($t): string {
     $value = (string) ($t[$key] ?? '');
-    return $value !== '' ? $value : $fallback;
+    return $value !== '' ? $value : $key;
+};
+$formatText = static function (string $key, array $vars = []) use ($tText): string {
+    return strtr($tText($key), $vars);
 };
 
 if (!ensure_classified_ads_table()) {
-    echo render_layout('<section class="card"><h1>' . e((string) ($t['title'] ?? 'Admin classifieds')) . '</h1><p class="help">' . e((string) ($t['storage_unavailable'] ?? 'Classifieds storage unavailable.')) . '</p></section>', (string) ($t['title'] ?? 'Admin classifieds'));
+    echo render_layout('<section class="card"><h1>' . e($tText('admin_title')) . '</h1><p class="help">' . e($tText('storage_unavailable')) . '</p></section>', $tText('admin_title'));
     return;
 }
 classifieds_sync_expired();
 
-$categories = ['gear' => (string) ($t['gear'] ?? 'Gear'), 'wanted' => (string) ($t['wanted'] ?? 'Wanted'), 'service' => (string) ($t['service'] ?? 'Service')];
-$statuses = [
-    'draft' => (string) ($t['draft'] ?? 'Draft'),
-    'pending' => (string) ($t['pending'] ?? 'En validation'),
-    'active' => (string) ($t['active'] ?? 'Active'),
-    'sold' => (string) ($t['sold'] ?? 'Sold'),
-    'archived' => (string) ($t['archived'] ?? 'Archived'),
-    'expired' => (string) ($t['expired'] ?? 'Expired'),
+$categories = [
+    'gear' => $tText('category_gear'),
+    'wanted' => $tText('category_wanted'),
+    'service' => $tText('category_service'),
 ];
+$statuses = [
+    'draft' => $tText('status_draft'),
+    'pending' => $tText('status_pending'),
+    'active' => $tText('status_active'),
+    'sold' => $tText('status_sold'),
+    'archived' => $tText('status_archived'),
+    'expired' => $tText('status_expired'),
+];
+$notifyModeration = static function (int $ownerId, string $body) use ($tText): void {
+    if ($ownerId > 0) {
+        notify_member($ownerId, 'moderation', $tText('notification_moderated_title'), $body, route_url('classifieds'));
+    }
+};
+$deleteFavoriteLinks = static function (array $ids): void {
+    $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn(int $id): bool => $id > 0)));
+    if ($ids === [] || !table_exists('member_favorites')) {
+        return;
+    }
+
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    try {
+        db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')
+            ->execute(array_merge(['classified_ad'], $ids));
+    } catch (Throwable $throwable) {
+        log_structured_event('classified_favorites_cleanup_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+    }
+};
+$deleteConfirm = json_encode($tText('delete_confirm'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+if (!is_string($deleteConfirm)) {
+    $deleteConfirm = '"delete_confirm"';
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -35,52 +67,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'bulk_update') {
             $ids = array_values(array_unique(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0)));
             if ($ids === []) {
-                throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+                throw new RuntimeException($tText('bulk_no_selection'));
             }
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
             $ownerStmt = db()->prepare('SELECT id, owner_member_id, title FROM classified_ads WHERE id IN (' . $placeholders . ')');
             $ownerStmt->execute($ids);
             $ownerRows = $ownerStmt->fetchAll() ?: [];
             if (count($ownerRows) !== count($ids)) {
-                throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+                throw new RuntimeException($tText('invalid'));
             }
             $bulkOp = (string) ($_POST['bulk_op'] ?? '');
             if ($bulkOp === 'delete') {
                 db()->prepare('DELETE FROM classified_ads WHERE id IN (' . $placeholders . ')')->execute($ids);
+                $deleteFavoriteLinks($ids);
                 foreach ($ownerRows as $ownerRow) {
-                    notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
+                    $notifyModeration((int) ($ownerRow['owner_member_id'] ?? 0), $formatText('notification_removed_body', [
+                        '{title}' => (string) ($ownerRow['title'] ?? ''),
+                    ]));
                 }
             } else {
                 $allowed = ['draft', 'pending', 'active', 'sold', 'archived', 'expired'];
                 if (!in_array($bulkOp, $allowed, true)) {
-                    throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+                    throw new RuntimeException($tText('invalid'));
                 }
-                $expiresAt = $bulkOp === 'active' ? date('Y-m-d H:i:s', time() + (30 * 86400)) : null;
+                $expiresAt = classifieds_expires_at_for_status($bulkOp);
                 db()->prepare('UPDATE classified_ads SET status = ?, expires_at = ?, updated_at = NOW() WHERE id IN (' . $placeholders . ')')
                     ->execute(array_merge([$bulkOp, $expiresAt], $ids));
                 foreach ($ownerRows as $ownerRow) {
-                    notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Status updated to ' . $bulkOp . ': ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
+                    $notifyModeration((int) ($ownerRow['owner_member_id'] ?? 0), $formatText('notification_status_body', [
+                        '{status}' => $statuses[$bulkOp] ?? $bulkOp,
+                        '{title}' => (string) ($ownerRow['title'] ?? ''),
+                    ]));
                 }
             }
-            set_flash('success', (string) ($t['saved'] ?? 'Saved.'));
+            set_flash('success', $tText('saved'));
             redirect_url(route_url('admin_classifieds'));
         }
 
         if ($id < 1) {
-            throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+            throw new RuntimeException($tText('invalid'));
         }
 
         $ownerStmt = db()->prepare('SELECT owner_member_id, title FROM classified_ads WHERE id = ? LIMIT 1');
         $ownerStmt->execute([$id]);
         $ownerRow = $ownerStmt->fetch() ?: null;
         if (!is_array($ownerRow)) {
-            throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+            throw new RuntimeException($tText('invalid'));
         }
 
         if ($action === 'delete') {
             db()->prepare('DELETE FROM classified_ads WHERE id = ?')->execute([$id]);
-            notify_member((int) ($ownerRow['owner_member_id'] ?? 0), 'moderation', 'Classified ad moderated', 'Ad removed by moderation: ' . (string) ($ownerRow['title'] ?? ''), route_url('classifieds'));
-            set_flash('success', (string) ($t['deleted'] ?? 'Deleted.'));
+            $deleteFavoriteLinks([$id]);
+            $notifyModeration((int) ($ownerRow['owner_member_id'] ?? 0), $formatText('notification_removed_body', [
+                '{title}' => (string) ($ownerRow['title'] ?? ''),
+            ]));
+            set_flash('success', $tText('deleted'));
             redirect_url(route_url('admin_classifieds'));
         }
 
@@ -91,29 +132,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $location = trim((string) ($_POST['location'] ?? ''));
         $contact = trim((string) ($_POST['contact'] ?? ''));
         if (!isset($statuses[$status])) {
-            throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+            throw new RuntimeException($tText('invalid'));
         }
-        classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, (string) ($t['invalid'] ?? 'Invalid data.'));
+        classifieds_validate_payload($category, $title, $description, $location, $contact, $categories, $tText('invalid'));
 
         $expiresAtRaw = trim((string) ($_POST['expires_at'] ?? ''));
         $expiresAtValue = null;
         if ($expiresAtRaw !== '') {
-            $timestamp = strtotime($expiresAtRaw);
-            if ($timestamp === false) {
-                throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid data.'));
+            $expiresAtDate = DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $expiresAtRaw);
+            $dateErrors = DateTimeImmutable::getLastErrors();
+            if (
+                !$expiresAtDate
+                || ($dateErrors !== false && ((int) $dateErrors['warning_count'] > 0 || (int) $dateErrors['error_count'] > 0))
+            ) {
+                throw new RuntimeException($tText('invalid'));
             }
-            $expiresAtValue = date('Y-m-d H:i:s', $timestamp);
+            $expiresAtValue = $expiresAtDate->format('Y-m-d H:i:s');
         } elseif ($status === 'active') {
-            $expiresAtValue = date('Y-m-d H:i:s', time() + (30 * 86400));
+            $expiresAtValue = classifieds_expires_at_for_status($status);
         }
 
         db()->prepare('UPDATE classified_ads SET category_code = ?, title = ?, description = ?, location = ?, contact = ?, price_cents = ?, status = ?, expires_at = ?, updated_at = NOW() WHERE id = ?')
             ->execute([$category, $title, $description, $location, $contact, max(0, parse_price_to_cents((string) ($_POST['price'] ?? '0'))), $status, $expiresAtValue, $id]);
         $ownerId = (int) ($ownerRow['owner_member_id'] ?? 0);
-        if ($ownerId > 0) {
-            notify_member($ownerId, 'moderation', 'Classified ad moderated', 'Status updated to ' . $status . ': ' . $title, route_url('classifieds'));
-        }
-        set_flash('success', (string) ($t['saved'] ?? 'Saved.'));
+        $notifyModeration($ownerId, $formatText('notification_status_body', [
+            '{status}' => $statuses[$status] ?? $status,
+            '{title}' => $title,
+        ]));
+        set_flash('success', $tText('saved'));
         redirect_url(route_url('admin_classifieds'));
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -160,94 +206,103 @@ $rowsStmt = db()->prepare('SELECT ca.*, m.callsign FROM classified_ads ca LEFT J
 $rowsStmt->execute($params);
 $rows = $rowsStmt->fetchAll() ?: [];
 
+$statsStmt = db()->prepare(
+    'SELECT COUNT(*) AS total,'
+    . ' SUM(CASE WHEN ca.status = "active" AND (ca.expires_at IS NULL OR ca.expires_at >= NOW()) THEN 1 ELSE 0 END) AS active,'
+    . ' SUM(CASE WHEN ca.status = "sold" THEN 1 ELSE 0 END) AS sold'
+    . ' FROM classified_ads ca LEFT JOIN members m ON m.id = ca.owner_member_id'
+    . $whereSql
+);
+$statsStmt->execute($params);
+$statsRow = $statsStmt->fetch() ?: [];
 $stats = [
-    'total' => count($rows),
-    'active' => count(array_filter($rows, static fn(array $row): bool => (string) $row['status'] === 'active' && (empty($row['expires_at']) || strtotime((string) $row['expires_at']) >= time()))),
-    'sold' => count(array_filter($rows, static fn(array $row): bool => (string) $row['status'] === 'sold')),
+    'total' => (int) ($statsRow['total'] ?? $totalRows),
+    'active' => (int) ($statsRow['active'] ?? 0),
+    'sold' => (int) ($statsRow['sold'] ?? 0),
 ];
 
 set_page_meta([
-    'title' => (string) ($t['title'] ?? 'Admin classifieds'),
-    'description' => (string) ($t['meta_desc'] ?? ''),
+    'title' => $tText('admin_title'),
+    'description' => $tText('admin_meta_desc'),
     'robots' => 'noindex,nofollow',
 ]);
 
 ob_start();
 ?>
 <div class="grid-3 stats-grid">
-    <div class="stat-card"><strong><?= (int) $stats['total'] ?></strong><span><?= e((string) ($t['stats_total'] ?? 'Ads')) ?></span></div>
-    <div class="stat-card"><strong><?= (int) $stats['active'] ?></strong><span><?= e((string) ($t['stats_active'] ?? 'Active')) ?></span></div>
-    <div class="stat-card"><strong><?= (int) $stats['sold'] ?></strong><span><?= e((string) ($t['stats_sold'] ?? 'Sold')) ?></span></div>
+    <div class="stat-card"><strong><?= (int) $stats['total'] ?></strong><span><?= e($tText('stats_total')) ?></span></div>
+    <div class="stat-card"><strong><?= (int) $stats['active'] ?></strong><span><?= e($tText('stats_active')) ?></span></div>
+    <div class="stat-card"><strong><?= (int) $stats['sold'] ?></strong><span><?= e($tText('stats_sold')) ?></span></div>
 </div>
 
 <div class="grid-2">
     <section class="card">
-        <h1><?= e((string) ($t['edit_ad'] ?? 'Edit')) ?></h1>
+        <h1><?= e($tText('edit_ad')) ?></h1>
         <?php if ($edit === null): ?>
-            <p class="help"><?= e((string) ($t['no_ads'] ?? 'No ads')) ?></p>
+            <p class="help"><?= e($tText('no_ads')) ?></p>
         <?php else: ?>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="save">
             <input type="hidden" name="id" value="<?= (int) $edit['id'] ?>">
-            <p class="help"><?= e((string) ($t['owner'] ?? 'Owner')) ?>: <?= e((string) ($edit['callsign'] ?? 'N/A')) ?></p>
-            <label><?= e((string) ($t['category'] ?? 'Category')) ?>
+            <p class="help"><?= e($tText('owner')) ?>: <?= e((string) ($edit['callsign'] ?? $tText('not_available'))) ?></p>
+            <label><?= e($tText('category')) ?>
                 <select name="category_code"><?php foreach ($categories as $code => $label): ?><option value="<?= e($code) ?>" <?= (string) $edit['category_code'] === $code ? 'selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select>
             </label>
-            <label><?= e((string) ($t['ad_title'] ?? 'Title')) ?><input type="text" name="title" maxlength="190" required value="<?= e((string) $edit['title']) ?>"></label>
-            <label><?= e((string) ($t['description'] ?? 'Description')) ?><textarea name="description" rows="6" required><?= e((string) $edit['description']) ?></textarea></label>
+            <label><?= e($tText('ad_title')) ?><input type="text" name="title" maxlength="190" required value="<?= e((string) $edit['title']) ?>"></label>
+            <label><?= e($tText('description')) ?><textarea name="description" rows="6" required><?= e((string) $edit['description']) ?></textarea></label>
             <div class="grid-2">
-                <label><?= e((string) ($t['price'] ?? 'Price')) ?><input type="text" name="price" value="<?= e(number_format(((int) $edit['price_cents']) / 100, 2, ',', '')) ?>"></label>
-                <label><?= e((string) ($t['status'] ?? 'Status')) ?>
+                <label><?= e($tText('price')) ?><input type="text" name="price" value="<?= e(number_format(((int) $edit['price_cents']) / 100, 2, ',', '')) ?>"></label>
+                <label><?= e($tText('status')) ?>
                     <select name="status"><?php foreach ($statuses as $code => $label): ?><option value="<?= e($code) ?>" <?= (string) $edit['status'] === $code ? 'selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select>
                 </label>
             </div>
-            <label><?= e((string) ($t['expires_on'] ?? 'Expires')) ?><input type="datetime-local" name="expires_at" value="<?= !empty($edit['expires_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $edit['expires_at']))) : '' ?>"></label>
-            <label><?= e((string) ($t['location'] ?? 'Location')) ?><input type="text" name="location" maxlength="120" value="<?= e((string) ($edit['location'] ?? '')) ?>"></label>
-            <label><?= e((string) ($t['contact'] ?? 'Contact')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($edit['contact'] ?? '')) ?>"></label>
-            <p><button class="button"><?= e((string) ($t['save'] ?? 'Save')) ?></button> <a class="button ghost" href="<?= e(route_url('admin_classifieds')) ?>"><?= e((string) ($t['cancel'] ?? 'Cancel')) ?></a></p>
+            <label><?= e($tText('expires_on')) ?><input type="datetime-local" name="expires_at" value="<?= !empty($edit['expires_at']) ? e(date('Y-m-d\TH:i', strtotime((string) $edit['expires_at']))) : '' ?>"></label>
+            <label><?= e($tText('location')) ?><input type="text" name="location" maxlength="120" value="<?= e((string) ($edit['location'] ?? '')) ?>"></label>
+            <label><?= e($tText('contact')) ?><input type="text" name="contact" maxlength="190" required value="<?= e((string) ($edit['contact'] ?? '')) ?>"></label>
+            <p><button class="button"><?= e($tText('save')) ?></button> <a class="button ghost" href="<?= e(route_url('admin_classifieds')) ?>"><?= e($tText('cancel')) ?></a></p>
         </form>
-        <form method="post" onsubmit="return confirm('Delete this ad?');">
+        <form method="post" onsubmit="return confirm(<?= e($deleteConfirm) ?>);">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $edit['id'] ?>">
-            <button class="button ghost"><?= e((string) ($t['delete'] ?? 'Delete')) ?></button>
+            <button class="button ghost"><?= e($tText('delete')) ?></button>
         </form>
         <?php endif; ?>
     </section>
 
     <section class="card">
-        <h2><?= e((string) ($t['all_ads'] ?? 'All ads')) ?></h2>
+        <h2><?= e($tText('all_ads')) ?></h2>
         <form method="get" class="inline-form" style="margin-bottom:.7rem;flex-wrap:wrap;">
             <input type="hidden" name="route" value="admin_classifieds">
-            <input type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="<?= e((string) ($t['search'] ?? 'Search')) ?>">
-            <select name="status"><option value=""><?= e((string) ($t['all_statuses'] ?? 'All statuses')) ?></option><?php foreach ($statuses as $statusCode => $statusLabel): ?><option value="<?= e($statusCode) ?>" <?= $adminStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option><?php endforeach; ?></select>
-            <select name="category"><option value=""><?= e((string) ($t['all_categories'] ?? 'All categories')) ?></option><?php foreach ($categories as $categoryCode => $categoryLabel): ?><option value="<?= e($categoryCode) ?>" <?= $adminCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option><?php endforeach; ?></select>
-            <button class="button" type="submit"><?= e((string) ($t['filter'] ?? 'Filter')) ?></button>
-            <a class="button secondary" href="<?= e(route_url('admin_classifieds')) ?>"><?= e((string) ($t['reset'] ?? 'Reset')) ?></a>
+            <input type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="<?= e($tText('search')) ?>">
+            <select name="status"><option value=""><?= e($tText('all_statuses')) ?></option><?php foreach ($statuses as $statusCode => $statusLabel): ?><option value="<?= e($statusCode) ?>" <?= $adminStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option><?php endforeach; ?></select>
+            <select name="category"><option value=""><?= e($tText('all_categories')) ?></option><?php foreach ($categories as $categoryCode => $categoryLabel): ?><option value="<?= e($categoryCode) ?>" <?= $adminCategory === $categoryCode ? 'selected' : '' ?>><?= e($categoryLabel) ?></option><?php endforeach; ?></select>
+            <button class="button" type="submit"><?= e($tText('filter')) ?></button>
+            <a class="button secondary" href="<?= e(route_url('admin_classifieds')) ?>"><?= e($tText('reset')) ?></a>
         </form>
-        <?php if ($rows === []): ?><p class="help"><?= e((string) ($t['no_ads'] ?? 'No ads')) ?></p><?php else: ?>
+        <?php if ($rows === []): ?><p class="help"><?= e($tText('no_ads')) ?></p><?php else: ?>
         <form method="post">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="bulk_update">
             <div class="inline-form" style="margin-bottom:.7rem;">
                 <select name="bulk_op">
-                    <option value="active"><?= e((string) ($t['bulk_publish'] ?? 'Publish (active)')) ?></option>
-                    <option value="pending"><?= e((string) ($t['bulk_to_pending'] ?? 'Set pending')) ?></option>
-                    <option value="draft"><?= e((string) ($t['bulk_to_draft'] ?? 'Set draft')) ?></option>
-                    <option value="sold"><?= e((string) ($t['bulk_to_sold'] ?? 'Set sold')) ?></option>
-                    <option value="archived"><?= e((string) ($t['bulk_archive'] ?? 'Archive')) ?></option>
-                    <option value="delete"><?= e((string) ($t['bulk_delete'] ?? 'Delete')) ?></option>
+                    <option value="active"><?= e($tText('bulk_publish')) ?></option>
+                    <option value="pending"><?= e($tText('bulk_to_pending')) ?></option>
+                    <option value="draft"><?= e($tText('bulk_to_draft')) ?></option>
+                    <option value="sold"><?= e($tText('bulk_to_sold')) ?></option>
+                    <option value="archived"><?= e($tText('bulk_archive')) ?></option>
+                    <option value="delete"><?= e($tText('bulk_delete')) ?></option>
                 </select>
-                <button class="button secondary" type="submit"><?= e((string) ($t['bulk_apply'] ?? 'Apply')) ?></button>
+                <button class="button secondary" type="submit"><?= e($tText('bulk_apply')) ?></button>
             </div>
             <div class="table-wrap"><table>
-                <thead><tr><th></th><th><?= e((string) ($t['ad_title'] ?? 'Title')) ?></th><th><?= e((string) ($t['owner'] ?? 'Owner')) ?></th><th><?= e((string) ($t['status'] ?? 'Status')) ?></th><th><?= e((string) ($t['actions'] ?? 'Actions')) ?></th></tr></thead>
+                <thead><tr><th></th><th><?= e($tText('ad_title')) ?></th><th><?= e($tText('owner')) ?></th><th><?= e($tText('status')) ?></th><th><?= e($tText('actions')) ?></th></tr></thead>
                 <tbody>
                 <?php foreach ($rows as $row): ?>
                     <tr>
                         <td><input type="checkbox" name="ids[]" value="<?= (int) $row['id'] ?>"></td>
                         <td><strong><?= e((string) $row['title']) ?></strong><div class="help"><?= e((string) ($categories[$row['category_code']] ?? $row['category_code'])) ?> - <?= e(format_price_eur((int) $row['price_cents'])) ?></div></td>
-                        <td><?= e((string) ($row['callsign'] ?? 'N/A')) ?></td>
-                        <td><span class="badge muted"><?= e((string) ($statuses[$row['status']] ?? $row['status'])) ?></span><?php if (!empty($row['expires_at'])): ?><div class="help"><?= e((string) ($t['expires_on'] ?? 'Expires')) ?>: <?= e(date('d/m/Y', strtotime((string) $row['expires_at']))) ?></div><?php endif; ?></td>
-                        <td><a href="<?= e(route_url('admin_classifieds', ['edit' => (int) $row['id']])) ?>"><?= e((string) ($t['edit_ad'] ?? 'Edit')) ?></a></td>
+                        <td><?= e((string) ($row['callsign'] ?? $tText('not_available'))) ?></td>
+                        <td><span class="badge muted"><?= e((string) ($statuses[$row['status']] ?? $row['status'])) ?></span><?php if (!empty($row['expires_at'])): ?><div class="help"><?= e($tText('expires_on')) ?>: <?= e(date('d/m/Y', strtotime((string) $row['expires_at']))) ?></div><?php endif; ?></td>
+                        <td><a href="<?= e(route_url('admin_classifieds', ['edit' => (int) $row['id']])) ?>"><?= e($tText('edit_ad')) ?></a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -255,13 +310,13 @@ ob_start();
         </form>
         <?php if ($totalPages > 1): ?>
             <nav class="actions mt-3">
-                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_classifieds', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page - 1])) ?>">&larr; <?= e((string) ($t['prev'] ?? 'Previous')) ?></a><?php endif; ?>
+                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_classifieds', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page - 1])) ?>">&larr; <?= e($tText('prev')) ?></a><?php endif; ?>
                 <span class="badge muted"><?= $page ?> / <?= $totalPages ?></span>
-                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_classifieds', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page + 1])) ?>"><?= e((string) ($t['next'] ?? 'Next')) ?> &rarr;</a><?php endif; ?>
+                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_classifieds', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page + 1])) ?>"><?= e($tText('next')) ?> &rarr;</a><?php endif; ?>
             </nav>
         <?php endif; ?>
         <?php endif; ?>
     </section>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), (string) ($t['title'] ?? 'Admin classifieds'));
+echo render_layout((string) ob_get_clean(), $tText('admin_title'));

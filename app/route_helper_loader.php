@@ -10,7 +10,7 @@ function app_load_route_helpers(string $route): void
 {
     $helperRoutes = [
         'module_catalog.php' => ['home', 'admin', 'admin_dashboard'],
-        'widget_catalog.php' => ['dashboard', 'save_dashboard', 'admin_dashboard'],
+        'widget_catalog.php' => ['dashboard', 'save_dashboard', 'widget_render', 'admin_dashboard'],
         'widget_renderer.php' => ['home', 'dashboard', 'widget_render'],
         'ham_weather_advice.php' => ['home'],
         'qsl_helpers.php' => ['qsl', 'qsl_preview', 'qsl_export'],
@@ -24,9 +24,9 @@ function app_load_route_helpers(string $route): void
         'article_helpers.php' => ['home', 'dashboard', 'search', 'chatbot', 'articles', 'article', 'article_propose', 'admin_articles', 'admin_translation_reviews', 'llms.txt', 'ai-index.json'],
         'ads_helpers.php' => ['ads', 'admin_ads', 'ad_click'],
         'committee_helpers.php' => ['committee', 'admin_editorial'],
-        'news_helpers.php' => ['admin_news'],
+        'news_helpers.php' => ['news', 'admin_news'],
         'press_helpers.php' => ['press', 'admin_press'],
-        'album_helpers.php' => ['home', 'admin_albums'],
+        'album_helpers.php' => ['home', 'albums', 'album', 'admin_albums'],
         'member_media.php' => ['directory', 'gdpr', 'profile'],
         'member_profile_helpers.php' => ['directory', 'gdpr', 'profile', 'register', 'tools_geocode'],
         'privacy_helpers.php' => ['forgot_password', 'register', 'profile', 'gdpr', 'my_requests', 'newsletter', 'newsletter_public', 'newsletter_unsubscribe', 'settings', 'admin_newsletters', 'ads', 'admin_ads', 'ad_click', 'admin_privacy'],

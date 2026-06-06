@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Baineadh an ceann is fearr leat',
   'favorite_added_msg' => 'Doiciméad curtha le ceanáin.',
   'favorite_removed_msg' => 'Doiciméad bainte de cheanáin.',
+  'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
 );

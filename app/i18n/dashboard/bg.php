@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Добавете любими, за да подобрите препоръките.',
   'nudge_review_notifications' => 'Проверете непрочетените известия.',
   'nudge_enable_recommendations' => 'Активиране на персонализирани препоръки.',
+  'save_unavailable' => 'Записването не е налично: липсва таблицата dashboard_widgets.',
+  'saving' => 'Записване...',
+  'invalid_server_response' => 'Невалиден отговор от сървъра.',
+  'save_error' => 'Грешка при записване.',
+  'layout_saved_at' => 'Подредбата е записана в {time}.',
+  'remove_widget' => 'Премахване на уиджета',
+  'preview_unavailable' => 'Прегледът не е наличен.',
+  'loading' => 'Зареждане...',
+  'load_widget_error' => 'Уиджетът не може да бъде зареден.',
 );

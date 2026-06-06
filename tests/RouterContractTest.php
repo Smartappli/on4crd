@@ -323,6 +323,71 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('function apply_runtime_schema_updates(): void', $updates);
     }
 
+    public function testRegistrationCleansSharedEmailAuthOrphans(): void
+    {
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $helpers = file_get_contents(__DIR__ . '/../app/member_profile_helpers.php');
+        self::assertIsString($register);
+        self::assertIsString($helpers);
+
+        self::assertStringContainsString('member_cleanup_registration_auth_orphan($authEmail, $callsign);', $register);
+        self::assertStringContainsString('member_delete_unlinked_auth_user((int) $userId);', $register);
+        self::assertStringContainsString('function member_cleanup_registration_auth_orphan(string $authEmail, string $callsign): void', $helpers);
+        self::assertStringContainsString('function member_shared_contact_emails(): array', $helpers);
+        self::assertStringContainsString("'crddurnal@gmail.com'", $helpers);
+        self::assertStringContainsString('array_merge($emails, member_shared_contact_emails())', $helpers);
+        self::assertStringContainsString('str_ends_with($authEmail, \'@local.invalid\')', $helpers);
+        self::assertStringContainsString('SELECT id FROM users WHERE username = ? AND email IN (', $helpers);
+        self::assertStringContainsString('function member_delete_unlinked_auth_user(int $authUserId): void', $helpers);
+    }
+
+    public function testDirectorySearchMatchesCallsignsCaseInsensitively(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        self::assertIsString($directory);
+
+        self::assertStringContainsString('UPPER(callsign) LIKE ?', $directory);
+        self::assertStringContainsString("mb_safe_strtoupper(\$search)", $directory);
+    }
+
+    public function testCurrentUserRepairsMissingAuthUserLinkByCallsign(): void
+    {
+        $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');
+        self::assertIsString($authHelpers);
+
+        self::assertStringContainsString('function authenticated_member_row(\\Delight\\Auth\\Auth $authClient, int $sessionMemberId = 0): ?array', $authHelpers);
+        self::assertStringContainsString('function authenticated_member_create_from_auth_user(\\Delight\\Auth\\Auth $authClient, string $authUsername): ?array', $authHelpers);
+        self::assertStringContainsString("preg_match('/^[A-Z0-9]{3,32}$/', \$authUsername)", $authHelpers);
+        self::assertStringContainsString('INSERT INTO members (', $authHelpers);
+        self::assertStringContainsString('$authClient->getUsername()', $authHelpers);
+        self::assertStringContainsString('UPPER(callsign) = ?', $authHelpers);
+        self::assertStringContainsString('$linkedAuthUserId === $authUserId', $authHelpers);
+        self::assertStringContainsString('$linkedAuthUserId === 0', $authHelpers);
+        self::assertStringContainsString('UPDATE members SET auth_user_id = ? WHERE id = ? AND (auth_user_id IS NULL OR auth_user_id = 0) LIMIT 1', $authHelpers);
+    }
+
+    public function testLoginValidatesMemberProfileBeforeSuccessFlash(): void
+    {
+        $login = file_get_contents(__DIR__ . '/../pages/login.php');
+        self::assertIsString($login);
+
+        self::assertStringContainsString('authenticated_member_row($authClient', $login);
+        self::assertStringContainsString("throw new RuntimeException((string) (\$t['member_unavailable'] ?? \$t['auth_unavailable']));", $login);
+        self::assertStringContainsString("\$_SESSION['member_id'] = (int) (\$memberRow['id'] ?? 0);", $login);
+        self::assertStringNotContainsString('session_regenerate_id(true);', $login);
+    }
+
+    public function testRegisterStoresResolvedMemberIdAfterAutoLogin(): void
+    {
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        self::assertIsString($register);
+
+        self::assertStringContainsString('authenticated_member_row($authClient', $register);
+        self::assertStringContainsString("\$_SESSION['member_id'] = (int) (\$memberRow['id'] ?? 0);", $register);
+        self::assertStringNotContainsString('session_regenerate_id(true);', $register);
+        self::assertStringNotContainsString("\$_SESSION['member_id'] = (int) \$authClient->getUserId();", $register);
+    }
+
     public function testRouteSpecificHelpersAreLoadedLazily(): void
     {
         $functions = file_get_contents(__DIR__ . '/../app/functions.php');
@@ -342,7 +407,7 @@ final class RouterContractTest extends TestCase
         $loader = file_get_contents(__DIR__ . '/../app/route_helper_loader.php');
         self::assertIsString($loader);
         self::assertStringContainsString("'module_catalog.php' => ['home'", $loader);
-        self::assertStringContainsString("'widget_catalog.php' => ['dashboard'", $loader);
+        self::assertStringContainsString("'widget_catalog.php' => ['dashboard', 'save_dashboard', 'widget_render'", $loader);
         self::assertStringContainsString("'widget_renderer.php' => ['home'", $loader);
         self::assertStringContainsString("'ham_weather_advice.php' => ['home']", $loader);
         self::assertStringContainsString("'member_library_helpers.php' => ['members_library'", $loader);
@@ -370,5 +435,277 @@ final class RouterContractTest extends TestCase
 
         self::assertStringContainsString('require_module_enabled($routeModules[$route], $route);', $router);
         self::assertStringContainsString('require_login(login_next_url_for_route($route, $_GET));', $router);
+    }
+
+    public function testPasswordResetCanBeForcedWithoutFirstLoginDefault(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $adminMembers = file_get_contents(__DIR__ . '/../pages/admin_members.php');
+        $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');
+        self::assertIsString($router);
+        self::assertIsString($register);
+        self::assertIsString($adminMembers);
+        self::assertIsString($authHelpers);
+
+        self::assertStringContainsString('member_password_change_required($passwordChangeUser)', $router);
+        self::assertStringContainsString('forced_notice', $router);
+        self::assertMatchesRegularExpression('/password_hash\(\$password, PASSWORD_DEFAULT\),\s*0,/', $register);
+        self::assertStringContainsString('redirect(module_enabled(\'dashboard\') ? \'dashboard\' : \'home\');', $register);
+        self::assertStringContainsString('password_change_required = ?', $adminMembers);
+        self::assertStringContainsString('password_reset_forced_at = ?', $adminMembers);
+        self::assertStringContainsString('password_reset_forced_at', $authHelpers);
+    }
+
+    public function testConfiguredAdministratorsIncludeExpectedCallsigns(): void
+    {
+        $permissions = file_get_contents(__DIR__ . '/../app/permissions.php');
+        self::assertIsString($permissions);
+
+        foreach (['ON8CJ', 'ON7ZB', 'ON4BEN'] as $callsign) {
+            self::assertStringContainsString("'" . $callsign . "'", $permissions);
+        }
+    }
+
+    public function testProposalDialogTriggersKeepNativeFallbacks(): void
+    {
+        $contracts = [
+            'pages/articles.php' => ['data-articles-category-open'],
+            'pages/classifieds.php' => ['data-classifieds-category-open'],
+            'pages/events.php' => ['data-event-proposal-open'],
+            'pages/members_library.php' => [
+                'data-members-library-modal-open="members-library-category-dialog"',
+                'data-members-library-modal-open="members-library-document-dialog"',
+            ],
+            'pages/news.php' => [
+                'data-news-proposal-open="news-proposal-dialog"',
+                'data-news-proposal-open="news-category-proposal-dialog"',
+            ],
+            'pages/wiki.php' => ['data-wiki-theme-open'],
+        ];
+
+        foreach ($contracts as $relativePath => $attributes) {
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+
+            foreach ($attributes as $attribute) {
+                $matchingLines = array_values(array_filter(
+                    explode("\n", $source),
+                    static fn(string $line): bool => str_contains($line, $attribute)
+                ));
+
+                self::assertNotEmpty(
+                    $matchingLines,
+                    sprintf('%s must contain proposal trigger %s.', $relativePath, $attribute)
+                );
+
+                self::assertStringContainsString(
+                    '<a ',
+                    $matchingLines[0],
+                    sprintf('%s must expose %s as a native link, not a JavaScript-only button.', $relativePath, $attribute)
+                );
+                self::assertStringContainsString('href=', $matchingLines[0], sprintf('%s native trigger %s must have an href fallback.', $relativePath, $attribute));
+                self::assertStringNotContainsString('<button', $matchingLines[0], sprintf('%s native trigger %s must not be a button.', $relativePath, $attribute));
+            }
+        }
+
+        $legacyFallbacks = [
+            'data-articles-category-fallback',
+            'data-event-proposal-fallback',
+            'data-members-library-fallback',
+            'data-news-proposal-fallback',
+            'data-wiki-theme-fallback',
+            'dataset.articlesCategoryFallback',
+            'dataset.eventProposalFallback',
+            'dataset.membersLibraryFallback',
+            'dataset.newsProposalFallback',
+            'dataset.wikiThemeFallback',
+        ];
+
+        foreach (array_keys($contracts) as $relativePath) {
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+            foreach ($legacyFallbacks as $fallback) {
+                self::assertStringNotContainsString($fallback, $source, sprintf('%s still contains legacy fallback attribute %s.', $relativePath, $fallback));
+            }
+        }
+
+        foreach (glob(__DIR__ . '/../assets/js/modules/*.js') ?: [] as $path) {
+            $source = file_get_contents((string) $path);
+            self::assertIsString($source);
+            foreach ($legacyFallbacks as $fallback) {
+                self::assertStringNotContainsString($fallback, $source, sprintf('%s still contains legacy fallback logic %s.', basename((string) $path), $fallback));
+            }
+        }
+    }
+
+    public function testWikiPageProposalReplacesDirectNewPageForModerators(): void
+    {
+        $wiki = file_get_contents(__DIR__ . '/../pages/wiki.php');
+        $wikiPropose = file_get_contents(__DIR__ . '/../pages/wiki_propose.php');
+        self::assertIsString($wiki);
+        self::assertIsString($wikiPropose);
+
+        self::assertStringNotContainsString("route_url('wiki_edit')", $wiki);
+        self::assertStringContainsString("route_url('wiki_propose')", $wiki);
+        self::assertStringContainsString("\$autoPublish = has_permission('wiki.moderate');", $wikiPropose);
+        self::assertStringContainsString("\$status = \$autoPublish ? 'published' : 'pending';", $wikiPropose);
+        self::assertStringContainsString("route_url('wiki_view', ['slug' => \$slug])", $wikiPropose);
+    }
+
+    public function testWikiCategoryProposalIsDirectForModeratorsAndPendingForMembers(): void
+    {
+        $wiki = file_get_contents(__DIR__ . '/../pages/wiki.php');
+        self::assertIsString($wiki);
+
+        self::assertStringContainsString("\$autoAccept = has_permission('wiki.moderate');", $wiki);
+        self::assertStringContainsString("\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", $wiki);
+        self::assertStringContainsString("if (!\$autoAccept) {", $wiki);
+        self::assertStringContainsString("redirect('my_requests');", $wiki);
+        self::assertStringContainsString('status = "accepted"', $wiki);
+    }
+
+    public function testPublicContentProposalAreasIncludeAlbumsAndAuctions(): void
+    {
+        $helpers = file_get_contents(__DIR__ . '/../app/content_helpers.php');
+        $requests = file_get_contents(__DIR__ . '/../pages/my_requests.php');
+        self::assertIsString($helpers);
+        self::assertIsString($requests);
+
+        self::assertStringContainsString("'albums' => true", $helpers);
+        self::assertStringContainsString("'auctions' => true", $helpers);
+        self::assertStringContainsString("'albums' => 'albums'", $requests);
+        self::assertStringContainsString("'auctions' => 'auctions'", $requests);
+    }
+
+    public function testRequestedModulesAutoValidateForAdministratorsAndKeepMemberQueue(): void
+    {
+        $contracts = [
+            'pages/events.php' => ["has_permission('events.manage')", "content_proposal_create((int) \$user['id'], 'events', 'content'", "redirect('my_requests')"],
+            'pages/news.php' => ["has_permission('news.moderate')", "INSERT INTO news_posts", "INSERT INTO news_sections", "redirect('my_requests')"],
+            'pages/albums.php' => ["has_permission('albums.manage')", "INSERT INTO albums", "content_proposal_create((int) \$user['id'], 'albums', 'content'", "redirect('my_requests')"],
+            'pages/members_library.php' => ["has_permission('admin.access')", "INSERT INTO member_library_categories", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "redirect('my_requests')"],
+            'pages/auctions.php' => ["has_permission('auctions.manage')", "INSERT INTO auction_lots", "content_proposal_create((int) \$user['id'], 'auctions', 'content'", "redirect('my_requests')"],
+            'pages/classifieds.php' => ["classifieds_can_moderate()", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "redirect('my_requests')"],
+            'pages/classifieds_manage.php' => ["content_proposal_accepted_categories('classifieds', 32)"],
+        ];
+
+        foreach ($contracts as $relativePath => $needles) {
+            $source = file_get_contents(__DIR__ . '/../' . $relativePath);
+            self::assertIsString($source);
+            foreach ($needles as $needle) {
+                self::assertStringContainsString($needle, $source, sprintf('%s must contain %s.', $relativePath, $needle));
+            }
+        }
+    }
+
+    public function testProfileGeocodeConsentIsCheckedByDefault(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        self::assertIsString($profile);
+
+        self::assertStringContainsString('name="allow_geocode" value="1" checked', $profile);
+    }
+
+    public function testProfileQrzUrlFieldIsEditable(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        self::assertIsString($profile);
+
+        self::assertStringContainsString('name="qrz_url"', $profile);
+        self::assertStringContainsString('$submittedQrzUrl = trim((string) ($_POST[\'qrz_url\'] ?? \'\'));', $profile);
+        self::assertStringNotContainsString('name="qrz_url" maxlength="255" readonly', $profile);
+    }
+
+    public function testProfilePhotoUploadHasLivePreview(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        $profileJs = file_get_contents(__DIR__ . '/../assets/js/modules/profile.js');
+        self::assertIsString($profile);
+        self::assertIsString($profileJs);
+
+        self::assertStringContainsString('$profilePhotoPreviewSrc = member_avatar_src($member);', $profile);
+        self::assertStringContainsString('class="profile-photo-upload-grid"', $profile);
+        self::assertStringContainsString('data-profile-photo-input', $profile);
+        self::assertStringContainsString('data-profile-photo-preview', $profile);
+        self::assertStringContainsString('URL.createObjectURL(file)', $profileJs);
+        self::assertStringContainsString('URL.revokeObjectURL(previewObjectUrl)', $profileJs);
+    }
+
+    public function testProfileAndRegisterUseSharedLicenceClassChoices(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        self::assertIsString($profile);
+        self::assertIsString($register);
+        self::assertIsString($directory);
+
+        self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member[\'licence_class\'] ?? \'\'));', $profile);
+        self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t);', $register);
+        self::assertStringContainsString('<select name="licence_class"><?= $licenceClassOptionsHtml ?></select>', $profile);
+        self::assertStringContainsString('member_profile_licence_class_display_text($profileT, $licenceValue)', $directory);
+        self::assertStringContainsString('$licenceFilterLabel = member_profile_licence_class_display_text($profileT, $licenceFilter);', $directory);
+        self::assertStringContainsString('$licenceClass = member_profile_licence_class_display_text($profileT, (string) ($member[\'licence_class\'] ?? \'\'));', $directory);
+        self::assertStringNotContainsString('<option value="ON3">ON3</option>', $register);
+        self::assertStringNotContainsString('<option value="ON2">ON2</option>', $register);
+    }
+
+    public function testDirectoryDisplaysPostalCodeThroughProfileFieldMetadata(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        self::assertIsString($directory);
+
+        self::assertStringContainsString('$profilePreviewFields = member_profile_preview_fields($profileT);', $directory);
+        self::assertStringContainsString("member_profile_display_row(\$member, 'postal_code', \$profilePreviewFields['postal_code'])", $directory);
+        self::assertStringContainsString("<?= e((string) \$postalCodeRow['label']) ?> <?= e((string) \$postalCodeRow['text']) ?>", $directory);
+        self::assertStringNotContainsString('$addDetail((string) $postalCodeRow[\'label\'], (string) $postalCodeRow[\'text\']);', $directory);
+    }
+
+    public function testDirectorySeparatesRadioModesAndBands(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        $css = file_get_contents(__DIR__ . '/../assets/css/app.css');
+        self::assertIsString($directory);
+        self::assertIsString($css);
+
+        self::assertStringContainsString('class="directory-radio-row"', $directory);
+        self::assertStringContainsString('class="directory-mode-list"', $directory);
+        self::assertStringContainsString('class="directory-band-list"', $directory);
+        self::assertStringContainsString('.directory-radio-row', $css);
+        self::assertStringContainsString('.directory-mode-list > span', $css);
+        self::assertStringContainsString('justify-content: flex-end;', $css);
+    }
+
+    public function testGdprReusesProfileFieldsAndVisibilitySettings(): void
+    {
+        $gdpr = file_get_contents(__DIR__ . '/../pages/gdpr.php');
+        self::assertIsString($gdpr);
+
+        self::assertStringContainsString('member_profile_select_columns_sql()', $gdpr);
+        self::assertStringContainsString('member_profile_visibility_fields($t)', $gdpr);
+        self::assertStringContainsString('member_profile_preview_rows($member, (string) $viewer, $t, true)', $gdpr);
+        self::assertStringContainsString('$gt(\'profile_data_title\')', $gdpr);
+        self::assertStringContainsString('$gt(\'profile_data_help\')', $gdpr);
+        self::assertStringContainsString('gdpr-callsign', $gdpr);
+    }
+
+    public function testProfileAndRegisterUseSharedQslViaChoices(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        self::assertIsString($profile);
+        self::assertIsString($register);
+        self::assertIsString($directory);
+
+        self::assertStringContainsString('$qslViaOptionsHtml = member_profile_qsl_via_options_html($t, (string) ($member[\'qsl_via\'] ?? \'\'));', $profile);
+        self::assertStringContainsString('$qslViaOptionsHtml = member_profile_qsl_via_options_html($t);', $register);
+        self::assertStringContainsString('<select name="qsl_via"><?= $qslViaOptionsHtml ?></select>', $profile);
+        self::assertStringContainsString('<select name="qsl_via">\' . $qslViaOptionsHtml . \'</select>', $register);
+        self::assertStringContainsString("member_profile_display_row(\$member, 'qsl_via', \$profilePreviewFields['qsl_via'])", $directory);
+        self::assertStringContainsString("<?= e((string) \$qslViaRow['label']) ?> <?= e((string) \$qslViaRow['text']) ?>", $directory);
+        self::assertStringNotContainsString('<input type="text" name="qsl_via"', $profile);
+        self::assertStringNotContainsString('<input type="text" name="qsl_via"', $register);
     }
 }

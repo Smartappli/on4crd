@@ -81,4 +81,5 @@ Kontaktas:',
 <ul><li>ISvarbus taškas</li></ul>',
   'html_cleanup_help' => 'HTML išvalomas automatiškai. Scenarijai, iframe ir pavojingi atributai pašalinami prieš patvirtinant.',
   'submit_for_review' => 'Pateikti patvirtinimui',
+  'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
 );

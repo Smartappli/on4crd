@@ -37,4 +37,6 @@ return array (
   'view_members' => 'Visualização de membros',
   'view_private' => 'Visualização privada',
   'empty_visible_info' => 'Nenhuma informação visível.',
+  'profile_data_title' => 'Dados do perfil',
+  'profile_data_help' => 'Esta sec??o reutiliza os campos n?o vazios do seu perfil e aplica as mesmas defini??es de visibilidade do diret?rio. A exporta??o JSON tamb?m cont?m os dados de perfil guardados na base de dados.',
 );

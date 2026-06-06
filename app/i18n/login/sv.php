@@ -5,6 +5,7 @@ return array (
   'required' => 'Inloggningsuppgifter krävs.',
   'captcha_invalid' => 'Ogiltig captcha.',
   'auth_unavailable' => 'Autentiseringsmodulen är inte tillgänglig. Kör installation av kompositör.',
+  'member_unavailable' => 'Inloggningen bekräftades, men ingen matchande aktiv medlemsprofil hittades.',
   'invalid_credentials' => 'Ogiltig kod eller lösenord.',
   'too_many' => 'För många anslutningsförsök. Försök igen om några minuter.',
   'not_verified' => 'Ditt konto är inte verifierat ännu.',

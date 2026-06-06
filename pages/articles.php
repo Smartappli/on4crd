@@ -41,23 +41,54 @@ articles_sync_scheduled_publications();
 $GLOBALS['articles_i18n'] = $t;
 $user = current_user();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite_article') {
-    $user = require_login();
-    verify_csrf();
-    $articleId = (int) ($_POST['article_id'] ?? 0);
-    if ($articleId > 0) {
-        $favStmt = db()->prepare('SELECT id, slug, title FROM articles WHERE id = ? AND status = "published" LIMIT 1');
-        $favStmt->execute([$articleId]);
-        $favRow = $favStmt->fetch() ?: null;
-        if ($favRow !== null) {
-            $favTitle = trim((string) ($favRow['title'] ?? (string) ($t['default_article_title'] ?? 'Article')));
-            $favUrl = route_url('article', ['slug' => (string) ($favRow['slug'] ?? '')]);
-            $saved = favorite_toggle((int) $user['id'], 'article', (int) $favRow['id'], $favTitle, $favUrl);
-            notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $favTitle, $favUrl);
-            set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+
+        if ($action === 'toggle_favorite_article') {
+            $user = require_login(route_url('articles'));
+            $articleId = (int) ($_POST['article_id'] ?? 0);
+            if ($articleId > 0) {
+                $favStmt = db()->prepare('SELECT id, slug, title FROM articles WHERE id = ? AND status = "published" LIMIT 1');
+                $favStmt->execute([$articleId]);
+                $favRow = $favStmt->fetch() ?: null;
+                if ($favRow !== null) {
+                    $favTitle = trim((string) ($favRow['title'] ?? (string) ($t['default_article_title'] ?? 'Article')));
+                    $favUrl = route_url('article', ['slug' => (string) ($favRow['slug'] ?? '')]);
+                    $saved = favorite_toggle((int) $user['id'], 'article', (int) $favRow['id'], $favTitle, $favUrl);
+                    notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $favTitle, $favUrl);
+                    set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
+                }
+            }
+            redirect_url(route_url_clean('articles', ['theme' => (string) ($_GET['theme'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'page' => max(1, (int) ($_GET['page'] ?? 1))]));
         }
+
+        if ($action === 'propose_category') {
+            $user = require_login(route_url('articles'));
+            $proposalTitle = (string) ($_POST['proposal_category'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) ($t['propose_category_reason_label'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'articles', 'category', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site((string) ($t['propose_category_subject'] ?? 'Category proposal'), [
+                'area' => 'articles',
+                'proposal_type' => 'category',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            redirect('my_requests');
+        }
+
+        throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('articles'));
     }
-    redirect_url(route_url_clean('articles', ['theme' => (string) ($_GET['theme'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'page' => max(1, (int) ($_GET['page'] ?? 1))]));
 }
 
 $themeMeta = [
@@ -142,6 +173,13 @@ set_page_meta([
 $contactEmail = site_contact_email();
 $categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_category_subject'])
     . '&body=' . rawurlencode((string) $t['propose_category_body']);
+$proposalContactDefault = '';
+if ($user !== null) {
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
+}
 
 ob_start();
 ?>
@@ -164,7 +202,7 @@ ob_start();
                 </article>
             </div>
             <div class="articles-hero-actions">
-                <button class="button secondary" type="button" data-articles-category-open data-articles-category-fallback="<?= e($categoryProposalUrl) ?>" aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e((string) $t['propose_category']) ?></button>
+                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-articles-category-open aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e((string) $t['propose_category']) ?></a>
                 <a class="button" href="<?= e(route_url('article_propose')) ?>"><?= e((string) $t['propose_article']) ?></a>
             </div>
         </div>
@@ -180,7 +218,11 @@ ob_start();
                 </div>
                 <button class="articles-category-dialog-close" type="button" data-articles-category-close aria-label="<?= e((string) $t['propose_category_close']) ?>">&times;</button>
             </div>
-            <form class="articles-category-form" method="dialog" data-articles-category-form data-articles-category-recipient="<?= e($contactEmail) ?>" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
+            <form class="articles-category-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-category-form data-articles-category-recipient="<?= e($contactEmail) ?>" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
+                <?php if ($user !== null): ?>
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_category">
+                <?php endif; ?>
                 <label>
                     <span><?= e((string) $t['propose_category_name_label']) ?></span>
                     <input type="text" name="proposal_category" maxlength="160" required>
@@ -191,7 +233,7 @@ ob_start();
                 </label>
                 <label>
                     <span><?= e((string) $t['propose_category_contact_label']) ?></span>
-                    <input type="text" name="proposal_contact" maxlength="220" required>
+                    <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
                 </label>
                 <div class="articles-category-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['propose_category_submit']) ?></button>

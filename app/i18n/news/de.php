@@ -57,4 +57,8 @@ return array (
   'proposal_submit' => 'Vorschlag senden',
   'proposal_cancel' => 'Abbrechen',
   'proposal_close' => 'Schließen',
+  'categories' => 'Abschnitte',
+  'search' => 'Suchen',
+  'news_count_label' => 'Anzahl der Nachrichten',
+  'proposal_recorded' => 'Vorschlag in Ihren Inhalten gespeichert.',
 );

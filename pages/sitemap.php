@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$xml = cache_remember('seo_sitemap_xml_v6', 300, static function (): string {
+$xml = cache_remember('seo_sitemap_xml_v7', 300, static function (): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
     $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries): void {
@@ -57,7 +57,9 @@ $xml = cache_remember('seo_sitemap_xml_v6', 300, static function (): string {
 
     foreach ($staticRoutes as $row) {
         $module = (string) ($row['module'] ?? '');
-        if ($module !== '' && !module_enabled($module)) {
+        $moduleRow = $module !== '' ? module_row($module) : null;
+        $moduleVisibility = is_array($moduleRow) ? (string) ($moduleRow['visibility'] ?? 'public') : 'public';
+        if ($module !== '' && (!module_enabled($module) || $moduleVisibility !== 'public')) {
             continue;
         }
 

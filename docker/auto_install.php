@@ -75,6 +75,7 @@ $permissions = [
     'ads.submit' => 'Gérer ses publicités',
     'ads.moderate' => 'Modérer les publicités',
     'ads.manage_all' => 'Gérer toutes les publicités et statistiques',
+    'classifieds.moderate' => 'Moderer les petites annonces',
     'modules.manage' => 'Gérer les modules du site',
     'press.manage' => 'Gérer les contacts et communiqués de presse',
     'editorial.manage' => 'Gérer les contenus éditoriaux multilingues',

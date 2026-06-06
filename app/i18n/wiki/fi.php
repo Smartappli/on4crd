@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Yhteystietosi',
   'propose_theme_submit' => 'Lähetä ehdotus',
   'cancel' => 'Peruuta',
+  'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
 );

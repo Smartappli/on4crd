@@ -37,4 +37,6 @@ return array (
   'view_members' => 'Members view',
   'view_private' => 'Private view',
   'empty_visible_info' => 'No visible information.',
+  'profile_data_title' => 'Profile data',
+  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
 );

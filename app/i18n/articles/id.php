@@ -81,4 +81,5 @@ Kontak:',
 <ul><li>Poin penting</li></ul>',
   'html_cleanup_help' => 'HTML dibersihkan secara otomatis. Skrip, iframe, dan atribut berbahaya dihapus sebelum validasi.',
   'submit_for_review' => 'Kirim untuk validasi',
+  'proposal_recorded' => 'Usulan disimpan di konten Anda.',
 );

@@ -31,4 +31,5 @@ return array (
   'propose_theme_contact' => 'Η επαφή σας',
   'propose_theme_submit' => 'Αποστολή πρότασης',
   'cancel' => 'Ακύρωση',
+  'proposal_recorded' => 'Η πρόταση αποθηκεύτηκε στο περιεχόμενό σας.',
 );

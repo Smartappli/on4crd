@@ -22,6 +22,101 @@ if (!table_exists('events')) {
     return;
 }
 
+if (!function_exists('events_public_unique_slug')) {
+function events_public_unique_slug(string $title, int $ignoreId = 0, int $maxLength = 190): string
+{
+    $base = slugify($title);
+    if ($base === '' || $base === 'n-a') {
+        $base = 'event';
+    }
+    if (strlen($base) > $maxLength) {
+        $base = rtrim(substr($base, 0, $maxLength), '-');
+    }
+    $base = $base !== '' ? $base : 'event';
+    $suffix = 1;
+    do {
+        $suffixText = $suffix <= 1 ? '' : '-' . $suffix;
+        $candidate = $suffixText === ''
+            ? $base
+            : rtrim(substr($base, 0, max(1, $maxLength - strlen($suffixText))), '-') . $suffixText;
+        $stmt = db()->prepare('SELECT id FROM events WHERE slug = ? AND id <> ? LIMIT 1');
+        $stmt->execute([$candidate, max(0, $ignoreId)]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Impossible de generer un slug evenement unique.');
+}
+}
+
+$user = current_user();
+$canManageEvents = has_permission('events.manage');
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+
+        if ($action === 'propose_event') {
+            $user = require_login(route_url('events'));
+            $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) $t['propose_event_datetime_label'] => (string) ($_POST['proposal_datetime'] ?? ''),
+                (string) $t['propose_event_location_label'] => (string) ($_POST['proposal_location'] ?? ''),
+                (string) $t['propose_event_description_label'] => (string) ($_POST['proposal_description'] ?? ''),
+            ]);
+            $autoPublish = has_permission('events.manage');
+            if ($autoPublish) {
+                $title = content_proposal_clean_single_line($proposalTitle, 160);
+                $dateRaw = content_proposal_clean_single_line((string) ($_POST['proposal_datetime'] ?? ''), 160);
+                $location = content_proposal_clean_single_line((string) ($_POST['proposal_location'] ?? ''), 190);
+                $descriptionText = content_proposal_clean_multiline((string) ($_POST['proposal_description'] ?? ''), 1600);
+                $startTs = $dateRaw !== '' ? strtotime($dateRaw) : false;
+                if ($title === '' || $startTs === false) {
+                    throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+                }
+                $endTs = $startTs + (2 * 3600);
+                $slug = events_public_unique_slug($title);
+                $description = $descriptionText !== ''
+                    ? sanitize_rich_html('<p>' . nl2br(e($descriptionText), false) . '</p>')
+                    : '';
+                $summary = $descriptionText !== '' ? mb_safe_strimwidth($descriptionText, 0, 280, '...') : '';
+                db()->prepare('INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status) VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")')
+                    ->execute([
+                        $slug,
+                        $title,
+                        $summary,
+                        $description,
+                        date('Y-m-d H:i:s', $startTs),
+                        date('Y-m-d H:i:s', $endTs),
+                        $location !== '' ? $location : null,
+                    ]);
+                cache_forget('home_next_event_v1');
+                set_flash('success', 'Evenement publie directement.');
+                redirect_url(route_url('event_view', ['slug' => $slug]));
+            }
+            $proposalId = content_proposal_create((int) $user['id'], 'events', 'content', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site((string) $t['propose_event_subject'], [
+                'area' => 'events',
+                'proposal_type' => 'content',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            redirect('my_requests');
+        }
+
+        throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('events'));
+    }
+}
+
 $rows = [];
 try {
     $stmt = db()->query('SELECT id, slug, title, summary, description, start_at, end_at, location, external_url FROM events WHERE status = "published" ORDER BY start_at ASC, id ASC');
@@ -169,6 +264,13 @@ $calendarConfig = [
 $contactEmail = site_contact_email();
 $proposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_event_subject'])
     . '&body=' . rawurlencode((string) $t['propose_event_body']);
+$proposalContactDefault = '';
+if ($user !== null) {
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
+}
 
 ob_start();
 ?>
@@ -179,7 +281,7 @@ ob_start();
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
     <div class="events-hero-actions">
-        <button class="button secondary" type="button" data-event-proposal-open data-event-proposal-fallback="<?= e($proposalUrl) ?>" aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($t['propose_event']) ?></button>
+        <a class="button secondary" href="<?= e($proposalUrl) ?>" data-event-proposal-open aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($canManageEvents ? 'Creer un evenement' : $t['propose_event']) ?></a>
         <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
     </div>
 </section>
@@ -189,12 +291,16 @@ ob_start();
         <div class="events-proposal-dialog-header">
             <div>
                 <p class="events-hero-title"><?= e($t['calendar_name']) ?></p>
-                <h2 id="events-proposal-title"><?= e($t['propose_event']) ?></h2>
-                <p class="help"><?= e($t['propose_event_intro']) ?></p>
+                <h2 id="events-proposal-title"><?= e($canManageEvents ? 'Creer un evenement' : $t['propose_event']) ?></h2>
+                <p class="help"><?= e($canManageEvents ? 'Votre evenement sera publie directement.' : $t['propose_event_intro']) ?></p>
             </div>
             <button class="events-proposal-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
         </div>
-        <form class="events-proposal-form" method="dialog" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+        <form class="events-proposal-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+            <?php if ($user !== null): ?>
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_event">
+            <?php endif; ?>
             <label>
                 <span><?= e($t['propose_event_title_label']) ?></span>
                 <input type="text" name="proposal_title" maxlength="160" required>
@@ -202,7 +308,7 @@ ob_start();
             <div class="events-proposal-form-grid">
                 <label>
                     <span><?= e($t['propose_event_datetime_label']) ?></span>
-                    <input type="text" name="proposal_datetime" maxlength="160">
+                    <input type="<?= $canManageEvents ? 'datetime-local' : 'text' ?>" name="proposal_datetime" maxlength="160">
                 </label>
                 <label>
                     <span><?= e($t['propose_event_location_label']) ?></span>
@@ -215,10 +321,10 @@ ob_start();
             </label>
             <label>
                 <span><?= e($t['propose_event_contact_label']) ?></span>
-                <input type="text" name="proposal_contact" maxlength="220" required>
+                <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
             <div class="events-proposal-dialog-actions">
-                <button class="button" type="submit"><?= e($t['propose_event_submit']) ?></button>
+                <button class="button" type="submit"><?= e($canManageEvents ? 'Publier' : $t['propose_event_submit']) ?></button>
                 <button class="button secondary" type="button" data-event-proposal-close><?= e($t['propose_event_cancel']) ?></button>
             </div>
         </form>

@@ -21,4 +21,7 @@ return array (
   'search' => 'Търсене на член',
   'search_ph' => 'Позивна, име, имейл...',
   'search_btn' => 'OK',
+  'th_password_reset' => '??????',
+  'password_reset_force' => 'Принудително следващо влизане',
+  'password_reset_unavailable' => 'Недостъпен',
 );

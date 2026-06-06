@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-gain-conv" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-gain-conv" data-tool-panel>
     <h2><?= e((string) $t['gain_conv_calc']) ?></h2>
     <label><?= e((string) $t['dbd_label']) ?>
         <input type="text" inputmode="decimal" id="gain-dbd" data-step="0.1" value="3">

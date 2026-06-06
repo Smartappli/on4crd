@@ -37,4 +37,6 @@ return array (
   'view_members' => 'pandangan anggota',
   'view_private' => 'Pemandangan pribadi',
   'empty_visible_info' => 'Tidak ada informasi yang terlihat.',
+  'profile_data_title' => 'Profile data',
+  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
 );

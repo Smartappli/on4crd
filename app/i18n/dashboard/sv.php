@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Lägg till favoriter för att förbättra rekommendationerna.',
   'nudge_review_notifications' => 'Kontrollera olästa aviseringar.',
   'nudge_enable_recommendations' => 'Aktivera personliga rekommendationer.',
+  'save_unavailable' => 'Sparning är inte tillgänglig: tabellen dashboard_widgets saknas.',
+  'saving' => 'Sparar...',
+  'invalid_server_response' => 'Ogiltigt serversvar.',
+  'save_error' => 'Sparfel.',
+  'layout_saved_at' => 'Layouten sparades kl. {time}.',
+  'remove_widget' => 'Ta bort widget',
+  'preview_unavailable' => 'Förhandsvisning är inte tillgänglig.',
+  'loading' => 'Läser in...',
+  'load_widget_error' => 'Widgeten kunde inte läsas in.',
 );

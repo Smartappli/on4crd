@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Sagatavot e-pastu',
   'propose_event_cancel' => 'Atcelt',
   'propose_event_close' => 'Aizvērt',
+  'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
 );

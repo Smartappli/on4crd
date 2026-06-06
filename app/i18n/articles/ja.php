@@ -81,4 +81,5 @@ ON4CRD の技術記事を提案したいです。
 <ul><li>重要なポイント</li></ul>',
   'html_cleanup_help' => 'HTML は自動的にクリーンアップされます。スクリプト、iframe、危険な属性は検証前に削除されます。',
   'submit_for_review' => '検証のために送信する',
+  'proposal_recorded' => '提案はあなたのコンテンツに保存されました。',
 );

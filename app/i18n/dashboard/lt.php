@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Pridėkite mėgstamiausių, kad pagerintumėte rekomendacijas.',
   'nudge_review_notifications' => 'Patikrinkite neskaitytus pranešimus.',
   'nudge_enable_recommendations' => 'Įgalinti suasmenintas rekomendacijas.',
+  'save_unavailable' => 'Įrašymas negalimas: trūksta dashboard_widgets lentelės.',
+  'saving' => 'Įrašoma...',
+  'invalid_server_response' => 'Netinkamas serverio atsakymas.',
+  'save_error' => 'Įrašymo klaida.',
+  'layout_saved_at' => 'Išdėstymas įrašytas {time}.',
+  'remove_widget' => 'Pašalinti valdiklį',
+  'preview_unavailable' => 'Peržiūra negalima.',
+  'loading' => 'Įkeliama...',
+  'load_widget_error' => 'Nepavyko įkelti valdiklio.',
 );

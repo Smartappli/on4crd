@@ -11,13 +11,14 @@ if (!function_exists('ensure_directories')) { function ensure_directories(): voi
 if (!function_exists('apply_runtime_schema_updates')) { function apply_runtime_schema_updates(): void {} }
 if (!function_exists('cache_dir_path')) { function cache_dir_path(): string { return sys_get_temp_dir(); } }
 if (!function_exists('current_user')) { function current_user(): ?array { return null; } }
-if (!function_exists('require_login')) { function require_login(): array { return []; } }
+if (!function_exists('require_login')) { function require_login(?string $nextUrl = null): array { return []; } }
 if (!function_exists('require_permission')) { function require_permission(string $permission): void {} }
 if (!function_exists('has_permission')) { function has_permission(string $permission): bool { return false; } }
 if (!function_exists('set_flash')) { function set_flash(string $type, string $message): void {} }
 if (!function_exists('redirect')) { function redirect(string $route): void {} }
 if (!function_exists('redirect_url')) { function redirect_url(string $url): void {} }
 if (!function_exists('table_exists')) { function table_exists(string $table): bool { return false; } }
+if (!function_exists('table_has_column')) { function table_has_column(string $table, string $column): bool { return false; } }
 if (!function_exists('current_locale')) { function current_locale(): string { return 'fr'; } }
 if (!function_exists('t_page')) { function t_page(string $domain, string $key, ?string $locale = null): string { return $key; } }
 if (!function_exists('render_layout')) { function render_layout(string $content, string $title = ''): string { return $content; } }
@@ -42,6 +43,12 @@ if (!function_exists('render_sitemap_xml')) { function render_sitemap_xml(): str
 if (!function_exists('format_price_eur')) { function format_price_eur(int $amountCents): string { return ''; } }
 if (!function_exists('format_integer_or_unlimited')) { function format_integer_or_unlimited(?int $value): string { return ''; } }
 if (!function_exists('parse_price_to_cents')) { function parse_price_to_cents(string $price): int { return 0; } }
+if (!function_exists('classifieds_can_moderate')) { function classifieds_can_moderate(): bool { return false; } }
+if (!function_exists('ensure_content_proposals_table')) { function ensure_content_proposals_table(): bool { return false; } }
+if (!function_exists('content_proposal_details_text')) { function content_proposal_details_text(array $details): string { return ''; } }
+if (!function_exists('content_proposal_clean_single_line')) { function content_proposal_clean_single_line(string $value, int $maxLength): string { return $value; } }
+if (!function_exists('content_proposal_create')) { function content_proposal_create(int $memberId, string $area, string $proposalType, string $title, string $summary = '', string $contact = '', string $sourceRef = '', string $status = 'pending'): int { return 0; } }
+if (!function_exists('content_proposal_notify_site')) { function content_proposal_notify_site(string $subject, array $proposal): bool { return false; } }
 
 if (!function_exists('auction_status_label')) { function auction_status_label(string $status): string { return $status; } }
 if (!function_exists('ad_status_label')) { function ad_status_label(string $status): string { return $status; } }

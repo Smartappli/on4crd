@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'Forbered e-mail',
   'propose_event_cancel' => 'Annuller',
   'propose_event_close' => 'Luk',
+  'proposal_recorded' => 'Forslaget er gemt i dit indhold.',
 );

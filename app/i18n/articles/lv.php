@@ -81,4 +81,5 @@ Kontaktinformācija:',
 <ul><li>ISvarīgs punkts</li></ul>',
   'html_cleanup_help' => 'HTML tiek notīrīts automātiski. Skripti, iframe un bīstamie atribūti tiek noņemti pirms validācijas.',
   'submit_for_review' => 'Iesniedziet apstiprināšanai',
+  'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
 );

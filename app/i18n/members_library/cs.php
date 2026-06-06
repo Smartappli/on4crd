@@ -31,4 +31,5 @@ return array (
   'favorite_removed' => 'Oblíbené bylo odstraněno',
   'favorite_added_msg' => 'Dokument přidán do oblíbených.',
   'favorite_removed_msg' => 'Dokument byl odebrán z oblíbených.',
+  'proposal_recorded' => 'Návrh byl uložen do vašeho obsahu.',
 );

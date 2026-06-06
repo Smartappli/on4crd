@@ -81,4 +81,5 @@ Kontakt:',
 <ul><li>IOluline punkt</li></ul>',
   'html_cleanup_help' => 'HTML puhastatakse automaatselt. Skriptid, iframe\'id ja ohtlikud atribuudid eemaldatakse enne valideerimist.',
   'submit_for_review' => 'Esitage kinnitamiseks',
+  'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
 );

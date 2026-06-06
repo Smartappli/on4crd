@@ -81,4 +81,5 @@ Teagmháil:',
 <ul><li> Pointe tábhachtach</li></ul>',
   'html_cleanup_help' => 'Glantar HTML go huathoibríoch. Baintear scripteanna, iframes agus tréithe contúirteacha roimh bhailíochtú.',
   'submit_for_review' => 'Cuir isteach le haghaidh bailíochtaithe',
+  'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
 );

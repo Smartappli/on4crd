@@ -93,6 +93,11 @@
   box-shadow: var(--shadow);
 }
 
+[data-route="classifieds"] .classifieds-category-inline {
+  display: grid;
+  gap: 1rem;
+}
+
 [data-route="classifieds"] .classifieds-category-dialog-header {
   display: flex;
   justify-content: space-between;

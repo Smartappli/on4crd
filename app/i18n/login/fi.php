@@ -5,6 +5,7 @@ return array (
   'required' => 'Valtuustiedot vaaditaan.',
   'captcha_invalid' => 'Virheellinen captcha.',
   'auth_unavailable' => 'Todennusmoduuli ei ole käytettävissä. Suorita säveltäjän asennus.',
+  'member_unavailable' => 'Kirjautuminen vahvistettiin, mutta vastaavaa aktiivista jäsenprofiilia ei löytynyt.',
   'invalid_credentials' => 'Virheellinen koodi tai salasana.',
   'too_many' => 'Liian monta yhteysyritystä. Yritä uudelleen muutaman minuutin kuluttua.',
   'not_verified' => 'Tiliäsi ei ole vielä vahvistettu.',

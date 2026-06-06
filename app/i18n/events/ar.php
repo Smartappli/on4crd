@@ -35,4 +35,5 @@ return array (
   'propose_event_submit' => 'إعداد البريد الإلكتروني',
   'propose_event_cancel' => 'إلغاء',
   'propose_event_close' => 'إغلاق',
+  'proposal_recorded' => 'تم حفظ الاقتراح في محتواك.',
 );

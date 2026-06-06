@@ -21,4 +21,7 @@ return array (
   'search' => 'Cerca membro',
   'search_ph' => 'Nominativo, nome, email…',
   'search_btn' => 'Cerca',
+  'th_password_reset' => 'Parola d\'accesso',
+  'password_reset_force' => 'Forza al prossimo accesso',
+  'password_reset_unavailable' => 'Non disponibile',
 );
