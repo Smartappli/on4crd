@@ -251,6 +251,17 @@ if (!in_array($route, $publicRoutes, true)) {
     require_login(login_next_url_for_route($route, $_GET));
 }
 
+$passwordChangeExemptRoutes = ['change_password', 'logout'];
+$passwordChangeUser = current_user();
+if (
+    $passwordChangeUser !== null
+    && member_password_change_required($passwordChangeUser)
+    && !in_array($route, $passwordChangeExemptRoutes, true)
+) {
+    set_flash('error', t_page('change_password', 'forced_notice'));
+    redirect('change_password');
+}
+
 app_load_route_helpers($route);
 
 $dispatchPage = static function (string $relativePath): void {

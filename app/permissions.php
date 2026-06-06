@@ -42,7 +42,7 @@ if (!function_exists('configured_administrator_callsigns')) {
  */
 function configured_administrator_callsigns(): array
 {
-    return ['ON4DG', 'ON5MDB'];
+    return ['ON4DG', 'ON5MDB', 'ON8CJ'];
 }
 }
 
