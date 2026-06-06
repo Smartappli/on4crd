@@ -21,4 +21,7 @@ return array (
   'search' => 'Vyhľadajte člena',
   'search_ph' => 'Volací znak, meno, email…',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Heslo',
+  'password_reset_force' => 'Vynútiť ďalšie prihlásenie',
+  'password_reset_unavailable' => 'nedostupné',
 );

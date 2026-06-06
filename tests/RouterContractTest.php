@@ -372,16 +372,28 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('require_login(login_next_url_for_route($route, $_GET));', $router);
     }
 
-    public function testFirstLoginPasswordResetIsNotForced(): void
+    public function testPasswordResetCanBeForcedWithoutFirstLoginDefault(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $adminMembers = file_get_contents(__DIR__ . '/../pages/admin_members.php');
         self::assertIsString($router);
         self::assertIsString($register);
+        self::assertIsString($adminMembers);
 
-        self::assertStringNotContainsString('member_password_change_required', $router);
-        self::assertStringNotContainsString('forced_notice', $router);
+        self::assertStringContainsString('member_password_change_required($passwordChangeUser)', $router);
+        self::assertStringContainsString('forced_notice', $router);
+        self::assertMatchesRegularExpression('/password_hash\(\$password, PASSWORD_DEFAULT\),\s*0,/', $register);
         self::assertStringContainsString('redirect(module_enabled(\'dashboard\') ? \'dashboard\' : \'home\');', $register);
+        self::assertStringContainsString('password_change_required = ?', $adminMembers);
+    }
+
+    public function testConfiguredAdministratorsIncludeOn8cj(): void
+    {
+        $permissions = file_get_contents(__DIR__ . '/../app/permissions.php');
+        self::assertIsString($permissions);
+
+        self::assertStringContainsString("'ON8CJ'", $permissions);
     }
 
     public function testProposalDialogTriggersKeepNativeFallbacks(): void

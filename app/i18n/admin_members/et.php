@@ -21,4 +21,7 @@ return array (
   'search' => 'Otsige liiget',
   'search_ph' => 'Kutsung, nimi, email…',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Parool',
+  'password_reset_force' => 'Jõudu järgmisel sisselogimisel',
+  'password_reset_unavailable' => 'Pole saadaval',
 );

@@ -21,4 +21,7 @@ return array (
   'search' => 'Cuardaigh ball',
   'search_ph' => 'Glaonna, ainm, ríomhphost…',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Pasfhocal',
+  'password_reset_force' => 'Cuir i bhfeidhm ar an gcéad logáil isteach eile',
+  'password_reset_unavailable' => 'Níl fáil air',
 );

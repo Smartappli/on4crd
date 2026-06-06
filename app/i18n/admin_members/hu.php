@@ -21,4 +21,7 @@ return array (
   'search' => 'Tag keresése',
   'search_ph' => 'Hívójel, név, email…',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Jelsz?',
+  'password_reset_force' => 'Kényszerítés a következő bejelentkezéskor',
+  'password_reset_unavailable' => 'Nem elérhető',
 );

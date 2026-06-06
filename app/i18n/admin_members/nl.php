@@ -21,4 +21,7 @@ return array (
   'search' => 'Lid zoeken',
   'search_ph' => 'Callsign, naam, e-mail…',
   'search_btn' => 'Zoeken',
+  'th_password_reset' => 'Wachtwoord',
+  'password_reset_force' => 'Forceer de volgende login',
+  'password_reset_unavailable' => 'Niet beschikbaar',
 );

@@ -21,4 +21,7 @@ return array (
   'search' => 'Søg efter et medlem',
   'search_ph' => 'Kaldesignal, navn, e-mail...',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Adgangskode',
+  'password_reset_force' => 'Tving ved næste login',
+  'password_reset_unavailable' => 'Ikke tilgængelig',
 );

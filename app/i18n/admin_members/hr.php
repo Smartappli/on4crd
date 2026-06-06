@@ -21,4 +21,7 @@ return array (
   'search' => 'Potražite člana',
   'search_ph' => 'Pozivni znak, ime, email…',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Lozinka',
+  'password_reset_force' => 'Prisilno pri sljedećoj prijavi',
+  'password_reset_unavailable' => 'Nedostupan',
 );

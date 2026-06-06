@@ -21,4 +21,7 @@ return array (
   'search' => 'Etsi jäsen',
   'search_ph' => 'Kutsumerkki, nimi, sähköposti…',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Salasana',
+  'password_reset_force' => 'Pakota seuraavan sisäänkirjautumisen yhteydessä',
+  'password_reset_unavailable' => 'Ei saatavilla',
 );

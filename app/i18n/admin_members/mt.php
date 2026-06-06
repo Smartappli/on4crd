@@ -21,4 +21,7 @@ return array (
   'search' => 'Fittex membru',
   'search_ph' => 'Callsign, isem, email...',
   'search_btn' => 'OK',
+  'th_password_reset' => 'Kelma sigrieta',
+  'password_reset_force' => 'Forza fuq il-login li jmiss',
+  'password_reset_unavailable' => 'Mhux disponibbli',
 );
