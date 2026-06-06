@@ -57,7 +57,7 @@ return array (
   'qsl_choice_eqsl' => 'eQSL',
   'qsl_choice_lotw_eqsl' => 'LoTW + eQSL',
   'qsl_choice_qrz' => 'QRZ.com',
-  'qsl_choice_manager' => 'Via manager QSL',
+  'qsl_choice_manager' => 'manager QSL',
   'qsl_choice_no_qsl' => 'Pas de QSL',
   'qsl_choice_other' => 'Autre',
 );
