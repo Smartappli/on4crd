@@ -2,6 +2,5 @@ parameters:
     level: 1
     paths:
         - pages
-    scanFiles:
-        - app/functions.php
-        - phpstan-stubs.php
+    scanDirectories:
+        - app
