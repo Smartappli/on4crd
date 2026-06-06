@@ -280,9 +280,6 @@ ob_start();
                     }
                 };
                 $postalCodeRow = member_profile_display_row($member, 'postal_code', $profilePreviewFields['postal_code']);
-                if ($postalCodeRow !== null) {
-                    $addDetail((string) $postalCodeRow['label'], (string) $postalCodeRow['text']);
-                }
                 $addDetail((string) $profileT('address'), $address);
                 $addDetail((string) $profileT('qsl_via'), $qslVia);
                 $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
@@ -330,6 +327,9 @@ ob_start();
                         <?php if ($country !== ''): ?>
                             <span><?= member_country_html($country) ?></span>
                         <?php endif; ?>
+                        <?php if ($postalCodeRow !== null): ?>
+                            <span><?= e((string) $postalCodeRow['label']) ?> <?= e((string) $postalCodeRow['text']) ?></span>
+                        <?php endif; ?>
                         <?php if ($grid !== ''): ?>
                             <span><?= e($t('grid')) ?> <?= e($grid) ?></span>
                         <?php endif; ?>
@@ -348,9 +348,6 @@ ob_start();
                         <?php if ((int) ($member['is_uba_member'] ?? 0) === 1): ?>
                             <span><?= e($t('uba_member')) ?><?= trim((string) ($member['uba_member_number'] ?? '')) !== '' ? ' ' . e((string) $member['uba_member_number']) : '' ?></span>
                         <?php endif; ?>
-                        <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
-                            <span><?= e($mode) ?></span>
-                        <?php endforeach; ?>
                     </div>
 
                     <?php if ($detailRows !== []): ?>
@@ -364,11 +361,22 @@ ob_start();
                         </dl>
                     <?php endif; ?>
 
-                    <?php if ($bandList !== []): ?>
-                        <div class="directory-band-list" aria-label="<?= e($t('bands')) ?>">
-                            <?php foreach (array_slice($bandList, 0, 5) as $band): ?>
-                                <span><?= e($band) ?></span>
-                            <?php endforeach; ?>
+                    <?php if ($modeList !== [] || $bandList !== []): ?>
+                        <div class="directory-radio-row">
+                            <?php if ($modeList !== []): ?>
+                                <div class="directory-mode-list" aria-label="<?= e($profileT('favourite_modes')) ?>">
+                                    <?php foreach (array_slice($modeList, 0, 5) as $mode): ?>
+                                        <span><?= e($mode) ?></span>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($bandList !== []): ?>
+                                <div class="directory-band-list" aria-label="<?= e($t('bands')) ?>">
+                                    <?php foreach (array_slice($bandList, 0, 5) as $band): ?>
+                                        <span><?= e($band) ?></span>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
 
