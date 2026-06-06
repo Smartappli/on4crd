@@ -6,6 +6,7 @@ $locale = current_locale();
 $t = i18n_domain_locale('members_library', $locale);
 /** @var array{id:int} $user */
 $user = current_user() ?? ['id' => 0];
+$canManageLibrary = has_permission('admin.access');
 set_page_meta(['title' => (string) $t['title'], 'description' => (string) $t['meta_desc'], 'robots' => 'noindex,follow']);
 
 if (!ensure_member_library_table()) {
@@ -43,6 +44,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalSummary = content_proposal_details_text([
                 (string) ($t['propose_category_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
+            $autoAccept = has_permission('admin.access');
+            if ($autoAccept) {
+                if (!member_library_ensure_categories_table()) {
+                    throw new RuntimeException((string) $t['storage_unavailable']);
+                }
+                $label = content_proposal_clean_single_line($proposalTitle, 160);
+                if ($label === '') {
+                    throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+                }
+                $code = member_library_category_slug($label);
+                db()->prepare('INSERT INTO member_library_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                    ->execute([$code, $label]);
+                set_flash('success', 'Categorie creee et validee directement.');
+                redirect_url(route_url_clean('members_library', ['category' => $code]));
+            }
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'category', $proposalTitle, $proposalSummary, $proposalContact);
             content_proposal_notify_site((string) ($t['propose_category_subject'] ?? 'Library category proposal'), [
                 'area' => 'members_library',
@@ -65,7 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (string) ($t['propose_document_link'] ?? 'Link or source') => $proposalLink,
                 (string) ($t['propose_document_description'] ?? 'Description') => (string) ($_POST['proposal_description'] ?? ''),
             ]);
-            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalLink);
+            $autoAccept = has_permission('admin.access');
+            $proposalStatus = $autoAccept ? 'accepted' : 'pending';
+            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalLink, $proposalStatus);
+            if ($autoAccept) {
+                set_flash('success', 'Document valide directement. Ajoutez le fichier depuis l administration bibliotheque si necessaire.');
+                redirect_url(route_url('members_library'));
+            }
             content_proposal_notify_site((string) ($t['propose_document_subject'] ?? 'Library document proposal'), [
                 'area' => 'members_library',
                 'proposal_type' => 'content',
@@ -94,7 +116,38 @@ $tag = trim((string) ($_GET['tag'] ?? ''));
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 12;
 
-$categories = db()->query('SELECT category, COUNT(*) AS total FROM member_library_documents GROUP BY category ORDER BY category')->fetchAll() ?: [];
+$documentCategories = db()->query('SELECT category, COUNT(*) AS total FROM member_library_documents GROUP BY category ORDER BY category')->fetchAll() ?: [];
+$categoryMap = [];
+foreach ($documentCategories as $catRow) {
+    $catCode = trim((string) ($catRow['category'] ?? 'general'));
+    if ($catCode === '') {
+        $catCode = 'general';
+    }
+    $categoryMap[$catCode] = [
+        'category' => $catCode,
+        'label' => $catCode,
+        'total' => (int) ($catRow['total'] ?? 0),
+    ];
+}
+if (member_library_ensure_categories_table()) {
+    try {
+        foreach ((db()->query('SELECT code, label FROM member_library_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: []) as $catRow) {
+            $catCode = member_library_category_slug((string) ($catRow['code'] ?? 'general'));
+            $catLabel = trim((string) ($catRow['label'] ?? $catCode));
+            if ($catLabel === '') {
+                $catLabel = $catCode;
+            }
+            if (!isset($categoryMap[$catCode])) {
+                $categoryMap[$catCode] = ['category' => $catCode, 'label' => $catLabel, 'total' => 0];
+            } else {
+                $categoryMap[$catCode]['label'] = $catLabel;
+            }
+        }
+    } catch (Throwable) {
+        // Keep document-derived categories if the optional category table cannot be read.
+    }
+}
+$categories = array_values($categoryMap);
 $where = [];
 $params = [];
 if ($category !== '') {
@@ -213,8 +266,8 @@ ob_start();
                 </article>
             </div>
             <div class="members-library-hero-action">
-                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) ($t['propose_category'] ?? 'Proposer une catégorie')) ?></a>
-                <a class="button" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) ($t['propose_document'] ?? 'Proposer un document')) ?></a>
+                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e($canManageLibrary ? 'Creer une categorie' : (string) ($t['propose_category'] ?? 'Proposer une categorie')) ?></a>
+                <a class="button" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e($canManageLibrary ? 'Valider un document' : (string) ($t['propose_document'] ?? 'Proposer un document')) ?></a>
             </div>
         </div>
     </section>
@@ -224,8 +277,8 @@ ob_start();
             <div class="members-library-dialog-header">
                 <div>
                     <p class="members-library-dialog-eyebrow"><?= e((string) ($t['category'] ?? 'Catégorie')) ?></p>
-                    <h2 id="members-library-category-title"><?= e((string) ($t['propose_category'] ?? 'Proposer une catégorie')) ?></h2>
-                    <p class="help"><?= e((string) ($t['propose_category_intro'] ?? 'Indiquez la catégorie à ajouter et son utilité pour la bibliothèque.')) ?></p>
+                    <h2 id="members-library-category-title"><?= e($canManageLibrary ? 'Creer une categorie' : (string) ($t['propose_category'] ?? 'Proposer une categorie')) ?></h2>
+                    <p class="help"><?= e($canManageLibrary ? 'La categorie sera validee directement.' : (string) ($t['propose_category_intro'] ?? 'Indiquez la categorie a ajouter et son utilite pour la bibliotheque.')) ?></p>
                 </div>
                 <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
             </div>
@@ -236,7 +289,7 @@ ob_start();
                 <label><span><?= e((string) ($t['propose_category_reason'] ?? 'Pourquoi ajouter cette catégorie ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) ($t['proposal_contact'] ?? 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
                 <div class="members-library-dialog-actions">
-                    <button class="button" type="submit"><?= e((string) ($t['proposal_submit'] ?? 'Envoyer la proposition')) ?></button>
+                    <button class="button" type="submit"><?= e($canManageLibrary ? 'Creer' : (string) ($t['proposal_submit'] ?? 'Envoyer la proposition')) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) ($t['proposal_cancel'] ?? 'Annuler')) ?></button>
                 </div>
             </form>
@@ -248,8 +301,8 @@ ob_start();
             <div class="members-library-dialog-header">
                 <div>
                     <p class="members-library-dialog-eyebrow"><?= e((string) ($t['document'] ?? 'Document')) ?></p>
-                    <h2 id="members-library-document-title"><?= e((string) ($t['propose_document'] ?? 'Proposer un document')) ?></h2>
-                    <p class="help"><?= e((string) ($t['propose_document_intro'] ?? 'Décrivez le document à ajouter à la bibliothèque membres.')) ?></p>
+                    <h2 id="members-library-document-title"><?= e($canManageLibrary ? 'Valider un document' : (string) ($t['propose_document'] ?? 'Proposer un document')) ?></h2>
+                    <p class="help"><?= e($canManageLibrary ? 'La proposition sera marquee acceptee directement; ajoutez le fichier depuis l administration si necessaire.' : (string) ($t['propose_document_intro'] ?? 'Decrivez le document a ajouter a la bibliotheque membres.')) ?></p>
                 </div>
                 <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
             </div>
@@ -262,7 +315,7 @@ ob_start();
                 <label><span><?= e((string) ($t['propose_document_description'] ?? 'Description')) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) ($t['proposal_contact'] ?? 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
                 <div class="members-library-dialog-actions">
-                    <button class="button" type="submit"><?= e((string) ($t['proposal_submit'] ?? 'Envoyer la proposition')) ?></button>
+                    <button class="button" type="submit"><?= e($canManageLibrary ? 'Valider' : (string) ($t['proposal_submit'] ?? 'Envoyer la proposition')) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) ($t['proposal_cancel'] ?? 'Annuler')) ?></button>
                 </div>
             </form>
@@ -303,7 +356,7 @@ ob_start();
                 <?php foreach ($categories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
                     <a class="members-library-category-item<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
-                        <span><?= e($catName) ?></span>
+                        <span><?= e((string) ($cat['label'] ?? $catName)) ?></span>
                         <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
                     </a>
                 <?php endforeach; ?>
