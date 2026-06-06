@@ -129,7 +129,7 @@ function current_user(): ?array
     }
 
     $memberColumns = ['id'];
-    foreach (['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required'] as $memberColumn) {
+    foreach (['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee', 'password_change_required', 'password_reset_forced_at'] as $memberColumn) {
         if (table_has_column('members', $memberColumn)) {
             $memberColumns[] = $memberColumn;
         }
@@ -171,20 +171,29 @@ function member_password_change_required(?array $user = null): bool
         return false;
     }
 
-    if (array_key_exists('password_change_required', $user)) {
-        return (int) ($user['password_change_required'] ?? 0) === 1;
+    if (array_key_exists('password_reset_forced_at', $user)) {
+        return (int) ($user['password_change_required'] ?? 0) === 1
+            && trim((string) ($user['password_reset_forced_at'] ?? '')) !== '';
     }
 
     $memberId = (int) ($user['id'] ?? 0);
-    if ($memberId <= 0 || !table_exists('members') || !table_has_column('members', 'password_change_required')) {
+    if (
+        $memberId <= 0
+        || !table_exists('members')
+        || !table_has_column('members', 'password_change_required')
+        || !table_has_column('members', 'password_reset_forced_at')
+    ) {
         return false;
     }
 
     try {
-        $stmt = db()->prepare('SELECT password_change_required FROM members WHERE id = ? LIMIT 1');
+        $stmt = db()->prepare('SELECT password_change_required, password_reset_forced_at FROM members WHERE id = ? LIMIT 1');
         $stmt->execute([$memberId]);
+        $row = $stmt->fetch();
 
-        return (int) $stmt->fetchColumn() === 1;
+        return is_array($row)
+            && (int) ($row['password_change_required'] ?? 0) === 1
+            && trim((string) ($row['password_reset_forced_at'] ?? '')) !== '';
     } catch (Throwable) {
         return false;
     }

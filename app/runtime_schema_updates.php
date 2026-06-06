@@ -260,6 +260,7 @@ function apply_runtime_schema_updates(): void
             'first_name' => 'ALTER TABLE members ADD COLUMN first_name VARCHAR(95) DEFAULT NULL AFTER callsign',
             'last_name' => 'ALTER TABLE members ADD COLUMN last_name VARCHAR(95) DEFAULT NULL AFTER first_name',
             'password_change_required' => 'ALTER TABLE members ADD COLUMN password_change_required TINYINT(1) NOT NULL DEFAULT 0 AFTER password_hash',
+            'password_reset_forced_at' => 'ALTER TABLE members ADD COLUMN password_reset_forced_at DATETIME DEFAULT NULL AFTER password_change_required',
             'country' => 'ALTER TABLE members ADD COLUMN country VARCHAR(190) DEFAULT NULL',
             'address' => 'ALTER TABLE members ADD COLUMN address VARCHAR(255) DEFAULT NULL AFTER country',
             'postal_code' => 'ALTER TABLE members ADD COLUMN postal_code VARCHAR(32) DEFAULT NULL AFTER address',
