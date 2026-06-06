@@ -76,10 +76,11 @@ if (table_exists('members')) {
          WHERE is_active = 1
            AND UPPER(callsign) <> ?'
     );
-    $countParams = ['ON4CRD'];
+    $countParams = [];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
     }
+    $countParams[] = 'ON4CRD';
     $countsStmt->execute($countParams);
     $countsRow = $countsStmt->fetch() ?: [];
     $activeMembersCount = (int) ($countsRow['active_total'] ?? 0);
