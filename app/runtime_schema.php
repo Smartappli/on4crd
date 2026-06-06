@@ -144,7 +144,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-06.1';
+    return '2026-06-06.2';
 }
 
 function runtime_schema_marker_path(): string
