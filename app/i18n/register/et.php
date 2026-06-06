@@ -47,6 +47,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Baaslitsents',
   'licence_intermediate' => 'Kesktaseme litsents',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Muu',
   'qsl_choice_bureau' => 'Bureau',

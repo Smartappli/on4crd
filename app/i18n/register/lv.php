@@ -47,6 +47,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Pamatlicence',
   'licence_intermediate' => 'Vidēja līmeņa licence',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Cita',
   'qsl_choice_bureau' => 'Bureau',

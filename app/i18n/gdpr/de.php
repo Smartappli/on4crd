@@ -37,4 +37,6 @@ return array (
   'view_members' => 'Mitgliederansicht',
   'view_private' => 'Private Ansicht',
   'empty_visible_info' => 'Keine sichtbaren Informationen.',
+  'profile_data_title' => 'Profildaten',
+  'profile_data_help' => 'Dieser Bereich ?bernimmt die nicht leeren Felder Ihres Profils und verwendet dieselben Sichtbarkeitseinstellungen wie das Verzeichnis. Der JSON-Export enth?lt auch die in der Datenbank gespeicherten Profildaten.',
 );

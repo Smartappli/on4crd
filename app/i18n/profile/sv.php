@@ -72,6 +72,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Grundlicens',
   'licence_intermediate' => 'Mellanlicens',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Annat',
   'qsl_choice_bureau' => 'Bureau',

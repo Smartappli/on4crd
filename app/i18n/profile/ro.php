@@ -72,6 +72,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Licență de bază',
   'licence_intermediate' => 'Licență intermediară',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Alta',
   'qsl_choice_bureau' => 'Bureau',

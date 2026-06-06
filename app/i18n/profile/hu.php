@@ -72,6 +72,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Alapengedély',
   'licence_intermediate' => 'Középszintű engedély',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Egyéb',
   'qsl_choice_bureau' => 'Bureau',

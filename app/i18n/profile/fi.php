@@ -72,6 +72,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Peruslupa',
   'licence_intermediate' => 'Keskitason lupa',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Muu',
   'qsl_choice_bureau' => 'Bureau',

@@ -72,6 +72,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => '基本ライセンス',
   'licence_intermediate' => '中級ライセンス',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'その他',
   'qsl_choice_bureau' => 'Bureau',

@@ -47,6 +47,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => '基础执照',
   'licence_intermediate' => '中级执照',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => '其他',
   'qsl_choice_bureau' => 'Bureau',

@@ -72,6 +72,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Bazinė licencija',
   'licence_intermediate' => 'Vidutinė licencija',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Kita',
   'qsl_choice_bureau' => 'Bureau',

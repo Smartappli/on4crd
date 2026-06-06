@@ -47,6 +47,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Основен лиценз',
   'licence_intermediate' => 'Междинен лиценз',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Друго',
   'qsl_choice_bureau' => 'Bureau',

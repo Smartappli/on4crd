@@ -72,6 +72,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'मूल लाइसेंस',
   'licence_intermediate' => 'मध्यवर्ती लाइसेंस',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'अन्य',
   'qsl_choice_bureau' => 'Bureau',

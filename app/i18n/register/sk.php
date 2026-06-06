@@ -47,6 +47,7 @@ return array (
   'licence_onl' => 'ONL',
   'licence_base' => 'Základná licencia',
   'licence_intermediate' => 'Stredná licencia',
+  'licence_on1' => 'ON1',
   'licence_harec' => 'HAREC',
   'licence_other' => 'Iné',
   'qsl_choice_bureau' => 'Bureau',

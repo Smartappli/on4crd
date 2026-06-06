@@ -37,4 +37,6 @@ return array (
   'view_members' => 'Ledenweergave',
   'view_private' => 'Privéweergave',
   'empty_visible_info' => 'Geen zichtbare informatie.',
+  'profile_data_title' => 'Profielgegevens',
+  'profile_data_help' => 'Deze sectie herneemt de niet-lege velden van uw profiel en past dezelfde zichtbaarheidsinstellingen toe als de ledenlijst. De JSON-export bevat ook de profielgegevens die in de database zijn opgeslagen.',
 );

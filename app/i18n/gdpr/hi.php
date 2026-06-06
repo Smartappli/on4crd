@@ -37,4 +37,6 @@ return array (
   'view_members' => 'सदस्य देखते हैं',
   'view_private' => 'निजी दृश्य',
   'empty_visible_info' => 'कोई दृश्यमान जानकारी नहीं.',
+  'profile_data_title' => 'Profile data',
+  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
 );
