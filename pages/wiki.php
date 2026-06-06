@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
             if ($autoAccept) {
-                set_flash('success', $tr('category_accepted', 'Categorie wiki creee.'));
+                set_flash('success', $tr('category_accepted', 'Catégorie wiki créée.'));
                 redirect_url(route_url_clean('wiki', ['theme' => slugify($proposalTitle)]));
             }
             set_flash('success', $tr('proposal_recorded', $locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.'));
@@ -150,24 +150,26 @@ ob_start();
             <h1><?= e((string) $t['wiki_pages']) ?></h1>
             <p class="help"><?= e((string) $t['summary_fallback']) ?></p>
         </div>
-        <div class="wiki-hero-stats">
-            <article>
-                <span><?= e((string) $t['wiki_pages']) ?></span>
-                <strong><?= $totalPagesCount ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) $t['updated_pages']) ?></span>
-                <strong><?= $updatedPagesCount ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) $t['revisions']) ?></span>
-                <strong><?= $revisionCount ?></strong>
-            </article>
+        <div class="wiki-hero-side">
+            <div class="wiki-hero-stats">
+                <article>
+                    <span><?= e((string) $t['wiki_pages']) ?></span>
+                    <strong><?= $totalPagesCount ?></strong>
+                </article>
+                <article>
+                    <span><?= e((string) $t['updated_pages']) ?></span>
+                    <strong><?= $updatedPagesCount ?></strong>
+                </article>
+                <article>
+                    <span><?= e((string) $t['revisions']) ?></span>
+                    <strong><?= $revisionCount ?></strong>
+                </article>
+            </div>
+            <p class="actions wiki-hero-actions">
+                <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une catégorie') : $tr('propose_theme', 'Proposer une thematique')) ?></a>
+                <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
+            </p>
         </div>
-        <p class="actions wiki-hero-actions">
-            <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Creer une categorie') : $tr('propose_theme', 'Proposer une thematique')) ?></a>
-            <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
-        </p>
     </section>
 
     <dialog class="wiki-theme-dialog" id="wiki-theme-dialog" aria-labelledby="wiki-theme-dialog-title">
@@ -175,9 +177,9 @@ ob_start();
             <div class="wiki-theme-dialog-header">
                 <div>
                     <p class="wiki-theme-dialog-eyebrow"><?= e($tr('themes', 'Thématiques')) ?></p>
-                    <h2 id="wiki-theme-dialog-title"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Creer une categorie') : $tr('propose_theme', 'Proposer une thematique')) ?></h2>
+                    <h2 id="wiki-theme-dialog-title"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une catégorie') : $tr('propose_theme', 'Proposer une thematique')) ?></h2>
                     <p class="help"><?= e($canAutoAcceptTheme
-                        ? $tr('create_theme_intro', 'Avec vos droits de moderation, la categorie sera validee directement.')
+                        ? $tr('create_theme_intro', 'Avec vos droits de modération, la catégorie sera validée directement.')
                         : $tr('propose_theme_intro', 'Indiquez la thematique a ajouter et les pages qui devraient y etre liees.')) ?></p>
                 </div>
                 <button class="wiki-theme-dialog-close" type="button" data-wiki-theme-close aria-label="<?= e($tr('close', 'Fermer')) ?>">&times;</button>
@@ -191,7 +193,7 @@ ob_start();
                 <label><span><?= e($tr('propose_theme_reason', 'Pourquoi l\'ajouter ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e($tr('propose_theme_contact', 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="wiki-theme-dialog-actions">
-                    <button class="button" type="submit"><?= e($canAutoAcceptTheme ? $tr('create_theme_submit', 'Creer la categorie') : $tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
+                    <button class="button" type="submit"><?= e($canAutoAcceptTheme ? $tr('create_theme_submit', 'Créer la catégorie') : $tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
                     <button class="button secondary" type="button" data-wiki-theme-close><?= e($tr('cancel', 'Annuler')) ?></button>
                 </div>
             </form>

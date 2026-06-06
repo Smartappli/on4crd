@@ -76,18 +76,20 @@
   font-weight: 650;
 }
 
-[data-route="wiki"] .wiki-hero-side,
-[data-route="wiki"] .wiki-hero-actions {
+[data-route="wiki"] .wiki-hero-side {
   display: grid;
   gap: .65rem;
-  justify-items: end;
+  align-content: center;
+  justify-items: stretch;
+  min-width: min(100%, 30rem);
 }
 
 [data-route="wiki"] .wiki-hero-actions {
   display: flex;
   flex-wrap: wrap;
+  gap: .65rem;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   margin: 0;
 }
 
@@ -292,9 +294,12 @@
     grid-template-columns: 1fr;
   }
 
-  [data-route="wiki"] .wiki-hero-side,
-  [data-route="wiki"] .wiki-hero-actions {
+  [data-route="wiki"] .wiki-hero-side {
+    min-width: 0;
     justify-items: start;
+  }
+
+  [data-route="wiki"] .wiki-hero-actions {
     justify-content: flex-start;
   }
 }
