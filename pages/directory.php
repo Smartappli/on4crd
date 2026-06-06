@@ -253,7 +253,6 @@ ob_start();
                 $phone = trim((string) ($member['phone'] ?? ''));
                 $country = trim((string) ($member['country'] ?? ''));
                 $address = trim((string) ($member['address'] ?? ''));
-                $postalCode = trim((string) ($member['postal_code'] ?? ''));
                 $qth = trim((string) ($member['qth'] ?? ''));
                 $grid = trim((string) ($member['locator'] ?? ''));
                 $qrzUrl = trim((string) ($member['qrz_url'] ?? ''));
