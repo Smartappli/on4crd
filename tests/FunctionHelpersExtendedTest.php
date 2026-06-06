@@ -440,6 +440,31 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringNotContainsString('>ON3</option>', $html);
     }
 
+    public function testMemberProfileQslViaOptionsUseTranslatedLabelsAndKeepLegacyValues(): void
+    {
+        $t = static fn(string $key): string => [
+            'qsl_choice_bureau' => 'Bureau',
+            'qsl_choice_direct' => 'Direct',
+            'qsl_choice_bureau_direct' => 'Bureau ou direct',
+            'qsl_choice_lotw' => 'LoTW',
+            'qsl_choice_eqsl' => 'eQSL',
+            'qsl_choice_lotw_eqsl' => 'LoTW + eQSL',
+            'qsl_choice_qrz' => 'QRZ.com',
+            'qsl_choice_manager' => 'Via manager QSL',
+            'qsl_choice_no_qsl' => 'Pas de QSL',
+            'qsl_choice_other' => 'Autre',
+        ][$key] ?? $key;
+
+        $html = member_profile_qsl_via_options_html($t, 'bureau_direct');
+        $legacyHtml = member_profile_qsl_via_options_html($t, 'Via ON4CRD');
+
+        self::assertStringContainsString('value="bureau_direct" selected', $html);
+        self::assertStringContainsString('Bureau ou direct', $html);
+        self::assertStringContainsString('value="no_qsl"', $html);
+        self::assertStringContainsString('Pas de QSL', $html);
+        self::assertStringContainsString('value="Via ON4CRD" selected', $legacyHtml);
+    }
+
     public function testMemberProfileChoicePostKeepsAllowedValuesOnly(): void
     {
         self::assertSame(
@@ -506,6 +531,33 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertContains('cq_zone', $labels);
         self::assertContains('qrz_url', $labels);
         self::assertStringContainsString('country-with-flag', (string) $rows[0]['html']);
+    }
+
+    public function testMemberProfilePreviewRowsTranslateQslChoiceCodes(): void
+    {
+        $t = static fn(string $key): string => [
+            'qsl_via' => 'QSL via',
+            'qsl_choice_bureau' => 'Bureau',
+            'qsl_choice_direct' => 'Direct',
+            'qsl_choice_bureau_direct' => 'Bureau ou direct',
+            'qsl_choice_lotw' => 'LoTW',
+            'qsl_choice_eqsl' => 'eQSL',
+            'qsl_choice_lotw_eqsl' => 'LoTW + eQSL',
+            'qsl_choice_qrz' => 'QRZ.com',
+            'qsl_choice_manager' => 'Via manager QSL',
+            'qsl_choice_no_qsl' => 'Pas de QSL',
+            'qsl_choice_other' => 'Autre',
+        ][$key] ?? $key;
+        $member = [
+            'qsl_via' => 'no_qsl',
+            'visibility_qsl' => 'public',
+        ];
+
+        $rows = member_profile_preview_rows($member, 'public', $t);
+
+        self::assertSame('QSL via', $rows[0]['label']);
+        self::assertSame('Pas de QSL', $rows[0]['text']);
+        self::assertSame('Pas de QSL', $rows[0]['html']);
     }
 
     public function testMemberQrzSaveKeepsExistingUrlForSameCallsign(): void

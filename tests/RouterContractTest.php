@@ -645,4 +645,19 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('<option value="ON3">ON3</option>', $register);
         self::assertStringNotContainsString('<option value="ON2">ON2</option>', $register);
     }
+
+    public function testProfileAndRegisterUseSharedQslViaChoices(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        self::assertIsString($profile);
+        self::assertIsString($register);
+
+        self::assertStringContainsString('$qslViaOptionsHtml = member_profile_qsl_via_options_html($t, (string) ($member[\'qsl_via\'] ?? \'\'));', $profile);
+        self::assertStringContainsString('$qslViaOptionsHtml = member_profile_qsl_via_options_html($t);', $register);
+        self::assertStringContainsString('<select name="qsl_via"><?= $qslViaOptionsHtml ?></select>', $profile);
+        self::assertStringContainsString('<select name="qsl_via">\' . $qslViaOptionsHtml . \'</select>', $register);
+        self::assertStringNotContainsString('<input type="text" name="qsl_via"', $profile);
+        self::assertStringNotContainsString('<input type="text" name="qsl_via"', $register);
+    }
 }
