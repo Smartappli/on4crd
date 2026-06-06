@@ -89,8 +89,13 @@ if ($dashboardPersistenceEnabled) {
 }
 $selectedWidgets = [];
 $seenSelected = [];
+$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links'];
+$hadLegacyUtilityWidget = false;
 foreach ($selected as $row) {
     $widgetKey = (string) ($row['widget_key'] ?? '');
+    if (in_array($widgetKey, $legacyUtilityWidgetKeys, true)) {
+        $hadLegacyUtilityWidget = true;
+    }
     if ($widgetKey === '' || !array_key_exists($widgetKey, $availableWidgets) || isset($seenSelected[$widgetKey])) {
         continue;
     }
@@ -101,15 +106,24 @@ foreach ($selected as $row) {
         'config' => is_array($decodedConfig) ? $decodedConfig : [],
     ];
 }
+$radioDefaultWidgetKeys = array_values(array_intersect(
+    array_merge(['welcome', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog())),
+    array_keys($availableWidgets)
+));
 if ($selectedWidgets === []) {
-    $defaultWidgetKeys = array_values(array_intersect(
-        array_merge(['welcome', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog())),
-        array_keys($availableWidgets)
-    ));
+    $defaultWidgetKeys = $radioDefaultWidgetKeys;
     if ($defaultWidgetKeys === []) {
         $defaultWidgetKeys = array_slice(array_keys($availableWidgets), 0, 4);
     }
     $selectedWidgets = array_map(static fn(string $key): array => ['key' => $key, 'config' => []], $defaultWidgetKeys);
+} elseif ($hadLegacyUtilityWidget) {
+    foreach ($radioDefaultWidgetKeys as $widgetKey) {
+        if (isset($seenSelected[$widgetKey])) {
+            continue;
+        }
+        $seenSelected[$widgetKey] = true;
+        $selectedWidgets[] = ['key' => $widgetKey, 'config' => []];
+    }
 }
 $selectedKeys = array_map(static fn(array $widget): string => (string) $widget['key'], $selectedWidgets);
 $availableToAdd = array_filter($availableWidgets, static fn(string $key): bool => !in_array($key, $selectedKeys, true), ARRAY_FILTER_USE_KEY);

@@ -295,11 +295,76 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString("array_merge(['welcome', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog()))", $dashboard);
     }
 
+    public function testHamWeatherAdviceWidgetHidesCalculationDetails(): void
+    {
+        $source = file_get_contents(__DIR__ . '/../app/ham_weather_advice.php');
+        self::assertIsString($source);
+        $returnBlock = strstr($source, 'return \'<div class="grid gap-4">\'');
+        self::assertIsString($returnBlock);
+
+        self::assertStringContainsString('$i18n[\'radio_info\']', $returnBlock);
+        foreach (['input_info', 'location', 'local_hour', 'local_weather', 'geomagnetic', 'updated_at'] as $detailKey) {
+            self::assertStringNotContainsString('$i18n[\'' . $detailKey . '\']', $returnBlock);
+        }
+    }
+
+    public function testHamWeatherAdviceUsesAgrometTokenFromEnvironment(): void
+    {
+        $source = file_get_contents(__DIR__ . '/../app/ham_weather_advice.php');
+        self::assertIsString($source);
+
+        self::assertStringContainsString("env('AGROMET_API_TOKEN'", $source);
+        self::assertStringContainsString("sprintf('Authorization: Token %s', \$token)", $source);
+        self::assertStringNotContainsString('my secret token', $source);
+    }
+
+    public function testAgrometHourlyUrlUsesConfigurableStationsAndRecentDates(): void
+    {
+        $_SERVER['AGROMET_API_BASE_URL'] = 'https://example.test/agromet';
+        $_SERVER['AGROMET_STATION_SIDS'] = '2,3';
+
+        $url = ham_agromet_hourly_url(new DateTimeImmutable('2026-06-06T12:00:00+02:00'));
+
+        self::assertSame('https://example.test/agromet/tsa,plu,hra,vvt/2,3/2026-06-05/2026-06-06/', $url);
+    }
+
+    public function testAgrometCurrentWeatherMapsLatestHourlyMeasurements(): void
+    {
+        $payload = [
+            'results' => [
+                ['datetime' => '2026-06-06T10:00:00+02:00', 'sid' => 1, 'tsa' => 12.0, 'hra' => 80, 'plu' => 0.0, 'vvt' => 2.0],
+                ['datetime' => '2026-06-06T11:00:00+02:00', 'sid' => 26, 'tsa' => 14.1, 'hra' => 91, 'plu' => 0.1, 'vvt' => 3.7],
+            ],
+        ];
+
+        $current = ham_agromet_current_weather($payload);
+
+        self::assertIsArray($current);
+        self::assertSame(14.1, $current['temperature_2m']);
+        self::assertSame(91, $current['relative_humidity_2m']);
+        self::assertSame(0.1, $current['precipitation']);
+        self::assertEqualsWithDelta(13.32, $current['wind_speed_10m'], 0.001);
+        self::assertSame('2026-06-06T11:00:00+02:00', $current['time']);
+    }
+
+    public function testDashboardWidgetCatalogScrollsFromLeftInsidePanel(): void
+    {
+        $css = file_get_contents(__DIR__ . '/../assets/css/app.css');
+        self::assertIsString($css);
+        $css = str_replace("\r\n", "\n", $css);
+
+        self::assertStringContainsString(".dashboard-offcanvas {\n", $css);
+        self::assertStringContainsString("  direction: rtl;\n", $css);
+        self::assertStringContainsString('.dashboard-offcanvas > * { direction: ltr; }', $css);
+    }
+
     public function testDashboardCatalogRestoresHamqslAndRemovesLegacyUtilityWidgets(): void
     {
         $catalog = widget_catalog();
         $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
         self::assertIsString($renderer);
+        self::assertIsString($dashboard);
 
         foreach (array_keys(hamqsl_widget_catalog()) as $hamqslKey) {
             self::assertArrayHasKey($hamqslKey, $catalog);
@@ -308,6 +373,9 @@ final class FunctionHelpersTest extends TestCase
             self::assertArrayNotHasKey($removedKey, $catalog);
             self::assertStringNotContainsString("case '" . $removedKey . "':", $renderer);
         }
+        self::assertStringContainsString("\$legacyUtilityWidgetKeys = ['club_status', 'events', 'quick_links'];", $dashboard);
+        self::assertStringContainsString('$hadLegacyUtilityWidget', $dashboard);
+        self::assertStringContainsString('$radioDefaultWidgetKeys', $dashboard);
     }
 
     public function testApplicationPhpFilesDoNotContainCommonMojibakeSequences(): void

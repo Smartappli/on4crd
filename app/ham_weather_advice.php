@@ -3,6 +3,206 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/widget_radio_helpers.php';
 
+if (!function_exists('ham_agromet_hourly_url')) {
+function ham_agromet_hourly_url(?DateTimeImmutable $now = null): string
+{
+    $baseUrl = rtrim((string) env('AGROMET_API_BASE_URL', 'https://agromet.be/fr/agromet/api/v3/get_pameseb_hourly'), '/');
+    $sensors = preg_replace('/[^a-z0-9_,]/i', '', (string) env('AGROMET_SENSORS', 'tsa,plu,hra,vvt'));
+    $stations = preg_replace('/[^a-z0-9_,]/i', '', (string) env('AGROMET_STATION_SIDS', '1,26'));
+    $sensors = $sensors !== '' ? $sensors : 'tsa,plu,hra,vvt';
+    $stations = $stations !== '' ? $stations : '1,26';
+    $now = $now ?? new DateTimeImmutable('now', new DateTimeZone('Europe/Brussels'));
+    $to = $now->format('Y-m-d');
+    $from = $now->sub(new DateInterval('P1D'))->format('Y-m-d');
+
+    return $baseUrl . '/' . $sensors . '/' . $stations . '/' . $from . '/' . $to . '/';
+}
+}
+
+if (!function_exists('ham_agromet_api_json')) {
+function ham_agromet_api_json(string $url, string $token): ?array
+{
+    $headers = [
+        'Content-Type: application/json',
+        'Accept: application/json',
+        sprintf('Authorization: Token %s', $token),
+        'User-Agent: ON4CRD-Agromet/1.0',
+    ];
+
+    if (function_exists('curl_init')) {
+        $curl = curl_init($url);
+        if ($curl === false) {
+            return null;
+        }
+        curl_setopt_array($curl, [
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_CONNECTTIMEOUT => 4,
+            CURLOPT_TIMEOUT => 8,
+        ]);
+        $raw = curl_exec($curl);
+        $status = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        curl_close($curl);
+        if (!is_string($raw) || trim($raw) === '' || $status >= 400) {
+            return null;
+        }
+    } else {
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 8,
+                'header' => implode("\r\n", $headers) . "\r\n",
+            ],
+        ]);
+        $raw = @file_get_contents($url, false, $context);
+        if (!is_string($raw) || trim($raw) === '') {
+            return null;
+        }
+    }
+
+    $decoded = json_decode($raw, true);
+    return is_array($decoded) ? $decoded : null;
+}
+}
+
+if (!function_exists('ham_agromet_row_timestamp')) {
+function ham_agromet_row_timestamp(array $row): string
+{
+    foreach (['timestamp', 'time', 'datetime', 'date_time', 'date', 'dt', 'moment'] as $key) {
+        $value = $row[$key] ?? null;
+        if (is_string($value) && trim($value) !== '') {
+            return trim($value);
+        }
+    }
+
+    foreach ($row as $value) {
+        if (is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}/', $value) === 1) {
+            return trim($value);
+        }
+    }
+
+    return '';
+}
+}
+
+if (!function_exists('ham_agromet_row_station')) {
+function ham_agromet_row_station(array $row): string
+{
+    foreach (['station_sid', 'station_id', 'sid', 'station', 'point'] as $key) {
+        $value = $row[$key] ?? null;
+        if (is_scalar($value) && trim((string) $value) !== '') {
+            return trim((string) $value);
+        }
+    }
+
+    return 'default';
+}
+}
+
+if (!function_exists('ham_agromet_numeric_value')) {
+function ham_agromet_numeric_value(array $row, string $sensor): ?float
+{
+    $sensor = strtolower($sensor);
+    foreach ([$sensor, strtoupper($sensor), $sensor . '_value', 'value_' . $sensor] as $key) {
+        $value = $row[$key] ?? null;
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+    }
+
+    foreach (['data', 'values', 'measurements'] as $containerKey) {
+        $container = $row[$containerKey] ?? null;
+        if (is_array($container)) {
+            $value = ham_agromet_numeric_value($container, $sensor);
+            if ($value !== null) {
+                return $value;
+            }
+        }
+    }
+
+    $rowSensor = strtolower(trim((string) ($row['sensor'] ?? $row['code'] ?? $row['parameter'] ?? $row['variable'] ?? '')));
+    if ($rowSensor === $sensor) {
+        foreach (['value', 'valeur', 'measurement', 'mesure'] as $valueKey) {
+            $value = $row[$valueKey] ?? null;
+            if (is_numeric($value)) {
+                return (float) $value;
+            }
+        }
+    }
+
+    return null;
+}
+}
+
+if (!function_exists('ham_agromet_current_weather')) {
+function ham_agromet_current_weather(array $payload): ?array
+{
+    $rows = $payload['results'] ?? $payload;
+    if (!is_array($rows)) {
+        return null;
+    }
+
+    $buckets = [];
+    foreach ($rows as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+        $timestamp = ham_agromet_row_timestamp($row);
+        $bucketKey = $timestamp . '|' . ham_agromet_row_station($row);
+        $buckets[$bucketKey] ??= ['timestamp' => $timestamp, 'values' => []];
+        foreach (['tsa', 'hra', 'plu', 'vvt'] as $sensor) {
+            $value = ham_agromet_numeric_value($row, $sensor);
+            if ($value !== null) {
+                $buckets[$bucketKey]['values'][$sensor] = $value;
+            }
+        }
+    }
+
+    $bestBucket = null;
+    foreach ($buckets as $bucket) {
+        if (($bucket['values'] ?? []) === []) {
+            continue;
+        }
+        if ($bestBucket === null) {
+            $bestBucket = $bucket;
+            continue;
+        }
+        $bucketTime = strtotime((string) ($bucket['timestamp'] ?? '')) ?: 0;
+        $bestTime = strtotime((string) ($bestBucket['timestamp'] ?? '')) ?: 0;
+        $bucketCount = count((array) ($bucket['values'] ?? []));
+        $bestCount = count((array) ($bestBucket['values'] ?? []));
+        if ($bucketTime > $bestTime || ($bucketTime === $bestTime && $bucketCount > $bestCount)) {
+            $bestBucket = $bucket;
+        }
+    }
+
+    if (!is_array($bestBucket)) {
+        return null;
+    }
+
+    $values = (array) ($bestBucket['values'] ?? []);
+    $current = [];
+    if (isset($values['tsa'])) {
+        $current['temperature_2m'] = (float) $values['tsa'];
+    }
+    if (isset($values['hra'])) {
+        $current['relative_humidity_2m'] = (int) round((float) $values['hra']);
+    }
+    if (isset($values['plu'])) {
+        $current['precipitation'] = (float) $values['plu'];
+    }
+    if (isset($values['vvt'])) {
+        $current['wind_speed_10m'] = (float) $values['vvt'] * 3.6;
+    }
+    if ((string) ($bestBucket['timestamp'] ?? '') !== '') {
+        $current['time'] = (string) $bestBucket['timestamp'];
+    }
+
+    return $current !== [] ? $current : null;
+}
+}
+
 if (!function_exists('render_ham_weather_advice')) {
 function render_ham_weather_advice(array $user = []): string
 {
@@ -327,27 +527,40 @@ function render_ham_weather_advice(array $user = []): string
     $locator = $memberLocator !== '' ? $memberLocator : $defaultLocator;
     $coordinates = maidenhead_to_coordinates($locator) ?? ['latitude' => 50.3150, 'longitude' => 4.9452];
 
-    $weatherUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
-        'latitude' => number_format((float) $coordinates['latitude'], 4, '.', ''),
-        'longitude' => number_format((float) $coordinates['longitude'], 4, '.', ''),
-        'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
-        'timezone' => 'auto',
-    ]);
-    $weatherPayload = cache_remember('ham:advice:weather:' . sha1($weatherUrl), 300, static function () use ($weatherUrl): ?array {
-        $context = stream_context_create([
-            'http' => [
-                'method' => 'GET',
-                'timeout' => 6,
-                'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Propagation/1.0\r\n",
-            ],
+    $currentWeather = null;
+    $agrometToken = trim((string) env('AGROMET_API_TOKEN', ''));
+    if ($agrometToken !== '') {
+        $agrometUrl = ham_agromet_hourly_url();
+        $agrometPayload = cache_remember('ham:advice:weather:agromet:' . sha1($agrometUrl), 300, static function () use ($agrometUrl, $agrometToken): ?array {
+            return ham_agromet_api_json($agrometUrl, $agrometToken);
+        });
+        $currentWeather = is_array($agrometPayload) ? ham_agromet_current_weather($agrometPayload) : null;
+    }
+
+    if (!is_array($currentWeather)) {
+        $weatherUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
+            'latitude' => number_format((float) $coordinates['latitude'], 4, '.', ''),
+            'longitude' => number_format((float) $coordinates['longitude'], 4, '.', ''),
+            'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
+            'timezone' => 'auto',
         ]);
-        $raw = @file_get_contents($weatherUrl, false, $context);
-        if (!is_string($raw) || trim($raw) === '') {
-            return null;
-        }
-        $decoded = json_decode($raw, true);
-        return is_array($decoded) ? $decoded : null;
-    });
+        $weatherPayload = cache_remember('ham:advice:weather:' . sha1($weatherUrl), 300, static function () use ($weatherUrl): ?array {
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'timeout' => 6,
+                    'header' => "Accept: application/json\r\nUser-Agent: ON4CRD-Propagation/1.0\r\n",
+                ],
+            ]);
+            $raw = @file_get_contents($weatherUrl, false, $context);
+            if (!is_string($raw) || trim($raw) === '') {
+                return null;
+            }
+            $decoded = json_decode($raw, true);
+            return is_array($decoded) ? $decoded : null;
+        });
+        $currentWeather = is_array($weatherPayload) && is_array($weatherPayload['current'] ?? null) ? $weatherPayload['current'] : [];
+    }
 
     $kpPayload = cache_remember('ham:advice:kp', 300, static function (): ?array {
         $context = stream_context_create([
@@ -365,24 +578,18 @@ function render_ham_weather_advice(array $user = []): string
         return is_array($decoded) ? $decoded : null;
     });
 
-    $currentWeather = is_array($weatherPayload) && is_array($weatherPayload['current'] ?? null) ? $weatherPayload['current'] : [];
     $temperature = is_numeric($currentWeather['temperature_2m'] ?? null) ? (float) $currentWeather['temperature_2m'] : 15.0;
     $wind = is_numeric($currentWeather['wind_speed_10m'] ?? null) ? (float) $currentWeather['wind_speed_10m'] : 10.0;
     $weatherCode = (int) ($currentWeather['weather_code'] ?? -1);
     $localTime = trim((string) ($currentWeather['time'] ?? ''));
     $hour = (int) gmdate('G');
-    $updatedLabel = '';
     if ($localTime !== '') {
         try {
             $dtLocal = new DateTimeImmutable($localTime);
             $hour = (int) $dtLocal->format('G');
-            $updatedLabel = $dtLocal->format('d-m-Y H:i');
         } catch (Throwable $throwable) {
             $hour = (int) gmdate('G');
-            $updatedLabel = gmdate('d-m-Y H:i');
         }
-    } else {
-        $updatedLabel = gmdate('d-m-Y H:i');
     }
 
     $humidity = is_numeric($currentWeather['relative_humidity_2m'] ?? null) ? (int) $currentWeather['relative_humidity_2m'] : 60;
@@ -392,7 +599,6 @@ function render_ham_weather_advice(array $user = []): string
     $kp = is_array($measurement) ? (float) ($measurement['kp'] ?? 3.0) : null;
     $kpTrend = is_array($kpPayload) ? extract_kp_trend($kpPayload) : null;
     $kpTrendForScoring = is_numeric($kpTrend) ? (float) $kpTrend : 0.0;
-    $kpTrendSummary = kp_trend_summary($kpTrend, $locale);
     $kpForScoring = is_numeric($kp) ? (float) $kp : 3.0;
 
     $month = (int) gmdate('n');
@@ -451,20 +657,6 @@ function render_ham_weather_advice(array $user = []): string
         . '<li><strong>' . e((string) $i18n['bands']) . '</strong> ' . e(implode(' • ', $bands)) . '</li>'
         . '<li><strong>' . e((string) $i18n['modes']) . '</strong> ' . e(implode(' • ', $modes)) . '</li>'
         . '<li><strong>' . e((string) $i18n['window']) . '</strong> ' . e($timeWindow) . '</li>'
-        . '</ul>'
-        . '</section>'
-        . '<section>'
-        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $i18n['input_info']) . '</h3>'
-        . '<ul class="mt-2 list-clean">'
-        . '<li><strong>' . e((string) $i18n['location']) . '</strong> ' . e($locator) . '</li>'
-        . '<li><strong>' . e((string) $i18n['local_hour']) . '</strong> ' . e(str_pad((string) $hour, 2, '0', STR_PAD_LEFT)) . 'h</li>'
-        . '<li><strong>' . e((string) $i18n['local_weather']) . '</strong> T=' . e(number_format($temperature, 1, ',', '')) . '°C, H=' . e((string) $humidity) . '%, vent ' . e(number_format($wind, 1, ',', '')) . ' km/h, nuages ' . e((string) $cloudCover) . '%, pluie ' . e(number_format($precipitation, 1, ',', '')) . ' mm/h</li>'
-        . '<li><strong>' . e((string) $i18n['geomagnetic']) . '</strong> '
-        . (is_numeric($kp)
-            ? 'Kp=' . e(number_format((float) $kp, 1, ',', '')) . ($kpTrendSummary !== null ? '; ' . e($kpTrendSummary) : '')
-            : e((string) $i18n['kp_unavailable']))
-        . '</li>'
-        . '<li><strong>' . e((string) $i18n['updated_at']) . '</strong> ' . e($updatedLabel) . '</li>'
         . '</ul>'
         . '</section>'
         . '</div>';
