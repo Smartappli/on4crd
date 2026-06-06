@@ -607,11 +607,13 @@ function member_profile_operator_since_options_html(string $currentValue = ''): 
 }
 }
 
-if (!function_exists('member_profile_licence_class_options_html')) {
-function member_profile_licence_class_options_html(callable $t, string $currentValue = ''): string
+if (!function_exists('member_profile_licence_class_choices')) {
+/**
+ * @return array<string, string>
+ */
+function member_profile_licence_class_choices(callable $t): array
 {
-    $currentValue = trim($currentValue);
-    $choices = [
+    return [
         '' => '',
         'Aucune' => (string) $t('licence_none'),
         'ONL' => (string) $t('licence_onl'),
@@ -621,6 +623,14 @@ function member_profile_licence_class_options_html(callable $t, string $currentV
         'HAREC' => (string) $t('licence_harec'),
         'Autre' => (string) $t('licence_other'),
     ];
+}
+}
+
+if (!function_exists('member_profile_licence_class_options_html')) {
+function member_profile_licence_class_options_html(callable $t, string $currentValue = ''): string
+{
+    $currentValue = trim($currentValue);
+    $choices = member_profile_licence_class_choices($t);
 
     $html = '';
     $hasCurrentValue = $currentValue === '';
@@ -637,6 +647,20 @@ function member_profile_licence_class_options_html(callable $t, string $currentV
     }
 
     return $html;
+}
+}
+
+if (!function_exists('member_profile_licence_class_display_text')) {
+function member_profile_licence_class_display_text(callable $t, string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return '';
+    }
+
+    $choices = member_profile_licence_class_choices($t);
+
+    return (string) ($choices[$value] ?? $value);
 }
 }
 
@@ -873,7 +897,7 @@ function member_profile_preview_fields(callable $t): array
         'postal_code' => ['label' => (string) $t('postal_code'), 'visibility' => 'visibility_postal_code'],
         'qth' => ['label' => (string) $t('qth'), 'visibility' => 'visibility_qth'],
         'locator' => ['label' => (string) $t('grid'), 'visibility' => 'visibility_locator'],
-        'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class'],
+        'licence_class' => ['label' => (string) $t('licence'), 'visibility' => 'visibility_licence_class', 'type' => 'choice', 'choices' => member_profile_licence_class_choices($t)],
         'operator_since' => ['label' => (string) $t('operator_since'), 'visibility' => 'visibility_operator_since'],
         'cq_zone' => ['label' => (string) $t('cq_zone'), 'visibility' => 'visibility_country'],
         'itu_zone' => ['label' => (string) $t('itu_zone'), 'visibility' => 'visibility_country'],
