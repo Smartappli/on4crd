@@ -193,23 +193,23 @@ function render_widget(string $slug, array $user = []): string
             }
 
             $items = [
-                '<li><strong>' . e((string) $labels['weather']) . ' : ' . e((string) $summary) . '</strong></li>',
-                '<li><strong>' . e((string) $labels['source']) . ' :</strong> ' . e($sourceLabel) . '</li>',
+                '<div class="dashboard-weather-item"><span class="help">' . e((string) $labels['weather']) . '</span><strong>' . e((string) $summary) . '</strong></div>',
+                '<div class="dashboard-weather-item"><span class="help">' . e((string) $labels['source']) . '</span><strong>' . e($sourceLabel) . '</strong></div>',
             ];
             if (is_numeric($temperature)) {
-                $items[] = '<li><strong>' . e((string) $labels['temperature']) . ' :</strong> ' . e(number_format((float) $temperature, 1, ',', '')) . '&deg;C</li>';
+                $items[] = '<div class="dashboard-weather-item"><span class="help">' . e((string) $labels['temperature']) . '</span><strong>' . e(number_format((float) $temperature, 1, ',', '')) . '&deg;C</strong></div>';
             }
             if (is_numeric($humidity)) {
-                $items[] = '<li><strong>' . e((string) $labels['humidity']) . ' :</strong> ' . e((string) $humidity) . '%</li>';
+                $items[] = '<div class="dashboard-weather-item"><span class="help">' . e((string) $labels['humidity']) . '</span><strong>' . e((string) $humidity) . '%</strong></div>';
             }
             if (is_numeric($wind)) {
-                $items[] = '<li><strong>' . e((string) $labels['wind']) . ' :</strong> ' . e(number_format((float) $wind, 1, ',', '')) . ' km/h</li>';
+                $items[] = '<div class="dashboard-weather-item"><span class="help">' . e((string) $labels['wind']) . '</span><strong>' . e(number_format((float) $wind, 1, ',', '')) . ' km/h</strong></div>';
             }
             if (is_numeric($precipitation)) {
-                $items[] = '<li><strong>' . e((string) $labels['rain']) . ' :</strong> ' . e(number_format((float) $precipitation, 1, ',', '')) . ' mm/h</li>';
+                $items[] = '<div class="dashboard-weather-item"><span class="help">' . e((string) $labels['rain']) . '</span><strong>' . e(number_format((float) $precipitation, 1, ',', '')) . ' mm/h</strong></div>';
             }
 
-            return '<ul class="list-clean">' . implode('', $items) . '</ul>';
+            return '<div class="dashboard-weather-grid">' . implode('', $items) . '</div>';
         default:
             $widgetUnavailable = match ($locale) {
                 'en' => 'Widget unavailable.',
