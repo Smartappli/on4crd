@@ -10,6 +10,26 @@
   gap: 1rem;
 }
 
+.site-search-box label {
+  display: block;
+  margin: 0;
+}
+
+.site-search-box label span {
+  display: block;
+}
+
+.site-search-box input[type="search"] {
+  width: 100%;
+  height: 3.25rem;
+  margin-top: .35rem;
+  padding: .75rem .9rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  color: var(--text);
+}
+
 .site-search-source-tabs,
 .site-search-pagination {
   display: flex;
