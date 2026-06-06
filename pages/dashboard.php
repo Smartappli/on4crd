@@ -147,6 +147,18 @@ $dashboardConfig = [
     'saveEnabled' => $dashboardPersistenceEnabled,
     'refreshMs' => 90000,
     'csrf' => csrf_token(),
+    'i18n' => [
+        'add' => $t('add'),
+        'save_unavailable' => $t('save_unavailable'),
+        'saving' => $t('saving'),
+        'invalid_server_response' => $t('invalid_server_response'),
+        'save_error' => $t('save_error'),
+        'layout_saved_at' => $t('layout_saved_at'),
+        'remove_widget' => $t('remove_widget'),
+        'preview_unavailable' => $t('preview_unavailable'),
+        'loading' => $t('loading'),
+        'load_widget_error' => $t('load_widget_error'),
+    ],
 ];
 
 ob_start();

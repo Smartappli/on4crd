@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Adjon hozzá kedvenceket az ajánlások javításához.',
   'nudge_review_notifications' => 'Ellenőrizze az olvasatlan értesítéseket.',
   'nudge_enable_recommendations' => 'Személyre szabott ajánlások engedélyezése.',
+  'save_unavailable' => 'A mentés nem érhető el: hiányzik a dashboard_widgets tábla.',
+  'saving' => 'Mentés...',
+  'invalid_server_response' => 'Érvénytelen szerverválasz.',
+  'save_error' => 'Mentési hiba.',
+  'layout_saved_at' => 'Az elrendezés mentve: {time}.',
+  'remove_widget' => 'Widget eltávolítása',
+  'preview_unavailable' => 'Az előnézet nem érhető el.',
+  'loading' => 'Betöltés...',
+  'load_widget_error' => 'A widget nem tölthető be.',
 );

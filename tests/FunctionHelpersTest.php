@@ -392,6 +392,43 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('padding: .4rem .55rem;', $css);
     }
 
+    public function testDashboardJavascriptUsesLocalizedMessages(): void
+    {
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        $dashboardJs = file_get_contents(__DIR__ . '/../assets/js/modules/dashboard.js');
+        self::assertIsString($dashboard);
+        self::assertIsString($dashboardJs);
+
+        $keys = [
+            'save_unavailable',
+            'saving',
+            'invalid_server_response',
+            'save_error',
+            'layout_saved_at',
+            'remove_widget',
+            'preview_unavailable',
+            'loading',
+            'load_widget_error',
+        ];
+
+        self::assertStringContainsString("'i18n' => [", $dashboard);
+        foreach ($keys as $key) {
+            self::assertStringContainsString("'" . $key . "' => \$t('" . $key . "')", $dashboard);
+        }
+        self::assertStringContainsString('dashboardConfig.i18n', $dashboardJs);
+
+        foreach (['Sauvegarde indisponible', 'Enregistrement', 'Réponse serveur invalide', 'Erreur de sauvegarde', 'Disposition enregistrée', 'Retirer le widget', 'Prévisualisation indisponible', 'Chargement', 'Impossible de charger'] as $hardCodedFrench) {
+            self::assertStringNotContainsString($hardCodedFrench, $dashboardJs);
+        }
+
+        $messages = i18n_domain_messages('dashboard');
+        foreach (supported_locales() as $locale) {
+            foreach ($keys as $key) {
+                self::assertNotSame('', trim((string) ($messages[$locale][$key] ?? '')), sprintf('Missing dashboard JS translation %s for %s.', $key, $locale));
+            }
+        }
+    }
+
     public function testDashboardClockWidgetUsesHomeLiveClockMarkupAndPropagationIsRemoved(): void
     {
         $catalog = widget_catalog();

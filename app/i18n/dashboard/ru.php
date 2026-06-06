@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Добавьте избранное для улучшения рекомендаций.',
   'nudge_review_notifications' => 'Проверьте непрочитанные уведомления.',
   'nudge_enable_recommendations' => 'Включите персонализированные рекомендации.',
+  'save_unavailable' => 'Сохранение недоступно: отсутствует таблица dashboard_widgets.',
+  'saving' => 'Сохранение...',
+  'invalid_server_response' => 'Недопустимый ответ сервера.',
+  'save_error' => 'Ошибка сохранения.',
+  'layout_saved_at' => 'Макет сохранён в {time}.',
+  'remove_widget' => 'Удалить виджет',
+  'preview_unavailable' => 'Предпросмотр недоступен.',
+  'loading' => 'Загрузка...',
+  'load_widget_error' => 'Не удалось загрузить виджет.',
 );

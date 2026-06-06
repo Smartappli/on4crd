@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Pievienojiet izlasi, lai uzlabotu ieteikumus.',
   'nudge_review_notifications' => 'Pārbaudiet nelasītos paziņojumus.',
   'nudge_enable_recommendations' => 'Iespējot personalizētus ieteikumus.',
+  'save_unavailable' => 'Saglabāšana nav pieejama: trūkst tabulas dashboard_widgets.',
+  'saving' => 'Saglabā...',
+  'invalid_server_response' => 'Nederīga servera atbilde.',
+  'save_error' => 'Saglabāšanas kļūda.',
+  'layout_saved_at' => 'Izkārtojums saglabāts plkst. {time}.',
+  'remove_widget' => 'Noņemt logrīku',
+  'preview_unavailable' => 'Priekšskatījums nav pieejams.',
+  'loading' => 'Ielādē...',
+  'load_widget_error' => 'Neizdevās ielādēt logrīku.',
 );

@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'সুপারিশ উন্নত করতে ফেভারিট যোগ করুন।',
   'nudge_review_notifications' => 'অপঠিত নোটিফিকেশন দেখুন।',
   'nudge_enable_recommendations' => 'ব্যক্তিগতকৃত সুপারিশ চালু করুন।',
+  'save_unavailable' => 'সংরক্ষণ উপলভ্য নয়: dashboard_widgets টেবিলটি নেই.',
+  'saving' => 'সংরক্ষণ হচ্ছে...',
+  'invalid_server_response' => 'সার্ভারের প্রতিক্রিয়া অকার্যকর.',
+  'save_error' => 'সংরক্ষণে ত্রুটি.',
+  'layout_saved_at' => 'লেআউট {time}-এ সংরক্ষিত হয়েছে.',
+  'remove_widget' => 'উইজেট সরান',
+  'preview_unavailable' => 'পূর্বরূপ উপলভ্য নয়.',
+  'loading' => 'লোড হচ্ছে...',
+  'load_widget_error' => 'উইজেট লোড করা যায়নি.',
 );

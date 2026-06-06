@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'أضف عناصر إلى المفضلة لتحسين النتائج.',
   'nudge_review_notifications' => 'راجع الإشعارات غير المقروءة.',
   'nudge_enable_recommendations' => 'فعّل التوصيات المخصصة.',
+  'save_unavailable' => 'الحفظ غير متاح: جدول dashboard_widgets مفقود.',
+  'saving' => 'جارٍ الحفظ...',
+  'invalid_server_response' => 'استجابة الخادم غير صالحة.',
+  'save_error' => 'خطأ في الحفظ.',
+  'layout_saved_at' => 'تم حفظ التخطيط في {time}.',
+  'remove_widget' => 'إزالة الودجت',
+  'preview_unavailable' => 'المعاينة غير متاحة.',
+  'loading' => 'جارٍ التحميل...',
+  'load_widget_error' => 'تعذر تحميل الودجت.',
 );

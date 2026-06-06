@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Přidáním oblíbených položek zlepšíte doporučení.',
   'nudge_review_notifications' => 'Zkontrolujte nepřečtená oznámení.',
   'nudge_enable_recommendations' => 'Povolit personalizovaná doporučení.',
+  'save_unavailable' => 'Ukládání není dostupné: chybí tabulka dashboard_widgets.',
+  'saving' => 'Ukládání...',
+  'invalid_server_response' => 'Neplatná odpověď serveru.',
+  'save_error' => 'Chyba při ukládání.',
+  'layout_saved_at' => 'Rozložení bylo uloženo v {time}.',
+  'remove_widget' => 'Odebrat widget',
+  'preview_unavailable' => 'Náhled není dostupný.',
+  'loading' => 'Načítání...',
+  'load_widget_error' => 'Widget se nepodařilo načíst.',
 );

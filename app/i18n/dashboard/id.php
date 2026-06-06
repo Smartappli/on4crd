@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Tambahkan favorit untuk meningkatkan rekomendasi.',
   'nudge_review_notifications' => 'Tinjau notifikasi yang belum dibaca.',
   'nudge_enable_recommendations' => 'Aktifkan rekomendasi yang dipersonalisasi.',
+  'save_unavailable' => 'Penyimpanan tidak tersedia: tabel dashboard_widgets tidak ada.',
+  'saving' => 'Menyimpan...',
+  'invalid_server_response' => 'Respons server tidak valid.',
+  'save_error' => 'Kesalahan penyimpanan.',
+  'layout_saved_at' => 'Tata letak disimpan pada {time}.',
+  'remove_widget' => 'Hapus widget',
+  'preview_unavailable' => 'Pratinjau tidak tersedia.',
+  'loading' => 'Memuat...',
+  'load_widget_error' => 'Widget tidak dapat dimuat.',
 );

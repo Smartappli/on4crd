@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Lisää suosikkeja parantaaksesi suosituksia.',
   'nudge_review_notifications' => 'Tarkista lukemattomat ilmoitukset.',
   'nudge_enable_recommendations' => 'Ota käyttöön henkilökohtaiset suositukset.',
+  'save_unavailable' => 'Tallennus ei ole käytettävissä: taulu dashboard_widgets puuttuu.',
+  'saving' => 'Tallennetaan...',
+  'invalid_server_response' => 'Virheellinen palvelimen vastaus.',
+  'save_error' => 'Tallennusvirhe.',
+  'layout_saved_at' => 'Asettelu tallennettiin klo {time}.',
+  'remove_widget' => 'Poista vimpain',
+  'preview_unavailable' => 'Esikatselu ei ole käytettävissä.',
+  'loading' => 'Ladataan...',
+  'load_widget_error' => 'Vimpainta ei voitu ladata.',
 );

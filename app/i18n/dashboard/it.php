@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Aggiungi preferiti per migliorare i suggerimenti.',
   'nudge_review_notifications' => 'Controlla le notifiche non lette.',
   'nudge_enable_recommendations' => 'Attiva le raccomandazioni personalizzate.',
+  'save_unavailable' => 'Salvataggio non disponibile: manca la tabella dashboard_widgets.',
+  'saving' => 'Salvataggio...',
+  'invalid_server_response' => 'Risposta del server non valida.',
+  'save_error' => 'Errore di salvataggio.',
+  'layout_saved_at' => 'Layout salvato alle {time}.',
+  'remove_widget' => 'Rimuovi widget',
+  'preview_unavailable' => 'Anteprima non disponibile.',
+  'loading' => 'Caricamento...',
+  'load_widget_error' => 'Impossibile caricare il widget.',
 );

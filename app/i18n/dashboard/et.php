@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Soovituste täiustamiseks lisage lemmikuid.',
   'nudge_review_notifications' => 'Kontrollige lugemata teatisi.',
   'nudge_enable_recommendations' => 'Lubage isikupärastatud soovitused.',
+  'save_unavailable' => 'Salvestamine pole saadaval: tabel dashboard_widgets puudub.',
+  'saving' => 'Salvestamine...',
+  'invalid_server_response' => 'Vigane serveri vastus.',
+  'save_error' => 'Salvestamise viga.',
+  'layout_saved_at' => 'Paigutus salvestati kell {time}.',
+  'remove_widget' => 'Eemalda vidin',
+  'preview_unavailable' => 'Eelvaade pole saadaval.',
+  'loading' => 'Laadimine...',
+  'load_widget_error' => 'Vidinat ei õnnestunud laadida.',
 );

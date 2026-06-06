@@ -46,4 +46,13 @@ return array (
   'nudge_add_favorites' => 'Tilføj favoritter for at forbedre anbefalingerne.',
   'nudge_review_notifications' => 'Tjek ulæste notifikationer.',
   'nudge_enable_recommendations' => 'Aktiver personlige anbefalinger.',
+  'save_unavailable' => 'Lagring er ikke tilgængelig: tabellen dashboard_widgets mangler.',
+  'saving' => 'Gemmer...',
+  'invalid_server_response' => 'Ugyldigt serversvar.',
+  'save_error' => 'Fejl ved lagring.',
+  'layout_saved_at' => 'Layoutet blev gemt kl. {time}.',
+  'remove_widget' => 'Fjern widget',
+  'preview_unavailable' => 'Forhåndsvisning er ikke tilgængelig.',
+  'loading' => 'Indlæser...',
+  'load_widget_error' => 'Widgetten kunne ikke indlæses.',
 );
