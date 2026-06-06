@@ -8,6 +8,7 @@ $user = current_user();
 $canManageAlbums = has_permission('albums.manage');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
     $action = (string) ($_POST['action'] ?? '');
     $user = require_login(route_url('albums'));
     verify_csrf();
@@ -69,6 +70,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     throw new RuntimeException('Demande invalide.');
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('albums'));
+    }
 }
 
 if (!table_exists('albums') || !table_exists('album_photos')) {

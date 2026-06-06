@@ -121,7 +121,16 @@ $formatAuctionDate = static function (mixed $value): string {
     $timestamp = strtotime((string) $value);
     return $timestamp !== false ? date('d/m/Y H:i', $timestamp) : '';
 };
-$auctionSubscribeUrl = current_user() !== null ? route_url('newsletter') : route_url('newsletter_public');
+$auctionSubscribeUrl = $user !== null ? route_url('newsletter') : route_url('newsletter_public');
+$proposalContactDefault = '';
+if ($user !== null) {
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
+}
+$showLotProposalForm = $user !== null && (string) ($_GET['propose_lot'] ?? '') === '1';
+$lotProposalUrl = $user !== null ? route_url('auctions', ['propose_lot' => '1']) : route_url('login', ['next' => route_url('auctions')]);
 
 ob_start();
 ?>
@@ -147,7 +156,7 @@ ob_start();
                     <p><?= e((string) $t['lots']) ?></p>
                 </div>
             </div>
-            <a class="button auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux enchères")) ?></a>
+            <p class="actions">`n                <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? 'Creer un lot' : 'Proposer un lot') ?></a>`n                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux encheres")) ?></a>`n            </p>
         </div>
     </header>
 

@@ -29,6 +29,7 @@ $categories = [
     'wanted' => $t('category_wanted'),
     'service' => $t('category_service'),
 ];
+$categories += content_proposal_accepted_categories('classifieds', 32);
 $statuses = [
     'draft' => $t('status_draft'),
     'pending' => $t('status_pending'),
