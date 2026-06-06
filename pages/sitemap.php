@@ -57,7 +57,8 @@ $xml = cache_remember('seo_sitemap_xml_v7', 300, static function (): string {
 
     foreach ($staticRoutes as $row) {
         $module = (string) ($row['module'] ?? '');
-        $moduleVisibility = $module !== '' ? (string) (module_row($module)['visibility'] ?? 'public') : 'public';
+        $moduleRow = $module !== '' ? module_row($module) : null;
+        $moduleVisibility = is_array($moduleRow) ? (string) ($moduleRow['visibility'] ?? 'public') : 'public';
         if ($module !== '' && (!module_enabled($module) || $moduleVisibility !== 'public')) {
             continue;
         }
