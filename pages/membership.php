@@ -10,8 +10,8 @@ $tr = static fn(string $key): string => (string) ($t[$key] ?? ($i18n['fr'][$key]
 $contactItems = [$tr('contact_item_1'), $tr('contact_item_2')];
 $requiredItems = [$tr('required_item_1'), $tr('required_item_2'), $tr('required_item_3'), $tr('required_item_4'), $tr('required_item_5'), $tr('required_item_6')];
 $reviewItems = [$tr('review_item_1'), $tr('review_item_2'), $tr('review_item_3')];
-$membershipImagePath = '/assets/membership/membership.jpg';
-$membershipImageAbsolutePath = __DIR__ . '/../assets/membership/membership.jpg';
+$membershipImagePath = '/assets/membership/membership.png';
+$membershipImageAbsolutePath = __DIR__ . '/../assets/membership/membership.png';
 $membershipImageUrl = is_file($membershipImageAbsolutePath) ? base_url($membershipImagePath) : '';
 $membershipUrl = route_url_with_locale('membership', $locale);
 
