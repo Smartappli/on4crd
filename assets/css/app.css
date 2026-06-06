@@ -652,22 +652,32 @@ textarea:focus-visible {
 .widget-card.dragging { opacity: .55; }
 .widget-card header, .row-between, .section-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
 .widget-body { margin-top: .8rem; }
+.widget-card[data-widget="open_meteo"] {
+  padding: .75rem;
+}
+.widget-card[data-widget="open_meteo"] .widget-body {
+  margin-top: .45rem;
+}
 .dashboard-weather-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .7rem;
+  gap: .45rem;
 }
 .dashboard-weather-item {
   display: grid;
-  gap: .15rem;
+  gap: .05rem;
   min-width: 0;
-  padding: .65rem .75rem;
+  padding: .4rem .55rem;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--panel-2);
+  line-height: 1.15;
 }
 .dashboard-weather-item strong {
   overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .dashboard-weather-grid { grid-template-columns: 1fr; }
 }
 #dashboard-save-status.error { color: var(--danger); }
 @media (max-width: 1280px) {

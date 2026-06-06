@@ -369,7 +369,9 @@ final class FunctionHelpersTest extends TestCase
     {
         $catalog = widget_catalog();
         $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        $css = file_get_contents(__DIR__ . '/../assets/css/app.css');
         self::assertIsString($renderer);
+        self::assertIsString($css);
 
         self::assertArrayHasKey('open_meteo', $catalog);
         self::assertStringContainsString('Agromet', (string) ($catalog['open_meteo']['description'] ?? ''));
@@ -381,6 +383,13 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString("'temperature' => 'Temperature'", $renderer);
         self::assertStringContainsString("'humidity' => 'Humidite'", $renderer);
         self::assertStringContainsString("'rain' => 'Pluie'", $renderer);
+        self::assertStringContainsString('dashboard-weather-grid', $renderer);
+        self::assertStringContainsString('dashboard-weather-item', $renderer);
+        self::assertStringContainsString('.dashboard-weather-grid', $css);
+        self::assertStringContainsString('grid-template-columns: repeat(2, minmax(0, 1fr));', $css);
+        self::assertStringContainsString('.widget-card[data-widget="open_meteo"]', $css);
+        self::assertStringContainsString('gap: .45rem;', $css);
+        self::assertStringContainsString('padding: .4rem .55rem;', $css);
     }
 
     public function testDashboardClockWidgetUsesHomeLiveClockMarkupAndPropagationIsRemoved(): void
