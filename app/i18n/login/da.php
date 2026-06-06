@@ -5,6 +5,7 @@ return array (
   'required' => 'Legitimationsoplysninger påkrævet.',
   'captcha_invalid' => 'Ugyldig captcha.',
   'auth_unavailable' => 'Godkendelsesmodulet er ikke tilgængeligt. Kør komponistinstallation.',
+  'member_unavailable' => 'Login er godkendt, men der blev ikke fundet en tilsvarende aktiv medlemsprofil.',
   'invalid_credentials' => 'Ugyldig kode eller adgangskode.',
   'too_many' => 'For mange forbindelsesforsøg. Prøv igen om et par minutter.',
   'not_verified' => 'Din konto er endnu ikke bekræftet.',

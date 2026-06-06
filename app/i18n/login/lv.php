@@ -5,6 +5,7 @@ return array (
   'required' => 'Nepieciešami akreditācijas dati.',
   'captcha_invalid' => 'Nederīgs captcha.',
   'auth_unavailable' => 'Autentifikācijas modulis nav pieejams. Palaidiet komponista instalēšanu.',
+  'member_unavailable' => 'Pieteikšanās ir apstiprināta, bet nav atrasts atbilstošs aktīvs biedra profils.',
   'invalid_credentials' => 'Nederīgs kods vai parole.',
   'too_many' => 'Pārāk daudz savienojuma mēģinājumu. Mēģiniet vēlreiz pēc dažām minūtēm.',
   'not_verified' => 'Jūsu konts vēl nav verificēts.',

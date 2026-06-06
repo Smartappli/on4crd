@@ -5,6 +5,7 @@ return array (
   'required' => 'Mandaat on nõutav.',
   'captcha_invalid' => 'Vale captcha.',
   'auth_unavailable' => 'Autentimismoodul pole saadaval. Käivitage helilooja installimine.',
+  'member_unavailable' => 'Sisselogimine kinnitati, kuid vastavat aktiivset liikmeprofiili ei leitud.',
   'invalid_credentials' => 'Vale kood või parool.',
   'too_many' => 'Liiga palju ühenduskatseid. Proovige mõne minuti pärast uuesti.',
   'not_verified' => 'Teie konto pole veel kinnitatud.',

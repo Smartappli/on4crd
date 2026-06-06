@@ -5,6 +5,7 @@ return array (
   'required' => 'Potrebne so poverilnice.',
   'captcha_invalid' => 'Neveljavna captcha.',
   'auth_unavailable' => 'Modul za preverjanje pristnosti ni na voljo. Zaženite namestitev skladatelja.',
+  'member_unavailable' => 'Prijava je bila potrjena, vendar ni bil najden ustrezen aktiven članski profil.',
   'invalid_credentials' => 'Neveljavna koda ali geslo.',
   'too_many' => 'Preveč poskusov povezave. Poskusite ponovno čez nekaj minut.',
   'not_verified' => 'Vaš račun še ni preverjen.',
