@@ -675,7 +675,6 @@ function render_ham_weather_advice(array $user = []): string
 
     return '<div class="grid gap-4">'
         . '<section>'
-        . '<h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) $i18n['radio_info']) . '</h3>'
         . '<ul class="mt-2 list-clean">'
         . '<li><strong>' . e($scoreLabel) . '</strong> ' . e((string) $i18n['for_qso']) . ' (score ' . e((string) max(0, min(100, (int) round($hfScore)))) . '/100)</li>'
         . '<li><strong>' . e((string) $i18n['bands']) . '</strong> ' . e(implode(' • ', $bands)) . '</li>'

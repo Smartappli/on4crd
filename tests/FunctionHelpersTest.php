@@ -295,15 +295,14 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString("array_merge(['welcome', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog()))", $dashboard);
     }
 
-    public function testHamWeatherAdviceWidgetHidesCalculationDetails(): void
+    public function testHamWeatherAdviceWidgetHidesHeadingAndCalculationDetails(): void
     {
         $source = file_get_contents(__DIR__ . '/../app/ham_weather_advice.php');
         self::assertIsString($source);
         $returnBlock = strstr($source, 'return \'<div class="grid gap-4">\'');
         self::assertIsString($returnBlock);
 
-        self::assertStringContainsString('$i18n[\'radio_info\']', $returnBlock);
-        foreach (['input_info', 'location', 'local_hour', 'local_weather', 'geomagnetic', 'updated_at'] as $detailKey) {
+        foreach (['radio_info', 'input_info', 'location', 'local_hour', 'local_weather', 'geomagnetic', 'updated_at'] as $detailKey) {
             self::assertStringNotContainsString('$i18n[\'' . $detailKey . '\']', $returnBlock);
         }
     }
