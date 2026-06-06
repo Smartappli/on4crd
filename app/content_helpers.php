@@ -480,6 +480,8 @@ function content_proposal_allowed_areas(): array
 {
     return [
         'articles' => true,
+        'albums' => true,
+        'auctions' => true,
         'classifieds' => true,
         'events' => true,
         'members_library' => true,
@@ -532,6 +534,65 @@ function content_proposal_details_text(array $details): string
     }
 
     return content_proposal_clean_multiline(implode("\n", $lines), 5000);
+}
+}
+
+if (!function_exists('content_proposal_category_code')) {
+function content_proposal_category_code(string $title, int $maxLength = 120, string $fallback = 'category'): string
+{
+    $maxLength = max(1, $maxLength);
+    $code = slugify($title);
+    if ($code === '' || $code === 'n-a') {
+        $code = slugify($fallback);
+    }
+    if ($code === '' || $code === 'n-a') {
+        $code = 'category';
+    }
+    if (strlen($code) > $maxLength) {
+        $code = rtrim(substr($code, 0, $maxLength), '-');
+    }
+
+    return $code !== '' ? $code : 'category';
+}
+}
+
+if (!function_exists('content_proposal_accepted_categories')) {
+/**
+ * @return array<string, string>
+ */
+function content_proposal_accepted_categories(string $area, int $maxCodeLength = 120): array
+{
+    if (!ensure_content_proposals_table()) {
+        return [];
+    }
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT title
+             FROM content_proposals
+             WHERE area = ?
+               AND proposal_type = "category"
+               AND status = "accepted"
+             ORDER BY updated_at ASC, id ASC'
+        );
+        $stmt->execute([$area]);
+    } catch (Throwable) {
+        return [];
+    }
+
+    $categories = [];
+    foreach (($stmt->fetchAll() ?: []) as $row) {
+        $title = content_proposal_clean_single_line((string) ($row['title'] ?? ''), 190);
+        if ($title === '') {
+            continue;
+        }
+        $code = content_proposal_category_code($title, $maxCodeLength, $area);
+        if (!isset($categories[$code])) {
+            $categories[$code] = $title;
+        }
+    }
+
+    return $categories;
 }
 }
 

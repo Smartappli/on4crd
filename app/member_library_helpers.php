@@ -73,6 +73,34 @@ function library_controlled_vocabulary_list(): array
 }
 }
 
+if (!function_exists('member_library_category_slug')) {
+function member_library_category_slug(string $value): string
+{
+    return content_proposal_category_code($value, 120, 'general');
+}
+}
+
+if (!function_exists('member_library_ensure_categories_table')) {
+function member_library_ensure_categories_table(): bool
+{
+    try {
+        db()->exec('CREATE TABLE IF NOT EXISTS member_library_categories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            code VARCHAR(120) NOT NULL UNIQUE,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )');
+        db()->prepare('INSERT IGNORE INTO member_library_categories (code, label, sort_order) VALUES (?, ?, ?)')
+            ->execute(['general', 'General', 1]);
+
+        return table_exists('member_library_categories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+}
+
 if (!function_exists('library_ingestion_templates_map')) {
 function library_ingestion_templates_map(): array
 {
