@@ -292,7 +292,22 @@ final class FunctionHelpersTest extends TestCase
         self::assertArrayHasKey('ham_weather_advice', $catalog);
         self::assertStringContainsString("case 'ham_weather_advice':", $renderer);
         self::assertStringContainsString('render_ham_weather_advice($user)', $renderer);
-        self::assertStringContainsString("'welcome', 'ham_weather_advice', 'propagation'", $dashboard);
+        self::assertStringContainsString("array_merge(['welcome', 'ham_weather_advice'], array_keys(hamqsl_widget_catalog()))", $dashboard);
+    }
+
+    public function testDashboardCatalogRestoresHamqslAndRemovesLegacyUtilityWidgets(): void
+    {
+        $catalog = widget_catalog();
+        $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
+        self::assertIsString($renderer);
+
+        foreach (array_keys(hamqsl_widget_catalog()) as $hamqslKey) {
+            self::assertArrayHasKey($hamqslKey, $catalog);
+        }
+        foreach (['club_status', 'events', 'quick_links'] as $removedKey) {
+            self::assertArrayNotHasKey($removedKey, $catalog);
+            self::assertStringNotContainsString("case '" . $removedKey . "':", $renderer);
+        }
     }
 
     public function testApplicationPhpFilesDoNotContainCommonMojibakeSequences(): void

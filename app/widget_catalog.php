@@ -11,18 +11,6 @@ function widget_catalog(): array
             'title' => 'Bienvenue',
             'description' => 'Message d accueil du tableau de bord membre.',
         ],
-        'club_status' => [
-            'title' => 'Statut du club',
-            'description' => 'Resume des modules actifs et de la configuration du site.',
-        ],
-        'events' => [
-            'title' => 'Agenda',
-            'description' => 'Prochains evenements du club.',
-        ],
-        'quick_links' => [
-            'title' => 'Raccourcis',
-            'description' => 'Acces rapides vers les pages membres principales.',
-        ],
         'propagation' => [
             'title' => 'Propagation',
             'description' => 'Indicateurs géomagnétiques en temps réel pour vos QSO.',
