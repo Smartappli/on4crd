@@ -20,59 +20,9 @@ function render_widget(string $slug, array $user = []): string
         case 'welcome':
             return '<p>Bonjour <strong>' . e($callsign) . '</strong>, bienvenue dans votre espace membre.</p>'
                 . '<p class="help">Personnalisez ce tableau de bord en ajoutant, supprimant et déplaçant vos widgets.</p>';
-
-        case 'club_status':
-            $moduleCount = 0;
-            if (table_exists('modules')) {
-                $stmt = db()->query('SELECT COUNT(*) FROM modules WHERE is_enabled = 1');
-                $moduleCount = $stmt !== false ? (int) $stmt->fetchColumn() : 0;
-            }
-
-            return '<p><strong>' . $moduleCount . '</strong> modules actifs.</p>'
-                . '<p class="help">Configuration dynamique via l’administration.</p>';
-
-        case 'events':
-            if (!table_exists('events')) {
-                return '<p class="help">Module événements indisponible.</p>';
-            }
-
-            $dateColumn = table_has_column('events', 'start_at')
-                ? 'start_at'
-                : (table_has_column('events', 'starts_at') ? 'starts_at' : '');
-            if ($dateColumn === '') {
-                return '<p class="help">Agenda indisponible.</p>';
-            }
-
-            $rows = db()->query(
-                'SELECT title, ' . $dateColumn . ' AS event_start_at FROM events WHERE '
-                . $dateColumn . ' IS NOT NULL AND ' . $dateColumn . ' >= NOW() ORDER BY ' . $dateColumn . ' ASC LIMIT 3'
-            );
-            $events = $rows !== false ? ($rows->fetchAll() ?: []) : [];
-            if ($events === []) {
-                return '<p class="help">Aucun événement à venir.</p>';
-            }
-
-            $html = '<ul class="list-clean">';
-            foreach ($events as $event) {
-                $title = e((string) ($event['title'] ?? 'Événement'));
-                $startsAt = e((string) ($event['event_start_at'] ?? ''));
-                $html .= '<li><strong>' . $title . '</strong><br><span class="help">' . $startsAt . '</span></li>';
-            }
-            $html .= '</ul>';
-
-            return $html;
-
         case 'chatbot':
             return '<p class="help">Posez vos questions à Raymond sur la radio, le club et les procédures.</p>'
                 . '<p><a class="button small" href="' . e(route_url('chatbot')) . '">Ouvrir Raymond</a></p>';
-
-        case 'quick_links':
-            return '<ul class="list-clean">'
-                . '<li><a href="' . e(route_url('profile')) . '">Mon profil</a></li>'
-                . '<li><a href="' . e(route_url('qsl')) . '">QSL</a></li>'
-                . '<li><a href="' . e(route_url('newsletter')) . '">Newsletter</a></li>'
-                . '</ul>';
-
         case 'ham_weather_advice':
             return render_ham_weather_advice($user);
 
