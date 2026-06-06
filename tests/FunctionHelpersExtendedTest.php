@@ -442,6 +442,9 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('>Ecouteur (ONL)</option>', $html);
         self::assertStringNotContainsString('>ON2</option>', $html);
         self::assertStringNotContainsString('>ON3</option>', $html);
+        self::assertSame('Licence intermédiaire (ON2)', member_profile_licence_class_display_text($t, 'ON2'));
+        self::assertSame('Licence de base (ON3)', member_profile_licence_class_display_text($t, 'ON3'));
+        self::assertSame('Licence radioamateur', member_profile_licence_class_display_text($t, 'Licence radioamateur'));
     }
 
     public function testMemberProfileQslViaOptionsUseTranslatedLabelsAndKeepLegacyValues(): void
@@ -564,6 +567,30 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('QSL via', $rows[0]['label']);
         self::assertSame('Pas de QSL', $rows[0]['text']);
         self::assertSame('Pas de QSL', $rows[0]['html']);
+    }
+
+    public function testMemberProfilePreviewRowsTranslateLicenceClassCodes(): void
+    {
+        $t = static fn(string $key): string => [
+            'licence' => 'Licence',
+            'licence_none' => 'Aucune',
+            'licence_onl' => 'Ecouteur (ONL)',
+            'licence_base' => 'Licence de base (ON3)',
+            'licence_intermediate' => 'Licence intermédiaire (ON2)',
+            'licence_on1' => 'Ancienne licence (ON1)',
+            'licence_harec' => 'HAREC',
+            'licence_other' => 'Autre',
+        ][$key] ?? $key;
+        $member = [
+            'licence_class' => 'ON3',
+            'visibility_licence_class' => 'public',
+        ];
+
+        $rows = member_profile_preview_rows($member, 'public', $t);
+
+        self::assertSame('Licence', $rows[0]['label']);
+        self::assertSame('Licence de base (ON3)', $rows[0]['text']);
+        self::assertSame('Licence de base (ON3)', $rows[0]['html']);
     }
 
     public function testMemberProfileSelectColumnsCoverProfileAndGdprFields(): void
