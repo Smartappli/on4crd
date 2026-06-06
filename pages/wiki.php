@@ -24,20 +24,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'propose_theme') {
             $user = require_login(route_url('wiki'));
+            $autoAccept = has_permission('wiki.moderate');
             $proposalTitle = (string) ($_POST['proposal_theme'] ?? '');
             $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
             $proposalSummary = content_proposal_details_text([
                 $tr('propose_theme_reason', 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
-            $proposalId = content_proposal_create((int) $user['id'], 'wiki', 'category', $proposalTitle, $proposalSummary, $proposalContact);
-            content_proposal_notify_site($tr('propose_theme_subject', 'Wiki theme proposal'), [
-                'area' => 'wiki',
-                'proposal_type' => 'category',
-                'title' => content_proposal_clean_single_line($proposalTitle, 190),
-                'summary' => $proposalSummary,
-                'contact' => content_proposal_clean_single_line($proposalContact, 220),
-                'source_ref' => 'content_proposals#' . $proposalId,
-            ]);
+            $proposalStatus = $autoAccept ? 'accepted' : 'pending';
+            $proposalId = content_proposal_create((int) $user['id'], 'wiki', 'category', $proposalTitle, $proposalSummary, $proposalContact, '', $proposalStatus);
+            if (!$autoAccept) {
+                content_proposal_notify_site($tr('propose_theme_subject', 'Wiki theme proposal'), [
+                    'area' => 'wiki',
+                    'proposal_type' => 'category',
+                    'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                    'summary' => $proposalSummary,
+                    'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+            }
+            if ($autoAccept) {
+                set_flash('success', $tr('category_accepted', 'Categorie wiki creee.'));
+                redirect_url(route_url_clean('wiki', ['theme' => slugify($proposalTitle)]));
+            }
             set_flash('success', $tr('proposal_recorded', $locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.'));
             redirect('my_requests');
         }
@@ -67,6 +75,7 @@ if ($user !== null) {
         $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
     }
 }
+$canAutoAcceptTheme = $user !== null && has_permission('wiki.moderate');
 
 $rows = [];
 $wikiThemes = [];
@@ -88,6 +97,16 @@ try {
             continue;
         }
         $wikiThemes[$themeCode] = ($wikiThemes[$themeCode] ?? 0) + 1;
+    }
+    if (table_exists('content_proposals')) {
+        $categoryRows = db()->query('SELECT title FROM content_proposals WHERE area = "wiki" AND proposal_type = "category" AND status = "accepted" ORDER BY title ASC')->fetchAll() ?: [];
+        foreach ($categoryRows as $categoryRow) {
+            $themeCode = slugify((string) ($categoryRow['title'] ?? ''));
+            if ($themeCode === '' || $themeCode === 'n-a') {
+                continue;
+            }
+            $wikiThemes[$themeCode] = $wikiThemes[$themeCode] ?? 0;
+        }
     }
     if ($theme !== '' && !isset($wikiThemes[$theme])) {
         $theme = '';
