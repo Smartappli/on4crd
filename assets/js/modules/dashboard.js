@@ -23,6 +23,7 @@
   const saveStatus = document.getElementById('dashboard-save-status');
   const addWidgetContainer = document.querySelector('.split-home aside .stack');
   const addWidgetTemplates = new Map();
+  const hiddenCatalogWidgets = new Set(['welcome']);
   let dragged = null;
   let isSaving = false;
 
@@ -101,6 +102,9 @@
   }
 
   function addWidgetOption(widgetKey, title) {
+    if (hiddenCatalogWidgets.has(widgetKey)) {
+      return;
+    }
     if (!addWidgetContainer || !widgetKey) {
       return;
     }

@@ -286,8 +286,12 @@ final class FunctionHelpersTest extends TestCase
         $catalog = widget_catalog();
         $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
         $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        $appJs = file_get_contents(__DIR__ . '/../assets/js/app.js');
+        $dashboardJs = file_get_contents(__DIR__ . '/../assets/js/modules/dashboard.js');
         self::assertIsString($renderer);
         self::assertIsString($dashboard);
+        self::assertIsString($appJs);
+        self::assertIsString($dashboardJs);
 
         self::assertArrayHasKey('ham_weather_advice', $catalog);
         self::assertStringContainsString("case 'ham_weather_advice':", $renderer);
@@ -384,8 +388,10 @@ final class FunctionHelpersTest extends TestCase
         $catalog = widget_catalog();
         $renderer = file_get_contents(__DIR__ . '/../app/widget_renderer.php');
         $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        $appJs = file_get_contents(__DIR__ . '/../assets/js/app.js');
         self::assertIsString($renderer);
         self::assertIsString($dashboard);
+        self::assertIsString($appJs);
 
         self::assertArrayHasKey('radio_clocks', $catalog);
         self::assertArrayNotHasKey('propagation', $catalog);
@@ -395,6 +401,10 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('data-live-clock data-timezone="local"', $renderer);
         self::assertStringContainsString('$catalogHiddenWidgetKeys = [\'welcome\'];', $dashboard);
         self::assertStringContainsString('!in_array($key, $catalogHiddenWidgetKeys, true)', $dashboard);
+        self::assertStringContainsString("const hiddenCatalogWidgets = new Set(['welcome']);", $dashboardJs);
+        self::assertStringContainsString('hiddenCatalogWidgets.has(widgetKey)', $dashboardJs);
+        self::assertStringContainsString('window.ON4CRDUpdateLiveClocks = updateClocks;', $appJs);
+        self::assertStringContainsString("document.querySelectorAll('[data-live-clock]')", $appJs);
     }
 
     public function testDashboardWidgetCatalogScrollsFromLeftInsidePanel(): void
