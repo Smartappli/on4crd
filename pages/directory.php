@@ -27,8 +27,8 @@ if (table_exists('members')) {
     $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role
         FROM members
         WHERE is_active = 1
-          AND UPPER(callsign) <> "ON4CRD"';
-    $params = [];
+          AND UPPER(callsign) <> ?';
+    $params = ['ON4CRD'];
 
     if ($search !== '') {
         $sql .= ' AND (callsign LIKE ?
@@ -69,38 +69,23 @@ if (table_exists('members')) {
     $stmt->execute($params);
     $members = $stmt->fetchAll() ?: [];
 
-    $directoryVisibilityFieldMeta = member_profile_visibility_fields($profileT);
-    $directoryVisibilityFields = array_keys($directoryVisibilityFieldMeta);
-    $visibleProfileConditions = implode(
-        ' OR ',
-        array_map(
-            static fn(string $field): string => $field . ' IN (' . $visibilityPlaceholders . ')',
-            $directoryVisibilityFields
-        )
-    );
-
     $countsStmt = db()->prepare(
         'SELECT COUNT(*) AS active_total,
                 SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
          WHERE is_active = 1
-           AND UPPER(callsign) <> "ON4CRD"
-           AND (' . $visibleProfileConditions . ')'
+           AND UPPER(callsign) <> ?'
     );
-    $countParams = [];
+    $countParams = ['ON4CRD'];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
-    }
-    foreach ($directoryVisibilityFields as $_visibilityField) {
-        foreach ($allowedVisibilityLevels as $visibilityLevel) {
-            $countParams[] = $visibilityLevel;
-        }
     }
     $countsStmt->execute($countParams);
     $countsRow = $countsStmt->fetch() ?: [];
     $activeMembersCount = (int) ($countsRow['active_total'] ?? 0);
     $ubaMembersCount = (int) ($countsRow['uba_total'] ?? 0);
 
+    $directoryVisibilityFieldMeta = member_profile_visibility_fields($profileT);
     $fieldVisibilityMap = [
         'photo_path' => 'visibility_photo',
         'avatar_path' => 'visibility_photo',
@@ -118,24 +103,16 @@ if (table_exists('members')) {
             }
         }
 
-        $hasVisibleData = false;
-        foreach (array_keys($fieldVisibilityMap) as $field) {
-            if ($field === 'is_uba_member' && (int) ($member[$field] ?? 0) !== 1) {
-                continue;
-            }
-            if (trim((string) ($member[$field] ?? '')) !== '') {
-                $hasVisibleData = true;
-                break;
-            }
-        }
-        if (!$hasVisibleData) {
+        if (!member_directory_card_has_visible_content($member, array_keys($fieldVisibilityMap))) {
             unset($members[$index]);
         }
     }
     unset($member);
     $members = array_values($members);
 
-    $licenceRows = db()->query('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND UPPER(callsign) <> "ON4CRD" AND licence_class IS NOT NULL AND licence_class <> "" GROUP BY licence_class ORDER BY licence_class ASC')->fetchAll() ?: [];
+    $licenceStmt = db()->prepare('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND UPPER(callsign) <> ? AND licence_class IS NOT NULL AND licence_class <> ? GROUP BY licence_class ORDER BY licence_class ASC');
+    $licenceStmt->execute(['ON4CRD', '']);
+    $licenceRows = $licenceStmt->fetchAll() ?: [];
 } else {
     $licenceRows = [];
 }

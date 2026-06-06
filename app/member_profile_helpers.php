@@ -724,6 +724,30 @@ function member_profile_preview_fields(callable $t): array
 }
 }
 
+if (!function_exists('member_directory_card_has_visible_content')) {
+/**
+ * @param array<string, mixed> $member
+ * @param list<string> $visibleFields
+ */
+function member_directory_card_has_visible_content(array $member, array $visibleFields): bool
+{
+    if (trim((string) ($member['callsign'] ?? '')) !== '') {
+        return true;
+    }
+
+    foreach ($visibleFields as $field) {
+        if ($field === 'is_uba_member' && (int) ($member[$field] ?? 0) !== 1) {
+            continue;
+        }
+        if (trim((string) ($member[$field] ?? '')) !== '') {
+            return true;
+        }
+    }
+
+    return false;
+}
+}
+
 if (!function_exists('member_profile_display_row')) {
 /**
  * @param array<string, mixed> $member
