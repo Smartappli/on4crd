@@ -322,6 +322,16 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame(['public', 'members', 'private'], member_profile_allowed_visibility_levels(['is_committee' => 1]));
     }
 
+    public function testDirectoryCardKeepsCallsignOnlyMembersVisible(): void
+    {
+        $visibleFields = ['first_name', 'country', 'is_uba_member'];
+
+        self::assertTrue(member_directory_card_has_visible_content(['callsign' => 'ON4BEN'], $visibleFields));
+        self::assertTrue(member_directory_card_has_visible_content(['callsign' => 'ON7ZB'], $visibleFields));
+        self::assertTrue(member_directory_card_has_visible_content(['callsign' => '', 'country' => 'Belgique'], $visibleFields));
+        self::assertFalse(member_directory_card_has_visible_content(['callsign' => '', 'country' => '', 'is_uba_member' => 0], $visibleFields));
+    }
+
     public function testMemberProfileOperatorSinceOptionsIncludesCurrentSelection(): void
     {
         $html = member_profile_operator_since_options_html('2020');
