@@ -309,7 +309,7 @@ ob_start();
                 <label><?= $helpFieldLabel($t('grid'), 'profile-grid-help', $t('grid_help')) ?><input type="text" name="locator" maxlength="6" value="<?= e((string) ($member['locator'] ?? '')) ?>"></label>
             </div>
             <label class="profile-checkbox" style="margin-top:.75rem;">
-                <input type="checkbox" name="allow_geocode" value="1">
+                <input type="checkbox" name="allow_geocode" value="1" checked>
                 <span><?= e($t('geocode_consent')) ?></span>
             </label>
             <?= privacy_notice_short_html('profile') ?>

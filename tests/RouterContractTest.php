@@ -596,4 +596,12 @@ final class RouterContractTest extends TestCase
             }
         }
     }
+
+    public function testProfileGeocodeConsentIsCheckedByDefault(): void
+    {
+        $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
+        self::assertIsString($profile);
+
+        self::assertStringContainsString('name="allow_geocode" value="1" checked', $profile);
+    }
 }
