@@ -5,7 +5,7 @@
 
 [data-route="reglement_interieur"] .reglement-interieur-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 34%);
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 24%);
   gap: 1.25rem;
   align-items: center;
 }
@@ -15,7 +15,9 @@
 }
 
 [data-route="reglement_interieur"] .reglement-interieur-illustration {
+  justify-self: end;
   margin: 0;
+  width: min(100%, 220px);
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -34,5 +36,9 @@
 @media (max-width: 760px) {
   [data-route="reglement_interieur"] .reglement-interieur-hero {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="reglement_interieur"] .reglement-interieur-illustration {
+    justify-self: center;
   }
 }
