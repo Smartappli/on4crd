@@ -10,19 +10,35 @@ function member_default_contact_email(): string
 }
 }
 
+if (!function_exists('member_shared_contact_emails')) {
+/**
+ * @return list<string>
+ */
+function member_shared_contact_emails(): array
+{
+    return [
+        member_default_contact_email(),
+        'crddurnal@gmail.com',
+    ];
+}
+}
+
 if (!function_exists('member_contact_email_from_input')) {
 function member_contact_email_from_input(string $email): string
 {
     $email = trim($email);
+    if ($email === '') {
+        return member_default_contact_email();
+    }
 
-    return $email !== '' ? $email : member_default_contact_email();
+    return member_contact_email_uses_shared_default($email) ? member_default_contact_email() : $email;
 }
 }
 
 if (!function_exists('member_contact_email_uses_shared_default')) {
 function member_contact_email_uses_shared_default(string $email): bool
 {
-    return strcasecmp(trim($email), member_default_contact_email()) === 0;
+    return in_array(strtolower(trim($email)), member_shared_contact_emails(), true);
 }
 }
 
@@ -97,7 +113,7 @@ function member_cleanup_registration_auth_orphan(string $authEmail, string $call
     try {
         $emails = [$authEmail];
         if (member_contact_email_uses_shared_default($authEmail) || str_ends_with($authEmail, '@local.invalid')) {
-            $emails[] = member_default_contact_email();
+            $emails = array_merge($emails, member_shared_contact_emails());
         }
         $emails = array_values(array_unique($emails));
         $placeholders = implode(',', array_fill(0, count($emails), '?'));

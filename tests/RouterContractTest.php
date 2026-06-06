@@ -333,6 +333,9 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('member_cleanup_registration_auth_orphan($authEmail, $callsign);', $register);
         self::assertStringContainsString('member_delete_unlinked_auth_user((int) $userId);', $register);
         self::assertStringContainsString('function member_cleanup_registration_auth_orphan(string $authEmail, string $callsign): void', $helpers);
+        self::assertStringContainsString('function member_shared_contact_emails(): array', $helpers);
+        self::assertStringContainsString("'crddurnal@gmail.com'", $helpers);
+        self::assertStringContainsString('array_merge($emails, member_shared_contact_emails())', $helpers);
         self::assertStringContainsString('str_ends_with($authEmail, \'@local.invalid\')', $helpers);
         self::assertStringContainsString('SELECT id FROM users WHERE username = ? AND email IN (', $helpers);
         self::assertStringContainsString('function member_delete_unlinked_auth_user(int $authUserId): void', $helpers);

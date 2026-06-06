@@ -285,6 +285,7 @@ final class FunctionHelpersExtendedTest extends TestCase
     {
         self::assertSame('crdurnal@gmail.com', member_contact_email_from_input(''));
         self::assertSame('crdurnal@gmail.com', member_contact_email_from_input('   '));
+        self::assertSame('crdurnal@gmail.com', member_contact_email_from_input(' crddurnal@gmail.com '));
         self::assertSame('member@example.test', member_contact_email_from_input(' member@example.test '));
     }
 
@@ -293,13 +294,16 @@ final class FunctionHelpersExtendedTest extends TestCase
         $authEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4CRD');
         $otherAuthEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON8CJ');
         $on4benAuthEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4BEN');
+        $on4benTypoAuthEmail = member_auth_email_for_contact_email('crddurnal@gmail.com', 'ON4BEN');
 
         self::assertNotSame('crdurnal@gmail.com', $authEmail);
         self::assertNotSame('crdurnal@gmail.com', $otherAuthEmail);
         self::assertNotSame('crdurnal@gmail.com', $on4benAuthEmail);
+        self::assertNotSame('crddurnal@gmail.com', $on4benTypoAuthEmail);
         self::assertNotSame($authEmail, $otherAuthEmail);
         self::assertNotSame($authEmail, $on4benAuthEmail);
         self::assertNotSame($otherAuthEmail, $on4benAuthEmail);
+        self::assertSame($on4benAuthEmail, $on4benTypoAuthEmail);
         self::assertStringStartsWith('on4crd-', $authEmail);
         self::assertStringStartsWith('on8cj-', $otherAuthEmail);
         self::assertStringStartsWith('on4ben-', $on4benAuthEmail);
