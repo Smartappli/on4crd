@@ -259,7 +259,7 @@ ob_start();
                 $operatorSince = trim((string) ($member['operator_since'] ?? ''));
                 $cqZone = trim((string) ($member['cq_zone'] ?? ''));
                 $ituZone = trim((string) ($member['itu_zone'] ?? ''));
-                $qslVia = trim((string) ($member['qsl_via'] ?? ''));
+                $qslVia = member_profile_qsl_via_display_text($profileT, (string) ($member['qsl_via'] ?? ''));
                 $eqslUsername = trim((string) ($member['eqsl_username'] ?? ''));
                 $interests = trim((string) ($member['interests'] ?? ''));
                 $bands = trim((string) ($member['favourite_bands'] ?? ''));

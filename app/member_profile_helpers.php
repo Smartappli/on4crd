@@ -685,6 +685,20 @@ function member_profile_qsl_via_options_html(callable $t, string $currentValue =
 }
 }
 
+if (!function_exists('member_profile_qsl_via_display_text')) {
+function member_profile_qsl_via_display_text(callable $t, string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return '';
+    }
+
+    $choices = member_profile_qsl_via_choices($t);
+
+    return (string) ($choices[$value] ?? $value);
+}
+}
+
 if (!function_exists('member_profile_favourite_band_choices')) {
 /**
  * @return list<string>
@@ -929,8 +943,7 @@ function member_profile_display_row(array $member, string $fieldName, array $fie
     }
 
     if ($type === 'choice') {
-        $choices = is_array($fieldMeta['choices'] ?? null) ? $fieldMeta['choices'] : [];
-        $displayText = (string) ($choices[$text] ?? $text);
+        $displayText = (string) ((is_array($fieldMeta['choices'] ?? null) ? $fieldMeta['choices'] : [])[$text] ?? $text);
 
         return ['label' => (string) $fieldMeta['label'], 'text' => $displayText, 'html' => e($displayText)];
     }
