@@ -95,9 +95,17 @@ function member_cleanup_registration_auth_orphan(string $authEmail, string $call
     }
 
     try {
-        $stmt = db()->prepare('SELECT id FROM users WHERE email = ? AND username = ? LIMIT 1');
-        $stmt->execute([$authEmail, $callsign]);
-        member_delete_unlinked_auth_user((int) ($stmt->fetchColumn() ?: 0));
+        $emails = [$authEmail];
+        if (member_contact_email_uses_shared_default($authEmail) || str_ends_with($authEmail, '@local.invalid')) {
+            $emails[] = member_default_contact_email();
+        }
+        $emails = array_values(array_unique($emails));
+        $placeholders = implode(',', array_fill(0, count($emails), '?'));
+        $stmt = db()->prepare('SELECT id FROM users WHERE username = ? AND email IN (' . $placeholders . ')');
+        $stmt->execute(array_merge([$callsign], $emails));
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $authUserId) {
+            member_delete_unlinked_auth_user((int) $authUserId);
+        }
     } catch (Throwable) {
         // A linked account will still be rejected by the auth layer.
     }
