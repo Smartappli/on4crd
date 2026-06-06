@@ -5,6 +5,7 @@ $members = [];
 $locale = current_locale();
 $t = i18n_domain_translator('directory', $locale);
 $profileT = i18n_domain_translator('profile', $locale);
+$profilePreviewFields = member_profile_preview_fields($profileT);
 
 $activeMembersCount = 0;
 $ubaMembersCount = 0;
@@ -91,7 +92,7 @@ if (table_exists('members')) {
         'photo_path' => 'visibility_photo',
         'avatar_path' => 'visibility_photo',
     ];
-    foreach (member_profile_preview_fields($profileT) as $field => $fieldMeta) {
+    foreach ($profilePreviewFields as $field => $fieldMeta) {
         $fieldVisibilityMap[$field] = (string) $fieldMeta['visibility'];
     }
 
@@ -133,9 +134,12 @@ foreach ($licenceRows as $licenceRow) {
     }
     $licenceOptions[] = [
         'value' => $licenceValue,
+        'label' => member_profile_licence_class_display_text($profileT, $licenceValue),
         'total' => (int) ($licenceRow['total'] ?? 0),
     ];
 }
+
+$licenceFilterLabel = member_profile_licence_class_display_text($profileT, $licenceFilter);
 
 $memberInitials = static function (array $member): string {
     $callsign = trim((string) ($member['callsign'] ?? ''));
@@ -200,7 +204,7 @@ ob_start();
                     <?php foreach ($licenceOptions as $licenceOption): ?>
                         <?php $licenceValue = (string) $licenceOption['value']; ?>
                         <option value="<?= e($licenceValue) ?>" <?= $licenceFilter === $licenceValue ? 'selected' : '' ?>>
-                            <?= e($licenceValue) ?> (<?= (int) $licenceOption['total'] ?>)
+                            <?= e((string) $licenceOption['label']) ?> (<?= (int) $licenceOption['total'] ?>)
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -225,7 +229,7 @@ ob_start();
                         <span><?= e($t('search_label')) ?>: <?= e($search) ?></span>
                     <?php endif; ?>
                     <?php if ($licenceFilter !== ''): ?>
-                        <span><?= e($t('licence')) ?>: <?= e($licenceFilter) ?></span>
+                        <span><?= e($t('licence')) ?>: <?= e($licenceFilterLabel) ?></span>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
@@ -244,7 +248,7 @@ ob_start();
                 <?php
                 $callsign = trim((string) ($member['callsign'] ?? ''));
                 $displayName = member_full_name_from_parts((string) ($member['first_name'] ?? ''), (string) ($member['last_name'] ?? ''));
-                $licenceClass = trim((string) ($member['licence_class'] ?? ''));
+                $licenceClass = member_profile_licence_class_display_text($profileT, (string) ($member['licence_class'] ?? ''));
                 $email = trim((string) ($member['email'] ?? ''));
                 $phone = trim((string) ($member['phone'] ?? ''));
                 $country = trim((string) ($member['country'] ?? ''));
@@ -276,7 +280,10 @@ ob_start();
                         $detailRows[] = ['label' => $label, 'value' => $value];
                     }
                 };
-                $addDetail((string) $profileT('postal_code'), $postalCode);
+                $postalCodeRow = member_profile_display_row($member, 'postal_code', $profilePreviewFields['postal_code']);
+                if ($postalCodeRow !== null) {
+                    $addDetail((string) $postalCodeRow['label'], (string) $postalCodeRow['text']);
+                }
                 $addDetail((string) $profileT('address'), $address);
                 $addDetail((string) $profileT('qsl_via'), $qslVia);
                 $addDetail((string) $profileT('eqsl_username'), $eqslUsername);
