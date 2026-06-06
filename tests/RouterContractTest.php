@@ -457,12 +457,14 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('password_reset_forced_at', $authHelpers);
     }
 
-    public function testConfiguredAdministratorsIncludeOn8cj(): void
+    public function testConfiguredAdministratorsIncludeExpectedCallsigns(): void
     {
         $permissions = file_get_contents(__DIR__ . '/../app/permissions.php');
         self::assertIsString($permissions);
 
-        self::assertStringContainsString("'ON8CJ'", $permissions);
+        foreach (['ON8CJ', 'ON7ZB', 'ON4BEN'] as $callsign) {
+            self::assertStringContainsString("'" . $callsign . "'", $permissions);
+        }
     }
 
     public function testProposalDialogTriggersKeepNativeFallbacks(): void
