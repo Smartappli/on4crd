@@ -19,6 +19,8 @@ set_page_meta(['title' => (string) $t['layout'], 'description' => (string) $t['m
 
 $returnQuery = http_build_query(['member_q' => (string) ($_GET['member_q'] ?? ''), 'sort' => (string) ($_GET['sort'] ?? 'callsign'), 'dir' => (string) ($_GET['dir'] ?? 'asc')]);
 $passwordChangeColumnAvailable = table_has_column('members', 'password_change_required');
+$passwordResetMarkerColumnAvailable = table_has_column('members', 'password_reset_forced_at');
+$passwordResetForceAvailable = $passwordChangeColumnAvailable && $passwordResetMarkerColumnAvailable;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
@@ -30,9 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) { set_flash('error', (string) $t['err_locator']); redirect('admin_members'); }
     $updates = ['callsign = ?', 'full_name = ?', 'email = ?', 'locator = ?', 'is_active = ?', 'is_committee = ?'];
     $params = [$callsign, $fullName, $email, $locator, isset($_POST['is_active']) ? 1 : 0, isset($_POST['is_committee']) ? 1 : 0];
-    if ($passwordChangeColumnAvailable) {
+    if ($passwordResetForceAvailable) {
+        $forcePasswordReset = isset($_POST['password_change_required']);
         $updates[] = 'password_change_required = ?';
-        $params[] = isset($_POST['password_change_required']) ? 1 : 0;
+        $updates[] = 'password_reset_forced_at = ?';
+        $params[] = $forcePasswordReset ? 1 : 0;
+        $params[] = $forcePasswordReset ? date('Y-m-d H:i:s') : null;
     }
     $params[] = (int) ($_POST['member_id'] ?? 0);
     db()->prepare('UPDATE members SET ' . implode(', ', $updates) . ' WHERE id = ? LIMIT 1')->execute($params);
@@ -51,6 +56,9 @@ if (!in_array($memberSort, $allowedSort, true)) { $memberSort = 'callsign'; }
 $memberColumns = 'id, callsign, full_name, email, locator, is_active, is_committee';
 if ($passwordChangeColumnAvailable) {
     $memberColumns .= ', password_change_required';
+}
+if ($passwordResetMarkerColumnAvailable) {
+    $memberColumns .= ', password_reset_forced_at';
 }
 $members = db()->query('SELECT ' . $memberColumns . ' FROM members ORDER BY callsign')->fetchAll();
 usort($members, static function (array $a, array $b) use ($memberSort, $memberDir): int { $cmp = strnatcasecmp((string) ($a[$memberSort] ?? ''), (string) ($b[$memberSort] ?? '')); return $memberDir === 'desc' ? -$cmp : $cmp; });
@@ -85,8 +93,9 @@ ob_start();
             <input type="text" name="callsign" value="<?= e((string) $member['callsign']) ?>"><input type="text" name="full_name" value="<?= e((string) $member['full_name']) ?>"><input type="email" name="email" value="<?= e((string) $member['email']) ?>"><input type="text" name="locator" value="<?= e((string) $member['locator']) ?>" maxlength="6">
             <label><input type="checkbox" name="is_active" value="1" <?= (int) $member['is_active'] === 1 ? 'checked' : '' ?>></label>
             <label><input type="checkbox" name="is_committee" value="1" <?= (int) $member['is_committee'] === 1 ? 'checked' : '' ?>></label>
-            <?php if ($passwordChangeColumnAvailable): ?>
-                <label><input type="checkbox" name="password_change_required" value="1" <?= (int) ($member['password_change_required'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e((string) $t['password_reset_force']) ?></label>
+            <?php if ($passwordResetForceAvailable): ?>
+                <?php $passwordResetForced = (int) ($member['password_change_required'] ?? 0) === 1 && trim((string) ($member['password_reset_forced_at'] ?? '')) !== ''; ?>
+                <label><input type="checkbox" name="password_change_required" value="1" <?= $passwordResetForced ? 'checked' : '' ?>> <?= e((string) $t['password_reset_force']) ?></label>
             <?php else: ?>
                 <span class="help"><?= e((string) $t['password_reset_unavailable']) ?></span>
             <?php endif; ?>

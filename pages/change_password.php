@@ -39,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (table_has_column('members', 'password_change_required')) {
                 $updates[] = 'password_change_required = 0';
             }
+            if (table_has_column('members', 'password_reset_forced_at')) {
+                $updates[] = 'password_reset_forced_at = NULL';
+            }
             $params[] = $memberId;
             db()->prepare('UPDATE members SET ' . implode(', ', $updates) . ' WHERE id = ?')->execute($params);
         }
