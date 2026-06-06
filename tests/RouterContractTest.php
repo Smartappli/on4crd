@@ -355,11 +355,23 @@ final class RouterContractTest extends TestCase
         $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');
         self::assertIsString($authHelpers);
 
+        self::assertStringContainsString('function authenticated_member_row(\\Delight\\Auth\\Auth $authClient, int $sessionMemberId = 0): ?array', $authHelpers);
         self::assertStringContainsString('$authClient->getUsername()', $authHelpers);
         self::assertStringContainsString('UPPER(callsign) = ?', $authHelpers);
         self::assertStringContainsString('$linkedAuthUserId === $authUserId', $authHelpers);
         self::assertStringContainsString('$linkedAuthUserId === 0', $authHelpers);
         self::assertStringContainsString('UPDATE members SET auth_user_id = ? WHERE id = ? AND (auth_user_id IS NULL OR auth_user_id = 0) LIMIT 1', $authHelpers);
+    }
+
+    public function testLoginValidatesMemberProfileBeforeSuccessFlash(): void
+    {
+        $login = file_get_contents(__DIR__ . '/../pages/login.php');
+        self::assertIsString($login);
+
+        self::assertStringContainsString('authenticated_member_row($authClient', $login);
+        self::assertStringContainsString("throw new RuntimeException((string) (\$t['member_unavailable'] ?? \$t['auth_unavailable']));", $login);
+        self::assertStringContainsString("\$_SESSION['member_id'] = (int) (\$memberRow['id'] ?? 0);", $login);
+        self::assertStringNotContainsString('session_regenerate_id(true);', $login);
     }
 
     public function testRouteSpecificHelpersAreLoadedLazily(): void
