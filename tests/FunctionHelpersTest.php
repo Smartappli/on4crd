@@ -309,6 +309,19 @@ final class FunctionHelpersTest extends TestCase
         foreach (['radio_info', 'input_info', 'location', 'local_hour', 'local_weather', 'geomagnetic', 'updated_at'] as $detailKey) {
             self::assertStringNotContainsString('$i18n[\'' . $detailKey . '\']', $returnBlock);
         }
+        self::assertStringContainsString('noaa-planetary-k-index.json', $source);
+        self::assertStringContainsString('$propagationLabel', $returnBlock);
+        self::assertStringContainsString('$propagationSummary', $returnBlock);
+    }
+
+    public function testHomeUsesHamWeatherAdviceForPropagationInsteadOfRemovedWidget(): void
+    {
+        $home = file_get_contents(__DIR__ . '/../pages/home.php');
+        self::assertIsString($home);
+
+        self::assertStringNotContainsString("\$homeSafeWidget('propagation')", $home);
+        self::assertStringContainsString("'propagation' => ''", $home);
+        self::assertStringContainsString('$homeHamAdviceHtml = $homeSafeHamAdvice();', $home);
     }
 
     public function testHamWeatherAdviceUsesAgrometTokenFromEnvironment(): void
