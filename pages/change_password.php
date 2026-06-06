@@ -5,7 +5,6 @@ $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_translator('change_password', $locale);
 $redirectRoute = module_enabled('dashboard') ? 'dashboard' : 'home';
-$passwordChangeRequired = member_password_change_required($user);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -61,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $content = '<div class="card narrow login-card"><h1>' . e($t('title')) . '</h1>'
-    . '<p class="help">' . e($t($passwordChangeRequired ? 'intro_required' : 'intro_optional')) . '</p>'
+    . '<p class="help">' . e($t('intro_optional')) . '</p>'
     . '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . '<label>' . e($t('current_password')) . '<input type="password" name="current_password" autocomplete="current-password" required></label>'
     . '<label>' . e($t('new_password')) . '<input type="password" name="password" minlength="8" autocomplete="new-password" required></label>'

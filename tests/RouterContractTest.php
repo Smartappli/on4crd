@@ -372,6 +372,18 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('require_login(login_next_url_for_route($route, $_GET));', $router);
     }
 
+    public function testFirstLoginPasswordResetIsNotForced(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        self::assertIsString($router);
+        self::assertIsString($register);
+
+        self::assertStringNotContainsString('member_password_change_required', $router);
+        self::assertStringNotContainsString('forced_notice', $router);
+        self::assertStringContainsString('redirect(module_enabled(\'dashboard\') ? \'dashboard\' : \'home\');', $register);
+    }
+
     public function testProposalDialogTriggersKeepNativeFallbacks(): void
     {
         $contracts = [

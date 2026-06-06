@@ -11,7 +11,7 @@ $t = static function (string $key) use ($messages): string {
 };
 
 if (!module_enabled('classifieds')) {
-    echo render_layout('<div class="card"><p>Module disabled.</p></div>', $t('title'));
+    echo render_layout('<div class="card"><p>' . e($t('module_disabled')) . '</p></div>', $t('title'));
     return;
 }
 
@@ -31,7 +31,7 @@ $categories = [
 ];
 $statuses = [
     'draft' => $t('status_draft'),
-    'pending' => (string) ($messages['status_pending'] ?? 'En validation'),
+    'pending' => $t('status_pending'),
     'active' => $t('status_active'),
     'sold' => $t('status_sold'),
     'archived' => $t('status_archived'),
@@ -74,7 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt, $id, (int) $user['id']]);
                 set_flash('success', $t('updated_ok'));
             } else {
-                classifieds_enforce_submission_limits((int) $user['id']);
+                classifieds_enforce_submission_limits((int) $user['id'], [
+                    'invalid_user' => $t('limit_invalid_user'),
+                    'rate_limited' => $t('limit_rate_limited'),
+                    'daily_limit' => $t('limit_daily'),
+                ]);
                 $stmt = db()->prepare('INSERT INTO classified_ads (owner_member_id, category_code, title, description, location, contact, price_cents, status, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->execute([(int) $user['id'], $category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt]);
                 set_flash('success', $t('created_ok'));
@@ -160,7 +164,7 @@ ob_start();
                 <label><span><?= e($t('publication_label')) ?></span>
                     <select name="status">
                         <option value="draft" <?= (($editing['status'] ?? 'draft') === 'draft') ? 'selected' : '' ?>><?= e($t('status_draft')) ?></option>
-                        <option value="active" <?= in_array((string) ($editing['status'] ?? ''), ['active', 'pending'], true) ? 'selected' : '' ?>><?= e(has_permission('ads.moderate') ? $t('published_30d') : 'Soumettre pour validation') ?></option>
+                        <option value="active" <?= in_array((string) ($editing['status'] ?? ''), ['active', 'pending'], true) ? 'selected' : '' ?>><?= e(has_permission('ads.moderate') ? $t('published_30d') : $t('submit_for_review')) ?></option>
                     </select>
                 </label>
                 <div class="classifieds-editor-actions">

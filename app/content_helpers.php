@@ -224,10 +224,16 @@ function classifieds_member_publication_status(string $requestedStatus): string
 }
 
 if (!function_exists('classifieds_enforce_submission_limits')) {
-function classifieds_enforce_submission_limits(int $memberId): void
+function classifieds_enforce_submission_limits(int $memberId, array $messages = []): void
 {
+    $messages = array_replace([
+        'invalid_user' => 'Invalid user.',
+        'rate_limited' => 'Please wait one minute before submitting another ad.',
+        'daily_limit' => 'Limit reached: maximum 5 ads per 24 hours.',
+    ], $messages);
+
     if ($memberId <= 0) {
-        throw new RuntimeException('Utilisateur invalide.');
+        throw new RuntimeException((string) $messages['invalid_user']);
     }
 
     $lastStmt = db()->prepare('SELECT created_at FROM classified_ads WHERE owner_member_id = ? ORDER BY created_at DESC, id DESC LIMIT 1');
@@ -236,14 +242,14 @@ function classifieds_enforce_submission_limits(int $memberId): void
     if (is_string($lastCreatedAt) && $lastCreatedAt !== '') {
         $lastTs = strtotime($lastCreatedAt);
         if ($lastTs !== false && $lastTs > time() - 60) {
-            throw new RuntimeException('Veuillez patienter une minute avant de proposer une autre annonce.');
+            throw new RuntimeException((string) $messages['rate_limited']);
         }
     }
 
     $countStmt = db()->prepare('SELECT COUNT(*) FROM classified_ads WHERE owner_member_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)');
     $countStmt->execute([$memberId]);
     if ((int) ($countStmt->fetchColumn() ?: 0) >= 5) {
-        throw new RuntimeException('Limite atteinte: maximum 5 annonces par 24 heures.');
+        throw new RuntimeException((string) $messages['daily_limit']);
     }
 }
 }

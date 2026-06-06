@@ -8,7 +8,7 @@ $t = static function (string $key) use ($messages): string {
 };
 
 if (!module_enabled('classifieds')) {
-    echo render_layout('<div class="card"><p>Module disabled.</p></div>', $t('title'));
+    echo render_layout('<div class="card"><p>' . e($t('module_disabled')) . '</p></div>', $t('title'));
     return;
 }
 
@@ -26,7 +26,7 @@ $categories = [
 ];
 $statuses = [
     'draft' => $t('status_draft'),
-    'pending' => (string) ($messages['status_pending'] ?? 'En validation'),
+    'pending' => $t('status_pending'),
     'active' => $t('status_active'),
     'sold' => $t('status_sold'),
     'archived' => $t('status_archived'),
@@ -59,7 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (
                 $proposalName === ''
+                || mb_strlen($proposalName) > 190
                 || !filter_var($proposalEmail, FILTER_VALIDATE_EMAIL)
+                || mb_strlen($proposalEmail) > 190
                 || $proposalCategory === ''
                 || mb_strlen($proposalCategory) > 120
                 || mb_strlen($proposalDetails) > 1200
@@ -113,7 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$category, $title, $description, $location, $contact, $priceCents, $requestedStatus, $expiresAt, $id, (int) $user['id']]);
                 set_flash('success', $t('updated_ok'));
             } else {
-                classifieds_enforce_submission_limits((int) $user['id']);
+                classifieds_enforce_submission_limits((int) $user['id'], [
+                    'invalid_user' => $t('limit_invalid_user'),
+                    'rate_limited' => $t('limit_rate_limited'),
+                    'daily_limit' => $t('limit_daily'),
+                ]);
                 $expiresAt = null;
                 if ($requestedStatus === 'active') {
                     $expiresAt = date('Y-m-d H:i:s', time() + (30 * 86400));
@@ -390,7 +396,7 @@ ob_start();
                     </div>
                     <h3><?= e((string) $ad['title']) ?></h3>
                     <p class="classifieds-card-meta">
-                        <?= e((string) ($ad['callsign'] ?? 'N/A')) ?>
+                        <?= e((string) ($ad['callsign'] ?? $t('not_available'))) ?>
                         <?php if ((string) ($ad['location'] ?? '') !== ''): ?> · <?= e((string) $ad['location']) ?><?php endif; ?>
                     </p>
                     <p class="classifieds-card-description"><?= nl2br(e(mb_safe_strimwidth((string) $ad['description'], 0, 260, '...'))) ?></p>

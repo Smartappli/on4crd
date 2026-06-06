@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $fullName,
             $email,
             password_hash($password, PASSWORD_DEFAULT),
-            1,
+            0,
             $country !== '' ? $country : null,
             $address !== '' ? $address : null,
             $postalCode !== '' ? $postalCode : null,
@@ -202,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['member_id'] = (int) $authClient->getUserId();
 
         set_flash('success', $t('ok_created'));
-        redirect('change_password');
+        redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect('register');
