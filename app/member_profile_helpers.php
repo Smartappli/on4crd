@@ -52,6 +52,58 @@ function member_auth_email_for_contact_email(string $contactEmail, string $calls
 }
 }
 
+if (!function_exists('member_auth_user_is_linked_to_member')) {
+function member_auth_user_is_linked_to_member(int $authUserId): bool
+{
+    if ($authUserId <= 0 || !table_exists('members') || !table_has_column('members', 'auth_user_id')) {
+        return false;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT COUNT(*) FROM members WHERE auth_user_id = ?');
+        $stmt->execute([$authUserId]);
+
+        return (int) $stmt->fetchColumn() > 0;
+    } catch (Throwable) {
+        return true;
+    }
+}
+}
+
+if (!function_exists('member_delete_unlinked_auth_user')) {
+function member_delete_unlinked_auth_user(int $authUserId): void
+{
+    if ($authUserId <= 0 || !table_exists('users') || member_auth_user_is_linked_to_member($authUserId)) {
+        return;
+    }
+
+    try {
+        db()->prepare('DELETE FROM users WHERE id = ? LIMIT 1')->execute([$authUserId]);
+    } catch (Throwable) {
+        // Do not mask the original registration failure if cleanup is unavailable.
+    }
+}
+}
+
+if (!function_exists('member_cleanup_registration_auth_orphan')) {
+function member_cleanup_registration_auth_orphan(string $authEmail, string $callsign): void
+{
+    $authEmail = trim($authEmail);
+    $callsign = strtoupper(trim($callsign));
+    if ($authEmail === '' || $callsign === '' || !table_exists('users')) {
+        return;
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT id FROM users WHERE email = ? AND username = ? LIMIT 1');
+        $stmt->execute([$authEmail, $callsign]);
+        member_delete_unlinked_auth_user((int) ($stmt->fetchColumn() ?: 0));
+    } catch (Throwable) {
+        // A linked account will still be rejected by the auth layer.
+    }
+}
+}
+
 if (!function_exists('member_country_options')) {
 /**
  * @return array<string, string>

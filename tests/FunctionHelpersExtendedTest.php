@@ -292,14 +292,20 @@ final class FunctionHelpersExtendedTest extends TestCase
     {
         $authEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4CRD');
         $otherAuthEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON8CJ');
+        $on4benAuthEmail = member_auth_email_for_contact_email('crdurnal@gmail.com', 'ON4BEN');
 
         self::assertNotSame('crdurnal@gmail.com', $authEmail);
         self::assertNotSame('crdurnal@gmail.com', $otherAuthEmail);
+        self::assertNotSame('crdurnal@gmail.com', $on4benAuthEmail);
         self::assertNotSame($authEmail, $otherAuthEmail);
+        self::assertNotSame($authEmail, $on4benAuthEmail);
+        self::assertNotSame($otherAuthEmail, $on4benAuthEmail);
         self::assertStringStartsWith('on4crd-', $authEmail);
         self::assertStringStartsWith('on8cj-', $otherAuthEmail);
+        self::assertStringStartsWith('on4ben-', $on4benAuthEmail);
         self::assertStringEndsWith('@local.invalid', $authEmail);
         self::assertStringEndsWith('@local.invalid', $otherAuthEmail);
+        self::assertStringEndsWith('@local.invalid', $on4benAuthEmail);
         self::assertSame('member@example.test', member_auth_email_for_contact_email('member@example.test', 'ON4CRD'));
     }
 

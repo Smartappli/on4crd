@@ -85,8 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('auth_unavailable'));
         }
 
+        $authEmail = member_auth_email_for_contact_email($email, $callsign);
+        member_cleanup_registration_auth_orphan($authEmail, $callsign);
+        $userId = 0;
         try {
-            $authEmail = member_auth_email_for_contact_email($email, $callsign);
             $userId = $authClient->registerWithUniqueUsername($authEmail, $password, $callsign);
         } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException|\Delight\Auth\InvalidUsernameException $exception) {
             throw new RuntimeException($t('invalid_data'));
@@ -96,8 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($t('too_many'));
         }
 
-        db()->prepare(
-            'INSERT INTO members (
+        try {
+            db()->prepare(
+                'INSERT INTO members (
                  auth_user_id, callsign, first_name, last_name, full_name, email, password_hash, password_change_required,
                  country, address, postal_code, phone, qth, locator, licence_class, operator_since,
                  cq_zone, itu_zone, qsl_via, lotw_username, eqsl_username, qrz_url, website,
@@ -160,38 +163,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  visibility_antennas = VALUES(visibility_antennas),
                  visibility_interests = VALUES(visibility_interests),
                  is_active = 1'
-        )->execute([
-            (int) $userId,
-            $callsign,
-            $firstName,
-            $lastName,
-            $fullName,
-            $email,
-            password_hash($password, PASSWORD_DEFAULT),
-            0,
-            $country !== '' ? $country : null,
-            $address !== '' ? $address : null,
-            $postalCode !== '' ? $postalCode : null,
-            $phone !== '' ? $phone : null,
-            $qth !== '' ? $qth : null,
-            $locator !== '' ? $locator : null,
-            $licenceClass !== '' ? $licenceClass : null,
-            $operatorSince !== '' ? $operatorSince : null,
-            $cqZone !== '' ? $cqZone : null,
-            $ituZone !== '' ? $ituZone : null,
-            $qslVia !== '' ? $qslVia : null,
-            $lotwUsername !== '' ? $lotwUsername : null,
-            $eqslUsername !== '' ? $eqslUsername : null,
-            $qrzUrl,
-            $website !== '' ? $website : null,
-            $isUbaMember,
-            $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
-            $favouriteBands !== '' ? $favouriteBands : null,
-            $favouriteModes !== '' ? $favouriteModes : null,
-            $stationEquipment !== '' ? $stationEquipment : null,
-            $antennas !== '' ? $antennas : null,
-            $interests !== '' ? $interests : null,
-        ]);
+            )->execute([
+                (int) $userId,
+                $callsign,
+                $firstName,
+                $lastName,
+                $fullName,
+                $email,
+                password_hash($password, PASSWORD_DEFAULT),
+                0,
+                $country !== '' ? $country : null,
+                $address !== '' ? $address : null,
+                $postalCode !== '' ? $postalCode : null,
+                $phone !== '' ? $phone : null,
+                $qth !== '' ? $qth : null,
+                $locator !== '' ? $locator : null,
+                $licenceClass !== '' ? $licenceClass : null,
+                $operatorSince !== '' ? $operatorSince : null,
+                $cqZone !== '' ? $cqZone : null,
+                $ituZone !== '' ? $ituZone : null,
+                $qslVia !== '' ? $qslVia : null,
+                $lotwUsername !== '' ? $lotwUsername : null,
+                $eqslUsername !== '' ? $eqslUsername : null,
+                $qrzUrl,
+                $website !== '' ? $website : null,
+                $isUbaMember,
+                $ubaMemberNumber !== '' ? $ubaMemberNumber : null,
+                $favouriteBands !== '' ? $favouriteBands : null,
+                $favouriteModes !== '' ? $favouriteModes : null,
+                $stationEquipment !== '' ? $stationEquipment : null,
+                $antennas !== '' ? $antennas : null,
+                $interests !== '' ? $interests : null,
+            ]);
+        } catch (Throwable $exception) {
+            member_delete_unlinked_auth_user((int) $userId);
+            throw $exception;
+        }
 
         if (in_array($callsign, configured_administrator_callsigns(), true)) {
             ensure_configured_administrator_roles([$callsign]);

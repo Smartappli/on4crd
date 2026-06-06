@@ -323,6 +323,20 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('function apply_runtime_schema_updates(): void', $updates);
     }
 
+    public function testRegistrationCleansSharedEmailAuthOrphans(): void
+    {
+        $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $helpers = file_get_contents(__DIR__ . '/../app/member_profile_helpers.php');
+        self::assertIsString($register);
+        self::assertIsString($helpers);
+
+        self::assertStringContainsString('member_cleanup_registration_auth_orphan($authEmail, $callsign);', $register);
+        self::assertStringContainsString('member_delete_unlinked_auth_user((int) $userId);', $register);
+        self::assertStringContainsString('function member_cleanup_registration_auth_orphan(string $authEmail, string $callsign): void', $helpers);
+        self::assertStringContainsString('WHERE email = ? AND username = ? LIMIT 1', $helpers);
+        self::assertStringContainsString('function member_delete_unlinked_auth_user(int $authUserId): void', $helpers);
+    }
+
     public function testRouteSpecificHelpersAreLoadedLazily(): void
     {
         $functions = file_get_contents(__DIR__ . '/../app/functions.php');
