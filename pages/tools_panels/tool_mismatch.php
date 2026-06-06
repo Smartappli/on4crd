@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-mismatch" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-mismatch" data-tool-panel>
     <h2><?= e((string) $t['mismatch_loss_calc']) ?></h2>
     <label><?= e((string) $t['swr']) ?>
         <input type="text" inputmode="decimal" id="mismatch-swr" data-min="1" data-step="0.01" value="1.5">

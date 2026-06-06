@@ -48,4 +48,4 @@ ob_start();
     <?php endforeach; ?>
 </section>
 <?php
-echo render_layout((string) ob_get_clean(), (string) ($t['layout'] ?? $i18n['fr']['layout']));
+echo render_layout((string) ob_get_clean(), (string) ($t['layout'] ?? 'Ecoles radio'));

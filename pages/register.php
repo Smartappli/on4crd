@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userId = 0;
         try {
             $userId = $authClient->registerWithUniqueUsername($authEmail, $password, $callsign);
-        } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException|\Delight\Auth\InvalidUsernameException $exception) {
+        } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException $exception) {
             throw new RuntimeException($t('invalid_data'));
         } catch (\Delight\Auth\UserAlreadyExistsException|\Delight\Auth\DuplicateUsernameException $exception) {
             throw new RuntimeException($t('already_exists'));

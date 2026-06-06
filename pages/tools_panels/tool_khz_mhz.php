@@ -1,4 +1,8 @@
-<article id="tool-khz-mhz" class="tool-panel card is-hidden" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article id="tool-khz-mhz" class="tool-panel card is-hidden" data-tool-panel>
     <h2><?= e((string) ($t['khz_mhz_calc'] ?? 'khz_mhz_calc')) ?></h2>
     <div class="tool-grid-form">
         <label for="tool-khz-mhz-in"><?= e((string) ($t['value_in'] ?? 'Input value')) ?></label>

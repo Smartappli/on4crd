@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-battery-current" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-battery-current" data-tool-panel>
     <h2><?= e((string) $t['battery_current_calc']) ?></h2>
     <label><?= e((string) $t['battery_voltage_v']) ?>
         <input type="text" inputmode="decimal" id="battery-voltage" data-min="0.1" data-step="0.1" value="13.8">

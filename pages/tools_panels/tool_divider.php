@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-divider" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-divider" data-tool-panel>
     <h2><?= e((string) $t['divider_calc']) ?></h2>
     <label><?= e((string) $t['vin_volts']) ?>
         <input type="text" inputmode="decimal" id="divider-vin" data-min="0" data-step="0.01" value="13.8">

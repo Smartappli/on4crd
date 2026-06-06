@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-duty" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-duty" data-tool-panel>
     <h2><?= e((string) $t['duty_cycle_calc']) ?></h2>
     <label><?= e((string) $t['tx_time_sec']) ?>
         <input type="text" inputmode="decimal" id="duty-tx" data-min="0" data-step="0.1" value="30">

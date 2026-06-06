@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-dipole" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-dipole" data-tool-panel>
     <h2><?= e((string) $t['dipole_calc']) ?></h2>
     <label><?= e((string) $t['frequency_mhz']) ?>
         <input type="text" inputmode="decimal" id="dipole-frequency" data-min="0" data-step="0.001" value="145.5">

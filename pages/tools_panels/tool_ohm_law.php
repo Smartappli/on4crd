@@ -1,4 +1,8 @@
-<article id="tool-ohm-law" data-tool-panel class="card tool-panel is-hidden">
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article id="tool-ohm-law" data-tool-panel class="card tool-panel is-hidden">
     <h2><?= e((string) ($t['ohm_law_calc'] ?? "Loi d'Ohm")) ?></h2>
     <p class="help"><?= e((string) ($t['ohm_law_help'] ?? 'Enter two values, or edit one of three values, to compute the missing or dependent value.')) ?></p>
     <div class="grid-auto">

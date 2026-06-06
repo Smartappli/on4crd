@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-muf" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-muf" data-tool-panel>
     <h2><?= e((string) $t['muftool_calc']) ?></h2>
     <label><?= e((string) $t['critical_freq_mhz']) ?>
         <input type="text" inputmode="decimal" id="muf-fof2" data-min="0" data-step="0.01" value="6">

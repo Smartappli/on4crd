@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-db-sum" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-db-sum" data-tool-panel>
     <h2><?= e((string) $t['db_sum_calc']) ?></h2>
     <label><?= e((string) $t['dbm_a']) ?>
         <input type="text" inputmode="decimal" id="dbsum-a" data-step="0.1" value="30">

@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-skip" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-skip" data-tool-panel>
     <h2><?= e((string) $t['skip_calc']) ?></h2>
     <label><?= e((string) $t['virtual_height_km']) ?>
         <input type="text" inputmode="decimal" id="skip-height" data-min="1" data-step="1" value="300">

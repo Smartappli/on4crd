@@ -1,4 +1,8 @@
-<article id="tool-xl" class="tool-panel card is-hidden" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article id="tool-xl" class="tool-panel card is-hidden" data-tool-panel>
     <h2><?= e((string) ($t['xl_calc'] ?? 'Reactance inductive (XL)')) ?></h2>
     <div class="tool-grid-form">
         <label for="xl-freq"><?= e((string) ($t['frequency_mhz'] ?? 'Frequency (MHz)')) ?></label>

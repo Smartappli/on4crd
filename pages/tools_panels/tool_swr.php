@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-swr" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-swr" data-tool-panel>
     <h2><?= e((string) $t['swr_calc']) ?></h2>
     <label><?= e((string) ($t['forward_power'] ?? 'Forward power (W)')) ?>
         <input type="text" inputmode="decimal" id="swr-forward" data-min="0.01" data-step="0.1" value="50">

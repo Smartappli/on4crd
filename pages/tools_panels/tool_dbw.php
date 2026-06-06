@@ -1,4 +1,8 @@
-<article id="tool-dbw" class="tool-panel card is-hidden" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article id="tool-dbw" class="tool-panel card is-hidden" data-tool-panel>
     <h2><?= e((string) ($t['dbw_calc'] ?? 'dBm <-> dBW')) ?></h2>
     <div class="tool-grid-form">
         <label for="dbw-dbm"><?= e((string) ($t['dbm_label'] ?? 'dBm')) ?></label>

@@ -1,4 +1,8 @@
-<article class="card tool-panel" id="tool-solar" data-tool-panel>
+<?php
+declare(strict_types=1);
+
+$t = isset($t) && is_array($t) ? $t : [];
+?><article class="card tool-panel" id="tool-solar" data-tool-panel>
     <h2><?= e((string) $t['solar_calc']) ?></h2>
     <label><?= e((string) $t['panel_watts']) ?>
         <input type="text" inputmode="decimal" id="solar-watts" data-min="0" data-step="1" value="100">

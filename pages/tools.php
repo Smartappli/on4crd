@@ -240,12 +240,13 @@ $jsI18n = [
     'dbuv_label' => $tr('dbuv_label', 'dBµV'),
 ];
 
-$renderFallbackToolGridPanel = static function () use ($toolGridFallbackPath, $hasToolGridFallback, &$t): bool {
+$renderFallbackToolGridPanel = static function (array $panelTranslations) use ($toolGridFallbackPath, $hasToolGridFallback): bool {
     $fallbackPath = $toolGridFallbackPath;
     if (!$hasToolGridFallback) {
         return false;
     }
 
+    $t = $panelTranslations;
     require $fallbackPath;
     return true;
 };
@@ -318,7 +319,7 @@ $extractPanelTranslationKeys = static function (string $toolId) use ($toolPanelM
     return $panelKeyCache[$toolId];
 };
 
-$renderToolPanel = static function (string $toolId) use ($toolPanelMap, &$t, $conversionTools, $radioMathTools): bool {
+$renderToolPanel = static function (string $toolId, array $panelTranslations, array $conversionToolEntries, array $radioMathToolEntries) use ($toolPanelMap): bool {
     $partialFile = $toolPanelMap[$toolId] ?? null;
     if ($partialFile === null) {
         return false;
@@ -329,6 +330,9 @@ $renderToolPanel = static function (string $toolId) use ($toolPanelMap, &$t, $co
         return false;
     }
 
+    $t = $panelTranslations;
+    $conversionTools = $conversionToolEntries;
+    $radioMathTools = $radioMathToolEntries;
     require $partialPath;
     return true;
 };
@@ -360,7 +364,7 @@ if (($_GET['ajax'] ?? '') === 'tool_panel') {
     }
 
     ob_start();
-    $rendered = $renderToolPanel($toolId) || ($toolId === 'tool-grid' && $renderFallbackToolGridPanel());
+    $rendered = $renderToolPanel($toolId, $t, $conversionTools, $radioMathTools) || ($toolId === 'tool-grid' && $renderFallbackToolGridPanel($t));
     $panelHtml = (string) ob_get_clean();
 
     if (!$rendered) {
@@ -462,7 +466,7 @@ ob_start();
     </aside>
     <div id="tools-content" class="tools-content">
         <?php
-        if (!$renderToolPanel('tool-grid') && !$renderFallbackToolGridPanel()) {
+        if (!$renderToolPanel('tool-grid', $t, $conversionTools, $radioMathTools) && !$renderFallbackToolGridPanel($t)) {
             trigger_error('Missing tools panel partial for id: tool-grid', E_USER_WARNING);
         }
         ?>
