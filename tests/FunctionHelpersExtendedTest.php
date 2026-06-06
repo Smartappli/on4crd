@@ -202,6 +202,25 @@ final class FunctionHelpersExtendedTest extends TestCase
         classifieds_validate_payload('gear', str_repeat('x', 191), 'Description', 'Namur', 'contact@example.test', $categories, 'Invalid');
     }
 
+    public function testPasswordChangeRequiredRequiresAdminForcedMarker(): void
+    {
+        self::assertFalse(member_password_change_required([
+            'id' => 1,
+            'password_change_required' => 1,
+            'password_reset_forced_at' => null,
+        ]));
+        self::assertFalse(member_password_change_required([
+            'id' => 1,
+            'password_change_required' => 0,
+            'password_reset_forced_at' => '2026-06-06 12:00:00',
+        ]));
+        self::assertTrue(member_password_change_required([
+            'id' => 1,
+            'password_change_required' => 1,
+            'password_reset_forced_at' => '2026-06-06 12:00:00',
+        ]));
+    }
+
     public function testMemberCountryHelpersFormatKnownCountryWithFlag(): void
     {
         self::assertSame('BE', member_country_code_for('Belgique'));
