@@ -7,6 +7,8 @@ $i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };
+$registrationThrottleLimit = 50;
+$registrationThrottleWindowSeconds = 60 * 60 * 12;
 
 if (current_user() !== null) {
     redirect(module_enabled('dashboard') ? 'dashboard' : 'home');
@@ -89,7 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         member_cleanup_registration_auth_orphan($authEmail, $callsign);
         $userId = 0;
         try {
-            $userId = $authClient->registerWithUniqueUsername($authEmail, $password, $callsign);
+            $authClient->throttle(['enumerateUsers', $authClient->getIpAddress()], 1, 60 * 60, 75);
+            $authClient->throttle(['createNewAccount', $authClient->getIpAddress()], 1, $registrationThrottleWindowSeconds, $registrationThrottleLimit, true);
+            $userId = $authClient->admin()->createUserWithUniqueUsername($authEmail, $password, $callsign);
+            $authClient->throttle(['createNewAccount', $authClient->getIpAddress()], 1, $registrationThrottleWindowSeconds, $registrationThrottleLimit, false);
         } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException $exception) {
             throw new RuntimeException($t('invalid_data'));
         } catch (\Delight\Auth\UserAlreadyExistsException|\Delight\Auth\DuplicateUsernameException $exception) {
