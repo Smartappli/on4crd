@@ -341,12 +341,12 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('function member_delete_unlinked_auth_user(int $authUserId): void', $helpers);
     }
 
-    public function testRegistrationThrottleAllowsTwentyAccountCreations(): void
+    public function testRegistrationThrottleAllowsFiftyAccountCreations(): void
     {
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
         self::assertIsString($register);
 
-        self::assertStringContainsString('$registrationThrottleLimit = 20;', $register);
+        self::assertStringContainsString('$registrationThrottleLimit = 50;', $register);
         self::assertStringContainsString('$registrationThrottleWindowSeconds = 60 * 60 * 12;', $register);
         self::assertStringContainsString('$authClient->throttle([\'createNewAccount\', $authClient->getIpAddress()], 1, $registrationThrottleWindowSeconds, $registrationThrottleLimit, true);', $register);
         self::assertStringContainsString('$authClient->admin()->createUserWithUniqueUsername($authEmail, $password, $callsign);', $register);
