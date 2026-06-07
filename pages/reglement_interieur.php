@@ -12,9 +12,15 @@ $updatedAtLabel = $text('updated_at_label');
 $updatedAt = $text('updated_at');
 $statusLabel = $text('status_label');
 $status = $text('status');
+$roiImagePath = 'assets/roi/roi.jpg';
+$roiImageAbsolutePath = dirname(__DIR__) . '/' . $roiImagePath;
+$roiImageUrl = is_file($roiImageAbsolutePath) ? asset_url($roiImagePath) : '';
 
 $clubName = trim((string) config('privacy.controller_name', 'Radio Club Durnal ON4CRD'));
 $clubEmail = site_contact_email();
+$introSummary = str_contains($summary, '{club_name}.')
+    ? str_replace('{club_name}.', "\n\n{club_name}.\n\n", $summary)
+    : str_replace('{club_name}', "\n\n{club_name}\n\n", $summary);
 
 $replacePlaceholders = static function (string $value) use ($clubName, $clubEmail): string {
     return strtr($value, [
@@ -39,20 +45,28 @@ $renderTextBlocks = static function (string $value) use ($replacePlaceholders): 
 set_page_meta([
     'title' => $title,
     'description' => mb_substr(trim($replacePlaceholders($summary)), 0, 160),
+    'image' => $roiImageUrl,
     'schema_type' => 'WebPage',
 ]);
 
 ob_start();
 ?>
-<div class="stack">
-    <section class="card">
-        <p class="help"><?= e($updatedAtLabel) ?> : <?= e($updatedAt) ?> · <?= e($statusLabel) ?> : <?= e($status) ?></p>
-        <h1><?= e($title) ?></h1>
-        <?= $renderTextBlocks($summary) ?>
-        <p class="help">
-            <?= e($text('contact_label')) ?> :
-            <a href="mailto:<?= e($clubEmail) ?>"><?= e($clubEmail) ?></a>
-        </p>
+<div class="stack reglement-interieur-module">
+    <section class="card reglement-interieur-hero">
+        <div class="reglement-interieur-hero-copy">
+            <p class="help"><?= e($updatedAtLabel) ?> : <?= e($updatedAt) ?> · <?= e($statusLabel) ?> : <?= e($status) ?></p>
+            <h1><?= e($title) ?></h1>
+            <?= $renderTextBlocks($introSummary) ?>
+            <p class="help">
+                <?= e($text('contact_label')) ?> :
+                <a href="mailto:<?= e($clubEmail) ?>"><?= e($clubEmail) ?></a>
+            </p>
+        </div>
+        <?php if ($roiImageUrl !== ''): ?>
+            <figure class="reglement-interieur-illustration">
+                <img src="<?= e($roiImageUrl) ?>" alt="<?= e($title) ?>" loading="lazy" decoding="async">
+            </figure>
+        <?php endif; ?>
     </section>
 
     <?php foreach ($sections as $section): ?>
