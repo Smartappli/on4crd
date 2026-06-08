@@ -362,6 +362,14 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("mb_safe_strtoupper(\$search)", $directory);
     }
 
+    public function testDirectoryDoesNotHideOn4crdCallsign(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        self::assertIsString($directory);
+
+        self::assertStringNotContainsString('UPPER(callsign) <> ?', $directory);
+    }
+
     public function testCurrentUserRepairsMissingAuthUserLinkByCallsign(): void
     {
         $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');

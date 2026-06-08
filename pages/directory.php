@@ -27,9 +27,8 @@ if (table_exists('members')) {
 
     $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role
         FROM members
-        WHERE is_active = 1
-          AND UPPER(callsign) <> ?';
-    $params = ['ON4CRD'];
+        WHERE is_active = 1';
+    $params = [];
 
     if ($search !== '') {
         $sql .= ' AND (UPPER(callsign) LIKE ?
@@ -74,14 +73,12 @@ if (table_exists('members')) {
         'SELECT COUNT(*) AS active_total,
                 SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
-         WHERE is_active = 1
-           AND UPPER(callsign) <> ?'
+         WHERE is_active = 1'
     );
     $countParams = [];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
         $countParams[] = $visibilityLevel;
     }
-    $countParams[] = 'ON4CRD';
     $countsStmt->execute($countParams);
     $countsRow = $countsStmt->fetch() ?: [];
     $activeMembersCount = (int) ($countsRow['active_total'] ?? 0);
@@ -112,8 +109,8 @@ if (table_exists('members')) {
     unset($member);
     $members = array_values($members);
 
-    $licenceStmt = db()->prepare('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND UPPER(callsign) <> ? AND licence_class IS NOT NULL AND licence_class <> ? GROUP BY licence_class ORDER BY licence_class ASC');
-    $licenceStmt->execute(['ON4CRD', '']);
+    $licenceStmt = db()->prepare('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND licence_class IS NOT NULL AND licence_class <> ? GROUP BY licence_class ORDER BY licence_class ASC');
+    $licenceStmt->execute(['']);
     $licenceRows = $licenceStmt->fetchAll() ?: [];
 } else {
     $licenceRows = [];
