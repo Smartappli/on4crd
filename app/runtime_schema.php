@@ -145,6 +145,36 @@ HTML;
     }
 }
 
+function seed_liberation_eghezee_2026_event(): void
+{
+    if (!table_exists('events')) {
+        return;
+    }
+
+    $slug = 'liberation-eghezee-82e-anniversaire-2026';
+    $title = 'Libération d\'Eghezée';
+    $summary = 'Participation au 82ème anniversaire de la Libération d\'Eghezée les 25, 26 et 27 septembre 2026.';
+    $description = '<p>Participation au 82ème anniversaire de la Libération d\'Eghezée, organisé les 25, 26 et 27 septembre 2026.</p>';
+
+    db()->prepare(
+        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
+         VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")
+         ON DUPLICATE KEY UPDATE title = VALUES(title), summary = VALUES(summary), description = VALUES(description), kind = VALUES(kind), start_at = VALUES(start_at), end_at = VALUES(end_at), location = VALUES(location), external_url = VALUES(external_url), status = VALUES(status)'
+    )->execute([
+        $slug,
+        $title,
+        $summary,
+        $description,
+        '2026-09-25 00:00:00',
+        '2026-09-27 23:59:00',
+        'Eghezée',
+    ]);
+
+    if (function_exists('cache_forget')) {
+        cache_forget('home_next_event_v1');
+    }
+}
+
 function seed_ad_placements(): void
 {
     if (!table_exists('ad_placements')) {
@@ -210,7 +240,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-09.2';
+    return '2026-06-09.3';
 }
 
 function runtime_schema_marker_path(): string
