@@ -4,7 +4,8 @@
 }
 
 [data-route="news_view"] .news-event-poster {
-  margin: 0 0 1.25rem;
+  width: 50%;
+  margin: 0 auto 1.25rem;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 22px;
@@ -82,6 +83,10 @@
 }
 
 @media (max-width: 720px) {
+  [data-route="news_view"] .news-event-poster {
+    width: 100%;
+  }
+
   [data-route="news_view"] .news-event-info-grid {
     grid-template-columns: 1fr;
   }
