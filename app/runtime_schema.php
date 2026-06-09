@@ -124,7 +124,7 @@ HTML;
     db()->prepare(
         'INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at)
          VALUES (?, NULL, ?, ?, ?, ?, "published", ?)'
-    )->execute([$sectionId, $slug, $title, $excerpt, $content, '2026-06-09 00:00:00']);
+    )->execute([$sectionId, $slug, $title, $excerpt, $content, '2026-06-09 09:00:00']);
 
     if (function_exists('cache_forget')) {
         cache_forget('news_published_count_v1');
