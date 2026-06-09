@@ -7,7 +7,7 @@
     const startNode = document.getElementById('event-detail-start');
     const endNode = document.getElementById('event-detail-end');
     const locationNode = document.getElementById('event-detail-location');
-    const detailLinkNode = document.getElementById('event-detail-link');
+    const actionsNode = document.getElementById('event-detail-actions');
     const externalLinkNode = document.getElementById('event-detail-external');
 
     document.querySelectorAll('.event-chip[data-event-id]').forEach((chip) => {
@@ -23,11 +23,11 @@
         if (startNode) startNode.textContent = chip.dataset.start || '';
         if (endNode) endNode.textContent = chip.dataset.end || '';
         if (locationNode) locationNode.textContent = chip.dataset.location || 'Ã€ confirmer';
-        if (detailLinkNode) detailLinkNode.setAttribute('href', chip.dataset.detailUrl || '#');
         if (externalLinkNode) {
           const url = chip.dataset.externalUrl || '';
           externalLinkNode.setAttribute('href', url || '#');
           externalLinkNode.classList.toggle('is-hidden', !url);
+          if (actionsNode) actionsNode.classList.toggle('is-hidden', !url);
         }
       });
     });
@@ -135,7 +135,7 @@
     start: document.getElementById('event-detail-start'),
     end: document.getElementById('event-detail-end'),
     location: document.getElementById('event-detail-location'),
-    link: document.getElementById('event-detail-link'),
+    actions: document.getElementById('event-detail-actions'),
     external: document.getElementById('event-detail-external'),
     imageWrap: document.getElementById('event-detail-image-wrap'),
     image: document.getElementById('event-detail-image')
@@ -156,7 +156,6 @@
     if (detail.start) detail.start.textContent = props.startLabel || '';
     if (detail.end) detail.end.textContent = props.endLabel || '';
     if (detail.location) detail.location.textContent = props.location || config.locationTbd || '';
-    if (detail.link) detail.link.setAttribute('href', event.url || '#');
     if (detail.image && detail.imageWrap) {
       const imageUrl = props.imageUrl || '';
       detail.image.setAttribute('alt', event.title || config.eventLabel || 'Evénement');
@@ -171,6 +170,7 @@
       const externalUrl = props.externalUrl || '';
       detail.external.setAttribute('href', externalUrl || '#');
       detail.external.classList.toggle('is-hidden', !externalUrl);
+      if (detail.actions) detail.actions.classList.toggle('is-hidden', !externalUrl);
     }
   };
   const formatDate = (date) => {

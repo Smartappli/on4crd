@@ -238,7 +238,6 @@ foreach ($rows as $event) {
         'startLabel' => $startAt->format('d/m/Y H:i'),
         'endLabel' => $endAt->format('d/m/Y H:i'),
         'location' => trim((string) ($event['location'] ?? '')),
-        'detailUrl' => route_url('event_view', ['slug' => (string) $event['slug']]),
         'externalUrl' => $externalUrl,
         'imageUrl' => $imageUrl,
     ];
@@ -388,7 +387,7 @@ ob_start();
                 <dt><?= e($t['end']) ?></dt><dd id="event-detail-end"></dd>
                 <dt><?= e($t['location']) ?></dt><dd id="event-detail-location"></dd>
             </dl>
-            <p class="events-detail-actions">
+            <p class="events-detail-actions is-hidden" id="event-detail-actions">
                 <a id="event-detail-external" class="button secondary is-hidden" href="#" target="_blank" rel="noopener noreferrer"><?= e($t['external_link']) ?></a>
             </p>
         </section>

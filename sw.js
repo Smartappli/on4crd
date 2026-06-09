@@ -1,4 +1,4 @@
-const VERSION = 'v358-events-cache';
+const VERSION = 'v359-events-cache';
 const STATIC_CACHE = `on4crd-static-${VERSION}`;
 const PAGE_CACHE = `on4crd-pages-${VERSION}`;
 const DATA_CACHE = `on4crd-data-${VERSION}`;

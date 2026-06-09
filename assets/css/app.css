@@ -3184,6 +3184,15 @@ textarea.wysiwyg-source {
   width: 100%;
   height: auto;
 }
+.events-event-poster-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+}
+.events-event-poster-grid img {
+  height: 100%;
+  object-fit: cover;
+}
 .events-next-card dl,
 .events-detail-card dl,
 .events-single-meta {
@@ -3220,6 +3229,9 @@ textarea.wysiwyg-source {
   }
 }
 @media (max-width: 760px) {
+  .events-event-poster-grid {
+    grid-template-columns: 1fr;
+  }
   .events-toolbar-actions {
     width: 100%;
     display: grid;
