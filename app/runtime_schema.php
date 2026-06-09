@@ -79,6 +79,61 @@ function seed_news_sections(): void
     }
 }
 
+function seed_brocante_crd_2026_news(): void
+{
+    if (!table_exists('news_posts') || !table_exists('news_sections')) {
+        return;
+    }
+
+    $sectionStmt = db()->prepare('SELECT id FROM news_sections WHERE slug = ? LIMIT 1');
+    $sectionStmt->execute(['on4crd']);
+    $sectionId = (int) ($sectionStmt->fetchColumn() ?: 0);
+    if ($sectionId <= 0) {
+        return;
+    }
+
+    $slug = 'brocante-crd-20-06-2026';
+    $existingStmt = db()->prepare('SELECT id FROM news_posts WHERE slug = ? LIMIT 1');
+    $existingStmt->execute([$slug]);
+    if ($existingStmt->fetchColumn()) {
+        return;
+    }
+
+    $title = 'Brocante CRD - samedi 20 juin 2026';
+    $excerpt = 'Brocante CRD à Leuze Longchamps le samedi 20 juin 2026 dès 09h00, avec petit-déjeuner, pains saucisses, tables exposants et repas du soir sur réservation.';
+    $content = <<<'HTML'
+<p>À vos agendas ! Brocante CRD, le samedi 20/06/2026 à partir de 09h00.</p>
+<p>Celle-ci se tiendra à Leuze Longchamps, entité d'Eghezée, route de La Bruyère 62, à côté de l'église.</p>
+<p>Le petit-déjeuner de bienvenue (café + croissant) vous sera proposé au prix de 2,- €. À partir de midi, vous aurez la possibilité de déguster de succulents pains saucisses proposés à un prix très démocratique. Réservation souhaitée auprès de Bruno : <a href="mailto:ON7ZB@uba.be">ON7ZB@uba.be</a>.</p>
+<p>Ne tardez pas à réserver votre ou vos table(s). Nous risquons aussi d'agrandir significativement l'espace d'exposition : le prix du mètre de table n'est que de 2,- €.</p>
+<p><strong>Horaire brocante :</strong> accueil exposants à partir de 08h00, accueil des visiteurs à partir de 09h00.</p>
+<p><strong>Infos et réservations obligatoires brocante :</strong> <a href="mailto:on4dg@uba.be">on4dg@uba.be</a>.</p>
+<p>En clôture de journée, à partir de 18h00, nous vous proposons un repas à prix d'ami composé de la manière suivante :</p>
+<ul>
+    <li>Apéritif</li>
+    <li>Assiette froide géante avec pas moins de 4 viandes différentes et ses accompagnements</li>
+    <li>Café + dessert : Merveilleux ou Éclair</li>
+</ul>
+<p>Le tout pour la modique somme de 25,- €.</p>
+<p>Le paiement anticipatif de votre repas du soir est à verser au plus tard le 16/06 sur le compte du CRD : <strong>BE82 9501 7301 2868</strong>. Mentionnez en communication votre indicatif, le nombre de repas souhaité et votre gourmandise de prédilection : code M pour Merveilleux ou code E pour Éclair au chocolat.</p>
+<p><strong>Réservations repas :</strong> Bruno <a href="mailto:on7zb@uba.be">on7zb@uba.be</a>.</p>
+<p>À très bientôt pour vivre ensemble cet événement.</p>
+<p>Pour le comité, Benoît ON4BEN.</p>
+HTML;
+
+    db()->prepare(
+        'INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at)
+         VALUES (?, NULL, ?, ?, ?, ?, "published", ?)'
+    )->execute([$sectionId, $slug, $title, $excerpt, $content, '2026-06-09 00:00:00']);
+
+    if (function_exists('cache_forget')) {
+        cache_forget('news_published_count_v1');
+        cache_forget('news_categories_v2');
+        cache_forget('news_archives_v1');
+        cache_forget('home_latest_news_v1');
+    }
+}
+
 function seed_ad_placements(): void
 {
     if (!table_exists('ad_placements')) {
@@ -144,7 +199,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-06.2';
+    return '2026-06-09.1';
 }
 
 function runtime_schema_marker_path(): string

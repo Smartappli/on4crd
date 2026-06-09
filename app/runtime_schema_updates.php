@@ -377,6 +377,7 @@ function apply_runtime_schema_updates(): void
     }
 
     seed_news_sections();
+    seed_brocante_crd_2026_news();
 
     ensure_configured_administrator_roles();
 
