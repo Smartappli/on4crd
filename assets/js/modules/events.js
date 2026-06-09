@@ -1,6 +1,7 @@
 ﻿(function () {
   const detailPanel = document.getElementById('event-detail');
   if (detailPanel) {
+    const nextPanel = document.getElementById('events-next-event');
     const titleNode = document.getElementById('event-detail-title');
     const summaryNode = document.getElementById('event-detail-summary');
     const startNode = document.getElementById('event-detail-start');
@@ -11,6 +12,12 @@
 
     document.querySelectorAll('.event-chip[data-event-id]').forEach((chip) => {
       chip.addEventListener('click', () => {
+        detailPanel.hidden = false;
+        detailPanel.classList.remove('is-hidden');
+        if (nextPanel) {
+          nextPanel.hidden = true;
+          nextPanel.classList.add('is-hidden');
+        }
         if (titleNode) titleNode.textContent = chip.dataset.title || 'Ã‰vÃ©nement';
         if (summaryNode) summaryNode.textContent = chip.dataset.summary || 'Aucun rÃ©sumÃ© disponible.';
         if (startNode) startNode.textContent = chip.dataset.start || '';
@@ -112,6 +119,8 @@
 (function () {
   const calendarEl = document.getElementById('events-calendar');
   if (!calendarEl) return;
+  const detailPanel = document.getElementById('event-detail');
+  const nextPanel = document.getElementById('events-next-event');
 
   const config = calendarEl.dataset.calendarConfig ? JSON.parse(calendarEl.dataset.calendarConfig) : {};
   if (!window.FullCalendar) {
@@ -127,17 +136,37 @@
     end: document.getElementById('event-detail-end'),
     location: document.getElementById('event-detail-location'),
     link: document.getElementById('event-detail-link'),
-    external: document.getElementById('event-detail-external')
+    external: document.getElementById('event-detail-external'),
+    imageWrap: document.getElementById('event-detail-image-wrap'),
+    image: document.getElementById('event-detail-image')
   };
 
   const updateDetails = (event) => {
     const props = event.extendedProps || {};
+    if (detailPanel) {
+      detailPanel.hidden = false;
+      detailPanel.classList.remove('is-hidden');
+    }
+    if (nextPanel) {
+      nextPanel.hidden = true;
+      nextPanel.classList.add('is-hidden');
+    }
     if (detail.title) detail.title.textContent = event.title || config.eventLabel || 'Evénement';
     if (detail.summary) detail.summary.textContent = props.summary || config.noSummary || '';
     if (detail.start) detail.start.textContent = props.startLabel || '';
     if (detail.end) detail.end.textContent = props.endLabel || '';
     if (detail.location) detail.location.textContent = props.location || config.locationTbd || '';
     if (detail.link) detail.link.setAttribute('href', event.url || '#');
+    if (detail.image && detail.imageWrap) {
+      const imageUrl = props.imageUrl || '';
+      detail.image.setAttribute('alt', event.title || config.eventLabel || 'Evénement');
+      if (imageUrl) {
+        detail.image.setAttribute('src', imageUrl);
+      } else {
+        detail.image.removeAttribute('src');
+      }
+      detail.imageWrap.classList.toggle('is-hidden', !imageUrl);
+    }
     if (detail.external) {
       const externalUrl = props.externalUrl || '';
       detail.external.setAttribute('href', externalUrl || '#');

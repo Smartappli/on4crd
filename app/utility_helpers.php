@@ -52,6 +52,26 @@ function site_contact_email(): string
 }
 }
 
+if (!function_exists('first_image_src_from_html')) {
+function first_image_src_from_html(string $html): string
+{
+    if ($html === '' || stripos($html, '<img') === false) {
+        return '';
+    }
+
+    if (preg_match('/<img\b[^>]*\bsrc\s*=\s*(["\'])(.*?)\1/i', $html, $matches) !== 1) {
+        return '';
+    }
+
+    $src = html_entity_decode((string) $matches[2], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    if (function_exists('sanitize_image_src_attribute')) {
+        return sanitize_image_src_attribute($src) ?? '';
+    }
+
+    return $src;
+}
+}
+
 if (!function_exists('llphant_embedding_generator')) {
 function llphant_embedding_generator(): ?object
 {

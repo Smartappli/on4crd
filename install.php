@@ -237,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $rolePermStmt = db()->prepare('INSERT IGNORE INTO role_permissions (role_id, permission_id) VALUES (?, ?)');
         foreach ($roles as $roleCode => $permCodes) { foreach ($permCodes as $permCode) { $rolePermStmt->execute([$roleMap[$roleCode], $permMap[$permCode]]); } }
 
-        seed_modules(); seed_dashboard_widgets(); seed_news_sections(); seed_brocante_crd_2026_news(); seed_ad_placements(); seed_live_feeds();
+        seed_modules(); seed_dashboard_widgets(); seed_news_sections(); seed_brocante_crd_2026_news(); seed_liberation_eghezee_2026_event(); seed_ad_placements(); seed_live_feeds();
 
         $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? 'ON4CRD')));
         $firstName = trim((string) ($_POST['first_name'] ?? ''));

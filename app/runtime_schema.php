@@ -154,7 +154,12 @@ function seed_liberation_eghezee_2026_event(): void
     $slug = 'liberation-eghezee-82e-anniversaire-2026';
     $title = 'Libération d\'Eghezée';
     $summary = 'Participation au 82ème anniversaire de la Libération d\'Eghezée les 25, 26 et 27 septembre 2026.';
-    $description = '<p>Participation au 82ème anniversaire de la Libération d\'Eghezée, organisé les 25, 26 et 27 septembre 2026.</p>';
+    $description = <<<'HTML'
+<figure class="events-event-poster">
+    <img src="/assets/events/liberation-eghezee-2026.png" alt="Libération d'Eghezée - 82ème anniversaire, 25, 26 et 27 septembre 2026">
+</figure>
+<p>Participation au 82ème anniversaire de la Libération d'Eghezée, organisé les 25, 26 et 27 septembre 2026.</p>
+HTML;
 
     db()->prepare(
         'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
@@ -240,7 +245,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-09.3';
+    return '2026-06-09.4';
 }
 
 function runtime_schema_marker_path(): string

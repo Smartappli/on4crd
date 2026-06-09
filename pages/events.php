@@ -186,6 +186,8 @@ if (strtolower((string) ($_GET['format'] ?? '')) === 'ics') {
     exit;
 }
 
+$hasRequestedMonth = isset($_GET['ym']);
+$hasRequestedWeek = isset($_GET['week']);
 $monthRaw = (string) ($_GET['ym'] ?? date('Y-m'));
 if (!preg_match('/^\d{4}-\d{2}$/', $monthRaw)) {
     $monthRaw = date('Y-m');
@@ -211,6 +213,8 @@ if (!$weekDate instanceof DateTimeImmutable) {
 }
 
 $eventCards = [];
+$nextEvent = null;
+$now = new DateTimeImmutable('now');
 foreach ($rows as $event) {
     try {
         $startAt = new DateTimeImmutable((string) $event['start_at']);
@@ -224,27 +228,36 @@ foreach ($rows as $event) {
         $summary = trim(strip_tags((string) ($event['description'] ?? '')));
     }
     $externalUrl = sanitize_href_attribute((string) ($event['external_url'] ?? '')) ?? '';
+    $imageUrl = first_image_src_from_html((string) ($event['description'] ?? ''));
 
-    $eventCards[(int) $event['id']] = [
+    $eventCard = [
         'id' => (int) $event['id'],
         'title' => (string) $event['title'],
         'summary' => $summary,
+        'startDate' => $startAt->format('Y-m-d'),
         'startLabel' => $startAt->format('d/m/Y H:i'),
         'endLabel' => $endAt->format('d/m/Y H:i'),
         'location' => trim((string) ($event['location'] ?? '')),
         'detailUrl' => route_url('event_view', ['slug' => (string) $event['slug']]),
         'externalUrl' => $externalUrl,
+        'imageUrl' => $imageUrl,
     ];
 
+    $eventCards[(int) $event['id']] = $eventCard;
+    if ($nextEvent === null && $endAt >= $now) {
+        $nextEvent = $eventCard;
+    }
 }
 
-$defaultEvent = $eventCards !== [] ? reset($eventCards) : null;
 $calendarView = match ($view) {
     'week' => 'timeGridWeek',
     'list' => 'listMonth',
     default => 'dayGridMonth',
 };
 $initialDate = $view === 'week' ? $weekDate->format('Y-m-d') : $monthDate->format('Y-m-d');
+if (!$hasRequestedMonth && !$hasRequestedWeek && is_array($nextEvent)) {
+    $initialDate = (string) $nextEvent['startDate'];
+}
 $calendarConfig = [
     'locale' => $calendarLocale,
     'initialView' => $calendarView,
@@ -342,23 +355,47 @@ ob_start();
         <script src="<?= e($calendarLocaleAsset) ?>"></script>
     </article>
 
-    <aside class="card events-detail-card" id="event-detail">
-        <h2><?= e($t['detail']) ?></h2>
-        <?php if (is_array($defaultEvent)): ?>
-            <h3 id="event-detail-title"><?= e($defaultEvent['title']) ?></h3>
-            <p id="event-detail-summary"><?= e($defaultEvent['summary'] !== '' ? $defaultEvent['summary'] : $t['no_summary']) ?></p>
+    <aside class="card events-side-card">
+        <section class="events-next-card" id="events-next-event">
+            <h2>Prochain événement</h2>
+            <?php if (is_array($nextEvent)): ?>
+                <?php if ($nextEvent['imageUrl'] !== ''): ?>
+                    <figure class="events-preview-image">
+                        <img src="<?= e((string) $nextEvent['imageUrl']) ?>" alt="<?= e((string) $nextEvent['title']) ?>">
+                    </figure>
+                <?php endif; ?>
+                <h3><?= e((string) $nextEvent['title']) ?></h3>
+                <p><?= e($nextEvent['summary'] !== '' ? (string) $nextEvent['summary'] : $t['no_summary']) ?></p>
+                <dl>
+                    <dt><?= e($t['start']) ?></dt><dd><?= e((string) $nextEvent['startLabel']) ?></dd>
+                    <dt><?= e($t['end']) ?></dt><dd><?= e((string) $nextEvent['endLabel']) ?></dd>
+                    <dt><?= e($t['location']) ?></dt><dd><?= e($nextEvent['location'] !== '' ? (string) $nextEvent['location'] : $t['location_tbd']) ?></dd>
+                </dl>
+                <p class="events-detail-actions">
+                    <a class="button" href="<?= e((string) $nextEvent['detailUrl']) ?>"><?= e($t['view_sheet']) ?></a>
+                </p>
+            <?php else: ?>
+                <p><?= e($t['no_event']) ?></p>
+            <?php endif; ?>
+        </section>
+
+        <section class="events-detail-card is-hidden" id="event-detail" hidden>
+            <h2><?= e($t['detail']) ?></h2>
+            <figure class="events-preview-image is-hidden" id="event-detail-image-wrap">
+                <img id="event-detail-image" src="" alt="">
+            </figure>
+            <h3 id="event-detail-title"></h3>
+            <p id="event-detail-summary"></p>
             <dl>
-                <dt><?= e($t['start']) ?></dt><dd id="event-detail-start"><?= e($defaultEvent['startLabel']) ?></dd>
-                <dt><?= e($t['end']) ?></dt><dd id="event-detail-end"><?= e($defaultEvent['endLabel']) ?></dd>
-                <dt><?= e($t['location']) ?></dt><dd id="event-detail-location"><?= e($defaultEvent['location'] !== '' ? $defaultEvent['location'] : $t['location_tbd']) ?></dd>
+                <dt><?= e($t['start']) ?></dt><dd id="event-detail-start"></dd>
+                <dt><?= e($t['end']) ?></dt><dd id="event-detail-end"></dd>
+                <dt><?= e($t['location']) ?></dt><dd id="event-detail-location"></dd>
             </dl>
             <p class="events-detail-actions">
-                <a id="event-detail-link" class="button" href="<?= e($defaultEvent['detailUrl']) ?>"><?= e($t['view_sheet']) ?></a>
-                <a id="event-detail-external" class="button secondary <?= $defaultEvent['externalUrl'] === '' ? 'is-hidden' : '' ?>" href="<?= e($defaultEvent['externalUrl']) ?>" target="_blank" rel="noopener noreferrer"><?= e($t['external_link']) ?></a>
+                <a id="event-detail-link" class="button" href="#"><?= e($t['view_sheet']) ?></a>
+                <a id="event-detail-external" class="button secondary is-hidden" href="#" target="_blank" rel="noopener noreferrer"><?= e($t['external_link']) ?></a>
             </p>
-        <?php else: ?>
-            <p><?= e($t['no_event']) ?></p>
-        <?php endif; ?>
+        </section>
     </aside>
 </section>
 <?php

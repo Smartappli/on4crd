@@ -3163,15 +3163,35 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 textarea.wysiwyg-source {
   display: none;
 }
+.events-side-card {
+  display: grid;
+  gap: 1rem;
+}
+.events-next-card h3,
 .events-detail-card h3 {
   margin: .25rem 0;
 }
+.events-preview-image,
+.events-event-poster {
+  margin: 0 0 .85rem;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--panel-2);
+}
+.events-preview-image img,
+.events-event-poster img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.events-next-card dl,
 .events-detail-card dl,
 .events-single-meta {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: .25rem .7rem;
 }
+.events-next-card dt,
 .events-detail-card dt,
 .events-single-meta dt {
   color: var(--muted);

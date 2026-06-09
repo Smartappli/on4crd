@@ -30,6 +30,7 @@ foreach ($rows as $event) {
         $summary = trim(strip_tags((string) ($event['description'] ?? '')));
     }
     $externalUrl = sanitize_href_attribute((string) ($event['external_url'] ?? '')) ?? '';
+    $imageUrl = first_image_src_from_html((string) ($event['description'] ?? ''));
 
     $calendarEvents[] = [
         'id' => (string) ((int) $event['id']),
@@ -41,6 +42,7 @@ foreach ($rows as $event) {
             'summary' => $summary,
             'location' => trim((string) ($event['location'] ?? '')),
             'externalUrl' => $externalUrl,
+            'imageUrl' => $imageUrl,
             'startLabel' => $startAt->format('d/m/Y H:i'),
             'endLabel' => $endAt->format('d/m/Y H:i'),
         ],
