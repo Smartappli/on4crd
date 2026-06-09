@@ -80,6 +80,19 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('loading="lazy"', $sanitized);
     }
 
+    public function testSanitizeRichHtmlPreservesUtf8Characters(): void
+    {
+        $sanitized = sanitize_rich_html('<p>À vos agendas : café, Éclair, Benoît, 2,- €.</p>');
+
+        self::assertStringContainsString('À vos agendas', $sanitized);
+        self::assertStringContainsString('café', $sanitized);
+        self::assertStringContainsString('Éclair', $sanitized);
+        self::assertStringContainsString('Benoît', $sanitized);
+        self::assertStringContainsString('€', $sanitized);
+        self::assertStringNotContainsString('Ã', $sanitized);
+        self::assertStringNotContainsString('â', $sanitized);
+    }
+
     public function testSafeStoragePublicPathAcceptsOnlyWhitelistedPrefixes(): void
     {
         self::assertSame('storage/press/doc.pdf', safe_storage_public_path('storage/press/doc.pdf'));

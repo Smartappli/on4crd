@@ -368,7 +368,7 @@ function sanitize_rich_html(string $html): string
 
     $dom = new DOMDocument();
     $previousUseInternalErrors = libxml_use_internal_errors(true);
-    $wrapped = '<!doctype html><html><body>' . $html . '</body></html>';
+    $wrapped = '<?xml encoding="UTF-8"><!doctype html><html><body>' . $html . '</body></html>';
     $dom->loadHTML($wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     libxml_clear_errors();
     libxml_use_internal_errors($previousUseInternalErrors);
