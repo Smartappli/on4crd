@@ -378,6 +378,7 @@ function apply_runtime_schema_updates(): void
 
     seed_news_sections();
     seed_brocante_crd_2026_news();
+    seed_liberation_eghezee_2026_event();
 
     ensure_configured_administrator_roles();
 
