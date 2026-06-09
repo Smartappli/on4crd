@@ -371,9 +371,6 @@ ob_start();
                     <dt><?= e($t['end']) ?></dt><dd><?= e((string) $nextEvent['endLabel']) ?></dd>
                     <dt><?= e($t['location']) ?></dt><dd><?= e($nextEvent['location'] !== '' ? (string) $nextEvent['location'] : $t['location_tbd']) ?></dd>
                 </dl>
-                <p class="events-detail-actions">
-                    <a class="button" href="<?= e((string) $nextEvent['detailUrl']) ?>"><?= e($t['view_sheet']) ?></a>
-                </p>
             <?php else: ?>
                 <p><?= e($t['no_event']) ?></p>
             <?php endif; ?>
@@ -392,7 +389,6 @@ ob_start();
                 <dt><?= e($t['location']) ?></dt><dd id="event-detail-location"></dd>
             </dl>
             <p class="events-detail-actions">
-                <a id="event-detail-link" class="button" href="#"><?= e($t['view_sheet']) ?></a>
                 <a id="event-detail-external" class="button secondary is-hidden" href="#" target="_blank" rel="noopener noreferrer"><?= e($t['external_link']) ?></a>
             </p>
         </section>

@@ -180,6 +180,79 @@ HTML;
     }
 }
 
+function seed_brocante_souper_crd_2026_event(): void
+{
+    if (!table_exists('events')) {
+        return;
+    }
+
+    $slug = 'brocante-souper-crd-2026';
+    $title = 'Brocante et souper du CRD';
+    $summary = 'Brocante et souper du CRD le samedi 20 juin 2026 à Leuze Longchamps.';
+    $description = <<<'HTML'
+<figure class="events-event-poster">
+    <img src="/assets/events/brocante-souper-crd-2026.png" alt="Brocante et souper du CRD - 20 juin 2026">
+</figure>
+<p>Brocante et souper du CRD le samedi 20 juin 2026 à Leuze Longchamps, route de La Bruyère 62.</p>
+<p>Accueil exposants dès 08h00, visiteurs dès 09h00. Souper à partir de 18h00 sur réservation.</p>
+HTML;
+
+    db()->prepare(
+        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
+         VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")
+         ON DUPLICATE KEY UPDATE title = VALUES(title), summary = VALUES(summary), description = VALUES(description), kind = VALUES(kind), start_at = VALUES(start_at), end_at = VALUES(end_at), location = VALUES(location), external_url = VALUES(external_url), status = VALUES(status)'
+    )->execute([
+        $slug,
+        $title,
+        $summary,
+        $description,
+        '2026-06-20 08:00:00',
+        '2026-06-20 22:00:00',
+        'Leuze Longchamps, route de La Bruyère 62',
+    ]);
+
+    if (function_exists('cache_forget')) {
+        cache_forget('home_next_event_v1');
+    }
+}
+
+function seed_fete_aischois_2026_event(): void
+{
+    if (!table_exists('events')) {
+        return;
+    }
+
+    $slug = 'fete-des-aischois-2026';
+    $title = 'Fête des Aischois';
+    $summary = 'Activation radio par Raymond (ON4DG) à la fête des Aischois le 8 août 2026, dès le matin jusque vers 17h00.';
+    $description = <<<'HTML'
+<figure class="events-event-poster events-event-poster-grid">
+    <img src="/assets/events/fete-des-aischois-2026-1.png" alt="Installation ON4CRD à la fête des Aischois">
+    <img src="/assets/events/fete-des-aischois-2026-2.png" alt="Antenne et caravane radio ON4CRD à la fête des Aischois">
+</figure>
+<p>Raymond (ON4DG) activera la fête des Aischois depuis le même emplacement que l'an dernier.</p>
+<p>L'activation est prévue le samedi 8 août 2026, dès le matin jusque vers 17h00.</p>
+HTML;
+
+    db()->prepare(
+        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
+         VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")
+         ON DUPLICATE KEY UPDATE title = VALUES(title), summary = VALUES(summary), description = VALUES(description), kind = VALUES(kind), start_at = VALUES(start_at), end_at = VALUES(end_at), location = VALUES(location), external_url = VALUES(external_url), status = VALUES(status)'
+    )->execute([
+        $slug,
+        $title,
+        $summary,
+        $description,
+        '2026-08-08 08:00:00',
+        '2026-08-08 17:00:00',
+        'Aische-en-Refail',
+    ]);
+
+    if (function_exists('cache_forget')) {
+        cache_forget('home_next_event_v1');
+    }
+}
+
 function seed_ad_placements(): void
 {
     if (!table_exists('ad_placements')) {
@@ -245,7 +318,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-09.4';
+    return '2026-06-09.5';
 }
 
 function runtime_schema_marker_path(): string
