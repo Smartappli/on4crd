@@ -68,6 +68,10 @@ function first_image_src_from_html(string $html): string
         return sanitize_image_src_attribute($src) ?? '';
     }
 
+    if (preg_match('/^(?:javascript|data|vbscript):/i', trim($src)) === 1) {
+        return '';
+    }
+
     return $src;
 }
 }
