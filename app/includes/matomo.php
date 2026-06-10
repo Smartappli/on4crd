@@ -6,9 +6,9 @@ $matomoSiteId = (string) config('tracking.matomo_site_id', '');
 $matomoRequireConsent = (bool) config('tracking.matomo_require_consent', true);
 $matomoDisableCookies = (bool) config('tracking.matomo_disable_cookies', true);
 $matomoConsentGiven = (string) ($_COOKIE['on4crd_tracking_consent'] ?? '') === '1';
-$matomoCanTrack = $matomoUrl !== '' && $matomoSiteId !== '' && (!$matomoRequireConsent || $matomoConsentGiven);
+$matomoConfigured = $matomoUrl !== '' && $matomoSiteId !== '';
 
-if (!$matomoCanTrack) {
+if (!$matomoConfigured) {
     return;
 }
 ?>
@@ -21,12 +21,14 @@ if (!$matomoCanTrack) {
   <?php endif; ?>
   <?php if ($matomoRequireConsent): ?>
   _paq.push(['requireConsent']);
+  <?php if ($matomoConsentGiven): ?>
   _paq.push(['rememberConsentGiven']);
+  <?php endif; ?>
   <?php endif; ?>
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
-    var u = <?= json_encode($matomoUrl . '/') ?>;
+    var u = <?= json_encode($matomoUrl . '/', JSON_UNESCAPED_SLASHES) ?>;
     _paq.push(['setTrackerUrl', u + 'matomo.php']);
     _paq.push(['setSiteId', <?= json_encode($matomoSiteId) ?>]);
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
