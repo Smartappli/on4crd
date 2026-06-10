@@ -1,6 +1,25 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
+  'title' => '404 - Stránka sa nenašla',
+  'eyebrow' => 'Signál sa stratil',
   'page_not_found' => 'Stránka sa nenašla.',
+  'description' => 'Požadovaná stránka neexistuje, bola presunutá alebo už nie je dostupná.',
+  'requested_label' => 'Požadovaná adresa:',
+  'home_button' => 'Späť na domovskú stránku',
+  'home_hint' => 'Vrátiť sa na hlavný portál ON4CRD.',
+  'search_button' => 'Prehľadať stránku',
+  'search_label' => 'Hľadať na ON4CRD',
+  'search_placeholder' => 'Kľúčové slovo, článok, udalosť...',
+  'search_submit' => 'Hľadať',
+  'search_hint' => 'Skúste volací znak, rádiovú tému, názov udalosti alebo klubovú službu.',
+  'quick_links_title' => 'Užitočné odkazy',
+  'news_link' => 'Novinky',
+  'news_hint' => 'Prečítajte si najnovšie klubové aktualizácie.',
+  'events_link' => 'Udalosti',
+  'events_hint' => 'Pozrite si nadchádzajúce aktivity.',
+  'tools_link' => 'Rádio nástroje',
+  'tools_hint' => 'Otvorte praktické rádioamatérske nástroje.',
 );
