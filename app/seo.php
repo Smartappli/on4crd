@@ -89,49 +89,12 @@ function seo_build_hreflang_alternates(string $route): array
 
     parse_str((string) ($canonicalParts['query'] ?? ''), $canonicalQuery);
     unset($canonicalQuery['lang'], $canonicalQuery['locale']);
-    $canonicalQueryString = seo_build_canonical_query($canonicalQuery);
-
-    $basePath = (string) ($canonicalParts['path'] ?? '/index.php');
-    $baseScheme = (string) ($canonicalParts['scheme'] ?? 'https');
-    $baseHost = (string) ($canonicalParts['host'] ?? '');
-    $basePort = isset($canonicalParts['port']) ? ':' . (string) $canonicalParts['port'] : '';
-    if ($baseHost === '') {
-        return [];
-    }
-
-    $requestHost = strtolower(trim((string) ($_SERVER['HTTP_HOST'] ?? '')));
-    $requestHostWithoutPort = explode(':', $requestHost)[0] ?? $requestHost;
-    $hostForLocalePattern = strtolower($baseHost) !== '' ? strtolower($baseHost) : $requestHostWithoutPort;
-    $parts = explode('.', $hostForLocalePattern);
-    $first = $parts[0] ?? '';
-    $suffix = count($parts) > 1 ? implode('.', array_slice($parts, 1)) : '';
-
     $alternates = [];
     foreach (seo_supported_locales() as $locale) {
-        $alternateQuery = $canonicalQuery;
-        $alternateQuery['locale'] = $locale;
-        $alternateQueryString = seo_build_canonical_query($alternateQuery);
-
-        if ($suffix !== '' && in_array($first, seo_supported_locales(), true)) {
-            $alternateHost = preg_replace('/^' . preg_quote($first, '/') . '\./', $locale . '.', $hostForLocalePattern, 1);
-            if ($alternateHost === null || $alternateHost === '') {
-                continue;
-            }
-            $alternates[$locale] = $baseScheme . '://' . $alternateHost . $basePort . $basePath . '?' . $alternateQueryString;
-            continue;
-        }
-        $alternates[$locale] = $baseScheme . '://' . $baseHost . $basePort . $basePath . '?' . $alternateQueryString;
+        $alternates[$locale] = route_url_with_locale($route, $locale, $canonicalQuery);
     }
 
-    $xDefault = $canonical;
-    $configuredBase = rtrim((string) config('app.base_url', ''), '/');
-    if ($configuredBase !== '') {
-        $xDefault = $configuredBase . '/index.php?route=' . rawurlencode($route);
-        if ($canonicalQueryString !== '') {
-            $xDefault .= '&' . $canonicalQueryString;
-        }
-    }
-    $alternates['x-default'] = $xDefault;
+    $alternates['x-default'] = route_url_with_locale($route, (string) config('app.default_locale', 'fr'), $canonicalQuery);
 
     return $alternates;
 }

@@ -3,10 +3,40 @@ declare(strict_types=1);
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$xml = cache_remember('seo_sitemap_xml_v8', 300, static function (): string {
+$requestedLocale = strtolower(trim((string) ($_GET['lang'] ?? $_GET['locale'] ?? '')));
+$supportedLocales = supported_locales();
+
+if ($requestedLocale === '') {
+    $xml = cache_remember('seo_sitemap_index_v1', 300, static function () use ($supportedLocales): string {
+        $lastmod = gmdate('c');
+        $buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        $buffer .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        foreach ($supportedLocales as $locale) {
+            $buffer .= '<sitemap>';
+            $buffer .= '<loc>' . e(route_url('sitemap.xml', ['lang' => $locale])) . '</loc>';
+            $buffer .= '<lastmod>' . e($lastmod) . '</lastmod>';
+            $buffer .= '</sitemap>';
+        }
+        $buffer .= '</sitemapindex>';
+
+        return $buffer;
+    });
+
+    echo (string) $xml;
+    return;
+}
+
+if (!in_array($requestedLocale, $supportedLocales, true)) {
+    http_response_code(404);
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    echo '<error>Unknown sitemap locale.</error>';
+    return;
+}
+
+$xml = cache_remember('seo_sitemap_xml_v9_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
-    $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries): void {
+    $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries, $requestedLocale): void {
         $alternates = [];
         $defaultLocale = (string) config('app.default_locale', 'fr');
         foreach (supported_locales() as $locale) {
@@ -14,15 +44,13 @@ $xml = cache_remember('seo_sitemap_xml_v8', 300, static function (): string {
         }
         $alternates['x-default'] = route_url_with_locale($route, $defaultLocale, $query);
 
-        foreach (supported_locales() as $locale) {
-            $entries[] = [
-                'loc' => $alternates[$locale],
-                'lastmod' => $lastmod ?? gmdate('c'),
-                'priority' => $priority,
-                'changefreq' => $changefreq,
-                'alternates' => $alternates,
-            ];
-        }
+        $entries[] = [
+            'loc' => $alternates[$requestedLocale],
+            'lastmod' => $lastmod ?? gmdate('c'),
+            'priority' => $priority,
+            'changefreq' => $changefreq,
+            'alternates' => $alternates,
+        ];
     };
 
     $addEntry('home', '1.0', 'daily');
