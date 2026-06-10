@@ -72,6 +72,26 @@ function render_localized_not_found(): void
     $locale = function_exists('current_locale') ? current_locale() : 'fr';
     $messages = i18n_domain_locale('errors', $locale);
     $message = (string) ($messages['page_not_found'] ?? 'Page introuvable.');
+    $errorPage = __DIR__ . '/pages/errors.php';
+    if (is_file($errorPage)) {
+        $previousRoute = $_GET['route'] ?? null;
+        $previousNotFoundRoute = $_GET['_not_found_route'] ?? null;
+        $_GET['_not_found_route'] = is_scalar($previousRoute) ? (string) $previousRoute : '';
+        $_GET['route'] = 'errors';
+        require $errorPage;
+        if ($previousRoute === null) {
+            unset($_GET['route']);
+        } else {
+            $_GET['route'] = $previousRoute;
+        }
+        if ($previousNotFoundRoute === null) {
+            unset($_GET['_not_found_route']);
+        } else {
+            $_GET['_not_found_route'] = $previousNotFoundRoute;
+        }
+        return;
+    }
+
     $htmlLang = in_array($locale, supported_locales(), true) ? $locale : substr($locale, 0, 2);
     $htmlDir = is_rtl_locale($htmlLang) ? 'rtl' : 'ltr';
     echo '<!doctype html><html lang="' . htmlspecialchars($htmlLang, ENT_QUOTES, 'UTF-8') . '" dir="' . htmlspecialchars($htmlDir, ENT_QUOTES, 'UTF-8') . '"><meta charset="utf-8"><title>404</title><body><h1>404</h1><p>'
@@ -246,7 +266,13 @@ if (isset($routeModules[$route])) {
     require_module_enabled($routeModules[$route], $route);
 }
 
-$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'donation', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
+$publicRoutes = ['home', 'login', 'logout', 'register', 'forgot_password', 'reset_password', 'membership', 'donation', 'conditions_utilisation', 'mentions_legales', 'reglement_interieur', 'sponsoring', 'gdpr', 'search', 'news', 'news_view', 'articles', 'article', 'wiki', 'wiki_view', 'albums', 'album', 'classifieds', 'chatbot', 'directory', 'tools', 'tools_geocode', 'committee', 'press', 'schools', 'events', 'events_feed', 'event_view', 'auctions', 'auction_view', 'ad_click', 'relais', 'code_q', 'code_cw', 'bandplan_on3', 'bandplan_on2', 'bandplan_harec', 'errors', 'sitemap.xml', 'robots.txt', 'newsletter_unsubscribe', 'newsletter_public', 'footer_contact', 'llms.txt', 'ai-index.json', 'knowledge-graph.jsonld', 'install.php'];
+if (!isset($routeModules[$route]) && !in_array($route, $publicRoutes, true)) {
+    http_response_code(404);
+    render_localized_not_found();
+    exit;
+}
+
 if (!in_array($route, $publicRoutes, true)) {
     require_login(login_next_url_for_route($route, $_GET));
 }
@@ -367,6 +393,10 @@ switch ($route) {
     case 'bandplan_on3': $dispatchPage('pages/bandplan_on3.php'); break;
     case 'bandplan_on2': $dispatchPage('pages/bandplan_on2.php'); break;
     case 'bandplan_harec': $dispatchPage('pages/bandplan_harec.php'); break;
+    case 'errors':
+        http_response_code(404);
+        $dispatchPage('pages/errors.php');
+        break;
     case 'ads': $dispatchPage('pages/ads.php'); break;
     case 'admin_ads': $dispatchPage('pages/admin_ads.php'); break;
     case 'ad_click': $dispatchPage('pages/ad_click.php'); break;
