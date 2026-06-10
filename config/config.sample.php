@@ -8,7 +8,7 @@ return [
         'pass' => 'change-me',
     ],
     'app' => [
-        'site_name' => 'ON4CRD v3.6.1',
+        'site_name' => 'ON4CRD',
         'env' => 'production', // production|development
         'base_url' => '',
         'default_locale' => 'fr',
