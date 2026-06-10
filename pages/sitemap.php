@@ -3,23 +3,26 @@ declare(strict_types=1);
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$xml = cache_remember('seo_sitemap_xml_v7', 300, static function (): string {
+$xml = cache_remember('seo_sitemap_xml_v8', 300, static function (): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
     $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries): void {
         $alternates = [];
+        $defaultLocale = (string) config('app.default_locale', 'fr');
         foreach (supported_locales() as $locale) {
             $alternates[$locale] = route_url_with_locale($route, $locale, $query);
         }
-        $alternates['x-default'] = route_url_with_locale($route, 'fr', $query);
+        $alternates['x-default'] = route_url_with_locale($route, $defaultLocale, $query);
 
-        $entries[] = [
-            'loc' => route_url($route, $query),
-            'lastmod' => $lastmod ?? gmdate('c'),
-            'priority' => $priority,
-            'changefreq' => $changefreq,
-            'alternates' => $alternates,
-        ];
+        foreach (supported_locales() as $locale) {
+            $entries[] = [
+                'loc' => $alternates[$locale],
+                'lastmod' => $lastmod ?? gmdate('c'),
+                'priority' => $priority,
+                'changefreq' => $changefreq,
+                'alternates' => $alternates,
+            ];
+        }
     };
 
     $addEntry('home', '1.0', 'daily');
@@ -52,7 +55,6 @@ $xml = cache_remember('seo_sitemap_xml_v7', 300, static function (): string {
         ['route' => 'events', 'module' => 'events', 'priority' => '0.8', 'changefreq' => 'weekly'],
         ['route' => 'auctions', 'module' => 'auctions', 'priority' => '0.8', 'changefreq' => 'daily'],
         ['route' => 'relais', 'priority' => '0.5', 'changefreq' => 'monthly'],
-        ['route' => 'footer_contact', 'priority' => '0.4', 'changefreq' => 'monthly'],
     ];
 
     foreach ($staticRoutes as $row) {

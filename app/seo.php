@@ -33,7 +33,9 @@ function seo_build_canonical_url(string $route): string
         str_starts_with($normalizedHost, 'cdn.')
         || ($configuredCdnHost !== '' && $normalizedHost === $configuredCdnHost)
     );
-    $base = (!$isCdnHost && $requestHost !== '') ? ($requestScheme . '://' . $requestHost) : $configuredBase;
+    $base = $configuredBase !== ''
+        ? $configuredBase
+        : ((!$isCdnHost && $requestHost !== '') ? ($requestScheme . '://' . $requestHost) : '');
     if ($base === '') {
         return '';
     }
@@ -86,7 +88,7 @@ function seo_build_hreflang_alternates(string $route): array
     }
 
     parse_str((string) ($canonicalParts['query'] ?? ''), $canonicalQuery);
-    unset($canonicalQuery['locale']);
+    unset($canonicalQuery['lang'], $canonicalQuery['locale']);
     $canonicalQueryString = seo_build_canonical_query($canonicalQuery);
 
     $basePath = (string) ($canonicalParts['path'] ?? '/index.php');
