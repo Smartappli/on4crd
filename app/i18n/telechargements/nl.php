@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Downloads',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => 'Downloads reserved for ON4CRD members.',
+  'title' => 'Bestanden',
+  'intro' => 'Bestanden en bronnen die leden kunnen downloaden.',
+  'meta_desc' => 'Bestanden voor ON4CRD-leden.',
 );

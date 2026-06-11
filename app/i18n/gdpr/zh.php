@@ -37,6 +37,6 @@ return array (
   'view_members' => '会员查看',
   'view_private' => '私人景观',
   'empty_visible_info' => '无可见信息。',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => '个人资料数据',
+  'profile_data_help' => '本部分会重新使用个人资料中非空的字段，并应用与目录相同的可见性设置。JSON 导出还包含存储在数据库中的个人资料数据。',
 );

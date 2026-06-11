@@ -11,7 +11,7 @@ return array (
   'identity_title' => '出版商和托管',
   'identity_editor' => '网站发布者',
   'identity_address' => '地址',
-  'identity_contact' => 'Contact',
+  'identity_contact' => '联系方式',
   'identity_publication_manager' => '出版经理',
   'identity_hosting' => '托管',
   'related_pages_title' => '相关页面',
@@ -55,5 +55,5 @@ return array (
       'body' => '要报告错误、有问题的内容、侵权或安全事件，请通过 {contact_email} 联系俱乐部。',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Radio Club Durnal ON4CRD 委员会',
 );

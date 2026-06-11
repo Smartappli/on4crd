@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Priekinė galia (W)',
   'reflected_power' => 'Atspindi galia (W)',
   'swr_result' => 'Apskaičiuotas SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW konvertavimas',
 );

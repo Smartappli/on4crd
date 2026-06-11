@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Vydavateľ a hosting',
   'identity_editor' => 'Vydavateľ webovej stránky',
   'identity_address' => 'Adresa',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontakt',
   'identity_publication_manager' => 'Manažér publikácie',
   'identity_hosting' => 'Webhosting',
   'related_pages_title' => 'Súvisiace stránky',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Ak chcete nahlásiť chybu, problematický obsah, porušenie práv alebo bezpečnostný incident, kontaktujte klub na {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Výbor Radio Club Durnal ON4CRD',
 );

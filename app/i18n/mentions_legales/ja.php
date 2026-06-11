@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'パブリッシャーとホスティング',
   'identity_editor' => 'ウェブサイト発行者',
   'identity_address' => '住所',
-  'identity_contact' => 'Contact',
+  'identity_contact' => '連絡先',
   'identity_publication_manager' => '出版マネージャー',
   'identity_hosting' => 'ホスティング',
   'related_pages_title' => '関連ページ',
@@ -55,5 +55,5 @@ return array (
       'body' => 'エラー、問題のあるコンテンツ、権利侵害、またはセキュリティ インシデントを報告するには、{contact_email} のクラブにご連絡ください。',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Radio Club Durnal ON4CRD 委員会',
 );

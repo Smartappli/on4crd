@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Unduhan',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => 'Unduhan reserved for ON4CRD members.',
+  'title' => 'Berkas',
+  'intro' => 'File dan sumber daya untuk diunduh oleh anggota.',
+  'meta_desc' => 'Berkas khusus anggota ON4CRD.',
 );

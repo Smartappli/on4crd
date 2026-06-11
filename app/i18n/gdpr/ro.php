@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Vizualizarea membrilor',
   'view_private' => 'Vedere privată',
   'empty_visible_info' => 'Nu există informații vizibile.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Datele profilului',
+  'profile_data_help' => 'Această secțiune reutilizează câmpurile completate ale profilului și aplică aceleași setări de vizibilitate ca directorul. Exportul JSON conține și datele profilului stocate în baza de date.',
 );

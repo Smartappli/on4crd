@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Библиотека на членовете',
   'news_title' => 'Новини',
   'wiki_title' => 'Знания',
-  'wiki_default_title' => 'Уики страница',
+  'wiki_default_title' => 'Знания страница',
   'classified_default_title' => 'Съобщение',
   'proposal_default_title' => 'Предложение',
   'content_open' => 'Отворете',

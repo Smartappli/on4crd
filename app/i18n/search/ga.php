@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Cuardach',
   'eyebrow' => 'Cuardach domhanda',
-  'lead' => 'Aimsigh go tapa nuacht, ailt, leathanaigh vicí, doiciméid, fógraí agus albaim.',
+  'lead' => 'Aimsigh go tapa nuacht, ailt, leathanaigh eolas, doiciméid, fógraí agus albaim.',
   'placeholder' => 'Táscaire, eochairfhocal, téama, doiciméad...',
   'query_label' => 'Do chuardach',
   'source_label' => 'Foinse',

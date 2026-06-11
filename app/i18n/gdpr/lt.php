@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Narių vaizdas',
   'view_private' => 'Privatus vaizdas',
   'empty_visible_info' => 'Nėra matomos informacijos.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Profilio duomenys',
+  'profile_data_help' => 'Ši skiltis pakartotinai naudoja ne tuščius jūsų profilio laukus ir taiko tuos pačius matomumo nustatymus kaip katalogas. JSON eksportas taip pat apima duomenų bazėje saugomus profilio duomenis.',
 );

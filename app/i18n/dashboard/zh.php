@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => '为什么这个建议',
   'recommendation_reason_default' => '根据您最近的活动。',
   'recommendation_reason_article' => '因为您阅读或保存文章。',
-  'recommendation_reason_wiki' => '因为您查阅维基页面。',
+  'recommendation_reason_wiki' => '因为您查阅知识页面。',
   'recommendation_reason_classified' => '因为你浏览分类广告。',
   'recommendation_reason_album' => '因为您查看共享相册。',
   'recommendation_reason_library' => '因为你查阅图书馆文献。',

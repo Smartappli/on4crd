@@ -37,6 +37,6 @@ return array (
   'view_members' => 'সদস্যদের দেখুন',
   'view_private' => 'ব্যক্তিগত ভিউ',
   'empty_visible_info' => 'কোন দৃশ্যমান তথ্য.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'প্রোফাইলের তথ্য',
+  'profile_data_help' => 'এই অংশটি আপনার প্রোফাইলের খালি নয় এমন ক্ষেত্রগুলি পুনরায় ব্যবহার করে এবং ডিরেক্টরির একই দৃশ্যমানতা সেটিংস প্রয়োগ করে। JSON রপ্তানিতে ডাটাবেসে সংরক্ষিত প্রোফাইলের তথ্যও থাকে।',
 );

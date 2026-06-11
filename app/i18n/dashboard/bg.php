@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Защо това предложение',
   'recommendation_reason_default' => 'Въз основа на скорошната ви активност.',
   'recommendation_reason_article' => 'Защото четете или запазвате статии.',
-  'recommendation_reason_wiki' => 'Защото разглеждате уики страници.',
+  'recommendation_reason_wiki' => 'Защото разглеждате знания страници.',
   'recommendation_reason_classified' => 'Защото гледате рекламите.',
   'recommendation_reason_album' => 'Защото разглеждате споделени албуми.',
   'recommendation_reason_library' => 'Защото се консултирате с библиотечни документи.',

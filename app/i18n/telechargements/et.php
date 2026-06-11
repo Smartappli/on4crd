@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Allalaadimised',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => 'Allalaadimised reserved for ON4CRD members.',
+  'title' => 'Failid',
+  'intro' => 'Failid ja ressursid, mida liikmed saavad alla laadida.',
+  'meta_desc' => 'Failid ON4CRD liikmetele.',
 );

@@ -51,7 +51,7 @@ return array (
   'proposal_type_content' => 'コンテンツ提案',
   'library_title' => '会員ライブラリ',
   'news_title' => 'ニュース',
-  'wiki_title' => 'ウィキ',
+  'wiki_title' => '知識',
   'wiki_default_title' => '知識ページ',
   'classified_default_title' => '案内広告',
   'proposal_default_title' => '提案',

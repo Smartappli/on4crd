@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Εκδότης και φιλοξενία',
   'identity_editor' => 'Εκδότης ιστότοπου',
   'identity_address' => 'Διεύθυνση',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Επικοινωνία',
   'identity_publication_manager' => 'Υπεύθυνος έκδοσης',
   'identity_hosting' => 'Φιλοξενία',
   'related_pages_title' => 'Σχετικές σελίδες',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Για να αναφέρετε ένα σφάλμα, προβληματικό περιεχόμενο, παραβίαση δικαιωμάτων ή περιστατικό ασφάλειας, επικοινωνήστε με το κλαμπ στο {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Επιτροπή του Radio Club Durnal ON4CRD',
 );

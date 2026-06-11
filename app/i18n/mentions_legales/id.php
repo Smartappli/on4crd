@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Penerbit dan hosting',
   'identity_editor' => 'Penerbit situs web',
   'identity_address' => 'Alamat',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontak',
   'identity_publication_manager' => 'Manajer publikasi',
   'identity_hosting' => 'Tuan rumah',
   'related_pages_title' => 'Halaman terkait',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Untuk melaporkan kesalahan, konten bermasalah, pelanggaran hak, atau insiden keamanan, hubungi klub di {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Komite Radio Club Durnal ON4CRD',
 );

@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Изглед на членовете',
   'view_private' => 'Частен изглед',
   'empty_visible_info' => 'Няма видима информация.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Данни от профила',
+  'profile_data_help' => 'Този раздел използва непразните полета от вашия профил и прилага същите настройки за видимост като указателя. Експортът JSON съдържа и данните от профила, съхранени в базата данни.',
 );

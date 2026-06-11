@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Jegyzőkönyvek',
-  'intro' => 'Minutes and reports available to members.',
-  'meta_desc' => 'Jegyzőkönyvek reserved for ON4CRD members.',
+  'intro' => 'A tagok számára elérhető jegyzőkönyvek és jelentések.',
+  'meta_desc' => 'Jegyzőkönyvek ON4CRD-tagoknak.',
 );

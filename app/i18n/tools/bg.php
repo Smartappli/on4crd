@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Мощност напред (W)',
   'reflected_power' => 'Отразена мощност (W)',
   'swr_result' => 'Изчислен КСВ',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Преобразуване dBm <-> dBW',
 );

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Eolas',
-  'unavailable' => 'Beidh an vicí ar fáil tar éis na leathanaigh a thúsú.',
+  'unavailable' => 'Beidh an eolas ar fáil tar éis na leathanaigh a thúsú.',
   'new_pages' => 'Leathanaigh nua',
   'updated_pages' => 'Leathanaigh leasaithe',
   'most_read' => 'Is mó a léann',
@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Cuardaigh leathanach (teideal nó ábhar)',
   'search' => 'Cuardach',
   'reset' => 'Athshocraigh',
-  'wiki_pages' => 'Leathanaigh Vicí',
+  'wiki_pages' => 'Leathanaigh Eolas',
   'no_page' => 'Níor aimsíodh leathanaigh',
   'for_search' => 'don taighde seo',
   'summary_fallback' => 'Tabhair cuairt ar an leathanach seo chun rochtain a fháil ar an ábhar iomlán.',
@@ -29,7 +29,7 @@ return array (
   'propose_page' => 'Mol leathanach',
   'propose_theme_intro' => 'Déan cur síos ar an téama le cur leis agus ar na leathanaigh ar chóir iad a nascadh leis.',
   'close' => 'Dún',
-  'propose_theme_body_intro' => 'Moladh téama Vicí:',
+  'propose_theme_body_intro' => 'Moladh téama Eolas:',
   'propose_theme_name' => 'Ainm téama',
   'propose_theme_reason' => 'Cén fáth a chur leis?',
   'propose_theme_contact' => 'Do theagmhálaí',

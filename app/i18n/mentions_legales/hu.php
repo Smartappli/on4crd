@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Kiadó és tárhely',
   'identity_editor' => 'Weboldal kiadója',
   'identity_address' => 'Cím',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kapcsolat',
   'identity_publication_manager' => 'Kiadványkezelő',
   'identity_hosting' => 'Tárhely',
   'related_pages_title' => 'Kapcsolódó oldalak',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Hiba, problémás tartalom, jogsértés vagy biztonsági incidens bejelentéséhez forduljon a klubhoz az {contact_email} telefonszámon.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'A Radio Club Durnal ON4CRD bizottsága',
 );

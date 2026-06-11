@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Miontuairiscí',
-  'intro' => 'Minutes and reports available to members.',
-  'meta_desc' => 'Miontuairiscí reserved for ON4CRD members.',
+  'intro' => 'Miontuairiscí agus tuarascálacha ar fáil do bhaill.',
+  'meta_desc' => 'Miontuairiscí do bhaill ON4CRD.',
 );

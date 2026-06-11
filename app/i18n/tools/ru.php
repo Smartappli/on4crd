@@ -105,7 +105,7 @@ return array (
   'load_power_w' => 'Мощность нагрузки (Вт)',
   'battery_current_a' => 'Расчётный ток (A)',
   'muftool_calc' => 'Упрощенная МУФ',
-  'critical_freq_mhz' => 'Critical frequency foF2 (MHz)',
+  'critical_freq_mhz' => 'Критическая частота foF2 (MHz)',
   'incidence_deg' => 'Угол падения (°)',
   'muf_result' => 'Расчётная MUF (MHz)',
   'skip_calc' => 'Упрощённая дальность скачка',
@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Передняя мощность (Вт)',
   'reflected_power' => 'Отраженная мощность (Вт)',
   'swr_result' => 'Расчетный КСВ',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Преобразование dBm <-> dBW',
 );

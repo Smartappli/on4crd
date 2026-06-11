@@ -25,7 +25,7 @@ return array (
   'storage_unavailable' => 'Knjižnica je privremeno nedostupna.',
   'meta_desc' => 'Administracija knjižnice članova ON4CRD.',
   'documents' => 'Dokumenti',
-  'file' => 'File',
+  'file' => 'Datoteka',
   'file_help' => 'Prihvaćeni formati: PDF, DOCX, TXT, Markdown i HTML. Maksimalna veličina: 25 MB.',
   'category_code' => 'Šifra',
   'category_label' => 'Libelle',

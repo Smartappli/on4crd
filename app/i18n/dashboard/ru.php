@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Почему это предложение',
   'recommendation_reason_default' => 'На основе вашей недавней активности.',
   'recommendation_reason_article' => 'Потому что вы читаете или сохраняете статьи.',
-  'recommendation_reason_wiki' => 'Потому что вы просматриваете вики-страницы.',
+  'recommendation_reason_wiki' => 'Потому что вы просматриваете знания-страницы.',
   'recommendation_reason_classified' => 'Потому что вы просматриваете объявления.',
   'recommendation_reason_album' => 'Потому что вы просматриваете общие альбомы.',
   'recommendation_reason_library' => 'Потому что вы просматриваете библиотечные документы.',

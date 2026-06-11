@@ -90,7 +90,7 @@ return array (
   'limit_daily' => 'Limiet bereikt: maximaal 5 advertenties per 24 uur.',
   'admin_title' => 'Advertenties administratie',
   'admin_meta_desc' => 'Moderatie en beheer van ON4CRD-advertenties.',
-  'stats_total' => 'Ads',
+  'stats_total' => 'Advertenties',
   'stats_active' => 'Actief',
   'stats_sold' => 'Verkocht',
   'edit_ad' => 'Advertentie bewerken',

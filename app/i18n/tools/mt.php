@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Qawwa \'l quddiem (W)',
   'reflected_power' => 'Qawwa riflessa (W)',
   'swr_result' => 'SWR ikkalkulat',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Konverżjoni dBm <-> dBW',
 );

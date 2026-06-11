@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Snaga naprijed (W)',
   'reflected_power' => 'Reflektirana snaga (W)',
   'swr_result' => 'Izračunati SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Pretvorba dBm <-> dBW',
 );

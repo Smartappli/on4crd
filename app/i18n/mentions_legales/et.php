@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Väljaandja ja hostimine',
   'identity_editor' => 'Veebisaidi väljaandja',
   'identity_address' => 'Aadress',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontakt',
   'identity_publication_manager' => 'Väljaande juht',
   'identity_hosting' => 'Veebimajutus',
   'related_pages_title' => 'Seotud lehed',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Veast, probleemsest sisust, õiguste rikkumisest või turvaintsidendist teatamiseks võtke ühendust klubiga {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Radio Club Durnal ON4CRD juhatus',
 );

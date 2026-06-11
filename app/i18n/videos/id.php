@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Video',
-  'intro' => 'Videos and audiovisual resources shared with club members.',
-  'meta_desc' => 'Video reserved for ON4CRD members.',
+  'intro' => 'Video dan sumber daya audiovisual yang dibagikan kepada anggota klub.',
+  'meta_desc' => 'Video khusus anggota ON4CRD.',
 );

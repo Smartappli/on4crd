@@ -10,7 +10,7 @@ return array (
   'service_reference' => '服务发布者',
   'identity_title' => '服务参考',
   'identity_editor' => '出版商',
-  'identity_contact' => 'Contact',
+  'identity_contact' => '联系方式',
   'identity_address' => '地址',
   'related_pages_title' => '相关页面',
   'legal_link_label' => '法律声明',
@@ -36,7 +36,7 @@ return array (
     2 =>
     array (
       'title' => '提交内容',
-      'body' => '通过网站提交的文章、新闻、事件、维基页面、分类广告和文件可能会在发布之前或之后进行审查、更正、拒绝或删除。内容必须对业余无线电社区有用，并尊重人、法律和俱乐部规则。',
+      'body' => '通过网站提交的文章、新闻、事件、知识页面、分类广告和文件可能会在发布之前或之后进行审查、更正、拒绝或删除。内容必须对业余无线电社区有用，并尊重人、法律和俱乐部规则。',
     ),
     3 =>
     array (

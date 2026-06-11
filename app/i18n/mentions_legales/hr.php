@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Izdavač i hosting',
   'identity_editor' => 'Izdavač web stranice',
   'identity_address' => 'Adresa',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontakt',
   'identity_publication_manager' => 'Voditelj publikacije',
   'identity_hosting' => 'Smještaj weba',
   'related_pages_title' => 'Povezane stranice',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Za prijavu pogreške, problematičnog sadržaja, kršenja prava ili sigurnosnog incidenta kontaktirajte klub na {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Odbor Radio Club Durnal ON4CRD',
 );

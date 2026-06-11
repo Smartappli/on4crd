@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Fremadgående effekt (W)',
   'reflected_power' => 'Reflekteret effekt (W)',
   'swr_result' => 'Beregnet SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW-konvertering',
 );

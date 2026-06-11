@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Προβολή μελών',
   'view_private' => 'Ιδιωτική θέα',
   'empty_visible_info' => 'Δεν υπάρχουν ορατές πληροφορίες.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Δεδομένα προφίλ',
+  'profile_data_help' => 'Αυτή η ενότητα επαναχρησιμοποιεί τα μη κενά πεδία από το προφίλ σας και εφαρμόζει τις ίδιες ρυθμίσεις ορατότητας με τον κατάλογο. Η εξαγωγή JSON περιέχει επίσης τα δεδομένα προφίλ που είναι αποθηκευμένα στη βάση δεδομένων.',
 );

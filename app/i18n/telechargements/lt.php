@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Atsisiuntimai',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => 'Atsisiuntimai reserved for ON4CRD members.',
+  'title' => 'Failai',
+  'intro' => 'Nariams atsisiųsti skirti failai ir ištekliai.',
+  'meta_desc' => 'Failai skirta ON4CRD nariams.',
 );

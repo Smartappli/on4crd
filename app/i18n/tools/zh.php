@@ -196,5 +196,5 @@ return array (
   'forward_power' => '正向功率（W）',
   'reflected_power' => '反射功率（W）',
   'swr_result' => '计算的驻波比',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW 转换',
 );

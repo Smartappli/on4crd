@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Cén fáth an moladh seo',
   'recommendation_reason_default' => 'Bunaithe ar do ghníomhaíocht le déanaí.',
   'recommendation_reason_article' => 'Toisc go bhfuil tú ag léamh nó ag sábháil ailt.',
-  'recommendation_reason_wiki' => 'Toisc go bhfuil tú ag féachaint ar leathanaigh vicí.',
+  'recommendation_reason_wiki' => 'Toisc go bhfuil tú ag féachaint ar leathanaigh eolas.',
   'recommendation_reason_classified' => 'Toisc go bhfuil tú ag féachaint ar na fógraí.',
   'recommendation_reason_album' => 'Toisc go bhfuil tú ag féachaint ar albaim roinnte.',
   'recommendation_reason_library' => 'Toisc go bhfuil tú ag breathnú ar dhoiciméid leabharlainne.',

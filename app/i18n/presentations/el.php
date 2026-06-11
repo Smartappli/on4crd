@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Παρουσιάσεις',
-  'intro' => 'Meeting decks, talks and documents presented to members.',
-  'meta_desc' => 'Παρουσιάσεις reserved for ON4CRD members.',
+  'intro' => 'Παρουσιάσεις συναντήσεων, ομιλίες και έγγραφα που παρουσιάζονται στα μέλη.',
+  'meta_desc' => 'Παρουσιάσεις για τα μέλη του ON4CRD.',
 );

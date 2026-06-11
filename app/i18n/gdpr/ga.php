@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Dearcadh na mball',
   'view_private' => 'Amharc príobháideach',
   'empty_visible_info' => 'Gan eolas sofheicthe.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Sonraí próifíle',
+  'profile_data_help' => 'Úsáideann an chuid seo na réimsí neamhfholmha ó do phróifíl agus cuireann sí na socruithe infheictheachta céanna i bhfeidhm leis an eolaire. Cuimsíonn an t-easpórtáil JSON na sonraí próifíle atá stóráilte sa bhunachar sonraí freisin.',
 );

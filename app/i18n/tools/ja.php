@@ -105,7 +105,7 @@ return array (
   'load_power_w' => '負荷電力(W)',
   'battery_current_a' => '推定電流 (A)',
   'muftool_calc' => '簡略化されたMUF',
-  'critical_freq_mhz' => 'Critical frequency foF2 (MHz)',
+  'critical_freq_mhz' => '臨界周波数 foF2 (MHz)',
   'incidence_deg' => '入射角(°)',
   'muf_result' => '推定 MUF (MHz)',
   'skip_calc' => '簡易スキップ距離計算',
@@ -196,5 +196,5 @@ return array (
   'forward_power' => '順方向電力 (W)',
   'reflected_power' => '反射電力(W)',
   'swr_result' => '計算されたSWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW 変換',
 );

@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Leidėjas ir priegloba',
   'identity_editor' => 'Svetainės leidėjas',
   'identity_address' => 'Adresas',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontaktas',
   'identity_publication_manager' => 'Leidinio vadybininkas',
   'identity_hosting' => 'Hostingas',
   'related_pages_title' => 'Susiję puslapiai',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Norėdami pranešti apie klaidą, probleminį turinį, teisių pažeidimą ar saugumo incidentą, susisiekite su klubu {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Radio Club Durnal ON4CRD komitetas',
 );

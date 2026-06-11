@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'কেন এই পরামর্শ',
   'recommendation_reason_default' => 'আপনার সাম্প্রতিক কার্যকলাপের উপর ভিত্তি করে।',
   'recommendation_reason_article' => 'কারণ আপনি নিবন্ধগুলি পড়েন বা সংরক্ষণ করেন।',
-  'recommendation_reason_wiki' => 'কারণ আপনি উইকি পাতার সাথে পরামর্শ করেন।',
+  'recommendation_reason_wiki' => 'কারণ আপনি জ্ঞান পাতার সাথে পরামর্শ করেন।',
   'recommendation_reason_classified' => 'কারণ আপনি ক্লাসিফাইড ব্রাউজ করেন।',
   'recommendation_reason_album' => 'কারণ আপনি শেয়ার করা অ্যালবাম দেখেন।',
   'recommendation_reason_library' => 'কারণ আপনি লাইব্রেরি নথির সাথে পরামর্শ করুন।',

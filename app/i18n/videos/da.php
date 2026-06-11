@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Videoer',
-  'intro' => 'Videos and audiovisual resources shared with club members.',
-  'meta_desc' => 'Videoer reserved for ON4CRD members.',
+  'intro' => 'Videoer og audiovisuelle ressourcer delt med klubbens medlemmer.',
+  'meta_desc' => 'Videoer forbeholdt ON4CRD-medlemmer.',
 );

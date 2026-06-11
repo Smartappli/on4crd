@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Prezentācijas',
-  'intro' => 'Meeting decks, talks and documents presented to members.',
-  'meta_desc' => 'Prezentācijas reserved for ON4CRD members.',
+  'intro' => 'Sanāksmju prezentācijas, lekcijas un dokumenti dalībniekiem.',
+  'meta_desc' => 'Prezentācijas ON4CRD biedriem.',
 );

@@ -64,7 +64,7 @@ return array (
   'spotlight_member_latest_wiki' => 'Най-новата Знания страница',
   'spotlight_member_latest_article' => 'Последна статия',
   'spotlight_member_gallery' => 'Галерия',
-  'spotlight_member_wiki_empty' => 'В момента няма налични уики страници.',
+  'spotlight_member_wiki_empty' => 'В момента няма налични знания страници.',
   'spotlight_member_article_empty' => 'Все още няма публикувани статии.',
   'spotlight_member_updated_on' => 'Актуализирано на',
   'spotlight_member_library' => 'Библиотека',

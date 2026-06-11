@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Widok członków',
   'view_private' => 'Prywatny widok',
   'empty_visible_info' => 'Brak widocznych informacji.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Dane profilu',
+  'profile_data_help' => 'Ta sekcja ponownie wykorzystuje niepuste pola profilu i stosuje te same ustawienia widoczności co katalog. Eksport JSON zawiera również dane profilu zapisane w bazie danych.',
 );

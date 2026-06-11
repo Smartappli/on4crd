@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Liikmete vaade',
   'view_private' => 'Privaatne vaade',
   'empty_visible_info' => 'Pole nähtavat teavet.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Profiiliandmed',
+  'profile_data_help' => 'See jaotis kasutab teie profiili täidetud välju ja rakendab samu nähtavusseadeid nagu kataloog. JSON-eksport sisaldab ka andmebaasis salvestatud profiiliandmeid.',
 );

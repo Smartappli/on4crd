@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Μπροστινή ισχύς (W)',
   'reflected_power' => 'Ανακλώμενη ισχύς (W)',
   'swr_result' => 'Υπολογισμένο SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Μετατροπή dBm <-> dBW',
 );

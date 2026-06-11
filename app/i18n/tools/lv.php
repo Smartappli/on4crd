@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Jauda uz priekšu (W)',
   'reflected_power' => 'Atstarotā jauda (W)',
   'swr_result' => 'Aprēķināts SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW konvertēšana',
 );

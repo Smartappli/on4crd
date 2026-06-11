@@ -10,7 +10,7 @@ return array (
   'service_reference' => 'Teenuse avaldas',
   'identity_title' => 'Teenuse viide',
   'identity_editor' => 'Kirjastaja',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontakt',
   'identity_address' => 'Aadress',
   'related_pages_title' => 'Seotud lehed',
   'legal_link_label' => 'Õiguslik teade',

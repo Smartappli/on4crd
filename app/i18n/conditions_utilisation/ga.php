@@ -10,7 +10,7 @@ return array (
   'service_reference' => 'Seirbhís arna fhoilsiú ag',
   'identity_title' => 'Tagairt seirbhíse',
   'identity_editor' => 'Foilsitheoir',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Teagmháil',
   'identity_address' => 'Seoladh',
   'related_pages_title' => 'Leathanaigh ghaolmhara',
   'legal_link_label' => 'Fógra dlíthiúil',
@@ -36,7 +36,7 @@ return array (
     2 =>
     array (
       'title' => 'Ábhar curtha isteach',
-      'body' => 'Féadfar ailt, nuacht, imeachtaí, leathanaigh vicí, aicmithe agus doiciméid a chuirtear isteach tríd an láithreán a athbhreithniú, a cheartú, a dhiúltú nó a bhaint roimh nó i ndiaidh a bhfoilsithe. Caithfidh an t-ábhar a bheith úsáideach don phobal raidió amaitéarach agus meas a bheith aige ar dhaoine, ar an dlí agus ar rialacha an chlub.',
+      'body' => 'Féadfar ailt, nuacht, imeachtaí, leathanaigh eolas, aicmithe agus doiciméid a chuirtear isteach tríd an láithreán a athbhreithniú, a cheartú, a dhiúltú nó a bhaint roimh nó i ndiaidh a bhfoilsithe. Caithfidh an t-ábhar a bheith úsáideach don phobal raidió amaitéarach agus meas a bheith aige ar dhaoine, ar an dlí agus ar rialacha an chlub.',
     ),
     3 =>
     array (

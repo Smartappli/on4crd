@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Potencia directa (W)',
   'reflected_power' => 'Potencia reflejada (W)',
   'swr_result' => 'ROE calculada',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Conversión dBm <-> dBW',
 );

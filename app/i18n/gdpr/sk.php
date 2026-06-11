@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Pohľad členov',
   'view_private' => 'Súkromný pohľad',
   'empty_visible_info' => 'Žiadne viditeľné informácie.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Údaje profilu',
+  'profile_data_help' => 'Táto časť opätovne používa neprázdne polia z vášho profilu a uplatňuje rovnaké nastavenia viditeľnosti ako adresár. Export JSON obsahuje aj údaje profilu uložené v databáze.',
 );

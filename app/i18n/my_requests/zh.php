@@ -51,7 +51,7 @@ return array (
   'proposal_type_content' => '内容建议',
   'library_title' => '会员资料库',
   'news_title' => '新闻',
-  'wiki_title' => '维基百科',
+  'wiki_title' => '知识',
   'wiki_default_title' => '知识 页面',
   'classified_default_title' => '分类广告',
   'proposal_default_title' => '建议',

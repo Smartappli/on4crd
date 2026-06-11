@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Võimsus edasi (W)',
   'reflected_power' => 'Peegeldunud võimsus (W)',
   'swr_result' => 'Arvutatud SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW teisendus',
 );

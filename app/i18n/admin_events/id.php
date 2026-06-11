@@ -1,4 +1,35 @@
 <?php
 declare(strict_types=1);
 
-return ['event_saved' => 'Acara disimpan.', 'layout' => 'Administrasi agenda', 'title_required' => 'Judul wajib diisi.', 'form_title' => 'sebuah acara', 'edit' => 'Ubah', 'create' => 'Buat', 'title' => 'Judul', 'slug' => 'Slug', 'summary' => 'Ringkasan', 'description' => 'Deskripsi', 'start' => 'Mulai', 'end' => 'Selesai', 'location' => 'Lokasi', 'external_url' => 'URL eksternal', 'type' => 'Jenis', 'status' => 'Status', 'type_club' => 'Klub', 'type_contest' => 'Kontes', 'draft' => 'Draf', 'published' => 'Dipublikasikan', 'save' => 'Simpan', 'saved_events' => 'Acara tersimpan', 'no_event' => 'Tidak ada acara.', 'calendar_view' => 'Tampilan kalender', 'calendar_help' => 'Klik acara untuk membuka edit.', 'today' => 'Hari ini', 'month' => 'Bulan', 'week' => 'Minggu', 'list' => 'Daftar', 'meta_desc' => 'Kelola acara dan kalender situs.'];
+return array (
+  'event_saved' => 'Acara disimpan.',
+  'layout' => 'Administrasi agenda',
+  'title_required' => 'Judul wajib diisi.',
+  'form_title' => 'sebuah acara',
+  'edit' => 'Ubah',
+  'create' => 'Buat',
+  'title' => 'Judul',
+  'slug' => 'Slug',
+  'summary' => 'Ringkasan',
+  'description' => 'Deskripsi',
+  'start' => 'Mulai',
+  'end' => 'Selesai',
+  'location' => 'Lokasi',
+  'external_url' => 'URL eksternal',
+  'type' => 'Jenis',
+  'status' => 'Status',
+  'type_club' => 'Klub',
+  'type_contest' => 'Kontes',
+  'draft' => 'Draf',
+  'published' => 'Dipublikasikan',
+  'save' => 'Simpan',
+  'saved_events' => 'Acara tersimpan',
+  'no_event' => 'Tidak ada acara.',
+  'calendar_view' => 'Tampilan kalender',
+  'calendar_help' => 'Klik acara untuk membuka edit.',
+  'today' => 'Hari ini',
+  'month' => 'Bulan',
+  'week' => 'Minggu',
+  'list' => 'Daftar',
+  'meta_desc' => 'Kelola acara dan kalender situs.',
+);

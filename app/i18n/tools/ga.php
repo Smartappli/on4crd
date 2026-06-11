@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Cumhacht ar aghaidh (W)',
   'reflected_power' => 'Cumhacht frithchaite (W)',
   'swr_result' => 'SWR ríofa',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Tiontú dBm <-> dBW',
 );

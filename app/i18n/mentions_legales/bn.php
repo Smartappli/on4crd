@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'প্রকাশক এবং হোস্টিং',
   'identity_editor' => 'ওয়েবসাইট প্রকাশক',
   'identity_address' => 'ঠিকানা',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'যোগাযোগ',
   'identity_publication_manager' => 'প্রকাশনা ম্যানেজার',
   'identity_hosting' => 'হোস্টিং',
   'related_pages_title' => 'সম্পর্কিত পাতা',
@@ -55,5 +55,5 @@ return array (
       'body' => 'একটি ত্রুটি, সমস্যাযুক্ত বিষয়বস্তু, অধিকার লঙ্ঘন বা নিরাপত্তা ঘটনা রিপোর্ট করতে, {contact_email} এ ক্লাবের সাথে যোগাযোগ করুন।',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Radio Club Durnal ON4CRD কমিটি',
 );

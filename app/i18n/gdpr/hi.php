@@ -37,6 +37,6 @@ return array (
   'view_members' => 'सदस्य देखते हैं',
   'view_private' => 'निजी दृश्य',
   'empty_visible_info' => 'कोई दृश्यमान जानकारी नहीं.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'प्रोफ़ाइल डेटा',
+  'profile_data_help' => 'यह अनुभाग आपकी प्रोफ़ाइल के खाली न रहने वाले फ़ील्ड का उपयोग करता है और निर्देशिका जैसी ही दृश्यता सेटिंग लागू करता है। JSON निर्यात में डेटाबेस में संग्रहीत प्रोफ़ाइल डेटा भी शामिल होता है।',
 );

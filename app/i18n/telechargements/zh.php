@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => '下载',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => '下载 reserved for ON4CRD members.',
+  'title' => '文件',
+  'intro' => '供成员下载的文件和资源。',
+  'meta_desc' => '文件仅供 ON4CRD 成员使用。',
 );

@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Tagok nézete',
   'view_private' => 'Privát nézet',
   'empty_visible_info' => 'Nincs látható információ.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Profiladatok',
+  'profile_data_help' => 'Ez a szakasz újra felhasználja a profil nem üres mezőit, és ugyanazokat a láthatósági beállításokat alkalmazza, mint a címtár. A JSON-export az adatbázisban tárolt profiladatokat is tartalmazza.',
 );

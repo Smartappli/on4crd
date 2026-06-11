@@ -20,7 +20,7 @@ return array (
   'open_page' => 'Открыть страницу',
   'themes' => 'Темы',
   'all_themes' => 'Все темы',
-  'propose_theme_subject' => 'Предложение темы ON4CRD вики',
+  'propose_theme_subject' => 'Предложение темы ON4CRD знания',
   'propose_theme' => 'Предложить тему',
   'create_theme' => 'Создать категорию',
   'create_theme_intro' => 'С вашими правами модерации категория будет утверждена сразу.',

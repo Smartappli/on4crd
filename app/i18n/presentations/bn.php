@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'উপস্থাপনা',
-  'intro' => 'Meeting decks, talks and documents presented to members.',
-  'meta_desc' => 'উপস্থাপনা reserved for ON4CRD members.',
+  'intro' => 'সদস্যদের জন্য উপস্থাপিত সভার স্লাইড, বক্তৃতা ও নথি।',
+  'meta_desc' => 'উপস্থাপনা শুধুমাত্র ON4CRD সদস্যদের জন্য।',
 );

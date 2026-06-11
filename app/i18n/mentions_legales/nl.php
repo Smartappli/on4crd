@@ -55,5 +55,5 @@ return array (
       'body' => 'Neem contact op met de club via {contact_email} om een fout, problematische inhoud, inbreuk op rechten of een beveiligingsincident te melden.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Comité van Radio Club Durnal ON4CRD',
 );

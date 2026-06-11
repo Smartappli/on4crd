@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'プレゼンテーション',
-  'intro' => 'Meeting decks, talks and documents presented to members.',
-  'meta_desc' => 'プレゼンテーション reserved for ON4CRD members.',
+  'intro' => 'メンバー向けに発表された会議資料、講演、文書。',
+  'meta_desc' => 'プレゼンテーションはON4CRDメンバー専用です。',
 );

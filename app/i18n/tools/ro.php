@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Putere directă (W)',
   'reflected_power' => 'Putere reflectată (W)',
   'swr_result' => 'SWR calculat',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Conversie dBm <-> dBW',
 );

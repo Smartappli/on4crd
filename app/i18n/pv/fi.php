@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Pöytäkirjat',
-  'intro' => 'Minutes and reports available to members.',
-  'meta_desc' => 'Pöytäkirjat reserved for ON4CRD members.',
+  'intro' => 'Jäsenille saatavilla olevat pöytäkirjat ja raportit.',
+  'meta_desc' => 'Pöytäkirjat ON4CRD:n jäsenille.',
 );

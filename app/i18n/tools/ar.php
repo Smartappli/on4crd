@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'القوة الأمامية (ث)',
   'reflected_power' => 'الطاقة المنعكسة (ث)',
   'swr_result' => 'SWR المحسوبة',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'تحويل dBm <-> dBW',
 );

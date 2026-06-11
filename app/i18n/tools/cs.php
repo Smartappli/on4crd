@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Dopředný výkon (W)',
   'reflected_power' => 'Odražený výkon (W)',
   'swr_result' => 'Vypočtené SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Převod dBm <-> dBW',
 );

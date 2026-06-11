@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Előremeneti teljesítmény (W)',
   'reflected_power' => 'Visszavert teljesítmény (W)',
   'swr_result' => 'Számított SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW átváltás',
 );

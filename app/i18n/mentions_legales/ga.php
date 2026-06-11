@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Foilsitheoir agus óstáil',
   'identity_editor' => 'Foilsitheoir láithreán gréasáin',
   'identity_address' => 'Seoladh',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Teagmháil',
   'identity_publication_manager' => 'Bainisteoir foilseachán',
   'identity_hosting' => 'Óstáil',
   'related_pages_title' => 'Leathanaigh ghaolmhara',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Chun earráid, ábhar fadhbach, sárú cearta nó teagmhas slándála a thuairisciú, déan teagmháil leis an gclub ag {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Coiste Radio Club Durnal ON4CRD',
 );

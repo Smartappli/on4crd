@@ -28,7 +28,7 @@ return array (
   'status_resolved' => 'Ratkaistu',
   'status_rejected' => 'Hylätty',
   'table_request' => 'Pyyntö',
-  'table_status' => 'Status',
+  'table_status' => 'Tila',
   'table_date' => 'Päivämäärä',
   'table_processing' => 'Käsittely',
   'table_resolution' => 'Resoluutio',
@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Jäsenten näkymä',
   'view_private' => 'Yksityinen näkymä',
   'empty_visible_info' => 'Ei näkyvää tietoa.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Profiilitiedot',
+  'profile_data_help' => 'Tämä osio käyttää profiilisi täytettyjä kenttiä ja soveltaa samoja näkyvyysasetuksia kuin hakemisto. JSON-vienti sisältää myös tietokantaan tallennetut profiilitiedot.',
 );

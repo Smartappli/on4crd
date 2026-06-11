@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Protokolai',
-  'intro' => 'Minutes and reports available to members.',
-  'meta_desc' => 'Protokolai reserved for ON4CRD members.',
+  'intro' => 'Nariams prieinami protokolai ir ataskaitos.',
+  'meta_desc' => 'Protokolai skirta ON4CRD nariams.',
 );

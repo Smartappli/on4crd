@@ -37,6 +37,6 @@ return array (
   'view_members' => 'مشاهدة الأعضاء',
   'view_private' => 'منظر خاص',
   'empty_visible_info' => 'لا توجد معلومات مرئية.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'بيانات الملف الشخصي',
+  'profile_data_help' => 'يعيد هذا القسم استخدام الحقول غير الفارغة من ملفك الشخصي ويطبق إعدادات الرؤية نفسها الموجودة في الدليل. يحتوي تصدير JSON أيضًا على بيانات الملف الشخصي المخزنة في قاعدة البيانات.',
 );

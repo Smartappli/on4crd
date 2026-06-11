@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Preuzimanja',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => 'Preuzimanja reserved for ON4CRD members.',
+  'title' => 'Datoteke',
+  'intro' => 'Datoteke i resursi koje članovi mogu preuzeti.',
+  'meta_desc' => 'Datoteke rezervirano za članove ON4CRD.',
 );

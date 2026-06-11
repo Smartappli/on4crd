@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Eteenpäin teho (W)',
   'reflected_power' => 'Heijastunut teho (W)',
   'swr_result' => 'Laskettu SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW -muunnos',
 );

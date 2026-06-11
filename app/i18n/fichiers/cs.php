@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Stažení',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => 'Stažení reserved for ON4CRD members.',
+  'title' => 'Soubory',
+  'intro' => 'Soubory a zdroje ke stažení pro členy.',
+  'meta_desc' => 'Soubory vyhrazené pro členy ON4CRD.',
 );

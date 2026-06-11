@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Pubblikatur u hosting',
   'identity_editor' => 'Pubblikatur tal-websajt',
   'identity_address' => 'Indirizz',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kuntatt',
   'identity_publication_manager' => 'Maniġer tal-pubblikazzjoni',
   'identity_hosting' => 'Hosting tal-web',
   'related_pages_title' => 'Paġni relatati',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Biex tirrapporta żball, kontenut problematiku, ksur tad-drittijiet jew inċident tas-sigurtà, ikkuntattja lill-klabb fuq {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Kumitat ta\' Radio Club Durnal ON4CRD',
 );

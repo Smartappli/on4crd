@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Framåteffekt (W)',
   'reflected_power' => 'Reflekterad effekt (W)',
   'swr_result' => 'Beräknad SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW-konvertering',
 );

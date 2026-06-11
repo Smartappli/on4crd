@@ -37,6 +37,6 @@ return array (
   'view_members' => 'Medlemmers visning',
   'view_private' => 'Privat udsigt',
   'empty_visible_info' => 'Ingen synlig information.',
-  'profile_data_title' => 'Profile data',
-  'profile_data_help' => 'This section reuses the non-empty fields from your profile and applies the same visibility settings as the directory. The JSON export also contains the profile data stored in the database.',
+  'profile_data_title' => 'Profildata',
+  'profile_data_help' => 'Dette afsnit genbruger de udfyldte felter fra din profil og anvender de samme synlighedsindstillinger som kataloget. JSON-eksporten indeholder også profildata, der er gemt i databasen.',
 );

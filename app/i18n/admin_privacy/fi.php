@@ -10,7 +10,7 @@ return array (
   'id' => 'ID',
   'member' => 'Jäsen',
   'type' => 'Tyyppi',
-  'status' => 'Status',
+  'status' => 'Tila',
   'dates' => 'Päivämäärät',
   'notes' => 'Huomautuksia',
   'history' => 'Historia',

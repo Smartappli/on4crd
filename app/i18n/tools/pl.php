@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'Moc do przodu (W)',
   'reflected_power' => 'Moc odbita (W)',
   'swr_result' => 'Obliczony SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'Konwersja dBm <-> dBW',
 );

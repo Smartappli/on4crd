@@ -21,7 +21,7 @@ return array (
   'publish_date' => 'Datum objave',
   'pdf_doc' => 'Dokument PDF',
   'th_date' => 'Datum',
-  'th_file' => 'File',
+  'th_file' => 'Datoteka',
   'open' => 'otvorena',
   'layout' => 'Pritisnite',
   'meta_desc' => 'Upravljanje kontaktima s medijima i priopćenjima za javnost.',

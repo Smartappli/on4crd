@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Presentasi',
-  'intro' => 'Meeting decks, talks and documents presented to members.',
-  'meta_desc' => 'Presentasi reserved for ON4CRD members.',
+  'intro' => 'Materi presentasi rapat, ceramah, dan dokumen yang disampaikan kepada anggota.',
+  'meta_desc' => 'Presentasi khusus anggota ON4CRD.',
 );

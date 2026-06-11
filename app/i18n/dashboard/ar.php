@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'لماذا هذا الاقتراح',
   'recommendation_reason_default' => 'بناءً على نشاطك الأخير.',
   'recommendation_reason_article' => 'لأنك تقرأ أو تحفظ المقالات.',
-  'recommendation_reason_wiki' => 'لأنك تستشير صفحات الويكي.',
+  'recommendation_reason_wiki' => 'لأنك تستشير صفحات المعرفة.',
   'recommendation_reason_classified' => 'لأنك تتصفح الإعلانات المبوبة.',
   'recommendation_reason_album' => 'لأنك تعرض الألبومات المشتركة.',
   'recommendation_reason_library' => 'لأنك تستشير وثائق المكتبة.',

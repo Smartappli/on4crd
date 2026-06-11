@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Descărcări',
-  'intro' => 'Files and resources for members to download.',
-  'meta_desc' => 'Descărcări reserved for ON4CRD members.',
+  'title' => 'Fișiere',
+  'intro' => 'Fișiere și resurse de descărcat pentru membri.',
+  'meta_desc' => 'Fișiere rezervate membrilor ON4CRD.',
 );

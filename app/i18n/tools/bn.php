@@ -105,7 +105,7 @@ return array (
   'load_power_w' => 'লোড পাওয়ার (W)',
   'battery_current_a' => 'আনুমানিক বর্তমান (A)',
   'muftool_calc' => 'সরলীকৃত MUF',
-  'critical_freq_mhz' => 'Critical frequency foF2 (MHz)',
+  'critical_freq_mhz' => 'সমালোচনামূলক ফ্রিকোয়েন্সি foF2 (MHz)',
   'incidence_deg' => 'আপতন কোণ (°)',
   'muf_result' => 'আনুমানিক MUF (MHz)',
   'skip_calc' => 'সরলীকৃত দূরত্ব এড়িয়ে যান',
@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'ফরোয়ার্ড পাওয়ার (W)',
   'reflected_power' => 'প্রতিফলিত শক্তি (W)',
   'swr_result' => 'গণনাকৃত SWR',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW রূপান্তর',
 );

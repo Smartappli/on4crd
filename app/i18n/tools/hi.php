@@ -196,5 +196,5 @@ return array (
   'forward_power' => 'आगे की शक्ति (डब्ल्यू)',
   'reflected_power' => 'परावर्तित शक्ति (डब्ल्यू)',
   'swr_result' => 'परिकलित एसडब्ल्यूआर',
-  'dbw_calc' => 'dBm <-> dBW conversion',
+  'dbw_calc' => 'dBm <-> dBW रूपांतरण',
 );

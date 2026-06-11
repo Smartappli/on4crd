@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Riaradh Vicí',
+  'title' => 'Riaradh Eolas',
   'new_page' => 'Leathanach nua',
   'th_title' => 'Teideal',
   'th_slug' => 'Drúchtín',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Gníomh',
   'edit' => 'Cuir in eagar',
   'empty' => 'Uimh leathanaigh.',
-  'layout' => 'Riaradh Vicí',
+  'layout' => 'Riaradh Eolas',
   'meta_desc' => 'Bainistíocht leathanach Viki.',
 );

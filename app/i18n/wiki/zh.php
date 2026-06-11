@@ -29,7 +29,7 @@ return array (
   'propose_page' => '推荐一个页面',
   'propose_theme_intro' => '描述要添加的主题以及应链接到该主题的页面。',
   'close' => '关闭',
-  'propose_theme_body_intro' => '维基主题提案：',
+  'propose_theme_body_intro' => '知识主题提案：',
   'propose_theme_name' => '主题名称',
   'propose_theme_reason' => '为什么要添加它？',
   'propose_theme_contact' => '您的联系方式',

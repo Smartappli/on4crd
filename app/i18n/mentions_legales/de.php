@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Herausgeber und Hosting',
   'identity_editor' => 'Website-Herausgeber',
   'identity_address' => 'Adresse',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontakt',
   'identity_publication_manager' => 'Publikationsmanager',
   'identity_hosting' => 'Webhosting',
   'related_pages_title' => 'Verwandte Seiten',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Um einen Fehler, problematischen Inhalt, eine Rechtsverletzung oder einen Sicherheitsvorfall zu melden, wenden Sie sich an den Club unter {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Vorstand des Radio Club Durnal ON4CRD',
 );

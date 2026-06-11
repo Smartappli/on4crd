@@ -55,5 +55,5 @@ return array (
       'body' => 'Pentru a raporta o eroare, conținut problematic, încălcare a drepturilor sau incident de securitate, contactați clubul la {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Comitetul Radio Club Durnal ON4CRD',
 );

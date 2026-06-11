@@ -11,7 +11,7 @@ return array (
   'identity_title' => 'Izdevējs un hostings',
   'identity_editor' => 'Vietnes izdevējs',
   'identity_address' => 'Adrese',
-  'identity_contact' => 'Contact',
+  'identity_contact' => 'Kontaktinformācija',
   'identity_publication_manager' => 'Publikāciju vadītājs',
   'identity_hosting' => 'Hostings',
   'related_pages_title' => 'Saistītās lapas',
@@ -55,5 +55,5 @@ return array (
       'body' => 'Lai ziņotu par kļūdu, problemātisku saturu, tiesību pārkāpumu vai drošības incidentu, sazinieties ar klubu {contact_email}.',
     ),
   ),
-  'default_publication_manager' => 'Radio Club Durnal ON4CRD committee',
+  'default_publication_manager' => 'Radio Club Durnal ON4CRD komiteja',
 );
