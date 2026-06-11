@@ -108,7 +108,7 @@ return array (
   'member_module_presentations_desc' => 'اعثر على عروض ومحاضرات مشتركة مع الأعضاء.',
   'member_module_videos_title' => 'الفيديوهات',
   'member_module_videos_desc' => 'ادخل إلى الفيديوهات والموارد السمعية البصرية المخصصة للأعضاء.',
-  'member_module_pv_title' => 'المحاضر',
+  'member_module_pv_title' => 'محاضر الاجتماعات',
   'member_module_pv_desc' => 'اطلع على محاضر النادي وتقاريره.',
   'member_module_fichiers_title' => 'الملفات',
   'member_module_fichiers_desc' => 'نزّل الملفات والموارد المتاحة للأعضاء.',

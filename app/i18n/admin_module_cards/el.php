@@ -50,7 +50,7 @@ return array (
   'admin_presentations_desc' => 'Διαχείριση εγγράφων παρουσιάσεων για τα μέλη.',
   'admin_videos_title' => 'Βίντεο',
   'admin_videos_desc' => 'Διαχείριση βίντεο και οπτικοακουστικών πόρων για τα μέλη.',
-  'admin_pv_title' => 'Πρακτικά',
+  'admin_pv_title' => 'Πρακτικά συνεδριάσεων',
   'admin_pv_desc' => 'Διαχείριση πρακτικών και αναφορών για τα μέλη.',
   'admin_telechargements_title' => 'Αρχεία',
   'admin_telechargements_desc' => 'Διαχείριση αρχείων και πόρων για τα μέλη.',

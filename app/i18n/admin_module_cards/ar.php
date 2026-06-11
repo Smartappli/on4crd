@@ -50,7 +50,7 @@ return array (
   'admin_presentations_desc' => 'إدارة مستندات العروض التقديمية المخصصة للأعضاء.',
   'admin_videos_title' => 'الفيديوهات',
   'admin_videos_desc' => 'إدارة الفيديوهات والموارد السمعية البصرية المخصصة للأعضاء.',
-  'admin_pv_title' => 'المحاضر',
+  'admin_pv_title' => 'محاضر الاجتماعات',
   'admin_pv_desc' => 'إدارة المحاضر والتقارير المخصصة للأعضاء.',
   'admin_telechargements_title' => 'الملفات',
   'admin_telechargements_desc' => 'إدارة الملفات والموارد المخصصة للأعضاء.',

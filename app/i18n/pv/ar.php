@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'المحاضر',
+  'title' => 'محاضر الاجتماعات',
   'intro' => 'محاضر وتقارير متاحة للأعضاء.',
-  'meta_desc' => 'المحاضر مخصصة لأعضاء ON4CRD.',
+  'meta_desc' => 'محاضر الاجتماعات مخصصة لأعضاء ON4CRD.',
 );

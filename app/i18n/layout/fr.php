@@ -19,7 +19,7 @@ return array (
   'nav_assistant' => 'Assistant',
   'nav_presentations' => 'Présentations',
   'nav_videos' => 'Vidéos',
-  'nav_minutes' => 'PV',
+  'nav_minutes' => 'Procès verbaux',
   'nav_downloads' => 'Fichiers',
   'nav_files' => 'Fichiers',
   'account_space' => 'Mon espace',

@@ -108,7 +108,7 @@ return array (
   'member_module_presentations_desc' => 'Βρείτε παρουσιάσεις και ομιλίες που μοιράζονται με τα μέλη.',
   'member_module_videos_title' => 'Βίντεο',
   'member_module_videos_desc' => 'Πρόσβαση σε βίντεο και οπτικοακουστικό υλικό για μέλη.',
-  'member_module_pv_title' => 'Πρακτικά',
+  'member_module_pv_title' => 'Πρακτικά συνεδριάσεων',
   'member_module_pv_desc' => 'Διαβάστε πρακτικά και αναφορές του συλλόγου.',
   'member_module_fichiers_title' => 'Αρχεία',
   'member_module_fichiers_desc' => 'Κατεβάστε αρχεία και πόρους διαθέσιμους στα μέλη.',

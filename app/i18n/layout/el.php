@@ -19,7 +19,7 @@ return array (
   'nav_assistant' => 'Βοηθός',
   'nav_presentations' => 'Παρουσιάσεις',
   'nav_videos' => 'Βίντεο',
-  'nav_minutes' => 'Πρακτικά',
+  'nav_minutes' => 'Πρακτικά συνεδριάσεων',
   'nav_downloads' => 'Αρχεία',
   'nav_files' => 'Αρχεία',
   'account_space' => 'Ο χώρος μου',

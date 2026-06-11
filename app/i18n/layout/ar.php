@@ -19,7 +19,7 @@ return array (
   'nav_assistant' => 'المساعد',
   'nav_presentations' => 'العروض التقديمية',
   'nav_videos' => 'الفيديوهات',
-  'nav_minutes' => 'المحاضر',
+  'nav_minutes' => 'محاضر الاجتماعات',
   'nav_downloads' => 'الملفات',
   'nav_files' => 'الملفات',
   'account_space' => 'حسابي',
