@@ -84,6 +84,13 @@ $xml = cache_remember('seo_sitemap_xml_v9_' . $requestedLocale, 300, static func
         ['route' => 'auctions', 'module' => 'auctions', 'priority' => '0.8', 'changefreq' => 'daily'],
         ['route' => 'relais', 'priority' => '0.5', 'changefreq' => 'monthly'],
     ];
+    $memberOnlyRoutesExcludedFromSitemap = [
+        'presentations',
+        'videos',
+        'pv',
+        'telechargements',
+    ];
+    unset($memberOnlyRoutesExcludedFromSitemap);
 
     foreach ($staticRoutes as $row) {
         $module = (string) ($row['module'] ?? '');

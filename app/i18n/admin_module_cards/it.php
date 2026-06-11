@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Richieste di dati, esportazione, cancellazione e follow-up.',
   'admin_classifieds_title' => 'Annunci',
   'admin_classifieds_desc' => 'Annunci dei membri moderati.',
+  'admin_presentations_title' => 'Presentazioni',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Video',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Verbali',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Download',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'طلبات البيانات وتصديرها ومحوها ومتابعتها.',
   'admin_classifieds_title' => 'الإعلانات المبوبة',
   'admin_classifieds_desc' => 'الإعلانات المبوبة للأعضاء المعتدلين.',
+  'admin_presentations_title' => 'العروض التقديمية',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'الفيديوهات',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'المحاضر',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'التنزيلات',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

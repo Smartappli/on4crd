@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Permintaan data, ekspor, penghapusan, dan tindak lanjut.',
   'admin_classifieds_title' => 'Iklan Baris',
   'admin_classifieds_desc' => 'Iklan baris anggota moderat.',
+  'admin_presentations_title' => 'Presentasi',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Video',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Notulen',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Unduhan',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

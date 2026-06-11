@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'डेटा अनुरोध, निर्यात, मिटाना और अनुवर्ती कार्रवाई।',
   'admin_classifieds_title' => 'वर्गीकृत',
   'admin_classifieds_desc' => 'मध्यम सदस्य वर्गीकृत.',
+  'admin_presentations_title' => 'प्रस्तुतियाँ',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'वीडियो',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'कार्यवृत्त',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'डाउनलोड',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

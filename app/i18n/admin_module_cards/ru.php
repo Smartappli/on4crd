@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Запросы данных, экспорт, удаление и отслеживание.',
   'admin_classifieds_title' => 'Объявления',
   'admin_classifieds_desc' => 'Объявления модераторов.',
+  'admin_presentations_title' => 'Презентации',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Видео',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Протоколы',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Загрузки',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

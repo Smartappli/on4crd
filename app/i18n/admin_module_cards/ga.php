@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Iarratais sonraí, easpórtáil, scriosadh agus obair leantach.',
   'admin_classifieds_title' => 'Rangaithe',
   'admin_classifieds_desc' => 'Aicmithe measartha ball.',
+  'admin_presentations_title' => 'Cur i láthair',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Físeáin',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Miontuairiscí',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Íoslódálacha',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

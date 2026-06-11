@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Solicitări de date, export, ștergere și urmărire.',
   'admin_classifieds_title' => 'Anunturi',
   'admin_classifieds_desc' => 'Anunturi moderate pentru membri.',
+  'admin_presentations_title' => 'Prezentări',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videoclipuri',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Procese-verbale',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Descărcări',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

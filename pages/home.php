@@ -136,7 +136,10 @@ $memberModuleIconPaths = [
     'members' => '<path d="M18 21a6 6 0 0 0-12 0"></path><circle cx="12" cy="8" r="4"></circle><path d="M20 8v6"></path><path d="M23 11h-6"></path>',
     'qsl' => '<rect width="18" height="14" x="3" y="5" rx="2"></rect><path d="m3 7 9 6 9-6"></path><path d="M7 17h4"></path>',
     'library' => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2"></path><path d="M8 7h8"></path><path d="M8 11h6"></path>',
-    'auctions' => '<path d="m14 13-8.5 8.5"></path><path d="m9 8 7 7"></path><path d="m12 5 7 7"></path><path d="m5 11 7-7"></path><path d="m2 22 6-6"></path>',
+    'presentations' => '<rect width="18" height="13" x="3" y="4" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M8 9h8"></path><path d="M8 13h5"></path>',
+    'videos' => '<rect width="18" height="14" x="3" y="5" rx="2"></rect><path d="m10 9 5 3-5 3V9Z"></path>',
+    'pv' => '<path d="M9 3h6l1 2h3v16H5V5h3l1-2Z"></path><path d="M9 11h6"></path><path d="M9 15h6"></path>',
+    'telechargements' => '<path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path>',    'auctions' => '<path d="m14 13-8.5 8.5"></path><path d="m9 8 7 7"></path><path d="m12 5 7 7"></path><path d="m5 11 7-7"></path><path d="m2 22 6-6"></path>',
     'classifieds' => '<path d="M20.6 13.5 13.5 20.6a2 2 0 0 1-2.8 0L3 12.9V4h8.9l8.7 8.7a2 2 0 0 1 0 2.8Z"></path><circle cx="7.5" cy="7.5" r=".8"></circle>',
     'chatbot' => '<path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="3"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M9 13v2"></path><path d="M15 13v2"></path>',
     'newsletter' => '<path d="M4 4h16v16H4z"></path><path d="M8 8h8"></path><path d="M8 12h8"></path><path d="M8 16h5"></path>',
@@ -146,7 +149,10 @@ $memberModuleIconClasses = [
     'members' => 'border-emerald-200 bg-emerald-50 text-emerald-700 group-hover:border-emerald-300 group-hover:bg-emerald-100',
     'qsl' => 'border-blue-200 bg-blue-50 text-blue-700 group-hover:border-blue-300 group-hover:bg-blue-100',
     'library' => 'border-amber-200 bg-amber-50 text-amber-700 group-hover:border-amber-300 group-hover:bg-amber-100',
-    'auctions' => 'border-rose-200 bg-rose-50 text-rose-700 group-hover:border-rose-300 group-hover:bg-rose-100',
+    'presentations' => 'border-teal-200 bg-teal-50 text-teal-700 group-hover:border-teal-300 group-hover:bg-teal-100',
+    'videos' => 'border-red-200 bg-red-50 text-red-700 group-hover:border-red-300 group-hover:bg-red-100',
+    'pv' => 'border-slate-200 bg-slate-50 text-slate-700 group-hover:border-slate-300 group-hover:bg-slate-100',
+    'telechargements' => 'border-lime-200 bg-lime-50 text-lime-700 group-hover:border-lime-300 group-hover:bg-lime-100',    'auctions' => 'border-rose-200 bg-rose-50 text-rose-700 group-hover:border-rose-300 group-hover:bg-rose-100',
     'classifieds' => 'border-cyan-200 bg-cyan-50 text-cyan-700 group-hover:border-cyan-300 group-hover:bg-cyan-100',
     'chatbot' => 'border-violet-200 bg-violet-50 text-violet-700 group-hover:border-violet-300 group-hover:bg-violet-100',
     'newsletter' => 'border-indigo-200 bg-indigo-50 text-indigo-700 group-hover:border-indigo-300 group-hover:bg-indigo-100',
@@ -188,7 +194,7 @@ if (table_exists('modules')) {
         $memberModuleCodesRendered[] = $moduleCode;
     }
 }
-$memberFallbackModuleCodes = ['dashboard', 'members', 'qsl', 'library', 'auctions', 'classifieds', 'chatbot', 'newsletter'];
+$memberFallbackModuleCodes = ['dashboard', 'members', 'qsl', 'library', 'presentations', 'videos', 'pv', 'telechargements', 'auctions', 'classifieds', 'chatbot', 'newsletter'];
 foreach ($memberFallbackModuleCodes as $moduleCode) {
     if (!isset($memberModuleDefinitions[$moduleCode])) {
         continue;

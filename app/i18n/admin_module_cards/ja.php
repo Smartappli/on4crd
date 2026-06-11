@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'データのリクエスト、エクスポート、消去、フォローアップ。',
   'admin_classifieds_title' => '広告',
   'admin_classifieds_desc' => '会員のクラシファイド広告をモデレーションします。',
+  'admin_presentations_title' => 'プレゼンテーション',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => '動画',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => '議事録',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'ダウンロード',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

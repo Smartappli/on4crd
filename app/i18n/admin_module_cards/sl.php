@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Zahteve za podatke, izvoz, izbris in spremljanje.',
   'admin_classifieds_title' => 'Mali oglasi',
   'admin_classifieds_desc' => 'Zmerni oglasi članov.',
+  'admin_presentations_title' => 'Predstavitve',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videoposnetki',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Zapisniki',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Prenosi',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

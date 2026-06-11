@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Solicitações de dados, exportação, apagamento e acompanhamento.',
   'admin_classifieds_title' => 'Classificados',
   'admin_classifieds_desc' => 'Classificados moderados para membros.',
+  'admin_presentations_title' => 'Apresentações',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Vídeos',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Atas',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Transferências',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

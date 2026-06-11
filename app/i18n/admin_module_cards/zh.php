@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => '数据请求、导出、删除和后续。',
   'admin_classifieds_title' => '分类广告',
   'admin_classifieds_desc' => '温和的会员分类。',
+  'admin_presentations_title' => '演示文稿',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => '视频',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => '会议记录',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => '下载',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

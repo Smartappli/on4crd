@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Data requests, export, erasure and follow-up.',
   'admin_classifieds_title' => 'Classifieds',
   'admin_classifieds_desc' => 'Moderate member classifieds.',
+  'admin_presentations_title' => 'Presentations',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videos',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Minutes',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Downloads',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

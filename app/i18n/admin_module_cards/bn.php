@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'ডেটা অনুরোধ, রপ্তানি, মুছে ফেলা এবং ফলো-আপ।',
   'admin_classifieds_title' => 'শ্রেণীবদ্ধ',
   'admin_classifieds_desc' => 'পরিমিত সদস্য শ্রেণীবদ্ধ.',
+  'admin_presentations_title' => 'উপস্থাপনা',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'ভিডিও',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'কার্যবিবরণী',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'ডাউনলোড',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

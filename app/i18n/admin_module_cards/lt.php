@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Duomenų užklausos, eksportavimas, trynimas ir tolesni veiksmai.',
   'admin_classifieds_title' => 'Skelbimai',
   'admin_classifieds_desc' => 'Nuosaikūs narių skelbimai.',
+  'admin_presentations_title' => 'Pristatymai',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Vaizdo įrašai',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Protokolai',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Atsisiuntimai',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Adatkérések, exportálás, törlés és nyomon követés.',
   'admin_classifieds_title' => 'Apróhirdetések',
   'admin_classifieds_desc' => 'Mérsékelt tagok apróhirdetései.',
+  'admin_presentations_title' => 'Bemutatók',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videók',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Jegyzőkönyvek',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Letöltések',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

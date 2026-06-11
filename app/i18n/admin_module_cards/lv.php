@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Datu pieprasījumi, eksportēšana, dzēšana un pārraudzība.',
   'admin_classifieds_title' => 'Sludinājumi',
   'admin_classifieds_desc' => 'Mērenu dalībnieku sludinājumi.',
+  'admin_presentations_title' => 'Prezentācijas',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Video',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Protokoli',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Lejupielādes',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Demandes de donnees, export, suppression et suivi.',
   'admin_classifieds_title' => 'Petites annonces',
   'admin_classifieds_desc' => 'Modération des annonces membres.',
+  'admin_presentations_title' => 'Présentations',
+  'admin_presentations_desc' => 'Gestion des supports de présentations réservés aux membres.',
+  'admin_videos_title' => 'Videos',
+  'admin_videos_desc' => 'Gestion des vidéos et ressources audiovisuelles réservées aux membres.',
+  'admin_pv_title' => 'PV',
+  'admin_pv_desc' => 'Gestion des procès-verbaux et comptes rendus réservés aux membres.',
+  'admin_telechargements_title' => 'Téléchargements',
+  'admin_telechargements_desc' => 'Gestion des fichiers téléchargeables réservés aux membres.',
 );

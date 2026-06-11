@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Dataanmodninger, eksport, sletning og opfølgning.',
   'admin_classifieds_title' => 'Rubrikannoncer',
   'admin_classifieds_desc' => 'Moderat medlem rubrikannoncer.',
+  'admin_presentations_title' => 'Præsentationer',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videoer',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Referater',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Downloads',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

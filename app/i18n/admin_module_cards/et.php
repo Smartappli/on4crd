@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Andmepäringud, eksport, kustutamine ja järelkontroll.',
   'admin_classifieds_title' => 'Kuulutused',
   'admin_classifieds_desc' => 'Mõõdukate liikmete kuulutused.',
+  'admin_presentations_title' => 'Esitlused',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videod',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Protokollid',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Allalaadimised',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

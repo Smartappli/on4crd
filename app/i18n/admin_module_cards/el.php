@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Αιτήματα δεδομένων, εξαγωγή, διαγραφή και παρακολούθηση.',
   'admin_classifieds_title' => 'Αγγελίες',
   'admin_classifieds_desc' => 'Αγγελίες μετριοπαθών μελών.',
+  'admin_presentations_title' => 'Παρουσιάσεις',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Βίντεο',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Πρακτικά',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Λήψεις',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

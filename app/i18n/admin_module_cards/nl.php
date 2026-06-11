@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Gegevens opvragen, exporteren, verwijderen en opvolgen.',
   'admin_classifieds_title' => 'Advertenties',
   'admin_classifieds_desc' => 'Gematigde ledenadvertenties.',
+  'admin_presentations_title' => 'Presentaties',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Video\'s',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Verslagen',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Downloads',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

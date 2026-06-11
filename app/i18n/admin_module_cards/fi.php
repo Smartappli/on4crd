@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Tietopyynnöt, vienti, poistaminen ja seuranta.',
   'admin_classifieds_title' => 'Luokitellut',
   'admin_classifieds_desc' => 'Maltilliset jäsenilmoitukset.',
+  'admin_presentations_title' => 'Esitykset',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videot',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Pöytäkirjat',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Lataukset',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

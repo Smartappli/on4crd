@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Talbiet tad-dejta, esportazzjoni, tħassir u segwitu.',
   'admin_classifieds_title' => 'Klassifikati',
   'admin_classifieds_desc' => 'Classifieds moderati tal-membri.',
+  'admin_presentations_title' => 'Preżentazzjonijiet',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Vidjows',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Minuti',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Tniżżil',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );

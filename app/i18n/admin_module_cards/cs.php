@@ -44,4 +44,12 @@ return array (
   'admin_privacy_desc' => 'Požadavky na data, export, vymazání a sledování.',
   'admin_classifieds_title' => 'Inzerce',
   'admin_classifieds_desc' => 'Inzerce moderovaných členů.',
+  'admin_presentations_title' => 'Prezentace',
+  'admin_presentations_desc' => 'Manage presentation documents reserved for members.',
+  'admin_videos_title' => 'Videa',
+  'admin_videos_desc' => 'Manage videos and audiovisual resources reserved for members.',
+  'admin_pv_title' => 'Zápisy',
+  'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
+  'admin_telechargements_title' => 'Stažení',
+  'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
 );
