@@ -23,7 +23,7 @@ return array (
   'sort_recent' => 'Najnovšie',
   'sort_oldest' => 'Najstaršie',
   'sort_title' => 'Titul A-Z',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Filtrovať',
   'reset' => 'Resetovať',
   'applied_filters' => 'Použité filtre',
   'search_filter' => 'Hľadať: %s',

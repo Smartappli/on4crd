@@ -31,6 +31,7 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_wiki', 'module' => 'wiki'],
         ['route' => 'admin_albums', 'module' => 'albums'],
         ['route' => 'admin_library', 'permission' => 'admin.access'],
+        ['route' => 'admin_webotheque', 'module' => 'webotheque', 'permission' => 'admin.access'],
         ['route' => 'admin_presentations', 'module' => 'presentations', 'permission' => 'admin.access'],
         ['route' => 'admin_videos', 'module' => 'videos', 'permission' => 'admin.access'],
         ['route' => 'admin_pv', 'module' => 'pv', 'permission' => 'admin.access'],

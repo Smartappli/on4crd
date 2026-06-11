@@ -1,0 +1,104 @@
+/* Module CSS: admin webotheque */
+[data-route="admin_webotheque"] .admin-webotheque-page {
+  display: grid;
+  gap: 1rem;
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  box-shadow: none;
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-hero-copy {
+  min-width: 0;
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-hero-side {
+  display: grid;
+  gap: .65rem;
+  align-content: center;
+  justify-items: stretch;
+  min-width: min(100%, 30rem);
+}
+
+[data-route="admin_webotheque"] .webotheque-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  gap: .75rem;
+  align-content: center;
+}
+
+[data-route="admin_webotheque"] .webotheque-hero-stats article {
+  display: grid;
+  min-height: 0;
+  padding: .65rem .75rem;
+  align-content: center;
+  justify-items: center;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 92%, white);
+  text-align: center;
+}
+
+[data-route="admin_webotheque"] .webotheque-hero-stats strong {
+  display: block;
+  order: 1;
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+[data-route="admin_webotheque"] .webotheque-hero-stats span {
+  display: block;
+  order: 2;
+  margin: .35rem 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 650;
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-form {
+  max-width: 760px;
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-list {
+  display: grid;
+  gap: .75rem;
+}
+
+[data-route="admin_webotheque"] .webotheque-card {
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  [data-route="admin_webotheque"] .admin-webotheque-hero {
+    grid-template-columns: 1fr;
+  }
+
+  [data-route="admin_webotheque"] .admin-webotheque-hero-side {
+    min-width: 0;
+  }
+
+  [data-route="admin_webotheque"] .admin-webotheque-hero-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  [data-route="admin_webotheque"] .webotheque-hero-stats {
+    grid-template-columns: 1fr;
+  }
+}

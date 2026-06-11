@@ -24,7 +24,7 @@ return array (
   'sort_oldest' => 'A legrégebbi',
   'sort_title' => 'Cím A-Z',
   'apply_filters' => 'Szűrés',
-  'reset' => 'Reset',
+  'reset' => 'Visszaállítás',
   'applied_filters' => 'Szűrők alkalmazva',
   'search_filter' => 'Keresés: %s',
   'month_filter' => 'Hónap: %s',

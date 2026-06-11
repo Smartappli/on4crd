@@ -198,6 +198,7 @@ $routeModules = [
     'change_password' => 'members',
     'my_requests' => 'members',
     'members_library' => 'members',
+    'webotheque' => 'webotheque',
     'presentations' => 'presentations',
     'videos' => 'videos',
     'pv' => 'pv',
@@ -257,6 +258,7 @@ $routeModules = [
     'admin_events_feed' => 'admin',
     'admin_dinner_reservations' => 'admin',
     'admin_library' => 'admin',
+    'admin_webotheque' => 'admin',
     'admin_presentations' => 'admin',
     'admin_videos' => 'admin',
     'admin_pv' => 'admin',
@@ -361,6 +363,7 @@ switch ($route) {
     case 'qsl_export': $dispatchPage('pages/qsl_export.php'); break;
     case 'chatbot': $dispatchPage('pages/chatbot.php'); break;
     case 'members_library': $dispatchPage('pages/members_library.php'); break;
+    case 'webotheque': $dispatchPage('pages/webotheque.php'); break;
     case 'presentations': $dispatchPage('pages/presentations.php'); break;
     case 'videos': $dispatchPage('pages/videos.php'); break;
     case 'pv': $dispatchPage('pages/pv.php'); break;
@@ -391,6 +394,7 @@ switch ($route) {
     case 'admin_wiki': $dispatchPage('pages/admin_wiki.php'); break;
     case 'admin_albums': $dispatchPage('pages/admin_albums.php'); break;
     case 'admin_library': $dispatchPage('pages/admin_library.php'); break;
+    case 'admin_webotheque': $dispatchPage('pages/admin_webotheque.php'); break;
     case 'admin_presentations': $dispatchPage('pages/admin_presentations.php'); break;
     case 'admin_videos': $dispatchPage('pages/admin_videos.php'); break;
     case 'admin_pv': $dispatchPage('pages/admin_pv.php'); break;

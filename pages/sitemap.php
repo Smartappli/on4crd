@@ -84,7 +84,7 @@ $xml = cache_remember('seo_sitemap_xml_v10_' . $requestedLocale, 300, static fun
         ['route' => 'auctions', 'module' => 'auctions', 'priority' => '0.8', 'changefreq' => 'daily'],
         ['route' => 'relais', 'priority' => '0.5', 'changefreq' => 'monthly'],
     ];
-    // Member-only routes such as presentations, videos, fichiers and pv are noindex/login-protected and intentionally omitted.
+    // Member-only routes such as webotheque, presentations, videos, fichiers and pv are noindex/login-protected and intentionally omitted.
 
     foreach ($staticRoutes as $row) {
         $module = (string) ($row['module'] ?? '');

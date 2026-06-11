@@ -392,6 +392,7 @@ function apply_runtime_schema_updates(): void
             }
         }
         $memberDocumentModules = [
+            ['webotheque', 'Webotheque', 'Liens et ressources web reserves aux membres', 0, 1, 'members', 29],
             ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
             ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
             ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],

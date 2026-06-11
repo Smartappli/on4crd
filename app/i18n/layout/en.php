@@ -14,6 +14,7 @@ return array (
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Article',
   'nav_library' => 'Library',
+  'nav_webotheque' => 'Web library',
   'nav_auctions' => 'Auctions',
   'nav_assistant' => 'Assistant',
   'nav_presentations' => 'Presentations',

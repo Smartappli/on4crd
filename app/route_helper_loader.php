@@ -16,6 +16,7 @@ function app_load_route_helpers(string $route): void
         'qsl_helpers.php' => ['qsl', 'qsl_preview', 'qsl_export'],
         'member_library_helpers.php' => ['members_library', 'admin_library', 'admin_articles', 'chatbot'],
         'member_module_documents.php' => ['presentations', 'videos', 'pv', 'fichiers', 'telechargements', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_fichiers', 'admin_telechargements'],
+        'member_webotheque.php' => ['webotheque', 'admin_webotheque'],
         'knowledge_helpers.php' => ['chatbot'],
         'member_favorites.php' => ['dashboard', 'members_library', 'articles', 'article', 'albums', 'album', 'classifieds'],
         'member_preferences.php' => ['dashboard', 'settings'],

@@ -23,7 +23,7 @@ return array (
   'sort_recent' => 'Najnovejša',
   'sort_oldest' => 'Najstarejši',
   'sort_title' => 'Naslov od A do Ž',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Filtriraj',
   'reset' => 'Ponastavi',
   'applied_filters' => 'Uporabljeni filtri',
   'search_filter' => 'Iskanje: %s',

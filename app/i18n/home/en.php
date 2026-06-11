@@ -103,6 +103,8 @@ return [
   'member_module_qsl_desc' => 'Prepare, preview and export your QSL cards from the member area.',
   'member_module_library_title' => 'Library',
   'member_module_library_desc' => 'Access documents, technical notes and resources shared with members.',
+  'member_module_webotheque_title' => 'Web library',
+  'member_module_webotheque_desc' => 'Find useful web links shared with members.',
   'member_module_presentations_title' => 'Presentations',
   'member_module_presentations_desc' => 'Find meeting decks and talks shared with members.',
   'member_module_videos_title' => 'Videos',

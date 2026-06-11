@@ -186,6 +186,7 @@ function render_layout_impl(string $content, string $title = ''): string
     ];
     $navMemberLibraryItems = [
         ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
+        ['label' => (string) ($layoutI18n['nav_webotheque'] ?? 'Webotheque'), 'route' => 'webotheque', 'module' => 'webotheque'],
         ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'presentations', 'module' => 'presentations'],
         ['label' => (string) ($layoutI18n['nav_gallery'] ?? 'Photos'), 'route' => 'albums', 'module' => 'albums'],
         ['label' => (string) ($layoutI18n['nav_videos'] ?? 'Videos'), 'route' => 'videos', 'module' => 'videos'],
