@@ -158,6 +158,12 @@ if (!ensure_member_library_table()) {
     return;
 }
 
+$adminLibraryRoutes = ['admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_telechargements'];
+$adminLibraryRoute = (string) ($_GET['route'] ?? $_POST['route'] ?? 'admin_library');
+if (!in_array($adminLibraryRoute, $adminLibraryRoutes, true)) {
+    $adminLibraryRoute = 'admin_library';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
@@ -167,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $label = trim((string) ($_POST['category_label'] ?? '')) ?: $code;
             db()->prepare('INSERT INTO member_library_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')->execute([$code, $label]);
             set_flash('success', (string) $t['ok_category']);
-            redirect('admin_library');
+            redirect($adminLibraryRoute);
         }
         if ($action === 'delete_category') {
             $code = library_category_slug((string) ($_POST['category_code'] ?? ''));
@@ -176,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('DELETE FROM member_library_categories WHERE code = ? LIMIT 1')->execute([$code]);
             }
             set_flash('success', (string) $t['ok_category_deleted']);
-            redirect('admin_library');
+            redirect($adminLibraryRoute);
         }
         if ($action === 'delete_document') {
             $id = (int) ($_POST['id'] ?? 0);
@@ -192,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('DELETE FROM member_library_documents WHERE id = ?')->execute([$id]);
             set_flash('success', (string) $t['ok_deleted']);
-            redirect('admin_library');
+            redirect($adminLibraryRoute);
         }
         if ($action === 'bulk_delete_documents') {
             $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
@@ -213,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('DELETE FROM member_library_documents WHERE id IN (' . $placeholders . ')')->execute($ids);
             set_flash('success', (string) $t['ok_deleted']);
-            redirect('admin_library');
+            redirect($adminLibraryRoute);
         }
         if ($action === 'merge_tags') {
             $fromTag = trim((string) ($_POST['from_tag'] ?? ''));
@@ -256,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             set_flash('success', sprintf((string) $t['ok_tags_merged'], $updated));
-            redirect('admin_library');
+            redirect($adminLibraryRoute);
         }
 
         $category = library_category_slug((string) ($_POST['category'] ?? 'general'));
@@ -285,20 +291,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         db()->prepare('INSERT INTO member_library_documents (member_id, category, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?)')
             ->execute([(int) ($user['id'] ?? 0), $category, $tags, $title, $description, (string) $stored['public_path'], $extractedText]);
-        notify_member((int) ($user['id'] ?? 0), 'import', 'Library import completed', $title, route_url('admin_library'));
+        notify_member((int) ($user['id'] ?? 0), 'import', 'Library import completed', $title, route_url($adminLibraryRoute));
         set_flash('success', (string) $t['ok_added']);
-        redirect('admin_library');
+        redirect($adminLibraryRoute);
     } catch (Throwable $throwable) {
         $key = $throwable->getMessage();
         set_flash('error', (string) ($t[$key] ?? $key));
-        redirect('admin_library');
+        redirect($adminLibraryRoute);
     }
 }
 
-$adminLibraryRoute = (string) ($_GET['route'] ?? 'admin_library');
-if (!in_array($adminLibraryRoute, ['admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_telechargements'], true)) {
-    $adminLibraryRoute = 'admin_library';
-}
 $categoryOptions = db()->query('SELECT code, label FROM member_library_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [];
 $perPage = 20;
 $page = max(1, (int) ($_GET['p'] ?? 1));
@@ -496,9 +498,9 @@ ob_start();
     </section>
     <?php if ($totalPages > 1): ?>
         <nav class="admin-library-pagination" aria-label="Pagination documents">
-            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_library', ['category' => $adminCategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
+            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
             <span class="badge muted"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_library', ['category' => $adminCategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
+            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
 </div>
