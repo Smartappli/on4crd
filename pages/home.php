@@ -202,7 +202,7 @@ foreach ($memberFallbackModuleCodes as $moduleCode) {
     if (!isset($memberModuleDefinitions[$moduleCode])) {
         continue;
     }
-    if (in_array($moduleCode, ['dashboard', 'members', 'qsl', 'auctions', 'classifieds', 'chatbot'], true) && !module_enabled($moduleCode)) {
+    if (in_array($moduleCode, ['dashboard', 'members', 'qsl', 'presentations', 'videos', 'fichiers', 'pv', 'auctions', 'classifieds', 'chatbot'], true) && !module_enabled($moduleCode)) {
         continue;
     }
     $moduleMeta = $memberModuleDefinitions[$moduleCode];
