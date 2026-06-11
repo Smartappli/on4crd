@@ -189,6 +189,7 @@ function render_layout_impl(string $content, string $title = ''): string
         ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'presentations', 'module' => 'presentations'],
         ['label' => (string) ($layoutI18n['nav_gallery'] ?? 'Photos'), 'route' => 'albums', 'module' => 'albums'],
         ['label' => (string) ($layoutI18n['nav_videos'] ?? 'Videos'), 'route' => 'videos', 'module' => 'videos'],
+        ['label' => (string) ($layoutI18n['nav_files'] ?? 'Fichiers'), 'route' => 'fichiers', 'module' => 'fichiers'],
         ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'PV'), 'route' => 'pv', 'module' => 'pv'],
         ['label' => (string) ($layoutI18n['nav_downloads'] ?? 'Téléchargements'), 'route' => 'telechargements', 'module' => 'telechargements'],
     ];
