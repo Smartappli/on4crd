@@ -197,7 +197,7 @@ function seo_apply_defaults(string $route): void
         'webotheque' => ['title' => 'Webothèque membres', 'description' => 'Liens et ressources web réservés aux membres ON4CRD.'],
         'presentations' => ['title' => 'Présentations membres', 'description' => 'Supports et présentations réservés aux membres ON4CRD.'],
         'videos' => ['title' => 'Videos membres', 'description' => 'Vidéos et ressources audiovisuelles réservées aux membres ON4CRD.'],
-        'pv' => ['title' => 'PV membres', 'description' => 'Procès-verbaux et comptes rendus réservés aux membres ON4CRD.'],
+        'pv' => ['title' => 'Procès verbaux membres', 'description' => 'Procès verbaux et comptes rendus réservés aux membres ON4CRD.'],
         'fichiers' => ['title' => 'Fichiers membres', 'description' => 'Fichiers et ressources a telecharger reserves aux membres ON4CRD.'],
         'telechargements' => ['title' => 'Fichiers membres', 'description' => 'Fichiers et ressources a telecharger reserves aux membres ON4CRD.'],
         'press' => ['title' => 'Presse', 'description' => 'Communiqués, retombées presse et publications autour du club ON4CRD.'],

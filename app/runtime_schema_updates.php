@@ -395,7 +395,7 @@ function apply_runtime_schema_updates(): void
             ['webotheque', 'Webotheque', 'Liens et ressources web reserves aux membres', 0, 1, 'members', 29],
             ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
             ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
-            ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
+            ['pv', 'Procès verbaux', 'Procès verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
             ['fichiers', 'Fichiers', 'Fichiers et ressources a telecharger', 0, 1, 'members', 33],
         ];
         $memberDocumentModuleStmt = db()->prepare(

@@ -34,8 +34,8 @@ function member_document_module_definitions(): array
             'admin_route' => 'admin_pv',
             'domain' => 'pv',
             'legacy_categories' => ['pv'],
-            'fallback_title' => 'PV',
-            'fallback_intro' => 'Proces-verbaux et comptes rendus disponibles pour les membres.',
+            'fallback_title' => 'Procès verbaux',
+            'fallback_intro' => 'Procès verbaux et comptes rendus disponibles pour les membres.',
         ],
     ];
 }
