@@ -204,10 +204,17 @@ function member_document_migrate_library_categories(): void
         return;
     }
 
+    $allLegacyCategories = [];
     foreach (member_document_module_definitions() as $moduleCode => $definition) {
         $legacyCategories = (array) ($definition['legacy_categories'] ?? []);
         if ($legacyCategories === []) {
             continue;
+        }
+        foreach ($legacyCategories as $legacyCategory) {
+            $legacyCategory = trim((string) $legacyCategory);
+            if ($legacyCategory !== '') {
+                $allLegacyCategories[$legacyCategory] = true;
+            }
         }
         $placeholders = implode(',', array_fill(0, count($legacyCategories), '?'));
         $select = db()->prepare('SELECT * FROM member_library_documents WHERE category IN (' . $placeholders . ') ORDER BY id ASC');
@@ -238,6 +245,15 @@ function member_document_migrate_library_categories(): void
                 $legacyId,
                 (string) ($row['uploaded_at'] ?? date('Y-m-d H:i:s')),
             ]);
+        }
+    }
+
+    if ($allLegacyCategories !== []) {
+        $legacyCategories = array_keys($allLegacyCategories);
+        $placeholders = implode(',', array_fill(0, count($legacyCategories), '?'));
+        db()->prepare('DELETE FROM member_library_documents WHERE category IN (' . $placeholders . ')')->execute($legacyCategories);
+        if (table_exists('member_library_categories')) {
+            db()->prepare('DELETE FROM member_library_categories WHERE code IN (' . $placeholders . ')')->execute($legacyCategories);
         }
     }
 }

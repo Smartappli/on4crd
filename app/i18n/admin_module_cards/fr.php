@@ -52,4 +52,6 @@ return array (
   'admin_pv_desc' => 'Gestion des procès-verbaux et comptes rendus réservés aux membres.',
   'admin_telechargements_title' => 'Téléchargements',
   'admin_telechargements_desc' => 'Gestion des fichiers téléchargeables réservés aux membres.',
+  'admin_fichiers_title' => 'Fichiers',
+  'admin_fichiers_desc' => 'Gerer les fichiers et ressources reserves aux membres.',
 );

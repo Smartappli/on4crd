@@ -52,4 +52,6 @@ return array (
   'admin_pv_desc' => 'Manage minutes and reports reserved for members.',
   'admin_telechargements_title' => 'ডাউনলোড',
   'admin_telechargements_desc' => 'Manage downloadable files reserved for members.',
+  'admin_fichiers_title' => 'Files',
+  'admin_fichiers_desc' => 'Manage files and resources reserved for members.',
 );
