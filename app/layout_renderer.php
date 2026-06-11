@@ -177,10 +177,10 @@ function render_layout_impl(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_assistant'], 'route' => 'chatbot', 'module' => 'chatbot'],
     ];
     $navMemberLibraryItems = [
-        ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'presentations']],
-        ['label' => (string) ($layoutI18n['nav_medias'] ?? 'Medias'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'medias']],
-        ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'PV'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'pv']],
-        ['label' => (string) ($layoutI18n['nav_downloads'] ?? 'Téléchargements'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'telechargements']],
+        ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'presentations', 'module' => 'presentations'],
+        ['label' => (string) ($layoutI18n['nav_medias'] ?? 'Medias'), 'route' => 'medias', 'module' => 'medias'],
+        ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'PV'), 'route' => 'pv', 'module' => 'pv'],
+        ['label' => (string) ($layoutI18n['nav_downloads'] ?? 'Téléchargements'), 'route' => 'telechargements', 'module' => 'telechargements'],
     ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {

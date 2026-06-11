@@ -10,6 +10,10 @@ function seed_modules(): void
     $modules = [
         ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 'members', 10],
         ['members', 'Membres', 'Espace membres et profil', 0, 1, 'members', 20],
+        ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
+        ['medias', 'Medias', 'Ressources médias réservées aux membres', 0, 1, 'members', 31],
+        ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
+        ['telechargements', 'Téléchargements', 'Fichiers et ressources à télécharger', 0, 1, 'members', 33],
         ['news', 'Actualités', 'Section des actualités du club', 0, 1, 'public', 30],
         ['articles', 'Articles', 'Articles techniques', 0, 1, 'public', 40],
         ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 'public', 50],
@@ -318,7 +322,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-09.5';
+    return '2026-06-11.1';
 }
 
 function runtime_schema_marker_path(): string

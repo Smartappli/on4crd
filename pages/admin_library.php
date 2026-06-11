@@ -75,7 +75,17 @@ function ensure_member_library_categories_table(): void
         sort_order INT NOT NULL DEFAULT 100,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )');
-    db()->prepare('INSERT IGNORE INTO member_library_categories (code, label, sort_order) VALUES (?, ?, ?)')->execute(['general', 'General', 1]);
+    $categoryInsert = db()->prepare('INSERT IGNORE INTO member_library_categories (code, label, sort_order) VALUES (?, ?, ?)');
+    $defaultCategories = function_exists('member_library_default_categories')
+        ? member_library_default_categories()
+        : [['code' => 'general', 'label' => 'General', 'sort_order' => 1]];
+    foreach ($defaultCategories as $category) {
+        $categoryInsert->execute([
+            (string) $category['code'],
+            (string) $category['label'],
+            (int) $category['sort_order'],
+        ]);
+    }
 }
 
 function library_extract_text(string $path, string $extension): string

@@ -153,6 +153,18 @@ textarea:focus-visible {
   background: var(--panel-2);
   text-decoration: none;
 }
+.nav-row-member a {
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+.nav-row-member a:hover,
+.nav-row-member a[aria-current="page"] {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  text-decoration: none;
+}
 .nav-form, .toolbar-form { margin: 0; }
 .toolbar-form { position: relative; }
 .nav-link-button {

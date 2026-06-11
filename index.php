@@ -198,6 +198,10 @@ $routeModules = [
     'change_password' => 'members',
     'my_requests' => 'members',
     'members_library' => 'members',
+    'presentations' => 'presentations',
+    'medias' => 'medias',
+    'pv' => 'pv',
+    'telechargements' => 'telechargements',
     'directory' => 'directory',
     'tools' => 'tools',
     'tools_geocode' => 'tools',
@@ -351,6 +355,10 @@ switch ($route) {
     case 'qsl_export': $dispatchPage('pages/qsl_export.php'); break;
     case 'chatbot': $dispatchPage('pages/chatbot.php'); break;
     case 'members_library': $dispatchPage('pages/members_library.php'); break;
+    case 'presentations': $dispatchPage('pages/presentations.php'); break;
+    case 'medias': $dispatchPage('pages/medias.php'); break;
+    case 'pv': $dispatchPage('pages/pv.php'); break;
+    case 'telechargements': $dispatchPage('pages/telechargements.php'); break;
     case 'search': $dispatchPage('pages/search.php'); break;
     case 'newsletter': $dispatchPage('pages/newsletter.php'); break;
     case 'newsletter_public': $dispatchPage('pages/newsletter_public.php'); break;
