@@ -256,6 +256,10 @@ $routeModules = [
     'admin_events_feed' => 'admin',
     'admin_dinner_reservations' => 'admin',
     'admin_library' => 'admin',
+    'admin_presentations' => 'admin',
+    'admin_videos' => 'admin',
+    'admin_pv' => 'admin',
+    'admin_telechargements' => 'admin',
     'admin_dashboard' => 'admin',
     'admin_auctions' => 'admin',
     'settings' => 'members',
@@ -384,6 +388,10 @@ switch ($route) {
     case 'admin_wiki': $dispatchPage('pages/admin_wiki.php'); break;
     case 'admin_albums': $dispatchPage('pages/admin_albums.php'); break;
     case 'admin_library': $dispatchPage('pages/admin_library.php'); break;
+    case 'admin_presentations': $dispatchPage('pages/admin_presentations.php'); break;
+    case 'admin_videos': $dispatchPage('pages/admin_videos.php'); break;
+    case 'admin_pv': $dispatchPage('pages/admin_pv.php'); break;
+    case 'admin_telechargements': $dispatchPage('pages/admin_telechargements.php'); break;
     case 'admin_news': $dispatchPage('pages/admin_news.php'); break;
     case 'admin_press': $dispatchPage('pages/admin_press.php'); break;
     case 'admin_editorial': $dispatchPage('pages/admin_editorial.php'); break;
