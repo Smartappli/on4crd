@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Katalog',
   'nav_dashboard' => 'Pulpit nawigacyjny',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Galeria',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Przedmioty',
   'nav_library' => 'Biblioteka',
   'nav_auctions' => 'Aukcje',

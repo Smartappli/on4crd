@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Kataloog',
   'nav_dashboard' => 'Armatuurlaud',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Galerii',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Üksused',
   'nav_library' => 'Raamatukogu',
   'nav_auctions' => 'Oksjonid',

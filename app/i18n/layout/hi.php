@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'निर्देशिका',
   'nav_dashboard' => 'डैशबोर्ड',
   'nav_wiki' => 'विकी',
-  'nav_gallery' => 'गैलरी',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'लेख',
   'nav_library' => 'लाइब्रेरी',
   'nav_auctions' => 'नीलामी',

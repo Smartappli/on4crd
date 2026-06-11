@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Direttorju',
   'nav_dashboard' => 'Daxxbord',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Gallerija',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Oġġetti',
   'nav_library' => 'Librerija',
   'nav_auctions' => 'Irkant',

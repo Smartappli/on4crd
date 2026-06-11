@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Hakemisto',
   'nav_dashboard' => 'Kojelauta',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Galleria',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Tuotteet',
   'nav_library' => 'Kirjasto',
   'nav_auctions' => 'Huutokaupat',

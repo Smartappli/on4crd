@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Katalogas',
   'nav_dashboard' => 'Prietaisų skydelis',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Galerija',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Daiktai',
   'nav_library' => 'biblioteka',
   'nav_auctions' => 'Aukcionai',

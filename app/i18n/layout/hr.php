@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Imenik',
   'nav_dashboard' => 'Nadzorna ploča',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Galerija',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Predmeti',
   'nav_library' => 'Knjižnica',
   'nav_auctions' => 'Aukcije',

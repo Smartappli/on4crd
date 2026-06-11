@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Справочник',
   'nav_dashboard' => 'Табло за управление',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Галерия',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Предмети',
   'nav_library' => 'Библиотека',
   'nav_auctions' => 'Търгове',

@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Eolaire',
   'nav_dashboard' => 'Deais',
   'nav_wiki' => 'Vicí',
-  'nav_gallery' => 'Gailearaí',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Míreanna',
   'nav_library' => 'Leabharlann',
   'nav_auctions' => 'Ceantanna',

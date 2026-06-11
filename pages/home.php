@@ -120,7 +120,8 @@ $memberModuleDefinitions = [
     'presentations' => ['route' => 'presentations', 'icon' => 'P', 'title_key' => 'member_module_presentations_title', 'desc_key' => 'member_module_presentations_desc', 'title_fallback' => 'Présentations', 'desc_fallback' => 'Retrouvez les supports de réunions et exposés partagés avec les membres.'],
     'videos' => ['route' => 'videos', 'icon' => 'V', 'title_key' => 'member_module_videos_title', 'desc_key' => 'member_module_videos_desc', 'title_fallback' => 'Videos', 'desc_fallback' => 'Accédez aux vidéos et ressources audiovisuelles réservées aux membres.'],
     'pv' => ['route' => 'pv', 'icon' => 'PV', 'title_key' => 'member_module_pv_title', 'desc_key' => 'member_module_pv_desc', 'title_fallback' => 'PV', 'desc_fallback' => 'Consultez les procès-verbaux et comptes rendus du club.'],
-    'telechargements' => ['route' => 'telechargements', 'icon' => 'DL', 'title_key' => 'member_module_telechargements_title', 'desc_key' => 'member_module_telechargements_desc', 'title_fallback' => 'Téléchargements', 'desc_fallback' => 'Téléchargez les fichiers et ressources mis à disposition des membres.'],    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title_key' => 'member_module_auctions_title', 'desc_key' => 'member_module_auctions_desc', 'title_fallback' => 'Enchères', 'desc_fallback' => 'Consultez les lots disponibles et participez aux ventes organisées par le club.'],
+    'fichiers' => ['route' => 'fichiers', 'icon' => 'FI', 'title_key' => 'member_module_fichiers_title', 'desc_key' => 'member_module_fichiers_desc', 'title_fallback' => 'Fichiers', 'desc_fallback' => 'Téléchargez les fichiers et ressources mis à disposition des membres.'],
+    'auctions' => ['route' => 'auctions', 'icon' => '⌁', 'title_key' => 'member_module_auctions_title', 'desc_key' => 'member_module_auctions_desc', 'title_fallback' => 'Enchères', 'desc_fallback' => 'Consultez les lots disponibles et participez aux ventes organisées par le club.'],
     'classifieds' => ['route' => 'classifieds', 'icon' => '□', 'title_key' => 'member_module_classifieds_title', 'desc_key' => 'member_module_classifieds_desc', 'title_fallback' => 'Petites annonces', 'desc_fallback' => 'Publiez ou consultez les annonces radioamateurs proposées par la communauté.'],
     'chatbot' => ['route' => 'chatbot', 'icon' => '?', 'title_key' => 'member_module_chatbot_title', 'desc_key' => 'member_module_chatbot_desc', 'title_fallback' => 'Assistant', 'desc_fallback' => 'Posez vos questions à l’assistant ON4CRD pour retrouver rapidement une information utile.'],
     'newsletter' => ['route' => 'newsletter', 'icon' => '≋', 'title_key' => 'member_module_newsletter_title', 'desc_key' => 'member_module_newsletter_desc', 'title_fallback' => 'Newsletter', 'desc_fallback' => 'Suivez les communications du club et gérez votre inscription aux nouvelles ON4CRD.'],
@@ -139,7 +140,8 @@ $memberModuleIconPaths = [
     'presentations' => '<rect width="18" height="13" x="3" y="4" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M8 9h8"></path><path d="M8 13h5"></path>',
     'videos' => '<rect width="18" height="14" x="3" y="5" rx="2"></rect><path d="m10 9 5 3-5 3V9Z"></path>',
     'pv' => '<path d="M9 3h6l1 2h3v16H5V5h3l1-2Z"></path><path d="M9 11h6"></path><path d="M9 15h6"></path>',
-    'telechargements' => '<path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path>',    'auctions' => '<path d="m14 13-8.5 8.5"></path><path d="m9 8 7 7"></path><path d="m12 5 7 7"></path><path d="m5 11 7-7"></path><path d="m2 22 6-6"></path>',
+    'fichiers' => '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h5"></path>',
+    'auctions' => '<path d="m14 13-8.5 8.5"></path><path d="m9 8 7 7"></path><path d="m12 5 7 7"></path><path d="m5 11 7-7"></path><path d="m2 22 6-6"></path>',
     'classifieds' => '<path d="M20.6 13.5 13.5 20.6a2 2 0 0 1-2.8 0L3 12.9V4h8.9l8.7 8.7a2 2 0 0 1 0 2.8Z"></path><circle cx="7.5" cy="7.5" r=".8"></circle>',
     'chatbot' => '<path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="3"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M9 13v2"></path><path d="M15 13v2"></path>',
     'newsletter' => '<path d="M4 4h16v16H4z"></path><path d="M8 8h8"></path><path d="M8 12h8"></path><path d="M8 16h5"></path>',
@@ -152,7 +154,8 @@ $memberModuleIconClasses = [
     'presentations' => 'border-teal-200 bg-teal-50 text-teal-700 group-hover:border-teal-300 group-hover:bg-teal-100',
     'videos' => 'border-red-200 bg-red-50 text-red-700 group-hover:border-red-300 group-hover:bg-red-100',
     'pv' => 'border-slate-200 bg-slate-50 text-slate-700 group-hover:border-slate-300 group-hover:bg-slate-100',
-    'telechargements' => 'border-lime-200 bg-lime-50 text-lime-700 group-hover:border-lime-300 group-hover:bg-lime-100',    'auctions' => 'border-rose-200 bg-rose-50 text-rose-700 group-hover:border-rose-300 group-hover:bg-rose-100',
+    'fichiers' => 'border-lime-200 bg-lime-50 text-lime-700 group-hover:border-lime-300 group-hover:bg-lime-100',
+    'auctions' => 'border-rose-200 bg-rose-50 text-rose-700 group-hover:border-rose-300 group-hover:bg-rose-100',
     'classifieds' => 'border-cyan-200 bg-cyan-50 text-cyan-700 group-hover:border-cyan-300 group-hover:bg-cyan-100',
     'chatbot' => 'border-violet-200 bg-violet-50 text-violet-700 group-hover:border-violet-300 group-hover:bg-violet-100',
     'newsletter' => 'border-indigo-200 bg-indigo-50 text-indigo-700 group-hover:border-indigo-300 group-hover:bg-indigo-100',
@@ -194,7 +197,7 @@ if (table_exists('modules')) {
         $memberModuleCodesRendered[] = $moduleCode;
     }
 }
-$memberFallbackModuleCodes = ['dashboard', 'members', 'qsl', 'library', 'presentations', 'videos', 'pv', 'telechargements', 'auctions', 'classifieds', 'chatbot', 'newsletter'];
+$memberFallbackModuleCodes = ['dashboard', 'members', 'qsl', 'library', 'presentations', 'videos', 'fichiers', 'pv', 'auctions', 'classifieds', 'chatbot', 'newsletter'];
 foreach ($memberFallbackModuleCodes as $moduleCode) {
     if (!isset($memberModuleDefinitions[$moduleCode])) {
         continue;

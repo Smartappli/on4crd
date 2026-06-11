@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'ディレクトリ',
   'nav_dashboard' => 'ダッシュボード',
   'nav_wiki' => 'ウィキ',
-  'nav_gallery' => 'ギャラリー',
+  'nav_gallery' => 'Photos',
   'nav_articles' => '記事',
   'nav_library' => 'ライブラリ',
   'nav_auctions' => 'オークション',

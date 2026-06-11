@@ -1,0 +1,130 @@
+/* Autonomous member document modules: presentations, videos, fichiers, pv */
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-module {
+  display: grid;
+  gap: 1rem;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  box-shadow: none;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-copy {
+  min-width: 0;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-heading {
+  margin: .15rem 0 .35rem;
+  font-family: inherit;
+  color: var(--text);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-side {
+  display: grid;
+  gap: .65rem;
+  align-content: center;
+  justify-items: stretch;
+  min-width: min(100%, 30rem);
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  gap: .75rem;
+  align-content: center;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-stats article {
+  display: grid;
+  min-height: 0;
+  padding: .65rem .75rem;
+  align-content: center;
+  justify-items: center;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 92%, white);
+  text-align: center;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-stats strong {
+  display: block;
+  order: 1;
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-stats span {
+  display: block;
+  order: 2;
+  margin: .35rem 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 650;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-search-panel {
+  margin-top: 0;
+  padding-block: .65rem;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-search-form {
+  margin: 0;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-content {
+  display: grid;
+  gap: .75rem;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-card {
+  height: 100%;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-preview-toggle {
+  margin-top: .75rem;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-pdf-preview {
+  width: 100%;
+  min-height: 420px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel-2);
+}
+
+@media (max-width: 900px) {
+  :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero {
+    grid-template-columns: 1fr;
+  }
+
+  :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-side {
+    min-width: 0;
+  }
+
+  :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-stats {
+    grid-template-columns: 1fr;
+  }
+}

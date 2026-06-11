@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Címtár',
   'nav_dashboard' => 'Irányítópult',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Galéria',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Tételek',
   'nav_library' => 'Könyvtár',
   'nav_auctions' => 'Aukciók',

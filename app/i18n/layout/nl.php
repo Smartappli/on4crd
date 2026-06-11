@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Gids',
   'nav_dashboard' => 'Dashboard',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Galerij',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Artikelen',
   'nav_library' => 'Bibliotheek',
   'nav_auctions' => 'Veilingen',

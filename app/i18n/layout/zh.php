@@ -11,7 +11,7 @@ return array (
   'nav_directory' => '目录',
   'nav_dashboard' => '仪表盘',
   'nav_wiki' => '维基',
-  'nav_gallery' => '画廊',
+  'nav_gallery' => 'Photos',
   'nav_articles' => '文章',
   'nav_library' => '资料库',
   'nav_auctions' => '拍卖',

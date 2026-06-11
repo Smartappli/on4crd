@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Κατάλογος',
   'nav_dashboard' => 'Ταμπλό',
   'nav_wiki' => 'Wiki',
-  'nav_gallery' => 'Γκαλερί',
+  'nav_gallery' => 'Photos',
   'nav_articles' => 'Είδη',
   'nav_library' => 'Βιβλιοθήκη',
   'nav_auctions' => 'δημοπρασίες',
