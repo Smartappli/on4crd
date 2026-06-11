@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'ويكي',
+  'title' => 'المعرفة',
   'unavailable' => 'ستتوفر الويكي بعد تهيئة الصفحات.',
   'new_pages' => 'صفحات جديدة',
   'updated_pages' => 'صفحات محدّثة',

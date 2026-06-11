@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Toisc go bhfuil tú ag féachaint ar albaim roinnte.',
   'recommendation_reason_library' => 'Toisc go bhfuil tú ag breathnú ar dhoiciméid leabharlainne.',
   'signal_article' => 'Míreanna',
-  'signal_wiki' => 'Vicí',
+  'signal_wiki' => 'Eolas',
   'signal_classified' => 'Fógraí',
   'signal_album' => 'Albaim',
   'signal_library' => 'Leabharlann',

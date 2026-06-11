@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Hvorfor dette forslag',
   'recommendation_reason_default' => 'Baseret på din seneste aktivitet.',
   'recommendation_reason_article' => 'Fordi du læser eller gemmer artikler.',
-  'recommendation_reason_wiki' => 'Fordi du ser wiki-sider.',
+  'recommendation_reason_wiki' => 'Fordi du ser Viden-sider.',
   'recommendation_reason_classified' => 'Fordi du ser annoncerne.',
   'recommendation_reason_album' => 'Fordi du ser delte album.',
   'recommendation_reason_library' => 'Fordi du konsulterer biblioteksdokumenter.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Hľadať',
   'eyebrow' => 'Globálne vyhľadávanie',
-  'lead' => 'Rýchlo vyhľadajte novinky, články, wiki stránky, dokumenty, oznámenia a albumy.',
+  'lead' => 'Rýchlo vyhľadajte novinky, články, Znalosti stránky, dokumenty, oznámenia a albumy.',
   'placeholder' => 'Indikátor, kľúčové slovo, téma, dokument...',
   'query_label' => 'Vaše hľadanie',
   'source_label' => 'Zdroj',

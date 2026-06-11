@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Búsqueda',
   'eyebrow' => 'Búsqueda global',
-  'lead' => 'Encuentra rápidamente noticias, artículos, páginas wiki, documentos, anuncios y álbumes.',
+  'lead' => 'Encuentra rápidamente noticias, artículos, páginas Conocimientos, documentos, anuncios y álbumes.',
   'placeholder' => 'Indicativo, palabra clave, tema, documento...',
   'query_label' => 'Tu búsqueda',
   'source_label' => 'Fuente',

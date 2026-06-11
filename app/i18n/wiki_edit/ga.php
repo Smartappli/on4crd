@@ -10,7 +10,7 @@ return array (
   'slug_label' => 'Drúchtín',
   'content_label' => 'Ábhar (HTML simplí)',
   'save' => 'Sábháil',
-  'layout' => 'Cuir wiki in eagar',
+  'layout' => 'Cuir Eolas in eagar',
   'meta_desc' => 'Cruthaigh nó cuir in eagar leathanach vicí.',
   'propose_title' => 'Mol leathanach vicí',
   'propose_meta_desc' => 'Cruthaigh leathanach nua vicí ó limistéar na mball.',

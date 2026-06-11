@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Eolaire de chomhaltaí agus de theagmhálaithe raidió amaitéaracha Club Raidió Durnal ON4CRD.',
   'tools_title' => 'Uirlisí raidió amaitéarach',
   'tools_description' => 'Uirlisí raidió: Aimsitheoir Maidenhead, tiontuithe, ríomh antenna, iomadú agus cúnamh praiticiúil do QSO.',
-  'wiki_title' => 'ON4CRD Vicí',
+  'wiki_title' => 'ON4CRD Eolas',
   'wiki_description' => 'Vicí comhoibríoch Club Raidió Durnal le heolas, nósanna imeachta agus acmhainní raidió amaitéarach.',
   'albums_title' => 'Albam grianghraf ON4CRD',
   'albums_description' => 'Gailearaí na ngrianghraf de ghníomhaíochtaí, turais, chomórtais agus chuimhneacháin an tsaoil ar Raidió Club Durnal.',

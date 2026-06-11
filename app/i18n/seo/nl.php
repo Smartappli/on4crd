@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Radio Club Durnal ON4CRD: nieuws, evenementen, opleiding, radioamateurtools en lokale bronnen in Durnal, Yvoir en Namen.',
   'tools_title' => 'ON4CRD Radio Club Durnal',
   'tools_description' => 'Radio Club Durnal ON4CRD: nieuws, evenementen, opleiding, radioamateurtools en lokale bronnen in Durnal, Yvoir en Namen.',
-  'wiki_title' => 'ON4CRD Radio Club Durnal',
+  'wiki_title' => 'ON4CRD Kennis',
   'wiki_description' => 'Radio Club Durnal ON4CRD: nieuws, evenementen, opleiding, radioamateurtools en lokale bronnen in Durnal, Yvoir en Namen.',
   'albums_title' => 'ON4CRD Radio Club Durnal',
   'albums_description' => 'Radio Club Durnal ON4CRD: nieuws, evenementen, opleiding, radioamateurtools en lokale bronnen in Durnal, Yvoir en Namen.',

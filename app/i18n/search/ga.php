@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Gach rud',
   'source_news' => 'Nuacht',
   'source_articles' => 'Míreanna',
-  'source_wiki' => 'Vicí',
+  'source_wiki' => 'Eolas',
   'source_library' => 'Leabharlann',
   'source_classifieds' => 'Fógraí',
   'source_albums' => 'Albaim',

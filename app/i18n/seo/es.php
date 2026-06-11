@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'default_title' => 'ON4CRD Radio Club Durnal',
   'default_description' => 'Radio Club Durnal ON4CRD: noticias, eventos, formación, herramientas de radioaficionado y recursos locales en Durnal, Yvoir y Namur.',
   'geo_placename' => 'Durnal, Yvoir, Namur, Bélgica',
@@ -15,7 +15,7 @@ return [
   'directory_description' => 'Radio Club Durnal ON4CRD: noticias, eventos, formación, herramientas de radioaficionado y recursos locales en Durnal, Yvoir y Namur.',
   'tools_title' => 'ON4CRD Radio Club Durnal',
   'tools_description' => 'Radio Club Durnal ON4CRD: noticias, eventos, formación, herramientas de radioaficionado y recursos locales en Durnal, Yvoir y Namur.',
-  'wiki_title' => 'ON4CRD Radio Club Durnal',
+  'wiki_title' => 'ON4CRD Conocimientos',
   'wiki_description' => 'Radio Club Durnal ON4CRD: noticias, eventos, formación, herramientas de radioaficionado y recursos locales en Durnal, Yvoir y Namur.',
   'albums_title' => 'ON4CRD Radio Club Durnal',
   'albums_description' => 'Radio Club Durnal ON4CRD: noticias, eventos, formación, herramientas de radioaficionado y recursos locales en Durnal, Yvoir y Namur.',
@@ -53,4 +53,4 @@ return [
   'qsl_description' => 'Radio Club Durnal ON4CRD: noticias, eventos, formación, herramientas de radioaficionado y recursos locales en Durnal, Yvoir y Namur.',
   'members_library_title' => 'ON4CRD Radio Club Durnal',
   'members_library_description' => 'Radio Club Durnal ON4CRD: noticias, eventos, formación, herramientas de radioaficionado y recursos locales en Durnal, Yvoir y Namur.',
-];
+);

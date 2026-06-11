@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'কারণ আপনি শেয়ার করা অ্যালবাম দেখেন।',
   'recommendation_reason_library' => 'কারণ আপনি লাইব্রেরি নথির সাথে পরামর্শ করুন।',
   'signal_article' => 'প্রবন্ধ',
-  'signal_wiki' => 'উইকি',
+  'signal_wiki' => 'জ্ঞান',
   'signal_classified' => 'বিজ্ঞাপন',
   'signal_album' => 'অ্যালবাম',
   'signal_library' => 'লাইব্রেরি',

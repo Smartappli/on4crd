@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki adminisztráció',
+  'title' => 'Tudás adminisztráció',
   'new_page' => 'Új oldal',
   'th_title' => 'Cím',
   'th_slug' => 'Slug',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Akció',
   'edit' => 'Szerkesztés',
   'empty' => 'Nincsenek oldalak.',
-  'layout' => 'Wiki adminisztráció',
-  'meta_desc' => 'Wiki oldal kezelése.',
+  'layout' => 'Tudás adminisztráció',
+  'meta_desc' => 'Tudás oldal kezelése.',
 );

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'default_title' => 'ON4CRD রেডিও ক্লাব দ্যুরনাল',
   'default_description' => 'Radio Club Durnal ON4CRD: সংবাদ, ইভেন্ট, প্রশিক্ষণ, অ্যামেচার রেডিও টুল এবং Durnal, Yvoir ও Namur এলাকার স্থানীয় সম্পদ।',
   'geo_placename' => 'দ্যুরনাল, ইভোয়ার, নামুর, বেলজিয়াম',
@@ -15,7 +15,7 @@ return [
   'directory_description' => 'Radio Club Durnal ON4CRD: সংবাদ, ইভেন্ট, প্রশিক্ষণ, অ্যামেচার রেডিও টুল এবং Durnal, Yvoir ও Namur এলাকার স্থানীয় সম্পদ।',
   'tools_title' => 'ON4CRD রেডিও ক্লাব দ্যুরনাল',
   'tools_description' => 'Radio Club Durnal ON4CRD: সংবাদ, ইভেন্ট, প্রশিক্ষণ, অ্যামেচার রেডিও টুল এবং Durnal, Yvoir ও Namur এলাকার স্থানীয় সম্পদ।',
-  'wiki_title' => 'ON4CRD রেডিও ক্লাব দ্যুরনাল',
+  'wiki_title' => 'ON4CRD জ্ঞান',
   'wiki_description' => 'Radio Club Durnal ON4CRD: সংবাদ, ইভেন্ট, প্রশিক্ষণ, অ্যামেচার রেডিও টুল এবং Durnal, Yvoir ও Namur এলাকার স্থানীয় সম্পদ।',
   'albums_title' => 'ON4CRD রেডিও ক্লাব দ্যুরনাল',
   'albums_description' => 'Radio Club Durnal ON4CRD: সংবাদ, ইভেন্ট, প্রশিক্ষণ, অ্যামেচার রেডিও টুল এবং Durnal, Yvoir ও Namur এলাকার স্থানীয় সম্পদ।',
@@ -53,4 +53,4 @@ return [
   'qsl_description' => 'Radio Club Durnal ON4CRD: সংবাদ, ইভেন্ট, প্রশিক্ষণ, অ্যামেচার রেডিও টুল এবং Durnal, Yvoir ও Namur এলাকার স্থানীয় সম্পদ।',
   'members_library_title' => 'ON4CRD রেডিও ক্লাব দ্যুরনাল',
   'members_library_description' => 'Radio Club Durnal ON4CRD: সংবাদ, ইভেন্ট, প্রশিক্ষণ, অ্যামেচার রেডিও টুল এবং Durnal, Yvoir ও Namur এলাকার স্থানীয় সম্পদ।',
-];
+);

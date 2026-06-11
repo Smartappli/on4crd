@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Miksi tämä ehdotus',
   'recommendation_reason_default' => 'Perustuu viimeaikaiseen toimintaasi.',
   'recommendation_reason_article' => 'Koska luet tai tallennat artikkeleita.',
-  'recommendation_reason_wiki' => 'Koska katselet wikisivuja.',
+  'recommendation_reason_wiki' => 'Koska katselet Tietämysivuja.',
   'recommendation_reason_classified' => 'Koska katsot mainoksia.',
   'recommendation_reason_album' => 'Koska katselet jaettuja albumeita.',
   'recommendation_reason_library' => 'Koska tarkastelet kirjaston asiakirjoja.',

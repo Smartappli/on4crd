@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wikin hallinto',
+  'title' => 'Tietämysn hallinto',
   'new_page' => 'Uusi sivu',
   'th_title' => 'Otsikko',
   'th_slug' => 'Slug',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Toiminta',
   'edit' => 'Muokkaa',
   'empty' => 'Ei sivuja.',
-  'layout' => 'Wikin hallinto',
-  'meta_desc' => 'Wiki-sivujen hallinta.',
+  'layout' => 'Tietämysn hallinto',
+  'meta_desc' => 'Tietämys-sivujen hallinta.',
 );

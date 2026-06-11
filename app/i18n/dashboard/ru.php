@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Потому что вы просматриваете общие альбомы.',
   'recommendation_reason_library' => 'Потому что вы просматриваете библиотечные документы.',
   'signal_article' => 'Статьи',
-  'signal_wiki' => 'Вики',
+  'signal_wiki' => 'Знания',
   'signal_classified' => 'Объявления',
   'signal_album' => 'Альбомы',
   'signal_library' => 'Библиотека',

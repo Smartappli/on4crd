@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Keresés',
   'eyebrow' => 'Globális keresés',
-  'lead' => 'Gyorsan kereshet híreket, cikkeket, wikioldalakat, dokumentumokat, közleményeket és albumokat.',
+  'lead' => 'Gyorsan kereshet híreket, cikkeket, Tudásoldalakat, dokumentumokat, közleményeket és albumokat.',
   'placeholder' => 'Mutató, kulcsszó, téma, dokumentum...',
   'query_label' => 'A keresésed',
   'source_label' => 'Forrás',

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'default_title' => 'ON4CRD ラジオクラブ・デュルナル',
   'default_description' => 'Radio Club Durnal ON4CRD のニュース、イベント、講習、アマチュア無線ツール、デュルナル・イヴォワール・ナミュールの地域情報。',
   'geo_placename' => 'デュルナル、イヴォワール、ナミュール、ベルギー',
@@ -15,7 +15,7 @@ return [
   'directory_description' => 'Radio Club Durnal ON4CRD のニュース、イベント、講習、アマチュア無線ツール、デュルナル・イヴォワール・ナミュールの地域情報。',
   'tools_title' => 'ON4CRD ラジオクラブ・デュルナル',
   'tools_description' => 'Radio Club Durnal ON4CRD のニュース、イベント、講習、アマチュア無線ツール、デュルナル・イヴォワール・ナミュールの地域情報。',
-  'wiki_title' => 'ON4CRD ラジオクラブ・デュルナル',
+  'wiki_title' => 'ON4CRD 知識',
   'wiki_description' => 'Radio Club Durnal ON4CRD のニュース、イベント、講習、アマチュア無線ツール、デュルナル・イヴォワール・ナミュールの地域情報。',
   'albums_title' => 'ON4CRD ラジオクラブ・デュルナル',
   'albums_description' => 'Radio Club Durnal ON4CRD のニュース、イベント、講習、アマチュア無線ツール、デュルナル・イヴォワール・ナミュールの地域情報。',
@@ -53,4 +53,4 @@ return [
   'qsl_description' => 'Radio Club Durnal ON4CRD のニュース、イベント、講習、アマチュア無線ツール、デュルナル・イヴォワール・ナミュールの地域情報。',
   'members_library_title' => 'ON4CRD ラジオクラブ・デュルナル',
   'members_library_description' => 'Radio Club Durnal ON4CRD のニュース、イベント、講習、アマチュア無線ツール、デュルナル・イヴォワール・ナミュールの地域情報。',
-];
+);

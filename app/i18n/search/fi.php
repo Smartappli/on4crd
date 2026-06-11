@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Etsi',
   'eyebrow' => 'Globaali haku',
-  'lead' => 'Löydä nopeasti uutisia, artikkeleita, wikisivuja, asiakirjoja, ilmoituksia ja albumeja.',
+  'lead' => 'Löydä nopeasti uutisia, artikkeleita, Tietämysivuja, asiakirjoja, ilmoituksia ja albumeja.',
   'placeholder' => 'Ilmaisin, avainsana, teema, asiakirja...',
   'query_label' => 'Sinun hakusi',
   'source_label' => 'lähde',

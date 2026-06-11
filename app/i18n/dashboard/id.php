@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Mengapa saran ini',
   'recommendation_reason_default' => 'Berdasarkan aktivitas terbaru Anda.',
   'recommendation_reason_article' => 'Karena Anda membaca atau menyimpan artikel.',
-  'recommendation_reason_wiki' => 'Karena Anda membuka halaman wiki.',
+  'recommendation_reason_wiki' => 'Karena Anda membuka halaman Pengetahuan.',
   'recommendation_reason_classified' => 'Karena Anda melihat iklan baris.',
   'recommendation_reason_album' => 'Karena Anda melihat album bersama.',
   'recommendation_reason_library' => 'Karena Anda membuka dokumen perpustakaan.',

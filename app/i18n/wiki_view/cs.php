@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Wiki stránka nebyla nalezena.',
+  'not_found' => 'Znalosti stránka nebyla nalezena.',
   'edit' => 'Upravit',
   'layout' => 'Znalosti',
-  'meta_desc' => 'Konzultace wiki stránky.',
+  'meta_desc' => 'Konzultace Znalosti stránky.',
   'history' => 'Historie',
   'no_revisions' => 'Žádné předchozí revize.',
 );

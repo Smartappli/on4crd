@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => '因为您查看共享相册。',
   'recommendation_reason_library' => '因为你查阅图书馆文献。',
   'signal_article' => '文章',
-  'signal_wiki' => '维基百科',
+  'signal_wiki' => '知识',
   'signal_classified' => '分类信息',
   'signal_album' => '相册',
   'signal_library' => '资料库',

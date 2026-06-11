@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Radio Club Durnal ON4CRD: berita, acara, pelatihan, alat radio amatir, dan sumber daya lokal di Durnal, Yvoir, dan Namur.',
   'tools_title' => 'ON4CRD Radio Club Durnal',
   'tools_description' => 'Radio Club Durnal ON4CRD: berita, acara, pelatihan, alat radio amatir, dan sumber daya lokal di Durnal, Yvoir, dan Namur.',
-  'wiki_title' => 'ON4CRD Radio Club Durnal',
+  'wiki_title' => 'ON4CRD Pengetahuan',
   'wiki_description' => 'Radio Club Durnal ON4CRD: berita, acara, pelatihan, alat radio amatir, dan sumber daya lokal di Durnal, Yvoir, dan Namur.',
   'albums_title' => 'ON4CRD Radio Club Durnal',
   'albums_description' => 'Radio Club Durnal ON4CRD: berita, acara, pelatihan, alat radio amatir, dan sumber daya lokal di Durnal, Yvoir, dan Namur.',

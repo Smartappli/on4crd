@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Varför detta förslag',
   'recommendation_reason_default' => 'Baserat på din senaste aktivitet.',
   'recommendation_reason_article' => 'För att du läser eller sparar artiklar.',
-  'recommendation_reason_wiki' => 'Eftersom du tittar på wiki-sidor.',
+  'recommendation_reason_wiki' => 'Eftersom du tittar på Kunskap-sidor.',
   'recommendation_reason_classified' => 'Eftersom du tittar på annonserna.',
   'recommendation_reason_album' => 'Eftersom du tittar på delade album.',
   'recommendation_reason_library' => 'Eftersom du konsulterar biblioteksdokument.',

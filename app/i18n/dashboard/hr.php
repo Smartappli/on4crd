@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Zašto ovaj prijedlog',
   'recommendation_reason_default' => 'Na temelju vaše nedavne aktivnosti.',
   'recommendation_reason_article' => 'Zato što čitate ili spremate članke.',
-  'recommendation_reason_wiki' => 'Zato što gledate wiki stranice.',
+  'recommendation_reason_wiki' => 'Zato što gledate Znanje stranice.',
   'recommendation_reason_classified' => 'Zato što gledate oglase.',
   'recommendation_reason_album' => 'Zato što gledate zajedničke albume.',
   'recommendation_reason_library' => 'Zato što konzultirate knjižnične dokumente.',

@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Perpustakaan anggota',
   'news_title' => 'Berita',
   'wiki_title' => 'Pengetahuan',
-  'wiki_default_title' => 'Halaman wiki',
+  'wiki_default_title' => 'Halaman Pengetahuan',
   'classified_default_title' => 'Iklan',
   'proposal_default_title' => 'Usulan',
   'content_open' => 'Buka',

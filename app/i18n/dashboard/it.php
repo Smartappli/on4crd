@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Perche questo suggerimento',
   'recommendation_reason_default' => 'Basato sulla tua attivita recente.',
   'recommendation_reason_article' => 'Perche leggi o salvi articoli.',
-  'recommendation_reason_wiki' => 'Perche consulti pagine wiki.',
+  'recommendation_reason_wiki' => 'Perche consulti pagine Conoscenze.',
   'recommendation_reason_classified' => 'Perche consulti annunci.',
   'recommendation_reason_album' => 'Perche visualizzi album condivisi.',
   'recommendation_reason_library' => 'Perche consulti documenti della libreria.',

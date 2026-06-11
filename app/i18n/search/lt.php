@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Ieškoti',
   'eyebrow' => 'Pasaulinė paieška',
-  'lead' => 'Greitai raskite naujienas, straipsnius, wiki puslapius, dokumentus, pranešimus ir albumus.',
+  'lead' => 'Greitai raskite naujienas, straipsnius, Žinios puslapius, dokumentus, pranešimus ir albumus.',
   'placeholder' => 'Rodiklis, raktinis žodis, tema, dokumentas...',
   'query_label' => 'Jūsų paieška',
   'source_label' => 'Šaltinis',

@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Waarom deze suggestie',
   'recommendation_reason_default' => 'Gebaseerd op je recente activiteit.',
   'recommendation_reason_article' => 'Omdat je artikelen leest of opslaat.',
-  'recommendation_reason_wiki' => 'Omdat je wiki-pagina\'s bekijkt.',
+  'recommendation_reason_wiki' => 'Omdat je Kennis-pagina\'s bekijkt.',
   'recommendation_reason_classified' => 'Omdat je rubrieksadvertenties bekijkt.',
   'recommendation_reason_album' => 'Omdat je gedeelde albums bekijkt.',
   'recommendation_reason_library' => 'Omdat je bibliotheekdocumenten bekijkt.',

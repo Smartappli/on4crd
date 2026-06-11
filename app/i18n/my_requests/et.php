@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Liikmete raamatukogu',
   'news_title' => 'Uudised',
   'wiki_title' => 'Teadmised',
-  'wiki_default_title' => 'Wiki leht',
+  'wiki_default_title' => 'Teadmised leht',
   'classified_default_title' => 'Teadaanne',
   'proposal_default_title' => 'Ettepanek',
   'content_open' => 'Avatud',

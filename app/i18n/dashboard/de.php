@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Warum dieser Vorschlag',
   'recommendation_reason_default' => 'Basierend auf Ihrer letzten Aktivität.',
   'recommendation_reason_article' => 'Weil Sie Artikel lesen oder speichern.',
-  'recommendation_reason_wiki' => 'Weil Sie Wiki-Seiten aufrufen.',
+  'recommendation_reason_wiki' => 'Weil Sie Wissen-Seiten aufrufen.',
   'recommendation_reason_classified' => 'Weil Sie Kleinanzeigen durchsuchen.',
   'recommendation_reason_album' => 'Weil Sie geteilte Alben ansehen.',
   'recommendation_reason_library' => 'Weil Sie Bibliotheksdokumente aufrufen.',

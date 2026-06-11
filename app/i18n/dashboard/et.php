@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Miks see soovitus',
   'recommendation_reason_default' => 'Põhineb teie hiljutisel tegevusel.',
   'recommendation_reason_article' => 'Kuna loete või salvestate artikleid.',
-  'recommendation_reason_wiki' => 'Kuna vaatate wiki lehti.',
+  'recommendation_reason_wiki' => 'Kuna vaatate Teadmised lehti.',
   'recommendation_reason_classified' => 'Sest te vaatate reklaame.',
   'recommendation_reason_album' => 'Kuna vaatate jagatud albumeid.',
   'recommendation_reason_library' => 'Sest te konsulteerite raamatukogu dokumentidega.',

@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Kodėl šis pasiūlymas',
   'recommendation_reason_default' => 'Remiantis jūsų naujausia veikla.',
   'recommendation_reason_article' => 'Nes skaitote ar išsaugote straipsnius.',
-  'recommendation_reason_wiki' => 'Nes žiūrite wiki puslapius.',
+  'recommendation_reason_wiki' => 'Nes žiūrite Žinios puslapius.',
   'recommendation_reason_classified' => 'Nes žiūrite skelbimus.',
   'recommendation_reason_album' => 'Nes žiūrite bendrinamus albumus.',
   'recommendation_reason_library' => 'Nes konsultuojate bibliotekos dokumentus.',

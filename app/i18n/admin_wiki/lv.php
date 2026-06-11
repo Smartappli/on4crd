@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki administrācija',
+  'title' => 'Zināšanas administrācija',
   'new_page' => 'Jauna lapa',
   'th_title' => 'Nosaukums',
   'th_slug' => 'Gliemezis',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Darbība',
   'edit' => 'Rediģēt',
   'empty' => 'Nav lapu.',
-  'layout' => 'Wiki administrācija',
-  'meta_desc' => 'Wiki lapu pārvaldība.',
+  'layout' => 'Zināšanas administrācija',
+  'meta_desc' => 'Zināšanas lapu pārvaldība.',
 );

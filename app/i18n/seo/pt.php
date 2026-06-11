@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Radio Club Durnal ON4CRD: notícias, eventos, formação, ferramentas de radioamador e recursos locais em Durnal, Yvoir e Namur.',
   'tools_title' => 'ON4CRD Radio Club Durnal',
   'tools_description' => 'Radio Club Durnal ON4CRD: notícias, eventos, formação, ferramentas de radioamador e recursos locais em Durnal, Yvoir e Namur.',
-  'wiki_title' => 'ON4CRD Radio Club Durnal',
+  'wiki_title' => 'ON4CRD Conhecimento',
   'wiki_description' => 'Radio Club Durnal ON4CRD: notícias, eventos, formação, ferramentas de radioamador e recursos locais em Durnal, Yvoir e Namur.',
   'albums_title' => 'ON4CRD Radio Club Durnal',
   'albums_description' => 'Radio Club Durnal ON4CRD: notícias, eventos, formação, ferramentas de radioamador e recursos locais em Durnal, Yvoir e Namur.',

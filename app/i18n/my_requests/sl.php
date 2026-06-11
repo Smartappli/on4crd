@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Knjižnica članov',
   'news_title' => 'Novice',
   'wiki_title' => 'Znanje',
-  'wiki_default_title' => 'Wiki stran',
+  'wiki_default_title' => 'Znanje stran',
   'classified_default_title' => 'Obvestilo',
   'proposal_default_title' => 'Predlog',
   'content_open' => 'Odpri',

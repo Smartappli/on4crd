@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'क्योंकि आप साझा किए गए एल्बम देखते हैं।',
   'recommendation_reason_library' => 'क्योंकि आप पुस्तकालय दस्तावेज़ों से परामर्श लेते हैं।',
   'signal_article' => 'लेख',
-  'signal_wiki' => 'विकी',
+  'signal_wiki' => 'ज्ञान',
   'signal_classified' => 'विज्ञापन',
   'signal_album' => 'एल्बम',
   'signal_library' => 'पुस्तकालय',

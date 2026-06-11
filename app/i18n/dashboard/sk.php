@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Prečo tento návrh',
   'recommendation_reason_default' => 'Na základe vašej nedávnej aktivity.',
   'recommendation_reason_article' => 'Pretože čítate alebo ukladáte články.',
-  'recommendation_reason_wiki' => 'Pretože si prezeráte stránky wiki.',
+  'recommendation_reason_wiki' => 'Pretože si prezeráte stránky Znalosti.',
   'recommendation_reason_classified' => 'Pretože si prezeráte reklamy.',
   'recommendation_reason_album' => 'Pretože si prezeráte zdieľané albumy.',
   'recommendation_reason_library' => 'Pretože nahliadate do knižničných dokumentov.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Поиск',
   'eyebrow' => 'Глобальный поиск',
-  'lead' => 'Быстро находите новости, статьи, wiki-страницы, документы, объявления и альбомы.',
+  'lead' => 'Быстро находите новости, статьи, Знания-страницы, документы, объявления и альбомы.',
   'placeholder' => 'Позывной, ключевое слово, тема, документ...',
   'query_label' => 'Ваш поиск',
   'source_label' => 'Источник',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Все',
   'source_news' => 'Новости',
   'source_articles' => 'Статьи',
-  'source_wiki' => 'Вики',
+  'source_wiki' => 'Знания',
   'source_library' => 'Библиотека',
   'source_classifieds' => 'Объявления',
   'source_albums' => 'Альбомы',

@@ -1,4 +1,11 @@
 <?php
 declare(strict_types=1);
 
-return ['not_found' => 'Pagina wiki non trovata.', 'edit' => 'Modifica', 'layout' => 'Conoscenze', 'meta_desc' => 'Visualizza una pagina wiki.', 'history' => 'Cronologia', 'no_revisions' => 'Nessuna revisione precedente.'];
+return array (
+  'not_found' => 'Pagina Conoscenze non trovata.',
+  'edit' => 'Modifica',
+  'layout' => 'Conoscenze',
+  'meta_desc' => 'Visualizza una pagina Conoscenze.',
+  'history' => 'Cronologia',
+  'no_revisions' => 'Nessuna revisione precedente.',
+);

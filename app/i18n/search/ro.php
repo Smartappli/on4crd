@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Cercetare',
   'eyebrow' => 'Căutare globală',
-  'lead' => 'Găsiți rapid știri, articole, pagini wiki, documente, anunțuri și albume.',
+  'lead' => 'Găsiți rapid știri, articole, pagini Cunoștințe, documente, anunțuri și albume.',
   'placeholder' => 'Indicator, cuvânt cheie, temă, document...',
   'query_label' => 'Căutarea dvs',
   'source_label' => 'Sursă',

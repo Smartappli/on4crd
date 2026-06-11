@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'विकी',
+  'title' => 'ज्ञान',
   'unavailable' => 'पेज इनिशियलाइज़ेशन के बाद विकी उपलब्ध होगी।',
   'new_pages' => 'नए पृष्ठ',
   'updated_pages' => 'अपडेट किए गए पृष्ठ',

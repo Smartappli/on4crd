@@ -11,5 +11,5 @@ return array (
   'edit' => 'Rediger',
   'empty' => 'Ingen sider.',
   'layout' => 'Viden - Administrering',
-  'meta_desc' => 'Wiki-sidestyring.',
+  'meta_desc' => 'Viden-sidestyring.',
 );

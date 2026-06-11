@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Biblioteca membrilor',
   'news_title' => 'Ştiri',
   'wiki_title' => 'Cunoștințe',
-  'wiki_default_title' => 'Pagină wiki',
+  'wiki_default_title' => 'Pagină Cunoștințe',
   'classified_default_title' => 'Anunţ',
   'proposal_default_title' => 'Propunere',
   'content_open' => 'Deschide',

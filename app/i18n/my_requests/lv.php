@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Biedru bibliotēka',
   'news_title' => 'Jaunumi',
   'wiki_title' => 'Zināšanas',
-  'wiki_default_title' => 'Wiki lapa',
+  'wiki_default_title' => 'Zināšanas lapa',
   'classified_default_title' => 'Paziņojums',
   'proposal_default_title' => 'Priekšlikums',
   'content_open' => 'Atvērt',

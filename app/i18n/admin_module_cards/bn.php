@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'রেডিও ফিড, TTL, URL ও সক্রিয়করণের সূক্ষ্ম নিয়ন্ত্রণ।',
   'admin_newsletters_title' => 'নিউজলেটার',
   'admin_newsletters_desc' => 'সাবস্ক্রাইবার, CSV ইমপোর্ট ও ইমেইল ক্যাম্পেইন।',
-  'admin_wiki_title' => 'উইকি',
+  'admin_wiki_title' => 'জ্ঞান',
   'admin_wiki_desc' => 'সহযোগী পৃষ্ঠা ও রিভিশন।',
   'admin_albums_title' => 'অ্যালবাম',
   'admin_albums_desc' => 'পাবলিক গ্যালারি ও সোশ্যাল সিঙ্ক।',

@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Narių biblioteka',
   'news_title' => 'Naujienos',
   'wiki_title' => 'Žinios',
-  'wiki_default_title' => 'Wiki puslapis',
+  'wiki_default_title' => 'Žinios puslapis',
   'classified_default_title' => 'Skelbimas',
   'proposal_default_title' => 'Pasiūlymas',
   'content_open' => 'Atidaryti',

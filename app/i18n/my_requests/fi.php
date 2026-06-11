@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Jäsenkirjasto',
   'news_title' => 'Uutiset',
   'wiki_title' => 'Tietämys',
-  'wiki_default_title' => 'Wiki-sivu',
+  'wiki_default_title' => 'Tietämys-sivu',
   'classified_default_title' => 'Ilmoitus',
   'proposal_default_title' => 'Ehdotus',
   'content_open' => 'Avaa',

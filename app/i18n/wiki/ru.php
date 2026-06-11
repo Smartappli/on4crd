@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Вики',
-  'unavailable' => 'Wiki станет доступна после инициализации страниц.',
+  'title' => 'Знания',
+  'unavailable' => 'Знания станет доступна после инициализации страниц.',
   'new_pages' => 'Новые страницы',
   'updated_pages' => 'Обновлённые страницы',
   'most_read' => 'Самые читаемые',
@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Поиск страницы (заголовок или содержимое)',
   'search' => 'Поиск',
   'reset' => 'Сброс',
-  'wiki_pages' => 'Страницы wiki',
+  'wiki_pages' => 'Страницы Знания',
   'no_page' => 'Страницы не найдены',
   'for_search' => ' для этого поиска',
   'summary_fallback' => 'Откройте страницу, чтобы увидеть полный контент.',
@@ -25,11 +25,11 @@ return array (
   'create_theme' => 'Создать категорию',
   'create_theme_intro' => 'С вашими правами модерации категория будет утверждена сразу.',
   'create_theme_submit' => 'Создать категорию',
-  'category_accepted' => 'Категория wiki создана.',
+  'category_accepted' => 'Категория Знания создана.',
   'propose_page' => 'Предложить страницу',
   'propose_theme_intro' => 'Опишите тему, которую нужно добавить, и страницы, которые должны быть связаны с ней.',
   'close' => 'Закрыть',
-  'propose_theme_body_intro' => 'Предложение темы Wiki:',
+  'propose_theme_body_intro' => 'Предложение темы Знания:',
   'propose_theme_name' => 'Название темы',
   'propose_theme_reason' => 'Зачем это добавлять?',
   'propose_theme_contact' => 'Ваш контакт',

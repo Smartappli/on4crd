@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Miért ez a javaslat',
   'recommendation_reason_default' => 'Legutóbbi tevékenysége alapján.',
   'recommendation_reason_article' => 'Mert cikkeket olvas vagy ment.',
-  'recommendation_reason_wiki' => 'Mert wiki oldalakat nézel.',
+  'recommendation_reason_wiki' => 'Mert Tudás oldalakat nézel.',
   'recommendation_reason_classified' => 'Mert a hirdetéseket nézi.',
   'recommendation_reason_album' => 'Mert megosztott albumokat nézel.',
   'recommendation_reason_library' => 'Mert könyvtári dokumentumokat olvas.',

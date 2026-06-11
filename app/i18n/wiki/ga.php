@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Vicí',
+  'title' => 'Eolas',
   'unavailable' => 'Beidh an vicí ar fáil tar éis na leathanaigh a thúsú.',
   'new_pages' => 'Leathanaigh nua',
   'updated_pages' => 'Leathanaigh leasaithe',
@@ -20,12 +20,12 @@ return array (
   'open_page' => 'Oscail leathanach',
   'themes' => 'Téamaí',
   'all_themes' => 'Gach téamaí',
-  'propose_theme_subject' => 'ON4CRD togra téama wiki',
+  'propose_theme_subject' => 'ON4CRD togra téama Eolas',
   'propose_theme' => 'Mol téama',
   'create_theme' => 'Cruthaigh catagóir',
   'create_theme_intro' => 'Le do chearta modhnóireachta, déanfar an chatagóir a bhailíochtú go díreach.',
   'create_theme_submit' => 'Cruthaigh an chatagóir',
-  'category_accepted' => 'Cruthaíodh catagóir wiki.',
+  'category_accepted' => 'Cruthaíodh catagóir Eolas.',
   'propose_page' => 'Mol leathanach',
   'propose_theme_intro' => 'Déan cur síos ar an téama le cur leis agus ar na leathanaigh ar chóir iad a nascadh leis.',
   'close' => 'Dún',

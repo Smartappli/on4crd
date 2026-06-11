@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Riċerka',
   'eyebrow' => 'Tfittxija globali',
-  'lead' => 'Sib malajr aħbarijiet, artikli, paġni wiki, dokumenti, avviżi u albums.',
+  'lead' => 'Sib malajr aħbarijiet, artikli, paġni Għarfien, dokumenti, avviżi u albums.',
   'placeholder' => 'Indikatur, keyword, tema, dokument...',
   'query_label' => 'It-tfittxija tiegħek',
   'source_label' => 'Sors',

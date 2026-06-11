@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Sök',
   'eyebrow' => 'Global sökning',
-  'lead' => 'Hitta snabbt nyheter, artiklar, wikisidor, dokument, meddelanden och album.',
+  'lead' => 'Hitta snabbt nyheter, artiklar, Kunskapidor, dokument, meddelanden och album.',
   'placeholder' => 'Indikator, nyckelord, tema, dokument...',
   'query_label' => 'Din sökning',
   'source_label' => 'Källa',

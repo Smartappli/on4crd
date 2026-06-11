@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Għaliex dan is-suġġeriment',
   'recommendation_reason_default' => 'Ibbażat fuq l-attività riċenti tiegħek.',
   'recommendation_reason_article' => 'Għax qed taqra jew issalva artikli.',
-  'recommendation_reason_wiki' => 'Għax qed tara paġni tal-wiki.',
+  'recommendation_reason_wiki' => 'Għax qed tara paġni tal-Għarfien.',
   'recommendation_reason_classified' => 'Għax qed tara r-reklami.',
   'recommendation_reason_album' => 'Minħabba li qed tara albums kondiviżi.',
   'recommendation_reason_library' => 'Għax qed tikkonsulta dokumenti tal-librerija.',

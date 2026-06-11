@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Librerija tal-Membri',
   'news_title' => 'Aħbarijiet',
   'wiki_title' => 'Għarfien',
-  'wiki_default_title' => 'Paġna wiki',
+  'wiki_default_title' => 'Paġna Għarfien',
   'classified_default_title' => 'Tħabbira',
   'proposal_default_title' => 'Proposta',
   'content_open' => 'Miftuħa',

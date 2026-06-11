@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Ledenbibliotheek',
   'news_title' => 'Nieuws',
   'wiki_title' => 'Kennis',
-  'wiki_default_title' => 'Wiki-pagina',
+  'wiki_default_title' => 'Kennis-pagina',
   'classified_default_title' => 'Advertentie',
   'proposal_default_title' => 'Voorstel',
   'content_open' => 'Openen',

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki haldus',
+  'title' => 'Teadmised haldus',
   'new_page' => 'Uus leht',
   'th_title' => 'Pealkiri',
   'th_slug' => 'Nälkjas',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Tegevus',
   'edit' => 'Muuda',
   'empty' => 'Lehtedeta.',
-  'layout' => 'Wiki haldus',
-  'meta_desc' => 'Wiki lehe haldamine.',
+  'layout' => 'Teadmised haldus',
+  'meta_desc' => 'Teadmised lehe haldamine.',
 );

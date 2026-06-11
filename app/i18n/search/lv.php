@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Meklēt',
   'eyebrow' => 'Globālā meklēšana',
-  'lead' => 'Ātri atrodiet ziņas, rakstus, wiki lapas, dokumentus, paziņojumus un albumus.',
+  'lead' => 'Ātri atrodiet ziņas, rakstus, Zināšanas lapas, dokumentus, paziņojumus un albumus.',
   'placeholder' => 'Indikators, atslēgvārds, tēma, dokuments...',
   'query_label' => 'Jūsu meklēšana',
   'source_label' => 'Avots',

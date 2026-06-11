@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'لأنك تعرض الألبومات المشتركة.',
   'recommendation_reason_library' => 'لأنك تستشير وثائق المكتبة.',
   'signal_article' => 'المقالات',
-  'signal_wiki' => 'الويكي',
+  'signal_wiki' => 'المعرفة',
   'signal_classified' => 'الإعلانات',
   'signal_album' => 'الألبومات',
   'signal_library' => 'المكتبة',

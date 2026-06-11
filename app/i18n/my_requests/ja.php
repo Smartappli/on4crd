@@ -52,7 +52,7 @@ return array (
   'library_title' => '会員ライブラリ',
   'news_title' => 'ニュース',
   'wiki_title' => 'ウィキ',
-  'wiki_default_title' => 'Wikiページ',
+  'wiki_default_title' => '知識ページ',
   'classified_default_title' => '案内広告',
   'proposal_default_title' => '提案',
   'content_open' => '開く',

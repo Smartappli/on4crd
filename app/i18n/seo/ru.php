@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'default_title' => 'ON4CRD Радиоклуб Дюрналь',
   'default_description' => 'Radio Club Durnal ON4CRD: новости, события, обучение, инструменты радиолюбителей и местные ресурсы Дюрналя, Ивуара и Намюра.',
   'geo_placename' => 'Дюрналь, Ивуар, Намюр, Бельгия',
@@ -15,7 +15,7 @@ return [
   'directory_description' => 'Radio Club Durnal ON4CRD: новости, события, обучение, инструменты радиолюбителей и местные ресурсы Дюрналя, Ивуара и Намюра.',
   'tools_title' => 'ON4CRD Радиоклуб Дюрналь',
   'tools_description' => 'Radio Club Durnal ON4CRD: новости, события, обучение, инструменты радиолюбителей и местные ресурсы Дюрналя, Ивуара и Намюра.',
-  'wiki_title' => 'ON4CRD Радиоклуб Дюрналь',
+  'wiki_title' => 'ON4CRD Знания',
   'wiki_description' => 'Radio Club Durnal ON4CRD: новости, события, обучение, инструменты радиолюбителей и местные ресурсы Дюрналя, Ивуара и Намюра.',
   'albums_title' => 'ON4CRD Радиоклуб Дюрналь',
   'albums_description' => 'Radio Club Durnal ON4CRD: новости, события, обучение, инструменты радиолюбителей и местные ресурсы Дюрналя, Ивуара и Намюра.',
@@ -53,4 +53,4 @@ return [
   'qsl_description' => 'Radio Club Durnal ON4CRD: новости, события, обучение, инструменты радиолюбителей и местные ресурсы Дюрналя, Ивуара и Намюра.',
   'members_library_title' => 'ON4CRD Радиоклуб Дюрналь',
   'members_library_description' => 'Radio Club Durnal ON4CRD: новости, события, обучение, инструменты радиолюбителей и местные ресурсы Дюрналя, Ивуара и Намюра.',
-];
+);

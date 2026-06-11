@@ -11,5 +11,5 @@ return array (
   'edit' => 'Redigera',
   'empty' => 'Inga sidor.',
   'layout' => 'Kunskap - Administrering',
-  'meta_desc' => 'Hantering av wikisidor.',
+  'meta_desc' => 'Hantering av Kunskapidor.',
 );

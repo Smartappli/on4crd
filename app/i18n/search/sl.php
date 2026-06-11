@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Iskanje',
   'eyebrow' => 'Globalno iskanje',
-  'lead' => 'Hitro poiščite novice, članke, wiki strani, dokumente, objave in albume.',
+  'lead' => 'Hitro poiščite novice, članke, Znanje strani, dokumente, objave in albume.',
   'placeholder' => 'Indikator, ključna beseda, tema, dokument ...',
   'query_label' => 'Vaše iskanje',
   'source_label' => 'Vir',

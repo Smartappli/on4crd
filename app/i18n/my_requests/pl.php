@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Biblioteka członków',
   'news_title' => 'Wiadomości',
   'wiki_title' => 'Wiedza',
-  'wiki_default_title' => 'Strona wiki',
+  'wiki_default_title' => 'Strona Wiedza',
   'classified_default_title' => 'Ogłoszenie',
   'proposal_default_title' => 'Propozycja',
   'content_open' => 'Otwórz',

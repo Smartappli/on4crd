@@ -30,7 +30,7 @@ return array (
   'recommendations_why' => 'Dlaczego ta sugestia',
   'recommendation_reason_default' => 'Na podstawie Twojej ostatniej aktywności.',
   'recommendation_reason_article' => 'Ponieważ czytasz lub zapisujesz artykuły.',
-  'recommendation_reason_wiki' => 'Ponieważ przeglądasz strony wiki.',
+  'recommendation_reason_wiki' => 'Ponieważ przeglądasz strony Wiedza.',
   'recommendation_reason_classified' => 'Ponieważ oglądasz reklamy.',
   'recommendation_reason_album' => 'Ponieważ przeglądasz udostępnione albumy.',
   'recommendation_reason_library' => 'Ponieważ przeglądasz dokumenty biblioteczne.',

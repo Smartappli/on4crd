@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Βιβλιοθήκη μελών',
   'news_title' => 'Νέα',
   'wiki_title' => 'Γνώσεις',
-  'wiki_default_title' => 'Σελίδα wiki',
+  'wiki_default_title' => 'Σελίδα Γνώσεις',
   'classified_default_title' => 'Ανακοίνωση',
   'proposal_default_title' => 'Πρόταση',
   'content_open' => 'Ανοίξτε',

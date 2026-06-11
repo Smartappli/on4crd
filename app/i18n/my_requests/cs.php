@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Knihovna členů',
   'news_title' => 'Novinky',
   'wiki_title' => 'Znalosti',
-  'wiki_default_title' => 'Wiki stránka',
+  'wiki_default_title' => 'Znalosti stránka',
   'classified_default_title' => 'Oznámení',
   'proposal_default_title' => 'Návrh',
   'content_open' => 'Otevřít',

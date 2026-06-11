@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Traži',
   'eyebrow' => 'Globalna pretraga',
-  'lead' => 'Brzo pronađite vijesti, članke, wiki stranice, dokumente, najave i albume.',
+  'lead' => 'Brzo pronađite vijesti, članke, Znanje stranice, dokumente, najave i albume.',
   'placeholder' => 'Indikator, ključna riječ, tema, dokument...',
   'query_label' => 'Vaša pretraga',
   'source_label' => 'Izvor',

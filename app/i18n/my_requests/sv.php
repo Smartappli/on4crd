@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Medlemsbibliotek',
   'news_title' => 'Nyheter',
   'wiki_title' => 'Kunskap',
-  'wiki_default_title' => 'Wikisida',
+  'wiki_default_title' => 'Kunskapsida',
   'classified_default_title' => 'Meddelande',
   'proposal_default_title' => 'Förslag',
   'content_open' => 'Öppna',

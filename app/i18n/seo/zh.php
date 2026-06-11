@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'default_title' => 'ON4CRD 杜尔纳尔无线电俱乐部',
   'default_description' => 'Radio Club Durnal ON4CRD：新闻、活动、培训、业余无线电工具以及 Durnal、Yvoir 和 Namur 的本地资源。',
   'geo_placename' => 'Durnal，Yvoir，Namur，比利时',
@@ -15,7 +15,7 @@ return [
   'directory_description' => 'Radio Club Durnal ON4CRD：新闻、活动、培训、业余无线电工具以及 Durnal、Yvoir 和 Namur 的本地资源。',
   'tools_title' => 'ON4CRD 杜尔纳尔无线电俱乐部',
   'tools_description' => 'Radio Club Durnal ON4CRD：新闻、活动、培训、业余无线电工具以及 Durnal、Yvoir 和 Namur 的本地资源。',
-  'wiki_title' => 'ON4CRD 杜尔纳尔无线电俱乐部',
+  'wiki_title' => 'ON4CRD 知识',
   'wiki_description' => 'Radio Club Durnal ON4CRD：新闻、活动、培训、业余无线电工具以及 Durnal、Yvoir 和 Namur 的本地资源。',
   'albums_title' => 'ON4CRD 杜尔纳尔无线电俱乐部',
   'albums_description' => 'Radio Club Durnal ON4CRD：新闻、活动、培训、业余无线电工具以及 Durnal、Yvoir 和 Namur 的本地资源。',
@@ -53,4 +53,4 @@ return [
   'qsl_description' => 'Radio Club Durnal ON4CRD：新闻、活动、培训、业余无线电工具以及 Durnal、Yvoir 和 Namur 的本地资源。',
   'members_library_title' => 'ON4CRD 杜尔纳尔无线电俱乐部',
   'members_library_description' => 'Radio Club Durnal ON4CRD：新闻、活动、培训、业余无线电工具以及 Durnal、Yvoir 和 Namur 的本地资源。',
-];
+);

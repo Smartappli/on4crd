@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Søg',
   'eyebrow' => 'Global søgning',
-  'lead' => 'Find hurtigt nyheder, artikler, wiki-sider, dokumenter, meddelelser og album.',
+  'lead' => 'Find hurtigt nyheder, artikler, Viden-sider, dokumenter, meddelelser og album.',
   'placeholder' => 'Indikator, nøgleord, tema, dokument...',
   'query_label' => 'Din søgning',
   'source_label' => 'Kilde',

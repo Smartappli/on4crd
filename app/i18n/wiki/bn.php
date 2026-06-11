@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'উইকি',
+  'title' => 'জ্ঞান',
   'unavailable' => 'পৃষ্ঠা ইনিশিয়ালাইজেশনের পর উইকি উপলব্ধ হবে।',
   'new_pages' => 'নতুন পৃষ্ঠা',
   'updated_pages' => 'আপডেট হওয়া পৃষ্ঠা',

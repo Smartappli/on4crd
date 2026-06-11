@@ -52,7 +52,7 @@ return array (
   'library_title' => 'Tagok könyvtára',
   'news_title' => 'Hírek',
   'wiki_title' => 'Tudás',
-  'wiki_default_title' => 'Wiki oldal',
+  'wiki_default_title' => 'Tudás oldal',
   'classified_default_title' => 'Közlemény',
   'proposal_default_title' => 'Javaslat',
   'content_open' => 'Nyissa meg',

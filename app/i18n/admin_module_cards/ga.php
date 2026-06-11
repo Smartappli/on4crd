@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Rialú fíneáil ar fhothaí raidió, TTL, URLanna agus gníomhachtú.',
   'admin_newsletters_title' => 'Nuachtlitir',
   'admin_newsletters_desc' => 'Síntiúsóirí, feachtais iompórtála agus ríomhphoist CSV.',
-  'admin_wiki_title' => 'Vicí',
+  'admin_wiki_title' => 'Eolas',
   'admin_wiki_desc' => 'Leathanaigh chomhoibríocha agus athbhreithnithe.',
   'admin_albums_title' => 'Albaim',
   'admin_albums_desc' => 'Gailearaí poiblí agus sioncrónú sóisialta.',
