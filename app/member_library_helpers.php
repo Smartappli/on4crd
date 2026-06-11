@@ -173,13 +173,23 @@ function render_member_library_module_page(string $route): void
 
     $locale = current_locale();
     $libraryT = i18n_domain_locale('members_library', $locale);
+    $moduleT = i18n_domain_locale($route, $locale);
     $text = static fn(string $key, string $fallback): string => (string) ($libraryT[$key] ?? $fallback);
-    $title = i18n_localized_value((array) ($definition['title'] ?? []), $locale);
+    $title = trim((string) ($moduleT['title'] ?? ''));
+    if ($title === '') {
+        $title = i18n_localized_value((array) ($definition['title'] ?? []), $locale);
+    }
     if ($title === '') {
         $title = ucfirst($route);
     }
-    $intro = i18n_localized_value((array) ($definition['intro'] ?? []), $locale);
-    $metaDesc = i18n_localized_value((array) ($definition['meta_desc'] ?? []), $locale);
+    $intro = trim((string) ($moduleT['intro'] ?? ''));
+    if ($intro === '') {
+        $intro = i18n_localized_value((array) ($definition['intro'] ?? []), $locale);
+    }
+    $metaDesc = trim((string) ($moduleT['meta_desc'] ?? ''));
+    if ($metaDesc === '') {
+        $metaDesc = i18n_localized_value((array) ($definition['meta_desc'] ?? []), $locale);
+    }
     if ($metaDesc === '') {
         $metaDesc = $intro;
     }
