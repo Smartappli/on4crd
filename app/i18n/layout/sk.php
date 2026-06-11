@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Nástroje',
   'nav_directory' => 'Adresár',
   'nav_dashboard' => 'Dashboard',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Znalosti',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Položky',
   'nav_library' => 'Knižnica',

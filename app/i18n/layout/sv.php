@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Verktyg',
   'nav_directory' => 'Katalog',
   'nav_dashboard' => 'Instrumentbräda',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Kunskap',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Föremål',
   'nav_library' => 'Bibliotek',

@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Εργαλεία',
   'nav_directory' => 'Κατάλογος',
   'nav_dashboard' => 'Ταμπλό',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Γνώσεις',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Είδη',
   'nav_library' => 'Βιβλιοθήκη',

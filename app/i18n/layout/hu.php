@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Eszközök',
   'nav_directory' => 'Címtár',
   'nav_dashboard' => 'Irányítópult',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Tudás',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Tételek',
   'nav_library' => 'Könyvtár',

@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Инструменты',
   'nav_directory' => 'Каталог',
   'nav_dashboard' => 'Панель',
-  'nav_wiki' => 'Вики',
+  'nav_wiki' => 'Знания',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Статьи',
   'nav_library' => 'Библиотека',

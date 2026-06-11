@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Uirlisí',
   'nav_directory' => 'Eolaire',
   'nav_dashboard' => 'Deais',
-  'nav_wiki' => 'Vicí',
+  'nav_wiki' => 'Eolas',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Míreanna',
   'nav_library' => 'Leabharlann',

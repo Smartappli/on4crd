@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Værktøjer',
   'nav_directory' => 'Vejviser',
   'nav_dashboard' => 'Dashboard',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Viden',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'genstande',
   'nav_library' => 'Bibliotek',

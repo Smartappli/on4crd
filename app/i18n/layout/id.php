@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Alat',
   'nav_directory' => 'Direktori',
   'nav_dashboard' => 'Dasbor',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Pengetahuan',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Artikel',
   'nav_library' => 'Perpustakaan',

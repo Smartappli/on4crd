@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Työkalut',
   'nav_directory' => 'Hakemisto',
   'nav_dashboard' => 'Kojelauta',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Tietämys',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Tuotteet',
   'nav_library' => 'Kirjasto',

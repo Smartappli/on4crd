@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Gereedschap',
   'nav_directory' => 'Gids',
   'nav_dashboard' => 'Dashboard',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Kennis',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Artikelen',
   'nav_library' => 'Bibliotheek',

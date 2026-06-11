@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Rīki',
   'nav_directory' => 'Katalogs',
   'nav_dashboard' => 'Informācijas panelis',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Zināšanas',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Preces',
   'nav_library' => 'Bibliotēka',

@@ -10,7 +10,7 @@ return array (
   'nav_tools' => '工具',
   'nav_directory' => '目录',
   'nav_dashboard' => '仪表盘',
-  'nav_wiki' => '维基',
+  'nav_wiki' => '知识',
   'nav_gallery' => 'Photos',
   'nav_articles' => '文章',
   'nav_library' => '资料库',

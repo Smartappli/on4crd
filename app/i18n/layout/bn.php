@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'সরঞ্জাম',
   'nav_directory' => 'ডিরেক্টরি',
   'nav_dashboard' => 'ড্যাশবোর্ড',
-  'nav_wiki' => 'উইকি',
+  'nav_wiki' => 'জ্ঞান',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'প্রবন্ধ',
   'nav_library' => 'লাইব্রেরি',

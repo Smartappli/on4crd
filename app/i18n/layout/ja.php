@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'ツール',
   'nav_directory' => 'ディレクトリ',
   'nav_dashboard' => 'ダッシュボード',
-  'nav_wiki' => 'ウィキ',
+  'nav_wiki' => '知識',
   'nav_gallery' => 'Photos',
   'nav_articles' => '記事',
   'nav_library' => 'ライブラリ',

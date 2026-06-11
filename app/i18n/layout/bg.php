@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Инструменти',
   'nav_directory' => 'Справочник',
   'nav_dashboard' => 'Табло за управление',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Знания',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Предмети',
   'nav_library' => 'Библиотека',

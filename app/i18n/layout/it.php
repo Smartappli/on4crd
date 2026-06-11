@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Strumenti',
   'nav_directory' => 'Direttorio',
   'nav_dashboard' => 'Pannello di controllo',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Conoscenze',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Articoli',
   'nav_library' => 'Biblioteca',

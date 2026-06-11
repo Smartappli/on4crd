@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Għodda',
   'nav_directory' => 'Direttorju',
   'nav_dashboard' => 'Daxxbord',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Għarfien',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Oġġetti',
   'nav_library' => 'Librerija',

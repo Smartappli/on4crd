@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Tööriistad',
   'nav_directory' => 'Kataloog',
   'nav_dashboard' => 'Armatuurlaud',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Teadmised',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Üksused',
   'nav_library' => 'Raamatukogu',

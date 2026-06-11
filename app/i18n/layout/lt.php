@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'Įrankiai',
   'nav_directory' => 'Katalogas',
   'nav_dashboard' => 'Prietaisų skydelis',
-  'nav_wiki' => 'Wiki',
+  'nav_wiki' => 'Žinios',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'Daiktai',
   'nav_library' => 'biblioteka',

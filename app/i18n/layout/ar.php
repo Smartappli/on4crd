@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'الأدوات',
   'nav_directory' => 'الدليل',
   'nav_dashboard' => 'لوحة التحكم',
-  'nav_wiki' => 'ويكي',
+  'nav_wiki' => 'المعرفة',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'مقالات',
   'nav_library' => 'المكتبة',

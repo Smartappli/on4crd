@@ -10,7 +10,7 @@ return array (
   'nav_tools' => 'उपकरण',
   'nav_directory' => 'निर्देशिका',
   'nav_dashboard' => 'डैशबोर्ड',
-  'nav_wiki' => 'विकी',
+  'nav_wiki' => 'ज्ञान',
   'nav_gallery' => 'Photos',
   'nav_articles' => 'लेख',
   'nav_library' => 'लाइब्रेरी',
