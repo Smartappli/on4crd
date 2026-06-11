@@ -34,7 +34,7 @@ function admin_module_cards_catalog(): array
         ['route' => 'admin_presentations', 'module' => 'presentations', 'permission' => 'admin.access'],
         ['route' => 'admin_videos', 'module' => 'videos', 'permission' => 'admin.access'],
         ['route' => 'admin_pv', 'module' => 'pv', 'permission' => 'admin.access'],
-        ['route' => 'admin_telechargements', 'module' => 'telechargements', 'permission' => 'admin.access'],
+        ['route' => 'admin_fichiers', 'module' => 'fichiers', 'permission' => 'admin.access'],
         ['route' => 'admin_ads', 'module' => 'advertising'],
         ['route' => 'admin_privacy', 'permission' => 'privacy.manage'],
         ['route' => 'admin_classifieds', 'module' => 'classifieds', 'permission' => 'classifieds.moderate'],
