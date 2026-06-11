@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'بحث: %s',
   'month_filter' => 'الشهر: %s',
   'category_filter' => 'القسم: %s',
-  'news_overview' => 'أخبار سابقة',
+  'news_overview' => 'التفاصيل',
   'no_match' => 'لا توجد أخبار تطابق بحثك.',
   'no_match_help' => 'غيّر المعايير أو أعد تعيين المرشحات.',
   'card_fallback_excerpt' => 'افتح الخبر لقراءة المقال كاملاً.',

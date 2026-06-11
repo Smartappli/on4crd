@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Αναζήτηση: %s',
   'month_filter' => 'Μήνας: %s',
   'category_filter' => 'Κατηγορία: %s',
-  'news_overview' => 'Παλιά νέα',
+  'news_overview' => 'Λεπτομέρειες',
   'no_match' => 'Καμία είδηση δεν αντιστοιχεί στην αναζήτησή σας.',
   'no_match_help' => 'Αλλάξτε τα κριτήριά σας ή επαναφέρετε τα φίλτρα.',
   'card_fallback_excerpt' => 'Ανοίξτε τα νέα για να διαβάσετε ολόκληρο το άρθρο.',

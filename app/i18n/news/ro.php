@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Caută: %s',
   'month_filter' => 'Luna: %s',
   'category_filter' => 'Categorie: %s',
-  'news_overview' => 'Vechi știri',
+  'news_overview' => 'Detalii',
   'no_match' => 'Nicio știre nu corespunde căutării tale.',
   'no_match_help' => 'Schimbați-vă criteriile sau resetați filtrele.',
   'card_fallback_excerpt' => 'Deschide știrile pentru a citi articolul integral.',

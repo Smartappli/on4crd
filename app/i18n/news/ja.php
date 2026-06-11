@@ -29,7 +29,7 @@ return array (
   'search_filter' => '検索: %s',
   'month_filter' => '月: %s',
   'category_filter' => 'カテゴリ: %s',
-  'news_overview' => '過去のニュース',
+  'news_overview' => '詳細',
   'no_match' => '検索条件に一致するニュースはありません。',
   'no_match_help' => '条件を変更するか、フィルターをリセットしてください。',
   'card_fallback_excerpt' => 'ニュースを開いて記事全文をお読みください。',

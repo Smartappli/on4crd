@@ -29,7 +29,7 @@ return array (
   'search_filter' => '搜索：%s',
   'month_filter' => '月份：%s',
   'category_filter' => '栏目：%s',
-  'news_overview' => '往期新闻',
+  'news_overview' => '详情',
   'no_match' => '没有新闻符合你的搜索条件。',
   'no_match_help' => '请修改条件或重置筛选。',
   'card_fallback_excerpt' => '打开新闻以阅读完整文章。',

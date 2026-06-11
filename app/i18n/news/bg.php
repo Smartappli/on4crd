@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Търсене: %s',
   'month_filter' => 'Месец: %s',
   'category_filter' => 'Категория: %s',
-  'news_overview' => 'Стари новини',
+  'news_overview' => 'Подробности',
   'no_match' => 'Няма новини, отговарящи на вашето търсене.',
   'no_match_help' => 'Променете вашите критерии или нулирайте филтрите.',
   'card_fallback_excerpt' => 'Отворете новината, за да прочетете цялата статия.',

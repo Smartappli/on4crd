@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Hľadať: %s',
   'month_filter' => 'Mesiac: %s',
   'category_filter' => 'Kategória: %s',
-  'news_overview' => 'Staré správy',
+  'news_overview' => 'Podrobnosti',
   'no_match' => 'Vášmu vyhľadávaniu nezodpovedajú žiadne správy.',
   'no_match_help' => 'Zmeňte svoje kritériá alebo resetujte filtre.',
   'card_fallback_excerpt' => 'Otvorte novinky a prečítajte si celý článok.',

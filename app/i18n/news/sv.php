@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Sök: %s',
   'month_filter' => 'Månad: %s',
   'category_filter' => 'Kategori: %s',
-  'news_overview' => 'Gamla nyheter',
+  'news_overview' => 'Detaljer',
   'no_match' => 'Inga nyheter matchar din sökning.',
   'no_match_help' => 'Ändra dina kriterier eller återställ filter.',
   'card_fallback_excerpt' => 'Öppna nyheterna för att läsa hela artikeln.',

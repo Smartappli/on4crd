@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Vyhledávání: %s',
   'month_filter' => 'Měsíc: %s',
   'category_filter' => 'Kategorie: %s',
-  'news_overview' => 'Staré zprávy',
+  'news_overview' => 'Podrobnosti',
   'no_match' => 'Vašemu vyhledávání neodpovídají žádné zprávy.',
   'no_match_help' => 'Změňte kritéria nebo resetujte filtry.',
   'card_fallback_excerpt' => 'Otevřete aktuality a přečtěte si celý článek.',

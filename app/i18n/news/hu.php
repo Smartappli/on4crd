@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Keresés: %s',
   'month_filter' => 'Hónap: %s',
   'category_filter' => 'Kategória: %s',
-  'news_overview' => 'Régi hírek',
+  'news_overview' => 'Részletek',
   'no_match' => 'Egyetlen hír sem felel meg a keresésnek.',
   'no_match_help' => 'Módosítsa a feltételeket vagy állítsa vissza a szűrőket.',
   'card_fallback_excerpt' => 'A teljes cikk elolvasásához nyissa meg a hírt.',

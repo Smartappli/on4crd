@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Search: %s',
   'month_filter' => 'Month: %s',
   'category_filter' => 'Section: %s',
-  'news_overview' => 'Older news',
+  'news_overview' => 'Details',
   'no_match' => 'No news matches your search.',
   'no_match_help' => 'Change your criteria or reset the filters.',
   'card_fallback_excerpt' => 'Open the news item to read the full article.',

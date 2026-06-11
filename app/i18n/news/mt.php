@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Fittex: %s',
   'month_filter' => 'Xahar: %s',
   'category_filter' => 'Kategorija: %s',
-  'news_overview' => 'Aħbarijiet antiki',
+  'news_overview' => 'Dettalji',
   'no_match' => 'L-ebda aħbar ma taqbel mat-tfittxija tiegħek.',
   'no_match_help' => 'Ibdel il-kriterji tiegħek jew reset filtri.',
   'card_fallback_excerpt' => 'Iftaħ l-aħbarijiet biex taqra l-artiklu sħiħ.',

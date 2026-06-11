@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Traži: %s',
   'month_filter' => 'Mjesec: %s',
   'category_filter' => 'Kategorija: %s',
-  'news_overview' => 'Stare vijesti',
+  'news_overview' => 'Detalji',
   'no_match' => 'Nijedna vijest ne odgovara vašoj pretrazi.',
   'no_match_help' => 'Promijenite kriterije ili poništite filtre.',
   'card_fallback_excerpt' => 'Otvorite vijest kako biste pročitali cijeli članak.',

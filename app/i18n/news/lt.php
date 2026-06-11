@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Paieška: %s',
   'month_filter' => 'Mėnuo: %s',
   'category_filter' => 'Kategorija: %s',
-  'news_overview' => 'Senos naujienos',
+  'news_overview' => 'Išsamiau',
   'no_match' => 'Jokia naujiena neatitinka jūsų paieškos.',
   'no_match_help' => 'Pakeiskite kriterijus arba iš naujo nustatykite filtrus.',
   'card_fallback_excerpt' => 'Atidarykite naujienas, kad perskaitytumėte visą straipsnį.',

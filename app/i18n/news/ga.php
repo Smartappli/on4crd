@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Cuardach: %s',
   'month_filter' => 'Mí: %s',
   'category_filter' => 'Catagóir: %s',
-  'news_overview' => 'Sean-nuacht',
+  'news_overview' => 'Sonraí',
   'no_match' => 'Ní thagann aon nuacht le do chuardach.',
   'no_match_help' => 'Athraigh do chritéir nó athshocraigh scagairí.',
   'card_fallback_excerpt' => 'Oscail an nuacht chun an t-alt iomlán a léamh.',

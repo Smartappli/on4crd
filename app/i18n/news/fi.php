@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Haku: %s',
   'month_filter' => 'Kuukausi: %s',
   'category_filter' => 'Luokka: %s',
-  'news_overview' => 'Vanhoja uutisia',
+  'news_overview' => 'Tiedot',
   'no_match' => 'Mikään uutinen ei vastaa hakuasi.',
   'no_match_help' => 'Muuta ehtoja tai nollaa suodattimet.',
   'card_fallback_excerpt' => 'Avaa uutinen lukeaksesi koko artikkelin.',

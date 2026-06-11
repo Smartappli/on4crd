@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Meklēt: %s',
   'month_filter' => 'Mēnesis: %s',
   'category_filter' => 'Kategorija: %s',
-  'news_overview' => 'Vecas ziņas',
+  'news_overview' => 'Detaļas',
   'no_match' => 'Neviena ziņa neatbilst jūsu meklēšanas vaicājumam.',
   'no_match_help' => 'Mainiet kritērijus vai atiestatiet filtrus.',
   'card_fallback_excerpt' => 'Atveriet ziņas, lai izlasītu visu rakstu.',

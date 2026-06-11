@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Otsing: %s',
   'month_filter' => 'Kuu: %s',
   'category_filter' => 'Kategooria: %s',
-  'news_overview' => 'Vana uudis',
+  'news_overview' => 'Üksikasjad',
   'no_match' => 'Teie otsingule ei vasta ükski uudis.',
   'no_match_help' => 'Muutke oma kriteeriume või lähtestage filtrid.',
   'card_fallback_excerpt' => 'Täieliku artikli lugemiseks avage uudis.',

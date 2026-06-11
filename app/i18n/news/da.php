@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Søgning: %s',
   'month_filter' => 'Måned: %s',
   'category_filter' => 'Kategori: %s',
-  'news_overview' => 'Gamle nyheder',
+  'news_overview' => 'Detaljer',
   'no_match' => 'Ingen nyheder matcher din søgning.',
   'no_match_help' => 'Skift dine kriterier eller nulstil filtre.',
   'card_fallback_excerpt' => 'Åbn nyhederne for at læse hele artiklen.',

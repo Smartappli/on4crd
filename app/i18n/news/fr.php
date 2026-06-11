@@ -29,7 +29,7 @@ return array (
   'search_filter' => 'Recherche : %s',
   'month_filter' => 'Mois : %s',
   'category_filter' => 'Rubrique : %s',
-  'news_overview' => 'Anciennes actualités',
+  'news_overview' => 'Détails',
   'no_match' => 'Aucune actualité ne correspond à votre recherche.',
   'no_match_help' => 'Modifiez vos critères ou réinitialisez les filtres.',
   'card_fallback_excerpt' => 'Ouvrez l’actualité pour lire l’article complet.',
