@@ -13,7 +13,7 @@ function seed_modules(): void
         ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
         ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
         ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
-        ['telechargements', 'Téléchargements', 'Fichiers et ressources à télécharger', 0, 1, 'members', 33],
+        ['fichiers', 'Fichiers', 'Fichiers et ressources a telecharger', 0, 1, 'members', 33],
         ['news', 'Actualités', 'Section des actualités du club', 0, 1, 'public', 30],
         ['articles', 'Articles', 'Articles techniques', 0, 1, 'public', 40],
         ['wiki', 'Wiki', 'Base de connaissances collaborative', 0, 1, 'public', 50],
