@@ -176,6 +176,12 @@ function render_layout_impl(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
         ['label' => (string) $layoutI18n['nav_assistant'], 'route' => 'chatbot', 'module' => 'chatbot'],
     ];
+    $navMemberLibraryItems = [
+        ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'presentations']],
+        ['label' => (string) ($layoutI18n['nav_medias'] ?? 'Medias'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'medias']],
+        ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'PV'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'pv']],
+        ['label' => (string) ($layoutI18n['nav_downloads'] ?? 'Téléchargements'), 'route' => 'members_library', 'module' => '', 'query' => ['category' => 'telechargements']],
+    ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {
         $links = '';
@@ -186,8 +192,16 @@ function render_layout_impl(string $content, string $title = ''): string
             }
 
             $route = (string) $item['route'];
-            $isCurrent = $currentRoute === $route || ($currentRoute === '' && $route === 'home');
-            $links .= '<a class="transition-colors duration-200" href="' . e(route_url($route)) . '"' . ($isCurrent ? ' aria-current="page"' : '') . '>'
+            $query = isset($item['query']) && is_array($item['query']) ? clean_query_params($item['query']) : [];
+            $queryMatches = true;
+            foreach ($query as $key => $value) {
+                if ((string) ($_GET[(string) $key] ?? '') !== (string) $value) {
+                    $queryMatches = false;
+                    break;
+                }
+            }
+            $isCurrent = ($currentRoute === $route || ($currentRoute === '' && $route === 'home')) && ($query === [] || $queryMatches);
+            $links .= '<a class="transition-colors duration-200" href="' . e(route_url_clean($route, $query)) . '"' . ($isCurrent ? ' aria-current="page"' : '') . '>'
                 . e((string) $item['label']) . '</a>';
         }
 
@@ -198,6 +212,10 @@ function render_layout_impl(string $content, string $title = ''): string
         $memberLinks = $buildNavLinks($navMemberItems, $currentRoute);
         if ($memberLinks !== '') {
             $navHtml .= '<div class="nav-row nav-row-member">' . $memberLinks . '</div>';
+        }
+        $memberLibraryLinks = $buildNavLinks($navMemberLibraryItems, $currentRoute);
+        if ($memberLibraryLinks !== '') {
+            $navHtml .= '<div class="nav-row nav-row-member nav-row-member-secondary">' . $memberLibraryLinks . '</div>';
         }
     }
 
