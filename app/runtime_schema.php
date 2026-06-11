@@ -10,6 +10,7 @@ function seed_modules(): void
     $modules = [
         ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 'members', 10],
         ['members', 'Membres', 'Espace membres et profil', 0, 1, 'members', 20],
+        ['webotheque', 'Webotheque', 'Liens et ressources web reserves aux membres', 0, 1, 'members', 29],
         ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
         ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
         ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
@@ -322,7 +323,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-11.3';
+    return '2026-06-11.4';
 }
 
 function runtime_schema_marker_path(): string

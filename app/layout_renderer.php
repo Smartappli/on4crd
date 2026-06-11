@@ -186,9 +186,10 @@ function render_layout_impl(string $content, string $title = ''): string
     ];
     $navMemberLibraryItems = [
         ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
+        ['label' => (string) ($layoutI18n['nav_webotheque'] ?? 'Webothèque'), 'route' => 'webotheque', 'module' => 'webotheque'],
         ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'presentations', 'module' => 'presentations'],
         ['label' => (string) ($layoutI18n['nav_gallery'] ?? 'Photos'), 'route' => 'albums', 'module' => 'albums'],
-        ['label' => (string) ($layoutI18n['nav_videos'] ?? 'Videos'), 'route' => 'videos', 'module' => 'videos'],
+        ['label' => (string) ($layoutI18n['nav_videos'] ?? 'Vidéos'), 'route' => 'videos', 'module' => 'videos'],
         ['label' => (string) ($layoutI18n['nav_files'] ?? 'Fichiers'), 'route' => 'fichiers', 'module' => 'fichiers'],
         ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'PV'), 'route' => 'pv', 'module' => 'pv'],
     ];

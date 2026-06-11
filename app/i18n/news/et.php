@@ -23,7 +23,7 @@ return array (
   'sort_recent' => 'Kõige värskem',
   'sort_oldest' => 'Kõige vanem',
   'sort_title' => 'Pealkiri A-Z',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Filtreeri',
   'reset' => 'Lähtesta',
   'applied_filters' => 'Filtrid on rakendatud',
   'search_filter' => 'Otsing: %s',

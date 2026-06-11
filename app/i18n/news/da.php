@@ -23,7 +23,7 @@ return array (
   'sort_recent' => 'Seneste',
   'sort_oldest' => 'Den ældste',
   'sort_title' => 'Titel A-Z',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Anvend filter',
   'reset' => 'Nulstil',
   'applied_filters' => 'Filtre anvendt',
   'search_filter' => 'Søgning: %s',
