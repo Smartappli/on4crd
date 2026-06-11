@@ -295,6 +295,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$adminLibraryRoute = (string) ($_GET['route'] ?? 'admin_library');
+if (!in_array($adminLibraryRoute, ['admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_telechargements'], true)) {
+    $adminLibraryRoute = 'admin_library';
+}
 $categoryOptions = db()->query('SELECT code, label FROM member_library_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [];
 $perPage = 20;
 $page = max(1, (int) ($_GET['p'] ?? 1));
@@ -382,7 +386,7 @@ ob_start();
                     <option value="legal"><?= e((string) ($t['ingestion_template_legal'] ?? 'Legal')) ?></option>
                 </select>
             </label>
-            <label class="admin-library-field"><span><?= e((string) $t['category_ph']) ?></span><select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>"><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select></label>
+            <label class="admin-library-field"><span><?= e((string) $t['category_ph']) ?></span><select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>" <?= $adminCategory === (string) $catOpt['code'] ? 'selected' : '' ?>><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select></label>
             <label class="admin-library-field"><span><?= e((string) $t['title_ph']) ?></span><input type="text" name="title" required></label>
             <label class="admin-library-field"><span><?= e((string) $t['tags_ph']) ?></span><input type="text" name="tags" placeholder="<?= e((string) $t['tags_help']) ?>"></label>
             <label class="admin-library-field admin-library-field-wide"><span><?= e((string) $t['desc_ph']) ?></span><textarea name="description"></textarea></label>
@@ -443,7 +447,7 @@ ob_start();
 
     <section class="admin-library-documents">
     <form method="get" class="inline-form" style="margin-bottom:.8rem;flex-wrap:wrap;">
-        <input type="hidden" name="route" value="admin_library">
+        <input type="hidden" name="route" value="<?= e($adminLibraryRoute) ?>">
         <select name="category">
             <option value=""><?= e((string) $t['all_categories']) ?></option>
             <?php foreach ($categoryOptions as $catOpt): ?>
@@ -453,7 +457,7 @@ ob_start();
         <input type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         <input type="search" name="tag" value="<?= e($adminTag) ?>" placeholder="<?= e((string) $t['tag_search_ph']) ?>">
         <button class="button" type="submit"><?= e((string) $t['filter']) ?></button>
-        <a class="button secondary" href="<?= e(route_url('admin_library')) ?>"><?= e((string) $t['reset']) ?></a>
+        <a class="button secondary" href="<?= e(route_url($adminLibraryRoute)) ?>"><?= e((string) $t['reset']) ?></a>
     </form>
     <?php if ($documents === []): ?>
         <article class="card admin-library-empty"><p><?= e((string) $t['empty']) ?></p></article>
