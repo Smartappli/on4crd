@@ -14,7 +14,7 @@ function app_load_route_helpers(string $route): void
         'widget_renderer.php' => ['home', 'dashboard', 'widget_render'],
         'ham_weather_advice.php' => ['home'],
         'qsl_helpers.php' => ['qsl', 'qsl_preview', 'qsl_export'],
-        'member_library_helpers.php' => ['members_library', 'presentations', 'medias', 'pv', 'telechargements', 'admin_library', 'admin_articles', 'chatbot'],
+        'member_library_helpers.php' => ['members_library', 'presentations', 'videos', 'pv', 'telechargements', 'admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_telechargements', 'admin_articles', 'chatbot'],
         'knowledge_helpers.php' => ['chatbot'],
         'member_favorites.php' => ['dashboard', 'members_library', 'articles', 'article', 'albums', 'album', 'classifieds'],
         'member_preferences.php' => ['dashboard', 'settings'],

@@ -11,7 +11,7 @@ function seed_modules(): void
         ['dashboard', 'Tableau de bord', 'Personnalisation du dashboard', 0, 1, 'members', 10],
         ['members', 'Membres', 'Espace membres et profil', 0, 1, 'members', 20],
         ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
-        ['medias', 'Medias', 'Ressources médias réservées aux membres', 0, 1, 'members', 31],
+        ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
         ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
         ['telechargements', 'Téléchargements', 'Fichiers et ressources à télécharger', 0, 1, 'members', 33],
         ['news', 'Actualités', 'Section des actualités du club', 0, 1, 'public', 30],

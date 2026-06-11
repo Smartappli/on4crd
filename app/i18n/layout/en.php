@@ -17,7 +17,7 @@ return array (
   'nav_auctions' => 'Auctions',
   'nav_assistant' => 'Assistant',
   'nav_presentations' => 'Presentations',
-  'nav_medias' => 'Media',
+  'nav_videos' => 'Videos',
   'nav_minutes' => 'Minutes',
   'nav_downloads' => 'Downloads',
   'account_space' => 'My account',

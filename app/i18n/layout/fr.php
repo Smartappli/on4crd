@@ -17,7 +17,7 @@ return array (
   'nav_auctions' => 'Enchères',
   'nav_assistant' => 'Assistant',
   'nav_presentations' => 'Présentations',
-  'nav_medias' => 'Medias',
+  'nav_videos' => 'Videos',
   'nav_minutes' => 'PV',
   'nav_downloads' => 'Téléchargements',
   'account_space' => 'Mon espace',

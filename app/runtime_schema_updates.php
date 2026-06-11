@@ -375,7 +375,7 @@ function apply_runtime_schema_updates(): void
         db()->exec("UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')");
         $memberDocumentModules = [
             ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
-            ['medias', 'Medias', 'Ressources médias réservées aux membres', 0, 1, 'members', 31],
+            ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
             ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
             ['telechargements', 'Téléchargements', 'Fichiers et ressources à télécharger', 0, 1, 'members', 33],
         ];

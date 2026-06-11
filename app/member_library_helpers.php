@@ -86,7 +86,7 @@ function member_library_default_categories(): array
     return [
         ['code' => 'general', 'label' => 'General', 'sort_order' => 1],
         ['code' => 'presentations', 'label' => 'Présentations', 'sort_order' => 10],
-        ['code' => 'medias', 'label' => 'Medias', 'sort_order' => 20],
+        ['code' => 'videos', 'label' => 'Videos', 'sort_order' => 20],
         ['code' => 'pv', 'label' => 'PV', 'sort_order' => 30],
         ['code' => 'telechargements', 'label' => 'Téléchargements', 'sort_order' => 40],
     ];
@@ -109,16 +109,16 @@ function member_library_module_definitions(): array
                 'en' => 'Presentations reserved for ON4CRD members.',
             ],
         ],
-        'medias' => [
-            'category' => 'medias',
-            'title' => ['fr' => 'Medias', 'en' => 'Media'],
+        'videos' => [
+            'category' => 'videos',
+            'title' => ['fr' => 'Videos', 'en' => 'Videos'],
             'intro' => [
-                'fr' => 'Ressources médias partagées avec les membres du club.',
-                'en' => 'Media resources shared with club members.',
+                'fr' => 'Vidéos et ressources audiovisuelles partagées avec les membres du club.',
+                'en' => 'Videos and audiovisual resources shared with club members.',
             ],
             'meta_desc' => [
-                'fr' => 'Médias réservés aux membres ON4CRD.',
-                'en' => 'Media resources reserved for ON4CRD members.',
+                'fr' => 'Vidéos réservées aux membres ON4CRD.',
+                'en' => 'Videos reserved for ON4CRD members.',
             ],
         ],
         'pv' => [
