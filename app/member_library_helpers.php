@@ -328,6 +328,22 @@ function member_library_ensure_categories_table(): bool
                 (int) $category['sort_order'],
             ]);
         }
+        try {
+            db()->exec("UPDATE member_library_documents SET category = 'videos' WHERE category = 'medias'");
+        } catch (Throwable) {
+        }
+        try {
+            $legacyCategoryStmt = db()->query("SELECT COUNT(*) FROM member_library_categories WHERE code = 'medias'");
+            if ($legacyCategoryStmt !== false && (int) $legacyCategoryStmt->fetchColumn() > 0) {
+                $videosCategoryStmt = db()->query("SELECT COUNT(*) FROM member_library_categories WHERE code = 'videos'");
+                if ($videosCategoryStmt !== false && (int) $videosCategoryStmt->fetchColumn() > 0) {
+                    db()->exec("DELETE FROM member_library_categories WHERE code = 'medias'");
+                } else {
+                    db()->exec("UPDATE member_library_categories SET code = 'videos', label = 'Videos', sort_order = 20 WHERE code = 'medias'");
+                }
+            }
+        } catch (Throwable) {
+        }
 
         return table_exists('member_library_categories');
     } catch (Throwable) {

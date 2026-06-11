@@ -373,6 +373,15 @@ function apply_runtime_schema_updates(): void
         }
         db()->exec("UPDATE modules SET is_enabled = 1, visibility = 'public' WHERE code IN ('news', 'articles', 'wiki', 'albums', 'tools', 'events', 'auctions', 'chatbot', 'advertising', 'classifieds', 'press', 'education', 'committee', 'directory')");
         db()->exec("UPDATE modules SET is_enabled = 1, visibility = 'members' WHERE code IN ('dashboard', 'members', 'qsl')");
+        $legacyMediasStmt = db()->query("SELECT COUNT(*) FROM modules WHERE code = 'medias'");
+        if ($legacyMediasStmt !== false && (int) $legacyMediasStmt->fetchColumn() > 0) {
+            $videosStmt = db()->query("SELECT COUNT(*) FROM modules WHERE code = 'videos'");
+            if ($videosStmt !== false && (int) $videosStmt->fetchColumn() > 0) {
+                db()->exec("DELETE FROM modules WHERE code = 'medias'");
+            } else {
+                db()->exec("UPDATE modules SET code = 'videos', label = 'Videos', description = 'Ressources vidéo réservées aux membres', visibility = 'members', sort_order = 31 WHERE code = 'medias'");
+            }
+        }
         $memberDocumentModules = [
             ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
             ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
@@ -388,6 +397,21 @@ function apply_runtime_schema_updates(): void
             $memberDocumentModuleStmt->execute($memberDocumentModule);
         }
         db()->exec("UPDATE modules SET visibility = 'admin' WHERE code = 'admin'");
+    }
+
+    if (table_exists('member_library_documents')) {
+        db()->exec("UPDATE member_library_documents SET category = 'videos' WHERE category = 'medias'");
+    }
+    if (table_exists('member_library_categories')) {
+        $legacyCategoryStmt = db()->query("SELECT COUNT(*) FROM member_library_categories WHERE code = 'medias'");
+        if ($legacyCategoryStmt !== false && (int) $legacyCategoryStmt->fetchColumn() > 0) {
+            $videosCategoryStmt = db()->query("SELECT COUNT(*) FROM member_library_categories WHERE code = 'videos'");
+            if ($videosCategoryStmt !== false && (int) $videosCategoryStmt->fetchColumn() > 0) {
+                db()->exec("DELETE FROM member_library_categories WHERE code = 'medias'");
+            } else {
+                db()->exec("UPDATE member_library_categories SET code = 'videos', label = 'Videos', sort_order = 20 WHERE code = 'medias'");
+            }
+        }
     }
 
     seed_news_sections();
