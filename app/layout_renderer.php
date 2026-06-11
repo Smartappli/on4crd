@@ -179,14 +179,13 @@ function render_layout_impl(string $content, string $title = ''): string
     $navMemberItems = [
         ['label' => (string) $layoutI18n['nav_dashboard'], 'route' => 'dashboard', 'module' => 'dashboard'],
         ['label' => (string) $layoutI18n['nav_wiki'], 'route' => 'wiki', 'module' => 'wiki'],
-        ['label' => (string) $layoutI18n['nav_gallery'], 'route' => 'albums', 'module' => 'albums'],
         ['label' => (string) $layoutI18n['nav_articles'], 'route' => 'articles', 'module' => 'articles'],
-        ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
         ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
         ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
         ['label' => (string) $layoutI18n['nav_assistant'], 'route' => 'chatbot', 'module' => 'chatbot'],
     ];
     $navMemberLibraryItems = [
+        ['label' => (string) $layoutI18n['nav_library'], 'route' => 'members_library', 'module' => ''],
         ['label' => (string) ($layoutI18n['nav_presentations'] ?? 'Présentations'), 'route' => 'presentations', 'module' => 'presentations'],
         ['label' => (string) ($layoutI18n['nav_videos'] ?? 'Videos'), 'route' => 'videos', 'module' => 'videos'],
         ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'PV'), 'route' => 'pv', 'module' => 'pv'],
