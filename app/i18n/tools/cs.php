@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Rádiová matematika',
   'open_category' => 'Zobrazit nástroje',
   'choose_tool' => 'Kategorie nástrojů',
-  'grid_title' => 'Výpočet sítě a zón CG/ITU je z poštovní adresy',
+  'grid_title' => 'Výpočet lokátoru a zón CQ/ITU z poštovní adresy',
   'address' => 'Poštovní adresa',
   'calc_grid' => 'Vypočítejte mřížku',
   'found_address' => 'Adresa nalezena',

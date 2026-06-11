@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Radio matematiikka',
   'open_category' => 'Näytä työkalut',
   'choose_tool' => 'Työkalujen luokat',
-  'grid_title' => 'Laske ruudukko ja vyöhykkeet CG/ITU depuis une adresse postale',
+  'grid_title' => 'Laske lokaattori ja CQ/ITU-vyöhykkeet postiosoitteesta',
   'address' => 'Postiosoite',
   'calc_grid' => 'Laske ruudukko',
   'found_address' => 'Osoite löytyi',
@@ -149,8 +150,8 @@ return array (
   'inductance_uh' => 'Induktanssi (µH)',
   'capacitance_pf' => 'Kapasitanssi (pF)',
   'reactance_result_ohm' => 'Reaktanssi (Ω)',
-  'vpp_vrms_calc' => 'Vpp to Vrms',
-  'vrms_vpp_calc' => 'Vrms to Vpp',
+  'vpp_vrms_calc' => 'Vpp:stä Vrms:iin',
+  'vrms_vpp_calc' => 'Vrms:stä Vpp:hen',
   'vpk_vrms_calc' => 'Vpk Vrmsille',
   'kw_w_calc' => 'kW - W',
   'w_kw_calc' => 'W - kW',
@@ -166,7 +167,7 @@ return array (
   'j_wh_calc' => 'Joulea Wh',
   'wh_j_calc' => 'Mitä jouleiksi',
   'ms_s_calc' => 'ms - s',
-  's_ms_calc' => 's to ms',
+  's_ms_calc' => 's -> ms',
   'rpm_rps_calc' => 'RPM - RPS',
   'rps_rpm_calc' => 'RPS - RPM',
   'value_in' => 'Arvo syötetty',

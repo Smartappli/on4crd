@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Matematika tar-radju',
   'open_category' => 'Ara l-għodod',
   'choose_tool' => 'Kategoriji tal-Għodda',
-  'grid_title' => 'Kalkolu tal-grilja u ż-żoni CG/ITU mill-indirizz postali',
+  'grid_title' => 'Ikkalkula l-locator u ż-żoni CQ/ITU minn indirizz postali',
   'address' => 'Indirizz postali',
   'calc_grid' => 'Ikkalkula l-grilja',
   'found_address' => 'Indirizz misjub',
@@ -84,10 +85,10 @@ return array (
   'bandwidth_result' => 'Bandwidth stmat',
   'dipole_calc' => 'Tul ta \'dipole ta\' nofs mewġ',
   'dipole_total_length' => 'Tul totali stmat',
-  'duty_cycle_calc' => 'Duty cycle',
+  'duty_cycle_calc' => 'Ċiklu ta\' xogħol',
   'tx_time_sec' => 'Ħin ta\' trażmissjoni (i)',
   'period_sec' => 'Perjodu(i) totali',
-  'duty_cycle_result' => 'Duty cycle',
+  'duty_cycle_result' => 'Ċiklu ta\' xogħol',
   'divider_calc' => 'Diviżur tal-vultaġġ',
   'vin_volts' => 'Vultaġġ tad-dħul (V)',
   'r1_ohm' => 'R1 (Ω)',
@@ -112,7 +113,7 @@ return array (
   'virtual_height_km' => 'Għoli virtwali (km)',
   'skip_result_km' => 'Distanza tal-qabża stmata (km)',
   'eirp_calc' => 'Konverżjoni ERP → EIRP',
-  'erp_input_w' => 'Input ERP (W)',
+  'erp_input_w' => 'Dħul ERP (W)',
   'eirp_result_w' => 'EIRP stmat (W)',
   'db_sum_calc' => 'Is-somma tas-setgħat (dBm)',
   'dbm_a' => 'Livell A (dBm)',
@@ -186,7 +187,7 @@ return array (
   'unit_conv_group_temperature' => 'Temperatura',
   'unit_conv_group_rotation' => 'Rotazzjoni',
   'unit_conv_group_field' => 'Livell tas-sinjal',
-  'unit_conv_swap' => 'Reverse',
+  'unit_conv_swap' => 'Aqleb',
   'unit_conv_family' => 'Familja',
   'unit_conv_from' => 'Minn',
   'unit_conv_to' => 'Lejn',

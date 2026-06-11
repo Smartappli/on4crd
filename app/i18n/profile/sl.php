@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Ime',
   'last_name' => 'Priimek',
   'phone' => 'Telefon',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Lokacija',
   'licence' => 'Licenca',
   'licence_help' => 'Radioamaterski licencni razred. Vnesite raven licence ali kategorijo, ki ustreza vašemu pooblastilu.',
   'bands' => 'Najljubši bendi',

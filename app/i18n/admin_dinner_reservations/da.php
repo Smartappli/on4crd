@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -26,7 +27,7 @@ return array (
   'line_remove' => 'Slet',
   'yes' => 'Ja',
   'no' => 'Nej',
-  'csv_reservation_id' => 'Reservation ID',
+  'csv_reservation_id' => 'Reservations-ID',
   'csv_reserved_by' => 'Navn',
   'csv_created_at' => 'Dato',
   'csv_starter_enabled' => 'Aktiv input',

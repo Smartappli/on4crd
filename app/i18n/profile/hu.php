@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Keresztnév',
   'last_name' => 'Vezetéknév',
   'phone' => 'Telefon',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Hely',
   'licence' => 'Licenc',
   'licence_help' => 'Rádióamatőr engedélyosztály. Adja meg az engedélyének megfelelő licencszintet vagy kategóriát.',
   'bands' => 'Kedvenc zenekarok',

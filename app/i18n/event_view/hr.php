@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -6,7 +7,7 @@ return array (
   'not_found_msg' => 'Traženi događaj nije dostupan.',
   'back' => '← Natrag na kalendar',
   'summary_fallback' => 'Pronađite sve korisne informacije o ovom događaju.',
-  'start' => 'Start',
+  'start' => 'Početak',
   'end' => 'Kraj',
   'location' => 'Lokacija',
   'tbd' => 'Bit će potvrđeno',

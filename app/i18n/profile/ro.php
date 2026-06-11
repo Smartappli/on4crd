@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Prenume',
   'last_name' => 'Nume de familie',
   'phone' => 'Telefon',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Localitate',
   'licence' => 'Licenţă',
   'licence_help' => 'Clasa de licență radioamator. Introduceți nivelul de licență sau categoria care se potrivește cu autorizația dvs.',
   'bands' => 'Trupele preferate',

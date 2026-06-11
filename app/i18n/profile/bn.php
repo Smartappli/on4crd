@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'প্রথম নাম',
   'last_name' => 'পদবি',
   'phone' => 'ফোন',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / অবস্থান',
   'licence' => 'লাইসেন্স',
   'licence_help' => 'রেডিও অপেশাদার লাইসেন্স ক্লাস। আপনার অনুমোদনের সাথে মিলিত লাইসেন্স স্তর বা বিভাগ লিখুন।',
   'bands' => 'প্রিয় ব্যান্ড',

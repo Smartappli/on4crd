@@ -9,7 +9,7 @@ return array (
   'nav_events' => 'Evenementen',
   'nav_tools' => 'Gereedschap',
   'nav_directory' => 'Gids',
-  'nav_dashboard' => 'Dashboard',
+  'nav_dashboard' => 'Overzicht',
   'nav_wiki' => 'Kennis',
   'nav_gallery' => 'Foto\'s',
   'nav_articles' => 'Artikelen',

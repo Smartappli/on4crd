@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Eesnimi',
   'last_name' => 'Perekonnanimi',
   'phone' => 'Telefon',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Asukoht',
   'licence' => 'Litsents',
   'licence_help' => 'Raadioamatööride litsentsiklass. Sisestage teie volitustele vastav litsentsitase või kategooria.',
   'bands' => 'Lemmikbändid',

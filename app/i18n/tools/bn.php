@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'রেডিও গণিত',
   'open_category' => 'টুল দেখুন',
   'choose_tool' => 'টুল বিভাগসমূহ',
-  'grid_title' => 'ক্যালকুল ডু গ্রিড এবং জোন CG/ITU পোস্টের ঠিকানা',
+  'grid_title' => 'ডাক ঠিকানা থেকে গ্রিড লোকেটর ও CQ/ITU জোন গণনা',
   'address' => 'ডাক ঠিকানা',
   'calc_grid' => 'গ্রিড গণনা করুন',
   'found_address' => 'প্রাপ্ত ঠিকানা',
@@ -84,10 +85,10 @@ return array (
   'bandwidth_result' => 'আনুমানিক ব্যান্ডউইথ',
   'dipole_calc' => 'অর্ধ-তরঙ্গ ডাইপোল দৈর্ঘ্য',
   'dipole_total_length' => 'আনুমানিক মোট দৈর্ঘ্য',
-  'duty_cycle_calc' => 'ডিউটি ??চক্র',
+  'duty_cycle_calc' => 'ডিউটি সাইকেল',
   'tx_time_sec' => 'TX সময় (গুলি)',
   'period_sec' => 'মোট সময়কাল (গুলি)',
-  'duty_cycle_result' => 'ডিউটি ??চক্র',
+  'duty_cycle_result' => 'ডিউটি সাইকেল',
   'divider_calc' => 'ভোল্টেজ বিভাজক',
   'vin_volts' => 'ইনপুট ভোল্টেজ (V)',
   'r1_ohm' => 'R1 (Ω)',

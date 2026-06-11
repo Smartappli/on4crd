@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Radiomatematik',
   'open_category' => 'Visa verktyg',
   'choose_tool' => 'Verktygskategorier',
-  'grid_title' => 'Beräkna rutnätet och zonerna CG/ITU har en postadress',
+  'grid_title' => 'Beräkna locator och CQ/ITU-zoner från en postadress',
   'address' => 'Postadress',
   'calc_grid' => 'Beräkna rutnätet',
   'found_address' => 'Adress hittades',

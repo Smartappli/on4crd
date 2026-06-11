@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -21,7 +22,7 @@ return array (
   'search' => 'Αναζήτηση μέλους',
   'search_ph' => 'Κλήση, όνομα, email…',
   'search_btn' => 'OK',
-  'th_password_reset' => '??????? ?????????',
+  'th_password_reset' => 'Κωδικός πρόσβασης',
   'password_reset_force' => 'Επιβολή στην επόμενη σύνδεση',
   'password_reset_unavailable' => 'Μη διαθέσιμο',
 );

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'L-isem',
   'last_name' => 'Kunjom',
   'phone' => 'Telefon',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Lokalità',
   'licence' => 'Liċenzja',
   'licence_help' => 'Klassi tal-liċenza tad-dilettanti tar-radju. Daħħal il-livell tal-liċenzja jew il-kategorija li taqbel mal-awtorizzazzjoni tiegħek.',
   'bands' => 'Bands favoriti',

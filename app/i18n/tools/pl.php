@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Matematyka radiowa',
   'open_category' => 'Zobacz narzędzia',
   'choose_tool' => 'Kategorie narzędzi',
-  'grid_title' => 'Obliczanie siatki i stref CG/ITU na adres pocztowy',
+  'grid_title' => 'Oblicz locator i strefy CQ/ITU na podstawie adresu pocztowego',
   'address' => 'Adres pocztowy',
   'calc_grid' => 'Oblicz siatkę',
   'found_address' => 'Znaleziono adres',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Radiowiskunde',
   'open_category' => 'Bekijk tools',
   'choose_tool' => 'Toolcategorieën',
-  'grid_title' => 'Bereken het raster en de zones CG/ITU op een postadres',
+  'grid_title' => 'Locator en CQ/ITU-zones berekenen uit een postadres',
   'address' => 'Postadres',
   'calc_grid' => 'Grid berekenen',
   'found_address' => 'Gevonden adres',

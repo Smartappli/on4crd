@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => '无线电数学',
   'open_category' => '查看工具',
   'choose_tool' => '工具类别',
-  'grid_title' => '计算网格和区域 CG/ITU 获取邮政地址',
+  'grid_title' => '根据邮政地址计算网格定位符和 CQ/ITU 分区',
   'address' => '邮政地址',
   'calc_grid' => '计算网格',
   'found_address' => '找到的地址',

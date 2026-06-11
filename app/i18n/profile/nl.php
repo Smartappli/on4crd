@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Voornaam',
   'last_name' => 'Achternaam',
   'phone' => 'Telefoon',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Locatie',
   'licence' => 'Licentie',
   'licence_help' => 'Radioamateurlicentieklasse. Voer het licentieniveau of de categorie in die overeenkomt met uw autorisatie.',
   'bands' => 'Favoriete banden',

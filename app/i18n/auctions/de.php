@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'lot' => 'Los',
   'lots' => 'Lose',
   'default_summary' => 'Club-Auktionslos.',
-  'start' => 'Start',
+  'start' => 'Beginn',
   'end' => 'Ende',
   'step' => 'Schritt',
   'view_lot' => 'Los anzeigen',

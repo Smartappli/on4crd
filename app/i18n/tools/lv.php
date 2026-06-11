@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Radio matemātika',
   'open_category' => 'Skatīt rīkus',
   'choose_tool' => 'Rīku kategorijas',
-  'grid_title' => 'Calcul du grid un les zones CG/ITU depuis une adresse postale',
+  'grid_title' => 'Aprēķināt lokatoru un CQ/ITU zonas pēc pasta adreses',
   'address' => 'Pasta adrese',
   'calc_grid' => 'Aprēķiniet režģi',
   'found_address' => 'Adrese atrasta',

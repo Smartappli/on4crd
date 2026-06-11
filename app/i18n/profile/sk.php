@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Krstné meno',
   'last_name' => 'Priezvisko',
   'phone' => 'Telefón',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Lokalita',
   'licence' => 'Licencia',
   'licence_help' => 'trieda rádioamatérskej licencie. Zadajte úroveň licencie alebo kategóriu zodpovedajúcu vašej autorizácii.',
   'bands' => 'Obľúbené kapely',

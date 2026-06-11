@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Raadio matemaatika',
   'open_category' => 'Vaata tööriistu',
   'choose_tool' => 'Tööriistade kategooriad',
-  'grid_title' => 'Arvuta ruudustiku ja tsoonide CG/ITU depuis une adresse postale',
+  'grid_title' => 'Arvuta lokaator ja CQ/ITU tsoonid postiaadressi põhjal',
   'address' => 'Postiaadress',
   'calc_grid' => 'Arvutage ruudustik',
   'found_address' => 'Aadress leitud',
@@ -164,7 +165,7 @@ return array (
   'pa_db_calc' => 'Pa kuni dB SPL',
   'db_pa_calc' => 'dB SPL kuni Pa',
   'j_wh_calc' => 'Džaulid kuni Wh',
-  'wh_j_calc' => 'Wh to Joules',
+  'wh_j_calc' => 'Wh -> džaulid',
   'ms_s_calc' => 'ms kuni s',
   's_ms_calc' => 's kuni ms',
   'rpm_rps_calc' => 'RPM kuni RPS',

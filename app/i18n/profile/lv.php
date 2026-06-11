@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Vārds',
   'last_name' => 'Uzvārds',
   'phone' => 'Tālrunis',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Atrašanās vieta',
   'licence' => 'Licence',
   'licence_help' => 'Radioamatieru licences klase. Ievadiet licences līmeni vai kategoriju, kas atbilst jūsu pilnvarojumam.',
   'bands' => 'Mīļākās grupas',

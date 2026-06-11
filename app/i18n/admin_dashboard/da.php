@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -6,7 +7,7 @@ return array (
   'title' => 'Administrationsdashboard',
   'help' => 'Aktiver/deaktiver de tilgængelige widgets på medlemsdashboardet.',
   'save' => 'Gem',
-  'layout' => 'Dashboard',
+  'layout' => 'Kontrolpanel',
   'meta_desc' => 'Konfiguration af medlemsdashboard-widgets.',
   'members_title' => 'Medlemsstyring',
   'members_help' => 'Hurtig adgang til medlemsadministrationsværktøjer.',

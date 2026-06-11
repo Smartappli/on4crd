@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Céad ainm',
   'last_name' => 'Sloinne',
   'phone' => 'Teileafón',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Suíomh',
   'licence' => 'Ceadúnas',
   'licence_help' => 'Raidió amaitéarach rang ceadúnas. Cuir isteach an leibhéal ceadúnais nó an chatagóir atá ag teacht le d\'údarú.',
   'bands' => 'Na bannaí is fearr leat',

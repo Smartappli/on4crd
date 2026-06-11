@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'lot' => 'puno',
   'lots' => 'serije',
   'default_summary' => 'Lot aukcije kluba.',
-  'start' => 'Start',
+  'start' => 'Početak',
   'end' => 'Kraj',
   'step' => 'Ne',
   'view_lot' => 'Pogledajte parcelu',

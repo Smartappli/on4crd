@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Radijo matematika',
   'open_category' => 'Žiūrėti įrankius',
   'choose_tool' => 'Įrankių kategorijos',
-  'grid_title' => 'Apskaičiuokite tinklelį ir zonas CG/ITU depuis une adresse postale',
+  'grid_title' => 'Apskaičiuoti lokatorių ir CQ/ITU zonas pagal pašto adresą',
   'address' => 'Pašto adresas',
   'calc_grid' => 'Apskaičiuokite tinklelį',
   'found_address' => 'Adresas rastas',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -145,7 +146,7 @@ return array (
   'table_preview' => 'Oversigt',
   'table_export' => 'Eksporter',
   'view' => 'Se',
-  'front_svg' => 'Front SVG',
+  'front_svg' => 'Forside-SVG',
   'back_svg' => 'Tilbage SVG',
   'manual_hint' => 'Betegnelses-, bånd-, tilstands- og RST-felterne normaliseres til store bogstaver under indtastning.',
   'band_placeholder' => '20 mio',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -21,7 +22,7 @@ return array (
   'label_placement' => 'Plasman',
   'label_format' => 'Format',
   'label_target_url' => 'URL cilj',
-  'label_start' => 'Start',
+  'label_start' => 'Početak',
   'label_duration_days' => 'Trajanje (dani)',
   'label_max_impressions' => 'Maksimalan broj prikaza',
   'label_weight' => 'Težina / prioritet',

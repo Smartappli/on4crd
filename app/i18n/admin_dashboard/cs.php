@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -6,7 +7,7 @@ return array (
   'title' => 'Administrační panel',
   'help' => 'Aktivujte/deaktivujte widgety dostupné na členském panelu.',
   'save' => 'Uložit',
-  'layout' => 'Dashboard',
+  'layout' => 'Přehled',
   'meta_desc' => 'Konfigurace widgetů panelu členů.',
   'members_title' => 'Správa členů',
   'members_help' => 'Rychlý přístup k nástrojům pro správu členů.',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -7,7 +8,7 @@ return array (
   'body' => '这些法规定义了适用于 {club_name} 管理的会员、活动和空间的操作、参与和行为规则。',
   'updated_at_label' => '最后更新',
   'updated_at' => '2026-06-05',
-  'status_label' => '??',
+  'status_label' => '状态',
   'status' => '草案有待委员会批准',
   'contact_label' => '俱乐部联系方式',
   'related_pages_title' => '相关页面',

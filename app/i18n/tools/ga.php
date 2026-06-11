@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Matamaitice raidió',
   'open_category' => 'Féach ar uirlisí',
   'choose_tool' => 'Catagóirí Uirlisí',
-  'grid_title' => 'Ríomh an grid agus criosanna CQ/ITU ó sheoladh poist',
+  'grid_title' => 'Ríomh an locator agus criosanna CQ/ITU ó sheoladh poist',
   'address' => 'Seoladh poist',
   'calc_grid' => 'Ríomh an eangach',
   'found_address' => 'Seoladh aimsithe',
@@ -32,7 +33,7 @@ return array (
   'estimated_distance' => 'Fad measta',
   'filter_calc' => 'Scagaire ríomh LC',
   'cutoff_freq' => 'Minicíocht scoite (MHz)',
-  'impedance' => 'Impedance (Ω)',
+  'impedance' => 'Impedans (Ω)',
   'inductance' => 'Ionduchtú (µH)',
   'capacitance' => 'Cumas (pF)',
   'balun_calc' => 'Balun ríomh',

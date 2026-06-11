@@ -9,7 +9,7 @@ return array (
   'nav_events' => 'Udalosti',
   'nav_tools' => 'Nástroje',
   'nav_directory' => 'Adresár',
-  'nav_dashboard' => 'Dashboard',
+  'nav_dashboard' => 'Prehľad',
   'nav_wiki' => 'Znalosti',
   'nav_gallery' => 'Fotografie',
   'nav_articles' => 'Položky',

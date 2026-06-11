@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -37,7 +38,7 @@ return array (
   'antennas' => 'Antenne',
   'favourite_modes' => 'Modi preferiti',
   'interests' => 'Interessi',
-  'password' => 'Password',
+  'password' => 'Parola d\'ordine',
   'submit' => 'Crea il mio account',
   'already_registered' => 'Già registrato?',
   'login' => 'Accedi',

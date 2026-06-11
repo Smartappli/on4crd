@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -12,7 +13,7 @@ return array (
   'slug' => 'Puž',
   'summary' => 'Sažetak',
   'description' => 'Opis',
-  'start' => 'Start',
+  'start' => 'Početak',
   'end' => 'Kraj',
   'location' => 'Lokacija',
   'external_url' => 'URL vanjski',

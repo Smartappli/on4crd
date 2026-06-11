@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -38,5 +39,5 @@ return array (
   'view_private' => 'Vista privata',
   'empty_visible_info' => 'Nessuna informazione visibile.',
   'profile_data_title' => 'Dati del profilo',
-  'profile_data_help' => 'Questa sezione riprende i campi non vuoti del profilo e applica le stesse impostazioni di visibilit? della directory. L?esportazione JSON contiene anche i dati del profilo salvati nel database.',
+  'profile_data_help' => 'Questa sezione riprende i campi non vuoti del profilo e applica le stesse impostazioni di visibilità della directory. L’esportazione JSON contiene anche i dati del profilo salvati nel database.',
 );

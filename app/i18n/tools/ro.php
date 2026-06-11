@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Matematică radio',
   'open_category' => 'Vizualizați instrumentele',
   'choose_tool' => 'Categorii de instrumente',
-  'grid_title' => 'Calcularea rețelei și a zonelor CG/ITU de la adresa poștală',
+  'grid_title' => 'Calcularea locatorului și a zonelor CQ/ITU dintr-o adresă poștală',
   'address' => 'Adresa poștală',
   'calc_grid' => 'Calculați grila',
   'found_address' => 'Adresă găsită',

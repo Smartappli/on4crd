@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Rádiómatematika',
   'open_category' => 'Eszközök megtekintése',
   'choose_tool' => 'Szerszám kategóriák',
-  'grid_title' => 'Calcul du grid and les zones CG/ITU depuis une adresse postale',
+  'grid_title' => 'Locator és CQ/ITU zónák számítása postai címből',
   'address' => 'Postacím',
   'calc_grid' => 'Számítsa ki a rácsot',
   'found_address' => 'Cím található',
@@ -166,7 +167,7 @@ return array (
   'j_wh_calc' => 'Joule Wh',
   'wh_j_calc' => 'Wh a Joule',
   'ms_s_calc' => 'ms-től s-ig',
-  's_ms_calc' => 's to ms',
+  's_ms_calc' => 's -> ms',
   'rpm_rps_calc' => 'RPM - RPS',
   'rps_rpm_calc' => 'RPS - RPM',
   'value_in' => 'Beírt érték',

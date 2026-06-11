@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -21,7 +22,7 @@ return array (
   'search' => 'सदस्य खोजें',
   'search_ph' => 'कॉलसाइन, नाम, ईमेल…',
   'search_btn' => 'खोजें',
-  'th_password_reset' => '???????',
+  'th_password_reset' => 'पासवर्ड',
   'password_reset_force' => 'अगले लॉगिन पर बल दें',
   'password_reset_unavailable' => 'अनुपलब्ध',
 );

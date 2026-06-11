@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Vardas',
   'last_name' => 'Pavardė',
   'phone' => 'Telefonas',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Vietovė',
   'licence' => 'Licencija',
   'licence_help' => 'Radijo mėgėjų licencijos klasė. Įveskite licencijos lygį arba kategoriją, atitinkančią jūsų įgaliojimą.',
   'bands' => 'Mėgstamiausios grupės',

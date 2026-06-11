@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -38,5 +39,5 @@ return array (
   'view_private' => 'Visualização privada',
   'empty_visible_info' => 'Nenhuma informação visível.',
   'profile_data_title' => 'Dados do perfil',
-  'profile_data_help' => 'Esta sec??o reutiliza os campos n?o vazios do seu perfil e aplica as mesmas defini??es de visibilidade do diret?rio. A exporta??o JSON tamb?m cont?m os dados de perfil guardados na base de dados.',
+  'profile_data_help' => 'Esta secção reutiliza os campos não vazios do seu perfil e aplica as mesmas definições de visibilidade do diretório. A exportação JSON também contém os dados de perfil guardados na base de dados.',
 );

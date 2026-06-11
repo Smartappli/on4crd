@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -7,7 +8,7 @@ return array (
   'body' => 'ये नियम {club_name} द्वारा प्रबंधित सदस्यों, गतिविधियों और स्थानों पर लागू संचालन, भागीदारी और आचरण नियमों को परिभाषित करते हैं।',
   'updated_at_label' => 'अंतिम बार अद्यतन किया गया',
   'updated_at' => '2026-06-05',
-  'status_label' => '??????',
+  'status_label' => 'स्थिति',
   'status' => 'ड्राफ्ट समिति की मंजूरी के लिए लंबित है',
   'contact_label' => 'क्लब संपर्क',
   'related_pages_title' => 'संबंधित पृष्ठ',

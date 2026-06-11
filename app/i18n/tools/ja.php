@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'ラジオ数学',
   'open_category' => 'ツールを見る',
   'choose_tool' => 'ツールカテゴリ',
-  'grid_title' => 'グリッドとゾーンの計算 CG/ITU 郵便番号の指定',
+  'grid_title' => '住所からグリッドロケーターとCQ/ITUゾーンを計算',
   'address' => '住所',
   'calc_grid' => 'グリッドを計算',
   'found_address' => '見つかった住所',
@@ -72,7 +73,7 @@ return array (
   'km_unit' => 'km',
   'fspl_calc' => '自由空間伝搬損失 (FSPL)',
   'distance_km' => '距離 (km)',
-  'frequency_mhz' => 'Frequency (MHz)',
+  'frequency_mhz' => '周波数 (MHz)',
   'fspl_result' => '推定損失',
   'runtime_calc' => 'バッテリー駆動時間',
   'capacity_mah' => 'バッテリー容量 (mAh)',
@@ -122,7 +123,7 @@ return array (
   'dbd_label' => 'dBd',
   'dbi_label' => 'dBi',
   'dbi_result' => 'dBi のゲイン',
-  'dbuv_calc' => 'dBm ? dB?V 変換 (50?)',
+  'dbuv_calc' => 'dBm から dBµV への変換 (50Ω)',
   'dbuv_label' => 'dBμV',
   'resistor_combo_calc' => '抵抗コンボファインダー (E12)',
   'target_resistance_ohm' => '目標抵抗値(?)',
@@ -178,7 +179,7 @@ return array (
   'unit_conv_title' => '単位換算',
   'unit_conv_help' => '変換を選択してください:',
   'unit_conv_group_rf' => '無線/RF',
-  'unit_conv_group_power' => '力',
+  'unit_conv_group_power' => '電力',
   'unit_conv_group_voltage' => '正弦波電圧',
   'unit_conv_group_length' => '長さ',
   'unit_conv_group_energy' => 'エネルギー',
@@ -186,10 +187,10 @@ return array (
   'unit_conv_group_temperature' => '温度',
   'unit_conv_group_rotation' => '回転',
   'unit_conv_group_field' => '信号レベル',
-  'unit_conv_swap' => 'スワップ',
-  'unit_conv_family' => '家族',
+  'unit_conv_swap' => '入れ替え',
+  'unit_conv_family' => '分類',
   'unit_conv_from' => 'から',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'へ',
   'unit_conv_presets' => 'クイック値',
   'unit_conv_reference' => '参照',
   'unit_conv_quick_links' => '詳細なコンバータ',

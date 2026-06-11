@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Funkmathematik',
   'open_category' => 'Werkzeuge anzeigen',
   'choose_tool' => 'Werkzeugkategorien',
-  'grid_title' => 'Berechnen Sie das Raster und die Zonen CG/ITU anhand einer Postadresse',
+  'grid_title' => 'Locator und CQ/ITU-Zonen aus einer Postadresse berechnen',
   'address' => 'Postadresse',
   'calc_grid' => 'Grid berechnen',
   'found_address' => 'Gefundene Adresse',

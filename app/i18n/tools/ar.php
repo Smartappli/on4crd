@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'رياضيات الراديو',
   'open_category' => 'عرض الأدوات',
   'choose_tool' => 'فئات الأدوات',
-  'grid_title' => 'حساب الشبكة والمناطق CG/ITU من عنوان بريدي',
+  'grid_title' => 'حساب محدد الشبكة ومناطق CQ/ITU من عنوان بريدي',
   'address' => 'العنوان البريدي',
   'calc_grid' => 'احسب المحدد',
   'found_address' => 'العنوان المُعثر عليه',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Förnamn',
   'last_name' => 'Efternamn',
   'phone' => 'Telefon',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Plats',
   'licence' => 'Licens',
   'licence_help' => 'Klass för radioamatörlicens. Ange den licensnivå eller kategori som matchar din behörighet.',
   'bands' => 'Favoritband',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Radijska matematika',
   'open_category' => 'Ogled orodij',
   'choose_tool' => 'Kategorije orodij',
-  'grid_title' => 'Calcul du grid et les zones CG/ITU depuis une postale adresse',
+  'grid_title' => 'Izračun lokatorja in con CQ/ITU iz poštnega naslova',
   'address' => 'Poštni naslov',
   'calc_grid' => 'Izračunajte mrežo',
   'found_address' => 'Naslov najden',

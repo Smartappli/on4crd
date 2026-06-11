@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -12,7 +13,7 @@ return array (
   'login_success' => 'Accesso effettuato.',
   'title' => 'Accedi',
   'callsign' => 'Nominativo',
-  'password' => 'Password',
+  'password' => 'Parola d\'ordine',
   'captcha_question' => 'Captcha: quanto fa',
   'login' => 'Accedi',
   'forgot_password' => 'Password dimenticata?',

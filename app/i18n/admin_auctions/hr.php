@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -16,7 +17,7 @@ return array (
   'reserve_price' => 'Rezervna cijena',
   'min_increment' => 'Nije minimalno',
   'buy_now' => 'Kupi sada',
-  'start' => 'Start',
+  'start' => 'Početak',
   'end' => 'Kraj',
   'status' => 'Status',
   'save_lot' => 'Spremi seriju',

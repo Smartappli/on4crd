@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return array (
   'title' => 'Petites annonces',
   'lead' => 'Déposez et consultez les annonces radioamateur du club.',
@@ -79,7 +82,7 @@ return array (
   'propose_category_invalid' => 'Veuillez compléter correctement le formulaire de proposition.',
   'propose_category_sent' => 'Proposition de catégorie envoyée.',
   'propose_category_failed' => 'La proposition n\'a pas pu être envoyée. Réessayez plus tard.',
-  'module_disabled' => 'Le module petites annonces est d?sactiv?.',
+  'module_disabled' => 'Le module petites annonces est désactivé.',
   'status_pending' => 'En validation',
   'submit_for_review' => 'Soumettre pour validation',
   'not_available' => 'Non renseign?',
@@ -91,7 +94,7 @@ return array (
   'stats_total' => 'Annonces',
   'stats_active' => 'Actives',
   'stats_sold' => 'Vendues',
-  'edit_ad' => '?diter l?annonce',
+  'edit_ad' => 'Éditer l’annonce',
   'no_ads' => 'Aucune annonce',
   'owner' => 'Propri?taire',
   'category' => 'Cat?gorie',
@@ -108,7 +111,7 @@ return array (
   'saved' => 'Enregistr?.',
   'bulk_no_selection' => 'S?lectionnez au moins une annonce.',
   'delete_confirm' => 'Supprimer cette annonce ?',
-  'notification_moderated_title' => 'Petite annonce mod?r?e',
-  'notification_removed_body' => 'Annonce supprim?e par la mod?ration : {title}',
+  'notification_moderated_title' => 'Petite annonce modérée',
+  'notification_removed_body' => 'Annonce supprimée par la modération : {title}',
   'notification_status_body' => 'Statut mis ? jour vers {status} : {title}',
 );

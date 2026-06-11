@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Радиоматематика',
   'open_category' => 'Открыть инструменты',
   'choose_tool' => 'Категории инструментов',
-  'grid_title' => 'Расчет сетки и зон CG/ITU по почтовому адресу',
+  'grid_title' => 'Расчет локатора и зон CQ/ITU по почтовому адресу',
   'address' => 'Почтовый адрес',
   'calc_grid' => 'Рассчитать grid',
   'found_address' => 'Найденный адрес',
@@ -72,7 +73,7 @@ return array (
   'km_unit' => 'km',
   'fspl_calc' => 'Потери в свободном пространстве (FSPL)',
   'distance_km' => 'Расстояние (км)',
-  'frequency_mhz' => 'Frequency (MHz)',
+  'frequency_mhz' => 'Частота (MHz)',
   'fspl_result' => 'Расчётные потери',
   'runtime_calc' => 'Автономность батареи',
   'capacity_mah' => 'Ёмкость батареи (mAh)',

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -21,7 +22,7 @@ return array (
   'search' => '搜索成员',
   'search_ph' => '呼号、姓名、邮箱…',
   'search_btn' => '搜索',
-  'th_password_reset' => '??',
+  'th_password_reset' => '密码',
   'password_reset_force' => '强制下次登录',
   'password_reset_unavailable' => '不可用',
 );

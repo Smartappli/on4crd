@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -26,7 +27,7 @@ return array (
   'line_remove' => 'Ta bort',
   'yes' => 'Ja',
   'no' => 'Nej',
-  'csv_reservation_id' => 'Reservation ID',
+  'csv_reservation_id' => 'Reservations-ID',
   'csv_reserved_by' => 'Namn',
   'csv_created_at' => 'Datum',
   'csv_starter_enabled' => 'Aktiv ingång',

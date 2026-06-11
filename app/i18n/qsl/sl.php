@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -106,7 +107,7 @@ return array (
   'contact_callsign' => 'Kontaktna koda',
   'qso_date' => 'Datum QSO',
   'utc' => 'UTC',
-  'band' => 'Band',
+  'band' => 'Pas',
   'mode' => 'Moda',
   'rst_sent' => 'RST pošilja',
   'rst_received' => 'RST prejel',
@@ -136,7 +137,7 @@ return array (
   'table_call' => 'Indikativno',
   'table_date' => 'Datum',
   'table_utc' => 'UTC',
-  'table_band' => 'Band',
+  'table_band' => 'Pas',
   'table_mode' => 'Moda',
   'table_rst' => 'RST',
   'table_action' => 'Akcija',

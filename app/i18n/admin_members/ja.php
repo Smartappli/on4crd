@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -21,7 +22,7 @@ return array (
   'search' => 'メンバーを検索',
   'search_ph' => 'コールサイン、名前、メール…',
   'search_btn' => '検索',
-  'th_password_reset' => '?????',
+  'th_password_reset' => 'パスワード',
   'password_reset_force' => '次回のログインを強制する',
   'password_reset_unavailable' => '利用不可',
 );

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -12,7 +13,7 @@ return array (
   'login_success' => 'Konnessjoni b\'suċċess.',
   'title' => 'Konnessjoni',
   'callsign' => 'Indikattiv',
-  'password' => 'Password',
+  'password' => 'Kelma sigrieta',
   'captcha_question' => 'Captcha: kemm',
   'login' => 'Idħol',
   'forgot_password' => 'Insejt il-password?',

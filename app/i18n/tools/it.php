@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Matematica radio',
   'open_category' => 'Vedi strumenti',
   'choose_tool' => 'Categorie di strumenti',
-  'grid_title' => 'Calcolo della griglia e delle zone CG/ITU a partire da un indirizzo postale',
+  'grid_title' => 'Calcolo del locator e delle zone CQ/ITU da un indirizzo postale',
   'address' => 'Indirizzo postale',
   'calc_grid' => 'Calcola grid',
   'found_address' => 'Indirizzo trovato',

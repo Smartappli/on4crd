@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'Matemática de rádio',
   'open_category' => 'Ver ferramentas',
   'choose_tool' => 'Categorias de ferramentas',
-  'grid_title' => 'Cálculo da grade e das zonas CG/ITU a partir de um endereço postal',
+  'grid_title' => 'Calcular locator e zonas CQ/ITU a partir de um endereço postal',
   'address' => 'Endereço postal',
   'calc_grid' => 'Calcular grid',
   'found_address' => 'Endereço encontrado',

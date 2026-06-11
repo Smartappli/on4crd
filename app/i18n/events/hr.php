@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -14,7 +15,7 @@ return array (
   'week' => 'tjedan',
   'list' => 'Popis',
   'detail' => 'Detalj',
-  'start' => 'Start',
+  'start' => 'Početak',
   'end' => 'Kraj',
   'location' => 'Lokacija',
   'view_sheet' => 'Pogledajte datoteku',

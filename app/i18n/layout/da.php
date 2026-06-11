@@ -9,7 +9,7 @@ return array (
   'nav_events' => 'Begivenheder',
   'nav_tools' => 'Værktøjer',
   'nav_directory' => 'Vejviser',
-  'nav_dashboard' => 'Dashboard',
+  'nav_dashboard' => 'Kontrolpanel',
   'nav_wiki' => 'Viden',
   'nav_gallery' => 'Fotos',
   'nav_articles' => 'genstande',

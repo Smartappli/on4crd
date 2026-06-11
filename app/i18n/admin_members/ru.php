@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -21,7 +22,7 @@ return array (
   'search' => 'Найти участника',
   'search_ph' => 'Позывной, имя, email…',
   'search_btn' => 'Найти',
-  'th_password_reset' => '??????',
+  'th_password_reset' => 'Пароль',
   'password_reset_force' => 'Принудительно при следующем входе в систему',
   'password_reset_unavailable' => 'Недоступно',
 );

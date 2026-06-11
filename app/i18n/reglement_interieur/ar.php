@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -7,7 +8,7 @@ return array (
   'body' => 'تحدد هذه اللوائح قواعد التشغيل والمشاركة والسلوك المطبقة على الأعضاء والأنشطة والمساحات التي تديرها {club_name}.',
   'updated_at_label' => 'آخر تحديث',
   'updated_at' => '2026-06-05',
-  'status_label' => '??????',
+  'status_label' => 'الحالة',
   'status' => 'مشروع في انتظار موافقة اللجنة',
   'contact_label' => 'اتصال النادي',
   'related_pages_title' => 'الصفحات ذات الصلة',

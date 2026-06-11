@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -127,7 +128,7 @@ return array (
   'adif_drop_click' => 'of klik om meerdere bestanden te selecteren (.adi, .adif)',
   'adif_auto_status' => 'Bestanden worden automatisch verwerkt wanneer ze worden toegevoegd.',
   'adif_duplicates_help' => 'Exacte duplicaten worden tijdens het importeren automatisch genegeerd.',
-  'records_count' => 'record(s)',
+  'records_count' => 'vermelding(en)',
   'cards_count' => 'kaart(en)',
   'qso_imported_stat' => 'Geimporteerde QSO',
   'qsl_created_stat' => 'Aangemaakte QSL',

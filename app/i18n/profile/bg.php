@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -22,7 +23,7 @@ return array (
   'first_name' => 'Първо име',
   'last_name' => 'Фамилия',
   'phone' => 'Телефон',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Местоположение',
   'licence' => 'Лиценз',
   'licence_help' => 'Радиолюбителски лиценз клас. Въведете нивото или категорията на лиценза, отговарящи на вашето разрешение.',
   'bands' => 'Любими групи',

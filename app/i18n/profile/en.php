@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -36,7 +37,7 @@ return array (
   'country' => 'Country',
   'address' => 'Address',
   'postal_code' => 'Postal code',
-  'qth' => 'QTH / Localité',
+  'qth' => 'QTH / Locality',
   'locator' => 'Locator',
   'grid' => 'Grid',
   'licence' => 'Licence',

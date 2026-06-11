@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
@@ -13,7 +14,7 @@ return array (
   'category_radio_math' => 'रेडियो गणित',
   'open_category' => 'टूल देखें',
   'choose_tool' => 'उपकरण श्रेणियाँ',
-  'grid_title' => 'ग्रिड और लेस ज़ोन की गणना CG/ITU एक पता पोस्टेल को हटा दें',
+  'grid_title' => 'डाक पते से ग्रिड लोकेटर और CQ/ITU ज़ोन की गणना करें',
   'address' => 'डाक पता',
   'calc_grid' => 'ग्रिड गणना करें',
   'found_address' => 'मिला पता',

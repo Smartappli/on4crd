@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 return array (
   'title' => 'Načrt pasu ON2',
-  'header_band' => 'Band',
+  'header_band' => 'Pas',
   'header_freq' => 'Frekvence (MHz)',
   'header_modes' => 'Načini',
   'header_power' => 'Največja moč*',
