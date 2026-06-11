@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Võrgustiku arvutamine postiaadressi järgi',
   'spotlight_tool_day_cta' => 'Rohkem tööriistu',
   'spotlight_member_wiki_articles' => 'Wiki/artiklid',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Teadmised',
   'spotlight_member_articles' => 'Üksused',
   'spotlight_member_latest_wiki' => 'Viimane wiki leht',
   'spotlight_member_latest_article' => 'Viimane artikkel',

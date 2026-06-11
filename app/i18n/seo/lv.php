@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Radio Club Durnal ON4CRD biedru un radioamatieru kontaktu katalogs.',
   'tools_title' => 'Radioamatieru instrumenti',
   'tools_description' => 'Radio instrumenti: Maidenhead lokators, konvertēšana, antenas aprēķini, izplatīšanās un praktiska palīdzība QSO.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Zināšanas',
   'wiki_description' => 'Radio Club Durnal sadarbības wiki ar radioamatieru zināšanām, procedūrām un resursiem.',
   'albums_title' => 'Fotoalbumi ON4CRD',
   'albums_description' => 'Fotogalerija no Radio Club Durnal aktivitātēm, izbraukumiem, konkursiem un dzīves mirkļiem.',

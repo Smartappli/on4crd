@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Režģa aprēķins no pasta adreses',
   'spotlight_tool_day_cta' => 'Vairāk rīku',
   'spotlight_member_wiki_articles' => 'Wiki/raksti',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Zināšanas',
   'spotlight_member_articles' => 'Preces',
   'spotlight_member_latest_wiki' => 'Jaunākā wiki lapa',
   'spotlight_member_latest_article' => 'Jaunākais raksts',

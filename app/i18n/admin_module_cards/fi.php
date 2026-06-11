@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Radiosyötteiden, TTL:n, URL-osoitteiden ja aktivoinnin tarkka hallinta.',
   'admin_newsletters_title' => 'Uutiskirje',
   'admin_newsletters_desc' => 'Tilaajat, CSV-tuonti- ja sähköpostikampanjat.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Tietämys',
   'admin_wiki_desc' => 'Yhteistyösivut ja versiot.',
   'admin_albums_title' => 'Albumit',
   'admin_albums_desc' => 'Julkinen galleria ja sosiaalinen synkronointi.',

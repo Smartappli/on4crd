@@ -47,7 +47,7 @@ return array (
   'search' => 'Suchen',
   'all_statuses' => 'Alle Status',
   'all_categories' => 'Alle Kategorien',
-  'filter' => 'Filter',
+  'filter' => 'Filtern',
   'reset_filter' => 'Zurücksetzen',
   'revisions' => 'Versionsverlauf',
   'scheduled_at' => 'Veroeffentlichungsdatum',

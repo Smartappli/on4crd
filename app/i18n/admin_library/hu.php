@@ -42,7 +42,7 @@ return array (
   'search_ph' => 'Keresés',
   'tag_search_ph' => 'Címkék keresése',
   'filter' => 'Szűrés',
-  'reset' => 'Reset',
+  'reset' => 'Visszaállítás',
   'bulk_delete' => 'Kijelölés törlése',
   'select' => 'Válassza ki',
   'tag_cleanup_title' => 'Címke tisztítás',

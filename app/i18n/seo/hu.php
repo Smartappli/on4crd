@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'A Radio Club Durnal ON4CRD tagjainak és rádióamatőr kapcsolatainak jegyzéke.',
   'tools_title' => 'Rádióamatőr eszközök',
   'tools_description' => 'Rádióeszközök: Maidenhead lokátor, átalakítások, antennaszámítások, terjedés és gyakorlati segítség a QSO-hez.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Tudás',
   'wiki_description' => 'Radio Club Durnal együttműködési wiki rádióamatőr ismeretekkel, eljárásokkal és forrásokkal.',
   'albums_title' => 'Fotóalbumok ON4CRD',
   'albums_description' => 'Képgaléria a Radio Club Durnal tevékenységeiről, kirándulásairól, versenyeiről és az élet pillanatairól.',

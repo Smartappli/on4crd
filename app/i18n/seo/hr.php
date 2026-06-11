@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Imenik članova i kontakata radioamatera Radio kluba Durnal ON4CRD.',
   'tools_title' => 'Radioamaterski alati',
   'tools_description' => 'Radio alati: Maidenhead lokator, pretvorbe, izračuni antena, propagacija i praktična pomoć za QSO.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Znanje',
   'wiki_description' => 'Radioklub Durnal kolaborativni wiki s radioamaterskim znanjem, postupcima i resursima.',
   'albums_title' => 'Foto albumi ON4CRD',
   'albums_description' => 'Fotogalerija aktivnosti Radio kluba Durnal, izleta, natjecanja i trenutaka iz života.',

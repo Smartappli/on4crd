@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Natančen nadzor radijskih virov, TTL, URL-jev in aktivacije.',
   'admin_newsletters_title' => 'Glasilo',
   'admin_newsletters_desc' => 'Naročniki, uvoz CSV in e-poštne akcije.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Znanje',
   'admin_wiki_desc' => 'Sodelovalne strani in revizije.',
   'admin_albums_title' => 'Albumi',
   'admin_albums_desc' => 'Javna galerija in socialna sinhronizacija.',

@@ -36,7 +36,7 @@ return array (
   'search_label' => 'Traži',
   'search_placeholder' => 'Naslov, opis, lokacija',
   'all_categories' => 'Sve kategorije',
-  'filter' => 'Filter',
+  'filter' => 'Filtriraj',
   'reset' => 'Resetiraj',
   'login_to_post' => 'Prijavite se za uplatu',
   'cancel' => 'Odustani',

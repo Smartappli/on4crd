@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Direttorju tal-membri u kuntatti tar-radju dilettanti tar-Radju Club Durnal ON4CRD.',
   'tools_title' => 'Għodod tar-radju dilettanti',
   'tools_description' => 'Għodod tar-radju: Lokalizzatur Maidenhead, konverżjonijiet, kalkoli tal-antenna, propagazzjoni u għajnuna prattika għal QSO.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Għarfien',
   'wiki_description' => 'Radio Club Durnal wiki kollaborattiv b\'għarfien, proċeduri u riżorsi tar-radju tad-dilettanti.',
   'albums_title' => 'Albums tar-ritratti ON4CRD',
   'albums_description' => 'Gallerija tar-ritratti tal-attivitajiet, ħarġiet, konkorsi u mumenti tal-ħajja tar-Radju Club Durnal.',

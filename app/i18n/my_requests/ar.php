@@ -37,7 +37,7 @@ return array (
   'article_status_scheduled' => 'المقرر',
   'article_status_published' => 'تم النشر',
   'article_status_rejected' => 'مرفوض',
-  'article_default_title' => 'Article',
+  'article_default_title' => 'مقالات',
   'category_default' => 'أخرى',
   'moderation_note' => 'ملاحظة الاعتدال',
   'article_open' => 'مفتوح',

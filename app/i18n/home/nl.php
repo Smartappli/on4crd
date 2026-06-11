@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Grid berekenen vanaf een postadres',
   'spotlight_tool_day_cta' => 'Meer tools',
   'spotlight_member_wiki_articles' => 'Wiki / Artikelen',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Kennis',
   'spotlight_member_articles' => 'Artikelen',
   'spotlight_member_latest_wiki' => 'Laatste wikipagina',
   'spotlight_member_latest_article' => 'Laatste artikel',

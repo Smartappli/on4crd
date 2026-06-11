@@ -37,7 +37,7 @@ return array (
   'article_status_scheduled' => 'Sceidealta',
   'article_status_published' => 'Foilsithe',
   'article_status_rejected' => 'Diúltaithe',
-  'article_default_title' => 'Article',
+  'article_default_title' => 'Míreanna',
   'category_default' => 'Eile',
   'moderation_note' => 'Nóta modhnóireachta',
   'article_open' => 'Oscail',

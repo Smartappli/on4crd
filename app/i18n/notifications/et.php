@@ -12,7 +12,7 @@ return array (
   'read' => 'Lugege',
   'filter_all' => 'Kõik teated',
   'filter_unread' => 'Ainult lugemata',
-  'filter' => 'Filter',
+  'filter' => 'Filtreeri',
   'mark_all_read' => 'Märgi kõik loetuks',
   'mark_read' => 'Märgi loetuks',
   'open' => 'Avatud',

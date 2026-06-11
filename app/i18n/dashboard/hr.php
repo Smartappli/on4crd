@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Zato što gledate zajedničke albume.',
   'recommendation_reason_library' => 'Zato što konzultirate knjižnične dokumente.',
   'signal_article' => 'Predmeti',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Znanje',
   'signal_classified' => 'Obavijesti',
   'signal_album' => 'Albumi',
   'signal_library' => 'Knjižnica',

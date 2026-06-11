@@ -13,7 +13,7 @@ return array (
   'next' => 'Dalje',
   'create_album' => 'Napravite album',
   'add_photo' => 'Dodajte fotografiju',
-  'upload' => 'Upload',
+  'upload' => 'Učitajte dokument',
   'rebuild_thumbs' => 'Ponovno generiraj sličice',
   'title' => 'Naslov',
   'description' => 'Opis',

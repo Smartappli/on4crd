@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Κατάλογος μελών και ραδιοερασιτεχνικών επαφών του Radio Club Durnal ON4CRD.',
   'tools_title' => 'Ραδιοερασιτεχνικά εργαλεία',
   'tools_description' => 'Εργαλεία ραδιοφώνου: Maidenhead locator, μετατροπές, υπολογισμοί κεραίας, διάδοση και πρακτική βοήθεια για το QSO.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Γνώσεις',
   'wiki_description' => 'Radio Club Durnal συνεργατικό wiki με ραδιοερασιτεχνικές γνώσεις, διαδικασίες και πόρους.',
   'albums_title' => 'Άλμπουμ φωτογραφιών ON4CRD',
   'albums_description' => 'Συλλογή φωτογραφιών με δραστηριότητες, εξόδους, διαγωνισμούς και στιγμές ζωής του Radio Club Durnal.',

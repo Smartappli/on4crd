@@ -36,7 +36,7 @@ return array (
   'search_label' => 'Otsi',
   'search_placeholder' => 'Pealkiri, kirjeldus, asukoht',
   'all_categories' => 'Kõik kategooriad',
-  'filter' => 'Filter',
+  'filter' => 'Filtreeri',
   'reset' => 'Lähtesta',
   'login_to_post' => 'Sissemaksmiseks logige sisse',
   'cancel' => 'Tühista',

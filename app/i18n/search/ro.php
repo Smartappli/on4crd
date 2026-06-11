@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Toate',
   'source_news' => 'Ştiri',
   'source_articles' => 'Articole',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Cunoștințe',
   'source_library' => 'Bibliotecă',
   'source_classifieds' => 'Anunturi',
   'source_albums' => 'Albume',

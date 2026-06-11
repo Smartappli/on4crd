@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Naslov i sadržaj su obavezni.',
   'error_field_too_long' => 'Jedno od polja premašuje dopuštenu duljinu.',
   'propose_success' => 'Wiki stranica poslana. Bit će objavljen nakon provjere.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Znanje',
   'propose_help' => 'Napišite novu stranicu s jednostavnim HTML-om. Bit će pregledan prije objave.',
   'propose_submit' => 'Pošalji stranicu',
   'cancel' => 'Odustani',

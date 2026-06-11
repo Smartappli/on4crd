@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Tudás',
   'unavailable' => 'A wiki az oldalak inicializálása után lesz elérhető.',
   'new_pages' => 'Új oldalak',
   'updated_pages' => 'Módosított oldalak',
@@ -10,7 +10,7 @@ return array (
   'new_page' => 'Új oldal',
   'search_placeholder' => 'Oldal keresése (cím vagy tartalom)',
   'search' => 'Keresés',
-  'reset' => 'Reset',
+  'reset' => 'Visszaállítás',
   'wiki_pages' => 'Wiki oldalak',
   'no_page' => 'Nem található oldal',
   'for_search' => 'ehhez a kutatáshoz',

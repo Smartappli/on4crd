@@ -142,7 +142,7 @@ return array (
   'table_action' => 'Azzjoni',
   'table_title' => 'Titolu',
   'table_qso' => 'QSO',
-  'table_preview' => 'Preview',
+  'table_preview' => 'Ħarsa ġenerali integrata',
   'table_export' => 'Esportazzjoni',
   'view' => 'Ara',
   'front_svg' => 'Quddiem SVG',

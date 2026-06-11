@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Katalogs',
   'nav_dashboard' => 'Informācijas panelis',
   'nav_wiki' => 'Zināšanas',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Fotoattēli',
   'nav_articles' => 'Preces',
   'nav_library' => 'Bibliotēka',
   'nav_webotheque' => 'Tīmekļa bibliotēka',

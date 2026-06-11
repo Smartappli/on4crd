@@ -15,7 +15,7 @@ return array (
   'search_placeholder' => 'Näitaja või nimi',
   'licence_filter' => 'Filtreerige litsentsi järgi',
   'all_licences' => 'Kõik litsentsid',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Filtreeri',
   'reset_filters' => 'Selge',
   'results' => 'Tulemused',
   'licence' => 'Litsents',

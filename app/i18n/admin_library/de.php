@@ -41,7 +41,7 @@ return array (
   'all_categories' => 'Alle Kategorien',
   'search_ph' => 'Suchen',
   'tag_search_ph' => 'Suchtags',
-  'filter' => 'Filter',
+  'filter' => 'Filtern',
   'reset' => 'Zurücksetzen',
   'bulk_delete' => 'Auswahl löschen',
   'select' => 'Wählen',

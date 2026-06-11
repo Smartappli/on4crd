@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Beräkning av rutnätet från en postadress',
   'spotlight_tool_day_cta' => 'Fler verktyg',
   'spotlight_member_wiki_articles' => 'Wiki/artiklar',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Kunskap',
   'spotlight_member_articles' => 'Föremål',
   'spotlight_member_latest_wiki' => 'Senaste wikisidan',
   'spotlight_member_latest_article' => 'Senaste artikeln',

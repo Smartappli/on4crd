@@ -36,7 +36,7 @@ return array (
   'search_label' => 'Hľadať',
   'search_placeholder' => 'Názov, popis, umiestnenie',
   'all_categories' => 'Všetky kategórie',
-  'filter' => 'Filter',
+  'filter' => 'Filtrovať',
   'reset' => 'Resetovať',
   'login_to_post' => 'Pre vklad sa prihláste',
   'cancel' => 'Zrušiť',

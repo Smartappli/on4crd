@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Titel og indhold er påkrævet.',
   'error_field_too_long' => 'Et af felterne overskrider den tilladte længde.',
   'propose_success' => 'Wiki-side indsendt. Det vil blive offentliggjort efter validering.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Viden',
   'propose_help' => 'Skriv en ny side med simpel HTML. Den vil blive gennemgået inden offentliggørelse.',
   'propose_submit' => 'Send side',
   'cancel' => 'Annuller',

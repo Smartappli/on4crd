@@ -15,7 +15,7 @@ return array (
   'search_placeholder' => 'Indikator eller navn',
   'licence_filter' => 'Filtrer efter licens',
   'all_licences' => 'Alle licenser',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Anvend filter',
   'reset_filters' => 'Ryd',
   'results' => 'Resultater',
   'licence' => 'Licens',

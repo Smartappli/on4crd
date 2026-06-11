@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Pentru că vizualizați albume partajate.',
   'recommendation_reason_library' => 'Pentru că consultați documente de bibliotecă.',
   'signal_article' => 'Articole',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Cunoștințe',
   'signal_classified' => 'Anunturi',
   'signal_album' => 'Albume',
   'signal_library' => 'Bibliotecă',

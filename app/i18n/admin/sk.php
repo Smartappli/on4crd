@@ -7,7 +7,7 @@ return array (
   'lead' => 'Všetky správcovské moduly a nástroje sú zoskupené na tomto jedinom dashboarde.',
   'search_label' => 'Rýchle vyhľadávanie',
   'search_placeholder' => 'Modul, nástroj, popis...',
-  'search_cta' => 'Filter',
+  'search_cta' => 'Filtrovať',
   'search_reset' => 'Resetovať',
   'empty' => 'Vášmu vyhľadávaniu nezodpovedá žiadny modul.',
   'open' => 'Otvorte',

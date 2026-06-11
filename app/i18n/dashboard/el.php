@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Επειδή βλέπετε κοινόχρηστα άλμπουμ.',
   'recommendation_reason_library' => 'Επειδή συμβουλεύεστε τα έγγραφα της βιβλιοθήκης.',
   'signal_article' => 'Είδη',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Γνώσεις',
   'signal_classified' => 'Ανακοινώσεις',
   'signal_album' => 'Άλμπουμ',
   'signal_library' => 'Βιβλιοθήκη',

@@ -37,7 +37,7 @@ return array (
   'article_status_scheduled' => 'নির্ধারিত',
   'article_status_published' => 'প্রকাশিত হয়েছে',
   'article_status_rejected' => 'প্রত্যাখ্যাত',
-  'article_default_title' => 'Article',
+  'article_default_title' => 'প্রবন্ধ',
   'category_default' => 'অন্যান্য',
   'moderation_note' => 'সংযম নোট',
   'article_open' => 'খোলা',

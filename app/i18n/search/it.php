@@ -21,7 +21,7 @@ return [
     'source_all' => 'Tutto',
     'source_news' => 'Notizie',
     'source_articles' => 'Articoli',
-    'source_wiki' => 'Wiki',
+    'source_wiki' => 'Conoscenze',
     'source_library' => 'Biblioteca',
     'source_classifieds' => 'Annunci',
     'source_albums' => 'Album',

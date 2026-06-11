@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Kollha',
   'source_news' => 'Aħbarijiet',
   'source_articles' => 'Oġġetti',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Għarfien',
   'source_library' => 'Librerija',
   'source_classifieds' => 'Avviżi',
   'source_albums' => 'Albums',

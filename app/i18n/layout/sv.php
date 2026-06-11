@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Katalog',
   'nav_dashboard' => 'Instrumentbräda',
   'nav_wiki' => 'Kunskap',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Foton',
   'nav_articles' => 'Föremål',
   'nav_library' => 'Bibliotek',
   'nav_webotheque' => 'Webbibliotek',

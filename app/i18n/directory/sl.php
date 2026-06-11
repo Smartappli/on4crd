@@ -15,7 +15,7 @@ return array (
   'search_placeholder' => 'Indikator ali ime',
   'licence_filter' => 'Filtriraj po licenci',
   'all_licences' => 'Vse licence',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Filtriraj',
   'reset_filters' => 'jasno',
   'results' => 'Rezultati',
   'licence' => 'Licenca',

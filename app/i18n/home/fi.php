@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Verkon laskenta postiosoitteesta',
   'spotlight_tool_day_cta' => 'Lisää työkaluja',
   'spotlight_member_wiki_articles' => 'Wiki/artikkelit',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Tietämys',
   'spotlight_member_articles' => 'Tuotteet',
   'spotlight_member_latest_wiki' => 'Uusin wiki-sivu',
   'spotlight_member_latest_article' => 'Uusin artikkeli',

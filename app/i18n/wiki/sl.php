@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Znanje',
   'unavailable' => 'Wiki bo na voljo po inicializaciji strani.',
   'new_pages' => 'Nove strani',
   'updated_pages' => 'Spremenjene strani',

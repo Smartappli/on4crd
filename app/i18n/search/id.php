@@ -21,7 +21,7 @@ return [
     'source_all' => 'Semua',
     'source_news' => 'Berita',
     'source_articles' => 'Artikel',
-    'source_wiki' => 'Wiki',
+    'source_wiki' => 'Pengetahuan',
     'source_library' => 'Perpustakaan',
     'source_classifieds' => 'Iklan',
     'source_albums' => 'Album',

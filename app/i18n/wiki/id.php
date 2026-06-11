@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Pengetahuan',
   'unavailable' => 'Wiki akan tersedia setelah inisialisasi halaman.',
   'new_pages' => 'Halaman baru',
   'updated_pages' => 'Halaman diperbarui',

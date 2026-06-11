@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Protože si prohlížíte sdílená alba.',
   'recommendation_reason_library' => 'Protože nahlížíte do knihovních dokumentů.',
   'signal_article' => 'Položky',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Znalosti',
   'signal_classified' => 'Oznámení',
   'signal_album' => 'alba',
   'signal_library' => 'Knihovna',

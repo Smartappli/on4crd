@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Beregning af nettet fra en postadresse',
   'spotlight_tool_day_cta' => 'Flere værktøjer',
   'spotlight_member_wiki_articles' => 'Wiki/artikler',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Viden',
   'spotlight_member_articles' => 'genstande',
   'spotlight_member_latest_wiki' => 'Seneste wiki-side',
   'spotlight_member_latest_article' => 'Seneste artikel',

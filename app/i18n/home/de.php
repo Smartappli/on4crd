@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Grid-Berechnung aus einer Postadresse',
   'spotlight_tool_day_cta' => 'Mehr Werkzeuge',
   'spotlight_member_wiki_articles' => 'Wiki / Artikel',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Wissen',
   'spotlight_member_articles' => 'Artikel',
   'spotlight_member_latest_wiki' => 'Neueste Wiki-Seite',
   'spotlight_member_latest_article' => 'Neuester Artikel',

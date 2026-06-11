@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Mindent',
   'source_news' => 'Hírek',
   'source_articles' => 'Tételek',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Tudás',
   'source_library' => 'Könyvtár',
   'source_classifieds' => 'Közlemények',
   'source_albums' => 'Albumok',

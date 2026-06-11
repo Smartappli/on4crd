@@ -36,7 +36,7 @@ return array (
   'search_label' => 'Søg',
   'search_placeholder' => 'Titel, beskrivelse, placering',
   'all_categories' => 'Alle kategorier',
-  'filter' => 'Filter',
+  'filter' => 'Anvend filter',
   'reset' => 'Nulstil',
   'login_to_post' => 'Log ind for at indbetale',
   'cancel' => 'Annuller',

@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Control fin al fluxurilor radio, TTL, URL-uri și activare.',
   'admin_newsletters_title' => 'Buletin informativ',
   'admin_newsletters_desc' => 'Abonați, import CSV și campanii de e-mail.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Cunoștințe',
   'admin_wiki_desc' => 'Pagini și revizuiri colaborative.',
   'admin_albums_title' => 'Albume',
   'admin_albums_desc' => 'Galerie publică și sincronizare socială.',

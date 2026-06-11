@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Výpočet mriežky z poštovej adresy',
   'spotlight_tool_day_cta' => 'Viac nástrojov',
   'spotlight_member_wiki_articles' => 'Wiki/Články',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Znalosti',
   'spotlight_member_articles' => 'Položky',
   'spotlight_member_latest_wiki' => 'Najnovšia stránka wiki',
   'spotlight_member_latest_article' => 'Najnovší článok',

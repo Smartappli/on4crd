@@ -8,7 +8,7 @@ return array (
   'create' => '2) Enostavno ustvarite zemljevide QSL',
   'manage' => '3) QSO uvozi',
   'generated' => 'QSL cards generated',
-  'filter' => 'Filter',
+  'filter' => 'Filtriraj',
   'reset' => 'Ponastavi',
   'page' => 'Stran',
   'previous' => 'Prejšnja',

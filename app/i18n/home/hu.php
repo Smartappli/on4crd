@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'A rács kiszámítása postai címből',
   'spotlight_tool_day_cta' => 'Több eszköz',
   'spotlight_member_wiki_articles' => 'Wiki/Cikkek',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Tudás',
   'spotlight_member_articles' => 'Tételek',
   'spotlight_member_latest_wiki' => 'Legújabb wiki oldal',
   'spotlight_member_latest_article' => 'Legújabb cikk',

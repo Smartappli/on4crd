@@ -10,7 +10,7 @@ return array (
   'indexed_photos' => 'Indexelt fotók',
   'search_placeholder' => 'Album keresése cím vagy leírás alapján',
   'search' => 'Keresés',
-  'reset' => 'Reset',
+  'reset' => 'Visszaállítás',
   'gallery' => 'Galéria',
   'none' => 'Nincs elérhető nyilvános album',
   'for_search' => 'ehhez a kutatáshoz',

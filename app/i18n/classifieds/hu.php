@@ -37,7 +37,7 @@ return array (
   'search_placeholder' => 'Cím, leírás, hely',
   'all_categories' => 'Minden kategória',
   'filter' => 'Szűrés',
-  'reset' => 'Reset',
+  'reset' => 'Visszaállítás',
   'login_to_post' => 'A befizetéshez jelentkezzen be',
   'cancel' => 'Mégsem',
   'archive' => 'Archívum',

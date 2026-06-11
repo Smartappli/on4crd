@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Απαιτείται τίτλος και περιεχόμενο.',
   'error_field_too_long' => 'Ένα από τα πεδία υπερβαίνει το επιτρεπόμενο μήκος.',
   'propose_success' => 'Η σελίδα Wiki υποβλήθηκε. Θα δημοσιευθεί μετά την επικύρωση.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Γνώσεις',
   'propose_help' => 'Γράψτε μια νέα σελίδα με απλό HTML. Θα αναθεωρηθεί πριν από τη δημοσίευση.',
   'propose_submit' => 'Υποβολή σελίδας',
   'cancel' => 'Ακύρωση',

@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Hakemisto Radio Club Durnal ON4CRD:n jäsenistä ja radioamatöörikontakteista.',
   'tools_title' => 'Radioamatöörityökalut',
   'tools_description' => 'Radiotyökalut: Maidenhead-paikannin, muunnokset, antennilaskelmat, eteneminen ja käytännön apu QSO:lle.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Tietämys',
   'wiki_description' => 'Radio Club Durnalin yhteistyöwiki radioamatööritietämyksen, -menetelmien ja -resurssien kanssa.',
   'albums_title' => 'Valokuva-albumit ON4CRD',
   'albums_description' => 'Kuvagalleria Radio Club Durnalin toiminnasta, retkistä, kilpailuista ja elämän hetkistä.',

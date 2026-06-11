@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Minħabba li qed tara albums kondiviżi.',
   'recommendation_reason_library' => 'Għax qed tikkonsulta dokumenti tal-librerija.',
   'signal_article' => 'Oġġetti',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Għarfien',
   'signal_classified' => 'Avviżi',
   'signal_album' => 'Albums',
   'signal_library' => 'Librerija',

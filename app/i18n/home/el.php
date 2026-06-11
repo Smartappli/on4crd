@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Υπολογισμός του πλέγματος από ταχυδρομική διεύθυνση',
   'spotlight_tool_day_cta' => 'Περισσότερα εργαλεία',
   'spotlight_member_wiki_articles' => 'Wiki/Άρθρα',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Γνώσεις',
   'spotlight_member_articles' => 'Είδη',
   'spotlight_member_latest_wiki' => 'Τελευταία σελίδα wiki',
   'spotlight_member_latest_article' => 'Τελευταίο άρθρο',

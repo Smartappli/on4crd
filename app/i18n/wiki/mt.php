@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Għarfien',
   'unavailable' => 'Il-wiki tkun disponibbli wara l-inizjalizzazzjoni tal-paġni.',
   'new_pages' => 'Paġni ġodda',
   'updated_pages' => 'Paġni modifikati',

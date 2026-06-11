@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Ponieważ przeglądasz udostępnione albumy.',
   'recommendation_reason_library' => 'Ponieważ przeglądasz dokumenty biblioteczne.',
   'signal_article' => 'Przedmioty',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Wiedza',
   'signal_classified' => 'Ogłoszenia',
   'signal_album' => 'Albumy',
   'signal_library' => 'Biblioteka',

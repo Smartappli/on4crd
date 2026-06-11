@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Karena Anda melihat album bersama.',
   'recommendation_reason_library' => 'Karena Anda membuka dokumen perpustakaan.',
   'signal_article' => 'Artikel',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Pengetahuan',
   'signal_classified' => 'Iklan',
   'signal_album' => 'Album',
   'signal_library' => 'Pustaka',

@@ -15,7 +15,7 @@ return array (
   'search_placeholder' => 'Indikator ili ime',
   'licence_filter' => 'Filtriraj po licenci',
   'all_licences' => 'Sve licence',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Filtriraj',
   'reset_filters' => 'čisto',
   'results' => 'Rezultati',
   'licence' => 'Licenca',

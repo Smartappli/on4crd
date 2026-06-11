@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Γνώσεις',
   'unavailable' => 'Το wiki θα είναι διαθέσιμο μετά την προετοιμασία των σελίδων.',
   'new_pages' => 'Νέες σελίδες',
   'updated_pages' => 'Τροποποιημένες σελίδες',

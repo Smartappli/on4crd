@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Viskas',
   'source_news' => 'Naujienos',
   'source_articles' => 'Daiktai',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Žinios',
   'source_library' => 'biblioteka',
   'source_classifieds' => 'Skelbimai',
   'source_albums' => 'Albumai',

@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Alting',
   'source_news' => 'Nyheder',
   'source_articles' => 'genstande',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Viden',
   'source_library' => 'Bibliotek',
   'source_classifieds' => 'Meddelelser',
   'source_albums' => 'Albums',

@@ -21,7 +21,7 @@ return array (
   'source_all' => 'sve',
   'source_news' => 'Vijesti',
   'source_articles' => 'Predmeti',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Znanje',
   'source_library' => 'Knjižnica',
   'source_classifieds' => 'Obavijesti',
   'source_albums' => 'Albumi',

@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Calculul grilei de la o adresă poștală',
   'spotlight_tool_day_cta' => 'Mai multe instrumente',
   'spotlight_member_wiki_articles' => 'Wiki/Articole',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Cunoștințe',
   'spotlight_member_articles' => 'Articole',
   'spotlight_member_latest_wiki' => 'Ultima pagină wiki',
   'spotlight_member_latest_article' => 'Ultimul articol',

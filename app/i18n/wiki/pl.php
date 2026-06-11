@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Wiedza',
   'unavailable' => 'Wiki będzie dostępna po zainicjowaniu stron.',
   'new_pages' => 'Nowe strony',
   'updated_pages' => 'Zmodyfikowane strony',

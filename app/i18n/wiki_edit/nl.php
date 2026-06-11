@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Titel en inhoud zijn vereist.',
   'error_field_too_long' => 'Eén van de velden overschrijdt de toegestane lengte.',
   'propose_success' => 'Wiki-pagina ingediend. Na validatie wordt het gepubliceerd.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Kennis',
   'propose_help' => 'Schrijf een nieuwe pagina met eenvoudige HTML. Het zal vóór publicatie worden beoordeeld.',
   'propose_submit' => 'Pagina indienen',
   'cancel' => 'Annuleer',

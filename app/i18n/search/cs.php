@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Všechno',
   'source_news' => 'Novinky',
   'source_articles' => 'Položky',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Znalosti',
   'source_library' => 'Knihovna',
   'source_classifieds' => 'Oznámení',
   'source_albums' => 'alba',

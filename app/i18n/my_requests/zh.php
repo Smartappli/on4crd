@@ -37,7 +37,7 @@ return array (
   'article_status_scheduled' => '预定',
   'article_status_published' => '已发表',
   'article_status_rejected' => '被拒绝',
-  'article_default_title' => 'Article',
+  'article_default_title' => '文章',
   'category_default' => '其他',
   'moderation_note' => '审核说明',
   'article_open' => '打开',

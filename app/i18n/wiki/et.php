@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Teadmised',
   'unavailable' => 'Viki on saadaval pärast lehtede lähtestamist.',
   'new_pages' => 'Uued lehed',
   'updated_pages' => 'Muudetud lehed',

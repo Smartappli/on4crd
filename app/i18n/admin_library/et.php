@@ -41,7 +41,7 @@ return array (
   'all_categories' => 'Kõik kategooriad',
   'search_ph' => 'Otsi',
   'tag_search_ph' => 'Otsi silte',
-  'filter' => 'Filter',
+  'filter' => 'Filtreeri',
   'reset' => 'Lähtesta',
   'bulk_delete' => 'Kustuta valik',
   'select' => 'Valige',

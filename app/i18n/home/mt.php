@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Kalkolu tal-grilja minn indirizz postali',
   'spotlight_tool_day_cta' => 'Aktar għodda',
   'spotlight_member_wiki_articles' => 'Wiki/Artikoli',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Għarfien',
   'spotlight_member_articles' => 'Oġġetti',
   'spotlight_member_latest_wiki' => 'L-aħħar paġna tal-wiki',
   'spotlight_member_latest_article' => 'L-aħħar artiklu',

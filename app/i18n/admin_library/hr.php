@@ -41,7 +41,7 @@ return array (
   'all_categories' => 'Sve kategorije',
   'search_ph' => 'Traži',
   'tag_search_ph' => 'Oznake za pretraživanje',
-  'filter' => 'Filter',
+  'filter' => 'Filtriraj',
   'reset' => 'Resetiraj',
   'bulk_delete' => 'Izbriši odabir',
   'select' => 'Odaberite',

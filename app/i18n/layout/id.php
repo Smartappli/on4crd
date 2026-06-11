@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Direktori',
   'nav_dashboard' => 'Dasbor',
   'nav_wiki' => 'Pengetahuan',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Foto',
   'nav_articles' => 'Artikel',
   'nav_library' => 'Perpustakaan',
   'nav_webotheque' => 'Perpustakaan web',

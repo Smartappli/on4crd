@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Fijn beheer van radiofeeds, TTL, URL’s en activatie.',
   'admin_newsletters_title' => 'Nieuwsbrief',
   'admin_newsletters_desc' => 'Abonnees, CSV-import en e-mailcampagnes.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Kennis',
   'admin_wiki_desc' => 'Samenwerkingspagina’s en revisies.',
   'admin_albums_title' => 'Albums',
   'admin_albums_desc' => 'Publieke galerij en sociale sync.',

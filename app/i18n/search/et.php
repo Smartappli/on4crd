@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Kõik',
   'source_news' => 'Uudised',
   'source_articles' => 'Üksused',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Teadmised',
   'source_library' => 'Raamatukogu',
   'source_classifieds' => 'Teated',
   'source_albums' => 'Albumid',

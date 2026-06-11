@@ -8,7 +8,7 @@ return array (
   'search_label' => 'Gyors keresés',
   'search_placeholder' => 'Modul, eszköz, leírás...',
   'search_cta' => 'Szűrés',
-  'search_reset' => 'Reset',
+  'search_reset' => 'Visszaállítás',
   'empty' => 'Egyetlen modul sem felel meg a keresésnek.',
   'open' => 'Nyissa meg',
 );

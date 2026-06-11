@@ -47,7 +47,7 @@ return array (
   'search' => 'Hľadať',
   'all_statuses' => 'Všetky stavy',
   'all_categories' => 'Všetky kategórie',
-  'filter' => 'Filter',
+  'filter' => 'Filtrovať',
   'reset_filter' => 'Resetovať',
   'revisions' => 'História verzií',
   'scheduled_at' => 'Dátum zverejnenia',

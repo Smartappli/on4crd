@@ -48,7 +48,7 @@ return array (
   'all_statuses' => 'Minden állapot',
   'all_categories' => 'Minden kategória',
   'filter' => 'Szűrés',
-  'reset_filter' => 'Reset',
+  'reset_filter' => 'Visszaállítás',
   'revisions' => 'Verzióelőzmények',
   'scheduled_at' => 'Megjelenés dátuma',
   'ok_revision_restored' => 'Visszaállított verzió.',

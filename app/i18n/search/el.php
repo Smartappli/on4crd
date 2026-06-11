@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Τα πάντα',
   'source_news' => 'Νέα',
   'source_articles' => 'Είδη',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Γνώσεις',
   'source_library' => 'Βιβλιοθήκη',
   'source_classifieds' => 'Ανακοινώσεις',
   'source_albums' => 'Άλμπουμ',

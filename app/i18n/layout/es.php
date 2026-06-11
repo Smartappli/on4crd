@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Directorio',
   'nav_dashboard' => 'Panel',
   'nav_wiki' => 'Conocimientos',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Fotos',
   'nav_articles' => 'Artículos',
   'nav_library' => 'Biblioteca',
   'nav_webotheque' => 'Biblioteca web',

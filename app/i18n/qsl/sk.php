@@ -8,7 +8,7 @@ return array (
   'create' => '2) Jednoduché vytváranie máp QSL',
   'manage' => '3) Dovoz QSO',
   'generated' => 'Vygenerované karty QSL',
-  'filter' => 'Filter',
+  'filter' => 'Filtrovať',
   'reset' => 'Resetovať',
   'page' => 'Stránka',
   'previous' => 'Predchádzajúce',

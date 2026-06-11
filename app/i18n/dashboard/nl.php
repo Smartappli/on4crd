@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Omdat je gedeelde albums bekijkt.',
   'recommendation_reason_library' => 'Omdat je bibliotheekdocumenten bekijkt.',
   'signal_article' => 'Artikelen',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Kennis',
   'signal_classified' => 'Advertenties',
   'signal_album' => 'Albums',
   'signal_library' => 'Bibliotheek',

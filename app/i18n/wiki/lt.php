@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Žinios',
   'unavailable' => 'Viki bus pasiekiama inicijavus puslapius.',
   'new_pages' => 'Nauji puslapiai',
   'updated_pages' => 'Modifikuoti puslapiai',

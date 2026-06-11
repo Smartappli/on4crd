@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Tytuł i treść są wymagane.',
   'error_field_too_long' => 'Jedno z pól przekracza dozwoloną długość.',
   'propose_success' => 'Strona Wiki została przesłana. Zostanie on opublikowany po weryfikacji.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Wiedza',
   'propose_help' => 'Napisz nową stronę za pomocą prostego kodu HTML. Zostanie on sprawdzony przed publikacją.',
   'propose_submit' => 'Prześlij stronę',
   'cancel' => 'Anuluj',

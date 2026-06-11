@@ -8,7 +8,7 @@ return array (
   'create' => '2) Looge hõlpsalt QSL kaarte',
   'manage' => '3) QSO import',
   'generated' => 'QSL kaardid on loodud',
-  'filter' => 'Filter',
+  'filter' => 'Filtreeri',
   'reset' => 'Lähtesta',
   'page' => 'Lehekülg',
   'previous' => 'Eelmine',

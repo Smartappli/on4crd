@@ -48,7 +48,7 @@ return array (
   'all_statuses' => 'Tutti gli stati',
   'all_categories' => 'Tutte le categorie',
   'filter' => 'Filtro',
-  'reset_filter' => 'Reset',
+  'reset_filter' => 'Reimposta',
   'revisions' => 'Storico versioni',
   'scheduled_at' => 'Data di pubblicazione',
   'ok_revision_restored' => 'Versione ripristinata.',

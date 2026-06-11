@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Eftersom du tittar på delade album.',
   'recommendation_reason_library' => 'Eftersom du konsulterar biblioteksdokument.',
   'signal_article' => 'Föremål',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Kunskap',
   'signal_classified' => 'Meddelanden',
   'signal_album' => 'Album',
   'signal_library' => 'Bibliotek',

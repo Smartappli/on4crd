@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Obliczanie siatki z adresu pocztowego',
   'spotlight_tool_day_cta' => 'Więcej narzędzi',
   'spotlight_member_wiki_articles' => 'Wiki/artykuły',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Wiedza',
   'spotlight_member_articles' => 'Przedmioty',
   'spotlight_member_latest_wiki' => 'Najnowsza strona wiki',
   'spotlight_member_latest_article' => 'Najnowszy artykuł',

@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Tikslus radijo kanalų, TTL, URL ir aktyvinimo valdymas.',
   'admin_newsletters_title' => 'Naujienlaiškis',
   'admin_newsletters_desc' => 'Prenumeratoriai, CSV importo ir el. pašto kampanijos.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Žinios',
   'admin_wiki_desc' => 'Bendradarbiavimo puslapiai ir pataisymai.',
   'admin_albums_title' => 'Albumai',
   'admin_albums_desc' => 'Viešoji galerija ir socialinis sinchronizavimas.',

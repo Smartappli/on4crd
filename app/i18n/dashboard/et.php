@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Kuna vaatate jagatud albumeid.',
   'recommendation_reason_library' => 'Sest te konsulteerite raamatukogu dokumentidega.',
   'signal_article' => 'Üksused',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Teadmised',
   'signal_classified' => 'Teated',
   'signal_album' => 'Albumid',
   'signal_library' => 'Raamatukogu',

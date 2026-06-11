@@ -13,7 +13,7 @@ return array (
   'next' => 'Næste',
   'create_album' => 'Opret et album',
   'add_photo' => 'Tilføj et billede',
-  'upload' => 'Upload',
+  'upload' => 'Upload dokumentet',
   'rebuild_thumbs' => 'Gendan thumbnails',
   'title' => 'Titel',
   'description' => 'Beskrivelse',

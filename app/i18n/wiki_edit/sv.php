@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Titel och innehåll krävs.',
   'error_field_too_long' => 'Ett av fälten överskrider den tillåtna längden.',
   'propose_success' => 'Wiki-sida skickad. Den kommer att publiceras efter validering.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Kunskap',
   'propose_help' => 'Skriv en ny sida med enkel HTML. Den kommer att granskas innan publicering.',
   'propose_submit' => 'Skicka sida',
   'cancel' => 'Avbryt',

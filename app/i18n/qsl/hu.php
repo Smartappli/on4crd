@@ -9,7 +9,7 @@ return array (
   'manage' => '3) QSO import',
   'generated' => 'QSL kártyák generálva',
   'filter' => 'Szűrés',
-  'reset' => 'Reset',
+  'reset' => 'Visszaállítás',
   'page' => 'oldal',
   'previous' => 'Előző',
   'next' => 'Következő',

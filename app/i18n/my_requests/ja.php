@@ -37,7 +37,7 @@ return array (
   'article_status_scheduled' => '予定されている',
   'article_status_published' => '発行済み',
   'article_status_rejected' => '拒否されました',
-  'article_default_title' => 'Article',
+  'article_default_title' => '記事',
   'category_default' => 'その他',
   'moderation_note' => 'モデレーションメモ',
   'article_open' => '開く',

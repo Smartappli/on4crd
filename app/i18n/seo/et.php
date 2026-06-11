@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Raadioklubi Durnal ON4CRD liikmete ja amatöörraadiokontaktide kataloog.',
   'tools_title' => 'Amatöörraadio tööriistad',
   'tools_description' => 'Raadiotööriistad: Maidenheadi lokaator, teisendused, antenniarvutused, levitamine ja praktiline abi QSO jaoks.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Teadmised',
   'wiki_description' => 'Raadioklubi Durnali koostööviki raadioamatöörteadmiste, protseduuride ja ressurssidega.',
   'albums_title' => 'Fotoalbumid ON4CRD',
   'albums_description' => 'Pildigalerii Raadioklubi Durnali tegemistest, väljasõitudest, võistlustest ja eluhetkedest.',

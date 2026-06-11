@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Wszystko',
   'source_news' => 'Wiadomości',
   'source_articles' => 'Przedmioty',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Wiedza',
   'source_library' => 'Biblioteka',
   'source_classifieds' => 'Ogłoszenia',
   'source_albums' => 'Albumy',

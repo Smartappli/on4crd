@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'الدليل',
   'nav_dashboard' => 'لوحة التحكم',
   'nav_wiki' => 'المعرفة',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'الصور',
   'nav_articles' => 'مقالات',
   'nav_library' => 'المكتبة',
   'nav_webotheque' => 'مكتبة الويب',

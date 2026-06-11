@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Jo jūs skatāties koplietotos albumus.',
   'recommendation_reason_library' => 'Jo jūs konsultējat bibliotēkas dokumentus.',
   'signal_article' => 'Preces',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Zināšanas',
   'signal_classified' => 'Paziņojumi',
   'signal_album' => 'Albumi',
   'signal_library' => 'Bibliotēka',

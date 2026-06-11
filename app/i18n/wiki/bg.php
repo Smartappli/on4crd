@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Знания',
   'unavailable' => 'Уикито ще бъде достъпно след инициализиране на страниците.',
   'new_pages' => 'Нови страници',
   'updated_pages' => 'Модифицирани страници',

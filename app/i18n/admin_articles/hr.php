@@ -47,7 +47,7 @@ return array (
   'search' => 'Traži',
   'all_statuses' => 'Svi statusi',
   'all_categories' => 'Sve kategorije',
-  'filter' => 'Filter',
+  'filter' => 'Filtriraj',
   'reset_filter' => 'Resetiraj',
   'revisions' => 'Povijest verzija',
   'scheduled_at' => 'Datum objave',

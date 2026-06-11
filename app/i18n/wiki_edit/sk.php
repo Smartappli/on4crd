@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Názov a obsah sú povinné.',
   'error_field_too_long' => 'Jedno z polí prekračuje povolenú dĺžku.',
   'propose_success' => 'Wiki stránka bola odoslaná. Po overení bude zverejnený.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Znalosti',
   'propose_help' => 'Napíšte novú stránku s jednoduchým HTML. Pred zverejnením bude skontrolovaný.',
   'propose_submit' => 'Odoslať stránku',
   'cancel' => 'Zrušiť',

@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Adresář',
   'nav_dashboard' => 'Dashboard',
   'nav_wiki' => 'Znalosti',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Fotografie',
   'nav_articles' => 'Položky',
   'nav_library' => 'Knihovna',
   'nav_webotheque' => 'Webová knihovna',

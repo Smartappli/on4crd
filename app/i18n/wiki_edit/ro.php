@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Titlul și conținutul sunt obligatorii.',
   'error_field_too_long' => 'Unul dintre câmpuri depășește lungimea permisă.',
   'propose_success' => 'Pagina Wiki trimisă. Acesta va fi publicat după validare.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Cunoștințe',
   'propose_help' => 'Scrieți o pagină nouă cu HTML simplu. Acesta va fi revizuit înainte de publicare.',
   'propose_submit' => 'Trimite pagina',
   'cancel' => 'Anulează',

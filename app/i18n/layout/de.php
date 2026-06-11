@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Verzeichnis',
   'nav_dashboard' => 'Armaturenbrett',
   'nav_wiki' => 'Wissen',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Fotos',
   'nav_articles' => 'Artikel',
   'nav_library' => 'Bibliothek',
   'nav_webotheque' => 'Webbibliothek',

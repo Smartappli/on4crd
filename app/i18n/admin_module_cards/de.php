@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Feinsteuerung von Funk-Feeds, TTL, URLs und Aktivierung.',
   'admin_newsletters_title' => 'Newsletter',
   'admin_newsletters_desc' => 'Abonnenten, CSV-Import und E-Mail-Kampagnen.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Wissen',
   'admin_wiki_desc' => 'Kollaborative Seiten und Revisionen.',
   'admin_albums_title' => 'Alben',
   'admin_albums_desc' => 'Öffentliche Galerie und Social-Sync.',

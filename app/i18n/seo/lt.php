@@ -15,7 +15,7 @@ return array (
   'directory_description' => 'Radijo klubo Durnal ON4CRD narių ir radijo mėgėjų kontaktų katalogas.',
   'tools_title' => 'Radijo mėgėjų įrankiai',
   'tools_description' => 'Radijo įrankiai: Maidenhead lokatorius, konversijos, antenos skaičiavimai, sklidimas ir praktinė pagalba QSO.',
-  'wiki_title' => 'ON4CRD Wiki',
+  'wiki_title' => 'ON4CRD Žinios',
   'wiki_description' => 'Radijo klubo Durnal bendradarbiavimo wiki su radijo mėgėjų žiniomis, procedūromis ir ištekliais.',
   'albums_title' => 'Nuotraukų albumai ON4CRD',
   'albums_description' => 'Radijo klubo Durnal veiklos, išvykų, konkursų ir gyvenimo akimirkų nuotraukų galerija.',

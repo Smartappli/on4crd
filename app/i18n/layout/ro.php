@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'Director',
   'nav_dashboard' => 'Bord',
   'nav_wiki' => 'Cunoștințe',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Fotografii',
   'nav_articles' => 'Articole',
   'nav_library' => 'Bibliotecă',
   'nav_webotheque' => 'Bibliotecă web',

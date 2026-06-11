@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Jemné ovládání rádiových kanálů, TTL, URL a aktivace.',
   'admin_newsletters_title' => 'Newsletter',
   'admin_newsletters_desc' => 'Předplatitelé, import CSV a e-mailové kampaně.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Znalosti',
   'admin_wiki_desc' => 'Společné stránky a revize.',
   'admin_albums_title' => 'alba',
   'admin_albums_desc' => 'Veřejná galerie a sociální synchronizace.',

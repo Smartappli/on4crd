@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Tinklelio apskaičiavimas pagal pašto adresą',
   'spotlight_tool_day_cta' => 'Daugiau įrankių',
   'spotlight_member_wiki_articles' => 'Wiki / straipsniai',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Žinios',
   'spotlight_member_articles' => 'Daiktai',
   'spotlight_member_latest_wiki' => 'Naujausias wiki puslapis',
   'spotlight_member_latest_article' => 'Naujausias straipsnis',

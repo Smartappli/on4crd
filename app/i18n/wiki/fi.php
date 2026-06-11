@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Tietämys',
   'unavailable' => 'Wiki on käytettävissä sivujen alustamisen jälkeen.',
   'new_pages' => 'Uudet sivut',
   'updated_pages' => 'Muokatut sivut',

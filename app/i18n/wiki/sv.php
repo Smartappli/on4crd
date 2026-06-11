@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Kunskap',
   'unavailable' => 'Wiki kommer att vara tillgänglig efter initialisering av sidorna.',
   'new_pages' => 'Nya sidor',
   'updated_pages' => 'Ändrade sidor',

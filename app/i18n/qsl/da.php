@@ -8,7 +8,7 @@ return array (
   'create' => '2) Opret nemt QSL-kort',
   'manage' => '3) QSO import',
   'generated' => 'QSL-kort genereret',
-  'filter' => 'Filter',
+  'filter' => 'Anvend filter',
   'reset' => 'Nulstil',
   'page' => 'Side',
   'previous' => 'Forrige',

@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Pealkiri ja sisu on kohustuslikud.',
   'error_field_too_long' => 'Üks väljadest ületab lubatud pikkuse.',
   'propose_success' => 'Wiki leht on esitatud. See avaldatakse pärast kinnitamist.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Teadmised',
   'propose_help' => 'Kirjutage uus leht lihtsa HTML-iga. Enne avaldamist vaadatakse see üle.',
   'propose_submit' => 'Esitage leht',
   'cancel' => 'Tühista',

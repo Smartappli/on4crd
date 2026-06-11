@@ -9,7 +9,7 @@ return array (
   'th_label' => 'Formulace',
   'assign_role' => 'Přiřadit roli',
   'member' => 'člen',
-  'role' => 'Role',
+  'role' => 'Role ve výboru',
   'assign' => 'Přiřadit',
   'layout' => 'Role a oprávnění',
   'meta_desc' => 'Správa rolí a oprávnění.',

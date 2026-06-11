@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Izračun mreže iz poštnega naslova',
   'spotlight_tool_day_cta' => 'Več orodij',
   'spotlight_member_wiki_articles' => 'Wiki/Članki',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Znanje',
   'spotlight_member_articles' => 'Predmeti',
   'spotlight_member_latest_wiki' => 'Najnovejša wiki stran',
   'spotlight_member_latest_article' => 'Zadnji članek',

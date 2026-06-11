@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Viden',
   'unavailable' => 'Wikien vil være tilgængelig efter initialisering af siderne.',
   'new_pages' => 'Nye sider',
   'updated_pages' => 'Ændrede sider',

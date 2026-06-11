@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Título e conteúdo são obrigatórios.',
   'error_field_too_long' => 'Um dos campos excede o comprimento permitido.',
   'propose_success' => 'Página Wiki enviada. Será publicado após validação.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Conhecimento',
   'propose_help' => 'Escreva uma nova página com HTML simples. Ele será revisado antes da publicação.',
   'propose_submit' => 'Enviar página',
   'cancel' => 'Cancelar',

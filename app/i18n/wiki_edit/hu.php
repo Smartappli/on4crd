@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'A cím és a tartalom kötelező.',
   'error_field_too_long' => 'Az egyik mező túllépi a megengedett hosszt.',
   'propose_success' => 'Wiki oldal elküldve. Érvényesítés után teszik közzé.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Tudás',
   'propose_help' => 'Írjon új oldalt egyszerű HTML-kóddal. Megjelenés előtt felülvizsgálják.',
   'propose_submit' => 'Oldal elküldése',
   'cancel' => 'Mégse',

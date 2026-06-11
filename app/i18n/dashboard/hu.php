@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Mert megosztott albumokat nézel.',
   'recommendation_reason_library' => 'Mert könyvtári dokumentumokat olvas.',
   'signal_article' => 'Tételek',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Tudás',
   'signal_classified' => 'Közlemények',
   'signal_album' => 'Albumok',
   'signal_library' => 'Könyvtár',

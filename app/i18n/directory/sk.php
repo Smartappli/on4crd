@@ -15,7 +15,7 @@ return array (
   'search_placeholder' => 'Indikátor alebo meno',
   'licence_filter' => 'Filtrovať podľa licencie',
   'all_licences' => 'Všetky licencie',
-  'apply_filters' => 'Filter',
+  'apply_filters' => 'Filtrovať',
   'reset_filters' => 'Jasné',
   'results' => 'Výsledky',
   'licence' => 'Licencia',

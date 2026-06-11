@@ -37,7 +37,7 @@ return array (
   'article_status_scheduled' => 'Запланировано',
   'article_status_published' => 'Опубликовано',
   'article_status_rejected' => 'Отклонено',
-  'article_default_title' => 'Article',
+  'article_default_title' => 'Статьи',
   'category_default' => 'Другое',
   'moderation_note' => 'Примечание модератора',
   'article_open' => 'Открыть',

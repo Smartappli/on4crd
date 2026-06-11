@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Otsikko ja sisältö ovat pakollisia.',
   'error_field_too_long' => 'Yksi kentistä ylittää sallitun pituuden.',
   'propose_success' => 'Wikisivu lähetetty. Se julkaistaan ​​vahvistuksen jälkeen.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Tietämys',
   'propose_help' => 'Kirjoita uusi sivu yksinkertaisella HTML-koodilla. Se tarkistetaan ennen julkaisemista.',
   'propose_submit' => 'Lähetä sivu',
   'cancel' => 'Peruuta',

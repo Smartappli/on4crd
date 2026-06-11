@@ -11,7 +11,7 @@ return array (
   'nav_directory' => 'ডিরেক্টরি',
   'nav_dashboard' => 'ড্যাশবোর্ড',
   'nav_wiki' => 'জ্ঞান',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'ছবি',
   'nav_articles' => 'প্রবন্ধ',
   'nav_library' => 'লাইব্রেরি',
   'nav_webotheque' => 'ওয়েব লাইব্রেরি',

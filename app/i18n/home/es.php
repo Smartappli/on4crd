@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Cálculo de grid desde una dirección postal',
   'spotlight_tool_day_cta' => 'Más herramientas',
   'spotlight_member_wiki_articles' => 'Wiki / Artículos',
-  'spotlight_member_wiki' => 'wiki',
+  'spotlight_member_wiki' => 'Conocimientos',
   'spotlight_member_articles' => 'Artículos',
   'spotlight_member_latest_wiki' => 'Ultima pagina wiki',
   'spotlight_member_latest_article' => 'Ultimo articulo',

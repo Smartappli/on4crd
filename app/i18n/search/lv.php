@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Viss',
   'source_news' => 'Jaunumi',
   'source_articles' => 'Preces',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Zināšanas',
   'source_library' => 'Bibliotēka',
   'source_classifieds' => 'Paziņojumi',
   'source_albums' => 'Albumi',

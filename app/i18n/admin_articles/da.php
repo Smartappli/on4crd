@@ -47,7 +47,7 @@ return array (
   'search' => 'Søg',
   'all_statuses' => 'Alle statusser',
   'all_categories' => 'Alle kategorier',
-  'filter' => 'Filter',
+  'filter' => 'Anvend filter',
   'reset_filter' => 'Nulstil',
   'revisions' => 'Versionshistorik',
   'scheduled_at' => 'Udgivelsesdato',

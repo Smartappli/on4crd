@@ -47,7 +47,7 @@ return array (
   'search' => 'Otsi',
   'all_statuses' => 'Kõik olekud',
   'all_categories' => 'Kõik kategooriad',
-  'filter' => 'Filter',
+  'filter' => 'Filtreeri',
   'reset_filter' => 'Lähtesta',
   'revisions' => 'Versiooni ajalugu',
   'scheduled_at' => 'Avaldamise kuupäev',

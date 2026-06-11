@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Judul dan konten diperlukan.',
   'error_field_too_long' => 'Salah satu bidang melebihi panjang yang diizinkan.',
   'propose_success' => 'Halaman Wiki dikirimkan. Ini akan dipublikasikan setelah validasi.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Pengetahuan',
   'propose_help' => 'Tulis halaman baru dengan HTML sederhana. Ini akan ditinjau sebelum dipublikasikan.',
   'propose_submit' => 'Kirim halaman',
   'cancel' => 'Batalkan',

@@ -41,7 +41,7 @@ return array (
   'all_categories' => 'Všetky kategórie',
   'search_ph' => 'Hľadať',
   'tag_search_ph' => 'Hľadať značky',
-  'filter' => 'Filter',
+  'filter' => 'Filtrovať',
   'reset' => 'Resetovať',
   'bulk_delete' => 'Odstrániť výber',
   'select' => 'Vyberte',

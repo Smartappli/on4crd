@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'Reikalingas pavadinimas ir turinys.',
   'error_field_too_long' => 'Vienas iš laukų viršija leistiną ilgį.',
   'propose_success' => 'Viki puslapis pateiktas. Jis bus paskelbtas po patvirtinimo.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'Žinios',
   'propose_help' => 'Parašykite naują puslapį naudodami paprastą HTML. Jis bus peržiūrėtas prieš paskelbiant.',
   'propose_submit' => 'Pateikti puslapį',
   'cancel' => 'Atšaukti',

@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Perhitungan grid dari alamat pos',
   'spotlight_tool_day_cta' => 'Alat lainnya',
   'spotlight_member_wiki_articles' => 'Wiki / Artikel',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Pengetahuan',
   'spotlight_member_articles' => 'Artikel',
   'spotlight_member_latest_wiki' => 'Halaman wiki terbaru',
   'spotlight_member_latest_article' => 'Artikel terbaru',

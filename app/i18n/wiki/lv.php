@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Zināšanas',
   'unavailable' => 'Wiki būs pieejams pēc lapu inicializācijas.',
   'new_pages' => 'Jaunas lapas',
   'updated_pages' => 'Modificētas lapas',

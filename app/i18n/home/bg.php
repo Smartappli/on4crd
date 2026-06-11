@@ -59,7 +59,7 @@ return array (
   'spotlight_tool_day_item' => 'Изчисляване на мрежата от пощенски адрес',
   'spotlight_tool_day_cta' => 'Още инструменти',
   'spotlight_member_wiki_articles' => 'Wiki/Статии',
-  'spotlight_member_wiki' => 'Wiki',
+  'spotlight_member_wiki' => 'Знания',
   'spotlight_member_articles' => 'Предмети',
   'spotlight_member_latest_wiki' => 'Най-новата wiki страница',
   'spotlight_member_latest_article' => 'Последна статия',

@@ -37,7 +37,7 @@ return array (
   'article_status_scheduled' => 'Agendado',
   'article_status_published' => 'Publicado',
   'article_status_rejected' => 'Rejeitado',
-  'article_default_title' => 'Article',
+  'article_default_title' => 'Artigos',
   'category_default' => 'Outro',
   'moderation_note' => 'Nota de moderação',
   'article_open' => 'Abrir',

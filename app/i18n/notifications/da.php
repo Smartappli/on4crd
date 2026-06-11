@@ -12,7 +12,7 @@ return array (
   'read' => 'Læs',
   'filter_all' => 'Alle meddelelser',
   'filter_unread' => 'Kun ulæst',
-  'filter' => 'Filter',
+  'filter' => 'Anvend filter',
   'mark_all_read' => 'Marker alle som læst',
   'mark_read' => 'Markér som læst',
   'open' => 'Åbn',

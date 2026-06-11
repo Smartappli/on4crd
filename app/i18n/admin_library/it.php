@@ -42,7 +42,7 @@ return array (
   'search_ph' => 'Ricerca',
   'tag_search_ph' => 'Cerca tag',
   'filter' => 'Filtro',
-  'reset' => 'Reset',
+  'reset' => 'Reimposta',
   'bulk_delete' => 'Elimina la selezione',
   'select' => 'Selezionare',
   'tag_cleanup_title' => 'Pulizia tag',

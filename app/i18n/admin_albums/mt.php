@@ -13,7 +13,7 @@ return array (
   'next' => 'Wara',
   'create_album' => 'Oħloq album',
   'add_photo' => 'Żid ritratt',
-  'upload' => 'Upload',
+  'upload' => 'Tella d-dokument',
   'rebuild_thumbs' => 'Riġenera thumbnails',
   'title' => 'Titolu',
   'description' => 'Deskrizzjoni',

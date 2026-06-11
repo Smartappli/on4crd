@@ -41,7 +41,7 @@ return array (
   'all_categories' => 'Alle kategorier',
   'search_ph' => 'Søg',
   'tag_search_ph' => 'Søg tags',
-  'filter' => 'Filter',
+  'filter' => 'Anvend filter',
   'reset' => 'Nulstil',
   'bulk_delete' => 'Slet markering',
   'select' => 'Vælg',

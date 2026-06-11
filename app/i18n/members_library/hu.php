@@ -16,7 +16,7 @@ return array (
   'all_categories' => 'Minden kategória',
   'for_filters' => 'ezekhez a szűrőkhöz',
   'documents' => 'Dokumentumok',
-  'reset' => 'Reset',
+  'reset' => 'Visszaállítás',
   'document' => 'dokumentum',
   'preview' => 'Áttekintés',
   'prev' => 'Előző',

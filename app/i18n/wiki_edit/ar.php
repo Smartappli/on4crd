@@ -17,7 +17,7 @@ return array (
   'error_title_content_required' => 'العنوان والمحتوى مطلوبان.',
   'error_field_too_long' => 'يتجاوز أحد الحقول الطول المسموح به.',
   'propose_success' => 'تم إرسال صفحة الويكي. سيتم نشره بعد المصادقة عليه.',
-  'wiki_label' => 'Wiki',
+  'wiki_label' => 'المعرفة',
   'propose_help' => 'اكتب صفحة جديدة باستخدام HTML بسيط. وسيتم مراجعتها قبل النشر.',
   'propose_submit' => 'إرسال الصفحة',
   'cancel' => 'إلغاء',

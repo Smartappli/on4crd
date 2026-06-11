@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Kennis',
   'unavailable' => 'De wiki is beschikbaar na initialisatie van de pagina\'s.',
   'new_pages' => 'Nieuwe pagina\'s',
   'updated_pages' => 'Bijgewerkte pagina\'s',

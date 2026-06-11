@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Koska katselet jaettuja albumeita.',
   'recommendation_reason_library' => 'Koska tarkastelet kirjaston asiakirjoja.',
   'signal_article' => 'Tuotteet',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Tietämys',
   'signal_classified' => 'Ilmoitukset',
   'signal_album' => 'Albumit',
   'signal_library' => 'Kirjasto',

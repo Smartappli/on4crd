@@ -57,7 +57,7 @@ return array (
   'restore_revision' => 'Irrestawra',
   'no_revisions' => 'Ebda reviżjonijiet salvati.',
   'confirm_restore_revision' => 'Irrestawra din il-verżjoni?',
-  'preview' => 'Preview',
+  'preview' => 'Ħarsa ġenerali integrata',
   'preview_help' => 'Iċċekkja l-għoti qabel il-pubblikazzjoni.',
   'preview_empty' => 'Il-previżjoni tidher wara li tikklikkja fuq "Preview".',
   'editorial_queue' => 'Fajl editorjali',

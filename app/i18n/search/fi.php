@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Kaikki',
   'source_news' => 'Uutiset',
   'source_articles' => 'Tuotteet',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Tietämys',
   'source_library' => 'Kirjasto',
   'source_classifieds' => 'Ilmoitukset',
   'source_albums' => 'Albumit',

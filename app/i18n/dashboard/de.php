@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Weil Sie geteilte Alben ansehen.',
   'recommendation_reason_library' => 'Weil Sie Bibliotheksdokumente aufrufen.',
   'signal_article' => 'Artikel',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Wissen',
   'signal_classified' => 'Kleinanzeigen',
   'signal_album' => 'Alben',
   'signal_library' => 'Bibliothek',

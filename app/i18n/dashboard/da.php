@@ -35,7 +35,7 @@ return array (
   'recommendation_reason_album' => 'Fordi du ser delte album.',
   'recommendation_reason_library' => 'Fordi du konsulterer biblioteksdokumenter.',
   'signal_article' => 'genstande',
-  'signal_wiki' => 'Wiki',
+  'signal_wiki' => 'Viden',
   'signal_classified' => 'Meddelelser',
   'signal_album' => 'Albums',
   'signal_library' => 'Bibliotek',

@@ -12,7 +12,7 @@ return array (
   'read' => 'Prečítajte si',
   'filter_all' => 'Všetky upozornenia',
   'filter_unread' => 'Iba neprečítané',
-  'filter' => 'Filter',
+  'filter' => 'Filtrovať',
   'mark_all_read' => 'Označiť všetko ako prečítané',
   'mark_read' => 'Označiť ako prečítané',
   'open' => 'Otvorte',

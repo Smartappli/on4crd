@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Raadiokanalite, TTL-i, URL-ide ja aktiveerimise täpne juhtimine.',
   'admin_newsletters_title' => 'Infoleht',
   'admin_newsletters_desc' => 'Tellijad, CSV impordi- ja meilikampaaniad.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Teadmised',
   'admin_wiki_desc' => 'Koostöölehed ja redaktsioonid.',
   'admin_albums_title' => 'Albumid',
   'admin_albums_desc' => 'Avalik galerii ja sotsiaalne sünkroonimine.',

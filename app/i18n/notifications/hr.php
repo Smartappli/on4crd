@@ -12,7 +12,7 @@ return array (
   'read' => 'čitati',
   'filter_all' => 'Sve obavijesti',
   'filter_unread' => 'Samo nepročitano',
-  'filter' => 'Filter',
+  'filter' => 'Filtriraj',
   'mark_all_read' => 'Označi sve kao pročitano',
   'mark_read' => 'Označi kao pročitano',
   'open' => 'Otvoreno',

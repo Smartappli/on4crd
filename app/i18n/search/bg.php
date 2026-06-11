@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Всичко',
   'source_news' => 'Новини',
   'source_articles' => 'Предмети',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Знания',
   'source_library' => 'Библиотека',
   'source_classifieds' => 'Съобщения',
   'source_albums' => 'Албуми',
