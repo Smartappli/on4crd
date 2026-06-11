@@ -180,6 +180,7 @@ function render_layout_impl(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_dashboard'], 'route' => 'dashboard', 'module' => 'dashboard'],
         ['label' => (string) $layoutI18n['nav_wiki'], 'route' => 'wiki', 'module' => 'wiki'],
         ['label' => (string) $layoutI18n['nav_articles'], 'route' => 'articles', 'module' => 'articles'],
+        ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'classifieds', 'module' => 'classifieds'],
         ['label' => 'QSL', 'route' => 'qsl', 'module' => 'qsl'],
         ['label' => (string) $layoutI18n['nav_auctions'], 'route' => 'auctions', 'module' => 'auctions'],
         ['label' => (string) $layoutI18n['nav_assistant'], 'route' => 'chatbot', 'module' => 'chatbot'],
@@ -191,7 +192,7 @@ function render_layout_impl(string $content, string $title = ''): string
         ['label' => (string) ($layoutI18n['nav_gallery'] ?? 'Photos'), 'route' => 'albums', 'module' => 'albums'],
         ['label' => (string) ($layoutI18n['nav_videos'] ?? 'Vidéos'), 'route' => 'videos', 'module' => 'videos'],
         ['label' => (string) ($layoutI18n['nav_files'] ?? 'Fichiers'), 'route' => 'fichiers', 'module' => 'fichiers'],
-        ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'PV'), 'route' => 'pv', 'module' => 'pv'],
+        ['label' => (string) ($layoutI18n['nav_minutes'] ?? 'Procès verbaux'), 'route' => 'pv', 'module' => 'pv'],
     ];
 
     $buildNavLinks = static function (array $items, string $currentRoute): string {
