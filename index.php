@@ -201,7 +201,8 @@ $routeModules = [
     'presentations' => 'presentations',
     'videos' => 'videos',
     'pv' => 'pv',
-    'telechargements' => 'telechargements',
+    'fichiers' => 'fichiers',
+    'telechargements' => 'fichiers',
     'directory' => 'directory',
     'tools' => 'tools',
     'tools_geocode' => 'tools',
@@ -259,6 +260,7 @@ $routeModules = [
     'admin_presentations' => 'admin',
     'admin_videos' => 'admin',
     'admin_pv' => 'admin',
+    'admin_fichiers' => 'admin',
     'admin_telechargements' => 'admin',
     'admin_dashboard' => 'admin',
     'admin_auctions' => 'admin',
@@ -362,6 +364,7 @@ switch ($route) {
     case 'presentations': $dispatchPage('pages/presentations.php'); break;
     case 'videos': $dispatchPage('pages/videos.php'); break;
     case 'pv': $dispatchPage('pages/pv.php'); break;
+    case 'fichiers': $dispatchPage('pages/fichiers.php'); break;
     case 'telechargements': $dispatchPage('pages/telechargements.php'); break;
     case 'search': $dispatchPage('pages/search.php'); break;
     case 'newsletter': $dispatchPage('pages/newsletter.php'); break;
@@ -391,6 +394,7 @@ switch ($route) {
     case 'admin_presentations': $dispatchPage('pages/admin_presentations.php'); break;
     case 'admin_videos': $dispatchPage('pages/admin_videos.php'); break;
     case 'admin_pv': $dispatchPage('pages/admin_pv.php'); break;
+    case 'admin_fichiers': $dispatchPage('pages/admin_fichiers.php'); break;
     case 'admin_telechargements': $dispatchPage('pages/admin_telechargements.php'); break;
     case 'admin_news': $dispatchPage('pages/admin_news.php'); break;
     case 'admin_press': $dispatchPage('pages/admin_press.php'); break;
