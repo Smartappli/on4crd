@@ -158,7 +158,7 @@ if (!ensure_member_library_table()) {
     return;
 }
 
-$adminLibraryRoutes = ['admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_telechargements'];
+$adminLibraryRoutes = ['admin_library'];
 $adminLibraryRoute = (string) ($_GET['route'] ?? $_POST['route'] ?? 'admin_library');
 if (!in_array($adminLibraryRoute, $adminLibraryRoutes, true)) {
     $adminLibraryRoute = 'admin_library';
