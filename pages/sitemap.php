@@ -33,7 +33,7 @@ if (!in_array($requestedLocale, $supportedLocales, true)) {
     return;
 }
 
-$xml = cache_remember('seo_sitemap_xml_v9_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
+$xml = cache_remember('seo_sitemap_xml_v10_' . $requestedLocale, 300, static function () use ($requestedLocale): string {
     /** @var list<array{loc:string,lastmod:string,priority:string,changefreq:string,alternates:array<string,string>}> $entries */
     $entries = [];
     $addEntry = static function (string $route, string $priority, string $changefreq, array $query = [], ?string $lastmod = null) use (&$entries, $requestedLocale): void {
@@ -84,13 +84,7 @@ $xml = cache_remember('seo_sitemap_xml_v9_' . $requestedLocale, 300, static func
         ['route' => 'auctions', 'module' => 'auctions', 'priority' => '0.8', 'changefreq' => 'daily'],
         ['route' => 'relais', 'priority' => '0.5', 'changefreq' => 'monthly'],
     ];
-    $memberOnlyRoutesExcludedFromSitemap = [
-        'presentations',
-        'videos',
-        'pv',
-        'telechargements',
-    ];
-    unset($memberOnlyRoutesExcludedFromSitemap);
+    // Member-only routes such as presentations, videos, pv and telechargements are noindex/login-protected and intentionally omitted.
 
     foreach ($staticRoutes as $row) {
         $module = (string) ($row['module'] ?? '');
