@@ -86,8 +86,6 @@ function member_library_default_categories(): array
     return [
         ['code' => 'general', 'label' => 'General', 'sort_order' => 1],
         ['code' => 'presentations', 'label' => 'Présentations', 'sort_order' => 10],
-        ['code' => 'videos', 'label' => 'Videos', 'sort_order' => 20],
-        ['code' => 'pv', 'label' => 'PV', 'sort_order' => 30],
         ['code' => 'telechargements', 'label' => 'Téléchargements', 'sort_order' => 40],
     ];
 }

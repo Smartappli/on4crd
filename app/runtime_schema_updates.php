@@ -382,11 +382,20 @@ function apply_runtime_schema_updates(): void
                 db()->exec("UPDATE modules SET code = 'videos', label = 'Videos', description = 'Ressources vidéo réservées aux membres', visibility = 'members', sort_order = 31 WHERE code = 'medias'");
             }
         }
+        $legacyDownloadsStmt = db()->query("SELECT COUNT(*) FROM modules WHERE code = 'telechargements'");
+        if ($legacyDownloadsStmt !== false && (int) $legacyDownloadsStmt->fetchColumn() > 0) {
+            $filesStmt = db()->query("SELECT COUNT(*) FROM modules WHERE code = 'fichiers'");
+            if ($filesStmt !== false && (int) $filesStmt->fetchColumn() > 0) {
+                db()->exec("DELETE FROM modules WHERE code = 'telechargements'");
+            } else {
+                db()->exec("UPDATE modules SET code = 'fichiers', label = 'Fichiers', description = 'Fichiers et ressources a telecharger', visibility = 'members', sort_order = 33 WHERE code = 'telechargements'");
+            }
+        }
         $memberDocumentModules = [
             ['presentations', 'Présentations', 'Supports et présentations réservés aux membres', 0, 1, 'members', 30],
             ['videos', 'Videos', 'Ressources vidéo réservées aux membres', 0, 1, 'members', 31],
             ['pv', 'PV', 'Procès-verbaux et comptes rendus réservés aux membres', 0, 1, 'members', 32],
-            ['telechargements', 'Téléchargements', 'Fichiers et ressources à télécharger', 0, 1, 'members', 33],
+            ['fichiers', 'Fichiers', 'Fichiers et ressources a telecharger', 0, 1, 'members', 33],
         ];
         $memberDocumentModuleStmt = db()->prepare(
             'INSERT INTO modules (code, label, description, is_core, is_enabled, visibility, sort_order)
