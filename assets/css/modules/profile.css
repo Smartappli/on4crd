@@ -30,9 +30,9 @@
 
 [data-route="profile"] .member-module-hero .profile-preview-view {
   padding: .9rem;
-  border: 1px solid rgb(226 232 240 / .18);
+  border: 1px solid rgb(255 255 255 / .32);
   border-radius: 16px;
-  background: rgb(2 12 23 / .48);
+  background: rgb(255 255 255 / .14);
   backdrop-filter: blur(8px);
 }
 
@@ -89,7 +89,7 @@
 
 [data-route="profile"] .member-module-hero .profile-preview-callsign,
 [data-route="profile"] .member-module-hero .profile-preview-summary dt {
-  color: rgb(226 232 240 / .78);
+  color: rgb(241 245 249 / .84);
 }
 
 [data-route="profile"] .profile-preview-summary dd {

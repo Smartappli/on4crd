@@ -42,12 +42,12 @@
 }
 
 [data-route="my_requests"] .member-module-hero .my-requests-member {
-  border-color: rgb(226 232 240 / .18);
-  background: rgb(2 12 23 / .58);
+  border-color: rgb(255 255 255 / .32);
+  background: rgb(255 255 255 / .16);
 }
 
 [data-route="my_requests"] .member-module-hero .my-requests-member span {
-  color: rgb(226 232 240 / .78);
+  color: rgb(241 245 249 / .84);
 }
 
 [data-route="my_requests"] .member-module-hero .my-requests-member strong {
