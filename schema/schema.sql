@@ -332,7 +332,7 @@ CREATE TABLE IF NOT EXISTS content_proposals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT NOT NULL,
     area VARCHAR(64) NOT NULL,
-    proposal_type ENUM('category','content') NOT NULL DEFAULT 'content',
+    proposal_type ENUM('category','content','domain','tag') NOT NULL DEFAULT 'content',
     title VARCHAR(190) NOT NULL,
     summary TEXT DEFAULT NULL,
     contact VARCHAR(220) DEFAULT NULL,

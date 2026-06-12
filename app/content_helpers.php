@@ -416,7 +416,7 @@ function ensure_content_proposals_table(): bool
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 member_id INT NOT NULL,
                 area VARCHAR(64) NOT NULL,
-                proposal_type ENUM("category","content") NOT NULL DEFAULT "content",
+                proposal_type ENUM("category","content","domain","tag") NOT NULL DEFAULT "content",
                 title VARCHAR(190) NOT NULL,
                 summary TEXT DEFAULT NULL,
                 contact VARCHAR(220) DEFAULT NULL,
@@ -434,7 +434,7 @@ function ensure_content_proposals_table(): bool
         $columns = [
             'member_id' => 'ALTER TABLE content_proposals ADD COLUMN member_id INT NOT NULL DEFAULT 0 AFTER id',
             'area' => 'ALTER TABLE content_proposals ADD COLUMN area VARCHAR(64) NOT NULL DEFAULT "articles" AFTER member_id',
-            'proposal_type' => 'ALTER TABLE content_proposals ADD COLUMN proposal_type ENUM("category","content") NOT NULL DEFAULT "content" AFTER area',
+            'proposal_type' => 'ALTER TABLE content_proposals ADD COLUMN proposal_type ENUM("category","content","domain","tag") NOT NULL DEFAULT "content" AFTER area',
             'title' => 'ALTER TABLE content_proposals ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Proposal" AFTER proposal_type',
             'summary' => 'ALTER TABLE content_proposals ADD COLUMN summary TEXT DEFAULT NULL AFTER title',
             'contact' => 'ALTER TABLE content_proposals ADD COLUMN contact VARCHAR(220) DEFAULT NULL AFTER summary',
@@ -449,6 +449,11 @@ function ensure_content_proposals_table(): bool
             if (!table_has_column('content_proposals', $column)) {
                 db()->exec($statement);
             }
+        }
+        try {
+            db()->exec('ALTER TABLE content_proposals MODIFY COLUMN proposal_type ENUM("category","content","domain","tag") NOT NULL DEFAULT "content"');
+        } catch (Throwable) {
+            // Some database engines used in tests do not support MySQL ENUM modification.
         }
 
         if (!table_has_index('content_proposals', 'idx_content_proposals_member_created')) {
@@ -563,7 +568,22 @@ if (!function_exists('content_proposal_accepted_categories')) {
  */
 function content_proposal_accepted_categories(string $area, int $maxCodeLength = 120): array
 {
+    return content_proposal_accepted_terms($area, 'category', $maxCodeLength, $area);
+}
+}
+
+if (!function_exists('content_proposal_accepted_terms')) {
+/**
+ * @return array<string, string>
+ */
+function content_proposal_accepted_terms(string $area, string $proposalType, int $maxCodeLength = 120, string $fallback = 'term'): array
+{
     if (!ensure_content_proposals_table()) {
+        return [];
+    }
+
+    $proposalType = content_proposal_clean_single_line($proposalType, 24);
+    if (!in_array($proposalType, ['category', 'domain', 'tag'], true)) {
         return [];
     }
 
@@ -572,28 +592,28 @@ function content_proposal_accepted_categories(string $area, int $maxCodeLength =
             'SELECT title
              FROM content_proposals
              WHERE area = ?
-               AND proposal_type = "category"
+               AND proposal_type = ?
                AND status = "accepted"
              ORDER BY updated_at ASC, id ASC'
         );
-        $stmt->execute([$area]);
+        $stmt->execute([$area, $proposalType]);
     } catch (Throwable) {
         return [];
     }
 
-    $categories = [];
+    $terms = [];
     foreach (($stmt->fetchAll() ?: []) as $row) {
         $title = content_proposal_clean_single_line((string) ($row['title'] ?? ''), 190);
         if ($title === '') {
             continue;
         }
-        $code = content_proposal_category_code($title, $maxCodeLength, $area);
-        if (!isset($categories[$code])) {
-            $categories[$code] = $title;
+        $code = content_proposal_category_code($title, $maxCodeLength, $fallback);
+        if (!isset($terms[$code])) {
+            $terms[$code] = $title;
         }
     }
 
-    return $categories;
+    return $terms;
 }
 }
 
@@ -622,7 +642,7 @@ function content_proposal_payload(
     if (
         $memberId <= 0
         || !isset(content_proposal_allowed_areas()[$area])
-        || !in_array($proposalType, ['category', 'content'], true)
+        || !in_array($proposalType, ['category', 'content', 'domain', 'tag'], true)
         || !in_array($status, ['pending', 'reviewed', 'accepted', 'rejected'], true)
         || $title === ''
     ) {
