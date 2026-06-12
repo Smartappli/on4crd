@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Otvorte',
   'content_manage' => 'Spravovať',
   'expires_on' => 'Platnosť vyprší',
+  'proposal_type_domain' => 'Návrh domény',
+  'proposal_type_tag' => 'Návrh štítku',
+  'webotheque_title' => 'Webová knižnica',
 );

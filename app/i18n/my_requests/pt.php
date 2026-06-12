@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Abrir',
   'content_manage' => 'Gerir',
   'expires_on' => 'Expira',
+  'proposal_type_domain' => 'Proposta de domínio',
+  'proposal_type_tag' => 'Proposta de etiqueta',
+  'webotheque_title' => 'Biblioteca web',
 );

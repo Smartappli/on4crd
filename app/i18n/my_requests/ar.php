@@ -58,4 +58,7 @@ return array (
   'content_open' => 'مفتوح',
   'content_manage' => 'إدارة',
   'expires_on' => 'ينتهي',
+  'proposal_type_domain' => 'اقتراح نطاق',
+  'proposal_type_tag' => 'اقتراح وسم',
+  'webotheque_title' => 'مكتبة الويب',
 );

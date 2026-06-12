@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Buka',
   'content_manage' => 'Kelola',
   'expires_on' => 'Berakhir',
+  'proposal_type_domain' => 'Usulan domain',
+  'proposal_type_tag' => 'Usulan tag',
+  'webotheque_title' => 'Perpustakaan web',
 );

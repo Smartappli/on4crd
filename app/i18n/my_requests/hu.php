@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Nyissa meg',
   'content_manage' => 'Kezelés',
   'expires_on' => 'Lejár',
+  'proposal_type_domain' => 'Domainjavaslat',
+  'proposal_type_tag' => 'Címkejavaslat',
+  'webotheque_title' => 'Webkönyvtár',
 );

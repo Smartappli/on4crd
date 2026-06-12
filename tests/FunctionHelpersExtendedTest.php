@@ -265,6 +265,12 @@ final class FunctionHelpersExtendedTest extends TestCase
 
         $webothequePayload = content_proposal_payload(12, 'webotheque', 'content', 'Useful link');
         self::assertSame('webotheque', $webothequePayload['area']);
+
+        $webothequeDomainPayload = content_proposal_payload(12, 'webotheque', 'domain', 'Radio resources');
+        self::assertSame('domain', $webothequeDomainPayload['proposal_type']);
+
+        $webothequeTagPayload = content_proposal_payload(12, 'webotheque', 'tag', 'Antenna');
+        self::assertSame('tag', $webothequeTagPayload['proposal_type']);
     }
 
     public function testContentProposalPayloadRejectsUnknownArea(): void

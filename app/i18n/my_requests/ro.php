@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Deschide',
   'content_manage' => 'Gestionează',
   'expires_on' => 'Expirat',
+  'proposal_type_domain' => 'Propunere de domeniu',
+  'proposal_type_tag' => 'Propunere de etichetă',
+  'webotheque_title' => 'Bibliotecă web',
 );

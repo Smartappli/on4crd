@@ -99,6 +99,8 @@ $proposalAreaLabels = [
 $proposalTypeLabels = [
     'category' => $text('proposal_type_category', $isFrench ? 'Proposition de categorie' : 'Category proposal'),
     'content' => $text('proposal_type_content', $isFrench ? 'Proposition de contenu' : 'Content proposal'),
+    'domain' => $text('proposal_type_domain', $isFrench ? 'Proposition de domaine' : 'Domain proposal'),
+    'tag' => $text('proposal_type_tag', $isFrench ? 'Proposition d etiquette' : 'Tag proposal'),
 ];
 $proposalAreaRoutes = [
     'articles' => 'articles',

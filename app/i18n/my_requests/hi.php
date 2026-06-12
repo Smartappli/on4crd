@@ -58,4 +58,7 @@ return array (
   'content_open' => 'खुला',
   'content_manage' => 'प्रबंधित करें',
   'expires_on' => 'समाप्ति',
+  'proposal_type_domain' => 'डोमेन प्रस्ताव',
+  'proposal_type_tag' => 'टैग प्रस्ताव',
+  'webotheque_title' => 'वेब लाइब्रेरी',
 );

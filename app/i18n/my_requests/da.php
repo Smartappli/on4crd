@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Åbn',
   'content_manage' => 'Administrer',
   'expires_on' => 'Udløber',
+  'proposal_type_domain' => 'Domæneforslag',
+  'proposal_type_tag' => 'Etiketforslag',
+  'webotheque_title' => 'Webbibliotek',
 );

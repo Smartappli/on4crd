@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Avatud',
   'content_manage' => 'Halda',
   'expires_on' => 'Aegub',
+  'proposal_type_domain' => 'Domeeniettepanek',
+  'proposal_type_tag' => 'Sildiettepanek',
+  'webotheque_title' => 'Veebikogu',
 );

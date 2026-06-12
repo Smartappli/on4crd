@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Otwórz',
   'content_manage' => 'Zarządzaj',
   'expires_on' => 'Wygasa',
+  'proposal_type_domain' => 'Propozycja domeny',
+  'proposal_type_tag' => 'Propozycja etykiety',
+  'webotheque_title' => 'Biblioteka internetowa',
 );

@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Atvērt',
   'content_manage' => 'Pārvaldīt',
   'expires_on' => 'Beidzas',
+  'proposal_type_domain' => 'Domēna priekšlikums',
+  'proposal_type_tag' => 'Birkas priekšlikums',
+  'webotheque_title' => 'Tīmekļa bibliotēka',
 );

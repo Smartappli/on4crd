@@ -58,4 +58,7 @@ return array (
   'content_open' => 'খোলা',
   'content_manage' => 'পরিচালনা করুন',
   'expires_on' => 'মেয়াদ শেষ',
+  'proposal_type_domain' => 'ডোমেইন প্রস্তাব',
+  'proposal_type_tag' => 'ট্যাগ প্রস্তাব',
+  'webotheque_title' => 'ওয়েব লাইব্রেরি',
 );

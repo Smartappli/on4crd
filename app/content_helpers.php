@@ -408,6 +408,35 @@ function classifieds_sync_expired(): void
 }
 
 if (!function_exists('ensure_content_proposals_table')) {
+/**
+ * @return array{type:string,nullable:bool,default:?string}|null
+ */
+function content_proposals_column_metadata(string $column): ?array
+{
+    try {
+        $stmt = db()->prepare(
+            'SELECT COLUMN_TYPE, IS_NULLABLE, COLUMN_DEFAULT
+             FROM information_schema.columns
+             WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?
+             LIMIT 1'
+        );
+        $stmt->execute(['content_proposals', $column]);
+        $row = $stmt->fetch();
+    } catch (Throwable) {
+        return null;
+    }
+
+    if (!is_array($row)) {
+        return null;
+    }
+
+    return [
+        'type' => strtolower(str_replace("'", '"', (string) ($row['COLUMN_TYPE'] ?? ''))),
+        'nullable' => strtoupper((string) ($row['IS_NULLABLE'] ?? 'YES')) === 'YES',
+        'default' => array_key_exists('COLUMN_DEFAULT', $row) && $row['COLUMN_DEFAULT'] !== null ? (string) $row['COLUMN_DEFAULT'] : null,
+    ];
+}
+
 function ensure_content_proposals_table(): bool
 {
     try {
@@ -450,10 +479,13 @@ function ensure_content_proposals_table(): bool
                 db()->exec($statement);
             }
         }
-        try {
-            db()->exec('ALTER TABLE content_proposals MODIFY COLUMN proposal_type ENUM("category","content","domain","tag") NOT NULL DEFAULT "content"');
-        } catch (Throwable) {
-            // Some database engines used in tests do not support MySQL ENUM modification.
+        $proposalTypeMetadata = content_proposals_column_metadata('proposal_type');
+        if ($proposalTypeMetadata !== null && (!str_contains($proposalTypeMetadata['type'], '"domain"') || !str_contains($proposalTypeMetadata['type'], '"tag"'))) {
+            try {
+                db()->exec('ALTER TABLE content_proposals MODIFY COLUMN proposal_type ENUM("category","content","domain","tag") NOT NULL DEFAULT "content"');
+            } catch (Throwable) {
+                // Some database engines used in tests do not support MySQL ENUM modification.
+            }
         }
 
         if (!table_has_index('content_proposals', 'idx_content_proposals_member_created')) {

@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Miftuħa',
   'content_manage' => 'Immaniġġja',
   'expires_on' => 'Skaduta',
+  'proposal_type_domain' => 'Proposta ta’ dominju',
+  'proposal_type_tag' => 'Proposta ta’ tikketta',
+  'webotheque_title' => 'Librerija tal-web',
 );

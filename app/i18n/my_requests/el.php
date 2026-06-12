@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Ανοίξτε',
   'content_manage' => 'Διαχείριση',
   'expires_on' => 'Λήγει',
+  'proposal_type_domain' => 'Πρόταση τομέα',
+  'proposal_type_tag' => 'Πρόταση ετικέτας',
+  'webotheque_title' => 'Διαδικτυακή βιβλιοθήκη',
 );

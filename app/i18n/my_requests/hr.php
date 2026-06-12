@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Otvoreno',
   'content_manage' => 'Upravljaj',
   'expires_on' => 'ističe',
+  'proposal_type_domain' => 'Prijedlog domene',
+  'proposal_type_tag' => 'Prijedlog oznake',
+  'webotheque_title' => 'Web knjižnica',
 );

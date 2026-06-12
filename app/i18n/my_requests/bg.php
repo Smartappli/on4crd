@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Отворете',
   'content_manage' => 'Управление',
   'expires_on' => 'Изтича',
+  'proposal_type_domain' => 'Предложение за домейн',
+  'proposal_type_tag' => 'Предложение за етикет',
+  'webotheque_title' => 'Уеб библиотека',
 );

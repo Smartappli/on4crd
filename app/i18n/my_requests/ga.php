@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Oscail',
   'content_manage' => 'Bainistigh',
   'expires_on' => 'In éag',
+  'proposal_type_domain' => 'Moladh fearainn',
+  'proposal_type_tag' => 'Moladh clibe',
+  'webotheque_title' => 'Leabharlann gréasáin',
 );

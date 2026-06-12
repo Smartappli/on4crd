@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Открыть',
   'content_manage' => 'Управлять',
   'expires_on' => 'Истекает',
+  'proposal_type_domain' => 'Предложение домена',
+  'proposal_type_tag' => 'Предложение тега',
+  'webotheque_title' => 'Веб-библиотека',
 );

@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Openen',
   'content_manage' => 'Beheren',
   'expires_on' => 'Vervalt',
+  'proposal_type_domain' => 'Domeinvoorstel',
+  'proposal_type_tag' => 'Labelvoorstel',
+  'webotheque_title' => 'Webbibliotheek',
 );

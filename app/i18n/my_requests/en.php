@@ -59,4 +59,6 @@ return array (
   'content_open' => 'Open',
   'content_manage' => 'Manage',
   'expires_on' => 'Expires',
+  'proposal_type_domain' => 'Domain proposal',
+  'proposal_type_tag' => 'Tag proposal',
 );

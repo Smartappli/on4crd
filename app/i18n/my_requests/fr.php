@@ -59,4 +59,6 @@ return array (
   'content_open' => 'Ouvrir',
   'content_manage' => 'Gérer',
   'expires_on' => 'Expire',
+  'proposal_type_domain' => 'Proposition de domaine',
+  'proposal_type_tag' => 'Proposition d’étiquette',
 );

@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Öppna',
   'content_manage' => 'Hantera',
   'expires_on' => 'Upphör att gälla',
+  'proposal_type_domain' => 'Domänförslag',
+  'proposal_type_tag' => 'Etikettförslag',
+  'webotheque_title' => 'Webbibliotek',
 );

@@ -58,4 +58,7 @@ return array (
   'content_open' => '開く',
   'content_manage' => '管理',
   'expires_on' => '期限',
+  'proposal_type_domain' => 'ドメイン提案',
+  'proposal_type_tag' => 'タグ提案',
+  'webotheque_title' => 'ウェブライブラリ',
 );

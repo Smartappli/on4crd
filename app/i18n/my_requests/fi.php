@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Avaa',
   'content_manage' => 'Hallitse',
   'expires_on' => 'Vanhenee',
+  'proposal_type_domain' => 'Verkkotunnusehdotus',
+  'proposal_type_tag' => 'Tunniste-ehdotus',
+  'webotheque_title' => 'Verkkokirjasto',
 );

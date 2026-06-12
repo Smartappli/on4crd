@@ -58,4 +58,7 @@ return array (
   'content_open' => 'Atidaryti',
   'content_manage' => 'Tvarkyti',
   'expires_on' => 'Baigia galioti',
+  'proposal_type_domain' => 'Domeno pasiūlymas',
+  'proposal_type_tag' => 'Žymos pasiūlymas',
+  'webotheque_title' => 'Žiniatinklio biblioteka',
 );
