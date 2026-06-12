@@ -262,6 +262,9 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertSame('Antennes', $payload['title']);
         self::assertSame('Reason: bad()Useful category', $payload['summary']);
         self::assertSame('member@example.test', $payload['contact']);
+
+        $webothequePayload = content_proposal_payload(12, 'webotheque', 'content', 'Useful link');
+        self::assertSame('webotheque', $webothequePayload['area']);
     }
 
     public function testContentProposalPayloadRejectsUnknownArea(): void
