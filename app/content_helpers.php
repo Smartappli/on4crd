@@ -486,6 +486,7 @@ function content_proposal_allowed_areas(): array
         'events' => true,
         'members_library' => true,
         'news' => true,
+        'webotheque' => true,
         'wiki' => true,
     ];
 }
