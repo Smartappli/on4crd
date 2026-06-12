@@ -25,9 +25,11 @@
 
 [data-route="admin_webotheque"] .webotheque-hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  grid-template-columns: minmax(110px, 1fr);
   gap: .75rem;
   align-content: center;
+  justify-self: end;
+  min-width: min(100%, 11rem);
 }
 
 [data-route="admin_webotheque"] .webotheque-hero-stats article {
@@ -94,6 +96,10 @@
 
   [data-route="admin_webotheque"] .admin-webotheque-hero-actions {
     justify-content: flex-start;
+  }
+
+  [data-route="admin_webotheque"] .webotheque-hero-stats {
+    justify-self: start;
   }
 }
 

@@ -34,9 +34,11 @@
 
 [data-route="webotheque"] .webotheque-hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  grid-template-columns: minmax(110px, 1fr);
   gap: .75rem;
   align-content: center;
+  justify-self: end;
+  min-width: min(100%, 11rem);
 }
 
 [data-route="webotheque"] .webotheque-hero-stats article {
@@ -97,6 +99,78 @@
   height: 100%;
 }
 
+[data-route="webotheque"] .webotheque-proposal-dialog {
+  width: min(720px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: var(--text);
+}
+
+[data-route="webotheque"] .webotheque-proposal-dialog::backdrop {
+  background: rgb(15 23 42 / .58);
+  backdrop-filter: blur(3px);
+}
+
+[data-route="webotheque"] .webotheque-proposal-dialog-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+  box-shadow: 0 24px 70px rgb(15 23 42 / .28);
+}
+
+[data-route="webotheque"] .webotheque-proposal-dialog-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+[data-route="webotheque"] .webotheque-proposal-dialog-header h2 {
+  margin: .1rem 0 .25rem;
+}
+
+[data-route="webotheque"] .webotheque-proposal-dialog-close {
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 88%, white);
+  color: var(--text);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+[data-route="webotheque"] .webotheque-proposal-form {
+  display: grid;
+  gap: .85rem;
+}
+
+[data-route="webotheque"] .webotheque-proposal-form label {
+  display: grid;
+  gap: .35rem;
+}
+
+[data-route="webotheque"] .webotheque-proposal-form label span {
+  color: var(--muted);
+  font-size: .88rem;
+  font-weight: 650;
+}
+
+[data-route="webotheque"] .webotheque-proposal-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin: .25rem 0 0;
+}
+
 @media (max-width: 900px) {
   [data-route="webotheque"] .webotheque-hero {
     grid-template-columns: 1fr;
@@ -108,6 +182,10 @@
 
   [data-route="webotheque"] .webotheque-hero-actions {
     justify-content: flex-start;
+  }
+
+  [data-route="webotheque"] .webotheque-hero-stats {
+    justify-self: start;
   }
 }
 

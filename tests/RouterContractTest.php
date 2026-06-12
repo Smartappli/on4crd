@@ -610,7 +610,7 @@ final class RouterContractTest extends TestCase
             'pages/auctions.php' => ["has_permission('auctions.manage')", "INSERT INTO auction_lots", "content_proposal_create((int) \$user['id'], 'auctions', 'content'", "redirect('my_requests')"],
             'pages/classifieds.php' => ["classifieds_can_moderate()", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "redirect('my_requests')"],
             'pages/classifieds_manage.php' => ["content_proposal_accepted_categories('classifieds', 32)"],
-            'app/member_webotheque.php' => ["data-webotheque-link-open", "data-webotheque-category-open", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "content_proposal_create((int) \$user['id'], 'webotheque', 'content'", "content_proposal_create((int) \$user['id'], 'webotheque', 'category'", "webotheque_insert_link", "redirect('my_requests')"],
+            'app/member_webotheque.php' => ["data-webotheque-modal-open=\"webotheque-link-dialog\"", "data-webotheque-modal-open=\"webotheque-category-dialog\"", "id=\"webotheque-link-dialog\"", "id=\"webotheque-category-dialog\"", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "content_proposal_create((int) \$user['id'], 'webotheque', 'content'", "content_proposal_create((int) \$user['id'], 'webotheque', 'category'", "webotheque_insert_link", "redirect('my_requests')"],
         ];
 
         foreach ($contracts as $relativePath => $needles) {
