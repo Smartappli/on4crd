@@ -411,7 +411,6 @@ function render_webotheque_page(): void
                     <article><span><?= e((string) $t['latest']) ?></span><strong><?= e($latestLabel) ?></strong></article>
                 </div>
                 <p class="actions webotheque-hero-actions">
-                    <a class="button secondary" href="#webotheque-list"><?= e((string) $t['view_links']) ?></a>
                     <a class="button" href="<?= e(route_url('webotheque', ['propose_link' => '1'])) ?>" data-webotheque-link-open><?= e((string) $t['propose_link']) ?></a>
                     <a class="button secondary" href="<?= e(route_url('webotheque', ['propose_category' => '1'])) ?>" data-webotheque-category-open><?= e((string) $t['propose_category']) ?></a>
                 </p>
