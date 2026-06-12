@@ -47,6 +47,26 @@
   color: white;
 }
 
+:is([data-route="wiki_view"], [data-route="wiki_edit"], [data-route="wiki_propose"]) :is(.wiki-view-hero, .wiki-edit-hero) {
+  position: relative;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / .32);
+  background:
+    radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
+    linear-gradient(90deg, rgb(15 23 42 / .84), rgb(20 184 166 / .52) 52%, rgb(204 251 241 / .22)),
+    url("../../img/module-hero-wiki.png") center / cover no-repeat;
+  box-shadow: none;
+  color: white;
+}
+
+:is([data-route="wiki_view"], [data-route="wiki_edit"], [data-route="wiki_propose"]) :is(.wiki-view-hero, .wiki-edit-hero) :is(h1, .eyebrow) {
+  color: white;
+}
+
+:is([data-route="wiki_view"], [data-route="wiki_edit"], [data-route="wiki_propose"]) :is(.wiki-view-hero, .wiki-edit-hero) .help {
+  color: rgb(241 245 249 / .92);
+}
+
 [data-route="wiki"] .wiki-hero-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(130px, 1fr));

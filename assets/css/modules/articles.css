@@ -15,6 +15,18 @@
   color: white;
 }
 
+[data-route="article_propose"] .page-hero {
+  position: relative;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / .32);
+  background:
+    radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
+    linear-gradient(90deg, rgb(120 53 15 / .84), rgb(217 119 6 / .52) 52%, rgb(254 243 199 / .22)),
+    url("../../img/module-hero-articles.png") center / cover no-repeat;
+  box-shadow: none;
+  color: white;
+}
+
 [data-route="articles"] .articles-hero-title {
   margin: .15rem 0 .35rem;
   font-family: inherit;
@@ -25,8 +37,14 @@
 }
 
 [data-route="articles"] .page-hero .eyebrow,
-[data-route="articles"] .page-hero .help {
+[data-route="articles"] .page-hero .help,
+[data-route="article_propose"] .page-hero .eyebrow,
+[data-route="article_propose"] .page-hero .help {
   color: rgb(241 245 249 / .92);
+}
+
+[data-route="article_propose"] .page-hero h1 {
+  color: white;
 }
 
 [data-route="articles"] .articles-search-panel {
