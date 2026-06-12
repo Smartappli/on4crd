@@ -594,8 +594,10 @@ final class RouterContractTest extends TestCase
 
         self::assertStringContainsString("'albums' => true", $helpers);
         self::assertStringContainsString("'auctions' => true", $helpers);
+        self::assertStringContainsString("'webotheque' => true", $helpers);
         self::assertStringContainsString("'albums' => 'albums'", $requests);
         self::assertStringContainsString("'auctions' => 'auctions'", $requests);
+        self::assertStringContainsString("'webotheque' => 'webotheque'", $requests);
     }
 
     public function testRequestedModulesAutoValidateForAdministratorsAndKeepMemberQueue(): void
@@ -608,6 +610,7 @@ final class RouterContractTest extends TestCase
             'pages/auctions.php' => ["has_permission('auctions.manage')", "INSERT INTO auction_lots", "content_proposal_create((int) \$user['id'], 'auctions', 'content'", "redirect('my_requests')"],
             'pages/classifieds.php' => ["classifieds_can_moderate()", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "redirect('my_requests')"],
             'pages/classifieds_manage.php' => ["content_proposal_accepted_categories('classifieds', 32)"],
+            'app/member_webotheque.php' => ["data-webotheque-link-open", "data-webotheque-category-open", "\$proposalStatus = \$autoAccept ? 'accepted' : 'pending';", "content_proposal_create((int) \$user['id'], 'webotheque', 'content'", "content_proposal_create((int) \$user['id'], 'webotheque', 'category'", "webotheque_insert_link", "redirect('my_requests')"],
         ];
 
         foreach ($contracts as $relativePath => $needles) {
