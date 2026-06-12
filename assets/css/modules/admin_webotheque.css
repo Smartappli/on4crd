@@ -8,11 +8,29 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: stretch;
+  position: relative;
+  overflow: hidden;
   box-shadow: none;
+  border: 1px solid rgb(148 163 184 / .22);
+  background:
+    linear-gradient(90deg, rgb(2 12 23 / .92), rgb(7 26 43 / .78) 47%, rgb(7 26 43 / .46)),
+    url("../../img/webotheque-hero-bg.png") center / cover no-repeat;
+  color: white;
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-hero-copy {
+  position: relative;
+  z-index: 1;
   min-width: 0;
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-hero .eyebrow,
+[data-route="admin_webotheque"] .admin-webotheque-hero .help {
+  color: rgb(226 232 240 / .86);
+}
+
+[data-route="admin_webotheque"] .admin-webotheque-hero h1 {
+  color: white;
 }
 
 [data-route="admin_webotheque"] .admin-webotheque-hero-side {
@@ -20,16 +38,18 @@
   gap: .65rem;
   align-content: center;
   justify-items: stretch;
-  min-width: min(100%, 30rem);
+  position: relative;
+  z-index: 1;
+  min-width: min(100%, 32rem);
 }
 
 [data-route="admin_webotheque"] .webotheque-hero-stats {
   display: grid;
-  grid-template-columns: minmax(110px, 1fr);
+  grid-template-columns: repeat(3, minmax(92px, 1fr));
   gap: .75rem;
   align-content: center;
   justify-self: end;
-  min-width: min(100%, 11rem);
+  min-width: min(100%, 25rem);
 }
 
 [data-route="admin_webotheque"] .webotheque-hero-stats article {
@@ -38,9 +58,11 @@
   padding: .65rem .75rem;
   align-content: center;
   justify-items: center;
-  border: 1px solid var(--border);
+  border: 1px solid rgb(226 232 240 / .18);
   border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 92%, white);
+  background: rgb(2 12 23 / .58);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .08);
+  backdrop-filter: blur(8px);
   text-align: center;
 }
 
@@ -48,7 +70,7 @@
   display: block;
   order: 1;
   margin: 0;
-  color: var(--accent-strong);
+  color: white;
   font-size: clamp(1.15rem, 2vw, 1.55rem);
   font-weight: 800;
   line-height: 1;
@@ -58,7 +80,7 @@
   display: block;
   order: 2;
   margin: .35rem 0 0;
-  color: var(--muted);
+  color: rgb(226 232 240 / .82);
   font-size: .82rem;
   font-weight: 650;
 }

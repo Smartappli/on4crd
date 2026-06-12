@@ -302,7 +302,7 @@ function render_webotheque_cards(array $links, array $t, array $categories = [])
         if ($description !== '') {
             $html .= '<p>' . e($description) . '</p>';
         }
-        $html .= '<p class="help">' . e((string) ($t['category_field'] ?? 'Category')) . ': ' . e($categoryLabel) . '</p>';
+        $html .= '<p class="help">' . e((string) ($t['domain_field'] ?? $t['category_field'] ?? 'Domain')) . ': ' . e($categoryLabel) . '</p>';
         if ($tags !== '') {
             $html .= '<p class="help">' . e((string) $t['tags']) . ': ' . e($tags) . '</p>';
         }
@@ -474,11 +474,14 @@ function render_webotheque_page(): void
             </div>
             <div class="webotheque-hero-side">
                 <div class="webotheque-hero-stats">
+                    <article><span><?= e((string) $t['links']) ?></span><strong><?= (int) ($stats['total'] ?? 0) ?></strong></article>
+                    <article><span><?= e((string) $t['tags']) ?></span><strong><?= (int) ($stats['tags'] ?? 0) ?></strong></article>
                     <article><span><?= e((string) $t['domains']) ?></span><strong><?= (int) ($stats['domains'] ?? 0) ?></strong></article>
                 </div>
                 <p class="actions webotheque-hero-actions">
                     <a class="button" href="<?= e(route_url('webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="webotheque-link-dialog" aria-haspopup="dialog" aria-controls="webotheque-link-dialog"><?= e((string) $t['propose_link']) ?></a>
-                    <a class="button secondary" href="<?= e(route_url('webotheque', ['propose_category' => '1'])) ?>" data-webotheque-modal-open="webotheque-category-dialog" aria-haspopup="dialog" aria-controls="webotheque-category-dialog"><?= e((string) $t['propose_category']) ?></a>
+                    <a class="button secondary" href="<?= e(route_url('webotheque', ['propose_domain' => '1'])) ?>" data-webotheque-modal-open="webotheque-domain-dialog" aria-haspopup="dialog" aria-controls="webotheque-domain-dialog"><?= e((string) $t['propose_category']) ?></a>
+                    <a class="button secondary" href="<?= e(route_url('webotheque', ['propose_tag' => '1'])) ?>" data-webotheque-modal-open="webotheque-tag-dialog" aria-haspopup="dialog" aria-controls="webotheque-tag-dialog"><?= e((string) $t['propose_tag']) ?></a>
                 </p>
             </div>
         </section>
@@ -499,7 +502,7 @@ function render_webotheque_page(): void
                     <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
                     <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
                     <label>
-                        <span><?= e((string) $t['category_field']) ?></span>
+                        <span><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?></span>
                         <select name="category">
                             <?php foreach ($categories as $code => $label): ?>
                                 <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
@@ -517,20 +520,44 @@ function render_webotheque_page(): void
             </div>
         </dialog>
 
-        <dialog class="webotheque-proposal-dialog" id="webotheque-category-dialog" aria-labelledby="webotheque-category-title"<?= $showCategoryProposalForm ? ' open data-webotheque-auto-open' : '' ?>>
+        <dialog class="webotheque-proposal-dialog" id="webotheque-domain-dialog" aria-labelledby="webotheque-domain-title"<?= $showCategoryProposalForm ? ' open data-webotheque-auto-open' : '' ?>>
             <div class="webotheque-proposal-dialog-card">
                 <div class="webotheque-proposal-dialog-header">
                     <div>
                         <p class="eyebrow"><?= e((string) $t['title']) ?></p>
-                        <h2 id="webotheque-category-title"><?= e((string) $t['propose_category']) ?></h2>
+                        <h2 id="webotheque-domain-title"><?= e((string) $t['propose_category']) ?></h2>
                         <p class="help"><?= e($canAutoValidate ? (string) $t['proposal_auto_accept_help'] : (string) $t['propose_category_help']) ?></p>
                     </div>
                     <button class="webotheque-proposal-dialog-close" type="button" data-webotheque-modal-close aria-label="<?= e((string) $t['cancel']) ?>">&times;</button>
                 </div>
                 <form method="post" class="webotheque-proposal-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="propose_category">
-                    <label><span><?= e((string) $t['category_name_field']) ?></span><input type="text" name="proposal_category" maxlength="120" required></label>
+                    <input type="hidden" name="action" value="propose_domain">
+                    <label><span><?= e((string) $t['category_name_field']) ?></span><input type="text" name="proposal_domain" maxlength="120" required></label>
+                    <label><span><?= e((string) $t['proposal_details_field']) ?></span><textarea name="proposal_details" rows="4" maxlength="1200"></textarea></label>
+                    <label><span><?= e((string) $t['contact_field']) ?></span><input type="email" name="proposal_contact" maxlength="220" value="<?= e($proposalContact) ?>"></label>
+                    <p class="webotheque-proposal-dialog-actions">
+                        <button class="button" type="submit"><?= e((string) $t['submit_proposal']) ?></button>
+                        <button class="button secondary" type="button" data-webotheque-modal-close><?= e((string) $t['cancel']) ?></button>
+                    </p>
+                </form>
+            </div>
+        </dialog>
+
+        <dialog class="webotheque-proposal-dialog" id="webotheque-tag-dialog" aria-labelledby="webotheque-tag-title"<?= $showTagProposalForm ? ' open data-webotheque-auto-open' : '' ?>>
+            <div class="webotheque-proposal-dialog-card">
+                <div class="webotheque-proposal-dialog-header">
+                    <div>
+                        <p class="eyebrow"><?= e((string) $t['title']) ?></p>
+                        <h2 id="webotheque-tag-title"><?= e((string) $t['propose_tag']) ?></h2>
+                        <p class="help"><?= e($canAutoValidate ? (string) $t['proposal_auto_accept_help'] : (string) $t['propose_tag_help']) ?></p>
+                    </div>
+                    <button class="webotheque-proposal-dialog-close" type="button" data-webotheque-modal-close aria-label="<?= e((string) $t['cancel']) ?>">&times;</button>
+                </div>
+                <form method="post" class="webotheque-proposal-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_tag">
+                    <label><span><?= e((string) $t['tag_name_field']) ?></span><input type="text" name="proposal_tag" maxlength="80" required></label>
                     <label><span><?= e((string) $t['proposal_details_field']) ?></span><textarea name="proposal_details" rows="4" maxlength="1200"></textarea></label>
                     <label><span><?= e((string) $t['contact_field']) ?></span><input type="email" name="proposal_contact" maxlength="220" value="<?= e($proposalContact) ?>"></label>
                     <p class="webotheque-proposal-dialog-actions">
@@ -556,7 +583,7 @@ function render_webotheque_page(): void
         </section>
 
         <?php if (count($categories) > 1): ?>
-            <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) $t['category_field']) ?>">
+            <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?>">
                 <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search])) ?>"><?= e((string) $t['all_categories']) ?></a>
                 <?php foreach ($categories as $code => $label): ?>
                     <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
@@ -656,6 +683,8 @@ function render_admin_webotheque_page(): void
             </div>
             <div class="admin-webotheque-hero-side">
                 <div class="webotheque-hero-stats">
+                    <article><span><?= e((string) $t['links']) ?></span><strong><?= (int) ($stats['total'] ?? 0) ?></strong></article>
+                    <article><span><?= e((string) $t['tags']) ?></span><strong><?= (int) ($stats['tags'] ?? 0) ?></strong></article>
                     <article><span><?= e((string) $t['domains']) ?></span><strong><?= (int) ($stats['domains'] ?? 0) ?></strong></article>
                 </div>
                 <p class="actions admin-webotheque-hero-actions">
@@ -681,7 +710,7 @@ function render_admin_webotheque_page(): void
                     <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
                     <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
                     <label>
-                        <span><?= e((string) $t['category_field']) ?></span>
+                        <span><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?></span>
                         <select name="category">
                             <?php foreach ($categories as $code => $label): ?>
                                 <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
@@ -713,7 +742,7 @@ function render_admin_webotheque_page(): void
         </section>
 
         <?php if (count($categories) > 1): ?>
-            <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) $t['category_field']) ?>">
+            <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?>">
                 <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search])) ?>"><?= e((string) $t['all_categories']) ?></a>
                 <?php foreach ($categories as $code => $label): ?>
                     <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
@@ -734,7 +763,7 @@ function render_admin_webotheque_page(): void
                             <h3><?= e((string) ($link['title'] ?? '')) ?></h3>
                             <?php if (trim((string) ($link['description'] ?? '')) !== ''): ?><p><?= e((string) $link['description']) ?></p><?php endif; ?>
                             <?php $linkCategory = webotheque_category_code((string) ($link['category'] ?? 'general')); ?>
-                            <p class="help"><?= e((string) $t['category_field']) ?>: <?= e((string) ($categories[$linkCategory] ?? webotheque_category_label_from_code($linkCategory))) ?></p>
+                            <p class="help"><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?>: <?= e((string) ($categories[$linkCategory] ?? webotheque_category_label_from_code($linkCategory))) ?></p>
                             <?php if (trim((string) ($link['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e((string) $link['tags']) ?></p><?php endif; ?>
                             <div class="actions">
                                 <a class="button secondary" href="<?= e($url) ?>" target="_blank" rel="noopener noreferrer"><?= e((string) $t['open']) ?></a>
