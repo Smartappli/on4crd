@@ -206,7 +206,6 @@ function webotheque_link_summary(array $t, string $categoryLabel, string $descri
 if (!function_exists('webotheque_stats')) {
 function webotheque_stats(): array
 {
-    $total = (int) (db()->query('SELECT COUNT(*) FROM member_webotheque_links')->fetchColumn() ?: 0);
     $rows = db()->query('SELECT url FROM member_webotheque_links')->fetchAll() ?: [];
     $domains = [];
     foreach ($rows as $row) {
@@ -215,9 +214,8 @@ function webotheque_stats(): array
             $domains[$domain] = true;
         }
     }
-    $latest = (string) (db()->query('SELECT created_at FROM member_webotheque_links ORDER BY created_at DESC, id DESC LIMIT 1')->fetchColumn() ?: '');
 
-    return ['total' => $total, 'domains' => count($domains), 'latest' => $latest];
+    return ['domains' => count($domains)];
 }
 }
 
@@ -571,6 +569,7 @@ function render_admin_webotheque_page(): void
             $categoryFilter = $categoryCode;
         }
     }
+    $showAdminLinkProposalForm = (string) ($_GET['propose_link'] ?? '') === '1';
     $stats = webotheque_stats();
     $links = webotheque_fetch_links($search, $categoryFilter, 120);
 
@@ -589,32 +588,43 @@ function render_admin_webotheque_page(): void
                 </div>
                 <p class="actions admin-webotheque-hero-actions">
                     <a class="button secondary" href="<?= e(route_url('webotheque')) ?>"><?= e((string) $t['view_links']) ?></a>
-                    <a class="button" href="#webotheque-add"><?= e((string) $t['propose_link']) ?></a>
+                    <a class="button" href="<?= e(route_url('admin_webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="admin-webotheque-link-dialog" aria-haspopup="dialog" aria-controls="admin-webotheque-link-dialog"><?= e((string) $t['propose_link']) ?></a>
                 </p>
             </div>
         </section>
 
-        <section class="card" id="webotheque-add">
-            <h2><?= e((string) $t['propose_link']) ?></h2>
-            <p class="help"><?= e((string) $t['proposal_auto_accept_help']) ?></p>
-            <form method="post" class="stack admin-webotheque-form">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="add_link">
-                <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
-                <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
-                <label>
-                    <span><?= e((string) $t['category_field']) ?></span>
-                    <select name="category">
-                        <?php foreach ($categories as $code => $label): ?>
-                            <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-                <label><span><?= e((string) $t['description_field']) ?></span><textarea name="description" rows="4"></textarea></label>
-                <label><span><?= e((string) $t['tags_field']) ?></span><input type="text" name="tags" maxlength="255"></label>
-                <p class="actions"><button class="button" type="submit"><?= e((string) $t['save']) ?></button></p>
-            </form>
-        </section>
+        <dialog class="webotheque-proposal-dialog" id="admin-webotheque-link-dialog" aria-labelledby="admin-webotheque-link-title"<?= $showAdminLinkProposalForm ? ' open data-webotheque-auto-open' : '' ?>>
+            <div class="webotheque-proposal-dialog-card">
+                <div class="webotheque-proposal-dialog-header">
+                    <div>
+                        <p class="eyebrow"><?= e((string) $t['administration']) ?></p>
+                        <h2 id="admin-webotheque-link-title"><?= e((string) $t['propose_link']) ?></h2>
+                        <p class="help"><?= e((string) $t['proposal_auto_accept_help']) ?></p>
+                    </div>
+                    <button class="webotheque-proposal-dialog-close" type="button" data-webotheque-modal-close aria-label="<?= e((string) $t['cancel']) ?>">&times;</button>
+                </div>
+                <form method="post" class="webotheque-proposal-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="add_link">
+                    <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
+                    <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
+                    <label>
+                        <span><?= e((string) $t['category_field']) ?></span>
+                        <select name="category">
+                            <?php foreach ($categories as $code => $label): ?>
+                                <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><span><?= e((string) $t['description_field']) ?></span><textarea name="description" rows="4"></textarea></label>
+                    <label><span><?= e((string) $t['tags_field']) ?></span><input type="text" name="tags" maxlength="255"></label>
+                    <p class="webotheque-proposal-dialog-actions">
+                        <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
+                        <button class="button secondary" type="button" data-webotheque-modal-close><?= e((string) $t['cancel']) ?></button>
+                    </p>
+                </form>
+            </div>
+        </dialog>
 
         <section class="card webotheque-search-panel">
             <form method="get" class="inline-form webotheque-search-form">

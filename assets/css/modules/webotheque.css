@@ -99,7 +99,8 @@
   height: 100%;
 }
 
-[data-route="webotheque"] .webotheque-proposal-dialog {
+[data-route="webotheque"] .webotheque-proposal-dialog,
+[data-route="admin_webotheque"] .webotheque-proposal-dialog {
   width: min(720px, calc(100vw - 2rem));
   max-height: calc(100vh - 2rem);
   padding: 0;
@@ -109,12 +110,14 @@
   color: var(--text);
 }
 
-[data-route="webotheque"] .webotheque-proposal-dialog::backdrop {
+[data-route="webotheque"] .webotheque-proposal-dialog::backdrop,
+[data-route="admin_webotheque"] .webotheque-proposal-dialog::backdrop {
   background: rgb(15 23 42 / .58);
   backdrop-filter: blur(3px);
 }
 
-[data-route="webotheque"] .webotheque-proposal-dialog-card {
+[data-route="webotheque"] .webotheque-proposal-dialog-card,
+[data-route="admin_webotheque"] .webotheque-proposal-dialog-card {
   display: grid;
   gap: 1rem;
   padding: 1.25rem;
@@ -124,18 +127,21 @@
   box-shadow: 0 24px 70px rgb(15 23 42 / .28);
 }
 
-[data-route="webotheque"] .webotheque-proposal-dialog-header {
+[data-route="webotheque"] .webotheque-proposal-dialog-header,
+[data-route="admin_webotheque"] .webotheque-proposal-dialog-header {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-[data-route="webotheque"] .webotheque-proposal-dialog-header h2 {
+[data-route="webotheque"] .webotheque-proposal-dialog-header h2,
+[data-route="admin_webotheque"] .webotheque-proposal-dialog-header h2 {
   margin: .1rem 0 .25rem;
 }
 
-[data-route="webotheque"] .webotheque-proposal-dialog-close {
+[data-route="webotheque"] .webotheque-proposal-dialog-close,
+[data-route="admin_webotheque"] .webotheque-proposal-dialog-close {
   width: 2.35rem;
   height: 2.35rem;
   flex: 0 0 auto;
@@ -148,23 +154,27 @@
   cursor: pointer;
 }
 
-[data-route="webotheque"] .webotheque-proposal-form {
+[data-route="webotheque"] .webotheque-proposal-form,
+[data-route="admin_webotheque"] .webotheque-proposal-form {
   display: grid;
   gap: .85rem;
 }
 
-[data-route="webotheque"] .webotheque-proposal-form label {
+[data-route="webotheque"] .webotheque-proposal-form label,
+[data-route="admin_webotheque"] .webotheque-proposal-form label {
   display: grid;
   gap: .35rem;
 }
 
-[data-route="webotheque"] .webotheque-proposal-form label span {
+[data-route="webotheque"] .webotheque-proposal-form label span,
+[data-route="admin_webotheque"] .webotheque-proposal-form label span {
   color: var(--muted);
   font-size: .88rem;
   font-weight: 650;
 }
 
-[data-route="webotheque"] .webotheque-proposal-dialog-actions {
+[data-route="webotheque"] .webotheque-proposal-dialog-actions,
+[data-route="admin_webotheque"] .webotheque-proposal-dialog-actions {
   display: flex;
   flex-wrap: wrap;
   gap: .65rem;

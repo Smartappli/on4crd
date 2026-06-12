@@ -72,6 +72,7 @@ function module_css_assets_for_route(string $route): array
         'admin_fichiers' => 'admin_member_documents',
         'admin_telechargements' => 'admin_member_documents',
         'classifieds_manage' => 'classifieds',
+        'admin_webotheque' => 'webotheque',
         'event_view' => 'events',
         'news_view' => 'news',
         'wiki_edit' => 'wiki',
@@ -104,6 +105,7 @@ function module_js_assets_for_route(string $route): array
         'article_propose' => 'articles',
         'save_dashboard' => 'dashboard',
         'widget_render' => 'dashboard',
+        'admin_webotheque' => 'webotheque',
         'wiki_edit' => 'wiki_edit',
         'wiki_propose' => 'wiki_edit',
     ];
