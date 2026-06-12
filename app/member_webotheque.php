@@ -320,6 +320,7 @@ function render_webotheque_page(): void
     $user = require_login();
     $locale = current_locale();
     $t = webotheque_i18n($locale);
+    $memberAreaLabel = member_area_eyebrow_label($locale);
 
     set_page_meta([
         'title' => (string) $t['title'],
@@ -468,7 +469,7 @@ function render_webotheque_page(): void
     <div class="stack webotheque-page">
         <section class="page-hero webotheque-hero">
             <div class="webotheque-hero-copy">
-                <p class="eyebrow"><?= e((string) $t['members_area']) ?></p>
+                <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
                 <h1><?= e((string) $t['title']) ?></h1>
                 <p class="help"><?= e((string) $t['intro']) ?></p>
             </div>
@@ -582,21 +583,32 @@ function render_webotheque_page(): void
             </form>
         </section>
 
-        <?php if (count($categories) > 1): ?>
-            <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?>">
-                <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search])) ?>"><?= e((string) $t['all_categories']) ?></a>
-                <?php foreach ($categories as $code => $label): ?>
-                    <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
-                <?php endforeach; ?>
-            </nav>
-        <?php endif; ?>
-
-        <section id="webotheque-list" class="webotheque-content">
-            <?php if ($links === []): ?>
-                <div class="card"><p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $categoryFilter !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p></div>
-            <?php else: ?>
-                <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories) ?></div>
+        <section class="webotheque-layout">
+            <?php if (count($categories) > 1): ?>
+                <aside class="card webotheque-domains-column">
+                    <p class="webotheque-domains-title"><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?></p>
+                    <nav class="webotheque-domains-list" aria-label="<?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?>">
+                        <a class="webotheque-domain-item<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search])) ?>"<?= $categoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                            <span><?= e((string) $t['all_categories']) ?></span>
+                            <strong><?= (int) ($stats['total'] ?? 0) ?></strong>
+                        </a>
+                        <?php foreach ($categories as $code => $label): ?>
+                            <a class="webotheque-domain-item<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"<?= $categoryFilter === $code ? ' aria-current="page"' : '' ?>>
+                                <span><?= e((string) $label) ?></span>
+                                <strong><?= (int) ($stats['by_category'][$code] ?? 0) ?></strong>
+                            </a>
+                        <?php endforeach; ?>
+                    </nav>
+                </aside>
             <?php endif; ?>
+
+            <section id="webotheque-list" class="webotheque-content">
+                <?php if ($links === []): ?>
+                    <div class="card"><p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $categoryFilter !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p></div>
+                <?php else: ?>
+                    <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories) ?></div>
+                <?php endif; ?>
+            </section>
         </section>
     </div>
     <?php

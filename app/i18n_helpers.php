@@ -275,3 +275,26 @@ function t_page(string $domain, string $key, ?string $locale = null): string
     return $key;
 }
 }
+
+if (!function_exists('member_area_eyebrow_label')) {
+function member_area_eyebrow_label(?string $locale = null): string
+{
+    $localeCode = strtolower(trim((string) ($locale ?? current_locale())));
+    $localeCode = str_replace('_', '-', $localeCode);
+    if (str_contains($localeCode, '-')) {
+        $localeCode = (string) explode('-', $localeCode, 2)[0];
+    }
+
+    if ($localeCode === 'fr') {
+        return 'Espace Membre';
+    }
+    if ($localeCode === 'en') {
+        return 'Member Area';
+    }
+
+    $homeMessages = i18n_domain_locale('home', $localeCode);
+    $label = trim((string) ($homeMessages['member_module_members_title'] ?? ''));
+
+    return $label !== '' ? $label : 'Member Area';
+}
+}
