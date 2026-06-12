@@ -3,13 +3,30 @@
   min-width: 0;
 }
 
+[data-route="articles"] .page-hero {
+  position: relative;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / .32);
+  background:
+    radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
+    linear-gradient(90deg, rgb(120 53 15 / .84), rgb(217 119 6 / .52) 52%, rgb(254 243 199 / .22)),
+    url("../../img/on4crd_hero3.png") center / cover no-repeat;
+  box-shadow: none;
+  color: white;
+}
+
 [data-route="articles"] .articles-hero-title {
   margin: .15rem 0 .35rem;
   font-family: inherit;
-  color: var(--text);
+  color: white;
   font-size: clamp(1.8rem, 3vw, 2.8rem);
   font-weight: 400;
   line-height: 1.1;
+}
+
+[data-route="articles"] .page-hero .eyebrow,
+[data-route="articles"] .page-hero .help {
+  color: rgb(241 245 249 / .92);
 }
 
 [data-route="articles"] .articles-search-panel {
@@ -32,8 +49,20 @@
   min-width: min(100%, 16rem);
 }
 
+[data-route="articles"] .articles-hero-stats article {
+  border-color: rgb(255 255 255 / .32);
+  background: rgb(255 255 255 / .16);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .16);
+  backdrop-filter: blur(8px);
+}
+
 [data-route="articles"] .articles-hero-stats strong {
+  color: white;
   text-align: center;
+}
+
+[data-route="articles"] .articles-hero-stats span {
+  color: rgb(241 245 249 / .84);
 }
 
 [data-route="articles"] .articles-hero-actions {

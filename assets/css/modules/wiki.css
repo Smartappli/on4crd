@@ -36,6 +36,15 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / .32);
+  background:
+    radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
+    linear-gradient(90deg, rgb(15 23 42 / .84), rgb(20 184 166 / .52) 52%, rgb(204 251 241 / .22)),
+    url("../../img/on4crd_hero9.png") center / cover no-repeat;
+  box-shadow: none;
+  color: white;
 }
 
 [data-route="wiki"] .wiki-hero-stats {
@@ -51,9 +60,11 @@
   padding: .65rem .75rem;
   align-content: center;
   justify-items: center;
-  border: 1px solid var(--border);
+  border: 1px solid rgb(255 255 255 / .32);
   border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 92%, white);
+  background: rgb(255 255 255 / .16);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .16);
+  backdrop-filter: blur(8px);
   text-align: center;
 }
 
@@ -61,7 +72,7 @@
   display: block;
   order: 1;
   margin: 0;
-  color: var(--accent-strong);
+  color: white;
   font-size: clamp(1.15rem, 2vw, 1.55rem);
   font-weight: 800;
   line-height: 1;
@@ -71,7 +82,7 @@
   display: block;
   order: 2;
   margin: .35rem 0 0;
-  color: var(--muted);
+  color: rgb(241 245 249 / .84);
   font-size: .82rem;
   font-weight: 650;
 }
@@ -248,11 +259,20 @@
 [data-route="wiki"] .wiki-hero-title {
   margin: 0;
   font-family: inherit;
-  color: var(--accent-strong);
+  color: rgb(241 245 249 / .92);
   font-size: .78rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: .08em;
+}
+
+[data-route="wiki"] .wiki-hero h1,
+[data-route="wiki"] .wiki-hero .help {
+  color: white;
+}
+
+[data-route="wiki"] .wiki-hero .help {
+  color: rgb(241 245 249 / .92);
 }
 
 .wiki-grid {
