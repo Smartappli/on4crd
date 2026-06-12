@@ -120,7 +120,7 @@ function webotheque_categories(array $t): array
         // Keep the base category if optional category metadata cannot be read.
     }
 
-    foreach (content_proposal_accepted_categories('webotheque', 120) as $code => $label) {
+    foreach (content_proposal_accepted_categories('webotheque', 120) + content_proposal_accepted_terms('webotheque', 'domain', 120, 'webotheque') as $code => $label) {
         $code = webotheque_category_code((string) $code);
         $label = content_proposal_clean_single_line((string) $label, 190);
         if ($code !== '' && $label !== '') {
@@ -196,26 +196,66 @@ if (!function_exists('webotheque_link_summary')) {
 function webotheque_link_summary(array $t, string $categoryLabel, string $description, string $tags): string
 {
     return content_proposal_details_text([
-        (string) ($t['category_field'] ?? 'Category') => $categoryLabel,
+        (string) ($t['domain_field'] ?? $t['category_field'] ?? 'Domain') => $categoryLabel,
         (string) ($t['description_field'] ?? 'Description') => $description,
         (string) ($t['tags_field'] ?? 'Tags') => $tags,
     ]);
 }
 }
 
+if (!function_exists('webotheque_tags_from_text')) {
+/**
+ * @return array<string, string>
+ */
+function webotheque_tags_from_text(string $value): array
+{
+    $tags = [];
+    foreach (preg_split('/[,;#]+/u', $value) ?: [] as $part) {
+        $tag = content_proposal_clean_single_line((string) $part, 80);
+        if ($tag === '') {
+            continue;
+        }
+        $tags[mb_strtolower($tag, 'UTF-8')] = $tag;
+    }
+
+    return $tags;
+}
+}
+
+if (!function_exists('webotheque_accepted_tags')) {
+/**
+ * @return array<string, string>
+ */
+function webotheque_accepted_tags(): array
+{
+    $tags = [];
+    foreach (content_proposal_accepted_terms('webotheque', 'tag', 80, 'tag') as $label) {
+        foreach (webotheque_tags_from_text((string) $label) as $key => $tag) {
+            $tags[$key] = $tag;
+        }
+    }
+
+    return $tags;
+}
+}
+
 if (!function_exists('webotheque_stats')) {
 function webotheque_stats(): array
 {
-    $rows = db()->query('SELECT url FROM member_webotheque_links')->fetchAll() ?: [];
+    $rows = db()->query('SELECT url, tags FROM member_webotheque_links')->fetchAll() ?: [];
     $domains = [];
+    $tags = webotheque_accepted_tags();
     foreach ($rows as $row) {
         $domain = webotheque_domain_from_url((string) ($row['url'] ?? ''));
         if ($domain !== '') {
             $domains[$domain] = true;
         }
+        foreach (webotheque_tags_from_text((string) ($row['tags'] ?? '')) as $key => $tag) {
+            $tags[$key] = $tag;
+        }
     }
 
-    return ['domains' => count($domains)];
+    return ['total' => count($rows), 'tags' => count($tags), 'domains' => count($domains)];
 }
 }
 
@@ -302,8 +342,8 @@ function render_webotheque_page(): void
             verify_csrf();
             $action = (string) ($_POST['action'] ?? '');
 
-            if ($action === 'propose_category') {
-                $proposalCategory = content_proposal_clean_single_line((string) ($_POST['proposal_category'] ?? ''), 120);
+            if ($action === 'propose_domain' || $action === 'propose_category') {
+                $proposalCategory = content_proposal_clean_single_line((string) ($_POST['proposal_domain'] ?? $_POST['proposal_category'] ?? ''), 120);
                 $proposalDetails = content_proposal_clean_multiline((string) ($_POST['proposal_details'] ?? ''), 1200);
                 $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContact), 220);
                 if ($proposalCategory === '') {
@@ -315,7 +355,7 @@ function render_webotheque_page(): void
                 ]);
                 $autoAccept = has_permission('admin.access');
                 $proposalStatus = $autoAccept ? 'accepted' : 'pending';
-                $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'category', $proposalCategory, $summary, $proposalContact, '', $proposalStatus);
+                $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'domain', $proposalCategory, $summary, $proposalContact, '', $proposalStatus);
                 if ($autoAccept) {
                     set_flash('success', (string) ($t['ok_category_added'] ?? 'Category created and approved.'));
                     redirect_url(route_url_clean('webotheque', ['category' => content_proposal_category_code($proposalCategory, 120, 'webotheque')]));
@@ -323,8 +363,39 @@ function render_webotheque_page(): void
 
                 content_proposal_notify_site((string) ($t['propose_category_subject'] ?? 'Web library category proposal'), [
                     'area' => 'webotheque',
-                    'proposal_type' => 'category',
+                    'proposal_type' => 'domain',
                     'title' => $proposalCategory,
+                    'summary' => $summary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+                set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+                redirect('my_requests');
+            }
+
+            if ($action === 'propose_tag') {
+                $proposalTag = content_proposal_clean_single_line((string) ($_POST['proposal_tag'] ?? ''), 80);
+                $proposalDetails = content_proposal_clean_multiline((string) ($_POST['proposal_details'] ?? ''), 1200);
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContact), 220);
+                if ($proposalTag === '') {
+                    throw new RuntimeException('err_tag_required');
+                }
+
+                $summary = content_proposal_details_text([
+                    (string) ($t['proposal_details_field'] ?? 'Details') => $proposalDetails,
+                ]);
+                $autoAccept = has_permission('admin.access');
+                $proposalStatus = $autoAccept ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'tag', $proposalTag, $summary, $proposalContact, '', $proposalStatus);
+                if ($autoAccept) {
+                    set_flash('success', (string) ($t['ok_tag_added'] ?? 'Tag created and approved.'));
+                    redirect_url(route_url('webotheque'));
+                }
+
+                content_proposal_notify_site((string) ($t['propose_tag_subject'] ?? 'Web library tag proposal'), [
+                    'area' => 'webotheque',
+                    'proposal_type' => 'tag',
+                    'title' => $proposalTag,
                     'summary' => $summary,
                     'contact' => $proposalContact,
                     'source_ref' => 'content_proposals#' . $proposalId,
@@ -387,7 +458,8 @@ function render_webotheque_page(): void
         }
     }
     $showLinkProposalForm = (string) ($_GET['propose_link'] ?? '') === '1';
-    $showCategoryProposalForm = (string) ($_GET['propose_category'] ?? '') === '1';
+    $showCategoryProposalForm = (string) ($_GET['propose_domain'] ?? $_GET['propose_category'] ?? '') === '1';
+    $showTagProposalForm = (string) ($_GET['propose_tag'] ?? '') === '1';
     $stats = webotheque_stats();
     $links = webotheque_fetch_links($search, $categoryFilter);
 
