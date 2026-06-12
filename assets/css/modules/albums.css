@@ -24,7 +24,7 @@
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(8 47 73 / .84), rgb(14 116 144 / .50) 52%, rgb(224 242 254 / .22)),
-    url("../../img/on4crd_hero12.png") center / cover no-repeat;
+    url("../../img/module-hero-albums.png") center / cover no-repeat;
   box-shadow: none;
   color: white;
 }

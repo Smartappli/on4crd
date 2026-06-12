@@ -2143,86 +2143,86 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(8 47 73 / .84), rgb(14 116 144 / .62) 50%, rgb(224 242 254 / .24)),
-    url("../img/on4crd_hero.png") center / cover no-repeat;
+    url("../img/module-hero-profile.png") center / cover no-repeat;
 }
 [data-route="members_library"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(22 78 99 / .84), rgb(15 118 110 / .62) 50%, rgb(204 251 241 / .24)),
-    url("../img/on4crd_hero4.png") center / cover no-repeat;
+    url("../img/module-hero-library.png") center / cover no-repeat;
 }
 [data-route="qsl"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(30 64 175 / .84), rgb(37 99 235 / .58) 52%, rgb(219 234 254 / .22)),
-    url("../img/on4crd_hero15.png") center / cover no-repeat;
+    url("../img/module-hero-qsl.png") center / cover no-repeat;
 }
 [data-route="classifieds"] .member-module-hero,
 [data-route="classifieds_manage"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(120 53 15 / .84), rgb(194 65 12 / .58) 52%, rgb(254 215 170 / .22)),
-    url("../img/on4crd_hero5.png") center / cover no-repeat;
+    url("../img/module-hero-classifieds.png") center / cover no-repeat;
 }
 [data-route="auctions"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(88 28 135 / .82), rgb(168 85 247 / .54) 52%, rgb(233 213 255 / .20)),
-    url("../img/on4crd_hero2.png") center / cover no-repeat;
+    url("../img/module-hero-auctions.png") center / cover no-repeat;
 }
 [data-route="chatbot"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(22 78 99 / .84), rgb(6 182 212 / .52) 52%, rgb(207 250 254 / .22)),
-    url("../img/on4crd_hero9.png") center / cover no-repeat;
+    url("../img/module-hero-chatbot.png") center / cover no-repeat;
 }
 [data-route="newsletter"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(67 56 202 / .82), rgb(14 165 233 / .52) 52%, rgb(224 242 254 / .22)),
-    url("../img/on4crd_hero8.png") center / cover no-repeat;
+    url("../img/module-hero-newsletter.png") center / cover no-repeat;
 }
 [data-route="settings"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(51 65 85 / .82), rgb(71 85 105 / .56) 52%, rgb(226 232 240 / .22)),
-    url("../img/on4crd_hero13.png") center / cover no-repeat;
+    url("../img/module-hero-settings.png") center / cover no-repeat;
 }
 [data-route="notifications"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(12 74 110 / .84), rgb(2 132 199 / .56) 52%, rgb(224 242 254 / .22)),
-    url("../img/on4crd_hero10.png") center / cover no-repeat;
+    url("../img/module-hero-notifications.png") center / cover no-repeat;
 }
 [data-route="my_requests"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(30 41 59 / .82), rgb(51 65 85 / .56) 52%, rgb(226 232 240 / .22)),
-    url("../img/on4crd_hero1.png") center / cover no-repeat;
+    url("../img/module-hero-requests.png") center / cover no-repeat;
 }
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(8 47 73 / .84), rgb(14 116 144 / .62) 50%, rgb(224 242 254 / .24)),
-    url("../img/on4crd_hero3.png") center / cover no-repeat;
+    url("../img/module-hero-presentations.png") center / cover no-repeat;
 }
 [data-route="videos"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(12 74 110 / .84), rgb(2 132 199 / .56) 52%, rgb(224 242 254 / .22)),
-    url("../img/on4crd_hero10.png") center / cover no-repeat;
+    url("../img/module-hero-videos.png") center / cover no-repeat;
 }
 [data-route="fichiers"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(20 83 45 / .82), rgb(22 163 74 / .54) 52%, rgb(220 252 231 / .20)),
-    url("../img/on4crd_hero14.png") center / cover no-repeat;
+    url("../img/module-hero-files.png") center / cover no-repeat;
 }
 [data-route="pv"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(120 53 15 / .82), rgb(217 119 6 / .52) 52%, rgb(254 243 199 / .22)),
-    url("../img/on4crd_hero8.png") center / cover no-repeat;
+    url("../img/module-hero-minutes.png") center / cover no-repeat;
 }
 .page-hero h1,
 .wiki-hero h1,

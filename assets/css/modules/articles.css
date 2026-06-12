@@ -10,7 +10,7 @@
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
     linear-gradient(90deg, rgb(120 53 15 / .84), rgb(217 119 6 / .52) 52%, rgb(254 243 199 / .22)),
-    url("../../img/on4crd_hero3.png") center / cover no-repeat;
+    url("../../img/module-hero-articles.png") center / cover no-repeat;
   box-shadow: none;
   color: white;
 }

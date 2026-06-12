@@ -255,8 +255,8 @@ if ($heroSubtitle !== '') {
 $moduleCount = count($activeModules);
 $heroBackgroundUrl = asset_url('assets/img/on4crd_hero.png');
 try {
-    $heroImageCandidates = cache_remember('home_hero_image_candidates_v1', 300, static function (): array {
-        return glob(__DIR__ . '/../assets/img/*.{png,jpg,jpeg,webp,gif,avif}', GLOB_BRACE) ?: [];
+    $heroImageCandidates = cache_remember('home_hero_image_candidates_v2', 300, static function (): array {
+        return glob(__DIR__ . '/../assets/img/on4crd_hero*.png') ?: [];
     });
 } catch (Throwable) {
     $heroImageCandidates = [];
