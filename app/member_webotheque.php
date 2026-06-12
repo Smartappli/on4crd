@@ -279,7 +279,7 @@ function render_webotheque_cards(array $links, array $t, array $categories = [])
 if (!function_exists('render_webotheque_page')) {
 function render_webotheque_page(): void
 {
-    require_login();
+    $user = require_login();
     $locale = current_locale();
     $t = webotheque_i18n($locale);
 
@@ -295,12 +295,103 @@ function render_webotheque_page(): void
         return;
     }
 
+    $categories = webotheque_categories($t);
+    $proposalContact = webotheque_member_contact($user);
+    $canAutoValidate = has_permission('admin.access');
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        try {
+            verify_csrf();
+            $action = (string) ($_POST['action'] ?? '');
+
+            if ($action === 'propose_category') {
+                $proposalCategory = content_proposal_clean_single_line((string) ($_POST['proposal_category'] ?? ''), 120);
+                $proposalDetails = content_proposal_clean_multiline((string) ($_POST['proposal_details'] ?? ''), 1200);
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContact), 220);
+                if ($proposalCategory === '') {
+                    throw new RuntimeException('err_category_required');
+                }
+
+                $summary = content_proposal_details_text([
+                    (string) ($t['proposal_details_field'] ?? 'Details') => $proposalDetails,
+                ]);
+                $autoAccept = has_permission('admin.access');
+                $proposalStatus = $autoAccept ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'category', $proposalCategory, $summary, $proposalContact, '', $proposalStatus);
+                if ($autoAccept) {
+                    set_flash('success', (string) ($t['ok_category_added'] ?? 'Category created and approved.'));
+                    redirect_url(route_url_clean('webotheque', ['category' => content_proposal_category_code($proposalCategory, 120, 'webotheque')]));
+                }
+
+                content_proposal_notify_site((string) ($t['propose_category_subject'] ?? 'Web library category proposal'), [
+                    'area' => 'webotheque',
+                    'proposal_type' => 'category',
+                    'title' => $proposalCategory,
+                    'summary' => $summary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+                set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+                redirect('my_requests');
+            }
+
+            if ($action === 'propose_link') {
+                $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? ''), 190);
+                $url = webotheque_normalize_url((string) ($_POST['url'] ?? ''));
+                $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? ''), 5000);
+                $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? ''), 255);
+                $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContact), 220);
+                if ($title === '' || $url === '') {
+                    throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
+                }
+
+                $summary = webotheque_link_summary($t, (string) ($categories[$category] ?? $category), $description, $tags);
+                $autoAccept = has_permission('admin.access');
+                $proposalStatus = $autoAccept ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'content', $title, $summary, $proposalContact, $url, $proposalStatus);
+                if ($autoAccept) {
+                    webotheque_insert_link((int) $user['id'], $category, $title, $url, $description, $tags);
+                    set_flash('success', (string) ($t['ok_added'] ?? 'Link added.'));
+                    redirect_url(route_url_clean('webotheque', ['category' => $category]));
+                }
+
+                content_proposal_notify_site((string) ($t['propose_link_subject'] ?? 'Web library link proposal'), [
+                    'area' => 'webotheque',
+                    'proposal_type' => 'content',
+                    'title' => $title,
+                    'summary' => $summary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId . ' ' . $url,
+                ]);
+                set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+                redirect('my_requests');
+            }
+
+            throw new RuntimeException('invalid');
+        } catch (Throwable $throwable) {
+            $key = $throwable->getMessage();
+            set_flash('error', (string) ($t[$key] ?? $key));
+            redirect_url(route_url('webotheque'));
+        }
+    }
+
     $search = trim((string) ($_GET['q'] ?? ''));
     if (mb_strlen($search) > 120) {
         $search = mb_substr($search, 0, 120);
     }
+    $categoryFilter = '';
+    $categoryInput = trim((string) ($_GET['category'] ?? ''));
+    if ($categoryInput !== '') {
+        $categoryCode = webotheque_category_code($categoryInput);
+        if (isset($categories[$categoryCode])) {
+            $categoryFilter = $categoryCode;
+        }
+    }
+    $showLinkProposalForm = (string) ($_GET['propose_link'] ?? '') === '1';
+    $showCategoryProposalForm = (string) ($_GET['propose_category'] ?? '') === '1';
     $stats = webotheque_stats();
-    $links = webotheque_fetch_links($search);
+    $links = webotheque_fetch_links($search, $categoryFilter);
     $latestDate = trim((string) ($stats['latest'] ?? ''));
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $t['none'];
 
@@ -321,29 +412,86 @@ function render_webotheque_page(): void
                 </div>
                 <p class="actions webotheque-hero-actions">
                     <a class="button secondary" href="#webotheque-list"><?= e((string) $t['view_links']) ?></a>
-                    <?php if (has_permission('admin.access')): ?>
-                        <a class="button" href="<?= e(route_url('admin_webotheque')) ?>"><?= e((string) $t['administration']) ?></a>
-                    <?php endif; ?>
+                    <a class="button" href="<?= e(route_url('webotheque', ['propose_link' => '1'])) ?>" data-webotheque-link-open><?= e((string) $t['propose_link']) ?></a>
+                    <a class="button secondary" href="<?= e(route_url('webotheque', ['propose_category' => '1'])) ?>" data-webotheque-category-open><?= e((string) $t['propose_category']) ?></a>
                 </p>
             </div>
         </section>
 
+        <?php if ($showLinkProposalForm): ?>
+            <section class="card" id="webotheque-propose-link">
+                <h2><?= e((string) $t['propose_link']) ?></h2>
+                <p class="help"><?= e($canAutoValidate ? (string) $t['proposal_auto_accept_help'] : (string) $t['propose_link_help']) ?></p>
+                <form method="post" class="stack admin-webotheque-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_link">
+                    <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
+                    <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
+                    <label>
+                        <span><?= e((string) $t['category_field']) ?></span>
+                        <select name="category">
+                            <?php foreach ($categories as $code => $label): ?>
+                                <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><span><?= e((string) $t['description_field']) ?></span><textarea name="description" rows="4"></textarea></label>
+                    <label><span><?= e((string) $t['tags_field']) ?></span><input type="text" name="tags" maxlength="255"></label>
+                    <label><span><?= e((string) $t['contact_field']) ?></span><input type="email" name="proposal_contact" maxlength="220" value="<?= e($proposalContact) ?>"></label>
+                    <p class="actions">
+                        <button class="button" type="submit"><?= e((string) $t['submit_proposal']) ?></button>
+                        <a class="button secondary" href="<?= e(route_url('webotheque')) ?>"><?= e((string) $t['cancel']) ?></a>
+                    </p>
+                </form>
+            </section>
+        <?php endif; ?>
+
+        <?php if ($showCategoryProposalForm): ?>
+            <section class="card" id="webotheque-propose-category">
+                <h2><?= e((string) $t['propose_category']) ?></h2>
+                <p class="help"><?= e($canAutoValidate ? (string) $t['proposal_auto_accept_help'] : (string) $t['propose_category_help']) ?></p>
+                <form method="post" class="stack admin-webotheque-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_category">
+                    <label><span><?= e((string) $t['category_name_field']) ?></span><input type="text" name="proposal_category" maxlength="120" required></label>
+                    <label><span><?= e((string) $t['proposal_details_field']) ?></span><textarea name="proposal_details" rows="4" maxlength="1200"></textarea></label>
+                    <label><span><?= e((string) $t['contact_field']) ?></span><input type="email" name="proposal_contact" maxlength="220" value="<?= e($proposalContact) ?>"></label>
+                    <p class="actions">
+                        <button class="button" type="submit"><?= e((string) $t['submit_proposal']) ?></button>
+                        <a class="button secondary" href="<?= e(route_url('webotheque')) ?>"><?= e((string) $t['cancel']) ?></a>
+                    </p>
+                </form>
+            </section>
+        <?php endif; ?>
+
         <section class="card webotheque-search-panel">
             <form method="get" class="inline-form webotheque-search-form">
                 <input type="hidden" name="route" value="webotheque">
+                <?php if ($categoryFilter !== ''): ?>
+                    <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
+                <?php endif; ?>
                 <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
                 <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-                <?php if ($search !== ''): ?>
+                <?php if ($search !== '' || $categoryFilter !== ''): ?>
                     <a class="button secondary" href="<?= e(route_url('webotheque')) ?>"><?= e((string) $t['reset']) ?></a>
                 <?php endif; ?>
             </form>
         </section>
 
+        <?php if (count($categories) > 1): ?>
+            <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) $t['category_field']) ?>">
+                <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search])) ?>"><?= e((string) $t['all_categories']) ?></a>
+                <?php foreach ($categories as $code => $label): ?>
+                    <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
+                <?php endforeach; ?>
+            </nav>
+        <?php endif; ?>
+
         <section id="webotheque-list" class="webotheque-content">
             <?php if ($links === []): ?>
-                <div class="card"><p><?= e((string) $t['empty']) ?><?php if ($search !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p></div>
+                <div class="card"><p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $categoryFilter !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p></div>
             <?php else: ?>
-                <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t) ?></div>
+                <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories) ?></div>
             <?php endif; ?>
         </section>
     </div>
@@ -371,6 +519,8 @@ function render_admin_webotheque_page(): void
         return;
     }
 
+    $categories = webotheque_categories($t);
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             verify_csrf();
@@ -382,15 +532,17 @@ function render_admin_webotheque_page(): void
                 redirect('admin_webotheque');
             }
 
-            $title = trim((string) ($_POST['title'] ?? ''));
+            $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? ''), 190);
             $url = webotheque_normalize_url((string) ($_POST['url'] ?? ''));
-            $description = trim((string) ($_POST['description'] ?? ''));
-            $tags = mb_safe_substr(trim((string) ($_POST['tags'] ?? '')), 0, 255);
+            $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? ''), 5000);
+            $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? ''), 255);
+            $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
             if ($title === '' || $url === '') {
                 throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
             }
-            db()->prepare('INSERT INTO member_webotheque_links (member_id, title, url, description, tags) VALUES (?, ?, ?, ?, ?)')
-                ->execute([(int) ($user['id'] ?? 0), $title, $url, $description, $tags]);
+            $summary = webotheque_link_summary($t, (string) ($categories[$category] ?? $category), $description, $tags);
+            content_proposal_create((int) ($user['id'] ?? 0), 'webotheque', 'content', $title, $summary, webotheque_member_contact($user ?? []), $url, 'accepted');
+            webotheque_insert_link((int) ($user['id'] ?? 0), $category, $title, $url, $description, $tags);
             set_flash('success', (string) $t['ok_added']);
             redirect('admin_webotheque');
         } catch (Throwable $throwable) {
@@ -404,8 +556,16 @@ function render_admin_webotheque_page(): void
     if (mb_strlen($search) > 120) {
         $search = mb_substr($search, 0, 120);
     }
+    $categoryFilter = '';
+    $categoryInput = trim((string) ($_GET['category'] ?? ''));
+    if ($categoryInput !== '') {
+        $categoryCode = webotheque_category_code($categoryInput);
+        if (isset($categories[$categoryCode])) {
+            $categoryFilter = $categoryCode;
+        }
+    }
     $stats = webotheque_stats();
-    $links = webotheque_fetch_links($search, 120);
+    $links = webotheque_fetch_links($search, $categoryFilter, 120);
     $latestDate = trim((string) ($stats['latest'] ?? ''));
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $t['none'];
 
@@ -426,19 +586,27 @@ function render_admin_webotheque_page(): void
                 </div>
                 <p class="actions admin-webotheque-hero-actions">
                     <a class="button secondary" href="<?= e(route_url('webotheque')) ?>"><?= e((string) $t['view_links']) ?></a>
-                    <a class="button" href="#webotheque-add"><?= e((string) $t['add_link']) ?></a>
+                    <a class="button" href="#webotheque-add"><?= e((string) $t['propose_link']) ?></a>
                 </p>
             </div>
         </section>
 
         <section class="card" id="webotheque-add">
-            <h2><?= e((string) $t['add_link']) ?></h2>
-            <p class="help"><?= e((string) $t['add_link_help']) ?></p>
+            <h2><?= e((string) $t['propose_link']) ?></h2>
+            <p class="help"><?= e((string) $t['proposal_auto_accept_help']) ?></p>
             <form method="post" class="stack admin-webotheque-form">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="add_link">
-                <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="255" required></label>
+                <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
                 <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
+                <label>
+                    <span><?= e((string) $t['category_field']) ?></span>
+                    <select name="category">
+                        <?php foreach ($categories as $code => $label): ?>
+                            <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
                 <label><span><?= e((string) $t['description_field']) ?></span><textarea name="description" rows="4"></textarea></label>
                 <label><span><?= e((string) $t['tags_field']) ?></span><input type="text" name="tags" maxlength="255"></label>
                 <p class="actions"><button class="button" type="submit"><?= e((string) $t['save']) ?></button></p>
@@ -448,13 +616,25 @@ function render_admin_webotheque_page(): void
         <section class="card webotheque-search-panel">
             <form method="get" class="inline-form webotheque-search-form">
                 <input type="hidden" name="route" value="admin_webotheque">
+                <?php if ($categoryFilter !== ''): ?>
+                    <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
+                <?php endif; ?>
                 <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
                 <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-                <?php if ($search !== ''): ?>
+                <?php if ($search !== '' || $categoryFilter !== ''): ?>
                     <a class="button secondary" href="<?= e(route_url('admin_webotheque')) ?>"><?= e((string) $t['reset']) ?></a>
                 <?php endif; ?>
             </form>
         </section>
+
+        <?php if (count($categories) > 1): ?>
+            <nav class="classifieds-category-strip webotheque-category-filter" aria-label="<?= e((string) $t['category_field']) ?>">
+                <a class="classifieds-category-pill<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search])) ?>"><?= e((string) $t['all_categories']) ?></a>
+                <?php foreach ($categories as $code => $label): ?>
+                    <a class="classifieds-category-pill<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
+                <?php endforeach; ?>
+            </nav>
+        <?php endif; ?>
 
         <section class="admin-webotheque-list">
             <h2><?= e((string) $t['content_list']) ?></h2>
@@ -468,6 +648,8 @@ function render_admin_webotheque_page(): void
                             <span class="badge muted"><?= e(webotheque_domain_from_url($url) ?: (string) $t['link']) ?></span>
                             <h3><?= e((string) ($link['title'] ?? '')) ?></h3>
                             <?php if (trim((string) ($link['description'] ?? '')) !== ''): ?><p><?= e((string) $link['description']) ?></p><?php endif; ?>
+                            <?php $linkCategory = webotheque_category_code((string) ($link['category'] ?? 'general')); ?>
+                            <p class="help"><?= e((string) $t['category_field']) ?>: <?= e((string) ($categories[$linkCategory] ?? webotheque_category_label_from_code($linkCategory))) ?></p>
                             <?php if (trim((string) ($link['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e((string) $link['tags']) ?></p><?php endif; ?>
                             <div class="actions">
                                 <a class="button secondary" href="<?= e($url) ?>" target="_blank" rel="noopener noreferrer"><?= e((string) $t['open']) ?></a>
