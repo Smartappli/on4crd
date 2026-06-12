@@ -304,6 +304,22 @@ CREATE TABLE IF NOT EXISTS member_library_documents (
     INDEX idx_member_uploaded (member_id, uploaded_at)
 );
 
+CREATE TABLE IF NOT EXISTS member_webotheque_links (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    category VARCHAR(120) NOT NULL DEFAULT 'general',
+    title VARCHAR(255) NOT NULL,
+    url VARCHAR(500) NOT NULL,
+    description TEXT NULL,
+    tags VARCHAR(255) NOT NULL DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    INDEX idx_created (created_at),
+    INDEX idx_category (category),
+    INDEX idx_tags (tags),
+    INDEX idx_member_created (member_id, created_at)
+);
+
 CREATE TABLE IF NOT EXISTS wiki_revisions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     wiki_page_id INT NOT NULL,

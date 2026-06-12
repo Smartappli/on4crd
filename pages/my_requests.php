@@ -93,6 +93,7 @@ $proposalAreaLabels = [
     'events' => $text('events_title', 'Events'),
     'members_library' => $text('library_title', $isFrench ? 'Bibliotheque membres' : 'Member library'),
     'news' => $text('news_title', $isFrench ? 'Actualites' : 'News'),
+    'webotheque' => $text('webotheque_title', $isFrench ? 'Webotheque' : 'Web library'),
     'wiki' => $text('wiki_title', 'Wiki'),
 ];
 $proposalTypeLabels = [
@@ -107,6 +108,7 @@ $proposalAreaRoutes = [
     'events' => 'events',
     'members_library' => 'members_library',
     'news' => 'news',
+    'webotheque' => 'webotheque',
     'wiki' => 'wiki',
 ];
 
