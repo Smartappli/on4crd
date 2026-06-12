@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('members_library', $locale);
+$memberAreaLabel = member_area_eyebrow_label($locale);
 /** @var array{id:int} $user */
 $user = current_user() ?? ['id' => 0];
 $canManageLibrary = has_permission('admin.access');
@@ -244,9 +245,9 @@ if ($documents !== []) {
 ob_start();
 ?>
 <div class="stack members-library-article-design">
-    <section class="page-hero">
+    <section class="page-hero members-library-hero member-module-hero">
         <div>
-            <p class="eyebrow"><?= e((string) $t['title']) ?></p>
+            <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
             <h1 class="members-library-heading"><?= e((string) $t['title']) ?></h1>
             <p class="help"><?= e((string) $t['intro']) ?></p>
         </div>

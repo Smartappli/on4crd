@@ -5,6 +5,7 @@ require_module_enabled('dashboard');
 $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_translator('dashboard', $locale);
+$memberAreaLabel = member_area_eyebrow_label($locale);
 set_page_meta(['title' => $t('meta_title'), 'description' => $t('meta_desc'), 'schema_type' => 'WebPage']);
 $availableWidgets = enabled_widget_catalog();
 unset($availableWidgets['chatbot']);
@@ -164,9 +165,10 @@ $dashboardConfig = [
 ob_start();
 ?>
 <div class="dashboard-fullwidth" id="dashboard-shell">
-  <section class="card">
+  <section class="card dashboard-hero member-module-hero">
     <div class="row-between">
       <div>
+        <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
         <h1 class="dashboard-heading"><?= e($t('title')) ?></h1>
       </div>
       <div class="actions">

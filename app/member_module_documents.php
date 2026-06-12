@@ -446,6 +446,7 @@ function render_member_document_module_page(string $module): void
     require_login();
     $locale = current_locale();
     $labels = member_document_labels($locale);
+    $memberAreaLabel = member_area_eyebrow_label($locale);
     $moduleText = member_document_module_text($moduleCode, $locale);
     $title = (string) $moduleText['title'];
     $intro = (string) $moduleText['intro'];
@@ -476,9 +477,9 @@ function render_member_document_module_page(string $module): void
     ob_start();
     ?>
     <div class="stack member-document-module">
-        <section class="page-hero member-document-hero">
+        <section class="page-hero member-document-hero member-module-hero">
             <div class="member-document-hero-copy">
-                <p class="eyebrow"><?= e((string) $labels['members_area']) ?></p>
+                <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
                 <h1 class="member-document-heading"><?= e($title) ?></h1>
                 <?php if ($intro !== ''): ?><p class="help"><?= e($intro) ?></p><?php endif; ?>
             </div>
