@@ -61,15 +61,19 @@ $unreadCount = member_notifications_unread_count($memberId);
 
 ob_start();
 ?>
-<div class="card">
+<div class="notifications-page stack">
+<section class="card notifications-hero member-module-hero">
     <div class="row-between">
         <div>
+            <p class="eyebrow"><?= e(member_area_eyebrow_label($locale)) ?></p>
             <h1><?= e((string) ($t['title'] ?? 'Notifications')) ?></h1>
             <p><?= e((string) ($t['intro'] ?? 'Track publication, moderation and import updates in one place.')) ?></p>
         </div>
         <span class="badge muted"><?= $unreadCount ?> <?= e((string) ($t['unread'] ?? 'unread')) ?></span>
     </div>
+</section>
 
+<section class="card notifications-list-card">
     <form method="get" class="inline-form" style="margin-bottom:.8rem;flex-wrap:wrap;">
         <input type="hidden" name="route" value="notifications">
         <select name="filter">
@@ -121,7 +125,7 @@ ob_start();
             <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('notifications', ['filter' => $filter, 'p' => $page + 1])) ?>"><?= e((string) ($t['next'] ?? 'Next')) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
+</section>
 </div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) ($t['title'] ?? 'Notifications'));
-

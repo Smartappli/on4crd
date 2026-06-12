@@ -256,7 +256,12 @@ $helpFieldLabel = static function (string $label, string $tooltipId, string $hel
 ob_start();
 ?>
 <div class="stack">
-<div class="card profile-hero">
+<div class="card profile-hero member-module-hero">
+    <div class="profile-hero-intro">
+        <p class="eyebrow"><?= e(member_area_eyebrow_label($locale)) ?></p>
+        <h1><?= e($t('title')) ?></h1>
+        <p class="help"><?= e($t('meta_desc')) ?></p>
+    </div>
     <div class="profile-preview-views">
         <?php foreach ($profileViews as $viewer => $view): ?>
             <?php $canSeePhoto = member_profile_visibility_allows((string) $viewer, (string) ($member['visibility_photo'] ?? 'private')); ?>

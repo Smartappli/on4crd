@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
+$memberAreaLabel = member_area_eyebrow_label($locale);
 $messages = array_replace(
     i18n_domain_locale('classifieds', $locale),
     i18n_domain_locale('classifieds_manage', $locale)
@@ -129,9 +130,9 @@ set_page_meta(['title' => $t('manage_page_title'), 'description' => $t('manage_p
 ob_start();
 ?>
 <section class="classifieds-page classifieds-manage-page">
-    <header class="page-hero classifieds-hero">
+    <header class="page-hero classifieds-hero member-module-hero">
         <div class="classifieds-hero-copy">
-            <p class="directory-eyebrow"><?= e($t('title')) ?></p>
+            <p class="directory-eyebrow"><?= e($memberAreaLabel) ?></p>
             <h1><?= e($t('manage_hero_title')) ?></h1>
             <p class="directory-lead"><?= e($t('manage_page_description')) ?></p>
         </div>

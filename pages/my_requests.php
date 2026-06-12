@@ -5,6 +5,7 @@ $user = require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('my_requests', $locale);
 $text = static fn (string $key, ?string $fallback = null): string => (string) ($t[$key] ?? $fallback ?? $key);
+$memberAreaLabel = member_area_eyebrow_label($locale);
 $isFrench = $locale === 'fr';
 
 $title = $text('title');
@@ -252,9 +253,9 @@ $registeredRequestsCount = count($cards);
 ob_start();
 ?>
 <div class="my-requests-page stack">
-    <section class="card my-requests-hero">
+    <section class="card my-requests-hero member-module-hero">
         <div>
-            <span class="badge muted"><?= e($text('badge')) ?></span>
+            <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
             <h1><?= e($title) ?></h1>
             <p class="help"><?= e($intro) ?></p>
         </div>

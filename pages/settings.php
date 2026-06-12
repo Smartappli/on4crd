@@ -70,6 +70,14 @@ $newsletterEmail = newsletter_normalize_email((string) ($currentNewsletter['emai
 $pageTitle = (string) ($t['title'] ?? 'Account settings');
 ob_start();
 ?>
+<div class="settings-page stack">
+<section class="card settings-hero member-module-hero">
+  <div>
+    <p class="eyebrow"><?= e(member_area_eyebrow_label($locale)) ?></p>
+    <h1><?= e($pageTitle) ?></h1>
+    <p class="help"><?= e((string) ($t['intro'] ?? 'Manage your account preferences and interface options here.')) ?></p>
+  </div>
+</section>
 <section class="card settings-module settings-preferences">
   <section class="settings-preferences-panel settings-preferences-newsletter" aria-labelledby="settings-newsletter-title">
     <h2 id="settings-newsletter-title" style="margin-top:0;"><?= e($newsletterT('title')) ?></h2>
@@ -142,5 +150,6 @@ ob_start();
     <?php endif; ?>
   </section>
 </section>
+</div>
 <?php
 echo render_layout((string) ob_get_clean(), $pageTitle);

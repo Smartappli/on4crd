@@ -50,10 +50,14 @@ $isSubscribed = $current !== null && (string) ($current['status'] ?? '') === 'ac
 
 ob_start();
 ?>
-<div class="card">
+<div class="newsletter-page stack">
+<section class="card newsletter-hero member-module-hero">
+    <p class="eyebrow"><?= e(member_area_eyebrow_label($locale)) ?></p>
     <h1><?= e($t('title')) ?></h1>
     <p><?= e($t('intro')) ?></p>
+</section>
 
+<section class="card newsletter-preferences-card">
     <?php if ($isSubscribed): ?>
         <p><strong><?= e($t('status')) ?></strong> <?= e($t('subscribed')) ?> (<?= e((string) $current['email']) ?>)</p>
         <form method="post">
@@ -77,6 +81,7 @@ ob_start();
             <button class="button"><?= e($t('subscribe')) ?></button>
         </form>
     <?php endif; ?>
+</section>
 </div>
 <?php
 

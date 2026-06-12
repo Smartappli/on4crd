@@ -5,6 +5,7 @@ $user = require_login();
 $memberId = (int) ($user['id'] ?? 0);
 $locale = current_locale();
 $qt = i18n_domain_translator('qsl', $locale);
+$memberAreaLabel = member_area_eyebrow_label($locale);
 $qslBackgroundTypeLabel = static function (string $type) use ($qt): string {
     return match ($type) {
         'image' => $qt('type_image'),
@@ -423,9 +424,9 @@ ksort($qsoModeOptions);
 ob_start();
 ?>
 <div class="qsl-page">
-<section class="page-hero">
+<section class="page-hero qsl-hero member-module-hero">
     <div>
-        <p class="eyebrow">QSL</p>
+        <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
         <h1 class="qsl-hero-title"><?= e($qt('studio')) ?></h1>
         <p class="help"><?= e($qt('studio_help')) ?></p>
     </div>

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $messages = i18n_domain_locale('classifieds', $locale);
+$memberAreaLabel = member_area_eyebrow_label($locale);
 $t = static function (string $key) use ($messages): string {
     return (string) ($messages[$key] ?? $key);
 };
@@ -206,9 +207,9 @@ set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
 ?>
 <section class="classifieds-page">
-    <header class="page-hero classifieds-hero">
+    <header class="page-hero classifieds-hero member-module-hero">
         <div class="classifieds-hero-copy">
-            <p class="directory-eyebrow classifieds-hero-title"><?= e($t('title')) ?></p>
+            <p class="directory-eyebrow classifieds-hero-title"><?= e($memberAreaLabel) ?></p>
             <h1 class="classifieds-hero-heading"><?= e($t('title')) ?></h1>
             <p class="directory-lead"><?= e($t('lead')) ?></p>
         </div>

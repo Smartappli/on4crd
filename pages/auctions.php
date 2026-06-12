@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_locale('auctions', $locale);
+$memberAreaLabel = member_area_eyebrow_label($locale);
 set_page_meta([
     'title' => (string) $t['meta_title'],
     'description' => (string) $t['meta_desc'],
@@ -135,9 +136,9 @@ $lotProposalUrl = $user !== null ? route_url('auctions', ['propose_lot' => '1'])
 ob_start();
 ?>
 <section class="auctions-page">
-    <header class="page-hero auctions-hero">
+    <header class="page-hero auctions-hero member-module-hero">
         <div class="auctions-hero-copy">
-            <p class="directory-eyebrow"><?= e((string) $t['meta_title']) ?></p>
+            <p class="directory-eyebrow"><?= e($memberAreaLabel) ?></p>
             <h1><?= e((string) $t['meta_title']) ?></h1>
             <p class="directory-lead"><?= e((string) $t['meta_desc']) ?></p>
         </div>
