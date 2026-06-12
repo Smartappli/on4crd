@@ -242,20 +242,25 @@ function webotheque_accepted_tags(): array
 if (!function_exists('webotheque_stats')) {
 function webotheque_stats(): array
 {
-    $rows = db()->query('SELECT url, tags FROM member_webotheque_links')->fetchAll() ?: [];
+    $rows = db()->query('SELECT url, tags, category FROM member_webotheque_links')->fetchAll() ?: [];
     $domains = [];
     $tags = webotheque_accepted_tags();
+    $byCategory = [];
     foreach ($rows as $row) {
         $domain = webotheque_domain_from_url((string) ($row['url'] ?? ''));
         if ($domain !== '') {
             $domains[$domain] = true;
+        }
+        $category = webotheque_category_code((string) ($row['category'] ?? ''));
+        if ($category !== '') {
+            $byCategory[$category] = ($byCategory[$category] ?? 0) + 1;
         }
         foreach (webotheque_tags_from_text((string) ($row['tags'] ?? '')) as $key => $tag) {
             $tags[$key] = $tag;
         }
     }
 
-    return ['total' => count($rows), 'tags' => count($tags), 'domains' => count($domains)];
+    return ['total' => count($rows), 'tags' => count($tags), 'domains' => count($domains), 'by_category' => $byCategory];
 }
 }
 
