@@ -10,6 +10,34 @@
   gap: 1rem;
 }
 
+[data-route="search"] .site-search-hero {
+  position: relative;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / .32);
+  background:
+    radial-gradient(circle at 78% 20%, rgb(255 255 255 / .16), transparent 34%),
+    linear-gradient(90deg, rgb(15 23 42 / .80), rgb(14 116 144 / .46) 52%, rgb(224 242 254 / .18)),
+    url("../../img/module-hero-search.png") center / cover no-repeat;
+  box-shadow: none;
+  color: white;
+}
+
+[data-route="search"] .site-search-copy h1,
+[data-route="search"] .site-search-copy .directory-eyebrow {
+  color: white;
+}
+
+[data-route="search"] .site-search-copy .directory-lead {
+  color: rgb(241 245 249 / .92);
+}
+
+[data-route="search"] .site-search-box {
+  border-color: rgb(255 255 255 / .30);
+  background: rgb(255 255 255 / .88);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .28);
+  backdrop-filter: blur(8px);
+}
+
 .site-search-box label {
   display: block;
   margin: 0;

@@ -3,6 +3,27 @@
   min-width: 0;
 }
 
+[data-route="events"] .page-hero {
+  position: relative;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / .32);
+  background:
+    radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
+    linear-gradient(90deg, rgb(120 53 15 / .84), rgb(217 119 6 / .50) 52%, rgb(254 243 199 / .20)),
+    url("../../img/module-hero-events.png") center / cover no-repeat;
+  box-shadow: none;
+  color: white;
+}
+
+[data-route="events"] .page-hero h1,
+[data-route="events"] .page-hero .events-hero-title {
+  color: white;
+}
+
+[data-route="events"] .page-hero .help {
+  color: rgb(241 245 249 / .92);
+}
+
 [data-route="events"] .events-hero-title {
   margin: 0;
   font-family: inherit;

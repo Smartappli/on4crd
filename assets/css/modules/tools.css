@@ -33,6 +33,39 @@
 
 [data-route="tools"] .tools-hero {
   margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / .32);
+  background:
+    radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
+    linear-gradient(90deg, rgb(22 78 99 / .84), rgb(13 148 136 / .52) 52%, rgb(204 251 241 / .22)),
+    url("../../img/module-hero-tools.png") center / cover no-repeat;
+  box-shadow: none;
+  color: white;
+}
+
+[data-route="tools"] .tools-hero h1,
+[data-route="tools"] .tools-hero .tools-hero-title {
+  color: white;
+}
+
+[data-route="tools"] .tools-hero .help {
+  color: rgb(241 245 249 / .92);
+}
+
+[data-route="tools"] .tools-hero .tools-stat {
+  border-color: rgb(255 255 255 / .32);
+  background: rgb(255 255 255 / .16);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .16);
+  backdrop-filter: blur(8px);
+}
+
+[data-route="tools"] .tools-hero .tools-stat span {
+  color: white;
+}
+
+[data-route="tools"] .tools-hero .tools-stat p {
+  color: rgb(241 245 249 / .84);
 }
 
 [data-route="tools"] .tools-stats {
