@@ -70,6 +70,20 @@
   font-weight: 650;
 }
 
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-heading,
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats strong {
+  color: white;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats article {
+  border-color: rgb(226 232 240 / .18);
+  background: rgb(2 12 23 / .58);
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats span {
+  color: rgb(226 232 240 / .78);
+}
+
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-actions {
   display: flex;
   flex-wrap: wrap;

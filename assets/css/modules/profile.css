@@ -4,7 +4,18 @@
 }
 
 [data-route="profile"] .profile-hero {
+  display: grid;
+  gap: 1rem;
   padding: 1.25rem;
+}
+
+[data-route="profile"] .profile-hero-intro h1 {
+  margin: .15rem 0 .35rem;
+  color: white;
+  font-family: inherit;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
 }
 
 [data-route="profile"] .profile-preview-views {
@@ -17,6 +28,14 @@
   min-width: 0;
 }
 
+[data-route="profile"] .member-module-hero .profile-preview-view {
+  padding: .9rem;
+  border: 1px solid rgb(226 232 240 / .18);
+  border-radius: 16px;
+  background: rgb(2 12 23 / .48);
+  backdrop-filter: blur(8px);
+}
+
 [data-route="profile"] .profile-preview-view header {
   align-items: center;
   display: flex;
@@ -27,6 +46,11 @@
 
 [data-route="profile"] .profile-preview-view h2 {
   margin: 0;
+}
+
+[data-route="profile"] .member-module-hero .profile-preview-view h2,
+[data-route="profile"] .member-module-hero .profile-preview-summary dd {
+  color: white;
 }
 
 [data-route="profile"] .profile-preview-callsign {
@@ -61,6 +85,11 @@
   font-size: .82rem;
   font-weight: 700;
   margin: 0;
+}
+
+[data-route="profile"] .member-module-hero .profile-preview-callsign,
+[data-route="profile"] .member-module-hero .profile-preview-summary dt {
+  color: rgb(226 232 240 / .78);
 }
 
 [data-route="profile"] .profile-preview-summary dd {

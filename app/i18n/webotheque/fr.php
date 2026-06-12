@@ -5,7 +5,7 @@ return array (
   'title' => 'Webothèque',
   'intro' => 'Retrouvez les liens web utiles partagés avec les membres.',
   'meta_desc' => 'Retrouvez les liens web utiles partagés avec les membres.',
-  'members_area' => 'Espace membres',
+  'members_area' => 'Espace Membre',
   'links' => 'Liens',
   'domains' => 'Domaines',
   'latest' => 'Dernier ajout',

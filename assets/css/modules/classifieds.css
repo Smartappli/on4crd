@@ -34,6 +34,15 @@
   letter-spacing: -.015em;
 }
 
+[data-route="classifieds"] .member-module-hero .classifieds-hero-title {
+  color: rgb(226 232 240 / .86);
+}
+
+[data-route="classifieds"] .member-module-hero .classifieds-hero-heading,
+[data-route="classifieds_manage"] .member-module-hero h1 {
+  color: white;
+}
+
 [data-route="classifieds"] .classifieds-hero-action {
   display: flex;
   flex-wrap: wrap;

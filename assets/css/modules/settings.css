@@ -3,6 +3,14 @@
   min-width: 0;
 }
 
+[data-route="settings"] .settings-hero h1 {
+  margin: .15rem 0 .35rem;
+  color: white;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
 [data-route="settings"] .settings-preferences {
   display: grid;
   grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr);

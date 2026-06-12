@@ -5,7 +5,7 @@ return array (
   'title' => 'Web library',
   'intro' => 'Find useful web links shared with members.',
   'meta_desc' => 'Find useful web links shared with members.',
-  'members_area' => 'Members area',
+  'members_area' => 'Member Area',
   'links' => 'Links',
   'domains' => 'Domains',
   'latest' => 'Latest',

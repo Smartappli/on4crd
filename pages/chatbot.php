@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_translator('chatbot', $locale);
+$memberAreaLabel = member_area_eyebrow_label($locale);
 set_page_meta(['title' => $t('meta_title'), 'description' => $t('meta_desc'), 'schema_type' => 'WebPage']);
 
 if (!isset($_SESSION['chatbot_history']) || !is_array($_SESSION['chatbot_history'])) {
@@ -132,7 +133,8 @@ $historyCount = count($history);
 ob_start();
 ?>
 <div class="chatbot-shell">
-    <aside class="chatbot-sidebar card">
+    <aside class="chatbot-sidebar card member-module-hero">
+        <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
         <img class="chatbot-illustration" src="<?= e(asset_url('assets/chartbot/chatbot.png')) ?>" alt="<?= e($t('chatbot_alt')) ?>">
         <h1><?= e($t('meta_title')) ?></h1>
         <p class="help"><?= e($t('sidebar_help')) ?></p>

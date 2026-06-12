@@ -12,6 +12,11 @@
 
 [data-route="my_requests"] .my-requests-hero h1 {
   margin: .45rem 0 .3rem;
+  color: white;
+}
+
+[data-route="my_requests"] .my-requests-hero .eyebrow {
+  margin: 0;
 }
 
 [data-route="my_requests"] .my-requests-member {
@@ -34,6 +39,19 @@
 [data-route="my_requests"] .my-requests-member strong {
   color: var(--accent-strong);
   overflow-wrap: anywhere;
+}
+
+[data-route="my_requests"] .member-module-hero .my-requests-member {
+  border-color: rgb(226 232 240 / .18);
+  background: rgb(2 12 23 / .58);
+}
+
+[data-route="my_requests"] .member-module-hero .my-requests-member span {
+  color: rgb(226 232 240 / .78);
+}
+
+[data-route="my_requests"] .member-module-hero .my-requests-member strong {
+  color: white;
 }
 
 [data-route="my_requests"] .my-requests-status h2,

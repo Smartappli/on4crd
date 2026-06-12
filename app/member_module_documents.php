@@ -65,7 +65,7 @@ function member_document_labels(string $locale): array
 {
     $labels = [
         'fr' => [
-            'members_area' => 'Espace membres',
+            'members_area' => 'Espace Membre',
             'documents' => 'Documents',
             'formats' => 'Formats',
             'latest' => 'Dernier ajout',
@@ -98,7 +98,7 @@ function member_document_labels(string $locale): array
             'content_list' => 'Contenus',
         ],
         'en' => [
-            'members_area' => 'Members area',
+            'members_area' => 'Member Area',
             'documents' => 'Documents',
             'formats' => 'Formats',
             'latest' => 'Latest upload',

@@ -3,6 +3,10 @@
   min-width: 0;
 }
 
+[data-route="chatbot"] .chatbot-sidebar.member-module-hero h1 {
+  color: white;
+}
+
 [data-route="chatbot"] .chatbot-illustration {
   width: 100%;
   max-width: none;

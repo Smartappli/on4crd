@@ -18,6 +18,10 @@
   line-height: 1.1;
 }
 
+[data-route="members_library"] .member-module-hero .members-library-heading {
+  color: white;
+}
+
 [data-route="members_library"] .members-library-hero-side {
   display: grid;
   gap: .85rem;

@@ -2,3 +2,11 @@
 [data-route="newsletter"] .newsletter-module {
   min-width: 0;
 }
+
+[data-route="newsletter"] .newsletter-hero h1 {
+  margin: .15rem 0 .35rem;
+  color: white;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
