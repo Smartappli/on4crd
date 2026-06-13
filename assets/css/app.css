@@ -3631,6 +3631,9 @@ textarea.wysiwyg-source {
 .site-search-box label {
   margin: 0;
 }
+.site-search-box label span {
+  color: #000;
+}
 .site-search-results {
   display: grid;
   gap: 1rem;
