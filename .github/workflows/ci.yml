@@ -21,7 +21,8 @@ jobs:
         php-version: ['8.4','8.5']
 
     steps:
-      - name: Checkout
+      - &checkout_step
+        name: Checkout
         uses: actions/checkout@v6
 
       - name: Setup PHP
@@ -29,47 +30,42 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           coverage: xdebug
-          extensions: dom, gd, mbstring, pdo, pdo_mysql, zip
+          extensions: &php_extensions dom, gd, mbstring, pdo, pdo_mysql, zip
           tools: composer:v2
 
-      - name: Prepare config
+      - &prepare_config_step
+        name: Prepare config
         run: cp config/config.sample.php config/config.php
 
-      - name: Install dependencies
+      - &install_dependencies_step
+        name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Lint PHP
+      - &lint_php_step
+        name: Lint PHP
         run: composer lint
 
-      - name: Run unit tests
+      - &run_unit_tests_step
+        name: Run unit tests
         run: composer test
 
   security:
     name: Security checks
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - *checkout_step
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
           coverage: none
-          extensions: dom, gd, mbstring, pdo, pdo_mysql, zip
+          extensions: *php_extensions
           tools: composer:v2, phpstan
 
-      - name: Prepare config
-        run: cp config/config.sample.php config/config.php
+      - *prepare_config_step
 
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
-
-      - name: Lint PHP
-        run: composer lint
-
-      - name: Run unit tests
-        run: composer test
+      - *install_dependencies_step
 
       - name: SAST (PHPStan)
         run: phpstan analyse app pages --no-progress --level=5
@@ -81,21 +77,19 @@ jobs:
     name: Toolbox smoke checks
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - *checkout_step
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
           coverage: none
+          extensions: *php_extensions
           tools: composer:v2
 
-      - name: Prepare config
-        run: cp config/config.sample.php config/config.php
+      - *prepare_config_step
 
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
+      - *install_dependencies_step
 
       - name: Start local PHP server
         run: |
