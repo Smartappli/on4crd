@@ -789,6 +789,21 @@ textarea:focus-visible {
 }
 .button:hover, button:hover { transform: translateY(-1px); background: var(--accent-strong); text-decoration: none; }
 .button[disabled], button[disabled] { opacity: .55; cursor: not-allowed; transform: none; }
+.nav .nav-link-button {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: .55rem .8rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transform: none;
+}
+.nav .nav-link-button:hover {
+  background: var(--panel-2);
+  transform: none;
+  text-decoration: none;
+}
 .button.disabled {
   opacity: .55;
   cursor: not-allowed;
