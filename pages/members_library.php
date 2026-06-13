@@ -155,6 +155,25 @@ foreach ($documentCategories as $catRow) {
         'total' => (int) ($catRow['total'] ?? 0),
     ];
 }
+foreach (member_library_default_categories() as $defaultCategory) {
+    $catCode = member_library_category_slug((string) ($defaultCategory['code'] ?? 'general'));
+    $catLabel = trim((string) ($defaultCategory['label'] ?? $catCode));
+    if ($catCode === '') {
+        continue;
+    }
+    if ($catLabel === '') {
+        $catLabel = $catCode === 'general' ? 'Général' : $catCode;
+    }
+    if (!isset($categoryMap[$catCode])) {
+        $categoryMap[$catCode] = [
+            'category' => $catCode,
+            'label' => $catLabel,
+            'total' => 0,
+        ];
+    } else {
+        $categoryMap[$catCode]['label'] = $catLabel;
+    }
+}
 if (member_library_ensure_categories_table()) {
     try {
         foreach ((db()->query('SELECT code, label FROM member_library_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: []) as $catRow) {

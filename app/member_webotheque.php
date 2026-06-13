@@ -96,13 +96,13 @@ function webotheque_category_label_from_code(string $code): string
 }
 }
 
-if (!function_exists('webotheque_categories')) {
+if (!function_exists('webotheque_default_categories')) {
 /**
  * @return array<string, string>
  */
-function webotheque_categories(array $t): array
+function webotheque_default_categories(array $t): array
 {
-    $categories = [
+    return [
         'general' => (string) ($t['category_general'] ?? 'General'),
         'radioamateur' => 'Radioamateur',
         'antennes' => 'Antennes',
@@ -113,6 +113,16 @@ function webotheque_categories(array $t): array
         'reglementation' => 'Réglementation',
         'formation' => 'Formation',
     ];
+}
+}
+
+if (!function_exists('webotheque_categories')) {
+/**
+ * @return array<string, string>
+ */
+function webotheque_categories(array $t): array
+{
+    $categories = webotheque_default_categories($t);
 
     try {
         if (table_has_column('member_webotheque_links', 'category')) {
