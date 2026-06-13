@@ -33,6 +33,11 @@
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+[data-route="albums"] .albums-hero-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: min(100%, 24rem);
+}
+
 [data-route="albums"] .albums-hero-title {
   margin: .15rem 0 .35rem;
   font-family: inherit;
