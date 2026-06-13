@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'събития',
   'nav_tools' => 'Инструменти',
   'nav_directory' => 'Справочник',
+  'nav_idea' => 'Идея',
   'nav_dashboard' => 'Табло за управление',
   'nav_wiki' => 'Знания',
   'nav_gallery' => 'Снимки',

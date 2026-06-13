@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Begivenheder',
   'nav_tools' => 'Værktøjer',
   'nav_directory' => 'Vejviser',
+  'nav_idea' => 'Idé',
   'nav_dashboard' => 'Kontrolpanel',
   'nav_wiki' => 'Viden',
   'nav_gallery' => 'Fotos',

@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Imeachtaí',
   'nav_tools' => 'Uirlisí',
   'nav_directory' => 'Eolaire',
+  'nav_idea' => 'Smaoineamh',
   'nav_dashboard' => 'Deais',
   'nav_wiki' => 'Eolas',
   'nav_gallery' => 'Grianghraif',

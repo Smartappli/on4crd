@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Renginiai',
   'nav_tools' => 'Įrankiai',
   'nav_directory' => 'Katalogas',
+  'nav_idea' => 'Idėja',
   'nav_dashboard' => 'Prietaisų skydelis',
   'nav_wiki' => 'Žinios',
   'nav_gallery' => 'Nuotraukos',

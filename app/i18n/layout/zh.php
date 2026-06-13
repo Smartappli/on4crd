@@ -9,6 +9,7 @@ return array (
   'nav_events' => '活动',
   'nav_tools' => '工具',
   'nav_directory' => '目录',
+  'nav_idea' => '想法',
   'nav_dashboard' => '仪表盘',
   'nav_wiki' => '知识',
   'nav_gallery' => '照片',

@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Tapahtumat',
   'nav_tools' => 'Työkalut',
   'nav_directory' => 'Hakemisto',
+  'nav_idea' => 'Idea',
   'nav_dashboard' => 'Kojelauta',
   'nav_wiki' => 'Tietämys',
   'nav_gallery' => 'Kuvat',

@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Események',
   'nav_tools' => 'Eszközök',
   'nav_directory' => 'Címtár',
+  'nav_idea' => 'Ötlet',
   'nav_dashboard' => 'Irányítópult',
   'nav_wiki' => 'Tudás',
   'nav_gallery' => 'Fotók',

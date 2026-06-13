@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Dogodki',
   'nav_tools' => 'Orodja',
   'nav_directory' => 'Imenik',
+  'nav_idea' => 'Ideja',
   'nav_dashboard' => 'Nadzorna plošča',
   'nav_wiki' => 'Znanje',
   'nav_gallery' => 'Fotografije',

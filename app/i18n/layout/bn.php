@@ -9,6 +9,7 @@ return array (
   'nav_events' => 'ইভেন্ট',
   'nav_tools' => 'সরঞ্জাম',
   'nav_directory' => 'ডিরেক্টরি',
+  'nav_idea' => 'ধারণা',
   'nav_dashboard' => 'ড্যাশবোর্ড',
   'nav_wiki' => 'জ্ঞান',
   'nav_gallery' => 'ছবি',

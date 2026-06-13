@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Εκδηλώσεις',
   'nav_tools' => 'Εργαλεία',
   'nav_directory' => 'Κατάλογος',
+  'nav_idea' => 'Ιδέα',
   'nav_dashboard' => 'Ταμπλό',
   'nav_wiki' => 'Γνώσεις',
   'nav_gallery' => 'Φωτογραφίες',

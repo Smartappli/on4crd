@@ -236,6 +236,7 @@ function safe_login_next_url(string $next): ?string
         'set_language',
         'set_accent',
         'set_theme',
+        'idea_submit',
     ];
     if (in_array($route, $blockedRoutes, true)) {
         return null;

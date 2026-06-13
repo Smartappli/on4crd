@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'الفعاليات',
   'nav_tools' => 'الأدوات',
   'nav_directory' => 'الدليل',
+  'nav_idea' => 'فكرة',
   'nav_dashboard' => 'لوحة التحكم',
   'nav_wiki' => 'المعرفة',
   'nav_gallery' => 'الصور',

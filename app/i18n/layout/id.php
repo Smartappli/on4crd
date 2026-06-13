@@ -9,6 +9,7 @@ return array (
   'nav_events' => 'Acara',
   'nav_tools' => 'Alat',
   'nav_directory' => 'Direktori',
+  'nav_idea' => 'Ide',
   'nav_dashboard' => 'Dasbor',
   'nav_wiki' => 'Pengetahuan',
   'nav_gallery' => 'Foto',

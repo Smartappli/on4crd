@@ -187,6 +187,12 @@ function render_layout_impl(string $content, string $title = ''): string
         $currentLocale = 'fr';
     }
     $layoutI18n = i18n_domain_locale('layout', $currentLocale);
+    $ideaI18n = i18n_domain_locale('idea', $currentLocale);
+    $ideaText = static function (string $key, string $fallback) use ($ideaI18n): string {
+        $value = trim((string) ($ideaI18n[$key] ?? ''));
+
+        return $value !== '' ? $value : $fallback;
+    };
     $currentAccent = strtolower((string) ($_SESSION['accent'] ?? 'blue'));
     $accentPalette = [
         'blue' => ['color' => '#2f6fed', 'strong' => '#1f59cf', 'label' => 'Bleu'],
@@ -219,6 +225,7 @@ function render_layout_impl(string $content, string $title = ''): string
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
         ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
+        ['label' => (string) ($layoutI18n['nav_idea'] ?? 'Idée'), 'dialog' => 'idea-dialog', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_directory'], 'route' => 'directory', 'module' => 'directory'],
     ];
     $navMemberItems = [
@@ -245,6 +252,13 @@ function render_layout_impl(string $content, string $title = ''): string
         foreach ($items as $item) {
             $module = (string) ($item['module'] ?? '');
             if ($module !== '' && !module_enabled($module)) {
+                continue;
+            }
+
+            $dialogId = trim((string) ($item['dialog'] ?? ''));
+            if ($dialogId !== '') {
+                $links .= '<button type="button" class="nav-link-button transition-colors duration-200" data-idea-modal-open aria-haspopup="dialog" aria-controls="' . e($dialogId) . '">'
+                    . e((string) $item['label']) . '</button>';
                 continue;
             }
 
@@ -553,6 +567,30 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
         . '</div>';
+    $returnQuery = $_GET;
+    unset($returnQuery['route'], $returnQuery['_csrf']);
+    $returnRoute = preg_match('/^[a-z0-9_]+$/', $currentRoute) === 1 ? $currentRoute : 'home';
+    $currentReturnUrl = route_url_clean($returnRoute !== '' ? $returnRoute : 'home', $returnQuery);
+    $ideaDialogHtml = '<dialog id="idea-dialog" class="idea-dialog" aria-labelledby="idea-dialog-title" aria-describedby="idea-dialog-intro">'
+        . '<div class="idea-dialog-card">'
+        . '<div class="idea-dialog-header"><div>'
+        . '<p class="idea-dialog-eyebrow">' . e((string) ($layoutI18n['nav_idea'] ?? 'Idée')) . '</p>'
+        . '<h2 id="idea-dialog-title">' . e($ideaText('title', 'Faire part d’une idée')) . '</h2>'
+        . '<p id="idea-dialog-intro">' . e($ideaText('intro', 'Envoyez une idée, une suggestion ou une amélioration au comité.')) . '</p>'
+        . '</div><button type="button" class="idea-dialog-close" data-idea-modal-close aria-label="' . e($ideaText('close', 'Fermer')) . '">&times;</button></div>'
+        . '<form class="idea-form" method="post" action="' . e(route_url('idea_submit')) . '">'
+        . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+        . '<input type="hidden" name="return_url" value="' . e($currentReturnUrl) . '">'
+        . '<div class="idea-form-grid">'
+        . '<label for="idea-name"><span>' . e($ideaText('name_label', 'Votre nom')) . '</span><input id="idea-name" type="text" name="idea_name" maxlength="160" autocomplete="name" required placeholder="' . e($ideaText('name_placeholder', 'Nom et indicatif, si applicable')) . '"></label>'
+        . '<label for="idea-email"><span>' . e($ideaText('email_label', 'Votre e-mail')) . '</span><input id="idea-email" type="email" name="idea_email" maxlength="190" autocomplete="email" required placeholder="' . e($ideaText('email_placeholder', 'vous@example.com')) . '"></label>'
+        . '</div>'
+        . '<label for="idea-title"><span>' . e($ideaText('idea_title_label', 'Titre de l’idée')) . '</span><input id="idea-title" type="text" name="idea_title" maxlength="190" required placeholder="' . e($ideaText('idea_title_placeholder', 'Résumez votre idée')) . '"></label>'
+        . '<label for="idea-message"><span>' . e($ideaText('message_label', 'Votre idée')) . '</span><textarea id="idea-message" name="idea_message" rows="6" maxlength="4000" required placeholder="' . e($ideaText('message_placeholder', 'Décrivez votre idée, le besoin et l’intérêt pour le club.')) . '"></textarea></label>'
+        . '<div class="idea-dialog-actions"><button type="button" class="button secondary" data-idea-modal-close>' . e($ideaText('cancel', 'Annuler')) . '</button><button type="submit" class="button">' . e($ideaText('submit', 'Envoyer l’idée')) . '</button></div>'
+        . '</form>'
+        . '</div>'
+        . '</dialog>';
     $nonce = csp_nonce();
     $htmlDir = is_rtl_locale($currentLocale) ? 'rtl' : 'ltr';
     $moduleCssHtml = '';
@@ -603,6 +641,7 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<button class="nav-backdrop" type="button" aria-label="' . e((string) ($layoutI18n['close_menu'] ?? 'Close menu')) . '" hidden></button>'
         . '<nav id="main-nav" class="nav" aria-label="' . e((string) ($layoutI18n['main_navigation'] ?? 'Main navigation')) . '">' . $navHtml . '<div class="nav-mobile-tools">' . $menuToolsHtml . '</div></nav>'
         . '<div class="toolbar">' . $menuToolsHtml . '</div></header>'
+        . $ideaDialogHtml
         . '<main id="main-content" class="layout container py-6">' . $flashHtml . $content . '</main>'
         . render_site_footer($currentRoute)
         . '<script nonce="' . e($nonce) . '" src="' . e(asset_url('assets/js/app.js')) . '" defer></script>'

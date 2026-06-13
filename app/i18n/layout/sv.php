@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Händelser',
   'nav_tools' => 'Verktyg',
   'nav_directory' => 'Katalog',
+  'nav_idea' => 'Idé',
   'nav_dashboard' => 'Instrumentbräda',
   'nav_wiki' => 'Kunskap',
   'nav_gallery' => 'Foton',

@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Pasākumi',
   'nav_tools' => 'Rīki',
   'nav_directory' => 'Katalogs',
+  'nav_idea' => 'Ideja',
   'nav_dashboard' => 'Informācijas panelis',
   'nav_wiki' => 'Zināšanas',
   'nav_gallery' => 'Fotoattēli',

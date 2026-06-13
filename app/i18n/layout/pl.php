@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Wydarzenia',
   'nav_tools' => 'Narzędzia',
   'nav_directory' => 'Katalog',
+  'nav_idea' => 'Pomysł',
   'nav_dashboard' => 'Pulpit nawigacyjny',
   'nav_wiki' => 'Wiedza',
   'nav_gallery' => 'Zdjęcia',

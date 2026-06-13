@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Události',
   'nav_tools' => 'Nástroje',
   'nav_directory' => 'Adresář',
+  'nav_idea' => 'Nápad',
   'nav_dashboard' => 'Přehled',
   'nav_wiki' => 'Znalosti',
   'nav_gallery' => 'Fotografie',

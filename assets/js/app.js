@@ -47,6 +47,50 @@
     });
   });
 
+  const ideaDialog = document.getElementById('idea-dialog');
+  const ideaOpenButtons = document.querySelectorAll('[data-idea-modal-open]');
+  if (ideaDialog instanceof HTMLElement && ideaOpenButtons.length > 0) {
+    const closeIdeaDialog = () => {
+      if (!ideaDialog.hasAttribute('open')) {
+        return;
+      }
+      if (typeof ideaDialog.close === 'function') {
+        ideaDialog.close();
+        return;
+      }
+      ideaDialog.removeAttribute('open');
+    };
+
+    const openIdeaDialog = () => {
+      if (typeof ideaDialog.showModal === 'function') {
+        ideaDialog.showModal();
+      } else {
+        ideaDialog.setAttribute('open', '');
+      }
+      const firstField = ideaDialog.querySelector('input, textarea, button');
+      if (firstField instanceof HTMLElement) {
+        window.setTimeout(() => firstField.focus(), 0);
+      }
+    };
+
+    ideaOpenButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        openIdeaDialog();
+      });
+    });
+
+    ideaDialog.querySelectorAll('[data-idea-modal-close]').forEach((button) => {
+      button.addEventListener('click', closeIdeaDialog);
+    });
+
+    ideaDialog.addEventListener('click', (event) => {
+      if (event.target === ideaDialog) {
+        closeIdeaDialog();
+      }
+    });
+  }
+
   const formatterCache = new Map();
   const dateFormatterCache = new Map();
   const defaultLocale = document.documentElement.lang || 'fr-FR';

@@ -9,6 +9,7 @@ return array (
   'nav_events' => 'イベント',
   'nav_tools' => 'ツール',
   'nav_directory' => 'ディレクトリ',
+  'nav_idea' => 'アイデア',
   'nav_dashboard' => 'ダッシュボード',
   'nav_wiki' => '知識',
   'nav_gallery' => '写真',

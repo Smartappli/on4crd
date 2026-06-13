@@ -9,6 +9,7 @@ return array (
   'nav_events' => 'События',
   'nav_tools' => 'Инструменты',
   'nav_directory' => 'Каталог',
+  'nav_idea' => 'Идея',
   'nav_dashboard' => 'Панель',
   'nav_wiki' => 'Знания',
   'nav_gallery' => 'Фотографии',

@@ -8,6 +8,7 @@ return array (
   'nav_events' => 'Sündmused',
   'nav_tools' => 'Tööriistad',
   'nav_directory' => 'Kataloog',
+  'nav_idea' => 'Idee',
   'nav_dashboard' => 'Armatuurlaud',
   'nav_wiki' => 'Teadmised',
   'nav_gallery' => 'Fotod',
