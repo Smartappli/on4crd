@@ -23,6 +23,23 @@ RewriteRule ^ai-index\.json$ index.php?route=ai-index.json [L,QSA]
 RewriteRule ^knowledge-graph\.jsonld$ index.php?route=knowledge-graph.jsonld [L,QSA]
 RewriteRule ^index\.php$ - [L]
 
+<IfModule mod_setenvif.c>
+    SetEnvIfNoCase Request_URI "(^|/)assets/" on4crd_static_asset
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(?:css|js|mjs|svg|png|jpe?g|webp|gif|woff2?)$">
+        Header set Cache-Control "public, max-age=31536000, immutable" env=on4crd_static_asset
+    </FilesMatch>
+    <FilesMatch "\.(?:webmanifest)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript text/javascript application/json application/manifest+json image/svg+xml
+</IfModule>
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^$ index.php [L,QSA]

@@ -224,7 +224,7 @@ ob_start();
                     <article class="album-tile">
                         <a class="album-tile-media" href="<?= e(route_url('album', ['id' => (int) $row['id']])) ?>">
                             <?php if ($coverSrc !== ''): ?>
-                                <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e((string) $row['title']) ?>">
+                                <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e((string) $row['title']) ?>" loading="lazy" decoding="async">
                             <?php else: ?>
                                 <span class="album-placeholder-mark" aria-hidden="true"></span>
                             <?php endif; ?>

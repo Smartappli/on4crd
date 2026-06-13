@@ -135,7 +135,7 @@ ob_start();
 <div class="chatbot-shell">
     <aside class="chatbot-sidebar card member-module-hero">
         <p class="eyebrow"><?= e($memberAreaLabel) ?></p>
-        <img class="chatbot-illustration" src="<?= e(asset_url('assets/chartbot/chatbot.png')) ?>" alt="<?= e($t('chatbot_alt')) ?>">
+        <img class="chatbot-illustration" src="<?= e(asset_url('assets/chartbot/chatbot.png')) ?>" alt="<?= e($t('chatbot_alt')) ?>" loading="lazy" decoding="async">
         <h1><?= e($t('meta_title')) ?></h1>
         <p class="help"><?= e($t('sidebar_help')) ?></p>
         <div class="chatbot-status">

@@ -360,7 +360,7 @@ ob_start();
             <?php if (is_array($nextEvent)): ?>
                 <?php if ($nextEvent['imageUrl'] !== ''): ?>
                     <figure class="events-preview-image">
-                        <img src="<?= e((string) $nextEvent['imageUrl']) ?>" alt="<?= e((string) $nextEvent['title']) ?>">
+                        <img src="<?= e((string) $nextEvent['imageUrl']) ?>" alt="<?= e((string) $nextEvent['title']) ?>" loading="lazy" decoding="async">
                     </figure>
                 <?php endif; ?>
                 <h3><?= e((string) $nextEvent['title']) ?></h3>
@@ -378,7 +378,7 @@ ob_start();
         <section class="events-detail-card is-hidden" id="event-detail" hidden>
             <h2><?= e($t['detail']) ?></h2>
             <figure class="events-preview-image is-hidden" id="event-detail-image-wrap">
-                <img id="event-detail-image" src="" alt="">
+                <img id="event-detail-image" src="" alt="" loading="lazy" decoding="async">
             </figure>
             <h3 id="event-detail-title"></h3>
             <p id="event-detail-summary"></p>

@@ -284,7 +284,7 @@ ob_start();
                 <article class="directory-member-card">
                     <header class="directory-member-header">
                         <div class="directory-avatar-wrap">
-                            <img class="directory-avatar" src="<?= e($memberAvatarSrc) ?>" alt="<?= e($t('avatar_of')) ?> <?= e($callsign) ?>">
+                            <img class="directory-avatar" src="<?= e($memberAvatarSrc) ?>" alt="<?= e($t('avatar_of')) ?> <?= e($callsign) ?>" loading="lazy" decoding="async">
                             <span aria-hidden="true"><?= e($memberInitials($member)) ?></span>
                         </div>
                         <div class="directory-member-title">

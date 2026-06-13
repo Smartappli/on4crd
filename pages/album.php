@@ -129,7 +129,7 @@ ob_start();
     <section class="album-detail-hero">
         <div class="album-detail-cover">
             <?php if ($coverPath !== null): ?>
-                <img src="<?= e(base_url($coverPath)) ?>" alt="<?= e((string) $album['title']) ?>">
+                <img src="<?= e(base_url($coverPath)) ?>" alt="<?= e((string) $album['title']) ?>" loading="eager" decoding="async" fetchpriority="high">
             <?php else: ?>
                 <span class="album-placeholder-mark" aria-hidden="true"></span>
             <?php endif; ?>
@@ -182,7 +182,7 @@ ob_start();
                     ?>
                     <figure class="album-photo-card">
                         <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener">
-                            <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>">
+                            <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>" loading="lazy" decoding="async">
                         </a>
                         <?php if ($title !== '' || $caption !== ''): ?>
                             <figcaption>
