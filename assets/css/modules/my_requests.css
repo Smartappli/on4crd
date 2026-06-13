@@ -47,11 +47,11 @@
 }
 
 [data-route="my_requests"] .member-module-hero .my-requests-member span {
-  color: var(--accent);
+  color: #000;
 }
 
 [data-route="my_requests"] .member-module-hero .my-requests-member strong {
-  color: var(--accent);
+  color: #000;
 }
 
 [data-route="my_requests"] .my-requests-status h2,

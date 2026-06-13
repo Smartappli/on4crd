@@ -75,7 +75,7 @@
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats strong {
-  color: var(--accent);
+  color: #000;
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats article {
@@ -84,7 +84,7 @@
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats span {
-  color: var(--accent);
+  color: #000;
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-actions {

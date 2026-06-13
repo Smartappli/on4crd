@@ -61,7 +61,7 @@
 
 [data-route="albums"] .albums-hero-stats strong,
 [data-route="album"] .album-detail-stats strong {
-  color: var(--accent);
+  color: #000;
 }
 
 [data-route="album"] .album-detail-hero h1 {
@@ -70,7 +70,7 @@
 
 [data-route="albums"] .albums-hero-stats span,
 [data-route="album"] .album-detail-stats span {
-  color: var(--accent);
+  color: #000;
 }
 
 .album-detail-hero {

@@ -2129,7 +2129,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .member-module-hero .auctions-stat span,
 .member-module-hero .classifieds-stat span,
 .member-module-hero .my-requests-member strong {
-  color: var(--accent);
+  color: #000;
 }
 .member-module-hero .articles-hero-stats span,
 .member-module-hero .member-document-hero-stats span,
@@ -2137,7 +2137,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .member-module-hero .auctions-stat p,
 .member-module-hero .classifieds-stat p,
 .member-module-hero .my-requests-member span {
-  color: var(--accent);
+  color: #000;
 }
 [data-route="profile"] .member-module-hero {
   background:
@@ -2341,7 +2341,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   display: block;
   order: 1;
   margin: 0;
-  color: var(--accent);
+  color: #000;
   font-size: clamp(1.15rem, 2vw, 1.55rem);
   font-weight: 800;
   line-height: 1;
@@ -2358,7 +2358,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   display: block;
   order: 2;
   margin: .35rem 0 0;
-  color: var(--accent);
+  color: #000;
   font-size: .82rem;
   font-weight: 650;
 }

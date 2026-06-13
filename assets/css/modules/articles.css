@@ -75,12 +75,12 @@
 }
 
 [data-route="articles"] .articles-hero-stats strong {
-  color: var(--accent);
+  color: #000;
   text-align: center;
 }
 
 [data-route="articles"] .articles-hero-stats span {
-  color: var(--accent);
+  color: #000;
 }
 
 [data-route="articles"] .articles-hero-actions {
