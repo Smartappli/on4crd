@@ -84,7 +84,7 @@ if (!function_exists('member_library_default_categories')) {
 function member_library_default_categories(): array
 {
     return [
-        ['code' => 'general', 'label' => 'General', 'sort_order' => 1],
+        ['code' => 'general', 'label' => 'Général', 'sort_order' => 1],
     ];
 }
 }

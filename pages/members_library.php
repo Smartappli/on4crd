@@ -151,7 +151,7 @@ foreach ($documentCategories as $catRow) {
     }
     $categoryMap[$catCode] = [
         'category' => $catCode,
-        'label' => $catCode,
+        'label' => $catCode === 'general' ? 'Général' : $catCode,
         'total' => (int) ($catRow['total'] ?? 0),
     ];
 }
@@ -162,6 +162,9 @@ if (member_library_ensure_categories_table()) {
             $catLabel = trim((string) ($catRow['label'] ?? $catCode));
             if ($catLabel === '') {
                 $catLabel = $catCode;
+            }
+            if ($catCode === 'general' && strcasecmp($catLabel, 'general') === 0) {
+                $catLabel = 'Général';
             }
             if (!isset($categoryMap[$catCode])) {
                 $categoryMap[$catCode] = ['category' => $catCode, 'label' => $catLabel, 'total' => 0];
@@ -174,6 +177,13 @@ if (member_library_ensure_categories_table()) {
     }
 }
 $categories = array_values($categoryMap);
+$categoryLabels = [];
+foreach ($categories as $catInfo) {
+    $catCode = trim((string) ($catInfo['category'] ?? ''));
+    if ($catCode !== '') {
+        $categoryLabels[$catCode] = (string) ($catInfo['label'] ?? ($catCode === 'general' ? 'Général' : $catCode));
+    }
+}
 $where = [];
 $params = [];
 if ($category !== '') {
@@ -434,6 +444,7 @@ ob_start();
                 <?php if ($safePath === null) { continue; } ?>
                 <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
                 <?php $docCategory = trim((string) ($document['category'] ?? 'general')); if ($docCategory === '') { $docCategory = 'general'; } ?>
+                <?php $docCategoryLabel = (string) ($categoryLabels[$docCategory] ?? ($docCategory === 'general' ? 'Général' : $docCategory)); ?>
                 <?php $docTitle = trim((string) ($document['title'] ?? '')); if ($docTitle === '') { $docTitle = (string) $t['document']; } ?>
                 <?php $docDescription = trim((string) ($document['description'] ?? '')); ?>
                 <?php $docTags = trim((string) ($document['tags'] ?? '')); ?>
@@ -442,7 +453,7 @@ ob_start();
                 <?php $relatedDocs = $relatedByDocumentId[$docId] ?? []; ?>
                 <?php $isFavorite = favorite_is_saved((int) $user['id'], 'library_document', (int) ($document['id'] ?? 0)); ?>
                 <article class="news-card feature-card members-library-document-card">
-                    <span class="badge muted"><?= e($docCategory) ?> / <?= e(strtoupper($extension)) ?></span>
+                    <span class="badge muted"><?= e($docCategoryLabel) ?> / <?= e(strtoupper($extension)) ?></span>
                     <h3><?= e($docTitle) ?></h3>
                     <?php if ($docDescription !== ''): ?><p><?= e($docDescription) ?></p><?php endif; ?>
                     <?php if ($docTags !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e($docTags) ?></p><?php endif; ?>
