@@ -17,7 +17,7 @@ return array (
   'propose_category' => 'Proposer un domaine',
   'propose_link_help' => 'Votre lien sera place dans vos contenus en attente de validation par un administrateur.',
   'propose_category_help' => 'Votre domaine sera placé dans vos contenus en attente de validation par un administrateur.',
-  'proposal_auto_accept_help' => 'En tant qu administrateur, votre proposition est validee automatiquement.',
+  'proposal_auto_accept_help' => 'En tant qu’administrateur, votre proposition est validée automatiquement.',
   'proposal_recorded' => 'Proposition enregistree dans vos contenus en attente.',
   'proposal_details_field' => 'Details',
   'submit_proposal' => 'Envoyer',

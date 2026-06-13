@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Notifications',
   'meta_desc' => 'Centre de notifications membres.',
-  'intro' => 'Suivez les publications, moderations et imports au meme endroit.',
+  'intro' => 'Suivez les publications, modérations et imports au même endroit.',
   'storage_unavailable' => 'Les notifications sont temporairement indisponibles.',
   'all_marked_read' => 'Toutes les notifications sont marquees comme lues.',
   'marked_read' => 'Notification marquee comme lue.',
@@ -17,7 +17,7 @@ return array (
   'mark_read' => 'Marquer comme lue',
   'open' => 'Ouvrir',
   'empty' => 'Aucune notification pour ce filtre.',
-  'prev' => 'Precedent',
+  'prev' => 'Précédent',
   'next' => 'Suivant',
   'page' => 'Page',
 );
