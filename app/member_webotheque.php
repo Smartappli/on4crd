@@ -665,7 +665,7 @@ function render_admin_webotheque_page(): void
         return;
     }
 
-    $categories = webotheque_categories($t);
+    $categories = webotheque_default_categories($t) + webotheque_categories($t);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
