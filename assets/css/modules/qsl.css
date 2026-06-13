@@ -15,3 +15,7 @@
 [data-route="qsl"] .member-module-hero .qsl-hero-title {
   color: white;
 }
+
+[data-route="qsl"] .member-module-hero .help {
+  color: white;
+}

@@ -11,7 +11,12 @@
 [data-route="classifieds"] .classifieds-hero-side {
   display: grid;
   gap: .75rem;
-  min-width: min(100%, 24rem);
+  min-width: min(100%, 34rem);
+}
+
+[data-route="classifieds"] .classifieds-hero.page-hero .classifieds-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-width: min(100%, 34rem);
 }
 
 [data-route="classifieds"] .classifieds-hero-title {
@@ -166,6 +171,11 @@
 @media (max-width: 640px) {
   .classifieds-grid {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="classifieds"] .classifieds-hero.page-hero .classifieds-stats {
+    grid-template-columns: 1fr;
+    min-width: 0;
   }
 
   [data-route="classifieds"] .classifieds-hero-side {
