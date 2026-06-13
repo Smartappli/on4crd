@@ -54,8 +54,9 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.5'
           coverage: none
+          extensions: dom, gd, mbstring, pdo, pdo_mysql, zip
           tools: composer:v2
 
       - name: Setup Node
