@@ -61,11 +61,11 @@
 }
 
 [data-route="tools"] .tools-hero .tools-stat span {
-  color: white;
+  color: var(--accent);
 }
 
 [data-route="tools"] .tools-hero .tools-stat p {
-  color: rgb(241 245 249 / .84);
+  color: var(--accent);
 }
 
 [data-route="tools"] .tools-stats {

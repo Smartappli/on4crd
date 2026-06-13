@@ -44,11 +44,11 @@
 }
 
 [data-route="directory"] .directory-hero-stats strong {
-  color: white;
+  color: var(--accent);
 }
 
 [data-route="directory"] .directory-hero-stats span {
-  color: rgb(241 245 249 / .84);
+  color: var(--accent);
 }
 
 [data-route="directory"] .directory-hero-title {

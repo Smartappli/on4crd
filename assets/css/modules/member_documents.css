@@ -71,8 +71,12 @@
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-heading,
-:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats strong {
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-heading {
   color: white;
+}
+
+:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats strong {
+  color: var(--accent);
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats article {
@@ -81,7 +85,7 @@
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats span {
-  color: rgb(241 245 249 / .84);
+  color: var(--accent);
 }
 
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero-actions {

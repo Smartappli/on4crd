@@ -32,11 +32,11 @@
 }
 
 [data-route="news"] .page-hero .news-hero-stat strong {
-  color: white;
+  color: var(--accent);
 }
 
 [data-route="news"] .page-hero .news-hero-stat span {
-  color: rgb(241 245 249 / .84);
+  color: var(--accent);
 }
 
 [data-route="news"] .news-hero-title {

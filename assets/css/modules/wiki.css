@@ -92,7 +92,7 @@
   display: block;
   order: 1;
   margin: 0;
-  color: white;
+  color: var(--accent);
   font-size: clamp(1.15rem, 2vw, 1.55rem);
   font-weight: 800;
   line-height: 1;
@@ -102,7 +102,7 @@
   display: block;
   order: 2;
   margin: .35rem 0 0;
-  color: rgb(241 245 249 / .84);
+  color: var(--accent);
   font-size: .82rem;
   font-weight: 650;
 }

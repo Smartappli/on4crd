@@ -60,14 +60,17 @@
 }
 
 [data-route="albums"] .albums-hero-stats strong,
-[data-route="album"] .album-detail-stats strong,
+[data-route="album"] .album-detail-stats strong {
+  color: var(--accent);
+}
+
 [data-route="album"] .album-detail-hero h1 {
   color: white;
 }
 
 [data-route="albums"] .albums-hero-stats span,
 [data-route="album"] .album-detail-stats span {
-  color: rgb(241 245 249 / .84);
+  color: var(--accent);
 }
 
 .album-detail-hero {

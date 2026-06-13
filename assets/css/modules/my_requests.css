@@ -47,11 +47,11 @@
 }
 
 [data-route="my_requests"] .member-module-hero .my-requests-member span {
-  color: rgb(241 245 249 / .84);
+  color: var(--accent);
 }
 
 [data-route="my_requests"] .member-module-hero .my-requests-member strong {
-  color: white;
+  color: var(--accent);
 }
 
 [data-route="my_requests"] .my-requests-status h2,
