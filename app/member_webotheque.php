@@ -365,7 +365,7 @@ function render_webotheque_page(): void
         return;
     }
 
-    $categories = webotheque_categories($t);
+    $categories = webotheque_default_categories($t) + webotheque_categories($t);
     $proposalContact = webotheque_member_contact($user);
     $canAutoValidate = has_permission('admin.access');
 
