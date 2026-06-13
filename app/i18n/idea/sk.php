@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'method_not_allowed' => 'Metóda nie je povolená.',
+  'title' => 'Zdieľať nápad',
+  'intro' => 'Pošlite výboru nápad, návrh alebo zlepšenie.',
+  'close' => 'Zavrieť',
+  'name_label' => 'Vaše meno',
+  'name_placeholder' => 'Meno a volací znak, ak je to relevantné',
+  'email_label' => 'Váš e-mail',
+  'email_placeholder' => 'vy@example.com',
+  'idea_title_label' => 'Názov nápadu',
+  'idea_title_placeholder' => 'Zhrňte svoj nápad',
+  'message_label' => 'Váš nápad',
+  'message_placeholder' => 'Opíšte svoj nápad, potrebu a prínos pre klub.',
+  'submit' => 'Odoslať nápad',
+  'cancel' => 'Zrušiť',
+  'sent' => 'Ďakujeme, váš nápad bol odoslaný výboru.',
+  'invalid' => 'Vyplňte formulár nápadu správne.',
+  'send_error' => 'Nápad sa nepodarilo odoslať. Skúste to znova neskôr.',
+  'email_subject' => 'Nový nápad pre výbor ON4CRD',
+  'email_intro' => 'Nový nápad odoslaný z webu ON4CRD:',
+);

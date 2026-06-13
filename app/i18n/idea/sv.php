@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'method_not_allowed' => 'Metoden är inte tillåten.',
+  'title' => 'Dela en idé',
+  'intro' => 'Skicka en idé, ett förslag eller en förbättring till styrelsen.',
+  'close' => 'Stäng',
+  'name_label' => 'Ditt namn',
+  'name_placeholder' => 'Namn och anropssignal, om tillämpligt',
+  'email_label' => 'Din e-post',
+  'email_placeholder' => 'du@example.com',
+  'idea_title_label' => 'Idéns titel',
+  'idea_title_placeholder' => 'Sammanfatta din idé',
+  'message_label' => 'Din idé',
+  'message_placeholder' => 'Beskriv din idé, behovet och nyttan för klubben.',
+  'submit' => 'Skicka idé',
+  'cancel' => 'Avbryt',
+  'sent' => 'Tack, din idé har skickats till styrelsen.',
+  'invalid' => 'Fyll i idéformuläret korrekt.',
+  'send_error' => 'Idén kunde inte skickas. Försök igen senare.',
+  'email_subject' => 'Ny idé till ON4CRD-styrelsen',
+  'email_intro' => 'Ny idé skickad från ON4CRD-webbplatsen:',
+);

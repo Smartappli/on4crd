@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'method_not_allowed' => 'Metodas neleidžiamas.',
+  'title' => 'Pasidalyti idėja',
+  'intro' => 'Nusiųskite komitetui idėją, pasiūlymą arba patobulinimą.',
+  'close' => 'Uždaryti',
+  'name_label' => 'Jūsų vardas',
+  'name_placeholder' => 'Vardas ir šaukinys, jei taikoma',
+  'email_label' => 'Jūsų el. paštas',
+  'email_placeholder' => 'jus@example.com',
+  'idea_title_label' => 'Idėjos pavadinimas',
+  'idea_title_placeholder' => 'Trumpai apibūdinkite savo idėją',
+  'message_label' => 'Jūsų idėja',
+  'message_placeholder' => 'Aprašykite savo idėją, poreikį ir naudą klubui.',
+  'submit' => 'Siųsti idėją',
+  'cancel' => 'Atšaukti',
+  'sent' => 'Ačiū, jūsų idėja išsiųsta komitetui.',
+  'invalid' => 'Tinkamai užpildykite idėjos formą.',
+  'send_error' => 'Idėjos nepavyko išsiųsti. Bandykite dar kartą vėliau.',
+  'email_subject' => 'Nauja idėja ON4CRD komitetui',
+  'email_intro' => 'Nauja idėja, išsiųsta iš ON4CRD svetainės:',
+);
