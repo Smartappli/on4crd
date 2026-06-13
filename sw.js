@@ -1,4 +1,4 @@
-const VERSION = 'v359-events-cache';
+const VERSION = 'v360-topics-sidebar';
 const STATIC_CACHE = `on4crd-static-${VERSION}`;
 const PAGE_CACHE = `on4crd-pages-${VERSION}`;
 const DATA_CACHE = `on4crd-data-${VERSION}`;
