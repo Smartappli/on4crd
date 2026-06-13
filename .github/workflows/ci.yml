@@ -41,12 +41,10 @@ jobs:
         name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - &lint_php_step
-        name: Lint PHP
+      - name: Lint PHP
         run: composer lint
 
-      - &run_unit_tests_step
-        name: Run unit tests
+      - name: Run unit tests
         run: composer test
 
   security:
