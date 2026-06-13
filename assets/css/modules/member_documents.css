@@ -74,6 +74,10 @@
   color: white;
 }
 
+[data-route="pv"] .member-module-hero .member-document-hero-copy .help {
+  color: #fff;
+}
+
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-hero-stats strong {
   color: #000;
 }
