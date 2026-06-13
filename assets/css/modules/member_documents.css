@@ -74,7 +74,7 @@
   color: white;
 }
 
-[data-route="pv"] .member-module-hero .member-document-hero-copy .help {
+:is([data-route="fichiers"], [data-route="videos"], [data-route="pv"]) .member-module-hero .member-document-hero-copy .help {
   color: #fff;
 }
 
