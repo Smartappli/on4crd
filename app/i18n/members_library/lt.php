@@ -12,7 +12,7 @@ return array (
   'search' => 'Ieškoti',
   'category' => 'Tema',
   'categories' => 'Temos',
-  'category_help' => 'Pasirinkite kategoriją arba naudokite toliau pateiktas sparčiuosius klavišus, kad filtruotumėte dokumentus.',
+  'category_help' => 'Pasirinkite temą arba naudokite toliau pateiktus sparčiuosius klavišus dokumentams filtruoti.',
   'all_categories' => 'Visos temos',
   'for_filters' => 'šiems filtrams',
   'documents' => 'Dokumentai',

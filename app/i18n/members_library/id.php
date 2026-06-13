@@ -12,7 +12,7 @@ return array (
   'search' => 'Cari',
   'category' => 'Topik',
   'categories' => 'Topik',
-  'category_help' => 'Pilih kategori atau gunakan pintasan di bawah untuk memfilter dokumen.',
+  'category_help' => 'Pilih topik atau gunakan pintasan di bawah untuk memfilter dokumen.',
   'all_categories' => 'Semua topik',
   'for_filters' => ' untuk filter ini',
   'documents' => 'Dokumen',

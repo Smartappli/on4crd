@@ -12,7 +12,7 @@ return array (
   'search' => 'Iskanje',
   'category' => 'Tematika',
   'categories' => 'Tematike',
-  'category_help' => 'Izberite kategorijo ali uporabite spodnje bližnjice za filtriranje dokumentov.',
+  'category_help' => 'Izberite tematiko ali uporabite spodnje bližnjice za filtriranje dokumentov.',
   'all_categories' => 'Vse tematike',
   'for_filters' => 'za te filtre',
   'documents' => 'Dokumenti',

@@ -12,7 +12,7 @@ return array (
   'search' => 'Cuardach',
   'category' => 'Téama',
   'categories' => 'Téamaí',
-  'category_help' => 'Roghnaigh catagóir nó úsáid na haicearraí thíos chun doiciméid a scagadh.',
+  'category_help' => 'Roghnaigh téama nó úsáid na haicearraí thíos chun doiciméid a scagadh.',
   'all_categories' => 'Gach téama',
   'for_filters' => 'do na scagairí seo',
   'documents' => 'Doiciméid',

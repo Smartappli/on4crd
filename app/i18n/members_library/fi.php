@@ -12,7 +12,7 @@ return array (
   'search' => 'Etsi',
   'category' => 'Aihe',
   'categories' => 'Aiheet',
-  'category_help' => 'Valitse luokka tai käytä alla olevia pikanäppäimiä asiakirjojen suodattamiseen.',
+  'category_help' => 'Valitse teema tai käytä alla olevia pikavalintoja asiakirjojen suodattamiseen.',
   'all_categories' => 'Kaikki aiheet',
   'for_filters' => 'näille suodattimille',
   'documents' => 'Asiakirjat',

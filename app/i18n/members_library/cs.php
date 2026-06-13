@@ -12,7 +12,7 @@ return array (
   'search' => 'Hledat',
   'category' => 'Téma',
   'categories' => 'Témata',
-  'category_help' => 'Vyberte kategorii nebo použijte níže uvedené zkratky k filtrování dokumentů.',
+  'category_help' => 'Vyberte téma nebo použijte níže uvedené zkratky k filtrování dokumentů.',
   'all_categories' => 'Všechna témata',
   'for_filters' => 'pro tyto filtry',
   'documents' => 'Dokumenty',

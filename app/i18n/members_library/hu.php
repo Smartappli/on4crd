@@ -12,7 +12,7 @@ return array (
   'search' => 'Keresés',
   'category' => 'Téma',
   'categories' => 'Témák',
-  'category_help' => 'Válasszon egy kategóriát, vagy használja az alábbi parancsikonokat a dokumentumok szűréséhez.',
+  'category_help' => 'Válasszon egy témát, vagy használja az alábbi parancsikonokat a dokumentumok szűréséhez.',
   'all_categories' => 'Minden téma',
   'for_filters' => 'ezekhez a szűrőkhöz',
   'documents' => 'Dokumentumok',

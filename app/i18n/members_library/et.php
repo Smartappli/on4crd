@@ -12,7 +12,7 @@ return array (
   'search' => 'Otsi',
   'category' => 'Teema',
   'categories' => 'Teemad',
-  'category_help' => 'Valige dokumentide filtreerimiseks kategooria või kasutage allolevaid otseteid.',
+  'category_help' => 'Valige dokumentide filtreerimiseks teema või kasutage allolevaid otseteid.',
   'all_categories' => 'Kõik teemad',
   'for_filters' => 'nende filtrite jaoks',
   'documents' => 'Dokumendid',

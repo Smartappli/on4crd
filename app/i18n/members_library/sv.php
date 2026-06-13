@@ -12,7 +12,7 @@ return array (
   'search' => 'Sök',
   'category' => 'Tema',
   'categories' => 'Teman',
-  'category_help' => 'Välj en kategori eller använd genvägarna nedan för att filtrera dokument.',
+  'category_help' => 'Välj ett tema eller använd genvägarna nedan för att filtrera dokument.',
   'all_categories' => 'Alla teman',
   'for_filters' => 'för dessa filter',
   'documents' => 'Dokument',

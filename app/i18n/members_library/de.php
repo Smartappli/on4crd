@@ -12,7 +12,7 @@ return array (
   'search' => 'Suchen',
   'category' => 'Thema',
   'categories' => 'Themen',
-  'category_help' => 'Wählen Sie eine Kategorie oder nutzen Sie die Schnellfilter unten.',
+  'category_help' => 'Wählen Sie ein Thema oder nutzen Sie die Schnellfilter unten.',
   'all_categories' => 'Alle Themen',
   'for_filters' => ' für diese Filter',
   'documents' => 'Dokumente',

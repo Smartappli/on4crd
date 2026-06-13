@@ -12,7 +12,7 @@ return array (
   'search' => 'Meklēt',
   'category' => 'Temats',
   'categories' => 'Temati',
-  'category_help' => 'Izvēlieties kategoriju vai izmantojiet tālāk norādītās saīsnes, lai filtrētu dokumentus.',
+  'category_help' => 'Izvēlieties tēmu vai izmantojiet tālāk norādītās saīsnes, lai filtrētu dokumentus.',
   'all_categories' => 'Visi temati',
   'for_filters' => 'šiem filtriem',
   'documents' => 'Dokumenti',

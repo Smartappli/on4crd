@@ -12,7 +12,7 @@ return array (
   'search' => 'A cerceta',
   'category' => 'Tematică',
   'categories' => 'Tematici',
-  'category_help' => 'Alegeți o categorie sau utilizați comenzile rapide de mai jos pentru a filtra documentele.',
+  'category_help' => 'Alegeți o tematică sau utilizați comenzile rapide de mai jos pentru a filtra documentele.',
   'all_categories' => 'Toate tematicile',
   'for_filters' => 'pentru aceste filtre',
   'documents' => 'Documente',

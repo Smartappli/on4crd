@@ -12,7 +12,7 @@ return array (
   'search' => 'Cerca',
   'category' => 'Tematica',
   'categories' => 'Tematiche',
-  'category_help' => 'Scegli una categoria o usa le scorciatoie qui sotto per filtrare i documenti.',
+  'category_help' => 'Scegli un tema o usa le scorciatoie qui sotto per filtrare i documenti.',
   'all_categories' => 'Tutte le tematiche',
   'for_filters' => ' per questi filtri',
   'documents' => 'Documenti',

@@ -12,7 +12,7 @@ return array (
   'search' => 'Għar-riċerka',
   'category' => 'Tema',
   'categories' => 'Temi',
-  'category_help' => 'Agħżel kategorija jew uża s-shortcuts hawn taħt biex tiffiltra d-dokumenti.',
+  'category_help' => 'Agħżel tema jew uża s-shortcuts hawn taħt biex tiffiltra d-dokumenti.',
   'all_categories' => 'It-temi kollha',
   'for_filters' => 'għal dawn il-filtri',
   'documents' => 'Dokumenti',

@@ -12,7 +12,7 @@ return array (
   'search' => '搜索',
   'category' => '主题',
   'categories' => '主题',
-  'category_help' => '选择一个类别，或使用下方快捷入口筛选文档。',
+  'category_help' => '选择一个主题，或使用下方快捷入口筛选文档。',
   'all_categories' => '所有主题',
   'for_filters' => ' 符合这些筛选条件',
   'documents' => '文档',

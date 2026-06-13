@@ -12,7 +12,7 @@ return array (
   'search' => 'Pesquisar',
   'category' => 'Temática',
   'categories' => 'Temáticas',
-  'category_help' => 'Escolha uma categoria ou use os atalhos abaixo para filtrar documentos.',
+  'category_help' => 'Escolha um tema ou use os atalhos abaixo para filtrar documentos.',
   'all_categories' => 'Todas as temáticas',
   'for_filters' => ' para estes filtros',
   'documents' => 'Documentos',

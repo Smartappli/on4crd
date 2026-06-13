@@ -12,7 +12,7 @@ return array (
   'search' => 'Zoeken',
   'category' => 'Thema',
   'categories' => 'Thema’s',
-  'category_help' => 'Kies een categorie of gebruik de snelle filters hieronder.',
+  'category_help' => 'Kies een thema of gebruik de snelle filters hieronder.',
   'all_categories' => 'Alle thema’s',
   'for_filters' => ' voor deze filters',
   'documents' => 'Documenten',
