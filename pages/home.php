@@ -824,7 +824,7 @@ $content = '<section class="mb-4 grid gap-4 lg:grid-cols-2">'
     . '</article>'
     . '</section>'
     . '<section class="grid gap-4 lg:grid-cols-[1.55fr_.95fr]">'
-    . '<article class="relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
+    . '<article class="home-hero-card relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 p-8 shadow-sm">'
     . '<img class="absolute inset-0 -z-20 h-full w-full object-cover" src="' . e($heroBackgroundUrl) . '" alt="' . e((string) $homeI18n['alt_hero_illustration']) . '" loading="eager" decoding="async">'
     . '<span class="hidden rounded-full bg-blue-600 px-3 py-1 text-[1.1rem] font-semibold uppercase tracking-wide text-white sm:inline-flex">' . e((string) $homeI18n['hero_tagline']) . '</span>'
     . $heroIntro

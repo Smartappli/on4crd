@@ -2140,10 +2140,12 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   color: #000;
 }
 :is(
+  [data-route="admin_webotheque"] .admin-webotheque-hero,
   [data-route="albums"] .albums-hero,
   [data-route="articles"] .page-hero,
   [data-route="article_propose"] .page-hero,
   [data-route="auctions"] .member-module-hero,
+  [data-route="chatbot"] .member-module-hero,
   [data-route="classifieds"] .member-module-hero,
   [data-route="classifieds_manage"] .member-module-hero,
   [data-route="directory"] .directory-hero,
@@ -2170,12 +2172,15 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 ) {
   position: relative;
   overflow: hidden;
+  padding-bottom: 2.45rem;
 }
 :is(
+  [data-route="admin_webotheque"] .admin-webotheque-hero,
   [data-route="albums"] .albums-hero,
   [data-route="articles"] .page-hero,
   [data-route="article_propose"] .page-hero,
   [data-route="auctions"] .member-module-hero,
+  [data-route="chatbot"] .member-module-hero,
   [data-route="classifieds"] .member-module-hero,
   [data-route="classifieds_manage"] .member-module-hero,
   [data-route="directory"] .directory-hero,
