@@ -21,7 +21,7 @@ return array (
   'search' => 'Wyszukaj członka',
   'search_ph' => 'Znak wywoławczy, imię i nazwisko, adres e-mail…',
   'search_btn' => 'OK',
-  'th_password_reset' => 'Has?o',
+  'th_password_reset' => 'Hasło',
   'password_reset_force' => 'Wymuś kolejne logowanie',
   'password_reset_unavailable' => 'Niedostępne',
 );

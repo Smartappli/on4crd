@@ -21,7 +21,7 @@ return array (
   'search' => 'Căutați un membru',
   'search_ph' => 'Indicativ, nume, e-mail...',
   'search_btn' => 'OK',
-  'th_password_reset' => 'Parol?',
+  'th_password_reset' => 'Parolă',
   'password_reset_force' => 'Forțați la următoarea autentificare',
   'password_reset_unavailable' => 'Indisponibil',
 );

@@ -21,7 +21,7 @@ return array (
   'search' => 'Sök efter en medlem',
   'search_ph' => 'Anropssignal, namn, e-post...',
   'search_btn' => 'OK',
-  'th_password_reset' => 'L?senord',
+  'th_password_reset' => 'Lösenord',
   'password_reset_force' => 'Framtvinga nästa inloggning',
   'password_reset_unavailable' => 'Ej tillgänglig',
 );

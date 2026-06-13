@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -90,14 +89,14 @@ return array (
   'limit_rate_limited' => 'Veuillez patienter une minute avant de proposer une autre annonce.',
   'limit_daily' => 'Limite atteinte : maximum 5 annonces par 24 heures.',
   'admin_title' => 'Administration des petites annonces',
-  'admin_meta_desc' => 'Mod?ration et gestion des petites annonces ON4CRD.',
+  'admin_meta_desc' => 'Modération et gestion des petites annonces ON4CRD.',
   'stats_total' => 'Annonces',
   'stats_active' => 'Actives',
   'stats_sold' => 'Vendues',
   'edit_ad' => 'Éditer l’annonce',
   'no_ads' => 'Aucune annonce',
-  'owner' => 'Propri?taire',
-  'category' => 'Cat?gorie',
+  'owner' => 'Propriétaire',
+  'category' => 'Catégorie',
   'ad_title' => 'Titre',
   'description' => 'Description',
   'price' => 'Prix',
@@ -107,11 +106,11 @@ return array (
   'delete' => 'Supprimer',
   'search' => 'Rechercher',
   'bulk_to_pending' => 'Passer en validation',
-  'deleted' => 'Annonce supprim?e.',
-  'saved' => 'Enregistr?.',
-  'bulk_no_selection' => 'S?lectionnez au moins une annonce.',
+  'deleted' => 'Annonce supprimée.',
+  'saved' => 'Enregistré.',
+  'bulk_no_selection' => 'Sélectionnez au moins une annonce.',
   'delete_confirm' => 'Supprimer cette annonce ?',
   'notification_moderated_title' => 'Petite annonce modérée',
   'notification_removed_body' => 'Annonce supprimée par la modération : {title}',
-  'notification_status_body' => 'Statut mis ? jour vers {status} : {title}',
+  'notification_status_body' => 'Statut mis à jour vers {status} : {title}',
 );

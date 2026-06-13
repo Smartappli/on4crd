@@ -21,7 +21,7 @@ return array (
   'search' => 'Buscar miembro',
   'search_ph' => 'Indicativo, nombre, correo…',
   'search_btn' => 'Buscar',
-  'th_password_reset' => 'Contrase?a',
+  'th_password_reset' => 'Contraseña',
   'password_reset_force' => 'Forzar el próximo inicio de sesión',
   'password_reset_unavailable' => 'No disponible',
 );
