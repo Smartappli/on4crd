@@ -34,7 +34,11 @@ article_ids = {}
 for tool_id, partial_file in sorted(map_entries.items()):
     panel = Path('pages/tools_panels', partial_file).read_text()
     expected = f'id="{tool_id}"'
-    if expected not in panel:
+    expected_dynamic_assignments = [
+        rf"\$[A-Za-z_][A-Za-z0-9_]*PanelId\s*=\s*['\"]{re.escape(tool_id)}['\"]",
+        rf"\$[A-Za-z_][A-Za-z0-9_]*PanelId\s*=\s*\(string\)\s*\(\$[A-Za-z_][A-Za-z0-9_]*PanelId\s*\?\?\s*['\"]{re.escape(tool_id)}['\"]\)",
+    ]
+    if expected not in panel and not any(re.search(pattern, panel) for pattern in expected_dynamic_assignments):
         raise SystemExit(f'Panel {partial_file} does not declare expected {expected}')
 
     ids = re.findall(r'id="([^"]+)"', panel)

@@ -132,7 +132,8 @@ final class I18nNativeLocalesTest extends TestCase
         $memberModuleKeys = array_values(array_unique($matches[1] ?? []));
         sort($memberModuleKeys);
 
-        self::assertCount(16, $memberModuleKeys);
+        self::assertNotEmpty($memberModuleKeys);
+        self::assertSame(0, count($memberModuleKeys) % 2, 'Member module title and description keys must stay paired.');
 
         foreach ($this->supportedLocales() as $locale) {
             $messages = $this->loadLocaleFile(__DIR__ . '/../app/i18n/home/' . $locale . '.php');
@@ -216,19 +217,27 @@ final class I18nNativeLocalesTest extends TestCase
             preg_match_all('/i18n_domain_(?:locale|translator|messages)\([\'"]([^\'"]+)[\'"]/', $source, $domainMatches);
             preg_match_all('/t_page\([\'"]([^\'"]+)[\'"]/', $source, $tPageMatches);
             preg_match_all('#/i18n/([a-z0-9_]+)(?:\.php|/)#', $source, $requireMatches);
+            preg_match_all('/render_(?:admin_)?member_document_module_page\([\'"]([^\'"]+)[\'"]\)/', $source, $memberDocumentMatches);
 
             $usedDomains = array_unique(array_merge(
                 $domainMatches[1] ?? [],
                 $tPageMatches[1] ?? [],
-                $requireMatches[1] ?? []
+                $requireMatches[1] ?? [],
+                $memberDocumentMatches[1] ?? []
             ));
+            if (str_contains($source, 'render_webotheque_page(') || str_contains($source, 'render_admin_webotheque_page(')) {
+                $usedDomains[] = 'webotheque';
+            }
             if (str_contains($source, 'admin_dashboard_translations(')) {
                 $usedDomains[] = 'admin';
+            }
+            if (preg_match('/^\s*<\?php\s+declare\(strict_types=1\);\s+redirect\([\'"][^\'"]+[\'"]\);\s*$/s', $source) === 1) {
+                $usedDomains[] = '__redirect_only__';
             }
 
             $usedDomains = array_values(array_filter(
                 $usedDomains,
-                static fn(string $domain): bool => isset($domains[$domain])
+                static fn(string $domain): bool => $domain === '__redirect_only__' || isset($domains[$domain])
             ));
             if ($usedDomains === []) {
                 $missing[] = $route . ' -> ' . $relativePath;

@@ -36,6 +36,7 @@ function seo_build_canonical_url(string $route): string
     $base = $configuredBase !== ''
         ? $configuredBase
         : ((!$isCdnHost && $requestHost !== '') ? ($requestScheme . '://' . $requestHost) : '');
+    $requestBase = (!$isCdnHost && $requestHost !== '') ? ($requestScheme . '://' . $requestHost) : '';
     if ($base === '') {
         return '';
     }
@@ -56,7 +57,7 @@ function seo_build_canonical_url(string $route): string
         'knowledge-graph.jsonld' => true,
     ];
     $url = isset($directRoutes[$route])
-        ? $base . '/' . $route
+        ? ($requestBase !== '' ? $requestBase : $base) . '/' . $route
         : $base . '/index.php?route=' . rawurlencode($route);
 
     if ($queryString !== '') {
