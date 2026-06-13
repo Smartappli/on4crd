@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'البحث',
   'eyebrow' => 'وحدة عامة',
-  'lead' => 'اعثر بسرعة على الأخبار والمقالات وصفحات Wiki والمستندات والإعلانات والألبومات.',
+  'lead' => 'اعثر بسرعة على الأخبار والمقالات وصفحات ويكي والمستندات والإعلانات والألبومات.',
   'placeholder' => 'إشارة نداء، كلمة مفتاحية، موضوع، مستند...',
   'query_label' => 'بحثك',
   'source_label' => 'المصدر',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'الكل',
   'source_news' => 'الأخبار',
   'source_articles' => 'المقالات',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'ويكي',
   'source_library' => 'المكتبة',
   'source_classifieds' => 'الإعلانات',
   'source_albums' => 'الألبومات',

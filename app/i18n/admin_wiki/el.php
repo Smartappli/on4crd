@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Διαχείριση Wiki',
+  'title' => 'Διαχείριση Βίκι',
   'new_page' => 'Νέα σελίδα',
   'th_title' => 'Τίτλος',
   'th_slug' => 'γυμνοσάλιαγκας',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Δράση',
   'edit' => 'Επεξεργασία',
   'empty' => 'Δεν υπάρχουν σελίδες.',
-  'layout' => 'Διαχείριση Wiki',
-  'meta_desc' => 'Διαχείριση σελίδων Wiki.',
+  'layout' => 'Διαχείριση Βίκι',
+  'meta_desc' => 'Διαχείριση σελίδων Βίκι.',
 );

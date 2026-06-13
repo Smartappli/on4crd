@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Страница Wiki не найдена.',
+  'not_found' => 'Страница Вики не найдена.',
   'edit' => 'Редактировать',
-  'layout' => 'Wiki',
-  'meta_desc' => 'Просмотр страницы Wiki.',
+  'layout' => 'Вики',
+  'meta_desc' => 'Просмотр страницы Вики.',
   'history' => 'История',
   'no_revisions' => 'Предыдущих ревизий нет.',
 );

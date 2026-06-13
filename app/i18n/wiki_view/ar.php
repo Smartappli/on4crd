@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'صفحة Wiki غير موجودة.',
+  'not_found' => 'صفحة ويكي غير موجودة.',
   'edit' => 'تعديل',
-  'layout' => 'Wiki',
-  'meta_desc' => 'عرض صفحة Wiki.',
+  'layout' => 'ويكي',
+  'meta_desc' => 'عرض صفحة ويكي.',
   'history' => 'السجل',
   'no_revisions' => 'لا توجد مراجعات سابقة.',
 );

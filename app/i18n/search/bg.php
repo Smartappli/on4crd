@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Търсене',
   'eyebrow' => 'Публичен модул',
-  'lead' => 'Бързо намирайте новини, статии, Wiki страници, документи, съобщения и албуми.',
+  'lead' => 'Бързо намирайте новини, статии, Уики страници, документи, съобщения и албуми.',
   'placeholder' => 'Индикатор, ключова дума, тема, документ...',
   'query_label' => 'Вашето търсене',
   'source_label' => 'Източник',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Всичко',
   'source_news' => 'Новини',
   'source_articles' => 'Статии',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Уики',
   'source_library' => 'Библиотека',
   'source_classifieds' => 'Съобщения',
   'source_albums' => 'Албуми',

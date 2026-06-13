@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Тонкая настройка радио-лент, TTL, URL и активации.',
   'admin_newsletters_title' => 'Рассылка',
   'admin_newsletters_desc' => 'Подписчики, импорт CSV и email-кампании.',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'Вики',
   'admin_wiki_desc' => 'Совместные страницы и ревизии.',
   'admin_albums_title' => 'Альбомы',
   'admin_albums_desc' => 'Публичная галерея и социальная синхронизация.',

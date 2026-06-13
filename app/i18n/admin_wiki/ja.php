@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki管理',
+  'title' => 'ウィキ管理',
   'new_page' => '新しいページ',
   'th_title' => 'タイトル',
   'th_slug' => 'ナメクジ',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'アクション',
   'edit' => '編集',
   'empty' => 'ページはありません。',
-  'layout' => 'Wiki管理',
-  'meta_desc' => 'Wikiページを管理します。',
+  'layout' => 'ウィキ管理',
+  'meta_desc' => 'ウィキページを管理します。',
 );

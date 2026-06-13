@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Αναζήτηση',
   'eyebrow' => 'Δημόσια ενότητα',
-  'lead' => 'Βρείτε γρήγορα ειδήσεις, άρθρα, σελίδες Wiki, έγγραφα, ανακοινώσεις και άλμπουμ.',
+  'lead' => 'Βρείτε γρήγορα ειδήσεις, άρθρα, σελίδες Βίκι, έγγραφα, ανακοινώσεις και άλμπουμ.',
   'placeholder' => 'Δείκτης, λέξη-κλειδί, θέμα, έγγραφο...',
   'query_label' => 'Η αναζήτησή σας',
   'source_label' => 'Πηγή',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Τα πάντα',
   'source_news' => 'Νέα',
   'source_articles' => 'Άρθρα',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Βίκι',
   'source_library' => 'Βιβλιοθήκη',
   'source_classifieds' => 'Ανακοινώσεις',
   'source_albums' => 'Άλμπουμ',

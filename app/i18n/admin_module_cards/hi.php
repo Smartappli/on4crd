@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'रेडियो फ़ीड, TTL, URL और सक्रियण का सूक्ष्म नियंत्रण।',
   'admin_newsletters_title' => 'न्यूज़लेटर',
   'admin_newsletters_desc' => 'सदस्य, CSV आयात और ईमेल अभियान।',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'विकी',
   'admin_wiki_desc' => 'सहयोगी पृष्ठ और संशोधन।',
   'admin_albums_title' => 'एल्बम',
   'admin_albums_desc' => 'सार्वजनिक गैलरी और सोशल सिंक।',

@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => '無線フィード、TTL、URL、有効化の詳細管理。',
   'admin_newsletters_title' => 'ニュースレター',
   'admin_newsletters_desc' => '購読者、CSVインポート、メール配信キャンペーン。',
-  'admin_wiki_title' => 'Wiki',
+  'admin_wiki_title' => 'ウィキ',
   'admin_wiki_desc' => '共同編集ページと改訂履歴。',
   'admin_albums_title' => 'アルバム',
   'admin_albums_desc' => '公開ギャラリーとソーシャル同期。',

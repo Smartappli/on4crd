@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki 管理',
+  'title' => '维基 管理',
   'new_page' => '新页面',
   'th_title' => '标题',
   'th_slug' => '蛞蝓',
@@ -10,6 +10,6 @@ return array (
   'th_action' => '行动',
   'edit' => '编辑',
   'empty' => '没有页面。',
-  'layout' => 'Wiki 管理',
-  'meta_desc' => '管理 Wiki 页面。',
+  'layout' => '维基 管理',
+  'meta_desc' => '管理 维基 页面。',
 );

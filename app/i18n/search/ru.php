@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Поиск',
   'eyebrow' => 'Публичный модуль',
-  'lead' => 'Быстро находите новости, статьи, Wiki-страницы, документы, объявления и альбомы.',
+  'lead' => 'Быстро находите новости, статьи, Вики-страницы, документы, объявления и альбомы.',
   'placeholder' => 'Позывной, ключевое слово, тема, документ...',
   'query_label' => 'Ваш поиск',
   'source_label' => 'Источник',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Все',
   'source_news' => 'Новости',
   'source_articles' => 'Статьи',
-  'source_wiki' => 'Wiki',
+  'source_wiki' => 'Вики',
   'source_library' => 'Библиотека',
   'source_classifieds' => 'Объявления',
   'source_albums' => 'Альбомы',
