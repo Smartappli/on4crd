@@ -70,7 +70,6 @@
   font-weight: 650;
 }
 
-:is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-heading,
 :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-module-hero .member-document-heading {
   color: white;
 }
