@@ -156,6 +156,13 @@ $articlePublicationSort = article_publication_sort_expression();
 $dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $dataStmt->execute($whereParams);
 $pagedRows = $dataStmt->fetchAll() ?: [];
+$latestArticleDate = '';
+$latestArticleStmt = db()->query('SELECT published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT 1');
+$latestArticleRow = $latestArticleStmt ? ($latestArticleStmt->fetch() ?: null) : null;
+if (is_array($latestArticleRow)) {
+    $latestArticleDate = (string) (article_publication_datetime($latestArticleRow) ?? '');
+}
+$latestArticleLabel = module_hero_latest_stat_date_label($latestArticleDate, $locale);
 $groupedArticles = [];
 foreach ($pagedRows as $row) {
     $theme = slugify((string) ($row['category'] ?? 'autres'));
@@ -199,6 +206,10 @@ ob_start();
                 <article>
                     <span><?= e((string) $t['theme_default']) ?></span>
                     <strong><?= (int) count($themeMeta) ?></strong>
+                </article>
+                <article>
+                    <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
+                    <strong><?= e($latestArticleLabel) ?></strong>
                 </article>
             </div>
             <div class="articles-hero-actions">

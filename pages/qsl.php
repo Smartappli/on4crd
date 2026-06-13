@@ -289,10 +289,21 @@ $qsoRows = $qsoLogs->fetchAll();
 
 $qslCards = db()->prepare('SELECT * FROM qsl_cards WHERE member_id = ? ORDER BY id DESC LIMIT 50');
 $qslCards->execute([$memberId]);
-$backgroundPresetsStmt = db()->prepare('SELECT id, label, type, image_data_uri, color_primary, color_secondary, is_default FROM qsl_background_presets WHERE member_id = ? ORDER BY is_default DESC, id DESC');
+$backgroundPresetsStmt = db()->prepare('SELECT id, label, type, image_data_uri, color_primary, color_secondary, is_default, created_at FROM qsl_background_presets WHERE member_id = ? ORDER BY is_default DESC, id DESC');
 $backgroundPresetsStmt->execute([$memberId]);
 $backgroundPresets = $backgroundPresetsStmt->fetchAll();
 $qslRows = $qslCards->fetchAll();
+$latestQslDate = '';
+$latestQslTimestamp = 0;
+foreach (array_merge($qsoRows, $qslRows, $backgroundPresets) as $activityRow) {
+    $createdAt = trim((string) ($activityRow['created_at'] ?? ''));
+    $createdTimestamp = $createdAt !== '' ? strtotime($createdAt) : false;
+    if ($createdTimestamp !== false && $createdTimestamp > $latestQslTimestamp) {
+        $latestQslTimestamp = $createdTimestamp;
+        $latestQslDate = $createdAt;
+    }
+}
+$latestQslLabel = module_hero_latest_stat_date_label($latestQslDate, $locale);
 $defaultBackgroundPresetId = 0;
 foreach ($backgroundPresets as $presetRow) {
     if ((int) ($presetRow['is_default'] ?? 0) === 1) {
@@ -443,6 +454,10 @@ ob_start();
             <article>
                 <span><?= e($qt('backgrounds_stat')) ?></span>
                 <strong><?= count($backgroundPresets) ?></strong>
+            </article>
+            <article>
+                <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
+                <strong><?= e($latestQslLabel) ?></strong>
             </article>
         </div>
         <a class="button" href="#qsl-create"><?= e($qt('create_my_qsl')) ?></a>

@@ -172,7 +172,7 @@ function render_layout_impl(string $content, string $title = ''): string
     $navPrimaryItems = [
         ['label' => (string) $layoutI18n['nav_home'], 'route' => 'home', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_news'], 'route' => 'news', 'module' => 'news'],
-        ['label' => (string) $layoutI18n['nav_shop'], 'route' => 'classifieds', 'module' => 'classifieds'],
+        ['label' => 'Ham Academy', 'url' => 'https://ham.academy', 'module' => ''],
         ['label' => (string) $layoutI18n['nav_events'], 'route' => 'events', 'module' => 'events'],
         ['label' => (string) $layoutI18n['nav_tools'], 'route' => 'tools', 'module' => ''],
         ['label' => (string) $layoutI18n['search_submit'], 'route' => 'search', 'module' => ''],
@@ -202,6 +202,16 @@ function render_layout_impl(string $content, string $title = ''): string
         foreach ($items as $item) {
             $module = (string) ($item['module'] ?? '');
             if ($module !== '' && !module_enabled($module)) {
+                continue;
+            }
+
+            $externalUrl = trim((string) ($item['url'] ?? ''));
+            if ($externalUrl !== '') {
+                $externalAttrs = str_starts_with($externalUrl, 'http://') || str_starts_with($externalUrl, 'https://')
+                    ? ' target="_blank" rel="noopener noreferrer"'
+                    : '';
+                $links .= '<a class="transition-colors duration-200" href="' . e($externalUrl) . '"' . $externalAttrs . '>'
+                    . e((string) $item['label']) . '</a>';
                 continue;
             }
 

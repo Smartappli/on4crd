@@ -148,6 +148,8 @@ foreach (($categoryCountStmt ? ($categoryCountStmt->fetchAll() ?: []) : []) as $
         $activeCategoryCounts[$code] = (int) ($countRow['total'] ?? 0);
     }
 }
+$latestClassifiedDate = trim((string) (db()->query('SELECT created_at FROM classified_ads WHERE ' . classifieds_active_where_sql() . ' ORDER BY created_at DESC, id DESC LIMIT 1')->fetchColumn() ?: ''));
+$latestClassifiedLabel = module_hero_latest_stat_date_label($latestClassifiedDate, $locale);
 
 $myAds = [];
 if ($user !== null) {
@@ -226,6 +228,10 @@ ob_start();
                 <div class="classifieds-stat">
                     <span><?= (int) count($myAds) ?></span>
                     <p><?= e($t('my_ads')) ?></p>
+                </div>
+                <div class="classifieds-stat">
+                    <span><?= e($latestClassifiedLabel) ?></span>
+                    <p><?= e(module_hero_latest_stat_text('latest', $locale)) ?></p>
                 </div>
             </div>
             <p class="classifieds-hero-action">

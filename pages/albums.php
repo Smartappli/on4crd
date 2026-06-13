@@ -125,6 +125,17 @@ $photoTotalStmt = db()->prepare(
 );
 $photoTotalStmt->execute($params);
 $photoTotal = (int) $photoTotalStmt->fetchColumn();
+$latestAlbumDate = trim((string) (db()->query(
+    'SELECT MAX(latest_at) FROM (
+        SELECT a.created_at AS latest_at FROM albums a WHERE a.is_public = 1
+        UNION ALL
+        SELECT p.created_at AS latest_at
+        FROM album_photos p
+        INNER JOIN albums a ON a.id = p.album_id
+        WHERE a.is_public = 1
+    ) latest_album_content'
+)->fetchColumn() ?: ''));
+$latestAlbumLabel = module_hero_latest_stat_date_label($latestAlbumDate, $locale);
 $proposalContactDefault = '';
 if ($user !== null) {
     $proposalContactDefault = trim((string) ($user['email'] ?? ''));
@@ -152,6 +163,10 @@ ob_start();
             <article>
                 <span><?= e((string) $t['indexed_photos']) ?></span>
                 <strong><?= (int) $photoTotal ?></strong>
+            </article>
+            <article>
+                <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
+                <strong><?= e($latestAlbumLabel) ?></strong>
             </article>
         </div>
         <p class="actions">

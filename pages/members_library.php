@@ -176,6 +176,8 @@ $offset = $pagination['offset'];
 $stmt = db()->prepare('SELECT * FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
+$latestDocumentDate = trim((string) (db()->query('SELECT uploaded_at FROM member_library_documents ORDER BY uploaded_at DESC, id DESC LIMIT 1')->fetchColumn() ?: ''));
+$latestDocumentLabel = module_hero_latest_stat_date_label($latestDocumentDate, $locale);
 $activeFiltersCount = 0;
 if ($search !== '') {
     $activeFiltersCount++;
@@ -264,6 +266,10 @@ ob_start();
                 <article>
                     <span><?= e((string) $t['tags']) ?></span>
                     <strong><?= (int) $activeFiltersCount ?></strong>
+                </article>
+                <article>
+                    <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
+                    <strong><?= e($latestDocumentLabel) ?></strong>
                 </article>
             </div>
             <div class="members-library-hero-action">

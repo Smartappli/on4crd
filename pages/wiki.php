@@ -82,11 +82,13 @@ $wikiThemes = [];
 $totalPagesCount = 0;
 $updatedPagesCount = 0;
 $revisionCount = 0;
+$latestWikiDate = '';
 
 try {
     $totalPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE status = "published"')->fetchColumn();
     $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE status = "published" AND updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
     $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
+    $latestWikiDate = trim((string) (db()->query('SELECT updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 1')->fetchColumn() ?: ''));
 
     $themeRows = db()->query('SELECT slug FROM wiki_pages WHERE status = "published" ORDER BY slug ASC')->fetchAll() ?: [];
     foreach ($themeRows as $themeRow) {
@@ -140,6 +142,7 @@ try {
 } catch (Throwable) {
     $rows = [];
 }
+$latestWikiLabel = module_hero_latest_stat_date_label($latestWikiDate, $locale);
 
 ob_start();
 ?>
@@ -163,6 +166,10 @@ ob_start();
                 <article>
                     <span><?= e((string) $t['revisions']) ?></span>
                     <strong><?= $revisionCount ?></strong>
+                </article>
+                <article>
+                    <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
+                    <strong><?= e($latestWikiLabel) ?></strong>
                 </article>
             </div>
             <p class="actions wiki-hero-actions">

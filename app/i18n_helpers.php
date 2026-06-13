@@ -298,3 +298,43 @@ function member_area_eyebrow_label(?string $locale = null): string
     return $label !== '' ? $label : 'Member Area';
 }
 }
+
+if (!function_exists('module_hero_latest_stat_text')) {
+function module_hero_latest_stat_text(string $key, ?string $locale = null): string
+{
+    $key = $key === 'none' ? 'none' : 'latest';
+    $value = trim(t_page('webotheque', $key, $locale));
+    if ($value !== '' && $value !== $key) {
+        return $value;
+    }
+
+    $localeCode = strtolower(trim((string) ($locale ?? current_locale())));
+    $localeCode = str_replace('_', '-', $localeCode);
+    if (str_contains($localeCode, '-')) {
+        $localeCode = (string) explode('-', $localeCode, 2)[0];
+    }
+
+    if ($key === 'none') {
+        return $localeCode === 'fr' ? 'Aucun' : 'None';
+    }
+
+    return $localeCode === 'fr' ? 'Dernier ajout' : 'Latest';
+}
+}
+
+if (!function_exists('module_hero_latest_stat_date_label')) {
+function module_hero_latest_stat_date_label(?string $date, ?string $locale = null): string
+{
+    $value = trim((string) $date);
+    if ($value === '') {
+        return module_hero_latest_stat_text('none', $locale);
+    }
+
+    $timestamp = strtotime($value);
+    if ($timestamp === false) {
+        return module_hero_latest_stat_text('none', $locale);
+    }
+
+    return date('d/m/Y', $timestamp);
+}
+}

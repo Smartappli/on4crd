@@ -242,10 +242,12 @@ function webotheque_accepted_tags(): array
 if (!function_exists('webotheque_stats')) {
 function webotheque_stats(): array
 {
-    $rows = db()->query('SELECT url, tags, category FROM member_webotheque_links')->fetchAll() ?: [];
+    $rows = db()->query('SELECT url, tags, category, created_at FROM member_webotheque_links')->fetchAll() ?: [];
     $domains = [];
     $tags = webotheque_accepted_tags();
     $byCategory = [];
+    $latest = '';
+    $latestTimestamp = 0;
     foreach ($rows as $row) {
         $domain = webotheque_domain_from_url((string) ($row['url'] ?? ''));
         if ($domain !== '') {
@@ -258,9 +260,15 @@ function webotheque_stats(): array
         foreach (webotheque_tags_from_text((string) ($row['tags'] ?? '')) as $key => $tag) {
             $tags[$key] = $tag;
         }
+        $createdAt = trim((string) ($row['created_at'] ?? ''));
+        $createdTimestamp = $createdAt !== '' ? strtotime($createdAt) : false;
+        if ($createdTimestamp !== false && $createdTimestamp > $latestTimestamp) {
+            $latestTimestamp = $createdTimestamp;
+            $latest = $createdAt;
+        }
     }
 
-    return ['total' => count($rows), 'tags' => count($tags), 'domains' => count($domains), 'by_category' => $byCategory];
+    return ['total' => count($rows), 'tags' => count($tags), 'domains' => count($domains), 'latest' => $latest, 'by_category' => $byCategory];
 }
 }
 
@@ -483,6 +491,7 @@ function render_webotheque_page(): void
                     <article><span><?= e((string) $t['links']) ?></span><strong><?= (int) ($stats['total'] ?? 0) ?></strong></article>
                     <article><span><?= e((string) $t['tags']) ?></span><strong><?= (int) ($stats['tags'] ?? 0) ?></strong></article>
                     <article><span><?= e((string) $t['domains']) ?></span><strong><?= (int) ($stats['domains'] ?? 0) ?></strong></article>
+                    <article><span><?= e((string) $t['latest']) ?></span><strong><?= e(module_hero_latest_stat_date_label((string) ($stats['latest'] ?? ''), $locale)) ?></strong></article>
                 </div>
                 <p class="actions webotheque-hero-actions">
                     <a class="button" href="<?= e(route_url('webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="webotheque-link-dialog" aria-haspopup="dialog" aria-controls="webotheque-link-dialog"><?= e((string) $t['propose_link']) ?></a>
