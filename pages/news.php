@@ -288,8 +288,8 @@ ob_start();
             </article>
         </div>
         <div class="news-hero-actions" aria-label="<?= e((string) $newsT['news_actions']) ?>">
-            <a class="button" href="<?= e($newsProposalUrl) ?>" data-news-proposal-open="news-proposal-dialog" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e($canModerateNews ? 'Creer une actualite' : (string) $newsT['propose_news']) ?></a>
-            <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-news-proposal-open="news-category-proposal-dialog" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e($canModerateNews ? 'Creer une rubrique' : (string) $newsT['propose_category']) ?></a>
+            <a class="button" href="<?= e($newsProposalUrl) ?>" data-news-proposal-open="news-proposal-dialog" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e($canModerateNews ? 'Créer une actualite' : (string) $newsT['propose_news']) ?></a>
+            <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-news-proposal-open="news-category-proposal-dialog" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e($canModerateNews ? 'Créer une rubrique' : (string) $newsT['propose_category']) ?></a>
         </div>
     </div>
 </section>
@@ -299,7 +299,7 @@ ob_start();
         <div class="news-proposal-dialog-header">
             <div>
                 <p class="news-hero-title"><?= e((string) $newsT['latest_news']) ?></p>
-                <h2 id="news-proposal-title"><?= e($canModerateNews ? 'Creer une actualite' : (string) $newsT['propose_news']) ?></h2>
+                <h2 id="news-proposal-title"><?= e($canModerateNews ? 'Créer une actualite' : (string) $newsT['propose_news']) ?></h2>
                 <p class="help"><?= e($canModerateNews ? 'Votre actualite sera publiee directement.' : (string) $newsT['propose_news_intro']) ?></p>
             </div>
             <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
@@ -340,7 +340,7 @@ ob_start();
         <div class="news-proposal-dialog-header">
             <div>
                 <p class="news-hero-title"><?= e((string) $newsT['category']) ?></p>
-                <h2 id="news-category-proposal-title"><?= e($canModerateNews ? 'Creer une rubrique' : (string) $newsT['propose_category']) ?></h2>
+                <h2 id="news-category-proposal-title"><?= e($canModerateNews ? 'Créer une rubrique' : (string) $newsT['propose_category']) ?></h2>
                 <p class="help"><?= e($canModerateNews ? 'La rubrique sera validee directement.' : (string) $newsT['propose_category_intro']) ?></p>
             </div>
             <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
@@ -363,7 +363,7 @@ ob_start();
                 <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
             <div class="news-proposal-dialog-actions">
-                <button class="button" type="submit"><?= e($canModerateNews ? 'Creer' : (string) $newsT['proposal_submit']) ?></button>
+                <button class="button" type="submit"><?= e($canModerateNews ? 'Créer' : (string) $newsT['proposal_submit']) ?></button>
                 <button class="button secondary" type="button" data-news-proposal-close><?= e((string) $newsT['proposal_cancel']) ?></button>
             </div>
         </form>
