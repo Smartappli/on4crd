@@ -130,6 +130,49 @@ function module_js_assets_for_route(string $route): array
     return $assets;
 }
 
+function module_preload_assets_for_route(string $route): array
+{
+    $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';
+    $heroImages = [
+        'admin_webotheque' => 'assets/img/webotheque-hero-bg.png',
+        'albums' => 'assets/img/module-hero-albums.png',
+        'article_propose' => 'assets/img/module-hero-articles.png',
+        'articles' => 'assets/img/module-hero-articles.png',
+        'auctions' => 'assets/img/module-hero-auctions.png',
+        'chatbot' => 'assets/img/module-hero-chatbot.png',
+        'classifieds' => 'assets/img/module-hero-classifieds.png',
+        'classifieds_manage' => 'assets/img/module-hero-classifieds.png',
+        'directory' => 'assets/img/module-hero-directory.png',
+        'events' => 'assets/img/module-hero-events.png',
+        'fichiers' => 'assets/img/module-hero-files.png',
+        'members_library' => 'assets/img/module-hero-library.png',
+        'my_requests' => 'assets/img/module-hero-requests.png',
+        'news' => 'assets/img/module-hero-news.png',
+        'newsletter' => 'assets/img/module-hero-newsletter.png',
+        'notifications' => 'assets/img/module-hero-notifications.png',
+        'presentations' => 'assets/img/module-hero-presentations.png',
+        'profile' => 'assets/img/module-hero-profile.png',
+        'pv' => 'assets/img/module-hero-minutes.png',
+        'qsl' => 'assets/img/module-hero-qsl.png',
+        'search' => 'assets/img/module-hero-search.png',
+        'settings' => 'assets/img/module-hero-settings.png',
+        'tools' => 'assets/img/module-hero-tools.png',
+        'videos' => 'assets/img/module-hero-videos.png',
+        'webotheque' => 'assets/img/webotheque-hero-bg.png',
+        'wiki' => 'assets/img/module-hero-wiki.png',
+        'wiki_edit' => 'assets/img/module-hero-wiki.png',
+        'wiki_propose' => 'assets/img/module-hero-wiki.png',
+        'wiki_view' => 'assets/img/module-hero-wiki.png',
+    ];
+    $assets = [];
+    $imagePath = $heroImages[$route] ?? '';
+    if ($imagePath !== '' && is_file(dirname(__DIR__) . '/' . $imagePath)) {
+        $assets[] = ['as' => 'image', 'href' => asset_url($imagePath)];
+    }
+
+    return $assets;
+}
+
 if (!function_exists('render_layout_impl')) {
 function render_layout_impl(string $content, string $title = ''): string
 {
@@ -516,6 +559,15 @@ function render_layout_impl(string $content, string $title = ''): string
     foreach (module_css_assets_for_route($currentRoute) as $moduleCssPath) {
         $moduleCssHtml .= '<link rel="stylesheet" href="' . e(asset_url($moduleCssPath)) . '">';
     }
+    $preloadHtml = '';
+    foreach (module_preload_assets_for_route($currentRoute) as $asset) {
+        $preloadAs = trim((string) ($asset['as'] ?? ''));
+        $preloadHref = trim((string) ($asset['href'] ?? ''));
+        if ($preloadAs !== '' && $preloadHref !== '') {
+            $fetchPriority = $preloadAs === 'image' ? ' fetchpriority="high"' : '';
+            $preloadHtml .= '<link rel="preload" as="' . e($preloadAs) . '" href="' . e($preloadHref) . '"' . $fetchPriority . '>';
+        }
+    }
     $moduleJsHtml = '';
     foreach (module_js_assets_for_route($currentRoute) as $moduleJsPath) {
         $moduleJsHtml .= '<script nonce="' . e($nonce) . '" src="' . e(asset_url($moduleJsPath)) . '" defer></script>';
@@ -539,6 +591,7 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<link rel="alternate" type="application/ld+json" title="ON4CRD knowledge graph" href="' . e(route_url('knowledge-graph.jsonld')) . '">'
         . '<link rel="icon" href="' . e(asset_url('assets/icons/icon.svg')) . '" type="image/svg+xml">'
         . '<link rel="apple-touch-icon" href="' . e(asset_url('assets/icons/apple-touch-icon.png')) . '">'
+        . $preloadHtml
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/app.css')) . '">'
         . $moduleCssHtml
         . '<link rel="stylesheet" href="' . e(asset_url('assets/css/tailwind-local.css')) . '">'
