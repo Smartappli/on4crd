@@ -85,6 +85,14 @@ function member_library_default_categories(): array
 {
     return [
         ['code' => 'general', 'label' => 'Général', 'sort_order' => 1],
+        ['code' => 'formation', 'label' => 'Formation', 'sort_order' => 10],
+        ['code' => 'technique', 'label' => 'Technique', 'sort_order' => 20],
+        ['code' => 'antennes', 'label' => 'Antennes', 'sort_order' => 30],
+        ['code' => 'propagation', 'label' => 'Propagation', 'sort_order' => 40],
+        ['code' => 'modes-numeriques', 'label' => 'Modes numériques', 'sort_order' => 50],
+        ['code' => 'reglementation', 'label' => 'Réglementation', 'sort_order' => 60],
+        ['code' => 'procedures', 'label' => 'Procédures', 'sort_order' => 70],
+        ['code' => 'club', 'label' => 'Club', 'sort_order' => 80],
     ];
 }
 }

@@ -104,6 +104,14 @@ function webotheque_categories(array $t): array
 {
     $categories = [
         'general' => (string) ($t['category_general'] ?? 'General'),
+        'radioamateur' => 'Radioamateur',
+        'antennes' => 'Antennes',
+        'propagation' => 'Propagation',
+        'modes-numeriques' => 'Modes numériques',
+        'logiciels' => 'Logiciels',
+        'materiel' => 'Matériel',
+        'reglementation' => 'Réglementation',
+        'formation' => 'Formation',
     ];
 
     try {
