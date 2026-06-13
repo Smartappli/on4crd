@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'method_not_allowed' => 'Meetod pole lubatud.',
+  'title' => 'Jaga ideed',
+  'intro' => 'Saada komiteele idee, ettepanek või parandus.',
+  'close' => 'Sulge',
+  'name_label' => 'Teie nimi',
+  'name_placeholder' => 'Nimi ja kutsung, kui asjakohane',
+  'email_label' => 'Teie e-post',
+  'email_placeholder' => 'teie@example.com',
+  'idea_title_label' => 'Idee pealkiri',
+  'idea_title_placeholder' => 'Võtke oma idee lühidalt kokku',
+  'message_label' => 'Teie idee',
+  'message_placeholder' => 'Kirjeldage oma ideed, vajadust ja kasu klubile.',
+  'submit' => 'Saada idee',
+  'cancel' => 'Loobu',
+  'sent' => 'Aitäh, teie idee saadeti komiteele.',
+  'invalid' => 'Palun täitke idee vorm korrektselt.',
+  'send_error' => 'Ideed ei õnnestunud saata. Proovige hiljem uuesti.',
+  'email_subject' => 'Uus idee ON4CRD komiteele',
+  'email_intro' => 'Uus idee, mis saadeti ON4CRD veebisaidilt:',
+);
