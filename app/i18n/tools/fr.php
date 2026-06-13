@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Boîte à outils',
-  'tool_index' => 'Classement des outils',
+  'tool_index' => 'Module public',
   'category_locators' => 'Repères & géolocalisation',
   'category_conversions' => 'Conversions radio',
   'category_antenna' => 'Antennes & propagation',
