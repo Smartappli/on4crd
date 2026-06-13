@@ -65,7 +65,7 @@ return array (
   'uba_member_number_help' => 'Cuir isteach d’uimhir bhall UBA ach amháin má roghnaítear ticbhosca ball UBA.',
   'qsl_info' => 'Faisnéis QSL',
   'favourite_modes' => 'Modhanna roghnaithe',
-  'antennas' => 'antennas',
+  'antennas' => 'Aeróga',
   'interests' => 'Leasanna',
   'save' => 'Sábháil',
   'geocode_consent' => 'Ríomh aimsitheoir agus criosanna raidió go huathoibríoch trí Nominatim le mo sheoladh poist.',

@@ -70,7 +70,7 @@ let config={};
 try{config=calendarEl.dataset.calendarConfig?JSON.parse(calendarEl.dataset.calendarConfig):{};}catch(_e){config={};}
 if(!window.FullCalendar){
 const message=config.loadError||"Calendar unavailable.";
-calendarEl.insertAdjacentHTML("beforeend",`<p class="help">${message}</p>`);
+const help=document.createElement("p");help.className="help";help.textContent=message;calendarEl.appendChild(help);
 return;
 }
 const calendar=new FullCalendar.Calendar(calendarEl,{

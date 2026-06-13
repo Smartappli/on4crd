@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'missing_q' => 'missing_q',
-  'service_down' => 'service_down',
-  'address_not_found' => 'адрес_не_намерен',
-  'invalid_coords' => 'невалидни_координи',
-);
+return [
+    'missing_q' => 'Липсва параметър q.',
+    'invalid_q' => 'Невалиден или твърде дълъг адрес.',
+    'method_not_allowed' => 'Методът не е разрешен.',
+    'rate_limited' => 'Твърде много заявки. Моля, изчакайте.',
+    'service_down' => 'Услугата за геокодиране не е налична.',
+    'address_not_found' => 'Адресът не е намерен.',
+    'invalid_coords' => 'Получени са невалидни координати.',
+];

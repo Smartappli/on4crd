@@ -1172,13 +1172,15 @@ if (!function_exists('privacy_purge_geocode_cache')) {
         }
 
         $cutoff = time() - ($retentionDays * 86400);
-        foreach (glob(rtrim($directory, '/\\') . DIRECTORY_SEPARATOR . 'profile_geocode_*.cache.php') ?: [] as $path) {
-            if (!is_file($path)) {
-                continue;
-            }
-            $modifiedAt = filemtime($path);
-            if ($modifiedAt !== false && $modifiedAt < $cutoff) {
-                @unlink($path);
+        foreach (['profile_geocode_*.cache.php', 'tools_geocode_*.cache.php'] as $pattern) {
+            foreach (glob(rtrim($directory, '/\\') . DIRECTORY_SEPARATOR . $pattern) ?: [] as $path) {
+                if (!is_file($path)) {
+                    continue;
+                }
+                $modifiedAt = filemtime($path);
+                if ($modifiedAt !== false && $modifiedAt < $cutoff) {
+                    @unlink($path);
+                }
             }
         }
     }

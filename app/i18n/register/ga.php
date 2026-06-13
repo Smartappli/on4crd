@@ -34,7 +34,7 @@ return array (
   'website' => 'Suíomh Gréasáin',
   'uba_member' => 'Ball UBA',
   'uba_member_number' => 'Uimhir bhall UBA',
-  'antennas' => 'antennas',
+  'antennas' => 'Aeróga',
   'favourite_modes' => 'Modhanna roghnaithe',
   'interests' => 'Leasanna',
   'password' => 'Pasfhocal',

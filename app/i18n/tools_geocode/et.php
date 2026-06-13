@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'missing_q' => 'puudu_q',
-  'service_down' => 'service_down',
-  'address_not_found' => 'aadress_ei_leitud',
-  'invalid_coords' => 'kehtetud_koordinaadid',
-);
+return [
+    'missing_q' => 'Parameeter q puudub.',
+    'invalid_q' => 'Aadress on vigane või liiga pikk.',
+    'method_not_allowed' => 'Meetod pole lubatud.',
+    'rate_limited' => 'Liiga palju päringuid. Palun oodake.',
+    'service_down' => 'Geokodeerimisteenus pole saadaval.',
+    'address_not_found' => 'Aadressi ei leitud.',
+    'invalid_coords' => 'Saadi vigased koordinaadid.',
+];

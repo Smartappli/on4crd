@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
-return array (
-  'missing_q' => 'nedostaje_q',
-  'service_down' => 'pad_usluge',
-  'address_not_found' => 'adresa_nije_nađena',
-  'invalid_coords' => 'nevažeće_koordinate',
-);
+return [
+    'missing_q' => 'Nedostaje parametar q.',
+    'invalid_q' => 'Adresa nije valjana ili je preduga.',
+    'method_not_allowed' => 'Metoda nije dopuštena.',
+    'rate_limited' => 'Previše zahtjeva. Pričekajte.',
+    'service_down' => 'Usluga geokodiranja nije dostupna.',
+    'address_not_found' => 'Adresa nije pronađena.',
+    'invalid_coords' => 'Primljene su nevaljane koordinate.',
+];

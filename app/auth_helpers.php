@@ -10,10 +10,23 @@ function mark_authenticated_response_private(): void
     }
 }
 
+function auth_bypass_request_is_local(): bool
+{
+    if (PHP_SAPI === 'cli') {
+        return true;
+    }
+
+    $ip = trim((string) ($_SERVER['REMOTE_ADDR'] ?? ''));
+    return in_array($ip, ['127.0.0.1', '::1', '::ffff:127.0.0.1'], true);
+}
+
 function auth_bypass_member_id(): int
 {
     $environment = strtolower(trim((string) config('app.env', 'production')));
     if ($environment !== 'development') {
+        return 0;
+    }
+    if (!auth_bypass_request_is_local()) {
         return 0;
     }
 

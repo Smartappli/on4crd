@@ -428,7 +428,11 @@
       node.innerHTML = html;
       loaded.add(widget);
     } catch (_e) {
-      node.innerHTML = `<p class="help">${unavailableMsg}</p>`;
+      node.textContent = '';
+      const errorNode = document.createElement('p');
+      errorNode.className = 'help';
+      errorNode.textContent = unavailableMsg;
+      node.appendChild(errorNode);
     } finally {
       loading.delete(widget);
     }
