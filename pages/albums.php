@@ -171,14 +171,14 @@ ob_start();
                 </article>
             </div>
             <p class="actions albums-hero-actions">
-                <a class="button" href="<?= e($albumProposalUrl) ?>"><?= e($canManageAlbums ? 'Creer un album' : 'Proposer un album') ?></a>
+                <a class="button" href="<?= e($albumProposalUrl) ?>"><?= e($canManageAlbums ? 'Créer un album' : 'Proposer un album') ?></a>
             </p>
         </div>
     </section>
 
     <?php if ($showAlbumProposalForm): ?>
     <section class="card">
-        <h2><?= e($canManageAlbums ? 'Creer un album' : 'Proposer un album') ?></h2>
+        <h2><?= e($canManageAlbums ? 'Créer un album' : 'Proposer un album') ?></h2>
         <p class="help"><?= e($canManageAlbums ? 'L album sera public directement.' : 'Votre proposition sera envoyee en validation et visible dans Mes contenus.') ?></p>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -187,7 +187,7 @@ ob_start();
             <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
             <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
-                <button class="button" type="submit"><?= e($canManageAlbums ? 'Creer' : 'Envoyer la proposition') ?></button>
+                <button class="button" type="submit"><?= e($canManageAlbums ? 'Créer' : 'Envoyer la proposition') ?></button>
                 <a class="button secondary" href="<?= e(route_url('albums')) ?>">Annuler</a>
             </p>
         </form>

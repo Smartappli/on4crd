@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Actualités',
   'unavailable' => 'Actualité indisponible',
-  'latest_news' => 'Dernières actualités',
+  'latest_news' => 'Module public',
   'unknown_date' => 'Date inconnue',
   'latest_fallback_excerpt' => 'Consultez les dernières nouvelles du club et de ses activités.',
   'default_section' => 'Actualités',
