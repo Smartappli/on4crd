@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Espace Membre',
   'unavailable' => 'Le wiki sera disponible après initialisation des pages.',
   'new_pages' => 'Nouvelles pages',
   'updated_pages' => 'Pages modifiées',
