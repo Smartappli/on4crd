@@ -192,7 +192,6 @@ ob_start();
 ?>
 <div class="stack">
     <section class="page-hero">
-        <span class="articles-hero-ai-label">Image générée par IA</span>
         <div>
             <p class="eyebrow"><?= e((string) $t['layout_title']) ?></p>
             <h1 class="articles-hero-title"><?= e((string) $t['page_title']) ?></h1>

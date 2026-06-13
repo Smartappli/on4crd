@@ -2139,6 +2139,80 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .member-module-hero .my-requests-member span {
   color: #000;
 }
+:is(
+  [data-route="albums"] .albums-hero,
+  [data-route="articles"] .page-hero,
+  [data-route="article_propose"] .page-hero,
+  [data-route="auctions"] .member-module-hero,
+  [data-route="classifieds"] .member-module-hero,
+  [data-route="classifieds_manage"] .member-module-hero,
+  [data-route="directory"] .directory-hero,
+  [data-route="events"] .page-hero,
+  [data-route="fichiers"] .member-module-hero,
+  [data-route="members_library"] .member-module-hero,
+  [data-route="my_requests"] .member-module-hero,
+  [data-route="news"] .news-hero,
+  [data-route="newsletter"] .member-module-hero,
+  [data-route="notifications"] .member-module-hero,
+  [data-route="presentations"] .member-module-hero,
+  [data-route="profile"] .member-module-hero,
+  [data-route="pv"] .member-module-hero,
+  [data-route="qsl"] .member-module-hero,
+  [data-route="search"] .site-search-hero,
+  [data-route="settings"] .member-module-hero,
+  [data-route="tools"] .tools-hero,
+  [data-route="videos"] .member-module-hero,
+  [data-route="webotheque"] .webotheque-hero,
+  [data-route="wiki"] .wiki-hero,
+  [data-route="wiki_edit"] .wiki-edit-hero,
+  [data-route="wiki_propose"] .wiki-edit-hero,
+  [data-route="wiki_view"] .wiki-view-hero
+) {
+  position: relative;
+  overflow: hidden;
+}
+:is(
+  [data-route="albums"] .albums-hero,
+  [data-route="articles"] .page-hero,
+  [data-route="article_propose"] .page-hero,
+  [data-route="auctions"] .member-module-hero,
+  [data-route="classifieds"] .member-module-hero,
+  [data-route="classifieds_manage"] .member-module-hero,
+  [data-route="directory"] .directory-hero,
+  [data-route="events"] .page-hero,
+  [data-route="fichiers"] .member-module-hero,
+  [data-route="members_library"] .member-module-hero,
+  [data-route="my_requests"] .member-module-hero,
+  [data-route="news"] .news-hero,
+  [data-route="newsletter"] .member-module-hero,
+  [data-route="notifications"] .member-module-hero,
+  [data-route="presentations"] .member-module-hero,
+  [data-route="profile"] .member-module-hero,
+  [data-route="pv"] .member-module-hero,
+  [data-route="qsl"] .member-module-hero,
+  [data-route="search"] .site-search-hero,
+  [data-route="settings"] .member-module-hero,
+  [data-route="tools"] .tools-hero,
+  [data-route="videos"] .member-module-hero,
+  [data-route="webotheque"] .webotheque-hero,
+  [data-route="wiki"] .wiki-hero,
+  [data-route="wiki_edit"] .wiki-edit-hero,
+  [data-route="wiki_propose"] .wiki-edit-hero,
+  [data-route="wiki_view"] .wiki-view-hero
+)::after {
+  content: "Image générée par IA";
+  position: absolute;
+  left: 1rem;
+  bottom: .75rem;
+  z-index: 2;
+  padding: .25rem .5rem;
+  background: #000;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 650;
+  line-height: 1.2;
+  pointer-events: none;
+}
 [data-route="profile"] .member-module-hero {
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
