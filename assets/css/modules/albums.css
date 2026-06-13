@@ -33,9 +33,23 @@
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+[data-route="albums"] .albums-hero-side {
+  display: grid;
+  gap: .65rem;
+  align-content: center;
+  justify-items: end;
+}
+
 [data-route="albums"] .albums-hero-stats {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   min-width: min(100%, 24rem);
+}
+
+[data-route="albums"] .albums-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin: 0;
 }
 
 [data-route="albums"] .albums-hero-title {
@@ -108,6 +122,12 @@
   .albums-hero,
   .album-detail-hero {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="albums"] .albums-hero-side,
+  [data-route="albums"] .albums-hero-actions {
+    justify-items: start;
+    justify-content: flex-start;
   }
 }
 

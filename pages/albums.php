@@ -155,23 +155,25 @@ ob_start();
             <h1 class="albums-hero-title"><?= e((string) $t['public_albums']) ?></h1>
             <p><?= e((string) $t['intro']) ?></p>
         </div>
-        <div class="albums-hero-stats">
-            <article>
-                <span><?= e((string) $t['albums']) ?></span>
-                <strong><?= (int) $totalAlbums ?></strong>
-            </article>
-            <article>
-                <span><?= e((string) $t['indexed_photos']) ?></span>
-                <strong><?= (int) $photoTotal ?></strong>
-            </article>
-            <article>
-                <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
-                <strong><?= e($latestAlbumLabel) ?></strong>
-            </article>
+        <div class="albums-hero-side">
+            <div class="albums-hero-stats">
+                <article>
+                    <span><?= e((string) $t['albums']) ?></span>
+                    <strong><?= (int) $totalAlbums ?></strong>
+                </article>
+                <article>
+                    <span><?= e((string) $t['indexed_photos']) ?></span>
+                    <strong><?= (int) $photoTotal ?></strong>
+                </article>
+                <article>
+                    <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
+                    <strong><?= e($latestAlbumLabel) ?></strong>
+                </article>
+            </div>
+            <p class="actions albums-hero-actions">
+                <a class="button" href="<?= e($albumProposalUrl) ?>"><?= e($canManageAlbums ? 'Creer un album' : 'Proposer un album') ?></a>
+            </p>
         </div>
-        <p class="actions">
-            <a class="button" href="<?= e($albumProposalUrl) ?>"><?= e($canManageAlbums ? 'Creer un album' : 'Proposer un album') ?></a>
-        </p>
     </section>
 
     <?php if ($showAlbumProposalForm): ?>
