@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Controlo avançado de feeds de rádio, TTL, URLs e ativação.',
   'admin_newsletters_title' => 'Newsletter',
   'admin_newsletters_desc' => 'Subscritores, importação CSV e campanhas de email.',
-  'admin_wiki_title' => 'Conhecimento',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Páginas colaborativas e revisões.',
   'admin_albums_title' => 'Álbuns',
   'admin_albums_desc' => 'Galeria pública e sincronização social.',

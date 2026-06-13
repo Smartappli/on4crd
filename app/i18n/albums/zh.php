@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => '按标题或说明搜索专辑',
   'search' => '搜索',
   'reset' => '重置',
-  'gallery' => '图库',
+  'gallery' => '会员专区',
   'none' => '暂无公开相册',
   'for_search' => '对于此搜索',
   'cover_alt' => '专辑封面',

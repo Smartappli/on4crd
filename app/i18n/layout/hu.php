@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Irányítópult',
   'nav_wiki' => 'Tudás',
   'nav_gallery' => 'Fotók',
-  'nav_articles' => 'Tételek',
+  'nav_articles' => 'Cikkek',
   'nav_library' => 'Könyvtár',
   'nav_webotheque' => 'Webkönyvtár',
   'nav_auctions' => 'Aukciók',

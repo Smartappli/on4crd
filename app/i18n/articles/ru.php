@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Сбросить поиск',
   'no_article_for_theme' => 'Нет доступных статей по этой теме.',
   'read_article' => 'Читать статью',
-  'layout_title' => 'Статьи',
+  'layout_title' => 'Зона для участников',
   'page' => 'Страница',
   'previous' => 'Предыдущий',
   'next' => 'Следующий',

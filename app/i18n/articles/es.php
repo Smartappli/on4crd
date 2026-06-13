@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Restablecer búsqueda',
   'no_article_for_theme' => 'No hay artículos disponibles para esta temática.',
   'read_article' => 'Leer artículo',
-  'layout_title' => 'Artículos',
+  'layout_title' => 'Área de miembros',
   'page' => 'Página',
   'previous' => 'Anterior',
   'next' => 'Siguiente',

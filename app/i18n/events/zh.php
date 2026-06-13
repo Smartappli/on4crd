@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => '活动',
+  'module_public' => '公共模块',
   'agenda_unavailable' => '日历暂不可用。',
   'export' => '导出日历',
   'calendar_load_error' => '无法加载交互式日历。',

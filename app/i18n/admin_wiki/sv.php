@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Kunskap - Administrering',
+  'title' => 'Wikiadministration',
   'new_page' => 'Ny sida',
   'th_title' => 'Titel',
   'th_slug' => 'Snigel',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Åtgärd',
   'edit' => 'Redigera',
   'empty' => 'Inga sidor.',
-  'layout' => 'Kunskap - Administrering',
-  'meta_desc' => 'Hantering av Kunskapidor.',
+  'layout' => 'Wikiadministration',
+  'meta_desc' => 'Hantera wikisidor.',
 );

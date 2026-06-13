@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'タイトルまたは説明でアルバムを検索する',
   'search' => '検索',
   'reset' => 'リセット',
-  'gallery' => 'ギャラリー',
+  'gallery' => 'メンバーエリア',
   'none' => '公開アルバムはありません',
   'for_search' => 'この検索のために',
   'cover_alt' => 'アルバムカバー',

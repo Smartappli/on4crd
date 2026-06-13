@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Händelser',
+  'module_public' => 'Offentlig modul',
   'agenda_unavailable' => 'Dagordningen är ännu inte tillgänglig.',
   'export' => 'Exportera kalendern',
   'calendar_load_error' => 'Det gick inte att ladda den interaktiva kalendern.',

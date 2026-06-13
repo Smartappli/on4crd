@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Otsi',
-  'eyebrow' => 'Globaalne otsing',
-  'lead' => 'Otsige kiiresti uudiseid, artikleid, vikilehti, dokumente, teadaandeid ja albumeid.',
+  'eyebrow' => 'Avalik moodul',
+  'lead' => 'Otsige kiiresti uudiseid, artikleid, Wiki lehti, dokumente, teadaandeid ja albumeid.',
   'placeholder' => 'Indikaator, märksõna, teema, dokument...',
   'query_label' => 'Sinu otsing',
   'source_label' => 'Allikas',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Globaalne otsing ON4CRD saidi sisus.',
   'source_all' => 'Kõik',
   'source_news' => 'Uudised',
-  'source_articles' => 'Üksused',
-  'source_wiki' => 'Teadmised',
+  'source_articles' => 'Artiklid',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Raamatukogu',
   'source_classifieds' => 'Teated',
   'source_albums' => 'Albumid',

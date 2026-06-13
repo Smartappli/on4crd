@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Įrankių dėžė',
-  'tool_index' => 'Įrankių klasifikacija',
+  'tool_index' => 'Viešasis modulis',
   'category_locators' => 'Orientyrai ir geografinė padėtis',
   'category_conversions' => 'Radijo konvertavimas',
   'category_antenna' => 'Antenos ir sklidimas',

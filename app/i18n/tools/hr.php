@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Kutija s alatima',
-  'tool_index' => 'Klasifikacija alata',
+  'tool_index' => 'Javni modul',
   'category_locators' => 'Znamenitosti i geolokacija',
   'category_conversions' => 'Radio pretvorbe',
   'category_antenna' => 'Antene i širenje',

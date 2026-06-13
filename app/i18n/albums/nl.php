@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Zoek een album op titel of beschrijving',
   'search' => 'Zoeken',
   'reset' => 'Resetten',
-  'gallery' => 'Galerij',
+  'gallery' => 'Ledengedeelte',
   'none' => 'Geen openbaar album beschikbaar',
   'for_search' => 'voor deze zoekopdracht',
   'cover_alt' => 'Albumhoes',

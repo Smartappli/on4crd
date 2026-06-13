@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'イベント',
+  'module_public' => '公開モジュール',
   'agenda_unavailable' => 'カレンダーはまだ利用できません。',
   'export' => 'カレンダーをエクスポート',
   'calendar_load_error' => 'インタラクティブカレンダーを読み込めませんでした。',

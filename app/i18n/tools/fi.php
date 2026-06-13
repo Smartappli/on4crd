@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Työkalulaatikko',
-  'tool_index' => 'Työkalujen luokitus',
+  'tool_index' => 'Julkinen moduuli',
   'category_locators' => 'Maamerkit ja maantieteellinen sijainti',
   'category_conversions' => 'Radiomuunnokset',
   'category_antenna' => 'Antennit ja levitys',

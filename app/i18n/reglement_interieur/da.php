@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publikationer og digitale værktøjer',
-      'body' => 'Indhold indsendt til webstedet, Videnen, nyheder, rubrikannoncer eller biblioteker skal være nyttigt, nøjagtigt og kompatibelt med klubbens formål. Udvalget kan moderere, rette eller fjerne indhold, når det er nødvendigt.',
+      'body' => 'Indhold indsendt til webstedet, Wikien, nyheder, rubrikannoncer eller biblioteker skal være nyttigt, nøjagtigt og kompatibelt med klubbens formål. Udvalget kan moderere, rette eller fjerne indhold, når det er nødvendigt.',
     ),
     5 => 
     array (

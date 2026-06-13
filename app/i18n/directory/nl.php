@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'De club in cijfers',
+  'club_numbers' => 'Publieke module',
   'intro' => 'Vind zichtbare clubleden, roepnamen, licenties, QTH en contactgegevens volgens de privacyinstellingen van elk lid.',
   'member_list' => 'Ledenlijst',
   'visible_members' => 'Zichtbare profielen',

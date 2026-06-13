@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Etsi',
-  'eyebrow' => 'Globaali haku',
-  'lead' => 'Löydä nopeasti uutisia, artikkeleita, Tietämysivuja, asiakirjoja, ilmoituksia ja albumeja.',
+  'eyebrow' => 'Julkinen moduuli',
+  'lead' => 'Löydä nopeasti uutisia, artikkeleita, Wiki, asiakirjoja, ilmoituksia ja albumeja.',
   'placeholder' => 'Ilmaisin, avainsana, teema, asiakirja...',
   'query_label' => 'Sinun hakusi',
   'source_label' => 'lähde',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Globaali haku ON4CRD sivuston sisällöstä.',
   'source_all' => 'Kaikki',
   'source_news' => 'Uutiset',
-  'source_articles' => 'Tuotteet',
-  'source_wiki' => 'Tietämys',
+  'source_articles' => 'Artikkelit',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Kirjasto',
   'source_classifieds' => 'Ilmoitukset',
   'source_albums' => 'Albumit',

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Cuardach',
-  'eyebrow' => 'Cuardach domhanda',
-  'lead' => 'Aimsigh go tapa nuacht, ailt, leathanaigh eolas, doiciméid, fógraí agus albaim.',
+  'eyebrow' => 'Modúl poiblí',
+  'lead' => 'Aimsigh go tapa nuacht, ailt, leathanaigh Wiki, doiciméid, fógraí agus albaim.',
   'placeholder' => 'Táscaire, eochairfhocal, téama, doiciméad...',
   'query_label' => 'Do chuardach',
   'source_label' => 'Foinse',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Cuardach domhanda ON4CRD in inneachar an tsuímh.',
   'source_all' => 'Gach rud',
   'source_news' => 'Nuacht',
-  'source_articles' => 'Míreanna',
-  'source_wiki' => 'Eolas',
+  'source_articles' => 'Ailt',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Leabharlann',
   'source_classifieds' => 'Fógraí',
   'source_albums' => 'Albaim',

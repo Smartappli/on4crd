@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => '検索',
-  'eyebrow' => 'サイト内検索',
-  'lead' => 'ニュース、記事、知識ページ、資料、広告、アルバムをすばやく探せます。',
+  'eyebrow' => '公開モジュール',
+  'lead' => 'ニュース、記事、Wikiページ、資料、広告、アルバムをすばやく探せます。',
   'placeholder' => 'コールサイン、キーワード、テーマ、資料...',
   'query_label' => '検索語',
   'source_label' => '検索対象',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'すべて',
   'source_news' => 'ニュース',
   'source_articles' => '記事',
-  'source_wiki' => '知識',
+  'source_wiki' => 'Wiki',
   'source_library' => 'ライブラリ',
   'source_classifieds' => '広告',
   'source_albums' => 'アルバム',

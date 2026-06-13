@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Viden-siden blev ikke fundet.',
+  'not_found' => 'Wiki-siden blev ikke fundet.',
   'edit' => 'Rediger',
-  'layout' => 'Viden',
-  'meta_desc' => 'Konsultation af en Viden-side.',
+  'layout' => 'Wiki',
+  'meta_desc' => 'Konsultation af en Wiki-side.',
   'history' => 'Historie',
   'no_revisions' => 'Ingen tidligere revisioner.',
 );

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Tööriistakast',
-  'tool_index' => 'Tööriistade klassifikatsioon',
+  'tool_index' => 'Avalik moodul',
   'category_locators' => 'Maamärgid ja geolokatsioon',
   'category_conversions' => 'Raadio teisendused',
   'category_antenna' => 'Antennid ja levi',

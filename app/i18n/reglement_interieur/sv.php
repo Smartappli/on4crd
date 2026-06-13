@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publikationer och digitala verktyg',
-      'body' => 'Innehåll som skickas till webbplatsen, Kunskapn, nyheter, klassannonser eller bibliotek måste vara användbart, korrekt och kompatibelt med klubbens syften. Kommittén kan moderera, korrigera eller ta bort innehåll vid behov.',
+      'body' => 'Innehåll som skickas till webbplatsen, Wikin, nyheter, klassannonser eller bibliotek måste vara användbart, korrekt och kompatibelt med klubbens syften. Kommittén kan moderera, korrigera eller ta bort innehåll vid behov.',
     ),
     5 => 
     array (

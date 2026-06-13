@@ -33,6 +33,6 @@ return array (
   'scope' => 'Tietojen laajuus',
   'scope_all' => 'Kaikki lähteet',
   'scope_knowledge' => 'Tietopohja',
-  'scope_articles' => 'Tuotteet',
+  'scope_articles' => 'Artikkelit',
   'scope_library' => 'Kirjaston materiaalit',
 );

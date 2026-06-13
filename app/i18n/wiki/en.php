@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wiki',
+  'title' => 'Member Area',
   'unavailable' => 'The wiki will be available after page initialization.',
   'new_pages' => 'New pages',
   'updated_pages' => 'Updated pages',

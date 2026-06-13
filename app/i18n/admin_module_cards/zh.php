@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => '精细控制无线电流、TTL、URL 与启用。',
   'admin_newsletters_title' => '通讯',
   'admin_newsletters_desc' => '订阅者、CSV 导入和邮件活动。',
-  'admin_wiki_title' => '知识',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => '协作页面与修订。',
   'admin_albums_title' => '相册',
   'admin_albums_desc' => '公开图库与社交同步。',

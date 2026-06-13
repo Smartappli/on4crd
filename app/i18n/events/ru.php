@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'События',
+  'module_public' => 'Публичный модуль',
   'agenda_unavailable' => 'Календарь пока недоступен.',
   'export' => 'Экспортировать календарь',
   'calendar_load_error' => 'Не удалось загрузить интерактивный календарь.',

@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Εργαλεία',
-  'tool_index' => 'Κατάλογος εργαλείων',
+  'tool_index' => 'Δημόσια ενότητα',
   'category_locators' => 'Εντοπισμός και γεωγραφική θέση',
   'category_conversions' => 'Μετατροπές ραδιοερασιτέχνη',
   'category_antenna' => 'Κεραίες & εκπομπή',
@@ -48,7 +47,7 @@ return array (
   'atten_100m' => 'Εξασθένηση καλωδίου (dB/100m)',
   'coax_loss' => 'Εκτιμώμενη απώλεια (dB)',
   'erp_calc' => 'Ισχύς με κέρδος ERP',
-  'tx_power_w' => '?σχύς TX (W)',
+  'tx_power_w' => 'Ισχύς TX (W)',
   'feedline_loss_db' => 'Απώλεια γραμμής (dB)',
   'antenna_gain_dbd' => 'Κέρδος κεραίας (dBd)',
   'erp_result' => 'Εκτιμώμενο ERP (W)',
@@ -164,7 +163,7 @@ return array (
   'f_c_calc' => '°F έως °C',
   'pa_db_calc' => 'Pa έως dB SPL',
   'db_pa_calc' => 'dB SPL σε Pa',
-  'j_wh_calc' => 'Joules πρ?ς Wh',
+  'j_wh_calc' => 'Joules προς Wh',
   'wh_j_calc' => 'Wh σε Joule',
   'ms_s_calc' => 'ms σε s',
   's_ms_calc' => 's σε ms',
@@ -190,7 +189,7 @@ return array (
   'unit_conv_swap' => 'Αντιστροφή',
   'unit_conv_family' => 'Οικογένεια',
   'unit_conv_from' => 'Από τότε',
-  'unit_conv_to' => 'πρ?ς',
+  'unit_conv_to' => 'προς',
   'unit_conv_presets' => 'Γρήγορες τιμές',
   'unit_conv_reference' => 'Αναφορά',
   'unit_conv_quick_links' => 'Αναλυτικοί μετατροπείς',

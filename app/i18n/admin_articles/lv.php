@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Preces',
+  'layout' => 'Raksti',
   'meta_desc' => 'Vietnes rakstu administrēšana un publicēšana.',
   'ok_saved' => 'Raksts saglabāts.',
   'err_invalid_category' => 'Nederīga kategorija.',

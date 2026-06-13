@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Przedmioty',
+  'layout' => 'Artykuły',
   'meta_desc' => 'Administracja i publikacja artykułów na stronie.',
   'ok_saved' => 'Artykuł został zapisany.',
   'err_invalid_category' => 'Nieprawidłowa kategoria.',

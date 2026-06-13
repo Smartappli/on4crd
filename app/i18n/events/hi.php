@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'कार्यक्रम',
+  'module_public' => 'सार्वजनिक मॉड्यूल',
   'agenda_unavailable' => 'कैलेंडर अभी उपलब्ध नहीं है।',
   'export' => 'कैलेंडर निर्यात करें',
   'calendar_load_error' => 'इंटरैक्टिव कैलेंडर लोड नहीं हो सका।',

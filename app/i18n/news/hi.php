@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'समाचार',
   'unavailable' => 'समाचार उपलब्ध नहीं है',
-  'latest_news' => 'नवीनतम समाचार',
+  'latest_news' => 'सार्वजनिक मॉड्यूल',
   'unknown_date' => 'अज्ञात तिथि',
   'latest_fallback_excerpt' => 'क्लब और उसकी गतिविधियों से जुड़े नवीनतम अपडेट पढ़ें।',
   'default_section' => 'समाचार',

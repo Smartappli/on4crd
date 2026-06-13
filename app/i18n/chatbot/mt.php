@@ -33,6 +33,6 @@ return array (
   'scope' => 'Skop ta\' għarfien',
   'scope_all' => 'Is-sorsi kollha',
   'scope_knowledge' => 'Bażi ta \'għarfien',
-  'scope_articles' => 'Oġġetti',
+  'scope_articles' => 'Artikli',
   'scope_library' => 'Materjali tal-librerija',
 );

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Vijesti',
   'unavailable' => 'Vijesti nedostupne',
-  'latest_news' => 'Najnovije vijesti',
+  'latest_news' => 'Javni modul',
   'unknown_date' => 'Datum nepoznat',
   'latest_fallback_excerpt' => 'Provjerite najnovije vijesti o klubu i njegovim aktivnostima.',
   'default_section' => 'Vijesti',

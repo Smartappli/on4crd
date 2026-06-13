@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klubi arvudes',
+  'club_numbers' => 'Avalik moodul',
   'intro' => 'Otsige üles nähtavad klubiliikmed, nende koodid, litsentsid, QTH ja kontaktandmed vastavalt nende privaatsuseelistustele.',
   'member_list' => 'Liikmete nimekiri',
   'visible_members' => 'Nähtavad profiilid',

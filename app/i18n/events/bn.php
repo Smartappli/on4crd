@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'ইভেন্টসমূহ',
+  'module_public' => 'সর্বজনীন মডিউল',
   'agenda_unavailable' => 'ক্যালেন্ডার এখনও উপলব্ধ নয়।',
   'export' => 'ক্যালেন্ডার রপ্তানি করুন',
   'calendar_load_error' => 'ইন্টারঅ্যাকটিভ ক্যালেন্ডার লোড করা যায়নি।',

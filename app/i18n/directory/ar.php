@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'النادي بالأرقام',
+  'club_numbers' => 'وحدة عامة',
   'intro' => 'اعثر على أعضاء النادي الظاهرين، وإشارات النداء، والرخص، وQTH وبيانات الاتصال وفق تفضيلات الخصوصية لكل عضو.',
   'member_list' => 'دليل الأعضاء',
   'visible_members' => 'ملفات ظاهرة',

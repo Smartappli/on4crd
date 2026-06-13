@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Нулиране на търсенето',
   'no_article_for_theme' => 'Няма налични статии за тази тема.',
   'read_article' => 'Прочетете статията',
-  'layout_title' => 'Предмети',
+  'layout_title' => 'Зона за членове',
   'page' => 'Страница',
   'previous' => 'Предишен',
   'next' => 'Следваща',

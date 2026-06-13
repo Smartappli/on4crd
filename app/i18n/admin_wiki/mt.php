@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Amministrazzjoni tal-Għarfien',
+  'title' => 'Amministrazzjoni tal-Wiki',
   'new_page' => 'Paġna ġdida',
   'th_title' => 'Titolu',
   'th_slug' => 'Slug',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Azzjoni',
   'edit' => 'Biex timmodifika',
   'empty' => 'Ebda paġni.',
-  'layout' => 'Amministrazzjoni tal-Għarfien',
-  'meta_desc' => 'Ġestjoni tal-paġna Għarfien.',
+  'layout' => 'Amministrazzjoni tal-Wiki',
+  'meta_desc' => 'Ġestjoni tal-paġni Wiki.',
 );

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Iskanje',
-  'eyebrow' => 'Globalno iskanje',
-  'lead' => 'Hitro poiščite novice, članke, Znanje strani, dokumente, objave in albume.',
+  'eyebrow' => 'Javni modul',
+  'lead' => 'Hitro poiščite novice, članke, Wiki strani, dokumente, objave in albume.',
   'placeholder' => 'Indikator, ključna beseda, tema, dokument ...',
   'query_label' => 'Vaše iskanje',
   'source_label' => 'Vir',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Globalno iskanje ON4CRD v vsebini spletnega mesta.',
   'source_all' => 'Vse',
   'source_news' => 'Novice',
-  'source_articles' => 'Predmeti',
-  'source_wiki' => 'Znanje',
+  'source_articles' => 'Članki',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Knjižnica',
   'source_classifieds' => 'Obvestila',
   'source_albums' => 'Albumi',

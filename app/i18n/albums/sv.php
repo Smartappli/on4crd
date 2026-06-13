@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Sök efter ett album efter titel eller beskrivning',
   'search' => 'Sök',
   'reset' => 'Återställ',
-  'gallery' => 'Galleri',
+  'gallery' => 'Medlemsområde',
   'none' => 'Inga offentliga album tillgängliga',
   'for_search' => 'för denna forskning',
   'cover_alt' => 'skivomslag',

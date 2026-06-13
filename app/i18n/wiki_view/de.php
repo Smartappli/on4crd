@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Wissen-Seite nicht gefunden.',
+  'not_found' => 'Wiki-Seite nicht gefunden.',
   'edit' => 'Bearbeiten',
-  'layout' => 'Wissen',
-  'meta_desc' => 'Wissen-Seite anzeigen.',
+  'layout' => 'Wiki',
+  'meta_desc' => 'Wiki-Seite anzeigen.',
   'history' => 'Verlauf',
   'no_revisions' => 'Keine früheren Revisionen.',
 );

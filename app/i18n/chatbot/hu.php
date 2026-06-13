@@ -33,6 +33,6 @@ return array (
   'scope' => 'A tudás köre',
   'scope_all' => 'Minden forrás',
   'scope_knowledge' => 'Tudásbázis',
-  'scope_articles' => 'Tételek',
+  'scope_articles' => 'Cikkek',
   'scope_library' => 'Könyvtári anyagok',
 );

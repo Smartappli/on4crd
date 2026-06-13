@@ -33,6 +33,6 @@ return array (
   'scope' => 'Kunskapens omfattning',
   'scope_all' => 'Alla källor',
   'scope_knowledge' => 'Kunskapsbas',
-  'scope_articles' => 'Föremål',
+  'scope_articles' => 'Artiklar',
   'scope_library' => 'Biblioteksmaterial',
 );

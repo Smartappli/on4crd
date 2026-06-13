@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Căutați un album după titlu sau descriere',
   'search' => 'A cerceta',
   'reset' => 'Resetați',
-  'gallery' => 'Galerie',
+  'gallery' => 'Spațiu membri',
   'none' => 'Nu există albume publice disponibile',
   'for_search' => 'pentru această cercetare',
   'cover_alt' => 'coperta albumului',

@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Bosca uirlisí',
-  'tool_index' => 'Aicmiú uirlisí',
+  'tool_index' => 'Modúl poiblí',
   'category_locators' => 'Sainchomharthaí Tíre & Geolocation',
   'category_conversions' => 'Tiontuithe Raidió',
   'category_antenna' => 'Antennas & iomadú',

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'खोज',
-  'eyebrow' => 'वैश्विक खोज',
-  'lead' => 'समाचार, लेख, विकि पृष्ठ, दस्तावेज़, विज्ञापन और एल्बम जल्दी खोजें।',
+  'eyebrow' => 'सार्वजनिक मॉड्यूल',
+  'lead' => 'समाचार, लेख, Wiki पृष्ठ, दस्तावेज़, विज्ञापन और एल्बम जल्दी खोजें।',
   'placeholder' => 'कॉलसाइन, कीवर्ड, विषय, दस्तावेज़...',
   'query_label' => 'आपकी खोज',
   'source_label' => 'स्रोत',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'सब',
   'source_news' => 'समाचार',
   'source_articles' => 'लेख',
-  'source_wiki' => 'ज्ञान',
+  'source_wiki' => 'Wiki',
   'source_library' => 'लाइब्रेरी',
   'source_classifieds' => 'विज्ञापन',
   'source_albums' => 'एल्बम',

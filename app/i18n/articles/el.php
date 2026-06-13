@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Επαναφορά αναζήτησης',
   'no_article_for_theme' => 'Δεν υπάρχουν διαθέσιμα άρθρα για αυτό το θέμα.',
   'read_article' => 'Διαβάστε το άρθρο',
-  'layout_title' => 'Είδη',
+  'layout_title' => 'Περιοχή μελών',
   'page' => 'Σελίδα',
   'previous' => 'Προηγούμενο',
   'next' => 'Επόμενο',

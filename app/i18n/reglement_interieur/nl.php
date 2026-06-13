@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publicaties en digitale hulpmiddelen',
-      'body' => 'Inhoud die op de site, Kennis, nieuws, advertenties of bibliotheken wordt ingediend, moet nuttig, nauwkeurig en compatibel zijn met de doeleinden van de club. De commissie kan indien nodig inhoud modereren, corrigeren of verwijderen.',
+      'body' => 'Inhoud die op de site, Wiki, nieuws, advertenties of bibliotheken wordt ingediend, moet nuttig, nauwkeurig en compatibel zijn met de doeleinden van de club. De commissie kan indien nodig inhoud modereren, corrigeren of verwijderen.',
     ),
     5 => 
     array (

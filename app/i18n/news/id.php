@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Berita',
   'unavailable' => 'Berita tidak tersedia',
-  'latest_news' => 'Berita terbaru',
+  'latest_news' => 'Modul publik',
   'unknown_date' => 'Tanggal tidak diketahui',
   'latest_fallback_excerpt' => 'Baca kabar terbaru dari klub dan kegiatannya.',
   'default_section' => 'Berita',

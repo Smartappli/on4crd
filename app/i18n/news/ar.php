@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'الأخبار',
   'unavailable' => 'الخبر غير متاح',
-  'latest_news' => 'آخر الأخبار',
+  'latest_news' => 'وحدة عامة',
   'unknown_date' => 'تاريخ غير معروف',
   'latest_fallback_excerpt' => 'اطلع على آخر أخبار النادي وأنشطته.',
   'default_section' => 'الأخبار',

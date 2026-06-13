@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Žinios administracija',
+  'title' => 'Wiki administravimas',
   'new_page' => 'Naujas puslapis',
   'th_title' => 'Pavadinimas',
   'th_slug' => 'Šliužas',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Veiksmas',
   'edit' => 'Redaguoti',
   'empty' => 'Nėra puslapių.',
-  'layout' => 'Žinios administracija',
-  'meta_desc' => 'Žinios puslapio valdymas.',
+  'layout' => 'Wiki administravimas',
+  'meta_desc' => 'Wiki puslapių valdymas.',
 );

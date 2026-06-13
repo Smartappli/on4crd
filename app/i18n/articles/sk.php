@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Obnoviť vyhľadávanie',
   'no_article_for_theme' => 'K tejto téme nie sú dostupné žiadne články.',
   'read_article' => 'Prečítajte si článok',
-  'layout_title' => 'Položky',
+  'layout_title' => 'Členská zóna',
   'page' => 'Stránka',
   'previous' => 'Predchádzajúce',
   'next' => 'Ďalej',

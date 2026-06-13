@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Nuacht',
   'unavailable' => 'Níl an nuacht ar fáil',
-  'latest_news' => 'Nuacht is déanaí',
+  'latest_news' => 'Modúl poiblí',
   'unknown_date' => 'Dáta anaithnid',
   'latest_fallback_excerpt' => 'Breathnaigh ar an nuacht is déanaí faoin gclub agus a ghníomhaíochtaí.',
   'default_section' => 'Nuacht',

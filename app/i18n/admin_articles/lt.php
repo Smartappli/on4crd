@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Daiktai',
+  'layout' => 'Straipsniai',
   'meta_desc' => 'Svetainės straipsnių administravimas ir publikavimas.',
   'ok_saved' => 'Straipsnis išsaugotas.',
   'err_invalid_category' => 'Netinkama kategorija.',

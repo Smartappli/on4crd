@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Meklējiet albumu pēc nosaukuma vai apraksta',
   'search' => 'Meklēt',
   'reset' => 'Atiestatīt',
-  'gallery' => 'Galerija',
+  'gallery' => 'Biedru zona',
   'none' => 'Publisks albums nav pieejams',
   'for_search' => 'šim pētījumam',
   'cover_alt' => 'albuma vāks',

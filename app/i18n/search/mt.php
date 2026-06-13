@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Riċerka',
-  'eyebrow' => 'Tfittxija globali',
-  'lead' => 'Sib malajr aħbarijiet, artikli, paġni Għarfien, dokumenti, avviżi u albums.',
+  'eyebrow' => 'Modulu pubbliku',
+  'lead' => 'Sib malajr aħbarijiet, artikli, paġni Wiki, dokumenti, avviżi u albums.',
   'placeholder' => 'Indikatur, keyword, tema, dokument...',
   'query_label' => 'It-tfittxija tiegħek',
   'source_label' => 'Sors',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Tfittxija globali ON4CRD fil-kontenut tas-sit.',
   'source_all' => 'Kollha',
   'source_news' => 'Aħbarijiet',
-  'source_articles' => 'Oġġetti',
-  'source_wiki' => 'Għarfien',
+  'source_articles' => 'Artikli',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Librerija',
   'source_classifieds' => 'Avviżi',
   'source_albums' => 'Albums',

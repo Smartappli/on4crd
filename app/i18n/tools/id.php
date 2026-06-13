@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Kotak alat',
-  'tool_index' => 'Indeks alat',
+  'tool_index' => 'Modul publik',
   'category_locators' => 'Locator & geolokasi',
   'category_conversions' => 'Konversi radio',
   'category_antenna' => 'Antena & propagasi',

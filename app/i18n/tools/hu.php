@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Eszköztár',
-  'tool_index' => 'Az eszközök osztályozása',
+  'tool_index' => 'Nyilvános modul',
   'category_locators' => 'Tereptárgyak és földrajzi helymeghatározás',
   'category_conversions' => 'Rádiókonverziók',
   'category_antenna' => 'Antennák és terjedés',

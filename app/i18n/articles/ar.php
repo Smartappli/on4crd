@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'إعادة ضبط البحث',
   'no_article_for_theme' => 'لا توجد مقالات متاحة لهذا الموضوع.',
   'read_article' => 'اقرأ المقال',
-  'layout_title' => 'مقالات',
+  'layout_title' => 'منطقة الأعضاء',
   'page' => 'صفحة',
   'previous' => 'سابق',
   'next' => 'التالي',

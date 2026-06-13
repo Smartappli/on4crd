@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Skrzynka narzędziowa',
-  'tool_index' => 'Klasyfikacja narzędzi',
+  'tool_index' => 'Moduł publiczny',
   'category_locators' => 'Zabytki i geolokalizacja',
   'category_conversions' => 'Konwersje radiowe',
   'category_antenna' => 'Anteny i propagacja',

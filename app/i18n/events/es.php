@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Eventos',
+  'module_public' => 'Módulo público',
   'agenda_unavailable' => 'La agenda aún no está disponible.',
   'export' => 'Exportar el calendario',
   'calendar_load_error' => 'No se puede cargar el calendario interactivo.',

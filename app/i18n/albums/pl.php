@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Wyszukaj album według tytułu lub opisu',
   'search' => 'Szukaj',
   'reset' => 'Zresetuj',
-  'gallery' => 'Galeria',
+  'gallery' => 'Strefa członkowska',
   'none' => 'Brak dostępnych albumów publicznych',
   'for_search' => 'dla tego badania',
   'cover_alt' => 'okładka albumu',

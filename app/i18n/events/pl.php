@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Wydarzenia',
+  'module_public' => 'Moduł publiczny',
   'agenda_unavailable' => 'Porządek obrad nie jest jeszcze dostępny.',
   'export' => 'Eksportuj kalendarz',
   'calendar_load_error' => 'Nie można załadować interaktywnego kalendarza.',

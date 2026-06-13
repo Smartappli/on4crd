@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Toolbox',
-  'tool_index' => 'Tool index',
+  'tool_index' => 'Public module',
   'category_locators' => 'Locators & geolocation',
   'category_conversions' => 'Radio conversions',
   'category_antenna' => 'Antenna & propagation',

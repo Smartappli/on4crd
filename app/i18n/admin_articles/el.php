@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Είδη',
+  'layout' => 'Άρθρα',
   'meta_desc' => 'Διαχείριση και δημοσίευση άρθρων ιστότοπου.',
   'ok_saved' => 'Το άρθρο αποθηκεύτηκε.',
   'err_invalid_category' => 'Μη έγκυρη κατηγορία.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Cutie de instrumente',
-  'tool_index' => 'Clasificarea instrumentelor',
+  'tool_index' => 'Modul public',
   'category_locators' => 'Repere și geolocalizare',
   'category_conversions' => 'Conversii radio',
   'category_antenna' => 'Antene și propagare',

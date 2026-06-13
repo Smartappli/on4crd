@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publikasi dan alat digital',
-      'body' => 'Konten yang dikirimkan ke situs, Pengetahuan, berita, iklan baris, atau perpustakaan harus bermanfaat, akurat, dan sesuai dengan tujuan klub. Panitia dapat memoderasi, memperbaiki atau menghapus konten bila diperlukan.',
+      'body' => 'Konten yang dikirimkan ke situs, Wiki, berita, iklan baris, atau perpustakaan harus bermanfaat, akurat, dan sesuai dengan tujuan klub. Panitia dapat memoderasi, memperbaiki atau menghapus konten bila diperlukan.',
     ),
     5 => 
     array (

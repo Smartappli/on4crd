@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Oġġetti',
+  'layout' => 'Artikli',
   'meta_desc' => 'Amministrazzjoni u pubblikazzjoni ta\' artikli fuq is-sit.',
   'ok_saved' => 'Artikolu salvat.',
   'err_invalid_category' => 'Kategorija invalida.',

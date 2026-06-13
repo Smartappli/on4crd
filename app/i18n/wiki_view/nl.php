@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Kennis-pagina niet gevonden.',
+  'not_found' => 'Wiki-pagina niet gevonden.',
   'edit' => 'Bewerken',
-  'layout' => 'Kennis',
-  'meta_desc' => 'Een Kennis-pagina bekijken.',
+  'layout' => 'Wiki',
+  'meta_desc' => 'Een Wiki-pagina bekijken.',
   'history' => 'Geschiedenis',
   'no_revisions' => 'Geen eerdere revisies.',
 );

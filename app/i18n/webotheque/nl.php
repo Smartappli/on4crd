@@ -17,7 +17,7 @@ return array (
   'search' => 'Zoeken',
   'reset' => 'Resetten',
   'empty' => 'Vind nuttige weblinks die met leden worden gedeeld.',
-  'for_filters' => '',
+  'for_filters' => ' voor deze filters',
   'tags' => 'Labels',
   'open' => 'Openen',
   'storage_unavailable' => 'Vind nuttige weblinks die met leden worden gedeeld.',

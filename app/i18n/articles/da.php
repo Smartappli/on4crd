@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Nulstil søgning',
   'no_article_for_theme' => 'Der er ingen tilgængelige artikler om dette emne.',
   'read_article' => 'Læs artiklen',
-  'layout_title' => 'genstande',
+  'layout_title' => 'Medlemsområde',
   'page' => 'Side',
   'previous' => 'Forrige',
   'next' => 'Næste',

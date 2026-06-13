@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Ieškoti',
-  'eyebrow' => 'Pasaulinė paieška',
-  'lead' => 'Greitai raskite naujienas, straipsnius, Žinios puslapius, dokumentus, pranešimus ir albumus.',
+  'eyebrow' => 'Viešasis modulis',
+  'lead' => 'Greitai raskite naujienas, straipsnius, Wiki puslapius, dokumentus, pranešimus ir albumus.',
   'placeholder' => 'Rodiklis, raktinis žodis, tema, dokumentas...',
   'query_label' => 'Jūsų paieška',
   'source_label' => 'Šaltinis',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Pasaulinė paieška ON4CRD svetainės turinyje.',
   'source_all' => 'Viskas',
   'source_news' => 'Naujienos',
-  'source_articles' => 'Daiktai',
-  'source_wiki' => 'Žinios',
+  'source_articles' => 'Straipsniai',
+  'source_wiki' => 'Wiki',
   'source_library' => 'biblioteka',
   'source_classifieds' => 'Skelbimai',
   'source_albums' => 'Albumai',

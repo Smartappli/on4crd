@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Kontrolpanel',
   'nav_wiki' => 'Viden',
   'nav_gallery' => 'Fotos',
-  'nav_articles' => 'genstande',
+  'nav_articles' => 'Artikler',
   'nav_library' => 'Bibliotek',
   'nav_webotheque' => 'Webbibliotek',
   'nav_auctions' => 'Auktioner',

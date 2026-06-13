@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Precyzyjna kontrola kanałów radiowych, TTL, adresów URL i aktywacji.',
   'admin_newsletters_title' => 'Biuletyn',
   'admin_newsletters_desc' => 'Subskrybenci, import CSV i kampanie e-mailowe.',
-  'admin_wiki_title' => 'Wiedza',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Wspólne strony i wersje.',
   'admin_albums_title' => 'Albumy',
   'admin_albums_desc' => 'Galeria publiczna i synchronizacja społecznościowa.',

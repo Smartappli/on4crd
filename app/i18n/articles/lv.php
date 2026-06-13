@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Atiestatīt meklēšanu',
   'no_article_for_theme' => 'Par šo tēmu nav pieejams neviens raksts.',
   'read_article' => 'Izlasi rakstu',
-  'layout_title' => 'Preces',
+  'layout_title' => 'Biedru zona',
   'page' => 'Lapa',
   'previous' => 'Iepriekšējais',
   'next' => 'Tālāk',

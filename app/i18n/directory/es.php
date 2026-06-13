@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'El club en cifras',
+  'club_numbers' => 'Módulo público',
   'intro' => 'Encuentra miembros visibles del club, indicativos, licencias, QTH y datos de contacto según las preferencias de privacidad de cada miembro.',
   'member_list' => 'Lista de miembros',
   'visible_members' => 'Perfiles visibles',

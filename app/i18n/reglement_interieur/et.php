@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Väljaanded ja digitaalsed tööriistad',
-      'body' => 'Saidile, Teadmisedle, uudistele, kuulutustele või raamatukogudele edastatav sisu peab olema kasulik, täpne ja klubi eesmärkidega ühilduv. Vajadusel võib komisjon sisu modereerida, parandada või eemaldada.',
+      'body' => 'Saidile, Wikile, uudistele, kuulutustele või raamatukogudele edastatav sisu peab olema kasulik, täpne ja klubi eesmärkidega ühilduv. Vajadusel võib komisjon sisu modereerida, parandada või eemaldada.',
     ),
     5 => 
     array (

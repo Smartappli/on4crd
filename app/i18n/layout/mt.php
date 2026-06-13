@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Daxxbord',
   'nav_wiki' => 'Għarfien',
   'nav_gallery' => 'Ritratti',
-  'nav_articles' => 'Oġġetti',
+  'nav_articles' => 'Artikli',
   'nav_library' => 'Librerija',
   'nav_webotheque' => 'Librerija tal-web',
   'nav_auctions' => 'Irkant',

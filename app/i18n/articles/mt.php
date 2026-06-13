@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Irrisettja t-tfittxija',
   'no_article_for_theme' => 'Ebda artikoli disponibbli għal dan is-suġġett.',
   'read_article' => 'Aqra l-artiklu',
-  'layout_title' => 'Oġġetti',
+  'layout_title' => 'Żona tal-membri',
   'page' => 'Paġna',
   'previous' => 'Preċedenti',
   'next' => 'Wara',

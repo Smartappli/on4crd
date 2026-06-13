@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Administração Conhecimento',
+  'title' => 'Administração do wiki',
   'new_page' => 'Nova página',
   'th_title' => 'Título',
   'th_slug' => 'Slug',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Ação',
   'edit' => 'Editar',
   'empty' => 'Sem páginas.',
-  'layout' => 'Administração Conhecimento',
-  'meta_desc' => 'Gestão de páginas Conhecimento.',
+  'layout' => 'Administração do wiki',
+  'meta_desc' => 'Gestão de páginas wiki.',
 );

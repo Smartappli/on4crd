@@ -33,6 +33,6 @@ return array (
   'scope' => 'Scóip an eolais',
   'scope_all' => 'Gach foinse',
   'scope_knowledge' => 'Bonn eolais',
-  'scope_articles' => 'Míreanna',
+  'scope_articles' => 'Ailt',
   'scope_library' => 'Ábhair leabharlainne',
 );

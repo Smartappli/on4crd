@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Kennis-beheer',
+  'title' => 'Wiki-beheer',
   'new_page' => 'Nieuwe pagina',
   'th_title' => 'Titel',
   'th_slug' => 'Slug',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Actie',
   'edit' => 'Bewerken',
   'empty' => 'Geen pagina\'s.',
-  'layout' => 'Kennis-beheer',
-  'meta_desc' => 'Kennis-pagina\'s beheren.',
+  'layout' => 'Wiki-beheer',
+  'meta_desc' => 'Wikipagina\'s beheren.',
 );

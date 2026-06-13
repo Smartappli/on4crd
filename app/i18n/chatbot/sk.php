@@ -33,6 +33,6 @@ return array (
   'scope' => 'Rozsah vedomostí',
   'scope_all' => 'Všetky zdroje',
   'scope_knowledge' => 'Znalostná báza',
-  'scope_articles' => 'Položky',
+  'scope_articles' => 'Články',
   'scope_library' => 'Materiály knižnice',
 );

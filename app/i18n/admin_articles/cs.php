@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Položky',
+  'layout' => 'Články',
   'meta_desc' => 'Správa a publikování článků na webu.',
   'ok_saved' => 'Článek uložen.',
   'err_invalid_category' => 'Neplatná kategorie.',

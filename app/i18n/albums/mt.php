@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Fittex album skont it-titlu jew id-deskrizzjoni',
   'search' => 'Għar-riċerka',
   'reset' => 'Irrisettja',
-  'gallery' => 'Gallerija',
+  'gallery' => 'Żona tal-membri',
   'none' => 'L-ebda album pubbliku disponibbli',
   'for_search' => 'għal din ir-riċerka',
   'cover_alt' => 'qoxra tal-album',

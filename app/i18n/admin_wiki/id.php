@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Administrasi Pengetahuan',
+  'title' => 'Administrasi Wiki',
   'new_page' => 'Lembaran baru',
   'th_title' => 'Judul',
   'th_slug' => 'Siput',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Tindakan',
   'edit' => 'Sunting',
   'empty' => 'Tidak ada halaman.',
-  'layout' => 'Administrasi Pengetahuan',
-  'meta_desc' => 'Kelola halaman Pengetahuan.',
+  'layout' => 'Administrasi Wiki',
+  'meta_desc' => 'Kelola halaman Wiki.',
 );

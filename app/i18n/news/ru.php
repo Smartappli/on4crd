@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Новости',
   'unavailable' => 'Новость недоступна',
-  'latest_news' => 'Последние новости',
+  'latest_news' => 'Публичный модуль',
   'unknown_date' => 'Дата неизвестна',
   'latest_fallback_excerpt' => 'Читайте последние новости клуба и его мероприятий.',
   'default_section' => 'Новости',

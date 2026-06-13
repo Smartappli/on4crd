@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Ní bhfuarthas leathanach Eolas.',
+  'not_found' => 'Ní bhfuarthas leathanach Wiki.',
   'edit' => 'Cuir in eagar',
-  'layout' => 'Eolas',
-  'meta_desc' => 'Comhairliúchán ar leathanach eolas.',
+  'layout' => 'Wiki',
+  'meta_desc' => 'Comhairliúchán ar leathanach Wiki.',
   'history' => 'Stair',
   'no_revisions' => 'Gan aon leasuithe roimhe seo.',
 );

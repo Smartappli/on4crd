@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Търсене',
-  'eyebrow' => 'Глобално търсене',
-  'lead' => 'Бързо намирайте новини, статии, знания страници, документи, съобщения и албуми.',
+  'eyebrow' => 'Публичен модул',
+  'lead' => 'Бързо намирайте новини, статии, Wiki страници, документи, съобщения и албуми.',
   'placeholder' => 'Индикатор, ключова дума, тема, документ...',
   'query_label' => 'Вашето търсене',
   'source_label' => 'Източник',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Глобално търсене ON4CRD в съдържанието на сайта.',
   'source_all' => 'Всичко',
   'source_news' => 'Новини',
-  'source_articles' => 'Предмети',
-  'source_wiki' => 'Знания',
+  'source_articles' => 'Статии',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Библиотека',
   'source_classifieds' => 'Съобщения',
   'source_albums' => 'Албуми',

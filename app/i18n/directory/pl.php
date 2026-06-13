@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klub w liczbach',
+  'club_numbers' => 'Moduł publiczny',
   'intro' => 'Znajdź widocznych członków klubu, ich kody, licencje, QTH i dane kontaktowe zgodnie z ich preferencjami dotyczącymi prywatności.',
   'member_list' => 'Lista członków',
   'visible_members' => 'Widoczne profile',

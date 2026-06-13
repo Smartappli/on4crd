@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Sök',
-  'eyebrow' => 'Global sökning',
-  'lead' => 'Hitta snabbt nyheter, artiklar, Kunskapidor, dokument, meddelanden och album.',
+  'eyebrow' => 'Offentlig modul',
+  'lead' => 'Hitta snabbt nyheter, artiklar, Wiki, dokument, meddelanden och album.',
   'placeholder' => 'Indikator, nyckelord, tema, dokument...',
   'query_label' => 'Din sökning',
   'source_label' => 'Källa',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Global sökning ON4CRD i webbplatsens innehåll.',
   'source_all' => 'Allt',
   'source_news' => 'Nyheter',
-  'source_articles' => 'Föremål',
-  'source_wiki' => 'Kunskap',
+  'source_articles' => 'Artiklar',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Bibliotek',
   'source_classifieds' => 'Meddelanden',
   'source_albums' => 'Album',

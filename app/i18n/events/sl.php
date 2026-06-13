@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Dogodki',
+  'module_public' => 'Javni modul',
   'agenda_unavailable' => 'Dnevni red še ni na voljo.',
   'export' => 'Izvozi koledar',
   'calendar_load_error' => 'Interaktivnega koledarja ni mogoče naložiti.',

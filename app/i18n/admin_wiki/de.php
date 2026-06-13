@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Wissen-Verwaltung',
+  'title' => 'Wiki-Verwaltung',
   'new_page' => 'Neue Seite',
   'th_title' => 'Titel',
   'th_slug' => 'Slug',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Aktion',
   'edit' => 'Bearbeiten',
   'empty' => 'Keine Seiten.',
-  'layout' => 'Wissen-Verwaltung',
-  'meta_desc' => 'Wissen-Seiten verwalten.',
+  'layout' => 'Wiki-Verwaltung',
+  'meta_desc' => 'Wiki-Seiten verwalten.',
 );

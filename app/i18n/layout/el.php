@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Ταμπλό',
   'nav_wiki' => 'Γνώσεις',
   'nav_gallery' => 'Φωτογραφίες',
-  'nav_articles' => 'Είδη',
+  'nav_articles' => 'Άρθρα',
   'nav_library' => 'Βιβλιοθήκη',
   'nav_webotheque' => 'Διαδικτυακή βιβλιοθήκη',
   'nav_auctions' => 'δημοπρασίες',

@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publikacje i narzędzia cyfrowe',
-      'body' => 'Treści przesłane na stronę, Wiedza, wiadomości, ogłoszenia lub biblioteki muszą być przydatne, dokładne i zgodne z celami klubu. Komisja może moderować, poprawiać lub usuwać treści, jeśli zajdzie taka potrzeba.',
+      'body' => 'Treści przesłane na stronę, Wiki, wiadomości, ogłoszenia lub biblioteki muszą być przydatne, dokładne i zgodne z celami klubu. Komisja może moderować, poprawiać lub usuwać treści, jeśli zajdzie taka potrzeba.',
     ),
     5 => 
     array (

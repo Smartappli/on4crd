@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Keresés visszaállítása',
   'no_article_for_theme' => 'Ebben a témában nem érhető el cikk.',
   'read_article' => 'Olvassa el a cikket',
-  'layout_title' => 'Tételek',
+  'layout_title' => 'Tagi felület',
   'page' => 'oldal',
   'previous' => 'Előző',
   'next' => 'Következő',

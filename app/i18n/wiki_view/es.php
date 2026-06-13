@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Página Conocimientos no encontrada.',
+  'not_found' => 'Página Wiki no encontrada.',
   'edit' => 'Editar',
-  'layout' => 'Conocimientos',
-  'meta_desc' => 'Ver una página Conocimientos.',
+  'layout' => 'Wiki',
+  'meta_desc' => 'Ver una página Wiki.',
   'history' => 'Historial',
   'no_revisions' => 'No hay revisiones anteriores.',
 );

@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Ieškokite albumo pagal pavadinimą arba aprašą',
   'search' => 'Ieškoti',
   'reset' => 'Nustatyti iš naujo',
-  'gallery' => 'Galerija',
+  'gallery' => 'Narių sritis',
   'none' => 'Viešųjų albumų nėra',
   'for_search' => 'šiam tyrimui',
   'cover_alt' => 'albumo viršelis',

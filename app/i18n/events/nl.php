@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Evenementen',
+  'module_public' => 'Publieke module',
   'agenda_unavailable' => 'De agenda is nog niet beschikbaar.',
   'export' => 'Kalender exporteren',
   'calendar_load_error' => 'Interactieve kalender kon niet geladen worden.',

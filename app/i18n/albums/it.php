@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Cerca un album per titolo o descrizione',
   'search' => 'Cerca',
   'reset' => 'Reimposta',
-  'gallery' => 'Galleria',
+  'gallery' => 'Area membri',
   'none' => 'Nessun album pubblico disponibile',
   'for_search' => 'per questa ricerca',
   'cover_alt' => 'Copertina dell\'album',

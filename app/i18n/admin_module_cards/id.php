@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Kontrol rinci feed radio, TTL, URL, dan aktivasi.',
   'admin_newsletters_title' => 'Buletin',
   'admin_newsletters_desc' => 'Pelanggan, impor CSV, dan kampanye email.',
-  'admin_wiki_title' => 'Pengetahuan',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Halaman kolaboratif dan revisi.',
   'admin_albums_title' => 'Album',
   'admin_albums_desc' => 'Galeri publik dan sinkronisasi sosial.',

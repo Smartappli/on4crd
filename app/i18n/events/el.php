@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Εκδηλώσεις',
+  'module_public' => 'Δημόσια ενότητα',
   'agenda_unavailable' => 'Η ατζέντα δεν είναι ακόμη διαθέσιμη.',
   'export' => 'Εξαγωγή ημερολογίου',
   'calendar_load_error' => 'Δεν είναι δυνατή η φόρτωση του διαδραστικού ημερολογίου.',

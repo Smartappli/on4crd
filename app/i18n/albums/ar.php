@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'ابحث في الألبوم حسب العنوان أو الوصف',
   'search' => 'بحث',
   'reset' => 'إعادة تعيين',
-  'gallery' => 'المعرض',
+  'gallery' => 'منطقة الأعضاء',
   'none' => 'لا يوجد ألبوم عام',
   'for_search' => 'لهذا البحث',
   'cover_alt' => 'غلاف الألبوم',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'ニュース',
   'unavailable' => 'ニュースを利用できません',
-  'latest_news' => '最新ニュース',
+  'latest_news' => '公開モジュール',
   'unknown_date' => '日付不明',
   'latest_fallback_excerpt' => 'クラブと活動に関する最新情報をご覧ください。',
   'default_section' => 'ニュース',

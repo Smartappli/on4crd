@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'genstande',
+  'layout' => 'Artikler',
   'meta_desc' => 'Administration og publicering af webstedsartikler.',
   'ok_saved' => 'Artiklen er gemt.',
   'err_invalid_category' => 'Ugyldig kategori.',

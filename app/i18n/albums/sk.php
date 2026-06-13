@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Vyhľadajte album podľa názvu alebo popisu',
   'search' => 'Hľadať',
   'reset' => 'Resetovať',
-  'gallery' => 'Galéria',
+  'gallery' => 'Členská zóna',
   'none' => 'Nie sú k dispozícii žiadne verejné albumy',
   'for_search' => 'pre tento výskum',
   'cover_alt' => 'obal albumu',

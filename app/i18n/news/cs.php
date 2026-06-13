@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Novinky',
   'unavailable' => 'Novinky nejsou k dispozici',
-  'latest_news' => 'Nejnovější zprávy',
+  'latest_news' => 'Veřejný modul',
   'unknown_date' => 'Datum neznámé',
   'latest_fallback_excerpt' => 'Podívejte se na nejnovější zprávy o klubu a jeho aktivitách.',
   'default_section' => 'Novinky',

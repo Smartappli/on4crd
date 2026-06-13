@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Табло за управление',
   'nav_wiki' => 'Знания',
   'nav_gallery' => 'Снимки',
-  'nav_articles' => 'Предмети',
+  'nav_articles' => 'Статии',
   'nav_library' => 'Библиотека',
   'nav_webotheque' => 'Уеб библиотека',
   'nav_auctions' => 'Търгове',

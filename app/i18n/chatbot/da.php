@@ -33,6 +33,6 @@ return array (
   'scope' => 'Vidensomfang',
   'scope_all' => 'Alle kilder',
   'scope_knowledge' => 'Vidensgrundlag',
-  'scope_articles' => 'genstande',
+  'scope_articles' => 'Artikler',
   'scope_library' => 'Biblioteksmaterialer',
 );

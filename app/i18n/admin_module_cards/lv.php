@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Precīza radio plūsmu, TTL, URL un aktivizēšanas kontrole.',
   'admin_newsletters_title' => 'Biļetens',
   'admin_newsletters_desc' => 'Abonenti, CSV importa un e-pasta kampaņas.',
-  'admin_wiki_title' => 'Zināšanas',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Sadarbības lapas un labojumi.',
   'admin_albums_title' => 'Albumi',
   'admin_albums_desc' => 'Publiskā galerija un sociālā sinhronizācija.',

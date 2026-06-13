@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Imeachtaí',
+  'module_public' => 'Modúl poiblí',
   'agenda_unavailable' => 'Níl an clár oibre ar fáil go fóill.',
   'export' => 'Easpórtáil an féilire',
   'calendar_load_error' => 'Ní féidir an féilire idirghníomhach a lódáil.',

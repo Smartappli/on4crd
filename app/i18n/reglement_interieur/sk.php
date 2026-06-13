@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publikácie a digitálne nástroje',
-      'body' => 'Obsah odoslaný na stránku, Znalosti, správy, inzeráty alebo knižnice musí byť užitočný, presný a kompatibilný s účelmi klubu. V prípade potreby môže komisia obsah moderovať, opraviť alebo odstrániť.',
+      'body' => 'Obsah odoslaný na stránku, Wiki, správy, inzeráty alebo knižnice musí byť užitočný, presný a kompatibilný s účelmi klubu. V prípade potreby môže komisia obsah moderovať, opraviť alebo odstrániť.',
     ),
     5 => 
     array (

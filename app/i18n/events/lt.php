@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Renginiai',
+  'module_public' => 'Viešasis modulis',
   'agenda_unavailable' => 'Darbotvarkė dar nepateikta.',
   'export' => 'Eksportuoti kalendorių',
   'calendar_load_error' => 'Nepavyko įkelti interaktyvaus kalendoriaus.',

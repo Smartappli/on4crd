@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Suche',
-  'eyebrow' => 'Globale Suche',
-  'lead' => 'Finden Sie schnell Nachrichten, Artikel, Wissen-Seiten, Dokumente, Anzeigen und Alben.',
+  'eyebrow' => 'Öffentliches Modul',
+  'lead' => 'Finden Sie schnell Nachrichten, Artikel, Wiki-Seiten, Dokumente, Anzeigen und Alben.',
   'placeholder' => 'Rufzeichen, Stichwort, Thema, Dokument...',
   'query_label' => 'Ihre Suche',
   'source_label' => 'Quelle',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Alles',
   'source_news' => 'Nachrichten',
   'source_articles' => 'Artikel',
-  'source_wiki' => 'Wissen',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Bibliothek',
   'source_classifieds' => 'Anzeigen',
   'source_albums' => 'Alben',

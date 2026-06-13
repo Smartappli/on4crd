@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Værktøjskasse',
-  'tool_index' => 'Klassificering af værktøjer',
+  'tool_index' => 'Offentligt modul',
   'category_locators' => 'Landemærker og geolokation',
   'category_conversions' => 'Radiokonverteringer',
   'category_antenna' => 'Antenner & udbredelse',

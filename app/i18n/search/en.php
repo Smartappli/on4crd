@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return [
     'title' => 'Search',
-    'eyebrow' => 'Global search',
+    'eyebrow' => 'Public module',
     'lead' => 'Quickly find news, articles, wiki pages, documents, classifieds and albums.',
     'placeholder' => 'Callsign, keyword, topic, document...',
     'query_label' => 'Your search',

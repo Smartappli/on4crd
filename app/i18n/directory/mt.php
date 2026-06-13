@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Il-klabb fiċ-ċifri',
+  'club_numbers' => 'Modulu pubbliku',
   'intro' => 'Sib membri tal-klabb viżibbli, il-kodiċijiet, il-liċenzji, QTH u l-informazzjoni ta \'kuntatt tagħhom skont il-preferenzi tal-privatezza tagħhom.',
   'member_list' => 'Lista ta\' membri',
   'visible_members' => 'Profili viżibbli',

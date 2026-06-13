@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Athshocraigh cuardach',
   'no_article_for_theme' => 'Níl ailt ar fáil don ábhar seo.',
   'read_article' => 'Léigh an t-alt',
-  'layout_title' => 'Míreanna',
+  'layout_title' => 'Limistéar na mBall',
   'page' => 'Leathanach',
   'previous' => 'Roimhe Seo',
   'next' => 'Ar aghaidh',

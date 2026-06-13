@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Hae albumia nimen tai kuvauksen perusteella',
   'search' => 'Etsi',
   'reset' => 'Nollaa',
-  'gallery' => 'Galleria',
+  'gallery' => 'Jäsenalue',
   'none' => 'Julkisia albumeita ei ole saatavilla',
   'for_search' => 'tätä tutkimusta varten',
   'cover_alt' => 'albumin kansi',

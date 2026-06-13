@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Naujienos',
   'unavailable' => 'Naujienos nepasiekiamos',
-  'latest_news' => 'Paskutinės naujienos',
+  'latest_news' => 'Viešasis modulis',
   'unknown_date' => 'Data nežinoma',
   'latest_fallback_excerpt' => 'Peržiūrėkite paskutines naujienas apie klubą ir jo veiklą.',
   'default_section' => 'Naujienos',

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Deais',
   'nav_wiki' => 'Eolas',
   'nav_gallery' => 'Grianghraif',
-  'nav_articles' => 'Míreanna',
+  'nav_articles' => 'Ailt',
   'nav_library' => 'Leabharlann',
   'nav_webotheque' => 'Leabharlann gréasáin',
   'nav_auctions' => 'Ceantanna',

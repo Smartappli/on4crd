@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Sündmused',
+  'module_public' => 'Avalik moodul',
   'agenda_unavailable' => 'Päevakava pole veel saadaval.',
   'export' => 'Ekspordi kalender',
   'calendar_load_error' => 'Interaktiivset kalendrit ei saa laadida.',

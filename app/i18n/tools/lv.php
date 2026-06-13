@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Rīkkopa',
-  'tool_index' => 'Instrumentu klasifikācija',
+  'tool_index' => 'Publisks modulis',
   'category_locators' => 'Orientieri un ģeogrāfiskā atrašanās vieta',
   'category_conversions' => 'Radio konversijas',
   'category_antenna' => 'Antenas un izplatīšana',

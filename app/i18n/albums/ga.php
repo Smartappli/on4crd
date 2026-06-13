@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Cuardaigh albam de réir teidil nó tuairisce',
   'search' => 'Cuardach',
   'reset' => 'Athshocraigh',
-  'gallery' => 'Gailearaí',
+  'gallery' => 'Limistéar na mBall',
   'none' => 'Níl albaim phoiblí ar fáil',
   'for_search' => 'don taighde seo',
   'cover_alt' => 'clúdach albam',

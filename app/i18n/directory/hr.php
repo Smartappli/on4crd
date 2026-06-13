@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klub u brojkama',
+  'club_numbers' => 'Javni modul',
   'intro' => 'Pronađite vidljive članove kluba, njihove šifre, licence, QTH i podatke za kontakt u skladu s njihovim preferencijama privatnosti.',
   'member_list' => 'Popis članova',
   'visible_members' => 'Vidljivi profili',

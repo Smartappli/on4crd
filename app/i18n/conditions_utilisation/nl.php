@@ -36,7 +36,7 @@ return array (
     2 => 
     array (
       'title' => 'Ingezonden inhoud',
-      'body' => 'Artikelen, nieuws, evenementen, Kennispagina\'s, advertenties en documenten die via de site worden ingediend, kunnen voor of na publicatie worden beoordeeld, gecorrigeerd, geweigerd of verwijderd. De inhoud moet nuttig blijven voor de amateurradiogemeenschap en de mensen, de wet en de clubregels respecteren.',
+      'body' => 'Artikelen, nieuws, evenementen, Wikipagina\'s, advertenties en documenten die via de site worden ingediend, kunnen voor of na publicatie worden beoordeeld, gecorrigeerd, geweigerd of verwijderd. De inhoud moet nuttig blijven voor de amateurradiogemeenschap en de mensen, de wet en de clubregels respecteren.',
     ),
     3 => 
     array (

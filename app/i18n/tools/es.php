@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Caja de herramientas',
-  'tool_index' => 'Índice de herramientas',
+  'tool_index' => 'Módulo público',
   'category_locators' => 'Locators y geolocalización',
   'category_conversions' => 'Conversiones de radio',
   'category_antenna' => 'Antenas y propagación',

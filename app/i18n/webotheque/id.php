@@ -17,7 +17,7 @@ return array (
   'search' => 'Cari',
   'reset' => 'Atur ulang',
   'empty' => 'Temukan tautan web berguna yang dibagikan kepada anggota.',
-  'for_filters' => '',
+  'for_filters' => ' untuk filter ini',
   'tags' => 'Tag',
   'open' => 'Buka',
   'storage_unavailable' => 'Temukan tautan web berguna yang dibagikan kepada anggota.',

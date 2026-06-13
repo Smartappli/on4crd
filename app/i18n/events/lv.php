@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Pasākumi',
+  'module_public' => 'Publisks modulis',
   'agenda_unavailable' => 'Darba kārtība vēl nav pieejama.',
   'export' => 'Eksportēt kalendāru',
   'calendar_load_error' => 'Nevar ielādēt interaktīvo kalendāru.',

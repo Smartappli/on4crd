@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Otsige albumit pealkirja või kirjelduse järgi',
   'search' => 'Otsi',
   'reset' => 'Lähtesta',
-  'gallery' => 'Galerii',
+  'gallery' => 'Liikmete ala',
   'none' => 'Avalikke albumeid pole saadaval',
   'for_search' => 'selle uuringu jaoks',
   'cover_alt' => 'albumi kaas',

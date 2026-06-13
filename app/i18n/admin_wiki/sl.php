@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Znanje administracija',
+  'title' => 'Administracija wikija',
   'new_page' => 'Nova stran',
   'th_title' => 'Naslov',
   'th_slug' => 'Polž',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Akcija',
   'edit' => 'Uredi',
   'empty' => 'Brez strani.',
-  'layout' => 'Znanje administracija',
-  'meta_desc' => 'Upravljanje strani Znanje.',
+  'layout' => 'Administracija wikija',
+  'meta_desc' => 'Upravljanje wiki strani.',
 );

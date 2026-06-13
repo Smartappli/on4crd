@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Ponovno postavljanje pretraživanja',
   'no_article_for_theme' => 'Nema dostupnih članaka za ovu temu.',
   'read_article' => 'Pročitajte članak',
-  'layout_title' => 'Predmeti',
+  'layout_title' => 'Člansko područje',
   'page' => 'Stranica',
   'previous' => 'Prethodno',
   'next' => 'Dalje',

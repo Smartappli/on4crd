@@ -33,6 +33,6 @@ return array (
   'scope' => 'Teadmiste ulatus',
   'scope_all' => 'Kõik allikad',
   'scope_knowledge' => 'Teadmistebaas',
-  'scope_articles' => 'Üksused',
+  'scope_articles' => 'Artiklid',
   'scope_library' => 'Raamatukogu materjalid',
 );

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'অনুসন্ধান',
-  'eyebrow' => 'সাইটজুড়ে অনুসন্ধান',
-  'lead' => 'সংবাদ, প্রবন্ধ, জ্ঞান পৃষ্ঠা, নথি, বিজ্ঞাপন ও অ্যালবাম দ্রুত খুঁজুন।',
+  'eyebrow' => 'সর্বজনীন মডিউল',
+  'lead' => 'সংবাদ, প্রবন্ধ, Wiki পৃষ্ঠা, নথি, বিজ্ঞাপন ও অ্যালবাম দ্রুত খুঁজুন।',
   'placeholder' => 'কলসাইন, কীওয়ার্ড, বিষয়, নথি...',
   'query_label' => 'আপনার অনুসন্ধান',
   'source_label' => 'উৎস',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'সব',
   'source_news' => 'সংবাদ',
   'source_articles' => 'প্রবন্ধ',
-  'source_wiki' => 'জ্ঞান',
+  'source_wiki' => 'Wiki',
   'source_library' => 'লাইব্রেরি',
   'source_classifieds' => 'বিজ্ঞাপন',
   'source_albums' => 'অ্যালবাম',

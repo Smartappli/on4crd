@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Νέα',
   'unavailable' => 'Τα νέα δεν είναι διαθέσιμα',
-  'latest_news' => 'Τελευταία νέα',
+  'latest_news' => 'Δημόσια ενότητα',
   'unknown_date' => 'Ημερομηνία άγνωστη',
   'latest_fallback_excerpt' => 'Δείτε τα τελευταία νέα για τον σύλλογο και τις δραστηριότητές του.',
   'default_section' => 'Νέα',

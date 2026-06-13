@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Setel ulang pencarian',
   'no_article_for_theme' => 'Tidak ada artikel tersedia untuk tema ini.',
   'read_article' => 'Baca artikel',
-  'layout_title' => 'Artikel',
+  'layout_title' => 'Area Anggota',
   'page' => 'Halaman',
   'previous' => 'Sebelumnya',
   'next' => 'Berikutnya',

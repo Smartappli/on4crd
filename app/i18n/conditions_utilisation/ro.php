@@ -36,7 +36,7 @@ return array (
     2 => 
     array (
       'title' => 'Conținut trimis',
-      'body' => 'Articolele, știrile, evenimentele, paginile Cunoștințe, anunțurile și documentele trimise prin intermediul site-ului pot fi revizuite, corectate, refuzate sau eliminate înainte sau după publicare. Conținutul trebuie să rămână util comunității de radio amatori și să respecte oamenii, legea și regulile clubului.',
+      'body' => 'Articolele, știrile, evenimentele, paginile Wiki, anunțurile și documentele trimise prin intermediul site-ului pot fi revizuite, corectate, refuzate sau eliminate înainte sau după publicare. Conținutul trebuie să rămână util comunității de radio amatori și să respecte oamenii, legea și regulile clubului.',
     ),
     3 => 
     array (

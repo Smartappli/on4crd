@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Poiščite album po naslovu ali opisu',
   'search' => 'Iskanje',
   'reset' => 'Ponastavi',
-  'gallery' => 'Galerija',
+  'gallery' => 'Člansko območje',
   'none' => 'Na voljo ni noben javni album',
   'for_search' => 'za to raziskavo',
   'cover_alt' => 'naslovnica albuma',

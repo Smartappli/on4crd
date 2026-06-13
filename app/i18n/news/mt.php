@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Aħbarijiet',
   'unavailable' => 'Aħbarijiet mhux disponibbli',
-  'latest_news' => 'L-aħħar aħbarijiet',
+  'latest_news' => 'Modulu pubbliku',
   'unknown_date' => 'Data mhux magħrufa',
   'latest_fallback_excerpt' => 'Ara l-aħħar aħbarijiet dwar il-klabb u l-attivitajiet tiegħu.',
   'default_section' => 'Aħbarijiet',

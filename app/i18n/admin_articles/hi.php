@@ -37,7 +37,7 @@ return array (
   'cat_materiel' => 'उपकरण एवं स्टेशन',
   'cat_formation' => 'प्रशिक्षण',
   'cat_autres' => 'अन्य',
-  'layout' => 'सामग्री',
+  'layout' => 'लेख',
   'meta_desc' => 'साइट लेखों का प्रशासन और प्रकाशन।',
   'err_invalid_article' => 'अमान्य आलेख.',
   'ok_deleted' => 'आलेख हटा दिया गया.',

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klub dalam angka',
+  'club_numbers' => 'Modul publik',
   'intro' => 'Temukan anggota klub yang terlihat, callsign, lisensi, QTH, dan detail kontak sesuai pengaturan privasi tiap anggota.',
   'member_list' => 'Direktori anggota',
   'visible_members' => 'Profil terlihat',

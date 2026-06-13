@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klubben i tal',
+  'club_numbers' => 'Offentligt modul',
   'intro' => 'Find synlige klubmedlemmer, deres koder, licenser, QTH og kontaktoplysninger i henhold til deres privatlivspræferencer.',
   'member_list' => 'Liste over medlemmer',
   'visible_members' => 'Synlige profiler',

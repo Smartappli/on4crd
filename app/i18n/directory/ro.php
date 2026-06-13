@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Clubul în cifre',
+  'club_numbers' => 'Modul public',
   'intro' => 'Găsiți membri vizibili ai clubului, codurile lor, licențele, QTH și informațiile de contact în funcție de preferințele lor de confidențialitate.',
   'member_list' => 'Lista membrilor',
   'visible_members' => 'Profiluri vizibile',

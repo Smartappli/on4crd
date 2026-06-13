@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Lähtesta otsing',
   'no_article_for_theme' => 'Selle teema kohta pole artikleid saadaval.',
   'read_article' => 'Lugege artiklit',
-  'layout_title' => 'Üksused',
+  'layout_title' => 'Liikmete ala',
   'page' => 'Lehekülg',
   'previous' => 'Eelmine',
   'next' => 'Edasi',

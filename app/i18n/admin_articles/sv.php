@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Föremål',
+  'layout' => 'Artiklar',
   'meta_desc' => 'Administration och publicering av sajtartiklar.',
   'ok_saved' => 'Artikeln har sparats.',
   'err_invalid_category' => 'Ogiltig kategori.',

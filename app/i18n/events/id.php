@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Acara',
+  'module_public' => 'Modul publik',
   'agenda_unavailable' => 'Kalender belum tersedia.',
   'export' => 'Ekspor kalender',
   'calendar_load_error' => 'Gagal memuat kalender interaktif.',

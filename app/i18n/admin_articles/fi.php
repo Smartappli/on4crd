@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Tuotteet',
+  'layout' => 'Artikkelit',
   'meta_desc' => 'Sivuston artikkeleiden ylläpito ja julkaiseminen.',
   'ok_saved' => 'Artikkeli tallennettu.',
   'err_invalid_category' => 'Virheellinen luokka.',

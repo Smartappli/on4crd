@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'জ্ঞান পৃষ্ঠা পাওয়া যায়নি।',
+  'not_found' => 'Wiki পৃষ্ঠা পাওয়া যায়নি।',
   'edit' => 'সম্পাদনা',
-  'layout' => 'জ্ঞান',
-  'meta_desc' => 'একটি জ্ঞান পৃষ্ঠা দেখুন।',
+  'layout' => 'Wiki',
+  'meta_desc' => 'একটি Wiki পৃষ্ঠা দেখুন।',
   'history' => 'ইতিহাস',
   'no_revisions' => 'আগের কোনো সংশোধন নেই।',
 );

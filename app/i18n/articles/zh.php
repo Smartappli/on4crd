@@ -14,7 +14,7 @@ return array (
   'reset_search' => '重置搜索',
   'no_article_for_theme' => '没有适用于此主题的文章。',
   'read_article' => '阅读文章',
-  'layout_title' => '文章',
+  'layout_title' => '会员专区',
   'page' => '页',
   'previous' => '以前的',
   'next' => '下一个',

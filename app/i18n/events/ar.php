@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'الفعاليات',
+  'module_public' => 'وحدة عامة',
   'agenda_unavailable' => 'التقويم غير متاح بعد.',
   'export' => 'تصدير التقويم',
   'calendar_load_error' => 'تعذّر تحميل التقويم التفاعلي.',

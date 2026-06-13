@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => '新闻',
   'unavailable' => '新闻不可用',
-  'latest_news' => '最新新闻',
+  'latest_news' => '公共模块',
   'unknown_date' => '日期未知',
   'latest_fallback_excerpt' => '阅读俱乐部及其活动的最新动态。',
   'default_section' => '新闻',

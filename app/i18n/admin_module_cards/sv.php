@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Finkontroll av radioflöden, TTL, URL:er och aktivering.',
   'admin_newsletters_title' => 'Nyhetsbrev',
   'admin_newsletters_desc' => 'Prenumeranter, CSV import och e-postkampanjer.',
-  'admin_wiki_title' => 'Kunskap',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Samarbetssidor och revisioner.',
   'admin_albums_title' => 'Album',
   'admin_albums_desc' => 'Offentligt galleri och social synk.',

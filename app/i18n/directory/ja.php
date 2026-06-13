@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => '数字で見るクラブ',
+  'club_numbers' => '公開モジュール',
   'intro' => '各メンバーのプライバシー設定に従って公開されているクラブメンバー、コールサイン、免許、QTH、連絡先を確認できます。',
   'member_list' => 'メンバーディレクトリ',
   'visible_members' => '公開プロフィール',

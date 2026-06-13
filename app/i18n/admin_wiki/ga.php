@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Riaradh Eolas',
+  'title' => 'Riarachán Wiki',
   'new_page' => 'Leathanach nua',
   'th_title' => 'Teideal',
   'th_slug' => 'Drúchtín',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Gníomh',
   'edit' => 'Cuir in eagar',
   'empty' => 'Uimh leathanaigh.',
-  'layout' => 'Riaradh Eolas',
-  'meta_desc' => 'Bainistíocht leathanach Viki.',
+  'layout' => 'Riarachán Wiki',
+  'meta_desc' => 'Bainistigh leathanaigh Wiki.',
 );

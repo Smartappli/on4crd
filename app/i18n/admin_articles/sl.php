@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Predmeti',
+  'layout' => 'Članki',
   'meta_desc' => 'Administracija in objava člankov na spletnem mestu.',
   'ok_saved' => 'Članek shranjen.',
   'err_invalid_category' => 'Neveljavna kategorija.',

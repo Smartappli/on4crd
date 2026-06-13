@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publikacije in digitalna orodja',
-      'body' => 'Vsebina, poslana na spletno mesto, Znanje, novice, oglase ali knjižnice, mora biti uporabna, točna in združljiva z nameni kluba. Komisija lahko po potrebi moderira, popravi ali odstrani vsebino.',
+      'body' => 'Vsebina, poslana na spletno mesto, Wiki, novice, oglase ali knjižnice, mora biti uporabna, točna in združljiva z nameni kluba. Komisija lahko po potrebi moderira, popravi ali odstrani vsebino.',
     ),
     5 => 
     array (

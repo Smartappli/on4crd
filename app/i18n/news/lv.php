@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Jaunumi',
   'unavailable' => 'Ziņas nav pieejamas',
-  'latest_news' => 'Jaunākās ziņas',
+  'latest_news' => 'Publisks modulis',
   'unknown_date' => 'Datums nav zināms',
   'latest_fallback_excerpt' => 'Iepazīstieties ar jaunākajām ziņām par klubu un tā aktivitātēm.',
   'default_section' => 'Jaunumi',

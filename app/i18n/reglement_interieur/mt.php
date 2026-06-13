@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Pubblikazzjonijiet u għodod diġitali',
-      'body' => 'Il-kontenut sottomess lis-sit, Għarfien, aħbarijiet, klassifikati jew libreriji għandu jkun utli, preċiż u kompatibbli mal-għanijiet tal-klabb. Il-kumitat jista\' jimmodera, jikkoreġi jew ineħħi l-kontenut meta meħtieġ.',
+      'body' => 'Il-kontenut sottomess lis-sit, Wiki, aħbarijiet, klassifikati jew libreriji għandu jkun utli, preċiż u kompatibbli mal-għanijiet tal-klabb. Il-kumitat jista\' jimmodera, jikkoreġi jew ineħħi l-kontenut meta meħtieġ.',
     ),
     5 => 
     array (

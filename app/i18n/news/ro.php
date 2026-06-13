@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Ştiri',
   'unavailable' => 'Știri indisponibile',
-  'latest_news' => 'Cele mai recente știri',
+  'latest_news' => 'Modul public',
   'unknown_date' => 'Data necunoscută',
   'latest_fallback_excerpt' => 'Consultați cele mai recente știri despre club și activitățile sale.',
   'default_section' => 'Ştiri',

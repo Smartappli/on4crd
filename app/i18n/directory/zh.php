@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => '俱乐部数据',
+  'club_numbers' => '公共模块',
   'intro' => '根据每位成员的隐私设置，查找可见的俱乐部成员、呼号、执照、QTH 和联系方式。',
   'member_list' => '会员名录',
   'visible_members' => '可见档案',

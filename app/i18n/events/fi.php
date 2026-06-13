@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Tapahtumat',
+  'module_public' => 'Julkinen moduuli',
   'agenda_unavailable' => 'Esityslista ei ole vielä saatavilla.',
   'export' => 'Vie kalenteri',
   'calendar_load_error' => 'Interaktiivisen kalenterin lataaminen epäonnistui.',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'সংবাদ',
   'unavailable' => 'সংবাদটি উপলভ্য নয়',
-  'latest_news' => 'সর্বশেষ সংবাদ',
+  'latest_news' => 'সর্বজনীন মডিউল',
   'unknown_date' => 'তারিখ অজানা',
   'latest_fallback_excerpt' => 'ক্লাব ও তার কার্যক্রমের সর্বশেষ খবর পড়ুন।',
   'default_section' => 'সংবাদ',

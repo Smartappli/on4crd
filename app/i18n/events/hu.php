@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Események',
+  'module_public' => 'Nyilvános modul',
   'agenda_unavailable' => 'A napirend még nem elérhető.',
   'export' => 'Naptár exportálása',
   'calendar_load_error' => 'Nem sikerült betölteni az interaktív naptárat.',

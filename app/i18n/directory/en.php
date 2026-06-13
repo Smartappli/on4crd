@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Club in numbers',
+  'club_numbers' => 'Public module',
   'intro' => 'Find visible club members, callsigns, licences, QTH and contact details according to each member privacy settings.',
   'member_list' => 'Member directory',
   'visible_members' => 'Visible profiles',

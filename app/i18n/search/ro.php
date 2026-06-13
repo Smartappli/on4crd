@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Cercetare',
-  'eyebrow' => 'Căutare globală',
-  'lead' => 'Găsiți rapid știri, articole, pagini Cunoștințe, documente, anunțuri și albume.',
+  'eyebrow' => 'Modul public',
+  'lead' => 'Găsiți rapid știri, articole, pagini Wiki, documente, anunțuri și albume.',
   'placeholder' => 'Indicator, cuvânt cheie, temă, document...',
   'query_label' => 'Căutarea dvs',
   'source_label' => 'Sursă',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Toate',
   'source_news' => 'Ştiri',
   'source_articles' => 'Articole',
-  'source_wiki' => 'Cunoștințe',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Bibliotecă',
   'source_classifieds' => 'Anunturi',
   'source_albums' => 'Albume',

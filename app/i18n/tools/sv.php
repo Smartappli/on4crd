@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Verktygslåda',
-  'tool_index' => 'Klassificering av verktyg',
+  'tool_index' => 'Offentlig modul',
   'category_locators' => 'Landmärken och geolokalisering',
   'category_conversions' => 'Radiokonverteringar',
   'category_antenna' => 'Antenner & spridning',

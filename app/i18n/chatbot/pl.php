@@ -33,6 +33,6 @@ return array (
   'scope' => 'Zakres wiedzy',
   'scope_all' => 'Wszystkie źródła',
   'scope_knowledge' => 'Baza wiedzy',
-  'scope_articles' => 'Przedmioty',
+  'scope_articles' => 'Artykuły',
   'scope_library' => 'Materiały biblioteczne',
 );

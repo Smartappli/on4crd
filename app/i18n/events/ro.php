@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Evenimente',
+  'module_public' => 'Modul public',
   'agenda_unavailable' => 'Agenda nu este încă disponibilă.',
   'export' => 'Exportă calendarul',
   'calendar_load_error' => 'Nu se poate încărca calendarul interactiv.',

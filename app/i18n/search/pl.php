@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Szukaj',
-  'eyebrow' => 'Globalne wyszukiwanie',
-  'lead' => 'Szybko znajduj wiadomości, artykuły, strony Wiedza, dokumenty, ogłoszenia i albumy.',
+  'eyebrow' => 'Moduł publiczny',
+  'lead' => 'Szybko znajduj wiadomości, artykuły, strony Wiki, dokumenty, ogłoszenia i albumy.',
   'placeholder' => 'Wskaźnik, słowo kluczowe, motyw, dokument...',
   'query_label' => 'Twoje wyszukiwanie',
   'source_label' => 'Źródło',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Wyszukiwanie globalne ON4CRD w treści serwisu.',
   'source_all' => 'Wszystko',
   'source_news' => 'Wiadomości',
-  'source_articles' => 'Przedmioty',
-  'source_wiki' => 'Wiedza',
+  'source_articles' => 'Artykuły',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Biblioteka',
   'source_classifieds' => 'Ogłoszenia',
   'source_albums' => 'Albumy',

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Informācijas panelis',
   'nav_wiki' => 'Zināšanas',
   'nav_gallery' => 'Fotoattēli',
-  'nav_articles' => 'Preces',
+  'nav_articles' => 'Raksti',
   'nav_library' => 'Bibliotēka',
   'nav_webotheque' => 'Tīmekļa bibliotēka',
   'nav_auctions' => 'Izsoles',

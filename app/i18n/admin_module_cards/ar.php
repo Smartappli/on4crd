@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'تحكم دقيق في تدفقات الراديو وTTL وعناوين URL والتفعيل.',
   'admin_newsletters_title' => 'النشرة البريدية',
   'admin_newsletters_desc' => 'المشتركون واستيراد CSV وحملات البريد الإلكتروني.',
-  'admin_wiki_title' => 'المعرفة',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'صفحات تعاونية ومراجعات.',
   'admin_albums_title' => 'الألبومات',
   'admin_albums_desc' => 'معرض عام ومزامنة اجتماعية.',

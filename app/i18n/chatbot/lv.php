@@ -33,6 +33,6 @@ return array (
   'scope' => 'Zināšanu apjoms',
   'scope_all' => 'Visi avoti',
   'scope_knowledge' => 'Zināšanu bāze',
-  'scope_articles' => 'Preces',
+  'scope_articles' => 'Raksti',
   'scope_library' => 'Bibliotēkas materiāli',
 );

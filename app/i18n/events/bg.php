@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'събития',
+  'module_public' => 'Публичен модул',
   'agenda_unavailable' => 'Дневният ред все още не е наличен.',
   'export' => 'Експортиране на календара',
   'calendar_load_error' => 'Интерактивният календар не може да се зареди.',

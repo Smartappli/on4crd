@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Viden - Administrering',
+  'title' => 'Wiki-administration',
   'new_page' => 'Ny side',
   'th_title' => 'Titel',
   'th_slug' => 'Snegl',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Handling',
   'edit' => 'Rediger',
   'empty' => 'Ingen sider.',
-  'layout' => 'Viden - Administrering',
-  'meta_desc' => 'Viden-sidestyring.',
+  'layout' => 'Wiki-administration',
+  'meta_desc' => 'Administrer Wiki-sider.',
 );

@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Uudised',
   'unavailable' => 'Uudised pole saadaval',
-  'latest_news' => 'Viimased uudised',
+  'latest_news' => 'Avalik moodul',
   'unknown_date' => 'Kuupäev teadmata',
   'latest_fallback_excerpt' => 'Tutvu viimaste uudistega klubi ja selle tegevuse kohta.',
   'default_section' => 'Uudised',

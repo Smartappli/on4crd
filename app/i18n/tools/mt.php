@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Kaxxa tal-għodda',
-  'tool_index' => 'Klassifikazzjoni ta\' għodod',
+  'tool_index' => 'Modulu pubbliku',
   'category_locators' => 'Landmarks u ġeolokalizzazzjoni',
   'category_conversions' => 'Konverżjonijiet tar-Radju',
   'category_antenna' => 'Antenni u propagazzjoni',

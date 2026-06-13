@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Veröffentlichungen und digitale Tools',
-      'body' => 'Inhalte, die auf der Website, im Wissen, in Nachrichten, Kleinanzeigen oder Bibliotheken eingereicht werden, müssen nützlich, korrekt und mit den Zwecken des Clubs kompatibel sein. Das Komitee kann bei Bedarf Inhalte moderieren, korrigieren oder entfernen.',
+      'body' => 'Inhalte, die auf der Website, im Wiki, in Nachrichten, Kleinanzeigen oder Bibliotheken eingereicht werden, müssen nützlich, korrekt und mit den Zwecken des Clubs kompatibel sein. Das Komitee kann bei Bedarf Inhalte moderieren, korrigieren oder entfernen.',
     ),
     5 => 
     array (

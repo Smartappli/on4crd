@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Album keresése cím vagy leírás alapján',
   'search' => 'Keresés',
   'reset' => 'Visszaállítás',
-  'gallery' => 'Galéria',
+  'gallery' => 'Tagi felület',
   'none' => 'Nincs elérhető nyilvános album',
   'for_search' => 'ehhez a kutatáshoz',
   'cover_alt' => 'album borítója',

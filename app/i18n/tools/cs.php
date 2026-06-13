@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Sada nástrojů',
-  'tool_index' => 'Klasifikace nástrojů',
+  'tool_index' => 'Veřejný modul',
   'category_locators' => 'Orientační body a geolokace',
   'category_conversions' => 'Rádiové konverze',
   'category_antenna' => 'Antény a šíření',

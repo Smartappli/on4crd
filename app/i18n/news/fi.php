@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Uutiset',
   'unavailable' => 'Uutisia ei saatavilla',
-  'latest_news' => 'Viimeisimmät uutiset',
+  'latest_news' => 'Julkinen moduuli',
   'unknown_date' => 'Päivämäärä tuntematon',
   'latest_fallback_excerpt' => 'Katso viimeisimmät uutiset klubista ja sen toiminnasta.',
   'default_section' => 'Uutiset',

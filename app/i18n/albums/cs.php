@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Vyhledejte album podle názvu nebo popisu',
   'search' => 'Hledat',
   'reset' => 'Resetovat',
-  'gallery' => 'Galerie',
+  'gallery' => 'Členská sekce',
   'none' => 'Nejsou k dispozici žádná veřejná alba',
   'for_search' => 'pro tento výzkum',
   'cover_alt' => 'obal alba',

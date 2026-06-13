@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Фин контрол на радио емисии, TTL, URL адреси и активиране.',
   'admin_newsletters_title' => 'Бюлетин',
   'admin_newsletters_desc' => 'Абонати, CSV импортиране и имейл кампании.',
-  'admin_wiki_title' => 'Знания',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Съвместни страници и ревизии.',
   'admin_albums_title' => 'Албуми',
   'admin_albums_desc' => 'Публична галерия и социална синхронизация.',

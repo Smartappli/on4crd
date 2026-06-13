@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'खोज रीसेट करें',
   'no_article_for_theme' => 'इस विषय के लिए कोई लेख उपलब्ध नहीं है.',
   'read_article' => 'आलेख पढ़ें',
-  'layout_title' => 'सामग्री',
+  'layout_title' => 'सदस्य क्षेत्र',
   'page' => 'पेज',
   'previous' => 'पहले का',
   'next' => 'अगला',

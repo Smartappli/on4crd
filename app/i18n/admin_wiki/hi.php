@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'ज्ञान प्रशासन',
+  'title' => 'Wiki प्रशासन',
   'new_page' => 'नया पेज',
   'th_title' => 'शीर्षक',
   'th_slug' => 'काउंटर',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'कार्रवाई',
   'edit' => 'संपादन करना',
   'empty' => 'कोई पेज नहीं.',
-  'layout' => 'ज्ञान प्रशासन',
-  'meta_desc' => 'विकि पृष्ठ प्रबंधित करें.',
+  'layout' => 'Wiki प्रशासन',
+  'meta_desc' => 'Wiki पृष्ठ प्रबंधित करें।',
 );

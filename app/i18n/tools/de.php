@@ -1,10 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
   'title' => 'Werkzeuge',
-  'tool_index' => 'Werkzeugübersicht',
+  'tool_index' => 'Öffentliches Modul',
   'category_locators' => 'Locatoren & Geolokalisierung',
   'category_conversions' => 'Funk-Umrechnungen',
   'category_antenna' => 'Antennen & Ausbreitung',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Gereedschapskist',
-  'tool_index' => 'Tools overzicht',
+  'tool_index' => 'Publieke module',
   'category_locators' => 'Locators & geolocatie',
   'category_conversions' => 'Radio conversies',
   'category_antenna' => 'Antennes & propagatie',

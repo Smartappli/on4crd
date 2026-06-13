@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Správa Znalosti',
+  'title' => 'Správa Wiki',
   'new_page' => 'Nová stránka',
   'th_title' => 'Názov',
   'th_slug' => 'Slimák',
@@ -10,6 +10,6 @@ return array (
   'th_action' => 'Akcia',
   'edit' => 'Upraviť',
   'empty' => 'Žiadne stránky.',
-  'layout' => 'Správa Znalosti',
-  'meta_desc' => 'Správa stránky Znalosti.',
+  'layout' => 'Správa Wiki',
+  'meta_desc' => 'Správa stránok Wiki.',
 );

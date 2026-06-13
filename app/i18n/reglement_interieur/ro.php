@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publicații și instrumente digitale',
-      'body' => 'Conținutul trimis pe site, Cunoștințe, știri, anunturi sau biblioteci trebuie să fie util, exact și compatibil cu scopurile clubului. Comitetul poate modera, corecta sau elimina conținut atunci când este necesar.',
+      'body' => 'Conținutul trimis pe site, Wiki, știri, anunturi sau biblioteci trebuie să fie util, exact și compatibil cu scopurile clubului. Comitetul poate modera, corecta sau elimina conținut atunci când este necesar.',
     ),
     5 => 
     array (

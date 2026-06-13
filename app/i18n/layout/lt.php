@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Prietaisų skydelis',
   'nav_wiki' => 'Žinios',
   'nav_gallery' => 'Nuotraukos',
-  'nav_articles' => 'Daiktai',
+  'nav_articles' => 'Straipsniai',
   'nav_library' => 'biblioteka',
   'nav_webotheque' => 'Žiniatinklio biblioteka',
   'nav_auctions' => 'Aukcionai',

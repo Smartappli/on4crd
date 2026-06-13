@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Søg',
-  'eyebrow' => 'Global søgning',
-  'lead' => 'Find hurtigt nyheder, artikler, Viden-sider, dokumenter, meddelelser og album.',
+  'eyebrow' => 'Offentligt modul',
+  'lead' => 'Find hurtigt nyheder, artikler, Wiki-sider, dokumenter, meddelelser og album.',
   'placeholder' => 'Indikator, nøgleord, tema, dokument...',
   'query_label' => 'Din søgning',
   'source_label' => 'Kilde',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Global søgning ON4CRD i webstedets indhold.',
   'source_all' => 'Alting',
   'source_news' => 'Nyheder',
-  'source_articles' => 'genstande',
-  'source_wiki' => 'Viden',
+  'source_articles' => 'Artikler',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Bibliotek',
   'source_classifieds' => 'Meddelelser',
   'source_albums' => 'Albums',

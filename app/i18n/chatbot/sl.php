@@ -33,6 +33,6 @@ return array (
   'scope' => 'Obseg znanja',
   'scope_all' => 'Vsi viri',
   'scope_knowledge' => 'Baza znanja',
-  'scope_articles' => 'Predmeti',
+  'scope_articles' => 'Članki',
   'scope_library' => 'Knjižnično gradivo',
 );

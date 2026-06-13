@@ -2,10 +2,10 @@
 declare(strict_types=1);
 
 return array (
-  'not_found' => 'Kunskapsidan hittades inte.',
+  'not_found' => 'Wikisidan hittades inte.',
   'edit' => 'Redigera',
-  'layout' => 'Kunskap',
-  'meta_desc' => 'Konsultation av en Kunskapida.',
+  'layout' => 'Wiki',
+  'meta_desc' => 'Konsultation av en Wikiida.',
   'history' => 'Historia',
   'no_revisions' => 'Inga tidigare revideringar.',
 );

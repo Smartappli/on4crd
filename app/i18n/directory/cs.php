@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klub v číslech',
+  'club_numbers' => 'Veřejný modul',
   'intro' => 'Najděte viditelné členy klubu, jejich kódy, licence, QTH a kontaktní informace podle jejich preferencí ochrany soukromí.',
   'member_list' => 'Seznam členů',
   'visible_members' => 'Viditelné profily',

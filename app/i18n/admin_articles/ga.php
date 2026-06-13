@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Míreanna',
+  'layout' => 'Ailt',
   'meta_desc' => 'Riarachán agus foilsiú altanna láithreáin.',
   'ok_saved' => 'Airteagal sábháilte.',
   'err_invalid_category' => 'Catagóir neamhbhailí.',

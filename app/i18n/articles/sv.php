@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Återställ sökning',
   'no_article_for_theme' => 'Inga artiklar tillgängliga för detta ämne.',
   'read_article' => 'Läs artikeln',
-  'layout_title' => 'Föremål',
+  'layout_title' => 'Medlemsområde',
   'page' => 'Sida',
   'previous' => 'Föregående',
   'next' => 'Nästa',

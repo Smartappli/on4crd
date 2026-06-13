@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Λεπτός έλεγχος ραδιοφωνικών ροών, TTL, διευθύνσεων URL και ενεργοποίησης.',
   'admin_newsletters_title' => 'Ενημερωτικό δελτίο',
   'admin_newsletters_desc' => 'Συνδρομητές, εισαγωγές CSV και καμπάνιες ηλεκτρονικού ταχυδρομείου.',
-  'admin_wiki_title' => 'Γνώσεις',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Συνεργατικές σελίδες και αναθεωρήσεις.',
   'admin_albums_title' => 'Άλμπουμ',
   'admin_albums_desc' => 'Δημόσια γκαλερί και κοινωνικός συγχρονισμός.',

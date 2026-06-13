@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Nyheter',
   'unavailable' => 'Nyheter inte tillgängliga',
-  'latest_news' => 'Senaste nyheterna',
+  'latest_news' => 'Offentlig modul',
   'unknown_date' => 'Datum okänt',
   'latest_fallback_excerpt' => 'Kolla in de senaste nyheterna om klubben och dess verksamhet.',
   'default_section' => 'Nyheter',

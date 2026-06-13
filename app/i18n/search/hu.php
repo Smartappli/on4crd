@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Keresés',
-  'eyebrow' => 'Globális keresés',
-  'lead' => 'Gyorsan kereshet híreket, cikkeket, Tudásoldalakat, dokumentumokat, közleményeket és albumokat.',
+  'eyebrow' => 'Nyilvános modul',
+  'lead' => 'Gyorsan kereshet híreket, cikkeket, Wikioldalakat, dokumentumokat, közleményeket és albumokat.',
   'placeholder' => 'Mutató, kulcsszó, téma, dokumentum...',
   'query_label' => 'A keresésed',
   'source_label' => 'Forrás',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Globális keresés ON4CRD a webhely tartalmában.',
   'source_all' => 'Mindent',
   'source_news' => 'Hírek',
-  'source_articles' => 'Tételek',
-  'source_wiki' => 'Tudás',
+  'source_articles' => 'Cikkek',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Könyvtár',
   'source_classifieds' => 'Közlemények',
   'source_albums' => 'Albumok',

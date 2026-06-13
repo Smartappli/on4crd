@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Üksused',
+  'layout' => 'Artiklid',
   'meta_desc' => 'Saidi artiklite haldamine ja avaldamine.',
   'ok_saved' => 'Artikkel salvestatud.',
   'err_invalid_category' => 'Kehtetu kategooria.',

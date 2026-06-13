@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Hľadať',
-  'eyebrow' => 'Globálne vyhľadávanie',
-  'lead' => 'Rýchlo vyhľadajte novinky, články, Znalosti stránky, dokumenty, oznámenia a albumy.',
+  'eyebrow' => 'Verejný modul',
+  'lead' => 'Rýchlo vyhľadajte novinky, články, Wiki stránky, dokumenty, oznámenia a albumy.',
   'placeholder' => 'Indikátor, kľúčové slovo, téma, dokument...',
   'query_label' => 'Vaše hľadanie',
   'source_label' => 'Zdroj',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Globálne vyhľadávanie ON4CRD v obsahu stránky.',
   'source_all' => 'Všetko',
   'source_news' => 'Správy',
-  'source_articles' => 'Položky',
-  'source_wiki' => 'Znalosti',
+  'source_articles' => 'Články',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Knižnica',
   'source_classifieds' => 'Oznamy',
   'source_albums' => 'Albumy',

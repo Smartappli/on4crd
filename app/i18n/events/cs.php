@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Události',
+  'module_public' => 'Veřejný modul',
   'agenda_unavailable' => 'Agenda zatím není k dispozici.',
   'export' => 'Exportovat kalendář',
   'calendar_load_error' => 'Interaktivní kalendář nelze načíst.',

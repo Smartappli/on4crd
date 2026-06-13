@@ -33,6 +33,6 @@ return array (
   'scope' => 'Πεδίο γνώσεων',
   'scope_all' => 'Όλες οι πηγές',
   'scope_knowledge' => 'Γνωσιακή βάση',
-  'scope_articles' => 'Είδη',
+  'scope_articles' => 'Άρθρα',
   'scope_library' => 'Υλικό βιβλιοθήκης',
 );

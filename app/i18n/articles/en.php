@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Reset search',
   'no_article_for_theme' => 'No articles available for this theme.',
   'read_article' => 'Read article',
-  'layout_title' => 'Articles',
+  'layout_title' => 'Member Area',
   'page' => 'Page',
   'previous' => 'Previous',
   'next' => 'Next',

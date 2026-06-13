@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Meklēt',
-  'eyebrow' => 'Globālā meklēšana',
-  'lead' => 'Ātri atrodiet ziņas, rakstus, Zināšanas lapas, dokumentus, paziņojumus un albumus.',
+  'eyebrow' => 'Publisks modulis',
+  'lead' => 'Ātri atrodiet ziņas, rakstus, Wiki lapas, dokumentus, paziņojumus un albumus.',
   'placeholder' => 'Indikators, atslēgvārds, tēma, dokuments...',
   'query_label' => 'Jūsu meklēšana',
   'source_label' => 'Avots',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Globālā meklēšana ON4CRD vietnes saturā.',
   'source_all' => 'Viss',
   'source_news' => 'Jaunumi',
-  'source_articles' => 'Preces',
-  'source_wiki' => 'Zināšanas',
+  'source_articles' => 'Raksti',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Bibliotēka',
   'source_classifieds' => 'Paziņojumi',
   'source_albums' => 'Albumi',

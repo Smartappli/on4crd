@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Novice',
   'unavailable' => 'Novice niso na voljo',
-  'latest_news' => 'Zadnje novice',
+  'latest_news' => 'Javni modul',
   'unknown_date' => 'Datum neznan',
   'latest_fallback_excerpt' => 'Oglejte si najnovejše novice o klubu in njegovih dejavnostih.',
   'default_section' => 'Novice',

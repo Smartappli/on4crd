@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Hírek',
   'unavailable' => 'A hírek nem érhetők el',
-  'latest_news' => 'Friss hírek',
+  'latest_news' => 'Nyilvános modul',
   'unknown_date' => 'Ismeretlen dátum',
   'latest_fallback_excerpt' => 'Tekintse meg a legfrissebb híreket a klubról és tevékenységéről.',
   'default_section' => 'Hírek',

@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Zoekopdracht resetten',
   'no_article_for_theme' => 'Geen artikelen beschikbaar voor dit thema.',
   'read_article' => 'Artikel lezen',
-  'layout_title' => 'Artikels',
+  'layout_title' => 'Ledengedeelte',
   'page' => 'Pagina',
   'previous' => 'Vorige',
   'next' => 'Volgende',

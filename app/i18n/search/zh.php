@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => '搜索',
-  'eyebrow' => '全站搜索',
-  'lead' => '快速查找新闻、文章、知识 页面、文档、广告和相册。',
+  'eyebrow' => '公共模块',
+  'lead' => '快速查找新闻、文章、Wiki 页面、文档、广告和相册。',
   'placeholder' => '呼号、关键词、主题、文档...',
   'query_label' => '搜索内容',
   'source_label' => '来源',
@@ -21,7 +21,7 @@ return array (
   'source_all' => '全部',
   'source_news' => '新闻',
   'source_articles' => '文章',
-  'source_wiki' => '知识',
+  'source_wiki' => 'Wiki',
   'source_library' => '资料库',
   'source_classifieds' => '广告',
   'source_albums' => '相册',

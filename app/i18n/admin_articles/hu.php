@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Tételek',
+  'layout' => 'Cikkek',
   'meta_desc' => 'Weboldal cikkeinek adminisztrációja és publikálása.',
   'ok_saved' => 'Cikk mentve.',
   'err_invalid_category' => 'Érvénytelen kategória.',

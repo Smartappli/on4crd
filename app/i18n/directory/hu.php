@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'A klub számokban',
+  'club_numbers' => 'Nyilvános modul',
   'intro' => 'Keresse meg a látható klubtagokat, kódjaikat, licenceiket, QTH-t és kapcsolatfelvételi adatait az adatvédelmi beállításaik szerint.',
   'member_list' => 'Tagok listája',
   'visible_members' => 'Látható profilok',

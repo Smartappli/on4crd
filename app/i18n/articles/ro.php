@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Resetați căutarea',
   'no_article_for_theme' => 'Nu există articole disponibile pentru acest subiect.',
   'read_article' => 'Citiți articolul',
-  'layout_title' => 'Articole',
+  'layout_title' => 'Spațiu membri',
   'page' => 'Pagină',
   'previous' => 'Anterior',
   'next' => 'Urmând',

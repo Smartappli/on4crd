@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klubi lukuina',
+  'club_numbers' => 'Julkinen moduuli',
   'intro' => 'Löydä näkyvät klubin jäsenet, heidän koodinsa, lisenssinsä, QTH ja yhteystiedot heidän yksityisyysasetustensa mukaan.',
   'member_list' => 'Lista jäsenistä',
   'visible_members' => 'Näkyvät profiilit',

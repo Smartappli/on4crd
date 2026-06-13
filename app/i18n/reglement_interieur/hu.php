@@ -7,7 +7,7 @@ return array (
   'body' => 'Jelen szabályzat határozza meg az {club_name} által kezelt tagokra, tevékenységekre és terekre vonatkozó működési, részvételi és magatartási szabályokat.',
   'updated_at_label' => 'Utoljára frissítve',
   'updated_at' => '2026-06-05',
-  'status_label' => '?llapot',
+  'status_label' => 'Állapot',
   'status' => 'A tervezet bizottsági jóváhagyásra vár',
   'contact_label' => 'Klub kapcsolattartó',
   'related_pages_title' => 'Kapcsolódó oldalak',
@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Kiadványok és digitális eszközök',
-      'body' => 'Az oldalra, Tudásre, hírekre, apróhirdetésekre vagy könyvtárakra beküldött tartalomnak hasznosnak, pontosnak és a klub céljaival összeegyeztethetőnek kell lennie. A bizottság szükség esetén moderálhat, javíthat vagy eltávolíthat tartalmat.',
+      'body' => 'Az oldalra, Wikire, hírekre, apróhirdetésekre vagy könyvtárakra beküldött tartalomnak hasznosnak, pontosnak és a klub céljaival összeegyeztethetőnek kell lennie. A bizottság szükség esetén moderálhat, javíthat vagy eltávolíthat tartalmat.',
     ),
     5 => 
     array (

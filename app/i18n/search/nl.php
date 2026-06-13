@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Zoeken',
-  'eyebrow' => 'Globaal zoeken',
-  'lead' => 'Vind snel nieuws, artikels, Kennispagina’s, documenten, advertenties en albums.',
+  'eyebrow' => 'Publieke module',
+  'lead' => 'Vind snel nieuws, artikels, Wikipagina’s, documenten, advertenties en albums.',
   'placeholder' => 'Roepnaam, trefwoord, thema, document...',
   'query_label' => 'Uw zoekopdracht',
   'source_label' => 'Bron',
@@ -20,8 +20,8 @@ return array (
   'meta_desc' => 'Globale ON4CRD-zoekfunctie in de site-inhoud.',
   'source_all' => 'Alles',
   'source_news' => 'Nieuws',
-  'source_articles' => 'Artikels',
-  'source_wiki' => 'Kennis',
+  'source_articles' => 'Artikelen',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Bibliotheek',
   'source_classifieds' => 'Advertenties',
   'source_albums' => 'Albums',

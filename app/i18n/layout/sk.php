@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -12,7 +11,7 @@ return array (
   'nav_dashboard' => 'Prehľad',
   'nav_wiki' => 'Znalosti',
   'nav_gallery' => 'Fotografie',
-  'nav_articles' => 'Položky',
+  'nav_articles' => 'Články',
   'nav_library' => 'Knižnica',
   'nav_webotheque' => 'Webová knižnica',
   'nav_auctions' => 'Aukcie',

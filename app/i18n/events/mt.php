@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Avvenimenti',
+  'module_public' => 'Modulu pubbliku',
   'agenda_unavailable' => 'L-aġenda għadha mhix disponibbli.',
   'export' => 'Esporta l-kalendarju',
   'calendar_load_error' => 'Ma jistax tagħbija kalendarju interattiv.',

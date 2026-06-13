@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'A rádiócsatornák, a TTL, az URL-ek és az aktiválás finom vezérlése.',
   'admin_newsletters_title' => 'Hírlevél',
   'admin_newsletters_desc' => 'Előfizetők, CSV import és e-mail kampányok.',
-  'admin_wiki_title' => 'Tudás',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Együttműködő oldalak és átdolgozások.',
   'admin_albums_title' => 'Albumok',
   'admin_albums_desc' => 'Nyilvános galéria és közösségi szinkronizálás.',

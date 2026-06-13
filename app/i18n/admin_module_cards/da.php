@@ -32,7 +32,7 @@ return array (
   'admin_live_feeds_desc' => 'Fin kontrol af radiofeeds, TTL, URL\'er og aktivering.',
   'admin_newsletters_title' => 'Nyhedsbrev',
   'admin_newsletters_desc' => 'Abonnenter, CSV import og e-mail-kampagner.',
-  'admin_wiki_title' => 'Viden',
+  'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Samarbejdssider og revisioner.',
   'admin_albums_title' => 'Albums',
   'admin_albums_desc' => 'Offentligt galleri og social sync.',

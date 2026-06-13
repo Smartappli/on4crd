@@ -33,6 +33,6 @@ return array (
   'scope' => 'Обхват на познанието',
   'scope_all' => 'Всички източници',
   'scope_knowledge' => 'База знания',
-  'scope_articles' => 'Предмети',
+  'scope_articles' => 'Статии',
   'scope_library' => 'Библиотечни материали',
 );

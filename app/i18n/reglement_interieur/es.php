@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Publicaciones y herramientas digitales.',
-      'body' => 'El contenido enviado al sitio, Conocimientos, noticias, clasificados o bibliotecas debe ser útil, preciso y compatible con los propósitos del club. El comité podrá moderar, corregir o eliminar contenidos cuando sea necesario.',
+      'body' => 'El contenido enviado al sitio, Wiki, noticias, clasificados o bibliotecas debe ser útil, preciso y compatible con los propósitos del club. El comité podrá moderar, corregir o eliminar contenidos cuando sea necesario.',
     ),
     5 => 
     array (

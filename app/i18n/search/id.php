@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Pencarian',
-  'eyebrow' => 'Pencarian global',
-  'lead' => 'Temukan berita, artikel, halaman Pengetahuan, dokumen, iklan, dan album dengan cepat.',
+  'eyebrow' => 'Modul publik',
+  'lead' => 'Temukan berita, artikel, halaman Wiki, dokumen, iklan, dan album dengan cepat.',
   'placeholder' => 'Callsign, kata kunci, topik, dokumen...',
   'query_label' => 'Pencarian Anda',
   'source_label' => 'Sumber',
@@ -21,7 +21,7 @@ return array (
   'source_all' => 'Semua',
   'source_news' => 'Berita',
   'source_articles' => 'Artikel',
-  'source_wiki' => 'Pengetahuan',
+  'source_wiki' => 'Wiki',
   'source_library' => 'Perpustakaan',
   'source_classifieds' => 'Iklan',
   'source_albums' => 'Album',

@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'অনুসন্ধান রিসেট করুন',
   'no_article_for_theme' => 'এই থিম জন্য কোন নিবন্ধ উপলব্ধ.',
   'read_article' => 'নিবন্ধ পড়ুন',
-  'layout_title' => 'প্রবন্ধ',
+  'layout_title' => 'সদস্য এলাকা',
   'page' => 'পাতা',
   'previous' => 'আগের',
   'next' => 'পরবর্তী',

@@ -14,7 +14,7 @@ return array (
   'reset_search' => '検索をリセットする',
   'no_article_for_theme' => 'このテーマに該当する記事はありません。',
   'read_article' => '記事を読む',
-  'layout_title' => '記事',
+  'layout_title' => 'メンバーエリア',
   'page' => 'ページ',
   'previous' => '前の',
   'next' => '次',

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'layout' => 'Предмети',
+  'layout' => 'Статии',
   'meta_desc' => 'Администриране и публикуване на статии в сайта.',
   'ok_saved' => 'Статията е запазена.',
   'err_invalid_category' => 'Невалидна категория.',

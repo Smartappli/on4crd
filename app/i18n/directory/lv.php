@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'Klubs skaitļos',
+  'club_numbers' => 'Publisks modulis',
   'intro' => 'Atrodiet redzamos kluba biedrus, viņu kodus, licences, QTH un kontaktinformāciju atbilstoši viņu privātuma vēlmēm.',
   'member_list' => 'Dalībnieku saraksts',
   'visible_members' => 'Redzamie profili',

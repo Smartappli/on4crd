@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Iš naujo nustatyti paiešką',
   'no_article_for_theme' => 'Nėra straipsnių šia tema.',
   'read_article' => 'Skaityti straipsnį',
-  'layout_title' => 'Daiktai',
+  'layout_title' => 'Narių sritis',
   'page' => 'Puslapis',
   'previous' => 'Ankstesnis',
   'next' => 'Kitas',

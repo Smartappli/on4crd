@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Nieuws',
   'unavailable' => 'Nieuws niet beschikbaar',
-  'latest_news' => 'Laatste nieuws',
+  'latest_news' => 'Publieke module',
   'unknown_date' => 'Onbekende datum',
   'latest_fallback_excerpt' => 'Lees de laatste berichten van de club en zijn activiteiten.',
   'default_section' => 'Nieuws',

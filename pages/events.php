@@ -288,7 +288,7 @@ ob_start();
 ?>
 <section class="page-hero">
     <div>
-        <p class="eyebrow events-hero-title"><?= e('Module public') ?></p>
+        <p class="eyebrow events-hero-title"><?= e((string) ($t['module_public'] ?? 'Module public')) ?></p>
         <h1><?= e('Agenda ON4CRD') ?></h1>
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>

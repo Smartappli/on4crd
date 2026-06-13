@@ -7,7 +7,7 @@ return array (
   'body' => 'Sainíonn na rialacháin seo na rialacha oibriúcháin, rannpháirtíochta agus iompair is infheidhme maidir le comhaltaí, gníomhaíochtaí agus spásanna arna mbainistiú ag {club_name}.',
   'updated_at_label' => 'Nuashonraithe is déanaí',
   'updated_at' => '2026-06-05',
-  'status_label' => 'St?das',
+  'status_label' => 'Stádas',
   'status' => 'Dréacht ar feitheamh ceadú an choiste',
   'contact_label' => 'Teagmháil club',
   'related_pages_title' => 'Leathanaigh ghaolmhara',
@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Foilseacháin agus uirlisí digiteacha',
-      'body' => 'Caithfidh ábhar a chuirtear isteach ar an suíomh, Eolas, nuacht, fógraí rangaithe nó leabharlanna a bheith úsáideach, cruinn agus ag luí le cuspóirí an chlub. Féadfaidh an coiste ábhar a mhaolú, a cheartú nó a bhaint nuair is gá.',
+      'body' => 'Caithfidh ábhar a chuirtear isteach ar an suíomh, Wiki, nuacht, fógraí rangaithe nó leabharlanna a bheith úsáideach, cruinn agus ag luí le cuspóirí an chlub. Féadfaidh an coiste ábhar a mhaolú, a cheartú nó a bhaint nuair is gá.',
     ),
     5 => 
     array (

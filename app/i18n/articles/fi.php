@@ -14,7 +14,7 @@ return array (
   'reset_search' => 'Nollaa haku',
   'no_article_for_theme' => 'Tästä aiheesta ei ole saatavilla artikkeleita.',
   'read_article' => 'Lue artikkeli',
-  'layout_title' => 'Tuotteet',
+  'layout_title' => 'Jäsenalue',
   'page' => 'Sivu',
   'previous' => 'Edellinen',
   'next' => 'Seuraavaksi',

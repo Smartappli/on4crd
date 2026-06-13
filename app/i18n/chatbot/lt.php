@@ -33,6 +33,6 @@ return array (
   'scope' => 'Žinių apimtis',
   'scope_all' => 'Visi šaltiniai',
   'scope_knowledge' => 'Žinių bazė',
-  'scope_articles' => 'Daiktai',
+  'scope_articles' => 'Straipsniai',
   'scope_library' => 'Bibliotekos medžiaga',
 );

@@ -11,7 +11,7 @@ return array (
   'search_placeholder' => 'Cari album berdasarkan judul atau deskripsi',
   'search' => 'Cari',
   'reset' => 'Mengatur ulang',
-  'gallery' => 'Galeri',
+  'gallery' => 'Area Anggota',
   'none' => 'Tidak ada album publik',
   'for_search' => 'untuk pencarian ini',
   'cover_alt' => 'Sampul album',

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'club_numbers' => 'An club i bhfigiúirí',
+  'club_numbers' => 'Modúl poiblí',
   'intro' => 'Aimsigh baill infheicthe an chlub, a gcóid, a gceadúnais, QTH agus faisnéis teagmhála de réir a roghanna príobháideachais.',
   'member_list' => 'Liosta ball',
   'visible_members' => 'Próifílí infheicthe',

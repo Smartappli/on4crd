@@ -45,7 +45,7 @@ return array (
     4 => 
     array (
       'title' => 'Pubblicazioni e strumenti digitali',
-      'body' => 'I contenuti inviati al sito, alla Conoscenze, alle notizie, agli annunci o alle biblioteche devono essere utili, accurati e compatibili con gli scopi del club. Il comitato può moderare, correggere o rimuovere i contenuti quando necessario.',
+      'body' => 'I contenuti inviati al sito, alla Wiki, alle notizie, agli annunci o alle biblioteche devono essere utili, accurati e compatibili con gli scopi del club. Il comitato può moderare, correggere o rimuovere i contenuti quando necessario.',
     ),
     5 => 
     array (

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Škatla z orodjem',
-  'tool_index' => 'Razvrstitev orodij',
+  'tool_index' => 'Javni modul',
   'category_locators' => 'Znamenitosti in geolokacija',
   'category_conversions' => 'Radijske pretvorbe',
   'category_antenna' => 'Antene in širjenje',
