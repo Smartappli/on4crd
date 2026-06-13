@@ -22,6 +22,10 @@
   color: white;
 }
 
+[data-route="members_library"] .member-module-hero .help {
+  color: #fff;
+}
+
 [data-route="members_library"] .members-library-hero-side {
   display: grid;
   gap: .85rem;
