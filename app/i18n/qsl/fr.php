@@ -56,7 +56,7 @@ return array (
   'preview_dynamic' => 'Aperçu dynamique selon les champs du formulaire.',
   'adif_processing' => 'Traitement des fichiers ADIF en cours…',
   'adif_import_error' => 'Échec de l’import ADIF.',
-  'adif_imported_status' => '{imported} QSO importe(s) depuis {files} fichier(s).',
+  'adif_imported_status' => '{imported} QSO importé(s) depuis {files} fichier(s).',
   'design_help' => 'Choisissez un type de fond. Le formulaire s’adapte automatiquement et l’aperçu se met à jour en direct.',
   'label_solid' => 'Couleur unie',
   'label_palette' => 'Palette prédéfinie',
