@@ -52,11 +52,11 @@
 
 [data-route="webotheque"] .webotheque-hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(92px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: .75rem;
   align-content: center;
   justify-self: end;
-  min-width: min(100%, 25rem);
+  min-width: min(100%, 32rem);
 }
 
 [data-route="webotheque"] .webotheque-hero-stats article {
