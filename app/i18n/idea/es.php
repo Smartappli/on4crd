@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+return array (
+  'method_not_allowed' => 'Método no permitido.',
+  'title' => 'Compartir una idea',
+  'intro' => 'Envía una idea, sugerencia o mejora al comité.',
+  'close' => 'Cerrar',
+  'name_label' => 'Tu nombre',
+  'name_placeholder' => 'Nombre e indicativo, si corresponde',
+  'email_label' => 'Tu correo electrónico',
+  'email_placeholder' => 'tu@example.com',
+  'idea_title_label' => 'Título de la idea',
+  'idea_title_placeholder' => 'Resume tu idea',
+  'message_label' => 'Tu idea',
+  'message_placeholder' => 'Describe tu idea, la necesidad y su utilidad para el club.',
+  'submit' => 'Enviar idea',
+  'cancel' => 'Cancelar',
+  'sent' => 'Gracias, tu idea ha sido enviada al comité.',
+  'invalid' => 'Completa correctamente el formulario de idea.',
+  'send_error' => 'No se pudo enviar la idea. Inténtalo de nuevo más tarde.',
+  'email_subject' => 'Nueva idea para el comité ON4CRD',
+  'email_intro' => 'Nueva idea enviada desde el sitio ON4CRD:',
+);
