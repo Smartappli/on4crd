@@ -52,16 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $label = content_proposal_clean_single_line($proposalTitle, 160);
                 if ($label === '') {
-                    throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+                    throw new RuntimeException((string) $t['invalid']);
                 }
                 $code = member_library_category_slug($label);
                 db()->prepare('INSERT INTO member_library_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                     ->execute([$code, $label]);
-                set_flash('success', 'Categorie creee et validee directement.');
+                set_flash('success', (string) $t['category_created_direct']);
                 redirect_url(route_url_clean('members_library', ['category' => $code]));
             }
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'category', $proposalTitle, $proposalSummary, $proposalContact);
-            content_proposal_notify_site((string) ($t['propose_category_subject'] ?? 'Library category proposal'), [
+            content_proposal_notify_site((string) $t['propose_category_subject'], [
                 'area' => 'members_library',
                 'proposal_type' => 'category',
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');
         }
 
@@ -86,10 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalStatus = $autoAccept ? 'accepted' : 'pending';
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalLink, $proposalStatus);
             if ($autoAccept) {
-                set_flash('success', 'Document valide directement. Ajoutez le fichier depuis l administration bibliotheque si necessaire.');
+                set_flash('success', (string) $t['document_validated_direct']);
                 redirect_url(route_url('members_library'));
             }
-            content_proposal_notify_site((string) ($t['propose_document_subject'] ?? 'Library document proposal'), [
+            content_proposal_notify_site((string) $t['propose_document_subject'], [
                 'area' => 'members_library',
                 'proposal_type' => 'content',
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
@@ -97,11 +97,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
                 'source_ref' => 'content_proposals#' . $proposalId,
             ]);
-            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');
         }
 
-        throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
+        throw new RuntimeException((string) $t['invalid']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
         redirect_url(route_url('members_library'));
@@ -189,8 +189,8 @@ if ($tag !== '') {
     $activeFiltersCount++;
 }
 $contactEmail = site_contact_email();
-$documentProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD'));
-$categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD'));
+$documentProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_document_subject']);
+$categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_category_subject']);
 
 $relatedByDocumentId = [];
 if ($documents !== []) {
@@ -273,8 +273,8 @@ ob_start();
                 </article>
             </div>
             <div class="members-library-hero-action">
-                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e($canManageLibrary ? 'Creer une categorie' : (string) ($t['propose_category'] ?? 'Proposer une categorie')) ?></a>
-                <a class="button" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e($canManageLibrary ? 'Valider un document' : (string) ($t['propose_document'] ?? 'Proposer un document')) ?></a>
+                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e($canManageLibrary ? (string) $t['create_category'] : (string) $t['propose_category']) ?></a>
+                <a class="button" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e($canManageLibrary ? (string) $t['validate_document'] : (string) $t['propose_document']) ?></a>
             </div>
         </div>
     </section>
@@ -283,21 +283,21 @@ ob_start();
         <div class="members-library-dialog-card">
             <div class="members-library-dialog-header">
                 <div>
-                    <p class="members-library-dialog-eyebrow"><?= e((string) ($t['category'] ?? 'Catégorie')) ?></p>
-                    <h2 id="members-library-category-title"><?= e($canManageLibrary ? 'Creer une categorie' : (string) ($t['propose_category'] ?? 'Proposer une categorie')) ?></h2>
-                    <p class="help"><?= e($canManageLibrary ? 'La categorie sera validee directement.' : (string) ($t['propose_category_intro'] ?? 'Indiquez la categorie a ajouter et son utilite pour la bibliotheque.')) ?></p>
+                    <p class="members-library-dialog-eyebrow"><?= e((string) $t['category']) ?></p>
+                    <h2 id="members-library-category-title"><?= e($canManageLibrary ? (string) $t['create_category'] : (string) $t['propose_category']) ?></h2>
+                    <p class="help"><?= e($canManageLibrary ? (string) $t['category_direct_help'] : (string) $t['propose_category_intro']) ?></p>
                 </div>
-                <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
+                <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_category_subject'] ?? 'Proposition de catégorie pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_category_body_intro'] ?? 'Proposition de catégorie pour la bibliothèque membres :')) ?>">
+            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_category_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_category">
-                <label><span><?= e((string) ($t['propose_category_name'] ?? 'Nom de la catégorie')) ?></span><input type="text" name="proposal_category" maxlength="160" required></label>
-                <label><span><?= e((string) ($t['propose_category_reason'] ?? 'Pourquoi ajouter cette catégorie ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
-                <label><span><?= e((string) ($t['proposal_contact'] ?? 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
+                <label><span><?= e((string) $t['propose_category_name']) ?></span><input type="text" name="proposal_category" maxlength="160" required></label>
+                <label><span><?= e((string) $t['propose_category_reason']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
                 <div class="members-library-dialog-actions">
-                    <button class="button" type="submit"><?= e($canManageLibrary ? 'Creer' : (string) ($t['proposal_submit'] ?? 'Envoyer la proposition')) ?></button>
-                    <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) ($t['proposal_cancel'] ?? 'Annuler')) ?></button>
+                    <button class="button" type="submit"><?= e($canManageLibrary ? (string) $t['create'] : (string) $t['proposal_submit']) ?></button>
+                    <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
                 </div>
             </form>
         </div>
@@ -307,23 +307,23 @@ ob_start();
         <div class="members-library-dialog-card">
             <div class="members-library-dialog-header">
                 <div>
-                    <p class="members-library-dialog-eyebrow"><?= e((string) ($t['document'] ?? 'Document')) ?></p>
-                    <h2 id="members-library-document-title"><?= e($canManageLibrary ? 'Valider un document' : (string) ($t['propose_document'] ?? 'Proposer un document')) ?></h2>
-                    <p class="help"><?= e($canManageLibrary ? 'La proposition sera marquee acceptee directement; ajoutez le fichier depuis l administration si necessaire.' : (string) ($t['propose_document_intro'] ?? 'Decrivez le document a ajouter a la bibliotheque membres.')) ?></p>
+                    <p class="members-library-dialog-eyebrow"><?= e((string) $t['document']) ?></p>
+                    <h2 id="members-library-document-title"><?= e($canManageLibrary ? (string) $t['validate_document'] : (string) $t['propose_document']) ?></h2>
+                    <p class="help"><?= e($canManageLibrary ? (string) $t['document_direct_help'] : (string) $t['propose_document_intro']) ?></p>
                 </div>
-                <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) ($t['modal_close'] ?? 'Fermer')) ?>">&times;</button>
+                <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_document_subject'] ?? 'Proposition de document pour la bibliothèque ON4CRD')) ?>" data-members-library-intro="<?= e((string) ($t['propose_document_body_intro'] ?? 'Proposition de document pour la bibliothèque membres :')) ?>">
+            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_document_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_document_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_document">
-                <label><span><?= e((string) ($t['propose_document_title'] ?? 'Titre du document')) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
-                <label><span><?= e((string) ($t['propose_document_category'] ?? 'Catégorie souhaitée')) ?></span><input type="text" name="proposal_category" maxlength="160"></label>
-                <label><span><?= e((string) ($t['propose_document_link'] ?? 'Lien ou source')) ?></span><input type="text" name="proposal_link" maxlength="500"></label>
-                <label><span><?= e((string) ($t['propose_document_description'] ?? 'Description')) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
-                <label><span><?= e((string) ($t['proposal_contact'] ?? 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
+                <label><span><?= e((string) $t['propose_document_title']) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
+                <label><span><?= e((string) $t['propose_document_category']) ?></span><input type="text" name="proposal_category" maxlength="160"></label>
+                <label><span><?= e((string) $t['propose_document_link']) ?></span><input type="text" name="proposal_link" maxlength="500"></label>
+                <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
+                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
                 <div class="members-library-dialog-actions">
-                    <button class="button" type="submit"><?= e($canManageLibrary ? 'Valider' : (string) ($t['proposal_submit'] ?? 'Envoyer la proposition')) ?></button>
-                    <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) ($t['proposal_cancel'] ?? 'Annuler')) ?></button>
+                    <button class="button" type="submit"><?= e($canManageLibrary ? (string) $t['validate'] : (string) $t['proposal_submit']) ?></button>
+                    <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
                 </div>
             </form>
         </div>
@@ -351,8 +351,8 @@ ob_start();
 
     <section class="members-library-layout">
         <aside class="members-library-index card">
-            <p class="members-library-index-title"><?= e((string) ($t['topics'] ?? 'Thematiques')) ?></p>
-            <nav class="members-library-category-list" aria-label="<?= e((string) ($t['topics'] ?? 'Thematiques')) ?>">
+            <p class="members-library-index-title"><?= e((string) $t['topics']) ?></p>
+            <nav class="members-library-category-list" aria-label="<?= e((string) $t['topics']) ?>">
                 <a class="members-library-category-item<?= $category === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
                     <span><?= e((string) $t['all_categories']) ?></span>
                     <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $categories)) ?></strong>
