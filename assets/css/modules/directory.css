@@ -27,6 +27,11 @@
   color: white;
 }
 
+[data-route="directory"] .directory-hero-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-width: min(100%, 34rem);
+}
+
 [data-route="directory"] .directory-hero .directory-hero-title,
 [data-route="directory"] .directory-hero .directory-hero-heading {
   color: white;
@@ -86,5 +91,10 @@
 @media (max-width: 640px) {
   .directory-grid {
     grid-template-columns: 1fr;
+  }
+
+  [data-route="directory"] .directory-hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-width: 0;
   }
 }

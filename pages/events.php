@@ -293,7 +293,7 @@ ob_start();
         <p class="help"><?= e($t['detail']) ?>, <?= e($t['month']) ?>, <?= e($t['week']) ?>, <?= e($t['list']) ?></p>
     </div>
     <div class="events-hero-actions">
-        <a class="button secondary" href="<?= e($proposalUrl) ?>" data-event-proposal-open aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($canManageEvents ? 'Creer un evenement' : $t['propose_event']) ?></a>
+        <a class="button secondary" href="<?= e($proposalUrl) ?>" data-event-proposal-open aria-haspopup="dialog" aria-controls="events-proposal-dialog"><?= e($canManageEvents ? 'Créer un événement' : $t['propose_event']) ?></a>
         <a class="button" href="<?= e(route_url('events', ['format' => 'ics'])) ?>"><?= e($t['export']) ?></a>
     </div>
 </section>
@@ -303,7 +303,7 @@ ob_start();
         <div class="events-proposal-dialog-header">
             <div>
                 <p class="events-hero-title"><?= e($t['calendar_name']) ?></p>
-                <h2 id="events-proposal-title"><?= e($canManageEvents ? 'Creer un evenement' : $t['propose_event']) ?></h2>
+                <h2 id="events-proposal-title"><?= e($canManageEvents ? 'Créer un événement' : $t['propose_event']) ?></h2>
                 <p class="help"><?= e($canManageEvents ? 'Votre evenement sera publie directement.' : $t['propose_event_intro']) ?></p>
             </div>
             <button class="events-proposal-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
