@@ -598,23 +598,21 @@ function render_webotheque_page(): void
         </section>
 
         <section class="webotheque-layout">
-            <?php if (count($categories) > 1): ?>
-                <aside class="card webotheque-domains-column">
-                    <p class="webotheque-domains-title"><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?></p>
-                    <nav class="webotheque-domains-list" aria-label="<?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?>">
-                        <a class="webotheque-domain-item<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search])) ?>"<?= $categoryFilter === '' ? ' aria-current="page"' : '' ?>>
-                            <span><?= e((string) $t['all_categories']) ?></span>
-                            <strong><?= (int) ($stats['total'] ?? 0) ?></strong>
+            <aside class="card webotheque-domains-column">
+                <p class="webotheque-domains-title"><?= e((string) ($t['topics'] ?? $t['category_field'])) ?></p>
+                <nav class="webotheque-domains-list" aria-label="<?= e((string) ($t['topics'] ?? $t['category_field'])) ?>">
+                    <a class="webotheque-domain-item<?= $categoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search])) ?>"<?= $categoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                        <span><?= e((string) $t['all_categories']) ?></span>
+                        <strong><?= (int) ($stats['total'] ?? 0) ?></strong>
+                    </a>
+                    <?php foreach ($categories as $code => $label): ?>
+                        <a class="webotheque-domain-item<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"<?= $categoryFilter === $code ? ' aria-current="page"' : '' ?>>
+                            <span><?= e((string) $label) ?></span>
+                            <strong><?= (int) ($stats['by_category'][$code] ?? 0) ?></strong>
                         </a>
-                        <?php foreach ($categories as $code => $label): ?>
-                            <a class="webotheque-domain-item<?= $categoryFilter === $code ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"<?= $categoryFilter === $code ? ' aria-current="page"' : '' ?>>
-                                <span><?= e((string) $label) ?></span>
-                                <strong><?= (int) ($stats['by_category'][$code] ?? 0) ?></strong>
-                            </a>
-                        <?php endforeach; ?>
-                    </nav>
-                </aside>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                </nav>
+            </aside>
 
             <section id="webotheque-list" class="webotheque-content">
                 <?php if ($links === []): ?>
