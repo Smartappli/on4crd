@@ -194,12 +194,11 @@ ob_start();
             <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/theme.css')) ?>">
             <link rel="stylesheet" href="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/palette.css')) ?>">
             <div id="admin-events-calendar" class="fullcalendar-theme" data-calendar-config="<?= e(json_encode($calendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>"></div>
-            <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) ?>"></script>
-            <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) ?>"></script>
-            <script src="<?= e($calendarLocaleAsset) ?>"></script>
+            <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) ?>" defer></script>
+            <script src="<?= e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) ?>" defer></script>
+            <script src="<?= e($calendarLocaleAsset) ?>" defer></script>
         <?php endif; ?>
     </section>
 </div>
 <?php
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);
-

@@ -497,9 +497,9 @@ $nextEventHtml = '<div class="home-events-planning rounded-2xl border border-sla
     . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/theme.css')) . '">'
     . '<link rel="stylesheet" href="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/palette.css')) . '">'
     . '<div class="fullcalendar-theme home-events-calendar" data-home-events-calendar data-calendar-config="' . e(json_encode($homeEventsCalendarConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '"></div>'
-    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) . '"></script>'
-    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) . '"></script>'
-    . '<script src="' . e($homeFullCalendarLocaleAsset) . '"></script>'
+    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/all.global.js')) . '" defer></script>'
+    . '<script src="' . e(asset_url('assets/vendor/fullcalendar/7.0.0-rc.2/themes/classic/global.js')) . '" defer></script>'
+    . '<script src="' . e($homeFullCalendarLocaleAsset) . '" defer></script>'
     . '</div>';
 
 $toolDayCta = trim((string) $homeI18n['spotlight_tool_day_cta']);
