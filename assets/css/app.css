@@ -1833,11 +1833,11 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 .qsl-hero-side {
   display: grid;
   gap: .75rem;
-  min-width: min(100%, 24rem);
+  min-width: min(100%, 32rem);
 }
 .qsl-hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: .75rem;
 }
 .qsl-hero-stats article {
