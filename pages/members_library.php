@@ -101,9 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'propose_document') {
             $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
             $proposalLink = (string) ($_POST['proposal_link'] ?? '');
+            $proposalCategory = member_library_category_slug((string) ($_POST['proposal_category'] ?? 'general'));
+            $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
             $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
             $proposalSummary = content_proposal_details_text([
-                (string) ($t['propose_document_category'] ?? 'Category') => (string) ($_POST['proposal_category'] ?? ''),
+                (string) ($t['propose_document_category'] ?? 'Category') => $proposalCategory,
+                (string) ($t['tags'] ?? 'Keywords') => $proposalTags,
                 (string) ($t['propose_document_link'] ?? 'Link or source') => $proposalLink,
                 (string) ($t['propose_document_description'] ?? 'Description') => (string) ($_POST['proposal_description'] ?? ''),
             ]);
@@ -397,7 +400,22 @@ ob_start();
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_document">
                 <label><span><?= e((string) $t['propose_document_title']) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
-                <label><span><?= e((string) $t['propose_document_category']) ?></span><input type="text" name="proposal_category" maxlength="160"></label>
+                <label>
+                    <span><?= e((string) $t['propose_document_category']) ?></span>
+                    <select name="proposal_category">
+                        <?php foreach ($categories as $proposalCategoryOption): ?>
+                            <?php
+                            $proposalCategoryCode = trim((string) ($proposalCategoryOption['category'] ?? ''));
+                            if ($proposalCategoryCode === '') {
+                                continue;
+                            }
+                            $proposalCategoryLabel = trim((string) ($proposalCategoryOption['label'] ?? $proposalCategoryCode));
+                            ?>
+                            <option value="<?= e($proposalCategoryCode) ?>"<?= $category === $proposalCategoryCode ? ' selected' : '' ?>><?= e($proposalCategoryLabel !== '' ? $proposalCategoryLabel : $proposalCategoryCode) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="proposal_tags" maxlength="255"></label>
                 <label><span><?= e((string) $t['propose_document_link']) ?></span><input type="text" name="proposal_link" maxlength="500"></label>
                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>

@@ -42,6 +42,8 @@ try {
 
     $name = $cleanLine((string) ($_POST['idea_name'] ?? ''), 160);
     $email = $cleanLine((string) ($_POST['idea_email'] ?? ''), 190);
+    $category = $cleanLine((string) ($_POST['idea_category'] ?? 'general'), 80);
+    $keywords = $cleanLine((string) ($_POST['idea_keywords'] ?? ''), 255);
     $title = $cleanLine((string) ($_POST['idea_title'] ?? ''), 190);
     $message = $cleanMessage((string) ($_POST['idea_message'] ?? ''), 4000);
 
@@ -53,6 +55,8 @@ try {
     $body = $t('email_intro', 'New idea sent from the ON4CRD website:') . "\n\n"
         . $t('name_label', 'Your name') . ': ' . $name . "\n"
         . $t('email_label', 'Your email') . ': ' . $email . "\n"
+        . $t('category_label', 'Topic') . ': ' . $category . "\n"
+        . $t('keywords_label', 'Keywords') . ': ' . $keywords . "\n"
         . $t('idea_title_label', 'Idea title') . ': ' . $title . "\n\n"
         . $t('message_label', 'Your idea') . ":\n" . $message . "\n";
     $headers = 'From: ON4CRD Website <no-reply@on4crd.be>' . "\r\n"

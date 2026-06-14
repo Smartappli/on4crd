@@ -36,16 +36,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
         $proposalDescription = (string) ($_POST['proposal_description'] ?? '');
+        $proposalTheme = (string) ($_POST['proposal_theme'] ?? 'general');
+        $proposalKeywords = (string) ($_POST['proposal_keywords'] ?? '');
         $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
         $title = content_proposal_clean_single_line($proposalTitle, 190);
         $description = content_proposal_clean_multiline($proposalDescription, 5000);
+        $theme = content_proposal_clean_single_line($proposalTheme, 80);
+        $keywords = content_proposal_clean_single_line($proposalKeywords, 255);
         $contact = content_proposal_clean_single_line($proposalContact, 220);
         if ($title === '') {
             throw new RuntimeException('Demande invalide.');
         }
         if (has_permission('albums.manage')) {
+            $albumDescription = trim($description . "\n\n" . content_proposal_details_text([
+                'Thematique' => $theme,
+                'Mots cles' => $keywords,
+            ]));
             db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, 1)')
-                ->execute([$title, $description !== '' ? $description : null]);
+                ->execute([$title, $albumDescription !== '' ? $albumDescription : null]);
             $albumId = (int) db()->lastInsertId();
             cache_forget('admin_albums_list_v2');
             cache_forget('admin_albums_photos_total_v2');
@@ -54,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_url(route_url('album', ['id' => $albumId]));
         }
         $summary = content_proposal_details_text([
+            'Thematique' => $theme,
+            'Mots cles' => $keywords,
             'Description' => $description,
         ]);
         $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, $contact);
@@ -145,6 +155,14 @@ if ($user !== null) {
 }
 $showAlbumProposalForm = $user !== null && (string) ($_GET['propose_album'] ?? '') === '1';
 $albumProposalUrl = $user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums')]);
+$albumThemeOptions = [
+    'general' => 'General',
+    'activites' => 'Activites club',
+    'contests' => 'Contests',
+    'formations' => 'Formations',
+    'sorties' => 'Sorties',
+    'radio' => 'Radioamateur',
+];
 
 ob_start();
 ?>
@@ -184,6 +202,15 @@ ob_start();
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_album">
             <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
+            <label>
+                <span>Thematique</span>
+                <select name="proposal_theme">
+                    <?php foreach ($albumThemeOptions as $albumThemeCode => $albumThemeLabel): ?>
+                        <option value="<?= e($albumThemeCode) ?>"><?= e($albumThemeLabel) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+            <label><span>Mots cles</span><input type="text" name="proposal_keywords" maxlength="255"></label>
             <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
             <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">

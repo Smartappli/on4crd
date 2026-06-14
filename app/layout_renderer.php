@@ -571,6 +571,19 @@ function render_layout_impl(string $content, string $title = ''): string
     unset($returnQuery['route'], $returnQuery['_csrf']);
     $returnRoute = preg_match('/^[a-z0-9_]+$/', $currentRoute) === 1 ? $currentRoute : 'home';
     $currentReturnUrl = route_url_clean($returnRoute !== '' ? $returnRoute : 'home', $returnQuery);
+    $ideaCategoryOptions = [
+        'general' => 'General',
+        'activity' => 'Activite club',
+        'training' => 'Formation',
+        'technical' => 'Technique',
+        'website' => 'Site web',
+        'equipment' => 'Materiel',
+        'event' => 'Evenement',
+    ];
+    $ideaCategoryOptionHtml = '';
+    foreach ($ideaCategoryOptions as $ideaCategoryCode => $ideaCategoryLabel) {
+        $ideaCategoryOptionHtml .= '<option value="' . e($ideaCategoryCode) . '">' . e($ideaCategoryLabel) . '</option>';
+    }
     $ideaDialogHtml = '<dialog id="idea-dialog" class="idea-dialog" aria-labelledby="idea-dialog-title" aria-describedby="idea-dialog-intro">'
         . '<div class="idea-dialog-card">'
         . '<div class="idea-dialog-header"><div>'
@@ -581,6 +594,10 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<form class="idea-form" method="post" action="' . e(route_url('idea_submit')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_url" value="' . e($currentReturnUrl) . '">'
+        . '<div class="idea-form-grid">'
+        . '<label for="idea-category"><span>' . e($ideaText('category_label', 'Thematique')) . '</span><select id="idea-category" name="idea_category">' . $ideaCategoryOptionHtml . '</select></label>'
+        . '<label for="idea-keywords"><span>' . e($ideaText('keywords_label', 'Mots cles')) . '</span><input id="idea-keywords" type="text" name="idea_keywords" maxlength="255" placeholder="' . e($ideaText('keywords_placeholder', 'ex: antennes, formation')) . '"></label>'
+        . '</div>'
         . '<div class="idea-form-grid">'
         . '<label for="idea-name"><span>' . e($ideaText('name_label', 'Votre nom')) . '</span><input id="idea-name" type="text" name="idea_name" maxlength="160" autocomplete="name" required placeholder="' . e($ideaText('name_placeholder', 'Nom et indicatif, si applicable')) . '"></label>'
         . '<label for="idea-email"><span>' . e($ideaText('email_label', 'Votre e-mail')) . '</span><input id="idea-email" type="email" name="idea_email" maxlength="190" autocomplete="email" required placeholder="' . e($ideaText('email_placeholder', 'vous@example.com')) . '"></label>'
