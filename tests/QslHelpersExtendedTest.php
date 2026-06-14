@@ -158,7 +158,7 @@ ADIF;
         self::assertSame('ON4CRD', $values[0]);
         self::assertSame('ON7ZB', $values[1]);
         self::assertSame('20260425', $values[4]);
-        self::assertSame('09:05', $values[5]);
+        self::assertSame('0905', $values[5]);
         self::assertSame('20M', $values[6]);
         self::assertSame('SSB', $values[7]);
         self::assertSame('&lt;TNX&gt;', $values[10]);
