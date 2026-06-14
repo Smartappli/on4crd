@@ -56,6 +56,19 @@ final class RouterContractTest extends TestCase
         return $values;
     }
 
+    public function testLoggedInToolbarShowsMembershipStatusBadge(): void
+    {
+        $layout = file_get_contents(__DIR__ . '/../app/layout_renderer.php');
+        self::assertIsString($layout);
+
+        self::assertStringContainsString('$membershipBadgeHtml = \'\';', $layout);
+        self::assertStringContainsString('if ($user !== null) {', $layout);
+        self::assertStringContainsString('En ordre de cotisation', $layout);
+        self::assertStringContainsString('toolbar-membership-row', $layout);
+        self::assertStringContainsString('membership-status-badge', $layout);
+        self::assertStringContainsString('. $membershipBadgeHtml', $layout);
+    }
+
     public function testEachSwitchCaseReferencesAnExistingPageFile(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
