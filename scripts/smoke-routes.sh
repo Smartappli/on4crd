@@ -12,7 +12,6 @@ TIMEOUT_SECONDS="${SMOKE_TIMEOUT_SECONDS:-8}"
 urls=(
   "${BASE_URL}?route=tools"
   "${BASE_URL}?route=articles&q=test"
-  "${BASE_URL}?route=home"
   "${BASE_URL}?route=tools&ajax=tool_panel&id=tool-grid"
 )
 

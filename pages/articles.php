@@ -110,18 +110,28 @@ if (mb_strlen($search) > 120) {
 }
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
-$themeCounts = cache_remember('articles_theme_counts_v1', 180, static function (): array {
-    $counts = [];
-    $rows = db()->query('SELECT category, COUNT(*) AS total FROM articles WHERE status = "published" GROUP BY category')->fetchAll() ?: [];
-    foreach ($rows as $row) {
-        $theme = slugify((string) ($row['category'] ?? 'autres'));
-        if ($theme === '') {
-            $theme = 'autres';
-        }
-        $counts[$theme] = (int) ($row['total'] ?? 0);
+$articlesTableAvailable = table_exists('articles');
+$themeCounts = [];
+if ($articlesTableAvailable) {
+    try {
+        $themeCounts = cache_remember('articles_theme_counts_v1', 180, static function (): array {
+            $counts = [];
+            $rows = db()->query('SELECT category, COUNT(*) AS total FROM articles WHERE status = "published" GROUP BY category')->fetchAll() ?: [];
+            foreach ($rows as $row) {
+                $theme = slugify((string) ($row['category'] ?? 'autres'));
+                if ($theme === '') {
+                    $theme = 'autres';
+                }
+                $counts[$theme] = (int) ($row['total'] ?? 0);
+            }
+            return $counts;
+        });
+        $themeCounts = is_array($themeCounts) ? $themeCounts : [];
+    } catch (Throwable) {
+        $themeCounts = [];
+        $articlesTableAvailable = false;
     }
-    return $counts;
-});
+}
 foreach (array_keys($themeCounts) as $themeCode) {
     if (!isset($themeMeta[$themeCode])) {
         $themeMeta[$themeCode] = ['label' => ucwords(str_replace('-', ' ', $themeCode)), 'image' => null];
@@ -145,22 +155,38 @@ if ($search !== '') {
     $whereParams[] = $like;
 }
 $whereSql = 'WHERE ' . implode(' AND ', $whereParts);
-$countStmt = db()->prepare('SELECT COUNT(*) FROM articles ' . $whereSql);
-$countStmt->execute($whereParams);
-$totalArticles = (int) $countStmt->fetchColumn();
+$totalArticles = 0;
+$pagedRows = [];
+$latestArticleDate = '';
+if ($articlesTableAvailable) {
+    try {
+        $countStmt = db()->prepare('SELECT COUNT(*) FROM articles ' . $whereSql);
+        $countStmt->execute($whereParams);
+        $totalArticles = (int) $countStmt->fetchColumn();
+    } catch (Throwable) {
+        $articlesTableAvailable = false;
+    }
+}
 $pagination = pagination_state($totalArticles, $page, $perPage);
 $page = $pagination['page'];
 $maxPage = $pagination['total_pages'];
 $offset = $pagination['offset'];
 $articlePublicationSort = article_publication_sort_expression();
-$dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
-$dataStmt->execute($whereParams);
-$pagedRows = $dataStmt->fetchAll() ?: [];
-$latestArticleDate = '';
-$latestArticleStmt = db()->query('SELECT published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT 1');
-$latestArticleRow = $latestArticleStmt ? ($latestArticleStmt->fetch() ?: null) : null;
-if (is_array($latestArticleRow)) {
-    $latestArticleDate = (string) (article_publication_datetime($latestArticleRow) ?? '');
+if ($articlesTableAvailable) {
+    try {
+        $dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+        $dataStmt->execute($whereParams);
+        $pagedRows = $dataStmt->fetchAll() ?: [];
+
+        $latestArticleStmt = db()->query('SELECT published_at, created_at, updated_at FROM articles WHERE status = "published" ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT 1');
+        $latestArticleRow = $latestArticleStmt ? ($latestArticleStmt->fetch() ?: null) : null;
+        if (is_array($latestArticleRow)) {
+            $latestArticleDate = (string) (article_publication_datetime($latestArticleRow) ?? '');
+        }
+    } catch (Throwable) {
+        $pagedRows = [];
+        $latestArticleDate = '';
+    }
 }
 $latestArticleLabel = module_hero_latest_stat_date_label($latestArticleDate, $locale);
 $groupedArticles = [];
