@@ -276,9 +276,17 @@ textarea:focus-visible {
   align-items: center;
   gap: .5rem;
 }
-.toolbar-membership-row {
-  display: flex;
-  justify-content: flex-end;
+.toolbar-account-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: .34rem;
+  width: 8.6rem;
+  min-width: 8.6rem;
+}
+.toolbar-account-stack .account-menu-trigger {
+  width: 100%;
+  min-width: 0;
 }
 .membership-status-badge {
   display: inline-flex;
@@ -286,16 +294,17 @@ textarea:focus-visible {
   justify-content: center;
   width: 100%;
   min-height: 1.7rem;
-  padding: .28rem .55rem;
-  border: 1px solid color-mix(in srgb, var(--success) 42%, var(--border));
+  padding: .3rem .55rem;
+  border: 1px solid color-mix(in srgb, var(--success) 56%, var(--border));
   border-radius: 999px;
-  background: color-mix(in srgb, var(--success) 13%, var(--panel));
-  color: color-mix(in srgb, var(--success) 86%, var(--text));
+  background: color-mix(in srgb, var(--success) 20%, var(--panel));
+  color: color-mix(in srgb, var(--success) 78%, var(--text));
   font-size: .78rem;
   font-weight: 800;
   line-height: 1.15;
   text-align: center;
   white-space: normal;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--success) 8%, transparent);
 }
 
 .toolbar-search-row {
@@ -3072,6 +3081,7 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   .nav-mobile-tools .toolbar-preferences-row .toolbar-form,
   .nav-mobile-tools .toolbar-auth,
   .nav-mobile-tools .account-menu { width: 100%; }
+  .nav-mobile-tools .toolbar-account-stack { width: 100%; min-width: 0; }
   .nav-mobile-tools .preference-select { width: 100%; min-width: 0; }
   .nav-row { width: 100%; flex-direction: column; gap: 0; }
   .nav a, .nav-link-button { padding:.55rem .7rem; border-bottom:1px solid var(--border); border-radius: 0; width: 100%; text-align: left; }

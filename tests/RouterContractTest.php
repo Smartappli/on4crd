@@ -61,12 +61,12 @@ final class RouterContractTest extends TestCase
         $layout = file_get_contents(__DIR__ . '/../app/layout_renderer.php');
         self::assertIsString($layout);
 
-        self::assertStringContainsString('$membershipBadgeHtml = \'\';', $layout);
         self::assertStringContainsString('if ($user !== null) {', $layout);
+        self::assertStringContainsString('$membershipBadgeHtml = \'<span class="membership-status-badge">\'', $layout);
         self::assertStringContainsString('En ordre de cotisation', $layout);
-        self::assertStringContainsString('toolbar-membership-row', $layout);
+        self::assertStringContainsString('toolbar-account-stack', $layout);
         self::assertStringContainsString('membership-status-badge', $layout);
-        self::assertStringContainsString('. $membershipBadgeHtml', $layout);
+        self::assertStringContainsString('</details>\' . $membershipBadgeHtml . \'</div>\'', $layout);
     }
 
     public function testEachSwitchCaseReferencesAnExistingPageFile(): void
