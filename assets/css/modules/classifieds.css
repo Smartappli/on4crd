@@ -146,8 +146,4 @@
     grid-template-columns: 1fr;
   }
 
-  [data-route="classifieds"] .classifieds-category-dialog-actions .button {
-    width: 100%;
-    justify-content: center;
-  }
 }

@@ -110,18 +110,6 @@
   margin: 0;
 }
 
-[data-route="webotheque"] .webotheque-content {
-  display: grid;
-  gap: .75rem;
-}
-
-[data-route="webotheque"] .webotheque-layout {
-  display: grid;
-  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
-  gap: 1rem;
-  align-items: start;
-}
-
 [data-route="webotheque"] .webotheque-card {
   height: 100%;
 }
