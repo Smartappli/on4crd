@@ -13,6 +13,7 @@
   },
   "scripts": {
     "lint": "php tools/lint.php",
+    "duplication": "php tools/check_duplication.php --threshold=3",
     "test": "@php vendor/bin/phpunit --configuration phpunit.xml.dist --testdox"
   },
   "config": {

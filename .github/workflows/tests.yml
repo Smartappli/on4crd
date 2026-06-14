@@ -40,6 +40,9 @@ jobs:
       - name: Lint PHP
         run: composer lint
 
+      - name: Check code duplication
+        run: composer duplication
+
       - name: Run unit tests
         run: composer test
 
