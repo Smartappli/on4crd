@@ -30,14 +30,14 @@ import re
 import sys
 
 js = Path(sys.argv[1]).read_text()
-pattern = re.compile(r"\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*document\.getElementById\(")
+pattern = re.compile(r"^\s{4}let\s+([A-Za-z_$][\w$]*)\s*=\s*null\s*;", re.M)
 names = pattern.findall(js)
 counts = {}
 for name in names:
     counts[name] = counts.get(name, 0) + 1
 dups = sorted(name for name, count in counts.items() if count > 1)
 if dups:
-    raise SystemExit(f"Duplicate DOM id binding declarations found: {', '.join(dups)}")
+    raise SystemExit(f"Duplicate tools DOM handle declarations found: {', '.join(dups)}")
 PY
 
 echo "tools JS syntax OK"
