@@ -3,13 +3,7 @@ declare(strict_types=1);
 
 require_module_enabled('press');
 require_permission('admin.access');
-$locale = current_locale();
-$i18n = require __DIR__ . '/../app/i18n/admin_press.php';
-$i18n = i18n_expand_supported_locales($i18n);
-$t = [];
-foreach (array_keys($i18n['fr']) as $key) {
-    $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
-}
+$t = i18n_domain_locale('admin_press');
 
 set_page_meta([
     'title' => (string) $t['layout'],

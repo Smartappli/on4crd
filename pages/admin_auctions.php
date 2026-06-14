@@ -4,13 +4,7 @@ declare(strict_types=1);
 require_permission('admin.access');
 require_permission('auctions.manage');
 
-$locale = current_locale();
-$i18n = i18n_domain_messages('admin_auctions');
-$i18n = i18n_expand_supported_locales($i18n);
-$t = [];
-foreach (array_keys($i18n['fr']) as $key) {
-    $t[$key] = i18n_localized_value($i18n, $locale, (string) $key);
-}
+$t = i18n_domain_locale('admin_auctions');
 
 set_page_meta([
     'title' => (string) $t['layout'],
