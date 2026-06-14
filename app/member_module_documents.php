@@ -28,6 +28,28 @@ function member_document_module_definitions(): array
             'legacy_categories' => ['fichiers', 'telechargements'],
             'fallback_title' => 'Fichiers',
             'fallback_intro' => 'Fichiers et ressources a telecharger pour les membres.',
+            'label_overrides' => [
+                'fr' => [
+                    'documents' => 'Fichiers',
+                    'view_content' => 'Mes fichiers',
+                    'administration' => 'Mes partages',
+                    'search_ph' => 'Rechercher dans mes fichiers',
+                    'empty' => 'Aucun fichier trouvé.',
+                    'upload_title' => 'Partager un fichier',
+                    'upload_help' => 'Ajoutez un fichier pour le rendre disponible dans Mes fichiers.',
+                    'document_field' => 'Fichier à partager',
+                    'upload' => 'Partager',
+                    'delete' => 'Retirer',
+                    'confirm_delete' => 'Retirer ce partage ?',
+                    'ok_added' => 'Fichier partagé.',
+                    'ok_deleted' => 'Partage retiré.',
+                    'content_list' => 'Fichiers partagés',
+                    'admin_title_prefix' => 'Mes partages',
+                    'admin_eyebrow' => 'Fichiers',
+                    'admin_page_title' => 'Mes partages',
+                    'admin_intro' => 'Gérez les fichiers que vous partagez avec les membres.',
+                ],
+            ],
         ],
         'pv' => [
             'route' => 'pv',
@@ -133,6 +155,29 @@ function member_document_labels(string $locale): array
     ];
 
     return $labels[$locale] ?? $labels['en'];
+}
+}
+
+if (!function_exists('member_document_module_labels')) {
+function member_document_module_labels(string $module, string $locale): array
+{
+    $labels = member_document_labels($locale);
+    $definition = member_document_module_definition($module);
+    if ($definition === null) {
+        return $labels;
+    }
+
+    $overridesByLocale = $definition['label_overrides'] ?? [];
+    if (!is_array($overridesByLocale)) {
+        return $labels;
+    }
+
+    $overrides = $overridesByLocale[$locale] ?? [];
+    if (!is_array($overrides)) {
+        return $labels;
+    }
+
+    return array_replace($labels, $overrides);
 }
 }
 
@@ -460,7 +505,7 @@ function render_member_document_module_page(string $module): void
 
     require_login();
     $locale = current_locale();
-    $labels = member_document_labels($locale);
+    $labels = member_document_module_labels($moduleCode, $locale);
     $memberAreaLabel = member_area_eyebrow_label($locale);
     $moduleText = member_document_module_text($moduleCode, $locale);
     $title = (string) $moduleText['title'];
@@ -551,13 +596,29 @@ function render_admin_member_document_module_page(string $module): void
     }
 
     $locale = current_locale();
-    $labels = member_document_labels($locale);
+    $labels = member_document_module_labels($moduleCode, $locale);
     $moduleText = member_document_module_text($moduleCode, $locale);
     $title = (string) $moduleText['title'];
+    $adminPageTitle = trim((string) ($labels['admin_page_title'] ?? ''));
+    if ($adminPageTitle === '') {
+        $adminPageTitle = $title;
+    }
+    $adminEyebrow = trim((string) ($labels['admin_eyebrow'] ?? ''));
+    if ($adminEyebrow === '') {
+        $adminEyebrow = (string) $labels['admin_title_prefix'];
+    }
+    $adminIntro = trim((string) ($labels['admin_intro'] ?? ''));
+    if ($adminIntro === '') {
+        $adminIntro = (string) $moduleText['intro'];
+    }
+    $adminLayoutTitle = (string) $labels['admin_title_prefix'] . ' - ' . $adminPageTitle;
+    if ((string) $labels['admin_title_prefix'] === $adminPageTitle) {
+        $adminLayoutTitle = $adminPageTitle;
+    }
     $adminRoute = (string) ($definition['admin_route'] ?? ('admin_' . $moduleCode));
 
     set_page_meta([
-        'title' => (string) $labels['admin_title_prefix'] . ' - ' . $title,
+        'title' => $adminLayoutTitle,
         'description' => (string) $moduleText['meta_desc'],
         'robots' => 'noindex,nofollow',
     ]);
@@ -622,9 +683,9 @@ function render_admin_member_document_module_page(string $module): void
     <div class="stack admin-member-document-module">
         <section class="page-hero admin-member-document-hero">
             <div class="admin-member-document-hero-copy">
-                <p class="eyebrow"><?= e((string) $labels['admin_title_prefix']) ?></p>
-                <h1><?= e($title) ?></h1>
-                <p class="help"><?= e((string) $moduleText['intro']) ?></p>
+                <p class="eyebrow"><?= e($adminEyebrow) ?></p>
+                <h1><?= e($adminPageTitle) ?></h1>
+                <p class="help"><?= e($adminIntro) ?></p>
             </div>
             <div class="admin-member-document-hero-side">
                 <?= render_member_document_module_stats($stats, $labels, $latestLabel) ?>
@@ -691,6 +752,6 @@ function render_admin_member_document_module_page(string $module): void
         </section>
     </div>
     <?php
-    echo render_layout((string) ob_get_clean(), (string) $labels['admin_title_prefix'] . ' - ' . $title);
+    echo render_layout((string) ob_get_clean(), $adminLayoutTitle);
 }
 }

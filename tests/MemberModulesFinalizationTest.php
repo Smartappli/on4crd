@@ -84,6 +84,15 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('storage/uploads/library/legacy.pdf', member_document_safe_path('storage/uploads/library/legacy.pdf'));
         self::assertNull(member_document_safe_path('storage/uploads/member_modules/../secret.pdf'));
 
+        $fileLabels = member_document_module_labels('fichiers', 'fr');
+        self::assertSame('Mes fichiers', $fileLabels['view_content']);
+        self::assertSame('Mes partages', $fileLabels['administration']);
+        self::assertSame('Mes partages', $fileLabels['admin_title_prefix']);
+
+        $presentationLabels = member_document_module_labels('presentations', 'fr');
+        self::assertSame('Voir les contenus', $presentationLabels['view_content']);
+        self::assertSame('Administration', $presentationLabels['administration']);
+
         $renderer = $this->source('app/member_module_documents.php');
         self::assertStringContainsString('idx_module_tags', $renderer);
         self::assertStringContainsString('name="tags"', $renderer);

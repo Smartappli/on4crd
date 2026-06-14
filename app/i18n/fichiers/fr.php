@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Fichiers',
-  'intro' => 'Fichiers et ressources à télécharger pour les membres.',
-  'meta_desc' => 'Fichiers reserves aux membres ON4CRD.',
+  'title' => 'Mes fichiers',
+  'intro' => 'Retrouvez les fichiers et ressources partagés avec les membres.',
+  'meta_desc' => 'Fichiers et partages réservés aux membres ON4CRD.',
 );
