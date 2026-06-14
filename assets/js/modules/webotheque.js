@@ -35,6 +35,10 @@
       }
 
       event.preventDefault();
+      const menu = button.closest('details');
+      if (menu) {
+        menu.removeAttribute('open');
+      }
       openDialog(dialog);
     });
   });
