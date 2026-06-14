@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { clickToolTarget } from './tools-navigation';
 
 test('tools lazy flow: click -> fetch panel -> init calc', async ({ page }) => {
   await page.goto('?route=tools');
@@ -6,7 +7,7 @@ test('tools lazy flow: click -> fetch panel -> init calc', async ({ page }) => {
   await expect(page.locator('#tool-grid')).toBeVisible();
   await expect(page.locator('#tool-power')).toHaveCount(0);
 
-  await page.locator('[data-tool-target="tool-power"]').click();
+  await clickToolTarget(page, 'tool-power');
   await expect(page.locator('#tool-power')).toBeVisible();
 
   await page.fill('#power-watts', '10');

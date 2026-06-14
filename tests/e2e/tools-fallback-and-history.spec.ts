@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { clickToolTarget } from './tools-navigation';
 
 test('fallback on panel fetch 404 and browser history hashchange', async ({ page }) => {
   await page.goto('?route=tools#tool-grid');
@@ -7,11 +8,11 @@ test('fallback on panel fetch 404 and browser history hashchange', async ({ page
     await route.fulfill({ status: 404, contentType: 'text/plain', body: 'Unknown tool panel' });
   });
 
-  await page.locator('[data-tool-target="tool-power"]').click();
+  await clickToolTarget(page, 'tool-power');
   await expect(page.locator('#tool-grid')).toBeVisible();
 
   await page.unroute('**/index.php?route=tools&ajax=tool_panel&id=tool-power');
-  await page.locator('[data-tool-target="tool-freq-wave"]').click();
+  await clickToolTarget(page, 'tool-freq-wave');
   await expect(page.locator('#tool-freq-wave')).toBeVisible();
 
   await page.goBack();
@@ -30,8 +31,8 @@ test('stale failed ajax response does not override latest successful tool select
     await route.continue();
   });
 
-  await page.locator('[data-tool-target="tool-power"]').click();
-  await page.locator('[data-tool-target="tool-freq-wave"]').click();
+  await clickToolTarget(page, 'tool-power');
+  await clickToolTarget(page, 'tool-freq-wave');
 
   await expect(page.locator('#tool-freq-wave')).toBeVisible();
   await expect(page.locator('#grid-tool-error')).toHaveClass(/is-hidden/);
