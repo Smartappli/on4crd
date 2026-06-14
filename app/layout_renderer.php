@@ -98,6 +98,51 @@ function module_css_assets_for_route(string $route): array
     return $assets;
 }
 
+if (!function_exists('render_bandplan_page')) {
+/**
+ * @param array<string, string> $messages
+ * @param list<array{0: string, 1: string, 2: string, 3: string, 4: string}> $rows
+ */
+function render_bandplan_page(string $title, array $messages, array $rows, string $cardClass = ''): string
+{
+    $sectionClass = trim('card ' . $cardClass);
+
+    ob_start();
+    ?>
+<section class="<?= e($sectionClass) ?>">
+    <h1><?= e($title) ?></h1>
+    <p class="help">IBPT/BIPT: <a href="https://www.ibpt.be/file/cc73d96153bbd5448a56f19d925d05b1379c7f21/1891ad4029fa18396c037433ed4c2a063854f1b0/freq-fr.pdf?name=Freq-FR.pdf&type=application%2Fpdf" target="_blank" rel="noopener noreferrer">Freq-FR.pdf</a></p>
+    <div class="table-wrap mt-3">
+        <table>
+            <thead>
+            <tr>
+                <th><?= e((string) $messages['header_band']) ?></th>
+                <th><?= e((string) $messages['header_freq']) ?></th>
+                <th><?= e((string) $messages['header_modes']) ?></th>
+                <th><?= e((string) $messages['header_power']) ?></th>
+                <th><?= e((string) $messages['header_notes']) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($rows as $row): ?>
+                <tr>
+                    <td><?= e($row[0]) ?></td>
+                    <td><?= e($row[1]) ?></td>
+                    <td><?= e($row[2]) ?></td>
+                    <td><?= e($row[3]) ?></td>
+                    <td><?= e((string) ($messages[$row[4]] ?? '')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</section>
+    <?php
+
+    return render_layout((string) ob_get_clean(), $title);
+}
+}
+
 function module_js_assets_for_route(string $route): array
 {
     $route = preg_replace('/[^a-z0-9_]/', '', strtolower($route)) ?: 'home';

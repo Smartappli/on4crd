@@ -278,5 +278,8 @@ function duplication_cli(array $argv): int
 }
 
 if (PHP_SAPI === 'cli' && realpath((string) ($_SERVER['SCRIPT_FILENAME'] ?? '')) === __FILE__) {
-    exit(duplication_cli($argv));
+    $cliArgv = is_array($_SERVER['argv'] ?? null)
+        ? array_map(static fn(mixed $arg): string => (string) $arg, $_SERVER['argv'])
+        : [];
+    exit(duplication_cli($cliArgv));
 }
