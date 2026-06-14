@@ -278,9 +278,45 @@ final class I18nNativeLocalesTest extends TestCase
 
             self::assertSame(1, preg_match('//u', $contents), sprintf('French locale file is not valid UTF-8: %s', $file));
             self::assertStringNotContainsString("\u{FFFD}", $contents, sprintf('French locale file contains replacement characters: %s', $file));
+            foreach (['Ã', 'â€™', 'â€œ', 'â€', 'â€“', 'â€”', 'â€¦', 'Â°', 'Âµ', 'Â·', 'Â '] as $fragment) {
+                self::assertStringNotContainsString($fragment, $contents, sprintf('French locale file contains mojibake fragment %s: %s', $fragment, $file));
+            }
 
             $messages = $this->loadLocaleFile((string) $file);
             self::assertNotEmpty($messages, sprintf('French locale file is not readable as a message array: %s', $file));
         }
+    }
+
+    public function testRequestedFrenchModuleLabelsStayAccented(): void
+    {
+        $auctions = file_get_contents(__DIR__ . '/../pages/auctions.php');
+        self::assertIsString($auctions);
+        self::assertStringContainsString('Créer un lot', $auctions);
+        self::assertStringNotContainsString('Creer un lot', $auctions);
+        self::assertStringNotContainsString('Creer un lot0', $auctions);
+
+        $classifieds = file_get_contents(__DIR__ . '/../pages/classifieds.php');
+        self::assertIsString($classifieds);
+        self::assertStringContainsString('Proposer une catégorie', $classifieds);
+        self::assertStringContainsString('La catégorie sera validée directement.', $classifieds);
+        self::assertStringNotContainsString('Creer une categorie', $classifieds);
+        self::assertStringNotContainsString('La categorie sera validee directement.', $classifieds);
+
+        $articles = $this->loadLocaleFile(__DIR__ . '/../app/i18n/articles/fr.php');
+        self::assertSame('Proposer une thématique', $articles['propose_category']);
+        self::assertSame('Proposition de thématique d’article ON4CRD', $articles['propose_category_subject']);
+        self::assertStringContainsString('nouvelle thématique d’article', (string) $articles['propose_category_body']);
+        self::assertSame('Nom de la thématique', $articles['propose_category_name_label']);
+
+        $articlesSource = file_get_contents(__DIR__ . '/../app/i18n/articles/fr.php');
+        self::assertIsString($articlesSource);
+        self::assertStringNotContainsString('Proposer une cagégorie', $articlesSource);
+
+        $wiki = file_get_contents(__DIR__ . '/../pages/wiki.php');
+        self::assertIsString($wiki);
+        self::assertStringContainsString('Proposer une thématique', $wiki);
+        self::assertStringContainsString('Indiquez la thématique à ajouter', $wiki);
+        self::assertStringNotContainsString('Proposer une thematique', $wiki);
+        self::assertStringNotContainsString('Indiquez la thematique a ajouter', $wiki);
     }
 }

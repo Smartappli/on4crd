@@ -28,17 +28,17 @@ return array (
   'reading_minutes' => 'min de lecture',
   'favorite_label' => 'Favori',
   'favorite_added' => 'Favori ajouté',
-  'favorite_removed' => 'Favori retire',
+  'favorite_removed' => 'Favori retiré',
   'favorite_added_msg' => 'Article ajouté aux favoris.',
-  'favorite_removed_msg' => 'Article retire des favoris.',
+  'favorite_removed_msg' => 'Article retiré des favoris.',
   'default_article_title' => 'Article',
-  'propose_category' => 'Proposer une catégorie',
-  'propose_category_subject' => 'Proposition de catégorie d’article ON4CRD',
+  'propose_category' => 'Proposer une thématique',
+  'propose_category_subject' => 'Proposition de thématique d’article ON4CRD',
   'propose_category_body' => 'Bonjour,
 
-Je souhaite proposer une nouvelle catégorie d’article.
+Je souhaite proposer une nouvelle thématique d’article.
 
-Nom de la catégorie :
+Nom de la thématique :
 Motivation :
 Contact :',
   'propose_article' => 'Proposer un article',
@@ -51,9 +51,9 @@ Titre :
 Catégorie :
 Résumé :
 Contact :',
-  'propose_category_intro' => 'Décrivez la catégorie souhaitée. Un e-mail prérempli sera préparé pour le comité.',
-  'propose_category_body_intro' => 'Bonjour, je souhaite proposer une nouvelle catégorie d’article.',
-  'propose_category_name_label' => 'Nom de la catégorie',
+  'propose_category_intro' => 'Décrivez la thématique souhaitée. Un e-mail prérempli sera préparé pour le comité.',
+  'propose_category_body_intro' => 'Bonjour, je souhaite proposer une nouvelle thématique d’article.',
+  'propose_category_name_label' => 'Nom de la thématique',
   'propose_category_reason_label' => 'Motivation',
   'propose_category_contact_label' => 'Contact',
   'propose_category_submit' => 'Préparer l’e-mail',

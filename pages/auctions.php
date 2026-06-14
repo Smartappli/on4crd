@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (has_permission('auctions.manage')) {
             if (!table_exists('auction_lots')) {
-                throw new RuntimeException('Stockage des encheres indisponible.');
+                throw new RuntimeException('Stockage des enchères indisponible.');
             }
             $slug = auction_unique_slug($title);
             $startingPrice = max(0, parse_price_to_cents($proposalPrice));
@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $proposalDetails = content_proposal_details_text([
-            'Resume' => $summary,
-            'Prix de depart' => $proposalPrice,
+            'Résumé' => $summary,
+            'Prix de départ' => $proposalPrice,
             'Description' => $descriptionText,
         ]);
         $proposalId = content_proposal_create((int) $user['id'], 'auctions', 'content', $title, $proposalDetails, $contact);
@@ -158,26 +158,26 @@ ob_start();
                 </div>
             </div>
             <p class="actions">
-                <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? 'Creer un lot' : 'Proposer un lot') ?></a>
-                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux encheres")) ?></a>
+                <a class="button" href="<?= e($lotProposalUrl) ?>"><?= e($canManageAuctions ? 'Créer un lot' : 'Proposer un lot') ?></a>
+                <a class="button secondary auctions-subscribe-button" href="<?= e($auctionSubscribeUrl) ?>"><?= e((string) ($t['subscribe_auctions'] ?? "M'abonner aux enchères")) ?></a>
             </p>
         </div>
     </header>
 
     <?php if ($showLotProposalForm): ?>
     <section class="card">
-        <h2><?= e($canManageAuctions ? 'Creer un lot' : 'Proposer un lot') ?></h2>
-        <p class="help"><?= e($canManageAuctions ? 'Le lot sera active directement pour 7 jours.' : 'Votre proposition sera envoyee en validation et visible dans Mes contenus.') ?></p>
+        <h2><?= e($canManageAuctions ? 'Créer un lot' : 'Proposer un lot') ?></h2>
+        <p class="help"><?= e($canManageAuctions ? 'Le lot sera activé directement pour 7 jours.' : 'Votre proposition sera envoyée en validation et visible dans Mes contenus.') ?></p>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_lot">
             <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
-            <label><span>Resume</span><input type="text" name="proposal_summary" maxlength="1000"></label>
-            <label><span>Prix de depart</span><input type="text" name="proposal_price" placeholder="0,00"></label>
+            <label><span>Résumé</span><input type="text" name="proposal_summary" maxlength="1000"></label>
+            <label><span>Prix de départ</span><input type="text" name="proposal_price" placeholder="0,00"></label>
             <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
             <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
-                <button class="button" type="submit"><?= e($canManageAuctions ? 'Creer' : 'Envoyer la proposition') ?></button>
+                <button class="button" type="submit"><?= e($canManageAuctions ? 'Créer' : 'Envoyer la proposition') ?></button>
                 <a class="button secondary" href="<?= e(route_url('auctions')) ?>">Annuler</a>
             </p>
         </form>

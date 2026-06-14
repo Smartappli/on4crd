@@ -27,7 +27,7 @@ return array (
   'operator_since' => 'Opérateur depuis',
   'cq_zone' => 'Zone CQ',
   'itu_zone' => 'Zone ITU',
-  'auto_radio_location_help' => 'Le grid, la zone CQ et la zone ITU restent manuels sauf si vous activez le geocodage optionnel.',
+  'auto_radio_location_help' => 'Le grid, la zone CQ et la zone ITU restent manuels sauf si vous activez le géocodage optionnel.',
   'qsl_via' => 'QSL via',
   'lotw_username' => 'Identifiant LoTW',
   'eqsl_username' => 'Identifiant eQSL',

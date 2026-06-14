@@ -173,7 +173,7 @@ ob_start();
                 </article>
             </div>
             <p class="actions wiki-hero-actions">
-                <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une thématique') : $tr('propose_theme', 'Proposer une thematique')) ?></a>
+                <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une thématique') : $tr('propose_theme', 'Proposer une thématique')) ?></a>
                 <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
             </p>
         </div>
@@ -184,10 +184,10 @@ ob_start();
             <div class="wiki-theme-dialog-header module-dialog-header">
                 <div>
                     <p class="wiki-theme-dialog-eyebrow"><?= e($tr('themes', 'Thématiques')) ?></p>
-                    <h2 id="wiki-theme-dialog-title"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une thématique') : $tr('propose_theme', 'Proposer une thematique')) ?></h2>
+                    <h2 id="wiki-theme-dialog-title"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une thématique') : $tr('propose_theme', 'Proposer une thématique')) ?></h2>
                     <p class="help"><?= e($canAutoAcceptTheme
                         ? $tr('create_theme_intro', 'Avec vos droits de modération, la thématique sera validée directement.')
-                        : $tr('propose_theme_intro', 'Indiquez la thematique a ajouter et les pages qui devraient y etre liees.')) ?></p>
+                        : $tr('propose_theme_intro', 'Indiquez la thématique à ajouter et les pages qui devraient y être liées.')) ?></p>
                 </div>
                 <button class="wiki-theme-dialog-close module-dialog-close" type="button" data-wiki-theme-close aria-label="<?= e($tr('close', 'Fermer')) ?>">&times;</button>
             </div>

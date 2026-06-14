@@ -10,8 +10,8 @@ return array (
   'related_articles' => 'Articles liés',
   'favorite_label' => 'Favori',
   'favorite_added' => 'Favori ajouté',
-  'favorite_removed' => 'Favori retire',
+  'favorite_removed' => 'Favori retiré',
   'favorite_added_msg' => 'Article ajouté aux favoris.',
-  'favorite_removed_msg' => 'Article retire des favoris.',
+  'favorite_removed_msg' => 'Article retiré des favoris.',
   'default_article_title' => 'Article',
 );
