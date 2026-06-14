@@ -45,22 +45,7 @@ $graph = [
             'location' => ['@id' => $homeUrl . '#place'],
         ],
         [
-            '@type' => 'Place',
-            '@id' => $homeUrl . '#place',
-            'name' => 'Bocq Arena',
-            'address' => [
-                '@type' => 'PostalAddress',
-                'streetAddress' => 'Rue des Ecoles',
-                'postalCode' => '5530',
-                'addressLocality' => 'Purnode',
-                'addressRegion' => 'Namur',
-                'addressCountry' => 'BE',
-            ],
-            'geo' => [
-                '@type' => 'GeoCoordinates',
-                'latitude' => 50.3150,
-                'longitude' => 4.9452,
-            ],
+            ...club_place_schema($homeUrl . '#place'),
         ],
         [
             '@type' => 'WebSite',
