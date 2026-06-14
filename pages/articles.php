@@ -84,6 +84,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('my_requests');
         }
 
+        if ($action === 'propose_tag') {
+            $user = require_login(route_url('articles'));
+            $proposalTitle = (string) ($_POST['proposal_tag'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalSummary = content_proposal_details_text([
+                (string) ($t['propose_tag_reason_label'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'articles', 'tag', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site((string) ($t['propose_tag_subject'] ?? 'Keyword proposal'), [
+                'area' => 'articles',
+                'proposal_type' => 'tag',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) ($t['proposal_recorded'] ?? ($locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.')));
+            redirect('my_requests');
+        }
+
         throw new RuntimeException((string) ($t['invalid'] ?? 'Invalid request.'));
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
