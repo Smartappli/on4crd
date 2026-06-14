@@ -100,19 +100,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'propose_document') {
             $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
-            $proposalLink = (string) ($_POST['proposal_link'] ?? '');
             $proposalCategory = member_library_category_slug((string) ($_POST['proposal_category'] ?? 'general'));
             $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
             $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $storedDocument = member_library_store_proposed_document_upload($_FILES['proposal_file'] ?? null, (int) $user['id']);
+            $proposalFilePath = (string) $storedDocument['public_path'];
             $proposalSummary = content_proposal_details_text([
                 (string) ($t['propose_document_category'] ?? 'Category') => $proposalCategory,
                 (string) ($t['tags'] ?? 'Keywords') => $proposalTags,
-                (string) ($t['propose_document_link'] ?? 'Link or source') => $proposalLink,
+                (string) ($t['document'] ?? 'Document') => (string) $storedDocument['original_name'],
                 (string) ($t['propose_document_description'] ?? 'Description') => (string) ($_POST['proposal_description'] ?? ''),
             ]);
             $autoAccept = has_permission('admin.access');
             $proposalStatus = $autoAccept ? 'accepted' : 'pending';
-            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalLink, $proposalStatus);
+            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalFilePath, $proposalStatus);
             if ($autoAccept) {
                 set_flash('success', (string) $t['document_validated_direct']);
                 redirect_url(route_url('members_library'));
@@ -123,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
                 'summary' => $proposalSummary,
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
-                'source_ref' => 'content_proposals#' . $proposalId,
+                'source_ref' => 'content_proposals#' . $proposalId . ' ' . $proposalFilePath,
             ]);
             set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');
@@ -402,7 +403,7 @@ ob_start();
                 </div>
                 <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_document_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_document_body_intro']) ?>">
+            <form class="members-library-dialog-form module-dialog-form" method="post" enctype="multipart/form-data" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_document_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_document_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_document">
                 <label><span><?= e((string) $t['propose_document_title']) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
@@ -422,7 +423,7 @@ ob_start();
                     </select>
                 </label>
                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="proposal_tags" maxlength="255"></label>
-                <label><span><?= e((string) $t['propose_document_link']) ?></span><input type="text" name="proposal_link" maxlength="500"></label>
+                <label><span><?= e((string) $t['document']) ?></span><input type="file" name="proposal_file" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html" required></label>
                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
                 <div class="members-library-dialog-actions module-dialog-actions">

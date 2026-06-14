@@ -80,6 +80,56 @@ function member_library_category_slug(string $value): string
 }
 }
 
+if (!function_exists('member_library_store_proposed_document_upload')) {
+/**
+ * @return array{public_path:string,absolute_path:string,extension:string,original_name:string}
+ */
+function member_library_store_proposed_document_upload(?array $file, int $memberId): array
+{
+    if (!is_array($file) || (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+        throw new RuntimeException(upload_i18n_message('upload_failed'));
+    }
+
+    $allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
+    $allowedMimes = [
+        'pdf' => ['application/pdf', 'application/x-pdf'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
+        'txt' => ['text/plain', 'application/octet-stream'],
+        'md' => ['text/plain', 'text/markdown', 'application/octet-stream'],
+        'html' => ['text/html', 'text/plain', 'application/octet-stream'],
+        'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
+    ];
+
+    $originalName = (string) ($file['name'] ?? '');
+    $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
+    if (!in_array($extension, $allowedExtensions, true)) {
+        throw new RuntimeException(upload_i18n_message('extension_not_allowed'));
+    }
+
+    $targetDir = dirname(__DIR__) . '/storage/uploads/library';
+    $base = slugify(pathinfo($originalName, PATHINFO_FILENAME));
+    if ($base === '') {
+        $base = 'document';
+    }
+
+    $filename = secure_move_uploaded_file(
+        $file,
+        $targetDir,
+        'proposal_doc_' . $memberId . '-' . $base,
+        $allowedExtensions,
+        $allowedMimes,
+        25 * 1024 * 1024
+    );
+
+    return [
+        'public_path' => 'storage/uploads/library/' . $filename,
+        'absolute_path' => $targetDir . '/' . $filename,
+        'extension' => $extension,
+        'original_name' => $originalName,
+    ];
+}
+}
+
 if (!function_exists('member_library_default_categories')) {
 function member_library_default_categories(): array
 {
