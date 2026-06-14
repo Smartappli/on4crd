@@ -130,6 +130,56 @@ function i18n_expand_supported_locales(array $messages, ?array $locales = null, 
 }
 }
 
+if (!function_exists('i18n_load_array_file_once')) {
+/**
+ * Load a PHP file returning an array while keeping repeat calls deterministic.
+ *
+ * @return array<mixed>
+ */
+function i18n_load_array_file_once(string $path): array
+{
+    static $cache = [];
+
+    $realPath = realpath($path);
+    if ($realPath === false || !is_file($realPath)) {
+        return [];
+    }
+
+    if (!array_key_exists($realPath, $cache)) {
+        $loaded = require_once $realPath;
+        $cache[$realPath] = is_array($loaded) ? $loaded : [];
+    }
+
+    return $cache[$realPath];
+}
+}
+
+if (!function_exists('i18n_load_domain_file_messages')) {
+/**
+ * Load all locale files for a domain located under app/i18n/<domain>/.
+ *
+ * @return array<string, array<string, string>>
+ */
+function i18n_load_domain_file_messages(string $domain, string $baseDirectory): array
+{
+    $domain = preg_replace('/[^a-z0-9_]/', '', strtolower($domain)) ?: '';
+    if ($domain === '') {
+        return [];
+    }
+
+    $messages = [];
+    $directory = rtrim($baseDirectory, '/\\') . DIRECTORY_SEPARATOR . $domain;
+    foreach (supported_locales() as $localeCode) {
+        $localeMessages = i18n_load_array_file_once($directory . DIRECTORY_SEPARATOR . $localeCode . '.php');
+        if ($localeMessages !== []) {
+            $messages[$localeCode] = $localeMessages;
+        }
+    }
+
+    return $messages;
+}
+}
+
 if (!function_exists('i18n_domain_messages')) {
 /**
  * Load a module i18n catalog from app/i18n/<domain>.php and/or app/i18n/<domain>/<locale>.php.
@@ -152,7 +202,7 @@ function i18n_domain_messages(string $domain): array
     $messages = [];
     $path = __DIR__ . '/i18n/' . $domain . '.php';
     if (is_file($path)) {
-        $loadedMessages = require $path;
+        $loadedMessages = i18n_load_array_file_once($path);
         if (is_array($loadedMessages)) {
             $messages = $loadedMessages;
         }
@@ -165,7 +215,7 @@ function i18n_domain_messages(string $domain): array
             if (!is_file($localePath)) {
                 continue;
             }
-            $localeMessages = require $localePath;
+            $localeMessages = i18n_load_array_file_once($localePath);
             if (is_array($localeMessages)) {
                 $messages[$localeCode] = array_replace(
                     isset($messages[$localeCode]) && is_array($messages[$localeCode]) ? $messages[$localeCode] : [],
