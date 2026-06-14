@@ -225,6 +225,68 @@ function webotheque_link_summary(array $t, string $categoryLabel, string $descri
 }
 }
 
+if (!function_exists('webotheque_proposal_source_url')) {
+function webotheque_proposal_source_url(string $sourceRef): string
+{
+    $sourceRef = trim($sourceRef);
+    if ($sourceRef === '') {
+        return '';
+    }
+    if (preg_match('/https?:\/\/\S+/i', $sourceRef, $match) === 1) {
+        return webotheque_normalize_url((string) $match[0]);
+    }
+
+    return webotheque_normalize_url($sourceRef);
+}
+}
+
+if (!function_exists('webotheque_proposal_detail_from_summary')) {
+/**
+ * @param list<string> $labels
+ */
+function webotheque_proposal_detail_from_summary(string $summary, array $labels): string
+{
+    $wanted = [];
+    foreach ($labels as $label) {
+        $normalized = mb_strtolower(trim($label), 'UTF-8');
+        if ($normalized !== '') {
+            $wanted[$normalized] = true;
+        }
+    }
+    foreach (preg_split('/\R/u', $summary) ?: [] as $line) {
+        if (preg_match('/^\s*([^:]{1,120}):\s*(.+)\s*$/u', (string) $line, $matches) !== 1) {
+            continue;
+        }
+        $label = mb_strtolower(trim((string) $matches[1]), 'UTF-8');
+        if (isset($wanted[$label])) {
+            return trim((string) $matches[2]);
+        }
+    }
+
+    return '';
+}
+}
+
+if (!function_exists('webotheque_proposal_category_from_summary')) {
+/**
+ * @param array<string, string> $categories
+ */
+function webotheque_proposal_category_from_summary(string $summary, array $categories): string
+{
+    foreach (preg_split('/\R/u', $summary) ?: [] as $line) {
+        if (preg_match('/^\s*([^:]{1,120}):\s*(.+)\s*$/u', (string) $line, $matches) !== 1) {
+            continue;
+        }
+        $code = webotheque_category_code((string) $matches[2]);
+        if (isset($categories[$code])) {
+            return $code;
+        }
+    }
+
+    return 'general';
+}
+}
+
 if (!function_exists('webotheque_tags_from_text')) {
 /**
  * @return array<string, string>
@@ -525,6 +587,8 @@ function render_webotheque_page(): void
     $showTagProposalForm = (string) ($_GET['propose_tag'] ?? '') === '1';
     $stats = webotheque_stats();
     $links = webotheque_fetch_links($search, $categoryFilter);
+    $pendingWebothequeAdminUrl = route_url_clean('admin_webotheque', ['status' => 'pending']) . '#pending-proposals';
+    $pendingWebothequeAdminLabel = $locale === 'fr' ? 'Administrer' : 'Manage';
 
     ob_start();
     ?>
@@ -551,6 +615,9 @@ function render_webotheque_page(): void
                             <a class="webotheque-propose-menu-item" role="menuitem" href="<?= e(route_url('webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="webotheque-link-dialog" aria-haspopup="dialog" aria-controls="webotheque-link-dialog"><?= e((string) $t['propose_link_item']) ?></a>
                         </div>
                     </details>
+                    <?php if ($canAutoValidate): ?>
+                        <a class="button secondary" href="<?= e($pendingWebothequeAdminUrl) ?>"><?= e($pendingWebothequeAdminLabel) ?></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>
@@ -690,11 +757,70 @@ function render_admin_webotheque_page(): void
     }
 
     $categories = webotheque_default_categories($t) + webotheque_categories($t);
+    $isFrench = $locale === 'fr';
+    $adminText = static function (string $key, string $fr, string $en) use ($t, $isFrench): string {
+        return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
+    };
+    $pendingProposalUrl = route_url_clean('admin_webotheque', ['status' => 'pending']) . '#pending-proposals';
+    $proposalStatusLabels = [
+        'pending' => $adminText('proposal_status_pending', 'En attente', 'Pending'),
+        'reviewed' => $adminText('proposal_status_reviewed', 'Relue', 'Reviewed'),
+        'accepted' => $adminText('proposal_status_accepted', 'Acceptée', 'Accepted'),
+        'rejected' => $adminText('proposal_status_rejected', 'Refusée', 'Rejected'),
+    ];
+    $proposalTypeLabels = [
+        'domain' => $adminText('proposal_type_domain', 'Thématique', 'Topic'),
+        'category' => $adminText('proposal_type_domain', 'Thématique', 'Topic'),
+        'content' => $adminText('proposal_type_content', 'Lien', 'Link'),
+        'tag' => $adminText('proposal_type_tag', 'Mot clé', 'Keyword'),
+    ];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             verify_csrf();
             $action = (string) ($_POST['action'] ?? 'add_link');
+            if ($action === 'update_proposal_status') {
+                $proposalId = (int) ($_POST['proposal_id'] ?? 0);
+                $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
+                $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
+                if ($proposalId <= 0 || !isset($proposalStatusLabels[$proposalStatus])) {
+                    throw new RuntimeException('err_required');
+                }
+                if (!ensure_content_proposals_table()) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+
+                $proposalStmt = db()->prepare('SELECT id, member_id, proposal_type, title, summary, source_ref FROM content_proposals WHERE id = ? AND area = "webotheque" LIMIT 1');
+                $proposalStmt->execute([$proposalId]);
+                $proposal = $proposalStmt->fetch() ?: null;
+                if (!is_array($proposal)) {
+                    throw new RuntimeException('err_required');
+                }
+
+                if ($proposalStatus === 'accepted' && (string) ($proposal['proposal_type'] ?? '') === 'content') {
+                    $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
+                    if ($sourceUrl === '') {
+                        throw new RuntimeException('err_url');
+                    }
+                    $proposalCategory = webotheque_category_from_input((string) ($_POST['proposal_category'] ?? 'general'), $categories);
+                    $summary = (string) ($proposal['summary'] ?? '');
+                    $description = webotheque_proposal_detail_from_summary($summary, [(string) ($t['description_field'] ?? 'Description'), 'Description']);
+                    if ($description === '') {
+                        $description = $summary;
+                    }
+                    $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Étiquettes', 'Etiquettes']);
+                    $existingStmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE url = ? LIMIT 1');
+                    $existingStmt->execute([$sourceUrl]);
+                    if (!$existingStmt->fetch()) {
+                        webotheque_insert_link((int) ($proposal['member_id'] ?? ($user['id'] ?? 0)), $proposalCategory, (string) ($proposal['title'] ?? ''), $sourceUrl, $description, $tags);
+                    }
+                }
+
+                db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "webotheque"')
+                    ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
+                set_flash('success', $adminText('proposal_status_saved', 'Proposition mise à jour.', 'Proposal updated.'));
+                redirect_url($pendingProposalUrl);
+            }
             if ($action === 'delete_link') {
                 $id = (int) ($_POST['id'] ?? 0);
                 db()->prepare('DELETE FROM member_webotheque_links WHERE id = ? LIMIT 1')->execute([$id]);
@@ -737,6 +863,19 @@ function render_admin_webotheque_page(): void
     $showAdminLinkProposalForm = (string) ($_GET['propose_link'] ?? '') === '1';
     $stats = webotheque_stats();
     $links = webotheque_fetch_links($search, $categoryFilter, 120);
+    $showPendingProposals = (string) ($_GET['status'] ?? '') === 'pending';
+    $pendingProposals = [];
+    if ($showPendingProposals && ensure_content_proposals_table()) {
+        $pendingStmt = db()->prepare(
+            'SELECT cp.id, cp.member_id, cp.proposal_type, cp.title, cp.summary, cp.contact, cp.source_ref, cp.status, cp.moderation_note, cp.created_at, cp.updated_at, m.callsign, m.email
+             FROM content_proposals cp
+             LEFT JOIN members m ON m.id = cp.member_id
+             WHERE cp.area = "webotheque" AND cp.status = "pending"
+             ORDER BY cp.created_at ASC, cp.id ASC'
+        );
+        $pendingStmt->execute();
+        $pendingProposals = $pendingStmt->fetchAll() ?: [];
+    }
 
     ob_start();
     ?>
@@ -759,6 +898,85 @@ function render_admin_webotheque_page(): void
                 </p>
             </div>
         </section>
+
+        <?php if ($showPendingProposals): ?>
+        <section class="admin-webotheque-list" id="pending-proposals" aria-labelledby="pending-proposals-title">
+            <div class="row-between">
+                <h2 id="pending-proposals-title"><?= e($adminText('pending_proposals_title', 'Contenus en attente de validation', 'Content pending review')) ?></h2>
+                <a class="button secondary" href="<?= e(route_url('admin_webotheque')) ?>"><?= e((string) $t['reset']) ?></a>
+            </div>
+            <?php if ($pendingProposals === []): ?>
+                <div class="card"><p><?= e($adminText('pending_proposals_empty', 'Aucun contenu webothèque en attente de validation.', 'No web library content is pending review.')) ?></p></div>
+            <?php endif; ?>
+            <?php foreach ($pendingProposals as $proposal): ?>
+                <?php
+                $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
+                $proposalStatus = (string) ($proposal['status'] ?? 'pending');
+                $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
+                $memberLabel = trim((string) ($proposal['callsign'] ?? ''));
+                if ($memberLabel === '') {
+                    $memberLabel = trim((string) ($proposal['email'] ?? ''));
+                }
+                if ($memberLabel === '') {
+                    $memberLabel = '#' . (int) ($proposal['member_id'] ?? 0);
+                }
+                $proposalCreatedTimestamp = strtotime((string) ($proposal['created_at'] ?? 'now'));
+                if ($proposalCreatedTimestamp === false) {
+                    $proposalCreatedTimestamp = time();
+                }
+                $proposalCategory = webotheque_proposal_category_from_summary((string) ($proposal['summary'] ?? ''), $categories);
+                ?>
+                <article class="news-card feature-card webotheque-card">
+                    <p>
+                        <span class="badge muted"><?= e((string) ($proposalTypeLabels[$proposalType] ?? $proposalType)) ?></span>
+                        <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
+                        <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
+                    </p>
+                    <h3><?= e((string) ($proposal['title'] ?? $adminText('proposal_default_title', 'Proposition', 'Proposal'))) ?></h3>
+                    <p class="help"><?= e($adminText('proposal_author', 'Proposé par', 'Proposed by')) ?>: <?= e($memberLabel) ?></p>
+                    <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
+                        <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
+                        <p class="help"><?= e($adminText('proposal_contact', 'Contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                    <?php endif; ?>
+                    <form method="post" class="webotheque-proposal-form module-dialog-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="update_proposal_status">
+                        <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
+                        <label>
+                            <span><?= e($adminText('proposal_status_label', 'Statut', 'Status')) ?></span>
+                            <select name="proposal_status">
+                                <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
+                                    <option value="<?= e($statusCode) ?>"<?= $proposalStatus === $statusCode ? ' selected' : '' ?>><?= e($statusLabel) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <?php if ($proposalType === 'content'): ?>
+                            <label>
+                                <span><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?></span>
+                                <select name="proposal_category">
+                                    <?php foreach ($categories as $code => $label): ?>
+                                        <option value="<?= e((string) $code) ?>"<?= $proposalCategory === $code ? ' selected' : '' ?>><?= e((string) $label) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                        <?php endif; ?>
+                        <label>
+                            <span><?= e($adminText('proposal_moderation_note', 'Note de modération', 'Moderation note')) ?></span>
+                            <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
+                        </label>
+                        <p class="actions">
+                            <?php if ($sourceUrl !== ''): ?>
+                                <a class="button secondary" href="<?= e($sourceUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e($adminText('proposal_open_source', 'Ouvrir la source', 'Open source')) ?></a>
+                            <?php endif; ?>
+                            <button class="button" type="submit"><?= e($adminText('proposal_save_status', 'Enregistrer le statut', 'Save status')) ?></button>
+                        </p>
+                    </form>
+                </article>
+            <?php endforeach; ?>
+        </section>
+        <?php endif; ?>
 
         <dialog class="webotheque-proposal-dialog" id="admin-webotheque-link-dialog" aria-labelledby="admin-webotheque-link-title"<?= $showAdminLinkProposalForm ? ' open data-webotheque-auto-open' : '' ?>>
             <div class="webotheque-proposal-dialog-card">
