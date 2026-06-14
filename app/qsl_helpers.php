@@ -316,7 +316,7 @@ function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templa
     );
     $qsoStmt->execute($params);
     $rows = $qsoStmt->fetchAll();
-    if (!is_array($rows) || $rows === []) {
+    if ($rows === []) {
         return 0;
     }
 
@@ -423,7 +423,7 @@ function sanitize_svg_document(string $svg): string
         return $safeFallbackSvg;
     }
 
-    if (preg_match_all('/(?:href|xlink:href)\s*=\s*["\']([^"\']+)["\']/i', $svg, $matches) > 0 && isset($matches[1])) {
+    if (preg_match_all('/(?:href|xlink:href)\s*=\s*["\']([^"\']+)["\']/i', $svg, $matches) > 0) {
         foreach ($matches[1] as $href) {
             $candidate = strtolower(trim((string) $href));
             if (str_starts_with($candidate, 'data:image/')) {
@@ -548,12 +548,12 @@ function qsl_background_upload_to_data_uri(?array $upload): string
         throw new RuntimeException(upload_i18n_message('qsl_bg_too_large'));
     }
 
-    $extension = match ($mime) {
+    $extensionsByMime = [
         'image/jpeg' => 'jpg',
         'image/png' => 'png',
         'image/webp' => 'webp',
-        default => 'jpg',
-    };
+    ];
+    $extension = $extensionsByMime[$mime];
     assert_upload_file_is_valid_signature($tmpPath, [$extension]);
     $sanitizedTmpPath = sanitize_uploaded_image_file($tmpPath, $extension);
     $raw = @file_get_contents($sanitizedTmpPath);
