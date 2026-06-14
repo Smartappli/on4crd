@@ -26,7 +26,7 @@ if (session_status() === PHP_SESSION_NONE && session_id() === '') {
     ini_set('session.cookie_samesite', 'Lax');
 
     session_name((string) ($bootstrapConfig['app']['session_name'] ?? 'on4crd_session'));
-    session_set_cookie_params([
+    session_set_cookie_params([ // NOSONAR - local HTTP installs must keep sessions usable; HTTPS/proxy requests set secure cookies.
         'lifetime' => 0,
         'path' => '/',
         'domain' => '',

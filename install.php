@@ -142,11 +142,12 @@ if (!is_file($configFile)) {
             }
 
             $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $values['db_host'], $values['db_port'], $values['db_name']);
-            new PDO($dsn, $values['db_user'], $values['db_pass'], [
+            $connection = new PDO($dsn, $values['db_user'], $values['db_pass'], [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_TIMEOUT => 5,
             ]);
+            $connection->query('SELECT 1');
 
             $configPhp = installer_build_config_php($values);
             if (!is_dir(dirname($configFile)) && !mkdir(dirname($configFile), 0755, true) && !is_dir(dirname($configFile))) {

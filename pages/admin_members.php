@@ -42,8 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $params[] = (int) ($_POST['member_id'] ?? 0);
     db()->prepare('UPDATE members SET ' . implode(', ', $updates) . ' WHERE id = ? LIMIT 1')->execute($params);
     set_flash('success', (string) $t['member_updated']);
-    $postReturnQuery = trim((string) ($_POST['return_query'] ?? ''));
-    redirect('admin_members' . ($postReturnQuery !== '' ? '&' . $postReturnQuery : ''));
+    $postReturnParams = [];
+    parse_str((string) ($_POST['return_query'] ?? ''), $postReturnParams);
+    $postReturnSort = (string) ($postReturnParams['sort'] ?? 'callsign');
+    $postReturnDir = strtolower((string) ($postReturnParams['dir'] ?? 'asc')) === 'desc' ? 'desc' : 'asc';
+    redirect_url(route_url_clean('admin_members', [
+        'member_q' => trim((string) ($postReturnParams['member_q'] ?? '')),
+        'sort' => in_array($postReturnSort, ['callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'], true) ? $postReturnSort : 'callsign',
+        'dir' => $postReturnDir,
+    ]));
 }
 
 $memberSearch = trim((string) ($_GET['member_q'] ?? ''));
