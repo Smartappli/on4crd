@@ -83,7 +83,7 @@ function llms_recent_public_content_lines(string $base): array
 
     if (module_enabled('wiki') && table_exists('wiki_pages')) {
         try {
-            $rows = db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 5')->fetchAll() ?: [];
+            $rows = db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE ' . wiki_public_page_where_sql() . ' ORDER BY updated_at DESC LIMIT 5')->fetchAll() ?: [];
             if ($rows !== []) {
                 $sections[] = '';
                 $sections[] = '## Recent public wiki pages';

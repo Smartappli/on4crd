@@ -398,7 +398,7 @@ try {
 
     if (module_enabled('wiki') && table_exists('wiki_pages')) {
         $latestWikiPage = cache_remember('home_latest_wiki_page_v2', 60, static function () {
-            return db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 1')->fetch();
+            return db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE ' . wiki_public_page_where_sql() . ' ORDER BY updated_at DESC LIMIT 1')->fetch();
         });
     }
 

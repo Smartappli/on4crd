@@ -74,7 +74,7 @@ if (module_enabled('events') && table_exists('events')) {
 
 if (module_enabled('wiki') && table_exists('wiki_pages')) {
     try {
-        $rows = db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 10')->fetchAll() ?: [];
+        $rows = db()->query('SELECT slug, title, content, updated_at FROM wiki_pages WHERE ' . wiki_public_page_where_sql() . ' ORDER BY updated_at DESC LIMIT 10')->fetchAll() ?: [];
         foreach ($rows as $row) {
             $recent['wiki'][] = [
                 'title' => (string) ($row['title'] ?? ''),
