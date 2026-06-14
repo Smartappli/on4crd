@@ -94,6 +94,7 @@ final class SeoHelpersTest extends TestCase
         self::assertIsArray($meta['json_ld'] ?? null);
         self::assertSame('ON4CRD', $meta['json_ld']['isPartOf']['name'] ?? null);
         self::assertSame('Radio Club Durnal ON4CRD', $meta['json_ld']['publisher']['name'] ?? null);
+        self::assertSame(club_place_schema(), $meta['json_ld']['about']['location'] ?? null);
         self::assertStringEndsWith('#webpage', (string) ($meta['json_ld']['@id'] ?? ''));
     }
 
@@ -120,5 +121,6 @@ final class SeoHelpersTest extends TestCase
         self::assertIsString($knowledgeGraph);
         self::assertStringContainsString("'@type' => 'Dataset'", $knowledgeGraph);
         self::assertStringContainsString("'@type' => 'DataCatalog'", $knowledgeGraph);
+        self::assertStringContainsString("club_place_schema(\$homeUrl . '#place')", $knowledgeGraph);
     }
 }
