@@ -300,15 +300,15 @@ ob_start();
 
 <dialog class="events-proposal-dialog" id="events-proposal-dialog" aria-labelledby="events-proposal-title">
     <div class="events-proposal-dialog-card">
-        <div class="events-proposal-dialog-header">
+        <div class="events-proposal-dialog-header module-dialog-header">
             <div>
                 <p class="events-hero-title"><?= e($t['calendar_name']) ?></p>
                 <h2 id="events-proposal-title"><?= e($canManageEvents ? 'Créer un événement' : $t['propose_event']) ?></h2>
                 <p class="help"><?= e($canManageEvents ? 'Votre evenement sera publie directement.' : $t['propose_event_intro']) ?></p>
             </div>
-            <button class="events-proposal-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
+            <button class="events-proposal-dialog-close module-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
         </div>
-        <form class="events-proposal-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
+        <form class="events-proposal-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-event-proposal-form data-event-proposal-recipient="<?= e($contactEmail) ?>" data-event-proposal-subject="<?= e($t['propose_event_subject']) ?>" data-event-proposal-intro="<?= e($t['propose_event_body_intro']) ?>">
             <?php if ($user !== null): ?>
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_event">
@@ -335,7 +335,7 @@ ob_start();
                 <span><?= e($t['propose_event_contact_label']) ?></span>
                 <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
-            <div class="events-proposal-dialog-actions">
+            <div class="events-proposal-dialog-actions module-dialog-actions">
                 <button class="button" type="submit"><?= e($canManageEvents ? 'Publier' : $t['propose_event_submit']) ?></button>
                 <button class="button secondary" type="button" data-event-proposal-close><?= e($t['propose_event_cancel']) ?></button>
             </div>
