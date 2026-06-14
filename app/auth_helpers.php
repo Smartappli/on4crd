@@ -20,6 +20,37 @@ function auth_bypass_request_is_local(): bool
     return in_array($ip, ['127.0.0.1', '::1', '::ffff:127.0.0.1'], true);
 }
 
+/**
+ * @return list<string>
+ */
+function auth_bypass_member_routes(): array
+{
+    return [
+        'dashboard',
+        'save_dashboard',
+        'widget_render',
+        'profile',
+        'qsl',
+        'qsl_preview',
+        'qsl_export',
+        'classifieds',
+        'auction_bid',
+        'newsletter',
+    ];
+}
+
+function auth_first_active_member_id(): int
+{
+    if (!table_exists('members')) {
+        return 0;
+    }
+
+    $stmt = db()->query('SELECT id FROM members WHERE is_active = 1 ORDER BY id ASC LIMIT 1');
+    $firstActiveMemberId = $stmt !== false ? (int) $stmt->fetchColumn() : 0;
+
+    return max(0, $firstActiveMemberId);
+}
+
 function auth_bypass_member_id(): int
 {
     $environment = strtolower(trim((string) config('app.env', 'production')));
@@ -37,47 +68,16 @@ function auth_bypass_member_id(): int
 
     $route = (string) ($_GET['route'] ?? 'home');
     $temporaryBypassForMembers = (bool) config('app.bypass_member_modules_auth', false);
-    $memberBypassRoutes = [
-        'dashboard',
-        'save_dashboard',
-        'widget_render',
-        'profile',
-        'qsl',
-        'qsl_preview',
-        'qsl_export',
-        'classifieds',
-        'auction_bid',
-        'newsletter',
-    ];
-    if ($temporaryBypassForMembers && in_array($route, $memberBypassRoutes, true) && table_exists('members')) {
-        $stmt = db()->query('SELECT id FROM members WHERE is_active = 1 ORDER BY id ASC LIMIT 1');
-        $firstActiveMemberId = $stmt !== false ? (int) $stmt->fetchColumn() : 0;
-
-        return max(0, $firstActiveMemberId);
+    if ($temporaryBypassForMembers && in_array($route, auth_bypass_member_routes(), true)) {
+        return auth_first_active_member_id();
     }
 
     $allowDevelopmentBypass = (bool) config('app.disable_login_in_development', false);
-    $route = (string) ($_GET['route'] ?? 'home');
-    $memberBypassRoutes = [
-        'dashboard',
-        'save_dashboard',
-        'widget_render',
-        'profile',
-        'qsl',
-        'qsl_preview',
-        'qsl_export',
-        'classifieds',
-        'auction_bid',
-        'newsletter',
-    ];
-    if (!$allowDevelopmentBypass || !table_exists('members') || !in_array($route, $memberBypassRoutes, true)) {
+    if (!$allowDevelopmentBypass || !in_array($route, auth_bypass_member_routes(), true)) {
         return 0;
     }
 
-    $stmt = db()->query('SELECT id FROM members WHERE is_active = 1 ORDER BY id ASC LIMIT 1');
-    $firstActiveMemberId = $stmt !== false ? (int) $stmt->fetchColumn() : 0;
-
-    return max(0, $firstActiveMemberId);
+    return auth_first_active_member_id();
 }
 
 function bypass_member_user(int $memberId): ?array
