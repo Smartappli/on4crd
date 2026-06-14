@@ -573,7 +573,7 @@ function render_ham_weather_advice(array $user = []): string
     $agrometToken = trim((string) env('AGROMET_API_TOKEN', ''));
     if ($agrometToken !== '') {
         $agrometUrl = ham_agromet_hourly_url();
-        $agrometPayload = cache_remember('ham:advice:weather:agromet:' . sha1($agrometUrl), 300, static function () use ($agrometUrl, $agrometToken): ?array {
+        $agrometPayload = cache_remember('ham:advice:weather:agromet:' . hash('sha256', $agrometUrl), 300, static function () use ($agrometUrl, $agrometToken): ?array {
             return ham_agromet_api_json($agrometUrl, $agrometToken);
         });
         $currentWeather = is_array($agrometPayload) ? ham_agromet_current_weather($agrometPayload) : null;
@@ -586,7 +586,7 @@ function render_ham_weather_advice(array $user = []): string
             'current' => 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,cloud_cover,precipitation',
             'timezone' => 'auto',
         ]);
-        $weatherPayload = cache_remember('ham:advice:weather:' . sha1($weatherUrl), 300, static function () use ($weatherUrl): ?array {
+        $weatherPayload = cache_remember('ham:advice:weather:' . hash('sha256', $weatherUrl), 300, static function () use ($weatherUrl): ?array {
             $context = stream_context_create([
                 'http' => [
                     'method' => 'GET',

@@ -43,7 +43,7 @@ if (strlen($query) > 160 || preg_match('/[\x00-\x1F\x7F]/', $query)) {
     return;
 }
 
-$cacheKey = 'tools_geocode_' . sha1(strtolower($query));
+$cacheKey = 'tools_geocode_' . hash('sha256', strtolower($query));
 $cacheMiss = new stdClass();
 $cachedPayload = function_exists('cache_get') ? cache_get($cacheKey, $cacheMiss) : $cacheMiss;
 if (is_array($cachedPayload)) {

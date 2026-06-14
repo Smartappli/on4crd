@@ -87,7 +87,7 @@ function render_widget(string $slug, array $user = []): string
             $agrometToken = trim((string) env('AGROMET_API_TOKEN', ''));
             if ($agrometToken !== '') {
                 $agrometUrl = ham_agromet_hourly_url();
-                $current = cache_remember('widget:weather:agromet:' . sha1($agrometUrl), $cacheTtl, static function () use ($agrometUrl, $agrometToken): ?array {
+                $current = cache_remember('widget:weather:agromet:' . hash('sha256', $agrometUrl), $cacheTtl, static function () use ($agrometUrl, $agrometToken): ?array {
                     $payload = ham_agromet_api_json($agrometUrl, $agrometToken);
                     return is_array($payload) ? ham_agromet_current_weather($payload) : null;
                 });
@@ -103,7 +103,7 @@ function render_widget(string $slug, array $user = []): string
                         'timezone' => 'auto',
                     ]);
                 }
-                $payload = cache_remember('widget:weather:open-meteo:' . sha1($fallbackFeedUrl . '|' . $locator), $cacheTtl, static function () use ($fallbackFeedUrl): ?array {
+                $payload = cache_remember('widget:weather:open-meteo:' . hash('sha256', $fallbackFeedUrl . '|' . $locator), $cacheTtl, static function () use ($fallbackFeedUrl): ?array {
                     $context = stream_context_create([
                         'http' => [
                             'method' => 'GET',

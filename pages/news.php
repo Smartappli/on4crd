@@ -181,7 +181,7 @@ $orderBy = match ($sort) {
     default => 'COALESCE(p.published_at, p.updated_at) DESC',
 };
 $perPage = 18;
-$cacheBase = 'news_list_' . md5(json_encode([$where, $params, $sort]));
+$cacheBase = 'news_list_' . hash('sha256', json_encode([$where, $params, $sort]));
 $totalPosts = cache_remember($cacheBase . '_count', 45, static function () use ($where, $params): int {
     try {
         $countSql = 'SELECT COUNT(*) FROM news_posts p LEFT JOIN news_sections s ON s.id = p.section_id WHERE ' . implode(' AND ', $where);

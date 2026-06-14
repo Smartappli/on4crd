@@ -40,7 +40,7 @@ function localized_article_row(array $row): array
 
 function article_translation_source_hash(string $title, string $excerpt, string $content): string
 {
-    return sha1(trim($title) . "\n---excerpt---\n" . trim($excerpt) . "\n---content---\n" . trim($content));
+    return substr(hash('sha256', trim($title) . "\n---excerpt---\n" . trim($excerpt) . "\n---content---\n" . trim($content)), 0, 40);
 }
 
 /**

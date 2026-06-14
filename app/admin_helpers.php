@@ -40,7 +40,7 @@ function admin_dashboard_cards(string $locale, int $userId, string $search = '')
  */
 function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
 {
-    return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . md5($searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
+    return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . hash('sha256', $searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
         $cards = [];
         foreach (admin_module_cards_catalog() as $card) {
             $module = (string) ($card['module'] ?? '');

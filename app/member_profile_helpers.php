@@ -52,7 +52,7 @@ function member_auth_email_for_shared_contact(string $callsign): string
         $localPart = 'member';
     }
 
-    return $localPart . '-' . substr(sha1(strtoupper(trim($callsign))), 0, 10) . '@local.invalid';
+    return $localPart . '-' . substr(hash('sha256', strtoupper(trim($callsign))), 0, 10) . '@local.invalid';
 }
 }
 
@@ -329,7 +329,7 @@ function member_profile_geocode_postal_address(string $country, string $address,
         return null;
     }
 
-    $cacheKey = 'profile_geocode_' . sha1(mb_strtolower($query));
+    $cacheKey = 'profile_geocode_' . hash('sha256', mb_strtolower($query));
 
     return cache_remember($cacheKey, 30 * 24 * 60 * 60, static function () use ($query, $country): ?array {
         $url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&q=' . rawurlencode($query);
