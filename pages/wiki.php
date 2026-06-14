@@ -181,7 +181,7 @@ ob_start();
 
     <dialog class="wiki-theme-dialog" id="wiki-theme-dialog" aria-labelledby="wiki-theme-dialog-title">
         <div class="wiki-theme-dialog-card">
-            <div class="wiki-theme-dialog-header">
+            <div class="wiki-theme-dialog-header module-dialog-header">
                 <div>
                     <p class="wiki-theme-dialog-eyebrow"><?= e($tr('themes', 'Thématiques')) ?></p>
                     <h2 id="wiki-theme-dialog-title"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une thématique') : $tr('propose_theme', 'Proposer une thematique')) ?></h2>
@@ -189,7 +189,7 @@ ob_start();
                         ? $tr('create_theme_intro', 'Avec vos droits de modération, la thématique sera validée directement.')
                         : $tr('propose_theme_intro', 'Indiquez la thematique a ajouter et les pages qui devraient y etre liees.')) ?></p>
                 </div>
-                <button class="wiki-theme-dialog-close" type="button" data-wiki-theme-close aria-label="<?= e($tr('close', 'Fermer')) ?>">&times;</button>
+                <button class="wiki-theme-dialog-close module-dialog-close" type="button" data-wiki-theme-close aria-label="<?= e($tr('close', 'Fermer')) ?>">&times;</button>
             </div>
             <form class="wiki-theme-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="<?= e($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD')) ?>" data-wiki-theme-intro="<?= e($tr('propose_theme_body_intro', 'Proposition de thématique wiki :')) ?>">
                 <?php if ($user !== null): ?>
