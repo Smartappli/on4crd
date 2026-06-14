@@ -201,8 +201,8 @@ function render_matomo_tracking_html(array $options = []): string
   <?php endif; ?>
   <?php if ($matomoCanTrackInitialPageView): ?>
   _paq.push(['trackPageView']);
-  <?php endif; ?>
   _paq.push(['enableLinkTracking']);
+  <?php endif; ?>
   (function() {
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
     g.async = true;
@@ -240,6 +240,7 @@ function render_matomo_tracking_html(array $options = []): string
         window._paq = window._paq || [];
         window._paq.push(['rememberConsentGiven']);
         window._paq.push(['trackPageView']);
+        window._paq.push(['enableLinkTracking']);
         hideBanner();
       });
     }

@@ -20,6 +20,7 @@ final class MatomoTrackingTest extends TestCase
         self::assertStringNotContainsString('setUserIsAnonymous', $html);
         self::assertStringContainsString("_paq.push(['disableCookies']);", $html);
         self::assertStringContainsString("_paq.push(['trackPageView']);", $html);
+        self::assertStringContainsString("_paq.push(['enableLinkTracking']);", $html);
         self::assertStringContainsString("u + 'matomo.php'", $html);
         self::assertStringContainsString("u + 'matomo.js'", $html);
         self::assertStringContainsString("_paq.push(['setSiteId', \"4\"]);", $html);
@@ -42,7 +43,9 @@ final class MatomoTrackingTest extends TestCase
         self::assertStringContainsString('on4crd_tracking_consent=', $html);
         self::assertStringContainsString("window._paq.push(['rememberConsentGiven']);", $html);
         self::assertStringContainsString("window._paq.push(['trackPageView']);", $html);
+        self::assertStringContainsString("window._paq.push(['enableLinkTracking']);", $html);
         self::assertDoesNotMatchRegularExpression("/^\\s+_paq\\.push\\(\\['trackPageView'\\]\\);$/m", $html);
+        self::assertDoesNotMatchRegularExpression("/^\\s+_paq\\.push\\(\\['enableLinkTracking'\\]\\);$/m", $html);
     }
 
     public function testRememberedConsentTracksInitialPageViewWithoutBanner(): void
@@ -55,6 +58,7 @@ final class MatomoTrackingTest extends TestCase
         self::assertStringContainsString("_paq.push(['requireConsent']);", $html);
         self::assertStringContainsString("_paq.push(['rememberConsentGiven']);", $html);
         self::assertMatchesRegularExpression("/^\\s+_paq\\.push\\(\\['trackPageView'\\]\\);$/m", $html);
+        self::assertMatchesRegularExpression("/^\\s+_paq\\.push\\(\\['enableLinkTracking'\\]\\);$/m", $html);
         $this->assertTrackerConfigurationPrecedesInitialPageView($html);
         self::assertStringNotContainsString('data-matomo-consent-banner', $html);
     }
@@ -68,6 +72,7 @@ final class MatomoTrackingTest extends TestCase
 
         self::assertStringContainsString("_paq.push(['requireConsent']);", $html);
         self::assertDoesNotMatchRegularExpression("/^\\s+_paq\\.push\\(\\['trackPageView'\\]\\);$/m", $html);
+        self::assertDoesNotMatchRegularExpression("/^\\s+_paq\\.push\\(\\['enableLinkTracking'\\]\\);$/m", $html);
         self::assertStringNotContainsString("_paq.push(['rememberConsentGiven']);", $html);
         self::assertStringNotContainsString('data-matomo-consent-banner', $html);
     }
