@@ -60,7 +60,7 @@ const scenarios: ToolScenario[] = [
     id: 'tool-freq-wave',
     steps: [
       { action: 'fill', selector: '#freq-mhz', value: '145.5' },
-      { action: 'expectText', selector: '#freq-wavelength', pattern: /2\.061.*m/ },
+      { action: 'expectText', selector: '#freq-wavelength', pattern: /2\.060.*m/ },
     ],
   },
   {
