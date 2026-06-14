@@ -35,6 +35,36 @@ function seo_public_current_query(): array
     return clean_query_params($query);
 }
 
+/**
+ * @return array<string, mixed>
+ */
+function club_place_schema(string $id = ''): array
+{
+    $place = [
+        '@type' => 'Place',
+        'name' => 'Bocq Arena',
+        'address' => [
+            '@type' => 'PostalAddress',
+            'streetAddress' => 'Rue des Ecoles',
+            'postalCode' => '5530',
+            'addressLocality' => 'Purnode',
+            'addressRegion' => 'Namur',
+            'addressCountry' => 'BE',
+        ],
+        'geo' => [
+            '@type' => 'GeoCoordinates',
+            'latitude' => 50.3150,
+            'longitude' => 4.9452,
+        ],
+    ];
+
+    if ($id !== '') {
+        $place['@id'] = $id;
+    }
+
+    return $place;
+}
+
 function localized_seo_defaults(string $route, string $locale, array $pageMeta, string $siteName): array
 {
     $seo = i18n_domain_locale('seo', $locale);
@@ -191,23 +221,7 @@ function localized_seo_defaults(string $route, string $locale, array $pageMeta, 
                 '@type' => 'Organization',
                 'name' => 'Radio Club Durnal ON4CRD',
                 'url' => route_url_with_locale('home', $locale),
-                'location' => [
-                    '@type' => 'Place',
-                    'name' => 'Bocq Arena',
-                    'address' => [
-                        '@type' => 'PostalAddress',
-                        'streetAddress' => 'Rue des Ecoles',
-                        'postalCode' => '5530',
-                        'addressLocality' => 'Purnode',
-                        'addressRegion' => 'Namur',
-                        'addressCountry' => 'BE',
-                    ],
-                    'geo' => [
-                        '@type' => 'GeoCoordinates',
-                        'latitude' => 50.3150,
-                        'longitude' => 4.9452,
-                    ],
-                ],
+                'location' => club_place_schema(),
             ],
         ];
         if (!empty($defaults['image'])) {
