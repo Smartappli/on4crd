@@ -36,6 +36,10 @@
       if (!dialog.open) {
         dialog.showModal();
       }
+      const menu = button.closest('details');
+      if (menu) {
+        menu.removeAttribute('open');
+      }
       const firstField = dialog.querySelector('input, textarea, select');
       if (firstField instanceof HTMLElement) {
         firstField.focus();
