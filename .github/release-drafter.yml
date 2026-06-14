@@ -3,18 +3,18 @@ tag-template: 'v$RESOLVED_VERSION'
 change-template: '- $TITLE (#$NUMBER)'
 version-template: '$MAJOR.$MINOR.$PATCH'
 categories:
-  - title: '🚀 Fonctionnalités'
+  - title: 'Fonctionnalites'
     labels:
       - feature
       - enhancement
-  - title: '🛡️ Sécurité'
+  - title: 'Securite'
     labels:
       - security
-  - title: '🧪 Qualité'
+  - title: 'Qualite'
     labels:
       - tests
       - ci
-  - title: '🛠️ Maintenance'
+  - title: 'Maintenance'
     labels:
       - chore
       - dependencies
