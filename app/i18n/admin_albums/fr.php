@@ -42,7 +42,7 @@ return array (
   'title_required' => 'Un titre est requis.',
   'invalid_photo' => 'Photo invalide.',
   'album_deleted_ok' => 'Album supprimé avec ses photos.',
-  'public_albums' => 'Albums publics',
+  'public_albums' => 'Albums photo',
   'photos' => 'Photos',
   'intro' => 'Créez des albums, publiez les galeries, téléversez les images, régénérez les miniatures et maintenez les légendes.',
   'batch_title_hint' => 'Laisser vide pour utiliser le nom de chaque fichier',

@@ -84,7 +84,7 @@ return array (
   'module_disabled' => 'Le module petites annonces est désactivé.',
   'status_pending' => 'En validation',
   'submit_for_review' => 'Soumettre pour validation',
-  'not_available' => 'Non renseign?',
+  'not_available' => 'Non renseigné',
   'limit_invalid_user' => 'Utilisateur invalide.',
   'limit_rate_limited' => 'Veuillez patienter une minute avant de proposer une autre annonce.',
   'limit_daily' => 'Limite atteinte : maximum 5 annonces par 24 heures.',

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'public_albums' => 'Albums publics',
+  'public_albums' => 'Albums photo',
   'gallery_unavailable' => 'La galerie sera disponible après initialisation.',
   'manage' => 'Gérer',
   'intro' => 'Explorez les activités du club en images : ateliers, sorties, contests et moments de vie associative.',
