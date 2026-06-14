@@ -14,15 +14,12 @@ trap cleanup EXIT
 
 python - <<'PY' > "$TMP_JS"
 from pathlib import Path
-import re
 
-script_file = Path('pages/tools_script.js.php')
+script_file = Path('assets/js/modules/tools.js')
 if not script_file.is_file():
-    raise SystemExit('tools script file not found: pages/tools_script.js.php')
+    raise SystemExit('tools script file not found: assets/js/modules/tools.js')
 
-js = script_file.read_text()
-js = re.sub(r'<\?(?:php|=).*?\?>', 'null', js, flags=re.S)
-print(js)
+print(script_file.read_text())
 PY
 
 node --check "$TMP_JS"
