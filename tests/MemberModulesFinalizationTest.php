@@ -96,7 +96,11 @@ final class MemberModulesFinalizationTest extends TestCase
         $pvDefinition = member_document_module_definition('pv');
         self::assertSame(['formats'], $pvDefinition['hidden_stats'] ?? null);
         self::assertTrue((bool) ($pvDefinition['latest_document_cta'] ?? false));
-        self::assertSame('Consulter le dernier PV', member_document_module_labels('pv', 'fr')['view_content']);
+        $pvLabels = member_document_module_labels('pv', 'fr');
+        self::assertSame('Consulter le dernier PV', $pvLabels['view_content']);
+        $pvStats = render_member_document_module_stats(['total' => 2, 'formats' => 1, 'latest' => '2026-06-14'], $pvLabels, '14/06/2026', ['formats']);
+        self::assertStringNotContainsString('Formats', $pvStats);
+        self::assertStringContainsString('Dernier ajout', $pvStats);
 
         $renderer = $this->source('app/member_module_documents.php');
         self::assertStringContainsString('idx_module_tags', $renderer);
