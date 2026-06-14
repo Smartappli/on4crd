@@ -48,10 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Demande invalide.');
         }
         if (has_permission('albums.manage')) {
-            $albumDescription = trim($description . "\n\n" . content_proposal_details_text([
-                'Thematique' => $theme,
-                'Mots cles' => $keywords,
-            ]));
+            $albumMetadata = ($theme !== '' && $theme !== 'general') || $keywords !== ''
+                ? content_proposal_details_text([
+                    'Thematique' => $theme,
+                    'Mots cles' => $keywords,
+                ])
+                : '';
+            $albumDescription = trim($description . ($albumMetadata !== '' ? "\n\n" . $albumMetadata : ''));
             db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, 1)')
                 ->execute([$title, $albumDescription !== '' ? $albumDescription : null]);
             $albumId = (int) db()->lastInsertId();

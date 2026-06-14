@@ -88,7 +88,7 @@ function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $ma
     if ($width <= 0 || $height <= 0) {
         return null;
     }
-    $mime = (string) ($info['mime'] ?? '');
+    $mime = (string) $info['mime'];
     $src = match ($mime) {
         'image/jpeg' => @imagecreatefromjpeg($sourcePath),
         'image/png' => @imagecreatefrompng($sourcePath),
