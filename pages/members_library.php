@@ -343,6 +343,9 @@ ob_start();
                         <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) ($t['propose_document_item'] ?? 'Un document')) ?></a>
                     </div>
                 </details>
+                <?php if ($canManageLibrary): ?>
+                    <a class="button secondary" href="<?= e($pendingLibraryAdminUrl) ?>"><?= e($pendingLibraryAdminLabel) ?></a>
+                <?php endif; ?>
             </div>
         </div>
     </section>
