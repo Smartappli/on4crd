@@ -17,7 +17,7 @@ final class MatomoTrackingTest extends TestCase
 
         self::assertStringContainsString("var _paq = window._paq = window._paq || [];", $html);
         self::assertStringContainsString("_paq.push(['setDoNotTrack', true]);", $html);
-        self::assertStringContainsString("_paq.push(['setUserIsAnonymous', true]);", $html);
+        self::assertStringNotContainsString('setUserIsAnonymous', $html);
         self::assertStringContainsString("_paq.push(['disableCookies']);", $html);
         self::assertStringContainsString("_paq.push(['trackPageView']);", $html);
         self::assertStringContainsString("u + 'matomo.php'", $html);

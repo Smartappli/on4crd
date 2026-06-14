@@ -71,7 +71,6 @@ function render_matomo_tracking_html(array $options = []): string
   _paq.push(['setTrackerUrl', u + 'matomo.php']);
   _paq.push(['setSiteId', <?= json_encode($matomoSiteId) ?>]);
   _paq.push(['setDoNotTrack', true]);
-  _paq.push(['setUserIsAnonymous', true]);
   <?php if ($matomoDisableCookies): ?>
   _paq.push(['disableCookies']);
   <?php endif; ?>
