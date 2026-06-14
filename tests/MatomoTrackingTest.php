@@ -23,6 +23,7 @@ final class MatomoTrackingTest extends TestCase
         self::assertStringContainsString("u + 'matomo.php'", $html);
         self::assertStringContainsString("u + 'matomo.js'", $html);
         self::assertStringContainsString("_paq.push(['setSiteId', \"4\"]);", $html);
+        $this->assertTrackerConfigurationPrecedesInitialPageView($html);
         self::assertStringNotContainsString("_paq.push(['requireConsent']);", $html);
         self::assertStringNotContainsString('data-matomo-consent-banner', $html);
     }
@@ -54,6 +55,7 @@ final class MatomoTrackingTest extends TestCase
         self::assertStringContainsString("_paq.push(['requireConsent']);", $html);
         self::assertStringContainsString("_paq.push(['rememberConsentGiven']);", $html);
         self::assertMatchesRegularExpression("/^\\s+_paq\\.push\\(\\['trackPageView'\\]\\);$/m", $html);
+        $this->assertTrackerConfigurationPrecedesInitialPageView($html);
         self::assertStringNotContainsString('data-matomo-consent-banner', $html);
     }
 
@@ -83,5 +85,18 @@ final class MatomoTrackingTest extends TestCase
             'consent' => '',
             'locale' => 'fr',
         ], $overrides));
+    }
+
+    private function assertTrackerConfigurationPrecedesInitialPageView(string $html): void
+    {
+        $trackerUrlPosition = strpos($html, "_paq.push(['setTrackerUrl', u + 'matomo.php']);");
+        $siteIdPosition = strpos($html, "_paq.push(['setSiteId', \"4\"]);");
+        $pageViewPosition = strpos($html, "_paq.push(['trackPageView']);");
+
+        self::assertIsInt($trackerUrlPosition);
+        self::assertIsInt($siteIdPosition);
+        self::assertIsInt($pageViewPosition);
+        self::assertLessThan($pageViewPosition, $trackerUrlPosition);
+        self::assertLessThan($pageViewPosition, $siteIdPosition);
     }
 }

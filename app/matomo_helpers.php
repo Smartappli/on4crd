@@ -67,6 +67,9 @@ function render_matomo_tracking_html(array $options = []): string
     ?>
 <script nonce="<?= e(csp_nonce()) ?>">
   var _paq = window._paq = window._paq || [];
+  var u = <?= json_encode($matomoUrl . '/', JSON_UNESCAPED_SLASHES) ?>;
+  _paq.push(['setTrackerUrl', u + 'matomo.php']);
+  _paq.push(['setSiteId', <?= json_encode($matomoSiteId) ?>]);
   _paq.push(['setDoNotTrack', true]);
   _paq.push(['setUserIsAnonymous', true]);
   <?php if ($matomoDisableCookies): ?>
@@ -83,9 +86,6 @@ function render_matomo_tracking_html(array $options = []): string
   <?php endif; ?>
   _paq.push(['enableLinkTracking']);
   (function() {
-    var u = <?= json_encode($matomoUrl . '/', JSON_UNESCAPED_SLASHES) ?>;
-    _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', <?= json_encode($matomoSiteId) ?>]);
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
     g.async = true;
     g.src = u + 'matomo.js';
