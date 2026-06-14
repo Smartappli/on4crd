@@ -37,7 +37,7 @@ sort($modules);
 $issues = [];
 foreach ($modules as $module) {
     $base = $i18nRoot . '/' . $module;
-    $en = require $base . '/en.php';
+    $en = require $base . '/en.php'; // NOSONAR - utility script validates repeatable locale arrays.
     if (!is_array($en)) {
         $issues[] = [$module, 'en', 'invalid_array'];
         continue;
@@ -50,7 +50,7 @@ foreach ($modules as $module) {
             continue;
         }
 
-        $dict = require $file;
+        $dict = require $file; // NOSONAR - utility script validates repeatable locale arrays.
         if (!is_array($dict)) {
             $issues[] = [$module, $locale, 'invalid_array'];
             continue;

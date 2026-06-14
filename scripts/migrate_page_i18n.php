@@ -73,7 +73,7 @@ foreach (glob($pagesRoot . '/*.php') ?: [] as $pageFile) {
     }
 
     [$start, $end, $arraySource] = $assignment;
-    $messages = eval('return ' . $arraySource . ';');
+    $messages = eval('return ' . $arraySource . ';'); // NOSONAR - local migration tool evaluates extracted trusted PHP array literals.
     if (!is_array($messages)) {
         fwrite(STDERR, 'Invalid i18n array: ' . basename($pageFile) . PHP_EOL);
         exit(1);

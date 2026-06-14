@@ -12,7 +12,7 @@ final class ToolsPanelsContractTest extends TestCase
      */
     private static function panelMap(): array
     {
-        $map = require __DIR__ . '/../app/config/tools_panels.php';
+        $map = require __DIR__ . '/../app/config/tools_panels.php'; // NOSONAR - test data file returns an array.
         self::assertIsArray($map);
 
         /** @var array<string, string> $map */
@@ -34,7 +34,7 @@ final class ToolsPanelsContractTest extends TestCase
 
     public function testEveryCatalogToolHasAMappedPanel(): void
     {
-        $catalog = require __DIR__ . '/../app/config/tools_catalog.php';
+        $catalog = require __DIR__ . '/../app/config/tools_catalog.php'; // NOSONAR - test data file returns an array.
         self::assertIsArray($catalog);
 
         $mappedToolIds = array_keys(self::panelMap());
@@ -178,7 +178,7 @@ final class ToolsPanelsContractTest extends TestCase
         self::assertFileExists($path);
 
         /** @var array<string, string> $t */
-        $t = require __DIR__ . '/../app/i18n/tools/fr.php';
+        $t = require __DIR__ . '/../app/i18n/tools/fr.php'; // NOSONAR - locale file returns an array.
         $conversionTools = [];
         $radioMathTools = [];
 
@@ -191,7 +191,7 @@ final class ToolsPanelsContractTest extends TestCase
         $bufferLevel = ob_get_level();
         try {
             ob_start();
-            require $path;
+            require $path; // NOSONAR - panel partials must be rendered repeatedly in contract tests.
             $html = (string) ob_get_clean();
         } finally {
             while (ob_get_level() > $bufferLevel) {

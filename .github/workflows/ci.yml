@@ -23,10 +23,9 @@ jobs:
     steps:
       - &checkout_step
         name: Checkout
-        uses: actions/checkout@v6
-
+        uses: actions/checkout@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           php-version: ${{ matrix.php-version }}
           coverage: xdebug
@@ -57,7 +56,7 @@ jobs:
       - *checkout_step
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           php-version: '8.5'
           coverage: none
@@ -81,7 +80,7 @@ jobs:
       - *checkout_step
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           php-version: '8.5'
           coverage: none

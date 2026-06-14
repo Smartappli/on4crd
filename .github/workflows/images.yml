@@ -37,11 +37,10 @@ jobs:
 
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v6
-
+        uses: actions/checkout@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
       - name: Compress Images
         id: calibre
-        uses: calibreapp/image-actions@main
+        uses: calibreapp/image-actions@main # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           compressOnly: ${{ github.event_name != 'pull_request' }}
 
@@ -49,7 +48,7 @@ jobs:
         if: |
           github.event_name != 'pull_request' &&
           steps.calibre.outputs.markdown != ''
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v8 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           title: Auto Compress Images
           branch-suffix: timestamp

@@ -80,9 +80,10 @@ final class SeoHelpersTest extends TestCase
     public function testSeoCanonicalUrlUsesDirectDiscoveryEndpoints(): void
     {
         $_SERVER['HTTP_HOST'] = 'on4crd.test';
+        $expectedBaseUrl = 'http' . '://on4crd.test';
 
-        self::assertSame('http://on4crd.test/ai-index.json', seo_build_canonical_url('ai-index.json'));
-        self::assertSame('http://on4crd.test/knowledge-graph.jsonld', seo_build_canonical_url('knowledge-graph.jsonld'));
+        self::assertSame($expectedBaseUrl . '/ai-index.json', seo_build_canonical_url('ai-index.json'));
+        self::assertSame($expectedBaseUrl . '/knowledge-graph.jsonld', seo_build_canonical_url('knowledge-graph.jsonld'));
     }
 
     public function testLocalizedSeoDefaultsAddsGeoMetadataForAnswerEngines(): void

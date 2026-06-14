@@ -21,10 +21,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-
+        uses: actions/checkout@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
@@ -55,10 +54,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-
+        uses: actions/checkout@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           php-version: '8.5'
           coverage: none
@@ -66,7 +64,7 @@ jobs:
           tools: composer:v2
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           node-version: '24'
 
@@ -98,7 +96,7 @@ jobs:
 
       - name: Upload Playwright artifacts
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
           name: playwright-artifacts
           path: |

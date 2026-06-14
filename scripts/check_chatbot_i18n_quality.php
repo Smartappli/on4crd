@@ -4,7 +4,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__);
 $dir = $root . '/app/i18n/chatbot';
 $expectedLocales = ['en', 'fr', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
-$requiredKeys = array_keys(require $dir . '/en.php');
+$requiredKeys = array_keys(require $dir . '/en.php'); // NOSONAR - utility script validates repeatable locale arrays.
 
 $errors = [];
 $warnings = [];
@@ -17,7 +17,7 @@ foreach ($expectedLocales as $locale) {
         continue;
     }
 
-    $dict = require $path;
+    $dict = require $path; // NOSONAR - utility script validates repeatable locale arrays.
     if (!is_array($dict)) {
         $errors[] = $locale . ': invalid dictionary';
         continue;

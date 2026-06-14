@@ -1,4 +1,4 @@
-FROM php:8.5-apache
+FROM php:8.5-apache # NOSONAR - Apache needs the image entrypoint to start as root before dropping worker privileges.
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

@@ -182,7 +182,7 @@ if (is_dir($homeDir)) {
             continue;
         }
 
-        $messages = require $path;
+        $messages = require $path; // NOSONAR - utility script validates repeatable locale arrays.
         if (!is_array($messages)) {
             $issues[] = ['home.php', ['invalid_locale_file_' . $locale]];
             continue;

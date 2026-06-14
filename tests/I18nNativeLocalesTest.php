@@ -32,7 +32,7 @@ final class I18nNativeLocalesTest extends TestCase
     private function loadLocaleFile(string $path): array
     {
         $t = static fn (string $key): string => $key;
-        $messages = require $path;
+        $messages = require $path; // NOSONAR - locale loader returns array data.
 
         self::assertIsArray($messages);
 

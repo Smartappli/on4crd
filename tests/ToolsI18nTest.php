@@ -15,7 +15,7 @@ final class ToolsI18nTest extends TestCase
         $path = __DIR__ . '/../app/i18n/tools/' . $locale . '.php';
         self::assertFileExists($path);
 
-        $data = require $path;
+        $data = require $path; // NOSONAR - locale files return arrays and are intentionally repeatable.
         self::assertIsArray($data);
 
         /** @var array<string, string> $data */
@@ -40,7 +40,7 @@ final class ToolsI18nTest extends TestCase
      */
     public static function localeKeyParityProvider(): array
     {
-        $messages = require __DIR__ . '/../app/i18n/tools.php';
+        $messages = require __DIR__ . '/../app/i18n/tools.php'; // NOSONAR - loader returns array data.
         unset($messages['fr']);
 
         $cases = [];
@@ -53,7 +53,7 @@ final class ToolsI18nTest extends TestCase
 
     public function testToolsLocalesDoNotContainCommonTechnicalMojibake(): void
     {
-        $messages = require __DIR__ . '/../app/i18n/tools.php';
+        $messages = require __DIR__ . '/../app/i18n/tools.php'; // NOSONAR - loader returns array data.
         self::assertIsArray($messages);
 
         $badFragments = ['Âµ', 'Â°', 'Î©', 'â†’', 'â†”', 'â€™', 'â€œ', 'â€“', 'â€”'];
