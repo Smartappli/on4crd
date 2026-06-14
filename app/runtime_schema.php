@@ -344,6 +344,12 @@ function apply_runtime_schema_updates_if_needed(?string $markerPath = null): boo
         return false;
     }
 
+    try {
+        db();
+    } catch (Throwable) {
+        return false;
+    }
+
     $lockPath = $markerPath . '.lock';
     $lockDirectory = dirname($lockPath);
     if (!is_dir($lockDirectory)) {
