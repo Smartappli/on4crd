@@ -80,7 +80,8 @@ function module_css_assets_for_route(string $route): array
         'wiki_view' => 'wiki',
     ];
     $module = $moduleByRoute[$route] ?? $route;
-    $assets = [];
+    $sharedPath = 'assets/css/modules/shared.css';
+    $assets = is_file(dirname(__DIR__) . '/' . $sharedPath) ? [$sharedPath] : [];
 
     $candidates = [$module];
     if ($route !== $module) {
