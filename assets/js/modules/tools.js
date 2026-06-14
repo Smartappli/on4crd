@@ -290,6 +290,25 @@
         return value;
     };
 
+    const trimTrailingDecimalZeros = (value) => {
+        let text = String(value);
+        if (!text.includes('.')) {
+            return text;
+        }
+        while (text.endsWith('0')) {
+            text = text.slice(0, -1);
+        }
+        return text.endsWith('.') ? text.slice(0, -1) : text;
+    };
+
+    const trimExponentialDecimalZeros = (value) => {
+        const [mantissa, exponent] = String(value).split('e');
+        if (typeof exponent !== 'string') {
+            return trimTrailingDecimalZeros(value);
+        }
+        return `${trimTrailingDecimalZeros(mantissa)}e${exponent}`;
+    };
+
     const initializedTools = new Set();
     const simpleToolConverters = {
         'tool-vpp-vrms': (x) => x / (2 * Math.sqrt(2)),
@@ -330,7 +349,7 @@
                 return;
             }
             const y = convert(x);
-            output.textContent = Number.isFinite(y) ? y.toFixed(6).replace(/\.?(0+)$/, '') : '—';
+            output.textContent = Number.isFinite(y) ? trimTrailingDecimalZeros(y.toFixed(6)) : '—';
         };
         input.addEventListener('input', sync);
         sync();
@@ -373,7 +392,7 @@
             if (!Number.isFinite(value)) return '—';
             const abs = Math.abs(value);
             if (abs !== 0 && (abs >= 1e7 || abs < 1e-4)) {
-                return value.toExponential(6).replace(/\.?0+e/, 'e');
+                return trimExponentialDecimalZeros(value.toExponential(6));
             }
             return value.toLocaleString(undefined, {
                 maximumFractionDigits: 8,
