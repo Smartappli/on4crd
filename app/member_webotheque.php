@@ -50,6 +50,10 @@ if (!function_exists('webotheque_normalize_url')) {
 function webotheque_normalize_url(string $url): string
 {
     $url = trim($url);
+    $rawScheme = parse_url($url, PHP_URL_SCHEME);
+    if (is_string($rawScheme) && $rawScheme !== '' && !in_array(strtolower($rawScheme), ['http', 'https'], true)) {
+        return '';
+    }
     if ($url !== '' && !preg_match('~^https?://~i', $url)) {
         $url = 'https://' . $url;
     }
