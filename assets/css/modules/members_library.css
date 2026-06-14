@@ -20,6 +20,10 @@
   color: #fff;
 }
 
+[data-route="members_library"] .members-library-hero.member-module-hero {
+  overflow: visible;
+}
+
 [data-route="members_library"] .members-library-hero-side {
   display: grid;
   gap: .85rem;
@@ -44,6 +48,7 @@
 
 [data-route="members_library"] .members-library-propose-menu {
   position: relative;
+  z-index: 5;
 }
 
 [data-route="members_library"] .members-library-propose-menu summary {
@@ -59,7 +64,7 @@
   position: absolute;
   right: 0;
   top: calc(100% + .45rem);
-  z-index: 30;
+  z-index: 50;
   display: grid;
   min-width: 13rem;
   padding: .4rem;
