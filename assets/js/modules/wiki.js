@@ -1,7 +1,7 @@
 (function () {
   const dialog = document.getElementById('wiki-theme-dialog');
-  const openButton = document.querySelector('[data-wiki-theme-open]');
-  if (!dialog || !openButton) {
+  const openButtons = document.querySelectorAll('[data-wiki-theme-open]');
+  if (!dialog || openButtons.length === 0) {
     return;
   }
 
@@ -27,15 +27,21 @@
     return labelText ? labelText.textContent.trim() : name;
   };
 
-  openButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (!dialog.open) {
-      dialog.showModal();
-    }
-    const firstField = dialog.querySelector('input, textarea');
-    if (firstField instanceof HTMLElement) {
-      firstField.focus();
-    }
+  openButtons.forEach((openButton) => {
+    openButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      const menu = openButton.closest('details');
+      if (menu) {
+        menu.removeAttribute('open');
+      }
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+      const firstField = dialog.querySelector('input, textarea');
+      if (firstField instanceof HTMLElement) {
+        firstField.focus();
+      }
+    });
   });
 
   dialog.querySelectorAll('[data-wiki-theme-close]').forEach((button) => {
