@@ -3040,7 +3040,6 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
 @media (max-width: 1024px) {
   .hero, .split, .grid-3, .home-grid, .footer-grid { grid-template-columns: 1fr; }
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .toolbar { display: none; }
 }
 @media (max-width: 900px) {
    .topbar { flex-wrap: nowrap; }
