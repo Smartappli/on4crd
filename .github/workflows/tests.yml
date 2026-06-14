@@ -43,8 +43,8 @@ jobs:
       - name: Run unit tests
         run: composer test
 
-      - name: Static analysis for webotheque
-        run: vendor/bin/phpstan analyse app/member_webotheque.php pages/webotheque.php pages/admin_webotheque.php tools/lint.php tests/WebothequeHelpersTest.php --no-progress --level=5 --memory-limit=1G
+      - name: Static analysis for finalized member modules
+        run: vendor/bin/phpstan analyse app/member_webotheque.php app/member_library_helpers.php app/member_module_documents.php app/album_helpers.php pages/webotheque.php pages/admin_webotheque.php pages/albums.php pages/idea_submit.php tools/lint.php tests/WebothequeHelpersTest.php tests/MemberModulesFinalizationTest.php --no-progress --level=5 --memory-limit=1G
 
   toolbox-smoke-and-e2e:
     name: Toolbox smoke + Playwright E2E
