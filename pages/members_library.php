@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'propose_category') {
-            $proposalTitle = (string) ($_POST['proposal_category'] ?? '');
+            $proposalTitle = (string) ($_POST['proposal_category_name'] ?? $_POST['proposal_category'] ?? '');
             $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
             $proposalSummary = content_proposal_details_text([
                 (string) ($t['propose_category_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
@@ -206,6 +206,7 @@ foreach ($categories as $catInfo) {
         $categoryLabels[$catCode] = (string) ($catInfo['label'] ?? ($catCode === 'general' ? 'Général' : $catCode));
     }
 }
+$documentProposalSelectedCategory = $category !== '' ? $category : 'general';
 $where = [];
 $params = [];
 if ($category !== '') {
@@ -351,7 +352,7 @@ ob_start();
             <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_category_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_category">
-                <label><span><?= e((string) $t['propose_category_name']) ?></span><input type="text" name="proposal_category" maxlength="160" required></label>
+                <label><span><?= e((string) $t['propose_category_name']) ?></span><input type="text" name="proposal_category_name" maxlength="160" required></label>
                 <label><span><?= e((string) $t['propose_category_reason']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
                 <div class="members-library-dialog-actions module-dialog-actions">
@@ -402,7 +403,7 @@ ob_start();
                 <label><span><?= e((string) $t['propose_document_title']) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
                 <label>
                     <span><?= e((string) $t['propose_document_category']) ?></span>
-                    <select name="proposal_category">
+                    <select name="proposal_category" required>
                         <?php foreach ($categories as $proposalCategoryOption): ?>
                             <?php
                             $proposalCategoryCode = trim((string) ($proposalCategoryOption['category'] ?? ''));
@@ -411,7 +412,7 @@ ob_start();
                             }
                             $proposalCategoryLabel = trim((string) ($proposalCategoryOption['label'] ?? $proposalCategoryCode));
                             ?>
-                            <option value="<?= e($proposalCategoryCode) ?>"<?= $category === $proposalCategoryCode ? ' selected' : '' ?>><?= e($proposalCategoryLabel !== '' ? $proposalCategoryLabel : $proposalCategoryCode) ?></option>
+                            <option value="<?= e($proposalCategoryCode) ?>"<?= $documentProposalSelectedCategory === $proposalCategoryCode ? ' selected' : '' ?>><?= e($proposalCategoryLabel !== '' ? $proposalCategoryLabel : $proposalCategoryCode) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </label>
