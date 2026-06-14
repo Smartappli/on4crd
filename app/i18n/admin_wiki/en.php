@@ -1,4 +1,31 @@
 <?php
 declare(strict_types=1);
 
-return ['title' => 'Wiki administration', 'new_page' => 'New page', 'th_title' => 'Title', 'th_slug' => 'Slug', 'th_updated' => 'Updated', 'th_action' => 'Action', 'edit' => 'Edit', 'empty' => 'No pages.', 'layout' => 'Wiki administration', 'meta_desc' => 'Manage wiki pages.'];
+return [
+  'title' => 'Wiki administration',
+  'new_page' => 'New page',
+  'th_title' => 'Title',
+  'th_slug' => 'Slug',
+  'th_updated' => 'Updated',
+  'th_action' => 'Action',
+  'th_status' => 'Status',
+  'edit' => 'Edit',
+  'view' => 'View',
+  'empty' => 'No pages.',
+  'layout' => 'Wiki administration',
+  'meta_desc' => 'Manage wiki pages.',
+  'status_pending' => 'Pending review',
+  'status_published' => 'Published',
+  'status_rejected' => 'Rejected',
+  'status_filter' => 'Filter by status',
+  'all_statuses' => 'All statuses',
+  'filter' => 'Filter',
+  'clear_filter' => 'Show all',
+  'type_modification' => 'Edit',
+  'source_page' => 'Source',
+  'invalid_page' => 'Invalid wiki page.',
+  'page_not_found' => 'Wiki page not found.',
+  'source_page_not_found' => 'Source page not found.',
+  'status_saved' => 'Wiki status saved.',
+  'modification_applied' => 'Wiki edit applied.',
+];
