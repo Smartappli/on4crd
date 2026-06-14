@@ -4,6 +4,13 @@ Options -Indexes
     Require all denied
 </FilesMatch>
 
+<FilesMatch "\.(?:html?|svg|xml)$">
+    ForceType application/octet-stream
+    <IfModule mod_headers.c>
+        Header set Content-Disposition "attachment"
+    </IfModule>
+</FilesMatch>
+
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
 </IfModule>
