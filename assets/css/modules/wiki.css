@@ -37,7 +37,7 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: stretch;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   border-color: rgb(255 255 255 / .32);
   background:
     radial-gradient(circle at 78% 20%, rgb(255 255 255 / .18), transparent 34%),
@@ -122,6 +122,53 @@
   align-items: center;
   justify-content: flex-end;
   margin: 0;
+}
+
+[data-route="wiki"] .wiki-propose-menu {
+  position: relative;
+  z-index: 20;
+}
+
+[data-route="wiki"] .wiki-propose-menu summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+[data-route="wiki"] .wiki-propose-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-route="wiki"] .wiki-propose-menu-panel {
+  position: absolute;
+  top: calc(100% + .45rem);
+  right: 0;
+  z-index: 60;
+  display: grid;
+  min-width: 14rem;
+  gap: .2rem;
+  padding: .4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+[data-route="wiki"] .wiki-propose-menu-item {
+  display: block;
+  padding: .55rem .65rem;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: .92rem;
+  font-weight: 750;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+[data-route="wiki"] .wiki-propose-menu-item:hover,
+[data-route="wiki"] .wiki-propose-menu-item:focus-visible {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent-strong);
 }
 
 [data-route="wiki"] .wiki-theme-dialog {
@@ -257,6 +304,11 @@
 
   [data-route="wiki"] .wiki-hero-actions {
     justify-content: flex-start;
+  }
+
+  [data-route="wiki"] .wiki-propose-menu-panel {
+    right: auto;
+    left: 0;
   }
 }
 
