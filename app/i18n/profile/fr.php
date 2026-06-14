@@ -69,7 +69,7 @@ return array (
   'save' => 'Enregistrer',
   'geocode_consent' => 'Calculer automatiquement le locator et les zones radio via Nominatim avec mon adresse postale.',
   'licence_none' => 'Aucune',
-  'licence_onl' => 'Ecouteur (ONL)',
+  'licence_onl' => 'Écouteur (ONL)',
   'licence_base' => 'Licence de base (ON3)',
   'licence_intermediate' => 'Licence intermédiaire (ON2)',
   'licence_on1' => 'Ancienne licence (ON1)',

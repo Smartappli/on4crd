@@ -174,7 +174,7 @@ final class FunctionHelpersExtendedTest extends TestCase
 
         try {
             assert_upload_file_is_valid_signature($tmp, ['docx']);
-            self::assertTrue(true);
+            $this->addToAssertionCount(1);
         } finally {
             @unlink($tmp);
         }
@@ -188,7 +188,7 @@ final class FunctionHelpersExtendedTest extends TestCase
 
         try {
             assert_upload_file_is_valid_signature($tmp, ['txt']);
-            self::assertTrue(true);
+            $this->addToAssertionCount(1);
         } finally {
             @unlink($tmp);
         }
@@ -237,7 +237,7 @@ final class FunctionHelpersExtendedTest extends TestCase
 
         $classifiedsCards = array_values(array_filter(
             admin_module_cards_catalog(),
-            static fn(array $card): bool => (string) ($card['route'] ?? '') === 'admin_classifieds'
+            static fn(array $card): bool => (string) $card['route'] === 'admin_classifieds'
         ));
 
         self::assertCount(1, $classifiedsCards);
@@ -432,7 +432,7 @@ final class FunctionHelpersExtendedTest extends TestCase
     {
         $t = static fn(string $key): string => [
             'licence_none' => 'Aucune',
-            'licence_onl' => 'Ecouteur (ONL)',
+            'licence_onl' => 'Écouteur (ONL)',
             'licence_base' => 'Licence de base (ON3)',
             'licence_intermediate' => 'Licence intermédiaire (ON2)',
             'licence_on1' => 'Ancienne licence (ON1)',
@@ -448,7 +448,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertStringContainsString('Licence de base (ON3)', $html);
         self::assertStringContainsString('value="ON1"', $html);
         self::assertStringContainsString('>Ancienne licence (ON1)</option>', $html);
-        self::assertStringContainsString('>Ecouteur (ONL)</option>', $html);
+        self::assertStringContainsString('>Écouteur (ONL)</option>', $html);
         self::assertStringNotContainsString('>ON2</option>', $html);
         self::assertStringNotContainsString('>ON3</option>', $html);
         self::assertSame('Licence intermédiaire (ON2)', member_profile_licence_class_display_text($t, 'ON2'));
@@ -583,7 +583,7 @@ final class FunctionHelpersExtendedTest extends TestCase
         $t = static fn(string $key): string => [
             'licence' => 'Licence',
             'licence_none' => 'Aucune',
-            'licence_onl' => 'Ecouteur (ONL)',
+            'licence_onl' => 'Écouteur (ONL)',
             'licence_base' => 'Licence de base (ON3)',
             'licence_intermediate' => 'Licence intermédiaire (ON2)',
             'licence_on1' => 'Ancienne licence (ON1)',
