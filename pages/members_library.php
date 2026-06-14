@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
                 'summary' => $proposalSummary,
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
-                'source_ref' => 'content_proposals#' . $proposalId . ' ' . $proposalFilePath,
+                'source_ref' => 'content_proposals#' . $proposalId . ' ' . base_url($proposalFilePath),
             ]);
             set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');

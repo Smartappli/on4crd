@@ -111,6 +111,9 @@ function member_library_store_proposed_document_upload(?array $file, int $member
     if ($base === '') {
         $base = 'document';
     }
+    if (strlen($base) > 80) {
+        $base = substr($base, 0, 80);
+    }
 
     $filename = secure_move_uploaded_file(
         $file,
