@@ -173,7 +173,7 @@ ob_start();
                 </article>
             </div>
             <p class="actions wiki-hero-actions">
-                <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une thématique') : $tr('propose_theme', 'Proposer une thématique')) ?></a>
+                <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></a>
                 <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
             </p>
         </div>
@@ -184,7 +184,7 @@ ob_start();
             <div class="wiki-theme-dialog-header module-dialog-header">
                 <div>
                     <p class="wiki-theme-dialog-eyebrow"><?= e($tr('themes', 'Thématiques')) ?></p>
-                    <h2 id="wiki-theme-dialog-title"><?= e($canAutoAcceptTheme ? $tr('create_theme', 'Créer une thématique') : $tr('propose_theme', 'Proposer une thématique')) ?></h2>
+                    <h2 id="wiki-theme-dialog-title"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></h2>
                     <p class="help"><?= e($canAutoAcceptTheme
                         ? $tr('create_theme_intro', 'Avec vos droits de modération, la thématique sera validée directement.')
                         : $tr('propose_theme_intro', 'Indiquez la thématique à ajouter et les pages qui devraient y être liées.')) ?></p>
@@ -200,7 +200,7 @@ ob_start();
                 <label><span><?= e($tr('propose_theme_reason', 'Pourquoi l\'ajouter ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e($tr('propose_theme_contact', 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="wiki-theme-dialog-actions module-dialog-actions">
-                    <button class="button" type="submit"><?= e($canAutoAcceptTheme ? $tr('create_theme_submit', 'Créer la thématique') : $tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
+                    <button class="button" type="submit"><?= e($canAutoAcceptTheme ? $tr('create_theme_submit', 'Proposer la thématique') : $tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
                     <button class="button secondary" type="button" data-wiki-theme-close><?= e($tr('cancel', 'Annuler')) ?></button>
                 </div>
             </form>

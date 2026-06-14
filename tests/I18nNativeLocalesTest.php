@@ -316,7 +316,13 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertIsString($wiki);
         self::assertStringContainsString('Proposer une thématique', $wiki);
         self::assertStringContainsString('Indiquez la thématique à ajouter', $wiki);
+        self::assertStringNotContainsString('Créer une thématique', $wiki);
+        self::assertStringNotContainsString('Créer la thématique', $wiki);
         self::assertStringNotContainsString('Proposer une thematique', $wiki);
         self::assertStringNotContainsString('Indiquez la thematique a ajouter', $wiki);
+
+        $wikiMessages = $this->loadLocaleFile(__DIR__ . '/../app/i18n/wiki/fr.php');
+        self::assertSame('Proposer une thématique', $wikiMessages['create_theme']);
+        self::assertSame('Proposer la thématique', $wikiMessages['create_theme_submit']);
     }
 }
