@@ -34,8 +34,11 @@ final class MemberModulesFinalizationTest extends TestCase
 
         self::assertStringContainsString('id="webotheque-link-dialog"', $webotheque);
         self::assertStringContainsString('id="admin-webotheque-link-dialog"', $webotheque);
-        self::assertMatchesRegularExpression('/id="webotheque-link-dialog".*<select name="category">.*name="tags"/s', $webotheque);
-        self::assertMatchesRegularExpression('/id="admin-webotheque-link-dialog".*<select name="category">.*name="tags"/s', $webotheque);
+        self::assertStringContainsString('function render_webotheque_link_fields(', $webotheque);
+        self::assertStringContainsString('<select name="category">', $webotheque);
+        self::assertStringContainsString('name="tags"', $webotheque);
+        self::assertStringContainsString('render_webotheque_link_fields($t, $categories, $proposalContact)', $webotheque);
+        self::assertStringContainsString('render_webotheque_link_fields($t, $categories)', $webotheque);
         self::assertSame('https://example.org', webotheque_normalize_url('example.org'));
     }
 
