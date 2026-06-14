@@ -199,7 +199,7 @@ ob_start();
                 <label><span><?= e($tr('propose_theme_name', 'Nom de la thématique')) ?></span><input type="text" name="proposal_theme" maxlength="160" required></label>
                 <label><span><?= e($tr('propose_theme_reason', 'Pourquoi l\'ajouter ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e($tr('propose_theme_contact', 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
-                <div class="wiki-theme-dialog-actions">
+                <div class="wiki-theme-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e($canAutoAcceptTheme ? $tr('create_theme_submit', 'Créer la thématique') : $tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
                     <button class="button secondary" type="button" data-wiki-theme-close><?= e($tr('cancel', 'Annuler')) ?></button>
                 </div>
@@ -224,16 +224,16 @@ ob_start();
         <?php endif; ?>
     </section>
 
-    <section class="wiki-layout">
-        <aside class="wiki-themes card">
+    <section class="wiki-layout module-taxonomy-layout">
+        <aside class="wiki-themes module-taxonomy-index card">
             <p class="wiki-themes-title"><?= e($tr('themes', 'Thématiques')) ?></p>
             <nav class="wiki-theme-list" aria-label="<?= e($tr('themes', 'Thématiques')) ?>">
-                <a class="wiki-theme-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
+                <a class="wiki-theme-item module-taxonomy-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
                     <span><?= e($tr('all_themes', 'Toutes les thématiques')) ?></span>
                     <strong><?= (int) ($wikiThemes !== [] ? array_sum($wikiThemes) : $totalPagesCount) ?></strong>
                 </a>
                 <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>
-                    <a class="wiki-theme-item<?= $themeCode === $theme ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeCode === $theme ? ' aria-current="page"' : '' ?>>
+                    <a class="wiki-theme-item module-taxonomy-item<?= $themeCode === $theme ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeCode === $theme ? ' aria-current="page"' : '' ?>>
                         <span><?= e(ucfirst(str_replace('-', ' ', $themeCode))) ?></span>
                         <strong><?= (int) $themeTotal ?></strong>
                     </a>
@@ -241,7 +241,7 @@ ob_start();
             </nav>
         </aside>
 
-        <div class="wiki-content">
+        <div class="wiki-content module-taxonomy-content">
             <?php if ($theme !== ''): ?>
                 <div class="card">
                     <p><a class="pill" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>"><?= e((string) $t['reset']) ?></a></p>
