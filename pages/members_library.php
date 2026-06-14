@@ -499,7 +499,7 @@ ob_start();
                     <?php if ($extension === 'pdf'): ?>
                         <details class="admin-library-preview-toggle">
                             <summary><?= e((string) $t['preview']) ?></summary>
-                            <iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview" loading="lazy"></iframe>
+                            <iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview" loading="lazy" title="<?= e($docTitle) ?>"></iframe>
                         </details>
                     <?php endif; ?>
                     <details class="admin-library-related-toggle">
