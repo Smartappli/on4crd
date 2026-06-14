@@ -1,0 +1,136 @@
+.module-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.module-dialog-header h2 {
+  margin: .15rem 0 .35rem;
+}
+
+.module-dialog-eyebrow {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.module-dialog-close {
+  display: inline-grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.module-dialog-form {
+  display: grid;
+  gap: .75rem;
+}
+
+.module-dialog-form label {
+  margin: 0;
+}
+
+.module-dialog-form label span {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.module-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  justify-content: flex-end;
+}
+
+.module-taxonomy-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.module-taxonomy-index {
+  position: sticky;
+  top: 1rem;
+}
+
+.module-taxonomy-title {
+  margin: 0 0 .85rem;
+  font-family: inherit;
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.module-taxonomy-list,
+.module-taxonomy-content {
+  display: grid;
+  gap: .75rem;
+}
+
+.module-taxonomy-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .75rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  background: color-mix(in srgb, var(--panel) 92%, white);
+}
+
+.module-taxonomy-item:hover,
+.module-taxonomy-item.is-active {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+}
+
+.module-taxonomy-item span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+.module-taxonomy-item strong {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+@media (max-width: 920px) {
+  .module-taxonomy-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .module-taxonomy-index {
+    position: static;
+  }
+}
+
+@media (max-width: 760px) {
+  .module-dialog-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+}
