@@ -106,7 +106,7 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertIsString($homePage);
 
         preg_match_all('/\$homeI18n\[[\'"]([^\'"]+)[\'"]\]/', $homePage, $matches);
-        $usedKeys = array_values(array_unique($matches[1] ?? []));
+        $usedKeys = array_values(array_unique($matches[1]));
         sort($usedKeys);
 
         self::assertNotEmpty($usedKeys);
@@ -129,7 +129,7 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertIsString($homePage);
 
         preg_match_all('/[\'"](member_module_[a-z0-9_]+)[\'"]/', $homePage, $matches);
-        $memberModuleKeys = array_values(array_unique($matches[1] ?? []));
+        $memberModuleKeys = array_values(array_unique($matches[1]));
         sort($memberModuleKeys);
 
         self::assertNotEmpty($memberModuleKeys);
@@ -220,10 +220,10 @@ final class I18nNativeLocalesTest extends TestCase
             preg_match_all('/render_(?:admin_)?member_document_module_page\([\'"]([^\'"]+)[\'"]\)/', $source, $memberDocumentMatches);
 
             $usedDomains = array_unique(array_merge(
-                $domainMatches[1] ?? [],
-                $tPageMatches[1] ?? [],
-                $requireMatches[1] ?? [],
-                $memberDocumentMatches[1] ?? []
+                $domainMatches[1],
+                $tPageMatches[1],
+                $requireMatches[1],
+                $memberDocumentMatches[1]
             ));
             if (str_contains($source, 'render_webotheque_page(') || str_contains($source, 'render_admin_webotheque_page(')) {
                 $usedDomains[] = 'webotheque';
@@ -257,7 +257,7 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertNotEmpty($messages);
 
         foreach (admin_module_cards_catalog() as $card) {
-            $route = (string) ($card['route'] ?? '');
+            $route = (string) $card['route'];
             self::assertNotSame('', $route);
             foreach ($this->supportedLocales() as $locale) {
                 self::assertNotSame('', trim((string) ($messages[$locale][$route . '_title'] ?? '')), sprintf('Missing admin module title for %s in %s.', $route, $locale));
