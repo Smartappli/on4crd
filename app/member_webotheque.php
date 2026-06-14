@@ -349,6 +349,33 @@ function render_webotheque_cards(array $links, array $t, array $categories = [])
 }
 }
 
+if (!function_exists('render_webotheque_link_fields')) {
+/**
+ * @param array<string, string> $t
+ * @param array<string, string> $categories
+ */
+function render_webotheque_link_fields(array $t, array $categories, ?string $proposalContact = null): string
+{
+    $html = '<label><span>' . e((string) $t['title_field']) . '</span><input type="text" name="title" maxlength="190" required></label>'
+        . '<label><span>' . e((string) $t['url_field']) . '</span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>'
+        . '<label><span>' . e((string) ($t['domain_field'] ?? $t['category_field'])) . '</span><select name="category">';
+
+    foreach ($categories as $code => $label) {
+        $html .= '<option value="' . e((string) $code) . '">' . e((string) $label) . '</option>';
+    }
+
+    $html .= '</select></label>'
+        . '<label><span>' . e((string) $t['description_field']) . '</span><textarea name="description" rows="4"></textarea></label>'
+        . '<label><span>' . e((string) $t['tags_field']) . '</span><input type="text" name="tags" maxlength="255"></label>';
+
+    if ($proposalContact !== null) {
+        $html .= '<label><span>' . e((string) $t['contact_field']) . '</span><input type="email" name="proposal_contact" maxlength="220" value="' . e($proposalContact) . '"></label>';
+    }
+
+    return $html;
+}
+}
+
 if (!function_exists('render_webotheque_page')) {
 function render_webotheque_page(): void
 {
@@ -536,19 +563,7 @@ function render_webotheque_page(): void
                 <form method="post" class="webotheque-proposal-form module-dialog-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="propose_link">
-                    <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
-                    <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
-                    <label>
-                        <span><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?></span>
-                        <select name="category">
-                            <?php foreach ($categories as $code => $label): ?>
-                                <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                    <label><span><?= e((string) $t['description_field']) ?></span><textarea name="description" rows="4"></textarea></label>
-                    <label><span><?= e((string) $t['tags_field']) ?></span><input type="text" name="tags" maxlength="255"></label>
-                    <label><span><?= e((string) $t['contact_field']) ?></span><input type="email" name="proposal_contact" maxlength="220" value="<?= e($proposalContact) ?>"></label>
+                    <?= render_webotheque_link_fields($t, $categories, $proposalContact) ?>
                     <p class="webotheque-proposal-dialog-actions module-dialog-actions">
                         <button class="button" type="submit"><?= e((string) $t['submit_proposal']) ?></button>
                         <button class="button secondary" type="button" data-webotheque-modal-close><?= e((string) $t['cancel']) ?></button>
@@ -753,18 +768,7 @@ function render_admin_webotheque_page(): void
                 <form method="post" class="webotheque-proposal-form module-dialog-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="add_link">
-                    <label><span><?= e((string) $t['title_field']) ?></span><input type="text" name="title" maxlength="190" required></label>
-                    <label><span><?= e((string) $t['url_field']) ?></span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>
-                    <label>
-                        <span><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?></span>
-                        <select name="category">
-                            <?php foreach ($categories as $code => $label): ?>
-                                <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                    <label><span><?= e((string) $t['description_field']) ?></span><textarea name="description" rows="4"></textarea></label>
-                    <label><span><?= e((string) $t['tags_field']) ?></span><input type="text" name="tags" maxlength="255"></label>
+                    <?= render_webotheque_link_fields($t, $categories) ?>
                     <p class="webotheque-proposal-dialog-actions module-dialog-actions">
                         <button class="button" type="submit"><?= e((string) $t['save']) ?></button>
                         <button class="button secondary" type="button" data-webotheque-modal-close><?= e((string) $t['cancel']) ?></button>

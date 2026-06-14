@@ -82,4 +82,29 @@ final class WebothequeHelpersTest extends TestCase
         self::assertStringContainsString('example.org', $html);
         self::assertStringNotContainsString('<script>', $html);
     }
+
+    public function testLinkFieldsRenderCategorySelectKeywordsAndOptionalContact(): void
+    {
+        $labels = [
+            'title_field' => 'Title',
+            'url_field' => 'URL',
+            'domain_field' => 'Topic',
+            'description_field' => 'Description',
+            'tags_field' => 'Keywords',
+            'contact_field' => 'Contact',
+        ];
+        $categories = [
+            'general' => 'General',
+            'modes' => 'Modes',
+        ];
+
+        $memberHtml = render_webotheque_link_fields($labels, $categories, 'member@example.test');
+        $adminHtml = render_webotheque_link_fields($labels, $categories);
+
+        self::assertStringContainsString('<select name="category">', $memberHtml);
+        self::assertStringContainsString('<option value="modes">Modes</option>', $memberHtml);
+        self::assertStringContainsString('name="tags"', $memberHtml);
+        self::assertStringContainsString('name="proposal_contact"', $memberHtml);
+        self::assertStringNotContainsString('name="proposal_contact"', $adminHtml);
+    }
 }
