@@ -47,7 +47,7 @@ jobs:
         run: composer test
 
       - name: Static analysis for finalized modules and quality gates
-        run: vendor/bin/phpstan analyse app/member_webotheque.php app/member_library_helpers.php app/member_module_documents.php app/album_helpers.php pages/webotheque.php pages/admin_webotheque.php pages/albums.php pages/idea_submit.php tools/lint.php tools/check_duplication.php tests/WebothequeHelpersTest.php tests/MemberModulesFinalizationTest.php tests/CodeDuplicationTest.php tests/ModuleUnitCoverageTest.php --no-progress --level=5 --memory-limit=1G
+        run: php vendor/bin/phpstan analyse app/member_webotheque.php app/member_library_helpers.php app/member_module_documents.php app/album_helpers.php pages/webotheque.php pages/admin_webotheque.php pages/albums.php pages/idea_submit.php tools/lint.php tools/check_duplication.php tests/WebothequeHelpersTest.php tests/MemberModulesFinalizationTest.php tests/CodeDuplicationTest.php tests/ModuleUnitCoverageTest.php --no-progress --level=5 --memory-limit=1G
 
   toolbox-smoke-and-e2e:
     name: Toolbox smoke + Playwright E2E
