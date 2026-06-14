@@ -21,11 +21,12 @@ if (!ensure_wiki_tables()) {
 
 $slug = trim((string) ($_GET['slug'] ?? ''));
 $canModerateWiki = has_permission('wiki.moderate');
+$visibilitySql = $canModerateWiki ? '' : ' AND ' . wiki_public_page_where_sql('p');
 $stmt = db()->prepare(
     'SELECT p.*, m.callsign
      FROM wiki_pages p
      LEFT JOIN members m ON m.id = p.author_id
-     WHERE p.slug = ?' . ($canModerateWiki ? '' : ' AND p.status = "published"') . '
+     WHERE p.slug = ?' . $visibilitySql . '
      LIMIT 1'
 );
 $stmt->execute([$slug]);
