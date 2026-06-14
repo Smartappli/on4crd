@@ -193,7 +193,7 @@ $renderCategoryProposalForm = static function (bool $dialogMode) use ($t, $propo
             <textarea name="proposal_details" rows="4" maxlength="1200" placeholder="<?= e($t('propose_category_details_placeholder')) ?>"></textarea>
         </label>
         <div class="classifieds-category-dialog-actions module-dialog-actions">
-            <button class="button" type="submit"><?= e($canModerateClassifieds ? 'Créer' : $t('propose_category_submit')) ?></button>
+            <button class="button" type="submit"><?= e($canModerateClassifieds ? $t('propose_category') : $t('propose_category_submit')) ?></button>
             <?php if ($dialogMode): ?>
                 <button class="button secondary" type="button" data-classifieds-category-close><?= e($t('propose_category_cancel')) ?></button>
             <?php else: ?>
