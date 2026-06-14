@@ -166,10 +166,15 @@ function ensure_wiki_tables(): bool
                 content LONGTEXT NOT NULL,
                 author_id INT DEFAULT NULL,
                 status ENUM("pending","published","rejected") NOT NULL DEFAULT "published",
+                proposal_kind VARCHAR(32) NOT NULL DEFAULT "page",
+                source_page_id INT DEFAULT NULL,
+                target_slug VARCHAR(190) DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 INDEX idx_wiki_status_updated (status, updated_at),
-                INDEX idx_wiki_updated (updated_at)
+                INDEX idx_wiki_updated (updated_at),
+                INDEX idx_wiki_proposal_kind (proposal_kind, status),
+                INDEX idx_wiki_source_page (source_page_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
 
@@ -184,11 +189,27 @@ function ensure_wiki_tables(): bool
         if (!table_has_column('wiki_pages', 'updated_at')) {
             db()->exec('ALTER TABLE wiki_pages ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at');
         }
+        if (!table_has_column('wiki_pages', 'proposal_kind')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN proposal_kind VARCHAR(32) NOT NULL DEFAULT "page" AFTER status');
+        }
+        if (!table_has_column('wiki_pages', 'source_page_id')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN source_page_id INT DEFAULT NULL AFTER proposal_kind');
+        }
+        if (!table_has_column('wiki_pages', 'target_slug')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN target_slug VARCHAR(190) DEFAULT NULL AFTER source_page_id');
+        }
+        db()->exec('UPDATE wiki_pages SET proposal_kind = "page" WHERE proposal_kind IS NULL OR proposal_kind = ""');
         if (!table_has_index('wiki_pages', 'idx_wiki_status_updated')) {
             db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_status_updated (status, updated_at)');
         }
         if (!table_has_index('wiki_pages', 'idx_wiki_updated')) {
             db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_updated (updated_at)');
+        }
+        if (!table_has_index('wiki_pages', 'idx_wiki_proposal_kind')) {
+            db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_proposal_kind (proposal_kind, status)');
+        }
+        if (!table_has_index('wiki_pages', 'idx_wiki_source_page')) {
+            db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_source_page (source_page_id)');
         }
 
         db()->exec(
@@ -216,6 +237,23 @@ function ensure_wiki_tables(): bool
 
         return false;
     }
+}
+}
+
+if (!function_exists('wiki_public_page_where_sql')) {
+function wiki_public_page_where_sql(string $alias = ''): string
+{
+    $prefix = '';
+    if ($alias !== '' && preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $alias) === 1) {
+        $prefix = $alias . '.';
+    }
+
+    $where = $prefix . 'status = "published"';
+    if (table_has_column('wiki_pages', 'proposal_kind')) {
+        $where .= ' AND ' . $prefix . 'proposal_kind <> "modification"';
+    }
+
+    return $where;
 }
 }
 

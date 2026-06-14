@@ -76,6 +76,12 @@ if ($user !== null) {
     }
 }
 $canAutoAcceptTheme = $user !== null && has_permission('wiki.moderate');
+$canAdminWiki = $user !== null && has_permission('wiki.moderate');
+$wikiProposalMenuLabel = $tr('propose_menu', 'Proposer');
+$wikiNewPageLabel = $tr('propose_new_page', 'Une nouvelle page');
+$wikiModificationLabel = $tr('propose_modification', 'Une modification');
+$wikiNewThemeLabel = $tr('propose_new_theme', 'Une nouvelle thématique');
+$wikiAdminLabel = $tr('administer', $locale === 'fr' ? 'Administrer' : 'Administer');
 
 $rows = [];
 $wikiThemes = [];
@@ -85,12 +91,13 @@ $revisionCount = 0;
 $latestWikiDate = '';
 
 try {
-    $totalPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE status = "published"')->fetchColumn();
-    $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE status = "published" AND updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
+    $publicWikiWhere = wiki_public_page_where_sql();
+    $totalPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE ' . $publicWikiWhere)->fetchColumn();
+    $updatedPagesCount = (int) db()->query('SELECT COUNT(*) FROM wiki_pages WHERE ' . $publicWikiWhere . ' AND updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)')->fetchColumn();
     $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
-    $latestWikiDate = trim((string) (db()->query('SELECT updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC, id DESC LIMIT 1')->fetchColumn() ?: ''));
+    $latestWikiDate = trim((string) (db()->query('SELECT updated_at FROM wiki_pages WHERE ' . $publicWikiWhere . ' ORDER BY updated_at DESC, id DESC LIMIT 1')->fetchColumn() ?: ''));
 
-    $themeRows = db()->query('SELECT slug FROM wiki_pages WHERE status = "published" ORDER BY slug ASC')->fetchAll() ?: [];
+    $themeRows = db()->query('SELECT slug FROM wiki_pages WHERE ' . $publicWikiWhere . ' ORDER BY slug ASC')->fetchAll() ?: [];
     foreach ($themeRows as $themeRow) {
         $slug = trim((string) ($themeRow['slug'] ?? ''));
         $themeSeed = $slug !== '' ? explode('-', $slug, 2)[0] : '';
@@ -126,7 +133,7 @@ try {
         $like = '%' . $search . '%';
         array_push($params, $like, $like, $like);
     }
-    array_unshift($where, 'p.status = "published"');
+    array_unshift($where, wiki_public_page_where_sql('p'));
     $whereSql = ' WHERE ' . implode(' AND ', $where);
     $stmt = db()->prepare(
         'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
