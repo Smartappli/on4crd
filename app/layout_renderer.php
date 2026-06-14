@@ -356,6 +356,8 @@ function render_layout_impl(string $content, string $title = ''): string
     $authHtml = '';
     if ($user !== null) {
         $accountLabel = trim((string) ($user['callsign'] ?? '')) !== '' ? (string) $user['callsign'] : (string) $layoutI18n['account_space'];
+        $membershipBadgeLabel = (string) ($layoutI18n['membership_good_standing'] ?? 'En ordre de cotisation');
+        $membershipBadgeHtml = '<span class="membership-status-badge">' . e($membershipBadgeLabel) . '</span>';
         $accountPrivacyLabel = (string) ($layoutI18n['account_privacy'] ?? 'Vie privée');
         $adminMenuLink = '';
         if (has_permission('admin.access')) {
@@ -363,7 +365,7 @@ function render_layout_impl(string $content, string $title = ''): string
                 . '<a class="account-menu-link" href="' . e(route_url('admin')) . '">' . e((string) $layoutI18n['account_admin']) . '</a>';
         }
 
-        $authHtml = '<details class="account-menu">'
+        $authHtml = '<div class="toolbar-account-stack"><details class="account-menu">'
             . '<summary class="button small account-menu-trigger">' . e($accountLabel) . '</summary>'
             . '<div class="account-menu-panel">'
             . '<a class="account-menu-link" href="' . e(route_url('profile')) . '">' . e((string) $layoutI18n['account_profile']) . '</a>'
@@ -377,7 +379,7 @@ function render_layout_impl(string $content, string $title = ''): string
             . '<button type="submit" class="button small account-menu-logout">' . e((string) $layoutI18n['logout']) . '</button>'
             . '</form>'
             . '</div>'
-            . '</details>';
+            . '</details>' . $membershipBadgeHtml . '</div>';
     } else {
         $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">' . e((string) $layoutI18n['login']) . '</a>';
     }
@@ -618,15 +620,9 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<span class="sr-only" id="accent-help">' . e((string) $layoutI18n['accent_help']) . '</span>'
         . '</form>';
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
-    $membershipBadgeHtml = '';
-    if ($user !== null) {
-        $membershipBadgeLabel = (string) ($layoutI18n['membership_good_standing'] ?? 'En ordre de cotisation');
-        $membershipBadgeHtml = '<div class="toolbar-membership-row"><span class="membership-status-badge">' . e($membershipBadgeLabel) . '</span></div>';
-    }
     $menuToolsHtml = '<div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
-        . $membershipBadgeHtml
         . '</div>';
     $returnQuery = $_GET;
     unset($returnQuery['route'], $returnQuery['_csrf']);
