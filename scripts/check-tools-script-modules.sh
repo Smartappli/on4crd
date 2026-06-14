@@ -33,8 +33,10 @@ if missing:
 if 'id="tools-i18n"' not in page:
     raise SystemExit('pages/tools.php must expose #tools-i18n for assets/js/modules/tools.js')
 
-if "'tools' => 'tools'" not in layout and '"tools" => "tools"' not in layout:
-    raise SystemExit('app/layout_renderer.php must map the tools route to assets/js/modules/tools.js')
+if "$module = $moduleByRoute[$route] ?? $route;" not in layout:
+    raise SystemExit('app/layout_renderer.php must default module JS assets to the route name')
+if "'assets/js/modules/' . $candidate . '.js'" not in layout:
+    raise SystemExit('app/layout_renderer.php must load module JS from assets/js/modules')
 
 print('OK tools script module: assets/js/modules/tools.js')
 PY
