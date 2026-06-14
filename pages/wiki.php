@@ -179,10 +179,10 @@ ob_start();
                     <strong><?= e($latestWikiLabel) ?></strong>
                 </article>
             </div>
-            <p class="actions wiki-hero-actions">
+            <div class="actions wiki-hero-actions">
                 <a class="button secondary" href="<?= e($themeProposalUrl) ?>" data-wiki-theme-open aria-haspopup="dialog" aria-controls="wiki-theme-dialog"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></a>
                 <a class="button" href="<?= e(route_url('wiki_propose')) ?>"><?= e($tr('propose_page', 'Proposer une page')) ?></a>
-            </p>
+            </div>
         </div>
     </section>
 
