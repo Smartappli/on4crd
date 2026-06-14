@@ -93,11 +93,17 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('Voir les contenus', $presentationLabels['view_content']);
         self::assertSame('Administration', $presentationLabels['administration']);
 
+        $pvDefinition = member_document_module_definition('pv');
+        self::assertSame(['formats'], $pvDefinition['hidden_stats'] ?? null);
+        self::assertTrue((bool) ($pvDefinition['latest_document_cta'] ?? false));
+        self::assertSame('Consulter le dernier PV', member_document_module_labels('pv', 'fr')['view_content']);
+
         $renderer = $this->source('app/member_module_documents.php');
         self::assertStringContainsString('idx_module_tags', $renderer);
         self::assertStringContainsString('name="tags"', $renderer);
         self::assertStringContainsString('function render_member_document_module_stats(', $renderer);
-        self::assertSame(2, substr_count($renderer, 'render_member_document_module_stats($stats, $labels, $latestLabel)'));
+        self::assertSame(2, substr_count($renderer, 'render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats)'));
+        self::assertStringContainsString('member_document_current_user_is_administrator()', $renderer);
     }
 
     public function testIdeaModuleUsesTopicSelectKeywordsAndSubmitsThem(): void

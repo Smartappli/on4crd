@@ -58,6 +58,13 @@ function member_document_module_definitions(): array
             'legacy_categories' => ['pv'],
             'fallback_title' => 'Procès verbaux',
             'fallback_intro' => 'Procès verbaux et comptes rendus disponibles pour les membres.',
+            'hidden_stats' => ['formats'],
+            'latest_document_cta' => true,
+            'label_overrides' => [
+                'fr' => [
+                    'view_content' => 'Consulter le dernier PV',
+                ],
+            ],
         ],
     ];
 }
@@ -206,6 +213,44 @@ function member_document_module_text(string $module, string $locale): array
     }
 
     return ['title' => $title, 'intro' => $intro, 'meta_desc' => $metaDesc];
+}
+}
+
+if (!function_exists('member_document_current_user_is_administrator')) {
+function member_document_current_user_is_administrator(): bool
+{
+    $user = current_user();
+    if (!is_array($user)) {
+        return false;
+    }
+    if ((int) ($user['is_admin'] ?? 0) === 1) {
+        return true;
+    }
+
+    $userId = (int) ($user['id'] ?? 0);
+    if (
+        $userId <= 0
+        || !table_exists('roles')
+        || !table_exists('member_roles')
+    ) {
+        return false;
+    }
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT 1
+             FROM member_roles mr
+             INNER JOIN roles r ON r.id = mr.role_id
+             WHERE mr.member_id = ?
+               AND r.code IN ("admin", "super_admin")
+             LIMIT 1'
+        );
+        $stmt->execute([$userId]);
+
+        return (bool) $stmt->fetchColumn();
+    } catch (Throwable) {
+        return false;
+    }
 }
 }
 
@@ -481,14 +526,23 @@ if (!function_exists('render_member_document_module_stats')) {
 /**
  * @param array<string, int|string|null> $stats
  * @param array<string, string> $labels
+ * @param list<string> $hiddenStats
  */
-function render_member_document_module_stats(array $stats, array $labels, string $latestLabel): string
+function render_member_document_module_stats(array $stats, array $labels, string $latestLabel, array $hiddenStats = []): string
 {
-    return '<div class="member-document-hero-stats">'
-        . '<article><span>' . e((string) $labels['documents']) . '</span><strong>' . (int) ($stats['total'] ?? 0) . '</strong></article>'
-        . '<article><span>' . e((string) $labels['formats']) . '</span><strong>' . (int) ($stats['formats'] ?? 0) . '</strong></article>'
-        . '<article><span>' . e((string) $labels['latest']) . '</span><strong>' . e($latestLabel) . '</strong></article>'
-        . '</div>';
+    $hiddenStats = array_map('strval', $hiddenStats);
+    $cards = [];
+    if (!in_array('documents', $hiddenStats, true)) {
+        $cards[] = '<article><span>' . e((string) $labels['documents']) . '</span><strong>' . (int) ($stats['total'] ?? 0) . '</strong></article>';
+    }
+    if (!in_array('formats', $hiddenStats, true)) {
+        $cards[] = '<article><span>' . e((string) $labels['formats']) . '</span><strong>' . (int) ($stats['formats'] ?? 0) . '</strong></article>';
+    }
+    if (!in_array('latest', $hiddenStats, true)) {
+        $cards[] = '<article><span>' . e((string) $labels['latest']) . '</span><strong>' . e($latestLabel) . '</strong></article>';
+    }
+
+    return '<div class="member-document-hero-stats">' . implode('', $cards) . '</div>';
 }
 }
 
@@ -530,9 +584,19 @@ function render_member_document_module_page(string $module): void
 
     $stats = member_document_module_stats($moduleCode);
     $documents = member_document_fetch_documents($moduleCode, $search);
+    $hiddenStats = (array) ($definition['hidden_stats'] ?? []);
     $latestDate = trim((string) ($stats['latest'] ?? ''));
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $labels['none'];
     $adminRoute = (string) ($definition['admin_route'] ?? ('admin_' . $moduleCode));
+    $primaryActionHref = '#member-document-list';
+    $primaryActionAttributes = '';
+    if ((bool) ($definition['latest_document_cta'] ?? false) && $documents !== []) {
+        $latestSafePath = member_document_safe_path((string) ($documents[0]['file_path'] ?? ''));
+        if ($latestSafePath !== null) {
+            $primaryActionHref = base_url($latestSafePath);
+            $primaryActionAttributes = ' target="_blank" rel="noopener"';
+        }
+    }
 
     ob_start();
     ?>
@@ -544,10 +608,10 @@ function render_member_document_module_page(string $module): void
                 <?php if ($intro !== ''): ?><p class="help"><?= e($intro) ?></p><?php endif; ?>
             </div>
             <div class="member-document-hero-side">
-                <?= render_member_document_module_stats($stats, $labels, $latestLabel) ?>
+                <?= render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats) ?>
                 <p class="actions member-document-hero-actions">
-                    <a class="button secondary" href="#member-document-list"><?= e((string) $labels['view_content']) ?></a>
-                    <?php if (has_permission('admin.access')): ?>
+                    <a class="button secondary" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e((string) $labels['view_content']) ?></a>
+                    <?php if (member_document_current_user_is_administrator()): ?>
                         <a class="button" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) $labels['administration']) ?></a>
                     <?php endif; ?>
                 </p>
@@ -675,6 +739,7 @@ function render_admin_member_document_module_page(string $module): void
     }
     $stats = member_document_module_stats($moduleCode);
     $documents = member_document_fetch_documents($moduleCode, $search, 100);
+    $hiddenStats = (array) ($definition['hidden_stats'] ?? []);
     $latestDate = trim((string) ($stats['latest'] ?? ''));
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $labels['none'];
 
@@ -688,7 +753,7 @@ function render_admin_member_document_module_page(string $module): void
                 <p class="help"><?= e($adminIntro) ?></p>
             </div>
             <div class="admin-member-document-hero-side">
-                <?= render_member_document_module_stats($stats, $labels, $latestLabel) ?>
+                <?= render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats) ?>
                 <p class="actions admin-member-document-hero-actions">
                     <a class="button secondary" href="<?= e(route_url((string) ($definition['route'] ?? $moduleCode))) ?>"><?= e((string) $labels['view_content']) ?></a>
                     <a class="button" href="#admin-member-document-upload"><?= e((string) $labels['upload_title']) ?></a>
