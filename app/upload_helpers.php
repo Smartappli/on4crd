@@ -131,7 +131,7 @@ function secure_move_uploaded_file(
         throw new RuntimeException(upload_i18n_message('cannot_move_uploaded_file'));
     }
 
-    @chmod($destinationPath, 0644);
+    @chmod($destinationPath, 0640);
     return $filename;
 }
 

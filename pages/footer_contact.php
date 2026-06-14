@@ -16,10 +16,14 @@ $email = trim((string) ($_POST['email'] ?? ''));
 $rawMessage = trim((string) ($_POST['message'] ?? ''));
 $message = trim(strip_tags($rawMessage));
 $returnRoute = trim((string) ($_POST['return_route'] ?? 'home'));
+$allowedReturnRoutes = ['home' => true, 'donation' => true];
+if (!isset($allowedReturnRoutes[$returnRoute])) {
+    $returnRoute = 'home';
+}
 
 if ($name === '' || $message === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     set_flash('error', $t('invalid_form'));
-    redirect($returnRoute !== '' ? $returnRoute : 'home');
+    redirect($returnRoute);
 }
 
 $safeName = str_replace(["\r", "\n"], ' ', $name);
@@ -39,4 +43,4 @@ if ($sent) {
     set_flash('error', $t('err_send'));
 }
 
-redirect($returnRoute !== '' ? $returnRoute : 'home');
+redirect($returnRoute);

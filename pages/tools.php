@@ -464,7 +464,7 @@ ob_start();
             </ul>
         </details>
     </aside>
-    <div id="tools-content" class="tools-content">
+    <div id="tools-content" class="tools-content" data-tool-panel-url="<?= e(route_url('tools')) ?>">
         <?php
         if (!$renderToolPanel('tool-grid', $t, $conversionTools, $radioMathTools) && !$renderFallbackToolGridPanel($t)) {
             trigger_error('Missing tools panel partial for id: tool-grid', E_USER_WARNING);

@@ -1227,6 +1227,36 @@
 
     const getToolPanels = () => Array.from(document.querySelectorAll('[data-tool-panel]'));
 
+    const sanitizeToolPanelFragment = (root) => {
+        root.querySelectorAll('script, iframe, object, embed, link[rel="import"], meta[http-equiv="refresh"]').forEach((node) => {
+            node.remove();
+        });
+        root.querySelectorAll('*').forEach((node) => {
+            Array.from(node.attributes).forEach((attribute) => {
+                const name = attribute.name.toLowerCase();
+                const value = attribute.value.trim().toLowerCase();
+                if (
+                    name.startsWith('on')
+                    || name === 'srcdoc'
+                    || ((name === 'href' || name === 'src' || name === 'xlink:href') && value.startsWith('javascript:'))
+                ) {
+                    node.removeAttribute(attribute.name);
+                }
+            });
+        });
+    };
+
+    const parseToolPanelHtml = (html, id) => {
+        const parsed = new DOMParser().parseFromString(html, 'text/html');
+        sanitizeToolPanelFragment(parsed);
+        const panel = parsed.getElementById(id);
+        if (!(panel instanceof HTMLElement) || panel.getAttribute('data-tool-panel') === null) {
+            return null;
+        }
+
+        return document.importNode(panel, true);
+    };
+
     const loadToolPanel = async (id) => {
         if (!/^tool-[a-z0-9-]+$/.test(id)) {
             return null;
@@ -1244,7 +1274,11 @@
             return null;
         }
 
-        const endpoint = new URL(window.location.href);
+        const panelEndpointUrl = toolsContent.getAttribute('data-tool-panel-url') || '/index.php?route=tools';
+        const endpoint = new URL(panelEndpointUrl, window.location.origin);
+        if (endpoint.origin !== window.location.origin) {
+            return null;
+        }
         endpoint.hash = '';
         endpoint.searchParams.set('route', 'tools');
         endpoint.searchParams.set('ajax', 'tool_panel');
@@ -1259,9 +1293,7 @@
             }
 
             const html = await response.text();
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = html.trim();
-            const panel = wrapper.querySelector(`#${id}[data-tool-panel]`) || wrapper.querySelector(`[data-tool-panel]#${id}`) || wrapper.firstElementChild;
+            const panel = parseToolPanelHtml(html, id);
             if (!(panel instanceof HTMLElement) || panel.id !== id || panel.getAttribute('data-tool-panel') === null) {
                 return null;
             }
