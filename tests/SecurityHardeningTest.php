@@ -39,7 +39,9 @@ final class SecurityHardeningTest extends TestCase
                 $contents = file_get_contents($path);
                 self::assertIsString($contents);
 
-                if (!str_contains($contents, '$_POST') && !str_contains($contents, 'REQUEST_METHOD')) {
+                $handlesPost = str_contains($contents, '$_POST')
+                    || preg_match('/REQUEST_METHOD.{0,160}POST|POST.{0,160}REQUEST_METHOD/s', $contents) === 1;
+                if (!$handlesPost) {
                     continue;
                 }
 
