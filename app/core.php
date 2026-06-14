@@ -76,8 +76,8 @@ function auth(): ?\Delight\Auth\Auth
         return null;
     }
 
-    $pdo = db();
     try {
+        $pdo = db();
         $auth = new \Delight\Auth\Auth($pdo);
     } catch (Throwable $throwable) {
         $auth = null;
@@ -134,13 +134,18 @@ function table_exists(string $table): bool
             return $fallbackCache[$normalized];
         }
 
-        $stmt = db()->prepare(
-            'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?'
-        );
-        $stmt->execute([$normalized]);
-        $fallbackCache[$normalized] = (int) $stmt->fetchColumn() > 0;
+        try {
+            $stmt = db()->prepare(
+                'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?'
+            );
+            $stmt->execute([$normalized]);
+            $fallbackCache[$normalized] = (int) $stmt->fetchColumn() > 0;
 
-        return $fallbackCache[$normalized];
+            return $fallbackCache[$normalized];
+        } catch (Throwable) {
+            $fallbackCache[$normalized] = false;
+            return false;
+        }
     }
 }
 
