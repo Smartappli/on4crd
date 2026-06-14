@@ -221,15 +221,15 @@ ob_start();
 
     <dialog class="articles-category-dialog" id="articles-category-dialog" aria-labelledby="articles-category-title">
         <div class="articles-category-dialog-card">
-            <div class="articles-category-dialog-header">
+            <div class="articles-category-dialog-header module-dialog-header">
                 <div>
-                    <p class="articles-category-dialog-eyebrow"><?= e((string) $t['theme_default']) ?></p>
+                    <p class="articles-category-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['theme_default']) ?></p>
                     <h2 id="articles-category-title"><?= e((string) $t['propose_category']) ?></h2>
                     <p class="help"><?= e((string) $t['propose_category_intro']) ?></p>
                 </div>
-                <button class="articles-category-dialog-close" type="button" data-articles-category-close aria-label="<?= e((string) $t['propose_category_close']) ?>">&times;</button>
+                <button class="articles-category-dialog-close module-dialog-close" type="button" data-articles-category-close aria-label="<?= e((string) $t['propose_category_close']) ?>">&times;</button>
             </div>
-            <form class="articles-category-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-category-form data-articles-category-recipient="<?= e($contactEmail) ?>" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
+            <form class="articles-category-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-category-form data-articles-category-recipient="<?= e($contactEmail) ?>" data-articles-category-subject="<?= e((string) $t['propose_category_subject']) ?>" data-articles-category-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
                 <?php if ($user !== null): ?>
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="propose_category">
@@ -246,7 +246,7 @@ ob_start();
                     <span><?= e((string) $t['propose_category_contact_label']) ?></span>
                     <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
                 </label>
-                <div class="articles-category-dialog-actions">
+                <div class="articles-category-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['propose_category_submit']) ?></button>
                     <button class="button secondary" type="button" data-articles-category-close><?= e((string) $t['propose_category_cancel']) ?></button>
                 </div>
@@ -271,12 +271,12 @@ ob_start();
         <?php endif; ?>
     </section>
 
-    <section class="articles-layout">
-        <aside class="articles-index card">
-            <p class="articles-index-title"><?= e((string) $t['theme_default']) ?></p>
-            <nav class="articles-category-list" aria-label="<?= e((string) $t['theme_default']) ?>">
+    <section class="articles-layout module-taxonomy-layout">
+        <aside class="articles-index module-taxonomy-index card">
+            <p class="articles-index-title module-taxonomy-title"><?= e((string) $t['theme_default']) ?></p>
+            <nav class="articles-category-list module-taxonomy-list" aria-label="<?= e((string) $t['theme_default']) ?>">
             <?php foreach ($themeMeta as $themeCode => $theme): ?>
-                <a class="articles-category-item<?= $themeFilter === $themeCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
+                <a class="articles-category-item module-taxonomy-item<?= $themeFilter === $themeCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
                     <span><?= e((string) $theme['label']) ?></span>
                     <strong><?= (int) ($themeCounts[$themeCode] ?? 0) ?></strong>
                 </a>
@@ -284,7 +284,7 @@ ob_start();
             </nav>
         </aside>
 
-        <div class="articles-content">
+        <div class="articles-content module-taxonomy-content">
     <?php if ($themeFilter !== ''): ?>
         <div class="card">
             <p><a class="pill" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
