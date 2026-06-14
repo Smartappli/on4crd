@@ -294,6 +294,7 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   width: auto;
+  margin-top: .35rem;
   min-height: 1.7rem;
   padding: .3rem .55rem;
   border: 1px solid color-mix(in srgb, var(--success) 56%, var(--border));
