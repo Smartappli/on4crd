@@ -85,6 +85,9 @@ function installer_build_config_php(array $values): string
         'tracking' => [
             'matomo_url' => 'https://stats.smartappli.eu/',
             'matomo_site_id' => '4',
+            'matomo_require_consent' => false,
+            'matomo_disable_cookies' => false,
+            'matomo_respect_do_not_track' => false,
         ],
         'social' => [
             'album_webhooks' => [],

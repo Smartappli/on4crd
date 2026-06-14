@@ -40,6 +40,7 @@ if (!function_exists('render_matomo_tracking_html')) {
  *   site_id?: string|int,
  *   require_consent?: bool,
  *   disable_cookies?: bool,
+ *   respect_do_not_track?: bool,
  *   consent?: string,
  *   locale?: string
  * } $options
@@ -50,6 +51,7 @@ function render_matomo_tracking_html(array $options = []): string
     $matomoSiteId = (string) ($options['site_id'] ?? config('tracking.matomo_site_id', ''));
     $matomoRequireConsent = (bool) ($options['require_consent'] ?? config('tracking.matomo_require_consent', true));
     $matomoDisableCookies = (bool) ($options['disable_cookies'] ?? config('tracking.matomo_disable_cookies', true));
+    $matomoRespectDoNotTrack = (bool) ($options['respect_do_not_track'] ?? config('tracking.matomo_respect_do_not_track', true));
     $matomoConsentValue = (string) ($options['consent'] ?? ($_COOKIE['on4crd_tracking_consent'] ?? ''));
     $matomoConsentGiven = $matomoConsentValue === '1';
     $matomoConsentAnswered = in_array($matomoConsentValue, ['0', '1'], true);
@@ -70,7 +72,9 @@ function render_matomo_tracking_html(array $options = []): string
   var u = <?= json_encode($matomoUrl . '/', JSON_UNESCAPED_SLASHES) ?>;
   _paq.push(['setTrackerUrl', u + 'matomo.php']);
   _paq.push(['setSiteId', <?= json_encode($matomoSiteId) ?>]);
+  <?php if ($matomoRespectDoNotTrack): ?>
   _paq.push(['setDoNotTrack', true]);
+  <?php endif; ?>
   <?php if ($matomoDisableCookies): ?>
   _paq.push(['disableCookies']);
   <?php endif; ?>

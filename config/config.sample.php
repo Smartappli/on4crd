@@ -75,6 +75,7 @@ return [
         'matomo_site_id' => '',
         'matomo_require_consent' => true,
         'matomo_disable_cookies' => true,
+        'matomo_respect_do_not_track' => true,
     ],
     'privacy' => [
         'controller_name' => 'Radio Club Durnal ON4CRD',

@@ -82,9 +82,22 @@ final class MatomoTrackingTest extends TestCase
             'site_id' => '4',
             'require_consent' => true,
             'disable_cookies' => true,
+            'respect_do_not_track' => true,
             'consent' => '',
             'locale' => 'fr',
         ], $overrides));
+    }
+
+    public function testDoNotTrackCanBeDisabled(): void
+    {
+        $html = $this->renderTrackingHtml([
+            'require_consent' => false,
+            'respect_do_not_track' => false,
+            'consent' => '',
+        ]);
+
+        self::assertStringNotContainsString("_paq.push(['setDoNotTrack', true]);", $html);
+        self::assertStringContainsString("_paq.push(['trackPageView']);", $html);
     }
 
     private function assertTrackerConfigurationPrecedesInitialPageView(string $html): void
