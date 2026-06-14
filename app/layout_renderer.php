@@ -685,6 +685,11 @@ function render_layout_impl(string $content, string $title = ''): string
     $matomoHtml = '';
     $matomoIncludePath = __DIR__ . '/includes/matomo.php';
     if (is_file($matomoIncludePath)) {
+        $matomoOptions = [
+            'route' => $currentRoute,
+            'query' => (array) $_GET,
+            'page_title' => $pageTitle,
+        ];
         ob_start();
         include $matomoIncludePath;
         $matomoHtml = (string) ob_get_clean();

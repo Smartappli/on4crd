@@ -33,6 +33,112 @@ function matomo_consent_text(?string $locale = null): array
 }
 }
 
+if (!function_exists('matomo_tracking_query')) {
+/**
+ * @param array<string|int, mixed> $query
+ * @return array<string, mixed>
+ */
+function matomo_tracking_query(array $query): array
+{
+    $clean = [];
+    $blockedNames = [
+        '_csrf',
+        'csrf',
+        'maintenance_bypass',
+        'next',
+        'return_url',
+    ];
+
+    foreach ($query as $key => $value) {
+        $key = trim((string) $key);
+        $normalizedKey = strtolower($key);
+        if (
+            $key === ''
+            || $normalizedKey === 'route'
+            || str_starts_with($normalizedKey, 'utm_')
+            || in_array($normalizedKey, $blockedNames, true)
+            || str_contains($normalizedKey, 'token')
+            || str_contains($normalizedKey, 'password')
+            || str_contains($normalizedKey, 'secret')
+            || str_contains($normalizedKey, 'email')
+        ) {
+            continue;
+        }
+
+        if (is_array($value)) {
+            $items = [];
+            foreach ($value as $item) {
+                if (is_scalar($item)) {
+                    $item = trim((string) $item);
+                    if ($item !== '') {
+                        $items[] = $item;
+                    }
+                }
+            }
+            if ($items !== []) {
+                $clean[$key] = $items;
+            }
+            continue;
+        }
+
+        if (is_scalar($value)) {
+            $clean[$key] = $value;
+        }
+    }
+
+    ksort($clean);
+
+    return function_exists('clean_query_params') ? clean_query_params($clean) : array_filter($clean, static fn(mixed $value): bool => $value !== '' && $value !== null && $value !== false);
+}
+}
+
+if (!function_exists('matomo_tracking_page_url')) {
+/**
+ * @param array<string, mixed> $options
+ */
+function matomo_tracking_page_url(array $options = []): string
+{
+    $pageUrl = trim((string) ($options['page_url'] ?? ''));
+    if ($pageUrl !== '') {
+        return $pageUrl;
+    }
+
+    $route = trim((string) ($options['route'] ?? ($_GET['route'] ?? 'home')));
+    if ($route === '' || preg_match('/^[a-z0-9_.-]+$/', $route) !== 1) {
+        $route = 'home';
+    }
+
+    $querySource = isset($options['query']) && is_array($options['query'])
+        ? $options['query']
+        : (array) $_GET;
+    $query = matomo_tracking_query($querySource);
+
+    $path = $route === 'home' ? '/' : ('/' . rawurlencode($route));
+    $queryString = http_build_query($query);
+    $separator = $queryString === '' ? '' : '?' . $queryString;
+
+    return base_url($path) . $separator;
+}
+}
+
+if (!function_exists('matomo_tracking_document_title')) {
+/**
+ * @param array<string, mixed> $options
+ */
+function matomo_tracking_document_title(array $options = []): string
+{
+    $title = trim((string) ($options['document_title'] ?? $options['page_title'] ?? ''));
+    if ($title !== '') {
+        return $title;
+    }
+
+    $pageMeta = isset($_SESSION['_page_meta']) && is_array($_SESSION['_page_meta']) ? $_SESSION['_page_meta'] : [];
+    $title = trim((string) ($pageMeta['title'] ?? ''));
+
+    return $title !== '' ? $title : (string) config('app.site_name', 'ON4CRD');
+}
+}
+
 if (!function_exists('render_matomo_tracking_html')) {
 /**
  * @param array{
@@ -41,6 +147,11 @@ if (!function_exists('render_matomo_tracking_html')) {
  *   require_consent?: bool,
  *   disable_cookies?: bool,
  *   respect_do_not_track?: bool,
+ *   page_url?: string,
+ *   page_title?: string,
+ *   document_title?: string,
+ *   route?: string,
+ *   query?: array<string, mixed>,
  *   consent?: string,
  *   locale?: string
  * } $options
@@ -63,6 +174,8 @@ function render_matomo_tracking_html(array $options = []): string
 
     $matomoCanTrackInitialPageView = !$matomoRequireConsent || $matomoConsentGiven;
     $matomoShowConsentBanner = $matomoRequireConsent && !$matomoConsentAnswered;
+    $matomoPageUrl = matomo_tracking_page_url($options);
+    $matomoDocumentTitle = matomo_tracking_document_title($options);
     $consentText = matomo_consent_text(isset($options['locale']) ? (string) $options['locale'] : null);
 
     ob_start();
@@ -72,6 +185,8 @@ function render_matomo_tracking_html(array $options = []): string
   var u = <?= json_encode($matomoUrl . '/', JSON_UNESCAPED_SLASHES) ?>;
   _paq.push(['setTrackerUrl', u + 'matomo.php']);
   _paq.push(['setSiteId', <?= json_encode($matomoSiteId) ?>]);
+  _paq.push(['setCustomUrl', <?= json_encode($matomoPageUrl, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>]);
+  _paq.push(['setDocumentTitle', <?= json_encode($matomoDocumentTitle, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>]);
   <?php if ($matomoRespectDoNotTrack): ?>
   _paq.push(['setDoNotTrack', true]);
   <?php endif; ?>

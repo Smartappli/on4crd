@@ -33,6 +33,7 @@ if (str_ends_with($normalizedRoute, '.php')) {
 if ($route === '') {
     $route = 'home';
 }
+$_GET['route'] = $route;
 $requestStart = microtime(true);
 
 register_shutdown_function(static function () use ($requestStart, $route): void {

@@ -100,16 +100,48 @@ final class MatomoTrackingTest extends TestCase
         self::assertStringContainsString("_paq.push(['trackPageView']);", $html);
     }
 
+    public function testInternalRouteUsesNormalizedTrackingUrlAndCleanQuery(): void
+    {
+        $html = $this->renderTrackingHtml([
+            'require_consent' => false,
+            'route' => 'dashboard',
+            'query' => [
+                'route' => 'dashboard',
+                'category' => 'club',
+                'p' => '2',
+                '_csrf' => 'secret',
+                'token' => 'reset-secret',
+                'utm_source' => 'newsletter',
+                'email' => 'member@example.test',
+            ],
+            'page_title' => 'Dashboard member',
+        ]);
+
+        self::assertStringContainsString("_paq.push(['setCustomUrl',", $html);
+        self::assertStringContainsString('/dashboard?', $html);
+        self::assertStringNotContainsString('route=dashboard', $html);
+        self::assertStringContainsString('category=club', $html);
+        self::assertStringContainsString('p=2', $html);
+        self::assertStringContainsString("_paq.push(['setDocumentTitle', \"Dashboard member\"]);", $html);
+        self::assertStringNotContainsString('_csrf', $html);
+        self::assertStringNotContainsString('reset-secret', $html);
+        self::assertStringNotContainsString('utm_source', $html);
+        self::assertStringNotContainsString('member@example.test', $html);
+    }
+
     private function assertTrackerConfigurationPrecedesInitialPageView(string $html): void
     {
         $trackerUrlPosition = strpos($html, "_paq.push(['setTrackerUrl', u + 'matomo.php']);");
         $siteIdPosition = strpos($html, "_paq.push(['setSiteId', \"4\"]);");
+        $customUrlPosition = strpos($html, "_paq.push(['setCustomUrl',");
         $pageViewPosition = strpos($html, "_paq.push(['trackPageView']);");
 
         self::assertIsInt($trackerUrlPosition);
         self::assertIsInt($siteIdPosition);
+        self::assertIsInt($customUrlPosition);
         self::assertIsInt($pageViewPosition);
         self::assertLessThan($pageViewPosition, $trackerUrlPosition);
         self::assertLessThan($pageViewPosition, $siteIdPosition);
+        self::assertLessThan($pageViewPosition, $customUrlPosition);
     }
 }
