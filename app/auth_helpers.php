@@ -292,21 +292,19 @@ function current_user(): ?array
         $memberId = 0;
     }
 
-    if ($memberId <= 0) {
-        $bypassMemberId = auth_bypass_member_id();
-        if ($bypassMemberId > 0) {
-            $bypassUser = bypass_member_user($bypassMemberId);
-            if (is_array($bypassUser)) {
-                $_SESSION['member_id'] = (int) $bypassUser['id'];
-                mark_authenticated_response_private();
-                $cache = $bypassUser;
-                return $cache;
-            }
+    $bypassMemberId = auth_bypass_member_id();
+    if ($bypassMemberId > 0) {
+        $bypassUser = bypass_member_user($bypassMemberId);
+        if (is_array($bypassUser)) {
+            $_SESSION['member_id'] = (int) $bypassUser['id'];
+            mark_authenticated_response_private();
+            $cache = $bypassUser;
+            return $cache;
         }
-
-        $cache = null;
-        return null;
     }
+
+    $cache = null;
+    return null;
 }
 }
 
@@ -421,10 +419,10 @@ function logout_member(): void
         unset($_COOKIE[$cookieName]);
         $cookieOptions = [
             'expires' => time() - 3600,
-            'path' => $cookieParams['path'] ?? '/',
-            'secure' => (bool) ($cookieParams['secure'] ?? false),
+            'path' => $cookieParams['path'],
+            'secure' => (bool) $cookieParams['secure'],
             'httponly' => true,
-            'samesite' => (string) ($cookieParams['samesite'] ?? 'Lax'),
+            'samesite' => (string) $cookieParams['samesite'],
         ];
         if (!empty($cookieParams['domain'])) {
             $cookieOptions['domain'] = (string) $cookieParams['domain'];

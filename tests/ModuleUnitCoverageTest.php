@@ -87,7 +87,7 @@ final class ModuleUnitCoverageTest extends TestCase
 
     public function testSharedModuleCssIsLoadedBeforeRouteSpecificCss(): void
     {
-        foreach (['albums', 'members_library', 'webotheque', 'wiki'] as $route) {
+        foreach (['albums', 'members_library', 'news', 'webotheque', 'wiki'] as $route) {
             $assets = module_css_assets_for_route($route);
 
             self::assertGreaterThanOrEqual(2, count($assets), sprintf('Route %s must have shared and route CSS assets.', $route));

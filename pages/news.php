@@ -296,15 +296,15 @@ ob_start();
 
 <dialog class="news-proposal-dialog" id="news-proposal-dialog" aria-labelledby="news-proposal-title">
     <div class="news-proposal-dialog-card">
-        <div class="news-proposal-dialog-header">
+        <div class="news-proposal-dialog-header module-dialog-header">
             <div>
-                <p class="news-hero-title"><?= e((string) $newsT['latest_news']) ?></p>
+                <p class="news-hero-title module-dialog-eyebrow"><?= e((string) $newsT['latest_news']) ?></p>
                 <h2 id="news-proposal-title"><?= e($canModerateNews ? 'Créer une actualite' : (string) $newsT['propose_news']) ?></h2>
                 <p class="help"><?= e($canModerateNews ? 'Votre actualite sera publiee directement.' : (string) $newsT['propose_news_intro']) ?></p>
             </div>
-            <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
+            <button class="news-proposal-dialog-close module-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
         </div>
-        <form class="news-proposal-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_news_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_news_body_intro']) ?>">
+        <form class="news-proposal-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_news_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_news_body_intro']) ?>">
             <?php if ($user !== null): ?>
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_news">
@@ -327,7 +327,7 @@ ob_start();
                     <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
                 </label>
             </div>
-            <div class="news-proposal-dialog-actions">
+            <div class="news-proposal-dialog-actions module-dialog-actions">
                 <button class="button" type="submit"><?= e($canModerateNews ? 'Publier' : (string) $newsT['proposal_submit']) ?></button>
                 <button class="button secondary" type="button" data-news-proposal-close><?= e((string) $newsT['proposal_cancel']) ?></button>
             </div>
@@ -337,15 +337,15 @@ ob_start();
 
 <dialog class="news-proposal-dialog" id="news-category-proposal-dialog" aria-labelledby="news-category-proposal-title">
     <div class="news-proposal-dialog-card">
-        <div class="news-proposal-dialog-header">
+        <div class="news-proposal-dialog-header module-dialog-header">
             <div>
-                <p class="news-hero-title"><?= e((string) $newsT['category']) ?></p>
+                <p class="news-hero-title module-dialog-eyebrow"><?= e((string) $newsT['category']) ?></p>
                 <h2 id="news-category-proposal-title"><?= e($canModerateNews ? 'Créer une rubrique' : (string) $newsT['propose_category']) ?></h2>
                 <p class="help"><?= e($canModerateNews ? 'La rubrique sera validee directement.' : (string) $newsT['propose_category_intro']) ?></p>
             </div>
-            <button class="news-proposal-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
+            <button class="news-proposal-dialog-close module-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
         </div>
-        <form class="news-proposal-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_category_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_category_body_intro']) ?>">
+        <form class="news-proposal-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-news-proposal-form data-news-proposal-recipient="<?= e($contactEmail) ?>" data-news-proposal-subject="<?= e((string) $newsT['propose_category_subject']) ?>" data-news-proposal-intro="<?= e((string) $newsT['propose_category_body_intro']) ?>">
             <?php if ($user !== null): ?>
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_category">
@@ -362,7 +362,7 @@ ob_start();
                 <span><?= e((string) $newsT['proposal_contact']) ?></span>
                 <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
             </label>
-            <div class="news-proposal-dialog-actions">
+            <div class="news-proposal-dialog-actions module-dialog-actions">
                 <button class="button" type="submit"><?= e($canModerateNews ? 'Créer' : (string) $newsT['proposal_submit']) ?></button>
                 <button class="button secondary" type="button" data-news-proposal-close><?= e((string) $newsT['proposal_cancel']) ?></button>
             </div>

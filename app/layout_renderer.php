@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+if (!function_exists('layout_option_map')) {
+function layout_option_map(array $values): array
+{
+    return $values;
+}
+}
+
 if (!function_exists('render_footer_social_links')) {
 function render_footer_social_links(): string
 {
@@ -29,9 +36,9 @@ function render_footer_social_links(): string
 
     $html = '<span style="display:inline-flex;align-items:center;gap:.6rem;">';
     foreach ($socialLinks as $social) {
-        $name = (string) ($social['name'] ?? '');
-        $href = (string) ($social['href'] ?? '#');
-        $path = (string) ($social['path'] ?? '');
+        $name = (string) $social['name'];
+        $href = (string) $social['href'];
+        $path = (string) $social['path'];
         $html .= '<a href="' . e($href) . '" target="_blank" rel="noopener noreferrer" aria-label="' . e($name . ' - Club Radio Durnal') . '" title="' . e($name . ' - Club Radio Durnal') . '">'
             . '<svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="' . e($path) . '"></path></svg>'
             . '<span class="sr-only">' . e($name) . '</span>'
@@ -559,11 +566,12 @@ function render_layout_impl(string $content, string $title = ''): string
         'amber' => '🟡',
         'orange' => '🟠',
     ];
+    $accentIcons = layout_option_map($accentIcons);
     $languageOptionHtml = '';
     foreach ($languageOptions as $localeCode => $localeConfig) {
         $isActive = $localeCode === $currentLocale;
-        $localeLabel = (string) ($localeConfig['label'] ?? strtoupper($localeCode));
-        $localeIcon = (string) ($localeConfig['icon'] ?? '');
+        $localeLabel = (string) $localeConfig['label'];
+        $localeIcon = (string) $localeConfig['icon'];
         $languageOptionHtml .= '<option value="' . e($localeCode) . '"' . ($isActive ? ' selected' : '') . '>'
             . e(trim($localeIcon . ' ' . $localeLabel))
             . '</option>';
@@ -571,18 +579,19 @@ function render_layout_impl(string $content, string $title = ''): string
     $themeOptionHtml = '';
     foreach ($themeOptions as $themeCode => $themeConfig) {
         $isActive = $themeCode === $currentTheme;
-        $themeIcon = (string) ($themeConfig['icon'] ?? '');
-        $themeLabel = (string) ($themeConfig['label'] ?? $themeCode);
+        $themeIcon = (string) $themeConfig['icon'];
+        $themeLabel = (string) $themeConfig['label'];
         $themeOptionHtml .= '<option value="' . e($themeCode) . '"' . ($isActive ? ' selected' : '') . '>'
             . e(trim($themeIcon . ' ' . $themeLabel))
             . '</option>';
     }
     $accentOptionHtml = '';
     foreach ($accentPalette as $accentCode => $accentConfig) {
+        $accentCode = strtolower((string) $accentCode);
         $isActive = $accentCode === $currentAccent;
         $accentIcon = (string) ($accentIcons[$accentCode] ?? '🎨');
-        $accentLabel = (string) ($layoutI18n['accent_' . $accentCode] ?? ($accentConfig['label'] ?? ucfirst($accentCode)));
-        $accentDotColor = (string) ($accentConfig['color'] ?? '#2f6fed');
+        $accentLabel = (string) ($layoutI18n['accent_' . $accentCode] ?? $accentConfig['label']);
+        $accentDotColor = (string) $accentConfig['color'];
         $accentOptionHtml .= '<option value="' . e($accentCode) . '"' . ($isActive ? ' selected' : '') . ' style="color:' . e($accentDotColor) . ';">'
             . e(trim($accentIcon . ' ' . $accentLabel))
             . '</option>';
@@ -616,7 +625,7 @@ function render_layout_impl(string $content, string $title = ''): string
     $returnQuery = $_GET;
     unset($returnQuery['route'], $returnQuery['_csrf']);
     $returnRoute = preg_match('/^[a-z0-9_]+$/', $currentRoute) === 1 ? $currentRoute : 'home';
-    $currentReturnUrl = route_url_clean($returnRoute !== '' ? $returnRoute : 'home', $returnQuery);
+    $currentReturnUrl = route_url_clean($returnRoute, $returnQuery);
     $ideaCategoryOptions = [
         'general' => 'General',
         'activity' => 'Activite club',
