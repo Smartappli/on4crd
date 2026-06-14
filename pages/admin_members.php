@@ -9,7 +9,7 @@ $t = [];
 foreach (array_keys($i18n['fr']) as $key) {
     $pool = [];
     foreach ($i18n as $lang => $translations) {
-        if (isset($translations[$key]) && is_string($translations[$key])) {
+        if (isset($translations[$key])) {
             $pool[$lang] = $translations[$key];
         }
     }
