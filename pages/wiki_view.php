@@ -52,6 +52,7 @@ $author = trim((string) ($row['callsign'] ?? ''));
 $updatedAt = strtotime((string) ($row['updated_at'] ?? '')) ?: time();
 $wikiStatus = (string) ($row['status'] ?? 'published');
 $isPublished = $wikiStatus === 'published';
+$isModificationProposal = (string) ($row['proposal_kind'] ?? 'page') === 'modification';
 $wikiUrl = route_url_with_locale('wiki_view', $locale, ['slug' => (string) $row['slug']]);
 $wikiPlainText = trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $row['content']), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
 $wikiDescription = mb_safe_strimwidth($wikiPlainText !== '' ? $wikiPlainText : $t('meta_desc'), 0, 220, '...');
@@ -139,7 +140,7 @@ ob_start();
         </div>
         <div class="wiki-view-actions">
             <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($t('layout')) ?></a>
-            <?php if ($canModerateWiki): ?>
+            <?php if ($canModerateWiki && !$isModificationProposal): ?>
                 <a class="button" href="<?= e(route_url('wiki_edit', ['id' => (int) $row['id']])) ?>"><?= e($t('edit')) ?></a>
             <?php endif; ?>
         </div>
