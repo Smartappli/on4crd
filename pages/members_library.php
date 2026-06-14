@@ -332,9 +332,14 @@ ob_start();
                 </article>
             </div>
             <div class="members-library-hero-action">
-                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) $t['propose_category']) ?></a>
-                <a class="button secondary" href="<?= e($tagProposalUrl) ?>" data-members-library-modal-open="members-library-tag-dialog" aria-haspopup="dialog" aria-controls="members-library-tag-dialog"><?= e((string) $t['propose_tag']) ?></a>
-                <a class="button" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) $t['propose_document']) ?></a>
+                <details class="members-library-propose-menu">
+                    <summary class="button" aria-haspopup="menu"><?= e((string) ($t['propose_menu'] ?? 'Proposer')) ?></summary>
+                    <div class="members-library-propose-menu-panel" role="menu">
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) ($t['propose_category_item'] ?? 'Une thématique')) ?></a>
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($tagProposalUrl) ?>" data-members-library-modal-open="members-library-tag-dialog" aria-haspopup="dialog" aria-controls="members-library-tag-dialog"><?= e((string) ($t['propose_tag_item'] ?? 'Un mot clé')) ?></a>
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) ($t['propose_document_item'] ?? 'Un document')) ?></a>
+                    </div>
+                </details>
             </div>
         </div>
     </section>
