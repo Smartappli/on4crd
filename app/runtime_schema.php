@@ -204,9 +204,6 @@ HTML;
         'Eghezée',
     ]);
 
-    if (function_exists('cache_forget')) {
-        cache_forget('home_next_event_v1');
-    }
 }
 
 function seed_brocante_souper_crd_2026_event(): void
@@ -232,9 +229,6 @@ HTML;
         'Leuze Longchamps, route de La Bruyère 62',
     ]);
 
-    if (function_exists('cache_forget')) {
-        cache_forget('home_next_event_v1');
-    }
 }
 
 function seed_fete_aischois_2026_event(): void
@@ -261,9 +255,6 @@ HTML;
         'Aische-en-Refail',
     ]);
 
-    if (function_exists('cache_forget')) {
-        cache_forget('home_next_event_v1');
-    }
 }
 
 function seed_ad_placements(): void
