@@ -290,9 +290,10 @@ textarea:focus-visible {
 }
 .membership-status-badge {
   display: inline-flex;
+  align-self: stretch;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: auto;
   min-height: 1.7rem;
   padding: .3rem .55rem;
   border: 1px solid color-mix(in srgb, var(--success) 56%, var(--border));
