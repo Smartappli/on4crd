@@ -6,13 +6,26 @@
 
   if (titleInput instanceof HTMLInputElement && slugInput instanceof HTMLInputElement) {
     let slugWasAuto = slugInput.value.trim() === '';
-    const slugify = (value) => value
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .replace(/-{2,}/g, '-');
+    const slugify = (value) => {
+      const normalized = value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      let slug = '';
+      let lastWasDash = true;
+
+      Array.from(normalized).forEach((character) => {
+        const code = character.charCodeAt(0);
+        const isAsciiLetter = code >= 97 && code <= 122;
+        const isDigit = code >= 48 && code <= 57;
+        if (isAsciiLetter || isDigit) {
+          slug += character;
+          lastWasDash = false;
+        } else if (!lastWasDash) {
+          slug += '-';
+          lastWasDash = true;
+        }
+      });
+
+      return slug.endsWith('-') ? slug.slice(0, -1) : slug;
+    };
 
     const syncSlug = () => {
       if (!slugWasAuto) return;
