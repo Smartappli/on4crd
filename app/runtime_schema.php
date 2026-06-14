@@ -150,6 +150,30 @@ HTML;
     }
 }
 
+function seed_published_club_event(
+    string $slug,
+    string $title,
+    string $summary,
+    string $description,
+    string $startAt,
+    string $endAt,
+    string $location
+): void {
+    if (!table_exists('events')) {
+        return;
+    }
+
+    db()->prepare(
+        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
+         VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")
+         ON DUPLICATE KEY UPDATE title = VALUES(title), summary = VALUES(summary), description = VALUES(description), kind = VALUES(kind), start_at = VALUES(start_at), end_at = VALUES(end_at), location = VALUES(location), external_url = VALUES(external_url), status = VALUES(status)'
+    )->execute([$slug, $title, $summary, $description, $startAt, $endAt, $location]);
+
+    if (function_exists('cache_forget')) {
+        cache_forget('home_next_event_v1');
+    }
+}
+
 function seed_liberation_eghezee_2026_event(): void
 {
     if (!table_exists('events')) {
