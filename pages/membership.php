@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = require __DIR__ . '/../app/i18n/membership.php';
+$i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/membership.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 $tr = static fn(string $key): string => (string) ($t[$key] ?? ($i18n['fr'][$key] ?? $key));

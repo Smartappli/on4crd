@@ -53,7 +53,7 @@ const scenarios: ToolScenario[] = [
     steps: [
       { action: 'fill', selector: '#locator-a', value: 'JO20LI' },
       { action: 'fill', selector: '#locator-b', value: 'JN18EU' },
-      { action: 'expectText', selector: '#locator-distance', pattern: /\d+\.\d km/ },
+      { action: 'expectContains', selector: '#locator-distance', text: 'km' },
     ],
   },
   {

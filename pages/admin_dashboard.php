@@ -4,7 +4,7 @@ declare(strict_types=1);
 require_module_enabled('dashboard');
 require_permission('admin.access');
 require_permission('modules.manage');
-$i18n = require __DIR__ . '/../app/i18n/admin_dashboard.php';
+$i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/admin_dashboard.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $locale = current_locale();
 $t = [];

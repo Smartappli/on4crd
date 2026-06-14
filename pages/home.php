@@ -515,7 +515,7 @@ $toolDayHtml = '<a class="group block rounded-2xl border border-slate-200 bg-whi
     . e($toolDayCta)
     . '</span></a>';
 try {
-    $toolsI18n = require __DIR__ . '/../app/i18n/tools.php';
+    $toolsI18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/tools.php');
     $t = [];
     foreach (array_keys($toolsI18n['fr'] ?? []) as $key) {
         $value = trim(i18n_localized_value($toolsI18n, $homeLocale, (string) $key));
@@ -525,8 +525,8 @@ try {
         $value = trim((string) ($t[$key] ?? ''));
         return $value !== '' ? $value : $fallback;
     };
-    $toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
-    $toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
+    $toolCatalog = i18n_load_array_file_once(__DIR__ . '/../app/config/tools_catalog.php');
+    $toolPanelMap = i18n_load_array_file_once(__DIR__ . '/../app/config/tools_panels.php');
     $toolCandidates = [];
     foreach (['locators', 'conversion', 'antenna', 'power', 'advanced_propagation', 'rf_measures', 'radio_math'] as $group) {
         foreach (($toolCatalog[$group] ?? []) as $entry) {
@@ -548,7 +548,7 @@ try {
     if ($toolCandidates !== []) {
         $selectedTool = $toolCandidates[array_rand($toolCandidates)];
         ob_start();
-        include (string) $selectedTool['path'];
+        require_once (string) $selectedTool['path'];
         $selectedToolPanel = trim((string) ob_get_clean());
         if ($selectedToolPanel !== '') {
             $toolDayHtml = '<div class="home-tool-day">'

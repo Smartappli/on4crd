@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 require_permission('admin.access');
-$i18n = require __DIR__ . '/../app/i18n/admin_translation_reviews.php';
+$i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/admin_translation_reviews.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $localeUi = current_locale();
 $t = [];
@@ -70,7 +70,7 @@ $chatbotI18nQa = ['ok' => true, 'issues' => []];
 try {
     $chatbotDir = dirname(__DIR__) . '/app/i18n/chatbot';
     $requiredLocales = ['en', 'fr', 'de', 'nl', 'es', 'it', 'pt', 'ar', 'hi', 'ja', 'zh', 'bn', 'ru', 'id'];
-    $requiredKeys = array_keys(require $chatbotDir . '/en.php');
+    $requiredKeys = array_keys(i18n_load_array_file_once($chatbotDir . '/en.php'));
     foreach ($requiredLocales as $locale) {
         $path = $chatbotDir . '/' . $locale . '.php';
         if (!is_file($path)) {
@@ -78,7 +78,7 @@ try {
             $chatbotI18nQa['issues'][] = $locale . ': missing file';
             continue;
         }
-        $dict = require $path;
+        $dict = i18n_load_array_file_once($path);
         if (!is_array($dict)) {
             $chatbotI18nQa['ok'] = false;
             $chatbotI18nQa['issues'][] = $locale . ': invalid dictionary';

@@ -1,4 +1,6 @@
 /.phpunit.cache/
+/vendor/
+/node_modules/
 /config/config.php
 /storage/cache/*
 !/storage/cache/.gitkeep

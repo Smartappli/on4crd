@@ -190,8 +190,14 @@ ob_start();
           $widgetTitle = (string) ($availableWidgets[$widgetKey]['title'] ?? $widgetKey);
           $widgetConfig = (array) ($selectedWidget['config'] ?? []);
           $widgetBodyHtml = $safeRenderWidget($widgetKey, $user);
-          include __DIR__ . '/dashboard_widget_card.php';
         ?>
+        <article class="widget-card" draggable="true" aria-grabbed="false" data-widget="<?= e($widgetKey) ?>" data-widget-config='<?= e(json_encode($widgetConfig, JSON_UNESCAPED_SLASHES)) ?>'>
+          <header>
+            <strong><?= e($widgetTitle) ?></strong>
+            <button class="ghost remove-widget" type="button">âœ•</button>
+          </header>
+          <div class="widget-body"><?= $widgetBodyHtml ?></div>
+        </article>
       <?php endforeach; ?>
     </div>
   </section>

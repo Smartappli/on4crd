@@ -5,7 +5,7 @@ require_module_enabled('admin');
 require_permission('admin.access');
 
 $locale = current_locale();
-$i18n = require __DIR__ . '/../app/i18n/admin_editorial.php';
+$i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/admin_editorial.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $t = [];
 foreach (array_keys($i18n['fr']) as $key) {

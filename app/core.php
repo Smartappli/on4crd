@@ -14,7 +14,7 @@ function config(?string $key = null, mixed $default = null): mixed
             }
             $configFile = $sampleConfigFile;
         }
-        $config = require $configFile;
+        $config = require $configFile; // NOSONAR - config returns an array and must stay repeatable.
     }
 
     if ($key === null) {

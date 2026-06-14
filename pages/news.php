@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$newsFallback = require __DIR__ . '/../app/i18n/news/fr.php';
+$newsFallback = i18n_load_array_file_once(__DIR__ . '/../app/i18n/news/fr.php');
 $newsT = array_replace(
     is_array($newsFallback) ? $newsFallback : [],
     i18n_domain_locale('news', $locale)

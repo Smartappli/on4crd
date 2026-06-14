@@ -692,9 +692,8 @@ function render_layout_impl(string $content, string $title = ''): string
             'query' => (array) $_GET,
             'page_title' => $pageTitle,
         ];
-        ob_start();
-        include $matomoIncludePath;
-        $matomoHtml = (string) ob_get_clean();
+        require_once __DIR__ . '/matomo_helpers.php';
+        $matomoHtml = render_matomo_tracking_html($matomoOptions);
     }
 
     return '<!doctype html><html lang="' . e($currentLocale) . '" dir="' . e($htmlDir) . '" class="notranslate" translate="no" data-theme="' . e($currentTheme) . '" style="--accent: ' . e($accentColor) . '; --accent-strong: ' . e($accentStrongColor) . ';"><head><meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = require __DIR__ . '/../app/i18n/login.php';
+$i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/login.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 $nextUrl = safe_login_next_url((string) ($_POST['next'] ?? $_GET['next'] ?? ''));

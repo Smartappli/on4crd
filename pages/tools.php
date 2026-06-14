@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
-$i18n = require __DIR__ . '/../app/i18n/tools.php';
+$i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/tools.php');
 $trCache = [];
 $tr = static function (string $key, string $fallback = '') use ($i18n, $locale, &$trCache): string {
     if (array_key_exists($key, $trCache)) {
@@ -120,8 +120,8 @@ $labelAntennaGainDbd = $tr('antenna_gain_dbd', 'Antenna gain (dBd)');
 $labelErpResult = $tr('erp_result', 'Estimated ERP');
 $labelQuarterWaveResult = $tr('quarter_wave_result', 'Estimated length');
 $labelVelocityFactor = $tr('velocity_factor', 'Velocity factor (0-1)');
-$toolCatalog = require __DIR__ . '/../app/config/tools_catalog.php';
-$toolPanelMap = require __DIR__ . '/../app/config/tools_panels.php';
+$toolCatalog = i18n_load_array_file_once(__DIR__ . '/../app/config/tools_catalog.php');
+$toolPanelMap = i18n_load_array_file_once(__DIR__ . '/../app/config/tools_panels.php');
 $toolGridFallbackPath = __DIR__ . '/tools_panels/tool_grid.php';
 $hasToolGridFallback = is_file($toolGridFallbackPath);
 $resolveToolTitle = static function (array $entry) use ($tr): string {
@@ -247,7 +247,7 @@ $renderFallbackToolGridPanel = static function (array $panelTranslations) use ($
     }
 
     $t = $panelTranslations;
-    require $fallbackPath;
+    require_once $fallbackPath;
     return true;
 };
 
@@ -333,7 +333,7 @@ $renderToolPanel = static function (string $toolId, array $panelTranslations, ar
     $t = $panelTranslations;
     $conversionTools = $conversionToolEntries;
     $radioMathTools = $radioMathToolEntries;
-    require $partialPath;
+    require_once $partialPath;
     return true;
 };
 

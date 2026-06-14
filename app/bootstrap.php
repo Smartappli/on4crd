@@ -6,7 +6,7 @@ if (!is_file($bootstrapConfigFile)) {
     throw new RuntimeException('Missing config/config.php. Copy config.sample.php first.');
 }
 
-$bootstrapConfig = require $bootstrapConfigFile;
+$bootstrapConfig = require $bootstrapConfigFile; // NOSONAR - config returns an array and must stay repeatable.
 $vendorAutoload = __DIR__ . '/../vendor/autoload.php';
 if (is_file($vendorAutoload)) {
     require_once $vendorAutoload;

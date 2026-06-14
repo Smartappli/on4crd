@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 if (!is_file(__DIR__ . '/config/config.php')) {
-    require __DIR__ . '/install.php';
+    require_once __DIR__ . '/install.php';
     exit;
 }
 
@@ -79,7 +79,7 @@ function render_localized_not_found(): void
         $previousNotFoundRoute = $_GET['_not_found_route'] ?? null;
         $_GET['_not_found_route'] = is_scalar($previousRoute) ? (string) $previousRoute : '';
         $_GET['route'] = 'errors';
-        require $errorPage;
+        require_once $errorPage;
         if ($previousRoute === null) {
             unset($_GET['route']);
         } else {
@@ -311,7 +311,7 @@ $dispatchPage = static function (string $relativePath): void {
         return;
     }
 
-    require $path;
+    require_once $path;
 };
 
 switch ($route) {

@@ -66,7 +66,7 @@ function cache_get(string $key, mixed $default = null, ?array $settings = null):
     }
 
     try {
-        $payload = @include $path;
+        $payload = @include $path; // NOSONAR - cache files are regenerated and must be read fresh.
     } catch (Throwable) {
         @unlink($path);
 

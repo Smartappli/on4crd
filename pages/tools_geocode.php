@@ -4,7 +4,7 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
 $locale = current_locale();
-$i18n = require __DIR__ . '/../app/i18n/tools_geocode.php';
+$i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/tools_geocode.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $resolved = [];
 foreach (array_keys($i18n['fr']) as $key) {

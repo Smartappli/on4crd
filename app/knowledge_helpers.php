@@ -637,7 +637,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                         db()->exec('DELETE FROM rag_chunks');
                         $insert = db()->prepare('INSERT INTO rag_chunks (source_type, source_key, title, body, url, embedding_json, embedding_provider, embedding_model) VALUES (?,?,?,?,?,?,?,?)');
                         $knowledgePath = __DIR__ . '/knowledge.php';
-                        $knowledgeBase = is_file($knowledgePath) ? (require $knowledgePath) : [];
+                        $knowledgeBase = i18n_load_array_file_once($knowledgePath);
                         if (is_array($knowledgeBase)) {
                             foreach ($knowledgeBase as $idx => $item) {
                                 if (!is_array($item)) { continue; }
@@ -920,7 +920,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
         $knowledgePath = __DIR__ . '/knowledge.php';
         $knowledgeBase = [];
         if (is_file($knowledgePath)) {
-            $loaded = require $knowledgePath;
+            $loaded = i18n_load_array_file_once($knowledgePath);
             if (is_array($loaded)) {
                 $knowledgeBase = $loaded;
             }
