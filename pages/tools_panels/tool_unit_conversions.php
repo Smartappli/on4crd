@@ -112,8 +112,9 @@ $unitConversionGroups = [
     ],
 ];
 $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversions');
+$unitConversionGroupsJson = json_encode($unitConversionGroups, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}';
 ?>
-<article class="card tool-panel is-hidden" id="<?= e($unitConversionPanelId) ?>" data-tool-panel>
+<article class="card tool-panel is-hidden" id="<?= e($unitConversionPanelId) ?>" data-tool-panel data-unit-conv-groups="<?= e($unitConversionGroupsJson) ?>">
     <div class="section-header">
         <div>
             <h2><?= e((string) ($t['unit_conv_title'] ?? 'Unit conversion')) ?></h2>
@@ -197,8 +198,4 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
             </div>
         </section>
     </div>
-
-    <script type="application/json" id="unit-conv-data">
-        <?= json_encode($unitConversionGroups, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}' ?>
-    </script>
 </article>

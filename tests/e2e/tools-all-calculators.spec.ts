@@ -335,6 +335,7 @@ const runStep = async (page: Page, step: ToolStep) => {
   }
 
   if (step.action === 'select') {
+    await expect(target.locator(`option[value="${step.value}"]`)).toHaveCount(1);
     await target.selectOption(step.value);
     return;
   }

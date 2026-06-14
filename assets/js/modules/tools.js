@@ -359,7 +359,6 @@
         const panel = document.getElementById(panelId);
         if (!(panel instanceof HTMLElement)) return;
 
-        const dataNode = panel.querySelector('#unit-conv-data');
         const groupSelect = panel.querySelector('#unit-conv-group');
         const fromSelect = panel.querySelector('#unit-conv-from');
         const toSelect = panel.querySelector('#unit-conv-to');
@@ -370,8 +369,7 @@
         const reference = panel.querySelector('#unit-conv-reference');
 
         if (
-            !(dataNode instanceof HTMLScriptElement)
-            || !(groupSelect instanceof HTMLSelectElement)
+            !(groupSelect instanceof HTMLSelectElement)
             || !(fromSelect instanceof HTMLSelectElement)
             || !(toSelect instanceof HTMLSelectElement)
             || !(input instanceof HTMLInputElement)
@@ -383,7 +381,9 @@
 
         let groups = {};
         try {
-            groups = JSON.parse(dataNode.textContent || '{}');
+            const dataNode = panel.querySelector('#unit-conv-data');
+            const groupsJson = panel.dataset.unitConvGroups || dataNode?.textContent || '{}';
+            groups = JSON.parse(groupsJson);
         } catch (_) {
             groups = {};
         }

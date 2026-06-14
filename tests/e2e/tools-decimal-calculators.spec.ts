@@ -29,7 +29,9 @@ test('unit converter accepts decimal comma input', async ({ page }) => {
   await expect(page.locator('#tool-unit-conversions')).toBeVisible();
 
   await page.selectOption('#unit-conv-group', 'rf');
+  await expect(page.locator('#unit-conv-from option[value="mhz"]')).toHaveCount(1);
   await page.selectOption('#unit-conv-from', 'mhz');
+  await expect(page.locator('#unit-conv-to option[value="khz"]')).toHaveCount(1);
   await page.selectOption('#unit-conv-to', 'khz');
   await page.fill('#unit-conv-input', '145,50');
 
