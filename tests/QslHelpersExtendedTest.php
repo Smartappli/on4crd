@@ -142,4 +142,25 @@ ADIF;
         self::assertStringContainsString('ON4CRD', $svg);
         self::assertStringNotContainsString('<script>', strtolower($svg));
     }
+
+    public function testQslSvgPayloadTextValuesNormalizeSharedFields(): void
+    {
+        $values = qsl_svg_payload_text_values([
+            'own_call' => ' on4crd ',
+            'qso_call' => '<on7zb>',
+            'qso_date' => '2026-04-25',
+            'time_on' => '9:5',
+            'band' => ' 20m ',
+            'mode' => ' ssb ',
+            'comment' => '<TNX>',
+        ]);
+
+        self::assertSame('ON4CRD', $values[0]);
+        self::assertSame('ON7ZB', $values[1]);
+        self::assertSame('2026-04-25', $values[4]);
+        self::assertSame('09:05', $values[5]);
+        self::assertSame('20M', $values[6]);
+        self::assertSame('SSB', $values[7]);
+        self::assertSame('&lt;TNX&gt;', $values[10]);
+    }
 }

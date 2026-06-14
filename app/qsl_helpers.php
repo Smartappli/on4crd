@@ -439,19 +439,29 @@ function sanitize_svg_document(string $svg): string
     return $svg;
 }
 
+/**
+ * @return list<string>
+ */
+function qsl_svg_payload_text_values(array $payload): array
+{
+    return [
+        e(qsl_normalize_callsign((string) ($payload['own_call'] ?? ''))),
+        e(qsl_normalize_callsign((string) ($payload['qso_call'] ?? ''))),
+        e(trim((string) ($payload['own_name'] ?? ''))),
+        e(trim((string) ($payload['own_qth'] ?? ''))),
+        e(qsl_normalize_date((string) ($payload['qso_date'] ?? ''))),
+        e(qsl_normalize_time((string) ($payload['time_on'] ?? ''))),
+        e(mb_safe_strtoupper(trim((string) ($payload['band'] ?? '')))),
+        e(mb_safe_strtoupper(trim((string) ($payload['mode'] ?? '')))),
+        e(trim((string) ($payload['rst_sent'] ?? ''))),
+        e(trim((string) ($payload['rst_recv'] ?? ''))),
+        e(qsl_normalize_comment((string) ($payload['comment'] ?? 'TNX QSO 73'))),
+    ];
+}
+
 function generate_qsl_svg(array $payload): string
 {
-    $ownCall = e(qsl_normalize_callsign((string) ($payload['own_call'] ?? '')));
-    $qsoCall = e(qsl_normalize_callsign((string) ($payload['qso_call'] ?? '')));
-    $ownName = e(trim((string) ($payload['own_name'] ?? '')));
-    $ownQth = e(trim((string) ($payload['own_qth'] ?? '')));
-    $date = e(qsl_normalize_date((string) ($payload['qso_date'] ?? '')));
-    $time = e(qsl_normalize_time((string) ($payload['time_on'] ?? '')));
-    $band = e(mb_safe_strtoupper(trim((string) ($payload['band'] ?? ''))));
-    $mode = e(mb_safe_strtoupper(trim((string) ($payload['mode'] ?? ''))));
-    $rstSent = e(trim((string) ($payload['rst_sent'] ?? '')));
-    $rstRecv = e(trim((string) ($payload['rst_recv'] ?? '')));
-    $comment = e(qsl_normalize_comment((string) ($payload['comment'] ?? 'TNX QSO 73')));
+    [$ownCall, $qsoCall, $ownName, $ownQth, $date, $time, $band, $mode, $rstSent, $rstRecv, $comment] = qsl_svg_payload_text_values($payload);
     $title = e(trim((string) ($payload['title'] ?? 'QSL Card')));
     $backgroundPrimary = e(trim((string) ($payload['background_primary'] ?? '#0B1F3A')));
     $backgroundSecondary = e(trim((string) ($payload['background_secondary'] ?? '#1D4ED8')));
@@ -491,17 +501,7 @@ function generate_qsl_svg(array $payload): string
 
 function generate_qsl_back_svg(array $payload): string
 {
-    $ownCall = e(qsl_normalize_callsign((string) ($payload['own_call'] ?? '')));
-    $qsoCall = e(qsl_normalize_callsign((string) ($payload['qso_call'] ?? '')));
-    $ownName = e(trim((string) ($payload['own_name'] ?? '')));
-    $ownQth = e(trim((string) ($payload['own_qth'] ?? '')));
-    $date = e(qsl_normalize_date((string) ($payload['qso_date'] ?? '')));
-    $time = e(qsl_normalize_time((string) ($payload['time_on'] ?? '')));
-    $band = e(mb_safe_strtoupper(trim((string) ($payload['band'] ?? ''))));
-    $mode = e(mb_safe_strtoupper(trim((string) ($payload['mode'] ?? ''))));
-    $rstSent = e(trim((string) ($payload['rst_sent'] ?? '')));
-    $rstRecv = e(trim((string) ($payload['rst_recv'] ?? '')));
-    $comment = e(qsl_normalize_comment((string) ($payload['comment'] ?? 'TNX QSO 73')));
+    [$ownCall, $qsoCall, $ownName, $ownQth, $date, $time, $band, $mode, $rstSent, $rstRecv, $comment] = qsl_svg_payload_text_values($payload);
 
     $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">'
         . '<rect width="900" height="500" fill="#f8fafc"/>'
