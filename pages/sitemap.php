@@ -127,7 +127,7 @@ $xml = cache_remember('seo_sitemap_xml_v10_' . $requestedLocale, 300, static fun
 
     if (module_enabled('wiki') && table_exists('wiki_pages')) {
         try {
-            $wikiPages = db()->query('SELECT slug, updated_at FROM wiki_pages WHERE status = "published" ORDER BY updated_at DESC LIMIT 500')->fetchAll();
+            $wikiPages = db()->query('SELECT slug, updated_at FROM wiki_pages WHERE ' . wiki_public_page_where_sql() . ' ORDER BY updated_at DESC LIMIT 500')->fetchAll();
             foreach ($wikiPages as $row) {
                 if (empty($row['slug'])) {
                     continue;

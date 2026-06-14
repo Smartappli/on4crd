@@ -186,7 +186,7 @@ if ($hasQuery && $isQueryLongEnough) {
                     $where .= ' OR (title LIKE ? OR content LIKE ?)';
                     array_push($params, $termLike, $termLike);
                 }
-                $stmt = db()->prepare('SELECT title, content, slug FROM wiki_pages WHERE status = "published" AND (' . $where . ') ORDER BY updated_at DESC LIMIT 35');
+                $stmt = db()->prepare('SELECT title, content, slug FROM wiki_pages WHERE ' . wiki_public_page_where_sql() . ' AND (' . $where . ') ORDER BY updated_at DESC LIMIT 35');
                 $stmt->execute($params);
                 foreach ($stmt->fetchAll() ?: [] as $row) {
                     $title = trim((string) ($row['title'] ?? ''));
