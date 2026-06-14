@@ -174,6 +174,14 @@ function seed_published_club_event(
     }
 }
 
+/**
+ * @param list{string, string, string, string, string, string, string} $event
+ */
+function seed_published_club_event_row(array $event): void
+{
+    seed_published_club_event(...$event);
+}
+
 function seed_liberation_eghezee_2026_event(): void
 {
     $slug = 'liberation-eghezee-82e-anniversaire-2026';
@@ -186,11 +194,7 @@ function seed_liberation_eghezee_2026_event(): void
 <p>Participation au 82ème anniversaire de la Libération d'Eghezée, organisé les 25, 26 et 27 septembre 2026.</p>
 HTML;
 
-    db()->prepare(
-        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
-         VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")
-         ON DUPLICATE KEY UPDATE title = VALUES(title), summary = VALUES(summary), description = VALUES(description), kind = VALUES(kind), start_at = VALUES(start_at), end_at = VALUES(end_at), location = VALUES(location), external_url = VALUES(external_url), status = VALUES(status)'
-    )->execute([
+    seed_published_club_event_row([
         $slug,
         $title,
         $summary,
@@ -218,11 +222,7 @@ function seed_brocante_souper_crd_2026_event(): void
 <p>Accueil exposants dès 08h00, visiteurs dès 09h00. Souper à partir de 18h00 sur réservation.</p>
 HTML;
 
-    db()->prepare(
-        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
-         VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")
-         ON DUPLICATE KEY UPDATE title = VALUES(title), summary = VALUES(summary), description = VALUES(description), kind = VALUES(kind), start_at = VALUES(start_at), end_at = VALUES(end_at), location = VALUES(location), external_url = VALUES(external_url), status = VALUES(status)'
-    )->execute([
+    seed_published_club_event_row([
         $slug,
         $title,
         $summary,
@@ -251,11 +251,7 @@ function seed_fete_aischois_2026_event(): void
 <p>L'activation est prévue le samedi 8 août 2026, dès le matin jusque vers 17h00.</p>
 HTML;
 
-    db()->prepare(
-        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
-         VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")
-         ON DUPLICATE KEY UPDATE title = VALUES(title), summary = VALUES(summary), description = VALUES(description), kind = VALUES(kind), start_at = VALUES(start_at), end_at = VALUES(end_at), location = VALUES(location), external_url = VALUES(external_url), status = VALUES(status)'
-    )->execute([
+    seed_published_club_event_row([
         $slug,
         $title,
         $summary,
