@@ -340,21 +340,21 @@ ob_start();
 
     <dialog class="members-library-dialog" id="members-library-category-dialog" aria-labelledby="members-library-category-title">
         <div class="members-library-dialog-card">
-            <div class="members-library-dialog-header">
+            <div class="members-library-dialog-header module-dialog-header">
                 <div>
-                    <p class="members-library-dialog-eyebrow"><?= e((string) $t['category']) ?></p>
+                    <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['category']) ?></p>
                     <h2 id="members-library-category-title"><?= e((string) $t['propose_category']) ?></h2>
                     <p class="help"><?= e($canManageLibrary ? (string) $t['category_direct_help'] : (string) $t['propose_category_intro']) ?></p>
                 </div>
-                <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
+                <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_category_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
+            <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_category_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_category_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_category">
                 <label><span><?= e((string) $t['propose_category_name']) ?></span><input type="text" name="proposal_category" maxlength="160" required></label>
                 <label><span><?= e((string) $t['propose_category_reason']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
-                <div class="members-library-dialog-actions">
+                <div class="members-library-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
                 </div>
@@ -364,21 +364,21 @@ ob_start();
 
     <dialog class="members-library-dialog" id="members-library-tag-dialog" aria-labelledby="members-library-tag-title">
         <div class="members-library-dialog-card">
-            <div class="members-library-dialog-header">
+            <div class="members-library-dialog-header module-dialog-header">
                 <div>
-                    <p class="members-library-dialog-eyebrow"><?= e((string) $t['keyword']) ?></p>
+                    <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['keyword']) ?></p>
                     <h2 id="members-library-tag-title"><?= e((string) $t['propose_tag']) ?></h2>
                     <p class="help"><?= e($canManageLibrary ? (string) $t['tag_direct_help'] : (string) $t['propose_tag_intro']) ?></p>
                 </div>
-                <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
+                <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_tag_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_tag_body_intro']) ?>">
+            <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_tag_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_tag_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_tag">
                 <label><span><?= e((string) $t['propose_tag_name']) ?></span><input type="text" name="proposal_tag" maxlength="80" required></label>
                 <label><span><?= e((string) $t['propose_tag_reason']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
-                <div class="members-library-dialog-actions">
+                <div class="members-library-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
                 </div>
@@ -388,15 +388,15 @@ ob_start();
 
     <dialog class="members-library-dialog" id="members-library-document-dialog" aria-labelledby="members-library-document-title">
         <div class="members-library-dialog-card">
-            <div class="members-library-dialog-header">
+            <div class="members-library-dialog-header module-dialog-header">
                 <div>
-                    <p class="members-library-dialog-eyebrow"><?= e((string) $t['document']) ?></p>
+                    <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['document']) ?></p>
                     <h2 id="members-library-document-title"><?= e((string) $t['propose_document']) ?></h2>
                     <p class="help"><?= e($canManageLibrary ? (string) $t['document_direct_help'] : (string) $t['propose_document_intro']) ?></p>
                 </div>
-                <button class="members-library-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
+                <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
             </div>
-            <form class="members-library-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_document_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_document_body_intro']) ?>">
+            <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) $t['propose_document_subject']) ?>" data-members-library-intro="<?= e((string) $t['propose_document_body_intro']) ?>">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="propose_document">
                 <label><span><?= e((string) $t['propose_document_title']) ?></span><input type="text" name="proposal_title" maxlength="190" required></label>
@@ -419,7 +419,7 @@ ob_start();
                 <label><span><?= e((string) $t['propose_document_link']) ?></span><input type="text" name="proposal_link" maxlength="500"></label>
                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
-                <div class="members-library-dialog-actions">
+                <div class="members-library-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
                 </div>
@@ -447,11 +447,11 @@ ob_start();
         <?php endif; ?>
     </section>
 
-    <section class="members-library-layout">
-        <aside class="members-library-index card">
-            <p class="members-library-index-title"><?= e((string) $t['topics']) ?></p>
-            <nav class="members-library-category-list" aria-label="<?= e((string) $t['topics']) ?>">
-                <a class="members-library-category-item<?= $category === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
+    <section class="members-library-layout module-taxonomy-layout">
+        <aside class="members-library-index module-taxonomy-index card">
+            <p class="members-library-index-title module-taxonomy-title"><?= e((string) $t['topics']) ?></p>
+            <nav class="members-library-category-list module-taxonomy-list" aria-label="<?= e((string) $t['topics']) ?>">
+                <a class="members-library-category-item module-taxonomy-item<?= $category === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
                     <span><?= e((string) $t['all_categories']) ?></span>
                     <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $categories)) ?></strong>
                 </a>
@@ -460,7 +460,7 @@ ob_start();
                 <?php endif; ?>
                 <?php foreach ($categories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
-                    <a class="members-library-category-item<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
+                    <a class="members-library-category-item module-taxonomy-item<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
                         <span><?= e((string) ($cat['label'] ?? $catName)) ?></span>
                         <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
                     </a>
@@ -468,7 +468,7 @@ ob_start();
             </nav>
         </aside>
 
-        <div class="members-library-content">
+        <div class="members-library-content module-taxonomy-content">
             <?php if ($documents === []): ?>
                 <div class="card">
                     <p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $category !== '' || $tag !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p>
