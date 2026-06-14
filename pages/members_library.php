@@ -251,6 +251,8 @@ $contactEmail = site_contact_email();
 $documentProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_document_subject']);
 $categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_category_subject']);
 $tagProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_tag_subject']);
+$pendingLibraryAdminUrl = route_url_clean('admin_library', ['status' => 'pending']) . '#pending-proposals';
+$pendingLibraryAdminLabel = $locale === 'fr' ? 'Administrer' : 'Manage';
 
 $relatedByDocumentId = [];
 if ($documents !== []) {
