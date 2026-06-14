@@ -76,60 +76,10 @@
   box-shadow: var(--shadow);
 }
 
-[data-route="events"] .events-proposal-dialog-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-[data-route="events"] .events-proposal-dialog-header h2 {
-  margin: .15rem 0 .35rem;
-}
-
-[data-route="events"] .events-proposal-dialog-close {
-  display: inline-grid;
-  width: 2.4rem;
-  height: 2.4rem;
-  flex: 0 0 auto;
-  place-items: center;
-  padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--panel-2);
-  color: var(--text);
-  font-size: 1.35rem;
-  line-height: 1;
-}
-
-[data-route="events"] .events-proposal-form {
-  display: grid;
-  gap: .75rem;
-}
-
-[data-route="events"] .events-proposal-form label {
-  margin: 0;
-}
-
-[data-route="events"] .events-proposal-form label span {
-  display: block;
-  color: var(--muted);
-  font-size: .82rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
-
 [data-route="events"] .events-proposal-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: .75rem;
-}
-
-[data-route="events"] .events-proposal-dialog-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .65rem;
-  justify-content: flex-end;
 }
 
 @media (max-width: 760px) {
@@ -142,8 +92,4 @@
     grid-template-columns: 1fr;
   }
 
-  [data-route="events"] .events-proposal-dialog-actions .button {
-    width: 100%;
-    justify-content: center;
-  }
 }
