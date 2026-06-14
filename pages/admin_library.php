@@ -163,11 +163,42 @@ $adminLibraryRoute = (string) ($_GET['route'] ?? $_POST['route'] ?? 'admin_libra
 if (!in_array($adminLibraryRoute, $adminLibraryRoutes, true)) {
     $adminLibraryRoute = 'admin_library';
 }
+$isFrench = $locale === 'fr';
+$adminLibraryText = static function (string $key, string $fr, string $en) use ($t, $isFrench): string {
+    return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
+};
+$pendingProposalUrl = route_url_clean($adminLibraryRoute, ['status' => 'pending']) . '#pending-proposals';
+$proposalStatusLabels = [
+    'pending' => $adminLibraryText('proposal_status_pending', 'En attente', 'Pending'),
+    'reviewed' => $adminLibraryText('proposal_status_reviewed', 'Relue', 'Reviewed'),
+    'accepted' => $adminLibraryText('proposal_status_accepted', 'Acceptée', 'Accepted'),
+    'rejected' => $adminLibraryText('proposal_status_rejected', 'Refusée', 'Rejected'),
+];
+$proposalTypeLabels = [
+    'category' => $adminLibraryText('proposal_type_category', 'Thématique', 'Topic'),
+    'content' => $adminLibraryText('proposal_type_content', 'Document', 'Document'),
+    'tag' => $adminLibraryText('proposal_type_tag', 'Mot clé', 'Keyword'),
+];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? 'upload');
+        if ($action === 'update_proposal_status') {
+            $proposalId = (int) ($_POST['proposal_id'] ?? 0);
+            $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
+            $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
+            if ($proposalId <= 0 || !isset($proposalStatusLabels[$proposalStatus])) {
+                throw new RuntimeException('err_required');
+            }
+            if (!ensure_content_proposals_table()) {
+                throw new RuntimeException('storage_unavailable');
+            }
+            db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "members_library"')
+                ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
+            set_flash('success', $adminLibraryText('proposal_status_saved', 'Proposition mise à jour.', 'Proposal updated.'));
+            redirect_url($pendingProposalUrl);
+        }
         if ($action === 'add_category') {
             $code = library_category_slug((string) ($_POST['category_code'] ?? ''));
             $label = trim((string) ($_POST['category_label'] ?? '')) ?: $code;
@@ -362,6 +393,34 @@ foreach ($tagDuplicates as $norm => $variants) {
 }
 ksort($tagDuplicates);
 
+$showPendingProposals = (string) ($_GET['status'] ?? '') === 'pending';
+$pendingProposals = [];
+if ($showPendingProposals && ensure_content_proposals_table()) {
+    $pendingStmt = db()->prepare(
+        'SELECT cp.id, cp.member_id, cp.proposal_type, cp.title, cp.summary, cp.contact, cp.source_ref, cp.status, cp.moderation_note, cp.created_at, cp.updated_at, m.callsign, m.email
+         FROM content_proposals cp
+         LEFT JOIN members m ON m.id = cp.member_id
+         WHERE cp.area = "members_library" AND cp.status = "pending"
+         ORDER BY cp.created_at ASC, cp.id ASC'
+    );
+    $pendingStmt->execute();
+    $pendingProposals = $pendingStmt->fetchAll() ?: [];
+}
+$proposalSourceUrl = static function (string $sourceRef): string {
+    $sourceRef = trim($sourceRef);
+    if ($sourceRef === '') {
+        return '';
+    }
+    $safePath = safe_storage_public_path_or_null($sourceRef, ['storage/uploads/library/']);
+    if ($safePath !== null) {
+        return base_url($safePath);
+    }
+    if (preg_match('/https?:\/\/\S+/i', $sourceRef, $match) === 1) {
+        return (string) $match[0];
+    }
+    return '';
+};
+
 ob_start();
 ?>
 <div class="card admin-library-shell">
@@ -373,6 +432,76 @@ ob_start();
             <span class="badge muted"><?= $totalDocuments ?> <?= e((string) $t['documents']) ?></span>
         </div>
     </header>
+
+    <?php if ($showPendingProposals): ?>
+    <section class="admin-library-documents" id="pending-proposals" aria-labelledby="pending-proposals-title">
+        <div class="admin-library-meta" style="justify-content:space-between;margin-bottom:.8rem;">
+            <h2 id="pending-proposals-title" style="margin:0;"><?= e($adminLibraryText('pending_proposals_title', 'Contenus en attente de validation', 'Content pending review')) ?></h2>
+            <a class="button secondary" href="<?= e(route_url($adminLibraryRoute)) ?>"><?= e((string) $t['reset']) ?></a>
+        </div>
+        <?php if ($pendingProposals === []): ?>
+            <article class="card admin-library-empty"><p><?= e($adminLibraryText('pending_proposals_empty', 'Aucun contenu members_library en attente de validation.', 'No members_library content is pending review.')) ?></p></article>
+        <?php endif; ?>
+        <?php foreach ($pendingProposals as $proposal): ?>
+            <?php
+            $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
+            $proposalStatus = (string) ($proposal['status'] ?? 'pending');
+            $sourceUrl = $proposalSourceUrl((string) ($proposal['source_ref'] ?? ''));
+            $memberLabel = trim((string) ($proposal['callsign'] ?? ''));
+            if ($memberLabel === '') {
+                $memberLabel = trim((string) ($proposal['email'] ?? ''));
+            }
+            if ($memberLabel === '') {
+                $memberLabel = '#' . (int) ($proposal['member_id'] ?? 0);
+            }
+            $proposalCreatedTimestamp = strtotime((string) ($proposal['created_at'] ?? 'now'));
+            if ($proposalCreatedTimestamp === false) {
+                $proposalCreatedTimestamp = time();
+            }
+            ?>
+            <article class="card admin-library-document">
+                <p>
+                    <span class="badge muted"><?= e((string) ($proposalTypeLabels[$proposalType] ?? $proposalType)) ?></span>
+                    <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
+                    <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
+                </p>
+                <h3><?= e((string) ($proposal['title'] ?? $adminLibraryText('proposal_default_title', 'Proposition', 'Proposal'))) ?></h3>
+                <p class="help"><?= e($adminLibraryText('proposal_author', 'Proposé par', 'Proposed by')) ?>: <?= e($memberLabel) ?></p>
+                <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
+                    <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
+                <?php endif; ?>
+                <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
+                    <p class="help"><?= e($adminLibraryText('proposal_contact', 'Contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                <?php endif; ?>
+                <form method="post" class="admin-library-upload-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="update_proposal_status">
+                    <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
+                    <div class="admin-library-upload-grid">
+                        <label class="admin-library-field">
+                            <span><?= e($adminLibraryText('proposal_status_label', 'Statut', 'Status')) ?></span>
+                            <select name="proposal_status">
+                                <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
+                                    <option value="<?= e($statusCode) ?>"<?= $proposalStatus === $statusCode ? ' selected' : '' ?>><?= e($statusLabel) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label class="admin-library-field admin-library-field-wide">
+                            <span><?= e($adminLibraryText('proposal_moderation_note', 'Note de modération', 'Moderation note')) ?></span>
+                            <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
+                        </label>
+                    </div>
+                    <div class="actions">
+                        <?php if ($sourceUrl !== ''): ?>
+                            <a class="button secondary" href="<?= e($sourceUrl) ?>" target="_blank" rel="noopener"><?= e($adminLibraryText('proposal_open_source', 'Ouvrir la source', 'Open source')) ?></a>
+                        <?php endif; ?>
+                        <button class="button" type="submit"><?= e($adminLibraryText('proposal_save_status', 'Enregistrer le statut', 'Save status')) ?></button>
+                    </div>
+                </form>
+            </article>
+        <?php endforeach; ?>
+    </section>
+    <?php endif; ?>
 
     <form method="post" enctype="multipart/form-data" class="admin-library-upload-form">
         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
