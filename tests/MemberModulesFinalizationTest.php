@@ -84,6 +84,8 @@ final class MemberModulesFinalizationTest extends TestCase
         $renderer = $this->source('app/member_module_documents.php');
         self::assertStringContainsString('idx_module_tags', $renderer);
         self::assertStringContainsString('name="tags"', $renderer);
+        self::assertStringContainsString('function render_member_document_module_stats(', $renderer);
+        self::assertSame(2, substr_count($renderer, 'render_member_document_module_stats($stats, $labels, $latestLabel)'));
     }
 
     public function testIdeaModuleUsesTopicSelectKeywordsAndSubmitsThem(): void

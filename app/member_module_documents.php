@@ -432,6 +432,21 @@ function render_member_document_module_cards(array $documents, array $labels): s
 }
 }
 
+if (!function_exists('render_member_document_module_stats')) {
+/**
+ * @param array<string, int|string|null> $stats
+ * @param array<string, string> $labels
+ */
+function render_member_document_module_stats(array $stats, array $labels, string $latestLabel): string
+{
+    return '<div class="member-document-hero-stats">'
+        . '<article><span>' . e((string) $labels['documents']) . '</span><strong>' . (int) ($stats['total'] ?? 0) . '</strong></article>'
+        . '<article><span>' . e((string) $labels['formats']) . '</span><strong>' . (int) ($stats['formats'] ?? 0) . '</strong></article>'
+        . '<article><span>' . e((string) $labels['latest']) . '</span><strong>' . e($latestLabel) . '</strong></article>'
+        . '</div>';
+}
+}
+
 if (!function_exists('render_member_document_module_page')) {
 function render_member_document_module_page(string $module): void
 {
@@ -484,20 +499,7 @@ function render_member_document_module_page(string $module): void
                 <?php if ($intro !== ''): ?><p class="help"><?= e($intro) ?></p><?php endif; ?>
             </div>
             <div class="member-document-hero-side">
-                <div class="member-document-hero-stats">
-                    <article>
-                        <span><?= e((string) $labels['documents']) ?></span>
-                        <strong><?= (int) ($stats['total'] ?? 0) ?></strong>
-                    </article>
-                    <article>
-                        <span><?= e((string) $labels['formats']) ?></span>
-                        <strong><?= (int) ($stats['formats'] ?? 0) ?></strong>
-                    </article>
-                    <article>
-                        <span><?= e((string) $labels['latest']) ?></span>
-                        <strong><?= e($latestLabel) ?></strong>
-                    </article>
-                </div>
+                <?= render_member_document_module_stats($stats, $labels, $latestLabel) ?>
                 <p class="actions member-document-hero-actions">
                     <a class="button secondary" href="#member-document-list"><?= e((string) $labels['view_content']) ?></a>
                     <?php if (has_permission('admin.access')): ?>
@@ -625,20 +627,7 @@ function render_admin_member_document_module_page(string $module): void
                 <p class="help"><?= e((string) $moduleText['intro']) ?></p>
             </div>
             <div class="admin-member-document-hero-side">
-                <div class="member-document-hero-stats">
-                    <article>
-                        <span><?= e((string) $labels['documents']) ?></span>
-                        <strong><?= (int) ($stats['total'] ?? 0) ?></strong>
-                    </article>
-                    <article>
-                        <span><?= e((string) $labels['formats']) ?></span>
-                        <strong><?= (int) ($stats['formats'] ?? 0) ?></strong>
-                    </article>
-                    <article>
-                        <span><?= e((string) $labels['latest']) ?></span>
-                        <strong><?= e($latestLabel) ?></strong>
-                    </article>
-                </div>
+                <?= render_member_document_module_stats($stats, $labels, $latestLabel) ?>
                 <p class="actions admin-member-document-hero-actions">
                     <a class="button secondary" href="<?= e(route_url((string) ($definition['route'] ?? $moduleCode))) ?>"><?= e((string) $labels['view_content']) ?></a>
                     <a class="button" href="#admin-member-document-upload"><?= e((string) $labels['upload_title']) ?></a>
