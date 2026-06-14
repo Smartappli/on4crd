@@ -176,10 +176,6 @@ function seed_published_club_event(
 
 function seed_liberation_eghezee_2026_event(): void
 {
-    if (!table_exists('events')) {
-        return;
-    }
-
     $slug = 'liberation-eghezee-82e-anniversaire-2026';
     $title = 'Libération d\'Eghezée';
     $summary = 'Participation au 82ème anniversaire de la Libération d\'Eghezée les 25, 26 et 27 septembre 2026.';
@@ -211,10 +207,6 @@ HTML;
 
 function seed_brocante_souper_crd_2026_event(): void
 {
-    if (!table_exists('events')) {
-        return;
-    }
-
     $slug = 'brocante-souper-crd-2026';
     $title = 'Brocante et souper du CRD';
     $summary = 'Brocante et souper du CRD le samedi 20 juin 2026 à Leuze Longchamps.';
@@ -247,10 +239,6 @@ HTML;
 
 function seed_fete_aischois_2026_event(): void
 {
-    if (!table_exists('events')) {
-        return;
-    }
-
     $slug = 'fete-des-aischois-2026';
     $title = 'Fête des Aischois';
     $summary = 'Activation radio par Raymond (ON4DG) à la fête des Aischois le 8 août 2026, dès le matin jusque vers 17h00.';
