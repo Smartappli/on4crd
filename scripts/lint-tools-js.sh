@@ -19,7 +19,7 @@ script_file = Path('assets/js/modules/tools.js')
 if not script_file.is_file():
     raise SystemExit('tools script file not found: assets/js/modules/tools.js')
 
-print(script_file.read_text())
+print(script_file.read_text(encoding='utf-8'))
 PY
 
 node --check "$TMP_JS"
@@ -29,7 +29,7 @@ from pathlib import Path
 import re
 import sys
 
-js = Path(sys.argv[1]).read_text()
+js = Path(sys.argv[1]).read_text(encoding='utf-8')
 pattern = re.compile(r"^\s{4}let\s+([A-Za-z_$][\w$]*)\s*=\s*null\s*;", re.M)
 names = pattern.findall(js)
 counts = {}

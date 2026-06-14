@@ -11,9 +11,9 @@ for path in (script_path, page_path, layout_path):
     if not path.is_file():
         raise SystemExit(f'tools script contract file not found: {path}')
 
-script = script_path.read_text()
-page = page_path.read_text()
-layout = layout_path.read_text()
+script = script_path.read_text(encoding='utf-8')
+page = page_path.read_text(encoding='utf-8')
+layout = layout_path.read_text(encoding='utf-8')
 
 expected = [
     "const readJsonConfig",
