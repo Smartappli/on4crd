@@ -160,7 +160,7 @@ function render_matomo_tracking_html(array $options = []): string
 {
     $matomoUrl = rtrim((string) ($options['url'] ?? config('tracking.matomo_url', '')), '/');
     $matomoSiteId = (string) ($options['site_id'] ?? config('tracking.matomo_site_id', ''));
-    $matomoRequireConsent = (bool) ($options['require_consent'] ?? config('tracking.matomo_require_consent', true));
+    $matomoRequireConsent = (bool) ($options['require_consent'] ?? config('tracking.matomo_require_consent', false));
     $matomoDisableCookies = (bool) ($options['disable_cookies'] ?? config('tracking.matomo_disable_cookies', true));
     $matomoRespectDoNotTrack = (bool) ($options['respect_do_not_track'] ?? config('tracking.matomo_respect_do_not_track', true));
     $matomoConsentValue = (string) ($options['consent'] ?? ($_COOKIE['on4crd_tracking_consent'] ?? ''));

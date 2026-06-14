@@ -73,7 +73,7 @@ return [
         // Renseigner uniquement si une instance Matomo est contractualisee et activee.
         'matomo_url' => '',
         'matomo_site_id' => '',
-        'matomo_require_consent' => true,
+        'matomo_require_consent' => false,
         'matomo_disable_cookies' => true,
         'matomo_respect_do_not_track' => true,
     ],
