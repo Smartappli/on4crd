@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
             if ($autoAccept) {
-                set_flash('success', $tr('category_accepted', 'CatÃ©gorie wiki crÃ©Ã©e.'));
+                set_flash('success', $tr('category_accepted', 'Catégorie wiki créée.'));
                 redirect_url(route_url_clean('wiki', ['theme' => slugify($proposalTitle)]));
             }
             set_flash('success', $tr('proposal_recorded', $locale === 'fr' ? 'Proposition enregistree dans vos contenus.' : 'Proposal saved in your content area.'));
@@ -66,8 +66,8 @@ if ($theme === 'n-a') {
     $theme = '';
 }
 $contactEmail = site_contact_email();
-$themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($tr('propose_theme_subject', 'Proposition de thÃ©matique wiki ON4CRD'))
-    . '&body=' . rawurlencode($tr('propose_theme_body_intro', 'Proposition de thÃ©matique wiki :'));
+$themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD'))
+    . '&body=' . rawurlencode($tr('propose_theme_body_intro', 'Proposition de thématique wiki :'));
 $proposalContactDefault = '';
 if ($user !== null) {
     $proposalContactDefault = trim((string) ($user['email'] ?? ''));
@@ -80,7 +80,7 @@ $canAdminWiki = $user !== null && has_permission('wiki.moderate');
 $wikiProposalMenuLabel = $tr('propose_menu', 'Proposer');
 $wikiNewPageLabel = $tr('propose_new_page', 'Une nouvelle page');
 $wikiModificationLabel = $tr('propose_modification', 'Une modification');
-$wikiNewThemeLabel = $tr('propose_new_theme', 'Une nouvelle thÃ©matique');
+$wikiNewThemeLabel = $tr('propose_new_theme', 'Une nouvelle thématique');
 $wikiAdminLabel = $tr('administer', $locale === 'fr' ? 'Administrer' : 'Administer');
 
 $rows = [];
@@ -199,24 +199,24 @@ ob_start();
         <div class="wiki-theme-dialog-card">
             <div class="wiki-theme-dialog-header module-dialog-header">
                 <div>
-                    <p class="wiki-theme-dialog-eyebrow"><?= e($tr('themes', 'ThÃ©matiques')) ?></p>
-                    <h2 id="wiki-theme-dialog-title"><?= e($tr('propose_theme', 'Proposer une thÃ©matique')) ?></h2>
+                    <p class="wiki-theme-dialog-eyebrow"><?= e($tr('themes', 'Thématiques')) ?></p>
+                    <h2 id="wiki-theme-dialog-title"><?= e($tr('propose_theme', 'Proposer une thématique')) ?></h2>
                     <p class="help"><?= e($canAutoAcceptTheme
-                        ? $tr('create_theme_intro', 'Avec vos droits de modÃ©ration, la thÃ©matique sera validÃ©e directement.')
-                        : $tr('propose_theme_intro', 'Indiquez la thÃ©matique Ã  ajouter et les pages qui devraient y Ãªtre liÃ©es.')) ?></p>
+                        ? $tr('create_theme_intro', 'Avec vos droits de modération, la thématique sera validée directement.')
+                        : $tr('propose_theme_intro', 'Indiquez la thématique à ajouter et les pages qui devraient y être liées.')) ?></p>
                 </div>
                 <button class="wiki-theme-dialog-close module-dialog-close" type="button" data-wiki-theme-close aria-label="<?= e($tr('close', 'Fermer')) ?>">&times;</button>
             </div>
-            <form class="wiki-theme-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="<?= e($tr('propose_theme_subject', 'Proposition de thÃ©matique wiki ON4CRD')) ?>" data-wiki-theme-intro="<?= e($tr('propose_theme_body_intro', 'Proposition de thÃ©matique wiki :')) ?>">
+            <form class="wiki-theme-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-wiki-theme-form data-wiki-theme-recipient="<?= e($contactEmail) ?>" data-wiki-theme-subject="<?= e($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD')) ?>" data-wiki-theme-intro="<?= e($tr('propose_theme_body_intro', 'Proposition de thématique wiki :')) ?>">
                 <?php if ($user !== null): ?>
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="propose_theme">
                 <?php endif; ?>
-                <label><span><?= e($tr('propose_theme_name', 'Nom de la thÃ©matique')) ?></span><input type="text" name="proposal_theme" maxlength="160" required></label>
+                <label><span><?= e($tr('propose_theme_name', 'Nom de la thématique')) ?></span><input type="text" name="proposal_theme" maxlength="160" required></label>
                 <label><span><?= e($tr('propose_theme_reason', 'Pourquoi l\'ajouter ?')) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e($tr('propose_theme_contact', 'Votre contact')) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="wiki-theme-dialog-actions module-dialog-actions">
-                    <button class="button" type="submit"><?= e($canAutoAcceptTheme ? $tr('create_theme_submit', 'Proposer la thÃ©matique') : $tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
+                    <button class="button" type="submit"><?= e($canAutoAcceptTheme ? $tr('create_theme_submit', 'Proposer la thématique') : $tr('propose_theme_submit', 'Envoyer la proposition')) ?></button>
                     <button class="button secondary" type="button" data-wiki-theme-close><?= e($tr('cancel', 'Annuler')) ?></button>
                 </div>
             </form>
@@ -242,10 +242,10 @@ ob_start();
 
     <section class="wiki-layout module-taxonomy-layout">
         <aside class="wiki-themes module-taxonomy-index card">
-            <p class="wiki-themes-title"><?= e($tr('themes', 'ThÃ©matiques')) ?></p>
-            <nav class="wiki-theme-list" aria-label="<?= e($tr('themes', 'ThÃ©matiques')) ?>">
+            <p class="wiki-themes-title"><?= e($tr('themes', 'Thématiques')) ?></p>
+            <nav class="wiki-theme-list" aria-label="<?= e($tr('themes', 'Thématiques')) ?>">
                 <a class="wiki-theme-item module-taxonomy-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
-                    <span><?= e($tr('all_themes', 'Toutes les thÃ©matiques')) ?></span>
+                    <span><?= e($tr('all_themes', 'Toutes les thématiques')) ?></span>
                     <strong><?= (int) ($wikiThemes !== [] ? array_sum($wikiThemes) : $totalPagesCount) ?></strong>
                 </a>
                 <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>

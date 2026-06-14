@@ -18,7 +18,7 @@ $pageTitle = $isModification
     : $tr('propose_title', 'Proposer une page wiki');
 $pageDescription = $isModification
     ? $tr('propose_modification_meta_desc', 'Proposer une modification pour une page wiki existante.')
-    : $tr('propose_meta_desc', 'CrÃ©er une nouvelle page wiki depuis lâ€™espace membre.');
+    : $tr('propose_meta_desc', 'Créer une nouvelle page wiki depuis l’espace membre.');
 
 set_page_meta([
     'title' => $pageTitle,
@@ -27,7 +27,7 @@ set_page_meta([
 ]);
 
 if (!ensure_wiki_tables()) {
-    echo render_layout('<div class="card"><h1>' . e($pageTitle) . '</h1><p>' . e($tr('meta_desc', 'CrÃ©er ou modifier une page wiki.')) . '</p></div>', $pageTitle);
+    echo render_layout('<div class="card"><h1>' . e($pageTitle) . '</h1><p>' . e($tr('meta_desc', 'Créer ou modifier une page wiki.')) . '</p></div>', $pageTitle);
     return;
 }
 
@@ -68,11 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($postedModification) {
             if ($postedSourceId <= 0) {
-                throw new RuntimeException($tr('source_page_required', 'SÃ©lectionnez la page Ã  modifier.'));
+                throw new RuntimeException($tr('source_page_required', 'Sélectionnez la page à modifier.'));
             }
             $postedSourcePage = $loadSourcePage($postedSourceId);
             if ($postedSourcePage === null) {
-                throw new RuntimeException($tr('source_page_not_found', 'La page Ã  modifier est introuvable.'));
+                throw new RuntimeException($tr('source_page_not_found', 'La page à modifier est introuvable.'));
             }
         }
 
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($tr('error_title_content_required', 'Le titre et le contenu sont obligatoires.'));
         }
         if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($content) > 50000) {
-            throw new RuntimeException($tr('error_field_too_long', 'Un des champs dÃ©passe la longueur autorisÃ©e.'));
+            throw new RuntimeException($tr('error_field_too_long', 'Un des champs dépasse la longueur autorisée.'));
         }
 
         if ($postedModification && $postedSourcePage !== null) {
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     throw $throwable;
                 }
 
-                set_flash('success', $tr('propose_modification_success_published', 'Modification wiki publiÃ©e automatiquement.'));
+                set_flash('success', $tr('propose_modification_success_published', 'Modification wiki publiée automatiquement.'));
                 redirect_url(route_url('wiki_view', ['slug' => $slug]));
             }
 
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('INSERT INTO wiki_pages (title, slug, content, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, "pending", "modification", ?, ?)')
                 ->execute([$title, $proposalSlug, $content, (int) $user['id'], (int) $postedSourcePage['id'], $targetSlug]);
 
-            set_flash('success', $tr('propose_modification_success', 'Modification wiki proposÃ©e. Elle sera publiÃ©e aprÃ¨s validation.'));
+            set_flash('success', $tr('propose_modification_success', 'Modification wiki proposée. Elle sera publiée après validation.'));
             redirect('my_requests');
         }
 
@@ -121,11 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([$title, $slug, $content, (int) $user['id'], $status]);
 
         if ($autoPublish) {
-            set_flash('success', $tr('propose_success_published', 'Page wiki publiÃ©e automatiquement.'));
+            set_flash('success', $tr('propose_success_published', 'Page wiki publiée automatiquement.'));
             redirect_url(route_url('wiki_view', ['slug' => $slug]));
         }
 
-        set_flash('success', $tr('propose_success', 'Page wiki proposÃ©e. Elle sera publiÃ©e aprÃ¨s validation.'));
+        set_flash('success', $tr('propose_success', 'Page wiki proposée. Elle sera publiée après validation.'));
         redirect('my_requests');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -145,11 +145,11 @@ $initialSlug = $sourcePage !== null ? (string) ($sourcePage['slug'] ?? '') : '';
 $initialContent = $sourcePage !== null ? (string) ($sourcePage['content'] ?? '<p></p>') : '<p></p>';
 $helpText = $isModification
     ? ($autoPublish
-        ? $tr('propose_modification_help_auto_publish', 'Avec vos droits de modÃ©ration, la modification sera publiÃ©e automatiquement.')
+        ? $tr('propose_modification_help_auto_publish', 'Avec vos droits de modération, la modification sera publiée automatiquement.')
         : $tr('propose_modification_help', 'Choisissez une page existante, ajustez son contenu, puis envoyez la modification pour validation.'))
     : ($autoPublish
-        ? $tr('propose_help_auto_publish', 'Avec vos droits de modÃ©ration, la page sera publiÃ©e automatiquement.')
-        : $tr('propose_help', 'RÃ©digez une nouvelle page avec du HTML simple. Elle sera relue avant publication.'));
+        ? $tr('propose_help_auto_publish', 'Avec vos droits de modération, la page sera publiée automatiquement.')
+        : $tr('propose_help', 'Rédigez une nouvelle page avec du HTML simple. Elle sera relue avant publication.'));
 
 ob_start();
 ?>
@@ -167,9 +167,9 @@ ob_start();
         <form method="get" class="wiki-edit-form wiki-source-picker">
             <input type="hidden" name="route" value="wiki_propose">
             <input type="hidden" name="mode" value="modify">
-            <label><?= e($tr('source_page_label', 'Page Ã  modifier')) ?>
+            <label><?= e($tr('source_page_label', 'Page à modifier')) ?>
                 <select name="source_id" required>
-                    <option value=""><?= e($tr('source_page_placeholder', 'SÃ©lectionner une page')) ?></option>
+                    <option value=""><?= e($tr('source_page_placeholder', 'Sélectionner une page')) ?></option>
                     <?php foreach ($sourcePages as $candidate): ?>
                         <option value="<?= (int) $candidate['id'] ?>" <?= (int) $candidate['id'] === $sourceId ? 'selected' : '' ?>>
                             <?= e((string) $candidate['title']) ?> (/<?= e((string) $candidate['slug']) ?>)
@@ -206,7 +206,7 @@ ob_start();
         </form>
     <?php elseif ($isModification): ?>
         <div class="wiki-edit-form">
-            <p class="help"><?= e($tr('source_page_select_help', 'SÃ©lectionnez une page existante pour charger son contenu avant de proposer une modification.')) ?></p>
+            <p class="help"><?= e($tr('source_page_select_help', 'Sélectionnez une page existante pour charger son contenu avant de proposer une modification.')) ?></p>
         </div>
     <?php endif; ?>
 </div>
