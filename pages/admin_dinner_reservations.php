@@ -372,7 +372,7 @@ ob_start();
     <?php endif; ?>
 </section>
 
-<script type="application/json" id="dinner-reservation-config"><?= e(json_encode([
+<script type="application/json" id="dinner-reservation-config"><?= json_encode([
     'locale' => $locale,
     'starterOptions' => $starterOptions,
     'mainOptions' => $mainOptions,
@@ -388,8 +388,7 @@ ob_start();
         'enableDessert' => $locale === 'en' ? 'Enable dessert' : ($locale === 'de' ? 'Dessert aktivieren' : ($locale === 'nl' ? 'Dessert activeren' : 'Activer dessert')),
         'lineTotal' => $locale === 'en' ? 'Line total' : ($locale === 'de' ? 'Zeilensumme' : ($locale === 'nl' ? 'Regeltotaal' : 'Total ligne')),
     ],
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?></script>
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}' ?></script>
 <?php
 
 echo render_layout((string) ob_get_clean(), (string) $t['layout']);
-

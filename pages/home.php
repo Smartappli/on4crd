@@ -552,7 +552,7 @@ try {
         $selectedToolPanel = trim((string) ob_get_clean());
         if ($selectedToolPanel !== '') {
             $toolDayHtml = '<div class="home-tool-day">'
-                . '<script type="application/json" id="tools-i18n">' . e(json_encode($t, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '</script>'
+                . '<script type="application/json" id="tools-i18n">' . (json_encode($t, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}') . '</script>'
                 . $selectedToolPanel
                 . '<a class="mt-3 flex justify-end text-sm font-semibold text-blue-600 hover:text-blue-700" href="' . e(route_url('tools')) . '#' . e((string) $selectedTool['id']) . '">'
                 . e($toolDayCta) . '</a>'

@@ -199,6 +199,6 @@ $unitConversionPanelId = (string) ($unitConversionPanelId ?? 'tool-unit-conversi
     </div>
 
     <script type="application/json" id="unit-conv-data">
-        <?= json_encode($unitConversionGroups, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+        <?= json_encode($unitConversionGroups, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?: '{}' ?>
     </script>
 </article>
