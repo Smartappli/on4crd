@@ -191,6 +191,11 @@ foreach ($existingCategoryRows as $existingCategoryRow) {
         $knownCategories[$code] = ucwords(str_replace('-', ' ', $code));
     }
 }
+foreach (content_proposal_accepted_categories('articles', 120) as $code => $label) {
+    if ($code !== '' && !isset($knownCategories[$code])) {
+        $knownCategories[$code] = $label;
+    }
+}
 
 $articleStatusChoices = [
     'draft' => $t('draft', 'Brouillon'),
@@ -200,6 +205,18 @@ $articleStatusChoices = [
     'rejected' => $t('rejected', 'Refuse'),
 ];
 $articleStatusLabel = static fn(string $status): string => $articleStatusChoices[$status] ?? $status;
+$pendingProposalUrl = route_url_clean('admin_articles', ['status' => 'pending']) . '#pending-proposals';
+$proposalStatusLabels = [
+    'pending' => $t('proposal_status_pending', 'En attente'),
+    'reviewed' => $t('proposal_status_reviewed', 'Relue'),
+    'accepted' => $t('proposal_status_accepted', 'Acceptée'),
+    'rejected' => $t('proposal_status_rejected', 'Refusée'),
+];
+$proposalTypeLabels = [
+    'category' => $t('proposal_type_category', 'Thématique'),
+    'content' => $t('proposal_type_content', 'Article'),
+    'tag' => $t('proposal_type_tag', 'Mot clé'),
+];
 $editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'scheduled_at' => null, 'moderation_note' => null];
 $editing = $editingDefault;
 $editingId = (int) ($_GET['id'] ?? 0);
@@ -208,6 +225,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
+
+        if ($action === 'update_proposal_status') {
+            $proposalId = (int) ($_POST['proposal_id'] ?? 0);
+            $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
+            $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
+            if ($proposalId <= 0 || !isset($proposalStatusLabels[$proposalStatus])) {
+                throw new RuntimeException($t('err_invalid_proposal', 'Proposition invalide.'));
+            }
+            if (!ensure_content_proposals_table()) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "articles"')
+                ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
+            set_flash('success', $t('proposal_status_saved', 'Proposition mise à jour.'));
+            redirect_url($pendingProposalUrl);
+        }
 
         if ($action === 'bulk_update_articles') {
             $ids = array_values(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])), static fn(int $v): bool => $v > 0));
@@ -599,6 +632,19 @@ if ($editingId > 0 && table_exists('article_revisions')) {
     $revisions = $revisionStmt->fetchAll() ?: [];
 }
 $scheduledQueue = db()->query('SELECT id, title, slug, status, scheduled_at, updated_at, content FROM articles WHERE status = "scheduled" ORDER BY scheduled_at ASC, updated_at DESC LIMIT 50')->fetchAll() ?: [];
+$showPendingProposals = $adminStatus === 'pending';
+$pendingProposals = [];
+if ($showPendingProposals && ensure_content_proposals_table()) {
+    $pendingStmt = db()->prepare(
+        'SELECT cp.id, cp.member_id, cp.proposal_type, cp.title, cp.summary, cp.contact, cp.source_ref, cp.status, cp.moderation_note, cp.created_at, cp.updated_at, m.callsign, m.email
+         FROM content_proposals cp
+         LEFT JOIN members m ON m.id = cp.member_id
+         WHERE cp.area = "articles" AND cp.status = "pending"
+         ORDER BY cp.created_at ASC, cp.id ASC'
+    );
+    $pendingStmt->execute();
+    $pendingProposals = $pendingStmt->fetchAll() ?: [];
+}
 
 ob_start();
 ?>
@@ -731,6 +777,69 @@ ob_start();
             </form>
         <?php endif; ?>
     </section>
+    <?php if ($showPendingProposals): ?>
+    <section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
+        <div class="row-between">
+            <h2 id="pending-proposals-title"><?= e($t('pending_proposals_title', 'Contenus en attente de validation')) ?></h2>
+            <a class="button secondary small" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter', 'Réinitialiser')) ?></a>
+        </div>
+        <?php if ($pendingProposals === []): ?>
+            <p class="help"><?= e($t('pending_proposals_empty', 'Aucune proposition articles en attente de validation.')) ?></p>
+        <?php endif; ?>
+        <div class="stack">
+            <?php foreach ($pendingProposals as $proposal): ?>
+                <?php
+                $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
+                $proposalStatus = (string) ($proposal['status'] ?? 'pending');
+                $memberLabel = trim((string) ($proposal['callsign'] ?? ''));
+                if ($memberLabel === '') {
+                    $memberLabel = trim((string) ($proposal['email'] ?? ''));
+                }
+                if ($memberLabel === '') {
+                    $memberLabel = '#' . (int) ($proposal['member_id'] ?? 0);
+                }
+                $proposalCreatedTimestamp = strtotime((string) ($proposal['created_at'] ?? 'now'));
+                if ($proposalCreatedTimestamp === false) {
+                    $proposalCreatedTimestamp = time();
+                }
+                ?>
+                <article class="article-item">
+                    <p>
+                        <span class="badge muted"><?= e((string) ($proposalTypeLabels[$proposalType] ?? $proposalType)) ?></span>
+                        <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
+                        <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
+                    </p>
+                    <h3><?= e((string) ($proposal['title'] ?? $t('proposal_default_title', 'Proposition'))) ?></h3>
+                    <p class="help"><?= e($t('proposal_author', 'Proposé par')) ?>: <?= e($memberLabel) ?></p>
+                    <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
+                        <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
+                        <p class="help"><?= e($t('proposal_contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                    <?php endif; ?>
+                    <form method="post" class="stack">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="update_proposal_status">
+                        <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
+                        <div class="grid-2">
+                            <label><?= e($t('proposal_status_label', 'Statut')) ?>
+                                <select name="proposal_status">
+                                    <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
+                                        <option value="<?= e($statusCode) ?>" <?= $proposalStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                            <label><?= e($t('proposal_moderation_note', 'Note de modération')) ?>
+                                <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
+                            </label>
+                        </div>
+                        <p><button class="button small" type="submit"><?= e($t('proposal_save_status', 'Enregistrer le statut')) ?></button></p>
+                    </form>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
     <section class="card">
         <div class="row-between">
             <h2><?= e($t('existing_articles')) ?></h2>

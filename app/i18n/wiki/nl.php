@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Voorstel verzenden',
   'cancel' => 'Annuleer',
   'proposal_recorded' => 'Voorstel opgeslagen in uw inhoud.',
+  'propose_menu' => 'Voorstellen',
+  'propose_new_page' => 'Een nieuwe pagina',
+  'propose_modification' => 'Een wijziging',
+  'propose_new_theme' => 'Een nieuw thema',
+  'administer' => 'Beheren',
 );

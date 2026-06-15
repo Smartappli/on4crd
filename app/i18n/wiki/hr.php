@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Pošalji prijedlog',
   'cancel' => 'Odustani',
   'proposal_recorded' => 'Prijedlog je spremljen u vašim sadržajima.',
+  'propose_menu' => 'Predloži',
+  'propose_new_page' => 'Nova stranica',
+  'propose_modification' => 'Izmjena',
+  'propose_new_theme' => 'Nova tema',
+  'administer' => 'Administriraj',
 );

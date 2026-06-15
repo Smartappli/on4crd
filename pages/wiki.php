@@ -76,7 +76,7 @@ if ($user !== null) {
     }
 }
 $canAutoAcceptTheme = $user !== null && has_permission('wiki.moderate');
-$canAdminWiki = $user !== null && has_permission('wiki.moderate');
+$canAdminWiki = $user !== null && has_permission('admin.access');
 $wikiProposalMenuLabel = $tr('propose_menu', 'Proposer');
 $wikiNewPageLabel = $tr('propose_new_page', 'Une nouvelle page');
 $wikiModificationLabel = $tr('propose_modification', 'Une modification');

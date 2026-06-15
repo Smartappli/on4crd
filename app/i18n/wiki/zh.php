@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => '发送提案',
   'cancel' => '取消',
   'proposal_recorded' => '建议已保存到你的内容中。',
+  'propose_menu' => '建议',
+  'propose_new_page' => '新页面',
+  'propose_modification' => '修改',
+  'propose_new_theme' => '新主题',
+  'administer' => '管理',
 );

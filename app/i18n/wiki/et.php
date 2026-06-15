@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Saada ettepanek',
   'cancel' => 'Tühista',
   'proposal_recorded' => 'Ettepanek salvestati teie sisusse.',
+  'propose_menu' => 'Paku välja',
+  'propose_new_page' => 'Uus leht',
+  'propose_modification' => 'Muudatus',
+  'propose_new_theme' => 'Uus teema',
+  'administer' => 'Halda',
 );

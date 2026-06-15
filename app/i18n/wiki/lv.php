@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Nosūtīt priekšlikumu',
   'cancel' => 'Atcelt',
   'proposal_recorded' => 'Priekšlikums saglabāts jūsu saturā.',
+  'propose_menu' => 'Ierosināt',
+  'propose_new_page' => 'Jauna lapa',
+  'propose_modification' => 'Izmaiņa',
+  'propose_new_theme' => 'Jauna tēma',
+  'administer' => 'Administrēt',
 );

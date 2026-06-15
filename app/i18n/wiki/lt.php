@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Siųsti pasiūlymą',
   'cancel' => 'Atšaukti',
   'proposal_recorded' => 'Pasiūlymas išsaugotas jūsų turinyje.',
+  'propose_menu' => 'Pasiūlyti',
+  'propose_new_page' => 'Naujas puslapis',
+  'propose_modification' => 'Pakeitimas',
+  'propose_new_theme' => 'Nauja tema',
+  'administer' => 'Administruoti',
 );

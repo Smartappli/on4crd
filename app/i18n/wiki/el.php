@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Αποστολή πρότασης',
   'cancel' => 'Ακύρωση',
   'proposal_recorded' => 'Η πρόταση αποθηκεύτηκε στο περιεχόμενό σας.',
+  'propose_menu' => 'Πρόταση',
+  'propose_new_page' => 'Μια νέα σελίδα',
+  'propose_modification' => 'Μια τροποποίηση',
+  'propose_new_theme' => 'Ένα νέο θέμα',
+  'administer' => 'Διαχείριση',
 );

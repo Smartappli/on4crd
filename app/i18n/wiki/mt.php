@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Ibgħat proposta',
   'cancel' => 'Ikkanċella',
   'proposal_recorded' => 'Il-proposta ġiet issejvjata fil-kontenut tiegħek.',
+  'propose_menu' => 'Ipproponi',
+  'propose_new_page' => 'Paġna ġdida',
+  'propose_modification' => 'Bidla',
+  'propose_new_theme' => 'Tema ġdida',
+  'administer' => 'Amministra',
 );

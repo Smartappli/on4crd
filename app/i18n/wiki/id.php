@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Kirim usulan',
   'cancel' => 'Batalkan',
   'proposal_recorded' => 'Usulan disimpan di konten Anda.',
+  'propose_menu' => 'Usulkan',
+  'propose_new_page' => 'Halaman baru',
+  'propose_modification' => 'Perubahan',
+  'propose_new_theme' => 'Tema baru',
+  'administer' => 'Kelola',
 );

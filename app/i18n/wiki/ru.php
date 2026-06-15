@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Отправить предложение',
   'cancel' => 'Отмена',
   'proposal_recorded' => 'Предложение сохранено в ваших материалах.',
+  'propose_menu' => 'Предложить',
+  'propose_new_page' => 'Новая страница',
+  'propose_modification' => 'Правка',
+  'propose_new_theme' => 'Новая тема',
+  'administer' => 'Администрировать',
 );

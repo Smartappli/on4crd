@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'প্রস্তাব পাঠান',
   'cancel' => 'বাতিল করুন',
   'proposal_recorded' => 'প্রস্তাবটি আপনার কনটেন্টে সংরক্ষিত হয়েছে।',
+  'propose_menu' => 'প্রস্তাব করুন',
+  'propose_new_page' => 'একটি নতুন পৃষ্ঠা',
+  'propose_modification' => 'একটি সম্পাদনা',
+  'propose_new_theme' => 'একটি নতুন থিম',
+  'administer' => 'প্রশাসন',
 );

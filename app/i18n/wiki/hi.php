@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'प्रस्ताव भेजें',
   'cancel' => 'रद्द करें',
   'proposal_recorded' => 'प्रस्ताव आपकी सामग्री में सहेज दिया गया है।',
+  'propose_menu' => 'प्रस्ताव दें',
+  'propose_new_page' => 'एक नया पृष्ठ',
+  'propose_modification' => 'एक संशोधन',
+  'propose_new_theme' => 'एक नया विषय',
+  'administer' => 'प्रशासित करें',
 );

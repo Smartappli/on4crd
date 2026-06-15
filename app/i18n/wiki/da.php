@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Send forslag',
   'cancel' => 'Annuller',
   'proposal_recorded' => 'Forslaget er gemt i dit indhold.',
+  'propose_menu' => 'Foreslå',
+  'propose_new_page' => 'En ny side',
+  'propose_modification' => 'En ændring',
+  'propose_new_theme' => 'Et nyt tema',
+  'administer' => 'Administrer',
 );

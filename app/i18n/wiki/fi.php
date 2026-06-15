@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Lähetä ehdotus',
   'cancel' => 'Peruuta',
   'proposal_recorded' => 'Ehdotus tallennettiin sisältöihisi.',
+  'propose_menu' => 'Ehdota',
+  'propose_new_page' => 'Uusi sivu',
+  'propose_modification' => 'Muutos',
+  'propose_new_theme' => 'Uusi teema',
+  'administer' => 'Hallinnoi',
 );

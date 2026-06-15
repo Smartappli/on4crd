@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Pošlji predlog',
   'cancel' => 'Prekliči',
   'proposal_recorded' => 'Predlog je shranjen med vašo vsebino.',
+  'propose_menu' => 'Predlagaj',
+  'propose_new_page' => 'Nova stran',
+  'propose_modification' => 'Sprememba',
+  'propose_new_theme' => 'Nova tematika',
+  'administer' => 'Upravljaj',
 );

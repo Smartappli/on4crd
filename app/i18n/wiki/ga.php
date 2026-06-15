@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Seol togra',
   'cancel' => 'Cealaigh',
   'proposal_recorded' => 'Sábháladh an moladh i d’inneachar.',
+  'propose_menu' => 'Mol',
+  'propose_new_page' => 'Leathanach nua',
+  'propose_modification' => 'Athrú',
+  'propose_new_theme' => 'Téama nua',
+  'administer' => 'Riar',
 );

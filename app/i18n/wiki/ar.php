@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'إرسال الاقتراح',
   'cancel' => 'إلغاء',
   'proposal_recorded' => 'تم حفظ الاقتراح في محتواك.',
+  'propose_menu' => 'اقتراح',
+  'propose_new_page' => 'صفحة جديدة',
+  'propose_modification' => 'تعديل',
+  'propose_new_theme' => 'موضوع جديد',
+  'administer' => 'إدارة',
 );

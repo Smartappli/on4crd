@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Odoslať návrh',
   'cancel' => 'Zrušiť',
   'proposal_recorded' => 'Návrh bol uložený vo vašom obsahu.',
+  'propose_menu' => 'Navrhnúť',
+  'propose_new_page' => 'Nová stránka',
+  'propose_modification' => 'Úprava',
+  'propose_new_theme' => 'Nová téma',
+  'administer' => 'Spravovať',
 );

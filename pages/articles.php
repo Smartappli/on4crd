@@ -119,6 +119,11 @@ $themeMeta = [
     'formation' => ['label' => (string) $t['theme_formation'], 'image' => null],
     'autres' => ['label' => (string) $t['theme_autres'], 'image' => null],
 ];
+foreach (content_proposal_accepted_categories('articles', 120) as $code => $label) {
+    if ($code !== '' && !isset($themeMeta[$code])) {
+        $themeMeta[$code] = ['label' => $label, 'image' => null];
+    }
+}
 
 $themeFilter = slugify(trim((string) ($_GET['theme'] ?? '')));
 if ($themeFilter === 'n-a') {
@@ -233,6 +238,13 @@ if ($user !== null) {
         $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
     }
 }
+$canAdminArticles = $user !== null && has_permission('admin.access');
+$articlesAdminUrl = route_url_clean('admin_articles', ['status' => 'pending']) . '#pending-proposals';
+$articlesProposeLabel = (string) ($t['propose_menu'] ?? 'Proposer');
+$articlesProposeCategoryLabel = (string) ($t['propose_category_item'] ?? $t['theme_default'] ?? 'Une thématique');
+$articlesProposeTagLabel = (string) ($t['propose_tag_item'] ?? 'Un mot clé');
+$articlesProposeArticleLabel = (string) ($t['propose_article_item'] ?? $t['propose_article'] ?? 'Un article');
+$articlesAdminLabel = (string) ($t['administer'] ?? ($locale === 'fr' ? 'Administrer' : 'Administer'));
 
 ob_start();
 ?>
@@ -259,8 +271,17 @@ ob_start();
                 </article>
             </div>
             <div class="articles-hero-actions">
-                <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-articles-category-open aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e((string) $t['propose_category']) ?></a>
-                <a class="button" href="<?= e(route_url('article_propose')) ?>"><?= e((string) $t['propose_article']) ?></a>
+                <details class="articles-propose-menu">
+                    <summary class="button" aria-haspopup="menu"><?= e($articlesProposeLabel) ?></summary>
+                    <div class="articles-propose-menu-panel" role="menu">
+                        <a class="articles-propose-menu-item" role="menuitem" href="<?= e($categoryProposalUrl) ?>" data-articles-category-open data-articles-dialog-open="articles-category-dialog" aria-haspopup="dialog" aria-controls="articles-category-dialog"><?= e($articlesProposeCategoryLabel) ?></a>
+                        <a class="articles-propose-menu-item" role="menuitem" href="#articles-tag-dialog" data-articles-dialog-open="articles-tag-dialog" aria-haspopup="dialog" aria-controls="articles-tag-dialog"><?= e($articlesProposeTagLabel) ?></a>
+                        <a class="articles-propose-menu-item" role="menuitem" href="<?= e(route_url('article_propose')) ?>"><?= e($articlesProposeArticleLabel) ?></a>
+                    </div>
+                </details>
+                <?php if ($canAdminArticles): ?>
+                    <a class="button secondary" href="<?= e($articlesAdminUrl) ?>"><?= e($articlesAdminLabel) ?></a>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -295,6 +316,41 @@ ob_start();
                 <div class="articles-category-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['propose_category_submit']) ?></button>
                     <button class="button secondary" type="button" data-articles-category-close><?= e((string) $t['propose_category_cancel']) ?></button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog class="articles-category-dialog articles-proposal-dialog" id="articles-tag-dialog" aria-labelledby="articles-tag-title">
+        <div class="articles-category-dialog-card">
+            <div class="articles-category-dialog-header module-dialog-header">
+                <div>
+                    <p class="articles-category-dialog-eyebrow module-dialog-eyebrow"><?= e((string) ($t['propose_tag_eyebrow'] ?? $t['theme_default'])) ?></p>
+                    <h2 id="articles-tag-title"><?= e((string) ($t['propose_tag'] ?? 'Proposer un mot clé')) ?></h2>
+                    <p class="help"><?= e((string) ($t['propose_tag_intro'] ?? 'Indiquez le mot clé à ajouter aux articles.')) ?></p>
+                </div>
+                <button class="articles-category-dialog-close module-dialog-close" type="button" data-articles-dialog-close aria-label="<?= e((string) ($t['propose_tag_close'] ?? $t['propose_category_close'])) ?>">&times;</button>
+            </div>
+            <form class="articles-category-form module-dialog-form" method="<?= $user !== null ? 'post' : 'dialog' ?>" data-articles-proposal-form data-articles-proposal-recipient="<?= e($contactEmail) ?>" data-articles-proposal-subject="<?= e((string) ($t['propose_tag_subject'] ?? 'Proposition de mot clé article ON4CRD')) ?>" data-articles-proposal-intro="<?= e((string) ($t['propose_tag_body_intro'] ?? 'Bonjour, je souhaite proposer un nouveau mot clé d’article.')) ?>">
+                <?php if ($user !== null): ?>
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_tag">
+                <?php endif; ?>
+                <label>
+                    <span><?= e((string) ($t['propose_tag_name_label'] ?? 'Mot clé')) ?></span>
+                    <input type="text" name="proposal_tag" maxlength="160" required>
+                </label>
+                <label>
+                    <span><?= e((string) ($t['propose_tag_reason_label'] ?? 'Motivation')) ?></span>
+                    <textarea name="proposal_reason" rows="5" maxlength="1600"></textarea>
+                </label>
+                <label>
+                    <span><?= e((string) ($t['propose_tag_contact_label'] ?? $t['propose_category_contact_label'])) ?></span>
+                    <input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required>
+                </label>
+                <div class="articles-category-dialog-actions module-dialog-actions">
+                    <button class="button" type="submit"><?= e((string) ($t['propose_tag_submit'] ?? $t['propose_category_submit'])) ?></button>
+                    <button class="button secondary" type="button" data-articles-dialog-close><?= e((string) ($t['propose_tag_cancel'] ?? $t['propose_category_cancel'])) ?></button>
                 </div>
             </form>
         </div>

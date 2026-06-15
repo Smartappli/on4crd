@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Enviar propuesta',
   'cancel' => 'Cancelar',
   'proposal_recorded' => 'Propuesta guardada en tus contenidos.',
+  'propose_menu' => 'Proponer',
+  'propose_new_page' => 'Una nueva página',
+  'propose_modification' => 'Una modificación',
+  'propose_new_theme' => 'Una nueva temática',
+  'administer' => 'Administrar',
 );

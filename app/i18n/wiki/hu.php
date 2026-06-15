@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Ajánlat küldése',
   'cancel' => 'Mégse',
   'proposal_recorded' => 'A javaslat mentve lett a tartalmai közé.',
+  'propose_menu' => 'Javaslat',
+  'propose_new_page' => 'Új oldal',
+  'propose_modification' => 'Módosítás',
+  'propose_new_theme' => 'Új téma',
+  'administer' => 'Adminisztrálás',
 );

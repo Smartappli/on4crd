@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => 'Trimiteți propunerea',
   'cancel' => 'Anulează',
   'proposal_recorded' => 'Propunerea a fost salvată în conținutul dvs.',
+  'propose_menu' => 'Propune',
+  'propose_new_page' => 'O pagină nouă',
+  'propose_modification' => 'O modificare',
+  'propose_new_theme' => 'O temă nouă',
+  'administer' => 'Administrează',
 );

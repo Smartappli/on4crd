@@ -36,4 +36,9 @@ return array (
   'propose_theme_submit' => '提案を送信する',
   'cancel' => 'キャンセル',
   'proposal_recorded' => '提案はあなたのコンテンツに保存されました。',
+  'propose_menu' => '提案する',
+  'propose_new_page' => '新しいページ',
+  'propose_modification' => '変更',
+  'propose_new_theme' => '新しいテーマ',
+  'administer' => '管理',
 );
