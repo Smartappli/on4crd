@@ -10,6 +10,12 @@
 
   const openDialog = (event) => {
     event.preventDefault();
+    if (event.currentTarget instanceof HTMLElement) {
+      const sourceMenu = event.currentTarget.closest('details');
+      if (sourceMenu instanceof HTMLDetailsElement) {
+        sourceMenu.open = false;
+      }
+    }
     if (!dialog.open) {
       dialog.showModal();
     }

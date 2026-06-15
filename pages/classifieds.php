@@ -204,6 +204,9 @@ $renderCategoryProposalForm = static function (bool $dialogMode) use ($t, $propo
     <?php
     return (string) ob_get_clean();
 };
+$classifiedsProposeMenuLabel = (string) ($messages['propose_menu'] ?? 'Proposer');
+$classifiedsProposeAdItemLabel = (string) ($messages['propose_ad_item'] ?? $t('propose_ad'));
+$classifiedsProposeCategoryItemLabel = (string) ($messages['propose_category_item'] ?? $t('propose_category'));
 
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
@@ -234,14 +237,19 @@ ob_start();
                     <p><?= e(module_hero_latest_stat_text('latest', $locale)) ?></p>
                 </div>
             </div>
-            <p class="classifieds-hero-action">
-                <a class="button" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_ad')) ?></a>
-                <?php if ($user !== null): ?>
-                    <a class="button secondary" href="<?= e(route_url('classifieds', ['propose_category' => '1'])) ?>" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($canModerateClassifieds ? 'Proposer une catégorie' : $t('propose_category')) ?></a>
-                <?php else: ?>
-                    <a class="button secondary" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($t('propose_category')) ?></a>
-                <?php endif; ?>
-            </p>
+            <div class="classifieds-hero-action">
+                <details class="classifieds-propose-menu">
+                    <summary class="button" aria-haspopup="menu"><?= e($classifiedsProposeMenuLabel) ?></summary>
+                    <div class="classifieds-propose-menu-panel" role="menu">
+                        <a class="classifieds-propose-menu-item" role="menuitem" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($classifiedsProposeAdItemLabel) ?></a>
+                        <?php if ($user !== null): ?>
+                            <a class="classifieds-propose-menu-item" role="menuitem" href="<?= e(route_url('classifieds', ['propose_category' => '1'])) ?>" data-classifieds-category-open aria-haspopup="dialog" aria-controls="classifieds-category-dialog"><?= e($classifiedsProposeCategoryItemLabel) ?></a>
+                        <?php else: ?>
+                            <a class="classifieds-propose-menu-item" role="menuitem" href="<?= e(route_url('classifieds_manage')) ?>"><?= e($classifiedsProposeCategoryItemLabel) ?></a>
+                        <?php endif; ?>
+                    </div>
+                </details>
+            </div>
         </div>
     </header>
 
