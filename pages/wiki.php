@@ -82,6 +82,7 @@ $wikiNewPageLabel = $tr('propose_new_page', 'Une nouvelle page');
 $wikiModificationLabel = $tr('propose_modification', 'Une modification');
 $wikiNewThemeLabel = $tr('propose_new_theme', 'Une nouvelle thématique');
 $wikiAdminLabel = $tr('administer', $locale === 'fr' ? 'Administrer' : 'Administer');
+$wikiCategoryLabels = wiki_categories($t);
 
 $rows = [];
 $wikiThemes = [];
@@ -97,23 +98,26 @@ try {
     $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
     $latestWikiDate = trim((string) (db()->query('SELECT updated_at FROM wiki_pages WHERE ' . $publicWikiWhere . ' ORDER BY updated_at DESC, id DESC LIMIT 1')->fetchColumn() ?: ''));
 
-    $themeRows = db()->query('SELECT slug FROM wiki_pages WHERE ' . $publicWikiWhere . ' ORDER BY slug ASC')->fetchAll() ?: [];
+    $wikiThemes = array_fill_keys(array_keys($wikiCategoryLabels), 0);
+    $themeRows = db()->query('SELECT category, COUNT(*) AS total FROM wiki_pages WHERE ' . $publicWikiWhere . ' GROUP BY category ORDER BY category ASC')->fetchAll() ?: [];
     foreach ($themeRows as $themeRow) {
-        $slug = trim((string) ($themeRow['slug'] ?? ''));
-        $themeSeed = $slug !== '' ? explode('-', $slug, 2)[0] : '';
-        $themeCode = slugify($themeSeed);
+        $themeCode = wiki_category_code((string) ($themeRow['category'] ?? ''));
         if ($themeCode === '' || $themeCode === 'n-a') {
             continue;
         }
-        $wikiThemes[$themeCode] = ($wikiThemes[$themeCode] ?? 0) + 1;
+        if (!isset($wikiCategoryLabels[$themeCode])) {
+            $wikiCategoryLabels[$themeCode] = wiki_category_label_from_code($themeCode);
+        }
+        $wikiThemes[$themeCode] = ($wikiThemes[$themeCode] ?? 0) + (int) ($themeRow['total'] ?? 0);
     }
     if (table_exists('content_proposals')) {
         $categoryRows = db()->query('SELECT title FROM content_proposals WHERE area = "wiki" AND proposal_type = "category" AND status = "accepted" ORDER BY title ASC')->fetchAll() ?: [];
         foreach ($categoryRows as $categoryRow) {
-            $themeCode = slugify((string) ($categoryRow['title'] ?? ''));
+            $themeCode = wiki_category_code((string) ($categoryRow['title'] ?? ''));
             if ($themeCode === '' || $themeCode === 'n-a') {
                 continue;
             }
+            $wikiCategoryLabels[$themeCode] = content_proposal_clean_single_line((string) ($categoryRow['title'] ?? $themeCode), 190);
             $wikiThemes[$themeCode] = $wikiThemes[$themeCode] ?? 0;
         }
     }
@@ -124,19 +128,18 @@ try {
     $where = [];
     $params = [];
     if ($theme !== '') {
-        $where[] = '(p.slug = ? OR p.slug LIKE ?)';
+        $where[] = 'p.category = ?';
         $params[] = $theme;
-        $params[] = $theme . '-%';
     }
     if ($search !== '') {
-        $where[] = '(p.title LIKE ? OR p.content LIKE ? OR p.slug LIKE ?)';
+        $where[] = '(p.title LIKE ? OR p.content LIKE ? OR p.slug LIKE ? OR p.category LIKE ?)';
         $like = '%' . $search . '%';
-        array_push($params, $like, $like, $like);
+        array_push($params, $like, $like, $like, $like);
     }
     array_unshift($where, wiki_public_page_where_sql('p'));
     $whereSql = ' WHERE ' . implode(' AND ', $where);
     $stmt = db()->prepare(
-        'SELECT p.slug, p.title, p.content, p.updated_at, p.author_id, m.callsign,
+        'SELECT p.slug, p.title, p.content, p.category, p.updated_at, p.author_id, m.callsign,
             (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
          FROM wiki_pages p
          LEFT JOIN members m ON m.id = p.author_id
@@ -250,7 +253,7 @@ ob_start();
                 </a>
                 <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>
                     <a class="wiki-theme-item module-taxonomy-item<?= $themeCode === $theme ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeCode === $theme ? ' aria-current="page"' : '' ?>>
-                        <span><?= e(ucfirst(str_replace('-', ' ', $themeCode))) ?></span>
+                        <span><?= e((string) ($wikiCategoryLabels[$themeCode] ?? wiki_category_label_from_code($themeCode))) ?></span>
                         <strong><?= (int) $themeTotal ?></strong>
                     </a>
                 <?php endforeach; ?>
@@ -280,10 +283,15 @@ ob_start();
                     $summary = mb_safe_strimwidth($summary, 0, 220, '...');
                     $author = trim((string) ($row['callsign'] ?? ''));
                     $revisionTotal = (int) ($row['revision_count'] ?? 0);
+                    $categoryCode = wiki_category_code((string) ($row['category'] ?? 'general'));
+                    $categoryLabel = (string) ($wikiCategoryLabels[$categoryCode] ?? wiki_category_label_from_code($categoryCode));
                     ?>
                     <article class="wiki-card">
                         <div class="wiki-card-main">
-                            <span class="wiki-slug">/<?= e((string) $row['slug']) ?></span>
+                            <div class="wiki-card-kicker">
+                                <span class="wiki-slug">/<?= e((string) $row['slug']) ?></span>
+                                <a class="wiki-category-badge" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
+                            </div>
                             <h2><a href="<?= e(route_url('wiki_view', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title']) ?></a></h2>
                             <p><?= e($summary) ?></p>
                         </div>

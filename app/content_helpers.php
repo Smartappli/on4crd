@@ -164,6 +164,7 @@ function ensure_wiki_tables(): bool
                 slug VARCHAR(190) NOT NULL UNIQUE,
                 title VARCHAR(190) NOT NULL,
                 content LONGTEXT NOT NULL,
+                category VARCHAR(120) NOT NULL DEFAULT "general",
                 author_id INT DEFAULT NULL,
                 status ENUM("pending","published","rejected") NOT NULL DEFAULT "published",
                 proposal_kind VARCHAR(32) NOT NULL DEFAULT "page",
@@ -171,6 +172,7 @@ function ensure_wiki_tables(): bool
                 target_slug VARCHAR(190) DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_wiki_category (category),
                 INDEX idx_wiki_status_updated (status, updated_at),
                 INDEX idx_wiki_updated (updated_at),
                 INDEX idx_wiki_proposal_kind (proposal_kind, status),
@@ -182,6 +184,11 @@ function ensure_wiki_tables(): bool
             db()->exec('ALTER TABLE wiki_pages ADD COLUMN status ENUM("pending","published","rejected") NOT NULL DEFAULT "published" AFTER author_id');
         } else {
             db()->exec('ALTER TABLE wiki_pages MODIFY COLUMN status ENUM("pending","published","rejected") NOT NULL DEFAULT "published"');
+        }
+        $addedCategory = false;
+        if (!table_has_column('wiki_pages', 'category')) {
+            db()->exec('ALTER TABLE wiki_pages ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER content');
+            $addedCategory = true;
         }
         if (!table_has_column('wiki_pages', 'created_at')) {
             db()->exec('ALTER TABLE wiki_pages ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER status');
@@ -198,7 +205,14 @@ function ensure_wiki_tables(): bool
         if (!table_has_column('wiki_pages', 'target_slug')) {
             db()->exec('ALTER TABLE wiki_pages ADD COLUMN target_slug VARCHAR(190) DEFAULT NULL AFTER source_page_id');
         }
+        db()->exec('UPDATE wiki_pages SET category = "general" WHERE category IS NULL OR category = ""');
+        if ($addedCategory) {
+            db()->exec('UPDATE wiki_pages SET category = LEFT(SUBSTRING_INDEX(slug, "-", 1), 120) WHERE slug IS NOT NULL AND slug <> "" AND slug <> "n-a"');
+        }
         db()->exec('UPDATE wiki_pages SET proposal_kind = "page" WHERE proposal_kind IS NULL OR proposal_kind = ""');
+        if (!table_has_index('wiki_pages', 'idx_wiki_category')) {
+            db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_category (category)');
+        }
         if (!table_has_index('wiki_pages', 'idx_wiki_status_updated')) {
             db()->exec('ALTER TABLE wiki_pages ADD INDEX idx_wiki_status_updated (status, updated_at)');
         }
@@ -312,6 +326,80 @@ function wiki_unique_slug(string $title, string $slugInput = '', int $ignoreId =
     } while ($suffix < 10000);
 
     throw new RuntimeException('Impossible de générer un slug wiki unique.');
+}
+}
+
+if (!function_exists('wiki_category_code')) {
+function wiki_category_code(string $value): string
+{
+    return content_proposal_category_code($value, 120, 'general');
+}
+}
+
+if (!function_exists('wiki_category_label_from_code')) {
+function wiki_category_label_from_code(string $code): string
+{
+    $label = trim(str_replace('-', ' ', wiki_category_code($code)));
+    if ($label === '') {
+        return 'General';
+    }
+
+    return ucwords($label);
+}
+}
+
+if (!function_exists('wiki_categories')) {
+/**
+ * @param array<string, string> $messages
+ * @return array<string, string>
+ */
+function wiki_categories(array $messages = []): array
+{
+    $categories = [
+        'general' => (string) ($messages['category_general'] ?? 'General'),
+    ];
+
+    try {
+        if (table_exists('wiki_pages') && table_has_column('wiki_pages', 'category')) {
+            $rows = db()->query('SELECT category FROM wiki_pages WHERE category IS NOT NULL AND category <> "" GROUP BY category ORDER BY category ASC')->fetchAll() ?: [];
+            foreach ($rows as $row) {
+                $code = wiki_category_code((string) ($row['category'] ?? ''));
+                if ($code !== '' && !isset($categories[$code])) {
+                    $categories[$code] = wiki_category_label_from_code($code);
+                }
+            }
+        }
+    } catch (Throwable) {
+        // Keep the default category if optional category metadata cannot be read.
+    }
+
+    foreach (content_proposal_accepted_categories('wiki', 120) as $code => $label) {
+        $code = wiki_category_code((string) $code);
+        $label = content_proposal_clean_single_line((string) $label, 190);
+        if ($code !== '' && $label !== '') {
+            $categories[$code] = $label;
+        }
+    }
+
+    return $categories;
+}
+}
+
+if (!function_exists('wiki_category_from_input')) {
+/**
+ * @param array<string, string> $categories
+ */
+function wiki_category_from_input(string $value, array $categories): string
+{
+    $code = wiki_category_code($value);
+    if ($code === '') {
+        $code = 'general';
+    }
+    if (!isset($categories[$code])) {
+        throw new RuntimeException('Invalid wiki theme.');
+    }
+
+    return $code;
 }
 }
 

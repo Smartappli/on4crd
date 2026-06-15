@@ -285,10 +285,12 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     slug VARCHAR(190) NOT NULL UNIQUE,
     title VARCHAR(190) NOT NULL,
     content LONGTEXT NOT NULL,
+    category VARCHAR(120) NOT NULL DEFAULT 'general',
     author_id INT DEFAULT NULL,
     status ENUM('pending','published','rejected') NOT NULL DEFAULT 'published',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_wiki_category (category)
 );
 
 CREATE TABLE IF NOT EXISTS member_library_documents (
