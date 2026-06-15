@@ -45,6 +45,8 @@ final class MemberModulesFinalizationTest extends TestCase
     public function testMembersLibraryModuleKeepsDocumentTopicSelectAndKeywords(): void
     {
         $library = $this->source('pages/members_library.php');
+        $contentHelpers = $this->source('app/content_helpers.php');
+        $routeHelperLoader = $this->source('app/route_helper_loader.php');
 
         self::assertStringContainsString('id="members-library-document-dialog"', $library);
         self::assertStringContainsString('<input type="text" name="proposal_category_name"', $library);
@@ -60,6 +62,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertContains('technique', $codes);
         self::assertNotContains('medias', $codes);
         self::assertSame(['Formation', 'technique'], library_filter_controlled_tags(['Formation', 'unknown', 'technique']));
+        self::assertStringContainsString('member_library_default_categories()', $contentHelpers);
+        self::assertStringContainsString("content_proposal_accepted_categories('members_library'", $contentHelpers);
+        self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
     }
 
     public function testSharedDocumentModulesAreDeclaredDispatchedAndTagged(): void
