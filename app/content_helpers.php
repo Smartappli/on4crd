@@ -359,6 +359,35 @@ function wiki_categories(array $messages = []): array
         'general' => (string) ($messages['category_general'] ?? 'General'),
     ];
 
+    if (function_exists('member_library_default_categories')) {
+        foreach (member_library_default_categories() as $category) {
+            $code = wiki_category_code((string) ($category['code'] ?? ''));
+            $label = content_proposal_clean_single_line((string) ($category['label'] ?? ''), 190);
+            if ($code !== '' && $label !== '' && !isset($categories[$code])) {
+                $categories[$code] = $label;
+            }
+        }
+    }
+
+    try {
+        if (
+            function_exists('member_library_ensure_categories_table')
+            && member_library_ensure_categories_table()
+            && table_exists('member_library_categories')
+        ) {
+            $rows = db()->query('SELECT code, label FROM member_library_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [];
+            foreach ($rows as $row) {
+                $code = wiki_category_code((string) ($row['code'] ?? ''));
+                $label = content_proposal_clean_single_line((string) ($row['label'] ?? ''), 190);
+                if ($code !== '' && $label !== '' && !isset($categories[$code])) {
+                    $categories[$code] = $label;
+                }
+            }
+        }
+    } catch (Throwable) {
+        // Keep wiki-owned categories if the member library category table cannot be read.
+    }
+
     try {
         if (table_exists('wiki_pages') && table_has_column('wiki_pages', 'category')) {
             $rows = db()->query('SELECT category FROM wiki_pages WHERE category IS NOT NULL AND category <> "" GROUP BY category ORDER BY category ASC')->fetchAll() ?: [];
@@ -377,6 +406,14 @@ function wiki_categories(array $messages = []): array
         $code = wiki_category_code((string) $code);
         $label = content_proposal_clean_single_line((string) $label, 190);
         if ($code !== '' && $label !== '') {
+            $categories[$code] = $label;
+        }
+    }
+
+    foreach (content_proposal_accepted_categories('members_library', 120) as $code => $label) {
+        $code = wiki_category_code((string) $code);
+        $label = content_proposal_clean_single_line((string) $label, 190);
+        if ($code !== '' && $label !== '' && !isset($categories[$code])) {
             $categories[$code] = $label;
         }
     }
