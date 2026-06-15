@@ -380,7 +380,7 @@ function render_layout_impl(string $content, string $title = ''): string
             . '<button type="submit" class="button small account-menu-logout">' . e((string) $layoutI18n['logout']) . '</button>'
             . '</form>'
             . '</div>'
-            . '</details>' . $membershipBadgeHtml . '</div>';
+            . '</details></div>';
     } else {
         $authHtml = '<a class="button toolbar-login-button" href="' . e(route_url('login')) . '">' . e((string) $layoutI18n['login']) . '</a>';
     }
@@ -621,10 +621,10 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<span class="sr-only" id="accent-help">' . e((string) $layoutI18n['accent_help']) . '</span>'
         . '</form>';
     $installButtonHtml = '<button type="button" class="button secondary" data-pwa-install hidden disabled aria-label="' . e((string) $layoutI18n['install_app']) . '">' . e((string) $layoutI18n['install_app']) . '</button>';
-    $menuToolsHtml = '<div class="toolbar-preferences">'
+    $menuToolsHtml = '<div class="toolbar-preferences-stack"><div class="toolbar-preferences">'
         . '<div class="toolbar-preferences-row">' . $languageFormHtml . $themeFormHtml . '</div>'
         . '<div class="toolbar-preferences-row">' . $accentFormHtml . '<div class="toolbar-auth">' . $installButtonHtml . $authHtml . '</div></div>'
-        . '</div>';
+        . '</div>' . $membershipBadgeHtml . '</div>';
     $returnQuery = $_GET;
     unset($returnQuery['route'], $returnQuery['_csrf']);
     $returnRoute = preg_match('/^[a-z0-9_]+$/', $currentRoute) === 1 ? $currentRoute : 'home';
