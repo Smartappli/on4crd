@@ -264,7 +264,7 @@ textarea:focus-visible {
   display: inline-flex;
   flex-direction: column;
   align-items: stretch;
-  gap: .45rem;
+  gap: .7rem;
 }
 .toolbar-preferences {
   display: inline-flex;
