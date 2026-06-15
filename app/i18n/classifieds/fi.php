@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Ehdota',
   'propose_ad_item' => 'Ilmoitus',
   'propose_category_item' => 'Kategoria',
+  'administer' => 'Hallinnoi',
   'my_ads' => 'Minun mainokseni',
   'all_ads' => 'Viimeaikaiset ilmoitukset',
   'save' => 'Tallenna',

@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Föreslå',
   'propose_ad_item' => 'En annons',
   'propose_category_item' => 'En kategori',
+  'administer' => 'Administrera',
   'my_ads' => 'Mina annonser',
   'all_ads' => 'Senaste meddelanden',
   'save' => 'Spara',

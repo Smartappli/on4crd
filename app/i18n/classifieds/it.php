@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Proporre',
   'propose_ad_item' => 'Un annuncio',
   'propose_category_item' => 'Una categoria',
+  'administer' => 'Amministra',
   'my_ads' => 'I miei annunci',
   'all_ads' => 'Annunci recenti',
   'save' => 'Salva',

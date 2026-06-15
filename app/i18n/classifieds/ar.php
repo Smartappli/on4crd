@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'اقتراح',
   'propose_ad_item' => 'إعلان صغير',
   'propose_category_item' => 'فئة',
+  'administer' => 'إدارة',
   'my_ads' => 'إعلاناتي',
   'all_ads' => 'أحدث الإعلانات',
   'save' => 'حفظ',

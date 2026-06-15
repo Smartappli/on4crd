@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Предложить',
   'propose_ad_item' => 'Объявление',
   'propose_category_item' => 'Категория',
+  'administer' => 'Администрировать',
   'my_ads' => 'Мои объявления',
   'all_ads' => 'Последние объявления',
   'save' => 'Сохранить',

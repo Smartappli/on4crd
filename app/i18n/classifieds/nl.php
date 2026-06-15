@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Voorstellen',
   'propose_ad_item' => 'Een advertentie',
   'propose_category_item' => 'Een categorie',
+  'administer' => 'Beheren',
   'my_ads' => 'Mijn advertenties',
   'all_ads' => 'Recente advertenties',
   'save' => 'Opslaan',

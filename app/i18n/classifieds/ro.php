@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Propune',
   'propose_ad_item' => 'Un anunț',
   'propose_category_item' => 'O categorie',
+  'administer' => 'Administrează',
   'my_ads' => 'Reclamele mele',
   'all_ads' => 'Anunțuri recente',
   'save' => 'Salva',

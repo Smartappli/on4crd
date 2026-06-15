@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Mol',
   'propose_ad_item' => 'Fógra',
   'propose_category_item' => 'Catagóir',
+  'administer' => 'Riar',
   'my_ads' => 'Mo fógraí',
   'all_ads' => 'Fógraí le déanaí',
   'save' => 'Sábháil',

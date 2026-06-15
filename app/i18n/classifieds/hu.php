@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Javasol',
   'propose_ad_item' => 'Egy hirdetés',
   'propose_category_item' => 'Egy kategória',
+  'administer' => 'Adminisztrálás',
   'my_ads' => 'Saját hirdetéseim',
   'all_ads' => 'Friss bejelentések',
   'save' => 'Mentés',

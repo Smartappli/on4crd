@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Predloži',
   'propose_ad_item' => 'Oglas',
   'propose_category_item' => 'Kategorija',
+  'administer' => 'Administriraj',
   'my_ads' => 'Moji oglasi',
   'all_ads' => 'Nedavne najave',
   'save' => 'spremiti',

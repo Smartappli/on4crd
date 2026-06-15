@@ -10,6 +10,7 @@ return array (
   'propose_menu' => '提议',
   'propose_ad_item' => '广告',
   'propose_category_item' => '类别',
+  'administer' => '管理',
   'my_ads' => '我的广告',
   'all_ads' => '最新广告',
   'save' => '保存',

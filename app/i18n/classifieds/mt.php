@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Ipproponi',
   'propose_ad_item' => 'Reklam',
   'propose_category_item' => 'Kategorija',
+  'administer' => 'Amministra',
   'my_ads' => 'Ir-reklami tiegħi',
   'all_ads' => 'Avviżi riċenti',
   'save' => 'Ħlief',

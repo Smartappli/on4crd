@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'প্রস্তাব করুন',
   'propose_ad_item' => 'একটি ছোট বিজ্ঞাপন',
   'propose_category_item' => 'একটি বিভাগ',
+  'administer' => 'প্রশাসন',
   'my_ads' => 'আমার বিজ্ঞাপন',
   'all_ads' => 'সাম্প্রতিক বিজ্ঞাপন',
   'save' => 'সংরক্ষণ',

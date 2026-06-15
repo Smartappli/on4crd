@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Προτείνετε',
   'propose_ad_item' => 'Μια αγγελία',
   'propose_category_item' => 'Μια κατηγορία',
+  'administer' => 'Διαχείριση',
   'my_ads' => 'Οι διαφημίσεις μου',
   'all_ads' => 'Πρόσφατες ανακοινώσεις',
   'save' => 'Αποθήκευση',

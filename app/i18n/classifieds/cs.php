@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Navrhnout',
   'propose_ad_item' => 'Inzerát',
   'propose_category_item' => 'Kategorie',
+  'administer' => 'Spravovat',
   'my_ads' => 'Moje reklamy',
   'all_ads' => 'Nedávná oznámení',
   'save' => 'Uložit',

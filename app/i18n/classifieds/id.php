@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Usulkan',
   'propose_ad_item' => 'Iklan',
   'propose_category_item' => 'Kategori',
+  'administer' => 'Kelola',
   'my_ads' => 'Iklan saya',
   'all_ads' => 'Iklan terbaru',
   'save' => 'Simpan',

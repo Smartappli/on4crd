@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Предложете',
   'propose_ad_item' => 'Малка обява',
   'propose_category_item' => 'Категория',
+  'administer' => 'Администриране',
   'my_ads' => 'Моите обяви',
   'all_ads' => 'Последни съобщения',
   'save' => 'Запазване',

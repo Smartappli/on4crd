@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Pasiūlyti',
   'propose_ad_item' => 'Skelbimas',
   'propose_category_item' => 'Kategorija',
+  'administer' => 'Administruoti',
   'my_ads' => 'Mano skelbimai',
   'all_ads' => 'Naujausi pranešimai',
   'save' => 'Išsaugoti',

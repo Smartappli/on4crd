@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Paku',
   'propose_ad_item' => 'Kuulutus',
   'propose_category_item' => 'Kategooria',
+  'administer' => 'Halda',
   'my_ads' => 'Minu reklaamid',
   'all_ads' => 'Viimased teadaanded',
   'save' => 'Salvesta',

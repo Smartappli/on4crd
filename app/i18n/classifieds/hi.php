@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'प्रस्तावित करें',
   'propose_ad_item' => 'एक विज्ञापन',
   'propose_category_item' => 'एक श्रेणी',
+  'administer' => 'प्रशासित करें',
   'my_ads' => 'मेरे विज्ञापन',
   'all_ads' => 'हाल के विज्ञापन',
   'save' => 'सहेजें',

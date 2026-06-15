@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Proposer',
   'propose_ad_item' => 'Une petite annonce',
   'propose_category_item' => 'Une catégorie',
+  'administer' => 'Administrer',
   'propose_category' => 'Proposer une catégorie',
   'propose_category_subject' => 'Proposition de catégorie pour les petites annonces ON4CRD',
   'my_ads' => 'Mes annonces',

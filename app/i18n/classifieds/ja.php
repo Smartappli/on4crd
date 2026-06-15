@@ -10,6 +10,7 @@ return array (
   'propose_menu' => '提案する',
   'propose_ad_item' => '広告',
   'propose_category_item' => 'カテゴリ',
+  'administer' => '管理',
   'my_ads' => '自分の広告',
   'all_ads' => '最近の広告',
   'save' => '保存',

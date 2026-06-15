@@ -10,6 +10,7 @@ return array (
   'propose_menu' => 'Ierosināt',
   'propose_ad_item' => 'Sludinājums',
   'propose_category_item' => 'Kategorija',
+  'administer' => 'Administrēt',
   'my_ads' => 'Manas reklāmas',
   'all_ads' => 'Jaunākie paziņojumi',
   'save' => 'Saglabāt',

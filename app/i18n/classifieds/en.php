@@ -8,6 +8,7 @@ return array (
   'propose_menu' => 'Propose',
   'propose_ad_item' => 'An ad',
   'propose_category_item' => 'A category',
+  'administer' => 'Administer',
   'propose_category' => 'Propose a category',
   'propose_category_subject' => 'Category proposal for ON4CRD classifieds',
   'my_ads' => 'My ads',
