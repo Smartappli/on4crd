@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Kõik litsentsid',
   'apply_filters' => 'Filtreeri',
   'reset_filters' => 'Selge',
+  'administer_members' => 'Halda',
   'results' => 'Tulemused',
   'licence' => 'Litsents',
   'email' => 'Meil',

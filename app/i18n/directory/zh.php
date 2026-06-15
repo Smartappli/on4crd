@@ -17,6 +17,7 @@ return array (
   'all_licences' => '所有执照',
   'apply_filters' => '筛选',
   'reset_filters' => '清除',
+  'administer_members' => '管理',
   'results' => '结果',
   'licence' => '执照',
   'email' => '电子邮箱',

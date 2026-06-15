@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Kaikki lisenssit',
   'apply_filters' => 'Suodata',
   'reset_filters' => 'Selkeä',
+  'administer_members' => 'Hallinnoi',
   'results' => 'Tulokset',
   'licence' => 'Lisenssi',
   'email' => 'Sähköposti',

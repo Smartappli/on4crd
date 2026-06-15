@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Vse licence',
   'apply_filters' => 'Filtriraj',
   'reset_filters' => 'jasno',
+  'administer_members' => 'Upravljaj',
   'results' => 'Rezultati',
   'licence' => 'Licenca',
   'email' => 'E-pošta',

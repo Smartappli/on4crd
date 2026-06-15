@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Minden engedély',
   'apply_filters' => 'Szűrés',
   'reset_filters' => 'Világos',
+  'administer_members' => 'Kezelés',
   'results' => 'Eredmények',
   'licence' => 'Licenc',
   'email' => 'E-mail',

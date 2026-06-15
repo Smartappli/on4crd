@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Alla licenser',
   'apply_filters' => 'Filtrera',
   'reset_filters' => 'Rensa',
+  'administer_members' => 'Administrera',
   'results' => 'Resultat',
   'licence' => 'Licens',
   'email' => 'E-post',

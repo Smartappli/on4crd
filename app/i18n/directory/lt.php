@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Visos licencijos',
   'apply_filters' => 'Filtruoti',
   'reset_filters' => 'Aišku',
+  'administer_members' => 'Administruoti',
   'results' => 'Rezultatai',
   'licence' => 'Licencija',
   'email' => 'El. paštas',

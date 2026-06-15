@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Alle licenser',
   'apply_filters' => 'Anvend filter',
   'reset_filters' => 'Ryd',
+  'administer_members' => 'Administrer',
   'results' => 'Resultater',
   'licence' => 'Licens',
   'email' => 'E-mail',

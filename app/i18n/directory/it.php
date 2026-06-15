@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Tutte le licenze',
   'apply_filters' => 'Filtra',
   'reset_filters' => 'Cancella',
+  'administer_members' => 'Amministra',
   'results' => 'Risultati',
   'licence' => 'Licenza',
   'email' => 'E-mail',

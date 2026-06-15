@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Gach ceadúnas',
   'apply_filters' => 'Scagaire',
   'reset_filters' => 'Glan',
+  'administer_members' => 'Riar',
   'results' => 'Torthaí',
   'licence' => 'Ceadúnas',
   'email' => 'Ríomhphost',

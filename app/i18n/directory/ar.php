@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'كل الرخص',
   'apply_filters' => 'تصفية',
   'reset_filters' => 'مسح',
+  'administer_members' => 'إدارة',
   'results' => 'النتائج',
   'licence' => 'الرخصة',
   'email' => 'البريد الإلكتروني',

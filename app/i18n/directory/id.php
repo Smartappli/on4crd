@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Semua lisensi',
   'apply_filters' => 'Menyaring',
   'reset_filters' => 'Hapus',
+  'administer_members' => 'Kelola',
   'results' => 'Hasil',
   'licence' => 'Lisensi',
   'email' => 'E-mail',

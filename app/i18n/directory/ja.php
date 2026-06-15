@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'すべての免許',
   'apply_filters' => '絞り込み',
   'reset_filters' => 'クリア',
+  'administer_members' => '管理',
   'results' => '結果',
   'licence' => 'ライセンス',
   'email' => 'メール',

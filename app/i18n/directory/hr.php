@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Sve licence',
   'apply_filters' => 'Filtriraj',
   'reset_filters' => 'čisto',
+  'administer_members' => 'Administriraj',
   'results' => 'Rezultati',
   'licence' => 'Licenca',
   'email' => 'E-mail',

@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'All licences',
   'apply_filters' => 'Filter',
   'reset_filters' => 'Clear',
+  'administer_members' => 'Administer',
   'results' => 'Results',
   'licence' => 'Licence',
   'email' => 'Email',

@@ -6,6 +6,7 @@ $locale = current_locale();
 $t = i18n_domain_translator('directory', $locale);
 $profileT = i18n_domain_translator('profile', $locale);
 $profilePreviewFields = member_profile_preview_fields($profileT);
+$canAdministerMembers = has_permission('admin.access');
 
 $activeMembersCount = 0;
 $ubaMembersCount = 0;
@@ -210,6 +211,9 @@ ob_start();
                 <button type="submit" class="button"><?= e($t('apply_filters')) ?></button>
                 <?php if ($hasFilters): ?>
                     <a class="button secondary" href="<?= e(route_url('directory')) ?>"><?= e($t('reset_filters')) ?></a>
+                <?php endif; ?>
+                <?php if ($canAdministerMembers): ?>
+                    <a class="button secondary" href="<?= e(route_url('admin_members')) ?>"><?= e($t('administer_members')) ?></a>
                 <?php endif; ?>
             </div>
         </form>

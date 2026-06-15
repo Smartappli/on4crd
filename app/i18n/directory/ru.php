@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Все лицензии',
   'apply_filters' => 'Фильтровать',
   'reset_filters' => 'Очистить',
+  'administer_members' => 'Администрировать',
   'results' => 'Результаты',
   'licence' => 'Лицензия',
   'email' => 'Электронная почта',

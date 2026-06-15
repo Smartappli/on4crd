@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Toate licențele',
   'apply_filters' => 'Filtra',
   'reset_filters' => 'A șterge',
+  'administer_members' => 'Administrare',
   'results' => 'Rezultate',
   'licence' => 'Licenţă',
   'email' => 'E-mail',

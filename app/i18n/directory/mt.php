@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Il-liċenzji kollha',
   'apply_filters' => 'Iffiltra',
   'reset_filters' => 'Biex tħassar',
+  'administer_members' => 'Amministra',
   'results' => 'Riżultati',
   'licence' => 'Liċenzja',
   'email' => 'E-mail',

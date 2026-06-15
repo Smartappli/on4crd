@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'সব লাইসেন্স',
   'apply_filters' => 'ফিল্টার',
   'reset_filters' => 'মুছুন',
+  'administer_members' => 'পরিচালনা',
   'results' => 'ফলাফল',
   'licence' => 'লাইসেন্স',
   'email' => 'ইমেইল',

@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Visas licences',
   'apply_filters' => 'Filtrs',
   'reset_filters' => 'Skaidrs',
+  'administer_members' => 'Administrēt',
   'results' => 'Rezultāti',
   'licence' => 'Licence',
   'email' => 'E-pasts',

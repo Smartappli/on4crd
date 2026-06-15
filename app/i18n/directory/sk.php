@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Všetky licencie',
   'apply_filters' => 'Filtrovať',
   'reset_filters' => 'Jasné',
+  'administer_members' => 'Spravovať',
   'results' => 'Výsledky',
   'licence' => 'Licencia',
   'email' => 'E-mail',

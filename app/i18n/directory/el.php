@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'Όλες οι άδειες',
   'apply_filters' => 'Φίλτρο',
   'reset_filters' => 'Καθαρό',
+  'administer_members' => 'Διαχείριση',
   'results' => 'Αποτελέσματα',
   'licence' => 'Άδεια',
   'email' => 'E-mail',

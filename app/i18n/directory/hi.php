@@ -17,6 +17,7 @@ return array (
   'all_licences' => 'सभी लाइसेंस',
   'apply_filters' => 'फ़िल्टर करें',
   'reset_filters' => 'साफ़ करें',
+  'administer_members' => 'प्रशासित करें',
   'results' => 'परिणाम',
   'licence' => 'लाइसेंस',
   'email' => 'ईमेल',
