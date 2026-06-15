@@ -251,7 +251,7 @@ ob_start();
                     </div>
                 </details>
                 <?php if ($canModerateClassifieds): ?>
-                    <a class="button secondary" href="<?= e(route_url('admin_classifieds')) ?>"><?= e($classifiedsAdminLabel) ?></a>
+                    <a class="button secondary" href="<?= e(route_url_clean('admin_classifieds', ['status' => 'pending'])) ?>"><?= e($classifiedsAdminLabel) ?></a>
                 <?php endif; ?>
             </div>
         </div>
