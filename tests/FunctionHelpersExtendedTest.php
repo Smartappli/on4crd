@@ -712,6 +712,46 @@ final class FunctionHelpersExtendedTest extends TestCase
         self::assertNotSame($baseHash, article_translation_source_hash('Titre', 'Resume', '<p>Contenu modifie</p>'));
     }
 
+    public function testNewsTranslationTargetLocalesCoverEveryNonFrenchLocale(): void
+    {
+        $targets = news_translation_target_locales();
+
+        self::assertNotContains('fr', $targets);
+        self::assertSame(count(supported_locales()) - 1, count($targets));
+        self::assertContains('en', $targets);
+        self::assertContains('id', $targets);
+    }
+
+    public function testNewsTranslationPublicStatusesExcludePendingReview(): void
+    {
+        $statuses = news_translation_public_statuses();
+
+        self::assertSame(['reviewed', 'auto'], $statuses);
+        self::assertNotContains('needs_review', $statuses);
+        self::assertNotContains('missing', $statuses);
+    }
+
+    public function testNewsTranslationDeeplTargetsCoverEveryNewsLocale(): void
+    {
+        foreach (news_translation_target_locales() as $locale) {
+            self::assertNotNull(news_translation_deepl_target($locale), 'Missing DeepL target for ' . $locale);
+        }
+
+        self::assertSame('HR', news_translation_deepl_target('hr'));
+        self::assertSame('GA', news_translation_deepl_target('ga'));
+        self::assertSame('MT', news_translation_deepl_target('mt'));
+        self::assertSame('HI', news_translation_deepl_target('hi'));
+        self::assertSame('BN', news_translation_deepl_target('bn'));
+    }
+
+    public function testNewsTranslationSourceHashTracksSourceChanges(): void
+    {
+        $baseHash = news_translation_source_hash('Titre', 'Resume', '<p>Contenu</p>');
+
+        self::assertSame($baseHash, news_translation_source_hash(' Titre ', ' Resume ', ' <p>Contenu</p> '));
+        self::assertNotSame($baseHash, news_translation_source_hash('Titre', 'Resume', '<p>Contenu modifie</p>'));
+    }
+
     public function testArticleTranslationPendingFallbackDetectsSourceCopiesOnly(): void
     {
         $source = [
