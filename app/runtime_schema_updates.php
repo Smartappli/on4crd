@@ -277,10 +277,10 @@ function apply_runtime_schema_updates(): void
         }
         if (table_exists('news_posts')) {
             db()->exec(
-                'UPDATE news_translations nt
+                "UPDATE news_translations nt
                  INNER JOIN news_posts np ON np.id = nt.news_post_id
-                 SET nt.source_hash = LEFT(SHA2(CONCAT(TRIM(np.title), "\n---excerpt---\n", TRIM(COALESCE(np.excerpt, "")), "\n---content---\n", TRIM(np.content)), 256), 40)
-                 WHERE nt.source_hash = ""'
+                 SET nt.source_hash = LEFT(SHA2(CONCAT(TRIM(np.title), CHAR(10), '---excerpt---', CHAR(10), TRIM(COALESCE(np.excerpt, '')), CHAR(10), '---content---', CHAR(10), TRIM(np.content)), 256), 40)
+                 WHERE nt.source_hash = ''"
             );
         }
     }
