@@ -207,6 +207,7 @@ $renderCategoryProposalForm = static function (bool $dialogMode) use ($t, $propo
 $classifiedsProposeMenuLabel = (string) ($messages['propose_menu'] ?? 'Proposer');
 $classifiedsProposeAdItemLabel = (string) ($messages['propose_ad_item'] ?? $t('propose_ad'));
 $classifiedsProposeCategoryItemLabel = (string) ($messages['propose_category_item'] ?? $t('propose_category'));
+$classifiedsAdminLabel = (string) ($messages['administer'] ?? ($locale === 'fr' ? 'Administrer' : 'Administer'));
 
 set_page_meta(['title' => $t('title'), 'description' => $t('lead')]);
 ob_start();
@@ -249,6 +250,9 @@ ob_start();
                         <?php endif; ?>
                     </div>
                 </details>
+                <?php if ($canModerateClassifieds): ?>
+                    <a class="button secondary" href="<?= e(route_url('admin_classifieds')) ?>"><?= e($classifiedsAdminLabel) ?></a>
+                <?php endif; ?>
             </div>
         </div>
     </header>
