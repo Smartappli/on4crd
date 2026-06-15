@@ -57,9 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 db()->prepare('INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')->execute([$sectionId, (int) $user['id'], $slug, $title, $excerpt, $content, $status, $status === 'published' ? date('Y-m-d H:i:s') : null]);
                 $postId = (int) db()->lastInsertId();
             }
-            news_translation_upsert($postId, 'en');
-            news_translation_upsert($postId, 'de');
-            news_translation_upsert($postId, 'nl');
+            news_translations_sync_all($postId);
             set_flash('success', $status === 'pending' ? (string) $t['saved_pending'] : (string) $t['saved']);
             redirect('admin_news');
         }
@@ -78,6 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $note = trim((string) ($_POST['moderation_note'] ?? ''));
             db()->prepare('UPDATE news_posts SET status = ?, moderation_note = ?, moderator_id = ?, published_at = CASE WHEN ? = "published" THEN NOW() ELSE published_at END WHERE id = ?')->execute([$status, $note, (int) $user['id'], $status, $postId]);
+            if ($status === 'published') {
+                news_translations_sync_all($postId);
+            }
             set_flash('success', (string) $t['moderation_saved']);
             redirect('admin_news');
         }

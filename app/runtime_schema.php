@@ -322,7 +322,7 @@ function ensure_directories(): void
 
 function runtime_schema_version(): string
 {
-    return '2026-06-11.4';
+    return '2026-06-15.1';
 }
 
 function runtime_schema_marker_path(): string

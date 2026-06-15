@@ -26,7 +26,7 @@ function app_load_route_helpers(string $route): void
         'article_helpers.php' => ['home', 'dashboard', 'search', 'chatbot', 'articles', 'article', 'article_propose', 'admin_articles', 'admin_translation_reviews', 'llms.txt', 'ai-index.json'],
         'ads_helpers.php' => ['ads', 'admin_ads', 'ad_click'],
         'committee_helpers.php' => ['committee', 'admin_editorial'],
-        'news_helpers.php' => ['news', 'admin_news'],
+        'news_helpers.php' => ['news', 'news_view', 'admin_news'],
         'press_helpers.php' => ['press', 'admin_press'],
         'album_helpers.php' => ['home', 'albums', 'album', 'admin_albums'],
         'member_media.php' => ['directory', 'gdpr', 'profile'],

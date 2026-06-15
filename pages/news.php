@@ -80,6 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $excerpt = mb_safe_strimwidth($summaryText, 0, 280, '...');
                 db()->prepare('INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at) VALUES (?, ?, ?, ?, ?, ?, "published", NOW())')
                     ->execute([$sectionId, (int) $user['id'], $slug, $title, $excerpt, sanitize_rich_html($content)]);
+                $postId = (int) db()->lastInsertId();
+                news_translations_sync_all($postId);
                 cache_forget('news_published_count_v1');
                 cache_forget('news_categories_v2');
                 cache_forget('news_archives_v1');
@@ -219,7 +221,7 @@ $resultEnd = min($offset + $perPage, $totalPosts);
 
 $posts = cache_remember($cacheBase . '_page_' . $page, 45, static function () use ($where, $orderBy, $perPage, $offset, $params): array {
     try {
-        $sql = 'SELECT p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.slug AS section_slug, s.name AS section_name, m.callsign AS author_callsign
+        $sql = 'SELECT p.id, p.slug, p.title, p.excerpt, p.published_at, p.updated_at, s.slug AS section_slug, s.name AS section_name, m.callsign AS author_callsign
             FROM news_posts p
             LEFT JOIN news_sections s ON s.id = p.section_id
             LEFT JOIN members m ON m.id = p.author_id
@@ -258,6 +260,7 @@ $archives = cache_remember('news_archives_v1', 120, static function (): array {
         return [];
     }
 });
+$posts = array_map('localized_news_row', $posts);
 
 $contactEmail = site_contact_email();
 $newsProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $newsT['propose_news_subject'])

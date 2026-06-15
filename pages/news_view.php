@@ -22,7 +22,7 @@ if ($slug === '' || !table_exists('news_posts')) {
     return;
 }
 
-$stmt = db()->prepare('SELECT title, excerpt, content, published_at, updated_at FROM news_posts WHERE slug = ? AND status = "published" LIMIT 1');
+$stmt = db()->prepare('SELECT id, title, excerpt, content, published_at, updated_at FROM news_posts WHERE slug = ? AND status = "published" LIMIT 1');
 $stmt->execute([$slug]);
 $post = $stmt->fetch();
 
@@ -31,6 +31,7 @@ if (!is_array($post)) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['not_found']) . '</h1><p>' . e((string) $t['not_found_msg']) . '</p></div>', (string) $t['not_found']);
     return;
 }
+$post = localized_news_row($post);
 
 $publishedAtRaw = (string) ($post['published_at'] ?? $post['updated_at'] ?? '');
 $publishedAt = $publishedAtRaw !== '' ? date('d/m/Y H:i', strtotime($publishedAtRaw)) : (string) $t['date_unknown'];

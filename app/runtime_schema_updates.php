@@ -212,6 +212,79 @@ function apply_runtime_schema_updates(): void
         );
     }
 
+    db()->exec(
+        'CREATE TABLE IF NOT EXISTS news_translations (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            news_post_id INT NOT NULL,
+            locale CHAR(2) NOT NULL,
+            source_hash CHAR(40) NOT NULL,
+            title TEXT DEFAULT NULL,
+            excerpt MEDIUMTEXT DEFAULT NULL,
+            content LONGTEXT DEFAULT NULL,
+            status ENUM("missing","auto","needs_review","reviewed") NOT NULL DEFAULT "missing",
+            reviewed_by INT DEFAULT NULL,
+            reviewed_at DATETIME DEFAULT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_news_translation (news_post_id, locale)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+    );
+
+    if (table_exists('news_translations')) {
+        if (!table_has_column('news_translations', 'news_post_id')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN news_post_id INT NOT NULL DEFAULT 0 AFTER id');
+        }
+        if (table_has_column('news_translations', 'news_id')) {
+            db()->exec('UPDATE news_translations SET news_post_id = news_id WHERE news_post_id = 0');
+        }
+        if (!table_has_column('news_translations', 'locale')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN locale CHAR(2) NOT NULL DEFAULT "en" AFTER news_post_id');
+        }
+        if (!table_has_column('news_translations', 'source_hash')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN source_hash CHAR(40) NOT NULL DEFAULT "" AFTER locale');
+        }
+        if (!table_has_column('news_translations', 'title')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN title TEXT DEFAULT NULL AFTER source_hash');
+        }
+        if (!table_has_column('news_translations', 'excerpt')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN excerpt MEDIUMTEXT DEFAULT NULL AFTER title');
+        }
+        if (table_has_column('news_translations', 'summary')) {
+            db()->exec('UPDATE news_translations SET excerpt = summary WHERE (excerpt IS NULL OR excerpt = "") AND summary IS NOT NULL');
+        }
+        if (!table_has_column('news_translations', 'content')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN content LONGTEXT DEFAULT NULL AFTER excerpt');
+        }
+        if (!table_has_column('news_translations', 'status')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN status ENUM("missing","auto","needs_review","reviewed") NOT NULL DEFAULT "missing" AFTER content');
+        } else {
+            db()->exec('ALTER TABLE news_translations MODIFY COLUMN status ENUM("missing","auto","needs_review","reviewed") NOT NULL DEFAULT "missing"');
+        }
+        if (!table_has_column('news_translations', 'reviewed_by')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN reviewed_by INT DEFAULT NULL AFTER status');
+        }
+        if (!table_has_column('news_translations', 'reviewed_at')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN reviewed_at DATETIME DEFAULT NULL AFTER reviewed_by');
+        }
+        if (!table_has_column('news_translations', 'updated_at')) {
+            db()->exec('ALTER TABLE news_translations ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER reviewed_at');
+        }
+        if (!table_has_index('news_translations', 'uniq_news_translation')) {
+            try {
+                db()->exec('ALTER TABLE news_translations ADD UNIQUE KEY uniq_news_translation (news_post_id, locale)');
+            } catch (Throwable) {
+                // Duplicate legacy rows can be cleaned manually; helpers still update matching rows safely.
+            }
+        }
+        if (table_exists('news_posts')) {
+            db()->exec(
+                'UPDATE news_translations nt
+                 INNER JOIN news_posts np ON np.id = nt.news_post_id
+                 SET nt.source_hash = LEFT(SHA2(CONCAT(TRIM(np.title), "\n---excerpt---\n", TRIM(COALESCE(np.excerpt, "")), "\n---content---\n", TRIM(np.content)), 256), 40)
+                 WHERE nt.source_hash = ""'
+            );
+        }
+    }
+
 
 
     db()->exec(
