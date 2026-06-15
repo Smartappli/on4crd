@@ -14,6 +14,9 @@ $tr = static function (string $key, string $fallback) use ($t): string {
 
     return $value !== '' && $value !== $key ? $value : $fallback;
 };
+$wikiMessages = i18n_domain_locale('wiki', $locale);
+$wikiCategories = wiki_categories($wikiMessages);
+$wikiThemeLabel = (string) ($wikiMessages['themes'] ?? 'Themes');
 
 $statusLabels = [
     'pending' => $tr('status_pending', 'En validation'),
@@ -50,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
         }
 
-        $pageStmt = db()->prepare('SELECT id, title, slug, content, author_id, status, proposal_kind, source_page_id, target_slug FROM wiki_pages WHERE id = ? LIMIT 1');
+        $pageStmt = db()->prepare('SELECT id, title, slug, content, category, author_id, status, proposal_kind, source_page_id, target_slug FROM wiki_pages WHERE id = ? LIMIT 1');
         $pageStmt->execute([$id]);
         $page = $pageStmt->fetch();
         if (!is_array($page)) {
@@ -59,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($status === 'published' && (string) ($page['proposal_kind'] ?? 'page') === 'modification') {
             $sourceId = (int) ($page['source_page_id'] ?? 0);
-            $sourceStmt = db()->prepare('SELECT id, title, slug, content FROM wiki_pages WHERE id = ? AND proposal_kind = "page" LIMIT 1');
+            $sourceStmt = db()->prepare('SELECT id, title, slug, content, category FROM wiki_pages WHERE id = ? AND proposal_kind = "page" LIMIT 1');
             $sourceStmt->execute([$sourceId]);
             $sourcePage = $sourceStmt->fetch();
             if (!is_array($sourcePage)) {
@@ -79,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $pdo->prepare('INSERT INTO wiki_revisions (wiki_page_id, member_id, content) VALUES (?, ?, ?)')
                     ->execute([$sourceId, $approverId, (string) ($sourcePage['content'] ?? '')]);
-                $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL, updated_at = NOW() WHERE id = ?')
-                    ->execute([(string) $page['title'], $targetSlug, (string) $page['content'], $authorId, $sourceId]);
+                $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL, updated_at = NOW() WHERE id = ?')
+                    ->execute([(string) $page['title'], $targetSlug, (string) $page['content'], wiki_category_code((string) ($page['category'] ?? 'general')), $authorId, $sourceId]);
                 $pdo->prepare('DELETE FROM wiki_pages WHERE id = ?')->execute([$id]);
                 $pdo->commit();
             } catch (Throwable $throwable) {
@@ -109,7 +112,7 @@ if ($statusFilter !== '') {
     $params[] = $statusFilter;
 }
 $stmt = db()->prepare(
-    'SELECT p.id, p.title, p.slug, p.status, p.updated_at, p.proposal_kind, p.source_page_id, p.target_slug,
+    'SELECT p.id, p.title, p.slug, p.category, p.status, p.updated_at, p.proposal_kind, p.source_page_id, p.target_slug,
         s.title AS source_title, s.slug AS source_slug
      FROM wiki_pages p
      LEFT JOIN wiki_pages s ON s.id = p.source_page_id
@@ -143,7 +146,7 @@ ob_start();
     </form>
     <div class="table-wrap">
         <table>
-            <thead><tr><th><?= e($t('th_title')) ?></th><th><?= e($t('th_slug')) ?></th><th><?= e($tr('th_status', 'Statut')) ?></th><th><?= e($t('th_updated')) ?></th><th><?= e($t('th_action')) ?></th></tr></thead>
+            <thead><tr><th><?= e($t('th_title')) ?></th><th><?= e($t('th_slug')) ?></th><th><?= e($wikiThemeLabel) ?></th><th><?= e($tr('th_status', 'Statut')) ?></th><th><?= e($t('th_updated')) ?></th><th><?= e($t('th_action')) ?></th></tr></thead>
             <tbody>
             <?php foreach ($pages as $page):
                 $pageStatus = (string) ($page['status'] ?? 'published');
@@ -153,6 +156,8 @@ ob_start();
                 if ($sourceLabel === '') {
                     $sourceLabel = trim((string) ($page['source_slug'] ?? ''));
                 }
+                $pageCategory = wiki_category_code((string) ($page['category'] ?? 'general'));
+                $pageCategoryLabel = (string) ($wikiCategories[$pageCategory] ?? wiki_category_label_from_code($pageCategory));
                 ?>
                 <tr>
                     <td>
@@ -165,6 +170,7 @@ ob_start();
                         <?php endif; ?>
                     </td>
                     <td><code><?= e((string) $page['slug']) ?></code></td>
+                    <td><span class="badge muted"><?= e($pageCategoryLabel) ?></span></td>
                     <td><span class="badge muted"><?= e((string) ($statusLabels[$pageStatus] ?? $pageStatus)) ?></span></td>
                     <td><?= e((string) $page['updated_at']) ?></td>
                     <td>
@@ -187,7 +193,7 @@ ob_start();
                     </td>
                 </tr>
             <?php endforeach; ?>
-            <?php if ($pages === []): ?><tr><td colspan="5"><?= e($t('empty')) ?></td></tr><?php endif; ?>
+            <?php if ($pages === []): ?><tr><td colspan="6"><?= e($t('empty')) ?></td></tr><?php endif; ?>
             </tbody>
         </table>
     </div>

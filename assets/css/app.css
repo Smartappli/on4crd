@@ -2720,6 +2720,32 @@ th, td { padding:.7rem; border-bottom:1px solid var(--border); text-align:left; 
   font-weight: 700;
   overflow-wrap: anywhere;
 }
+.wiki-card-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .45rem;
+}
+.wiki-category-badge,
+.wiki-category-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: .22rem .55rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+  color: var(--accent-strong);
+  font-size: .78rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-decoration: none;
+}
+.wiki-category-badge:hover,
+.wiki-category-link:hover {
+  background: color-mix(in srgb, var(--accent) 16%, var(--panel));
+  text-decoration: none;
+}
 .wiki-card-meta {
   display: flex;
   flex-wrap: wrap;

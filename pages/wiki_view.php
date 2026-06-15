@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
+$wikiMessages = i18n_domain_locale('wiki', $locale);
 $i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/wiki_view.php');
 $i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
@@ -49,6 +50,9 @@ $revisionStmt->execute([(int) $row['id']]);
 $revisions = $revisionStmt->fetchAll() ?: [];
 
 $author = trim((string) ($row['callsign'] ?? ''));
+$wikiCategories = wiki_categories($wikiMessages);
+$categoryCode = wiki_category_code((string) ($row['category'] ?? 'general'));
+$categoryLabel = (string) ($wikiCategories[$categoryCode] ?? wiki_category_label_from_code($categoryCode));
 $updatedAt = strtotime((string) ($row['updated_at'] ?? '')) ?: time();
 $wikiStatus = (string) ($row['status'] ?? 'published');
 $isPublished = $wikiStatus === 'published';
@@ -64,9 +68,9 @@ set_page_meta([
     'canonical' => $wikiUrl,
     'schema_type' => 'TechArticle',
     'modified_time' => date('c', $updatedAt),
-    'section' => 'Wiki ON4CRD',
-    'tags' => ['ON4CRD', 'wiki radioamateur', 'Radio Club Durnal'],
-    'keywords' => ['ON4CRD', 'wiki radioamateur', 'documentation radioamateur', 'Radio Club Durnal'],
+    'section' => 'Wiki ON4CRD - ' . $categoryLabel,
+    'tags' => ['ON4CRD', 'wiki radioamateur', $categoryLabel, 'Radio Club Durnal'],
+    'keywords' => ['ON4CRD', 'wiki radioamateur', $categoryLabel, 'documentation radioamateur', 'Radio Club Durnal'],
     'citation_author' => $author !== '' ? $author : 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         [
@@ -77,6 +81,7 @@ set_page_meta([
             'abstract' => $wikiDescription,
             'url' => $wikiUrl,
             'dateModified' => date('c', $updatedAt),
+            'articleSection' => $categoryLabel,
             'wordCount' => str_word_count($wikiPlainText),
             'inLanguage' => $locale,
             'proficiencyLevel' => 'Beginner',
@@ -134,6 +139,7 @@ ob_start();
             <h1><?= e((string) $row['title']) ?></h1>
             <p class="help">
                 <?= e(date('d/m/Y H:i', $updatedAt)) ?>
+                &middot; <a class="wiki-category-link" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
                 <?php if ($author !== ''): ?> · <?= e($author) ?><?php endif; ?>
                 <?php if (!$isPublished): ?> · <span class="badge muted"><?= e($wikiStatus) ?></span><?php endif; ?>
             </p>
