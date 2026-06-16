@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'Document ID' => (string) $documentId,
                     'Category' => (string) ($document['category'] ?? 'general'),
                     'Tags' => (string) ($document['tags'] ?? ''),
-                    'Description' => (string) ($document['description'] ?? ''),
+                    'Description' => mb_safe_substr((string) ($document['description'] ?? ''), 0, 1800),
                 ]);
                 $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $title, $proposalSummary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
                 content_proposal_notify_site($membersLibraryText('document_change_subject', 'Modification de document à valider', 'Document change pending review'), [
@@ -139,7 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             set_flash('success', $membersLibraryText('document_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
             redirect('my_requests');
-            redirect_url($membersLibraryReturnUrl());
         }
 
         if ($action === 'propose_category') {
@@ -687,7 +686,7 @@ ob_start();
                                     </select>
                                 </label>
                                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="document_tags" value="<?= e($docTags) ?>" maxlength="255"></label>
-                                <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="document_description" rows="5" maxlength="5000"><?= e($docDescription) ?></textarea></label>
+                                <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="document_description" rows="5" maxlength="1800"><?= e($docDescription) ?></textarea></label>
                                 <label><span><?= e($membersLibraryText('replace_document_file', 'Remplacer le fichier', 'Replace file')) ?></span><input type="file" name="document_file" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
                                 <div class="members-library-dialog-actions module-dialog-actions">
                                     <button class="button" type="submit"><?= e($membersLibraryText('save_document', 'Enregistrer', 'Save')) ?></button>
