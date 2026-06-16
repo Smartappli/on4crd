@@ -453,6 +453,7 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("'album_helpers.php' => ['home'", $loader);
         self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
         self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);
+        self::assertStringContainsString("'member_media.php' => ['directory', 'gdpr', 'profile', 'admin_committee']", $loader);
         self::assertStringContainsString("'newsletter.php' => ['newsletter'", $loader);
         self::assertStringNotContainsString("'admin_helpers.php' => ['home'", $loader);
 
@@ -529,7 +530,10 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('name="member_id"', $adminCommittee);
         self::assertStringContainsString("UPDATE members SET is_committee = ?, committee_role = ?, committee_bio = ?, committee_sort_order = ? WHERE id = ?", $adminCommittee);
         self::assertStringContainsString('$committeeRows = db()->query(', $adminCommittee);
+        self::assertStringContainsString('SELECT id, callsign, full_name, avatar_path, photo_path, committee_role, committee_sort_order', $adminCommittee);
         self::assertStringContainsString('<table>', $adminCommittee);
+        self::assertStringContainsString('class="admin-committee-avatar"', $adminCommittee);
+        self::assertStringContainsString('member_avatar_src($row)', $adminCommittee);
         self::assertStringContainsString("route_url('admin_committee', ['member_id' => (int) \$row['id']])", $adminCommittee);
         self::assertStringNotContainsString("SELECT id, callsign, full_name, committee_role, committee_bio, committee_sort_order", $adminCommittee);
         self::assertStringNotContainsString("\$row['committee_bio']", $adminCommittee);
