@@ -391,9 +391,11 @@ function member_library_sync_accepted_proposals(array $messages = [], int $limit
         $stmt->execute();
         $proposals = $stmt->fetchAll() ?: [];
     } catch (Throwable $throwable) {
-        log_structured_event('member_library_accepted_proposals_sync_load_failed', [
-            'message' => $throwable->getMessage(),
-        ]);
+        if (function_exists('log_structured_event')) {
+            log_structured_event('member_library_accepted_proposals_sync_load_failed', [
+                'message' => $throwable->getMessage(),
+            ]);
+        }
 
         return $result;
     }
@@ -419,10 +421,12 @@ function member_library_sync_accepted_proposals(array $messages = [], int $limit
             $result['applied']++;
         } catch (Throwable $throwable) {
             $result['failed']++;
-            log_structured_event('member_library_accepted_proposal_sync_failed', [
-                'proposal_id' => (int) ($proposal['id'] ?? 0),
-                'message' => $throwable->getMessage(),
-            ]);
+            if (function_exists('log_structured_event')) {
+                log_structured_event('member_library_accepted_proposal_sync_failed', [
+                    'proposal_id' => (int) ($proposal['id'] ?? 0),
+                    'message' => $throwable->getMessage(),
+                ]);
+            }
         }
     }
 
