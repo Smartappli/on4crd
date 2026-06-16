@@ -156,6 +156,7 @@ final class RouterContractTest extends TestCase
             'dashboard',
             'save_dashboard',
             'widget_render',
+            'member_library_preview',
             'qsl',
             'qsl_preview',
             'qsl_export',
@@ -273,6 +274,7 @@ final class RouterContractTest extends TestCase
         foreach ([
             'dashboard_widget_card' => 'dashboard',
             'members_library' => 'members',
+            'member_library_preview' => 'members',
             'tools' => 'tools',
             'tools_geocode' => 'tools',
             'relais' => 'education',
