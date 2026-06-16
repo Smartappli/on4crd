@@ -454,6 +454,7 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("'llms.txt', 'ai-index.json'", $loader);
         self::assertStringContainsString("'album_helpers.php' => ['home'", $loader);
         self::assertStringContainsString("'qsl_helpers.php' => ['qsl'", $loader);
+        self::assertStringContainsString("'layout_renderer.php' => ['bandplan_on3', 'bandplan_on2', 'bandplan_harec']", $loader);
         self::assertStringContainsString("'knowledge_helpers.php' => ['chatbot']", $loader);
         self::assertStringContainsString("'member_media.php' => ['directory', 'gdpr', 'profile', 'admin_committee']", $loader);
         self::assertStringContainsString("'newsletter.php' => ['newsletter'", $loader);

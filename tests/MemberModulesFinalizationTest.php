@@ -81,7 +81,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
         self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId])", $library);
-        self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId, 'download' => '1'])", $library);
+        self::assertStringNotContainsString("route_url('member_library_preview', ['id' => \$docId, 'download' => '1'])", $library);
+        self::assertStringNotContainsString("\$t['open']", $library);
         self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>"', $library);
         self::assertStringContainsString('class="members-library-pdf-preview"', $library);
         self::assertStringContainsString("\$documentPreviewUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId]) : '';", $adminLibrary);

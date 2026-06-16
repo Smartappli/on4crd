@@ -9,6 +9,7 @@ function app_load_helper_file(string $filename): void
 function app_load_route_helpers(string $route): void
 {
     $helperRoutes = [
+        'layout_renderer.php' => ['bandplan_on3', 'bandplan_on2', 'bandplan_harec'],
         'module_catalog.php' => ['home', 'admin', 'admin_dashboard'],
         'widget_catalog.php' => ['dashboard', 'save_dashboard', 'widget_render', 'admin_dashboard'],
         'widget_renderer.php' => ['home', 'dashboard', 'widget_render'],
