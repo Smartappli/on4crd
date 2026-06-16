@@ -24,6 +24,41 @@ set_page_meta([
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
+
+        $committeeMove = trim((string) ($_POST['committee_move'] ?? ''));
+        if ($committeeMove !== '') {
+            if (preg_match('/\A(up|down):(\d+)\z/', $committeeMove, $matches) !== 1) {
+                throw new RuntimeException($tr('invalid_member', 'Membre invalide.'));
+            }
+
+            $direction = (string) $matches[1];
+            $moveMemberId = (int) $matches[2];
+            $orderRows = db()->query('SELECT id FROM members WHERE is_active = 1 AND is_committee = 1 ORDER BY committee_sort_order ASC, callsign ASC')->fetchAll() ?: [];
+            $orderedIds = [];
+            foreach ($orderRows as $orderRow) {
+                $orderedIds[] = (int) ($orderRow['id'] ?? 0);
+            }
+
+            $currentIndex = array_search($moveMemberId, $orderedIds, true);
+            if ($currentIndex === false) {
+                throw new RuntimeException($tr('invalid_member', 'Membre invalide.'));
+            }
+
+            $targetIndex = $direction === 'up' ? $currentIndex - 1 : $currentIndex + 1;
+            if (isset($orderedIds[$targetIndex])) {
+                [$orderedIds[$currentIndex], $orderedIds[$targetIndex]] = [$orderedIds[$targetIndex], $orderedIds[$currentIndex]];
+                db()->beginTransaction();
+                $orderUpdate = db()->prepare('UPDATE members SET committee_sort_order = ? WHERE id = ?');
+                foreach ($orderedIds as $position => $orderedId) {
+                    $orderUpdate->execute([($position + 1) * 10, $orderedId]);
+                }
+                db()->commit();
+                set_flash('success', $tr('order_updated', 'Ordre d affichage mis a jour.'));
+            }
+
+            redirect_url(route_url('admin_committee', ['member_id' => $moveMemberId]));
+        }
+
         $memberId = (int) ($_POST['member_id'] ?? 0);
         $memberStmt = db()->prepare('SELECT id FROM members WHERE id = ? AND is_active = 1 LIMIT 1');
         $memberStmt->execute([$memberId]);
@@ -47,6 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
         set_flash('success', (string) $t['updated']);
     } catch (Throwable $throwable) {
+        if (db()->inTransaction()) {
+            db()->rollBack();
+        }
         set_flash('error', $throwable->getMessage());
     }
     redirect('admin_committee');
@@ -79,7 +117,7 @@ ob_start();
         <?php if ($selectedMember === null): ?>
             <p class="help"><?= e($tr('no_active_members', 'Aucun membre actif disponible.')) ?></p>
         <?php else: ?>
-        <form method="post" class="stack">
+        <form method="post" class="stack" id="admin-committee-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <div class="form-grid">
                 <label><?= e($tr('member', 'Membre')) ?>
@@ -129,7 +167,7 @@ ob_start();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($committeeRows as $row): ?>
+                        <?php foreach ($committeeRows as $rowIndex => $row): ?>
                             <tr>
                                 <td>
                                     <div class="admin-committee-member">
@@ -142,7 +180,15 @@ ob_start();
                                 </td>
                                 <td><?= e((string) ($row['committee_role'] ?? '')) ?></td>
                                 <td><?= (int) ($row['committee_sort_order'] ?? 100) ?></td>
-                                <td><a href="<?= e(route_url('admin_committee', ['member_id' => (int) $row['id']])) ?>"><?= e($tr('edit', 'Modifier')) ?></a></td>
+                                <td>
+                                    <div class="admin-committee-actions">
+                                        <a href="<?= e(route_url('admin_committee', ['member_id' => (int) $row['id']])) ?>"><?= e($tr('edit', 'Modifier')) ?></a>
+                                        <span class="admin-committee-move-buttons" aria-label="<?= e($tr('move_member', 'Deplacer le membre')) ?>">
+                                            <button class="button small secondary admin-committee-arrow" type="submit" form="admin-committee-form" name="committee_move" value="up:<?= (int) $row['id'] ?>" aria-label="<?= e($tr('move_up', 'Monter')) ?> <?= e((string) $row['callsign']) ?>" title="<?= e($tr('move_up', 'Monter')) ?>" <?= $rowIndex === 0 ? 'disabled' : '' ?>>&uarr;</button>
+                                            <button class="button small secondary admin-committee-arrow" type="submit" form="admin-committee-form" name="committee_move" value="down:<?= (int) $row['id'] ?>" aria-label="<?= e($tr('move_down', 'Descendre')) ?> <?= e((string) $row['callsign']) ?>" title="<?= e($tr('move_down', 'Descendre')) ?>" <?= $rowIndex === count($committeeRows) - 1 ? 'disabled' : '' ?>>&darr;</button>
+                                        </span>
+                                    </div>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
