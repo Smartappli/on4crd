@@ -74,6 +74,7 @@ if (!albums_admin_tables_ready()) {
     return;
 }
 albums_admin_ensure_photo_order_column();
+album_ensure_source_proposal_column();
 album_sync_accepted_proposals();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -89,7 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($title === '') {
                 throw new RuntimeException((string) $t['title_required']);
             }
-            db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, ?)')->execute([$title, $description, $isPublic]);
+            db()->prepare('INSERT INTO albums (member_id, title, description, is_public) VALUES (?, ?, ?, ?)')
+                ->execute([(int) (current_user()['id'] ?? 0), $title, $description, $isPublic]);
             album_clear_caches();
             set_flash('success', (string) $t['created_ok']);
             redirect('admin_albums');
@@ -125,19 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$albumStmt->fetchColumn()) {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
-            $photoStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ?');
-            $photoStmt->execute([$albumId]);
-            $photoRows = $photoStmt->fetchAll() ?: [];
-            db()->beginTransaction();
-            db()->prepare('DELETE FROM album_photos WHERE album_id = ?')->execute([$albumId]);
-            db()->prepare('DELETE FROM albums WHERE id = ?')->execute([$albumId]);
-            db()->commit();
-            foreach ($photoRows as $photoRow) {
-                if (!albums_admin_delete_photo_files((string) ($photoRow['file_path'] ?? ''))) {
-                    log_structured_event('album_photo_file_delete_failed', ['album_id' => $albumId]);
-                }
-            }
-            albums_admin_clear_cache();
+            album_delete_record($albumId);
             set_flash('success', (string) $t['album_deleted_ok']);
             redirect('admin_albums');
         }
