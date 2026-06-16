@@ -640,7 +640,7 @@ ob_start();
                     </details>
                     <div class="actions members-library-document-actions">
                         <?php if ($canEditDocument): ?>
-                            <button class="button secondary" type="button" data-members-library-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($membersLibraryText('edit_document', 'Modifier', 'Edit')) ?></button>
+                            <button class="button secondary" type="button" data-members-library-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($membersLibraryText('edit_document', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
                         <?php endif; ?>
                         <form method="post" class="inline-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
