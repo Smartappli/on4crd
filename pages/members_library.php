@@ -517,9 +517,9 @@ ob_start();
                     <?php if ($docTags !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e($docTags) ?></p><?php endif; ?>
                     <?php if ($docExtract !== ''): ?><p class="help"><?= e(mb_safe_strimwidth($docExtract, 0, 220, '...')) ?></p><?php endif; ?>
                     <?php if ($extension === 'pdf'): ?>
-                        <details class="admin-library-preview-toggle">
+                        <details class="members-library-preview-toggle">
                             <summary><?= e((string) $t['preview']) ?></summary>
-                            <iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview" loading="lazy" title="<?= e($docTitle) ?>"></iframe>
+                            <iframe src="<?= e(route_url('member_library_preview', ['id' => $docId])) ?>" class="members-library-pdf-preview" loading="lazy" title="<?= e($docTitle) ?>"></iframe>
                         </details>
                     <?php endif; ?>
                     <details class="admin-library-related-toggle">
