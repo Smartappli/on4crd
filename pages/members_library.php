@@ -70,51 +70,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($membersLibraryText('document_forbidden', 'Vous ne pouvez pas modifier ce document.', 'You cannot edit this document.'));
             }
 
-            if ($action === 'delete_document') {
-                member_library_delete_document_file((string) ($document['file_path'] ?? ''));
-                db()->prepare('DELETE FROM member_library_documents WHERE id = ? LIMIT 1')->execute([$documentId]);
-                if (table_exists('member_favorites')) {
-                    db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['library_document', $documentId]);
-                }
-                set_flash('success', $membersLibraryText('document_deleted', 'Document supprimé.', 'Document deleted.'));
-                redirect_url($membersLibraryReturnUrl());
-            }
+            $file = $_FILES['document_file'] ?? null;
+            $hasReplacementFile = is_array($file) && (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE;
+            $sourceRef = '';
+            $title = content_proposal_clean_single_line((string) ($_POST['document_title'] ?? $document['title'] ?? ''), 190);
+            $documentCategory = member_library_category_slug((string) ($_POST['document_category'] ?? $document['category'] ?? 'general'));
+            $documentTags = member_library_clean_tags((string) ($_POST['document_tags'] ?? $document['tags'] ?? ''));
+            $description = content_proposal_clean_multiline((string) ($_POST['document_description'] ?? $document['description'] ?? ''), 1800);
 
-            $title = content_proposal_clean_single_line((string) ($_POST['document_title'] ?? ''), 190);
             if ($title === '') {
                 throw new RuntimeException($membersLibraryText('document_title_required', 'Un titre est requis.', 'A title is required.'));
             }
-            $documentCategory = member_library_category_slug((string) ($_POST['document_category'] ?? 'general'));
-            $documentTags = member_library_clean_tags((string) ($_POST['document_tags'] ?? ''));
-            $description = content_proposal_clean_multiline((string) ($_POST['document_description'] ?? ''), 5000);
 
-            $file = $_FILES['document_file'] ?? null;
-            $hasReplacementFile = is_array($file) && (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE;
+            if ($action === 'delete_document') {
+                if ($canManageLibrary) {
+                    member_library_delete_document_record($documentId);
+                    set_flash('success', $membersLibraryText('document_deleted', 'Document supprimé.', 'Document deleted.'));
+                    redirect_url($membersLibraryReturnUrl());
+                }
+
+                $sourceRef = (string) ($document['file_path'] ?? '');
+                $proposalSummary = content_proposal_details_text([
+                    'Action' => 'delete_document',
+                    'Document ID' => (string) $documentId,
+                    'Category' => (string) ($document['category'] ?? 'general'),
+                    'Tags' => (string) ($document['tags'] ?? ''),
+                    'Description' => (string) ($document['description'] ?? ''),
+                ]);
+                $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $title, $proposalSummary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
+                content_proposal_notify_site($membersLibraryText('document_change_subject', 'Modification de document à valider', 'Document change pending review'), [
+                    'area' => 'members_library',
+                    'proposal_type' => 'content',
+                    'title' => $title,
+                    'summary' => $proposalSummary,
+                    'contact' => (string) ($user['email'] ?? ''),
+                    'source_ref' => $sourceRef !== '' ? ('content_proposals#' . $proposalId . ' ' . base_url($sourceRef)) : ('content_proposals#' . $proposalId),
+                ]);
+                set_flash('success', $membersLibraryText('document_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+                redirect('my_requests');
+            }
+
             if ($hasReplacementFile) {
-                $stored = member_library_store_document_upload($file, (int) ($user['id'] ?? 0), 'doc');
-                $extractedText = member_library_extract_text((string) $stored['absolute_path'], (string) $stored['extension']);
-                db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ?, file_path = ?, extracted_text = ? WHERE id = ?')
-                    ->execute([
-                        $documentCategory,
-                        $documentTags,
-                        $title,
-                        $description !== '' ? $description : null,
-                        (string) $stored['public_path'],
-                        $extractedText !== '' ? $extractedText : null,
-                        $documentId,
-                    ]);
-                member_library_delete_document_file((string) ($document['file_path'] ?? ''));
-            } else {
-                db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ? WHERE id = ?')
-                    ->execute([$documentCategory, $documentTags, $title, $description !== '' ? $description : null, $documentId]);
+                $stored = member_library_store_document_upload($file, (int) ($user['id'] ?? 0), $canManageLibrary ? 'doc' : 'proposal_doc');
+                $sourceRef = (string) $stored['public_path'];
             }
 
-            if (table_exists('member_favorites')) {
-                $favoriteUrl = route_url_clean('members_library', ['q' => $title, 'category' => $documentCategory, 'tag' => $documentTags]);
-                db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
-                    ->execute([$title, $favoriteUrl, 'library_document', $documentId]);
+            if ($canManageLibrary) {
+                member_library_update_document_record($documentId, $title, $documentCategory, $documentTags, $description, $sourceRef);
+                set_flash('success', $membersLibraryText('document_updated', 'Document mis à jour.', 'Document updated.'));
+                redirect_url($membersLibraryReturnUrl());
             }
-            set_flash('success', $membersLibraryText('document_updated', 'Document mis à jour.', 'Document updated.'));
+
+            $proposalSummary = content_proposal_details_text([
+                'Action' => 'update_document',
+                'Document ID' => (string) $documentId,
+                'Category' => $documentCategory,
+                'Tags' => $documentTags,
+                'Description' => $description,
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $title, $proposalSummary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
+            content_proposal_notify_site($membersLibraryText('document_change_subject', 'Modification de document à valider', 'Document change pending review'), [
+                'area' => 'members_library',
+                'proposal_type' => 'content',
+                'title' => $title,
+                'summary' => $proposalSummary,
+                'contact' => (string) ($user['email'] ?? ''),
+                'source_ref' => $sourceRef !== '' ? ('content_proposals#' . $proposalId . ' ' . base_url($sourceRef)) : ('content_proposals#' . $proposalId),
+            ]);
+            set_flash('success', $membersLibraryText('document_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+            redirect('my_requests');
             redirect_url($membersLibraryReturnUrl());
         }
 
