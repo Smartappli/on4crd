@@ -536,7 +536,7 @@ ob_start();
                         <?php endif; ?>
                     </details>
                     <p class="actions">
-                        <a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
+                        <a class="button secondary" href="<?= e(route_url('member_library_preview', ['id' => $docId, 'download' => '1'])) ?>"><?= e((string) $t['open']) ?></a>
                         <form method="post" class="inline-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="toggle_favorite_document">

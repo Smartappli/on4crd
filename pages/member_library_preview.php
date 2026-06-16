@@ -28,7 +28,10 @@ if (!is_array($document)) {
 }
 
 $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']);
-if ($safePath === null || strtolower(pathinfo($safePath, PATHINFO_EXTENSION)) !== 'pdf') {
+$extension = strtolower(pathinfo((string) $safePath, PATHINFO_EXTENSION));
+$allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
+$isDownload = (string) ($_GET['download'] ?? '') === '1';
+if ($safePath === null || !in_array($extension, $allowedExtensions, true) || (!$isDownload && $extension !== 'pdf')) {
     http_response_code(404);
     exit('Document not found');
 }
@@ -82,9 +85,18 @@ if (preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches) === 1) {
 }
 
 $length = $end - $start + 1;
+$contentTypes = [
+    'pdf' => 'application/pdf',
+    'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'txt' => 'text/plain; charset=utf-8',
+    'md' => 'text/plain; charset=utf-8',
+    'html' => 'application/octet-stream',
+    'htm' => 'application/octet-stream',
+];
+$disposition = $isDownload ? 'attachment' : 'inline';
 http_response_code($statusCode);
-header('Content-Type: application/pdf');
-header('Content-Disposition: inline; filename="' . $filename . '"');
+header('Content-Type: ' . ($contentTypes[$extension] ?? 'application/octet-stream'));
+header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
 header('Content-Length: ' . $length);
 header('Accept-Ranges: bytes');
 header('Cache-Control: private, max-age=600');
