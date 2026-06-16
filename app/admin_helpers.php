@@ -87,6 +87,8 @@ function admin_pending_content_areas(): array
         'events' => ['route' => 'admin_events', 'permission' => 'events.manage', 'label' => ['fr' => 'Evenements', 'en' => 'Events']],
         'members_library' => ['route' => 'admin_library', 'permission' => 'admin.access', 'label' => ['fr' => 'Bibliotheque membres', 'en' => 'Member library']],
         'news' => ['route' => 'admin_news', 'permission' => 'news.moderate', 'label' => ['fr' => 'Actualites', 'en' => 'News']],
+        'presentations' => ['route' => 'admin_presentations', 'permission' => 'admin.access', 'label' => ['fr' => 'Presentations', 'en' => 'Presentations']],
+        'videos' => ['route' => 'admin_videos', 'permission' => 'admin.access', 'label' => ['fr' => 'Videos', 'en' => 'Videos']],
         'webotheque' => ['route' => 'admin_webotheque', 'permission' => 'admin.access', 'label' => ['fr' => 'Webotheque', 'en' => 'Web library']],
         'wiki' => ['route' => 'admin_wiki', 'permission' => 'wiki.moderate', 'label' => ['fr' => 'Wiki', 'en' => 'Wiki']],
     ];
@@ -309,6 +311,13 @@ function admin_apply_accepted_content_proposal(array $proposal, string $locale):
         $messages = webotheque_i18n($locale);
         $categories = webotheque_default_categories($messages) + webotheque_categories($messages);
         webotheque_apply_accepted_proposal($proposal, $categories, $messages);
+        return;
+    }
+
+    if (in_array($area, ['presentations', 'videos'], true)) {
+        require_once __DIR__ . '/member_module_documents.php';
+
+        member_document_apply_accepted_proposal($proposal, $area);
         return;
     }
 
