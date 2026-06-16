@@ -68,6 +68,7 @@ final class MemberModulesFinalizationTest extends TestCase
         $memberLibraryHelpers = $this->source('app/member_library_helpers.php');
         $contentHelpers = $this->source('app/content_helpers.php');
         $routeHelperLoader = $this->source('app/route_helper_loader.php');
+        $previewPage = $this->source('pages/member_library_preview.php');
 
         self::assertStringContainsString('id="members-library-document-dialog"', $library);
         self::assertStringContainsString('<input type="text" name="proposal_category_name"', $library);
@@ -79,6 +80,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
         self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId])", $library);
+        self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId, 'download' => '1'])", $library);
+        self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>"', $library);
         self::assertStringContainsString('class="members-library-pdf-preview"', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('member_library_sync_accepted_proposals($memberLibraryMessages);', $adminLibrary);
@@ -109,6 +112,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'fichiers', 'members_library', 'admin_articles'", $routeHelperLoader);
         self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
+        self::assertStringContainsString("\$isDownload = (string) (\$_GET['download'] ?? '') === '1';", $previewPage);
+        self::assertStringContainsString("\$disposition = \$isDownload ? 'attachment' : 'inline';", $previewPage);
+        self::assertStringContainsString("header('Content-Disposition: ' . \$disposition", $previewPage);
     }
 
     public function testSharedDocumentModulesAreDeclaredDispatchedAndTagged(): void
