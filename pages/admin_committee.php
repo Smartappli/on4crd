@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $rows = db()->query('SELECT id, callsign, full_name, is_committee, committee_role, committee_bio, committee_sort_order FROM members WHERE is_active = 1 ORDER BY callsign ASC')->fetchAll() ?: [];
-$committeeRows = db()->query('SELECT id, callsign, full_name, committee_role, committee_sort_order FROM members WHERE is_active = 1 AND is_committee = 1 ORDER BY committee_sort_order ASC, callsign ASC')->fetchAll() ?: [];
+$committeeRows = db()->query('SELECT id, callsign, full_name, avatar_path, photo_path, committee_role, committee_sort_order FROM members WHERE is_active = 1 AND is_committee = 1 ORDER BY committee_sort_order ASC, callsign ASC')->fetchAll() ?: [];
 
 $selectedId = (int) ($_GET['member_id'] ?? 0);
 if ($selectedId <= 0 && $committeeRows !== []) {
@@ -131,7 +131,15 @@ ob_start();
                     <tbody>
                         <?php foreach ($committeeRows as $row): ?>
                             <tr>
-                                <td><strong><?= e((string) $row['callsign']) ?></strong><div class="help"><?= e((string) $row['full_name']) ?></div></td>
+                                <td>
+                                    <div class="admin-committee-member">
+                                        <img class="admin-committee-avatar" src="<?= e(member_avatar_src($row)) ?>" alt="<?= e($tr('avatar_alt', 'Avatar du membre')) ?> <?= e((string) $row['callsign']) ?>" loading="lazy" decoding="async">
+                                        <span>
+                                            <strong><?= e((string) $row['callsign']) ?></strong>
+                                            <span class="help"><?= e((string) $row['full_name']) ?></span>
+                                        </span>
+                                    </div>
+                                </td>
                                 <td><?= e((string) ($row['committee_role'] ?? '')) ?></td>
                                 <td><?= (int) ($row['committee_sort_order'] ?? 100) ?></td>
                                 <td><a href="<?= e(route_url('admin_committee', ['member_id' => (int) $row['id']])) ?>"><?= e($tr('edit', 'Modifier')) ?></a></td>
