@@ -336,9 +336,12 @@ ob_start();
                     $coverSrc = $coverThumb !== '' && is_file($coverThumbAbs) ? $coverThumb : ($coverPath ?? '');
                     $photoCount = (int) ($row['photo_count'] ?? 0);
                     $description = trim((string) ($row['description'] ?? ''));
+                    $albumId = (int) ($row['id'] ?? 0);
+                    $canEditAlbum = $user !== null && $albumId > 0 && ($canManageAlbums || (int) ($row['member_id'] ?? 0) === (int) ($user['id'] ?? 0));
+                    $editDialogId = 'album-edit-dialog-' . $albumId;
                     ?>
                     <article class="album-tile">
-                        <a class="album-tile-media" href="<?= e(route_url('album', ['id' => (int) $row['id']])) ?>">
+                        <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
                             <?php if ($coverSrc !== ''): ?>
                                 <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e((string) $row['title']) ?>" loading="lazy" decoding="async">
                             <?php else: ?>
@@ -347,7 +350,7 @@ ob_start();
                         </a>
                         <div class="album-tile-body">
                             <div>
-                                <h2><a href="<?= e(route_url('album', ['id' => (int) $row['id']])) ?>"><?= e((string) $row['title']) ?></a></h2>
+                                <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e((string) $row['title']) ?></a></h2>
                                 <?php if ($description !== ''): ?>
                                     <p><?= e(mb_safe_strimwidth($description, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
@@ -363,9 +366,50 @@ ob_start();
                                         <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
                                     </form>
                                 <?php endif; ?>
+                                <?php if ($canEditAlbum): ?>
+                                    <button class="button secondary" type="button" data-album-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($albumText('edit_album', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </article>
+                    <?php if ($canEditAlbum): ?>
+                        <dialog class="album-dialog" id="<?= e($editDialogId) ?>" aria-labelledby="<?= e($editDialogId) ?>-title">
+                            <div class="album-dialog-card">
+                                <div class="album-dialog-header module-dialog-header">
+                                    <div>
+                                        <p class="module-dialog-eyebrow"><?= e((string) $t['albums']) ?></p>
+                                        <h2 id="<?= e($editDialogId) ?>-title"><?= e($albumText('edit_album_title', 'Modifier l album', 'Edit album')) ?></h2>
+                                        <p class="help"><?= e((string) $row['title']) ?></p>
+                                    </div>
+                                    <button class="album-dialog-close module-dialog-close" type="button" data-album-modal-close aria-label="<?= e($albumText('close', 'Fermer', 'Close')) ?>">&times;</button>
+                                </div>
+                                <form method="post" class="album-dialog-form module-dialog-form">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="update_album">
+                                    <input type="hidden" name="album_id" value="<?= $albumId ?>">
+                                    <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                    <input type="hidden" name="return_p" value="<?= $page ?>">
+                                    <label><span><?= e($albumText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="title" value="<?= e((string) $row['title']) ?>" maxlength="190" required></label>
+                                    <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="description" rows="5" maxlength="10000"><?= e($description) ?></textarea></label>
+                                    <p class="album-dialog-actions module-dialog-actions">
+                                        <button class="button" type="submit"><?= e($albumText('save_album', 'Enregistrer', 'Save')) ?></button>
+                                        <button class="button secondary" type="button" data-album-modal-close><?= e($albumText('cancel', 'Annuler', 'Cancel')) ?></button>
+                                    </p>
+                                </form>
+                                <form method="post" class="album-delete-form">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="delete_album">
+                                    <input type="hidden" name="album_id" value="<?= $albumId ?>">
+                                    <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                    <input type="hidden" name="return_p" value="<?= $page ?>">
+                                    <p class="help"><?= e($canManageAlbums
+                                        ? $albumText('delete_album_warning_admin', 'La suppression de cet album et de ses photos est definitive.', 'Deleting this album and its photos is permanent.')
+                                        : $albumText('delete_album_warning', 'La suppression de cet album sera appliquee apres validation.', 'Deleting this album will be applied after review.')) ?></p>
+                                    <button class="button secondary album-danger" type="submit"><?= e($albumText('delete_album', 'Supprimer l album', 'Delete album')) ?></button>
+                                </form>
+                            </div>
+                        </dialog>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </div>
             <?php if ($totalPages > 1): ?>
