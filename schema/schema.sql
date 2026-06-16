@@ -350,11 +350,13 @@ CREATE TABLE IF NOT EXISTS content_proposals (
 
 CREATE TABLE IF NOT EXISTS albums (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT DEFAULT NULL,
     title VARCHAR(190) NOT NULL,
     description TEXT DEFAULT NULL,
     is_public TINYINT(1) NOT NULL DEFAULT 0,
     source_proposal_id INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_albums_member (member_id),
     INDEX idx_albums_source_proposal (source_proposal_id)
 );
 
