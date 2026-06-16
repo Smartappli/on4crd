@@ -531,6 +531,8 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('$committeeRows = db()->query(', $adminCommittee);
         self::assertStringContainsString('<table>', $adminCommittee);
         self::assertStringContainsString("route_url('admin_committee', ['member_id' => (int) \$row['id']])", $adminCommittee);
+        self::assertStringNotContainsString("SELECT id, callsign, full_name, committee_role, committee_bio, committee_sort_order", $adminCommittee);
+        self::assertStringNotContainsString("\$row['committee_bio']", $adminCommittee);
         self::assertStringNotContainsString('name="members[', $adminCommittee);
     }
 
