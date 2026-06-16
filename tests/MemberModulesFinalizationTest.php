@@ -69,6 +69,7 @@ final class MemberModulesFinalizationTest extends TestCase
         $contentHelpers = $this->source('app/content_helpers.php');
         $routeHelperLoader = $this->source('app/route_helper_loader.php');
         $previewPage = $this->source('pages/member_library_preview.php');
+        $requestSecurity = $this->source('app/request_security.php');
 
         self::assertStringContainsString('id="members-library-document-dialog"', $library);
         self::assertStringContainsString('<input type="text" name="proposal_category_name"', $library);
@@ -83,6 +84,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId, 'download' => '1'])", $library);
         self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>"', $library);
         self::assertStringContainsString('class="members-library-pdf-preview"', $library);
+        self::assertStringContainsString("\$documentPreviewUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId]) : '';", $adminLibrary);
+        self::assertStringContainsString("\$documentDownloadUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId, 'download' => '1']) : '';", $adminLibrary);
+        self::assertStringNotContainsString('iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview"', $adminLibrary);
+        self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t[\'open\']) ?></a>', $adminLibrary);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('member_library_sync_accepted_proposals($memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);
@@ -110,11 +115,14 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("content_proposal_accepted_categories('members_library'", $contentHelpers);
         self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library', 'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'member_library_preview'", $routeHelperLoader);
-        self::assertStringContainsString("'fichiers', 'members_library', 'admin_articles'", $routeHelperLoader);
+        self::assertStringContainsString("'fichiers', 'members_library', 'member_library_preview', 'admin_articles'", $routeHelperLoader);
         self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
         self::assertStringContainsString("\$isDownload = (string) (\$_GET['download'] ?? '') === '1';", $previewPage);
         self::assertStringContainsString("\$disposition = \$isDownload ? 'attachment' : 'inline';", $previewPage);
         self::assertStringContainsString("header('Content-Disposition: ' . \$disposition", $previewPage);
+        self::assertStringContainsString("if (in_array(security_header_current_route(), ['member_library_preview'], true))", $requestSecurity);
+        self::assertStringContainsString("\$frameAncestors = \"'self'\";", $requestSecurity);
+        self::assertStringContainsString("\$xFrameOptions = 'SAMEORIGIN';", $requestSecurity);
     }
 
     public function testSharedDocumentModulesAreDeclaredDispatchedAndTagged(): void
