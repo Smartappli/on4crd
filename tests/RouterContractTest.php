@@ -536,15 +536,34 @@ final class RouterContractTest extends TestCase
 
         preg_match_all("/\\['route' => '([^']+)'/", $moduleCatalog, $catalogMatches);
         $catalogRoutes = array_fill_keys($catalogMatches[1], true);
-        $technicalAdminRoutes = ['admin_events_feed' => true];
+        $technicalAdminRoutes = ['admin' => true, 'admin_events_feed' => true];
+        $adminPageFiles = glob(__DIR__ . '/../pages/admin*.php');
+        self::assertIsArray($adminPageFiles);
+
+        $adminRoutes = [];
+        foreach ($adminPageFiles as $pageFile) {
+            $adminRoutes[basename((string) $pageFile, '.php')] = true;
+        }
 
         foreach ($routeModules as $route => $module) {
-            if (!str_starts_with($route, 'admin_')) {
-                continue;
+            if ($route === 'admin' || str_starts_with($route, 'admin_')) {
+                $adminRoutes[$route] = true;
             }
+        }
 
-            self::assertArrayHasKey($route, $dispatchRoutes, sprintf('Admin route %s is mapped to a module but not dispatched.', $route));
-            self::assertNotSame('', $module, sprintf('Admin route %s must have a module gate.', $route));
+        ksort($adminRoutes);
+        self::assertNotEmpty($adminRoutes);
+
+        foreach (array_keys($catalogRoutes) as $route) {
+            self::assertArrayHasKey($route, $adminRoutes, sprintf('Catalogued admin route %s must have a page file or route module mapping.', $route));
+            self::assertArrayHasKey($route, $routeModules, sprintf('Catalogued admin route %s must have a module gate.', $route));
+        }
+
+        foreach (array_keys($adminRoutes) as $route) {
+            self::assertArrayHasKey($route, $dispatchRoutes, sprintf('Admin route %s must be dispatched.', $route));
+            self::assertSame('pages/' . $route . '.php', $dispatchRoutes[$route], sprintf('Admin route %s must dispatch to its matching page file.', $route));
+            self::assertArrayHasKey($route, $routeModules, sprintf('Admin route %s must have a module gate.', $route));
+            self::assertNotSame('', $routeModules[$route], sprintf('Admin route %s must have a non-empty module gate.', $route));
 
             $pagePath = __DIR__ . '/../' . $dispatchRoutes[$route];
             self::assertFileExists($pagePath, sprintf('Admin route %s points to a missing page.', $route));
