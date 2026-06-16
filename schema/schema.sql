@@ -353,7 +353,9 @@ CREATE TABLE IF NOT EXISTS albums (
     title VARCHAR(190) NOT NULL,
     description TEXT DEFAULT NULL,
     is_public TINYINT(1) NOT NULL DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    source_proposal_id INT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_albums_source_proposal (source_proposal_id)
 );
 
 CREATE TABLE IF NOT EXISTS album_photos (

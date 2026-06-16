@@ -74,6 +74,7 @@ if (!albums_admin_tables_ready()) {
     return;
 }
 albums_admin_ensure_photo_order_column();
+album_sync_accepted_proposals();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -89,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException((string) $t['title_required']);
             }
             db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, ?)')->execute([$title, $description, $isPublic]);
-            albums_admin_clear_cache();
+            album_clear_caches();
             set_flash('success', (string) $t['created_ok']);
             redirect('admin_albums');
         }

@@ -58,9 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, 1)')
                 ->execute([$title, $albumDescription !== '' ? $albumDescription : null]);
             $albumId = (int) db()->lastInsertId();
-            cache_forget('admin_albums_list_v2');
-            cache_forget('admin_albums_photos_total_v2');
-            cache_forget('home_public_album_random_photos_v1');
+            album_clear_caches();
             set_flash('success', 'Album cree et valide directement.');
             redirect_url(route_url('album', ['id' => $albumId]));
         }
@@ -93,6 +91,7 @@ if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
     return;
 }
+album_sync_accepted_proposals();
 
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 100) {

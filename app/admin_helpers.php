@@ -294,7 +294,25 @@ function admin_update_content_proposal_status(int $proposalId, string $status, s
  */
 function admin_apply_accepted_content_proposal(array $proposal, string $locale): void
 {
-    if ((string) ($proposal['area'] ?? '') !== 'members_library') {
+    $area = (string) ($proposal['area'] ?? '');
+
+    if ($area === 'albums') {
+        require_once __DIR__ . '/album_helpers.php';
+
+        album_apply_accepted_proposal($proposal);
+        return;
+    }
+
+    if ($area === 'webotheque') {
+        require_once __DIR__ . '/member_webotheque.php';
+
+        $messages = webotheque_i18n($locale);
+        $categories = webotheque_default_categories($messages) + webotheque_categories($messages);
+        webotheque_apply_accepted_proposal($proposal, $categories, $messages);
+        return;
+    }
+
+    if ($area !== 'members_library') {
         return;
     }
 

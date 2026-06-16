@@ -351,6 +351,77 @@ function webotheque_apply_accepted_proposal(
 }
 }
 
+if (!function_exists('webotheque_sync_accepted_proposals')) {
+/**
+ * @param array<string, string> $categories
+ * @param array<string, string> $t
+ * @return array{checked:int,applied:int,skipped:int,failed:int}
+ */
+function webotheque_sync_accepted_proposals(array $categories, array $t = [], int $fallbackMemberId = 0, int $limit = 100): array
+{
+    static $alreadyRan = false;
+
+    $result = ['checked' => 0, 'applied' => 0, 'skipped' => 0, 'failed' => 0];
+    if ($alreadyRan) {
+        return $result;
+    }
+    $alreadyRan = true;
+
+    if (!ensure_content_proposals_table() || !ensure_webotheque_table()) {
+        return $result;
+    }
+
+    $limit = max(1, min(500, $limit));
+    try {
+        $stmt = db()->prepare(
+            'SELECT id, member_id, proposal_type, title, summary, source_ref
+             FROM content_proposals
+             WHERE area = "webotheque"
+               AND status = "accepted"
+               AND proposal_type = "content"
+             ORDER BY updated_at ASC, id ASC
+             LIMIT ' . $limit
+        );
+        $stmt->execute();
+        $proposals = $stmt->fetchAll() ?: [];
+    } catch (Throwable $throwable) {
+        log_structured_event('webotheque_accepted_proposals_sync_load_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+
+        return $result;
+    }
+
+    foreach ($proposals as $proposal) {
+        $result['checked']++;
+        try {
+            $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
+            if ($sourceUrl === '') {
+                throw new RuntimeException('err_url');
+            }
+
+            $existingStmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE url = ? LIMIT 1');
+            $existingStmt->execute([$sourceUrl]);
+            if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+                $result['skipped']++;
+                continue;
+            }
+
+            webotheque_apply_accepted_proposal($proposal, $categories, $t, $fallbackMemberId);
+            $result['applied']++;
+        } catch (Throwable $throwable) {
+            $result['failed']++;
+            log_structured_event('webotheque_accepted_proposal_sync_failed', [
+                'proposal_id' => (int) ($proposal['id'] ?? 0),
+                'message' => $throwable->getMessage(),
+            ]);
+        }
+    }
+
+    return $result;
+}
+}
+
 if (!function_exists('webotheque_stats')) {
 function webotheque_stats(): array
 {
@@ -487,6 +558,7 @@ function render_webotheque_page(): void
     }
 
     $categories = webotheque_default_categories($t) + webotheque_categories($t);
+    webotheque_sync_accepted_proposals($categories, $t, (int) ($user['id'] ?? 0));
     $proposalContact = webotheque_member_contact($user);
     $canAutoValidate = has_permission('admin.access');
 
@@ -785,6 +857,7 @@ function render_admin_webotheque_page(): void
     }
 
     $categories = webotheque_default_categories($t) + webotheque_categories($t);
+    webotheque_sync_accepted_proposals($categories, $t, (int) ($user['id'] ?? 0));
     $isFrench = $locale === 'fr';
     $adminText = static function (string $key, string $fr, string $en) use ($t, $isFrench): string {
         return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
