@@ -161,6 +161,7 @@ function module_js_assets_for_route(string $route): array
         'admin_webotheque' => 'webotheque',
         'wiki_edit' => 'wiki_edit',
         'wiki_propose' => 'wiki_edit',
+        'wiki_view' => 'wiki',
     ];
     $module = $moduleByRoute[$route] ?? $route;
     $assets = [];
@@ -169,7 +170,7 @@ function module_js_assets_for_route(string $route): array
     if ($route === 'home') {
         $candidates[] = 'tools';
     }
-    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'article_propose', 'classifieds', 'classifieds_manage', 'wiki_edit', 'wiki_propose'], true)) {
+    if (str_starts_with($route, 'admin_') || in_array($route, ['ads', 'article_propose', 'classifieds', 'classifieds_manage', 'wiki_edit', 'wiki_propose', 'wiki_view'], true)) {
         $candidates[] = 'wysiwyg';
     }
 

@@ -1,19 +1,68 @@
 (function () {
-  const dialog = document.getElementById('wiki-theme-dialog');
-  const openButtons = document.querySelectorAll('[data-wiki-theme-open]');
-  if (!dialog || openButtons.length === 0) {
-    return;
-  }
+  const supportsDialog = typeof HTMLDialogElement !== 'undefined';
 
-  if (typeof HTMLDialogElement === 'undefined' || !(dialog instanceof HTMLDialogElement)) {
-    return;
-  }
-
-  const closeDialog = () => {
-    if (dialog.open) {
+  const closeDialog = (dialog) => {
+    if (dialog instanceof HTMLDialogElement && dialog.open) {
       dialog.close();
     }
   };
+
+  const openDialog = (dialog) => {
+    if (!(dialog instanceof HTMLDialogElement)) {
+      return;
+    }
+    if (dialog.open) {
+      dialog.close();
+    }
+    dialog.showModal();
+    const firstField = dialog.querySelector('input, textarea, select');
+    if (firstField instanceof HTMLElement) {
+      firstField.focus();
+    }
+  };
+
+  const bindModalFamily = (openSelector, closeSelector, dialogSelector) => {
+    if (!supportsDialog) {
+      return;
+    }
+
+    document.querySelectorAll(openSelector).forEach((openButton) => {
+      openButton.addEventListener('click', (event) => {
+        const dialogId = openButton.getAttribute(openSelector.slice(1, -1)) || '';
+        const dialog = document.getElementById(dialogId);
+        if (!(dialog instanceof HTMLDialogElement)) {
+          return;
+        }
+
+        event.preventDefault();
+        const menu = openButton.closest('details');
+        if (menu) {
+          menu.removeAttribute('open');
+        }
+        openDialog(dialog);
+      });
+    });
+
+    document.querySelectorAll(dialogSelector).forEach((dialog) => {
+      dialog.querySelectorAll(closeSelector).forEach((button) => {
+        button.addEventListener('click', () => closeDialog(dialog));
+      });
+
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+          closeDialog(dialog);
+        }
+      });
+    });
+  };
+
+  bindModalFamily('[data-wiki-page-modal-open]', '[data-wiki-page-modal-close]', '.wiki-page-dialog');
+
+  const dialog = document.getElementById('wiki-theme-dialog');
+  const openButtons = document.querySelectorAll('[data-wiki-theme-open]');
+  if (!supportsDialog || !(dialog instanceof HTMLDialogElement) || openButtons.length === 0) {
+    return;
+  }
 
   const fieldValue = (form, name) => {
     const field = form.querySelector(`[name="${name}"]`);
@@ -34,23 +83,17 @@
       if (menu) {
         menu.removeAttribute('open');
       }
-      if (!dialog.open) {
-        dialog.showModal();
-      }
-      const firstField = dialog.querySelector('input, textarea');
-      if (firstField instanceof HTMLElement) {
-        firstField.focus();
-      }
+      openDialog(dialog);
     });
   });
 
   dialog.querySelectorAll('[data-wiki-theme-close]').forEach((button) => {
-    button.addEventListener('click', closeDialog);
+    button.addEventListener('click', () => closeDialog(dialog));
   });
 
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) {
-      closeDialog();
+      closeDialog(dialog);
     }
   });
 
@@ -74,6 +117,6 @@
     ].filter(Boolean).join('\n');
 
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    closeDialog();
+    closeDialog(dialog);
   });
 })();

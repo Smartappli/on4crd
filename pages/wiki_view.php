@@ -290,7 +290,9 @@ ob_start();
                 <form method="post" class="wiki-page-delete-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_page">
-                    <p class="help"><?= e($wikiViewText('delete_page_warning', 'La suppression de cette page sera definitive apres validation.', 'Deleting this page is permanent after validation.')) ?></p>
+                    <p class="help"><?= e($canModerateWiki
+                        ? $wikiViewText('delete_page_warning_admin', 'La suppression de cette page est definitive.', 'Deleting this page is permanent.')
+                        : $wikiViewText('delete_page_warning', 'La suppression de cette page sera appliquee apres validation.', 'Deleting this page will be applied after review.')) ?></p>
                     <button class="button secondary wiki-page-danger" type="submit"><?= e($wikiViewText('delete_page', 'Supprimer la page', 'Delete page')) ?></button>
                 </form>
             </div>
