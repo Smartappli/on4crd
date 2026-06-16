@@ -78,6 +78,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
+        self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId])", $library);
+        self::assertStringContainsString('class="members-library-pdf-preview"', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('member_library_sync_accepted_proposals($memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);
@@ -104,6 +106,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_library_default_categories()', $contentHelpers);
         self::assertStringContainsString("content_proposal_accepted_categories('members_library'", $contentHelpers);
         self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library'", $routeHelperLoader);
+        self::assertStringContainsString("'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'fichiers', 'members_library', 'admin_articles'", $routeHelperLoader);
         self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
     }
