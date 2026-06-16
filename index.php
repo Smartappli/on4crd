@@ -199,6 +199,7 @@ $routeModules = [
     'change_password' => 'members',
     'my_requests' => 'members',
     'members_library' => 'members',
+    'member_library_preview' => 'members',
     'webotheque' => 'webotheque',
     'presentations' => 'presentations',
     'videos' => 'videos',
@@ -364,6 +365,7 @@ switch ($route) {
     case 'qsl_export': $dispatchPage('pages/qsl_export.php'); break;
     case 'chatbot': $dispatchPage('pages/chatbot.php'); break;
     case 'members_library': $dispatchPage('pages/members_library.php'); break;
+    case 'member_library_preview': $dispatchPage('pages/member_library_preview.php'); break;
     case 'webotheque': $dispatchPage('pages/webotheque.php'); break;
     case 'presentations': $dispatchPage('pages/presentations.php'); break;
     case 'videos': $dispatchPage('pages/videos.php'); break;
