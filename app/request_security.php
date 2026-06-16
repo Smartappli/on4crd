@@ -111,6 +111,25 @@ function matomo_origin(): ?string
     return $origin;
 }
 
+function security_header_current_route(): string
+{
+    $route = trim((string) ($_GET['route'] ?? ''));
+    if ($route === '') {
+        $requestPath = parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH);
+        $path = is_string($requestPath) ? trim($requestPath, '/') : '';
+        if ($path !== '' && $path !== 'index.php') {
+            $route = strtolower(pathinfo($path, PATHINFO_FILENAME));
+        }
+    }
+
+    $normalizedRoute = ltrim($route, '/');
+    if (str_ends_with($normalizedRoute, '.php')) {
+        return strtolower(pathinfo($normalizedRoute, PATHINFO_FILENAME));
+    }
+
+    return $route;
+}
+
 function apply_security_headers(): void
 {
     if (headers_sent()) {
@@ -123,6 +142,13 @@ function apply_security_headers(): void
     $styleSrc = ["'self'", "'unsafe-inline'"];
     $connectSrc = ["'self'"];
     $frameSrc = ["'self'", 'https://www.google.com', 'https://maps.google.com'];
+    $frameAncestors = "'none'";
+    $xFrameOptions = 'DENY';
+
+    if (in_array(security_header_current_route(), ['member_library_preview'], true)) {
+        $frameAncestors = "'self'";
+        $xFrameOptions = 'SAMEORIGIN';
+    }
 
     $matomoOrigin = matomo_origin();
     if ($matomoOrigin !== null) {
@@ -135,7 +161,7 @@ function apply_security_headers(): void
         "default-src 'self'",
         "base-uri 'self'",
         "form-action 'self'",
-        "frame-ancestors 'none'",
+        'frame-ancestors ' . $frameAncestors,
         "object-src 'none'",
         "manifest-src 'self'",
         "worker-src 'self'",
@@ -155,7 +181,7 @@ function apply_security_headers(): void
     header('Content-Security-Policy: ' . implode('; ', $csp));
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('X-Content-Type-Options: nosniff');
-    header('X-Frame-Options: DENY');
+    header('X-Frame-Options: ' . $xFrameOptions);
     header('Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=(), usb=()');
     header('Cross-Origin-Opener-Policy: same-origin');
     header('Cross-Origin-Resource-Policy: same-origin');

@@ -22,7 +22,7 @@ function app_load_route_helpers(string $route): void
         'member_preferences.php' => ['dashboard', 'settings'],
         'member_recommendations.php' => ['settings'],
         'notifications.php' => ['dashboard', 'notifications', 'articles', 'article', 'albums', 'album', 'classifieds', 'members_library', 'admin_articles', 'admin_albums', 'admin_classifieds', 'admin_library', 'admin_news'],
-        'article_import_helpers.php' => ['presentations', 'videos', 'pv', 'fichiers', 'members_library', 'admin_articles', 'admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_fichiers'],
+        'article_import_helpers.php' => ['presentations', 'videos', 'pv', 'fichiers', 'members_library', 'member_library_preview', 'admin_articles', 'admin_library', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_fichiers'],
         'article_helpers.php' => ['home', 'dashboard', 'search', 'chatbot', 'articles', 'article', 'article_propose', 'admin_articles', 'admin_translation_reviews', 'llms.txt', 'ai-index.json'],
         'ads_helpers.php' => ['ads', 'admin_ads', 'ad_click'],
         'committee_helpers.php' => ['committee', 'admin_editorial'],
