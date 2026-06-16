@@ -222,8 +222,16 @@ if (ensure_content_proposals_table()) {
             $area = (string) ($proposal['area'] ?? '');
             $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
             $proposalStatus = (string) ($proposal['status'] ?? 'pending');
+            $proposalTitle = trim((string) ($proposal['title'] ?? $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal')));
+            if ($proposalTitle === '') {
+                $proposalTitle = $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal');
+            }
             $updatedAt = (string) ($proposal['updated_at'] ?? $proposal['created_at'] ?? 'now');
             $route = (string) ($proposalAreaRoutes[$area] ?? 'my_requests');
+            $proposalUrl = route_url($route);
+            if ($area === 'members_library' && $proposalType === 'content' && $proposalStatus === 'accepted') {
+                $proposalUrl = route_url_clean('members_library', ['q' => $proposalTitle]);
+            }
             $noteParts = [];
             if (trim((string) ($proposal['summary'] ?? '')) !== '') {
                 $noteParts[] = trim((string) $proposal['summary']);
@@ -234,11 +242,11 @@ if (ensure_content_proposals_table()) {
             $cards[] = [
                 'timestamp' => $timestampFor($updatedAt),
                 'status' => (string) ($statusLabels[$proposalStatus] ?? $proposalStatus),
-                'title' => (string) ($proposalTypeLabels[$proposalType] ?? $proposalType) . ': ' . (string) ($proposal['title'] ?? $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal')),
+                'title' => (string) ($proposalTypeLabels[$proposalType] ?? $proposalType) . ': ' . $proposalTitle,
                 'meta' => (string) ($proposalAreaLabels[$area] ?? $area),
                 'date' => $formatRequestDate($updatedAt),
                 'note' => implode("\n", $noteParts),
-                'url' => route_url($route),
+                'url' => $proposalUrl,
                 'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
             ];
         }
