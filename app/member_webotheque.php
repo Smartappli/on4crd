@@ -589,9 +589,14 @@ function webotheque_fetch_links(string $search, string $category = '', int $limi
 }
 
 if (!function_exists('render_webotheque_cards')) {
-function render_webotheque_cards(array $links, array $t, array $categories = []): string
+function render_webotheque_cards(array $links, array $t, array $categories = [], ?array $viewer = null, bool $canManage = false, array $returnQuery = []): string
 {
     $html = '';
+    $text = static fn(string $key, string $fallback): string => (string) ($t[$key] ?? $fallback);
+    $viewerId = max(0, (int) ($viewer['id'] ?? 0));
+    $returnCategory = (string) ($returnQuery['category'] ?? '');
+    $returnSearch = (string) ($returnQuery['q'] ?? '');
+
     foreach ($links as $link) {
         $title = trim((string) ($link['title'] ?? ''));
         $url = trim((string) ($link['url'] ?? ''));
@@ -600,9 +605,13 @@ function render_webotheque_cards(array $links, array $t, array $categories = [])
         }
         $description = trim((string) ($link['description'] ?? ''));
         $tags = trim((string) ($link['tags'] ?? ''));
+        $linkId = max(0, (int) ($link['id'] ?? 0));
         $category = webotheque_category_code((string) ($link['category'] ?? 'general'));
         $categoryLabel = (string) ($categories[$category] ?? webotheque_category_label_from_code($category));
         $domain = webotheque_domain_from_url($url);
+        $canEditLink = $linkId > 0 && ($canManage || ($viewerId > 0 && (int) ($link['member_id'] ?? 0) === $viewerId));
+        $dialogId = 'webotheque-edit-dialog-' . $linkId;
+
         $html .= '<article class="news-card feature-card webotheque-card">'
             . '<span class="badge muted">' . e($domain !== '' ? $domain : (string) $t['link']) . '</span>'
             . '<h2>' . e($title) . '</h2>';
@@ -613,8 +622,49 @@ function render_webotheque_cards(array $links, array $t, array $categories = [])
         if ($tags !== '') {
             $html .= '<p class="help">' . e((string) $t['tags']) . ': ' . e($tags) . '</p>';
         }
-        $html .= '<p class="actions"><a class="button secondary" href="' . e($url) . '" target="_blank" rel="noopener noreferrer">' . e((string) $t['open']) . '</a></p>'
-            . '</article>';
+        $html .= '<p class="actions webotheque-link-actions">'
+            . '<a class="button secondary" href="' . e($url) . '" target="_blank" rel="noopener noreferrer">' . e((string) $t['open']) . '</a>';
+        if ($canEditLink) {
+            $html .= '<button class="button secondary" type="button" data-webotheque-modal-open="' . e($dialogId) . '" aria-haspopup="dialog" aria-controls="' . e($dialogId) . '">' . e($text('edit_link', 'Modifier / Supprimer')) . '</button>';
+        }
+        $html .= '</p></article>';
+
+        if ($canEditLink) {
+            $html .= '<dialog class="webotheque-proposal-dialog" id="' . e($dialogId) . '" aria-labelledby="' . e($dialogId) . '-title">'
+                . '<div class="webotheque-proposal-dialog-card">'
+                . '<div class="webotheque-proposal-dialog-header module-dialog-header">'
+                . '<div><p class="eyebrow">' . e((string) ($t['link'] ?? 'Link')) . '</p>'
+                . '<h2 id="' . e($dialogId) . '-title">' . e($text('edit_link_title', 'Modifier le lien')) . '</h2>'
+                . '<p class="help">' . e($title) . '</p></div>'
+                . '<button class="webotheque-proposal-dialog-close module-dialog-close" type="button" data-webotheque-modal-close aria-label="' . e($text('cancel', 'Annuler')) . '">&times;</button>'
+                . '</div>'
+                . '<form method="post" class="webotheque-proposal-form module-dialog-form">'
+                . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+                . '<input type="hidden" name="action" value="update_link">'
+                . '<input type="hidden" name="id" value="' . $linkId . '">'
+                . '<input type="hidden" name="return_category" value="' . e($returnCategory) . '">'
+                . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
+                . render_webotheque_link_fields($t, $categories, null, [
+                    'title' => $title,
+                    'url' => $url,
+                    'category' => $category,
+                    'description' => $description,
+                    'tags' => $tags,
+                ])
+                . '<p class="webotheque-proposal-dialog-actions module-dialog-actions">'
+                . '<button class="button" type="submit">' . e($text('save', 'Enregistrer')) . '</button>'
+                . '<button class="button secondary" type="button" data-webotheque-modal-close>' . e($text('cancel', 'Annuler')) . '</button>'
+                . '</p></form>'
+                . '<form method="post" class="webotheque-delete-form">'
+                . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+                . '<input type="hidden" name="action" value="delete_link">'
+                . '<input type="hidden" name="id" value="' . $linkId . '">'
+                . '<input type="hidden" name="return_category" value="' . e($returnCategory) . '">'
+                . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
+                . '<p class="help">' . e($text('delete_link_warning', 'La suppression du lien est definitive.')) . '</p>'
+                . '<button class="button secondary webotheque-danger" type="submit">' . e($text('delete_link', $text('delete', 'Supprimer le lien'))) . '</button>'
+                . '</form></div></dialog>';
+        }
     }
 
     return $html;
@@ -626,19 +676,26 @@ if (!function_exists('render_webotheque_link_fields')) {
  * @param array<string, string> $t
  * @param array<string, string> $categories
  */
-function render_webotheque_link_fields(array $t, array $categories, ?string $proposalContact = null): string
+function render_webotheque_link_fields(array $t, array $categories, ?string $proposalContact = null, array $values = []): string
 {
-    $html = '<label><span>' . e((string) $t['title_field']) . '</span><input type="text" name="title" maxlength="190" required></label>'
-        . '<label><span>' . e((string) $t['url_field']) . '</span><input type="url" name="url" maxlength="500" placeholder="https://example.org" required></label>'
+    $title = (string) ($values['title'] ?? '');
+    $url = (string) ($values['url'] ?? '');
+    $selectedCategory = webotheque_category_code((string) ($values['category'] ?? 'general'));
+    $description = (string) ($values['description'] ?? '');
+    $tags = (string) ($values['tags'] ?? '');
+
+    $html = '<label><span>' . e((string) $t['title_field']) . '</span><input type="text" name="title" value="' . e($title) . '" maxlength="190" required></label>'
+        . '<label><span>' . e((string) $t['url_field']) . '</span><input type="url" name="url" value="' . e($url) . '" maxlength="500" placeholder="https://example.org" required></label>'
         . '<label><span>' . e((string) ($t['domain_field'] ?? $t['category_field'])) . '</span><select name="category">';
 
     foreach ($categories as $code => $label) {
-        $html .= '<option value="' . e((string) $code) . '">' . e((string) $label) . '</option>';
+        $code = (string) $code;
+        $html .= '<option value="' . e($code) . '"' . ($selectedCategory === $code ? ' selected' : '') . '>' . e((string) $label) . '</option>';
     }
 
     $html .= '</select></label>'
-        . '<label><span>' . e((string) $t['description_field']) . '</span><textarea name="description" rows="4"></textarea></label>'
-        . '<label><span>' . e((string) $t['tags_field']) . '</span><input type="text" name="tags" maxlength="255"></label>';
+        . '<label><span>' . e((string) $t['description_field']) . '</span><textarea name="description" rows="4">' . e($description) . '</textarea></label>'
+        . '<label><span>' . e((string) $t['tags_field']) . '</span><input type="text" name="tags" value="' . e($tags) . '" maxlength="255"></label>';
 
     if ($proposalContact !== null) {
         $html .= '<label><span>' . e((string) $t['contact_field']) . '</span><input type="email" name="proposal_contact" maxlength="220" value="' . e($proposalContact) . '"></label>';
