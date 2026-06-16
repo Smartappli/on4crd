@@ -4,6 +4,31 @@ declare(strict_types=1);
 require_permission('admin.access');
 $locale = current_locale();
 $t = admin_dashboard_translations($locale);
+$adminText = static function (string $fr, string $en = '') use ($locale): string {
+    return $locale === 'fr' || $en === '' ? $fr : $en;
+};
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        verify_csrf();
+        $action = (string) ($_POST['action'] ?? '');
+        if ($action === 'update_content_proposal_status') {
+            admin_update_content_proposal_status(
+                (int) ($_POST['proposal_id'] ?? 0),
+                (string) ($_POST['proposal_status'] ?? 'pending'),
+                trim((string) ($_POST['moderation_note'] ?? '')),
+                $locale
+            );
+            set_flash('success', $adminText('Proposition mise a jour.', 'Proposal updated.'));
+            redirect_url(route_url('admin') . '#pending-proposals');
+        }
+        throw new RuntimeException($adminText('Action invalide.', 'Invalid action.'));
+    } catch (Throwable $throwable) {
+        set_flash('error', $throwable->getMessage());
+        redirect_url(route_url('admin') . '#pending-proposals');
+    }
+}
+
 $adminCardIcons = [
     'admin_modules' => '🧩',
     'admin_permissions' => '🔐',
@@ -28,6 +53,8 @@ $adminCardIcons = [
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $userId = (int) (current_user()['id'] ?? 0);
 $cards = admin_dashboard_cards($locale, $userId, $adminSearch);
+$pendingProposals = admin_pending_content_proposals_for_dashboard($locale);
+$proposalStatusLabels = admin_pending_content_proposal_status_labels($locale);
 
 ob_start();
 ?>
@@ -35,7 +62,78 @@ ob_start();
     <style>
         .admin-open-cta{display:inline-flex;align-items:center;justify-content:center;padding:.35rem .7rem;border-radius:999px;border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;font-size:.8rem;font-weight:600;transition:all .15s ease}
         .admin-link:hover .admin-open-cta{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
+        .admin-pending-badge{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .55rem;border-radius:999px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:.78rem;font-weight:700}
+        .admin-pending-list{display:grid;gap:.75rem}
+        .admin-pending-item{padding:1rem;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
     </style>
+    <?php if ($pendingProposals !== []): ?>
+        <section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
+            <div class="row-between">
+                <div>
+                    <h2 id="pending-proposals-title"><?= e($adminText('Contenus en attente', 'Pending content')) ?></h2>
+                    <p class="help"><?= e($adminText('Propositions envoyees depuis les modules publics et visibles pour les administrateurs concernes.', 'Proposals submitted from public modules and visible to matching administrators.')) ?></p>
+                </div>
+                <span class="admin-pending-badge"><?= count($pendingProposals) ?> <?= e($adminText('en attente', 'pending')) ?></span>
+            </div>
+            <div class="admin-pending-list">
+                <?php foreach ($pendingProposals as $proposal): ?>
+                    <?php
+                    $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
+                    $memberLabel = trim((string) ($proposal['callsign'] ?? ''));
+                    if ($memberLabel === '') {
+                        $memberLabel = trim((string) ($proposal['email'] ?? ''));
+                    }
+                    if ($memberLabel === '') {
+                        $memberLabel = '#' . (int) ($proposal['member_id'] ?? 0);
+                    }
+                    $createdTimestamp = strtotime((string) ($proposal['created_at'] ?? 'now'));
+                    if ($createdTimestamp === false) {
+                        $createdTimestamp = time();
+                    }
+                    ?>
+                    <article class="admin-pending-item">
+                        <p>
+                            <span class="badge muted"><?= e((string) ($proposal['area_label'] ?? $proposal['area'] ?? '')) ?></span>
+                            <span class="badge muted"><?= e($proposalType) ?></span>
+                            <span class="badge muted"><?= e(date('d/m/Y H:i', $createdTimestamp)) ?></span>
+                        </p>
+                        <h3><?= e((string) ($proposal['title'] ?? $adminText('Proposition', 'Proposal'))) ?></h3>
+                        <p class="help"><?= e($adminText('Propose par', 'Proposed by')) ?>: <?= e($memberLabel) ?></p>
+                        <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
+                            <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
+                        <?php endif; ?>
+                        <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
+                            <p class="help"><?= e($adminText('Contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                        <?php endif; ?>
+                        <?php if (trim((string) ($proposal['source_ref'] ?? '')) !== ''): ?>
+                            <p class="help"><?= e($adminText('Source', 'Source')) ?>: <?= e((string) $proposal['source_ref']) ?></p>
+                        <?php endif; ?>
+                        <form method="post" class="stack">
+                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="action" value="update_content_proposal_status">
+                            <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
+                            <div class="grid-2">
+                                <label><?= e($adminText('Statut', 'Status')) ?>
+                                    <select name="proposal_status">
+                                        <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
+                                            <option value="<?= e($statusCode) ?>"><?= e($statusLabel) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </label>
+                                <label><?= e($adminText('Note de moderation', 'Moderation note')) ?>
+                                    <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
+                                </label>
+                            </div>
+                            <div class="actions">
+                                <a class="button secondary small" href="<?= e((string) ($proposal['area_url'] ?? route_url('admin'))) ?>"><?= e($adminText('Ouvrir le module', 'Open module')) ?></a>
+                                <button class="button small" type="submit"><?= e($adminText('Enregistrer', 'Save')) ?></button>
+                            </div>
+                        </form>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+    <?php endif; ?>
     <?php if ($cards === []): ?>
         <section class="card empty-state"><p><?= e((string) $t['empty']) ?></p></section>
     <?php else: ?>
