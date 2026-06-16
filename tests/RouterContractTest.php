@@ -740,6 +740,8 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("'albums' => 'albums'", $requests);
         self::assertStringContainsString("'auctions' => 'auctions'", $requests);
         self::assertStringContainsString("'webotheque' => 'webotheque'", $requests);
+        self::assertStringContainsString("\$area === 'members_library' && \$proposalType === 'content' && \$proposalStatus === 'accepted'", $requests);
+        self::assertStringContainsString("route_url_clean('members_library', ['q' => \$proposalTitle])", $requests);
     }
 
     public function testRequestedModulesAutoValidateForAdministratorsAndKeepMemberQueue(): void
