@@ -4,7 +4,7 @@ declare(strict_types=1);
 return array (
   'title' => 'Member library',
   'intro' => 'Browse shared documents by category, search their extracted content, and open the original files.',
-  'open' => 'Open document',
+  'open' => 'Download document',
   'empty' => 'No document found.',
   'storage_unavailable' => 'The library is temporarily unavailable.',
   'meta_desc' => 'Private ON4CRD member library.',
