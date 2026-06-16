@@ -121,10 +121,23 @@ function member_document_labels(string $locale): array
             'confirm_delete' => 'Supprimer ce contenu ?',
             'ok_added' => 'Contenu ajoute.',
             'ok_deleted' => 'Contenu supprime.',
+            'ok_updated' => 'Contenu mis a jour.',
             'err_required' => 'Titre et fichier requis.',
             'err_invalid' => 'Type de fichier non autorise.',
             'admin_title_prefix' => 'Administration',
             'content_list' => 'Contenus',
+            'edit_document' => 'Modifier / Supprimer',
+            'edit_document_title' => 'Modifier le contenu',
+            'save_document' => 'Enregistrer',
+            'replace_document_file' => 'Remplacer le fichier',
+            'delete_document_warning' => 'La suppression de ce contenu est definitive apres validation.',
+            'delete_document_warning_admin' => 'La suppression de ce contenu est definitive.',
+            'document_change_recorded' => 'Modification enregistree dans vos contenus en attente de validation.',
+            'document_change_subject' => 'Modification de contenu a valider',
+            'document_forbidden' => 'Vous ne pouvez pas modifier ce contenu.',
+            'document_missing' => 'Contenu introuvable.',
+            'cancel' => 'Annuler',
+            'modal_close' => 'Fermer',
         ],
         'en' => [
             'members_area' => 'Member Area',
@@ -154,10 +167,23 @@ function member_document_labels(string $locale): array
             'confirm_delete' => 'Delete this content?',
             'ok_added' => 'Content added.',
             'ok_deleted' => 'Content deleted.',
+            'ok_updated' => 'Content updated.',
             'err_required' => 'Title and file are required.',
             'err_invalid' => 'File type is not allowed.',
             'admin_title_prefix' => 'Administration',
             'content_list' => 'Content',
+            'edit_document' => 'Edit / Delete',
+            'edit_document_title' => 'Edit content',
+            'save_document' => 'Save',
+            'replace_document_file' => 'Replace file',
+            'delete_document_warning' => 'Deleting this content is permanent after review.',
+            'delete_document_warning_admin' => 'Deleting this content is permanent.',
+            'document_change_recorded' => 'Change saved in your content pending review.',
+            'document_change_subject' => 'Content change pending review',
+            'document_forbidden' => 'You cannot edit this content.',
+            'document_missing' => 'Content not found.',
+            'cancel' => 'Cancel',
+            'modal_close' => 'Close',
         ],
     ];
 
@@ -359,6 +385,13 @@ function member_document_safe_path(string $path): ?string
 }
 }
 
+if (!function_exists('member_document_module_allows_member_management')) {
+function member_document_module_allows_member_management(string $moduleCode): bool
+{
+    return in_array(member_document_module_normalize($moduleCode), ['presentations', 'videos'], true);
+}
+}
+
 if (!function_exists('member_document_store_upload')) {
 function member_document_store_upload(array $file, string $moduleCode, int $memberId): array
 {
@@ -411,6 +444,161 @@ function member_document_store_upload(array $file, string $moduleCode, int $memb
         'absolute_path' => $targetDir . '/' . $filename,
         'extension' => $extension,
     ];
+}
+}
+
+if (!function_exists('member_document_delete_file')) {
+function member_document_delete_file(string $publicPath): void
+{
+    $safePath = member_document_safe_path($publicPath);
+    if ($safePath === null || !str_starts_with($safePath, 'storage/uploads/member_modules/')) {
+        return;
+    }
+
+    $absolute = dirname(__DIR__) . '/' . $safePath;
+    if (is_file($absolute)) {
+        @unlink($absolute);
+    }
+}
+}
+
+if (!function_exists('member_document_proposal_action')) {
+function member_document_proposal_action(string $summary): string
+{
+    $action = content_proposal_clean_single_line(
+        content_proposal_detail_from_summary($summary, ['Action']),
+        32
+    );
+
+    return in_array($action, ['update_document', 'delete_document'], true) ? $action : '';
+}
+}
+
+if (!function_exists('member_document_proposal_document_id')) {
+function member_document_proposal_document_id(string $summary): int
+{
+    return max(0, (int) content_proposal_detail_from_summary($summary, ['Document ID']));
+}
+}
+
+if (!function_exists('member_document_proposal_detail')) {
+function member_document_proposal_detail(string $summary, array $labels): string
+{
+    return content_proposal_detail_from_summary($summary, $labels);
+}
+}
+
+if (!function_exists('member_document_update_record')) {
+function member_document_update_record(
+    int $documentId,
+    string $moduleCode,
+    string $title,
+    string $description,
+    string $tags,
+    string $replacementPublicPath = ''
+): void {
+    if (!ensure_member_module_documents_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $moduleCode = member_document_module_normalize($moduleCode);
+    $title = content_proposal_clean_single_line($title, 255);
+    $description = content_proposal_clean_multiline($description, 5000);
+    $tags = content_proposal_clean_single_line($tags, 255);
+    if ($documentId <= 0 || $moduleCode === '' || $title === '') {
+        throw new RuntimeException('err_required');
+    }
+
+    $stmt = db()->prepare('SELECT file_path FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
+    $stmt->execute([$documentId, $moduleCode]);
+    $currentPath = (string) ($stmt->fetchColumn() ?: '');
+    if ($currentPath === '') {
+        throw new RuntimeException('err_invalid');
+    }
+
+    $replacementSafePath = '';
+    if ($replacementPublicPath !== '') {
+        $replacementSafePath = member_document_safe_path($replacementPublicPath) ?? '';
+        if ($replacementSafePath === '') {
+            throw new RuntimeException('err_invalid');
+        }
+        $absolute = dirname(__DIR__) . '/' . $replacementSafePath;
+        if (!is_file($absolute)) {
+            throw new RuntimeException('err_invalid');
+        }
+    }
+
+    if ($replacementSafePath !== '') {
+        $extension = strtolower(pathinfo($replacementSafePath, PATHINFO_EXTENSION));
+        $extractedText = member_document_extract_text(dirname(__DIR__) . '/' . $replacementSafePath, $extension);
+        db()->prepare('UPDATE member_module_documents SET title = ?, description = ?, tags = ?, file_path = ?, extracted_text = ? WHERE id = ? AND module_code = ?')
+            ->execute([$title, $description !== '' ? $description : null, $tags, $replacementSafePath, $extractedText !== '' ? $extractedText : null, $documentId, $moduleCode]);
+        if ($currentPath !== $replacementSafePath) {
+            member_document_delete_file($currentPath);
+        }
+        return;
+    }
+
+    db()->prepare('UPDATE member_module_documents SET title = ?, description = ?, tags = ? WHERE id = ? AND module_code = ?')
+        ->execute([$title, $description !== '' ? $description : null, $tags, $documentId, $moduleCode]);
+}
+}
+
+if (!function_exists('member_document_delete_record')) {
+function member_document_delete_record(int $documentId, string $moduleCode): void
+{
+    if (!ensure_member_module_documents_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if ($documentId <= 0 || $moduleCode === '') {
+        throw new RuntimeException('err_required');
+    }
+
+    $stmt = db()->prepare('SELECT file_path FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
+    $stmt->execute([$documentId, $moduleCode]);
+    $path = (string) ($stmt->fetchColumn() ?: '');
+    if ($path === '') {
+        throw new RuntimeException('err_invalid');
+    }
+
+    member_document_delete_file($path);
+    db()->prepare('DELETE FROM member_module_documents WHERE id = ? AND module_code = ?')->execute([$documentId, $moduleCode]);
+}
+}
+
+if (!function_exists('member_document_apply_accepted_proposal')) {
+function member_document_apply_accepted_proposal(array $proposal, string $moduleCode): ?int
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if ((string) ($proposal['proposal_type'] ?? '') !== 'content' || !member_document_module_allows_member_management($moduleCode)) {
+        return null;
+    }
+
+    $summary = (string) ($proposal['summary'] ?? '');
+    $action = member_document_proposal_action($summary);
+    if ($action === '') {
+        return null;
+    }
+
+    $documentId = member_document_proposal_document_id($summary);
+    if ($action === 'delete_document') {
+        member_document_delete_record($documentId, $moduleCode);
+
+        return $documentId;
+    }
+
+    member_document_update_record(
+        $documentId,
+        $moduleCode,
+        (string) ($proposal['title'] ?? ''),
+        member_document_proposal_detail($summary, ['Description']),
+        member_document_proposal_detail($summary, ['Tags', 'Etiquettes']),
+        (string) ($proposal['source_ref'] ?? '')
+    );
+
+    return $documentId;
 }
 }
 
@@ -482,9 +670,13 @@ function member_document_fetch_documents(string $moduleCode, string $search, int
 }
 
 if (!function_exists('render_member_document_module_cards')) {
-function render_member_document_module_cards(array $documents, array $labels): string
+function render_member_document_module_cards(array $documents, array $labels, string $moduleCode = '', ?array $viewer = null, bool $canManage = false, array $returnQuery = []): string
 {
     $html = '';
+    $moduleCode = member_document_module_normalize($moduleCode);
+    $viewerId = max(0, (int) ($viewer['id'] ?? 0));
+    $returnSearch = (string) ($returnQuery['q'] ?? '');
+    $allowMemberManagement = member_document_module_allows_member_management($moduleCode);
     foreach ($documents as $document) {
         $safePath = member_document_safe_path((string) ($document['file_path'] ?? ''));
         if ($safePath === null) {
@@ -498,6 +690,9 @@ function render_member_document_module_cards(array $documents, array $labels): s
         $docDescription = trim((string) ($document['description'] ?? ''));
         $docTags = trim((string) ($document['tags'] ?? ''));
         $docExtract = trim((string) ($document['extracted_text'] ?? ''));
+        $documentId = max(0, (int) ($document['id'] ?? 0));
+        $canEditDocument = $allowMemberManagement && $documentId > 0 && ($canManage || ($viewerId > 0 && (int) ($document['member_id'] ?? 0) === $viewerId));
+        $dialogId = 'member-document-edit-dialog-' . $documentId;
         $html .= '<article class="news-card feature-card member-document-card">'
             . '<span class="badge muted">' . e(strtoupper($extension)) . '</span>'
             . '<h2>' . e($docTitle) . '</h2>';
@@ -514,8 +709,44 @@ function render_member_document_module_cards(array $documents, array $labels): s
             $html .= '<details class="member-document-preview-toggle"><summary>' . e((string) $labels['preview']) . '</summary>'
                 . '<iframe src="' . e(base_url($safePath)) . '" class="member-document-pdf-preview" loading="lazy"></iframe></details>';
         }
-        $html .= '<p class="actions"><a class="button secondary" href="' . e(base_url($safePath)) . '" target="_blank" rel="noopener">' . e((string) $labels['open']) . '</a></p>'
-            . '</article>';
+        $html .= '<p class="actions member-document-card-actions">'
+            . '<a class="button secondary" href="' . e(base_url($safePath)) . '" target="_blank" rel="noopener">' . e((string) $labels['open']) . '</a>';
+        if ($canEditDocument) {
+            $html .= '<button class="button secondary" type="button" data-member-document-modal-open="' . e($dialogId) . '" aria-haspopup="dialog" aria-controls="' . e($dialogId) . '">' . e((string) $labels['edit_document']) . '</button>';
+        }
+        $html .= '</p></article>';
+
+        if ($canEditDocument) {
+            $html .= '<dialog class="member-document-dialog" id="' . e($dialogId) . '" aria-labelledby="' . e($dialogId) . '-title">'
+                . '<div class="member-document-dialog-card">'
+                . '<div class="member-document-dialog-header module-dialog-header">'
+                . '<div><p class="module-dialog-eyebrow">' . e((string) $labels['documents']) . '</p>'
+                . '<h2 id="' . e($dialogId) . '-title">' . e((string) $labels['edit_document_title']) . '</h2>'
+                . '<p class="help">' . e($docTitle) . '</p></div>'
+                . '<button class="member-document-dialog-close module-dialog-close" type="button" data-member-document-modal-close aria-label="' . e((string) $labels['modal_close']) . '">&times;</button>'
+                . '</div>'
+                . '<form method="post" enctype="multipart/form-data" class="member-document-dialog-form module-dialog-form">'
+                . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+                . '<input type="hidden" name="action" value="update_document">'
+                . '<input type="hidden" name="id" value="' . $documentId . '">'
+                . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
+                . '<label><span>' . e((string) $labels['title_field']) . '</span><input type="text" name="title" value="' . e($docTitle) . '" maxlength="255" required></label>'
+                . '<label><span>' . e((string) $labels['description_field']) . '</span><textarea name="description" rows="5" maxlength="5000">' . e($docDescription) . '</textarea></label>'
+                . '<label><span>' . e((string) $labels['tags_field']) . '</span><input type="text" name="tags" value="' . e($docTags) . '" maxlength="255"></label>'
+                . '<label><span>' . e((string) $labels['replace_document_file']) . '</span><input type="file" name="document_file"></label>'
+                . '<p class="member-document-dialog-actions module-dialog-actions">'
+                . '<button class="button" type="submit">' . e((string) $labels['save_document']) . '</button>'
+                . '<button class="button secondary" type="button" data-member-document-modal-close>' . e((string) $labels['cancel']) . '</button>'
+                . '</p></form>'
+                . '<form method="post" class="member-document-delete-form">'
+                . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+                . '<input type="hidden" name="action" value="delete_document">'
+                . '<input type="hidden" name="id" value="' . $documentId . '">'
+                . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
+                . '<p class="help">' . e($canManage ? (string) $labels['delete_document_warning_admin'] : (string) $labels['delete_document_warning']) . '</p>'
+                . '<button class="button secondary member-document-danger" type="submit">' . e((string) $labels['delete']) . '</button>'
+                . '</form></div></dialog>';
+        }
     }
 
     return $html;
