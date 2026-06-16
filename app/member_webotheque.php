@@ -211,6 +211,81 @@ function webotheque_insert_link(
 }
 }
 
+if (!function_exists('webotheque_link_proposal_action')) {
+function webotheque_link_proposal_action(string $summary): string
+{
+    $action = content_proposal_clean_single_line(
+        content_proposal_detail_from_summary($summary, ['Action']),
+        32
+    );
+
+    return in_array($action, ['update_link', 'delete_link'], true) ? $action : '';
+}
+}
+
+if (!function_exists('webotheque_link_proposal_link_id')) {
+function webotheque_link_proposal_link_id(string $summary): int
+{
+    return max(0, (int) content_proposal_detail_from_summary($summary, ['Link ID', 'Lien ID']));
+}
+}
+
+if (!function_exists('webotheque_update_link_record')) {
+function webotheque_update_link_record(
+    int $linkId,
+    string $category,
+    string $title,
+    string $url,
+    string $description = '',
+    string $tags = ''
+): void {
+    if (!ensure_webotheque_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $linkId = max(0, $linkId);
+    $title = content_proposal_clean_single_line($title, 190);
+    $url = webotheque_normalize_url($url);
+    $description = content_proposal_clean_multiline($description, 5000);
+    $tags = content_proposal_clean_single_line($tags, 255);
+    $category = webotheque_category_code($category);
+    if ($linkId <= 0 || $title === '' || $url === '' || $category === '') {
+        throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
+    }
+
+    $stmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE id = ? LIMIT 1');
+    $stmt->execute([$linkId]);
+    if ((int) ($stmt->fetchColumn() ?: 0) <= 0) {
+        throw new RuntimeException('err_required');
+    }
+
+    db()->prepare('UPDATE member_webotheque_links SET category = ?, title = ?, url = ?, description = ?, tags = ?, updated_at = NOW() WHERE id = ?')
+        ->execute([$category, $title, $url, $description !== '' ? $description : null, $tags, $linkId]);
+}
+}
+
+if (!function_exists('webotheque_delete_link_record')) {
+function webotheque_delete_link_record(int $linkId): void
+{
+    if (!ensure_webotheque_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $linkId = max(0, $linkId);
+    if ($linkId <= 0) {
+        throw new RuntimeException('err_required');
+    }
+
+    $stmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE id = ? LIMIT 1');
+    $stmt->execute([$linkId]);
+    if ((int) ($stmt->fetchColumn() ?: 0) <= 0) {
+        throw new RuntimeException('err_required');
+    }
+
+    db()->prepare('DELETE FROM member_webotheque_links WHERE id = ? LIMIT 1')->execute([$linkId]);
+}
+}
+
 if (!function_exists('webotheque_link_summary')) {
 /**
  * @param array<string, string> $t
@@ -318,6 +393,38 @@ function webotheque_apply_accepted_proposal(
         return null;
     }
 
+    $summary = (string) ($proposal['summary'] ?? '');
+    $linkAction = webotheque_link_proposal_action($summary);
+    if ($linkAction !== '') {
+        $linkId = webotheque_link_proposal_link_id($summary);
+        if ($linkAction === 'delete_link') {
+            webotheque_delete_link_record($linkId);
+
+            return $linkId;
+        }
+
+        $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
+        if ($sourceUrl === '') {
+            throw new RuntimeException('err_url');
+        }
+        $category = $categoryOverride !== ''
+            ? webotheque_category_from_input($categoryOverride, $categories)
+            : webotheque_proposal_category_from_summary($summary, $categories);
+        $description = webotheque_proposal_detail_from_summary($summary, [(string) ($t['description_field'] ?? 'Description'), 'Description']);
+        $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Etiquettes']);
+
+        webotheque_update_link_record(
+            $linkId,
+            $category,
+            (string) ($proposal['title'] ?? ''),
+            $sourceUrl,
+            $description,
+            $tags
+        );
+
+        return $linkId;
+    }
+
     $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
     if ($sourceUrl === '') {
         throw new RuntimeException('err_url');
@@ -326,7 +433,6 @@ function webotheque_apply_accepted_proposal(
         ? webotheque_category_from_input($categoryOverride, $categories)
         : webotheque_proposal_category_from_summary((string) ($proposal['summary'] ?? ''), $categories);
 
-    $summary = (string) ($proposal['summary'] ?? '');
     $description = webotheque_proposal_detail_from_summary($summary, [(string) ($t['description_field'] ?? 'Description'), 'Description']);
     if ($description === '') {
         $description = $summary;
@@ -395,6 +501,11 @@ function webotheque_sync_accepted_proposals(array $categories, array $t = [], in
     foreach ($proposals as $proposal) {
         $result['checked']++;
         try {
+            if (webotheque_link_proposal_action((string) ($proposal['summary'] ?? '')) !== '') {
+                $result['skipped']++;
+                continue;
+            }
+
             $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
             if ($sourceUrl === '') {
                 throw new RuntimeException('err_url');
