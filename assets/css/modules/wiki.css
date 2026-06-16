@@ -222,6 +222,57 @@
   letter-spacing: .04em;
 }
 
+[data-route="wiki_view"] .wiki-page-dialog {
+  width: min(900px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: var(--text);
+}
+
+[data-route="wiki_view"] .wiki-page-dialog::backdrop {
+  background: rgb(15 23 42 / .58);
+  backdrop-filter: blur(3px);
+}
+
+[data-route="wiki_view"] .wiki-page-dialog-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+  box-shadow: 0 24px 70px rgb(15 23 42 / .28);
+}
+
+[data-route="wiki_view"] .wiki-page-dialog-actions {
+  justify-content: flex-start;
+  margin: .25rem 0 0;
+}
+
+[data-route="wiki_view"] .wiki-page-delete-form {
+  display: grid;
+  gap: .55rem;
+  margin-top: .25rem;
+  padding-top: .85rem;
+  border-top: 1px solid var(--border);
+}
+
+[data-route="wiki_view"] .wiki-page-delete-form .help {
+  margin: 0;
+}
+
+[data-route="wiki_view"] .wiki-page-danger {
+  border-color: color-mix(in srgb, #dc2626 55%, var(--border));
+  color: #b91c1c;
+}
+
+[data-theme="dark"] [data-route="wiki_view"] .wiki-page-danger {
+  color: #fca5a5;
+}
+
 [data-route="wiki"] .wiki-search-panel {
   margin-top: 0;
 }
