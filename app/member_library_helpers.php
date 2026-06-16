@@ -80,11 +80,11 @@ function member_library_category_slug(string $value): string
 }
 }
 
-if (!function_exists('member_library_store_proposed_document_upload')) {
+if (!function_exists('member_library_store_document_upload')) {
 /**
  * @return array{public_path:string,absolute_path:string,extension:string,original_name:string}
  */
-function member_library_store_proposed_document_upload(?array $file, int $memberId): array
+function member_library_store_document_upload(?array $file, int $memberId, string $prefix = 'doc'): array
 {
     if (!is_array($file) || (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
         throw new RuntimeException(upload_i18n_message('upload_failed'));
@@ -114,11 +114,15 @@ function member_library_store_proposed_document_upload(?array $file, int $member
     if (strlen($base) > 80) {
         $base = substr($base, 0, 80);
     }
+    $prefix = trim((string) preg_replace('/[^a-z0-9_-]+/i', '_', $prefix), '_');
+    if ($prefix === '') {
+        $prefix = 'doc';
+    }
 
     $filename = secure_move_uploaded_file(
         $file,
         $targetDir,
-        'proposal_doc_' . $memberId . '-' . $base,
+        $prefix . '_' . $memberId . '-' . $base,
         $allowedExtensions,
         $allowedMimes,
         25 * 1024 * 1024
@@ -130,6 +134,35 @@ function member_library_store_proposed_document_upload(?array $file, int $member
         'extension' => $extension,
         'original_name' => $originalName,
     ];
+}
+}
+
+if (!function_exists('member_library_store_proposed_document_upload')) {
+/**
+ * @return array{public_path:string,absolute_path:string,extension:string,original_name:string}
+ */
+function member_library_store_proposed_document_upload(?array $file, int $memberId): array
+{
+    return member_library_store_document_upload($file, $memberId, 'proposal_doc');
+}
+}
+
+if (!function_exists('member_library_delete_document_file')) {
+function member_library_delete_document_file(string $publicPath): void
+{
+    if (!function_exists('safe_storage_public_path_or_null')) {
+        return;
+    }
+
+    $safePath = safe_storage_public_path_or_null($publicPath, ['storage/uploads/library/']);
+    if ($safePath === null) {
+        return;
+    }
+
+    $absolute = dirname(__DIR__) . '/' . $safePath;
+    if (is_file($absolute)) {
+        @unlink($absolute);
+    }
 }
 }
 

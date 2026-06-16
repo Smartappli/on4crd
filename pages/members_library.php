@@ -8,6 +8,20 @@ $memberAreaLabel = member_area_eyebrow_label($locale);
 /** @var array{id:int} $user */
 $user = current_user() ?? ['id' => 0];
 $canManageLibrary = has_permission('admin.access');
+$isFrench = $locale === 'fr';
+$membersLibraryText = static function (string $key, string $fr, string $en) use ($t, $isFrench): string {
+    return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
+};
+$membersLibraryReturnUrl = static function (): string {
+    $page = max(1, (int) ($_POST['return_p'] ?? $_GET['p'] ?? 1));
+
+    return route_url_clean('members_library', [
+        'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+        'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+        'tag' => (string) ($_POST['return_tag'] ?? $_GET['tag'] ?? ''),
+        'p' => $page > 1 ? $page : '',
+    ]);
+};
 set_page_meta(['title' => (string) $t['title'], 'description' => (string) $t['meta_desc'], 'robots' => 'noindex,follow']);
 
 if (!ensure_member_library_table()) {
@@ -38,6 +52,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+        }
+
+        if ($action === 'update_document' || $action === 'delete_document') {
+            $documentId = (int) ($_POST['document_id'] ?? 0);
+            if ($documentId <= 0) {
+                throw new RuntimeException((string) $t['invalid']);
+            }
+
+            $docStmt = db()->prepare('SELECT * FROM member_library_documents WHERE id = ? LIMIT 1');
+            $docStmt->execute([$documentId]);
+            $document = $docStmt->fetch() ?: null;
+            if (!is_array($document)) {
+                throw new RuntimeException($membersLibraryText('document_missing', 'Document introuvable.', 'Document not found.'));
+            }
+            if (!$canManageLibrary && (int) ($document['member_id'] ?? 0) !== (int) ($user['id'] ?? 0)) {
+                throw new RuntimeException($membersLibraryText('document_forbidden', 'Vous ne pouvez pas modifier ce document.', 'You cannot edit this document.'));
+            }
+
+            if ($action === 'delete_document') {
+                member_library_delete_document_file((string) ($document['file_path'] ?? ''));
+                db()->prepare('DELETE FROM member_library_documents WHERE id = ? LIMIT 1')->execute([$documentId]);
+                if (table_exists('member_favorites')) {
+                    db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['library_document', $documentId]);
+                }
+                set_flash('success', $membersLibraryText('document_deleted', 'Document supprimé.', 'Document deleted.'));
+                redirect_url($membersLibraryReturnUrl());
+            }
+
+            $title = content_proposal_clean_single_line((string) ($_POST['document_title'] ?? ''), 190);
+            if ($title === '') {
+                throw new RuntimeException($membersLibraryText('document_title_required', 'Un titre est requis.', 'A title is required.'));
+            }
+            $documentCategory = member_library_category_slug((string) ($_POST['document_category'] ?? 'general'));
+            $documentTags = member_library_clean_tags((string) ($_POST['document_tags'] ?? ''));
+            $description = content_proposal_clean_multiline((string) ($_POST['document_description'] ?? ''), 5000);
+
+            $file = $_FILES['document_file'] ?? null;
+            $hasReplacementFile = is_array($file) && (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE;
+            if ($hasReplacementFile) {
+                $stored = member_library_store_document_upload($file, (int) ($user['id'] ?? 0), 'doc');
+                $extractedText = member_library_extract_text((string) $stored['absolute_path'], (string) $stored['extension']);
+                db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ?, file_path = ?, extracted_text = ? WHERE id = ?')
+                    ->execute([
+                        $documentCategory,
+                        $documentTags,
+                        $title,
+                        $description !== '' ? $description : null,
+                        (string) $stored['public_path'],
+                        $extractedText !== '' ? $extractedText : null,
+                        $documentId,
+                    ]);
+                member_library_delete_document_file((string) ($document['file_path'] ?? ''));
+            } else {
+                db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ? WHERE id = ?')
+                    ->execute([$documentCategory, $documentTags, $title, $description !== '' ? $description : null, $documentId]);
+            }
+
+            if (table_exists('member_favorites')) {
+                $favoriteUrl = route_url_clean('members_library', ['q' => $title, 'category' => $documentCategory, 'tag' => $documentTags]);
+                db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
+                    ->execute([$title, $favoriteUrl, 'library_document', $documentId]);
+            }
+            set_flash('success', $membersLibraryText('document_updated', 'Document mis à jour.', 'Document updated.'));
+            redirect_url($membersLibraryReturnUrl());
         }
 
         if ($action === 'propose_category') {
@@ -142,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         throw new RuntimeException((string) $t['invalid']);
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
-        redirect_url(route_url('members_library'));
+        redirect_url($membersLibraryReturnUrl());
     }
 }
 
@@ -510,6 +588,8 @@ ob_start();
                 <?php $docId = (int) ($document['id'] ?? 0); ?>
                 <?php $relatedDocs = $relatedByDocumentId[$docId] ?? []; ?>
                 <?php $isFavorite = favorite_is_saved((int) $user['id'], 'library_document', (int) ($document['id'] ?? 0)); ?>
+                <?php $canEditDocument = $canManageLibrary || (int) ($document['member_id'] ?? 0) === (int) ($user['id'] ?? 0); ?>
+                <?php $editDialogId = 'members-library-edit-dialog-' . $docId; ?>
                 <article class="news-card feature-card members-library-document-card">
                     <span class="badge muted"><?= e($docCategoryLabel) ?> / <?= e(strtoupper($extension)) ?></span>
                     <h3><?= e($docTitle) ?></h3>
@@ -535,15 +615,75 @@ ob_start();
                             </ul>
                         <?php endif; ?>
                     </details>
-                    <p class="actions">
+                    <div class="actions members-library-document-actions">
+                        <?php if ($canEditDocument): ?>
+                            <button class="button secondary" type="button" data-members-library-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($membersLibraryText('edit_document', 'Modifier', 'Edit')) ?></button>
+                        <?php endif; ?>
                         <form method="post" class="inline-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="toggle_favorite_document">
                             <input type="hidden" name="document_id" value="<?= (int) ($document['id'] ?? 0) ?>">
                             <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; ' . e((string) $t['favorite']) : '&#9734; ' . e((string) $t['favorite']) ?></button>
                         </form>
-                    </p>
+                    </div>
                 </article>
+                <?php if ($canEditDocument): ?>
+                    <dialog class="members-library-dialog" id="<?= e($editDialogId) ?>" aria-labelledby="<?= e($editDialogId) ?>-title">
+                        <div class="members-library-dialog-card">
+                            <div class="members-library-dialog-header module-dialog-header">
+                                <div>
+                                    <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) $t['document']) ?></p>
+                                    <h2 id="<?= e($editDialogId) ?>-title"><?= e($membersLibraryText('edit_document_title', 'Modifier le document', 'Edit document')) ?></h2>
+                                    <p class="help"><?= e($docTitle) ?></p>
+                                </div>
+                                <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
+                            </div>
+                            <form class="members-library-dialog-form module-dialog-form" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                <input type="hidden" name="action" value="update_document">
+                                <input type="hidden" name="document_id" value="<?= $docId ?>">
+                                <input type="hidden" name="return_category" value="<?= e($category) ?>">
+                                <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                <input type="hidden" name="return_tag" value="<?= e($tag) ?>">
+                                <input type="hidden" name="return_p" value="<?= $page ?>">
+                                <label><span><?= e((string) $t['propose_document_title']) ?></span><input type="text" name="document_title" value="<?= e($docTitle) ?>" maxlength="190" required></label>
+                                <label>
+                                    <span><?= e((string) $t['propose_document_category']) ?></span>
+                                    <select name="document_category" required>
+                                        <?php foreach ($categories as $documentCategoryOption): ?>
+                                            <?php
+                                            $documentCategoryCode = trim((string) ($documentCategoryOption['category'] ?? ''));
+                                            if ($documentCategoryCode === '') {
+                                                continue;
+                                            }
+                                            $documentCategoryOptionLabel = trim((string) ($documentCategoryOption['label'] ?? $documentCategoryCode));
+                                            ?>
+                                            <option value="<?= e($documentCategoryCode) ?>"<?= $docCategory === $documentCategoryCode ? ' selected' : '' ?>><?= e($documentCategoryOptionLabel !== '' ? $documentCategoryOptionLabel : $documentCategoryCode) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </label>
+                                <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="document_tags" value="<?= e($docTags) ?>" maxlength="255"></label>
+                                <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="document_description" rows="5" maxlength="5000"><?= e($docDescription) ?></textarea></label>
+                                <label><span><?= e($membersLibraryText('replace_document_file', 'Remplacer le fichier', 'Replace file')) ?></span><input type="file" name="document_file" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
+                                <div class="members-library-dialog-actions module-dialog-actions">
+                                    <button class="button" type="submit"><?= e($membersLibraryText('save_document', 'Enregistrer', 'Save')) ?></button>
+                                    <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
+                                </div>
+                            </form>
+                            <form method="post" class="members-library-delete-form">
+                                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                <input type="hidden" name="action" value="delete_document">
+                                <input type="hidden" name="document_id" value="<?= $docId ?>">
+                                <input type="hidden" name="return_category" value="<?= e($category) ?>">
+                                <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                <input type="hidden" name="return_tag" value="<?= e($tag) ?>">
+                                <input type="hidden" name="return_p" value="<?= $page ?>">
+                                <p class="help"><?= e($membersLibraryText('delete_document_warning', 'La suppression du fichier est définitive.', 'Deleting this file is permanent.')) ?></p>
+                                <button class="button secondary members-library-danger" type="submit"><?= e($membersLibraryText('delete_document', 'Supprimer le document', 'Delete document')) ?></button>
+                            </form>
+                        </div>
+                    </dialog>
+                <?php endif; ?>
             <?php endforeach; ?>
             </div>
             <?php if ($totalPages > 1): ?>

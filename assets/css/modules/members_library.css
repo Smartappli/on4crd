@@ -125,6 +125,32 @@
   height: 100%;
 }
 
+[data-route="members_library"] .members-library-document-actions {
+  align-items: center;
+  gap: .55rem;
+}
+
+[data-route="members_library"] .members-library-delete-form {
+  display: grid;
+  gap: .55rem;
+  margin-top: .25rem;
+  padding-top: .85rem;
+  border-top: 1px solid var(--border);
+}
+
+[data-route="members_library"] .members-library-delete-form .help {
+  margin: 0;
+}
+
+[data-route="members_library"] .members-library-danger {
+  border-color: color-mix(in srgb, #dc2626 55%, var(--border));
+  color: #b91c1c;
+}
+
+[data-theme="dark"] [data-route="members_library"] .members-library-danger {
+  color: #fca5a5;
+}
+
 @supports selector(:has(*)) {
   [data-route="members_library"] .members-library-document-card:has(.members-library-preview-toggle[open]) {
     grid-column: 1 / -1;
