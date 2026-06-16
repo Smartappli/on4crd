@@ -600,22 +600,27 @@ ob_start();
     <?php foreach ($documents as $document): ?>
         <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); if ($safePath === null) { continue; } ?>
         <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
+        <?php $documentId = (int) ($document['id'] ?? 0); ?>
+        <?php $documentPreviewUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId]) : ''; ?>
+        <?php $documentDownloadUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId, 'download' => '1']) : ''; ?>
         <article class="card admin-library-document">
-            <p><input type="checkbox" form="bulk-delete-form" name="ids[]" value="<?= (int) $document['id'] ?>"> <span class="help"><?= e((string) $t['select']) ?></span></p>
+            <p><input type="checkbox" form="bulk-delete-form" name="ids[]" value="<?= $documentId ?>"> <span class="help"><?= e((string) $t['select']) ?></span></p>
             <p><span class="badge muted"><?= e((string) ($document['category'] ?? 'general')) ?></span> <span class="badge muted"><?= e(strtoupper($extension)) ?></span></p>
             <h3><?= e((string) $document['title']) ?></h3>
             <p><?= e((string) ($document['description'] ?? '')) ?></p>
             <?php if (trim((string) ($document['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e((string) $document['tags']) ?></p><?php endif; ?>
             <?php if (trim((string) ($document['extracted_text'] ?? '')) !== ''): ?><p class="help"><?= e(mb_safe_strimwidth((string) $document['extracted_text'], 0, 220, '...')) ?></p><?php endif; ?>
-            <?php if ($extension === 'pdf'): ?>
-                <details class="admin-library-preview-toggle"><summary><?= e((string) $t['preview']) ?></summary><iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview" loading="lazy" title="<?= e((string) $document['title']) ?>"></iframe></details>
+            <?php if ($extension === 'pdf' && $documentPreviewUrl !== ''): ?>
+                <details class="admin-library-preview-toggle"><summary><?= e((string) $t['preview']) ?></summary><iframe src="<?= e($documentPreviewUrl) ?>" class="admin-library-pdf-preview" loading="lazy" title="<?= e((string) $document['title']) ?>"></iframe></details>
             <?php endif; ?>
             <div class="actions">
-                <a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
+                <?php if ($documentDownloadUrl !== ''): ?>
+                    <a class="button secondary" href="<?= e($documentDownloadUrl) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
+                <?php endif; ?>
                 <form method="post" onsubmit="return confirm('<?= e((string) $t['confirm_delete']) ?>');">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_document">
-                    <input type="hidden" name="id" value="<?= (int) $document['id'] ?>">
+                    <input type="hidden" name="id" value="<?= $documentId ?>">
                     <button class="button secondary" type="submit"><?= e((string) $t['delete_document']) ?></button>
                 </form>
             </div>
