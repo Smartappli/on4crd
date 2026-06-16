@@ -2,3 +2,27 @@
 [data-route="admin_committee"] .admin-committee-module {
   min-width: 0;
 }
+
+[data-route="admin_committee"] .admin-committee-module .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .85rem;
+  align-items: start;
+}
+
+[data-route="admin_committee"] .admin-committee-module .admin-committee-wide {
+  grid-column: 1 / -1;
+}
+
+[data-route="admin_committee"] .admin-committee-module .admin-committee-toggle {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 2.75rem;
+}
+
+@media (max-width: 720px) {
+  [data-route="admin_committee"] .admin-committee-module .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
