@@ -156,6 +156,12 @@
   height: 100%;
 }
 
+[data-route="webotheque"] .webotheque-link-actions,
+[data-route="admin_webotheque"] .webotheque-link-actions {
+  align-items: center;
+  gap: .55rem;
+}
+
 [data-route="webotheque"] .webotheque-proposal-dialog,
 [data-route="admin_webotheque"] .webotheque-proposal-dialog {
   width: min(720px, calc(100vw - 2rem));
@@ -206,6 +212,31 @@
 [data-route="admin_webotheque"] .webotheque-proposal-dialog-actions {
   justify-content: flex-start;
   margin: .25rem 0 0;
+}
+
+[data-route="webotheque"] .webotheque-delete-form,
+[data-route="admin_webotheque"] .webotheque-delete-form {
+  display: grid;
+  gap: .55rem;
+  margin-top: .25rem;
+  padding-top: .85rem;
+  border-top: 1px solid var(--border);
+}
+
+[data-route="webotheque"] .webotheque-delete-form .help,
+[data-route="admin_webotheque"] .webotheque-delete-form .help {
+  margin: 0;
+}
+
+[data-route="webotheque"] .webotheque-danger,
+[data-route="admin_webotheque"] .webotheque-danger {
+  border-color: color-mix(in srgb, #dc2626 55%, var(--border));
+  color: #b91c1c;
+}
+
+[data-theme="dark"] [data-route="webotheque"] .webotheque-danger,
+[data-theme="dark"] [data-route="admin_webotheque"] .webotheque-danger {
+  color: #fca5a5;
 }
 
 @media (max-width: 900px) {

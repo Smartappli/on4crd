@@ -73,6 +73,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($tr('proposal_storage_unavailable', 'Stockage des propositions indisponible.'));
             }
 
+            if ($proposalStatus === 'accepted') {
+                $proposalStmt = db()->prepare('SELECT id, summary FROM content_proposals WHERE id = ? AND area = "wiki" LIMIT 1');
+                $proposalStmt->execute([$proposalId]);
+                $proposal = $proposalStmt->fetch() ?: null;
+                if (!is_array($proposal)) {
+                    throw new RuntimeException($tr('invalid_proposal', 'Proposition wiki invalide.'));
+                }
+                if (wiki_content_proposal_action((string) ($proposal['summary'] ?? '')) === 'delete_page') {
+                    wiki_delete_page_record(wiki_content_proposal_page_id((string) ($proposal['summary'] ?? '')));
+                }
+            }
+
             db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "wiki"')
                 ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
             set_flash('success', $tr('proposal_status_saved', 'Proposition wiki mise a jour.'));

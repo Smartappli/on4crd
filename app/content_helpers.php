@@ -440,6 +440,59 @@ function wiki_category_from_input(string $value, array $categories): string
 }
 }
 
+if (!function_exists('wiki_content_proposal_action')) {
+function wiki_content_proposal_action(string $summary): string
+{
+    $action = content_proposal_clean_single_line(
+        content_proposal_detail_from_summary($summary, ['Action']),
+        32
+    );
+
+    return in_array($action, ['delete_page'], true) ? $action : '';
+}
+}
+
+if (!function_exists('wiki_content_proposal_page_id')) {
+function wiki_content_proposal_page_id(string $summary): int
+{
+    return max(0, (int) content_proposal_detail_from_summary($summary, ['Page ID']));
+}
+}
+
+if (!function_exists('wiki_delete_page_record')) {
+function wiki_delete_page_record(int $pageId): void
+{
+    if (!ensure_wiki_tables()) {
+        throw new RuntimeException('Stockage wiki indisponible.');
+    }
+
+    $pageId = max(0, $pageId);
+    if ($pageId <= 0) {
+        throw new RuntimeException('Page wiki invalide.');
+    }
+
+    $stmt = db()->prepare('SELECT id FROM wiki_pages WHERE id = ? LIMIT 1');
+    $stmt->execute([$pageId]);
+    if ((int) ($stmt->fetchColumn() ?: 0) <= 0) {
+        throw new RuntimeException('Page wiki introuvable.');
+    }
+
+    $pdo = db();
+    $pdo->beginTransaction();
+    try {
+        $pdo->prepare('DELETE FROM wiki_revisions WHERE wiki_page_id = ?')->execute([$pageId]);
+        $pdo->prepare('DELETE FROM wiki_pages WHERE source_page_id = ?')->execute([$pageId]);
+        $pdo->prepare('DELETE FROM wiki_pages WHERE id = ? LIMIT 1')->execute([$pageId]);
+        $pdo->commit();
+    } catch (Throwable $throwable) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        throw $throwable;
+    }
+}
+}
+
 if (!function_exists('classifieds_active_where_sql')) {
 function classifieds_active_where_sql(string $alias = ''): string
 {

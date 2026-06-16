@@ -729,11 +729,95 @@ function render_webotheque_page(): void
     webotheque_sync_accepted_proposals($categories, $t, (int) ($user['id'] ?? 0));
     $proposalContact = webotheque_member_contact($user);
     $canAutoValidate = has_permission('admin.access');
+    $webothequeReturnUrl = static function (): string {
+        return route_url_clean('webotheque', [
+            'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+            'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+        ]);
+    };
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             verify_csrf();
             $action = (string) ($_POST['action'] ?? '');
+
+            if ($action === 'update_link' || $action === 'delete_link') {
+                $linkId = (int) ($_POST['id'] ?? 0);
+                if ($linkId <= 0) {
+                    throw new RuntimeException('err_required');
+                }
+
+                $linkStmt = db()->prepare('SELECT * FROM member_webotheque_links WHERE id = ? LIMIT 1');
+                $linkStmt->execute([$linkId]);
+                $link = $linkStmt->fetch() ?: null;
+                if (!is_array($link)) {
+                    throw new RuntimeException($t['err_required'] ?? 'Lien introuvable.');
+                }
+                if (!$canAutoValidate && (int) ($link['member_id'] ?? 0) !== (int) ($user['id'] ?? 0)) {
+                    throw new RuntimeException($t['forbidden'] ?? 'Vous ne pouvez pas modifier ce lien.');
+                }
+
+                $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? $link['title'] ?? ''), 190);
+                $url = webotheque_normalize_url((string) ($_POST['url'] ?? $link['url'] ?? ''));
+                $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? $link['description'] ?? ''), 5000);
+                $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? $link['tags'] ?? ''), 255);
+                $category = webotheque_category_from_input((string) ($_POST['category'] ?? $link['category'] ?? 'general'), $categories);
+                if ($title === '' || $url === '') {
+                    throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
+                }
+
+                if ($action === 'delete_link') {
+                    if ($canAutoValidate) {
+                        webotheque_delete_link_record($linkId);
+                        set_flash('success', (string) ($t['ok_deleted'] ?? 'Lien supprime.'));
+                        redirect_url($webothequeReturnUrl());
+                    }
+
+                    $proposalSummary = content_proposal_details_text([
+                        'Action' => 'delete_link',
+                        'Link ID' => (string) $linkId,
+                        (string) ($t['domain_field'] ?? $t['category_field'] ?? 'Domain') => (string) ($categories[webotheque_category_code((string) ($link['category'] ?? 'general'))] ?? ($link['category'] ?? 'general')),
+                        (string) ($t['description_field'] ?? 'Description') => mb_safe_substr((string) ($link['description'] ?? ''), 0, 1800),
+                        (string) ($t['tags_field'] ?? 'Tags') => (string) ($link['tags'] ?? ''),
+                    ]);
+                    $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'content', $title, $proposalSummary, $proposalContact, (string) ($link['url'] ?? ''), 'pending');
+                    content_proposal_notify_site((string) ($t['propose_link_subject'] ?? 'Web library link proposal'), [
+                        'area' => 'webotheque',
+                        'proposal_type' => 'content',
+                        'title' => $title,
+                        'summary' => $proposalSummary,
+                        'contact' => $proposalContact,
+                        'source_ref' => 'content_proposals#' . $proposalId . ' ' . (string) ($link['url'] ?? ''),
+                    ]);
+                    set_flash('success', (string) ($t['proposal_recorded'] ?? 'Modification enregistree dans vos contenus en attente de validation.'));
+                    redirect('my_requests');
+                }
+
+                if ($canAutoValidate) {
+                    webotheque_update_link_record($linkId, $category, $title, $url, $description, $tags);
+                    set_flash('success', (string) ($t['ok_updated'] ?? 'Lien mis a jour.'));
+                    redirect_url($webothequeReturnUrl());
+                }
+
+                $proposalSummary = content_proposal_details_text([
+                    'Action' => 'update_link',
+                    'Link ID' => (string) $linkId,
+                    (string) ($t['domain_field'] ?? $t['category_field'] ?? 'Domain') => (string) ($categories[$category] ?? $category),
+                    (string) ($t['description_field'] ?? 'Description') => $description,
+                    (string) ($t['tags_field'] ?? 'Tags') => $tags,
+                ]);
+                $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'content', $title, $proposalSummary, $proposalContact, $url, 'pending');
+                content_proposal_notify_site((string) ($t['propose_link_subject'] ?? 'Web library link proposal'), [
+                    'area' => 'webotheque',
+                    'proposal_type' => 'content',
+                    'title' => $title,
+                    'summary' => $proposalSummary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId . ' ' . $url,
+                ]);
+                set_flash('success', (string) ($t['proposal_recorded'] ?? 'Modification enregistree dans vos contenus en attente de validation.'));
+                redirect('my_requests');
+            }
 
             if ($action === 'propose_domain' || $action === 'propose_category') {
                 $proposalCategory = content_proposal_clean_single_line((string) ($_POST['proposal_domain'] ?? $_POST['proposal_category'] ?? ''), 120);
@@ -834,7 +918,7 @@ function render_webotheque_page(): void
         } catch (Throwable $throwable) {
             $key = $throwable->getMessage();
             set_flash('error', (string) ($t[$key] ?? $key));
-            redirect_url(route_url('webotheque'));
+            redirect_url($webothequeReturnUrl());
         }
     }
 
@@ -995,7 +1079,7 @@ function render_webotheque_page(): void
                 <?php if ($links === []): ?>
                     <div class="card"><p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $categoryFilter !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p></div>
                 <?php else: ?>
-                    <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories) ?></div>
+                    <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories, $user, $canAutoValidate, ['q' => $search, 'category' => $categoryFilter]) ?></div>
                 <?php endif; ?>
             </section>
         </section>
@@ -1031,6 +1115,12 @@ function render_admin_webotheque_page(): void
         return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
     };
     $pendingProposalUrl = route_url_clean('admin_webotheque', ['status' => 'pending']) . '#pending-proposals';
+    $webothequeAdminReturnUrl = static function (): string {
+        return route_url_clean('admin_webotheque', [
+            'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+            'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+        ]);
+    };
     $proposalStatusLabels = [
         'pending' => $adminText('proposal_status_pending', 'En attente', 'Pending'),
         'reviewed' => $adminText('proposal_status_reviewed', 'Relue', 'Reviewed'),
@@ -1048,6 +1138,31 @@ function render_admin_webotheque_page(): void
         try {
             verify_csrf();
             $action = (string) ($_POST['action'] ?? 'add_link');
+            if ($action === 'update_link' || $action === 'delete_link') {
+                $linkId = (int) ($_POST['id'] ?? 0);
+                if ($linkId <= 0) {
+                    throw new RuntimeException('err_required');
+                }
+
+                if ($action === 'delete_link') {
+                    webotheque_delete_link_record($linkId);
+                    set_flash('success', (string) $t['ok_deleted']);
+                    redirect_url($webothequeAdminReturnUrl());
+                }
+
+                $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? ''), 190);
+                $url = webotheque_normalize_url((string) ($_POST['url'] ?? ''));
+                $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? ''), 5000);
+                $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? ''), 255);
+                $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
+                if ($title === '' || $url === '') {
+                    throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
+                }
+
+                webotheque_update_link_record($linkId, $category, $title, $url, $description, $tags);
+                set_flash('success', (string) ($t['ok_updated'] ?? 'Lien mis a jour.'));
+                redirect_url($webothequeAdminReturnUrl());
+            }
             if ($action === 'update_proposal_status') {
                 $proposalId = (int) ($_POST['proposal_id'] ?? 0);
                 $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
@@ -1083,7 +1198,7 @@ function render_admin_webotheque_page(): void
             }
             if ($action === 'delete_link') {
                 $id = (int) ($_POST['id'] ?? 0);
-                db()->prepare('DELETE FROM member_webotheque_links WHERE id = ? LIMIT 1')->execute([$id]);
+                webotheque_delete_link_record($id);
                 set_flash('success', (string) $t['ok_deleted']);
                 redirect('admin_webotheque');
             }
@@ -1288,28 +1403,7 @@ function render_admin_webotheque_page(): void
             <?php if ($links === []): ?>
                 <div class="card"><p><?= e((string) $t['empty']) ?></p></div>
             <?php else: ?>
-                <div class="news-grid webotheque-grid">
-                    <?php foreach ($links as $link): ?>
-                        <?php $url = (string) ($link['url'] ?? ''); ?>
-                        <article class="news-card feature-card webotheque-card">
-                            <span class="badge muted"><?= e(webotheque_domain_from_url($url) ?: (string) $t['link']) ?></span>
-                            <h3><?= e((string) ($link['title'] ?? '')) ?></h3>
-                            <?php if (trim((string) ($link['description'] ?? '')) !== ''): ?><p><?= e((string) $link['description']) ?></p><?php endif; ?>
-                            <?php $linkCategory = webotheque_category_code((string) ($link['category'] ?? 'general')); ?>
-                            <p class="help"><?= e((string) ($t['domain_field'] ?? $t['category_field'])) ?>: <?= e((string) ($categories[$linkCategory] ?? webotheque_category_label_from_code($linkCategory))) ?></p>
-                            <?php if (trim((string) ($link['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e((string) $link['tags']) ?></p><?php endif; ?>
-                            <div class="actions">
-                                <a class="button secondary" href="<?= e($url) ?>" target="_blank" rel="noopener noreferrer"><?= e((string) $t['open']) ?></a>
-                                <form method="post" class="inline-form" onsubmit="return confirm('<?= e((string) $t['confirm_delete']) ?>');">
-                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                                    <input type="hidden" name="action" value="delete_link">
-                                    <input type="hidden" name="id" value="<?= (int) ($link['id'] ?? 0) ?>">
-                                    <button class="button secondary" type="submit"><?= e((string) $t['delete']) ?></button>
-                                </form>
-                            </div>
-                        </article>
-                    <?php endforeach; ?>
-                </div>
+                <div class="news-grid webotheque-grid"><?= render_webotheque_cards($links, $t, $categories, $user, true, ['q' => $search, 'category' => $categoryFilter]) ?></div>
             <?php endif; ?>
         </section>
     </div>
