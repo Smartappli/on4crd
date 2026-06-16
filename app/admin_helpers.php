@@ -270,13 +270,38 @@ function admin_update_content_proposal_status(int $proposalId, string $status, s
         throw new RuntimeException($locale === 'fr' ? 'Stockage des propositions indisponible.' : 'Proposal storage unavailable.');
     }
 
-    $stmt = db()->prepare('SELECT area FROM content_proposals WHERE id = ? LIMIT 1');
+    $stmt = db()->prepare('SELECT id, member_id, area, proposal_type, title, summary, source_ref FROM content_proposals WHERE id = ? LIMIT 1');
     $stmt->execute([$proposalId]);
-    $area = (string) ($stmt->fetchColumn() ?: '');
+    $proposal = $stmt->fetch() ?: null;
+    if (!is_array($proposal)) {
+        throw new RuntimeException($locale === 'fr' ? 'Proposition introuvable.' : 'Proposal not found.');
+    }
+    $area = (string) ($proposal['area'] ?? '');
     if (!admin_can_manage_pending_content_area($area)) {
         throw new RuntimeException($locale === 'fr' ? 'Permission insuffisante.' : 'Insufficient permission.');
     }
 
+    if ($status === 'accepted') {
+        admin_apply_accepted_content_proposal($proposal, $locale);
+    }
+
     db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ?')
         ->execute([$status, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
+}
+
+/**
+ * @param array<string, mixed> $proposal
+ */
+function admin_apply_accepted_content_proposal(array $proposal, string $locale): void
+{
+    if ((string) ($proposal['area'] ?? '') !== 'members_library') {
+        return;
+    }
+
+    require_once __DIR__ . '/member_library_helpers.php';
+
+    member_library_apply_accepted_proposal(
+        $proposal,
+        i18n_domain_locale('members_library', $locale)
+    );
 }

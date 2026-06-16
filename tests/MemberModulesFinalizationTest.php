@@ -48,6 +48,7 @@ final class MemberModulesFinalizationTest extends TestCase
     {
         $library = $this->source('pages/members_library.php');
         $adminLibrary = $this->source('pages/admin_library.php');
+        $adminHelpers = $this->source('app/admin_helpers.php');
         $memberLibraryHelpers = $this->source('app/member_library_helpers.php');
         $contentHelpers = $this->source('app/content_helpers.php');
         $routeHelperLoader = $this->source('app/route_helper_loader.php');
@@ -61,6 +62,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
+        self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);
+        self::assertStringContainsString("i18n_domain_locale('members_library', $locale)", $adminHelpers);
+        self::assertStringContainsString('member_library_apply_accepted_proposal(', $adminHelpers);
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
 
         $codes = array_map(static fn(array $category): string => (string) $category['code'], member_library_default_categories());
