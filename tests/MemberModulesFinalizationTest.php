@@ -108,7 +108,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('technique,antenne', member_library_proposal_tags_from_summary('Tags: technique,unknown,antenne'));
         self::assertStringContainsString('member_library_default_categories()', $contentHelpers);
         self::assertStringContainsString("content_proposal_accepted_categories('members_library'", $contentHelpers);
-        self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library'", $routeHelperLoader);
+        self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library', 'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'fichiers', 'members_library', 'admin_articles'", $routeHelperLoader);
         self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
