@@ -14,6 +14,7 @@ if (!ensure_member_library_table()) {
     echo render_layout('<div class="card"><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['title']);
     return;
 }
+member_library_sync_accepted_proposals($t);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {

@@ -356,6 +356,80 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
 }
 }
 
+if (!function_exists('member_library_sync_accepted_proposals')) {
+/**
+ * @param array<string, string> $messages
+ * @return array{checked:int,applied:int,skipped:int,failed:int}
+ */
+function member_library_sync_accepted_proposals(array $messages = [], int $limit = 100): array
+{
+    static $alreadyRan = false;
+
+    $result = ['checked' => 0, 'applied' => 0, 'skipped' => 0, 'failed' => 0];
+    if ($alreadyRan) {
+        return $result;
+    }
+    $alreadyRan = true;
+
+    if (!ensure_content_proposals_table() || !ensure_member_library_table()) {
+        return $result;
+    }
+
+    require_once __DIR__ . '/article_import_helpers.php';
+
+    $limit = max(1, min(500, $limit));
+    try {
+        $stmt = db()->prepare(
+            'SELECT id, member_id, proposal_type, title, summary, source_ref
+             FROM content_proposals
+             WHERE area = "members_library"
+               AND status = "accepted"
+               AND proposal_type IN ("category", "content")
+             ORDER BY updated_at ASC, id ASC
+             LIMIT ' . $limit
+        );
+        $stmt->execute();
+        $proposals = $stmt->fetchAll() ?: [];
+    } catch (Throwable $throwable) {
+        log_structured_event('member_library_accepted_proposals_sync_load_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+
+        return $result;
+    }
+
+    foreach ($proposals as $proposal) {
+        $result['checked']++;
+        try {
+            if ((string) ($proposal['proposal_type'] ?? '') === 'content') {
+                $sourcePath = member_library_proposal_source_path((string) ($proposal['source_ref'] ?? ''));
+                if ($sourcePath === '') {
+                    throw new RuntimeException('err_invalid');
+                }
+
+                $existingStmt = db()->prepare('SELECT id FROM member_library_documents WHERE file_path = ? LIMIT 1');
+                $existingStmt->execute([$sourcePath]);
+                if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+                    $result['skipped']++;
+                    continue;
+                }
+            }
+
+            member_library_apply_accepted_proposal($proposal, $messages);
+            $result['applied']++;
+        } catch (Throwable $throwable) {
+            $result['failed']++;
+            log_structured_event('member_library_accepted_proposal_sync_failed', [
+                'proposal_id' => (int) ($proposal['id'] ?? 0),
+                'message' => $throwable->getMessage(),
+            ]);
+        }
+    }
+
+    return $result;
+}
+}
+
 if (!function_exists('member_library_default_categories')) {
 function member_library_default_categories(): array
 {
