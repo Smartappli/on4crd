@@ -118,6 +118,58 @@
   background: var(--panel);
 }
 
+[data-route="albums"] .album-dialog {
+  width: min(720px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: var(--text);
+}
+
+[data-route="albums"] .album-dialog::backdrop {
+  background: rgb(15 23 42 / .58);
+  backdrop-filter: blur(3px);
+}
+
+[data-route="albums"] .album-dialog-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+  box-shadow: 0 24px 70px rgb(15 23 42 / .28);
+}
+
+[data-route="albums"] .album-dialog-actions {
+  justify-content: flex-start;
+  margin: .25rem 0 0;
+}
+
+[data-route="albums"] .album-delete-form {
+  display: grid;
+  gap: .55rem;
+  margin-top: .25rem;
+  padding-top: .85rem;
+  border-top: 1px solid var(--border);
+}
+
+[data-route="albums"] .album-delete-form .help {
+  margin: 0;
+}
+
+[data-route="albums"] .album-danger {
+  border-color: color-mix(in srgb, #dc2626 55%, var(--border));
+  color: #b91c1c;
+}
+
+[data-theme="dark"] [data-route="albums"] .album-danger {
+  color: #fca5a5;
+}
+
 @media (max-width: 900px) {
   .albums-hero,
   .album-detail-hero {
