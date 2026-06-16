@@ -319,6 +319,116 @@ function member_library_proposal_source_path(string $sourceRef): string
 }
 }
 
+if (!function_exists('member_library_document_proposal_action')) {
+function member_library_document_proposal_action(string $summary): string
+{
+    $action = content_proposal_clean_single_line(
+        content_proposal_detail_from_summary($summary, ['Action']),
+        32
+    );
+
+    return in_array($action, ['update_document', 'delete_document'], true) ? $action : '';
+}
+}
+
+if (!function_exists('member_library_document_proposal_document_id')) {
+function member_library_document_proposal_document_id(string $summary): int
+{
+    return max(0, (int) content_proposal_detail_from_summary($summary, ['Document ID']));
+}
+}
+
+if (!function_exists('member_library_update_document_record')) {
+function member_library_update_document_record(
+    int $documentId,
+    string $title,
+    string $category,
+    string $tags,
+    string $description,
+    string $replacementPublicPath = ''
+): void {
+    if (!ensure_member_library_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $documentId = max(0, $documentId);
+    $title = content_proposal_clean_single_line($title, 190);
+    if ($documentId <= 0 || $title === '') {
+        throw new RuntimeException('err_required');
+    }
+
+    $stmt = db()->prepare('SELECT file_path FROM member_library_documents WHERE id = ? LIMIT 1');
+    $stmt->execute([$documentId]);
+    $currentPath = (string) ($stmt->fetchColumn() ?: '');
+    if ($currentPath === '') {
+        throw new RuntimeException('err_invalid');
+    }
+
+    $category = member_library_category_slug($category !== '' ? $category : 'general');
+    $tags = member_library_clean_tags($tags);
+    $description = content_proposal_clean_multiline($description, 5000);
+    $replacementPublicPath = member_library_proposal_source_path($replacementPublicPath);
+
+    if ($replacementPublicPath !== '') {
+        $absolutePath = dirname(__DIR__) . '/' . $replacementPublicPath;
+        if (!is_file($absolutePath)) {
+            throw new RuntimeException('err_invalid');
+        }
+        $extension = strtolower((string) pathinfo($replacementPublicPath, PATHINFO_EXTENSION));
+        $extractedText = member_library_extract_text($absolutePath, $extension);
+        db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ?, file_path = ?, extracted_text = ? WHERE id = ?')
+            ->execute([
+                $category,
+                $tags,
+                $title,
+                $description !== '' ? $description : null,
+                $replacementPublicPath,
+                $extractedText !== '' ? $extractedText : null,
+                $documentId,
+            ]);
+        if ($currentPath !== $replacementPublicPath) {
+            member_library_delete_document_file($currentPath);
+        }
+    } else {
+        db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ? WHERE id = ?')
+            ->execute([$category, $tags, $title, $description !== '' ? $description : null, $documentId]);
+    }
+
+    if (table_exists('member_favorites')) {
+        $favoriteUrl = route_url_clean('members_library', ['q' => $title, 'category' => $category, 'tag' => $tags]);
+        db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
+            ->execute([$title, $favoriteUrl, 'library_document', $documentId]);
+    }
+}
+}
+
+if (!function_exists('member_library_delete_document_record')) {
+function member_library_delete_document_record(int $documentId): void
+{
+    if (!ensure_member_library_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $documentId = max(0, $documentId);
+    if ($documentId <= 0) {
+        throw new RuntimeException('err_required');
+    }
+
+    $stmt = db()->prepare('SELECT file_path FROM member_library_documents WHERE id = ? LIMIT 1');
+    $stmt->execute([$documentId]);
+    $path = (string) ($stmt->fetchColumn() ?: '');
+    if ($path === '') {
+        throw new RuntimeException('err_invalid');
+    }
+
+    member_library_delete_document_file($path);
+    db()->prepare('DELETE FROM member_library_documents WHERE id = ? LIMIT 1')->execute([$documentId]);
+    if (table_exists('member_favorites')) {
+        db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['library_document', $documentId]);
+    }
+}
+}
+
 if (!function_exists('member_library_apply_accepted_proposal')) {
 function member_library_apply_accepted_proposal(array $proposal, array $messages = []): ?int
 {
@@ -347,6 +457,32 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
         throw new RuntimeException('storage_unavailable');
     }
 
+    $summary = (string) ($proposal['summary'] ?? '');
+    $documentAction = member_library_document_proposal_action($summary);
+    if ($documentAction !== '') {
+        $documentId = member_library_document_proposal_document_id($summary);
+        if ($documentAction === 'delete_document') {
+            member_library_delete_document_record($documentId);
+
+            return $documentId;
+        }
+
+        $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 190);
+        if ($title === '') {
+            throw new RuntimeException('err_required');
+        }
+        member_library_update_document_record(
+            $documentId,
+            $title,
+            member_library_proposal_category_from_summary($summary, $messages),
+            member_library_proposal_tags_from_summary($summary, $messages),
+            member_library_proposal_description_from_summary($summary, $messages),
+            member_library_proposal_source_path((string) ($proposal['source_ref'] ?? ''))
+        );
+
+        return $documentId;
+    }
+
     $sourcePath = member_library_proposal_source_path((string) ($proposal['source_ref'] ?? ''));
     if ($sourcePath === '') {
         throw new RuntimeException('err_invalid');
@@ -360,7 +496,6 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
     if ($title === '') {
         throw new RuntimeException('err_required');
     }
-    $summary = (string) ($proposal['summary'] ?? '');
     $category = member_library_proposal_category_from_summary($summary, $messages);
     $tags = member_library_proposal_tags_from_summary($summary, $messages);
     $description = member_library_proposal_description_from_summary($summary, $messages);
@@ -437,6 +572,10 @@ function member_library_sync_accepted_proposals(array $messages = [], int $limit
         $result['checked']++;
         try {
             if ((string) ($proposal['proposal_type'] ?? '') === 'content') {
+                if (member_library_document_proposal_action((string) ($proposal['summary'] ?? '')) !== '') {
+                    $result['skipped']++;
+                    continue;
+                }
                 $sourcePath = member_library_proposal_source_path((string) ($proposal['source_ref'] ?? ''));
                 if ($sourcePath === '') {
                     throw new RuntimeException('err_invalid');
