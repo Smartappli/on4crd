@@ -320,6 +320,12 @@ function apply_runtime_schema_updates(): void
     }
 
     if (table_exists('albums') && table_has_column('albums', 'is_public')) {
+        if (!table_has_column('albums', 'member_id')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN member_id INT DEFAULT NULL AFTER id');
+        }
+        if (!table_has_index('albums', 'idx_albums_member')) {
+            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_member (member_id)');
+        }
         db()->exec('ALTER TABLE albums MODIFY COLUMN is_public TINYINT(1) NOT NULL DEFAULT 0');
     }
 
