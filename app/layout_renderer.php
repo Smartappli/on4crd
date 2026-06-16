@@ -159,6 +159,8 @@ function module_js_assets_for_route(string $route): array
         'save_dashboard' => 'dashboard',
         'widget_render' => 'dashboard',
         'admin_webotheque' => 'webotheque',
+        'presentations' => 'member_documents',
+        'videos' => 'member_documents',
         'wiki_edit' => 'wiki_edit',
         'wiki_propose' => 'wiki_edit',
         'wiki_view' => 'wiki',
