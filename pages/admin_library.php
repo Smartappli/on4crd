@@ -601,7 +601,7 @@ ob_start();
         <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); if ($safePath === null) { continue; } ?>
         <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
         <?php $documentId = (int) ($document['id'] ?? 0); ?>
-        <?php $documentPreviewUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId]) : ''; ?>
+        <?php $documentPreviewUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId]) . '#view=Fit' : ''; ?>
         <?php $documentDownloadUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId, 'download' => '1']) : ''; ?>
         <article class="card admin-library-document">
             <p><input type="checkbox" form="bulk-delete-form" name="ids[]" value="<?= $documentId ?>"> <span class="help"><?= e((string) $t['select']) ?></span></p>

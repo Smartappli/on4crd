@@ -519,7 +519,7 @@ ob_start();
                     <?php if ($extension === 'pdf'): ?>
                         <details class="members-library-preview-toggle">
                             <summary><?= e((string) $t['preview']) ?></summary>
-                            <iframe src="<?= e(route_url('member_library_preview', ['id' => $docId])) ?>" class="members-library-pdf-preview" loading="lazy" title="<?= e($docTitle) ?>"></iframe>
+                            <iframe src="<?= e(route_url('member_library_preview', ['id' => $docId]) . '#view=Fit') ?>" class="members-library-pdf-preview" loading="lazy" title="<?= e($docTitle) ?>"></iframe>
                         </details>
                     <?php endif; ?>
                     <details class="admin-library-related-toggle">

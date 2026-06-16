@@ -70,6 +70,8 @@ final class MemberModulesFinalizationTest extends TestCase
         $routeHelperLoader = $this->source('app/route_helper_loader.php');
         $previewPage = $this->source('pages/member_library_preview.php');
         $requestSecurity = $this->source('app/request_security.php');
+        $membersLibraryCss = $this->source('assets/css/modules/members_library.css');
+        $adminLibraryCss = $this->source('assets/css/modules/admin_library.css');
 
         self::assertStringContainsString('id="members-library-document-dialog"', $library);
         self::assertStringContainsString('<input type="text" name="proposal_category_name"', $library);
@@ -80,15 +82,19 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
-        self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId])", $library);
+        self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId]) . '#view=Fit'", $library);
         self::assertStringNotContainsString("route_url('member_library_preview', ['id' => \$docId, 'download' => '1'])", $library);
         self::assertStringNotContainsString("\$t['open']", $library);
         self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>"', $library);
         self::assertStringContainsString('class="members-library-pdf-preview"', $library);
-        self::assertStringContainsString("\$documentPreviewUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId]) : '';", $adminLibrary);
+        self::assertStringContainsString("\$documentPreviewUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId]) . '#view=Fit' : '';", $adminLibrary);
         self::assertStringContainsString("\$documentDownloadUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId, 'download' => '1']) : '';", $adminLibrary);
         self::assertStringNotContainsString('iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview"', $adminLibrary);
         self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t[\'open\']) ?></a>', $adminLibrary);
+        self::assertStringContainsString('grid-column: 1 / -1;', $membersLibraryCss);
+        self::assertStringContainsString('height: min(86vh, 980px);', $membersLibraryCss);
+        self::assertStringContainsString('min-height: min(720px, 86vh);', $membersLibraryCss);
+        self::assertStringContainsString('height: min(86vh, 980px);', $adminLibraryCss);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('member_library_sync_accepted_proposals($memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);
