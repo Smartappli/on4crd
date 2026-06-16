@@ -738,6 +738,81 @@ function content_proposal_details_text(array $details): string
 }
 }
 
+if (!function_exists('content_proposal_summary_rows')) {
+/**
+ * @return list<array{label:string,value:string}>
+ */
+function content_proposal_summary_rows(string $summary): array
+{
+    $rows = [];
+    $currentIndex = null;
+    foreach (preg_split('/\R/u', $summary) ?: [] as $line) {
+        $line = trim((string) $line);
+        if ($line === '') {
+            continue;
+        }
+        if (preg_match('/^\s*([^:]{1,120}):\s*(.*)\s*$/u', $line, $matches) === 1) {
+            $rows[] = [
+                'label' => trim((string) $matches[1]),
+                'value' => trim((string) $matches[2]),
+            ];
+            $currentIndex = count($rows) - 1;
+            continue;
+        }
+        if ($currentIndex !== null) {
+            $rows[$currentIndex]['value'] = trim($rows[$currentIndex]['value'] . "\n" . $line);
+        }
+    }
+
+    return $rows;
+}
+}
+
+if (!function_exists('content_proposal_label_key')) {
+function content_proposal_label_key(string $label): string
+{
+    $label = mb_strtolower(trim($label), 'UTF-8');
+    if ($label === '') {
+        return '';
+    }
+    $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $label);
+    if (is_string($ascii) && $ascii !== '') {
+        $label = $ascii;
+    }
+    $label = preg_replace('/[^a-z0-9]+/i', ' ', $label) ?? $label;
+
+    return trim((string) preg_replace('/\s+/u', ' ', $label));
+}
+}
+
+if (!function_exists('content_proposal_detail_from_summary')) {
+/**
+ * @param list<string> $labels
+ */
+function content_proposal_detail_from_summary(string $summary, array $labels): string
+{
+    $wanted = [];
+    foreach ($labels as $label) {
+        $normalized = content_proposal_label_key($label);
+        if ($normalized !== '') {
+            $wanted[$normalized] = true;
+        }
+    }
+    if ($wanted === []) {
+        return '';
+    }
+
+    foreach (content_proposal_summary_rows($summary) as $row) {
+        $label = content_proposal_label_key($row['label']);
+        if (isset($wanted[$label])) {
+            return trim($row['value']);
+        }
+    }
+
+    return '';
+}
+}
+
 if (!function_exists('content_proposal_category_code')) {
 function content_proposal_category_code(string $title, int $maxLength = 120, string $fallback = 'category'): string
 {

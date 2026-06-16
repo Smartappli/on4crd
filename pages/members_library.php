@@ -115,6 +115,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalStatus = $autoAccept ? 'accepted' : 'pending';
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalFilePath, $proposalStatus);
             if ($autoAccept) {
+                member_library_apply_accepted_proposal([
+                    'id' => $proposalId,
+                    'member_id' => (int) $user['id'],
+                    'proposal_type' => 'content',
+                    'title' => $proposalTitle,
+                    'summary' => $proposalSummary,
+                    'source_ref' => $proposalFilePath,
+                ], $t);
                 set_flash('success', (string) $t['document_validated_direct']);
                 redirect_url(route_url('members_library'));
             }

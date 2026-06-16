@@ -39,12 +39,16 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('name="tags"', $webotheque);
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories, $proposalContact)', $webotheque);
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories)', $webotheque);
+        self::assertStringContainsString('function webotheque_apply_accepted_proposal(', $webotheque);
+        self::assertGreaterThanOrEqual(2, substr_count($webotheque, 'webotheque_apply_accepted_proposal('));
         self::assertSame('https://example.org', webotheque_normalize_url('example.org'));
     }
 
     public function testMembersLibraryModuleKeepsDocumentTopicSelectAndKeywords(): void
     {
         $library = $this->source('pages/members_library.php');
+        $adminLibrary = $this->source('pages/admin_library.php');
+        $memberLibraryHelpers = $this->source('app/member_library_helpers.php');
         $contentHelpers = $this->source('app/content_helpers.php');
         $routeHelperLoader = $this->source('app/route_helper_loader.php');
 
@@ -55,6 +59,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$documentProposalSelectedCategory = \$category !== '' ? \$category : 'general';", $library);
         self::assertStringContainsString("\$proposalTags = content_proposal_clean_single_line", $library);
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
+        self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
+        self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
+        self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
 
         $codes = array_map(static fn(array $category): string => (string) $category['code'], member_library_default_categories());
         self::assertContains('general', $codes);
@@ -62,8 +69,13 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertContains('technique', $codes);
         self::assertNotContains('medias', $codes);
         self::assertSame(['Formation', 'technique'], library_filter_controlled_tags(['Formation', 'unknown', 'technique']));
+        self::assertSame('storage/uploads/library/manual.pdf', member_library_proposal_source_path('content_proposals#12 https://on4crd.test/storage/uploads/library/manual.pdf?download=1'));
+        self::assertSame('formation', member_library_proposal_category_from_summary("Category: formation\nTags: technique"));
+        self::assertSame('technique,antenne', member_library_proposal_tags_from_summary('Tags: technique,unknown,antenne'));
         self::assertStringContainsString('member_library_default_categories()', $contentHelpers);
         self::assertStringContainsString("content_proposal_accepted_categories('members_library'", $contentHelpers);
+        self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library'", $routeHelperLoader);
+        self::assertStringContainsString("'fichiers', 'members_library', 'admin_articles'", $routeHelperLoader);
         self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
     }
 

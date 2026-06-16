@@ -280,6 +280,14 @@ final class FunctionHelpersExtendedTest extends TestCase
         content_proposal_payload(12, 'unknown', 'category', 'Title');
     }
 
+    public function testContentProposalSummaryDetailsParseContinuationLinesAndLabels(): void
+    {
+        $summary = "Description: First line\nSecond line\nMots clés: FT8, Antenne";
+
+        self::assertSame("First line\nSecond line", content_proposal_detail_from_summary($summary, ['description']));
+        self::assertSame('FT8, Antenne', content_proposal_detail_from_summary($summary, ['Mots cles']));
+    }
+
     public function testPasswordChangeRequiredRequiresAdminForcedMarker(): void
     {
         self::assertFalse(member_password_change_required([

@@ -5,6 +5,7 @@ require_permission('admin.access');
 $user = current_user();
 $locale = current_locale();
 $t = i18n_domain_locale('admin_library', $locale);
+$memberLibraryMessages = i18n_domain_locale('members_library', $locale);
 set_page_meta(['title' => (string) $t['title'], 'description' => (string) $t['meta_desc']]);
 
 function library_category_slug(string $value): string
@@ -90,21 +91,7 @@ function ensure_member_library_categories_table(): void
 
 function library_extract_text(string $path, string $extension): string
 {
-    $extension = strtolower($extension);
-    if ($extension === 'pdf') {
-        return article_extract_pdf_text($path);
-    }
-    if ($extension === 'docx') {
-        return trim(strip_tags(article_extract_docx_html($path)));
-    }
-    $raw = @file_get_contents($path);
-    if (!is_string($raw)) {
-        return '';
-    }
-    if (in_array($extension, ['html', 'htm'], true)) {
-        $raw = strip_tags($raw);
-    }
-    return trim((string) preg_replace('/\s+/u', ' ', $raw));
+    return member_library_extract_text($path, $extension);
 }
 
 function library_store_upload(array $file, int $memberId): array
@@ -193,6 +180,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             if (!ensure_content_proposals_table()) {
                 throw new RuntimeException('storage_unavailable');
+            }
+            $proposalStmt = db()->prepare('SELECT id, member_id, proposal_type, title, summary, source_ref FROM content_proposals WHERE id = ? AND area = "members_library" LIMIT 1');
+            $proposalStmt->execute([$proposalId]);
+            $proposal = $proposalStmt->fetch() ?: null;
+            if (!is_array($proposal)) {
+                throw new RuntimeException('err_required');
+            }
+            if ($proposalStatus === 'accepted') {
+                member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);
             }
             db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "members_library"')
                 ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);

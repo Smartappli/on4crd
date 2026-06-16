@@ -246,24 +246,7 @@ if (!function_exists('webotheque_proposal_detail_from_summary')) {
  */
 function webotheque_proposal_detail_from_summary(string $summary, array $labels): string
 {
-    $wanted = [];
-    foreach ($labels as $label) {
-        $normalized = mb_strtolower(trim($label), 'UTF-8');
-        if ($normalized !== '') {
-            $wanted[$normalized] = true;
-        }
-    }
-    foreach (preg_split('/\R/u', $summary) ?: [] as $line) {
-        if (preg_match('/^\s*([^:]{1,120}):\s*(.+)\s*$/u', (string) $line, $matches) !== 1) {
-            continue;
-        }
-        $label = mb_strtolower(trim((string) $matches[1]), 'UTF-8');
-        if (isset($wanted[$label])) {
-            return trim((string) $matches[2]);
-        }
-    }
-
-    return '';
+    return content_proposal_detail_from_summary($summary, $labels);
 }
 }
 
@@ -320,6 +303,51 @@ function webotheque_accepted_tags(): array
     }
 
     return $tags;
+}
+}
+
+if (!function_exists('webotheque_apply_accepted_proposal')) {
+function webotheque_apply_accepted_proposal(
+    array $proposal,
+    array $categories,
+    array $t = [],
+    int $fallbackMemberId = 0,
+    string $categoryOverride = ''
+): ?int {
+    if ((string) ($proposal['proposal_type'] ?? '') !== 'content') {
+        return null;
+    }
+
+    $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
+    if ($sourceUrl === '') {
+        throw new RuntimeException('err_url');
+    }
+    $category = $categoryOverride !== ''
+        ? webotheque_category_from_input($categoryOverride, $categories)
+        : webotheque_proposal_category_from_summary((string) ($proposal['summary'] ?? ''), $categories);
+
+    $summary = (string) ($proposal['summary'] ?? '');
+    $description = webotheque_proposal_detail_from_summary($summary, [(string) ($t['description_field'] ?? 'Description'), 'Description']);
+    if ($description === '') {
+        $description = $summary;
+    }
+    $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Etiquettes']);
+
+    $existingStmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE url = ? LIMIT 1');
+    $existingStmt->execute([$sourceUrl]);
+    $existingId = (int) ($existingStmt->fetchColumn() ?: 0);
+    if ($existingId > 0) {
+        return $existingId;
+    }
+
+    return webotheque_insert_link(
+        max(0, (int) ($proposal['member_id'] ?? $fallbackMemberId)),
+        $category,
+        (string) ($proposal['title'] ?? ''),
+        $sourceUrl,
+        $description,
+        $tags
+    );
 }
 }
 
@@ -797,23 +825,14 @@ function render_admin_webotheque_page(): void
                     throw new RuntimeException('err_required');
                 }
 
-                if ($proposalStatus === 'accepted' && (string) ($proposal['proposal_type'] ?? '') === 'content') {
-                    $sourceUrl = webotheque_proposal_source_url((string) ($proposal['source_ref'] ?? ''));
-                    if ($sourceUrl === '') {
-                        throw new RuntimeException('err_url');
-                    }
-                    $proposalCategory = webotheque_category_from_input((string) ($_POST['proposal_category'] ?? 'general'), $categories);
-                    $summary = (string) ($proposal['summary'] ?? '');
-                    $description = webotheque_proposal_detail_from_summary($summary, [(string) ($t['description_field'] ?? 'Description'), 'Description']);
-                    if ($description === '') {
-                        $description = $summary;
-                    }
-                    $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Étiquettes', 'Etiquettes']);
-                    $existingStmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE url = ? LIMIT 1');
-                    $existingStmt->execute([$sourceUrl]);
-                    if (!$existingStmt->fetch()) {
-                        webotheque_insert_link((int) ($proposal['member_id'] ?? ($user['id'] ?? 0)), $proposalCategory, (string) ($proposal['title'] ?? ''), $sourceUrl, $description, $tags);
-                    }
+                if ($proposalStatus === 'accepted') {
+                    webotheque_apply_accepted_proposal(
+                        $proposal,
+                        $categories,
+                        $t,
+                        (int) ($user['id'] ?? 0),
+                        (string) ($_POST['proposal_category'] ?? '')
+                    );
                 }
 
                 db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "webotheque"')

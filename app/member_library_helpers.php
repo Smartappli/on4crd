@@ -133,6 +133,229 @@ function member_library_store_proposed_document_upload(?array $file, int $member
 }
 }
 
+if (!function_exists('member_library_extract_text')) {
+function member_library_extract_text(string $path, string $extension): string
+{
+    $extension = strtolower($extension);
+    if ($extension === 'pdf' && function_exists('article_extract_pdf_text')) {
+        return article_extract_pdf_text($path);
+    }
+    if ($extension === 'docx' && function_exists('article_extract_docx_html')) {
+        return trim(strip_tags(article_extract_docx_html($path)));
+    }
+    if (!is_file($path)) {
+        return '';
+    }
+
+    $raw = @file_get_contents($path);
+    if (!is_string($raw)) {
+        return '';
+    }
+    if (in_array($extension, ['html', 'htm'], true)) {
+        $raw = strip_tags($raw);
+    }
+
+    return trim((string) preg_replace('/\s+/u', ' ', $raw));
+}
+}
+
+if (!function_exists('member_library_split_tags')) {
+/**
+ * @return list<string>
+ */
+function member_library_split_tags(string $value): array
+{
+    $tags = [];
+    foreach (preg_split('/[,;#]+/u', $value) ?: [] as $part) {
+        $tag = content_proposal_clean_single_line((string) $part, 80);
+        if ($tag !== '') {
+            $tags[] = $tag;
+        }
+    }
+
+    return $tags;
+}
+}
+
+if (!function_exists('member_library_clean_tags')) {
+function member_library_clean_tags(string $value): string
+{
+    $seen = [];
+    $tags = [];
+    foreach (library_filter_controlled_tags(member_library_split_tags($value)) as $tag) {
+        $key = mb_strtolower(trim((string) $tag), 'UTF-8');
+        if ($key === '' || isset($seen[$key])) {
+            continue;
+        }
+        $seen[$key] = true;
+        $tags[] = trim((string) $tag);
+    }
+
+    return mb_safe_substr(implode(',', $tags), 0, 255);
+}
+}
+
+if (!function_exists('member_library_proposal_labels')) {
+/**
+ * @return list<string>
+ */
+function member_library_proposal_labels(array $messages, string $field): array
+{
+    $labels = match ($field) {
+        'category' => ['Category', 'Categorie', 'Topic', 'Theme', 'Thematique'],
+        'tags' => ['Tags', 'Keywords', 'Mots cles'],
+        'description' => ['Description'],
+        default => [],
+    };
+    $messageKey = match ($field) {
+        'category' => 'propose_document_category',
+        'tags' => 'tags',
+        'description' => 'propose_document_description',
+        default => '',
+    };
+    if ($messageKey !== '' && isset($messages[$messageKey])) {
+        array_unshift($labels, (string) $messages[$messageKey]);
+    }
+
+    return array_values(array_unique(array_filter($labels, static fn(string $label): bool => trim($label) !== '')));
+}
+}
+
+if (!function_exists('member_library_proposal_value_at')) {
+function member_library_proposal_value_at(string $summary, int $index): string
+{
+    $rows = content_proposal_summary_rows($summary);
+
+    return trim((string) ($rows[$index]['value'] ?? ''));
+}
+}
+
+if (!function_exists('member_library_proposal_category_from_summary')) {
+function member_library_proposal_category_from_summary(string $summary, array $messages = []): string
+{
+    $category = content_proposal_detail_from_summary($summary, member_library_proposal_labels($messages, 'category'));
+    if ($category === '') {
+        $category = member_library_proposal_value_at($summary, 0);
+    }
+
+    return member_library_category_slug($category !== '' ? $category : 'general');
+}
+}
+
+if (!function_exists('member_library_proposal_tags_from_summary')) {
+function member_library_proposal_tags_from_summary(string $summary, array $messages = []): string
+{
+    return member_library_clean_tags(content_proposal_detail_from_summary($summary, member_library_proposal_labels($messages, 'tags')));
+}
+}
+
+if (!function_exists('member_library_proposal_description_from_summary')) {
+function member_library_proposal_description_from_summary(string $summary, array $messages = []): string
+{
+    return content_proposal_clean_multiline(
+        content_proposal_detail_from_summary($summary, member_library_proposal_labels($messages, 'description')),
+        5000
+    );
+}
+}
+
+if (!function_exists('member_library_proposal_source_path')) {
+function member_library_proposal_source_path(string $sourceRef): string
+{
+    $sourceRef = rawurldecode(trim($sourceRef));
+    if ($sourceRef === '') {
+        return '';
+    }
+    if (function_exists('safe_storage_public_path_or_null')) {
+        $safePath = safe_storage_public_path_or_null($sourceRef, ['storage/uploads/library/']);
+        if ($safePath !== null) {
+            return $safePath;
+        }
+    }
+    if (preg_match('~(storage/uploads/library/[^\s?#]+)~i', str_replace('\\', '/', $sourceRef), $matches) === 1) {
+        $candidate = ltrim((string) $matches[1], '/');
+        if (function_exists('safe_storage_public_path_or_null')) {
+            return safe_storage_public_path_or_null($candidate, ['storage/uploads/library/']) ?? '';
+        }
+        if (!str_contains($candidate, '..') && str_starts_with($candidate, 'storage/uploads/library/')) {
+            return $candidate;
+        }
+    }
+
+    return '';
+}
+}
+
+if (!function_exists('member_library_apply_accepted_proposal')) {
+function member_library_apply_accepted_proposal(array $proposal, array $messages = []): ?int
+{
+    $proposalType = (string) ($proposal['proposal_type'] ?? '');
+
+    if ($proposalType === 'category') {
+        if (!member_library_ensure_categories_table()) {
+            throw new RuntimeException('storage_unavailable');
+        }
+        $label = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
+        if ($label === '') {
+            throw new RuntimeException('err_required');
+        }
+        $code = member_library_category_slug($label);
+        db()->prepare('INSERT INTO member_library_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+            ->execute([$code, $label]);
+
+        return null;
+    }
+
+    if ($proposalType !== 'content') {
+        return null;
+    }
+
+    if (!ensure_member_library_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $sourcePath = member_library_proposal_source_path((string) ($proposal['source_ref'] ?? ''));
+    if ($sourcePath === '') {
+        throw new RuntimeException('err_invalid');
+    }
+    $absolutePath = dirname(__DIR__) . '/' . $sourcePath;
+    if (!is_file($absolutePath)) {
+        throw new RuntimeException('err_invalid');
+    }
+
+    $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 190);
+    if ($title === '') {
+        throw new RuntimeException('err_required');
+    }
+    $summary = (string) ($proposal['summary'] ?? '');
+    $category = member_library_proposal_category_from_summary($summary, $messages);
+    $tags = member_library_proposal_tags_from_summary($summary, $messages);
+    $description = member_library_proposal_description_from_summary($summary, $messages);
+
+    $existingStmt = db()->prepare('SELECT id FROM member_library_documents WHERE file_path = ? LIMIT 1');
+    $existingStmt->execute([$sourcePath]);
+    $existingId = (int) ($existingStmt->fetchColumn() ?: 0);
+    if ($existingId > 0) {
+        return $existingId;
+    }
+
+    $extension = strtolower((string) pathinfo($sourcePath, PATHINFO_EXTENSION));
+    $extractedText = member_library_extract_text($absolutePath, $extension);
+    db()->prepare('INSERT INTO member_library_documents (member_id, category, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?)')
+        ->execute([
+            max(0, (int) ($proposal['member_id'] ?? 0)),
+            $category,
+            $tags,
+            $title,
+            $description !== '' ? $description : null,
+            $sourcePath,
+            $extractedText !== '' ? $extractedText : null,
+        ]);
+
+    return (int) db()->lastInsertId();
+}
+}
+
 if (!function_exists('member_library_default_categories')) {
 function member_library_default_categories(): array
 {
