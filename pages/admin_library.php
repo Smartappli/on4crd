@@ -144,6 +144,7 @@ if (!ensure_member_library_table()) {
     echo render_layout('<div class="card"><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['title']);
     return;
 }
+member_library_sync_accepted_proposals($memberLibraryMessages);
 
 $adminLibraryRoutes = ['admin_library'];
 $adminLibraryRoute = (string) ($_GET['route'] ?? $_POST['route'] ?? 'admin_library');

@@ -60,13 +60,17 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$documentProposalSelectedCategory = \$category !== '' ? \$category : 'general';", $library);
         self::assertStringContainsString("\$proposalTags = content_proposal_clean_single_line", $library);
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
+        self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
+        self::assertStringContainsString('member_library_sync_accepted_proposals($memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);
         self::assertStringContainsString("require_once __DIR__ . '/article_import_helpers.php';", $adminHelpers);
         self::assertStringContainsString("i18n_domain_locale('members_library', \$locale)", $adminHelpers);
         self::assertStringContainsString('member_library_apply_accepted_proposal(', $adminHelpers);
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
+        self::assertStringContainsString('function member_library_sync_accepted_proposals(array $messages = [], int $limit = 100): array', $memberLibraryHelpers);
+        self::assertStringContainsString('member_library_accepted_proposal_sync_failed', $memberLibraryHelpers);
 
         $codes = array_map(static fn(array $category): string => (string) $category['code'], member_library_default_categories());
         self::assertContains('general', $codes);
