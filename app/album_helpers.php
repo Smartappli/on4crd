@@ -64,6 +64,12 @@ function album_ensure_source_proposal_column(): bool
     }
 
     try {
+        if (!table_has_column('albums', 'member_id')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN member_id INT DEFAULT NULL AFTER id');
+        }
+        if (!table_has_index('albums', 'idx_albums_member')) {
+            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_member (member_id)');
+        }
         if (!table_has_column('albums', 'source_proposal_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_public');
         }
@@ -95,6 +101,106 @@ function album_proposal_description_from_summary(string $summary): ?string
     return $albumDescription !== '' ? $albumDescription : null;
 }
 
+function album_proposal_action(string $summary): string
+{
+    $action = content_proposal_clean_single_line(
+        content_proposal_detail_from_summary($summary, ['Action']),
+        32
+    );
+
+    return in_array($action, ['update_album', 'delete_album'], true) ? $action : '';
+}
+
+function album_proposal_album_id(string $summary): int
+{
+    return max(0, (int) content_proposal_detail_from_summary($summary, ['Album ID']));
+}
+
+function album_delete_photo_file(string $publicPath): void
+{
+    $safePath = safe_storage_public_path_or_null($publicPath, ['storage/uploads/albums/']);
+    if ($safePath === null) {
+        return;
+    }
+
+    $absolute = dirname(__DIR__) . '/' . $safePath;
+    if (is_file($absolute)) {
+        @unlink($absolute);
+    }
+    $thumbPublic = album_thumbnail_public_path($safePath);
+    $thumbAbsolute = dirname(__DIR__) . '/' . $thumbPublic;
+    if (is_file($thumbAbsolute)) {
+        @unlink($thumbAbsolute);
+    }
+}
+
+function album_update_record(int $albumId, string $title, string $description, ?int $isPublic = null): void
+{
+    if (!album_ensure_source_proposal_column()) {
+        throw new RuntimeException('Albums storage unavailable.');
+    }
+
+    $title = content_proposal_clean_single_line($title, 190);
+    $description = content_proposal_clean_multiline($description, 10000);
+    if ($albumId <= 0 || $title === '') {
+        throw new RuntimeException('Invalid album proposal.');
+    }
+
+    $stmt = db()->prepare('SELECT id, is_public FROM albums WHERE id = ? LIMIT 1');
+    $stmt->execute([$albumId]);
+    $album = $stmt->fetch();
+    if (!is_array($album)) {
+        throw new RuntimeException('Invalid album proposal.');
+    }
+
+    $visibility = $isPublic;
+    if ($visibility === null) {
+        $visibility = (int) ($album['is_public'] ?? 1);
+    }
+
+    db()->prepare('UPDATE albums SET title = ?, description = ?, is_public = ? WHERE id = ?')
+        ->execute([$title, $description !== '' ? $description : null, $visibility ? 1 : 0, $albumId]);
+    album_clear_caches();
+}
+
+function album_delete_record(int $albumId): void
+{
+    if (!album_ensure_source_proposal_column()) {
+        throw new RuntimeException('Albums storage unavailable.');
+    }
+    if ($albumId <= 0) {
+        throw new RuntimeException('Invalid album proposal.');
+    }
+
+    $albumStmt = db()->prepare('SELECT id FROM albums WHERE id = ? LIMIT 1');
+    $albumStmt->execute([$albumId]);
+    if (!$albumStmt->fetchColumn()) {
+        throw new RuntimeException('Invalid album proposal.');
+    }
+
+    $photoStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ?');
+    $photoStmt->execute([$albumId]);
+    $photoRows = $photoStmt->fetchAll() ?: [];
+
+    $pdo = db();
+    $pdo->beginTransaction();
+    try {
+        $pdo->prepare('DELETE FROM album_photos WHERE album_id = ?')->execute([$albumId]);
+        $pdo->prepare('DELETE FROM albums WHERE id = ?')->execute([$albumId]);
+        $pdo->commit();
+    } catch (Throwable $throwable) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        throw $throwable;
+    }
+
+    foreach ($photoRows as $photoRow) {
+        album_delete_photo_file((string) ($photoRow['file_path'] ?? ''));
+    }
+    album_clear_caches();
+}
+
 function album_apply_accepted_proposal(array $proposal): ?int
 {
     if ((string) ($proposal['proposal_type'] ?? '') !== 'content') {
@@ -110,6 +216,25 @@ function album_apply_accepted_proposal(array $proposal): ?int
         throw new RuntimeException('Invalid album proposal.');
     }
 
+    $summary = (string) ($proposal['summary'] ?? '');
+    $action = album_proposal_action($summary);
+    if ($action !== '') {
+        $albumId = album_proposal_album_id($summary);
+        if ($action === 'delete_album') {
+            album_delete_record($albumId);
+
+            return $albumId;
+        }
+
+        album_update_record(
+            $albumId,
+            $title,
+            (string) (content_proposal_detail_from_summary($summary, ['Description', 'Resume', 'Summary']) ?: '')
+        );
+
+        return $albumId;
+    }
+
     $existingStmt = db()->prepare('SELECT id FROM albums WHERE source_proposal_id = ? LIMIT 1');
     $existingStmt->execute([$proposalId]);
     $existingId = (int) ($existingStmt->fetchColumn() ?: 0);
@@ -117,9 +242,9 @@ function album_apply_accepted_proposal(array $proposal): ?int
         return $existingId;
     }
 
-    $description = album_proposal_description_from_summary((string) ($proposal['summary'] ?? ''));
-    db()->prepare('INSERT INTO albums (title, description, is_public, source_proposal_id) VALUES (?, ?, 1, ?)')
-        ->execute([$title, $description, $proposalId]);
+    $description = album_proposal_description_from_summary($summary);
+    db()->prepare('INSERT INTO albums (member_id, title, description, is_public, source_proposal_id) VALUES (?, ?, ?, 1, ?)')
+        ->execute([max(0, (int) ($proposal['member_id'] ?? 0)), $title, $description, $proposalId]);
     $albumId = (int) db()->lastInsertId();
     album_clear_caches();
 
@@ -167,6 +292,11 @@ function album_sync_accepted_proposals(int $limit = 100): array
     foreach ($proposals as $proposal) {
         $result['checked']++;
         try {
+            if (album_proposal_action((string) ($proposal['summary'] ?? '')) !== '') {
+                $result['skipped']++;
+                continue;
+            }
+
             $proposalId = (int) ($proposal['id'] ?? 0);
             $existingStmt = db()->prepare('SELECT id FROM albums WHERE source_proposal_id = ? LIMIT 1');
             $existingStmt->execute([$proposalId]);
