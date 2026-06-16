@@ -25,7 +25,7 @@ function admin_dashboard_translations(string $locale): array
 }
 
 /**
- * @return array<int, array{route:string,title:string,desc:string}>
+ * @return array<int, array{route:string,title:string,desc:string,url:string,pending_count:int}>
  */
 function admin_dashboard_cards(string $locale, int $userId, string $search = ''): array
 {
@@ -36,12 +36,13 @@ function admin_dashboard_cards(string $locale, int $userId, string $search = '')
 }
 
 /**
- * @return array<int, array{route:string,title:string,desc:string}>
+ * @return array<int, array{route:string,title:string,desc:string,url:string,pending_count:int}>
  */
 function admin_cards_for_dashboard(string $locale, int $userId, string $searchNeedle = ''): array
 {
     return cache_remember('admin_cards_' . $locale . '_' . $userId . '_' . hash('sha256', $searchNeedle), 30, static function () use ($locale, $searchNeedle): array {
         $cards = [];
+        $pendingCounts = admin_pending_content_counts_by_route();
         foreach (admin_module_cards_catalog() as $card) {
             $module = (string) ($card['module'] ?? '');
             $permission = (string) ($card['permission'] ?? '');
@@ -59,8 +60,223 @@ function admin_cards_for_dashboard(string $locale, int $userId, string $searchNe
                     continue;
                 }
             }
-            $cards[] = ['route' => (string) $card['route'], 'title' => $title, 'desc' => $desc];
+            $route = (string) $card['route'];
+            $pendingCount = (int) ($pendingCounts[$route] ?? 0);
+            $cards[] = [
+                'route' => $route,
+                'title' => $title,
+                'desc' => $desc,
+                'url' => admin_pending_content_card_url($route, $pendingCount),
+                'pending_count' => $pendingCount,
+            ];
         }
         return $cards;
     });
+}
+
+/**
+ * @return array<string, array{route:string,permission:string,label:array<string,string>}>
+ */
+function admin_pending_content_areas(): array
+{
+    return [
+        'articles' => ['route' => 'admin_articles', 'permission' => 'articles.manage', 'label' => ['fr' => 'Articles', 'en' => 'Articles']],
+        'albums' => ['route' => 'admin_albums', 'permission' => 'albums.manage', 'label' => ['fr' => 'Albums', 'en' => 'Albums']],
+        'auctions' => ['route' => 'admin_auctions', 'permission' => 'auctions.manage', 'label' => ['fr' => 'Encheres', 'en' => 'Auctions']],
+        'classifieds' => ['route' => 'admin_classifieds', 'permission' => 'classifieds.moderate', 'label' => ['fr' => 'Petites annonces', 'en' => 'Classifieds']],
+        'events' => ['route' => 'admin_events', 'permission' => 'events.manage', 'label' => ['fr' => 'Evenements', 'en' => 'Events']],
+        'members_library' => ['route' => 'admin_library', 'permission' => 'admin.access', 'label' => ['fr' => 'Bibliotheque membres', 'en' => 'Member library']],
+        'news' => ['route' => 'admin_news', 'permission' => 'news.moderate', 'label' => ['fr' => 'Actualites', 'en' => 'News']],
+        'webotheque' => ['route' => 'admin_webotheque', 'permission' => 'admin.access', 'label' => ['fr' => 'Webotheque', 'en' => 'Web library']],
+        'wiki' => ['route' => 'admin_wiki', 'permission' => 'wiki.moderate', 'label' => ['fr' => 'Wiki', 'en' => 'Wiki']],
+    ];
+}
+
+function admin_can_manage_pending_content_area(string $area): bool
+{
+    $definition = admin_pending_content_areas()[$area] ?? null;
+    if (!is_array($definition)) {
+        return false;
+    }
+
+    return has_permission((string) $definition['permission']);
+}
+
+function admin_pending_content_area_label(string $area, string $locale): string
+{
+    $definition = admin_pending_content_areas()[$area] ?? null;
+    if (!is_array($definition)) {
+        return $area;
+    }
+
+    return i18n_localized_value($definition['label'], $locale, 'fr');
+}
+
+function admin_pending_content_area_url(string $area): string
+{
+    $definition = admin_pending_content_areas()[$area] ?? null;
+    if (!is_array($definition)) {
+        return route_url('admin');
+    }
+
+    return route_url((string) $definition['route']);
+}
+
+/**
+ * @return array<string, string>
+ */
+function admin_pending_content_proposal_status_labels(string $locale): array
+{
+    $labels = [
+        'fr' => [
+            'pending' => 'En attente',
+            'reviewed' => 'Relue',
+            'accepted' => 'Acceptee',
+            'rejected' => 'Refusee',
+        ],
+        'en' => [
+            'pending' => 'Pending',
+            'reviewed' => 'Reviewed',
+            'accepted' => 'Accepted',
+            'rejected' => 'Rejected',
+        ],
+    ];
+
+    return $labels[$locale] ?? $labels['fr'];
+}
+
+function admin_pending_content_card_url(string $route, int $pendingCount): string
+{
+    if ($pendingCount <= 0) {
+        return route_url($route);
+    }
+
+    return match ($route) {
+        'admin_articles', 'admin_library', 'admin_webotheque', 'admin_wiki' => route_url_clean($route, ['status' => 'pending']) . '#pending-proposals',
+        'admin_classifieds' => route_url_clean($route, ['status' => 'pending']),
+        'admin_ads' => route_url($route, ['refresh' => '1']),
+        'admin_news', 'admin_privacy', 'admin_translation_reviews' => route_url($route),
+        default => route_url('admin') . '#pending-proposals',
+    };
+}
+
+/**
+ * @return array<string, int>
+ */
+function admin_pending_content_counts_by_route(): array
+{
+    $counts = [];
+    $addCount = static function (string $route, int $count) use (&$counts): void {
+        if ($count <= 0) {
+            return;
+        }
+        $counts[$route] = (int) ($counts[$route] ?? 0) + $count;
+    };
+
+    try {
+        if (table_exists('content_proposals')) {
+            $proposalRows = db()->query('SELECT area, COUNT(*) AS total FROM content_proposals WHERE status = "pending" GROUP BY area')->fetchAll() ?: [];
+            foreach ($proposalRows as $row) {
+                $area = (string) ($row['area'] ?? '');
+                if (!admin_can_manage_pending_content_area($area)) {
+                    continue;
+                }
+                $definition = admin_pending_content_areas()[$area] ?? null;
+                if (is_array($definition)) {
+                    $addCount((string) $definition['route'], (int) ($row['total'] ?? 0));
+                }
+            }
+        }
+
+        if (has_permission('articles.manage') && table_exists('articles')) {
+            $addCount('admin_articles', (int) (db()->query('SELECT COUNT(*) FROM articles WHERE status = "pending"')->fetchColumn() ?: 0));
+        }
+        if (has_permission('wiki.moderate') && table_exists('wiki_pages')) {
+            $addCount('admin_wiki', (int) (db()->query('SELECT COUNT(*) FROM wiki_pages WHERE status = "pending"')->fetchColumn() ?: 0));
+        }
+        if (has_permission('classifieds.moderate') && table_exists('classified_ads')) {
+            $addCount('admin_classifieds', (int) (db()->query('SELECT COUNT(*) FROM classified_ads WHERE status = "pending"')->fetchColumn() ?: 0));
+        }
+        if (has_permission('ads.moderate') && table_exists('ads')) {
+            $addCount('admin_ads', (int) (db()->query('SELECT COUNT(*) FROM ads WHERE status IN ("pending", "rejected", "paused")')->fetchColumn() ?: 0));
+        }
+        if (has_permission('news.moderate') && table_exists('news_posts')) {
+            $addCount('admin_news', (int) (db()->query('SELECT COUNT(*) FROM news_posts WHERE status = "pending"')->fetchColumn() ?: 0));
+        }
+        if (has_permission('privacy.manage') && table_exists('privacy_requests')) {
+            $addCount('admin_privacy', (int) (db()->query('SELECT COUNT(*) FROM privacy_requests WHERE status = "pending"')->fetchColumn() ?: 0));
+        }
+        if (has_permission('admin.access')) {
+            $translationCount = 0;
+            if (table_exists('news_translations')) {
+                $translationCount += (int) (db()->query('SELECT COUNT(*) FROM news_translations WHERE status IN ("auto", "needs_review")')->fetchColumn() ?: 0);
+            }
+            if (table_exists('article_translations')) {
+                $translationCount += (int) (db()->query('SELECT COUNT(*) FROM article_translations WHERE status IN ("auto", "needs_review")')->fetchColumn() ?: 0);
+            }
+            $addCount('admin_translation_reviews', $translationCount);
+        }
+    } catch (Throwable) {
+        return $counts;
+    }
+
+    return $counts;
+}
+
+/**
+ * @return list<array<string, mixed>>
+ */
+function admin_pending_content_proposals_for_dashboard(string $locale, int $limit = 80): array
+{
+    if (!ensure_content_proposals_table()) {
+        return [];
+    }
+
+    try {
+        $stmt = db()->prepare(
+            'SELECT cp.id, cp.member_id, cp.area, cp.proposal_type, cp.title, cp.summary, cp.contact, cp.source_ref, cp.status, cp.moderation_note, cp.created_at, cp.updated_at, m.callsign, m.email
+             FROM content_proposals cp
+             LEFT JOIN members m ON m.id = cp.member_id
+             WHERE cp.status = "pending"
+             ORDER BY cp.created_at ASC, cp.id ASC
+             LIMIT ' . max(1, $limit)
+        );
+        $stmt->execute();
+    } catch (Throwable) {
+        return [];
+    }
+
+    $rows = [];
+    foreach (($stmt->fetchAll() ?: []) as $row) {
+        $area = (string) ($row['area'] ?? '');
+        if (!admin_can_manage_pending_content_area($area)) {
+            continue;
+        }
+        $row['area_label'] = admin_pending_content_area_label($area, $locale);
+        $row['area_url'] = admin_pending_content_area_url($area);
+        $rows[] = $row;
+    }
+
+    return $rows;
+}
+
+function admin_update_content_proposal_status(int $proposalId, string $status, string $moderationNote, string $locale): void
+{
+    $labels = admin_pending_content_proposal_status_labels($locale);
+    if ($proposalId <= 0 || !isset($labels[$status])) {
+        throw new RuntimeException($locale === 'fr' ? 'Proposition invalide.' : 'Invalid proposal.');
+    }
+    if (!ensure_content_proposals_table()) {
+        throw new RuntimeException($locale === 'fr' ? 'Stockage des propositions indisponible.' : 'Proposal storage unavailable.');
+    }
+
+    $stmt = db()->prepare('SELECT area FROM content_proposals WHERE id = ? LIMIT 1');
+    $stmt->execute([$proposalId]);
+    $area = (string) ($stmt->fetchColumn() ?: '');
+    if (!admin_can_manage_pending_content_area($area)) {
+        throw new RuntimeException($locale === 'fr' ? 'Permission insuffisante.' : 'Insufficient permission.');
+    }
+
+    db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ?')
+        ->execute([$status, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
 }
