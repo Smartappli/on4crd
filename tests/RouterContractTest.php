@@ -604,6 +604,22 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('status = "accepted"', $wiki);
     }
 
+    public function testWikiPendingCategoryProposalsAreManageableFromAdminWiki(): void
+    {
+        $adminWiki = file_get_contents(__DIR__ . '/../pages/admin_wiki.php');
+        self::assertIsString($adminWiki);
+
+        self::assertStringContainsString("require_permission('wiki.moderate');", $adminWiki);
+        self::assertStringContainsString("\$pendingProposalUrl = route_url_clean('admin_wiki', ['status' => 'pending']) . '#pending-proposals';", $adminWiki);
+        self::assertStringContainsString("\$action = (string) (\$_POST['action'] ?? 'update_page_status');", $adminWiki);
+        self::assertStringContainsString("if (\$action === 'update_proposal_status')", $adminWiki);
+        self::assertStringContainsString('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "wiki"', $adminWiki);
+        self::assertStringContainsString('WHERE cp.area = "wiki" AND cp.status = "pending"', $adminWiki);
+        self::assertStringContainsString('id="pending-proposals"', $adminWiki);
+        self::assertStringContainsString('name="action" value="update_proposal_status"', $adminWiki);
+        self::assertStringContainsString('name="proposal_status"', $adminWiki);
+    }
+
     public function testPublicContentProposalAreasIncludeAlbumsAndAuctions(): void
     {
         $helpers = file_get_contents(__DIR__ . '/../app/content_helpers.php');

@@ -23,10 +23,23 @@ $statusLabels = [
     'published' => $tr('status_published', 'Publie'),
     'rejected' => $tr('status_rejected', 'Refuse'),
 ];
+$proposalStatusLabels = [
+    'pending' => $tr('proposal_status_pending', 'En attente'),
+    'reviewed' => $tr('proposal_status_reviewed', 'Relue'),
+    'accepted' => $tr('proposal_status_accepted', 'Acceptee'),
+    'rejected' => $tr('proposal_status_rejected', 'Refusee'),
+];
+$proposalTypeLabels = [
+    'category' => $tr('proposal_type_category', 'Thematique'),
+    'content' => $tr('proposal_type_content', 'Contenu'),
+    'domain' => $tr('proposal_type_domain', 'Domaine'),
+    'tag' => $tr('proposal_type_tag', 'Mot cle'),
+];
 $statusFilter = trim((string) ($_GET['status'] ?? ''));
 if (!isset($statusLabels[$statusFilter])) {
     $statusFilter = '';
 }
+$pendingProposalUrl = route_url_clean('admin_wiki', ['status' => 'pending']) . '#pending-proposals';
 
 set_page_meta([
     'title' => $t('layout'),
@@ -47,6 +60,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         verify_csrf();
+        $action = (string) ($_POST['action'] ?? 'update_page_status');
+
+        if ($action === 'update_proposal_status') {
+            $proposalId = (int) ($_POST['proposal_id'] ?? 0);
+            $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
+            $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
+            if ($proposalId <= 0 || !isset($proposalStatusLabels[$proposalStatus])) {
+                throw new RuntimeException($tr('invalid_proposal', 'Proposition wiki invalide.'));
+            }
+            if (!ensure_content_proposals_table()) {
+                throw new RuntimeException($tr('proposal_storage_unavailable', 'Stockage des propositions indisponible.'));
+            }
+
+            db()->prepare('UPDATE content_proposals SET status = ?, moderation_note = ? WHERE id = ? AND area = "wiki"')
+                ->execute([$proposalStatus, $moderationNote !== '' ? $moderationNote : null, $proposalId]);
+            set_flash('success', $tr('proposal_status_saved', 'Proposition wiki mise a jour.'));
+            redirect_url($pendingProposalUrl);
+        }
+
         $id = (int) ($_POST['id'] ?? 0);
         $status = (string) ($_POST['status'] ?? '');
         if ($id <= 0 || !isset($statusLabels[$status])) {
@@ -121,6 +153,20 @@ $stmt = db()->prepare(
 );
 $stmt->execute($params);
 $pages = $stmt->fetchAll() ?: [];
+
+$showPendingProposals = $statusFilter === 'pending';
+$pendingProposals = [];
+if ($showPendingProposals && ensure_content_proposals_table()) {
+    $proposalStmt = db()->prepare(
+        'SELECT cp.id, cp.member_id, cp.proposal_type, cp.title, cp.summary, cp.contact, cp.source_ref, cp.status, cp.moderation_note, cp.created_at, cp.updated_at, m.callsign, m.email
+         FROM content_proposals cp
+         LEFT JOIN members m ON m.id = cp.member_id
+         WHERE cp.area = "wiki" AND cp.status = "pending"
+         ORDER BY cp.created_at ASC, cp.id ASC'
+    );
+    $proposalStmt->execute();
+    $pendingProposals = $proposalStmt->fetchAll() ?: [];
+}
 
 ob_start();
 ?>
@@ -198,5 +244,69 @@ ob_start();
         </table>
     </div>
 </div>
+<?php if ($showPendingProposals): ?>
+<section class="card" id="pending-proposals" aria-labelledby="pending-proposals-title">
+    <div class="row-between">
+        <h2 id="pending-proposals-title"><?= e($tr('pending_proposals_title', 'Contenus wiki en attente de validation')) ?></h2>
+        <a class="button secondary small" href="<?= e(route_url_clean('admin_wiki')) ?>"><?= e($tr('clear_filter', 'Tout afficher')) ?></a>
+    </div>
+    <?php if ($pendingProposals === []): ?>
+        <p class="help"><?= e($tr('pending_proposals_empty', 'Aucune proposition wiki en attente de validation.')) ?></p>
+    <?php endif; ?>
+    <div class="stack">
+        <?php foreach ($pendingProposals as $proposal): ?>
+            <?php
+            $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
+            $proposalStatus = (string) ($proposal['status'] ?? 'pending');
+            $memberLabel = trim((string) ($proposal['callsign'] ?? ''));
+            if ($memberLabel === '') {
+                $memberLabel = trim((string) ($proposal['email'] ?? ''));
+            }
+            if ($memberLabel === '') {
+                $memberLabel = '#' . (int) ($proposal['member_id'] ?? 0);
+            }
+            $proposalCreatedTimestamp = strtotime((string) ($proposal['created_at'] ?? 'now'));
+            if ($proposalCreatedTimestamp === false) {
+                $proposalCreatedTimestamp = time();
+            }
+            ?>
+            <article class="article-item">
+                <p>
+                    <span class="badge muted"><?= e((string) ($proposalTypeLabels[$proposalType] ?? $proposalType)) ?></span>
+                    <span class="badge muted"><?= e((string) ($proposalStatusLabels[$proposalStatus] ?? $proposalStatus)) ?></span>
+                    <span class="badge muted"><?= e(date('d/m/Y H:i', $proposalCreatedTimestamp)) ?></span>
+                </p>
+                <h3><?= e((string) ($proposal['title'] ?? $tr('proposal_default_title', 'Proposition'))) ?></h3>
+                <p class="help"><?= e($tr('proposal_author', 'Propose par')) ?>: <?= e($memberLabel) ?></p>
+                <?php if (trim((string) ($proposal['summary'] ?? '')) !== ''): ?>
+                    <p><?= nl2br(e((string) $proposal['summary'])) ?></p>
+                <?php endif; ?>
+                <?php if (trim((string) ($proposal['contact'] ?? '')) !== ''): ?>
+                    <p class="help"><?= e($tr('proposal_contact', 'Contact')) ?>: <?= e((string) $proposal['contact']) ?></p>
+                <?php endif; ?>
+                <form method="post" class="stack">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="update_proposal_status">
+                    <input type="hidden" name="proposal_id" value="<?= (int) ($proposal['id'] ?? 0) ?>">
+                    <input type="hidden" name="return_status" value="pending">
+                    <div class="grid-2">
+                        <label><?= e($tr('proposal_status_label', 'Statut')) ?>
+                            <select name="proposal_status">
+                                <?php foreach ($proposalStatusLabels as $statusCode => $statusLabel): ?>
+                                    <option value="<?= e($statusCode) ?>" <?= $proposalStatus === $statusCode ? 'selected' : '' ?>><?= e($statusLabel) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label><?= e($tr('proposal_moderation_note', 'Note de moderation')) ?>
+                            <textarea name="moderation_note" rows="3"><?= e((string) ($proposal['moderation_note'] ?? '')) ?></textarea>
+                        </label>
+                    </div>
+                    <p><button class="button small" type="submit"><?= e($tr('proposal_save_status', 'Enregistrer le statut')) ?></button></p>
+                </form>
+            </article>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
 <?php
 echo render_layout((string) ob_get_clean(), $t('layout'));
