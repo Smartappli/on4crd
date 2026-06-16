@@ -739,6 +739,8 @@ function content_proposal_allowed_areas(): array
         'events' => true,
         'members_library' => true,
         'news' => true,
+        'presentations' => true,
+        'videos' => true,
         'webotheque' => true,
         'wiki' => true,
     ];

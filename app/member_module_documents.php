@@ -788,7 +788,7 @@ function render_member_document_module_page(string $module): void
         return;
     }
 
-    require_login();
+    $user = require_login();
     $locale = current_locale();
     $labels = member_document_module_labels($moduleCode, $locale);
     $memberAreaLabel = member_area_eyebrow_label($locale);
@@ -806,6 +806,104 @@ function render_member_document_module_page(string $module): void
     if (!ensure_member_module_documents_table()) {
         echo render_layout('<div class="card"><p>' . e((string) $labels['storage_unavailable']) . '</p></div>', $title);
         return;
+    }
+
+    $canManageDocuments = member_document_current_user_is_administrator();
+    $returnUrl = static function () use ($definition, $moduleCode): string {
+        return route_url_clean((string) ($definition['route'] ?? $moduleCode), [
+            'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+        ]);
+    };
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        try {
+            verify_csrf();
+            $action = (string) ($_POST['action'] ?? '');
+            if (($action !== 'update_document' && $action !== 'delete_document') || !member_document_module_allows_member_management($moduleCode)) {
+                throw new RuntimeException((string) $labels['err_invalid']);
+            }
+
+            $documentId = (int) ($_POST['id'] ?? 0);
+            $docStmt = db()->prepare('SELECT * FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
+            $docStmt->execute([$documentId, $moduleCode]);
+            $document = $docStmt->fetch() ?: null;
+            if (!is_array($document)) {
+                throw new RuntimeException((string) $labels['document_missing']);
+            }
+            if (!$canManageDocuments && (int) ($document['member_id'] ?? 0) !== (int) ($user['id'] ?? 0)) {
+                throw new RuntimeException((string) $labels['document_forbidden']);
+            }
+
+            $titleInput = content_proposal_clean_single_line((string) ($_POST['title'] ?? $document['title'] ?? ''), 255);
+            $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? $document['description'] ?? ''), 5000);
+            $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? $document['tags'] ?? ''), 255);
+            if ($titleInput === '') {
+                throw new RuntimeException((string) $labels['err_required']);
+            }
+
+            if ($action === 'delete_document') {
+                if ($canManageDocuments) {
+                    member_document_delete_record($documentId, $moduleCode);
+                    set_flash('success', (string) $labels['ok_deleted']);
+                    redirect_url($returnUrl());
+                }
+
+                $proposalSummary = content_proposal_details_text([
+                    'Action' => 'delete_document',
+                    'Document ID' => (string) $documentId,
+                    'Module' => $moduleCode,
+                    'Tags' => (string) ($document['tags'] ?? ''),
+                    'Description' => mb_safe_substr((string) ($document['description'] ?? ''), 0, 1800),
+                ]);
+                $proposalId = content_proposal_create((int) $user['id'], $moduleCode, 'content', $titleInput, $proposalSummary, (string) ($user['email'] ?? ''), (string) ($document['file_path'] ?? ''), 'pending');
+                content_proposal_notify_site((string) $labels['document_change_subject'], [
+                    'area' => $moduleCode,
+                    'proposal_type' => 'content',
+                    'title' => $titleInput,
+                    'summary' => $proposalSummary,
+                    'contact' => (string) ($user['email'] ?? ''),
+                    'source_ref' => 'content_proposals#' . $proposalId . ' ' . base_url((string) ($document['file_path'] ?? '')),
+                ]);
+                set_flash('success', (string) $labels['document_change_recorded']);
+                redirect('my_requests');
+            }
+
+            $replacementPublicPath = '';
+            $file = $_FILES['document_file'] ?? null;
+            if (is_array($file) && (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                $stored = member_document_store_upload($file, $moduleCode, (int) ($user['id'] ?? 0));
+                $replacementPublicPath = (string) $stored['public_path'];
+            }
+
+            if ($canManageDocuments) {
+                member_document_update_record($documentId, $moduleCode, $titleInput, $description, $tags, $replacementPublicPath);
+                set_flash('success', (string) $labels['ok_updated']);
+                redirect_url($returnUrl());
+            }
+
+            $proposalSummary = content_proposal_details_text([
+                'Action' => 'update_document',
+                'Document ID' => (string) $documentId,
+                'Module' => $moduleCode,
+                'Tags' => $tags,
+                'Description' => $description,
+            ]);
+            $proposalId = content_proposal_create((int) $user['id'], $moduleCode, 'content', $titleInput, $proposalSummary, (string) ($user['email'] ?? ''), $replacementPublicPath, 'pending');
+            content_proposal_notify_site((string) $labels['document_change_subject'], [
+                'area' => $moduleCode,
+                'proposal_type' => 'content',
+                'title' => $titleInput,
+                'summary' => $proposalSummary,
+                'contact' => (string) ($user['email'] ?? ''),
+                'source_ref' => $replacementPublicPath !== '' ? ('content_proposals#' . $proposalId . ' ' . base_url($replacementPublicPath)) : ('content_proposals#' . $proposalId),
+            ]);
+            set_flash('success', (string) $labels['document_change_recorded']);
+            redirect('my_requests');
+        } catch (Throwable $throwable) {
+            $key = $throwable->getMessage();
+            set_flash('error', (string) ($labels[$key] ?? $key));
+            redirect_url($returnUrl());
+        }
     }
 
     $search = trim((string) ($_GET['q'] ?? ''));
@@ -842,7 +940,7 @@ function render_member_document_module_page(string $module): void
                 <?= render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats) ?>
                 <p class="actions member-document-hero-actions">
                     <a class="button secondary" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e((string) $labels['view_content']) ?></a>
-                    <?php if (member_document_current_user_is_administrator()): ?>
+                    <?php if ($canManageDocuments): ?>
                         <a class="button" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) $labels['administration']) ?></a>
                     <?php endif; ?>
                 </p>
@@ -867,7 +965,7 @@ function render_member_document_module_page(string $module): void
                 </div>
             <?php else: ?>
                 <div class="news-grid member-document-grid">
-                    <?= render_member_document_module_cards($documents, $labels) ?>
+                    <?= render_member_document_module_cards($documents, $labels, $moduleCode, $user, $canManageDocuments, ['q' => $search]) ?>
                 </div>
             <?php endif; ?>
         </section>
