@@ -6,6 +6,14 @@ $t = i18n_domain_locale('albums', $locale);
 set_page_meta(['title' => (string) $t['public_albums'], 'description' => (string) $t['meta_desc']]);
 $user = current_user();
 $canManageAlbums = has_permission('albums.manage');
+$albumText = static function (string $key, string $fr, string $en) use ($t, $locale): string {
+    $value = trim((string) ($t[$key] ?? ''));
+    if ($value !== '') {
+        return $value;
+    }
+
+    return $locale === 'fr' ? $fr : $en;
+};
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -28,6 +36,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         redirect_url(route_url_clean('albums', ['q' => (string) ($_GET['q'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+    }
+
+    if ($action === 'update_album' || $action === 'delete_album') {
+        if (!album_ensure_source_proposal_column()) {
+            throw new RuntimeException((string) $t['gallery_unavailable']);
+        }
+        $albumId = (int) ($_POST['album_id'] ?? 0);
+        $albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? LIMIT 1');
+        $albumStmt->execute([$albumId]);
+        $album = $albumStmt->fetch() ?: null;
+        if (!is_array($album)) {
+            throw new RuntimeException($albumText('invalid_album', 'Album introuvable.', 'Album not found.'));
+        }
+        if (!$canManageAlbums && (int) ($album['member_id'] ?? 0) !== (int) ($user['id'] ?? 0)) {
+            throw new RuntimeException($albumText('album_forbidden', 'Vous ne pouvez pas modifier cet album.', 'You cannot edit this album.'));
+        }
+
+        $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? $album['title'] ?? ''), 190);
+        $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? $album['description'] ?? ''), 10000);
+        if ($title === '') {
+            throw new RuntimeException($albumText('title_required', 'Titre requis.', 'Title is required.'));
+        }
+
+        $returnUrl = route_url_clean('albums', [
+            'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+            'p' => max(1, (int) ($_POST['return_p'] ?? $_GET['p'] ?? 1)),
+        ]);
+
+        if ($action === 'delete_album') {
+            if ($canManageAlbums) {
+                album_delete_record($albumId);
+                set_flash('success', $albumText('album_deleted_ok', 'Album supprime.', 'Album deleted.'));
+                redirect_url($returnUrl);
+            }
+
+            $summary = content_proposal_details_text([
+                'Action' => 'delete_album',
+                'Album ID' => (string) $albumId,
+                'Description' => mb_safe_substr((string) ($album['description'] ?? ''), 0, 5000),
+            ]);
+            $sourceRef = route_url('album', ['id' => $albumId]);
+            $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
+            content_proposal_notify_site($albumText('album_change_subject', 'Modification d album a valider', 'Album change pending review'), [
+                'area' => 'albums',
+                'proposal_type' => 'content',
+                'title' => $title,
+                'summary' => $summary,
+                'contact' => (string) ($user['email'] ?? ''),
+                'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
+            ]);
+            set_flash('success', $albumText('album_change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+            redirect('my_requests');
+        }
+
+        if ($canManageAlbums) {
+            album_update_record($albumId, $title, $description);
+            set_flash('success', $albumText('album_updated_ok', 'Album mis a jour.', 'Album updated.'));
+            redirect_url($returnUrl);
+        }
+
+        $summary = content_proposal_details_text([
+            'Action' => 'update_album',
+            'Album ID' => (string) $albumId,
+            'Description' => $description,
+        ]);
+        $sourceRef = route_url('album', ['id' => $albumId]);
+        $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
+        content_proposal_notify_site($albumText('album_change_subject', 'Modification d album a valider', 'Album change pending review'), [
+            'area' => 'albums',
+            'proposal_type' => 'content',
+            'title' => $title,
+            'summary' => $summary,
+            'contact' => (string) ($user['email'] ?? ''),
+            'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
+        ]);
+        set_flash('success', $albumText('album_change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
+        redirect('my_requests');
     }
 
     if ($action === 'propose_album') {
@@ -55,8 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ])
                 : '';
             $albumDescription = trim($description . ($albumMetadata !== '' ? "\n\n" . $albumMetadata : ''));
-            db()->prepare('INSERT INTO albums (title, description, is_public) VALUES (?, ?, 1)')
-                ->execute([$title, $albumDescription !== '' ? $albumDescription : null]);
+            album_ensure_source_proposal_column();
+            db()->prepare('INSERT INTO albums (member_id, title, description, is_public) VALUES (?, ?, ?, 1)')
+                ->execute([(int) $user['id'], $title, $albumDescription !== '' ? $albumDescription : null]);
             $albumId = (int) db()->lastInsertId();
             album_clear_caches();
             set_flash('success', 'Album cree et valide directement.');
@@ -91,6 +177,7 @@ if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
     return;
 }
+album_ensure_source_proposal_column();
 album_sync_accepted_proposals();
 
 $search = trim((string) ($_GET['q'] ?? ''));
