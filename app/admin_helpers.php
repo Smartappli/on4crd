@@ -299,6 +299,7 @@ function admin_apply_accepted_content_proposal(array $proposal, string $locale):
     }
 
     require_once __DIR__ . '/member_library_helpers.php';
+    require_once __DIR__ . '/article_import_helpers.php';
 
     member_library_apply_accepted_proposal(
         $proposal,
