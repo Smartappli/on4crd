@@ -520,6 +520,20 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("\$card['pending_count']", $adminPage);
     }
 
+    public function testAdminCommitteeUsesSingleFormAndSummaryTable(): void
+    {
+        $adminCommittee = file_get_contents(__DIR__ . '/../pages/admin_committee.php');
+        self::assertIsString($adminCommittee);
+
+        self::assertSame(1, substr_count($adminCommittee, '<form method="post"'));
+        self::assertStringContainsString('name="member_id"', $adminCommittee);
+        self::assertStringContainsString("UPDATE members SET is_committee = ?, committee_role = ?, committee_bio = ?, committee_sort_order = ? WHERE id = ?", $adminCommittee);
+        self::assertStringContainsString('$committeeRows = db()->query(', $adminCommittee);
+        self::assertStringContainsString('<table>', $adminCommittee);
+        self::assertStringContainsString("route_url('admin_committee', ['member_id' => (int) \$row['id']])", $adminCommittee);
+        self::assertStringNotContainsString('name="members[', $adminCommittee);
+    }
+
     public function testProposalDialogTriggersKeepNativeFallbacks(): void
     {
         $contracts = [
