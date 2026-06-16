@@ -232,6 +232,14 @@ if (ensure_content_proposals_table()) {
             if ($area === 'members_library' && $proposalType === 'content' && $proposalStatus === 'accepted') {
                 $proposalUrl = route_url_clean('members_library', ['q' => $proposalTitle]);
             }
+            if ($area === 'albums' && $proposalType === 'content' && $proposalStatus === 'accepted') {
+                $proposalUrl = route_url_clean('albums', ['q' => $proposalTitle]);
+            }
+            if ($area === 'webotheque' && $proposalStatus === 'accepted') {
+                $proposalUrl = in_array($proposalType, ['content', 'tag'], true)
+                    ? route_url_clean('webotheque', ['q' => $proposalTitle])
+                    : route_url_clean('webotheque', ['category' => $proposalTitle]);
+            }
             $noteParts = [];
             if (trim((string) ($proposal['summary'] ?? '')) !== '') {
                 $noteParts[] = trim((string) $proposal['summary']);
