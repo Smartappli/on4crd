@@ -21,6 +21,29 @@
   min-height: 2.75rem;
 }
 
+[data-route="admin_committee"] .admin-committee-module .admin-committee-member {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  min-width: 12rem;
+}
+
+[data-route="admin_committee"] .admin-committee-module .admin-committee-member > span {
+  display: grid;
+  gap: .1rem;
+  min-width: 0;
+}
+
+[data-route="admin_committee"] .admin-committee-module .admin-committee-avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--panel);
+}
+
 @media (max-width: 720px) {
   [data-route="admin_committee"] .admin-committee-module .form-grid {
     grid-template-columns: 1fr;
