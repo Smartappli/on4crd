@@ -66,7 +66,7 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('En ordre de cotisation', $layout);
         self::assertStringContainsString('toolbar-account-stack', $layout);
         self::assertStringContainsString('membership-status-badge', $layout);
-        self::assertStringContainsString('</details>\' . $membershipBadgeHtml . \'</div>\'', $layout);
+        self::assertStringContainsString("'</div>' . \$membershipBadgeHtml . '</div>'", $layout);
     }
 
     public function testEachSwitchCaseReferencesAnExistingPageFile(): void
