@@ -140,14 +140,18 @@ ob_start();
     <div class="grid-3">
         <?php foreach ($cards as $card): ?>
             <?php $cardRoute = (string) $card['route']; $cardIcon = (string) ($adminCardIcons[$cardRoute] ?? '📦'); ?>
-            <a class="card admin-link" href="<?= e(route_url($cardRoute)) ?>">
+            <a class="card admin-link" href="<?= e((string) ($card['url'] ?? route_url($cardRoute))) ?>">
                 <div class="row-between">
                     <h2><?= e((string) $card['title']) ?></h2>
                     <span aria-hidden="true"><?= e($cardIcon) ?></span>
                 </div>
                 <p><?= e((string) $card['desc']) ?></p>
                 <div class="row-between" style="margin-top:.75rem;">
-                    <span></span>
+                    <?php if ((int) ($card['pending_count'] ?? 0) > 0): ?>
+                        <span class="admin-pending-badge"><?= (int) ($card['pending_count'] ?? 0) ?> <?= e($adminText('en attente', 'pending')) ?></span>
+                    <?php else: ?>
+                        <span></span>
+                    <?php endif; ?>
                     <span class="admin-open-cta"><?= e((string) $t['open']) ?> →</span>
                 </div>
             </a>

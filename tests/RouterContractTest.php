@@ -500,6 +500,26 @@ final class RouterContractTest extends TestCase
         }
     }
 
+    public function testAdminDashboardSurfacesPendingContentQueues(): void
+    {
+        $adminHelpers = file_get_contents(__DIR__ . '/../app/admin_helpers.php');
+        $adminPage = file_get_contents(__DIR__ . '/../pages/admin.php');
+        self::assertIsString($adminHelpers);
+        self::assertIsString($adminPage);
+
+        self::assertStringContainsString('function admin_pending_content_counts_by_route(): array', $adminHelpers);
+        self::assertStringContainsString('SELECT area, COUNT(*) AS total FROM content_proposals WHERE status = "pending" GROUP BY area', $adminHelpers);
+        self::assertStringContainsString("'pending_count' => \$pendingCount", $adminHelpers);
+        self::assertStringContainsString('function admin_pending_content_proposals_for_dashboard(string $locale', $adminHelpers);
+        self::assertStringContainsString('function admin_update_content_proposal_status(', $adminHelpers);
+
+        self::assertStringContainsString('$pendingProposals = admin_pending_content_proposals_for_dashboard($locale);', $adminPage);
+        self::assertStringContainsString('id="pending-proposals"', $adminPage);
+        self::assertStringContainsString('name="action" value="update_content_proposal_status"', $adminPage);
+        self::assertStringContainsString('admin-pending-badge', $adminPage);
+        self::assertStringContainsString("\$card['pending_count']", $adminPage);
+    }
+
     public function testProposalDialogTriggersKeepNativeFallbacks(): void
     {
         $contracts = [
