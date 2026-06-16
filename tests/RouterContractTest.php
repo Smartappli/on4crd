@@ -521,6 +521,49 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("\$card['pending_count']", $adminPage);
     }
 
+    public function testAdminRoutesAreProtectedDispatchedAndCatalogued(): void
+    {
+        $router = file_get_contents(__DIR__ . '/../index.php');
+        $moduleCatalog = file_get_contents(__DIR__ . '/../app/module_catalog.php');
+        self::assertIsString($router);
+        self::assertIsString($moduleCatalog);
+
+        $routeModules = $this->extractAssocStringArray($router, 'routeModules');
+        $dispatchRoutes = [];
+        foreach ($this->extractDispatchRoutes($router) as $match) {
+            $dispatchRoutes[(string) $match[1]] = (string) $match[2];
+        }
+
+        preg_match_all("/\\['route' => '([^']+)'/", $moduleCatalog, $catalogMatches);
+        $catalogRoutes = array_fill_keys($catalogMatches[1], true);
+        $technicalAdminRoutes = ['admin_events_feed' => true];
+
+        foreach ($routeModules as $route => $module) {
+            if (!str_starts_with($route, 'admin_')) {
+                continue;
+            }
+
+            self::assertArrayHasKey($route, $dispatchRoutes, sprintf('Admin route %s is mapped to a module but not dispatched.', $route));
+            self::assertNotSame('', $module, sprintf('Admin route %s must have a module gate.', $route));
+
+            $pagePath = __DIR__ . '/../' . $dispatchRoutes[$route];
+            self::assertFileExists($pagePath, sprintf('Admin route %s points to a missing page.', $route));
+            $page = file_get_contents($pagePath);
+            self::assertIsString($page);
+
+            $isRedirectOnly = preg_match('/^\s*<\?php\s+declare\(strict_types=1\);\s+redirect\([\'"][^\'"]+[\'"]\);\s*$/s', $page) === 1;
+            $hasProtection = str_contains($page, 'require_permission(')
+                || str_contains($page, 'render_admin_member_document_module_page(')
+                || str_contains($page, 'render_admin_webotheque_page(')
+                || $isRedirectOnly;
+            self::assertTrue($hasProtection, sprintf('Admin route %s must enforce a permission or be an explicit redirect.', $route));
+
+            if (!$isRedirectOnly && !isset($technicalAdminRoutes[$route])) {
+                self::assertArrayHasKey($route, $catalogRoutes, sprintf('Admin route %s must be present in the admin dashboard catalog.', $route));
+            }
+        }
+    }
+
     public function testAdminCommitteeUsesSingleFormAndSummaryTable(): void
     {
         $adminCommittee = file_get_contents(__DIR__ . '/../pages/admin_committee.php');

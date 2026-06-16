@@ -775,6 +775,37 @@ function content_proposal_label_key(string $label): string
     if ($label === '') {
         return '';
     }
+    $label = strtr($label, [
+        'à' => 'a',
+        'á' => 'a',
+        'â' => 'a',
+        'ã' => 'a',
+        'ä' => 'a',
+        'å' => 'a',
+        'æ' => 'ae',
+        'ç' => 'c',
+        'è' => 'e',
+        'é' => 'e',
+        'ê' => 'e',
+        'ë' => 'e',
+        'ì' => 'i',
+        'í' => 'i',
+        'î' => 'i',
+        'ï' => 'i',
+        'ñ' => 'n',
+        'ò' => 'o',
+        'ó' => 'o',
+        'ô' => 'o',
+        'õ' => 'o',
+        'ö' => 'o',
+        'œ' => 'oe',
+        'ù' => 'u',
+        'ú' => 'u',
+        'û' => 'u',
+        'ü' => 'u',
+        'ý' => 'y',
+        'ÿ' => 'y',
+    ]);
     $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $label);
     if (is_string($ascii) && $ascii !== '') {
         $label = $ascii;

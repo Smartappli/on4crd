@@ -146,7 +146,7 @@ function i18n_load_array_file_once(string $path): array
     }
 
     if (!array_key_exists($realPath, $cache)) {
-        $loaded = require_once $realPath;
+        $loaded = require $realPath;
         $cache[$realPath] = is_array($loaded) ? $loaded : [];
     }
 

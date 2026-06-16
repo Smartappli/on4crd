@@ -266,6 +266,16 @@ final class I18nNativeLocalesTest extends TestCase
         }
     }
 
+    public function testDirectLocaleFileReadsDoNotPoisonDomainLoaderCache(): void
+    {
+        $directMessages = $this->loadLocaleFile(__DIR__ . '/../app/i18n/admin_module_cards/fr.php');
+        self::assertSame('Modules', $directMessages['admin_modules_title'] ?? null);
+
+        $domainMessages = i18n_domain_messages('admin_module_cards');
+        self::assertSame('Modules', $domainMessages['fr']['admin_modules_title'] ?? null);
+        self::assertSame('Modules', $domainMessages['en']['admin_modules_title'] ?? null);
+    }
+
     public function testFrenchLocaleFilesAreValidUtf8AndReadable(): void
     {
         $files = glob(__DIR__ . '/../app/i18n/*/fr.php');
@@ -284,6 +294,88 @@ final class I18nNativeLocalesTest extends TestCase
 
             $messages = $this->loadLocaleFile((string) $file);
             self::assertNotEmpty($messages, sprintf('French locale file is not readable as a message array: %s', $file));
+        }
+    }
+
+    public function testEveryLocaleFileIsValidUtf8WithoutEncodingArtifacts(): void
+    {
+        $files = glob(__DIR__ . '/../app/i18n/*/*.php');
+        self::assertIsArray($files);
+        self::assertNotEmpty($files);
+
+        $mojibakeFragments = [
+            "\u{FFFD}",
+            "\u{00C3}\u{00A0}",
+            "\u{00C3}\u{00A2}",
+            "\u{00C3}\u{00A4}",
+            "\u{00C3}\u{00A7}",
+            "\u{00C3}\u{00A8}",
+            "\u{00C3}\u{00A9}",
+            "\u{00C3}\u{00AA}",
+            "\u{00C3}\u{00AB}",
+            "\u{00C3}\u{00AE}",
+            "\u{00C3}\u{00AF}",
+            "\u{00C3}\u{00B4}",
+            "\u{00C3}\u{00B6}",
+            "\u{00C3}\u{00B9}",
+            "\u{00C3}\u{00BB}",
+            "\u{00C3}\u{00BC}",
+            "\u{00C2}\u{00A0}",
+            "\u{00C2}\u{00B0}",
+            "\u{00E2}\u{20AC}\u{2122}",
+            "\u{00E2}\u{20AC}\u{0153}",
+            "\u{00E2}\u{20AC}\u{009D}",
+            "\u{00E2}\u{20AC}\u{201C}",
+        ];
+
+        foreach ($files as $file) {
+            $contents = file_get_contents((string) $file);
+            self::assertIsString($contents);
+
+            self::assertSame(1, preg_match('//u', $contents), sprintf('Locale file is not valid UTF-8: %s', $file));
+            self::assertFalse(str_starts_with($contents, "\xEF\xBB\xBF"), sprintf('Locale file contains a UTF-8 BOM: %s', $file));
+            foreach ($mojibakeFragments as $fragment) {
+                self::assertStringNotContainsString($fragment, $contents, sprintf('Locale file contains encoding artifact %s: %s', bin2hex($fragment), $file));
+            }
+
+            $messages = $this->loadLocaleFile((string) $file);
+            self::assertNotEmpty($messages, sprintf('Locale file is not readable as a message array: %s', $file));
+        }
+    }
+
+    public function testFrenchAndEnglishLocaleFilesAreCompleteReferences(): void
+    {
+        $directories = glob(__DIR__ . '/../app/i18n/*', GLOB_ONLYDIR);
+        self::assertIsArray($directories);
+        self::assertNotEmpty($directories);
+
+        $assertNotEmptyTranslations = static function (array $messages, string $locale, string $domain, string $prefix = '') use (&$assertNotEmptyTranslations): void {
+            foreach ($messages as $key => $value) {
+                $fullKey = $prefix === '' ? (string) $key : $prefix . '.' . (string) $key;
+                if (is_array($value)) {
+                    self::assertNotEmpty($value, sprintf('Empty %s reference translation group for %s in app/i18n/%s', $locale, $fullKey, $domain));
+                    $assertNotEmptyTranslations($value, $locale, $domain, $fullKey);
+                    continue;
+                }
+
+                self::assertNotSame('', trim((string) $value), sprintf('Empty %s reference translation for %s in app/i18n/%s', $locale, $fullKey, $domain));
+            }
+        };
+
+        foreach ($directories as $directory) {
+            $fr = $this->loadLocaleFile($directory . '/fr.php');
+            $en = $this->loadLocaleFile($directory . '/en.php');
+            $domain = basename((string) $directory);
+            $frKeys = array_keys($fr);
+            $enKeys = array_keys($en);
+            sort($frKeys);
+            sort($enKeys);
+
+            self::assertSame($frKeys, $enKeys, sprintf('French/English key mismatch in app/i18n/%s', $domain));
+
+            foreach (['fr' => $fr, 'en' => $en] as $locale => $messages) {
+                $assertNotEmptyTranslations($messages, $locale, $domain);
+            }
         }
     }
 
