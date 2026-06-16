@@ -84,9 +84,14 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
         self::assertStringContainsString("if (\$action === 'update_document' || \$action === 'delete_document')", $library);
         self::assertStringContainsString("!\$canManageLibrary && (int) (\$document['member_id'] ?? 0) !== (int) (\$user['id'] ?? 0)", $library);
+        self::assertStringContainsString("'Action' => 'update_document'", $library);
+        self::assertStringContainsString("'Action' => 'delete_document'", $library);
+        self::assertStringContainsString("content_proposal_create((int) \$user['id'], 'members_library', 'content', \$title, \$proposalSummary", $library);
+        self::assertStringContainsString("member_library_update_document_record(\$documentId, \$title, \$documentCategory, \$documentTags, \$description, \$sourceRef);", $library);
+        self::assertStringContainsString('redirect(\'my_requests\');', $library);
         self::assertStringContainsString('data-members-library-modal-open="<?= e($editDialogId) ?>"', $library);
         self::assertStringContainsString('name="document_file"', $library);
-        self::assertStringContainsString('member_library_delete_document_file((string) ($document[\'file_path\'] ?? \'\'));', $library);
+        self::assertStringContainsString('member_library_delete_document_record($documentId);', $library);
         self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId]) . '#view=Fit'", $library);
         self::assertStringNotContainsString("route_url('member_library_preview', ['id' => \$docId, 'download' => '1'])", $library);
         self::assertStringNotContainsString("\$t['open']", $library);
@@ -114,6 +119,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_store_document_upload(?array $file, int $memberId, string $prefix = \'doc\'): array', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_delete_document_file(string $publicPath): void', $memberLibraryHelpers);
+        self::assertStringContainsString('function member_library_update_document_record(', $memberLibraryHelpers);
+        self::assertStringContainsString('function member_library_delete_document_record(int $documentId): void', $memberLibraryHelpers);
+        self::assertStringContainsString('member_library_document_proposal_action($summary)', $memberLibraryHelpers);
+        self::assertStringContainsString("if (member_library_document_proposal_action((string) (\$proposal['summary'] ?? '')) !== '')", $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_sync_accepted_proposals(array $messages = [], int $limit = 100): array', $memberLibraryHelpers);
         self::assertStringContainsString('member_library_accepted_proposal_sync_failed', $memberLibraryHelpers);
 
