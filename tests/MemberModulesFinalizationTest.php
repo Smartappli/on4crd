@@ -27,13 +27,25 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("'Mots cles' => \$keywords", $albums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
         self::assertStringContainsString('album_clear_caches();', $albums);
+        self::assertStringContainsString("if (\$action === 'update_album' || \$action === 'delete_album')", $albums);
+        self::assertStringContainsString("!\$canManageAlbums && (int) (\$album['member_id'] ?? 0) !== (int) (\$user['id'] ?? 0)", $albums);
+        self::assertStringContainsString("'Action' => 'update_album'", $albums);
+        self::assertStringContainsString("'Action' => 'delete_album'", $albums);
+        self::assertStringContainsString("content_proposal_create((int) \$user['id'], 'albums', 'content', \$title, \$summary", $albums);
+        self::assertStringContainsString('data-album-modal-open="<?= e($editDialogId) ?>"', $albums);
 
         $adminAlbums = $this->source('pages/admin_albums.php');
         self::assertMatchesRegularExpression('/<select\s+name="album_id"\s+required>.*foreach \(\$albums as \$album\)/s', $adminAlbums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $adminAlbums);
+        self::assertStringContainsString('album_delete_record($albumId);', $adminAlbums);
         self::assertStringContainsString('function album_apply_accepted_proposal(array $proposal): ?int', $albumHelpers);
         self::assertStringContainsString('function album_sync_accepted_proposals(int $limit = 100): array', $albumHelpers);
+        self::assertStringContainsString('function album_proposal_action(string $summary): string', $albumHelpers);
+        self::assertStringContainsString('function album_update_record(', $albumHelpers);
+        self::assertStringContainsString('function album_delete_record(int $albumId): void', $albumHelpers);
+        self::assertStringContainsString('member_id', $albumHelpers);
         self::assertStringContainsString('source_proposal_id', $albumHelpers);
+        self::assertStringContainsString('idx_albums_member', $schema);
         self::assertStringContainsString('idx_albums_source_proposal', $schema);
         self::assertSame(
             "Club fieldday\n\nThematique: radio\nMots cles: ft8",
@@ -198,7 +210,19 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function render_member_document_module_stats(', $renderer);
         self::assertSame(2, substr_count($renderer, 'render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats)'));
         self::assertStringContainsString('member_document_current_user_is_administrator()', $renderer);
-        self::assertStringNotContainsString('content_proposal_create(', $renderer);
+        self::assertStringContainsString('function member_document_module_allows_member_management(', $renderer);
+        self::assertStringContainsString('function member_document_apply_accepted_proposal(array $proposal, string $moduleCode): ?int', $renderer);
+        self::assertStringContainsString("member_document_module_allows_member_management(\$moduleCode)", $renderer);
+        self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'content', \$titleInput, \$proposalSummary", $renderer);
+        self::assertStringContainsString('data-member-document-modal-open', $renderer);
+
+        $adminHelpers = $this->source('app/admin_helpers.php');
+        $contentHelpers = $this->source('app/content_helpers.php');
+        self::assertStringContainsString("'presentations' => ['route' => 'admin_presentations'", $adminHelpers);
+        self::assertStringContainsString("'videos' => ['route' => 'admin_videos'", $adminHelpers);
+        self::assertStringContainsString("member_document_apply_accepted_proposal(\$proposal, \$area);", $adminHelpers);
+        self::assertStringContainsString("'presentations' => true", $contentHelpers);
+        self::assertStringContainsString("'videos' => true", $contentHelpers);
     }
 
     public function testIdeaModuleUsesTopicSelectKeywordsAndSubmitsThem(): void
