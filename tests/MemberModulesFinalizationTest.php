@@ -19,13 +19,26 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('storage/uploads/albums/thumbs/photo.jpg', album_thumbnail_public_path('storage/uploads/albums/photo.webp'));
 
         $albums = $this->source('pages/albums.php');
+        $albumHelpers = $this->source('app/album_helpers.php');
+        $schema = $this->source('schema/schema.sql');
         self::assertStringContainsString('name="proposal_theme"', $albums);
         self::assertMatchesRegularExpression('/<select\s+name="proposal_theme"[^>]*>.*\$albumThemeOptions/s', $albums);
         self::assertStringContainsString('name="proposal_keywords"', $albums);
         self::assertStringContainsString("'Mots cles' => \$keywords", $albums);
+        self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
+        self::assertStringContainsString('album_clear_caches();', $albums);
 
         $adminAlbums = $this->source('pages/admin_albums.php');
         self::assertMatchesRegularExpression('/<select\s+name="album_id"\s+required>.*foreach \(\$albums as \$album\)/s', $adminAlbums);
+        self::assertStringContainsString('album_sync_accepted_proposals();', $adminAlbums);
+        self::assertStringContainsString('function album_apply_accepted_proposal(array $proposal): ?int', $albumHelpers);
+        self::assertStringContainsString('function album_sync_accepted_proposals(int $limit = 100): array', $albumHelpers);
+        self::assertStringContainsString('source_proposal_id', $albumHelpers);
+        self::assertStringContainsString('idx_albums_source_proposal', $schema);
+        self::assertSame(
+            "Club fieldday\n\nThematique: radio\nMots cles: ft8",
+            album_proposal_description_from_summary("Thematique: radio\nMots cles: ft8\nDescription: Club fieldday")
+        );
     }
 
     public function testWebothequeModuleKeepsCategorySelectsAndKeywordInputs(): void
@@ -40,6 +53,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories, $proposalContact)', $webotheque);
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories)', $webotheque);
         self::assertStringContainsString('function webotheque_apply_accepted_proposal(', $webotheque);
+        self::assertStringContainsString('function webotheque_sync_accepted_proposals(', $webotheque);
+        self::assertStringContainsString('webotheque_sync_accepted_proposals($categories, $t,', $webotheque);
+        self::assertStringContainsString('webotheque_accepted_proposal_sync_failed', $webotheque);
         self::assertGreaterThanOrEqual(2, substr_count($webotheque, 'webotheque_apply_accepted_proposal('));
         self::assertSame('https://example.org', webotheque_normalize_url('example.org'));
     }
@@ -68,6 +84,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("require_once __DIR__ . '/article_import_helpers.php';", $adminHelpers);
         self::assertStringContainsString("i18n_domain_locale('members_library', \$locale)", $adminHelpers);
         self::assertStringContainsString('member_library_apply_accepted_proposal(', $adminHelpers);
+        self::assertStringContainsString("require_once __DIR__ . '/album_helpers.php';", $adminHelpers);
+        self::assertStringContainsString('album_apply_accepted_proposal($proposal);', $adminHelpers);
+        self::assertStringContainsString("require_once __DIR__ . '/member_webotheque.php';", $adminHelpers);
+        self::assertStringContainsString('webotheque_apply_accepted_proposal($proposal, $categories, $messages);', $adminHelpers);
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_sync_accepted_proposals(array $messages = [], int $limit = 100): array', $memberLibraryHelpers);
         self::assertStringContainsString('member_library_accepted_proposal_sync_failed', $memberLibraryHelpers);
@@ -137,6 +157,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function render_member_document_module_stats(', $renderer);
         self::assertSame(2, substr_count($renderer, 'render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats)'));
         self::assertStringContainsString('member_document_current_user_is_administrator()', $renderer);
+        self::assertStringNotContainsString('content_proposal_create(', $renderer);
     }
 
     public function testIdeaModuleUsesTopicSelectKeywordsAndSubmitsThem(): void
