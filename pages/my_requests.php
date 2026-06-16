@@ -94,6 +94,8 @@ $proposalAreaLabels = [
     'events' => $text('events_title', 'Events'),
     'members_library' => $text('library_title', $isFrench ? 'Bibliotheque membres' : 'Member library'),
     'news' => $text('news_title', $isFrench ? 'Actualites' : 'News'),
+    'presentations' => $text('presentations_title', $isFrench ? 'Presentations' : 'Presentations'),
+    'videos' => $text('videos_title', $isFrench ? 'Videos' : 'Videos'),
     'webotheque' => $text('webotheque_title', $isFrench ? 'Webotheque' : 'Web library'),
     'wiki' => $text('wiki_title', 'Wiki'),
 ];
@@ -111,6 +113,8 @@ $proposalAreaRoutes = [
     'events' => 'events',
     'members_library' => 'members_library',
     'news' => 'news',
+    'presentations' => 'presentations',
+    'videos' => 'videos',
     'webotheque' => 'webotheque',
     'wiki' => 'wiki',
 ];
@@ -234,6 +238,9 @@ if (ensure_content_proposals_table()) {
             }
             if ($area === 'albums' && $proposalType === 'content' && $proposalStatus === 'accepted') {
                 $proposalUrl = route_url_clean('albums', ['q' => $proposalTitle]);
+            }
+            if (in_array($area, ['presentations', 'videos'], true) && $proposalType === 'content' && $proposalStatus === 'accepted') {
+                $proposalUrl = route_url_clean($area, ['q' => $proposalTitle]);
             }
             if ($area === 'webotheque' && $proposalStatus === 'accepted') {
                 $proposalUrl = in_array($proposalType, ['content', 'tag'], true)
