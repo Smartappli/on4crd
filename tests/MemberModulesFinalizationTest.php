@@ -63,7 +63,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);
-        self::assertStringContainsString("i18n_domain_locale('members_library', $locale)", $adminHelpers);
+        self::assertStringContainsString("i18n_domain_locale('members_library', \$locale)", $adminHelpers);
         self::assertStringContainsString('member_library_apply_accepted_proposal(', $adminHelpers);
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
 
