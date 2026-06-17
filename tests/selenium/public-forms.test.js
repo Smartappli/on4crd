@@ -13,7 +13,7 @@ const {
 
 test('Selenium login: captcha, champs et next sont conserves', async (t) => {
   await withSelenium(t, async (driver) => {
-    const nextUrl = routeUrl('admin_albums', { focus: 'album-wizard' });
+    const nextUrl = '/index.php?route=admin_albums&focus=album-wizard';
     await driver.get(`${routeUrl('login', { next: nextUrl })}#album-wizard`);
     await waitForDocumentReady(driver);
     await assertNoServerError(driver);
