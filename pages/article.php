@@ -30,6 +30,12 @@ foreach (array_keys($i18n['fr']) as $key) {
 }
 
 $slug = (string) ($_GET['slug'] ?? '');
+if ($slug === '' || !table_exists('articles')) {
+    http_response_code(404);
+    echo render_layout('<div class="card"><p>' . e((string) $t['not_found']) . '</p></div>', (string) $t['layout_article']);
+    return;
+}
+
 $stmt = db()->prepare('SELECT * FROM articles WHERE slug = ? AND status = "published"');
 $stmt->execute([$slug]);
 $row = $stmt->fetch();
