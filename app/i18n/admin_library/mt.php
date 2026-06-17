@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Sottotema mħassra. Id-dokumenti jibqgħu fit-tema prinċipali.',
   'all_subcategories' => 'Is-sottotemi kollha',
   'no_subcategory' => 'L-ebda sottotema',
+  'err_category_has_subcategories' => 'Ħassar l-ewwel is-sottotemi kollha f’din it-tema.',
+  'err_subcategory_has_documents' => 'Din is-sottotema għadha fiha dokumenti. Mexxi jew ħassar dawk id-dokumenti qabel tħassarha.',
 );

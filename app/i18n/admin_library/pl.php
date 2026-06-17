@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Podtemat usunięty. Dokumenty pozostają w temacie nadrzędnym.',
   'all_subcategories' => 'Wszystkie podtematy',
   'no_subcategory' => 'Bez podtematu',
+  'err_category_has_subcategories' => 'Najpierw usuń wszystkie podtematy w tym temacie.',
+  'err_subcategory_has_documents' => 'Ten podtemat nadal zawiera dokumenty. Przenieś lub usuń te dokumenty przed jego usunięciem.',
 );

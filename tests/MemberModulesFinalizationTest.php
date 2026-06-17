@@ -114,10 +114,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringNotContainsString('iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview"', $adminLibrary);
         self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t[\'open\']) ?></a>', $adminLibrary);
         self::assertStringContainsString('grid-column: 1 / -1;', $membersLibraryCss);
-        self::assertStringContainsString('height: min(86vh, 980px);', $membersLibraryCss);
-        self::assertStringContainsString('min-height: min(720px, 86vh);', $membersLibraryCss);
+        self::assertStringContainsString('height: min(140vh, 1320px);', $membersLibraryCss);
+        self::assertStringContainsString('min-height: min(1120px, 140vh);', $membersLibraryCss);
         self::assertStringContainsString('.members-library-delete-form', $membersLibraryCss);
-        self::assertStringContainsString('height: min(86vh, 980px);', $adminLibraryCss);
+        self::assertStringContainsString('height: min(140vh, 1320px);', $adminLibraryCss);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('member_library_sync_accepted_proposals($memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);

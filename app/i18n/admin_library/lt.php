@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Potemė ištrinta. Dokumentai lieka pagrindinėje temoje.',
   'all_subcategories' => 'Visos potemės',
   'no_subcategory' => 'Be potemės',
+  'err_category_has_subcategories' => 'Pirmiausia ištrinkite visas šios temos potemės.',
+  'err_subcategory_has_documents' => 'Šioje potemėje vis dar yra dokumentų. Prieš ištrindami perkelkite arba ištrinkite tuos dokumentus.',
 );

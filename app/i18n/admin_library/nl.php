@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Subthema verwijderd. De documenten blijven in het bovenliggende thema.',
   'all_subcategories' => 'Alle subthema\'s',
   'no_subcategory' => 'Geen subthema',
+  'err_category_has_subcategories' => 'Verwijder eerst alle subthema’s in dit thema.',
+  'err_subcategory_has_documents' => 'Dit subthema bevat nog documenten. Verplaats of verwijder die documenten voordat u het verwijdert.',
 );

@@ -66,4 +66,6 @@ return array (
   'ingestion_template_safety' => 'Securite',
   'ingestion_template_technical' => 'Technique',
   'ingestion_template_legal' => 'Juridique',
+  'err_category_has_subcategories' => 'Supprimez d’abord toutes les sous-thématiques de cette thématique.',
+  'err_subcategory_has_documents' => 'Cette sous-thématique contient encore des documents. Déplacez ou supprimez ces documents avant de la supprimer.',
 );

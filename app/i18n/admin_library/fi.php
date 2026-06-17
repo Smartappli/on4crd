@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Alateema poistettu. Asiakirjat jäävät pääteemaan.',
   'all_subcategories' => 'Kaikki alateemat',
   'no_subcategory' => 'Ei alateemaa',
+  'err_category_has_subcategories' => 'Poista ensin kaikki tämän teeman alateemat.',
+  'err_subcategory_has_documents' => 'Tämä alateema sisältää vielä asiakirjoja. Siirrä tai poista asiakirjat ennen alateeman poistamista.',
 );

@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Underämne borttaget. Dokumenten ligger kvar i överordnat ämne.',
   'all_subcategories' => 'Alla underämnen',
   'no_subcategory' => 'Inget underämne',
+  'err_category_has_subcategories' => 'Ta först bort alla underämnen i detta ämne.',
+  'err_subcategory_has_documents' => 'Detta underämne innehåller fortfarande dokument. Flytta eller ta bort dokumenten innan du tar bort det.',
 );

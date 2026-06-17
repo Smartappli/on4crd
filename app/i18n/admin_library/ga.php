@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Fo-théama scriosta. Fanann na doiciméid sa phríomhthéama.',
   'all_subcategories' => 'Gach fo-théama',
   'no_subcategory' => 'Gan fo-théama',
+  'err_category_has_subcategories' => 'Scrios na fo-théamaí uile sa téama seo ar dtús.',
+  'err_subcategory_has_documents' => 'Tá doiciméid fós san fho-théama seo. Bog nó scrios na doiciméid sin sula scriosann tú é.',
 );

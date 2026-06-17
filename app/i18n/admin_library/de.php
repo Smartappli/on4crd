@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Unterthema gelöscht. Die Dokumente bleiben im übergeordneten Thema.',
   'all_subcategories' => 'Alle Unterthemen',
   'no_subcategory' => 'Kein Unterthema',
+  'err_category_has_subcategories' => 'Löschen Sie zuerst alle Unterthemen dieses Themas.',
+  'err_subcategory_has_documents' => 'Dieses Unterthema enthält noch Dokumente. Verschieben oder löschen Sie diese Dokumente, bevor Sie es löschen.',
 );

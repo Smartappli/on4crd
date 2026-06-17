@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => '子主题已删除。文档仍保留在父主题中。',
   'all_subcategories' => '所有子主题',
   'no_subcategory' => '无子主题',
+  'err_category_has_subcategories' => '请先删除此主题中的所有子主题。',
+  'err_subcategory_has_documents' => '此子主题仍包含文档。删除前请先移动或删除这些文档。',
 );

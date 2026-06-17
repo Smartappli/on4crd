@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'উপবিষয় মুছে ফেলা হয়েছে। নথিগুলি মূল বিষয়ে থাকে।',
   'all_subcategories' => 'সব উপবিষয়',
   'no_subcategory' => 'কোনও উপবিষয় নেই',
+  'err_category_has_subcategories' => 'প্রথমে এই বিষয়ের সব উপবিষয় মুছে ফেলুন।',
+  'err_subcategory_has_documents' => 'এই উপবিষয়ে এখনও নথি আছে। এটি মুছে ফেলার আগে সেই নথিগুলি সরান বা মুছে ফেলুন।',
 );

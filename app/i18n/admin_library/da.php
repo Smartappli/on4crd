@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Underemne slettet. Dokumenterne forbliver i det overordnede emne.',
   'all_subcategories' => 'Alle underemner',
   'no_subcategory' => 'Intet underemne',
+  'err_category_has_subcategories' => 'Slet først alle underemner i dette emne.',
+  'err_subcategory_has_documents' => 'Dette underemne indeholder stadig dokumenter. Flyt eller slet dokumenterne, før du sletter det.',
 );

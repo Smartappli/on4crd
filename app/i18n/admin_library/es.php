@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Subtema eliminado. Sus documentos permanecen en el tema principal.',
   'all_subcategories' => 'Todos los subtemas',
   'no_subcategory' => 'Sin subtema',
+  'err_category_has_subcategories' => 'Elimine primero todos los subtemas de este tema.',
+  'err_subcategory_has_documents' => 'Este subtema aún contiene documentos. Mueva o elimine esos documentos antes de eliminarlo.',
 );

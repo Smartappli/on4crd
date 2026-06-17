@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'تم حذف الموضوع الفرعي. تبقى المستندات في الموضوع الأب.',
   'all_subcategories' => 'كل الموضوعات الفرعية',
   'no_subcategory' => 'بدون موضوع فرعي',
+  'err_category_has_subcategories' => 'احذف أولاً كل الموضوعات الفرعية في هذا الموضوع.',
+  'err_subcategory_has_documents' => 'لا يزال هذا الموضوع الفرعي يحتوي على مستندات. انقل تلك المستندات أو احذفها قبل حذفه.',
 );

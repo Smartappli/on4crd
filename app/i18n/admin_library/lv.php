@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Apakštēma dzēsta. Dokumenti paliek vecāktēmā.',
   'all_subcategories' => 'Visas apakštēmas',
   'no_subcategory' => 'Bez apakštēmas',
+  'err_category_has_subcategories' => 'Vispirms dzēsiet visas šīs tēmas apakštēmas.',
+  'err_subcategory_has_documents' => 'Šajā apakštēmā vēl ir dokumenti. Pirms dzēšanas pārvietojiet vai izdzēsiet šos dokumentus.',
 );

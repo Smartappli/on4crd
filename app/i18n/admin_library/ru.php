@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Подтема удалена. Документы остаются в родительской теме.',
   'all_subcategories' => 'Все подтемы',
   'no_subcategory' => 'Без подтемы',
+  'err_category_has_subcategories' => 'Сначала удалите все подтемы этой темы.',
+  'err_subcategory_has_documents' => 'Эта подтема всё ещё содержит документы. Переместите или удалите эти документы перед её удалением.',
 );

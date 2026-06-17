@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Podtéma odstránená. Dokumenty zostávajú v nadradenej téme.',
   'all_subcategories' => 'Všetky podtémy',
   'no_subcategory' => 'Bez podtémy',
+  'err_category_has_subcategories' => 'Najprv odstráňte všetky podtémy tejto témy.',
+  'err_subcategory_has_documents' => 'Táto podtéma stále obsahuje dokumenty. Pred odstránením ich presuňte alebo odstráňte.',
 );

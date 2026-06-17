@@ -216,9 +216,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'delete_category') {
             $code = library_category_slug((string) ($_POST['category_code'] ?? ''));
             if ($code !== 'general') {
+                $subcategoryCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_subcategories WHERE category_code = ?');
+                $subcategoryCountStmt->execute([$code]);
+                if ((int) ($subcategoryCountStmt->fetchColumn() ?: 0) > 0) {
+                    throw new RuntimeException('err_category_has_subcategories');
+                }
                 db()->prepare('UPDATE member_library_documents SET category = "general", subcategory = "" WHERE category = ?')->execute([$code]);
                 db()->prepare('DELETE FROM member_library_categories WHERE code = ? LIMIT 1')->execute([$code]);
-                db()->prepare('DELETE FROM member_library_subcategories WHERE category_code = ?')->execute([$code]);
             }
             set_flash('success', (string) $t['ok_category_deleted']);
             redirect($adminLibraryRoute);
@@ -239,8 +243,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $parentCode = library_category_slug((string) ($_POST['subcategory_category'] ?? 'general'));
             $code = library_subcategory_slug((string) ($_POST['subcategory_code'] ?? ''));
             if ($code !== '') {
-                db()->prepare('UPDATE member_library_documents SET subcategory = "" WHERE category = ? AND subcategory = ?')->execute([$parentCode, $code]);
+                $documentCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_documents WHERE category = ? AND subcategory = ?');
+                $documentCountStmt->execute([$parentCode, $code]);
+                if ((int) ($documentCountStmt->fetchColumn() ?: 0) > 0) {
+                    throw new RuntimeException('err_subcategory_has_documents');
+                }
                 db()->prepare('DELETE FROM member_library_subcategories WHERE category_code = ? AND code = ? LIMIT 1')->execute([$parentCode, $code]);
+            } else {
+                throw new RuntimeException('err_required');
             }
             set_flash('success', (string) ($t['ok_subcategory_deleted'] ?? $t['ok_category_deleted']));
             redirect($adminLibraryRoute);

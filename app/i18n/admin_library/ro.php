@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Subtema a fost ștearsă. Documentele rămân în tema părinte.',
   'all_subcategories' => 'Toate subtemele',
   'no_subcategory' => 'Fără subtemă',
+  'err_category_has_subcategories' => 'Ștergeți mai întâi toate subtemele din această temă.',
+  'err_subcategory_has_documents' => 'Această subtemă conține încă documente. Mutați sau ștergeți documentele înainte de a o șterge.',
 );

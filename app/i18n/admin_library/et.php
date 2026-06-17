@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Alateema kustutatud. Dokumendid jäävad põhiteemasse.',
   'all_subcategories' => 'Kõik alateemad',
   'no_subcategory' => 'Alateemata',
+  'err_category_has_subcategories' => 'Kustutage esmalt kõik selle teema alateemad.',
+  'err_subcategory_has_documents' => 'See alateema sisaldab veel dokumente. Teisaldage või kustutage need dokumendid enne selle kustutamist.',
 );

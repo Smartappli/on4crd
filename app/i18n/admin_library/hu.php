@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Altéma törölve. A dokumentumok a szülő témában maradnak.',
   'all_subcategories' => 'Minden altéma',
   'no_subcategory' => 'Nincs altéma',
+  'err_category_has_subcategories' => 'Először törölje a téma összes altémáját.',
+  'err_subcategory_has_documents' => 'Ez az altéma még tartalmaz dokumentumokat. Törlés előtt helyezze át vagy törölje ezeket a dokumentumokat.',
 );

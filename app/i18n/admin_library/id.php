@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Subtopik dihapus. Dokumen tetap berada di topik induk.',
   'all_subcategories' => 'Semua subtopik',
   'no_subcategory' => 'Tanpa subtopik',
+  'err_category_has_subcategories' => 'Hapus semua subtopik dalam topik ini terlebih dahulu.',
+  'err_subcategory_has_documents' => 'Subtopik ini masih berisi dokumen. Pindahkan atau hapus dokumen tersebut sebelum menghapusnya.',
 );

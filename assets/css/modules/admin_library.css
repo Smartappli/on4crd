@@ -4,6 +4,6 @@
 }
 
 [data-route="admin_library"] .admin-library-pdf-preview {
-  height: min(86vh, 980px);
-  min-height: min(720px, 86vh);
+  height: min(140vh, 1320px);
+  min-height: min(1120px, 140vh);
 }

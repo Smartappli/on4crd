@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'उपविषय हटा दिया गया. दस्तावेज़ मूल विषय में रहते हैं.',
   'all_subcategories' => 'सभी उपविषय',
   'no_subcategory' => 'कोई उपविषय नहीं',
+  'err_category_has_subcategories' => 'पहले इस विषय के सभी उपविषय हटाएँ.',
+  'err_subcategory_has_documents' => 'इस उपविषय में अभी भी दस्तावेज़ हैं. इसे हटाने से पहले उन दस्तावेज़ों को स्थानांतरित करें या हटाएँ.',
 );

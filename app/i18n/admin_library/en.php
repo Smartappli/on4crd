@@ -66,4 +66,6 @@ return array (
   'ingestion_template_safety' => 'Safety',
   'ingestion_template_technical' => 'Technical',
   'ingestion_template_legal' => 'Legal',
+  'err_category_has_subcategories' => 'Delete all subtopics in this topic first.',
+  'err_subcategory_has_documents' => 'This subtopic still contains documents. Move or delete those documents before deleting it.',
 );

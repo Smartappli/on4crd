@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'Podtema izbrisana. Dokumenti ostanejo v nadrejeni temi.',
   'all_subcategories' => 'Vse podteme',
   'no_subcategory' => 'Brez podteme',
+  'err_category_has_subcategories' => 'Najprej izbrišite vse podteme te teme.',
+  'err_subcategory_has_documents' => 'Ta podtema še vedno vsebuje dokumente. Pred izbrisom jih premaknite ali izbrišite.',
 );

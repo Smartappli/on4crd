@@ -66,4 +66,6 @@ return array (
   'ok_subcategory_deleted' => 'サブトピックを削除しました。ドキュメントは親トピックに残ります。',
   'all_subcategories' => 'すべてのサブトピック',
   'no_subcategory' => 'サブトピックなし',
+  'err_category_has_subcategories' => '先にこのトピック内のすべてのサブトピックを削除してください。',
+  'err_subcategory_has_documents' => 'このサブトピックにはまだドキュメントがあります。削除する前に移動または削除してください。',
 );
