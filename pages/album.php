@@ -24,6 +24,12 @@ if (!$album) {
     return;
 }
 
+$albumTitle = trim((string) ($album['title'] ?? ''));
+if ($albumTitle === '') {
+    $albumTitle = (string) $t['title'];
+}
+$albumDescription = trim((string) ($album['description'] ?? ''));
+
 $user = current_user();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
     $user = require_login();
@@ -43,25 +49,37 @@ $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'album', (in
 
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 24;
-$countStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
-$countStmt->execute([(int) $album['id']]);
-$photoTotal = (int) $countStmt->fetchColumn();
-$pagination = pagination_state($photoTotal, $page, $perPage);
-$page = $pagination['page'];
-$totalPages = $pagination['total_pages'];
-$offset = $pagination['offset'];
+$photoTotal = 0;
+$totalPages = 1;
+$offset = 0;
+$photos = [];
+$coverPath = null;
+try {
+    $countStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
+    $countStmt->execute([(int) $album['id']]);
+    $photoTotal = (int) $countStmt->fetchColumn();
+    $pagination = pagination_state($photoTotal, $page, $perPage);
+    $page = $pagination['page'];
+    $totalPages = $pagination['total_pages'];
+    $offset = $pagination['offset'];
 
-$photosStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
-$photosStmt->execute([(int) $album['id']]);
-$photos = $photosStmt->fetchAll() ?: [];
+    $photosStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+    $photosStmt->execute([(int) $album['id']]);
+    $photos = $photosStmt->fetchAll() ?: [];
 
-$coverStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1');
-$coverStmt->execute([(int) $album['id']]);
-$coverPath = safe_storage_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''), ['storage/uploads/albums/']);
+    $coverStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1');
+    $coverStmt->execute([(int) $album['id']]);
+    $coverPath = safe_storage_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''), ['storage/uploads/albums/']);
+} catch (Throwable $throwable) {
+    log_structured_event('album_detail_photos_prepare_failed', [
+        'album_id' => (int) $album['id'],
+        'message' => $throwable->getMessage(),
+    ]);
+}
 $pageMeta = [
-    'title' => (string) $album['title'],
-    'description' => trim((string) ($album['description'] ?? '')) !== '' ? (string) $album['description'] : (string) $t['meta_desc'],
-    'ai_summary' => trim((string) ($album['description'] ?? '')) !== '' ? (string) $album['description'] : (string) $t['meta_desc'],
+    'title' => $albumTitle,
+    'description' => $albumDescription !== '' ? $albumDescription : (string) $t['meta_desc'],
+    'ai_summary' => $albumDescription !== '' ? $albumDescription : (string) $t['meta_desc'],
     'canonical' => route_url_with_locale('album', $locale, ['id' => (int) $album['id']]),
     'schema_type' => 'ImageGallery',
     'keywords' => ['ON4CRD', 'Radio Club Durnal', 'album photo', 'radioamateur', 'activites club'],
@@ -72,23 +90,32 @@ if ($coverPath !== null) {
 }
 $imageItems = [];
 foreach (array_slice($photos, 0, 12) as $position => $photo) {
-    $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
-    if ($filePath === null) {
-        continue;
+    try {
+        $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+        if ($filePath === null) {
+            continue;
+        }
+        $photoTitle = trim((string) ($photo['title'] ?? ''));
+        $imageItems[] = [
+            '@type' => 'ImageObject',
+            'position' => $position + 1,
+            'url' => base_url($filePath),
+            'name' => $photoTitle !== '' ? $photoTitle : $albumTitle,
+            'caption' => trim((string) ($photo['caption'] ?? '')),
+        ];
+    } catch (Throwable $throwable) {
+        log_structured_event('album_detail_jsonld_photo_skipped', [
+            'album_id' => (int) $album['id'],
+            'photo_id' => (int) ($photo['id'] ?? 0),
+            'message' => $throwable->getMessage(),
+        ]);
     }
-    $imageItems[] = [
-        '@type' => 'ImageObject',
-        'position' => $position + 1,
-        'url' => base_url($filePath),
-        'name' => trim((string) ($photo['title'] ?? '')) !== '' ? (string) $photo['title'] : (string) $album['title'],
-        'caption' => trim((string) ($photo['caption'] ?? '')),
-    ];
 }
 $pageMeta['json_ld'] = [
     [
         '@context' => 'https://schema.org',
         '@type' => 'ImageGallery',
-        'name' => (string) $album['title'],
+        'name' => $albumTitle,
         'description' => (string) $pageMeta['description'],
         'url' => (string) $pageMeta['canonical'],
         'numberOfItems' => $photoTotal,
@@ -119,7 +146,7 @@ $pageMeta['json_ld'] = [
             [
                 '@type' => 'ListItem',
                 'position' => 3,
-                'name' => (string) $album['title'],
+                'name' => $albumTitle,
                 'item' => (string) $pageMeta['canonical'],
             ],
         ],
@@ -133,16 +160,16 @@ ob_start();
     <section class="album-detail-hero">
         <div class="album-detail-cover">
             <?php if ($coverPath !== null): ?>
-                <img src="<?= e(base_url($coverPath)) ?>" alt="<?= e((string) $album['title']) ?>" loading="eager" decoding="async" fetchpriority="high">
+                <img src="<?= e(base_url($coverPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
             <?php else: ?>
                 <span class="album-placeholder-mark" aria-hidden="true"></span>
             <?php endif; ?>
         </div>
         <div class="album-detail-copy">
             <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
-            <h1><?= e((string) $album['title']) ?></h1>
-            <?php if (trim((string) ($album['description'] ?? '')) !== ''): ?>
-                <p><?= e((string) $album['description']) ?></p>
+            <h1><?= e($albumTitle) ?></h1>
+            <?php if ($albumDescription !== ''): ?>
+                <p><?= e($albumDescription) ?></p>
             <?php endif; ?>
             <div class="album-detail-stats">
                 <article>
@@ -174,15 +201,24 @@ ob_start();
             <div class="album-photo-grid">
                 <?php foreach ($photos as $photo): ?>
                     <?php
-                    $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
-                    if ($filePath === null) {
+                    try {
+                        $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+                        if ($filePath === null) {
+                            continue;
+                        }
+                        $thumbPath = album_thumbnail_public_path($filePath);
+                        $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
+                        $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
+                        $title = trim((string) ($photo['title'] ?? ''));
+                        $caption = trim((string) ($photo['caption'] ?? ''));
+                    } catch (Throwable $throwable) {
+                        log_structured_event('album_detail_photo_render_skipped', [
+                            'album_id' => (int) $album['id'],
+                            'photo_id' => (int) ($photo['id'] ?? 0),
+                            'message' => $throwable->getMessage(),
+                        ]);
                         continue;
                     }
-                    $thumbPath = album_thumbnail_public_path($filePath);
-                    $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
-                    $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
-                    $title = trim((string) ($photo['title'] ?? ''));
-                    $caption = trim((string) ($photo['caption'] ?? ''));
                     ?>
                     <figure class="album-photo-card">
                         <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener">
@@ -212,4 +248,4 @@ ob_start();
     </section>
 </div>
 <?php
-echo render_layout((string) ob_get_clean(), (string) $album['title']);
+echo render_layout((string) ob_get_clean(), $albumTitle);
