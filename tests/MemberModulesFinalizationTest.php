@@ -39,6 +39,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
         self::assertStringContainsString('album_clear_caches();', $albums);
         self::assertStringContainsString('album_ensure_photo_sort_order_column()', $album);
+        self::assertStringContainsString("log_structured_event('album_detail_photos_prepare_failed'", $album);
+        self::assertStringContainsString("log_structured_event('album_detail_photo_render_skipped'", $album);
+        self::assertStringContainsString("\$albumTitle = trim((string) (\$album['title'] ?? ''));", $album);
         self::assertStringContainsString("if (\$action === 'update_album' || \$action === 'delete_album')", $albums);
         self::assertStringContainsString("!\$canManageAlbums && (int) (\$album['member_id'] ?? 0) !== (int) (\$user['id'] ?? 0)", $albums);
         self::assertStringContainsString("'Action' => 'update_album'", $albums);
