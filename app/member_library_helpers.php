@@ -9,38 +9,29 @@ function ensure_member_library_table(): bool
         return $ready;
     }
     try {
-        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, category VARCHAR(120) NOT NULL DEFAULT "general", tags VARCHAR(255) NOT NULL DEFAULT "", title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at), INDEX idx_category (category), INDEX idx_tags (tags))');
+        db()->exec('CREATE TABLE IF NOT EXISTS member_library_documents (id INT AUTO_INCREMENT PRIMARY KEY, member_id INT NOT NULL, category VARCHAR(120) NOT NULL DEFAULT "general", subcategory VARCHAR(120) NOT NULL DEFAULT "", tags VARCHAR(255) NOT NULL DEFAULT "", title VARCHAR(255) NOT NULL, description TEXT NULL, file_path VARCHAR(255) NOT NULL, extracted_text LONGTEXT NULL, uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, INDEX idx_uploaded (uploaded_at), INDEX idx_member_uploaded (member_id, uploaded_at), INDEX idx_category (category), INDEX idx_subcategory (subcategory), INDEX idx_category_subcategory (category, subcategory), INDEX idx_tags (tags))');
         $ready = table_exists('member_library_documents');
         if ($ready) {
-            $hasCategory = false;
-            try {
-                $col = db()->query("SHOW COLUMNS FROM member_library_documents LIKE 'category'");
-                $hasCategory = (bool) ($col && $col->fetch());
-            } catch (Throwable) {
-                $hasCategory = false;
-            }
-            if (!$hasCategory) {
+            if (!table_has_column('member_library_documents', 'category')) {
                 db()->exec('ALTER TABLE member_library_documents ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
             }
-            $hasTags = false;
-            try {
-                $tagsCol = db()->query("SHOW COLUMNS FROM member_library_documents LIKE 'tags'");
-                $hasTags = (bool) ($tagsCol && $tagsCol->fetch());
-            } catch (Throwable) {
-                $hasTags = false;
+            if (!table_has_column('member_library_documents', 'subcategory')) {
+                db()->exec('ALTER TABLE member_library_documents ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
             }
-            if (!$hasTags) {
-                db()->exec('ALTER TABLE member_library_documents ADD COLUMN tags VARCHAR(255) NOT NULL DEFAULT "" AFTER category');
+            if (!table_has_column('member_library_documents', 'tags')) {
+                db()->exec('ALTER TABLE member_library_documents ADD COLUMN tags VARCHAR(255) NOT NULL DEFAULT "" AFTER subcategory');
             }
-            try {
+            if (!table_has_index('member_library_documents', 'idx_category')) {
                 db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category (category)');
-            } catch (Throwable) {
-                // Index may already exist.
             }
-            try {
+            if (!table_has_index('member_library_documents', 'idx_subcategory')) {
+                db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_subcategory (subcategory)');
+            }
+            if (!table_has_index('member_library_documents', 'idx_category_subcategory')) {
+                db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category_subcategory (category, subcategory)');
+            }
+            if (!table_has_index('member_library_documents', 'idx_tags')) {
                 db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_tags (tags)');
-            } catch (Throwable) {
-                // Index may already exist.
             }
         }
     } catch (Throwable) {
@@ -77,6 +68,57 @@ if (!function_exists('member_library_category_slug')) {
 function member_library_category_slug(string $value): string
 {
     return content_proposal_category_code($value, 120, 'general');
+}
+}
+
+if (!function_exists('member_library_subcategory_slug')) {
+function member_library_subcategory_slug(string $value): string
+{
+    $slug = slugify($value);
+    if ($slug === '' || $slug === 'n-a') {
+        return '';
+    }
+    if (strlen($slug) > 120) {
+        $slug = rtrim(substr($slug, 0, 120), '-');
+    }
+
+    return $slug;
+}
+}
+
+if (!function_exists('member_library_subcategory_ref')) {
+function member_library_subcategory_ref(string $categoryCode, string $subcategoryCode): string
+{
+    $categoryCode = member_library_category_slug($categoryCode !== '' ? $categoryCode : 'general');
+    $subcategoryCode = member_library_subcategory_slug($subcategoryCode);
+
+    return $subcategoryCode !== '' ? ($categoryCode . ':' . $subcategoryCode) : '';
+}
+}
+
+if (!function_exists('member_library_subcategory_ref_parts')) {
+/**
+ * @return array{category:string,subcategory:string}
+ */
+function member_library_subcategory_ref_parts(string $value): array
+{
+    $value = trim($value);
+    if ($value === '') {
+        return ['category' => '', 'subcategory' => ''];
+    }
+
+    $parts = explode(':', $value, 2);
+    if (count($parts) === 2) {
+        return [
+            'category' => member_library_category_slug($parts[0] !== '' ? $parts[0] : 'general'),
+            'subcategory' => member_library_subcategory_slug($parts[1]),
+        ];
+    }
+
+    return [
+        'category' => '',
+        'subcategory' => member_library_subcategory_slug($value),
+    ];
 }
 }
 
@@ -236,12 +278,14 @@ function member_library_proposal_labels(array $messages, string $field): array
 {
     $labels = match ($field) {
         'category' => ['Category', 'Categorie', 'Topic', 'Theme', 'Thematique'],
+        'subcategory' => ['Subcategory', 'Sub-topic', 'Sub topic', 'Sous-thematique', 'Sous thematique', 'Sous-theme'],
         'tags' => ['Tags', 'Keywords', 'Mots cles'],
         'description' => ['Description'],
         default => [],
     };
     $messageKey = match ($field) {
         'category' => 'propose_document_category',
+        'subcategory' => 'propose_document_subcategory',
         'tags' => 'tags',
         'description' => 'propose_document_description',
         default => '',
@@ -272,6 +316,13 @@ function member_library_proposal_category_from_summary(string $summary, array $m
     }
 
     return member_library_category_slug($category !== '' ? $category : 'general');
+}
+}
+
+if (!function_exists('member_library_proposal_subcategory_from_summary')) {
+function member_library_proposal_subcategory_from_summary(string $summary, array $messages = []): string
+{
+    return member_library_subcategory_slug(content_proposal_detail_from_summary($summary, member_library_proposal_labels($messages, 'subcategory')));
 }
 }
 
@@ -345,7 +396,8 @@ function member_library_update_document_record(
     string $category,
     string $tags,
     string $description,
-    string $replacementPublicPath = ''
+    string $replacementPublicPath = '',
+    string $subcategory = ''
 ): void {
     if (!ensure_member_library_table()) {
         throw new RuntimeException('storage_unavailable');
@@ -365,6 +417,7 @@ function member_library_update_document_record(
     }
 
     $category = member_library_category_slug($category !== '' ? $category : 'general');
+    $subcategory = member_library_subcategory_slug($subcategory);
     $tags = member_library_clean_tags($tags);
     $description = content_proposal_clean_multiline($description, 5000);
     $replacementPublicPath = member_library_proposal_source_path($replacementPublicPath);
@@ -376,9 +429,10 @@ function member_library_update_document_record(
         }
         $extension = strtolower((string) pathinfo($replacementPublicPath, PATHINFO_EXTENSION));
         $extractedText = member_library_extract_text($absolutePath, $extension);
-        db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ?, file_path = ?, extracted_text = ? WHERE id = ?')
+        db()->prepare('UPDATE member_library_documents SET category = ?, subcategory = ?, tags = ?, title = ?, description = ?, file_path = ?, extracted_text = ? WHERE id = ?')
             ->execute([
                 $category,
+                $subcategory,
                 $tags,
                 $title,
                 $description !== '' ? $description : null,
@@ -390,12 +444,12 @@ function member_library_update_document_record(
             member_library_delete_document_file($currentPath);
         }
     } else {
-        db()->prepare('UPDATE member_library_documents SET category = ?, tags = ?, title = ?, description = ? WHERE id = ?')
-            ->execute([$category, $tags, $title, $description !== '' ? $description : null, $documentId]);
+        db()->prepare('UPDATE member_library_documents SET category = ?, subcategory = ?, tags = ?, title = ?, description = ? WHERE id = ?')
+            ->execute([$category, $subcategory, $tags, $title, $description !== '' ? $description : null, $documentId]);
     }
 
     if (table_exists('member_favorites')) {
-        $favoriteUrl = route_url_clean('members_library', ['q' => $title, 'category' => $category, 'tag' => $tags]);
+        $favoriteUrl = route_url_clean('members_library', ['q' => $title, 'category' => $category, 'subcategory' => $subcategory, 'tag' => $tags]);
         db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
             ->execute([$title, $favoriteUrl, 'library_document', $documentId]);
     }
@@ -477,7 +531,8 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
             member_library_proposal_category_from_summary($summary, $messages),
             member_library_proposal_tags_from_summary($summary, $messages),
             member_library_proposal_description_from_summary($summary, $messages),
-            member_library_proposal_source_path((string) ($proposal['source_ref'] ?? ''))
+            member_library_proposal_source_path((string) ($proposal['source_ref'] ?? '')),
+            member_library_proposal_subcategory_from_summary($summary, $messages)
         );
 
         return $documentId;
@@ -497,6 +552,7 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
         throw new RuntimeException('err_required');
     }
     $category = member_library_proposal_category_from_summary($summary, $messages);
+    $subcategory = member_library_proposal_subcategory_from_summary($summary, $messages);
     $tags = member_library_proposal_tags_from_summary($summary, $messages);
     $description = member_library_proposal_description_from_summary($summary, $messages);
 
@@ -509,10 +565,11 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
 
     $extension = strtolower((string) pathinfo($sourcePath, PATHINFO_EXTENSION));
     $extractedText = member_library_extract_text($absolutePath, $extension);
-    db()->prepare('INSERT INTO member_library_documents (member_id, category, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    db()->prepare('INSERT INTO member_library_documents (member_id, category, subcategory, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
         ->execute([
             max(0, (int) ($proposal['member_id'] ?? 0)),
             $category,
+            $subcategory,
             $tags,
             $title,
             $description !== '' ? $description : null,
@@ -606,6 +663,32 @@ function member_library_sync_accepted_proposals(array $messages = [], int $limit
 }
 }
 
+if (!function_exists('member_library_default_subcategories')) {
+function member_library_default_subcategories(): array
+{
+    return [
+        ['category_code' => 'general', 'code' => 'references', 'label' => 'References', 'sort_order' => 10],
+        ['category_code' => 'general', 'code' => 'club', 'label' => 'Club', 'sort_order' => 20],
+        ['category_code' => 'formation', 'code' => 'cours', 'label' => 'Cours', 'sort_order' => 10],
+        ['category_code' => 'formation', 'code' => 'examens', 'label' => 'Examens', 'sort_order' => 20],
+        ['category_code' => 'technique', 'code' => 'montages', 'label' => 'Montages', 'sort_order' => 10],
+        ['category_code' => 'technique', 'code' => 'mesures', 'label' => 'Mesures', 'sort_order' => 20],
+        ['category_code' => 'antennes', 'code' => 'construction', 'label' => 'Construction', 'sort_order' => 10],
+        ['category_code' => 'antennes', 'code' => 'reglages', 'label' => 'Reglages', 'sort_order' => 20],
+        ['category_code' => 'propagation', 'code' => 'bulletins', 'label' => 'Bulletins', 'sort_order' => 10],
+        ['category_code' => 'propagation', 'code' => 'previsions', 'label' => 'Previsions', 'sort_order' => 20],
+        ['category_code' => 'modes-numeriques', 'code' => 'logiciels', 'label' => 'Logiciels', 'sort_order' => 10],
+        ['category_code' => 'modes-numeriques', 'code' => 'protocoles', 'label' => 'Protocoles', 'sort_order' => 20],
+        ['category_code' => 'reglementation', 'code' => 'licences', 'label' => 'Licences', 'sort_order' => 10],
+        ['category_code' => 'reglementation', 'code' => 'procedures', 'label' => 'Procedures', 'sort_order' => 20],
+        ['category_code' => 'procedures', 'code' => 'station', 'label' => 'Station', 'sort_order' => 10],
+        ['category_code' => 'procedures', 'code' => 'securite', 'label' => 'Securite', 'sort_order' => 20],
+        ['category_code' => 'club', 'code' => 'reunions', 'label' => 'Reunions', 'sort_order' => 10],
+        ['category_code' => 'club', 'code' => 'archives', 'label' => 'Archives', 'sort_order' => 20],
+    ];
+}
+}
+
 if (!function_exists('member_library_default_categories')) {
 function member_library_default_categories(): array
 {
@@ -663,6 +746,100 @@ function member_library_ensure_categories_table(): bool
     } catch (Throwable) {
         return false;
     }
+}
+}
+
+if (!function_exists('member_library_ensure_subcategories_table')) {
+function member_library_ensure_subcategories_table(): bool
+{
+    try {
+        db()->exec('CREATE TABLE IF NOT EXISTS member_library_subcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_code VARCHAR(120) NOT NULL,
+            code VARCHAR(120) NOT NULL,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_member_library_subcategory (category_code, code),
+            INDEX idx_member_library_subcategory_category (category_code)
+        )');
+        $subcategoryInsert = db()->prepare('INSERT IGNORE INTO member_library_subcategories (category_code, code, label, sort_order) VALUES (?, ?, ?, ?)');
+        foreach (member_library_default_subcategories() as $subcategory) {
+            $categoryCode = member_library_category_slug((string) ($subcategory['category_code'] ?? 'general'));
+            $code = member_library_subcategory_slug((string) ($subcategory['code'] ?? ''));
+            $label = content_proposal_clean_single_line((string) ($subcategory['label'] ?? $code), 160);
+            if ($categoryCode === '' || $code === '' || $label === '') {
+                continue;
+            }
+            $subcategoryInsert->execute([
+                $categoryCode,
+                $code,
+                $label,
+                (int) ($subcategory['sort_order'] ?? 100),
+            ]);
+        }
+
+        return table_exists('member_library_subcategories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+}
+
+if (!function_exists('member_library_subcategory_options')) {
+/**
+ * @return list<array{category_code:string,code:string,label:string}>
+ */
+function member_library_subcategory_options(): array
+{
+    if (!member_library_ensure_subcategories_table()) {
+        return array_map(
+            static fn(array $subcategory): array => [
+                'category_code' => (string) ($subcategory['category_code'] ?? 'general'),
+                'code' => (string) ($subcategory['code'] ?? ''),
+                'label' => (string) ($subcategory['label'] ?? ''),
+            ],
+            member_library_default_subcategories()
+        );
+    }
+
+    try {
+        $rows = db()->query('SELECT category_code, code, label FROM member_library_subcategories ORDER BY category_code ASC, sort_order ASC, label ASC')->fetchAll() ?: [];
+    } catch (Throwable) {
+        $rows = [];
+    }
+
+    $options = [];
+    foreach ($rows as $row) {
+        $categoryCode = member_library_category_slug((string) ($row['category_code'] ?? 'general'));
+        $code = member_library_subcategory_slug((string) ($row['code'] ?? ''));
+        $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
+        if ($categoryCode === '' || $code === '' || $label === '') {
+            continue;
+        }
+        $options[] = [
+            'category_code' => $categoryCode,
+            'code' => $code,
+            'label' => $label,
+        ];
+    }
+
+    return $options;
+}
+}
+
+if (!function_exists('member_library_subcategories_by_category')) {
+/**
+ * @return array<string, list<array{category_code:string,code:string,label:string}>>
+ */
+function member_library_subcategories_by_category(): array
+{
+    $byCategory = [];
+    foreach (member_library_subcategory_options() as $subcategory) {
+        $byCategory[$subcategory['category_code']][] = $subcategory;
+    }
+
+    return $byCategory;
 }
 }
 
