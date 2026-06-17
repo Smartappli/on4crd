@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Bezpieczeństwo',
   'ingestion_template_technical' => 'Techniczne',
   'ingestion_template_legal' => 'Legalne',
+  'subcategory_ph' => 'Podtemat',
+  'subcategories' => 'Podtematy',
+  'add_subcategory' => 'Dodaj podtemat',
+  'subcategory_code' => 'Kod podtematu',
+  'subcategory_label' => 'Etykieta podtematu',
+  'ok_subcategory' => 'Podtemat zapisany.',
+  'ok_subcategory_deleted' => 'Podtemat usunięty. Dokumenty pozostają w temacie nadrzędnym.',
+  'all_subcategories' => 'Wszystkie podtematy',
+  'no_subcategory' => 'Bez podtematu',
 );

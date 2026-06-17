@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Mengapa kata kunci ini perlu ditambahkan?',
   'tag_direct_help' => 'Kata kunci akan langsung disetujui.',
   'tag_created_direct' => 'Kata kunci diusulkan dan langsung disetujui.',
+  'subcategory' => 'Subtopik',
+  'subcategories' => 'Subtopik',
+  'all_subcategories' => 'Semua subtopik',
+  'no_subcategory' => 'Tanpa subtopik',
+  'propose_document_subcategory' => 'Subtopik yang diinginkan',
 );

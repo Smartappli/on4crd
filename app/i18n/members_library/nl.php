@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Waarom dit trefwoord toevoegen?',
   'tag_direct_help' => 'Het trefwoord wordt direct goedgekeurd.',
   'tag_created_direct' => 'Trefwoord voorgesteld en direct goedgekeurd.',
+  'subcategory' => 'Subthema',
+  'subcategories' => 'Subthema\'s',
+  'all_subcategories' => 'Alle subthema\'s',
+  'no_subcategory' => 'Geen subthema',
+  'propose_document_subcategory' => 'Gewenst subthema',
 );

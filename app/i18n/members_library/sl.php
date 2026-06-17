@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Zakaj dodati to ključno besedo?',
   'tag_direct_help' => 'Ključna beseda bo neposredno odobrena.',
   'tag_created_direct' => 'Ključna beseda je predlagana in neposredno odobrena.',
+  'subcategory' => 'Podtema',
+  'subcategories' => 'Podteme',
+  'all_subcategories' => 'Vse podteme',
+  'no_subcategory' => 'Brez podteme',
+  'propose_document_subcategory' => 'Želena podtema',
 );

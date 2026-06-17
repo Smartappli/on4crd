@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Turvalisus',
   'ingestion_template_technical' => 'Tehniline',
   'ingestion_template_legal' => 'Juriidiline',
+  'subcategory_ph' => 'Alateema',
+  'subcategories' => 'Alateemad',
+  'add_subcategory' => 'Lisa alateema',
+  'subcategory_code' => 'Alateema kood',
+  'subcategory_label' => 'Alateema silt',
+  'ok_subcategory' => 'Alateema salvestatud.',
+  'ok_subcategory_deleted' => 'Alateema kustutatud. Dokumendid jäävad põhiteemasse.',
+  'all_subcategories' => 'Kõik alateemad',
+  'no_subcategory' => 'Alateemata',
 );

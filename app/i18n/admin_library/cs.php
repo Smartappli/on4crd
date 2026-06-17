@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Bezpečnost',
   'ingestion_template_technical' => 'Technický',
   'ingestion_template_legal' => 'Právní',
+  'subcategory_ph' => 'Podtéma',
+  'subcategories' => 'Podtémata',
+  'add_subcategory' => 'Přidat podtéma',
+  'subcategory_code' => 'Kód podtématu',
+  'subcategory_label' => 'Popisek podtématu',
+  'ok_subcategory' => 'Podtéma uloženo.',
+  'ok_subcategory_deleted' => 'Podtéma odstraněno. Dokumenty zůstávají v nadřazeném tématu.',
+  'all_subcategories' => 'Všechna podtémata',
+  'no_subcategory' => 'Bez podtématu',
 );

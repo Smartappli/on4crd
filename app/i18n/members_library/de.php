@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Warum dieses Schlagwort hinzufügen?',
   'tag_direct_help' => 'Das Schlagwort wird direkt genehmigt.',
   'tag_created_direct' => 'Schlagwort vorgeschlagen und direkt genehmigt.',
+  'subcategory' => 'Unterthema',
+  'subcategories' => 'Unterthemen',
+  'all_subcategories' => 'Alle Unterthemen',
+  'no_subcategory' => 'Kein Unterthema',
+  'propose_document_subcategory' => 'Gewünschtes Unterthema',
 );

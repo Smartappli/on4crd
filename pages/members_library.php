@@ -83,11 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $documentSubcategoryRef = trim((string) ($_POST['document_subcategory_ref'] ?? ''));
             if ($documentSubcategoryRef !== '') {
                 $documentSubcategoryParts = member_library_subcategory_ref_parts($documentSubcategoryRef);
-                if ($documentSubcategoryParts['subcategory'] !== '') {
+                if ($documentSubcategoryParts['subcategory'] !== '' && ($documentSubcategoryParts['category'] === '' || $documentSubcategoryParts['category'] === $documentCategory)) {
                     $documentSubcategory = $documentSubcategoryParts['subcategory'];
-                    if ($documentSubcategoryParts['category'] !== '') {
-                        $documentCategory = $documentSubcategoryParts['category'];
-                    }
+                } else {
+                    $documentSubcategory = '';
                 }
             } elseif (array_key_exists('document_subcategory_ref', $_POST)) {
                 $documentSubcategory = '';
@@ -629,6 +628,19 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
+                <label>
+                    <span><?= e((string) ($t['propose_document_subcategory'] ?? 'Subcategory')) ?></span>
+                    <select name="proposal_subcategory_ref">
+                        <option value=""><?= e((string) ($t['no_subcategory'] ?? 'No subtopic')) ?></option>
+                        <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
+                            <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
+                                <?php foreach ($subcatGroup as $subcatOption): ?>
+                                    <option value="<?= e(member_library_subcategory_ref($parentCode, (string) $subcatOption['code'])) ?>"<?= $documentProposalSelectedSubcategory === (string) $subcatOption['code'] && $documentProposalSelectedCategory === $parentCode ? ' selected' : '' ?>><?= e((string) $subcatOption['label']) ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="proposal_tags" maxlength="255"></label>
                 <label><span><?= e((string) $t['document']) ?></span><input type="file" name="proposal_file" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html" required></label>
                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
@@ -647,16 +659,19 @@ ob_start();
             <?php if ($category !== ''): ?>
                 <input type="hidden" name="category" value="<?= e($category) ?>">
             <?php endif; ?>
+            <?php if ($subcategory !== ''): ?>
+                <input type="hidden" name="subcategory" value="<?= e($subcategory) ?>">
+            <?php endif; ?>
             <?php if ($tag !== ''): ?>
                 <input type="hidden" name="tag" value="<?= e($tag) ?>">
             <?php endif; ?>
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
             <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'tag' => $tag])) ?>"><?= e((string) $t['reset']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'tag' => $tag])) ?>"><?= e((string) $t['reset']) ?></a>
             <?php endif; ?>
         </form>
-        <?php if ($search !== '' || $category !== '' || $tag !== ''): ?>
+        <?php if ($search !== '' || $category !== '' || $subcategory !== '' || $tag !== ''): ?>
             <p class="help"><?= e((string) $t['documents']) ?> : <?= (int) $totalDocuments ?></p>
         <?php endif; ?>
     </section>
@@ -665,7 +680,7 @@ ob_start();
         <aside class="members-library-index module-taxonomy-index card">
             <p class="members-library-index-title module-taxonomy-title"><?= e((string) $t['topics']) ?></p>
             <nav class="members-library-category-list module-taxonomy-list" aria-label="<?= e((string) $t['topics']) ?>">
-                <a class="members-library-category-item module-taxonomy-item<?= $category === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
+                <a class="members-library-category-item module-taxonomy-item<?= $category === '' && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
                     <span><?= e((string) $t['all_categories']) ?></span>
                     <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $categories)) ?></strong>
                 </a>
@@ -674,10 +689,21 @@ ob_start();
                 <?php endif; ?>
                 <?php foreach ($categories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
-                    <a class="members-library-category-item module-taxonomy-item<?= $catName === $category ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
+                    <a class="members-library-category-item module-taxonomy-item<?= $catName === $category && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
                         <span><?= e((string) ($cat['label'] ?? $catName)) ?></span>
                         <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
                     </a>
+                    <?php if (($subcategoriesByCategory[$catName] ?? []) !== []): ?>
+                        <div class="members-library-subcategory-list">
+                            <?php foreach ($subcategoriesByCategory[$catName] as $subcatInfo): ?>
+                                <?php $subcatCode = (string) ($subcatInfo['code'] ?? ''); if ($subcatCode === '') { continue; } ?>
+                                <a class="members-library-subcategory-item module-taxonomy-item<?= $catName === $category && $subcatCode === $subcategory ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'q' => $search, 'tag' => $tag])) ?>">
+                                    <span><?= e((string) ($subcatInfo['label'] ?? $subcatCode)) ?></span>
+                                    <strong><?= (int) ($subcatInfo['total'] ?? 0) ?></strong>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </nav>
         </aside>
@@ -685,7 +711,7 @@ ob_start();
         <div class="members-library-content module-taxonomy-content">
             <?php if ($documents === []): ?>
                 <div class="card">
-                    <p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $category !== '' || $tag !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p>
+                    <p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $category !== '' || $subcategory !== '' || $tag !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p>
                 </div>
             <?php endif; ?>
 
@@ -696,6 +722,8 @@ ob_start();
                 <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
                 <?php $docCategory = trim((string) ($document['category'] ?? 'general')); if ($docCategory === '') { $docCategory = 'general'; } ?>
                 <?php $docCategoryLabel = (string) ($categoryLabels[$docCategory] ?? ($docCategory === 'general' ? 'Général' : $docCategory)); ?>
+                <?php $docSubcategory = member_library_subcategory_slug((string) ($document['subcategory'] ?? '')); ?>
+                <?php $docSubcategoryLabel = $docSubcategory !== '' ? (string) ($subcategoryLabels[$docCategory . ':' . $docSubcategory] ?? $docSubcategory) : ''; ?>
                 <?php $docTitle = trim((string) ($document['title'] ?? '')); if ($docTitle === '') { $docTitle = (string) $t['document']; } ?>
                 <?php $docDescription = trim((string) ($document['description'] ?? '')); ?>
                 <?php $docTags = trim((string) ($document['tags'] ?? '')); ?>
@@ -706,7 +734,7 @@ ob_start();
                 <?php $canEditDocument = $canManageLibrary || (int) ($document['member_id'] ?? 0) === (int) ($user['id'] ?? 0); ?>
                 <?php $editDialogId = 'members-library-edit-dialog-' . $docId; ?>
                 <article class="news-card feature-card members-library-document-card">
-                    <span class="badge muted"><?= e($docCategoryLabel) ?> / <?= e(strtoupper($extension)) ?></span>
+                    <span class="badge muted"><?= e($docCategoryLabel) ?><?php if ($docSubcategoryLabel !== ''): ?> / <?= e($docSubcategoryLabel) ?><?php endif; ?> / <?= e(strtoupper($extension)) ?></span>
                     <h3><?= e($docTitle) ?></h3>
                     <?php if ($docDescription !== ''): ?><p><?= e($docDescription) ?></p><?php endif; ?>
                     <?php if ($docTags !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e($docTags) ?></p><?php endif; ?>
@@ -725,7 +753,7 @@ ob_start();
                             <ul class="help" style="padding-left:1rem;margin:.4rem 0;">
                                 <?php foreach ($relatedDocs as $related): ?>
                                     <?php $relatedTitle = trim((string) ($related['title'] ?? '')); if ($relatedTitle === '') { $relatedTitle = (string) ($t['document'] ?? 'Document'); } ?>
-                                    <li><a href="<?= e(route_url_clean('members_library', ['q' => $relatedTitle, 'category' => (string) ($related['category'] ?? ''), 'tag' => $tag])) ?>"><?= e($relatedTitle) ?></a></li>
+                                    <li><a href="<?= e(route_url_clean('members_library', ['q' => $relatedTitle, 'category' => (string) ($related['category'] ?? ''), 'subcategory' => (string) ($related['subcategory'] ?? ''), 'tag' => $tag])) ?>"><?= e($relatedTitle) ?></a></li>
                                 <?php endforeach; ?>
                             </ul>
                         <?php endif; ?>
@@ -758,6 +786,7 @@ ob_start();
                                 <input type="hidden" name="action" value="update_document">
                                 <input type="hidden" name="document_id" value="<?= $docId ?>">
                                 <input type="hidden" name="return_category" value="<?= e($category) ?>">
+                                <input type="hidden" name="return_subcategory" value="<?= e($subcategory) ?>">
                                 <input type="hidden" name="return_q" value="<?= e($search) ?>">
                                 <input type="hidden" name="return_tag" value="<?= e($tag) ?>">
                                 <input type="hidden" name="return_p" value="<?= $page ?>">
@@ -777,6 +806,19 @@ ob_start();
                                         <?php endforeach; ?>
                                     </select>
                                 </label>
+                                <label>
+                                    <span><?= e((string) ($t['propose_document_subcategory'] ?? 'Subcategory')) ?></span>
+                                    <select name="document_subcategory_ref">
+                                        <option value=""><?= e((string) ($t['no_subcategory'] ?? 'No subtopic')) ?></option>
+                                        <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
+                                            <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
+                                                <?php foreach ($subcatGroup as $subcatOption): ?>
+                                                    <option value="<?= e(member_library_subcategory_ref($parentCode, (string) $subcatOption['code'])) ?>"<?= $docCategory === $parentCode && $docSubcategory === (string) $subcatOption['code'] ? ' selected' : '' ?>><?= e((string) $subcatOption['label']) ?></option>
+                                                <?php endforeach; ?>
+                                            </optgroup>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </label>
                                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="document_tags" value="<?= e($docTags) ?>" maxlength="255"></label>
                                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="document_description" rows="5" maxlength="1800"><?= e($docDescription) ?></textarea></label>
                                 <label><span><?= e($membersLibraryText('replace_document_file', 'Remplacer le fichier', 'Replace file')) ?></span><input type="file" name="document_file" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
@@ -790,6 +832,7 @@ ob_start();
                                 <input type="hidden" name="action" value="delete_document">
                                 <input type="hidden" name="document_id" value="<?= $docId ?>">
                                 <input type="hidden" name="return_category" value="<?= e($category) ?>">
+                                <input type="hidden" name="return_subcategory" value="<?= e($subcategory) ?>">
                                 <input type="hidden" name="return_q" value="<?= e($search) ?>">
                                 <input type="hidden" name="return_tag" value="<?= e($tag) ?>">
                                 <input type="hidden" name="return_p" value="<?= $page ?>">
@@ -803,9 +846,9 @@ ob_start();
             </div>
             <?php if ($totalPages > 1): ?>
                 <div class="card actions">
-                    <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'tag' => $tag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
+                    <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'q' => $search, 'tag' => $tag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
                     <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-                    <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'q' => $search, 'tag' => $tag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
+                    <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'q' => $search, 'tag' => $tag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>

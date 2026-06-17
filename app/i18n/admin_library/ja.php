@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => '安全',
   'ingestion_template_technical' => '技術',
   'ingestion_template_legal' => '法務',
+  'subcategory_ph' => 'サブトピック',
+  'subcategories' => 'サブトピック',
+  'add_subcategory' => 'サブトピックを追加',
+  'subcategory_code' => 'サブトピックコード',
+  'subcategory_label' => 'サブトピックラベル',
+  'ok_subcategory' => 'サブトピックを保存しました。',
+  'ok_subcategory_deleted' => 'サブトピックを削除しました。ドキュメントは親トピックに残ります。',
+  'all_subcategories' => 'すべてのサブトピック',
+  'no_subcategory' => 'サブトピックなし',
 );

@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Cén fáth an t-eochairfhocal seo a chur leis?',
   'tag_direct_help' => 'Faomhfar an t-eochairfhocal go díreach.',
   'tag_created_direct' => 'Moladh an t-eochairfhocal agus faomhadh é go díreach.',
+  'subcategory' => 'Fo-théama',
+  'subcategories' => 'Fo-théamaí',
+  'all_subcategories' => 'Gach fo-théama',
+  'no_subcategory' => 'Gan fo-théama',
+  'propose_document_subcategory' => 'Fo-théama inmhianaithe',
 );

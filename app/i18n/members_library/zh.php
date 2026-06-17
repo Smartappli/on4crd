@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => '为什么添加这个关键词？',
   'tag_direct_help' => '该关键词将直接批准。',
   'tag_created_direct' => '关键词已提出并直接批准。',
+  'subcategory' => '子主题',
+  'subcategories' => '子主题',
+  'all_subcategories' => '所有子主题',
+  'no_subcategory' => '无子主题',
+  'propose_document_subcategory' => '所需子主题',
 );

@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Biztonság',
   'ingestion_template_technical' => 'Műszaki',
   'ingestion_template_legal' => 'Jogi',
+  'subcategory_ph' => 'Altéma',
+  'subcategories' => 'Altémák',
+  'add_subcategory' => 'Altéma hozzáadása',
+  'subcategory_code' => 'Altéma kódja',
+  'subcategory_label' => 'Altéma címkéje',
+  'ok_subcategory' => 'Altéma mentve.',
+  'ok_subcategory_deleted' => 'Altéma törölve. A dokumentumok a szülő témában maradnak.',
+  'all_subcategories' => 'Minden altéma',
+  'no_subcategory' => 'Nincs altéma',
 );

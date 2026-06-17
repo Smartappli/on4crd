@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Miksi tämä avainsana pitäisi lisätä?',
   'tag_direct_help' => 'Avainsana hyväksytään suoraan.',
   'tag_created_direct' => 'Avainsana ehdotettiin ja hyväksyttiin suoraan.',
+  'subcategory' => 'Alateema',
+  'subcategories' => 'Alateemat',
+  'all_subcategories' => 'Kaikki alateemat',
+  'no_subcategory' => 'Ei alateemaa',
+  'propose_document_subcategory' => 'Toivottu alateema',
 );

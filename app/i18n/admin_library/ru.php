@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Безопасность',
   'ingestion_template_technical' => 'Технический',
   'ingestion_template_legal' => 'Юридический',
+  'subcategory_ph' => 'Подтема',
+  'subcategories' => 'Подтемы',
+  'add_subcategory' => 'Добавить подтему',
+  'subcategory_code' => 'Код подтемы',
+  'subcategory_label' => 'Метка подтемы',
+  'ok_subcategory' => 'Подтема сохранена.',
+  'ok_subcategory_deleted' => 'Подтема удалена. Документы остаются в родительской теме.',
+  'all_subcategories' => 'Все подтемы',
+  'no_subcategory' => 'Без подтемы',
 );

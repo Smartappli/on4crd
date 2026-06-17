@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Miért érdemes ezt a kulcsszót hozzáadni?',
   'tag_direct_help' => 'A kulcsszó közvetlenül jóvá lesz hagyva.',
   'tag_created_direct' => 'A kulcsszó javasolva és közvetlenül jóváhagyva.',
+  'subcategory' => 'Altéma',
+  'subcategories' => 'Altémák',
+  'all_subcategories' => 'Minden altéma',
+  'no_subcategory' => 'Nincs altéma',
+  'propose_document_subcategory' => 'Kívánt altéma',
 );

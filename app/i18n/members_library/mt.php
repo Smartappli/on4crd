@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Għaliex iżżid din il-kelma ewlenija?',
   'tag_direct_help' => 'Il-kelma ewlenija tiġi approvata direttament.',
   'tag_created_direct' => 'Il-kelma ewlenija ġiet proposta u approvata direttament.',
+  'subcategory' => 'Sottotema',
+  'subcategories' => 'Sottotemi',
+  'all_subcategories' => 'Is-sottotemi kollha',
+  'no_subcategory' => 'L-ebda sottotema',
+  'propose_document_subcategory' => 'Sottotema mixtieqa',
 );

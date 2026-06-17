@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Por que adicionar esta palavra-chave?',
   'tag_direct_help' => 'A palavra-chave será aprovada diretamente.',
   'tag_created_direct' => 'Palavra-chave proposta e aprovada diretamente.',
+  'subcategory' => 'Subtema',
+  'subcategories' => 'Subtemas',
+  'all_subcategories' => 'Todos os subtemas',
+  'no_subcategory' => 'Sem subtema',
+  'propose_document_subcategory' => 'Subtema desejado',
 );

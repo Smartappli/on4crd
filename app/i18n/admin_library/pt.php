@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Seguranca',
   'ingestion_template_technical' => 'Tecnico',
   'ingestion_template_legal' => 'Jurídico',
+  'subcategory_ph' => 'Subtema',
+  'subcategories' => 'Subtemas',
+  'add_subcategory' => 'Adicionar subtema',
+  'subcategory_code' => 'Código do subtema',
+  'subcategory_label' => 'Rótulo do subtema',
+  'ok_subcategory' => 'Subtema guardado.',
+  'ok_subcategory_deleted' => 'Subtema eliminado. Os documentos permanecem no tema principal.',
+  'all_subcategories' => 'Todos os subtemas',
+  'no_subcategory' => 'Sem subtema',
 );

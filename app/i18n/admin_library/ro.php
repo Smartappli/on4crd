@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Securitate',
   'ingestion_template_technical' => 'Tehnic',
   'ingestion_template_legal' => 'Legal',
+  'subcategory_ph' => 'Subtemă',
+  'subcategories' => 'Subteme',
+  'add_subcategory' => 'Adaugă subtemă',
+  'subcategory_code' => 'Cod subtemă',
+  'subcategory_label' => 'Etichetă subtemă',
+  'ok_subcategory' => 'Subtema a fost salvată.',
+  'ok_subcategory_deleted' => 'Subtema a fost ștearsă. Documentele rămân în tema părinte.',
+  'all_subcategories' => 'Toate subtemele',
+  'no_subcategory' => 'Fără subtemă',
 );

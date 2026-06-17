@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Drošība',
   'ingestion_template_technical' => 'Tehniski',
   'ingestion_template_legal' => 'Juridisks',
+  'subcategory_ph' => 'Apakštēma',
+  'subcategories' => 'Apakštēmas',
+  'add_subcategory' => 'Pievienot apakštēmu',
+  'subcategory_code' => 'Apakštēmas kods',
+  'subcategory_label' => 'Apakštēmas etiķete',
+  'ok_subcategory' => 'Apakštēma saglabāta.',
+  'ok_subcategory_deleted' => 'Apakštēma dzēsta. Dokumenti paliek vecāktēmā.',
+  'all_subcategories' => 'Visas apakštēmas',
+  'no_subcategory' => 'Bez apakštēmas',
 );

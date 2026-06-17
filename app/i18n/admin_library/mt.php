@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Sigurtà',
   'ingestion_template_technical' => 'Tekniku',
   'ingestion_template_legal' => 'Legali',
+  'subcategory_ph' => 'Sottotema',
+  'subcategories' => 'Sottotemi',
+  'add_subcategory' => 'Żid sottotema',
+  'subcategory_code' => 'Kodiċi tas-sottotema',
+  'subcategory_label' => 'Tikketta tas-sottotema',
+  'ok_subcategory' => 'Sottotema ssejvjata.',
+  'ok_subcategory_deleted' => 'Sottotema mħassra. Id-dokumenti jibqgħu fit-tema prinċipali.',
+  'all_subcategories' => 'Is-sottotemi kollha',
+  'no_subcategory' => 'L-ebda sottotema',
 );

@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Защо да се добави тази ключова дума?',
   'tag_direct_help' => 'Ключовата дума ще бъде одобрена директно.',
   'tag_created_direct' => 'Ключовата дума е предложена и одобрена директно.',
+  'subcategory' => 'Подтема',
+  'subcategories' => 'Подтеми',
+  'all_subcategories' => 'Всички подтеми',
+  'no_subcategory' => 'Без подтема',
+  'propose_document_subcategory' => 'Желана подтема',
 );

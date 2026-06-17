@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'নিরাপত্তা',
   'ingestion_template_technical' => 'প্রযুক্তিগত',
   'ingestion_template_legal' => 'আইনি',
+  'subcategory_ph' => 'উপবিষয়',
+  'subcategories' => 'উপবিষয়',
+  'add_subcategory' => 'উপবিষয় যোগ করুন',
+  'subcategory_code' => 'উপবিষয়ের কোড',
+  'subcategory_label' => 'উপবিষয়ের লেবেল',
+  'ok_subcategory' => 'উপবিষয় সংরক্ষিত হয়েছে।',
+  'ok_subcategory_deleted' => 'উপবিষয় মুছে ফেলা হয়েছে। নথিগুলি মূল বিষয়ে থাকে।',
+  'all_subcategories' => 'সব উপবিষয়',
+  'no_subcategory' => 'কোনও উপবিষয় নেই',
 );

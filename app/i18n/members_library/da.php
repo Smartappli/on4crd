@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Hvorfor tilføje dette nøgleord?',
   'tag_direct_help' => 'Nøgleordet godkendes direkte.',
   'tag_created_direct' => 'Nøgleord foreslået og godkendt direkte.',
+  'subcategory' => 'Underemne',
+  'subcategories' => 'Underemner',
+  'all_subcategories' => 'Alle underemner',
+  'no_subcategory' => 'Intet underemne',
+  'propose_document_subcategory' => 'Ønsket underemne',
 );

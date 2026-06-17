@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'このキーワードを追加する理由',
   'tag_direct_help' => 'キーワードは直接承認されます。',
   'tag_created_direct' => 'キーワードが提案され、直接承認されました。',
+  'subcategory' => 'サブトピック',
+  'subcategories' => 'サブトピック',
+  'all_subcategories' => 'すべてのサブトピック',
+  'no_subcategory' => 'サブトピックなし',
+  'propose_document_subcategory' => '希望するサブトピック',
 );

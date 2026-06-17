@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Kodėl pridėti šį raktinį žodį?',
   'tag_direct_help' => 'Raktinis žodis bus patvirtintas tiesiogiai.',
   'tag_created_direct' => 'Raktinis žodis pasiūlytas ir patvirtintas tiesiogiai.',
+  'subcategory' => 'Potemė',
+  'subcategories' => 'Potemės',
+  'all_subcategories' => 'Visos potemės',
+  'no_subcategory' => 'Be potemės',
+  'propose_document_subcategory' => 'Pageidaujama potemė',
 );

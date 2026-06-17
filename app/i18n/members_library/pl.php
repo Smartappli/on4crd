@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Dlaczego dodać to słowo kluczowe?',
   'tag_direct_help' => 'Słowo kluczowe zostanie zatwierdzone bezpośrednio.',
   'tag_created_direct' => 'Słowo kluczowe zaproponowane i zatwierdzone bezpośrednio.',
+  'subcategory' => 'Podtemat',
+  'subcategories' => 'Podtematy',
+  'all_subcategories' => 'Wszystkie podtematy',
+  'no_subcategory' => 'Bez podtematu',
+  'propose_document_subcategory' => 'Pożądany podtemat',
 );

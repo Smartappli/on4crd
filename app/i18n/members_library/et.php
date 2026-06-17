@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Miks see märksõna lisada?',
   'tag_direct_help' => 'Märksõna kinnitatakse otse.',
   'tag_created_direct' => 'Märksõna pakuti välja ja kinnitati otse.',
+  'subcategory' => 'Alateema',
+  'subcategories' => 'Alateemad',
+  'all_subcategories' => 'Kõik alateemad',
+  'no_subcategory' => 'Alateemata',
+  'propose_document_subcategory' => 'Soovitud alateema',
 );

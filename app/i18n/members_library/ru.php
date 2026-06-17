@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Зачем добавить это ключевое слово?',
   'tag_direct_help' => 'Ключевое слово будет одобрено сразу.',
   'tag_created_direct' => 'Ключевое слово предложено и сразу одобрено.',
+  'subcategory' => 'Подтема',
+  'subcategories' => 'Подтемы',
+  'all_subcategories' => 'Все подтемы',
+  'no_subcategory' => 'Без подтемы',
+  'propose_document_subcategory' => 'Желаемая подтема',
 );

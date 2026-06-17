@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'De ce să fie adăugat acest cuvânt-cheie?',
   'tag_direct_help' => 'Cuvântul-cheie va fi aprobat direct.',
   'tag_created_direct' => 'Cuvânt-cheie propus și aprobat direct.',
+  'subcategory' => 'Subtemă',
+  'subcategories' => 'Subteme',
+  'all_subcategories' => 'Toate subtemele',
+  'no_subcategory' => 'Fără subtemă',
+  'propose_document_subcategory' => 'Subtema dorită',
 );

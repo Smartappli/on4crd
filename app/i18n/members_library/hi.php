@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'यह मुख्य शब्द क्यों जोड़ें?',
   'tag_direct_help' => 'मुख्य शब्द सीधे स्वीकृत किया जाएगा।',
   'tag_created_direct' => 'मुख्य शब्द प्रस्तावित और सीधे स्वीकृत किया गया।',
+  'subcategory' => 'उपविषय',
+  'subcategories' => 'उपविषय',
+  'all_subcategories' => 'सभी उपविषय',
+  'no_subcategory' => 'कोई उपविषय नहीं',
+  'propose_document_subcategory' => 'वांछित उपविषय',
 );

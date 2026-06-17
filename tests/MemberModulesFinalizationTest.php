@@ -99,7 +99,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("'Action' => 'update_document'", $library);
         self::assertStringContainsString("'Action' => 'delete_document'", $library);
         self::assertStringContainsString("content_proposal_create((int) \$user['id'], 'members_library', 'content', \$title, \$proposalSummary", $library);
-        self::assertStringContainsString("member_library_update_document_record(\$documentId, \$title, \$documentCategory, \$documentTags, \$description, \$sourceRef);", $library);
+        self::assertStringContainsString("member_library_update_document_record(\$documentId, \$title, \$documentCategory, \$documentTags, \$description, \$sourceRef, \$documentSubcategory);", $library);
         self::assertStringContainsString('redirect(\'my_requests\');', $library);
         self::assertStringContainsString('data-members-library-modal-open="<?= e($editDialogId) ?>"', $library);
         self::assertStringContainsString('name="document_file"', $library);

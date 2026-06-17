@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => '安全',
   'ingestion_template_technical' => '技术',
   'ingestion_template_legal' => '法律',
+  'subcategory_ph' => '子主题',
+  'subcategories' => '子主题',
+  'add_subcategory' => '添加子主题',
+  'subcategory_code' => '子主题代码',
+  'subcategory_label' => '子主题标签',
+  'ok_subcategory' => '子主题已保存。',
+  'ok_subcategory_deleted' => '子主题已删除。文档仍保留在父主题中。',
+  'all_subcategories' => '所有子主题',
+  'no_subcategory' => '无子主题',
 );

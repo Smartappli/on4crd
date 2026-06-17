@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Perché aggiungere questa parola chiave?',
   'tag_direct_help' => 'La parola chiave sarà approvata direttamente.',
   'tag_created_direct' => 'Parola chiave proposta e approvata direttamente.',
+  'subcategory' => 'Sottotema',
+  'subcategories' => 'Sottotemi',
+  'all_subcategories' => 'Tutti i sottotemi',
+  'no_subcategory' => 'Nessun sottotema',
+  'propose_document_subcategory' => 'Sottotema desiderato',
 );

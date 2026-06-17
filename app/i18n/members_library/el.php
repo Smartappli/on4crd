@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Γιατί να προστεθεί αυτή η λέξη-κλειδί;',
   'tag_direct_help' => 'Η λέξη-κλειδί θα εγκριθεί απευθείας.',
   'tag_created_direct' => 'Η λέξη-κλειδί προτάθηκε και εγκρίθηκε απευθείας.',
+  'subcategory' => 'Υποθέμα',
+  'subcategories' => 'Υποθέματα',
+  'all_subcategories' => 'Όλα τα υποθέματα',
+  'no_subcategory' => 'Χωρίς υποθέμα',
+  'propose_document_subcategory' => 'Επιθυμητό υποθέμα',
 );

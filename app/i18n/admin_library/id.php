@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Keamanan',
   'ingestion_template_technical' => 'Teknis',
   'ingestion_template_legal' => 'Legal',
+  'subcategory_ph' => 'Subtopik',
+  'subcategories' => 'Subtopik',
+  'add_subcategory' => 'Tambah subtopik',
+  'subcategory_code' => 'Kode subtopik',
+  'subcategory_label' => 'Label subtopik',
+  'ok_subcategory' => 'Subtopik disimpan.',
+  'ok_subcategory_deleted' => 'Subtopik dihapus. Dokumen tetap berada di topik induk.',
+  'all_subcategories' => 'Semua subtopik',
+  'no_subcategory' => 'Tanpa subtopik',
 );

@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Säkerhet',
   'ingestion_template_technical' => 'Tekniska',
   'ingestion_template_legal' => 'Lagligt',
+  'subcategory_ph' => 'Underämne',
+  'subcategories' => 'Underämnen',
+  'add_subcategory' => 'Lägg till underämne',
+  'subcategory_code' => 'Kod för underämne',
+  'subcategory_label' => 'Etikett för underämne',
+  'ok_subcategory' => 'Underämne sparat.',
+  'ok_subcategory_deleted' => 'Underämne borttaget. Dokumenten ligger kvar i överordnat ämne.',
+  'all_subcategories' => 'Alla underämnen',
+  'no_subcategory' => 'Inget underämne',
 );

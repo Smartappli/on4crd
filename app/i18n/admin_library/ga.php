@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Slándáil',
   'ingestion_template_technical' => 'Teicniúil',
   'ingestion_template_legal' => 'Dlíthiúil',
+  'subcategory_ph' => 'Fo-théama',
+  'subcategories' => 'Fo-théamaí',
+  'add_subcategory' => 'Cuir fo-théama leis',
+  'subcategory_code' => 'Cód fo-théama',
+  'subcategory_label' => 'Lipéad fo-théama',
+  'ok_subcategory' => 'Fo-théama sábháilte.',
+  'ok_subcategory_deleted' => 'Fo-théama scriosta. Fanann na doiciméid sa phríomhthéama.',
+  'all_subcategories' => 'Gach fo-théama',
+  'no_subcategory' => 'Gan fo-théama',
 );

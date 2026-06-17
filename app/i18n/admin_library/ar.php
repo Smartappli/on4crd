@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'سلامة',
   'ingestion_template_technical' => 'تقني',
   'ingestion_template_legal' => 'قانوني',
+  'subcategory_ph' => 'موضوع فرعي',
+  'subcategories' => 'موضوعات فرعية',
+  'add_subcategory' => 'إضافة موضوع فرعي',
+  'subcategory_code' => 'رمز الموضوع الفرعي',
+  'subcategory_label' => 'تسمية الموضوع الفرعي',
+  'ok_subcategory' => 'تم حفظ الموضوع الفرعي.',
+  'ok_subcategory_deleted' => 'تم حذف الموضوع الفرعي. تبقى المستندات في الموضوع الأب.',
+  'all_subcategories' => 'كل الموضوعات الفرعية',
+  'no_subcategory' => 'بدون موضوع فرعي',
 );

@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'لماذا يجب إضافة هذه الكلمة المفتاحية؟',
   'tag_direct_help' => 'سيتم اعتماد الكلمة المفتاحية مباشرة.',
   'tag_created_direct' => 'تم اقتراح الكلمة المفتاحية والموافقة عليها مباشرة.',
+  'subcategory' => 'موضوع فرعي',
+  'subcategories' => 'موضوعات فرعية',
+  'all_subcategories' => 'كل الموضوعات الفرعية',
+  'no_subcategory' => 'بدون موضوع فرعي',
+  'propose_document_subcategory' => 'الموضوع الفرعي المطلوب',
 );

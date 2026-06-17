@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Saugumas',
   'ingestion_template_technical' => 'Techninė',
   'ingestion_template_legal' => 'Teisinė',
+  'subcategory_ph' => 'Potemė',
+  'subcategories' => 'Potemės',
+  'add_subcategory' => 'Pridėti potemę',
+  'subcategory_code' => 'Potemės kodas',
+  'subcategory_label' => 'Potemės etiketė',
+  'ok_subcategory' => 'Potemė išsaugota.',
+  'ok_subcategory_deleted' => 'Potemė ištrinta. Dokumentai lieka pagrindinėje temoje.',
+  'all_subcategories' => 'Visos potemės',
+  'no_subcategory' => 'Be potemės',
 );

@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'এই কীওয়ার্ডটি কেন যোগ করবেন?',
   'tag_direct_help' => 'কীওয়ার্ডটি সরাসরি অনুমোদিত হবে।',
   'tag_created_direct' => 'কীওয়ার্ডটি প্রস্তাবিত ও সরাসরি অনুমোদিত হয়েছে।',
+  'subcategory' => 'উপবিষয়',
+  'subcategories' => 'উপবিষয়',
+  'all_subcategories' => 'সব উপবিষয়',
+  'no_subcategory' => 'কোনও উপবিষয় নেই',
+  'propose_document_subcategory' => 'পছন্দের উপবিষয়',
 );

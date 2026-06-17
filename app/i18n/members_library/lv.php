@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Kāpēc pievienot šo atslēgvārdu?',
   'tag_direct_help' => 'Atslēgvārds tiks apstiprināts tieši.',
   'tag_created_direct' => 'Atslēgvārds ierosināts un apstiprināts tieši.',
+  'subcategory' => 'Apakštēma',
+  'subcategories' => 'Apakštēmas',
+  'all_subcategories' => 'Visas apakštēmas',
+  'no_subcategory' => 'Bez apakštēmas',
+  'propose_document_subcategory' => 'Vēlamā apakštēma',
 );

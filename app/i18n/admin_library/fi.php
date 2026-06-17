@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Turvallisuus',
   'ingestion_template_technical' => 'Tekninen',
   'ingestion_template_legal' => 'Laillinen',
+  'subcategory_ph' => 'Alateema',
+  'subcategories' => 'Alateemat',
+  'add_subcategory' => 'Lisää alateema',
+  'subcategory_code' => 'Alateeman koodi',
+  'subcategory_label' => 'Alateeman nimi',
+  'ok_subcategory' => 'Alateema tallennettu.',
+  'ok_subcategory_deleted' => 'Alateema poistettu. Asiakirjat jäävät pääteemaan.',
+  'all_subcategories' => 'Kaikki alateemat',
+  'no_subcategory' => 'Ei alateemaa',
 );

@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Varnost',
   'ingestion_template_technical' => 'Tehnični',
   'ingestion_template_legal' => 'Pravno',
+  'subcategory_ph' => 'Podtema',
+  'subcategories' => 'Podteme',
+  'add_subcategory' => 'Dodaj podtemo',
+  'subcategory_code' => 'Koda podteme',
+  'subcategory_label' => 'Oznaka podteme',
+  'ok_subcategory' => 'Podtema shranjena.',
+  'ok_subcategory_deleted' => 'Podtema izbrisana. Dokumenti ostanejo v nadrejeni temi.',
+  'all_subcategories' => 'Vse podteme',
+  'no_subcategory' => 'Brez podteme',
 );

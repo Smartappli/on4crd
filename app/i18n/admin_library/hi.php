@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'सुरक्षा',
   'ingestion_template_technical' => 'तकनीकी',
   'ingestion_template_legal' => 'कानूनी',
+  'subcategory_ph' => 'उपविषय',
+  'subcategories' => 'उपविषय',
+  'add_subcategory' => 'उपविषय जोड़ें',
+  'subcategory_code' => 'उपविषय कोड',
+  'subcategory_label' => 'उपविषय लेबल',
+  'ok_subcategory' => 'उपविषय सहेजा गया.',
+  'ok_subcategory_deleted' => 'उपविषय हटा दिया गया. दस्तावेज़ मूल विषय में रहते हैं.',
+  'all_subcategories' => 'सभी उपविषय',
+  'no_subcategory' => 'कोई उपविषय नहीं',
 );

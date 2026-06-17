@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Veiligheid',
   'ingestion_template_technical' => 'Technisch',
   'ingestion_template_legal' => 'Juridisch',
+  'subcategory_ph' => 'Subthema',
+  'subcategories' => 'Subthema\'s',
+  'add_subcategory' => 'Subthema toevoegen',
+  'subcategory_code' => 'Subthemacode',
+  'subcategory_label' => 'Subthemalabel',
+  'ok_subcategory' => 'Subthema opgeslagen.',
+  'ok_subcategory_deleted' => 'Subthema verwijderd. De documenten blijven in het bovenliggende thema.',
+  'all_subcategories' => 'Alle subthema\'s',
+  'no_subcategory' => 'Geen subthema',
 );

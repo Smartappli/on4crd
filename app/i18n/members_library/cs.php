@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Proč toto klíčové slovo přidat?',
   'tag_direct_help' => 'Klíčové slovo bude schváleno přímo.',
   'tag_created_direct' => 'Klíčové slovo bylo navrženo a přímo schváleno.',
+  'subcategory' => 'Podtéma',
+  'subcategories' => 'Podtémata',
+  'all_subcategories' => 'Všechna podtémata',
+  'no_subcategory' => 'Bez podtématu',
+  'propose_document_subcategory' => 'Požadované podtéma',
 );

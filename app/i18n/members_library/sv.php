@@ -73,4 +73,9 @@ return array (
   'propose_tag_reason' => 'Varför lägga till detta nyckelord?',
   'tag_direct_help' => 'Nyckelordet godkänns direkt.',
   'tag_created_direct' => 'Nyckelord föreslaget och direkt godkänt.',
+  'subcategory' => 'Underämne',
+  'subcategories' => 'Underämnen',
+  'all_subcategories' => 'Alla underämnen',
+  'no_subcategory' => 'Inget underämne',
+  'propose_document_subcategory' => 'Önskat underämne',
 );

@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Ασφάλεια',
   'ingestion_template_technical' => 'Τεχνικό',
   'ingestion_template_legal' => 'Νομική',
+  'subcategory_ph' => 'Υποθέμα',
+  'subcategories' => 'Υποθέματα',
+  'add_subcategory' => 'Προσθήκη υποθέματος',
+  'subcategory_code' => 'Κωδικός υποθέματος',
+  'subcategory_label' => 'Ετικέτα υποθέματος',
+  'ok_subcategory' => 'Το υποθέμα αποθηκεύτηκε.',
+  'ok_subcategory_deleted' => 'Το υποθέμα διαγράφηκε. Τα έγγραφα παραμένουν στο γονικό θέμα.',
+  'all_subcategories' => 'Όλα τα υποθέματα',
+  'no_subcategory' => 'Χωρίς υποθέμα',
 );

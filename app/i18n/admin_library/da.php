@@ -57,4 +57,13 @@ return array (
   'ingestion_template_safety' => 'Sikkerhed',
   'ingestion_template_technical' => 'Teknisk',
   'ingestion_template_legal' => 'Juridisk',
+  'subcategory_ph' => 'Underemne',
+  'subcategories' => 'Underemner',
+  'add_subcategory' => 'Tilføj underemne',
+  'subcategory_code' => 'Kode for underemne',
+  'subcategory_label' => 'Etiket for underemne',
+  'ok_subcategory' => 'Underemne gemt.',
+  'ok_subcategory_deleted' => 'Underemne slettet. Dokumenterne forbliver i det overordnede emne.',
+  'all_subcategories' => 'Alle underemner',
+  'no_subcategory' => 'Intet underemne',
 );
