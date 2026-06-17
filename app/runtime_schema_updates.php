@@ -331,6 +331,26 @@ function apply_runtime_schema_updates(): void
             'SELECT COUNT(*) FROM information_schema.columns
              WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
         );
+        $columnStmt->execute(['album_photos', 'album_id']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE album_photos ADD COLUMN album_id INT NOT NULL DEFAULT 0 AFTER id');
+        }
+        $columnStmt->execute(['album_photos', 'title']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE album_photos ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Photo" AFTER album_id');
+        }
+        $columnStmt->execute(['album_photos', 'caption']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE album_photos ADD COLUMN caption TEXT DEFAULT NULL AFTER title');
+        }
+        $columnStmt->execute(['album_photos', 'file_path']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE album_photos ADD COLUMN file_path VARCHAR(255) NOT NULL DEFAULT "" AFTER caption');
+        }
+        $columnStmt->execute(['album_photos', 'created_at']);
+        if ((int) $columnStmt->fetchColumn() === 0) {
+            db()->exec('ALTER TABLE album_photos ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER file_path');
+        }
         $columnStmt->execute(['album_photos', 'sort_order']);
         if ((int) $columnStmt->fetchColumn() === 0) {
             db()->exec('ALTER TABLE album_photos ADD COLUMN sort_order INT NOT NULL DEFAULT 0 AFTER album_id');
@@ -341,6 +361,18 @@ function apply_runtime_schema_updates(): void
     if (table_exists('albums') && table_has_column('albums', 'is_public')) {
         if (!table_has_column('albums', 'member_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN member_id INT DEFAULT NULL AFTER id');
+        }
+        if (!table_has_column('albums', 'category')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
+        }
+        if (!table_has_column('albums', 'subcategory')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
+        }
+        if (!table_has_column('albums', 'title')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Album" AFTER subcategory');
+        }
+        if (!table_has_column('albums', 'description')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN description TEXT DEFAULT NULL AFTER title');
         }
         if (!table_has_column('albums', 'source_proposal_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_public');
@@ -363,8 +395,17 @@ function apply_runtime_schema_updates(): void
         if (!table_has_column('albums', 'social_publish_error')) {
             db()->exec('ALTER TABLE albums ADD COLUMN social_publish_error TEXT DEFAULT NULL AFTER social_published_at');
         }
+        if (!table_has_column('albums', 'created_at')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error');
+        }
         if (!table_has_index('albums', 'idx_albums_member')) {
             db()->exec('ALTER TABLE albums ADD INDEX idx_albums_member (member_id)');
+        }
+        if (!table_has_index('albums', 'idx_albums_category')) {
+            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_category (category)');
+        }
+        if (!table_has_index('albums', 'idx_albums_subcategory')) {
+            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_subcategory (category, subcategory)');
         }
         if (!table_has_index('albums', 'idx_albums_source_proposal')) {
             db()->exec('ALTER TABLE albums ADD INDEX idx_albums_source_proposal (source_proposal_id)');
