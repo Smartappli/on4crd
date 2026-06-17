@@ -36,7 +36,17 @@ Avant de pousser une modification, vous pouvez lancer les contrôles principaux:
 ```bash
 composer test
 ./scripts/check-tools.sh
+npm run test:e2e
+npm run test:selenium
 ```
+
+Les tests Selenium utilisent `SELENIUM_BASE_URL` si vous ciblez une instance deja lancee:
+
+```bash
+SELENIUM_BASE_URL=https://staging.example.test/index.php npm run test:selenium
+```
+
+Les scenarios admin Selenium sont ignores tant que `SELENIUM_ADMIN_USER` et `SELENIUM_ADMIN_PASSWORD` ne sont pas fournis. Utilisez-les uniquement sur staging ou sur une base jetable, car ils creent et suppriment un album de test.
 
 
 ### Mode maintenance

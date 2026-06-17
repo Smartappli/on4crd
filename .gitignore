@@ -1,6 +1,7 @@
 /.phpunit.cache/
 /vendor/
 /node_modules/
+/selenium-artifacts/
 /config/config.php
 /storage/cache/*
 !/storage/cache/.gitkeep
