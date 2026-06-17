@@ -524,31 +524,48 @@ ob_start();
         <?php else: ?>
             <div class="albums-grid">
                 <?php foreach ($rows as $row):
-                    $coverPath = safe_storage_public_path_or_null((string) ($row['cover_path'] ?? ''), ['storage/uploads/albums/']);
-                    $coverThumb = $coverPath !== null ? album_thumbnail_public_path($coverPath) : '';
-                    $coverThumbAbs = $coverThumb !== '' ? dirname(__DIR__) . '/' . $coverThumb : '';
-                    $coverSrc = $coverThumb !== '' && is_file($coverThumbAbs) ? $coverThumb : ($coverPath ?? '');
+                    $albumId = (int) ($row['id'] ?? 0);
+                    $albumTitle = trim((string) ($row['title'] ?? ''));
+                    if ($albumTitle === '') {
+                        $albumTitle = (string) $t['albums'];
+                    }
+                    $coverSrc = '';
                     $photoCount = (int) ($row['photo_count'] ?? 0);
                     $description = trim((string) ($row['description'] ?? ''));
-                    $albumId = (int) ($row['id'] ?? 0);
-                    $albumCategory = album_category_code((string) ($row['category'] ?? 'general'));
-                    $albumSubcategory = album_subcategory_code((string) ($row['subcategory'] ?? ''));
-                    $albumCategoryLabel = (string) ($albumCategories[$albumCategory] ?? album_category_label_from_code($albumCategory));
-                    $albumSubcategoryLabel = $albumSubcategory !== '' ? album_category_label_from_code($albumSubcategory) : '';
-                    $canEditAlbum = $user !== null && $albumId > 0 && ($canManageAlbums || (int) ($row['member_id'] ?? 0) === (int) ($user['id'] ?? 0));
+                    $albumCategory = 'general';
+                    $albumSubcategory = '';
+                    $albumCategoryLabel = (string) ($albumCategories['general'] ?? 'General');
+                    $albumSubcategoryLabel = '';
+                    $canEditAlbum = false;
+                    try {
+                        $coverPath = safe_storage_public_path_or_null((string) ($row['cover_path'] ?? ''), ['storage/uploads/albums/']);
+                        $coverThumb = $coverPath !== null ? album_thumbnail_public_path($coverPath) : '';
+                        $coverThumbAbs = $coverThumb !== '' ? dirname(__DIR__) . '/' . $coverThumb : '';
+                        $coverSrc = $coverThumb !== '' && is_file($coverThumbAbs) ? $coverThumb : ($coverPath ?? '');
+                        $albumCategory = album_category_code((string) ($row['category'] ?? 'general'));
+                        $albumSubcategory = album_subcategory_code((string) ($row['subcategory'] ?? ''));
+                        $albumCategoryLabel = (string) ($albumCategories[$albumCategory] ?? album_category_label_from_code($albumCategory));
+                        $albumSubcategoryLabel = $albumSubcategory !== '' ? album_category_label_from_code($albumSubcategory) : '';
+                        $canEditAlbum = $user !== null && $albumId > 0 && ($canManageAlbums || (int) ($row['member_id'] ?? 0) === (int) ($user['id'] ?? 0));
+                    } catch (Throwable $throwable) {
+                        log_structured_event('album_tile_render_prepare_failed', [
+                            'album_id' => $albumId,
+                            'message' => $throwable->getMessage(),
+                        ]);
+                    }
                     $editDialogId = 'album-edit-dialog-' . $albumId;
                     ?>
                     <article class="album-tile">
                         <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
                             <?php if ($coverSrc !== ''): ?>
-                                <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e((string) $row['title']) ?>" loading="lazy" decoding="async">
+                                <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
                             <?php else: ?>
                                 <span class="album-placeholder-mark" aria-hidden="true"></span>
                             <?php endif; ?>
                         </a>
                         <div class="album-tile-body">
                             <div>
-                                <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e((string) $row['title']) ?></a></h2>
+                                <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e($albumTitle) ?></a></h2>
                                 <?php if ($description !== ''): ?>
                                     <p><?= e(mb_safe_strimwidth($description, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
@@ -583,7 +600,7 @@ ob_start();
                                     <div>
                                         <p class="module-dialog-eyebrow"><?= e((string) $t['albums']) ?></p>
                                         <h2 id="<?= e($editDialogId) ?>-title"><?= e($albumText('edit_album_title', 'Modifier l album', 'Edit album')) ?></h2>
-                                        <p class="help"><?= e((string) $row['title']) ?></p>
+                                        <p class="help"><?= e($albumTitle) ?></p>
                                     </div>
                                     <button class="album-dialog-close module-dialog-close" type="button" data-album-modal-close aria-label="<?= e($albumText('close', 'Fermer', 'Close')) ?>">&times;</button>
                                 </div>
@@ -596,7 +613,7 @@ ob_start();
                                     <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
                                     <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                     <input type="hidden" name="return_p" value="<?= $page ?>">
-                                    <label><span><?= e($albumText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="title" value="<?= e((string) $row['title']) ?>" maxlength="190" required></label>
+                                    <label><span><?= e($albumText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="title" value="<?= e($albumTitle) ?>" maxlength="190" required></label>
                                     <?= render_album_taxonomy_fields($albumCategories, $t, $albumCategory, $albumSubcategory) ?>
                                     <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="description" rows="5" maxlength="10000"><?= e($description) ?></textarea></label>
                                     <p class="album-dialog-actions module-dialog-actions">

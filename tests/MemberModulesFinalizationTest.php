@@ -34,6 +34,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category', $albums);
         self::assertStringContainsString('album_ensure_photo_sort_order_column()', $albums);
         self::assertStringContainsString("route_url('admin_albums') . '#album-wizard'", $albums);
+        self::assertStringContainsString("log_structured_event('album_tile_render_prepare_failed'", $albums);
+        self::assertStringContainsString("\$albumTitle = trim((string) (\$row['title'] ?? ''));", $albums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
         self::assertStringContainsString('album_clear_caches();', $albums);
         self::assertStringContainsString('album_ensure_photo_sort_order_column()', $album);
@@ -61,6 +63,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('return album_ensure_photo_sort_order_column();', $adminAlbums);
         self::assertStringContainsString('function album_social_publish_if_public(int $albumId): array', $albumHelpers);
         self::assertStringContainsString('function album_ensure_photo_sort_order_column(): bool', $albumHelpers);
+        self::assertStringContainsString("function_exists('mb_convert_case')", $albumHelpers);
+        self::assertStringContainsString('return ucwords(strtolower($label));', $albumHelpers);
         self::assertStringContainsString("table_has_column('album_photos', 'created_at')", $albumHelpers);
         self::assertStringContainsString("table_has_column('albums', 'created_at')", $albumHelpers);
         self::assertStringContainsString('ALTER TABLE album_photos ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER file_path', $runtimeUpdates);
