@@ -2,3 +2,136 @@
 [Wed Jun 17 21:51:18 2026] 127.0.0.1:54883 Accepted
 [Wed Jun 17 21:51:18 2026] 127.0.0.1:54883 Closed without sending a request; it was probably just an unused speculative preconnection
 [Wed Jun 17 21:51:18 2026] 127.0.0.1:54883 Closing
+[Wed Jun 17 21:55:12 2026] 127.0.0.1:63351 Accepted
+[Wed Jun 17 21:55:12 2026] [on4crd] {"ts":"2026-06-17T19:55:12+00:00","event":"php_error","request_id":"b88fb5b9c52b00439fa171bc","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","severity":8192,"message":"Delight\\Auth\\Auth::register(): Implicitly marking parameter $callback as nullable is deprecated, the explicit nullable type must be used instead","file":"D:\\projects\\on4crd\\vendor\\delight-im\\auth\\src\\Auth.php","line":231}
+[Wed Jun 17 21:55:12 2026] [on4crd] {"ts":"2026-06-17T19:55:12+00:00","event":"php_error","request_id":"b88fb5b9c52b00439fa171bc","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","severity":8192,"message":"Delight\\Auth\\Auth::registerWithUniqueUsername(): Implicitly marking parameter $callback as nullable is deprecated, the explicit nullable type must be used instead","file":"D:\\projects\\on4crd\\vendor\\delight-im\\auth\\src\\Auth.php","line":274}
+[Wed Jun 17 21:55:12 2026] [on4crd] {"ts":"2026-06-17T19:55:12+00:00","event":"php_error","request_id":"b88fb5b9c52b00439fa171bc","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","severity":8192,"message":"Delight\\Auth\\Auth::login(): Implicitly marking parameter $onBeforeSuccess as nullable is deprecated, the explicit nullable type must be used instead","file":"D:\\projects\\on4crd\\vendor\\delight-im\\auth\\src\\Auth.php","line":302}
+[Wed Jun 17 21:55:12 2026] [on4crd] {"ts":"2026-06-17T19:55:12+00:00","event":"php_error","request_id":"b88fb5b9c52b00439fa171bc","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","severity":8192,"message":"Delight\\Auth\\Auth::loginWithUsername(): Implicitly marking parameter $onBeforeSuccess as nullable is deprecated, the explicit nullable type must be used instead","file":"D:\\projects\\on4crd\\vendor\\delight-im\\auth\\src\\Auth.php","line":328}
+[Wed Jun 17 21:55:12 2026] [on4crd] {"ts":"2026-06-17T19:55:12+00:00","event":"php_error","request_id":"b88fb5b9c52b00439fa171bc","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","severity":8192,"message":"Delight\\Auth\\Auth::authenticateUserInternal(): Implicitly marking parameter $onBeforeSuccess as nullable is deprecated, the explicit nullable type must be used instead","file":"D:\\projects\\on4crd\\vendor\\delight-im\\auth\\src\\Auth.php","line":1306}
+[Wed Jun 17 21:55:12 2026] [on4crd] {"ts":"2026-06-17T19:55:12+00:00","event":"php_error","request_id":"b88fb5b9c52b00439fa171bc","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","severity":8192,"message":"Delight\\Auth\\UserManager::createUserInternal(): Implicitly marking parameter $callback as nullable is deprecated, the explicit nullable type must be used instead","file":"D:\\projects\\on4crd\\vendor\\delight-im\\auth\\src\\UserManager.php","line":131}
+[Wed Jun 17 21:55:17 2026] 127.0.0.1:63351 [200]: GET /index.php?route=home
+[Wed Jun 17 21:55:17 2026] [on4crd] {"ts":"2026-06-17T19:55:17+00:00","event":"http_request","request_id":"b88fb5b9c52b00439fa171bc","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":5069,"route_name":"home","method":"GET"}
+[Wed Jun 17 21:55:17 2026] 127.0.0.1:63351 Closing
+[Wed Jun 17 21:55:21 2026] 127.0.0.1:62879 Accepted
+[Wed Jun 17 21:55:21 2026] 127.0.0.1:60289 Accepted
+[Wed Jun 17 21:55:21 2026] [on4crd] {"ts":"2026-06-17T19:55:21+00:00","event":"content_proposals_table_ensure_failed","request_id":"60e6031d3a77621329a60324","route":"articles","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","message":"could not find driver"}
+[Wed Jun 17 21:55:21 2026] 127.0.0.1:62879 [200]: GET /index.php?route=articles
+[Wed Jun 17 21:55:21 2026] [on4crd] {"ts":"2026-06-17T19:55:21+00:00","event":"http_request","request_id":"60e6031d3a77621329a60324","route":"articles","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":75,"route_name":"articles","method":"GET"}
+[Wed Jun 17 21:55:21 2026] 127.0.0.1:62879 Closing
+[Wed Jun 17 21:55:21 2026] 127.0.0.1:60289 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:55:21 2026] 127.0.0.1:60289 Closing
+[Wed Jun 17 21:55:23 2026] 127.0.0.1:53679 Accepted
+[Wed Jun 17 21:55:23 2026] [on4crd] {"ts":"2026-06-17T19:55:23+00:00","event":"wiki_tables_ensure_failed","request_id":"40e0013dc24ac2d764907965","route":"wiki","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","message":"could not find driver"}
+[Wed Jun 17 21:55:23 2026] 127.0.0.1:53679 [200]: GET /index.php?route=wiki
+[Wed Jun 17 21:55:23 2026] [on4crd] {"ts":"2026-06-17T19:55:23+00:00","event":"http_request","request_id":"40e0013dc24ac2d764907965","route":"wiki","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":43,"route_name":"wiki","method":"GET"}
+[Wed Jun 17 21:55:23 2026] 127.0.0.1:53679 Closing
+[Wed Jun 17 21:55:23 2026] 127.0.0.1:60432 Accepted
+[Wed Jun 17 21:55:23 2026] 127.0.0.1:60432 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:55:23 2026] 127.0.0.1:60432 Closing
+[Wed Jun 17 21:55:24 2026] 127.0.0.1:53679 Accepted
+[Wed Jun 17 21:55:24 2026] 127.0.0.1:53679 [200]: GET /index.php?route=albums
+[Wed Jun 17 21:55:24 2026] [on4crd] {"ts":"2026-06-17T19:55:24+00:00","event":"http_request","request_id":"723c329ad314a39d3d91f9f3","route":"albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":68,"route_name":"albums","method":"GET"}
+[Wed Jun 17 21:55:24 2026] 127.0.0.1:53679 Closing
+[Wed Jun 17 21:55:24 2026] 127.0.0.1:54909 Accepted
+[Wed Jun 17 21:55:24 2026] 127.0.0.1:54909 Invalid request (Une connexion existante a dû être fermée par l’hôte distant)
+[Wed Jun 17 21:55:24 2026] 127.0.0.1:54909 Closing
+[Wed Jun 17 21:55:25 2026] 127.0.0.1:64225 Accepted
+[Wed Jun 17 21:55:25 2026] 127.0.0.1:60358 Accepted
+[Wed Jun 17 21:55:25 2026] 127.0.0.1:64225 [200]: GET /index.php?route=albums
+[Wed Jun 17 21:55:25 2026] [on4crd] {"ts":"2026-06-17T19:55:25+00:00","event":"http_request","request_id":"7ecd6d4635daf5bbeacdf66f","route":"albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":33,"route_name":"albums","method":"GET"}
+[Wed Jun 17 21:55:25 2026] 127.0.0.1:64225 Closing
+[Wed Jun 17 21:55:25 2026] 127.0.0.1:60358 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:55:25 2026] 127.0.0.1:60358 Closing
+[Wed Jun 17 21:55:26 2026] 127.0.0.1:61916 Accepted
+[Wed Jun 17 21:55:26 2026] 127.0.0.1:61916 [200]: GET /index.php?route=albums
+[Wed Jun 17 21:55:26 2026] [on4crd] {"ts":"2026-06-17T19:55:26+00:00","event":"http_request","request_id":"bbf3ffb5b59bd8cbd40c740b","route":"albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":34,"route_name":"albums","method":"GET"}
+[Wed Jun 17 21:55:26 2026] 127.0.0.1:61916 Closing
+[Wed Jun 17 21:55:26 2026] 127.0.0.1:56196 Accepted
+[Wed Jun 17 21:55:26 2026] 127.0.0.1:56196 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:55:26 2026] 127.0.0.1:56196 Closing
+[Wed Jun 17 21:55:28 2026] 127.0.0.1:55511 Accepted
+[Wed Jun 17 21:55:28 2026] 127.0.0.1:55511 [200]: GET /index.php?route=search&q=radio&source=all
+[Wed Jun 17 21:55:28 2026] [on4crd] {"ts":"2026-06-17T19:55:28+00:00","event":"http_request","request_id":"c5841fcb74f0c5e91dbce338","route":"search","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":67,"route_name":"search","method":"GET"}
+[Wed Jun 17 21:55:28 2026] 127.0.0.1:55511 Closing
+[Wed Jun 17 21:55:28 2026] 127.0.0.1:64465 Accepted
+[Wed Jun 17 21:55:28 2026] 127.0.0.1:64465 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:55:28 2026] 127.0.0.1:64465 Closing
+[Wed Jun 17 21:55:30 2026] 127.0.0.1:61426 Accepted
+[Wed Jun 17 21:55:30 2026] 127.0.0.1:51466 Accepted
+[Wed Jun 17 21:55:30 2026] 127.0.0.1:61426 [200]: GET /index.php?route=search&q=on4crd&source=all
+[Wed Jun 17 21:55:30 2026] [on4crd] {"ts":"2026-06-17T19:55:30+00:00","event":"http_request","request_id":"6cc100726babe8d3a45f5e2b","route":"search","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":26,"route_name":"search","method":"GET"}
+[Wed Jun 17 21:55:30 2026] 127.0.0.1:61426 Closing
+[Wed Jun 17 21:55:30 2026] 127.0.0.1:51466 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:55:30 2026] 127.0.0.1:51466 Closing
+[Wed Jun 17 21:55:32 2026] 127.0.0.1:59099 Accepted
+[Wed Jun 17 21:55:32 2026] 127.0.0.1:51032 Accepted
+[Wed Jun 17 21:55:32 2026] 127.0.0.1:51032 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:55:32 2026] 127.0.0.1:51032 Closing
+[Wed Jun 17 21:55:32 2026] 127.0.0.1:59099 [302]: GET /index.php?route=admin_albums&focus=album-wizard
+[Wed Jun 17 21:55:32 2026] [on4crd] {"ts":"2026-06-17T19:55:32+00:00","event":"http_request","request_id":"43897ed2bc64534b694dd69e","route":"admin_albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":302,"duration_ms":1,"route_name":"admin_albums","method":"GET"}
+[Wed Jun 17 21:55:32 2026] 127.0.0.1:59099 Closing
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:55373 Accepted
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:64105 Accepted
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:55373 [200]: GET /index.php?route=albums
+[Wed Jun 17 21:56:47 2026] [on4crd] {"ts":"2026-06-17T19:56:47+00:00","event":"http_request","request_id":"05ad37e414d466dbfb15bd79","route":"albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":23,"route_name":"albums","method":"GET"}
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:55373 Closing
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:54209 Accepted
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:62193 Accepted
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:54209 [200]: GET /index.php?route=home
+[Wed Jun 17 21:56:47 2026] [on4crd] {"ts":"2026-06-17T19:56:47+00:00","event":"http_request","request_id":"8d7e5dd3be53c9d3afef8be0","route":"home","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":57,"route_name":"home","method":"GET"}
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:54209 Closing
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:64105 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:64105 Closing
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:62193 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:56:47 2026] 127.0.0.1:62193 Closing
+[Wed Jun 17 21:56:49 2026] 127.0.0.1:55320 Accepted
+[Wed Jun 17 21:56:49 2026] 127.0.0.1:55718 Accepted
+[Wed Jun 17 21:56:49 2026] [on4crd] {"ts":"2026-06-17T19:56:49+00:00","event":"content_proposals_table_ensure_failed","request_id":"92a5a7e74d3ec7c5551d9b00","route":"articles","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","message":"could not find driver"}
+[Wed Jun 17 21:56:49 2026] 127.0.0.1:55320 [200]: GET /index.php?route=articles
+[Wed Jun 17 21:56:49 2026] [on4crd] {"ts":"2026-06-17T19:56:49+00:00","event":"http_request","request_id":"92a5a7e74d3ec7c5551d9b00","route":"articles","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":24,"route_name":"articles","method":"GET"}
+[Wed Jun 17 21:56:49 2026] 127.0.0.1:55320 Closing
+[Wed Jun 17 21:56:50 2026] 127.0.0.1:55718 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:56:50 2026] 127.0.0.1:55718 Closing
+[Wed Jun 17 21:56:51 2026] 127.0.0.1:50920 Accepted
+[Wed Jun 17 21:56:51 2026] 127.0.0.1:57493 Accepted
+[Wed Jun 17 21:56:51 2026] 127.0.0.1:50920 [200]: GET /index.php?route=albums
+[Wed Jun 17 21:56:51 2026] [on4crd] {"ts":"2026-06-17T19:56:51+00:00","event":"http_request","request_id":"eff098ab6576faef0b95e34d","route":"albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":23,"route_name":"albums","method":"GET"}
+[Wed Jun 17 21:56:51 2026] 127.0.0.1:50920 Closing
+[Wed Jun 17 21:56:51 2026] 127.0.0.1:57493 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:56:51 2026] 127.0.0.1:57493 Closing
+[Wed Jun 17 21:56:52 2026] 127.0.0.1:50909 Accepted
+[Wed Jun 17 21:56:52 2026] 127.0.0.1:63942 Accepted
+[Wed Jun 17 21:56:52 2026] [on4crd] {"ts":"2026-06-17T19:56:52+00:00","event":"wiki_tables_ensure_failed","request_id":"bfb82a00c463aa36f4c9d912","route":"wiki","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","message":"could not find driver"}
+[Wed Jun 17 21:56:52 2026] 127.0.0.1:50909 [200]: GET /index.php?route=wiki
+[Wed Jun 17 21:56:52 2026] [on4crd] {"ts":"2026-06-17T19:56:52+00:00","event":"http_request","request_id":"bfb82a00c463aa36f4c9d912","route":"wiki","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":16,"route_name":"wiki","method":"GET"}
+[Wed Jun 17 21:56:52 2026] 127.0.0.1:50909 Closing
+[Wed Jun 17 21:56:53 2026] 127.0.0.1:63942 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:56:53 2026] 127.0.0.1:63942 Closing
+[Wed Jun 17 21:56:57 2026] 127.0.0.1:57035 Accepted
+[Wed Jun 17 21:56:57 2026] 127.0.0.1:57035 [200]: GET /index.php?route=albums
+[Wed Jun 17 21:56:57 2026] [on4crd] {"ts":"2026-06-17T19:56:57+00:00","event":"http_request","request_id":"47e429330b307c8ef9ad55c1","route":"albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":22,"route_name":"albums","method":"GET"}
+[Wed Jun 17 21:56:57 2026] 127.0.0.1:57035 Closing
+[Wed Jun 17 21:56:57 2026] 127.0.0.1:60741 Accepted
+[Wed Jun 17 21:56:57 2026] 127.0.0.1:60741 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:56:57 2026] 127.0.0.1:60741 Closing
+[Wed Jun 17 21:57:01 2026] 127.0.0.1:61555 Accepted
+[Wed Jun 17 21:57:01 2026] 127.0.0.1:65477 Accepted
+[Wed Jun 17 21:57:01 2026] 127.0.0.1:61555 [200]: GET /index.php?route=search&q=radio&source=all
+[Wed Jun 17 21:57:01 2026] [on4crd] {"ts":"2026-06-17T19:57:01+00:00","event":"http_request","request_id":"2431f27bbd9e643fef87731c","route":"search","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":22,"route_name":"search","method":"GET"}
+[Wed Jun 17 21:57:01 2026] 127.0.0.1:61555 Closing
+[Wed Jun 17 21:57:01 2026] 127.0.0.1:65477 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:57:01 2026] 127.0.0.1:65477 Closing
+[Wed Jun 17 21:57:04 2026] 127.0.0.1:62596 Accepted
+[Wed Jun 17 21:57:04 2026] 127.0.0.1:58070 Accepted
+[Wed Jun 17 21:57:04 2026] 127.0.0.1:62596 [200]: GET /index.php?route=search&q=on4crd&source=all
+[Wed Jun 17 21:57:04 2026] [on4crd] {"ts":"2026-06-17T19:57:04+00:00","event":"http_request","request_id":"4adbda27dfda8ae53e85dc8d","route":"search","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":200,"duration_ms":22,"route_name":"search","method":"GET"}
+[Wed Jun 17 21:57:04 2026] 127.0.0.1:62596 Closing
+[Wed Jun 17 21:57:05 2026] 127.0.0.1:58070 Invalid request (Une connexion existante a dû être fermée par l’hôte distant)
+[Wed Jun 17 21:57:05 2026] 127.0.0.1:58070 Closing
+[Wed Jun 17 21:57:06 2026] 127.0.0.1:64796 Accepted
+[Wed Jun 17 21:57:06 2026] 127.0.0.1:54570 Accepted
+[Wed Jun 17 21:57:06 2026] 127.0.0.1:64796 [302]: GET /index.php?route=admin_albums&focus=album-wizard
+[Wed Jun 17 21:57:06 2026] [on4crd] {"ts":"2026-06-17T19:57:06+00:00","event":"http_request","request_id":"b3d3f2bc3913dda96a3ae22f","route":"admin_albums","ip_hash":"283c93a069df362fae605d4f6ce92b73ffb5677ea0e0e4885e0f112d6e837bb2","status_code":302,"duration_ms":1,"route_name":"admin_albums","method":"GET"}
+[Wed Jun 17 21:57:06 2026] 127.0.0.1:64796 Closing
+[Wed Jun 17 21:57:07 2026] 127.0.0.1:54570 Closed without sending a request; it was probably just an unused speculative preconnection
+[Wed Jun 17 21:57:07 2026] 127.0.0.1:54570 Closing
