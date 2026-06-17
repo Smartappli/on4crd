@@ -25,6 +25,19 @@ function routeUrl(route, query = {}) {
   return url.toString();
 }
 
+function baseUrlHost() {
+  return new URL(baseUrl).host;
+}
+
+async function isOutsideBaseUrl(driver) {
+  try {
+    const current = new URL(await driver.getCurrentUrl());
+    return current.host !== baseUrlHost();
+  } catch {
+    return false;
+  }
+}
+
 async function createDriver() {
   const options = new chrome.Options();
   if (process.env.SELENIUM_HEADLESS !== '0') {
@@ -263,6 +276,8 @@ module.exports = {
   until,
   assert,
   routeUrl,
+  baseUrlHost,
+  isOutsideBaseUrl,
   timeoutMs,
   withSelenium,
   visit,

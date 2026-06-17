@@ -6,6 +6,7 @@ const {
   visit,
   pagePlainText,
   skipIfInstallWizard,
+  isOutsideBaseUrl,
   isLoginPage,
   elementExists,
 } = require('./helpers');
@@ -93,6 +94,10 @@ test('Selenium securite: les routes membres non authentifiees sont protegees', a
   await withSelenium(t, async (driver) => {
     for (const route of memberRoutes) {
       await visit(driver, route);
+      if (await isOutsideBaseUrl(driver)) {
+        t.skip('app.base_url redirige hors de SELENIUM_BASE_URL; controle local des routes protegees ignore.');
+        return;
+      }
       if (await skipIfInstallWizard(t, driver)) {
         return;
       }
@@ -106,6 +111,10 @@ test('Selenium securite: les routes admin non authentifiees sont protegees', asy
     for (const route of adminRoutes) {
       const query = route === 'admin_albums' ? { focus: 'album-wizard' } : {};
       await visit(driver, route, query);
+      if (await isOutsideBaseUrl(driver)) {
+        t.skip('app.base_url redirige hors de SELENIUM_BASE_URL; controle local des routes admin ignore.');
+        return;
+      }
       if (await skipIfInstallWizard(t, driver)) {
         return;
       }

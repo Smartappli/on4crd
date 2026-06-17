@@ -5,6 +5,7 @@ const {
   withSelenium,
   visit,
   firstText,
+  isOutsideBaseUrl,
 } = require('./helpers');
 
 const publicRoutes = [
@@ -37,6 +38,10 @@ test('Selenium recherche: formulaire, query et resultats restent rendus', async 
 test('Selenium admin: acces non authentifie redirige vers login avec next conserve', async (t) => {
   await withSelenium(t, async (driver) => {
     await visit(driver, 'admin_albums', { focus: 'album-wizard' });
+    if (await isOutsideBaseUrl(driver)) {
+      t.skip('app.base_url redirige hors de SELENIUM_BASE_URL; controle de redirection admin ignore.');
+      return;
+    }
     const bodyText = await firstText(driver, 'body');
     if (/Assistant de d.ploiement ON4CRD|installation/i.test(bodyText)) {
       t.skip('Instance locale non installee; controle de redirection admin ignore.');
