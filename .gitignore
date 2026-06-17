@@ -2,6 +2,7 @@
 /vendor/
 /node_modules/
 /selenium-artifacts/
+/storage/selenium-php-server*.log
 /config/config.php
 /storage/cache/*
 !/storage/cache/.gitkeep
