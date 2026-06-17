@@ -26,9 +26,10 @@ if (table_exists('members')) {
     $allowedVisibilityLevels = member_profile_allowed_visibility_levels(is_array($viewer) ? $viewer : null);
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
 
+    $directoryVisibleWhere = 'is_active = 1 AND directory_hidden = 0';
     $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role
         FROM members
-        WHERE is_active = 1';
+        WHERE ' . $directoryVisibleWhere;
     $params = [];
 
     if ($search !== '') {
@@ -74,7 +75,7 @@ if (table_exists('members')) {
         'SELECT COUNT(*) AS active_total,
                 SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
-         WHERE is_active = 1'
+         WHERE ' . $directoryVisibleWhere
     );
     $countParams = [];
     foreach ($allowedVisibilityLevels as $visibilityLevel) {
@@ -110,7 +111,7 @@ if (table_exists('members')) {
     unset($member);
     $members = array_values($members);
 
-    $licenceStmt = db()->prepare('SELECT licence_class, COUNT(*) AS total FROM members WHERE is_active = 1 AND licence_class IS NOT NULL AND licence_class <> ? GROUP BY licence_class ORDER BY licence_class ASC');
+    $licenceStmt = db()->prepare('SELECT licence_class, COUNT(*) AS total FROM members WHERE ' . $directoryVisibleWhere . ' AND licence_class IS NOT NULL AND licence_class <> ? GROUP BY licence_class ORDER BY licence_class ASC');
     $licenceStmt->execute(['']);
     $licenceRows = $licenceStmt->fetchAll() ?: [];
 } else {

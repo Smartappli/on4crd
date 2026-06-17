@@ -385,6 +385,18 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('UPPER(callsign) <> ?', $directory);
     }
 
+    public function testDirectoryExcludesExplicitlyHiddenMembers(): void
+    {
+        $directory = file_get_contents(__DIR__ . '/../pages/directory.php');
+        $schemaUpdates = file_get_contents(__DIR__ . '/../app/runtime_schema_updates.php');
+        self::assertIsString($directory);
+        self::assertIsString($schemaUpdates);
+
+        self::assertStringContainsString("'directory_hidden' => 'ALTER TABLE members ADD COLUMN directory_hidden TINYINT(1) NOT NULL DEFAULT 0 AFTER is_active'", $schemaUpdates);
+        self::assertStringContainsString('$directoryVisibleWhere = \'is_active = 1 AND directory_hidden = 0\';', $directory);
+        self::assertStringContainsString('WHERE \' . $directoryVisibleWhere', $directory);
+    }
+
     public function testCurrentUserRepairsMissingAuthUserLinkByCallsign(): void
     {
         $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');

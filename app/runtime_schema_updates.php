@@ -432,6 +432,7 @@ function apply_runtime_schema_updates(): void
             'postal_code' => 'ALTER TABLE members ADD COLUMN postal_code VARCHAR(32) DEFAULT NULL AFTER address',
             'is_uba_member' => 'ALTER TABLE members ADD COLUMN is_uba_member TINYINT(1) NOT NULL DEFAULT 0',
             'uba_member_number' => 'ALTER TABLE members ADD COLUMN uba_member_number VARCHAR(64) DEFAULT NULL',
+            'directory_hidden' => 'ALTER TABLE members ADD COLUMN directory_hidden TINYINT(1) NOT NULL DEFAULT 0 AFTER is_active',
             'visibility_email' => 'ALTER TABLE members ADD COLUMN visibility_email ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_phone' => 'ALTER TABLE members ADD COLUMN visibility_phone ENUM("public","members","private") NOT NULL DEFAULT "private"',
             'visibility_full_name' => 'ALTER TABLE members ADD COLUMN visibility_full_name ENUM("public","members","private") NOT NULL DEFAULT "private"',

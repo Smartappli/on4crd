@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS members (
     visibility_photo ENUM('public','members','private') NOT NULL DEFAULT 'private',
     visibility_online ENUM('public','members','private') NOT NULL DEFAULT 'members',
     is_active TINYINT(1) NOT NULL DEFAULT 1,
+    directory_hidden TINYINT(1) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
