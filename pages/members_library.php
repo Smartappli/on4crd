@@ -79,6 +79,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sourceRef = '';
             $title = content_proposal_clean_single_line((string) ($_POST['document_title'] ?? $document['title'] ?? ''), 190);
             $documentCategory = member_library_category_slug((string) ($_POST['document_category'] ?? $document['category'] ?? 'general'));
+            $documentSubcategory = member_library_subcategory_slug((string) ($document['subcategory'] ?? ''));
+            $documentSubcategoryRef = trim((string) ($_POST['document_subcategory_ref'] ?? ''));
+            if ($documentSubcategoryRef !== '') {
+                $documentSubcategoryParts = member_library_subcategory_ref_parts($documentSubcategoryRef);
+                if ($documentSubcategoryParts['subcategory'] !== '') {
+                    $documentSubcategory = $documentSubcategoryParts['subcategory'];
+                    if ($documentSubcategoryParts['category'] !== '') {
+                        $documentCategory = $documentSubcategoryParts['category'];
+                    }
+                }
+            } elseif (array_key_exists('document_subcategory_ref', $_POST)) {
+                $documentSubcategory = '';
+            }
             $documentTags = member_library_clean_tags((string) ($_POST['document_tags'] ?? $document['tags'] ?? ''));
             $description = content_proposal_clean_multiline((string) ($_POST['document_description'] ?? $document['description'] ?? ''), 1800);
 
@@ -98,6 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'Action' => 'delete_document',
                     'Document ID' => (string) $documentId,
                     'Category' => (string) ($document['category'] ?? 'general'),
+                    (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => (string) ($document['subcategory'] ?? ''),
                     'Tags' => (string) ($document['tags'] ?? ''),
                     'Description' => mb_safe_substr((string) ($document['description'] ?? ''), 0, 1800),
                 ]);
@@ -120,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($canManageLibrary) {
-                member_library_update_document_record($documentId, $title, $documentCategory, $documentTags, $description, $sourceRef);
+                member_library_update_document_record($documentId, $title, $documentCategory, $documentTags, $description, $sourceRef, $documentSubcategory);
                 set_flash('success', $membersLibraryText('document_updated', 'Document mis à jour.', 'Document updated.'));
                 redirect_url($membersLibraryReturnUrl());
             }
