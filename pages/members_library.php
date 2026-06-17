@@ -17,6 +17,7 @@ $membersLibraryReturnUrl = static function (): string {
 
     return route_url_clean('members_library', [
         'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+        'subcategory' => (string) ($_POST['return_subcategory'] ?? $_GET['subcategory'] ?? ''),
         'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
         'tag' => (string) ($_POST['return_tag'] ?? $_GET['tag'] ?? ''),
         'p' => $page > 1 ? $page : '',
@@ -28,6 +29,8 @@ if (!ensure_member_library_table()) {
     echo render_layout('<div class="card"><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['title']);
     return;
 }
+member_library_ensure_categories_table();
+member_library_ensure_subcategories_table();
 member_library_sync_accepted_proposals($t);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,20 +41,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'toggle_favorite_document') {
             $documentId = (int) ($_POST['document_id'] ?? 0);
             if ($documentId > 0) {
-                $docStmt = db()->prepare('SELECT id, title, category, tags FROM member_library_documents WHERE id = ? LIMIT 1');
+                $docStmt = db()->prepare('SELECT id, title, category, subcategory, tags FROM member_library_documents WHERE id = ? LIMIT 1');
                 $docStmt->execute([$documentId]);
                 $docRow = $docStmt->fetch() ?: null;
                 if ($docRow !== null) {
                     $docTitle = trim((string) ($docRow['title'] ?? 'Document'));
                     $docCategory = trim((string) ($docRow['category'] ?? ''));
+                    $docSubcategory = trim((string) ($docRow['subcategory'] ?? ''));
                     $docTags = trim((string) ($docRow['tags'] ?? ''));
-                    $favoriteUrl = route_url_clean('members_library', ['q' => $docTitle, 'category' => $docCategory, 'tag' => $docTags]);
+                    $favoriteUrl = route_url_clean('members_library', ['q' => $docTitle, 'category' => $docCategory, 'subcategory' => $docSubcategory, 'tag' => $docTags]);
                     $saved = favorite_toggle((int) $user['id'], 'library_document', (int) $docRow['id'], $docTitle, $favoriteUrl);
                     notify_member((int) $user['id'], 'favorite', $saved ? (string) $t['favorite_added'] : (string) $t['favorite_removed'], $docTitle, $favoriteUrl);
                     set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
                 }
             }
-            redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+            redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'subcategory' => (string) ($_GET['subcategory'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
         }
 
         if ($action === 'update_document' || $action === 'delete_document') {

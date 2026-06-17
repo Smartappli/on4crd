@@ -216,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'delete_category') {
             $code = library_category_slug((string) ($_POST['category_code'] ?? ''));
             if ($code !== 'general') {
-                db()->prepare('UPDATE member_library_documents SET category = "general" WHERE category = ?')->execute([$code]);
+                db()->prepare('UPDATE member_library_documents SET category = "general", subcategory = "" WHERE category = ?')->execute([$code]);
                 db()->prepare('DELETE FROM member_library_categories WHERE code = ? LIMIT 1')->execute([$code]);
                 db()->prepare('DELETE FROM member_library_subcategories WHERE category_code = ?')->execute([$code]);
             }
@@ -327,6 +327,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $category = library_category_slug((string) ($_POST['category'] ?? 'general'));
+        $subcategory = '';
+        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+        if ($subcategoryRef !== '' && function_exists('member_library_subcategory_ref_parts')) {
+            $subcategoryParts = member_library_subcategory_ref_parts($subcategoryRef);
+            if ($subcategoryParts['subcategory'] !== '') {
+                $subcategory = $subcategoryParts['subcategory'];
+                if ($subcategoryParts['category'] !== '') {
+                    $category = $subcategoryParts['category'];
+                }
+            }
+        }
         $title = trim((string) ($_POST['title'] ?? ''));
         $description = trim((string) ($_POST['description'] ?? ''));
         $templateKey = trim((string) ($_POST['template'] ?? ''));
@@ -350,8 +361,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stored = library_store_upload($file, (int) ($user['id'] ?? 0));
         $extractedText = library_extract_text((string) $stored['absolute_path'], (string) $stored['extension']);
 
-        db()->prepare('INSERT INTO member_library_documents (member_id, category, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?)')
-            ->execute([(int) ($user['id'] ?? 0), $category, $tags, $title, $description, (string) $stored['public_path'], $extractedText]);
+        db()->prepare('INSERT INTO member_library_documents (member_id, category, subcategory, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+            ->execute([(int) ($user['id'] ?? 0), $category, $subcategory, $tags, $title, $description, (string) $stored['public_path'], $extractedText]);
         notify_member((int) ($user['id'] ?? 0), 'import', 'Library import completed', $title, route_url($adminLibraryRoute));
         set_flash('success', (string) $t['ok_added']);
         redirect($adminLibraryRoute);
@@ -363,12 +374,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $categoryOptions = db()->query('SELECT code, label FROM member_library_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [];
+$categoryLabels = [];
+foreach ($categoryOptions as $catOpt) {
+    $catCode = library_category_slug((string) ($catOpt['code'] ?? 'general'));
+    $categoryLabels[$catCode] = (string) ($catOpt['label'] ?? $catCode);
+}
+$subcategoryOptions = function_exists('member_library_subcategory_options') ? member_library_subcategory_options() : [];
+$subcategoriesByCategory = [];
+$subcategoryLabels = [];
+foreach ($subcategoryOptions as $subcatOpt) {
+    $parentCode = library_category_slug((string) ($subcatOpt['category_code'] ?? 'general'));
+    $subcatCode = library_subcategory_slug((string) ($subcatOpt['code'] ?? ''));
+    if ($subcatCode === '') {
+        continue;
+    }
+    $subcategoriesByCategory[$parentCode][] = [
+        'category_code' => $parentCode,
+        'code' => $subcatCode,
+        'label' => (string) ($subcatOpt['label'] ?? $subcatCode),
+    ];
+    $subcategoryLabels[$parentCode . ':' . $subcatCode] = (string) ($subcatOpt['label'] ?? $subcatCode);
+}
 $perPage = 20;
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $adminCategory = library_category_slug((string) ($_GET['category'] ?? ''));
 if ($adminCategory === 'general' && !isset($_GET['category'])) {
     $adminCategory = '';
 }
+$adminSubcategory = library_subcategory_slug((string) ($_GET['subcategory'] ?? ''));
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $adminTag = trim((string) ($_GET['tag'] ?? ''));
 $where = [];
@@ -376,6 +409,10 @@ $params = [];
 if ($adminCategory !== '') {
     $where[] = 'category = ?';
     $params[] = $adminCategory;
+}
+if ($adminSubcategory !== '') {
+    $where[] = 'subcategory = ?';
+    $params[] = $adminSubcategory;
 }
 if ($adminSearch !== '') {
     $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
@@ -394,7 +431,7 @@ $pagination = pagination_state($totalDocuments, $page, $perPage);
 $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
 $offset = $pagination['offset'];
-$stmt = db()->prepare('SELECT id, category, tags, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$stmt = db()->prepare('SELECT id, category, subcategory, tags, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
 
@@ -548,6 +585,19 @@ ob_start();
                 </select>
             </label>
             <label class="admin-library-field"><span><?= e((string) $t['category_ph']) ?></span><select name="category"><?php foreach ($categoryOptions as $catOpt): ?><option value="<?= e((string) $catOpt['code']) ?>" <?= $adminCategory === (string) $catOpt['code'] ? 'selected' : '' ?>><?= e((string) $catOpt['label']) ?></option><?php endforeach; ?></select></label>
+            <label class="admin-library-field">
+                <span><?= e((string) ($t['subcategory_ph'] ?? 'Sous-thématique')) ?></span>
+                <select name="subcategory_ref">
+                    <option value=""><?= e((string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></option>
+                    <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
+                        <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
+                            <?php foreach ($subcatGroup as $subcatOpt): ?>
+                                <option value="<?= e(member_library_subcategory_ref($parentCode, (string) $subcatOpt['code'])) ?>"<?= $adminSubcategory === (string) $subcatOpt['code'] && ($adminCategory === '' || $adminCategory === $parentCode) ? ' selected' : '' ?>><?= e((string) $subcatOpt['label']) ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    <?php endforeach; ?>
+                </select>
+            </label>
             <label class="admin-library-field"><span><?= e((string) $t['title_ph']) ?></span><input type="text" name="title" required></label>
             <label class="admin-library-field"><span><?= e((string) $t['tags_ph']) ?></span><input type="text" name="tags" placeholder="<?= e((string) $t['tags_help']) ?>"></label>
             <label class="admin-library-field admin-library-field-wide"><span><?= e((string) $t['desc_ph']) ?></span><textarea name="description"></textarea></label>
@@ -575,6 +625,36 @@ ob_start();
                     <span class="badge muted"><?= e((string) $catOpt['label']) ?></span>
                     <?php if ((string) $catOpt['code'] !== 'general'): ?><button class="button secondary" type="submit"><?= e((string) $t['delete']) ?></button><?php endif; ?>
                 </form>
+            <?php endforeach; ?>
+        </div>
+    </section>
+
+    <section class="card admin-library-categories">
+        <h2><?= e((string) ($t['subcategories'] ?? 'Sous-thématiques')) ?></h2>
+        <form method="post" class="inline-form">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="add_subcategory">
+            <select name="subcategory_category" required>
+                <?php foreach ($categoryOptions as $catOpt): ?>
+                    <option value="<?= e((string) $catOpt['code']) ?>"><?= e((string) $catOpt['label']) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="text" name="subcategory_code" placeholder="<?= e((string) ($t['subcategory_code'] ?? 'Code sous-thématique')) ?>">
+            <input type="text" name="subcategory_label" placeholder="<?= e((string) ($t['subcategory_label'] ?? 'Libellé sous-thématique')) ?>">
+            <button class="button" type="submit"><?= e((string) ($t['add_subcategory'] ?? 'Ajouter une sous-thématique')) ?></button>
+        </form>
+        <div class="admin-library-category-list">
+            <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
+                <?php foreach ($subcatGroup as $subcatOpt): ?>
+                    <form method="post" class="inline-form admin-library-category-item">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="subcategory_category" value="<?= e($parentCode) ?>">
+                        <input type="hidden" name="subcategory_code" value="<?= e((string) $subcatOpt['code']) ?>">
+                        <span class="badge muted"><?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?> / <?= e((string) $subcatOpt['label']) ?></span>
+                        <button class="button secondary" type="submit"><?= e((string) $t['delete']) ?></button>
+                    </form>
+                <?php endforeach; ?>
             <?php endforeach; ?>
         </div>
     </section>
@@ -615,6 +695,16 @@ ob_start();
                 <option value="<?= e((string) $catOpt['code']) ?>" <?= $adminCategory === (string) $catOpt['code'] ? 'selected' : '' ?>><?= e((string) $catOpt['label']) ?></option>
             <?php endforeach; ?>
         </select>
+        <select name="subcategory">
+            <option value=""><?= e((string) ($t['all_subcategories'] ?? 'Toutes les sous-thématiques')) ?></option>
+            <?php foreach ($subcategoriesByCategory as $parentCode => $subcatGroup): ?>
+                <optgroup label="<?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?>">
+                    <?php foreach ($subcatGroup as $subcatOpt): ?>
+                        <option value="<?= e((string) $subcatOpt['code']) ?>" <?= $adminSubcategory === (string) $subcatOpt['code'] && ($adminCategory === '' || $adminCategory === $parentCode) ? 'selected' : '' ?>><?= e((string) $subcatOpt['label']) ?></option>
+                    <?php endforeach; ?>
+                </optgroup>
+            <?php endforeach; ?>
+        </select>
         <input type="search" name="q" value="<?= e($adminSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
         <input type="search" name="tag" value="<?= e($adminTag) ?>" placeholder="<?= e((string) $t['tag_search_ph']) ?>">
         <button class="button" type="submit"><?= e((string) $t['filter']) ?></button>
@@ -634,11 +724,19 @@ ob_start();
         <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); if ($safePath === null) { continue; } ?>
         <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
         <?php $documentId = (int) ($document['id'] ?? 0); ?>
+        <?php $documentCategory = library_category_slug((string) ($document['category'] ?? 'general')); ?>
+        <?php $documentSubcategory = library_subcategory_slug((string) ($document['subcategory'] ?? '')); ?>
+        <?php $documentCategoryLabel = (string) ($categoryLabels[$documentCategory] ?? $documentCategory); ?>
+        <?php $documentSubcategoryLabel = $documentSubcategory !== '' ? (string) ($subcategoryLabels[$documentCategory . ':' . $documentSubcategory] ?? $documentSubcategory) : ''; ?>
         <?php $documentPreviewUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId]) . '#view=Fit' : ''; ?>
         <?php $documentDownloadUrl = $documentId > 0 ? route_url('member_library_preview', ['id' => $documentId, 'download' => '1']) : ''; ?>
         <article class="card admin-library-document">
             <p><input type="checkbox" form="bulk-delete-form" name="ids[]" value="<?= $documentId ?>"> <span class="help"><?= e((string) $t['select']) ?></span></p>
-            <p><span class="badge muted"><?= e((string) ($document['category'] ?? 'general')) ?></span> <span class="badge muted"><?= e(strtoupper($extension)) ?></span></p>
+            <p>
+                <span class="badge muted"><?= e($documentCategoryLabel) ?></span>
+                <?php if ($documentSubcategoryLabel !== ''): ?><span class="badge muted"><?= e($documentSubcategoryLabel) ?></span><?php endif; ?>
+                <span class="badge muted"><?= e(strtoupper($extension)) ?></span>
+            </p>
             <h3><?= e((string) $document['title']) ?></h3>
             <p><?= e((string) ($document['description'] ?? '')) ?></p>
             <?php if (trim((string) ($document['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $t['tags']) ?>: <?= e((string) $document['tags']) ?></p><?php endif; ?>
@@ -662,9 +760,9 @@ ob_start();
     </section>
     <?php if ($totalPages > 1): ?>
         <nav class="admin-library-pagination" aria-label="Pagination documents">
-            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
+            <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'subcategory' => $adminSubcategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
             <span class="badge muted"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
+            <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean($adminLibraryRoute, ['category' => $adminCategory, 'subcategory' => $adminSubcategory, 'q' => $adminSearch, 'tag' => $adminTag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
         </nav>
     <?php endif; ?>
 </div>
