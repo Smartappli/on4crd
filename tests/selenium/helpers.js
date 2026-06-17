@@ -87,10 +87,53 @@ async function waitForDocumentReady(driver) {
   }, timeoutMs);
 }
 
+async function currentBodyText(driver) {
+  return driver.findElement(By.css('body')).getText().catch(() => '');
+}
+
+async function pagePlainText(driver) {
+  const bodyText = await currentBodyText(driver);
+  if (bodyText.trim() !== '') {
+    return bodyText.replace(/\s+/g, ' ').trim();
+  }
+
+  const source = await driver.getPageSource().catch(() => '');
+  return source
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+async function pageHasInstallWizard(driver) {
+  const text = await pagePlainText(driver);
+  return /Assistant de d.{1,2}ploiement ON4CRD|installation|installer/i.test(text)
+    && /ON4CRD|configuration|config|base de donn|database|deploy/i.test(text);
+}
+
+async function skipIfInstallWizard(t, driver) {
+  if (await pageHasInstallWizard(driver)) {
+    t.skip('Instance locale non installee; scenario Selenium ignore.');
+    return true;
+  }
+
+  return false;
+}
+
+async function assertPageHasContent(driver, label = 'page') {
+  const source = await driver.getPageSource().catch(() => '');
+  const text = await pagePlainText(driver);
+  assert.ok(
+    text.length > 0 || source.trim().length > 0,
+    `${label} doit rendre du contenu visible ou une reponse non vide.`,
+  );
+}
+
 async function assertNoServerError(driver) {
   const title = await driver.getTitle();
   const source = await driver.getPageSource();
-  const bodyText = await driver.findElement(By.css('body')).getText().catch(() => '');
+  const bodyText = await currentBodyText(driver);
   const combined = `${title}\n${bodyText}\n${source}`;
   assert.doesNotMatch(
     combined,
@@ -109,6 +152,34 @@ async function firstText(driverOrElement, selector) {
   }
 
   return elements[0].getText();
+}
+
+async function elementExists(driverOrElement, selector) {
+  return (await findElements(driverOrElement, selector)).length > 0;
+}
+
+async function findFirstExisting(driverOrElement, selectors) {
+  for (const selector of selectors) {
+    const elements = await findElements(driverOrElement, selector);
+    if (elements.length > 0) {
+      return elements[0];
+    }
+  }
+
+  return null;
+}
+
+async function isLoginPage(driver) {
+  const url = await driver.getCurrentUrl();
+  if (/route=login\b/.test(url)) {
+    return true;
+  }
+
+  return await elementExists(driver, '[data-login-form], input[name="callsign"][type="text"], input[name="password"]');
+}
+
+async function assertLoginPage(driver, label = 'route protegee') {
+  assert.ok(await isLoginPage(driver), `${label} doit rediriger vers la page de connexion.`);
 }
 
 function parsePhotoCount(text) {
@@ -186,8 +257,17 @@ module.exports = {
   withSelenium,
   visit,
   waitForDocumentReady,
+  currentBodyText,
+  pagePlainText,
+  pageHasInstallWizard,
+  skipIfInstallWizard,
+  assertPageHasContent,
   assertNoServerError,
   firstText,
+  elementExists,
+  findFirstExisting,
+  isLoginPage,
+  assertLoginPage,
   parsePhotoCount,
   visibleImageCount,
   loginAsAdmin,
