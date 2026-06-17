@@ -473,7 +473,19 @@ function album_subcategory_ref_parts(string $value): array
 function album_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', album_category_code($code)));
-    return $label !== '' ? mb_convert_case($label, MB_CASE_TITLE, 'UTF-8') : 'General';
+    if ($label === '') {
+        return 'General';
+    }
+
+    try {
+        if (function_exists('mb_convert_case')) {
+            return mb_convert_case($label, MB_CASE_TITLE, 'UTF-8');
+        }
+    } catch (Throwable) {
+        // Fall back to an ASCII-only title case when the runtime rejects stored text.
+    }
+
+    return ucwords(strtolower($label));
 }
 
 /**
