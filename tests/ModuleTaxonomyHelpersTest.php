@@ -38,6 +38,18 @@ final class ModuleTaxonomyHelpersTest extends TestCase
         self::assertArrayHasKey('general', album_default_categories());
     }
 
+    public function testArticleTaxonomyReferencesAreNormalized(): void
+    {
+        self::assertSame('autres:reglementation', article_subcategory_ref('', 'Reglementation'));
+        self::assertSame(
+            ['category' => 'antennes', 'subcategory' => 'yagi'],
+            article_subcategory_ref_parts('Antennes:Yagi')
+        );
+        self::assertSame('Mes favoris', article_favorites_label(['favorites' => 'Mes favoris'], 'fr'));
+        self::assertSame('Favorites', article_favorites_label([], 'en'));
+        self::assertArrayHasKey('autres', article_default_categories());
+    }
+
     public function testWikiTaxonomyReferencesAreNormalized(): void
     {
         self::assertSame('general:procedures', wiki_subcategory_ref('', 'Procédures'));

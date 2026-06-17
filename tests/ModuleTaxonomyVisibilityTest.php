@@ -100,6 +100,37 @@ final class ModuleTaxonomyVisibilityTest extends TestCase
         );
     }
 
+    public function testArticleVisibleTaxonomyKeepsOnlyNonEmptyBranches(): void
+    {
+        self::assertSame(
+            ['antennes' => 'Antennes'],
+            article_visible_categories(
+                ['autres' => 'Autres', 'antennes' => 'Antennes', 'empty' => 'Empty'],
+                ['autres' => 0, 'antennes' => 3, 'empty' => 0]
+            )
+        );
+
+        self::assertSame(
+            [
+                'antennes' => [
+                    ['category_code' => 'antennes', 'code' => 'yagi', 'label' => 'Yagi', 'total' => 2],
+                ],
+            ],
+            article_visible_subcategories_by_category(
+                [
+                    'antennes' => [
+                        ['category_code' => 'antennes', 'code' => 'yagi', 'label' => 'Yagi'],
+                        ['category_code' => 'antennes', 'code' => 'empty', 'label' => 'Empty'],
+                    ],
+                    'empty' => [
+                        ['category_code' => 'empty', 'code' => 'archive', 'label' => 'Archive'],
+                    ],
+                ],
+                ['antennes:yagi' => 2, 'antennes:empty' => 0, 'empty:archive' => 0]
+            )
+        );
+    }
+
     public function testSharedDocumentVisibleTaxonomyKeepsOnlyNonEmptyBranches(): void
     {
         self::assertSame(
