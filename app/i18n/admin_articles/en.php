@@ -88,4 +88,12 @@ return array (
   'proposal_save_status' => 'Save status',
   'proposal_status_saved' => 'Proposal updated.',
   'err_invalid_proposal' => 'Invalid proposal.',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'add_category' => 'Add topic',
+  'add_subcategory' => 'Add subtopic',
+  'ok_subcategory_updated' => 'Subtopic saved.',
+  'ok_subcategory_deleted' => 'Subtopic deleted.',
+  'err_category_has_subcategories' => 'Delete all subtopics in this topic first.',
+  'err_subcategory_has_documents' => 'This subtopic still contains articles.',
 );

@@ -79,7 +79,8 @@ function secure_move_uploaded_file(
     string $prefix,
     array $allowedExtensions,
     array $allowedMimes,
-    int $maxBytes
+    int $maxBytes,
+    bool $anonymousFilename = false
 ): string {
     $errorCode = (int) ($upload['error'] ?? UPLOAD_ERR_NO_FILE);
     if ($errorCode !== UPLOAD_ERR_OK) {
@@ -122,7 +123,12 @@ function secure_move_uploaded_file(
         throw new RuntimeException(upload_i18n_message('cannot_create_destination_dir'));
     }
 
-    $filename = $prefix . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
+    if ($anonymousFilename) {
+        $hashSource = random_bytes(32) . '|' . hash_file('sha256', $sanitizedTmpPath);
+        $filename = hash('sha256', $hashSource) . '.' . $extension;
+    } else {
+        $filename = $prefix . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
+    }
     $destinationPath = rtrim($destinationDirectory, '/') . '/' . $filename;
     $moved = $sanitizedTmpPath === $tmpPath
         ? move_uploaded_file($tmpPath, $destinationPath)

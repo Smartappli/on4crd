@@ -50,6 +50,268 @@ function notify_album_webhooks(array $album): void
     }
 }
 
+/**
+ * @return array{ok:bool,data:array<string,mixed>,error:string}
+ */
+function album_graph_api_post(string $path, array $params, string $accessToken): array
+{
+    $version = trim((string) (getenv('META_GRAPH_VERSION') ?: 'v25.0'));
+    if (!preg_match('/^v\d+\.\d+$/', $version)) {
+        $version = 'v25.0';
+    }
+    $params['access_token'] = $accessToken;
+    $url = 'https://graph.facebook.com/' . $version . '/' . ltrim($path, '/');
+    $body = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+    $raw = false;
+    $status = 0;
+    if (function_exists('curl_init')) {
+        $curl = curl_init($url);
+        if ($curl !== false) {
+            curl_setopt_array($curl, [
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $body,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
+            ]);
+            $raw = curl_exec($curl);
+            $status = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+            curl_close($curl);
+        }
+    } else {
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+                'content' => $body,
+                'timeout' => 10,
+                'ignore_errors' => true,
+            ],
+        ]);
+        $raw = @file_get_contents($url, false, $context);
+        $statusLine = is_array($http_response_header ?? null) ? ($http_response_header[0] ?? '') : '';
+        if (preg_match('/\s(\d{3})\s/', (string) $statusLine, $matches) === 1) {
+            $status = (int) $matches[1];
+        }
+    }
+    if (!is_string($raw) || $raw === '') {
+        return ['ok' => false, 'data' => [], 'error' => 'Meta API request failed.'];
+    }
+    $decoded = json_decode($raw, true);
+    if (!is_array($decoded)) {
+        return ['ok' => false, 'data' => [], 'error' => 'Meta API returned invalid JSON.'];
+    }
+    if ($status < 200 || $status >= 300 || isset($decoded['error'])) {
+        $message = is_array($decoded['error'] ?? null)
+            ? (string) ($decoded['error']['message'] ?? 'Meta API error.')
+            : 'Meta API error.';
+
+        return ['ok' => false, 'data' => $decoded, 'error' => $message];
+    }
+
+    return ['ok' => true, 'data' => $decoded, 'error' => ''];
+}
+
+/**
+ * @return list<array{id:int,title:string,caption:string,url:string}>
+ */
+function album_public_photo_urls(int $albumId, int $limit = 100): array
+{
+    if ($albumId <= 0 || !table_exists('album_photos')) {
+        return [];
+    }
+    $limit = max(1, min(100, $limit));
+    $stmt = db()->prepare('SELECT id, title, caption, file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT ' . $limit);
+    $stmt->execute([$albumId]);
+    $rows = $stmt->fetchAll() ?: [];
+    $photos = [];
+    foreach ($rows as $row) {
+        $path = safe_storage_public_path_or_null((string) ($row['file_path'] ?? ''), ['storage/uploads/albums/']);
+        if ($path === null) {
+            continue;
+        }
+        $url = base_url($path);
+        if (!str_starts_with(strtolower($url), 'https://')) {
+            continue;
+        }
+        $photos[] = [
+            'id' => (int) ($row['id'] ?? 0),
+            'title' => trim((string) ($row['title'] ?? '')),
+            'caption' => trim((string) ($row['caption'] ?? '')),
+            'url' => $url,
+        ];
+    }
+
+    return $photos;
+}
+
+/**
+ * @return array{facebook:?string,instagram:?string,skipped:list<string>,errors:list<string>}
+ */
+function album_social_publish_if_public(int $albumId): array
+{
+    $result = ['facebook' => null, 'instagram' => null, 'skipped' => [], 'errors' => []];
+    if ($albumId <= 0 || !table_exists('albums') || !table_exists('album_photos')) {
+        $result['errors'][] = 'Invalid album.';
+        return $result;
+    }
+
+    album_ensure_source_proposal_column();
+    $albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? LIMIT 1');
+    $albumStmt->execute([$albumId]);
+    $album = $albumStmt->fetch() ?: null;
+    if (!is_array($album) || (int) ($album['is_public'] ?? 0) !== 1) {
+        $result['skipped'][] = 'album_not_public';
+        return $result;
+    }
+
+    $photos = album_public_photo_urls($albumId, 100);
+    if ($photos === []) {
+        $result['errors'][] = 'No publicly reachable HTTPS photo URL.';
+        db()->prepare('UPDATE albums SET social_publish_error = ? WHERE id = ?')->execute([implode("\n", $result['errors']), $albumId]);
+        return $result;
+    }
+
+    $title = trim((string) ($album['title'] ?? 'Album'));
+    $description = trim((string) ($album['description'] ?? ''));
+    $caption = trim($title . ($description !== '' ? "\n\n" . $description : ''));
+
+    $facebookPageId = trim((string) (getenv('FACEBOOK_PAGE_ID') ?: getenv('META_FACEBOOK_PAGE_ID') ?: ''));
+    $facebookToken = trim((string) (getenv('FACEBOOK_PAGE_ACCESS_TOKEN') ?: getenv('META_FACEBOOK_PAGE_ACCESS_TOKEN') ?: ''));
+    $facebookTargetAlbumId = trim((string) (getenv('FACEBOOK_ALBUM_ID') ?: getenv('META_FACEBOOK_ALBUM_ID') ?: ($album['facebook_album_id'] ?? '')));
+    $facebookAlreadyPublished = trim((string) ($album['facebook_post_id'] ?? '')) !== '' || trim((string) ($album['facebook_album_id'] ?? '')) !== '';
+    if ($facebookPageId !== '' && $facebookToken !== '' && !$facebookAlreadyPublished) {
+        if ($facebookTargetAlbumId !== '') {
+            $uploadedPhotoIds = [];
+            foreach ($photos as $photo) {
+                $upload = album_graph_api_post($facebookTargetAlbumId . '/photos', [
+                    'url' => $photo['url'],
+                    'caption' => $photo['caption'] !== '' ? $photo['caption'] : ($photo['title'] !== '' ? $photo['title'] : $title),
+                ], $facebookToken);
+                $photoId = trim((string) ($upload['data']['id'] ?? ''));
+                if ($upload['ok'] && $photoId !== '') {
+                    $uploadedPhotoIds[] = $photoId;
+                } else {
+                    $result['errors'][] = 'Facebook: ' . $upload['error'];
+                }
+            }
+            if ($uploadedPhotoIds !== []) {
+                $result['facebook'] = $facebookTargetAlbumId;
+                db()->prepare('UPDATE albums SET facebook_album_id = ? WHERE id = ?')->execute([$facebookTargetAlbumId, $albumId]);
+            }
+        } else {
+            $facebookPhotos = array_slice($photos, 0, 10);
+            if (count($photos) > count($facebookPhotos)) {
+                $result['skipped'][] = 'facebook_page_post_limited_to_10_photos';
+            }
+            if (count($facebookPhotos) === 1) {
+                $upload = album_graph_api_post($facebookPageId . '/photos', [
+                    'url' => $facebookPhotos[0]['url'],
+                    'caption' => $caption,
+                ], $facebookToken);
+                $facebookPostId = trim((string) ($upload['data']['post_id'] ?? $upload['data']['id'] ?? ''));
+                if (!$upload['ok']) {
+                    $result['errors'][] = 'Facebook: ' . $upload['error'];
+                }
+            } else {
+                $attachedMedia = [];
+                foreach ($facebookPhotos as $index => $photo) {
+                    $upload = album_graph_api_post($facebookPageId . '/photos', [
+                        'url' => $photo['url'],
+                        'caption' => $photo['caption'] !== '' ? $photo['caption'] : ($photo['title'] !== '' ? $photo['title'] : $title),
+                        'published' => 'false',
+                    ], $facebookToken);
+                    $mediaId = trim((string) ($upload['data']['id'] ?? ''));
+                    if ($upload['ok'] && $mediaId !== '') {
+                        $mediaPayload = json_encode(['media_fbid' => $mediaId], JSON_UNESCAPED_SLASHES);
+                        if (is_string($mediaPayload)) {
+                            $attachedMedia['attached_media[' . $index . ']'] = $mediaPayload;
+                        }
+                    } else {
+                        $result['errors'][] = 'Facebook: ' . $upload['error'];
+                    }
+                }
+                $facebookPostId = '';
+                if ($attachedMedia !== []) {
+                    $post = album_graph_api_post($facebookPageId . '/feed', ['message' => $caption] + $attachedMedia, $facebookToken);
+                    $facebookPostId = trim((string) ($post['data']['id'] ?? ''));
+                    if (!$post['ok']) {
+                        $result['errors'][] = 'Facebook: ' . $post['error'];
+                    }
+                }
+            }
+            if (($facebookPostId ?? '') !== '') {
+                $result['facebook'] = $facebookPostId;
+                db()->prepare('UPDATE albums SET facebook_post_id = ? WHERE id = ?')->execute([$facebookPostId, $albumId]);
+            }
+        }
+    } else {
+        $result['skipped'][] = 'facebook_not_configured_or_already_published';
+    }
+
+    $instagramUserId = trim((string) (getenv('INSTAGRAM_BUSINESS_ACCOUNT_ID') ?: getenv('META_INSTAGRAM_BUSINESS_ACCOUNT_ID') ?: ''));
+    $instagramToken = trim((string) (getenv('INSTAGRAM_ACCESS_TOKEN') ?: getenv('META_INSTAGRAM_ACCESS_TOKEN') ?: $facebookToken));
+    if ($instagramUserId !== '' && $instagramToken !== '' && trim((string) ($album['instagram_media_id'] ?? '')) === '') {
+        $instagramPhotos = array_slice($photos, 0, 10);
+        if (count($photos) > count($instagramPhotos)) {
+            $result['skipped'][] = 'instagram_carousel_limited_to_10_photos';
+        }
+        if (count($instagramPhotos) === 1) {
+            $container = album_graph_api_post($instagramUserId . '/media', [
+                'image_url' => $instagramPhotos[0]['url'],
+                'caption' => $caption,
+            ], $instagramToken);
+            $creationId = trim((string) ($container['data']['id'] ?? ''));
+            if (!$container['ok']) {
+                $result['errors'][] = 'Instagram: ' . $container['error'];
+            }
+        } else {
+            $children = [];
+            foreach ($instagramPhotos as $photo) {
+                $child = album_graph_api_post($instagramUserId . '/media', [
+                    'image_url' => $photo['url'],
+                    'is_carousel_item' => 'true',
+                ], $instagramToken);
+                $childId = trim((string) ($child['data']['id'] ?? ''));
+                if ($child['ok'] && $childId !== '') {
+                    $children[] = $childId;
+                } else {
+                    $result['errors'][] = 'Instagram: ' . $child['error'];
+                }
+            }
+            $creationId = '';
+            if (count($children) >= 2) {
+                $container = album_graph_api_post($instagramUserId . '/media', [
+                    'media_type' => 'CAROUSEL',
+                    'children' => implode(',', $children),
+                    'caption' => $caption,
+                ], $instagramToken);
+                $creationId = trim((string) ($container['data']['id'] ?? ''));
+                if (!$container['ok']) {
+                    $result['errors'][] = 'Instagram: ' . $container['error'];
+                }
+            }
+        }
+        if (($creationId ?? '') !== '') {
+            $publish = album_graph_api_post($instagramUserId . '/media_publish', ['creation_id' => $creationId], $instagramToken);
+            $mediaId = trim((string) ($publish['data']['id'] ?? ''));
+            if ($publish['ok'] && $mediaId !== '') {
+                $result['instagram'] = $mediaId;
+                db()->prepare('UPDATE albums SET instagram_media_id = ? WHERE id = ?')->execute([$mediaId, $albumId]);
+            } else {
+                $result['errors'][] = 'Instagram: ' . $publish['error'];
+            }
+        }
+    } else {
+        $result['skipped'][] = 'instagram_not_configured_or_already_published';
+    }
+
+    db()->prepare('UPDATE albums SET social_published_at = IF((facebook_album_id IS NOT NULL AND facebook_album_id <> "") OR (facebook_post_id IS NOT NULL AND facebook_post_id <> "") OR (instagram_media_id IS NOT NULL AND instagram_media_id <> ""), COALESCE(social_published_at, NOW()), social_published_at), social_publish_error = ? WHERE id = ?')
+        ->execute([$result['errors'] !== [] ? implode("\n", $result['errors']) : null, $albumId]);
+
+    return $result;
+}
+
 function album_clear_caches(): void
 {
     cache_forget('admin_albums_list_v2');
@@ -84,6 +346,24 @@ function album_ensure_source_proposal_column(): bool
         }
         if (!table_has_column('albums', 'source_proposal_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_public');
+        }
+        if (!table_has_column('albums', 'publish_requested')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN publish_requested TINYINT(1) NOT NULL DEFAULT 0 AFTER source_proposal_id');
+        }
+        if (!table_has_column('albums', 'facebook_album_id')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN facebook_album_id VARCHAR(80) DEFAULT NULL AFTER publish_requested');
+        }
+        if (!table_has_column('albums', 'facebook_post_id')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN facebook_post_id VARCHAR(80) DEFAULT NULL AFTER facebook_album_id');
+        }
+        if (!table_has_column('albums', 'instagram_media_id')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN instagram_media_id VARCHAR(80) DEFAULT NULL AFTER facebook_post_id');
+        }
+        if (!table_has_column('albums', 'social_published_at')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN social_published_at DATETIME DEFAULT NULL AFTER instagram_media_id');
+        }
+        if (!table_has_column('albums', 'social_publish_error')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN social_publish_error TEXT DEFAULT NULL AFTER social_published_at');
         }
         if (!table_has_index('albums', 'idx_albums_source_proposal')) {
             db()->exec('ALTER TABLE albums ADD INDEX idx_albums_source_proposal (source_proposal_id)');
@@ -690,7 +970,8 @@ function handle_album_upload(?array $upload, string $callsign): string
         slugify($callsign !== '' ? $callsign : 'member'),
         ['jpg', 'jpeg', 'png', 'webp'],
         ['image/jpeg', 'image/png', 'image/webp'],
-        8 * 1024 * 1024
+        8 * 1024 * 1024,
+        true
     );
 
     $publicPath = 'storage/uploads/albums/' . $saved;

@@ -931,6 +931,7 @@ textarea { resize: vertical; }
 .avatar.member { width:108px; height:108px; }
 .directory-grid, .gallery-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
 .member-card, .gallery-item { background: var(--panel-2); border:1px solid var(--border); padding:1rem; border-radius:18px; }
+.album-dropzone { border:2px dashed var(--border); padding:14px; text-align:center; cursor:pointer; }
 .directory-page { display: grid; gap: 1rem; }
 .directory-hero {
   display: grid;

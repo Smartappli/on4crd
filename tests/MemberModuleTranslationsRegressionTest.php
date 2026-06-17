@@ -37,6 +37,38 @@ final class MemberModuleTranslationsRegressionTest extends TestCase
     }
 
     /**
+     * @param list<string> $keys
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('adminFallbackTranslationDomains')]
+    public function testAdminModuleTranslationsDoNotFallBackToEnglishForNativeLocales(string $domain, array $keys): void
+    {
+        $base = dirname(__DIR__) . '/app/i18n/' . $domain;
+        $english = require $base . '/en.php';
+        self::assertIsArray($english);
+
+        $files = glob($base . '/*.php');
+        self::assertIsArray($files);
+
+        foreach ($files as $file) {
+            $locale = pathinfo($file, PATHINFO_FILENAME);
+            if ($locale === 'en') {
+                continue;
+            }
+            $messages = require $file;
+            self::assertIsArray($messages, $file);
+
+            foreach ($keys as $key) {
+                self::assertArrayHasKey($key, $messages, $domain . '/' . basename($file) . ' misses ' . $key);
+                self::assertNotSame(
+                    $english[$key] ?? null,
+                    $messages[$key],
+                    $domain . '/' . basename($file) . ' still uses the English fallback for ' . $key
+                );
+            }
+        }
+    }
+
+    /**
      * @return array<string, array{0:string,1:list<string>}>
      */
     public static function taxonomyTranslationDomains(): array
@@ -60,7 +92,7 @@ final class MemberModuleTranslationsRegressionTest extends TestCase
             ],
             'admin_albums' => [
                 'admin_albums',
-                ['add_category', 'add_subcategory', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
+                ['add_category', 'add_subcategory', 'err_category_has_subcategories', 'err_subcategory_has_documents', 'wizard_title', 'wizard_step_details', 'wizard_step_upload', 'wizard_step_review', 'wizard_finalize', 'batch_max_files', 'batch_max_size'],
             ],
             'wiki' => [
                 'wiki',
@@ -77,6 +109,27 @@ final class MemberModuleTranslationsRegressionTest extends TestCase
             'admin_articles' => [
                 'admin_articles',
                 ['subcategory_field', 'no_subcategory', 'add_category', 'add_subcategory', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, array{0:string,1:list<string>}>
+     */
+    public static function adminFallbackTranslationDomains(): array
+    {
+        return [
+            'admin_albums' => [
+                'admin_albums',
+                ['category_field', 'subcategory_field', 'no_subcategory', 'add_category', 'add_subcategory', 'err_category_has_documents', 'err_category_has_subcategories', 'err_subcategory_has_documents', 'wizard_title', 'wizard_step_upload', 'wizard_finalize', 'batch_max_size'],
+            ],
+            'admin_articles' => [
+                'admin_articles',
+                ['subcategory_field', 'no_subcategory', 'add_category', 'add_subcategory', 'ok_subcategory_updated', 'ok_subcategory_deleted', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
+            ],
+            'admin_wiki' => [
+                'admin_wiki',
+                ['new_page', 'empty', 'status_pending', 'status_published', 'status_rejected', 'add_category', 'add_subcategory', 'category_saved', 'subcategory_saved', 'err_category_has_documents', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
             ],
         ];
     }

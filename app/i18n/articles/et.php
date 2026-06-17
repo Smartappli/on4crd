@@ -98,4 +98,8 @@ Kontakt:',
   'propose_tag_submit' => 'Send proposal',
   'propose_tag_cancel' => 'Cancel',
   'propose_tag_close' => 'Close',
+  'all_categories' => 'All topics',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

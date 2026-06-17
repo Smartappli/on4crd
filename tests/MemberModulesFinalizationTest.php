@@ -43,10 +43,23 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertMatchesRegularExpression('/<select\s+name="album_id"\s+required>.*foreach \(\$albums as \$album\)/s', $adminAlbums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $adminAlbums);
         self::assertStringContainsString('album_delete_record($albumId);', $adminAlbums);
+        self::assertStringContainsString('id="album-wizard"', $adminAlbums);
+        self::assertStringContainsString('name="album_wizard"', $adminAlbums);
+        self::assertStringContainsString("if (\$action === 'finalize_album_creation')", $adminAlbums);
+        self::assertStringContainsString('album_social_publish_if_public($albumId)', $adminAlbums);
+        self::assertStringContainsString('return_wizard_album_id', $adminAlbums);
+        self::assertStringContainsString('publish_requested', $adminAlbums);
         self::assertStringContainsString("if (\$action === 'add_subcategory')", $adminAlbums);
         self::assertStringContainsString("if (\$action === 'delete_subcategory')", $adminAlbums);
         self::assertStringContainsString('UPDATE albums SET category = "general", subcategory = "" WHERE category = ?', $adminAlbums);
         self::assertStringContainsString('render_album_taxonomy_fields($albumCategories, $t)', $adminAlbums);
+        self::assertStringContainsString('function album_social_publish_if_public(int $albumId): array', $albumHelpers);
+        self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
+        self::assertMatchesRegularExpression('/secure_move_uploaded_file\([^;]+8 \* 1024 \* 1024,\s+true\s+\)/s', $albumHelpers);
+        self::assertStringContainsString("getenv('FACEBOOK_ALBUM_ID')", $albumHelpers);
+        self::assertStringContainsString("\$facebookPageId . '/photos'", $albumHelpers);
+        self::assertStringContainsString("\$facebookPageId . '/feed'", $albumHelpers);
+        self::assertStringNotContainsString("\$facebookPageId . '/albums'", $albumHelpers);
         self::assertStringContainsString('function album_apply_accepted_proposal(array $proposal): ?int', $albumHelpers);
         self::assertStringContainsString('function album_sync_accepted_proposals(int $limit = 100): array', $albumHelpers);
         self::assertStringContainsString('function album_proposal_action(string $summary): string', $albumHelpers);
@@ -62,6 +75,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('source_proposal_id', $albumHelpers);
         self::assertStringContainsString('idx_albums_member', $schema);
         self::assertStringContainsString('idx_albums_source_proposal', $schema);
+        self::assertStringContainsString('publish_requested TINYINT(1) NOT NULL DEFAULT 0', $schema);
+        self::assertStringContainsString('facebook_album_id VARCHAR(80) DEFAULT NULL', $schema);
+        self::assertStringContainsString('facebook_post_id VARCHAR(80) DEFAULT NULL', $schema);
+        self::assertStringContainsString('instagram_media_id VARCHAR(80) DEFAULT NULL', $schema);
+        self::assertStringContainsString('social_publish_error TEXT DEFAULT NULL', $schema);
         self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_module_documents', $schema);
         self::assertStringContainsString('idx_member_module_category_deleted', $schema);
         self::assertSame(

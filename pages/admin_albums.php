@@ -179,11 +179,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($title === '') {
                 throw new RuntimeException((string) $t['title_required']);
             }
-            db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public) VALUES (?, ?, ?, ?, ?, ?)')
+            db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public, publish_requested) VALUES (?, ?, ?, ?, ?, 0, ?)')
                 ->execute([(int) (current_user()['id'] ?? 0), $category, $subcategory, $title, $description, $isPublic]);
+            $albumId = (int) db()->lastInsertId();
             album_clear_caches();
-            set_flash('success', (string) $t['created_ok']);
-            redirect('admin_albums');
+            set_flash('success', (string) ($t['album_created_continue'] ?? $t['created_ok']));
+            redirect_url(route_url_clean('admin_albums', ['album_wizard' => $albumId, 'step' => 2]));
         }
 
         if ($action === 'update_album') {
@@ -276,12 +277,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($uploadBatch === []) {
                 throw new RuntimeException((string) $t['no_photo_imported']);
             }
-            if (count($uploadBatch) > 20) {
-                throw new RuntimeException('Maximum 20 photos par import.');
+            if (count($uploadBatch) > 100) {
+                throw new RuntimeException((string) ($t['batch_max_files'] ?? 'Maximum 100 photos par import.'));
             }
             $totalBytes = array_sum(array_map(static fn(array $item): int => max(0, (int) ($item['size'] ?? 0)), $uploadBatch));
-            if ($totalBytes > 80 * 1024 * 1024) {
-                throw new RuntimeException('Le lot de photos dépasse 80 Mo.');
+            if ($totalBytes > 512 * 1024 * 1024) {
+                throw new RuntimeException((string) ($t['batch_max_size'] ?? 'Le lot de photos depasse 512 Mo.'));
             }
 
             $createdPaths = [];
@@ -292,12 +293,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 foreach ($uploadBatch as $single) {
                     $path = handle_album_upload($single, (string) (current_user()['callsign'] ?? 'album'));
                     $createdPaths[] = $path;
-                    $photoTitle = $title !== '' && count($uploadBatch) === 1 ? $title : pathinfo((string) ($single['name'] ?? ''), PATHINFO_FILENAME);
-                    $photoTitle = trim($photoTitle) !== '' ? trim($photoTitle) : (string) $t['photo'];
+                    $nextOrder++;
+                    $photoTitle = $title !== '' && count($uploadBatch) === 1 ? $title : ((string) $t['photo'] . ' ' . $nextOrder);
                     if (mb_strlen($photoTitle) > 190) {
                         $photoTitle = mb_substr($photoTitle, 0, 190);
                     }
-                    $nextOrder++;
                     $insertPhotoStmt->execute([$albumId, $nextOrder, $photoTitle, $caption, $path]);
                     $lastTitle = $photoTitle;
                     $importedCount++;
@@ -325,6 +325,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             albums_admin_clear_cache();
             set_flash('success', $importedCount . ' ' . (string) $t['uploaded_count']);
+            if ((int) ($_POST['album_wizard'] ?? 0) === $albumId) {
+                redirect_url(route_url_clean('admin_albums', ['album_wizard' => $albumId, 'step' => 3]));
+            }
+            redirect('admin_albums');
+        }
+
+        if ($action === 'finalize_album_creation') {
+            $albumId = (int) ($_POST['album_id'] ?? 0);
+            if ($albumId <= 0) {
+                throw new RuntimeException((string) $t['invalid_album']);
+            }
+            $albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? LIMIT 1');
+            $albumStmt->execute([$albumId]);
+            $albumRow = $albumStmt->fetch() ?: null;
+            if (!is_array($albumRow)) {
+                throw new RuntimeException((string) $t['invalid_album']);
+            }
+            $photoCountStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
+            $photoCountStmt->execute([$albumId]);
+            if ((int) ($photoCountStmt->fetchColumn() ?: 0) <= 0) {
+                throw new RuntimeException((string) ($t['wizard_no_photos'] ?? $t['no_photo_imported']));
+            }
+            $publish = (int) ($albumRow['publish_requested'] ?? 0) === 1 ? 1 : 0;
+            db()->prepare('UPDATE albums SET is_public = ?, publish_requested = 0 WHERE id = ?')->execute([$publish, $albumId]);
+            $socialResult = ['errors' => [], 'skipped' => []];
+            if ($publish === 1) {
+                $socialResult = album_social_publish_if_public($albumId);
+                notify_album_webhooks([
+                    'event' => 'album.created',
+                    'album_id' => $albumId,
+                    'album_title' => (string) ($albumRow['title'] ?? ''),
+                    'public_url' => route_url('album', ['id' => $albumId]),
+                ]);
+            }
+            albums_admin_clear_cache();
+            if (($socialResult['errors'] ?? []) !== []) {
+                set_flash('warning', (string) ($t['album_finalized_social_warning'] ?? 'Album finalise, mais la synchronisation sociale a echoue.'));
+            } else {
+                set_flash('success', (string) ($t['album_finalized_ok'] ?? $t['created_ok']));
+            }
             redirect('admin_albums');
         }
 
@@ -364,6 +404,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             albums_admin_clear_cache();
             set_flash('success', (string) $t['photo_deleted_ok']);
+            $wizardAlbumId = (int) ($_POST['return_wizard_album_id'] ?? 0);
+            if ($wizardAlbumId > 0) {
+                redirect_url(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 3]));
+            }
             redirect('admin_albums');
         }
 
@@ -462,6 +506,28 @@ $photos = db()->query(
      LIMIT ' . (int) $photosPerPage . ' OFFSET ' . (int) $photosOffset
 )->fetchAll() ?: [];
 
+$wizardAlbumId = max(0, (int) ($_GET['album_wizard'] ?? 0));
+$wizardStep = max(1, min(3, (int) ($_GET['step'] ?? 1)));
+$wizardAlbum = null;
+$wizardPhotos = [];
+if ($wizardAlbumId > 0) {
+    $wizardAlbumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? LIMIT 1');
+    $wizardAlbumStmt->execute([$wizardAlbumId]);
+    $wizardAlbum = $wizardAlbumStmt->fetch() ?: null;
+    if (!is_array($wizardAlbum)) {
+        $wizardAlbum = null;
+        $wizardAlbumId = 0;
+        $wizardStep = 1;
+    } else {
+        $wizardPhotoStmt = db()->prepare('SELECT * FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC');
+        $wizardPhotoStmt->execute([$wizardAlbumId]);
+        $wizardPhotos = $wizardPhotoStmt->fetchAll() ?: [];
+    }
+}
+if ($wizardAlbumId <= 0) {
+    $wizardStep = 1;
+}
+
 ob_start();
 ?>
 <div class="stack">
@@ -542,22 +608,87 @@ ob_start();
     </section>
 
     <div class="grid-2">
-        <section class="card">
-            <h2><?= e((string) $t['create_album']) ?></h2>
-            <form method="post">
-                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <input type="hidden" name="action" value="create_album">
-                <label><?= e((string) $t['title']) ?>
-                    <input type="text" name="title" required maxlength="190">
-                </label>
-                <?= render_album_taxonomy_fields($albumCategories, $t) ?>
-                <label><?= e((string) $t['description']) ?>
-                    <textarea name="description" rows="4"></textarea>
-                </label>
-                <label><input type="checkbox" name="is_public"> <?= e((string) $t['public_album']) ?></label>
-                <p class="help">Par defaut, un nouvel album reste prive jusqu a publication explicite.</p>
-                <button class="button"><?= e((string) $t['create_album']) ?></button>
-            </form>
+        <section class="card album-wizard" id="album-wizard">
+            <h2><?= e((string) ($t['wizard_title'] ?? $t['create_album'])) ?></h2>
+            <div class="actions" aria-label="<?= e((string) ($t['wizard_title'] ?? $t['create_album'])) ?>">
+                <span class="pill<?= $wizardStep === 1 ? ' is-active' : '' ?>">1. <?= e((string) ($t['wizard_step_details'] ?? $t['title'])) ?></span>
+                <span class="pill<?= $wizardStep === 2 ? ' is-active' : '' ?>">2. <?= e((string) ($t['wizard_step_upload'] ?? $t['upload'])) ?></span>
+                <span class="pill<?= $wizardStep === 3 ? ' is-active' : '' ?>">3. <?= e((string) ($t['wizard_step_review'] ?? $t['photos_editor'])) ?></span>
+            </div>
+            <?php if ($wizardStep === 1): ?>
+                <form method="post" class="stack">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="create_album">
+                    <label><?= e((string) $t['title']) ?>
+                        <input type="text" name="title" required maxlength="190">
+                    </label>
+                    <?= render_album_taxonomy_fields($albumCategories, $t) ?>
+                    <label><?= e((string) $t['description']) ?>
+                        <textarea name="description" rows="4"></textarea>
+                    </label>
+                    <label><input type="checkbox" name="is_public"> <?= e((string) $t['public_album']) ?></label>
+                    <p class="help"><?= e((string) ($t['wizard_private_help'] ?? 'The album stays private until final validation.')) ?></p>
+                    <button class="button"><?= e((string) ($t['wizard_continue_upload'] ?? $t['create_album'])) ?></button>
+                </form>
+            <?php elseif ($wizardStep === 2 && is_array($wizardAlbum)): ?>
+                <h3><?= e((string) ($wizardAlbum['title'] ?? $t['create_album'])) ?></h3>
+                <form method="post" enctype="multipart/form-data" class="stack">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="upload_photo">
+                    <input type="hidden" name="album_id" value="<?= (int) $wizardAlbumId ?>">
+                    <input type="hidden" name="album_wizard" value="<?= (int) $wizardAlbumId ?>">
+                    <label><?= e((string) $t['caption']) ?>
+                        <textarea name="caption" rows="3"></textarea>
+                    </label>
+                    <label><?= e((string) $t['files_dropzone']) ?>
+                        <div id="album-wizard-dropzone" class="album-dropzone" data-ready-files="<?= e((string) $t['ready_files']) ?>">
+                            <?= e((string) $t['dropzone_hint']) ?>
+                        </div>
+                        <input id="album-wizard-photos-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required style="display:none;">
+                    </label>
+                    <p class="help"><?= e((string) ($t['upload_help'] ?? '')) ?></p>
+                    <div class="actions">
+                        <button class="button"><?= e((string) $t['upload']) ?></button>
+                        <a class="button secondary" href="<?= e(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 3])) ?>"><?= e((string) ($t['wizard_review_now'] ?? $t['photos_editor'])) ?></a>
+                    </div>
+                </form>
+            <?php elseif ($wizardStep === 3 && is_array($wizardAlbum)): ?>
+                <h3><?= e((string) ($wizardAlbum['title'] ?? $t['create_album'])) ?></h3>
+                <?php if ($wizardPhotos === []): ?>
+                    <p class="help"><?= e((string) ($t['wizard_no_photos'] ?? $t['no_photo_imported'])) ?></p>
+                    <a class="button secondary" href="<?= e(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
+                <?php else: ?>
+                    <div class="gallery-grid">
+                        <?php foreach ($wizardPhotos as $photo): ?>
+                            <?php
+                            $safePath = albums_admin_safe_photo_path((string) ($photo['file_path'] ?? ''));
+                            $thumbPath = $safePath !== null ? album_thumbnail_public_path($safePath) : '';
+                            $thumbAbs = $thumbPath !== '' ? dirname(__DIR__) . '/' . $thumbPath : '';
+                            $imageSrc = $thumbPath !== '' && is_file($thumbAbs) ? $thumbPath : ($safePath ?? '');
+                            ?>
+                            <article class="gallery-item">
+                                <?php if ($imageSrc !== ''): ?>
+                                    <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e((string) ($photo['title'] ?? $t['photo'])) ?>">
+                                <?php endif; ?>
+                                <form method="post" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_photo'], JSON_UNESCAPED_UNICODE)) ?>)">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="delete_photo">
+                                    <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
+                                    <input type="hidden" name="return_wizard_album_id" value="<?= (int) $wizardAlbumId ?>">
+                                    <button class="button small secondary" type="submit"><?= e((string) $t['delete']) ?></button>
+                                </form>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                    <form method="post" class="actions mt-3">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="finalize_album_creation">
+                        <input type="hidden" name="album_id" value="<?= (int) $wizardAlbumId ?>">
+                        <a class="button secondary" href="<?= e(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
+                        <button class="button" type="submit"><?= e((string) ($t['wizard_finalize'] ?? $t['save'])) ?></button>
+                    </form>
+                <?php endif; ?>
+            <?php endif; ?>
         </section>
 
         <section class="card">
@@ -579,7 +710,7 @@ ob_start();
                     <textarea name="caption" rows="3"></textarea>
                 </label>
                 <label><?= e((string) $t['files_dropzone']) ?>
-                    <div id="album-dropzone" class="card" style="border:2px dashed var(--border);padding:14px;text-align:center;cursor:pointer;" data-ready-files="<?= e((string) $t['ready_files']) ?>">
+                    <div id="album-dropzone" class="album-dropzone" data-ready-files="<?= e((string) $t['ready_files']) ?>">
                         <?= e((string) $t['dropzone_hint']) ?>
                     </div>
                     <input id="album-photos-input" type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required style="display:none;">

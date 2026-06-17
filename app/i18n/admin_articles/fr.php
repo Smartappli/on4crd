@@ -88,4 +88,12 @@ return array (
   'proposal_save_status' => 'Enregistrer le statut',
   'proposal_status_saved' => 'Proposition mise à jour.',
   'err_invalid_proposal' => 'Proposition invalide.',
+  'subcategory_field' => 'Sous-thématique',
+  'no_subcategory' => 'Sans sous-thématique',
+  'add_category' => 'Ajouter une thématique',
+  'add_subcategory' => 'Ajouter une sous-thématique',
+  'ok_subcategory_updated' => 'Sous-thématique enregistrée.',
+  'ok_subcategory_deleted' => 'Sous-thématique supprimée.',
+  'err_category_has_subcategories' => 'Supprimez d’abord toutes les sous-thématiques de cette thématique.',
+  'err_subcategory_has_documents' => 'Cette sous-thématique contient encore des articles.',
 );
