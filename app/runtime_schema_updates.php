@@ -358,7 +358,7 @@ function apply_runtime_schema_updates(): void
         }
     }
 
-    if (table_exists('albums') && table_has_column('albums', 'is_public')) {
+    if (table_exists('albums')) {
         if (!table_has_column('albums', 'member_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN member_id INT DEFAULT NULL AFTER id');
         }
@@ -373,6 +373,9 @@ function apply_runtime_schema_updates(): void
         }
         if (!table_has_column('albums', 'description')) {
             db()->exec('ALTER TABLE albums ADD COLUMN description TEXT DEFAULT NULL AFTER title');
+        }
+        if (!table_has_column('albums', 'is_public')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN is_public TINYINT(1) NOT NULL DEFAULT 0 AFTER description');
         }
         if (!table_has_column('albums', 'source_proposal_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_public');

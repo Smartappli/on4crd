@@ -538,6 +538,7 @@ CREATE TABLE IF NOT EXISTS album_subcategories (
 CREATE TABLE IF NOT EXISTS album_photos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     album_id INT NOT NULL,
+    sort_order INT NOT NULL DEFAULT 0,
     title VARCHAR(190) NOT NULL,
     caption TEXT DEFAULT NULL,
     file_path VARCHAR(255) NOT NULL,
