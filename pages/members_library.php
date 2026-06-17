@@ -352,12 +352,48 @@ foreach ($categories as $catInfo) {
         $categoryLabels[$catCode] = (string) ($catInfo['label'] ?? ($catCode === 'general' ? 'Général' : $catCode));
     }
 }
+$subcategoryCounts = [];
+try {
+    $subcategoryCountRows = db()->query('SELECT category, subcategory, COUNT(*) AS total FROM member_library_documents WHERE subcategory IS NOT NULL AND subcategory <> "" GROUP BY category, subcategory ORDER BY category ASC, subcategory ASC')->fetchAll() ?: [];
+    foreach ($subcategoryCountRows as $subcatCountRow) {
+        $parentCode = member_library_category_slug((string) ($subcatCountRow['category'] ?? 'general'));
+        $subcatCode = member_library_subcategory_slug((string) ($subcatCountRow['subcategory'] ?? ''));
+        if ($subcatCode !== '') {
+            $subcategoryCounts[$parentCode . ':' . $subcatCode] = (int) ($subcatCountRow['total'] ?? 0);
+        }
+    }
+} catch (Throwable) {
+    $subcategoryCounts = [];
+}
+$subcategoriesByCategory = [];
+$subcategoryLabels = [];
+foreach (member_library_subcategory_options() as $subcatOption) {
+    $parentCode = member_library_category_slug((string) ($subcatOption['category_code'] ?? 'general'));
+    $subcatCode = member_library_subcategory_slug((string) ($subcatOption['code'] ?? ''));
+    $subcatLabel = trim((string) ($subcatOption['label'] ?? $subcatCode));
+    if ($parentCode === '' || $subcatCode === '' || $subcatLabel === '') {
+        continue;
+    }
+    $subcatInfo = [
+        'category_code' => $parentCode,
+        'code' => $subcatCode,
+        'label' => $subcatLabel,
+        'total' => (int) ($subcategoryCounts[$parentCode . ':' . $subcatCode] ?? 0),
+    ];
+    $subcategoriesByCategory[$parentCode][] = $subcatInfo;
+    $subcategoryLabels[$parentCode . ':' . $subcatCode] = $subcatLabel;
+}
 $documentProposalSelectedCategory = $category !== '' ? $category : 'general';
+$documentProposalSelectedSubcategory = $subcategory;
 $where = [];
 $params = [];
 if ($category !== '') {
     $where[] = 'category = ?';
     $params[] = $category;
+}
+if ($subcategory !== '') {
+    $where[] = 'subcategory = ?';
+    $params[] = $subcategory;
 }
 if ($search !== '') {
     $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
