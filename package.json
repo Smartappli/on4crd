@@ -7,6 +7,6 @@
   },
   "scripts": {
     "test:e2e": "playwright test",
-    "test:selenium": "node --test tests/selenium"
+    "test:selenium": "node --test \"tests/selenium/*.test.js\""
   }
 }
