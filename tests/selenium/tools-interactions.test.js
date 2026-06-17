@@ -70,8 +70,9 @@ test('Selenium outils: panneau conversion unites RF', async (t) => {
     }
 
     assert.ok((await driver.findElements(By.css('#unit-conv-group option[value="rf"]'))).length > 0);
-    assert.ok((await driver.findElements(By.css('#unit-conv-from option[value="mhz"]'))).length > 0);
-    assert.ok((await driver.findElements(By.css('#unit-conv-to option[value="khz"]'))).length > 0);
+    const groupsJson = await driver.findElement(By.css('#tool-unit-converter')).getAttribute('data-unit-conv-groups');
+    assert.match(groupsJson, /"mhz"/);
+    assert.match(groupsJson, /"khz"/);
     assert.ok((await driver.findElements(By.css('#unit-conv-input'))).length > 0);
     assert.ok((await driver.findElements(By.css('#unit-conv-output'))).length > 0);
   });
