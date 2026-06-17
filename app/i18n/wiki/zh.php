@@ -41,7 +41,7 @@ return array (
   'propose_modification' => '修改',
   'propose_new_theme' => '新主题',
   'administer' => '管理',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => '副标题',
+  'no_subcategory' => '无副主题',
+  'favorites' => '收藏夹',
 );

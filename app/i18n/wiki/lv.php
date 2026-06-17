@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Izmaiņa',
   'propose_new_theme' => 'Jauna tēma',
   'administer' => 'Administrēt',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Apakštēma',
+  'no_subcategory' => 'Nav apakštēmas',
+  'favorites' => 'Izlase',
 );

@@ -41,12 +41,15 @@ $technicalValues = array_fill_keys([
     'HTML',
     'JSON',
     'LoRa',
+    'LoTW',
+    'LoTW + eQSL',
     'MHz',
     'ON2',
     'ON3',
     'ON4CRD',
     'PDF',
     'QRZ',
+    'QRZ.com',
     'QSL',
     'RGPD',
     'RSS',
@@ -57,6 +60,7 @@ $technicalValues = array_fill_keys([
     'URL',
     'Winlink',
     'WSPR',
+    'eQSL',
     'kHz',
 ], true);
 

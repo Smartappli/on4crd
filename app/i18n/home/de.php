@@ -106,7 +106,7 @@ return array (
   'member_module_webotheque_desc' => 'Finden Sie nützliche Weblinks, die mit Mitgliedern geteilt werden.',
   'member_module_presentations_title' => 'Präsentationen',
   'member_module_presentations_desc' => 'Finden Sie Sitzungsunterlagen und Vorträge für Mitglieder.',
-  'member_module_videos_title' => 'Videos',
+  'member_module_videos_title' => 'Videothek',
   'member_module_videos_desc' => 'Greifen Sie auf Videos und audiovisuelle Ressourcen für Mitglieder zu.',
   'member_module_pv_title' => 'Protokolle',
   'member_module_pv_desc' => 'Lesen Sie Protokolle und Berichte des Clubs.',

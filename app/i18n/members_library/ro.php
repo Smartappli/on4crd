@@ -41,7 +41,7 @@ return array (
   'propose_menu' => 'Propune',
   'propose_category_item' => 'O tematică',
   'propose_tag_item' => 'Un cuvânt-cheie',
-  'propose_document_item' => 'Un document',
+  'propose_document_item' => 'Un material',
   'propose_category' => 'Propuneți o tematică',
   'propose_category_subject' => 'Propunere de tematică pentru biblioteca ON4CRD',
   'propose_category_intro' => 'Indicați tematica de adăugat și utilitatea ei pentru bibliotecă.',

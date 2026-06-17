@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Una modifica',
   'propose_new_theme' => 'Una nuova tematica',
   'administer' => 'Amministra',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Sottoargomento',
+  'no_subcategory' => 'Nessun sottoargomento',
+  'favorites' => 'Preferiti',
 );

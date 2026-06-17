@@ -106,7 +106,7 @@ return array (
   'member_module_webotheque_desc' => 'Vind nuttige weblinks die met leden worden gedeeld.',
   'member_module_presentations_title' => 'Presentaties',
   'member_module_presentations_desc' => 'Vind vergaderpresentaties en lezingen voor leden.',
-  'member_module_videos_title' => 'Videos',
+  'member_module_videos_title' => 'Video\'s',
   'member_module_videos_desc' => 'Open videos en audiovisuele bronnen voor leden.',
   'member_module_pv_title' => 'Verslagen',
   'member_module_pv_desc' => 'Lees clubverslagen en notulen.',

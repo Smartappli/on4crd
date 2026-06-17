@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Μια τροποποίηση',
   'propose_new_theme' => 'Ένα νέο θέμα',
   'administer' => 'Διαχείριση',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Υποθέμα',
+  'no_subcategory' => 'Χωρίς υποθέμα',
+  'favorites' => 'Αγαπημένα',
 );

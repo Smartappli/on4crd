@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'تعديل',
   'propose_new_theme' => 'موضوع جديد',
   'administer' => 'إدارة',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'موضوع فرعي',
+  'no_subcategory' => 'لا يوجد موضوع فرعي',
+  'favorites' => 'المفضلة',
 );

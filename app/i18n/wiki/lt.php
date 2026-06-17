@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Pakeitimas',
   'propose_new_theme' => 'Nauja tema',
   'administer' => 'Administruoti',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Potemė',
+  'no_subcategory' => 'Nėra potemės',
+  'favorites' => 'Mėgstamiausi',
 );

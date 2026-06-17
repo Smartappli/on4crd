@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'एक संशोधन',
   'propose_new_theme' => 'एक नया विषय',
   'administer' => 'प्रशासित करें',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'उपविषय',
+  'no_subcategory' => 'कोई उपविषय नहीं',
+  'favorites' => 'पसंदीदा',
 );

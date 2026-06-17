@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Muutos',
   'propose_new_theme' => 'Uusi teema',
   'administer' => 'Hallinnoi',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Ala-aihe',
+  'no_subcategory' => 'Ei ala-aihetta',
+  'favorites' => 'Suosikit',
 );

@@ -40,8 +40,8 @@ return array (
   'propose_new_page' => 'En ny side',
   'propose_modification' => 'En ændring',
   'propose_new_theme' => 'Et nyt tema',
-  'administer' => 'Administrer',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'administer' => 'Forvalte',
+  'subcategory_field' => 'Underemne',
+  'no_subcategory' => 'Intet underemne',
+  'favorites' => 'Favoritter',
 );

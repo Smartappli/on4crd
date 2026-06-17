@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Een wijziging',
   'propose_new_theme' => 'Een nieuw thema',
   'administer' => 'Beheren',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Subonderwerp',
+  'no_subcategory' => 'Geen subonderwerp',
+  'favorites' => 'Favorieten',
 );

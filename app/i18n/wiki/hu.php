@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Módosítás',
   'propose_new_theme' => 'Új téma',
   'administer' => 'Adminisztrálás',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Altéma',
+  'no_subcategory' => 'Nincs altéma',
+  'favorites' => 'Kedvencek',
 );

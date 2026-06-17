@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Bidla',
   'propose_new_theme' => 'Tema ġdida',
   'administer' => 'Amministra',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Subtema',
+  'no_subcategory' => 'L-ebda subsuġġett',
+  'favorites' => 'Favoriti',
 );

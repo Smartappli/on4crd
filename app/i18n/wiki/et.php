@@ -41,7 +41,7 @@ return array (
   'propose_modification' => 'Muudatus',
   'propose_new_theme' => 'Uus teema',
   'administer' => 'Halda',
-  'subcategory_field' => 'Subtopic',
-  'no_subcategory' => 'No subtopic',
-  'favorites' => 'Favorites',
+  'subcategory_field' => 'Alateema',
+  'no_subcategory' => 'Alateema puudub',
+  'favorites' => 'Lemmikud',
 );

@@ -8,7 +8,7 @@ return array (
   'nav_events' => 'Avvenimenti',
   'nav_tools' => 'Għodda',
   'nav_directory' => 'Direttorju',
-  'nav_idea' => 'Idea',
+  'nav_idea' => 'Ideat',
   'nav_dashboard' => 'Daxxbord',
   'nav_wiki' => 'Għarfien',
   'nav_gallery' => 'Ritratti',

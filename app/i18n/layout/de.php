@@ -19,7 +19,7 @@ return array (
   'nav_auctions' => 'Auktionen',
   'nav_assistant' => 'Assistent',
   'nav_presentations' => 'Präsentationen',
-  'nav_videos' => 'Videos',
+  'nav_videos' => 'Videothek',
   'nav_minutes' => 'Protokolle',
   'nav_downloads' => 'Dateien',
   'nav_files' => 'Dateien',
