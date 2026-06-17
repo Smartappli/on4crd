@@ -16,7 +16,7 @@ return array (
   'save_reservation' => 'Ħlief riżerva',
   'history' => 'Storiku',
   'no_history' => 'Ebda riżervi rreġistrati.',
-  'total' => 'Total:',
+  'total' => 'Somma:',
   'col_starter' => 'Dħul',
   'col_meal' => 'Ikla',
   'col_dessert' => 'Deżerta',

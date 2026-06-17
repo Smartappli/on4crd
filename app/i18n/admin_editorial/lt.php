@@ -8,7 +8,7 @@ return array (
   'intro' => 'Prancūzų kalba išlieka šaltiniu. Kitas kalbas galima sugeneruoti automatiškai ir tada skaityti atgal.',
   'fr_source' => 'prancūzų kalba (šaltinis)',
   'english' => 'anglų kalba',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Vokiečių',
   'dutch' => 'Nyderlandai',
   'save' => 'Išsaugoti',
   'committee_title' => 'Komitetas – pavadinimas',

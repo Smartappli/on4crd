@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Сначала удалите все подтемы в этой теме.',
   'err_subcategory_has_documents' => 'В этой подтеме еще есть альбомы.',
   'wizard_title' => 'Мастер создания новых альбомов',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Подробности',
   'wizard_step_upload' => 'Загрузить',
   'wizard_step_review' => 'Обзор',
   'wizard_private_help' => 'Альбом остается конфиденциальным до окончательной проверки.',

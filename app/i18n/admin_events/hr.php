@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -18,7 +17,7 @@ return array (
   'location' => 'Lokacija',
   'external_url' => 'URL vanjski',
   'type' => 'Vrsta',
-  'status' => 'Status',
+  'status' => 'Stanje',
   'type_club' => 'Klub',
   'type_contest' => 'Natjecanje',
   'draft' => 'Nacrt',

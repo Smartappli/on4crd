@@ -56,7 +56,7 @@ return array (
   'ingestion_template_training' => 'Antrenamentul',
   'ingestion_template_safety' => 'Securitate',
   'ingestion_template_technical' => 'Tehnic',
-  'ingestion_template_legal' => 'Legal',
+  'ingestion_template_legal' => 'Juridic',
   'subcategory_ph' => 'Subtemă',
   'subcategories' => 'Subteme',
   'add_subcategory' => 'Adaugă subtemă',

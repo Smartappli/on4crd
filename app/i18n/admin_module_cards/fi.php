@@ -16,7 +16,7 @@ return array (
   'admin_committee_desc' => 'Toimikunnan jäsenet, rooli, järjestys ja elämäkerta.',
   'admin_press_title' => 'Paina',
   'admin_press_desc' => 'Lehdistöyhteystiedot, päivätyt tiedotteet ja ladattavat asiakirjat.',
-  'admin_events_title' => 'Agenda',
+  'admin_events_title' => 'Tapahtumakalenteri',
   'admin_events_desc' => 'Klubitapahtumat ja paikalliset kilpailut näkyvät live-widgeteissä.',
   'admin_dinner_reservations_title' => 'Vuosittainen illallinen',
   'admin_dinner_reservations_desc' => 'Varaukset, ateria-/jälkiruokalinjat, määrät ja automaattinen summa.',

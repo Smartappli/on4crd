@@ -10,7 +10,7 @@ return array (
   'id' => 'ID',
   'member' => 'Anggota',
   'type' => 'Jenis',
-  'status' => 'Status',
+  'status' => 'Keadaan',
   'dates' => 'Tanggal',
   'notes' => 'Catatan',
   'history' => 'Sejarah',

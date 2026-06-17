@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'প্রথমে এই বিষয়ের সমস্ত সাবটপিক মুছুন।',
   'err_subcategory_has_documents' => 'এই সাবটপিকটিতে এখনও অ্যালবাম রয়েছে৷',
   'wizard_title' => 'নতুন অ্যালবাম উইজার্ড',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'বিস্তারিত',
   'wizard_step_upload' => 'আপলোড',
   'wizard_step_review' => 'পর্যালোচনা',
   'wizard_private_help' => 'চূড়ান্ত বৈধতা না হওয়া পর্যন্ত অ্যালবামটি ব্যক্তিগত থাকে৷',

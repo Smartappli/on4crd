@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Vispirms izdzēsiet visas šīs tēmas apakštēmas.',
   'err_subcategory_has_documents' => 'Šajā apakštēmā joprojām ir albumi.',
   'wizard_title' => 'Jauna albuma vednis',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Sīkāka informācija',
   'wizard_step_upload' => 'Augšupielādēt',
   'wizard_step_review' => 'Pārskats',
   'wizard_private_help' => 'Albums paliek privāts līdz galīgajai apstiprināšanai.',

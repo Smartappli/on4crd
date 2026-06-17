@@ -27,7 +27,7 @@ return array (
   'yes' => 'Ja',
   'no' => 'Nein',
   'csv_reservation_id' => 'Reservierungs-ID',
-  'csv_reserved_by' => 'Name',
+  'csv_reserved_by' => 'Reserviert von',
   'csv_created_at' => 'Datum',
   'csv_starter_enabled' => 'Vorspeise aktiv',
   'csv_starter' => 'Vorspeise',

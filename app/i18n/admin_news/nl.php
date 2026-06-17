@@ -19,7 +19,7 @@ return array (
   'excerpt' => 'Uittreksel',
   'simple_html' => 'Eenvoudige HTML-inhoud',
   'editor_tip' => 'Tip: gebruik de knop Word importeren (.docx) in de editorwerkbalk.',
-  'status' => 'Status',
+  'status' => 'Toestand',
   'save' => 'Opslaan',
   'my_news' => 'Mijn nieuws / beheerde secties',
   'action' => 'Actie',

@@ -23,7 +23,7 @@ return array (
   'csv_content' => 'CSV/Excel-innehåll (kopiera och klistra in)',
   'import' => 'Importera',
   'member' => 'Medlem',
-  'status' => 'Status',
+  'status' => 'Läge',
   'actions' => 'Åtgärder',
   'unsubscribe' => 'Avsluta prenumeration',
   'reactivate' => 'Återaktivera',

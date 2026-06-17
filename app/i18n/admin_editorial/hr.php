@@ -8,7 +8,7 @@ return array (
   'intro' => 'Francuski ostaje izvor. Ostali jezici mogu se automatski generirati i potom pročitati.',
   'fr_source' => 'francuski (izvor)',
   'english' => 'engleski',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Njemački',
   'dutch' => 'Nizozemska',
   'save' => 'spremiti',
   'committee_title' => 'Odbor — naziv',

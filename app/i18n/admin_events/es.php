@@ -18,7 +18,7 @@ return array (
   'external_url' => 'URL externa',
   'type' => 'Tipo',
   'status' => 'Estado',
-  'type_club' => 'Club',
+  'type_club' => 'Asociación',
   'type_contest' => 'Concurso',
   'draft' => 'Borrador',
   'published' => 'Publicado',

@@ -20,7 +20,7 @@ return array (
   'col_title' => 'Judul',
   'col_owner' => 'Pemilik',
   'col_placement' => 'Penempatan',
-  'col_status' => 'Status',
+  'col_status' => 'Keadaan',
   'col_url' => 'URL',
   'col_code' => 'Kode',
   'col_name' => 'Nama',

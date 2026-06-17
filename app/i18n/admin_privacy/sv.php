@@ -10,7 +10,7 @@ return array (
   'id' => 'ID',
   'member' => 'Medlem',
   'type' => 'Typ',
-  'status' => 'Status',
+  'status' => 'Läge',
   'dates' => 'Datum',
   'notes' => 'Anteckningar',
   'history' => 'Historia',

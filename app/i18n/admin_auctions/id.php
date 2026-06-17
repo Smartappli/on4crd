@@ -18,7 +18,7 @@ return array (
   'buy_now' => 'Beli sekarang',
   'start' => 'Awal',
   'end' => 'Akhir',
-  'status' => 'Status',
+  'status' => 'Keadaan',
   'save_lot' => 'Hemat banyak',
   'saved_lots' => 'Banyak yang disimpan',
   'no_lot' => 'Tidak banyak.',

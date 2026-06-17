@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Exclua todos os subtópicos deste tópico primeiro.',
   'err_subcategory_has_documents' => 'Este subtópico ainda contém álbuns.',
   'wizard_title' => 'Assistente de novo álbum',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Detalhes',
   'wizard_step_upload' => 'Enviar',
   'wizard_step_review' => 'Revisão',
   'wizard_private_help' => 'O álbum permanece privado até a validação final.',

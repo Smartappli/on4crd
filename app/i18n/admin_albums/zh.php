@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => '首先删除该主题中的所有子主题。',
   'err_subcategory_has_documents' => '该子主题仍然包含专辑。',
   'wizard_title' => '新专辑向导',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => '细节',
   'wizard_step_upload' => '上传',
   'wizard_step_review' => '审查',
   'wizard_private_help' => '在最终验证之前，该专辑将保持私密状态。',

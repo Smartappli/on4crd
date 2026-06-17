@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Pirmiausia ištrinkite visas šios temos potemes.',
   'err_subcategory_has_documents' => 'Šioje potemėje vis dar yra albumų.',
   'wizard_title' => 'Naujo albumo vedlys',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Detalės',
   'wizard_step_upload' => 'Įkelti',
   'wizard_step_review' => 'Apžvalga',
   'wizard_private_help' => 'Albumas lieka privatus iki galutinio patvirtinimo.',

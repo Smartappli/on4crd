@@ -18,7 +18,7 @@ return array (
   'buy_now' => 'Köp nu',
   'start' => 'Starta',
   'end' => 'Slut',
-  'status' => 'Status',
+  'status' => 'Läge',
   'save_lot' => 'Spara batch',
   'saved_lots' => 'Registrerade partier',
   'no_lot' => 'Inga priser.',

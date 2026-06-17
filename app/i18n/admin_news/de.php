@@ -19,7 +19,7 @@ return array (
   'excerpt' => 'Auszug',
   'simple_html' => 'Einfacher HTML-Inhalt',
   'editor_tip' => 'Tipp: Verwenden Sie die Schaltfläche Word importieren (.docx) in der Editorleiste.',
-  'status' => 'Status',
+  'status' => 'Zustand',
   'save' => 'Speichern',
   'my_news' => 'Meine Nachrichten / verwaltete Bereiche',
   'action' => 'Aktion',

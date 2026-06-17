@@ -8,7 +8,7 @@ return array (
   'intro' => 'Franceza rămâne sursa. Alte limbi pot fi generate automat și apoi citite înapoi.',
   'fr_source' => 'franceza (sursa)',
   'english' => 'engleză',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Germană',
   'dutch' => 'Olanda',
   'save' => 'Salva',
   'committee_title' => 'Comitetul — titlu',

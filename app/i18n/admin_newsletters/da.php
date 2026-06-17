@@ -23,7 +23,7 @@ return array (
   'csv_content' => 'CSV/Excel-indhold (kopier og indsæt)',
   'import' => 'Importere',
   'member' => 'Medlem',
-  'status' => 'Status',
+  'status' => 'Tilstand',
   'actions' => 'Handlinger',
   'unsubscribe' => 'Afmeld',
   'reactivate' => 'Genaktiver',

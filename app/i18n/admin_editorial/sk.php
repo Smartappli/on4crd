@@ -8,7 +8,7 @@ return array (
   'intro' => 'Zdrojom zostáva francúzština. Iné jazyky je možné vygenerovať automaticky a potom ich prečítať.',
   'fr_source' => 'francúzština (zdroj)',
   'english' => 'angličtina',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Nemčina',
   'dutch' => 'Holandsko',
   'save' => 'Uložiť',
   'committee_title' => 'Výbor — titul',

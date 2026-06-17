@@ -56,7 +56,7 @@ return array (
   'ingestion_template_training' => 'Formación',
   'ingestion_template_safety' => 'Seguridad',
   'ingestion_template_technical' => 'Técnico',
-  'ingestion_template_legal' => 'Legal',
+  'ingestion_template_legal' => 'Jurídico',
   'subcategory_ph' => 'Subtema',
   'subcategories' => 'Subtemas',
   'add_subcategory' => 'Añadir subtema',

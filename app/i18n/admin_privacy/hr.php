@@ -10,7 +10,7 @@ return array (
   'id' => 'ID',
   'member' => 'Član',
   'type' => 'Tip',
-  'status' => 'Status',
+  'status' => 'Stanje',
   'dates' => 'Datumi',
   'notes' => 'Bilješke',
   'history' => 'Povijest',

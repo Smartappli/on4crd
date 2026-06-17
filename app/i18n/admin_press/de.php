@@ -13,7 +13,7 @@ return array (
   'notes' => 'Notizen',
   'order' => 'Reihenfolge',
   'add' => 'Hinzufügen',
-  'th_name' => 'Name',
+  'th_name' => 'Vollständiger Name',
   'th_role' => 'Rolle',
   'th_contact' => 'Kontakt',
   'title' => 'Titel',

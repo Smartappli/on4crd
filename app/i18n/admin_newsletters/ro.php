@@ -21,7 +21,7 @@ return array (
   'add_or_reactivate' => 'Adăugați/reactivați',
   'csv_import' => 'Importați CSV',
   'csv_content' => 'CSV/Conținut Excel (copiați și lipiți)',
-  'import' => 'Import',
+  'import' => 'Importă',
   'member' => 'Membru',
   'status' => 'Stare',
   'actions' => 'Acțiuni',

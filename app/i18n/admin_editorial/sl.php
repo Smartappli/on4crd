@@ -8,7 +8,7 @@ return array (
   'intro' => 'Vir ostaja francoščina. Druge jezike je mogoče samodejno ustvariti in nato prebrati.',
   'fr_source' => 'francoščina (vir)',
   'english' => 'angleščina',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Nemščina',
   'dutch' => 'Nizozemska',
   'save' => 'Shrani',
   'committee_title' => 'Odbor — naziv',

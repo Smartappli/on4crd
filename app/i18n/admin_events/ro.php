@@ -18,7 +18,7 @@ return array (
   'external_url' => 'URL extern',
   'type' => 'Fel',
   'status' => 'Stare',
-  'type_club' => 'Club',
+  'type_club' => 'Asociație',
   'type_contest' => 'Concurenţă',
   'draft' => 'Proiect',
   'published' => 'Publicat',

@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Διαγράψτε πρώτα όλα τα υποθέματα σε αυτό το θέμα.',
   'err_subcategory_has_documents' => 'Αυτό το υποθέμα εξακολουθεί να περιέχει άλμπουμ.',
   'wizard_title' => 'Οδηγός νέου άλμπουμ',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Καθέκαστα',
   'wizard_step_upload' => 'Μεταφόρτωση',
   'wizard_step_review' => 'Επανεξέταση',
   'wizard_private_help' => 'Το άλμπουμ παραμένει ιδιωτικό μέχρι την τελική επικύρωση.',

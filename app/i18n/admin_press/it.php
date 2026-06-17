@@ -21,7 +21,7 @@ return array (
   'publish_date' => 'Data di pubblicazione',
   'pdf_doc' => 'Documento PDF',
   'th_date' => 'Data',
-  'th_file' => 'File',
+  'th_file' => 'Documento',
   'open' => 'apri',
   'layout' => 'Stampa',
   'meta_desc' => 'Gestione contatti stampa e comunicati.',

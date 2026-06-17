@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Scrios gach fothopaic san ábhar seo ar dtús.',
   'err_subcategory_has_documents' => 'Tá albam fós sa bhfothopaic seo.',
   'wizard_title' => 'Treoraí albam nua',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Sonraí',
   'wizard_step_upload' => 'Uaslódáil',
   'wizard_step_review' => 'Léirmheas',
   'wizard_private_help' => 'Fanann an t-albam príobháideach go dtí an bailíochtú deiridh.',

@@ -23,7 +23,7 @@ return array (
   'csv_content' => 'Konten CSV/Excel (salin-tempel)',
   'import' => 'Impor',
   'member' => 'Anggota',
-  'status' => 'Status',
+  'status' => 'Keadaan',
   'actions' => 'Tindakan',
   'unsubscribe' => 'Berhenti berlangganan',
   'reactivate' => 'Mengaktifkan kembali',

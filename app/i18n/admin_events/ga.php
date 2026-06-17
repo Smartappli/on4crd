@@ -18,7 +18,7 @@ return array (
   'external_url' => 'URL seachtrach',
   'type' => 'Cineál',
   'status' => 'Stádas',
-  'type_club' => 'Club',
+  'type_club' => 'Cumann',
   'type_contest' => 'Comórtas',
   'draft' => 'Dréacht',
   'published' => 'Foilsithe',

@@ -7,7 +7,7 @@ return array (
   'core' => 'inima',
   'enabled' => 'Activat',
   'visibility' => 'Vizibilitate',
-  'public' => 'Public',
+  'public' => 'Vizibil public',
   'members' => 'Membrii',
   'admin' => 'Administratorii',
   'save' => 'Salva',

@@ -18,7 +18,7 @@ return array (
   'external_url' => 'Ulkoinen URL',
   'type' => 'Kirjoita',
   'status' => 'Tila',
-  'type_club' => 'Club',
+  'type_club' => 'Kerho',
   'type_contest' => 'Kilpailu',
   'draft' => 'Luonnos',
   'published' => 'Julkaistu',

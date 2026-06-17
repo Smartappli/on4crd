@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Najprv odstráňte všetky podtémy v tejto téme.',
   'err_subcategory_has_documents' => 'Táto podtéma stále obsahuje albumy.',
   'wizard_title' => 'Sprievodca novým albumom',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Podrobnosti',
   'wizard_step_upload' => 'Nahrať',
   'wizard_step_review' => 'recenzia',
   'wizard_private_help' => 'Album zostane súkromný až do konečného overenia.',

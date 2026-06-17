@@ -19,7 +19,7 @@ return array (
   'excerpt' => 'Utdrag',
   'simple_html' => 'Enkelt HTML-innehåll',
   'editor_tip' => 'Tips: Använd knappen Importera Word (.docx-format) i redigeringsfältet.',
-  'status' => 'Status',
+  'status' => 'Läge',
   'save' => 'Spara',
   'my_news' => 'Mina nyheter/hanterade sektioner',
   'action' => 'Åtgärd',

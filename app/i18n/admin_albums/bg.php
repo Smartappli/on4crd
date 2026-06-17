@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Първо изтрийте всички подтеми в тази тема.',
   'err_subcategory_has_documents' => 'Тази подтема все още съдържа албуми.',
   'wizard_title' => 'Помощник за нов албум',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Подробности',
   'wizard_step_upload' => 'Качване',
   'wizard_step_review' => 'Преглед',
   'wizard_private_help' => 'Албумът остава частен до окончателното валидиране.',

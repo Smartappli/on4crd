@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -20,7 +19,7 @@ return array (
   'total' => 'I alt:',
   'col_starter' => 'Indgang',
   'col_meal' => 'Måltider',
-  'col_dessert' => 'Dessert',
+  'col_dessert' => 'Sød ret',
   'col_qty' => 'Mængde',
   'col_line_total' => 'Samlet linje',
   'line_active' => 'Aktiv',
@@ -37,7 +36,7 @@ return array (
   'csv_meal' => 'fad',
   'csv_meal_price' => 'Flad pris',
   'csv_dessert_enabled' => 'Aktiv dessert',
-  'csv_dessert' => 'Dessert',
+  'csv_dessert' => 'Sød ret',
   'csv_dessert_price' => 'Dessert pris',
   'csv_quantity' => 'Mængde',
   'csv_line_total' => 'Samlet linje',

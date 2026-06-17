@@ -17,7 +17,7 @@ return array (
   'location' => 'Locatie',
   'external_url' => 'Externe URL',
   'type' => 'Vriendelijk',
-  'status' => 'Status',
+  'status' => 'Toestand',
   'type_club' => 'Clubje',
   'type_contest' => 'Wedstrijd',
   'draft' => 'Concept',
@@ -29,7 +29,7 @@ return array (
   'calendar_help' => 'Klik op een evenement om de bewerking te openen.',
   'today' => 'Vandaag',
   'month' => 'Maand',
-  'week' => 'Week',
+  'week' => 'Weeknummer',
   'list' => 'Lijst',
   'meta_desc' => 'Beheer van evenementen en kalenderitems van de site.',
 );

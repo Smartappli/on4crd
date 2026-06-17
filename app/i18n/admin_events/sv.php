@@ -17,7 +17,7 @@ return array (
   'location' => 'Plats',
   'external_url' => 'URL extern',
   'type' => 'Typ',
-  'status' => 'Status',
+  'status' => 'Läge',
   'type_club' => 'Klubb',
   'type_contest' => 'Konkurrens',
   'draft' => 'Utkast',

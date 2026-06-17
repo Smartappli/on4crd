@@ -380,6 +380,144 @@ final class I18nNativeLocalesTest extends TestCase
         }
     }
 
+    public function testAdminLocaleFilesDoNotKeepFrenchOrEnglishFallbackStrings(): void
+    {
+        $issues = [];
+        $technicalValues = array_fill_keys([
+            '',
+            'ID',
+            'URL',
+            'API',
+            'CSV',
+            'HTML',
+            'JSON',
+            'PDF',
+            'RSS',
+            'GDPR',
+            'RGPD',
+            'ON4CRD',
+            'QSL',
+            'UBA',
+            'LoTW',
+            'eQSL',
+            'QRZ',
+            'AM',
+            'FM',
+            'SSB',
+            'CW',
+            'FT8',
+            'FT4',
+            'DMR',
+            'D-STAR',
+            'APRS',
+            'RTTY',
+            'SSTV',
+            'WSPR',
+            'HAREC',
+            'Dashboard',
+            'Wiki',
+            'Newsletter',
+            'Newsletters',
+            'Administration',
+            'Admin',
+            'OpenAI',
+            'DeepL',
+            'Matomo',
+        ], true);
+
+        foreach (glob(__DIR__ . '/../app/i18n/admin*', GLOB_ONLYDIR) ?: [] as $directory) {
+            $domain = basename((string) $directory);
+            $frPath = $directory . '/fr.php';
+            $enPath = $directory . '/en.php';
+            if (!is_file($frPath) || !is_file($enPath)) {
+                continue;
+            }
+
+            $fr = $this->flattenAdminLocaleValues($this->loadLocaleFile($frPath));
+            $en = $this->flattenAdminLocaleValues($this->loadLocaleFile($enPath));
+            foreach ($this->supportedLocales() as $locale) {
+                if ($locale === 'fr' || $locale === 'en') {
+                    continue;
+                }
+                $path = $directory . '/' . $locale . '.php';
+                $messages = $this->flattenAdminLocaleValues($this->loadLocaleFile($path));
+                foreach ($messages as $key => $value) {
+                    if (!$this->isAdminNativeTranslationCandidate($key, $value, $technicalValues)) {
+                        continue;
+                    }
+                    if (
+                        isset($en[$key])
+                        && $value === $en[$key]
+                        && $this->isAdminNativeTranslationCandidate($key, $en[$key], $technicalValues)
+                    ) {
+                        $issues[] = sprintf('%s/%s:%s still equals en "%s"', $domain, $locale, $key, $value);
+                    }
+                    if (
+                        isset($fr[$key])
+                        && $value === $fr[$key]
+                        && $this->isAdminNativeTranslationCandidate($key, $fr[$key], $technicalValues)
+                    ) {
+                        $issues[] = sprintf('%s/%s:%s still equals fr "%s"', $domain, $locale, $key, $value);
+                    }
+                }
+            }
+        }
+
+        self::assertSame([], $issues);
+    }
+
+    /**
+     * @param array<string, mixed> $values
+     * @return array<string, string>
+     */
+    private function flattenAdminLocaleValues(array $values, string $prefix = ''): array
+    {
+        $flat = [];
+        foreach ($values as $key => $value) {
+            $path = $prefix === '' ? (string) $key : $prefix . '.' . (string) $key;
+            if (is_array($value)) {
+                $flat += $this->flattenAdminLocaleValues($value, $path);
+                continue;
+            }
+            if (is_string($value)) {
+                $flat[$path] = trim(strip_tags($value));
+            }
+        }
+
+        return $flat;
+    }
+
+    /**
+     * @param array<string, true> $technicalValues
+     */
+    private function isAdminNativeTranslationCandidate(string $key, string $value, array $technicalValues): bool
+    {
+        $value = trim($value);
+        if ($value === '' || isset($technicalValues[$value])) {
+            return false;
+        }
+        if (preg_match('/(?:^|\.|_)(?:slug|code|id|url|uri|path|route|token|csrf|parser|locator|callsign|filename|file_name)(?:$|\.|_)/i', $key) === 1) {
+            return false;
+        }
+        if (preg_match('/^[A-Z0-9 _.:\/#%+\-()]+$/u', $value) === 1) {
+            return false;
+        }
+        if (preg_match('/^(?:[a-z][a-z0-9]*_)+[a-z0-9]+$/', $value) === 1) {
+            return false;
+        }
+        if (preg_match('/\.(?:php|html?|css|js|json|xml|csv|pdf|png|jpe?g|webp|svg)$/i', $value) === 1) {
+            return false;
+        }
+        if (preg_match('/^https?:\/\//i', $value) === 1) {
+            return false;
+        }
+        if ((function_exists('mb_strlen') ? mb_strlen($value, 'UTF-8') : strlen($value)) < 4) {
+            return false;
+        }
+
+        return preg_match('/\p{L}/u', $value) === 1;
+    }
+
     public function testRequestedFrenchModuleLabelsStayAccented(): void
     {
         $auctions = file_get_contents(__DIR__ . '/../pages/auctions.php');

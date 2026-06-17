@@ -48,7 +48,7 @@ return array (
   'admin_classifieds_desc' => 'Mitglieder-Kleinanzeigen moderieren.',
   'admin_presentations_title' => 'Präsentationen',
   'admin_presentations_desc' => 'Präsentationsunterlagen für Mitglieder verwalten.',
-  'admin_videos_title' => 'Videos',
+  'admin_videos_title' => 'Videobeiträge',
   'admin_videos_desc' => 'Videos und audiovisuelle Ressourcen für Mitglieder verwalten.',
   'admin_pv_title' => 'Protokolle',
   'admin_pv_desc' => 'Protokolle und Berichte für Mitglieder verwalten.',

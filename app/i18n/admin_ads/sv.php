@@ -20,7 +20,7 @@ return array (
   'col_title' => 'Titel',
   'col_owner' => 'Vårdnadshavare',
   'col_placement' => 'Placering',
-  'col_status' => 'Status',
+  'col_status' => 'Läge',
   'col_url' => 'URL',
   'col_code' => 'Kod',
   'col_name' => 'Namn',

@@ -15,7 +15,7 @@ return array (
   'add' => 'Adăuga',
   'th_name' => 'Nume',
   'th_role' => 'Rol',
-  'th_contact' => 'Contact',
+  'th_contact' => 'Persoană de contact',
   'title' => 'Titlu',
   'summary' => 'Rezumat',
   'publish_date' => 'Data publicării',

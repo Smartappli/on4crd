@@ -10,7 +10,7 @@ return array (
   'id' => 'ID',
   'member' => 'Członek',
   'type' => 'Typ',
-  'status' => 'Status',
+  'status' => 'Stan',
   'dates' => 'Daty',
   'notes' => 'Notatki',
   'history' => 'Historia',

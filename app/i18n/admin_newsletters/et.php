@@ -21,7 +21,7 @@ return array (
   'add_or_reactivate' => 'Lisa/aktiveeri uuesti',
   'csv_import' => 'Importige CSV',
   'csv_content' => 'CSV/Exceli sisu (kopeeri ja kleebi)',
-  'import' => 'Import',
+  'import' => 'Impordi',
   'member' => 'liige',
   'status' => 'Olek',
   'actions' => 'Tegevused',

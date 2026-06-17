@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'まず、このトピック内のすべてのサブトピックを削除します。',
   'err_subcategory_has_documents' => 'このサブトピックにはまだアルバムが含まれています。',
   'wizard_title' => 'ニューアルバムウィザード',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => '詳細',
   'wizard_step_upload' => 'アップロード',
   'wizard_step_review' => 'レビュー',
   'wizard_private_help' => 'アルバムは最終検証まで非公開のままです。',

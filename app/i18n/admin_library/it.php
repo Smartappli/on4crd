@@ -25,7 +25,7 @@ return array (
   'storage_unavailable' => 'La biblioteca è temporaneamente non disponibile.',
   'meta_desc' => 'Amministrazione della biblioteca membro di ON4CRD.',
   'documents' => 'Documenti',
-  'file' => 'File',
+  'file' => 'Documento',
   'file_help' => 'Formati accettati: PDF, DOCX, TXT, Markdown e HTML. Dimensione massima: 25 MB.',
   'category_code' => 'Code',
   'category_label' => 'Etichetta',

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 return array (
@@ -19,7 +18,7 @@ return array (
   'buy_now' => 'Kupi sada',
   'start' => 'Početak',
   'end' => 'Kraj',
-  'status' => 'Status',
+  'status' => 'Stanje',
   'save_lot' => 'Spremi seriju',
   'saved_lots' => 'Registrirane serije',
   'no_lot' => 'Nema nagrada.',

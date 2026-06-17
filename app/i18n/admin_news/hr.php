@@ -19,7 +19,7 @@ return array (
   'excerpt' => 'Izvadak',
   'simple_html' => 'Jednostavan sadržaj HTML',
   'editor_tip' => 'Savjet: Koristite gumb Uvezi Word (format .docx) na traci za uređivanje.',
-  'status' => 'Status',
+  'status' => 'Stanje',
   'save' => 'spremiti',
   'my_news' => 'Moje vijesti / upravljani odjeljci',
   'action' => 'Akcija',

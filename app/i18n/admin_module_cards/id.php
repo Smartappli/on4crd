@@ -34,7 +34,7 @@ return array (
   'admin_newsletters_desc' => 'Pelanggan, impor CSV, dan kampanye email.',
   'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Halaman kolaboratif dan revisi.',
-  'admin_albums_title' => 'Album',
+  'admin_albums_title' => 'Album foto',
   'admin_albums_desc' => 'Galeri publik dan sinkronisasi sosial.',
   'admin_library_title' => 'Perpustakaan',
   'admin_library_desc' => 'Kelola dokumen PDF dari perpustakaan anggota.',

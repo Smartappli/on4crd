@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Najpierw usuń wszystkie podtematy w tym temacie.',
   'err_subcategory_has_documents' => 'Ten podtemat nadal zawiera albumy.',
   'wizard_title' => 'Kreator nowego albumu',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Bliższe dane',
   'wizard_step_upload' => 'Prześlij',
   'wizard_step_review' => 'Recenzja',
   'wizard_private_help' => 'Album pozostaje prywatny aż do ostatecznej weryfikacji.',

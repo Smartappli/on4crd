@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Primero elimine todos los subtemas de este tema.',
   'err_subcategory_has_documents' => 'Este subtema todavía contiene álbumes.',
   'wizard_title' => 'Asistente para nuevo álbum',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Detalles',
   'wizard_step_upload' => 'Subir',
   'wizard_step_review' => 'Revisar',
   'wizard_private_help' => 'El álbum permanece privado hasta la validación final.',

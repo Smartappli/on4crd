@@ -8,7 +8,7 @@ return array (
   'intro' => 'Il-Franċiż jibqa\' s-sors. Lingwi oħra jistgħu jiġu ġġenerati awtomatikament u mbagħad jinqraw lura.',
   'fr_source' => 'Franċiż (sors)',
   'english' => 'Ingliż',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Ġermaniż',
   'dutch' => 'l-Olanda',
   'save' => 'Ħlief',
   'committee_title' => 'Kumitat — titolu',

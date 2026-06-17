@@ -19,7 +19,7 @@ return array (
   'excerpt' => 'Estratt',
   'simple_html' => 'Kontenut sempliċi HTML',
   'editor_tip' => 'Tip: Uża l-buttuna Importa Kelma (format .docx) fil-bar tal-editur.',
-  'status' => 'Status',
+  'status' => 'Stat',
   'save' => 'Ħlief',
   'my_news' => 'Aħbarijiet tiegħi / sezzjonijiet ġestiti',
   'action' => 'Azzjoni',

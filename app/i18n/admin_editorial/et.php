@@ -8,7 +8,7 @@ return array (
   'intro' => 'Prantsuse keel jääb allikaks. Teisi keeli saab automaatselt genereerida ja seejärel tagasi lugeda.',
   'fr_source' => 'prantsuse keel (allikas)',
   'english' => 'inglise keel',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Saksa',
   'dutch' => 'Holland',
   'save' => 'Salvesta',
   'committee_title' => 'Komitee — tiitel',

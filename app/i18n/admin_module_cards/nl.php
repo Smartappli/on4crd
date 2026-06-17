@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'admin_modules_title' => 'Modules',
+  'admin_modules_title' => 'Modulebeheer',
   'admin_modules_desc' => 'Modules activeren, deactiveren en centraal beheren.',
   'admin_members_title' => 'Ledenbeheer',
   'admin_members_desc' => 'Ledenprofielen, actieve status en comité.',
@@ -16,7 +16,7 @@ return array (
   'admin_committee_desc' => 'Comitéleden, rol, volgorde en biografie.',
   'admin_press_title' => 'Pers',
   'admin_press_desc' => 'Perscontacten, gedateerde berichten en downloads.',
-  'admin_events_title' => 'Agenda',
+  'admin_events_title' => 'Evenementen',
   'admin_events_desc' => 'Clubevenementen en lokale contests in live widgets.',
   'admin_dinner_reservations_title' => 'Jaarlijks diner',
   'admin_dinner_reservations_desc' => 'Reservaties, maaltijdregels, aantallen en automatisch totaal.',
@@ -34,7 +34,7 @@ return array (
   'admin_newsletters_desc' => 'Abonnees, CSV-import en e-mailcampagnes.',
   'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Samenwerkingspagina’s en revisies.',
-  'admin_albums_title' => 'Albums',
+  'admin_albums_title' => 'Fotoalbums',
   'admin_albums_desc' => 'Publieke galerij en sociale sync.',
   'admin_library_title' => 'Bibliotheek',
   'admin_library_desc' => 'Beheer van PDF-documenten uit de ledenbibliotheek.',

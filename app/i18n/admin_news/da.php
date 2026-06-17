@@ -19,7 +19,7 @@ return array (
   'excerpt' => 'Uddrag',
   'simple_html' => 'Simpelt HTML indhold',
   'editor_tip' => 'Tip: Brug knappen Importer Word (.docx-format) i redigeringslinjen.',
-  'status' => 'Status',
+  'status' => 'Tilstand',
   'save' => 'Gem',
   'my_news' => 'Mine nyheder / administrerede sektioner',
   'action' => 'Handling',

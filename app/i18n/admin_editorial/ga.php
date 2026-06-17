@@ -8,7 +8,7 @@ return array (
   'intro' => 'Is í an Fhraincis an fhoinse fós. Is féidir teangacha eile a ghiniúint go huathoibríoch agus ansin iad a léamh ar ais.',
   'fr_source' => 'Fraincis (foinse)',
   'english' => 'Béarla',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Gearmáinis',
   'dutch' => 'Ísiltír',
   'save' => 'Sábháil',
   'committee_title' => 'Coiste — teideal',

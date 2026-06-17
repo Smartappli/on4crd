@@ -18,7 +18,7 @@ return array (
   'external_url' => 'URL esterna',
   'type' => 'Tipo',
   'status' => 'Stato',
-  'type_club' => 'Club',
+  'type_club' => 'Circolo',
   'type_contest' => 'Concorso',
   'draft' => 'Bozza',
   'published' => 'Pubblicato',

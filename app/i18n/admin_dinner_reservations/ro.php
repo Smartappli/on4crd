@@ -16,7 +16,7 @@ return array (
   'save_reservation' => 'Salvați rezervarea',
   'history' => 'Istoric',
   'no_history' => 'Nu au fost înregistrate rezervări.',
-  'total' => 'Total:',
+  'total' => 'Sumă:',
   'col_starter' => 'Intrare',
   'col_meal' => 'Masă',
   'col_dessert' => 'Desert',

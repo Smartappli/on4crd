@@ -8,7 +8,7 @@ return array (
   'intro' => 'A francia marad a forrás. Más nyelvek automatikusan generálhatók, majd visszaolvashatók.',
   'fr_source' => 'francia (forrás)',
   'english' => 'angolul',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Német',
   'dutch' => 'Hollandia',
   'save' => 'Mentés',
   'committee_title' => 'bizottság – cím',

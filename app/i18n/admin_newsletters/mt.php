@@ -23,7 +23,7 @@ return array (
   'csv_content' => 'CSV/Kontenut Excel (kopja u paste)',
   'import' => 'Importazzjoni',
   'member' => 'Membru',
-  'status' => 'Status',
+  'status' => 'Stat',
   'actions' => 'Azzjonijiet',
   'unsubscribe' => 'Ħassar l-abbonament',
   'reactivate' => 'Attiva mill-ġdid',

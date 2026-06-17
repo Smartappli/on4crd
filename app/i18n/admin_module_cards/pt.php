@@ -16,7 +16,7 @@ return array (
   'admin_committee_desc' => 'Membros do comité, função, ordem e biografia.',
   'admin_press_title' => 'Imprensa',
   'admin_press_desc' => 'Contactos de imprensa, comunicados datados e documentos descarregáveis.',
-  'admin_events_title' => 'Agenda',
+  'admin_events_title' => 'Calendário',
   'admin_events_desc' => 'Eventos do clube e concursos locais exibidos em widgets ao vivo.',
   'admin_dinner_reservations_title' => 'Jantar anual',
   'admin_dinner_reservations_desc' => 'Reservas, linhas de refeição/sobremesa, quantidades e total automático.',

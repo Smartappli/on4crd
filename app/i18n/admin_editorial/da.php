@@ -8,7 +8,7 @@ return array (
   'intro' => 'Fransk er fortsat kilden. Andre sprog kan automatisk genereres og derefter læses tilbage.',
   'fr_source' => 'fransk (kilde)',
   'english' => 'engelsk',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Tysk',
   'dutch' => 'Holland',
   'save' => 'Gem',
   'committee_title' => 'Udvalg — titel',

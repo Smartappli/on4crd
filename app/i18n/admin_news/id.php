@@ -19,7 +19,7 @@ return array (
   'excerpt' => 'Kutipan',
   'simple_html' => 'Konten HTML sederhana',
   'editor_tip' => 'Tip: gunakan tombol Impor Word (format .docx) di toolbar editor.',
-  'status' => 'Status',
+  'status' => 'Keadaan',
   'save' => 'Menyimpan',
   'my_news' => 'Berita saya/bagian yang dikelola',
   'action' => 'Tindakan',

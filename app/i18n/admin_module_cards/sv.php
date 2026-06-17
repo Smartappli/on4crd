@@ -34,7 +34,7 @@ return array (
   'admin_newsletters_desc' => 'Prenumeranter, CSV import och e-postkampanjer.',
   'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Samarbetssidor och revisioner.',
-  'admin_albums_title' => 'Album',
+  'admin_albums_title' => 'Fotoalbum',
   'admin_albums_desc' => 'Offentligt galleri och social synk.',
   'admin_library_title' => 'Bibliotek',
   'admin_library_desc' => 'Hantera PDF-dokument från medlemsbiblioteket.',

@@ -6,7 +6,7 @@ return array (
   'role_removed' => 'Peran dihapus.',
   'title' => 'Peran dan izin',
   'th_permission' => 'Izin',
-  'th_label' => 'Label',
+  'th_label' => 'Nama label',
   'assign_role' => 'Tetapkan peran',
   'member' => 'Anggota',
   'role' => 'Peran',

@@ -18,7 +18,7 @@ return array (
   'buy_now' => 'Ixtri issa',
   'start' => 'Bidu',
   'end' => 'TMIEM',
-  'status' => 'Status',
+  'status' => 'Stat',
   'save_lot' => 'Ħlief lott',
   'saved_lots' => 'Lottijiet reġistrati',
   'no_lot' => 'Ebda premjijiet.',

@@ -23,7 +23,7 @@ return array (
   'csv_content' => 'CSV/Excel sadržaj (kopirajte i zalijepite)',
   'import' => 'uvoz',
   'member' => 'član',
-  'status' => 'Status',
+  'status' => 'Stanje',
   'actions' => 'Radnje',
   'unsubscribe' => 'Odjavi pretplatu',
   'reactivate' => 'Ponovno aktiviranje',

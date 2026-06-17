@@ -6,7 +6,7 @@ return array (
   'title' => 'Administrasi feed langsung',
   'intro' => 'Widget real-time terbatas pada dashboard anggota. Kelola aktivasi, URL, parser, dan TTL tanpa menampilkan widget di halaman publik.',
   'active' => 'Aktif',
-  'label' => 'Label',
+  'label' => 'Nama label',
   'url' => 'URL',
   'parser' => 'pengurai',
   'cache_ttl' => 'tembolok TTL',

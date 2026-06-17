@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'احذف جميع المواضيع الفرعية في هذا الموضوع أولاً.',
   'err_subcategory_has_documents' => 'لا يزال هذا الموضوع الفرعي يحتوي على ألبومات.',
   'wizard_title' => 'معالج الألبوم الجديد',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'تفاصيل',
   'wizard_step_upload' => 'رفع',
   'wizard_step_review' => 'مراجعة',
   'wizard_private_help' => 'يظل الألبوم خاصًا حتى التحقق النهائي من الصحة.',

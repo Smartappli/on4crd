@@ -20,7 +20,7 @@ return array (
   'col_title' => 'Titolu',
   'col_owner' => 'Depożitarju',
   'col_placement' => 'Investiment',
-  'col_status' => 'Status',
+  'col_status' => 'Stat',
   'col_url' => 'URL',
   'col_code' => 'Kodiċi',
   'col_name' => 'Isem',

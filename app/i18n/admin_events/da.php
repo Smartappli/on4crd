@@ -17,7 +17,7 @@ return array (
   'location' => 'Beliggenhed',
   'external_url' => 'URL ekstern',
   'type' => 'Slags',
-  'status' => 'Status',
+  'status' => 'Tilstand',
   'type_club' => 'Klub',
   'type_contest' => 'Konkurrence',
   'draft' => 'Udkast',
@@ -30,6 +30,6 @@ return array (
   'today' => 'I dag',
   'month' => 'Måned',
   'week' => 'uge',
-  'list' => 'Liste',
+  'list' => 'Oversigt',
   'meta_desc' => 'Håndtering af arrangementer og kalender på stedet.',
 );

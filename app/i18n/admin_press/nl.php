@@ -15,7 +15,7 @@ return array (
   'add' => 'Toevoegen',
   'th_name' => 'Naam',
   'th_role' => 'Rol',
-  'th_contact' => 'Contact',
+  'th_contact' => 'Contactpersoon',
   'title' => 'Titel',
   'summary' => 'Samenvatting',
   'publish_date' => 'Publicatiedatum',

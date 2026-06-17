@@ -17,7 +17,7 @@ return array (
   'location' => 'Ort',
   'external_url' => 'Externe URL',
   'type' => 'Typ',
-  'status' => 'Status',
+  'status' => 'Zustand',
   'type_club' => 'Verein',
   'type_contest' => 'Wettbewerb',
   'draft' => 'Entwurf',
@@ -30,6 +30,6 @@ return array (
   'today' => 'Heute',
   'month' => 'Monat',
   'week' => 'Woche',
-  'list' => 'Liste',
+  'list' => 'Auflistung',
   'meta_desc' => 'Verwaltung der Ereignisse und Kalendereinträge der Website.',
 );

@@ -23,7 +23,7 @@ return array (
   'csv_content' => 'CSV/Excel-Inhalt (Kopieren/Einfügen)',
   'import' => 'Importieren',
   'member' => 'Mitglied',
-  'status' => 'Status',
+  'status' => 'Zustand',
   'actions' => 'Aktionen',
   'unsubscribe' => 'Abmelden',
   'reactivate' => 'Reaktivieren',

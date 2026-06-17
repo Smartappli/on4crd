@@ -34,7 +34,7 @@ return array (
   'admin_newsletters_desc' => 'Abbonati, kampanji ta \'importazzjoni u email CSV.',
   'admin_wiki_title' => 'Wiki',
   'admin_wiki_desc' => 'Paġni kollaborattivi u reviżjonijiet.',
-  'admin_albums_title' => 'Albums',
+  'admin_albums_title' => 'Albums tar-ritratti',
   'admin_albums_desc' => 'Gallerija pubblika u sinkronizzazzjoni soċjali.',
   'admin_library_title' => 'Librerija',
   'admin_library_desc' => 'Immaniġġja dokumenti PDF mil-librerija tal-membri.',

@@ -18,7 +18,7 @@ return array (
   'buy_now' => 'Direct kopen',
   'start' => 'Begin',
   'end' => 'Einde',
-  'status' => 'Status',
+  'status' => 'Toestand',
   'save_lot' => 'Lot opslaan',
   'saved_lots' => 'Opgeslagen loten',
   'no_lot' => 'Geen lot.',

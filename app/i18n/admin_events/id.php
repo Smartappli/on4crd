@@ -17,7 +17,7 @@ return array (
   'location' => 'Lokasi',
   'external_url' => 'URL eksternal',
   'type' => 'Jenis',
-  'status' => 'Status',
+  'status' => 'Keadaan',
   'type_club' => 'Klub',
   'type_contest' => 'Kontes',
   'draft' => 'Draf',

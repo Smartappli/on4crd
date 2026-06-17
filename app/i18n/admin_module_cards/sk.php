@@ -16,7 +16,7 @@ return array (
   'admin_committee_desc' => 'Členovia výboru, úloha, poradie a životopis.',
   'admin_press_title' => 'Stlačte tlačidlo',
   'admin_press_desc' => 'Tlačové kontakty, dátumové správy a dokumenty na stiahnutie.',
-  'admin_events_title' => 'Agenda',
+  'admin_events_title' => 'Kalendár',
   'admin_events_desc' => 'Klubové udalosti a miestne súťaže zobrazené v živých miniaplikáciách.',
   'admin_dinner_reservations_title' => 'Výročná večera',
   'admin_dinner_reservations_desc' => 'Rezervácie, rady jedál/dezertov, množstvá a automatický súčet.',

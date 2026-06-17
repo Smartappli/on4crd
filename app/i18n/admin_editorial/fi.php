@@ -8,7 +8,7 @@ return array (
   'intro' => 'Lähteenä on edelleen ranska. Muut kielet voidaan luoda automaattisesti ja lukea sitten takaisin.',
   'fr_source' => 'ranska (lähde)',
   'english' => 'englanti',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Saksa',
   'dutch' => 'Alankomaat',
   'save' => 'Tallenna',
   'committee_title' => 'Komitea – nimi',

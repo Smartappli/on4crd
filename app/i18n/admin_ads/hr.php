@@ -20,7 +20,7 @@ return array (
   'col_title' => 'Naslov',
   'col_owner' => 'Skrbnik',
   'col_placement' => 'Plasman',
-  'col_status' => 'Status',
+  'col_status' => 'Stanje',
   'col_url' => 'URL',
   'col_code' => 'Šifra',
   'col_name' => 'Ime',

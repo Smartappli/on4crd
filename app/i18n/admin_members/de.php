@@ -8,7 +8,7 @@ return array (
   'meta_desc' => 'Mitgliederprofile verwalten.',
   'members' => 'Mitglieder',
   'th_callsign' => 'Rufzeichen',
-  'th_name' => 'Name',
+  'th_name' => 'Vollständiger Name',
   'th_email' => 'E-Mail',
   'th_locator' => 'Locator',
   'th_active' => 'Aktiv',

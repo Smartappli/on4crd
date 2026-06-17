@@ -8,7 +8,7 @@ return array (
   'intro' => 'Franču valoda joprojām ir avots. Citas valodas var tikt automātiski ģenerētas un pēc tam lasītas atpakaļ.',
   'fr_source' => 'franču valoda (avots)',
   'english' => 'angļu valoda',
-  'deutsch' => 'Deutsch',
+  'deutsch' => 'Vācu',
   'dutch' => 'Nīderlande',
   'save' => 'Saglabāt',
   'committee_title' => 'Komiteja — nosaukums',

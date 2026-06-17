@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'पहले इस विषय के सभी उपविषयों को हटा दें।',
   'err_subcategory_has_documents' => 'इस उपविषय में अभी भी एल्बम शामिल हैं।',
   'wizard_title' => 'नया एल्बम विज़ार्ड',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'विवरण',
   'wizard_step_upload' => 'अपलोड',
   'wizard_step_review' => 'समीक्षा',
   'wizard_private_help' => 'अंतिम सत्यापन तक एल्बम निजी रहता है।',

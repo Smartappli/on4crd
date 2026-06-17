@@ -18,7 +18,7 @@ return array (
   'buy_now' => 'Sofortkauf',
   'start' => 'Beginn',
   'end' => 'Ende',
-  'status' => 'Status',
+  'status' => 'Zustand',
   'save_lot' => 'Los speichern',
   'saved_lots' => 'Gespeicherte Lose',
   'no_lot' => 'Kein Los.',

@@ -64,7 +64,7 @@ return array (
   'err_category_has_subcategories' => 'Poista ensin kaikki tämän aiheen ala-aiheet.',
   'err_subcategory_has_documents' => 'Tämä ala-aihe sisältää edelleen albumeita.',
   'wizard_title' => 'Uuden albumin ohjattu toiminto',
-  'wizard_step_details' => 'Details',
+  'wizard_step_details' => 'Yksityiskohdat',
   'wizard_step_upload' => 'Lataa',
   'wizard_step_review' => 'Tarkista',
   'wizard_private_help' => 'Albumi pysyy yksityisenä lopulliseen vahvistukseen asti.',

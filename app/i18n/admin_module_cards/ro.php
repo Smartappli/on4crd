@@ -16,7 +16,7 @@ return array (
   'admin_committee_desc' => 'Membrii comisiei, rol, ordine și biografie.',
   'admin_press_title' => 'Apăsați',
   'admin_press_desc' => 'Contacte de presă, comunicate datate și documente descărcabile.',
-  'admin_events_title' => 'Agenda',
+  'admin_events_title' => 'Calendar',
   'admin_events_desc' => 'Evenimentele clubului și concursurile locale afișate în widget-uri live.',
   'admin_dinner_reservations_title' => 'Cina anuală',
   'admin_dinner_reservations_desc' => 'Rezervări, linii de masă/desert, cantități și total automat.',
