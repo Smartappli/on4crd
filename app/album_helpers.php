@@ -1066,21 +1066,42 @@ function album_photo_public_path_or_null(string $path): ?string
     if (is_string($urlPath) && $urlPath !== '') {
         $candidate = $urlPath;
     }
-    $candidate = ltrim(str_replace('\\', '/', rawurldecode($candidate)), '/');
+    $candidate = (string) preg_replace('#/+#', '/', ltrim(str_replace('\\', '/', rawurldecode($candidate)), '/'));
     $prefix = 'storage/uploads/albums/';
+    $uploadsPrefix = 'uploads/albums/';
     $lowerCandidate = strtolower($candidate);
     $prefixPosition = strpos($lowerCandidate, $prefix);
+    $uploadsPrefixPosition = strpos($lowerCandidate, $uploadsPrefix);
     if ($prefixPosition !== false) {
         $candidate = $prefix . ltrim(substr($candidate, $prefixPosition + strlen($prefix)), '/');
-    } elseif (str_starts_with($lowerCandidate, 'uploads/albums/')) {
-        $candidate = $prefix . ltrim(substr($candidate, strlen('uploads/albums/')), '/');
+    } elseif ($uploadsPrefixPosition !== false) {
+        $candidate = $prefix . ltrim(substr($candidate, $uploadsPrefixPosition + strlen($uploadsPrefix)), '/');
     } elseif (str_starts_with($lowerCandidate, 'albums/')) {
         $candidate = $prefix . ltrim(substr($candidate, strlen('albums/')), '/');
     } elseif (preg_match('/^[a-z0-9][a-z0-9._-]*\.(?:jpe?g|png|webp)$/i', $candidate) === 1) {
         $candidate = $prefix . $candidate;
     }
 
-    return safe_storage_public_path_or_null($candidate, [$prefix]);
+    $safePath = safe_storage_public_path_or_null($candidate, [$prefix]);
+    if ($safePath !== null) {
+        album_ensure_public_photo_permissions($safePath);
+    }
+
+    return $safePath;
+}
+
+function album_ensure_public_photo_permissions(string $publicPath): void
+{
+    $absolutePath = dirname(__DIR__) . '/' . ltrim($publicPath, '/');
+    if (is_file($absolutePath)) {
+        @chmod($absolutePath, 0644);
+    }
+
+    $thumbPath = album_thumbnail_public_path($publicPath);
+    $thumbAbsolutePath = dirname(__DIR__) . '/' . ltrim($thumbPath, '/');
+    if (is_file($thumbAbsolutePath)) {
+        @chmod($thumbAbsolutePath, 0644);
+    }
 }
 
 function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string

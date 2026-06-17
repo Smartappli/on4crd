@@ -48,6 +48,10 @@ final class AlbumHelpersTest extends TestCase
             'storage/uploads/albums/abcdef123456.jpg',
             album_photo_public_path_or_null('/var/www/on4crd/storage/uploads/albums/abcdef123456.jpg')
         );
+        self::assertSame(
+            'storage/uploads/albums/abcdef123456.jpg',
+            album_photo_public_path_or_null('/var/www/on4crd/storage/app/public/uploads/albums/abcdef123456.jpg')
+        );
 
         self::assertNull(album_photo_public_path_or_null('../private/secret.jpg'));
         self::assertNull(album_photo_public_path_or_null('storage/uploads/library/doc.pdf'));
