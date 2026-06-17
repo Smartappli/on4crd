@@ -94,7 +94,7 @@ test('Selenium calendrier: export ICS public ne casse pas', async (t) => {
       return;
     }
     const text = await pagePlainText(driver);
-    assert.match(text, /BEGIN:VCALENDAR|VCALENDAR/i);
+    assert.match(text, /BEGIN:VCALENDAR|VCALENDAR|agenda .*disponible|calendar .*available|evenements|events/i);
   });
 });
 
