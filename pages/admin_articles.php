@@ -1029,7 +1029,7 @@ ob_start();
                 ?>
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
-                    <p><strong><?= e($t('category_label')) ?></strong> <?= e($articleCategoryLabel) ?><?= $articleSubcategoryLabel !== '' ? ' / ' . e($articleSubcategoryLabel) : '' ?> Â· <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
+                    <p><strong><?= e($t('category_label')) ?></strong> <?= e($articleCategoryLabel) ?><?= $articleSubcategoryLabel !== '' ? ' / ' . e($articleSubcategoryLabel) : '' ?> - <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>
