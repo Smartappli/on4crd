@@ -48,6 +48,8 @@ SELENIUM_BASE_URL=https://staging.example.test/index.php npm run test:selenium
 
 Les scenarios admin Selenium sont ignores tant que `SELENIUM_ADMIN_USER` et `SELENIUM_ADMIN_PASSWORD` ne sont pas fournis. Utilisez-les uniquement sur staging ou sur une base jetable, car ils creent et suppriment un album de test.
 
+La suite Selenium couvre les routes publiques, les formulaires publics, les liens liste/detail, les filtres de taxonomie, les outils radio, les routes SEO/API, une matrice de rendu multilingue et, avec identifiants, les pages membres/admin.
+
 
 ### Mode maintenance
 
