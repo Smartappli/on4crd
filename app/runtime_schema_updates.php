@@ -5,6 +5,7 @@ function apply_runtime_schema_updates(): void
 {
     require_once __DIR__ . '/content_helpers.php';
     require_once __DIR__ . '/member_content.php';
+    require_once __DIR__ . '/member_library_helpers.php';
     require_once __DIR__ . '/notifications.php';
     require_once __DIR__ . '/privacy_helpers.php';
 
@@ -489,6 +490,24 @@ function apply_runtime_schema_updates(): void
     }
 
     if (table_exists('member_library_documents')) {
+        if (!table_has_column('member_library_documents', 'subcategory')) {
+            db()->exec('ALTER TABLE member_library_documents ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
+        }
+        if (!table_has_column('member_library_documents', 'tags')) {
+            db()->exec('ALTER TABLE member_library_documents ADD COLUMN tags VARCHAR(255) NOT NULL DEFAULT "" AFTER subcategory');
+        }
+        if (!table_has_index('member_library_documents', 'idx_category')) {
+            db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category (category)');
+        }
+        if (!table_has_index('member_library_documents', 'idx_subcategory')) {
+            db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_subcategory (subcategory)');
+        }
+        if (!table_has_index('member_library_documents', 'idx_category_subcategory')) {
+            db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category_subcategory (category, subcategory)');
+        }
+        if (!table_has_index('member_library_documents', 'idx_tags')) {
+            db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_tags (tags)');
+        }
         db()->exec("UPDATE member_library_documents SET category = 'videos' WHERE category = 'medias'");
     }
     if (table_exists('member_library_categories')) {
@@ -501,6 +520,9 @@ function apply_runtime_schema_updates(): void
                 db()->exec("UPDATE member_library_categories SET code = 'videos', label = 'Videos', sort_order = 20 WHERE code = 'medias'");
             }
         }
+    }
+    if (function_exists('member_library_ensure_subcategories_table')) {
+        member_library_ensure_subcategories_table();
     }
 
     seed_news_sections();

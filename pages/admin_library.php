@@ -14,6 +14,13 @@ function library_category_slug(string $value): string
     return $slug !== '' ? $slug : 'general';
 }
 
+function library_subcategory_slug(string $value): string
+{
+    return function_exists('member_library_subcategory_slug')
+        ? member_library_subcategory_slug($value)
+        : (slugify($value) ?: '');
+}
+
 function library_tag_norm(string $value): string
 {
     $tag = trim($value);
@@ -86,6 +93,9 @@ function ensure_member_library_categories_table(): void
             (string) $category['label'],
             (int) $category['sort_order'],
         ]);
+    }
+    if (function_exists('member_library_ensure_subcategories_table')) {
+        member_library_ensure_subcategories_table();
     }
 }
 

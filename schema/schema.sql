@@ -297,13 +297,38 @@ CREATE TABLE IF NOT EXISTS member_library_documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT NOT NULL,
     category VARCHAR(120) NOT NULL DEFAULT 'general',
+    subcategory VARCHAR(120) NOT NULL DEFAULT '',
+    tags VARCHAR(255) NOT NULL DEFAULT '',
     title VARCHAR(255) NOT NULL,
     description TEXT NULL,
     file_path VARCHAR(255) NOT NULL,
     extracted_text LONGTEXT NULL,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_uploaded (uploaded_at),
-    INDEX idx_member_uploaded (member_id, uploaded_at)
+    INDEX idx_member_uploaded (member_id, uploaded_at),
+    INDEX idx_category (category),
+    INDEX idx_subcategory (subcategory),
+    INDEX idx_category_subcategory (category, subcategory),
+    INDEX idx_tags (tags)
+);
+
+CREATE TABLE IF NOT EXISTS member_library_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(120) NOT NULL UNIQUE,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS member_library_subcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_code VARCHAR(120) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_member_library_subcategory (category_code, code),
+    INDEX idx_member_library_subcategory_category (category_code)
 );
 
 CREATE TABLE IF NOT EXISTS member_webotheque_links (
