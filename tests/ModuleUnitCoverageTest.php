@@ -14,7 +14,7 @@ final class ModuleUnitCoverageTest extends TestCase
     private const MODULE_TEST_FILES = [
         'admin' => ['tests/RouterContractTest.php', 'tests/I18nNativeLocalesTest.php'],
         'advertising' => ['tests/RouterContractTest.php', 'tests/I18nNativeLocalesTest.php'],
-        'albums' => ['tests/MemberModulesFinalizationTest.php', 'tests/RouterContractTest.php'],
+        'albums' => ['tests/AlbumHelpersTest.php', 'tests/MemberModulesFinalizationTest.php', 'tests/RouterContractTest.php'],
         'articles' => ['tests/FunctionHelpersExtendedTest.php', 'tests/RouterContractTest.php'],
         'auctions' => ['tests/FunctionHelpersTest.php', 'tests/RouterContractTest.php'],
         'chatbot' => ['tests/ChatbotI18nTest.php', 'tests/ChatbotRagRetrievalTest.php'],
