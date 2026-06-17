@@ -143,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'Action' => 'update_document',
                 'Document ID' => (string) $documentId,
                 'Category' => $documentCategory,
+                (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => $documentSubcategory,
                 'Tags' => $documentTags,
                 'Description' => $description,
             ]);
