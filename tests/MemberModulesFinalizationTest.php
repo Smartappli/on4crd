@@ -21,6 +21,7 @@ final class MemberModulesFinalizationTest extends TestCase
         $albums = $this->source('pages/albums.php');
         $album = $this->source('pages/album.php');
         $albumHelpers = $this->source('app/album_helpers.php');
+        $runtimeUpdates = $this->source('app/runtime_schema_updates.php');
         $schema = $this->source('schema/schema.sql');
         self::assertStringContainsString('name="proposal_theme"', $albums);
         self::assertStringContainsString('name="proposal_subcategory_ref"', $albums);
@@ -60,6 +61,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('return album_ensure_photo_sort_order_column();', $adminAlbums);
         self::assertStringContainsString('function album_social_publish_if_public(int $albumId): array', $albumHelpers);
         self::assertStringContainsString('function album_ensure_photo_sort_order_column(): bool', $albumHelpers);
+        self::assertStringContainsString("table_has_column('album_photos', 'created_at')", $albumHelpers);
+        self::assertStringContainsString("table_has_column('albums', 'created_at')", $albumHelpers);
+        self::assertStringContainsString('ALTER TABLE album_photos ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER file_path', $runtimeUpdates);
+        self::assertStringContainsString('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error', $runtimeUpdates);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
         self::assertMatchesRegularExpression('/secure_move_uploaded_file\([^;]+8 \* 1024 \* 1024,\s+true\s+\)/s', $albumHelpers);
         self::assertStringContainsString("getenv('FACEBOOK_ALBUM_ID')", $albumHelpers);
@@ -81,6 +86,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('source_proposal_id', $albumHelpers);
         self::assertStringContainsString('idx_albums_member', $schema);
         self::assertStringContainsString('idx_albums_source_proposal', $schema);
+        self::assertStringContainsString('sort_order INT NOT NULL DEFAULT 0', $schema);
         self::assertStringContainsString('publish_requested TINYINT(1) NOT NULL DEFAULT 0', $schema);
         self::assertStringContainsString('facebook_album_id VARCHAR(80) DEFAULT NULL', $schema);
         self::assertStringContainsString('facebook_post_id VARCHAR(80) DEFAULT NULL', $schema);
