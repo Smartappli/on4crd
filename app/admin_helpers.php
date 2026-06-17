@@ -309,7 +309,7 @@ function admin_apply_accepted_content_proposal(array $proposal, string $locale):
         require_once __DIR__ . '/member_webotheque.php';
 
         $messages = webotheque_i18n($locale);
-        $categories = webotheque_default_categories($messages) + webotheque_categories($messages);
+        $categories = webotheque_categories($messages);
         webotheque_apply_accepted_proposal($proposal, $categories, $messages);
         return;
     }
