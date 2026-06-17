@@ -80,6 +80,7 @@ final class MemberModulesFinalizationTest extends TestCase
         $memberLibraryHelpers = $this->source('app/member_library_helpers.php');
         $contentHelpers = $this->source('app/content_helpers.php');
         $routeHelperLoader = $this->source('app/route_helper_loader.php');
+        $searchPage = $this->source('pages/search.php');
         $previewPage = $this->source('pages/member_library_preview.php');
         $requestSecurity = $this->source('app/request_security.php');
         $membersLibraryCss = $this->source('assets/css/modules/members_library.css');
@@ -94,6 +95,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
+        self::assertStringContainsString("'member_library_helpers.php' => ['members_library', 'search'", $routeHelperLoader);
+        self::assertStringContainsString("function_exists('ensure_member_library_table') && ensure_member_library_table()", $searchPage);
+        self::assertStringContainsString('SELECT title, description, extracted_text, category, subcategory, tags FROM member_library_documents', $searchPage);
         self::assertStringContainsString("if (\$action === 'update_document' || \$action === 'delete_document')", $library);
         self::assertStringContainsString("!\$canManageLibrary && (int) (\$document['member_id'] ?? 0) !== (int) (\$user['id'] ?? 0)", $library);
         self::assertStringContainsString("'Action' => 'update_document'", $library);
@@ -120,6 +124,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('height: min(140vh, 1320px);', $adminLibraryCss);
         self::assertStringContainsString('member_library_apply_accepted_proposal($proposal, $memberLibraryMessages);', $adminLibrary);
         self::assertStringContainsString('member_library_sync_accepted_proposals($memberLibraryMessages);', $adminLibrary);
+        self::assertStringContainsString("throw new RuntimeException('err_category_has_subcategories');", $adminLibrary);
+        self::assertStringContainsString("throw new RuntimeException('err_subcategory_has_documents');", $adminLibrary);
         self::assertStringContainsString('function admin_apply_accepted_content_proposal(array $proposal, string $locale): void', $adminHelpers);
         self::assertStringContainsString("require_once __DIR__ . '/article_import_helpers.php';", $adminHelpers);
         self::assertStringContainsString("i18n_domain_locale('members_library', \$locale)", $adminHelpers);

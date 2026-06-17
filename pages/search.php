@@ -207,7 +207,7 @@ if ($hasQuery && $isQueryLongEnough) {
             }
         }
 
-        if ($shouldSearch('library') && table_exists('member_library_documents')) {
+        if ($shouldSearch('library') && function_exists('ensure_member_library_table') && ensure_member_library_table()) {
             try {
                 $where = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ? OR tags LIKE ?)';
                 $params = [$like, $like, $like, $like];
@@ -215,7 +215,7 @@ if ($hasQuery && $isQueryLongEnough) {
                     $where .= ' OR (title LIKE ? OR description LIKE ? OR extracted_text LIKE ? OR tags LIKE ?)';
                     array_push($params, $termLike, $termLike, $termLike, $termLike);
                 }
-                $stmt = db()->prepare('SELECT title, description, extracted_text, category, tags FROM member_library_documents WHERE ' . $where . ' ORDER BY uploaded_at DESC LIMIT 35');
+                $stmt = db()->prepare('SELECT title, description, extracted_text, category, subcategory, tags FROM member_library_documents WHERE ' . $where . ' ORDER BY uploaded_at DESC LIMIT 35');
                 $stmt->execute($params);
                 foreach ($stmt->fetchAll() ?: [] as $row) {
                     $title = trim((string) ($row['title'] ?? ''));
@@ -231,6 +231,10 @@ if ($hasQuery && $isQueryLongEnough) {
                     $urlQuery = ['q' => $title];
                     if ($category !== '') {
                         $urlQuery['category'] = $category;
+                    }
+                    $subcategory = trim((string) ($row['subcategory'] ?? ''));
+                    if ($subcategory !== '') {
+                        $urlQuery['subcategory'] = $subcategory;
                     }
                     $collected[] = [
                         'source' => 'library',

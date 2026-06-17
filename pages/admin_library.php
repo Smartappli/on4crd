@@ -216,10 +216,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'delete_category') {
             $code = library_category_slug((string) ($_POST['category_code'] ?? ''));
             if ($code !== 'general') {
-                $subcategoryCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_subcategories WHERE category_code = ?');
-                $subcategoryCountStmt->execute([$code]);
-                if ((int) ($subcategoryCountStmt->fetchColumn() ?: 0) > 0) {
-                    throw new RuntimeException('err_category_has_subcategories');
+                if (function_exists('member_library_ensure_subcategories_table') && member_library_ensure_subcategories_table()) {
+                    $subcategoryCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_subcategories WHERE category_code = ?');
+                    $subcategoryCountStmt->execute([$code]);
+                    if ((int) ($subcategoryCountStmt->fetchColumn() ?: 0) > 0) {
+                        throw new RuntimeException('err_category_has_subcategories');
+                    }
                 }
                 db()->prepare('UPDATE member_library_documents SET category = "general", subcategory = "" WHERE category = ?')->execute([$code]);
                 db()->prepare('DELETE FROM member_library_categories WHERE code = ? LIMIT 1')->execute([$code]);
@@ -243,6 +245,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $parentCode = library_category_slug((string) ($_POST['subcategory_category'] ?? 'general'));
             $code = library_subcategory_slug((string) ($_POST['subcategory_code'] ?? ''));
             if ($code !== '') {
+                if (!function_exists('member_library_ensure_subcategories_table') || !member_library_ensure_subcategories_table()) {
+                    throw new RuntimeException('storage_unavailable');
+                }
                 $documentCountStmt = db()->prepare('SELECT COUNT(*) FROM member_library_documents WHERE category = ? AND subcategory = ?');
                 $documentCountStmt->execute([$parentCode, $code]);
                 if ((int) ($documentCountStmt->fetchColumn() ?: 0) > 0) {
