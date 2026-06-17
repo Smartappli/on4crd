@@ -175,7 +175,12 @@ async function isLoginPage(driver) {
     return true;
   }
 
-  return await elementExists(driver, '[data-login-form], input[name="callsign"][type="text"], input[name="password"]');
+  if (await elementExists(driver, '[data-login-form]')) {
+    return true;
+  }
+
+  return await elementExists(driver, 'input[name="callsign"][type="text"]')
+    && await elementExists(driver, 'input[name="password"]');
 }
 
 async function assertLoginPage(driver, label = 'route protegee') {
