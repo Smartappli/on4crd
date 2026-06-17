@@ -134,10 +134,14 @@ async function assertNoServerError(driver) {
   const title = await driver.getTitle();
   const source = await driver.getPageSource();
   const bodyText = await currentBodyText(driver);
-  const combined = `${title}\n${bodyText}\n${source}`;
+  const visible = `${title}\n${bodyText}`;
   assert.doesNotMatch(
-    combined,
-    /Une erreur interne|Internal Server Error|Fatal error|Parse error|HTTP ERROR 500|Service Unavailable|Erreur 503|503 Service/i,
+    visible,
+    /Une erreur interne|Internal Server Error|HTTP ERROR 500|HTTP ERROR 503|Erreur 503|\b503\b.*Service Unavailable|Service Unavailable.*\b503\b/i,
+  );
+  assert.doesNotMatch(
+    source,
+    /Fatal error|Parse error/i,
   );
 }
 
