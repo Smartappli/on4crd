@@ -170,8 +170,15 @@ function album_ensure_categories_table(): bool
             code VARCHAR(120) NOT NULL UNIQUE,
             label VARCHAR(160) NOT NULL,
             sort_order INT NOT NULL DEFAULT 100,
+            deleted_at TIMESTAMP NULL DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )');
+        if (!table_has_column('album_categories', 'deleted_at')) {
+            db()->exec('ALTER TABLE album_categories ADD COLUMN deleted_at TIMESTAMP NULL DEFAULT NULL AFTER sort_order');
+        }
+        if (!table_has_index('album_categories', 'idx_album_category_deleted')) {
+            db()->exec('ALTER TABLE album_categories ADD INDEX idx_album_category_deleted (deleted_at)');
+        }
         $insert = db()->prepare('INSERT IGNORE INTO album_categories (code, label, sort_order) VALUES (?, ?, ?)');
         $order = 1;
         foreach (album_default_categories() as $code => $label) {
@@ -209,10 +216,32 @@ function album_ensure_subcategories_table(): bool
  */
 function album_categories(): array
 {
-    $categories = album_default_categories();
-    if (album_ensure_categories_table()) {
+    $categories = [];
+    $deletedCategories = [];
+    $categoryTableAvailable = album_ensure_categories_table();
+    if ($categoryTableAvailable) {
         try {
-            foreach (db()->query('SELECT code, label FROM album_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [] as $row) {
+            foreach (db()->query('SELECT code FROM album_categories WHERE deleted_at IS NOT NULL')->fetchAll() ?: [] as $row) {
+                $code = album_category_code((string) ($row['code'] ?? ''));
+                if ($code !== '') {
+                    $deletedCategories[$code] = true;
+                }
+            }
+        } catch (Throwable) {
+            $deletedCategories = [];
+        }
+    }
+
+    foreach (album_default_categories() as $code => $label) {
+        $categoryCode = album_category_code((string) $code);
+        if ($categoryCode !== '' && !isset($deletedCategories[$categoryCode])) {
+            $categories[$categoryCode] = (string) $label;
+        }
+    }
+
+    if ($categoryTableAvailable) {
+        try {
+            foreach (db()->query('SELECT code, label FROM album_categories WHERE deleted_at IS NULL ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [] as $row) {
                 $code = album_category_code((string) ($row['code'] ?? ''));
                 $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
                 if ($code !== '' && $label !== '') {
@@ -226,7 +255,7 @@ function album_categories(): array
         if (table_exists('albums') && table_has_column('albums', 'category')) {
             foreach (db()->query('SELECT category FROM albums WHERE category IS NOT NULL AND category <> "" GROUP BY category ORDER BY category ASC')->fetchAll() ?: [] as $row) {
                 $code = album_category_code((string) ($row['category'] ?? ''));
-                if ($code !== '' && !isset($categories[$code])) {
+                if ($code !== '' && !isset($deletedCategories[$code]) && !isset($categories[$code])) {
                     $categories[$code] = album_category_label_from_code($code);
                 }
             }

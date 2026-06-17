@@ -300,7 +300,9 @@ CREATE TABLE IF NOT EXISTS wiki_categories (
     code VARCHAR(120) NOT NULL UNIQUE,
     label VARCHAR(160) NOT NULL,
     sort_order INT NOT NULL DEFAULT 100,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_wiki_category_deleted (deleted_at)
 );
 
 CREATE TABLE IF NOT EXISTS wiki_subcategories (
@@ -393,6 +395,53 @@ CREATE TABLE IF NOT EXISTS member_webotheque_subcategories (
     INDEX idx_webotheque_subcategory_category (category_code)
 );
 
+CREATE TABLE IF NOT EXISTS member_module_documents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    module_code VARCHAR(80) NOT NULL,
+    member_id INT NOT NULL,
+    category VARCHAR(120) NOT NULL DEFAULT 'general',
+    subcategory VARCHAR(120) NOT NULL DEFAULT '',
+    tags VARCHAR(255) NOT NULL DEFAULT '',
+    title VARCHAR(255) NOT NULL,
+    description TEXT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    extracted_text LONGTEXT NULL,
+    legacy_library_document_id INT NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_module_uploaded (module_code, uploaded_at),
+    INDEX idx_member_module (member_id, module_code),
+    INDEX idx_module_category (module_code, category),
+    INDEX idx_module_subcategory (module_code, category, subcategory),
+    INDEX idx_module_tags (module_code, tags)
+);
+
+CREATE TABLE IF NOT EXISTS member_module_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    module_code VARCHAR(80) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_member_module_category (module_code, code),
+    INDEX idx_member_module_category_module (module_code),
+    INDEX idx_member_module_category_deleted (module_code, deleted_at)
+);
+
+CREATE TABLE IF NOT EXISTS member_module_subcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    module_code VARCHAR(80) NOT NULL,
+    category_code VARCHAR(120) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_member_module_subcategory (module_code, category_code, code),
+    INDEX idx_member_module_subcategory_module (module_code, category_code),
+    INDEX idx_member_module_subcategory_deleted (module_code, deleted_at)
+);
+
 CREATE TABLE IF NOT EXISTS wiki_revisions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     wiki_page_id INT NOT NULL,
@@ -440,7 +489,9 @@ CREATE TABLE IF NOT EXISTS album_categories (
     code VARCHAR(120) NOT NULL UNIQUE,
     label VARCHAR(160) NOT NULL,
     sort_order INT NOT NULL DEFAULT 100,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_album_category_deleted (deleted_at)
 );
 
 CREATE TABLE IF NOT EXISTS album_subcategories (

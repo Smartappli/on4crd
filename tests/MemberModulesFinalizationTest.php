@@ -45,6 +45,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_delete_record($albumId);', $adminAlbums);
         self::assertStringContainsString("if (\$action === 'add_subcategory')", $adminAlbums);
         self::assertStringContainsString("if (\$action === 'delete_subcategory')", $adminAlbums);
+        self::assertStringContainsString('UPDATE albums SET category = "general", subcategory = "" WHERE category = ?', $adminAlbums);
         self::assertStringContainsString('render_album_taxonomy_fields($albumCategories, $t)', $adminAlbums);
         self::assertStringContainsString('function album_apply_accepted_proposal(array $proposal): ?int', $albumHelpers);
         self::assertStringContainsString('function album_sync_accepted_proposals(int $limit = 100): array', $albumHelpers);
@@ -54,11 +55,15 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function album_subcategory_ref(', $albumHelpers);
         self::assertStringContainsString('function album_visible_categories(', $albumHelpers);
         self::assertStringContainsString('function album_favorite_album_ids(', $albumHelpers);
+        self::assertStringContainsString('idx_album_category_deleted', $albumHelpers);
+        self::assertStringContainsString('deleted_at IS NULL', $albumHelpers);
         self::assertStringContainsString('member_id', $albumHelpers);
         self::assertStringContainsString('subcategory', $albumHelpers);
         self::assertStringContainsString('source_proposal_id', $albumHelpers);
         self::assertStringContainsString('idx_albums_member', $schema);
         self::assertStringContainsString('idx_albums_source_proposal', $schema);
+        self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_module_documents', $schema);
+        self::assertStringContainsString('idx_member_module_category_deleted', $schema);
         self::assertSame(
             "Club fieldday\n\nThematique: radio\nMots cles: ft8",
             album_proposal_description_from_summary("Thematique: radio\nMots cles: ft8\nDescription: Club fieldday")
@@ -80,6 +85,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('$visibleSubcategoriesByCategory = webotheque_visible_subcategories_by_category', $webotheque);
         self::assertStringContainsString("if (\$action === 'add_category')", $webotheque);
         self::assertStringContainsString("if (\$action === 'delete_category')", $webotheque);
+        self::assertStringContainsString('UPDATE member_webotheque_links SET category = "general", subcategory = "" WHERE category = ?', $webotheque);
         self::assertStringContainsString('name="tags"', $webotheque);
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories, $proposalContact)', $webotheque);
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories)', $webotheque);
@@ -188,6 +194,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function wiki_subcategory_ref(', $contentHelpers);
         self::assertStringContainsString('function wiki_visible_categories(', $contentHelpers);
         self::assertStringContainsString('function wiki_favorite_page_ids(', $contentHelpers);
+        self::assertStringContainsString('idx_wiki_category_deleted', $contentHelpers);
+        self::assertStringContainsString('deleted_at IS NULL', $contentHelpers);
         self::assertStringContainsString('wiki_ensure_subcategories_table();', $contentHelpers);
         self::assertStringContainsString('subcategory VARCHAR(120) NOT NULL DEFAULT ""', $contentHelpers);
         self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library', 'member_library_preview'", $routeHelperLoader);
@@ -251,6 +259,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_document_subcategory_ref(', $renderer);
         self::assertStringContainsString('function member_document_visible_categories(', $renderer);
         self::assertStringContainsString('function member_document_favorite_document_ids(', $renderer);
+        self::assertStringContainsString('idx_member_module_category_deleted', $renderer);
+        self::assertStringContainsString('UPDATE member_module_documents SET category = "general", subcategory = "" WHERE module_code = ? AND category = ?', $renderer);
         self::assertStringContainsString("if (\$action === 'toggle_favorite_document')", $renderer);
         self::assertStringContainsString("if (\$action === 'add_subcategory')", $renderer);
         self::assertStringContainsString("if (\$action === 'delete_subcategory')", $renderer);

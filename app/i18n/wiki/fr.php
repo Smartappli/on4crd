@@ -41,7 +41,7 @@ return array (
   'propose_theme_submit' => 'Envoyer la proposition',
   'cancel' => 'Annuler',
   'proposal_recorded' => 'Proposition enregistrée dans vos contenus.',
-  'subcategory_field' => 'Sous-th?matique',
-  'no_subcategory' => 'Sans sous-th?matique',
+  'subcategory_field' => 'Sous-thématique',
+  'no_subcategory' => 'Sans sous-thématique',
   'favorites' => 'Favoris',
 );

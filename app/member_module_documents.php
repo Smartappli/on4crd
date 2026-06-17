@@ -576,10 +576,18 @@ function member_document_ensure_categories_table(string $moduleCode): bool
             code VARCHAR(120) NOT NULL,
             label VARCHAR(160) NOT NULL,
             sort_order INT NOT NULL DEFAULT 100,
+            deleted_at TIMESTAMP NULL DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY uniq_member_module_category (module_code, code),
-            INDEX idx_member_module_category_module (module_code)
+            INDEX idx_member_module_category_module (module_code),
+            INDEX idx_member_module_category_deleted (module_code, deleted_at)
         )');
+        if (!table_has_column('member_module_categories', 'deleted_at')) {
+            db()->exec('ALTER TABLE member_module_categories ADD COLUMN deleted_at TIMESTAMP NULL DEFAULT NULL AFTER sort_order');
+        }
+        if (!table_has_index('member_module_categories', 'idx_member_module_category_deleted')) {
+            db()->exec('ALTER TABLE member_module_categories ADD INDEX idx_member_module_category_deleted (module_code, deleted_at)');
+        }
         $insert = db()->prepare('INSERT IGNORE INTO member_module_categories (module_code, code, label, sort_order) VALUES (?, ?, ?, ?)');
         foreach (member_document_default_categories($moduleCode) as $category) {
             $insert->execute([$moduleCode, (string) $category['code'], (string) $category['label'], (int) $category['sort_order']]);
@@ -608,10 +616,18 @@ function member_document_ensure_subcategories_table(string $moduleCode): bool
             code VARCHAR(120) NOT NULL,
             label VARCHAR(160) NOT NULL,
             sort_order INT NOT NULL DEFAULT 100,
+            deleted_at TIMESTAMP NULL DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY uniq_member_module_subcategory (module_code, category_code, code),
-            INDEX idx_member_module_subcategory_module (module_code, category_code)
+            INDEX idx_member_module_subcategory_module (module_code, category_code),
+            INDEX idx_member_module_subcategory_deleted (module_code, deleted_at)
         )');
+        if (!table_has_column('member_module_subcategories', 'deleted_at')) {
+            db()->exec('ALTER TABLE member_module_subcategories ADD COLUMN deleted_at TIMESTAMP NULL DEFAULT NULL AFTER sort_order');
+        }
+        if (!table_has_index('member_module_subcategories', 'idx_member_module_subcategory_deleted')) {
+            db()->exec('ALTER TABLE member_module_subcategories ADD INDEX idx_member_module_subcategory_deleted (module_code, deleted_at)');
+        }
         $insert = db()->prepare('INSERT IGNORE INTO member_module_subcategories (module_code, category_code, code, label, sort_order) VALUES (?, ?, ?, ?, ?)');
         foreach (member_document_default_subcategories($moduleCode) as $subcategory) {
             $insert->execute([
@@ -638,13 +654,32 @@ function member_document_categories(string $moduleCode): array
 {
     $moduleCode = member_document_module_normalize($moduleCode);
     $categories = [];
+    $deletedCategories = [];
+    if (member_document_ensure_categories_table($moduleCode)) {
+        try {
+            $stmt = db()->prepare('SELECT code FROM member_module_categories WHERE module_code = ? AND deleted_at IS NOT NULL');
+            $stmt->execute([$moduleCode]);
+            foreach ($stmt->fetchAll() ?: [] as $row) {
+                $code = member_document_category_code((string) ($row['code'] ?? ''));
+                if ($code !== '') {
+                    $deletedCategories[$code] = true;
+                }
+            }
+        } catch (Throwable) {
+            $deletedCategories = [];
+        }
+    }
+
     foreach (member_document_default_categories($moduleCode) as $category) {
-        $categories[(string) $category['code']] = (string) $category['label'];
+        $code = member_document_category_code((string) $category['code']);
+        if ($code !== '' && !isset($deletedCategories[$code])) {
+            $categories[$code] = (string) $category['label'];
+        }
     }
 
     if (member_document_ensure_categories_table($moduleCode)) {
         try {
-            $stmt = db()->prepare('SELECT code, label FROM member_module_categories WHERE module_code = ? ORDER BY sort_order ASC, label ASC');
+            $stmt = db()->prepare('SELECT code, label FROM member_module_categories WHERE module_code = ? AND deleted_at IS NULL ORDER BY sort_order ASC, label ASC');
             $stmt->execute([$moduleCode]);
             foreach ($stmt->fetchAll() ?: [] as $row) {
                 $code = member_document_category_code((string) ($row['code'] ?? ''));
@@ -663,7 +698,7 @@ function member_document_categories(string $moduleCode): array
             $stmt->execute([$moduleCode]);
             foreach ($stmt->fetchAll() ?: [] as $row) {
                 $code = member_document_category_code((string) ($row['category'] ?? ''));
-                if ($code !== '' && !isset($categories[$code])) {
+                if ($code !== '' && !isset($deletedCategories[$code]) && !isset($categories[$code])) {
                     $categories[$code] = member_document_category_label_from_code($code);
                 }
             }
@@ -703,7 +738,7 @@ function member_document_subcategory_options(string $moduleCode): array
     $options = [];
     if (member_document_ensure_subcategories_table($moduleCode)) {
         try {
-            $stmt = db()->prepare('SELECT category_code, code, label FROM member_module_subcategories WHERE module_code = ? ORDER BY category_code ASC, sort_order ASC, label ASC');
+            $stmt = db()->prepare('SELECT category_code, code, label FROM member_module_subcategories WHERE module_code = ? AND deleted_at IS NULL ORDER BY category_code ASC, sort_order ASC, label ASC');
             $stmt->execute([$moduleCode]);
             $rows = $stmt->fetchAll() ?: [];
         } catch (Throwable) {
@@ -1776,7 +1811,7 @@ function render_admin_member_document_module_page(string $module): void
                 if ($label === '' || $code === '') {
                     throw new RuntimeException('err_required');
                 }
-                db()->prepare('INSERT INTO member_module_categories (module_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                db()->prepare('INSERT INTO member_module_categories (module_code, code, label, deleted_at) VALUES (?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
                     ->execute([$moduleCode, $code, $label]);
                 set_flash('success', (string) ($labels['ok_added'] ?? 'Saved.'));
                 redirect_url(route_url_clean($adminRoute, ['category' => $code]));
@@ -1786,17 +1821,17 @@ function render_admin_member_document_module_page(string $module): void
                     throw new RuntimeException('storage_unavailable');
                 }
                 $category = member_document_category_from_input((string) ($_POST['category_code'] ?? ''), $categories);
-                $docCountStmt = db()->prepare('SELECT COUNT(*) FROM member_module_documents WHERE module_code = ? AND category = ?');
-                $docCountStmt->execute([$moduleCode, $category]);
-                if ((int) $docCountStmt->fetchColumn() > 0) {
-                    throw new RuntimeException('err_category_has_documents');
+                if ($category === 'general') {
+                    throw new RuntimeException('err_category');
                 }
-                $subCountStmt = db()->prepare('SELECT COUNT(*) FROM member_module_subcategories WHERE module_code = ? AND category_code = ?');
+                $subCountStmt = db()->prepare('SELECT COUNT(*) FROM member_module_subcategories WHERE module_code = ? AND category_code = ? AND deleted_at IS NULL');
                 $subCountStmt->execute([$moduleCode, $category]);
                 if ((int) $subCountStmt->fetchColumn() > 0) {
                     throw new RuntimeException('err_category_has_subcategories');
                 }
-                db()->prepare('DELETE FROM member_module_categories WHERE module_code = ? AND code = ?')->execute([$moduleCode, $category]);
+                db()->prepare('UPDATE member_module_documents SET category = "general", subcategory = "" WHERE module_code = ? AND category = ?')->execute([$moduleCode, $category]);
+                db()->prepare('INSERT INTO member_module_categories (module_code, code, label, deleted_at) VALUES (?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
+                    ->execute([$moduleCode, $category, (string) ($categories[$category] ?? member_document_category_label_from_code($category))]);
                 set_flash('success', (string) ($labels['ok_deleted'] ?? 'Deleted.'));
                 redirect($adminRoute);
             }
@@ -1810,7 +1845,7 @@ function render_admin_member_document_module_page(string $module): void
                 if ($label === '' || $code === '') {
                     throw new RuntimeException('err_required');
                 }
-                db()->prepare('INSERT INTO member_module_subcategories (module_code, category_code, code, label) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                db()->prepare('INSERT INTO member_module_subcategories (module_code, category_code, code, label, deleted_at) VALUES (?, ?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
                     ->execute([$moduleCode, $category, $code, $label]);
                 set_flash('success', (string) ($labels['ok_added'] ?? 'Saved.'));
                 redirect_url(route_url_clean($adminRoute, ['category' => $category, 'subcategory' => $code]));
@@ -1830,7 +1865,7 @@ function render_admin_member_document_module_page(string $module): void
                 if ((int) $countStmt->fetchColumn() > 0) {
                     throw new RuntimeException('err_subcategory_has_documents');
                 }
-                db()->prepare('DELETE FROM member_module_subcategories WHERE module_code = ? AND category_code = ? AND code = ?')->execute([$moduleCode, $category, $subcategory]);
+                db()->prepare('UPDATE member_module_subcategories SET deleted_at = NOW() WHERE module_code = ? AND category_code = ? AND code = ?')->execute([$moduleCode, $category, $subcategory]);
                 set_flash('success', (string) ($labels['ok_deleted'] ?? 'Deleted.'));
                 redirect_url(route_url_clean($adminRoute, ['category' => $category]));
             }
@@ -2031,12 +2066,13 @@ function render_admin_member_document_module_page(string $module): void
                 <?php foreach ($categories as $code => $label): ?>
                     <?php $categoryTotal = (int) (($stats['by_category'][(string) $code] ?? 0)); ?>
                     <?php $subcategoryTotal = count($subcategoriesByCategory[(string) $code] ?? []); ?>
+                    <?php $categoryDeleteDisabled = (string) $code === 'general' || $subcategoryTotal > 0; ?>
                     <form method="post" class="inline-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="delete_category">
                         <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
                         <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
-                        <button class="button secondary small" type="submit"<?= ($categoryTotal > 0 || $subcategoryTotal > 0) ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
+                        <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
                     </form>
                 <?php endforeach; ?>
                 <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>

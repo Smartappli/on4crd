@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($label === '' || $code === '') {
                 throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
             }
-            db()->prepare('INSERT INTO wiki_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+            db()->prepare('INSERT INTO wiki_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
                 ->execute([$code, $label]);
             set_flash('success', $tr('category_saved', 'Thématique wiki enregistrée.'));
             redirect_url(route_url_clean('admin_wiki'));
@@ -83,17 +83,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
             }
             $category = wiki_category_from_input((string) ($_POST['category_code'] ?? ''), $wikiCategories);
-            $pageCountStmt = db()->prepare('SELECT COUNT(*) FROM wiki_pages WHERE category = ?');
-            $pageCountStmt->execute([$category]);
-            if ((int) $pageCountStmt->fetchColumn() > 0) {
-                throw new RuntimeException($tr('err_category_has_documents', 'Cette thématique contient encore des pages.'));
+            if ($category === 'general') {
+                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
             }
             $subCountStmt = db()->prepare('SELECT COUNT(*) FROM wiki_subcategories WHERE category_code = ?');
             $subCountStmt->execute([$category]);
             if ((int) $subCountStmt->fetchColumn() > 0) {
                 throw new RuntimeException($tr('err_category_has_subcategories', 'Supprimez d abord toutes les sous-thématiques.'));
             }
-            db()->prepare('DELETE FROM wiki_categories WHERE code = ?')->execute([$category]);
+            db()->prepare('UPDATE wiki_pages SET category = "general", subcategory = "" WHERE category = ?')->execute([$category]);
+            db()->prepare('INSERT INTO wiki_categories (code, label, deleted_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
+                ->execute([$category, (string) ($wikiCategories[$category] ?? wiki_category_label_from_code($category))]);
             set_flash('success', $tr('category_deleted', 'Thématique wiki supprimée.'));
             redirect_url(route_url_clean('admin_wiki'));
         }
@@ -313,12 +313,13 @@ ob_start();
             <?php foreach ($wikiCategories as $code => $label): ?>
                 <?php $categoryTotal = (int) ($wikiCategoryCounts[(string) $code] ?? 0); ?>
                 <?php $subcategoryTotal = count($wikiSubcategoriesByCategory[(string) $code] ?? []); ?>
+                <?php $categoryDeleteDisabled = (string) $code === 'general' || $subcategoryTotal > 0; ?>
                 <form method="post" class="inline-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="delete_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
                     <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
-                    <button class="button secondary small" type="submit"<?= ($categoryTotal > 0 || $subcategoryTotal > 0) ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
+                    <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
                 </form>
             <?php endforeach; ?>
             <?php foreach ($wikiSubcategoriesByCategory as $parentCode => $subcategories): ?>

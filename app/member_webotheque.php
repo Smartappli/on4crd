@@ -1688,19 +1688,15 @@ function render_admin_webotheque_page(): void
                     throw new RuntimeException('storage_unavailable');
                 }
                 $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
-                if (count($categories) <= 1) {
+                if ($category === 'general' || count($categories) <= 1) {
                     throw new RuntimeException('err_category_required');
-                }
-                $linkCountStmt = db()->prepare('SELECT COUNT(*) FROM member_webotheque_links WHERE category = ?');
-                $linkCountStmt->execute([$category]);
-                if ((int) $linkCountStmt->fetchColumn() > 0) {
-                    throw new RuntimeException('err_category_has_documents');
                 }
                 $subcategoryCountStmt = db()->prepare('SELECT COUNT(*) FROM member_webotheque_subcategories WHERE category_code = ?');
                 $subcategoryCountStmt->execute([$category]);
                 if ((int) $subcategoryCountStmt->fetchColumn() > 0) {
                     throw new RuntimeException('err_category_has_subcategories');
                 }
+                db()->prepare('UPDATE member_webotheque_links SET category = "general", subcategory = "" WHERE category = ?')->execute([$category]);
                 db()->prepare('INSERT INTO member_webotheque_categories (code, label, deleted_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
                     ->execute([$category, (string) ($categories[$category] ?? webotheque_category_label_from_code($category))]);
                 set_flash('success', $adminText('category_deleted', 'Thématique supprimée.', 'Topic deleted.'));
@@ -2094,7 +2090,7 @@ function render_admin_webotheque_page(): void
                         <?php
                         $categoryTotal = (int) (($stats['by_category'][(string) $code] ?? 0));
                         $categorySubcategoryTotal = count($subcategoriesByCategory[(string) $code] ?? []);
-                        $categoryDeleteDisabled = $categoryTotal > 0 || $categorySubcategoryTotal > 0 || count($categories) <= 1;
+                        $categoryDeleteDisabled = (string) $code === 'general' || $categorySubcategoryTotal > 0 || count($categories) <= 1;
                         ?>
                         <form method="post" class="inline-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">

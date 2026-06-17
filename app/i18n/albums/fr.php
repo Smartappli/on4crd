@@ -22,9 +22,9 @@ return array (
   'previous' => 'Précédent',
   'next' => 'Suivant',
   'page' => 'Page',
-  'category_field' => 'Th?matique',
-  'subcategory_field' => 'Sous-th?matique',
-  'no_subcategory' => 'Sans sous-th?matique',
-  'all_categories' => 'Toutes les th?matiques',
+  'category_field' => 'Thématique',
+  'subcategory_field' => 'Sous-thématique',
+  'no_subcategory' => 'Sans sous-thématique',
+  'all_categories' => 'Toutes les thématiques',
   'favorites' => 'Favoris',
 );

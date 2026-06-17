@@ -407,8 +407,15 @@ function wiki_ensure_categories_table(): bool
             code VARCHAR(120) NOT NULL UNIQUE,
             label VARCHAR(160) NOT NULL,
             sort_order INT NOT NULL DEFAULT 100,
+            deleted_at TIMESTAMP NULL DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )');
+        if (!table_has_column('wiki_categories', 'deleted_at')) {
+            db()->exec('ALTER TABLE wiki_categories ADD COLUMN deleted_at TIMESTAMP NULL DEFAULT NULL AFTER sort_order');
+        }
+        if (!table_has_index('wiki_categories', 'idx_wiki_category_deleted')) {
+            db()->exec('ALTER TABLE wiki_categories ADD INDEX idx_wiki_category_deleted (deleted_at)');
+        }
 
         return table_exists('wiki_categories');
     } catch (Throwable) {
@@ -446,15 +453,32 @@ if (!function_exists('wiki_categories')) {
  */
 function wiki_categories(array $messages = []): array
 {
-    $categories = [
-        'general' => (string) ($messages['category_general'] ?? 'General'),
-    ];
+    $categories = [];
+    $deletedCategories = [];
+
+    try {
+        if (wiki_ensure_categories_table()) {
+            $deletedRows = db()->query('SELECT code FROM wiki_categories WHERE deleted_at IS NOT NULL')->fetchAll() ?: [];
+            foreach ($deletedRows as $row) {
+                $code = wiki_category_code((string) ($row['code'] ?? ''));
+                if ($code !== '') {
+                    $deletedCategories[$code] = true;
+                }
+            }
+        }
+    } catch (Throwable) {
+        $deletedCategories = [];
+    }
+
+    if (!isset($deletedCategories['general'])) {
+        $categories['general'] = (string) ($messages['category_general'] ?? 'General');
+    }
 
     if (function_exists('member_library_default_categories')) {
         foreach (member_library_default_categories() as $category) {
             $code = wiki_category_code((string) ($category['code'] ?? ''));
             $label = content_proposal_clean_single_line((string) ($category['label'] ?? ''), 190);
-            if ($code !== '' && $label !== '' && !isset($categories[$code])) {
+            if ($code !== '' && $label !== '' && !isset($deletedCategories[$code]) && !isset($categories[$code])) {
                 $categories[$code] = $label;
             }
         }
@@ -462,7 +486,7 @@ function wiki_categories(array $messages = []): array
 
     try {
         if (wiki_ensure_categories_table()) {
-            $rows = db()->query('SELECT code, label FROM wiki_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [];
+            $rows = db()->query('SELECT code, label FROM wiki_categories WHERE deleted_at IS NULL ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [];
             foreach ($rows as $row) {
                 $code = wiki_category_code((string) ($row['code'] ?? ''));
                 $label = content_proposal_clean_single_line((string) ($row['label'] ?? ''), 190);
@@ -484,7 +508,7 @@ function wiki_categories(array $messages = []): array
             foreach ($rows as $row) {
                 $code = wiki_category_code((string) ($row['code'] ?? ''));
                 $label = content_proposal_clean_single_line((string) ($row['label'] ?? ''), 190);
-                if ($code !== '' && $label !== '' && !isset($categories[$code])) {
+                if ($code !== '' && $label !== '' && !isset($deletedCategories[$code]) && !isset($categories[$code])) {
                     $categories[$code] = $label;
                 }
             }
@@ -498,7 +522,7 @@ function wiki_categories(array $messages = []): array
             $rows = db()->query('SELECT category FROM wiki_pages WHERE category IS NOT NULL AND category <> "" GROUP BY category ORDER BY category ASC')->fetchAll() ?: [];
             foreach ($rows as $row) {
                 $code = wiki_category_code((string) ($row['category'] ?? ''));
-                if ($code !== '' && !isset($categories[$code])) {
+                if ($code !== '' && !isset($deletedCategories[$code]) && !isset($categories[$code])) {
                     $categories[$code] = wiki_category_label_from_code($code);
                 }
             }
@@ -510,7 +534,7 @@ function wiki_categories(array $messages = []): array
     foreach (content_proposal_accepted_categories('wiki', 120) as $code => $label) {
         $code = wiki_category_code((string) $code);
         $label = content_proposal_clean_single_line((string) $label, 190);
-        if ($code !== '' && $label !== '') {
+        if ($code !== '' && $label !== '' && !isset($deletedCategories[$code])) {
             $categories[$code] = $label;
         }
     }
@@ -518,7 +542,7 @@ function wiki_categories(array $messages = []): array
     foreach (content_proposal_accepted_categories('members_library', 120) as $code => $label) {
         $code = wiki_category_code((string) $code);
         $label = content_proposal_clean_single_line((string) $label, 190);
-        if ($code !== '' && $label !== '' && !isset($categories[$code])) {
+        if ($code !== '' && $label !== '' && !isset($deletedCategories[$code]) && !isset($categories[$code])) {
             $categories[$code] = $label;
         }
     }
