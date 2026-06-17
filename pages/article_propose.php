@@ -45,14 +45,8 @@ function article_propose_t(string $key, string $fallback): string
 }
 
 $title = $label('propose_article', 'Proposer un article');
-$categories = [
-    'antennes' => $label('theme_antennes', 'Antennes'),
-    'trafic' => $label('theme_trafic', 'Trafic'),
-    'numerique' => $label('theme_numerique', 'Numerique'),
-    'materiel' => $label('theme_materiel', 'Materiel'),
-    'formation' => $label('theme_formation', 'Formation'),
-    'autres' => $label('theme_autres', 'Autres'),
-];
+article_ensure_taxonomy_schema($articlesI18n);
+$categories = article_categories($articlesI18n);
 
 set_page_meta([
     'title' => $title,
@@ -72,9 +66,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $articleTitle = trim((string) ($_POST['title'] ?? ''));
         $excerpt = trim((string) ($_POST['excerpt'] ?? ''));
         $rawContent = trim((string) ($_POST['content'] ?? ''));
-        $category = slugify((string) ($_POST['category'] ?? 'autres'));
+        $category = article_category_code((string) ($_POST['category'] ?? 'autres'));
         if ($category === '' || !isset($categories[$category])) {
             $category = 'autres';
+        }
+        $subcategory = '';
+        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+        if ($subcategoryRef !== '') {
+            $subcategoryParts = article_subcategory_ref_parts($subcategoryRef);
+            if ($subcategoryParts['subcategory'] !== '') {
+                $subcategory = $subcategoryParts['subcategory'];
+                if ($subcategoryParts['category'] !== '') {
+                    $candidateCategory = article_category_code($subcategoryParts['category']);
+                    if (isset($categories[$candidateCategory])) {
+                        $category = $candidateCategory;
+                    }
+                }
+            }
         }
         if (mb_strlen($articleTitle) > 190 || mb_strlen($excerpt) > 2000 || mb_strlen($rawContent) > 50000) {
             throw new RuntimeException($label('error_field_too_long', 'Un des champs dépasse la longueur autorisée.'));
@@ -95,8 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug = article_unique_slug($articleTitle);
             try {
                 db()->beginTransaction();
-                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?)')
-                    ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, (int) $user['id']]);
+                db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, author_id) VALUES (?, ?, ?, ?, "pending", ?, ?, ?)')
+                    ->execute([$articleTitle, $slug, $excerpt !== '' ? $excerpt : null, $content, $category, $subcategory, (int) $user['id']]);
                 db()->commit();
                 break;
             } catch (Throwable $submitThrowable) {
