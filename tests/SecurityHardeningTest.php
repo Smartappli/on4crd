@@ -6,6 +6,17 @@ use PHPUnit\Framework\TestCase;
 
 final class SecurityHardeningTest extends TestCase
 {
+    public function testRootHtaccessBlocksDirectAccessToInternalApplicationDirectories(): void
+    {
+        $contents = file_get_contents(__DIR__ . '/../.htaccess');
+        self::assertIsString($contents);
+
+        self::assertStringContainsString(
+            '^(?:app|config|pages|schema|tests|tools|vendor|storage/auth|storage/cache|storage/private)(?:/|$)',
+            $contents
+        );
+    }
+
     public function testStorageHtaccessForcesActiveContentToDownload(): void
     {
         foreach (['storage/.htaccess', 'storage/uploads/.htaccess', 'storage/press/.htaccess'] as $relativePath) {
