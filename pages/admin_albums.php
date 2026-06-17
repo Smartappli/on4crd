@@ -45,6 +45,57 @@ function albums_admin_delete_photo_files(string $publicPath): bool
     return $ok;
 }
 
+/**
+ * @param array<string, mixed> $photo
+ * @param array<string, mixed> $messages
+ * @return array{safe_path:?string,image_src:string,title:string,caption:string,album_title:string}
+ */
+function albums_admin_photo_render_data(array $photo, array $messages, string $logEvent): array
+{
+    $safePath = null;
+    $imageSrc = '';
+
+    try {
+        $safePath = albums_admin_safe_photo_path((string) ($photo['file_path'] ?? ''));
+        if ($safePath !== null) {
+            $imageSrc = $safePath;
+            $thumbPath = album_thumbnail_public_path($safePath);
+            $thumbAbs = $thumbPath !== '' ? dirname(__DIR__) . '/' . $thumbPath : '';
+            if ($thumbAbs !== '' && is_file($thumbAbs)) {
+                $imageSrc = $thumbPath;
+            }
+        }
+    } catch (Throwable $throwable) {
+        log_structured_event($logEvent, [
+            'photo_id' => (int) ($photo['id'] ?? 0),
+            'album_id' => (int) ($photo['album_id'] ?? 0),
+            'message' => $throwable->getMessage(),
+        ]);
+        $safePath = null;
+        $imageSrc = '';
+    }
+
+    $title = trim((string) ($photo['title'] ?? ''));
+    if ($title === '') {
+        $title = (string) ($messages['photo'] ?? 'Photo');
+    }
+
+    return [
+        'safe_path' => $safePath,
+        'image_src' => $imageSrc,
+        'title' => $title,
+        'caption' => trim((string) ($photo['caption'] ?? '')),
+        'album_title' => trim((string) ($photo['album_title'] ?? '')),
+    ];
+}
+
+function albums_admin_js_string(string $message): string
+{
+    $encoded = json_encode($message, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    return is_string($encoded) ? $encoded : '""';
+}
+
 function albums_admin_clear_cache(): void
 {
     cache_forget('admin_albums_list_v2');
@@ -652,16 +703,14 @@ ob_start();
                     <div class="gallery-grid">
                         <?php foreach ($wizardPhotos as $photo): ?>
                             <?php
-                            $safePath = albums_admin_safe_photo_path((string) ($photo['file_path'] ?? ''));
-                            $thumbPath = $safePath !== null ? album_thumbnail_public_path($safePath) : '';
-                            $thumbAbs = $thumbPath !== '' ? dirname(__DIR__) . '/' . $thumbPath : '';
-                            $imageSrc = $thumbPath !== '' && is_file($thumbAbs) ? $thumbPath : ($safePath ?? '');
+                            $photoRender = albums_admin_photo_render_data((array) $photo, $t, 'album_admin_wizard_photo_prepare_failed');
+                            $imageSrc = $photoRender['image_src'];
                             ?>
                             <article class="gallery-item">
                                 <?php if ($imageSrc !== ''): ?>
-                                    <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e((string) ($photo['title'] ?? $t['photo'])) ?>">
+                                    <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($photoRender['title']) ?>">
                                 <?php endif; ?>
-                                <form method="post" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_photo'], JSON_UNESCAPED_UNICODE)) ?>)">
+                                <form method="post" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="delete_photo">
                                     <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
@@ -759,25 +808,24 @@ ob_start();
         <?php else: ?>
             <div class="gallery-grid">
                 <?php foreach ($photos as $photo):
-                    $safePath = albums_admin_safe_photo_path((string) ($photo['file_path'] ?? ''));
-                    $thumbPath = $safePath !== null ? album_thumbnail_public_path($safePath) : '';
-                    $thumbAbs = $thumbPath !== '' ? dirname(__DIR__) . '/' . $thumbPath : '';
-                    $imageSrc = $thumbPath !== '' && is_file($thumbAbs) ? $thumbPath : ($safePath ?? '');
+                    $photoRender = albums_admin_photo_render_data((array) $photo, $t, 'album_admin_photo_prepare_failed');
+                    $safePath = $photoRender['safe_path'];
+                    $imageSrc = $photoRender['image_src'];
                     ?>
                     <article class="gallery-item">
                         <?php if ($imageSrc !== ''): ?>
-                            <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e((string) ($photo['title'] ?? $t['photo'])) ?>">
+                            <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($photoRender['title']) ?>">
                         <?php endif; ?>
-                        <p class="help"><?= e((string) $t['album_word']) ?> : <?= e((string) $photo['album_title']) ?></p>
+                        <p class="help"><?= e((string) $t['album_word']) ?> : <?= e($photoRender['album_title']) ?></p>
                         <form method="post">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
                             <label><?= e((string) $t['title']) ?>
-                                <input type="text" name="title" value="<?= e((string) $photo['title']) ?>" required maxlength="190">
+                                <input type="text" name="title" value="<?= e($photoRender['title']) ?>" required maxlength="190">
                             </label>
                             <label><?= e((string) $t['caption']) ?>
-                                <textarea name="caption" rows="2"><?= e((string) ($photo['caption'] ?? '')) ?></textarea>
+                                <textarea name="caption" rows="2"><?= e($photoRender['caption']) ?></textarea>
                             </label>
                             <div class="actions">
                                 <button class="button small" type="submit"><?= e((string) $t['update']) ?></button>
@@ -791,7 +839,7 @@ ob_start();
                             <button class="button small secondary" type="submit" name="direction" value="up">&uarr;</button>
                             <button class="button small secondary" type="submit" name="direction" value="down">&darr;</button>
                         </form>
-                        <form method="post" style="margin-top:8px;" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_photo'], JSON_UNESCAPED_UNICODE)) ?>)">
+                        <form method="post" style="margin-top:8px;" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_photo">
                             <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">

@@ -101,6 +101,13 @@ final class FunctionHelpersTest extends TestCase
         safe_storage_public_path('storage/uploads/doc.pdf');
     }
 
+    public function testSafeStoragePublicPathRejectsNullBytes(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        safe_storage_public_path("storage/press/doc.pdf\0.jpg");
+    }
+
     public function testCsrfTokenAndVerificationWork(): void
     {
         $token = csrf_token();

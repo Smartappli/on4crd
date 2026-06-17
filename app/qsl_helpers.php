@@ -4,7 +4,7 @@ declare(strict_types=1);
 function safe_storage_public_path(string $path, array $allowedPrefixes = ['storage/press/']): string
 {
     $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
-    if ($normalized === '' || str_contains($normalized, '..')) {
+    if ($normalized === '' || str_contains($normalized, "\0") || str_contains($normalized, '..')) {
         throw new RuntimeException('Chemin de stockage invalide.');
     }
 
