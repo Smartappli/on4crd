@@ -283,7 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 set_flash('success', $t('ok_saved'));
             }
-            redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+            redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'subcategory' => (string) ($_GET['subcategory'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
         }
 
         if ($action === 'add_category') {
@@ -470,7 +470,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         db()->beginTransaction();
                         if ($id > 0) {
-                            $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
+                            $previousStmt = db()->prepare('SELECT title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, author_id FROM articles WHERE id = ? LIMIT 1');
                             $previousStmt->execute([$id]);
                             $previous = $previousStmt->fetch() ?: null;
                             if (!is_array($previous)) {
@@ -480,7 +480,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $existingPublishedAt = trim((string) ($previous['published_at'] ?? ''));
                             $publishedAtValue = $publishNow ? ($existingPublishedAt !== '' ? $existingPublishedAt : date('Y-m-d H:i:s')) : null;
                             if (table_exists('article_revisions')) {
-                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
                                     ->execute([
                                         $id,
                                         (string) ($previous['title'] ?? ''),
@@ -489,21 +489,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         (string) ($previous['content'] ?? ''),
                                         (string) ($previous['status'] ?? 'draft'),
                                         (string) ($previous['category'] ?? 'autres'),
+                                        (string) ($previous['subcategory'] ?? ''),
                                         $previous['scheduled_at'] ?? null,
                                         $previous['published_at'] ?? null,
                                         isset($previous['author_id']) ? (int) $previous['author_id'] : null,
                                     ]);
                             }
-                            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id = ?')
-                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, $id]);
+                            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = ?, updated_at = NOW() WHERE id = ?')
+                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $subcategory, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, $id]);
                         } else {
                             $publishedAtValue = $publishNow ? date('Y-m-d H:i:s') : null;
-                            db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, scheduled_at, published_at, moderation_note, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, (int) current_user()['id']]);
+                            db()->prepare('INSERT INTO articles (title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, moderation_note, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                ->execute([$title, $slug, $excerpt, $content, $status, $category, $subcategory, $scheduledAtValue, $publishedAtValue, $moderationNoteValue, (int) current_user()['id']]);
                             $id = (int) db()->lastInsertId();
                             if (table_exists('article_revisions')) {
-                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-                                    ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
+                                db()->prepare('INSERT INTO article_revisions (article_id, title, slug, excerpt, content, status, category, subcategory, scheduled_at, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                                    ->execute([$id, $title, $slug, $excerpt, $content, $status, $category, $subcategory, $scheduledAtValue, $publishedAtValue, (int) current_user()['id']]);
                             }
                         }
                         db()->commit();
@@ -552,6 +553,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (table_exists('article_revisions')) {
                 db()->prepare('DELETE FROM article_revisions WHERE article_id = ?')->execute([$id]);
             }
+            if (table_exists('member_favorites')) {
+                db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['article', $id]);
+            }
             db()->prepare('DELETE FROM articles WHERE id = ?')->execute([$id]);
             set_flash('success', $t('ok_deleted', 'Article supprimé.'));
             redirect('admin_articles');
@@ -568,7 +572,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
             }
             $restoredStatus = (string) ($revision['status'] ?? 'draft');
-            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, scheduled_at = ?, published_at = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')
+            db()->prepare('UPDATE articles SET title = ?, slug = ?, excerpt = ?, content = ?, status = ?, category = ?, subcategory = ?, scheduled_at = ?, published_at = ?, moderation_note = NULL, updated_at = NOW() WHERE id = ?')
                 ->execute([
                     (string) ($revision['title'] ?? ''),
                     (string) ($revision['slug'] ?? ''),
@@ -576,6 +580,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     (string) ($revision['content'] ?? ''),
                     $restoredStatus,
                     (string) ($revision['category'] ?? 'autres'),
+                    (string) ($revision['subcategory'] ?? ''),
                     $revision['scheduled_at'] ?? null,
                     $revision['published_at'] ?? null,
                     $articleId,
@@ -590,11 +595,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_flash('success', $t('ok_revision_restored', 'Version restaurée.'));
             redirect_url(route_url('admin_articles', ['id' => $articleId]));
         } elseif ($action === 'save_category') {
-            $oldCode = slugify(trim((string) ($_POST['old_code'] ?? '')));
-            $newCode = slugify(trim((string) ($_POST['new_code'] ?? '')));
+            $oldCode = article_category_code(trim((string) ($_POST['old_code'] ?? '')));
+            $newCode = article_category_code(trim((string) ($_POST['new_code'] ?? '')));
             if ($oldCode === '' || $newCode === '') {
                 throw new RuntimeException($t('err_invalid_category'));
             }
+            db()->prepare('UPDATE article_categories SET code = ? WHERE code = ?')->execute([$newCode, $oldCode]);
+            db()->prepare('UPDATE article_subcategories SET category_code = ? WHERE category_code = ?')->execute([$newCode, $oldCode]);
             db()->prepare('UPDATE articles SET category = ? WHERE category = ?')->execute([$newCode, $oldCode]);
             set_flash('success', $t('ok_category_updated'));
             redirect('admin_articles');
@@ -653,7 +660,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $adminStatus = (string) ($_GET['status'] ?? '');
-$adminCategory = slugify(trim((string) ($_GET['category'] ?? '')));
+$adminCategoryRaw = trim((string) ($_GET['category'] ?? ''));
+$adminCategory = $adminCategoryRaw !== '' ? article_category_code($adminCategoryRaw) : '';
+$adminSubcategory = article_subcategory_code(trim((string) ($_GET['subcategory'] ?? '')));
 $adminSearch = trim((string) ($_GET['q'] ?? ''));
 $adminWhere = [];
 $adminParams = [];
@@ -665,9 +674,15 @@ if ($adminCategory !== '') {
     $adminWhere[] = 'category = ?';
     $adminParams[] = $adminCategory;
 }
+if ($adminSubcategory !== '') {
+    $adminWhere[] = 'subcategory = ?';
+    $adminParams[] = $adminSubcategory;
+}
 if ($adminSearch !== '') {
-    $adminWhere[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+    $adminWhere[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ?)';
     $needle = '%' . $adminSearch . '%';
+    $adminParams[] = $needle;
+    $adminParams[] = $needle;
     $adminParams[] = $needle;
     $adminParams[] = $needle;
     $adminParams[] = $needle;
@@ -689,6 +704,20 @@ $articleStats = db()->query('SELECT status, COUNT(*) AS total FROM articles GROU
 $articleStatMap = array_fill_keys(array_keys($articleStatusChoices), 0);
 foreach ($articleStats as $statRow) {
     $articleStatMap[(string) $statRow['status']] = (int) $statRow['total'];
+}
+$articleCategoryCounts = [];
+$articleSubcategoryCounts = [];
+$articleTaxonomyRows = db()->query('SELECT category, subcategory, COUNT(*) AS total FROM articles GROUP BY category, subcategory ORDER BY category ASC, subcategory ASC')->fetchAll() ?: [];
+foreach ($articleTaxonomyRows as $articleTaxonomyRow) {
+    $categoryCode = article_category_code((string) ($articleTaxonomyRow['category'] ?? 'autres'));
+    $subcategoryCode = article_subcategory_code((string) ($articleTaxonomyRow['subcategory'] ?? ''));
+    $total = (int) ($articleTaxonomyRow['total'] ?? 0);
+    if ($categoryCode !== '') {
+        $articleCategoryCounts[$categoryCode] = ($articleCategoryCounts[$categoryCode] ?? 0) + $total;
+    }
+    if ($categoryCode !== '' && $subcategoryCode !== '') {
+        $articleSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] = ($articleSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] ?? 0) + $total;
+    }
 }
 if ($previewPayload === null) {
     $editingId = (int) ($_GET['id'] ?? 0);
