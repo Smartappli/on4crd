@@ -15,6 +15,8 @@ set_page_meta([
     'schema_type' => 'WebPage',
 ]);
 articles_sync_scheduled_publications();
+$articleMessages = i18n_domain_locale('articles', $locale);
+article_ensure_taxonomy_schema($articleMessages);
 $previewPayload = null;
 
 /**
@@ -174,28 +176,8 @@ function editorial_retry_scheduled_article(int $id): string
     return 'retried';
 }
 
-$defaultCategories = [
-    'antennes' => $t('cat_antennes'),
-    'trafic' => $t('cat_trafic'),
-    'numerique' => $t('cat_numerique'),
-    'materiel' => $t('cat_materiel'),
-    'formation' => $t('cat_formation'),
-    'autres' => $t('cat_autres'),
-];
-
-$existingCategoryRows = db()->query('SELECT DISTINCT category FROM articles WHERE category IS NOT NULL AND category <> "" ORDER BY category ASC')->fetchAll();
-$knownCategories = $defaultCategories;
-foreach ($existingCategoryRows as $existingCategoryRow) {
-    $code = trim((string) ($existingCategoryRow['category'] ?? ''));
-    if ($code !== '' && !isset($knownCategories[$code])) {
-        $knownCategories[$code] = ucwords(str_replace('-', ' ', $code));
-    }
-}
-foreach (content_proposal_accepted_categories('articles', 120) as $code => $label) {
-    if ($code !== '' && !isset($knownCategories[$code])) {
-        $knownCategories[$code] = $label;
-    }
-}
+$knownCategories = article_categories($articleMessages);
+$articleSubcategoriesByCategory = article_subcategories_by_category();
 
 $articleStatusChoices = [
     'draft' => $t('draft', 'Brouillon'),
@@ -217,7 +199,7 @@ $proposalTypeLabels = [
     'content' => $t('proposal_type_content', 'Article'),
     'tag' => $t('proposal_type_tag', 'Mot clé'),
 ];
-$editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'scheduled_at' => null, 'moderation_note' => null];
+$editingDefault = ['id' => 0, 'title' => '', 'slug' => '', 'excerpt' => '', 'content' => '<p></p>', 'status' => 'draft', 'category' => 'autres', 'subcategory' => '', 'scheduled_at' => null, 'moderation_note' => null];
 $editing = $editingDefault;
 $editingId = (int) ($_GET['id'] ?? 0);
 

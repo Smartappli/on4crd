@@ -151,11 +151,7 @@ ob_start();
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <label><?= e($label('article_title_label', 'Titre de l\'article')) ?><input type="text" name="title" maxlength="190" required></label>
-            <label><?= e($label('category_label', 'Catégorie')) ?><select name="category">
-                <?php foreach ($categories as $code => $categoryLabel): ?>
-                    <option value="<?= e($code) ?>"><?= e($categoryLabel) ?></option>
-                <?php endforeach; ?>
-            </select></label>
+            <?= render_article_taxonomy_fields($categories, $articlesI18n, 'autres') ?>
             <label><?= e($label('excerpt_label', 'Résumé')) ?><textarea name="excerpt" rows="3" maxlength="2000" placeholder="<?= e($label('excerpt_placeholder', 'Court résumé affiché dans la liste des articles.')) ?>"></textarea></label>
             <label><?= e($label('content_label', 'Contenu mis en page')) ?><textarea name="content" rows="16" maxlength="50000" data-wysiwyg="full" required placeholder="<?= e($label('content_placeholder', '<h2>Titre de section</h2>' . "\n" . '<p>Votre texte...</p>' . "\n" . '<ul><li>Point important</li></ul>')) ?>"></textarea></label>
             <p class="help"><?= e($label('html_cleanup_help', 'Le HTML est nettoyé automatiquement. Les scripts, iframes et attributs dangereux sont retirés avant validation.')) ?></p>

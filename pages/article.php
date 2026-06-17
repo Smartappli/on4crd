@@ -13,6 +13,8 @@ function article_view_reading_minutes(string $html): int
 
 
 $locale = current_locale();
+$articleMessages = i18n_domain_locale('articles', $locale);
+article_ensure_taxonomy_schema($articleMessages);
 $i18n = i18n_load_array_file_once(__DIR__ . '/../app/i18n/article.php');
 articles_sync_scheduled_publications();
 $i18n = i18n_expand_supported_locales($i18n);
@@ -56,8 +58,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
 }
 $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) $row['id']) : false;
 
-$category = slugify((string) ($row['category'] ?? 'autres'));
-$categoryLabel = ucwords(str_replace('-', ' ', $category));
+$articleCategories = article_categories($articleMessages);
+$articleSubcategoriesByCategory = article_subcategories_by_category();
+$category = article_category_code((string) ($row['category'] ?? 'autres'));
+$categoryLabel = (string) ($articleCategories[$category] ?? article_category_label_from_code($category));
+$subcategory = article_subcategory_code((string) ($row['subcategory'] ?? ''));
+$subcategoryLabel = '';
+foreach ($articleSubcategoriesByCategory[$category] ?? [] as $subcategoryInfo) {
+    if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategory) {
+        $subcategoryLabel = (string) ($subcategoryInfo['label'] ?? $subcategory);
+        break;
+    }
+}
 $readingMinutes = article_view_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? ''));
 $articlePlainText = article_view_plain_text((string) ($row['content_localized'] ?? $row['content'] ?? ''));
 $articleDescription = trim((string) ($row['excerpt_localized'] ?? '')) !== '' ? (string) $row['excerpt_localized'] : (string) $t['meta_fallback'];
@@ -76,8 +88,8 @@ set_page_meta([
     'published_time' => $articlePublishedAt,
     'modified_time' => $articleModifiedAt,
     'section' => $categoryLabel,
-    'tags' => array_filter([$categoryLabel, 'radioamateur', 'ON4CRD']),
-    'keywords' => array_filter([$categoryLabel, 'radioamateur', 'article technique', 'Radio Club Durnal', 'ON4CRD']),
+    'tags' => array_filter([$categoryLabel, $subcategoryLabel, 'radioamateur', 'ON4CRD']),
+    'keywords' => array_filter([$categoryLabel, $subcategoryLabel, 'radioamateur', 'article technique', 'Radio Club Durnal', 'ON4CRD']),
     'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         '@context' => 'https://schema.org',
@@ -128,7 +140,7 @@ $next = $nextStmt->fetch() ?: null;
 ob_start();
 ?>
 <article class="card article-view">
-    <p><a class="pill" href="<?= e(route_url('articles', ['theme' => $category])) ?>"><?= e((string) $t['back_to_articles']) ?></a></p>
+    <p><a class="pill" href="<?= e(route_url('articles', ['theme' => $category, 'subcategory' => $subcategory])) ?>"><?= e((string) $t['back_to_articles']) ?></a></p>
     <?php if ($user !== null): ?>
         <form method="post" class="inline-form" style="margin-bottom:.7rem;">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -138,7 +150,7 @@ ob_start();
     <?php endif; ?>
     <h1><?= e((string) $row['title_localized']) ?></h1>
     <p class="help">
-        <?= e($categoryLabel) ?> ·
+        <?= e($categoryLabel) ?><?= $subcategoryLabel !== '' ? ' / ' . e($subcategoryLabel) : '' ?> ·
         <?= e($articleDisplayDate) ?> ·
         <?= $readingMinutes ?> <?= e((string) $t['reading_minutes']) ?>
     </p>
