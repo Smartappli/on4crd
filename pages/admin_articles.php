@@ -242,6 +242,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (table_exists('article_revisions')) {
                     db()->prepare('DELETE FROM article_revisions WHERE article_id IN (' . $placeholders . ')')->execute($ids);
                 }
+                if (table_exists('member_favorites')) {
+                    db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $ids));
+                }
                 db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
                 set_flash('success', $t('ok_deleted', 'Article supprimé.'));
             } else {
@@ -1042,32 +1045,66 @@ ob_start();
     </section>
     <section class="card">
         <h2><?= e($t('category_edit')) ?></h2>
-        <div class="stack">
+        <div class="grid-2">
+            <form method="post" class="stack">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="add_category">
+                <label><?= e($t('category')) ?>
+                    <input type="text" name="category_label" maxlength="160" required>
+                </label>
+                <input type="hidden" name="category_code" value="">
+                <button class="button" type="submit"><?= e($t('add_category', 'Ajouter une thematique')) ?></button>
+            </form>
+            <form method="post" class="stack">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="add_subcategory">
+                <label><?= e($t('category')) ?>
+                    <select name="subcategory_category">
+                        <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
+                            <option value="<?= e((string) $categoryCode) ?>"<?= $adminCategory === (string) $categoryCode ? ' selected' : '' ?>><?= e((string) $categoryLabel) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+                    <input type="text" name="subcategory_label" maxlength="160" required>
+                </label>
+                <input type="hidden" name="subcategory_code" value="">
+                <button class="button" type="submit"><?= e($t('add_subcategory', 'Ajouter une sous-thematique')) ?></button>
+            </form>
+        </div>
+        <div class="tags-cloud">
             <?php foreach ($knownCategories as $categoryCode => $categoryLabel): ?>
-                <article class="article-item">
-                    <form method="post" class="row-between" style="gap:8px;align-items:end;">
-                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="save_category">
-                        <input type="hidden" name="old_code" value="<?= e($categoryCode) ?>">
-                        <label style="flex:1;"><?= e($t('code')) ?>
-                            <input type="text" name="new_code" value="<?= e($categoryCode) ?>" required>
-                        </label>
-                        <label style="flex:2;"><?= e($t('label')) ?>
-                            <input type="text" value="<?= e($categoryLabel) ?>" disabled>
-                        </label>
-                        <button class="button small" type="submit"><?= e($t('rename_code')) ?></button>
-                    </form>
-                    <?php if ($categoryCode !== 'autres'): ?>
-                        <form method="post" style="margin-top:8px;">
-                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                            <input type="hidden" name="action" value="delete_category">
-                            <input type="hidden" name="code" value="<?= e($categoryCode) ?>">
-                            <button class="button small secondary" type="submit"><?= e($t('delete_to_other')) ?></button>
-                        </form>
-                    <?php endif; ?>
-                </article>
+                <?php
+                $categoryTotal = (int) ($articleCategoryCounts[(string) $categoryCode] ?? 0);
+                $subcategoryTotal = count($articleSubcategoriesByCategory[(string) $categoryCode] ?? []);
+                $categoryDeleteDisabled = (string) $categoryCode === 'autres' || $subcategoryTotal > 0;
+                ?>
+                <form method="post" class="inline-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="delete_category">
+                    <input type="hidden" name="category_code" value="<?= e((string) $categoryCode) ?>">
+                    <span class="pill"><?= e((string) $categoryLabel) ?> (<?= $categoryTotal ?>)</span>
+                    <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                </form>
             <?php endforeach; ?>
-            <?php if ($articles === []): ?><p><?= e($t('no_articles')) ?></p><?php endif; ?>
+            <?php foreach ($articleSubcategoriesByCategory as $parentCode => $subcategories): ?>
+                <?php foreach ($subcategories as $subcategoryInfo): ?>
+                    <?php
+                    $subCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
+                    if ($subCode === '') {
+                        continue;
+                    }
+                    $subTotal = (int) ($articleSubcategoryCounts[(string) $parentCode . ':' . $subCode] ?? 0);
+                    ?>
+                    <form method="post" class="inline-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="subcategory_ref" value="<?= e(article_subcategory_ref((string) $parentCode, $subCode)) ?>">
+                        <span class="pill"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
+                        <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                    </form>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
         </div>
     </section>
 </div>
