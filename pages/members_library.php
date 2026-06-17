@@ -425,6 +425,9 @@ if ($search !== '') {
 if ($category !== '') {
     $activeFiltersCount++;
 }
+if ($subcategory !== '') {
+    $activeFiltersCount++;
+}
 if ($tag !== '') {
     $activeFiltersCount++;
 }
@@ -454,17 +457,22 @@ if ($documents !== []) {
     if ($docIds !== [] && $categoriesInPage !== []) {
         $categoryKeys = array_keys($categoriesInPage);
         $catPlaceholders = implode(',', array_fill(0, count($categoryKeys), '?'));
-        $relatedStmt = db()->prepare('SELECT id, category, title FROM member_library_documents WHERE category IN (' . $catPlaceholders . ') ORDER BY uploaded_at DESC, id DESC LIMIT 300');
+        $relatedStmt = db()->prepare('SELECT id, category, subcategory, title FROM member_library_documents WHERE category IN (' . $catPlaceholders . ') ORDER BY uploaded_at DESC, id DESC LIMIT 300');
         $relatedStmt->execute($categoryKeys);
         $relatedPool = $relatedStmt->fetchAll() ?: [];
 
         $poolByCategory = [];
+        $poolBySubcategory = [];
         foreach ($relatedPool as $candidate) {
             $candidateCategory = trim((string) ($candidate['category'] ?? 'general'));
             if ($candidateCategory === '') {
                 $candidateCategory = 'general';
             }
             $poolByCategory[$candidateCategory][] = $candidate;
+            $candidateSubcategory = member_library_subcategory_slug((string) ($candidate['subcategory'] ?? ''));
+            if ($candidateSubcategory !== '') {
+                $poolBySubcategory[$candidateCategory . ':' . $candidateSubcategory][] = $candidate;
+            }
         }
 
         foreach ($documents as $documentRow) {
@@ -473,16 +481,29 @@ if ($documents !== []) {
             if ($docCategory === '') {
                 $docCategory = 'general';
             }
+            $docSubcategory = member_library_subcategory_slug((string) ($documentRow['subcategory'] ?? ''));
             $relatedByDocumentId[$docId] = [];
-            foreach (($poolByCategory[$docCategory] ?? []) as $candidate) {
-                if ((int) ($candidate['id'] ?? 0) === $docId) {
-                    continue;
-                }
-                $relatedByDocumentId[$docId][] = $candidate;
-                if (count($relatedByDocumentId[$docId]) >= 3) {
-                    break;
+            $candidatePools = [];
+            if ($docSubcategory !== '') {
+                $candidatePools[] = $poolBySubcategory[$docCategory . ':' . $docSubcategory] ?? [];
+            }
+            $candidatePools[] = $poolByCategory[$docCategory] ?? [];
+            foreach ($candidatePools as $candidatePool) {
+                foreach ($candidatePool as $candidate) {
+                    if ((int) ($candidate['id'] ?? 0) === $docId) {
+                        continue;
+                    }
+                    $candidateId = (int) ($candidate['id'] ?? 0);
+                    if (isset($relatedByDocumentId[$docId][$candidateId])) {
+                        continue;
+                    }
+                    $relatedByDocumentId[$docId][$candidateId] = $candidate;
+                    if (count($relatedByDocumentId[$docId]) >= 3) {
+                        break 2;
+                    }
                 }
             }
+            $relatedByDocumentId[$docId] = array_values($relatedByDocumentId[$docId]);
         }
     }
 }
