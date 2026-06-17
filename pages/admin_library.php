@@ -218,8 +218,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($code !== 'general') {
                 db()->prepare('UPDATE member_library_documents SET category = "general" WHERE category = ?')->execute([$code]);
                 db()->prepare('DELETE FROM member_library_categories WHERE code = ? LIMIT 1')->execute([$code]);
+                db()->prepare('DELETE FROM member_library_subcategories WHERE category_code = ?')->execute([$code]);
             }
             set_flash('success', (string) $t['ok_category_deleted']);
+            redirect($adminLibraryRoute);
+        }
+        if ($action === 'add_subcategory') {
+            $parentCode = library_category_slug((string) ($_POST['subcategory_category'] ?? 'general'));
+            $code = library_subcategory_slug((string) ($_POST['subcategory_code'] ?? ''));
+            $label = trim((string) ($_POST['subcategory_label'] ?? '')) ?: $code;
+            if ($code === '' || $label === '') {
+                throw new RuntimeException('err_required');
+            }
+            db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$parentCode, $code, $label]);
+            set_flash('success', (string) ($t['ok_subcategory'] ?? $t['ok_category']));
+            redirect($adminLibraryRoute);
+        }
+        if ($action === 'delete_subcategory') {
+            $parentCode = library_category_slug((string) ($_POST['subcategory_category'] ?? 'general'));
+            $code = library_subcategory_slug((string) ($_POST['subcategory_code'] ?? ''));
+            if ($code !== '') {
+                db()->prepare('UPDATE member_library_documents SET subcategory = "" WHERE category = ? AND subcategory = ?')->execute([$parentCode, $code]);
+                db()->prepare('DELETE FROM member_library_subcategories WHERE category_code = ? AND code = ? LIMIT 1')->execute([$parentCode, $code]);
+            }
+            set_flash('success', (string) ($t['ok_subcategory_deleted'] ?? $t['ok_category_deleted']));
             redirect($adminLibraryRoute);
         }
         if ($action === 'delete_document') {
