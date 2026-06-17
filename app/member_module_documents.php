@@ -106,7 +106,17 @@ function member_document_labels(string $locale): array
             'reset' => 'Reinitialiser',
             'empty' => 'Aucun contenu trouve.',
             'for_filters' => ' pour ces filtres',
+            'category_field' => 'Thématique',
+            'subcategory_field' => 'Sous-thématique',
+            'all_categories' => 'Toutes les thématiques',
+            'no_subcategory' => 'Sans sous-thématique',
             'tags' => 'Etiquettes',
+            'favorite' => 'Favori',
+            'favorites' => 'Favoris',
+            'favorite_added' => 'Favori ajouté',
+            'favorite_removed' => 'Favori retiré',
+            'favorite_added_msg' => 'Contenu ajouté aux favoris.',
+            'favorite_removed_msg' => 'Contenu retiré des favoris.',
             'preview' => 'Apercu',
             'open' => 'Ouvrir',
             'storage_unavailable' => 'Ce module est temporairement indisponible.',
@@ -124,6 +134,10 @@ function member_document_labels(string $locale): array
             'ok_updated' => 'Contenu mis a jour.',
             'err_required' => 'Titre et fichier requis.',
             'err_invalid' => 'Type de fichier non autorise.',
+            'err_category' => 'Thématique invalide.',
+            'err_category_has_documents' => 'Cette thématique contient encore des contenus.',
+            'err_category_has_subcategories' => 'Supprimez d abord toutes les sous-thématiques de cette thématique.',
+            'err_subcategory_has_documents' => 'Cette sous-thématique contient encore des contenus.',
             'admin_title_prefix' => 'Administration',
             'content_list' => 'Contenus',
             'edit_document' => 'Modifier / Supprimer',
@@ -152,7 +166,17 @@ function member_document_labels(string $locale): array
             'reset' => 'Reset',
             'empty' => 'No content found.',
             'for_filters' => ' for these filters',
+            'category_field' => 'Topic',
+            'subcategory_field' => 'Subtopic',
+            'all_categories' => 'All topics',
+            'no_subcategory' => 'No subtopic',
             'tags' => 'Tags',
+            'favorite' => 'Favorite',
+            'favorites' => 'Favorites',
+            'favorite_added' => 'Favorite added',
+            'favorite_removed' => 'Favorite removed',
+            'favorite_added_msg' => 'Content added to favorites.',
+            'favorite_removed_msg' => 'Content removed from favorites.',
             'preview' => 'Preview',
             'open' => 'Open',
             'storage_unavailable' => 'This module is temporarily unavailable.',
@@ -170,6 +194,10 @@ function member_document_labels(string $locale): array
             'ok_updated' => 'Content updated.',
             'err_required' => 'Title and file are required.',
             'err_invalid' => 'File type is not allowed.',
+            'err_category' => 'Invalid topic.',
+            'err_category_has_documents' => 'This topic still contains content.',
+            'err_category_has_subcategories' => 'Delete all subtopics in this topic first.',
+            'err_subcategory_has_documents' => 'This subtopic still contains content.',
             'admin_title_prefix' => 'Administration',
             'content_list' => 'Content',
             'edit_document' => 'Edit / Delete',
@@ -288,6 +316,8 @@ function ensure_member_module_documents_table(): bool
             id INT AUTO_INCREMENT PRIMARY KEY,
             module_code VARCHAR(80) NOT NULL,
             member_id INT NOT NULL,
+            category VARCHAR(120) NOT NULL DEFAULT "general",
+            subcategory VARCHAR(120) NOT NULL DEFAULT "",
             tags VARCHAR(255) NOT NULL DEFAULT "",
             title VARCHAR(255) NOT NULL,
             description TEXT NULL,
@@ -297,12 +327,28 @@ function ensure_member_module_documents_table(): bool
             uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             INDEX idx_module_uploaded (module_code, uploaded_at),
             INDEX idx_member_module (member_id, module_code),
+            INDEX idx_module_category (module_code, category),
+            INDEX idx_module_subcategory (module_code, category, subcategory),
             INDEX idx_module_tags (module_code, tags)
         )');
 
+        if (!table_has_column('member_module_documents', 'category')) {
+            db()->exec('ALTER TABLE member_module_documents ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
+        }
+        if (!table_has_column('member_module_documents', 'subcategory')) {
+            db()->exec('ALTER TABLE member_module_documents ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
+        }
         if (!table_has_column('member_module_documents', 'legacy_library_document_id')) {
             db()->exec('ALTER TABLE member_module_documents ADD COLUMN legacy_library_document_id INT NULL AFTER extracted_text');
         }
+        if (!table_has_index('member_module_documents', 'idx_module_category')) {
+            db()->exec('ALTER TABLE member_module_documents ADD INDEX idx_module_category (module_code, category)');
+        }
+        if (!table_has_index('member_module_documents', 'idx_module_subcategory')) {
+            db()->exec('ALTER TABLE member_module_documents ADD INDEX idx_module_subcategory (module_code, category, subcategory)');
+        }
+        db()->exec('UPDATE member_module_documents SET category = "general" WHERE category IS NULL OR category = ""');
+        db()->exec('UPDATE member_module_documents SET subcategory = "" WHERE subcategory IS NULL');
 
         member_document_migrate_library_categories();
 
@@ -338,8 +384,8 @@ function member_document_migrate_library_categories(): void
         $rows = $select->fetchAll() ?: [];
         $exists = db()->prepare('SELECT id FROM member_module_documents WHERE legacy_library_document_id = ? AND module_code = ? LIMIT 1');
         $insert = db()->prepare(
-            'INSERT INTO member_module_documents (module_code, member_id, tags, title, description, file_path, extracted_text, legacy_library_document_id, uploaded_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO member_module_documents (module_code, member_id, category, subcategory, tags, title, description, file_path, extracted_text, legacy_library_document_id, uploaded_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
         foreach ($rows as $row) {
             $legacyId = (int) ($row['id'] ?? 0);
@@ -353,6 +399,8 @@ function member_document_migrate_library_categories(): void
             $insert->execute([
                 $moduleCode,
                 (int) ($row['member_id'] ?? 0),
+                function_exists('member_library_category_slug') ? member_library_category_slug((string) ($row['category'] ?? 'general')) : 'general',
+                function_exists('member_library_subcategory_slug') ? member_library_subcategory_slug((string) ($row['subcategory'] ?? '')) : '',
                 (string) ($row['tags'] ?? ''),
                 (string) ($row['title'] ?? ''),
                 (string) ($row['description'] ?? ''),
@@ -389,6 +437,406 @@ if (!function_exists('member_document_module_allows_member_management')) {
 function member_document_module_allows_member_management(string $moduleCode): bool
 {
     return in_array(member_document_module_normalize($moduleCode), ['presentations', 'videos'], true);
+}
+}
+
+if (!function_exists('member_document_category_code')) {
+function member_document_category_code(string $value): string
+{
+    return content_proposal_category_code($value, 120, 'general');
+}
+}
+
+if (!function_exists('member_document_subcategory_code')) {
+function member_document_subcategory_code(string $value): string
+{
+    return content_taxonomy_code($value, 120, '', true);
+}
+}
+
+if (!function_exists('member_document_subcategory_ref')) {
+function member_document_subcategory_ref(string $categoryCode, string $subcategoryCode): string
+{
+    $categoryCode = member_document_category_code($categoryCode !== '' ? $categoryCode : 'general');
+    $subcategoryCode = member_document_subcategory_code($subcategoryCode);
+
+    return $subcategoryCode !== '' ? ($categoryCode . ':' . $subcategoryCode) : '';
+}
+}
+
+if (!function_exists('member_document_subcategory_ref_parts')) {
+/**
+ * @return array{category:string,subcategory:string}
+ */
+function member_document_subcategory_ref_parts(string $value): array
+{
+    $value = trim($value);
+    if ($value === '') {
+        return ['category' => '', 'subcategory' => ''];
+    }
+
+    $parts = explode(':', $value, 2);
+    if (count($parts) === 2) {
+        return [
+            'category' => member_document_category_code($parts[0] !== '' ? $parts[0] : 'general'),
+            'subcategory' => member_document_subcategory_code($parts[1]),
+        ];
+    }
+
+    return ['category' => '', 'subcategory' => member_document_subcategory_code($value)];
+}
+}
+
+if (!function_exists('member_document_category_label_from_code')) {
+function member_document_category_label_from_code(string $code): string
+{
+    $label = trim(str_replace('-', ' ', member_document_category_code($code)));
+    if ($label === '') {
+        return 'General';
+    }
+
+    return mb_convert_case($label, MB_CASE_TITLE, 'UTF-8');
+}
+}
+
+if (!function_exists('member_document_default_categories')) {
+/**
+ * @return list<array{code:string,label:string,sort_order:int}>
+ */
+function member_document_default_categories(string $moduleCode = ''): array
+{
+    $defaults = [['code' => 'general', 'label' => 'General', 'sort_order' => 1]];
+    if (function_exists('member_library_default_categories')) {
+        foreach (member_library_default_categories() as $category) {
+            $code = member_document_category_code((string) ($category['code'] ?? ''));
+            $label = content_proposal_clean_single_line((string) ($category['label'] ?? $code), 160);
+            if ($code !== '' && $label !== '') {
+                $defaults[] = [
+                    'code' => $code,
+                    'label' => $label,
+                    'sort_order' => (int) ($category['sort_order'] ?? 100),
+                ];
+            }
+        }
+    }
+
+    $seen = [];
+    $result = [];
+    foreach ($defaults as $category) {
+        if (isset($seen[$category['code']])) {
+            continue;
+        }
+        $seen[$category['code']] = true;
+        $result[] = $category;
+    }
+
+    return $result;
+}
+}
+
+if (!function_exists('member_document_default_subcategories')) {
+/**
+ * @return list<array{category_code:string,code:string,label:string,sort_order:int}>
+ */
+function member_document_default_subcategories(string $moduleCode = ''): array
+{
+    $defaults = [];
+    if (function_exists('member_library_default_subcategories')) {
+        foreach (member_library_default_subcategories() as $subcategory) {
+            $categoryCode = member_document_category_code((string) ($subcategory['category_code'] ?? 'general'));
+            $code = member_document_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $label = content_proposal_clean_single_line((string) ($subcategory['label'] ?? $code), 160);
+            if ($categoryCode !== '' && $code !== '' && $label !== '') {
+                $defaults[] = [
+                    'category_code' => $categoryCode,
+                    'code' => $code,
+                    'label' => $label,
+                    'sort_order' => (int) ($subcategory['sort_order'] ?? 100),
+                ];
+            }
+        }
+    }
+
+    return $defaults;
+}
+}
+
+if (!function_exists('member_document_ensure_categories_table')) {
+function member_document_ensure_categories_table(string $moduleCode): bool
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if ($moduleCode === '') {
+        return false;
+    }
+
+    try {
+        db()->exec('CREATE TABLE IF NOT EXISTS member_module_categories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            module_code VARCHAR(80) NOT NULL,
+            code VARCHAR(120) NOT NULL,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_member_module_category (module_code, code),
+            INDEX idx_member_module_category_module (module_code)
+        )');
+        $insert = db()->prepare('INSERT IGNORE INTO member_module_categories (module_code, code, label, sort_order) VALUES (?, ?, ?, ?)');
+        foreach (member_document_default_categories($moduleCode) as $category) {
+            $insert->execute([$moduleCode, (string) $category['code'], (string) $category['label'], (int) $category['sort_order']]);
+        }
+
+        return table_exists('member_module_categories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+}
+
+if (!function_exists('member_document_ensure_subcategories_table')) {
+function member_document_ensure_subcategories_table(string $moduleCode): bool
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if ($moduleCode === '') {
+        return false;
+    }
+
+    try {
+        db()->exec('CREATE TABLE IF NOT EXISTS member_module_subcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            module_code VARCHAR(80) NOT NULL,
+            category_code VARCHAR(120) NOT NULL,
+            code VARCHAR(120) NOT NULL,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_member_module_subcategory (module_code, category_code, code),
+            INDEX idx_member_module_subcategory_module (module_code, category_code)
+        )');
+        $insert = db()->prepare('INSERT IGNORE INTO member_module_subcategories (module_code, category_code, code, label, sort_order) VALUES (?, ?, ?, ?, ?)');
+        foreach (member_document_default_subcategories($moduleCode) as $subcategory) {
+            $insert->execute([
+                $moduleCode,
+                (string) $subcategory['category_code'],
+                (string) $subcategory['code'],
+                (string) $subcategory['label'],
+                (int) $subcategory['sort_order'],
+            ]);
+        }
+
+        return table_exists('member_module_subcategories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+}
+
+if (!function_exists('member_document_categories')) {
+/**
+ * @return array<string, string>
+ */
+function member_document_categories(string $moduleCode): array
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    $categories = [];
+    foreach (member_document_default_categories($moduleCode) as $category) {
+        $categories[(string) $category['code']] = (string) $category['label'];
+    }
+
+    if (member_document_ensure_categories_table($moduleCode)) {
+        try {
+            $stmt = db()->prepare('SELECT code, label FROM member_module_categories WHERE module_code = ? ORDER BY sort_order ASC, label ASC');
+            $stmt->execute([$moduleCode]);
+            foreach ($stmt->fetchAll() ?: [] as $row) {
+                $code = member_document_category_code((string) ($row['code'] ?? ''));
+                $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
+                if ($code !== '' && $label !== '') {
+                    $categories[$code] = $label;
+                }
+            }
+        } catch (Throwable) {
+        }
+    }
+
+    try {
+        if (table_exists('member_module_documents') && table_has_column('member_module_documents', 'category')) {
+            $stmt = db()->prepare('SELECT category FROM member_module_documents WHERE module_code = ? AND category IS NOT NULL AND category <> "" GROUP BY category ORDER BY category ASC');
+            $stmt->execute([$moduleCode]);
+            foreach ($stmt->fetchAll() ?: [] as $row) {
+                $code = member_document_category_code((string) ($row['category'] ?? ''));
+                if ($code !== '' && !isset($categories[$code])) {
+                    $categories[$code] = member_document_category_label_from_code($code);
+                }
+            }
+        }
+    } catch (Throwable) {
+    }
+
+    return $categories;
+}
+}
+
+if (!function_exists('member_document_category_from_input')) {
+/**
+ * @param array<string, string> $categories
+ */
+function member_document_category_from_input(string $value, array $categories): string
+{
+    $code = member_document_category_code($value);
+    if ($code === '') {
+        $code = 'general';
+    }
+    if (!isset($categories[$code])) {
+        throw new RuntimeException('err_category');
+    }
+
+    return $code;
+}
+}
+
+if (!function_exists('member_document_subcategory_options')) {
+/**
+ * @return list<array{category_code:string,code:string,label:string}>
+ */
+function member_document_subcategory_options(string $moduleCode): array
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    $options = [];
+    if (member_document_ensure_subcategories_table($moduleCode)) {
+        try {
+            $stmt = db()->prepare('SELECT category_code, code, label FROM member_module_subcategories WHERE module_code = ? ORDER BY category_code ASC, sort_order ASC, label ASC');
+            $stmt->execute([$moduleCode]);
+            $rows = $stmt->fetchAll() ?: [];
+        } catch (Throwable) {
+            $rows = [];
+        }
+    } else {
+        $rows = member_document_default_subcategories($moduleCode);
+    }
+
+    foreach ($rows as $row) {
+        $categoryCode = member_document_category_code((string) ($row['category_code'] ?? 'general'));
+        $code = member_document_subcategory_code((string) ($row['code'] ?? ''));
+        $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
+        if ($categoryCode === '' || $code === '' || $label === '') {
+            continue;
+        }
+        $options[] = ['category_code' => $categoryCode, 'code' => $code, 'label' => $label];
+    }
+
+    return $options;
+}
+}
+
+if (!function_exists('member_document_subcategories_by_category')) {
+/**
+ * @return array<string, list<array{category_code:string,code:string,label:string}>>
+ */
+function member_document_subcategories_by_category(string $moduleCode): array
+{
+    $byCategory = [];
+    foreach (member_document_subcategory_options($moduleCode) as $subcategory) {
+        $byCategory[$subcategory['category_code']][] = $subcategory;
+    }
+
+    return $byCategory;
+}
+}
+
+if (!function_exists('member_document_visible_categories')) {
+/**
+ * @param array<string, string> $categories
+ * @param array<string, int> $countsByCategory
+ * @return array<string, string>
+ */
+function member_document_visible_categories(array $categories, array $countsByCategory): array
+{
+    $visible = [];
+    foreach ($categories as $code => $label) {
+        if ((int) ($countsByCategory[(string) $code] ?? 0) <= 0) {
+            continue;
+        }
+        $visible[(string) $code] = (string) $label;
+    }
+
+    return $visible;
+}
+}
+
+if (!function_exists('member_document_visible_subcategories_by_category')) {
+/**
+ * @param array<string, list<array<string, mixed>>> $subcategoriesByCategory
+ * @param array<string, int> $countsBySubcategory
+ * @return array<string, list<array<string, mixed>>>
+ */
+function member_document_visible_subcategories_by_category(array $subcategoriesByCategory, array $countsBySubcategory): array
+{
+    $visible = [];
+    foreach ($subcategoriesByCategory as $categoryCode => $subcategories) {
+        foreach ($subcategories as $subcategory) {
+            $code = member_document_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $count = (int) ($countsBySubcategory[(string) $categoryCode . ':' . $code] ?? 0);
+            if ($code === '' || $count <= 0) {
+                continue;
+            }
+            $subcategory['total'] = $count;
+            $visible[(string) $categoryCode][] = $subcategory;
+        }
+    }
+
+    return $visible;
+}
+}
+
+if (!function_exists('member_document_favorites_label')) {
+/**
+ * @param array<string, mixed> $labels
+ */
+function member_document_favorites_label(array $labels, string $locale = ''): string
+{
+    $label = trim((string) ($labels['favorites'] ?? ''));
+    if ($label !== '') {
+        return $label;
+    }
+    if ($locale === 'fr') {
+        return 'Favoris';
+    }
+
+    return 'Favorites';
+}
+}
+
+if (!function_exists('member_document_favorite_document_ids')) {
+/**
+ * @return list<int>
+ */
+function member_document_favorite_document_ids(int $memberId, string $moduleCode): array
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if (
+        $memberId <= 0
+        || $moduleCode === ''
+        || !function_exists('ensure_member_favorites_table')
+        || !ensure_member_favorites_table()
+        || !ensure_member_module_documents_table()
+    ) {
+        return [];
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT d.id FROM member_favorites f INNER JOIN member_module_documents d ON d.id = f.target_id WHERE f.member_id = ? AND f.target_type = ? AND d.module_code = ? ORDER BY f.created_at DESC, f.id DESC');
+        $stmt->execute([$memberId, 'member_module_document', $moduleCode]);
+        $ids = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    } catch (Throwable) {
+        return [];
+    }
 }
 }
 
@@ -495,7 +943,9 @@ function member_document_update_record(
     string $title,
     string $description,
     string $tags,
-    string $replacementPublicPath = ''
+    string $replacementPublicPath = '',
+    string $category = 'general',
+    string $subcategory = ''
 ): void {
     if (!ensure_member_module_documents_table()) {
         throw new RuntimeException('storage_unavailable');
@@ -505,6 +955,8 @@ function member_document_update_record(
     $title = content_proposal_clean_single_line($title, 255);
     $description = content_proposal_clean_multiline($description, 5000);
     $tags = content_proposal_clean_single_line($tags, 255);
+    $category = member_document_category_code($category !== '' ? $category : 'general');
+    $subcategory = member_document_subcategory_code($subcategory);
     if ($documentId <= 0 || $moduleCode === '' || $title === '') {
         throw new RuntimeException('err_required');
     }
@@ -531,16 +983,23 @@ function member_document_update_record(
     if ($replacementSafePath !== '') {
         $extension = strtolower(pathinfo($replacementSafePath, PATHINFO_EXTENSION));
         $extractedText = member_document_extract_text(dirname(__DIR__) . '/' . $replacementSafePath, $extension);
-        db()->prepare('UPDATE member_module_documents SET title = ?, description = ?, tags = ?, file_path = ?, extracted_text = ? WHERE id = ? AND module_code = ?')
-            ->execute([$title, $description !== '' ? $description : null, $tags, $replacementSafePath, $extractedText !== '' ? $extractedText : null, $documentId, $moduleCode]);
+        db()->prepare('UPDATE member_module_documents SET category = ?, subcategory = ?, title = ?, description = ?, tags = ?, file_path = ?, extracted_text = ? WHERE id = ? AND module_code = ?')
+            ->execute([$category, $subcategory, $title, $description !== '' ? $description : null, $tags, $replacementSafePath, $extractedText !== '' ? $extractedText : null, $documentId, $moduleCode]);
         if ($currentPath !== $replacementSafePath) {
             member_document_delete_file($currentPath);
         }
-        return;
+    } else {
+        db()->prepare('UPDATE member_module_documents SET category = ?, subcategory = ?, title = ?, description = ?, tags = ? WHERE id = ? AND module_code = ?')
+            ->execute([$category, $subcategory, $title, $description !== '' ? $description : null, $tags, $documentId, $moduleCode]);
     }
 
-    db()->prepare('UPDATE member_module_documents SET title = ?, description = ?, tags = ? WHERE id = ? AND module_code = ?')
-        ->execute([$title, $description !== '' ? $description : null, $tags, $documentId, $moduleCode]);
+    if (table_exists('member_favorites')) {
+        $definition = member_document_module_definition($moduleCode) ?? [];
+        $route = (string) ($definition['route'] ?? $moduleCode);
+        $favoriteUrl = route_url_clean($route, ['q' => $title, 'category' => $category, 'subcategory' => $subcategory]);
+        db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
+            ->execute([$title, $favoriteUrl, 'member_module_document', $documentId]);
+    }
 }
 }
 
@@ -565,6 +1024,9 @@ function member_document_delete_record(int $documentId, string $moduleCode): voi
 
     member_document_delete_file($path);
     db()->prepare('DELETE FROM member_module_documents WHERE id = ? AND module_code = ?')->execute([$documentId, $moduleCode]);
+    if (table_exists('member_favorites')) {
+        db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['member_module_document', $documentId]);
+    }
 }
 }
 
@@ -595,7 +1057,9 @@ function member_document_apply_accepted_proposal(array $proposal, string $module
         (string) ($proposal['title'] ?? ''),
         member_document_proposal_detail($summary, ['Description']),
         member_document_proposal_detail($summary, ['Tags', 'Etiquettes']),
-        (string) ($proposal['source_ref'] ?? '')
+        (string) ($proposal['source_ref'] ?? ''),
+        member_document_proposal_detail($summary, ['Category', 'Thematique', 'Thématique', 'Topic']),
+        member_document_proposal_detail($summary, ['Subcategory', 'Sous-thematique', 'Sous-thématique', 'Subtopic'])
     );
 
     return $documentId;
@@ -648,24 +1112,104 @@ function member_document_module_stats(string $moduleCode): array
     $latestStmt->execute([$moduleCode]);
     $latest = trim((string) ($latestStmt->fetchColumn() ?: ''));
 
-    return ['total' => $total, 'formats' => count($formats), 'latest' => $latest];
+    $byCategory = [];
+    $bySubcategory = [];
+    try {
+        $categoryStmt = db()->prepare('SELECT category, COUNT(*) AS total FROM member_module_documents WHERE module_code = ? GROUP BY category ORDER BY category ASC');
+        $categoryStmt->execute([$moduleCode]);
+        foreach ($categoryStmt->fetchAll() ?: [] as $row) {
+            $code = member_document_category_code((string) ($row['category'] ?? 'general'));
+            if ($code !== '') {
+                $byCategory[$code] = (int) ($row['total'] ?? 0);
+            }
+        }
+        $subcategoryStmt = db()->prepare('SELECT category, subcategory, COUNT(*) AS total FROM member_module_documents WHERE module_code = ? AND subcategory IS NOT NULL AND subcategory <> "" GROUP BY category, subcategory ORDER BY category ASC, subcategory ASC');
+        $subcategoryStmt->execute([$moduleCode]);
+        foreach ($subcategoryStmt->fetchAll() ?: [] as $row) {
+            $category = member_document_category_code((string) ($row['category'] ?? 'general'));
+            $subcategory = member_document_subcategory_code((string) ($row['subcategory'] ?? ''));
+            if ($category !== '' && $subcategory !== '') {
+                $bySubcategory[$category . ':' . $subcategory] = (int) ($row['total'] ?? 0);
+            }
+        }
+    } catch (Throwable) {
+        $byCategory = [];
+        $bySubcategory = [];
+    }
+
+    return ['total' => $total, 'formats' => count($formats), 'latest' => $latest, 'by_category' => $byCategory, 'by_subcategory' => $bySubcategory];
 }
 }
 
 if (!function_exists('member_document_fetch_documents')) {
-function member_document_fetch_documents(string $moduleCode, string $search, int $limit = 60): array
+/**
+ * @param list<int> $favoriteIds
+ */
+function member_document_fetch_documents(string $moduleCode, string $search, int $limit = 60, string $category = '', string $subcategory = '', array $favoriteIds = []): array
 {
     $where = ['module_code = ?'];
     $params = [$moduleCode];
+    $category = member_document_category_code($category);
+    $subcategory = member_document_subcategory_code($subcategory);
+    if ($category !== '') {
+        $where[] = 'category = ?';
+        $params[] = $category;
+    }
+    if ($subcategory !== '') {
+        $where[] = 'subcategory = ?';
+        $params[] = $subcategory;
+    }
+    if ($favoriteIds !== []) {
+        $where[] = 'id IN (' . implode(',', array_fill(0, count($favoriteIds), '?')) . ')';
+        array_push($params, ...$favoriteIds);
+    }
     if ($search !== '') {
-        $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ? OR tags LIKE ?)';
+        $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ? OR tags LIKE ? OR category LIKE ? OR subcategory LIKE ?)';
         $like = '%' . $search . '%';
-        array_push($params, $like, $like, $like, $like);
+        array_push($params, $like, $like, $like, $like, $like, $like);
     }
     $stmt = db()->prepare('SELECT * FROM member_module_documents WHERE ' . implode(' AND ', $where) . ' ORDER BY uploaded_at DESC, id DESC LIMIT ' . (int) $limit);
     $stmt->execute($params);
 
     return $stmt->fetchAll() ?: [];
+}
+}
+
+if (!function_exists('render_member_document_taxonomy_fields')) {
+/**
+ * @param array<string, string> $categories
+ * @param array<string, string> $labels
+ */
+function render_member_document_taxonomy_fields(string $moduleCode, array $categories, array $labels, string $selectedCategory = 'general', string $selectedSubcategory = ''): string
+{
+    $selectedCategory = member_document_category_code($selectedCategory !== '' ? $selectedCategory : 'general');
+    $selectedSubcategory = member_document_subcategory_code($selectedSubcategory);
+    $subcategoriesByCategory = member_document_subcategories_by_category($moduleCode);
+
+    $html = '<label><span>' . e((string) ($labels['category_field'] ?? 'Topic')) . '</span><select name="category">';
+    foreach ($categories as $code => $label) {
+        $html .= '<option value="' . e((string) $code) . '"' . ($selectedCategory === (string) $code ? ' selected' : '') . '>' . e((string) $label) . '</option>';
+    }
+    $html .= '</select></label>'
+        . '<label><span>' . e((string) ($labels['subcategory_field'] ?? 'Subtopic')) . '</span><select name="subcategory_ref">'
+        . '<option value="">' . e((string) ($labels['no_subcategory'] ?? 'No subtopic')) . '</option>';
+
+    foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
+        $parentLabel = (string) ($categories[(string) $parentCode] ?? member_document_category_label_from_code((string) $parentCode));
+        $html .= '<optgroup label="' . e($parentLabel) . '">';
+        foreach ($subcategories as $subcategory) {
+            $code = member_document_subcategory_code((string) ($subcategory['code'] ?? ''));
+            if ($code === '') {
+                continue;
+            }
+            $html .= '<option value="' . e(member_document_subcategory_ref((string) $parentCode, $code)) . '"'
+                . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
+                . '>' . e((string) ($subcategory['label'] ?? $code)) . '</option>';
+        }
+        $html .= '</optgroup>';
+    }
+
+    return $html . '</select></label>';
 }
 }
 
@@ -676,6 +1220,17 @@ function render_member_document_module_cards(array $documents, array $labels, st
     $moduleCode = member_document_module_normalize($moduleCode);
     $viewerId = max(0, (int) ($viewer['id'] ?? 0));
     $returnSearch = (string) ($returnQuery['q'] ?? '');
+    $returnCategory = (string) ($returnQuery['category'] ?? '');
+    $returnSubcategory = (string) ($returnQuery['subcategory'] ?? '');
+    $returnFavorites = (string) ($returnQuery['favorites'] ?? '');
+    $categories = member_document_categories($moduleCode);
+    $subcategoriesByCategory = member_document_subcategories_by_category($moduleCode);
+    $subcategoryLabels = [];
+    foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
+        foreach ($subcategories as $subcategory) {
+            $subcategoryLabels[(string) $parentCode . ':' . (string) ($subcategory['code'] ?? '')] = (string) ($subcategory['label'] ?? '');
+        }
+    }
     $allowMemberManagement = member_document_module_allows_member_management($moduleCode);
     foreach ($documents as $document) {
         $safePath = member_document_safe_path((string) ($document['file_path'] ?? ''));
@@ -691,7 +1246,12 @@ function render_member_document_module_cards(array $documents, array $labels, st
         $docTags = trim((string) ($document['tags'] ?? ''));
         $docExtract = trim((string) ($document['extracted_text'] ?? ''));
         $documentId = max(0, (int) ($document['id'] ?? 0));
+        $docCategory = member_document_category_code((string) ($document['category'] ?? 'general'));
+        $docSubcategory = member_document_subcategory_code((string) ($document['subcategory'] ?? ''));
+        $docCategoryLabel = (string) ($categories[$docCategory] ?? member_document_category_label_from_code($docCategory));
+        $docSubcategoryLabel = $docSubcategory !== '' ? (string) ($subcategoryLabels[$docCategory . ':' . $docSubcategory] ?? $docSubcategory) : '';
         $canEditDocument = $allowMemberManagement && $documentId > 0 && ($canManage || ($viewerId > 0 && (int) ($document['member_id'] ?? 0) === $viewerId));
+        $isFavorite = $viewerId > 0 && $documentId > 0 && function_exists('favorite_is_saved') && favorite_is_saved($viewerId, 'member_module_document', $documentId);
         $dialogId = 'member-document-edit-dialog-' . $documentId;
         $html .= '<article class="news-card feature-card member-document-card">'
             . '<span class="badge muted">' . e(strtoupper($extension)) . '</span>'
@@ -702,6 +1262,7 @@ function render_member_document_module_cards(array $documents, array $labels, st
         if ($docTags !== '') {
             $html .= '<p class="help">' . e((string) $labels['tags']) . ': ' . e($docTags) . '</p>';
         }
+        $html .= '<p class="help">' . e((string) ($labels['category_field'] ?? 'Topic')) . ': ' . e($docCategoryLabel) . ($docSubcategoryLabel !== '' ? ' / ' . e($docSubcategoryLabel) : '') . '</p>';
         if ($docExtract !== '') {
             $html .= '<p class="help">' . e(mb_safe_strimwidth($docExtract, 0, 220, '...')) . '</p>';
         }
@@ -713,6 +1274,18 @@ function render_member_document_module_cards(array $documents, array $labels, st
             . '<a class="button secondary" href="' . e(base_url($safePath)) . '" target="_blank" rel="noopener">' . e((string) $labels['open']) . '</a>';
         if ($canEditDocument) {
             $html .= '<button class="button secondary" type="button" data-member-document-modal-open="' . e($dialogId) . '" aria-haspopup="dialog" aria-controls="' . e($dialogId) . '">' . e((string) $labels['edit_document']) . '</button>';
+        }
+        if ($viewerId > 0 && $documentId > 0 && function_exists('favorite_toggle')) {
+            $html .= '<form method="post" class="inline-form">'
+                . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+                . '<input type="hidden" name="action" value="toggle_favorite_document">'
+                . '<input type="hidden" name="id" value="' . $documentId . '">'
+                . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
+                . '<input type="hidden" name="return_category" value="' . e($returnCategory) . '">'
+                . '<input type="hidden" name="return_subcategory" value="' . e($returnSubcategory) . '">'
+                . '<input type="hidden" name="return_favorites" value="' . e($returnFavorites) . '">'
+                . '<button class="button secondary" type="submit">' . ($isFavorite ? '&#9733; ' : '&#9734; ') . e((string) ($labels['favorite'] ?? 'Favorite')) . '</button>'
+                . '</form>';
         }
         $html .= '</p></article>';
 
@@ -730,7 +1303,11 @@ function render_member_document_module_cards(array $documents, array $labels, st
                 . '<input type="hidden" name="action" value="update_document">'
                 . '<input type="hidden" name="id" value="' . $documentId . '">'
                 . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
+                . '<input type="hidden" name="return_category" value="' . e($returnCategory) . '">'
+                . '<input type="hidden" name="return_subcategory" value="' . e($returnSubcategory) . '">'
+                . '<input type="hidden" name="return_favorites" value="' . e($returnFavorites) . '">'
                 . '<label><span>' . e((string) $labels['title_field']) . '</span><input type="text" name="title" value="' . e($docTitle) . '" maxlength="255" required></label>'
+                . render_member_document_taxonomy_fields($moduleCode, $categories, $labels, $docCategory, $docSubcategory)
                 . '<label><span>' . e((string) $labels['description_field']) . '</span><textarea name="description" rows="5" maxlength="5000">' . e($docDescription) . '</textarea></label>'
                 . '<label><span>' . e((string) $labels['tags_field']) . '</span><input type="text" name="tags" value="' . e($docTags) . '" maxlength="255"></label>'
                 . '<label><span>' . e((string) $labels['replace_document_file']) . '</span><input type="file" name="document_file"></label>'
@@ -743,6 +1320,9 @@ function render_member_document_module_cards(array $documents, array $labels, st
                 . '<input type="hidden" name="action" value="delete_document">'
                 . '<input type="hidden" name="id" value="' . $documentId . '">'
                 . '<input type="hidden" name="return_q" value="' . e($returnSearch) . '">'
+                . '<input type="hidden" name="return_category" value="' . e($returnCategory) . '">'
+                . '<input type="hidden" name="return_subcategory" value="' . e($returnSubcategory) . '">'
+                . '<input type="hidden" name="return_favorites" value="' . e($returnFavorites) . '">'
                 . '<p class="help">' . e($canManage ? (string) $labels['delete_document_warning_admin'] : (string) $labels['delete_document_warning']) . '</p>'
                 . '<button class="button secondary member-document-danger" type="submit">' . e((string) $labels['delete']) . '</button>'
                 . '</form></div></dialog>';
@@ -809,9 +1389,14 @@ function render_member_document_module_page(string $module): void
     }
 
     $canManageDocuments = member_document_current_user_is_administrator();
+    $categories = member_document_categories($moduleCode);
+    member_document_ensure_subcategories_table($moduleCode);
     $returnUrl = static function () use ($definition, $moduleCode): string {
         return route_url_clean((string) ($definition['route'] ?? $moduleCode), [
             'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+            'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+            'subcategory' => (string) ($_POST['return_subcategory'] ?? $_GET['subcategory'] ?? ''),
+            'favorites' => (string) ($_POST['return_favorites'] ?? $_GET['favorites'] ?? '') === '1' ? '1' : '',
         ]);
     };
 
@@ -819,6 +1404,29 @@ function render_member_document_module_page(string $module): void
         try {
             verify_csrf();
             $action = (string) ($_POST['action'] ?? '');
+            if ($action === 'toggle_favorite_document') {
+                $documentId = (int) ($_POST['id'] ?? 0);
+                if ($documentId > 0 && function_exists('favorite_toggle')) {
+                    $docStmt = db()->prepare('SELECT id, title, category, subcategory FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
+                    $docStmt->execute([$documentId, $moduleCode]);
+                    $document = $docStmt->fetch() ?: null;
+                    if (is_array($document)) {
+                        $docTitle = trim((string) ($document['title'] ?? ''));
+                        if ($docTitle === '') {
+                            $docTitle = (string) $labels['documents'];
+                        }
+                        $favoriteUrl = route_url_clean((string) ($definition['route'] ?? $moduleCode), [
+                            'q' => $docTitle,
+                            'category' => (string) ($document['category'] ?? ''),
+                            'subcategory' => (string) ($document['subcategory'] ?? ''),
+                        ]);
+                        $saved = favorite_toggle((int) $user['id'], 'member_module_document', (int) $document['id'], $docTitle, $favoriteUrl);
+                        notify_member((int) $user['id'], 'favorite', $saved ? (string) $labels['favorite_added'] : (string) $labels['favorite_removed'], $docTitle, $favoriteUrl);
+                        set_flash('success', $saved ? (string) $labels['favorite_added_msg'] : (string) $labels['favorite_removed_msg']);
+                    }
+                }
+                redirect_url($returnUrl());
+            }
             if (($action !== 'update_document' && $action !== 'delete_document') || !member_document_module_allows_member_management($moduleCode)) {
                 throw new RuntimeException((string) $labels['err_invalid']);
             }
@@ -837,6 +1445,20 @@ function render_member_document_module_page(string $module): void
             $titleInput = content_proposal_clean_single_line((string) ($_POST['title'] ?? $document['title'] ?? ''), 255);
             $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? $document['description'] ?? ''), 5000);
             $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? $document['tags'] ?? ''), 255);
+            $category = member_document_category_from_input((string) ($_POST['category'] ?? $document['category'] ?? 'general'), $categories);
+            $subcategory = member_document_subcategory_code((string) ($document['subcategory'] ?? ''));
+            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+            if ($subcategoryRef !== '') {
+                $subcategoryParts = member_document_subcategory_ref_parts($subcategoryRef);
+                if ($subcategoryParts['subcategory'] !== '') {
+                    $subcategory = $subcategoryParts['subcategory'];
+                    if ($subcategoryParts['category'] !== '') {
+                        $category = member_document_category_from_input($subcategoryParts['category'], $categories);
+                    }
+                }
+            } elseif (array_key_exists('subcategory_ref', $_POST)) {
+                $subcategory = '';
+            }
             if ($titleInput === '') {
                 throw new RuntimeException((string) $labels['err_required']);
             }
@@ -852,6 +1474,8 @@ function render_member_document_module_page(string $module): void
                     'Action' => 'delete_document',
                     'Document ID' => (string) $documentId,
                     'Module' => $moduleCode,
+                    'Category' => (string) ($document['category'] ?? 'general'),
+                    'Subcategory' => (string) ($document['subcategory'] ?? ''),
                     'Tags' => (string) ($document['tags'] ?? ''),
                     'Description' => mb_safe_substr((string) ($document['description'] ?? ''), 0, 1800),
                 ]);
@@ -876,7 +1500,7 @@ function render_member_document_module_page(string $module): void
             }
 
             if ($canManageDocuments) {
-                member_document_update_record($documentId, $moduleCode, $titleInput, $description, $tags, $replacementPublicPath);
+                member_document_update_record($documentId, $moduleCode, $titleInput, $description, $tags, $replacementPublicPath, $category, $subcategory);
                 set_flash('success', (string) $labels['ok_updated']);
                 redirect_url($returnUrl());
             }
@@ -885,6 +1509,8 @@ function render_member_document_module_page(string $module): void
                 'Action' => 'update_document',
                 'Document ID' => (string) $documentId,
                 'Module' => $moduleCode,
+                'Category' => $category,
+                'Subcategory' => $subcategory,
                 'Tags' => $tags,
                 'Description' => $description,
             ]);
@@ -912,7 +1538,69 @@ function render_member_document_module_page(string $module): void
     }
 
     $stats = member_document_module_stats($moduleCode);
-    $documents = member_document_fetch_documents($moduleCode, $search);
+    $subcategoriesByCategory = member_document_subcategories_by_category($moduleCode);
+    foreach ((array) ($stats['by_subcategory'] ?? []) as $subcategoryKey => $subcategoryTotal) {
+        $parts = explode(':', (string) $subcategoryKey, 2);
+        if (count($parts) !== 2 || (int) $subcategoryTotal <= 0) {
+            continue;
+        }
+        $parentCode = member_document_category_code($parts[0]);
+        $subcategoryCode = member_document_subcategory_code($parts[1]);
+        if ($parentCode === '' || $subcategoryCode === '') {
+            continue;
+        }
+        $known = false;
+        foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
+            if (member_document_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+                $known = true;
+                break;
+            }
+        }
+        if (!$known) {
+            $subcategoriesByCategory[$parentCode][] = [
+                'category_code' => $parentCode,
+                'code' => $subcategoryCode,
+                'label' => member_document_category_label_from_code($subcategoryCode),
+            ];
+        }
+    }
+    $visibleCategories = member_document_visible_categories($categories, (array) ($stats['by_category'] ?? []));
+    $visibleSubcategoriesByCategory = member_document_visible_subcategories_by_category($subcategoriesByCategory, (array) ($stats['by_subcategory'] ?? []));
+    $categoryFilter = '';
+    $categoryInput = trim((string) ($_GET['category'] ?? ''));
+    if ($categoryInput !== '') {
+        $categoryCode = member_document_category_code($categoryInput);
+        if (isset($categories[$categoryCode])) {
+            $categoryFilter = $categoryCode;
+        }
+    }
+    $subcategoryFilter = '';
+    $subcategoryInput = trim((string) ($_GET['subcategory'] ?? ''));
+    if ($subcategoryInput !== '') {
+        $subcategoryCode = member_document_subcategory_code($subcategoryInput);
+        if ($subcategoryCode !== '') {
+            $candidateCategory = $categoryFilter;
+            if ($candidateCategory === '') {
+                foreach ($visibleSubcategoriesByCategory as $parentCode => $subcategories) {
+                    foreach ($subcategories as $subcategoryInfo) {
+                        if (member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryCode) {
+                            $candidateCategory = (string) $parentCode;
+                            break 2;
+                        }
+                    }
+                }
+            }
+            if ($candidateCategory !== '' && (int) (($stats['by_subcategory'][$candidateCategory . ':' . $subcategoryCode] ?? 0)) > 0) {
+                $categoryFilter = $candidateCategory;
+                $subcategoryFilter = $subcategoryCode;
+            }
+        }
+    }
+    $favoriteDocumentIds = member_document_favorite_document_ids((int) ($user['id'] ?? 0), $moduleCode);
+    $favoriteDocumentCount = count($favoriteDocumentIds);
+    $favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteDocumentCount > 0;
+    $favoritesLabel = member_document_favorites_label($labels, $locale);
+    $documents = member_document_fetch_documents($moduleCode, $search, 60, $categoryFilter, $subcategoryFilter, $favoritesOnly ? $favoriteDocumentIds : []);
     $hiddenStats = (array) ($definition['hidden_stats'] ?? []);
     $latestDate = trim((string) ($stats['latest'] ?? ''));
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $labels['none'];
@@ -950,24 +1638,68 @@ function render_member_document_module_page(string $module): void
         <section class="card member-document-search-panel">
             <form method="get" class="inline-form member-document-search-form">
                 <input type="hidden" name="route" value="<?= e((string) ($definition['route'] ?? $moduleCode)) ?>">
+                <?php if ($categoryFilter !== ''): ?>
+                    <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
+                <?php endif; ?>
+                <?php if ($subcategoryFilter !== ''): ?>
+                    <input type="hidden" name="subcategory" value="<?= e($subcategoryFilter) ?>">
+                <?php endif; ?>
+                <?php if ($favoritesOnly): ?>
+                    <input type="hidden" name="favorites" value="1">
+                <?php endif; ?>
                 <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $labels['search_ph']) ?>">
                 <button class="button" type="submit"><?= e((string) $labels['search']) ?></button>
-                <?php if ($search !== ''): ?>
+                <?php if ($search !== '' || $categoryFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
                     <a class="button secondary" href="<?= e(route_url((string) ($definition['route'] ?? $moduleCode))) ?>"><?= e((string) $labels['reset']) ?></a>
                 <?php endif; ?>
             </form>
         </section>
 
-        <section id="member-document-list" class="member-document-content">
-            <?php if ($documents === []): ?>
-                <div class="card">
-                    <p><?= e((string) $labels['empty']) ?><?php if ($search !== ''): ?><?= e((string) $labels['for_filters']) ?>.<?php endif; ?></p>
-                </div>
-            <?php else: ?>
-                <div class="news-grid member-document-grid">
-                    <?= render_member_document_module_cards($documents, $labels, $moduleCode, $user, $canManageDocuments, ['q' => $search]) ?>
-                </div>
-            <?php endif; ?>
+        <section class="member-document-layout module-taxonomy-layout">
+            <aside class="card member-document-taxonomy module-taxonomy-index">
+                <p class="module-taxonomy-title"><?= e((string) ($labels['category_field'] ?? 'Topic')) ?></p>
+                <nav class="module-taxonomy-list" aria-label="<?= e((string) ($labels['category_field'] ?? 'Topic')) ?>">
+                    <?php if ($favoriteDocumentCount > 0): ?>
+                        <a class="module-taxonomy-item<?= $favoritesOnly ? ' is-active' : '' ?>" href="<?= e(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['favorites' => '1', 'q' => $search])) ?>"<?= $favoritesOnly ? ' aria-current="page"' : '' ?>>
+                            <span><?= e($favoritesLabel) ?></span>
+                            <strong><?= (int) $favoriteDocumentCount ?></strong>
+                        </a>
+                    <?php endif; ?>
+                    <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                        <span><?= e((string) ($labels['all_categories'] ?? 'All topics')) ?></span>
+                        <strong><?= (int) ($stats['total'] ?? 0) ?></strong>
+                    </a>
+                    <?php foreach ($visibleCategories as $categoryCode => $categoryLabel): ?>
+                        <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['category' => (string) $categoryCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                            <span><?= e((string) $categoryLabel) ?></span>
+                            <strong><?= (int) ($stats['by_category'][$categoryCode] ?? 0) ?></strong>
+                        </a>
+                        <?php if (($visibleSubcategoriesByCategory[(string) $categoryCode] ?? []) !== []): ?>
+                            <div class="module-taxonomy-children">
+                                <?php foreach ($visibleSubcategoriesByCategory[(string) $categoryCode] as $subcategoryInfo): ?>
+                                    <?php $subCode = member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                                    <a class="module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['category' => (string) $categoryCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
+                                        <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
+                                        <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
+                                    </a>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </nav>
+            </aside>
+
+            <section id="member-document-list" class="member-document-content module-taxonomy-content">
+                <?php if ($documents === []): ?>
+                    <div class="card">
+                        <p><?= e((string) $labels['empty']) ?><?php if ($search !== '' || $categoryFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?><?= e((string) $labels['for_filters']) ?>.<?php endif; ?></p>
+                    </div>
+                <?php else: ?>
+                    <div class="news-grid member-document-grid">
+                        <?= render_member_document_module_cards($documents, $labels, $moduleCode, $user, $canManageDocuments, ['q' => $search, 'category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '']) ?>
+                    </div>
+                <?php endif; ?>
+            </section>
         </section>
     </div>
     <?php
@@ -1021,10 +1753,87 @@ function render_admin_member_document_module_page(string $module): void
         return;
     }
 
+    $categories = member_document_categories($moduleCode);
+    member_document_ensure_subcategories_table($moduleCode);
+    $adminReturnUrl = static function () use ($adminRoute): string {
+        return route_url_clean($adminRoute, [
+            'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+            'subcategory' => (string) ($_POST['return_subcategory'] ?? $_GET['subcategory'] ?? ''),
+            'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+        ]);
+    };
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             verify_csrf();
             $action = (string) ($_POST['action'] ?? 'upload');
+            if ($action === 'add_category') {
+                if (!member_document_ensure_categories_table($moduleCode)) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+                $code = member_document_category_code((string) ($_POST['category_code'] ?? $label));
+                if ($label === '' || $code === '') {
+                    throw new RuntimeException('err_required');
+                }
+                db()->prepare('INSERT INTO member_module_categories (module_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                    ->execute([$moduleCode, $code, $label]);
+                set_flash('success', (string) ($labels['ok_added'] ?? 'Saved.'));
+                redirect_url(route_url_clean($adminRoute, ['category' => $code]));
+            }
+            if ($action === 'delete_category') {
+                if (!member_document_ensure_categories_table($moduleCode)) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $category = member_document_category_from_input((string) ($_POST['category_code'] ?? ''), $categories);
+                $docCountStmt = db()->prepare('SELECT COUNT(*) FROM member_module_documents WHERE module_code = ? AND category = ?');
+                $docCountStmt->execute([$moduleCode, $category]);
+                if ((int) $docCountStmt->fetchColumn() > 0) {
+                    throw new RuntimeException('err_category_has_documents');
+                }
+                $subCountStmt = db()->prepare('SELECT COUNT(*) FROM member_module_subcategories WHERE module_code = ? AND category_code = ?');
+                $subCountStmt->execute([$moduleCode, $category]);
+                if ((int) $subCountStmt->fetchColumn() > 0) {
+                    throw new RuntimeException('err_category_has_subcategories');
+                }
+                db()->prepare('DELETE FROM member_module_categories WHERE module_code = ? AND code = ?')->execute([$moduleCode, $category]);
+                set_flash('success', (string) ($labels['ok_deleted'] ?? 'Deleted.'));
+                redirect($adminRoute);
+            }
+            if ($action === 'add_subcategory') {
+                if (!member_document_ensure_subcategories_table($moduleCode)) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $category = member_document_category_from_input((string) ($_POST['subcategory_category'] ?? 'general'), $categories);
+                $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+                $code = member_document_subcategory_code((string) ($_POST['subcategory_code'] ?? $label));
+                if ($label === '' || $code === '') {
+                    throw new RuntimeException('err_required');
+                }
+                db()->prepare('INSERT INTO member_module_subcategories (module_code, category_code, code, label) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                    ->execute([$moduleCode, $category, $code, $label]);
+                set_flash('success', (string) ($labels['ok_added'] ?? 'Saved.'));
+                redirect_url(route_url_clean($adminRoute, ['category' => $category, 'subcategory' => $code]));
+            }
+            if ($action === 'delete_subcategory') {
+                if (!member_document_ensure_subcategories_table($moduleCode)) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $parts = member_document_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+                $category = member_document_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $categories);
+                $subcategory = member_document_subcategory_code($parts['subcategory']);
+                if ($subcategory === '') {
+                    throw new RuntimeException('err_required');
+                }
+                $countStmt = db()->prepare('SELECT COUNT(*) FROM member_module_documents WHERE module_code = ? AND category = ? AND subcategory = ?');
+                $countStmt->execute([$moduleCode, $category, $subcategory]);
+                if ((int) $countStmt->fetchColumn() > 0) {
+                    throw new RuntimeException('err_subcategory_has_documents');
+                }
+                db()->prepare('DELETE FROM member_module_subcategories WHERE module_code = ? AND category_code = ? AND code = ?')->execute([$moduleCode, $category, $subcategory]);
+                set_flash('success', (string) ($labels['ok_deleted'] ?? 'Deleted.'));
+                redirect_url(route_url_clean($adminRoute, ['category' => $category]));
+            }
             if ($action === 'delete_document') {
                 $id = (int) ($_POST['id'] ?? 0);
                 $stmt = db()->prepare('SELECT file_path FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
@@ -1038,23 +1847,38 @@ function render_admin_member_document_module_page(string $module): void
                     }
                 }
                 db()->prepare('DELETE FROM member_module_documents WHERE id = ? AND module_code = ?')->execute([$id, $moduleCode]);
+                if (table_exists('member_favorites')) {
+                    db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['member_module_document', $id]);
+                }
                 set_flash('success', (string) $labels['ok_deleted']);
-                redirect($adminRoute);
+                redirect_url($adminReturnUrl());
             }
 
             $uploadTitle = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
             $tags = mb_safe_substr(trim((string) ($_POST['tags'] ?? '')), 0, 255);
+            $category = member_document_category_from_input((string) ($_POST['category'] ?? 'general'), $categories);
+            $subcategory = '';
+            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+            if ($subcategoryRef !== '') {
+                $subcategoryParts = member_document_subcategory_ref_parts($subcategoryRef);
+                if ($subcategoryParts['subcategory'] !== '') {
+                    $subcategory = $subcategoryParts['subcategory'];
+                    if ($subcategoryParts['category'] !== '') {
+                        $category = member_document_category_from_input($subcategoryParts['category'], $categories);
+                    }
+                }
+            }
             $file = $_FILES['document'] ?? null;
             if ($uploadTitle === '' || !is_array($file)) {
                 throw new RuntimeException('err_required');
             }
             $stored = member_document_store_upload($file, $moduleCode, (int) ($user['id'] ?? 0));
             $extractedText = member_document_extract_text((string) $stored['absolute_path'], (string) $stored['extension']);
-            db()->prepare('INSERT INTO member_module_documents (module_code, member_id, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?)')
-                ->execute([$moduleCode, (int) ($user['id'] ?? 0), $tags, $uploadTitle, $description, (string) $stored['public_path'], $extractedText]);
+            db()->prepare('INSERT INTO member_module_documents (module_code, member_id, category, subcategory, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+                ->execute([$moduleCode, (int) ($user['id'] ?? 0), $category, $subcategory, $tags, $uploadTitle, $description, (string) $stored['public_path'], $extractedText]);
             set_flash('success', (string) $labels['ok_added']);
-            redirect($adminRoute);
+            redirect_url(route_url_clean($adminRoute, ['category' => $category, 'subcategory' => $subcategory]));
         } catch (Throwable $throwable) {
             $key = $throwable->getMessage();
             set_flash('error', (string) ($labels[$key] ?? $key));
@@ -1067,7 +1891,65 @@ function render_admin_member_document_module_page(string $module): void
         $search = mb_substr($search, 0, 120);
     }
     $stats = member_document_module_stats($moduleCode);
-    $documents = member_document_fetch_documents($moduleCode, $search, 100);
+    $subcategoriesByCategory = member_document_subcategories_by_category($moduleCode);
+    foreach ((array) ($stats['by_subcategory'] ?? []) as $subcategoryKey => $subcategoryTotal) {
+        $parts = explode(':', (string) $subcategoryKey, 2);
+        if (count($parts) !== 2 || (int) $subcategoryTotal <= 0) {
+            continue;
+        }
+        $parentCode = member_document_category_code($parts[0]);
+        $subcategoryCode = member_document_subcategory_code($parts[1]);
+        if ($parentCode === '' || $subcategoryCode === '') {
+            continue;
+        }
+        $known = false;
+        foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
+            if (member_document_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+                $known = true;
+                break;
+            }
+        }
+        if (!$known) {
+            $subcategoriesByCategory[$parentCode][] = [
+                'category_code' => $parentCode,
+                'code' => $subcategoryCode,
+                'label' => member_document_category_label_from_code($subcategoryCode),
+            ];
+        }
+    }
+    $visibleCategories = member_document_visible_categories($categories, (array) ($stats['by_category'] ?? []));
+    $visibleSubcategoriesByCategory = member_document_visible_subcategories_by_category($subcategoriesByCategory, (array) ($stats['by_subcategory'] ?? []));
+    $categoryFilter = '';
+    $categoryInput = trim((string) ($_GET['category'] ?? ''));
+    if ($categoryInput !== '') {
+        $categoryCode = member_document_category_code($categoryInput);
+        if (isset($categories[$categoryCode])) {
+            $categoryFilter = $categoryCode;
+        }
+    }
+    $subcategoryFilter = '';
+    $subcategoryInput = trim((string) ($_GET['subcategory'] ?? ''));
+    if ($subcategoryInput !== '') {
+        $subcategoryCode = member_document_subcategory_code($subcategoryInput);
+        if ($subcategoryCode !== '') {
+            $candidateCategory = $categoryFilter;
+            if ($candidateCategory === '') {
+                foreach ($visibleSubcategoriesByCategory as $parentCode => $subcategories) {
+                    foreach ($subcategories as $subcategoryInfo) {
+                        if (member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryCode) {
+                            $candidateCategory = (string) $parentCode;
+                            break 2;
+                        }
+                    }
+                }
+            }
+            if ($candidateCategory !== '') {
+                $categoryFilter = $candidateCategory;
+                $subcategoryFilter = $subcategoryCode;
+            }
+        }
+    }
+    $documents = member_document_fetch_documents($moduleCode, $search, 100, $categoryFilter, $subcategoryFilter);
     $hiddenStats = (array) ($definition['hidden_stats'] ?? []);
     $latestDate = trim((string) ($stats['latest'] ?? ''));
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $labels['none'];
@@ -1097,6 +1979,7 @@ function render_admin_member_document_module_page(string $module): void
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                 <input type="hidden" name="action" value="upload">
                 <label><span><?= e((string) $labels['title_field']) ?></span><input type="text" name="title" maxlength="255" required></label>
+                <?= render_member_document_taxonomy_fields($moduleCode, $categories, $labels, $categoryFilter !== '' ? $categoryFilter : 'general', $subcategoryFilter) ?>
                 <label><span><?= e((string) $labels['description_field']) ?></span><textarea name="description" rows="4"></textarea></label>
                 <label><span><?= e((string) $labels['tags_field']) ?></span><input type="text" name="tags" maxlength="255"></label>
                 <label><span><?= e((string) $labels['document_field']) ?></span><input type="file" name="document" required></label>
@@ -1107,13 +1990,84 @@ function render_admin_member_document_module_page(string $module): void
         <section class="card member-document-search-panel">
             <form method="get" class="inline-form member-document-search-form">
                 <input type="hidden" name="route" value="<?= e($adminRoute) ?>">
+                <?php if ($categoryFilter !== ''): ?>
+                    <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
+                <?php endif; ?>
+                <?php if ($subcategoryFilter !== ''): ?>
+                    <input type="hidden" name="subcategory" value="<?= e($subcategoryFilter) ?>">
+                <?php endif; ?>
                 <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $labels['search_ph']) ?>">
                 <button class="button" type="submit"><?= e((string) $labels['search']) ?></button>
-                <?php if ($search !== ''): ?>
+                <?php if ($search !== '' || $categoryFilter !== '' || $subcategoryFilter !== ''): ?>
                     <a class="button secondary" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) $labels['reset']) ?></a>
                 <?php endif; ?>
             </form>
         </section>
+
+        <section class="card admin-member-document-taxonomy">
+            <h2><?= e((string) ($labels['category_field'] ?? 'Topics')) ?></h2>
+            <div class="grid-2">
+                <form method="post" class="stack">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="add_category">
+                    <label><span><?= e((string) ($labels['category_field'] ?? 'Topic')) ?></span><input type="text" name="category_label" maxlength="160" required></label>
+                    <button class="button" type="submit"><?= e((string) ($labels['upload'] ?? 'Add')) ?></button>
+                </form>
+                <form method="post" class="stack">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="add_subcategory">
+                    <label><span><?= e((string) ($labels['category_field'] ?? 'Topic')) ?></span>
+                        <select name="subcategory_category">
+                            <?php foreach ($categories as $code => $label): ?>
+                                <option value="<?= e((string) $code) ?>"<?= $categoryFilter === (string) $code ? ' selected' : '' ?>><?= e((string) $label) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><span><?= e((string) ($labels['subcategory_field'] ?? 'Subtopic')) ?></span><input type="text" name="subcategory_label" maxlength="160" required></label>
+                    <button class="button" type="submit"><?= e((string) ($labels['upload'] ?? 'Add')) ?></button>
+                </form>
+            </div>
+            <div class="tags-cloud">
+                <?php foreach ($categories as $code => $label): ?>
+                    <?php $categoryTotal = (int) (($stats['by_category'][(string) $code] ?? 0)); ?>
+                    <?php $subcategoryTotal = count($subcategoriesByCategory[(string) $code] ?? []); ?>
+                    <form method="post" class="inline-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="delete_category">
+                        <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
+                        <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
+                        <button class="button secondary small" type="submit"<?= ($categoryTotal > 0 || $subcategoryTotal > 0) ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
+                    </form>
+                <?php endforeach; ?>
+                <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
+                    <?php foreach ($subcategories as $subcategoryInfo): ?>
+                        <?php $subCode = member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                        <?php if ($subCode === '') { continue; } ?>
+                        <?php $subTotal = (int) (($stats['by_subcategory'][(string) $parentCode . ':' . $subCode] ?? 0)); ?>
+                        <form method="post" class="inline-form">
+                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="action" value="delete_subcategory">
+                            <input type="hidden" name="subcategory_ref" value="<?= e(member_document_subcategory_ref((string) $parentCode, $subCode)) ?>">
+                            <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
+                            <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
+                        </form>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
+        </section>
+
+        <?php if ($visibleCategories !== []): ?>
+            <nav class="classifieds-category-strip member-document-category-filter" aria-label="<?= e((string) ($labels['category_field'] ?? 'Topic')) ?>">
+                <a class="classifieds-category-pill<?= $categoryFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search])) ?>"><?= e((string) ($labels['all_categories'] ?? 'All topics')) ?></a>
+                <?php foreach ($visibleCategories as $code => $label): ?>
+                    <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
+                    <?php foreach (($visibleSubcategoriesByCategory[(string) $code] ?? []) as $subcategoryInfo): ?>
+                        <?php $subCode = member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                        <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean($adminRoute, ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></a>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </nav>
+        <?php endif; ?>
 
         <section class="admin-member-document-list">
             <h2><?= e((string) $labels['content_list']) ?></h2>
@@ -1129,6 +2083,11 @@ function render_admin_member_document_module_page(string $module): void
                             <span class="badge muted"><?= e(strtoupper($extension)) ?></span>
                             <h3><?= e((string) ($document['title'] ?? $labels['documents'])) ?></h3>
                             <?php if (trim((string) ($document['description'] ?? '')) !== ''): ?><p><?= e((string) $document['description']) ?></p><?php endif; ?>
+                            <?php
+                            $docCategory = member_document_category_code((string) ($document['category'] ?? 'general'));
+                            $docSubcategory = member_document_subcategory_code((string) ($document['subcategory'] ?? ''));
+                            ?>
+                            <p class="help"><?= e((string) ($labels['category_field'] ?? 'Topic')) ?>: <?= e((string) ($categories[$docCategory] ?? member_document_category_label_from_code($docCategory))) ?><?= $docSubcategory !== '' ? ' / ' . e(member_document_category_label_from_code($docSubcategory)) : '' ?></p>
                             <?php if (trim((string) ($document['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $labels['tags']) ?>: <?= e((string) $document['tags']) ?></p><?php endif; ?>
                             <p class="actions">
                                 <a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $labels['open']) ?></a>
@@ -1136,6 +2095,9 @@ function render_admin_member_document_module_page(string $module): void
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="delete_document">
                                     <input type="hidden" name="id" value="<?= (int) ($document['id'] ?? 0) ?>">
+                                    <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                    <input type="hidden" name="return_category" value="<?= e($categoryFilter) ?>">
+                                    <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
                                     <button class="button secondary" type="submit"><?= e((string) $labels['delete']) ?></button>
                                 </form>
                             </p>

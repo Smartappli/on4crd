@@ -286,11 +286,32 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     title VARCHAR(190) NOT NULL,
     content LONGTEXT NOT NULL,
     category VARCHAR(120) NOT NULL DEFAULT 'general',
+    subcategory VARCHAR(120) NOT NULL DEFAULT '',
     author_id INT DEFAULT NULL,
     status ENUM('pending','published','rejected') NOT NULL DEFAULT 'published',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_wiki_category (category)
+    INDEX idx_wiki_category (category),
+    INDEX idx_wiki_subcategory (category, subcategory)
+);
+
+CREATE TABLE IF NOT EXISTS wiki_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(120) NOT NULL UNIQUE,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS wiki_subcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_code VARCHAR(120) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_wiki_subcategory (category_code, code),
+    INDEX idx_wiki_subcategory_category (category_code)
 );
 
 CREATE TABLE IF NOT EXISTS member_library_documents (
@@ -335,6 +356,7 @@ CREATE TABLE IF NOT EXISTS member_webotheque_links (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT NOT NULL,
     category VARCHAR(120) NOT NULL DEFAULT 'general',
+    subcategory VARCHAR(120) NOT NULL DEFAULT '',
     title VARCHAR(255) NOT NULL,
     url VARCHAR(500) NOT NULL,
     description TEXT NULL,
@@ -343,8 +365,32 @@ CREATE TABLE IF NOT EXISTS member_webotheque_links (
     updated_at TIMESTAMP NULL DEFAULT NULL,
     INDEX idx_created (created_at),
     INDEX idx_category (category),
+    INDEX idx_subcategory (subcategory),
+    INDEX idx_category_subcategory (category, subcategory),
     INDEX idx_tags (tags),
     INDEX idx_member_created (member_id, created_at)
+);
+
+CREATE TABLE IF NOT EXISTS member_webotheque_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_webotheque_category (code),
+    INDEX idx_webotheque_category_deleted (deleted_at)
+);
+
+CREATE TABLE IF NOT EXISTS member_webotheque_subcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_code VARCHAR(120) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_webotheque_subcategory (category_code, code),
+    INDEX idx_webotheque_subcategory_category (category_code)
 );
 
 CREATE TABLE IF NOT EXISTS wiki_revisions (
@@ -376,13 +422,36 @@ CREATE TABLE IF NOT EXISTS content_proposals (
 CREATE TABLE IF NOT EXISTS albums (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT DEFAULT NULL,
+    category VARCHAR(120) NOT NULL DEFAULT 'general',
+    subcategory VARCHAR(120) NOT NULL DEFAULT '',
     title VARCHAR(190) NOT NULL,
     description TEXT DEFAULT NULL,
     is_public TINYINT(1) NOT NULL DEFAULT 0,
     source_proposal_id INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_albums_member (member_id),
+    INDEX idx_albums_category (category),
+    INDEX idx_albums_subcategory (category, subcategory),
     INDEX idx_albums_source_proposal (source_proposal_id)
+);
+
+CREATE TABLE IF NOT EXISTS album_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(120) NOT NULL UNIQUE,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS album_subcategories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_code VARCHAR(120) NOT NULL,
+    code VARCHAR(120) NOT NULL,
+    label VARCHAR(160) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 100,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uniq_album_subcategory (category_code, code),
+    INDEX idx_album_subcategory_category (category_code)
 );
 
 CREATE TABLE IF NOT EXISTS album_photos (

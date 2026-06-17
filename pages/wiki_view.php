@@ -60,6 +60,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $actingUser = require_login(route_url('wiki_view', ['slug' => (string) $row['slug']]));
         verify_csrf();
         $action = (string) ($_POST['action'] ?? '');
+        if ($action === 'toggle_favorite') {
+            if (function_exists('favorite_toggle')) {
+                $saved = favorite_toggle(
+                    (int) $actingUser['id'],
+                    'wiki_page',
+                    (int) $row['id'],
+                    (string) ($row['title'] ?? ''),
+                    route_url('wiki_view', ['slug' => (string) $row['slug']])
+                );
+                notify_member((int) $actingUser['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', (string) ($row['title'] ?? ''), route_url('wiki_view', ['slug' => (string) $row['slug']]));
+                set_flash('success', $saved ? 'Page ajoutée aux favoris.' : 'Page retirée des favoris.');
+            }
+            redirect_url(route_url('wiki_view', ['slug' => (string) $row['slug']]));
+        }
         if (($action !== 'update_page' && $action !== 'delete_page') || !$canManageWikiPage) {
             throw new RuntimeException($wikiViewText('forbidden', 'Vous ne pouvez pas modifier cette page.', 'You cannot edit this page.'));
         }
@@ -76,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'Page ID' => (string) (int) $row['id'],
                 'Slug' => (string) $row['slug'],
                 'Category' => wiki_category_code((string) ($row['category'] ?? 'general')),
+                'Subcategory' => wiki_subcategory_code((string) ($row['subcategory'] ?? '')),
             ]);
             $sourceRef = route_url('wiki_view', ['slug' => (string) $row['slug']]);
             $proposalId = content_proposal_create(
@@ -104,10 +119,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slugInput = trim((string) ($_POST['slug'] ?? ''));
         $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
         $category = wiki_category_from_input((string) ($_POST['category'] ?? 'general'), $wikiCategories);
+        $subcategory = wiki_subcategory_code((string) ($row['subcategory'] ?? ''));
+        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+        if ($subcategoryRef !== '') {
+            $subcategoryParts = wiki_subcategory_ref_parts($subcategoryRef);
+            if ($subcategoryParts['subcategory'] !== '') {
+                $subcategory = $subcategoryParts['subcategory'];
+                if ($subcategoryParts['category'] !== '') {
+                    $category = wiki_category_from_input($subcategoryParts['category'], $wikiCategories);
+                }
+            }
+        } elseif (array_key_exists('subcategory_ref', $_POST)) {
+            $subcategory = '';
+        }
         if ($title === '' || trim(strip_tags($content)) === '') {
             throw new RuntimeException($wikiViewText('title_content_required', 'Le titre et le contenu sont obligatoires.', 'Title and content are required.'));
         }
-        if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($category) > 120 || mb_strlen($content) > 50000) {
+        if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
             throw new RuntimeException($wikiViewText('field_too_long', 'Un des champs depasse la longueur autorisee.', 'One field is too long.'));
         }
 
@@ -119,8 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $pdo->prepare('INSERT INTO wiki_revisions (wiki_page_id, member_id, content) VALUES (?, ?, ?)')
                     ->execute([(int) $row['id'], (int) $actingUser['id'], (string) ($row['content'] ?? '')]);
-                $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL, updated_at = NOW() WHERE id = ?')
-                    ->execute([$title, $slug, $content, $category, (int) $actingUser['id'], (int) $row['id']]);
+                $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, subcategory = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL, updated_at = NOW() WHERE id = ?')
+                    ->execute([$title, $slug, $content, $category, $subcategory, (int) $actingUser['id'], (int) $row['id']]);
                 $pdo->commit();
             } catch (Throwable $throwable) {
                 if ($pdo->inTransaction()) {
@@ -135,8 +163,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $proposalSlug = wiki_unique_slug($title, 'modification-' . (string) $row['slug']);
         $targetSlug = wiki_slug_base($title, $targetSlugInput);
-        db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, ?, "pending", "modification", ?, ?)')
-            ->execute([$title, $proposalSlug, $content, $category, (int) $actingUser['id'], (int) $row['id'], $targetSlug]);
+        db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, ?, ?, "pending", "modification", ?, ?)')
+            ->execute([$title, $proposalSlug, $content, $category, $subcategory, (int) $actingUser['id'], (int) $row['id'], $targetSlug]);
 
         set_flash('success', $wikiViewText('change_recorded', 'Modification enregistree dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
         redirect('my_requests');
@@ -160,6 +188,15 @@ $revisions = $revisionStmt->fetchAll() ?: [];
 $author = trim((string) ($row['callsign'] ?? ''));
 $categoryCode = wiki_category_code((string) ($row['category'] ?? 'general'));
 $categoryLabel = (string) ($wikiCategories[$categoryCode] ?? wiki_category_label_from_code($categoryCode));
+$subcategoryCode = wiki_subcategory_code((string) ($row['subcategory'] ?? ''));
+$wikiSubcategoryLabels = [];
+foreach (wiki_subcategories_by_category() as $parentCode => $subcategories) {
+    foreach ($subcategories as $subcategoryInfo) {
+        $wikiSubcategoryLabels[(string) $parentCode . ':' . (string) ($subcategoryInfo['code'] ?? '')] = (string) ($subcategoryInfo['label'] ?? '');
+    }
+}
+$subcategoryLabel = $subcategoryCode !== '' ? (string) ($wikiSubcategoryLabels[$categoryCode . ':' . $subcategoryCode] ?? wiki_category_label_from_code($subcategoryCode)) : '';
+$isFavorite = $currentUser !== null && function_exists('favorite_is_saved') && favorite_is_saved((int) ($currentUser['id'] ?? 0), 'wiki_page', (int) $row['id']);
 $updatedAt = strtotime((string) ($row['updated_at'] ?? '')) ?: time();
 $wikiUrl = route_url_with_locale('wiki_view', $locale, ['slug' => (string) $row['slug']]);
 $wikiPlainText = trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $row['content']), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
@@ -244,12 +281,20 @@ ob_start();
             <p class="help">
                 <?= e(date('d/m/Y H:i', $updatedAt)) ?>
                 &middot; <a class="wiki-category-link" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
+                <?php if ($subcategoryCode !== ''): ?> &middot; <a class="wiki-category-link" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $subcategoryCode])) ?>"><?= e($subcategoryLabel) ?></a><?php endif; ?>
                 <?php if ($author !== ''): ?> · <?= e($author) ?><?php endif; ?>
                 <?php if (!$isPublished): ?> · <span class="badge muted"><?= e($wikiStatus) ?></span><?php endif; ?>
             </p>
         </div>
         <div class="wiki-view-actions">
             <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e($t('layout')) ?></a>
+            <?php if ($currentUser !== null): ?>
+                <form method="post" class="inline-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="toggle_favorite">
+                    <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
+                </form>
+            <?php endif; ?>
             <?php if ($canManageWikiPage): ?>
                 <button class="button" type="button" data-wiki-page-modal-open="wiki-page-edit-dialog" aria-haspopup="dialog" aria-controls="wiki-page-edit-dialog"><?= e($wikiViewText('edit_page', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
             <?php endif; ?>
@@ -273,13 +318,7 @@ ob_start();
                     <div class="wiki-edit-grid">
                         <label><span><?= e($wikiViewText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="title" value="<?= e((string) $row['title']) ?>" maxlength="190" required></label>
                         <label><span><?= e($wikiViewText('slug_label', 'Slug', 'Slug')) ?></span><input type="text" name="slug" value="<?= e((string) $row['slug']) ?>" maxlength="190"></label>
-                        <label><span><?= e((string) ($wikiMessages['themes'] ?? 'Themes')) ?></span>
-                            <select name="category">
-                                <?php foreach ($wikiCategories as $categoryOptionCode => $categoryOptionLabel): ?>
-                                    <option value="<?= e((string) $categoryOptionCode) ?>"<?= $categoryCode === (string) $categoryOptionCode ? ' selected' : '' ?>><?= e((string) $categoryOptionLabel) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
+                        <?= render_wiki_taxonomy_fields($wikiCategories, $wikiMessages, $categoryCode, $subcategoryCode) ?>
                     </div>
                     <label><span><?= e($wikiViewText('content_label', 'Contenu', 'Content')) ?></span><textarea name="content" rows="18" maxlength="50000" data-wysiwyg="full" required><?= e((string) $row['content']) ?></textarea></label>
                     <p class="wiki-page-dialog-actions module-dialog-actions">

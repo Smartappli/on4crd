@@ -41,4 +41,7 @@ return array (
   'propose_theme_submit' => 'Send proposal',
   'cancel' => 'Cancel',
   'proposal_recorded' => 'Proposal saved in your content area.',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

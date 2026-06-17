@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'Úprava',
   'propose_new_theme' => 'Nová téma',
   'administer' => 'Spravovať',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

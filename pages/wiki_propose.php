@@ -43,7 +43,7 @@ $loadSourcePage = static function (int $id): ?array {
         return null;
     }
 
-    $stmt = db()->prepare('SELECT id, title, slug, content, category, author_id FROM wiki_pages WHERE id = ? AND ' . wiki_public_page_where_sql() . ' LIMIT 1');
+    $stmt = db()->prepare('SELECT id, title, slug, content, category, subcategory, author_id FROM wiki_pages WHERE id = ? AND ' . wiki_public_page_where_sql() . ' LIMIT 1');
     $stmt->execute([$id]);
     $row = $stmt->fetch();
 
@@ -51,7 +51,7 @@ $loadSourcePage = static function (int $id): ?array {
 };
 
 if ($isModification) {
-    $sourcePages = db()->query('SELECT id, title, slug, category FROM wiki_pages WHERE ' . wiki_public_page_where_sql() . ' ORDER BY title ASC, id ASC LIMIT 300')->fetchAll() ?: [];
+    $sourcePages = db()->query('SELECT id, title, slug, category, subcategory FROM wiki_pages WHERE ' . wiki_public_page_where_sql() . ' ORDER BY title ASC, id ASC LIMIT 300')->fetchAll() ?: [];
     if ($sourceId > 0) {
         $sourcePage = $loadSourcePage($sourceId);
     }
@@ -68,6 +68,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slugInput = trim((string) ($_POST['slug'] ?? ''));
         $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
         $category = wiki_category_from_input((string) ($_POST['category'] ?? 'general'), $wikiCategories);
+        $subcategory = '';
+        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+        if ($subcategoryRef !== '') {
+            $subcategoryParts = wiki_subcategory_ref_parts($subcategoryRef);
+            if ($subcategoryParts['subcategory'] !== '') {
+                $subcategory = $subcategoryParts['subcategory'];
+                if ($subcategoryParts['category'] !== '') {
+                    $category = wiki_category_from_input($subcategoryParts['category'], $wikiCategories);
+                }
+            }
+        }
         $postedSourcePage = null;
 
         if ($postedModification) {
@@ -83,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($title === '' || trim(strip_tags($content)) === '') {
             throw new RuntimeException($tr('error_title_content_required', 'Le titre et le contenu sont obligatoires.'));
         }
-        if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($category) > 120 || mb_strlen($content) > 50000) {
+        if (mb_strlen($title) > 190 || mb_strlen($slugInput) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
             throw new RuntimeException($tr('error_field_too_long', 'Un des champs dépasse la longueur autorisée.'));
         }
 
@@ -96,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try {
                     $pdo->prepare('INSERT INTO wiki_revisions (wiki_page_id, member_id, content) VALUES (?, ?, ?)')
                         ->execute([(int) $postedSourcePage['id'], (int) $user['id'], (string) ($postedSourcePage['content'] ?? '')]);
-                    $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL WHERE id = ?')
-                        ->execute([$title, $slug, $content, $category, (int) $user['id'], (int) $postedSourcePage['id']]);
+                    $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, subcategory = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL WHERE id = ?')
+                        ->execute([$title, $slug, $content, $category, $subcategory, (int) $user['id'], (int) $postedSourcePage['id']]);
                     $pdo->commit();
                 } catch (Throwable $throwable) {
                     if ($pdo->inTransaction()) {
@@ -112,8 +123,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $proposalSlug = wiki_unique_slug($title, 'modification-' . (string) ($postedSourcePage['slug'] ?? 'wiki'));
             $targetSlug = wiki_slug_base($title, $targetSlugInput);
-            db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, ?, "pending", "modification", ?, ?)')
-                ->execute([$title, $proposalSlug, $content, $category, (int) $user['id'], (int) $postedSourcePage['id'], $targetSlug]);
+            db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status, proposal_kind, source_page_id, target_slug) VALUES (?, ?, ?, ?, ?, ?, "pending", "modification", ?, ?)')
+                ->execute([$title, $proposalSlug, $content, $category, $subcategory, (int) $user['id'], (int) $postedSourcePage['id'], $targetSlug]);
 
             set_flash('success', $tr('propose_modification_success', 'Modification wiki proposée. Elle sera publiée après validation.'));
             redirect('my_requests');
@@ -121,8 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $slug = wiki_unique_slug($title, $slugInput);
         $status = $autoPublish ? 'published' : 'pending';
-        db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, author_id, status, proposal_kind) VALUES (?, ?, ?, ?, ?, ?, "page")')
-            ->execute([$title, $slug, $content, $category, (int) $user['id'], $status]);
+        db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status, proposal_kind) VALUES (?, ?, ?, ?, ?, ?, ?, "page")')
+            ->execute([$title, $slug, $content, $category, $subcategory, (int) $user['id'], $status]);
 
         if ($autoPublish) {
             set_flash('success', $tr('propose_success_published', 'Page wiki publiée automatiquement.'));
@@ -148,6 +159,7 @@ $initialTitle = $sourcePage !== null ? (string) ($sourcePage['title'] ?? '') : '
 $initialSlug = $sourcePage !== null ? (string) ($sourcePage['slug'] ?? '') : '';
 $initialContent = $sourcePage !== null ? (string) ($sourcePage['content'] ?? '<p></p>') : '<p></p>';
 $initialCategory = wiki_category_code($sourcePage !== null ? (string) ($sourcePage['category'] ?? 'general') : 'general');
+$initialSubcategory = wiki_subcategory_code($sourcePage !== null ? (string) ($sourcePage['subcategory'] ?? '') : '');
 $helpText = $isModification
     ? ($autoPublish
         ? $tr('propose_modification_help_auto_publish', 'Avec vos droits de modération, la modification sera publiée automatiquement.')
@@ -198,13 +210,7 @@ ob_start();
             <div class="wiki-edit-grid">
                 <label><?= e($t('title_label')) ?><input type="text" name="title" value="<?= e($initialTitle) ?>" maxlength="190" required></label>
                 <label><?= e($t('slug_label')) ?><input type="text" name="slug" value="<?= e($initialSlug) ?>" maxlength="190" placeholder="theme-titre-de-page"></label>
-                <label><?= e($wikiThemeLabel) ?>
-                    <select name="category">
-                        <?php foreach ($wikiCategories as $categoryCode => $categoryLabel): ?>
-                            <option value="<?= e((string) $categoryCode) ?>" <?= $initialCategory === $categoryCode ? 'selected' : '' ?>><?= e((string) $categoryLabel) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
+                <?= render_wiki_taxonomy_fields($wikiCategories, $wikiMessages, $initialCategory, $initialSubcategory) ?>
             </div>
             <label><?= e($t('content_label')) ?>
                 <textarea name="content" rows="22" maxlength="50000" data-wysiwyg="full" required><?= e($initialContent) ?></textarea>

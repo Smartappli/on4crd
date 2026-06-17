@@ -55,4 +55,10 @@ return array (
   'open' => 'Öppna',
   'photo' => 'Foto',
   'confirm_delete_photo' => 'Vill du ta bort det här fotot permanent?',
+  'category_field' => 'Topic',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'err_category_has_documents' => 'This topic still contains albums.',
+  'err_category_has_subcategories' => 'Delete all subtopics in this topic first.',
+  'err_subcategory_has_documents' => 'This subtopic still contains albums.',
 );

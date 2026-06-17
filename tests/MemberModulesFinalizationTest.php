@@ -22,9 +22,14 @@ final class MemberModulesFinalizationTest extends TestCase
         $albumHelpers = $this->source('app/album_helpers.php');
         $schema = $this->source('schema/schema.sql');
         self::assertStringContainsString('name="proposal_theme"', $albums);
-        self::assertMatchesRegularExpression('/<select\s+name="proposal_theme"[^>]*>.*\$albumThemeOptions/s', $albums);
+        self::assertStringContainsString('name="proposal_subcategory_ref"', $albums);
+        self::assertStringContainsString('foreach ($albumCategories as $albumThemeCode => $albumThemeLabel)', $albums);
         self::assertStringContainsString('name="proposal_keywords"', $albums);
         self::assertStringContainsString("'Mots cles' => \$keywords", $albums);
+        self::assertStringContainsString("'Sous-thematique' => \$proposalSubcategory", $albums);
+        self::assertStringContainsString('$favoriteAlbumIds = $user !== null ? album_favorite_album_ids', $albums);
+        self::assertStringContainsString('$visibleAlbumCategories = album_visible_categories($albumCategories, $albumCategoryCounts);', $albums);
+        self::assertStringContainsString('$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category', $albums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
         self::assertStringContainsString('album_clear_caches();', $albums);
         self::assertStringContainsString("if (\$action === 'update_album' || \$action === 'delete_album')", $albums);
@@ -38,12 +43,19 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertMatchesRegularExpression('/<select\s+name="album_id"\s+required>.*foreach \(\$albums as \$album\)/s', $adminAlbums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $adminAlbums);
         self::assertStringContainsString('album_delete_record($albumId);', $adminAlbums);
+        self::assertStringContainsString("if (\$action === 'add_subcategory')", $adminAlbums);
+        self::assertStringContainsString("if (\$action === 'delete_subcategory')", $adminAlbums);
+        self::assertStringContainsString('render_album_taxonomy_fields($albumCategories, $t)', $adminAlbums);
         self::assertStringContainsString('function album_apply_accepted_proposal(array $proposal): ?int', $albumHelpers);
         self::assertStringContainsString('function album_sync_accepted_proposals(int $limit = 100): array', $albumHelpers);
         self::assertStringContainsString('function album_proposal_action(string $summary): string', $albumHelpers);
         self::assertStringContainsString('function album_update_record(', $albumHelpers);
         self::assertStringContainsString('function album_delete_record(int $albumId): void', $albumHelpers);
+        self::assertStringContainsString('function album_subcategory_ref(', $albumHelpers);
+        self::assertStringContainsString('function album_visible_categories(', $albumHelpers);
+        self::assertStringContainsString('function album_favorite_album_ids(', $albumHelpers);
         self::assertStringContainsString('member_id', $albumHelpers);
+        self::assertStringContainsString('subcategory', $albumHelpers);
         self::assertStringContainsString('source_proposal_id', $albumHelpers);
         self::assertStringContainsString('idx_albums_member', $schema);
         self::assertStringContainsString('idx_albums_source_proposal', $schema);
@@ -61,6 +73,13 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('id="admin-webotheque-link-dialog"', $webotheque);
         self::assertStringContainsString('function render_webotheque_link_fields(', $webotheque);
         self::assertStringContainsString('<select name="category">', $webotheque);
+        self::assertStringContainsString('name="subcategory_ref"', $webotheque);
+        self::assertStringContainsString('function webotheque_subcategory_ref(', $webotheque);
+        self::assertStringContainsString('function webotheque_ensure_categories_table(', $webotheque);
+        self::assertStringContainsString('function webotheque_favorite_link_ids(', $webotheque);
+        self::assertStringContainsString('$visibleSubcategoriesByCategory = webotheque_visible_subcategories_by_category', $webotheque);
+        self::assertStringContainsString("if (\$action === 'add_category')", $webotheque);
+        self::assertStringContainsString("if (\$action === 'delete_category')", $webotheque);
         self::assertStringContainsString('name="tags"', $webotheque);
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories, $proposalContact)', $webotheque);
         self::assertStringContainsString('render_webotheque_link_fields($t, $categories)', $webotheque);
@@ -68,6 +87,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function webotheque_sync_accepted_proposals(', $webotheque);
         self::assertStringContainsString('webotheque_sync_accepted_proposals($categories, $t,', $webotheque);
         self::assertStringContainsString('webotheque_accepted_proposal_sync_failed', $webotheque);
+        self::assertStringContainsString('member_webotheque_categories', $this->source('schema/schema.sql'));
         self::assertGreaterThanOrEqual(2, substr_count($webotheque, 'webotheque_apply_accepted_proposal('));
         self::assertSame('https://example.org', webotheque_normalize_url('example.org'));
     }
@@ -165,6 +185,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('technique,antenne', member_library_proposal_tags_from_summary('Tags: technique,unknown,antenne'));
         self::assertStringContainsString('member_library_default_categories()', $contentHelpers);
         self::assertStringContainsString("content_proposal_accepted_categories('members_library'", $contentHelpers);
+        self::assertStringContainsString('function wiki_subcategory_ref(', $contentHelpers);
+        self::assertStringContainsString('function wiki_visible_categories(', $contentHelpers);
+        self::assertStringContainsString('function wiki_favorite_page_ids(', $contentHelpers);
+        self::assertStringContainsString('wiki_ensure_subcategories_table();', $contentHelpers);
+        self::assertStringContainsString('subcategory VARCHAR(120) NOT NULL DEFAULT ""', $contentHelpers);
         self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library', 'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'fichiers', 'members_library', 'member_library_preview', 'admin_articles'", $routeHelperLoader);
@@ -222,6 +247,14 @@ final class MemberModulesFinalizationTest extends TestCase
 
         $renderer = $this->source('app/member_module_documents.php');
         self::assertStringContainsString('idx_module_tags', $renderer);
+        self::assertStringContainsString('idx_module_subcategory', $renderer);
+        self::assertStringContainsString('function member_document_subcategory_ref(', $renderer);
+        self::assertStringContainsString('function member_document_visible_categories(', $renderer);
+        self::assertStringContainsString('function member_document_favorite_document_ids(', $renderer);
+        self::assertStringContainsString("if (\$action === 'toggle_favorite_document')", $renderer);
+        self::assertStringContainsString("if (\$action === 'add_subcategory')", $renderer);
+        self::assertStringContainsString("if (\$action === 'delete_subcategory')", $renderer);
+        self::assertStringContainsString('render_member_document_taxonomy_fields($moduleCode, $categories, $labels', $renderer);
         self::assertStringContainsString('name="tags"', $renderer);
         self::assertStringContainsString('function render_member_document_module_stats(', $renderer);
         self::assertSame(2, substr_count($renderer, 'render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats)'));

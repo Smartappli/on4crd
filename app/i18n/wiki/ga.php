@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'Athrú',
   'propose_new_theme' => 'Téama nua',
   'administer' => 'Riar',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

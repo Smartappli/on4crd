@@ -19,7 +19,7 @@ function app_load_route_helpers(string $route): void
         'member_module_documents.php' => ['presentations', 'videos', 'pv', 'fichiers', 'telechargements', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_fichiers', 'admin_telechargements'],
         'member_webotheque.php' => ['webotheque', 'admin_webotheque'],
         'knowledge_helpers.php' => ['chatbot'],
-        'member_favorites.php' => ['dashboard', 'members_library', 'articles', 'article', 'albums', 'album', 'classifieds'],
+        'member_favorites.php' => ['dashboard', 'members_library', 'webotheque', 'presentations', 'wiki', 'wiki_view', 'articles', 'article', 'albums', 'album', 'classifieds'],
         'member_preferences.php' => ['dashboard', 'settings'],
         'member_recommendations.php' => ['settings'],
         'notifications.php' => ['dashboard', 'notifications', 'articles', 'article', 'albums', 'album', 'classifieds', 'members_library', 'admin_articles', 'admin_albums', 'admin_classifieds', 'admin_library', 'admin_news'],

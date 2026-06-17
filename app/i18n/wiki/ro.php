@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'O modificare',
   'propose_new_theme' => 'O temă nouă',
   'administer' => 'Administrează',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

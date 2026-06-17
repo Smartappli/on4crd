@@ -50,6 +50,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('my_requests');
         }
 
+        if ($action === 'toggle_favorite_page') {
+            $user = require_login(route_url('wiki'));
+            $pageId = (int) ($_POST['page_id'] ?? 0);
+            if ($pageId > 0 && function_exists('favorite_toggle')) {
+                $pageStmt = db()->prepare('SELECT id, slug, title FROM wiki_pages WHERE id = ? AND ' . wiki_public_page_where_sql() . ' LIMIT 1');
+                $pageStmt->execute([$pageId]);
+                $pageRow = $pageStmt->fetch() ?: null;
+                if (is_array($pageRow)) {
+                    $pageTitle = (string) ($pageRow['title'] ?? '');
+                    $pageUrl = route_url('wiki_view', ['slug' => (string) ($pageRow['slug'] ?? '')]);
+                    $saved = favorite_toggle((int) $user['id'], 'wiki_page', (int) $pageRow['id'], $pageTitle, $pageUrl);
+                    notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', $pageTitle, $pageUrl);
+                    set_flash('success', $saved ? 'Page ajoutée aux favoris.' : 'Page retirée des favoris.');
+                }
+            }
+            redirect_url(route_url_clean('wiki', [
+                'theme' => (string) ($_POST['return_theme'] ?? $_GET['theme'] ?? ''),
+                'subtheme' => (string) ($_POST['return_subtheme'] ?? $_GET['subtheme'] ?? ''),
+                'favorites' => (string) ($_POST['return_favorites'] ?? $_GET['favorites'] ?? '') === '1' ? '1' : '',
+                'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+            ]));
+        }
+
         throw new RuntimeException($tr('invalid', 'Invalid request.'));
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -65,6 +88,7 @@ $theme = slugify(trim((string) ($_GET['theme'] ?? '')));
 if ($theme === 'n-a') {
     $theme = '';
 }
+$subtheme = wiki_subcategory_code((string) ($_GET['subtheme'] ?? ''));
 $contactEmail = site_contact_email();
 $themeProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($tr('propose_theme_subject', 'Proposition de thématique wiki ON4CRD'))
     . '&body=' . rawurlencode($tr('propose_theme_body_intro', 'Proposition de thématique wiki :'));
@@ -83,9 +107,17 @@ $wikiModificationLabel = $tr('propose_modification', 'Une modification');
 $wikiNewThemeLabel = $tr('propose_new_theme', 'Une nouvelle thématique');
 $wikiAdminLabel = $tr('administer', $locale === 'fr' ? 'Administrer' : 'Administer');
 $wikiCategoryLabels = wiki_categories($t);
+$wikiSubcategoriesByCategory = wiki_subcategories_by_category();
+$favoriteWikiPageIds = $user !== null ? wiki_favorite_page_ids((int) ($user['id'] ?? 0)) : [];
+$favoriteWikiPageCount = count($favoriteWikiPageIds);
+$favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteWikiPageCount > 0;
+$favoritesLabel = wiki_favorites_label($t, $locale);
 
 $rows = [];
 $wikiThemes = [];
+$wikiSubthemes = [];
+$visibleWikiThemes = [];
+$visibleWikiSubthemes = [];
 $totalPagesCount = 0;
 $updatedPagesCount = 0;
 $revisionCount = 0;
@@ -98,7 +130,6 @@ try {
     $revisionCount = (int) db()->query('SELECT COUNT(*) FROM wiki_revisions')->fetchColumn();
     $latestWikiDate = trim((string) (db()->query('SELECT updated_at FROM wiki_pages WHERE ' . $publicWikiWhere . ' ORDER BY updated_at DESC, id DESC LIMIT 1')->fetchColumn() ?: ''));
 
-    $wikiThemes = array_fill_keys(array_keys($wikiCategoryLabels), 0);
     $themeRows = db()->query('SELECT category, COUNT(*) AS total FROM wiki_pages WHERE ' . $publicWikiWhere . ' GROUP BY category ORDER BY category ASC')->fetchAll() ?: [];
     foreach ($themeRows as $themeRow) {
         $themeCode = wiki_category_code((string) ($themeRow['category'] ?? ''));
@@ -110,6 +141,31 @@ try {
         }
         $wikiThemes[$themeCode] = ($wikiThemes[$themeCode] ?? 0) + (int) ($themeRow['total'] ?? 0);
     }
+    $subthemeRows = db()->query('SELECT category, subcategory, COUNT(*) AS total FROM wiki_pages WHERE ' . $publicWikiWhere . ' AND subcategory IS NOT NULL AND subcategory <> "" GROUP BY category, subcategory ORDER BY category ASC, subcategory ASC')->fetchAll() ?: [];
+    foreach ($subthemeRows as $subthemeRow) {
+        $themeCode = wiki_category_code((string) ($subthemeRow['category'] ?? 'general'));
+        $subthemeCode = wiki_subcategory_code((string) ($subthemeRow['subcategory'] ?? ''));
+        if ($themeCode === '' || $subthemeCode === '') {
+            continue;
+        }
+        $wikiSubthemes[$themeCode . ':' . $subthemeCode] = (int) ($subthemeRow['total'] ?? 0);
+        $known = false;
+        foreach ($wikiSubcategoriesByCategory[$themeCode] ?? [] as $subcategoryOption) {
+            if (wiki_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subthemeCode) {
+                $known = true;
+                break;
+            }
+        }
+        if (!$known) {
+            $wikiSubcategoriesByCategory[$themeCode][] = [
+                'category_code' => $themeCode,
+                'code' => $subthemeCode,
+                'label' => wiki_category_label_from_code($subthemeCode),
+            ];
+        }
+    }
+    $visibleWikiThemes = wiki_visible_categories($wikiCategoryLabels, $wikiThemes);
+    $visibleWikiSubthemes = wiki_visible_subcategories_by_category($wikiSubcategoriesByCategory, $wikiSubthemes);
     if (table_exists('content_proposals')) {
         $categoryRows = db()->query('SELECT title FROM content_proposals WHERE area = "wiki" AND proposal_type = "category" AND status = "accepted" ORDER BY title ASC')->fetchAll() ?: [];
         foreach ($categoryRows as $categoryRow) {
@@ -118,11 +174,28 @@ try {
                 continue;
             }
             $wikiCategoryLabels[$themeCode] = content_proposal_clean_single_line((string) ($categoryRow['title'] ?? $themeCode), 190);
-            $wikiThemes[$themeCode] = $wikiThemes[$themeCode] ?? 0;
         }
     }
     if ($theme !== '' && !isset($wikiThemes[$theme])) {
         $theme = '';
+    }
+    if ($subtheme !== '') {
+        $candidateTheme = $theme;
+        if ($candidateTheme === '') {
+            foreach ($visibleWikiSubthemes as $parentCode => $subthemes) {
+                foreach ($subthemes as $subthemeInfo) {
+                    if (wiki_subcategory_code((string) ($subthemeInfo['code'] ?? '')) === $subtheme) {
+                        $candidateTheme = (string) $parentCode;
+                        break 2;
+                    }
+                }
+            }
+        }
+        if ($candidateTheme !== '' && (int) ($wikiSubthemes[$candidateTheme . ':' . $subtheme] ?? 0) > 0) {
+            $theme = $candidateTheme;
+        } else {
+            $subtheme = '';
+        }
     }
 
     $where = [];
@@ -131,15 +204,23 @@ try {
         $where[] = 'p.category = ?';
         $params[] = $theme;
     }
+    if ($subtheme !== '') {
+        $where[] = 'p.subcategory = ?';
+        $params[] = $subtheme;
+    }
+    if ($favoritesOnly) {
+        $where[] = 'p.id IN (' . implode(',', array_fill(0, $favoriteWikiPageCount, '?')) . ')';
+        array_push($params, ...$favoriteWikiPageIds);
+    }
     if ($search !== '') {
-        $where[] = '(p.title LIKE ? OR p.content LIKE ? OR p.slug LIKE ? OR p.category LIKE ?)';
+        $where[] = '(p.title LIKE ? OR p.content LIKE ? OR p.slug LIKE ? OR p.category LIKE ? OR p.subcategory LIKE ?)';
         $like = '%' . $search . '%';
-        array_push($params, $like, $like, $like, $like);
+        array_push($params, $like, $like, $like, $like, $like);
     }
     array_unshift($where, wiki_public_page_where_sql('p'));
     $whereSql = ' WHERE ' . implode(' AND ', $where);
     $stmt = db()->prepare(
-        'SELECT p.slug, p.title, p.content, p.category, p.updated_at, p.author_id, m.callsign,
+        'SELECT p.id, p.slug, p.title, p.content, p.category, p.subcategory, p.updated_at, p.author_id, m.callsign,
             (SELECT COUNT(*) FROM wiki_revisions r WHERE r.wiki_page_id = p.id) AS revision_count
          FROM wiki_pages p
          LEFT JOIN members m ON m.id = p.author_id
@@ -229,16 +310,22 @@ ob_start();
     <section class="card wiki-search-panel">
         <form method="get" class="inline-form wiki-search-form">
             <input type="hidden" name="route" value="wiki">
-            <?php if ($theme !== ''): ?>
+            <?php if ($theme !== '' || $subtheme !== '' || $favoritesOnly): ?>
                 <input type="hidden" name="theme" value="<?= e($theme) ?>">
+            <?php endif; ?>
+            <?php if ($subtheme !== ''): ?>
+                <input type="hidden" name="subtheme" value="<?= e($subtheme) ?>">
+            <?php endif; ?>
+            <?php if ($favoritesOnly): ?>
+                <input type="hidden" name="favorites" value="1">
             <?php endif; ?>
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('wiki', ['theme' => $theme])) ?>"><?= e((string) $t['reset']) ?></a>
+            <?php if ($search !== '' || $theme !== '' || $subtheme !== '' || $favoritesOnly): ?>
+                <a class="button secondary" href="<?= e(route_url('wiki')) ?>"><?= e((string) $t['reset']) ?></a>
             <?php endif; ?>
         </form>
-        <?php if ($search !== '' || $theme !== ''): ?>
+        <?php if ($search !== '' || $theme !== '' || $subtheme !== '' || $favoritesOnly): ?>
             <p class="help"><?= e((string) $t['wiki_pages']) ?> : <?= (int) count($rows) ?></p>
         <?php endif; ?>
     </section>
@@ -247,15 +334,32 @@ ob_start();
         <aside class="wiki-themes module-taxonomy-index card">
             <p class="wiki-themes-title"><?= e($tr('themes', 'Thématiques')) ?></p>
             <nav class="wiki-theme-list" aria-label="<?= e($tr('themes', 'Thématiques')) ?>">
-                <a class="wiki-theme-item module-taxonomy-item<?= $theme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
+                <?php if ($favoriteWikiPageCount > 0): ?>
+                    <a class="wiki-theme-item module-taxonomy-item<?= $favoritesOnly ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['favorites' => '1', 'q' => $search])) ?>"<?= $favoritesOnly ? ' aria-current="page"' : '' ?>>
+                        <span><?= e($favoritesLabel) ?></span>
+                        <strong><?= (int) $favoriteWikiPageCount ?></strong>
+                    </a>
+                <?php endif; ?>
+                <a class="wiki-theme-item module-taxonomy-item<?= !$favoritesOnly && $theme === '' && $subtheme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['q' => $search])) ?>">
                     <span><?= e($tr('all_themes', 'Toutes les thématiques')) ?></span>
                     <strong><?= (int) ($wikiThemes !== [] ? array_sum($wikiThemes) : $totalPagesCount) ?></strong>
                 </a>
-                <?php foreach ($wikiThemes as $themeCode => $themeTotal): ?>
-                    <a class="wiki-theme-item module-taxonomy-item<?= $themeCode === $theme ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeCode === $theme ? ' aria-current="page"' : '' ?>>
+                <?php foreach ($visibleWikiThemes as $themeCode => $themeLabel): ?>
+                    <a class="wiki-theme-item module-taxonomy-item<?= !$favoritesOnly && $themeCode === $theme && $subtheme === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === '' ? ' aria-current="page"' : '' ?>>
                         <span><?= e((string) ($wikiCategoryLabels[$themeCode] ?? wiki_category_label_from_code($themeCode))) ?></span>
-                        <strong><?= (int) $themeTotal ?></strong>
+                        <strong><?= (int) ($wikiThemes[$themeCode] ?? 0) ?></strong>
                     </a>
+                    <?php if (($visibleWikiSubthemes[(string) $themeCode] ?? []) !== []): ?>
+                        <div class="module-taxonomy-children">
+                            <?php foreach ($visibleWikiSubthemes[(string) $themeCode] as $subthemeInfo): ?>
+                                <?php $subCode = wiki_subcategory_code((string) ($subthemeInfo['code'] ?? '')); ?>
+                                <a class="wiki-theme-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('wiki', ['theme' => $themeCode, 'subtheme' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeCode === $theme && $subtheme === $subCode ? ' aria-current="page"' : '' ?>>
+                                    <span><?= e((string) ($subthemeInfo['label'] ?? $subCode)) ?></span>
+                                    <strong><?= (int) ($subthemeInfo['total'] ?? 0) ?></strong>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </nav>
         </aside>
@@ -271,7 +375,7 @@ ob_start();
         <?php if ($rows === []): ?>
             <article class="wiki-empty">
                 <h2><?= e((string) $t['no_page']) ?></h2>
-                <p class="help"><?= $search !== '' ? e((string) $t['for_search']) : e((string) $t['summary_fallback']) ?></p>
+                <p class="help"><?= ($search !== '' || $theme !== '' || $subtheme !== '' || $favoritesOnly) ? e((string) $t['for_search']) : e((string) $t['summary_fallback']) ?></p>
             </article>
         <?php else: ?>
             <div class="wiki-grid">
@@ -285,12 +389,19 @@ ob_start();
                     $revisionTotal = (int) ($row['revision_count'] ?? 0);
                     $categoryCode = wiki_category_code((string) ($row['category'] ?? 'general'));
                     $categoryLabel = (string) ($wikiCategoryLabels[$categoryCode] ?? wiki_category_label_from_code($categoryCode));
+                    $rowSubtheme = wiki_subcategory_code((string) ($row['subcategory'] ?? ''));
+                    $rowSubthemeLabel = $rowSubtheme !== '' ? wiki_category_label_from_code($rowSubtheme) : '';
+                    $rowId = (int) ($row['id'] ?? 0);
+                    $rowIsFavorite = $user !== null && $rowId > 0 && function_exists('favorite_is_saved') && favorite_is_saved((int) ($user['id'] ?? 0), 'wiki_page', $rowId);
                     ?>
                     <article class="wiki-card">
                         <div class="wiki-card-main">
                             <div class="wiki-card-kicker">
                                 <span class="wiki-slug">/<?= e((string) $row['slug']) ?></span>
                                 <a class="wiki-category-badge" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode])) ?>"><?= e($categoryLabel) ?></a>
+                                <?php if ($rowSubtheme !== ''): ?>
+                                    <a class="wiki-category-badge" href="<?= e(route_url_clean('wiki', ['theme' => $categoryCode, 'subtheme' => $rowSubtheme])) ?>"><?= e($rowSubthemeLabel) ?></a>
+                                <?php endif; ?>
                             </div>
                             <h2><a href="<?= e(route_url('wiki_view', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title']) ?></a></h2>
                             <p><?= e($summary) ?></p>
@@ -302,6 +413,18 @@ ob_start();
                         </div>
                         <div class="wiki-card-actions">
                             <a class="button secondary" href="<?= e(route_url('wiki_view', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $t['open_page']) ?></a>
+                            <?php if ($user !== null && $rowId > 0): ?>
+                                <form method="post" class="inline-form">
+                                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                    <input type="hidden" name="action" value="toggle_favorite_page">
+                                    <input type="hidden" name="page_id" value="<?= $rowId ?>">
+                                    <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                    <input type="hidden" name="return_theme" value="<?= e($theme) ?>">
+                                    <input type="hidden" name="return_subtheme" value="<?= e($subtheme) ?>">
+                                    <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
+                                    <button class="button secondary" type="submit"><?= $rowIsFavorite ? '&#9733;' : '&#9734;' ?></button>
+                                </form>
+                            <?php endif; ?>
                         </div>
                     </article>
                 <?php endforeach; ?>

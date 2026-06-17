@@ -22,4 +22,9 @@ return array (
   'previous' => '上一页',
   'next' => '下一页',
   'page' => '页',
+  'category_field' => 'Topic',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'all_categories' => 'All topics',
+  'favorites' => 'Favorites',
 );

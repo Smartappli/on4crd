@@ -21,8 +21,7 @@ if (!ensure_wiki_tables()) {
 $user = require_login();
 $id = (int) ($_GET['id'] ?? 0);
 $wikiCategories = wiki_categories($wikiMessages);
-$wikiThemeLabel = (string) ($wikiMessages['themes'] ?? 'Themes');
-$page = ['id' => 0, 'title' => '', 'slug' => '', 'content' => '<p></p>', 'category' => 'general', 'updated_at' => null];
+$page = ['id' => 0, 'title' => '', 'slug' => '', 'content' => '<p></p>', 'category' => 'general', 'subcategory' => '', 'updated_at' => null];
 
 if ($id > 0) {
     $stmt = db()->prepare('SELECT * FROM wiki_pages WHERE id = ? LIMIT 1');
@@ -43,11 +42,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $content = sanitize_rich_html((string) ($_POST['content'] ?? ''));
         $slug = slugify((string) ($_POST['slug'] ?? $title));
         $category = wiki_category_from_input((string) ($_POST['category'] ?? 'general'), $wikiCategories);
+        $subcategory = wiki_subcategory_code((string) ($page['subcategory'] ?? ''));
+        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+        if ($subcategoryRef !== '') {
+            $subcategoryParts = wiki_subcategory_ref_parts($subcategoryRef);
+            if ($subcategoryParts['subcategory'] !== '') {
+                $subcategory = $subcategoryParts['subcategory'];
+                if ($subcategoryParts['category'] !== '') {
+                    $category = wiki_category_from_input($subcategoryParts['category'], $wikiCategories);
+                }
+            }
+        } elseif (array_key_exists('subcategory_ref', $_POST)) {
+            $subcategory = '';
+        }
 
         if ($title === '' || trim(strip_tags($content)) === '' || $slug === '') {
             throw new RuntimeException($t('content_label'));
         }
-        if (mb_strlen($title) > 190 || mb_strlen($slug) > 190 || mb_strlen($category) > 120 || mb_strlen($content) > 50000) {
+        if (mb_strlen($title) > 190 || mb_strlen($slug) > 190 || mb_strlen($category) > 120 || mb_strlen($subcategory) > 120 || mb_strlen($content) > 50000) {
             throw new RuntimeException('Un des champs dépasse la longueur autorisée.');
         }
 
@@ -59,9 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($id > 0) {
             db()->prepare('INSERT INTO wiki_revisions (wiki_page_id, member_id, content) VALUES (?, ?, ?)')->execute([$id, (int) $user['id'], (string) $page['content']]);
-            db()->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, author_id = ?, status = "published" WHERE id = ?')->execute([$title, $slug, $content, $category, (int) $user['id'], $id]);
+            db()->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, subcategory = ?, author_id = ?, status = "published" WHERE id = ?')->execute([$title, $slug, $content, $category, $subcategory, (int) $user['id'], $id]);
         } else {
-            db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, author_id, status) VALUES (?, ?, ?, ?, ?, "published")')->execute([$title, $slug, $content, $category, (int) $user['id']]);
+            db()->prepare('INSERT INTO wiki_pages (title, slug, content, category, subcategory, author_id, status) VALUES (?, ?, ?, ?, ?, ?, "published")')->execute([$title, $slug, $content, $category, $subcategory, (int) $user['id']]);
         }
 
         set_flash('success', $t('saved'));
@@ -88,14 +100,7 @@ ob_start();
         <div class="wiki-edit-grid">
             <label><?= e($t('title_label')) ?><input type="text" name="title" value="<?= e((string) $page['title']) ?>" maxlength="190" required></label>
             <label><?= e($t('slug_label')) ?><input type="text" name="slug" value="<?= e((string) $page['slug']) ?>" maxlength="190"></label>
-            <label><?= e($wikiThemeLabel) ?>
-                <select name="category">
-                    <?php $selectedCategory = wiki_category_code((string) ($page['category'] ?? 'general')); ?>
-                    <?php foreach ($wikiCategories as $categoryCode => $categoryLabel): ?>
-                        <option value="<?= e((string) $categoryCode) ?>" <?= $selectedCategory === $categoryCode ? 'selected' : '' ?>><?= e((string) $categoryLabel) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
+            <?= render_wiki_taxonomy_fields($wikiCategories, $wikiMessages, (string) ($page['category'] ?? 'general'), (string) ($page['subcategory'] ?? '')) ?>
         </div>
         <label><?= e($t('content_label')) ?>
             <textarea name="content" rows="22" maxlength="50000" data-wysiwyg="full"><?= e((string) $page['content']) ?></textarea>

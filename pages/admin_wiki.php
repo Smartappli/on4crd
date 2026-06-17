@@ -16,6 +16,7 @@ $tr = static function (string $key, string $fallback) use ($t): string {
 };
 $wikiMessages = i18n_domain_locale('wiki', $locale);
 $wikiCategories = wiki_categories($wikiMessages);
+$wikiSubcategoriesByCategory = wiki_subcategories_by_category();
 $wikiThemeLabel = (string) ($wikiMessages['themes'] ?? 'Themes');
 
 $statusLabels = [
@@ -62,6 +63,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         verify_csrf();
         $action = (string) ($_POST['action'] ?? 'update_page_status');
 
+        if ($action === 'add_category') {
+            if (!wiki_ensure_categories_table()) {
+                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+            }
+            $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+            $code = wiki_category_code((string) ($_POST['category_code'] ?? $label));
+            if ($label === '' || $code === '') {
+                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+            }
+            db()->prepare('INSERT INTO wiki_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$code, $label]);
+            set_flash('success', $tr('category_saved', 'Thématique wiki enregistrée.'));
+            redirect_url(route_url_clean('admin_wiki'));
+        }
+
+        if ($action === 'delete_category') {
+            if (!wiki_ensure_categories_table()) {
+                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+            }
+            $category = wiki_category_from_input((string) ($_POST['category_code'] ?? ''), $wikiCategories);
+            $pageCountStmt = db()->prepare('SELECT COUNT(*) FROM wiki_pages WHERE category = ?');
+            $pageCountStmt->execute([$category]);
+            if ((int) $pageCountStmt->fetchColumn() > 0) {
+                throw new RuntimeException($tr('err_category_has_documents', 'Cette thématique contient encore des pages.'));
+            }
+            $subCountStmt = db()->prepare('SELECT COUNT(*) FROM wiki_subcategories WHERE category_code = ?');
+            $subCountStmt->execute([$category]);
+            if ((int) $subCountStmt->fetchColumn() > 0) {
+                throw new RuntimeException($tr('err_category_has_subcategories', 'Supprimez d abord toutes les sous-thématiques.'));
+            }
+            db()->prepare('DELETE FROM wiki_categories WHERE code = ?')->execute([$category]);
+            set_flash('success', $tr('category_deleted', 'Thématique wiki supprimée.'));
+            redirect_url(route_url_clean('admin_wiki'));
+        }
+
+        if ($action === 'add_subcategory') {
+            if (!wiki_ensure_subcategories_table()) {
+                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+            }
+            $category = wiki_category_from_input((string) ($_POST['subcategory_category'] ?? 'general'), $wikiCategories);
+            $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+            $code = wiki_subcategory_code((string) ($_POST['subcategory_code'] ?? $label));
+            if ($label === '' || $code === '') {
+                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+            }
+            db()->prepare('INSERT INTO wiki_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $code, $label]);
+            set_flash('success', $tr('subcategory_saved', 'Sous-thématique wiki enregistrée.'));
+            redirect_url(route_url_clean('admin_wiki'));
+        }
+
+        if ($action === 'delete_subcategory') {
+            if (!wiki_ensure_subcategories_table()) {
+                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+            }
+            $parts = wiki_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+            $category = wiki_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $wikiCategories);
+            $subcategory = wiki_subcategory_code($parts['subcategory']);
+            if ($subcategory === '') {
+                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+            }
+            $countStmt = db()->prepare('SELECT COUNT(*) FROM wiki_pages WHERE category = ? AND subcategory = ?');
+            $countStmt->execute([$category, $subcategory]);
+            if ((int) $countStmt->fetchColumn() > 0) {
+                throw new RuntimeException($tr('err_subcategory_has_documents', 'Cette sous-thématique contient encore des pages.'));
+            }
+            db()->prepare('DELETE FROM wiki_subcategories WHERE category_code = ? AND code = ?')->execute([$category, $subcategory]);
+            set_flash('success', $tr('subcategory_deleted', 'Sous-thématique wiki supprimée.'));
+            redirect_url(route_url_clean('admin_wiki'));
+        }
+
         if ($action === 'update_proposal_status') {
             $proposalId = (int) ($_POST['proposal_id'] ?? 0);
             $proposalStatus = (string) ($_POST['proposal_status'] ?? 'pending');
@@ -97,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
         }
 
-        $pageStmt = db()->prepare('SELECT id, title, slug, content, category, author_id, status, proposal_kind, source_page_id, target_slug FROM wiki_pages WHERE id = ? LIMIT 1');
+        $pageStmt = db()->prepare('SELECT id, title, slug, content, category, subcategory, author_id, status, proposal_kind, source_page_id, target_slug FROM wiki_pages WHERE id = ? LIMIT 1');
         $pageStmt->execute([$id]);
         $page = $pageStmt->fetch();
         if (!is_array($page)) {
@@ -106,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($status === 'published' && (string) ($page['proposal_kind'] ?? 'page') === 'modification') {
             $sourceId = (int) ($page['source_page_id'] ?? 0);
-            $sourceStmt = db()->prepare('SELECT id, title, slug, content, category FROM wiki_pages WHERE id = ? AND proposal_kind = "page" LIMIT 1');
+            $sourceStmt = db()->prepare('SELECT id, title, slug, content, category, subcategory FROM wiki_pages WHERE id = ? AND proposal_kind = "page" LIMIT 1');
             $sourceStmt->execute([$sourceId]);
             $sourcePage = $sourceStmt->fetch();
             if (!is_array($sourcePage)) {
@@ -126,8 +198,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $pdo->prepare('INSERT INTO wiki_revisions (wiki_page_id, member_id, content) VALUES (?, ?, ?)')
                     ->execute([$sourceId, $approverId, (string) ($sourcePage['content'] ?? '')]);
-                $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL, updated_at = NOW() WHERE id = ?')
-                    ->execute([(string) $page['title'], $targetSlug, (string) $page['content'], wiki_category_code((string) ($page['category'] ?? 'general')), $authorId, $sourceId]);
+                $pdo->prepare('UPDATE wiki_pages SET title = ?, slug = ?, content = ?, category = ?, subcategory = ?, author_id = ?, status = "published", proposal_kind = "page", source_page_id = NULL, target_slug = NULL, updated_at = NOW() WHERE id = ?')
+                    ->execute([(string) $page['title'], $targetSlug, (string) $page['content'], wiki_category_code((string) ($page['category'] ?? 'general')), wiki_subcategory_code((string) ($page['subcategory'] ?? '')), $authorId, $sourceId]);
                 $pdo->prepare('DELETE FROM wiki_pages WHERE id = ?')->execute([$id]);
                 $pdo->commit();
             } catch (Throwable $throwable) {
@@ -156,7 +228,7 @@ if ($statusFilter !== '') {
     $params[] = $statusFilter;
 }
 $stmt = db()->prepare(
-    'SELECT p.id, p.title, p.slug, p.category, p.status, p.updated_at, p.proposal_kind, p.source_page_id, p.target_slug,
+    'SELECT p.id, p.title, p.slug, p.category, p.subcategory, p.status, p.updated_at, p.proposal_kind, p.source_page_id, p.target_slug,
         s.title AS source_title, s.slug AS source_slug
      FROM wiki_pages p
      LEFT JOIN wiki_pages s ON s.id = p.source_page_id
@@ -165,6 +237,18 @@ $stmt = db()->prepare(
 );
 $stmt->execute($params);
 $pages = $stmt->fetchAll() ?: [];
+$wikiCategoryCounts = [];
+$wikiSubcategoryCounts = [];
+foreach ($pages as $pageRow) {
+    $categoryCode = wiki_category_code((string) ($pageRow['category'] ?? 'general'));
+    $subcategoryCode = wiki_subcategory_code((string) ($pageRow['subcategory'] ?? ''));
+    if ($categoryCode !== '') {
+        $wikiCategoryCounts[$categoryCode] = ($wikiCategoryCounts[$categoryCode] ?? 0) + 1;
+    }
+    if ($categoryCode !== '' && $subcategoryCode !== '') {
+        $wikiSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] = ($wikiSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] ?? 0) + 1;
+    }
+}
 
 $showPendingProposals = $statusFilter === 'pending';
 $pendingProposals = [];
@@ -202,6 +286,57 @@ ob_start();
             <a class="button secondary small" href="<?= e(route_url_clean('admin_wiki')) ?>"><?= e($tr('clear_filter', 'Tout afficher')) ?></a>
         <?php endif; ?>
     </form>
+    <section class="admin-wiki-taxonomy">
+        <h2><?= e($wikiThemeLabel) ?></h2>
+        <div class="grid-2">
+            <form method="post" class="stack">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="add_category">
+                <label><span><?= e($wikiThemeLabel) ?></span><input type="text" name="category_label" maxlength="160" required></label>
+                <button class="button" type="submit"><?= e($tr('add_category', 'Ajouter')) ?></button>
+            </form>
+            <form method="post" class="stack">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="add_subcategory">
+                <label><span><?= e($wikiThemeLabel) ?></span>
+                    <select name="subcategory_category">
+                        <?php foreach ($wikiCategories as $code => $label): ?>
+                            <option value="<?= e((string) $code) ?>"><?= e((string) $label) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><span><?= e((string) ($wikiMessages['subcategory_field'] ?? 'Sous-thématique')) ?></span><input type="text" name="subcategory_label" maxlength="160" required></label>
+                <button class="button" type="submit"><?= e($tr('add_subcategory', 'Ajouter')) ?></button>
+            </form>
+        </div>
+        <div class="tags-cloud">
+            <?php foreach ($wikiCategories as $code => $label): ?>
+                <?php $categoryTotal = (int) ($wikiCategoryCounts[(string) $code] ?? 0); ?>
+                <?php $subcategoryTotal = count($wikiSubcategoriesByCategory[(string) $code] ?? []); ?>
+                <form method="post" class="inline-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="delete_category">
+                    <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
+                    <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
+                    <button class="button secondary small" type="submit"<?= ($categoryTotal > 0 || $subcategoryTotal > 0) ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
+                </form>
+            <?php endforeach; ?>
+            <?php foreach ($wikiSubcategoriesByCategory as $parentCode => $subcategories): ?>
+                <?php foreach ($subcategories as $subcategoryInfo): ?>
+                    <?php $subCode = wiki_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                    <?php if ($subCode === '') { continue; } ?>
+                    <?php $subTotal = (int) ($wikiSubcategoryCounts[(string) $parentCode . ':' . $subCode] ?? 0); ?>
+                    <form method="post" class="inline-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="subcategory_ref" value="<?= e(wiki_subcategory_ref((string) $parentCode, $subCode)) ?>">
+                        <span class="pill"><?= e((string) ($wikiCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
+                        <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
+                    </form>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+    </section>
     <div class="table-wrap">
         <table>
             <thead><tr><th><?= e($t('th_title')) ?></th><th><?= e($t('th_slug')) ?></th><th><?= e($wikiThemeLabel) ?></th><th><?= e($tr('th_status', 'Statut')) ?></th><th><?= e($t('th_updated')) ?></th><th><?= e($t('th_action')) ?></th></tr></thead>
@@ -216,6 +351,7 @@ ob_start();
                 }
                 $pageCategory = wiki_category_code((string) ($page['category'] ?? 'general'));
                 $pageCategoryLabel = (string) ($wikiCategories[$pageCategory] ?? wiki_category_label_from_code($pageCategory));
+                $pageSubcategory = wiki_subcategory_code((string) ($page['subcategory'] ?? ''));
                 ?>
                 <tr>
                     <td>
@@ -228,7 +364,7 @@ ob_start();
                         <?php endif; ?>
                     </td>
                     <td><code><?= e((string) $page['slug']) ?></code></td>
-                    <td><span class="badge muted"><?= e($pageCategoryLabel) ?></span></td>
+                    <td><span class="badge muted"><?= e($pageCategoryLabel) ?></span><?php if ($pageSubcategory !== ''): ?> <span class="badge muted"><?= e(wiki_category_label_from_code($pageSubcategory)) ?></span><?php endif; ?></td>
                     <td><span class="badge muted"><?= e((string) ($statusLabels[$pageStatus] ?? $pageStatus)) ?></span></td>
                     <td><?= e((string) $page['updated_at']) ?></td>
                     <td>

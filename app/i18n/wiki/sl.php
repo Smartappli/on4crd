@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'Sprememba',
   'propose_new_theme' => 'Nova tematika',
   'administer' => 'Upravljaj',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

@@ -22,4 +22,9 @@ return array (
   'previous' => 'Poprzedni',
   'next' => 'Następny',
   'page' => 'Strona',
+  'category_field' => 'Topic',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'all_categories' => 'All topics',
+  'favorites' => 'Favorites',
 );

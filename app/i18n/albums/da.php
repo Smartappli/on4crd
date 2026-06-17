@@ -22,4 +22,9 @@ return array (
   'previous' => 'Forrige',
   'next' => 'Næste',
   'page' => 'Side',
+  'category_field' => 'Topic',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'all_categories' => 'All topics',
+  'favorites' => 'Favorites',
 );

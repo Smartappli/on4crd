@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'একটি সম্পাদনা',
   'propose_new_theme' => 'একটি নতুন থিম',
   'administer' => 'প্রশাসন',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

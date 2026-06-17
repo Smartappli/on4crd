@@ -67,8 +67,20 @@ function album_ensure_source_proposal_column(): bool
         if (!table_has_column('albums', 'member_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN member_id INT DEFAULT NULL AFTER id');
         }
+        if (!table_has_column('albums', 'category')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
+        }
+        if (!table_has_column('albums', 'subcategory')) {
+            db()->exec('ALTER TABLE albums ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
+        }
         if (!table_has_index('albums', 'idx_albums_member')) {
             db()->exec('ALTER TABLE albums ADD INDEX idx_albums_member (member_id)');
+        }
+        if (!table_has_index('albums', 'idx_albums_category')) {
+            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_category (category)');
+        }
+        if (!table_has_index('albums', 'idx_albums_subcategory')) {
+            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_subcategory (category, subcategory)');
         }
         if (!table_has_column('albums', 'source_proposal_id')) {
             db()->exec('ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_public');
@@ -76,6 +88,10 @@ function album_ensure_source_proposal_column(): bool
         if (!table_has_index('albums', 'idx_albums_source_proposal')) {
             db()->exec('ALTER TABLE albums ADD INDEX idx_albums_source_proposal (source_proposal_id)');
         }
+        db()->exec('UPDATE albums SET category = "general" WHERE category IS NULL OR category = ""');
+        db()->exec('UPDATE albums SET subcategory = "" WHERE subcategory IS NULL');
+        album_ensure_categories_table();
+        album_ensure_subcategories_table();
 
         return true;
     } catch (Throwable $throwable) {
@@ -85,6 +101,306 @@ function album_ensure_source_proposal_column(): bool
 
         return false;
     }
+}
+
+function album_category_code(string $value): string
+{
+    return content_proposal_category_code($value, 120, 'general');
+}
+
+function album_subcategory_code(string $value): string
+{
+    return content_taxonomy_code($value, 120, '', true);
+}
+
+function album_subcategory_ref(string $categoryCode, string $subcategoryCode): string
+{
+    $categoryCode = album_category_code($categoryCode !== '' ? $categoryCode : 'general');
+    $subcategoryCode = album_subcategory_code($subcategoryCode);
+
+    return $subcategoryCode !== '' ? ($categoryCode . ':' . $subcategoryCode) : '';
+}
+
+/**
+ * @return array{category:string,subcategory:string}
+ */
+function album_subcategory_ref_parts(string $value): array
+{
+    $value = trim($value);
+    if ($value === '') {
+        return ['category' => '', 'subcategory' => ''];
+    }
+    $parts = explode(':', $value, 2);
+    if (count($parts) === 2) {
+        return [
+            'category' => album_category_code($parts[0] !== '' ? $parts[0] : 'general'),
+            'subcategory' => album_subcategory_code($parts[1]),
+        ];
+    }
+
+    return ['category' => '', 'subcategory' => album_subcategory_code($value)];
+}
+
+function album_category_label_from_code(string $code): string
+{
+    $label = trim(str_replace('-', ' ', album_category_code($code)));
+    return $label !== '' ? mb_convert_case($label, MB_CASE_TITLE, 'UTF-8') : 'General';
+}
+
+/**
+ * @return array<string, string>
+ */
+function album_default_categories(): array
+{
+    return [
+        'general' => 'General',
+        'activites' => 'Activites club',
+        'contests' => 'Contests',
+        'formations' => 'Formations',
+        'sorties' => 'Sorties',
+        'radio' => 'Radioamateur',
+    ];
+}
+
+function album_ensure_categories_table(): bool
+{
+    try {
+        db()->exec('CREATE TABLE IF NOT EXISTS album_categories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            code VARCHAR(120) NOT NULL UNIQUE,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )');
+        $insert = db()->prepare('INSERT IGNORE INTO album_categories (code, label, sort_order) VALUES (?, ?, ?)');
+        $order = 1;
+        foreach (album_default_categories() as $code => $label) {
+            $insert->execute([(string) $code, (string) $label, $order++ * 10]);
+        }
+
+        return table_exists('album_categories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+
+function album_ensure_subcategories_table(): bool
+{
+    try {
+        db()->exec('CREATE TABLE IF NOT EXISTS album_subcategories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_code VARCHAR(120) NOT NULL,
+            code VARCHAR(120) NOT NULL,
+            label VARCHAR(160) NOT NULL,
+            sort_order INT NOT NULL DEFAULT 100,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uniq_album_subcategory (category_code, code),
+            INDEX idx_album_subcategory_category (category_code)
+        )');
+
+        return table_exists('album_subcategories');
+    } catch (Throwable) {
+        return false;
+    }
+}
+
+/**
+ * @return array<string, string>
+ */
+function album_categories(): array
+{
+    $categories = album_default_categories();
+    if (album_ensure_categories_table()) {
+        try {
+            foreach (db()->query('SELECT code, label FROM album_categories ORDER BY sort_order ASC, label ASC')->fetchAll() ?: [] as $row) {
+                $code = album_category_code((string) ($row['code'] ?? ''));
+                $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
+                if ($code !== '' && $label !== '') {
+                    $categories[$code] = $label;
+                }
+            }
+        } catch (Throwable) {
+        }
+    }
+    try {
+        if (table_exists('albums') && table_has_column('albums', 'category')) {
+            foreach (db()->query('SELECT category FROM albums WHERE category IS NOT NULL AND category <> "" GROUP BY category ORDER BY category ASC')->fetchAll() ?: [] as $row) {
+                $code = album_category_code((string) ($row['category'] ?? ''));
+                if ($code !== '' && !isset($categories[$code])) {
+                    $categories[$code] = album_category_label_from_code($code);
+                }
+            }
+        }
+    } catch (Throwable) {
+    }
+
+    return $categories;
+}
+
+/**
+ * @param array<string, string> $categories
+ */
+function album_category_from_input(string $value, array $categories): string
+{
+    $code = album_category_code($value);
+    if ($code === '') {
+        $code = 'general';
+    }
+    if (!isset($categories[$code])) {
+        throw new RuntimeException('Invalid album category.');
+    }
+
+    return $code;
+}
+
+/**
+ * @return list<array{category_code:string,code:string,label:string}>
+ */
+function album_subcategory_options(): array
+{
+    if (!album_ensure_subcategories_table()) {
+        return [];
+    }
+
+    try {
+        $rows = db()->query('SELECT category_code, code, label FROM album_subcategories ORDER BY category_code ASC, sort_order ASC, label ASC')->fetchAll() ?: [];
+    } catch (Throwable) {
+        $rows = [];
+    }
+
+    $options = [];
+    foreach ($rows as $row) {
+        $categoryCode = album_category_code((string) ($row['category_code'] ?? 'general'));
+        $code = album_subcategory_code((string) ($row['code'] ?? ''));
+        $label = content_proposal_clean_single_line((string) ($row['label'] ?? $code), 160);
+        if ($categoryCode !== '' && $code !== '' && $label !== '') {
+            $options[] = ['category_code' => $categoryCode, 'code' => $code, 'label' => $label];
+        }
+    }
+
+    return $options;
+}
+
+/**
+ * @return array<string, list<array{category_code:string,code:string,label:string}>>
+ */
+function album_subcategories_by_category(): array
+{
+    $byCategory = [];
+    foreach (album_subcategory_options() as $subcategory) {
+        $byCategory[$subcategory['category_code']][] = $subcategory;
+    }
+
+    return $byCategory;
+}
+
+/**
+ * @param array<string, string> $categories
+ * @param array<string, int> $countsByCategory
+ * @return array<string, string>
+ */
+function album_visible_categories(array $categories, array $countsByCategory): array
+{
+    $visible = [];
+    foreach ($categories as $code => $label) {
+        if ((int) ($countsByCategory[(string) $code] ?? 0) <= 0) {
+            continue;
+        }
+        $visible[(string) $code] = (string) $label;
+    }
+
+    return $visible;
+}
+
+/**
+ * @param array<string, list<array<string, mixed>>> $subcategoriesByCategory
+ * @param array<string, int> $countsBySubcategory
+ * @return array<string, list<array<string, mixed>>>
+ */
+function album_visible_subcategories_by_category(array $subcategoriesByCategory, array $countsBySubcategory): array
+{
+    $visible = [];
+    foreach ($subcategoriesByCategory as $categoryCode => $subcategories) {
+        foreach ($subcategories as $subcategory) {
+            $code = album_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $count = (int) ($countsBySubcategory[(string) $categoryCode . ':' . $code] ?? 0);
+            if ($code === '' || $count <= 0) {
+                continue;
+            }
+            $subcategory['total'] = $count;
+            $visible[(string) $categoryCode][] = $subcategory;
+        }
+    }
+
+    return $visible;
+}
+
+/**
+ * @return list<int>
+ */
+function album_favorite_album_ids(int $memberId): array
+{
+    if (
+        $memberId <= 0
+        || !function_exists('ensure_member_favorites_table')
+        || !ensure_member_favorites_table()
+        || !table_exists('albums')
+    ) {
+        return [];
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT a.id FROM member_favorites f INNER JOIN albums a ON a.id = f.target_id WHERE f.member_id = ? AND f.target_type = ? AND a.is_public = 1 ORDER BY f.created_at DESC, f.id DESC');
+        $stmt->execute([$memberId, 'album']);
+        $ids = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    } catch (Throwable) {
+        return [];
+    }
+}
+
+/**
+ * @param array<string, string> $categories
+ * @param array<string, string> $labels
+ */
+function render_album_taxonomy_fields(array $categories, array $labels = [], string $selectedCategory = 'general', string $selectedSubcategory = ''): string
+{
+    $selectedCategory = album_category_code($selectedCategory !== '' ? $selectedCategory : 'general');
+    $selectedSubcategory = album_subcategory_code($selectedSubcategory);
+    $subcategoriesByCategory = album_subcategories_by_category();
+    $categoryLabel = (string) ($labels['category_field'] ?? 'Thématique');
+    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? 'Sous-thématique');
+    $noSubcategory = (string) ($labels['no_subcategory'] ?? 'Sans sous-thématique');
+
+    $html = '<label><span>' . e($categoryLabel) . '</span><select name="category">';
+    foreach ($categories as $code => $label) {
+        $html .= '<option value="' . e((string) $code) . '"' . ($selectedCategory === (string) $code ? ' selected' : '') . '>' . e((string) $label) . '</option>';
+    }
+    $html .= '</select></label>'
+        . '<label><span>' . e($subcategoryLabel) . '</span><select name="subcategory_ref">'
+        . '<option value="">' . e($noSubcategory) . '</option>';
+    foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
+        $html .= '<optgroup label="' . e((string) ($categories[(string) $parentCode] ?? album_category_label_from_code((string) $parentCode))) . '">';
+        foreach ($subcategories as $subcategory) {
+            $code = album_subcategory_code((string) ($subcategory['code'] ?? ''));
+            if ($code === '') {
+                continue;
+            }
+            $html .= '<option value="' . e(album_subcategory_ref((string) $parentCode, $code)) . '"'
+                . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
+                . '>' . e((string) ($subcategory['label'] ?? $code)) . '</option>';
+        }
+        $html .= '</optgroup>';
+    }
+
+    return $html . '</select></label>';
 }
 
 function album_proposal_description_from_summary(string $summary): ?string
@@ -134,7 +450,7 @@ function album_delete_photo_file(string $publicPath): void
     }
 }
 
-function album_update_record(int $albumId, string $title, string $description, ?int $isPublic = null): void
+function album_update_record(int $albumId, string $title, string $description, ?int $isPublic = null, string $category = 'general', string $subcategory = ''): void
 {
     if (!album_ensure_source_proposal_column()) {
         throw new RuntimeException('Albums storage unavailable.');
@@ -142,6 +458,8 @@ function album_update_record(int $albumId, string $title, string $description, ?
 
     $title = content_proposal_clean_single_line($title, 190);
     $description = content_proposal_clean_multiline($description, 10000);
+    $category = album_category_code($category !== '' ? $category : 'general');
+    $subcategory = album_subcategory_code($subcategory);
     if ($albumId <= 0 || $title === '') {
         throw new RuntimeException('Invalid album proposal.');
     }
@@ -158,8 +476,12 @@ function album_update_record(int $albumId, string $title, string $description, ?
         $visibility = (int) ($album['is_public'] ?? 1);
     }
 
-    db()->prepare('UPDATE albums SET title = ?, description = ?, is_public = ? WHERE id = ?')
-        ->execute([$title, $description !== '' ? $description : null, $visibility ? 1 : 0, $albumId]);
+    db()->prepare('UPDATE albums SET category = ?, subcategory = ?, title = ?, description = ?, is_public = ? WHERE id = ?')
+        ->execute([$category, $subcategory, $title, $description !== '' ? $description : null, $visibility ? 1 : 0, $albumId]);
+    if (table_exists('member_favorites')) {
+        db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
+            ->execute([$title, route_url('album', ['id' => $albumId]), 'album', $albumId]);
+    }
     album_clear_caches();
 }
 
@@ -186,6 +508,9 @@ function album_delete_record(int $albumId): void
     $pdo->beginTransaction();
     try {
         $pdo->prepare('DELETE FROM album_photos WHERE album_id = ?')->execute([$albumId]);
+        if (table_exists('member_favorites')) {
+            $pdo->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['album', $albumId]);
+        }
         $pdo->prepare('DELETE FROM albums WHERE id = ?')->execute([$albumId]);
         $pdo->commit();
     } catch (Throwable $throwable) {
@@ -229,7 +554,10 @@ function album_apply_accepted_proposal(array $proposal): ?int
         album_update_record(
             $albumId,
             $title,
-            (string) (content_proposal_detail_from_summary($summary, ['Description', 'Resume', 'Summary']) ?: '')
+            (string) (content_proposal_detail_from_summary($summary, ['Description', 'Resume', 'Summary']) ?: ''),
+            null,
+            (string) (content_proposal_detail_from_summary($summary, ['Thematique', 'Thématique', 'Theme', 'Topic']) ?: 'general'),
+            (string) (content_proposal_detail_from_summary($summary, ['Sous-thematique', 'Sous-thématique', 'Subtopic']) ?: '')
         );
 
         return $albumId;
@@ -243,8 +571,10 @@ function album_apply_accepted_proposal(array $proposal): ?int
     }
 
     $description = album_proposal_description_from_summary($summary);
-    db()->prepare('INSERT INTO albums (member_id, title, description, is_public, source_proposal_id) VALUES (?, ?, ?, 1, ?)')
-        ->execute([max(0, (int) ($proposal['member_id'] ?? 0)), $title, $description, $proposalId]);
+    $category = album_category_code((string) (content_proposal_detail_from_summary($summary, ['Thematique', 'Thématique', 'Theme', 'Topic']) ?: 'general'));
+    $subcategory = album_subcategory_code((string) (content_proposal_detail_from_summary($summary, ['Sous-thematique', 'Sous-thématique', 'Subtopic']) ?: ''));
+    db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public, source_proposal_id) VALUES (?, ?, ?, ?, ?, 1, ?)')
+        ->execute([max(0, (int) ($proposal['member_id'] ?? 0)), $category, $subcategory, $title, $description, $proposalId]);
     $albumId = (int) db()->lastInsertId();
     album_clear_caches();
 

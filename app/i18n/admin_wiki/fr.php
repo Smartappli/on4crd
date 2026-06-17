@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'title' => 'Administration du wiki',
   'new_page' => 'Nouvelle page',
   'th_title' => 'Titre',
@@ -28,4 +28,15 @@ return [
   'source_page_not_found' => 'Page source introuvable.',
   'status_saved' => 'Statut wiki enregistré.',
   'modification_applied' => 'Modification wiki appliquée.',
-];
+  'add_category' => 'Ajouter une th?matique',
+  'add_subcategory' => 'Ajouter une sous-th?matique',
+  'delete' => 'Supprimer',
+  'category_saved' => 'Th?matique wiki enregistr?e.',
+  'category_deleted' => 'Th?matique wiki supprim?e.',
+  'subcategory_saved' => 'Sous-th?matique wiki enregistr?e.',
+  'subcategory_deleted' => 'Sous-th?matique wiki supprim?e.',
+  'err_category_has_documents' => 'Cette th?matique contient encore des pages.',
+  'err_category_has_subcategories' => 'Supprimez d abord toutes les sous-th?matiques.',
+  'err_subcategory_has_documents' => 'Cette sous-th?matique contient encore des pages.',
+  'storage_unavailable' => 'Stockage wiki indisponible.',
+);

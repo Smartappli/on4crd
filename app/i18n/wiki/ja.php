@@ -41,4 +41,7 @@ return array (
   'propose_modification' => '変更',
   'propose_new_theme' => '新しいテーマ',
   'administer' => '管理',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

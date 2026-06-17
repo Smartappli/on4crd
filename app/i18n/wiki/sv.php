@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'En ändring',
   'propose_new_theme' => 'Ett nytt tema',
   'administer' => 'Administrera',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

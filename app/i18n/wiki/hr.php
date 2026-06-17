@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'Izmjena',
   'propose_new_theme' => 'Nova tema',
   'administer' => 'Administriraj',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

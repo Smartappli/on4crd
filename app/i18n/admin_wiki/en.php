@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-return [
+return array (
   'title' => 'Wiki administration',
   'new_page' => 'New page',
   'th_title' => 'Title',
@@ -28,4 +28,15 @@ return [
   'source_page_not_found' => 'Source page not found.',
   'status_saved' => 'Wiki status saved.',
   'modification_applied' => 'Wiki edit applied.',
-];
+  'add_category' => 'Add topic',
+  'add_subcategory' => 'Add subtopic',
+  'delete' => 'Delete',
+  'category_saved' => 'Wiki topic saved.',
+  'category_deleted' => 'Wiki topic deleted.',
+  'subcategory_saved' => 'Wiki subtopic saved.',
+  'subcategory_deleted' => 'Wiki subtopic deleted.',
+  'err_category_has_documents' => 'This topic still contains pages.',
+  'err_category_has_subcategories' => 'Delete all subtopics first.',
+  'err_subcategory_has_documents' => 'This subtopic still contains pages.',
+  'storage_unavailable' => 'Wiki storage unavailable.',
+);

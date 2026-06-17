@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'Perubahan',
   'propose_new_theme' => 'Tema baru',
   'administer' => 'Kelola',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );

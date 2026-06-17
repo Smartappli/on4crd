@@ -55,4 +55,10 @@ return array (
   'open' => 'Ouvrir',
   'photo' => 'Photo',
   'confirm_delete_photo' => 'Supprimer définitivement cette photo ?',
+  'category_field' => 'Th?matique',
+  'subcategory_field' => 'Sous-th?matique',
+  'no_subcategory' => 'Sans sous-th?matique',
+  'err_category_has_documents' => 'Cette th?matique contient encore des albums.',
+  'err_category_has_subcategories' => 'Supprimez d abord toutes les sous-th?matiques de cette th?matique.',
+  'err_subcategory_has_documents' => 'Cette sous-th?matique contient encore des albums.',
 );

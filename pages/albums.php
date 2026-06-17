@@ -35,7 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
             }
         }
-        redirect_url(route_url_clean('albums', ['q' => (string) ($_GET['q'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+        redirect_url(route_url_clean('albums', [
+            'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+            'subcategory' => (string) ($_POST['return_subcategory'] ?? $_GET['subcategory'] ?? ''),
+            'favorites' => (string) ($_POST['return_favorites'] ?? $_GET['favorites'] ?? '') === '1' ? '1' : '',
+            'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
+            'p' => max(1, (int) ($_POST['return_p'] ?? $_GET['p'] ?? 1)),
+        ]));
     }
 
     if ($action === 'update_album' || $action === 'delete_album') {
@@ -55,11 +61,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? $album['title'] ?? ''), 190);
         $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? $album['description'] ?? ''), 10000);
+        $albumCategoriesForPost = album_categories();
+        $category = album_category_from_input((string) ($_POST['category'] ?? $album['category'] ?? 'general'), $albumCategoriesForPost);
+        $subcategory = album_subcategory_code((string) ($album['subcategory'] ?? ''));
+        $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+        if ($subcategoryRef !== '') {
+            $subcategoryParts = album_subcategory_ref_parts($subcategoryRef);
+            if ($subcategoryParts['subcategory'] !== '') {
+                $subcategory = $subcategoryParts['subcategory'];
+                if ($subcategoryParts['category'] !== '') {
+                    $category = album_category_from_input($subcategoryParts['category'], $albumCategoriesForPost);
+                }
+            }
+        } elseif (array_key_exists('subcategory_ref', $_POST)) {
+            $subcategory = '';
+        }
         if ($title === '') {
             throw new RuntimeException($albumText('title_required', 'Titre requis.', 'Title is required.'));
         }
 
         $returnUrl = route_url_clean('albums', [
+            'category' => (string) ($_POST['return_category'] ?? $_GET['category'] ?? ''),
+            'subcategory' => (string) ($_POST['return_subcategory'] ?? $_GET['subcategory'] ?? ''),
+            'favorites' => (string) ($_POST['return_favorites'] ?? $_GET['favorites'] ?? '') === '1' ? '1' : '',
             'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
             'p' => max(1, (int) ($_POST['return_p'] ?? $_GET['p'] ?? 1)),
         ]);
@@ -74,6 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $summary = content_proposal_details_text([
                 'Action' => 'delete_album',
                 'Album ID' => (string) $albumId,
+                'Thematique' => (string) ($album['category'] ?? 'general'),
+                'Sous-thematique' => (string) ($album['subcategory'] ?? ''),
                 'Description' => mb_safe_substr((string) ($album['description'] ?? ''), 0, 5000),
             ]);
             $sourceRef = route_url('album', ['id' => $albumId]);
@@ -91,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($canManageAlbums) {
-            album_update_record($albumId, $title, $description);
+            album_update_record($albumId, $title, $description, null, $category, $subcategory);
             set_flash('success', $albumText('album_updated_ok', 'Album mis a jour.', 'Album updated.'));
             redirect_url($returnUrl);
         }
@@ -99,6 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $summary = content_proposal_details_text([
             'Action' => 'update_album',
             'Album ID' => (string) $albumId,
+            'Thematique' => $category,
+            'Sous-thematique' => $subcategory,
             'Description' => $description,
         ]);
         $sourceRef = route_url('album', ['id' => $albumId]);
@@ -122,27 +150,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
         $proposalDescription = (string) ($_POST['proposal_description'] ?? '');
         $proposalTheme = (string) ($_POST['proposal_theme'] ?? 'general');
+        $albumCategoriesForPost = album_categories();
+        $proposalCategory = album_category_from_input($proposalTheme, $albumCategoriesForPost);
+        $proposalSubcategory = '';
+        $proposalSubcategoryRef = trim((string) ($_POST['proposal_subcategory_ref'] ?? ''));
+        if ($proposalSubcategoryRef !== '') {
+            $proposalSubcategoryParts = album_subcategory_ref_parts($proposalSubcategoryRef);
+            if ($proposalSubcategoryParts['subcategory'] !== '') {
+                $proposalSubcategory = $proposalSubcategoryParts['subcategory'];
+                if ($proposalSubcategoryParts['category'] !== '') {
+                    $proposalCategory = album_category_from_input($proposalSubcategoryParts['category'], $albumCategoriesForPost);
+                }
+            }
+        }
         $proposalKeywords = (string) ($_POST['proposal_keywords'] ?? '');
         $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
         $title = content_proposal_clean_single_line($proposalTitle, 190);
         $description = content_proposal_clean_multiline($proposalDescription, 5000);
-        $theme = content_proposal_clean_single_line($proposalTheme, 80);
+        $theme = $proposalCategory;
         $keywords = content_proposal_clean_single_line($proposalKeywords, 255);
         $contact = content_proposal_clean_single_line($proposalContact, 220);
         if ($title === '') {
             throw new RuntimeException('Demande invalide.');
         }
         if (has_permission('albums.manage')) {
-            $albumMetadata = ($theme !== '' && $theme !== 'general') || $keywords !== ''
+            $albumMetadata = ($theme !== '' && $theme !== 'general') || $proposalSubcategory !== '' || $keywords !== ''
                 ? content_proposal_details_text([
                     'Thematique' => $theme,
+                    'Sous-thematique' => $proposalSubcategory,
                     'Mots cles' => $keywords,
                 ])
                 : '';
             $albumDescription = trim($description . ($albumMetadata !== '' ? "\n\n" . $albumMetadata : ''));
             album_ensure_source_proposal_column();
-            db()->prepare('INSERT INTO albums (member_id, title, description, is_public) VALUES (?, ?, ?, 1)')
-                ->execute([(int) $user['id'], $title, $albumDescription !== '' ? $albumDescription : null]);
+            db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public) VALUES (?, ?, ?, ?, ?, 1)')
+                ->execute([(int) $user['id'], $proposalCategory, $proposalSubcategory, $title, $albumDescription !== '' ? $albumDescription : null]);
             $albumId = (int) db()->lastInsertId();
             album_clear_caches();
             set_flash('success', 'Album cree et valide directement.');
@@ -150,6 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $summary = content_proposal_details_text([
             'Thematique' => $theme,
+            'Sous-thematique' => $proposalSubcategory,
             'Mots cles' => $keywords,
             'Description' => $description,
         ]);
@@ -179,19 +222,117 @@ if (!table_exists('albums') || !table_exists('album_photos')) {
 }
 album_ensure_source_proposal_column();
 album_sync_accepted_proposals();
+$albumCategories = album_categories();
+$albumSubcategoriesByCategory = album_subcategories_by_category();
+
+$albumCategoryCounts = [];
+$albumSubcategoryCounts = [];
+try {
+    foreach (db()->query('SELECT category, COUNT(*) AS total FROM albums WHERE is_public = 1 GROUP BY category ORDER BY category ASC')->fetchAll() ?: [] as $categoryRow) {
+        $code = album_category_code((string) ($categoryRow['category'] ?? 'general'));
+        if ($code !== '') {
+            $albumCategoryCounts[$code] = (int) ($categoryRow['total'] ?? 0);
+        }
+    }
+    foreach (db()->query('SELECT category, subcategory, COUNT(*) AS total FROM albums WHERE is_public = 1 AND subcategory IS NOT NULL AND subcategory <> "" GROUP BY category, subcategory ORDER BY category ASC, subcategory ASC')->fetchAll() ?: [] as $subcategoryRow) {
+        $categoryCode = album_category_code((string) ($subcategoryRow['category'] ?? 'general'));
+        $subcategoryCode = album_subcategory_code((string) ($subcategoryRow['subcategory'] ?? ''));
+        if ($categoryCode !== '' && $subcategoryCode !== '') {
+            $albumSubcategoryCounts[$categoryCode . ':' . $subcategoryCode] = (int) ($subcategoryRow['total'] ?? 0);
+        }
+    }
+} catch (Throwable) {
+    $albumCategoryCounts = [];
+    $albumSubcategoryCounts = [];
+}
+foreach ($albumSubcategoryCounts as $subcategoryKey => $subcategoryTotal) {
+    $parts = explode(':', (string) $subcategoryKey, 2);
+    if (count($parts) !== 2 || (int) $subcategoryTotal <= 0) {
+        continue;
+    }
+    $parentCode = album_category_code($parts[0]);
+    $subcategoryCode = album_subcategory_code($parts[1]);
+    if ($parentCode === '' || $subcategoryCode === '') {
+        continue;
+    }
+    $known = false;
+    foreach ($albumSubcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
+        if (album_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+            $known = true;
+            break;
+        }
+    }
+    if (!$known) {
+        $albumSubcategoriesByCategory[$parentCode][] = [
+            'category_code' => $parentCode,
+            'code' => $subcategoryCode,
+            'label' => album_category_label_from_code($subcategoryCode),
+        ];
+    }
+}
+$visibleAlbumCategories = album_visible_categories($albumCategories, $albumCategoryCounts);
+$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category($albumSubcategoriesByCategory, $albumSubcategoryCounts);
 
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 100) {
     $search = mb_substr($search, 0, 100);
 }
+$categoryFilter = '';
+$categoryInput = trim((string) ($_GET['category'] ?? ''));
+if ($categoryInput !== '') {
+    $categoryCode = album_category_code($categoryInput);
+    if (isset($albumCategories[$categoryCode])) {
+        $categoryFilter = $categoryCode;
+    }
+}
+$subcategoryFilter = '';
+$subcategoryInput = trim((string) ($_GET['subcategory'] ?? ''));
+if ($subcategoryInput !== '') {
+    $subcategoryCode = album_subcategory_code($subcategoryInput);
+    if ($subcategoryCode !== '') {
+        $candidateCategory = $categoryFilter;
+        if ($candidateCategory === '') {
+            foreach ($visibleAlbumSubcategoriesByCategory as $parentCode => $subcategories) {
+                foreach ($subcategories as $subcategoryInfo) {
+                    if (album_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryCode) {
+                        $candidateCategory = (string) $parentCode;
+                        break 2;
+                    }
+                }
+            }
+        }
+        if ($candidateCategory !== '' && (int) ($albumSubcategoryCounts[$candidateCategory . ':' . $subcategoryCode] ?? 0) > 0) {
+            $categoryFilter = $candidateCategory;
+            $subcategoryFilter = $subcategoryCode;
+        }
+    }
+}
+$favoriteAlbumIds = $user !== null ? album_favorite_album_ids((int) ($user['id'] ?? 0)) : [];
+$favoriteAlbumCount = count($favoriteAlbumIds);
+$favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteAlbumCount > 0;
+$favoritesLabel = trim((string) ($t['favorites'] ?? '')) !== '' ? (string) $t['favorites'] : ($locale === 'fr' ? 'Favoris' : 'Favorites');
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 12;
 
 $params = [];
 $where = 'a.is_public = 1';
+if ($categoryFilter !== '') {
+    $where .= ' AND a.category = ?';
+    $params[] = $categoryFilter;
+}
+if ($subcategoryFilter !== '') {
+    $where .= ' AND a.subcategory = ?';
+    $params[] = $subcategoryFilter;
+}
+if ($favoritesOnly) {
+    $where .= ' AND a.id IN (' . implode(',', array_fill(0, $favoriteAlbumCount, '?')) . ')';
+    array_push($params, ...$favoriteAlbumIds);
+}
 if ($search !== '') {
-    $where .= ' AND (a.title LIKE ? OR a.description LIKE ?)';
+    $where .= ' AND (a.title LIKE ? OR a.description LIKE ? OR a.category LIKE ? OR a.subcategory LIKE ?)';
     $like = '%' . $search . '%';
+    $params[] = $like;
+    $params[] = $like;
     $params[] = $like;
     $params[] = $like;
 }
@@ -244,14 +385,6 @@ if ($user !== null) {
 }
 $showAlbumProposalForm = $user !== null && (string) ($_GET['propose_album'] ?? '') === '1';
 $albumProposalUrl = $user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums')]);
-$albumThemeOptions = [
-    'general' => 'General',
-    'activites' => 'Activites club',
-    'contests' => 'Contests',
-    'formations' => 'Formations',
-    'sorties' => 'Sorties',
-    'radio' => 'Radioamateur',
-];
 
 ob_start();
 ?>
@@ -291,11 +424,24 @@ ob_start();
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_album">
             <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
-            <label>
-                <span>Thematique</span>
+            <label><span><?= e((string) ($t['category_field'] ?? 'Thematique')) ?></span>
                 <select name="proposal_theme">
-                    <?php foreach ($albumThemeOptions as $albumThemeCode => $albumThemeLabel): ?>
-                        <option value="<?= e($albumThemeCode) ?>"><?= e($albumThemeLabel) ?></option>
+                    <?php foreach ($albumCategories as $albumThemeCode => $albumThemeLabel): ?>
+                        <option value="<?= e((string) $albumThemeCode) ?>"><?= e((string) $albumThemeLabel) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+            <label><span><?= e((string) ($t['subcategory_field'] ?? 'Sous-thematique')) ?></span>
+                <select name="proposal_subcategory_ref">
+                    <option value=""><?= e((string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></option>
+                    <?php foreach ($albumSubcategoriesByCategory as $parentCode => $subcategories): ?>
+                        <optgroup label="<?= e((string) ($albumCategories[(string) $parentCode] ?? album_category_label_from_code((string) $parentCode))) ?>">
+                            <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                <?php $subCode = album_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                                <?php if ($subCode === '') { continue; } ?>
+                                <option value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
                     <?php endforeach; ?>
                 </select>
             </label>
@@ -313,19 +459,62 @@ ob_start();
     <section class="albums-toolbar">
         <form method="get" class="albums-search-form">
             <input type="hidden" name="route" value="albums">
+            <?php if ($categoryFilter !== ''): ?>
+                <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
+            <?php endif; ?>
+            <?php if ($subcategoryFilter !== ''): ?>
+                <input type="hidden" name="subcategory" value="<?= e($subcategoryFilter) ?>">
+            <?php endif; ?>
+            <?php if ($favoritesOnly): ?>
+                <input type="hidden" name="favorites" value="1">
+            <?php endif; ?>
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== ''): ?>
+            <?php if ($search !== '' || $categoryFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
                 <a class="button secondary" href="<?= e(route_url('albums')) ?>"><?= e((string) $t['reset']) ?></a>
             <?php endif; ?>
         </form>
     </section>
 
-    <section class="albums-gallery">
+    <section class="albums-layout module-taxonomy-layout">
+        <aside class="card albums-taxonomy module-taxonomy-index">
+            <p class="module-taxonomy-title"><?= e((string) ($t['category_field'] ?? 'Thematique')) ?></p>
+            <nav class="module-taxonomy-list" aria-label="<?= e((string) ($t['category_field'] ?? 'Thematique')) ?>">
+                <?php if ($favoriteAlbumCount > 0): ?>
+                    <a class="module-taxonomy-item<?= $favoritesOnly ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['favorites' => '1', 'q' => $search])) ?>"<?= $favoritesOnly ? ' aria-current="page"' : '' ?>>
+                        <span><?= e($favoritesLabel) ?></span>
+                        <strong><?= (int) $favoriteAlbumCount ?></strong>
+                    </a>
+                <?php endif; ?>
+                <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                    <span><?= e((string) ($t['all_categories'] ?? 'Toutes les thématiques')) ?></span>
+                    <strong><?= (int) array_sum($albumCategoryCounts) ?></strong>
+                </a>
+                <?php foreach ($visibleAlbumCategories as $categoryCode => $categoryLabel): ?>
+                    <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['category' => (string) $categoryCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                        <span><?= e((string) $categoryLabel) ?></span>
+                        <strong><?= (int) ($albumCategoryCounts[$categoryCode] ?? 0) ?></strong>
+                    </a>
+                    <?php if (($visibleAlbumSubcategoriesByCategory[(string) $categoryCode] ?? []) !== []): ?>
+                        <div class="module-taxonomy-children">
+                            <?php foreach ($visibleAlbumSubcategoriesByCategory[(string) $categoryCode] as $subcategoryInfo): ?>
+                                <?php $subCode = album_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                                <a class="module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['category' => (string) $categoryCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
+                                    <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
+                                    <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </nav>
+        </aside>
+
+    <section class="albums-gallery module-taxonomy-content">
         <?php if ($rows === []): ?>
             <article class="albums-empty">
                 <h2><?= e((string) $t['none']) ?></h2>
-                <p class="help"><?= $search !== '' ? e((string) $t['for_search']) : e((string) $t['intro']) ?></p>
+                <p class="help"><?= ($search !== '' || $categoryFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly) ? e((string) $t['for_search']) : e((string) $t['intro']) ?></p>
             </article>
         <?php else: ?>
             <div class="albums-grid">
@@ -337,6 +526,10 @@ ob_start();
                     $photoCount = (int) ($row['photo_count'] ?? 0);
                     $description = trim((string) ($row['description'] ?? ''));
                     $albumId = (int) ($row['id'] ?? 0);
+                    $albumCategory = album_category_code((string) ($row['category'] ?? 'general'));
+                    $albumSubcategory = album_subcategory_code((string) ($row['subcategory'] ?? ''));
+                    $albumCategoryLabel = (string) ($albumCategories[$albumCategory] ?? album_category_label_from_code($albumCategory));
+                    $albumSubcategoryLabel = $albumSubcategory !== '' ? album_category_label_from_code($albumSubcategory) : '';
                     $canEditAlbum = $user !== null && $albumId > 0 && ($canManageAlbums || (int) ($row['member_id'] ?? 0) === (int) ($user['id'] ?? 0));
                     $editDialogId = 'album-edit-dialog-' . $albumId;
                     ?>
@@ -354,6 +547,7 @@ ob_start();
                                 <?php if ($description !== ''): ?>
                                     <p><?= e(mb_safe_strimwidth($description, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
+                                <p class="help"><?= e((string) ($t['category_field'] ?? 'Thematique')) ?>: <?= e($albumCategoryLabel) ?><?= $albumSubcategoryLabel !== '' ? ' / ' . e($albumSubcategoryLabel) : '' ?></p>
                             </div>
                             <div class="album-tile-footer">
                                 <span class="badge muted"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span>
@@ -363,6 +557,11 @@ ob_start();
                                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                         <input type="hidden" name="action" value="toggle_favorite_album">
                                         <input type="hidden" name="album_id" value="<?= (int) ($row['id'] ?? 0) ?>">
+                                        <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                        <input type="hidden" name="return_category" value="<?= e($categoryFilter) ?>">
+                                        <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
+                                        <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
+                                        <input type="hidden" name="return_p" value="<?= $page ?>">
                                         <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
                                     </form>
                                 <?php endif; ?>
@@ -388,8 +587,12 @@ ob_start();
                                     <input type="hidden" name="action" value="update_album">
                                     <input type="hidden" name="album_id" value="<?= $albumId ?>">
                                     <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                    <input type="hidden" name="return_category" value="<?= e($categoryFilter) ?>">
+                                    <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
+                                    <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                     <input type="hidden" name="return_p" value="<?= $page ?>">
                                     <label><span><?= e($albumText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="title" value="<?= e((string) $row['title']) ?>" maxlength="190" required></label>
+                                    <?= render_album_taxonomy_fields($albumCategories, $t, $albumCategory, $albumSubcategory) ?>
                                     <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="description" rows="5" maxlength="10000"><?= e($description) ?></textarea></label>
                                     <p class="album-dialog-actions module-dialog-actions">
                                         <button class="button" type="submit"><?= e($albumText('save_album', 'Enregistrer', 'Save')) ?></button>
@@ -401,6 +604,9 @@ ob_start();
                                     <input type="hidden" name="action" value="delete_album">
                                     <input type="hidden" name="album_id" value="<?= $albumId ?>">
                                     <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                    <input type="hidden" name="return_category" value="<?= e($categoryFilter) ?>">
+                                    <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
+                                    <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                     <input type="hidden" name="return_p" value="<?= $page ?>">
                                     <p class="help"><?= e($canManageAlbums
                                         ? $albumText('delete_album_warning_admin', 'La suppression de cet album et de ses photos est definitive.', 'Deleting this album and its photos is permanent.')
@@ -415,15 +621,16 @@ ob_start();
             <?php if ($totalPages > 1): ?>
                 <nav class="actions mt-3" aria-label="<?= e((string) $t['pagination']) ?>">
                     <?php if ($page > 1): ?>
-                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['q' => $search, 'p' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'p' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
                     <?php endif; ?>
                     <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
                     <?php if ($page < $totalPages): ?>
-                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['q' => $search, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
                     <?php endif; ?>
                 </nav>
             <?php endif; ?>
         <?php endif; ?>
+    </section>
     </section>
 </div>
 <?php

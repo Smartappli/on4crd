@@ -41,4 +41,7 @@ return array (
   'propose_modification' => 'Редакция',
   'propose_new_theme' => 'Нова тема',
   'administer' => 'Администриране',
+  'subcategory_field' => 'Subtopic',
+  'no_subcategory' => 'No subtopic',
+  'favorites' => 'Favorites',
 );
