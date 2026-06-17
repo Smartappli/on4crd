@@ -368,10 +368,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $status = (string) ($_POST['status'] ?? 'draft');
             $moderationNote = trim((string) ($_POST['moderation_note'] ?? ''));
             $categoryChoice = trim((string) ($_POST['category'] ?? 'autres'));
-            $customCategory = slugify(trim((string) ($_POST['category_custom'] ?? '')));
-            $category = $categoryChoice === '__custom__' ? $customCategory : slugify($categoryChoice);
+            $customCategory = article_category_code(trim((string) ($_POST['category_custom'] ?? '')));
+            $category = $categoryChoice === '__custom__' ? $customCategory : article_category_code($categoryChoice);
             if ($category === '') {
                 $category = 'autres';
+            }
+            if ($categoryChoice === '__custom__' && $category !== 'autres' && !isset($knownCategories[$category])) {
+                $customLabel = article_category_label_from_code($category);
+                db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                    ->execute([$category, $customLabel]);
+                $knownCategories[$category] = $customLabel;
+            }
+            if (!isset($knownCategories[$category])) {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            $subcategory = '';
+            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+            if ($subcategoryRef !== '') {
+                $subcategoryParts = article_subcategory_ref_parts($subcategoryRef);
+                if ($subcategoryParts['subcategory'] !== '') {
+                    $subcategory = $subcategoryParts['subcategory'];
+                    if ($subcategoryParts['category'] !== '') {
+                        $category = article_category_from_input($subcategoryParts['category'], $knownCategories);
+                    }
+                }
             }
             if ($title === '' || !isset($articleStatusChoices[$status])) {
                 throw new RuntimeException($t('err_invalid_article', 'Article invalide.'));
@@ -414,6 +434,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 || mb_strlen($excerpt) > 2000
                 || mb_strlen($content) > 50000
                 || mb_strlen($category) > 120
+                || mb_strlen($subcategory) > 120
             ) {
                 throw new RuntimeException($t('err_invalid_article', 'Un des champs dépasse la longueur autorisée.'));
             }
@@ -424,6 +445,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'content' => $content,
                     'status' => $status,
                     'category' => $category,
+                    'subcategory' => $subcategory,
                     'scheduled_at' => $scheduledAtValue,
                     'moderation_note' => $moderationNoteValue,
                 ];
@@ -435,6 +457,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'content' => $content,
                     'status' => $status,
                     'category' => $category,
+                    'subcategory' => $subcategory,
                     'scheduled_at' => $scheduledAtValue,
                     'moderation_note' => $moderationNoteValue,
                 ]);
