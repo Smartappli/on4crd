@@ -23,7 +23,7 @@ function albums_admin_ensure_photo_order_column(): bool
 
 function albums_admin_safe_photo_path(string $publicPath): ?string
 {
-    return safe_storage_public_path_or_null($publicPath, ['storage/uploads/albums/']);
+    return album_photo_public_path_or_null($publicPath);
 }
 
 function albums_admin_delete_photo_files(string $publicPath): bool

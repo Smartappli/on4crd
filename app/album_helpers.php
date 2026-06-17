@@ -126,7 +126,7 @@ function album_public_photo_urls(int $albumId, int $limit = 100): array
     $rows = $stmt->fetchAll() ?: [];
     $photos = [];
     foreach ($rows as $row) {
-        $path = safe_storage_public_path_or_null((string) ($row['file_path'] ?? ''), ['storage/uploads/albums/']);
+        $path = album_photo_public_path_or_null((string) ($row['file_path'] ?? ''));
         if ($path === null) {
             continue;
         }
@@ -814,7 +814,7 @@ function album_proposal_album_id(string $summary): int
 
 function album_delete_photo_file(string $publicPath): void
 {
-    $safePath = safe_storage_public_path_or_null($publicPath, ['storage/uploads/albums/']);
+    $safePath = album_photo_public_path_or_null($publicPath);
     if ($safePath === null) {
         return;
     }
@@ -1046,9 +1046,41 @@ function handle_album_upload(?array $upload, string $callsign): string
     );
 
     $publicPath = 'storage/uploads/albums/' . $saved;
-    create_album_thumbnail($publicPath, 640, 640);
+    @chmod(dirname(__DIR__) . '/' . $publicPath, 0644);
+    $thumbPath = create_album_thumbnail($publicPath, 640, 640);
+    if ($thumbPath !== null) {
+        @chmod(dirname(__DIR__) . '/' . $thumbPath, 0644);
+    }
 
     return $publicPath;
+}
+
+function album_photo_public_path_or_null(string $path): ?string
+{
+    $candidate = trim(str_replace('\\', '/', $path));
+    if ($candidate === '') {
+        return null;
+    }
+
+    $urlPath = parse_url($candidate, PHP_URL_PATH);
+    if (is_string($urlPath) && $urlPath !== '') {
+        $candidate = $urlPath;
+    }
+    $candidate = ltrim(str_replace('\\', '/', rawurldecode($candidate)), '/');
+    $prefix = 'storage/uploads/albums/';
+    $lowerCandidate = strtolower($candidate);
+    $prefixPosition = strpos($lowerCandidate, $prefix);
+    if ($prefixPosition !== false) {
+        $candidate = $prefix . ltrim(substr($candidate, $prefixPosition + strlen($prefix)), '/');
+    } elseif (str_starts_with($lowerCandidate, 'uploads/albums/')) {
+        $candidate = $prefix . ltrim(substr($candidate, strlen('uploads/albums/')), '/');
+    } elseif (str_starts_with($lowerCandidate, 'albums/')) {
+        $candidate = $prefix . ltrim(substr($candidate, strlen('albums/')), '/');
+    } elseif (preg_match('/^[a-z0-9][a-z0-9._-]*\.(?:jpe?g|png|webp)$/i', $candidate) === 1) {
+        $candidate = $prefix . $candidate;
+    }
+
+    return safe_storage_public_path_or_null($candidate, [$prefix]);
 }
 
 function create_album_thumbnail(string $publicPath, int $maxWidth = 640, int $maxHeight = 640): ?string

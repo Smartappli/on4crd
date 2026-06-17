@@ -584,7 +584,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
 
         $homeGalleryItems = '';
         foreach ($homeGalleryPhotos as $photo) {
-            $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+            $filePath = album_photo_public_path_or_null((string) ($photo['file_path'] ?? ''));
             if ($filePath === null) {
                 continue;
             }

@@ -69,7 +69,7 @@ try {
 
     $coverStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1');
     $coverStmt->execute([(int) $album['id']]);
-    $coverPath = safe_storage_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''), ['storage/uploads/albums/']);
+    $coverPath = album_photo_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''));
 } catch (Throwable $throwable) {
     log_structured_event('album_detail_photos_prepare_failed', [
         'album_id' => (int) $album['id'],
@@ -91,7 +91,7 @@ if ($coverPath !== null) {
 $imageItems = [];
 foreach (array_slice($photos, 0, 12) as $position => $photo) {
     try {
-        $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+        $filePath = album_photo_public_path_or_null((string) ($photo['file_path'] ?? ''));
         if ($filePath === null) {
             continue;
         }
@@ -202,7 +202,7 @@ ob_start();
                 <?php foreach ($photos as $photo): ?>
                     <?php
                     try {
-                        $filePath = safe_storage_public_path_or_null((string) ($photo['file_path'] ?? ''), ['storage/uploads/albums/']);
+                        $filePath = album_photo_public_path_or_null((string) ($photo['file_path'] ?? ''));
                         if ($filePath === null) {
                             continue;
                         }
