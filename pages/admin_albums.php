@@ -96,6 +96,21 @@ function albums_admin_js_string(string $message): string
     return is_string($encoded) ? $encoded : '""';
 }
 
+/**
+ * @param mixed $photo
+ */
+function albums_admin_log_photo_render_failure(Throwable $throwable, mixed $photo, string $event): void
+{
+    $photoRow = is_array($photo) ? $photo : [];
+    log_structured_event($event, [
+        'photo_id' => (int) ($photoRow['id'] ?? 0),
+        'album_id' => (int) ($photoRow['album_id'] ?? 0),
+        'message' => $throwable->getMessage(),
+        'file' => $throwable->getFile(),
+        'line' => $throwable->getLine(),
+    ]);
+}
+
 function albums_admin_clear_cache(): void
 {
     cache_forget('admin_albums_list_v2');
@@ -703,8 +718,10 @@ ob_start();
                     <div class="gallery-grid">
                         <?php foreach ($wizardPhotos as $photo): ?>
                             <?php
-                            $photoRender = albums_admin_photo_render_data((array) $photo, $t, 'album_admin_wizard_photo_prepare_failed');
-                            $imageSrc = $photoRender['image_src'];
+                            try {
+                                $photoRow = is_array($photo) ? $photo : [];
+                                $photoRender = albums_admin_photo_render_data($photoRow, $t, 'album_admin_wizard_photo_prepare_failed');
+                                $imageSrc = $photoRender['image_src'];
                             ?>
                             <article class="gallery-item">
                                 <?php if ($imageSrc !== ''): ?>
@@ -713,11 +730,18 @@ ob_start();
                                 <form method="post" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="delete_photo">
-                                    <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
+                                    <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                                     <input type="hidden" name="return_wizard_album_id" value="<?= (int) $wizardAlbumId ?>">
                                     <button class="button small secondary" type="submit"><?= e((string) $t['delete']) ?></button>
                                 </form>
                             </article>
+                            <?php } catch (Throwable $throwable) {
+                                albums_admin_log_photo_render_failure($throwable, $photo, 'album_admin_wizard_photo_render_failed');
+                                ?>
+                                <article class="gallery-item">
+                                    <p class="help"><?= e((string) ($t['invalid_photo'] ?? 'Photo invalide.')) ?></p>
+                                </article>
+                            <?php } ?>
                         <?php endforeach; ?>
                     </div>
                     <form method="post" class="actions mt-3">
@@ -807,10 +831,13 @@ ob_start();
             <p class="help"><?= e((string) $t['no_photos']) ?></p>
         <?php else: ?>
             <div class="gallery-grid">
-                <?php foreach ($photos as $photo):
-                    $photoRender = albums_admin_photo_render_data((array) $photo, $t, 'album_admin_photo_prepare_failed');
-                    $safePath = $photoRender['safe_path'];
-                    $imageSrc = $photoRender['image_src'];
+                <?php foreach ($photos as $photo): ?>
+                    <?php
+                    try {
+                        $photoRow = is_array($photo) ? $photo : [];
+                        $photoRender = albums_admin_photo_render_data($photoRow, $t, 'album_admin_photo_prepare_failed');
+                        $safePath = $photoRender['safe_path'];
+                        $imageSrc = $photoRender['image_src'];
                     ?>
                     <article class="gallery-item">
                         <?php if ($imageSrc !== ''): ?>
@@ -820,7 +847,7 @@ ob_start();
                         <form method="post">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_photo">
-                            <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
+                            <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                             <label><?= e((string) $t['title']) ?>
                                 <input type="text" name="title" value="<?= e($photoRender['title']) ?>" required maxlength="190">
                             </label>
@@ -835,17 +862,24 @@ ob_start();
                         <form method="post" class="inline-form" style="margin-top:8px;">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="reorder_photo">
-                            <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
+                            <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                             <button class="button small secondary" type="submit" name="direction" value="up">&uarr;</button>
                             <button class="button small secondary" type="submit" name="direction" value="down">&darr;</button>
                         </form>
                         <form method="post" style="margin-top:8px;" onsubmit="return confirm(<?= e(albums_admin_js_string((string) $t['confirm_delete_photo'])) ?>)">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_photo">
-                            <input type="hidden" name="photo_id" value="<?= (int) $photo['id'] ?>">
+                            <input type="hidden" name="photo_id" value="<?= (int) ($photoRow['id'] ?? 0) ?>">
                             <button class="button small secondary" type="submit"><?= e((string) $t['delete']) ?></button>
                         </form>
                     </article>
+                    <?php } catch (Throwable $throwable) {
+                        albums_admin_log_photo_render_failure($throwable, $photo, 'album_admin_photo_render_failed');
+                        ?>
+                        <article class="gallery-item">
+                            <p class="help"><?= e((string) ($t['invalid_photo'] ?? 'Photo invalide.')) ?></p>
+                        </article>
+                    <?php } ?>
                 <?php endforeach; ?>
             </div>
             <?php if ($photosMaxPage > 1): ?>

@@ -59,8 +59,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("album_admin_wizard_url(['album_wizard' => \$albumId, 'step' => 2])", $adminAlbums);
         self::assertStringContainsString("album_admin_wizard_url(['album_wizard' => \$albumId, 'step' => 3])", $adminAlbums);
         self::assertStringContainsString('function albums_admin_photo_render_data(array $photo, array $messages, string $logEvent): array', $adminAlbums);
+        self::assertStringContainsString('function albums_admin_log_photo_render_failure(Throwable $throwable, mixed $photo, string $event): void', $adminAlbums);
         self::assertStringContainsString("album_admin_wizard_photo_prepare_failed", $adminAlbums);
+        self::assertStringContainsString("album_admin_wizard_photo_render_failed", $adminAlbums);
         self::assertStringContainsString("album_admin_photo_prepare_failed", $adminAlbums);
+        self::assertStringContainsString("album_admin_photo_render_failed", $adminAlbums);
         self::assertStringContainsString('albums_admin_js_string((string) $t[\'confirm_delete_photo\'])', $adminAlbums);
         self::assertStringContainsString("if (\$action === 'finalize_album_creation')", $adminAlbums);
         self::assertStringContainsString('album_social_publish_if_public($albumId)', $adminAlbums);
