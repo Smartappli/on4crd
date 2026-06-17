@@ -605,14 +605,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('UPDATE articles SET category = ? WHERE category = ?')->execute([$newCode, $oldCode]);
             set_flash('success', $t('ok_category_updated'));
             redirect('admin_articles');
-        } elseif ($action === 'delete_category') {
-            $code = slugify(trim((string) ($_POST['code'] ?? '')));
-            if ($code === '' || $code === 'autres') {
-                throw new RuntimeException($t('err_delete_category'));
-            }
-            db()->prepare('UPDATE articles SET category = "autres" WHERE category = ?')->execute([$code]);
-            set_flash('success', $t('ok_category_deleted'));
-            redirect('admin_articles');
         } elseif ($action === 'retry_scheduled_article') {
             $id = (int) ($_POST['id'] ?? 0);
             $result = editorial_retry_scheduled_article($id);
@@ -773,6 +765,30 @@ ob_start();
             </label>
             <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
                 <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
+            </label>
+            <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+                <select name="subcategory_ref">
+                    <?php $editingSubcategory = article_subcategory_code((string) ($editing['subcategory'] ?? '')); ?>
+                    <option value=""><?= e($t('no_subcategory', 'Sans sous-thematique')) ?></option>
+                    <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
+                        <?php if ($subcategories === []): ?>
+                            <?php continue; ?>
+                        <?php endif; ?>
+                        <optgroup label="<?= e((string) ($knownCategories[(string) $subcategoryCategoryCode] ?? article_category_label_from_code((string) $subcategoryCategoryCode))) ?>">
+                            <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                <?php
+                                $subcategoryCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
+                                if ($subcategoryCode === '') {
+                                    continue;
+                                }
+                                $subcategoryRef = article_subcategory_ref((string) $subcategoryCategoryCode, $subcategoryCode);
+                                $isSelectedSubcategory = $editingCategory === (string) $subcategoryCategoryCode && $editingSubcategory === $subcategoryCode;
+                                ?>
+                                <option value="<?= e($subcategoryRef) ?>" <?= $isSelectedSubcategory ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    <?php endforeach; ?>
+                </select>
             </label>
             <label><?= e($t('import_document')) ?><input type="file" name="article_document" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
             <label><?= e($t('excerpt')) ?><textarea name="excerpt" rows="4"><?= e((string) $editing['excerpt']) ?></textarea></label>
@@ -970,14 +986,47 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
+                <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+                    <select name="subcategory">
+                        <option value=""><?= e($t('no_subcategory', 'Sans sous-thematique')) ?></option>
+                        <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
+                            <?php if ($subcategories === []): ?>
+                                <?php continue; ?>
+                            <?php endif; ?>
+                            <optgroup label="<?= e((string) ($knownCategories[(string) $subcategoryCategoryCode] ?? article_category_label_from_code((string) $subcategoryCategoryCode))) ?>">
+                                <?php foreach ($subcategories as $subcategoryInfo): ?>
+                                    <?php
+                                    $subcategoryCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
+                                    if ($subcategoryCode === '') {
+                                        continue;
+                                    }
+                                    ?>
+                                    <option value="<?= e($subcategoryCode) ?>" <?= $adminSubcategory === $subcategoryCode ? 'selected' : '' ?>><?= e((string) ($subcategoryInfo['label'] ?? $subcategoryCode)) ?></option>
+                                <?php endforeach; ?>
+                            </optgroup>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
             </div>
             <p><button class="button" type="submit"><?= e($t('filter', 'Filtrer')) ?></button> <a class="button secondary" href="<?= e(route_url('admin_articles')) ?>"><?= e($t('reset_filter', 'Réinitialiser')) ?></a></p>
         </form>
         <div class="stack">
             <?php foreach ($articles as $article): ?>
+                <?php
+                $articleCategoryCode = article_category_code((string) ($article['category'] ?? 'autres'));
+                $articleCategoryLabel = (string) ($knownCategories[$articleCategoryCode] ?? article_category_label_from_code($articleCategoryCode));
+                $articleSubcategoryCode = article_subcategory_code((string) ($article['subcategory'] ?? ''));
+                $articleSubcategoryLabel = '';
+                foreach ($articleSubcategoriesByCategory[$articleCategoryCode] ?? [] as $subcategoryInfo) {
+                    if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $articleSubcategoryCode) {
+                        $articleSubcategoryLabel = (string) ($subcategoryInfo['label'] ?? $articleSubcategoryCode);
+                        break;
+                    }
+                }
+                ?>
                 <article class="article-item">
                     <div class="row-between"><h3><?= e((string) $article['title']) ?></h3><a class="button small" href="<?= e(route_url('admin_articles', ['id' => (int) $article['id']])) ?>"><?= e($t('edit')) ?></a></div>
-                    <p><strong><?= e($t('category_label')) ?></strong>  <?= e((string) ($knownCategories[(string) ($article['category'] ?? '')] ?? ($article['category'] ?? 'autres'))) ?> · <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
+                    <p><strong><?= e($t('category_label')) ?></strong> <?= e($articleCategoryLabel) ?><?= $articleSubcategoryLabel !== '' ? ' / ' . e($articleSubcategoryLabel) : '' ?> Â· <span class="badge muted"><?= e($articleStatusLabel((string) $article['status'])) ?></span></p>
                     <p><?= e((string) $article['excerpt']) ?></p>
                 </article>
             <?php endforeach; ?>
@@ -985,9 +1034,9 @@ ob_start();
         </div>
         <?php if ($totalPages > 1): ?>
             <nav class="actions mt-3">
-                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page - 1])) ?>">&larr; Prev</a><?php endif; ?>
+                <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page - 1])) ?>">&larr; Prev</a><?php endif; ?>
                 <span class="badge muted"><?= $page ?> / <?= $totalPages ?></span>
-                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'p' => $page + 1])) ?>">Next &rarr;</a><?php endif; ?>
+                <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('admin_articles', ['q' => $adminSearch, 'status' => $adminStatus, 'category' => $adminCategory, 'subcategory' => $adminSubcategory, 'p' => $page + 1])) ?>">Next &rarr;</a><?php endif; ?>
             </nav>
         <?php endif; ?>
     </section>
