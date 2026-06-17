@@ -48,6 +48,11 @@ final class MemberModuleRegressionContractsTest extends TestCase
             '<?php foreach ($visibleWikiThemes as $themeCode => $themeLabel): ?>'
         );
         $this->assertAppearsBefore(
+            $this->source('pages/articles.php'),
+            '<?php if ($favoriteArticleCount > 0): ?>',
+            '<?php foreach ($visibleArticleCategories as $themeCode => $themeLabel): ?>'
+        );
+        $this->assertAppearsBefore(
             $this->source('app/member_module_documents.php'),
             '<?php if ($favoriteDocumentCount > 0): ?>',
             '<?php foreach ($visibleCategories as $categoryCode => $categoryLabel): ?>'
@@ -88,6 +93,14 @@ final class MemberModuleRegressionContractsTest extends TestCase
                 'err_subcategory_has_documents',
                 'DELETE FROM wiki_subcategories WHERE category_code = ? AND code = ?',
             ],
+            'pages/admin_articles.php' => [
+                'SELECT COUNT(*) FROM article_subcategories WHERE category_code = ?',
+                'err_category_has_subcategories',
+                'UPDATE articles SET category = "autres", subcategory = "" WHERE category = ?',
+                'SELECT COUNT(*) FROM articles WHERE category = ? AND subcategory = ?',
+                'err_subcategory_has_documents',
+                'DELETE FROM article_subcategories WHERE category_code = ? AND code = ?',
+            ],
             'pages/admin_library.php' => [
                 'SELECT COUNT(*) FROM member_library_subcategories WHERE category_code = ?',
                 "throw new RuntimeException('err_category_has_subcategories');",
@@ -118,12 +131,16 @@ final class MemberModuleRegressionContractsTest extends TestCase
             'CREATE TABLE IF NOT EXISTS member_module_subcategories',
             'CREATE TABLE IF NOT EXISTS album_categories',
             'CREATE TABLE IF NOT EXISTS album_subcategories',
+            'CREATE TABLE IF NOT EXISTS article_categories',
+            'CREATE TABLE IF NOT EXISTS article_subcategories',
             'subcategory VARCHAR(120) NOT NULL DEFAULT \'\'',
             'idx_wiki_category_deleted',
             'idx_webotheque_category_deleted',
             'idx_member_module_category_deleted',
             'idx_member_module_subcategory_deleted',
             'idx_album_category_deleted',
+            'idx_article_category_deleted',
+            'idx_articles_subcategory',
         ] as $snippet) {
             self::assertStringContainsString($snippet, $schema);
         }

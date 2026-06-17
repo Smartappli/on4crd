@@ -70,6 +70,14 @@ final class MemberModuleTranslationsRegressionTest extends TestCase
                 'admin_wiki',
                 ['add_category', 'add_subcategory', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
             ],
+            'articles' => [
+                'articles',
+                ['all_categories', 'subcategory_field', 'no_subcategory', 'favorites', 'favorite_label'],
+            ],
+            'admin_articles' => [
+                'admin_articles',
+                ['subcategory_field', 'no_subcategory', 'add_category', 'add_subcategory', 'err_category_has_subcategories', 'err_subcategory_has_documents'],
+            ],
         ];
     }
 }
