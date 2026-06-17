@@ -4,6 +4,7 @@ declare(strict_types=1);
 function apply_runtime_schema_updates(): void
 {
     require_once __DIR__ . '/content_helpers.php';
+    require_once __DIR__ . '/article_helpers.php';
     require_once __DIR__ . '/member_content.php';
     require_once __DIR__ . '/member_library_helpers.php';
     require_once __DIR__ . '/notifications.php';
@@ -176,6 +177,15 @@ function apply_runtime_schema_updates(): void
         if (!$hasCategory) {
             db()->exec('ALTER TABLE articles ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "autres" AFTER status');
         }
+        if (!table_has_column('articles', 'subcategory')) {
+            db()->exec('ALTER TABLE articles ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
+        }
+        if (!table_has_index('articles', 'idx_articles_category')) {
+            db()->exec('ALTER TABLE articles ADD INDEX idx_articles_category (category)');
+        }
+        if (!table_has_index('articles', 'idx_articles_subcategory')) {
+            db()->exec('ALTER TABLE articles ADD INDEX idx_articles_subcategory (category, subcategory)');
+        }
 
         $columnStmt->execute(['articles', 'scheduled_at']);
         if ((int) $columnStmt->fetchColumn() === 0) {
@@ -204,6 +214,7 @@ function apply_runtime_schema_updates(): void
                 content LONGTEXT NULL,
                 status VARCHAR(32) NOT NULL DEFAULT "draft",
                 category VARCHAR(120) NOT NULL DEFAULT "autres",
+                subcategory VARCHAR(120) NOT NULL DEFAULT "",
                 scheduled_at DATETIME NULL DEFAULT NULL,
                 published_at DATETIME NULL DEFAULT NULL,
                 author_id INT NULL DEFAULT NULL,
@@ -211,6 +222,13 @@ function apply_runtime_schema_updates(): void
                 INDEX idx_article_revision_article_created (article_id, created_at)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
         );
+        if (!table_has_column('article_revisions', 'subcategory')) {
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
+        }
+
+        if (function_exists('article_ensure_taxonomy_schema')) {
+            article_ensure_taxonomy_schema();
+        }
     }
 
     db()->exec(

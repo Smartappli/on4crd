@@ -38,6 +38,7 @@ function article_category_logo(string $label): string
 $locale = current_locale();
 $t = i18n_domain_locale('articles', $locale);
 articles_sync_scheduled_publications();
+article_ensure_taxonomy_schema($t);
 $GLOBALS['articles_i18n'] = $t;
 $user = current_user();
 
@@ -61,7 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
                 }
             }
-            redirect_url(route_url_clean('articles', ['theme' => (string) ($_GET['theme'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'page' => max(1, (int) ($_GET['page'] ?? 1))]));
+            redirect_url(route_url_clean('articles', [
+                'theme' => (string) ($_GET['theme'] ?? ''),
+                'subcategory' => (string) ($_GET['subcategory'] ?? ''),
+                'favorites' => (string) ($_POST['return_favorites'] ?? $_GET['favorites'] ?? '') === '1' ? '1' : '',
+                'q' => (string) ($_GET['q'] ?? ''),
+                'page' => max(1, (int) ($_GET['page'] ?? 1)),
+            ]));
         }
 
         if ($action === 'propose_category') {
@@ -111,24 +118,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$themeMeta = [
-    'antennes' => ['label' => (string) $t['theme_antennes'], 'image' => null],
-    'trafic' => ['label' => (string) $t['theme_trafic'], 'image' => null],
-    'numerique' => ['label' => (string) $t['theme_numerique'], 'image' => null],
-    'materiel' => ['label' => (string) $t['theme_materiel'], 'image' => null],
-    'formation' => ['label' => (string) $t['theme_formation'], 'image' => null],
-    'autres' => ['label' => (string) $t['theme_autres'], 'image' => null],
-];
-foreach (content_proposal_accepted_categories('articles', 120) as $code => $label) {
-    if ($code !== '' && !isset($themeMeta[$code])) {
-        $themeMeta[$code] = ['label' => $label, 'image' => null];
-    }
-}
-
-$themeFilter = slugify(trim((string) ($_GET['theme'] ?? '')));
+$articleCategories = article_categories($t);
+$articleSubcategoriesByCategory = article_subcategories_by_category();
+$themeFilterRaw = trim((string) ($_GET['theme'] ?? ''));
+$themeFilter = $themeFilterRaw !== '' ? article_category_code($themeFilterRaw) : '';
 if ($themeFilter === 'n-a') {
     $themeFilter = '';
 }
+$subcategoryFilter = article_subcategory_code(trim((string) ($_GET['subcategory'] ?? '')));
 $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
@@ -137,13 +134,14 @@ $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
 $articlesTableAvailable = table_exists('articles');
 $themeCounts = [];
+$subcategoryCounts = [];
 if ($articlesTableAvailable) {
     try {
-        $themeCounts = cache_remember('articles_theme_counts_v1', 180, static function (): array {
+        $themeCounts = cache_remember('articles_theme_counts_v2', 180, static function (): array {
             $counts = [];
             $rows = db()->query('SELECT category, COUNT(*) AS total FROM articles WHERE status = "published" GROUP BY category')->fetchAll() ?: [];
             foreach ($rows as $row) {
-                $theme = slugify((string) ($row['category'] ?? 'autres'));
+                $theme = article_category_code((string) ($row['category'] ?? 'autres'));
                 if ($theme === '') {
                     $theme = 'autres';
                 }
@@ -152,19 +150,69 @@ if ($articlesTableAvailable) {
             return $counts;
         });
         $themeCounts = is_array($themeCounts) ? $themeCounts : [];
+        $subcategoryRows = db()->query('SELECT category, subcategory, COUNT(*) AS total FROM articles WHERE status = "published" AND subcategory IS NOT NULL AND subcategory <> "" GROUP BY category, subcategory ORDER BY category ASC, subcategory ASC')->fetchAll() ?: [];
+        foreach ($subcategoryRows as $subcategoryRow) {
+            $themeCode = article_category_code((string) ($subcategoryRow['category'] ?? 'autres'));
+            $subCode = article_subcategory_code((string) ($subcategoryRow['subcategory'] ?? ''));
+            if ($themeCode === '' || $subCode === '') {
+                continue;
+            }
+            $subcategoryCounts[$themeCode . ':' . $subCode] = (int) ($subcategoryRow['total'] ?? 0);
+            $known = false;
+            foreach ($articleSubcategoriesByCategory[$themeCode] ?? [] as $subcategoryOption) {
+                if (article_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subCode) {
+                    $known = true;
+                    break;
+                }
+            }
+            if (!$known) {
+                $articleSubcategoriesByCategory[$themeCode][] = [
+                    'category_code' => $themeCode,
+                    'code' => $subCode,
+                    'label' => article_category_label_from_code($subCode),
+                ];
+            }
+        }
     } catch (Throwable) {
         $themeCounts = [];
+        $subcategoryCounts = [];
         $articlesTableAvailable = false;
     }
 }
-foreach (array_keys($themeCounts) as $themeCode) {
-    if (!isset($themeMeta[$themeCode])) {
-        $themeMeta[$themeCode] = ['label' => ucwords(str_replace('-', ' ', $themeCode)), 'image' => null];
-    }
-}
-if ($themeFilter !== '' && !isset($themeMeta[$themeFilter])) {
+$visibleArticleCategories = article_visible_categories($articleCategories, $themeCounts);
+$visibleArticleSubcategoriesByCategory = article_visible_subcategories_by_category($articleSubcategoriesByCategory, $subcategoryCounts);
+if ($themeFilter !== '' && !isset($visibleArticleCategories[$themeFilter])) {
     $themeFilter = '';
 }
+if ($subcategoryFilter !== '') {
+    $candidateTheme = $themeFilter;
+    if ($candidateTheme === '') {
+        foreach ($visibleArticleSubcategoriesByCategory as $parentCode => $subcategories) {
+            foreach ($subcategories as $subcategoryInfo) {
+                if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryFilter) {
+                    $candidateTheme = (string) $parentCode;
+                    break 2;
+                }
+            }
+        }
+    }
+    $hasVisibleSubcategory = false;
+    foreach ($visibleArticleSubcategoriesByCategory[$candidateTheme] ?? [] as $subcategoryInfo) {
+        if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryFilter) {
+            $hasVisibleSubcategory = true;
+            break;
+        }
+    }
+    if ($hasVisibleSubcategory) {
+        $themeFilter = $candidateTheme;
+    } else {
+        $subcategoryFilter = '';
+    }
+}
+$favoriteArticleIds = $user !== null ? article_favorite_article_ids((int) ($user['id'] ?? 0)) : [];
+$favoriteArticleCount = count($favoriteArticleIds);
+$favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteArticleCount > 0;
+$favoritesLabel = article_favorites_label($t, $locale);
 
 $whereParts = ['status = "published"'];
 $whereParams = [];
@@ -172,12 +220,22 @@ if ($themeFilter !== '') {
     $whereParts[] = 'category = ?';
     $whereParams[] = $themeFilter;
 }
+if ($subcategoryFilter !== '') {
+    $whereParts[] = 'subcategory = ?';
+    $whereParams[] = $subcategoryFilter;
+}
 if ($search !== '') {
-    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ?)';
+    $whereParts[] = '(title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ?)';
     $like = '%' . $search . '%';
     $whereParams[] = $like;
     $whereParams[] = $like;
     $whereParams[] = $like;
+    $whereParams[] = $like;
+    $whereParams[] = $like;
+}
+if ($favoritesOnly) {
+    $whereParts[] = 'id IN (' . implode(',', array_fill(0, $favoriteArticleCount, '?')) . ')';
+    array_push($whereParams, ...$favoriteArticleIds);
 }
 $whereSql = 'WHERE ' . implode(' AND ', $whereParts);
 $totalArticles = 0;
@@ -199,7 +257,7 @@ $offset = $pagination['offset'];
 $articlePublicationSort = article_publication_sort_expression();
 if ($articlesTableAvailable) {
     try {
-        $dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+        $dataStmt = db()->prepare('SELECT id, slug, title, excerpt, content, category, subcategory, published_at, created_at, updated_at FROM articles ' . $whereSql . ' ORDER BY ' . $articlePublicationSort . ' DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
         $dataStmt->execute($whereParams);
         $pagedRows = $dataStmt->fetchAll() ?: [];
 
@@ -216,7 +274,7 @@ if ($articlesTableAvailable) {
 $latestArticleLabel = module_hero_latest_stat_date_label($latestArticleDate, $locale);
 $groupedArticles = [];
 foreach ($pagedRows as $row) {
-    $theme = slugify((string) ($row['category'] ?? 'autres'));
+    $theme = article_category_code((string) ($row['category'] ?? 'autres'));
     if ($theme === '') {
         $theme = 'autres';
     }
@@ -263,7 +321,7 @@ ob_start();
                 </article>
                 <article>
                     <span><?= e((string) $t['theme_default']) ?></span>
-                    <strong><?= (int) count($themeMeta) ?></strong>
+                    <strong><?= (int) count($visibleArticleCategories) ?></strong>
                 </article>
                 <article>
                     <span><?= e(module_hero_latest_stat_text('latest', $locale)) ?></span>
@@ -362,13 +420,19 @@ ob_start();
             <?php if ($themeFilter !== ''): ?>
                 <input type="hidden" name="theme" value="<?= e($themeFilter) ?>">
             <?php endif; ?>
+            <?php if ($subcategoryFilter !== ''): ?>
+                <input type="hidden" name="subcategory" value="<?= e($subcategoryFilter) ?>">
+            <?php endif; ?>
+            <?php if ($favoritesOnly): ?>
+                <input type="hidden" name="favorites" value="1">
+            <?php endif; ?>
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_placeholder']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
-            <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter])) ?>"><?= e((string) $t['reset_search']) ?></a>
+            <?php if ($search !== '' || $themeFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
+                <a class="button secondary" href="<?= e(route_url('articles')) ?>"><?= e((string) $t['reset_search']) ?></a>
             <?php endif; ?>
         </form>
-        <?php if ($search !== '' || $themeFilter !== ''): ?>
+        <?php if ($search !== '' || $themeFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
             <p class="help"><?= e((string) $t['results']) ?> : <?= $totalArticles ?></p>
         <?php endif; ?>
     </section>
@@ -377,17 +441,38 @@ ob_start();
         <aside class="articles-index module-taxonomy-index card">
             <p class="articles-index-title module-taxonomy-title"><?= e((string) $t['theme_default']) ?></p>
             <nav class="articles-category-list module-taxonomy-list" aria-label="<?= e((string) $t['theme_default']) ?>">
-            <?php foreach ($themeMeta as $themeCode => $theme): ?>
-                <a class="articles-category-item module-taxonomy-item<?= $themeFilter === $themeCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= $themeFilter === $themeCode ? ' aria-current="page"' : '' ?>>
-                    <span><?= e((string) $theme['label']) ?></span>
+                <?php if ($favoriteArticleCount > 0): ?>
+                <a class="articles-category-item module-taxonomy-item<?= $favoritesOnly ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['favorites' => '1', 'q' => $search])) ?>"<?= $favoritesOnly ? ' aria-current="page"' : '' ?>>
+                    <span><?= e($favoritesLabel) ?></span>
+                    <strong><?= (int) $favoriteArticleCount ?></strong>
+                </a>
+                <?php endif; ?>
+                <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                    <span><?= e((string) ($t['all_categories'] ?? 'Toutes les thematiques')) ?></span>
+                    <strong><?= (int) array_sum($themeCounts) ?></strong>
+                </a>
+            <?php foreach ($visibleArticleCategories as $themeCode => $themeLabel): ?>
+                <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                    <span><?= e((string) $themeLabel) ?></span>
                     <strong><?= (int) ($themeCounts[$themeCode] ?? 0) ?></strong>
                 </a>
+                <?php if (($visibleArticleSubcategoriesByCategory[(string) $themeCode] ?? []) !== []): ?>
+                    <div class="module-taxonomy-children">
+                        <?php foreach ($visibleArticleSubcategoriesByCategory[(string) $themeCode] as $subcategoryInfo): ?>
+                            <?php $subCode = article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                            <a class="articles-category-item module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['theme' => $themeCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === $themeCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
+                                <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
+                                <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             <?php endforeach; ?>
             </nav>
         </aside>
 
         <div class="articles-content module-taxonomy-content">
-    <?php if ($themeFilter !== ''): ?>
+    <?php if ($themeFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
         <div class="card">
             <p><a class="pill" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"><?= e((string) $t['reset_filter']) ?></a></p>
         </div>
@@ -400,14 +485,22 @@ ob_start();
     <?php else: ?>
         <?php foreach ($groupedArticles as $themeCode => $themeRows): ?>
             <section class="card">
-                <h2><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></h2>
+                <h2><?= e((string) ($articleCategories[$themeCode] ?? (string) $t['theme_default'])) ?></h2>
                 <div class="news-grid">
                     <?php foreach ($themeRows as $row): ?>
                         <?php $row = localized_article_row($row); ?>
                         <?php $articleDate = article_publication_datetime($row); ?>
                         <?php $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'article', (int) ($row['id'] ?? 0)) : false; ?>
+                        <?php $rowSubcategory = article_subcategory_code((string) ($row['subcategory'] ?? '')); ?>
+                        <?php $rowSubcategoryLabel = ''; ?>
+                        <?php foreach ($articleSubcategoriesByCategory[$themeCode] ?? [] as $subcategoryInfo) {
+                            if (article_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $rowSubcategory) {
+                                $rowSubcategoryLabel = (string) ($subcategoryInfo['label'] ?? $rowSubcategory);
+                                break;
+                            }
+                        } ?>
                         <article class="news-card feature-card">
-                            <span class="badge muted"><?= e((string) ($themeMeta[$themeCode]['label'] ?? (string) $t['theme_default'])) ?></span>
+                            <span class="badge muted"><?= e((string) ($articleCategories[$themeCode] ?? (string) $t['theme_default'])) ?><?= $rowSubcategoryLabel !== '' ? ' / ' . e($rowSubcategoryLabel) : '' ?></span>
                             <h3><a href="<?= e(route_url('article', ['slug' => (string) $row['slug']])) ?>"><?= e((string) $row['title_localized']) ?></a></h3>
                             <p class="help"><?= $articleDate !== null ? e(date('d/m/Y', strtotime($articleDate))) . ' · ' : '' ?><?= article_reading_minutes((string) ($row['content_localized'] ?? $row['content'] ?? '')) ?> <?= e((string) $t['reading_minutes']) ?></p>
                             <p><?= e(article_card_excerpt($row)) ?></p>
@@ -418,6 +511,7 @@ ob_start();
                                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                         <input type="hidden" name="action" value="toggle_favorite_article">
                                         <input type="hidden" name="article_id" value="<?= (int) ($row['id'] ?? 0) ?>">
+                                        <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                         <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733; ' . e((string) $t['favorite_label']) : '&#9734; ' . e((string) $t['favorite_label']) ?></button>
                                     </form>
                                 <?php endif; ?>
@@ -431,11 +525,11 @@ ob_start();
     <?php if ($maxPage > 1): ?>
         <div class="card actions">
             <?php if ($page > 1): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'q' => $search, 'page' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'page' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
             <?php endif; ?>
             <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $maxPage ?></span>
             <?php if ($page < $maxPage): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'q' => $search, 'page' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('articles', ['theme' => $themeFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'page' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
             <?php endif; ?>
         </div>
     <?php endif; ?>
