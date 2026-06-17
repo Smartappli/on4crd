@@ -21,6 +21,9 @@ function ensure_member_library_table(): bool
             if (!table_has_column('member_library_documents', 'tags')) {
                 db()->exec('ALTER TABLE member_library_documents ADD COLUMN tags VARCHAR(255) NOT NULL DEFAULT "" AFTER subcategory');
             }
+            if (!table_has_column('member_library_documents', 'extracted_text')) {
+                db()->exec('ALTER TABLE member_library_documents ADD COLUMN extracted_text LONGTEXT NULL AFTER file_path');
+            }
             if (!table_has_index('member_library_documents', 'idx_category')) {
                 db()->exec('ALTER TABLE member_library_documents ADD INDEX idx_category (category)');
             }

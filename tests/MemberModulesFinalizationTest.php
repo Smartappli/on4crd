@@ -136,6 +136,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('webotheque_apply_accepted_proposal($proposal, $categories, $messages);', $adminHelpers);
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_store_document_upload(?array $file, int $memberId, string $prefix = \'doc\'): array', $memberLibraryHelpers);
+        self::assertStringContainsString('ALTER TABLE member_library_documents ADD COLUMN extracted_text LONGTEXT NULL AFTER file_path', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_delete_document_file(string $publicPath): void', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_update_document_record(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_delete_document_record(int $documentId): void', $memberLibraryHelpers);
