@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { Builder, By, until } = require('selenium-webdriver');
+const { Builder, By, Capabilities, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 
 const baseUrl = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:8080/index.php';
@@ -39,8 +39,9 @@ async function createDriver() {
   if (process.env.SELENIUM_CHROME_BINARY) {
     options.setChromeBinaryPath(process.env.SELENIUM_CHROME_BINARY);
   }
+  const capabilities = Capabilities.chrome().setPageLoadStrategy('eager');
 
-  const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+  const driver = await new Builder().forBrowser('chrome').withCapabilities(capabilities).setChromeOptions(options).build();
   await driver.manage().setTimeouts({
     implicit: 0,
     pageLoad: Number(process.env.SELENIUM_PAGELOAD_TIMEOUT_MS || 30000),
