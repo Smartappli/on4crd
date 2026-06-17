@@ -220,7 +220,10 @@ if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
     return;
 }
-album_ensure_source_proposal_column();
+if (!album_ensure_photo_sort_order_column() || !album_ensure_source_proposal_column()) {
+    echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
+    return;
+}
 album_sync_accepted_proposals();
 $albumCategories = album_categories();
 $albumSubcategoriesByCategory = album_subcategories_by_category();
@@ -384,7 +387,9 @@ if ($user !== null) {
     }
 }
 $showAlbumProposalForm = $user !== null && (string) ($_GET['propose_album'] ?? '') === '1';
-$albumProposalUrl = $user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums')]);
+$albumProposalUrl = $canManageAlbums
+    ? route_url('admin_albums') . '#album-wizard'
+    : ($user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums')]));
 
 ob_start();
 ?>

@@ -8,6 +8,10 @@ if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['title']);
     return;
 }
+if (!album_ensure_photo_sort_order_column() || !album_ensure_source_proposal_column()) {
+    echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['title']);
+    return;
+}
 
 $albumId = (int) ($_GET['id'] ?? 0);
 $albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? AND is_public = 1');

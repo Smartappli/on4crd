@@ -319,6 +319,28 @@ function album_clear_caches(): void
     cache_forget('home_public_album_random_photos_v1');
 }
 
+function album_ensure_photo_sort_order_column(): bool
+{
+    if (!table_exists('album_photos')) {
+        return false;
+    }
+
+    try {
+        if (!table_has_column('album_photos', 'sort_order')) {
+            db()->exec('ALTER TABLE album_photos ADD COLUMN sort_order INT NOT NULL DEFAULT 0 AFTER album_id');
+            db()->exec('UPDATE album_photos SET sort_order = id WHERE sort_order = 0');
+        }
+
+        return true;
+    } catch (Throwable $throwable) {
+        log_structured_event('album_photo_sort_order_ensure_failed', [
+            'message' => $throwable->getMessage(),
+        ]);
+
+        return false;
+    }
+}
+
 function album_ensure_source_proposal_column(): bool
 {
     if (!table_exists('albums')) {

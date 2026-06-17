@@ -16,20 +16,9 @@ function albums_admin_tables_ready(): bool
     return table_exists('albums') && table_exists('album_photos');
 }
 
-function albums_admin_ensure_photo_order_column(): void
+function albums_admin_ensure_photo_order_column(): bool
 {
-    if (!table_exists('album_photos')) {
-        return;
-    }
-    $stmt = db()->prepare(
-        'SELECT COUNT(*) FROM information_schema.columns
-         WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?'
-    );
-    $stmt->execute(['album_photos', 'sort_order']);
-    if ((int) $stmt->fetchColumn() === 0) {
-        db()->exec('ALTER TABLE album_photos ADD COLUMN sort_order INT NOT NULL DEFAULT 0 AFTER album_id');
-        db()->exec('UPDATE album_photos SET sort_order = id WHERE sort_order = 0');
-    }
+    return album_ensure_photo_sort_order_column();
 }
 
 function albums_admin_safe_photo_path(string $publicPath): ?string
@@ -73,8 +62,10 @@ if (!albums_admin_tables_ready()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
     return;
 }
-albums_admin_ensure_photo_order_column();
-album_ensure_source_proposal_column();
+if (!albums_admin_ensure_photo_order_column() || !album_ensure_source_proposal_column()) {
+    echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
+    return;
+}
 album_sync_accepted_proposals();
 $albumCategories = album_categories();
 $albumSubcategoriesByCategory = album_subcategories_by_category();

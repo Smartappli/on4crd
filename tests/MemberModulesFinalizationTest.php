@@ -19,6 +19,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertSame('storage/uploads/albums/thumbs/photo.jpg', album_thumbnail_public_path('storage/uploads/albums/photo.webp'));
 
         $albums = $this->source('pages/albums.php');
+        $album = $this->source('pages/album.php');
         $albumHelpers = $this->source('app/album_helpers.php');
         $schema = $this->source('schema/schema.sql');
         self::assertStringContainsString('name="proposal_theme"', $albums);
@@ -30,8 +31,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('$favoriteAlbumIds = $user !== null ? album_favorite_album_ids', $albums);
         self::assertStringContainsString('$visibleAlbumCategories = album_visible_categories($albumCategories, $albumCategoryCounts);', $albums);
         self::assertStringContainsString('$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category', $albums);
+        self::assertStringContainsString('album_ensure_photo_sort_order_column()', $albums);
+        self::assertStringContainsString("route_url('admin_albums') . '#album-wizard'", $albums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
         self::assertStringContainsString('album_clear_caches();', $albums);
+        self::assertStringContainsString('album_ensure_photo_sort_order_column()', $album);
         self::assertStringContainsString("if (\$action === 'update_album' || \$action === 'delete_album')", $albums);
         self::assertStringContainsString("!\$canManageAlbums && (int) (\$album['member_id'] ?? 0) !== (int) (\$user['id'] ?? 0)", $albums);
         self::assertStringContainsString("'Action' => 'update_album'", $albums);
@@ -53,7 +57,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("if (\$action === 'delete_subcategory')", $adminAlbums);
         self::assertStringContainsString('UPDATE albums SET category = "general", subcategory = "" WHERE category = ?', $adminAlbums);
         self::assertStringContainsString('render_album_taxonomy_fields($albumCategories, $t)', $adminAlbums);
+        self::assertStringContainsString('return album_ensure_photo_sort_order_column();', $adminAlbums);
         self::assertStringContainsString('function album_social_publish_if_public(int $albumId): array', $albumHelpers);
+        self::assertStringContainsString('function album_ensure_photo_sort_order_column(): bool', $albumHelpers);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
         self::assertMatchesRegularExpression('/secure_move_uploaded_file\([^;]+8 \* 1024 \* 1024,\s+true\s+\)/s', $albumHelpers);
         self::assertStringContainsString("getenv('FACEBOOK_ALBUM_ID')", $albumHelpers);
