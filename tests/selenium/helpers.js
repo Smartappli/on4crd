@@ -108,8 +108,9 @@ async function pagePlainText(driver) {
 
 async function pageHasInstallWizard(driver) {
   const text = await pagePlainText(driver);
-  return /Assistant de d.{1,2}ploiement ON4CRD|installation|installer/i.test(text)
-    && /ON4CRD|configuration|config|base de donn|database|deploy/i.test(text);
+  return /Assistant de d.{1,2}ploiement ON4CRD/i.test(text)
+    || (/config\/config\.php|app\.allow_install|install\.php/i.test(text)
+      && /base de donn|database|administrateur|administrator|initialisation/i.test(text));
 }
 
 async function skipIfInstallWizard(t, driver) {
