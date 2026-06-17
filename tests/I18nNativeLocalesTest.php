@@ -400,7 +400,9 @@ final class I18nNativeLocalesTest extends TestCase
             'UBA',
             'LoTW',
             'eQSL',
+            'LoTW + eQSL',
             'QRZ',
+            'QRZ.com',
             'AM',
             'FM',
             'SSB',
@@ -466,6 +468,61 @@ final class I18nNativeLocalesTest extends TestCase
         self::assertSame([], $issues);
     }
 
+    public function testNativeLocaleFilesDoNotKeepFrenchOrEnglishFallbackStrings(): void
+    {
+        $issues = [];
+        $technicalValues = $this->nativeLocaleTechnicalValues();
+
+        foreach (glob(__DIR__ . '/../app/i18n/*', GLOB_ONLYDIR) ?: [] as $directory) {
+            $domain = basename((string) $directory);
+            $frPath = $directory . '/fr.php';
+            $enPath = $directory . '/en.php';
+            if (!is_file($frPath) || !is_file($enPath)) {
+                continue;
+            }
+
+            $fr = $this->flattenAdminLocaleValues($this->loadLocaleFile($frPath));
+            $en = $this->flattenAdminLocaleValues($this->loadLocaleFile($enPath));
+            foreach ($this->supportedLocales() as $locale) {
+                if ($locale === 'fr' || $locale === 'en') {
+                    continue;
+                }
+
+                $path = $directory . '/' . $locale . '.php';
+                $messages = $this->flattenAdminLocaleValues($this->loadLocaleFile($path));
+                foreach ($messages as $key => $value) {
+                    if (!$this->isNativeTranslationCandidate($key, $value, $technicalValues)) {
+                        continue;
+                    }
+                    if (
+                        isset($en[$key])
+                        && $value === $en[$key]
+                        && $this->isNativeTranslationCandidate($key, $en[$key], $technicalValues)
+                    ) {
+                        $issues[] = sprintf('%s/%s:%s still equals en "%s"', $domain, $locale, $key, $value);
+                    }
+                    if (
+                        isset($fr[$key])
+                        && $value === $fr[$key]
+                        && $this->isNativeTranslationCandidate($key, $fr[$key], $technicalValues)
+                    ) {
+                        $issues[] = sprintf('%s/%s:%s still equals fr "%s"', $domain, $locale, $key, $value);
+                    }
+                }
+            }
+        }
+
+        if ($issues !== []) {
+            self::fail(
+                "Native locale fallback strings found:\n"
+                . implode("\n", array_slice($issues, 0, 50))
+                . (count($issues) > 50 ? "\n... and " . (count($issues) - 50) . ' more.' : '')
+            );
+        }
+
+        self::assertSame([], $issues);
+    }
+
     /**
      * @param array<string, mixed> $values
      * @return array<string, string>
@@ -509,6 +566,196 @@ final class I18nNativeLocalesTest extends TestCase
             return false;
         }
         if (preg_match('/^https?:\/\//i', $value) === 1) {
+            return false;
+        }
+        if ((function_exists('mb_strlen') ? mb_strlen($value, 'UTF-8') : strlen($value)) < 4) {
+            return false;
+        }
+
+        return preg_match('/\p{L}/u', $value) === 1;
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private function nativeLocaleTechnicalValues(): array
+    {
+        return array_fill_keys([
+            '',
+            'ADIF',
+            'AM',
+            'APRS',
+            'API',
+            'CSV',
+            'CW',
+            'D-STAR',
+            'DMR',
+            'EchoLink',
+            'FM',
+            'FT4',
+            'FT8',
+            'GDPR',
+            'HAMQSL',
+            'HamQSL',
+            'HAREC',
+            'HTML',
+            'ID',
+            'JSON',
+            'LoRa',
+            'LoTW',
+            'LoTW + eQSL',
+            'MHz',
+            'ON2',
+            'ON3',
+            'ON4CRD',
+            'PDF',
+            'QRZ',
+            'QRZ.com',
+            'QSL',
+            'RGPD',
+            'RSS',
+            'RTTY',
+            'SSB',
+            'SSTV',
+            'UBA',
+            'UTC',
+            'URL',
+            'Winlink',
+            'WSPR',
+            'eQSL',
+            'kHz',
+            'Administration',
+            'Admin',
+            'Adresse',
+            'Adresse.',
+            'Agenda',
+            'Album',
+            'Album public',
+            'Albums',
+            'Altitude',
+            'Amber',
+            'Antennes',
+            'Assistant',
+            'Aurora',
+            'Band',
+            'Campagnes',
+            'Canal',
+            'Clics',
+            'Club',
+            'Comité',
+            'Contact',
+            'CQ zone',
+            'Dashboard',
+            'dBµV',
+            'DeepL',
+            'Dessert',
+            'Details',
+            'Deutsch',
+            'Document',
+            'Duty cycle',
+            'Email',
+            'E-mail',
+            'Emerald',
+            'Export',
+            'File',
+            'Filter',
+            'Front SVG',
+            'Galerie',
+            'Grid',
+            'Grx (dBi)',
+            'Gtx (dBi)',
+            'Illustration ON4CRD',
+            'Impedance (Ω)',
+            'Import',
+            'Input ERP (W)',
+            'ITU zone',
+            'Label',
+            'Legal',
+            'Licence',
+            'Liste',
+            'Locator',
+            'Locator A',
+            'Locator B',
+            'Logo UBA',
+            'Matomo',
+            'Modules',
+            'Name',
+            'Newsletter',
+            'Newsletters',
+            'ON4CRD Newsletter',
+            'OpenAI',
+            'Orange',
+            'Parser',
+            'Password',
+            'Pause',
+            'Polarisation',
+            'Preview',
+            'Privacy',
+            'Profil',
+            'Prosigns',
+            'Public',
+            'Q-code',
+            'QSL via',
+            'QTH / Localité',
+            'record(s)',
+            'Reset',
+            'Role',
+            's to ms',
+            'Separator',
+            'Service',
+            'Sponsoring',
+            'Sponsoring ON4CRD',
+            'Start',
+            'Station',
+            'Stats',
+            'Status',
+            'Total:',
+            'Type',
+            'UBA logo',
+            'Upload',
+            'Violet',
+            'Visual',
+            'Vpp to Vrms',
+            'Vrms to Vpp',
+            'Watts (W)',
+            'Website',
+            'Week',
+            'Wh to Joules',
+            'Widgets',
+            'Wiki',
+            'Wiki administration',
+        ], true);
+    }
+
+    /**
+     * @param array<string, true> $technicalValues
+     */
+    private function isNativeTranslationCandidate(string $key, string $value, array $technicalValues): bool
+    {
+        $value = trim($value);
+        $key = strtolower($key);
+        if ($value === '' || isset($technicalValues[$value])) {
+            return false;
+        }
+        if (preg_match('/(?:^|\.|_)(?:slug|code|filename|file_name|url|uri|path|route|id|uuid|token|csrf|format|unit|dbm|dbw|ohm|mhz|khz|hz)(?:$|\.|_)/i', $key) === 1) {
+            return false;
+        }
+        if (preg_match('/(?:^|\.|_)(?:value|line|venue|club_name|calendar_name|default_title|wiki_title|address_value|location_value|callsign_value)(?:$|\.|_)/i', $key) === 1) {
+            return false;
+        }
+        if (preg_match('/^(?:[a-z][a-z0-9]*_)+[a-z0-9]+$/', $value) === 1) {
+            return false;
+        }
+        if (preg_match('/\.(?:ics|php|html?|css|js|json|xml|csv|pdf|png|jpe?g|webp|gif|svg)$/i', $value) === 1) {
+            return false;
+        }
+        if (preg_match('/^https?:\/\//i', $value) === 1) {
+            return false;
+        }
+        if (preg_match('/^[A-Z0-9 _.\-:\/()+#%&]+$/u', $value) === 1) {
+            return false;
+        }
+        if (preg_match('/^(?:[A-Z]{2,}|[A-Z0-9-]{2,})(?:\s+(?:[A-Z]{2,}|[A-Z0-9-]{2,}))*$/u', $value) === 1) {
             return false;
         }
         if ((function_exists('mb_strlen') ? mb_strlen($value, 'UTF-8') : strlen($value)) < 4) {
