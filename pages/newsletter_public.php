@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-newsletter_ensure_tables();
 $locale = current_locale();
 $t = i18n_domain_translator('newsletter_public', $locale);
 
