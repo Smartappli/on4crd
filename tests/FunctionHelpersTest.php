@@ -135,6 +135,13 @@ final class FunctionHelpersTest extends TestCase
         self::assertSame(route_url('qsl_export', ['id' => '7']), $next);
     }
 
+    public function testSafeLoginNextUrlPreservesSafeFragment(): void
+    {
+        $next = safe_login_next_url('/index.php?route=admin_albums&focus=album-wizard#album-wizard');
+
+        self::assertSame(route_url('admin_albums', ['focus' => 'album-wizard']) . '#album-wizard', $next);
+    }
+
     public function testRouteUrlUsesDirectDiscoveryFiles(): void
     {
         self::assertStringEndsWith('/sitemap.xml', route_url('sitemap.xml'));

@@ -388,7 +388,7 @@ if ($user !== null) {
 }
 $showAlbumProposalForm = $user !== null && (string) ($_GET['propose_album'] ?? '') === '1';
 $albumProposalUrl = $canManageAlbums
-    ? route_url('admin_albums') . '#album-wizard'
+    ? album_admin_wizard_url()
     : ($user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums')]));
 
 ob_start();

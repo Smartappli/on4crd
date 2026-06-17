@@ -175,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $albumId = (int) db()->lastInsertId();
             album_clear_caches();
             set_flash('success', (string) ($t['album_created_continue'] ?? $t['created_ok']));
-            redirect_url(route_url_clean('admin_albums', ['album_wizard' => $albumId, 'step' => 2]));
+            redirect_url(album_admin_wizard_url(['album_wizard' => $albumId, 'step' => 2]));
         }
 
         if ($action === 'update_album') {
@@ -317,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             albums_admin_clear_cache();
             set_flash('success', $importedCount . ' ' . (string) $t['uploaded_count']);
             if ((int) ($_POST['album_wizard'] ?? 0) === $albumId) {
-                redirect_url(route_url_clean('admin_albums', ['album_wizard' => $albumId, 'step' => 3]));
+                redirect_url(album_admin_wizard_url(['album_wizard' => $albumId, 'step' => 3]));
             }
             redirect('admin_albums');
         }
@@ -397,7 +397,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_flash('success', (string) $t['photo_deleted_ok']);
             $wizardAlbumId = (int) ($_POST['return_wizard_album_id'] ?? 0);
             if ($wizardAlbumId > 0) {
-                redirect_url(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 3]));
+                redirect_url(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 3]));
             }
             redirect('admin_albums');
         }
@@ -640,14 +640,14 @@ ob_start();
                     <p class="help"><?= e((string) ($t['upload_help'] ?? '')) ?></p>
                     <div class="actions">
                         <button class="button"><?= e((string) $t['upload']) ?></button>
-                        <a class="button secondary" href="<?= e(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 3])) ?>"><?= e((string) ($t['wizard_review_now'] ?? $t['photos_editor'])) ?></a>
+                        <a class="button secondary" href="<?= e(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 3])) ?>"><?= e((string) ($t['wizard_review_now'] ?? $t['photos_editor'])) ?></a>
                     </div>
                 </form>
             <?php elseif ($wizardStep === 3 && is_array($wizardAlbum)): ?>
                 <h3><?= e((string) ($wizardAlbum['title'] ?? $t['create_album'])) ?></h3>
                 <?php if ($wizardPhotos === []): ?>
                     <p class="help"><?= e((string) ($t['wizard_no_photos'] ?? $t['no_photo_imported'])) ?></p>
-                    <a class="button secondary" href="<?= e(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
+                    <a class="button secondary" href="<?= e(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
                 <?php else: ?>
                     <div class="gallery-grid">
                         <?php foreach ($wizardPhotos as $photo): ?>
@@ -675,7 +675,7 @@ ob_start();
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                         <input type="hidden" name="action" value="finalize_album_creation">
                         <input type="hidden" name="album_id" value="<?= (int) $wizardAlbumId ?>">
-                        <a class="button secondary" href="<?= e(route_url_clean('admin_albums', ['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
+                        <a class="button secondary" href="<?= e(album_admin_wizard_url(['album_wizard' => $wizardAlbumId, 'step' => 2])) ?>"><?= e((string) $t['upload']) ?></a>
                         <button class="button" type="submit"><?= e((string) ($t['wizard_finalize'] ?? $t['save'])) ?></button>
                     </form>
                 <?php endif; ?>

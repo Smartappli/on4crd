@@ -1,4 +1,17 @@
 (function () {
+  const params = new URLSearchParams(window.location.search);
+  const shouldFocusWizard = params.get('focus') === 'album-wizard' || window.location.hash === '#album-wizard';
+  if (shouldFocusWizard) {
+    const wizard = document.getElementById('album-wizard');
+    if (wizard instanceof HTMLElement) {
+      if (!wizard.hasAttribute('tabindex')) wizard.setAttribute('tabindex', '-1');
+      window.requestAnimationFrame(() => {
+        wizard.scrollIntoView({ block: 'start' });
+        wizard.focus({ preventScroll: true });
+      });
+    }
+  }
+
   const pairs = [
     ['#album-dropzone', '#album-photos-input'],
     ['#album-wizard-dropzone', '#album-wizard-photos-input'],

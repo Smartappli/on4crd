@@ -74,7 +74,7 @@ $captchaExpected = $captchaA + $captchaB;
 $_SESSION['login_captcha'] = (string) $captchaExpected;
 
 $content = '<div class="card narrow login-card"><h1>' . e((string) $t['title']) . '</h1>'
-    . '<form method="post"><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
+    . '<form method="post" data-login-form><input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . ($nextUrl !== null ? '<input type="hidden" name="next" value="' . e($nextUrl) . '">' : '')
     . '<label>' . e((string) $t['callsign']) . '<input type="text" name="callsign" required></label>'
     . '<label>' . e((string) $t['password']) . '<input type="password" name="password" required></label>'
@@ -83,6 +83,7 @@ $content = '<div class="card narrow login-card"><h1>' . e((string) $t['title']) 
     . '<button class="button">' . e((string) $t['login']) . '</button></form>'
     . '<p><a href="' . e(route_url('forgot_password')) . '">' . e((string) $t['forgot_password']) . '</a></p>'
     . '<p>' . e((string) $t['no_member']) . ' <a href="' . e(route_url('register')) . '">' . e((string) $t['create_account']) . '</a></p>'
-    . '</div>';
+    . '</div>'
+    . '<script nonce="' . e(csp_nonce()) . '">(function(){var hash=window.location.hash;if(!/^[#][A-Za-z0-9][A-Za-z0-9_-]{0,79}$/.test(hash)){return;}var next=document.querySelector("[data-login-form] input[name=next]");if(!next||next.value.indexOf("#")!==-1){return;}next.value+=hash;})();</script>';
 
 echo render_layout($content, (string) $t['title']);

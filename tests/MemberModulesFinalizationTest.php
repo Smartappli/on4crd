@@ -21,6 +21,7 @@ final class MemberModulesFinalizationTest extends TestCase
         $albums = $this->source('pages/albums.php');
         $album = $this->source('pages/album.php');
         $albumHelpers = $this->source('app/album_helpers.php');
+        $adminAlbumsJs = $this->source('assets/js/modules/admin_albums.js');
         $runtimeUpdates = $this->source('app/runtime_schema_updates.php');
         $schema = $this->source('schema/schema.sql');
         self::assertStringContainsString('name="proposal_theme"', $albums);
@@ -33,7 +34,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('$visibleAlbumCategories = album_visible_categories($albumCategories, $albumCategoryCounts);', $albums);
         self::assertStringContainsString('$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category', $albums);
         self::assertStringContainsString('album_ensure_photo_sort_order_column()', $albums);
-        self::assertStringContainsString("route_url('admin_albums') . '#album-wizard'", $albums);
+        self::assertStringContainsString('album_admin_wizard_url()', $albums);
         self::assertStringContainsString("log_structured_event('album_tile_render_prepare_failed'", $albums);
         self::assertStringContainsString("\$albumTitle = trim((string) (\$row['title'] ?? ''));", $albums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
@@ -55,6 +56,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_delete_record($albumId);', $adminAlbums);
         self::assertStringContainsString('id="album-wizard"', $adminAlbums);
         self::assertStringContainsString('name="album_wizard"', $adminAlbums);
+        self::assertStringContainsString("album_admin_wizard_url(['album_wizard' => \$albumId, 'step' => 2])", $adminAlbums);
+        self::assertStringContainsString("album_admin_wizard_url(['album_wizard' => \$albumId, 'step' => 3])", $adminAlbums);
         self::assertStringContainsString("if (\$action === 'finalize_album_creation')", $adminAlbums);
         self::assertStringContainsString('album_social_publish_if_public($albumId)', $adminAlbums);
         self::assertStringContainsString('return_wizard_album_id', $adminAlbums);
@@ -65,6 +68,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('render_album_taxonomy_fields($albumCategories, $t)', $adminAlbums);
         self::assertStringContainsString('return album_ensure_photo_sort_order_column();', $adminAlbums);
         self::assertStringContainsString('function album_social_publish_if_public(int $albumId): array', $albumHelpers);
+        self::assertStringContainsString('function album_admin_wizard_url(array $query = []): string', $albumHelpers);
+        self::assertStringContainsString("\$query['focus'] = 'album-wizard';", $albumHelpers);
         self::assertStringContainsString('function album_ensure_photo_sort_order_column(): bool', $albumHelpers);
         self::assertStringContainsString("function_exists('mb_convert_case')", $albumHelpers);
         self::assertStringContainsString('return ucwords(strtolower($label));', $albumHelpers);
@@ -72,6 +77,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("table_has_column('albums', 'created_at')", $albumHelpers);
         self::assertStringContainsString('ALTER TABLE album_photos ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER file_path', $runtimeUpdates);
         self::assertStringContainsString('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error', $runtimeUpdates);
+        self::assertStringContainsString("params.get('focus') === 'album-wizard'", $adminAlbumsJs);
+        self::assertStringContainsString("wizard.scrollIntoView({ block: 'start' });", $adminAlbumsJs);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
         self::assertMatchesRegularExpression('/secure_move_uploaded_file\([^;]+8 \* 1024 \* 1024,\s+true\s+\)/s', $albumHelpers);
         self::assertStringContainsString("getenv('FACEBOOK_ALBUM_ID')", $albumHelpers);

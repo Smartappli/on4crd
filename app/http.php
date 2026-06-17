@@ -244,6 +244,12 @@ function safe_login_next_url(string $next): ?string
 
     unset($query['route'], $query['next'], $query['_csrf']);
 
-    return route_url_clean($route, $query);
+    $safeUrl = route_url_clean($route, $query);
+    $fragment = trim((string) ($parts['fragment'] ?? ''));
+    if ($fragment !== '' && preg_match('/^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/', $fragment) === 1) {
+        $safeUrl .= '#' . rawurlencode($fragment);
+    }
+
+    return $safeUrl;
 }
 }

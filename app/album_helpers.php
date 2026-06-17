@@ -319,6 +319,16 @@ function album_clear_caches(): void
     cache_forget('home_public_album_random_photos_v1');
 }
 
+/**
+ * @param array<string, mixed> $query
+ */
+function album_admin_wizard_url(array $query = []): string
+{
+    $query['focus'] = 'album-wizard';
+
+    return route_url_clean('admin_albums', $query) . '#album-wizard';
+}
+
 function album_ensure_photo_sort_order_column(): bool
 {
     if (!table_exists('album_photos')) {
