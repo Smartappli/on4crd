@@ -846,6 +846,46 @@ function member_library_subcategories_by_category(): array
 }
 }
 
+if (!function_exists('member_library_visible_categories')) {
+/**
+ * @param list<array<string, mixed>> $categories
+ * @return list<array<string, mixed>>
+ */
+function member_library_visible_categories(array $categories): array
+{
+    $visible = [];
+    foreach ($categories as $category) {
+        if ((int) ($category['total'] ?? 0) <= 0) {
+            continue;
+        }
+        $visible[] = $category;
+    }
+
+    return $visible;
+}
+}
+
+if (!function_exists('member_library_visible_subcategories_by_category')) {
+/**
+ * @param array<string, list<array<string, mixed>>> $subcategoriesByCategory
+ * @return array<string, list<array<string, mixed>>>
+ */
+function member_library_visible_subcategories_by_category(array $subcategoriesByCategory): array
+{
+    $visible = [];
+    foreach ($subcategoriesByCategory as $categoryCode => $subcategories) {
+        foreach ($subcategories as $subcategory) {
+            if ((int) ($subcategory['total'] ?? 0) <= 0) {
+                continue;
+            }
+            $visible[(string) $categoryCode][] = $subcategory;
+        }
+    }
+
+    return $visible;
+}
+}
+
 if (!function_exists('library_ingestion_templates_map')) {
 function library_ingestion_templates_map(): array
 {

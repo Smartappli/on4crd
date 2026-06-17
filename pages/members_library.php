@@ -382,6 +382,8 @@ foreach (member_library_subcategory_options() as $subcatOption) {
     $subcategoriesByCategory[$parentCode][] = $subcatInfo;
     $subcategoryLabels[$parentCode . ':' . $subcatCode] = $subcatLabel;
 }
+$visibleCategories = member_library_visible_categories($categories);
+$visibleSubcategoriesByCategory = member_library_visible_subcategories_by_category($subcategoriesByCategory);
 $documentProposalSelectedCategory = $category !== '' ? $category : 'general';
 $documentProposalSelectedSubcategory = $subcategory;
 $where = [];
@@ -524,7 +526,7 @@ ob_start();
                 </article>
                 <article>
                     <span><?= e((string) ($t['categories'] ?? $t['all_categories'])) ?></span>
-                    <strong><?= (int) count($categories) ?></strong>
+                    <strong><?= (int) count($visibleCategories) ?></strong>
                 </article>
                 <article>
                     <span><?= e((string) $t['tags']) ?></span>
@@ -682,20 +684,20 @@ ob_start();
             <nav class="members-library-category-list module-taxonomy-list" aria-label="<?= e((string) $t['topics']) ?>">
                 <a class="members-library-category-item module-taxonomy-item<?= $category === '' && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
                     <span><?= e((string) $t['all_categories']) ?></span>
-                    <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $categories)) ?></strong>
+                    <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $visibleCategories)) ?></strong>
                 </a>
-                <?php if ($categories === []): ?>
+                <?php if ($visibleCategories === []): ?>
                     <p class="help"><?= e((string) ($t['empty'] ?? 'Aucun document trouve.')) ?></p>
                 <?php endif; ?>
-                <?php foreach ($categories as $cat): ?>
+                <?php foreach ($visibleCategories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
                     <a class="members-library-category-item module-taxonomy-item<?= $catName === $category && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
                         <span><?= e((string) ($cat['label'] ?? $catName)) ?></span>
                         <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
                     </a>
-                    <?php if (($subcategoriesByCategory[$catName] ?? []) !== []): ?>
+                    <?php if (($visibleSubcategoriesByCategory[$catName] ?? []) !== []): ?>
                         <div class="members-library-subcategory-list">
-                            <?php foreach ($subcategoriesByCategory[$catName] as $subcatInfo): ?>
+                            <?php foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo): ?>
                                 <?php $subcatCode = (string) ($subcatInfo['code'] ?? ''); if ($subcatCode === '') { continue; } ?>
                                 <a class="members-library-subcategory-item module-taxonomy-item<?= $catName === $category && $subcatCode === $subcategory ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'q' => $search, 'tag' => $tag])) ?>">
                                     <span><?= e((string) ($subcatInfo['label'] ?? $subcatCode)) ?></span>

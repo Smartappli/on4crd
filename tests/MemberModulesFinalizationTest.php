@@ -91,6 +91,10 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringNotContainsString('<input type="text" name="proposal_category"', $library);
         self::assertMatchesRegularExpression('/id="members-library-document-dialog".*<select name="proposal_category" required>.*name="proposal_tags"/s', $library);
         self::assertStringContainsString("\$documentProposalSelectedCategory = \$category !== '' ? \$category : 'general';", $library);
+        self::assertStringContainsString('$visibleCategories = member_library_visible_categories($categories);', $library);
+        self::assertStringContainsString('$visibleSubcategoriesByCategory = member_library_visible_subcategories_by_category($subcategoriesByCategory);', $library);
+        self::assertStringContainsString('foreach ($visibleCategories as $cat)', $library);
+        self::assertStringContainsString('foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo)', $library);
         self::assertStringContainsString("\$proposalTags = content_proposal_clean_single_line", $library);
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
