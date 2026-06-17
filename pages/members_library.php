@@ -20,6 +20,7 @@ $membersLibraryReturnUrl = static function (): string {
         'subcategory' => (string) ($_POST['return_subcategory'] ?? $_GET['subcategory'] ?? ''),
         'q' => (string) ($_POST['return_q'] ?? $_GET['q'] ?? ''),
         'tag' => (string) ($_POST['return_tag'] ?? $_GET['tag'] ?? ''),
+        'favorites' => (string) ($_POST['return_favorites'] ?? $_GET['favorites'] ?? '') === '1' ? '1' : '',
         'p' => $page > 1 ? $page : '',
     ]);
 };
@@ -55,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     set_flash('success', $saved ? (string) $t['favorite_added_msg'] : (string) $t['favorite_removed_msg']);
                 }
             }
-            redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'subcategory' => (string) ($_GET['subcategory'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+            redirect_url(route_url_clean('members_library', ['category' => (string) ($_GET['category'] ?? ''), 'subcategory' => (string) ($_GET['subcategory'] ?? ''), 'q' => (string) ($_GET['q'] ?? ''), 'tag' => (string) ($_GET['tag'] ?? ''), 'favorites' => (string) ($_GET['favorites'] ?? '') === '1' ? '1' : '', 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
         }
 
         if ($action === 'update_document' || $action === 'delete_document') {
@@ -287,6 +288,10 @@ if ($category === 'general' && !isset($_GET['category'])) {
 }
 $subcategory = member_library_subcategory_slug((string) ($_GET['subcategory'] ?? ''));
 $tag = trim((string) ($_GET['tag'] ?? ''));
+$favoriteDocumentIds = member_library_favorite_document_ids((int) ($user['id'] ?? 0));
+$favoriteDocumentCount = count($favoriteDocumentIds);
+$favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteDocumentCount > 0;
+$favoritesLabel = member_library_favorites_label($t, $locale);
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 12;
 
@@ -396,6 +401,10 @@ if ($subcategory !== '') {
     $where[] = 'subcategory = ?';
     $params[] = $subcategory;
 }
+if ($favoritesOnly) {
+    $where[] = 'id IN (' . implode(',', array_fill(0, $favoriteDocumentCount, '?')) . ')';
+    array_push($params, ...$favoriteDocumentIds);
+}
 if ($search !== '') {
     $where[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
     $like = '%' . $search . '%';
@@ -427,6 +436,9 @@ if ($category !== '') {
     $activeFiltersCount++;
 }
 if ($subcategory !== '') {
+    $activeFiltersCount++;
+}
+if ($favoritesOnly) {
     $activeFiltersCount++;
 }
 if ($tag !== '') {
@@ -667,13 +679,16 @@ ob_start();
             <?php if ($tag !== ''): ?>
                 <input type="hidden" name="tag" value="<?= e($tag) ?>">
             <?php endif; ?>
+            <?php if ($favoritesOnly): ?>
+                <input type="hidden" name="favorites" value="1">
+            <?php endif; ?>
             <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
             <button class="button" type="submit"><?= e((string) $t['search']) ?></button>
             <?php if ($search !== ''): ?>
-                <a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'tag' => $tag])) ?>"><?= e((string) $t['reset']) ?></a>
+                <a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'tag' => $tag, 'favorites' => $favoritesOnly ? '1' : ''])) ?>"><?= e((string) $t['reset']) ?></a>
             <?php endif; ?>
         </form>
-        <?php if ($search !== '' || $category !== '' || $subcategory !== '' || $tag !== ''): ?>
+        <?php if ($search !== '' || $category !== '' || $subcategory !== '' || $tag !== '' || $favoritesOnly): ?>
             <p class="help"><?= e((string) $t['documents']) ?> : <?= (int) $totalDocuments ?></p>
         <?php endif; ?>
     </section>
@@ -682,7 +697,13 @@ ob_start();
         <aside class="members-library-index module-taxonomy-index card">
             <p class="members-library-index-title module-taxonomy-title"><?= e((string) $t['topics']) ?></p>
             <nav class="members-library-category-list module-taxonomy-list" aria-label="<?= e((string) $t['topics']) ?>">
-                <a class="members-library-category-item module-taxonomy-item<?= $category === '' && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
+                <?php if ($favoriteDocumentCount > 0): ?>
+                    <a class="members-library-category-item module-taxonomy-item<?= $favoritesOnly ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['favorites' => '1', 'q' => $search, 'tag' => $tag])) ?>">
+                        <span><?= e($favoritesLabel) ?></span>
+                        <strong><?= (int) $favoriteDocumentCount ?></strong>
+                    </a>
+                <?php endif; ?>
+                <a class="members-library-category-item module-taxonomy-item<?= !$favoritesOnly && $category === '' && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['q' => $search, 'tag' => $tag])) ?>">
                     <span><?= e((string) $t['all_categories']) ?></span>
                     <strong><?= (int) array_sum(array_map(static fn(array $cat): int => (int) ($cat['total'] ?? 0), $visibleCategories)) ?></strong>
                 </a>
@@ -691,7 +712,7 @@ ob_start();
                 <?php endif; ?>
                 <?php foreach ($visibleCategories as $cat): ?>
                     <?php $catName = trim((string) ($cat['category'] ?? 'general')); if ($catName === '') { $catName = 'general'; } ?>
-                    <a class="members-library-category-item module-taxonomy-item<?= $catName === $category && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
+                    <a class="members-library-category-item module-taxonomy-item<?= !$favoritesOnly && $catName === $category && $subcategory === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'q' => $search, 'tag' => $tag])) ?>">
                         <span><?= e((string) ($cat['label'] ?? $catName)) ?></span>
                         <strong><?= (int) ($cat['total'] ?? 0) ?></strong>
                     </a>
@@ -699,7 +720,7 @@ ob_start();
                         <div class="members-library-subcategory-list">
                             <?php foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo): ?>
                                 <?php $subcatCode = (string) ($subcatInfo['code'] ?? ''); if ($subcatCode === '') { continue; } ?>
-                                <a class="members-library-subcategory-item module-taxonomy-item<?= $catName === $category && $subcatCode === $subcategory ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'q' => $search, 'tag' => $tag])) ?>">
+                                <a class="members-library-subcategory-item module-taxonomy-item<?= !$favoritesOnly && $catName === $category && $subcatCode === $subcategory ? ' is-active' : '' ?>" href="<?= e(route_url_clean('members_library', ['category' => $catName, 'subcategory' => $subcatCode, 'q' => $search, 'tag' => $tag])) ?>">
                                     <span><?= e((string) ($subcatInfo['label'] ?? $subcatCode)) ?></span>
                                     <strong><?= (int) ($subcatInfo['total'] ?? 0) ?></strong>
                                 </a>
@@ -713,7 +734,7 @@ ob_start();
         <div class="members-library-content module-taxonomy-content">
             <?php if ($documents === []): ?>
                 <div class="card">
-                    <p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $category !== '' || $subcategory !== '' || $tag !== ''): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p>
+                    <p><?= e((string) $t['empty']) ?><?php if ($search !== '' || $category !== '' || $subcategory !== '' || $tag !== '' || $favoritesOnly): ?><?= e((string) $t['for_filters']) ?>.<?php endif; ?></p>
                 </div>
             <?php endif; ?>
 
@@ -791,6 +812,7 @@ ob_start();
                                 <input type="hidden" name="return_subcategory" value="<?= e($subcategory) ?>">
                                 <input type="hidden" name="return_q" value="<?= e($search) ?>">
                                 <input type="hidden" name="return_tag" value="<?= e($tag) ?>">
+                                <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                 <input type="hidden" name="return_p" value="<?= $page ?>">
                                 <label><span><?= e((string) $t['propose_document_title']) ?></span><input type="text" name="document_title" value="<?= e($docTitle) ?>" maxlength="190" required></label>
                                 <label>
@@ -837,6 +859,7 @@ ob_start();
                                 <input type="hidden" name="return_subcategory" value="<?= e($subcategory) ?>">
                                 <input type="hidden" name="return_q" value="<?= e($search) ?>">
                                 <input type="hidden" name="return_tag" value="<?= e($tag) ?>">
+                                <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                 <input type="hidden" name="return_p" value="<?= $page ?>">
                                 <p class="help"><?= e($membersLibraryText('delete_document_warning', 'La suppression du fichier est définitive.', 'Deleting this file is permanent.')) ?></p>
                                 <button class="button secondary members-library-danger" type="submit"><?= e($membersLibraryText('delete_document', 'Supprimer le document', 'Delete document')) ?></button>
@@ -848,9 +871,9 @@ ob_start();
             </div>
             <?php if ($totalPages > 1): ?>
                 <div class="card actions">
-                    <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'q' => $search, 'tag' => $tag, 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
+                    <?php if ($page > 1): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'q' => $search, 'tag' => $tag, 'favorites' => $favoritesOnly ? '1' : '', 'p' => $page - 1])) ?>">&larr; <?= e((string) $t['prev']) ?></a><?php endif; ?>
                     <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
-                    <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'q' => $search, 'tag' => $tag, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
+                    <?php if ($page < $totalPages): ?><a class="button secondary" href="<?= e(route_url_clean('members_library', ['category' => $category, 'subcategory' => $subcategory, 'q' => $search, 'tag' => $tag, 'favorites' => $favoritesOnly ? '1' : '', 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?> &rarr;</a><?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>

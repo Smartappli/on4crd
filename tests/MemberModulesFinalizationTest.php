@@ -93,6 +93,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$documentProposalSelectedCategory = \$category !== '' ? \$category : 'general';", $library);
         self::assertStringContainsString('$visibleCategories = member_library_visible_categories($categories);', $library);
         self::assertStringContainsString('$visibleSubcategoriesByCategory = member_library_visible_subcategories_by_category($subcategoriesByCategory);', $library);
+        self::assertStringContainsString('$favoriteDocumentIds = member_library_favorite_document_ids((int) ($user[\'id\'] ?? 0));', $library);
+        self::assertStringContainsString('$favoritesOnly = (string) ($_GET[\'favorites\'] ?? \'\') === \'1\' && $favoriteDocumentCount > 0;', $library);
+        self::assertStringContainsString('$favoritesLabel = member_library_favorites_label($t, $locale);', $library);
+        self::assertStringContainsString("['favorites' => '1', 'q' => \$search, 'tag' => \$tag]", $library);
+        self::assertStringContainsString("id IN (' . implode(',', array_fill(0, \$favoriteDocumentCount, '?')) . ')", $library);
         self::assertStringContainsString('foreach ($visibleCategories as $cat)', $library);
         self::assertStringContainsString('foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo)', $library);
         self::assertStringContainsString("\$proposalTags = content_proposal_clean_single_line", $library);

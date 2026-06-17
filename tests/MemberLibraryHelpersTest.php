@@ -76,4 +76,12 @@ final class MemberLibraryHelpersTest extends TestCase
     {
         self::assertSame('formation,securite,technique', member_library_clean_tags(' formation,unknown,securite,formation,technique '));
     }
+
+    public function testFavoritesLabelUsesPluralFallbacks(): void
+    {
+        self::assertSame('Mes favoris', member_library_favorites_label(['favorites' => 'Mes favoris'], 'fr'));
+        self::assertSame('Favoris', member_library_favorites_label(['favorite' => 'Favori'], 'fr'));
+        self::assertSame('Favorites', member_library_favorites_label(['favorite' => 'Favorite'], 'en'));
+        self::assertSame('Favorito', member_library_favorites_label(['favorite' => 'Favorito'], 'es'));
+    }
 }

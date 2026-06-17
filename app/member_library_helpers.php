@@ -886,6 +886,61 @@ function member_library_visible_subcategories_by_category(array $subcategoriesBy
 }
 }
 
+if (!function_exists('member_library_favorites_label')) {
+/**
+ * @param array<string, mixed> $messages
+ */
+function member_library_favorites_label(array $messages, string $locale = ''): string
+{
+    $label = trim((string) ($messages['favorites'] ?? ''));
+    if ($label !== '') {
+        return $label;
+    }
+    if ($locale === 'fr') {
+        return 'Favoris';
+    }
+    if ($locale === 'en') {
+        return 'Favorites';
+    }
+
+    $favorite = trim((string) ($messages['favorite'] ?? ''));
+    return $favorite !== '' ? $favorite : 'Favorites';
+}
+}
+
+if (!function_exists('member_library_favorite_document_ids')) {
+/**
+ * @return list<int>
+ */
+function member_library_favorite_document_ids(int $memberId): array
+{
+    if (
+        $memberId <= 0
+        || !function_exists('ensure_member_favorites_table')
+        || !ensure_member_favorites_table()
+        || !ensure_member_library_table()
+    ) {
+        return [];
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT d.id FROM member_favorites f INNER JOIN member_library_documents d ON d.id = f.target_id WHERE f.member_id = ? AND f.target_type = ? ORDER BY f.created_at DESC, f.id DESC');
+        $stmt->execute([$memberId, 'library_document']);
+        $ids = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $ids[] = $id;
+            }
+        }
+
+        return $ids;
+    } catch (Throwable) {
+        return [];
+    }
+}
+}
+
 if (!function_exists('library_ingestion_templates_map')) {
 function library_ingestion_templates_map(): array
 {
