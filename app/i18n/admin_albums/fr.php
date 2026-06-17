@@ -58,6 +58,8 @@ return array (
   'category_field' => 'Thématique',
   'subcategory_field' => 'Sous-thématique',
   'no_subcategory' => 'Sans sous-thématique',
+  'add_category' => 'Ajouter une thématique',
+  'add_subcategory' => 'Ajouter une sous-thématique',
   'err_category_has_documents' => 'Cette thématique contient encore des albums.',
   'err_category_has_subcategories' => 'Supprimez d\'abord toutes les sous-thématiques de cette thématique.',
   'err_subcategory_has_documents' => 'Cette sous-thématique contient encore des albums.',

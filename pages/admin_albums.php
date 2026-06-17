@@ -493,7 +493,7 @@ ob_start();
                 <label><?= e((string) ($t['category_field'] ?? 'Thématique')) ?>
                     <input type="text" name="category_label" maxlength="160" required>
                 </label>
-                <button class="button"><?= e((string) $t['create_album']) ?></button>
+                <button class="button"><?= e((string) ($t['add_category'] ?? $t['create_album'])) ?></button>
             </form>
             <form method="post">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -508,7 +508,7 @@ ob_start();
                 <label><?= e((string) ($t['subcategory_field'] ?? 'Sous-thématique')) ?>
                     <input type="text" name="subcategory_label" maxlength="160" required>
                 </label>
-                <button class="button"><?= e((string) $t['create_album']) ?></button>
+                <button class="button"><?= e((string) ($t['add_subcategory'] ?? $t['create_album'])) ?></button>
             </form>
         </div>
         <div class="tags-cloud">

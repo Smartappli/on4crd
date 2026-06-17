@@ -17,6 +17,17 @@ final class ModuleTaxonomyHelpersTest extends TestCase
         self::assertSame('Favorites', member_document_favorites_label([], 'en'));
     }
 
+    public function testWebothequeTaxonomyReferencesAreNormalized(): void
+    {
+        self::assertSame('general:references', webotheque_subcategory_ref('', 'References'));
+        self::assertSame(
+            ['category' => 'modes-numeriques', 'subcategory' => 'ft8'],
+            webotheque_subcategory_ref_parts('Modes numeriques:FT8')
+        );
+        self::assertSame('Mes favoris', webotheque_favorites_label(['favorites' => 'Mes favoris'], 'fr'));
+        self::assertSame('Favorites', webotheque_favorites_label([], 'en'));
+    }
+
     public function testAlbumTaxonomyReferencesAreNormalized(): void
     {
         self::assertSame('general:archives', album_subcategory_ref('', 'Archives'));
@@ -36,5 +47,13 @@ final class ModuleTaxonomyHelpersTest extends TestCase
         );
         self::assertSame('Favoris', wiki_favorites_label(['favorite' => 'Favori'], 'fr'));
         self::assertSame('Favorites', wiki_favorites_label([], 'en'));
+    }
+
+    public function testContentTaxonomyCodeTransliteratesAccentsAndSupportsEmptyCodes(): void
+    {
+        self::assertSame('sous-thematique', content_taxonomy_code('Sous thématique'));
+        self::assertSame('', content_taxonomy_code('', 120, 'fallback', true));
+        self::assertSame('fallback', content_taxonomy_code('', 120, 'fallback'));
+        self::assertSame('long', content_taxonomy_code('long-code', 4));
     }
 }
