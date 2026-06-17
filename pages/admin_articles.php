@@ -286,6 +286,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_url(route_url_clean('admin_articles', ['q' => (string) ($_GET['q'] ?? ''), 'status' => (string) ($_GET['status'] ?? ''), 'category' => (string) ($_GET['category'] ?? ''), 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
         }
 
+        if ($action === 'add_category') {
+            if (!article_ensure_categories_table($articleMessages)) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+            $code = article_category_code((string) ($_POST['category_code'] ?? $label));
+            if ($label === '' || $code === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                ->execute([$code, $label]);
+            set_flash('success', $t('ok_category_updated'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $code]));
+        }
+
+        if ($action === 'delete_category') {
+            if (!article_ensure_categories_table($articleMessages) || !article_ensure_subcategories_table()) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $category = article_category_from_input((string) ($_POST['category_code'] ?? $_POST['code'] ?? ''), $knownCategories);
+            if ($category === 'autres') {
+                throw new RuntimeException($t('err_delete_category'));
+            }
+            $subCountStmt = db()->prepare('SELECT COUNT(*) FROM article_subcategories WHERE category_code = ?');
+            $subCountStmt->execute([$category]);
+            if ((int) ($subCountStmt->fetchColumn() ?: 0) > 0) {
+                throw new RuntimeException($t('err_category_has_subcategories', 'Supprimez d abord toutes les sous-thématiques de cette thématique.'));
+            }
+            db()->prepare('UPDATE articles SET category = "autres", subcategory = "" WHERE category = ?')->execute([$category]);
+            db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NOW()) ON DUPLICATE KEY UPDATE deleted_at = NOW()')
+                ->execute([$category, (string) ($knownCategories[$category] ?? article_category_label_from_code($category))]);
+            set_flash('success', $t('ok_category_deleted'));
+            redirect('admin_articles');
+        }
+
+        if ($action === 'add_subcategory') {
+            if (!article_ensure_subcategories_table()) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $category = article_category_from_input((string) ($_POST['subcategory_category'] ?? 'autres'), $knownCategories);
+            $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+            $code = article_subcategory_code((string) ($_POST['subcategory_code'] ?? $label));
+            if ($label === '' || $code === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $code, $label]);
+            set_flash('success', $t('ok_subcategory_updated', 'Sous-thématique enregistrée.'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $code]));
+        }
+
+        if ($action === 'delete_subcategory') {
+            if (!article_ensure_subcategories_table()) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $parts = article_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+            $category = article_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'autres'), $knownCategories);
+            $subcategory = article_subcategory_code($parts['subcategory']);
+            if ($subcategory === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            $countStmt = db()->prepare('SELECT COUNT(*) FROM articles WHERE category = ? AND subcategory = ?');
+            $countStmt->execute([$category, $subcategory]);
+            if ((int) ($countStmt->fetchColumn() ?: 0) > 0) {
+                throw new RuntimeException($t('err_subcategory_has_documents', 'Cette sous-thématique contient encore des articles.'));
+            }
+            db()->prepare('DELETE FROM article_subcategories WHERE category_code = ? AND code = ?')->execute([$category, $subcategory]);
+            set_flash('success', $t('ok_subcategory_deleted', 'Sous-thématique supprimée.'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category]));
+        }
+
         if ($action === 'save_article' || $action === 'preview_article') {
             $id = (int) ($_POST['id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
