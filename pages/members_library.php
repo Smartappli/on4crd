@@ -222,12 +222,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'propose_document') {
             $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
             $proposalCategory = member_library_category_slug((string) ($_POST['proposal_category'] ?? 'general'));
+            $proposalSubcategory = '';
+            $proposalSubcategoryRef = trim((string) ($_POST['proposal_subcategory_ref'] ?? ''));
+            if ($proposalSubcategoryRef !== '') {
+                $proposalSubcategoryParts = member_library_subcategory_ref_parts($proposalSubcategoryRef);
+                if ($proposalSubcategoryParts['subcategory'] !== '') {
+                    $proposalSubcategory = $proposalSubcategoryParts['subcategory'];
+                    if ($proposalSubcategoryParts['category'] !== '') {
+                        $proposalCategory = $proposalSubcategoryParts['category'];
+                    }
+                }
+            }
             $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
             $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
             $storedDocument = member_library_store_proposed_document_upload($_FILES['proposal_file'] ?? null, (int) $user['id']);
             $proposalFilePath = (string) $storedDocument['public_path'];
             $proposalSummary = content_proposal_details_text([
                 (string) ($t['propose_document_category'] ?? 'Category') => $proposalCategory,
+                (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => $proposalSubcategory,
                 (string) ($t['tags'] ?? 'Keywords') => $proposalTags,
                 (string) ($t['document'] ?? 'Document') => (string) $storedDocument['original_name'],
                 (string) ($t['propose_document_description'] ?? 'Description') => (string) ($_POST['proposal_description'] ?? ''),
@@ -270,7 +282,11 @@ $search = trim((string) ($_GET['q'] ?? ''));
 if (mb_strlen($search) > 120) {
     $search = mb_substr($search, 0, 120);
 }
-$category = trim((string) ($_GET['category'] ?? ''));
+$category = member_library_category_slug((string) ($_GET['category'] ?? ''));
+if ($category === 'general' && !isset($_GET['category'])) {
+    $category = '';
+}
+$subcategory = member_library_subcategory_slug((string) ($_GET['subcategory'] ?? ''));
 $tag = trim((string) ($_GET['tag'] ?? ''));
 $page = max(1, (int) ($_GET['p'] ?? 1));
 $perPage = 12;
