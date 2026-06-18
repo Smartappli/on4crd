@@ -108,7 +108,7 @@ function webotheque_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', $code));
     if ($label === '') {
-        return 'General';
+        return 'Général';
     }
 
     return mb_convert_case($label, MB_CASE_TITLE, 'UTF-8');
@@ -347,7 +347,7 @@ if (!function_exists('webotheque_default_categories')) {
 function webotheque_default_categories(array $t): array
 {
     return [
-        'general' => (string) ($t['category_general'] ?? 'General'),
+        'general' => (string) ($t['category_general'] ?? 'Général'),
         'radioamateur' => 'Radioamateur',
         'antennes' => 'Antennes',
         'propagation' => 'Propagation',
@@ -634,8 +634,11 @@ function webotheque_proposal_subcategory_from_summary(string $summary, array $t 
         (string) ($t['subcategory_field'] ?? 'Subtopic'),
         'Subtopic',
         'Subcategory',
+        'Sous-thématique',
         'Sous-thematique',
+        'Sous thématique',
         'Sous thematique',
+        'Sous-thème',
         'Sous-theme',
     ]));
 }
@@ -707,7 +710,7 @@ function webotheque_apply_accepted_proposal(
             ? webotheque_category_from_input($categoryOverride, $categories)
             : webotheque_proposal_category_from_summary($summary, $categories);
         $description = webotheque_proposal_detail_from_summary($summary, [(string) ($t['description_field'] ?? 'Description'), 'Description']);
-        $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Etiquettes']);
+        $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Étiquettes', 'Etiquettes']);
         $subcategory = webotheque_proposal_subcategory_from_summary($summary, $t);
 
         webotheque_update_link_record(
@@ -735,7 +738,7 @@ function webotheque_apply_accepted_proposal(
     if ($description === '') {
         $description = $summary;
     }
-    $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Etiquettes']);
+    $tags = webotheque_proposal_detail_from_summary($summary, [(string) ($t['tags_field'] ?? 'Tags'), 'Tags', 'Étiquettes', 'Etiquettes']);
     $subcategory = webotheque_proposal_subcategory_from_summary($summary, $t);
 
     $existingStmt = db()->prepare('SELECT id FROM member_webotheque_links WHERE url = ? LIMIT 1');

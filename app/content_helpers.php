@@ -352,7 +352,7 @@ function wiki_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', wiki_category_code($code)));
     if ($label === '') {
-        return 'General';
+        return 'Général';
     }
 
     return ucwords($label);
@@ -471,7 +471,7 @@ function wiki_categories(array $messages = []): array
     }
 
     if (!isset($deletedCategories['general'])) {
-        $categories['general'] = (string) ($messages['category_general'] ?? 'General');
+        $categories['general'] = (string) ($messages['category_general'] ?? 'Général');
     }
 
     if (function_exists('member_library_default_categories')) {

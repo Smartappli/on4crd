@@ -465,9 +465,9 @@ function render_article_taxonomy_fields(array $categories, array $labels = [], s
     $selectedCategory = article_category_code($selectedCategory !== '' ? $selectedCategory : 'autres');
     $selectedSubcategory = article_subcategory_code($selectedSubcategory);
     $subcategoriesByCategory = article_subcategories_by_category();
-    $categoryLabel = (string) ($labels['category_label'] ?? $labels['category'] ?? 'Categorie');
-    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? $labels['subcategory'] ?? 'Sous-thematique');
-    $noSubcategory = (string) ($labels['no_subcategory'] ?? 'Sans sous-thematique');
+    $categoryLabel = (string) ($labels['category_label'] ?? $labels['category'] ?? 'Catégorie');
+    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? $labels['subcategory'] ?? 'Sous-thématique');
+    $noSubcategory = (string) ($labels['no_subcategory'] ?? 'Sans sous-thématique');
 
     $html = '<label><span>' . e($categoryLabel) . '</span><select name="category">';
     foreach ($categories as $code => $label) {

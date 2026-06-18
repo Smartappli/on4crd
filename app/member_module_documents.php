@@ -110,21 +110,21 @@ function member_document_labels(string $locale): array
             'subcategory_field' => 'Sous-thématique',
             'all_categories' => 'Toutes les thématiques',
             'no_subcategory' => 'Sans sous-thématique',
-            'tags' => 'Etiquettes',
+            'tags' => 'Étiquettes',
             'favorite' => 'Favori',
             'favorites' => 'Favoris',
             'favorite_added' => 'Favori ajouté',
             'favorite_removed' => 'Favori retiré',
             'favorite_added_msg' => 'Contenu ajouté aux favoris.',
             'favorite_removed_msg' => 'Contenu retiré des favoris.',
-            'preview' => 'Apercu',
+            'preview' => 'Aperçu',
             'open' => 'Ouvrir',
             'storage_unavailable' => 'Ce module est temporairement indisponible.',
             'upload_title' => 'Ajouter un contenu',
             'upload_help' => 'Le contenu sera disponible uniquement dans ce module.',
             'title_field' => 'Titre',
             'description_field' => 'Description',
-            'tags_field' => 'Etiquettes',
+            'tags_field' => 'Étiquettes',
             'document_field' => 'Fichier',
             'upload' => 'Ajouter',
             'delete' => 'Supprimer',
@@ -492,7 +492,7 @@ function member_document_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', member_document_category_code($code)));
     if ($label === '') {
-        return 'General';
+        return 'Général';
     }
 
     return mb_convert_case($label, MB_CASE_TITLE, 'UTF-8');
@@ -505,7 +505,7 @@ if (!function_exists('member_document_default_categories')) {
  */
 function member_document_default_categories(string $moduleCode = ''): array
 {
-    $defaults = [['code' => 'general', 'label' => 'General', 'sort_order' => 1]];
+    $defaults = [['code' => 'general', 'label' => 'Général', 'sort_order' => 1]];
     if (function_exists('member_library_default_categories')) {
         foreach (member_library_default_categories() as $category) {
             $code = member_document_category_code((string) ($category['code'] ?? ''));
@@ -1091,10 +1091,10 @@ function member_document_apply_accepted_proposal(array $proposal, string $module
         $moduleCode,
         (string) ($proposal['title'] ?? ''),
         member_document_proposal_detail($summary, ['Description']),
-        member_document_proposal_detail($summary, ['Tags', 'Etiquettes']),
+        member_document_proposal_detail($summary, ['Tags', 'Étiquettes', 'Etiquettes']),
         (string) ($proposal['source_ref'] ?? ''),
-        member_document_proposal_detail($summary, ['Category', 'Thematique', 'Thématique', 'Topic']),
-        member_document_proposal_detail($summary, ['Subcategory', 'Sous-thematique', 'Sous-thématique', 'Subtopic'])
+        member_document_proposal_detail($summary, ['Category', 'Thématique', 'Thematique', 'Topic']),
+        member_document_proposal_detail($summary, ['Subcategory', 'Sous-thématique', 'Sous-thematique', 'Subtopic'])
     );
 
     return $documentId;

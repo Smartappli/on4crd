@@ -633,13 +633,13 @@ function render_layout_impl(string $content, string $title = ''): string
     $returnRoute = preg_match('/^[a-z0-9_]+$/', $currentRoute) === 1 ? $currentRoute : 'home';
     $currentReturnUrl = route_url_clean($returnRoute, $returnQuery);
     $ideaCategoryOptions = [
-        'general' => 'General',
-        'activity' => 'Activite club',
+        'general' => 'Général',
+        'activity' => 'Activité club',
         'training' => 'Formation',
         'technical' => 'Technique',
         'website' => 'Site web',
-        'equipment' => 'Materiel',
-        'event' => 'Evenement',
+        'equipment' => 'Matériel',
+        'event' => 'Événement',
     ];
     $ideaCategoryOptionHtml = '';
     foreach ($ideaCategoryOptions as $ideaCategoryCode => $ideaCategoryLabel) {
@@ -656,8 +656,8 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_url" value="' . e($currentReturnUrl) . '">'
         . '<div class="idea-form-grid">'
-        . '<label for="idea-category"><span>' . e($ideaText('category_label', 'Thematique')) . '</span><select id="idea-category" name="idea_category">' . $ideaCategoryOptionHtml . '</select></label>'
-        . '<label for="idea-keywords"><span>' . e($ideaText('keywords_label', 'Mots cles')) . '</span><input id="idea-keywords" type="text" name="idea_keywords" maxlength="255" placeholder="' . e($ideaText('keywords_placeholder', 'ex: antennes, formation')) . '"></label>'
+        . '<label for="idea-category"><span>' . e($ideaText('category_label', 'Thématique')) . '</span><select id="idea-category" name="idea_category">' . $ideaCategoryOptionHtml . '</select></label>'
+        . '<label for="idea-keywords"><span>' . e($ideaText('keywords_label', 'Mots clés')) . '</span><input id="idea-keywords" type="text" name="idea_keywords" maxlength="255" placeholder="' . e($ideaText('keywords_placeholder', 'ex: antennes, formation')) . '"></label>'
         . '</div>'
         . '<div class="idea-form-grid">'
         . '<label for="idea-name"><span>' . e($ideaText('name_label', 'Votre nom')) . '</span><input id="idea-name" type="text" name="idea_name" maxlength="160" autocomplete="name" required placeholder="' . e($ideaText('name_placeholder', 'Nom et indicatif, si applicable')) . '"></label>'
