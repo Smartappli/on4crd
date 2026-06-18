@@ -87,14 +87,26 @@ for (const [route, expected] of discoveryRoutes) {
 
 test('Selenium calendrier: export ICS public ne casse pas', async (t) => {
   await withSelenium(t, async (driver) => {
-    await driver.get(routeUrl('events', { format: 'ics' }));
-    await waitForDocumentReady(driver);
+    await visit(driver, 'events');
     await assertNoServerError(driver);
     if (await skipIfInstallWizard(t, driver)) {
       return;
     }
-    const text = await pagePlainText(driver);
-    assert.match(text, /BEGIN:VCALENDAR|VCALENDAR|agenda .*disponible|calendar .*available|evenements|events/i);
+    const result = await driver.executeAsyncScript(`
+      const url = arguments[0];
+      const done = arguments[arguments.length - 1];
+      fetch(url, { credentials: 'same-origin' })
+        .then(async (response) => done({
+          status: response.status,
+          contentType: response.headers.get('content-type') || '',
+          text: await response.text()
+        }))
+        .catch((error) => done({ status: 0, contentType: '', text: String(error) }));
+    `, routeUrl('events', { format: 'ics' }));
+
+    assert.strictEqual(result.status, 200, `Export ICS inaccessible: ${result.text}`);
+    assert.match(result.contentType, /text\/calendar/i);
+    assert.match(result.text, /BEGIN:VCALENDAR|VCALENDAR|agenda .*disponible|calendar .*available|evenements|events/i);
   });
 });
 

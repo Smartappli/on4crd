@@ -180,6 +180,35 @@ final class FunctionHelpersExtendedTest extends TestCase
         }
     }
 
+    public function testDetectUploadedMimeTypeUsesImageContentFallback(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'png-mime-');
+        self::assertIsString($tmp);
+        file_put_contents(
+            $tmp,
+            base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGklEQVR4nGP8z8Dwn4GBgYGJgYGB4T8ABQsCBAJH7m4AAAAASUVORK5CYII=', true)
+        );
+
+        try {
+            self::assertSame('image/png', detect_uploaded_mime_type($tmp));
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
+    public function testDetectUploadedMimeTypeUsesPdfSignatureFallback(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'pdf-mime-');
+        self::assertIsString($tmp);
+        file_put_contents($tmp, "%PDF-1.4\n1 0 obj\n<<>>\nendobj\n");
+
+        try {
+            self::assertSame('application/pdf', detect_uploaded_mime_type($tmp));
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
     public function testUploadSignatureValidatorAllowsTextExtensionsWithoutBinarySignature(): void
     {
         $tmp = tempnam(sys_get_temp_dir(), 'txt-sig-');

@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/config_loader.php';
+
 function config(?string $key = null, mixed $default = null): mixed
 {
     static $config = null;
     static $pathCache = [];
     if ($config === null) {
-        $configFile = __DIR__ . '/../config/config.php';
+        $configFile = app_config_file_path();
         if (!is_file($configFile)) {
             $sampleConfigFile = __DIR__ . '/../config/config.sample.php';
             if (PHP_SAPI !== 'cli' || !is_file($sampleConfigFile)) {

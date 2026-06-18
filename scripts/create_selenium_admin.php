@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../app/bootstrap.php';
+require_once __DIR__ . '/../app/member_profile_helpers.php';
 
 /**
  * @return array<string, string>

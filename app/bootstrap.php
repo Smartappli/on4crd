@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-$bootstrapConfigFile = __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/config_loader.php';
+
+$bootstrapConfigFile = app_config_file_path();
 if (!is_file($bootstrapConfigFile)) {
     throw new RuntimeException('Missing config/config.php. Copy config.sample.php first.');
 }

@@ -9,23 +9,107 @@ function ensure_storage_htaccess(string $directory, string $rules): void
     }
 }
 
+if (!function_exists('safe_storage_public_path')) {
+function safe_storage_public_path(string $path, array $allowedPrefixes = ['storage/press/']): string
+{
+    $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
+    if ($normalized === '' || str_contains($normalized, "\0") || str_contains($normalized, '..')) {
+        throw new RuntimeException('Chemin de stockage invalide.');
+    }
+
+    foreach ($allowedPrefixes as $prefix) {
+        $prefix = ltrim(str_replace('\\', '/', trim($prefix)), '/');
+        if ($prefix !== '' && str_starts_with($normalized, $prefix)) {
+            return $normalized;
+        }
+    }
+
+    throw new RuntimeException('Chemin de stockage non autorise.');
+}
+}
+
+if (!function_exists('safe_storage_public_path_or_null')) {
+function safe_storage_public_path_or_null(string $path, array $allowedPrefixes = ['storage/press/']): ?string
+{
+    try {
+        return safe_storage_public_path($path, $allowedPrefixes);
+    } catch (Throwable) {
+        return null;
+    }
+}
+}
+
 function detect_uploaded_mime_type(string $tmpPath): string
 {
     if (!is_file($tmpPath)) {
         return '';
     }
-    if (!function_exists('finfo_open') || !function_exists('finfo_file') || !function_exists('finfo_close')) {
+    $mime = '';
+
+    if (function_exists('finfo_open') && function_exists('finfo_file') && function_exists('finfo_close')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo !== false) {
+            $mime = strtolower(trim((string) finfo_file($finfo, $tmpPath)));
+            finfo_close($finfo);
+            if ($mime !== '' && $mime !== 'application/octet-stream') {
+                return $mime;
+            }
+        }
+    }
+
+    if (function_exists('mime_content_type')) {
+        $detected = strtolower(trim((string) @mime_content_type($tmpPath)));
+        if ($detected !== '' && $detected !== 'application/octet-stream') {
+            return $detected;
+        }
+        if ($mime === '') {
+            $mime = $detected;
+        }
+    }
+
+    $fallback = detect_uploaded_mime_type_from_content($tmpPath);
+    if ($fallback !== '') {
+        return $fallback;
+    }
+
+    return $mime;
+}
+
+function detect_uploaded_mime_type_from_content(string $tmpPath): string
+{
+    $imageInfo = @getimagesize($tmpPath);
+    if (is_array($imageInfo)) {
+        $imageMime = strtolower(trim((string) ($imageInfo['mime'] ?? '')));
+        if (in_array($imageMime, ['image/jpeg', 'image/png', 'image/webp'], true)) {
+            return $imageMime;
+        }
+    }
+
+    $signature = @file_get_contents($tmpPath, false, null, 0, 64);
+    if ($signature === false || $signature === '') {
         return '';
     }
 
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    if ($finfo === false) {
-        return '';
+    if (str_starts_with($signature, '%PDF-')) {
+        return 'application/pdf';
     }
-    $mime = (string) finfo_file($finfo, $tmpPath);
-    finfo_close($finfo);
+    if (str_starts_with($signature, "\xFF\xD8\xFF")) {
+        return 'image/jpeg';
+    }
+    if (str_starts_with($signature, "\x89PNG\r\n\x1A\n")) {
+        return 'image/png';
+    }
+    if (str_starts_with($signature, 'RIFF') && str_contains(substr($signature, 8, 16), 'WEBP')) {
+        return 'image/webp';
+    }
+    if (str_starts_with($signature, "PK\x03\x04")) {
+        return 'application/zip';
+    }
+    if (!str_contains($signature, "\0") && preg_match('//u', $signature) === 1) {
+        return 'text/plain';
+    }
 
-    return strtolower(trim($mime));
+    return '';
 }
 
 function upload_i18n_message(string $key): string

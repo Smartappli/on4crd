@@ -397,6 +397,61 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('WHERE \' . $directoryVisibleWhere', $directory);
     }
 
+    public function testConfigLoaderSupportsEnvironmentOverride(): void
+    {
+        $loader = file_get_contents(__DIR__ . '/../app/config_loader.php');
+        $core = file_get_contents(__DIR__ . '/../app/core.php');
+        $bootstrap = file_get_contents(__DIR__ . '/../app/bootstrap.php');
+        self::assertIsString($loader);
+        self::assertIsString($core);
+        self::assertIsString($bootstrap);
+
+        self::assertStringContainsString("getenv('ON4CRD_CONFIG_FILE')", $loader);
+        self::assertStringContainsString('function app_config_file_path(): string', $loader);
+        self::assertStringContainsString('require_once __DIR__ . \'/config_loader.php\';', $core);
+        self::assertStringContainsString('$configFile = app_config_file_path();', $core);
+        self::assertStringContainsString('require_once __DIR__ . \'/config_loader.php\';', $bootstrap);
+        self::assertStringContainsString('$bootstrapConfigFile = app_config_file_path();', $bootstrap);
+    }
+
+    public function testCommitteeEditorialHelpersSupportCurrentEditorialSchema(): void
+    {
+        $committeeHelpers = file_get_contents(__DIR__ . '/../app/committee_helpers.php');
+        self::assertIsString($committeeHelpers);
+
+        self::assertStringContainsString("table_has_column('editorial_contents', 'content_key')", $committeeHelpers);
+        self::assertStringContainsString("function editorial_content_text_columns(): array", $committeeHelpers);
+        self::assertStringContainsString("\$textColumn = \$locale . '_text';", $committeeHelpers);
+        self::assertStringContainsString('INSERT INTO editorial_contents (content_key, fr_text, en_text, de_text, nl_text)', $committeeHelpers);
+        self::assertStringNotContainsString('SELECT fr, en, de, nl FROM editorial_contents WHERE slot = ?', $committeeHelpers);
+    }
+
+    public function testSeleniumHelperDisablesServiceWorkerDuringAuthenticatedRuns(): void
+    {
+        $seleniumHelpers = file_get_contents(__DIR__ . '/../tests/selenium/helpers.js');
+        self::assertIsString($seleniumHelpers);
+
+        self::assertStringContainsString("async function disableServiceWorkerForSelenium(driver)", $seleniumHelpers);
+        self::assertStringContainsString("driver.sendDevToolsCommand('ServiceWorker.disable')", $seleniumHelpers);
+        self::assertStringContainsString("Page.addScriptToEvaluateOnNewDocument", $seleniumHelpers);
+        self::assertStringContainsString("await driver.wait(async () => !(await isLoginPage(driver))", $seleniumHelpers);
+        self::assertStringContainsString("await driver.manage().deleteAllCookies();", $seleniumHelpers);
+    }
+
+    public function testPressReleasesUseCurrentPublishedOnSchemaColumn(): void
+    {
+        $pressHelpers = file_get_contents(__DIR__ . '/../app/press_helpers.php');
+        $schema = file_get_contents(__DIR__ . '/../schema/schema.sql');
+        self::assertIsString($pressHelpers);
+        self::assertIsString($schema);
+
+        self::assertStringContainsString('published_on DATE DEFAULT NULL', $schema);
+        self::assertStringContainsString("table_has_column('press_releases', 'published_on')", $pressHelpers);
+        self::assertStringContainsString("'published_on'", $pressHelpers);
+        self::assertStringContainsString("'release_date'", $pressHelpers);
+        self::assertStringContainsString('` DESC, id DESC', $pressHelpers);
+    }
+
     public function testCurrentUserRepairsMissingAuthUserLinkByCallsign(): void
     {
         $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');

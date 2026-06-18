@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+if (!function_exists('safe_storage_public_path')) {
 function safe_storage_public_path(string $path, array $allowedPrefixes = ['storage/press/']): string
 {
     $normalized = ltrim(str_replace('\\', '/', trim($path)), '/');
@@ -18,6 +19,9 @@ function safe_storage_public_path(string $path, array $allowedPrefixes = ['stora
     throw new RuntimeException('Chemin de stockage non autorisé.');
 }
 
+}
+
+if (!function_exists('safe_storage_public_path_or_null')) {
 function safe_storage_public_path_or_null(string $path, array $allowedPrefixes = ['storage/press/']): ?string
 {
     try {
@@ -25,6 +29,8 @@ function safe_storage_public_path_or_null(string $path, array $allowedPrefixes =
     } catch (Throwable) {
         return null;
     }
+}
+
 }
 
 function qsl_normalize_callsign(string $value): string

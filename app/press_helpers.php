@@ -21,5 +21,10 @@ function latest_press_releases(int $limit = 20): array
         return [];
     }
     $limit = max(1, min(100, $limit));
-    return db()->query('SELECT * FROM press_releases ORDER BY release_date DESC, id DESC LIMIT ' . (int) $limit)->fetchAll() ?: [];
+    $dateColumn = table_has_column('press_releases', 'published_on')
+        ? 'published_on'
+        : (table_has_column('press_releases', 'release_date') ? 'release_date' : '');
+    $orderBy = $dateColumn !== '' ? '`' . $dateColumn . '` DESC, id DESC' : 'id DESC';
+
+    return db()->query('SELECT * FROM press_releases ORDER BY ' . $orderBy . ' LIMIT ' . (int) $limit)->fetchAll() ?: [];
 }

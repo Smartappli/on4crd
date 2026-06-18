@@ -5,6 +5,30 @@ const path = require('node:path');
 const { Builder, By, Capabilities, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 
+function loadLocalSeleniumEnv() {
+  const envPath = path.join(process.cwd(), 'storage', 'auth', 'selenium-admin.env');
+  if (!fs.existsSync(envPath)) {
+    return;
+  }
+
+  const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed === '' || trimmed.startsWith('#') || !trimmed.includes('=')) {
+      continue;
+    }
+
+    const separator = trimmed.indexOf('=');
+    const key = trimmed.slice(0, separator).trim();
+    const value = trimmed.slice(separator + 1).trim();
+    if (key !== '' && process.env[key] === undefined) {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadLocalSeleniumEnv();
+
 const baseUrl = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:8080/index.php';
 const timeoutMs = Number(process.env.SELENIUM_TIMEOUT_MS || 15000);
 const artifactsDir = process.env.SELENIUM_ARTIFACTS_DIR || path.join(process.cwd(), 'selenium-artifacts');
@@ -45,6 +69,7 @@ async function createDriver() {
   }
   options.addArguments(
     '--disable-gpu',
+    '--disable-background-networking',
     '--disable-dev-shm-usage',
     '--no-sandbox',
     '--window-size=1440,1200',
@@ -60,8 +85,44 @@ async function createDriver() {
     pageLoad: Number(process.env.SELENIUM_PAGELOAD_TIMEOUT_MS || 30000),
     script: timeoutMs,
   });
+  await disableServiceWorkerForSelenium(driver);
 
   return driver;
+}
+
+async function disableServiceWorkerForSelenium(driver) {
+  if (process.env.SELENIUM_DISABLE_SERVICE_WORKER === '0') {
+    return;
+  }
+
+  const disableServiceWorkerScript = `
+    (() => {
+      try {
+        Object.defineProperty(Navigator.prototype, 'serviceWorker', {
+          configurable: true,
+          get: () => undefined
+        });
+      } catch (error) {}
+    })();
+  `;
+
+  if (typeof driver.sendDevToolsCommand !== 'function') {
+    return;
+  }
+
+  try {
+    await driver.sendDevToolsCommand('ServiceWorker.disable');
+  } catch {
+    // Older Chromium/WebDriver builds may not expose the ServiceWorker domain.
+  }
+
+  try {
+    await driver.sendDevToolsCommand('Page.addScriptToEvaluateOnNewDocument', {
+      source: disableServiceWorkerScript,
+    });
+  } catch {
+    // Browser-level service worker disabling above is sufficient when available.
+  }
 }
 
 async function withSelenium(t, callback) {
@@ -236,6 +297,11 @@ async function visibleImageCount(driver, selector) {
 }
 
 async function loginAsAdmin(driver, username, password) {
+  try {
+    await driver.manage().deleteAllCookies();
+  } catch {
+    // A clean cookie jar avoids reusing stale Selenium sessions when a browser profile is recycled.
+  }
   await visit(driver, 'login');
   await driver.findElement(By.css('input[name="callsign"]')).sendKeys(username);
   await driver.findElement(By.css('input[name="password"]')).sendKeys(password);
@@ -246,6 +312,8 @@ async function loginAsAdmin(driver, username, password) {
   await driver.findElement(By.css('input[name="captcha"]')).sendKeys(String(Number(captchaMatch[1]) + Number(captchaMatch[2])));
   await driver.findElement(By.css('[data-login-form] button')).click();
   await waitForDocumentReady(driver);
+  await assertNoServerError(driver);
+  await driver.wait(async () => !(await isLoginPage(driver)), timeoutMs, 'Connexion admin Selenium echouee.');
   await assertNoServerError(driver);
 }
 
