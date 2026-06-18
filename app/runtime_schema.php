@@ -38,13 +38,13 @@ function seed_modules(): void
         $stmt = db()->prepare(
             'INSERT INTO modules (code, label, description, is_core, is_enabled, visibility, sort_order)
              VALUES (?, ?, ?, ?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), visibility = VALUES(visibility), sort_order = VALUES(sort_order)'
+             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = IF(VALUES(is_core) = 1, VALUES(is_enabled), is_enabled), visibility = IF(VALUES(is_core) = 1, VALUES(visibility), visibility), sort_order = VALUES(sort_order)'
         );
     } else {
         $stmt = db()->prepare(
             'INSERT INTO modules (code, label, description, is_core, is_enabled, sort_order)
              VALUES (?, ?, ?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = VALUES(is_enabled), sort_order = VALUES(sort_order)'
+             ON DUPLICATE KEY UPDATE label = VALUES(label), description = VALUES(description), is_core = VALUES(is_core), is_enabled = IF(VALUES(is_core) = 1, VALUES(is_enabled), is_enabled), sort_order = VALUES(sort_order)'
         );
     }
 

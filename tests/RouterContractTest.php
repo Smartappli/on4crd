@@ -426,6 +426,16 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('SELECT fr, en, de, nl FROM editorial_contents WHERE slot = ?', $committeeHelpers);
     }
 
+    public function testSeedModulesPreservesAdminConfigurableState(): void
+    {
+        $schema = file_get_contents(__DIR__ . '/../app/runtime_schema.php');
+        self::assertIsString($schema);
+
+        self::assertStringContainsString('is_enabled = IF(VALUES(is_core) = 1, VALUES(is_enabled), is_enabled)', $schema);
+        self::assertStringContainsString('visibility = IF(VALUES(is_core) = 1, VALUES(visibility), visibility)', $schema);
+        self::assertStringNotContainsString('is_enabled = VALUES(is_enabled), visibility = VALUES(visibility)', $schema);
+    }
+
     public function testSeleniumHelperDisablesServiceWorkerDuringAuthenticatedRuns(): void
     {
         $seleniumHelpers = file_get_contents(__DIR__ . '/../tests/selenium/helpers.js');
