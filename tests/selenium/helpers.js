@@ -374,6 +374,29 @@ function ensureSeleniumFixtures() {
   }
 }
 
+function seleniumPhpEnv(extraEnv = {}) {
+  const env = { ...process.env, ...extraEnv };
+  if (!env.ON4CRD_CONFIG_FILE) {
+    const localConfig = path.join(process.cwd(), 'storage', 'auth', 'selenium-config.php');
+    if (fs.existsSync(localConfig)) {
+      env.ON4CRD_CONFIG_FILE = localConfig;
+    }
+  }
+
+  return env;
+}
+
+function runSeleniumPhp(source, extraEnv = {}) {
+  const phpSource = source.startsWith('<?php') ? source : `<?php\n${source}`;
+  return childProcess.execFileSync('php', ['-d', 'extension=pdo_mysql'], {
+    cwd: process.cwd(),
+    env: seleniumPhpEnv(extraEnv),
+    input: phpSource,
+    stdio: ['pipe', 'pipe', 'pipe'],
+    timeout: 30000,
+  }).toString('utf8');
+}
+
 module.exports = {
   By,
   until,
@@ -402,4 +425,5 @@ module.exports = {
   requireAdminCredentials,
   writeTinyPngFixture,
   ensureSeleniumFixtures,
+  runSeleniumPhp,
 };

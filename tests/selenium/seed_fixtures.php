@@ -78,8 +78,8 @@ function selenium_fixture_seed_article(int $memberId): void
     }
 
     db()->prepare(
-        'INSERT INTO articles (slug, title, excerpt, content, status, category, subcategory, published_at, author_id)
-         VALUES (?, ?, ?, ?, "published", "radio", "selenium", NOW(), ?)
+        'INSERT INTO articles (slug, title, excerpt, content, status, category, subcategory, published_at, author_id, created_at, updated_at)
+         VALUES (?, ?, ?, ?, "published", "radio", "selenium", NOW(), ?, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 2 HOUR))
          ON DUPLICATE KEY UPDATE
             title = VALUES(title),
             excerpt = VALUES(excerpt),
@@ -88,7 +88,9 @@ function selenium_fixture_seed_article(int $memberId): void
             category = "radio",
             subcategory = "selenium",
             published_at = NOW(),
-            author_id = VALUES(author_id)'
+            author_id = VALUES(author_id),
+            created_at = DATE_SUB(NOW(), INTERVAL 2 HOUR),
+            updated_at = DATE_SUB(NOW(), INTERVAL 2 HOUR)'
     )->execute([
         'selenium-fixture-article',
         'Selenium fixture article radio',
