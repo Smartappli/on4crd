@@ -60,6 +60,7 @@ $totalPages = 1;
 $offset = 0;
 $photos = [];
 $coverPath = null;
+$coverDisplayPath = null;
 try {
     $countStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
     $countStmt->execute([(int) $album['id']]);
@@ -76,6 +77,11 @@ try {
     $coverStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1');
     $coverStmt->execute([(int) $album['id']]);
     $coverPath = album_photo_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''));
+    if ($coverPath !== null) {
+        $coverThumbPath = album_thumbnail_public_path($coverPath);
+        $coverThumbAbs = dirname(__DIR__) . '/' . $coverThumbPath;
+        $coverDisplayPath = $coverThumbPath !== '' && is_file($coverThumbAbs) ? $coverThumbPath : $coverPath;
+    }
 } catch (Throwable $throwable) {
     log_structured_event('album_detail_photos_prepare_failed', [
         'album_id' => (int) $album['id'],
@@ -168,8 +174,8 @@ ob_start();
 <div class="album-detail-page">
     <section class="album-detail-hero">
         <div class="album-detail-cover">
-            <?php if ($coverPath !== null): ?>
-                <img src="<?= e(base_url($coverPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
+            <?php if ($coverDisplayPath !== null): ?>
+                <img src="<?= e(base_url($coverDisplayPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
             <?php else: ?>
                 <span class="album-placeholder-mark" aria-hidden="true"></span>
             <?php endif; ?>
