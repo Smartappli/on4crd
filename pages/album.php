@@ -36,6 +36,16 @@ if ($albumTitle === '') {
     $albumTitle = (string) $t['title'];
 }
 $albumDescription = trim((string) ($album['description'] ?? ''));
+$albumDescriptionText = $albumDescription;
+if ($albumDescriptionText !== '') {
+    $albumDescriptionText = (string) preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $albumDescriptionText);
+    $albumDescriptionText = (string) preg_replace('/<\s*\/\s*(p|div|li|h[1-6])\s*>/i', "\n", $albumDescriptionText);
+    $albumDescriptionText = html_entity_decode(strip_tags($albumDescriptionText), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $albumDescriptionText = str_replace(["\r\n", "\r"], "\n", $albumDescriptionText);
+    $albumDescriptionText = (string) preg_replace('/[ \t]+/', ' ', $albumDescriptionText);
+    $albumDescriptionText = (string) preg_replace('/\n{3,}/', "\n\n", $albumDescriptionText);
+    $albumDescriptionText = trim($albumDescriptionText);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
     $user = require_login();
@@ -90,8 +100,8 @@ try {
 }
 $pageMeta = [
     'title' => $albumTitle,
-    'description' => $albumDescription !== '' ? $albumDescription : (string) $t['meta_desc'],
-    'ai_summary' => $albumDescription !== '' ? $albumDescription : (string) $t['meta_desc'],
+    'description' => $albumDescriptionText !== '' ? $albumDescriptionText : (string) $t['meta_desc'],
+    'ai_summary' => $albumDescriptionText !== '' ? $albumDescriptionText : (string) $t['meta_desc'],
     'canonical' => route_url_with_locale('album', $locale, ['id' => (int) $album['id']]),
     'schema_type' => 'ImageGallery',
     'keywords' => ['ON4CRD', 'Radio Club Durnal', 'album photo', 'radioamateur', 'activités club'],
@@ -230,7 +240,7 @@ ob_start();
                     }
                     ?>
                     <figure class="album-photo-card">
-                        <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener">
+                        <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener" data-album-viewer-open data-photo-title="<?= e($title) ?>" data-photo-caption="<?= e($caption) ?>">
                             <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>" loading="lazy" decoding="async">
                         </a>
                         <?php if ($title !== '' || $caption !== ''): ?>
@@ -255,6 +265,20 @@ ob_start();
             <?php endif; ?>
         <?php endif; ?>
     </section>
+
+    <dialog class="album-photo-viewer" id="album-photo-viewer" data-album-description="<?= e($albumDescriptionText) ?>" aria-labelledby="album-photo-viewer-title">
+        <div class="album-photo-viewer-card">
+            <button class="album-photo-viewer-close" type="button" data-album-viewer-close aria-label="Fermer">&times;</button>
+            <div class="album-photo-viewer-media">
+                <img src="" alt="" data-album-viewer-image>
+            </div>
+            <aside class="album-photo-viewer-copy" aria-live="polite">
+                <h2 id="album-photo-viewer-title" data-album-viewer-title></h2>
+                <p data-album-viewer-caption></p>
+                <p class="album-photo-viewer-description" data-album-viewer-description></p>
+            </aside>
+        </div>
+    </dialog>
 </div>
 <?php
 echo render_layout((string) ob_get_clean(), $albumTitle);
