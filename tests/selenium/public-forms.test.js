@@ -3,16 +3,52 @@ const {
   By,
   assert,
   routeUrl,
+  timeoutMs,
   withSelenium,
   visit,
   waitForDocumentReady,
   assertNoServerError,
+  pagePlainText,
   skipIfInstallWizard,
   elementExists,
   loginAsAdmin,
   requireAdminCredentials,
   ensureSeleniumFixtures,
+  runSeleniumPhp,
 } = require('./helpers');
+
+function cleanupNewsletterEmail(email) {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/newsletter.php';
+$email = getenv('SELENIUM_NEWSLETTER_EMAIL') ?: '';
+if ($email !== '') {
+    newsletter_ensure_tables();
+    $stmt = db()->prepare('SELECT id FROM newsletter_subscribers WHERE email = ?');
+    $stmt->execute([$email]);
+    $ids = array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN) ?: []);
+    if ($ids !== [] && table_exists('newsletter_deliveries')) {
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        db()->prepare('DELETE FROM newsletter_deliveries WHERE subscriber_id IN (' . $placeholders . ')')->execute($ids);
+    }
+    db()->prepare('DELETE FROM newsletter_subscribers WHERE email = ?')->execute([$email]);
+}
+`, { SELENIUM_NEWSLETTER_EMAIL: email });
+}
+
+function newsletterSubscriber(email) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/newsletter.php';
+$email = getenv('SELENIUM_NEWSLETTER_EMAIL') ?: '';
+newsletter_ensure_tables();
+$stmt = db()->prepare('SELECT email, status, unsubscribe_token FROM newsletter_subscribers WHERE email = ? LIMIT 1');
+$stmt->execute([$email]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: [], JSON_THROW_ON_ERROR);
+`, { SELENIUM_NEWSLETTER_EMAIL: email });
+
+  return JSON.parse(output);
+}
 
 test('Selenium login: captcha, champs et next sont conserves', async (t) => {
   await withSelenium(t, async (driver) => {
@@ -84,6 +120,42 @@ test('Selenium newsletter publique: email, consentement et CSRF sont presents', 
     assert.ok(await elementExists(driver, 'input[name="_csrf"]'));
     assert.ok(await elementExists(driver, 'input[type="email"][name="email"]'));
     assert.ok(await elementExists(driver, 'input[name="newsletter_consent"][type="checkbox"]'));
+  });
+});
+
+test('Selenium newsletter publique: inscription puis desinscription par jeton', async (t) => {
+  const email = `selenium.newsletter.${Date.now()}@example.test`;
+  cleanupNewsletterEmail(email);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await visit(driver, 'newsletter_public');
+      if (await skipIfInstallWizard(t, driver)) {
+        return;
+      }
+
+      const form = await driver.findElement(By.css('form.stack'));
+      await form.findElement(By.css('input[type="email"][name="email"]')).sendKeys(email);
+      await form.findElement(By.css('input[name="newsletter_consent"][type="checkbox"]')).click();
+      await form.findElement(By.css('button[type="submit"]')).click();
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+      await driver.wait(async () => /newsletter|abonn|subscription|confirmed/i.test(await pagePlainText(driver)), timeoutMs);
+
+      let subscriber = newsletterSubscriber(email);
+      assert.equal(subscriber.email, email);
+      assert.equal(subscriber.status, 'active');
+      assert.match(subscriber.unsubscribe_token, /^[a-f0-9]{48}$/);
+
+      await visit(driver, 'newsletter_unsubscribe', { token: subscriber.unsubscribe_token });
+      const text = await pagePlainText(driver);
+      assert.match(text, /desabonn|désabonn|unsubscribed|cancel/i);
+
+      subscriber = newsletterSubscriber(email);
+      assert.equal(subscriber.status, 'unsubscribed');
+    } finally {
+      cleanupNewsletterEmail(email);
+    }
   });
 });
 

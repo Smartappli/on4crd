@@ -1184,8 +1184,8 @@ function member_document_fetch_documents(string $moduleCode, string $search, int
 {
     $where = ['module_code = ?'];
     $params = [$moduleCode];
-    $category = member_document_category_code($category);
-    $subcategory = member_document_subcategory_code($subcategory);
+    $category = trim($category) !== '' ? member_document_category_code($category) : '';
+    $subcategory = trim($subcategory) !== '' ? member_document_subcategory_code($subcategory) : '';
     if ($category !== '') {
         $where[] = 'category = ?';
         $params[] = $category;
