@@ -607,6 +607,99 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
   });
 });
 
+test('Selenium admin taxonomies: modification des thematiques et sous-thematiques', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const token = `SELENIUMADMTAX${Date.now()}`;
+  cleanupAdminRows(token);
+  const fixture = prepareTaxonomyEditFixture(token);
+  const subcategoryRef = `${fixture.category}:${fixture.subcategory}`;
+  const modules = [
+    {
+      route: 'admin_albums',
+      categoryFields: { action: 'update_category', category_code: fixture.category },
+      subcategoryFields: { action: 'update_subcategory', subcategory_ref: subcategoryRef },
+      stateCategory: 'albums_category',
+      stateSubcategory: 'albums_subcategory',
+    },
+    {
+      route: 'admin_articles',
+      categoryFields: { action: 'update_category', category_code: fixture.category },
+      subcategoryFields: { action: 'update_subcategory', subcategory_ref: subcategoryRef },
+      stateCategory: 'articles_category',
+      stateSubcategory: 'articles_subcategory',
+    },
+    {
+      route: 'admin_wiki',
+      categoryFields: { action: 'update_category', category_code: fixture.category },
+      subcategoryFields: { action: 'update_subcategory', subcategory_ref: subcategoryRef },
+      stateCategory: 'wiki_category',
+      stateSubcategory: 'wiki_subcategory',
+    },
+    {
+      route: 'admin_webotheque',
+      categoryFields: { action: 'update_category', category: fixture.category },
+      subcategoryFields: { action: 'update_subcategory', subcategory_ref: subcategoryRef },
+      stateCategory: 'webotheque_category',
+      stateSubcategory: 'webotheque_subcategory',
+    },
+    {
+      route: 'admin_library',
+      categoryFields: { action: 'update_category', category_code: fixture.category },
+      subcategoryFields: { action: 'update_subcategory', subcategory_category: fixture.category, subcategory_code: fixture.subcategory },
+      stateCategory: 'library_category',
+      stateSubcategory: 'library_subcategory',
+    },
+    {
+      route: 'admin_presentations',
+      categoryFields: { action: 'update_category', category_code: fixture.category },
+      subcategoryFields: { action: 'update_subcategory', subcategory_ref: subcategoryRef },
+      stateCategory: 'presentations_category',
+      stateSubcategory: 'presentations_subcategory',
+    },
+  ];
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      for (const module of modules) {
+        const categoryLabel = `${module.route} category ${token}`;
+        const subcategoryLabel = `${module.route} subcategory ${token}`;
+        await visit(driver, module.route);
+        let csrf = await firstCsrfToken(driver);
+        let response = await postBrowserForm(driver, routeUrl(module.route), {
+          _csrf: csrf,
+          ...module.categoryFields,
+          category_label: categoryLabel,
+        });
+        assert.equal(response.ok, true, response.body);
+        assert.ok(response.status < 500, `${module.route} update_category ne doit pas produire d erreur serveur.`);
+        assert.doesNotMatch(response.body, /Une erreur interne|Internal Server Error|Fatal error/i);
+
+        await visit(driver, module.route);
+        csrf = await firstCsrfToken(driver);
+        response = await postBrowserForm(driver, routeUrl(module.route), {
+          _csrf: csrf,
+          ...module.subcategoryFields,
+          subcategory_label: subcategoryLabel,
+        });
+        assert.equal(response.ok, true, response.body);
+        assert.ok(response.status < 500, `${module.route} update_subcategory ne doit pas produire d erreur serveur.`);
+        assert.doesNotMatch(response.body, /Une erreur interne|Internal Server Error|Fatal error/i);
+
+        const state = taxonomyEditState(fixture.category, fixture.subcategory);
+        assert.equal(state[module.stateCategory], categoryLabel, `${module.route} doit modifier le libelle de thematique.`);
+        assert.equal(state[module.stateSubcategory], subcategoryLabel, `${module.route} doit modifier le libelle de sous-thematique.`);
+      }
+    } finally {
+      cleanupAdminRows(token);
+    }
+  });
+});
+
 test('Selenium admin articles: taxonomie, bulk update et relance programmee', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
