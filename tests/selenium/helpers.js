@@ -299,6 +299,7 @@ async function visibleImageCount(driver, selector) {
 }
 
 async function loginAsAdmin(driver, username, password) {
+  resetSeleniumLoginThrottle(username);
   try {
     await driver.manage().deleteAllCookies();
   } catch {
@@ -317,6 +318,35 @@ async function loginAsAdmin(driver, username, password) {
   await assertNoServerError(driver);
   await driver.wait(async () => !(await isLoginPage(driver)), timeoutMs, 'Connexion admin Selenium echouee.');
   await assertNoServerError(driver);
+}
+
+function resetSeleniumLoginThrottle(username) {
+  if (process.env.SELENIUM_RESET_LOGIN_THROTTLE === '0') {
+    return;
+  }
+
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$username = strtoupper(trim((string) (getenv('SELENIUM_THROTTLE_USERNAME') ?: '')));
+if ($username !== '' && table_exists('users_throttling')) {
+    $bucket = static function (array $criteria): string {
+        return rtrim(strtr(base64_encode(hash('sha256', implode("\\n", $criteria), true)), '+/', '-_'), '=');
+    };
+    $buckets = [
+        $bucket(['enumerateUsers', '127.0.0.1']),
+        $bucket(['enumerateUsers', '::1']),
+        $bucket(['enumerateUsers', '::ffff:127.0.0.1']),
+        $bucket(['enumerateUsers', '']),
+        $bucket(['attemptToLogin', '127.0.0.1']),
+        $bucket(['attemptToLogin', '::1']),
+        $bucket(['attemptToLogin', '::ffff:127.0.0.1']),
+        $bucket(['attemptToLogin', '']),
+        $bucket(['attemptToLogin', 'username', $username]),
+    ];
+    $placeholders = implode(',', array_fill(0, count($buckets), '?'));
+    db()->prepare('DELETE FROM users_throttling WHERE bucket IN (' . $placeholders . ')')->execute($buckets);
+}
+`, { SELENIUM_THROTTLE_USERNAME: username });
 }
 
 function requireAdminCredentials(t) {
