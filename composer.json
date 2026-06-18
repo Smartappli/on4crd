@@ -13,6 +13,7 @@
   },
   "scripts": {
     "lint": "php tools/lint.php",
+    "analyse": "@php vendor/bin/phpstan analyse --no-progress --memory-limit=1G",
     "duplication": "php tools/check_duplication.php --threshold=3",
     "test": "@php vendor/bin/phpunit --configuration phpunit.xml.dist --testdox"
   },

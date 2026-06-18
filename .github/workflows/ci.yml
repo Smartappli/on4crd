@@ -68,7 +68,7 @@ jobs:
       - *install_dependencies_step
 
       - name: SAST (PHPStan)
-        run: php vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+        run: composer analyse
 
       - name: Dependency audit
         run: composer audit --no-interaction
