@@ -177,6 +177,12 @@ if ($albumIds !== []) {
     }
     $deleteIds('albums', 'id', $albumIds);
 }
+if (table_exists('album_subcategories')) {
+    db()->prepare('DELETE FROM album_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('album_categories')) {
+    db()->prepare('DELETE FROM album_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
 
 $articleIds = $idsFor('articles', 'slug LIKE ? OR title LIKE ? OR excerpt LIKE ? OR content LIKE ? OR category LIKE ? OR subcategory LIKE ?', [$like, $like, $like, $like, $like, $like]);
 if ($articleIds !== []) {
@@ -189,6 +195,30 @@ if (table_exists('article_subcategories')) {
 }
 if (table_exists('article_categories')) {
     db()->prepare('DELETE FROM article_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+if (table_exists('wiki_subcategories')) {
+    db()->prepare('DELETE FROM wiki_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('wiki_categories')) {
+    db()->prepare('DELETE FROM wiki_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+if (table_exists('member_webotheque_subcategories')) {
+    db()->prepare('DELETE FROM member_webotheque_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('member_webotheque_categories')) {
+    db()->prepare('DELETE FROM member_webotheque_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+if (table_exists('member_library_subcategories')) {
+    db()->prepare('DELETE FROM member_library_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('member_library_categories')) {
+    db()->prepare('DELETE FROM member_library_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
+if (table_exists('member_module_subcategories')) {
+    db()->prepare('DELETE FROM member_module_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('member_module_categories')) {
+    db()->prepare('DELETE FROM member_module_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
 }
 
 $newsIds = $idsFor('news_posts', 'slug LIKE ? OR title LIKE ? OR excerpt LIKE ? OR content LIKE ?', [$like, $like, $like, $like]);
@@ -444,6 +474,84 @@ foreach ($stmt->fetchAll() ?: [] as $row) {
 }
 echo json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_IDS: ids.join(',') });
+}
+
+function prepareTaxonomyEditFixture(token) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+$token = strtolower(trim((string) getenv('SELENIUM_TOKEN')));
+$category = $token . '-cat';
+$subcategory = $token . '-sub';
+$categoryLabel = 'Category ' . $token;
+$subcategoryLabel = 'Subcategory ' . $token;
+
+album_ensure_categories_table();
+album_ensure_subcategories_table();
+db()->prepare('INSERT INTO album_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')->execute([$category, $categoryLabel]);
+db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')->execute([$category, $subcategory, $subcategoryLabel]);
+
+article_ensure_taxonomy_schema(i18n_domain_locale('articles', 'fr'));
+db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')->execute([$category, $categoryLabel]);
+db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')->execute([$category, $subcategory, $subcategoryLabel]);
+
+ensure_wiki_tables();
+wiki_ensure_categories_table();
+wiki_ensure_subcategories_table();
+db()->prepare('INSERT INTO wiki_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')->execute([$category, $categoryLabel]);
+db()->prepare('INSERT INTO wiki_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')->execute([$category, $subcategory, $subcategoryLabel]);
+
+ensure_webotheque_table();
+webotheque_ensure_categories_table(i18n_domain_locale('webotheque', 'fr'));
+webotheque_ensure_subcategories_table();
+db()->prepare('INSERT INTO member_webotheque_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')->execute([$category, $categoryLabel]);
+db()->prepare('INSERT INTO member_webotheque_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')->execute([$category, $subcategory, $subcategoryLabel]);
+
+member_library_ensure_categories_table();
+member_library_ensure_subcategories_table();
+db()->prepare('INSERT INTO member_library_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')->execute([$category, $categoryLabel]);
+db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')->execute([$category, $subcategory, $subcategoryLabel]);
+
+ensure_member_module_documents_table();
+member_document_ensure_categories_table('presentations');
+member_document_ensure_subcategories_table('presentations');
+db()->prepare('INSERT INTO member_module_categories (module_code, code, label, deleted_at) VALUES ("presentations", ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')->execute([$category, $categoryLabel]);
+db()->prepare('INSERT INTO member_module_subcategories (module_code, category_code, code, label, deleted_at) VALUES ("presentations", ?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')->execute([$category, $subcategory, $subcategoryLabel]);
+
+echo json_encode(['category' => $category, 'subcategory' => $subcategory], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_TOKEN: token });
+}
+
+function taxonomyEditState(category, subcategory) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$category = trim((string) getenv('SELENIUM_CATEGORY'));
+$subcategory = trim((string) getenv('SELENIUM_SUBCATEGORY'));
+$state = [];
+$single = static function (string $table, string $where, array $params): ?string {
+    if (!table_exists($table)) {
+        return null;
+    }
+    $stmt = db()->prepare('SELECT label FROM ' . $table . ' WHERE ' . $where . ' LIMIT 1');
+    $stmt->execute($params);
+    $value = $stmt->fetchColumn();
+    return is_string($value) ? $value : null;
+};
+$state['albums_category'] = $single('album_categories', 'code = ?', [$category]);
+$state['albums_subcategory'] = $single('album_subcategories', 'category_code = ? AND code = ?', [$category, $subcategory]);
+$state['articles_category'] = $single('article_categories', 'code = ?', [$category]);
+$state['articles_subcategory'] = $single('article_subcategories', 'category_code = ? AND code = ?', [$category, $subcategory]);
+$state['wiki_category'] = $single('wiki_categories', 'code = ?', [$category]);
+$state['wiki_subcategory'] = $single('wiki_subcategories', 'category_code = ? AND code = ?', [$category, $subcategory]);
+$state['webotheque_category'] = $single('member_webotheque_categories', 'code = ?', [$category]);
+$state['webotheque_subcategory'] = $single('member_webotheque_subcategories', 'category_code = ? AND code = ?', [$category, $subcategory]);
+$state['library_category'] = $single('member_library_categories', 'code = ?', [$category]);
+$state['library_subcategory'] = $single('member_library_subcategories', 'category_code = ? AND code = ?', [$category, $subcategory]);
+$state['presentations_category'] = $single('member_module_categories', 'module_code = "presentations" AND code = ?', [$category]);
+$state['presentations_subcategory'] = $single('member_module_subcategories', 'module_code = "presentations" AND category_code = ? AND code = ?', [$category, $subcategory]);
+echo json_encode($state, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_CATEGORY: category, SELENIUM_SUBCATEGORY: subcategory });
 }
 
 test('Selenium admin albums: maintenance album, photos, ordre et miniatures', async (t) => {
