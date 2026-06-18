@@ -1027,9 +1027,44 @@ function member_profile_preview_rows(array $member, string $viewer, callable $t,
 if (!function_exists('member_profile_select_columns_sql')) {
 function member_profile_select_columns_sql(): string
 {
+    $columnSql = static function (string $column, string $default = "''"): string {
+        return table_has_column('members', $column) ? $column : $default . ' AS ' . $column;
+    };
     $visibilityColumnSql = static function (string $column, string $default = 'members'): string {
         return table_has_column('members', $column) ? $column : "'" . $default . "' AS " . $column;
     };
+
+    $profileColumns = [
+        $columnSql('callsign'),
+        $columnSql('first_name'),
+        $columnSql('last_name'),
+        $columnSql('full_name'),
+        $columnSql('email'),
+        $columnSql('phone'),
+        $columnSql('country'),
+        $columnSql('address'),
+        $columnSql('postal_code'),
+        $columnSql('qth'),
+        $columnSql('locator'),
+        $columnSql('licence_class'),
+        $columnSql('operator_since'),
+        $columnSql('cq_zone'),
+        $columnSql('itu_zone'),
+        $columnSql('qsl_via'),
+        $columnSql('lotw_username'),
+        $columnSql('eqsl_username'),
+        $columnSql('qrz_url'),
+        $columnSql('website'),
+        $columnSql('is_uba_member', '0'),
+        $columnSql('uba_member_number'),
+        $columnSql('station_equipment'),
+        $columnSql('antennas'),
+        $columnSql('favourite_bands'),
+        $columnSql('favourite_modes'),
+        $columnSql('interests'),
+        $columnSql('photo_path'),
+        $columnSql('avatar_path'),
+    ];
 
     $visibilityColumns = [
         $visibilityColumnSql('visibility_photo', 'private'),
@@ -1055,10 +1090,7 @@ function member_profile_select_columns_sql(): string
         $visibilityColumnSql('visibility_interests', 'private'),
     ];
 
-    return 'callsign, first_name, last_name, full_name, email, phone, country, address, postal_code, qth, locator, licence_class, operator_since, cq_zone, itu_zone,
-            qsl_via, lotw_username, eqsl_username, qrz_url, website, is_uba_member, uba_member_number, station_equipment, antennas,
-            favourite_bands, favourite_modes, interests, photo_path, avatar_path, '
-            . implode(', ', $visibilityColumns);
+    return implode(', ', array_merge($profileColumns, $visibilityColumns));
 }
 }
 

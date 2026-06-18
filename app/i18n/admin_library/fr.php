@@ -63,7 +63,7 @@ return array (
   'ingestion_template' => 'Modele d ingestion',
   'ingestion_template_none' => 'Aucun',
   'ingestion_template_training' => 'Formation',
-  'ingestion_template_safety' => 'Securite',
+  'ingestion_template_safety' => 'Sécurité',
   'ingestion_template_technical' => 'Technique',
   'ingestion_template_legal' => 'Juridique',
   'err_category_has_subcategories' => 'Supprimez d’abord toutes les sous-thématiques de cette thématique.',

@@ -92,11 +92,13 @@ $proposalAreaLabels = [
     'auctions' => $text('auctions_title', $isFrench ? 'Encheres' : 'Auctions'),
     'classifieds' => $text('classifieds_title', 'Classifieds'),
     'events' => $text('events_title', 'Events'),
-    'members_library' => $text('library_title', $isFrench ? 'Bibliotheque membres' : 'Member library'),
-    'news' => $text('news_title', $isFrench ? 'Actualites' : 'News'),
+    'members_library' => $text('library_title', $isFrench ? 'Bibliothèque membres' : 'Member library'),
+    'news' => $text('news_title', $isFrench ? 'Actualités' : 'News'),
+    'fichiers' => $text('files_title', $isFrench ? 'Fichiers' : 'Files'),
     'presentations' => $text('presentations_title', $isFrench ? 'Presentations' : 'Presentations'),
+    'pv' => $text('minutes_title', $isFrench ? 'Proces verbaux' : 'Minutes'),
     'videos' => $text('videos_title', $isFrench ? 'Videos' : 'Videos'),
-    'webotheque' => $text('webotheque_title', $isFrench ? 'Webotheque' : 'Web library'),
+    'webotheque' => $text('webotheque_title', $isFrench ? 'Webothèque' : 'Web library'),
     'wiki' => $text('wiki_title', 'Wiki'),
 ];
 $proposalTypeLabels = [
@@ -113,13 +115,27 @@ $proposalAreaRoutes = [
     'events' => 'events',
     'members_library' => 'members_library',
     'news' => 'news',
+    'fichiers' => 'fichiers',
     'presentations' => 'presentations',
+    'pv' => 'pv',
     'videos' => 'videos',
     'webotheque' => 'webotheque',
     'wiki' => 'wiki',
 ];
 
 $cards = [];
+$directDocumentSourceRefs = [];
+$normalizeDocumentSourceRef = static function (string $value): string {
+    $value = rawurldecode(trim(str_replace('\\', '/', $value)));
+    if ($value === '') {
+        return '';
+    }
+    if (preg_match('~(storage/uploads/(?:library|member_modules)/[^\s?#]+)~i', $value, $matches) === 1) {
+        return ltrim((string) $matches[1], '/');
+    }
+
+    return ltrim($value, '/');
+};
 
 $privacyRequests = privacy_member_requests((int) $user['id']);
 foreach ($privacyRequests as $request) {
@@ -218,6 +234,103 @@ if (table_exists('classified_ads') && table_has_column('classified_ads', 'owner_
     }
 }
 
+if (table_exists('member_library_documents')) {
+    try {
+        $stmt = db()->prepare('SELECT id, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_library_documents WHERE member_id = ? ORDER BY uploaded_at DESC, id DESC LIMIT 50');
+        $stmt->execute([(int) $user['id']]);
+        foreach (($stmt->fetchAll() ?: []) as $document) {
+            $titleValue = trim((string) ($document['title'] ?? ''));
+            if ($titleValue === '') {
+                $titleValue = $text('library_document_default_title', $isFrench ? 'Document' : 'Document');
+            }
+            $uploadedAt = (string) ($document['uploaded_at'] ?? 'now');
+            $categoryValue = trim((string) ($document['category'] ?? ''));
+            $subcategoryValue = trim((string) ($document['subcategory'] ?? ''));
+            $sourceKey = $normalizeDocumentSourceRef((string) ($document['file_path'] ?? ''));
+            if ($sourceKey !== '') {
+                $directDocumentSourceRefs[$sourceKey] = true;
+            }
+            $urlQuery = ['q' => $titleValue];
+            if ($categoryValue !== '') {
+                $urlQuery['category'] = $categoryValue;
+            }
+            if ($subcategoryValue !== '') {
+                $urlQuery['subcategory'] = $subcategoryValue;
+            }
+            $metaParts = [$text('library_title', $isFrench ? 'Bibliothèque membres' : 'Member library')];
+            if ($categoryValue !== '') {
+                $metaParts[] = $categoryValue;
+            }
+            if ($subcategoryValue !== '') {
+                $metaParts[] = $subcategoryValue;
+            }
+            $cards[] = [
+                'timestamp' => $timestampFor($uploadedAt),
+                'status' => (string) ($statusLabels['published'] ?? ($isFrench ? 'Publie' : 'Published')),
+                'title' => $titleValue,
+                'meta' => implode(' / ', $metaParts),
+                'date' => $formatRequestDate($uploadedAt),
+                'note' => trim((string) ($document['description'] ?? '')),
+                'url' => route_url_clean('members_library', $urlQuery),
+                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
+            ];
+        }
+    } catch (Throwable $throwable) {
+        log_structured_event('my_requests_member_library_documents_load_failed', ['message' => $throwable->getMessage()]);
+    }
+}
+
+if (table_exists('member_module_documents')) {
+    try {
+        $stmt = db()->prepare('SELECT id, module_code, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_module_documents WHERE member_id = ? ORDER BY uploaded_at DESC, id DESC LIMIT 100');
+        $stmt->execute([(int) $user['id']]);
+        foreach (($stmt->fetchAll() ?: []) as $document) {
+            $moduleCode = preg_replace('/[^a-z0-9_]/', '', strtolower((string) ($document['module_code'] ?? ''))) ?: '';
+            if ($moduleCode === '') {
+                continue;
+            }
+            $titleValue = trim((string) ($document['title'] ?? ''));
+            if ($titleValue === '') {
+                $titleValue = $text('document_default_title', $isFrench ? 'Document' : 'Document');
+            }
+            $uploadedAt = (string) ($document['uploaded_at'] ?? 'now');
+            $categoryValue = trim((string) ($document['category'] ?? ''));
+            $subcategoryValue = trim((string) ($document['subcategory'] ?? ''));
+            $sourceKey = $normalizeDocumentSourceRef((string) ($document['file_path'] ?? ''));
+            if ($sourceKey !== '') {
+                $directDocumentSourceRefs[$sourceKey] = true;
+            }
+            $route = (string) ($proposalAreaRoutes[$moduleCode] ?? $moduleCode);
+            $urlQuery = ['q' => $titleValue];
+            if ($categoryValue !== '') {
+                $urlQuery['category'] = $categoryValue;
+            }
+            if ($subcategoryValue !== '') {
+                $urlQuery['subcategory'] = $subcategoryValue;
+            }
+            $metaParts = [(string) ($proposalAreaLabels[$moduleCode] ?? ucfirst(str_replace('_', ' ', $moduleCode)))];
+            if ($categoryValue !== '') {
+                $metaParts[] = $categoryValue;
+            }
+            if ($subcategoryValue !== '') {
+                $metaParts[] = $subcategoryValue;
+            }
+            $cards[] = [
+                'timestamp' => $timestampFor($uploadedAt),
+                'status' => (string) ($statusLabels['published'] ?? ($isFrench ? 'Publie' : 'Published')),
+                'title' => $titleValue,
+                'meta' => implode(' / ', $metaParts),
+                'date' => $formatRequestDate($uploadedAt),
+                'note' => trim((string) ($document['description'] ?? '')),
+                'url' => route_url_clean($route, $urlQuery),
+                'cta' => $text('content_open', $isFrench ? 'Ouvrir' : 'Open'),
+            ];
+        }
+    } catch (Throwable $throwable) {
+        log_structured_event('my_requests_member_module_documents_load_failed', ['message' => $throwable->getMessage()]);
+    }
+}
+
 if (ensure_content_proposals_table()) {
     try {
         $stmt = db()->prepare('SELECT id, area, proposal_type, title, summary, contact, source_ref, status, moderation_note, created_at, updated_at FROM content_proposals WHERE member_id = ? ORDER BY updated_at DESC, id DESC LIMIT 100');
@@ -229,6 +342,15 @@ if (ensure_content_proposals_table()) {
             $proposalTitle = trim((string) ($proposal['title'] ?? $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal')));
             if ($proposalTitle === '') {
                 $proposalTitle = $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal');
+            }
+            $proposalSourceKey = $normalizeDocumentSourceRef((string) ($proposal['source_ref'] ?? ''));
+            if (
+                $proposalStatus === 'accepted'
+                && $proposalType === 'content'
+                && $proposalSourceKey !== ''
+                && isset($directDocumentSourceRefs[$proposalSourceKey])
+            ) {
+                continue;
             }
             $updatedAt = (string) ($proposal['updated_at'] ?? $proposal['created_at'] ?? 'now');
             $route = (string) ($proposalAreaRoutes[$area] ?? 'my_requests');

@@ -9,7 +9,7 @@ function hamqsl_widget_variants(): array
             'title' => 'HAMQSL - Propagation HF/VHF',
             'description' => 'Resume visuel des conditions HF/VHF, MUF et EME.',
             'image' => 'solarn0nbh.php',
-            'alt' => 'Donnees solaires et conditions HF VHF HAMQSL',
+            'alt' => 'Données solaires et conditions HF VHF HAMQSL',
             'layout' => 'wide',
         ],
         'hamqsl_solar_image' => [

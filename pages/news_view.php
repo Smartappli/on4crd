@@ -55,9 +55,9 @@ set_page_meta([
     'schema_type' => 'NewsArticle',
     'published_time' => $newsPublishedAt,
     'modified_time' => $newsModifiedAt,
-    'section' => (string) ($t['published_on'] ?? 'Actualite'),
-    'tags' => ['ON4CRD', 'Radio Club Durnal', 'actualite radioamateur'],
-    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'actualite radioamateur', 'Belgique', 'Namur'],
+    'section' => (string) ($t['published_on'] ?? 'Actualité'),
+    'tags' => ['ON4CRD', 'Radio Club Durnal', 'actualité radioamateur'],
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'actualité radioamateur', 'Belgique', 'Namur'],
     'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         '@context' => 'https://schema.org',

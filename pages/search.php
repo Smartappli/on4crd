@@ -215,7 +215,7 @@ if ($hasQuery && $isQueryLongEnough) {
                     $where .= ' OR (title LIKE ? OR description LIKE ? OR extracted_text LIKE ? OR tags LIKE ?)';
                     array_push($params, $termLike, $termLike, $termLike, $termLike);
                 }
-                $stmt = db()->prepare('SELECT title, description, extracted_text, category, subcategory, tags FROM member_library_documents WHERE ' . $where . ' ORDER BY uploaded_at DESC LIMIT 35');
+                $stmt = db()->prepare('SELECT title, description, extracted_text, category, subcategory, tags FROM member_library_documents WHERE ' . $where . ' ORDER BY uploaded_at DESC, id DESC LIMIT 35');
                 $stmt->execute($params);
                 foreach ($stmt->fetchAll() ?: [] as $row) {
                     $title = trim((string) ($row['title'] ?? ''));

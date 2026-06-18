@@ -484,7 +484,7 @@ function album_category_label_from_code(string $code): string
 {
     $label = trim(str_replace('-', ' ', album_category_code($code)));
     if ($label === '') {
-        return 'General';
+        return 'Général';
     }
 
     try {
@@ -504,8 +504,8 @@ function album_category_label_from_code(string $code): string
 function album_default_categories(): array
 {
     return [
-        'general' => 'General',
-        'activites' => 'Activites club',
+        'general' => 'Général',
+        'activites' => 'Activités club',
         'contests' => 'Contests',
         'formations' => 'Formations',
         'sorties' => 'Sorties',
@@ -785,12 +785,12 @@ function render_album_taxonomy_fields(array $categories, array $labels = [], str
 
 function album_proposal_description_from_summary(string $summary): ?string
 {
-    $description = content_proposal_detail_from_summary($summary, ['Description', 'Resume', 'Summary']);
-    $theme = content_proposal_detail_from_summary($summary, ['Thematique', 'Theme', 'Topic']);
-    $keywords = content_proposal_detail_from_summary($summary, ['Mots cles', 'Keywords', 'Tags']);
+    $description = content_proposal_detail_from_summary($summary, ['Description', 'Résumé', 'Resume', 'Summary']);
+    $theme = content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic']);
+    $keywords = content_proposal_detail_from_summary($summary, ['Mots clés', 'Mots cles', 'Keywords', 'Tags']);
     $metadata = content_proposal_details_text([
-        'Thematique' => $theme,
-        'Mots cles' => $keywords,
+        'Thématique' => $theme,
+        'Mots clés' => $keywords,
     ]);
     $albumDescription = trim($description . ($metadata !== '' ? "\n\n" . $metadata : ''));
 
@@ -934,10 +934,10 @@ function album_apply_accepted_proposal(array $proposal): ?int
         album_update_record(
             $albumId,
             $title,
-            (string) (content_proposal_detail_from_summary($summary, ['Description', 'Resume', 'Summary']) ?: ''),
+            (string) (content_proposal_detail_from_summary($summary, ['Description', 'Résumé', 'Resume', 'Summary']) ?: ''),
             null,
-            (string) (content_proposal_detail_from_summary($summary, ['Thematique', 'Thématique', 'Theme', 'Topic']) ?: 'general'),
-            (string) (content_proposal_detail_from_summary($summary, ['Sous-thematique', 'Sous-thématique', 'Subtopic']) ?: '')
+            (string) (content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic']) ?: 'general'),
+            (string) (content_proposal_detail_from_summary($summary, ['Sous-thématique', 'Sous-thematique', 'Subtopic']) ?: '')
         );
 
         return $albumId;
@@ -951,8 +951,8 @@ function album_apply_accepted_proposal(array $proposal): ?int
     }
 
     $description = album_proposal_description_from_summary($summary);
-    $category = album_category_code((string) (content_proposal_detail_from_summary($summary, ['Thematique', 'Thématique', 'Theme', 'Topic']) ?: 'general'));
-    $subcategory = album_subcategory_code((string) (content_proposal_detail_from_summary($summary, ['Sous-thematique', 'Sous-thématique', 'Subtopic']) ?: ''));
+    $category = album_category_code((string) (content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic']) ?: 'general'));
+    $subcategory = album_subcategory_code((string) (content_proposal_detail_from_summary($summary, ['Sous-thématique', 'Sous-thematique', 'Subtopic']) ?: ''));
     db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public, source_proposal_id) VALUES (?, ?, ?, ?, ?, 1, ?)')
         ->execute([max(0, (int) ($proposal['member_id'] ?? 0)), $category, $subcategory, $title, $description, $proposalId]);
     $albumId = (int) db()->lastInsertId();

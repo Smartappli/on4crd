@@ -43,7 +43,7 @@ return array (
   'admin_ads_title' => 'Publicités',
   'admin_ads_desc' => 'Régie publicitaire, placements et statistiques.',
   'admin_privacy_title' => 'RGPD',
-  'admin_privacy_desc' => 'Demandes de donnees, export, suppression et suivi.',
+  'admin_privacy_desc' => 'Demandes de données, export, suppression et suivi.',
   'admin_classifieds_title' => 'Petites annonces',
   'admin_classifieds_desc' => 'Modération des annonces membres.',
   'admin_presentations_title' => 'Présentations',

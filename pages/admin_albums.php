@@ -157,6 +157,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('admin_albums');
         }
 
+        if ($action === 'update_category') {
+            if (!album_ensure_categories_table()) {
+                throw new RuntimeException((string) $t['storage_unavailable']);
+            }
+            $category = album_category_from_input((string) ($_POST['category_code'] ?? ''), $albumCategories);
+            $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+            if ($label === '') {
+                throw new RuntimeException((string) $t['title_required']);
+            }
+            db()->prepare('INSERT INTO album_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                ->execute([$category, $label]);
+            album_clear_caches();
+            set_flash('success', (string) $t['created_ok']);
+            redirect('admin_albums');
+        }
+
         if ($action === 'delete_category') {
             if (!album_ensure_categories_table()) {
                 throw new RuntimeException((string) $t['storage_unavailable']);
@@ -190,6 +206,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$category, $code, $label]);
+            album_clear_caches();
+            set_flash('success', (string) $t['created_ok']);
+            redirect('admin_albums');
+        }
+
+        if ($action === 'update_subcategory') {
+            if (!album_ensure_subcategories_table()) {
+                throw new RuntimeException((string) $t['storage_unavailable']);
+            }
+            $parts = album_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+            $category = album_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $albumCategories);
+            $subcategory = album_subcategory_code($parts['subcategory']);
+            $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+            if ($subcategory === '' || $label === '') {
+                throw new RuntimeException((string) $t['title_required']);
+            }
+            db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $subcategory, $label]);
             album_clear_caches();
             set_flash('success', (string) $t['created_ok']);
             redirect('admin_albums');
@@ -641,10 +675,12 @@ ob_start();
                 <?php $categoryDeleteDisabled = (string) $code === 'general' || $subcategoryTotal > 0; ?>
                 <form method="post" class="inline-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="delete_category">
+                    <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
-                    <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
-                    <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                    <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
+                    <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
+                    <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
                 </form>
             <?php endforeach; ?>
             <?php foreach ($albumSubcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -654,10 +690,12 @@ ob_start();
                     <?php $subTotal = (int) ($albumSubcategoryCounts[(string) $parentCode . ':' . $subCode] ?? 0); ?>
                     <form method="post" class="inline-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_ref" value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                        <span class="pill"><?= e((string) ($albumCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
-                        <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                        <span class="pill"><?= e((string) ($albumCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                        <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>
@@ -810,6 +848,7 @@ ob_start();
                             <p class="help"><?= (int) $album['photo_count'] ?> <?= e((string) $t['photos']) ?> · <?= e((string) $t['created_at']) ?> <?= e((string) $album['created_at']) ?></p>
                             <div class="actions">
                                 <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                                <span class="pill"><?= e((string) $t['public_album']) ?>: <?= (int) $album['is_public'] === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
                                 <a class="button secondary small" href="<?= e(route_url('album', ['id' => (int) $album['id']])) ?>"><?= e((string) $t['view_public']) ?></a>
                             </div>
                         </form>

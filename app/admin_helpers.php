@@ -84,12 +84,12 @@ function admin_pending_content_areas(): array
         'albums' => ['route' => 'admin_albums', 'permission' => 'albums.manage', 'label' => ['fr' => 'Albums', 'en' => 'Albums']],
         'auctions' => ['route' => 'admin_auctions', 'permission' => 'auctions.manage', 'label' => ['fr' => 'Encheres', 'en' => 'Auctions']],
         'classifieds' => ['route' => 'admin_classifieds', 'permission' => 'classifieds.moderate', 'label' => ['fr' => 'Petites annonces', 'en' => 'Classifieds']],
-        'events' => ['route' => 'admin_events', 'permission' => 'events.manage', 'label' => ['fr' => 'Evenements', 'en' => 'Events']],
-        'members_library' => ['route' => 'admin_library', 'permission' => 'admin.access', 'label' => ['fr' => 'Bibliotheque membres', 'en' => 'Member library']],
-        'news' => ['route' => 'admin_news', 'permission' => 'news.moderate', 'label' => ['fr' => 'Actualites', 'en' => 'News']],
+        'events' => ['route' => 'admin_events', 'permission' => 'events.manage', 'label' => ['fr' => 'Événements', 'en' => 'Events']],
+        'members_library' => ['route' => 'admin_library', 'permission' => 'admin.access', 'label' => ['fr' => 'Bibliothèque membres', 'en' => 'Member library']],
+        'news' => ['route' => 'admin_news', 'permission' => 'news.moderate', 'label' => ['fr' => 'Actualités', 'en' => 'News']],
         'presentations' => ['route' => 'admin_presentations', 'permission' => 'admin.access', 'label' => ['fr' => 'Presentations', 'en' => 'Presentations']],
         'videos' => ['route' => 'admin_videos', 'permission' => 'admin.access', 'label' => ['fr' => 'Videos', 'en' => 'Videos']],
-        'webotheque' => ['route' => 'admin_webotheque', 'permission' => 'admin.access', 'label' => ['fr' => 'Webotheque', 'en' => 'Web library']],
+        'webotheque' => ['route' => 'admin_webotheque', 'permission' => 'admin.access', 'label' => ['fr' => 'Webothèque', 'en' => 'Web library']],
         'wiki' => ['route' => 'admin_wiki', 'permission' => 'wiki.moderate', 'label' => ['fr' => 'Wiki', 'en' => 'Wiki']],
     ];
 }

@@ -122,7 +122,15 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
       await driver.wait(until.urlContains('route=admin_albums'), timeoutMs);
       await assertNoServerError(driver);
 
+      const detailLink = await driver.findElement(By.xpath(`//article[contains(@class,"article-item")][.//input[@name="title" and @value="${title}"]]//a[contains(@href,"route=album")]`));
+      await driver.get(await detailLink.getAttribute('href'));
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+      assert.ok((await driver.findElements(By.css('.album-photo-card img'))).length >= 1, 'Un admin doit pouvoir previsualiser un album finalise avec ses images meme s il reste prive.');
+
       if (process.env.SELENIUM_CREATE_PUBLIC_ALBUM === '1') {
+        await driver.get(routeUrl('admin_albums'));
+        await waitForDocumentReady(driver);
         const publicLink = await driver.findElement(By.xpath(`//article[contains(@class,"article-item")][.//input[@name="title" and @value="${title}"]]//a[contains(@href,"route=album")]`));
         await driver.get(await publicLink.getAttribute('href'));
         await waitForDocumentReady(driver);

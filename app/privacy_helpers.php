@@ -116,7 +116,7 @@ if (!function_exists('privacy_contact_config')) {
         return [
             'controller_name' => trim((string) config('privacy.controller_name', 'Radio Club Durnal ON4CRD')),
             'controller_email' => trim((string) config('privacy.controller_email', 'crdurnal@gmail.com')),
-            'controller_postal_address' => trim((string) config('privacy.controller_postal_address', 'Rue des Ecoles, 5530 Purnode, Belgique')),
+            'controller_postal_address' => trim((string) config('privacy.controller_postal_address', 'Rue des Écoles, 5530 Purnode, Belgique')),
             'dpo_email' => trim((string) config('privacy.dpo_email', '')),
             'supervisory_authority' => trim((string) config('privacy.supervisory_authority', 'Autorité de protection des données, https://www.autoriteprotectiondonnees.be/')),
         ];

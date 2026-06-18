@@ -124,7 +124,7 @@ function render_widget(string $slug, array $user = []): string
             if (!is_array($current)) {
                 $weatherUnavailable = match ($locale) {
                     'en' => 'Weather data is currently unavailable.',
-                    default => 'Donnees meteo indisponibles pour le moment.',
+                    default => 'Données météo indisponibles pour le moment.',
                 };
                 return '<p class="help">' . e($weatherUnavailable) . '</p>';
             }

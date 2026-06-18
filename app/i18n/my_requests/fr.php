@@ -51,7 +51,7 @@ return array (
   'proposal_type_content' => 'Proposition de contenu',
   'library_title' => 'Bibliothèque membres',
   'news_title' => 'Actualités',
-  'webotheque_title' => 'Webotheque',
+  'webotheque_title' => 'Webothèque',
   'wiki_title' => 'Wiki',
   'wiki_default_title' => 'Page wiki',
   'classified_default_title' => 'Annonce',

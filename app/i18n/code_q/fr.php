@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Code Q radioamateur etendu',
-  'intro' => 'Tableau etendu des Q-codes utilises en radiocommunication radioamateur et en trafic general.',
+  'title' => 'Code Q radioamateur étendu',
+  'intro' => 'Tableau étendu des Q-codes utilisés en radiocommunication radioamateur et en trafic général.',
   'meaning' => 'Signification',
   'code' => 'Code Q',
   'codes' => 
@@ -48,7 +48,7 @@ return array (
     'QSQ' => 'Medecin a bord ?',
     'QSR' => 'Repeter sur frequence',
     'QSS' => 'Quelle frequence de travail ?',
-    'QST' => 'Message general',
+    'QST' => 'Message général',
     'QSU' => 'Emettre sur frequence actuelle',
     'QSV' => 'Serie de V',
     'QSW' => 'Emettre sur cette frequence',

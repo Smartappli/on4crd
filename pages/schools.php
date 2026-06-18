@@ -5,7 +5,7 @@ $locale = current_locale();
 $t = i18n_domain_locale('schools', $locale);
 
 set_page_meta([
-    'title' => (string) ($t['meta_title'] ?? 'Ecoles radio'),
+    'title' => (string) ($t['meta_title'] ?? 'Écoles radio'),
     'description' => (string) ($t['meta_desc'] ?? ''),
     'schema_type' => 'WebPage',
 ]);
@@ -48,4 +48,4 @@ ob_start();
     <?php endforeach; ?>
 </section>
 <?php
-echo render_layout((string) ob_get_clean(), (string) ($t['layout'] ?? 'Ecoles radio'));
+echo render_layout((string) ob_get_clean(), (string) ($t['layout'] ?? 'Écoles radio'));

@@ -159,7 +159,7 @@ function article_default_categories(array $messages = []): array
         'antennes' => (string) ($messages['theme_antennes'] ?? 'Antennes'),
         'trafic' => (string) ($messages['theme_trafic'] ?? 'Trafic & DX'),
         'numerique' => (string) ($messages['theme_numerique'] ?? 'Modes numeriques'),
-        'materiel' => (string) ($messages['theme_materiel'] ?? 'Materiel & station'),
+        'materiel' => (string) ($messages['theme_materiel'] ?? 'Matériel & station'),
         'formation' => (string) ($messages['theme_formation'] ?? 'Formation'),
         'autres' => (string) ($messages['theme_autres'] ?? 'Autres'),
     ];
@@ -465,9 +465,9 @@ function render_article_taxonomy_fields(array $categories, array $labels = [], s
     $selectedCategory = article_category_code($selectedCategory !== '' ? $selectedCategory : 'autres');
     $selectedSubcategory = article_subcategory_code($selectedSubcategory);
     $subcategoriesByCategory = article_subcategories_by_category();
-    $categoryLabel = (string) ($labels['category_label'] ?? $labels['category'] ?? 'Categorie');
-    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? $labels['subcategory'] ?? 'Sous-thematique');
-    $noSubcategory = (string) ($labels['no_subcategory'] ?? 'Sans sous-thematique');
+    $categoryLabel = (string) ($labels['category_label'] ?? $labels['category'] ?? 'Catégorie');
+    $subcategoryLabel = (string) ($labels['subcategory_field'] ?? $labels['subcategory'] ?? 'Sous-thématique');
+    $noSubcategory = (string) ($labels['no_subcategory'] ?? 'Sans sous-thématique');
 
     $html = '<label><span>' . e($categoryLabel) . '</span><select name="category">';
     foreach ($categories as $code => $label) {

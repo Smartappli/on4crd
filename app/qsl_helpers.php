@@ -326,7 +326,7 @@ function create_qsl_cards_from_qsos(int $memberId, array $qsoIds, string $templa
         return 0;
     }
 
-    $memberStmt = db()->prepare('SELECT id, username, email, callsign, full_name, qth FROM users WHERE id = ? LIMIT 1');
+    $memberStmt = db()->prepare('SELECT id, callsign, full_name, qth FROM members WHERE id = ? LIMIT 1');
     $memberStmt->execute([$memberId]);
     $member = $memberStmt->fetch();
     if (!is_array($member)) {

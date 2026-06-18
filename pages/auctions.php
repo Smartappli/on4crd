@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     date('Y-m-d H:i:s', $endsAt ?: ($startsAt + 7 * 86400)),
                 ]);
             cache_forget('auction_public_lots_60_v1');
-            set_flash('success', 'Lot cree et valide directement.');
+            set_flash('success', 'Lot créé et validé directement.');
             redirect_url(route_url('auction_view', ['slug' => $slug]));
         }
 

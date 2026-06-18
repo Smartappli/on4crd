@@ -14,11 +14,18 @@ if (!album_ensure_photo_sort_order_column() || !album_ensure_source_proposal_col
 }
 
 $albumId = (int) ($_GET['id'] ?? 0);
-$albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? AND is_public = 1');
+$user = current_user();
+$albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? LIMIT 1');
 $albumStmt->execute([$albumId]);
 $album = $albumStmt->fetch();
+$canPreviewPrivateAlbum = is_array($album)
+    && $user !== null
+    && (
+        has_permission('albums.manage')
+        || (int) ($album['member_id'] ?? 0) === (int) ($user['id'] ?? 0)
+    );
 
-if (!$album) {
+if (!$album || ((int) ($album['is_public'] ?? 0) !== 1 && !$canPreviewPrivateAlbum)) {
     http_response_code(404);
     echo render_layout('<div class="card"><p>' . e((string) $t['not_found']) . '</p></div>', (string) $t['title']);
     return;
@@ -30,7 +37,6 @@ if ($albumTitle === '') {
 }
 $albumDescription = trim((string) ($album['description'] ?? ''));
 
-$user = current_user();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
     $user = require_login();
     verify_csrf();
@@ -54,6 +60,7 @@ $totalPages = 1;
 $offset = 0;
 $photos = [];
 $coverPath = null;
+$coverDisplayPath = null;
 try {
     $countStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
     $countStmt->execute([(int) $album['id']]);
@@ -70,6 +77,11 @@ try {
     $coverStmt = db()->prepare('SELECT file_path FROM album_photos WHERE album_id = ? ORDER BY sort_order ASC, id ASC LIMIT 1');
     $coverStmt->execute([(int) $album['id']]);
     $coverPath = album_photo_public_path_or_null((string) ($coverStmt->fetchColumn() ?: ''));
+    if ($coverPath !== null) {
+        $coverThumbPath = album_thumbnail_public_path($coverPath);
+        $coverThumbAbs = dirname(__DIR__) . '/' . $coverThumbPath;
+        $coverDisplayPath = $coverThumbPath !== '' && is_file($coverThumbAbs) ? $coverThumbPath : $coverPath;
+    }
 } catch (Throwable $throwable) {
     log_structured_event('album_detail_photos_prepare_failed', [
         'album_id' => (int) $album['id'],
@@ -82,11 +94,14 @@ $pageMeta = [
     'ai_summary' => $albumDescription !== '' ? $albumDescription : (string) $t['meta_desc'],
     'canonical' => route_url_with_locale('album', $locale, ['id' => (int) $album['id']]),
     'schema_type' => 'ImageGallery',
-    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'album photo', 'radioamateur', 'activites club'],
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'album photo', 'radioamateur', 'activités club'],
     'citation_author' => 'Radio Club Durnal ON4CRD',
 ];
 if ($coverPath !== null) {
     $pageMeta['image'] = base_url($coverPath);
+}
+if ((int) ($album['is_public'] ?? 0) !== 1) {
+    $pageMeta['robots'] = 'noindex,nofollow';
 }
 $imageItems = [];
 foreach (array_slice($photos, 0, 12) as $position => $photo) {
@@ -159,8 +174,8 @@ ob_start();
 <div class="album-detail-page">
     <section class="album-detail-hero">
         <div class="album-detail-cover">
-            <?php if ($coverPath !== null): ?>
-                <img src="<?= e(base_url($coverPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
+            <?php if ($coverDisplayPath !== null): ?>
+                <img src="<?= e(base_url($coverDisplayPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
             <?php else: ?>
                 <span class="album-placeholder-mark" aria-hidden="true"></span>
             <?php endif; ?>
@@ -168,9 +183,6 @@ ob_start();
         <div class="album-detail-copy">
             <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
             <h1><?= e($albumTitle) ?></h1>
-            <?php if ($albumDescription !== ''): ?>
-                <p><?= e($albumDescription) ?></p>
-            <?php endif; ?>
             <div class="album-detail-stats">
                 <article>
                     <span><?= e((string) $t['photos']) ?></span>
@@ -192,9 +204,6 @@ ob_start();
     </section>
 
     <section class="album-photo-section">
-        <div class="row-between">
-            <h2><?= e((string) $t['album_photos']) ?></h2>
-        </div>
         <?php if ($photos === []): ?>
             <p class="help"><?= e((string) $t['none']) ?></p>
         <?php else: ?>

@@ -280,9 +280,9 @@ if (!function_exists('member_library_proposal_labels')) {
 function member_library_proposal_labels(array $messages, string $field): array
 {
     $labels = match ($field) {
-        'category' => ['Category', 'Categorie', 'Topic', 'Theme', 'Thematique'],
-        'subcategory' => ['Subcategory', 'Sub-topic', 'Sub topic', 'Sous-thematique', 'Sous thematique', 'Sous-theme'],
-        'tags' => ['Tags', 'Keywords', 'Mots cles'],
+        'category' => ['Category', 'Catégorie', 'Categorie', 'Topic', 'Theme', 'Thématique', 'Thematique'],
+        'subcategory' => ['Subcategory', 'Sub-topic', 'Sub topic', 'Sous-thématique', 'Sous-thematique', 'Sous thématique', 'Sous thematique', 'Sous-thème', 'Sous-theme'],
+        'tags' => ['Tags', 'Keywords', 'Mots clés', 'Mots cles'],
         'description' => ['Description'],
         default => [],
     };
@@ -670,23 +670,23 @@ if (!function_exists('member_library_default_subcategories')) {
 function member_library_default_subcategories(): array
 {
     return [
-        ['category_code' => 'general', 'code' => 'references', 'label' => 'References', 'sort_order' => 10],
+        ['category_code' => 'general', 'code' => 'references', 'label' => 'Références', 'sort_order' => 10],
         ['category_code' => 'general', 'code' => 'club', 'label' => 'Club', 'sort_order' => 20],
         ['category_code' => 'formation', 'code' => 'cours', 'label' => 'Cours', 'sort_order' => 10],
         ['category_code' => 'formation', 'code' => 'examens', 'label' => 'Examens', 'sort_order' => 20],
         ['category_code' => 'technique', 'code' => 'montages', 'label' => 'Montages', 'sort_order' => 10],
         ['category_code' => 'technique', 'code' => 'mesures', 'label' => 'Mesures', 'sort_order' => 20],
         ['category_code' => 'antennes', 'code' => 'construction', 'label' => 'Construction', 'sort_order' => 10],
-        ['category_code' => 'antennes', 'code' => 'reglages', 'label' => 'Reglages', 'sort_order' => 20],
+        ['category_code' => 'antennes', 'code' => 'reglages', 'label' => 'Réglages', 'sort_order' => 20],
         ['category_code' => 'propagation', 'code' => 'bulletins', 'label' => 'Bulletins', 'sort_order' => 10],
-        ['category_code' => 'propagation', 'code' => 'previsions', 'label' => 'Previsions', 'sort_order' => 20],
+        ['category_code' => 'propagation', 'code' => 'previsions', 'label' => 'Prévisions', 'sort_order' => 20],
         ['category_code' => 'modes-numeriques', 'code' => 'logiciels', 'label' => 'Logiciels', 'sort_order' => 10],
         ['category_code' => 'modes-numeriques', 'code' => 'protocoles', 'label' => 'Protocoles', 'sort_order' => 20],
         ['category_code' => 'reglementation', 'code' => 'licences', 'label' => 'Licences', 'sort_order' => 10],
-        ['category_code' => 'reglementation', 'code' => 'procedures', 'label' => 'Procedures', 'sort_order' => 20],
+        ['category_code' => 'reglementation', 'code' => 'procedures', 'label' => 'Procédures', 'sort_order' => 20],
         ['category_code' => 'procedures', 'code' => 'station', 'label' => 'Station', 'sort_order' => 10],
-        ['category_code' => 'procedures', 'code' => 'securite', 'label' => 'Securite', 'sort_order' => 20],
-        ['category_code' => 'club', 'code' => 'reunions', 'label' => 'Reunions', 'sort_order' => 10],
+        ['category_code' => 'procedures', 'code' => 'securite', 'label' => 'Sécurité', 'sort_order' => 20],
+        ['category_code' => 'club', 'code' => 'reunions', 'label' => 'Réunions', 'sort_order' => 10],
         ['category_code' => 'club', 'code' => 'archives', 'label' => 'Archives', 'sort_order' => 20],
     ];
 }

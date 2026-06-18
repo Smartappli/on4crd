@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 cache_forget('news_categories_v2');
                 cache_forget('news_archives_v1');
                 cache_forget('home_latest_news_v1');
-                set_flash('success', (string) ($newsT['published'] ?? 'Actualite publiee.'));
+                set_flash('success', (string) ($newsT['published'] ?? 'Actualité publiée.'));
                 redirect_url(route_url('news_view', ['slug' => $slug]));
             }
             $proposalId = content_proposal_create((int) $user['id'], 'news', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalSource);
@@ -291,7 +291,7 @@ ob_start();
             </article>
         </div>
         <div class="news-hero-actions" aria-label="<?= e((string) $newsT['news_actions']) ?>">
-            <a class="button" href="<?= e($newsProposalUrl) ?>" data-news-proposal-open="news-proposal-dialog" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e($canModerateNews ? 'Créer une actualite' : (string) $newsT['propose_news']) ?></a>
+            <a class="button" href="<?= e($newsProposalUrl) ?>" data-news-proposal-open="news-proposal-dialog" aria-haspopup="dialog" aria-controls="news-proposal-dialog"><?= e($canModerateNews ? 'Créer une actualité' : (string) $newsT['propose_news']) ?></a>
             <a class="button secondary" href="<?= e($categoryProposalUrl) ?>" data-news-proposal-open="news-category-proposal-dialog" aria-haspopup="dialog" aria-controls="news-category-proposal-dialog"><?= e($canModerateNews ? 'Créer une rubrique' : (string) $newsT['propose_category']) ?></a>
         </div>
     </div>
@@ -302,8 +302,8 @@ ob_start();
         <div class="news-proposal-dialog-header module-dialog-header">
             <div>
                 <p class="news-hero-title module-dialog-eyebrow"><?= e((string) $newsT['latest_news']) ?></p>
-                <h2 id="news-proposal-title"><?= e($canModerateNews ? 'Créer une actualite' : (string) $newsT['propose_news']) ?></h2>
-                <p class="help"><?= e($canModerateNews ? 'Votre actualite sera publiee directement.' : (string) $newsT['propose_news_intro']) ?></p>
+                <h2 id="news-proposal-title"><?= e($canModerateNews ? 'Créer une actualité' : (string) $newsT['propose_news']) ?></h2>
+                <p class="help"><?= e($canModerateNews ? 'Votre actualité sera publiée directement.' : (string) $newsT['propose_news_intro']) ?></p>
             </div>
             <button class="news-proposal-dialog-close module-dialog-close" type="button" data-news-proposal-close aria-label="<?= e((string) $newsT['proposal_close']) ?>">&times;</button>
         </div>

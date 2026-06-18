@@ -86,7 +86,7 @@ function ensure_member_library_categories_table(): void
     $categoryInsert = db()->prepare('INSERT IGNORE INTO member_library_categories (code, label, sort_order) VALUES (?, ?, ?)');
     $defaultCategories = function_exists('member_library_default_categories')
         ? member_library_default_categories()
-        : [['code' => 'general', 'label' => 'General', 'sort_order' => 1]];
+        : [['code' => 'general', 'label' => 'Général', 'sort_order' => 1]];
     foreach ($defaultCategories as $category) {
         $categoryInsert->execute([
             (string) $category['code'],
@@ -213,6 +213,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             set_flash('success', (string) $t['ok_category']);
             redirect($adminLibraryRoute);
         }
+        if ($action === 'update_category') {
+            $code = library_category_slug((string) ($_POST['category_code'] ?? ''));
+            $label = trim((string) ($_POST['category_label'] ?? ''));
+            if ($code === '' || $label === '') {
+                throw new RuntimeException('err_required');
+            }
+            db()->prepare('INSERT INTO member_library_categories (code, label) VALUES (?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$code, $label]);
+            set_flash('success', (string) $t['ok_category']);
+            redirect($adminLibraryRoute);
+        }
         if ($action === 'delete_category') {
             $code = library_category_slug((string) ($_POST['category_code'] ?? ''));
             if ($code !== 'general') {
@@ -233,6 +244,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $parentCode = library_category_slug((string) ($_POST['subcategory_category'] ?? 'general'));
             $code = library_subcategory_slug((string) ($_POST['subcategory_code'] ?? ''));
             $label = trim((string) ($_POST['subcategory_label'] ?? '')) ?: $code;
+            if ($code === '' || $label === '') {
+                throw new RuntimeException('err_required');
+            }
+            db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$parentCode, $code, $label]);
+            set_flash('success', (string) ($t['ok_subcategory'] ?? $t['ok_category']));
+            redirect($adminLibraryRoute);
+        }
+        if ($action === 'update_subcategory') {
+            $parentCode = library_category_slug((string) ($_POST['subcategory_category'] ?? 'general'));
+            $code = library_subcategory_slug((string) ($_POST['subcategory_code'] ?? ''));
+            $label = trim((string) ($_POST['subcategory_label'] ?? ''));
             if ($code === '' || $label === '') {
                 throw new RuntimeException('err_required');
             }
@@ -446,7 +469,7 @@ $pagination = pagination_state($totalDocuments, $page, $perPage);
 $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
 $offset = $pagination['offset'];
-$stmt = db()->prepare('SELECT id, category, subcategory, tags, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
+$stmt = db()->prepare('SELECT id, category, subcategory, tags, title, description, file_path, extracted_text, uploaded_at FROM member_library_documents' . $whereSql . ' ORDER BY uploaded_at DESC, id DESC LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset);
 $stmt->execute($params);
 $documents = $stmt->fetchAll() ?: [];
 
@@ -635,10 +658,12 @@ ob_start();
             <?php foreach ($categoryOptions as $catOpt): ?>
                 <form method="post" class="inline-form admin-library-category-item">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="delete_category">
+                    <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $catOpt['code']) ?>">
-                    <span class="badge muted"><?= e((string) $catOpt['label']) ?></span>
-                    <?php if ((string) $catOpt['code'] !== 'general'): ?><button class="button secondary" type="submit"><?= e((string) $t['delete']) ?></button><?php endif; ?>
+                    <span class="badge muted"><?= e((string) $catOpt['code']) ?></span>
+                    <input type="text" name="category_label" value="<?= e((string) $catOpt['label']) ?>" maxlength="160" required>
+                    <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                    <?php if ((string) $catOpt['code'] !== 'general'): ?><button class="button secondary small" type="submit" name="action" value="delete_category"><?= e((string) $t['delete']) ?></button><?php endif; ?>
                 </form>
             <?php endforeach; ?>
         </div>
@@ -663,11 +688,13 @@ ob_start();
                 <?php foreach ($subcatGroup as $subcatOpt): ?>
                     <form method="post" class="inline-form admin-library-category-item">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_category" value="<?= e($parentCode) ?>">
                         <input type="hidden" name="subcategory_code" value="<?= e((string) $subcatOpt['code']) ?>">
-                        <span class="badge muted"><?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?> / <?= e((string) $subcatOpt['label']) ?></span>
-                        <button class="button secondary" type="submit"><?= e((string) $t['delete']) ?></button>
+                        <span class="badge muted"><?= e((string) ($categoryLabels[$parentCode] ?? $parentCode)) ?> / <?= e((string) $subcatOpt['code']) ?></span>
+                        <input type="text" name="subcategory_label" value="<?= e((string) $subcatOpt['label']) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Enregistrer')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"><?= e((string) $t['delete']) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>

@@ -274,11 +274,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $articleTitle = (string) ($bulkRow['title'] ?? '');
                     $articleSlug = (string) ($bulkRow['slug'] ?? '');
                     if ($bulkOp === 'published') {
-                        notify_member($authorId, 'publication', 'Article publie', $articleTitle, route_url('article', ['slug' => $articleSlug]));
+                        notify_member($authorId, 'publication', 'Article publié', $articleTitle, route_url('article', ['slug' => $articleSlug]));
                     } elseif ($bulkOp === 'scheduled') {
-                        notify_member($authorId, 'publication', 'Article planifie', $articleTitle, route_url('my_requests'));
+                        notify_member($authorId, 'publication', 'Article planifié', $articleTitle, route_url('my_requests'));
                     } elseif ($bulkOp === 'rejected') {
-                        notify_member($authorId, 'moderation', 'Article refuse', $moderationNote, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', 'Article refusé', $moderationNote, route_url('my_requests'));
                     }
                 }
                 if ($translationSyncFailed) {
@@ -303,6 +303,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([$code, $label]);
             set_flash('success', $t('ok_category_updated'));
             redirect_url(route_url_clean('admin_articles', ['category' => $code]));
+        }
+
+        if ($action === 'update_category') {
+            if (!article_ensure_categories_table($articleMessages)) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $category = article_category_from_input((string) ($_POST['category_code'] ?? $_POST['code'] ?? ''), $knownCategories);
+            $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+            if ($label === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                ->execute([$category, $label]);
+            set_flash('success', $t('ok_category_updated'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category]));
         }
 
         if ($action === 'delete_category') {
@@ -340,6 +355,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([$category, $code, $label]);
             set_flash('success', $t('ok_subcategory_updated', 'Sous-thématique enregistrée.'));
             redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $code]));
+        }
+
+        if ($action === 'update_subcategory') {
+            if (!article_ensure_subcategories_table()) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $parts = article_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+            $category = article_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'autres'), $knownCategories);
+            $subcategory = article_subcategory_code($parts['subcategory']);
+            $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+            if ($subcategory === '' || $label === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $subcategory, $label]);
+            set_flash('success', $t('ok_subcategory_updated', 'Sous-thématique enregistrée.'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $subcategory]));
         }
 
         if ($action === 'delete_subcategory') {
@@ -529,18 +561,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         article_translations_sync_all($id);
                     } catch (Throwable) {
-                        set_flash('warning', 'Article enregistre, mais les traductions automatiques devront etre relancees.');
+                        set_flash('warning', 'Article enregistré, mais les traductions automatiques devront être relancées.');
                     }
                 }
 
                 $currentUserId = (int) current_user()['id'];
                 if ($authorId > 0 && $authorId !== $currentUserId) {
                     if ($notifyStatus === 'published') {
-                        notify_member($authorId, 'publication', 'Article publie', $title, route_url('article', ['slug' => $slug]));
+                        notify_member($authorId, 'publication', 'Article publié', $title, route_url('article', ['slug' => $slug]));
                     } elseif ($notifyStatus === 'scheduled') {
-                        notify_member($authorId, 'publication', 'Article planifie', $title, route_url('my_requests'));
+                        notify_member($authorId, 'publication', 'Article planifié', $title, route_url('my_requests'));
                     } elseif ($notifyStatus === 'rejected') {
-                        notify_member($authorId, 'moderation', 'Article refuse', $moderationNoteValue ?? $title, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', 'Article refusé', $moderationNoteValue ?? $title, route_url('my_requests'));
                     }
                 }
 
@@ -771,10 +803,10 @@ ob_start();
             <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
                 <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
             </label>
-            <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+            <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
                 <select name="subcategory_ref">
                     <?php $editingSubcategory = article_subcategory_code((string) ($editing['subcategory'] ?? '')); ?>
-                    <option value=""><?= e($t('no_subcategory', 'Sans sous-thematique')) ?></option>
+                    <option value=""><?= e($t('no_subcategory', 'Sans sous-thématique')) ?></option>
                     <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
                         <?php if ($subcategories === []): ?>
                             <?php continue; ?>
@@ -991,9 +1023,9 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+                <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
                     <select name="subcategory">
-                        <option value=""><?= e($t('no_subcategory', 'Sans sous-thematique')) ?></option>
+                        <option value=""><?= e($t('no_subcategory', 'Sans sous-thématique')) ?></option>
                         <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
                             <?php if ($subcategories === []): ?>
                                 <?php continue; ?>
@@ -1055,7 +1087,7 @@ ob_start();
                     <input type="text" name="category_label" maxlength="160" required>
                 </label>
                 <input type="hidden" name="category_code" value="">
-                <button class="button" type="submit"><?= e($t('add_category', 'Ajouter une thematique')) ?></button>
+                <button class="button" type="submit"><?= e($t('add_category', 'Ajouter une thématique')) ?></button>
             </form>
             <form method="post" class="stack">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -1067,11 +1099,11 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+                <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
                     <input type="text" name="subcategory_label" maxlength="160" required>
                 </label>
                 <input type="hidden" name="subcategory_code" value="">
-                <button class="button" type="submit"><?= e($t('add_subcategory', 'Ajouter une sous-thematique')) ?></button>
+                <button class="button" type="submit"><?= e($t('add_subcategory', 'Ajouter une sous-thématique')) ?></button>
             </form>
         </div>
         <div class="tags-cloud">
@@ -1083,10 +1115,12 @@ ob_start();
                 ?>
                 <form method="post" class="inline-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="delete_category">
+                    <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $categoryCode) ?>">
-                    <span class="pill"><?= e((string) $categoryLabel) ?> (<?= $categoryTotal ?>)</span>
-                    <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                    <span class="pill"><?= e((string) $categoryCode) ?> (<?= $categoryTotal ?>)</span>
+                    <input type="text" name="category_label" value="<?= e((string) $categoryLabel) ?>" maxlength="160" required>
+                    <button class="button small" type="submit"><?= e($t('save', 'Enregistrer')) ?></button>
+                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
                 </form>
             <?php endforeach; ?>
             <?php foreach ($articleSubcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -1100,10 +1134,12 @@ ob_start();
                     ?>
                     <form method="post" class="inline-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_ref" value="<?= e(article_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                        <span class="pill"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
-                        <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                        <span class="pill"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                        <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e($t('save', 'Enregistrer')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>
