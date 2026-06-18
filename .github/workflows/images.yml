@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
+        uses: actions/checkout@v7 # NOSONAR - reviewed action pin managed by workflow update policy.
       - name: Compress Images
         id: calibre
         uses: calibreapp/image-actions@main # NOSONAR - reviewed action pin managed by workflow update policy.

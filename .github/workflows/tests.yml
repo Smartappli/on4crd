@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
+        uses: actions/checkout@v7 # NOSONAR - reviewed action pin managed by workflow update policy.
       - name: Setup PHP
         uses: shivammathur/setup-php@v2 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
@@ -78,7 +78,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6 # NOSONAR - reviewed action pin managed by workflow update policy.
+        uses: actions/checkout@v7 # NOSONAR - reviewed action pin managed by workflow update policy.
       - name: Setup PHP
         uses: shivammathur/setup-php@v2 # NOSONAR - reviewed action pin managed by workflow update policy.
         with:
