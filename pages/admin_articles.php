@@ -274,11 +274,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $articleTitle = (string) ($bulkRow['title'] ?? '');
                     $articleSlug = (string) ($bulkRow['slug'] ?? '');
                     if ($bulkOp === 'published') {
-                        notify_member($authorId, 'publication', 'Article publie', $articleTitle, route_url('article', ['slug' => $articleSlug]));
+                        notify_member($authorId, 'publication', 'Article publié', $articleTitle, route_url('article', ['slug' => $articleSlug]));
                     } elseif ($bulkOp === 'scheduled') {
-                        notify_member($authorId, 'publication', 'Article planifie', $articleTitle, route_url('my_requests'));
+                        notify_member($authorId, 'publication', 'Article planifié', $articleTitle, route_url('my_requests'));
                     } elseif ($bulkOp === 'rejected') {
-                        notify_member($authorId, 'moderation', 'Article refuse', $moderationNote, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', 'Article refusé', $moderationNote, route_url('my_requests'));
                     }
                 }
                 if ($translationSyncFailed) {
@@ -561,18 +561,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         article_translations_sync_all($id);
                     } catch (Throwable) {
-                        set_flash('warning', 'Article enregistre, mais les traductions automatiques devront etre relancees.');
+                        set_flash('warning', 'Article enregistré, mais les traductions automatiques devront être relancées.');
                     }
                 }
 
                 $currentUserId = (int) current_user()['id'];
                 if ($authorId > 0 && $authorId !== $currentUserId) {
                     if ($notifyStatus === 'published') {
-                        notify_member($authorId, 'publication', 'Article publie', $title, route_url('article', ['slug' => $slug]));
+                        notify_member($authorId, 'publication', 'Article publié', $title, route_url('article', ['slug' => $slug]));
                     } elseif ($notifyStatus === 'scheduled') {
-                        notify_member($authorId, 'publication', 'Article planifie', $title, route_url('my_requests'));
+                        notify_member($authorId, 'publication', 'Article planifié', $title, route_url('my_requests'));
                     } elseif ($notifyStatus === 'rejected') {
-                        notify_member($authorId, 'moderation', 'Article refuse', $moderationNoteValue ?? $title, route_url('my_requests'));
+                        notify_member($authorId, 'moderation', 'Article refusé', $moderationNoteValue ?? $title, route_url('my_requests'));
                     }
                 }
 

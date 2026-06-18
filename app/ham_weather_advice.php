@@ -354,7 +354,7 @@ function render_ham_weather_advice(array $user = []): string
             'location' => 'Posizione:',
             'local_hour' => 'Ora locale:',
             'updated_at' => 'Ultimo aggiornamento:',
-            'local_weather' => 'Meteo locale:',
+            'local_weather' => 'Météo locale:',
             'geomagnetic' => 'Indice geomagnetico:',
             'kp_unavailable' => 'non disponibile',
         ],

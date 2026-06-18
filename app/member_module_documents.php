@@ -27,7 +27,7 @@ function member_document_module_definitions(): array
             'domain' => 'fichiers',
             'legacy_categories' => ['fichiers', 'telechargements'],
             'fallback_title' => 'Fichiers',
-            'fallback_intro' => 'Fichiers et ressources a telecharger pour les membres.',
+            'fallback_intro' => 'Fichiers et ressources à télécharger pour les membres.',
             'label_overrides' => [
                 'fr' => [
                     'documents' => 'Fichiers',

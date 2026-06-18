@@ -9,18 +9,18 @@ function widget_catalog(): array
     return [
         'welcome' => [
             'title' => 'Bienvenue',
-            'description' => 'Message d accueil du tableau de bord membre.',
+            'description' => 'Message d’accueil du tableau de bord membre.',
         ],
         'open_meteo' => [
-            'title' => 'Meteo locale',
+            'title' => 'Météo locale',
             'description' => 'Conditions locales via Agromet avec secours Open-Meteo.',
         ],
         'radio_clocks' => [
             'title' => 'Horloges radio',
-            'description' => 'Deux horloges synchronisees pour la date et heure UTC et locale.',
+            'description' => 'Deux horloges synchronisées pour la date et heure UTC et locale.',
         ],
         'ham_weather_advice' => [
-            'title' => 'Meteo radioamateur',
+            'title' => 'Météo radioamateur',
             'description' => 'Score QSO, bandes, modes et créneau conseillé depuis les données météo et propagation.',
         ],
     ] + hamqsl_widget_catalog();

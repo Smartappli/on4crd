@@ -159,7 +159,7 @@ function article_default_categories(array $messages = []): array
         'antennes' => (string) ($messages['theme_antennes'] ?? 'Antennes'),
         'trafic' => (string) ($messages['theme_trafic'] ?? 'Trafic & DX'),
         'numerique' => (string) ($messages['theme_numerique'] ?? 'Modes numeriques'),
-        'materiel' => (string) ($messages['theme_materiel'] ?? 'Materiel & station'),
+        'materiel' => (string) ($messages['theme_materiel'] ?? 'Matériel & station'),
         'formation' => (string) ($messages['theme_formation'] ?? 'Formation'),
         'autres' => (string) ($messages['theme_autres'] ?? 'Autres'),
     ];

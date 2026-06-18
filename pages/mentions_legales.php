@@ -14,7 +14,7 @@ $notProvided = $text('not_provided');
 
 $clubName = trim((string) config('privacy.controller_name', 'Radio Club Durnal ON4CRD'));
 $clubEmail = site_contact_email();
-$clubAddress = trim((string) config('privacy.controller_postal_address', 'Rue des Ecoles, 5530 Purnode, Belgique'));
+$clubAddress = trim((string) config('privacy.controller_postal_address', 'Rue des Écoles, 5530 Purnode, Belgique'));
 $publicationManager = trim((string) config('legal.publication_manager', $text('default_publication_manager')));
 $hostingName = trim((string) config('legal.hosting_name', 'OVH SAS (OVHcloud)'));
 $hostingAddress = trim((string) config('legal.hosting_address', '2 rue Kellermann, 59100 Roubaix, France'));

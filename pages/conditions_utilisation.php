@@ -13,7 +13,7 @@ $updatedAt = $text('updated_at');
 
 $clubName = trim((string) config('privacy.controller_name', 'Radio Club Durnal ON4CRD'));
 $clubEmail = site_contact_email();
-$clubAddress = trim((string) config('privacy.controller_postal_address', 'Rue des Ecoles, 5530 Purnode, Belgique'));
+$clubAddress = trim((string) config('privacy.controller_postal_address', 'Rue des Écoles, 5530 Purnode, Belgique'));
 
 $replaceLegalPlaceholders = static function (string $value) use ($clubName, $clubEmail, $clubAddress): string {
     return strtr($value, [

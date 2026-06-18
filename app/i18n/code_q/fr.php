@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 return array (
-  'title' => 'Code Q radioamateur etendu',
+  'title' => 'Code Q radioamateur étendu',
   'intro' => 'Tableau étendu des Q-codes utilisés en radiocommunication radioamateur et en trafic général.',
   'meaning' => 'Signification',
   'code' => 'Code Q',

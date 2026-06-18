@@ -28,8 +28,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('name="proposal_subcategory_ref"', $albums);
         self::assertStringContainsString('foreach ($albumCategories as $albumThemeCode => $albumThemeLabel)', $albums);
         self::assertStringContainsString('name="proposal_keywords"', $albums);
-        self::assertStringContainsString("'Mots cles' => \$keywords", $albums);
-        self::assertStringContainsString("'Sous-thematique' => \$proposalSubcategory", $albums);
+        self::assertStringContainsString("'Mots clés' => \$keywords", $albums);
+        self::assertStringContainsString("'Sous-thématique' => \$proposalSubcategory", $albums);
         self::assertStringContainsString('$favoriteAlbumIds = $user !== null ? album_favorite_album_ids', $albums);
         self::assertStringContainsString('$visibleAlbumCategories = album_visible_categories($albumCategories, $albumCategoryCounts);', $albums);
         self::assertStringContainsString('$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category', $albums);
@@ -116,7 +116,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('CREATE TABLE IF NOT EXISTS member_module_documents', $schema);
         self::assertStringContainsString('idx_member_module_category_deleted', $schema);
         self::assertSame(
-            "Club fieldday\n\nThematique: radio\nMots cles: ft8",
+            "Club fieldday\n\nThématique: radio\nMots clés: ft8",
             album_proposal_description_from_summary("Thematique: radio\nMots cles: ft8\nDescription: Club fieldday")
         );
     }
