@@ -14,11 +14,18 @@ if (!album_ensure_photo_sort_order_column() || !album_ensure_source_proposal_col
 }
 
 $albumId = (int) ($_GET['id'] ?? 0);
-$albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? AND is_public = 1');
+$user = current_user();
+$albumStmt = db()->prepare('SELECT * FROM albums WHERE id = ? LIMIT 1');
 $albumStmt->execute([$albumId]);
 $album = $albumStmt->fetch();
+$canPreviewPrivateAlbum = is_array($album)
+    && $user !== null
+    && (
+        has_permission('albums.manage')
+        || (int) ($album['member_id'] ?? 0) === (int) ($user['id'] ?? 0)
+    );
 
-if (!$album) {
+if (!$album || ((int) ($album['is_public'] ?? 0) !== 1 && !$canPreviewPrivateAlbum)) {
     http_response_code(404);
     echo render_layout('<div class="card"><p>' . e((string) $t['not_found']) . '</p></div>', (string) $t['title']);
     return;
@@ -30,7 +37,6 @@ if ($albumTitle === '') {
 }
 $albumDescription = trim((string) ($album['description'] ?? ''));
 
-$user = current_user();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
     $user = require_login();
     verify_csrf();
@@ -87,6 +93,9 @@ $pageMeta = [
 ];
 if ($coverPath !== null) {
     $pageMeta['image'] = base_url($coverPath);
+}
+if ((int) ($album['is_public'] ?? 0) !== 1) {
+    $pageMeta['robots'] = 'noindex,nofollow';
 }
 $imageItems = [];
 foreach (array_slice($photos, 0, 12) as $position => $photo) {
