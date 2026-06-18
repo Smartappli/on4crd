@@ -207,9 +207,6 @@ ob_start();
     </section>
 
     <section class="album-photo-section">
-        <div class="row-between">
-            <h2><?= e((string) $t['album_photos']) ?></h2>
-        </div>
         <?php if ($photos === []): ?>
             <p class="help"><?= e((string) $t['none']) ?></p>
         <?php else: ?>
