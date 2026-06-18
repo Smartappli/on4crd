@@ -38,13 +38,14 @@ if (table_exists('members')) {
     }
     $committeeSelect = $memberColumnSql('is_committee', '0') . ' AS is_committee, '
         . $memberColumnSql('committee_role') . ' AS committee_role';
+    $callsignSearchSql = table_has_column('members', 'callsign') ? 'UPPER(callsign) LIKE ?' : "UPPER('') LIKE ?";
     $sql = 'SELECT ' . member_profile_select_columns_sql() . ', ' . $committeeSelect . '
         FROM members
         WHERE ' . $directoryVisibleWhere;
     $params = [];
 
     if ($search !== '') {
-        $sql .= ' AND (UPPER(' . $memberColumnSql('callsign') . ') LIKE ?
+        $sql .= ' AND (' . $callsignSearchSql . '
             OR (' . $memberColumnSql('first_name') . ' LIKE ? AND ' . $memberVisibilitySql('visibility_first_name', 'members') . ' IN (' . $visibilityPlaceholders . '))
             OR (' . $memberColumnSql('last_name') . ' LIKE ? AND ' . $memberVisibilitySql('visibility_last_name') . ' IN (' . $visibilityPlaceholders . '))
             OR (' . $memberColumnSql('address') . ' LIKE ? AND ' . $memberVisibilitySql('visibility_address') . ' IN (' . $visibilityPlaceholders . '))
