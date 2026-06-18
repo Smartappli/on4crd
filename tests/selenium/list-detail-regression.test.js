@@ -9,6 +9,7 @@ const {
   assertPageHasContent,
   pagePlainText,
   skipIfInstallWizard,
+  ensureSeleniumFixtures,
 } = require('./helpers');
 
 const detailScenarios = [
@@ -47,6 +48,7 @@ const detailScenarios = [
 for (const scenario of detailScenarios) {
   test(`Selenium liste/detail: ${scenario.label} ouvre le premier detail disponible`, async (t) => {
     await withSelenium(t, async (driver) => {
+      ensureSeleniumFixtures();
       await visit(driver, scenario.listRoute);
       if (await skipIfInstallWizard(t, driver)) {
         return;
@@ -73,6 +75,7 @@ const taxonomyRoutes = ['articles', 'wiki', 'albums'];
 for (const route of taxonomyRoutes) {
   test(`Selenium taxonomie publique: ${route} applique un filtre sans erreur`, async (t) => {
     await withSelenium(t, async (driver) => {
+      ensureSeleniumFixtures();
       await visit(driver, route);
       if (await skipIfInstallWizard(t, driver)) {
         return;
@@ -95,6 +98,7 @@ for (const route of taxonomyRoutes) {
 
 test('Selenium petites annonces: recherche et categories restent navigables', async (t) => {
   await withSelenium(t, async (driver) => {
+    ensureSeleniumFixtures();
     await visit(driver, 'classifieds', { q: 'radio' });
     if (await skipIfInstallWizard(t, driver)) {
       return;

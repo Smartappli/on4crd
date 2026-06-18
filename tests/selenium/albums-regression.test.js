@@ -8,10 +8,12 @@ const {
   assertNoServerError,
   parsePhotoCount,
   visibleImageCount,
+  ensureSeleniumFixtures,
 } = require('./helpers');
 
 test('Selenium albums: le nombre de photos de la liste correspond au detail public', async (t) => {
   await withSelenium(t, async (driver) => {
+    ensureSeleniumFixtures();
     await visit(driver, 'albums');
     const tiles = await driver.findElements(By.css('.album-tile'));
     if (tiles.length === 0) {
@@ -38,6 +40,7 @@ test('Selenium albums: le nombre de photos de la liste correspond au detail publ
 
 test('Selenium album detail: les photos comptees sont rendues en cartes image', async (t) => {
   await withSelenium(t, async (driver) => {
+    ensureSeleniumFixtures();
     await visit(driver, 'albums');
     const links = await driver.findElements(By.css('.album-tile-media'));
     if (links.length === 0) {

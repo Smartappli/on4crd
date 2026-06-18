@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const childProcess = require('node:child_process');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -32,6 +33,7 @@ loadLocalSeleniumEnv();
 const baseUrl = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:8080/index.php';
 const timeoutMs = Number(process.env.SELENIUM_TIMEOUT_MS || 15000);
 const artifactsDir = process.env.SELENIUM_ARTIFACTS_DIR || path.join(process.cwd(), 'selenium-artifacts');
+let seleniumFixturesSeeded = false;
 
 function routeUrl(route, query = {}) {
   const url = new URL(baseUrl);
@@ -339,6 +341,39 @@ function writeTinyPngFixture(name) {
   return filePath;
 }
 
+function ensureSeleniumFixtures() {
+  if (seleniumFixturesSeeded) {
+    return true;
+  }
+
+  const seedScript = path.join(process.cwd(), 'tests', 'selenium', 'seed_fixtures.php');
+  if (!fs.existsSync(seedScript)) {
+    return false;
+  }
+
+  const env = { ...process.env };
+  if (!env.ON4CRD_CONFIG_FILE) {
+    const localConfig = path.join(process.cwd(), 'storage', 'auth', 'selenium-config.php');
+    if (!fs.existsSync(localConfig)) {
+      return false;
+    }
+    env.ON4CRD_CONFIG_FILE = localConfig;
+  }
+
+  try {
+    childProcess.execFileSync('php', ['-d', 'extension=pdo_mysql', seedScript], {
+      cwd: process.cwd(),
+      env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      timeout: 30000,
+    });
+    seleniumFixturesSeeded = true;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 module.exports = {
   By,
   until,
@@ -366,4 +401,5 @@ module.exports = {
   loginAsAdmin,
   requireAdminCredentials,
   writeTinyPngFixture,
+  ensureSeleniumFixtures,
 };

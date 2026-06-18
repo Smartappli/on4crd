@@ -9,6 +9,9 @@ const {
   assertNoServerError,
   skipIfInstallWizard,
   elementExists,
+  loginAsAdmin,
+  requireAdminCredentials,
+  ensureSeleniumFixtures,
 } = require('./helpers');
 
 test('Selenium login: captcha, champs et next sont conserves', async (t) => {
@@ -99,18 +102,26 @@ test('Selenium recherche: requete courte et requete vide restent controlees', as
 });
 
 const nativeFallbacks = [
-  ['articles', '[data-articles-category-open][href], [data-articles-dialog-open][href]'],
-  ['wiki', '[data-wiki-theme-open][href]'],
-  ['news', '[data-news-proposal-open][href]'],
-  ['events', '[data-event-proposal-open][href]'],
-  ['classifieds', '[data-classifieds-category-open][href]'],
-  ['webotheque', '[data-webotheque-modal-open][href]'],
-  ['albums', 'a[href*="route=login"][href*="route=albums"], a[href*="route=albums"][href*="propose_album"]'],
+  { route: 'articles', selector: '[data-articles-category-open][href], [data-articles-dialog-open][href]' },
+  { route: 'wiki', selector: '[data-wiki-theme-open][href]' },
+  { route: 'news', selector: '[data-news-proposal-open][href]' },
+  { route: 'events', selector: '[data-event-proposal-open][href]' },
+  { route: 'classifieds', selector: '[data-classifieds-category-open][href], a[href*="route=classifieds_manage"]' },
+  { route: 'webotheque', selector: '[data-webotheque-modal-open][href]', authenticated: true },
+  { route: 'albums', selector: 'a[href*="route=login"][href*="albums"], a[href*="route=albums"][href*="propose_album"]' },
 ];
 
-for (const [route, selector] of nativeFallbacks) {
+for (const { route, selector, authenticated = false } of nativeFallbacks) {
   test(`Selenium fallback natif: ${route} expose des liens utilisables`, async (t) => {
     await withSelenium(t, async (driver) => {
+      ensureSeleniumFixtures();
+      if (authenticated) {
+        const credentials = requireAdminCredentials(t);
+        if (credentials === null) {
+          return;
+        }
+        await loginAsAdmin(driver, credentials.username, credentials.password);
+      }
       await visit(driver, route);
       if (await skipIfInstallWizard(t, driver)) {
         return;
