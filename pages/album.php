@@ -183,9 +183,6 @@ ob_start();
         <div class="album-detail-copy">
             <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
             <h1><?= e($albumTitle) ?></h1>
-            <?php if ($albumDescription !== ''): ?>
-                <p><?= e($albumDescription) ?></p>
-            <?php endif; ?>
             <div class="album-detail-stats">
                 <article>
                     <span><?= e((string) $t['photos']) ?></span>
