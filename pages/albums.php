@@ -98,13 +98,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $summary = content_proposal_details_text([
                 'Action' => 'delete_album',
                 'Album ID' => (string) $albumId,
-                'Thematique' => (string) ($album['category'] ?? 'general'),
-                'Sous-thematique' => (string) ($album['subcategory'] ?? ''),
+                'Thématique' => (string) ($album['category'] ?? 'general'),
+                'Sous-thématique' => (string) ($album['subcategory'] ?? ''),
                 'Description' => mb_safe_substr((string) ($album['description'] ?? ''), 0, 5000),
             ]);
             $sourceRef = route_url('album', ['id' => $albumId]);
             $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
-            content_proposal_notify_site($albumText('album_change_subject', 'Modification d album a valider', 'Album change pending review'), [
+            content_proposal_notify_site($albumText('album_change_subject', 'Modification d’album à valider', 'Album change pending review'), [
                 'area' => 'albums',
                 'proposal_type' => 'content',
                 'title' => $title,
@@ -125,13 +125,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $summary = content_proposal_details_text([
             'Action' => 'update_album',
             'Album ID' => (string) $albumId,
-            'Thematique' => $category,
-            'Sous-thematique' => $subcategory,
+            'Thématique' => $category,
+            'Sous-thématique' => $subcategory,
             'Description' => $description,
         ]);
         $sourceRef = route_url('album', ['id' => $albumId]);
         $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, (string) ($user['email'] ?? ''), $sourceRef, 'pending');
-        content_proposal_notify_site($albumText('album_change_subject', 'Modification d album a valider', 'Album change pending review'), [
+        content_proposal_notify_site($albumText('album_change_subject', 'Modification d’album à valider', 'Album change pending review'), [
             'area' => 'albums',
             'proposal_type' => 'content',
             'title' => $title,
@@ -176,9 +176,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (has_permission('albums.manage')) {
             $albumMetadata = ($theme !== '' && $theme !== 'general') || $proposalSubcategory !== '' || $keywords !== ''
                 ? content_proposal_details_text([
-                    'Thematique' => $theme,
-                    'Sous-thematique' => $proposalSubcategory,
-                    'Mots cles' => $keywords,
+                    'Thématique' => $theme,
+                    'Sous-thématique' => $proposalSubcategory,
+                    'Mots clés' => $keywords,
                 ])
                 : '';
             $albumDescription = trim($description . ($albumMetadata !== '' ? "\n\n" . $albumMetadata : ''));
@@ -187,13 +187,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([(int) $user['id'], $proposalCategory, $proposalSubcategory, $title, $albumDescription !== '' ? $albumDescription : null]);
             $albumId = (int) db()->lastInsertId();
             album_clear_caches();
-            set_flash('success', 'Album cree et valide directement.');
+            set_flash('success', 'Album créé et validé directement.');
             redirect_url(route_url('album', ['id' => $albumId]));
         }
         $summary = content_proposal_details_text([
-            'Thematique' => $theme,
-            'Sous-thematique' => $proposalSubcategory,
-            'Mots cles' => $keywords,
+            'Thématique' => $theme,
+            'Sous-thématique' => $proposalSubcategory,
+            'Mots clés' => $keywords,
             'Description' => $description,
         ]);
         $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, $contact);
@@ -429,14 +429,14 @@ ob_start();
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
             <input type="hidden" name="action" value="propose_album">
             <label><span>Titre</span><input type="text" name="proposal_title" maxlength="190" required></label>
-            <label><span><?= e((string) ($t['category_field'] ?? 'Thematique')) ?></span>
+            <label><span><?= e((string) ($t['category_field'] ?? 'Thématique')) ?></span>
                 <select name="proposal_theme">
                     <?php foreach ($albumCategories as $albumThemeCode => $albumThemeLabel): ?>
                         <option value="<?= e((string) $albumThemeCode) ?>"><?= e((string) $albumThemeLabel) ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label><span><?= e((string) ($t['subcategory_field'] ?? 'Sous-thematique')) ?></span>
+            <label><span><?= e((string) ($t['subcategory_field'] ?? 'Sous-thématique')) ?></span>
                 <select name="proposal_subcategory_ref">
                     <option value=""><?= e((string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></option>
                     <?php foreach ($albumSubcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -450,7 +450,7 @@ ob_start();
                     <?php endforeach; ?>
                 </select>
             </label>
-            <label><span>Mots cles</span><input type="text" name="proposal_keywords" maxlength="255"></label>
+            <label><span>Mots clés</span><input type="text" name="proposal_keywords" maxlength="255"></label>
             <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
             <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
@@ -483,8 +483,8 @@ ob_start();
 
     <section class="albums-layout module-taxonomy-layout">
         <aside class="card albums-taxonomy module-taxonomy-index">
-            <p class="module-taxonomy-title"><?= e((string) ($t['category_field'] ?? 'Thematique')) ?></p>
-            <nav class="module-taxonomy-list" aria-label="<?= e((string) ($t['category_field'] ?? 'Thematique')) ?>">
+            <p class="module-taxonomy-title"><?= e((string) ($t['category_field'] ?? 'Thématique')) ?></p>
+            <nav class="module-taxonomy-list" aria-label="<?= e((string) ($t['category_field'] ?? 'Thématique')) ?>">
                 <?php if ($favoriteAlbumCount > 0): ?>
                     <a class="module-taxonomy-item<?= $favoritesOnly ? ' is-active' : '' ?>" href="<?= e(route_url_clean('albums', ['favorites' => '1', 'q' => $search])) ?>"<?= $favoritesOnly ? ' aria-current="page"' : '' ?>>
                         <span><?= e($favoritesLabel) ?></span>
@@ -534,7 +534,7 @@ ob_start();
                     $description = trim((string) ($row['description'] ?? ''));
                     $albumCategory = 'general';
                     $albumSubcategory = '';
-                    $albumCategoryLabel = (string) ($albumCategories['general'] ?? 'General');
+                    $albumCategoryLabel = (string) ($albumCategories['general'] ?? 'Général');
                     $albumSubcategoryLabel = '';
                     $canEditAlbum = false;
                     try {
@@ -569,7 +569,7 @@ ob_start();
                                 <?php if ($description !== ''): ?>
                                     <p><?= e(mb_safe_strimwidth($description, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
-                                <p class="help"><?= e((string) ($t['category_field'] ?? 'Thematique')) ?>: <?= e($albumCategoryLabel) ?><?= $albumSubcategoryLabel !== '' ? ' / ' . e($albumSubcategoryLabel) : '' ?></p>
+                                <p class="help"><?= e((string) ($t['category_field'] ?? 'Thématique')) ?>: <?= e($albumCategoryLabel) ?><?= $albumSubcategoryLabel !== '' ? ' / ' . e($albumSubcategoryLabel) : '' ?></p>
                             </div>
                             <div class="album-tile-footer">
                                 <span class="badge muted"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span>

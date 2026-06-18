@@ -803,10 +803,10 @@ ob_start();
             <label id="article-category-custom" hidden><?= e($t('new_category_id')) ?>
                 <input type="text" name="category_custom" value="" placeholder="<?= e($t('custom_category_ph')) ?>">
             </label>
-            <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+            <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
                 <select name="subcategory_ref">
                     <?php $editingSubcategory = article_subcategory_code((string) ($editing['subcategory'] ?? '')); ?>
-                    <option value=""><?= e($t('no_subcategory', 'Sans sous-thematique')) ?></option>
+                    <option value=""><?= e($t('no_subcategory', 'Sans sous-thématique')) ?></option>
                     <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
                         <?php if ($subcategories === []): ?>
                             <?php continue; ?>
@@ -1023,9 +1023,9 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+                <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
                     <select name="subcategory">
-                        <option value=""><?= e($t('no_subcategory', 'Sans sous-thematique')) ?></option>
+                        <option value=""><?= e($t('no_subcategory', 'Sans sous-thématique')) ?></option>
                         <?php foreach ($articleSubcategoriesByCategory as $subcategoryCategoryCode => $subcategories): ?>
                             <?php if ($subcategories === []): ?>
                                 <?php continue; ?>
@@ -1087,7 +1087,7 @@ ob_start();
                     <input type="text" name="category_label" maxlength="160" required>
                 </label>
                 <input type="hidden" name="category_code" value="">
-                <button class="button" type="submit"><?= e($t('add_category', 'Ajouter une thematique')) ?></button>
+                <button class="button" type="submit"><?= e($t('add_category', 'Ajouter une thématique')) ?></button>
             </form>
             <form method="post" class="stack">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -1099,11 +1099,11 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </label>
-                <label><?= e($t('subcategory_field', 'Sous-thematique')) ?>
+                <label><?= e($t('subcategory_field', 'Sous-thématique')) ?>
                     <input type="text" name="subcategory_label" maxlength="160" required>
                 </label>
                 <input type="hidden" name="subcategory_code" value="">
-                <button class="button" type="submit"><?= e($t('add_subcategory', 'Ajouter une sous-thematique')) ?></button>
+                <button class="button" type="submit"><?= e($t('add_subcategory', 'Ajouter une sous-thématique')) ?></button>
             </form>
         </div>
         <div class="tags-cloud">

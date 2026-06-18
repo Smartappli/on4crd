@@ -154,7 +154,7 @@ ob_start();
             <span class="badge muted"><?= count($committeeRows) ?> <?= e($tr('committee_members', 'membre(s)')) ?></span>
         </div>
         <?php if ($committeeRows === []): ?>
-            <p class="help"><?= e($tr('empty_summary', 'Aucun membre n est affiche sur la page comite.')) ?></p>
+            <p class="help"><?= e($tr('empty_summary', 'Aucun membre n’est affiché sur la page comité.')) ?></p>
         <?php else: ?>
             <div class="table-wrap">
                 <table>

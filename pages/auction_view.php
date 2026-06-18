@@ -33,7 +33,7 @@ set_page_meta([
     'canonical' => $auctionUrl,
     'schema_type' => 'Product',
     'modified_time' => !empty($lot['updated_at']) ? date('c', strtotime((string) $lot['updated_at'])) : null,
-    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'enchere radioamateur', 'materiel radioamateur'],
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'enchère radioamateur', 'matériel radioamateur'],
     'citation_author' => 'Radio Club Durnal ON4CRD',
     'json_ld' => [
         [

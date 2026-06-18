@@ -92,13 +92,13 @@ $proposalAreaLabels = [
     'auctions' => $text('auctions_title', $isFrench ? 'Encheres' : 'Auctions'),
     'classifieds' => $text('classifieds_title', 'Classifieds'),
     'events' => $text('events_title', 'Events'),
-    'members_library' => $text('library_title', $isFrench ? 'Bibliotheque membres' : 'Member library'),
-    'news' => $text('news_title', $isFrench ? 'Actualites' : 'News'),
+    'members_library' => $text('library_title', $isFrench ? 'Bibliothèque membres' : 'Member library'),
+    'news' => $text('news_title', $isFrench ? 'Actualités' : 'News'),
     'fichiers' => $text('files_title', $isFrench ? 'Fichiers' : 'Files'),
     'presentations' => $text('presentations_title', $isFrench ? 'Presentations' : 'Presentations'),
     'pv' => $text('minutes_title', $isFrench ? 'Proces verbaux' : 'Minutes'),
     'videos' => $text('videos_title', $isFrench ? 'Videos' : 'Videos'),
-    'webotheque' => $text('webotheque_title', $isFrench ? 'Webotheque' : 'Web library'),
+    'webotheque' => $text('webotheque_title', $isFrench ? 'Webothèque' : 'Web library'),
     'wiki' => $text('wiki_title', 'Wiki'),
 ];
 $proposalTypeLabels = [
@@ -257,7 +257,7 @@ if (table_exists('member_library_documents')) {
             if ($subcategoryValue !== '') {
                 $urlQuery['subcategory'] = $subcategoryValue;
             }
-            $metaParts = [$text('library_title', $isFrench ? 'Bibliotheque membres' : 'Member library')];
+            $metaParts = [$text('library_title', $isFrench ? 'Bibliothèque membres' : 'Member library')];
             if ($categoryValue !== '') {
                 $metaParts[] = $categoryValue;
             }

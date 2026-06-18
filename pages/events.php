@@ -47,7 +47,7 @@ function events_public_unique_slug(string $title, int $ignoreId = 0, int $maxLen
         $suffix++;
     } while ($suffix < 10000);
 
-    throw new RuntimeException('Impossible de generer un slug evenement unique.');
+    throw new RuntimeException('Impossible de générer un slug événement unique.');
 }
 }
 
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $location !== '' ? $location : null,
                     ]);
                 cache_forget('home_next_event_v1');
-                set_flash('success', 'Evenement publie directement.');
+                set_flash('success', 'Événement publié directement.');
                 redirect_url(route_url('event_view', ['slug' => $slug]));
             }
             $proposalId = content_proposal_create((int) $user['id'], 'events', 'content', $proposalTitle, $proposalSummary, $proposalContact);
@@ -304,7 +304,7 @@ ob_start();
             <div>
                 <p class="events-hero-title"><?= e($t['calendar_name']) ?></p>
                 <h2 id="events-proposal-title"><?= e($canManageEvents ? 'Créer un événement' : $t['propose_event']) ?></h2>
-                <p class="help"><?= e($canManageEvents ? 'Votre evenement sera publie directement.' : $t['propose_event_intro']) ?></p>
+                <p class="help"><?= e($canManageEvents ? 'Votre événement sera publié directement.' : $t['propose_event_intro']) ?></p>
             </div>
             <button class="events-proposal-dialog-close module-dialog-close" type="button" data-event-proposal-close aria-label="<?= e($t['propose_event_close']) ?>">&times;</button>
         </div>

@@ -31,7 +31,7 @@ $proposalStatusLabels = [
     'rejected' => $tr('proposal_status_rejected', 'Refusee'),
 ];
 $proposalTypeLabels = [
-    'category' => $tr('proposal_type_category', 'Thematique'),
+    'category' => $tr('proposal_type_category', 'Thématique'),
     'content' => $tr('proposal_type_content', 'Contenu'),
     'domain' => $tr('proposal_type_domain', 'Domaine'),
     'tag' => $tr('proposal_type_tag', 'Mot cle'),

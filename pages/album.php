@@ -88,7 +88,7 @@ $pageMeta = [
     'ai_summary' => $albumDescription !== '' ? $albumDescription : (string) $t['meta_desc'],
     'canonical' => route_url_with_locale('album', $locale, ['id' => (int) $album['id']]),
     'schema_type' => 'ImageGallery',
-    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'album photo', 'radioamateur', 'activites club'],
+    'keywords' => ['ON4CRD', 'Radio Club Durnal', 'album photo', 'radioamateur', 'activités club'],
     'citation_author' => 'Radio Club Durnal ON4CRD',
 ];
 if ($coverPath !== null) {

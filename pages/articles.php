@@ -448,7 +448,7 @@ ob_start();
                 </a>
                 <?php endif; ?>
                 <a class="articles-category-item module-taxonomy-item<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('articles', ['q' => $search])) ?>"<?= !$favoritesOnly && $themeFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
-                    <span><?= e((string) ($t['all_categories'] ?? 'Toutes les thematiques')) ?></span>
+                    <span><?= e((string) ($t['all_categories'] ?? 'Toutes les thématiques')) ?></span>
                     <strong><?= (int) array_sum($themeCounts) ?></strong>
                 </a>
             <?php foreach ($visibleArticleCategories as $themeCode => $themeLabel): ?>

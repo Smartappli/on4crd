@@ -21,7 +21,7 @@ function widget_catalog(): array
         ],
         'ham_weather_advice' => [
             'title' => 'Meteo radioamateur',
-            'description' => 'Score QSO, bandes, modes et creneau conseille depuis les donnees meteo et propagation.',
+            'description' => 'Score QSO, bandes, modes et créneau conseillé depuis les données météo et propagation.',
         ],
     ] + hamqsl_widget_catalog();
 }

@@ -86,7 +86,7 @@ function ensure_member_library_categories_table(): void
     $categoryInsert = db()->prepare('INSERT IGNORE INTO member_library_categories (code, label, sort_order) VALUES (?, ?, ?)');
     $defaultCategories = function_exists('member_library_default_categories')
         ? member_library_default_categories()
-        : [['code' => 'general', 'label' => 'General', 'sort_order' => 1]];
+        : [['code' => 'general', 'label' => 'Général', 'sort_order' => 1]];
     foreach ($defaultCategories as $category) {
         $categoryInsert->execute([
             (string) $category['code'],

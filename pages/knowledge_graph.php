@@ -39,7 +39,7 @@ $graph = [
                 'propagation radio',
                 'plans de bandes belges',
                 'formations radioamateur',
-                'activites radio club',
+                'activités radio club',
             ],
             'areaServed' => ['Durnal', 'Yvoir', 'Province de Namur', 'Belgique'],
             'location' => ['@id' => $homeUrl . '#place'],
@@ -92,8 +92,8 @@ $graph = [
 ];
 
 foreach ([
-    ['route' => 'news', 'name' => 'Actualites ON4CRD', 'about' => 'actualites radioamateur'],
-    ['route' => 'events', 'name' => 'Agenda ON4CRD', 'about' => 'evenements radioamateurs'],
+    ['route' => 'news', 'name' => 'Actualités ON4CRD', 'about' => 'actualités radioamateur'],
+    ['route' => 'events', 'name' => 'Agenda ON4CRD', 'about' => 'événements radioamateurs'],
     ['route' => 'articles', 'name' => 'Articles techniques ON4CRD', 'about' => 'documentation technique radioamateur'],
     ['route' => 'wiki', 'name' => 'Wiki ON4CRD', 'about' => 'base de connaissances radioamateur'],
     ['route' => 'tools', 'name' => 'Outils radioamateurs ON4CRD', 'about' => 'outils de calcul radioamateur'],
