@@ -54,10 +54,33 @@ function ad_runtime_status(array $ad): string
  */
 function available_ad_placements(): array
 {
+    if (table_exists('ad_placements')) {
+        try {
+            $rows = db()->query('SELECT id, code, name, description, sort_order, is_active FROM ad_placements WHERE is_active = 1 ORDER BY sort_order ASC, name ASC')->fetchAll() ?: [];
+            if ($rows !== []) {
+                return array_map(static function (array $row): array {
+                    $name = (string) ($row['name'] ?? '');
+
+                    return [
+                        'id' => (int) ($row['id'] ?? 0),
+                        'code' => (string) ($row['code'] ?? ''),
+                        'name' => $name,
+                        'label' => $name,
+                        'description' => (string) ($row['description'] ?? ''),
+                        'sort_order' => (int) ($row['sort_order'] ?? 0),
+                        'is_active' => (int) ($row['is_active'] ?? 1),
+                    ];
+                }, $rows);
+            }
+        } catch (Throwable) {
+            // Static fallback keeps read-only pages usable when the schema is unavailable.
+        }
+    }
+
     return [
-        ['code' => 'home_hero', 'label' => 'Accueil (hero)'],
-        ['code' => 'home_sidebar', 'label' => 'Accueil (latéral)'],
-        ['code' => 'news_inline', 'label' => 'Actualités (inline)'],
+        ['id' => 0, 'code' => 'homepage_top', 'name' => 'Accueil (haut)', 'label' => 'Accueil (haut)', 'description' => 'Banniere en haut de la page d accueil', 'sort_order' => 10, 'is_active' => 1],
+        ['id' => 0, 'code' => 'sidebar', 'name' => 'Barre laterale', 'label' => 'Barre laterale', 'description' => 'Emplacement encart lateral', 'sort_order' => 20, 'is_active' => 1],
+        ['id' => 0, 'code' => 'article_inline', 'name' => 'Article (inline)', 'label' => 'Article (inline)', 'description' => 'Annonce dans le contenu des articles', 'sort_order' => 30, 'is_active' => 1],
     ];
 }
 
@@ -70,6 +93,39 @@ function ad_placements_for_member(int $memberId): array
 }
 
 /**
+ * @return array{impressions:int,clicks:int,ctr:float,unique_viewers:int}
+ */
+function ad_summary_stats(int $adId): array
+{
+    if ($adId <= 0 || !table_exists('ad_events')) {
+        return ['impressions' => 0, 'clicks' => 0, 'ctr' => 0.0, 'unique_viewers' => 0];
+    }
+
+    try {
+        $stmt = db()->prepare('SELECT SUM(event_type = "impression") AS impressions, SUM(event_type = "click") AS clicks FROM ad_events WHERE ad_id = ?');
+        $stmt->execute([$adId]);
+        $row = $stmt->fetch() ?: [];
+        $impressions = (int) ($row['impressions'] ?? 0);
+        $clicks = (int) ($row['clicks'] ?? 0);
+        $uniqueViewers = 0;
+        if (table_has_column('ad_events', 'ip_hash')) {
+            $uniqueStmt = db()->prepare('SELECT COUNT(DISTINCT ip_hash) FROM ad_events WHERE ad_id = ? AND ip_hash IS NOT NULL AND ip_hash <> ""');
+            $uniqueStmt->execute([$adId]);
+            $uniqueViewers = (int) ($uniqueStmt->fetchColumn() ?: 0);
+        }
+
+        return [
+            'impressions' => $impressions,
+            'clicks' => $clicks,
+            'ctr' => $impressions > 0 ? round(($clicks / $impressions) * 100, 2) : 0.0,
+            'unique_viewers' => $uniqueViewers,
+        ];
+    } catch (Throwable) {
+        return ['impressions' => 0, 'clicks' => 0, 'ctr' => 0.0, 'unique_viewers' => 0];
+    }
+}
+
+/**
  * @return array<int, array<string,mixed>>
  */
 function member_ads(int $memberId, bool $ownerOnly = true): array
@@ -78,24 +134,19 @@ function member_ads(int $memberId, bool $ownerOnly = true): array
         return [];
     }
 
-    $placementMap = [];
-    foreach (available_ad_placements() as $placement) {
-        $placementMap[(string) ($placement['code'] ?? '')] = (string) ($placement['label'] ?? '');
-    }
-
     if ($ownerOnly) {
-        $stmt = db()->prepare('SELECT a.* FROM ads a WHERE a.owner_member_id = ? ORDER BY a.updated_at DESC, a.id DESC');
+        $stmt = db()->prepare('SELECT a.*, ap.code AS placement_code, ap.name AS placement_name, m.callsign AS owner_callsign FROM ads a INNER JOIN ad_placements ap ON ap.id = a.placement_id LEFT JOIN members m ON m.id = a.owner_member_id WHERE a.owner_member_id = ? ORDER BY a.updated_at DESC, a.id DESC');
         $stmt->execute([$memberId]);
         $rows = $stmt->fetchAll() ?: [];
     } else {
-        $rows = db()->query('SELECT a.* FROM ads a ORDER BY a.updated_at DESC, a.id DESC')->fetchAll() ?: [];
+        $rows = db()->query('SELECT a.*, ap.code AS placement_code, ap.name AS placement_name, m.callsign AS owner_callsign FROM ads a INNER JOIN ad_placements ap ON ap.id = a.placement_id LEFT JOIN members m ON m.id = a.owner_member_id ORDER BY a.updated_at DESC, a.id DESC')->fetchAll() ?: [];
     }
 
     foreach ($rows as &$row) {
         $row['runtime_status'] = ad_runtime_status($row);
-        $code = (string) ($row['placement_code'] ?? '');
-        $row['placement_name'] = $placementMap[$code] ?? $code;
+        $row['placement_name'] = (string) ($row['placement_name'] ?? $row['placement_code'] ?? '');
         $row['owner_callsign'] = (string) ($row['owner_callsign'] ?? '');
+        $row['stats'] = ad_summary_stats((int) ($row['id'] ?? 0));
     }
     unset($row);
 
@@ -110,23 +161,40 @@ function ad_fetch_by_id(int $adId): ?array
     if ($adId <= 0 || !table_exists('ads')) {
         return null;
     }
-    $stmt = db()->prepare('SELECT * FROM ads WHERE id = ? LIMIT 1');
+    $stmt = db()->prepare('SELECT a.*, ap.code AS placement_code, ap.name AS placement_name, m.callsign AS owner_callsign FROM ads a INNER JOIN ad_placements ap ON ap.id = a.placement_id LEFT JOIN members m ON m.id = a.owner_member_id WHERE a.id = ? LIMIT 1');
     $stmt->execute([$adId]);
     $row = $stmt->fetch();
-    return is_array($row) ? $row : null;
+    if (!is_array($row)) {
+        return null;
+    }
+    $row['runtime_status'] = ad_runtime_status($row);
+    $row['stats'] = ad_summary_stats((int) ($row['id'] ?? 0));
+    $row['summary'] = $row['stats'];
+
+    return $row;
 }
 
 /**
- * @return array<int, array{day:string,impressions:int,clicks:int}>
+ * @return array<int, array{event_date:string,placement_code:string,impressions:int,clicks:int,ctr:float}>
  */
 function ad_daily_stats(int $adId): array
 {
     if ($adId <= 0 || !table_exists('ad_events')) {
         return [];
     }
-    $stmt = db()->prepare('SELECT DATE(created_at) AS day, SUM(event_type = "impression") AS impressions, SUM(event_type = "click") AS clicks FROM ad_events WHERE ad_id = ? GROUP BY DATE(created_at) ORDER BY day DESC LIMIT 30');
+    $stmt = db()->prepare('SELECT DATE(created_at) AS event_date, placement_code, SUM(event_type = "impression") AS impressions, SUM(event_type = "click") AS clicks FROM ad_events WHERE ad_id = ? GROUP BY DATE(created_at), placement_code ORDER BY event_date DESC LIMIT 30');
     $stmt->execute([$adId]);
-    return $stmt->fetchAll() ?: [];
+    $rows = $stmt->fetchAll() ?: [];
+    foreach ($rows as &$row) {
+        $impressions = (int) ($row['impressions'] ?? 0);
+        $clicks = (int) ($row['clicks'] ?? 0);
+        $row['impressions'] = $impressions;
+        $row['clicks'] = $clicks;
+        $row['ctr'] = $impressions > 0 ? round(($clicks / $impressions) * 100, 2) : 0.0;
+    }
+    unset($row);
+
+    return $rows;
 }
 
 function log_ad_event(int $adId, string $eventType, string $placementCode = ''): void
