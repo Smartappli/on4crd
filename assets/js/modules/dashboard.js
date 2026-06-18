@@ -39,7 +39,8 @@
   const saveEnabled = Boolean(dashboardConfig.saveEnabled);
   const saveButton = document.getElementById('save-dashboard');
   const saveStatus = document.getElementById('dashboard-save-status');
-  const addWidgetContainer = document.querySelector('.split-home aside .stack');
+  const addWidgetContainer = document.querySelector('#dashboard-widgets-panel .stack')
+    || document.querySelector('.split-home aside .stack');
   const addWidgetTemplates = new Map();
   const hiddenCatalogWidgets = new Set(['welcome']);
   let dragged = null;

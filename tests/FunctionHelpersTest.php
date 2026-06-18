@@ -456,6 +456,8 @@ final class FunctionHelpersTest extends TestCase
             self::assertStringContainsString("'" . $key . "' => \$t('" . $key . "')", $dashboard);
         }
         self::assertStringContainsString('dashboardConfig.i18n', $dashboardJs);
+        self::assertStringContainsString("document.querySelector('#dashboard-widgets-panel .stack')", $dashboardJs);
+        self::assertStringContainsString("|| document.querySelector('.split-home aside .stack')", $dashboardJs);
 
         foreach (['Sauvegarde indisponible', 'Enregistrement', 'Réponse serveur invalide', 'Erreur de sauvegarde', 'Disposition enregistrée', 'Retirer le widget', 'Prévisualisation indisponible', 'Chargement', 'Impossible de charger'] as $hardCodedFrench) {
             self::assertStringNotContainsString($hardCodedFrench, $dashboardJs);

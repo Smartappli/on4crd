@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') =
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_recommendations') {
     verify_csrf();
-    $enabled = ((string) ($_POST['recommendations_enabled'] ?? '1')) === '1';
+    $enabled = isset($_POST['recommendations_enabled']) && (string) $_POST['recommendations_enabled'] === '1';
     set_member_preference_bool($userId, 'personalized_recommendations_enabled', $enabled);
     set_flash('success', $rt('recommendations_pref_saved'));
     redirect_url(route_url('settings'));

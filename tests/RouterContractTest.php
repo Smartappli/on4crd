@@ -869,6 +869,15 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('name="allow_geocode" value="1" checked', $profile);
     }
 
+    public function testSettingsRecommendationsCheckboxCanBeDisabled(): void
+    {
+        $settings = file_get_contents(__DIR__ . '/../pages/settings.php');
+        self::assertIsString($settings);
+
+        self::assertStringContainsString("\$enabled = isset(\$_POST['recommendations_enabled']) && (string) \$_POST['recommendations_enabled'] === '1';", $settings);
+        self::assertStringNotContainsString("\$_POST['recommendations_enabled'] ?? '1'", $settings);
+    }
+
     public function testProfileQrzUrlFieldIsEditable(): void
     {
         $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
