@@ -21,6 +21,8 @@ final class MemberModulesFinalizationTest extends TestCase
         $albums = $this->source('pages/albums.php');
         $album = $this->source('pages/album.php');
         $albumHelpers = $this->source('app/album_helpers.php');
+        $albumJs = $this->source('assets/js/modules/album.js');
+        $albumsCss = $this->source('assets/css/modules/albums.css');
         $adminAlbumsJs = $this->source('assets/js/modules/admin_albums.js');
         $runtimeUpdates = $this->source('app/runtime_schema_updates.php');
         $schema = $this->source('schema/schema.sql');
@@ -43,6 +45,13 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("log_structured_event('album_detail_photos_prepare_failed'", $album);
         self::assertStringContainsString("log_structured_event('album_detail_photo_render_skipped'", $album);
         self::assertStringContainsString("\$albumTitle = trim((string) (\$album['title'] ?? ''));", $album);
+        self::assertStringContainsString('$albumDescriptionText = html_entity_decode(strip_tags($albumDescriptionText), ENT_QUOTES | ENT_HTML5, \'UTF-8\');', $album);
+        self::assertStringContainsString('data-album-viewer-open', $album);
+        self::assertStringContainsString('id="album-photo-viewer"', $album);
+        self::assertStringContainsString('data-album-description="<?= e($albumDescriptionText) ?>"', $album);
+        self::assertStringContainsString('data-album-viewer-image', $albumJs);
+        self::assertStringContainsString('dialog.showModal();', $albumJs);
+        self::assertStringContainsString('.album-photo-viewer-copy', $albumsCss);
         self::assertStringContainsString("if (\$action === 'update_album' || \$action === 'delete_album')", $albums);
         self::assertStringContainsString("!\$canManageAlbums && (int) (\$album['member_id'] ?? 0) !== (int) (\$user['id'] ?? 0)", $albums);
         self::assertStringContainsString("'Action' => 'update_album'", $albums);

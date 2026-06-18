@@ -1,7 +1,9 @@
 const test = require('node:test');
 const {
   By,
+  until,
   assert,
+  timeoutMs,
   withSelenium,
   visit,
   waitForDocumentReady,
@@ -65,5 +67,36 @@ test('Selenium album detail: les photos comptees sont rendues en cartes image', 
 
     const renderedImages = await visibleImageCount(driver, '.album-photo-card img');
     assert.equal(renderedImages, expectedOnPage, 'Chaque carte photo doit contenir une image chargee.');
+  });
+});
+
+test('Selenium album detail: une miniature ouvre la photo agrandie avec sa description', async (t) => {
+  await withSelenium(t, async (driver) => {
+    ensureSeleniumFixtures();
+    await visit(driver, 'albums', { q: 'Selenium fixture album public' });
+    const detailLinks = await driver.findElements(By.xpath('//article[contains(@class,"album-tile")]//h2/a[contains(normalize-space(.), "Selenium fixture album public")]'));
+    if (detailLinks.length === 0) {
+      t.skip('Album fixture public indisponible sur cet environnement.');
+      return;
+    }
+
+    await detailLinks[0].click();
+    await waitForDocumentReady(driver);
+    await assertNoServerError(driver);
+
+    const photoLinks = await driver.findElements(By.css('.album-photo-card [data-album-viewer-open]'));
+    assert.ok(photoLinks.length >= 1, 'La fiche album doit exposer les miniatures ouvrables.');
+
+    await photoLinks[0].click();
+    const viewer = await driver.wait(until.elementLocated(By.css('#album-photo-viewer[open]')), timeoutMs);
+    const image = await viewer.findElement(By.css('[data-album-viewer-image]'));
+    await driver.wait(async () => {
+      const src = await image.getAttribute('src');
+      return src.includes('/storage/uploads/albums/');
+    }, timeoutMs);
+
+    const copyText = await viewer.findElement(By.css('.album-photo-viewer-copy')).getText();
+    assert.match(copyText, /Album public de regression Selenium/i, 'La description de l album doit apparaitre a cote de la photo agrandie.');
+    assert.match(copyText, /Selenium fixture photo|Photo de regression Selenium/i, 'Le titre ou la legende de la photo doit rester disponible dans le viewer.');
   });
 });
