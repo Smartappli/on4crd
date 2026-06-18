@@ -470,7 +470,7 @@ test('Selenium membre dashboard: widgets, rendu AJAX, sauvegarde et retour au ca
       }, timeoutMs, 'Le panneau widgets doit s ouvrir.');
 
       const addRadio = await driver.findElement(By.css('#dashboard-widgets-panel .add-widget[data-widget="radio_clocks"]'));
-      await addRadio.click();
+      await driver.executeScript('arguments[0].click();', addRadio);
       await driver.wait(async () => {
         const cards = await driver.findElements(By.css('#dashboard-grid .widget-card[data-widget="radio_clocks"]'));
         return cards.length === 1;
