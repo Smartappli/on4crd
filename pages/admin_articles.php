@@ -294,7 +294,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
             }
             $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
-            $code = article_category_code((string) ($_POST['category_code'] ?? $label));
+            $codeInput = trim((string) ($_POST['category_code'] ?? ''));
+            $code = article_category_code($codeInput !== '' ? $codeInput : $label);
             if ($label === '' || $code === '') {
                 throw new RuntimeException($t('err_invalid_category'));
             }
@@ -330,7 +331,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $category = article_category_from_input((string) ($_POST['subcategory_category'] ?? 'autres'), $knownCategories);
             $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
-            $code = article_subcategory_code((string) ($_POST['subcategory_code'] ?? $label));
+            $codeInput = trim((string) ($_POST['subcategory_code'] ?? ''));
+            $code = article_subcategory_code($codeInput !== '' ? $codeInput : $label);
             if ($label === '' || $code === '') {
                 throw new RuntimeException($t('err_invalid_category'));
             }

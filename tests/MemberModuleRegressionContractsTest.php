@@ -118,6 +118,18 @@ final class MemberModuleRegressionContractsTest extends TestCase
         }
     }
 
+    public function testAdminArticlesOptionalTaxonomyCodesFallbackToLabels(): void
+    {
+        $source = $this->source('pages/admin_articles.php');
+
+        self::assertStringContainsString('$codeInput = trim((string) ($_POST[\'category_code\'] ?? \'\'));', $source);
+        self::assertStringContainsString('$code = article_category_code($codeInput !== \'\' ? $codeInput : $label);', $source);
+        self::assertStringContainsString('$codeInput = trim((string) ($_POST[\'subcategory_code\'] ?? \'\'));', $source);
+        self::assertStringContainsString('$code = article_subcategory_code($codeInput !== \'\' ? $codeInput : $label);', $source);
+        self::assertStringNotContainsString('article_category_code((string) ($_POST[\'category_code\'] ?? $label))', $source);
+        self::assertStringNotContainsString('article_subcategory_code((string) ($_POST[\'subcategory_code\'] ?? $label))', $source);
+    }
+
     public function testSchemaKeepsTaxonomyColumnsAndDeletionTombstones(): void
     {
         $schema = $this->source('schema/schema.sql');
