@@ -1,4 +1,7 @@
 const test = require('node:test');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const {
   By,
   until,
@@ -80,6 +83,22 @@ if ($title !== '') {
     if (table_exists('content_proposals')) {
         db()->prepare('DELETE FROM content_proposals WHERE title = ?')->execute([$title]);
         db()->prepare('DELETE FROM content_proposals WHERE title = ?')->execute([$title . ' updated']);
+    }
+    if (table_exists('member_library_documents')) {
+        $stmt = db()->prepare('SELECT id, file_path FROM member_library_documents WHERE title = ? OR title = ?');
+        $stmt->execute([$title, $title . ' updated']);
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: [] as $row) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id > 0 && table_exists('member_favorites')) {
+                db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['library_document', $id]);
+            }
+            if (function_exists('member_library_delete_document_file')) {
+                member_library_delete_document_file((string) ($row['file_path'] ?? ''));
+            }
+            if ($id > 0) {
+                db()->prepare('DELETE FROM member_library_documents WHERE id = ?')->execute([$id]);
+            }
+        }
     }
 }
 `, { SELENIUM_TEST_TITLE: title });
@@ -175,6 +194,46 @@ test('Selenium membre: proposer un article et le retrouver dans Mes contenus', a
       const text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'La proposition article doit apparaitre dans Mes contenus.');
       assert.match(text, /article/i);
+    } finally {
+      cleanupWorkflowRows(title);
+    }
+  });
+});
+
+test('Selenium membre: ajouter un document bibliotheque et le retrouver en ligne et dans Mes contenus', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const title = `selenium-library-${Date.now()}`;
+  const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
+  fs.mkdirSync(fixtureDir, { recursive: true });
+  const fixture = path.join(fixtureDir, `${title}.txt`);
+  fs.writeFileSync(fixture, `Document Selenium ${title}\n`, 'utf8');
+  cleanupWorkflowRows(title);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'admin_library');
+
+      const form = await driver.findElement(By.css('form.admin-library-upload-form'));
+      await form.findElement(By.css('input[name="title"]')).sendKeys(title);
+      await form.findElement(By.css('input[name="tags"]')).sendKeys('formation');
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="description"]')), 'Document bibliotheque Selenium.');
+      await form.findElement(By.css('input[type="file"][name="document"]')).sendKeys(path.resolve(fixture));
+      await submitForm(driver, form);
+
+      await visit(driver, 'members_library', { q: title });
+      let text = await pagePlainText(driver);
+      assert.match(text, new RegExp(title), 'Le document ajoute doit etre visible en ligne dans la bibliotheque membre.');
+
+      await visit(driver, 'my_requests');
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(title), 'Le document ajoute doit apparaitre dans Mes contenus.');
+      assert.match(text, /biblioth|library/i);
     } finally {
       cleanupWorkflowRows(title);
     }

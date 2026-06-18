@@ -181,7 +181,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
-        self::assertStringContainsString("'member_library_helpers.php' => ['members_library', 'search'", $routeHelperLoader);
+        self::assertStringContainsString("'member_library_helpers.php' => ['members_library', 'my_requests', 'search'", $routeHelperLoader);
+        self::assertStringContainsString("'member_module_documents.php' => ['my_requests', 'presentations'", $routeHelperLoader);
+        self::assertStringContainsString('SELECT id, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_library_documents WHERE member_id = ?', $this->source('pages/my_requests.php'));
+        self::assertStringContainsString('SELECT id, module_code, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_module_documents WHERE member_id = ?', $this->source('pages/my_requests.php'));
+        self::assertStringContainsString('$directDocumentSourceRefs[$sourceKey] = true;', $this->source('pages/my_requests.php'));
         self::assertStringContainsString("function_exists('ensure_member_library_table') && ensure_member_library_table()", $searchPage);
         self::assertStringContainsString('SELECT title, description, extracted_text, category, subcategory, tags FROM member_library_documents', $searchPage);
         self::assertStringContainsString("if (\$action === 'update_document' || \$action === 'delete_document')", $library);
