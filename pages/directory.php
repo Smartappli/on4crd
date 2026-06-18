@@ -25,19 +25,30 @@ if (table_exists('members')) {
     $viewer = current_user();
     $allowedVisibilityLevels = member_profile_allowed_visibility_levels(is_array($viewer) ? $viewer : null);
     $visibilityPlaceholders = implode(',', array_fill(0, count($allowedVisibilityLevels), '?'));
+    $memberColumnSql = static function (string $column, string $default = "''"): string {
+        return table_has_column('members', $column) ? $column : $default;
+    };
+    $memberVisibilitySql = static function (string $column, string $default = 'private'): string {
+        return table_has_column('members', $column) ? $column : "'" . $default . "'";
+    };
 
     $directoryVisibleWhere = 'is_active = 1 AND directory_hidden = 0';
-    $sql = 'SELECT ' . member_profile_select_columns_sql() . ', is_committee, committee_role
+    if (!table_has_column('members', 'directory_hidden')) {
+        $directoryVisibleWhere = 'is_active = 1';
+    }
+    $committeeSelect = $memberColumnSql('is_committee', '0') . ' AS is_committee, '
+        . $memberColumnSql('committee_role') . ' AS committee_role';
+    $sql = 'SELECT ' . member_profile_select_columns_sql() . ', ' . $committeeSelect . '
         FROM members
         WHERE ' . $directoryVisibleWhere;
     $params = [];
 
     if ($search !== '') {
-        $sql .= ' AND (UPPER(callsign) LIKE ?
-            OR (first_name LIKE ? AND visibility_first_name IN (' . $visibilityPlaceholders . '))
-            OR (last_name LIKE ? AND visibility_last_name IN (' . $visibilityPlaceholders . '))
-            OR (address LIKE ? AND visibility_address IN (' . $visibilityPlaceholders . '))
-            OR (postal_code LIKE ? AND visibility_postal_code IN (' . $visibilityPlaceholders . ')))';
+        $sql .= ' AND (UPPER(' . $memberColumnSql('callsign') . ') LIKE ?
+            OR (' . $memberColumnSql('first_name') . ' LIKE ? AND ' . $memberVisibilitySql('visibility_first_name', 'members') . ' IN (' . $visibilityPlaceholders . '))
+            OR (' . $memberColumnSql('last_name') . ' LIKE ? AND ' . $memberVisibilitySql('visibility_last_name') . ' IN (' . $visibilityPlaceholders . '))
+            OR (' . $memberColumnSql('address') . ' LIKE ? AND ' . $memberVisibilitySql('visibility_address') . ' IN (' . $visibilityPlaceholders . '))
+            OR (' . $memberColumnSql('postal_code') . ' LIKE ? AND ' . $memberVisibilitySql('visibility_postal_code') . ' IN (' . $visibilityPlaceholders . ')))';
         $like = '%' . $search . '%';
         $params[] = '%' . mb_safe_strtoupper($search) . '%';
         $params[] = $like;
@@ -58,7 +69,7 @@ if (table_exists('members')) {
         }
     }
     if ($licenceFilter !== '') {
-        $sql .= ' AND licence_class = ? AND visibility_licence_class IN (' . $visibilityPlaceholders . ')';
+        $sql .= ' AND ' . $memberColumnSql('licence_class') . ' = ? AND ' . $memberVisibilitySql('visibility_licence_class') . ' IN (' . $visibilityPlaceholders . ')';
         $params[] = $licenceFilter;
         foreach ($allowedVisibilityLevels as $visibilityLevel) {
             $params[] = $visibilityLevel;
@@ -73,7 +84,7 @@ if (table_exists('members')) {
 
     $countsStmt = db()->prepare(
         'SELECT COUNT(*) AS active_total,
-                SUM(CASE WHEN is_uba_member = 1 AND visibility_uba IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
+                SUM(CASE WHEN ' . $memberColumnSql('is_uba_member', '0') . ' = 1 AND ' . $memberVisibilitySql('visibility_uba') . ' IN (' . $visibilityPlaceholders . ') THEN 1 ELSE 0 END) AS uba_total
          FROM members
          WHERE ' . $directoryVisibleWhere
     );
@@ -111,7 +122,7 @@ if (table_exists('members')) {
     unset($member);
     $members = array_values($members);
 
-    $licenceStmt = db()->prepare('SELECT licence_class, COUNT(*) AS total FROM members WHERE ' . $directoryVisibleWhere . ' AND licence_class IS NOT NULL AND licence_class <> ? GROUP BY licence_class ORDER BY licence_class ASC');
+    $licenceStmt = db()->prepare('SELECT ' . $memberColumnSql('licence_class') . ' AS licence_class, COUNT(*) AS total FROM members WHERE ' . $directoryVisibleWhere . ' AND ' . $memberColumnSql('licence_class') . ' IS NOT NULL AND ' . $memberColumnSql('licence_class') . ' <> ? GROUP BY ' . $memberColumnSql('licence_class') . ' ORDER BY licence_class ASC');
     $licenceStmt->execute(['']);
     $licenceRows = $licenceStmt->fetchAll() ?: [];
 } else {

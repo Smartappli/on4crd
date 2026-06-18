@@ -1816,6 +1816,20 @@ function render_admin_member_document_module_page(string $module): void
                 set_flash('success', (string) ($labels['ok_added'] ?? 'Saved.'));
                 redirect_url(route_url_clean($adminRoute, ['category' => $code]));
             }
+            if ($action === 'update_category') {
+                if (!member_document_ensure_categories_table($moduleCode)) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $category = member_document_category_from_input((string) ($_POST['category_code'] ?? ''), $categories);
+                $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+                if ($label === '') {
+                    throw new RuntimeException('err_required');
+                }
+                db()->prepare('INSERT INTO member_module_categories (module_code, code, label, deleted_at) VALUES (?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                    ->execute([$moduleCode, $category, $label]);
+                set_flash('success', (string) ($labels['ok_updated'] ?? 'Saved.'));
+                redirect_url(route_url_clean($adminRoute, ['category' => $category]));
+            }
             if ($action === 'delete_category') {
                 if (!member_document_ensure_categories_table($moduleCode)) {
                     throw new RuntimeException('storage_unavailable');
@@ -1849,6 +1863,22 @@ function render_admin_member_document_module_page(string $module): void
                     ->execute([$moduleCode, $category, $code, $label]);
                 set_flash('success', (string) ($labels['ok_added'] ?? 'Saved.'));
                 redirect_url(route_url_clean($adminRoute, ['category' => $category, 'subcategory' => $code]));
+            }
+            if ($action === 'update_subcategory') {
+                if (!member_document_ensure_subcategories_table($moduleCode)) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $parts = member_document_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+                $category = member_document_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $categories);
+                $subcategory = member_document_subcategory_code($parts['subcategory']);
+                $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+                if ($subcategory === '' || $label === '') {
+                    throw new RuntimeException('err_required');
+                }
+                db()->prepare('INSERT INTO member_module_subcategories (module_code, category_code, code, label, deleted_at) VALUES (?, ?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                    ->execute([$moduleCode, $category, $subcategory, $label]);
+                set_flash('success', (string) ($labels['ok_updated'] ?? 'Saved.'));
+                redirect_url(route_url_clean($adminRoute, ['category' => $category, 'subcategory' => $subcategory]));
             }
             if ($action === 'delete_subcategory') {
                 if (!member_document_ensure_subcategories_table($moduleCode)) {
@@ -2069,10 +2099,12 @@ function render_admin_member_document_module_page(string $module): void
                     <?php $categoryDeleteDisabled = (string) $code === 'general' || $subcategoryTotal > 0; ?>
                     <form method="post" class="inline-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="delete_category">
+                        <input type="hidden" name="action" value="update_category">
                         <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
-                        <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
-                        <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
+                        <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
+                        <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e((string) ($labels['save_document'] ?? 'Save')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
                     </form>
                 <?php endforeach; ?>
                 <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -2082,10 +2114,12 @@ function render_admin_member_document_module_page(string $module): void
                         <?php $subTotal = (int) (($stats['by_subcategory'][(string) $parentCode . ':' . $subCode] ?? 0)); ?>
                         <form method="post" class="inline-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                            <input type="hidden" name="action" value="delete_subcategory">
+                            <input type="hidden" name="action" value="update_subcategory">
                             <input type="hidden" name="subcategory_ref" value="<?= e(member_document_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                            <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
-                            <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
+                            <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                            <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                            <button class="button small" type="submit"><?= e((string) ($labels['save_document'] ?? 'Save')) ?></button>
+                            <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
                         </form>
                     <?php endforeach; ?>
                 <?php endforeach; ?>

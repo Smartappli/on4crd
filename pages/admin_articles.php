@@ -305,6 +305,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_url(route_url_clean('admin_articles', ['category' => $code]));
         }
 
+        if ($action === 'update_category') {
+            if (!article_ensure_categories_table($articleMessages)) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $category = article_category_from_input((string) ($_POST['category_code'] ?? $_POST['code'] ?? ''), $knownCategories);
+            $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+            if ($label === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                ->execute([$category, $label]);
+            set_flash('success', $t('ok_category_updated'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category]));
+        }
+
         if ($action === 'delete_category') {
             if (!article_ensure_categories_table($articleMessages) || !article_ensure_subcategories_table()) {
                 throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
@@ -340,6 +355,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([$category, $code, $label]);
             set_flash('success', $t('ok_subcategory_updated', 'Sous-thématique enregistrée.'));
             redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $code]));
+        }
+
+        if ($action === 'update_subcategory') {
+            if (!article_ensure_subcategories_table()) {
+                throw new RuntimeException($t('module_unavailable', 'Stockage indisponible.'));
+            }
+            $parts = article_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+            $category = article_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'autres'), $knownCategories);
+            $subcategory = article_subcategory_code($parts['subcategory']);
+            $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+            if ($subcategory === '' || $label === '') {
+                throw new RuntimeException($t('err_invalid_category'));
+            }
+            db()->prepare('INSERT INTO article_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $subcategory, $label]);
+            set_flash('success', $t('ok_subcategory_updated', 'Sous-thématique enregistrée.'));
+            redirect_url(route_url_clean('admin_articles', ['category' => $category, 'subcategory' => $subcategory]));
         }
 
         if ($action === 'delete_subcategory') {
@@ -1083,10 +1115,12 @@ ob_start();
                 ?>
                 <form method="post" class="inline-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="delete_category">
+                    <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $categoryCode) ?>">
-                    <span class="pill"><?= e((string) $categoryLabel) ?> (<?= $categoryTotal ?>)</span>
-                    <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                    <span class="pill"><?= e((string) $categoryCode) ?> (<?= $categoryTotal ?>)</span>
+                    <input type="text" name="category_label" value="<?= e((string) $categoryLabel) ?>" maxlength="160" required>
+                    <button class="button small" type="submit"><?= e($t('save', 'Enregistrer')) ?></button>
+                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
                 </form>
             <?php endforeach; ?>
             <?php foreach ($articleSubcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -1100,10 +1134,12 @@ ob_start();
                     ?>
                     <form method="post" class="inline-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_ref" value="<?= e(article_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                        <span class="pill"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
-                        <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
+                        <span class="pill"><?= e((string) ($knownCategories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                        <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e($t('save', 'Enregistrer')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($t('delete', 'Supprimer')) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>

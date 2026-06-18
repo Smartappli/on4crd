@@ -78,6 +78,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_url(route_url_clean('admin_wiki'));
         }
 
+        if ($action === 'update_category') {
+            if (!wiki_ensure_categories_table()) {
+                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+            }
+            $category = wiki_category_from_input((string) ($_POST['category_code'] ?? ''), $wikiCategories);
+            $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+            if ($label === '') {
+                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+            }
+            db()->prepare('INSERT INTO wiki_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                ->execute([$category, $label]);
+            set_flash('success', $tr('category_saved', 'Thématique wiki enregistrée.'));
+            redirect_url(route_url_clean('admin_wiki'));
+        }
+
         if ($action === 'delete_category') {
             if (!wiki_ensure_categories_table()) {
                 throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
@@ -110,6 +125,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             db()->prepare('INSERT INTO wiki_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
                 ->execute([$category, $code, $label]);
+            set_flash('success', $tr('subcategory_saved', 'Sous-thématique wiki enregistrée.'));
+            redirect_url(route_url_clean('admin_wiki'));
+        }
+
+        if ($action === 'update_subcategory') {
+            if (!wiki_ensure_subcategories_table()) {
+                throw new RuntimeException($tr('storage_unavailable', 'Stockage wiki indisponible.'));
+            }
+            $parts = wiki_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+            $category = wiki_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $wikiCategories);
+            $subcategory = wiki_subcategory_code($parts['subcategory']);
+            $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+            if ($subcategory === '' || $label === '') {
+                throw new RuntimeException($tr('invalid_page', 'Page wiki invalide.'));
+            }
+            db()->prepare('INSERT INTO wiki_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$category, $subcategory, $label]);
             set_flash('success', $tr('subcategory_saved', 'Sous-thématique wiki enregistrée.'));
             redirect_url(route_url_clean('admin_wiki'));
         }
@@ -316,10 +348,12 @@ ob_start();
                 <?php $categoryDeleteDisabled = (string) $code === 'general' || $subcategoryTotal > 0; ?>
                 <form method="post" class="inline-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="delete_category">
+                    <input type="hidden" name="action" value="update_category">
                     <input type="hidden" name="category_code" value="<?= e((string) $code) ?>">
-                    <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
-                    <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
+                    <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
+                    <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
+                    <button class="button small" type="submit"><?= e($tr('save', 'Enregistrer')) ?></button>
+                    <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
                 </form>
             <?php endforeach; ?>
             <?php foreach ($wikiSubcategoriesByCategory as $parentCode => $subcategories): ?>
@@ -329,10 +363,12 @@ ob_start();
                     <?php $subTotal = (int) ($wikiSubcategoryCounts[(string) $parentCode . ':' . $subCode] ?? 0); ?>
                     <form method="post" class="inline-form">
                         <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                        <input type="hidden" name="action" value="delete_subcategory">
+                        <input type="hidden" name="action" value="update_subcategory">
                         <input type="hidden" name="subcategory_ref" value="<?= e(wiki_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                        <span class="pill"><?= e((string) ($wikiCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
-                        <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
+                        <span class="pill"><?= e((string) ($wikiCategories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                        <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                        <button class="button small" type="submit"><?= e($tr('save', 'Enregistrer')) ?></button>
+                        <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e($tr('delete', 'Supprimer')) ?></button>
                     </form>
                 <?php endforeach; ?>
             <?php endforeach; ?>

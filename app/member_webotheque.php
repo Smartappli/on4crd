@@ -1683,6 +1683,20 @@ function render_admin_webotheque_page(): void
                 set_flash('success', $adminText('category_saved', 'Thématique enregistrée.', 'Topic saved.'));
                 redirect_url(route_url_clean('admin_webotheque', ['category' => $code]));
             }
+            if ($action === 'update_category') {
+                if (!webotheque_ensure_categories_table($t)) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
+                $label = content_proposal_clean_single_line((string) ($_POST['category_label'] ?? ''), 160);
+                if ($label === '') {
+                    throw new RuntimeException('err_category_required');
+                }
+                db()->prepare('INSERT INTO member_webotheque_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                    ->execute([$category, $label]);
+                set_flash('success', $adminText('category_saved', 'Thématique enregistrée.', 'Topic saved.'));
+                redirect_url(route_url_clean('admin_webotheque', ['category' => $category]));
+            }
             if ($action === 'delete_category') {
                 if (!webotheque_ensure_categories_table($t) || !webotheque_ensure_subcategories_table()) {
                     throw new RuntimeException('storage_unavailable');
@@ -1716,6 +1730,22 @@ function render_admin_webotheque_page(): void
                     ->execute([$category, $code, $label]);
                 set_flash('success', $adminText('subcategory_saved', 'Sous-thématique enregistrée.', 'Subtopic saved.'));
                 redirect_url(route_url_clean('admin_webotheque', ['category' => $category, 'subcategory' => $code]));
+            }
+            if ($action === 'update_subcategory') {
+                if (!webotheque_ensure_subcategories_table()) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+                $parts = webotheque_subcategory_ref_parts((string) ($_POST['subcategory_ref'] ?? ''));
+                $category = webotheque_category_from_input($parts['category'] !== '' ? $parts['category'] : (string) ($_POST['category'] ?? 'general'), $categories);
+                $subcategory = webotheque_subcategory_code($parts['subcategory']);
+                $label = content_proposal_clean_single_line((string) ($_POST['subcategory_label'] ?? ''), 160);
+                if ($subcategory === '' || $label === '') {
+                    throw new RuntimeException('err_required');
+                }
+                db()->prepare('INSERT INTO member_webotheque_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                    ->execute([$category, $subcategory, $label]);
+                set_flash('success', $adminText('subcategory_saved', 'Sous-thématique enregistrée.', 'Subtopic saved.'));
+                redirect_url(route_url_clean('admin_webotheque', ['category' => $category, 'subcategory' => $subcategory]));
             }
             if ($action === 'delete_subcategory') {
                 if (!webotheque_ensure_subcategories_table()) {
@@ -2094,10 +2124,12 @@ function render_admin_webotheque_page(): void
                         ?>
                         <form method="post" class="inline-form">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                            <input type="hidden" name="action" value="delete_category">
+                            <input type="hidden" name="action" value="update_category">
                             <input type="hidden" name="category" value="<?= e((string) $code) ?>">
-                            <span class="pill"><?= e((string) $label) ?> (<?= $categoryTotal ?>)</span>
-                            <button class="button secondary small" type="submit"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                            <span class="pill"><?= e((string) $code) ?> (<?= $categoryTotal ?>)</span>
+                            <input type="text" name="category_label" value="<?= e((string) $label) ?>" maxlength="160" required>
+                            <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Save')) ?></button>
+                            <button class="button secondary small" type="submit" name="action" value="delete_category"<?= $categoryDeleteDisabled ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
                         </form>
                     <?php endforeach; ?>
                 </div>
@@ -2131,10 +2163,12 @@ function render_admin_webotheque_page(): void
                             ?>
                             <form method="post" class="inline-form">
                                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                                <input type="hidden" name="action" value="delete_subcategory">
+                                <input type="hidden" name="action" value="update_subcategory">
                                 <input type="hidden" name="subcategory_ref" value="<?= e(webotheque_subcategory_ref((string) $parentCode, $subCode)) ?>">
-                                <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?> (<?= $subTotal ?>)</span>
-                                <button class="button secondary small" type="submit"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
+                                <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
+                                <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                                <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Save')) ?></button>
+                                <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
                             </form>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
