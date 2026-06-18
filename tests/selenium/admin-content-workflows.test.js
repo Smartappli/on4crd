@@ -1,0 +1,242 @@
+const test = require('node:test');
+const {
+  By,
+  assert,
+  routeUrl,
+  withSelenium,
+  visit,
+  waitForDocumentReady,
+  assertNoServerError,
+  pagePlainText,
+  loginAsAdmin,
+  requireAdminCredentials,
+  runSeleniumPhp,
+} = require('./helpers');
+
+async function submitForm(driver, form) {
+  await driver.executeScript(`
+    const form = arguments[0];
+    const submitter = form.querySelector('button[type="submit"], button:not([type="button"]), input[type="submit"]');
+    if (typeof form.requestSubmit === 'function') {
+      form.requestSubmit(submitter || undefined);
+    } else {
+      form.submit();
+    }
+  `, form);
+  await waitForDocumentReady(driver);
+  await assertNoServerError(driver);
+}
+
+async function setFieldValue(driver, element, value) {
+  await driver.executeScript(`
+    const element = arguments[0];
+    const value = arguments[1];
+    element.value = value;
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+    element.dispatchEvent(new Event('change', { bubbles: true }));
+    const label = element.closest('label');
+    const editor = label ? label.querySelector('.wysiwyg-editor[contenteditable="true"]') : null;
+    if (editor) {
+      editor.innerHTML = value;
+      editor.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  `, element, value);
+}
+
+async function selectValue(driver, select, value) {
+  await driver.executeScript(`
+    const select = arguments[0];
+    const value = arguments[1];
+    select.value = value;
+    select.dispatchEvent(new Event('input', { bubbles: true }));
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  `, select, value);
+}
+
+async function browserFetchText(driver, url) {
+  return driver.executeAsyncScript(`
+    const url = arguments[0];
+    const done = arguments[arguments.length - 1];
+    fetch(url, { credentials: 'same-origin' })
+      .then((response) => response.text())
+      .then((body) => done(body))
+      .catch((error) => done('SELENIUM_FETCH_ERROR:' + error.message));
+  `, url);
+}
+
+function prepareContentStorage() {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/cache.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+if (function_exists('news_default_section_id')) {
+    news_default_section_id();
+}
+`);
+}
+
+function cleanupContentRows(slug) {
+  runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/cache.php';
+$slug = trim((string) (getenv('SELENIUM_CONTENT_SLUG') ?: ''));
+if ($slug !== '') {
+    if (table_exists('news_posts')) {
+        $stmt = db()->prepare('SELECT id FROM news_posts WHERE slug = ? OR slug LIKE ?');
+        $stmt->execute([$slug, $slug . '-%']);
+        $ids = array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN) ?: []);
+        if ($ids !== []) {
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            if (table_exists('news_translations')) {
+                db()->prepare('DELETE FROM news_translations WHERE news_post_id IN (' . $placeholders . ')')->execute($ids);
+            }
+            db()->prepare('DELETE FROM news_posts WHERE id IN (' . $placeholders . ')')->execute($ids);
+        }
+    }
+    if (table_exists('events')) {
+        db()->prepare('DELETE FROM events WHERE slug = ? OR slug LIKE ?')->execute([$slug, $slug . '-%']);
+    }
+    $cacheDir = function_exists('cache_storage_dir') ? cache_storage_dir() : __DIR__ . '/../storage/cache/data';
+    foreach (glob(rtrim($cacheDir, '/') . '/*') ?: [] as $file) {
+        $name = basename((string) $file);
+        if (stripos($name, 'news') !== false || stripos($name, 'event') !== false || stripos($name, 'home_') !== false) {
+            @unlink((string) $file);
+        }
+    }
+}
+`, { SELENIUM_CONTENT_SLUG: slug });
+}
+
+test('Selenium admin actualites: creer, modifier, rechercher et consulter publiquement', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const suffix = Date.now();
+  const slug = `selenium-news-${suffix}`;
+  const title = `Selenium actualite ${suffix}`;
+  const updatedTitle = `${title} modifiee`;
+  cleanupContentRows(slug);
+  prepareContentStorage();
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'admin_news');
+
+      const createForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_post"]]'));
+      await createForm.findElement(By.css('input[name="title"]')).sendKeys(title);
+      await createForm.findElement(By.css('input[name="slug"]')).sendKeys(slug);
+      await setFieldValue(driver, await createForm.findElement(By.css('textarea[name="excerpt"]')), 'Resume Selenium actualite.');
+      await setFieldValue(driver, await createForm.findElement(By.css('textarea[name="content"]')), '<p>Contenu public Selenium actualite.</p>');
+      const statusSelects = await createForm.findElements(By.css('select[name="status"]'));
+      if (statusSelects.length > 0) {
+        await selectValue(driver, statusSelects[0], 'published');
+      }
+      await submitForm(driver, createForm);
+
+      let text = await pagePlainText(driver);
+      assert.match(text, new RegExp(title), 'L actualite creee doit apparaitre en admin.');
+
+      const editLink = await driver.findElement(By.xpath(`//tr[.//*[contains(normalize-space(.), "${title}")]]//a[contains(@href,"edit=")]`));
+      await driver.get(await editLink.getAttribute('href'));
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+
+      const editForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_post"]]'));
+      await setFieldValue(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
+      await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="excerpt"]')), 'Resume Selenium actualite modifie.');
+      await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="content"]')), '<p>Contenu public Selenium actualite modifie.</p>');
+      const editStatusSelects = await editForm.findElements(By.css('select[name="status"]'));
+      if (editStatusSelects.length > 0) {
+        await selectValue(driver, editStatusSelects[0], 'published');
+      }
+      await submitForm(driver, editForm);
+
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(updatedTitle), 'L actualite modifiee doit rester visible en admin.');
+
+      await visit(driver, 'news_view', { slug });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(updatedTitle), 'La page publique doit afficher le titre modifie.');
+      assert.match(text, /Contenu public Selenium actualite modifie/i, 'La page publique doit afficher le contenu modifie.');
+
+      await visit(driver, 'news', { q: updatedTitle });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(updatedTitle), 'La recherche publique des actualites doit retrouver l actualite publiee.');
+    } finally {
+      cleanupContentRows(slug);
+    }
+  });
+});
+
+test('Selenium admin evenements: creer, modifier, flux public et export ICS', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const suffix = Date.now();
+  const slug = `selenium-event-${suffix}`;
+  const title = `Selenium evenement ${suffix}`;
+  const updatedTitle = `${title} modifie`;
+  cleanupContentRows(slug);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'admin_events');
+
+      const createForm = await driver.findElement(By.css('form.stack'));
+      await createForm.findElement(By.css('input[name="title"]')).sendKeys(title);
+      await createForm.findElement(By.css('input[name="slug"]')).sendKeys(slug);
+      await setFieldValue(driver, await createForm.findElement(By.css('textarea[name="summary"]')), 'Resume Selenium evenement.');
+      await setFieldValue(driver, await createForm.findElement(By.css('textarea[name="description"]')), '<p>Description publique Selenium evenement.</p>');
+      await setFieldValue(driver, await createForm.findElement(By.css('input[name="start_at"]')), '2026-12-18T18:00');
+      await setFieldValue(driver, await createForm.findElement(By.css('input[name="end_at"]')), '2026-12-18T20:00');
+      await createForm.findElement(By.css('input[name="location"]')).sendKeys('Durnal Selenium');
+      await createForm.findElement(By.css('input[name="external_url"]')).sendKeys('https://example.org/selenium-event');
+      await selectValue(driver, await createForm.findElement(By.css('select[name="kind"]')), 'club');
+      await selectValue(driver, await createForm.findElement(By.css('select[name="status"]')), 'published');
+      await submitForm(driver, createForm);
+
+      let text = await pagePlainText(driver);
+      assert.match(text, new RegExp(title), 'L evenement cree doit apparaitre en admin.');
+
+      const editLink = await driver.findElement(By.xpath(`//li[.//a[contains(normalize-space(.), "${title}")]]//a[contains(@href,"edit=")]`));
+      await driver.get(await editLink.getAttribute('href'));
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+
+      const editForm = await driver.findElement(By.css('form.stack'));
+      await setFieldValue(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
+      await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="summary"]')), 'Resume Selenium evenement modifie.');
+      await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="description"]')), '<p>Description publique Selenium evenement modifie.</p>');
+      await setFieldValue(driver, await editForm.findElement(By.css('input[name="location"]')), 'Durnal Selenium modifie');
+      await selectValue(driver, await editForm.findElement(By.css('select[name="status"]')), 'published');
+      await submitForm(driver, editForm);
+
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(updatedTitle), 'L evenement modifie doit rester visible en admin.');
+
+      await visit(driver, 'event_view', { slug });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(updatedTitle), 'La page evenement publique doit afficher le titre modifie.');
+      assert.match(text, /Durnal Selenium modifie/i, 'La page evenement publique doit afficher le lieu modifie.');
+      assert.match(text, /Description publique Selenium evenement modifie/i, 'La page evenement publique doit afficher la description modifiee.');
+
+      const feedBody = await browserFetchText(driver, routeUrl('events_feed'));
+      assert.doesNotMatch(feedBody, /^SELENIUM_FETCH_ERROR:/, 'Le flux JSON public des evenements doit etre lisible.');
+      assert.match(feedBody, new RegExp(updatedTitle), 'Le flux JSON public doit contenir l evenement publie.');
+
+      const icsBody = await browserFetchText(driver, routeUrl('events', { format: 'ics' }));
+      assert.doesNotMatch(icsBody, /^SELENIUM_FETCH_ERROR:/, 'L export ICS public doit etre lisible.');
+      assert.match(icsBody, /BEGIN:VCALENDAR/i, 'L export ICS doit contenir un calendrier.');
+      assert.match(icsBody, new RegExp(updatedTitle), 'L export ICS doit contenir l evenement publie.');
+    } finally {
+      cleanupContentRows(slug);
+    }
+  });
+});
