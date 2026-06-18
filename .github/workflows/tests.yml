@@ -49,8 +49,32 @@ jobs:
         run: php vendor/bin/phpstan analyse app/member_webotheque.php app/member_library_helpers.php app/member_module_documents.php app/album_helpers.php pages/webotheque.php pages/admin_webotheque.php pages/albums.php pages/idea_submit.php tools/lint.php tools/check_duplication.php tests/WebothequeHelpersTest.php tests/MemberModulesFinalizationTest.php tests/CodeDuplicationTest.php tests/ModuleUnitCoverageTest.php --no-progress --level=5 --memory-limit=1G
 
   toolbox-smoke-and-e2e:
-    name: Toolbox smoke + Playwright E2E
+    name: Toolbox smoke + browser E2E
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: on4crd_test
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      ON4CRD_CONFIG_FILE: ${{ github.workspace }}/storage/auth/selenium-config.php
+      SELENIUM_CONFIG_PATH: ${{ github.workspace }}/storage/auth/selenium-config.php
+      SELENIUM_DB_DSN: mysql:host=127.0.0.1;port=3306;dbname=on4crd_test;charset=utf8mb4
+      SELENIUM_DB_USER: root
+      SELENIUM_DB_PASS: root
+      SELENIUM_APP_BASE_URL: http://127.0.0.1:8080
+      SELENIUM_BASE_URL: http://127.0.0.1:8080/index.php
+      SELENIUM_TIMEOUT_MS: 20000
+      SELENIUM_ARTIFACTS_DIR: selenium-artifacts
+      SELENIUM_ADMIN_USER: SELENIUMADMIN
 
     steps:
       - name: Checkout
@@ -68,16 +92,26 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Prepare config
-        run: cp config/config.sample.php config/config.php
-
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Install Playwright dependencies
+      - name: Install browser test dependencies
         run: |
           npm ci
           npx playwright install --with-deps chromium
+
+      - name: Expose Playwright Chromium to Selenium
+        run: |
+          CHROME_PATH="$(node -e "const { chromium } = require('@playwright/test'); process.stdout.write(chromium.executablePath())")"
+          echo "SELENIUM_CHROME_BINARY=${CHROME_PATH}" >> "$GITHUB_ENV"
+
+      - name: Prepare Selenium database and admin
+        env:
+          ON4CRD_ALLOW_SELENIUM_FIXTURES: '1'
+        run: |
+          php scripts/prepare_selenium_ci.php
+          php scripts/create_selenium_admin.php
+          php tests/selenium/seed_fixtures.php
 
       - name: Start local PHP server
         run: |
@@ -89,10 +123,21 @@ jobs:
           TOOLS_SMOKE_BASE_URL: http://127.0.0.1:8080/index.php
         run: ./scripts/check-tools.sh --with-smoke
 
+      - name: Run Selenium tests
+        run: npm run test:selenium
+
       - name: Run Playwright E2E
         env:
           E2E_BASE_URL: http://127.0.0.1:8080/index.php
         run: npm run test:e2e
+
+      - name: Upload Selenium artifacts
+        if: always()
+        uses: actions/upload-artifact@v7 # NOSONAR - reviewed action pin managed by workflow update policy.
+        with:
+          name: selenium-artifacts
+          path: selenium-artifacts
+          if-no-files-found: ignore
 
       - name: Upload Playwright artifacts
         if: always()
