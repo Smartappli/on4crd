@@ -1871,7 +1871,7 @@ textarea { resize: vertical; }
 .album-tile-media {
   display: grid;
   place-items: center;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 8;
   overflow: hidden;
   background: var(--panel-2);
   color: var(--muted);
@@ -1929,14 +1929,14 @@ textarea { resize: vertical; }
   background: var(--panel-2);
 }
 .album-detail-hero {
-  grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
   align-items: center;
 }
 .album-detail-cover {
   display: grid;
   place-items: center;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   min-height: 0;
   overflow: hidden;
   border-radius: 18px;
@@ -4105,7 +4105,7 @@ textarea.wysiwyg-source {
     grid-template-columns: 1fr;
   }
   .album-detail-cover {
-    width: min(100%, 320px);
+    width: min(100%, 260px);
     justify-self: start;
   }
   .wiki-history-panel {
@@ -4178,7 +4178,7 @@ textarea.wysiwyg-source {
   .matomo-consent-actions { justify-content: stretch; }
   .matomo-consent-actions .button { flex: 1 1 auto; }
   .album-detail-cover {
-    width: min(100%, 280px);
+    width: min(100%, 220px);
   }
 }
 
