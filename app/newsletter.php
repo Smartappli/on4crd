@@ -296,7 +296,12 @@ function newsletter_subscriber_for_member(int $memberId): ?array
 {
     newsletter_ensure_tables();
 
-    $stmt = db()->prepare('SELECT * FROM newsletter_subscribers WHERE member_id = ? LIMIT 1');
+    $stmt = db()->prepare(
+        'SELECT * FROM newsletter_subscribers
+         WHERE member_id = ?
+         ORDER BY CASE WHEN status = "active" THEN 0 ELSE 1 END, updated_at DESC, id DESC
+         LIMIT 1'
+    );
     $stmt->execute([$memberId]);
     $row = $stmt->fetch();
 
