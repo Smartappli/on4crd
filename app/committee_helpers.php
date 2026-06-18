@@ -6,6 +6,21 @@ declare(strict_types=1);
  */
 function committee_members(): array
 {
+    if (
+        table_exists('members')
+        && table_has_column('members', 'is_committee')
+        && table_has_column('members', 'committee_role')
+        && table_has_column('members', 'committee_bio')
+        && table_has_column('members', 'committee_sort_order')
+    ) {
+        return db()->query(
+            'SELECT id, callsign, full_name, avatar_path, photo_path, committee_role, committee_bio, committee_sort_order AS sort_order, is_active
+            FROM members
+            WHERE is_active = 1 AND is_committee = 1
+            ORDER BY committee_sort_order ASC, callsign ASC'
+        )->fetchAll() ?: [];
+    }
+
     if (!table_exists('committee_members')) {
         return [];
     }

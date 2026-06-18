@@ -677,6 +677,18 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('name="members[', $adminCommittee);
     }
 
+    public function testPublicCommitteeReadsMembersManagedByAdminCommittee(): void
+    {
+        $committeeHelpers = file_get_contents(__DIR__ . '/../app/committee_helpers.php');
+        self::assertIsString($committeeHelpers);
+
+        self::assertStringContainsString('FROM members', $committeeHelpers);
+        self::assertStringContainsString('is_committee = 1', $committeeHelpers);
+        self::assertStringContainsString('committee_bio', $committeeHelpers);
+        self::assertStringContainsString('committee_sort_order AS sort_order', $committeeHelpers);
+        self::assertStringContainsString('committee_members', $committeeHelpers);
+    }
+
     public function testProposalDialogTriggersKeepNativeFallbacks(): void
     {
         $contracts = [
