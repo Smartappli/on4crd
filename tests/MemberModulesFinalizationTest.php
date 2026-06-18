@@ -310,6 +310,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function member_document_subcategory_ref(', $renderer);
         self::assertStringContainsString('function member_document_visible_categories(', $renderer);
         self::assertStringContainsString('function member_document_favorite_document_ids(', $renderer);
+        self::assertStringContainsString("\$category = trim(\$category) !== '' ? member_document_category_code(\$category) : '';", $renderer);
+        self::assertStringContainsString("\$subcategory = trim(\$subcategory) !== '' ? member_document_subcategory_code(\$subcategory) : '';", $renderer);
         self::assertStringContainsString('idx_member_module_category_deleted', $renderer);
         self::assertStringContainsString('UPDATE member_module_documents SET category = "general", subcategory = "" WHERE module_code = ? AND category = ?', $renderer);
         self::assertStringContainsString("if (\$action === 'toggle_favorite_document')", $renderer);
