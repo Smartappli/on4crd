@@ -504,20 +504,41 @@ async function loginAsAdmin(driver, username, password) {
     // A clean cookie jar avoids reusing stale Selenium sessions when a browser profile is recycled.
   }
   await visit(driver, 'login');
-  await driver.wait(async () => {
-    const state = await driver.executeScript('return document.readyState');
-    return state === 'complete';
-  }, timeoutMs);
-  await driver.findElement(By.css('input[name="callsign"]')).sendKeys(username);
-  await driver.findElement(By.css('input[name="password"]')).sendKeys(password);
 
-  const captchaLabel = await driver.findElement(By.xpath('//input[@name="captcha"]/ancestor::label')).getText();
-  const captchaMatch = captchaLabel.match(/(\d+)\s*\+\s*(\d+)/);
-  assert.ok(captchaMatch, `Captcha arithmetique introuvable: ${captchaLabel}`);
-  await driver.findElement(By.css('input[name="captcha"]')).sendKeys(String(Number(captchaMatch[1]) + Number(captchaMatch[2])));
-  await driver.findElement(By.css('[data-login-form] button')).click();
-  await waitForDocumentReady(driver);
-  await assertNoServerError(driver);
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    await driver.wait(async () => {
+      const state = await driver.executeScript('return document.readyState');
+      return state === 'complete';
+    }, timeoutMs);
+
+    const callsignInput = await driver.findElement(By.css('input[name="callsign"]'));
+    const passwordInput = await driver.findElement(By.css('input[name="password"]'));
+    const captchaInput = await driver.findElement(By.css('input[name="captcha"]'));
+    await callsignInput.clear();
+    await callsignInput.sendKeys(username);
+    await passwordInput.clear();
+    await passwordInput.sendKeys(password);
+
+    const captchaLabel = await captchaInput.findElement(By.xpath('ancestor::label')).getText();
+    const captchaMatch = captchaLabel.match(/(\d+)\s*\+\s*(\d+)/);
+    assert.ok(captchaMatch, `Captcha arithmetique introuvable: ${captchaLabel}`);
+    await captchaInput.clear();
+    await captchaInput.sendKeys(String(Number(captchaMatch[1]) + Number(captchaMatch[2])));
+    await driver.findElement(By.css('[data-login-form] button')).click();
+    await waitForDocumentReady(driver);
+    await assertNoServerError(driver);
+
+    if (!(await isLoginPage(driver))) {
+      await assertNoServerError(driver);
+      return;
+    }
+
+    const text = await pagePlainText(driver);
+    if (!/captcha invalide|invalid captcha/i.test(text)) {
+      break;
+    }
+  }
+
   await driver.wait(async () => !(await isLoginPage(driver)), timeoutMs, 'Connexion admin Selenium echouee.');
   await assertNoServerError(driver);
 }
