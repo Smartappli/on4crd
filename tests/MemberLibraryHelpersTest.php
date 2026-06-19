@@ -77,6 +77,20 @@ final class MemberLibraryHelpersTest extends TestCase
         self::assertSame('formation,securite,technique', member_library_clean_tags(' formation,unknown,securite,formation,technique '));
     }
 
+    public function testDocumentUploadConfigurationAcceptsCommonDocumentMimeVariants(): void
+    {
+        $extensions = member_library_document_upload_extensions();
+        $mimes = member_library_document_upload_mimes();
+
+        self::assertContains('doc', $extensions);
+        self::assertContains('application/msword', $mimes['doc']);
+        self::assertContains('application/cdfv2', $mimes['doc']);
+        self::assertContains('application/vnd.pdf', $mimes['pdf']);
+        self::assertContains('text/pdf', $mimes['pdf']);
+        self::assertContains('application/x-zip-compressed', $mimes['docx']);
+        self::assertContains('text/x-markdown', $mimes['md']);
+    }
+
     public function testFavoritesLabelUsesPluralFallbacks(): void
     {
         self::assertSame('Mes favoris', member_library_favorites_label(['favorites' => 'Mes favoris'], 'fr'));

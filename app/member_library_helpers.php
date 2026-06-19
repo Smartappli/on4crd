@@ -131,7 +131,7 @@ if (!function_exists('member_library_document_upload_extensions')) {
  */
 function member_library_document_upload_extensions(): array
 {
-    return ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
+    return ['pdf', 'doc', 'docx', 'txt', 'md', 'html', 'htm'];
 }
 }
 
@@ -142,12 +142,13 @@ if (!function_exists('member_library_document_upload_mimes')) {
 function member_library_document_upload_mimes(): array
 {
     return [
-        'pdf' => ['application/pdf', 'application/x-pdf'],
-        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
+        'pdf' => ['application/pdf', 'application/x-pdf', 'application/acrobat', 'application/vnd.pdf', 'text/pdf', 'text/x-pdf', 'application/octet-stream'],
+        'doc' => ['application/msword', 'application/vnd.ms-word', 'application/x-msword', 'application/vnd.ms-office', 'application/cdfv2', 'application/x-cfb', 'application/x-ole-storage', 'application/octet-stream'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/octet-stream'],
         'txt' => ['text/plain', 'application/octet-stream'],
-        'md' => ['text/plain', 'text/markdown', 'application/octet-stream'],
-        'html' => ['text/html', 'text/plain', 'application/octet-stream'],
-        'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
+        'md' => ['text/plain', 'text/markdown', 'text/x-markdown', 'application/octet-stream'],
+        'html' => ['text/html', 'text/plain', 'application/xhtml+xml', 'application/octet-stream'],
+        'htm' => ['text/html', 'text/plain', 'application/xhtml+xml', 'application/octet-stream'],
     ];
 }
 }

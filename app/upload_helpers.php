@@ -134,6 +134,9 @@ function detect_uploaded_mime_type_from_content(string $tmpPath): string
     if (str_starts_with($signature, '%PDF-')) {
         return 'application/pdf';
     }
+    if (str_starts_with($signature, "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1")) {
+        return 'application/msword';
+    }
     if (str_starts_with($signature, "\xFF\xD8\xFF")) {
         return 'image/jpeg';
     }
@@ -175,6 +178,7 @@ function assert_upload_file_is_valid_signature(string $tmpPath, array $allowedEx
         'png' => "\x89PNG\r\n\x1A\n",
         'webp' => 'RIFF',
         'docx' => "PK\x03\x04",
+        'doc' => "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1",
     ];
 
     $hasKnownSignature = false;

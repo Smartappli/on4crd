@@ -660,7 +660,7 @@ ob_start();
                     </select>
                 </label>
                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="proposal_tags" maxlength="255"></label>
-                <label><span><?= e((string) $t['document']) ?></span><input type="file" name="proposal_file" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html" required></label>
+                <label><span><?= e((string) $t['document']) ?></span><input type="file" name="proposal_file" accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html" required></label>
                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
                 <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
                 <div class="members-library-dialog-actions module-dialog-actions">
@@ -849,7 +849,7 @@ ob_start();
                                 </label>
                                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="document_tags" value="<?= e($docTags) ?>" maxlength="255"></label>
                                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="document_description" rows="5" maxlength="1800"><?= e($docDescription) ?></textarea></label>
-                                <label><span><?= e($membersLibraryText('replace_document_file', 'Remplacer le fichier', 'Replace file')) ?></span><input type="file" name="document_file" accept=".pdf,.docx,.txt,.md,.html,.htm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
+                                <label><span><?= e($membersLibraryText('replace_document_file', 'Remplacer le fichier', 'Replace file')) ?></span><input type="file" name="document_file" accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"></label>
                                 <div class="members-library-dialog-actions module-dialog-actions">
                                     <button class="button" type="submit"><?= e($membersLibraryText('save_document', 'Enregistrer', 'Save')) ?></button>
                                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>

@@ -87,6 +87,7 @@ if (preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches) === 1) {
 $length = $end - $start + 1;
 $contentTypes = [
     'pdf' => 'application/pdf',
+    'doc' => 'application/msword',
     'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'txt' => 'text/plain; charset=utf-8',
     'md' => 'text/plain; charset=utf-8',

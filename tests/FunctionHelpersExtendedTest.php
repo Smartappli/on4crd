@@ -180,6 +180,20 @@ final class FunctionHelpersExtendedTest extends TestCase
         }
     }
 
+    public function testUploadSignatureValidatorAcceptsLegacyDocOleHeader(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'doc-sig-');
+        self::assertIsString($tmp);
+        file_put_contents($tmp, "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1" . str_repeat("\0", 16));
+
+        try {
+            assert_upload_file_is_valid_signature($tmp, ['doc']);
+            self::assertSame('application/msword', detect_uploaded_mime_type_from_content($tmp));
+        } finally {
+            @unlink($tmp);
+        }
+    }
+
     public function testDetectUploadedMimeTypeUsesImageContentFallback(): void
     {
         $tmp = tempnam(sys_get_temp_dir(), 'png-mime-');

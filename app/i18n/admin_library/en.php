@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 return array (
   'title' => 'Library administration',
-  'intro' => 'Publish member documents in PDF, DOCX, text, Markdown or HTML, extract their content, and organize them by category.',
+  'intro' => 'Publish member documents in PDF, DOC, DOCX, text, Markdown or HTML, extract their content, and organize them by category.',
   'category_ph' => 'Category',
   'subcategory_ph' => 'Subtopic',
   'categories' => 'Categories',
@@ -21,7 +21,7 @@ return array (
   'next' => 'Next',
   'page' => 'Page',
   'err_required' => 'A title and a document are required.',
-  'err_invalid' => 'The file must be a valid PDF, DOCX, TXT, Markdown or HTML document.',
+  'err_invalid' => 'The file must be a valid PDF, DOC, DOCX, TXT, Markdown or HTML document.',
   'err_size' => 'The document exceeds the allowed limit of 25 MB.',
   'err_upload' => 'The document upload failed.',
   'ok_added' => 'Document added to the member library.',
@@ -29,7 +29,7 @@ return array (
   'meta_desc' => 'Administration of the ON4CRD member library.',
   'documents' => 'Documents',
   'file' => 'File',
-  'file_help' => 'Accepted formats: PDF, DOCX, TXT, Markdown and HTML. Maximum size: 25 MB.',
+  'file_help' => 'Accepted formats: PDF, DOC, DOCX, TXT, Markdown and HTML. Maximum size: 25 MB.',
   'category_code' => 'Code',
   'category_label' => 'Label',
   'subcategory_code' => 'Subtopic code',

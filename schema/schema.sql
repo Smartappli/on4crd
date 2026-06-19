@@ -235,6 +235,20 @@ CREATE TABLE IF NOT EXISTS dashboard_widgets (
     position INT NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS member_notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    type VARCHAR(64) NOT NULL DEFAULT 'info',
+    title VARCHAR(255) NOT NULL,
+    body TEXT DEFAULT NULL,
+    url VARCHAR(255) DEFAULT NULL,
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    read_at TIMESTAMP NULL DEFAULT NULL,
+    INDEX idx_member_unread (member_id, is_read, created_at),
+    INDEX idx_member_created (member_id, created_at)
+);
+
 CREATE TABLE IF NOT EXISTS qso_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     member_id INT NOT NULL,
