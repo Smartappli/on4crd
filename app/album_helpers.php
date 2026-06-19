@@ -89,7 +89,7 @@ function album_graph_api_post(string $path, array $params, string $accessToken):
             ],
         ]);
         $raw = @file_get_contents($url, false, $context);
-        $statusLine = is_array($http_response_header ?? null) ? ($http_response_header[0] ?? '') : '';
+        $statusLine = $http_response_header[0] ?? '';
         if (preg_match('/\s(\d{3})\s/', (string) $statusLine, $matches) === 1) {
             $status = (int) $matches[1];
         }
@@ -240,7 +240,7 @@ function album_social_publish_if_public(int $albumId): array
                     }
                 }
             }
-            if (($facebookPostId ?? '') !== '') {
+            if ($facebookPostId !== '') {
                 $result['facebook'] = $facebookPostId;
                 db()->prepare('UPDATE albums SET facebook_post_id = ? WHERE id = ?')->execute([$facebookPostId, $albumId]);
             }
@@ -292,7 +292,7 @@ function album_social_publish_if_public(int $albumId): array
                 }
             }
         }
-        if (($creationId ?? '') !== '') {
+        if ($creationId !== '') {
             $publish = album_graph_api_post($instagramUserId . '/media_publish', ['creation_id' => $creationId], $instagramToken);
             $mediaId = trim((string) ($publish['data']['id'] ?? ''));
             if ($publish['ok'] && $mediaId !== '') {
@@ -769,13 +769,13 @@ function render_album_taxonomy_fields(array $categories, array $labels = [], str
     foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
         $html .= '<optgroup label="' . e((string) ($categories[(string) $parentCode] ?? album_category_label_from_code((string) $parentCode))) . '">';
         foreach ($subcategories as $subcategory) {
-            $code = album_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $code = album_subcategory_code((string) $subcategory['code']);
             if ($code === '') {
                 continue;
             }
             $html .= '<option value="' . e(album_subcategory_ref((string) $parentCode, $code)) . '"'
                 . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
-                . '>' . e((string) ($subcategory['label'] ?? $code)) . '</option>';
+                . '>' . e((string) $subcategory['label']) . '</option>';
         }
         $html .= '</optgroup>';
     }

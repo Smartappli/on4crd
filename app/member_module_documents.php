@@ -1238,13 +1238,13 @@ function render_member_document_taxonomy_fields(string $moduleCode, array $categ
         $parentLabel = (string) ($categories[(string) $parentCode] ?? member_document_category_label_from_code((string) $parentCode));
         $html .= '<optgroup label="' . e($parentLabel) . '">';
         foreach ($subcategories as $subcategory) {
-            $code = member_document_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $code = member_document_subcategory_code((string) $subcategory['code']);
             if ($code === '') {
                 continue;
             }
             $html .= '<option value="' . e(member_document_subcategory_ref((string) $parentCode, $code)) . '"'
                 . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
-                . '>' . e((string) ($subcategory['label'] ?? $code)) . '</option>';
+                . '>' . e((string) $subcategory['label']) . '</option>';
         }
         $html .= '</optgroup>';
     }
@@ -1268,7 +1268,7 @@ function render_member_document_module_cards(array $documents, array $labels, st
     $subcategoryLabels = [];
     foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
         foreach ($subcategories as $subcategory) {
-            $subcategoryLabels[(string) $parentCode . ':' . (string) ($subcategory['code'] ?? '')] = (string) ($subcategory['label'] ?? '');
+            $subcategoryLabels[(string) $parentCode . ':' . (string) $subcategory['code']] = (string) $subcategory['label'];
         }
     }
     $allowMemberManagement = member_document_module_allows_member_management($moduleCode);
@@ -1595,7 +1595,7 @@ function render_member_document_module_page(string $module): void
         }
         $known = false;
         foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
-            if (member_document_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+            if (member_document_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
                 $known = true;
                 break;
             }
@@ -1973,7 +1973,7 @@ function render_admin_member_document_module_page(string $module): void
         }
         $known = false;
         foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
-            if (member_document_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+            if (member_document_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
                 $known = true;
                 break;
             }
@@ -2113,7 +2113,7 @@ function render_admin_member_document_module_page(string $module): void
                 <?php endforeach; ?>
                 <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
                     <?php foreach ($subcategories as $subcategoryInfo): ?>
-                        <?php $subCode = member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                        <?php $subCode = member_document_subcategory_code((string) $subcategoryInfo['code']); ?>
                         <?php if ($subCode === '') { continue; } ?>
                         <?php $subTotal = (int) (($stats['by_subcategory'][(string) $parentCode . ':' . $subCode] ?? 0)); ?>
                         <form method="post" class="inline-form">
@@ -2121,7 +2121,7 @@ function render_admin_member_document_module_page(string $module): void
                             <input type="hidden" name="action" value="update_subcategory">
                             <input type="hidden" name="subcategory_ref" value="<?= e(member_document_subcategory_ref((string) $parentCode, $subCode)) ?>">
                             <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
-                            <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                            <input type="text" name="subcategory_label" value="<?= e((string) $subcategoryInfo['label']) ?>" maxlength="160" required>
                             <button class="button small" type="submit"><?= e((string) ($labels['save_document'] ?? 'Save')) ?></button>
                             <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $labels['delete']) ?></button>
                         </form>

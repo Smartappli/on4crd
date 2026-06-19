@@ -95,6 +95,29 @@ final class ModuleUnitCoverageTest extends TestCase
         }
     }
 
+    public function testSharedDialogJsIsLoadedBeforeDialogModules(): void
+    {
+        $routes = [
+            'albums' => 'albums',
+            'webotheque' => 'webotheque',
+            'admin_webotheque' => 'webotheque',
+            'wiki' => 'wiki',
+            'wiki_view' => 'wiki',
+            'presentations' => 'member_documents',
+            'videos' => 'member_documents',
+        ];
+
+        foreach ($routes as $route => $module) {
+            $assets = module_js_assets_for_route($route);
+            $sharedIndex = array_search('assets/js/modules/module_dialogs.js', $assets, true);
+            $moduleIndex = array_search('assets/js/modules/' . $module . '.js', $assets, true);
+
+            self::assertIsInt($sharedIndex, sprintf('Route %s must load the shared dialog helper.', $route));
+            self::assertIsInt($moduleIndex, sprintf('Route %s must load its dialog module.', $route));
+            self::assertLessThan($moduleIndex, $sharedIndex, sprintf('Route %s must load the shared dialog helper first.', $route));
+        }
+    }
+
     public function testBandplanPagesUseSharedRenderer(): void
     {
         self::assertStringContainsString('function render_bandplan_page(', $this->source('app/layout_renderer.php'));

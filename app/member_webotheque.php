@@ -443,6 +443,42 @@ function webotheque_category_from_input(string $value, array $categories): strin
 }
 }
 
+if (!function_exists('webotheque_link_form_values')) {
+/**
+ * @param array<string, mixed> $input
+ * @param array<string, string> $categories
+ * @return array{title:string,url:string,description:string,tags:string,category:string,subcategory:string}
+ */
+function webotheque_link_form_values(array $input, array $categories): array
+{
+    $title = content_proposal_clean_single_line((string) ($input['title'] ?? ''), 190);
+    $url = webotheque_normalize_url((string) ($input['url'] ?? ''));
+    $description = content_proposal_clean_multiline((string) ($input['description'] ?? ''), 5000);
+    $tags = content_proposal_clean_single_line((string) ($input['tags'] ?? ''), 255);
+    $category = webotheque_category_from_input((string) ($input['category'] ?? ''), $categories);
+    $subcategory = '';
+    $subcategoryRef = trim((string) ($input['subcategory_ref'] ?? ''));
+    if ($subcategoryRef !== '') {
+        $subcategoryParts = webotheque_subcategory_ref_parts($subcategoryRef);
+        if ($subcategoryParts['subcategory'] !== '') {
+            $subcategory = $subcategoryParts['subcategory'];
+            if ($subcategoryParts['category'] !== '') {
+                $category = webotheque_category_from_input($subcategoryParts['category'], $categories);
+            }
+        }
+    }
+
+    return [
+        'title' => $title,
+        'url' => $url,
+        'description' => $description,
+        'tags' => $tags,
+        'category' => $category,
+        'subcategory' => $subcategory,
+    ];
+}
+}
+
 if (!function_exists('webotheque_member_contact')) {
 function webotheque_member_contact(array $user): string
 {
@@ -1083,13 +1119,13 @@ function render_webotheque_link_fields(array $t, array $categories, ?string $pro
     foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
         $html .= '<optgroup label="' . e((string) ($categories[$parentCode] ?? $parentCode)) . '">';
         foreach ($subcategories as $subcategory) {
-            $code = webotheque_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $code = webotheque_subcategory_code((string) $subcategory['code']);
             if ($code === '') {
                 continue;
             }
             $html .= '<option value="' . e(webotheque_subcategory_ref((string) $parentCode, $code)) . '"'
                 . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
-                . '>' . e((string) ($subcategory['label'] ?? $code)) . '</option>';
+                . '>' . e((string) $subcategory['label']) . '</option>';
         }
         $html .= '</optgroup>';
     }
@@ -1324,22 +1360,7 @@ function render_webotheque_page(): void
             }
 
             if ($action === 'propose_link') {
-                $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? ''), 190);
-                $url = webotheque_normalize_url((string) ($_POST['url'] ?? ''));
-                $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? ''), 5000);
-                $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? ''), 255);
-                $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
-                $subcategory = '';
-                $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-                if ($subcategoryRef !== '') {
-                    $subcategoryParts = webotheque_subcategory_ref_parts($subcategoryRef);
-                    if ($subcategoryParts['subcategory'] !== '') {
-                        $subcategory = $subcategoryParts['subcategory'];
-                        if ($subcategoryParts['category'] !== '') {
-                            $category = webotheque_category_from_input($subcategoryParts['category'], $categories);
-                        }
-                    }
-                }
+                ['title' => $title, 'url' => $url, 'description' => $description, 'tags' => $tags, 'category' => $category, 'subcategory' => $subcategory] = webotheque_link_form_values($_POST, $categories);
                 $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContact), 220);
                 if ($title === '' || $url === '') {
                     throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
@@ -1401,7 +1422,7 @@ function render_webotheque_page(): void
         }
         $alreadyKnown = false;
         foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
-            if (webotheque_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+            if (webotheque_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
                 $alreadyKnown = true;
                 break;
             }
@@ -1781,22 +1802,7 @@ function render_admin_webotheque_page(): void
                     redirect_url($webothequeAdminReturnUrl());
                 }
 
-                $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? ''), 190);
-                $url = webotheque_normalize_url((string) ($_POST['url'] ?? ''));
-                $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? ''), 5000);
-                $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? ''), 255);
-                $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
-                $subcategory = '';
-                $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-                if ($subcategoryRef !== '') {
-                    $subcategoryParts = webotheque_subcategory_ref_parts($subcategoryRef);
-                    if ($subcategoryParts['subcategory'] !== '') {
-                        $subcategory = $subcategoryParts['subcategory'];
-                        if ($subcategoryParts['category'] !== '') {
-                            $category = webotheque_category_from_input($subcategoryParts['category'], $categories);
-                        }
-                    }
-                }
+                ['title' => $title, 'url' => $url, 'description' => $description, 'tags' => $tags, 'category' => $category, 'subcategory' => $subcategory] = webotheque_link_form_values($_POST, $categories);
                 if ($title === '' || $url === '') {
                     throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
                 }
@@ -1845,22 +1851,7 @@ function render_admin_webotheque_page(): void
                 redirect('admin_webotheque');
             }
 
-            $title = content_proposal_clean_single_line((string) ($_POST['title'] ?? ''), 190);
-            $url = webotheque_normalize_url((string) ($_POST['url'] ?? ''));
-            $description = content_proposal_clean_multiline((string) ($_POST['description'] ?? ''), 5000);
-            $tags = content_proposal_clean_single_line((string) ($_POST['tags'] ?? ''), 255);
-            $category = webotheque_category_from_input((string) ($_POST['category'] ?? ''), $categories);
-            $subcategory = '';
-            $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
-            if ($subcategoryRef !== '') {
-                $subcategoryParts = webotheque_subcategory_ref_parts($subcategoryRef);
-                if ($subcategoryParts['subcategory'] !== '') {
-                    $subcategory = $subcategoryParts['subcategory'];
-                    if ($subcategoryParts['category'] !== '') {
-                        $category = webotheque_category_from_input($subcategoryParts['category'], $categories);
-                    }
-                }
-            }
+            ['title' => $title, 'url' => $url, 'description' => $description, 'tags' => $tags, 'category' => $category, 'subcategory' => $subcategory] = webotheque_link_form_values($_POST, $categories);
             if ($title === '' || $url === '') {
                 throw new RuntimeException($url === '' ? 'err_url' : 'err_required');
             }
@@ -1902,7 +1893,7 @@ function render_admin_webotheque_page(): void
         }
         $alreadyKnown = false;
         foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
-            if (webotheque_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+            if (webotheque_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
                 $alreadyKnown = true;
                 break;
             }
@@ -2101,7 +2092,7 @@ function render_admin_webotheque_page(): void
                 <?php foreach ($visibleCategories as $code => $label): ?>
                     <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code])) ?>"><?= e((string) $label) ?></a>
                     <?php foreach (($visibleSubcategoriesByCategory[(string) $code] ?? []) as $subcategoryInfo): ?>
-                        <?php $subCode = webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                        <?php $subCode = webotheque_subcategory_code((string) $subcategoryInfo['code']); ?>
                         <a class="classifieds-category-pill<?= $categoryFilter === $code && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean('admin_webotheque', ['q' => $search, 'category' => (string) $code, 'subcategory' => $subCode])) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></a>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
@@ -2158,7 +2149,7 @@ function render_admin_webotheque_page(): void
                     <?php foreach ($subcategoriesByCategory as $parentCode => $subcategories): ?>
                         <?php foreach ($subcategories as $subcategoryInfo): ?>
                             <?php
-                            $subCode = webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? ''));
+                            $subCode = webotheque_subcategory_code((string) $subcategoryInfo['code']);
                             if ($subCode === '') {
                                 continue;
                             }
@@ -2169,7 +2160,7 @@ function render_admin_webotheque_page(): void
                                 <input type="hidden" name="action" value="update_subcategory">
                                 <input type="hidden" name="subcategory_ref" value="<?= e(webotheque_subcategory_ref((string) $parentCode, $subCode)) ?>">
                                 <span class="pill"><?= e((string) ($categories[(string) $parentCode] ?? $parentCode)) ?> / <?= e($subCode) ?> (<?= $subTotal ?>)</span>
-                                <input type="text" name="subcategory_label" value="<?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?>" maxlength="160" required>
+                                <input type="text" name="subcategory_label" value="<?= e((string) $subcategoryInfo['label']) ?>" maxlength="160" required>
                                 <button class="button small" type="submit"><?= e((string) ($t['save'] ?? 'Save')) ?></button>
                                 <button class="button secondary small" type="submit" name="action" value="delete_subcategory"<?= $subTotal > 0 ? ' disabled' : '' ?>><?= e((string) $t['delete']) ?></button>
                             </form>

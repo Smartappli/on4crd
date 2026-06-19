@@ -1,66 +1,18 @@
 (function () {
-  const supportsDialog = typeof HTMLDialogElement !== 'undefined';
+  if (!window.ON4CRD || typeof window.ON4CRD.bindModalDialogs !== 'function') {
+    return;
+  }
 
-  const closeDialog = (dialog) => {
-    if (dialog instanceof HTMLDialogElement && dialog.open) {
-      dialog.close();
-    }
-  };
-
-  const openDialog = (dialog) => {
-    if (!(dialog instanceof HTMLDialogElement)) {
-      return;
-    }
-    if (dialog.open) {
-      dialog.close();
-    }
-    dialog.showModal();
-    const firstField = dialog.querySelector('input, textarea, select');
-    if (firstField instanceof HTMLElement) {
-      firstField.focus();
-    }
-  };
-
-  const bindModalFamily = (openSelector, closeSelector, dialogSelector) => {
-    if (!supportsDialog) {
-      return;
-    }
-
-    document.querySelectorAll(openSelector).forEach((openButton) => {
-      openButton.addEventListener('click', (event) => {
-        const dialogId = openButton.getAttribute(openSelector.slice(1, -1)) || '';
-        const dialog = document.getElementById(dialogId);
-        if (!(dialog instanceof HTMLDialogElement)) {
-          return;
-        }
-
-        event.preventDefault();
-        const menu = openButton.closest('details');
-        if (menu) {
-          menu.removeAttribute('open');
-        }
-        openDialog(dialog);
-      });
-    });
-
-    document.querySelectorAll(dialogSelector).forEach((dialog) => {
-      dialog.querySelectorAll(closeSelector).forEach((button) => {
-        button.addEventListener('click', () => closeDialog(dialog));
-      });
-
-      dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) {
-          closeDialog(dialog);
-        }
-      });
-    });
-  };
-
-  bindModalFamily('[data-wiki-page-modal-open]', '[data-wiki-page-modal-close]', '.wiki-page-dialog');
+  window.ON4CRD.bindModalDialogs({
+    openAttribute: 'data-wiki-page-modal-open',
+    closeSelector: '[data-wiki-page-modal-close]',
+    dialogSelector: '.wiki-page-dialog',
+    closeParentDetails: true
+  });
 
   const dialog = document.getElementById('wiki-theme-dialog');
   const openButtons = document.querySelectorAll('[data-wiki-theme-open]');
-  if (!supportsDialog || !(dialog instanceof HTMLDialogElement) || openButtons.length === 0) {
+  if (typeof HTMLDialogElement === 'undefined' || !(dialog instanceof HTMLDialogElement) || openButtons.length === 0) {
     return;
   }
 
@@ -83,17 +35,17 @@
       if (menu) {
         menu.removeAttribute('open');
       }
-      openDialog(dialog);
+      window.ON4CRD.openDialog(dialog);
     });
   });
 
   dialog.querySelectorAll('[data-wiki-theme-close]').forEach((button) => {
-    button.addEventListener('click', () => closeDialog(dialog));
+    button.addEventListener('click', () => window.ON4CRD.closeDialog(dialog));
   });
 
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) {
-      closeDialog(dialog);
+      window.ON4CRD.closeDialog(dialog);
     }
   });
 
@@ -117,6 +69,6 @@
     ].filter(Boolean).join('\n');
 
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    closeDialog(dialog);
+    window.ON4CRD.closeDialog(dialog);
   });
 })();

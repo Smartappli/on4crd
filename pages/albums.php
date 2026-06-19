@@ -260,7 +260,7 @@ foreach ($albumSubcategoryCounts as $subcategoryKey => $subcategoryTotal) {
     }
     $known = false;
     foreach ($albumSubcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
-        if (album_subcategory_code((string) ($subcategoryOption['code'] ?? '')) === $subcategoryCode) {
+        if (album_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
             $known = true;
             break;
         }
@@ -442,9 +442,9 @@ ob_start();
                     <?php foreach ($albumSubcategoriesByCategory as $parentCode => $subcategories): ?>
                         <optgroup label="<?= e((string) ($albumCategories[(string) $parentCode] ?? album_category_label_from_code((string) $parentCode))) ?>">
                             <?php foreach ($subcategories as $subcategoryInfo): ?>
-                                <?php $subCode = album_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
+                                <?php $subCode = album_subcategory_code((string) $subcategoryInfo['code']); ?>
                                 <?php if ($subCode === '') { continue; } ?>
-                                <option value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>"><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></option>
+                                <option value="<?= e(album_subcategory_ref((string) $parentCode, $subCode)) ?>"><?= e((string) $subcategoryInfo['label']) ?></option>
                             <?php endforeach; ?>
                         </optgroup>
                     <?php endforeach; ?>
