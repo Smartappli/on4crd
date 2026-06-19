@@ -12,6 +12,13 @@ $isFrench = $locale === 'fr';
 $membersLibraryText = static function (string $key, string $fr, string $en) use ($t, $isFrench): string {
     return (string) ($t[$key] ?? ($isFrench ? $fr : $en));
 };
+$proposalContactDefault = trim((string) ($user['email'] ?? ''));
+if ($proposalContactDefault === '') {
+    $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+}
+if ($proposalContactDefault === '') {
+    $proposalContactDefault = trim((string) ($user['full_name'] ?? ''));
+}
 $membersLibraryReturnUrl = static function (): string {
     $page = max(1, (int) ($_POST['return_p'] ?? $_GET['p'] ?? 1));
 
@@ -162,7 +169,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'propose_category') {
             $proposalTitle = (string) ($_POST['proposal_category_name'] ?? $_POST['proposal_category'] ?? '');
-            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? $proposalContactDefault);
+            if (trim($proposalContact) === '') {
+                $proposalContact = $proposalContactDefault;
+            }
             $proposalSummary = content_proposal_details_text([
                 (string) ($t['propose_category_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
@@ -196,7 +206,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'propose_tag') {
             $proposalTitle = (string) ($_POST['proposal_tag'] ?? '');
-            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? $proposalContactDefault);
+            if (trim($proposalContact) === '') {
+                $proposalContact = $proposalContactDefault;
+            }
             $proposalSummary = content_proposal_details_text([
                 (string) ($t['propose_tag_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
             ]);
@@ -237,7 +250,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
-            $proposalContact = (string) ($_POST['proposal_contact'] ?? '');
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? $proposalContactDefault);
+            if (trim($proposalContact) === '') {
+                $proposalContact = $proposalContactDefault;
+            }
             $storedDocument = member_library_store_proposed_document_upload($_FILES['proposal_file'] ?? null, (int) $user['id']);
             $proposalFilePath = (string) $storedDocument['public_path'];
             $proposalSummary = content_proposal_details_text([
@@ -584,7 +600,7 @@ ob_start();
                 <input type="hidden" name="action" value="propose_category">
                 <label><span><?= e((string) $t['propose_category_name']) ?></span><input type="text" name="proposal_category_name" maxlength="160" required></label>
                 <label><span><?= e((string) $t['propose_category_reason']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
-                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
+                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="members-library-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
@@ -608,7 +624,7 @@ ob_start();
                 <input type="hidden" name="action" value="propose_tag">
                 <label><span><?= e((string) $t['propose_tag_name']) ?></span><input type="text" name="proposal_tag" maxlength="80" required></label>
                 <label><span><?= e((string) $t['propose_tag_reason']) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
-                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
+                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="members-library-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
@@ -662,7 +678,7 @@ ob_start();
                 <label><span><?= e((string) $t['tags']) ?></span><input type="text" name="proposal_tags" maxlength="255"></label>
                 <label><span><?= e((string) $t['document']) ?></span><input type="file" name="proposal_file" accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html" required></label>
                 <label><span><?= e((string) $t['propose_document_description']) ?></span><textarea name="proposal_description" rows="5" maxlength="1600"></textarea></label>
-                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e((string) ($user['email'] ?? '')) ?>" required></label>
+                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
                 <div class="members-library-dialog-actions module-dialog-actions">
                     <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
                     <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>

@@ -130,12 +130,20 @@ $normalizeDocumentSourceRef = static function (string $value): string {
     if ($value === '') {
         return '';
     }
-    if (preg_match('~(storage/uploads/(?:library|member_modules)/[^\s?#]+)~i', $value, $matches) === 1) {
+    if (preg_match('~(storage/(?:private|uploads)/(?:library|member_modules)/[^\s?#]+)~i', $value, $matches) === 1) {
         return ltrim((string) $matches[1], '/');
     }
 
     return ltrim($value, '/');
 };
+
+if (function_exists('member_library_sync_accepted_proposals')) {
+    try {
+        member_library_sync_accepted_proposals(i18n_domain_locale('members_library', $locale));
+    } catch (Throwable $throwable) {
+        log_structured_event('my_requests_member_library_sync_failed', ['message' => $throwable->getMessage()]);
+    }
+}
 
 $privacyRequests = privacy_member_requests((int) $user['id']);
 foreach ($privacyRequests as $request) {
