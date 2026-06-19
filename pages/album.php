@@ -248,12 +248,6 @@ ob_start();
                         <a href="<?= e(base_url($filePath)) ?>" target="_blank" rel="noopener" data-album-viewer-open data-photo-title="<?= e($title) ?>" data-photo-caption="<?= e($caption) ?>">
                             <img src="<?= e(base_url($imageSrc)) ?>" alt="<?= e($title !== '' ? $title : (string) $t['photo_alt']) ?>" loading="lazy" decoding="async">
                         </a>
-                        <?php if ($title !== '' || $caption !== ''): ?>
-                            <figcaption>
-                                <?php if ($title !== ''): ?><strong><?= e($title) ?></strong><?php endif; ?>
-                                <?php if ($caption !== ''): ?><span><?= e($caption) ?></span><?php endif; ?>
-                            </figcaption>
-                        <?php endif; ?>
                     </figure>
                 <?php endforeach; ?>
             </div>

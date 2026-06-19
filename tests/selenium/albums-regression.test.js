@@ -64,6 +64,11 @@ test('Selenium album detail: les photos comptees sont rendues en cartes image', 
     const expectedOnPage = Math.min(photoCount, 24);
     const cards = await driver.findElements(By.css('.album-photo-card'));
     assert.equal(cards.length, expectedOnPage, 'Chaque photo paginee doit produire une carte dans la grille.');
+    assert.equal(
+      (await driver.findElements(By.css('.album-photo-card figcaption'))).length,
+      0,
+      'Le detail public ne doit pas afficher de description sous les photos.',
+    );
 
     const renderedImages = await visibleImageCount(driver, '.album-photo-card img');
     assert.equal(renderedImages, expectedOnPage, 'Chaque carte photo doit contenir une image chargee.');
