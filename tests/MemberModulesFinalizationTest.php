@@ -21,6 +21,7 @@ final class MemberModulesFinalizationTest extends TestCase
         $albums = $this->source('pages/albums.php');
         $album = $this->source('pages/album.php');
         $albumHelpers = $this->source('app/album_helpers.php');
+        $albumSchema = $this->source('app/album_schema.php');
         $albumJs = $this->source('assets/js/modules/album.js');
         $albumsCss = $this->source('assets/css/modules/albums.css');
         $adminAlbumsJs = $this->source('assets/js/modules/admin_albums.js');
@@ -90,9 +91,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("function_exists('mb_convert_case')", $albumHelpers);
         self::assertStringContainsString('return ucwords(strtolower($label));', $albumHelpers);
         self::assertStringContainsString("table_has_column('album_photos', 'created_at')", $albumHelpers);
-        self::assertStringContainsString("table_has_column('albums', 'created_at')", $albumHelpers);
+        self::assertStringContainsString("table_has_column('albums', (string) \$column)", $albumSchema);
         self::assertStringContainsString('ALTER TABLE album_photos ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER file_path', $runtimeUpdates);
-        self::assertStringContainsString('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error', $runtimeUpdates);
+        self::assertStringContainsString('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error', $albumSchema);
         self::assertStringContainsString("params.get('focus') === 'album-wizard'", $adminAlbumsJs);
         self::assertStringContainsString("wizard.scrollIntoView({ block: 'start' });", $adminAlbumsJs);
         self::assertStringContainsString('secure_move_uploaded_file(', $albumHelpers);
@@ -114,6 +115,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_id', $albumHelpers);
         self::assertStringContainsString('subcategory', $albumHelpers);
         self::assertStringContainsString('source_proposal_id', $albumHelpers);
+        self::assertStringContainsString("require_once __DIR__ . '/album_schema.php';", $runtimeUpdates);
         self::assertStringContainsString('idx_albums_member', $schema);
         self::assertStringContainsString('idx_albums_source_proposal', $schema);
         self::assertStringContainsString('sort_order INT NOT NULL DEFAULT 0', $schema);

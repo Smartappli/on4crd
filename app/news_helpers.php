@@ -140,30 +140,7 @@ function can_edit_news_post(array $post, int $memberId): bool
  */
 function localized_news_row(array $row): array
 {
-    $locale = current_locale();
-    if ($locale !== 'fr') {
-        $newsId = (int) ($row['id'] ?? 0);
-        if ($newsId > 0 && table_exists('news_translations')) {
-            try {
-                $publicStatuses = news_translation_public_statuses();
-                $statusPlaceholders = implode(',', array_fill(0, count($publicStatuses), '?'));
-                $stmt = db()->prepare('SELECT title, excerpt, content FROM news_translations WHERE news_post_id = ? AND locale = ? AND status IN (' . $statusPlaceholders . ') ORDER BY CASE status WHEN "reviewed" THEN 0 ELSE 1 END, updated_at DESC LIMIT 1');
-                $stmt->execute(array_merge([$newsId, $locale], $publicStatuses));
-                $translation = $stmt->fetch();
-                if (is_array($translation)) {
-                    foreach (['title', 'excerpt', 'content'] as $field) {
-                        $value = trim((string) ($translation[$field] ?? ''));
-                        if ($value !== '') {
-                            $row[$field] = $value;
-                        }
-                    }
-                }
-            } catch (Throwable) {
-                // Keep the source news item when translations are unavailable.
-            }
-        }
-    }
-
+    $row = localized_translation_row($row, 'news_translations', 'news_post_id', (int) ($row['id'] ?? 0), news_translation_public_statuses());
     $row['title_localized'] = (string) ($row['title'] ?? '');
     $row['excerpt_localized'] = (string) ($row['excerpt'] ?? '');
     $row['content_localized'] = (string) ($row['content'] ?? '');
@@ -212,25 +189,7 @@ function news_translation_pending_row_is_source_fallback(array $existing, array 
  */
 function news_translation_auto_fields(array $source, string $locale): array
 {
-    $sourceTitle = (string) ($source['title'] ?? '');
-    $sourceExcerpt = (string) ($source['excerpt'] ?? '');
-    $sourceContent = (string) ($source['content'] ?? '');
-    $translated = article_translation_deepl_translate([$sourceTitle, $sourceExcerpt, $sourceContent], $locale);
-    if (is_array($translated)) {
-        return [
-            'title' => trim($translated[0]) !== '' ? trim($translated[0]) : $sourceTitle,
-            'excerpt' => trim($translated[1]) !== '' ? trim($translated[1]) : $sourceExcerpt,
-            'content' => trim($translated[2]) !== '' ? article_sanitize_content($translated[2]) : $sourceContent,
-            'status' => 'auto',
-        ];
-    }
-
-    return [
-        'title' => $sourceTitle,
-        'excerpt' => $sourceExcerpt,
-        'content' => $sourceContent,
-        'status' => 'needs_review',
-    ];
+    return article_translation_auto_fields($source, $locale);
 }
 
 function news_translation_upsert(int $newsId, string $locale, ?string $title = null, ?string $summary = null, ?string $content = null): void

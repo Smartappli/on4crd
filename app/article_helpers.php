@@ -3,34 +3,50 @@ declare(strict_types=1);
 
 /**
  * @param array<string,mixed> $row
+ * @param list<string> $publicStatuses
+ * @return array<string,mixed>
+ */
+function localized_translation_row(array $row, string $translationTable, string $sourceIdColumn, int $sourceId, array $publicStatuses): array
+{
+    $locale = current_locale();
+    if (
+        $locale === 'fr'
+        || $sourceId <= 0
+        || $publicStatuses === []
+        || !preg_match('/^[a-z_]+$/', $translationTable)
+        || !preg_match('/^[a-z_]+$/', $sourceIdColumn)
+        || !table_exists($translationTable)
+    ) {
+        return $row;
+    }
+
+    try {
+        $statusPlaceholders = implode(',', array_fill(0, count($publicStatuses), '?'));
+        $stmt = db()->prepare('SELECT title, excerpt, content FROM ' . $translationTable . ' WHERE ' . $sourceIdColumn . ' = ? AND locale = ? AND status IN (' . $statusPlaceholders . ') ORDER BY CASE status WHEN "reviewed" THEN 0 ELSE 1 END, updated_at DESC LIMIT 1');
+        $stmt->execute(array_merge([$sourceId, $locale], $publicStatuses));
+        $translation = $stmt->fetch();
+        if (is_array($translation)) {
+            foreach (['title', 'excerpt', 'content'] as $field) {
+                $value = trim((string) ($translation[$field] ?? ''));
+                if ($value !== '') {
+                    $row[$field] = $value;
+                }
+            }
+        }
+    } catch (Throwable) {
+        // Keep the source row when translations are unavailable.
+    }
+
+    return $row;
+}
+
+/**
+ * @param array<string,mixed> $row
  * @return array<string,mixed>
  */
 function localized_article_row(array $row): array
 {
-    $locale = current_locale();
-    if ($locale !== 'fr') {
-        $articleId = (int) ($row['id'] ?? 0);
-        if ($articleId > 0 && table_exists('article_translations')) {
-            try {
-                $publicStatuses = article_translation_public_statuses();
-                $statusPlaceholders = implode(',', array_fill(0, count($publicStatuses), '?'));
-                $stmt = db()->prepare('SELECT title, excerpt, content FROM article_translations WHERE article_id = ? AND locale = ? AND status IN (' . $statusPlaceholders . ') ORDER BY CASE status WHEN "reviewed" THEN 0 ELSE 1 END, updated_at DESC LIMIT 1');
-                $stmt->execute(array_merge([$articleId, $locale], $publicStatuses));
-                $translation = $stmt->fetch();
-                if (is_array($translation)) {
-                    foreach (['title', 'excerpt', 'content'] as $field) {
-                        $value = trim((string) ($translation[$field] ?? ''));
-                        if ($value !== '') {
-                            $row[$field] = $value;
-                        }
-                    }
-                }
-            } catch (Throwable) {
-                // Keep the source article when translations are unavailable.
-            }
-        }
-    }
-
+    $row = localized_translation_row($row, 'article_translations', 'article_id', (int) ($row['id'] ?? 0), article_translation_public_statuses());
     $row['title_localized'] = (string) ($row['title'] ?? '');
     $row['excerpt_localized'] = (string) ($row['excerpt'] ?? '');
     $row['content_localized'] = (string) ($row['content'] ?? '');
@@ -402,7 +418,7 @@ function article_visible_subcategories_by_category(array $subcategoriesByCategor
     $visible = [];
     foreach ($subcategoriesByCategory as $categoryCode => $subcategories) {
         foreach ($subcategories as $subcategory) {
-            $code = article_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $code = article_subcategory_code((string) $subcategory['code']);
             $count = (int) ($countsBySubcategory[(string) $categoryCode . ':' . $code] ?? 0);
             if ($code === '' || $count <= 0) {
                 continue;
@@ -479,13 +495,13 @@ function render_article_taxonomy_fields(array $categories, array $labels = [], s
     foreach ($subcategoriesByCategory as $parentCode => $subcategories) {
         $html .= '<optgroup label="' . e((string) ($categories[(string) $parentCode] ?? article_category_label_from_code((string) $parentCode))) . '">';
         foreach ($subcategories as $subcategory) {
-            $code = article_subcategory_code((string) ($subcategory['code'] ?? ''));
+            $code = article_subcategory_code((string) $subcategory['code']);
             if ($code === '') {
                 continue;
             }
             $html .= '<option value="' . e(article_subcategory_ref((string) $parentCode, $code)) . '"'
                 . ($selectedCategory === (string) $parentCode && $selectedSubcategory === $code ? ' selected' : '')
-                . '>' . e((string) ($subcategory['label'] ?? $code)) . '</option>';
+                . '>' . e((string) $subcategory['label']) . '</option>';
         }
         $html .= '</optgroup>';
     }
@@ -554,7 +570,7 @@ function article_translation_pending_row_is_source_fallback(array $existing, arr
     }
 
     foreach (['title', 'excerpt', 'content'] as $field) {
-        if (trim((string) ($existing[$field] ?? '')) !== trim((string) ($source[$field] ?? ''))) {
+        if (trim((string) ($existing[$field] ?? '')) !== trim((string) $source[$field])) {
             return false;
         }
     }
@@ -788,7 +804,7 @@ function article_translation_deepl_translate(array $texts, string $locale): ?arr
         return null;
     }
 
-    $texts = array_values(array_map(static fn(string $text): string => trim($text), $texts));
+    $texts = array_map(static fn(string $text): string => trim($text), $texts);
     if ($texts === [] || implode('', $texts) === '') {
         return null;
     }
@@ -869,9 +885,9 @@ function article_translation_deepl_translate(array $texts, string $locale): ?arr
  */
 function article_translation_auto_fields(array $source, string $locale): array
 {
-    $sourceTitle = (string) ($source['title'] ?? '');
-    $sourceExcerpt = (string) ($source['excerpt'] ?? '');
-    $sourceContent = (string) ($source['content'] ?? '');
+    $sourceTitle = (string) $source['title'];
+    $sourceExcerpt = (string) $source['excerpt'];
+    $sourceContent = (string) $source['content'];
     $translated = article_translation_deepl_translate([$sourceTitle, $sourceExcerpt, $sourceContent], $locale);
     if (is_array($translated)) {
         return [
@@ -954,3 +970,4 @@ function article_translations_sync_all(int $articleId): int
 
     return $count;
 }
+        

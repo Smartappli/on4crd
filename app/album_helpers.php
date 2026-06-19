@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/album_schema.php';
+
 function notify_album_webhooks(array $album): void
 {
     if (!table_exists('webhooks')) {
@@ -373,60 +375,7 @@ function album_ensure_source_proposal_column(): bool
     }
 
     try {
-        if (!table_has_column('albums', 'member_id')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN member_id INT DEFAULT NULL AFTER id');
-        }
-        if (!table_has_column('albums', 'category')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN category VARCHAR(120) NOT NULL DEFAULT "general" AFTER member_id');
-        }
-        if (!table_has_column('albums', 'subcategory')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
-        }
-        if (!table_has_column('albums', 'title')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Album" AFTER subcategory');
-        }
-        if (!table_has_column('albums', 'description')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN description TEXT DEFAULT NULL AFTER title');
-        }
-        if (!table_has_column('albums', 'is_public')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN is_public TINYINT(1) NOT NULL DEFAULT 0 AFTER description');
-        }
-        if (!table_has_index('albums', 'idx_albums_member')) {
-            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_member (member_id)');
-        }
-        if (!table_has_index('albums', 'idx_albums_category')) {
-            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_category (category)');
-        }
-        if (!table_has_index('albums', 'idx_albums_subcategory')) {
-            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_subcategory (category, subcategory)');
-        }
-        if (!table_has_column('albums', 'source_proposal_id')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_public');
-        }
-        if (!table_has_column('albums', 'publish_requested')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN publish_requested TINYINT(1) NOT NULL DEFAULT 0 AFTER source_proposal_id');
-        }
-        if (!table_has_column('albums', 'facebook_album_id')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN facebook_album_id VARCHAR(80) DEFAULT NULL AFTER publish_requested');
-        }
-        if (!table_has_column('albums', 'facebook_post_id')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN facebook_post_id VARCHAR(80) DEFAULT NULL AFTER facebook_album_id');
-        }
-        if (!table_has_column('albums', 'instagram_media_id')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN instagram_media_id VARCHAR(80) DEFAULT NULL AFTER facebook_post_id');
-        }
-        if (!table_has_column('albums', 'social_published_at')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN social_published_at DATETIME DEFAULT NULL AFTER instagram_media_id');
-        }
-        if (!table_has_column('albums', 'social_publish_error')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN social_publish_error TEXT DEFAULT NULL AFTER social_published_at');
-        }
-        if (!table_has_column('albums', 'created_at')) {
-            db()->exec('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error');
-        }
-        if (!table_has_index('albums', 'idx_albums_source_proposal')) {
-            db()->exec('ALTER TABLE albums ADD INDEX idx_albums_source_proposal (source_proposal_id)');
-        }
+        album_ensure_schema_columns_and_indexes();
         db()->exec('UPDATE albums SET category = "general" WHERE category IS NULL OR category = ""');
         db()->exec('UPDATE albums SET subcategory = "" WHERE subcategory IS NULL');
         album_ensure_categories_table();
