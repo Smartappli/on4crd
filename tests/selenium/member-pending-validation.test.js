@@ -588,6 +588,7 @@ async function acceptProposalWithAdmin(driver, credentials, title) {
   }
 
   assert.equal(proposalStatus(title), 'accepted', `La proposition ${title} doit etre acceptee.`);
+  await visit(driver, 'admin');
 }
 
 async function publishArticleWithAdmin(driver, credentials, title) {
