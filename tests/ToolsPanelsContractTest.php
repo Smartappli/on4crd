@@ -95,8 +95,16 @@ final class ToolsPanelsContractTest extends TestCase
     public function testSimpleConverterPanelsHaveAConverterImplementation(string $toolId, string $panelFile): void
     {
         $html = $this->renderPanel($panelFile);
-        if (!str_contains($html, 'id="' . $toolId . '-in"')) {
-            self::assertTrue(true);
+
+        $hasSimpleInput = str_contains($html, 'id="' . $toolId . '-in"');
+        $hasSimpleOutput = str_contains($html, 'id="' . $toolId . '-out"');
+        self::assertSame(
+            $hasSimpleInput,
+            $hasSimpleOutput,
+            sprintf('Simple converter %s must expose matching -in and -out elements.', $toolId)
+        );
+
+        if (!$hasSimpleInput) {
             return;
         }
 
