@@ -571,14 +571,14 @@ $homeGalleryHtml = '<a class="group block rounded-2xl border border-dashed borde
     . '</a>';
 if (module_enabled('albums') && table_exists('albums') && table_exists('album_photos')) {
     try {
-        $homeGalleryPhotos = cache_remember('home_public_album_random_photos_v1', 60, static function (): array {
+        $homeGalleryPhotos = cache_remember('home_public_album_random_photo_v1', 60, static function (): array {
             $stmt = db()->query(
                 'SELECT p.id, p.album_id, p.file_path, p.title, p.caption, a.title AS album_title
                  FROM album_photos p
                  INNER JOIN albums a ON a.id = p.album_id
                  WHERE a.is_public = 1
                  ORDER BY RAND()
-                 LIMIT 10'
+                 LIMIT 1'
             );
 
             return $stmt !== false ? ($stmt->fetchAll() ?: []) : [];
@@ -595,14 +595,11 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
             $thumbAbs = dirname(__DIR__) . '/' . $thumbPath;
             $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
             $photoTitle = trim((string) ($photo['title'] ?? ''));
-            $photoCaption = trim((string) ($photo['caption'] ?? ''));
             $albumTitle = trim((string) ($photo['album_title'] ?? ''));
             $alt = $photoTitle !== '' ? $photoTitle : ($albumTitle !== '' ? $albumTitle : (string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie'));
-            $caption = $photoCaption !== '' ? $photoCaption : $albumTitle;
 
             $homeGalleryItems .= '<a class="home-gallery-slide" href="' . e(route_url('album', ['id' => (int) ($photo['album_id'] ?? 0)])) . '">'
                 . '<img src="' . e(base_url($imageSrc)) . '" alt="' . e($alt) . '" loading="lazy" decoding="async">'
-                . ($caption !== '' ? '<span>' . e(mb_safe_strimwidth($caption, 0, 70, '...')) . '</span>' : '')
                 . '</a>';
         }
 

@@ -10,6 +10,8 @@ const {
   assertNoServerError,
   parsePhotoCount,
   visibleImageCount,
+  loginAsAdmin,
+  requireAdminCredentials,
   ensureSeleniumFixtures,
 } = require('./helpers');
 
@@ -103,5 +105,29 @@ test('Selenium album detail: une miniature ouvre la photo agrandie avec sa descr
     const copyText = await viewer.findElement(By.css('.album-photo-viewer-copy')).getText();
     assert.match(copyText, /Album public de regression Selenium/i, 'La description de l album doit apparaitre a cote de la photo agrandie.');
     assert.match(copyText, /Selenium fixture photo|Photo de regression Selenium/i, 'Le titre ou la legende de la photo doit rester disponible dans le viewer.');
+  });
+});
+
+test('Selenium home: la galerie affiche une seule image sans description', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  await withSelenium(t, async (driver) => {
+    ensureSeleniumFixtures();
+    await loginAsAdmin(driver, credentials.username, credentials.password);
+    await visit(driver, 'home');
+
+    const slides = await driver.findElements(By.css('.home-gallery-carousel .home-gallery-slide'));
+    assert.equal(slides.length, 1, 'La galerie home doit afficher une seule image.');
+    assert.equal(
+      (await driver.findElements(By.css('.home-gallery-carousel .home-gallery-slide span'))).length,
+      0,
+      'La galerie home ne doit pas afficher de description sous l image.',
+    );
+
+    const renderedImages = await visibleImageCount(driver, '.home-gallery-carousel .home-gallery-slide img');
+    assert.equal(renderedImages, 1, 'La galerie home doit contenir une image chargee.');
   });
 });
