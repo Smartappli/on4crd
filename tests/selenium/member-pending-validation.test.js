@@ -664,6 +664,16 @@ function writeTextFixture(title, content) {
   return fixture;
 }
 
+function proposalDateTime(daysFromNow = 1) {
+  const date = new Date(Date.now() + (daysFromNow * 24 * 60 * 60 * 1000));
+  date.setHours(19, 30, 0, 0);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd} 19:30`;
+}
+
 test('Selenium membre: proposer un document bibliotheque, le valider et le retrouver dans members_library', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -932,13 +942,13 @@ const contentProposalScenarios = [
       await openDialog(driver, 'events-proposal-dialog');
       const form = await driver.findElement(By.css('#events-proposal-dialog form.events-proposal-form'));
       await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
-      await form.findElement(By.css('input[name="proposal_datetime"]')).sendKeys('2026-07-15 19:30');
+      await form.findElement(By.css('input[name="proposal_datetime"]')).sendKeys(proposalDateTime(1));
       await form.findElement(By.css('input[name="proposal_location"]')).sendKeys('Durnal');
       await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Evenement Selenium propose puis valide.');
       await submitForm(driver, form);
     },
     afterAccept: async (driver, title) => {
-      await assertRouteContains(driver, 'events', { format: 'ics' }, title, 'L evenement valide doit etre visible dans agenda.');
+      await assertRouteContains(driver, 'events', {}, title, 'L evenement valide doit etre visible dans agenda.');
     },
   },
   {
