@@ -172,11 +172,12 @@ final class FunctionHelpersTest extends TestCase
         self::assertTrue(is_https_request());
     }
 
-    public function testIsHttpsRequestUsesFirstForwardedProtoValue(): void
+    public function testIsHttpsRequestIgnoresForwardedProtoFromUntrustedProxy(): void
     {
         $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https, http';
+        $_SERVER['REMOTE_ADDR'] = '198.51.100.10';
 
-        self::assertTrue(is_https_request());
+        self::assertFalse(is_https_request());
     }
 
     public function testMaidenheadToCoordinatesConvertsFourCharactersLocator(): void
