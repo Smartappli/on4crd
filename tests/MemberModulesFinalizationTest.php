@@ -170,6 +170,7 @@ final class MemberModulesFinalizationTest extends TestCase
         $routeHelperLoader = $this->source('app/route_helper_loader.php');
         $searchPage = $this->source('pages/search.php');
         $previewPage = $this->source('pages/member_library_preview.php');
+        $myRequests = $this->source('pages/my_requests.php');
         $requestSecurity = $this->source('app/request_security.php');
         $membersLibraryCss = $this->source('assets/css/modules/members_library.css');
         $adminLibraryCss = $this->source('assets/css/modules/admin_library.css');
@@ -182,6 +183,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('$visibleCategories = member_library_visible_categories($categories);', $library);
         self::assertStringContainsString('$visibleSubcategoriesByCategory = member_library_visible_subcategories_by_category($subcategoriesByCategory);', $library);
         self::assertStringContainsString('$favoriteDocumentIds = member_library_favorite_document_ids((int) ($user[\'id\'] ?? 0));', $library);
+        self::assertStringContainsString('$proposalContactDefault = trim((string) ($user[\'email\'] ?? \'\'));', $library);
+        self::assertStringContainsString('$proposalContactDefault = trim((string) ($user[\'callsign\'] ?? \'\'));', $library);
+        self::assertStringContainsString('value="<?= e($proposalContactDefault) ?>" required', $library);
         self::assertStringContainsString('$favoritesOnly = (string) ($_GET[\'favorites\'] ?? \'\') === \'1\' && $favoriteDocumentCount > 0;', $library);
         self::assertStringContainsString('$favoritesLabel = member_library_favorites_label($t, $locale);', $library);
         self::assertStringContainsString("['favorites' => '1', 'q' => \$search, 'tag' => \$tag]", $library);
@@ -195,9 +199,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_library_create_document_record(', $library);
         self::assertStringContainsString("'member_library_helpers.php' => ['members_library', 'my_requests', 'search'", $routeHelperLoader);
         self::assertStringContainsString("'member_module_documents.php' => ['my_requests', 'presentations'", $routeHelperLoader);
-        self::assertStringContainsString('SELECT id, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_library_documents WHERE member_id = ?', $this->source('pages/my_requests.php'));
-        self::assertStringContainsString('SELECT id, module_code, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_module_documents WHERE member_id = ?', $this->source('pages/my_requests.php'));
-        self::assertStringContainsString('$directDocumentSourceRefs[$sourceKey] = true;', $this->source('pages/my_requests.php'));
+        self::assertStringContainsString('member_library_sync_accepted_proposals(i18n_domain_locale(\'members_library\', $locale));', $myRequests);
+        self::assertStringContainsString('storage/(?:private|uploads)/(?:library|member_modules)', $myRequests);
+        self::assertStringContainsString('SELECT id, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_library_documents WHERE member_id = ?', $myRequests);
+        self::assertStringContainsString('SELECT id, module_code, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_module_documents WHERE member_id = ?', $myRequests);
+        self::assertStringContainsString('$directDocumentSourceRefs[$sourceKey] = true;', $myRequests);
         self::assertStringContainsString("function_exists('ensure_member_library_table') && ensure_member_library_table()", $searchPage);
         self::assertStringContainsString('SELECT title, description, extracted_text, category, subcategory, tags FROM member_library_documents', $searchPage);
         self::assertStringContainsString("if (\$action === 'update_document' || \$action === 'delete_document')", $library);
