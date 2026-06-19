@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!hash_equals($captchaExpected, $captcha)) {
             throw new RuntimeException((string) $t['captcha_invalid']);
         }
-        unset($_SESSION['login_captcha']);
+        unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
         $authClient = auth();
         if ($authClient === null) {
             throw new RuntimeException((string) $t['auth_unavailable']);
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException((string) ($t['member_unavailable'] ?? $t['auth_unavailable']));
         }
 
-        unset($_SESSION['login_captcha']);
+        unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
         $_SESSION['member_id'] = (int) ($memberRow['id'] ?? 0);
         set_flash('success', (string) $t['login_success']);
         redirect_url($nextUrl ?? $defaultLoginRedirectUrl);
