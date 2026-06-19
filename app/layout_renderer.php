@@ -168,7 +168,7 @@ function module_js_assets_for_route(string $route): array
     $module = $moduleByRoute[$route] ?? $route;
     $assets = [];
 
-    $dialogModules = ['albums', 'member_documents', 'webotheque', 'wiki'];
+    $dialogModules = ['albums', 'articles', 'member_documents', 'members_library', 'news', 'webotheque', 'wiki'];
     $candidates = in_array($module, $dialogModules, true) ? ['module_dialogs', $module] : [$module];
     if ($route === 'home') {
         $candidates[] = 'tools';

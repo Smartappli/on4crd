@@ -99,6 +99,10 @@ final class ModuleUnitCoverageTest extends TestCase
     {
         $routes = [
             'albums' => 'albums',
+            'articles' => 'articles',
+            'article_propose' => 'articles',
+            'members_library' => 'members_library',
+            'news' => 'news',
             'webotheque' => 'webotheque',
             'admin_webotheque' => 'webotheque',
             'wiki' => 'wiki',
