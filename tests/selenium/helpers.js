@@ -504,6 +504,10 @@ async function loginAsAdmin(driver, username, password) {
     // A clean cookie jar avoids reusing stale Selenium sessions when a browser profile is recycled.
   }
   await visit(driver, 'login');
+  await driver.wait(async () => {
+    const state = await driver.executeScript('return document.readyState');
+    return state === 'complete';
+  }, timeoutMs);
   await driver.findElement(By.css('input[name="callsign"]')).sendKeys(username);
   await driver.findElement(By.css('input[name="password"]')).sendKeys(password);
 
