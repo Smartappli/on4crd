@@ -137,5 +137,31 @@ test('Selenium home: la galerie affiche une seule image sans texte', async (t) =
 
     const renderedImages = await visibleImageCount(driver, '.home-gallery-carousel .home-gallery-slide img');
     assert.equal(renderedImages, 1, 'La galerie home doit contenir une image chargee.');
+
+    const layout = await driver.executeScript(() => {
+      const carousel = document.querySelector('.home-gallery-carousel');
+      const slide = document.querySelector('.home-gallery-carousel .home-gallery-slide');
+      const image = document.querySelector('.home-gallery-carousel .home-gallery-slide img');
+      if (!(carousel instanceof HTMLElement) || !(slide instanceof HTMLElement) || !(image instanceof HTMLImageElement)) {
+        return null;
+      }
+
+      const carouselRect = carousel.getBoundingClientRect();
+      const imageRect = image.getBoundingClientRect();
+
+      return {
+        carouselHeight: carouselRect.height,
+        imageHeight: imageRect.height,
+        imageWidth: imageRect.width,
+        imageObjectFit: window.getComputedStyle(image).objectFit,
+        slideDisplay: window.getComputedStyle(slide).display,
+      };
+    });
+
+    assert.ok(layout, 'La galerie home doit exposer un carousel, une slide et une image.');
+    assert.ok(layout.carouselHeight >= 160, `La galerie home doit conserver une hauteur stable, recu ${layout.carouselHeight}.`);
+    assert.ok(layout.imageWidth >= 100 && layout.imageHeight >= 100, 'L image de galerie home doit occuper le bloc.');
+    assert.equal(layout.imageObjectFit, 'cover', 'L image de galerie home doit remplir le carousel.');
+    assert.equal(layout.slideDisplay, 'flex', 'La slide de galerie home doit utiliser le layout carousel.');
   });
 });

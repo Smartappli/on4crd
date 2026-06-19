@@ -145,6 +145,35 @@ body[data-route="home"] .site-footer {
   animation: homeSponsorFade .45s ease both;
 }
 
+.home-gallery-carousel {
+  min-height: 190px;
+  aspect-ratio: 16 / 10;
+}
+
+.home-gallery-track,
+.home-gallery-slide {
+  height: 100%;
+}
+
+.home-gallery-slide {
+  padding: 0;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.home-gallery-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+}
+
+.home-gallery-slide:focus-visible {
+  outline: 3px solid rgb(37 99 235);
+  outline-offset: -3px;
+}
+
 @keyframes homeSponsorFade {
   from {
     opacity: 0;
@@ -170,5 +199,13 @@ body[data-route="home"] .site-footer {
 
   .home-media-slide img {
     max-height: 130px;
+  }
+
+  .home-gallery-carousel {
+    min-height: 170px;
+  }
+
+  .home-gallery-slide img {
+    max-height: none;
   }
 }
