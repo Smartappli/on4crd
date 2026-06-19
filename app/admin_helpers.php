@@ -298,6 +298,26 @@ function admin_apply_accepted_content_proposal(array $proposal, string $locale):
 {
     $area = (string) ($proposal['area'] ?? '');
 
+    if ($area === 'events') {
+        admin_apply_accepted_event_proposal($proposal);
+        return;
+    }
+
+    if ($area === 'auctions') {
+        admin_apply_accepted_auction_proposal($proposal);
+        return;
+    }
+
+    if ($area === 'news') {
+        admin_apply_accepted_news_proposal($proposal);
+        return;
+    }
+
+    if ($area === 'articles') {
+        admin_apply_accepted_article_taxonomy_proposal($proposal, $locale);
+        return;
+    }
+
     if ($area === 'albums') {
         require_once __DIR__ . '/album_helpers.php';
 
@@ -332,4 +352,261 @@ function admin_apply_accepted_content_proposal(array $proposal, string $locale):
         $proposal,
         i18n_domain_locale('members_library', $locale)
     );
+}
+
+/**
+ * @param array<string, mixed> $proposal
+ * @return list<string>
+ */
+function admin_content_proposal_summary_values(array $proposal): array
+{
+    $values = [];
+    foreach (content_proposal_summary_rows((string) ($proposal['summary'] ?? '')) as $row) {
+        $values[] = trim((string) ($row['value'] ?? ''));
+    }
+
+    return $values;
+}
+
+function admin_content_proposal_unique_slug(string $table, string $title, string $fallback, int $maxLength = 190): string
+{
+    if (!in_array($table, ['events', 'auction_lots', 'news_posts'], true)) {
+        throw new RuntimeException('Invalid content proposal target.');
+    }
+
+    $base = slugify($title);
+    if ($base === '' || $base === 'n-a') {
+        $base = $fallback;
+    }
+    if (strlen($base) > $maxLength) {
+        $base = rtrim(substr($base, 0, $maxLength), '-');
+    }
+    $base = $base !== '' ? $base : $fallback;
+
+    $suffix = 1;
+    do {
+        $suffixText = $suffix <= 1 ? '' : '-' . $suffix;
+        $candidate = $suffixText === ''
+            ? $base
+            : rtrim(substr($base, 0, max(1, $maxLength - strlen($suffixText))), '-') . $suffixText;
+        $stmt = db()->prepare('SELECT id FROM ' . $table . ' WHERE slug = ? LIMIT 1');
+        $stmt->execute([$candidate]);
+        if (!$stmt->fetchColumn()) {
+            return $candidate;
+        }
+        $suffix++;
+    } while ($suffix < 10000);
+
+    throw new RuntimeException('Cannot generate unique proposal slug.');
+}
+
+/**
+ * @param array<string, mixed> $proposal
+ */
+function admin_apply_accepted_event_proposal(array $proposal): void
+{
+    if ((string) ($proposal['proposal_type'] ?? '') !== 'content' || !table_exists('events')) {
+        return;
+    }
+
+    $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
+    if ($title === '') {
+        throw new RuntimeException('Invalid event proposal.');
+    }
+    $existingStmt = db()->prepare('SELECT id FROM events WHERE title = ? LIMIT 1');
+    $existingStmt->execute([$title]);
+    if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+        return;
+    }
+
+    $values = admin_content_proposal_summary_values($proposal);
+    $dateRaw = content_proposal_clean_single_line((string) ($values[0] ?? ''), 160);
+    $startTs = $dateRaw !== '' ? strtotime($dateRaw) : false;
+    if ($startTs === false) {
+        throw new RuntimeException('Invalid event proposal date.');
+    }
+
+    $location = content_proposal_clean_single_line((string) ($values[1] ?? ''), 190);
+    $descriptionText = content_proposal_clean_multiline((string) ($values[2] ?? ''), 1600);
+    $description = $descriptionText !== ''
+        ? sanitize_rich_html('<p>' . nl2br(e($descriptionText), false) . '</p>')
+        : '';
+    $summary = $descriptionText !== '' ? mb_safe_strimwidth($descriptionText, 0, 280, '...') : '';
+    $slug = admin_content_proposal_unique_slug('events', $title, 'event');
+    $endTs = $startTs + (2 * 3600);
+
+    db()->prepare('INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status) VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")')
+        ->execute([
+            $slug,
+            $title,
+            $summary,
+            $description,
+            date('Y-m-d H:i:s', $startTs),
+            date('Y-m-d H:i:s', $endTs),
+            $location !== '' ? $location : null,
+        ]);
+    cache_forget('home_next_event_v1');
+}
+
+/**
+ * @param array<string, mixed> $proposal
+ */
+function admin_apply_accepted_auction_proposal(array $proposal): void
+{
+    if ((string) ($proposal['proposal_type'] ?? '') !== 'content' || !table_exists('auction_lots')) {
+        return;
+    }
+
+    require_once __DIR__ . '/money_helpers.php';
+
+    $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 190);
+    if ($title === '') {
+        throw new RuntimeException('Invalid auction proposal.');
+    }
+    $existingStmt = db()->prepare('SELECT id FROM auction_lots WHERE title = ? LIMIT 1');
+    $existingStmt->execute([$title]);
+    if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+        return;
+    }
+
+    $values = admin_content_proposal_summary_values($proposal);
+    $summary = content_proposal_clean_multiline((string) ($values[0] ?? ''), 1000);
+    $price = content_proposal_clean_single_line((string) ($values[1] ?? '0'), 64);
+    $descriptionText = content_proposal_clean_multiline((string) ($values[2] ?? ''), 5000);
+    $contact = content_proposal_clean_single_line((string) ($proposal['contact'] ?? ''), 220);
+    $description = $descriptionText !== '' ? '<p>' . nl2br(e($descriptionText), false) . '</p>' : '';
+    if ($contact !== '') {
+        $description .= '<p><strong>Contact:</strong> ' . e($contact) . '</p>';
+    }
+    $startsAt = time();
+    $endsAt = strtotime('+7 days', $startsAt) ?: ($startsAt + 7 * 86400);
+    $slug = admin_content_proposal_unique_slug('auction_lots', $title, 'lot');
+
+    db()->prepare('INSERT INTO auction_lots (slug, title, summary, description, image_url, starting_price_cents, reserve_price_cents, min_increment_cents, buy_now_price_cents, starts_at, ends_at, status) VALUES (?, ?, ?, ?, "", ?, NULL, 100, NULL, ?, ?, "active")')
+        ->execute([
+            $slug,
+            $title,
+            $summary !== '' ? $summary : mb_safe_strimwidth($descriptionText, 0, 280, '...'),
+            sanitize_rich_html($description),
+            max(0, parse_price_to_cents($price)),
+            date('Y-m-d H:i:s', $startsAt),
+            date('Y-m-d H:i:s', $endsAt),
+        ]);
+    cache_forget('auction_public_lots_60_v1');
+}
+
+/**
+ * @param array<string, mixed> $proposal
+ */
+function admin_apply_accepted_news_proposal(array $proposal): void
+{
+    $proposalType = (string) ($proposal['proposal_type'] ?? '');
+    if (!in_array($proposalType, ['category', 'content'], true)) {
+        return;
+    }
+
+    require_once __DIR__ . '/news_helpers.php';
+
+    $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 190);
+    if ($title === '') {
+        throw new RuntimeException('Invalid news proposal.');
+    }
+
+    if ($proposalType === 'category') {
+        if (!table_exists('news_sections')) {
+            return;
+        }
+        $slug = news_slug_base($title, 100);
+        db()->prepare(
+            'INSERT INTO news_sections (slug, name, sort_order)
+             VALUES (?, ?, 100)
+             ON DUPLICATE KEY UPDATE name = VALUES(name)'
+        )->execute([$slug, $title]);
+        cache_forget('news_categories_v2');
+        return;
+    }
+
+    if (!table_exists('news_posts')) {
+        return;
+    }
+    $existingStmt = db()->prepare('SELECT id FROM news_posts WHERE title = ? LIMIT 1');
+    $existingStmt->execute([$title]);
+    if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+        return;
+    }
+
+    $sectionId = news_default_section_id();
+    if ($sectionId <= 0) {
+        throw new RuntimeException('News storage unavailable.');
+    }
+
+    $values = admin_content_proposal_summary_values($proposal);
+    $summaryText = content_proposal_clean_multiline((string) ($values[0] ?? ''), 1800);
+    $sourceText = content_proposal_clean_single_line((string) ($proposal['source_ref'] ?? $values[1] ?? ''), 500);
+    if ($summaryText === '') {
+        throw new RuntimeException('Invalid news proposal.');
+    }
+
+    $paragraphs = array_values(array_filter(array_map(
+        static fn(string $line): string => trim($line),
+        preg_split('/\R{2,}/u', $summaryText) ?: []
+    )));
+    if ($paragraphs === []) {
+        $paragraphs = [$summaryText];
+    }
+    $content = '';
+    foreach ($paragraphs as $paragraph) {
+        $content .= '<p>' . nl2br(e($paragraph), false) . '</p>';
+    }
+    if ($sourceText !== '') {
+        $sourceUrl = sanitize_href_attribute($sourceText);
+        $content .= '<p><strong>Source:</strong> ';
+        $content .= $sourceUrl !== null
+            ? '<a href="' . e($sourceUrl) . '" target="_blank" rel="noopener noreferrer">' . e($sourceText) . '</a>'
+            : e($sourceText);
+        $content .= '</p>';
+    }
+
+    $slug = admin_content_proposal_unique_slug('news_posts', $title, 'news');
+    db()->prepare('INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at) VALUES (?, ?, ?, ?, ?, ?, "published", NOW())')
+        ->execute([
+            $sectionId,
+            max(0, (int) ($proposal['member_id'] ?? 0)),
+            $slug,
+            $title,
+            mb_safe_strimwidth($summaryText, 0, 280, '...'),
+            sanitize_rich_html($content),
+        ]);
+    $postId = (int) db()->lastInsertId();
+    if ($postId > 0 && function_exists('news_translations_sync_all')) {
+        news_translations_sync_all($postId);
+    }
+    cache_forget('news_published_count_v1');
+    cache_forget('news_categories_v2');
+    cache_forget('news_archives_v1');
+    cache_forget('home_latest_news_v1');
+}
+
+/**
+ * @param array<string, mixed> $proposal
+ */
+function admin_apply_accepted_article_taxonomy_proposal(array $proposal, string $locale): void
+{
+    if ((string) ($proposal['proposal_type'] ?? '') !== 'category') {
+        return;
+    }
+
+    require_once __DIR__ . '/article_helpers.php';
+
+    $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
+    if ($title === '' || !article_ensure_categories_table(i18n_domain_locale('articles', $locale))) {
+        return;
+    }
+    $code = article_category_code($title);
+    if ($code === '') {
+        return;
+    }
+
+    db()->prepare('INSERT INTO article_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+        ->execute([$code, $title]);
 }

@@ -87,6 +87,34 @@ async function setSelectValue(driver, select, value) {
   `, select, value);
 }
 
+async function openDialog(driver, id) {
+  await driver.executeScript(`
+    const dialog = document.getElementById(arguments[0]);
+    if (!dialog || dialog.open) {
+      return;
+    }
+    if (typeof dialog.showModal === 'function') {
+      dialog.showModal();
+    } else {
+      dialog.setAttribute('open', '');
+    }
+  `, id);
+}
+
+async function selectOptionsText(driver, selector) {
+  return driver.executeScript(`
+    return Array.from(document.querySelectorAll(arguments[0]))
+      .map((option) => option.textContent || '')
+      .join(' ');
+  `, selector);
+}
+
+async function assertSelectOptionContains(driver, route, query, selector, title, message) {
+  await visit(driver, route, query);
+  const text = await selectOptionsText(driver, selector);
+  assert.match(text, new RegExp(escapeRegExp(title)), message);
+}
+
 function ensureStandardMember() {
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';
@@ -284,6 +312,80 @@ if (table_exists('albums')) {
     }
 }
 
+if (table_exists('articles')) {
+    $stmt = db()->prepare('SELECT id FROM articles WHERE title LIKE ? OR excerpt LIKE ? OR content LIKE ?');
+    $stmt->execute([$like, $like, $like]);
+    $ids = array_values(array_filter(array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN) ?: []), static fn(int $id): bool => $id > 0));
+    if ($ids !== []) {
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        if (table_exists('article_translations')) {
+            db()->prepare('DELETE FROM article_translations WHERE article_id IN (' . $placeholders . ')')->execute($ids);
+        }
+        if (table_exists('article_revisions')) {
+            db()->prepare('DELETE FROM article_revisions WHERE article_id IN (' . $placeholders . ')')->execute($ids);
+        }
+        if (table_exists('member_favorites')) {
+            db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['article'], $ids));
+        }
+        db()->prepare('DELETE FROM articles WHERE id IN (' . $placeholders . ')')->execute($ids);
+    }
+}
+
+if (table_exists('wiki_pages')) {
+    $wikiWhere = 'title LIKE ? OR slug LIKE ? OR content LIKE ?';
+    $wikiParams = [$like, $like, $like];
+    if (table_has_column('wiki_pages', 'target_slug')) {
+        $wikiWhere .= ' OR target_slug LIKE ?';
+        $wikiParams[] = $like;
+    }
+    $stmt = db()->prepare('SELECT id FROM wiki_pages WHERE ' . $wikiWhere);
+    $stmt->execute($wikiParams);
+    $ids = array_values(array_filter(array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN) ?: []), static fn(int $id): bool => $id > 0));
+    if ($ids !== []) {
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        if (table_exists('wiki_revisions')) {
+            db()->prepare('DELETE FROM wiki_revisions WHERE wiki_page_id IN (' . $placeholders . ')')->execute($ids);
+        }
+        if (table_exists('member_favorites')) {
+            db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id IN (' . $placeholders . ')')->execute(array_merge(['wiki_page'], $ids));
+        }
+        db()->prepare('DELETE FROM wiki_pages WHERE id IN (' . $placeholders . ')')->execute($ids);
+    }
+}
+
+if (table_exists('classified_ads')) {
+    db()->prepare('DELETE FROM classified_ads WHERE title LIKE ? OR description LIKE ? OR contact LIKE ?')
+        ->execute([$like, $like, $like]);
+}
+
+if (table_exists('events')) {
+    db()->prepare('DELETE FROM events WHERE title LIKE ? OR summary LIKE ? OR description LIKE ? OR location LIKE ?')
+        ->execute([$like, $like, $like, $like]);
+}
+
+if (table_exists('auction_lots')) {
+    db()->prepare('DELETE FROM auction_lots WHERE title LIKE ? OR summary LIKE ? OR description LIKE ?')
+        ->execute([$like, $like, $like]);
+}
+
+if (table_exists('news_posts')) {
+    $stmt = db()->prepare('SELECT id FROM news_posts WHERE title LIKE ? OR excerpt LIKE ? OR content LIKE ?');
+    $stmt->execute([$like, $like, $like]);
+    $ids = array_values(array_filter(array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN) ?: []), static fn(int $id): bool => $id > 0));
+    if ($ids !== []) {
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        if (table_exists('news_translations')) {
+            db()->prepare('DELETE FROM news_translations WHERE news_post_id IN (' . $placeholders . ')')->execute($ids);
+        }
+        db()->prepare('DELETE FROM news_posts WHERE id IN (' . $placeholders . ')')->execute($ids);
+    }
+}
+
+if (table_exists('news_sections')) {
+    db()->prepare('DELETE FROM news_sections WHERE slug LIKE ? OR name LIKE ?')
+        ->execute([$like, $like]);
+}
+
 if (table_exists('content_proposals')) {
     db()->prepare('DELETE FROM content_proposals WHERE title LIKE ? OR summary LIKE ? OR contact LIKE ? OR source_ref LIKE ?')
         ->execute([$like, $like, $like, $like]);
@@ -325,6 +427,41 @@ echo (string) ((int) ($stmt->fetchColumn() ?: 0));
 `, { SELENIUM_PROPOSAL_TITLE: title }).trim();
 
   return Number(output || 0);
+}
+
+function pendingValidationRecord(kind, title) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+
+$kind = getenv('SELENIUM_RECORD_KIND') ?: '';
+$title = getenv('SELENIUM_RECORD_TITLE') ?: '';
+$row = [];
+if ($kind === 'article' && table_exists('articles')) {
+    $stmt = db()->prepare('SELECT id, slug, status FROM articles WHERE title = ? ORDER BY id DESC LIMIT 1');
+    $stmt->execute([$title]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+} elseif ($kind === 'wiki' && table_exists('wiki_pages')) {
+    $stmt = db()->prepare('SELECT id, slug, status FROM wiki_pages WHERE title = ? ORDER BY id DESC LIMIT 1');
+    $stmt->execute([$title]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+} elseif ($kind === 'classified' && table_exists('classified_ads')) {
+    $stmt = db()->prepare('SELECT id, "" AS slug, status FROM classified_ads WHERE title = ? ORDER BY id DESC LIMIT 1');
+    $stmt->execute([$title]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+}
+echo json_encode($row ?: new stdClass(), JSON_THROW_ON_ERROR);
+`, {
+    SELENIUM_RECORD_KIND: kind,
+    SELENIUM_RECORD_TITLE: title,
+  }).trim();
+
+  return JSON.parse(output || '{}');
+}
+
+function pendingValidationStatus(kind, title) {
+  return String(pendingValidationRecord(kind, title).status || '');
 }
 
 function seedMemberModuleDocument(moduleCode, title, description) {
@@ -451,6 +588,66 @@ async function acceptProposalWithAdmin(driver, credentials, title) {
   }
 
   assert.equal(proposalStatus(title), 'accepted', `La proposition ${title} doit etre acceptee.`);
+}
+
+async function publishArticleWithAdmin(driver, credentials, title) {
+  const row = pendingValidationRecord('article', title);
+  assert.ok(Number(row.id || 0) > 0, `L article ${title} doit exister avant validation admin.`);
+
+  await loginAsAdmin(driver, credentials.username, credentials.password);
+  await visit(driver, 'admin_articles', { id: row.id });
+  const form = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save_article"]]'));
+  await setSelectValue(driver, await form.findElement(By.css('select[name="status"]')), 'published');
+  await submitForm(driver, form);
+
+  assert.equal(pendingValidationStatus('article', title), 'published', `L article ${title} doit etre publie.`);
+}
+
+async function publishWikiPageWithAdmin(driver, credentials, title) {
+  const row = pendingValidationRecord('wiki', title);
+  assert.ok(Number(row.id || 0) > 0, `La page wiki ${title} doit exister avant validation admin.`);
+
+  await loginAsAdmin(driver, credentials.username, credentials.password);
+  await visit(driver, 'admin_wiki', { status: 'pending' });
+  const csrf = await driver.executeScript('return document.querySelector("input[name=\\"_csrf\\"]") ? document.querySelector("input[name=\\"_csrf\\"]").value : "";');
+  assert.notEqual(csrf, '', 'admin_wiki doit exposer un jeton CSRF.');
+  await driver.executeScript(`
+    const fields = arguments[0];
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = window.location.href.split('#')[0];
+    for (const [name, value] of Object.entries(fields)) {
+      const input = document.createElement('input');
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+  `, {
+    _csrf: csrf,
+    action: 'update_page_status',
+    id: String(row.id),
+    status: 'published',
+    return_status: 'pending',
+  });
+  await waitForDocumentReady(driver);
+  await assertNoServerError(driver);
+
+  assert.equal(pendingValidationStatus('wiki', title), 'published', `La page wiki ${title} doit etre publiee.`);
+}
+
+async function activateClassifiedWithAdmin(driver, credentials, title) {
+  const row = pendingValidationRecord('classified', title);
+  assert.ok(Number(row.id || 0) > 0, `L annonce ${title} doit exister avant validation admin.`);
+
+  await loginAsAdmin(driver, credentials.username, credentials.password);
+  await visit(driver, 'admin_classifieds', { edit: row.id });
+  const form = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="save"]]'));
+  await setSelectValue(driver, await form.findElement(By.css('select[name="status"]')), 'active');
+  await submitForm(driver, form);
+
+  assert.equal(pendingValidationStatus('classified', title), 'active', `L annonce ${title} doit etre active.`);
 }
 
 async function loginAsMember(driver) {
@@ -678,3 +875,397 @@ for (const moduleCode of ['presentations', 'videos']) {
     });
   });
 }
+
+async function runContentProposalScenario(t, scenario) {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `${scenario.tokenPrefix}-${Date.now()}`;
+  const title = `${token}-${scenario.titleSuffix}`;
+  cleanupPendingValidationRows(token);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      ensureStandardMember();
+
+      await loginAsMember(driver);
+      await scenario.submit(driver, title, token);
+
+      await driver.wait(until.urlContains('route=my_requests'), timeoutMs);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /attente|pending/i,
+        moduleRegex: scenario.moduleRegex,
+      });
+      assert.equal(proposalStatus(title), 'pending', `${title} doit rester en attente avant validation admin.`);
+
+      await acceptProposalWithAdmin(driver, credentials, title);
+      if (typeof scenario.afterAccept === 'function') {
+        await scenario.afterAccept(driver, title, token);
+      }
+
+      await loginAsMember(driver);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /accept|publ|active|actif/i,
+        moduleRegex: scenario.moduleRegex,
+      });
+    } finally {
+      cleanupPendingValidationRows(token);
+    }
+  });
+}
+
+const contentProposalScenarios = [
+  {
+    name: 'Selenium membre: proposer un evenement, le valider et le retrouver dans agenda',
+    tokenPrefix: 'selenium-pending-events',
+    titleSuffix: 'event',
+    moduleRegex: /event|agenda|v.nement/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'events');
+      await openDialog(driver, 'events-proposal-dialog');
+      const form = await driver.findElement(By.css('#events-proposal-dialog form.events-proposal-form'));
+      await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+      await form.findElement(By.css('input[name="proposal_datetime"]')).sendKeys('2026-07-15 19:30');
+      await form.findElement(By.css('input[name="proposal_location"]')).sendKeys('Durnal');
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Evenement Selenium propose puis valide.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertRouteContains(driver, 'events', {}, title, 'L evenement valide doit etre visible dans agenda.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer un lot enchere, le valider et le retrouver dans les encheres',
+    tokenPrefix: 'selenium-pending-auctions',
+    titleSuffix: 'lot',
+    moduleRegex: /encher|auction/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'auctions', { propose_lot: '1' });
+      const form = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="propose_lot"]]'));
+      await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+      await form.findElement(By.css('input[name="proposal_summary"]')).sendKeys('Lot Selenium.');
+      await form.findElement(By.css('input[name="proposal_price"]')).sendKeys('12,50');
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Lot enchere propose par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertRouteContains(driver, 'auctions', {}, title, 'Le lot valide doit etre visible dans les encheres.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une actualite, la valider et la retrouver dans les actualites',
+    tokenPrefix: 'selenium-pending-news',
+    titleSuffix: 'post',
+    moduleRegex: /actualit|news/i,
+    submit: async (driver, title, token) => {
+      await visit(driver, 'news');
+      await openDialog(driver, 'news-proposal-dialog');
+      const form = await driver.findElement(By.css('#news-proposal-dialog form.news-proposal-form'));
+      await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_summary"]')), 'Actualite Selenium proposee puis validee.');
+      await form.findElement(By.css('input[name="proposal_source"]')).sendKeys(`https://example.org/${token}`);
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertRouteContains(driver, 'news', { q: title }, title, 'L actualite validee doit etre visible dans les actualites.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une rubrique actualites, la valider et la retrouver dans les actualites',
+    tokenPrefix: 'selenium-pending-news-category',
+    titleSuffix: 'rubrique',
+    moduleRegex: /actualit|news/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'news');
+      await openDialog(driver, 'news-category-proposal-dialog');
+      const form = await driver.findElement(By.css('#news-category-proposal-dialog form.news-proposal-form'));
+      await form.findElement(By.css('input[name="proposal_category"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Rubrique actualites proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertRouteContains(driver, 'news', {}, title, 'La rubrique actualites validee doit etre visible dans les actualites.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une categorie article, la valider et la retrouver dans le formulaire article',
+    tokenPrefix: 'selenium-pending-article-category',
+    titleSuffix: 'theme',
+    moduleRegex: /article/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'articles');
+      await openDialog(driver, 'articles-category-dialog');
+      const form = await driver.findElement(By.css('#articles-category-dialog form.articles-category-form'));
+      await form.findElement(By.css('input[name="proposal_category"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Categorie article proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'article_propose', {}, 'select[name="category"] option', title, 'La categorie article validee doit etre disponible dans le formulaire article.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer un mot cle article et le valider dans Mes contenus',
+    tokenPrefix: 'selenium-pending-article-tag',
+    titleSuffix: 'tag',
+    moduleRegex: /article/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'articles');
+      await openDialog(driver, 'articles-tag-dialog');
+      const form = await driver.findElement(By.css('#articles-tag-dialog form.articles-category-form'));
+      await form.findElement(By.css('input[name="proposal_tag"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Mot cle article propose par Selenium.');
+      await submitForm(driver, form);
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une categorie petites annonces, la valider et la retrouver dans classifieds',
+    tokenPrefix: 'selenium-pending-classified-category',
+    titleSuffix: 'category',
+    moduleRegex: /annonce|classified/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'classifieds', { propose_category: '1' });
+      const form = await driver.findElement(By.css('#classifieds-category-inline form.classifieds-category-form'));
+      await form.findElement(By.css('input[name="proposal_category"]')).sendKeys(title);
+      await setInputValue(driver, await form.findElement(By.css('input[name="proposal_name"]')), 'Selenium Member');
+      await setInputValue(driver, await form.findElement(By.css('input[name="proposal_email"]')), 'selenium-member@example.test');
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_details"]')), 'Categorie petites annonces proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertRouteContains(driver, 'classifieds', {}, title, 'La categorie petites annonces validee doit etre visible dans classifieds.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une thematique wiki, la valider et la retrouver dans le formulaire wiki',
+    tokenPrefix: 'selenium-pending-wiki-category',
+    titleSuffix: 'theme',
+    moduleRegex: /wiki/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'wiki');
+      await openDialog(driver, 'wiki-theme-dialog');
+      const form = await driver.findElement(By.css('#wiki-theme-dialog form.wiki-theme-form'));
+      await form.findElement(By.css('input[name="proposal_theme"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Thematique wiki proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'wiki_propose', {}, 'select[name="category"] option', title, 'La thematique wiki validee doit etre disponible dans le formulaire wiki.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une categorie members_library, la valider et la retrouver dans le formulaire document',
+    tokenPrefix: 'selenium-pending-library-category',
+    titleSuffix: 'topic',
+    moduleRegex: /biblioth|library/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'members_library');
+      await openDialog(driver, 'members-library-category-dialog');
+      const form = await driver.findElement(By.css('#members-library-category-dialog form.members-library-dialog-form'));
+      await form.findElement(By.css('input[name="proposal_category_name"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Categorie bibliotheque proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'members_library', {}, '#members-library-document-dialog select[name="proposal_category"] option', title, 'La categorie members_library validee doit etre disponible pour un document.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer un mot cle members_library et le valider dans Mes contenus',
+    tokenPrefix: 'selenium-pending-library-tag',
+    titleSuffix: 'tag',
+    moduleRegex: /biblioth|library/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'members_library');
+      await openDialog(driver, 'members-library-tag-dialog');
+      const form = await driver.findElement(By.css('#members-library-tag-dialog form.members-library-dialog-form'));
+      await form.findElement(By.css('input[name="proposal_tag"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Mot cle bibliotheque propose par Selenium.');
+      await submitForm(driver, form);
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une thematique webotheque, la valider et la retrouver dans le formulaire lien',
+    tokenPrefix: 'selenium-pending-webotheque-domain',
+    titleSuffix: 'domain',
+    moduleRegex: /weboth|web library/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'webotheque', { propose_domain: '1' });
+      const form = await driver.findElement(By.css('#webotheque-domain-dialog form.webotheque-proposal-form'));
+      await form.findElement(By.css('input[name="proposal_domain"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_details"]')), 'Thematique webotheque proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'webotheque', { propose_link: '1' }, '#webotheque-link-dialog select[name="category"] option', title, 'La thematique webotheque validee doit etre disponible pour un lien.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer un mot cle webotheque et le valider dans Mes contenus',
+    tokenPrefix: 'selenium-pending-webotheque-tag',
+    titleSuffix: 'tag',
+    moduleRegex: /weboth|web library/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'webotheque', { propose_tag: '1' });
+      const form = await driver.findElement(By.css('#webotheque-tag-dialog form.webotheque-proposal-form'));
+      await form.findElement(By.css('input[name="proposal_tag"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_details"]')), 'Mot cle webotheque propose par Selenium.');
+      await submitForm(driver, form);
+    },
+  },
+];
+
+for (const scenario of contentProposalScenarios) {
+  test(scenario.name, async (t) => runContentProposalScenario(t, scenario));
+}
+
+test('Selenium membre: proposer un article, le publier en admin et le retrouver dans les articles', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `selenium-pending-article-${Date.now()}`;
+  const title = `${token}-post`;
+  cleanupPendingValidationRows(token);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      ensureStandardMember();
+
+      await loginAsMember(driver);
+      await visit(driver, 'article_propose');
+      const form = await driver.findElement(By.css('form.stack'));
+      await form.findElement(By.css('input[name="title"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="excerpt"]')), 'Resume article Selenium.');
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="content"]')), '<p>Article Selenium propose puis publie.</p>');
+      await submitForm(driver, form);
+
+      await driver.wait(until.urlContains('route=my_requests'), timeoutMs);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /attente|pending/i,
+        moduleRegex: /article/i,
+      });
+      assert.equal(pendingValidationStatus('article', title), 'pending', 'L article membre doit etre en attente avant validation.');
+
+      await publishArticleWithAdmin(driver, credentials, title);
+      await assertRouteContains(driver, 'articles', { q: title }, title, 'L article publie doit etre visible dans les articles.');
+
+      await loginAsMember(driver);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /publ|published/i,
+        moduleRegex: /article/i,
+      });
+    } finally {
+      cleanupPendingValidationRows(token);
+    }
+  });
+});
+
+test('Selenium membre: proposer une page wiki, la publier en admin et la retrouver dans le wiki', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `selenium-pending-wiki-page-${Date.now()}`;
+  const title = `${token}-page`;
+  cleanupPendingValidationRows(token);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      ensureStandardMember();
+
+      await loginAsMember(driver);
+      await visit(driver, 'wiki_propose');
+      const form = await driver.findElement(By.css('form.wiki-edit-form'));
+      await form.findElement(By.css('input[name="title"]')).sendKeys(title);
+      await form.findElement(By.css('input[name="slug"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="content"]')), '<p>Page wiki Selenium proposee puis publiee.</p>');
+      await submitForm(driver, form);
+
+      await driver.wait(until.urlContains('route=my_requests'), timeoutMs);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /attente|pending/i,
+        moduleRegex: /wiki/i,
+      });
+      assert.equal(pendingValidationStatus('wiki', title), 'pending', 'La page wiki membre doit etre en attente avant validation.');
+
+      await publishWikiPageWithAdmin(driver, credentials, title);
+      await assertRouteContains(driver, 'wiki', { q: title }, title, 'La page wiki publiee doit etre visible dans le wiki.');
+
+      await loginAsMember(driver);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /publ|published/i,
+        moduleRegex: /wiki/i,
+      });
+    } finally {
+      cleanupPendingValidationRows(token);
+    }
+  });
+});
+
+test('Selenium membre: proposer une petite annonce, la valider et la retrouver dans classifieds', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `selenium-pending-classified-${Date.now()}`;
+  const title = `${token}-ad`;
+  cleanupPendingValidationRows(token);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      ensureStandardMember();
+
+      await loginAsMember(driver);
+      await visit(driver, 'classifieds_manage');
+      const form = await driver.findElement(By.css('.classifieds-editor-form'));
+      await form.findElement(By.css('input[name="title"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="description"]')), 'Annonce Selenium proposee puis validee.');
+      await form.findElement(By.css('input[name="price"]')).clear();
+      await form.findElement(By.css('input[name="price"]')).sendKeys('25,00');
+      await form.findElement(By.css('input[name="location"]')).sendKeys('Durnal');
+      await setInputValue(driver, await form.findElement(By.css('input[name="contact"]')), 'selenium-member@example.test');
+      await setSelectValue(driver, await form.findElement(By.css('select[name="status"]')), 'active');
+      await submitForm(driver, form);
+
+      await visit(driver, 'my_requests');
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /attente|pending/i,
+        moduleRegex: /annonce|classified/i,
+      });
+      assert.equal(pendingValidationStatus('classified', title), 'pending', 'L annonce membre doit etre en attente avant validation.');
+
+      await activateClassifiedWithAdmin(driver, credentials, title);
+      await assertRouteContains(driver, 'classifieds', { q: title }, title, 'L annonce validee doit etre visible dans classifieds.');
+
+      await loginAsMember(driver);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /active|actif/i,
+        moduleRegex: /annonce|classified/i,
+      });
+    } finally {
+      cleanupPendingValidationRows(token);
+    }
+  });
+});
