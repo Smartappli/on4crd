@@ -446,6 +446,9 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("Page.addScriptToEvaluateOnNewDocument", $seleniumHelpers);
         self::assertStringContainsString("await driver.wait(async () => !(await isLoginPage(driver))", $seleniumHelpers);
         self::assertStringContainsString("await driver.manage().deleteAllCookies();", $seleniumHelpers);
+        self::assertStringContainsString("function readConfiguredSeleniumAppBaseUrl()", $seleniumHelpers);
+        self::assertStringContainsString("async function ensureSeleniumTarget(t, driver)", $seleniumHelpers);
+        self::assertStringContainsString("SELENIUM_STRICT_TARGET", $seleniumHelpers);
     }
 
     public function testPressReleasesUseCurrentPublishedOnSchemaColumn(): void

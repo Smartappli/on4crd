@@ -15,6 +15,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
   writeTinyPngFixture,
 } = require('./helpers');
@@ -157,6 +158,9 @@ test('Selenium membre QSL: fond, creation manuelle, preview, export et suppressi
   const suffix = Date.now();
   const qsoCall = `F${String(suffix).slice(-5)}SL`;
   const backgroundLabel = `selenium-qsl-bg-${suffix}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupQslRows(qsoCall, backgroundLabel);
 
   await withSelenium(t, async (driver) => {
@@ -274,6 +278,9 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
   const paletteLabel = `${token}-palette`;
   const pngPath = writeTinyPngFixture(`${token.toLowerCase()}.png`);
   const adifPath = writeAdifFixture(token, qsoCall);
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupQslToken(qsoCall, token);
 
   await withSelenium(t, async (driver) => {

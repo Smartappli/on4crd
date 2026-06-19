@@ -11,6 +11,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -371,6 +372,9 @@ test('Selenium membre/public: favoris articles, wiki, albums et webotheque', asy
   }
 
   const token = `SELENIUMFAV${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   cleanupCoverageRows(token);
   const fixtures = prepareFavoriteFixtures(token, Number(member.id));
@@ -411,6 +415,9 @@ test('Selenium membre/public: propositions et auto-publications des modules publ
 
   const token = `SELENIUMPROP${Date.now()}`;
   const contact = `${token.toLowerCase()}@example.test`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupCoverageRows(token);
 
   await withSelenium(t, async (driver) => {
@@ -507,6 +514,9 @@ test('Selenium membre: RGPD, notifications, chatbot, outils et newsletter', asyn
   }
 
   const token = `SELENIUMUTIL${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   cleanupCoverageRows(token);
   const notificationIds = createUnreadNotifications(token, Number(member.id));

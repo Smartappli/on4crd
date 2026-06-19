@@ -10,6 +10,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
   timeoutMs,
 } = require('./helpers');
@@ -323,6 +324,9 @@ test('Selenium membre compte: profil, preferences et newsletter se modifient san
     return;
   }
 
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   const preferencesBefore = capturePreferences(member.id);
   const newsletterBefore = captureNewsletterRows(member.id);
@@ -443,6 +447,9 @@ echo json_encode($stmt->fetchColumn() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNE
 test('Selenium membre dashboard: widgets, rendu AJAX, sauvegarde et retour au catalogue', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
     return;
   }
   if (!dashboardTableExists()) {

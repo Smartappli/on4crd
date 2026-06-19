@@ -30,10 +30,52 @@ function loadLocalSeleniumEnv() {
 
 loadLocalSeleniumEnv();
 
-const baseUrl = process.env.SELENIUM_BASE_URL || 'http://127.0.0.1:8080/index.php';
+function normalizeSeleniumBaseUrl(value) {
+  const raw = String(value || '').trim();
+  if (raw === '') {
+    return '';
+  }
+
+  let url;
+  try {
+    url = new URL(raw);
+  } catch {
+    return '';
+  }
+  if (!url.pathname || url.pathname === '/') {
+    url.pathname = '/index.php';
+  } else if (url.pathname.endsWith('/')) {
+    url.pathname = `${url.pathname.replace(/\/+$/, '')}/index.php`;
+  }
+  url.search = '';
+  url.hash = '';
+
+  return url.toString();
+}
+
+function readConfiguredSeleniumAppBaseUrl() {
+  const configPath = process.env.ON4CRD_CONFIG_FILE || path.join(process.cwd(), 'storage', 'auth', 'selenium-config.php');
+  if (!fs.existsSync(configPath)) {
+    return '';
+  }
+
+  try {
+    const source = fs.readFileSync(configPath, 'utf8');
+    const match = source.match(/['"]base_url['"]\s*=>\s*['"]([^'"]+)['"]/);
+    return match ? match[1] : '';
+  } catch {
+    return '';
+  }
+}
+
+const baseUrl = normalizeSeleniumBaseUrl(process.env.SELENIUM_BASE_URL)
+  || normalizeSeleniumBaseUrl(process.env.SELENIUM_APP_BASE_URL)
+  || normalizeSeleniumBaseUrl(readConfiguredSeleniumAppBaseUrl())
+  || 'http://127.0.0.1:8080/index.php';
 const timeoutMs = Number(process.env.SELENIUM_TIMEOUT_MS || 15000);
 const artifactsDir = process.env.SELENIUM_ARTIFACTS_DIR || path.join(process.cwd(), 'selenium-artifacts');
 let seleniumFixturesSeeded = false;
+let seleniumHttpTargetProbe = null;
 
 function routeUrl(route, query = {}) {
   const url = new URL(baseUrl);
@@ -76,8 +118,9 @@ async function createDriver() {
     '--no-sandbox',
     '--window-size=1440,1200',
   );
-  if (process.env.SELENIUM_CHROME_BINARY) {
-    options.setChromeBinaryPath(process.env.SELENIUM_CHROME_BINARY);
+  const chromeBinary = process.env.SELENIUM_CHROME_BINARY || playwrightChromiumBinaryPath();
+  if (chromeBinary !== '') {
+    options.setChromeBinaryPath(chromeBinary);
   }
   const capabilities = Capabilities.chrome().setPageLoadStrategy('eager');
 
@@ -90,6 +133,16 @@ async function createDriver() {
   await disableServiceWorkerForSelenium(driver);
 
   return driver;
+}
+
+function playwrightChromiumBinaryPath() {
+  try {
+    const { chromium } = require('@playwright/test');
+    const executablePath = chromium.executablePath();
+    return fs.existsSync(executablePath) ? executablePath : '';
+  } catch {
+    return '';
+  }
 }
 
 async function disableServiceWorkerForSelenium(driver) {
@@ -128,15 +181,152 @@ async function disableServiceWorkerForSelenium(driver) {
 }
 
 async function withSelenium(t, callback) {
-  const driver = await createDriver();
+  let driver = null;
   try {
+    if (!(await ensureSeleniumRunnable(t))) {
+      return;
+    }
+    driver = await createDriver();
+    if (!(await ensureSeleniumTarget(t, driver))) {
+      return;
+    }
     await callback(driver);
   } catch (error) {
-    await saveFailureArtifacts(driver, t.name);
+    if (driver === null && isBrowserUnavailableError(error) && !shouldFailOnInvalidSeleniumTarget()) {
+      t.skip(`Navigateur Selenium indisponible: ${error.message}`);
+      return;
+    }
+    if (driver !== null) {
+      await saveFailureArtifacts(driver, t.name);
+    }
     throw error;
   } finally {
-    await driver.quit();
+    if (driver !== null) {
+      await driver.quit();
+    }
   }
+}
+
+async function ensureSeleniumRunnable(t) {
+  return ensureSeleniumHttpTarget(t);
+}
+
+function shouldFailOnInvalidSeleniumTarget() {
+  return process.env.CI === 'true' || process.env.SELENIUM_STRICT_TARGET === '1';
+}
+
+function isBrowserUnavailableError(error) {
+  const message = String(error && error.message ? error.message : error);
+
+  return /cannot find chrome|cannot find.*binary|chrome.*not found|unable to obtain browser driver|session not created/i.test(message);
+}
+
+async function ensureSeleniumHttpTarget(t) {
+  if (process.env.SELENIUM_SKIP_TARGET_CHECK === '1' || process.env.SELENIUM_SKIP_HTTP_TARGET_CHECK === '1') {
+    return true;
+  }
+
+  const result = await probeSeleniumHttpTarget();
+  if (result.ok) {
+    return true;
+  }
+
+  return handleInvalidSeleniumTarget(t, result.message);
+}
+
+async function probeSeleniumHttpTarget() {
+  if (seleniumHttpTargetProbe !== null) {
+    return seleniumHttpTargetProbe;
+  }
+
+  seleniumHttpTargetProbe = (async () => {
+    if (typeof fetch !== 'function') {
+      return { ok: true, message: '' };
+    }
+
+    try {
+      const response = await fetch(routeUrl('home'), {
+        redirect: 'follow',
+        signal: AbortSignal.timeout(5000),
+      });
+      const source = await response.text();
+      const title = source.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '';
+
+      if (looksLikeOn4crdDocument(title, source) || /Assistant de d.{1,2}ploiement ON4CRD/i.test(source)) {
+        return { ok: true, message: '' };
+      }
+
+      return {
+        ok: false,
+        message: `SELENIUM_BASE_URL ${baseUrl} ne cible pas ON4CRD en HTTP (status: ${response.status}, titre: ${title || 'sans titre'}).`,
+      };
+    } catch (error) {
+      const message = String(error && error.message ? error.message : error);
+
+      return {
+        ok: false,
+        message: `SELENIUM_BASE_URL ${baseUrl} ne repond pas en HTTP: ${message}`,
+      };
+    }
+  })();
+
+  return seleniumHttpTargetProbe;
+}
+
+async function ensureSeleniumTarget(t, driver) {
+  if (process.env.SELENIUM_SKIP_TARGET_CHECK === '1') {
+    return true;
+  }
+
+  try {
+    await driver.get(routeUrl('home'));
+    await waitForDocumentReady(driver);
+    await assertNoServerError(driver);
+  } catch (error) {
+    return handleInvalidSeleniumTarget(
+      t,
+      `SELENIUM_BASE_URL ${baseUrl} ne repond pas comme une application ON4CRD: ${error.message}`,
+    );
+  }
+
+  if (await isOn4crdApplicationPage(driver)) {
+    return true;
+  }
+
+  const current = await driver.getCurrentUrl().catch(() => baseUrl);
+  const title = await driver.getTitle().catch(() => '');
+
+  return handleInvalidSeleniumTarget(
+    t,
+    `SELENIUM_BASE_URL ${baseUrl} ne cible pas ON4CRD (url: ${current}, titre: ${title || 'sans titre'}).`,
+  );
+}
+
+function handleInvalidSeleniumTarget(t, message) {
+  if (shouldFailOnInvalidSeleniumTarget()) {
+    assert.fail(message);
+  }
+
+  t.skip(message);
+  return false;
+}
+
+async function isOn4crdApplicationPage(driver) {
+  if (await pageHasInstallWizard(driver)) {
+    return true;
+  }
+
+  const title = await driver.getTitle().catch(() => '');
+  const source = await driver.getPageSource().catch(() => '');
+
+  return looksLikeOn4crdDocument(title, source);
+}
+
+function looksLikeOn4crdDocument(title, source) {
+  const combined = `${title}\n${source}`;
+
+  return /\bON4CRD\b/i.test(combined)
+    && (/<body\b[^>]*\bdata-route=/i.test(source) || /ON4CRD\.be|Radio Club Durnal/i.test(combined));
 }
 
 async function saveFailureArtifacts(driver, testName) {
@@ -455,5 +645,6 @@ module.exports = {
   requireAdminCredentials,
   writeTinyPngFixture,
   ensureSeleniumFixtures,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 };

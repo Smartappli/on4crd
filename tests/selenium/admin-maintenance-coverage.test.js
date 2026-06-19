@@ -10,6 +10,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -561,6 +562,9 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
   }
 
   const token = `SELENIUMADMALB${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   cleanupAdminRows(token);
   const fixture = prepareAlbumFixture(token, Number(member.id));
@@ -614,6 +618,9 @@ test('Selenium admin taxonomies: modification des thematiques et sous-thematique
   }
 
   const token = `SELENIUMADMTAX${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupAdminRows(token);
   const fixture = prepareTaxonomyEditFixture(token);
   const subcategoryRef = `${fixture.category}:${fixture.subcategory}`;
@@ -707,6 +714,9 @@ test('Selenium admin articles: taxonomie, bulk update et relance programmee', as
   }
 
   const token = `SELENIUMADMART${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   cleanupAdminRows(token);
   const fixture = prepareArticleFixture(token, Number(member.id));
@@ -772,6 +782,9 @@ test('Selenium admin news: moderation et attribution de responsable de rubrique'
   }
 
   const token = `SELENIUMADMNEWS${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   cleanupAdminRows(token);
   const fixture = prepareNewsFixture(token, Number(member.id));
@@ -808,6 +821,9 @@ test('Selenium admin bibliotheque et petites annonces: fusion tags, bulk delete 
   }
 
   const token = `SELENIUMADMBULK${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   cleanupAdminRows(token);
   const library = prepareLibraryFixture(token, Number(member.id));

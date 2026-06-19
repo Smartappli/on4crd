@@ -14,6 +14,7 @@ const {
   loginAsAdmin,
   requireAdminCredentials,
   ensureSeleniumFixtures,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -125,6 +126,9 @@ test('Selenium newsletter publique: email, consentement et CSRF sont presents', 
 
 test('Selenium newsletter publique: inscription puis desinscription par jeton', async (t) => {
   const email = `selenium.newsletter.${Date.now()}@example.test`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupNewsletterEmail(email);
 
   await withSelenium(t, async (driver) => {

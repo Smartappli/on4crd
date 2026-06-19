@@ -10,6 +10,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -404,6 +405,9 @@ test('Selenium admin articles: taxonomie, apercu, revisions, suppression et prop
   const proposalTitle = `Selenium article proposition ${suffix}`;
   const proposalNote = `Moderation article Selenium ${suffix}`;
 
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupArticleFixture(token);
 
   await withSelenium(t, async (driver) => {
@@ -516,6 +520,9 @@ test('Selenium admin wiki: taxonomie, statut de page et proposition', async (t) 
   const proposalTitle = `Selenium wiki proposition ${suffix}`;
   const proposalNote = `Moderation wiki Selenium ${suffix}`;
 
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupWikiFixture(token);
   const fixture = prepareWikiFixture(token, pageTitle, pageSlug, proposalTitle);
 

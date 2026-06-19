@@ -6,9 +6,12 @@ function app_load_helper_file(string $filename): void
     require_once __DIR__ . '/' . ltrim($filename, '/');
 }
 
-function app_load_route_helpers(string $route): void
+/**
+ * @return array<string, list<string>>
+ */
+function app_route_helper_map(): array
 {
-    $helperRoutes = [
+    return [
         'layout_renderer.php' => ['bandplan_on3', 'bandplan_on2', 'bandplan_harec'],
         'module_catalog.php' => ['home', 'admin', 'admin_dashboard'],
         'widget_catalog.php' => ['dashboard', 'save_dashboard', 'widget_render', 'admin_dashboard'],
@@ -37,7 +40,11 @@ function app_load_route_helpers(string $route): void
         'admin_helpers.php' => ['admin'],
         'newsletter.php' => ['newsletter', 'newsletter_public', 'newsletter_unsubscribe', 'settings', 'admin_newsletters'],
     ];
+}
 
+function app_load_route_helpers(string $route): void
+{
+    $helperRoutes = app_route_helper_map();
     if ($route === '__all') {
         foreach (array_keys($helperRoutes) as $filename) {
             app_load_helper_file($filename);

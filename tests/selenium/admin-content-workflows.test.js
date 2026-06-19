@@ -10,6 +10,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -118,6 +119,9 @@ test('Selenium admin actualites: creer, modifier, rechercher et consulter publiq
   const slug = `selenium-news-${suffix}`;
   const title = `Selenium actualite ${suffix}`;
   const updatedTitle = `${title} modifiee`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupContentRows(slug);
   prepareContentStorage();
 
@@ -182,6 +186,9 @@ test('Selenium admin evenements: creer, modifier, flux public et export ICS', as
   const slug = `selenium-event-${suffix}`;
   const title = `Selenium evenement ${suffix}`;
   const updatedTitle = `${title} modifie`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupContentRows(slug);
 
   await withSelenium(t, async (driver) => {

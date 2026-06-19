@@ -9,6 +9,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -81,6 +82,9 @@ test('Selenium admin newsletters: abonnes, import CSV, campagne, envoi et statut
   const emailTwo = `selenium-newsletter-${suffix}-two@example.test`;
   const campaignTitle = `Selenium newsletter ${suffix}`;
   const campaignSubject = `Sujet Selenium newsletter ${suffix}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupNewsletterRows(campaignTitle, [emailOne, emailTwo]);
 
   await withSelenium(t, async (driver) => {

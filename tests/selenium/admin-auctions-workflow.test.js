@@ -9,6 +9,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -89,6 +90,9 @@ test('Selenium admin encheres: creer, modifier, publier et enchérir sur un lot'
   const slug = `selenium-auction-${suffix}`;
   const title = `Selenium lot ${suffix}`;
   const updatedTitle = `${title} modifie`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupAuctionRows(slug);
 
   await withSelenium(t, async (driver) => {

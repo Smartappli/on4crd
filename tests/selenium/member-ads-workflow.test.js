@@ -11,6 +11,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -131,6 +132,9 @@ test('Selenium publicites: placement, campagne, clic suivi, stats et moderation'
   const placementName = `Selenium placement ${suffix}`;
   const title = `Selenium publicite ${suffix}`;
   const updatedTitle = `${title} updated`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   ensureAdStorageAndCleanup(placementCode, title);
 
   await withSelenium(t, async (driver) => {

@@ -15,6 +15,7 @@ const {
   loginAsAdmin,
   requireAdminCredentials,
   ensureSeleniumFixtures,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -112,6 +113,9 @@ test('Selenium membre: creer, modifier et vendre une petite annonce', async (t) 
 
   const title = `selenium-classified-${Date.now()}`;
   const updatedTitle = `${title} updated`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupWorkflowRows(title);
 
   await withSelenium(t, async (driver) => {
@@ -176,6 +180,9 @@ test('Selenium membre: proposer un article et le retrouver dans Mes contenus', a
   }
 
   const title = `selenium-article-${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupWorkflowRows(title);
 
   await withSelenium(t, async (driver) => {
@@ -211,6 +218,9 @@ test('Selenium membre: ajouter un document bibliotheque et le retrouver en ligne
   fs.mkdirSync(fixtureDir, { recursive: true });
   const fixture = path.join(fixtureDir, `${title}.txt`);
   fs.writeFileSync(fixture, `Document Selenium ${title}\n`, 'utf8');
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupWorkflowRows(title);
 
   await withSelenium(t, async (driver) => {
@@ -247,6 +257,9 @@ test('Selenium membre: publier une page wiki avec les droits admin', async (t) =
   }
 
   const title = `selenium-wiki-${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupWorkflowRows(title);
 
   await withSelenium(t, async (driver) => {
@@ -278,6 +291,9 @@ test('Selenium membre: creer, modifier et supprimer un lien webotheque', async (
 
   const title = `selenium-webotheque-${Date.now()}`;
   const updatedTitle = `${title} updated`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupWorkflowRows(title);
 
   await withSelenium(t, async (driver) => {
@@ -322,6 +338,9 @@ test('Selenium admin: moderer une petite annonce depuis admin_classifieds', asyn
   }
 
   const title = `selenium-admin-classified-${Date.now()}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupWorkflowRows(title);
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';

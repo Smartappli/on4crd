@@ -9,6 +9,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -145,6 +146,9 @@ test('Selenium membre RGPD: demande, suivi admin et suivi membre', async (t) => 
     return;
   }
 
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   const token = `SELENIUMPRIV${Date.now()}`;
   const requestType = availablePrivacyType(member.id);
@@ -194,6 +198,9 @@ test('Selenium membre notifications: filtrer et marquer comme lu', async (t) => 
     return;
   }
 
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const member = memberByCallsign(credentials.username.toUpperCase());
   const suffix = Date.now();
   const title = `Notification Selenium ${suffix}`;

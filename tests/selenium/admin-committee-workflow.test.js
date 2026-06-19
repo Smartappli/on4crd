@@ -9,6 +9,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -81,6 +82,9 @@ test('Selenium admin comite: modifier un membre et verifier l affichage public',
   }
 
   const callsign = credentials.username.toUpperCase();
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const originalState = captureCommitteeState(callsign);
   const role = `Role Selenium comite ${Date.now()}`;
   const bio = `Bio Selenium comite ${Date.now()}`;

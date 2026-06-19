@@ -9,6 +9,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -208,6 +209,9 @@ test('Selenium admin editorial: les contenus multilingues sont sauvegardes', asy
   if (credentials === null) {
     return;
   }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   if (!editorialTableExists()) {
     t.skip('Table editorial_contents absente; scenario editorial ignore.');
     return;
@@ -250,6 +254,9 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
 test('Selenium admin traductions: news et articles passent en reviewed', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
     return;
   }
 

@@ -9,6 +9,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -225,6 +226,9 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
   }
 
   const callsign = credentials.username.toUpperCase();
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const memberState = adminMemberState(callsign);
   const moduleOriginal = moduleState('press', true);
   const role = createTemporaryRole(`Selenium role ${Date.now()}`);
@@ -294,6 +298,9 @@ test('Selenium admin configuration: flux live, presse et diner annuel', async (t
 
   const suffix = Date.now();
   const token = `SELENIUMCFG${suffix}`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   const feedCode = `selenium-feed-${suffix}`;
   const feedLabel = `Selenium feed ${suffix}`;
   const feedOriginal = liveFeedState(feedCode, feedLabel);

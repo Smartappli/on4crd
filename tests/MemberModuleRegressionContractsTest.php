@@ -160,16 +160,32 @@ final class MemberModuleRegressionContractsTest extends TestCase
 
     public function testRouteHelperLoaderKeepsFavoritesHelpersAvailableOnAdaptedModules(): void
     {
-        $loader = $this->source('app/route_helper_loader.php');
-
-        self::assertStringContainsString(
-            "'member_favorites.php' => ['dashboard', 'members_library', 'webotheque', 'presentations', 'wiki', 'wiki_view', 'articles', 'article', 'albums', 'album', 'classifieds']",
-            $loader
-        );
-        self::assertStringContainsString(
-            "'member_module_documents.php' => ['presentations', 'videos', 'pv', 'fichiers', 'telechargements', 'admin_presentations', 'admin_videos', 'admin_pv', 'admin_fichiers', 'admin_telechargements']",
-            $loader
-        );
+        $this->assertRouteHelperIncludes('member_favorites.php', [
+            'dashboard',
+            'members_library',
+            'webotheque',
+            'presentations',
+            'wiki',
+            'wiki_view',
+            'articles',
+            'article',
+            'albums',
+            'album',
+            'classifieds',
+        ]);
+        $this->assertRouteHelperIncludes('member_module_documents.php', [
+            'my_requests',
+            'presentations',
+            'videos',
+            'pv',
+            'fichiers',
+            'telechargements',
+            'admin_presentations',
+            'admin_videos',
+            'admin_pv',
+            'admin_fichiers',
+            'admin_telechargements',
+        ]);
     }
 
     private function assertAppearsBefore(string $source, string $first, string $second): void
@@ -181,5 +197,19 @@ final class MemberModuleRegressionContractsTest extends TestCase
         }
 
         self::assertLessThan($secondPosition, $firstPosition);
+    }
+
+    /**
+     * @param list<string> $expectedRoutes
+     */
+    private function assertRouteHelperIncludes(string $helper, array $expectedRoutes): void
+    {
+        self::assertTrue(function_exists('app_route_helper_map'));
+        $helperRoutes = app_route_helper_map();
+
+        self::assertArrayHasKey($helper, $helperRoutes);
+        foreach ($expectedRoutes as $route) {
+            self::assertContains($route, $helperRoutes[$helper], sprintf('%s must be loaded for %s.', $helper, $route));
+        }
     }
 }

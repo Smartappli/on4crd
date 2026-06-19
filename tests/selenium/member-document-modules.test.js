@@ -13,6 +13,7 @@ const {
   pagePlainText,
   loginAsAdmin,
   requireAdminCredentials,
+  ensureSeleniumRunnable,
   runSeleniumPhp,
 } = require('./helpers');
 
@@ -103,6 +104,9 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
   const title = `${token} presentation`;
   const updatedTitle = `${title} updated`;
   const fixture = writeTextFixture(`${token}.txt`, `Contenu Selenium pour ${title}.\n`);
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
   cleanupPresentationFixture(token);
 
   await withSelenium(t, async (driver) => {

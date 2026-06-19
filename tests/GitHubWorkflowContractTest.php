@@ -35,7 +35,9 @@ final class GitHubWorkflowContractTest extends TestCase
     {
         $workflow = $this->source('.github/workflows/tests.yml');
 
-        self::assertStringContainsString('image: mysql:8.4', $workflow);
+        self::assertStringContainsString('services:', $workflow);
+        self::assertStringContainsString('mysql:', $workflow);
+        self::assertMatchesRegularExpression('/^\s*image:\s+mysql:(?!latest\b)[0-9][0-9A-Za-z._-]*\s*$/m', $workflow);
         self::assertStringContainsString('ON4CRD_CONFIG_FILE:', $workflow);
         self::assertStringContainsString('SELENIUM_BASE_URL:', $workflow);
         self::assertStringContainsString('SELENIUM_CHROME_BINARY', $workflow);
