@@ -655,6 +655,7 @@ function render_layout_impl(string $content, string $title = ''): string
         . '<form class="idea-form" method="post" action="' . e(route_url('idea_submit')) . '">'
         . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
         . '<input type="hidden" name="return_url" value="' . e($currentReturnUrl) . '">'
+        . '<input type="text" name="idea_website" value="" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden">'
         . '<div class="idea-form-grid">'
         . '<label for="idea-category"><span>' . e($ideaText('category_label', 'Thématique')) . '</span><select id="idea-category" name="idea_category">' . $ideaCategoryOptionHtml . '</select></label>'
         . '<label for="idea-keywords"><span>' . e($ideaText('keywords_label', 'Mots clés')) . '</span><input id="idea-keywords" type="text" name="idea_keywords" maxlength="255" placeholder="' . e($ideaText('keywords_placeholder', 'ex: antennes, formation')) . '"></label>'

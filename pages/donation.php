@@ -27,6 +27,8 @@ set_page_meta([
 
 $supportItems = [$tr('support_item_1'), $tr('support_item_2'), $tr('support_item_3')];
 $processItems = [$tr('process_item_1'), $tr('process_item_2'), $tr('process_item_3')];
+$contactCaptcha = public_form_captcha_challenge('footer_contact');
+$contactCaptchaLabel = public_form_captcha_label($contactCaptcha, $locale);
 
 $renderList = static function (array $items): string {
     $html = '';
@@ -65,12 +67,15 @@ $content = '<section class="rounded-3xl border border-emerald-200 bg-gradient-to
     . '<form class="grid gap-3" method="post" action="' . e(route_url('footer_contact')) . '">'
     . '<input type="hidden" name="_csrf" value="' . e(csrf_token()) . '">'
     . '<input type="hidden" name="return_route" value="donation">'
+    . '<input type="text" name="contact_website" value="" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden">'
     . '<label for="donation-contact-name" class="sr-only">' . e($tr('contact_name')) . '</label>'
     . '<input id="donation-contact-name" type="text" name="name" placeholder="' . e($tr('contact_name')) . '" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">'
     . '<label for="donation-contact-email" class="sr-only">' . e($tr('contact_email')) . '</label>'
     . '<input id="donation-contact-email" type="email" name="email" placeholder="' . e($tr('contact_email')) . '" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">'
     . '<label for="donation-contact-message" class="sr-only">' . e($tr('contact_message')) . '</label>'
     . '<textarea id="donation-contact-message" name="message" placeholder="' . e($tr('contact_message')) . '" rows="5" maxlength="2000" data-wysiwyg="off" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>'
+    . '<label for="donation-contact-captcha" class="text-xs font-semibold text-slate-600">' . e($contactCaptchaLabel) . '</label>'
+    . '<input id="donation-contact-captcha" type="text" inputmode="numeric" pattern="[0-9]*" name="contact_captcha" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">'
     . '<button type="submit" class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">' . e($tr('contact_send')) . '</button>'
     . '</form>'
     . '</div>'

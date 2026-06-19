@@ -7,6 +7,7 @@ $i18n = i18n_expand_supported_locales($i18n);
 $t = $i18n[$locale] ?? $i18n['fr'];
 $nextUrl = safe_login_next_url((string) ($_POST['next'] ?? $_GET['next'] ?? ''));
 $defaultLoginRedirectUrl = route_url(module_enabled('dashboard') ? 'dashboard' : 'home');
+$membershipLabel = $locale === 'fr' ? 'Devenir membre' : 'Become a member';
 
 if (current_user() !== null) {
     redirect_url($nextUrl ?? $defaultLoginRedirectUrl);
@@ -82,7 +83,7 @@ $content = '<div class="card narrow login-card"><h1>' . e((string) $t['title']) 
     . '<input type="text" name="captcha" inputmode="numeric" autocomplete="off" required></label>'
     . '<button class="button">' . e((string) $t['login']) . '</button></form>'
     . '<p><a href="' . e(route_url('forgot_password')) . '">' . e((string) $t['forgot_password']) . '</a></p>'
-    . '<p>' . e((string) $t['no_member']) . ' <a href="' . e(route_url('register')) . '">' . e((string) $t['create_account']) . '</a></p>'
+    . '<p>' . e((string) $t['no_member']) . ' <a href="' . e(route_url('membership')) . '">' . e($membershipLabel) . '</a></p>'
     . '</div>'
     . '<script nonce="' . e(csp_nonce()) . '">(function(){var hash=window.location.hash;if(!/^[#][A-Za-z0-9][A-Za-z0-9_-]{0,79}$/.test(hash)){return;}var next=document.querySelector("[data-login-form] input[name=next]");if(!next||next.value.indexOf("#")!==-1){return;}next.value+=hash;})();</script>';
 

@@ -157,6 +157,7 @@ final class RouterContractTest extends TestCase
             'save_dashboard',
             'widget_render',
             'member_library_preview',
+            'member_document_preview',
             'qsl',
             'qsl_preview',
             'qsl_export',
@@ -275,6 +276,7 @@ final class RouterContractTest extends TestCase
             'dashboard_widget_card' => 'dashboard',
             'members_library' => 'members',
             'member_library_preview' => 'members',
+            'member_document_preview' => 'members',
             'tools' => 'tools',
             'tools_geocode' => 'tools',
             'relais' => 'education',
@@ -338,15 +340,20 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('function apply_runtime_schema_updates(): void', $updates);
     }
 
-    public function testRegistrationCleansSharedEmailAuthOrphans(): void
+    public function testPublicRegistrationIsClosedAndAdminCreationCleansSharedEmailAuthOrphans(): void
     {
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $adminMembers = file_get_contents(__DIR__ . '/../pages/admin_members.php');
         $helpers = file_get_contents(__DIR__ . '/../app/member_profile_helpers.php');
         self::assertIsString($register);
+        self::assertIsString($adminMembers);
         self::assertIsString($helpers);
 
-        self::assertStringContainsString('member_cleanup_registration_auth_orphan($authEmail, $callsign);', $register);
-        self::assertStringContainsString('member_delete_unlinked_auth_user((int) $userId);', $register);
+        self::assertStringNotContainsString('createUserWithUniqueUsername', $register);
+        self::assertStringNotContainsString('ON DUPLICATE KEY UPDATE', $register);
+        self::assertStringNotContainsString('ensure_configured_administrator_roles', $register);
+        self::assertStringContainsString('member_cleanup_registration_auth_orphan($authEmail, $callsign);', $adminMembers);
+        self::assertStringContainsString('member_delete_unlinked_auth_user($authUserId);', $adminMembers);
         self::assertStringContainsString('function member_cleanup_registration_auth_orphan(string $authEmail, string $callsign): void', $helpers);
         self::assertStringContainsString('function member_shared_contact_emails(): array', $helpers);
         self::assertStringContainsString("'crddurnal@gmail.com'", $helpers);
@@ -356,15 +363,18 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('function member_delete_unlinked_auth_user(int $authUserId): void', $helpers);
     }
 
-    public function testRegistrationThrottleAllowsFiveAccountCreations(): void
+    public function testAdminMembersCreatesAccountsWithoutPublicRegistrationUpsert(): void
     {
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
+        $adminMembers = file_get_contents(__DIR__ . '/../pages/admin_members.php');
         self::assertIsString($register);
+        self::assertIsString($adminMembers);
 
-        self::assertStringContainsString('$registrationThrottleLimit = 5;', $register);
-        self::assertStringContainsString('$registrationThrottleWindowSeconds = 60 * 60 * 12;', $register);
-        self::assertStringContainsString('$authClient->throttle([\'createNewAccount\', $authClient->getIpAddress()], 1, $registrationThrottleWindowSeconds, $registrationThrottleLimit, true);', $register);
-        self::assertStringContainsString('$authClient->admin()->createUserWithUniqueUsername($authEmail, $password, $callsign);', $register);
+        self::assertStringContainsString('Public registration is closed', $register);
+        self::assertStringContainsString("SELECT COUNT(*) FROM members WHERE UPPER(callsign) = ?", $adminMembers);
+        self::assertStringContainsString('$authClient->admin()->createUserWithUniqueUsername($authEmail, $password, $callsign);', $adminMembers);
+        self::assertStringContainsString('INSERT INTO members (', $adminMembers);
+        self::assertStringNotContainsString('ON DUPLICATE KEY UPDATE', $adminMembers);
         self::assertStringNotContainsString('registerWithUniqueUsername($authEmail, $password, $callsign)', $register);
     }
 
@@ -492,13 +502,15 @@ final class RouterContractTest extends TestCase
         self::assertStringNotContainsString('session_regenerate_id(true);', $login);
     }
 
-    public function testRegisterStoresResolvedMemberIdAfterAutoLogin(): void
+    public function testPublicRegisterDoesNotAutoLoginOrCreateMembers(): void
     {
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
         self::assertIsString($register);
 
-        self::assertStringContainsString('authenticated_member_row($authClient', $register);
-        self::assertStringContainsString("\$_SESSION['member_id'] = (int) (\$memberRow['id'] ?? 0);", $register);
+        self::assertStringContainsString("redirect('login');", $register);
+        self::assertStringNotContainsString('authenticated_member_row($authClient', $register);
+        self::assertStringNotContainsString("\$_SESSION['member_id']", $register);
+        self::assertStringNotContainsString('createUserWithUniqueUsername', $register);
         self::assertStringNotContainsString('session_regenerate_id(true);', $register);
         self::assertStringNotContainsString("\$_SESSION['member_id'] = (int) \$authClient->getUserId();", $register);
     }
@@ -557,18 +569,15 @@ final class RouterContractTest extends TestCase
     public function testPasswordResetCanBeForcedWithoutFirstLoginDefault(): void
     {
         $router = file_get_contents(__DIR__ . '/../index.php');
-        $register = file_get_contents(__DIR__ . '/../pages/register.php');
         $adminMembers = file_get_contents(__DIR__ . '/../pages/admin_members.php');
         $authHelpers = file_get_contents(__DIR__ . '/../app/auth_helpers.php');
         self::assertIsString($router);
-        self::assertIsString($register);
         self::assertIsString($adminMembers);
         self::assertIsString($authHelpers);
 
         self::assertStringContainsString('member_password_change_required($passwordChangeUser)', $router);
         self::assertStringContainsString('forced_notice', $router);
-        self::assertMatchesRegularExpression('/password_hash\(\$password, PASSWORD_DEFAULT\),\s*0,/', $register);
-        self::assertStringContainsString('redirect(module_enabled(\'dashboard\') ? \'dashboard\' : \'home\');', $register);
+        self::assertStringContainsString('password_hash($password, PASSWORD_DEFAULT)', $adminMembers);
         self::assertStringContainsString('password_change_required = ?', $adminMembers);
         self::assertStringContainsString('password_reset_forced_at = ?', $adminMembers);
         self::assertStringContainsString('password_reset_forced_at', $authHelpers);
@@ -906,7 +915,7 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('URL.revokeObjectURL(previewObjectUrl)', $profileJs);
     }
 
-    public function testProfileAndRegisterUseSharedLicenceClassChoices(): void
+    public function testProfileUsesSharedLicenceClassChoicesAndPublicRegisterHasNoRadioProfileForm(): void
     {
         $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
@@ -916,7 +925,7 @@ final class RouterContractTest extends TestCase
         self::assertIsString($directory);
 
         self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t, (string) ($member[\'licence_class\'] ?? \'\'));', $profile);
-        self::assertStringContainsString('$licenceClassOptionsHtml = member_profile_licence_class_options_html($t);', $register);
+        self::assertStringNotContainsString('name="licence_class"', $register);
         self::assertStringContainsString('<select name="licence_class"><?= $licenceClassOptionsHtml ?></select>', $profile);
         self::assertStringContainsString('member_profile_licence_class_display_text($profileT, $licenceValue)', $directory);
         self::assertStringContainsString('$licenceFilterLabel = member_profile_licence_class_display_text($profileT, $licenceFilter);', $directory);
@@ -964,7 +973,7 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString('gdpr-callsign', $gdpr);
     }
 
-    public function testProfileAndRegisterUseSharedQslViaChoices(): void
+    public function testProfileUsesSharedQslViaChoicesAndPublicRegisterHasNoQslForm(): void
     {
         $profile = file_get_contents(__DIR__ . '/../pages/profile.php');
         $register = file_get_contents(__DIR__ . '/../pages/register.php');
@@ -974,9 +983,8 @@ final class RouterContractTest extends TestCase
         self::assertIsString($directory);
 
         self::assertStringContainsString('$qslViaOptionsHtml = member_profile_qsl_via_options_html($t, (string) ($member[\'qsl_via\'] ?? \'\'));', $profile);
-        self::assertStringContainsString('$qslViaOptionsHtml = member_profile_qsl_via_options_html($t);', $register);
         self::assertStringContainsString('<select name="qsl_via"><?= $qslViaOptionsHtml ?></select>', $profile);
-        self::assertStringContainsString('<select name="qsl_via">\' . $qslViaOptionsHtml . \'</select>', $register);
+        self::assertStringNotContainsString('name="qsl_via"', $register);
         self::assertStringContainsString("member_profile_display_row(\$member, 'qsl_via', \$profilePreviewFields['qsl_via'])", $directory);
         self::assertStringContainsString("<?= e((string) \$qslViaRow['label']) ?> <?= e((string) \$qslViaRow['text']) ?>", $directory);
         self::assertStringNotContainsString('<input type="text" name="qsl_via"', $profile);

@@ -96,6 +96,7 @@ test('Selenium layout: navigation, preferences, idee et footer sont disponibles 
     assert.ok(await elementExists(driver, '[data-idea-modal-open]'));
     assert.ok(await elementExists(driver, '#idea-dialog form input[name="idea_email"]'));
     assert.ok(await elementExists(driver, '#idea-dialog form textarea[name="idea_message"]'));
+    assert.ok(await elementExists(driver, '#idea-dialog form input[name="idea_website"]'));
 
     assert.ok(await elementExists(driver, 'form[action*="set_language"] select[name="locale"]'));
     assert.ok(await elementExists(driver, 'form[action*="set_theme"] select[name="theme"]'));
@@ -104,6 +105,8 @@ test('Selenium layout: navigation, preferences, idee et footer sont disponibles 
     assert.ok(await elementExists(driver, 'form[action*="footer_contact"] input[name="name"]'));
     assert.ok(await elementExists(driver, 'form[action*="footer_contact"] input[name="email"]'));
     assert.ok(await elementExists(driver, 'form[action*="footer_contact"] textarea[name="message"]'));
+    assert.ok(await elementExists(driver, 'form[action*="footer_contact"] input[name="contact_captcha"]'));
+    assert.ok(await elementExists(driver, 'form[action*="footer_contact"] input[name="contact_website"]'));
 
     const footerLinks = await driver.findElements(By.css('.site-footer a[href]'));
     assert.ok(footerLinks.length >= 4, 'Le footer doit exposer plusieurs liens utiles.');

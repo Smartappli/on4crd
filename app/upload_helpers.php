@@ -39,6 +39,47 @@ function safe_storage_public_path_or_null(string $path, array $allowedPrefixes =
 }
 }
 
+if (!function_exists('storage_document_allowed_prefixes')) {
+/**
+ * @return list<string>
+ */
+function storage_document_allowed_prefixes(): array
+{
+    return [
+        'storage/private/library/',
+        'storage/private/member_modules/',
+        // Legacy paths remain readable only through authorized controllers.
+        'storage/uploads/library/',
+        'storage/uploads/member_modules/',
+    ];
+}
+}
+
+if (!function_exists('safe_storage_document_path')) {
+function safe_storage_document_path(string $path, array $allowedPrefixes = []): string
+{
+    return safe_storage_public_path($path, $allowedPrefixes !== [] ? $allowedPrefixes : storage_document_allowed_prefixes());
+}
+}
+
+if (!function_exists('safe_storage_document_path_or_null')) {
+function safe_storage_document_path_or_null(string $path, array $allowedPrefixes = []): ?string
+{
+    try {
+        return safe_storage_document_path($path, $allowedPrefixes);
+    } catch (Throwable) {
+        return null;
+    }
+}
+}
+
+if (!function_exists('storage_document_absolute_path')) {
+function storage_document_absolute_path(string $safePath): string
+{
+    return dirname(__DIR__) . '/' . safe_storage_document_path($safePath);
+}
+}
+
 function detect_uploaded_mime_type(string $tmpPath): string
 {
     if (!is_file($tmpPath)) {

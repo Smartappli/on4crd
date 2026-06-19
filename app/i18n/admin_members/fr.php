@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'member_updated' => 'Membre mis à jour.',
+  'member_created' => 'Membre cree.',
   'title' => 'Gestion des membres',
   'layout' => 'Membres',
   'meta_desc' => 'Gestion des profils membres.',
@@ -24,4 +25,11 @@ return array (
   'th_password_reset' => 'Mot de passe',
   'password_reset_force' => 'Forcer au prochain login',
   'password_reset_unavailable' => 'Indisponible',
+  'create_title' => 'Ajouter un membre',
+  'create_submit' => 'Creer le membre',
+  'temporary_password' => 'Mot de passe temporaire',
+  'err_name' => 'Nom requis.',
+  'err_password' => 'Mot de passe invalide.',
+  'err_exists' => 'Un membre ou compte existe deja pour cet indicatif.',
+  'auth_unavailable' => 'Authentification indisponible.',
 );

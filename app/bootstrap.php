@@ -13,7 +13,10 @@ $vendorAutoload = __DIR__ . '/../vendor/autoload.php';
 if (is_file($vendorAutoload)) {
     require_once $vendorAutoload;
 }
-$forwardedProtoHeader = strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
+$trustedProxyAddresses = array_map('trim', array_map('strval', (array) ($bootstrapConfig['security']['trusted_proxies'] ?? [])));
+$remoteAddress = trim((string) ($_SERVER['REMOTE_ADDR'] ?? ''));
+$trustForwardedHeaders = $remoteAddress !== '' && in_array($remoteAddress, $trustedProxyAddresses, true);
+$forwardedProtoHeader = $trustForwardedHeaders ? strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))) : '';
 $forwardedProto = $forwardedProtoHeader !== '' ? trim(explode(',', $forwardedProtoHeader)[0]) : '';
 $serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');
 $isHttps = (

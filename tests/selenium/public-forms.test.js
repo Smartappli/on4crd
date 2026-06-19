@@ -74,25 +74,18 @@ test('Selenium login: captcha, champs et next sont conserves', async (t) => {
   });
 });
 
-test('Selenium inscription: le formulaire expose les champs obligatoires du profil radio', async (t) => {
+test('Selenium inscription: la creation publique de compte est fermee', async (t) => {
   await withSelenium(t, async (driver) => {
     await visit(driver, 'register');
     if (await skipIfInstallWizard(t, driver)) {
       return;
     }
 
-    for (const selector of [
-      'input[name="callsign"]',
-      'input[name="last_name"]',
-      'input[name="first_name"]',
-      'input[name="email"]',
-      'select[name="country"]',
-      'input[name="qth"]',
-      'input[name="locator"]',
-      'input[name="password"]',
-    ]) {
-      assert.ok(await elementExists(driver, selector), `Champ attendu absent: ${selector}`);
-    }
+    const body = await pagePlainText(driver);
+    assert.match(body, /inscription publique|public registration/i);
+    assert.equal(await elementExists(driver, 'input[name="callsign"]'), false);
+    assert.equal(await elementExists(driver, 'input[name="password"]'), false);
+    assert.ok(await elementExists(driver, 'a[href*="route=membership"]'));
   });
 });
 

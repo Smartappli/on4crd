@@ -203,7 +203,8 @@ if (!function_exists('answer_question_from_knowledge')) {
 
         $filePath = trim((string) ($doc['file_path'] ?? ''));
         if ($extracted === '' && $filePath !== '') {
-            $absPath = storage_path($filePath);
+            $safePath = safe_storage_document_path_or_null($filePath, ['storage/private/library/', 'storage/uploads/library/']);
+            $absPath = $safePath !== null ? storage_document_absolute_path($safePath) : '';
             $ext = mb_safe_strtolower((string) pathinfo($absPath, PATHINFO_EXTENSION));
             $allowed = ['txt', 'md', 'csv', 'json', 'log', 'xml', 'html', 'htm', 'docx', 'pdf'];
             if (is_file($absPath) && in_array($ext, $allowed, true)) {
@@ -609,6 +610,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
         ];
         $chatbotT = $chatbotI18n[$locale] ?? $chatbotI18n['fr'];
         $normalized = mb_safe_strtolower(trim($question));
+        $canUseMemberLibrary = current_user() !== null;
         if ($normalized === '') {
             return ['answer' => (string) $chatbotT['empty_question'], 'source' => (string) $chatbotT['assistant_source']];
         }
@@ -666,7 +668,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                             }
                         }
 
-                        if (ensure_member_library_table()) {
+                        if ($canUseMemberLibrary && ensure_member_library_table()) {
                             $docs = db()->query('SELECT id,title,description,extracted_text,file_path FROM member_library_documents ORDER BY uploaded_at DESC LIMIT 120')->fetchAll() ?: [];
                             foreach ($docs as $doc) {
                                 if (!is_array($doc)) { continue; }
@@ -675,8 +677,8 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                                 $title = trim((string) ($doc['title'] ?? 'Document'));
                                 $body = rag_library_document_body($doc);
                                 if ($body === '') { continue; }
-                                $safePath = safe_storage_public_path_or_null((string) ($doc['file_path'] ?? ''), ['storage/uploads/library/']) ?? '';
-                                $url = $safePath !== '' ? base_url($safePath) : '';
+                                $safePath = safe_storage_document_path_or_null((string) ($doc['file_path'] ?? ''), ['storage/private/library/', 'storage/uploads/library/']) ?? '';
+                                $url = $safePath !== '' ? route_url('member_library_preview', ['id' => $docId, 'download' => '1']) : '';
                                 foreach (rag_chunks_from_text($body) as $chunkIndex => $chunk) {
                                     $key = 'doc_' . (string) $docId . '_' . (string) $chunkIndex;
                                     $vec = rag_embedding_vector($title . ' ' . $chunk);
@@ -711,12 +713,16 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                         $params[] = $like;
                         $params[] = $like;
                     }
-                    $sql = 'SELECT source_type, source_key, title, body, url, embedding_json, updated_at FROM rag_chunks WHERE ' . implode(' OR ', $whereParts);
+                    $sql = 'SELECT source_type, source_key, title, body, url, embedding_json, updated_at FROM rag_chunks WHERE (' . implode(' OR ', $whereParts) . ')';
                     $stepSourceTypes = isset($step['source_types']) && is_array($step['source_types']) ? $step['source_types'] : [];
                     if ($stepSourceTypes !== []) {
                         $typePlaceholders = implode(',', array_fill(0, count($stepSourceTypes), '?'));
                         $sql .= ' AND source_type IN (' . $typePlaceholders . ')';
                         foreach ($stepSourceTypes as $type) { $params[] = $type; }
+                    }
+                    if (!$canUseMemberLibrary) {
+                        $sql .= ' AND source_type <> ?';
+                        $params[] = 'library';
                     }
                     $stepLimit = max(20, min(120, (int) ($step['limit'] ?? 80)));
                     $sql .= ' ORDER BY updated_at DESC LIMIT ' . $stepLimit;
@@ -738,7 +744,12 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                     }
                 }
                 if ($rows === []) {
-                    $stmt = db()->query('SELECT source_type, source_key, title, body, url, embedding_json, updated_at FROM rag_chunks ORDER BY updated_at DESC LIMIT 220');
+                    $fallbackSql = 'SELECT source_type, source_key, title, body, url, embedding_json, updated_at FROM rag_chunks';
+                    if (!$canUseMemberLibrary) {
+                        $fallbackSql .= ' WHERE source_type <> "library"';
+                    }
+                    $fallbackSql .= ' ORDER BY updated_at DESC LIMIT 220';
+                    $stmt = db()->query($fallbackSql);
                     $rows = $stmt ? ($stmt->fetchAll() ?: []) : [];
                 } else {
                     $rows = array_values($rows);
@@ -1040,7 +1051,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
             }
         }
 
-        if (ensure_member_library_table()) {
+        if ($canUseMemberLibrary && ensure_member_library_table()) {
             try {
                 $whereParts = [];
                 $params = [];
@@ -1053,7 +1064,7 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                     $whereParts[] = '(title LIKE ? OR description LIKE ? OR extracted_text LIKE ?)';
                     array_push($params, '%'.$question.'%', '%'.$question.'%', '%'.$question.'%');
                 }
-                $sql = 'SELECT title, description, extracted_text, file_path FROM member_library_documents WHERE (' . implode(' OR ', $whereParts) . ') ORDER BY uploaded_at DESC LIMIT 25';
+                $sql = 'SELECT id, title, description, extracted_text, file_path FROM member_library_documents WHERE (' . implode(' OR ', $whereParts) . ') ORDER BY uploaded_at DESC LIMIT 25';
                 $stmt = db()->prepare($sql);
                 $stmt->execute($params);
                 $docs = $stmt->fetchAll();
@@ -1083,14 +1094,15 @@ function answer_question_from_knowledge(string $question, array $preferredSource
                     $chatbotDocT = $chatbotDocI18n[$locale] ?? $chatbotDocI18n['fr'];
                     $docTitle = trim((string) ($doc['title'] ?? (string) $chatbotDocT['doc_fallback']));
                     $docDescription = trim((string) ($doc['description'] ?? ''));
+                    $docId = (int) ($doc['id'] ?? 0);
                     $docUrl = trim((string) ($doc['file_path'] ?? ''));
-                    $safeDocUrl = safe_storage_public_path_or_null($docUrl, ['storage/uploads/library/']);
+                    $safeDocUrl = safe_storage_document_path_or_null($docUrl, ['storage/private/library/', 'storage/uploads/library/']);
                     $answer = (string) $chatbotDocT['prefix'] . $docTitle . '.';
                     if ($docDescription !== '') {
                         $answer .= "\n\n" . (string) $chatbotDocT['summary'] . $docDescription;
                     }
-                    if (is_string($safeDocUrl) && $safeDocUrl !== '') {
-                        $answer .= "\n\n" . (string) $chatbotDocT['open'] . base_url($safeDocUrl);
+                    if (is_string($safeDocUrl) && $safeDocUrl !== '' && $docId > 0) {
+                        $answer .= "\n\n" . (string) $chatbotDocT['open'] . route_url('member_library_preview', ['id' => $docId, 'download' => '1']);
                     }
                     return ['answer' => $answer, 'source' => (string) $chatbotDocT['source']];
                 }

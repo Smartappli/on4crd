@@ -264,12 +264,12 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('subcategory VARCHAR(120) NOT NULL DEFAULT ""', $contentHelpers);
         self::assertStringContainsString("'qsl', 'qsl_preview', 'qsl_export', 'members_library', 'admin_library', 'member_library_preview'", $routeHelperLoader);
         self::assertStringContainsString("'member_library_preview'", $routeHelperLoader);
-        self::assertStringContainsString("'fichiers', 'members_library', 'member_library_preview', 'admin_articles'", $routeHelperLoader);
+        self::assertStringContainsString("'fichiers', 'members_library', 'member_library_preview', 'member_document_preview', 'admin_articles'", $routeHelperLoader);
         self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
         self::assertStringContainsString("\$isDownload = (string) (\$_GET['download'] ?? '') === '1';", $previewPage);
         self::assertStringContainsString("\$disposition = \$isDownload ? 'attachment' : 'inline';", $previewPage);
         self::assertStringContainsString("header('Content-Disposition: ' . \$disposition", $previewPage);
-        self::assertStringContainsString("if (in_array(security_header_current_route(), ['member_library_preview'], true))", $requestSecurity);
+        self::assertStringContainsString("if (in_array(security_header_current_route(), ['member_library_preview', 'member_document_preview'], true))", $requestSecurity);
         self::assertStringContainsString("\$frameAncestors = \"'self'\";", $requestSecurity);
         self::assertStringContainsString("\$xFrameOptions = 'SAMEORIGIN';", $requestSecurity);
     }
@@ -295,6 +295,7 @@ final class MemberModulesFinalizationTest extends TestCase
 
         self::assertSame('fichiers', member_document_module_normalize('telechargements'));
         self::assertNull(member_document_module_definition('unknown'));
+        self::assertSame('storage/private/member_modules/videos/demo.pdf', member_document_safe_path('/storage/private/member_modules/videos/demo.pdf'));
         self::assertSame('storage/uploads/member_modules/videos/demo.pdf', member_document_safe_path('/storage/uploads/member_modules/videos/demo.pdf'));
         self::assertSame('storage/uploads/library/legacy.pdf', member_document_safe_path('storage/uploads/library/legacy.pdf'));
         self::assertNull(member_document_safe_path('storage/uploads/member_modules/../secret.pdf'));

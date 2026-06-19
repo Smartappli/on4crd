@@ -63,6 +63,10 @@ return [
     ],
     'security' => [
         'csrf_key' => 'replace-with-a-random-32-byte-secret',
+        // Production: definir app.base_url ou l'allowlist d'hotes publics attendus.
+        'allowed_hosts' => ['on4crd.be', 'www.on4crd.be'],
+        // Adresses IP exactes des reverse proxies autorises a fournir X-Forwarded-*.
+        'trusted_proxies' => [],
     ],
     'cache' => [
         'enabled' => true,

@@ -23,6 +23,94 @@ $passwordResetMarkerColumnAvailable = table_has_column('members', 'password_rese
 $passwordResetForceAvailable = $passwordChangeColumnAvailable && $passwordResetMarkerColumnAvailable;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
+    $action = (string) ($_POST['action'] ?? 'update_member');
+
+    if ($action === 'create_member') {
+        try {
+            $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
+            $fullName = trim((string) ($_POST['full_name'] ?? ''));
+            $emailInput = trim((string) ($_POST['email'] ?? ''));
+            $email = member_contact_email_from_input($emailInput);
+            $password = (string) ($_POST['password'] ?? '');
+            $locator = strtoupper(trim((string) ($_POST['locator'] ?? '')));
+
+            if ($callsign === '' || mb_strlen($callsign) > 32 || preg_match('/^[A-Z0-9\/-]{2,32}$/', $callsign) !== 1) {
+                throw new RuntimeException((string) $t['err_callsign']);
+            }
+            if ($fullName === '' || mb_strlen($fullName) > 190) {
+                throw new RuntimeException((string) $t['err_name']);
+            }
+            if ($emailInput !== '' && filter_var($emailInput, FILTER_VALIDATE_EMAIL) === false) {
+                throw new RuntimeException((string) $t['err_email']);
+            }
+            if ($locator !== '' && preg_match('/^[A-R]{2}[0-9]{2}(?:[A-X]{2})?$/', $locator) !== 1) {
+                throw new RuntimeException((string) $t['err_locator']);
+            }
+            if (strlen($password) < 8) {
+                throw new RuntimeException((string) $t['err_password']);
+            }
+
+            $existsStmt = db()->prepare('SELECT COUNT(*) FROM members WHERE UPPER(callsign) = ?');
+            $existsStmt->execute([$callsign]);
+            if ((int) $existsStmt->fetchColumn() > 0) {
+                throw new RuntimeException((string) $t['err_exists']);
+            }
+
+            $authClient = auth();
+            if ($authClient === null) {
+                throw new RuntimeException((string) $t['auth_unavailable']);
+            }
+
+            $authEmail = member_auth_email_for_contact_email($email, $callsign);
+            member_cleanup_registration_auth_orphan($authEmail, $callsign);
+            $authUserId = 0;
+            try {
+                $authUserId = (int) $authClient->admin()->createUserWithUniqueUsername($authEmail, $password, $callsign);
+            } catch (\Delight\Auth\InvalidEmailException|\Delight\Auth\InvalidPasswordException $exception) {
+                throw new RuntimeException((string) $t['err_password']);
+            } catch (\Delight\Auth\UserAlreadyExistsException|\Delight\Auth\DuplicateUsernameException $exception) {
+                throw new RuntimeException((string) $t['err_exists']);
+            }
+
+            $nameParts = member_name_parts_from_full_name($fullName);
+            $passwordChangeRequired = isset($_POST['password_change_required']) ? 1 : 0;
+            $columns = ['auth_user_id', 'callsign', 'first_name', 'last_name', 'full_name', 'email', 'password_hash', 'locator', 'is_active', 'is_committee'];
+            $values = [
+                $authUserId,
+                $callsign,
+                $nameParts['first_name'],
+                $nameParts['last_name'],
+                $fullName,
+                $email,
+                password_hash($password, PASSWORD_DEFAULT),
+                $locator !== '' ? $locator : null,
+                isset($_POST['is_active']) ? 1 : 0,
+                isset($_POST['is_committee']) ? 1 : 0,
+            ];
+            if ($passwordChangeColumnAvailable) {
+                $columns[] = 'password_change_required';
+                $values[] = $passwordChangeRequired;
+            }
+            if ($passwordResetMarkerColumnAvailable) {
+                $columns[] = 'password_reset_forced_at';
+                $values[] = $passwordChangeRequired === 1 ? date('Y-m-d H:i:s') : null;
+            }
+
+            try {
+                db()->prepare('INSERT INTO members (' . implode(', ', $columns) . ') VALUES (' . implode(', ', array_fill(0, count($columns), '?')) . ')')
+                    ->execute($values);
+            } catch (Throwable $exception) {
+                member_delete_unlinked_auth_user($authUserId);
+                throw $exception;
+            }
+
+            set_flash('success', (string) $t['member_created']);
+        } catch (Throwable $throwable) {
+            set_flash('error', $throwable->getMessage());
+        }
+        redirect('admin_members');
+    }
+
     $callsign = strtoupper(trim((string) ($_POST['callsign'] ?? '')));
     $fullName = trim((string) ($_POST['full_name'] ?? ''));
     $email = trim((string) ($_POST['email'] ?? ''));
@@ -85,6 +173,24 @@ ob_start();
 ?>
 <section class="card">
     <h1><?= e((string) $t['title']) ?></h1>
+    <section class="stack" style="margin:1rem 0;">
+        <h2><?= e((string) $t['create_title']) ?></h2>
+        <form method="post" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap:.75rem; align-items:end;">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="create_member">
+            <label><?= e((string) $t['th_callsign']) ?><input type="text" name="callsign" maxlength="32" required></label>
+            <label><?= e((string) $t['th_name']) ?><input type="text" name="full_name" maxlength="190" required></label>
+            <label><?= e((string) $t['th_email']) ?><input type="email" name="email" maxlength="190" placeholder="<?= e(member_default_contact_email()) ?>"></label>
+            <label><?= e((string) $t['th_locator']) ?><input type="text" name="locator" maxlength="6"></label>
+            <label><?= e((string) $t['temporary_password']) ?><input type="password" name="password" minlength="8" autocomplete="new-password" required></label>
+            <label><input type="checkbox" name="is_active" value="1" checked> <?= e((string) $t['th_active']) ?></label>
+            <label><input type="checkbox" name="is_committee" value="1"> <?= e((string) $t['th_committee']) ?></label>
+            <?php if ($passwordChangeColumnAvailable): ?>
+                <label><input type="checkbox" name="password_change_required" value="1" checked> <?= e((string) $t['password_reset_force']) ?></label>
+            <?php endif; ?>
+            <button class="button" type="submit"><?= e((string) $t['create_submit']) ?></button>
+        </form>
+    </section>
     <form method="get" style="margin:.5rem 0 1rem;">
         <label><?= e((string) $t['search']) ?>
             <input type="text" name="member_q" value="<?= e($memberSearch) ?>" placeholder="<?= e((string) $t['search_ph']) ?>">
@@ -96,7 +202,7 @@ ob_start();
     </tr></thead><tbody>
     <?php foreach ($members as $member): ?>
         <tr><td colspan="8"><form method="post" class="grid" style="grid-template-columns: 1fr 1fr 1fr 1fr auto auto minmax(11rem, auto) auto; gap:.5rem; align-items:center;">
-            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>"><input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="update_member"><input type="hidden" name="member_id" value="<?= (int) $member['id'] ?>"><input type="hidden" name="return_query" value="<?= e($returnQuery) ?>">
             <input type="text" name="callsign" value="<?= e((string) $member['callsign']) ?>"><input type="text" name="full_name" value="<?= e((string) $member['full_name']) ?>"><input type="email" name="email" value="<?= e((string) $member['email']) ?>"><input type="text" name="locator" value="<?= e((string) $member['locator']) ?>" maxlength="6">
             <label><input type="checkbox" name="is_active" value="1" <?= (int) $member['is_active'] === 1 ? 'checked' : '' ?>></label>
             <label><input type="checkbox" name="is_committee" value="1" <?= (int) $member['is_committee'] === 1 ? 'checked' : '' ?>></label>

@@ -426,8 +426,10 @@ function member_document_migrate_library_categories(): void
 if (!function_exists('member_document_safe_path')) {
 function member_document_safe_path(string $path): ?string
 {
-    return safe_storage_public_path_or_null($path, [
+    return safe_storage_document_path_or_null($path, [
+        'storage/private/member_modules/',
         'storage/uploads/member_modules/',
+        'storage/private/library/',
         'storage/uploads/library/',
     ]);
 }
@@ -908,7 +910,7 @@ function member_document_store_upload(array $file, string $moduleCode, int $memb
         throw new RuntimeException('err_invalid');
     }
 
-    $targetDir = dirname(__DIR__) . '/storage/uploads/member_modules/' . $moduleCode;
+    $targetDir = dirname(__DIR__) . '/storage/private/member_modules/' . $moduleCode;
     $base = slugify(pathinfo($originalName, PATHINFO_FILENAME));
     if ($base === '') {
         $base = 'document';
@@ -923,7 +925,7 @@ function member_document_store_upload(array $file, string $moduleCode, int $memb
     );
 
     return [
-        'public_path' => 'storage/uploads/member_modules/' . $moduleCode . '/' . $filename,
+        'public_path' => 'storage/private/member_modules/' . $moduleCode . '/' . $filename,
         'absolute_path' => $targetDir . '/' . $filename,
         'extension' => $extension,
     ];
@@ -934,11 +936,14 @@ if (!function_exists('member_document_delete_file')) {
 function member_document_delete_file(string $publicPath): void
 {
     $safePath = member_document_safe_path($publicPath);
-    if ($safePath === null || !str_starts_with($safePath, 'storage/uploads/member_modules/')) {
+    if ($safePath === null || (
+        !str_starts_with($safePath, 'storage/private/member_modules/')
+        && !str_starts_with($safePath, 'storage/uploads/member_modules/')
+    )) {
         return;
     }
 
-    $absolute = dirname(__DIR__) . '/' . $safePath;
+    $absolute = storage_document_absolute_path($safePath);
     if (is_file($absolute)) {
         @unlink($absolute);
     }
@@ -1009,7 +1014,7 @@ function member_document_update_record(
         if ($replacementSafePath === '') {
             throw new RuntimeException('err_invalid');
         }
-        $absolute = dirname(__DIR__) . '/' . $replacementSafePath;
+        $absolute = storage_document_absolute_path($replacementSafePath);
         if (!is_file($absolute)) {
             throw new RuntimeException('err_invalid');
         }
@@ -1017,7 +1022,7 @@ function member_document_update_record(
 
     if ($replacementSafePath !== '') {
         $extension = strtolower(pathinfo($replacementSafePath, PATHINFO_EXTENSION));
-        $extractedText = member_document_extract_text(dirname(__DIR__) . '/' . $replacementSafePath, $extension);
+        $extractedText = member_document_extract_text(storage_document_absolute_path($replacementSafePath), $extension);
         db()->prepare('UPDATE member_module_documents SET category = ?, subcategory = ?, title = ?, description = ?, tags = ?, file_path = ?, extracted_text = ? WHERE id = ? AND module_code = ?')
             ->execute([$category, $subcategory, $title, $description !== '' ? $description : null, $tags, $replacementSafePath, $extractedText !== '' ? $extractedText : null, $documentId, $moduleCode]);
         if ($currentPath !== $replacementSafePath) {
@@ -1281,6 +1286,8 @@ function render_member_document_module_cards(array $documents, array $labels, st
         $docTags = trim((string) ($document['tags'] ?? ''));
         $docExtract = trim((string) ($document['extracted_text'] ?? ''));
         $documentId = max(0, (int) ($document['id'] ?? 0));
+        $documentPreviewUrl = $documentId > 0 ? route_url('member_document_preview', ['module' => $moduleCode, 'id' => $documentId]) . '#view=Fit' : '';
+        $documentDownloadUrl = $documentId > 0 ? route_url('member_document_preview', ['module' => $moduleCode, 'id' => $documentId, 'download' => '1']) : '';
         $docCategory = member_document_category_code((string) ($document['category'] ?? 'general'));
         $docSubcategory = member_document_subcategory_code((string) ($document['subcategory'] ?? ''));
         $docCategoryLabel = (string) ($categories[$docCategory] ?? member_document_category_label_from_code($docCategory));
@@ -1301,12 +1308,14 @@ function render_member_document_module_cards(array $documents, array $labels, st
         if ($docExtract !== '') {
             $html .= '<p class="help">' . e(mb_safe_strimwidth($docExtract, 0, 220, '...')) . '</p>';
         }
-        if ($extension === 'pdf') {
+        if ($extension === 'pdf' && $documentPreviewUrl !== '') {
             $html .= '<details class="member-document-preview-toggle"><summary>' . e((string) $labels['preview']) . '</summary>'
-                . '<iframe src="' . e(base_url($safePath)) . '" class="member-document-pdf-preview" loading="lazy"></iframe></details>';
+                . '<iframe src="' . e($documentPreviewUrl) . '" class="member-document-pdf-preview" loading="lazy"></iframe></details>';
         }
-        $html .= '<p class="actions member-document-card-actions">'
-            . '<a class="button secondary" href="' . e(base_url($safePath)) . '" target="_blank" rel="noopener">' . e((string) $labels['open']) . '</a>';
+        $html .= '<p class="actions member-document-card-actions">';
+        if ($documentDownloadUrl !== '') {
+            $html .= '<a class="button secondary" href="' . e($documentDownloadUrl) . '" target="_blank" rel="noopener">' . e((string) $labels['open']) . '</a>';
+        }
         if ($canEditDocument) {
             $html .= '<button class="button secondary" type="button" data-member-document-modal-open="' . e($dialogId) . '" aria-haspopup="dialog" aria-controls="' . e($dialogId) . '">' . e((string) $labels['edit_document']) . '</button>';
         }
@@ -1521,7 +1530,7 @@ function render_member_document_module_page(string $module): void
                     'title' => $titleInput,
                     'summary' => $proposalSummary,
                     'contact' => (string) ($user['email'] ?? ''),
-                    'source_ref' => 'content_proposals#' . $proposalId . ' ' . base_url((string) ($document['file_path'] ?? '')),
+                    'source_ref' => 'content_proposals#' . $proposalId,
                 ]);
                 set_flash('success', (string) $labels['document_change_recorded']);
                 redirect('my_requests');
@@ -1556,7 +1565,7 @@ function render_member_document_module_page(string $module): void
                 'title' => $titleInput,
                 'summary' => $proposalSummary,
                 'contact' => (string) ($user['email'] ?? ''),
-                'source_ref' => $replacementPublicPath !== '' ? ('content_proposals#' . $proposalId . ' ' . base_url($replacementPublicPath)) : ('content_proposals#' . $proposalId),
+                'source_ref' => 'content_proposals#' . $proposalId,
             ]);
             set_flash('success', (string) $labels['document_change_recorded']);
             redirect('my_requests');
@@ -1644,8 +1653,9 @@ function render_member_document_module_page(string $module): void
     $primaryActionAttributes = '';
     if ((bool) ($definition['latest_document_cta'] ?? false) && $documents !== []) {
         $latestSafePath = member_document_safe_path((string) ($documents[0]['file_path'] ?? ''));
-        if ($latestSafePath !== null) {
-            $primaryActionHref = base_url($latestSafePath);
+        $latestDocumentId = max(0, (int) ($documents[0]['id'] ?? 0));
+        if ($latestSafePath !== null && $latestDocumentId > 0) {
+            $primaryActionHref = route_url('member_document_preview', ['module' => $moduleCode, 'id' => $latestDocumentId, 'download' => '1']);
             $primaryActionAttributes = ' target="_blank" rel="noopener"';
         }
     }
@@ -1904,13 +1914,7 @@ function render_admin_member_document_module_page(string $module): void
                 $stmt = db()->prepare('SELECT file_path FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
                 $stmt->execute([$id, $moduleCode]);
                 $path = (string) ($stmt->fetchColumn() ?: '');
-                $safePath = member_document_safe_path($path);
-                if ($safePath !== null && str_starts_with($safePath, 'storage/uploads/member_modules/')) {
-                    $absolute = dirname(__DIR__) . '/' . $safePath;
-                    if (is_file($absolute)) {
-                        @unlink($absolute);
-                    }
-                }
+                member_document_delete_file($path);
                 db()->prepare('DELETE FROM member_module_documents WHERE id = ? AND module_code = ?')->execute([$id, $moduleCode]);
                 if (table_exists('member_favorites')) {
                     db()->prepare('DELETE FROM member_favorites WHERE target_type = ? AND target_id = ?')->execute(['member_module_document', $id]);
@@ -2149,6 +2153,8 @@ function render_admin_member_document_module_page(string $module): void
                         <?php $safePath = member_document_safe_path((string) ($document['file_path'] ?? '')); ?>
                         <?php if ($safePath === null) { continue; } ?>
                         <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
+                        <?php $documentId = (int) ($document['id'] ?? 0); ?>
+                        <?php $documentDownloadUrl = $documentId > 0 ? route_url('member_document_preview', ['module' => $moduleCode, 'id' => $documentId, 'download' => '1']) : ''; ?>
                         <article class="news-card feature-card member-document-card">
                             <span class="badge muted"><?= e(strtoupper($extension)) ?></span>
                             <h3><?= e((string) ($document['title'] ?? $labels['documents'])) ?></h3>
@@ -2160,11 +2166,11 @@ function render_admin_member_document_module_page(string $module): void
                             <p class="help"><?= e((string) ($labels['category_field'] ?? 'Topic')) ?>: <?= e((string) ($categories[$docCategory] ?? member_document_category_label_from_code($docCategory))) ?><?= $docSubcategory !== '' ? ' / ' . e(member_document_category_label_from_code($docSubcategory)) : '' ?></p>
                             <?php if (trim((string) ($document['tags'] ?? '')) !== ''): ?><p class="help"><?= e((string) $labels['tags']) ?>: <?= e((string) $document['tags']) ?></p><?php endif; ?>
                             <p class="actions">
-                                <a class="button secondary" href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $labels['open']) ?></a>
+                                <?php if ($documentDownloadUrl !== ''): ?><a class="button secondary" href="<?= e($documentDownloadUrl) ?>" target="_blank" rel="noopener"><?= e((string) $labels['open']) ?></a><?php endif; ?>
                                 <form method="post" class="inline-form" onsubmit="return confirm('<?= e((string) $labels['confirm_delete']) ?>');">
                                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                                     <input type="hidden" name="action" value="delete_document">
-                                    <input type="hidden" name="id" value="<?= (int) ($document['id'] ?? 0) ?>">
+                                    <input type="hidden" name="id" value="<?= $documentId ?>">
                                     <input type="hidden" name="return_q" value="<?= e($search) ?>">
                                     <input type="hidden" name="return_category" value="<?= e($categoryFilter) ?>">
                                     <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">

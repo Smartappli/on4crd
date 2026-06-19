@@ -91,6 +91,119 @@ function verify_csrf(): void
     }
 }
 
+function public_form_client_ip(): string
+{
+    if (function_exists('request_is_from_trusted_proxy') && request_is_from_trusted_proxy()) {
+        $forwardedFor = trim((string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''));
+        if ($forwardedFor !== '') {
+            $candidate = trim(explode(',', $forwardedFor)[0] ?? '');
+            if ($candidate !== '') {
+                return $candidate;
+            }
+        }
+    }
+
+    return trim((string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown')) ?: 'unknown';
+}
+
+function public_form_rate_limit(string $scope, int $limit = 5, int $windowSeconds = 900): void
+{
+    $scope = preg_replace('/[^a-z0-9_\\-]/i', '', $scope) ?: 'form';
+    $ipHash = hash('sha256', public_form_client_ip());
+    $sessionHash = hash('sha256', session_id() ?: csrf_token());
+    $directory = storage_path('cache/rate-limit');
+    if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) {
+        return;
+    }
+
+    $file = rtrim($directory, '/') . '/' . $scope . '-' . hash('sha256', $ipHash . '|' . $sessionHash) . '.json';
+    $now = time();
+    $events = [];
+    $raw = is_file($file) ? @file_get_contents($file) : false;
+    if (is_string($raw) && $raw !== '') {
+        $decoded = json_decode($raw, true);
+        if (is_array($decoded)) {
+            $events = array_values(array_filter(array_map('intval', $decoded), static fn(int $timestamp): bool => $timestamp > $now - $windowSeconds));
+        }
+    }
+
+    if (count($events) >= $limit) {
+        throw new RuntimeException('too_many_requests');
+    }
+
+    $events[] = $now;
+    @file_put_contents($file, json_encode($events, JSON_THROW_ON_ERROR), LOCK_EX);
+}
+
+/**
+ * @return array{left:int,right:int,answer:int}
+ */
+function public_form_captcha_challenge(string $scope): array
+{
+    $scope = preg_replace('/[^a-z0-9_\\-]/i', '', $scope) ?: 'form';
+    if (!isset($_SESSION['_public_form_captchas']) || !is_array($_SESSION['_public_form_captchas'])) {
+        $_SESSION['_public_form_captchas'] = [];
+    }
+
+    $existing = $_SESSION['_public_form_captchas'][$scope] ?? null;
+    if (is_array($existing)
+        && isset($existing['left'], $existing['right'], $existing['answer'])
+        && (int) ($existing['expires_at'] ?? 0) > time()
+    ) {
+        return [
+            'left' => (int) $existing['left'],
+            'right' => (int) $existing['right'],
+            'answer' => (int) $existing['answer'],
+        ];
+    }
+
+    $left = random_int(2, 9);
+    $right = random_int(2, 9);
+    $_SESSION['_public_form_captchas'][$scope] = [
+        'left' => $left,
+        'right' => $right,
+        'answer' => $left + $right,
+        'expires_at' => time() + 1800,
+    ];
+
+    return ['left' => $left, 'right' => $right, 'answer' => $left + $right];
+}
+
+function public_form_captcha_label(array $challenge, string $locale = ''): string
+{
+    $left = (int) ($challenge['left'] ?? 0);
+    $right = (int) ($challenge['right'] ?? 0);
+
+    return match (strtolower($locale)) {
+        'fr' => 'Anti-spam: combien font ' . $left . ' + ' . $right . ' ?',
+        'nl' => 'Anti-spam: hoeveel is ' . $left . ' + ' . $right . '?',
+        'de' => 'Anti-spam: wie viel ist ' . $left . ' + ' . $right . '?',
+        default => 'Anti-spam: what is ' . $left . ' + ' . $right . '?',
+    };
+}
+
+function public_form_verify_captcha(string $scope, string $answer): bool
+{
+    $scope = preg_replace('/[^a-z0-9_\\-]/i', '', $scope) ?: 'form';
+    $challenge = $_SESSION['_public_form_captchas'][$scope] ?? null;
+    unset($_SESSION['_public_form_captchas'][$scope]);
+    if (!is_array($challenge) || (int) ($challenge['expires_at'] ?? 0) < time()) {
+        return false;
+    }
+
+    $submitted = trim($answer);
+    if ($submitted === '' || preg_match('/^-?\\d+$/', $submitted) !== 1) {
+        return false;
+    }
+
+    return hash_equals((string) (int) $challenge['answer'], (string) (int) $submitted);
+}
+
+function public_form_honeypot_triggered(string $fieldName): bool
+{
+    return trim((string) ($_POST[$fieldName] ?? '')) !== '';
+}
+
 function matomo_origin(): ?string
 {
     $matomoUrl = trim((string) config('tracking.matomo_url', ''));
@@ -145,7 +258,7 @@ function apply_security_headers(): void
     $frameAncestors = "'none'";
     $xFrameOptions = 'DENY';
 
-    if (in_array(security_header_current_route(), ['member_library_preview'], true)) {
+    if (in_array(security_header_current_route(), ['member_library_preview', 'member_document_preview'], true)) {
         $frameAncestors = "'self'";
         $xFrameOptions = 'SAMEORIGIN';
     }

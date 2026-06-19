@@ -39,6 +39,12 @@ $cleanMessage = static function (string $value, int $maxLength): string {
 
 try {
     verify_csrf();
+    public_form_rate_limit('idea_submit', 5, 900);
+
+    if (public_form_honeypot_triggered('idea_website')) {
+        set_flash('success', $t('sent', 'Thank you, your idea has been sent to the committee.'));
+        redirect_url($redirectUrl);
+    }
 
     $name = $cleanLine((string) ($_POST['idea_name'] ?? ''), 160);
     $email = $cleanLine((string) ($_POST['idea_email'] ?? ''), 190);
@@ -72,6 +78,8 @@ try {
     $rawMessage = $throwable->getMessage();
     if ($rawMessage === 'send') {
         set_flash('error', $t('send_error', 'The idea could not be sent. Please try again later.'));
+    } elseif ($rawMessage === 'too_many_requests') {
+        set_flash('error', $t('too_many_requests', 'Too many requests. Please try again later.'));
     } elseif ($rawMessage === 'invalid' || $rawMessage === '') {
         set_flash('error', $t('invalid', 'Please complete the idea form correctly.'));
     } else {

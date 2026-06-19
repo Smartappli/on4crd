@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return array (
   'member_updated' => 'Member updated.',
+  'member_created' => 'Member created.',
   'title' => 'Member management',
   'layout' => 'Members',
   'meta_desc' => 'Manage member profiles.',
@@ -24,4 +25,11 @@ return array (
   'th_password_reset' => 'Password',
   'password_reset_force' => 'Force on next login',
   'password_reset_unavailable' => 'Unavailable',
+  'create_title' => 'Add a member',
+  'create_submit' => 'Create member',
+  'temporary_password' => 'Temporary password',
+  'err_name' => 'Name required.',
+  'err_password' => 'Invalid password.',
+  'err_exists' => 'A member or account already exists for this callsign.',
+  'auth_unavailable' => 'Authentication unavailable.',
 );

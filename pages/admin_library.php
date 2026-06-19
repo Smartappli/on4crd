@@ -122,7 +122,7 @@ function library_store_upload(array $file, int $memberId): array
         throw new RuntimeException('err_invalid');
     }
 
-    $targetDir = dirname(__DIR__) . '/storage/uploads/library';
+    $targetDir = dirname(__DIR__) . '/storage/private/library';
     $base = slugify(pathinfo($originalName, PATHINFO_FILENAME));
     if ($base === '') {
         $base = 'document';
@@ -138,7 +138,7 @@ function library_store_upload(array $file, int $memberId): array
     $destination = $targetDir . '/' . $filename;
 
     return [
-        'public_path' => 'storage/uploads/library/' . $filename,
+        'public_path' => 'storage/private/library/' . $filename,
         'absolute_path' => $destination,
         'extension' => $extension,
         'original_name' => $originalName,
@@ -288,9 +288,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = db()->prepare('SELECT file_path FROM member_library_documents WHERE id = ? LIMIT 1');
             $stmt->execute([$id]);
             $path = (string) ($stmt->fetchColumn() ?: '');
-            $safePath = safe_storage_public_path_or_null($path, ['storage/uploads/library/']);
+            $safePath = safe_storage_document_path_or_null($path, ['storage/private/library/', 'storage/uploads/library/']);
             if ($safePath !== null) {
-                $absolute = dirname(__DIR__) . '/' . $safePath;
+                $absolute = storage_document_absolute_path($safePath);
                 if (is_file($absolute)) {
                     @unlink($absolute);
                 }
@@ -308,9 +308,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sel = db()->prepare('SELECT file_path FROM member_library_documents WHERE id IN (' . $placeholders . ')');
             $sel->execute($ids);
             foreach ($sel->fetchAll() ?: [] as $row) {
-                $safePath = safe_storage_public_path_or_null((string) ($row['file_path'] ?? ''), ['storage/uploads/library/']);
+                $safePath = safe_storage_document_path_or_null((string) ($row['file_path'] ?? ''), ['storage/private/library/', 'storage/uploads/library/']);
                 if ($safePath !== null) {
-                    $absolute = dirname(__DIR__) . '/' . $safePath;
+                    $absolute = storage_document_absolute_path($safePath);
                     if (is_file($absolute)) {
                         @unlink($absolute);
                     }
@@ -516,9 +516,9 @@ $proposalSourceUrl = static function (string $sourceRef): string {
     if ($sourceRef === '') {
         return '';
     }
-    $safePath = safe_storage_public_path_or_null($sourceRef, ['storage/uploads/library/']);
-    if ($safePath !== null) {
-        return base_url($safePath);
+    $safePath = function_exists('member_library_proposal_source_path') ? member_library_proposal_source_path($sourceRef) : '';
+    if ($safePath !== '') {
+        return '';
     }
     if (preg_match('/https?:\/\/\S+/i', $sourceRef, $match) === 1) {
         return (string) $match[0];
@@ -763,7 +763,7 @@ ob_start();
     </form>
     <?php endif; ?>
     <?php foreach ($documents as $document): ?>
-        <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); if ($safePath === null) { continue; } ?>
+        <?php $safePath = safe_storage_document_path_or_null((string) ($document['file_path'] ?? ''), ['storage/private/library/', 'storage/uploads/library/']); if ($safePath === null) { continue; } ?>
         <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
         <?php $documentId = (int) ($document['id'] ?? 0); ?>
         <?php $documentCategory = library_category_slug((string) ($document['category'] ?? 'general')); ?>

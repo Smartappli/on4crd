@@ -462,7 +462,16 @@ if (!function_exists('privacy_member_file_manifest')) {
         }
 
         foreach (privacy_export_rows_by_member('member_library_documents', $memberId) as $row) {
-            $entry = privacy_file_manifest_entry('member_library_document', (string) ($row['file_path'] ?? ''), ['storage/uploads/library/']);
+            $entry = privacy_file_manifest_entry('member_library_document', (string) ($row['file_path'] ?? ''), ['storage/private/library/', 'storage/uploads/library/']);
+            if ($entry !== null) {
+                $entry['record_id'] = (int) ($row['id'] ?? 0);
+                $entry['title'] = (string) ($row['title'] ?? '');
+                $files[] = $entry;
+            }
+        }
+
+        foreach (privacy_export_rows_by_member('member_module_documents', $memberId) as $row) {
+            $entry = privacy_file_manifest_entry('member_module_document', (string) ($row['file_path'] ?? ''), ['storage/private/member_modules/', 'storage/uploads/member_modules/']);
             if ($entry !== null) {
                 $entry['record_id'] = (int) ($row['id'] ?? 0);
                 $entry['title'] = (string) ($row['title'] ?? '');
@@ -557,6 +566,7 @@ if (!function_exists('privacy_export_member_data')) {
             ['member_favorites', 'member_id'],
             ['member_notifications', 'member_id'],
             ['member_library_documents', 'member_id'],
+            ['member_module_documents', 'member_id'],
             ['dashboard_widgets', 'member_id'],
             ['member_tool_presets', 'member_id'],
             ['member_tool_history', 'member_id'],
@@ -667,16 +677,19 @@ if (!function_exists('privacy_delete_public_files')) {
     {
         $allowedPrefixes = [
             'storage/uploads/members/',
+            'storage/private/library/',
             'storage/uploads/library/',
+            'storage/private/member_modules/',
+            'storage/uploads/member_modules/',
             'storage/uploads/ads/',
         ];
         $root = realpath(dirname(__DIR__));
-        $uploadsRoot = realpath(dirname(__DIR__) . '/storage/uploads');
+        $storageRoot = realpath(dirname(__DIR__) . '/storage');
         $result = ['deleted' => 0, 'missing' => 0, 'failed' => 0];
 
         foreach (array_values(array_unique(array_filter(array_map('strval', $paths)))) as $path) {
             $safePath = privacy_safe_public_storage_path($path, $allowedPrefixes);
-            if ($safePath === null || $root === false || $uploadsRoot === false) {
+            if ($safePath === null || $root === false || $storageRoot === false) {
                 $result['failed']++;
                 continue;
             }
@@ -687,7 +700,7 @@ if (!function_exists('privacy_delete_public_files')) {
                 $result['missing']++;
                 continue;
             }
-            if (!str_starts_with($realPath, $uploadsRoot . DIRECTORY_SEPARATOR)) {
+            if (!str_starts_with($realPath, $storageRoot . DIRECTORY_SEPARATOR)) {
                 $result['failed']++;
                 continue;
             }

@@ -2,6 +2,151 @@
 declare(strict_types=1);
 
 if (!function_exists('base_url')) {
+function app_is_production_environment(): bool
+{
+    $environment = strtolower(trim((string) config('app.env', 'production')));
+
+    return $environment === 'production';
+}
+
+function app_normalized_host(string $hostHeader): string
+{
+    $host = trim(explode(',', $hostHeader)[0] ?? '');
+    if ($host === '' || preg_match('/[\r\n]/', $host) === 1) {
+        return '';
+    }
+
+    if (str_contains($host, '://')) {
+        $parts = parse_url($host);
+        if (!is_array($parts) || empty($parts['host'])) {
+            return '';
+        }
+        $host = (string) $parts['host'];
+        if (!empty($parts['port'])) {
+            $host .= ':' . (int) $parts['port'];
+        }
+    }
+
+    $host = strtolower(rtrim(trim($host), '.'));
+    if ($host === '' || preg_match('/[^a-z0-9\\-\\.:\\[\\]]/i', $host) !== 0) {
+        return '';
+    }
+
+    return $host;
+}
+
+function app_host_without_port(string $host): string
+{
+    $host = app_normalized_host($host);
+    if ($host === '') {
+        return '';
+    }
+
+    if (str_starts_with($host, '[')) {
+        $end = strpos($host, ']');
+        return $end === false ? $host : substr($host, 1, $end - 1);
+    }
+
+    return (string) preg_replace('/:\\d+$/', '', $host);
+}
+
+/**
+ * @return list<string>
+ */
+function app_allowed_hosts(): array
+{
+    $hosts = [];
+    foreach ((array) config('security.allowed_hosts', []) as $configuredHost) {
+        $host = app_normalized_host((string) $configuredHost);
+        if ($host !== '') {
+            $hosts[] = app_host_without_port($host);
+        }
+    }
+
+    $baseUrl = trim((string) config('app.base_url', ''));
+    if ($baseUrl !== '') {
+        $parts = parse_url($baseUrl);
+        if (is_array($parts) && !empty($parts['host'])) {
+            $hosts[] = strtolower((string) $parts['host']);
+        }
+    }
+
+    return array_values(array_unique(array_filter($hosts)));
+}
+
+function app_first_allowed_host(): string
+{
+    $configuredBaseUrl = trim((string) config('app.base_url', ''));
+    if ($configuredBaseUrl !== '') {
+        $parts = parse_url($configuredBaseUrl);
+        if (is_array($parts) && !empty($parts['host'])) {
+            $host = strtolower((string) $parts['host']);
+            if (!empty($parts['port'])) {
+                $host .= ':' . (int) $parts['port'];
+            }
+
+            return $host;
+        }
+    }
+
+    foreach ((array) config('security.allowed_hosts', []) as $configuredHost) {
+        $host = app_normalized_host((string) $configuredHost);
+        if ($host !== '') {
+            return $host;
+        }
+    }
+
+    return '';
+}
+
+function request_is_from_trusted_proxy(): bool
+{
+    $remoteAddress = trim((string) ($_SERVER['REMOTE_ADDR'] ?? ''));
+    if ($remoteAddress === '') {
+        return false;
+    }
+
+    $trustedProxies = array_map('trim', array_map('strval', (array) config('security.trusted_proxies', [])));
+
+    return in_array($remoteAddress, $trustedProxies, true);
+}
+
+function request_host_header(): string
+{
+    if (request_is_from_trusted_proxy()) {
+        $forwardedHost = trim((string) ($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ''));
+        if ($forwardedHost !== '') {
+            return $forwardedHost;
+        }
+    }
+
+    return (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+}
+
+function request_forwarded_port(): string
+{
+    if (!request_is_from_trusted_proxy()) {
+        return '';
+    }
+
+    $forwardedPortHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_PORT'] ?? ''));
+    if ($forwardedPortHeader === '') {
+        return '';
+    }
+
+    return trim(explode(',', $forwardedPortHeader)[0] ?? '');
+}
+
+function request_host_is_allowed(string $host): bool
+{
+    $allowedHosts = app_allowed_hosts();
+    if ($allowedHosts === []) {
+        return !app_is_production_environment();
+    }
+
+    return in_array(app_host_without_port($host), $allowedHosts, true);
+}
+
 function base_url(string $path = ''): string
 {
     static $base = null;
@@ -12,20 +157,18 @@ function base_url(string $path = ''): string
             $base = $configured;
         } else {
             $scheme = is_https_request() ? 'https' : 'http';
-            $forwardedHostHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_HOST'] ?? ''));
-            $hostHeader = $forwardedHostHeader !== ''
-                ? trim(explode(',', $forwardedHostHeader)[0])
-                : (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
-
-            $host = strtolower(trim($hostHeader));
-            if ($host === '' || preg_match('/[^a-z0-9\\-\\.:\\[\\]]/i', $host) !== 0) {
-                $host = 'localhost';
+            $host = app_normalized_host(request_host_header());
+            if ($host === '' || !request_host_is_allowed($host)) {
+                if (app_is_production_environment()) {
+                    error_log('ON4CRD app.base_url or security.allowed_hosts must be configured for production absolute URLs.');
+                }
+                $host = app_first_allowed_host() ?: 'localhost';
+                if (app_is_production_environment()) {
+                    $scheme = 'https';
+                }
             }
 
-            $forwardedPortHeader = trim((string) ($_SERVER['HTTP_X_FORWARDED_PORT'] ?? ''));
-            $forwardedPort = $forwardedPortHeader !== ''
-                ? trim(explode(',', $forwardedPortHeader)[0])
-                : '';
+            $forwardedPort = request_forwarded_port();
             if ($forwardedPort !== '' && ctype_digit($forwardedPort)) {
                 $port = (int) $forwardedPort;
                 if (($scheme === 'https' && $port !== 443) || ($scheme === 'http' && $port !== 80)) {

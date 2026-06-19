@@ -151,7 +151,7 @@ function member_library_store_document_upload(?array $file, int $memberId, strin
         throw new RuntimeException(upload_i18n_message('extension_not_allowed'));
     }
 
-    $targetDir = dirname(__DIR__) . '/storage/uploads/library';
+    $targetDir = dirname(__DIR__) . '/storage/private/library';
     $base = slugify(pathinfo($originalName, PATHINFO_FILENAME));
     if ($base === '') {
         $base = 'document';
@@ -174,7 +174,7 @@ function member_library_store_document_upload(?array $file, int $memberId, strin
     );
 
     return [
-        'public_path' => 'storage/uploads/library/' . $filename,
+        'public_path' => 'storage/private/library/' . $filename,
         'absolute_path' => $targetDir . '/' . $filename,
         'extension' => $extension,
         'original_name' => $originalName,
@@ -199,12 +199,12 @@ function member_library_delete_document_file(string $publicPath): void
         return;
     }
 
-    $safePath = safe_storage_public_path_or_null($publicPath, ['storage/uploads/library/']);
+    $safePath = safe_storage_document_path_or_null($publicPath, ['storage/private/library/', 'storage/uploads/library/']);
     if ($safePath === null) {
         return;
     }
 
-    $absolute = dirname(__DIR__) . '/' . $safePath;
+    $absolute = storage_document_absolute_path($safePath);
     if (is_file($absolute)) {
         @unlink($absolute);
     }
@@ -353,18 +353,21 @@ function member_library_proposal_source_path(string $sourceRef): string
     if ($sourceRef === '') {
         return '';
     }
-    if (function_exists('safe_storage_public_path_or_null')) {
-        $safePath = safe_storage_public_path_or_null($sourceRef, ['storage/uploads/library/']);
+    if (function_exists('safe_storage_document_path_or_null')) {
+        $safePath = safe_storage_document_path_or_null($sourceRef, ['storage/private/library/', 'storage/uploads/library/']);
         if ($safePath !== null) {
             return $safePath;
         }
     }
-    if (preg_match('~(storage/uploads/library/[^\s?#]+)~i', str_replace('\\', '/', $sourceRef), $matches) === 1) {
+    if (preg_match('~(storage/(?:private|uploads)/library/[^\s?#]+)~i', str_replace('\\', '/', $sourceRef), $matches) === 1) {
         $candidate = ltrim((string) $matches[1], '/');
-        if (function_exists('safe_storage_public_path_or_null')) {
-            return safe_storage_public_path_or_null($candidate, ['storage/uploads/library/']) ?? '';
+        if (function_exists('safe_storage_document_path_or_null')) {
+            return safe_storage_document_path_or_null($candidate, ['storage/private/library/', 'storage/uploads/library/']) ?? '';
         }
-        if (!str_contains($candidate, '..') && str_starts_with($candidate, 'storage/uploads/library/')) {
+        if (!str_contains($candidate, '..') && (
+            str_starts_with($candidate, 'storage/private/library/')
+            || str_starts_with($candidate, 'storage/uploads/library/')
+        )) {
             return $candidate;
         }
     }
@@ -426,7 +429,7 @@ function member_library_update_document_record(
     $replacementPublicPath = member_library_proposal_source_path($replacementPublicPath);
 
     if ($replacementPublicPath !== '') {
-        $absolutePath = dirname(__DIR__) . '/' . $replacementPublicPath;
+        $absolutePath = storage_document_absolute_path($replacementPublicPath);
         if (!is_file($absolutePath)) {
             throw new RuntimeException('err_invalid');
         }

@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'title' => $title,
                     'summary' => $proposalSummary,
                     'contact' => (string) ($user['email'] ?? ''),
-                    'source_ref' => $sourceRef !== '' ? ('content_proposals#' . $proposalId . ' ' . base_url($sourceRef)) : ('content_proposals#' . $proposalId),
+                    'source_ref' => 'content_proposals#' . $proposalId,
                 ]);
                 set_flash('success', $membersLibraryText('document_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
                 redirect('my_requests');
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'title' => $title,
                 'summary' => $proposalSummary,
                 'contact' => (string) ($user['email'] ?? ''),
-                'source_ref' => $sourceRef !== '' ? ('content_proposals#' . $proposalId . ' ' . base_url($sourceRef)) : ('content_proposals#' . $proposalId),
+                'source_ref' => 'content_proposals#' . $proposalId,
             ]);
             set_flash('success', $membersLibraryText('document_change_recorded', 'Modification enregistrée dans vos contenus en attente de validation.', 'Change saved in your content pending review.'));
             redirect('my_requests');
@@ -265,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'title' => content_proposal_clean_single_line($proposalTitle, 190),
                 'summary' => $proposalSummary,
                 'contact' => content_proposal_clean_single_line($proposalContact, 220),
-                'source_ref' => 'content_proposals#' . $proposalId . ' ' . base_url($proposalFilePath),
+                'source_ref' => 'content_proposals#' . $proposalId,
             ]);
             set_flash('success', (string) $t['proposal_recorded']);
             redirect('my_requests');
@@ -740,7 +740,7 @@ ob_start();
 
             <div class="news-grid members-library-document-grid">
             <?php foreach ($documents as $document): ?>
-                <?php $safePath = safe_storage_public_path_or_null((string) ($document['file_path'] ?? ''), ['storage/uploads/library/']); ?>
+                <?php $safePath = safe_storage_document_path_or_null((string) ($document['file_path'] ?? ''), ['storage/private/library/', 'storage/uploads/library/']); ?>
                 <?php if ($safePath === null) { continue; } ?>
                 <?php $extension = strtolower(pathinfo($safePath, PATHINFO_EXTENSION)); ?>
                 <?php $docCategory = trim((string) ($document['category'] ?? 'general')); if ($docCategory === '') { $docCategory = 'general'; } ?>

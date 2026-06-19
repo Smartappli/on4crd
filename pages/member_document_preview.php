@@ -8,28 +8,31 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit('Method not allowed');
 }
 
-if (!ensure_member_library_table()) {
+if (!ensure_member_module_documents_table()) {
     http_response_code(404);
     exit('Document not found');
 }
 
+$moduleCode = member_document_module_normalize((string) ($_GET['module'] ?? ''));
 $documentId = (int) ($_GET['id'] ?? 0);
-if ($documentId <= 0) {
+$definition = $moduleCode !== '' ? member_document_module_definition($moduleCode) : null;
+if ($moduleCode === '' || $definition === null || $documentId <= 0) {
     http_response_code(404);
     exit('Document not found');
 }
+require_module_enabled($moduleCode, (string) ($definition['route'] ?? $moduleCode));
 
-$stmt = db()->prepare('SELECT title, file_path FROM member_library_documents WHERE id = ? LIMIT 1');
-$stmt->execute([$documentId]);
+$stmt = db()->prepare('SELECT title, file_path FROM member_module_documents WHERE id = ? AND module_code = ? LIMIT 1');
+$stmt->execute([$documentId, $moduleCode]);
 $document = $stmt->fetch() ?: null;
 if (!is_array($document)) {
     http_response_code(404);
     exit('Document not found');
 }
 
-$safePath = safe_storage_document_path_or_null((string) ($document['file_path'] ?? ''), ['storage/private/library/', 'storage/uploads/library/']);
+$safePath = member_document_safe_path((string) ($document['file_path'] ?? ''));
 $extension = strtolower(pathinfo((string) $safePath, PATHINFO_EXTENSION));
-$allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
+$allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm', 'ppt', 'pptx', 'xls', 'xlsx', 'csv', 'zip', 'jpg', 'jpeg', 'png', 'webp', 'mp4', 'webm', 'mov', 'm4v'];
 $isDownload = (string) ($_GET['download'] ?? '') === '1';
 if ($safePath === null || !in_array($extension, $allowedExtensions, true) || (!$isDownload && $extension !== 'pdf')) {
     http_response_code(404);
@@ -50,7 +53,7 @@ if ($size === false || $size < 1) {
 
 $filename = str_replace(['"', "\r", "\n"], '', basename($safePath));
 if ($filename === '') {
-    $filename = 'document.pdf';
+    $filename = 'document.' . ($extension !== '' ? $extension : 'bin');
 }
 
 session_write_close();
@@ -84,7 +87,6 @@ if (preg_match('/^bytes=(\d*)-(\d*)$/', $rangeHeader, $matches) === 1) {
     }
 }
 
-$length = $end - $start + 1;
 $contentTypes = [
     'pdf' => 'application/pdf',
     'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -92,7 +94,22 @@ $contentTypes = [
     'md' => 'text/plain; charset=utf-8',
     'html' => 'application/octet-stream',
     'htm' => 'application/octet-stream',
+    'ppt' => 'application/vnd.ms-powerpoint',
+    'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'xls' => 'application/vnd.ms-excel',
+    'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'csv' => 'text/csv; charset=utf-8',
+    'zip' => 'application/zip',
+    'jpg' => 'image/jpeg',
+    'jpeg' => 'image/jpeg',
+    'png' => 'image/png',
+    'webp' => 'image/webp',
+    'mp4' => 'video/mp4',
+    'webm' => 'video/webm',
+    'mov' => 'video/quicktime',
+    'm4v' => 'video/x-m4v',
 ];
+$length = $end - $start + 1;
 $disposition = $isDownload ? 'attachment' : 'inline';
 http_response_code($statusCode);
 header('Content-Type: ' . ($contentTypes[$extension] ?? 'application/octet-stream'));

@@ -200,6 +200,7 @@ $routeModules = [
     'my_requests' => 'members',
     'members_library' => 'members',
     'member_library_preview' => 'members',
+    'member_document_preview' => 'members',
     'webotheque' => 'webotheque',
     'presentations' => 'presentations',
     'videos' => 'videos',
@@ -366,6 +367,7 @@ switch ($route) {
     case 'chatbot': $dispatchPage('pages/chatbot.php'); break;
     case 'members_library': $dispatchPage('pages/members_library.php'); break;
     case 'member_library_preview': $dispatchPage('pages/member_library_preview.php'); break;
+    case 'member_document_preview': $dispatchPage('pages/member_document_preview.php'); break;
     case 'webotheque': $dispatchPage('pages/webotheque.php'); break;
     case 'presentations': $dispatchPage('pages/presentations.php'); break;
     case 'videos': $dispatchPage('pages/videos.php'); break;

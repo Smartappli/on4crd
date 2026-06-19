@@ -268,7 +268,10 @@ function render_layout(string $content, string $title = ''): string
 
 function is_https_request(): bool
 {
-    $forwardedProtoHeader = strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
+    $trustForwardedHeaders = function_exists('request_is_from_trusted_proxy') && request_is_from_trusted_proxy();
+    $forwardedProtoHeader = $trustForwardedHeaders
+        ? strtolower(trim((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')))
+        : '';
     $forwardedProto = $forwardedProtoHeader !== '' ? trim(explode(',', $forwardedProtoHeader)[0]) : '';
     $serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');
 
@@ -381,6 +384,108 @@ function sanitize_image_src_attribute(string $url): ?string
     return sanitize_href_attribute($trimmed);
 }
 
+function sanitize_rich_html_unwrap_element(DOMElement $element): void
+{
+    $parent = $element->parentNode;
+    if (!$parent) {
+        return;
+    }
+
+    while ($element->firstChild) {
+        $parent->insertBefore($element->firstChild, $element);
+    }
+    $parent->removeChild($element);
+}
+
+function sanitize_rich_html_attributes(DOMElement $node): void
+{
+    $tag = strtolower($node->tagName);
+    $allowedByTag = [
+        'a' => ['href' => true, 'rel' => true, 'target' => true, 'title' => true],
+        'img' => ['alt' => true, 'height' => true, 'loading' => true, 'src' => true, 'title' => true, 'width' => true],
+        'ol' => ['start' => true, 'title' => true],
+        'td' => ['colspan' => true, 'rowspan' => true, 'title' => true],
+        'th' => ['colspan' => true, 'rowspan' => true, 'scope' => true, 'title' => true],
+    ];
+    $globalAllowed = ['title' => true];
+    $allowedAttributes = array_replace($globalAllowed, $allowedByTag[$tag] ?? []);
+    $toRemove = [];
+
+    foreach ($node->attributes as $attribute) {
+        $originalName = $attribute->name;
+        $name = strtolower($originalName);
+        $value = trim($attribute->value);
+        if (!isset($allowedAttributes[$name])) {
+            $toRemove[] = $originalName;
+            continue;
+        }
+
+        if ($name === 'href') {
+            $safe = sanitize_href_attribute($value);
+            if ($safe === null) {
+                $toRemove[] = $originalName;
+            } else {
+                $node->setAttribute('href', $safe);
+            }
+            continue;
+        }
+
+        if ($name === 'src') {
+            $safe = sanitize_image_src_attribute($value);
+            if ($safe === null) {
+                $toRemove[] = $originalName;
+            } else {
+                $node->setAttribute('src', $safe);
+            }
+            continue;
+        }
+
+        if ($name === 'target') {
+            if ($tag !== 'a' || $value !== '_blank') {
+                $toRemove[] = $originalName;
+            }
+            continue;
+        }
+
+        if ($name === 'rel') {
+            $safeTokens = ['nofollow' => true, 'noopener' => true, 'noreferrer' => true, 'sponsored' => true, 'ugc' => true];
+            $tokens = preg_split('/\s+/', strtolower($value)) ?: [];
+            $tokens = array_values(array_unique(array_filter($tokens, static fn(string $token): bool => isset($safeTokens[$token]))));
+            if ($tokens === []) {
+                $toRemove[] = $originalName;
+            } else {
+                $node->setAttribute('rel', implode(' ', $tokens));
+            }
+            continue;
+        }
+
+        if (in_array($name, ['width', 'height', 'colspan', 'rowspan', 'start'], true) && preg_match('/^\d{1,4}$/', $value) !== 1) {
+            $toRemove[] = $originalName;
+            continue;
+        }
+
+        if ($name === 'scope' && !in_array(strtolower($value), ['col', 'row', 'colgroup', 'rowgroup'], true)) {
+            $toRemove[] = $originalName;
+            continue;
+        }
+
+        if ($name === 'loading' && !in_array(strtolower($value), ['lazy', 'eager'], true)) {
+            $node->setAttribute('loading', 'lazy');
+        }
+    }
+
+    foreach ($toRemove as $attrName) {
+        $node->removeAttribute($attrName);
+    }
+
+    if ($tag === 'a' && $node->getAttribute('target') === '_blank') {
+        $node->setAttribute('rel', 'noopener noreferrer');
+    }
+    if ($tag === 'img' && !$node->hasAttribute('loading')) {
+        $node->setAttribute('loading', 'lazy');
+    }
+}
+
 function sanitize_rich_html(string $html): string
 {
     if ($html === '') {
@@ -394,54 +499,42 @@ function sanitize_rich_html(string $html): string
     libxml_clear_errors();
     libxml_use_internal_errors($previousUseInternalErrors);
 
-    $removeTags = ['script', 'style', 'iframe', 'object', 'embed', 'link', 'meta', 'base'];
-    foreach ($removeTags as $tag) {
-        while (($nodes = $dom->getElementsByTagName($tag))->length > 0) {
-            $node = $nodes->item(0);
-            if ($node !== null && $node->parentNode !== null) {
-                $node->parentNode->removeChild($node);
-            } else {
-                break;
-            }
-        }
-    }
+    $allowedTags = array_fill_keys([
+        'a', 'b', 'blockquote', 'br', 'caption', 'code', 'div', 'em', 'figcaption', 'figure', 'h2', 'h3', 'h4',
+        'h5', 'h6', 'hr', 'i', 'img', 'li', 'ol', 'p', 'pre', 's', 'span', 'strong', 'sub', 'sup', 'table',
+        'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'u', 'ul',
+    ], true);
+    $removeWithContent = array_fill_keys([
+        'audio', 'base', 'canvas', 'embed', 'iframe', 'link', 'math', 'meta', 'noscript', 'object', 'picture',
+        'script', 'source', 'style', 'svg', 'template', 'video',
+    ], true);
+    $removeElementOnly = array_fill_keys(['input', 'option', 'select', 'textarea'], true);
 
     $allNodes = $dom->getElementsByTagName('*');
     for ($i = $allNodes->length - 1; $i >= 0; $i--) {
         $node = $allNodes->item($i);
-        if (!$node instanceof DOMElement || !$node->hasAttributes()) {
+        if (!$node instanceof DOMElement) {
             continue;
         }
-        $toRemove = [];
-        foreach ($node->attributes as $attribute) {
-            $name = strtolower($attribute->name);
-            if (str_starts_with($name, 'on')) {
-                $toRemove[] = $attribute->name;
-                continue;
-            }
-            if ($name === 'href') {
-                $safe = sanitize_href_attribute($attribute->value);
-                if ($safe === null) {
-                    $toRemove[] = $attribute->name;
-                } else {
-                    $node->setAttribute('href', $safe);
-                }
-            }
-            if ($name === 'src') {
-                $safe = sanitize_image_src_attribute($attribute->value);
-                if ($safe === null) {
-                    $toRemove[] = $attribute->name;
-                } else {
-                    $node->setAttribute('src', $safe);
-                }
-            }
+
+        $tag = strtolower($node->tagName);
+        if ($tag === 'html' || $tag === 'body') {
+            continue;
         }
-        foreach ($toRemove as $attrName) {
-            $node->removeAttribute($attrName);
+
+        if (isset($removeWithContent[$tag]) || isset($removeElementOnly[$tag])) {
+            if ($node->parentNode !== null) {
+                $node->parentNode->removeChild($node);
+            }
+            continue;
         }
-        if (strtolower($node->tagName) === 'img' && !$node->hasAttribute('loading')) {
-            $node->setAttribute('loading', 'lazy');
+
+        if (!isset($allowedTags[$tag])) {
+            sanitize_rich_html_unwrap_element($node);
+            continue;
         }
+
+        sanitize_rich_html_attributes($node);
     }
 
     $body = $dom->getElementsByTagName('body')->item(0);

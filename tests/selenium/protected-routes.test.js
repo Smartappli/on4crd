@@ -22,6 +22,7 @@ const memberRoutes = [
   'my_requests',
   'members_library',
   'member_library_preview',
+  'member_document_preview',
   'webotheque',
   'presentations',
   'videos',

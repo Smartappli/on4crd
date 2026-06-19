@@ -7,18 +7,42 @@ $i18n = i18n_expand_supported_locales($i18n);
 $t = static function (string $key) use ($locale, $i18n): string {
     return (string) (($i18n[$locale] ?? $i18n['fr'])[$key] ?? $key);
 };
+$logPasswordResetDetail = static function (string $reason, string $email = ''): void {
+    try {
+        $logDirectory = dirname(__DIR__) . '/storage/auth';
+        if (!is_dir($logDirectory)) {
+            mkdir($logDirectory, 0755, true);
+        }
+        file_put_contents(
+            $logDirectory . '/password_reset_requests.log',
+            json_encode([
+                'reason' => $reason,
+                'email_hash' => $email !== '' ? privacy_hash_value($email) : '',
+                'created_at' => gmdate('c'),
+                'ip_hash' => privacy_request_ip_hash(),
+            ], JSON_UNESCAPED_SLASHES) . PHP_EOL,
+            FILE_APPEND | LOCK_EX
+        );
+    } catch (Throwable) {
+        // Do not reveal logging failures on the public reset flow.
+    }
+};
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         verify_csrf();
         $email = trim((string) ($_POST['email'] ?? ''));
-        if ($email === '') {
-            throw new RuntimeException($t('err_email_required'));
+        if ($email === '' || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            $logPasswordResetDetail('invalid_public_input', $email);
+            set_flash('success', $t('ok_sent'));
+            redirect('forgot_password');
         }
 
         $authClient = auth();
         if ($authClient === null) {
-            throw new RuntimeException($t('err_auth_unavailable'));
+            $logPasswordResetDetail('auth_unavailable', $email);
+            set_flash('success', $t('ok_sent'));
+            redirect('forgot_password');
         }
 
         $authClient->forgotPassword($email, static function (string $selector, string $token) use ($email, $t): void {
@@ -55,19 +79,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         set_flash('success', $t('ok_sent'));
         redirect('forgot_password');
     } catch (\Delight\Auth\InvalidEmailException $exception) {
-        set_flash('error', $t('err_invalid_email'));
+        $logPasswordResetDetail('invalid_email', (string) ($_POST['email'] ?? ''));
+        set_flash('success', $t('ok_sent'));
         redirect('forgot_password');
     } catch (\Delight\Auth\EmailNotVerifiedException $exception) {
-        set_flash('error', $t('err_not_verified'));
+        $logPasswordResetDetail('email_not_verified', (string) ($_POST['email'] ?? ''));
+        set_flash('success', $t('ok_sent'));
         redirect('forgot_password');
     } catch (\Delight\Auth\ResetDisabledException $exception) {
-        set_flash('error', $t('err_reset_disabled'));
+        $logPasswordResetDetail('reset_disabled', (string) ($_POST['email'] ?? ''));
+        set_flash('success', $t('ok_sent'));
         redirect('forgot_password');
     } catch (\Delight\Auth\TooManyRequestsException $exception) {
         set_flash('error', $t('err_too_many'));
         redirect('forgot_password');
     } catch (Throwable $throwable) {
-        set_flash('error', $throwable->getMessage());
+        $logPasswordResetDetail('unexpected:' . substr(get_class($throwable), 0, 80), (string) ($_POST['email'] ?? ''));
+        set_flash('success', $t('ok_sent'));
         redirect('forgot_password');
     }
 }
