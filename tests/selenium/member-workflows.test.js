@@ -216,8 +216,11 @@ test('Selenium membre: ajouter un document bibliotheque et le retrouver en ligne
   const title = `selenium-library-${Date.now()}`;
   const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
   fs.mkdirSync(fixtureDir, { recursive: true });
-  const fixture = path.join(fixtureDir, `${title}.txt`);
-  fs.writeFileSync(fixture, `Document Selenium ${title}\n`, 'utf8');
+  const fixture = path.join(fixtureDir, `${title}.doc`);
+  fs.writeFileSync(fixture, Buffer.concat([
+    Buffer.from([0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]),
+    Buffer.alloc(256),
+  ]));
   if (!(await ensureSeleniumRunnable(t))) {
     return;
   }
@@ -238,11 +241,11 @@ test('Selenium membre: ajouter un document bibliotheque et le retrouver en ligne
 
       await visit(driver, 'members_library', { q: title });
       let text = await pagePlainText(driver);
-      assert.match(text, new RegExp(title), 'Le document ajoute doit etre visible en ligne dans la bibliotheque membre.');
+      assert.match(text, new RegExp(title), 'Le document .doc ajoute doit etre visible en ligne dans la bibliotheque membre.');
 
       await visit(driver, 'my_requests');
       text = await pagePlainText(driver);
-      assert.match(text, new RegExp(title), 'Le document ajoute doit apparaitre dans Mes contenus.');
+      assert.match(text, new RegExp(title), 'Le document .doc ajoute doit apparaitre dans Mes contenus.');
       assert.match(text, /biblioth|library/i);
     } finally {
       cleanupWorkflowRows(title);

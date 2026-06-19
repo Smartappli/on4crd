@@ -190,6 +190,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('foreach ($visibleSubcategoriesByCategory[$catName] as $subcatInfo)', $library);
         self::assertStringContainsString("\$proposalTags = content_proposal_clean_single_line", $library);
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
+        self::assertStringContainsString('accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/html"', $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
         self::assertStringContainsString('member_library_create_document_record(', $library);
         self::assertStringContainsString("'member_library_helpers.php' => ['members_library', 'my_requests', 'search'", $routeHelperLoader);
@@ -216,6 +217,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('class="members-library-pdf-preview"', $library);
         self::assertStringContainsString("\$documentPreviewUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId]) . '#view=Fit' : '';", $adminLibrary);
         self::assertStringContainsString("\$documentDownloadUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId, 'download' => '1']) : '';", $adminLibrary);
+        self::assertStringContainsString('accept=".pdf,.doc,.docx,.txt,.md,.html,.htm,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/html,text/markdown"', $adminLibrary);
         self::assertStringNotContainsString('iframe src="<?= e(base_url($safePath)) ?>" class="admin-library-pdf-preview"', $adminLibrary);
         self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>" target="_blank" rel="noopener"><?= e((string) $t[\'open\']) ?></a>', $adminLibrary);
         self::assertStringContainsString('grid-column: 1 / -1;', $membersLibraryCss);
@@ -271,6 +273,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("'wiki', 'wiki_edit', 'wiki_propose', 'wiki_view', 'admin_wiki'", $routeHelperLoader);
         self::assertStringContainsString("\$isDownload = (string) (\$_GET['download'] ?? '') === '1';", $previewPage);
         self::assertStringContainsString("\$disposition = \$isDownload ? 'attachment' : 'inline';", $previewPage);
+        self::assertStringContainsString("'doc' => 'application/msword'", $previewPage);
         self::assertStringContainsString("header('Content-Disposition: ' . \$disposition", $previewPage);
         self::assertStringContainsString("if (in_array(security_header_current_route(), ['member_library_preview', 'member_document_preview'], true))", $requestSecurity);
         self::assertStringContainsString("\$frameAncestors = \"'self'\";", $requestSecurity);
