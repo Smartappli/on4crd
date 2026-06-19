@@ -937,7 +937,7 @@ const contentProposalScenarios = [
       await submitForm(driver, form);
     },
     afterAccept: async (driver, title) => {
-      await assertRouteContains(driver, 'events', {}, title, 'L evenement valide doit etre visible dans agenda.');
+      await assertRouteContains(driver, 'events', { format: 'ics' }, title, 'L evenement valide doit etre visible dans agenda.');
     },
   },
   {
