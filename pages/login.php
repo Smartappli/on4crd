@@ -64,13 +64,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         set_flash('success', (string) $t['login_success']);
         redirect_url($nextUrl ?? $defaultLoginRedirectUrl);
     } catch (Throwable $throwable) {
+        unset($_SESSION['login_captcha'], $_SESSION['login_captcha_operands']);
         set_flash('error', $throwable->getMessage());
         redirect_url(route_url('login', $nextUrl !== null ? ['next' => $nextUrl] : []));
     }
 }
 
-$captchaA = random_int(1, 9);
-$captchaB = random_int(1, 9);
+$captchaOperands = $_SESSION['login_captcha_operands'] ?? null;
+if (
+    is_array($captchaOperands)
+    && isset($captchaOperands['a'], $captchaOperands['b'])
+    && is_int($captchaOperands['a'])
+    && is_int($captchaOperands['b'])
+) {
+    $captchaA = $captchaOperands['a'];
+    $captchaB = $captchaOperands['b'];
+} else {
+    $captchaA = random_int(1, 9);
+    $captchaB = random_int(1, 9);
+    $_SESSION['login_captcha_operands'] = ['a' => $captchaA, 'b' => $captchaB];
+}
 $captchaExpected = $captchaA + $captchaB;
 $_SESSION['login_captcha'] = (string) $captchaExpected;
 
