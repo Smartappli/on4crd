@@ -573,7 +573,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
     try {
         $homeGalleryPhotos = cache_remember('home_public_album_random_photo_v1', 60, static function (): array {
             $stmt = db()->query(
-                'SELECT p.id, p.album_id, p.file_path, p.title, p.caption, a.title AS album_title
+                'SELECT p.id, p.album_id, p.file_path, p.title, a.title AS album_title
                  FROM album_photos p
                  INNER JOIN albums a ON a.id = p.album_id
                  WHERE a.is_public = 1
