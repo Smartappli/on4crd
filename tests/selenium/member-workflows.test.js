@@ -253,6 +253,56 @@ test('Selenium membre: ajouter un document bibliotheque et le retrouver en ligne
   });
 });
 
+test('Selenium membre: proposer un document depuis la bibliotheque membre et le retrouver dans Mes contenus', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const title = `selenium-library-member-form-${Date.now()}`;
+  const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
+  fs.mkdirSync(fixtureDir, { recursive: true });
+  const fixture = path.join(fixtureDir, `${title}.txt`);
+  fs.writeFileSync(fixture, 'Document Selenium soumis depuis la bibliotheque membre.');
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+  cleanupWorkflowRows(title);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'members_library');
+
+      const openButton = await driver.findElement(By.css('[data-members-library-modal-open="members-library-document-dialog"]'));
+      await driver.executeScript('arguments[0].click();', openButton);
+
+      const form = await driver.findElement(By.css('#members-library-document-dialog form'));
+      await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+      await form.findElement(By.css('input[name="proposal_tags"]')).sendKeys('formation');
+      await form.findElement(By.css('input[type="file"][name="proposal_file"]')).sendKeys(path.resolve(fixture));
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Document propose depuis la bibliotheque membre.');
+
+      const contactValue = await form.findElement(By.css('input[name="proposal_contact"]')).getAttribute('value');
+      assert.ok(contactValue.trim() !== '', 'Le contact doit etre pre-rempli meme si le compte n a pas d email.');
+
+      await submitForm(driver, form);
+
+      await visit(driver, 'members_library', { q: title });
+      let text = await pagePlainText(driver);
+      assert.match(text, new RegExp(title), 'Le document soumis depuis members_library doit etre visible en bibliotheque.');
+
+      await visit(driver, 'my_requests');
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(title), 'Le document soumis depuis members_library doit apparaitre dans Mes contenus.');
+      assert.match(text, /biblioth|library/i);
+    } finally {
+      cleanupWorkflowRows(title);
+    }
+  });
+});
+
 test('Selenium membre: publier une page wiki avec les droits admin', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
