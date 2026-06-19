@@ -191,7 +191,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$proposalTags = content_proposal_clean_single_line", $library);
         self::assertStringContainsString("(string) (\$t['tags'] ?? 'Keywords') => \$proposalTags", $library);
         self::assertStringContainsString('member_library_sync_accepted_proposals($t);', $library);
-        self::assertStringContainsString('member_library_apply_accepted_proposal([', $library);
+        self::assertStringContainsString('member_library_create_document_record(', $library);
         self::assertStringContainsString("'member_library_helpers.php' => ['members_library', 'my_requests', 'search'", $routeHelperLoader);
         self::assertStringContainsString("'member_module_documents.php' => ['my_requests', 'presentations'", $routeHelperLoader);
         self::assertStringContainsString('SELECT id, title, description, category, subcategory, tags, file_path, uploaded_at FROM member_library_documents WHERE member_id = ?', $this->source('pages/my_requests.php'));
@@ -236,6 +236,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("require_once __DIR__ . '/member_webotheque.php';", $adminHelpers);
         self::assertStringContainsString('webotheque_apply_accepted_proposal($proposal, $categories, $messages);', $adminHelpers);
         self::assertStringContainsString('function member_library_apply_accepted_proposal(', $memberLibraryHelpers);
+        self::assertStringContainsString('function member_library_create_document_record(', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_store_document_upload(?array $file, int $memberId, string $prefix = \'doc\'): array', $memberLibraryHelpers);
         self::assertStringContainsString('ALTER TABLE member_library_documents ADD COLUMN extracted_text LONGTEXT NULL AFTER file_path', $memberLibraryHelpers);
         self::assertStringContainsString('function member_library_delete_document_file(string $publicPath): void', $memberLibraryHelpers);

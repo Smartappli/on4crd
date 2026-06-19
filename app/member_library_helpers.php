@@ -415,6 +415,64 @@ function member_library_document_proposal_document_id(string $summary): int
 }
 }
 
+if (!function_exists('member_library_create_document_record')) {
+function member_library_create_document_record(
+    int $memberId,
+    string $title,
+    string $category,
+    string $tags,
+    string $description,
+    string $publicPath,
+    string $subcategory = ''
+): int {
+    if (!ensure_member_library_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $title = content_proposal_clean_single_line($title, 190);
+    if ($title === '') {
+        throw new RuntimeException('err_required');
+    }
+
+    $sourcePath = member_library_proposal_source_path($publicPath);
+    if ($sourcePath === '') {
+        throw new RuntimeException('err_invalid');
+    }
+    $absolutePath = storage_document_absolute_path($sourcePath);
+    if (!is_file($absolutePath)) {
+        throw new RuntimeException('err_invalid');
+    }
+
+    $existingStmt = db()->prepare('SELECT id FROM member_library_documents WHERE file_path = ? LIMIT 1');
+    $existingStmt->execute([$sourcePath]);
+    $existingId = (int) ($existingStmt->fetchColumn() ?: 0);
+    if ($existingId > 0) {
+        return $existingId;
+    }
+
+    $category = member_library_category_slug($category !== '' ? $category : 'general');
+    $subcategory = member_library_subcategory_slug($subcategory);
+    $tags = member_library_clean_tags($tags);
+    $description = content_proposal_clean_multiline($description, 5000);
+    $extension = strtolower((string) pathinfo($sourcePath, PATHINFO_EXTENSION));
+    $extractedText = member_library_extract_text($absolutePath, $extension);
+
+    db()->prepare('INSERT INTO member_library_documents (member_id, category, subcategory, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+        ->execute([
+            max(0, $memberId),
+            $category,
+            $subcategory,
+            $tags,
+            $title,
+            $description !== '' ? $description : null,
+            $sourcePath,
+            $extractedText !== '' ? $extractedText : null,
+        ]);
+
+    return (int) db()->lastInsertId();
+}
+}
+
 if (!function_exists('member_library_update_document_record')) {
 function member_library_update_document_record(
     int $documentId,
@@ -564,46 +622,15 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
         return $documentId;
     }
 
-    $sourcePath = member_library_proposal_source_path((string) ($proposal['source_ref'] ?? ''));
-    if ($sourcePath === '') {
-        throw new RuntimeException('err_invalid');
-    }
-    $absolutePath = dirname(__DIR__) . '/' . $sourcePath;
-    if (!is_file($absolutePath)) {
-        throw new RuntimeException('err_invalid');
-    }
-
-    $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 190);
-    if ($title === '') {
-        throw new RuntimeException('err_required');
-    }
-    $category = member_library_proposal_category_from_summary($summary, $messages);
-    $subcategory = member_library_proposal_subcategory_from_summary($summary, $messages);
-    $tags = member_library_proposal_tags_from_summary($summary, $messages);
-    $description = member_library_proposal_description_from_summary($summary, $messages);
-
-    $existingStmt = db()->prepare('SELECT id FROM member_library_documents WHERE file_path = ? LIMIT 1');
-    $existingStmt->execute([$sourcePath]);
-    $existingId = (int) ($existingStmt->fetchColumn() ?: 0);
-    if ($existingId > 0) {
-        return $existingId;
-    }
-
-    $extension = strtolower((string) pathinfo($sourcePath, PATHINFO_EXTENSION));
-    $extractedText = member_library_extract_text($absolutePath, $extension);
-    db()->prepare('INSERT INTO member_library_documents (member_id, category, subcategory, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-        ->execute([
-            max(0, (int) ($proposal['member_id'] ?? 0)),
-            $category,
-            $subcategory,
-            $tags,
-            $title,
-            $description !== '' ? $description : null,
-            $sourcePath,
-            $extractedText !== '' ? $extractedText : null,
-        ]);
-
-    return (int) db()->lastInsertId();
+    return member_library_create_document_record(
+        max(0, (int) ($proposal['member_id'] ?? 0)),
+        (string) ($proposal['title'] ?? ''),
+        member_library_proposal_category_from_summary($summary, $messages),
+        member_library_proposal_tags_from_summary($summary, $messages),
+        member_library_proposal_description_from_summary($summary, $messages),
+        (string) ($proposal['source_ref'] ?? ''),
+        member_library_proposal_subcategory_from_summary($summary, $messages)
+    );
 }
 }
 

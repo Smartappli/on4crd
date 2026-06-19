@@ -367,10 +367,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('err_required');
         }
         $stored = library_store_upload($file, (int) ($user['id'] ?? 0));
-        $extractedText = library_extract_text((string) $stored['absolute_path'], (string) $stored['extension']);
-
-        db()->prepare('INSERT INTO member_library_documents (member_id, category, subcategory, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-            ->execute([(int) ($user['id'] ?? 0), $category, $subcategory, $tags, $title, $description, (string) $stored['public_path'], $extractedText]);
+        member_library_create_document_record(
+            (int) ($user['id'] ?? 0),
+            $title,
+            $category,
+            $tags,
+            $description,
+            (string) $stored['public_path'],
+            $subcategory
+        );
         notify_member((int) ($user['id'] ?? 0), 'import', 'Library import completed', $title, route_url($adminLibraryRoute));
         set_flash('success', (string) $t['ok_added']);
         redirect($adminLibraryRoute);

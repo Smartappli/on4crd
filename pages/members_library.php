@@ -220,7 +220,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'propose_document') {
-            $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
+            $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_title'] ?? ''), 190);
+            if ($proposalTitle === '') {
+                throw new RuntimeException((string) $t['invalid']);
+            }
             $proposalCategory = member_library_category_slug((string) ($_POST['proposal_category'] ?? 'general'));
             $proposalSubcategory = '';
             $proposalSubcategoryRef = trim((string) ($_POST['proposal_subcategory_ref'] ?? ''));
@@ -248,14 +251,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $proposalStatus = $autoAccept ? 'accepted' : 'pending';
             $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'content', $proposalTitle, $proposalSummary, $proposalContact, $proposalFilePath, $proposalStatus);
             if ($autoAccept) {
-                member_library_apply_accepted_proposal([
-                    'id' => $proposalId,
-                    'member_id' => (int) $user['id'],
-                    'proposal_type' => 'content',
-                    'title' => $proposalTitle,
-                    'summary' => $proposalSummary,
-                    'source_ref' => $proposalFilePath,
-                ], $t);
+                member_library_create_document_record(
+                    (int) $user['id'],
+                    $proposalTitle,
+                    $proposalCategory,
+                    $proposalTags,
+                    (string) ($_POST['proposal_description'] ?? ''),
+                    $proposalFilePath,
+                    $proposalSubcategory
+                );
                 set_flash('success', (string) $t['document_validated_direct']);
                 redirect_url(route_url('members_library'));
             }
