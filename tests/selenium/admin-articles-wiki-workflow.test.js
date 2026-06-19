@@ -88,12 +88,15 @@ async function buttonDisabledByHidden(driver, action, hiddenName, hiddenValue) {
     const form = Array.from(document.forms).find((candidate) => {
       const actionInput = candidate.querySelector('input[name="action"]');
       const hidden = candidate.querySelector('input[name="' + hiddenName + '"]');
-      return actionInput && hidden && actionInput.value === action && hidden.value === hiddenValue;
+      const matchingSubmitter = Array.from(candidate.querySelectorAll('button, input[type="submit"]'))
+        .some((submitter) => submitter.name === 'action' && submitter.value === action);
+      return hidden && hidden.value === hiddenValue && ((actionInput && actionInput.value === action) || matchingSubmitter);
     });
     if (!form) {
       return null;
     }
-    const button = form.querySelector('button, input[type="submit"]');
+    const submitters = Array.from(form.querySelectorAll('button, input[type="submit"]'));
+    const button = submitters.find((submitter) => submitter.name === 'action' && submitter.value === action) || submitters[0];
     return button ? Boolean(button.disabled) : null;
   `, action, hiddenName, hiddenValue);
 }
@@ -106,13 +109,16 @@ async function submitFormByHidden(driver, action, hiddenName, hiddenValue) {
     const form = Array.from(document.forms).find((candidate) => {
       const actionInput = candidate.querySelector('input[name="action"]');
       const hidden = candidate.querySelector('input[name="' + hiddenName + '"]');
-      return actionInput && hidden && actionInput.value === action && hidden.value === hiddenValue;
+      const matchingSubmitter = Array.from(candidate.querySelectorAll('button, input[type="submit"]'))
+        .some((submitter) => submitter.name === 'action' && submitter.value === action);
+      return hidden && hidden.value === hiddenValue && ((actionInput && actionInput.value === action) || matchingSubmitter);
     });
     if (!form) {
       return false;
     }
     window.confirm = () => true;
-    const submitter = form.querySelector('button[type="submit"], button:not([type="button"]), input[type="submit"]');
+    const submitters = Array.from(form.querySelectorAll('button[type="submit"], button:not([type="button"]), input[type="submit"]'));
+    const submitter = submitters.find((candidate) => candidate.name === 'action' && candidate.value === action) || submitters[0];
     if (typeof form.requestSubmit === 'function') {
       form.requestSubmit(submitter || undefined);
     } else {

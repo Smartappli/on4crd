@@ -446,12 +446,20 @@ async function isLoginPage(driver) {
     return true;
   }
 
+  const route = await driver.executeScript('return document.body ? document.body.getAttribute("data-route") : "";')
+    .catch(() => '');
+  if (route === 'login') {
+    return true;
+  }
+
   if (await elementExists(driver, '[data-login-form]')) {
     return true;
   }
 
-  return await elementExists(driver, 'input[name="callsign"][type="text"]')
-    && await elementExists(driver, 'input[name="password"]');
+  return await elementExists(
+    driver,
+    'form[action*="route=login"] input[name="callsign"], form[action*="route=login"] input[name="password"]',
+  );
 }
 
 async function assertLoginPage(driver, label = 'route protegee') {

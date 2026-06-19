@@ -17,16 +17,16 @@ const {
   runSeleniumPhp,
 } = require('./helpers');
 
-async function submitForm(driver, form) {
+async function submitForm(driver, form, submitter = null) {
   await driver.executeScript(`
     const form = arguments[0];
-    const submitter = form.querySelector('button[type="submit"], button:not([type="button"]), input[type="submit"]');
+    const submitter = arguments[1] || form.querySelector('button[type="submit"], button:not([type="button"]), input[type="submit"]');
     if (typeof form.requestSubmit === 'function') {
       form.requestSubmit(submitter || undefined);
     } else {
       form.submit();
     }
-  `, form);
+  `, form, submitter);
   await waitForDocumentReady(driver);
   await assertNoServerError(driver);
 }
@@ -127,7 +127,7 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
       assert.doesNotMatch(await taxonomyText(driver), new RegExp(category), 'Une thematique vide ne doit pas apparaitre cote membre.');
 
       await visit(driver, 'admin_presentations', { category, subcategory });
-      const categoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="delete_category"] and .//input[@name="category_code" and @value="${category}"]]//button`));
+      const categoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="category_code" and @value="${category}"]]//button[@name="action" and @value="delete_category"]`));
       assert.ok(await categoryDeleteButton.getAttribute('disabled'), 'Une thematique avec sous-thematique ne doit pas etre supprimable.');
 
       const uploadForm = await driver.findElement(By.css('#admin-member-document-upload form.admin-member-document-form'));
@@ -142,7 +142,7 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
       let text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le document uploade doit apparaitre en admin.');
 
-      const subcategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="delete_subcategory"] and .//input[@name="subcategory_ref" and @value="${category}:${subcategory}"]]//button`));
+      const subcategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="subcategory_ref" and @value="${category}:${subcategory}"]]//button[@name="action" and @value="delete_subcategory"]`));
       assert.ok(await subcategoryDeleteButton.getAttribute('disabled'), 'Une sous-thematique avec document ne doit pas etre supprimable.');
 
       await visit(driver, 'presentations', { q: title });
@@ -172,14 +172,14 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
       await driver.wait(async () => !(await pagePlainText(driver)).includes(updatedTitle), timeoutMs);
 
       await visit(driver, 'admin_presentations', { category });
-      const enabledSubcategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="delete_subcategory"] and .//input[@name="subcategory_ref" and @value="${category}:${subcategory}"]]//button`));
+      const enabledSubcategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="subcategory_ref" and @value="${category}:${subcategory}"]]//button[@name="action" and @value="delete_subcategory"]`));
       assert.equal(await enabledSubcategoryDeleteButton.getAttribute('disabled'), null, 'La sous-thematique vide doit redevenir supprimable.');
-      await submitForm(driver, await enabledSubcategoryDeleteButton.findElement(By.xpath('./ancestor::form')));
+      await submitForm(driver, await enabledSubcategoryDeleteButton.findElement(By.xpath('./ancestor::form')), enabledSubcategoryDeleteButton);
 
       await visit(driver, 'admin_presentations');
-      const enabledCategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="delete_category"] and .//input[@name="category_code" and @value="${category}"]]//button`));
+      const enabledCategoryDeleteButton = await driver.findElement(By.xpath(`//form[.//input[@name="category_code" and @value="${category}"]]//button[@name="action" and @value="delete_category"]`));
       assert.equal(await enabledCategoryDeleteButton.getAttribute('disabled'), null, 'La thematique sans sous-thematique doit redevenir supprimable.');
-      await submitForm(driver, await enabledCategoryDeleteButton.findElement(By.xpath('./ancestor::form')));
+      await submitForm(driver, await enabledCategoryDeleteButton.findElement(By.xpath('./ancestor::form')), enabledCategoryDeleteButton);
 
       await visit(driver, 'admin_presentations');
       assert.equal((await driver.findElements(By.xpath(`//input[@name="category_code" and @value="${category}"]`))).length, 0, 'La thematique supprimee ne doit plus etre listee.');
