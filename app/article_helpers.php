@@ -970,4 +970,3 @@ function article_translations_sync_all(int $articleId): int
 
     return $count;
 }
-        
