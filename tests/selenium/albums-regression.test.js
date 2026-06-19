@@ -108,7 +108,7 @@ test('Selenium album detail: une miniature ouvre la photo agrandie avec sa descr
   });
 });
 
-test('Selenium home: la galerie affiche une seule image sans description', async (t) => {
+test('Selenium home: la galerie affiche une seule image sans texte', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
     return;
@@ -126,6 +126,14 @@ test('Selenium home: la galerie affiche une seule image sans description', async
       0,
       'La galerie home ne doit pas afficher de description sous l image.',
     );
+    assert.equal(
+      (await driver.findElements(By.css('.home-gallery-carousel .home-gallery-link'))).length,
+      0,
+      'La galerie home ne doit pas afficher de lien texte.',
+    );
+
+    const galleryText = (await driver.findElement(By.css('.home-gallery-carousel')).getText()).trim();
+    assert.equal(galleryText, '', 'La galerie home ne doit afficher aucun texte visible.');
 
     const renderedImages = await visibleImageCount(driver, '.home-gallery-carousel .home-gallery-slide img');
     assert.equal(renderedImages, 1, 'La galerie home doit contenir une image chargee.');

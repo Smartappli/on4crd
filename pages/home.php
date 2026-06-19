@@ -565,10 +565,7 @@ try {
     // The static link remains available if a random tool panel cannot be rendered.
 }
 
-$homeGalleryHtml = '<a class="group block rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('albums')) . '">'
-    . '<p>' . e((string) ($homeI18n['spotlight_member_gallery_empty'] ?? 'Aucune photo publique disponible pour le moment.')) . '</p>'
-    . '<span class="mt-3 inline-flex text-sm font-semibold text-blue-600 group-hover:text-blue-700">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' -></span>'
-    . '</a>';
+$homeGalleryHtml = '';
 if (module_enabled('albums') && table_exists('albums') && table_exists('album_photos')) {
     try {
         $homeGalleryPhotos = cache_remember('home_public_album_random_photo_v1', 60, static function (): array {
@@ -606,19 +603,20 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
         if ($homeGalleryItems !== '') {
             $homeGalleryHtml = '<div class="home-gallery-carousel" aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '">'
                 . '<div class="home-gallery-track">' . $homeGalleryItems . '</div>'
-                . '<a class="home-gallery-link" href="' . e(route_url('albums')) . '">' . e((string) ($homeI18n['spotlight_member_open'] ?? 'Ouvrir')) . ' -></a>'
                 . '</div>';
         }
     } catch (Throwable) {
-        // Keep the gallery fallback link when public album photos cannot be read.
+        // Keep the gallery empty when public album photos cannot be read.
     }
 }
 
 $memberSpotlightRowHtml = '';
 if ($isAuthenticated) {
+    $homeGalleryArticleHtml = $homeGalleryHtml !== ''
+        ? '<article aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '">' . $homeGalleryHtml . '</article>'
+        : '';
     $memberSpotlightRowHtml = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_wiki'] ?? 'Dernière page wiki')) . '</h3>' . $latestWikiHtml . '</article>'
-        . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '</h3>'
-        . $homeGalleryHtml . '</article>'
+        . $homeGalleryArticleHtml
         . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_article'] ?? 'Dernier article')) . '</h3>' . $latestArticleHtml . '</article>'
         . '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_library'] ?? 'Bibliothèque')) . '</h3>'
         . '<a class="group block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" href="' . e(route_url('members_library')) . '">'
