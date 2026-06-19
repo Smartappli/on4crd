@@ -125,6 +125,33 @@ function member_library_subcategory_ref_parts(string $value): array
 }
 }
 
+if (!function_exists('member_library_document_upload_extensions')) {
+/**
+ * @return list<string>
+ */
+function member_library_document_upload_extensions(): array
+{
+    return ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
+}
+}
+
+if (!function_exists('member_library_document_upload_mimes')) {
+/**
+ * @return array<string,list<string>>
+ */
+function member_library_document_upload_mimes(): array
+{
+    return [
+        'pdf' => ['application/pdf', 'application/x-pdf'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
+        'txt' => ['text/plain', 'application/octet-stream'],
+        'md' => ['text/plain', 'text/markdown', 'application/octet-stream'],
+        'html' => ['text/html', 'text/plain', 'application/octet-stream'],
+        'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
+    ];
+}
+}
+
 if (!function_exists('member_library_store_document_upload')) {
 /**
  * @return array{public_path:string,absolute_path:string,extension:string,original_name:string}
@@ -135,15 +162,8 @@ function member_library_store_document_upload(?array $file, int $memberId, strin
         throw new RuntimeException(upload_i18n_message('upload_failed'));
     }
 
-    $allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
-    $allowedMimes = [
-        'pdf' => ['application/pdf', 'application/x-pdf'],
-        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
-        'txt' => ['text/plain', 'application/octet-stream'],
-        'md' => ['text/plain', 'text/markdown', 'application/octet-stream'],
-        'html' => ['text/html', 'text/plain', 'application/octet-stream'],
-        'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
-    ];
+    $allowedExtensions = member_library_document_upload_extensions();
+    $allowedMimes = member_library_document_upload_mimes();
 
     $originalName = (string) ($file['name'] ?? '');
     $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));

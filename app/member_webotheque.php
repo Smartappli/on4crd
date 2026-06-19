@@ -318,6 +318,102 @@ function webotheque_visible_subcategories_by_category(array $subcategoriesByCate
 }
 }
 
+if (!function_exists('webotheque_list_state')) {
+/**
+ * @param array<string, string> $categories
+ * @param array<string, mixed> $query
+ * @return array{search:string,stats:array<string,mixed>,subcategories_by_category:array<string,list<array{category_code:string,code:string,label:string,total?:int}>>,visible_categories:array<string,string>,visible_subcategories_by_category:array<string,list<array<string,mixed>>>,category_filter:string,subcategory_filter:string}
+ */
+function webotheque_list_state(array $categories, array $query, bool $requireSubcategoryStats): array
+{
+    $search = trim((string) ($query['q'] ?? ''));
+    if (mb_strlen($search) > 120) {
+        $search = mb_substr($search, 0, 120);
+    }
+
+    $categoryFilter = '';
+    $categoryInput = trim((string) ($query['category'] ?? ''));
+    if ($categoryInput !== '') {
+        $categoryCode = webotheque_category_code($categoryInput);
+        if (isset($categories[$categoryCode])) {
+            $categoryFilter = $categoryCode;
+        }
+    }
+
+    $stats = webotheque_stats();
+    $countsByCategory = [];
+    foreach ((array) ($stats['by_category'] ?? []) as $categoryCode => $categoryTotal) {
+        $countsByCategory[(string) $categoryCode] = (int) $categoryTotal;
+    }
+    $countsBySubcategory = [];
+    foreach ((array) ($stats['by_subcategory'] ?? []) as $subcategoryKey => $subcategoryTotal) {
+        $countsBySubcategory[(string) $subcategoryKey] = (int) $subcategoryTotal;
+    }
+
+    $subcategoriesByCategory = webotheque_subcategories_by_category();
+    foreach ($countsBySubcategory as $subcategoryKey => $subcategoryTotal) {
+        $parts = explode(':', (string) $subcategoryKey, 2);
+        if (count($parts) !== 2 || $subcategoryTotal <= 0) {
+            continue;
+        }
+        $parentCode = webotheque_category_code($parts[0]);
+        $subcategoryCode = webotheque_subcategory_code($parts[1]);
+        if ($parentCode === '' || $subcategoryCode === '') {
+            continue;
+        }
+        $alreadyKnown = false;
+        foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
+            if (webotheque_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
+                $alreadyKnown = true;
+                break;
+            }
+        }
+        if (!$alreadyKnown) {
+            $subcategoriesByCategory[$parentCode][] = [
+                'category_code' => $parentCode,
+                'code' => $subcategoryCode,
+                'label' => webotheque_category_label_from_code($subcategoryCode),
+            ];
+        }
+    }
+
+    $visibleCategories = webotheque_visible_categories($categories, $countsByCategory);
+    $visibleSubcategoriesByCategory = webotheque_visible_subcategories_by_category($subcategoriesByCategory, $countsBySubcategory);
+    $subcategoryFilter = '';
+    $subcategoryInput = trim((string) ($query['subcategory'] ?? ''));
+    if ($subcategoryInput !== '') {
+        $subcategoryCode = webotheque_subcategory_code($subcategoryInput);
+        if ($subcategoryCode !== '') {
+            $candidateCategory = $categoryFilter;
+            if ($candidateCategory === '') {
+                foreach ($visibleSubcategoriesByCategory as $parentCode => $subcategories) {
+                    foreach ($subcategories as $subcategoryInfo) {
+                        if (webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryCode) {
+                            $candidateCategory = (string) $parentCode;
+                            break 2;
+                        }
+                    }
+                }
+            }
+            if ($candidateCategory !== '' && (!$requireSubcategoryStats || (int) ($countsBySubcategory[$candidateCategory . ':' . $subcategoryCode] ?? 0) > 0)) {
+                $categoryFilter = $candidateCategory;
+                $subcategoryFilter = $subcategoryCode;
+            }
+        }
+    }
+
+    return [
+        'search' => $search,
+        'stats' => $stats,
+        'subcategories_by_category' => $subcategoriesByCategory,
+        'visible_categories' => $visibleCategories,
+        'visible_subcategories_by_category' => $visibleSubcategoriesByCategory,
+        'category_filter' => $categoryFilter,
+        'subcategory_filter' => $subcategoryFilter,
+    ];
+}
+}
+
 if (!function_exists('webotheque_favorites_label')) {
 /**
  * @param array<string, mixed> $messages
@@ -1396,69 +1492,14 @@ function render_webotheque_page(): void
         }
     }
 
-    $search = trim((string) ($_GET['q'] ?? ''));
-    if (mb_strlen($search) > 120) {
-        $search = mb_substr($search, 0, 120);
-    }
-    $categoryFilter = '';
-    $categoryInput = trim((string) ($_GET['category'] ?? ''));
-    if ($categoryInput !== '') {
-        $categoryCode = webotheque_category_code($categoryInput);
-        if (isset($categories[$categoryCode])) {
-            $categoryFilter = $categoryCode;
-        }
-    }
-    $stats = webotheque_stats();
-    $subcategoriesByCategory = webotheque_subcategories_by_category();
-    foreach ((array) ($stats['by_subcategory'] ?? []) as $subcategoryKey => $subcategoryTotal) {
-        $parts = explode(':', (string) $subcategoryKey, 2);
-        if (count($parts) !== 2) {
-            continue;
-        }
-        $parentCode = webotheque_category_code($parts[0]);
-        $subcategoryCode = webotheque_subcategory_code($parts[1]);
-        if ($parentCode === '' || $subcategoryCode === '') {
-            continue;
-        }
-        $alreadyKnown = false;
-        foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
-            if (webotheque_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
-                $alreadyKnown = true;
-                break;
-            }
-        }
-        if (!$alreadyKnown && (int) $subcategoryTotal > 0) {
-            $subcategoriesByCategory[$parentCode][] = [
-                'category_code' => $parentCode,
-                'code' => $subcategoryCode,
-                'label' => webotheque_category_label_from_code($subcategoryCode),
-            ];
-        }
-    }
-    $visibleCategories = webotheque_visible_categories($categories, (array) ($stats['by_category'] ?? []));
-    $visibleSubcategoriesByCategory = webotheque_visible_subcategories_by_category($subcategoriesByCategory, (array) ($stats['by_subcategory'] ?? []));
-    $subcategoryFilter = '';
-    $subcategoryInput = trim((string) ($_GET['subcategory'] ?? ''));
-    if ($subcategoryInput !== '') {
-        $subcategoryCode = webotheque_subcategory_code($subcategoryInput);
-        if ($subcategoryCode !== '') {
-            $candidateCategory = $categoryFilter;
-            if ($candidateCategory === '') {
-                foreach ($visibleSubcategoriesByCategory as $parentCode => $subcategories) {
-                    foreach ($subcategories as $subcategoryInfo) {
-                        if (webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryCode) {
-                            $candidateCategory = (string) $parentCode;
-                            break 2;
-                        }
-                    }
-                }
-            }
-            if ($candidateCategory !== '' && (int) (($stats['by_subcategory'][$candidateCategory . ':' . $subcategoryCode] ?? 0)) > 0) {
-                $categoryFilter = $candidateCategory;
-                $subcategoryFilter = $subcategoryCode;
-            }
-        }
-    }
+    $listState = webotheque_list_state($categories, $_GET, true);
+    $search = $listState['search'];
+    $stats = $listState['stats'];
+    $subcategoriesByCategory = $listState['subcategories_by_category'];
+    $visibleCategories = $listState['visible_categories'];
+    $visibleSubcategoriesByCategory = $listState['visible_subcategories_by_category'];
+    $categoryFilter = $listState['category_filter'];
+    $subcategoryFilter = $listState['subcategory_filter'];
     $favoriteLinkIds = webotheque_favorite_link_ids((int) ($user['id'] ?? 0));
     $favoriteLinkCount = count($favoriteLinkIds);
     $favoritesOnly = (string) ($_GET['favorites'] ?? '') === '1' && $favoriteLinkCount > 0;
@@ -1867,69 +1908,14 @@ function render_admin_webotheque_page(): void
         }
     }
 
-    $search = trim((string) ($_GET['q'] ?? ''));
-    if (mb_strlen($search) > 120) {
-        $search = mb_substr($search, 0, 120);
-    }
-    $categoryFilter = '';
-    $categoryInput = trim((string) ($_GET['category'] ?? ''));
-    if ($categoryInput !== '') {
-        $categoryCode = webotheque_category_code($categoryInput);
-        if (isset($categories[$categoryCode])) {
-            $categoryFilter = $categoryCode;
-        }
-    }
-    $stats = webotheque_stats();
-    $subcategoriesByCategory = webotheque_subcategories_by_category();
-    foreach ((array) ($stats['by_subcategory'] ?? []) as $subcategoryKey => $subcategoryTotal) {
-        $parts = explode(':', (string) $subcategoryKey, 2);
-        if (count($parts) !== 2) {
-            continue;
-        }
-        $parentCode = webotheque_category_code($parts[0]);
-        $subcategoryCode = webotheque_subcategory_code($parts[1]);
-        if ($parentCode === '' || $subcategoryCode === '') {
-            continue;
-        }
-        $alreadyKnown = false;
-        foreach ($subcategoriesByCategory[$parentCode] ?? [] as $subcategoryOption) {
-            if (webotheque_subcategory_code((string) $subcategoryOption['code']) === $subcategoryCode) {
-                $alreadyKnown = true;
-                break;
-            }
-        }
-        if (!$alreadyKnown && (int) $subcategoryTotal > 0) {
-            $subcategoriesByCategory[$parentCode][] = [
-                'category_code' => $parentCode,
-                'code' => $subcategoryCode,
-                'label' => webotheque_category_label_from_code($subcategoryCode),
-            ];
-        }
-    }
-    $visibleCategories = webotheque_visible_categories($categories, (array) ($stats['by_category'] ?? []));
-    $visibleSubcategoriesByCategory = webotheque_visible_subcategories_by_category($subcategoriesByCategory, (array) ($stats['by_subcategory'] ?? []));
-    $subcategoryFilter = '';
-    $subcategoryInput = trim((string) ($_GET['subcategory'] ?? ''));
-    if ($subcategoryInput !== '') {
-        $subcategoryCode = webotheque_subcategory_code($subcategoryInput);
-        if ($subcategoryCode !== '') {
-            $candidateCategory = $categoryFilter;
-            if ($candidateCategory === '') {
-                foreach ($visibleSubcategoriesByCategory as $parentCode => $subcategories) {
-                    foreach ($subcategories as $subcategoryInfo) {
-                        if (webotheque_subcategory_code((string) ($subcategoryInfo['code'] ?? '')) === $subcategoryCode) {
-                            $candidateCategory = (string) $parentCode;
-                            break 2;
-                        }
-                    }
-                }
-            }
-            if ($candidateCategory !== '') {
-                $categoryFilter = $candidateCategory;
-                $subcategoryFilter = $subcategoryCode;
-            }
-        }
-    }
+    $listState = webotheque_list_state($categories, $_GET, false);
+    $search = $listState['search'];
+    $stats = $listState['stats'];
+    $subcategoriesByCategory = $listState['subcategories_by_category'];
+    $visibleCategories = $listState['visible_categories'];
+    $visibleSubcategoriesByCategory = $listState['visible_subcategories_by_category'];
+    $categoryFilter = $listState['category_filter'];
+    $subcategoryFilter = $listState['subcategory_filter'];
     $showAdminLinkProposalForm = (string) ($_GET['propose_link'] ?? '') === '1';
     $links = webotheque_fetch_links($search, $categoryFilter, 120, $subcategoryFilter);
     $showPendingProposals = (string) ($_GET['status'] ?? '') === 'pending';

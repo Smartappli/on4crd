@@ -106,43 +106,13 @@ function library_extract_text(string $path, string $extension): string
 
 function library_store_upload(array $file, int $memberId): array
 {
-    $allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
-    $allowedMimes = [
-        'pdf' => ['application/pdf', 'application/x-pdf'],
-        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
-        'txt' => ['text/plain', 'application/octet-stream'],
-        'md' => ['text/plain', 'text/markdown', 'application/octet-stream'],
-        'html' => ['text/html', 'text/plain', 'application/octet-stream'],
-        'htm' => ['text/html', 'text/plain', 'application/octet-stream'],
-    ];
-
     $originalName = (string) ($file['name'] ?? '');
     $extension = strtolower((string) pathinfo($originalName, PATHINFO_EXTENSION));
-    if (!in_array($extension, $allowedExtensions, true)) {
+    if (!in_array($extension, member_library_document_upload_extensions(), true)) {
         throw new RuntimeException('err_invalid');
     }
 
-    $targetDir = dirname(__DIR__) . '/storage/private/library';
-    $base = slugify(pathinfo($originalName, PATHINFO_FILENAME));
-    if ($base === '') {
-        $base = 'document';
-    }
-    $filename = secure_move_uploaded_file(
-        $file,
-        $targetDir,
-        'doc_' . $memberId . '-' . $base,
-        $allowedExtensions,
-        $allowedMimes,
-        25 * 1024 * 1024
-    );
-    $destination = $targetDir . '/' . $filename;
-
-    return [
-        'public_path' => 'storage/private/library/' . $filename,
-        'absolute_path' => $destination,
-        'extension' => $extension,
-        'original_name' => $originalName,
-    ];
+    return member_library_store_document_upload($file, $memberId, 'doc');
 }
 
 try {
@@ -421,17 +391,18 @@ $subcategoryOptions = function_exists('member_library_subcategory_options') ? me
 $subcategoriesByCategory = [];
 $subcategoryLabels = [];
 foreach ($subcategoryOptions as $subcatOpt) {
-    $parentCode = library_category_slug((string) ($subcatOpt['category_code'] ?? 'general'));
-    $subcatCode = library_subcategory_slug((string) ($subcatOpt['code'] ?? ''));
+    $parentCode = library_category_slug((string) $subcatOpt['category_code']);
+    $subcatCode = library_subcategory_slug((string) $subcatOpt['code']);
     if ($subcatCode === '') {
         continue;
     }
+    $subcatLabel = (string) $subcatOpt['label'];
     $subcategoriesByCategory[$parentCode][] = [
         'category_code' => $parentCode,
         'code' => $subcatCode,
-        'label' => (string) ($subcatOpt['label'] ?? $subcatCode),
+        'label' => $subcatLabel,
     ];
-    $subcategoryLabels[$parentCode . ':' . $subcatCode] = (string) ($subcatOpt['label'] ?? $subcatCode);
+    $subcategoryLabels[$parentCode . ':' . $subcatCode] = $subcatLabel;
 }
 $perPage = 20;
 $page = max(1, (int) ($_GET['p'] ?? 1));
