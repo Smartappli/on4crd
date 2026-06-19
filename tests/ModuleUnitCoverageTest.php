@@ -25,7 +25,7 @@ final class ModuleUnitCoverageTest extends TestCase
         'education' => ['tests/RouterContractTest.php', 'tests/I18nNativeLocalesTest.php'],
         'events' => ['tests/RouterContractTest.php', 'tests/I18nNativeLocalesTest.php'],
         'fichiers' => ['tests/MemberModulesFinalizationTest.php', 'tests/RouterContractTest.php'],
-        'members' => ['tests/FunctionHelpersExtendedTest.php', 'tests/MemberModulesFinalizationTest.php'],
+        'members' => ['tests/FunctionHelpersExtendedTest.php', 'tests/MemberModulesFinalizationTest.php', 'tests/MemberLibraryHelpersTest.php', 'tests/NotificationContractsTest.php'],
         'news' => ['tests/RouterContractTest.php', 'tests/I18nNativeLocalesTest.php'],
         'presentations' => ['tests/MemberModulesFinalizationTest.php', 'tests/RouterContractTest.php'],
         'press' => ['tests/FunctionHelpersTest.php', 'tests/RouterContractTest.php'],
@@ -83,6 +83,26 @@ final class ModuleUnitCoverageTest extends TestCase
         ] as $testMethod) {
             self::assertStringContainsString('function ' . $testMethod . '(', $finalizationTest);
         }
+    }
+
+    public function testMembersLibraryAndNotificationsKeepDatabaseLifecycleCoverage(): void
+    {
+        $memberLibraryTest = $this->source('tests/MemberLibraryHelpersTest.php');
+        $notificationTest = $this->source('tests/NotificationContractsTest.php');
+
+        foreach ([
+            'testAcceptedProposalAppliesFullDocumentLifecycleAgainstDatabase',
+            'testExtractTextNormalizesPlainHtmlAndMissingFiles',
+            'testProposalSourcePathAcceptsLibraryReferencesAndRejectsUnsafePaths',
+            'testDefaultTaxonomyAndIngestionTemplatesUseControlledVocabulary',
+        ] as $testMethod) {
+            self::assertStringContainsString('function ' . $testMethod . '(', $memberLibraryTest);
+        }
+
+        self::assertStringContainsString(
+            'function testMemberNotificationHelpersCoverCreateReadAndMarkLifecycleAgainstDatabase(',
+            $notificationTest
+        );
     }
 
     public function testSharedModuleCssIsLoadedBeforeRouteSpecificCss(): void
