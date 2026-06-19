@@ -25,4 +25,12 @@ return array (
   'th_password_reset' => 'Парола',
   'password_reset_force' => 'Принудително следващо влизане',
   'password_reset_unavailable' => 'Недостъпен',
+  'member_created' => 'Членът е създаден.',
+  'create_title' => 'Добавяне на член',
+  'create_submit' => 'Създай член',
+  'temporary_password' => 'Временна парола',
+  'err_name' => 'Името е задължително.',
+  'err_password' => 'Невалидна парола.',
+  'err_exists' => 'Вече има член или акаунт за този повиквателен знак.',
+  'auth_unavailable' => 'Удостоверяването не е налично.',
 );

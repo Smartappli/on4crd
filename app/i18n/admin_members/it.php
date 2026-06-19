@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Parola d\'accesso',
   'password_reset_force' => 'Forza al prossimo accesso',
   'password_reset_unavailable' => 'Non disponibile',
+  'member_created' => 'Membro creato.',
+  'create_title' => 'Aggiungi un membro',
+  'create_submit' => 'Crea membro',
+  'temporary_password' => 'Password temporanea',
+  'err_name' => 'Nome obbligatorio.',
+  'err_password' => 'Password non valida.',
+  'err_exists' => 'Esiste gia un membro o account per questo nominativo.',
+  'auth_unavailable' => 'Autenticazione non disponibile.',
 );

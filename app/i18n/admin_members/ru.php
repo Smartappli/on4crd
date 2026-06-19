@@ -25,4 +25,12 @@ return array (
   'th_password_reset' => 'Пароль',
   'password_reset_force' => 'Принудительно при следующем входе в систему',
   'password_reset_unavailable' => 'Недоступно',
+  'member_created' => 'Участник создан.',
+  'create_title' => 'Добавить участника',
+  'create_submit' => 'Создать участника',
+  'temporary_password' => 'Временный пароль',
+  'err_name' => 'Имя обязательно.',
+  'err_password' => 'Недействительный пароль.',
+  'err_exists' => 'Для этого позывного уже есть участник или учетная запись.',
+  'auth_unavailable' => 'Аутентификация недоступна.',
 );

@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Pasfhocal',
   'password_reset_force' => 'Cuir i bhfeidhm ar an gcéad logáil isteach eile',
   'password_reset_unavailable' => 'Níl fáil air',
+  'member_created' => 'Cruthaíodh an ball.',
+  'create_title' => 'Cuir ball leis',
+  'create_submit' => 'Cruthaigh ball',
+  'temporary_password' => 'Pasfhocal sealadach',
+  'err_name' => 'Tá ainm riachtanach.',
+  'err_password' => 'Pasfhocal neamhbhailí.',
+  'err_exists' => 'Tá ball nó cuntas ann cheana don chomhartha glao seo.',
+  'auth_unavailable' => 'Níl fíordheimhniú ar fáil.',
 );

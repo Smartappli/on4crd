@@ -25,4 +25,12 @@ return array (
   'th_password_reset' => '密码',
   'password_reset_force' => '强制下次登录',
   'password_reset_unavailable' => '不可用',
+  'member_created' => '成员已创建。',
+  'create_title' => '添加成员',
+  'create_submit' => '创建成员',
+  'temporary_password' => '临时密码',
+  'err_name' => '需要姓名。',
+  'err_password' => '密码无效。',
+  'err_exists' => '此呼号已有成员或账户。',
+  'auth_unavailable' => '身份验证不可用。',
 );

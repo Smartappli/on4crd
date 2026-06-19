@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Palavra-passe',
   'password_reset_force' => 'Forçar no próximo login',
   'password_reset_unavailable' => 'Indisponível',
+  'member_created' => 'Membro criado.',
+  'create_title' => 'Adicionar membro',
+  'create_submit' => 'Criar membro',
+  'temporary_password' => 'Palavra-passe temporaria',
+  'err_name' => 'Nome obrigatorio.',
+  'err_password' => 'Palavra-passe invalida.',
+  'err_exists' => 'Ja existe um membro ou conta para este indicativo.',
+  'auth_unavailable' => 'Autenticacao indisponivel.',
 );

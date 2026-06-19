@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Heslo',
   'password_reset_force' => 'Vynutit další přihlášení',
   'password_reset_unavailable' => 'Není k dispozici',
+  'member_created' => 'Clen byl vytvoren.',
+  'create_title' => 'Pridat clena',
+  'create_submit' => 'Vytvorit clena',
+  'temporary_password' => 'Docasne heslo',
+  'err_name' => 'Jmeno je povinne.',
+  'err_password' => 'Neplatne heslo.',
+  'err_exists' => 'Pro tuto volacku jiz existuje clen nebo ucet.',
+  'auth_unavailable' => 'Overovani neni dostupne.',
 );

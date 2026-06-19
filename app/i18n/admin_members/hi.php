@@ -25,4 +25,12 @@ return array (
   'th_password_reset' => 'पासवर्ड',
   'password_reset_force' => 'अगले लॉगिन पर बल दें',
   'password_reset_unavailable' => 'अनुपलब्ध',
+  'member_created' => 'सदस्य बनाया गया।',
+  'create_title' => 'सदस्य जोड़ें',
+  'create_submit' => 'सदस्य बनाएं',
+  'temporary_password' => 'अस्थायी पासवर्ड',
+  'err_name' => 'नाम आवश्यक है।',
+  'err_password' => 'अमान्य पासवर्ड।',
+  'err_exists' => 'इस कॉलसाइन के लिए सदस्य या खाता पहले से मौजूद है।',
+  'auth_unavailable' => 'प्रमाणीकरण उपलब्ध नहीं है।',
 );

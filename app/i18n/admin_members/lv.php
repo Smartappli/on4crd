@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Parole',
   'password_reset_force' => 'Piespiediet nākamo pieteikšanos',
   'password_reset_unavailable' => 'Nav pieejams',
+  'member_created' => 'Biedrs izveidots.',
+  'create_title' => 'Pievienot biedru',
+  'create_submit' => 'Izveidot biedru',
+  'temporary_password' => 'Pagaidu parole',
+  'err_name' => 'Vards ir obligats.',
+  'err_password' => 'Nederiga parole.',
+  'err_exists' => 'Sadam izsaukuma signālam jau pastav biedrs vai konts.',
+  'auth_unavailable' => 'Autentifikacija nav pieejama.',
 );

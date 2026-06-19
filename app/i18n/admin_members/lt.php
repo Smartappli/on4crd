@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Slaptažodis',
   'password_reset_force' => 'Priverskite kitą prisijungimą',
   'password_reset_unavailable' => 'Nepasiekiamas',
+  'member_created' => 'Narys sukurtas.',
+  'create_title' => 'Prideti nari',
+  'create_submit' => 'Sukurti nari',
+  'temporary_password' => 'Laikinas slaptazodis',
+  'err_name' => 'Vardas privalomas.',
+  'err_password' => 'Neteisingas slaptazodis.',
+  'err_exists' => 'Siam saukiniui jau yra narys arba paskyra.',
+  'auth_unavailable' => 'Autentifikavimas nepasiekiamas.',
 );

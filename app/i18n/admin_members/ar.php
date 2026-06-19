@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'كلمة المرور',
   'password_reset_force' => 'فرض تغيير كلمة المرور عند تسجيل الدخول التالي',
   'password_reset_unavailable' => 'غير متاح',
+  'member_created' => 'تم إنشاء العضو.',
+  'create_title' => 'إضافة عضو',
+  'create_submit' => 'إنشاء عضو',
+  'temporary_password' => 'كلمة مرور مؤقتة',
+  'err_name' => 'الاسم مطلوب.',
+  'err_password' => 'كلمة المرور غير صالحة.',
+  'err_exists' => 'يوجد عضو أو حساب لهذا النداء بالفعل.',
+  'auth_unavailable' => 'المصادقة غير متاحة.',
 );

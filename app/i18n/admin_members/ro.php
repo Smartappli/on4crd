@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Parolă',
   'password_reset_force' => 'Forțați la următoarea autentificare',
   'password_reset_unavailable' => 'Indisponibil',
+  'member_created' => 'Membru creat.',
+  'create_title' => 'Adauga membru',
+  'create_submit' => 'Creeaza membru',
+  'temporary_password' => 'Parola temporara',
+  'err_name' => 'Numele este obligatoriu.',
+  'err_password' => 'Parola nevalida.',
+  'err_exists' => 'Exista deja un membru sau cont pentru acest indicativ.',
+  'auth_unavailable' => 'Autentificarea nu este disponibila.',
 );

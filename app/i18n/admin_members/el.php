@@ -25,4 +25,12 @@ return array (
   'th_password_reset' => 'Κωδικός πρόσβασης',
   'password_reset_force' => 'Επιβολή στην επόμενη σύνδεση',
   'password_reset_unavailable' => 'Μη διαθέσιμο',
+  'member_created' => 'Το μέλος δημιουργήθηκε.',
+  'create_title' => 'Προσθήκη μέλους',
+  'create_submit' => 'Δημιουργία μέλους',
+  'temporary_password' => 'Προσωρινός κωδικός',
+  'err_name' => 'Απαιτείται όνομα.',
+  'err_password' => 'Μη έγκυρος κωδικός.',
+  'err_exists' => 'Υπάρχει ήδη μέλος ή λογαριασμός για αυτό το διακριτικό.',
+  'auth_unavailable' => 'Ο έλεγχος ταυτότητας δεν είναι διαθέσιμος.',
 );

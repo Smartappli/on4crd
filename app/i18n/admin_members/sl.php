@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Geslo',
   'password_reset_force' => 'Vsili ob naslednji prijavi',
   'password_reset_unavailable' => 'Ni na voljo',
+  'member_created' => 'Clan ustvarjen.',
+  'create_title' => 'Dodaj clana',
+  'create_submit' => 'Ustvari clana',
+  'temporary_password' => 'Zacasno geslo',
+  'err_name' => 'Ime je obvezno.',
+  'err_password' => 'Neveljavno geslo.',
+  'err_exists' => 'Za ta klicni znak ze obstaja clan ali racun.',
+  'auth_unavailable' => 'Preverjanje pristnosti ni na voljo.',
 );

@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Salasana',
   'password_reset_force' => 'Pakota seuraavan sisäänkirjautumisen yhteydessä',
   'password_reset_unavailable' => 'Ei saatavilla',
+  'member_created' => 'Jasen luotu.',
+  'create_title' => 'Lisaa jasen',
+  'create_submit' => 'Luo jasen',
+  'temporary_password' => 'Valiaikainen salasana',
+  'err_name' => 'Nimi vaaditaan.',
+  'err_password' => 'Virheellinen salasana.',
+  'err_exists' => 'Talle kutsulle on jo jasen tai tili.',
+  'auth_unavailable' => 'Tunnistautuminen ei ole kaytettavissa.',
 );

@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Contraseña',
   'password_reset_force' => 'Forzar el próximo inicio de sesión',
   'password_reset_unavailable' => 'No disponible',
+  'member_created' => 'Miembro creado.',
+  'create_title' => 'Anadir un miembro',
+  'create_submit' => 'Crear miembro',
+  'temporary_password' => 'Contrasena temporal',
+  'err_name' => 'Nombre obligatorio.',
+  'err_password' => 'Contrasena no valida.',
+  'err_exists' => 'Ya existe un miembro o cuenta para este indicativo.',
+  'auth_unavailable' => 'Autenticacion no disponible.',
 );

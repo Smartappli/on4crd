@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Kata sandi',
   'password_reset_force' => 'Paksa login berikutnya',
   'password_reset_unavailable' => 'Tidak tersedia',
+  'member_created' => 'Anggota dibuat.',
+  'create_title' => 'Tambah anggota',
+  'create_submit' => 'Buat anggota',
+  'temporary_password' => 'Kata sandi sementara',
+  'err_name' => 'Nama wajib diisi.',
+  'err_password' => 'Kata sandi tidak valid.',
+  'err_exists' => 'Sudah ada anggota atau akun untuk callsign ini.',
+  'auth_unavailable' => 'Autentikasi tidak tersedia.',
 );

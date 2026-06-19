@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Passwort',
   'password_reset_force' => 'Bei nächster Anmeldung erzwingen',
   'password_reset_unavailable' => 'Nicht verfügbar',
+  'member_created' => 'Mitglied erstellt.',
+  'create_title' => 'Mitglied hinzufuegen',
+  'create_submit' => 'Mitglied erstellen',
+  'temporary_password' => 'Temporaeres Passwort',
+  'err_name' => 'Name erforderlich.',
+  'err_password' => 'Ungueltiges Passwort.',
+  'err_exists' => 'Ein Mitglied oder Konto existiert bereits fuer dieses Rufzeichen.',
+  'auth_unavailable' => 'Authentifizierung nicht verfuegbar.',
 );

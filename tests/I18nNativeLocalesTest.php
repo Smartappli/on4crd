@@ -189,6 +189,7 @@ final class I18nNativeLocalesTest extends TestCase
             'events_feed',
             'knowledge_graph',
             'llms',
+            'member_document_preview',
             'member_library_preview',
             'newsletter_unsubscribe',
             'qsl_export',

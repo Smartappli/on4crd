@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Lozinka',
   'password_reset_force' => 'Prisilno pri sljedećoj prijavi',
   'password_reset_unavailable' => 'Nedostupan',
+  'member_created' => 'Clan je stvoren.',
+  'create_title' => 'Dodaj clana',
+  'create_submit' => 'Stvori clana',
+  'temporary_password' => 'Privremena lozinka',
+  'err_name' => 'Ime je obavezno.',
+  'err_password' => 'Neispravna lozinka.',
+  'err_exists' => 'Clan ili racun vec postoji za ovaj pozivni znak.',
+  'auth_unavailable' => 'Autentikacija nije dostupna.',
 );

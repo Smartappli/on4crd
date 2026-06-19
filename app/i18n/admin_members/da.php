@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Adgangskode',
   'password_reset_force' => 'Tving ved næste login',
   'password_reset_unavailable' => 'Ikke tilgængelig',
+  'member_created' => 'Medlem oprettet.',
+  'create_title' => 'Tilfoj medlem',
+  'create_submit' => 'Opret medlem',
+  'temporary_password' => 'Midlertidig adgangskode',
+  'err_name' => 'Navn er paakraevet.',
+  'err_password' => 'Ugyldig adgangskode.',
+  'err_exists' => 'Der findes allerede et medlem eller en konto for dette kaldesignal.',
+  'auth_unavailable' => 'Godkendelse er ikke tilgaengelig.',
 );

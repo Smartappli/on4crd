@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Kelma sigrieta',
   'password_reset_force' => 'Forza fuq il-login li jmiss',
   'password_reset_unavailable' => 'Mhux disponibbli',
+  'member_created' => 'Membru nħoloq.',
+  'create_title' => 'Żid membru',
+  'create_submit' => 'Oħloq membru',
+  'temporary_password' => 'Password temporanja',
+  'err_name' => 'L-isem huwa meħtieġ.',
+  'err_password' => 'Password mhix valida.',
+  'err_exists' => 'Diġà hemm membru jew kont għal dan is-sejħa.',
+  'auth_unavailable' => 'Awtentikazzjoni mhux disponibbli.',
 );

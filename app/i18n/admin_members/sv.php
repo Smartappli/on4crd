@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Lösenord',
   'password_reset_force' => 'Framtvinga nästa inloggning',
   'password_reset_unavailable' => 'Ej tillgänglig',
+  'member_created' => 'Medlem skapat.',
+  'create_title' => 'Lagg till medlem',
+  'create_submit' => 'Skapa medlem',
+  'temporary_password' => 'Tillfalligt losenord',
+  'err_name' => 'Namn kravs.',
+  'err_password' => 'Ogiltigt losenord.',
+  'err_exists' => 'Det finns redan en medlem eller ett konto for denna anropssignal.',
+  'auth_unavailable' => 'Autentisering ar inte tillganglig.',
 );

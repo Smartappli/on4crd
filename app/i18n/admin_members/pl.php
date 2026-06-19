@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Hasło',
   'password_reset_force' => 'Wymuś kolejne logowanie',
   'password_reset_unavailable' => 'Niedostępne',
+  'member_created' => 'Czlonek utworzony.',
+  'create_title' => 'Dodaj czlonka',
+  'create_submit' => 'Utworz czlonka',
+  'temporary_password' => 'Haslo tymczasowe',
+  'err_name' => 'Nazwa jest wymagana.',
+  'err_password' => 'Nieprawidlowe haslo.',
+  'err_exists' => 'Dla tego znaku istnieje juz czlonek lub konto.',
+  'auth_unavailable' => 'Uwierzytelnianie niedostepne.',
 );

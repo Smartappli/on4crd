@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 $locale = current_locale();
+$registerI18n = i18n_domain_locale('register', $locale);
 $isFrench = $locale === 'fr';
 $title = $isFrench ? 'Inscription membre' : 'Member registration';
 $message = $isFrench

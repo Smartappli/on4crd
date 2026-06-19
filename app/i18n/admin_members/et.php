@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Parool',
   'password_reset_force' => 'Jõudu järgmisel sisselogimisel',
   'password_reset_unavailable' => 'Pole saadaval',
+  'member_created' => 'Liige loodud.',
+  'create_title' => 'Lisa liige',
+  'create_submit' => 'Loo liige',
+  'temporary_password' => 'Ajutine parool',
+  'err_name' => 'Nimi on kohustuslik.',
+  'err_password' => 'Vigane parool.',
+  'err_exists' => 'Selle kutsungi jaoks on liige voi konto juba olemas.',
+  'auth_unavailable' => 'Autentimine pole saadaval.',
 );

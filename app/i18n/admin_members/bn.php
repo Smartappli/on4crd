@@ -25,4 +25,12 @@ return array (
   'th_password_reset' => 'পাসওয়ার্ড',
   'password_reset_force' => 'পরবর্তী লগইন করতে বাধ্য করুন',
   'password_reset_unavailable' => 'অনুপলব্ধ',
+  'member_created' => 'সদস্য তৈরি হয়েছে।',
+  'create_title' => 'সদস্য যোগ করুন',
+  'create_submit' => 'সদস্য তৈরি করুন',
+  'temporary_password' => 'অস্থায়ী পাসওয়ার্ড',
+  'err_name' => 'নাম প্রয়োজন।',
+  'err_password' => 'পাসওয়ার্ড বৈধ নয়।',
+  'err_exists' => 'এই কলসাইনের জন্য সদস্য বা অ্যাকাউন্ট ইতিমধ্যে আছে।',
+  'auth_unavailable' => 'প্রমাণীকরণ উপলভ্য নয়।',
 );

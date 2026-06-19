@@ -25,4 +25,12 @@ return array (
   'th_password_reset' => 'パスワード',
   'password_reset_force' => '次回のログインを強制する',
   'password_reset_unavailable' => '利用不可',
+  'member_created' => 'メンバーを作成しました。',
+  'create_title' => 'メンバーを追加',
+  'create_submit' => 'メンバーを作成',
+  'temporary_password' => '一時パスワード',
+  'err_name' => '名前は必須です。',
+  'err_password' => 'パスワードが無効です。',
+  'err_exists' => 'このコールサインのメンバーまたはアカウントは既に存在します。',
+  'auth_unavailable' => '認証を利用できません。',
 );

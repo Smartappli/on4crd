@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Jelszó',
   'password_reset_force' => 'Kényszerítés a következő bejelentkezéskor',
   'password_reset_unavailable' => 'Nem elérhető',
+  'member_created' => 'Tag letrehozva.',
+  'create_title' => 'Tag hozzaadasa',
+  'create_submit' => 'Tag letrehozasa',
+  'temporary_password' => 'Ideiglenes jelszo',
+  'err_name' => 'Nev kotelezo.',
+  'err_password' => 'Ervenytelen jelszo.',
+  'err_exists' => 'Ehhez a hivójelhez mar letezik tag vagy fiok.',
+  'auth_unavailable' => 'Hitelesites nem erheto el.',
 );

@@ -24,4 +24,12 @@ return array (
   'th_password_reset' => 'Wachtwoord',
   'password_reset_force' => 'Forceer de volgende login',
   'password_reset_unavailable' => 'Niet beschikbaar',
+  'member_created' => 'Lid aangemaakt.',
+  'create_title' => 'Lid toevoegen',
+  'create_submit' => 'Lid aanmaken',
+  'temporary_password' => 'Tijdelijk wachtwoord',
+  'err_name' => 'Naam verplicht.',
+  'err_password' => 'Ongeldig wachtwoord.',
+  'err_exists' => 'Er bestaat al een lid of account voor deze roepnaam.',
+  'auth_unavailable' => 'Authenticatie niet beschikbaar.',
 );
