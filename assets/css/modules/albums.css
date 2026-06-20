@@ -29,6 +29,11 @@
   color: white;
 }
 
+[data-route="albums"] .albums-hero {
+  overflow: visible;
+  z-index: 10;
+}
+
 .albums-hero {
   grid-template-columns: minmax(0, 1fr) auto;
 }
@@ -59,6 +64,10 @@
   z-index: 5;
 }
 
+[data-route="albums"] .albums-propose-menu[open] {
+  z-index: 80;
+}
+
 [data-route="albums"] .albums-propose-menu summary {
   list-style: none;
   cursor: pointer;
@@ -72,7 +81,7 @@
   position: absolute;
   right: 0;
   top: calc(100% + .45rem);
-  z-index: 50;
+  z-index: 80;
   display: grid;
   min-width: 13rem;
   padding: .4rem;
