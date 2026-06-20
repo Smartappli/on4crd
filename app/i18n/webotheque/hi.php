@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'पसंदीदा से लिंक हटा दिया गया.',
   'err_subcategory_has_documents' => 'इस उपविषय में अभी भी लिंक मौजूद हैं।',
   'taxonomy_title' => 'विषय और उपविषय',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'उप-विषय जोड़ें',
   'no_subcategories' => 'कोई उपविषय कॉन्फ़िगर नहीं किया गया.',
   'add_category' => 'विषय जोड़ें',
   'category_saved' => 'विषय सहेजा गया.',

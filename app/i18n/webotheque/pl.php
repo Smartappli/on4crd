@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link usunięty z ulubionych.',
   'err_subcategory_has_documents' => 'Ten podtemat nadal zawiera linki.',
   'taxonomy_title' => 'Tematy i podtematy',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Dodaj podtemat',
   'no_subcategories' => 'Nie skonfigurowano żadnych podtematów.',
   'add_category' => 'Dodaj temat',
   'category_saved' => 'Temat został zapisany.',

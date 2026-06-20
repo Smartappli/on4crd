@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Ο σύνδεσμος αφαιρέθηκε από τα αγαπημένα.',
   'err_subcategory_has_documents' => 'Αυτό το υποθέμα εξακολουθεί να περιέχει συνδέσμους.',
   'taxonomy_title' => 'Θέματα και υποθέματα',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Προσθήκη υποθέματος',
   'no_subcategories' => 'Δεν έχουν διαμορφωθεί υποθέματα.',
   'add_category' => 'Προσθήκη θέματος',
   'category_saved' => 'Το θέμα αποθηκεύτηκε.',

@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Enlace eliminado de favoritos.',
   'err_subcategory_has_documents' => 'Este subtema todavía contiene enlaces.',
   'taxonomy_title' => 'Temas y subtemas',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Añadir subtema',
   'no_subcategories' => 'No hay subtemas configurados.',
   'add_category' => 'Agregar tema',
   'category_saved' => 'Tema guardado.',

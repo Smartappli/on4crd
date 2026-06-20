@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Ссылка удалена из избранного.',
   'err_subcategory_has_documents' => 'Эта подтема все еще содержит ссылки.',
   'taxonomy_title' => 'Темы и подтемы',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Добавить подтему',
   'no_subcategories' => 'Подтемы не настроены.',
   'add_category' => 'Добавить тему',
   'category_saved' => 'Тема сохранена.',

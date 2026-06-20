@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Linkki poistettu suosikeista.',
   'err_subcategory_has_documents' => 'Tämä ala-aihe sisältää edelleen linkkejä.',
   'taxonomy_title' => 'Aiheet ja ala-aiheet',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Lisää ala-aihe',
   'no_subcategories' => 'Ala-aiheita ei ole määritetty.',
   'add_category' => 'Lisää aihe',
   'category_saved' => 'Aihe tallennettu.',

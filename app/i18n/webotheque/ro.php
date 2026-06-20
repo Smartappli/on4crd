@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link eliminat din favorite.',
   'err_subcategory_has_documents' => 'Acest subtipic conține încă link-uri.',
   'taxonomy_title' => 'Subiecte și subteme',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Adaugă subtemă',
   'no_subcategories' => 'Nu s-au configurat subteme.',
   'add_category' => 'Adăugați subiect',
   'category_saved' => 'Subiect salvat.',

@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Länk borttagen från favoriter.',
   'err_subcategory_has_documents' => 'Detta underämne innehåller fortfarande länkar.',
   'taxonomy_title' => 'Ämnen och underämnen',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Lägg till underämne',
   'no_subcategories' => 'Inga underämnen har konfigurerats.',
   'add_category' => 'Lägg till ämne',
   'category_saved' => 'Ämnet har sparats.',

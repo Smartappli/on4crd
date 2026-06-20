@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link removido dos favoritos.',
   'err_subcategory_has_documents' => 'Este subtópico ainda contém links.',
   'taxonomy_title' => 'Tópicos e subtópicos',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Adicionar subtópico',
   'no_subcategories' => 'Nenhum subtópico configurado.',
   'add_category' => 'Adicionar tópico',
   'category_saved' => 'Tópico salvo.',

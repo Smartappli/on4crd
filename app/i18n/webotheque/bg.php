@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Връзката е премахната от любимите.',
   'err_subcategory_has_documents' => 'Тази подтема все още съдържа връзки.',
   'taxonomy_title' => 'Теми и подтеми',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Добавяне на подтема',
   'no_subcategories' => 'Няма конфигурирани подтеми.',
   'add_category' => 'Добавяне на тема',
   'category_saved' => 'Темата е запазена.',

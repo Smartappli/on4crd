@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => '链接已从收藏夹中删除。',
   'err_subcategory_has_documents' => '该子主题仍然包含链接。',
   'taxonomy_title' => '主题和副主题',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => '添加子主题',
   'no_subcategories' => '未配置子主题。',
   'add_category' => '添加主题',
   'category_saved' => '主题已保存。',

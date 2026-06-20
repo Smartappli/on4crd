@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link removed from favorites.',
   'err_subcategory_has_documents' => 'This subtopic still contains links.',
   'taxonomy_title' => 'Topics and subtopics',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Add a subtopic',
   'no_subcategories' => 'No subtopics configured.',
   'add_category' => 'Add topic',
   'category_saved' => 'Topic saved.',

@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Saite noņemta no izlases.',
   'err_subcategory_has_documents' => 'Šajā apakštēmā joprojām ir saites.',
   'taxonomy_title' => 'Tēmas un apakštēmas',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Pievienot apakštēmu',
   'no_subcategories' => 'Nav konfigurēta neviena apakštēma.',
   'add_category' => 'Pievienot tēmu',
   'category_saved' => 'Tēma saglabāta.',

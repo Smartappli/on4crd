@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link fjernet fra favoritter.',
   'err_subcategory_has_documents' => 'Dette underemne indeholder stadig links.',
   'taxonomy_title' => 'Emner og underemner',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Tilføj underemne',
   'no_subcategories' => 'Ingen underemner er konfigureret.',
   'add_category' => 'Tilføj emne',
   'category_saved' => 'Emnet er gemt.',

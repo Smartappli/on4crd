@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link verwijderd uit favorieten.',
   'err_subcategory_has_documents' => 'Dit subonderwerp bevat nog steeds links.',
   'taxonomy_title' => 'Onderwerpen en subonderwerpen',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Subthema toevoegen',
   'no_subcategories' => 'Geen subonderwerpen geconfigureerd.',
   'add_category' => 'Onderwerp toevoegen',
   'category_saved' => 'Onderwerp opgeslagen.',

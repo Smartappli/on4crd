@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Nasc bainte de cheanáin.',
   'err_subcategory_has_documents' => 'Tá naisc fós san fhothopaic seo.',
   'taxonomy_title' => 'Ábhair agus fothopaicí',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Cuir fo-ábhar leis',
   'no_subcategories' => 'Níl aon fhothopaicí cumraithe.',
   'add_category' => 'Cuir topaic leis',
   'category_saved' => 'Sábháladh an t-ábhar.',

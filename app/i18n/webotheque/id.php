@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Tautan dihapus dari favorit.',
   'err_subcategory_has_documents' => 'Subtopik ini masih berisi link.',
   'taxonomy_title' => 'Topik dan subtopik',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Tambah subtopik',
   'no_subcategories' => 'Tidak ada subtopik yang dikonfigurasi.',
   'add_category' => 'Tambahkan topik',
   'category_saved' => 'Topik disimpan.',

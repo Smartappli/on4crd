@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'লিঙ্ক প্রিয় থেকে সরানো হয়েছে.',
   'err_subcategory_has_documents' => 'এই সাবটপিকটিতে এখনও লিঙ্ক রয়েছে।',
   'taxonomy_title' => 'বিষয় এবং উপ-বিষয়',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'উপ-বিষয় যোগ করুন',
   'no_subcategories' => 'কোন সাবটপিক কনফিগার করা নেই.',
   'add_category' => 'বিষয় যোগ করুন',
   'category_saved' => 'বিষয় সংরক্ষিত.',

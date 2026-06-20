@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Nuoroda pašalinta iš mėgstamiausių.',
   'err_subcategory_has_documents' => 'Šioje potemėje vis dar yra nuorodų.',
   'taxonomy_title' => 'Temos ir potemės',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Pridėti potemę',
   'no_subcategories' => 'Potemų nesukonfigūruota.',
   'add_category' => 'Pridėti temą',
   'category_saved' => 'Tema išsaugota.',

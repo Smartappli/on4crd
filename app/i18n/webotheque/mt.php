@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link imneħħija mill-favoriti.',
   'err_subcategory_has_documents' => 'Dan is-subsuġġett għadu fih links.',
   'taxonomy_title' => 'Suġġetti u sottosuġġetti',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Żid sottotema',
   'no_subcategories' => 'Ebda sottosuġġetti kkonfigurati.',
   'add_category' => 'Żid is-suġġett',
   'category_saved' => 'Suġġett salvat.',

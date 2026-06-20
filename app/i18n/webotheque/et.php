@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link eemaldati lemmikutest.',
   'err_subcategory_has_documents' => 'See alateema sisaldab endiselt linke.',
   'taxonomy_title' => 'Teemad ja alateemad',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Lisa alamteema',
   'no_subcategories' => 'Ühtegi alamteemat pole seadistatud.',
   'add_category' => 'Lisa teema',
   'category_saved' => 'Teema salvestatud.',

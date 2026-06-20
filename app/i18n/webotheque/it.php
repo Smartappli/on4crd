@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link rimosso dai preferiti.',
   'err_subcategory_has_documents' => 'Questo argomento secondario contiene ancora collegamenti.',
   'taxonomy_title' => 'Argomenti e sottoargomenti',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Aggiungi sottoargomento',
   'no_subcategories' => 'Nessun argomento secondario configurato.',
   'add_category' => 'Aggiungi argomento',
   'category_saved' => 'Argomento salvato.',

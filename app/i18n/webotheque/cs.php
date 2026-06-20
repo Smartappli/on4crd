@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Odkaz odstraněn z oblíbených.',
   'err_subcategory_has_documents' => 'Toto podtéma stále obsahuje odkazy.',
   'taxonomy_title' => 'Témata a podtémata',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Přidat podtéma',
   'no_subcategories' => 'Nejsou nakonfigurována žádná podtémata.',
   'add_category' => 'Přidat téma',
   'category_saved' => 'Téma bylo uloženo.',

@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'お気に入りからリンクが削除されました。',
   'err_subcategory_has_documents' => 'このサブトピックにはまだリンクが含まれています。',
   'taxonomy_title' => 'トピックとサブトピック',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'サブトピックを追加',
   'no_subcategories' => 'サブトピックが設定されていません。',
   'add_category' => 'トピックを追加',
   'category_saved' => 'トピックが保存されました。',

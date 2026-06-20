@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Link eltávolítva a kedvencek közül.',
   'err_subcategory_has_documents' => 'Ez az altéma még tartalmaz linkeket.',
   'taxonomy_title' => 'Témák és altémák',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Altéma hozzáadása',
   'no_subcategories' => 'Nincs beállítva altéma.',
   'add_category' => 'Téma hozzáadása',
   'category_saved' => 'Téma mentve.',

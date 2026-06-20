@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'Veza uklonjena iz favorita.',
   'err_subcategory_has_documents' => 'Ova podtema još uvijek sadrži poveznice.',
   'taxonomy_title' => 'Teme i podteme',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'Dodaj podtemu',
   'no_subcategories' => 'Nema konfiguriranih podtema.',
   'add_category' => 'Dodaj temu',
   'category_saved' => 'Tema je spremljena.',

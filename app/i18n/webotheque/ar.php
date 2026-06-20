@@ -87,7 +87,7 @@ return array (
   'favorite_removed_msg' => 'تمت إزالة الرابط من المفضلة.',
   'err_subcategory_has_documents' => 'لا يزال هذا الموضوع الفرعي يحتوي على روابط.',
   'taxonomy_title' => 'المواضيع والمواضيع الفرعية',
-  'add_subcategory' => 'Add',
+  'add_subcategory' => 'إضافة موضوع فرعي',
   'no_subcategories' => 'لم يتم تكوين أي موضوعات فرعية.',
   'add_category' => 'إضافة موضوع',
   'category_saved' => 'تم حفظ الموضوع.',
