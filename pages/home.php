@@ -568,14 +568,14 @@ try {
 $homeGalleryHtml = '';
 if (module_enabled('albums') && table_exists('albums') && table_exists('album_photos')) {
     try {
-        $homeGalleryPhotos = cache_remember('home_public_album_random_photo_v1', 60, static function (): array {
+        $homeGalleryPhotos = cache_remember('home_public_album_random_photos_v1', 60, static function (): array {
             $stmt = db()->query(
                 'SELECT p.id, p.album_id, p.file_path, p.title, a.title AS album_title
                  FROM album_photos p
                  INNER JOIN albums a ON a.id = p.album_id
                  WHERE a.is_public = 1
                  ORDER BY RAND()
-                 LIMIT 1'
+                 LIMIT 5'
             );
 
             return $stmt !== false ? ($stmt->fetchAll() ?: []) : [];
@@ -601,7 +601,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
         }
 
         if ($homeGalleryItems !== '') {
-            $homeGalleryHtml = '<div class="home-media-carousel home-gallery-carousel" aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '">'
+            $homeGalleryHtml = '<div class="home-media-carousel home-gallery-carousel" data-home-gallery-carousel aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '">'
                 . '<div class="home-media-track home-gallery-track">' . $homeGalleryItems . '</div>'
                 . '</div>';
         }
@@ -613,7 +613,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
 $memberSpotlightRowHtml = '';
 if ($isAuthenticated) {
     $homeGalleryArticleHtml = $homeGalleryHtml !== ''
-        ? '<article aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '">' . $homeGalleryHtml . '</article>'
+        ? '<article aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Photos')) . '</h3>' . $homeGalleryHtml . '</article>'
         : '';
     $memberSpotlightRowHtml = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_wiki'] ?? 'Dernière page wiki')) . '</h3>' . $latestWikiHtml . '</article>'
         . $homeGalleryArticleHtml
@@ -787,7 +787,7 @@ $homeSponsorsTrophiesSectionHtml = '<section class="mt-4 grid gap-4 lg:grid-cols
     . '<span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-700">CRD</span>'
     . '</div>'
     . '<div class="mt-4">' . $trophySlotHtml . '</div>'
-    . '<a class="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('albums')) . '">' . e((string) ($homeI18n['home_trophies_cta'] ?? 'Voir la galerie')) . '</a>'
+    . '<a class="mt-4 inline-flex w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-50" href="' . e(route_url('events')) . '">' . e((string) ($homeI18n['home_trophies_cta'] ?? 'Voir les prochains événements')) . '</a>'
     . '</article>'
     . '<article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">'
     . '<h2 class="text-2xl font-extrabold text-slate-900">' . e((string) ($homeI18n['home_other_sections_title'] ?? 'Nouvelles des autres radioclubs')) . '</h2>'
