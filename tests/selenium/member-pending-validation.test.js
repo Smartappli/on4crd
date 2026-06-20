@@ -973,6 +973,64 @@ test('Selenium membre: proposer une video, la valider et la retrouver dans video
   });
 });
 
+test('Selenium membre: proposer une presentation, la valider et la retrouver dans presentations', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `selenium-pending-presentation-${Date.now()}`;
+  const title = `${token}-presentation`;
+  const fixture = writeTextFixture(title, 'Presentation Selenium proposee puis validee.');
+  cleanupPendingValidationRows(token);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      ensureStandardMember();
+
+      await loginAsMember(driver);
+      await visit(driver, 'presentations');
+      const proposeMenu = await driver.findElement(By.css('.member-document-propose-menu'));
+      await driver.executeScript('arguments[0].setAttribute("open", "");', proposeMenu);
+      const proposeLink = await proposeMenu.findElement(By.css('[data-member-document-modal-open="member-document-proposal-dialog"]'));
+      const proposeLabel = String(await driver.executeScript('return arguments[0].textContent || "";', proposeLink)).replace(/\s+/g, ' ').trim();
+      assert.match(proposeLabel, /pr.sent/i, 'Le dropdown presentations doit proposer une presentation.');
+      await driver.executeScript('arguments[0].click();', proposeLink);
+
+      const form = await driver.findElement(By.css('#member-document-proposal-dialog form.member-document-dialog-form'));
+      await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+      await form.findElement(By.css('input[name="proposal_tags"]')).sendKeys('selenium, presentation');
+      await form.findElement(By.css('input[type="file"][name="proposal_file"]')).sendKeys(path.resolve(fixture));
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Presentation proposee par Selenium.');
+      const contact = await form.findElement(By.css('input[name="proposal_contact"]')).getAttribute('value');
+      assert.ok(contact.trim() !== '', 'Le contact de proposition presentation doit etre pre-rempli.');
+      await submitForm(driver, form);
+
+      await driver.wait(until.urlContains('route=my_requests'), timeoutMs);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /attente|pending/i,
+        moduleRegex: /presentations/i,
+      });
+      assert.equal(proposalStatus(title), 'pending', 'La presentation proposee doit rester en attente avant validation admin.');
+
+      await acceptProposalWithAdmin(driver, credentials, title);
+      await assertRouteContains(driver, 'presentations', { q: title }, title, 'La presentation validee doit etre visible dans presentations.');
+
+      await loginAsMember(driver);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /accept|publ/i,
+        moduleRegex: /presentations/i,
+      });
+    } finally {
+      cleanupPendingValidationRows(token);
+    }
+  });
+});
+
 async function runContentProposalScenario(t, scenario) {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {

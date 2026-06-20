@@ -321,6 +321,9 @@ final class MemberModulesFinalizationTest extends TestCase
 
         $presentationLabels = member_document_module_labels('presentations', 'fr');
         self::assertSame('Voir les contenus', $presentationLabels['view_content']);
+        self::assertSame('Proposer', $presentationLabels['propose_menu']);
+        self::assertSame('Proposer une présentation', $presentationLabels['propose_content']);
+        self::assertSame('Une présentation', $presentationLabels['propose_presentation_item']);
         self::assertSame('Administration', $presentationLabels['administration']);
 
         $pvDefinition = member_document_module_definition('pv');
@@ -352,8 +355,20 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member_document_current_user_is_administrator()', $renderer);
         self::assertStringContainsString('function member_document_module_allows_member_management(', $renderer);
         self::assertStringContainsString('function member_document_apply_accepted_proposal(array $proposal, string $moduleCode): ?int', $renderer);
+        self::assertStringContainsString('function member_document_upsert_category(', $renderer);
+        self::assertStringContainsString('function member_document_upsert_subcategory(', $renderer);
         self::assertStringContainsString("member_document_module_allows_member_management(\$moduleCode)", $renderer);
+        self::assertStringContainsString("\$canProposeTaxonomy = \$moduleCode === 'presentations';", $renderer);
+        self::assertStringContainsString("if (\$action === 'propose_category' && \$canProposeTaxonomy)", $renderer);
+        self::assertStringContainsString("if (\$action === 'propose_subcategory' && \$canProposeTaxonomy)", $renderer);
+        self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'category'", $renderer);
+        self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'subcategory'", $renderer);
         self::assertStringContainsString("content_proposal_create((int) \$user['id'], \$moduleCode, 'content', \$titleInput, \$proposalSummary", $renderer);
+        self::assertStringContainsString("if (\$proposalType === 'category')", $renderer);
+        self::assertStringContainsString("if (\$proposalType === 'subcategory')", $renderer);
+        self::assertStringContainsString('member-document-propose-menu', $renderer);
+        self::assertStringContainsString('member-document-category-dialog', $renderer);
+        self::assertStringContainsString('member-document-subcategory-dialog', $renderer);
         self::assertStringContainsString('data-member-document-modal-open', $renderer);
 
         $adminHelpers = $this->source('app/admin_helpers.php');

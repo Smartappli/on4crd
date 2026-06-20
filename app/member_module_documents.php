@@ -12,6 +12,32 @@ function member_document_module_definitions(): array
             'legacy_categories' => ['presentations'],
             'fallback_title' => 'Presentations',
             'fallback_intro' => 'Supports de reunions, exposes et documents presentes aux membres.',
+            'label_overrides' => [
+                'fr' => [
+                    'documents' => 'Présentations',
+                    'propose_content' => 'Proposer une présentation',
+                    'propose_content_title' => 'Proposer une présentation',
+                    'propose_content_intro' => 'Votre proposition sera enregistrée dans Mes contenus et attendra la validation d\'un administrateur.',
+                    'propose_content_intro_admin' => 'Votre proposition sera validée directement.',
+                    'propose_content_subject' => 'Proposition de présentation à valider',
+                    'propose_content_recorded' => 'Proposition enregistrée dans vos contenus.',
+                    'content_validated_direct' => 'Présentation proposée et validée directement.',
+                    'proposal_file_field' => 'Fichier de présentation',
+                    'propose_presentation_item' => 'Une présentation',
+                ],
+                'en' => [
+                    'documents' => 'Presentations',
+                    'propose_content' => 'Propose a presentation',
+                    'propose_content_title' => 'Propose a presentation',
+                    'propose_content_intro' => 'Your proposal will be saved in My content and wait for administrator approval.',
+                    'propose_content_intro_admin' => 'Your proposal will be approved directly.',
+                    'propose_content_subject' => 'Presentation proposal pending review',
+                    'propose_content_recorded' => 'Proposal saved in your content area.',
+                    'content_validated_direct' => 'Presentation proposed and approved directly.',
+                    'proposal_file_field' => 'Presentation file',
+                    'propose_presentation_item' => 'A presentation',
+                ],
+            ],
         ],
         'videos' => [
             'route' => 'videos',
@@ -122,6 +148,10 @@ function member_document_labels(string $locale): array
             'latest' => 'Dernier ajout',
             'none' => 'Aucun',
             'view_content' => 'Voir les contenus',
+            'propose_menu' => 'Proposer',
+            'propose_category_item' => 'Une thématique',
+            'propose_subcategory_item' => 'Une sous thématique',
+            'propose_presentation_item' => 'Un contenu',
             'propose_content' => 'Proposer un contenu',
             'propose_content_title' => 'Proposer un contenu',
             'propose_content_intro' => 'Votre proposition sera enregistree dans Mes contenus et attendra la validation d\'un administrateur.',
@@ -129,6 +159,24 @@ function member_document_labels(string $locale): array
             'propose_content_subject' => 'Proposition de contenu a valider',
             'propose_content_recorded' => 'Proposition enregistree dans vos contenus.',
             'content_validated_direct' => 'Contenu propose et valide directement.',
+            'propose_category' => 'Proposer une thématique',
+            'propose_category_title' => 'Proposer une thématique',
+            'propose_category_intro' => 'Votre proposition sera enregistrée dans Mes contenus et attendra la validation d\'un administrateur.',
+            'propose_category_intro_admin' => 'Votre proposition sera validée directement.',
+            'propose_category_subject' => 'Proposition de thématique à valider',
+            'propose_category_name' => 'Nom de la thématique',
+            'propose_category_reason' => 'Raison ou contexte',
+            'propose_subcategory' => 'Proposer une sous thématique',
+            'propose_subcategory_title' => 'Proposer une sous thématique',
+            'propose_subcategory_intro' => 'Votre proposition sera enregistrée dans Mes contenus et attendra la validation d\'un administrateur.',
+            'propose_subcategory_intro_admin' => 'Votre proposition sera validée directement.',
+            'propose_subcategory_subject' => 'Proposition de sous-thématique à valider',
+            'propose_subcategory_parent' => 'Thématique parente',
+            'propose_subcategory_name' => 'Nom de la sous thématique',
+            'propose_subcategory_reason' => 'Raison ou contexte',
+            'proposal_recorded' => 'Proposition enregistrée dans vos contenus.',
+            'category_created_direct' => 'Thématique proposée et validée directement.',
+            'subcategory_created_direct' => 'Sous-thématique proposée et validée directement.',
             'proposal_file_field' => 'Fichier',
             'proposal_contact' => 'Contact',
             'administration' => 'Administration',
@@ -165,6 +213,8 @@ function member_document_labels(string $locale): array
             'ok_updated' => 'Contenu mis a jour.',
             'err_required' => 'Titre et fichier requis.',
             'err_invalid' => 'Type de fichier non autorise.',
+            'err_category_required' => 'Nom de thématique requis.',
+            'err_subcategory_required' => 'Nom de sous-thématique requis.',
             'err_category' => 'Thématique invalide.',
             'err_category_has_documents' => 'Cette thématique contient encore des contenus.',
             'err_category_has_subcategories' => 'Supprimez d abord toutes les sous-thématiques de cette thématique.',
@@ -191,6 +241,10 @@ function member_document_labels(string $locale): array
             'latest' => 'Latest upload',
             'none' => 'None',
             'view_content' => 'View content',
+            'propose_menu' => 'Propose',
+            'propose_category_item' => 'A topic',
+            'propose_subcategory_item' => 'A subtopic',
+            'propose_presentation_item' => 'Content',
             'propose_content' => 'Propose content',
             'propose_content_title' => 'Propose content',
             'propose_content_intro' => 'Your proposal will be saved in My content and wait for administrator approval.',
@@ -198,6 +252,24 @@ function member_document_labels(string $locale): array
             'propose_content_subject' => 'Content proposal pending review',
             'propose_content_recorded' => 'Proposal saved in your content area.',
             'content_validated_direct' => 'Content proposed and approved directly.',
+            'propose_category' => 'Propose a topic',
+            'propose_category_title' => 'Propose a topic',
+            'propose_category_intro' => 'Your proposal will be saved in My content and wait for administrator approval.',
+            'propose_category_intro_admin' => 'Your proposal will be approved directly.',
+            'propose_category_subject' => 'Topic proposal pending review',
+            'propose_category_name' => 'Topic name',
+            'propose_category_reason' => 'Reason or context',
+            'propose_subcategory' => 'Propose a subtopic',
+            'propose_subcategory_title' => 'Propose a subtopic',
+            'propose_subcategory_intro' => 'Your proposal will be saved in My content and wait for administrator approval.',
+            'propose_subcategory_intro_admin' => 'Your proposal will be approved directly.',
+            'propose_subcategory_subject' => 'Subtopic proposal pending review',
+            'propose_subcategory_parent' => 'Parent topic',
+            'propose_subcategory_name' => 'Subtopic name',
+            'propose_subcategory_reason' => 'Reason or context',
+            'proposal_recorded' => 'Proposal saved in your content area.',
+            'category_created_direct' => 'Topic proposed and approved directly.',
+            'subcategory_created_direct' => 'Subtopic proposed and approved directly.',
             'proposal_file_field' => 'File',
             'proposal_contact' => 'Contact',
             'administration' => 'Administration',
@@ -234,6 +306,8 @@ function member_document_labels(string $locale): array
             'ok_updated' => 'Content updated.',
             'err_required' => 'Title and file are required.',
             'err_invalid' => 'File type is not allowed.',
+            'err_category_required' => 'Topic name is required.',
+            'err_subcategory_required' => 'Subtopic name is required.',
             'err_category' => 'Invalid topic.',
             'err_category_has_documents' => 'This topic still contains content.',
             'err_category_has_subcategories' => 'Delete all subtopics in this topic first.',
@@ -770,6 +844,53 @@ function member_document_category_from_input(string $value, array $categories): 
 }
 }
 
+if (!function_exists('member_document_upsert_category')) {
+function member_document_upsert_category(string $moduleCode, string $label): string
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if (!member_document_ensure_categories_table($moduleCode)) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $label = content_proposal_clean_single_line($label, 160);
+    $code = member_document_category_code($label);
+    if ($moduleCode === '' || $label === '' || $code === '') {
+        throw new RuntimeException('err_category_required');
+    }
+
+    db()->prepare('INSERT INTO member_module_categories (module_code, code, label, deleted_at) VALUES (?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+        ->execute([$moduleCode, $code, $label]);
+
+    return $code;
+}
+}
+
+if (!function_exists('member_document_upsert_subcategory')) {
+/**
+ * @param array<string, string> $categories
+ * @return array{category:string,subcategory:string}
+ */
+function member_document_upsert_subcategory(string $moduleCode, array $categories, string $categoryInput, string $label): array
+{
+    $moduleCode = member_document_module_normalize($moduleCode);
+    if (!member_document_ensure_subcategories_table($moduleCode)) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $category = member_document_category_from_input($categoryInput !== '' ? $categoryInput : 'general', $categories);
+    $label = content_proposal_clean_single_line($label, 160);
+    $code = member_document_subcategory_code($label);
+    if ($moduleCode === '' || $label === '' || $code === '') {
+        throw new RuntimeException('err_subcategory_required');
+    }
+
+    db()->prepare('INSERT INTO member_module_subcategories (module_code, category_code, code, label, deleted_at) VALUES (?, ?, ?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+        ->execute([$moduleCode, $category, $code, $label]);
+
+    return ['category' => $category, 'subcategory' => $code];
+}
+}
+
 if (!function_exists('member_document_subcategory_options')) {
 /**
  * @return list<array{category_code:string,code:string,label:string}>
@@ -1267,11 +1388,30 @@ if (!function_exists('member_document_apply_accepted_proposal')) {
 function member_document_apply_accepted_proposal(array $proposal, string $moduleCode): ?int
 {
     $moduleCode = member_document_module_normalize($moduleCode);
-    if ((string) ($proposal['proposal_type'] ?? '') !== 'content' || !member_document_module_allows_member_management($moduleCode)) {
+    if (!member_document_module_allows_member_management($moduleCode)) {
+        return null;
+    }
+
+    $proposalType = (string) ($proposal['proposal_type'] ?? '');
+    if ($proposalType === 'category') {
+        member_document_upsert_category($moduleCode, (string) ($proposal['title'] ?? ''));
+
         return null;
     }
 
     $summary = (string) ($proposal['summary'] ?? '');
+    if ($proposalType === 'subcategory') {
+        $categories = member_document_categories($moduleCode);
+        $category = member_document_proposal_detail($summary, ['Category', 'Thématique', 'Thematique', 'Topic']);
+        member_document_upsert_subcategory($moduleCode, $categories, $category !== '' ? $category : 'general', (string) ($proposal['title'] ?? ''));
+
+        return null;
+    }
+
+    if ($proposalType !== 'content') {
+        return null;
+    }
+
     $action = member_document_proposal_action($summary);
     if ($action === '') {
         return member_document_create_record(
@@ -1635,6 +1775,12 @@ function render_member_document_module_page(string $module): void
     }
 
     $canManageDocuments = member_document_current_user_is_administrator();
+    $canProposeDocument = member_document_module_allows_member_management($moduleCode);
+    $canProposeTaxonomy = $moduleCode === 'presentations';
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
     $categories = member_document_categories($moduleCode);
     member_document_ensure_subcategories_table($moduleCode);
     $returnUrl = static function () use ($definition, $moduleCode): string {
@@ -1673,7 +1819,76 @@ function render_member_document_module_page(string $module): void
                 }
                 redirect_url($returnUrl());
             }
-            if ($action === 'propose_document' && member_document_module_allows_member_management($moduleCode)) {
+            if ($action === 'propose_category' && $canProposeTaxonomy) {
+                $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_category_name'] ?? $_POST['proposal_category'] ?? ''), 160);
+                $proposalReason = content_proposal_clean_multiline((string) ($_POST['proposal_reason'] ?? $_POST['proposal_details'] ?? ''), 1600);
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContactDefault), 220);
+                if ($proposalContact === '') {
+                    $proposalContact = $proposalContactDefault;
+                }
+                if ($proposalTitle === '') {
+                    throw new RuntimeException('err_category_required');
+                }
+
+                $proposalSummary = content_proposal_details_text([
+                    (string) $labels['propose_category_reason'] => $proposalReason,
+                ]);
+                $proposalStatus = $canManageDocuments ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create((int) $user['id'], $moduleCode, 'category', $proposalTitle, $proposalSummary, $proposalContact, '', $proposalStatus);
+                if ($canManageDocuments) {
+                    $category = member_document_upsert_category($moduleCode, $proposalTitle);
+                    set_flash('success', (string) $labels['category_created_direct']);
+                    redirect_url(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['category' => $category]));
+                }
+
+                content_proposal_notify_site((string) $labels['propose_category_subject'], [
+                    'area' => $moduleCode,
+                    'proposal_type' => 'category',
+                    'title' => $proposalTitle,
+                    'summary' => $proposalSummary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+                set_flash('success', (string) $labels['proposal_recorded']);
+                redirect('my_requests');
+            }
+            if ($action === 'propose_subcategory' && $canProposeTaxonomy) {
+                $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_subcategory_name'] ?? $_POST['proposal_subcategory'] ?? ''), 160);
+                $proposalCategory = member_document_category_from_input((string) ($_POST['proposal_parent_category'] ?? $_POST['proposal_category'] ?? 'general'), $categories);
+                $proposalReason = content_proposal_clean_multiline((string) ($_POST['proposal_reason'] ?? $_POST['proposal_details'] ?? ''), 1600);
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContactDefault), 220);
+                if ($proposalContact === '') {
+                    $proposalContact = $proposalContactDefault;
+                }
+                if ($proposalTitle === '') {
+                    throw new RuntimeException('err_subcategory_required');
+                }
+
+                $proposalSummary = content_proposal_details_text([
+                    (string) $labels['category_field'] => $proposalCategory,
+                    (string) $labels['subcategory_field'] => $proposalTitle,
+                    (string) $labels['propose_subcategory_reason'] => $proposalReason,
+                ]);
+                $proposalStatus = $canManageDocuments ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create((int) $user['id'], $moduleCode, 'subcategory', $proposalTitle, $proposalSummary, $proposalContact, '', $proposalStatus);
+                if ($canManageDocuments) {
+                    $saved = member_document_upsert_subcategory($moduleCode, $categories, $proposalCategory, $proposalTitle);
+                    set_flash('success', (string) $labels['subcategory_created_direct']);
+                    redirect_url(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['category' => $saved['category'], 'subcategory' => $saved['subcategory']]));
+                }
+
+                content_proposal_notify_site((string) $labels['propose_subcategory_subject'], [
+                    'area' => $moduleCode,
+                    'proposal_type' => 'subcategory',
+                    'title' => $proposalTitle,
+                    'summary' => $proposalSummary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+                set_flash('success', (string) $labels['proposal_recorded']);
+                redirect('my_requests');
+            }
+            if ($action === 'propose_document' && $canProposeDocument) {
                 $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_title'] ?? ''), 255);
                 $proposalDescription = content_proposal_clean_multiline((string) ($_POST['proposal_description'] ?? ''), 5000);
                 $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
@@ -1868,12 +2083,9 @@ function render_member_document_module_page(string $module): void
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $labels['none'];
     $adminRoute = (string) ($definition['admin_route'] ?? ('admin_' . $moduleCode));
     $routeName = (string) ($definition['route'] ?? $moduleCode);
-    $canProposeDocument = member_document_module_allows_member_management($moduleCode);
     $showDocumentProposalForm = $canProposeDocument && (string) ($_GET['propose_document'] ?? $_GET['propose_video'] ?? '') === '1';
-    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
-    if ($proposalContactDefault === '') {
-        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
-    }
+    $showCategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_category'] ?? '') === '1';
+    $showSubcategoryProposalForm = $canProposeTaxonomy && (string) ($_GET['propose_subcategory'] ?? '') === '1';
     $primaryActionHref = '#member-document-list';
     $primaryActionAttributes = '';
     $primaryActionLabel = (string) $labels['view_content'];
@@ -1901,14 +2113,83 @@ function render_member_document_module_page(string $module): void
             </div>
             <div class="member-document-hero-side">
                 <?= render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats) ?>
-                <p class="actions member-document-hero-actions">
-                    <a class="button secondary" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e($primaryActionLabel) ?></a>
+                <div class="actions member-document-hero-actions">
+                    <?php if ($canProposeTaxonomy): ?>
+                        <details class="member-document-propose-menu">
+                            <summary class="button secondary" aria-haspopup="menu"><?= e((string) $labels['propose_menu']) ?></summary>
+                            <div class="member-document-propose-menu-panel" role="menu">
+                                <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_category' => '1'])) ?>" data-member-document-modal-open="member-document-category-dialog" aria-haspopup="dialog" aria-controls="member-document-category-dialog"><?= e((string) $labels['propose_category_item']) ?></a>
+                                <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_subcategory' => '1'])) ?>" data-member-document-modal-open="member-document-subcategory-dialog" aria-haspopup="dialog" aria-controls="member-document-subcategory-dialog"><?= e((string) $labels['propose_subcategory_item']) ?></a>
+                                <a class="member-document-propose-menu-item" role="menuitem" href="<?= e(route_url($routeName, ['propose_document' => '1'])) ?>" data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog"><?= e((string) $labels['propose_presentation_item']) ?></a>
+                            </div>
+                        </details>
+                    <?php else: ?>
+                        <a class="button secondary" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e($primaryActionLabel) ?></a>
+                    <?php endif; ?>
                     <?php if ($canManageDocuments): ?>
                         <a class="button" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) $labels['administration']) ?></a>
                     <?php endif; ?>
-                </p>
+                </div>
             </div>
         </section>
+
+        <?php if ($canProposeTaxonomy): ?>
+            <dialog class="member-document-dialog" id="member-document-category-dialog" aria-labelledby="member-document-category-title"<?= $showCategoryProposalForm ? ' open data-member-document-auto-open' : '' ?>>
+                <div class="member-document-dialog-card">
+                    <div class="member-document-dialog-header module-dialog-header">
+                        <div>
+                            <p class="module-dialog-eyebrow"><?= e((string) $labels['documents']) ?></p>
+                            <h2 id="member-document-category-title"><?= e((string) $labels['propose_category_title']) ?></h2>
+                            <p class="help"><?= e($canManageDocuments ? (string) $labels['propose_category_intro_admin'] : (string) $labels['propose_category_intro']) ?></p>
+                        </div>
+                        <button class="member-document-dialog-close module-dialog-close" type="button" data-member-document-modal-close aria-label="<?= e((string) $labels['modal_close']) ?>">&times;</button>
+                    </div>
+                    <form method="post" class="member-document-dialog-form module-dialog-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="propose_category">
+                        <label><span><?= e((string) $labels['propose_category_name']) ?></span><input type="text" name="proposal_category_name" maxlength="160" required></label>
+                        <label><span><?= e((string) $labels['propose_category_reason']) ?></span><textarea name="proposal_reason" rows="4" maxlength="1600"></textarea></label>
+                        <label><span><?= e((string) $labels['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+                        <p class="member-document-dialog-actions module-dialog-actions">
+                            <button class="button" type="submit"><?= e((string) $labels['propose_category']) ?></button>
+                            <button class="button secondary" type="button" data-member-document-modal-close><?= e((string) $labels['cancel']) ?></button>
+                        </p>
+                    </form>
+                </div>
+            </dialog>
+
+            <dialog class="member-document-dialog" id="member-document-subcategory-dialog" aria-labelledby="member-document-subcategory-title"<?= $showSubcategoryProposalForm ? ' open data-member-document-auto-open' : '' ?>>
+                <div class="member-document-dialog-card">
+                    <div class="member-document-dialog-header module-dialog-header">
+                        <div>
+                            <p class="module-dialog-eyebrow"><?= e((string) $labels['documents']) ?></p>
+                            <h2 id="member-document-subcategory-title"><?= e((string) $labels['propose_subcategory_title']) ?></h2>
+                            <p class="help"><?= e($canManageDocuments ? (string) $labels['propose_subcategory_intro_admin'] : (string) $labels['propose_subcategory_intro']) ?></p>
+                        </div>
+                        <button class="member-document-dialog-close module-dialog-close" type="button" data-member-document-modal-close aria-label="<?= e((string) $labels['modal_close']) ?>">&times;</button>
+                    </div>
+                    <form method="post" class="member-document-dialog-form module-dialog-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="propose_subcategory">
+                        <label>
+                            <span><?= e((string) $labels['propose_subcategory_parent']) ?></span>
+                            <select name="proposal_parent_category">
+                                <?php foreach ($categories as $code => $label): ?>
+                                    <option value="<?= e((string) $code) ?>"<?= ($categoryFilter !== '' ? $categoryFilter : 'general') === (string) $code ? ' selected' : '' ?>><?= e((string) $label) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label><span><?= e((string) $labels['propose_subcategory_name']) ?></span><input type="text" name="proposal_subcategory_name" maxlength="160" required></label>
+                        <label><span><?= e((string) $labels['propose_subcategory_reason']) ?></span><textarea name="proposal_reason" rows="4" maxlength="1600"></textarea></label>
+                        <label><span><?= e((string) $labels['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+                        <p class="member-document-dialog-actions module-dialog-actions">
+                            <button class="button" type="submit"><?= e((string) $labels['propose_subcategory']) ?></button>
+                            <button class="button secondary" type="button" data-member-document-modal-close><?= e((string) $labels['cancel']) ?></button>
+                        </p>
+                    </form>
+                </div>
+            </dialog>
+        <?php endif; ?>
 
         <?php if ($canProposeDocument): ?>
             <dialog class="member-document-dialog" id="member-document-proposal-dialog" aria-labelledby="member-document-proposal-title"<?= $showDocumentProposalForm ? ' open data-member-document-auto-open' : '' ?>>

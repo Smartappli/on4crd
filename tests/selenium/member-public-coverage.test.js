@@ -181,6 +181,13 @@ if ($webIds !== []) {
     $deleteByIds('member_webotheque_links', 'id', $webIds);
 }
 
+if (table_exists('member_module_subcategories')) {
+    db()->prepare('DELETE FROM member_module_subcategories WHERE module_code = "presentations" AND (code LIKE ? OR label LIKE ?)')->execute([$like, $like]);
+}
+if (table_exists('member_module_categories')) {
+    db()->prepare('DELETE FROM member_module_categories WHERE module_code = "presentations" AND code <> "general" AND (code LIKE ? OR label LIKE ?)')->execute([$like, $like]);
+}
+
 if (table_exists('member_favorites')) {
     db()->prepare('DELETE FROM member_favorites WHERE title LIKE ? OR url LIKE ? OR target_key LIKE ?')->execute([$like, $like, $like]);
 }
@@ -316,6 +323,8 @@ echo json_encode([
     'auction_lots' => $count('auction_lots', 'title LIKE ? OR summary LIKE ? OR description LIKE ?', [$like, $like, $like]),
     'albums' => $count('albums', 'title LIKE ? OR description LIKE ?', [$like, $like]),
     'webotheque_links' => $count('member_webotheque_links', 'title LIKE ? OR url LIKE ? OR description LIKE ? OR tags LIKE ?', [$like, $like, $like, $like]),
+    'presentation_categories' => $count('member_module_categories', 'module_code = "presentations" AND (code LIKE ? OR label LIKE ?)', [$like, $like]),
+    'presentation_subcategories' => $count('member_module_subcategories', 'module_code = "presentations" AND (code LIKE ? OR label LIKE ?)', [$like, $like]),
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_TOKEN: token });
 }
@@ -492,6 +501,24 @@ test('Selenium membre/public: propositions et auto-publications des modules publ
         description: `Web link description ${token}`,
         tags: `selenium,${token}`,
       });
+      await visit(driver, 'presentations');
+      const presentationMenu = await driver.findElement(By.css('.member-document-propose-menu'));
+      const presentationMenuText = await driver.executeScript('arguments[0].setAttribute("open", ""); return arguments[0].textContent;', presentationMenu);
+      assert.match(String(presentationMenuText), /Proposer/, 'Les presentations doivent afficher le dropdown Proposer.');
+      assert.match(String(presentationMenuText), /th.mat/i, 'Le dropdown presentations doit proposer une thematique.');
+      assert.match(String(presentationMenuText), /sous th.mat/i, 'Le dropdown presentations doit proposer une sous-thematique.');
+      assert.match(String(presentationMenuText), /pr.sent/i, 'Le dropdown presentations doit proposer une presentation.');
+      await submitProposal(driver, 'presentations', { propose_category: '1' }, 'propose_category', {
+        proposal_category_name: `Presentation topic ${token}`,
+        proposal_reason: `Presentation topic reason ${token}`,
+        proposal_contact: contact,
+      });
+      await submitProposal(driver, 'presentations', { propose_subcategory: '1' }, 'propose_subcategory', {
+        proposal_parent_category: 'general',
+        proposal_subcategory_name: `Presentation subtopic ${token}`,
+        proposal_reason: `Presentation subtopic reason ${token}`,
+        proposal_contact: contact,
+      });
 
       const counts = proposalArtifactCounts(token);
       assert.ok(counts.content_proposals >= 4, `Des propositions doivent etre creees ou acceptees: ${JSON.stringify(counts)}.`);
@@ -501,6 +528,8 @@ test('Selenium membre/public: propositions et auto-publications des modules publ
       assert.ok(counts.auction_lots + counts.content_proposals >= 1, `La proposition enchere doit laisser une trace: ${JSON.stringify(counts)}.`);
       assert.ok(counts.albums + counts.content_proposals >= 1, `La proposition album doit laisser une trace: ${JSON.stringify(counts)}.`);
       assert.ok(counts.webotheque_links + counts.content_proposals >= 1, `La proposition webotheque doit laisser une trace: ${JSON.stringify(counts)}.`);
+      assert.ok(counts.presentation_categories >= 1, `La thematique presentations auto-validee doit etre creee: ${JSON.stringify(counts)}.`);
+      assert.ok(counts.presentation_subcategories >= 1, `La sous-thematique presentations auto-validee doit etre creee: ${JSON.stringify(counts)}.`);
     } finally {
       cleanupCoverageRows(token);
     }
