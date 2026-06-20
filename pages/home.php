@@ -593,7 +593,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
             $imageSrc = is_file($thumbAbs) ? $thumbPath : $filePath;
             $photoTitle = trim((string) ($photo['title'] ?? ''));
             $albumTitle = trim((string) ($photo['album_title'] ?? ''));
-            $alt = $photoTitle !== '' ? $photoTitle : ($albumTitle !== '' ? $albumTitle : (string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie'));
+            $alt = $photoTitle !== '' ? $photoTitle : ($albumTitle !== '' ? $albumTitle : (string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos'));
 
             $homeGalleryItems .= '<a class="home-media-slide home-gallery-slide" href="' . e(route_url('album', ['id' => (int) ($photo['album_id'] ?? 0)])) . '">'
                 . '<img src="' . e(base_url($imageSrc)) . '" alt="' . e($alt) . '" loading="lazy" decoding="async">'
@@ -601,7 +601,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
         }
 
         if ($homeGalleryItems !== '') {
-            $homeGalleryHtml = '<div class="home-media-carousel home-gallery-carousel" data-home-gallery-carousel aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '">'
+            $homeGalleryHtml = '<div class="home-media-carousel home-gallery-carousel" data-home-gallery-carousel aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos')) . '">'
                 . '<div class="home-media-track home-gallery-track">' . $homeGalleryItems . '</div>'
                 . '</div>';
         }
@@ -613,7 +613,7 @@ if (module_enabled('albums') && table_exists('albums') && table_exists('album_ph
 $memberSpotlightRowHtml = '';
 if ($isAuthenticated) {
     $homeGalleryArticleHtml = $homeGalleryHtml !== ''
-        ? '<article aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie')) . '"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Photos')) . '</h3>' . $homeGalleryHtml . '</article>'
+        ? '<article aria-label="' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos')) . '"><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_gallery'] ?? 'Galerie photos')) . '</h3>' . $homeGalleryHtml . '</article>'
         : '';
     $memberSpotlightRowHtml = '<article><h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">' . e((string) ($homeI18n['spotlight_member_latest_wiki'] ?? 'Dernière page wiki')) . '</h3>' . $latestWikiHtml . '</article>'
         . $homeGalleryArticleHtml

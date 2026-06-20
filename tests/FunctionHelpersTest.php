@@ -355,15 +355,22 @@ final class FunctionHelpersTest extends TestCase
     public function testHomeAlbumPhotosUseFiveItemCarouselAndTrophyCtaTargetsEvents(): void
     {
         $home = file_get_contents(__DIR__ . '/../pages/home.php');
+        $homeFr = file_get_contents(__DIR__ . '/../app/i18n/home/fr.php');
+        $homeEn = file_get_contents(__DIR__ . '/../app/i18n/home/en.php');
         $homeJs = file_get_contents(__DIR__ . '/../assets/js/modules/home.js');
         $homeCss = file_get_contents(__DIR__ . '/../assets/css/modules/home.css');
         self::assertIsString($home);
+        self::assertIsString($homeFr);
+        self::assertIsString($homeEn);
         self::assertIsString($homeJs);
         self::assertIsString($homeCss);
 
         self::assertStringContainsString('home_public_album_random_photos_v1', $home);
         self::assertStringContainsString('LIMIT 5', $home);
         self::assertStringContainsString('data-home-gallery-carousel', $home);
+        self::assertStringContainsString('Galerie photos', $home);
+        self::assertStringContainsString("'spotlight_member_gallery' => 'Galerie photos'", $homeFr);
+        self::assertStringContainsString("'spotlight_member_gallery' => 'Photo gallery'", $homeEn);
         self::assertStringContainsString('[data-home-gallery-carousel]', $homeJs);
         self::assertStringContainsString('home-gallery-carousel.is-ready .home-gallery-slide.is-active', $homeCss);
         self::assertStringContainsString('height: auto;', $homeCss);

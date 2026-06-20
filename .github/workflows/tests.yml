@@ -95,6 +95,9 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist
 
+      - name: Prepare config
+        run: cp config/config.sample.php config/config.php
+
       - name: Install browser test dependencies
         run: |
           npm ci

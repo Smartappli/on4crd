@@ -41,6 +41,14 @@ final class GitHubWorkflowContractTest extends TestCase
         self::assertStringContainsString('ON4CRD_CONFIG_FILE:', $workflow);
         self::assertStringContainsString('SELENIUM_BASE_URL:', $workflow);
         self::assertStringContainsString('SELENIUM_CHROME_BINARY', $workflow);
+        $browserJob = strstr($workflow, 'toolbox-smoke-and-e2e:');
+        self::assertIsString($browserJob);
+        self::assertStringContainsString('cp config/config.sample.php config/config.php', $browserJob);
+        $prepareConfigOffset = strpos($browserJob, 'cp config/config.sample.php config/config.php');
+        $startServerOffset = strpos($browserJob, 'Start local PHP server');
+        self::assertIsInt($prepareConfigOffset);
+        self::assertIsInt($startServerOffset);
+        self::assertLessThan($startServerOffset, $prepareConfigOffset);
         self::assertStringContainsString('scripts/prepare_selenium_ci.php', $workflow);
         self::assertStringContainsString('scripts/create_selenium_admin.php', $workflow);
         self::assertStringContainsString('tests/selenium/seed_fixtures.php', $workflow);
