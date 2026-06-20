@@ -695,11 +695,11 @@ ob_start();
                     ?>
                     <article class="album-tile">
                         <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
-                                <?php if ($coverSrc !== ''): ?>
-                                    <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
-                                <?php else: ?>
-                                    <span class="album-placeholder-mark" aria-hidden="true"></span>
-                                <?php endif; ?>
+                            <?php if ($coverSrc !== ''): ?>
+                                <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
+                            <?php else: ?>
+                                <span class="album-placeholder-mark" aria-hidden="true"></span>
+                            <?php endif; ?>
                         </a>
                         <div class="album-tile-body">
                             <div>
