@@ -694,19 +694,13 @@ ob_start();
                     $editDialogId = 'album-edit-dialog-' . $albumId;
                     ?>
                     <article class="album-tile">
-                        <div class="album-tile-media-stack">
-                            <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
+                        <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
                                 <?php if ($coverSrc !== ''): ?>
                                     <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
                                 <?php else: ?>
                                     <span class="album-placeholder-mark" aria-hidden="true"></span>
                                 <?php endif; ?>
-                            </a>
-                            <div class="album-tile-taxonomy">
-                                <p><span><?= e((string) ($t['category_field'] ?? 'Thématique')) ?></span><?= e($albumCategoryLabel) ?></p>
-                                <p><span><?= e((string) ($t['subcategory_field'] ?? 'Sous-thématique')) ?></span><?= e($albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></p>
-                            </div>
-                        </div>
+                        </a>
                         <div class="album-tile-body">
                             <div>
                                 <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e($albumTitle) ?></a></h2>
@@ -724,7 +718,7 @@ ob_start();
                                             <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
                                             <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                             <input type="hidden" name="return_p" value="<?= $page ?>">
-                                            <button class="button secondary badge muted album-favorite-badge" type="submit" aria-label="<?= e($favoriteLabel) ?>" title="<?= e($favoriteLabel) ?>"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
+                                            <button class="button secondary badge muted album-favorite-badge" type="submit" aria-label="<?= e($favoriteLabel) ?>" title="<?= e($favoriteLabel) ?>"><span>Favori</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
                                         </form>
                                     <?php endif; ?>
                                 </div>
