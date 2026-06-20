@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Mijn account',
   'account_profile' => 'Profiel',
   'account_privacy' => 'Privacy',
-  'account_settings' => 'Privacy',
+  'account_settings' => 'Instellingen',
   'account_requests' => 'Mijn aanvragen',
   'account_admin' => 'Beheer',
   'logout' => 'Afmelden',

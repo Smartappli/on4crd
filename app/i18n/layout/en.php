@@ -25,7 +25,7 @@ return array (
   'account_space' => 'My account',
   'account_profile' => 'Profile',
   'account_privacy' => 'Privacy',
-  'account_settings' => 'Privacy',
+  'account_settings' => 'Settings',
   'account_requests' => 'My requests',
   'account_admin' => 'Administration',
   'logout' => 'Log out',

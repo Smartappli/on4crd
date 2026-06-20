@@ -26,7 +26,7 @@ return array (
   'account_space' => 'Akun saya',
   'account_profile' => 'Profil',
   'account_privacy' => 'Privasi',
-  'account_settings' => 'Privasi',
+  'account_settings' => 'Pengaturan',
   'account_requests' => 'Permintaan saya',
   'account_admin' => 'Administrasi',
   'logout' => 'Keluar',

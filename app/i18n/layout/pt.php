@@ -26,7 +26,7 @@ return array (
   'account_space' => 'O meu espaço',
   'account_profile' => 'Perfil',
   'account_privacy' => 'Privacidade',
-  'account_settings' => 'Privacidade',
+  'account_settings' => 'Definições',
   'account_requests' => 'Os meus pedidos',
   'account_admin' => 'Administração',
   'logout' => 'Terminar sessão',

@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Moj prostor',
   'account_profile' => 'Profil',
   'account_privacy' => 'Zasebnost',
-  'account_settings' => 'Zasebnost',
+  'account_settings' => 'Nastavitve',
   'account_requests' => 'Moje zahteve',
   'account_admin' => 'Administracija',
   'logout' => 'Prekini povezavo',

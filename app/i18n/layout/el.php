@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Ο χώρος μου',
   'account_profile' => 'Προφίλ',
   'account_privacy' => 'Απόρρητο',
-  'account_settings' => 'Απόρρητο',
+  'account_settings' => 'Ρυθμίσεις',
   'account_requests' => 'Τα αιτήματά μου',
   'account_admin' => 'Διοίκηση',
   'logout' => 'Αποσύνδεση',

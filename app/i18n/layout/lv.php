@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Mana telpa',
   'account_profile' => 'Profils',
   'account_privacy' => 'Privātums',
-  'account_settings' => 'Privātums',
+  'account_settings' => 'Iestatījumi',
   'account_requests' => 'Mani pieprasījumi',
   'account_admin' => 'Administrācija',
   'logout' => 'Atvienot',

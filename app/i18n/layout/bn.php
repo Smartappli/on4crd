@@ -26,7 +26,7 @@ return array (
   'account_space' => 'আমার অ্যাকাউন্ট',
   'account_profile' => 'প্রোফাইল',
   'account_privacy' => 'গোপনীয়তা',
-  'account_settings' => 'গোপনীয়তা',
+  'account_settings' => 'সেটিংস',
   'account_requests' => 'আমার অনুরোধ',
   'account_admin' => 'প্রশাসন',
   'logout' => 'লগআউট',

@@ -26,7 +26,7 @@ return array (
   'account_space' => 'Mein Bereich',
   'account_profile' => 'Profil',
   'account_privacy' => 'Datenschutz',
-  'account_settings' => 'Datenschutz',
+  'account_settings' => 'Einstellungen',
   'account_requests' => 'Meine Anfragen',
   'account_admin' => 'Verwaltung',
   'logout' => 'Abmelden',

@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Моето пространство',
   'account_profile' => 'Профил',
   'account_privacy' => 'Поверителност',
-  'account_settings' => 'Поверителност',
+  'account_settings' => 'Настройки',
   'account_requests' => 'Моите заявки',
   'account_admin' => 'Администрация',
   'logout' => 'Прекъснете връзката',

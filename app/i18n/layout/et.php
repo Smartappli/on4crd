@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Minu ruum',
   'account_profile' => 'Profiil',
   'account_privacy' => 'Privaatsus',
-  'account_settings' => 'Privaatsus',
+  'account_settings' => 'Seaded',
   'account_requests' => 'Minu taotlused',
   'account_admin' => 'Administreerimine',
   'logout' => 'Katkesta ühendus',

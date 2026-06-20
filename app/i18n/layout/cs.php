@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Můj prostor',
   'account_profile' => 'Profil',
   'account_privacy' => 'Soukromí',
-  'account_settings' => 'Soukromí',
+  'account_settings' => 'Nastavení',
   'account_requests' => 'Moje žádosti',
   'account_admin' => 'Administrace',
   'logout' => 'Odpojit',

@@ -25,7 +25,7 @@ return array (
   'account_space' => 'حسابي',
   'account_profile' => 'الملف الشخصي',
   'account_privacy' => 'الخصوصية',
-  'account_settings' => 'الخصوصية',
+  'account_settings' => 'الإعدادات',
   'account_requests' => 'طلباتي',
   'account_admin' => 'الإدارة',
   'logout' => 'تسجيل الخروج',

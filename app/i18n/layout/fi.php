@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Minun tilani',
   'account_profile' => 'Profiili',
   'account_privacy' => 'Yksityisyys',
-  'account_settings' => 'Yksityisyys',
+  'account_settings' => 'Asetukset',
   'account_requests' => 'Omat pyynnöt',
   'account_admin' => 'Hallinto',
   'logout' => 'Katkaise yhteys',

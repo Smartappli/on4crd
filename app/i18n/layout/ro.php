@@ -26,7 +26,7 @@ return array (
   'account_space' => 'Spațiul meu',
   'account_profile' => 'Profil',
   'account_privacy' => 'Confidențialitate',
-  'account_settings' => 'Confidențialitate',
+  'account_settings' => 'Setări',
   'account_requests' => 'Cererile mele',
   'account_admin' => 'Administrare',
   'logout' => 'Deconecta',

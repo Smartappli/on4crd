@@ -25,7 +25,7 @@ return array (
   'account_space' => 'Mit rum',
   'account_profile' => 'Profil',
   'account_privacy' => 'Privatliv',
-  'account_settings' => 'Privatliv',
+  'account_settings' => 'Indstillinger',
   'account_requests' => 'Mine anmodninger',
   'account_admin' => 'Administrering',
   'logout' => 'Afbryd forbindelsen',
