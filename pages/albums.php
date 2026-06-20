@@ -665,9 +665,7 @@ ob_start();
                     $description = trim((string) ($row['description'] ?? ''));
                     $descriptionText = '';
                     if ($description !== '') {
-                        $descriptionText = (string) preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $description);
-                        $descriptionText = (string) preg_replace('/<\s*\/\s*(p|div|li|h[1-6])\s*>/i', "\n", $descriptionText);
-                        $descriptionText = html_entity_decode(strip_tags($descriptionText), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                        $descriptionText = album_description_display_text($description);
                         $descriptionText = trim((string) preg_replace('/\s+/u', ' ', $descriptionText));
                     }
                     $albumCategory = 'general';
@@ -694,13 +692,19 @@ ob_start();
                     $editDialogId = 'album-edit-dialog-' . $albumId;
                     ?>
                     <article class="album-tile">
-                        <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
-                            <?php if ($coverSrc !== ''): ?>
-                                <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
-                            <?php else: ?>
-                                <span class="album-placeholder-mark" aria-hidden="true"></span>
-                            <?php endif; ?>
-                        </a>
+                        <div class="album-tile-media-stack">
+                            <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
+                                <?php if ($coverSrc !== ''): ?>
+                                    <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
+                                <?php else: ?>
+                                    <span class="album-placeholder-mark" aria-hidden="true"></span>
+                                <?php endif; ?>
+                            </a>
+                            <div class="album-tile-taxonomy">
+                                <p><?= e($albumCategoryLabel) ?></p>
+                                <p><?= e($albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></p>
+                            </div>
+                        </div>
                         <div class="album-tile-body">
                             <div>
                                 <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e($albumTitle) ?></a></h2>
