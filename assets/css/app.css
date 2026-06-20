@@ -1887,23 +1887,6 @@ textarea { resize: vertical; }
   gap: .45rem;
   width: 112px;
 }
-.album-tile-taxonomy {
-  display: grid;
-  gap: .15rem;
-  min-width: 0;
-  font-size: .78rem;
-  line-height: 1.25;
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-.album-tile-taxonomy p {
-  margin: 0;
-}
-.album-tile-taxonomy span {
-  display: block;
-  color: var(--text);
-  font-weight: 700;
-}
 .album-placeholder-mark {
   width: 4rem;
   height: 4rem;
@@ -2035,23 +2018,6 @@ textarea { resize: vertical; }
   height: 100%;
   min-height: 0;
   object-fit: cover;
-}
-.album-detail-taxonomy {
-  display: grid;
-  gap: .2rem;
-  min-width: 0;
-  font-size: .86rem;
-  line-height: 1.3;
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-.album-detail-taxonomy p {
-  margin: 0;
-}
-.album-detail-taxonomy span {
-  display: block;
-  color: var(--text);
-  font-weight: 700;
 }
 .album-detail-copy {
   display: grid;

@@ -700,10 +700,6 @@ ob_start();
                                     <span class="album-placeholder-mark" aria-hidden="true"></span>
                                 <?php endif; ?>
                             </a>
-                            <div class="album-tile-taxonomy">
-                                <p><span>Thématique</span><?= e($albumCategoryLabel) ?></p>
-                                <p><span>Sous thématique</span><?= e($albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></p>
-                            </div>
                         </div>
                         <div class="album-tile-body">
                             <div>

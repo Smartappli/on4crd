@@ -200,10 +200,6 @@ ob_start();
                     <span class="album-placeholder-mark" aria-hidden="true"></span>
                 <?php endif; ?>
             </div>
-            <div class="album-detail-taxonomy">
-                <p><span>Thématique</span><?= e($albumCategoryLabel) ?></p>
-                <p><span>Sous thématique</span><?= e($albumSubcategoryDisplay) ?></p>
-            </div>
         </div>
         <div class="album-detail-copy">
             <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
