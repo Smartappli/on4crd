@@ -7,6 +7,6 @@
   },
   "scripts": {
     "test:e2e": "playwright test",
-    "test:selenium": "node --test --test-concurrency=1 \"tests/selenium/*.test.js\""
+    "test:selenium": "node --test --test-concurrency=1 --test-timeout=120000 \"tests/selenium/*.test.js\""
   }
 }
