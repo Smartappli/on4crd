@@ -208,6 +208,10 @@ body[data-route="home"] .site-footer {
     min-height: 170px;
   }
 
+  .home-gallery-carousel {
+    min-height: 0;
+  }
+
   .home-media-slide img {
     max-height: 130px;
   }
