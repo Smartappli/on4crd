@@ -694,13 +694,19 @@ ob_start();
                     $editDialogId = 'album-edit-dialog-' . $albumId;
                     ?>
                     <article class="album-tile">
-                        <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
-                            <?php if ($coverSrc !== ''): ?>
-                                <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
-                            <?php else: ?>
-                                <span class="album-placeholder-mark" aria-hidden="true"></span>
-                            <?php endif; ?>
-                        </a>
+                        <div class="album-tile-media-stack">
+                            <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
+                                <?php if ($coverSrc !== ''): ?>
+                                    <img src="<?= e(base_url($coverSrc)) ?>" alt="<?= e((string) $t['cover_alt']) ?> <?= e($albumTitle) ?>" loading="lazy" decoding="async">
+                                <?php else: ?>
+                                    <span class="album-placeholder-mark" aria-hidden="true"></span>
+                                <?php endif; ?>
+                            </a>
+                            <div class="album-tile-taxonomy">
+                                <p><span><?= e((string) ($t['category_field'] ?? 'Thématique')) ?></span><?= e($albumCategoryLabel) ?></p>
+                                <p><span><?= e((string) ($t['subcategory_field'] ?? 'Sous-thématique')) ?></span><?= e($albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></p>
+                            </div>
+                        </div>
                         <div class="album-tile-body">
                             <div>
                                 <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e($albumTitle) ?></a></h2>
@@ -725,7 +731,6 @@ ob_start();
                                 <?php if ($descriptionText !== ''): ?>
                                     <p><?= e(mb_safe_strimwidth($descriptionText, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
-                                <p class="help"><?= e((string) ($t['category_field'] ?? 'Thématique')) ?>: <?= e($albumCategoryLabel) ?><?= $albumSubcategoryLabel !== '' ? ' / ' . e($albumSubcategoryLabel) : '' ?></p>
                             </div>
                             <?php if ($canEditAlbum): ?>
                             <div class="album-tile-footer">
