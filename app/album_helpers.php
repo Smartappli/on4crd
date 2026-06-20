@@ -732,6 +732,38 @@ function render_album_taxonomy_fields(array $categories, array $labels = [], str
     return $html . '</select></label>';
 }
 
+function album_description_display_text(string $description): string
+{
+    $text = trim($description);
+    if ($text === '') {
+        return '';
+    }
+
+    $text = (string) preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $text);
+    $text = (string) preg_replace('/<\s*\/\s*(p|div|li|h[1-6])\s*>/i', "\n", $text);
+    $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $text = str_replace(["\r\n", "\r"], "\n", $text);
+    $text = (string) preg_replace('/[ \t]+/', ' ', $text);
+
+    $metadataLabels = '(?:Th[eé]matique|Thematique|Theme|Topic|Sous[- ]th[eé]matique|Sous[- ]thematique|Subtopic|Mots cl[eé]s|Mots cles|Keywords|Tags)';
+    $lines = preg_split('/\n+/', $text) ?: [];
+    $cleanedLines = [];
+    foreach ($lines as $line) {
+        $line = trim((string) $line);
+        if ($line === '') {
+            continue;
+        }
+
+        $line = (string) preg_replace('/(?:^|\s+)' . $metadataLabels . '\s*:\s*.*?(?=\s+' . $metadataLabels . '\s*:|$)/iu', ' ', $line);
+        $line = trim((string) preg_replace('/[ \t]+/', ' ', $line));
+        if ($line !== '') {
+            $cleanedLines[] = $line;
+        }
+    }
+
+    return trim(implode("\n", $cleanedLines));
+}
+
 function album_proposal_description_from_summary(string $summary): ?string
 {
     $description = content_proposal_detail_from_summary($summary, ['Description', 'Résumé', 'Resume', 'Summary']);
