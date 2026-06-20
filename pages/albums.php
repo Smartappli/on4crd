@@ -722,7 +722,7 @@ ob_start();
                                             <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
                                             <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                             <input type="hidden" name="return_p" value="<?= $page ?>">
-                                            <button class="button secondary badge muted album-favorite-badge" type="submit" aria-label="<?= e($favoriteLabel) ?>" title="<?= e($favoriteLabel) ?>"><span>Favori</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
+                                            <button class="button secondary badge muted album-favorite-badge" type="submit" aria-label="<?= e($favoriteLabel) ?>" title="<?= e($favoriteLabel) ?>"><span>Mettre en favoris</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
                                         </form>
                                     <?php endif; ?>
                                 </div>
@@ -730,12 +730,12 @@ ob_start();
                                     <p><?= e(mb_safe_strimwidth($descriptionText, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
                             </div>
-                            <?php if ($canEditAlbum): ?>
-                            <div class="album-tile-footer">
-                                <button class="button secondary" type="button" data-album-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($albumText('edit_album', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
-                            </div>
-                            <?php endif; ?>
                         </div>
+                        <?php if ($canEditAlbum): ?>
+                            <div class="album-tile-actions">
+                                <button class="button secondary album-tile-edit-button" type="button" data-album-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($albumText('edit_album', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
+                            </div>
+                        <?php endif; ?>
                     </article>
                     <?php if ($canEditAlbum): ?>
                         <dialog class="album-dialog" id="<?= e($editDialogId) ?>" aria-labelledby="<?= e($editDialogId) ?>-title">
