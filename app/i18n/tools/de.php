@@ -189,7 +189,7 @@ return array (
   'unit_conv_swap' => 'Tauschen',
   'unit_conv_family' => 'Familie',
   'unit_conv_from' => 'Aus',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'Nach',
   'unit_conv_presets' => 'Schnelle Werte',
   'unit_conv_reference' => 'Referenz',
   'unit_conv_quick_links' => 'Detaillierte Konverter',

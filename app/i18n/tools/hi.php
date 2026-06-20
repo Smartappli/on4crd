@@ -189,7 +189,7 @@ return array (
   'unit_conv_swap' => 'बदलना',
   'unit_conv_family' => 'परिवार',
   'unit_conv_from' => 'से',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'तक',
   'unit_conv_presets' => 'त्वरित मूल्य',
   'unit_conv_reference' => 'संदर्भ',
   'unit_conv_quick_links' => 'विस्तृत कनवर्टर्स',

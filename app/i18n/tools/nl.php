@@ -190,7 +190,7 @@ return array (
   'unit_conv_swap' => 'Ruil',
   'unit_conv_family' => 'Familie',
   'unit_conv_from' => 'Van',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'Naar',
   'unit_conv_presets' => 'Snelle waarden',
   'unit_conv_reference' => 'Referentie',
   'unit_conv_quick_links' => 'Gedetailleerde converters',

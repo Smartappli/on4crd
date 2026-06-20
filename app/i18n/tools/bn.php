@@ -189,7 +189,7 @@ return array (
   'unit_conv_swap' => 'অদলবদল',
   'unit_conv_family' => 'পরিবার',
   'unit_conv_from' => 'থেকে',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'এ',
   'unit_conv_presets' => 'দ্রুত মান',
   'unit_conv_reference' => 'রেফারেন্স',
   'unit_conv_quick_links' => 'বিস্তারিত রূপান্তরকারী',

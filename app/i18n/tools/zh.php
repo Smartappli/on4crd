@@ -189,7 +189,7 @@ return array (
   'unit_conv_swap' => '交换',
   'unit_conv_family' => '家庭',
   'unit_conv_from' => '从',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => '到',
   'unit_conv_presets' => '快速值',
   'unit_conv_reference' => '参考',
   'unit_conv_quick_links' => '详细转换器',

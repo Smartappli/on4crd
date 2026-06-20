@@ -189,7 +189,7 @@ return array (
   'unit_conv_swap' => 'تبديل',
   'unit_conv_family' => 'عائلة',
   'unit_conv_from' => 'من',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'إلى',
   'unit_conv_presets' => 'القيم السريعة',
   'unit_conv_reference' => 'مرجع',
   'unit_conv_quick_links' => 'المحولات التفصيلية',

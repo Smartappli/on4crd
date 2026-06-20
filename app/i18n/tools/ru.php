@@ -189,7 +189,7 @@ return array (
   'unit_conv_swap' => 'Менять',
   'unit_conv_family' => 'Семья',
   'unit_conv_from' => 'От',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'К',
   'unit_conv_presets' => 'Быстрые значения',
   'unit_conv_reference' => 'Ссылка',
   'unit_conv_quick_links' => 'Подробные конвертеры',

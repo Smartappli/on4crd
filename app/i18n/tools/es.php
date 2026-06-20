@@ -189,7 +189,7 @@ return array (
   'unit_conv_swap' => 'Intercambio',
   'unit_conv_family' => 'Familia',
   'unit_conv_from' => 'De',
-  'unit_conv_to' => 'To',
+  'unit_conv_to' => 'A',
   'unit_conv_presets' => 'Valores rápidos',
   'unit_conv_reference' => 'Referencia',
   'unit_conv_quick_links' => 'Convertidores detallados',
