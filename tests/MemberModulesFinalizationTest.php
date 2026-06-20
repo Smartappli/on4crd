@@ -40,6 +40,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_admin_wizard_url()', $albums);
         self::assertStringContainsString("log_structured_event('album_tile_render_prepare_failed'", $albums);
         self::assertStringContainsString("\$albumTitle = trim((string) (\$row['title'] ?? ''));", $albums);
+        self::assertStringContainsString('$descriptionText = html_entity_decode(strip_tags($descriptionText), ENT_QUOTES | ENT_HTML5, \'UTF-8\');', $albums);
+        self::assertStringContainsString('mb_safe_strimwidth($descriptionText, 0, 150, \'...\')', $albums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
         self::assertStringContainsString('album_clear_caches();', $albums);
         self::assertStringContainsString('album_ensure_photo_sort_order_column()', $album);

@@ -352,6 +352,25 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('$homeHamAdviceHtml = $homeSafeHamAdvice();', $home);
     }
 
+    public function testHomeAlbumPhotosUseFiveItemCarouselAndTrophyCtaTargetsEvents(): void
+    {
+        $home = file_get_contents(__DIR__ . '/../pages/home.php');
+        $homeJs = file_get_contents(__DIR__ . '/../assets/js/modules/home.js');
+        $homeCss = file_get_contents(__DIR__ . '/../assets/css/modules/home.css');
+        self::assertIsString($home);
+        self::assertIsString($homeJs);
+        self::assertIsString($homeCss);
+
+        self::assertStringContainsString('home_public_album_random_photos_v1', $home);
+        self::assertStringContainsString('LIMIT 5', $home);
+        self::assertStringContainsString('data-home-gallery-carousel', $home);
+        self::assertStringContainsString('[data-home-gallery-carousel]', $homeJs);
+        self::assertStringContainsString('home-gallery-carousel.is-ready .home-gallery-slide.is-active', $homeCss);
+        self::assertStringContainsString('height: auto;', $homeCss);
+        self::assertStringContainsString("route_url('events')", $home);
+        self::assertStringNotContainsString("route_url('albums')) . '\">' . e((string) (\$homeI18n['home_trophies_cta']", $home);
+    }
+
     public function testHamWeatherAdviceUsesAgrometTokenFromEnvironment(): void
     {
         $source = file_get_contents(__DIR__ . '/../app/ham_weather_advice.php');
@@ -470,6 +489,16 @@ final class FunctionHelpersTest extends TestCase
                 self::assertNotSame('', trim((string) ($messages[$locale][$key] ?? '')), sprintf('Missing dashboard JS translation %s for %s.', $key, $locale));
             }
         }
+    }
+
+    public function testDashboardCloseButtonsUseEncodingSafeCrossEntity(): void
+    {
+        $dashboard = file_get_contents(__DIR__ . '/../pages/dashboard.php');
+        self::assertIsString($dashboard);
+
+        self::assertStringContainsString('<button class="ghost remove-widget" type="button">&times;</button>', $dashboard);
+        self::assertStringContainsString('id="close-widgets-panel" aria-label="<?= e($t(\'close\')) ?>">&times;</button>', $dashboard);
+        self::assertStringNotContainsString('âœ•', $dashboard);
     }
 
     public function testDashboardClockWidgetUsesHomeLiveClockMarkupAndPropagationIsRemoved(): void

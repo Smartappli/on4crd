@@ -49,6 +49,20 @@ final class GitHubWorkflowContractTest extends TestCase
         self::assertStringContainsString('selenium-artifacts', $workflow);
     }
 
+    public function testImageWorkflowCoversRepositoryImagesBeyondAssets(): void
+    {
+        $workflow = $this->source('.github/workflows/images.yml');
+
+        foreach (['jpg', 'jpeg', 'png', 'webp', 'avif'] as $extension) {
+            self::assertStringContainsString("- '**/*." . $extension . "'", $workflow);
+            self::assertStringNotContainsString("- 'assets/**/*." . $extension . "'", $workflow);
+        }
+
+        self::assertStringContainsString('calibreapp/image-actions', $workflow);
+        self::assertStringContainsString('Runtime uploads under storage/uploads are ignored by git', $workflow);
+        self::assertStringContainsString('app/upload_helpers.php', $workflow);
+    }
+
     public function testSeleniumCiPreparationScriptBuildsConfigAndSchema(): void
     {
         $script = $this->source('scripts/prepare_selenium_ci.php');
