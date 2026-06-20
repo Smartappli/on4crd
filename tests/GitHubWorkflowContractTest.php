@@ -76,11 +76,15 @@ final class GitHubWorkflowContractTest extends TestCase
     public function testSeleniumCiPreparationScriptBuildsConfigAndSchema(): void
     {
         $script = $this->source('scripts/prepare_selenium_ci.php');
+        $schema = $this->source('schema/schema.sql');
 
         self::assertStringContainsString('SELENIUM_CONFIG_PATH', $script);
         self::assertStringContainsString('SELENIUM_DB_DSN', $script);
         self::assertStringContainsString('/schema/schema.sql', $script);
         self::assertStringContainsString('/app/bootstrap.php', $script);
         self::assertStringContainsString('CREATE DATABASE IF NOT EXISTS', $script);
+        self::assertStringContainsString('proposal_kind VARCHAR(32) NOT NULL DEFAULT', $schema);
+        self::assertStringContainsString('source_page_id INT DEFAULT NULL', $schema);
+        self::assertStringContainsString('target_slug VARCHAR(190) DEFAULT NULL', $schema);
     }
 }

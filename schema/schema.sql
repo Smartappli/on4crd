@@ -328,10 +328,17 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
     subcategory VARCHAR(120) NOT NULL DEFAULT '',
     author_id INT DEFAULT NULL,
     status ENUM('pending','published','rejected') NOT NULL DEFAULT 'published',
+    proposal_kind VARCHAR(32) NOT NULL DEFAULT 'page',
+    source_page_id INT DEFAULT NULL,
+    target_slug VARCHAR(190) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_wiki_category (category),
-    INDEX idx_wiki_subcategory (category, subcategory)
+    INDEX idx_wiki_subcategory (category, subcategory),
+    INDEX idx_wiki_status_updated (status, updated_at),
+    INDEX idx_wiki_updated (updated_at),
+    INDEX idx_wiki_proposal_kind (proposal_kind, status),
+    INDEX idx_wiki_source_page (source_page_id)
 );
 
 CREATE TABLE IF NOT EXISTS wiki_categories (
