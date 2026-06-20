@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'Fotografija izbrisana.',
   'album_label' => 'Fotoalbum',
   'dropzone_hint' => 'Povucite i ispustite svoje fotografije ovdje ili kliknite za odabir.',
-  'yes' => 'da',
+  'yes' => 'Da',
   'no' => 'Ne',
   'edit_albums' => 'Uređivanje albuma',
   'save' => 'spremiti',

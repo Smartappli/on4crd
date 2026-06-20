@@ -29,7 +29,7 @@ return array (
   'photo_deleted_ok' => 'Fotografia bola odstránená.',
   'album_label' => 'album',
   'dropzone_hint' => 'Presuňte fotografie sem alebo ich vyberte kliknutím.',
-  'yes' => 'áno',
+  'yes' => 'Áno',
   'no' => 'Nie',
   'edit_albums' => 'Upraviť albumy',
   'save' => 'Uložiť',

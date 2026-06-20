@@ -24,7 +24,7 @@ return array (
   'col_line_total' => 'Celkový riadok',
   'line_active' => 'Aktívne',
   'line_remove' => 'Odstrániť',
-  'yes' => 'áno',
+  'yes' => 'Áno',
   'no' => 'Nie',
   'csv_reservation_id' => 'Rezervácia ID',
   'csv_reserved_by' => 'Meno',

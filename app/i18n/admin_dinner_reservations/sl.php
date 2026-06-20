@@ -24,7 +24,7 @@ return array (
   'col_line_total' => 'Skupna vrstica',
   'line_active' => 'Aktiven',
   'line_remove' => 'Izbriši',
-  'yes' => 'ja',
+  'yes' => 'Da',
   'no' => 'Ne',
   'csv_reservation_id' => 'Rezervacija ID',
   'csv_reserved_by' => 'Ime',
