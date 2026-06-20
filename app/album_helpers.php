@@ -745,7 +745,8 @@ function album_description_display_text(string $description): string
     $text = str_replace(["\r\n", "\r"], "\n", $text);
     $text = (string) preg_replace('/[ \t]+/', ' ', $text);
 
-    $metadataLabels = '(?:Th[eé]matique|Thematique|Theme|Topic|Sous[- ]th[eé]matique|Sous[- ]thematique|Subtopic|Mots cl[eé]s|Mots cles|Keywords|Tags)';
+    $accentedE = '(?:[eéèêë]|\?|Ã©|&eacute;)';
+    $metadataLabels = '(?:Th' . $accentedE . 'matique|Thematique|Theme|Topic|Sous[- ]th' . $accentedE . 'matique|Sous[- ]thematique|Subtopic|Mots cl' . $accentedE . 's|Mots cles|Keywords|Tags)';
     $lines = preg_split('/\n+/', $text) ?: [];
     $cleanedLines = [];
     foreach ($lines as $line) {
