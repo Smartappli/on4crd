@@ -57,6 +57,33 @@ $allowedExactValues = array_fill_keys([
     'YouTube',
     'eQSL',
     'macOS',
+    'Administration',
+    'Agenda ON4CRD',
+    'Album',
+    'Albums',
+    'Assistant',
+    'Bid',
+    'Clics',
+    'Details',
+    'Format',
+    'Google Map - Radio Club Durnal',
+    'Grid',
+    'Licence',
+    'Liste',
+    'Locator',
+    'Newsletter',
+    'Parser',
+    'Prosigns',
+    'Radio / RF',
+    'Reference',
+    'Rotation',
+    'Service',
+    'Sponsoring',
+    'Station',
+    'Status',
+    'Stats',
+    'Wiki',
+    'Widgets',
 ], true);
 
 /**
@@ -98,7 +125,7 @@ function i18n_value_has_letters(string $value): bool
  * Filters values that are expected to remain stable across locales: placeholders,
  * URLs, radio abbreviations, file formats, callsigns, and similar technical tokens.
  */
-function is_i18n_stable_value(string $value, string $key, array $allowedExactValues): bool
+function is_i18n_stable_value(string $value, string $key, string $locale, array $allowedExactValues): bool
 {
     $value = normalize_i18n_value($value);
 
@@ -107,6 +134,14 @@ function is_i18n_stable_value(string $value, string $key, array $allowedExactVal
     }
 
     if (isset($allowedExactValues[$value])) {
+        return true;
+    }
+
+    if ($value === 'No' && in_array($locale, ['es', 'it'], true)) {
+        return true;
+    }
+
+    if ($value === 'Contact' && in_array($locale, ['nl', 'ro'], true)) {
         return true;
     }
 
@@ -127,6 +162,24 @@ function is_i18n_stable_value(string $value, string $key, array $allowedExactVal
     }
 
     if (preg_match('/^(ON|OO|OP|OQ|OR|OS|OT)[0-9][A-Z]{1,4}$/u', $value) === 1) {
+        return true;
+    }
+
+    if (
+        preg_match('/(address|calendar_name|code|filename|ics_|map_title|path|route|slug|url|venue_)/i', $key) === 1
+        && preg_match('/^[\p{L}\p{N}\s.,:;\/+_.()\-]+$/u', $value) === 1
+    ) {
+        return true;
+    }
+
+    if (preg_match('/(cw_qrp_value|dbd|dbi|dbm|dbuv|dbw|frequency|gain|impedance|km_unit|locator|meters_unit|mhz|ohm|power|r1_|r2_|rx_|tx_|watt)/i', $key) === 1) {
+        return true;
+    }
+
+    if (
+        preg_match('/[Ωµ]|(?:^|\b)(?:dBd|dBi|dBm|dBW|dBµV|GHz|Grx|Gtx|kHz|km|MHz|Ptx|R[12])(?:\b|$)/u', $value) === 1
+        && preg_match('/(field|gain|label|level|niveau|power|tool|unit)/i', $key) === 1
+    ) {
         return true;
     }
 
@@ -218,7 +271,7 @@ foreach ($moduleDirs as $moduleDir) {
             }
 
             $normalizedValue = normalize_i18n_value($value);
-            if (is_i18n_stable_value($normalizedValue, $key, $allowedExactValues)) {
+            if (is_i18n_stable_value($normalizedValue, $key, $locale, $allowedExactValues)) {
                 continue;
             }
 
@@ -227,7 +280,7 @@ foreach ($moduleDirs as $moduleDir) {
                 isset($en[$key])
                 && is_string($en[$key])
                 && $normalizedValue === normalize_i18n_value($en[$key])
-                && !is_i18n_stable_value($en[$key], $key, $allowedExactValues)
+                && !is_i18n_stable_value($en[$key], $key, $locale, $allowedExactValues)
             ) {
                 $sources[] = 'en';
             }
@@ -236,7 +289,7 @@ foreach ($moduleDirs as $moduleDir) {
                 isset($fr[$key])
                 && is_string($fr[$key])
                 && $normalizedValue === normalize_i18n_value($fr[$key])
-                && !is_i18n_stable_value($fr[$key], $key, $allowedExactValues)
+                && !is_i18n_stable_value($fr[$key], $key, $locale, $allowedExactValues)
             ) {
                 $sources[] = 'fr';
             }
