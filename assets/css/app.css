@@ -1882,6 +1882,23 @@ textarea { resize: vertical; }
   color: var(--muted);
   font-weight: 700;
 }
+.album-tile-media-stack {
+  display: grid;
+  gap: .45rem;
+  width: 112px;
+}
+.album-tile-taxonomy {
+  display: grid;
+  gap: .15rem;
+  min-width: 0;
+  font-size: .78rem;
+  line-height: 1.25;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.album-tile-taxonomy p {
+  margin: 0;
+}
 .album-placeholder-mark {
   width: 4rem;
   height: 4rem;
@@ -1980,6 +1997,11 @@ textarea { resize: vertical; }
   grid-template-columns: 190px minmax(0, 1fr);
   align-items: start;
 }
+.album-detail-cover-stack {
+  display: grid;
+  gap: .55rem;
+  width: 190px;
+}
 .album-detail-cover {
   display: grid;
   place-items: center;
@@ -1997,6 +2019,18 @@ textarea { resize: vertical; }
   height: 100%;
   min-height: 0;
   object-fit: cover;
+}
+.album-detail-taxonomy {
+  display: grid;
+  gap: .2rem;
+  min-width: 0;
+  font-size: .86rem;
+  line-height: 1.3;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.album-detail-taxonomy p {
+  margin: 0;
 }
 .album-detail-copy {
   display: grid;
@@ -4239,9 +4273,15 @@ textarea.wysiwyg-source {
     width: 88px;
     height: 88px;
   }
+  .album-tile-media-stack {
+    width: 88px;
+  }
   .album-detail-cover {
     width: 140px;
     height: 140px;
+  }
+  .album-detail-cover-stack {
+    width: 140px;
   }
   .album-detail-hero {
     grid-template-columns: 140px minmax(0, 1fr);
