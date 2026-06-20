@@ -493,7 +493,7 @@ ob_start();
                     <strong><?= e($latestAlbumLabel) ?></strong>
                 </article>
             </div>
-            <p class="actions albums-hero-actions">
+            <div class="actions albums-hero-actions">
                 <details class="albums-propose-menu">
                     <summary class="button" aria-haspopup="menu">Proposer</summary>
                     <div class="albums-propose-menu-panel" role="menu">
@@ -505,7 +505,7 @@ ob_start();
                 <?php if ($canManageAlbums): ?>
                     <a class="button secondary" href="<?= e(route_url('admin_albums')) ?>">Administrer</a>
                 <?php endif; ?>
-            </p>
+            </div>
         </div>
     </section>
 
