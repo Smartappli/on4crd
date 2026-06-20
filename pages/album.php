@@ -59,6 +59,13 @@ if ($albumDescriptionText !== '') {
     $albumDescriptionText = (string) preg_replace('/\n{3,}/', "\n\n", $albumDescriptionText);
     $albumDescriptionText = trim($albumDescriptionText);
 }
+$albumTaxonomyText = i18n_domain_locale('albums', $locale);
+$albumCategories = album_categories();
+$albumCategoryCode = album_category_code((string) ($album['category'] ?? 'general'));
+$albumSubcategoryCode = album_subcategory_code((string) ($album['subcategory'] ?? ''));
+$albumCategoryLabel = (string) ($albumCategories[$albumCategoryCode] ?? album_category_label_from_code($albumCategoryCode));
+$albumSubcategoryLabel = $albumSubcategoryCode !== '' ? album_category_label_from_code($albumSubcategoryCode) : '';
+$albumSubcategoryDisplay = $albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) ($albumTaxonomyText['no_subcategory'] ?? 'Sans sous-thématique');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
     $user = require_login();
@@ -196,12 +203,18 @@ ob_start();
 ?>
 <div class="album-detail-page">
     <section class="album-detail-hero">
-        <div class="album-detail-cover">
-            <?php if ($coverDisplayPath !== null): ?>
-                <img src="<?= e(base_url($coverDisplayPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
-            <?php else: ?>
-                <span class="album-placeholder-mark" aria-hidden="true"></span>
-            <?php endif; ?>
+        <div class="album-detail-cover-stack">
+            <div class="album-detail-cover">
+                <?php if ($coverDisplayPath !== null): ?>
+                    <img src="<?= e(base_url($coverDisplayPath)) ?>" alt="<?= e($albumTitle) ?>" loading="eager" decoding="async" fetchpriority="high">
+                <?php else: ?>
+                    <span class="album-placeholder-mark" aria-hidden="true"></span>
+                <?php endif; ?>
+            </div>
+            <div class="album-detail-taxonomy">
+                <p><span><?= e((string) ($albumTaxonomyText['category_field'] ?? 'Thématique')) ?></span><?= e($albumCategoryLabel) ?></p>
+                <p><span><?= e((string) ($albumTaxonomyText['subcategory_field'] ?? 'Sous-thématique')) ?></span><?= e($albumSubcategoryDisplay) ?></p>
+            </div>
         </div>
         <div class="album-detail-copy">
             <p><a href="<?= e(route_url('albums')) ?>"><?= e((string) $t['back']) ?></a></p>
