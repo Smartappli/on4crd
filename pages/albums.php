@@ -704,31 +704,34 @@ ob_start();
                         <div class="album-tile-body">
                             <div>
                                 <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e($albumTitle) ?></a></h2>
+                                <div class="album-tile-badges">
+                                    <span class="badge muted album-photo-count-badge"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span>
+                                    <?php if ($user !== null): ?>
+                                        <?php $isFavorite = favorite_is_saved((int) $user['id'], 'album', (int) ($row['id'] ?? 0)); ?>
+                                        <?php $favoriteLabel = $isFavorite ? $albumText('favorite_remove', 'Retirer des favoris', 'Remove from favorites') : $albumText('favorite_add', 'Ajouter aux favoris', 'Add to favorites'); ?>
+                                        <form method="post" class="album-favorite-form">
+                                            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                                            <input type="hidden" name="action" value="toggle_favorite_album">
+                                            <input type="hidden" name="album_id" value="<?= (int) ($row['id'] ?? 0) ?>">
+                                            <input type="hidden" name="return_q" value="<?= e($search) ?>">
+                                            <input type="hidden" name="return_category" value="<?= e($categoryFilter) ?>">
+                                            <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
+                                            <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
+                                            <input type="hidden" name="return_p" value="<?= $page ?>">
+                                            <button class="button secondary badge muted album-favorite-badge" type="submit" aria-label="<?= e($favoriteLabel) ?>" title="<?= e($favoriteLabel) ?>"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
                                 <?php if ($descriptionText !== ''): ?>
                                     <p><?= e(mb_safe_strimwidth($descriptionText, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
                                 <p class="help"><?= e((string) ($t['category_field'] ?? 'Thématique')) ?>: <?= e($albumCategoryLabel) ?><?= $albumSubcategoryLabel !== '' ? ' / ' . e($albumSubcategoryLabel) : '' ?></p>
                             </div>
+                            <?php if ($canEditAlbum): ?>
                             <div class="album-tile-footer">
-                                <span class="badge muted"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span>
-                                <?php if ($user !== null): ?>
-                                    <?php $isFavorite = favorite_is_saved((int) $user['id'], 'album', (int) ($row['id'] ?? 0)); ?>
-                                    <form method="post" class="album-favorite-form">
-                                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                                        <input type="hidden" name="action" value="toggle_favorite_album">
-                                        <input type="hidden" name="album_id" value="<?= (int) ($row['id'] ?? 0) ?>">
-                                        <input type="hidden" name="return_q" value="<?= e($search) ?>">
-                                        <input type="hidden" name="return_category" value="<?= e($categoryFilter) ?>">
-                                        <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
-                                        <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
-                                        <input type="hidden" name="return_p" value="<?= $page ?>">
-                                        <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
-                                    </form>
-                                <?php endif; ?>
-                                <?php if ($canEditAlbum): ?>
                                     <button class="button secondary" type="button" data-album-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($albumText('edit_album', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
-                                <?php endif; ?>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </article>
                     <?php if ($canEditAlbum): ?>
