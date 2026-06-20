@@ -8,6 +8,14 @@ $viewerCloseLabel = trim((string) ($viewerLabels['close'] ?? ''));
 if ($viewerCloseLabel === '') {
     $viewerCloseLabel = $locale === 'fr' ? 'Fermer' : 'Close';
 }
+$viewerPreviousLabel = trim((string) ($t['previous'] ?? ''));
+if ($viewerPreviousLabel === '') {
+    $viewerPreviousLabel = $locale === 'fr' ? 'Précédent' : 'Previous';
+}
+$viewerNextLabel = trim((string) ($t['next'] ?? ''));
+if ($viewerNextLabel === '') {
+    $viewerNextLabel = $locale === 'fr' ? 'Suivant' : 'Next';
+}
 
 if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['title']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['title']);
@@ -269,7 +277,13 @@ ob_start();
         <div class="album-photo-viewer-card">
             <button class="album-photo-viewer-close" type="button" data-album-viewer-close aria-label="<?= e($viewerCloseLabel) ?>">&times;</button>
             <div class="album-photo-viewer-media">
+                <?php if (count($photos) > 1): ?>
+                    <button class="album-photo-viewer-nav is-prev" type="button" data-album-viewer-prev aria-label="<?= e($viewerPreviousLabel) ?>">&#8249;</button>
+                <?php endif; ?>
                 <img src="" alt="" data-album-viewer-image>
+                <?php if (count($photos) > 1): ?>
+                    <button class="album-photo-viewer-nav is-next" type="button" data-album-viewer-next aria-label="<?= e($viewerNextLabel) ?>">&#8250;</button>
+                <?php endif; ?>
             </div>
             <aside class="album-photo-viewer-copy" aria-live="polite">
                 <h2 id="album-photo-viewer-title" data-album-viewer-title></h2>

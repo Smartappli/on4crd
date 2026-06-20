@@ -12,6 +12,10 @@
   const descriptionNode = dialog.querySelector('[data-album-viewer-description]');
   const copyNode = dialog.querySelector('.album-photo-viewer-copy');
   const closeButtons = dialog.querySelectorAll('[data-album-viewer-close]');
+  const previousButton = dialog.querySelector('[data-album-viewer-prev]');
+  const nextButton = dialog.querySelector('[data-album-viewer-next]');
+  const links = Array.from(openLinks);
+  let currentIndex = -1;
 
   if (!(image instanceof HTMLImageElement) || !(copyNode instanceof HTMLElement)) {
     return;
@@ -40,7 +44,43 @@
     image.alt = '';
   };
 
-  openLinks.forEach((link) => {
+  const showPhoto = (index) => {
+    if (links.length === 0) {
+      return;
+    }
+
+    currentIndex = (index + links.length) % links.length;
+    const link = links[currentIndex];
+    const href = link.getAttribute('href') || '';
+    if (href === '') {
+      return;
+    }
+
+    const thumbnail = link.querySelector('img');
+    const title = link.getAttribute('data-photo-title') || '';
+    const caption = link.getAttribute('data-photo-caption') || '';
+    const description = dialog.getAttribute('data-album-description') || '';
+    const fallbackAlt = thumbnail instanceof HTMLImageElement ? thumbnail.alt : '';
+
+    image.src = href;
+    image.alt = title.trim() || fallbackAlt;
+
+    const hasTitle = setText(titleNode, title);
+    const hasCaption = setText(captionNode, caption);
+    const hasDescription = setText(descriptionNode, description);
+    copyNode.hidden = !hasTitle && !hasCaption && !hasDescription;
+
+    if (!dialog.open) {
+      dialog.showModal();
+
+      const closeButton = dialog.querySelector('[data-album-viewer-close]');
+      if (closeButton instanceof HTMLElement) {
+        closeButton.focus();
+      }
+    }
+  };
+
+  links.forEach((link, index) => {
     link.addEventListener('click', (event) => {
       const href = link.getAttribute('href') || '';
       if (href === '') {
@@ -48,32 +88,23 @@
       }
 
       event.preventDefault();
-
-      const thumbnail = link.querySelector('img');
-      const title = link.getAttribute('data-photo-title') || '';
-      const caption = link.getAttribute('data-photo-caption') || '';
-      const description = dialog.getAttribute('data-album-description') || '';
-      const fallbackAlt = thumbnail instanceof HTMLImageElement ? thumbnail.alt : '';
-
-      image.src = href;
-      image.alt = title.trim() || fallbackAlt;
-
-      const hasTitle = setText(titleNode, title);
-      const hasCaption = setText(captionNode, caption);
-      const hasDescription = setText(descriptionNode, description);
-      copyNode.hidden = !hasTitle && !hasCaption && !hasDescription;
-
-      if (dialog.open) {
-        dialog.close();
-      }
-      dialog.showModal();
-
-      const closeButton = dialog.querySelector('[data-album-viewer-close]');
-      if (closeButton instanceof HTMLElement) {
-        closeButton.focus();
-      }
+      showPhoto(index);
     });
   });
+
+  if (previousButton instanceof HTMLButtonElement) {
+    previousButton.hidden = links.length < 2;
+    previousButton.addEventListener('click', () => {
+      showPhoto(currentIndex - 1);
+    });
+  }
+
+  if (nextButton instanceof HTMLButtonElement) {
+    nextButton.hidden = links.length < 2;
+    nextButton.addEventListener('click', () => {
+      showPhoto(currentIndex + 1);
+    });
+  }
 
   closeButtons.forEach((button) => {
     button.addEventListener('click', closeViewer);
@@ -86,4 +117,20 @@
   });
 
   dialog.addEventListener('close', clearImage);
+
+  document.addEventListener('keydown', (event) => {
+    if (!dialog.open || links.length < 2) {
+      return;
+    }
+
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      showPhoto(currentIndex - 1);
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      showPhoto(currentIndex + 1);
+    }
+  });
 })();
