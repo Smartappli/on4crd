@@ -701,8 +701,8 @@ ob_start();
                                 <?php endif; ?>
                             </a>
                             <div class="album-tile-taxonomy">
-                                <p><?= e($albumCategoryLabel) ?></p>
-                                <p><?= e($albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></p>
+                                <p><span>Thématique</span><?= e($albumCategoryLabel) ?></p>
+                                <p><span>Sous thématique</span><?= e($albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) ($t['no_subcategory'] ?? 'Sans sous-thématique')) ?></p>
                             </div>
                         </div>
                         <div class="album-tile-body">
@@ -722,7 +722,7 @@ ob_start();
                                             <input type="hidden" name="return_subcategory" value="<?= e($subcategoryFilter) ?>">
                                             <input type="hidden" name="return_favorites" value="<?= $favoritesOnly ? '1' : '' ?>">
                                             <input type="hidden" name="return_p" value="<?= $page ?>">
-                                            <button class="button secondary badge muted album-favorite-badge" type="submit" aria-label="<?= e($favoriteLabel) ?>" title="<?= e($favoriteLabel) ?>"><span>Mettre en favoris</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
+                                            <button class="button secondary badge muted album-favorite-badge" type="submit" aria-label="<?= e($favoriteLabel) ?>" title="<?= e($favoriteLabel) ?>"><span>Favoris</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
                                         </form>
                                     <?php endif; ?>
                                 </div>

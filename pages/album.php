@@ -201,8 +201,8 @@ ob_start();
                 <?php endif; ?>
             </div>
             <div class="album-detail-taxonomy">
-                <p><?= e($albumCategoryLabel) ?></p>
-                <p><?= e($albumSubcategoryDisplay) ?></p>
+                <p><span>Thématique</span><?= e($albumCategoryLabel) ?></p>
+                <p><span>Sous thématique</span><?= e($albumSubcategoryDisplay) ?></p>
             </div>
         </div>
         <div class="album-detail-copy">
@@ -222,7 +222,7 @@ ob_start();
                 <form method="post" class="album-favorite-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="toggle_favorite">
-                    <button class="button secondary album-favorite-button" type="submit"><span>Mettre en favoris</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
+                    <button class="button secondary album-favorite-button" type="submit"><span>Favoris</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
                 </form>
             <?php endif; ?>
         </div>
