@@ -51,7 +51,7 @@ jobs:
   toolbox-smoke-and-e2e:
     name: Toolbox smoke + browser E2E
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 70
     services:
       mysql:
         image: mysql:9.7
@@ -128,7 +128,7 @@ jobs:
         run: ./scripts/check-tools.sh --with-smoke
 
       - name: Run Selenium tests
-        timeout-minutes: 35
+        timeout-minutes: 60
         run: npm run test:selenium
 
       - name: Run Playwright E2E

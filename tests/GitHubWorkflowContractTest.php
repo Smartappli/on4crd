@@ -54,8 +54,8 @@ final class GitHubWorkflowContractTest extends TestCase
         self::assertStringContainsString('tests/selenium/seed_fixtures.php', $workflow);
         self::assertStringContainsString('ON4CRD_ALLOW_SELENIUM_FIXTURES', $workflow);
         self::assertStringContainsString('npm run test:selenium', $workflow);
-        self::assertStringContainsString('timeout-minutes: 45', $browserJob);
-        self::assertMatchesRegularExpression('/name:\s+Run Selenium tests\s+timeout-minutes:\s+35/s', $browserJob);
+        self::assertStringContainsString('timeout-minutes: 70', $browserJob);
+        self::assertMatchesRegularExpression('/name:\s+Run Selenium tests\s+timeout-minutes:\s+60/s', $browserJob);
         self::assertStringContainsString('selenium-artifacts', $workflow);
     }
 
