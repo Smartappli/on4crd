@@ -3,20 +3,32 @@ name: Compress images
 on:
   pull_request:
     paths:
-      - 'assets/**/*.jpg'
-      - 'assets/**/*.jpeg'
-      - 'assets/**/*.png'
-      - 'assets/**/*.webp'
-      - 'assets/**/*.avif'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.png'
+      - '**/*.webp'
+      - '**/*.avif'
+      - '!vendor/**'
+      - '!node_modules/**'
+      - '!storage/cache/**'
+      - '!selenium-artifacts/**'
+      - '!playwright-report/**'
+      - '!test-results/**'
   push:
     branches:
       - main
     paths:
-      - 'assets/**/*.jpg'
-      - 'assets/**/*.jpeg'
-      - 'assets/**/*.png'
-      - 'assets/**/*.webp'
-      - 'assets/**/*.avif'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.png'
+      - '**/*.webp'
+      - '**/*.avif'
+      - '!vendor/**'
+      - '!node_modules/**'
+      - '!storage/cache/**'
+      - '!selenium-artifacts/**'
+      - '!playwright-report/**'
+      - '!test-results/**'
   workflow_dispatch:
   schedule:
     - cron: '0 23 * * 0'
@@ -35,6 +47,7 @@ jobs:
       (github.event_name != 'pull_request' ||
        github.event.pull_request.head.repo.full_name == github.repository)
 
+    # Runtime uploads under storage/uploads are ignored by git and optimized by app/upload_helpers.php.
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v7 # NOSONAR - reviewed action pin managed by workflow update policy.
