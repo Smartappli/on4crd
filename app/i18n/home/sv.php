@@ -126,7 +126,7 @@ return array (
   'venue_line_2' => 'Rue des Écoles',
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Partnerannonsering',
-  'alt_hero_illustration' => 'Illustration ON4CRD',
+  'alt_hero_illustration' => 'ON4CRD-illustration',
   'alt_uba_logo' => 'Logotyp UBA',
   'alt_repeater_logo' => 'Relälogotyp',
   'journalist_title' => 'Du är journalist',

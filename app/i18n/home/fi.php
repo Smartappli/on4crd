@@ -127,7 +127,7 @@ return array (
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Kumppanimainonta',
   'alt_hero_illustration' => 'Kuva ON4CRD',
-  'alt_uba_logo' => 'UBA logo',
+  'alt_uba_logo' => 'UBA-logo',
   'alt_repeater_logo' => 'Releen logo',
   'journalist_title' => 'Olet toimittaja',
   'journalist_desc' => 'Pääset suoraan lehdistöpakettimme valmistelemaan julkaisujasi ja raporttejasi.',

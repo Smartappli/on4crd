@@ -127,7 +127,7 @@ return array (
   'venue_line_3' => '5530 Purnode',
   'alt_partner_ad' => 'Reklamar ta\' msieħba',
   'alt_hero_illustration' => 'Illustrazzjoni ON4CRD',
-  'alt_uba_logo' => 'UBA logo',
+  'alt_uba_logo' => 'Logo UBA',
   'alt_repeater_logo' => 'Logo tar-relay',
   'journalist_title' => 'Inti ġurnalist',
   'journalist_desc' => 'Aċċessa lill-kit tal-istampa tagħna direttament biex tipprepara l-pubblikazzjonijiet u r-rapporti tiegħek.',
