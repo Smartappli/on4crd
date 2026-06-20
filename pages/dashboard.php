@@ -194,7 +194,7 @@ ob_start();
         <article class="widget-card" draggable="true" aria-grabbed="false" data-widget="<?= e($widgetKey) ?>" data-widget-config='<?= e(json_encode($widgetConfig, JSON_UNESCAPED_SLASHES)) ?>'>
           <header>
             <strong><?= e($widgetTitle) ?></strong>
-            <button class="ghost remove-widget" type="button">âœ•</button>
+            <button class="ghost remove-widget" type="button">&times;</button>
           </header>
           <div class="widget-body"><?= $widgetBodyHtml ?></div>
         </article>
@@ -206,7 +206,7 @@ ob_start();
 <aside class="dashboard-offcanvas" id="dashboard-widgets-panel" aria-hidden="true" data-widget-unavailable="<?= e($t('widget_unavailable')) ?>">
   <header class="dashboard-offcanvas-header">
     <h2><?= e($t('available_widgets')) ?></h2>
-    <button class="ghost" type="button" id="close-widgets-panel" aria-label="<?= e($t('close')) ?>">✕</button>
+    <button class="ghost" type="button" id="close-widgets-panel" aria-label="<?= e($t('close')) ?>">&times;</button>
   </header>
   <p class="help"><?= e($t('widgets_help')) ?></p>
   <div class="stack">
