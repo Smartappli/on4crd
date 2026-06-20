@@ -406,6 +406,16 @@ if (table_exists('album_categories')) {
         ->execute([$like, $like]);
 }
 
+if (table_exists('member_webotheque_subcategories')) {
+    db()->prepare('DELETE FROM member_webotheque_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')
+        ->execute([$like, $like, $like]);
+}
+
+if (table_exists('member_webotheque_categories')) {
+    db()->prepare('DELETE FROM member_webotheque_categories WHERE code LIKE ? OR label LIKE ?')
+        ->execute([$like, $like]);
+}
+
 if (table_exists('content_proposals')) {
     db()->prepare('DELETE FROM content_proposals WHERE title LIKE ? OR summary LIKE ? OR contact LIKE ? OR source_ref LIKE ?')
         ->execute([$like, $like, $like, $like]);
@@ -1240,6 +1250,23 @@ const contentProposalScenarios = [
     },
     afterAccept: async (driver, title) => {
       await assertSelectOptionContains(driver, 'webotheque', { propose_link: '1' }, '#webotheque-link-dialog select[name="category"] option', title, 'La thematique webotheque validee doit etre disponible pour un lien.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une sous-thematique webotheque, la valider et la retrouver dans le formulaire lien',
+    tokenPrefix: 'selenium-pending-webotheque-subcategory',
+    titleSuffix: 'subtopic',
+    moduleRegex: /weboth|web library/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'webotheque', { propose_subcategory: '1' });
+      const form = await driver.findElement(By.css('#webotheque-subcategory-dialog form.webotheque-proposal-form'));
+      await setSelectValue(driver, await form.findElement(By.css('select[name="proposal_parent_category"]')), 'general');
+      await form.findElement(By.css('input[name="proposal_subcategory"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_details"]')), 'Sous-thematique webotheque proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'webotheque', { propose_link: '1' }, '#webotheque-link-dialog select[name="subcategory_ref"] option', title, 'La sous-thematique webotheque validee doit etre disponible pour proposer un lien.');
     },
   },
   {

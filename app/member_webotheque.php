@@ -539,6 +539,31 @@ function webotheque_category_from_input(string $value, array $categories): strin
 }
 }
 
+if (!function_exists('webotheque_upsert_subcategory')) {
+/**
+ * @param array<string, string> $categories
+ * @return array{category:string,subcategory:string}
+ */
+function webotheque_upsert_subcategory(array $categories, string $categoryInput, string $label): array
+{
+    if (!webotheque_ensure_subcategories_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $category = webotheque_category_from_input($categoryInput !== '' ? $categoryInput : 'general', $categories);
+    $label = content_proposal_clean_single_line($label, 160);
+    $code = webotheque_subcategory_code($label);
+    if ($label === '' || $code === '') {
+        throw new RuntimeException('err_subcategory_required');
+    }
+
+    db()->prepare('INSERT INTO member_webotheque_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+        ->execute([$category, $code, $label]);
+
+    return ['category' => $category, 'subcategory' => $code];
+}
+}
+
 if (!function_exists('webotheque_link_form_values')) {
 /**
  * @param array<string, mixed> $input
@@ -820,11 +845,22 @@ function webotheque_apply_accepted_proposal(
     int $fallbackMemberId = 0,
     string $categoryOverride = ''
 ): ?int {
-    if ((string) ($proposal['proposal_type'] ?? '') !== 'content') {
+    $proposalType = (string) ($proposal['proposal_type'] ?? '');
+    $summary = (string) ($proposal['summary'] ?? '');
+
+    if ($proposalType === 'subcategory') {
+        $category = $categoryOverride !== ''
+            ? webotheque_category_from_input($categoryOverride, $categories)
+            : webotheque_proposal_category_from_summary($summary, $categories);
+        webotheque_upsert_subcategory($categories, $category, (string) ($proposal['title'] ?? ''));
+
         return null;
     }
 
-    $summary = (string) ($proposal['summary'] ?? '');
+    if ($proposalType !== 'content') {
+        return null;
+    }
+
     $linkAction = webotheque_link_proposal_action($summary);
     if ($linkAction !== '') {
         $linkId = webotheque_link_proposal_link_id($summary);
@@ -919,7 +955,7 @@ function webotheque_sync_accepted_proposals(array $categories, array $t = [], in
              FROM content_proposals
              WHERE area = "webotheque"
                AND status = "accepted"
-               AND proposal_type = "content"
+               AND proposal_type IN ("content", "subcategory")
              ORDER BY updated_at ASC, id ASC
              LIMIT ' . $limit
         );
@@ -936,6 +972,30 @@ function webotheque_sync_accepted_proposals(array $categories, array $t = [], in
     foreach ($proposals as $proposal) {
         $result['checked']++;
         try {
+            $proposalType = (string) ($proposal['proposal_type'] ?? 'content');
+            if ($proposalType === 'subcategory') {
+                $summary = (string) ($proposal['summary'] ?? '');
+                $category = webotheque_proposal_category_from_summary($summary, $categories);
+                $subcategory = webotheque_subcategory_code((string) ($proposal['title'] ?? ''));
+                if ($subcategory === '') {
+                    throw new RuntimeException('err_subcategory_required');
+                }
+                if (!webotheque_ensure_subcategories_table()) {
+                    throw new RuntimeException('storage_unavailable');
+                }
+
+                $existingStmt = db()->prepare('SELECT id FROM member_webotheque_subcategories WHERE category_code = ? AND code = ? LIMIT 1');
+                $existingStmt->execute([$category, $subcategory]);
+                if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+                    $result['skipped']++;
+                    continue;
+                }
+
+                webotheque_apply_accepted_proposal($proposal, $categories, $t, $fallbackMemberId);
+                $result['applied']++;
+                continue;
+            }
+
             if (webotheque_link_proposal_action((string) ($proposal['summary'] ?? '')) !== '') {
                 $result['skipped']++;
                 continue;
@@ -1424,6 +1484,41 @@ function render_webotheque_page(): void
                 redirect('my_requests');
             }
 
+            if ($action === 'propose_subcategory') {
+                $proposalSubcategory = content_proposal_clean_single_line((string) ($_POST['proposal_subcategory'] ?? $_POST['proposal_subcategory_name'] ?? ''), 160);
+                $proposalCategory = webotheque_category_from_input((string) ($_POST['proposal_parent_category'] ?? $_POST['proposal_category'] ?? 'general'), $categories);
+                $proposalDetails = content_proposal_clean_multiline((string) ($_POST['proposal_details'] ?? ''), 1200);
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? $proposalContact), 220);
+                if ($proposalSubcategory === '') {
+                    throw new RuntimeException('err_subcategory_required');
+                }
+
+                $summary = content_proposal_details_text([
+                    (string) ($t['domain_field'] ?? $t['category_field'] ?? 'Topic') => (string) ($categories[$proposalCategory] ?? $proposalCategory),
+                    (string) ($t['subcategory_field'] ?? 'Subtopic') => $proposalSubcategory,
+                    (string) ($t['proposal_details_field'] ?? 'Details') => $proposalDetails,
+                ]);
+                $autoAccept = has_permission('admin.access');
+                $proposalStatus = $autoAccept ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create((int) $user['id'], 'webotheque', 'subcategory', $proposalSubcategory, $summary, $proposalContact, '', $proposalStatus);
+                if ($autoAccept) {
+                    $saved = webotheque_upsert_subcategory($categories, $proposalCategory, $proposalSubcategory);
+                    set_flash('success', (string) ($t['ok_subcategory_added'] ?? 'Subtopic created and approved.'));
+                    redirect_url(route_url_clean('webotheque', ['category' => $saved['category'], 'subcategory' => $saved['subcategory']]));
+                }
+
+                content_proposal_notify_site((string) ($t['propose_subcategory_subject'] ?? 'Web library subtopic proposal'), [
+                    'area' => 'webotheque',
+                    'proposal_type' => 'subcategory',
+                    'title' => $proposalSubcategory,
+                    'summary' => $summary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+                set_flash('success', (string) ($t['proposal_recorded'] ?? 'Proposal saved in your content area.'));
+                redirect('my_requests');
+            }
+
             if ($action === 'propose_tag') {
                 $proposalTag = content_proposal_clean_single_line((string) ($_POST['proposal_tag'] ?? ''), 80);
                 $proposalDetails = content_proposal_clean_multiline((string) ($_POST['proposal_details'] ?? ''), 1200);
@@ -1506,6 +1601,7 @@ function render_webotheque_page(): void
     $favoritesLabel = webotheque_favorites_label($t, $locale);
     $showLinkProposalForm = (string) ($_GET['propose_link'] ?? '') === '1';
     $showCategoryProposalForm = (string) ($_GET['propose_domain'] ?? $_GET['propose_category'] ?? '') === '1';
+    $showSubcategoryProposalForm = (string) ($_GET['propose_subcategory'] ?? '') === '1';
     $showTagProposalForm = (string) ($_GET['propose_tag'] ?? '') === '1';
     $links = webotheque_fetch_links($search, $categoryFilter, 80, $subcategoryFilter, $favoritesOnly ? $favoriteLinkIds : []);
     $pendingWebothequeAdminUrl = route_url_clean('admin_webotheque', ['status' => 'pending']) . '#pending-proposals';
@@ -1532,6 +1628,7 @@ function render_webotheque_page(): void
                         <summary class="button" aria-haspopup="menu"><?= e((string) $t['propose_menu']) ?></summary>
                         <div class="webotheque-propose-menu-panel" role="menu">
                             <a class="webotheque-propose-menu-item" role="menuitem" href="<?= e(route_url('webotheque', ['propose_domain' => '1'])) ?>" data-webotheque-modal-open="webotheque-domain-dialog" aria-haspopup="dialog" aria-controls="webotheque-domain-dialog"><?= e((string) $t['propose_category_item']) ?></a>
+                            <a class="webotheque-propose-menu-item" role="menuitem" href="<?= e(route_url('webotheque', ['propose_subcategory' => '1'])) ?>" data-webotheque-modal-open="webotheque-subcategory-dialog" aria-haspopup="dialog" aria-controls="webotheque-subcategory-dialog"><?= e((string) $t['propose_subcategory_item']) ?></a>
                             <a class="webotheque-propose-menu-item" role="menuitem" href="<?= e(route_url('webotheque', ['propose_tag' => '1'])) ?>" data-webotheque-modal-open="webotheque-tag-dialog" aria-haspopup="dialog" aria-controls="webotheque-tag-dialog"><?= e((string) $t['propose_tag_item']) ?></a>
                             <a class="webotheque-propose-menu-item" role="menuitem" href="<?= e(route_url('webotheque', ['propose_link' => '1'])) ?>" data-webotheque-modal-open="webotheque-link-dialog" aria-haspopup="dialog" aria-controls="webotheque-link-dialog"><?= e((string) $t['propose_link_item']) ?></a>
                         </div>
@@ -1579,6 +1676,38 @@ function render_webotheque_page(): void
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="propose_domain">
                     <label><span><?= e((string) $t['category_name_field']) ?></span><input type="text" name="proposal_domain" maxlength="120" required></label>
+                    <label><span><?= e((string) $t['proposal_details_field']) ?></span><textarea name="proposal_details" rows="4" maxlength="1200"></textarea></label>
+                    <label><span><?= e((string) $t['contact_field']) ?></span><input type="email" name="proposal_contact" maxlength="220" value="<?= e($proposalContact) ?>"></label>
+                    <p class="webotheque-proposal-dialog-actions module-dialog-actions">
+                        <button class="button" type="submit"><?= e((string) $t['submit_proposal']) ?></button>
+                        <button class="button secondary" type="button" data-webotheque-modal-close><?= e((string) $t['cancel']) ?></button>
+                    </p>
+                </form>
+            </div>
+        </dialog>
+
+        <dialog class="webotheque-proposal-dialog" id="webotheque-subcategory-dialog" aria-labelledby="webotheque-subcategory-title"<?= $showSubcategoryProposalForm ? ' open data-webotheque-auto-open' : '' ?>>
+            <div class="webotheque-proposal-dialog-card">
+                <div class="webotheque-proposal-dialog-header module-dialog-header">
+                    <div>
+                        <p class="eyebrow"><?= e((string) $t['title']) ?></p>
+                        <h2 id="webotheque-subcategory-title"><?= e((string) $t['propose_subcategory']) ?></h2>
+                        <p class="help"><?= e($canAutoValidate ? (string) $t['proposal_auto_accept_help'] : (string) $t['propose_subcategory_help']) ?></p>
+                    </div>
+                    <button class="webotheque-proposal-dialog-close module-dialog-close" type="button" data-webotheque-modal-close aria-label="<?= e((string) $t['cancel']) ?>">&times;</button>
+                </div>
+                <form method="post" class="webotheque-proposal-form module-dialog-form">
+                    <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="action" value="propose_subcategory">
+                    <label>
+                        <span><?= e((string) ($t['subcategory_parent_field'] ?? $t['category_field'])) ?></span>
+                        <select name="proposal_parent_category">
+                            <?php foreach ($categories as $code => $label): ?>
+                                <option value="<?= e((string) $code) ?>"<?= $categoryFilter === (string) $code ? ' selected' : '' ?>><?= e((string) $label) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label><span><?= e((string) ($t['subcategory_name_field'] ?? $t['subcategory_field'])) ?></span><input type="text" name="proposal_subcategory" maxlength="160" required></label>
                     <label><span><?= e((string) $t['proposal_details_field']) ?></span><textarea name="proposal_details" rows="4" maxlength="1200"></textarea></label>
                     <label><span><?= e((string) $t['contact_field']) ?></span><input type="email" name="proposal_contact" maxlength="220" value="<?= e($proposalContact) ?>"></label>
                     <p class="webotheque-proposal-dialog-actions module-dialog-actions">
@@ -1723,6 +1852,7 @@ function render_admin_webotheque_page(): void
     $proposalTypeLabels = [
         'domain' => $adminText('proposal_type_domain', 'Thématique', 'Topic'),
         'category' => $adminText('proposal_type_domain', 'Thématique', 'Topic'),
+        'subcategory' => $adminText('proposal_type_subcategory', 'Sous-thématique', 'Subtopic'),
         'content' => $adminText('proposal_type_content', 'Lien', 'Link'),
         'tag' => $adminText('proposal_type_tag', 'Mot clé', 'Keyword'),
     ];
