@@ -1,5 +1,5 @@
 (function(){
-const carousels=document.querySelectorAll("[data-home-sponsor-carousel],[data-home-trophy-carousel]");
+const carousels=document.querySelectorAll("[data-home-sponsor-carousel],[data-home-trophy-carousel],[data-home-gallery-carousel]");
 if(!carousels.length){return;}
 carousels.forEach((carousel)=>{
 const slides=Array.from(carousel.querySelectorAll(".home-media-slide"));
