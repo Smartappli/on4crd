@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Ailt',
   'spotlight_member_latest_wiki' => 'An leathanach Wiki is déanaí',
   'spotlight_member_latest_article' => 'Alt is déanaí',
-  'spotlight_member_gallery' => 'Grianghraif',
+  'spotlight_member_gallery' => 'Gailearaí grianghraf',
   'spotlight_member_wiki_empty' => 'Níl aon leathanaigh Wiki ar fáil faoi láthair.',
   'spotlight_member_article_empty' => 'Níl aon alt foilsithe fós.',
   'spotlight_member_updated_on' => 'Nuashonraithe ar',

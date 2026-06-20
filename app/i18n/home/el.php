@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Άρθρα',
   'spotlight_member_latest_wiki' => 'Τελευταία σελίδα Βίκι',
   'spotlight_member_latest_article' => 'Τελευταίο άρθρο',
-  'spotlight_member_gallery' => 'Φωτογραφίες',
+  'spotlight_member_gallery' => 'Συλλογή φωτογραφιών',
   'spotlight_member_wiki_empty' => 'Δεν υπάρχουν διαθέσιμες σελίδες Βίκι αυτή τη στιγμή.',
   'spotlight_member_article_empty' => 'Δεν έχουν δημοσιευτεί ακόμη άρθρα.',
   'spotlight_member_updated_on' => 'Ενημερώθηκε στις',

@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Идея',
   'nav_dashboard' => 'Табло за управление',
   'nav_wiki' => 'Знания',
-  'nav_gallery' => 'Снимки',
+  'nav_gallery' => 'Фотогалерия',
   'nav_articles' => 'Статии',
   'nav_library' => 'Библиотека',
   'nav_webotheque' => 'Уеб библиотека',

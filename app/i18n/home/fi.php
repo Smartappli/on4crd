@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Artikkelit',
   'spotlight_member_latest_wiki' => 'Uusin Wiki-sivu',
   'spotlight_member_latest_article' => 'Uusin artikkeli',
-  'spotlight_member_gallery' => 'Kuvat',
+  'spotlight_member_gallery' => 'Kuvagalleria',
   'spotlight_member_wiki_empty' => 'Wiki ei ole tällä hetkellä saatavilla.',
   'spotlight_member_article_empty' => 'Ei vielä julkaistuja artikkeleita.',
   'spotlight_member_updated_on' => 'Päivitetty',

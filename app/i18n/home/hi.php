@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'लेख',
   'spotlight_member_latest_wiki' => 'नवीनतम विकी पृष्ठ',
   'spotlight_member_latest_article' => 'नवीनतम लेख',
-  'spotlight_member_gallery' => 'फ़ोटो',
+  'spotlight_member_gallery' => 'फ़ोटो गैलरी',
   'spotlight_member_wiki_empty' => 'इस समय कोई विकी पृष्ठ उपलब्ध नहीं है।',
   'spotlight_member_article_empty' => 'इस समय कोई लेख प्रकाशित नहीं है।',
   'spotlight_member_updated_on' => 'अपडेट किया गया',

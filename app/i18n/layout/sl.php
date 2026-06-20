@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Ideja',
   'nav_dashboard' => 'Nadzorna plošča',
   'nav_wiki' => 'Znanje',
-  'nav_gallery' => 'Fotografije',
+  'nav_gallery' => 'Fotogalerija',
   'nav_articles' => 'Članki',
   'nav_library' => 'Knjižnica',
   'nav_webotheque' => 'Spletna knjižnica',

@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Straipsniai',
   'spotlight_member_latest_wiki' => 'Naujausias Wiki puslapis',
   'spotlight_member_latest_article' => 'Naujausias straipsnis',
-  'spotlight_member_gallery' => 'Nuotraukos',
+  'spotlight_member_gallery' => 'Nuotraukų galerija',
   'spotlight_member_wiki_empty' => 'Šiuo metu nėra pasiekiamų Wiki puslapių.',
   'spotlight_member_article_empty' => 'Dar nėra paskelbtų straipsnių.',
   'spotlight_member_updated_on' => 'Atnaujinta',

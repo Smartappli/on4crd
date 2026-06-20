@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => '記事',
   'spotlight_member_latest_wiki' => '最新のウィキページ',
   'spotlight_member_latest_article' => '最新の記事',
-  'spotlight_member_gallery' => '写真',
+  'spotlight_member_gallery' => 'フォトギャラリー',
   'spotlight_member_wiki_empty' => '現在利用できるウィキページはありません。',
   'spotlight_member_article_empty' => '現在公開されている記事はありません。',
   'spotlight_member_updated_on' => '更新日',

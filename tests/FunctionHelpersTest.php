@@ -357,11 +357,15 @@ final class FunctionHelpersTest extends TestCase
         $home = file_get_contents(__DIR__ . '/../pages/home.php');
         $homeFr = file_get_contents(__DIR__ . '/../app/i18n/home/fr.php');
         $homeEn = file_get_contents(__DIR__ . '/../app/i18n/home/en.php');
+        $layoutFr = file_get_contents(__DIR__ . '/../app/i18n/layout/fr.php');
+        $layoutEn = file_get_contents(__DIR__ . '/../app/i18n/layout/en.php');
         $homeJs = file_get_contents(__DIR__ . '/../assets/js/modules/home.js');
         $homeCss = file_get_contents(__DIR__ . '/../assets/css/modules/home.css');
         self::assertIsString($home);
         self::assertIsString($homeFr);
         self::assertIsString($homeEn);
+        self::assertIsString($layoutFr);
+        self::assertIsString($layoutEn);
         self::assertIsString($homeJs);
         self::assertIsString($homeCss);
 
@@ -371,6 +375,8 @@ final class FunctionHelpersTest extends TestCase
         self::assertStringContainsString('Galerie photos', $home);
         self::assertStringContainsString("'spotlight_member_gallery' => 'Galerie photos'", $homeFr);
         self::assertStringContainsString("'spotlight_member_gallery' => 'Photo gallery'", $homeEn);
+        self::assertStringContainsString("'nav_gallery' => 'Galerie photos'", $layoutFr);
+        self::assertStringContainsString("'nav_gallery' => 'Photo gallery'", $layoutEn);
         self::assertStringContainsString('[data-home-gallery-carousel]', $homeJs);
         self::assertStringContainsString('home-gallery-carousel.is-ready .home-gallery-slide.is-active', $homeCss);
         self::assertStringContainsString('height: auto;', $homeCss);

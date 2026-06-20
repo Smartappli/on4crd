@@ -12,7 +12,7 @@ return array (
   'nav_idea' => 'Idee',
   'nav_dashboard' => 'Armaturenbrett',
   'nav_wiki' => 'Wissen',
-  'nav_gallery' => 'Fotos',
+  'nav_gallery' => 'Fotogalerie',
   'nav_articles' => 'Artikel',
   'nav_library' => 'Bibliothek',
   'nav_webotheque' => 'Webbibliothek',

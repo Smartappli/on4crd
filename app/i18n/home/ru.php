@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Статьи',
   'spotlight_member_latest_wiki' => 'Последняя страница Вики',
   'spotlight_member_latest_article' => 'Последняя статья',
-  'spotlight_member_gallery' => 'Фотографии',
+  'spotlight_member_gallery' => 'Фотогалерея',
   'spotlight_member_wiki_empty' => 'Пока нет доступной страницы Вики.',
   'spotlight_member_article_empty' => 'Пока нет опубликованных статей.',
   'spotlight_member_updated_on' => 'Обновлено',

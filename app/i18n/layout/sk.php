@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Nápad',
   'nav_dashboard' => 'Prehľad',
   'nav_wiki' => 'Znalosti',
-  'nav_gallery' => 'Fotografie',
+  'nav_gallery' => 'Fotogaléria',
   'nav_articles' => 'Články',
   'nav_library' => 'Knižnica',
   'nav_webotheque' => 'Webová knižnica',

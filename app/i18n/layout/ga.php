@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Smaoineamh',
   'nav_dashboard' => 'Deais',
   'nav_wiki' => 'Eolas',
-  'nav_gallery' => 'Grianghraif',
+  'nav_gallery' => 'Gailearaí grianghraf',
   'nav_articles' => 'Ailt',
   'nav_library' => 'Leabharlann',
   'nav_webotheque' => 'Leabharlann gréasáin',

@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Idee',
   'nav_dashboard' => 'Overzicht',
   'nav_wiki' => 'Kennis',
-  'nav_gallery' => 'Foto\'s',
+  'nav_gallery' => 'Fotogalerij',
   'nav_articles' => 'Artikelen',
   'nav_library' => 'Bibliotheek',
   'nav_webotheque' => 'Webbibliotheek',

@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Artiklid',
   'spotlight_member_latest_wiki' => 'Viimane Wiki leht',
   'spotlight_member_latest_article' => 'Viimane artikkel',
-  'spotlight_member_gallery' => 'Fotod',
+  'spotlight_member_gallery' => 'Fotogalerii',
   'spotlight_member_wiki_empty' => 'Hetkel pole ühtegi Wiki lehte saadaval.',
   'spotlight_member_article_empty' => 'Ühtegi artiklit pole veel avaldatud.',
   'spotlight_member_updated_on' => 'Värskendatud',

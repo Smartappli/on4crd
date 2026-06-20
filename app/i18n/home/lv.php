@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Raksti',
   'spotlight_member_latest_wiki' => 'Jaunākā Wiki lapa',
   'spotlight_member_latest_article' => 'Jaunākais raksts',
-  'spotlight_member_gallery' => 'Fotoattēli',
+  'spotlight_member_gallery' => 'Fotogalerija',
   'spotlight_member_wiki_empty' => 'Pašlaik nav pieejama neviena Wiki lapa.',
   'spotlight_member_article_empty' => 'Vēl nav publicēts neviens raksts.',
   'spotlight_member_updated_on' => 'Atjaunināts',

@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Idea',
   'nav_dashboard' => 'Dashboard',
   'nav_wiki' => 'Knowledge',
-  'nav_gallery' => 'Photos',
+  'nav_gallery' => 'Photo gallery',
   'nav_articles' => 'Articles',
   'nav_library' => 'Library',
   'nav_webotheque' => 'Web library',

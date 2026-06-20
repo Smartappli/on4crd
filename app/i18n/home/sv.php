@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Artiklar',
   'spotlight_member_latest_wiki' => 'Senaste Wikiidan',
   'spotlight_member_latest_article' => 'Senaste artikeln',
-  'spotlight_member_gallery' => 'Foton',
+  'spotlight_member_gallery' => 'Fotogalleri',
   'spotlight_member_wiki_empty' => 'Inga Wiki tillgängliga för tillfället.',
   'spotlight_member_article_empty' => 'Inga artiklar publicerade ännu.',
   'spotlight_member_updated_on' => 'Uppdaterad på',

@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Idé',
   'nav_dashboard' => 'Kontrolpanel',
   'nav_wiki' => 'Viden',
-  'nav_gallery' => 'Fotos',
+  'nav_gallery' => 'Fotogalleri',
   'nav_articles' => 'Artikler',
   'nav_library' => 'Bibliotek',
   'nav_webotheque' => 'Webbibliotek',

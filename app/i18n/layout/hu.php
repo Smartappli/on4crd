@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Ötlet',
   'nav_dashboard' => 'Irányítópult',
   'nav_wiki' => 'Tudás',
-  'nav_gallery' => 'Fotók',
+  'nav_gallery' => 'Fotógaléria',
   'nav_articles' => 'Cikkek',
   'nav_library' => 'Könyvtár',
   'nav_webotheque' => 'Webkönyvtár',

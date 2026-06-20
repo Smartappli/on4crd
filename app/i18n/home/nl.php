@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Artikelen',
   'spotlight_member_latest_wiki' => 'Laatste Wikipagina',
   'spotlight_member_latest_article' => 'Laatste artikel',
-  'spotlight_member_gallery' => 'Foto\'s',
+  'spotlight_member_gallery' => 'Fotogalerij',
   'spotlight_member_wiki_empty' => 'Er is momenteel geen Wikipagina beschikbaar.',
   'spotlight_member_article_empty' => 'Er is momenteel geen artikel gepubliceerd.',
   'spotlight_member_updated_on' => 'Bijgewerkt op',

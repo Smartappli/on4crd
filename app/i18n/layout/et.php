@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Idee',
   'nav_dashboard' => 'Armatuurlaud',
   'nav_wiki' => 'Teadmised',
-  'nav_gallery' => 'Fotod',
+  'nav_gallery' => 'Fotogalerii',
   'nav_articles' => 'Artiklid',
   'nav_library' => 'Raamatukogu',
   'nav_webotheque' => 'Veebikogu',

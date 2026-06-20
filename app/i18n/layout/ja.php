@@ -12,7 +12,7 @@ return array (
   'nav_idea' => 'アイデア',
   'nav_dashboard' => 'ダッシュボード',
   'nav_wiki' => '知識',
-  'nav_gallery' => '写真',
+  'nav_gallery' => 'フォトギャラリー',
   'nav_articles' => '記事',
   'nav_library' => 'ライブラリ',
   'nav_webotheque' => 'ウェブライブラリ',

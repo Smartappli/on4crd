@@ -12,7 +12,7 @@ return array (
   'nav_idea' => 'Idee',
   'nav_dashboard' => 'Bord',
   'nav_wiki' => 'Cunoștințe',
-  'nav_gallery' => 'Fotografii',
+  'nav_gallery' => 'Galerie foto',
   'nav_articles' => 'Articole',
   'nav_library' => 'Bibliotecă',
   'nav_webotheque' => 'Bibliotecă web',

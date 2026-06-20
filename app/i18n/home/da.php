@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Artikler',
   'spotlight_member_latest_wiki' => 'Seneste Wiki-side',
   'spotlight_member_latest_article' => 'Seneste artikel',
-  'spotlight_member_gallery' => 'Fotos',
+  'spotlight_member_gallery' => 'Fotogalleri',
   'spotlight_member_wiki_empty' => 'Ingen tilgængelige Wiki-sider i øjeblikket.',
   'spotlight_member_article_empty' => 'Ingen artikler offentliggjort endnu.',
   'spotlight_member_updated_on' => 'Opdateret den',

@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Статии',
   'spotlight_member_latest_wiki' => 'Най-новата Уики страница',
   'spotlight_member_latest_article' => 'Последна статия',
-  'spotlight_member_gallery' => 'Снимки',
+  'spotlight_member_gallery' => 'Фотогалерия',
   'spotlight_member_wiki_empty' => 'В момента няма налични Уики страници.',
   'spotlight_member_article_empty' => 'Все още няма публикувани статии.',
   'spotlight_member_updated_on' => 'Актуализирано на',

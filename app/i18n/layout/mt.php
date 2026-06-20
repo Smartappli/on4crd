@@ -11,7 +11,7 @@ return array (
   'nav_idea' => 'Ideat',
   'nav_dashboard' => 'Daxxbord',
   'nav_wiki' => 'Għarfien',
-  'nav_gallery' => 'Ritratti',
+  'nav_gallery' => 'Gallerija tar-ritratti',
   'nav_articles' => 'Artikli',
   'nav_library' => 'Librerija',
   'nav_webotheque' => 'Librerija tal-web',

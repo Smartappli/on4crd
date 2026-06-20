@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Članki',
   'spotlight_member_latest_wiki' => 'Najnovejša Wiki stran',
   'spotlight_member_latest_article' => 'Zadnji članek',
-  'spotlight_member_gallery' => 'Fotografije',
+  'spotlight_member_gallery' => 'Fotogalerija',
   'spotlight_member_wiki_empty' => 'Trenutno ni na voljo nobena Wiki stran.',
   'spotlight_member_article_empty' => 'Ni še objavljenih člankov.',
   'spotlight_member_updated_on' => 'Posodobljeno dne',

@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => '文章',
   'spotlight_member_latest_wiki' => '最新维基页面',
   'spotlight_member_latest_article' => '最新文章',
-  'spotlight_member_gallery' => '照片',
+  'spotlight_member_gallery' => '照片图库',
   'spotlight_member_wiki_empty' => '目前没有可用的维基页面。',
   'spotlight_member_article_empty' => '目前没有已发布的文章。',
   'spotlight_member_updated_on' => '更新于',

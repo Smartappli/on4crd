@@ -12,7 +12,7 @@ return array (
   'nav_idea' => 'Ide',
   'nav_dashboard' => 'Dasbor',
   'nav_wiki' => 'Pengetahuan',
-  'nav_gallery' => 'Foto',
+  'nav_gallery' => 'Galeri foto',
   'nav_articles' => 'Artikel',
   'nav_library' => 'Perpustakaan',
   'nav_webotheque' => 'Perpustakaan web',

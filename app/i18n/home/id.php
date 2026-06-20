@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Artikel',
   'spotlight_member_latest_wiki' => 'Halaman Wiki terbaru',
   'spotlight_member_latest_article' => 'Artikel terbaru',
-  'spotlight_member_gallery' => 'Foto',
+  'spotlight_member_gallery' => 'Galeri foto',
   'spotlight_member_wiki_empty' => 'Belum ada halaman Wiki yang tersedia saat ini.',
   'spotlight_member_article_empty' => 'Belum ada artikel yang diterbitkan saat ini.',
   'spotlight_member_updated_on' => 'Diperbarui pada',

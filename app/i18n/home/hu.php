@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Cikkek',
   'spotlight_member_latest_wiki' => 'Legújabb Wiki oldal',
   'spotlight_member_latest_article' => 'Legújabb cikk',
-  'spotlight_member_gallery' => 'Fotók',
+  'spotlight_member_gallery' => 'Fotógaléria',
   'spotlight_member_wiki_empty' => 'Jelenleg nem érhetők el Wiki oldalak.',
   'spotlight_member_article_empty' => 'Még nem jelent meg cikk.',
   'spotlight_member_updated_on' => 'Frissítve',

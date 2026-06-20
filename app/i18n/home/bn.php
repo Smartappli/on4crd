@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'প্রবন্ধ',
   'spotlight_member_latest_wiki' => 'সর্বশেষ উইকি পৃষ্ঠা',
   'spotlight_member_latest_article' => 'সর্বশেষ নিবন্ধ',
-  'spotlight_member_gallery' => 'ছবি',
+  'spotlight_member_gallery' => 'ছবির গ্যালারি',
   'spotlight_member_wiki_empty' => 'এই মুহূর্তে কোনো উইকি পৃষ্ঠা উপলভ্য নেই।',
   'spotlight_member_article_empty' => 'এই মুহূর্তে কোনো নিবন্ধ প্রকাশিত নেই।',
   'spotlight_member_updated_on' => 'আপডেট হয়েছে',

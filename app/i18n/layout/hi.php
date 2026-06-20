@@ -12,7 +12,7 @@ return array (
   'nav_idea' => 'विचार',
   'nav_dashboard' => 'डैशबोर्ड',
   'nav_wiki' => 'ज्ञान',
-  'nav_gallery' => 'फ़ोटो',
+  'nav_gallery' => 'फ़ोटो गैलरी',
   'nav_articles' => 'लेख',
   'nav_library' => 'लाइब्रेरी',
   'nav_webotheque' => 'वेब लाइब्रेरी',

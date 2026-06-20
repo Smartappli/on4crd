@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Artikli',
   'spotlight_member_latest_wiki' => 'L-aħħar paġna tal-Wiki',
   'spotlight_member_latest_article' => 'L-aħħar artiklu',
-  'spotlight_member_gallery' => 'Ritratti',
+  'spotlight_member_gallery' => 'Gallerija tar-ritratti',
   'spotlight_member_wiki_empty' => 'Ebda paġni Wiki disponibbli bħalissa.',
   'spotlight_member_article_empty' => 'S\'issa l-ebda artikli ppubblikati.',
   'spotlight_member_updated_on' => 'Aġġornat fuq',

@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'المقالات',
   'spotlight_member_latest_wiki' => 'آخر صفحة ويكي',
   'spotlight_member_latest_article' => 'آخر مقال',
-  'spotlight_member_gallery' => 'الصور',
+  'spotlight_member_gallery' => 'معرض الصور',
   'spotlight_member_wiki_empty' => 'لا توجد صفحة ويكي متاحة حاليًا.',
   'spotlight_member_article_empty' => 'لا يوجد مقال منشور حاليًا.',
   'spotlight_member_updated_on' => 'تم التحديث في',

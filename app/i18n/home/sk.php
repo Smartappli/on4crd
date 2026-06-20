@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Články',
   'spotlight_member_latest_wiki' => 'Najnovšia stránka Wiki',
   'spotlight_member_latest_article' => 'Najnovší článok',
-  'spotlight_member_gallery' => 'Fotografie',
+  'spotlight_member_gallery' => 'Fotogaléria',
   'spotlight_member_wiki_empty' => 'Momentálne nie sú k dispozícii žiadne stránky Wiki.',
   'spotlight_member_article_empty' => 'Zatiaľ neboli publikované žiadne články.',
   'spotlight_member_updated_on' => 'Aktualizované dňa',

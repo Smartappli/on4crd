@@ -63,7 +63,7 @@ return array (
   'spotlight_member_articles' => 'Articole',
   'spotlight_member_latest_wiki' => 'Ultima pagină Wiki',
   'spotlight_member_latest_article' => 'Ultimul articol',
-  'spotlight_member_gallery' => 'Fotografii',
+  'spotlight_member_gallery' => 'Galerie foto',
   'spotlight_member_wiki_empty' => 'Nu există pagini Wiki disponibile momentan.',
   'spotlight_member_article_empty' => 'Niciun articol încă publicat.',
   'spotlight_member_updated_on' => 'Actualizat pe',
