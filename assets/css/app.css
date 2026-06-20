@@ -1882,28 +1882,6 @@ textarea { resize: vertical; }
   color: var(--muted);
   font-weight: 700;
 }
-.album-tile-media-stack {
-  display: grid;
-  gap: .5rem;
-  width: 112px;
-}
-.album-tile-taxonomy {
-  display: grid;
-  gap: .25rem;
-  min-width: 0;
-  font-size: .76rem;
-  line-height: 1.25;
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-.album-tile-taxonomy p {
-  margin: 0;
-}
-.album-tile-taxonomy span {
-  display: block;
-  color: var(--text);
-  font-weight: 700;
-}
 .album-placeholder-mark {
   width: 4rem;
   height: 4rem;
@@ -1975,9 +1953,11 @@ textarea { resize: vertical; }
 }
 .album-tile-badges .album-favorite-badge {
   width: auto;
-  min-width: 2.7rem;
+  min-width: 5rem;
   padding: .28rem .7rem;
   border-radius: 999px;
+  gap: .3rem;
+  white-space: nowrap;
 }
 .album-tile-badges .album-favorite-badge:hover {
   transform: none;
@@ -1992,11 +1972,6 @@ textarea { resize: vertical; }
 .album-detail-hero {
   grid-template-columns: 190px minmax(0, 1fr);
   align-items: start;
-}
-.album-detail-cover-stack {
-  display: grid;
-  gap: .65rem;
-  width: 190px;
 }
 .album-detail-cover {
   display: grid;
@@ -2015,23 +1990,6 @@ textarea { resize: vertical; }
   height: 100%;
   min-height: 0;
   object-fit: cover;
-}
-.album-detail-taxonomy {
-  display: grid;
-  gap: .3rem;
-  min-width: 0;
-  font-size: .86rem;
-  line-height: 1.3;
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-.album-detail-taxonomy p {
-  margin: 0;
-}
-.album-detail-taxonomy span {
-  display: block;
-  color: var(--text);
-  font-weight: 700;
 }
 .album-detail-copy {
   display: grid;
@@ -4196,9 +4154,6 @@ textarea.wysiwyg-source {
     height: 190px;
     justify-self: start;
   }
-  .album-detail-cover-stack {
-    justify-self: start;
-  }
   .wiki-history-panel {
     position: static;
   }
@@ -4277,15 +4232,9 @@ textarea.wysiwyg-source {
     width: 88px;
     height: 88px;
   }
-  .album-tile-media-stack {
-    width: 88px;
-  }
   .album-detail-cover {
     width: 140px;
     height: 140px;
-  }
-  .album-detail-cover-stack {
-    width: 140px;
   }
   .album-detail-hero {
     grid-template-columns: 140px minmax(0, 1fr);

@@ -219,7 +219,7 @@ ob_start();
                 <form method="post" class="album-favorite-form">
                     <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                     <input type="hidden" name="action" value="toggle_favorite">
-                    <button class="button secondary" type="submit"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></button>
+                    <button class="button secondary album-favorite-button" type="submit"><span>Favori</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
                 </form>
             <?php endif; ?>
         </div>
