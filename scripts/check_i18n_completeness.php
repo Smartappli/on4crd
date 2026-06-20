@@ -61,6 +61,7 @@ $allowedExactValues = array_fill_keys([
     'Agenda ON4CRD',
     'Album',
     'Albums',
+    'Adresse.',
     'Altitude',
     'Antennes',
     'Aurora',
@@ -198,7 +199,7 @@ function is_i18n_stable_value(string $value, string $key, string $locale, array 
     }
 
     if (
-        preg_match('/(address|calendar_name|code|filename|ics_|map_title|path|route|slug|url|venue_)/i', $key) === 1
+        preg_match('/(address|calendar_name|code|contact_item_[0-9]+|filename|geo_placename|ics_|location_value|altitude_value|map_title|path|route|slug|url|venue_)/i', $key) === 1
         && preg_match('/^[\p{L}\p{N}\s.,:;\/+_.()\-]+$/u', $value) === 1
     ) {
         return true;
