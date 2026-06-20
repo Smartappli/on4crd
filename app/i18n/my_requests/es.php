@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Caduca',
   'proposal_type_domain' => 'Propuesta de dominio',
   'proposal_type_tag' => 'Propuesta de etiqueta',
+  'proposal_type_subcategory' => 'Propuesta de subtema',
   'webotheque_title' => 'Biblioteca web',
 );

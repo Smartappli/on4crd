@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Ablauf',
   'proposal_type_domain' => 'Domänenvorschlag',
   'proposal_type_tag' => 'Tag-Vorschlag',
+  'proposal_type_subcategory' => 'Unterthemenvorschlag',
   'webotheque_title' => 'Webbibliothek',
 );

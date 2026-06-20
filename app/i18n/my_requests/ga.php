@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'In éag',
   'proposal_type_domain' => 'Moladh fearainn',
   'proposal_type_tag' => 'Moladh clibe',
+  'proposal_type_subcategory' => 'Moladh fo-ábhair',
   'webotheque_title' => 'Leabharlann gréasáin',
 );

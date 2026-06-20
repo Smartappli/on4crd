@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Истекает',
   'proposal_type_domain' => 'Предложение домена',
   'proposal_type_tag' => 'Предложение тега',
+  'proposal_type_subcategory' => 'Предложение подтемы',
   'webotheque_title' => 'Веб-библиотека',
 );

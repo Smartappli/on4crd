@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Λήγει',
   'proposal_type_domain' => 'Πρόταση τομέα',
   'proposal_type_tag' => 'Πρόταση ετικέτας',
+  'proposal_type_subcategory' => 'Πρόταση υποθεματικής',
   'webotheque_title' => 'Διαδικτυακή βιβλιοθήκη',
 );

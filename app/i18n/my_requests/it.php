@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Scade',
   'proposal_type_domain' => 'Proposta di dominio',
   'proposal_type_tag' => 'Proposta di etichetta',
+  'proposal_type_subcategory' => 'Proposta di sottoargomento',
   'webotheque_title' => 'Biblioteca web',
 );

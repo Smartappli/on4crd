@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Lejár',
   'proposal_type_domain' => 'Domainjavaslat',
   'proposal_type_tag' => 'Címkejavaslat',
+  'proposal_type_subcategory' => 'Altéma-javaslat',
   'webotheque_title' => 'Webkönyvtár',
 );

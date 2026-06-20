@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Platnosť vyprší',
   'proposal_type_domain' => 'Návrh domény',
   'proposal_type_tag' => 'Návrh štítku',
+  'proposal_type_subcategory' => 'Návrh podtémy',
   'webotheque_title' => 'Webová knižnica',
 );

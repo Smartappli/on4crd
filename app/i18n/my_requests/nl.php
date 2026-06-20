@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Vervalt',
   'proposal_type_domain' => 'Domeinvoorstel',
   'proposal_type_tag' => 'Labelvoorstel',
+  'proposal_type_subcategory' => 'Subonderwerpvoorstel',
   'webotheque_title' => 'Webbibliotheek',
 );

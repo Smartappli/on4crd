@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Wygasa',
   'proposal_type_domain' => 'Propozycja domeny',
   'proposal_type_tag' => 'Propozycja etykiety',
+  'proposal_type_subcategory' => 'Propozycja podtematu',
   'webotheque_title' => 'Biblioteka internetowa',
 );

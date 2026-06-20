@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Udløber',
   'proposal_type_domain' => 'Domæneforslag',
   'proposal_type_tag' => 'Etiketforslag',
+  'proposal_type_subcategory' => 'Forslag til underemne',
   'webotheque_title' => 'Webbibliotek',
 );

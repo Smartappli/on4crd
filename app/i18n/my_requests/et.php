@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Aegub',
   'proposal_type_domain' => 'Domeeniettepanek',
   'proposal_type_tag' => 'Sildiettepanek',
+  'proposal_type_subcategory' => 'Alateema ettepanek',
   'webotheque_title' => 'Veebikogu',
 );

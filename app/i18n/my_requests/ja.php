@@ -60,5 +60,6 @@ return array (
   'expires_on' => '期限',
   'proposal_type_domain' => 'ドメイン提案',
   'proposal_type_tag' => 'タグ提案',
+  'proposal_type_subcategory' => 'サブトピック提案',
   'webotheque_title' => 'ウェブライブラリ',
 );

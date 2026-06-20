@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Skaduta',
   'proposal_type_domain' => 'Proposta ta’ dominju',
   'proposal_type_tag' => 'Proposta ta’ tikketta',
+  'proposal_type_subcategory' => 'Proposta ta’ sotto-suġġett',
   'webotheque_title' => 'Librerija tal-web',
 );

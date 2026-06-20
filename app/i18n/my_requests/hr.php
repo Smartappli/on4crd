@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'ističe',
   'proposal_type_domain' => 'Prijedlog domene',
   'proposal_type_tag' => 'Prijedlog oznake',
+  'proposal_type_subcategory' => 'Prijedlog podteme',
   'webotheque_title' => 'Web knjižnica',
 );

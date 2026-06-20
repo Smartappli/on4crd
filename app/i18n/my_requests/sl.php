@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'poteče',
   'proposal_type_domain' => 'Predlog domene',
   'proposal_type_tag' => 'Predlog oznake',
+  'proposal_type_subcategory' => 'Predlog podteme',
   'webotheque_title' => 'Spletna knjižnica',
 );

@@ -60,5 +60,6 @@ return array (
   'expires_on' => '到期',
   'proposal_type_domain' => '域建议',
   'proposal_type_tag' => '标签建议',
+  'proposal_type_subcategory' => '子主题建议',
   'webotheque_title' => '网页资料库',
 );

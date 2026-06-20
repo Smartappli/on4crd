@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Baigia galioti',
   'proposal_type_domain' => 'Domeno pasiūlymas',
   'proposal_type_tag' => 'Žymos pasiūlymas',
+  'proposal_type_subcategory' => 'Potemės pasiūlymas',
   'webotheque_title' => 'Žiniatinklio biblioteka',
 );

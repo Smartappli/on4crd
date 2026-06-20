@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'ينتهي',
   'proposal_type_domain' => 'اقتراح نطاق',
   'proposal_type_tag' => 'اقتراح وسم',
+  'proposal_type_subcategory' => 'اقتراح موضوع فرعي',
   'webotheque_title' => 'مكتبة الويب',
 );

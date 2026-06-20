@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Upphör att gälla',
   'proposal_type_domain' => 'Domänförslag',
   'proposal_type_tag' => 'Etikettförslag',
+  'proposal_type_subcategory' => 'Förslag på underämne',
   'webotheque_title' => 'Webbibliotek',
 );

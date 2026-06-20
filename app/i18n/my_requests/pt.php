@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Expira',
   'proposal_type_domain' => 'Proposta de domínio',
   'proposal_type_tag' => 'Proposta de etiqueta',
+  'proposal_type_subcategory' => 'Proposta de subtópico',
   'webotheque_title' => 'Biblioteca web',
 );

@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Изтича',
   'proposal_type_domain' => 'Предложение за домейн',
   'proposal_type_tag' => 'Предложение за етикет',
+  'proposal_type_subcategory' => 'Предложение за подтема',
   'webotheque_title' => 'Уеб библиотека',
 );

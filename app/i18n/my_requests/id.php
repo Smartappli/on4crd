@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Berakhir',
   'proposal_type_domain' => 'Usulan domain',
   'proposal_type_tag' => 'Usulan tag',
+  'proposal_type_subcategory' => 'Usulan subtopik',
   'webotheque_title' => 'Perpustakaan web',
 );

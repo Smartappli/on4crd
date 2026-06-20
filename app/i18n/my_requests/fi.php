@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Vanhenee',
   'proposal_type_domain' => 'Verkkotunnusehdotus',
   'proposal_type_tag' => 'Tunniste-ehdotus',
+  'proposal_type_subcategory' => 'Ala-aihe-ehdotus',
   'webotheque_title' => 'Verkkokirjasto',
 );

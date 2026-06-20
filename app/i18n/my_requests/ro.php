@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'Expirat',
   'proposal_type_domain' => 'Propunere de domeniu',
   'proposal_type_tag' => 'Propunere de etichetă',
+  'proposal_type_subcategory' => 'Propunere de subtematică',
   'webotheque_title' => 'Bibliotecă web',
 );

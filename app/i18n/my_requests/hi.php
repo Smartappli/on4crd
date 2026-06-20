@@ -60,5 +60,6 @@ return array (
   'expires_on' => 'समाप्ति',
   'proposal_type_domain' => 'डोमेन प्रस्ताव',
   'proposal_type_tag' => 'टैग प्रस्ताव',
+  'proposal_type_subcategory' => 'उपविषय प्रस्ताव',
   'webotheque_title' => 'वेब लाइब्रेरी',
 );
