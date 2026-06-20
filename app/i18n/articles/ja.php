@@ -94,7 +94,7 @@ ON4CRD の技術記事を提案したいです。
   'propose_tag_body_intro' => 'こんにちは。新しい記事のキーワードを提案したいと思います。',
   'propose_tag_name_label' => 'キーワード',
   'propose_tag_reason_label' => '理由',
-  'propose_tag_contact_label' => 'Contact',
+  'propose_tag_contact_label' => '連絡先',
   'propose_tag_submit' => '提案を送信する',
   'propose_tag_cancel' => 'キャンセル',
   'propose_tag_close' => '閉じる',

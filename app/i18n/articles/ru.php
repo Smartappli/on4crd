@@ -94,7 +94,7 @@ return array (
   'propose_tag_body_intro' => 'Здравствуйте, я хотел бы предложить новое ключевое слово для статьи.',
   'propose_tag_name_label' => 'Ключевое слово',
   'propose_tag_reason_label' => 'Причина',
-  'propose_tag_contact_label' => 'Contact',
+  'propose_tag_contact_label' => 'Контакт',
   'propose_tag_submit' => 'Отправить предложение',
   'propose_tag_cancel' => 'Отмена',
   'propose_tag_close' => 'Закрыть',

@@ -94,7 +94,7 @@ return array (
   'propose_tag_body_intro' => 'হ্যালো, আমি একটি নতুন নিবন্ধ কীওয়ার্ড সাজেস্ট করতে চাই।',
   'propose_tag_name_label' => 'কীওয়ার্ড',
   'propose_tag_reason_label' => 'কারণ',
-  'propose_tag_contact_label' => 'Contact',
+  'propose_tag_contact_label' => 'যোগাযোগ',
   'propose_tag_submit' => 'প্রস্তাব পাঠান',
   'propose_tag_cancel' => 'বাতিল করুন',
   'propose_tag_close' => 'বন্ধ',

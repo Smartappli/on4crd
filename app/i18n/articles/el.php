@@ -94,7 +94,7 @@ return array (
   'propose_tag_body_intro' => 'Γεια σας, θα ήθελα να προτείνω μια νέα λέξη-κλειδί άρθρου.',
   'propose_tag_name_label' => 'Λέξη-κλειδί',
   'propose_tag_reason_label' => 'Λόγος',
-  'propose_tag_contact_label' => 'Contact',
+  'propose_tag_contact_label' => 'Επικοινωνία',
   'propose_tag_submit' => 'Αποστολή πρότασης',
   'propose_tag_cancel' => 'Ακύρωση',
   'propose_tag_close' => 'Κλείσιμο',

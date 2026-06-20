@@ -94,7 +94,7 @@ return array (
   'propose_tag_body_intro' => 'नमस्ते, मैं एक नया लेख कीवर्ड सुझाना चाहूँगा।',
   'propose_tag_name_label' => 'कीवर्ड',
   'propose_tag_reason_label' => 'कारण',
-  'propose_tag_contact_label' => 'Contact',
+  'propose_tag_contact_label' => 'संपर्क',
   'propose_tag_submit' => 'प्रस्ताव भेजें',
   'propose_tag_cancel' => 'रद्द करें',
   'propose_tag_close' => 'बंद करें',

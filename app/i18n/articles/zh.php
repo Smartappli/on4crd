@@ -94,7 +94,7 @@ return array (
   'propose_tag_body_intro' => '您好，我想建议一个新的文章关键字。',
   'propose_tag_name_label' => '关键词',
   'propose_tag_reason_label' => '原因',
-  'propose_tag_contact_label' => 'Contact',
+  'propose_tag_contact_label' => '联系方式',
   'propose_tag_submit' => '发送提案',
   'propose_tag_cancel' => '取消',
   'propose_tag_close' => '关闭',

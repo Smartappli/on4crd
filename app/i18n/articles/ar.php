@@ -94,7 +94,7 @@ return array (
   'propose_tag_body_intro' => 'مرحبًا، أود أن أقترح كلمة رئيسية جديدة للمقالة.',
   'propose_tag_name_label' => 'الكلمة الرئيسية',
   'propose_tag_reason_label' => 'السبب',
-  'propose_tag_contact_label' => 'Contact',
+  'propose_tag_contact_label' => 'التواصل',
   'propose_tag_submit' => 'إرسال الاقتراح',
   'propose_tag_cancel' => 'إلغاء',
   'propose_tag_close' => 'إغلاق',
