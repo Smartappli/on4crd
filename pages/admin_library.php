@@ -144,6 +144,7 @@ $proposalStatusLabels = [
 ];
 $proposalTypeLabels = [
     'category' => $adminLibraryText('proposal_type_category', 'Thématique', 'Topic'),
+    'subcategory' => $adminLibraryText('proposal_type_subcategory', 'Sous-thématique', 'Subtopic'),
     'content' => $adminLibraryText('proposal_type_content', 'Document', 'Document'),
     'tag' => $adminLibraryText('proposal_type_tag', 'Mot clé', 'Keyword'),
 ];

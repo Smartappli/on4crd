@@ -20,6 +20,28 @@ function member_document_module_definitions(): array
             'legacy_categories' => ['videos', 'medias'],
             'fallback_title' => 'Videos',
             'fallback_intro' => 'Videos et ressources audiovisuelles partagees avec les membres du club.',
+            'label_overrides' => [
+                'fr' => [
+                    'propose_content' => 'Proposer une vidéo',
+                    'propose_content_title' => 'Proposer une vidéo',
+                    'propose_content_intro' => 'Votre proposition sera enregistrée dans Mes contenus et attendra la validation d\'un administrateur.',
+                    'propose_content_intro_admin' => 'Votre proposition sera validée directement.',
+                    'propose_content_subject' => 'Proposition de vidéo à valider',
+                    'propose_content_recorded' => 'Proposition enregistrée dans vos contenus.',
+                    'content_validated_direct' => 'Vidéo proposée et validée directement.',
+                    'proposal_file_field' => 'Fichier vidéo ou ressource',
+                ],
+                'en' => [
+                    'propose_content' => 'Propose a video',
+                    'propose_content_title' => 'Propose a video',
+                    'propose_content_intro' => 'Your proposal will be saved in My content and wait for administrator approval.',
+                    'propose_content_intro_admin' => 'Your proposal will be approved directly.',
+                    'propose_content_subject' => 'Video proposal pending review',
+                    'propose_content_recorded' => 'Proposal saved in your content area.',
+                    'content_validated_direct' => 'Video proposed and approved directly.',
+                    'proposal_file_field' => 'Video file or resource',
+                ],
+            ],
         ],
         'fichiers' => [
             'route' => 'fichiers',
@@ -100,6 +122,15 @@ function member_document_labels(string $locale): array
             'latest' => 'Dernier ajout',
             'none' => 'Aucun',
             'view_content' => 'Voir les contenus',
+            'propose_content' => 'Proposer un contenu',
+            'propose_content_title' => 'Proposer un contenu',
+            'propose_content_intro' => 'Votre proposition sera enregistree dans Mes contenus et attendra la validation d\'un administrateur.',
+            'propose_content_intro_admin' => 'Votre proposition sera validee directement.',
+            'propose_content_subject' => 'Proposition de contenu a valider',
+            'propose_content_recorded' => 'Proposition enregistree dans vos contenus.',
+            'content_validated_direct' => 'Contenu propose et valide directement.',
+            'proposal_file_field' => 'Fichier',
+            'proposal_contact' => 'Contact',
             'administration' => 'Administration',
             'search_ph' => 'Rechercher par titre, resume ou contenu indexe',
             'search' => 'Rechercher',
@@ -160,6 +191,15 @@ function member_document_labels(string $locale): array
             'latest' => 'Latest upload',
             'none' => 'None',
             'view_content' => 'View content',
+            'propose_content' => 'Propose content',
+            'propose_content_title' => 'Propose content',
+            'propose_content_intro' => 'Your proposal will be saved in My content and wait for administrator approval.',
+            'propose_content_intro_admin' => 'Your proposal will be approved directly.',
+            'propose_content_subject' => 'Content proposal pending review',
+            'propose_content_recorded' => 'Proposal saved in your content area.',
+            'content_validated_direct' => 'Content proposed and approved directly.',
+            'proposal_file_field' => 'File',
+            'proposal_contact' => 'Contact',
             'administration' => 'Administration',
             'search_ph' => 'Search by title, summary or indexed content',
             'search' => 'Search',
@@ -1072,6 +1112,63 @@ function member_document_proposal_detail(string $summary, array $labels): string
 }
 }
 
+if (!function_exists('member_document_create_record')) {
+function member_document_create_record(
+    int $memberId,
+    string $moduleCode,
+    string $title,
+    string $description,
+    string $tags,
+    string $publicPath,
+    string $category = 'general',
+    string $subcategory = ''
+): int {
+    if (!ensure_member_module_documents_table()) {
+        throw new RuntimeException('storage_unavailable');
+    }
+
+    $moduleCode = member_document_module_normalize($moduleCode);
+    $title = content_proposal_clean_single_line($title, 255);
+    $description = content_proposal_clean_multiline($description, 5000);
+    $tags = content_proposal_clean_single_line($tags, 255);
+    $category = member_document_category_code($category !== '' ? $category : 'general');
+    $subcategory = member_document_subcategory_code($subcategory);
+    $safePath = member_document_safe_path($publicPath) ?? '';
+    if ($moduleCode === '' || $title === '' || $safePath === '') {
+        throw new RuntimeException('err_required');
+    }
+
+    $absolute = storage_document_absolute_path($safePath);
+    if (!is_file($absolute)) {
+        throw new RuntimeException('err_invalid');
+    }
+
+    $existingStmt = db()->prepare('SELECT id FROM member_module_documents WHERE module_code = ? AND file_path = ? LIMIT 1');
+    $existingStmt->execute([$moduleCode, $safePath]);
+    $existingId = (int) ($existingStmt->fetchColumn() ?: 0);
+    if ($existingId > 0) {
+        return $existingId;
+    }
+
+    $extension = strtolower((string) pathinfo($safePath, PATHINFO_EXTENSION));
+    $extractedText = member_document_extract_text($absolute, $extension);
+    db()->prepare('INSERT INTO member_module_documents (module_code, member_id, category, subcategory, tags, title, description, file_path, extracted_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        ->execute([
+            $moduleCode,
+            max(0, $memberId),
+            $category,
+            $subcategory,
+            $tags,
+            $title,
+            $description !== '' ? $description : null,
+            $safePath,
+            $extractedText !== '' ? $extractedText : null,
+        ]);
+
+    return (int) db()->lastInsertId();
+}
+}
+
 if (!function_exists('member_document_update_record')) {
 function member_document_update_record(
     int $documentId,
@@ -1177,7 +1274,16 @@ function member_document_apply_accepted_proposal(array $proposal, string $module
     $summary = (string) ($proposal['summary'] ?? '');
     $action = member_document_proposal_action($summary);
     if ($action === '') {
-        return null;
+        return member_document_create_record(
+            max(0, (int) ($proposal['member_id'] ?? 0)),
+            $moduleCode,
+            (string) ($proposal['title'] ?? ''),
+            member_document_proposal_detail($summary, ['Description']),
+            member_document_proposal_detail($summary, ['Tags', 'Étiquettes', 'Etiquettes']),
+            (string) ($proposal['source_ref'] ?? ''),
+            member_document_proposal_detail($summary, ['Category', 'Thématique', 'Thematique', 'Topic']),
+            member_document_proposal_detail($summary, ['Subcategory', 'Sous-thématique', 'Sous-thematique', 'Subtopic'])
+        );
     }
 
     $documentId = member_document_proposal_document_id($summary);
@@ -1567,6 +1673,78 @@ function render_member_document_module_page(string $module): void
                 }
                 redirect_url($returnUrl());
             }
+            if ($action === 'propose_document' && member_document_module_allows_member_management($moduleCode)) {
+                $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_title'] ?? ''), 255);
+                $proposalDescription = content_proposal_clean_multiline((string) ($_POST['proposal_description'] ?? ''), 5000);
+                $proposalTags = content_proposal_clean_single_line((string) ($_POST['proposal_tags'] ?? ''), 255);
+                $proposalCategory = member_document_category_from_input((string) ($_POST['category'] ?? 'general'), $categories);
+                $proposalSubcategory = '';
+                $proposalSubcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
+                if ($proposalSubcategoryRef !== '') {
+                    $proposalSubcategoryParts = member_document_subcategory_ref_parts($proposalSubcategoryRef);
+                    if ($proposalSubcategoryParts['subcategory'] !== '') {
+                        $proposalSubcategory = $proposalSubcategoryParts['subcategory'];
+                        if ($proposalSubcategoryParts['category'] !== '') {
+                            $proposalCategory = member_document_category_from_input($proposalSubcategoryParts['category'], $categories);
+                        }
+                    }
+                }
+                $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? ($user['email'] ?? '')), 220);
+                if ($proposalContact === '') {
+                    $proposalContact = content_proposal_clean_single_line((string) ($user['callsign'] ?? ''), 220);
+                }
+                $proposalFile = $_FILES['proposal_file'] ?? null;
+                if ($proposalTitle === '' || !is_array($proposalFile)) {
+                    throw new RuntimeException((string) $labels['err_required']);
+                }
+
+                $stored = member_document_store_upload($proposalFile, $moduleCode, (int) ($user['id'] ?? 0));
+                $proposalSummary = content_proposal_details_text([
+                    'Module' => $moduleCode,
+                    'Category' => $proposalCategory,
+                    'Subcategory' => $proposalSubcategory,
+                    'Tags' => $proposalTags,
+                    'Document' => (string) ($proposalFile['name'] ?? ''),
+                    'Description' => $proposalDescription,
+                ]);
+                $proposalStatus = $canManageDocuments ? 'accepted' : 'pending';
+                $proposalId = content_proposal_create(
+                    (int) $user['id'],
+                    $moduleCode,
+                    'content',
+                    $proposalTitle,
+                    $proposalSummary,
+                    $proposalContact,
+                    (string) $stored['public_path'],
+                    $proposalStatus
+                );
+
+                if ($canManageDocuments) {
+                    member_document_create_record(
+                        (int) $user['id'],
+                        $moduleCode,
+                        $proposalTitle,
+                        $proposalDescription,
+                        $proposalTags,
+                        (string) $stored['public_path'],
+                        $proposalCategory,
+                        $proposalSubcategory
+                    );
+                    set_flash('success', (string) $labels['content_validated_direct']);
+                    redirect_url(route_url((string) ($definition['route'] ?? $moduleCode)));
+                }
+
+                content_proposal_notify_site((string) $labels['propose_content_subject'], [
+                    'area' => $moduleCode,
+                    'proposal_type' => 'content',
+                    'title' => $proposalTitle,
+                    'summary' => $proposalSummary,
+                    'contact' => $proposalContact,
+                    'source_ref' => 'content_proposals#' . $proposalId,
+                ]);
+                set_flash('success', (string) $labels['propose_content_recorded']);
+                redirect('my_requests');
+            }
             if (($action !== 'update_document' && $action !== 'delete_document') || !member_document_module_allows_member_management($moduleCode)) {
                 throw new RuntimeException((string) $labels['err_invalid']);
             }
@@ -1689,9 +1867,21 @@ function render_member_document_module_page(string $module): void
     $latestDate = trim((string) ($stats['latest'] ?? ''));
     $latestLabel = $latestDate !== '' ? date('d/m/Y', strtotime($latestDate) ?: time()) : (string) $labels['none'];
     $adminRoute = (string) ($definition['admin_route'] ?? ('admin_' . $moduleCode));
+    $routeName = (string) ($definition['route'] ?? $moduleCode);
+    $canProposeDocument = member_document_module_allows_member_management($moduleCode);
+    $showDocumentProposalForm = $canProposeDocument && (string) ($_GET['propose_document'] ?? $_GET['propose_video'] ?? '') === '1';
+    $proposalContactDefault = trim((string) ($user['email'] ?? ''));
+    if ($proposalContactDefault === '') {
+        $proposalContactDefault = trim((string) ($user['callsign'] ?? ''));
+    }
     $primaryActionHref = '#member-document-list';
     $primaryActionAttributes = '';
-    if ((bool) ($definition['latest_document_cta'] ?? false) && $documents !== []) {
+    $primaryActionLabel = (string) $labels['view_content'];
+    if ($moduleCode === 'videos' && $canProposeDocument) {
+        $primaryActionHref = route_url($routeName, ['propose_video' => '1']);
+        $primaryActionAttributes = ' data-member-document-modal-open="member-document-proposal-dialog" aria-haspopup="dialog" aria-controls="member-document-proposal-dialog"';
+        $primaryActionLabel = (string) $labels['propose_content'];
+    } elseif ((bool) ($definition['latest_document_cta'] ?? false) && $documents !== []) {
         $latestSafePath = member_document_safe_path((string) ($documents[0]['file_path'] ?? ''));
         $latestDocumentId = max(0, (int) ($documents[0]['id'] ?? 0));
         if ($latestSafePath !== null && $latestDocumentId > 0) {
@@ -1712,7 +1902,7 @@ function render_member_document_module_page(string $module): void
             <div class="member-document-hero-side">
                 <?= render_member_document_module_stats($stats, $labels, $latestLabel, $hiddenStats) ?>
                 <p class="actions member-document-hero-actions">
-                    <a class="button secondary" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e((string) $labels['view_content']) ?></a>
+                    <a class="button secondary" href="<?= e($primaryActionHref) ?>"<?= $primaryActionAttributes ?>><?= e($primaryActionLabel) ?></a>
                     <?php if ($canManageDocuments): ?>
                         <a class="button" href="<?= e(route_url($adminRoute)) ?>"><?= e((string) $labels['administration']) ?></a>
                     <?php endif; ?>
@@ -1720,9 +1910,38 @@ function render_member_document_module_page(string $module): void
             </div>
         </section>
 
+        <?php if ($canProposeDocument): ?>
+            <dialog class="member-document-dialog" id="member-document-proposal-dialog" aria-labelledby="member-document-proposal-title"<?= $showDocumentProposalForm ? ' open data-member-document-auto-open' : '' ?>>
+                <div class="member-document-dialog-card">
+                    <div class="member-document-dialog-header module-dialog-header">
+                        <div>
+                            <p class="module-dialog-eyebrow"><?= e((string) $labels['documents']) ?></p>
+                            <h2 id="member-document-proposal-title"><?= e((string) $labels['propose_content_title']) ?></h2>
+                            <p class="help"><?= e($canManageDocuments ? (string) $labels['propose_content_intro_admin'] : (string) $labels['propose_content_intro']) ?></p>
+                        </div>
+                        <button class="member-document-dialog-close module-dialog-close" type="button" data-member-document-modal-close aria-label="<?= e((string) $labels['modal_close']) ?>">&times;</button>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" class="member-document-dialog-form module-dialog-form">
+                        <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="action" value="propose_document">
+                        <label><span><?= e((string) $labels['title_field']) ?></span><input type="text" name="proposal_title" maxlength="255" required></label>
+                        <?= render_member_document_taxonomy_fields($moduleCode, $categories, $labels, $categoryFilter !== '' ? $categoryFilter : 'general', $subcategoryFilter) ?>
+                        <label><span><?= e((string) $labels['description_field']) ?></span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
+                        <label><span><?= e((string) $labels['tags_field']) ?></span><input type="text" name="proposal_tags" maxlength="255"></label>
+                        <label><span><?= e((string) $labels['proposal_file_field']) ?></span><input type="file" name="proposal_file" required></label>
+                        <label><span><?= e((string) $labels['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+                        <p class="member-document-dialog-actions module-dialog-actions">
+                            <button class="button" type="submit"><?= e((string) $labels['propose_content']) ?></button>
+                            <button class="button secondary" type="button" data-member-document-modal-close><?= e((string) $labels['cancel']) ?></button>
+                        </p>
+                    </form>
+                </div>
+            </dialog>
+        <?php endif; ?>
+
         <section class="card member-document-search-panel">
             <form method="get" class="inline-form member-document-search-form">
-                <input type="hidden" name="route" value="<?= e((string) ($definition['route'] ?? $moduleCode)) ?>">
+                <input type="hidden" name="route" value="<?= e($routeName) ?>">
                 <?php if ($categoryFilter !== ''): ?>
                     <input type="hidden" name="category" value="<?= e($categoryFilter) ?>">
                 <?php endif; ?>
@@ -1735,7 +1954,7 @@ function render_member_document_module_page(string $module): void
                 <input type="text" name="q" value="<?= e($search) ?>" placeholder="<?= e((string) $labels['search_ph']) ?>">
                 <button class="button" type="submit"><?= e((string) $labels['search']) ?></button>
                 <?php if ($search !== '' || $categoryFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly): ?>
-                    <a class="button secondary" href="<?= e(route_url((string) ($definition['route'] ?? $moduleCode))) ?>"><?= e((string) $labels['reset']) ?></a>
+                    <a class="button secondary" href="<?= e(route_url($routeName)) ?>"><?= e((string) $labels['reset']) ?></a>
                 <?php endif; ?>
             </form>
         </section>
@@ -1750,12 +1969,12 @@ function render_member_document_module_page(string $module): void
                             <strong><?= (int) $favoriteDocumentCount ?></strong>
                         </a>
                     <?php endif; ?>
-                    <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                    <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($routeName, ['q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === '' && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                         <span><?= e((string) ($labels['all_categories'] ?? 'All topics')) ?></span>
                         <strong><?= (int) ($stats['total'] ?? 0) ?></strong>
                     </a>
                     <?php foreach ($visibleCategories as $categoryCode => $categoryLabel): ?>
-                        <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['category' => (string) $categoryCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
+                        <a class="module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean($routeName, ['category' => (string) $categoryCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                             <span><?= e((string) $categoryLabel) ?></span>
                             <strong><?= (int) ($stats['by_category'][$categoryCode] ?? 0) ?></strong>
                         </a>
@@ -1763,7 +1982,7 @@ function render_member_document_module_page(string $module): void
                             <div class="module-taxonomy-children">
                                 <?php foreach ($visibleSubcategoriesByCategory[(string) $categoryCode] as $subcategoryInfo): ?>
                                     <?php $subCode = member_document_subcategory_code((string) ($subcategoryInfo['code'] ?? '')); ?>
-                                    <a class="module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean((string) ($definition['route'] ?? $moduleCode), ['category' => (string) $categoryCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
+                                    <a class="module-taxonomy-item module-taxonomy-subitem<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' is-active' : '' ?>" href="<?= e(route_url_clean($routeName, ['category' => (string) $categoryCode, 'subcategory' => $subCode, 'q' => $search])) ?>"<?= !$favoritesOnly && $categoryFilter === $categoryCode && $subcategoryFilter === $subCode ? ' aria-current="page"' : '' ?>>
                                         <span><?= e((string) ($subcategoryInfo['label'] ?? $subCode)) ?></span>
                                         <strong><?= (int) ($subcategoryInfo['total'] ?? 0) ?></strong>
                                     </a>

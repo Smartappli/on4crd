@@ -1647,9 +1647,6 @@ function render_webotheque_page(): void
                         <span><?= e((string) $t['all_categories']) ?></span>
                         <strong><?= (int) array_sum(array_map('intval', (array) ($stats['by_category'] ?? []))) ?></strong>
                     </a>
-                    <?php if ($visibleCategories === []): ?>
-                        <span class="webotheque-domain-item module-taxonomy-item is-muted"><?= e((string) ($t['empty'] ?? 'No link found.')) ?></span>
-                    <?php endif; ?>
                     <?php foreach ($visibleCategories as $code => $label): ?>
                         <a class="webotheque-domain-item module-taxonomy-item<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === '' ? ' is-active' : '' ?>" href="<?= e(route_url_clean('webotheque', ['q' => $search, 'category' => (string) $code])) ?>"<?= !$favoritesOnly && $categoryFilter === $code && $subcategoryFilter === '' ? ' aria-current="page"' : '' ?>>
                             <span><?= e((string) $label) ?></span>

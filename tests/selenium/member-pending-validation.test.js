@@ -386,6 +386,26 @@ if (table_exists('news_sections')) {
         ->execute([$like, $like]);
 }
 
+if (table_exists('member_library_subcategories')) {
+    db()->prepare('DELETE FROM member_library_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')
+        ->execute([$like, $like, $like]);
+}
+
+if (table_exists('member_library_categories')) {
+    db()->prepare('DELETE FROM member_library_categories WHERE code LIKE ? OR label LIKE ?')
+        ->execute([$like, $like]);
+}
+
+if (table_exists('album_subcategories')) {
+    db()->prepare('DELETE FROM album_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')
+        ->execute([$like, $like, $like]);
+}
+
+if (table_exists('album_categories')) {
+    db()->prepare('DELETE FROM album_categories WHERE code LIKE ? OR label LIKE ?')
+        ->execute([$like, $like]);
+}
+
 if (table_exists('content_proposals')) {
     db()->prepare('DELETE FROM content_proposals WHERE title LIKE ? OR summary LIKE ? OR contact LIKE ? OR source_ref LIKE ?')
         ->execute([$like, $like, $like, $like]);
@@ -887,6 +907,62 @@ for (const moduleCode of ['presentations', 'videos']) {
   });
 }
 
+test('Selenium membre: proposer une video, la valider et la retrouver dans videos', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `selenium-pending-video-${Date.now()}`;
+  const title = `${token}-video`;
+  const fixture = writeTextFixture(title, 'Ressource video Selenium proposee puis validee.');
+  cleanupPendingValidationRows(token);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      ensureStandardMember();
+
+      await loginAsMember(driver);
+      await visit(driver, 'videos');
+      const proposeButton = await driver.findElement(By.css('[data-member-document-modal-open="member-document-proposal-dialog"]'));
+      const proposeLabel = (await proposeButton.getText()).replace(/\s+/g, ' ').trim();
+      assert.match(proposeLabel, /Proposer.*vid/i, 'Le bouton principal videos doit proposer une video.');
+      await driver.executeScript('arguments[0].click();', proposeButton);
+
+      const form = await driver.findElement(By.css('#member-document-proposal-dialog form.member-document-dialog-form'));
+      await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+      await form.findElement(By.css('input[name="proposal_tags"]')).sendKeys('selenium, video');
+      await form.findElement(By.css('input[type="file"][name="proposal_file"]')).sendKeys(path.resolve(fixture));
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Video proposee par Selenium.');
+      const contact = await form.findElement(By.css('input[name="proposal_contact"]')).getAttribute('value');
+      assert.ok(contact.trim() !== '', 'Le contact de proposition video doit etre pre-rempli.');
+      await submitForm(driver, form);
+
+      await driver.wait(until.urlContains('route=my_requests'), timeoutMs);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /attente|pending/i,
+        moduleRegex: /videos/i,
+      });
+      assert.equal(proposalStatus(title), 'pending', 'La video proposee doit rester en attente avant validation admin.');
+
+      await acceptProposalWithAdmin(driver, credentials, title);
+      await assertRouteContains(driver, 'videos', { q: title }, title, 'La video validee doit etre visible dans videos.');
+
+      await loginAsMember(driver);
+      await assertMyRequestsCard(driver, title, {
+        statusRegex: /accept|publ/i,
+        moduleRegex: /videos/i,
+      });
+    } finally {
+      cleanupPendingValidationRows(token);
+    }
+  });
+});
+
 async function runContentProposalScenario(t, scenario) {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -932,6 +1008,38 @@ async function runContentProposalScenario(t, scenario) {
 }
 
 const contentProposalScenarios = [
+  {
+    name: 'Selenium membre: proposer une thematique albums, la valider et la retrouver dans le formulaire album',
+    tokenPrefix: 'selenium-pending-album-category',
+    titleSuffix: 'topic',
+    moduleRegex: /album/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'albums', { propose_category: '1' });
+      const form = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="propose_category"]]'));
+      await form.findElement(By.css('input[name="proposal_category_name"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Thematique albums proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'albums', { propose_album: '1' }, 'select[name="proposal_theme"] option', title, 'La thematique albums validee doit etre disponible pour proposer un album.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une sous-thematique albums, la valider et la retrouver dans le formulaire album',
+    tokenPrefix: 'selenium-pending-album-subcategory',
+    titleSuffix: 'subtopic',
+    moduleRegex: /album/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'albums', { propose_subcategory: '1' });
+      const form = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="propose_subcategory"]]'));
+      await form.findElement(By.css('input[name="proposal_subcategory_name"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Sous-thematique albums proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'albums', { propose_album: '1' }, 'select[name="proposal_subcategory_ref"] option', title, 'La sous-thematique albums validee doit etre disponible pour proposer un album.');
+    },
+  },
   {
     name: 'Selenium membre: proposer un evenement, le valider et le retrouver dans agenda',
     tokenPrefix: 'selenium-pending-events',
@@ -1085,6 +1193,23 @@ const contentProposalScenarios = [
     },
     afterAccept: async (driver, title) => {
       await assertSelectOptionContains(driver, 'members_library', {}, '#members-library-document-dialog select[name="proposal_category"] option', title, 'La categorie members_library validee doit etre disponible pour un document.');
+    },
+  },
+  {
+    name: 'Selenium membre: proposer une sous-thematique members_library, la valider et la retrouver dans le formulaire document',
+    tokenPrefix: 'selenium-pending-library-subcategory',
+    titleSuffix: 'subtopic',
+    moduleRegex: /biblioth|library/i,
+    submit: async (driver, title) => {
+      await visit(driver, 'members_library');
+      await openDialog(driver, 'members-library-subcategory-dialog');
+      const form = await driver.findElement(By.css('#members-library-subcategory-dialog form.members-library-dialog-form'));
+      await form.findElement(By.css('input[name="proposal_subcategory_name"]')).sendKeys(title);
+      await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), 'Sous-thematique bibliotheque proposee par Selenium.');
+      await submitForm(driver, form);
+    },
+    afterAccept: async (driver, title) => {
+      await assertSelectOptionContains(driver, 'members_library', {}, '#members-library-document-dialog select[name="proposal_subcategory_ref"] option', title, 'La sous-thematique members_library validee doit etre disponible pour un document.');
     },
   },
   {

@@ -7,7 +7,8 @@
     openAttribute: 'data-members-library-modal-open',
     closeSelector: '[data-members-library-modal-close]',
     dialogSelector: '.members-library-dialog',
-    closeParentDetails: true
+    closeParentDetails: true,
+    autoOpenAttribute: 'data-members-library-auto-open'
   });
 
   window.ON4CRD.bindDialogMailtoForms({

@@ -857,7 +857,42 @@ function album_delete_record(int $albumId): void
 
 function album_apply_accepted_proposal(array $proposal): ?int
 {
-    if ((string) ($proposal['proposal_type'] ?? '') !== 'content') {
+    $proposalType = (string) ($proposal['proposal_type'] ?? '');
+    if ($proposalType === 'category') {
+        if (!album_ensure_categories_table()) {
+            throw new RuntimeException('Albums storage unavailable.');
+        }
+        $label = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
+        $code = album_category_code($label);
+        if ($label === '' || $code === '') {
+            throw new RuntimeException('Invalid album proposal.');
+        }
+        db()->prepare('INSERT INTO album_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+            ->execute([$code, $label]);
+        album_clear_caches();
+
+        return null;
+    }
+
+    if ($proposalType === 'subcategory') {
+        if (!album_ensure_subcategories_table()) {
+            throw new RuntimeException('Albums storage unavailable.');
+        }
+        $summary = (string) ($proposal['summary'] ?? '');
+        $label = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
+        $code = album_subcategory_code($label);
+        $parentCategory = album_category_code((string) (content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic', 'Category']) ?: 'general'));
+        if ($label === '' || $code === '') {
+            throw new RuntimeException('Invalid album proposal.');
+        }
+        db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+            ->execute([$parentCategory, $code, $label]);
+        album_clear_caches();
+
+        return null;
+    }
+
+    if ($proposalType !== 'content') {
         return null;
     }
     if (!album_ensure_source_proposal_column()) {
@@ -934,7 +969,7 @@ function album_sync_accepted_proposals(int $limit = 100): array
              FROM content_proposals
              WHERE area = "albums"
                AND status = "accepted"
-               AND proposal_type = "content"
+               AND proposal_type IN ("content", "category", "subcategory")
              ORDER BY updated_at ASC, id ASC
              LIMIT ' . $limit
         );
@@ -951,17 +986,19 @@ function album_sync_accepted_proposals(int $limit = 100): array
     foreach ($proposals as $proposal) {
         $result['checked']++;
         try {
-            if (album_proposal_action((string) ($proposal['summary'] ?? '')) !== '') {
+            if ((string) ($proposal['proposal_type'] ?? '') === 'content' && album_proposal_action((string) ($proposal['summary'] ?? '')) !== '') {
                 $result['skipped']++;
                 continue;
             }
 
-            $proposalId = (int) ($proposal['id'] ?? 0);
-            $existingStmt = db()->prepare('SELECT id FROM albums WHERE source_proposal_id = ? LIMIT 1');
-            $existingStmt->execute([$proposalId]);
-            if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
-                $result['skipped']++;
-                continue;
+            if ((string) ($proposal['proposal_type'] ?? '') === 'content') {
+                $proposalId = (int) ($proposal['id'] ?? 0);
+                $existingStmt = db()->prepare('SELECT id FROM albums WHERE source_proposal_id = ? LIMIT 1');
+                $existingStmt->execute([$proposalId]);
+                if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+                    $result['skipped']++;
+                    continue;
+                }
             }
 
             album_apply_accepted_proposal($proposal);

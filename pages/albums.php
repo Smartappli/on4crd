@@ -209,6 +209,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect('my_requests');
     }
 
+    if ($action === 'propose_category') {
+        $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_category_name'] ?? ''), 160);
+        $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? ($user['email'] ?? '')), 220);
+        if ($proposalContact === '') {
+            $proposalContact = content_proposal_clean_single_line((string) ($user['callsign'] ?? ''), 220);
+        }
+        if ($proposalTitle === '') {
+            throw new RuntimeException('Demande invalide.');
+        }
+        $summary = content_proposal_details_text([
+            'Description' => (string) ($_POST['proposal_reason'] ?? ''),
+        ]);
+        if ($canManageAlbums) {
+            if (!album_ensure_categories_table()) {
+                throw new RuntimeException((string) $t['gallery_unavailable']);
+            }
+            $code = album_category_code($proposalTitle);
+            db()->prepare('INSERT INTO album_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+                ->execute([$code, $proposalTitle]);
+            album_clear_caches();
+            set_flash('success', 'Thématique créée et validée directement.');
+            redirect_url(route_url_clean('albums', ['category' => $code]));
+        }
+        $proposalId = content_proposal_create((int) $user['id'], 'albums', 'category', $proposalTitle, $summary, $proposalContact);
+        content_proposal_notify_site('Proposition de thematique albums ON4CRD', [
+            'area' => 'albums',
+            'proposal_type' => 'category',
+            'title' => $proposalTitle,
+            'summary' => $summary,
+            'contact' => $proposalContact,
+            'source_ref' => 'content_proposals#' . $proposalId,
+        ]);
+        set_flash('success', 'Proposition enregistree dans vos contenus.');
+        redirect('my_requests');
+    }
+
+    if ($action === 'propose_subcategory') {
+        $proposalTitle = content_proposal_clean_single_line((string) ($_POST['proposal_subcategory_name'] ?? ''), 160);
+        $albumCategoriesForPost = album_categories();
+        $parentCategory = album_category_from_input((string) ($_POST['proposal_parent_category'] ?? 'general'), $albumCategoriesForPost);
+        $proposalContact = content_proposal_clean_single_line((string) ($_POST['proposal_contact'] ?? ($user['email'] ?? '')), 220);
+        if ($proposalContact === '') {
+            $proposalContact = content_proposal_clean_single_line((string) ($user['callsign'] ?? ''), 220);
+        }
+        if ($proposalTitle === '') {
+            throw new RuntimeException('Demande invalide.');
+        }
+        $summary = content_proposal_details_text([
+            'Thématique' => $parentCategory,
+            'Sous-thématique' => $proposalTitle,
+            'Description' => (string) ($_POST['proposal_reason'] ?? ''),
+        ]);
+        if ($canManageAlbums) {
+            if (!album_ensure_subcategories_table()) {
+                throw new RuntimeException((string) $t['gallery_unavailable']);
+            }
+            $code = album_subcategory_code($proposalTitle);
+            db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                ->execute([$parentCategory, $code, $proposalTitle]);
+            album_clear_caches();
+            set_flash('success', 'Sous-thématique créée et validée directement.');
+            redirect_url(route_url_clean('albums', ['category' => $parentCategory, 'subcategory' => $code]));
+        }
+        $proposalId = content_proposal_create((int) $user['id'], 'albums', 'subcategory', $proposalTitle, $summary, $proposalContact);
+        content_proposal_notify_site('Proposition de sous-thematique albums ON4CRD', [
+            'area' => 'albums',
+            'proposal_type' => 'subcategory',
+            'title' => $proposalTitle,
+            'summary' => $summary,
+            'contact' => $proposalContact,
+            'source_ref' => 'content_proposals#' . $proposalId,
+        ]);
+        set_flash('success', 'Proposition enregistree dans vos contenus.');
+        redirect('my_requests');
+    }
+
     throw new RuntimeException('Demande invalide.');
     } catch (Throwable $throwable) {
         set_flash('error', $throwable->getMessage());
@@ -387,9 +463,11 @@ if ($user !== null) {
     }
 }
 $showAlbumProposalForm = $user !== null && (string) ($_GET['propose_album'] ?? '') === '1';
-$albumProposalUrl = $canManageAlbums
-    ? album_admin_wizard_url()
-    : ($user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums')]));
+$showAlbumCategoryProposalForm = $user !== null && (string) ($_GET['propose_category'] ?? '') === '1';
+$showAlbumSubcategoryProposalForm = $user !== null && (string) ($_GET['propose_subcategory'] ?? '') === '1';
+$albumProposalUrl = $user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_album' => '1'])]);
+$albumCategoryProposalUrl = $user !== null ? route_url('albums', ['propose_category' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_category' => '1'])]);
+$albumSubcategoryProposalUrl = $user !== null ? route_url('albums', ['propose_subcategory' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_subcategory' => '1'])]);
 
 ob_start();
 ?>
@@ -416,14 +494,24 @@ ob_start();
                 </article>
             </div>
             <p class="actions albums-hero-actions">
-                <a class="button" href="<?= e($albumProposalUrl) ?>"><?= e($canManageAlbums ? 'Créer un album' : 'Proposer un album') ?></a>
+                <details class="albums-propose-menu">
+                    <summary class="button" aria-haspopup="menu">Proposer</summary>
+                    <div class="albums-propose-menu-panel" role="menu">
+                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumProposalUrl) ?>">Un album</a>
+                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumCategoryProposalUrl) ?>">Une thématique</a>
+                        <a class="albums-propose-menu-item" role="menuitem" href="<?= e($albumSubcategoryProposalUrl) ?>">Une sous thématique</a>
+                    </div>
+                </details>
+                <?php if ($canManageAlbums): ?>
+                    <a class="button secondary" href="<?= e(route_url('admin_albums')) ?>">Administrer</a>
+                <?php endif; ?>
             </p>
         </div>
     </section>
 
     <?php if ($showAlbumProposalForm): ?>
     <section class="card">
-        <h2><?= e($canManageAlbums ? 'Créer un album' : 'Proposer un album') ?></h2>
+        <h2>Proposer un album</h2>
         <p class="help"><?= e($canManageAlbums ? 'L album sera public directement.' : 'Votre proposition sera envoyee en validation et visible dans Mes contenus.') ?></p>
         <form method="post" class="stack">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
@@ -452,6 +540,49 @@ ob_start();
             </label>
             <label><span>Mots clés</span><input type="text" name="proposal_keywords" maxlength="255"></label>
             <label><span>Description</span><textarea name="proposal_description" rows="5" maxlength="5000"></textarea></label>
+            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <p class="actions">
+                <button class="button" type="submit"><?= e($canManageAlbums ? 'Créer' : 'Envoyer la proposition') ?></button>
+                <a class="button secondary" href="<?= e(route_url('albums')) ?>">Annuler</a>
+            </p>
+        </form>
+    </section>
+    <?php endif; ?>
+
+    <?php if ($showAlbumCategoryProposalForm): ?>
+    <section class="card" id="album-category-proposal">
+        <h2>Proposer une thématique</h2>
+        <p class="help"><?= e($canManageAlbums ? 'La thématique sera validée directement.' : 'Votre proposition sera envoyée en validation et visible dans Mes contenus.') ?></p>
+        <form method="post" class="stack">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="propose_category">
+            <label><span>Nom de la thématique</span><input type="text" name="proposal_category_name" maxlength="160" required></label>
+            <label><span>Description</span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+            <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+            <p class="actions">
+                <button class="button" type="submit"><?= e($canManageAlbums ? 'Créer' : 'Envoyer la proposition') ?></button>
+                <a class="button secondary" href="<?= e(route_url('albums')) ?>">Annuler</a>
+            </p>
+        </form>
+    </section>
+    <?php endif; ?>
+
+    <?php if ($showAlbumSubcategoryProposalForm): ?>
+    <section class="card" id="album-subcategory-proposal">
+        <h2>Proposer une sous thématique</h2>
+        <p class="help"><?= e($canManageAlbums ? 'La sous thématique sera validée directement.' : 'Votre proposition sera envoyée en validation et visible dans Mes contenus.') ?></p>
+        <form method="post" class="stack">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="propose_subcategory">
+            <label><span>Thématique parente</span>
+                <select name="proposal_parent_category" required>
+                    <?php foreach ($albumCategories as $albumThemeCode => $albumThemeLabel): ?>
+                        <option value="<?= e((string) $albumThemeCode) ?>"><?= e((string) $albumThemeLabel) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+            <label><span>Nom de la sous thématique</span><input type="text" name="proposal_subcategory_name" maxlength="160" required></label>
+            <label><span>Description</span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
             <label><span>Contact</span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
             <p class="actions">
                 <button class="button" type="submit"><?= e($canManageAlbums ? 'Créer' : 'Envoyer la proposition') ?></button>

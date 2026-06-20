@@ -588,6 +588,25 @@ function member_library_apply_accepted_proposal(array $proposal, array $messages
         return null;
     }
 
+    if ($proposalType === 'subcategory') {
+        if (!member_library_ensure_subcategories_table()) {
+            throw new RuntimeException('storage_unavailable');
+        }
+        $label = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
+        $code = member_library_subcategory_slug($label);
+        $parentCategory = member_library_proposal_category_from_summary((string) ($proposal['summary'] ?? ''), $messages);
+        if ($parentCategory === '') {
+            $parentCategory = 'general';
+        }
+        if ($label === '' || $code === '') {
+            throw new RuntimeException('err_required');
+        }
+        db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+            ->execute([$parentCategory, $code, $label]);
+
+        return null;
+    }
+
     if ($proposalType !== 'content') {
         return null;
     }
@@ -663,7 +682,7 @@ function member_library_sync_accepted_proposals(array $messages = [], int $limit
              FROM content_proposals
              WHERE area = "members_library"
                AND status = "accepted"
-               AND proposal_type IN ("category", "content")
+               AND proposal_type IN ("category", "subcategory", "content")
              ORDER BY updated_at ASC, id ASC
              LIMIT ' . $limit
         );

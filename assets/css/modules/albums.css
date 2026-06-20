@@ -48,8 +48,52 @@
 [data-route="albums"] .albums-hero-actions {
   display: flex;
   flex-wrap: wrap;
+  gap: .65rem;
+  align-items: center;
   justify-content: flex-end;
   margin: 0;
+}
+
+[data-route="albums"] .albums-propose-menu {
+  position: relative;
+  z-index: 5;
+}
+
+[data-route="albums"] .albums-propose-menu summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+[data-route="albums"] .albums-propose-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-route="albums"] .albums-propose-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + .45rem);
+  z-index: 50;
+  display: grid;
+  min-width: 13rem;
+  padding: .4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+[data-route="albums"] .albums-propose-menu-item {
+  display: block;
+  padding: .55rem .65rem;
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+[data-route="albums"] .albums-propose-menu-item:hover,
+[data-route="albums"] .albums-propose-menu-item:focus-visible {
+  background: var(--panel-2);
+  text-decoration: none;
 }
 
 [data-route="albums"] .albums-hero-title {

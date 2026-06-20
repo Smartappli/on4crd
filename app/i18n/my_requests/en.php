@@ -61,4 +61,5 @@ return array (
   'expires_on' => 'Expires',
   'proposal_type_domain' => 'Domain proposal',
   'proposal_type_tag' => 'Tag proposal',
+  'proposal_type_subcategory' => 'Subtopic proposal',
 );

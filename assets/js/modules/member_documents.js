@@ -6,6 +6,7 @@
   window.ON4CRD.bindModalDialogs({
     openAttribute: 'data-member-document-modal-open',
     closeSelector: '[data-member-document-modal-close]',
-    dialogSelector: '.member-document-dialog'
+    dialogSelector: '.member-document-dialog',
+    autoOpenAttribute: 'data-member-document-auto-open'
   });
 })();

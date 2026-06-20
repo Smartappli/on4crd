@@ -204,6 +204,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('my_requests');
         }
 
+        if ($action === 'propose_subcategory') {
+            $proposalTitle = (string) ($_POST['proposal_subcategory_name'] ?? '');
+            $parentCategory = member_library_category_slug((string) ($_POST['proposal_parent_category'] ?? 'general'));
+            if ($parentCategory === '') {
+                $parentCategory = 'general';
+            }
+            $proposalContact = (string) ($_POST['proposal_contact'] ?? $proposalContactDefault);
+            if (trim($proposalContact) === '') {
+                $proposalContact = $proposalContactDefault;
+            }
+            $proposalSummary = content_proposal_details_text([
+                (string) ($t['propose_document_category'] ?? 'Category') => $parentCategory,
+                (string) ($t['propose_document_subcategory'] ?? 'Subcategory') => $proposalTitle,
+                (string) ($t['propose_subcategory_reason'] ?? $t['propose_category_reason'] ?? 'Reason') => (string) ($_POST['proposal_reason'] ?? ''),
+            ]);
+            $autoAccept = has_permission('admin.access');
+            if ($autoAccept) {
+                if (!member_library_ensure_subcategories_table()) {
+                    throw new RuntimeException((string) $t['storage_unavailable']);
+                }
+                $label = content_proposal_clean_single_line($proposalTitle, 160);
+                $code = member_library_subcategory_slug($label);
+                if ($label === '' || $code === '') {
+                    throw new RuntimeException((string) $t['invalid']);
+                }
+                db()->prepare('INSERT INTO member_library_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+                    ->execute([$parentCategory, $code, $label]);
+                set_flash('success', (string) ($t['subcategory_created_direct'] ?? $t['category_created_direct']));
+                redirect_url(route_url_clean('members_library', ['category' => $parentCategory, 'subcategory' => $code]));
+            }
+            $proposalId = content_proposal_create((int) $user['id'], 'members_library', 'subcategory', $proposalTitle, $proposalSummary, $proposalContact);
+            content_proposal_notify_site((string) ($t['propose_subcategory_subject'] ?? $t['propose_category_subject']), [
+                'area' => 'members_library',
+                'proposal_type' => 'subcategory',
+                'title' => content_proposal_clean_single_line($proposalTitle, 190),
+                'summary' => $proposalSummary,
+                'contact' => content_proposal_clean_single_line($proposalContact, 220),
+                'source_ref' => 'content_proposals#' . $proposalId,
+            ]);
+            set_flash('success', (string) $t['proposal_recorded']);
+            redirect('my_requests');
+        }
+
         if ($action === 'propose_tag') {
             $proposalTitle = (string) ($_POST['proposal_tag'] ?? '');
             $proposalContact = (string) ($_POST['proposal_contact'] ?? $proposalContactDefault);
@@ -467,7 +510,12 @@ if ($tag !== '') {
 $contactEmail = site_contact_email();
 $documentProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_document_subject']);
 $categoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_category_subject']);
+$subcategoryProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) ($t['propose_subcategory_subject'] ?? $t['propose_category_subject']));
 $tagProposalUrl = 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode((string) $t['propose_tag_subject']);
+$showCategoryProposalForm = (string) ($_GET['propose_category'] ?? '') === '1';
+$showSubcategoryProposalForm = (string) ($_GET['propose_subcategory'] ?? '') === '1';
+$showTagProposalForm = (string) ($_GET['propose_tag'] ?? '') === '1';
+$showDocumentProposalForm = (string) ($_GET['propose_document'] ?? '') === '1';
 $pendingLibraryAdminUrl = route_url_clean('admin_library', ['status' => 'pending']) . '#pending-proposals';
 $pendingLibraryAdminLabel = $locale === 'fr' ? 'Administrer' : 'Manage';
 
@@ -574,6 +622,7 @@ ob_start();
                     <summary class="button" aria-haspopup="menu"><?= e((string) ($t['propose_menu'] ?? 'Proposer')) ?></summary>
                     <div class="members-library-propose-menu-panel" role="menu">
                         <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($categoryProposalUrl) ?>" data-members-library-modal-open="members-library-category-dialog" aria-haspopup="dialog" aria-controls="members-library-category-dialog"><?= e((string) ($t['propose_category_item'] ?? 'Une thématique')) ?></a>
+                        <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($subcategoryProposalUrl) ?>" data-members-library-modal-open="members-library-subcategory-dialog" aria-haspopup="dialog" aria-controls="members-library-subcategory-dialog"><?= e((string) ($t['propose_subcategory_item'] ?? 'Une sous thématique')) ?></a>
                         <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($tagProposalUrl) ?>" data-members-library-modal-open="members-library-tag-dialog" aria-haspopup="dialog" aria-controls="members-library-tag-dialog"><?= e((string) ($t['propose_tag_item'] ?? 'Un mot clé')) ?></a>
                         <a class="members-library-propose-menu-item" role="menuitem" href="<?= e($documentProposalUrl) ?>" data-members-library-modal-open="members-library-document-dialog" aria-haspopup="dialog" aria-controls="members-library-document-dialog"><?= e((string) ($t['propose_document_item'] ?? 'Un document')) ?></a>
                     </div>
@@ -585,7 +634,7 @@ ob_start();
         </div>
     </section>
 
-    <dialog class="members-library-dialog" id="members-library-category-dialog" aria-labelledby="members-library-category-title">
+    <dialog class="members-library-dialog" id="members-library-category-dialog" aria-labelledby="members-library-category-title"<?= $showCategoryProposalForm ? ' open data-members-library-auto-open' : '' ?>>
         <div class="members-library-dialog-card">
             <div class="members-library-dialog-header module-dialog-header">
                 <div>
@@ -609,7 +658,46 @@ ob_start();
         </div>
     </dialog>
 
-    <dialog class="members-library-dialog" id="members-library-tag-dialog" aria-labelledby="members-library-tag-title">
+    <dialog class="members-library-dialog" id="members-library-subcategory-dialog" aria-labelledby="members-library-subcategory-title"<?= $showSubcategoryProposalForm ? ' open data-members-library-auto-open' : '' ?>>
+        <div class="members-library-dialog-card">
+            <div class="members-library-dialog-header module-dialog-header">
+                <div>
+                    <p class="members-library-dialog-eyebrow module-dialog-eyebrow"><?= e((string) ($t['subcategory'] ?? 'Sous thématique')) ?></p>
+                    <h2 id="members-library-subcategory-title"><?= e((string) ($t['propose_subcategory'] ?? 'Proposer une sous thématique')) ?></h2>
+                    <p class="help"><?= e($canManageLibrary ? (string) ($t['subcategory_direct_help'] ?? $t['category_direct_help']) : (string) ($t['propose_subcategory_intro'] ?? $t['propose_category_intro'])) ?></p>
+                </div>
+                <button class="members-library-dialog-close module-dialog-close" type="button" data-members-library-modal-close aria-label="<?= e((string) $t['modal_close']) ?>">&times;</button>
+            </div>
+            <form class="members-library-dialog-form module-dialog-form" method="post" data-members-library-proposal-form data-members-library-recipient="<?= e($contactEmail) ?>" data-members-library-subject="<?= e((string) ($t['propose_subcategory_subject'] ?? $t['propose_category_subject'])) ?>" data-members-library-intro="<?= e((string) ($t['propose_subcategory_body_intro'] ?? $t['propose_category_body_intro'])) ?>">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="action" value="propose_subcategory">
+                <label>
+                    <span><?= e((string) ($t['propose_subcategory_parent'] ?? $t['category'])) ?></span>
+                    <select name="proposal_parent_category" required>
+                        <?php foreach ($categories as $proposalCategoryOption): ?>
+                            <?php
+                            $proposalCategoryCode = trim((string) ($proposalCategoryOption['category'] ?? ''));
+                            if ($proposalCategoryCode === '') {
+                                continue;
+                            }
+                            $proposalCategoryLabel = trim((string) ($proposalCategoryOption['label'] ?? $proposalCategoryCode));
+                            ?>
+                            <option value="<?= e($proposalCategoryCode) ?>"<?= $documentProposalSelectedCategory === $proposalCategoryCode ? ' selected' : '' ?>><?= e($proposalCategoryLabel !== '' ? $proposalCategoryLabel : $proposalCategoryCode) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label><span><?= e((string) ($t['propose_subcategory_name'] ?? 'Nom de la sous thématique')) ?></span><input type="text" name="proposal_subcategory_name" maxlength="160" required></label>
+                <label><span><?= e((string) ($t['propose_subcategory_reason'] ?? $t['propose_category_reason'])) ?></span><textarea name="proposal_reason" rows="5" maxlength="1600"></textarea></label>
+                <label><span><?= e((string) $t['proposal_contact']) ?></span><input type="text" name="proposal_contact" maxlength="220" value="<?= e($proposalContactDefault) ?>" required></label>
+                <div class="members-library-dialog-actions module-dialog-actions">
+                    <button class="button" type="submit"><?= e((string) $t['proposal_submit']) ?></button>
+                    <button class="button secondary" type="button" data-members-library-modal-close><?= e((string) $t['proposal_cancel']) ?></button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <dialog class="members-library-dialog" id="members-library-tag-dialog" aria-labelledby="members-library-tag-title"<?= $showTagProposalForm ? ' open data-members-library-auto-open' : '' ?>>
         <div class="members-library-dialog-card">
             <div class="members-library-dialog-header module-dialog-header">
                 <div>
@@ -633,7 +721,7 @@ ob_start();
         </div>
     </dialog>
 
-    <dialog class="members-library-dialog" id="members-library-document-dialog" aria-labelledby="members-library-document-title">
+    <dialog class="members-library-dialog" id="members-library-document-dialog" aria-labelledby="members-library-document-title"<?= $showDocumentProposalForm ? ' open data-members-library-auto-open' : '' ?>>
         <div class="members-library-dialog-card">
             <div class="members-library-dialog-header module-dialog-header">
                 <div>

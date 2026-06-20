@@ -61,4 +61,5 @@ return array (
   'expires_on' => 'Expire',
   'proposal_type_domain' => 'Proposition de domaine',
   'proposal_type_tag' => 'Proposition d’étiquette',
+  'proposal_type_subcategory' => 'Proposition de sous-thématique',
 );
