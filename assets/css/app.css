@@ -1882,6 +1882,28 @@ textarea { resize: vertical; }
   color: var(--muted);
   font-weight: 700;
 }
+.album-tile-media-stack {
+  display: grid;
+  gap: .5rem;
+  width: 112px;
+}
+.album-tile-taxonomy {
+  display: grid;
+  gap: .25rem;
+  min-width: 0;
+  font-size: .76rem;
+  line-height: 1.25;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.album-tile-taxonomy p {
+  margin: 0;
+}
+.album-tile-taxonomy span {
+  display: block;
+  color: var(--text);
+  font-weight: 700;
+}
 .album-placeholder-mark {
   width: 4rem;
   height: 4rem;
@@ -4229,6 +4251,9 @@ textarea.wysiwyg-source {
   .album-tile-media {
     width: 88px;
     height: 88px;
+  }
+  .album-tile-media-stack {
+    width: 88px;
   }
   .album-detail-cover {
     width: 140px;
