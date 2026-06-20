@@ -30,7 +30,7 @@ return array (
   'album_label' => 'Fotoalbum',
   'dropzone_hint' => 'Zet hier foto\'s neer of klik om ze te selecteren.',
   'yes' => 'Ja',
-  'no' => 'No',
+  'no' => 'Nee',
   'edit_albums' => 'Albums bewerken',
   'save' => 'Opslaan',
   'album_word' => 'Fotoalbum',

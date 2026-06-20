@@ -30,7 +30,7 @@ return array (
   'album_label' => 'الألبوم',
   'dropzone_hint' => 'قم بإسقاط الصور هنا أو انقر لتحديدها.',
   'yes' => 'نعم',
-  'no' => 'No',
+  'no' => 'لا',
   'edit_albums' => 'تحرير الألبومات',
   'save' => 'حفظ',
   'album_word' => 'الألبوم',

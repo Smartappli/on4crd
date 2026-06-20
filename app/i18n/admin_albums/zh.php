@@ -30,7 +30,7 @@ return array (
   'album_label' => '专辑',
   'dropzone_hint' => '将照片拖放到此处或单击以选择它们。',
   'yes' => '是的',
-  'no' => 'No',
+  'no' => '否',
   'edit_albums' => '编辑相册',
   'save' => '保存',
   'album_word' => '专辑',

@@ -30,7 +30,7 @@ return array (
   'album_label' => 'Album tar-ritratti',
   'dropzone_hint' => 'Iddreggja u qiegħed ir-ritratti tiegħek hawn jew ikklikkja biex tagħżel.',
   'yes' => 'Iva',
-  'no' => 'Nru',
+  'no' => 'Le',
   'edit_albums' => 'Editja albums',
   'save' => 'Ħlief',
   'album_word' => 'Album tar-ritratti',

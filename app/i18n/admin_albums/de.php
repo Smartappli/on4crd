@@ -30,7 +30,7 @@ return array (
   'album_label' => 'Fotoalbum',
   'dropzone_hint' => 'Legen Sie Fotos hier ab oder klicken Sie, um sie auszuwählen.',
   'yes' => 'Ja',
-  'no' => 'No',
+  'no' => 'Nein',
   'edit_albums' => 'Alben bearbeiten',
   'save' => 'Speichern',
   'album_word' => 'Fotoalbum',

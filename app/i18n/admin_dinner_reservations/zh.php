@@ -25,7 +25,7 @@ return [
     'line_active' => '启用',
     'line_remove' => '消除',
     'yes' => '是的',
-    'no' => '不',
+    'no' => '否',
     'csv_reservation_id' => '预订ID',
     'csv_reserved_by' => '姓名',
     'csv_created_at' => '日期',

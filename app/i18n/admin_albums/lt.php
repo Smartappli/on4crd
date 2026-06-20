@@ -30,7 +30,7 @@ return array (
   'album_label' => 'Albumas',
   'dropzone_hint' => 'Nuvilkite nuotraukas čia arba spustelėkite, kad pasirinktumėte.',
   'yes' => 'Taip',
-  'no' => 'Nr',
+  'no' => 'Ne',
   'edit_albums' => 'Redaguoti albumus',
   'save' => 'Išsaugoti',
   'album_word' => 'Albumas',

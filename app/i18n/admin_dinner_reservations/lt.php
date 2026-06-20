@@ -25,7 +25,7 @@ return array (
   'line_active' => 'Aktyvus',
   'line_remove' => 'Ištrinti',
   'yes' => 'Taip',
-  'no' => 'Nr',
+  'no' => 'Ne',
   'csv_reservation_id' => 'Rezervacija ID',
   'csv_reserved_by' => 'Vardas',
   'csv_created_at' => 'Data',

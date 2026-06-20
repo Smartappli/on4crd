@@ -25,7 +25,7 @@ return array (
   'line_active' => 'Attiva',
   'line_remove' => 'ĦaSsar',
   'yes' => 'Iva',
-  'no' => 'Nru',
+  'no' => 'Le',
   'csv_reservation_id' => 'Riżerva ID',
   'csv_reserved_by' => 'Isem',
   'csv_created_at' => 'Data',

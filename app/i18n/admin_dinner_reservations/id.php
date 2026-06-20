@@ -25,7 +25,7 @@ return array (
   'line_active' => 'Diaktifkan',
   'line_remove' => 'Menghapus',
   'yes' => 'Ya',
-  'no' => 'TIDAK',
+  'no' => 'Tidak',
   'csv_reservation_id' => 'ID Reservasi',
   'csv_reserved_by' => 'Nama',
   'csv_created_at' => 'Tanggal',

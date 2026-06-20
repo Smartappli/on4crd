@@ -30,7 +30,7 @@ return array (
   'album_label' => 'Fotoalbum',
   'dropzone_hint' => 'Povucite i ispustite svoje fotografije ovdje ili kliknite za odabir.',
   'yes' => 'da',
-  'no' => 'br',
+  'no' => 'Ne',
   'edit_albums' => 'Uređivanje albuma',
   'save' => 'spremiti',
   'album_word' => 'Fotoalbum',

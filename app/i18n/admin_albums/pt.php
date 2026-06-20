@@ -30,7 +30,7 @@ return array (
   'album_label' => 'Álbum',
   'dropzone_hint' => 'Solte as fotos aqui ou clique para selecioná-las.',
   'yes' => 'Sim',
-  'no' => 'No',
+  'no' => 'Não',
   'edit_albums' => 'Editar álbuns',
   'save' => 'Guardar',
   'album_word' => 'Álbum',

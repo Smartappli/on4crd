@@ -30,7 +30,7 @@ return array (
   'album_label' => 'アルバム',
   'dropzone_hint' => '写真をここにドロップするか、クリックして選択します。',
   'yes' => 'はい',
-  'no' => 'No',
+  'no' => 'いいえ',
   'edit_albums' => 'アルバムを編集する',
   'save' => '保存',
   'album_word' => 'アルバム',

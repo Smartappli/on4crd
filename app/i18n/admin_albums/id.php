@@ -30,7 +30,7 @@ return array (
   'album_label' => 'Album foto',
   'dropzone_hint' => 'Letakkan foto di sini atau klik untuk memilihnya.',
   'yes' => 'Ya',
-  'no' => 'No',
+  'no' => 'Tidak',
   'edit_albums' => 'Mengedit album',
   'save' => 'Simpan',
   'album_word' => 'Album foto',
