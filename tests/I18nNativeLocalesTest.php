@@ -771,6 +771,20 @@ final class I18nNativeLocalesTest extends TestCase
         return preg_match('/\p{L}/u', $value) === 1;
     }
 
+    public function testI18nCompletenessScriptPasses(): void
+    {
+        $command = escapeshellarg(PHP_BINARY)
+            . ' '
+            . escapeshellarg(__DIR__ . '/../scripts/check_i18n_completeness.php')
+            . ' --strict';
+        $output = [];
+        $exitCode = 0;
+
+        exec($command, $output, $exitCode);
+
+        self::assertSame(0, $exitCode, implode(PHP_EOL, $output));
+    }
+
     public function testRequestedFrenchModuleLabelsStayAccented(): void
     {
         $auctions = file_get_contents(__DIR__ . '/../pages/auctions.php');
