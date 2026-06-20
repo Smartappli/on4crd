@@ -729,7 +729,7 @@ ob_start();
                             </div>
                             <?php if ($canEditAlbum): ?>
                             <div class="album-tile-footer">
-                                    <button class="button secondary" type="button" data-album-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($albumText('edit_album', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
+                                <button class="button secondary" type="button" data-album-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($albumText('edit_album', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
                             </div>
                             <?php endif; ?>
                         </div>
