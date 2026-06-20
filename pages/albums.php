@@ -663,6 +663,13 @@ ob_start();
                     $coverSrc = '';
                     $photoCount = (int) ($row['photo_count'] ?? 0);
                     $description = trim((string) ($row['description'] ?? ''));
+                    $descriptionText = '';
+                    if ($description !== '') {
+                        $descriptionText = (string) preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $description);
+                        $descriptionText = (string) preg_replace('/<\s*\/\s*(p|div|li|h[1-6])\s*>/i', "\n", $descriptionText);
+                        $descriptionText = html_entity_decode(strip_tags($descriptionText), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                        $descriptionText = trim((string) preg_replace('/\s+/u', ' ', $descriptionText));
+                    }
                     $albumCategory = 'general';
                     $albumSubcategory = '';
                     $albumCategoryLabel = (string) ($albumCategories['general'] ?? 'Général');
@@ -697,8 +704,8 @@ ob_start();
                         <div class="album-tile-body">
                             <div>
                                 <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e($albumTitle) ?></a></h2>
-                                <?php if ($description !== ''): ?>
-                                    <p><?= e(mb_safe_strimwidth($description, 0, 150, '...')) ?></p>
+                                <?php if ($descriptionText !== ''): ?>
+                                    <p><?= e(mb_safe_strimwidth($descriptionText, 0, 150, '...')) ?></p>
                                 <?php endif; ?>
                                 <p class="help"><?= e((string) ($t['category_field'] ?? 'Thématique')) ?>: <?= e($albumCategoryLabel) ?><?= $albumSubcategoryLabel !== '' ? ' / ' . e($albumSubcategoryLabel) : '' ?></p>
                             </div>
