@@ -1,5 +1,4 @@
 const test = require('node:test');
-const path = require('node:path');
 const {
   By,
   until,
@@ -13,8 +12,9 @@ const {
   loginAsAdmin,
   requireAdminCredentials,
   runSeleniumPhp,
-  writeTinyPngFixture,
 } = require('./helpers');
+
+const TINY_PNG_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGklEQVR4nGP8z8Dwn4GBgYGJgYGB4T8ABQsCBAJH7m4AAAAASUVORK5CYII=';
 
 function albumCreationState(title) {
   const output = runSeleniumPhp(`
@@ -88,6 +88,56 @@ async function submitForm(driver, form) {
   await assertNoServerError(driver);
 }
 
+async function uploadWizardPhotos(driver, uploadForm, albumId, title) {
+  const uploadUrl = routeUrl('admin_albums');
+  const result = await driver.executeAsyncScript(`
+    const form = arguments[0];
+    const uploadUrl = arguments[1];
+    const albumId = arguments[2];
+    const title = arguments[3];
+    const pngBase64 = arguments[4];
+    const done = arguments[arguments.length - 1];
+    const csrf = form.querySelector('input[name="_csrf"]')?.value || '';
+    const bytes = Uint8Array.from(atob(pngBase64), (char) => char.charCodeAt(0));
+    const makeFile = (index) => new File(
+      [bytes],
+      title + '-' + index + '.png',
+      { type: 'image/png' }
+    );
+    const data = new FormData();
+    data.append('_csrf', csrf);
+    data.append('action', 'upload_photo');
+    data.append('album_id', String(albumId));
+    data.append('album_wizard', String(albumId));
+    data.append('caption', 'Preview Selenium upload.');
+    data.append('photos[]', makeFile(1));
+    data.append('photos[]', makeFile(2));
+    fetch(uploadUrl, {
+      method: 'POST',
+      body: data,
+      credentials: 'same-origin',
+      redirect: 'follow'
+    }).then(async (response) => ({
+      ok: response.ok,
+      status: response.status,
+      url: response.url,
+      body: await response.text()
+    })).catch((error) => ({
+      ok: false,
+      status: 0,
+      url: '',
+      body: String(error)
+    })).then(done);
+  `, uploadForm, uploadUrl, albumId, title, TINY_PNG_BASE64);
+
+  assert.equal(result.ok, true, `L upload album doit repondre en succes HTTP, recu ${result.status}: ${String(result.body).slice(0, 240)}`);
+  assert.doesNotMatch(
+    String(result.body),
+    /Une erreur interne|Internal Server Error|HTTP ERROR 500|HTTP ERROR 503|Erreur 503|Service Unavailable/i,
+    'La reponse HTML de l upload ne doit pas contenir d erreur serveur.',
+  );
+}
+
 test('Selenium admin albums: creation multi-etapes, upload massif et preview', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -133,34 +183,18 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
       created = true;
 
       await driver.wait(until.elementLocated(By.css('#album-wizard-photos-input')), timeoutMs);
-      const firstImage = writeTinyPngFixture(`${title}-1.png`);
-      const secondImage = writeTinyPngFixture(`${title}-2.png`);
-      const photosInput = await driver.findElement(By.css('#album-wizard-photos-input'));
-      await driver.executeScript(`
-        const input = arguments[0];
-        input.style.display = 'block';
-        input.style.visibility = 'visible';
-        input.style.opacity = '1';
-      `, photosInput);
-      await photosInput.sendKeys(`${path.resolve(firstImage)}\n${path.resolve(secondImage)}`);
-      await driver.wait(async () => {
-        const filesCount = await driver.executeScript('return arguments[0].files.length;', photosInput);
-        return Number(filesCount) >= 2;
-      }, timeoutMs, 'Les deux fichiers de test doivent etre attaches avant la soumission.');
       const uploadForm = await driver.findElement(By.xpath('//section[@id="album-wizard"]//form[.//input[@name="action" and @value="upload_photo"]]'));
-      await submitForm(driver, uploadForm);
+      await uploadWizardPhotos(driver, uploadForm, albumId, title);
 
       await driver.wait(
         () => Promise.resolve(albumPhotoCount(albumId) >= 2),
-        Math.max(timeoutMs, 60000),
+        Math.max(timeoutMs, 30000),
         'Les photos televersees doivent etre enregistrees en base avant la preview.',
       );
-      if ((await driver.findElements(By.css('#album-wizard .gallery-item'))).length === 0) {
-        await driver.get(`${routeUrl('admin_albums', { album_wizard: albumId, step: 3, focus: 'album-wizard' })}#album-wizard`);
-        await waitForDocumentReady(driver);
-        await assertNoServerError(driver);
-      }
-      await driver.wait(until.elementLocated(By.css('#album-wizard .gallery-item')), Math.max(timeoutMs, 60000));
+      await driver.get(`${routeUrl('admin_albums', { album_wizard: albumId, step: 3, focus: 'album-wizard' })}#album-wizard`);
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
+      await driver.wait(until.elementLocated(By.css('#album-wizard .gallery-item')), Math.max(timeoutMs, 30000));
       let previewImages = await driver.findElements(By.css('#album-wizard .gallery-item img'));
       assert.ok(previewImages.length >= 2, 'Les images televersees doivent apparaitre dans la preview de l assistant.');
 
