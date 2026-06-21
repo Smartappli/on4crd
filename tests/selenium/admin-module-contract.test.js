@@ -116,6 +116,7 @@ const routesWithoutForms = new Set([
   'admin_events_feed',
   'admin_telechargements',
   'admin_translation_reviews',
+  'admin_privacy',
 ]);
 
 function enableAdminModulesForContract() {
