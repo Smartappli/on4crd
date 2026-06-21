@@ -1,5 +1,14 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { clickToolTarget } from './tools-navigation';
+
+const waitForToolPanelResponse = (page: Page, toolId: string, expectedStatus: number) => page.waitForResponse((response) => {
+  const url = new URL(response.url());
+  return url.pathname.endsWith('/index.php')
+    && url.searchParams.get('route') === 'tools'
+    && url.searchParams.get('ajax') === 'tool_panel'
+    && url.searchParams.get('id') === toolId
+    && response.status() === expectedStatus;
+});
 
 test('fallback on panel fetch 404 and browser history hashchange', async ({ page }) => {
   await page.goto('?route=tools#tool-grid');
@@ -8,11 +17,15 @@ test('fallback on panel fetch 404 and browser history hashchange', async ({ page
     await route.fulfill({ status: 404, contentType: 'text/plain', body: 'Unknown tool panel' });
   });
 
+  const failedPanelResponse = waitForToolPanelResponse(page, 'tool-power', 404);
   await clickToolTarget(page, 'tool-power');
+  await failedPanelResponse;
   await expect(page.locator('#tool-grid')).toBeVisible();
 
   await page.unroute('**/index.php?route=tools&ajax=tool_panel&id=tool-power');
+  const loadedPanelResponse = waitForToolPanelResponse(page, 'tool-freq-wave', 200);
   await clickToolTarget(page, 'tool-freq-wave');
+  await loadedPanelResponse;
   await expect(page.locator('#tool-freq-wave')).toBeVisible();
 
   await page.goBack();
