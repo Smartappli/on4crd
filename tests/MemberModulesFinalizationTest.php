@@ -79,7 +79,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_ensure_schema_columns_and_indexes()', $adminAlbums);
         self::assertStringContainsString('name="is_featured"', $adminAlbums);
         self::assertStringContainsString('is_featured, publish_requested', $adminAlbums);
-        self::assertStringContainsString('is_public = ?, is_featured = ?', $adminAlbums);
+        self::assertStringContainsString('album_update_record($albumId, $title, $description, $isPublic, $category, $subcategory, $isFeatured);', $adminAlbums);
+        self::assertStringNotContainsString("cache_remember('admin_albums_list_v2'", $adminAlbums);
         self::assertStringContainsString('album_delete_record($albumId);', $adminAlbums);
         self::assertStringContainsString('id="album-wizard"', $adminAlbums);
         self::assertStringContainsString('name="album_wizard"', $adminAlbums);
@@ -125,6 +126,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function album_sync_accepted_proposals(int $limit = 100): array', $albumHelpers);
         self::assertStringContainsString('function album_proposal_action(string $summary): string', $albumHelpers);
         self::assertStringContainsString('function album_update_record(', $albumHelpers);
+        self::assertStringContainsString('SELECT id, is_public, is_featured FROM albums WHERE id = ? LIMIT 1', $albumHelpers);
+        self::assertStringContainsString('is_public = ?, is_featured = ?', $albumHelpers);
         self::assertStringContainsString('function album_delete_record(int $albumId): void', $albumHelpers);
         self::assertStringContainsString('function album_subcategory_ref(', $albumHelpers);
         self::assertStringContainsString('function album_visible_categories(', $albumHelpers);

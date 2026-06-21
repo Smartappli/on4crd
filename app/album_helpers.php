@@ -838,9 +838,9 @@ function album_delete_photo_file(string $publicPath): void
     }
 }
 
-function album_update_record(int $albumId, string $title, string $description, ?int $isPublic = null, string $category = 'general', string $subcategory = ''): void
+function album_update_record(int $albumId, string $title, string $description, ?int $isPublic = null, string $category = 'general', string $subcategory = '', ?int $isFeatured = null): void
 {
-    if (!album_ensure_source_proposal_column()) {
+    if (!album_ensure_schema_columns_and_indexes() || !album_ensure_source_proposal_column()) {
         throw new RuntimeException('Albums storage unavailable.');
     }
 
@@ -852,7 +852,7 @@ function album_update_record(int $albumId, string $title, string $description, ?
         throw new RuntimeException('Invalid album proposal.');
     }
 
-    $stmt = db()->prepare('SELECT id, is_public FROM albums WHERE id = ? LIMIT 1');
+    $stmt = db()->prepare('SELECT id, is_public, is_featured FROM albums WHERE id = ? LIMIT 1');
     $stmt->execute([$albumId]);
     $album = $stmt->fetch();
     if (!is_array($album)) {
@@ -863,9 +863,13 @@ function album_update_record(int $albumId, string $title, string $description, ?
     if ($visibility === null) {
         $visibility = (int) ($album['is_public'] ?? 1);
     }
+    $featured = $isFeatured;
+    if ($featured === null) {
+        $featured = (int) ($album['is_featured'] ?? 0);
+    }
 
-    db()->prepare('UPDATE albums SET category = ?, subcategory = ?, title = ?, description = ?, is_public = ? WHERE id = ?')
-        ->execute([$category, $subcategory, $title, $description !== '' ? $description : null, $visibility ? 1 : 0, $albumId]);
+    db()->prepare('UPDATE albums SET category = ?, subcategory = ?, title = ?, description = ?, is_public = ?, is_featured = ? WHERE id = ?')
+        ->execute([$category, $subcategory, $title, $description !== '' ? $description : null, $visibility ? 1 : 0, $featured ? 1 : 0, $albumId]);
     if (table_exists('member_favorites')) {
         db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
             ->execute([$title, route_url('album', ['id' => $albumId]), 'album', $albumId]);

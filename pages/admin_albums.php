@@ -310,8 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$albumStmt->fetchColumn()) {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
-            db()->prepare('UPDATE albums SET category = ?, subcategory = ?, title = ?, description = ?, is_public = ?, is_featured = ? WHERE id = ?')->execute([$category, $subcategory, $title, $description, $isPublic, $isFeatured, $albumId]);
-            albums_admin_clear_cache();
+            album_update_record($albumId, $title, $description, $isPublic, $category, $subcategory, $isFeatured);
             set_flash('success', (string) $t['updated_ok']);
             redirect('admin_albums');
         }
@@ -561,13 +560,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$albums = cache_remember('admin_albums_list_v2', 30, static fn(): array => db()->query(
+$albums = db()->query(
     'SELECT a.*, COUNT(p.id) AS photo_count, MAX(p.created_at) AS last_photo_at
      FROM albums a
      LEFT JOIN album_photos p ON p.album_id = a.id
      GROUP BY a.id
      ORDER BY a.created_at DESC'
-)->fetchAll() ?: []);
+)->fetchAll() ?: [];
 $albumsCount = count($albums);
 $publicCount = 0;
 $featuredCount = 0;
