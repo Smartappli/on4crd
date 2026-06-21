@@ -323,7 +323,7 @@ if (!table_exists('albums') || !table_exists('album_photos')) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
     return;
 }
-if (!album_ensure_photo_sort_order_column() || !album_ensure_source_proposal_column()) {
+if (!album_ensure_photo_sort_order_column() || !album_ensure_schema_columns_and_indexes() || !album_ensure_source_proposal_column()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['public_albums']) . '</h1><p>' . e((string) $t['gallery_unavailable']) . '</p></div>', (string) $t['albums']);
     return;
 }
@@ -446,17 +446,35 @@ if ($search !== '') {
 $countStmt = db()->prepare('SELECT COUNT(*) FROM albums a WHERE ' . $where);
 $countStmt->execute($params);
 $totalAlbums = (int) $countStmt->fetchColumn();
-$pagination = pagination_state($totalAlbums, $page, $perPage);
+$regularWhere = $where . ' AND a.is_featured = 0';
+$regularCountStmt = db()->prepare('SELECT COUNT(*) FROM albums a WHERE ' . $regularWhere);
+$regularCountStmt->execute($params);
+$regularAlbumsTotal = (int) $regularCountStmt->fetchColumn();
+$pagination = pagination_state($regularAlbumsTotal, $page, $perPage);
 $page = $pagination['page'];
 $totalPages = $pagination['total_pages'];
 $offset = $pagination['offset'];
+
+$albumListSelect = 'SELECT a.*,
+        (SELECT COUNT(*) FROM album_photos p WHERE p.album_id = a.id) AS photo_count,
+        (SELECT p.file_path FROM album_photos p WHERE p.album_id = a.id ORDER BY p.sort_order ASC, p.id ASC LIMIT 1) AS cover_path
+     FROM albums a
+     WHERE ' . $where;
+
+$featuredStmt = db()->prepare(
+    $albumListSelect . '
+       AND a.is_featured = 1
+     ORDER BY a.created_at DESC, a.id DESC'
+);
+$featuredStmt->execute($params);
+$featuredRows = $featuredStmt->fetchAll() ?: [];
 
 $stmt = db()->prepare(
     'SELECT a.*,
         (SELECT COUNT(*) FROM album_photos p WHERE p.album_id = a.id) AS photo_count,
         (SELECT p.file_path FROM album_photos p WHERE p.album_id = a.id ORDER BY p.sort_order ASC, p.id ASC LIMIT 1) AS cover_path
      FROM albums a
-     WHERE ' . $where . '
+     WHERE ' . $regularWhere . '
      ORDER BY a.id DESC
      LIMIT ' . (int) $perPage . ' OFFSET ' . (int) $offset
 );

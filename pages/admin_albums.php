@@ -135,6 +135,10 @@ if (!albums_admin_ensure_photo_order_column() || !album_ensure_schema_columns_an
 album_sync_accepted_proposals();
 $albumCategories = album_categories();
 $albumSubcategoriesByCategory = album_subcategories_by_category();
+$featuredAlbumLabel = trim((string) ($t['featured_album'] ?? ''));
+if ($featuredAlbumLabel === '') {
+    $featuredAlbumLabel = $locale === 'fr' ? 'Album à la une' : 'Featured album';
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -566,9 +570,11 @@ $albums = cache_remember('admin_albums_list_v2', 30, static fn(): array => db()-
 )->fetchAll() ?: []);
 $albumsCount = count($albums);
 $publicCount = 0;
+$featuredCount = 0;
 $totalPhotos = 0;
 foreach ($albums as $albumRow) {
     $publicCount += (int) $albumRow['is_public'] === 1 ? 1 : 0;
+    $featuredCount += (int) ($albumRow['is_featured'] ?? 0) === 1 ? 1 : 0;
     $totalPhotos += (int) ($albumRow['photo_count'] ?? 0);
 }
 $albumCategoryCounts = [];
@@ -639,6 +645,7 @@ ob_start();
         <div class="stats-grid">
             <article class="stat-card"><span class="help"><?= e((string) $t['albums']) ?></span><strong><?= $albumsCount ?></strong></article>
             <article class="stat-card"><span class="help"><?= e((string) $t['public_albums']) ?></span><strong><?= $publicCount ?></strong></article>
+            <article class="stat-card"><span class="help"><?= e($featuredAlbumLabel) ?></span><strong><?= $featuredCount ?></strong></article>
             <article class="stat-card"><span class="help"><?= e((string) $t['photos']) ?></span><strong><?= $totalPhotos ?></strong></article>
         </div>
     </section>
@@ -724,6 +731,7 @@ ob_start();
                         <textarea name="description" rows="4"></textarea>
                     </label>
                     <label><input type="checkbox" name="is_public"> <?= e((string) $t['public_album']) ?></label>
+                    <label><input type="checkbox" name="is_featured"> <?= e($featuredAlbumLabel) ?></label>
                     <p class="help"><?= e((string) ($t['wizard_private_help'] ?? 'The album stays private until final validation.')) ?></p>
                     <button class="button"><?= e((string) ($t['wizard_continue_upload'] ?? $t['create_album'])) ?></button>
                 </form>
@@ -841,6 +849,7 @@ ob_start();
                                 <input type="text" name="title" value="<?= e((string) $album['title']) ?>" required maxlength="190">
                             </label>
                             <label><input type="checkbox" name="is_public" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['public_album']) ?></label>
+                            <label><input type="checkbox" name="is_featured" <?= (int) ($album['is_featured'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e($featuredAlbumLabel) ?></label>
                             <div style="grid-column:1 / -1;">
                                 <?= render_album_taxonomy_fields($albumCategories, $t, (string) ($album['category'] ?? 'general'), (string) ($album['subcategory'] ?? '')) ?>
                             </div>
@@ -851,6 +860,7 @@ ob_start();
                             <div class="actions">
                                 <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
                                 <span class="pill"><?= e((string) $t['public_album']) ?>: <?= (int) $album['is_public'] === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
+                                <span class="pill"><?= e($featuredAlbumLabel) ?>: <?= (int) ($album['is_featured'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
                                 <a class="button secondary small" href="<?= e(route_url('album', ['id' => (int) $album['id']])) ?>"><?= e((string) $t['view_public']) ?></a>
                             </div>
                         </form>
