@@ -513,6 +513,24 @@ $showAlbumSubcategoryProposalForm = $user !== null && (string) ($_GET['propose_s
 $albumProposalUrl = $user !== null ? route_url('albums', ['propose_album' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_album' => '1'])]);
 $albumCategoryProposalUrl = $user !== null ? route_url('albums', ['propose_category' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_category' => '1'])]);
 $albumSubcategoryProposalUrl = $user !== null ? route_url('albums', ['propose_subcategory' => '1']) : route_url('login', ['next' => route_url('albums', ['propose_subcategory' => '1'])]);
+$featuredAlbumsTitle = $albumText('featured_albums', 'Album à la une', 'Featured albums');
+$featuredAlbumBadge = $albumText('featured_album_badge', 'À la une', 'Featured');
+$otherAlbumsTitle = $albumText('other_albums', 'Autres albums', 'Other albums');
+$albumSections = [];
+if ($featuredRows !== []) {
+    $albumSections[] = [
+        'title' => $featuredAlbumsTitle,
+        'rows' => $featuredRows,
+        'featured' => true,
+    ];
+}
+if ($rows !== []) {
+    $albumSections[] = [
+        'title' => $featuredRows !== [] ? $otherAlbumsTitle : '',
+        'rows' => $rows,
+        'featured' => false,
+    ];
+}
 
 ob_start();
 ?>
