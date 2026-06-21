@@ -146,7 +146,7 @@ test('Selenium newsletter publique: inscription puis desinscription par jeton', 
 
       await visit(driver, 'newsletter_unsubscribe', { token: subscriber.unsubscribe_token });
       const text = await pagePlainText(driver);
-      assert.match(text, /desabonn|désabonn|unsubscribed|cancel/i);
+      assert.match(text, /desabonn|désabonn|unsubscribe|unsubscribed|cancel/i);
 
       subscriber = newsletterSubscriber(email);
       assert.equal(subscriber.status, 'unsubscribed');

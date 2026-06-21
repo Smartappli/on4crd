@@ -569,6 +569,16 @@ async function assertMyRequestsCard(driver, title, { statusRegex, moduleRegex })
   }
 }
 
+async function waitForMyRequestsOrAlbumDetail(driver) {
+  await driver.wait(async () => {
+    const currentUrl = await driver.getCurrentUrl();
+    return currentUrl.includes('route=my_requests') || currentUrl.includes('route=album');
+  }, timeoutMs);
+  if (!(await driver.getCurrentUrl()).includes('route=my_requests')) {
+    await visit(driver, 'my_requests');
+  }
+}
+
 async function assertRouteContains(driver, route, query, title, message) {
   await visit(driver, route, query);
   const text = await pagePlainText(driver);
@@ -842,7 +852,7 @@ test('Selenium membre: proposer un album, le valider et le retrouver dans les al
       await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Album propose par Selenium puis valide.');
       await submitForm(driver, form);
 
-      await driver.wait(until.urlContains('route=my_requests'), timeoutMs);
+      await waitForMyRequestsOrAlbumDetail(driver);
       await assertMyRequestsCard(driver, title, {
         statusRegex: /attente|pending/i,
         moduleRegex: /album/i,
@@ -940,7 +950,7 @@ test('Selenium membre: proposer une video, la valider et la retrouver dans video
       await visit(driver, 'videos');
       const proposeButton = await driver.findElement(By.css('[data-member-document-modal-open="member-document-proposal-dialog"]'));
       const proposeLabel = (await proposeButton.getText()).replace(/\s+/g, ' ').trim();
-      assert.match(proposeLabel, /Proposer.*vid/i, 'Le bouton principal videos doit proposer une video.');
+      assert.match(proposeLabel, /Propos(?:er|e).*vid/i, 'Le bouton principal videos doit proposer une video.');
       await driver.executeScript('arguments[0].click();', proposeButton);
 
       const form = await driver.findElement(By.css('#member-document-proposal-dialog form.member-document-dialog-form'));

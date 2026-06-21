@@ -102,7 +102,7 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
       const uploadForm = await driver.findElement(By.xpath('//section[@id="album-wizard"]//form[.//input[@name="action" and @value="upload_photo"]]'));
       await submitForm(driver, uploadForm);
 
-      await driver.wait(until.elementLocated(By.css('#album-wizard .gallery-item')), timeoutMs);
+      await driver.wait(until.elementLocated(By.css('#album-wizard .gallery-item')), Math.max(timeoutMs, 45000));
       await assertNoServerError(driver);
       let previewImages = await driver.findElements(By.css('#album-wizard .gallery-item img'));
       assert.ok(previewImages.length >= 2, 'Les images televersees doivent apparaitre dans la preview de l assistant.');

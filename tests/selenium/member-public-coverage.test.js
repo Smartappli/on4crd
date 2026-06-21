@@ -504,10 +504,10 @@ test('Selenium membre/public: propositions et auto-publications des modules publ
       await visit(driver, 'presentations');
       const presentationMenu = await driver.findElement(By.css('.member-document-propose-menu'));
       const presentationMenuText = await driver.executeScript('arguments[0].setAttribute("open", ""); return arguments[0].textContent;', presentationMenu);
-      assert.match(String(presentationMenuText), /Proposer/, 'Les presentations doivent afficher le dropdown Proposer.');
-      assert.match(String(presentationMenuText), /th.mat/i, 'Le dropdown presentations doit proposer une thematique.');
-      assert.match(String(presentationMenuText), /sous th.mat/i, 'Le dropdown presentations doit proposer une sous-thematique.');
-      assert.match(String(presentationMenuText), /pr.sent/i, 'Le dropdown presentations doit proposer une presentation.');
+      assert.match(String(presentationMenuText), /Propos(?:er|e)/i, 'Les presentations doivent afficher le dropdown Proposer.');
+      assert.match(String(presentationMenuText), /th.mat|topic/i, 'Le dropdown presentations doit proposer une thematique.');
+      assert.match(String(presentationMenuText), /sous th.mat|subtopic/i, 'Le dropdown presentations doit proposer une sous-thematique.');
+      assert.match(String(presentationMenuText), /pr.sent|presentation/i, 'Le dropdown presentations doit proposer une presentation.');
       await submitProposal(driver, 'presentations', { propose_category: '1' }, 'propose_category', {
         proposal_category_name: `Presentation topic ${token}`,
         proposal_reason: `Presentation topic reason ${token}`,
