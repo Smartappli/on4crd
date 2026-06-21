@@ -860,6 +860,7 @@ ob_start();
                 <?php $docTags = trim((string) ($document['tags'] ?? '')); ?>
                 <?php $docExtract = trim((string) ($document['extracted_text'] ?? '')); ?>
                 <?php $docId = (int) ($document['id'] ?? 0); ?>
+                <?php $docDownloadUrl = $docId > 0 ? route_url('member_library_preview', ['id' => $docId, 'download' => '1']) : ''; ?>
                 <?php $relatedDocs = $relatedByDocumentId[$docId] ?? []; ?>
                 <?php $isFavorite = favorite_is_saved((int) $user['id'], 'library_document', (int) ($document['id'] ?? 0)); ?>
                 <?php $canEditDocument = $canManageLibrary || (int) ($document['member_id'] ?? 0) === (int) ($user['id'] ?? 0); ?>
@@ -890,6 +891,9 @@ ob_start();
                         <?php endif; ?>
                     </details>
                     <div class="actions members-library-document-actions">
+                        <?php if ($docDownloadUrl !== ''): ?>
+                            <a class="button secondary" href="<?= e($docDownloadUrl) ?>" target="_blank" rel="noopener"><?= e((string) $t['open']) ?></a>
+                        <?php endif; ?>
                         <?php if ($canEditDocument): ?>
                             <button class="button secondary" type="button" data-members-library-modal-open="<?= e($editDialogId) ?>" aria-haspopup="dialog" aria-controls="<?= e($editDialogId) ?>"><?= e($membersLibraryText('edit_document', 'Modifier / Supprimer', 'Edit / Delete')) ?></button>
                         <?php endif; ?>
