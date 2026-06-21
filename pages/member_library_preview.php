@@ -29,7 +29,7 @@ if (!is_array($document)) {
 
 $safePath = safe_storage_document_path_or_null((string) ($document['file_path'] ?? ''), ['storage/private/library/', 'storage/uploads/library/']);
 $extension = strtolower(pathinfo((string) $safePath, PATHINFO_EXTENSION));
-$allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm'];
+$allowedExtensions = ['pdf', 'doc', 'docx', 'txt', 'md', 'html', 'htm'];
 $isDownload = (string) ($_GET['download'] ?? '') === '1';
 if ($safePath === null || !in_array($extension, $allowedExtensions, true) || (!$isDownload && $extension !== 'pdf')) {
     http_response_code(404);
