@@ -1,4 +1,7 @@
 const test = require('node:test');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const {
   By,
   assert,
@@ -349,6 +352,29 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
 `, { SELENIUM_DOCUMENT_ID: String(documentId) });
 }
 
+function libraryDocumentRecordByTitle(title) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$title = trim((string) getenv('SELENIUM_DOCUMENT_TITLE'));
+if ($title === '' || !table_exists('member_library_documents')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, title, description, tags FROM member_library_documents WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_DOCUMENT_TITLE: title });
+}
+
+function writeLibraryUploadFixture(title, token) {
+  const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
+  fs.mkdirSync(fixtureDir, { recursive: true });
+  const fixture = path.join(fixtureDir, `${title}.txt`);
+  fs.writeFileSync(fixture, `Document Selenium member_library admin ${token}`);
+
+  return fixture;
+}
+
 async function assertPageContains(driver, text, message) {
   assert.match(await pagePlainText(driver), new RegExp(escapeRegExp(text)), message);
 }
@@ -481,6 +507,27 @@ async function deleteMemberModuleDocumentFromAdminRoute(driver, fixture) {
   );
 }
 
+async function createLibraryDocumentFromAdminRoute(driver, token) {
+  const title = `selenium-admin-member-library-${token}`;
+  const fixture = writeLibraryUploadFixture(title, token);
+  await visit(driver, 'admin_library');
+
+  const form = await driver.findElement(By.css('form.admin-library-upload-form'));
+  await setFieldValue(driver, await form.findElement(By.css('input[name="title"]')), title);
+  await setFieldValue(driver, await form.findElement(By.css('input[name="tags"]')), `selenium,admin,${token}`);
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="description"]')), `Document member_library admin Selenium ${token}`);
+  await form.findElement(By.css('input[type="file"][name="document"]')).sendKeys(path.resolve(fixture));
+  await submitForm(driver, form);
+
+  const document = libraryDocumentRecordByTitle(title);
+  assert.ok(document && Number(document.id) > 0, 'Le document member_library doit etre cree depuis admin_library.');
+
+  return {
+    id: Number(document.id),
+    title: document.title,
+  };
+}
+
 async function deleteLibraryDocumentFromAdminRoute(driver, fixture) {
   await visit(driver, 'admin_library', { q: fixture.title });
   await assertPageContains(driver, fixture.title, 'Le document member_library doit apparaitre sur admin_library.');
@@ -538,7 +585,6 @@ test('Selenium admin: supprimer documents depuis admin_presentations, admin_vide
   const fixtures = [
     prepareModuleDocumentFixture('presentations', token, memberId),
     prepareModuleDocumentFixture('videos', token, memberId),
-    prepareLibraryDocumentFixture(token, memberId),
   ];
   for (const fixture of fixtures) {
     assert.ok(fixture && Number(fixture.id) > 0, `La fixture ${JSON.stringify(fixture)} doit etre creee avant la suppression admin.`);
@@ -549,7 +595,8 @@ test('Selenium admin: supprimer documents depuis admin_presentations, admin_vide
       await loginAsAdmin(driver, credentials.username, credentials.password);
       await deleteMemberModuleDocumentFromAdminRoute(driver, fixtures[0]);
       await deleteMemberModuleDocumentFromAdminRoute(driver, fixtures[1]);
-      await deleteLibraryDocumentFromAdminRoute(driver, fixtures[2]);
+      const libraryFixture = await createLibraryDocumentFromAdminRoute(driver, token);
+      await deleteLibraryDocumentFromAdminRoute(driver, libraryFixture);
     } finally {
       cleanupAdminCrudFixtures(token);
     }
