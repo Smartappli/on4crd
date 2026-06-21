@@ -582,7 +582,7 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       const albumForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));
       await setFieldValue(driver, await albumForm.findElement(By.css('input[name="title"]')), `Admin album updated ${token}`);
       await setFieldValue(driver, await albumForm.findElement(By.css('textarea[name="description"]')), `Admin album updated description ${token}`);
-      await setCheckbox(driver, await albumForm.findElement(By.css('input[name="is_featured"]')), true);
+      await setCheckbox(driver, await albumForm.findElement(By.css('input[type="checkbox"][name="is_featured"]')), true);
       await submitForm(driver, albumForm);
       let state = albumState(fixture.album_id, fixture.photo_ids);
       assert.equal(state.album.title, `Admin album updated ${token}`, 'Le titre album admin doit etre mis a jour.');
@@ -602,7 +602,7 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
 
       await visit(driver, 'admin_albums');
       const unpinForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));
-      await setCheckbox(driver, await unpinForm.findElement(By.css('input[name="is_featured"]')), false);
+      await setCheckbox(driver, await unpinForm.findElement(By.css('input[type="checkbox"][name="is_featured"]')), false);
       await submitForm(driver, unpinForm);
       state = albumState(fixture.album_id, fixture.photo_ids);
       assert.equal(Number(state.album.is_featured), 0, 'Un admin doit pouvoir desepingler un album.');
