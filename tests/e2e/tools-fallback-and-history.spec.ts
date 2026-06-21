@@ -44,9 +44,12 @@ test('stale failed ajax response does not override latest successful tool select
     await route.continue();
   });
 
+  const staleFailedPanelResponse = waitForToolPanelResponse(page, 'tool-power', 404);
   await clickToolTarget(page, 'tool-power');
   await clickToolTarget(page, 'tool-freq-wave');
 
+  await expect(page.locator('#tool-freq-wave')).toBeVisible();
+  await staleFailedPanelResponse;
   await expect(page.locator('#tool-freq-wave')).toBeVisible();
   await expect(page.locator('#grid-tool-error')).toHaveClass(/is-hidden/);
 
