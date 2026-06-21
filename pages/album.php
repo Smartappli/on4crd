@@ -68,6 +68,7 @@ if ($albumTitle === '') {
 }
 $albumDescription = trim((string) ($album['description'] ?? ''));
 $albumDescriptionText = album_description_display_text($albumDescription);
+$albumDescriptionText = html_entity_decode(strip_tags($albumDescriptionText), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 $albumCategories = album_categories();
 $albumCategoryCode = album_category_code((string) ($album['category'] ?? 'general'));
 $albumSubcategoryCode = album_subcategory_code((string) ($album['subcategory'] ?? ''));
@@ -270,8 +271,35 @@ ob_start();
                     <button class="button secondary album-favorite-button" type="submit"><span>Favoris</span><span aria-hidden="true"><?= $isFavorite ? '&#9733;' : '&#9734;' ?></span></button>
                 </form>
             <?php endif; ?>
+            <?php if ($canUploadAlbumPhotos): ?>
+                <p class="actions"><a class="button" href="#album-upload"><?= e($albumText('upload_photos_cta', 'Ajouter des photos', 'Add photos')) ?></a></p>
+            <?php endif; ?>
         </div>
     </section>
+
+    <?php if ($canUploadAlbumPhotos): ?>
+    <section class="card album-upload-panel" id="album-upload">
+        <div>
+            <h2><?= e($albumText('upload_photos_title', 'Ajouter des photos a l album', 'Add photos to the album')) ?></h2>
+            <p class="help"><?= e($albumText('upload_photos_help', 'Votre album reste prive jusqu a validation. Vous pouvez ajouter plusieurs images avant l examen.', 'The album stays private until review. You can add several images before approval.')) ?></p>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="stack">
+            <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="upload_album_photos">
+            <label><span><?= e($albumText('caption', 'Legende commune', 'Shared caption')) ?></span>
+                <textarea name="caption" rows="3" maxlength="5000"></textarea>
+            </label>
+            <label><span><?= e($albumText('files_dropzone', 'Fichiers image', 'Image files')) ?></span>
+                <div class="album-dropzone" data-album-upload-dropzone data-ready-files="<?= e($albumText('ready_files', 'fichier(s) pret(s) a etre importe(s).', 'file(s) ready to import.')) ?>" role="button" tabindex="0">
+                    <?= e($albumText('dropzone_hint', 'Glissez-deposez vos photos ici ou cliquez pour selectionner.', 'Drop photos here or click to select them.')) ?>
+                </div>
+                <input type="file" name="photos[]" accept="image/jpeg,image/png,image/webp" multiple required data-album-upload-input>
+            </label>
+            <p class="help"><?= e($albumText('upload_help', 'Formats acceptes : JPG, PNG et WEBP. Taille maximale : 8 Mo par image.', 'Accepted formats: JPG, PNG and WEBP. Maximum size: 8 MB per image.')) ?></p>
+            <p class="actions"><button class="button" type="submit"><?= e($albumText('upload', 'Televerser', 'Upload')) ?></button></p>
+        </form>
+    </section>
+    <?php endif; ?>
 
     <section class="album-photo-section">
         <?php if ($photos === []): ?>

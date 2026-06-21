@@ -15,7 +15,4 @@ return array (
   'pagination' => 'Pagination des photos',
   'previous' => 'Précédent',
   'next' => 'Suivant',
-  'upload_photos_cta' => 'Ajouter des photos',
-  'upload_photos_title' => 'Ajouter des photos a l album',
-  'upload_photos_help' => 'Votre album reste prive jusqu a validation. Vous pouvez ajouter plusieurs images avant l examen.',
 );
