@@ -128,7 +128,7 @@ jobs:
         run: ./scripts/check-tools.sh --with-smoke
 
       - name: Run Selenium tests
-        timeout-minutes: 180
+        timeout-minutes: 60
         run: npm run test:selenium
 
       - name: Run Playwright E2E
