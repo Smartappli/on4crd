@@ -229,6 +229,22 @@
   background: var(--panel-2);
 }
 
+[data-route="videos"] .member-document-video-player {
+  margin-top: .75rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #050505;
+}
+
+[data-route="videos"] .member-document-video-player video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 72vh;
+  background: #050505;
+}
+
 @media (max-width: 900px) {
   :is([data-route="presentations"], [data-route="videos"], [data-route="fichiers"], [data-route="pv"]) .member-document-hero {
     grid-template-columns: 1fr;
