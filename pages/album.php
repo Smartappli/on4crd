@@ -3,6 +3,15 @@ declare(strict_types=1);
 
 $locale = current_locale();
 $t = i18n_domain_locale('album', $locale);
+$uploadT = i18n_domain_locale('admin_albums', $locale);
+$albumText = static function (string $key, string $fr, string $en) use ($t, $uploadT, $locale): string {
+    $value = trim((string) ($t[$key] ?? $uploadT[$key] ?? ''));
+    if ($value !== '') {
+        return $value;
+    }
+
+    return $locale === 'fr' ? $fr : $en;
+};
 $viewerLabels = i18n_domain_locale('idea', $locale);
 $viewerCloseLabel = trim((string) ($viewerLabels['close'] ?? ''));
 if ($viewerCloseLabel === '') {
@@ -37,6 +46,15 @@ $canPreviewPrivateAlbum = is_array($album)
         has_permission('albums.manage')
         || (int) ($album['member_id'] ?? 0) === (int) ($user['id'] ?? 0)
     );
+$canUploadAlbumPhotos = is_array($album)
+    && $user !== null
+    && (
+        has_permission('albums.manage')
+        || (
+            (int) ($album['is_public'] ?? 0) !== 1
+            && (int) ($album['member_id'] ?? 0) === (int) ($user['id'] ?? 0)
+        )
+    );
 
 if (!$album || ((int) ($album['is_public'] ?? 0) !== 1 && !$canPreviewPrivateAlbum)) {
     http_response_code(404);
@@ -56,19 +74,50 @@ $albumSubcategoryCode = album_subcategory_code((string) ($album['subcategory'] ?
 $albumCategoryLabel = (string) ($albumCategories[$albumCategoryCode] ?? album_category_label_from_code($albumCategoryCode));
 $albumSubcategoryLabel = $albumSubcategoryCode !== '' ? album_category_label_from_code($albumSubcategoryCode) : '';
 $albumSubcategoryDisplay = $albumSubcategoryLabel !== '' ? $albumSubcategoryLabel : (string) (i18n_domain_locale('albums', $locale)['no_subcategory'] ?? 'Sans sous-thématique');
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (string) ($_POST['action'] ?? '') === 'toggle_favorite') {
-    $user = require_login();
-    verify_csrf();
-    $saved = favorite_toggle(
-        (int) $user['id'],
-        'album',
-        (int) $album['id'],
-        (string) ($album['title'] ?? ''),
-        route_url('album', ['id' => (int) $album['id']])
-    );
-    notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', (string) ($album['title'] ?? ''), route_url('album', ['id' => (int) $album['id']]));
-    set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
-    redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = (string) ($_POST['action'] ?? '');
+    if ($action === 'toggle_favorite') {
+        $user = require_login();
+        verify_csrf();
+        $saved = favorite_toggle(
+            (int) $user['id'],
+            'album',
+            (int) $album['id'],
+            (string) ($album['title'] ?? ''),
+            route_url('album', ['id' => (int) $album['id']])
+        );
+        notify_member((int) $user['id'], 'favorite', $saved ? 'Favorite added' : 'Favorite removed', (string) ($album['title'] ?? ''), route_url('album', ['id' => (int) $album['id']]));
+        set_flash('success', $saved ? 'Album added to favorites.' : 'Album removed from favorites.');
+        redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => max(1, (int) ($_GET['p'] ?? 1))]));
+    }
+
+    if ($action === 'upload_album_photos') {
+        $user = require_login(route_url('album', ['id' => (int) $album['id']]));
+        verify_csrf();
+        try {
+            if (!$canUploadAlbumPhotos) {
+                throw new RuntimeException($albumText('album_forbidden', 'Vous ne pouvez pas ajouter de photos a cet album.', 'You cannot add photos to this album.'));
+            }
+
+            $uploadResult = album_store_uploaded_photos(
+                (int) $album['id'],
+                $_FILES['photos'] ?? $_FILES['photo'] ?? null,
+                '',
+                (string) ($_POST['caption'] ?? ''),
+                (string) ($user['callsign'] ?? 'album'),
+                $albumText('photo', 'Photo', 'Photo')
+            );
+            notify_member((int) $user['id'], 'import', 'Album import completed', (int) $uploadResult['count'] . ' photo(s) imported.', route_url('album', ['id' => (int) $album['id']]));
+            $totalStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
+            $totalStmt->execute([(int) $album['id']]);
+            $targetPage = max(1, (int) ceil(((int) $totalStmt->fetchColumn()) / 24));
+            set_flash('success', (int) $uploadResult['count'] . ' ' . $albumText('uploaded_count', 'photo(s) ajoutee(s).', 'photo(s) added.'));
+            redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => $targetPage]) . '#album-upload');
+        } catch (Throwable $throwable) {
+            set_flash('error', $throwable->getMessage());
+            redirect_url(route_url_clean('album', ['id' => (int) $album['id'], 'p' => max(1, (int) ($_GET['p'] ?? 1))]) . '#album-upload');
+        }
+    }
 }
 $isFavorite = $user !== null ? favorite_is_saved((int) $user['id'], 'album', (int) $album['id']) : false;
 
