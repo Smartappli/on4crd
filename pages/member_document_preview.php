@@ -34,7 +34,8 @@ $safePath = member_document_safe_path((string) ($document['file_path'] ?? ''));
 $extension = strtolower(pathinfo((string) $safePath, PATHINFO_EXTENSION));
 $allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm', 'ppt', 'pptx', 'xls', 'xlsx', 'csv', 'zip', 'jpg', 'jpeg', 'png', 'webp', 'mp4', 'webm', 'mov', 'm4v'];
 $isDownload = (string) ($_GET['download'] ?? '') === '1';
-if ($safePath === null || !in_array($extension, $allowedExtensions, true) || (!$isDownload && $extension !== 'pdf')) {
+$canRenderInline = $extension === 'pdf' || ($moduleCode === 'videos' && member_document_is_video_extension($extension));
+if ($safePath === null || !in_array($extension, $allowedExtensions, true) || (!$isDownload && !$canRenderInline)) {
     http_response_code(404);
     exit('Document not found');
 }
