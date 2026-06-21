@@ -144,7 +144,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'propose_album') {
-        if (!table_exists('albums')) {
+        if (!table_exists('albums') || !table_exists('album_photos')) {
+            throw new RuntimeException((string) $t['gallery_unavailable']);
+        }
+        if (!album_ensure_photo_sort_order_column() || !album_ensure_source_proposal_column()) {
             throw new RuntimeException((string) $t['gallery_unavailable']);
         }
         $proposalTitle = (string) ($_POST['proposal_title'] ?? '');
@@ -182,31 +185,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ])
                 : '';
             $albumDescription = trim($description . ($albumMetadata !== '' ? "\n\n" . $albumMetadata : ''));
-            album_ensure_source_proposal_column();
             db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public) VALUES (?, ?, ?, ?, ?, 1)')
                 ->execute([(int) $user['id'], $proposalCategory, $proposalSubcategory, $title, $albumDescription !== '' ? $albumDescription : null]);
             $albumId = (int) db()->lastInsertId();
             album_clear_caches();
-            set_flash('success', 'Album créé et validé directement.');
-            redirect_url(route_url('album', ['id' => $albumId]));
+            set_flash('success', 'Album cree et valide directement. Ajoutez maintenant les photos.');
+            redirect_url(route_url('album', ['id' => $albumId]) . '#album-upload');
         }
-        $summary = content_proposal_details_text([
-            'Thématique' => $theme,
-            'Sous-thématique' => $proposalSubcategory,
-            'Mots clés' => $keywords,
-            'Description' => $description,
-        ]);
-        $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, $contact);
+        if (!ensure_content_proposals_table()) {
+            throw new RuntimeException((string) $t['gallery_unavailable']);
+        }
+        $albumId = 0;
+        $proposalId = 0;
+        $summary = '';
+        $sourceRef = '';
+        db()->beginTransaction();
+        try {
+            db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public, source_proposal_id) VALUES (?, ?, ?, ?, ?, 0, NULL)')
+                ->execute([(int) $user['id'], $proposalCategory, $proposalSubcategory, $title, null]);
+            $albumId = (int) db()->lastInsertId();
+            $sourceRef = route_url('album', ['id' => $albumId]);
+            $summary = content_proposal_details_text([
+                'Album ID' => (string) $albumId,
+                'Thématique' => $theme,
+                'Sous-thématique' => $proposalSubcategory,
+                'Mots clés' => $keywords,
+                'Description' => $description,
+            ]);
+            $albumDescription = album_proposal_description_from_summary($summary);
+            db()->prepare('UPDATE albums SET description = ? WHERE id = ?')->execute([$albumDescription, $albumId]);
+            $proposalId = content_proposal_create((int) $user['id'], 'albums', 'content', $title, $summary, $contact, $sourceRef, 'pending');
+            db()->prepare('UPDATE albums SET source_proposal_id = ? WHERE id = ?')->execute([$proposalId, $albumId]);
+            db()->commit();
+        } catch (Throwable $throwable) {
+            if (db()->inTransaction()) {
+                db()->rollBack();
+            }
+            throw $throwable;
+        }
+        album_clear_caches();
         content_proposal_notify_site('Proposition d album ON4CRD', [
             'area' => 'albums',
             'proposal_type' => 'content',
             'title' => content_proposal_clean_single_line($title, 190),
             'summary' => $summary,
             'contact' => $contact,
-            'source_ref' => 'content_proposals#' . $proposalId,
+            'source_ref' => 'content_proposals#' . $proposalId . ' ' . $sourceRef,
         ]);
-        set_flash('success', 'Proposition enregistree dans vos contenus.');
-        redirect('my_requests');
+        set_flash('success', 'Proposition enregistree dans vos contenus. Ajoutez maintenant vos photos.');
+        redirect_url($sourceRef . '#album-upload');
     }
 
     if ($action === 'propose_category') {

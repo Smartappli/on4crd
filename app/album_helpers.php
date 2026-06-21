@@ -960,16 +960,21 @@ function album_apply_accepted_proposal(array $proposal): ?int
         return $albumId;
     }
 
+    $description = album_proposal_description_from_summary($summary);
+    $category = album_category_code((string) (content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic']) ?: 'general'));
+    $subcategory = album_subcategory_code((string) (content_proposal_detail_from_summary($summary, ['Sous-thématique', 'Sous-thematique', 'Subtopic']) ?: ''));
+
     $existingStmt = db()->prepare('SELECT id FROM albums WHERE source_proposal_id = ? LIMIT 1');
     $existingStmt->execute([$proposalId]);
     $existingId = (int) ($existingStmt->fetchColumn() ?: 0);
     if ($existingId > 0) {
+        db()->prepare('UPDATE albums SET member_id = ?, category = ?, subcategory = ?, title = ?, description = ?, is_public = 1, publish_requested = 0 WHERE id = ?')
+            ->execute([max(0, (int) ($proposal['member_id'] ?? 0)), $category, $subcategory, $title, $description, $existingId]);
+        album_clear_caches();
+
         return $existingId;
     }
 
-    $description = album_proposal_description_from_summary($summary);
-    $category = album_category_code((string) (content_proposal_detail_from_summary($summary, ['Thématique', 'Thematique', 'Theme', 'Topic']) ?: 'general'));
-    $subcategory = album_subcategory_code((string) (content_proposal_detail_from_summary($summary, ['Sous-thématique', 'Sous-thematique', 'Subtopic']) ?: ''));
     db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public, source_proposal_id) VALUES (?, ?, ?, ?, ?, 1, ?)')
         ->execute([max(0, (int) ($proposal['member_id'] ?? 0)), $category, $subcategory, $title, $description, $proposalId]);
     $albumId = (int) db()->lastInsertId();
@@ -1026,9 +1031,10 @@ function album_sync_accepted_proposals(int $limit = 100): array
 
             if ((string) ($proposal['proposal_type'] ?? '') === 'content') {
                 $proposalId = (int) ($proposal['id'] ?? 0);
-                $existingStmt = db()->prepare('SELECT id FROM albums WHERE source_proposal_id = ? LIMIT 1');
+                $existingStmt = db()->prepare('SELECT id, is_public FROM albums WHERE source_proposal_id = ? LIMIT 1');
                 $existingStmt->execute([$proposalId]);
-                if ((int) ($existingStmt->fetchColumn() ?: 0) > 0) {
+                $existingAlbum = $existingStmt->fetch() ?: null;
+                if (is_array($existingAlbum) && (int) ($existingAlbum['is_public'] ?? 0) === 1) {
                     $result['skipped']++;
                     continue;
                 }
@@ -1072,6 +1078,107 @@ function handle_album_upload(?array $upload, string $callsign): string
     }
 
     return $publicPath;
+}
+
+/**
+ * @param mixed $files
+ * @return list<array{name:mixed,type:mixed,tmp_name:mixed,error:mixed,size:mixed}>
+ */
+function album_upload_batch_from_files(mixed $files): array
+{
+    $uploadBatch = [];
+    if (is_array($files) && is_array($files['name'] ?? null)) {
+        $total = count($files['name']);
+        for ($i = 0; $i < $total; $i++) {
+            $single = [
+                'name' => $files['name'][$i] ?? '',
+                'type' => $files['type'][$i] ?? '',
+                'tmp_name' => $files['tmp_name'][$i] ?? '',
+                'error' => $files['error'][$i] ?? UPLOAD_ERR_NO_FILE,
+                'size' => $files['size'][$i] ?? 0,
+            ];
+            if ((int) $single['error'] === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+            $uploadBatch[] = $single;
+        }
+    } elseif (is_array($files) && (int) ($files['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+        $uploadBatch[] = $files;
+    }
+
+    return array_values(array_filter($uploadBatch, static fn($item): bool => is_array($item)));
+}
+
+/**
+ * @param mixed $files
+ * @return array{count:int,last_title:string,paths:list<string>}
+ */
+function album_store_uploaded_photos(int $albumId, mixed $files, string $title, string $caption, string $callsign, string $defaultPhotoTitle = 'Photo'): array
+{
+    if ($albumId <= 0 || !album_ensure_photo_sort_order_column()) {
+        throw new RuntimeException('Invalid album.');
+    }
+
+    $messages = i18n_domain_locale('admin_albums', current_locale());
+    $title = content_proposal_clean_single_line($title, 190);
+    $caption = content_proposal_clean_multiline($caption, 5000);
+    $defaultPhotoTitle = content_proposal_clean_single_line($defaultPhotoTitle !== '' ? $defaultPhotoTitle : 'Photo', 190);
+    if ($defaultPhotoTitle === '') {
+        $defaultPhotoTitle = 'Photo';
+    }
+
+    $uploadBatch = album_upload_batch_from_files($files);
+    if ($uploadBatch === []) {
+        throw new RuntimeException((string) ($messages['no_photo_imported'] ?? 'No photo was imported.'));
+    }
+    if (count($uploadBatch) > 100) {
+        throw new RuntimeException((string) ($messages['batch_max_files'] ?? 'Maximum 100 photos per import.'));
+    }
+    $totalBytes = array_sum(array_map(static fn(array $item): int => max(0, (int) ($item['size'] ?? 0)), $uploadBatch));
+    if ($totalBytes > 512 * 1024 * 1024) {
+        throw new RuntimeException((string) ($messages['batch_max_size'] ?? 'The photo batch exceeds 512 MB.'));
+    }
+
+    $insertPhotoStmt = db()->prepare('INSERT INTO album_photos (album_id, sort_order, title, caption, file_path) VALUES (?, ?, ?, ?, ?)');
+    $orderStmt = db()->prepare('SELECT COALESCE(MAX(sort_order), 0) FROM album_photos WHERE album_id = ?');
+    $createdPaths = [];
+    $importedCount = 0;
+    $lastTitle = $title !== '' ? $title : $defaultPhotoTitle;
+
+    try {
+        $orderStmt->execute([$albumId]);
+        $nextOrder = (int) ($orderStmt->fetchColumn() ?: 0);
+        db()->beginTransaction();
+        foreach ($uploadBatch as $single) {
+            $path = handle_album_upload($single, $callsign !== '' ? $callsign : 'album');
+            $createdPaths[] = $path;
+            $nextOrder++;
+            $photoTitle = $title !== '' && count($uploadBatch) === 1 ? $title : ($defaultPhotoTitle . ' ' . $nextOrder);
+            if (mb_strlen($photoTitle) > 190) {
+                $photoTitle = mb_substr($photoTitle, 0, 190);
+            }
+            $insertPhotoStmt->execute([$albumId, $nextOrder, $photoTitle, $caption !== '' ? $caption : null, $path]);
+            $lastTitle = $photoTitle;
+            $importedCount++;
+        }
+        db()->commit();
+    } catch (Throwable $throwable) {
+        if (db()->inTransaction()) {
+            db()->rollBack();
+        }
+        foreach ($createdPaths as $createdPath) {
+            album_delete_photo_file($createdPath);
+        }
+        throw $throwable;
+    }
+
+    album_clear_caches();
+
+    return [
+        'count' => $importedCount,
+        'last_title' => $lastTitle,
+        'paths' => $createdPaths,
+    ];
 }
 
 function album_photo_public_path_or_null(string $path): ?string
