@@ -128,7 +128,7 @@ if (!albums_admin_tables_ready()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
     return;
 }
-if (!albums_admin_ensure_photo_order_column() || !album_ensure_source_proposal_column()) {
+if (!albums_admin_ensure_photo_order_column() || !album_ensure_schema_columns_and_indexes() || !album_ensure_source_proposal_column()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
     return;
 }
@@ -254,6 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
             $isPublic = isset($_POST['is_public']) ? 1 : 0;
+            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
             $category = album_category_from_input((string) ($_POST['category'] ?? 'general'), $albumCategories);
             $subcategory = '';
             $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
@@ -270,8 +271,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($title === '') {
                 throw new RuntimeException((string) $t['title_required']);
             }
-            db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public, publish_requested) VALUES (?, ?, ?, ?, ?, 0, ?)')
-                ->execute([(int) (current_user()['id'] ?? 0), $category, $subcategory, $title, $description, $isPublic]);
+            db()->prepare('INSERT INTO albums (member_id, category, subcategory, title, description, is_public, is_featured, publish_requested) VALUES (?, ?, ?, ?, ?, 0, ?, ?)')
+                ->execute([(int) (current_user()['id'] ?? 0), $category, $subcategory, $title, $description, $isFeatured, $isPublic]);
             $albumId = (int) db()->lastInsertId();
             album_clear_caches();
             set_flash('success', (string) ($t['album_created_continue'] ?? $t['created_ok']));
@@ -283,6 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
             $isPublic = isset($_POST['is_public']) ? 1 : 0;
+            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
             $category = album_category_from_input((string) ($_POST['category'] ?? 'general'), $albumCategories);
             $subcategory = '';
             $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
@@ -304,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$albumStmt->fetchColumn()) {
                 throw new RuntimeException((string) $t['invalid_album']);
             }
-            db()->prepare('UPDATE albums SET category = ?, subcategory = ?, title = ?, description = ?, is_public = ? WHERE id = ?')->execute([$category, $subcategory, $title, $description, $isPublic, $albumId]);
+            db()->prepare('UPDATE albums SET category = ?, subcategory = ?, title = ?, description = ?, is_public = ?, is_featured = ? WHERE id = ?')->execute([$category, $subcategory, $title, $description, $isPublic, $isFeatured, $albumId]);
             albums_admin_clear_cache();
             set_flash('success', (string) $t['updated_ok']);
             redirect('admin_albums');
