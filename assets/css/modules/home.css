@@ -146,17 +146,18 @@ body[data-route="home"] .site-footer {
 }
 
 .home-gallery-carousel {
-  min-height: 0;
+  min-height: 190px;
+  aspect-ratio: 16 / 9;
 }
 
 .home-gallery-track,
 .home-gallery-slide {
-  height: auto;
-  min-height: 0;
+  height: 100%;
+  min-height: inherit;
 }
 
 .home-gallery-slide {
-  display: block;
+  display: flex;
   padding: 0;
   overflow: hidden;
   text-decoration: none;
@@ -168,16 +169,16 @@ body[data-route="home"] .site-footer {
 }
 
 .home-gallery-carousel.is-ready .home-gallery-slide.is-active {
-  display: block;
+  display: flex;
   animation: homeSponsorFade .45s ease both;
 }
 
 .home-gallery-slide img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   max-height: none;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .home-gallery-slide:focus-visible {
@@ -209,7 +210,7 @@ body[data-route="home"] .site-footer {
   }
 
   .home-gallery-carousel {
-    min-height: 0;
+    min-height: 170px;
   }
 
   .home-media-slide img {
