@@ -124,6 +124,16 @@ function albums_admin_validate_text_lengths(string $title, string $description =
     }
 }
 
+function albums_admin_post_checkbox(string $key): int
+{
+    $value = $_POST[$key] ?? '0';
+    if (is_array($value)) {
+        $value = end($value);
+    }
+
+    return in_array((string) $value, ['1', 'on', 'true'], true) ? 1 : 0;
+}
+
 if (!albums_admin_tables_ready()) {
     echo render_layout('<div class="card"><h1>' . e((string) $t['manage_title']) . '</h1><p>' . e((string) $t['storage_unavailable']) . '</p></div>', (string) $t['manage_title']);
     return;
@@ -257,8 +267,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'create_album') {
             $title = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
-            $isPublic = isset($_POST['is_public']) ? 1 : 0;
-            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
+            $isPublic = albums_admin_post_checkbox('is_public');
+            $isFeatured = albums_admin_post_checkbox('is_featured');
             $category = album_category_from_input((string) ($_POST['category'] ?? 'general'), $albumCategories);
             $subcategory = '';
             $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
@@ -287,8 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $albumId = (int) ($_POST['album_id'] ?? 0);
             $title = trim((string) ($_POST['title'] ?? ''));
             $description = trim((string) ($_POST['description'] ?? ''));
-            $isPublic = isset($_POST['is_public']) ? 1 : 0;
-            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
+            $isPublic = albums_admin_post_checkbox('is_public');
+            $isFeatured = albums_admin_post_checkbox('is_featured');
             $category = album_category_from_input((string) ($_POST['category'] ?? 'general'), $albumCategories);
             $subcategory = '';
             $subcategoryRef = trim((string) ($_POST['subcategory_ref'] ?? ''));
@@ -729,8 +739,10 @@ ob_start();
                     <label><?= e((string) $t['description']) ?>
                         <textarea name="description" rows="4"></textarea>
                     </label>
-                    <label><input type="checkbox" name="is_public"> <?= e((string) $t['public_album']) ?></label>
-                    <label><input type="checkbox" name="is_featured"> <?= e($featuredAlbumLabel) ?></label>
+                    <input type="hidden" name="is_public" value="0">
+                    <label><input type="checkbox" name="is_public" value="1"> <?= e((string) $t['public_album']) ?></label>
+                    <input type="hidden" name="is_featured" value="0">
+                    <label><input type="checkbox" name="is_featured" value="1"> <?= e($featuredAlbumLabel) ?></label>
                     <p class="help"><?= e((string) ($t['wizard_private_help'] ?? 'The album stays private until final validation.')) ?></p>
                     <button class="button"><?= e((string) ($t['wizard_continue_upload'] ?? $t['create_album'])) ?></button>
                 </form>
@@ -847,8 +859,10 @@ ob_start();
                             <label><?= e((string) $t['title']) ?>
                                 <input type="text" name="title" value="<?= e((string) $album['title']) ?>" required maxlength="190">
                             </label>
-                            <label><input type="checkbox" name="is_public" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['public_album']) ?></label>
-                            <label><input type="checkbox" name="is_featured" <?= (int) ($album['is_featured'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e($featuredAlbumLabel) ?></label>
+                            <input type="hidden" name="is_public" value="0">
+                            <label><input type="checkbox" name="is_public" value="1" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['public_album']) ?></label>
+                            <input type="hidden" name="is_featured" value="0">
+                            <label><input type="checkbox" name="is_featured" value="1" <?= (int) ($album['is_featured'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e($featuredAlbumLabel) ?></label>
                             <div style="grid-column:1 / -1;">
                                 <?= render_album_taxonomy_fields($albumCategories, $t, (string) ($album['category'] ?? 'general'), (string) ($album['subcategory'] ?? '')) ?>
                             </div>
