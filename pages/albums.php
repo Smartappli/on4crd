@@ -516,21 +516,7 @@ $albumSubcategoryProposalUrl = $user !== null ? route_url('albums', ['propose_su
 $featuredAlbumsTitle = $albumText('featured_albums', 'Album à la une', 'Featured albums');
 $featuredAlbumBadge = $albumText('featured_album_badge', 'À la une', 'Featured');
 $otherAlbumsTitle = $albumText('other_albums', 'Autres albums', 'Other albums');
-$albumSections = [];
-if ($featuredRows !== []) {
-    $albumSections[] = [
-        'title' => $featuredAlbumsTitle,
-        'rows' => $featuredRows,
-        'featured' => true,
-    ];
-}
-if ($rows !== []) {
-    $albumSections[] = [
-        'title' => $featuredRows !== [] ? $otherAlbumsTitle : '',
-        'rows' => $rows,
-        'featured' => false,
-    ];
-}
+$albumSections = album_listing_sections($featuredRows, $rows, $featuredAlbumsTitle, $otherAlbumsTitle);
 
 ob_start();
 ?>
@@ -718,9 +704,9 @@ ob_start();
         <?php else: ?>
             <?php foreach ($albumSections as $albumSection): ?>
                 <?php
-                $albumSectionRows = is_array($albumSection['rows'] ?? null) ? $albumSection['rows'] : [];
-                $albumSectionTitle = trim((string) ($albumSection['title'] ?? ''));
-                $albumSectionFeatured = (bool) ($albumSection['featured'] ?? false);
+                $albumSectionRows = $albumSection['rows'];
+                $albumSectionTitle = trim((string) $albumSection['title']);
+                $albumSectionFeatured = (bool) $albumSection['featured'];
                 ?>
                 <section class="albums-results-section<?= $albumSectionFeatured ? ' albums-featured-section' : '' ?>">
                     <?php if ($albumSectionTitle !== ''): ?>

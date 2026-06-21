@@ -290,7 +290,7 @@ function albumState(albumId, photoIds = []) {
 require_once 'app/bootstrap.php';
 $albumId = (int) getenv('SELENIUM_ALBUM_ID');
 $photoIds = array_values(array_filter(array_map('intval', explode(',', (string) getenv('SELENIUM_PHOTO_IDS')))));
-$albumStmt = db()->prepare('SELECT id, title, description FROM albums WHERE id = ? LIMIT 1');
+$albumStmt = db()->prepare('SELECT id, title, description, is_public, is_featured FROM albums WHERE id = ? LIMIT 1');
 $albumStmt->execute([$albumId]);
 $album = $albumStmt->fetch() ?: null;
 $photos = [];
@@ -582,9 +582,41 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       const albumForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));
       await setFieldValue(driver, await albumForm.findElement(By.css('input[name="title"]')), `Admin album updated ${token}`);
       await setFieldValue(driver, await albumForm.findElement(By.css('textarea[name="description"]')), `Admin album updated description ${token}`);
+      await setCheckbox(driver, await albumForm.findElement(By.css('input[name="is_featured"]')), true);
       await submitForm(driver, albumForm);
       let state = albumState(fixture.album_id, fixture.photo_ids);
       assert.equal(state.album.title, `Admin album updated ${token}`, 'Le titre album admin doit etre mis a jour.');
+      assert.equal(Number(state.album.is_featured), 1, 'Un admin doit pouvoir epingler un album.');
+
+      await visit(driver, 'albums');
+      const featuredSections = await driver.findElements(By.css('.albums-featured-section'));
+      assert.ok(featuredSections.length >= 1, 'La section album a la une doit apparaitre avec un album epingle.');
+      const featuredTexts = [];
+      for (const section of featuredSections) {
+        featuredTexts.push(await section.getText());
+      }
+      assert.ok(
+        featuredTexts.some((text) => text.includes(`Admin album updated ${token}`)),
+        'La section album a la une doit contenir l album epingle.'
+      );
+
+      await visit(driver, 'admin_albums');
+      const unpinForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));
+      await setCheckbox(driver, await unpinForm.findElement(By.css('input[name="is_featured"]')), false);
+      await submitForm(driver, unpinForm);
+      state = albumState(fixture.album_id, fixture.photo_ids);
+      assert.equal(Number(state.album.is_featured), 0, 'Un admin doit pouvoir desepingler un album.');
+      await visit(driver, 'albums');
+      const afterUnpinSections = await driver.findElements(By.css('.albums-featured-section'));
+      const afterUnpinTexts = [];
+      for (const section of afterUnpinSections) {
+        afterUnpinTexts.push(await section.getText());
+      }
+      assert.equal(
+        afterUnpinTexts.some((text) => text.includes(`Admin album updated ${token}`)),
+        false,
+        'Un album desepingle ne doit plus rester dans la section a la une.'
+      );
 
       await visit(driver, 'admin_albums');
       const photoForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_photo"] and .//input[@name="photo_id" and @value="${firstPhotoId}"]]`));

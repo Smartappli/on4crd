@@ -133,6 +133,50 @@ final class AlbumHelpersTest extends TestCase
         self::assertArrayNotHasKey('events', $visible);
     }
 
+    public function testAlbumListingSectionsHideFeaturedSectionWhenNoAlbumIsPinned(): void
+    {
+        $sections = album_listing_sections(
+            [],
+            [
+                ['id' => 10, 'title' => 'Regular album'],
+            ],
+            'Album à la une',
+            'Autres albums'
+        );
+
+        self::assertCount(1, $sections);
+        self::assertFalse($sections[0]['featured']);
+        self::assertSame('', $sections[0]['title']);
+        self::assertSame(10, $sections[0]['rows'][0]['id']);
+    }
+
+    public function testAlbumListingSectionsPutPinnedAlbumsBeforeRegularAlbums(): void
+    {
+        $sections = album_listing_sections(
+            [
+                ['id' => 7, 'title' => 'Featured album'],
+            ],
+            [
+                ['id' => 3, 'title' => 'Regular album'],
+            ],
+            'Album à la une',
+            'Autres albums'
+        );
+
+        self::assertCount(2, $sections);
+        self::assertTrue($sections[0]['featured']);
+        self::assertSame('Album à la une', $sections[0]['title']);
+        self::assertSame(7, $sections[0]['rows'][0]['id']);
+        self::assertFalse($sections[1]['featured']);
+        self::assertSame('Autres albums', $sections[1]['title']);
+        self::assertSame(3, $sections[1]['rows'][0]['id']);
+    }
+
+    public function testAlbumListingSectionsReturnNoSectionForEmptyLists(): void
+    {
+        self::assertSame([], album_listing_sections([], [], 'Album à la une', 'Autres albums'));
+    }
+
     public function testAlbumProposalSummaryExtractsDescriptionMetadataAndActions(): void
     {
         self::assertSame(

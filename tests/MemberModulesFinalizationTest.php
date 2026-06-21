@@ -42,6 +42,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('$regularWhere = $where . \' AND a.is_featured = 0\';', $albums);
         self::assertStringContainsString('AND a.is_featured = 1', $albums);
         self::assertStringContainsString('$featuredAlbumsTitle = $albumText(\'featured_albums\'', $albums);
+        self::assertStringContainsString('$albumSections = album_listing_sections($featuredRows, $rows, $featuredAlbumsTitle, $otherAlbumsTitle);', $albums);
         self::assertStringContainsString('albums-featured-section', $albums);
         self::assertStringContainsString('album-featured-badge', $albums);
         self::assertStringContainsString("\$albumText('first_page'", $albums);
@@ -127,6 +128,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function album_delete_record(int $albumId): void', $albumHelpers);
         self::assertStringContainsString('function album_subcategory_ref(', $albumHelpers);
         self::assertStringContainsString('function album_visible_categories(', $albumHelpers);
+        self::assertStringContainsString('function album_listing_sections(', $albumHelpers);
         self::assertStringContainsString('function album_favorite_album_ids(', $albumHelpers);
         self::assertStringContainsString('idx_album_category_deleted', $albumHelpers);
         self::assertStringContainsString('deleted_at IS NULL', $albumHelpers);

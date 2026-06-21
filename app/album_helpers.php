@@ -665,6 +665,32 @@ function album_visible_subcategories_by_category(array $subcategoriesByCategory,
 }
 
 /**
+ * @param list<array<string, mixed>> $featuredRows
+ * @param list<array<string, mixed>> $regularRows
+ * @return list<array{title:string,rows:non-empty-list<array<string, mixed>>,featured:bool}>
+ */
+function album_listing_sections(array $featuredRows, array $regularRows, string $featuredTitle, string $regularTitle): array
+{
+    $sections = [];
+    if ($featuredRows !== []) {
+        $sections[] = [
+            'title' => trim($featuredTitle),
+            'rows' => $featuredRows,
+            'featured' => true,
+        ];
+    }
+    if ($regularRows !== []) {
+        $sections[] = [
+            'title' => $featuredRows !== [] ? trim($regularTitle) : '',
+            'rows' => $regularRows,
+            'featured' => false,
+        ];
+    }
+
+    return $sections;
+}
+
+/**
  * @return list<int>
  */
 function album_favorite_album_ids(int $memberId): array
@@ -1106,7 +1132,7 @@ function album_upload_batch_from_files(mixed $files): array
         $uploadBatch[] = $files;
     }
 
-    return array_values(array_filter($uploadBatch, static fn($item): bool => is_array($item)));
+    return $uploadBatch;
 }
 
 /**
