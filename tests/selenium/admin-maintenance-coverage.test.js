@@ -606,6 +606,20 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
         featuredTexts.some((text) => text.includes(`Admin album updated ${token}`)),
         'La section album a la une doit contenir l album epingle.'
       );
+      const publicAlbumTile = await driver.findElement(By.xpath(`//article[contains(@class,"album-tile")][.//a[contains(normalize-space(.), "Admin album updated ${token}")]]`));
+      const publicEditButton = await publicAlbumTile.findElement(By.css('[data-album-modal-open]'));
+      const publicDialogId = await publicEditButton.getAttribute('data-album-modal-open');
+      await driver.executeScript('arguments[0].click();', publicEditButton);
+      const publicEditDialog = await driver.findElement(By.id(publicDialogId));
+      const publicEditForm = await publicEditDialog.findElement(By.css('form.album-dialog-form'));
+      assert.equal(
+        await publicEditForm.findElement(By.css('input[type="checkbox"][name="album_is_featured"]')).isSelected(),
+        true,
+        'La case album a la une doit etre disponible et cochee dans le modal public admin.'
+      );
+      await submitForm(driver, publicEditForm);
+      state = albumState(fixture.album_id, fixture.photo_ids);
+      assert.equal(Number(state.album.is_featured), 1, 'Le modal public admin ne doit pas perdre l etat album a la une.');
 
       await visit(driver, 'admin_albums');
       const unpinForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));

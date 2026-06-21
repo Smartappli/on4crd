@@ -139,6 +139,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('function album_update_record(', $albumHelpers);
         self::assertStringContainsString('SELECT id, is_public, is_featured FROM albums WHERE id = ? LIMIT 1', $albumHelpers);
         self::assertStringContainsString('is_public = ?, is_featured = ?', $albumHelpers);
+        self::assertStringContainsString("log_structured_event('album_featured_update_mismatch'", $albumHelpers);
         self::assertStringContainsString('function album_delete_record(int $albumId): void', $albumHelpers);
         self::assertStringContainsString('function album_subcategory_ref(', $albumHelpers);
         self::assertStringContainsString('function album_visible_categories(', $albumHelpers);

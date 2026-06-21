@@ -870,6 +870,19 @@ function album_update_record(int $albumId, string $title, string $description, ?
 
     db()->prepare('UPDATE albums SET category = ?, subcategory = ?, title = ?, description = ?, is_public = ?, is_featured = ? WHERE id = ?')
         ->execute([$category, $subcategory, $title, $description !== '' ? $description : null, $visibility ? 1 : 0, $featured ? 1 : 0, $albumId]);
+    if ($isFeatured !== null) {
+        $verifyStmt = db()->prepare('SELECT is_featured FROM albums WHERE id = ? LIMIT 1');
+        $verifyStmt->execute([$albumId]);
+        $storedFeatured = (int) $verifyStmt->fetchColumn();
+        if ($storedFeatured !== ($featured ? 1 : 0)) {
+            log_structured_event('album_featured_update_mismatch', [
+                'album_id' => $albumId,
+                'expected' => $featured ? 1 : 0,
+                'stored' => $storedFeatured,
+            ]);
+            throw new RuntimeException('Albums storage unavailable.');
+        }
+    }
     if (table_exists('member_favorites')) {
         db()->prepare('UPDATE member_favorites SET title = ?, url = ? WHERE target_type = ? AND target_id = ?')
             ->execute([$title, route_url('album', ['id' => $albumId]), 'album', $albumId]);
