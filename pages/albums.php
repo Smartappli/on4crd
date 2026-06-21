@@ -710,14 +710,26 @@ ob_start();
         </aside>
 
     <section class="albums-gallery module-taxonomy-content">
-        <?php if ($rows === []): ?>
+        <?php if ($albumSections === []): ?>
             <article class="albums-empty">
                 <h2><?= e((string) $t['none']) ?></h2>
                 <p class="help"><?= ($search !== '' || $categoryFilter !== '' || $subcategoryFilter !== '' || $favoritesOnly) ? e((string) $t['for_search']) : e((string) $t['intro']) ?></p>
             </article>
         <?php else: ?>
-            <div class="albums-grid">
-                <?php foreach ($rows as $row):
+            <?php foreach ($albumSections as $albumSection): ?>
+                <?php
+                $albumSectionRows = is_array($albumSection['rows'] ?? null) ? $albumSection['rows'] : [];
+                $albumSectionTitle = trim((string) ($albumSection['title'] ?? ''));
+                $albumSectionFeatured = (bool) ($albumSection['featured'] ?? false);
+                ?>
+                <section class="albums-results-section<?= $albumSectionFeatured ? ' albums-featured-section' : '' ?>">
+                    <?php if ($albumSectionTitle !== ''): ?>
+                        <div class="albums-section-heading">
+                            <h2><?= e($albumSectionTitle) ?></h2>
+                        </div>
+                    <?php endif; ?>
+                    <div class="albums-grid<?= $albumSectionFeatured ? ' albums-featured-grid' : '' ?>">
+                <?php foreach ($albumSectionRows as $row):
                     $albumId = (int) ($row['id'] ?? 0);
                     $albumTitle = trim((string) ($row['title'] ?? ''));
                     if ($albumTitle === '') {
@@ -755,7 +767,7 @@ ob_start();
                     }
                     $editDialogId = 'album-edit-dialog-' . $albumId;
                     ?>
-                    <article class="album-tile">
+                    <article class="album-tile<?= $albumSectionFeatured ? ' album-tile-featured' : '' ?>">
                         <div class="album-tile-media-stack">
                             <a class="album-tile-media" href="<?= e(route_url('album', ['id' => $albumId])) ?>">
                                 <?php if ($coverSrc !== ''): ?>
@@ -769,6 +781,9 @@ ob_start();
                             <div>
                                 <h2><a href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e($albumTitle) ?></a></h2>
                                 <div class="album-tile-badges">
+                                    <?php if ($albumSectionFeatured): ?>
+                                        <span class="badge album-featured-badge"><?= e($featuredAlbumBadge) ?></span>
+                                    <?php endif; ?>
                                     <span class="badge muted album-photo-count-badge"><?= $photoCount ?> <?= e((string) ($photoCount > 1 ? $t['photos'] : $t['photo'])) ?></span>
                                     <?php if ($user !== null): ?>
                                         <?php $isFavorite = favorite_is_saved((int) $user['id'], 'album', (int) ($row['id'] ?? 0)); ?>
@@ -843,7 +858,9 @@ ob_start();
                         </dialog>
                     <?php endif; ?>
                 <?php endforeach; ?>
-            </div>
+                    </div>
+                </section>
+            <?php endforeach; ?>
             <?php if ($totalPages > 1): ?>
                 <nav class="actions mt-3" aria-label="<?= e((string) $t['pagination']) ?>">
                     <?php if ($page > 1): ?>
