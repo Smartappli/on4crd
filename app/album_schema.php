@@ -15,7 +15,8 @@ function album_ensure_schema_columns_and_indexes(bool $normalizeVisibilityDefaul
         'title' => 'ALTER TABLE albums ADD COLUMN title VARCHAR(190) NOT NULL DEFAULT "Album" AFTER subcategory',
         'description' => 'ALTER TABLE albums ADD COLUMN description TEXT DEFAULT NULL AFTER title',
         'is_public' => 'ALTER TABLE albums ADD COLUMN is_public TINYINT(1) NOT NULL DEFAULT 0 AFTER description',
-        'source_proposal_id' => 'ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_public',
+        'is_featured' => 'ALTER TABLE albums ADD COLUMN is_featured TINYINT(1) NOT NULL DEFAULT 0 AFTER is_public',
+        'source_proposal_id' => 'ALTER TABLE albums ADD COLUMN source_proposal_id INT NULL AFTER is_featured',
         'publish_requested' => 'ALTER TABLE albums ADD COLUMN publish_requested TINYINT(1) NOT NULL DEFAULT 0 AFTER source_proposal_id',
         'facebook_album_id' => 'ALTER TABLE albums ADD COLUMN facebook_album_id VARCHAR(80) DEFAULT NULL AFTER publish_requested',
         'facebook_post_id' => 'ALTER TABLE albums ADD COLUMN facebook_post_id VARCHAR(80) DEFAULT NULL AFTER facebook_album_id',
@@ -35,6 +36,7 @@ function album_ensure_schema_columns_and_indexes(bool $normalizeVisibilityDefaul
         'idx_albums_category' => 'ALTER TABLE albums ADD INDEX idx_albums_category (category)',
         'idx_albums_subcategory' => 'ALTER TABLE albums ADD INDEX idx_albums_subcategory (category, subcategory)',
         'idx_albums_source_proposal' => 'ALTER TABLE albums ADD INDEX idx_albums_source_proposal (source_proposal_id)',
+        'idx_albums_featured_public' => 'ALTER TABLE albums ADD INDEX idx_albums_featured_public (is_public, is_featured, created_at)',
     ];
     foreach ($indexes as $index => $sql) {
         if (!table_has_index('albums', (string) $index)) {

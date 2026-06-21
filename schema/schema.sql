@@ -522,6 +522,7 @@ CREATE TABLE IF NOT EXISTS albums (
     title VARCHAR(190) NOT NULL,
     description TEXT DEFAULT NULL,
     is_public TINYINT(1) NOT NULL DEFAULT 0,
+    is_featured TINYINT(1) NOT NULL DEFAULT 0,
     source_proposal_id INT DEFAULT NULL,
     publish_requested TINYINT(1) NOT NULL DEFAULT 0,
     facebook_album_id VARCHAR(80) DEFAULT NULL,
@@ -533,7 +534,8 @@ CREATE TABLE IF NOT EXISTS albums (
     INDEX idx_albums_member (member_id),
     INDEX idx_albums_category (category),
     INDEX idx_albums_subcategory (category, subcategory),
-    INDEX idx_albums_source_proposal (source_proposal_id)
+    INDEX idx_albums_source_proposal (source_proposal_id),
+    INDEX idx_albums_featured_public (is_public, is_featured, created_at)
 );
 
 CREATE TABLE IF NOT EXISTS album_categories (
