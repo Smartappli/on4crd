@@ -57,6 +57,22 @@ final class AlbumHelpersTest extends TestCase
         self::assertNull(album_photo_public_path_or_null('storage/uploads/library/doc.pdf'));
     }
 
+    public function testAlbumUploadBatchFromFilesNormalizesMultipleFiles(): void
+    {
+        $batch = album_upload_batch_from_files([
+            'name' => ['one.jpg', 'ignored.png', 'two.webp'],
+            'type' => ['image/jpeg', 'image/png', 'image/webp'],
+            'tmp_name' => ['tmp1', '', 'tmp2'],
+            'error' => [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE, UPLOAD_ERR_OK],
+            'size' => [123, 0, 456],
+        ]);
+
+        self::assertCount(2, $batch);
+        self::assertSame('one.jpg', $batch[0]['name']);
+        self::assertSame('two.webp', $batch[1]['name']);
+        self::assertSame([], album_upload_batch_from_files(['error' => UPLOAD_ERR_NO_FILE]));
+    }
+
     public function testSubcategoryReferencesNormalizeAndParseParentCategory(): void
     {
         self::assertSame('general:field-day', album_subcategory_ref('', 'Field Day'));

@@ -693,6 +693,7 @@ ob_start();
                     $descriptionText = '';
                     if ($description !== '') {
                         $descriptionText = album_description_display_text($description);
+                        $descriptionText = html_entity_decode(strip_tags($descriptionText), ENT_QUOTES | ENT_HTML5, 'UTF-8');
                         $descriptionText = trim((string) preg_replace('/\s+/u', ' ', $descriptionText));
                     }
                     $albumCategory = 'general';
