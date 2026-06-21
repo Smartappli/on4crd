@@ -585,7 +585,7 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       await setCheckbox(driver, await albumForm.findElement(By.css('input[type="checkbox"][name^="album_is_featured"]')), true);
       const albumSaveButton = await albumForm.findElement(By.css('button[type="submit"], button:not([type="button"]), input[type="submit"]'));
       await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', albumSaveButton);
-      await albumSaveButton.click();
+      await driver.executeScript('arguments[0].click();', albumSaveButton);
       await waitForDocumentReady(driver);
       await assertNoServerError(driver);
       let state = albumState(fixture.album_id, fixture.photo_ids);
