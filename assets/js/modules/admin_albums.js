@@ -46,4 +46,18 @@
     });
     input.addEventListener('change', setCount);
   });
+
+  document.querySelectorAll('[data-admin-album-save]').forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) return;
+    button.addEventListener('click', (event) => {
+      const form = button.closest('form');
+      if (!(form instanceof HTMLFormElement)) return;
+      event.preventDefault();
+      if (typeof form.requestSubmit === 'function') {
+        form.requestSubmit(button);
+      } else {
+        form.submit();
+      }
+    });
+  });
 })();

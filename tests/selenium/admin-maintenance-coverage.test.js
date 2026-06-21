@@ -591,7 +591,7 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       await setFieldValue(driver, await albumForm.findElement(By.css('select[name="category"]')), fixture.category);
       await setFieldValue(driver, await albumForm.findElement(By.css('select[name="subcategory_ref"]')), `${fixture.category}:${fixture.subcategory}`);
       await setCheckbox(driver, await albumForm.findElement(By.css('input[type="checkbox"][name^="album_is_featured"]')), true);
-      const albumSaveButton = await albumForm.findElement(By.css('button[type="submit"], button:not([type="button"]), input[type="submit"]'));
+      const albumSaveButton = await albumForm.findElement(By.css('[data-admin-album-save]'));
       await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', albumSaveButton);
       await driver.executeScript('arguments[0].click();', albumSaveButton);
       await waitForDocumentReady(driver);
