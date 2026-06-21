@@ -37,7 +37,13 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('$visibleAlbumCategories = album_visible_categories($albumCategories, $albumCategoryCounts);', $albums);
         self::assertStringContainsString('$visibleAlbumSubcategoriesByCategory = album_visible_subcategories_by_category', $albums);
         self::assertStringContainsString('album_ensure_photo_sort_order_column()', $albums);
+        self::assertStringContainsString('album_ensure_schema_columns_and_indexes()', $albums);
         self::assertStringContainsString("route_url('admin_albums')", $albums);
+        self::assertStringContainsString('$regularWhere = $where . \' AND a.is_featured = 0\';', $albums);
+        self::assertStringContainsString('AND a.is_featured = 1', $albums);
+        self::assertStringContainsString('$featuredAlbumsTitle = $albumText(\'featured_albums\'', $albums);
+        self::assertStringContainsString('albums-featured-section', $albums);
+        self::assertStringContainsString('album-featured-badge', $albums);
         self::assertStringContainsString("\$albumText('first_page'", $albums);
         self::assertStringContainsString("'p' => 1", $albums);
         self::assertStringContainsString("\$albumText('last_page'", $albums);
@@ -69,6 +75,10 @@ final class MemberModulesFinalizationTest extends TestCase
         $adminAlbums = $this->source('pages/admin_albums.php');
         self::assertMatchesRegularExpression('/<select\s+name="album_id"\s+required>.*foreach \(\$albums as \$album\)/s', $adminAlbums);
         self::assertStringContainsString('album_sync_accepted_proposals();', $adminAlbums);
+        self::assertStringContainsString('album_ensure_schema_columns_and_indexes()', $adminAlbums);
+        self::assertStringContainsString('name="is_featured"', $adminAlbums);
+        self::assertStringContainsString('is_featured, publish_requested', $adminAlbums);
+        self::assertStringContainsString('is_public = ?, is_featured = ?', $adminAlbums);
         self::assertStringContainsString('album_delete_record($albumId);', $adminAlbums);
         self::assertStringContainsString('id="album-wizard"', $adminAlbums);
         self::assertStringContainsString('name="album_wizard"', $adminAlbums);
@@ -98,6 +108,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('return ucwords(strtolower($label));', $albumHelpers);
         self::assertStringContainsString("table_has_column('album_photos', 'created_at')", $albumHelpers);
         self::assertStringContainsString("table_has_column('albums', (string) \$column)", $albumSchema);
+        self::assertStringContainsString("'is_featured' => 'ALTER TABLE albums ADD COLUMN is_featured", $albumSchema);
+        self::assertStringContainsString('idx_albums_featured_public', $albumSchema);
         self::assertStringContainsString('ALTER TABLE album_photos ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER file_path', $runtimeUpdates);
         self::assertStringContainsString('ALTER TABLE albums ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER social_publish_error', $albumSchema);
         self::assertStringContainsString("params.get('focus') === 'album-wizard'", $adminAlbumsJs);
@@ -124,6 +136,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("require_once __DIR__ . '/album_schema.php';", $runtimeUpdates);
         self::assertStringContainsString('idx_albums_member', $schema);
         self::assertStringContainsString('idx_albums_source_proposal', $schema);
+        self::assertStringContainsString('is_featured TINYINT(1) NOT NULL DEFAULT 0', $schema);
+        self::assertStringContainsString('idx_albums_featured_public', $schema);
         self::assertStringContainsString('sort_order INT NOT NULL DEFAULT 0', $schema);
         self::assertStringContainsString('publish_requested TINYINT(1) NOT NULL DEFAULT 0', $schema);
         self::assertStringContainsString('facebook_album_id VARCHAR(80) DEFAULT NULL', $schema);
