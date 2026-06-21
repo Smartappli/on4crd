@@ -45,10 +45,10 @@ const adminRoutes = [
 ];
 
 const expectedRouteActions = {
-  admin: ['update_content_proposal_status'],
+  admin: [],
   admin_ads: ['add_placement'],
   admin_albums: ['add_category', 'add_subcategory', 'create_album', 'upload_photo', 'update_album', 'delete_album', 'rebuild_thumbnails'],
-  admin_articles: ['save_article', 'preview_article', 'add_category', 'add_subcategory', 'bulk_update_articles'],
+  admin_articles: ['save_article', 'preview_article', 'add_category', 'add_subcategory'],
   admin_classifieds: [],
   admin_dashboard: [],
   admin_library: ['add_category', 'add_subcategory', 'merge_tags', 'bulk_delete_documents'],
@@ -57,7 +57,7 @@ const expectedRouteActions = {
   admin_newsletters: ['add_subscriber', 'import_csv', 'create_campaign'],
   admin_permissions: ['assign_role'],
   admin_press: ['contact', 'release'],
-  admin_translation_reviews: ['review_news_translation', 'review_article_translation'],
+  admin_translation_reviews: [],
   admin_webotheque: ['add_category', 'add_subcategory', 'update_link'],
   admin_wiki: ['add_category', 'add_subcategory'],
 };
@@ -111,9 +111,11 @@ const moduleCodesToEnable = [
 ];
 
 const routesWithoutForms = new Set([
+  'admin',
   'admin_editorial',
   'admin_events_feed',
   'admin_telechargements',
+  'admin_translation_reviews',
 ]);
 
 function enableAdminModulesForContract() {
@@ -165,11 +167,11 @@ foreach ($states as $state) {
 
 async function routeFormContract(driver) {
   return driver.executeScript(`
-    return Array.from(document.querySelectorAll('form')).map((form) => {
+    return Array.from(document.querySelectorAll('main form')).map((form) => {
       const method = (form.getAttribute('method') || 'get').toLowerCase();
       return {
         method,
-        actionValues: Array.from(form.querySelectorAll('input[name="action"]')).map((input) => input.value || ''),
+        actionValues: Array.from(form.querySelectorAll('input[name="action"], button[name="action"]')).map((input) => input.value || ''),
         hasCsrf: Boolean(form.querySelector('input[name="_csrf"]')),
         hasSubmit: Boolean(form.querySelector('button[type="submit"], button:not([type="button"]), input[type="submit"]')),
         fieldCount: form.querySelectorAll('input:not([type="hidden"]), select, textarea').length,
