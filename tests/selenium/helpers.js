@@ -588,7 +588,7 @@ function writeTinyPngFixture(name) {
   fs.mkdirSync(dir, { recursive: true });
   const filePath = path.join(dir, name);
   const pngBase64 =
-    'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGklEQVR4nGP8z8Dwn4GBgYGJgYGB4T8ABQsCBAJH7m4AAAAASUVORK5CYII=';
+    'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVR4nGPQz3/7HxkzkC4AAE5fKKFmq1FQAAAAAElFTkSuQmCC';
   fs.writeFileSync(filePath, Buffer.from(pngBase64, 'base64'));
 
   return filePath;

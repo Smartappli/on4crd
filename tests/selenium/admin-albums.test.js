@@ -14,7 +14,7 @@ const {
   runSeleniumPhp,
 } = require('./helpers');
 
-const TINY_PNG_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGklEQVR4nGP8z8Dwn4GBgYGJgYGB4T8ABQsCBAJH7m4AAAAASUVORK5CYII=';
+const TINY_PNG_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVR4nGPQz3/7HxkzkC4AAE5fKKFmq1FQAAAAAElFTkSuQmCC';
 
 function albumCreationState(title) {
   const output = runSeleniumPhp(`
@@ -133,7 +133,7 @@ async function uploadWizardPhotos(driver, uploadForm, albumId, title) {
   assert.equal(result.ok, true, `L upload album doit repondre en succes HTTP, recu ${result.status}: ${String(result.body).slice(0, 240)}`);
   assert.doesNotMatch(
     String(result.body),
-    /Une erreur interne|Internal Server Error|HTTP ERROR 500|HTTP ERROR 503|Erreur 503|Service Unavailable/i,
+    /Une erreur interne|Internal Server Error|HTTP ERROR 500|HTTP ERROR 503|Erreur 503|Service Unavailable|Uploaded image is invalid|Image t[ée]l[ée]vers[ée]e invalide|No photo was imported|Aucune photo/i,
     'La reponse HTML de l upload ne doit pas contenir d erreur serveur.',
   );
 }
