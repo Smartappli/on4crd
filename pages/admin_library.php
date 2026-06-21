@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 require_permission('admin.access');
-$user = current_user();
+$user = require_login();
 $locale = current_locale();
 $t = i18n_domain_locale('admin_library', $locale);
 $memberLibraryMessages = i18n_domain_locale('members_library', $locale);
@@ -368,7 +368,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('err_required');
         }
         $stored = library_store_upload($file, (int) ($user['id'] ?? 0));
-        member_library_create_document_record(
+        $documentId = member_library_create_document_record(
             (int) ($user['id'] ?? 0),
             $title,
             $category,
@@ -377,6 +377,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (string) $stored['public_path'],
             $subcategory
         );
+        try {
+            if (ensure_content_proposals_table()) {
+                $proposalSummary = content_proposal_details_text([
+                    (string) ($memberLibraryMessages['propose_document_category'] ?? 'Category') => $category,
+                    (string) ($memberLibraryMessages['propose_document_subcategory'] ?? 'Subcategory') => $subcategory,
+                    (string) ($memberLibraryMessages['tags'] ?? 'Keywords') => $tags,
+                    (string) ($memberLibraryMessages['document'] ?? 'Document') => (string) ($stored['original_name'] ?? ''),
+                    (string) ($memberLibraryMessages['propose_document_description'] ?? 'Description') => $description,
+                    'Document ID' => (string) $documentId,
+                ]);
+                content_proposal_create(
+                    (int) ($user['id'] ?? 0),
+                    'members_library',
+                    'content',
+                    $title,
+                    $proposalSummary,
+                    (string) ($user['email'] ?? ''),
+                    (string) $stored['public_path'],
+                    'accepted'
+                );
+            }
+        } catch (Throwable $throwable) {
+            log_structured_event('admin_library_content_record_create_failed', [
+                'document_id' => (int) $documentId,
+                'message' => $throwable->getMessage(),
+            ]);
+        }
         notify_member((int) ($user['id'] ?? 0), 'import', 'Library import completed', $title, route_url($adminLibraryRoute));
         set_flash('success', (string) $t['ok_added']);
         redirect($adminLibraryRoute);
