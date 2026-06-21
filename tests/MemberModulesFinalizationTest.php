@@ -56,8 +56,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_sync_accepted_proposals();', $albums);
         self::assertStringContainsString('album_clear_caches();', $albums);
         self::assertStringContainsString('function albums_page_post_checkbox(string $key, ?int $default = null, string ...$fallbackKeys): ?int', $albums);
-        self::assertStringContainsString("\$isFeatured = albums_page_post_checkbox('album_is_featured', null, 'is_featured');", $albums);
+        self::assertStringContainsString("array_key_exists('album_is_featured_present', \$_POST)", $albums);
         self::assertStringContainsString('album_update_record($albumId, $title, $description, null, $category, $subcategory, $isFeatured);', $albums);
+        self::assertStringContainsString('name="album_is_featured_present" value="1"', $albums);
         self::assertStringContainsString('name="album_is_featured" value="1" autocomplete="off" <?= $albumFeatured ? \'checked\' : \'\' ?>', $albums);
         self::assertStringContainsString('album_ensure_photo_sort_order_column()', $album);
         self::assertStringContainsString("log_structured_event('album_detail_photos_prepare_failed'", $album);
@@ -82,10 +83,11 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_sync_accepted_proposals();', $adminAlbums);
         self::assertStringContainsString('album_ensure_schema_columns_and_indexes()', $adminAlbums);
         self::assertStringContainsString('function albums_admin_post_checkbox(string $key, ?int $recordId = null, string ...$fallbackKeys): int', $adminAlbums);
-        self::assertStringContainsString("\$isFeatured = albums_admin_post_checkbox('album_is_featured', null, 'is_featured');", $adminAlbums);
-        self::assertStringContainsString("\$isFeatured = albums_admin_post_checkbox('album_is_featured', null, 'is_featured');", $adminAlbums);
+        self::assertStringContainsString('function albums_admin_post_form_checkbox(string $key, string $presenceKey, ?int $recordId = null, string ...$fallbackKeys): int', $adminAlbums);
+        self::assertStringContainsString("\$isFeatured = albums_admin_post_form_checkbox('album_is_featured', 'album_is_featured_present', null, 'is_featured');", $adminAlbums);
         self::assertStringNotContainsString('type="hidden" name="is_featured" value="0"', $adminAlbums);
-        self::assertStringContainsString('type="hidden" name="album_is_featured" value="0"', $adminAlbums);
+        self::assertStringNotContainsString('type="hidden" name="album_is_featured" value="0"', $adminAlbums);
+        self::assertStringContainsString('type="hidden" name="album_is_featured_present" value="1"', $adminAlbums);
         self::assertStringContainsString('name="album_is_featured" value="1"', $adminAlbums);
         self::assertStringNotContainsString('name="album_is_featured[<?= (int) $album[\'id\'] ?>]"', $adminAlbums);
         self::assertStringNotContainsString("\$isFeatured = isset(\$_POST['is_featured']) ? 1 : 0;", $adminAlbums);

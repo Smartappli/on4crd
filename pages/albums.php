@@ -142,7 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($canManageAlbums) {
-            $isFeatured = albums_page_post_checkbox('album_is_featured', null, 'is_featured');
+            $isFeatured = array_key_exists('album_is_featured_present', $_POST)
+                ? albums_page_post_checkbox('album_is_featured', 0)
+                : albums_page_post_checkbox('album_is_featured', null, 'is_featured');
             album_update_record($albumId, $title, $description, null, $category, $subcategory, $isFeatured);
             set_flash('success', $albumText('album_updated_ok', 'Album mis a jour.', 'Album updated.'));
             redirect_url($returnUrl);
@@ -849,7 +851,7 @@ ob_start();
                                     <?= render_album_taxonomy_fields($albumCategories, $t, $albumCategory, $albumSubcategory) ?>
                                     <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="description" rows="5" maxlength="10000"><?= e($description) ?></textarea></label>
                                     <?php if ($canManageAlbums): ?>
-                                        <input type="hidden" name="album_is_featured" value="0">
+                                        <input type="hidden" name="album_is_featured_present" value="1">
                                         <label><input type="checkbox" name="album_is_featured" value="1" autocomplete="off" <?= $albumFeatured ? 'checked' : '' ?>> <?= e($featuredAlbumsTitle) ?></label>
                                     <?php endif; ?>
                                     <p class="album-dialog-actions module-dialog-actions">
