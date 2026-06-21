@@ -1135,6 +1135,34 @@ function member_document_favorite_document_ids(int $memberId, string $moduleCode
 }
 
 if (!function_exists('member_document_store_upload')) {
+/**
+ * @return list<string>
+ */
+function member_document_video_extensions(): array
+{
+    return ['mp4', 'webm', 'mov', 'm4v'];
+}
+}
+
+if (!function_exists('member_document_is_video_extension')) {
+function member_document_is_video_extension(string $extension): bool
+{
+    return in_array(strtolower($extension), member_document_video_extensions(), true);
+}
+}
+
+if (!function_exists('member_document_upload_max_bytes')) {
+function member_document_upload_max_bytes(string $moduleCode, string $extension): int
+{
+    if (member_document_module_normalize($moduleCode) === 'videos' && member_document_is_video_extension($extension)) {
+        return 1024 * 1024 * 1024;
+    }
+
+    return 100 * 1024 * 1024;
+}
+}
+
+if (!function_exists('member_document_store_upload')) {
 function member_document_store_upload(array $file, string $moduleCode, int $memberId): array
 {
     $allowedExtensions = ['pdf', 'docx', 'txt', 'md', 'html', 'htm', 'ppt', 'pptx', 'xls', 'xlsx', 'csv', 'zip', 'jpg', 'jpeg', 'png', 'webp', 'mp4', 'webm', 'mov', 'm4v'];
@@ -1178,7 +1206,7 @@ function member_document_store_upload(array $file, string $moduleCode, int $memb
         'doc_' . $memberId . '-' . $base,
         $allowedExtensions,
         $allowedMimes,
-        100 * 1024 * 1024
+        member_document_upload_max_bytes($moduleCode, $extension)
     );
 
     return [
@@ -1628,7 +1656,8 @@ function render_member_document_module_cards(array $documents, array $labels, st
         $docTags = trim((string) ($document['tags'] ?? ''));
         $docExtract = trim((string) ($document['extracted_text'] ?? ''));
         $documentId = max(0, (int) ($document['id'] ?? 0));
-        $documentPreviewUrl = $documentId > 0 ? route_url('member_document_preview', ['module' => $moduleCode, 'id' => $documentId]) . '#view=Fit' : '';
+        $documentInlineUrl = $documentId > 0 ? route_url('member_document_preview', ['module' => $moduleCode, 'id' => $documentId]) : '';
+        $documentPreviewUrl = $documentInlineUrl !== '' ? $documentInlineUrl . '#view=Fit' : '';
         $documentDownloadUrl = $documentId > 0 ? route_url('member_document_preview', ['module' => $moduleCode, 'id' => $documentId, 'download' => '1']) : '';
         $docCategory = member_document_category_code((string) ($document['category'] ?? 'general'));
         $docSubcategory = member_document_subcategory_code((string) ($document['subcategory'] ?? ''));
@@ -1653,6 +1682,12 @@ function render_member_document_module_cards(array $documents, array $labels, st
         if ($extension === 'pdf' && $documentPreviewUrl !== '') {
             $html .= '<details class="member-document-preview-toggle"><summary>' . e((string) $labels['preview']) . '</summary>'
                 . '<iframe src="' . e($documentPreviewUrl) . '" class="member-document-pdf-preview" loading="lazy"></iframe></details>';
+        }
+        if ($moduleCode === 'videos' && member_document_is_video_extension($extension) && $documentInlineUrl !== '') {
+            $html .= '<div class="member-document-video-player">'
+                . '<video controls preload="metadata" playsinline src="' . e($documentInlineUrl) . '">'
+                . e((string) ($labels['open'] ?? 'Open'))
+                . '</video></div>';
         }
         $html .= '<p class="actions member-document-card-actions">';
         if ($documentDownloadUrl !== '') {
