@@ -811,11 +811,13 @@ ob_start();
             <?php if ($totalPages > 1): ?>
                 <nav class="actions mt-3" aria-label="<?= e((string) $t['pagination']) ?>">
                     <?php if ($page > 1): ?>
+                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'p' => 1])) ?>"><?= e($albumText('first_page', 'Première', 'First')) ?></a>
                         <a class="button secondary" href="<?= e(route_url_clean('albums', ['category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'p' => $page - 1])) ?>"><?= e((string) $t['previous']) ?></a>
                     <?php endif; ?>
                     <span class="pill"><?= e((string) $t['page']) ?> <?= $page ?> / <?= $totalPages ?></span>
                     <?php if ($page < $totalPages): ?>
                         <a class="button secondary" href="<?= e(route_url_clean('albums', ['category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'p' => $page + 1])) ?>"><?= e((string) $t['next']) ?></a>
+                        <a class="button secondary" href="<?= e(route_url_clean('albums', ['category' => $categoryFilter, 'subcategory' => $subcategoryFilter, 'favorites' => $favoritesOnly ? '1' : '', 'q' => $search, 'p' => $totalPages])) ?>"><?= e($albumText('last_page', 'Dernière', 'Last')) ?></a>
                     <?php endif; ?>
                 </nav>
             <?php endif; ?>
