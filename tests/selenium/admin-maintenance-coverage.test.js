@@ -583,7 +583,11 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       await setFieldValue(driver, await albumForm.findElement(By.css('input[name="title"]')), `Admin album updated ${token}`);
       await setFieldValue(driver, await albumForm.findElement(By.css('textarea[name="description"]')), `Admin album updated description ${token}`);
       await setCheckbox(driver, await albumForm.findElement(By.css('input[type="checkbox"][name^="album_is_featured"]')), true);
-      await submitForm(driver, albumForm);
+      const albumSaveButton = await albumForm.findElement(By.css('button[type="submit"], button:not([type="button"]), input[type="submit"]'));
+      await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', albumSaveButton);
+      await albumSaveButton.click();
+      await waitForDocumentReady(driver);
+      await assertNoServerError(driver);
       let state = albumState(fixture.album_id, fixture.photo_ids);
       assert.equal(state.album.title, `Admin album updated ${token}`, 'Le titre album admin doit etre mis a jour.');
       assert.equal(Number(state.album.is_featured), 1, 'Un admin doit pouvoir epingler un album.');

@@ -882,11 +882,15 @@ ob_start();
         <?php else: ?>
             <div class="stack">
                 <?php foreach ($albums as $album): ?>
+                    <?php
+                    $albumId = (int) $album['id'];
+                    $albumEditFormId = 'admin-album-edit-form-' . $albumId;
+                    ?>
                     <article class="article-item">
-                        <form method="post" class="grid-2" autocomplete="off">
+                        <form id="<?= e($albumEditFormId) ?>" method="post" action="<?= e(route_url('admin_albums')) ?>" class="grid-2" autocomplete="off">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="update_album">
-                            <input type="hidden" name="album_id" value="<?= (int) $album['id'] ?>">
+                            <input type="hidden" name="album_id" value="<?= $albumId ?>">
                             <label><?= e((string) $t['title']) ?>
                                 <input type="text" name="title" value="<?= e((string) $album['title']) ?>" required maxlength="190">
                             </label>
@@ -901,17 +905,17 @@ ob_start();
                                 <textarea name="description" rows="3"><?= e((string) ($album['description'] ?? '')) ?></textarea>
                             </label>
                             <p class="help"><?= (int) $album['photo_count'] ?> <?= e((string) $t['photos']) ?> · <?= e((string) $t['created_at']) ?> <?= e((string) $album['created_at']) ?></p>
-                            <div class="actions">
-                                <button class="button small" type="submit"><?= e((string) $t['save']) ?></button>
+                            <div class="actions" style="grid-column:1 / -1;">
+                                <button class="button small" type="submit" form="<?= e($albumEditFormId) ?>"><?= e((string) $t['save']) ?></button>
                                 <span class="pill"><?= e((string) $t['public_album']) ?>: <?= (int) $album['is_public'] === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
                                 <span class="pill"><?= e($featuredAlbumLabel) ?>: <?= (int) ($album['is_featured'] ?? 0) === 1 ? e((string) $t['yes']) : e((string) $t['no']) ?></span>
-                                <a class="button secondary small" href="<?= e(route_url('album', ['id' => (int) $album['id']])) ?>"><?= e((string) $t['view_public']) ?></a>
+                                <a class="button secondary small" href="<?= e(route_url('album', ['id' => $albumId])) ?>"><?= e((string) $t['view_public']) ?></a>
                             </div>
                         </form>
                         <form method="post" style="margin-top:8px;" onsubmit="return confirm(<?= e(json_encode((string) $t['confirm_delete_album'], JSON_UNESCAPED_UNICODE)) ?>)">
                             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
                             <input type="hidden" name="action" value="delete_album">
-                            <input type="hidden" name="album_id" value="<?= (int) $album['id'] ?>">
+                            <input type="hidden" name="album_id" value="<?= $albumId ?>">
                             <button class="button small secondary" type="submit"><?= e((string) $t['delete_album']) ?></button>
                         </form>
                     </article>
