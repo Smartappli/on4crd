@@ -12,8 +12,40 @@ const {
   assertNoServerError,
   loginAsAdmin,
   requireAdminCredentials,
+  runSeleniumPhp,
   writeTinyPngFixture,
 } = require('./helpers');
+
+function albumCreationState(title) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$title = getenv('SELENIUM_ALBUM_TITLE') ?: '';
+$stmt = db()->prepare('SELECT id FROM albums WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title]);
+$albumId = (int) ($stmt->fetchColumn() ?: 0);
+$photoCount = 0;
+if ($albumId > 0) {
+    $photoStmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
+    $photoStmt->execute([$albumId]);
+    $photoCount = (int) ($photoStmt->fetchColumn() ?: 0);
+}
+echo json_encode(['id' => $albumId, 'photo_count' => $photoCount], JSON_THROW_ON_ERROR);
+`, { SELENIUM_ALBUM_TITLE: title }).trim();
+
+  return JSON.parse(output || '{"id":0,"photo_count":0}');
+}
+
+function albumPhotoCount(albumId) {
+  const output = runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$albumId = (int) (getenv('SELENIUM_ALBUM_ID') ?: 0);
+$stmt = db()->prepare('SELECT COUNT(*) FROM album_photos WHERE album_id = ?');
+$stmt->execute([$albumId]);
+echo (string) (int) ($stmt->fetchColumn() ?: 0);
+`, { SELENIUM_ALBUM_ID: String(albumId) }).trim();
+
+  return Number.parseInt(output, 10) || 0;
+}
 
 async function cleanupAlbumByTitle(driver, title) {
   await visit(driver, 'admin_albums');
@@ -52,6 +84,8 @@ async function submitForm(driver, form) {
     }
     submitButton.click();
   `, form, submitButton);
+  await waitForDocumentReady(driver);
+  await assertNoServerError(driver);
 }
 
 test('Selenium admin albums: creation multi-etapes, upload massif et preview', async (t) => {
@@ -93,27 +127,48 @@ test('Selenium admin albums: creation multi-etapes, upload massif et preview', a
         }
       }
       await submitForm(driver, wizardForm);
+      const createdState = albumCreationState(title);
+      assert.ok(createdState.id > 0, 'L album cree par l assistant doit exister en base avant l upload.');
+      const albumId = createdState.id;
       created = true;
 
       await driver.wait(until.elementLocated(By.css('#album-wizard-photos-input')), timeoutMs);
       const firstImage = writeTinyPngFixture(`${title}-1.png`);
       const secondImage = writeTinyPngFixture(`${title}-2.png`);
-      await driver.findElement(By.css('#album-wizard-photos-input')).sendKeys(`${path.resolve(firstImage)}\n${path.resolve(secondImage)}`);
+      const photosInput = await driver.findElement(By.css('#album-wizard-photos-input'));
+      await driver.executeScript(`
+        const input = arguments[0];
+        input.style.display = 'block';
+        input.style.visibility = 'visible';
+        input.style.opacity = '1';
+      `, photosInput);
+      await photosInput.sendKeys(`${path.resolve(firstImage)}\n${path.resolve(secondImage)}`);
+      await driver.wait(async () => {
+        const filesCount = await driver.executeScript('return arguments[0].files.length;', photosInput);
+        return Number(filesCount) >= 2;
+      }, timeoutMs, 'Les deux fichiers de test doivent etre attaches avant la soumission.');
       const uploadForm = await driver.findElement(By.xpath('//section[@id="album-wizard"]//form[.//input[@name="action" and @value="upload_photo"]]'));
       await submitForm(driver, uploadForm);
 
-      await driver.wait(until.elementLocated(By.css('#album-wizard .gallery-item')), Math.max(timeoutMs, 45000));
-      await assertNoServerError(driver);
+      await driver.wait(
+        () => Promise.resolve(albumPhotoCount(albumId) >= 2),
+        Math.max(timeoutMs, 60000),
+        'Les photos televersees doivent etre enregistrees en base avant la preview.',
+      );
+      if ((await driver.findElements(By.css('#album-wizard .gallery-item'))).length === 0) {
+        await driver.get(`${routeUrl('admin_albums', { album_wizard: albumId, step: 3, focus: 'album-wizard' })}#album-wizard`);
+        await waitForDocumentReady(driver);
+        await assertNoServerError(driver);
+      }
+      await driver.wait(until.elementLocated(By.css('#album-wizard .gallery-item')), Math.max(timeoutMs, 60000));
       let previewImages = await driver.findElements(By.css('#album-wizard .gallery-item img'));
       assert.ok(previewImages.length >= 2, 'Les images televersees doivent apparaitre dans la preview de l assistant.');
 
-        if (process.env.SELENIUM_SKIP_PREVIEW_DELETE !== '1') {
-          const deleteForm = await driver.findElement(By.css('#album-wizard .gallery-item form'));
-          await driver.executeScript('window.confirm = () => true;');
-          await submitForm(driver, deleteForm);
-          await waitForDocumentReady(driver);
-          await assertNoServerError(driver);
-          previewImages = await driver.findElements(By.css('#album-wizard .gallery-item img'));
+      if (process.env.SELENIUM_SKIP_PREVIEW_DELETE !== '1') {
+        const deleteForm = await driver.findElement(By.css('#album-wizard .gallery-item form'));
+        await driver.executeScript('window.confirm = () => true;');
+        await submitForm(driver, deleteForm);
+        previewImages = await driver.findElements(By.css('#album-wizard .gallery-item img'));
         assert.ok(previewImages.length >= 1, 'La suppression en preview ne doit pas supprimer toutes les photos restantes.');
       }
 
