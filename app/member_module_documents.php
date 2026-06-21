@@ -1134,7 +1134,7 @@ function member_document_favorite_document_ids(int $memberId, string $moduleCode
 }
 }
 
-if (!function_exists('member_document_store_upload')) {
+if (!function_exists('member_document_video_extensions')) {
 /**
  * @return list<string>
  */
