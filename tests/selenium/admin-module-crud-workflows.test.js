@@ -464,6 +464,39 @@ async function updateAndDeleteLibraryDocument(driver, fixture, token) {
   );
 }
 
+async function deleteMemberModuleDocumentFromAdminRoute(driver, fixture) {
+  const adminRoute = `admin_${fixture.module}`;
+  await visit(driver, adminRoute, { q: fixture.title });
+  await assertPageContains(driver, fixture.title, `Le document ${fixture.module} doit apparaitre sur ${adminRoute}.`);
+
+  const deleteForm = await driver.findElement(By.xpath(
+    `//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), ${escapeXPathText(fixture.title)})]]`
+    + `//form[.//input[@name="action" and @value="delete_document"] and .//input[@name="id" and @value="${fixture.id}"]]`,
+  ));
+  await submitForm(driver, deleteForm);
+  await driver.wait(
+    () => Promise.resolve(moduleDocumentRecord(fixture.module, fixture.id) === null),
+    timeoutMs,
+    `Le document ${fixture.module} doit etre supprime depuis ${adminRoute}.`,
+  );
+}
+
+async function deleteLibraryDocumentFromAdminRoute(driver, fixture) {
+  await visit(driver, 'admin_library', { q: fixture.title });
+  await assertPageContains(driver, fixture.title, 'Le document member_library doit apparaitre sur admin_library.');
+
+  const deleteForm = await driver.findElement(By.xpath(
+    `//article[contains(@class,"admin-library-document")][.//*[contains(normalize-space(.), ${escapeXPathText(fixture.title)})]]`
+    + `//form[.//input[@name="action" and @value="delete_document"] and .//input[@name="id" and @value="${fixture.id}"]]`,
+  ));
+  await submitForm(driver, deleteForm);
+  await driver.wait(
+    () => Promise.resolve(libraryDocumentRecord(fixture.id) === null),
+    timeoutMs,
+    'Le document member_library doit etre supprime depuis admin_library.',
+  );
+}
+
 test('Selenium admin: modifier et supprimer albums et webotheque', async (t) => {
   const credentials = requireAdminCredentials(t);
   if (credentials === null) {
@@ -484,6 +517,39 @@ test('Selenium admin: modifier et supprimer albums et webotheque', async (t) => 
       await loginAsAdmin(driver, credentials.username, credentials.password);
       await updateAndDeleteAlbum(driver, album, token);
       await updateAndDeleteWebotheque(driver, webotheque, token);
+    } finally {
+      cleanupAdminCrudFixtures(token);
+    }
+  });
+});
+
+test('Selenium admin: supprimer documents depuis admin_presentations, admin_videos et admin_library', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `ADMDEL${Date.now()}`;
+  cleanupAdminCrudFixtures(token);
+  const memberId = seleniumMemberId(credentials.username);
+  const fixtures = [
+    prepareModuleDocumentFixture('presentations', token, memberId),
+    prepareModuleDocumentFixture('videos', token, memberId),
+    prepareLibraryDocumentFixture(token, memberId),
+  ];
+  for (const fixture of fixtures) {
+    assert.ok(fixture && Number(fixture.id) > 0, `La fixture ${JSON.stringify(fixture)} doit etre creee avant la suppression admin.`);
+  }
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await deleteMemberModuleDocumentFromAdminRoute(driver, fixtures[0]);
+      await deleteMemberModuleDocumentFromAdminRoute(driver, fixtures[1]);
+      await deleteLibraryDocumentFromAdminRoute(driver, fixtures[2]);
     } finally {
       cleanupAdminCrudFixtures(token);
     }
