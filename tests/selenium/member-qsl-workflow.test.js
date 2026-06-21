@@ -1,7 +1,4 @@
 const test = require('node:test');
-const fs = require('node:fs');
-const os = require('node:os');
-const path = require('node:path');
 const {
   By,
   until,
@@ -17,8 +14,9 @@ const {
   requireAdminCredentials,
   ensureSeleniumRunnable,
   runSeleniumPhp,
-  writeTinyPngFixture,
 } = require('./helpers');
+
+const TINY_PNG_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGklEQVR4nGP8z8Dwn4GBgYGJgYGB4T8ABQsCBAJH7m4AAAAASUVORK5CYII=';
 
 async function submitForm(driver, form) {
   await driver.executeScript(`
@@ -51,6 +49,63 @@ async function activateQslPanel(driver, target) {
       link.click();
     }
   `, target);
+}
+
+async function postMultipartFile(driver, form, fileFieldName, fileName, payload, mimeType, isBase64 = false) {
+  const result = await driver.executeAsyncScript(`
+    const form = arguments[0];
+    const fileFieldName = arguments[1];
+    const fileName = arguments[2];
+    const payload = arguments[3];
+    const mimeType = arguments[4];
+    const isBase64 = arguments[5];
+    const done = arguments[arguments.length - 1];
+    const data = new FormData(form);
+    data.delete(fileFieldName);
+    const body = isBase64
+      ? Uint8Array.from(atob(payload), (char) => char.charCodeAt(0))
+      : payload;
+    data.append(fileFieldName, new File([body], fileName, { type: mimeType }));
+    fetch(form.getAttribute('action') || window.location.href, {
+      method: 'POST',
+      body: data,
+      credentials: 'same-origin',
+      redirect: 'follow',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(async (response) => {
+      const bodyText = await response.text();
+      let json = null;
+      try {
+        json = JSON.parse(bodyText);
+      } catch (error) {}
+      return {
+        ok: response.ok && (!json || json.ok !== false),
+        status: response.status,
+        url: response.url,
+        body: bodyText,
+        json
+      };
+    }).catch((error) => ({
+      ok: false,
+      status: 0,
+      url: '',
+      body: String(error),
+      json: null
+    })).then(done);
+  `, form, fileFieldName, fileName, payload, mimeType, isBase64);
+
+  assert.equal(
+    result.ok,
+    true,
+    `Le POST multipart QSL doit repondre en succes HTTP, recu ${result.status}: ${String(result.body).slice(0, 240)}`,
+  );
+  assert.doesNotMatch(
+    String(result.body),
+    /Une erreur interne|Internal Server Error|HTTP ERROR 500|HTTP ERROR 503|Erreur 503|Service Unavailable/i,
+    'La reponse multipart QSL ne doit pas contenir d erreur serveur.',
+  );
+
+  return result;
 }
 
 function cleanupQslRows(qsoCall, backgroundLabel) {
@@ -128,12 +183,9 @@ echo json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
   }) || '{}');
 }
 
-function writeAdifFixture(token, qsoCall) {
-  const dir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
-  fs.mkdirSync(dir, { recursive: true });
-  const filePath = path.join(dir, `${token.toLowerCase()}.adi`);
+function buildAdifFixture(token, qsoCall) {
   const field = (name, value) => `<${name}:${String(value).length}>${value}`;
-  const content = [
+  return [
     field('CALL', qsoCall),
     field('QSO_DATE', '20260618'),
     field('TIME_ON', '1542'),
@@ -144,9 +196,6 @@ function writeAdifFixture(token, qsoCall) {
     field('COMMENT', `Selenium ${token}`),
     '<EOR>',
   ].join('');
-  fs.writeFileSync(filePath, content, 'utf8');
-
-  return filePath;
 }
 
 test('Selenium membre QSL: fond, creation manuelle, preview, export et suppression', async (t) => {
@@ -276,8 +325,7 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
   const imageLabel = `${token}-image`;
   const solidLabel = `${token}-solid`;
   const paletteLabel = `${token}-palette`;
-  const pngPath = writeTinyPngFixture(`${token.toLowerCase()}.png`);
-  const adifPath = writeAdifFixture(token, qsoCall);
+  const adifContent = buildAdifFixture(token, qsoCall);
   if (!(await ensureSeleniumRunnable(t))) {
     return;
   }
@@ -291,11 +339,9 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
 
       const imageForm = await driver.findElement(By.css('form[data-preview-form="image"]'));
       await setInputValue(driver, await imageForm.findElement(By.css('input[name="background_label"]')), imageLabel);
-      const imageInput = await imageForm.findElement(By.css('input[name="background_image"]'));
-      await driver.executeScript('arguments[0].hidden = false; arguments[0].style.display = "block";', imageInput);
-      await imageInput.sendKeys(pngPath);
-      await submitForm(driver, imageForm);
+      await postMultipartFile(driver, imageForm, 'background_image', `${token.toLowerCase()}.png`, TINY_PNG_BASE64, 'image/png', true);
 
+      await visit(driver, 'qsl');
       await activateQslPanel(driver, 'design');
       const solidForm = await driver.findElement(By.css('form[data-preview-form="solid"]'));
       await setInputValue(driver, await solidForm.findElement(By.css('input[name="solid_label"]')), solidLabel);
@@ -333,10 +379,7 @@ test('Selenium membre QSL: import ADIF, generation groupee et fonds avances', as
 
       await activateQslPanel(driver, 'adif');
       const adifForm = await driver.findElement(By.css('#adif-dropzone-form'));
-      const adifInput = await adifForm.findElement(By.css('input[name="adif_files[]"]'));
-      await driver.executeScript('arguments[0].hidden = false; arguments[0].style.display = "block";', adifInput);
-      await adifInput.sendKeys(adifPath);
-      await submitForm(driver, adifForm);
+      await postMultipartFile(driver, adifForm, 'adif_files[]', `${token.toLowerCase()}.adi`, adifContent, 'text/plain');
 
       state = qslState(qsoCall, token);
       assert.equal(state.qsos.length, 1, 'L import ADIF doit creer le QSO.');
