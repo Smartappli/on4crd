@@ -50,18 +50,29 @@ const localizedRoutes = [
   ['search', { q: 'radio', source: 'all' }],
 ];
 
-test('Selenium i18n: les pages publiques representatives rendent dans toutes les locales', async (t) => {
-  await withSelenium(t, async (driver) => {
-    for (const locale of locales) {
-      for (const [route, query] of localizedRoutes) {
-        await visit(driver, route, { ...query, locale });
-        if (await skipIfInstallWizard(t, driver)) {
-          return;
+function localeChunks(size) {
+  const chunks = [];
+  for (let index = 0; index < locales.length; index += size) {
+    chunks.push(locales.slice(index, index + size));
+  }
+
+  return chunks;
+}
+
+for (const localeGroup of localeChunks(5)) {
+  test(`Selenium i18n: les pages publiques representatives rendent pour ${localeGroup.join(', ')}`, async (t) => {
+    await withSelenium(t, async (driver) => {
+      for (const locale of localeGroup) {
+        for (const [route, query] of localizedRoutes) {
+          await visit(driver, route, { ...query, locale });
+          if (await skipIfInstallWizard(t, driver)) {
+            return;
+          }
+          await assertPageHasContent(driver, `${route}/${locale}`);
+          const htmlLang = await driver.executeScript('return document.documentElement.getAttribute("lang") || "";');
+          assert.ok(htmlLang === '' || htmlLang.toLowerCase().startsWith(locale), `Langue HTML inattendue pour ${route}/${locale}: ${htmlLang}`);
         }
-        await assertPageHasContent(driver, `${route}/${locale}`);
-        const htmlLang = await driver.executeScript('return document.documentElement.getAttribute("lang") || "";');
-        assert.ok(htmlLang === '' || htmlLang.toLowerCase().startsWith(locale), `Langue HTML inattendue pour ${route}/${locale}: ${htmlLang}`);
       }
-    }
+    });
   });
-});
+}
