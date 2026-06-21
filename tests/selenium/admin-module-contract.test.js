@@ -51,7 +51,7 @@ const expectedRouteActions = {
   admin_articles: ['save_article', 'preview_article', 'add_category', 'add_subcategory'],
   admin_classifieds: [],
   admin_dashboard: [],
-  admin_library: ['add_category', 'add_subcategory', 'merge_tags', 'bulk_delete_documents'],
+  admin_library: ['add_category', 'add_subcategory', 'merge_tags'],
   admin_members: ['update_member', 'create_member'],
   admin_news: ['save_post', 'assign_section_manager'],
   admin_newsletters: ['add_subscriber', 'import_csv', 'create_campaign'],
