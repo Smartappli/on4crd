@@ -741,7 +741,6 @@ ob_start();
                     </label>
                     <input type="hidden" name="is_public" value="0">
                     <label><input type="checkbox" name="is_public" value="1"> <?= e((string) $t['public_album']) ?></label>
-                    <input type="hidden" name="is_featured" value="0">
                     <label><input type="checkbox" name="is_featured" value="1"> <?= e($featuredAlbumLabel) ?></label>
                     <p class="help"><?= e((string) ($t['wizard_private_help'] ?? 'The album stays private until final validation.')) ?></p>
                     <button class="button"><?= e((string) ($t['wizard_continue_upload'] ?? $t['create_album'])) ?></button>
@@ -861,7 +860,6 @@ ob_start();
                             </label>
                             <input type="hidden" name="is_public" value="0">
                             <label><input type="checkbox" name="is_public" value="1" <?= (int) $album['is_public'] === 1 ? 'checked' : '' ?>> <?= e((string) $t['public_album']) ?></label>
-                            <input type="hidden" name="is_featured" value="0">
                             <label><input type="checkbox" name="is_featured" value="1" <?= (int) ($album['is_featured'] ?? 0) === 1 ? 'checked' : '' ?>> <?= e($featuredAlbumLabel) ?></label>
                             <div style="grid-column:1 / -1;">
                                 <?= render_album_taxonomy_fields($albumCategories, $t, (string) ($album['category'] ?? 'general'), (string) ($album['subcategory'] ?? '')) ?>

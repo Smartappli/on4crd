@@ -79,7 +79,7 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('album_ensure_schema_columns_and_indexes()', $adminAlbums);
         self::assertStringContainsString('function albums_admin_post_checkbox(string $key): int', $adminAlbums);
         self::assertStringContainsString("\$isFeatured = albums_admin_post_checkbox('is_featured');", $adminAlbums);
-        self::assertStringContainsString('name="is_featured" value="0"', $adminAlbums);
+        self::assertStringNotContainsString('type="hidden" name="is_featured" value="0"', $adminAlbums);
         self::assertStringContainsString('name="is_featured" value="1"', $adminAlbums);
         self::assertStringNotContainsString("\$isFeatured = isset(\$_POST['is_featured']) ? 1 : 0;", $adminAlbums);
         self::assertStringContainsString('is_featured, publish_requested', $adminAlbums);
