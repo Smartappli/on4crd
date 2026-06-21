@@ -352,7 +352,8 @@ if (ensure_content_proposals_table()) {
             if ($proposalTitle === '') {
                 $proposalTitle = $text('proposal_default_title', $isFrench ? 'Proposition' : 'Proposal');
             }
-            $proposalSourceKey = $normalizeDocumentSourceRef((string) ($proposal['source_ref'] ?? ''));
+            $proposalSourceRef = trim((string) ($proposal['source_ref'] ?? ''));
+            $proposalSourceKey = $normalizeDocumentSourceRef($proposalSourceRef);
             if (
                 $proposalStatus === 'accepted'
                 && $proposalType === 'content'
@@ -364,10 +365,18 @@ if (ensure_content_proposals_table()) {
             $updatedAt = (string) ($proposal['updated_at'] ?? $proposal['created_at'] ?? 'now');
             $route = (string) ($proposalAreaRoutes[$area] ?? 'my_requests');
             $proposalUrl = route_url($route);
+            if ($area === 'albums' && $proposalType === 'content' && $proposalSourceRef !== '') {
+                $sourceQuery = [];
+                parse_str((string) (parse_url($proposalSourceRef, PHP_URL_QUERY) ?: ''), $sourceQuery);
+                $sourceAlbumId = (int) ($sourceQuery['id'] ?? 0);
+                if (($sourceQuery['route'] ?? '') === 'album' && $sourceAlbumId > 0) {
+                    $proposalUrl = route_url('album', ['id' => $sourceAlbumId]);
+                }
+            }
             if ($area === 'members_library' && $proposalType === 'content' && $proposalStatus === 'accepted') {
                 $proposalUrl = route_url_clean('members_library', ['q' => $proposalTitle]);
             }
-            if ($area === 'albums' && $proposalType === 'content' && $proposalStatus === 'accepted') {
+            if ($area === 'albums' && $proposalType === 'content' && $proposalStatus === 'accepted' && $proposalUrl === route_url('albums')) {
                 $proposalUrl = route_url_clean('albums', ['q' => $proposalTitle]);
             }
             if (in_array($area, ['presentations', 'videos'], true) && $proposalType === 'content' && $proposalStatus === 'accepted') {

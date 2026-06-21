@@ -284,6 +284,20 @@
   cursor: pointer;
 }
 
+[data-route="album"] .album-upload-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+[data-route="album"] .album-upload-panel h2 {
+  margin: 0 0 .35rem;
+}
+
+[data-route="album"] .album-upload-panel input[type="file"] {
+  margin-top: .65rem;
+  max-width: 100%;
+}
+
 .album-tile,
 .album-photo-card {
   overflow: hidden;
