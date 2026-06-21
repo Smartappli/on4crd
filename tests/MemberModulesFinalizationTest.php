@@ -370,6 +370,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('member-document-category-dialog', $renderer);
         self::assertStringContainsString('member-document-subcategory-dialog', $renderer);
         self::assertStringContainsString('data-member-document-modal-open', $renderer);
+        self::assertStringContainsString('function member_document_upload_max_bytes(', $renderer);
+        self::assertStringContainsString('1024 * 1024 * 1024', $renderer);
+        self::assertStringContainsString('member-document-video-player', $renderer);
 
         $adminHelpers = $this->source('app/admin_helpers.php');
         $contentHelpers = $this->source('app/content_helpers.php');
