@@ -81,7 +81,9 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString("\$isFeatured = albums_admin_post_checkbox('album_is_featured', null, 'is_featured');", $adminAlbums);
         self::assertStringContainsString("\$isFeatured = albums_admin_post_checkbox('album_is_featured', \$albumId, 'is_featured');", $adminAlbums);
         self::assertStringNotContainsString('type="hidden" name="is_featured" value="0"', $adminAlbums);
+        self::assertStringContainsString('type="hidden" name="album_is_featured" value="0"', $adminAlbums);
         self::assertStringContainsString('name="album_is_featured" value="1"', $adminAlbums);
+        self::assertStringContainsString('type="hidden" name="album_is_featured[<?= (int) $album[\'id\'] ?>]" value="0"', $adminAlbums);
         self::assertStringContainsString('name="album_is_featured[<?= (int) $album[\'id\'] ?>]" value="1"', $adminAlbums);
         self::assertStringNotContainsString("\$isFeatured = isset(\$_POST['is_featured']) ? 1 : 0;", $adminAlbums);
         self::assertStringContainsString('is_featured, publish_requested', $adminAlbums);
