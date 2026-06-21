@@ -219,8 +219,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('name="document_file"', $library);
         self::assertStringContainsString('member_library_delete_document_record($documentId);', $library);
         self::assertStringContainsString("route_url('member_library_preview', ['id' => \$docId]) . '#view=Fit'", $library);
-        self::assertStringNotContainsString("route_url('member_library_preview', ['id' => \$docId, 'download' => '1'])", $library);
-        self::assertStringNotContainsString("\$t['open']", $library);
+        self::assertStringContainsString("\$docDownloadUrl = \$docId > 0 ? route_url('member_library_preview', ['id' => \$docId, 'download' => '1']) : '';", $library);
+        self::assertStringContainsString("<?= e((string) \$t['open']) ?>", $library);
         self::assertStringNotContainsString('href="<?= e(base_url($safePath)) ?>"', $library);
         self::assertStringContainsString('class="members-library-pdf-preview"', $library);
         self::assertStringContainsString("\$documentPreviewUrl = \$documentId > 0 ? route_url('member_library_preview', ['id' => \$documentId]) . '#view=Fit' : '';", $adminLibrary);
