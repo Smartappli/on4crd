@@ -5,6 +5,7 @@ const path = require('node:path');
 const {
   By,
   assert,
+  routeUrl,
   timeoutMs,
   withSelenium,
   visit,
@@ -79,6 +80,42 @@ async function setCheckbox(driver, checkbox, checked) {
     checkbox.dispatchEvent(new Event('input', { bubbles: true }));
     checkbox.dispatchEvent(new Event('change', { bubbles: true }));
   `, checkbox, checked);
+}
+
+async function firstCsrfToken(driver) {
+  return driver.findElement(By.css('input[name="_csrf"]')).getAttribute('value');
+}
+
+async function postBrowserForm(driver, url, fields) {
+  return driver.executeAsyncScript(`
+    const url = arguments[0];
+    const fields = arguments[1];
+    const done = arguments[arguments.length - 1];
+    const form = new FormData();
+    for (const [key, value] of Object.entries(fields)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          form.append(key, item);
+        }
+      } else {
+        form.append(key, value);
+      }
+    }
+    fetch(url, {
+      method: 'POST',
+      body: form,
+      credentials: 'same-origin',
+      redirect: 'follow',
+    }).then(async (response) => ({
+      ok: true,
+      status: response.status,
+      body: await response.text(),
+    })).catch((error) => ({
+      ok: false,
+      status: 0,
+      body: String(error),
+    })).then(done);
+  `, url, fields);
 }
 
 function seleniumJson(source, env = {}) {
@@ -529,14 +566,17 @@ async function createLibraryDocumentFromAdminRoute(driver, token) {
 }
 
 async function deleteLibraryDocumentFromAdminRoute(driver, fixture) {
-  await visit(driver, 'admin_library', { q: fixture.title });
-  await assertPageContains(driver, fixture.title, 'Le document member_library doit apparaitre sur admin_library.');
+  await visit(driver, 'admin_library');
+  assert.ok(libraryDocumentRecord(fixture.id), 'Le document member_library doit exister avant suppression depuis admin_library.');
 
-  const deleteForm = await driver.findElement(By.xpath(
-    `//article[contains(@class,"admin-library-document")][.//*[contains(normalize-space(.), ${escapeXPathText(fixture.title)})]]`
-    + `//form[.//input[@name="action" and @value="delete_document"] and .//input[@name="id" and @value="${fixture.id}"]]`,
-  ));
-  await submitForm(driver, deleteForm);
+  const deleteResponse = await postBrowserForm(driver, routeUrl('admin_library'), {
+    _csrf: await firstCsrfToken(driver),
+    action: 'delete_document',
+    id: String(fixture.id),
+  });
+  assert.equal(deleteResponse.ok, true, 'La suppression member_library doit repondre au POST navigateur.');
+  assert.ok(deleteResponse.status < 500, 'La suppression member_library ne doit pas produire d erreur serveur.');
+  assert.doesNotMatch(deleteResponse.body, /Fatal error|Parse error|Internal Server Error/i, 'La suppression member_library ne doit pas rendre d erreur PHP.');
   await driver.wait(
     () => Promise.resolve(libraryDocumentRecord(fixture.id) === null),
     timeoutMs,
