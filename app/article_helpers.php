@@ -238,6 +238,53 @@ function article_ensure_subcategories_table(): bool
     }
 }
 
+function article_ensure_revisions_table(): bool
+{
+    try {
+        db()->exec(
+            'CREATE TABLE IF NOT EXISTS article_revisions (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                article_id INT NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                slug VARCHAR(255) NOT NULL,
+                excerpt TEXT NULL,
+                content LONGTEXT NULL,
+                status VARCHAR(32) NOT NULL DEFAULT "draft",
+                category VARCHAR(120) NOT NULL DEFAULT "autres",
+                subcategory VARCHAR(120) NOT NULL DEFAULT "",
+                scheduled_at DATETIME NULL DEFAULT NULL,
+                published_at DATETIME NULL DEFAULT NULL,
+                author_id INT NULL DEFAULT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_article_revision_article_created (article_id, created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+
+        if (!table_has_column('article_revisions', 'subcategory')) {
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
+        }
+        if (!table_has_column('article_revisions', 'scheduled_at')) {
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN scheduled_at DATETIME NULL DEFAULT NULL AFTER subcategory');
+        }
+        if (!table_has_column('article_revisions', 'published_at')) {
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN published_at DATETIME NULL DEFAULT NULL AFTER scheduled_at');
+        }
+        if (!table_has_column('article_revisions', 'author_id')) {
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN author_id INT NULL DEFAULT NULL AFTER published_at');
+        }
+        if (!table_has_column('article_revisions', 'created_at')) {
+            db()->exec('ALTER TABLE article_revisions ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+        }
+        if (!table_has_index('article_revisions', 'idx_article_revision_article_created')) {
+            db()->exec('ALTER TABLE article_revisions ADD INDEX idx_article_revision_article_created (article_id, created_at)');
+        }
+
+        return table_exists('article_revisions');
+    } catch (Throwable) {
+        return false;
+    }
+}
+
 function article_ensure_taxonomy_schema(array $messages = []): bool
 {
     try {
@@ -254,10 +301,7 @@ function article_ensure_taxonomy_schema(array $messages = []): bool
             db()->exec('UPDATE articles SET subcategory = "" WHERE subcategory IS NULL');
         }
 
-        if (table_exists('article_revisions')) {
-            if (!table_has_column('article_revisions', 'subcategory')) {
-                db()->exec('ALTER TABLE article_revisions ADD COLUMN subcategory VARCHAR(120) NOT NULL DEFAULT "" AFTER category');
-            }
+        if (article_ensure_revisions_table()) {
             db()->exec('UPDATE article_revisions SET subcategory = "" WHERE subcategory IS NULL');
         }
 
