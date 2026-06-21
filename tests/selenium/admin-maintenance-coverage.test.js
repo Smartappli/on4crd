@@ -266,6 +266,12 @@ if (!is_dir($dir)) {
     mkdir($dir, 0775, true);
 }
 $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGklEQVR4nGP8z8Dwn4GBgYGJgYGB4T8ABQsCBAJH7m4AAAAASUVORK5CYII=');
+$category = strtolower($token) . '-album-cat';
+$subcategory = strtolower($token) . '-album-sub';
+db()->prepare('INSERT INTO album_categories (code, label, deleted_at) VALUES (?, ?, NULL) ON DUPLICATE KEY UPDATE label = VALUES(label), deleted_at = NULL')
+    ->execute([$category, 'Album Category ' . $token]);
+db()->prepare('INSERT INTO album_subcategories (category_code, code, label) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label)')
+    ->execute([$category, $subcategory, 'Album Subcategory ' . $token]);
 $paths = [];
 for ($i = 1; $i <= 2; $i++) {
     $public = 'storage/uploads/albums/selenium/' . strtolower($token) . '-' . $i . '.png';
@@ -281,7 +287,7 @@ foreach ($paths as $index => $path) {
         ->execute([$albumId, $index + 1, 'Photo ' . ($index + 1) . ' ' . $token, 'Caption ' . ($index + 1) . ' ' . $token, $path]);
     $photoIds[] = (int) db()->lastInsertId();
 }
-echo json_encode(['album_id' => $albumId, 'photo_ids' => $photoIds], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+echo json_encode(['album_id' => $albumId, 'photo_ids' => $photoIds, 'category' => $category, 'subcategory' => $subcategory], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_TOKEN: token, SELENIUM_MEMBER_ID: String(memberId) });
 }
 
@@ -290,7 +296,7 @@ function albumState(albumId, photoIds = []) {
 require_once 'app/bootstrap.php';
 $albumId = (int) getenv('SELENIUM_ALBUM_ID');
 $photoIds = array_values(array_filter(array_map('intval', explode(',', (string) getenv('SELENIUM_PHOTO_IDS')))));
-$albumStmt = db()->prepare('SELECT id, title, description, is_public, is_featured FROM albums WHERE id = ? LIMIT 1');
+$albumStmt = db()->prepare('SELECT id, title, description, category, subcategory, is_public, is_featured FROM albums WHERE id = ? LIMIT 1');
 $albumStmt->execute([$albumId]);
 $album = $albumStmt->fetch() ?: null;
 $photos = [];
@@ -582,6 +588,8 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       const albumForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));
       await setFieldValue(driver, await albumForm.findElement(By.css('input[name="title"]')), `Admin album updated ${token}`);
       await setFieldValue(driver, await albumForm.findElement(By.css('textarea[name="description"]')), `Admin album updated description ${token}`);
+      await setFieldValue(driver, await albumForm.findElement(By.css('select[name="category"]')), fixture.category);
+      await setFieldValue(driver, await albumForm.findElement(By.css('select[name="subcategory_ref"]')), `${fixture.category}:${fixture.subcategory}`);
       await setCheckbox(driver, await albumForm.findElement(By.css('input[type="checkbox"][name^="album_is_featured"]')), true);
       const albumSaveButton = await albumForm.findElement(By.css('button[type="submit"], button:not([type="button"]), input[type="submit"]'));
       await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', albumSaveButton);
@@ -590,6 +598,9 @@ test('Selenium admin albums: maintenance album, photos, ordre et miniatures', as
       await assertNoServerError(driver);
       let state = albumState(fixture.album_id, fixture.photo_ids);
       assert.equal(state.album.title, `Admin album updated ${token}`, 'Le titre album admin doit etre mis a jour.');
+      assert.equal(state.album.description, `Admin album updated description ${token}`, 'La description album admin doit etre mise a jour.');
+      assert.equal(state.album.category, fixture.category, 'La thematique album admin doit etre mise a jour.');
+      assert.equal(state.album.subcategory, fixture.subcategory, 'La sous-thematique album admin doit etre mise a jour.');
       assert.equal(Number(state.album.is_featured), 1, 'Un admin doit pouvoir epingler un album.');
       await visit(driver, 'admin_albums');
       const repinnedForm = await driver.findElement(By.xpath(`//form[.//input[@name="action" and @value="update_album"] and .//input[@name="album_id" and @value="${fixture.album_id}"]]`));
