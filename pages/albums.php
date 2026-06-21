@@ -15,6 +15,31 @@ $albumText = static function (string $key, string $fr, string $en) use ($t, $loc
     return $locale === 'fr' ? $fr : $en;
 };
 
+if (!function_exists('albums_page_post_checkbox')) {
+function albums_page_post_checkbox(string $key, ?int $default = null, string ...$fallbackKeys): ?int
+{
+    foreach (array_merge([$key], $fallbackKeys) as $candidateKey) {
+        if (!array_key_exists($candidateKey, $_POST)) {
+            continue;
+        }
+
+        $values = is_array($_POST[$candidateKey]) ? $_POST[$candidateKey] : [$_POST[$candidateKey]];
+        foreach ($values as $singleValue) {
+            if (!is_scalar($singleValue)) {
+                continue;
+            }
+            if (in_array(strtolower(trim((string) $singleValue)), ['1', 'on', 'true', 'yes'], true)) {
+                return 1;
+            }
+        }
+
+        return 0;
+    }
+
+    return $default;
+}
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
     $action = (string) ($_POST['action'] ?? '');
@@ -117,7 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($canManageAlbums) {
-            album_update_record($albumId, $title, $description, null, $category, $subcategory);
+            $isFeatured = albums_page_post_checkbox('album_is_featured', null, 'is_featured');
+            album_update_record($albumId, $title, $description, null, $category, $subcategory, $isFeatured);
             set_flash('success', $albumText('album_updated_ok', 'Album mis a jour.', 'Album updated.'));
             redirect_url($returnUrl);
         }
@@ -734,6 +760,7 @@ ob_start();
                     $albumSubcategory = '';
                     $albumCategoryLabel = (string) ($albumCategories['general'] ?? 'Général');
                     $albumSubcategoryLabel = '';
+                    $albumFeatured = (int) ($row['is_featured'] ?? 0) === 1;
                     $canEditAlbum = false;
                     try {
                         $coverPath = album_photo_public_path_or_null((string) ($row['cover_path'] ?? ''));
@@ -821,6 +848,10 @@ ob_start();
                                     <label><span><?= e($albumText('title_label', 'Titre', 'Title')) ?></span><input type="text" name="title" value="<?= e($albumTitle) ?>" maxlength="190" required></label>
                                     <?= render_album_taxonomy_fields($albumCategories, $t, $albumCategory, $albumSubcategory) ?>
                                     <label><span><?= e($albumText('description_label', 'Description', 'Description')) ?></span><textarea name="description" rows="5" maxlength="10000"><?= e($description) ?></textarea></label>
+                                    <?php if ($canManageAlbums): ?>
+                                        <input type="hidden" name="album_is_featured" value="0">
+                                        <label><input type="checkbox" name="album_is_featured" value="1" autocomplete="off" <?= $albumFeatured ? 'checked' : '' ?>> <?= e($featuredAlbumsTitle) ?></label>
+                                    <?php endif; ?>
                                     <p class="album-dialog-actions module-dialog-actions">
                                         <button class="button" type="submit"><?= e($albumText('save_album', 'Enregistrer', 'Save')) ?></button>
                                         <button class="button secondary" type="button" data-album-modal-close><?= e($albumText('cancel', 'Annuler', 'Cancel')) ?></button>
