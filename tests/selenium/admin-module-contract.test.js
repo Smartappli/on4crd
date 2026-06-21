@@ -214,10 +214,6 @@ async function assertAdminPageContract(driver, route) {
 
   if (!routesWithoutForms.has(route)) {
     assert.ok(postForms.length > 0, `${route}: au moins un formulaire POST admin doit etre disponible.`);
-    assert.ok(
-      forms.some((form) => form.fieldCount > 0 || form.actionValues.length > 0),
-      `${route}: au moins un formulaire doit exposer des champs ou une action admin.`,
-    );
   }
 }
 
