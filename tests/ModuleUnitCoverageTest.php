@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../app/layout_renderer.php';
+require_once __DIR__ . '/../app/member_module_documents.php';
 
 final class ModuleUnitCoverageTest extends TestCase
 {
@@ -82,6 +83,112 @@ final class ModuleUnitCoverageTest extends TestCase
             'testIdeaModuleUsesTopicSelectKeywordsAndSubmitsThem',
         ] as $testMethod) {
             self::assertStringContainsString('function ' . $testMethod . '(', $finalizationTest);
+        }
+    }
+
+    public function testRequestedModulesHaveSeleniumCoverageAcrossPublicMemberAndAdminSurfaces(): void
+    {
+        $seleniumSources = [
+            'public_routes' => $this->source('tests/selenium/public-routes.test.js'),
+            'protected_routes' => $this->source('tests/selenium/protected-routes.test.js'),
+            'authenticated_routes' => $this->source('tests/selenium/authenticated-routes.test.js'),
+            'member_workflows' => $this->source('tests/selenium/member-workflows.test.js'),
+            'member_documents' => $this->source('tests/selenium/member-document-modules.test.js'),
+            'member_pending' => $this->source('tests/selenium/member-pending-validation.test.js'),
+            'admin_crud' => $this->source('tests/selenium/admin-module-crud-workflows.test.js'),
+        ];
+
+        self::assertStringContainsString("['albums', {}]", $seleniumSources['public_routes']);
+
+        foreach ([
+            'members_library',
+            'webotheque',
+            'presentations',
+            'videos',
+            'pv',
+            'fichiers',
+            'telechargements',
+        ] as $route) {
+            self::assertStringContainsString("'" . $route . "'", $seleniumSources['protected_routes'], $route . ' must be protected when public.');
+            self::assertStringContainsString("'" . $route . "'", $seleniumSources['authenticated_routes'], $route . ' must be reachable when authenticated.');
+        }
+
+        foreach ([
+            'admin_albums',
+            'admin_library',
+            'admin_webotheque',
+            'admin_presentations',
+            'admin_videos',
+            'admin_pv',
+            'admin_fichiers',
+            'admin_telechargements',
+        ] as $route) {
+            self::assertStringContainsString("'" . $route . "'", $seleniumSources['protected_routes'], $route . ' must be admin-protected.');
+            self::assertStringContainsString("'" . $route . "'", $seleniumSources['authenticated_routes'], $route . ' must be reachable by admin.');
+        }
+
+        $workflowContracts = [
+            'albums member CRUD' => ['member_workflows', 'Selenium membre: creer modifier supprimer un album'],
+            'albums member approval' => ['member_pending', 'Selenium membre: proposer un album, le valider et le retrouver dans les albums'],
+            'albums taxonomy approval' => ['member_pending', 'Selenium membre: proposer une thematique albums'],
+            'albums admin CRUD' => ['admin_crud', 'Selenium admin: modifier et supprimer albums et webotheque'],
+            'webotheque member CRUD' => ['member_workflows', 'Selenium membre: creer, modifier et supprimer un lien webotheque'],
+            'webotheque member approval' => ['member_pending', 'Selenium membre: proposer un lien webotheque, le valider'],
+            'webotheque taxonomy approval' => ['member_pending', 'Selenium membre: proposer une thematique webotheque'],
+            'webotheque admin CRUD' => ['admin_crud', 'Selenium admin: modifier et supprimer albums et webotheque'],
+            'library member CRUD' => ['member_workflows', 'Le document members_library supprime cote membre'],
+            'library member approval' => ['member_pending', 'Selenium membre: proposer un document bibliotheque, le valider'],
+            'library taxonomy approval' => ['member_pending', 'Selenium membre: proposer une categorie members_library'],
+            'library admin CRUD' => ['admin_crud', 'Selenium admin: modifier et supprimer presentations, videos et member_library'],
+            'presentations member CRUD' => ['member_documents', "for (const moduleCode of ['presentations', 'videos'])"],
+            'presentations taxonomy CRUD' => ['member_documents', 'Selenium modules documents: taxonomy, upload, favoris, edition et suppression presentations'],
+            'presentations member approval' => ['member_pending', 'Selenium membre: proposer une presentation, la valider'],
+            'videos member CRUD' => ['member_documents', "for (const moduleCode of ['presentations', 'videos'])"],
+            'videos member approval' => ['member_pending', 'Selenium membre: proposer une video, la valider'],
+            'document admin CRUD' => ['admin_crud', 'Selenium admin: modifier et supprimer presentations, videos et member_library'],
+            'pv admin to member lifecycle' => ['member_documents', "for (const moduleCode of ['pv', 'fichiers'])"],
+            'fichiers admin to member lifecycle' => ['member_documents', 'L alias telechargements doit afficher les fichiers.'],
+            'taxonomy admin CRUD' => ['admin_crud', 'Selenium admin: ajouter modifier supprimer thematiques et sous-thematiques modules'],
+        ];
+
+        foreach ($workflowContracts as $label => [$sourceKey, $snippet]) {
+            self::assertStringContainsString($snippet, $seleniumSources[$sourceKey], $label . ' Selenium coverage is missing.');
+        }
+    }
+
+    public function testDocumentModulePermissionAndAssetContractsMatchMemberSurface(): void
+    {
+        $definitions = member_document_module_definitions();
+
+        foreach ([
+            'presentations' => ['route' => 'presentations', 'admin_route' => 'admin_presentations', 'member_management' => true],
+            'videos' => ['route' => 'videos', 'admin_route' => 'admin_videos', 'member_management' => true],
+            'fichiers' => ['route' => 'fichiers', 'admin_route' => 'admin_fichiers', 'member_management' => false],
+            'pv' => ['route' => 'pv', 'admin_route' => 'admin_pv', 'member_management' => false],
+        ] as $module => $contract) {
+            self::assertArrayHasKey($module, $definitions);
+            self::assertSame($contract['route'], $definitions[$module]['route'] ?? null);
+            self::assertSame($contract['admin_route'], $definitions[$module]['admin_route'] ?? null);
+            self::assertSame($contract['member_management'], member_document_module_allows_member_management($module));
+        }
+
+        self::assertSame('fichiers', member_document_module_normalize('telechargements'));
+        self::assertFalse(member_document_module_allows_member_management('telechargements'));
+
+        foreach (['pv', 'fichiers', 'telechargements'] as $route) {
+            self::assertSame(
+                ['assets/css/modules/shared.css', 'assets/css/modules/member_documents.css'],
+                module_css_assets_for_route($route)
+            );
+            self::assertSame([], module_js_assets_for_route($route));
+        }
+
+        foreach (['admin_pv', 'admin_fichiers', 'admin_telechargements'] as $route) {
+            self::assertSame(
+                ['assets/css/modules/shared.css', 'assets/css/modules/admin_member_documents.css'],
+                module_css_assets_for_route($route)
+            );
+            self::assertContains('assets/js/modules/wysiwyg.js', module_js_assets_for_route($route));
         }
     }
 
