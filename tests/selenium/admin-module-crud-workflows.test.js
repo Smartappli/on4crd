@@ -704,7 +704,11 @@ async function updateAndDeleteAlbum(driver, fixture, token) {
   if (featuredCheckboxes.length > 0) {
     await setCheckbox(driver, featuredCheckboxes[0], true);
   }
-  await submitForm(driver, editForm);
+  const saveButton = await editForm.findElement(By.css('[data-admin-album-save]'));
+  await driver.executeScript('arguments[0].scrollIntoView({ block: "center", inline: "nearest" });', saveButton);
+  await saveButton.click();
+  await waitForDocumentReady(driver);
+  await assertNoServerError(driver);
 
   const updated = albumRecord(fixture.id);
   assert.ok(updated, 'L album modifie doit exister en base.');
