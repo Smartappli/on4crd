@@ -46,6 +46,7 @@ const publicPageRoutes = [
   ['bandplan_harec', {}],
   ['newsletter_public', {}],
   ['newsletter_unsubscribe', { token: 'selenium-invalid-token' }],
+  ['errors', {}],
 ];
 
 for (const [route, query] of publicPageRoutes) {
