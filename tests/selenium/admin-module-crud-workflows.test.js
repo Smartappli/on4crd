@@ -164,12 +164,24 @@ if (table_exists('album_photos') && table_exists('albums')) {
         db()->prepare('DELETE FROM albums WHERE id = ?')->execute([$albumId]);
     }
 }
+if (table_exists('album_subcategories')) {
+    db()->prepare('DELETE FROM album_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('album_categories')) {
+    db()->prepare('DELETE FROM album_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
+}
 
 $webIds = $idsFor('member_webotheque_links', 'title LIKE ? OR url LIKE ? OR description LIKE ? OR tags LIKE ?', [$like, $like, $like, $like]);
 if ($webIds !== []) {
     $deleteFavorites('webotheque_link', $webIds);
     $placeholders = implode(',', array_fill(0, count($webIds), '?'));
     db()->prepare('DELETE FROM member_webotheque_links WHERE id IN (' . $placeholders . ')')->execute($webIds);
+}
+if (table_exists('member_webotheque_subcategories')) {
+    db()->prepare('DELETE FROM member_webotheque_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('member_webotheque_categories')) {
+    db()->prepare('DELETE FROM member_webotheque_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
 }
 
 if (table_exists('member_module_documents')) {
@@ -193,6 +205,12 @@ if (table_exists('member_module_documents')) {
         db()->prepare('DELETE FROM member_module_documents WHERE id IN (' . $placeholders . ')')->execute($moduleIds);
     }
 }
+if (table_exists('member_module_subcategories')) {
+    db()->prepare('DELETE FROM member_module_subcategories WHERE module_code IN ("presentations", "videos") AND (category_code LIKE ? OR code LIKE ? OR label LIKE ?)')->execute([$like, $like, $like]);
+}
+if (table_exists('member_module_categories')) {
+    db()->prepare('DELETE FROM member_module_categories WHERE module_code IN ("presentations", "videos") AND (code LIKE ? OR label LIKE ?)')->execute([$like, $like]);
+}
 
 if (table_exists('member_library_documents')) {
     $stmt = db()->prepare('SELECT id, file_path FROM member_library_documents WHERE title LIKE ? OR description LIKE ? OR tags LIKE ? OR file_path LIKE ?');
@@ -214,6 +232,12 @@ if (table_exists('member_library_documents')) {
         $placeholders = implode(',', array_fill(0, count($libraryIds), '?'));
         db()->prepare('DELETE FROM member_library_documents WHERE id IN (' . $placeholders . ')')->execute($libraryIds);
     }
+}
+if (table_exists('member_library_subcategories')) {
+    db()->prepare('DELETE FROM member_library_subcategories WHERE category_code LIKE ? OR code LIKE ? OR label LIKE ?')->execute([$like, $like, $like]);
+}
+if (table_exists('member_library_categories')) {
+    db()->prepare('DELETE FROM member_library_categories WHERE code LIKE ? OR label LIKE ?')->execute([$like, $like]);
 }
 
 if (table_exists('content_proposals')) {
@@ -276,6 +300,20 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
 `, { SELENIUM_ALBUM_ID: String(albumId) });
 }
 
+function albumRecordByTitle(title) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$title = trim((string) getenv('SELENIUM_ALBUM_TITLE'));
+if ($title === '' || !table_exists('albums')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, title, description, is_public, is_featured FROM albums WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_ALBUM_TITLE: title });
+}
+
 function prepareWebothequeFixture(token, memberId) {
   return seleniumJson(`
 require_once 'app/bootstrap.php';
@@ -305,6 +343,20 @@ $stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webo
 $stmt->execute([$id]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_LINK_ID: String(linkId) });
+}
+
+function webothequeRecordByTitle(title) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$title = trim((string) getenv('SELENIUM_LINK_TITLE'));
+if ($title === '' || !table_exists('member_webotheque_links')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, title, url, description, tags FROM member_webotheque_links WHERE title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_LINK_TITLE: title });
 }
 
 function prepareModuleDocumentFixture(module, token, memberId) {
@@ -347,6 +399,21 @@ $stmt = db()->prepare('SELECT id, module_code, title, description, tags FROM mem
 $stmt->execute([$id, $module]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 `, { SELENIUM_MODULE: module, SELENIUM_DOCUMENT_ID: String(documentId) });
+}
+
+function moduleDocumentRecordByTitle(module, title) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$module = preg_replace('/[^a-z0-9_]/', '', strtolower((string) getenv('SELENIUM_MODULE')));
+$title = trim((string) getenv('SELENIUM_DOCUMENT_TITLE'));
+if ($module === '' || $title === '' || !table_exists('member_module_documents')) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, module_code, title, description, tags FROM member_module_documents WHERE title = ? AND module_code = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$title, $module]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_MODULE: module, SELENIUM_DOCUMENT_TITLE: title });
 }
 
 function prepareLibraryDocumentFixture(token, memberId) {
@@ -403,17 +470,224 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
 `, { SELENIUM_DOCUMENT_TITLE: title });
 }
 
-function writeLibraryUploadFixture(title, token) {
+function adminTaxonomyCategoryRecord(area, categoryCode) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$area = preg_replace('/[^a-z0-9_]/', '', strtolower((string) getenv('SELENIUM_TAXONOMY_AREA')));
+$code = trim((string) getenv('SELENIUM_CATEGORY_CODE'));
+$row = null;
+if ($code !== '') {
+    if ($area === 'albums' && table_exists('album_categories')) {
+        $stmt = db()->prepare('SELECT code, label, deleted_at FROM album_categories WHERE code = ? LIMIT 1');
+        $stmt->execute([$code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } elseif ($area === 'webotheque' && table_exists('member_webotheque_categories')) {
+        $stmt = db()->prepare('SELECT code, label, deleted_at FROM member_webotheque_categories WHERE code = ? LIMIT 1');
+        $stmt->execute([$code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } elseif ($area === 'library' && table_exists('member_library_categories')) {
+        $stmt = db()->prepare('SELECT code, label, NULL AS deleted_at FROM member_library_categories WHERE code = ? LIMIT 1');
+        $stmt->execute([$code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } elseif (in_array($area, ['presentations', 'videos'], true) && table_exists('member_module_categories')) {
+        $stmt = db()->prepare('SELECT code, label, deleted_at FROM member_module_categories WHERE module_code = ? AND code = ? LIMIT 1');
+        $stmt->execute([$area, $code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+}
+echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_TAXONOMY_AREA: area, SELENIUM_CATEGORY_CODE: categoryCode });
+}
+
+function adminTaxonomySubcategoryRecord(area, categoryCode, subcategoryCode) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$area = preg_replace('/[^a-z0-9_]/', '', strtolower((string) getenv('SELENIUM_TAXONOMY_AREA')));
+$category = trim((string) getenv('SELENIUM_CATEGORY_CODE'));
+$code = trim((string) getenv('SELENIUM_SUBCATEGORY_CODE'));
+$row = null;
+if ($category !== '' && $code !== '') {
+    if ($area === 'albums' && table_exists('album_subcategories')) {
+        $stmt = db()->prepare('SELECT category_code, code, label, NULL AS deleted_at FROM album_subcategories WHERE category_code = ? AND code = ? LIMIT 1');
+        $stmt->execute([$category, $code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } elseif ($area === 'webotheque' && table_exists('member_webotheque_subcategories')) {
+        $stmt = db()->prepare('SELECT category_code, code, label, NULL AS deleted_at FROM member_webotheque_subcategories WHERE category_code = ? AND code = ? LIMIT 1');
+        $stmt->execute([$category, $code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } elseif ($area === 'library' && table_exists('member_library_subcategories')) {
+        $stmt = db()->prepare('SELECT category_code, code, label, NULL AS deleted_at FROM member_library_subcategories WHERE category_code = ? AND code = ? LIMIT 1');
+        $stmt->execute([$category, $code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } elseif (in_array($area, ['presentations', 'videos'], true) && table_exists('member_module_subcategories')) {
+        $stmt = db()->prepare('SELECT category_code, code, label, deleted_at FROM member_module_subcategories WHERE module_code = ? AND category_code = ? AND code = ? LIMIT 1');
+        $stmt->execute([$area, $category, $code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+}
+echo json_encode($row, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+`, { SELENIUM_TAXONOMY_AREA: area, SELENIUM_CATEGORY_CODE: categoryCode, SELENIUM_SUBCATEGORY_CODE: subcategoryCode });
+}
+
+function writeTextFixture(title, token, prefix = 'admin') {
   const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
   fs.mkdirSync(fixtureDir, { recursive: true });
-  const fixture = path.join(fixtureDir, `${title}.txt`);
-  fs.writeFileSync(fixture, `Document Selenium member_library admin ${token}`);
+  const fixture = path.join(fixtureDir, `${prefix}-${title}.txt`);
+  fs.writeFileSync(fixture, `Document Selenium ${prefix} ${title} ${token}`);
 
   return fixture;
 }
 
 async function assertPageContains(driver, text, message) {
   assert.match(await pagePlainText(driver), new RegExp(escapeRegExp(text)), message);
+}
+
+async function setOptionalNamedFieldValue(driver, form, name, value) {
+  const fields = await form.findElements(By.css(`[name="${name}"]`));
+  if (fields.length > 0) {
+    await setFieldValue(driver, fields[0], value);
+  }
+}
+
+async function findCategoryForm(driver, categoryCode) {
+  return driver.findElement(By.xpath(
+    `//form[.//input[@name="action" and @value="update_category"] and .//input[(@name="category_code" or @name="category") and @value="${categoryCode}"]]`,
+  ));
+}
+
+async function findSubcategoryForm(driver, categoryCode, subcategoryCode) {
+  const ref = `${categoryCode}:${subcategoryCode}`;
+  return driver.findElement(By.xpath(
+    `//form[.//input[@name="action" and @value="update_subcategory"] and ((.//input[@name="subcategory_ref" and @value="${ref}"]) or (.//input[@name="subcategory_category" and @value="${categoryCode}"] and .//input[@name="subcategory_code" and @value="${subcategoryCode}"]))]`,
+  ));
+}
+
+async function createUpdateDeleteAdminTaxonomy(driver, { area, route }, token) {
+  const categoryCode = `selenium-${area}-${token.toLowerCase()}-cat`;
+  const subcategoryCode = `${categoryCode}-sub`;
+  const categoryLabel = categoryCode;
+  const updatedCategoryLabel = `${categoryCode}-updated`;
+  const subcategoryLabel = subcategoryCode;
+  const updatedSubcategoryLabel = `${subcategoryCode}-updated`;
+
+  await visit(driver, route);
+  let categoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_category"]]'));
+  await setOptionalNamedFieldValue(driver, categoryForm, 'category_code', categoryCode);
+  await setOptionalNamedFieldValue(driver, categoryForm, 'category_label', categoryLabel);
+  await submitForm(driver, categoryForm);
+
+  let category = adminTaxonomyCategoryRecord(area, categoryCode);
+  assert.ok(category, `La thematique ${area} doit etre creee.`);
+  assert.equal(category.label, categoryLabel, `La thematique ${area} doit avoir le libelle initial.`);
+
+  await visit(driver, route);
+  categoryForm = await findCategoryForm(driver, categoryCode);
+  await setFieldValue(driver, await categoryForm.findElement(By.css('input[name="category_label"]')), updatedCategoryLabel);
+  await submitForm(driver, categoryForm);
+
+  category = adminTaxonomyCategoryRecord(area, categoryCode);
+  assert.ok(category, `La thematique ${area} doit exister apres modification.`);
+  assert.equal(category.label, updatedCategoryLabel, `La thematique ${area} doit etre modifiee.`);
+
+  await visit(driver, route);
+  const subcategoryForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="add_subcategory"]]'));
+  await setOptionalNamedFieldValue(driver, subcategoryForm, 'subcategory_category', categoryCode);
+  await setOptionalNamedFieldValue(driver, subcategoryForm, 'subcategory_code', subcategoryCode);
+  await setOptionalNamedFieldValue(driver, subcategoryForm, 'subcategory_label', subcategoryLabel);
+  await submitForm(driver, subcategoryForm);
+
+  let subcategory = adminTaxonomySubcategoryRecord(area, categoryCode, subcategoryCode);
+  assert.ok(subcategory, `La sous-thematique ${area} doit etre creee.`);
+  assert.equal(subcategory.label, subcategoryLabel, `La sous-thematique ${area} doit avoir le libelle initial.`);
+
+  await visit(driver, route);
+  const subcategoryUpdateForm = await findSubcategoryForm(driver, categoryCode, subcategoryCode);
+  await setFieldValue(driver, await subcategoryUpdateForm.findElement(By.css('input[name="subcategory_label"]')), updatedSubcategoryLabel);
+  await submitForm(driver, subcategoryUpdateForm);
+
+  subcategory = adminTaxonomySubcategoryRecord(area, categoryCode, subcategoryCode);
+  assert.ok(subcategory, `La sous-thematique ${area} doit exister apres modification.`);
+  assert.equal(subcategory.label, updatedSubcategoryLabel, `La sous-thematique ${area} doit etre modifiee.`);
+
+  await visit(driver, route);
+  const subcategoryDeleteForm = await findSubcategoryForm(driver, categoryCode, subcategoryCode);
+  const subcategoryDeleteButton = await subcategoryDeleteForm.findElement(By.css('button[name="action"][value="delete_subcategory"]'));
+  assert.equal(await subcategoryDeleteButton.getAttribute('disabled'), null, `La sous-thematique ${area} vide doit etre supprimable.`);
+  await submitForm(driver, subcategoryDeleteForm, subcategoryDeleteButton);
+
+  subcategory = adminTaxonomySubcategoryRecord(area, categoryCode, subcategoryCode);
+  assert.ok(subcategory === null || subcategory.deleted_at !== null, `La sous-thematique ${area} doit etre supprimee.`);
+
+  await visit(driver, route);
+  const categoryDeleteForm = await findCategoryForm(driver, categoryCode);
+  const categoryDeleteButton = await categoryDeleteForm.findElement(By.css('button[name="action"][value="delete_category"]'));
+  assert.equal(await categoryDeleteButton.getAttribute('disabled'), null, `La thematique ${area} vide doit etre supprimable.`);
+  await submitForm(driver, categoryDeleteForm, categoryDeleteButton);
+
+  category = adminTaxonomyCategoryRecord(area, categoryCode);
+  assert.ok(category === null || category.deleted_at !== null, `La thematique ${area} doit etre supprimee.`);
+}
+
+async function createAlbumFromAdminRoute(driver, token) {
+  const title = `selenium-admin-album-${token}`;
+  await visit(driver, 'admin_albums', { focus: 'album-wizard' });
+
+  const form = await driver.findElement(By.xpath('//section[@id="album-wizard"]//form[.//input[@name="action" and @value="create_album"]]'));
+  await setFieldValue(driver, await form.findElement(By.css('input[name="title"]')), title);
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="description"]')), `Album admin Selenium ${token}`);
+  await submitForm(driver, form);
+
+  const album = albumRecordByTitle(title);
+  assert.ok(album && Number(album.id) > 0, 'L album doit etre cree depuis admin_albums.');
+
+  return {
+    id: Number(album.id),
+    title: album.title,
+  };
+}
+
+async function createWebothequeFromAdminRoute(driver, token) {
+  const title = `selenium-admin-webotheque-${token}`;
+  const url = `https://example.org/selenium-admin-webotheque-${token.toLowerCase()}`;
+  await visit(driver, 'admin_webotheque', { propose_link: '1' });
+
+  const form = await driver.findElement(By.css('#admin-webotheque-link-dialog form.webotheque-proposal-form'));
+  await setFieldValue(driver, await form.findElement(By.css('input[name="title"]')), title);
+  await setFieldValue(driver, await form.findElement(By.css('input[name="url"]')), url);
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="description"]')), `Lien webotheque admin Selenium ${token}`);
+  await setFieldValue(driver, await form.findElement(By.css('input[name="tags"]')), 'selenium,admin');
+  await submitForm(driver, form);
+
+  const link = webothequeRecordByTitle(title);
+  assert.ok(link && Number(link.id) > 0, 'Le lien doit etre cree depuis admin_webotheque.');
+
+  return {
+    id: Number(link.id),
+    title: link.title,
+    url: link.url,
+  };
+}
+
+async function createModuleDocumentFromAdminRoute(driver, module, token) {
+  const title = `selenium-admin-${module}-${token}`;
+  const fixture = writeTextFixture(title, token, module);
+  await visit(driver, `admin_${module}`);
+
+  const form = await driver.findElement(By.css('#admin-member-document-upload form.admin-member-document-form'));
+  await setFieldValue(driver, await form.findElement(By.css('input[name="title"]')), title);
+  await setFieldValue(driver, await form.findElement(By.css('textarea[name="description"]')), `Document admin Selenium ${module} ${token}`);
+  await setFieldValue(driver, await form.findElement(By.css('input[name="tags"]')), `selenium,admin,${module}`);
+  await form.findElement(By.css('input[type="file"][name="document"]')).sendKeys(path.resolve(fixture));
+  await submitForm(driver, form);
+
+  const document = moduleDocumentRecordByTitle(module, title);
+  assert.ok(document && Number(document.id) > 0, `Le document ${module} doit etre cree depuis admin_${module}.`);
+
+  return {
+    id: Number(document.id),
+    module,
+    title: document.title,
+  };
 }
 
 async function updateAndDeleteAlbum(driver, fixture, token) {
@@ -546,7 +820,7 @@ async function deleteMemberModuleDocumentFromAdminRoute(driver, fixture) {
 
 async function createLibraryDocumentFromAdminRoute(driver, token) {
   const title = `selenium-admin-member-library-${token}`;
-  const fixture = writeLibraryUploadFixture(title, token);
+  const fixture = writeTextFixture(title, token, 'member-library');
   await visit(driver, 'admin_library');
 
   const form = await driver.findElement(By.css('form.admin-library-upload-form'));
@@ -595,15 +869,45 @@ test('Selenium admin: modifier et supprimer albums et webotheque', async (t) => 
 
   const token = `ADMCRUD${Date.now()}`;
   cleanupAdminCrudFixtures(token);
-  const memberId = seleniumMemberId(credentials.username);
-  const album = prepareAlbumFixture(token, memberId);
-  const webotheque = prepareWebothequeFixture(token, memberId);
 
   await withSelenium(t, async (driver) => {
     try {
       await loginAsAdmin(driver, credentials.username, credentials.password);
+      const album = await createAlbumFromAdminRoute(driver, token);
+      const webotheque = await createWebothequeFromAdminRoute(driver, token);
       await updateAndDeleteAlbum(driver, album, token);
       await updateAndDeleteWebotheque(driver, webotheque, token);
+    } finally {
+      cleanupAdminCrudFixtures(token);
+    }
+  });
+});
+
+test('Selenium admin: ajouter modifier supprimer thematiques et sous-thematiques modules', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+
+  const token = `ADMTAX${Date.now()}`;
+  cleanupAdminCrudFixtures(token);
+  const modules = [
+    { area: 'albums', route: 'admin_albums' },
+    { area: 'webotheque', route: 'admin_webotheque' },
+    { area: 'library', route: 'admin_library' },
+    { area: 'presentations', route: 'admin_presentations' },
+    { area: 'videos', route: 'admin_videos' },
+  ];
+
+  await withSelenium(t, async (driver) => {
+    try {
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      for (const module of modules) {
+        await createUpdateDeleteAdminTaxonomy(driver, module, token);
+      }
     } finally {
       cleanupAdminCrudFixtures(token);
     }
@@ -654,19 +958,15 @@ test('Selenium admin: modifier et supprimer presentations, videos et member_libr
 
   const token = `ADMCRUD${Date.now()}`;
   cleanupAdminCrudFixtures(token);
-  const memberId = seleniumMemberId(credentials.username);
-  const fixtures = [
-    prepareModuleDocumentFixture('presentations', token, memberId),
-    prepareModuleDocumentFixture('videos', token, memberId),
-    prepareLibraryDocumentFixture(token, memberId),
-  ];
-  for (const fixture of fixtures) {
-    assert.ok(fixture && Number(fixture.id) > 0, `La fixture ${JSON.stringify(fixture)} doit etre creee avant le scenario Selenium.`);
-  }
 
   await withSelenium(t, async (driver) => {
     try {
       await loginAsAdmin(driver, credentials.username, credentials.password);
+      const fixtures = [
+        await createModuleDocumentFromAdminRoute(driver, 'presentations', token),
+        await createModuleDocumentFromAdminRoute(driver, 'videos', token),
+        await createLibraryDocumentFromAdminRoute(driver, token),
+      ];
       await updateAndDeleteMemberModuleDocument(driver, fixtures[0], token);
       await updateAndDeleteMemberModuleDocument(driver, fixtures[1], token);
       await updateAndDeleteLibraryDocument(driver, fixtures[2], token);

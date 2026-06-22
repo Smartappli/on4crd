@@ -50,15 +50,18 @@ function writeTextFixture(name, content) {
   return filePath;
 }
 
-function cleanupPresentationFixture(token) {
+function cleanupMemberDocumentFixture(module, token) {
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 require_once 'app/cache.php';
 require_once 'app/route_helper_loader.php';
 app_load_route_helpers('__all');
 $token = getenv('SELENIUM_DOCUMENT_TOKEN') ?: '';
-if ($token !== '') {
+$module = preg_replace('/[^a-z0-9_]/', '', strtolower((string) getenv('SELENIUM_DOCUMENT_MODULE')));
+if ($module === '') {
     $module = 'presentations';
+}
+if ($token !== '') {
     ensure_member_module_documents_table();
     member_document_ensure_categories_table($module);
     member_document_ensure_subcategories_table($module);
@@ -80,7 +83,7 @@ if ($token !== '') {
     db()->prepare('DELETE FROM member_module_subcategories WHERE module_code = ? AND (category_code = ? OR code = ?)')->execute([$module, $token, $token . '-sub']);
     db()->prepare('DELETE FROM member_module_categories WHERE module_code = ? AND code = ?')->execute([$module, $token]);
 }
-`, { SELENIUM_DOCUMENT_TOKEN: token });
+`, { SELENIUM_DOCUMENT_MODULE: module, SELENIUM_DOCUMENT_TOKEN: token });
 }
 
 async function taxonomyText(driver) {
@@ -107,7 +110,7 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
   if (!(await ensureSeleniumRunnable(t))) {
     return;
   }
-  cleanupPresentationFixture(token);
+  cleanupMemberDocumentFixture('presentations', token);
 
   await withSelenium(t, async (driver) => {
     try {
@@ -184,7 +187,63 @@ test('Selenium modules documents: taxonomy, upload, favoris, edition et suppress
       await visit(driver, 'admin_presentations');
       assert.equal((await driver.findElements(By.xpath(`//input[@name="category_code" and @value="${category}"]`))).length, 0, 'La thematique supprimee ne doit plus etre listee.');
     } finally {
-      cleanupPresentationFixture(token);
+      cleanupMemberDocumentFixture('presentations', token);
     }
   });
 });
+
+for (const moduleCode of ['presentations', 'videos']) {
+  test(`Selenium membre: ajouter modifier supprimer un document ${moduleCode}`, async (t) => {
+    const credentials = requireAdminCredentials(t);
+    if (credentials === null) {
+      return;
+    }
+
+    const token = `selenium-member-${moduleCode}-${Date.now()}`;
+    const title = `${token} document`;
+    const updatedTitle = `${title} updated`;
+    const fixture = writeTextFixture(`${token}.txt`, `Contenu Selenium membre ${moduleCode}.\n`);
+    if (!(await ensureSeleniumRunnable(t))) {
+      return;
+    }
+    cleanupMemberDocumentFixture(moduleCode, token);
+
+    await withSelenium(t, async (driver) => {
+      try {
+        await loginAsAdmin(driver, credentials.username, credentials.password);
+        const proposeQuery = moduleCode === 'videos' ? { propose_video: '1' } : { propose_document: '1' };
+        await visit(driver, moduleCode, proposeQuery);
+
+        const createForm = await driver.findElement(By.css('#member-document-proposal-dialog form'));
+        await createForm.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+        await setFieldValue(driver, await createForm.findElement(By.css('textarea[name="proposal_description"]')), `Document ${moduleCode} propose par Selenium.`);
+        await createForm.findElement(By.css('input[name="proposal_tags"]')).sendKeys(`selenium,${moduleCode}`);
+        await createForm.findElement(By.css('input[type="file"][name="proposal_file"]')).sendKeys(path.resolve(fixture));
+        await submitForm(driver, createForm);
+
+        await visit(driver, moduleCode, { q: title });
+        let text = await pagePlainText(driver);
+        assert.match(text, new RegExp(title), `Le document ${moduleCode} cree cote membre doit etre visible.`);
+
+        const editForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="update_document"]]`));
+        await setFieldValue(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
+        await setFieldValue(driver, await editForm.findElement(By.css('textarea[name="description"]')), `Document ${moduleCode} modifie cote membre.`);
+        await setFieldValue(driver, await editForm.findElement(By.css('input[name="tags"]')), `selenium,${moduleCode},updated`);
+        await submitForm(driver, editForm);
+
+        await visit(driver, moduleCode, { q: updatedTitle });
+        text = await pagePlainText(driver);
+        assert.match(text, new RegExp(updatedTitle), `Le document ${moduleCode} modifie cote membre doit etre visible.`);
+
+        const deleteForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[.//input[@name="action" and @value="delete_document"]]`));
+        await submitForm(driver, deleteForm);
+
+        await visit(driver, moduleCode, { q: updatedTitle });
+        text = await pagePlainText(driver);
+        assert.doesNotMatch(text, new RegExp(updatedTitle), `Le document ${moduleCode} supprime cote membre ne doit plus etre visible.`);
+      } finally {
+        cleanupMemberDocumentFixture(moduleCode, token);
+      }
+    });
+  });
+}

@@ -67,6 +67,24 @@ require_once 'app/route_helper_loader.php';
 app_load_route_helpers('__all');
 $title = getenv('SELENIUM_TEST_TITLE') ?: '';
 if ($title !== '') {
+    if (table_exists('albums')) {
+        $stmt = db()->prepare('SELECT id FROM albums WHERE title = ? OR title = ?');
+        $stmt->execute([$title, $title . ' updated']);
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) ?: [] as $albumId) {
+            $albumId = (int) $albumId;
+            if ($albumId <= 0) {
+                continue;
+            }
+            if (function_exists('album_delete_record')) {
+                album_delete_record($albumId);
+            } else {
+                if (table_exists('album_photos')) {
+                    db()->prepare('DELETE FROM album_photos WHERE album_id = ?')->execute([$albumId]);
+                }
+                db()->prepare('DELETE FROM albums WHERE id = ?')->execute([$albumId]);
+            }
+        }
+    }
     if (table_exists('classified_ads')) {
         db()->prepare('DELETE FROM classified_ads WHERE title = ?')->execute([$title]);
         db()->prepare('DELETE FROM classified_ads WHERE title = ?')->execute([$title . ' updated']);
@@ -260,6 +278,7 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
   }
 
   const title = `selenium-library-member-form-${Date.now()}`;
+  const updatedTitle = `${title} updated`;
   const fixtureDir = path.join(os.tmpdir(), 'on4crd-selenium-fixtures');
   fs.mkdirSync(fixtureDir, { recursive: true });
   const fixture = path.join(fixtureDir, `${title}.txt`);
@@ -297,6 +316,23 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
       text = await pagePlainText(driver);
       assert.match(text, new RegExp(title), 'Le document soumis depuis members_library doit apparaitre dans Mes contenus.');
       assert.match(text, /biblioth|library/i);
+
+      await visit(driver, 'members_library', { q: title });
+      const editForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="update_document"]]`));
+      await setInputValue(driver, await editForm.findElement(By.css('input[name="document_title"]')), updatedTitle);
+      await setRichTextarea(driver, await editForm.findElement(By.css('textarea[name="document_description"]')), 'Document bibliotheque membre modifie par Selenium.');
+      await submitForm(driver, editForm);
+
+      await visit(driver, 'members_library', { q: updatedTitle });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(updatedTitle), 'Le document members_library modifie cote membre doit etre visible.');
+
+      const deleteForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[.//input[@name="action" and @value="delete_document"]]`));
+      await submitForm(driver, deleteForm);
+
+      await visit(driver, 'members_library', { q: updatedTitle });
+      text = await pagePlainText(driver);
+      assert.doesNotMatch(text, new RegExp(updatedTitle), 'Le document members_library supprime cote membre ne doit plus etre visible.');
     } finally {
       cleanupWorkflowRows(title);
     }
@@ -378,6 +414,56 @@ test('Selenium membre: creer, modifier et supprimer un lien webotheque', async (
 
       text = await pagePlainText(driver);
       assert.doesNotMatch(text, new RegExp(updatedTitle), 'Le lien webotheque supprime ne doit plus etre affiche.');
+    } finally {
+      cleanupWorkflowRows(title);
+    }
+  });
+});
+
+test('Selenium membre: creer modifier supprimer un album', async (t) => {
+  const credentials = requireAdminCredentials(t);
+  if (credentials === null) {
+    return;
+  }
+
+  const title = `selenium-album-member-${Date.now()}`;
+  const updatedTitle = `${title} updated`;
+  if (!(await ensureSeleniumRunnable(t))) {
+    return;
+  }
+  cleanupWorkflowRows(title);
+
+  await withSelenium(t, async (driver) => {
+    try {
+      ensureSeleniumFixtures();
+      await loginAsAdmin(driver, credentials.username, credentials.password);
+      await visit(driver, 'albums', { propose_album: '1' });
+
+      const createForm = await driver.findElement(By.xpath('//form[.//input[@name="action" and @value="propose_album"]]'));
+      await createForm.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
+      await createForm.findElement(By.css('input[name="proposal_keywords"]')).sendKeys('selenium,album');
+      await setRichTextarea(driver, await createForm.findElement(By.css('textarea[name="proposal_description"]')), 'Album membre Selenium.');
+      await submitForm(driver, createForm);
+
+      await visit(driver, 'albums', { q: title });
+      let text = await pagePlainText(driver);
+      assert.match(text, new RegExp(title), 'L album cree cote membre doit etre visible.');
+
+      const editForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="update_album"]]`));
+      await setInputValue(driver, await editForm.findElement(By.css('input[name="title"]')), updatedTitle);
+      await setRichTextarea(driver, await editForm.findElement(By.css('textarea[name="description"]')), 'Album membre Selenium modifie.');
+      await submitForm(driver, editForm);
+
+      await visit(driver, 'albums', { q: updatedTitle });
+      text = await pagePlainText(driver);
+      assert.match(text, new RegExp(updatedTitle), 'L album modifie cote membre doit etre visible.');
+
+      const deleteForm = await driver.findElement(By.xpath(`//dialog[.//*[contains(normalize-space(.), "${updatedTitle}")]]//form[.//input[@name="action" and @value="delete_album"]]`));
+      await submitForm(driver, deleteForm);
+
+      await visit(driver, 'albums', { q: updatedTitle });
+      text = await pagePlainText(driver);
+      assert.doesNotMatch(text, new RegExp(updatedTitle), 'L album supprime cote membre ne doit plus etre visible.');
     } finally {
       cleanupWorkflowRows(title);
     }
