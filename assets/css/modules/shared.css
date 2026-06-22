@@ -57,6 +57,62 @@
   justify-content: flex-end;
 }
 
+.member-document-propose-menu,
+.members-library-propose-menu,
+.webotheque-propose-menu {
+  position: relative;
+  z-index: 5;
+}
+
+.member-document-propose-menu summary,
+.members-library-propose-menu summary,
+.webotheque-propose-menu summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.member-document-propose-menu summary::-webkit-details-marker,
+.members-library-propose-menu summary::-webkit-details-marker,
+.webotheque-propose-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.member-document-propose-menu-panel,
+.members-library-propose-menu-panel,
+.webotheque-propose-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + .45rem);
+  z-index: 50;
+  display: grid;
+  min-width: 13rem;
+  padding: .4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.member-document-propose-menu-item,
+.members-library-propose-menu-item,
+.webotheque-propose-menu-item {
+  display: block;
+  padding: .55rem .65rem;
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.member-document-propose-menu-item:hover,
+.member-document-propose-menu-item:focus-visible,
+.members-library-propose-menu-item:hover,
+.members-library-propose-menu-item:focus-visible,
+.webotheque-propose-menu-item:hover,
+.webotheque-propose-menu-item:focus-visible {
+  background: var(--panel-2);
+  text-decoration: none;
+}
+
 .module-taxonomy-layout {
   display: grid;
   grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
