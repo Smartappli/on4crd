@@ -240,6 +240,7 @@ foreach ($rows as $event) {
         'location' => trim((string) ($event['location'] ?? '')),
         'externalUrl' => $externalUrl,
         'imageUrl' => $imageUrl,
+        'url' => route_url('event_view', ['slug' => (string) $event['slug']]),
     ];
 
     $eventCards[(int) $event['id']] = $eventCard;
@@ -369,6 +370,7 @@ ob_start();
                 <?php endif; ?>
                 <h3><?= e((string) $nextEvent['title']) ?></h3>
                 <p><?= e($nextEvent['summary'] !== '' ? (string) $nextEvent['summary'] : $t['no_summary']) ?></p>
+                <p><a class="button secondary" href="<?= e((string) $nextEvent['url']) ?>"><?= e($t['detail']) ?></a></p>
                 <dl>
                     <dt><?= e($t['start']) ?></dt><dd><?= e((string) $nextEvent['startLabel']) ?></dd>
                     <dt><?= e($t['end']) ?></dt><dd><?= e((string) $nextEvent['endLabel']) ?></dd>

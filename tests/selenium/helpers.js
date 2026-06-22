@@ -75,6 +75,7 @@ const baseUrl = normalizeSeleniumBaseUrl(process.env.SELENIUM_BASE_URL)
 const timeoutMs = Number(process.env.SELENIUM_TIMEOUT_MS || 15000);
 const artifactsDir = process.env.SELENIUM_ARTIFACTS_DIR || path.join(process.cwd(), 'selenium-artifacts');
 let seleniumFixturesSeeded = false;
+let seleniumAdminFixtureSeeded = false;
 let seleniumHttpTargetProbe = null;
 
 function routeUrl(route, query = {}) {
@@ -239,38 +240,55 @@ async function probeSeleniumHttpTarget() {
     return seleniumHttpTargetProbe;
   }
 
-  seleniumHttpTargetProbe = (async () => {
+  const result = await (async () => {
     if (typeof fetch !== 'function') {
       return { ok: true, message: '' };
     }
 
+    const probeTimeoutMs = Number(process.env.SELENIUM_HTTP_TARGET_TIMEOUT_MS || timeoutMs);
+    const probeAttempts = Math.max(1, Number(process.env.SELENIUM_HTTP_TARGET_ATTEMPTS || 3));
+    let lastErrorMessage = '';
+
     try {
-      const response = await fetch(routeUrl('home'), {
-        redirect: 'follow',
-        signal: AbortSignal.timeout(5000),
-      });
-      const source = await response.text();
-      const title = source.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '';
+      for (let attempt = 1; attempt <= probeAttempts; attempt += 1) {
+        try {
+          const response = await fetch(routeUrl('home'), {
+            redirect: 'follow',
+            signal: AbortSignal.timeout(probeTimeoutMs),
+          });
+          const source = await response.text();
+          const title = source.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '';
 
-      if (looksLikeOn4crdDocument(title, source) || /Assistant de d.{1,2}ploiement ON4CRD/i.test(source)) {
-        return { ok: true, message: '' };
+          if (looksLikeOn4crdDocument(title, source) || /Assistant de d.{1,2}ploiement ON4CRD/i.test(source)) {
+            return { ok: true, message: '' };
+          }
+
+          return {
+            ok: false,
+            message: `SELENIUM_BASE_URL ${baseUrl} ne cible pas ON4CRD en HTTP (status: ${response.status}, titre: ${title || 'sans titre'}).`,
+          };
+        } catch (error) {
+          lastErrorMessage = String(error && error.message ? error.message : error);
+          if (attempt < probeAttempts) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          }
+        }
       }
-
-      return {
-        ok: false,
-        message: `SELENIUM_BASE_URL ${baseUrl} ne cible pas ON4CRD en HTTP (status: ${response.status}, titre: ${title || 'sans titre'}).`,
-      };
     } catch (error) {
-      const message = String(error && error.message ? error.message : error);
-
-      return {
-        ok: false,
-        message: `SELENIUM_BASE_URL ${baseUrl} ne repond pas en HTTP: ${message}`,
-      };
+      lastErrorMessage = String(error && error.message ? error.message : error);
     }
+
+    return {
+      ok: false,
+      message: `SELENIUM_BASE_URL ${baseUrl} ne repond pas en HTTP: ${lastErrorMessage || 'timeout'}`,
+    };
   })();
 
-  return seleniumHttpTargetProbe;
+  if (result.ok) {
+    seleniumHttpTargetProbe = Promise.resolve(result);
+  }
+
+  return result;
 }
 
 async function ensureSeleniumTarget(t, driver) {
@@ -580,7 +598,36 @@ function requireAdminCredentials(t) {
     return null;
   }
 
+  ensureSeleniumAdminFixture(username, password);
+
   return { username, password };
+}
+
+function ensureSeleniumAdminFixture(username, password) {
+  if (seleniumAdminFixtureSeeded || process.env.SELENIUM_SKIP_ADMIN_FIXTURE === '1') {
+    return true;
+  }
+
+  const createAdminScript = path.join(process.cwd(), 'scripts', 'create_selenium_admin.php');
+  if (!fs.existsSync(createAdminScript)) {
+    return false;
+  }
+
+  try {
+    childProcess.execFileSync('php', ['-d', 'extension=pdo_mysql', createAdminScript], {
+      cwd: process.cwd(),
+      env: seleniumPhpEnv({
+        SELENIUM_ADMIN_USER: username,
+        SELENIUM_ADMIN_PASSWORD: password,
+      }),
+      stdio: ['ignore', 'pipe', 'pipe'],
+      timeout: 30000,
+    });
+    seleniumAdminFixtureSeeded = true;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function writeTinyPngFixture(name) {

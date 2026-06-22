@@ -18,10 +18,10 @@ const {
 test('Selenium albums: le nombre de photos de la liste correspond au detail public', async (t) => {
   await withSelenium(t, async (driver) => {
     ensureSeleniumFixtures();
-    await visit(driver, 'albums');
-    const tiles = await driver.findElements(By.css('.album-tile'));
+    await visit(driver, 'albums', { q: 'Selenium fixture album public' });
+    const tiles = await driver.findElements(By.xpath('//article[contains(@class,"album-tile")][.//h2/a[contains(normalize-space(.), "Selenium fixture album public")]]'));
     if (tiles.length === 0) {
-      t.skip('Aucun album public disponible sur cet environnement.');
+      t.skip('Album fixture public indisponible sur cet environnement.');
       return;
     }
 
@@ -45,10 +45,10 @@ test('Selenium albums: le nombre de photos de la liste correspond au detail publ
 test('Selenium album detail: les photos comptees sont rendues en cartes image', async (t) => {
   await withSelenium(t, async (driver) => {
     ensureSeleniumFixtures();
-    await visit(driver, 'albums');
-    const links = await driver.findElements(By.css('.album-tile-media'));
+    await visit(driver, 'albums', { q: 'Selenium fixture album public' });
+    const links = await driver.findElements(By.xpath('//article[contains(@class,"album-tile")][.//h2/a[contains(normalize-space(.), "Selenium fixture album public")]]//a[contains(@class,"album-tile-media")]'));
     if (links.length === 0) {
-      t.skip('Aucun album public disponible sur cet environnement.');
+      t.skip('Album fixture public indisponible sur cet environnement.');
       return;
     }
 

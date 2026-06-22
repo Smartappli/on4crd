@@ -66,7 +66,13 @@ function adminMemberState(callsign) {
   const state = seleniumJson(`
 require_once 'app/bootstrap.php';
 $callsign = strtoupper((string) getenv('SELENIUM_TARGET_CALLSIGN'));
-$stmt = db()->prepare('SELECT id, callsign, full_name, email, locator, is_active, is_committee, password_change_required, password_reset_forced_at FROM members WHERE callsign = ? LIMIT 1');
+$columns = ['id', 'callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'];
+foreach (['password_change_required', 'password_reset_forced_at'] as $column) {
+    if (table_has_column('members', $column)) {
+        $columns[] = $column;
+    }
+}
+$stmt = db()->prepare('SELECT ' . implode(', ', $columns) . ' FROM members WHERE callsign = ? LIMIT 1');
 $stmt->execute([$callsign]);
 echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 `, { SELENIUM_TARGET_CALLSIGN: callsign });
