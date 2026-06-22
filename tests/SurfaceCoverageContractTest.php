@@ -182,6 +182,167 @@ final class SurfaceCoverageContractTest extends TestCase
         }
     }
 
+    public function testPublicAndMemberPagesKeepSeleniumCoverage(): void
+    {
+        $publicRouteCoverage = $this->source('tests/selenium/public-routes.test.js');
+        $publicDetailCoverage = $this->source('tests/selenium/public-detail-not-found.test.js');
+        $authenticatedPublicCsrf = $this->source('tests/selenium/authenticated-public-csrf.test.js');
+        $protectedRoutes = $this->source('tests/selenium/protected-routes.test.js');
+        $authenticatedRoutes = $this->source('tests/selenium/authenticated-routes.test.js');
+
+        $publicRoutes = $this->arrayValuesFromRouter('publicRoutes');
+        $publicNonPageRoutes = [
+            'ad_click',
+            'ai-index.json',
+            'article',
+            'album',
+            'auction_view',
+            'event_view',
+            'events_feed',
+            'footer_contact',
+            'idea_submit',
+            'install.php',
+            'knowledge-graph.jsonld',
+            'llms.txt',
+            'news_view',
+            'robots.txt',
+            'sitemap.xml',
+            'tools_geocode',
+            'wiki_view',
+        ];
+        $publicDetailRoutes = ['ad_click', 'article', 'album', 'auction_view', 'event_view', 'news_view', 'wiki_view'];
+        $authenticatedPublicPostRoutes = [
+            'article',
+            'auction_view',
+            'album',
+            'articles',
+            'auctions',
+            'chatbot',
+            'classifieds',
+            'donation',
+            'events',
+            'gdpr',
+            'home',
+            'membership',
+            'news',
+            'newsletter_public',
+            'newsletter_unsubscribe',
+            'tools',
+            'wiki',
+            'wiki_view',
+        ];
+        $memberEndpointRoutes = [
+            'auction_bid',
+            'dashboard_widget_card',
+            'member_document_preview',
+            'member_library_preview',
+            'qsl_export',
+            'qsl_preview',
+            'save_dashboard',
+            'widget_render',
+            'wiki_edit',
+        ];
+
+        foreach ($this->dispatchRoutes() as $route => $_relativePage) {
+            if (in_array($route, $publicRoutes, true)) {
+                if (!in_array($route, $publicNonPageRoutes, true)) {
+                    self::assertStringContainsString(
+                        "['" . $route . "'",
+                        $publicRouteCoverage,
+                        sprintf('Public page route %s must be covered by public-routes Selenium tests.', $route)
+                    );
+                }
+
+                if (in_array($route, $publicDetailRoutes, true)) {
+                    self::assertStringContainsString("'" . $route . "'", $publicDetailCoverage, sprintf('Public detail route %s must be covered by not-found Selenium tests.', $route));
+                }
+
+                if (in_array($route, $authenticatedPublicPostRoutes, true)) {
+                    self::assertStringContainsString("'" . $route . "'", $authenticatedPublicCsrf, sprintf('Public route %s must be covered when authenticated member-only actions are visible.', $route));
+                }
+
+                continue;
+            }
+
+            if ($route === 'admin' || str_starts_with($route, 'admin_')) {
+                continue;
+            }
+
+            self::assertStringContainsString("'" . $route . "'", $protectedRoutes, sprintf('Member route %s must be covered by protected-route Selenium tests.', $route));
+            if (!in_array($route, $memberEndpointRoutes, true)) {
+                self::assertStringContainsString("'" . $route . "'", $authenticatedRoutes, sprintf('Member page route %s must be covered by authenticated Selenium tests.', $route));
+            }
+        }
+    }
+
+    public function testPostHandlingRoutesKeepCsrfAndSeleniumCoverage(): void
+    {
+        $publicCsrfCoverage = $this->source('tests/selenium/csrf-forms.test.js');
+        $authenticatedCsrfCoverage = $this->source('tests/selenium/authenticated-csrf-contract.test.js');
+        $authenticatedPublicCsrf = $this->source('tests/selenium/authenticated-public-csrf.test.js');
+        $protectedPostEndpointCoverage = [
+            'auction_bid' => [
+                $this->source('tests/selenium/admin-auctions-workflow.test.js'),
+                'form[action*="route=auction_bid"]',
+            ],
+        ];
+        $publicRoutes = $this->arrayValuesFromRouter('publicRoutes');
+        $publicPostEndpointRoutes = ['footer_contact', 'idea_submit'];
+
+        foreach ($this->dispatchRoutes() as $route => $relativePage) {
+            if ($route === 'install.php') {
+                continue;
+            }
+
+            $controller = $this->routeControllerSource($relativePage);
+            if (!str_contains($controller, 'REQUEST_METHOD') || !str_contains($controller, 'POST')) {
+                continue;
+            }
+
+            self::assertStringContainsString('verify_csrf(', $controller, sprintf('POST route %s must verify CSRF tokens.', $route));
+
+            if (in_array($route, $publicRoutes, true)) {
+                $isPublicPostEndpoint = in_array($route, $publicPostEndpointRoutes, true);
+                $hasPublicFormCoverage = str_contains($publicCsrfCoverage, "'" . $route . "'")
+                    || str_contains($authenticatedPublicCsrf, "'" . $route . "'")
+                    || $isPublicPostEndpoint;
+
+                self::assertTrue(
+                    $hasPublicFormCoverage,
+                    sprintf('Public POST route %s must have public or authenticated-public Selenium CSRF coverage.', $route)
+                );
+                continue;
+            }
+
+            if (isset($protectedPostEndpointCoverage[$route])) {
+                [$coverageSource, $coverageSnippet] = $protectedPostEndpointCoverage[$route];
+                self::assertStringContainsString(
+                    $coverageSnippet,
+                    $coverageSource,
+                    sprintf('Protected POST endpoint %s must be covered by its workflow Selenium test.', $route)
+                );
+                continue;
+            }
+
+            self::assertStringContainsString("'" . $route . "'", $authenticatedCsrfCoverage, sprintf('Protected POST route %s must be covered by authenticated CSRF Selenium tests.', $route));
+        }
+    }
+
+    private function routeControllerSource(string $relativePage): string
+    {
+        $source = $this->source($relativePage);
+
+        if (str_contains($source, 'render_member_webotheque_page(') || str_contains($source, 'render_admin_webotheque_page()')) {
+            $source .= "\n" . $this->source('app/member_webotheque.php');
+        }
+
+        if (str_contains($source, 'render_member_document_module_page(') || str_contains($source, 'render_admin_member_document_module_page(')) {
+            $source .= "\n" . $this->source('app/member_module_documents.php');
+        }
+
+        return $source;
+    }
+
     private function source(string $relativePath): string
     {
         $source = file_get_contents(dirname(__DIR__) . '/' . str_replace('/', DIRECTORY_SEPARATOR, $relativePath));

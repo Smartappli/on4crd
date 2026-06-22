@@ -29,6 +29,7 @@ const authenticatedRoutes = [
   'settings',
   'classifieds_manage',
   'article_propose',
+  'wiki_edit',
   'wiki_propose',
   'ads',
   'admin',
