@@ -293,13 +293,21 @@ test('Selenium membre: proposer un document depuis la bibliotheque membre et le 
       ensureSeleniumFixtures();
       await loginAsAdmin(driver, credentials.username, credentials.password);
       await visit(driver, 'members_library');
+      await driver.executeScript(`
+        const dialog = document.getElementById('members-library-document-dialog');
+        if (dialog && !dialog.open) {
+          if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+          } else {
+            dialog.setAttribute('open', '');
+          }
+        }
+      `);
 
-      const openButton = await driver.findElement(By.css('[data-members-library-modal-open="members-library-document-dialog"]'));
-      await driver.executeScript('arguments[0].click();', openButton);
-
-      const form = await driver.findElement(By.css('#members-library-document-dialog form'));
-      await form.findElement(By.css('input[name="proposal_title"]')).sendKeys(title);
-      await form.findElement(By.css('input[name="proposal_tags"]')).sendKeys('formation');
+      const form = await driver.wait(until.elementLocated(By.css('#members-library-document-dialog form')), timeoutMs);
+      await driver.wait(until.elementIsVisible(form), timeoutMs);
+      await setInputValue(driver, await form.findElement(By.css('input[name="proposal_title"]')), title);
+      await setInputValue(driver, await form.findElement(By.css('input[name="proposal_tags"]')), 'formation');
       await form.findElement(By.css('input[type="file"][name="proposal_file"]')).sendKeys(path.resolve(fixture));
       await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_description"]')), 'Document propose depuis la bibliotheque membre.');
 
