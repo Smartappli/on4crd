@@ -1118,6 +1118,41 @@ const contentProposalScenarios = [
       await assertSelectOptionContains(driver, 'albums', { propose_album: '1' }, 'select[name="proposal_subcategory_ref"] option', title, 'La sous-thematique albums validee doit etre disponible pour proposer un album.');
     },
   },
+  ...['presentations'].flatMap((moduleCode) => [
+    {
+      name: `Selenium membre: proposer une thematique ${moduleCode}, la valider et la retrouver dans le formulaire document`,
+      tokenPrefix: `selenium-pending-${moduleCode}-category`,
+      titleSuffix: 'topic',
+      moduleRegex: new RegExp(moduleCode, 'i'),
+      submit: async (driver, title) => {
+        await visit(driver, moduleCode, { propose_category: '1' });
+        const form = await driver.findElement(By.css('#member-document-category-dialog form.member-document-dialog-form'));
+        await setInputValue(driver, await form.findElement(By.css('input[name="proposal_category_name"]')), title);
+        await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), `Thematique ${moduleCode} proposee par Selenium.`);
+        await submitForm(driver, form);
+      },
+      afterAccept: async (driver, title) => {
+        await assertSelectOptionContains(driver, moduleCode, { propose_document: '1' }, '#member-document-proposal-dialog select[name="category"] option', title, `La thematique ${moduleCode} validee doit etre disponible pour proposer un document.`);
+      },
+    },
+    {
+      name: `Selenium membre: proposer une sous-thematique ${moduleCode}, la valider et la retrouver dans le formulaire document`,
+      tokenPrefix: `selenium-pending-${moduleCode}-subcategory`,
+      titleSuffix: 'subtopic',
+      moduleRegex: new RegExp(moduleCode, 'i'),
+      submit: async (driver, title) => {
+        await visit(driver, moduleCode, { propose_subcategory: '1' });
+        const form = await driver.findElement(By.css('#member-document-subcategory-dialog form.member-document-dialog-form'));
+        await setSelectValue(driver, await form.findElement(By.css('select[name="proposal_parent_category"]')), 'general');
+        await setInputValue(driver, await form.findElement(By.css('input[name="proposal_subcategory_name"]')), title);
+        await setRichTextarea(driver, await form.findElement(By.css('textarea[name="proposal_reason"]')), `Sous-thematique ${moduleCode} proposee par Selenium.`);
+        await submitForm(driver, form);
+      },
+      afterAccept: async (driver, title) => {
+        await assertSelectOptionContains(driver, moduleCode, { propose_document: '1' }, '#member-document-proposal-dialog select[name="subcategory_ref"] option', title, `La sous-thematique ${moduleCode} validee doit etre disponible pour proposer un document.`);
+      },
+    },
+  ]),
   {
     name: 'Selenium membre: proposer un evenement, le valider et le retrouver dans agenda',
     tokenPrefix: 'selenium-pending-events',
