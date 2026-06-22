@@ -120,6 +120,32 @@ function news_default_section_id(): int
     }
 }
 
+function news_content_html_from_summary(string $summaryText, string $sourceText = ''): string
+{
+    $paragraphs = array_values(array_filter(array_map(
+        static fn(string $line): string => trim($line),
+        preg_split('/\R{2,}/u', $summaryText) ?: []
+    )));
+    if ($paragraphs === []) {
+        $paragraphs = [$summaryText];
+    }
+
+    $content = '';
+    foreach ($paragraphs as $paragraph) {
+        $content .= '<p>' . nl2br(e($paragraph), false) . '</p>';
+    }
+    if ($sourceText !== '') {
+        $sourceUrl = sanitize_href_attribute($sourceText);
+        $content .= '<p><strong>Source:</strong> ';
+        $content .= $sourceUrl !== null
+            ? '<a href="' . e($sourceUrl) . '" target="_blank" rel="noopener noreferrer">' . e($sourceText) . '</a>'
+            : e($sourceText);
+        $content .= '</p>';
+    }
+
+    return sanitize_rich_html($content);
+}
+
 function can_edit_news_post(array $post, int $memberId): bool
 {
     if ($memberId <= 0) {
