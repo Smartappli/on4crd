@@ -188,6 +188,32 @@ final class MemberModuleRegressionContractsTest extends TestCase
         ]);
     }
 
+    public function testPvAndFilesModulesKeepAdminUploadMemberReadAndAliasContracts(): void
+    {
+        $renderer = $this->source('app/member_module_documents.php');
+        $preview = $this->source('pages/member_document_preview.php');
+
+        foreach ([
+            'pv' => ['route' => 'pv', 'admin_route' => 'admin_pv'],
+            'fichiers' => ['route' => 'fichiers', 'admin_route' => 'admin_fichiers'],
+        ] as $module => $routes) {
+            self::assertStringContainsString("render_member_document_module_page('" . $module . "')", $this->source('pages/' . $routes['route'] . '.php'));
+            self::assertStringContainsString("render_admin_member_document_module_page('" . $module . "')", $this->source('pages/' . $routes['admin_route'] . '.php'));
+        }
+
+        self::assertStringContainsString("redirect('fichiers');", $this->source('pages/telechargements.php'));
+        self::assertStringContainsString("redirect('admin_fichiers');", $this->source('pages/admin_telechargements.php'));
+        self::assertStringContainsString("return \$module === 'telechargements' ? 'fichiers' : \$module;", $renderer);
+        self::assertStringContainsString("'fichiers' => [", $renderer);
+        self::assertStringContainsString("'pv' => [", $renderer);
+        self::assertStringContainsString("'latest_document_cta' => true", $renderer);
+        self::assertStringContainsString('<input type="hidden" name="action" value="upload">', $renderer);
+        self::assertStringContainsString('<input type="hidden" name="action" value="delete_document">', $renderer);
+        self::assertStringContainsString("route_url('member_document_preview', ['module' => \$moduleCode, 'id' => \$documentId, 'download' => '1'])", $renderer);
+        self::assertStringContainsString("'txt' => 'text/plain; charset=utf-8'", $preview);
+        self::assertStringContainsString("\$disposition = \$isDownload ? 'attachment' : 'inline';", $preview);
+    }
+
     private function assertAppearsBefore(string $source, string $first, string $second): void
     {
         $firstPosition = strpos($source, $first);

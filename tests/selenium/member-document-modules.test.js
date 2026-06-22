@@ -5,6 +5,7 @@ const test = require('node:test');
 const {
   By,
   assert,
+  routeUrl,
   timeoutMs,
   withSelenium,
   visit,
@@ -86,6 +87,41 @@ if ($token !== '') {
 `, { SELENIUM_DOCUMENT_MODULE: module, SELENIUM_DOCUMENT_TOKEN: token });
 }
 
+function memberDocumentByTitle(module, title) {
+  return JSON.parse(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+require_once 'app/route_helper_loader.php';
+app_load_route_helpers('__all');
+$module = preg_replace('/[^a-z0-9_]/', '', strtolower((string) getenv('SELENIUM_DOCUMENT_MODULE')));
+$title = (string) getenv('SELENIUM_DOCUMENT_TITLE');
+if ($module === '' || $title === '' || !ensure_member_module_documents_table()) {
+    echo 'null';
+    return;
+}
+$stmt = db()->prepare('SELECT id, module_code, title, file_path FROM member_module_documents WHERE module_code = ? AND title = ? ORDER BY id DESC LIMIT 1');
+$stmt->execute([$module, $title]);
+echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: null);
+`, { SELENIUM_DOCUMENT_MODULE: module, SELENIUM_DOCUMENT_TITLE: title }).trim() || 'null');
+}
+
+async function fetchAuthenticatedText(driver, url) {
+  const result = await driver.executeAsyncScript(`
+    const url = arguments[0];
+    const done = arguments[arguments.length - 1];
+    fetch(url, { credentials: 'same-origin' })
+      .then(async (response) => ({
+        ok: response.ok,
+        status: response.status,
+        text: await response.text()
+      }))
+      .catch((error) => ({ ok: false, status: 0, text: String(error) }))
+      .then(done);
+  `, url);
+  assert.equal(result.ok, true, `La ressource authentifiee ${url} doit etre lisible (${result.status}).`);
+
+  return String(result.text || '');
+}
+
 async function taxonomyText(driver) {
   const elements = await driver.findElements(By.css('.member-document-taxonomy .module-taxonomy-list'));
   if (elements.length === 0) {
@@ -93,6 +129,69 @@ async function taxonomyText(driver) {
   }
 
   return (await elements[0].getText()).replace(/\s+/g, ' ').trim();
+}
+
+for (const moduleCode of ['pv', 'fichiers']) {
+  test(`Selenium admin/membre: publier consulter et supprimer un document ${moduleCode}`, async (t) => {
+    const credentials = requireAdminCredentials(t);
+    if (credentials === null) {
+      return;
+    }
+
+    const token = `selenium-admin-${moduleCode}-${Date.now()}`;
+    const title = `${token} document`;
+    const fixtureText = `Contenu Selenium admin ${moduleCode} ${token}.`;
+    const fixture = writeTextFixture(`${token}.txt`, `${fixtureText}\n`);
+    const adminRoute = moduleCode === 'pv' ? 'admin_pv' : 'admin_fichiers';
+    const memberRoute = moduleCode === 'pv' ? 'pv' : 'fichiers';
+    if (!(await ensureSeleniumRunnable(t))) {
+      return;
+    }
+    cleanupMemberDocumentFixture(moduleCode, token);
+
+    await withSelenium(t, async (driver) => {
+      try {
+        await loginAsAdmin(driver, credentials.username, credentials.password);
+        await visit(driver, adminRoute);
+
+        const uploadForm = await driver.findElement(By.css('#admin-member-document-upload form.admin-member-document-form'));
+        await uploadForm.findElement(By.css('input[name="title"]')).sendKeys(title);
+        await setFieldValue(driver, await uploadForm.findElement(By.css('textarea[name="description"]')), `Document Selenium ${moduleCode}.`);
+        await uploadForm.findElement(By.css('input[name="tags"]')).sendKeys(`selenium,${moduleCode}`);
+        await uploadForm.findElement(By.css('input[type="file"][name="document"]')).sendKeys(path.resolve(fixture));
+        await submitForm(driver, uploadForm);
+
+        let text = await pagePlainText(driver);
+        assert.match(text, new RegExp(title), `Le document ${moduleCode} uploade doit apparaitre en admin.`);
+
+        const document = memberDocumentByTitle(moduleCode, title);
+        assert.ok(document && Number(document.id) > 0, `Le document ${moduleCode} doit exister en base apres upload admin.`);
+
+        await visit(driver, memberRoute, { q: title });
+        text = await pagePlainText(driver);
+        assert.match(text, new RegExp(title), `Le document ${moduleCode} doit etre consultable cote membre.`);
+
+        const downloadUrl = routeUrl('member_document_preview', { module: moduleCode, id: document.id, download: '1' });
+        assert.match(await fetchAuthenticatedText(driver, downloadUrl), new RegExp(fixtureText), `Le telechargement ${moduleCode} doit renvoyer le fichier uploade.`);
+
+        if (moduleCode === 'fichiers') {
+          await visit(driver, 'telechargements', { q: title });
+          text = await pagePlainText(driver);
+          assert.match(text, new RegExp(title), 'L alias telechargements doit afficher les fichiers.');
+        }
+
+        await visit(driver, adminRoute, { q: title });
+        const deleteForm = await driver.findElement(By.xpath(`//article[contains(@class,"member-document-card")][.//*[contains(normalize-space(.), "${title}")]]//form[.//input[@name="action" and @value="delete_document"]]`));
+        await submitForm(driver, deleteForm);
+
+        await visit(driver, memberRoute, { q: title });
+        text = await pagePlainText(driver);
+        assert.doesNotMatch(text, new RegExp(title), `Le document ${moduleCode} supprime en admin ne doit plus etre visible cote membre.`);
+      } finally {
+        cleanupMemberDocumentFixture(moduleCode, token);
+      }
+    });
+  });
 }
 
 test('Selenium modules documents: taxonomy, upload, favoris, edition et suppression presentations', async (t) => {
