@@ -50,12 +50,21 @@
   document.querySelectorAll('[data-admin-album-save]').forEach((button) => {
     if (!(button instanceof HTMLButtonElement)) return;
     button.addEventListener('click', (event) => {
-      const form = button.closest('form');
+      const form = button.form || button.closest('form');
       if (!(form instanceof HTMLFormElement)) return;
+
+      if (button.form === form) {
+        return;
+      }
+
       event.preventDefault();
-      if (typeof form.requestSubmit === 'function') {
-        form.requestSubmit(button);
-      } else {
+      try {
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit();
+          return;
+        }
+        form.submit();
+      } catch (error) {
         form.submit();
       }
     });
