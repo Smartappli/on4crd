@@ -58,28 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     throw new RuntimeException((string) ($newsT['unavailable'] ?? 'News storage unavailable.'));
                 }
                 $slug = news_unique_slug($title);
-                $paragraphs = array_values(array_filter(array_map(
-                    static fn(string $line): string => trim($line),
-                    preg_split('/\R{2,}/u', $summaryText) ?: []
-                )));
-                if ($paragraphs === []) {
-                    $paragraphs = [$summaryText];
-                }
-                $content = '';
-                foreach ($paragraphs as $paragraph) {
-                    $content .= '<p>' . nl2br(e($paragraph), false) . '</p>';
-                }
-                if ($sourceText !== '') {
-                    $sourceUrl = sanitize_href_attribute($sourceText);
-                    $content .= '<p><strong>Source:</strong> ';
-                    $content .= $sourceUrl !== null
-                        ? '<a href="' . e($sourceUrl) . '" target="_blank" rel="noopener noreferrer">' . e($sourceText) . '</a>'
-                        : e($sourceText);
-                    $content .= '</p>';
-                }
+                $content = news_content_html_from_summary($summaryText, $sourceText);
                 $excerpt = mb_safe_strimwidth($summaryText, 0, 280, '...');
                 db()->prepare('INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at) VALUES (?, ?, ?, ?, ?, ?, "published", NOW())')
-                    ->execute([$sectionId, (int) $user['id'], $slug, $title, $excerpt, sanitize_rich_html($content)]);
+                    ->execute([$sectionId, (int) $user['id'], $slug, $title, $excerpt, $content]);
                 $postId = (int) db()->lastInsertId();
                 news_translations_sync_all($postId);
                 cache_forget('news_published_count_v1');
