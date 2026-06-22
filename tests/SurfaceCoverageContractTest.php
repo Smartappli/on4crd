@@ -97,19 +97,27 @@ final class SurfaceCoverageContractTest extends TestCase
         $applicationSurfaceExceptions = [
             'admin_events_feed',
             'admin_fichiers',
+            'admin_classifieds',
             'admin_presentations',
             'admin_pv',
             'admin_telechargements',
             'admin_videos',
             'admin_webotheque',
+            'ai-index.json',
+            'article_propose',
             'dashboard_widget_card',
             'events_feed',
             'idea_submit',
             'install.php',
+            'knowledge-graph.jsonld',
+            'llms.txt',
             'member_document_preview',
             'member_library_preview',
             'qsl_export',
+            'robots.txt',
+            'sitemap.xml',
             'widget_render',
+            'wiki_propose',
         ];
 
         foreach ($this->dispatchRoutes() as $route => $relativePage) {
