@@ -533,25 +533,7 @@ function admin_apply_accepted_news_proposal(array $proposal): void
         throw new RuntimeException('Invalid news proposal.');
     }
 
-    $paragraphs = array_values(array_filter(array_map(
-        static fn(string $line): string => trim($line),
-        preg_split('/\R{2,}/u', $summaryText) ?: []
-    )));
-    if ($paragraphs === []) {
-        $paragraphs = [$summaryText];
-    }
-    $content = '';
-    foreach ($paragraphs as $paragraph) {
-        $content .= '<p>' . nl2br(e($paragraph), false) . '</p>';
-    }
-    if ($sourceText !== '') {
-        $sourceUrl = sanitize_href_attribute($sourceText);
-        $content .= '<p><strong>Source:</strong> ';
-        $content .= $sourceUrl !== null
-            ? '<a href="' . e($sourceUrl) . '" target="_blank" rel="noopener noreferrer">' . e($sourceText) . '</a>'
-            : e($sourceText);
-        $content .= '</p>';
-    }
+    $content = news_content_html_from_summary($summaryText, $sourceText);
 
     $slug = admin_content_proposal_unique_slug('news_posts', $title, 'news');
     db()->prepare('INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at) VALUES (?, ?, ?, ?, ?, ?, "published", NOW())')
@@ -561,7 +543,7 @@ function admin_apply_accepted_news_proposal(array $proposal): void
             $slug,
             $title,
             mb_safe_strimwidth($summaryText, 0, 280, '...'),
-            sanitize_rich_html($content),
+            $content,
         ]);
     $postId = (int) db()->lastInsertId();
     if ($postId > 0 && function_exists('news_translations_sync_all')) {
