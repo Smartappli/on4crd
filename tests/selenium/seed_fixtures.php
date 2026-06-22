@@ -100,6 +100,58 @@ function selenium_fixture_seed_article(int $memberId): void
     ]);
 }
 
+function selenium_fixture_seed_news(int $memberId): void
+{
+    if (!table_exists('news_posts') || !table_exists('news_sections')) {
+        return;
+    }
+
+    if (function_exists('seed_news_sections')) {
+        seed_news_sections();
+    }
+
+    db()->prepare(
+        'INSERT INTO news_sections (slug, name, sort_order)
+         VALUES ("selenium", "Selenium", 900)
+         ON DUPLICATE KEY UPDATE name = VALUES(name), sort_order = VALUES(sort_order)'
+    )->execute();
+
+    $sectionStmt = db()->prepare('SELECT id FROM news_sections WHERE slug = ? LIMIT 1');
+    $sectionStmt->execute(['selenium']);
+    $sectionId = (int) ($sectionStmt->fetchColumn() ?: 0);
+    if ($sectionId <= 0) {
+        return;
+    }
+
+    db()->prepare(
+        'INSERT INTO news_posts (section_id, author_id, slug, title, excerpt, content, status, published_at, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, "published", NOW(), DATE_SUB(NOW(), INTERVAL 90 MINUTE), DATE_SUB(NOW(), INTERVAL 90 MINUTE))
+         ON DUPLICATE KEY UPDATE
+            section_id = VALUES(section_id),
+            author_id = VALUES(author_id),
+            title = VALUES(title),
+            excerpt = VALUES(excerpt),
+            content = VALUES(content),
+            status = "published",
+            published_at = NOW(),
+            updated_at = DATE_SUB(NOW(), INTERVAL 90 MINUTE)'
+    )->execute([
+        $sectionId,
+        $memberId,
+        'selenium-fixture-news',
+        'Selenium fixture actualite radio',
+        'Actualite publique de regression Selenium.',
+        '<p>Actualite publique de regression Selenium pour verifier la navigation detail.</p>',
+    ]);
+
+    $postIdStmt = db()->prepare('SELECT id FROM news_posts WHERE slug = ? LIMIT 1');
+    $postIdStmt->execute(['selenium-fixture-news']);
+    $postId = (int) ($postIdStmt->fetchColumn() ?: 0);
+    if ($postId > 0 && function_exists('news_translations_sync_all')) {
+        news_translations_sync_all($postId);
+    }
+}
+
 function selenium_fixture_seed_wiki(int $memberId): void
 {
     if (!table_exists('wiki_pages')) {
@@ -122,6 +174,34 @@ function selenium_fixture_seed_wiki(int $memberId): void
         'Selenium fixture wiki radio',
         '<p>Page wiki publique de regression Selenium.</p>',
         $memberId,
+    ]);
+}
+
+function selenium_fixture_seed_event(): void
+{
+    if (!table_exists('events')) {
+        return;
+    }
+
+    db()->prepare(
+        'INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status)
+         VALUES (?, ?, ?, ?, "club", DATE_ADD(NOW(), INTERVAL 14 DAY), DATE_ADD(DATE_ADD(NOW(), INTERVAL 14 DAY), INTERVAL 2 HOUR), ?, NULL, "published")
+         ON DUPLICATE KEY UPDATE
+            title = VALUES(title),
+            summary = VALUES(summary),
+            description = VALUES(description),
+            kind = "club",
+            start_at = DATE_ADD(NOW(), INTERVAL 14 DAY),
+            end_at = DATE_ADD(DATE_ADD(NOW(), INTERVAL 14 DAY), INTERVAL 2 HOUR),
+            location = VALUES(location),
+            external_url = NULL,
+            status = "published"'
+    )->execute([
+        'selenium-fixture-event',
+        'Selenium fixture evenement radio',
+        'Evenement public de regression Selenium.',
+        '<p>Evenement public de regression Selenium pour verifier la navigation detail.</p>',
+        'Durnal',
     ]);
 }
 
@@ -230,7 +310,9 @@ function selenium_fixture_seed_webotheque(int $memberId): void
 
 $memberId = selenium_fixture_member_id();
 selenium_fixture_seed_article($memberId);
+selenium_fixture_seed_news($memberId);
 selenium_fixture_seed_wiki($memberId);
+selenium_fixture_seed_event();
 selenium_fixture_seed_album($memberId);
 selenium_fixture_seed_auction();
 selenium_fixture_seed_classified($memberId);
@@ -240,6 +322,11 @@ foreach ([
     'auction_public_lots_60_v1',
     'admin_albums_list_v2',
     'admin_albums_photos_total_v2',
+    'news_published_count_v1',
+    'news_categories_v2',
+    'news_archives_v1',
+    'home_latest_news_v1',
+    'home_next_event_v1',
 ] as $cacheKey) {
     cache_forget($cacheKey);
 }
