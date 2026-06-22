@@ -17,7 +17,8 @@ WORKDIR /var/www/html
 
 COPY docker/entrypoint.sh /usr/local/bin/on4crd-entrypoint
 
-RUN chmod +x /usr/local/bin/on4crd-entrypoint \
+RUN sed -i 's/\r$//' /usr/local/bin/on4crd-entrypoint \
+    && chmod +x /usr/local/bin/on4crd-entrypoint \
     && a2enmod rewrite
 
 ENTRYPOINT ["/usr/local/bin/on4crd-entrypoint"]
