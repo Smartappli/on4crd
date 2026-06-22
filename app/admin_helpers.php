@@ -408,6 +408,7 @@ function admin_apply_accepted_event_proposal(array $proposal): void
     if ((string) ($proposal['proposal_type'] ?? '') !== 'content' || !table_exists('events')) {
         return;
     }
+    require_once __DIR__ . '/event_helpers.php';
 
     $title = content_proposal_clean_single_line((string) ($proposal['title'] ?? ''), 160);
     if ($title === '') {
@@ -428,24 +429,9 @@ function admin_apply_accepted_event_proposal(array $proposal): void
 
     $location = content_proposal_clean_single_line((string) ($values[1] ?? ''), 190);
     $descriptionText = content_proposal_clean_multiline((string) ($values[2] ?? ''), 1600);
-    $description = $descriptionText !== ''
-        ? sanitize_rich_html('<p>' . nl2br(e($descriptionText), false) . '</p>')
-        : '';
-    $summary = $descriptionText !== '' ? mb_safe_strimwidth($descriptionText, 0, 280, '...') : '';
     $slug = admin_content_proposal_unique_slug('events', $title, 'event');
-    $endTs = $startTs + (2 * 3600);
 
-    db()->prepare('INSERT INTO events (slug, title, summary, description, kind, start_at, end_at, location, external_url, status) VALUES (?, ?, ?, ?, "club", ?, ?, ?, NULL, "published")')
-        ->execute([
-            $slug,
-            $title,
-            $summary,
-            $description,
-            date('Y-m-d H:i:s', $startTs),
-            date('Y-m-d H:i:s', $endTs),
-            $location !== '' ? $location : null,
-        ]);
-    cache_forget('home_next_event_v1');
+    event_publish_club_event($slug, $title, $startTs, $descriptionText, $location);
 }
 
 /**
