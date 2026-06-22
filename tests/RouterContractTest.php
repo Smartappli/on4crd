@@ -459,6 +459,10 @@ final class RouterContractTest extends TestCase
         self::assertStringContainsString("function readConfiguredSeleniumAppBaseUrl()", $seleniumHelpers);
         self::assertStringContainsString("async function ensureSeleniumTarget(t, driver)", $seleniumHelpers);
         self::assertStringContainsString("SELENIUM_STRICT_TARGET", $seleniumHelpers);
+        self::assertStringContainsString("function resetSeleniumLoginThrottle(username)", $seleniumHelpers);
+        self::assertStringContainsString('for ($octet = 16; $octet <= 31; $octet++)', $seleniumHelpers);
+        self::assertStringContainsString("SELENIUM_THROTTLE_IPS", $seleniumHelpers);
+        self::assertStringContainsString("\$buckets[] = \$bucket(['attemptToLogin', \$ip]);", $seleniumHelpers);
     }
 
     public function testPressReleasesUseCurrentPublishedOnSchemaColumn(): void

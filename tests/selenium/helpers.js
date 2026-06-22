@@ -573,17 +573,27 @@ if ($username !== '' && table_exists('users_throttling')) {
     $bucket = static function (array $criteria): string {
         return rtrim(strtr(base64_encode(hash('sha256', implode("\\n", $criteria), true)), '+/', '-_'), '=');
     };
+    $ipCandidates = ['127.0.0.1', '::1', '::ffff:127.0.0.1', ''];
+    for ($octet = 16; $octet <= 31; $octet++) {
+        $ipCandidates[] = '172.' . $octet . '.0.1';
+    }
+    foreach (['10.0.0.1', '10.5.0.1', '192.168.65.1'] as $ip) {
+        $ipCandidates[] = $ip;
+    }
+    foreach (explode(',', (string) getenv('SELENIUM_THROTTLE_IPS')) as $ip) {
+        $ip = trim($ip);
+        if ($ip !== '') {
+            $ipCandidates[] = $ip;
+        }
+    }
+    $ipCandidates = array_values(array_unique($ipCandidates));
     $buckets = [
-        $bucket(['enumerateUsers', '127.0.0.1']),
-        $bucket(['enumerateUsers', '::1']),
-        $bucket(['enumerateUsers', '::ffff:127.0.0.1']),
-        $bucket(['enumerateUsers', '']),
-        $bucket(['attemptToLogin', '127.0.0.1']),
-        $bucket(['attemptToLogin', '::1']),
-        $bucket(['attemptToLogin', '::ffff:127.0.0.1']),
-        $bucket(['attemptToLogin', '']),
         $bucket(['attemptToLogin', 'username', $username]),
     ];
+    foreach ($ipCandidates as $ip) {
+        $buckets[] = $bucket(['enumerateUsers', $ip]);
+        $buckets[] = $bucket(['attemptToLogin', $ip]);
+    }
     $placeholders = implode(',', array_fill(0, count($buckets), '?'));
     db()->prepare('DELETE FROM users_throttling WHERE bucket IN (' . $placeholders . ')')->execute($buckets);
 }
