@@ -93,7 +93,8 @@ final class MemberModulesFinalizationTest extends TestCase
         self::assertStringContainsString('method="post" action="<?= e(route_url(\'admin_albums\')) ?>"', $adminAlbums);
         self::assertStringContainsString('type="submit" data-admin-album-save', $adminAlbums);
         self::assertStringContainsString("document.querySelectorAll('[data-admin-album-save]')", $adminAlbumsJs);
-        self::assertStringContainsString('form.requestSubmit(button);', $adminAlbumsJs);
+        self::assertStringContainsString('if (button.form === form) {', $adminAlbumsJs);
+        self::assertStringContainsString('form.requestSubmit();', $adminAlbumsJs);
         self::assertStringNotContainsString('name="album_is_featured[<?= (int) $album[\'id\'] ?>]"', $adminAlbums);
         self::assertStringNotContainsString("\$isFeatured = isset(\$_POST['is_featured']) ? 1 : 0;", $adminAlbums);
         self::assertStringContainsString('is_featured, publish_requested', $adminAlbums);
