@@ -87,11 +87,10 @@ function detect_uploaded_mime_type(string $tmpPath): string
     }
     $mime = '';
 
-    if (function_exists('finfo_open') && function_exists('finfo_file') && function_exists('finfo_close')) {
+    if (function_exists('finfo_open') && function_exists('finfo_file')) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         if ($finfo !== false) {
             $mime = strtolower(trim((string) finfo_file($finfo, $tmpPath)));
-            finfo_close($finfo);
             if ($mime !== '' && $mime !== 'application/octet-stream') {
                 return $mime;
             }
