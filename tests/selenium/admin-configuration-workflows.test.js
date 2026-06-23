@@ -67,6 +67,9 @@ function adminMemberState(callsign) {
 require_once 'app/bootstrap.php';
 $callsign = strtoupper((string) getenv('SELENIUM_TARGET_CALLSIGN'));
 $columns = ['id', 'callsign', 'full_name', 'email', 'locator', 'is_active', 'is_committee'];
+if (table_has_column('members', 'auth_user_id')) {
+    $columns[] = 'auth_user_id';
+}
 foreach (['password_change_required', 'password_reset_forced_at'] as $column) {
     if (table_has_column('members', $column)) {
         $columns[] = $column;
@@ -261,6 +264,16 @@ echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED
   return state;
 }
 
+function liveFeedRecord(feedId) {
+  return seleniumJson(`
+require_once 'app/bootstrap.php';
+$id = (int) getenv('SELENIUM_FEED_ID');
+$stmt = db()->prepare('SELECT id, code, label, url, parser, cache_ttl, refresh_seconds, is_enabled, notes FROM live_feeds WHERE id = ? LIMIT 1');
+$stmt->execute([$id]);
+echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+`, { SELENIUM_FEED_ID: String(feedId) });
+}
+
 function restoreLiveFeed(state) {
   runSeleniumPhp(`
 require_once 'app/bootstrap.php';
@@ -356,6 +369,7 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
       assert.equal(selectedVisibility, newVisibility, 'Le select de visibilite doit etre positionne avant soumission.');
       await submitForm(driver, moduleForm);
       const moduleAfter = moduleState('press');
+      assert.equal(Number(moduleAfter.is_enabled), Number(moduleOriginal.is_enabled), 'La sauvegarde module ne doit pas changer l etat active si la case reste identique.');
       assert.equal(moduleAfter.visibility, newVisibility, 'La visibilite du module doit etre persistee.');
 
       await visit(driver, 'admin_members', { member_q: callsign });
@@ -379,8 +393,14 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
       await setFieldValue(driver, await createMemberForm.findElement(By.css('input[name="password"]')), 'Selenium!2026');
       await submitForm(driver, createMemberForm);
       const createdMember = adminMemberState(createdCallsign);
+      assert.equal(createdMember.callsign, createdCallsign, 'Le membre cree depuis admin_members doit etre persiste avec son indicatif.');
       assert.equal(createdMember.email, createdEmail, 'Le membre cree depuis admin_members doit etre persiste avec son email.');
       assert.equal(createdMember.full_name, `Membre Selenium ${createdCallsign}`, 'Le membre cree depuis admin_members doit etre persiste avec son nom.');
+      assert.equal(createdMember.locator, 'JO20BB', 'Le membre cree depuis admin_members doit etre persiste avec son locator.');
+      assert.equal(Number(createdMember.is_active), 1, 'Le membre cree depuis admin_members doit etre actif.');
+      if (Object.prototype.hasOwnProperty.call(createdMember, 'auth_user_id')) {
+        assert.ok(Number(createdMember.auth_user_id) > 0, 'Le membre cree depuis admin_members doit etre rattache a un compte auth.');
+      }
       await visit(driver, 'admin_members', { member_q: createdCallsign });
       const createdMemberForm = await driver.findElement(By.xpath(`//input[@name="member_id" and @value="${createdMember.id}"]/ancestor::form[1]`));
       const createdCallsignValue = await createdMemberForm.findElement(By.css('input[name="callsign"]')).getAttribute('value');
@@ -392,12 +412,19 @@ test('Selenium admin configuration: modules, membres et roles restent modifiable
       await setFieldValue(driver, await form.findElement(By.css('select[name="member_id"]')), String(memberState.id));
       await setFieldValue(driver, await form.findElement(By.css('select[name="role_id"]')), String(role.id));
       await submitForm(driver, form);
+      let assignmentCount = Number(runSeleniumPhp(`
+require_once 'app/bootstrap.php';
+$stmt = db()->prepare('SELECT COUNT(*) FROM member_roles WHERE member_id = ? AND role_id = ?');
+$stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (int) getenv('SELENIUM_ROLE_ID')]);
+echo (int) $stmt->fetchColumn();
+`, { SELENIUM_MEMBER_ID: String(memberState.id), SELENIUM_ROLE_ID: String(role.id) }).trim());
+      assert.equal(assignmentCount, 1, 'Le role temporaire doit etre affecte en base.');
       const roleText = await pagePlainText(driver);
       assert.match(roleText, new RegExp(role.label), 'Le role temporaire doit apparaitre dans les attributions.');
 
       const removeForm = await driver.findElement(By.xpath(`//input[@name="action" and @value="remove_role"]/ancestor::form[input[@name="member_id" and @value="${memberState.id}"] and input[@name="role_id" and @value="${role.id}"]][1]`));
       await submitForm(driver, removeForm);
-      const assignmentCount = Number(runSeleniumPhp(`
+      assignmentCount = Number(runSeleniumPhp(`
 require_once 'app/bootstrap.php';
 $stmt = db()->prepare('SELECT COUNT(*) FROM member_roles WHERE member_id = ? AND role_id = ?');
 $stmt->execute([(int) getenv('SELENIUM_MEMBER_ID'), (int) getenv('SELENIUM_ROLE_ID')]);
@@ -442,13 +469,14 @@ test('Selenium admin configuration: flux live, presse et diner annuel', async (t
       await setFieldValue(driver, await feedSection.findElement(By.css(`input[name="feeds[${feedOriginal.id}][label]"]`)), feedUpdatedLabel);
       await setFieldValue(driver, await feedSection.findElement(By.css(`textarea[name="feeds[${feedOriginal.id}][notes]"]`)), `Notes ${token}`);
       await submitForm(driver, feedForm);
-      const feedAfter = seleniumJson(`
-require_once 'app/bootstrap.php';
-$stmt = db()->prepare('SELECT label, notes FROM live_feeds WHERE id = ? LIMIT 1');
-$stmt->execute([(int) getenv('SELENIUM_FEED_ID')]);
-echo json_encode($stmt->fetch() ?: null, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-`, { SELENIUM_FEED_ID: String(feedOriginal.id) });
+      const feedAfter = liveFeedRecord(feedOriginal.id);
       assert.equal(feedAfter.label, feedUpdatedLabel, 'Le libelle du flux live doit etre mis a jour.');
+      assert.equal(feedAfter.code, feedCode, 'La mise a jour du flux live doit conserver le code.');
+      assert.equal(feedAfter.url, 'https://example.com/selenium-feed.json', 'La mise a jour du flux live doit conserver l URL.');
+      assert.equal(feedAfter.parser, 'json', 'La mise a jour du flux live doit conserver le parser.');
+      assert.equal(Number(feedAfter.cache_ttl), 120, 'La mise a jour du flux live doit conserver le TTL cache.');
+      assert.equal(Number(feedAfter.refresh_seconds), 180, 'La mise a jour du flux live doit conserver la frequence de refresh.');
+      assert.equal(Number(feedAfter.is_enabled), Number(feedOriginal.is_enabled), 'La mise a jour du flux live doit conserver l etat actif.');
       assert.match(String(feedAfter.notes || ''), new RegExp(token), 'Les notes du flux live doivent etre mises a jour.');
 
       await visit(driver, 'admin_press');
